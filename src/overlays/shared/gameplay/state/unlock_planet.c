@@ -231,12 +231,12 @@ int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *in
 #include "rnc/overlay/quad.h"
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
 u8 *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
-void FUN_001f9cf8_002604f0(void *, void *, void *) __asm__("FUN_001f9cf8");
-void FUN_001f9a10_002604f0(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_001fa050_002604f0(void *, void *) __asm__("FUN_001fa050");
+void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
-void FUN_001fa378_002604f0(void *, void *, void *) __asm__("FUN_001fa378");
-void FUN_00214598_002604f0(void *, void *) __asm__("FUN_00214598");
+void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
                                void *) __asm__("FUN_L00_00260668");
 void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
@@ -250,21 +250,21 @@ int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void 
     u8 *transform_record = FUN_L00_002603d0_002604f0(reference_object);
     if (!transform_record)
         return 0;
-    FUN_001f9cf8_002604f0(transformed_position, position, reference_object + 0xC0);
-    FUN_001f9a10_002604f0(transformed_position, transformed_position, reference_object + 0x10);
-    FUN_001fa050_002604f0(composed_attachment_rotation_matrix, rotation);
+    transform_vector_by_basis(transformed_position, position, reference_object + 0xC0);
+    fast_vec_add(transformed_position, transformed_position, reference_object + 0x10);
+    euler_rotation_matrix(composed_attachment_rotation_matrix, rotation);
     copy_matrix_rotation(reference_basis_matrix, reference_object + 0xC0);
-    FUN_001fa378_002604f0(composed_attachment_rotation_matrix, reference_basis_matrix, composed_attachment_rotation_matrix);
-    FUN_00214598_002604f0(composed_attachment_rotation_matrix, transformed_rotation);
+    multiply_matrix(composed_attachment_rotation_matrix, reference_basis_matrix, composed_attachment_rotation_matrix);
+    matrix_to_euler(composed_attachment_rotation_matrix, transformed_rotation);
     if (*(int *)(transform_record + 0x3C) & 4) {
-        FUN_001f9a10_002604f0(transformed_position, transformed_position, transform_record + 0x10);
+        fast_vec_add(transformed_position, transformed_position, transform_record + 0x10);
         FUN_L00_00260668_002604f0(comparison_object, reference_object, transformed_position, transformed_rotation, position, rotation);
         return 1;
     }
     if (comparison_object[0x22] && comparison_object[0x22] < reference_object[0x22]) {
         qcopy(translation_adjustment, transform_record + 0x10);
         FUN_L00_0025f730_002604f0(translation_adjustment, 1.0f);
-        FUN_001f9a10_002604f0(transformed_position, transformed_position, translation_adjustment);
+        fast_vec_add(transformed_position, transformed_position, translation_adjustment);
     }
     return 1;
 }

@@ -3721,16 +3721,16 @@ extern float func_00214D28_f2180(float *p, float target, float maxstep) __asm__(
 extern int func_001F9850_f2180(int) __asm__("FUN_001f96f8");
 extern int func_001FA898_r_f2180(float) __asm__("FUN_001fa6d0");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void func_L00_002EBE88_f2180(void *) __asm__("FUN_L00_002ea9d8");
-extern void func_L00_00217718_f2180(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern float func_L00_001FF860_f2180(float, float) __asm__("FUN_001f9e90");
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float func_001FA748_f2180(float, float) __asm__("FUN_001fa580");
 extern float func_001FA790_f2180(float, float) __asm__("FUN_001fa5c8");
-extern float func_001F9D48_f2180(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float func_001F9F90_f2180(float) __asm__("FUN_001f9dc8");
-extern void func_001F9BC0_f2180(void *) __asm__("FUN_001f99f8");
-extern void func_L00_002EBEE0_f2180(void *) __asm__("FUN_L00_002eaa30");
-extern float func_L00_0025CE58_f2180(float *p, float *v, float a, float b, float c,
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
+extern float approach_angle(float *p, float *v, float a, float b, float c,
                                      float d) __asm__("FUN_L00_0025be00");
 extern char D_L17_001B0DB0[];
 extern char *D_L17_001600EC;
@@ -3759,24 +3759,24 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
     i3 = func_001FA898_r_f2180(scaled_path_position);
     lerp_vector(camera_position, &camera_position_path->p[i1], &camera_position_path->p[i1 + 1], camera_position_blend);
     lerp_vector(moby + 0x10, &shuttle_movement_path->p[i3], &shuttle_movement_path->p[i3 + 1], moby_path_blend);
-    func_L00_002EBE88_f2180(camera_position);
+    set_camera_position(camera_position);
     {
         char *base = D_L17_001600EC + (shuttle_vars->e84 << 7);
-        func_L00_00217718_f2180(base + 0x30, base + 0x70, 0x72, 0);
+        set_race_camera(base + 0x30, base + 0x70, 0x72, 0);
     }
     if (i3 > 0) {
-        interpolation_start_angle = func_L00_001FF860_f2180(shuttle_movement_path->p[i3].x - shuttle_movement_path->p[i3 - 1].x, shuttle_movement_path->p[i3].y - shuttle_movement_path->p[i3 - 1].y);
+        interpolation_start_angle = fast_arc_tan(shuttle_movement_path->p[i3].x - shuttle_movement_path->p[i3 - 1].x, shuttle_movement_path->p[i3].y - shuttle_movement_path->p[i3 - 1].y);
         *(float *)(moby + 0x48) = func_001FA748_f2180(
-            func_001FA790_f2180(func_L00_001FF860_f2180(shuttle_movement_path->p[i3 + 1].x - shuttle_movement_path->p[i3].x,
+            func_001FA790_f2180(fast_arc_tan(shuttle_movement_path->p[i3 + 1].x - shuttle_movement_path->p[i3].x,
                                                         shuttle_movement_path->p[i3 + 1].y - shuttle_movement_path->p[i3].y),
                                 interpolation_start_angle) *
                 moby_path_blend,
             interpolation_start_angle);
-        interpolation_start_angle = -func_L00_001FF860_f2180(func_001F9D48_f2180(&shuttle_movement_path->p[i3 - 1], &shuttle_movement_path->p[i3]),
+        interpolation_start_angle = -fast_arc_tan(vector_distance(&shuttle_movement_path->p[i3 - 1], &shuttle_movement_path->p[i3]),
                                        shuttle_movement_path->p[i3].z - shuttle_movement_path->p[i3 - 1].z);
         *(float *)(moby + 0x44) = func_001FA748_f2180(
             func_001FA790_f2180(
-                -func_L00_001FF860_f2180(func_001F9D48_f2180(&shuttle_movement_path->p[i3], &shuttle_movement_path->p[i3 + 1]),
+                -fast_arc_tan(vector_distance(&shuttle_movement_path->p[i3], &shuttle_movement_path->p[i3 + 1]),
                                          shuttle_movement_path->p[i3 + 1].z - shuttle_movement_path->p[i3].z),
                 interpolation_start_angle) *
                 moby_path_blend,
@@ -3784,33 +3784,33 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
         *(float *)(moby + 0x44) = *(float *)(moby + 0x44) * func_001F9F90_f2180(shuttle_vars->f88);
         *(float *)(moby + 0x48) = func_001FA748_f2180(*(float *)(moby + 0x48), shuttle_vars->f88);
     } else {
-        *(float *)(moby + 0x44) = -func_L00_001FF860_f2180(
-            func_001F9D48_f2180(&shuttle_movement_path->p[0], &shuttle_movement_path->p[1]), shuttle_movement_path->p[1].z - shuttle_movement_path->p[0].z);
+        *(float *)(moby + 0x44) = -fast_arc_tan(
+            vector_distance(&shuttle_movement_path->p[0], &shuttle_movement_path->p[1]), shuttle_movement_path->p[1].z - shuttle_movement_path->p[0].z);
         *(float *)(moby + 0x48) =
-            func_L00_001FF860_f2180(shuttle_movement_path->p[1].x - shuttle_movement_path->p[0].x, shuttle_movement_path->p[1].y - shuttle_movement_path->p[0].y);
+            fast_arc_tan(shuttle_movement_path->p[1].x - shuttle_movement_path->p[0].x, shuttle_movement_path->p[1].y - shuttle_movement_path->p[0].y);
     }
     if (i1 > 0 && i2 > 0) {
-        func_001F9BC0_f2180(camera_rotation);
-        interpolation_start_angle = func_L00_001FF860_f2180(camera_aim_path->p[i2].x - camera_position[0], camera_aim_path->p[i2].y - camera_position[1]);
+        clear_u64_value(camera_rotation);
+        interpolation_start_angle = fast_arc_tan(camera_aim_path->p[i2].x - camera_position[0], camera_aim_path->p[i2].y - camera_position[1]);
         camera_rotation[2] = func_001FA748_f2180(
             func_001FA790_f2180(
-                func_L00_001FF860_f2180(camera_aim_path->p[i2 + 1].x - camera_position[0], camera_aim_path->p[i2 + 1].y - camera_position[1]), interpolation_start_angle) *
+                fast_arc_tan(camera_aim_path->p[i2 + 1].x - camera_position[0], camera_aim_path->p[i2 + 1].y - camera_position[1]), interpolation_start_angle) *
                 camera_aim_blend,
             interpolation_start_angle);
-        interpolation_start_angle = -func_L00_001FF860_f2180(func_001F9D48_f2180(camera_position, &camera_aim_path->p[i2]), camera_aim_path->p[i2].z - camera_position[2]);
+        interpolation_start_angle = -fast_arc_tan(vector_distance(camera_position, &camera_aim_path->p[i2]), camera_aim_path->p[i2].z - camera_position[2]);
         camera_rotation[1] = func_001FA748_f2180(
-            func_001FA790_f2180(-func_L00_001FF860_f2180(func_001F9D48_f2180(camera_position, &camera_aim_path->p[i2 + 1]),
+            func_001FA790_f2180(-fast_arc_tan(vector_distance(camera_position, &camera_aim_path->p[i2 + 1]),
                                                          camera_aim_path->p[i2 + 1].z - camera_position[2]),
                                 interpolation_start_angle) *
                 camera_aim_blend,
             interpolation_start_angle);
-        func_L00_002EBEE0_f2180(camera_rotation);
+        set_camera_rotation(camera_rotation);
     }
     *(float *)(moby + 0x2C) =
         *(float *)(*(char **)(moby + 0x24) + 0x24) * (shuttle_vars->f9C - (shuttle_vars->f9C - shuttle_vars->fA0) * shuttle_vars->fA4);
     if (shuttle_vars->fA4 > 0.8f) {
         turn = frame_time_sq * 12.566371f;
-        func_L00_0025CE58_f2180(&shuttle_vars->f88, &shuttle_vars->f8C, 3.1415927f, turn, turn,
+        approach_angle(&shuttle_vars->f88, &shuttle_vars->f8C, 3.1415927f, turn, turn,
                                 frame_time * 6.2831855f);
     }
     return shuttle_vars->fA4 == 1.0f;

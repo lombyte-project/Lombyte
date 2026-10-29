@@ -100,7 +100,7 @@ extern void mark_moby_for_removal_307d68(struct Moby *) __asm__("FUN_0020c828");
 extern s32 tick_countdown_16_307d68(s16 *) __asm__("FUN_001f9770");
 extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe *) __asm__("FUN_001efa68");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern void FUN_L00_001ff660_307d68(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026dd20_307d68(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32,
@@ -179,7 +179,7 @@ void update_class_4ea_projectile(struct Moby *projectile_moby)
             spark_scatter_vector.f[1] = random_float_between(-1.0f, 1.0f);
             spark_scatter_vector.f[2] = random_float_between(-1.0f, 1.0f);
             push.q = spark_scatter_vector.q;
-            FUN_L00_001ff660_307d68(&spark_scatter_vector, projectile_vars, D_L09_00174000);
+            reflect_vector(&spark_scatter_vector, projectile_vars, D_L09_00174000);
             fast_vec_normalize(&push, &push, fast_vec_length(&spark_scatter_vector) * 0.5f);
             fast_vec_add(&push, &spark_scatter_vector, &push);
             fast_vec_normalize(&push, &push, random_float_between(frame_time * 3.0f, frame_time * 6.0f));

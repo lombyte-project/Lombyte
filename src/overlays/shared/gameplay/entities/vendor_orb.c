@@ -163,7 +163,7 @@ extern int func_L00_002E1790_2E0E50(Moby *) __asm__("FUN_L00_002e02e0");
 extern int func_L00_00222B80_2E0E50(int, int) __asm__("FUN_L00_002223f8");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void func_L00_002EBF50_2E0E50(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern float func_001F9878_2E0E50(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2E0E50(float) __asm__("FUN_001fa6d0");
 extern void func_L00_002E17F0_2E0E50(Moby *) __asm__("FUN_L00_002e0340");
 extern float func_00214D28_2E0E50(float *, float, float) __asm__("FUN_00213ed8");
@@ -171,10 +171,10 @@ extern float func_00214D88_2E0E50(float *, float *, float, float, float, float) 
 extern void func_L00_002EBE88_2E0E50(void *) __asm__("FUN_L00_002ea9d8");
 extern void func_L00_002EBEE0_2E0E50(void *) __asm__("FUN_L00_002eaa30");
 extern void func_001F9C08_2E0E50(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void func_001F9BC0_2E0E50(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float func_001FA790_2E0E50(float, float) __asm__("FUN_001fa5c8");
 extern float func_001FA748_2E0E50(float, float) __asm__("FUN_001fa580");
-extern void func_L00_002EC0C8_2E0E50(int) __asm__("FUN_L00_002eac18");
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern int func_001F9908_2E0E50(void *) __asm__("FUN_001f9740");
 
 void hydrodisplacer_update(Moby *moby) __asm__("FUN_L00_002df9a0");
@@ -296,7 +296,7 @@ void hydrodisplacer_update(Moby *moby) {
             break;
         }
         moby->state = 5;
-        data->i0 = func_001FA898_2E0E50(func_001F9878_2E0E50(D_L00_00161BB4_macro));
+        data->i0 = func_001FA898_2E0E50(scale_time(D_L00_00161BB4_macro));
         if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full == 0) {
             ((Moby *)linked)->command = 8;
             ((Hero *)D_0013E633_2E0E50)->hydro_tank_full = 1;
@@ -341,7 +341,7 @@ void hydrodisplacer_update(Moby *moby) {
             if (data->f10 < 1.0f) {
                 func_00214D88_2E0E50(&data->f10, &data->f14, 1.0f, frame_time_sq_macro * 0.666f, frame_time_sq_macro * 0.666f, frame_time_macro * 0.5f);
                 func_001F9C08_2E0E50(&camera_pos, D_L00_001600EC_macro + (data->i8 << 7) + 0x30, D_L00_001600EC_macro + (data->iC << 7) + 0x30, data->f10);
-                func_001F9BC0_2E0E50(&camera_rot);
+                clear_u64_value(&camera_rot);
                 camera_rot.y = func_001FA790_2E0E50(((Node *)D_L00_001600EC_macro)[data->iC].v70.y, ((Node *)D_L00_001600EC_macro)[data->i8].v70.y) * data->f10;
                 camera_rot.y = func_001FA748_2E0E50(((Node *)D_L00_001600EC_macro)[data->i8].v70.y, camera_rot.y);
                 camera_rot.z = func_001FA790_2E0E50(((Node *)D_L00_001600EC_macro)[data->iC].v70.z, ((Node *)D_L00_001600EC_macro)[data->i8].v70.z) * data->f10;
@@ -356,7 +356,7 @@ void hydrodisplacer_update(Moby *moby) {
             }
             moby->command = 2;
             D_L00_0015F404_macro = 0;
-            func_L00_002EC0C8_2E0E50(3);
+            jet_end_mount(3);
             return;
         case HYDRODISPLACER_CAMERA_RETURN_TO_ACTIVATION:
             if (0.0f < fade_level) {
@@ -505,7 +505,7 @@ extern u8 item_available[] __asm__("D_0013D4C0");
 extern f32 FUN_001fa580_2e03a0(f32, f32) __asm__("FUN_001fa580");
 extern void initialize_moby_particle_effect(void *) __asm__("FUN_L00_002d6bf0");
 extern void debug_print() __asm__("FUN_001e93b0");
-extern void FUN_0020c828_2e03a0(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 FUN_001f99c0_2e03a0(f32) __asm__("FUN_001f99c0");
@@ -546,7 +546,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
             debug_print(pilots_helmet_missing_cutscene_format, moby->h);
         if (item_available[7]) {
             debug_print(pilots_helmet_already_owned_message);
-            FUN_0020c828_2e03a0(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         moby->state = 1;
@@ -596,7 +596,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
         break;
     case PILOTS_HELMET_SAVE_AND_REMOVE:
         memcard_save_data(0, -1);
-        FUN_0020c828_2e03a0(moby);
+        mark_moby_for_removal(moby);
         break;
     }
 }
@@ -873,9 +873,9 @@ extern float func_L00_0025F368_2E3700(float) __asm__("FUN_L00_0025e310");
 extern float func_001F9FA8_2E3700(float) __asm__("FUN_001f9de0");
 extern float func_001F9F90_2E3700(float) __asm__("FUN_001f9dc8");
 extern void func_L00_001FF4B0_2E3700(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9CA0_2E3700(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void func_001F9EE8_2E3700(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void func_001F9EC0_2E3700(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float func_L00_00258C80_2E3700(float, float) __asm__("FUN_L00_00257c48");
 extern float func_002140F8_2E3700(float, float) __asm__("FUN_002132a8");
 extern Part *func_L00_002757E8_2E3700(void *, void *, int, int) __asm__("FUN_L00_00274948");
@@ -943,10 +943,10 @@ void update_slot_panes_and_effects(int unused, int beam) {
     one = 1.0f;
     func_001F9BF0_2E3700(span2, &D_L00_001E7130_2E3700[beam], from);
     func_L00_001FF4B0_2E3700(beam_direction, span2, one);
-    func_001F9CA0_2E3700(side, beam_direction, D_0013E633_2E3700);
+    fast_vec_cross(side, beam_direction, D_0013E633_2E3700);
     func_L00_001FF4B0_2E3700(side, side, -1.0f);
-    func_001F9CA0_2E3700(up, side, beam_direction);
-    func_001F9EE8_2E3700(tip, &D_L00_001E7190_2E3700[strand][18], beam_direction);
+    fast_vec_cross(up, side, beam_direction);
+    transform_vector(tip, &D_L00_001E7190_2E3700[strand][18], beam_direction);
     qcopy(&D_L00_001E7160_2E3700[beam], tip);
     point = D_L00_001E7190_2E3700[next_strand];
     for (second_strand_point_index = 0; second_strand_point_index < 19; second_strand_point_index++) {
@@ -981,7 +981,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
         particle_velocity.f[3] = one;
         particle_velocity.f[0] = speed * func_001F9F90_2E3700(angle);
         particle_velocity.f[1] = speed * func_001F9FA8_2E3700(angle);
-        func_001F9EC0_2E3700(&particle_velocity, &particle_velocity, &D_L00_001E7070_2E3700[beam]);
+        transform_vector_by_basis(&particle_velocity, &particle_velocity, &D_L00_001E7070_2E3700[beam]);
         func_L00_002757E8_2E3700(D_L00_001E7070_2E3700[beam].v30, &particle_velocity, 0x7F, D_L00_00161D58_2E3700[beam]);
         if (func_002140B0_2E3700(3) == 0) {
             Part *spark;

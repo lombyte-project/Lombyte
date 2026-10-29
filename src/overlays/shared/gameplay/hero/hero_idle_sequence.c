@@ -1546,7 +1546,7 @@ typedef struct {
 } P_207d40;
 extern P_207d40 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern void draw_offset_textured_effect_quad(void *, s32, f32, f32) __asm__("FUN_L00_00263618");
-extern int FUN_L00_0020d498_207d40(int) __asm__("FUN_L00_0020d498");
+extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern void FUN_00213ed8_207d40(void *, f32, f32) __asm__("FUN_00213ed8");
 #define P D_0013F350_lui
 
@@ -1576,7 +1576,7 @@ void draw_hero_glow_quads(void) {
         return;
     }
     if (vehicle_mode == 0) {
-        if ((FUN_L00_0020d498_207d40(3) == 3 || FUN_L00_0020d498_207d40(3) == 2) && P.h22D8 == 0) {
+        if ((hero_slot_item_id(3) == 3 || hero_slot_item_id(3) == 2) && P.h22D8 == 0) {
             P.v1D80.f[2] += 0.015f;
             draw_offset_textured_effect_quad(&P.v1D80, 0x280000C0, 0.057f, 0.08f);
             P.v1D80.f[2] -= 0.015f;
@@ -1858,7 +1858,7 @@ void update_hero_moby(void) {
 extern void set_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233210");
 extern void clear_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233248");
 extern void FUN_L00_00232fe8_00208a10(void) __asm__("FUN_L00_00232fe8");
-extern void FUN_001f9838_00208a10(void *, void *, int) __asm__("FUN_001f9838");
+extern void copy_memory_aligned(void *, void *, int) __asm__("FUN_001f9838");
 extern void offset_hero_position_against_gravity(void *, void *, float) __asm__("FUN_L00_002336e8");
 extern void set_moby_local_table_entry(void *, int, void *, float,
                                       float) __asm__("FUN_L00_0024eed8");
@@ -1877,7 +1877,7 @@ void update_hero_vehicle_moby(void) {
     hero_moby = ((unsigned char *)hero.moby);
     qcopy(hero_moby + 0x10, &hero.motion.pos);
     qcopy(hero_moby + 0x40, &hero.motion.rot);
-    FUN_001f9838_00208a10(hero_moby + 0xC0, &hero, 0x30);
+    copy_memory_aligned(hero_moby + 0xC0, &hero, 0x30);
     update_entity(((unsigned char *)hero.moby));
     if (hero.collision_off_frames == 0 && *(int *)(((unsigned char *)hero.moby) + 0x94) != 0) {
         qcopy(&position_scratch, &hero.motion.pos);
@@ -1935,8 +1935,8 @@ f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 void get_moby_light_direction(M_208b60 *, V_208b60 *) __asm__("FUN_0020d510");
 f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-f32 FUN_001f9dc8_208b60(f32) __asm__("FUN_001f9dc8");
-f32 FUN_001f9de0_208b60(f32) __asm__("FUN_001f9de0");
+f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+f32 fast_sin(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a68_208b60(V_208b60 *, M_208b60 *, f32) __asm__("FUN_001f9a68");
 void normalize_vector_xyz(V_208b60 *, V_208b60 *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_208b60(V_208b60 *, V_208b60 *, V_208b60 *) __asm__("FUN_001f9a10");
@@ -1969,14 +1969,14 @@ void update_hero_moby_probed_height_bounds(void) {
     G.fD20 = fast_add_rotations(G.fD20, rotation_step);
     get_moby_light_direction(G.m2080, &v);
     planar_angle = fast_arc_tan(v.f[0], v.f[1]);
-    planar_cosine = FUN_001f9dc8_208b60(planar_angle);
-    planar_sine = FUN_001f9de0_208b60(planar_angle);
+    planar_cosine = fast_cos(planar_angle);
+    planar_sine = fast_sin(planar_angle);
     {
-        f32 direction_xy_scale = FUN_001f9dc8_208b60(G.fD20);
+        f32 direction_xy_scale = fast_cos(G.fD20);
         v.f[0] = planar_cosine * direction_xy_scale;
         v.f[1] = planar_sine * direction_xy_scale;
     }
-    v.f[2] = -FUN_001f9de0_208b60(G.fD20);
+    v.f[2] = -fast_sin(G.fD20);
     qcopy(&l00_hero_height_probe_direction, &v);
     probe_reference_z = G.f2D8;
     if (probe_reference_z < 1.0f) {

@@ -61,12 +61,12 @@ void interpolate_wrapped_rotations_cosine_eased(float *out, float *start_rotatio
     out[1] = fast_add_rotations(start_rotations[1], fast_subtract_rotations(target_rotations[1], start_rotations[1]) * cosine_ease_weight);
     out[2] = fast_add_rotations(start_rotations[2], fast_subtract_rotations(target_rotations[2], start_rotations[2]) * cosine_ease_weight);
 }
-float FUN_001fa5c8_00258110(float, float) __asm__("FUN_001fa5c8");
+float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 float absolute_float(float) __asm__("FUN_001f99c0");
-float FUN_001fa580_00258110(float, float) __asm__("FUN_001fa580");
+float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_00258110");
 float spring_turn(float *turn_step, float current_angle, float target_angle, float spring_strength, float damping_factor, float max_turn_step) {
-    float angle_delta = FUN_001fa5c8_00258110(target_angle, current_angle);
+    float angle_delta = fast_subtract_rotations(target_angle, current_angle);
     float k = angle_delta / 0.15707964f;
     if (k > 1.0f)
         k = 1.0f;
@@ -83,7 +83,7 @@ float spring_turn(float *turn_step, float current_angle, float target_angle, flo
         *turn_step = absolute_float(angle_delta);
     else if (*turn_step < -absolute_float(angle_delta))
         *turn_step = -absolute_float(angle_delta);
-    return FUN_001fa580_00258110(current_angle, *turn_step);
+    return fast_add_rotations(current_angle, *turn_step);
 }
 extern float FUN_001f99c0(float);
 
@@ -153,9 +153,9 @@ extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
 extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern V_258490 D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
-extern float FUN_001f99c0_258490(float) __asm__("FUN_001f99c0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void FUN_001f9a28_258490(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001f9a10_258490(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_258490(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9bf8_258490(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -189,7 +189,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
     pos->f[2] += h;
     gz = allocate_voice_for_target_entry_cf(pos);
     pos->f[2] -= h;
-    if (lim < FUN_001f99c0_258490(gz - to->f[2])) {
+    if (lim < absolute_float(gz - to->f[2])) {
         if ((((flags ^ 1) & 1) && gz < to->f[2]) || to->f[2] < gz) {
             qcopy(pos, to);
             ok = 0;
@@ -199,8 +199,8 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
     FUN_001f9bf8_258490(&n, &d, r * 1.2f);
     up.q = 0;
     up.f[2] = h;
-    FUN_001f9a10_258490(&a, to, &up);
-    FUN_001f9a10_258490(&b, &a, &n);
+    fast_vec_add(&a, to, &up);
+    fast_vec_add(&b, &a, &n);
     if (ok && FUN_001efa68_258490(&a, &b, m2 | 0x24, ign, 0)) {
         c = D_L00_00173E40_258490;
         if (*(int *)(c + 0x1C) > 0) {
@@ -213,11 +213,11 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
                     if (0.0f < k) {
                         FUN_001f9a68_258490(nrm, nrm, k);
                         ok = 0;
-                        FUN_001f9a10_258490(&d, &d, nrm);
+                        fast_vec_add(&d, &d, nrm);
                     }
                 }
             }
-            FUN_001f9a10_258490(pos, to, &d);
+            fast_vec_add(pos, to, &d);
         }
     }
     if (!(flags & 2)) {
@@ -244,7 +244,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
     pos->f[2] += h;
     gz = allocate_voice_for_target_entry_cf(pos);
     pos->f[2] -= h;
-    if (lim < FUN_001f99c0_258490(gz - to->f[2])) {
+    if (lim < absolute_float(gz - to->f[2])) {
         if ((((flags ^ 1) & 1) && gz < to->f[2]) || to->f[2] < gz) {
             qcopy(pos, to);
             ok = 0;

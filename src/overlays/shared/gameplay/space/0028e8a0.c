@@ -223,7 +223,7 @@ typedef struct {
 } C_0028ed58;
 extern C_0028ed58 D_L00_0016C860_0028ed58 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
-void FUN_002335a0_0028ed58(void) __asm__("FUN_002335a0");
+void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_0028ed58(s32) __asm__("FUN_L00_0028e9c8");
 s32 FUN_001f96f8_0028ed58(s32) __asm__("FUN_001f96f8");
 void FUN_002049f0_0028ed58(s32) __asm__("FUN_002049f0");
@@ -241,7 +241,7 @@ void prepare_target_level_transition(s32 target_level_index) {
     D_L00_0015F400 = 0;
     shared_state_record->i20 = 0;
     shared_state_record->h24 = -1;
-    FUN_002335a0_0028ed58();
+    calculate_dma_transfer_address();
     shared_table_offset = D_L00_001611CC - 0x60000;
     shared_result_record = &D_L00_0016C860_0028ed58;
     shared_result_record->i58 = D_L00_00173E00_0028ed58.i4 + shared_table_offset;

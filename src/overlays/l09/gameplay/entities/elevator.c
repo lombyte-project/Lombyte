@@ -1328,7 +1328,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) __asm__("FUN_L09_002ef868");
 void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate);
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
-extern void func_L00_00260108_309688(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern Hit_309688 *func_L00_0025B478_309688(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int func_L09_003095D0_309688(void *, int) __asm__("FUN_L09_00308220");
 extern int func_001F9850_309688(int) __asm__("FUN_001f96f8");
@@ -1336,7 +1336,7 @@ extern int func_0022ED80_309688(int, int, void *) __asm__("FUN_0022da68");
 extern float func_002140F8_309688(float, float) __asm__("FUN_002132a8");
 extern float func_001F9F90_309688(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_309688(float) __asm__("FUN_001f9de0");
-extern void func_001F9EC0_309688(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -1401,7 +1401,7 @@ void barrier_update(Moby *moby)
         piece_pos[0] = piece_pos[0] + scale * func_001F9F90_309688(angle);
         scale = scale * func_001F9FA8_309688(angle);
         piece_pos[2] = piece_pos[2] + scale;
-        func_001F9EC0_309688(piece_pos, piece_pos, ((f32 *)&moby->rot_row0));
+        transform_vector_by_basis(piece_pos, piece_pos, ((f32 *)&moby->rot_row0));
         fast_vec_add(piece_pos, piece_pos, center);
         fast_vec_sub(piece_velocity, piece_pos, origin);
         scale = func_001F9B88_309688(6.0f - fast_vec_length(piece_velocity)) / 6.0f;
@@ -1413,7 +1413,7 @@ void barrier_update(Moby *moby)
             func_L09_002F0BB8_309688(moby, piece_pos, piece_velocity, odd, func_002140F8_309688(1.0f, 1.3f));
         }
         if (i % 3 == 0) {
-            func_L00_00260108_309688(moby, piece_pos, -1, func_002140F8_309688(0.3f, 0.6f), 0.0f);
+            cart_burst(moby, piece_pos, -1, func_002140F8_309688(0.3f, 0.6f), 0.0f);
         }
         angle = angle + 6.2831855f / func_001FA888_309688(count);
     }
@@ -1458,10 +1458,10 @@ extern void update_moby_rotation_oscillation(void *, char *, char *, float, floa
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
-extern void func_001F9C30_30A560(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float func_002140F8_30A560(float, float) __asm__("FUN_002132a8");
 extern void func_001E9730_30A560() __asm__("FUN_001e93b0");
-extern int func_001F9908_30A560(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int func_0022ED80_30A560(int, int, char *) __asm__("FUN_0022da68");
 extern int func_001F9850_30A560(int) __asm__("FUN_001f96f8");
 extern void func_001F9BF0_30A560(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1471,7 +1471,7 @@ extern void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern float func_001FA748_30A560(float, float) __asm__("FUN_001fa580");
-extern void func_001F9BD8_30A560(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_L00_002617B0_30A560(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern char D_L09_00209518_30A560[] __asm__("D_L09_00209228");
 extern unsigned char D_0013E633_30A560[] __asm__("D_0013F350");
@@ -1498,7 +1498,7 @@ void update_floating_ship_piece(char *moby) {
     float side_dot, front_dot;
     unsigned char linked_state;
 
-    func_001F9C30_30A560(movement, moby + 0x10, -1.0f);
+    fast_vec_scale(movement, moby + 0x10, -1.0f);
     qcopy(original_rotation, moby + 0x40);
     old_z = *(float *)(moby + 0x18);
     sink_level = *(float *)(data + 0x84) - 0.300000012f;
@@ -1548,7 +1548,7 @@ void update_floating_ship_piece(char *moby) {
             float deg_to_rad;
             float tilt;
             float pitch_target;
-            func_001F9908_30A560((int *)(data + 0x88));
+            fast_dec_timer((int *)(data + 0x88));
             func_001F9BF0_30A560(hero_offset, (D_0013E633_30A560 + 0x80), moby + 0x10);
             deg_to_rad = 0.0174532924f;
             side_dot = fast_vec_dot(hero_offset, moby + 0xC0);
@@ -1614,7 +1614,7 @@ void update_floating_ship_piece(char *moby) {
                           frame_time * 0.436332315f, frame_time * 0.541052043f);
         *(float *)(moby + 0x40) = func_001FA748_30A560(*(float *)(data + 0x60), *(float *)(moby + 0x40));
         *(float *)(moby + 0x44) = func_001FA748_30A560(*(float *)(data + 0x64), *(float *)(moby + 0x44));
-        func_001F9BD8_30A560(movement, movement, moby + 0x10);
+        fast_vec_add(movement, movement, moby + 0x10);
         func_L00_002617B0_30A560(data + 0x20, movement, original_rotation, moby + 0x40);
         break;
     }

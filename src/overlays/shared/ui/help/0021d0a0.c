@@ -643,10 +643,10 @@ extern struct Moby *FUN_0020c4f8_2348d0(s32) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_2348d0(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode_and_set_moby(s32, s32, struct Moby *) __asm__("FUN_L01_00231348");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
-extern void FUN_001f99f8_2348d0(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a28_2348d0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_2348d0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001f9a68_2348d0(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 FUN_001f9af0_2348d0(void *) __asm__("FUN_001f9af0");
 extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
@@ -739,7 +739,7 @@ void update_hero_timers_and_spatial_state(void) {
     hero.current_path_dist = 9999.0f;
     if (hero.air_frames.s != 0 && gravity_z(&hero.motion.velocity) < 0.0f) {
         if (hero.pos_history_count != 0x20) goto skip;
-        FUN_001f99f8_2348d0(&sum);
+        clear_u64_value(&sum);
         sample_count = 8;
         for (i = 0; i < sample_count; i++) {
             history_index_base = hero.pos_history_index - i;
@@ -750,7 +750,7 @@ void update_hero_timers_and_spatial_state(void) {
             }
             FUN_001f9a10_2348d0(&sum, &sum, &history_delta);
         }
-        FUN_001f9a68_2348d0(&sum, &sum, 1.0f / (f32)sample_count);
+        fast_vec_scale(&sum, &sum, 1.0f / (f32)sample_count);
         if (FUN_001f9af0_2348d0(&sum) < frame_time) {
             hero.still_frames++;
             goto skip;

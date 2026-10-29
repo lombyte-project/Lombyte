@@ -3649,7 +3649,7 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 unsigned char *spawn_color_tween_emitter_particle(void *pos, unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, int g, float x, float y) __asm__("FUN_L00_002729c8");
 extern float FUN_001fa6c0_2cd2b0(int) __asm__("FUN_001fa6c0");
-extern float FUN_L00_0025e310_2cd2b0(float) __asm__("FUN_L00_0025e310");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float FUN_001f9dc8_2cd2b0(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2cd2b0(float) __asm__("FUN_001f9de0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -3675,9 +3675,9 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby)
 
     frame_phase_work_value = FUN_001fa6c0_2cd2b0(D_L07_0015F5CC_lui);
     qcopy(oscillating_reference_position, moby_effect_data->f140);
-    oscillation_work_value = FUN_001f9dc8_2cd2b0(FUN_L00_0025e310_2cd2b0(frame_phase_work_value / 11.0f));
+    oscillation_work_value = FUN_001f9dc8_2cd2b0(normalize_angle(frame_phase_work_value / 11.0f));
     frame_phase_work_value = frame_phase_work_value / 10.0f;
-    oscillation_work_value = FUN_L00_0025e310_2cd2b0(frame_phase_work_value + oscillation_work_value * 1.5707964f);
+    oscillation_work_value = normalize_angle(frame_phase_work_value + oscillation_work_value * 1.5707964f);
     oscillating_reference_position[0] = oscillating_reference_position[0] + FUN_001f9de0_2cd2b0(oscillation_work_value);
     moby_point_position(effect_owner_moby, 2, attachment_position);
     fast_vec_sub(endpoint_work_vector, oscillating_reference_position, attachment_position);

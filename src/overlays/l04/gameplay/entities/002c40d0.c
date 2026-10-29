@@ -13,7 +13,7 @@ extern char *get_moby_suck_cannon_record(char *) __asm__("FUN_L00_002db890");
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
-/* Moby state 9 while FUN_L00_002dbc30 reports a hit; allocates a voice when the short at 0x68 of FUN_L00_002db890(moby) is 6. */
+/* Moby state 9 while FUN_L00_002dbc30 reports a hit; allocates a voice when the short at 0x68 of process_moby_hit_state_and_voice(moby) is 6. */
 int process_moby_hit_state_and_voice(struct Moby *moby, int input_quad_address, int b, float f) __asm__("FUN_L04_002c40d0");
 
 int process_moby_hit_state_and_voice(struct Moby *moby, int input_quad_address, int launch_position_source, float launch_position_offset) {

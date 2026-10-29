@@ -1093,16 +1093,16 @@ extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("
 extern int FUN_L00_0024f7c8();
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
-extern void func_L00_00250800_2D6C58(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_0020DAF8_2D6C58(char *, int, char *) __asm__("FUN_0020cca8");
 extern float func_00214158_2D6C58(void) __asm__("FUN_00213308");
 extern float func_002140F8_2D6C58(float, float) __asm__("FUN_002132a8");
 extern void func_L00_001FF4B0_2D6C58(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float func_001F9F90_2D6C58(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2D6C58(float) __asm__("FUN_001f9de0");
-extern float func_001F9878_2D6C58(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2D6C58(float) __asm__("FUN_001fa6d0");
-extern char *func_00219780_2D6C58(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
     char *data = *(char **)(moby + 0x78);
@@ -1117,7 +1117,7 @@ void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
     int frames1, frames2, frames3;
     float random_angle, offset;
 
-    func_L00_00250800_2D6C58(moby, joint, joint_pos);
+    moby_point_position(moby, joint, joint_pos);
     func_0020DAF8_2D6C58(moby, joint, joint_transform_buffer);
     for (i = 0; i < count; i++) {
         float *spawn_ptr = spawn_pos;
@@ -1154,10 +1154,10 @@ void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) {
         }
         velocity[3] = bomber_tank_joint_particle_velocity_w_gp;
         spread_vector[3] = bomber_tank_joint_particle_spread_vector_w_gp;
-        frames1 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)bomber_tank_joint_particle_duration_frames_range_start_gp, (float)bomber_tank_joint_particle_duration_frames_range_start_gp * 1.2f)));
-        frames2 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)bomber_tank_joint_particle_second_frame_count_range_start_gp, (float)bomber_tank_joint_particle_second_frame_count_range_start_gp * 1.2f)));
-        frames3 = func_001FA898_2D6C58(func_001F9878_2D6C58(func_002140F8_2D6C58((float)bomber_tank_joint_particle_third_frame_count_range_start_gp, (float)bomber_tank_joint_particle_third_frame_count_range_start_gp * 1.5f)));
-        func_00219780_2D6C58(joint_pos, velocity, spread_vector, bomber_tank_joint_particle_initial_color_gp, bomber_tank_joint_particle_second_color_gp, frames1, frames2, frames3, -1);
+        frames1 = func_001FA898_2D6C58(scale_time(func_002140F8_2D6C58((float)bomber_tank_joint_particle_duration_frames_range_start_gp, (float)bomber_tank_joint_particle_duration_frames_range_start_gp * 1.2f)));
+        frames2 = func_001FA898_2D6C58(scale_time(func_002140F8_2D6C58((float)bomber_tank_joint_particle_second_frame_count_range_start_gp, (float)bomber_tank_joint_particle_second_frame_count_range_start_gp * 1.2f)));
+        frames3 = func_001FA898_2D6C58(scale_time(func_002140F8_2D6C58((float)bomber_tank_joint_particle_third_frame_count_range_start_gp, (float)bomber_tank_joint_particle_third_frame_count_range_start_gp * 1.5f)));
+        spawn_spark(joint_pos, velocity, spread_vector, bomber_tank_joint_particle_initial_color_gp, bomber_tank_joint_particle_second_color_gp, frames1, frames2, frames3, -1);
     }
 }
 /* Spawns debris mobys while the level counter allows, then scatters or bursts the group's other mobys. */
@@ -1872,7 +1872,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             }
             FUN_L00_0025f730(aim, distance);
             fast_vec_add(aim, aim, &moby->pos);
-            func_L00_00250800_2D6C58(moby, 9, point);
+            moby_point_position(moby, 9, point);
             subtract_vector_xyz(velocity, &target->pos, point);
             set_vector_length_xy(velocity, velocity, time);
             velocity[2] = FUN_L00_0025abf0(point, aim, &scratch, time, -(frame_time_sq * 15.0f));

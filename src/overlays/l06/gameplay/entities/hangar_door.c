@@ -1066,21 +1066,21 @@ extern void func_L06_002F71A8_2F69D0(Moby *) __asm__("FUN_L06_002f5d78");
 extern int func_001F9850_2F69D0(int) __asm__("FUN_001f96f8");
 extern float func_00214D28_2F69D0(float *, float, float) __asm__("FUN_00213ed8");
 extern float func_001F9B88_2F69D0(float) __asm__("FUN_001f99c0");
-extern void func_L00_00217718_2F69D0(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void func_L00_002EBF50_2F69D0(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern int func_0022ED80_2F69D0(int, int, Moby *) __asm__("FUN_0022da68");
 extern void func_L00_002512D8_2F69D0(int) __asm__("FUN_L00_002502a0");
 extern float func_00214D88_2F69D0(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern int func_L00_0028EB98_2F69D0(Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern void func_L00_0028EBF0_2F69D0(int) __asm__("FUN_0022d798");
-extern void func_001F9C08_2F69D0(void *, void *, void *, float) __asm__("FUN_001f9a40");
+extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float func_001FA790_2F69D0(float, float) __asm__("FUN_001fa5c8");
 extern float func_001FA748_2F69D0(float, float) __asm__("FUN_001fa580");
-extern void func_L00_002EBE88_2F69D0(void *) __asm__("FUN_L00_002ea9d8");
-extern void func_L00_002EBEE0_2F69D0(void *) __asm__("FUN_L00_002eaa30");
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
-extern void func_L00_002EC0C8_2F69D0(int) __asm__("FUN_L00_002eac18");
-extern int func_L00_00203F20_2F69D0(int, int) __asm__("FUN_L00_00203908");
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
+extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern int func_0020BFC8_2F69D0(int, int) __asm__("FUN_0020b178");
 
@@ -1160,8 +1160,8 @@ void update_drawbridge(Moby *moby) {
         func_00214D28_2F69D0(&data->fade, 1.0f, 1.0f / func_001F9850_2F69D0(20));
         D_L06_0015F3FC = 1.0f - func_001F9B88_2F69D0(data->fade);
         if (previous_fade < 0.0f && 0.0f <= data->fade) {
-            func_L00_00217718_2F69D0(D_0013E633_2F69D0 + 0x80, D_0013E633_2F69D0 + 0x90, 0x72, 1);
-            func_L00_002EBF50_2F69D0(D_L06_0016016C_2F69D0 + (data->node_start << 7) + 0x30, D_L06_0016016C_2F69D0 + (data->node_start << 7) + 0x70, 1, 0, 0);
+            set_race_camera(D_0013E633_2F69D0 + 0x80, D_0013E633_2F69D0 + 0x90, 0x72, 1);
+            jet_mount(D_L06_0016016C_2F69D0 + (data->node_start << 7) + 0x30, D_L06_0016016C_2F69D0 + (data->node_start << 7) + 0x70, 1, 0, 0);
         } else if (1.0f <= data->fade) {
             moby->state = 4;
             moby->command = func_0022ED80_2F69D0(0, 4, data->c[9]);
@@ -1206,15 +1206,15 @@ void update_drawbridge(Moby *moby) {
             qcopy_nc(&from_rot, &((Node *)D_L06_0016016C_2F69D0)[data->node_mid].v70);
             qcopy_nc(&to_rot, &((Node *)D_L06_0016016C_2F69D0)[data->node_end].v70);
         }
-        func_001F9C08_2F69D0(&position, &from_pos, &to_pos, blend);
+        lerp_vector(&position, &from_pos, &to_pos, blend);
         rotation.x = func_001FA790_2F69D0(to_rot.x, from_rot.x) * blend;
         rotation.x = func_001FA748_2F69D0(from_rot.x, rotation.x);
         rotation.y = func_001FA790_2F69D0(to_rot.y, from_rot.y) * blend;
         rotation.y = func_001FA748_2F69D0(from_rot.y, rotation.y);
         rotation.z = func_001FA790_2F69D0(to_rot.z, from_rot.z) * blend;
         rotation.z = func_001FA748_2F69D0(from_rot.z, rotation.z);
-        func_L00_002EBE88_2F69D0(&position);
-        func_L00_002EBEE0_2F69D0(&rotation);
+        set_camera_position(&position);
+        set_camera_rotation(&rotation);
         break;
     case FADE_AFTER_DRAWBRIDGE_ANIMATION:
         previous_fade = data->fade;
@@ -1222,10 +1222,10 @@ void update_drawbridge(Moby *moby) {
         D_L06_0015F3FC = 1.0f - func_001F9B88_2F69D0(data->fade);
         if (previous_fade < 0.0f && 0.0f <= data->fade) {
             enter_hero_idle_state_for_current_vehicle_mode();
-            func_L00_002EC0C8_2F69D0(3);
+            jet_end_mount(3);
         } else if (1.0f <= data->fade) {
             moby->state = 6;
-            func_L00_00203F20_2F69D0(0x1776, 0x2D);
+            help_request(0x1776, 0x2D);
             queue_dialogue_message(0x177C, -1);
             func_0020BFC8_2F69D0(0, -1);
         }
@@ -2419,8 +2419,8 @@ extern void func_L06_002FAAC8_2FA618(void *) __asm__("FUN_L06_002f9698");
 extern float func_L00_001FF860_2FA618(float, float) __asm__("FUN_001f9e90");
 extern void func_L00_0025D5B0_2FA618(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
-extern void func_L00_0025E4B0_2FA618(void *, void *) __asm__("FUN_L00_0025d458");
-extern void func_L00_0025E590_2FA618(void *, void *) __asm__("FUN_L00_0025d538");
+extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void func_L00_0025A8E8_2FA618(void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern float func_001FA748_2FA618(float, float) __asm__("FUN_001fa580");
 extern float func_001F9FA8_2FA618(float) __asm__("FUN_001f9de0");
@@ -2520,11 +2520,11 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby)
         case REACTION_NO_RESPONSE:
             break;
         }
-        func_L00_0025E4B0_2FA618(moby, data->f60);
+        trooper_anim_update(moby, data->f60);
     }
 
     moby->hit_slot = 0xFF;
-    func_L00_0025E590_2FA618(moby, data->f60);
+    trooper_anim_finish(moby, data->f60);
     switch (moby->state) {
     case SNAPPER_APPROACH_TARGET:
     case SNAPPER_REPOSITION_AROUND_TARGET:
@@ -3027,7 +3027,7 @@ void alien_queen_update(unsigned char *moby)
 }
 extern int FUN_001fa6d0(float);
 extern char *FUN_L00_0025a420(void *, int, int);
-extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void FUN_L00_00257470(void *, int, int);
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
@@ -3095,7 +3095,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     *(int *)(data + 0x110) = FUN_001fa6d0(*(float *)(data + 0x20) * 16.0f);
     dmg = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
-    kind = fun_00213928(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
+    kind = trooper_take_damage(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
     if (out != 1 && (unsigned char)moby[0x20] != 14 &&
         (unsigned char)moby[0x20] != 3 && (unsigned char)moby[0x20] != 5) {
         if (*(char **)(hit + 0x20) != 0) {

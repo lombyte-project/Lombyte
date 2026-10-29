@@ -58,7 +58,7 @@ extern void func_001FA540_303CA8(void *, void *, void *) __asm__("FUN_001fa378")
 extern void func_001F9BD8_303CA8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F4868_303CA8(int) __asm__("FUN_001f44b8");
 extern float func_001FA888_303CA8(int) __asm__("FUN_001fa6c0");
-extern int func_001FA8A8_303CA8(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void func_L00_001FD1D8_303CA8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L12_001FB7D0_303CA8[] __asm__("D_L12_001FB510");
 
@@ -113,7 +113,7 @@ void draw_oscillating_target_link_strips(Moby *moby) {
         } else {
             fade = 1.0f - func_001FA888_303CA8(data->phase[ring]) / func_001FA888_303CA8(oscillating_link_strip_fade_pivot_ticks);
         }
-        quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = func_001FA8A8_303CA8(oscillating_link_strip_fade_source_color, oscillating_link_strip_fade_target_color, fade);
+        quad[1].c[0] = quad[1].c[1] = quad[1].c[2] = quad[1].c[3] = fast_tween_color(oscillating_link_strip_fade_source_color, oscillating_link_strip_fade_target_color, fade);
         scroll = 0.0f;
         for (segment = 0; segment < data->count - 1; segment++) {
             scroll = scroll + oscillating_link_strip_segment_u_step_gp;
@@ -251,12 +251,12 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214
 float absolute_float(float input) __asm__("func_001F99C0");
 void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) __asm__("FUN_L00_0025b6b8");
 void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
-extern float func_L00_001FF860_304310(float, float) __asm__("FUN_001f9e90");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float func_001F9D10_304310(void *, void *) __asm__("FUN_001f9b48");
 extern float func_001FA748_304310(float, float) __asm__("FUN_001fa580");
 extern float func_001F9FA8_304310(float) __asm__("FUN_001f9de0");
 extern void func_L00_0025C710_304310(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
-extern float func_001F9D48_304310(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void func_001F9BD8_304310(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_L00_00200290_304310(void *, float) __asm__("FUN_001fa728");
 extern int func_00215570_304310(void *, int) __asm__("FUN_00214720");
@@ -298,7 +298,7 @@ void update_oscillating_target_link(Moby *moby) {
         moby->state = 1;
         break;
     case TARGET_TRACKING_STATE_ACTIVE:
-        moby->rot.z = func_L00_001FF860_304310(D_L12_0015FFD8[data->target].pos.x - moby->pos.x,
+        moby->rot.z = fast_arc_tan(D_L12_0015FFD8[data->target].pos.x - moby->pos.x,
                                              D_L12_0015FFD8[data->target].pos.y - moby->pos.y);
         data->dist = func_001F9D10_304310(((float *)&moby->pos), (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
         data->angle = func_001FA748_304310(data->angle, data->turn * 0.017453292f * D_0015ED6C);
@@ -320,7 +320,7 @@ void update_oscillating_target_link(Moby *moby) {
         start.q = row->v10;
         end.q = row->v20;
         func_L00_0025C710_304310(((float *)&moby->pos), &start, &end, swing);
-        if (func_001F9D48_304310(((float *)&moby->pos), D_0013F4D0_304310) > 64.0f) {
+        if (vector_distance(((float *)&moby->pos), D_0013F4D0_304310) > 64.0f) {
             return;
         }
         if (moby->visible == 0 && D_L12_0015FFD8[data->target].visible == 0) {

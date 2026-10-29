@@ -15,7 +15,7 @@ typedef struct {
 extern void func_001F9BF0_298940(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_298940(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int func_001F9908_298940(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int func_001F9850_298940(int) __asm__("FUN_001f96f8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -46,7 +46,7 @@ void emit_moby_sprite_particles(char *moby) {
         } else if (phase_sum <= 0.0f) {
             sprite_data->a[i] = phase_sum + 255.0f;
         }
-        if (func_001F9908_298940(&sprite_data->c[i])) {
+        if (fast_dec_timer(&sprite_data->c[i])) {
             sprite_data->c[i] = func_001F9850_298940(0xFF);
         }
         color_blend_offset = convert_integer_to_float(func_001F9850_298940(0xFF) - sprite_data->c[i]);
@@ -61,9 +61,9 @@ void emit_moby_sprite_particles(char *moby) {
 #include "qcopy.h"
 extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_001F9850_cc1b8(int) __asm__("FUN_001f96f8");
-extern float func_001F9D10_cc1b8(void *, void *) __asm__("FUN_001f9b48");
-extern float func_L00_001FF860_cc1b8(float, float) __asm__("FUN_001f9e90");
-extern float func_001F9CE8_cc1b8(void *) __asm__("FUN_001f9b20");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) __asm__("FUN_L10_002cc1b8");
 
@@ -83,11 +83,11 @@ char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, i
         *(int *)(shot_data + 0x10) = owner;
         *(int *)(shot_data + 0x14) = target;
         *(int *)(shot_data + 0x28) = 0;
-        *(float *)(shot_data + 0x38) = func_001F9D10_cc1b8(rocket + 0x10, &hero.motion.pos);
+        *(float *)(shot_data + 0x38) = fast_vec_dist(rocket + 0x10, &hero.motion.pos);
         *(int *)(shot_data + 0x30) = 0;
         *(int *)(shot_data + 0x34) = 0;
-        *(float *)(rocket + 0x48) = func_L00_001FF860_cc1b8(*(float *)shot_data, *(float *)(shot_data + 4));
-        *(float *)(rocket + 0x44) = -func_L00_001FF860_cc1b8(func_001F9CE8_cc1b8(shot_data), *(float *)(shot_data + 8));
+        *(float *)(rocket + 0x48) = fast_arc_tan(*(float *)shot_data, *(float *)(shot_data + 4));
+        *(float *)(rocket + 0x44) = -fast_arc_tan(vector_length_xy(shot_data), *(float *)(shot_data + 8));
         update_entity(rocket);
     }
     return rocket;

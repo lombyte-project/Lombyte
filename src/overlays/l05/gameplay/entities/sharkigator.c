@@ -639,7 +639,7 @@ void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9
 void update_moby_glow_and_queue_draw(char *m) __asm__("FUN_L05_002d7020");
 void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 void draw_group_scenery_ship_trails(char *moby) __asm__("FUN_L05_002d7920");
-extern char *func_L00_0025B478_2D8388(void *, int, int) __asm__("FUN_L00_0025a420");
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float func_00214158_2D8388(void) __asm__("FUN_00213308");
 extern float func_L00_001FF860_2D8388(float, float) __asm__("FUN_001f9e90");
 extern float func_001FA790_2D8388(float, float) __asm__("FUN_001fa5c8");
@@ -651,10 +651,10 @@ extern int func_001FA8A8_2D8388(int, int, float) __asm__("FUN_001fa6e0");
 extern void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 extern int func_L00_0028EB98_2D8388(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int func_0022ED80_2D8388(int, int, int) __asm__("FUN_0022da68");
-extern void func_001F9EC0_2D8388(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void func_001F9BD8_2D8388(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void func_001F49B0_2D8388(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void func_001F9C30_2D8388(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int func_001F9850_2D8388(int) __asm__("FUN_001f96f8");
 extern void *func_L00_00265050_2D8388(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12) __asm__("FUN_L00_00263fd8");
 extern void func_0020D678_2D8388(void *) __asm__("FUN_0020c828");
@@ -692,7 +692,7 @@ void scenery_ship_update(char *moby) {
     float *effect_origin_position, *effect_origin_rotation, *tab;
 
     if (D_L05_001672C8_2D8388[0] < 55.0f) return;
-    hit = func_L00_0025B478_2D8388(moby, 0x10000, 0);
+    hit = find_moby_hit(moby, 0x10000, 0);
     damaged = 0;
     switch (*(unsigned char *)(moby + 0x20)) {
     case SCENERY_SHIP_INITIALIZE: {
@@ -757,20 +757,20 @@ void scenery_ship_update(char *moby) {
         left_offset.f[0] = -1.2f;
         left_offset.f[1] = 0.4f;
         left_offset.f[2] = 0.45f;
-        func_001F9EC0_2D8388(&left_offset, &left_offset, moby + 0xC0);
+        transform_vector_by_basis(&left_offset, &left_offset, moby + 0xC0);
         func_001F9BD8_2D8388((float *)&data->trail[0][(short)data->f322], left_offset.f, (float *)(moby + 0x10));
         data->trail[0][(short)data->f322].w = 1.0f;
         tail_offset.q = 0;
         tail_offset.f[0] = -1.5f;
         tail_offset.f[2] = -0.3f;
-        func_001F9EC0_2D8388(&tail_offset, &tail_offset, moby + 0xC0);
+        transform_vector_by_basis(&tail_offset, &tail_offset, moby + 0xC0);
         func_001F9BD8_2D8388((float *)&data->trail[1][(short)data->f322], tail_offset.f, (float *)(moby + 0x10));
         data->trail[1][(short)data->f322].w = 1.0f;
         right_offset.q = 0;
         right_offset.f[0] = -1.2f;
         right_offset.f[1] = -0.4f;
         right_offset.f[2] = 0.45f;
-        func_001F9EC0_2D8388(&right_offset, &right_offset, moby + 0xC0);
+        transform_vector_by_basis(&right_offset, &right_offset, moby + 0xC0);
         func_001F9BD8_2D8388((float *)&data->trail[2][(short)data->f322], right_offset.f, (float *)(moby + 0x10));
         data->trail[2][(short)data->f322].w = 1.0f;
         if (frame_number != *data->f324) {
@@ -793,7 +793,7 @@ void scenery_ship_update(char *moby) {
         tab = (float *)D_L05_0015F580_macro;
         effect_origin_position = (float *)(moby + 0x10);
         effect_origin_rotation = (float *)(moby + 0x40);
-        func_001F9C30_2D8388(&left_offset, moby + 0xC0, scenery_ship_removal_effect_basis_scale_gp * frame_scale);
+        fast_vec_scale(&left_offset, moby + 0xC0, scenery_ship_removal_effect_basis_scale_gp * frame_scale);
         left_offset.f[2] = left_offset.f[2] + scenery_ship_removal_effect_z_addend_gp * frame_scale;
         lifetime = func_001F9850_2D8388(0x5A);
         func_L00_00265050_2D8388(moby, 0x72E, effect_origin_position, effect_origin_rotation, lifetime, 0, left_offset.f, tab, D_0015ED70 * 12.0f, tab);

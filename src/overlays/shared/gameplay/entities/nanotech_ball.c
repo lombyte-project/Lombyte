@@ -275,13 +275,13 @@ typedef struct {
 extern char g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
 extern T_2d8510 D_L00_001B2080_lui __asm__("D_L00_001B2080") NOT_SDA;
 extern s32 D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
-void FUN_001f9a28_2d8510(void *, void *, void *) __asm__("FUN_001f9a28");
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-s32 FUN_001f9770_2d8510(void *) __asm__("FUN_001f9770");
+s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32 FUN_001f96f8_2d8510(s32) __asm__("FUN_001f96f8");
-f32 FUN_001fa6c0_2d8510(s32) __asm__("FUN_001fa6c0");
-s32 FUN_001fa6d0_2d8510(f32) __asm__("FUN_001fa6d0");
+f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
 s32 FUN_001fa6e0_2d8510(s32, s32, f32) __asm__("FUN_001fa6e0");
 u8 *FUN_L00_00272f68_2d8510(void *, s32, u8, s32, s32, s32, s32, f32) __asm__("FUN_L00_00272f68");
@@ -300,14 +300,14 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
     f32 z, color_progress_or_size_factor, unwrapped_effect_value;
     u8 *effect_record;
     effect_data = moby->p78;
-    FUN_001f9a28_2d8510(&effect_position, &(*(V_2d8510 *)g_debug_camera), &moby->v10);
+    fast_vec_sub(&effect_position, &(*(V_2d8510 *)g_debug_camera), &moby->v10);
     any_effect_timer_above_threshold = 0;
     fast_vec_normalize(&effect_position, &effect_position, -0.3f);
     fast_vec_normalize(&effect_position_step, &effect_position, 0.1f);
     fast_vec_add(&effect_position, &effect_position, &moby->v10);
     z = effect_position.z;
     for (i = 0; i < 4; i++) {
-        if (FUN_001f9770_2d8510(&effect_data->h58[i]))
+        if (fast_dec_timer_s16(&effect_data->h58[i]))
             continue;
         if (effect_data->h58[i] > FUN_001f96f8_2d8510(0x30))
             any_effect_timer_above_threshold = 1;
@@ -316,20 +316,20 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
             effect_data->f60[i] = unwrapped_effect_value - 255.0f;
         else if (unwrapped_effect_value <= 0.0f)
             effect_data->f60[i] = unwrapped_effect_value + 255.0f;
-        color_progress_or_size_factor = FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(0xFF) - effect_data->h58[i]);
+        color_progress_or_size_factor = convert_integer_to_float(FUN_001f96f8_2d8510(0xFF) - effect_data->h58[i]);
         color_progress_or_size_factor = color_progress_or_size_factor / (f32)FUN_001f96f8_2d8510(0xFF);
         c = FUN_001fa6e0_2d8510(nanotech_ball_collection_color_range_start_gp, nanotech_ball_collection_color_range_end_gp,
                                 absolute_float(0.5f - color_progress_or_size_factor));
         hi = c >> 24;
-        color_progress_or_size_factor = 1.0f - effect_data->h58[i] / FUN_001fa6c0_2d8510(FUN_001f96f8_2d8510(D_L00_00161A58_gp));
-        al = FUN_001fa6d0_2d8510(FUN_001fa6c0_2d8510(hi) * (1.0f - color_progress_or_size_factor)) << 24;
+        color_progress_or_size_factor = 1.0f - effect_data->h58[i] / convert_integer_to_float(FUN_001f96f8_2d8510(D_L00_00161A58_gp));
+        al = truncate_float_to_s32(convert_integer_to_float(hi) * (1.0f - color_progress_or_size_factor)) << 24;
         c = al | (c & 0xFFFFFF);
         effect_position.z = z + nanotech_ball_collection_particle_z_offsets[i];
-        effect_record = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), nanotech_ball_collection_particle_byte_source_index, 0,
+        effect_record = FUN_L00_00272f68_2d8510(&effect_position, c, truncate_float_to_s32(effect_data->f60[i]), nanotech_ball_collection_particle_byte_source_index, 0,
                                     2, 1, nanotech_ball_collection_particle_scale_factors[i] * color_progress_or_size_factor);
         if (effect_record)
             effect_record[2] = *D_L00_001B2080_lui.pF8;
-        effect_record = FUN_L00_00272f68_2d8510(&effect_position, al | 0xFFFFFF, FUN_001fa6d0_2d8510(effect_data->f60[i]),
+        effect_record = FUN_L00_00272f68_2d8510(&effect_position, al | 0xFFFFFF, truncate_float_to_s32(effect_data->f60[i]),
                                     nanotech_ball_collection_particle_byte_source_index, nanotech_ball_collection_second_particle_mode_selector, 2, 1,
                                     nanotech_ball_collection_particle_scale_factors[i] * (color_progress_or_size_factor * 0.7f));
         if (effect_record)
@@ -353,7 +353,7 @@ typedef struct {
 extern u128 D_L00_001E3CA0_002d8850[] __asm__("D_L00_001E3CA0");
 void FUN_00214890_002d8850(void *, void *, void *, float) __asm__("FUN_00214890");
 void FUN_001f9bf8_002d8850(void *, void *, float) __asm__("FUN_001f9bf8");
-void FUN_001f9a10_002d8850(void *, void *, void *) __asm__("FUN_001f9a10");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i) __asm__("FUN_L00_002d8850");
 
 void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i) {
@@ -364,7 +364,7 @@ void compute_nanotech_ball_slot_position(unsigned char *moby, float *out, int i)
     e = moby_data->e[i];
     if (e && moby[0x20] == 2)
         FUN_001f9bf8_002d8850(&slot_offset, &slot_offset, *(float *)(e + 0x28));
-    FUN_001f9a10_002d8850(out, &moby_data->p10, &slot_offset);
+    fast_vec_add(out, &moby_data->p10, &slot_offset);
     out[2] += moby_data->f0_002d8850;
 }
 typedef f32 V4[4] __attribute__((aligned(16)));
@@ -494,7 +494,7 @@ extern float D_L00_001E17F0_2D9EA0[] __asm__("D_L00_001E14A0");
 extern float func_002140F8_2D9EA0(float, float) __asm__("FUN_002132a8");
 extern int func_002140B0_2D9EA0(int) __asm__("FUN_00213260");
 extern int func_001F9850_2D9EA0(int) __asm__("FUN_001f96f8");
-extern void func_001FA1F8_2D9EA0(void *, void *) __asm__("FUN_001fa030");
+extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void func_L00_001FF4B0_2D9EA0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
@@ -519,7 +519,7 @@ extern int func_L00_002D99C0_2D9EA0(void *) __asm__("FUN_L00_002d8510");
 extern void func_L00_002D9668_2D9EA0(void *) __asm__("FUN_L00_002d81b8");
 extern int func_001F9938_2D9EA0(void *) __asm__("FUN_001f9770");
 extern void func_L00_002688A8_2D9EA0(void *) __asm__("FUN_L00_00267a08");
-extern void func_0020D678_2D9EA0(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int func_L00_0028EF68_2D9EA0(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern float func_001FA888_2D9EA0(int) __asm__("FUN_001fa6c0");
 extern float func_L00_00258E58_2D9EA0(float, float, float, float, float) __asm__("FUN_L00_00257e20");
@@ -558,7 +558,7 @@ void nanotech_ball_update(Moby *moby) {
         for (i = 0; i < 4; i++) data->h58[i] = func_001F9850_2D9EA0(D_L00_00161A58_gp);
         for (i = 7; i >= 0; i--) data->slots[i] = 0;
         if (D_L00_0015F63C == 0) {
-            func_001FA1F8_2D9EA0(&moby->rot_row0, &moby->rot);
+            euler_rotation_basis(&moby->rot_row0, &moby->rot);
             D_L00_0015F63C = moby;
             moby->update_dist = 0xFF;
             data->f7C = 0;
@@ -734,7 +734,7 @@ void nanotech_ball_update(Moby *moby) {
                 }
             }
             if (D_L00_0015F63C == moby) moby->state = 4;
-            else func_0020D678_2D9EA0(moby);
+            else mark_moby_for_removal(moby);
         } else {
             int i;
             func_001F9C30_2D9EA0(&v20, D_0013F5E0, -nanotech_ball_collection_target_gravity_offset_gp);
@@ -1898,7 +1898,7 @@ fail:
 extern u8 *D_001403E0_lui __asm__("D_001403E0") NOT_SDA;
 u8 *FUN_L00_002db890_002dbb20(u8 *) __asm__("FUN_L00_002db890");
 void FUN_L00_002d9fd0_002dbb20(void *, void *, void *) __asm__("FUN_L00_002d9fd0");
-void FUN_0020e098_002dbb20(void *) __asm__("FUN_0020e098");
+void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 void FUN_0022da68_002dbb20(s32, s32, void *) __asm__("FUN_0022da68");
 void mark_moby_for_removal_cf(void *, s32, s32) __asm__("FUN_L00_00257470");
 s32 FUN_001f96f8_002dbb20(s32) __asm__("FUN_001f96f8");
@@ -1914,7 +1914,7 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
     if (moby != 0 && moby[0x20] != 0xFE && moby[0x20] != 0xFD && *(s16 *)(suction_record + 0x68) != 8) {
         qcopy(moby + 0x10, position);
         FUN_L00_002d9fd0_002dbb20(*(void **)(suction_record + 0x60), moby, suck_cannon_storage_euler_offset);
-        FUN_0020e098_002dbb20(moby);
+        refresh_moby_spatial_bounds_from_basis(moby);
         sound_source_moby = D_001403E0_lui;
         if (sound_source_moby != 0 && *(s16 *)(sound_source_moby + 0xA6) == 0x351) {
             FUN_0022da68_002dbb20(5, 0, sound_source_moby);
@@ -2360,13 +2360,13 @@ extern float func_L00_001FF860_2DDEA0(float, float) __asm__("FUN_001f9e90");
 extern float func_001FA748_2DDEA0(float, float) __asm__("FUN_001fa580");
 extern float func_001FA790_2DDEA0(float, float) __asm__("FUN_001fa5c8");
 extern void approach_w(void *, void *, float, float, float, float) __asm__("FUN_L00_00258278");
-extern void func_001F9BC0_2DDEA0(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int func_001F9850_2DDEA0(int) __asm__("FUN_001f96f8");
 extern float func_001FA888_2DDEA0(int) __asm__("FUN_001fa6c0");
-extern void func_00215328_2DDEA0(void *, void *) __asm__("FUN_002144d8");
+extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_002144d8");
 extern void func_001FA218_2DDEA0(void *, void *) __asm__("FUN_001fa050");
-extern void func_001FA460_2DDEA0(void *, void *) __asm__("FUN_001fa298");
-extern void func_001FA540_2DDEA0(void *, void *, void *) __asm__("FUN_001fa378");
+extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void func_002150B0_2DDEA0(void *, void *) __asm__("FUN_00214260");
 extern void func_001FA5C8_2DDEA0(void *, void *, void *, float) __asm__("FUN_001fa400");
 extern void func_001FA6C0_2DDEA0(void *, void *) __asm__("FUN_001fa4f8");
@@ -2375,9 +2375,9 @@ extern void func_L00_00250800_2DDEA0(void *, int, void *) __asm__("FUN_L00_0024f
 extern float func_001F9D48_2DDEA0(void *, void *) __asm__("FUN_001f9b80");
 extern void func_00213DE0_2DDEA0(void *, int, int, int) __asm__("FUN_00212f90");
 extern int func_L00_002DB6C8_2DDEA0(void *, void *) __asm__("FUN_L00_002da218");
-extern void func_001FA4A0_2DDEA0(void *, void *) __asm__("FUN_001fa2d8");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void func_001F9BF0_2DDEA0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void func_001F9EE8_2DDEA0(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern float func_001F9B88_2DDEA0(float) __asm__("FUN_001f99c0");
 extern void func_001F9EC0_2DDEA0(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void func_001F9BD8_2DDEA0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2394,7 +2394,7 @@ extern void func_L00_001FF500_2DDEA0(void *, void *, float) __asm__("FUN_001f9c4
 extern int func_L00_001F2BE8_2DDEA0(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int func_L00_001F10E0_2DDEA0(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float func_L00_0025F368_2DDEA0(float) __asm__("FUN_L00_0025e310");
-extern void func_001F9CA0_2DDEA0(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void func_00215380_2DDEA0(void *, void *, float) __asm__("FUN_00214530");
 extern void func_001FA588_2DDEA0(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern float func_001F9CE8_2DDEA0(void *) __asm__("FUN_001f9b20");
@@ -2435,7 +2435,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 record->state = 2;
                 record->f6C = 0.0f;
             }
-            func_001F9BC0_2DDEA0(&record->vel);
+            clear_u64_value(&record->vel);
             break;
         }
         case SUCK_UPDATE_RISING_FOR_SUCTION:
@@ -2443,8 +2443,8 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             record->f6C = record->f6C + 1.0f / func_001FA888_2DDEA0(func_001F9850_2DDEA0(1));
             if (1.0f < record->f6C) record->f6C = 1.0f;
             moby->pos.z += record->f6C / 100.0f * frame_scale;
-            func_00215328_2DDEA0(&record->q20, &moby->rot_row0);
-            func_001F9BC0_2DDEA0(&record->vel);
+            extract_matrix_rotation_quaternion(&record->q20, &moby->rot_row0);
+            clear_u64_value(&record->vel);
             break;
         case SUCK_UPDATE_BEING_PULLED_IN: {
             float one, distance, half;
@@ -2457,8 +2457,8 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 work.v[0].x = -1.5707964f;
                 work.v[0].z = -1.5707964f;
                 func_001FA218_2DDEA0(&work.v[11], &work.v[0]);
-                func_001FA460_2DDEA0(&work.v[3], &record->owner->rot_row0);
-                func_001FA540_2DDEA0(&work.v[7], &work.v[3], &work.v[11]);
+                copy_matrix_rotation(&work.v[3], &record->owner->rot_row0);
+                multiply_matrix(&work.v[7], &work.v[3], &work.v[11]);
                 func_002150B0_2DDEA0(&work.v[1], &work.v[7]);
                 func_001FA5C8_2DDEA0(&work.v[2], &record->q20, &work.v[1], record->f6C);
                 func_001FA6C0_2DDEA0(&work.v[2], &work.v[3]);
@@ -2486,9 +2486,9 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 func_L00_002DB6C8_2DDEA0(moby, &work.v[0]);
                 ((struct Hero *)D_0013F450_2DDEA0)->unk2050[record->idx]->flags &= 0xEFFF;
             } else {
-                func_001FA4A0_2DDEA0(&work.v[5], D_0013FA90_2DDEA0);
+                transpose_rotation_matrix(&work.v[5], D_0013FA90_2DDEA0);
                 func_001F9BF0_2DDEA0(&work.v[2], &moby->pos, &work.v[0]);
-                func_001F9EE8_2DDEA0(&work.v[2], &work.v[2], &work.v[5]);
+                transform_vector(&work.v[2], &work.v[2], &work.v[5]);
                 if (work.v[2].x < 0.0f) {
                     if (0.0f < work.v[2].y) {
                         { float t = -work.v[2].x; float r; if (t < 2.0f) r = t; else r = 2.0f; work.v[3].y = r; }
@@ -2601,11 +2601,11 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 record->v50.y = 0.0f;
                 record->v50.w = 0.01f;
                 spin = func_001F9CB8_2DDEA0(&work.v[0]) / record->f80;
-                func_00215328_2DDEA0(&work.v[1], &moby->rot_row0);
+                extract_matrix_rotation_quaternion(&work.v[1], &moby->rot_row0);
                 func_L00_001FF4B0_2DDEA0(&record->v50, &record->v50, one);
                 func_L00_0025F368_2DDEA0(spin);
                 func_L00_001FF4B0_2DDEA0(&work.v[4], &record->vel, -1.0f);
-                func_001F9CA0_2DDEA0(&work.v[3], &work.v[4], &record->v50);
+                fast_vec_cross(&work.v[3], &work.v[4], &record->v50);
                 func_L00_001FF4B0_2DDEA0(&work.v[3], &work.v[3], one);
                 func_00215380_2DDEA0(&work.v[2], &work.v[3], spin);
                 func_001FA588_2DDEA0(&work.v[5], &work.v[1], &work.v[2]);

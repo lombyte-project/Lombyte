@@ -395,7 +395,7 @@ extern void func_L00_001FF4B0_2E8040(void *, void *, float) __asm__("FUN_001f9bf
 extern void func_001F9BD8_2E8040(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9850_2E8040(int) __asm__("FUN_001f96f8");
 extern unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
-extern void func_001F9EC0_2E8040(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float func_00214158_2E8040(void) __asm__("FUN_00213308");
 extern void func_002156E0_2E8040(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 extern unsigned char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
@@ -407,7 +407,7 @@ extern void func_00215C00_2E8040(void *, float, float, float) __asm__("FUN_00214
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void func_0020D678_2E8040(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern Tex D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
 extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
@@ -448,7 +448,7 @@ void update_ship_rocket(Moby *rocket) {
         }
         *(Q_2E8040 *)&trail_direction = 0;
         trail_direction.z = 0.02f;
-        func_001F9EC0_2E8040(&trail_direction, &trail_direction, &*(V4_2E8040 *)&rocket->rot_row0);
+        transform_vector_by_basis(&trail_direction, &trail_direction, &*(V4_2E8040 *)&rocket->rot_row0);
         func_002156E0_2E8040(&trail_direction, &trail_direction, &*(V4_2E8040 *)&rocket->rot_row0, func_00214158_2E8040());
         spawned_effect = spawn_burst(&effect_scratch_vector, &trail_direction, 0x4F007FFF, 0x1FFFFFFF, func_001F9850_2E8040(5), 1, 20000.0f);
         if (spawned_effect != 0) {
@@ -471,17 +471,17 @@ void update_ship_rocket(Moby *rocket) {
     func_00215C00_2E8040(rocket_data, rocket_data->speed, rocket->rot.z, -rocket->rot.y);
     func_001F9BD8_2E8040(&*(V4_2E8040 *)&rocket->pos, &*(V4_2E8040 *)&rocket->pos, rocket_data);
     if (rocket->pos.x < 2.0f || rocket->pos.x > 1021.0f || rocket->pos.y < 2.0f || rocket->pos.y > 1021.0f || rocket->pos.z < 2.0f || rocket->pos.z > 1021.0f) {
-        func_0020D678_2E8040(rocket);
+        mark_moby_for_removal(rocket);
         return;
     }
     moby_point_position(rocket, 1, &hitpos);
     if (collision_line(&old, &hitpos, 0, rocket_data->owner, 0) != 0) {
         qcopy(&effect_scratch_vector, &D_L13_001741E0_2E8040);
         spawn_explosion(rocket, rocket_data, &effect_scratch_vector, 2.0f, 10.0f, 10, 3, 0x10, 4.0f, 2.0f, 9.0f, 1.0f, 0, 20.0f, 0, 1, -1, 0);
-        func_0020D678_2E8040(rocket);
+        mark_moby_for_removal(rocket);
         return;
     }
     if (fast_dec_timer(&rocket_data->timer) != 0) {
-        func_0020D678_2E8040(rocket);
+        mark_moby_for_removal(rocket);
     }
 }

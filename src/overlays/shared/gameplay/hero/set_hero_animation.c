@@ -158,20 +158,20 @@ extern E_231ff8 D_L00_0017BBD0_00231ff8[] __asm__("D_L00_0017BBD0")
     __attribute__((section(".data")));
 extern E_231ff8 D_L00_0015F6B8_gp[1] __asm__("D_L00_0015F6B8") __attribute__((sda));
 int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
-int FUN_L00_0020d498_00231ff8(int) __asm__("FUN_L00_0020d498");
+int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_animation_id, int *out_secondary_animation_id) {
     int matching_animation_entry_indices[20];
     E_231ff8 *animation_table;
     int match_count = 0;
     int animation_lookup_key = return_hero_animation_id_unchanged(input_animation_id);
-    if (FUN_L00_0020d498_00231ff8(3) == 2)
+    if (hero_slot_item_id(3) == 2)
         animation_table = D_L00_0017BBF0_00231ff8;
-    else if (FUN_L00_0020d498_00231ff8(3) == 3)
+    else if (hero_slot_item_id(3) == 3)
         animation_table = D_L00_0017BBD0_00231ff8;
     else {
         animation_table = D_L00_0015F6B8_gp;
-        if (FUN_L00_0020d498_00231ff8(3) != 4)
+        if (hero_slot_item_id(3) != 4)
             animation_table = 0;
     }
     if (animation_table) {
@@ -804,10 +804,10 @@ typedef union {
 } Vec4_2332d0;
 float FUN_001f9dc8_002332d0(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_002332d0(float) __asm__("FUN_001f9de0");
-void FUN_001fa050_002332d0(void *, void *) __asm__("FUN_001fa050");
-void FUN_001f9d20_002332d0(void *, void *, void *) __asm__("FUN_001f9d20");
-void FUN_001f99f8_002332d0(void *) __asm__("FUN_001f99f8");
-float FUN_001f9e90_002332d0(float, float) __asm__("FUN_001f9e90");
+void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+void clear_u64_value(void *) __asm__("FUN_001f99f8");
+float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float compute_hero_ground_aligned_heading(void) __asm__("FUN_L00_002332d0");
 
 float compute_hero_ground_aligned_heading(void) {
@@ -817,25 +817,25 @@ float compute_hero_ground_aligned_heading(void) {
     heading_direction.f[0] = FUN_001f9dc8_002332d0(0.0f);
     heading_direction.f[1] = FUN_001f9de0_002332d0(0.0f);
     heading_direction.f[2] = 0.0f;
-    FUN_001fa050_002332d0(heading_rotation_matrix, &hero.motion.rot);
+    euler_rotation_matrix(heading_rotation_matrix, &hero.motion.rot);
     P = &hero;
-    FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
+    transform_vector(&heading_direction, &heading_direction, heading_rotation_matrix);
     if (P->ground_normal.f[0] != 0.0f || P->ground_normal.f[1] != 0.0f) {
         y_alignment_reference_vector.q = P->ground_normal.q;
-        FUN_001f99f8_002332d0(&z_rotation_angles);
-        FUN_001f99f8_002332d0(&y_rotation_angles);
-        z_rotation_angles.f[2] = -FUN_001f9e90_002332d0(P->ground_normal.f[0], P->ground_normal.f[1]);
-        FUN_001fa050_002332d0(heading_rotation_matrix, &z_rotation_angles);
-        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
-        FUN_001f9d20_002332d0(&y_alignment_reference_vector, &y_alignment_reference_vector, heading_rotation_matrix);
-        y_rotation_angles.f[1] = -FUN_001f9e90_002332d0(y_alignment_reference_vector.f[2], y_alignment_reference_vector.f[0]);
-        FUN_001fa050_002332d0(heading_rotation_matrix, &y_rotation_angles);
-        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
+        clear_u64_value(&z_rotation_angles);
+        clear_u64_value(&y_rotation_angles);
+        z_rotation_angles.f[2] = -fast_arc_tan(P->ground_normal.f[0], P->ground_normal.f[1]);
+        euler_rotation_matrix(heading_rotation_matrix, &z_rotation_angles);
+        transform_vector(&heading_direction, &heading_direction, heading_rotation_matrix);
+        transform_vector(&y_alignment_reference_vector, &y_alignment_reference_vector, heading_rotation_matrix);
+        y_rotation_angles.f[1] = -fast_arc_tan(y_alignment_reference_vector.f[2], y_alignment_reference_vector.f[0]);
+        euler_rotation_matrix(heading_rotation_matrix, &y_rotation_angles);
+        transform_vector(&heading_direction, &heading_direction, heading_rotation_matrix);
         z_rotation_angles.f[2] = -z_rotation_angles.f[2];
-        FUN_001fa050_002332d0(heading_rotation_matrix, &z_rotation_angles);
-        FUN_001f9d20_002332d0(&heading_direction, &heading_direction, heading_rotation_matrix);
+        euler_rotation_matrix(heading_rotation_matrix, &z_rotation_angles);
+        transform_vector(&heading_direction, &heading_direction, heading_rotation_matrix);
     }
-    return FUN_001f9e90_002332d0(heading_direction.f[0], heading_direction.f[1]);
+    return fast_arc_tan(heading_direction.f[0], heading_direction.f[1]);
 }
 extern int scale_ticks(int) __asm__("FUN_001f96f8");
 
@@ -1625,7 +1625,7 @@ typedef struct {
 } B_00234b38;
 extern B_00234b38 D_L00_0016C860_00234b38 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
-void FUN_0020cb10_00234b38(void *, s32, void *) __asm__("FUN_0020cb10");
+void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_00234a50_00234b38(void *) __asm__("FUN_L00_00234a50");
 void apply_hero_moby_scale(void *a) __asm__("FUN_L00_00234b38");
 
@@ -1637,7 +1637,7 @@ void apply_hero_moby_scale(void *scale_owner_moby) {
         scale_factor = 1.33f;
     scale_state = &D_L00_0017C340_00234b38;
     if (scale_state->b1 == 0) {
-        FUN_0020cb10_00234b38(scale_owner_moby, 0x18, scale_state);
+        attach_manipulator(scale_owner_moby, 0x18, scale_state);
         scale_state->f20 = scale_factor;
         scale_state->f24 = scale_factor;
         scale_state->f28 = scale_factor;

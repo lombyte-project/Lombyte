@@ -38,7 +38,7 @@ void step_angle_toward_target(float *current_angle, void *rotation_direction, fl
 extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025bb38");
 extern void advance_damped_scalar_velocity(float *, float, float, float,
                                       float) __asm__("FUN_L00_0025b798");
-extern float FUN_001fa580_0025bc98(float, float) __asm__("FUN_001fa580");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_0025bc98(float) __asm__("FUN_001f99c0");
 
 float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
@@ -55,7 +55,7 @@ float FUN_L00_0025bc98(float *current_angle, float *angular_velocity, int rotati
     }
     angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle);
     advance_damped_scalar_velocity(angular_velocity, angle_error, angle_error_gain, angular_velocity_damping, angular_velocity_limit);
-    angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle = FUN_001fa580_0025bc98(*current_angle, *angular_velocity));
+    angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle = fast_add_rotations(*current_angle, *angular_velocity));
     if (FUN_001f99c0_0025bc98(angle_error) < angular_velocity_limit * 0.01f) {
         *current_angle = x;
         *angular_velocity = 0;
@@ -63,7 +63,7 @@ float FUN_L00_0025bc98(float *current_angle, float *angular_velocity, int rotati
     }
     return angle_error;
 }
-extern float FUN_001fa5c8_25be00(float, float) __asm__("FUN_001fa5c8");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_001fa580_25be00(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_25be00(float) __asm__("FUN_001f99c0");
 extern float square_root(float) __asm__("FUN_001f9988");
@@ -77,7 +77,7 @@ float approach_angle(float *current_angle, float *angular_velocity, float target
     float stop;
     float target_angular_speed;
 
-    angle_error = FUN_001fa5c8_25be00(target, *current_angle);
+    angle_error = fast_subtract_rotations(target, *current_angle);
     initial_angular_velocity = *angular_velocity;
     if (initial_angular_velocity * angle_error >= 0.0f && angle_error != 0.0f) {
         stop = initial_angular_velocity * initial_angular_velocity / angular_braking_step * 0.5f;

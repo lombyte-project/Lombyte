@@ -517,19 +517,19 @@ extern int func_001160D8_2E2EF0(void) __asm__("FUN_001160d8");
 extern int func_002140B0_2E2EF0(int) __asm__("FUN_00213260");
 extern float func_00214358_2E2EF0(void *,int,float) __asm__("FUN_00213508");
 extern float func_001F9D10_2E2EF0(void *,void *) __asm__("FUN_001f9b48");
-extern float func_L00_001FF860_2E2EF0(float,float) __asm__("FUN_001f9e90");
-extern float func_001FA850_2E2EF0(float,float) __asm__("FUN_001fa688");
+extern float fast_arc_tan(float,float) __asm__("FUN_001f9e90");
+extern float fast_difference_between_rotations(float,float) __asm__("FUN_001fa688");
 extern float func_001F9B88_2E2EF0(float) __asm__("FUN_001f99c0");
 extern float func_002140F8_2E2EF0(float,float) __asm__("FUN_002132a8");
 extern float smooth54(float *,float,float) __asm__("FUN_00213ed8");
 extern void func_L00_002626A8_2E2EF0(char *,char *,float,float) __asm__("FUN_L00_00261630");
-extern float func_001F9D48_2E2EF0(void *,void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *,void *) __asm__("FUN_001f9b80");
 extern int func_L00_0025A208_2E2EF0(int *,int,int,int) __asm__("FUN_L00_002591d0");
 extern int func_L00_0025A2F0_2E2EF0(int *,int,int,int) __asm__("FUN_L00_002592b8");
-extern int func_001F9938_2E2EF0(void *) __asm__("FUN_001f9770");
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void func_L01_0026F040_2E2EF0(int,int) __asm__("FUN_L01_0026e090");
 extern void spawn_spark_scatter(void *) __asm__("FUN_L12_002e19a8");
-extern void func_L00_002592B0_2E2EF0(char *,float *,float,float,float,float) __asm__("FUN_L00_00258278");
+extern void approach_w(char *,float *,float,float,float,float) __asm__("FUN_L00_00258278");
 extern void func_L12_002E2BF8_2E2EF0(unsigned char *) __asm__("FUN_L12_002e18e8");
 extern float func_L00_0025BC48_2E2EF0(void *,void *,void *,float,float) __asm__("FUN_L00_0025abf0");
 extern void setup_fall54(float,char *,float *,int,int,int) __asm__("FUN_L00_0025c558");
@@ -541,14 +541,14 @@ extern float func_001FA790_2E2EF0(float,float) __asm__("FUN_001fa5c8");
 extern float func_001FA748_2E2EF0(float,float) __asm__("FUN_001fa580");
 extern float func_001F9F90_2E2EF0(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2E2EF0(float) __asm__("FUN_001f9de0");
-extern void func_L00_0025AC00_2E2EF0(void *,int,int,void *,void *,float) __asm__("FUN_L00_00259bc8");
-extern int func_L00_0025A778_2E2EF0(void *,void *,int) __asm__("FUN_L00_00259740");
+extern void spawn_nearby_effect(void *,int,int,void *,void *,float) __asm__("FUN_L00_00259bc8");
+extern int point_in_path_xy(void *,void *,int) __asm__("FUN_L00_00259740");
 extern int func_L00_002DDEA0_2E2EF0(void *,void *) __asm__("FUN_L00_002dc9f0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern void mark_moby_for_removal_cf(void *,int,int) __asm__("FUN_L00_00257470");
 extern void spawn_type_52_particle_near_moby(char *) __asm__("FUN_L10_002e3de8");
 extern void func_L12_002E43A8_2E2EF0(void *) __asm__("FUN_L12_002e3098");
-extern void func_0020D678_2E2EF0(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void func_L00_00263950_2E2EF0(char *,char *,int,float,float) __asm__("FUN_L00_002628d8");
 extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
 
@@ -585,7 +585,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     FUN_L01_00274b78_c((char *)moby,(char *)&work,data->range);
     target=work.moby;
     if (!target) target=*(AnklebiterMoby **)D_0013E633_2E2EF0;
-    if (moby->pos[2]<26.0f) { func_0020D678_2E2EF0(moby); return; }
+    if (moby->pos[2]<26.0f) { mark_moby_for_removal(moby); return; }
     switch(moby->state) {
     case ANKLEBITER_INITIALIZE:
         if(data->sleep) {
@@ -616,8 +616,8 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     case ANKLEBITER_IDLE: {
         float idle_distance, idle_angle, idle_difference;
         idle_distance=func_001F9D10_2E2EF0(target->pos,data->home);
-        idle_angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
-        idle_difference=func_001FA850_2E2EF0(moby->rot[2],idle_angle);
+        idle_angle=fast_arc_tan(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
+        idle_difference=fast_difference_between_rotations(moby->rot[2],idle_angle);
         if(idle_distance<data->range && func_001F9B88_2E2EF0(moby->pos[2]-target->pos[2])<4.0f) {
             moby->state=3;
             if(idle_difference<0.9599311f) {
@@ -643,7 +643,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     }
     case ANKLEBITER_DORMANT:
         if(data->group_enabled) {
-            if(func_001F9D48_2E2EF0(moby->pos,target->pos)<2.0f) break;
+            if(vector_distance(moby->pos,target->pos)<2.0f) break;
             if(data->group_check<D_L12_0015F5CC) {
                 data->group_check=D_L12_0015F5CC; count=0;
                 func_L00_0025A208_2E2EF0((int *)&iterator,moby->group,0,0);
@@ -658,7 +658,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
         fast_vec_sub(work.v0,target->pos,moby->pos);
         if(fast_vec_length(work.v0)<data->range && func_001F9B88_2E2EF0(moby->pos[2]-target->pos[2])<8.0f && func_002140B0_2E2EF0(19)==0) {
             if(moby->group!=255) func_L01_0026F040_2E2EF0(moby->group,1);
-        } else if(!((moby->proximity&1)&&func_001F9938_2E2EF0(&data->group_timer)) && moby->proximity!=7) break;
+        } else if(!((moby->proximity&1)&&fast_dec_timer_s16(&data->group_timer)) && moby->proximity!=7) break;
         moby->state=13;
         if(moby->anim!=7) func_00213DE0_2E2EF0(moby,7,0,1);
         moby->flags|=0x1000;
@@ -668,8 +668,8 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     case ANKLEBITER_ACTIVATE_FROM_DORMANCY: {
         int collision=*(int *)(moby->model+0x10);
         moby->flags&=0xFFBE; moby->collision=collision;
-        angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
-        func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.03f,0.3f,D_0015ED6C*6.2831855f);
+        angle=fast_arc_tan(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
+        approach_w((char *)moby,&data->turn_velocity,angle,0.03f,0.3f,D_0015ED6C*6.2831855f);
         if(moby->anim_flags&2) {
             if(func_002140B0_2E2EF0(256)&1) data->circle_rate=-data->circle_rate;
             data->circle_angle=data->circle_rate*0.017453292f;
@@ -679,8 +679,8 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
         break;
     }
     case ANKLEBITER_WAIT_FOR_LEAP_TRIGGER:
-        angle=func_L00_001FF860_2E2EF0(data->home[0]-moby->pos[0],data->home[1]-moby->pos[1]);
-        func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.05f,0.3f,0.2f);
+        angle=fast_arc_tan(data->home[0]-moby->pos[0],data->home[1]-moby->pos[1]);
+        approach_w((char *)moby,&data->turn_velocity,angle,0.05f,0.3f,0.2f);
         fast_vec_sub(work.v0,target->pos,data->home);
         if((fast_vec_length(work.v0)<data->range&&func_001F9B88_2E2EF0(data->home[2]-target->pos[2])<8.0f)||moby->proximity==2) {
             if(moby->group!=255) func_L01_0026F040_2E2EF0(moby->group,2);
@@ -699,7 +699,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
             if(moby->anim!=9) func_00213DE0_2E2EF0(moby,9,8,func_001F9850_2E2EF0(7));
             return;
         }
-        if(moby->pos[2]<0.0f) { func_0020D678_2E2EF0(moby); return; }
+        if(moby->pos[2]<0.0f) { mark_moby_for_removal(moby); return; }
         break;
     case ANKLEBITER_LAND_AFTER_LEAP:
         if(moby->anim_flags&2) {
@@ -711,13 +711,13 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
         }
         break;
     case ANKLEBITER_FACE_TARGET_BEFORE_PURSUIT:
-        angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
-        func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.03f,0.3f,D_0015ED6C*6.2831855f);
+        angle=fast_arc_tan(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
+        approach_w((char *)moby,&data->turn_velocity,angle,0.03f,0.3f,D_0015ED6C*6.2831855f);
         if(moby->anim_flags&2) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); }
         break;
     case ANKLEBITER_PURSUE_TARGET: {
         float chase_angle, look_difference, clamp;
-        chase_angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
+        chase_angle=fast_arc_tan(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
         look_difference=func_001FA790_2E2EF0(chase_angle,moby->rot[2]);
         clamp=0.6981317f;
         if(look_difference>clamp || (clamp=-0.6981317f,look_difference<clamp)) look_difference=clamp;
@@ -728,7 +728,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
                 data->circle_timer=func_001F9850_2E2EF0((int)func_002140F8_2E2EF0(30.0f,90.0f)); data->circle_angle=-data->circle_angle;
             }
             fast_vec_sub(work.v0,target->pos,data->home);
-            if(func_001F9D48_2E2EF0(moby->pos,target->pos)<1.5f) {
+            if(vector_distance(moby->pos,target->pos)<1.5f) {
                 moby->state=5;
                 if(moby->anim!=4) func_00213DE0_2E2EF0(moby,4,0,func_001F9850_2E2EF0(5));
             } else if(fast_vec_length(work.v0)<data->range+5.5f && func_001F9B88_2E2EF0(moby->pos[2]-target->pos[2])<4.4f) {
@@ -740,26 +740,26 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     }
     case ANKLEBITER_MELEE_ATTACK:
         (*(AnklebiterMoby **)D_0013E633_2E2EF0)->anim_rate=1.3f;
-        angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
-        func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.05f,0.3f,0.2f);
-        if(moby->anim_end==moby->anim && func_00215B18_2E2EF0((char *)moby,13.0f) && func_001F9B88_2E2EF0(moby->pos[2]-target->pos[2])<0.5f && func_001F9D48_2E2EF0(moby->pos,target->pos)<2.0f && func_001FA850_2E2EF0(func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]),moby->rot[2])<0.2617994f) {
+        angle=fast_arc_tan(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
+        approach_w((char *)moby,&data->turn_velocity,angle,0.05f,0.3f,0.2f);
+        if(moby->anim_end==moby->anim && func_00215B18_2E2EF0((char *)moby,13.0f) && func_001F9B88_2E2EF0(moby->pos[2]-target->pos[2])<0.5f && vector_distance(moby->pos,target->pos)<2.0f && fast_difference_between_rotations(fast_arc_tan(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]),moby->rot[2])<0.2617994f) {
             work.v0[0]=func_001F9F90_2E2EF0(moby->rot[2])*0.2f; work.v0[1]=func_001F9FA8_2E2EF0(moby->rot[2])*0.2f; work.v0[2]=0.0f;
             qcopy(work.v10,target->pos); work.v10[2]+=0.75f;
-            func_L00_0025AC00_2E2EF0(target,(int)moby,1,work.v10,work.v0,1.0f);
+            spawn_nearby_effect(target,(int)moby,1,work.v10,work.v0,1.0f);
         }
-        if((moby->anim_flags&2)&&func_001F9D48_2E2EF0(moby->pos,target->pos)>=2.0f) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); }
+        if((moby->anim_flags&2)&&vector_distance(moby->pos,target->pos)>=2.0f) { moby->state=4; data->blocked=0; func_L12_002E2BF8_2E2EF0((unsigned char *)moby); }
         break;
     case ANKLEBITER_RETURN_HOME: {
         float return_distance;
-        func_L12_002E41C8_2E2EF0((char *)moby,func_L00_001FF860_2E2EF0(data->home[0]-moby->pos[0],data->home[1]-moby->pos[1]));
-        if(func_001F9D48_2E2EF0(moby->pos,data->home)<2.0f) {
+        func_L12_002E41C8_2E2EF0((char *)moby,fast_arc_tan(data->home[0]-moby->pos[0],data->home[1]-moby->pos[1]));
+        if(vector_distance(moby->pos,data->home)<2.0f) {
             moby->state=1;
             if(moby->anim!=0) func_00213DE0_2E2EF0(moby,0,0,func_001F9850_2E2EF0(7));
         }
         return_distance=func_001F9D10_2E2EF0(target->pos,data->home); data->return_timer++; blocked=0;
         if(data->path!=-1) {
             char *path=D_L12_001B0C30_2E2EF0[data->path];
-            blocked=func_L00_0025A778_2E2EF0(D_0013F3D0_r,path+0x10,*(int *)path)==0;
+            blocked=point_in_path_xy(D_0013F3D0_r,path+0x10,*(int *)path)==0;
         }
         if(!blocked) {
             if(return_distance<data->range) {
@@ -779,7 +779,7 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
             if(moby->anim!=13) func_00213DE0_2E2EF0(moby,13,8,func_001F9850_2E2EF0(8));
             return;
         }
-        if(moby->pos[2]<27.0f) { func_0020D678_2E2EF0(moby); return; }
+        if(moby->pos[2]<27.0f) { mark_moby_for_removal(moby); return; }
         break;
     case ANKLEBITER_CONTROLLED_MOTION_UNTIL_RETURN_HOME:
         if(func_L00_002DDEA0_2E2EF0(moby,data->fall)) { moby->state=6; data->return_timer=0; data->stuck=0; }
@@ -791,11 +791,11 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
         hit=func_L00_0025D6F0_2E2EF0(moby,data->fall);
         if((hit&0x40)||(compute_interpolated_record_value(moby)>37.0f && moby->anim_end==moby->anim)) {
             moby->anim_rate=0.0f; mark_moby_for_removal_cf(moby,0,-1); moby->state=15; moby->flags|=8;
-        } else if(moby->pos[2]<10.0f) { mark_moby_for_removal_cf(moby,0,-1); { func_0020D678_2E2EF0(moby); return; } }
+        } else if(moby->pos[2]<10.0f) { mark_moby_for_removal_cf(moby,0,-1); { mark_moby_for_removal(moby); return; } }
         else if(hit&1) spawn_type_52_particle_near_moby((char *)moby);
         break;
     case ANKLEBITER_DEATH_EFFECTS_AND_REMOVE:
-        spawn_type_52_particle_near_moby((char *)moby); func_L12_002E43A8_2E2EF0(moby); func_L12_002E43A8_2E2EF0(moby); { func_0020D678_2E2EF0(moby); return; }
+        spawn_type_52_particle_near_moby((char *)moby); func_L12_002E43A8_2E2EF0(moby); func_L12_002E43A8_2E2EF0(moby); { mark_moby_for_removal(moby); return; }
     }
     if(moby->enabled && moby->state!=9 && moby->state!=8) {
         func_L00_00263950_2E2EF0((char *)moby,data->collision_data,0,D_0015ED64*0.018f,D_0015ED64*0.3f);

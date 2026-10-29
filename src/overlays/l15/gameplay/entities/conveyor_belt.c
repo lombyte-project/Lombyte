@@ -244,7 +244,7 @@ extern s32 D_L15_00178500[] __asm__("D_L15_00178500");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern Res *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L00_002603d0(int);
-extern void func_L00_001FF240_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff290");
+extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void func_L00_001FF610_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -286,7 +286,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     switch (state) {
     case POISON_VESSEL_FREE_FLIGHT:
         data->f8 = data->f8 - poison_vessel_gravity_gp * frame_time_sq;
-        func_L00_001FF240_2E9358(&temporary_vector, &moby->pos, data);
+        add_vectors(&temporary_vector, &moby->pos, data);
         if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
             if (((Tb *)D_L15_001744C0_2E9358)->f18 != 0 && FUN_L00_002603d0(((Tb *)D_L15_001744C0_2E9358)->f18) != 0) {
                 data->target = (Moby_2E9358 *)((Tb *)D_L15_001744C0_2E9358)->f18;
@@ -1702,17 +1702,17 @@ void emit_cutscene_mode_moby_effects(struct Moby *moby) {
         break;
     }
 }
-extern float FUN_001f9988_2edbe0(float) __asm__("FUN_001f9988");
+extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_001fa6c0_2edbe0(int) __asm__("FUN_001fa6c0");
 extern int FUN_001f44b8_2edbe0(int) __asm__("FUN_001f44b8");
 extern void FUN_00233980_2edbe0(int, long) __asm__("FUN_00233980");
 extern float FUN_001f96b0_2edbe0(float) __asm__("FUN_001f96b0");
 extern float FUN_001fa580_2edbe0(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f9de0_2edbe0(float) __asm__("FUN_001f9de0");
-extern void FUN_L00_00250320_2edbe0(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
+extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern float FUN_L00_00200260_2edbe0(float, float) __asm__("FUN_L00_00200260");
 extern float FUN_001fa610_2edbe0(float x) __asm__("FUN_001fa610");
-extern void FUN_001f76a0_2edbe0(void) __asm__("FUN_001f76a0");
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98_2edbe0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");
 extern float D_0015ED6C_2edbe0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
@@ -1855,13 +1855,13 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     FUN_00233980_2edbe0(0x14, 0xFF9000000260L);
     data->prev = data->angle;
     data->angle = FUN_001fa580_2edbe0(data->angle, 360.0f / FUN_001f96b0_2edbe0(scaled_ripple_phase_advance_divisor_gp) * 0.017453292f * D_0015ED6C_2edbe0);
-    FUN_L00_00250320_2edbe0(moby, &r, &g, &b);
+    get_moby_color(moby, &r, &g, &b);
     color = (D_L15_001621EC << 24) | (b << 16) | (g << 8) | r;
     for (i = 0; i < 46; i++) {
         float *template_vertex = D_L15_001DE860[i];
         float x = template_vertex[0];
         float y = template_vertex[1];
-        float rad = FUN_001f9988_2edbe0(x * x + y * y);
+        float rad = square_root(x * x + y * y);
         float radius_remainder = FUN_L00_00200260_2edbe0(rad, scaled_ripple_radial_wavelength_gp);
         float w = FUN_001fa610_2edbe0(radius_remainder * 6.2831855f / scaled_ripple_radial_wavelength_gp);
         float z = FUN_001f9de0_2edbe0(FUN_001fa580_2edbe0(w, data->angle));
@@ -1876,7 +1876,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
             D_L15_001DEED8[uv_vertex_index][0] = D_L15_001DEA88[uv_vertex_index][0] + FUN_L00_00200260_2edbe0(scale * uv_scroll_factors.f[j][0], 1.0f);
             D_L15_001DEED8[uv_vertex_index][1] = D_L15_001DEA88[uv_vertex_index][1] + FUN_L00_00200260_2edbe0(scale * uv_scroll_factors.f[j][1], 1.0f);
         }
-        FUN_001f76a0_2edbe0();
+        font_queue_vu_state();
         for (k = 0; k < 1; k++) {
             FUN_L00_001fde98_2edbe0(D_L15_001621B0[k], D_L15_001621D0[k], D_L15_001621E0[k], (void *)D_L15_001621D8[k], 1);
         }

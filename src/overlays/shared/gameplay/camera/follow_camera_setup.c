@@ -1197,7 +1197,7 @@ extern s32 FUN_001f96f8_2e7d20(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
-extern void FUN_001f9a10_2e7d20(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 FUN_L00_002e4290_2e7d20(void *) __asm__("FUN_L00_002e4290");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
@@ -1331,7 +1331,7 @@ slow:
     }
 move:
     FUN_001f9bf8_2e7d20(orbit_state, orbit_state, AF_2e7d20(0x2C) - BF_2e7d20(0x30));
-    FUN_001f9a10_2e7d20(&moby_offset_or_camera_endpoint, orbit_state, (x + 0x90));
+    fast_vec_add(&moby_offset_or_camera_endpoint, orbit_state, (x + 0x90));
     if (D_0013F350_lui.i2084 == 0x7F) {
         goto clear;
     }

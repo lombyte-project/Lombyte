@@ -358,7 +358,7 @@ extern void func_L00_0025BBA0_2C73D0(void *, float *, void *, void *) __asm__("F
 extern void func_L00_0025D5B0_2C73D0(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void func_L01_0026F040_2C73D0(int, int) __asm__("FUN_L01_0026e090");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
-extern void func_L00_0025E590_2C73D0(void *, void *) __asm__("FUN_L00_0025d538");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern float func_002140F8_2C73D0(float, float) __asm__("FUN_002132a8");
 extern float func_001F9878_2C73D0(float) __asm__("FUN_001f96b0");
 extern int func_002140B0_2C73D0(int) __asm__("FUN_00213260");
@@ -470,7 +470,7 @@ void update_seeker_damage_and_target(Moby *moby) {
         func_L00_0025E4B0_2C73D0(moby, data->react);
     }
     moby->hit_slot = 0xFF;
-    func_L00_0025E590_2C73D0(moby, data->react);
+    trooper_anim_finish(moby, data->react);
     if (data->f38 != 0 || moby->command == 1) {
         data->retreat = func_001FA898_2C73D0(func_001F9878_2C73D0(func_002140F8_2C73D0(180.0f, 240.0f)));
         data->f38 = 0;
@@ -661,7 +661,7 @@ extern float frame_2E39E0(Moby *) __asm__("FUN_0020c9e0");
 extern void hurt_2E39E0(Moby *, Moby *, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern int knock_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025c698");
 extern int recover_2E39E0(Moby *, void *) __asm__("FUN_L00_002dc9f0");
-extern void zero_2E39E0(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fixed_2E39E0(short) __asm__("FUN_001fa6c0");
@@ -957,7 +957,7 @@ void update_ground_melee_enemy(Moby *moby) {
         break;
     case GROUND_ENEMY_STATE_FATAL_KNOCKBACK:
         if (knock_update_2E39E0(moby, data->motion) & 0x40) {
-            zero_2E39E0(&step);
+            clear_u64_value(&step);
             cart_burst(moby, &moby->pos, 6, 0.5f, 13.0f);
             delete_2E39E0(moby);
             return;

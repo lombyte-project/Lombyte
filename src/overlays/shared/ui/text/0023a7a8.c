@@ -105,7 +105,7 @@ typedef struct {
     int start;
 } O_23aaa8;
 extern int D_L00_0015F5CC_23aaa8 __asm__("D_L00_0015F5CC");
-int FUN_001f96f8_23aaa8(int) __asm__("FUN_001f96f8");
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 int random_integer_below(int) __asm__("FUN_00213260");
 extern T_23aaa8 *D_L00_0017E4F4 NOT_SDA;
 int update_hud_animation_frame(O_23aaa8 *hud_frame_state) __asm__("FUN_L00_0023aaa8");
@@ -152,8 +152,8 @@ int update_hud_animation_frame(O_23aaa8 *hud_frame_state) {
                     frame_index += frame_sequence->base;
                 } else {
                     frame_index = frame_sequence->base;
-                    restart_start_offset = FUN_001f96f8_23aaa8(0xA);
-                    hud_frame_state->start = frame_sequence->n * 2 + restart_start_offset + random_integer_below(FUN_001f96f8_23aaa8(0x1E));
+                    restart_start_offset = scale_game_frames(0xA);
+                    hud_frame_state->start = frame_sequence->n * 2 + restart_start_offset + random_integer_below(scale_game_frames(0x1E));
                 }
             } else {
                 frame_index = hud_frame_state->frame;

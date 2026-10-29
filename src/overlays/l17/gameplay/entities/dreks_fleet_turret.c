@@ -279,7 +279,7 @@ extern void func_001F9BF0_a95b8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void func_L00_001FF4B0_a95b8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int func_001F4868_a95b8(int) __asm__("FUN_001f44b8");
-extern void func_001F9BD8_a95b8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_L00_001FD1D8_a95b8(void *, void *, int) __asm__("FUN_001f7d30");
 extern struct {
     float a, b;
@@ -313,11 +313,11 @@ void draw_fleet_beam_quad(struct Moby *moby) {
     }
     func_001F9BF0_a95b8(quad_vertex_scratch, moby_vars + 0x10, beam_start_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0) = *(OvlQuad *)quad_vertex_scratch;
-    func_001F9BD8_a95b8(quad_vertex_scratch, moby_vars + 0x10, beam_start_vertex_offset);
+    fast_vec_add(quad_vertex_scratch, moby_vars + 0x10, beam_start_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0x10) = *(OvlQuad *)quad_vertex_scratch;
     func_001F9BF0_a95b8(quad_vertex_scratch, moby_vars + 0x20, beam_end_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0x20) = *(OvlQuad *)quad_vertex_scratch;
-    func_001F9BD8_a95b8(quad_vertex_scratch, moby_vars + 0x20, beam_end_vertex_offset);
+    fast_vec_add(quad_vertex_scratch, moby_vars + 0x20, beam_end_vertex_offset);
     *(OvlQuad *)(quad_primitive.pad + 0x30) = *(OvlQuad *)quad_vertex_scratch;
     func_L00_001FD1D8_a95b8(&quad_primitive, 0, 0);
 }

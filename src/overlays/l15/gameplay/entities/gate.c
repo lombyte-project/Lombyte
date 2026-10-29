@@ -2495,7 +2495,7 @@ extern int D_001413D0 NOT_SDA;
 extern char D_00178700[] __asm__("D_L15_00178700");
 extern int FUN_00249d60(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_001f99c8_f(float) __asm__("FUN_001fa6d0");
-extern void FUN_0023ee30(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_0024dcf8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern void mark_moby_for_removal_cf(void *, int, long long) __asm__("FUN_L00_00257470");
@@ -2504,7 +2504,7 @@ extern void trooper_knockback_arc(void *, void *, void *, void *) __asm__("FUN_L
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_set_knockback(void *, float, float) __asm__("FUN_L03_00250a78");
 extern void FUN_0024cd00(void *, void *) __asm__("FUN_L00_0025d458");
-extern void FUN_0024cde0(void *, void *) __asm__("FUN_L00_0025d538");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_0024f560(float, void *, void *) __asm__("FUN_L02_00261c80");
 extern void activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float FUN_001f8bc8(void *, void *) __asm__("FUN_001f9b48");
@@ -2617,7 +2617,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
             case HIT_REACTION_DEATH_ALTERNATE:
                 origin.q = 0;
                 ultramech_moby->flags &= 0xEFFF;
-                FUN_0023ee30(ultramech_moby, 7, &effect);
+                moby_point_position(ultramech_moby, 7, &effect);
                 hit = -1;
                 FUN_0024dcf8(ultramech_moby, &origin, &effect, 0.0f, 0.0f, 0x14, 6, 0x20,
                               16.0f, 8.0f, 9.0f, -1, 4.0f, 32.0f, 1, 16, hit, 0);
@@ -2633,7 +2633,7 @@ void process_ultramech_hits_and_update_target(void *ultramech_instance) {
             *(int *)(slot + 0x34) = 0;
     }
     *(unsigned char *)((char *)ultramech_moby + 0xA4) = 0xFF;
-    FUN_0024cde0(ultramech_moby, (char *)ultramech_vars + 0x60);
+    trooper_anim_finish(ultramech_moby, (char *)ultramech_vars + 0x60);
     *(float *)((char *)ultramech_moby + 0x2C) = *(float *)(ultramech_moby->cls + 0x24) * ultramech_post_hit_scale_multiplier_gp;
     ultramech_vars->w164 = 0;
     if (ultramech_moby->state != 1) {

@@ -228,7 +228,7 @@ s32 process_hero_hit_response(s32 apply_hurt_response) {
 #include "qcopy.h"
 /* Same source as the exact FUN_L15_00209450, with mode 1 in place of mode 2 and no 0x11/0x12 branch. */
 extern f32 D_0015ED6C_209450 __asm__("D_0015ED6C");
-f32 FUN_001f9b80_209450(void *, void *) __asm__("FUN_001f9b80");
+f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_209450(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_209450(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void update_hero_smoothed_parameters(void) __asm__("FUN_L06_00228360");
@@ -262,7 +262,7 @@ void update_hero_smoothed_parameters(void) {
         hero.capsule_radius_target = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
-        FUN_001f9b80_209450(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
+        vector_distance(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
         f32 *smoothing_state = D_0013F570;
         struct Hero *hero_base = (struct Hero *)((u8 *)smoothing_state - 0x220);
         approach_value_209450(hero_base->capsule_top_target, frame_scale * 0.02f, smoothing_state);
@@ -585,8 +585,8 @@ extern s32 FUN_001f96f8_2b438(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9dc8_2b438(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2b438(float) __asm__("FUN_001f9de0");
 extern f32 FUN_001fa688_2b438(f32, f32) __asm__("FUN_001fa688");
-extern f32 FUN_001fa5c8_2b438(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 FUN_001f9b20_2b438(void *) __asm__("FUN_001f9b20");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value_2b438(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
@@ -703,7 +703,7 @@ void update_hero_airborne_planar_velocity(void) {
             x = hero.motion.rot.f[2];
             hero.motion.yaw_error = FUN_L00_0025bc98_2b438(&x, &hero.motion.yaw_rate, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
                                             ED6C * 7.330383f);
-            speed_component_or_yaw_delta = FUN_001fa5c8_2b438(x, hero.motion.rot.f[2]);
+            speed_component_or_yaw_delta = fast_subtract_rotations(x, hero.motion.rot.f[2]);
             FUN_L00_002091d8_2b438(0.0f, 0.0f, speed_component_or_yaw_delta);
         } else {
             FUN_L00_00211e30_2b438(0, ED64 * 0.04f, ED64 * 0.2f, hero.air_turn_rate);
@@ -714,7 +714,7 @@ void update_hero_airborne_planar_velocity(void) {
         if (hero.target_speed < hero_airborne_deceleration_speed_reference[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 speed_decay_step = hero.stickless_decel;
-                speed = FUN_001f9b20_2b438(&hero.motion.velocity);
+                speed = vector_length_xy(&hero.motion.velocity);
                 approach_value_2b438(0.0f, speed_decay_step, &speed);
                 FUN_001f9c48_2b438(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;

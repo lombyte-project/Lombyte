@@ -79,7 +79,7 @@ extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 extern void func_0022ED80_3102C8(int, int, void *) __asm__("FUN_0022da68");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern float func_001F9D48_3102C8(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int func_001F9850_3102C8(int) __asm__("FUN_001f96f8");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
@@ -130,7 +130,7 @@ void thruster_pack_lock_update(Lock *moby)
         if (moby->bB0 == 0xFF) {
             return;
         }
-        if (!(func_001F9D48_3102C8(moby->pos, D_0013F3D0_r) < 4.0f)) {
+        if (!(vector_distance(moby->pos, D_0013F3D0_r) < 4.0f)) {
             return;
         }
         if (!((unsigned int)*(int *)(D_0013F3D0_r + 0x200C) < 2)) {

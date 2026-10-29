@@ -463,7 +463,7 @@ extern float func_001FA748_2D9F08(float, float) __asm__("FUN_001fa580");
 extern void func_L00_002EBE88_2D9F08(void *) __asm__("FUN_L00_002ea9d8");
 extern void func_L00_002EBEE0_2D9F08(void *) __asm__("FUN_L00_002eaa30");
 extern int func_00216028_2D9F08(int, int) __asm__("FUN_002151d8");
-extern float func_001FA850_2D9F08(float, float) __asm__("FUN_001fa688");
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern void func_001F49B0_2D9F08(void (*)(void), Moby *) __asm__("FUN_001f4600");
 extern void func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
 extern int func_001F9938_2D9F08(void *) __asm__("FUN_001f9770");
@@ -573,7 +573,7 @@ void tresspasser_pad_update(Moby *moby) {
             func_L00_002EBF50_2D9F08(&D_L02_00167300_2D9F08.v140, &D_L02_00167300_2D9F08.v150, 1, 0, 0);
         }
         i = 0;
-        if (0.99f <= data->f110 && func_001FA850_2D9F08(D_L02_00167300_2D9F08.v150.z, camera_rot.z) < 0.017453292f) {
+        if (0.99f <= data->f110 && fast_difference_between_rotations(D_L02_00167300_2D9F08.v150.z, camera_rot.z) < 0.017453292f) {
             func_001F49B0_2D9F08(func_L02_002DA820_2D9F08, moby);
             for (i = 0; i < 12; i++) {
                 if (data->iB0[i] == 1) {
@@ -1421,7 +1421,7 @@ typedef struct {
 } L02SpriteData;
 extern void func_001F9BF0_ea8b0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_001F9BD8_ea8b0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int func_001F9908_ea8b0(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int func_001F9850_ea8b0(int) __asm__("FUN_001f96f8");
 extern int func_001FA8A8_2ebce8_ea8b0(int, int, float) __asm__("FUN_001fa6e0");
 extern float func_001F9B88_ea8b0(float) __asm__("FUN_001f99c0");
@@ -1452,7 +1452,7 @@ void update_collectible_sprite_effect(char *moby) {
         } else if (unwrapped_sprite_value <= 0.0f) {
             sprite_data->a[i] = unwrapped_sprite_value + 255.0f;
         }
-        if (func_001F9908_ea8b0(&sprite_data->c[i])) {
+        if (fast_dec_timer(&sprite_data->c[i])) {
             sprite_data->c[i] = func_001F9850_ea8b0(0xFF);
         }
         timer_elapsed_fraction = convert_integer_to_float(func_001F9850_ea8b0(0xFF) - sprite_data->c[i]);

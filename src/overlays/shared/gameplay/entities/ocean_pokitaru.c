@@ -470,9 +470,9 @@ void rocket_update(struct Moby *moby) {
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void FUN_001f9a10_30a908(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_30a908(void *, void *, float) __asm__("FUN_001f9a68");
-extern float FUN_001f9b20_30a908(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void FUN_001f9bf8_30a908(void *, void *, float) __asm__("FUN_001f9bf8");
-extern int FUN_001fa6e0_30a908(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 typedef struct { float u, v; } UV_30a908;
 typedef struct { float x, y, z; } Pos;
 typedef struct {
@@ -504,7 +504,7 @@ typedef struct { char pad[0x228]; float f228, f22C; } Fog;
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
-extern void FUN_001f9cf8_30a908(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_001f9a28_30a908(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float FUN_001fa6c0_30a908(int) __asm__("FUN_001fa6c0");
 extern void func_L00_001FDE48_30a908(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
@@ -560,12 +560,12 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     strip_length_direction.y = 0.0f;
     strip_length_direction.z = 0.0f;
     strip_length_direction.w = 1.0f;
-    FUN_001f9cf8_30a908(&strip_length_direction, &strip_length_direction, ocean_strip_orientation_basis);
+    transform_vector_by_basis(&strip_length_direction, &strip_length_direction, ocean_strip_orientation_basis);
     strip_width_direction.x = 0.0f;
     strip_width_direction.y = 1.0f;
     strip_width_direction.z = 0.0f;
     strip_width_direction.w = 1.0f;
-    FUN_001f9cf8_30a908(&strip_width_direction, &strip_width_direction, ocean_strip_orientation_basis);
+    transform_vector_by_basis(&strip_width_direction, &strip_width_direction, ocean_strip_orientation_basis);
     strip_length_direction.z = 0.0f;
     FUN_001f9bf8_30a908(&strip_length_direction, &strip_length_direction, 1.0f);
     strip_width_direction.z = 0.0f;
@@ -590,7 +590,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     color_interpolation_scalar = 10.0f;
     for (i = 0; i < 12; i += 2) {
         float strip_fraction = FUN_001fa6c0_30a908(i) / 10.0f;
-        int col = FUN_001fa6e0_30a908(ocean_vars->f0, ocean_vars->f4, FUN_001fa6c0_30a908(i) / color_interpolation_scalar);
+        int col = fast_tween_color(ocean_vars->f0, ocean_vars->f4, FUN_001fa6c0_30a908(i) / color_interpolation_scalar);
         FUN_001f9a68_30a908(&scratch_vector, &first_strip_edge_delta, strip_fraction);
         ocean_strip_vertex_colors[i] = col;
         l11_ocean_strip_vertex_uvs[i].u = 0.0f;
@@ -646,8 +646,8 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         color_interpolation_scalar = 1.0f;
     }
     if (color_interpolation_scalar >= 0.0f) {
-        colA = FUN_001fa6e0_30a908(0, colA, color_interpolation_scalar);
-        colB = FUN_001fa6e0_30a908(0, colB, color_interpolation_scalar);
+        colA = fast_tween_color(0, colA, color_interpolation_scalar);
+        colB = fast_tween_color(0, colB, color_interpolation_scalar);
         for (layer = 0; layer < 2; layer++) {
             int id = layer + 0x28;
             vu1_add_g_sregister(6, get_effect_texture(ocean_vars->f1C + id));
@@ -682,11 +682,11 @@ void draw_pokitaru_ocean(struct Moby *moby) {
                         scratch_vector.y = l11_ocean_wave_grid_vertex_positions[i].y - ((Cam *)D_L11_00167680)->y;
                         scratch_vector.z = l11_ocean_wave_grid_vertex_positions[i].z - ((Cam *)D_L11_00167680)->z;
                         scratch_vector.w = 1.0f;
-                        color_interpolation_scalar = FUN_001f9b20_30a908(&scratch_vector) / (ocean_vars->f18 * 2.0f);
+                        color_interpolation_scalar = vector_length_xy(&scratch_vector) / (ocean_vars->f18 * 2.0f);
                         if (color_interpolation_scalar > 1.0f) {
                             color_interpolation_scalar = 1.0f;
                         }
-                        D_L11_001DA208[i] = FUN_001fa6e0_30a908(colA, colB, color_interpolation_scalar);
+                        D_L11_001DA208[i] = fast_tween_color(colA, colB, color_interpolation_scalar);
                     }
                     vertex_count += 4;
                     if (vertex_count >= 0x40) {

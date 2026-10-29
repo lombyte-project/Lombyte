@@ -128,7 +128,7 @@ char *draw_number(float scale, void *particle_spawn_position, int source_moby, i
 #endif
 extern unsigned char *func_00218928_87158(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_87158(float) __asm__("FUN_001fa6d0");
-extern int func_002140B0_87158(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern unsigned char *D_L01_001B25D0 __attribute__((section(".data")));
 unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) __asm__("FUN_L01_00287158");
@@ -146,7 +146,7 @@ unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_
         r[2] = *D_L01_001B25D0;
         *(short *)(r + 0xA) = particle_lifetime;
         *(float *)(r + 0xC) = particle_scale * 210000.0f;
-        r[8] = func_002140B0_87158(0xFF);
+        r[8] = random_integer_below(0xFF);
         *(int *)(particle_data + 8) = b;
         *(int *)(particle_data + 0xC) = particle_data_value;
         *(float *)particle_data = particle_scale;

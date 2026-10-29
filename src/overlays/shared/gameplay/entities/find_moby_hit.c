@@ -129,7 +129,7 @@ typedef struct {
 } G_259a88;
 extern G_259a88 D_L00_00173E40_lui __asm__("D_L00_00173E40") NOT_SDA;
 extern T_259a88 D_L00_00178100_lui[] __asm__("D_L00_00178100") NOT_SDA;
-void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
+void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void record_moby_hit(unsigned char *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
 void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
     L_259a88 hit_descriptor_copy;
@@ -145,7 +145,7 @@ void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
             return;
     }
     hit_record = &D_L00_00178100_lui[i];
-    FUN_001f99f8_259a88(hit_record);
+    clear_u64_value(hit_record);
     qcopy(&D_L00_00178100_lui[i].b, &hit_descriptor->v);
     hit_record->x = hit_descriptor->x;
     hit_record->y = hit_descriptor->y;
@@ -485,7 +485,7 @@ typedef union {
 } Vec4_25aca0 __attribute__((aligned(16)));
 
 extern void compute_moby_joint_matrices(void *, int, int) __asm__("FUN_0020fa90");
-extern void FUN_001f9a10_25aca0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a28_25aca0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_25aca0(float, void *, void *) __asm__("FUN_001f9a68");
 extern void scale_vector(float, void *, void *) __asm__("FUN_001f9a80");
@@ -554,7 +554,7 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
                         } else {
                             qcopy(&first, (void *)((0x70000000 + (*(int *)list << 4))));
                             qcopy(&second, (void *)((entry + 0x10)));
-                            FUN_001f9a10_25aca0(&first, &first, &second);
+                            fast_vec_add(&first, &first, &second);
                             FUN_001f9a68_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
                             radius = *(float *)(entity + 0x2c);
                             radius = *(float *)(list + 8) * radius * 0.0009765625f;
@@ -612,7 +612,7 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
             } else {
                 qcopy(&first, (void *)((0x70000000 + (*(int *)(entry + 4) << 4))));
                 qcopy(&second, (void *)((entry + 0x10)));
-                FUN_001f9a10_25aca0(&first, &first, &second);
+                fast_vec_add(&first, &first, &second);
                 FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
                 extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c);
             }
@@ -626,9 +626,9 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
             /* Fakematch: the do-while (0) raises the loop-weighted refs of entity + 0x10,
              * &out[emitted] and entity + 0xc0 so global alloc gives &second the last saved register. */
             do {
-                FUN_001f9a10_25aca0(&second, &second, &first);
+                fast_vec_add(&second, &second, &first);
                 transform_vector_by_basis(&second, &second, entity + 0xc0);
-                FUN_001f9a10_25aca0(&out[emitted], &second, entity + 0x10);
+                fast_vec_add(&out[emitted], &second, entity + 0x10);
             } while (0);
             break;
         }
@@ -648,8 +648,8 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
             second.f[0] = FUN_001f9dc8_25aca0(angle) * weight;
             second.f[1] = FUN_001f9de0_25aca0(angle) * weight;
             second.f[2] = random;
-            FUN_001f9a10_25aca0(&second, &second, entity + 0x10);
-            FUN_001f9a10_25aca0(&out[emitted], &first, &second);
+            fast_vec_add(&second, &second, entity + 0x10);
+            fast_vec_add(&out[emitted], &first, &second);
             break;
         }
         case SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET: {
@@ -660,7 +660,7 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
             FUN_001f9a28_25aca0(&third, &second, &first);
             weight = random_float_between(0.0f, 1.0f);
             FUN_001f9a68_25aca0(weight, &third, &third);
-            FUN_001f9a10_25aca0(&fourth, &third, &first);
+            fast_vec_add(&fourth, &third, &first);
             divide_vector_xyz(1024.0f, &fourth, &fourth);
             extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c);
             extent = extent * 0.0009765625f;
@@ -669,9 +669,9 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
                 fifth.f[1] = random_float_between(-extent, extent);
                 fifth.f[2] = random_float_between(-extent, extent);
             } while (!(FUN_001f9af0_25aca0(&fifth) <= extent));
-            FUN_001f9a10_25aca0(&fifth, &fifth, &fourth);
+            fast_vec_add(&fifth, &fifth, &fourth);
             transform_vector_by_basis(&fifth, &fifth, entity + 0xc0);
-            FUN_001f9a10_25aca0(&out[emitted], &fifth, entity + 0x10);
+            fast_vec_add(&out[emitted], &fifth, entity + 0x10);
             break;
         }
         }

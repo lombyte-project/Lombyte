@@ -243,7 +243,7 @@ void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, f
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
@@ -257,7 +257,7 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
     int i;
     float *projected_point_components, *pa, *pb;
 
-    FUN_001f9a28_25db00(segment_delta, segment_start, segment_end);
+    fast_vec_sub(segment_delta, segment_start, segment_end);
     planar_normal[0] = -segment_delta[1];
     planar_normal[1] = segment_delta[0];
     *(int *)&planar_normal[2] = 0;
@@ -513,12 +513,12 @@ extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__(
 extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern void *spawn_debris(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
-extern void func_L00_0026B890_25e450(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
+extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-extern int func_L00_00200290_25e450(void *, float) __asm__("FUN_001fa728");
+extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int allocate_voice_for_target_entry_25e450(int, int, void *) __asm__("FUN_0022da68");
-extern void func_L00_002D4CE8_25e450(void *, void *, int, int) __asm__("FUN_L00_002d3838");
+extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 
 extern char default_explosion_flash_descriptor[] __asm__("D_L00_001B0250");
 extern char alternate_explosion_flash_descriptor[] __asm__("D_L00_001B02A0");
@@ -629,11 +629,11 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         c1 = D_L00_001E9048_25e450;
         sp = sp - proximity_speed_reduction * frame_time_macro;
         sp = sp * fF;
-        func_L00_0026B890_25e450(explosion_position, &vb, swap_packed_color_channels(c0.v[random_integer_below(6)], flag),
+        spawn_particle(explosion_position, &vb, swap_packed_color_channels(c0.v[random_integer_below(6)], flag),
             swap_packed_color_channels(c1.v[random_integer_below(6)], flag), fF * 400000.0f,
             random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)) - effect_reduction_level * 3,
             random_int_between(scale_game_frames(0x1E), scale_game_frames(0x2D)) - effect_reduction_level * 5, 0, 0, sp);
-        func_L00_0026B890_25e450(explosion_position, &vb, 0x7FFFFFFF, 0xFFFFFF, fF * 400000.0f,
+        spawn_particle(explosion_position, &vb, 0x7FFFFFFF, 0xFFFFFF, fF * 400000.0f,
             random_int_between(scale_game_frames(5), scale_game_frames(0xA)) - effect_reduction_level * 2,
             random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)) - effect_reduction_level * 3, 0, 0, sp * 0.5f);
     }
@@ -684,7 +684,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         Q_25e450 v;
         *(u128_25e450 *)&v = *(u128_25e450 *)explosion_position;
         v.f[3] = 2.0f;
-        if (func_L00_00200290_25e450(&v, 10.0f) != -1) {
+        if (fast_bsphere_check(&v, 10.0f) != -1) {
             ((Cam *)player_camera)->f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
             ((Cam *)player_camera)->f168 = scale_game_frames(0x19);
         }
@@ -698,7 +698,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
             Q_25e450 v;
             qcopy(&v, explosion_position);
             v.f[3] = fG;
-            if (func_L00_00200290_25e450(&v, 100.0f) != -1) {
+            if (fast_bsphere_check(&v, 100.0f) != -1) {
                 if (0.0f < fG) {
                     ((Fl *)default_explosion_flash_descriptor)->f[9] = fG;
                     ((Fl *)default_explosion_flash_descriptor)->f[10] = fG;
@@ -709,9 +709,9 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
                     ((Fl *)default_explosion_flash_descriptor)->f[8] = 15.0f;
                 }
                 if (flag) {
-                    func_L00_002D4CE8_25e450(alternate_explosion_flash_descriptor, explosion_position, 0, 0);
+                    mine_camera_blast(alternate_explosion_flash_descriptor, explosion_position, 0, 0);
                 } else {
-                    func_L00_002D4CE8_25e450(default_explosion_flash_descriptor, explosion_position, 0, 0);
+                    mine_camera_blast(default_explosion_flash_descriptor, explosion_position, 0, 0);
                 }
             }
         }

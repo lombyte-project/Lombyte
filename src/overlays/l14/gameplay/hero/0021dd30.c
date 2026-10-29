@@ -224,7 +224,7 @@ s32 process_hero_hit_reaction(s32 apply_hit_reaction) {
 /* Same source as the exact FUN_L01_00231ae0, with a b12E2/i300 branch in place of its 0x11/0x12 branch. */
 
 extern f32 D_0015ED6C_231ae0 __asm__("D_0015ED6C");
-f32 FUN_001f9b80_231ae0(void *, void *) __asm__("FUN_001f9b80");
+f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value_231ae0(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_231ae0(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void update_hero_smoothed_parameters(void) __asm__("FUN_L14_00222f38");
@@ -256,7 +256,7 @@ void update_hero_smoothed_parameters(void) {
         hero.capsule_radius_target = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
-        FUN_001f9b80_231ae0(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
+        vector_distance(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
         f32 *smoothed_values = D_0013F570;
         struct Hero *hero_ptr = (struct Hero *)((u8 *)smoothed_values - 0x220);
         approach_value_231ae0(hero_ptr->capsule_top_target, frame_scale * 0.02f, smoothed_values);

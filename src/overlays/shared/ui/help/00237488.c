@@ -421,11 +421,11 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern float FUN_L00_0022e138(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int coll_sphere(float, void *, int, int) __asm__("FUN_L00_001f0d60");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void FUN_L00_0022e3e0(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
@@ -465,7 +465,7 @@ void update_hero_movement_and_collision_probes(void) {
             if (end[2] < 0.5f) end[2] = 0.5f;
             distance = 20.0f;
             hit = collision_line(start, end, 2, hero.moby, 0);
-            if (!hit || (distance = FUN_L00_0022e138(start, D_L05_00174260), distance > 3.0f)) {
+            if (!hit || (distance = fast_vec_dist(start, D_L05_00174260), distance > 3.0f)) {
                 for (offset = -0.4f; offset < 0.5f; offset += 0.1f) {
                     transform_hero_local_offset_to_world(probe, 1.1f + offset, 0.0f, 0.0f);
                     if (!coll_sphere(hero.capsule_radius, probe, 2, 0)) {
@@ -486,7 +486,7 @@ void update_hero_movement_and_collision_probes(void) {
         start[2] = 0.21f;
         transform_vector_by_basis(start, start, (char *)hero.moby + 0xc0);
         euler_rotation_matrix(rotation, D_L05_0017AB20);
-        FUN_L00_0022e3e0(start, start, rotation);
+        transform_vector(start, start, rotation);
         fast_vec_add(hero.hoverboard_moby + 0x10, hero.hoverboard_moby + 0x10, start);
         copy_matrix_rotation(moby_rotation, (char *)hero.moby + 0xc0);
         multiply_matrix(combined, moby_rotation, rotation);
@@ -648,7 +648,7 @@ extern int D_00141660_lui __asm__("D_00141660") NOT_SDA;
 extern unsigned char D_0013D5C8_2523C8[] __asm__("D_0013D4DC");
 extern Rec2C D_L05_0017C188_2523C8[] __asm__("D_L05_0017C088");
 extern int D_L05_0015F674_gp __asm__("D_L05_0015F674") __attribute__((sda));
-extern int func_L05_0024D680_2523C8(int, int) __asm__("FUN_L05_0024cee8");
+extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern int func_001F9908_2523C8(int *) __asm__("FUN_001f9740");
 extern Moby *D_L05_0015FFD8_macro __asm__("D_L05_0015FFD8") MACRO_ADDR;
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
@@ -713,13 +713,13 @@ int process_hero_primary_item_input(void) {
                     launch_hero_wrench();
                     break;
                 }
-                func_L05_0024D680_2523C8(0x15, 1);
+                hero_set_state(0x15, 1);
                 break;
             }
             if ((*(Hero *)((char *)&hero)).unk308 == 1) {
-                func_L05_0024D680_2523C8(0x70, 1);
+                hero_set_state(0x70, 1);
             } else {
-                func_L05_0024D680_2523C8(0x13, 1);
+                hero_set_state(0x13, 1);
             }
             break;
         }
@@ -738,13 +738,13 @@ int process_hero_primary_item_input(void) {
                 }
                 if (((*(Hero *)((char *)&hero)).past_jump_apex == 0 && (*(Hero *)((char *)&hero)).ground_distance > 0.1f) || ((*(Hero *)((char *)&hero)).past_jump_apex != 0 && (*(Hero *)((char *)&hero)).ground_distance > 0.57f)
                     || ((*(Hero *)((char *)&hero)).state.current == 8 && (*(Hero *)((char *)&hero)).ground_distance > 0.57f)) {
-                    func_L05_0024D680_2523C8(0x14, 1);
+                    hero_set_state(0x14, 1);
                     break;
                 }
                 if ((*(Hero *)((char *)&hero)).on_slip_ground != 0) {
                     break;
                 }
-                func_L05_0024D680_2523C8(0x13, 1);
+                hero_set_state(0x13, 1);
                 break;
             }
         }
@@ -758,7 +758,7 @@ int process_hero_primary_item_input(void) {
                         break;
                     }
                     if ((*(Hero *)((char *)&hero)).anim_frame >= (float)rec->f10 && (D_0013CA40_p2523C8.held & 0xA) && FUN_L00_00266d60(mask, scale_game_frames(0xF), 0)) {
-                        func_L05_0024D680_2523C8(0x15, 1);
+                        hero_set_state(0x15, 1);
                         break;
                     }
                 }
@@ -783,13 +783,13 @@ int process_hero_primary_item_input(void) {
                 break;
             }
             if (D_0013CA40_p2523C8.held & 0xA) {
-                func_L05_0024D680_2523C8(0x15, 1);
+                hero_set_state(0x15, 1);
                 break;
             }
             if ((*(Hero *)((char *)&hero)).unk308 == 1) {
-                func_L05_0024D680_2523C8(0x70, 1);
+                hero_set_state(0x70, 1);
             } else {
-                func_L05_0024D680_2523C8(0x13, 1);
+                hero_set_state(0x13, 1);
             }
         }
         break;
@@ -815,12 +815,12 @@ int process_hero_primary_item_input(void) {
                             }
                         }
                         if ((*(Hero *)((char *)&hero)).swing_target_in_sight != 0 && (*(Hero *)((char *)&hero)).grapple_lockout_timer == 0 && (*(Hero *)((char *)&hero)).state.current != 0x2C) {
-                            func_L05_0024D680_2523C8(0x2C, 1);
+                            hero_set_state(0x2C, 1);
                             break;
                         }
                     }
                     if ((*(Hero *)((char *)&hero)).grapple_target_in_sight != 0 && (*(Hero *)((char *)&hero)).grapple_lockout_timer == 0) {
-                        func_L05_0024D680_2523C8(0x24, 1);
+                        hero_set_state(0x24, 1);
                     }
                 }
             }
@@ -903,7 +903,7 @@ int process_hero_primary_item_input(void) {
                 if (FUN_L00_00233e98(-1)) {
                     if ((*(Hero *)((char *)&hero)).state.control_mode == 0xC || (*(Hero *)((char *)&hero)).state.control_mode == 0 || (*(Hero *)((char *)&hero)).state.current == 3
                         || ((*(Hero *)((char *)&hero)).state.control_mode == 1 && (*(Hero *)((char *)&hero)).stick_magnitude < 0.7f)) {
-                        func_L05_0024D680_2523C8(0x23, 1);
+                        hero_set_state(0x23, 1);
                     } else {
                         start_equipped_item_animation();
                     }
@@ -923,7 +923,7 @@ int process_hero_primary_item_input(void) {
 
                 if (FUN_L00_00266d60(mask, window <= held_frames ? window : held_frames, &press_time2)) {
                     if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
-                        func_L05_0024D680_2523C8(0x20, 1);
+                        hero_set_state(0x20, 1);
                         if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
                             allocate_voice_for_target_entry_alt(0, 0, (int)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby));
                         }
@@ -1029,7 +1029,7 @@ int process_hero_primary_item_input(void) {
                 if ((*(Hero *)((char *)&hero)).state.control_mode < 2U || (*(Hero *)((char *)&hero)).state.control_mode == 0xC
                     || (((*(Hero *)((char *)&hero)).state.control_mode == 2 || (*(Hero *)((char *)&hero)).state.control_mode == 4) && (*(Hero *)((char *)&hero)).grounded_frames != 0)) {
                     if ((D_0013CA40_p2523C8.held & 8) && (D_0013CA40_p2523C8.pressed & 8)) {
-                        func_L05_0024D680_2523C8(0x81, 1);
+                        hero_set_state(0x81, 1);
                     }
                 }
             }

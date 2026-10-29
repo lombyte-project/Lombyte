@@ -654,7 +654,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float FUN_L08_00211a20(float);
-extern void FUN_00218888_002e7eb0(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int D_L08_0015F5CC __asm__("D_L08_0015F5CC");
 typedef union { float float_value; int int_value; } Data;
 /* Retail inherits GP 0x166c00: these scalar labels preserve its GP-relative loads.
@@ -735,7 +735,7 @@ char *create_moby_with_particles(int owner, float *position, float *rotation, in
                 particle_frame_count = truncate_float_to_s32(FUN_L08_00211a20(random_float_between((float)D_L08_00161D08_gp, (float)D_L08_00161D08_gp * 1.2f)));
                 particle_second_frame_count = truncate_float_to_s32(FUN_L08_00211a20(random_float_between((float)D_L08_00161D0C_gp, (float)D_L08_00161D0C_gp * 1.2f)));
                 particle_third_frame_count = truncate_float_to_s32(FUN_L08_00211a20(random_float_between((float)D_L08_00161D10_gp, (float)D_L08_00161D10_gp * 1.5f)));
-                FUN_00218888_002e7eb0(moby + 0x10, velocity_ptr, offset_ptr, moby_creation_initial_spark_word_gp, moby_creation_second_spark_word_gp, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
+                spawn_spark(moby + 0x10, velocity_ptr, offset_ptr, moby_creation_initial_spark_word_gp, moby_creation_second_spark_word_gp, particle_frame_count, particle_second_frame_count, particle_third_frame_count, -1);
             } while ((float)i < moby_creation_particle_count_limit_gp);
         }
         if (current_level_index == 12)
@@ -751,7 +751,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_game_frames_002e8210(float) __asm__("FUN_L08_00211a20");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int decrement_timer_002e8210(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -848,7 +848,7 @@ target_done:
     direction[3] = 2.0f;
     ((int *)velocity)[0] = 1;
     qcopy(position, data);
-    if (decrement_timer_002e8210(timer_ptr) == 0) goto collision;
+    if (fast_dec_timer(timer_ptr) == 0) goto collision;
 remove:
     mark_moby_for_removal(moby);
     return;

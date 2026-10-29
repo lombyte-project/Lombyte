@@ -558,7 +558,7 @@ extern char D_L09_00166F40_2eaa50[] __asm__("D_L09_00166F40");
 extern f32 D_0015ED6C_2eaa50 __asm__("D_0015ED6C");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern struct Moby *create_moby_2eaa50(s32) __asm__("FUN_0020c4f8");
+extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void set_moby_color(struct Moby *, s32, s32, s32) __asm__("FUN_L00_002502f0");
 extern void upd_a(struct Moby *) __asm__("FUN_L00_00250df8");
 
@@ -574,7 +574,7 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
     Vec4 path_displacement;
     Vec4 path_scatter_vector;
 
-    spawned_moby = create_moby_2eaa50(random_integer_below(4) + 0x107);
+    spawned_moby = create_moby(random_integer_below(4) + 0x107);
     if (spawned_moby != 0) {
         ovars = (PebbleVars *)owner->pvars;
         vars = (PebbleVars *)spawned_moby->pvars;
@@ -1638,7 +1638,7 @@ extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern int func_001F9850_2F9A50(int) __asm__("FUN_001f96f8");
-extern int func_001F9908_2F9A50(int *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern float func_001F9C78_2F9A50(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
@@ -1687,7 +1687,7 @@ void platform_update(Moby *moby)
     if (data->timer != 0) {
         float side_dot, front_dot, pitch_target;
         float deg_to_rad;
-        func_001F9908_2F9A50(&data->timer);
+        fast_dec_timer(&data->timer);
         fast_vec_sub(&hero_offset, (D_0013E633_2F9A50 + 0x80), &(*(Vec_2F9A50 *)&moby->pos));
         deg_to_rad = 0.01745329238474369f;
         side_dot = func_001F9C78_2F9A50(&hero_offset, &(*(Vec_2F9A50 *)&moby->rot_row0));

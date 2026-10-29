@@ -2649,14 +2649,14 @@ extern int func_001F9850_2A3DD0(int) __asm__("FUN_001f96f8");
 extern float func_001F9B88_2A3DD0(float) __asm__("FUN_001f99c0");
 extern int func_001FA898_2A3DD0(float) __asm__("FUN_001fa6d0");
 extern void func_001F9BF0_2A3DD0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void func_001F9EE8_2A3DD0(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void func_001F9EC0_2A3DD0(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void func_001F9BD8_2A3DD0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_L00_001FF4B0_2A3DD0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001FA4A0_2A3DD0(void *, void *) __asm__("FUN_001fa2d8");
 extern void func_L15_002A47B8_2A3DD0(void *) __asm__("FUN_L15_002a35d8");
 extern int func_0022ED80_2A3DD0(int, int, void *) __asm__("FUN_0022da68");
-extern void func_001F49B0_2A3DD0(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void func_L15_002A4318_2A3DD0(void) __asm__("FUN_L15_002a3138");
 extern unsigned char *func_L15_002655D0_2A3DD0(void *, void *, void *, int, int, int, int, int, void *) __asm__("FUN_L15_002647f0");
 
@@ -2704,7 +2704,7 @@ void update_spark_emitter_moby(unsigned char *moby) {
             }
             func_001F9BF0_2A3DD0(V, D_0013F420, moby + 0x10);
             func_001FA4A0_2A3DD0(W, moby + 0xC0);
-            func_001F9EE8_2A3DD0(V, V, W);
+            transform_vector(V, V, W);
             V[0] = 0.0f;
             z = V[0];
             i = 15;
@@ -2723,10 +2723,10 @@ void update_spark_emitter_moby(unsigned char *moby) {
                 C[0] = z;
                 C[1] = func_002140F8_2A3DD0(lo, hi);
                 C[2] = func_002140F8_2A3DD0(lo, hi);
-                func_001F9EC0_2A3DD0(A, A, moby + 0xC0);
-                func_001F9EC0_2A3DD0(B, B, moby + 0xC0);
-                func_001F9EC0_2A3DD0(C, C, moby + 0xC0);
-                func_001F9BD8_2A3DD0(A, A, moby + 0x10);
+                transform_vector_by_basis(A, A, moby + 0xC0);
+                transform_vector_by_basis(B, B, moby + 0xC0);
+                transform_vector_by_basis(C, C, moby + 0xC0);
+                fast_vec_add(A, A, moby + 0x10);
                 func_L00_001FF4B0_2A3DD0(B, B, one / (float)func_001F9850_2A3DD0(30));
                 func_L00_001FF4B0_2A3DD0(C, C, one / (float)func_001F9850_2A3DD0(30));
                 B[3] = 0.125f;
@@ -2744,12 +2744,12 @@ void update_spark_emitter_moby(unsigned char *moby) {
                 func_L15_002655D0_2A3DD0(A, B, C, col, 0x60808080, fa, fb, fc, moby);
             } while (i >= 0);
             if (func_001F9B88_2A3DD0(V[1]) < hi && z < V[2] && V[2] < hi) {
-                func_001F9EC0_2A3DD0(moby_data, V, moby + 0xC0);
-                func_001F9BD8_2A3DD0(moby_data, moby_data, moby + 0x10);
+                transform_vector_by_basis(moby_data, V, moby + 0xC0);
+                fast_vec_add(moby_data, moby_data, moby + 0x10);
             } else {
                 qzero(moby_data);
             }
-            func_001F49B0_2A3DD0(func_L15_002A4318_2A3DD0, moby);
+            add_draw_callback(func_L15_002A4318_2A3DD0, moby);
         }
         break;
     }
@@ -2758,7 +2758,7 @@ void update_spark_emitter_moby(unsigned char *moby) {
             moby[0x20] = 3;
         } else {
             qzero(moby_data);
-            func_001F49B0_2A3DD0(func_L15_002A4318_2A3DD0, moby);
+            add_draw_callback(func_L15_002A4318_2A3DD0, moby);
         }
         break;
     }
@@ -3080,7 +3080,7 @@ void spiderbot_update(unsigned char *moby) {
         int i;
         *(u128_2A8090 *)B = 0;
         B[2] = 12.0f;
-        func_001F9EC0_2A3DD0(B, B, moby + 0xC0);
+        transform_vector_by_basis(B, B, moby + 0xC0);
         fast_vec_add(R.v, moby + 0x10, B);
         *(u128_2A8090 *)A = *(u128_2A8090 *)R.v;
         R.flags = 0x10001;

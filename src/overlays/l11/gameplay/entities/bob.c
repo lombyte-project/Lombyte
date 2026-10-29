@@ -1700,7 +1700,7 @@ extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void FUN_001f9cf8_309ac0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -1872,7 +1872,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         tab_a8 = D_L11_001B0EB0[boat_vars->idx_a8];
         tab_ac = D_L11_001B0EB0[boat_vars->idx_ac];
         for (i = 0; i < tab_a8[0]; i++) {
-            FUN_001f9cf8_309ac0((char *)tab_a8 + 0x10 + i * 16, (char *)tab_ac + 0x10 + i * 16, &moby->rot_row0);
+            transform_vector_by_basis((char *)tab_a8 + 0x10 + i * 16, (char *)tab_ac + 0x10 + i * 16, &moby->rot_row0);
             fast_vec_add((char *)tab_a8 + 0x10 + i * 16, (char *)tab_a8 + 0x10 + i * 16, &moby->pos);
         }
         break;

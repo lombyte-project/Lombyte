@@ -2463,7 +2463,7 @@ void taxi_update(struct Moby *moby) {
     fast_vec_sub(position_delta, &moby->pos, previous_position);
     update_entity_matrix(taxi_vars->spring, position_delta, previous_rotation, &moby->rot);
 }
-extern float FUN_001f9b48_2f1040(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 struct L14PathPoint {
     char pad0[0x30];
     float pos[4];
@@ -2485,7 +2485,7 @@ void initialize_taxi_stop_from_position(struct Moby *moby) {
     int i;
     taxi_vars->picked = -1;
     for (i = 0; i < 5; i++) {
-        if (FUN_001f9b48_2f1040(&moby->pos, D_L14_001600EC_2f1040[taxi_vars->points[i]].pos) < 1.0f) {
+        if (fast_vec_dist(&moby->pos, D_L14_001600EC_2f1040[taxi_vars->points[i]].pos) < 1.0f) {
             taxi_vars->picked = i;
             break;
         }

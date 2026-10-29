@@ -1754,7 +1754,7 @@ typedef struct {
 } L10SpriteData;
 extern void func_001F9BF0_298940(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_001FF4B0_298940(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9BD8_298940(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9908_298940(int *) __asm__("FUN_001f9740");
 extern int func_001F9850_298940(int) __asm__("FUN_001f96f8");
 extern float func_001FA888_298940(int) __asm__("FUN_001fa6c0");
@@ -1778,7 +1778,7 @@ void update_suck_cannon_particles(char *moby) {
     func_001F9BF0_298940(d, D_L10_00167240_298940, moby + 0x10);
     func_L00_001FF4B0_298940(d, d, -0.3f);
     func_L00_001FF4B0_298940(particle_position_step, d, 0.1f);
-    func_001F9BD8_298940(d, d, moby + 0x10);
+    fast_vec_add(d, d, moby + 0x10);
     *(float *)(moby + 0x18) -= 0.25f;
     for (i = 0; i < 4; i++) {
         float sprite_attribute_sum = sprite_data->a[i] + sprite_data->b[i];
@@ -1797,6 +1797,6 @@ void update_suck_cannon_particles(char *moby) {
         if (D_L04_0015F5C4 != 2)
             func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                      sprite_data->d[i]);
-        func_001F9BD8_298940(d, d, particle_position_step);
+        fast_vec_add(d, d, particle_position_step);
     }
 }

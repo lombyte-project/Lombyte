@@ -6,7 +6,7 @@
 
 extern volatile int D_L00_001611A0_gp __asm__("D_L00_001611A0") __attribute__((sda));
 extern int D_L00_001611C0_002a08c8 __asm__("D_L00_001611C0");
-void FUN_001e93b0_002a08c8(char *) __asm__("FUN_001e93b0");
+void debug_print(char *) __asm__("FUN_001e93b0");
 u32 *FUN_00122fe0_002a08c8(int) __asm__("FUN_00122fe0");
 void flush_cache(int) __asm__("FUN_00118a80");
 void FUN_001232c8_002a08c8(u32 *, u32) __asm__("FUN_001232c8");
@@ -25,7 +25,7 @@ void vu1_send_chain_render_buffer(void) {
     if (render_buffer_high_water_bytes < buffer_used_bytes) {
         render_buffer_high_water_bytes = buffer_used_bytes;
         if (D_L00_001611CC < buffer_used_bytes) {
-            FUN_001e93b0_002a08c8(vu1_render_buffer_overflow_message);
+            debug_print(vu1_render_buffer_overflow_message);
             buffer_limit_exceeded = 1;
         }
     }

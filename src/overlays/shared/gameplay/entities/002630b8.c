@@ -136,7 +136,7 @@ extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60")
 float FUN_L00_00263468_002634f8(Vec4_2634f8 *) __asm__("FUN_L00_00263468");
 int FUN_001efa68_002634f8(Vec4_2634f8 *, Vec4_2634f8 *, int, void *, int) __asm__("FUN_001efa68");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-float FUN_001f9b20_002634f8(void *) __asm__("FUN_001f9b20");
+float vector_length_xy(void *) __asm__("FUN_001f9b20");
 void spawn_timed_effect_particle(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
 void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) __asm__("FUN_L00_002634f8");
 
@@ -156,7 +156,7 @@ void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) {
             fast_vec_sub(&position_delta, &D_L00_00173E60_002634f8, &position_owner->pos);
             spawn_timed_effect_particle(
                 &D_L00_00173E60_002634f8,
-                (u8)(int)(FUN_001f9b20_002634f8(&position_delta) / 60.0f * 191.0f + 64.0f));
+                (u8)(int)(vector_length_xy(&position_delta) / 60.0f * 191.0f + 64.0f));
         }
     }
 }
@@ -170,11 +170,11 @@ typedef struct {
 } Pk;
 extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
 u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-void FUN_001f9a28_00263618(void *, void *, void *) __asm__("FUN_001f9a28");
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9a68_00263618(void *, void *, float) __asm__("FUN_001f9a68");
-void FUN_001f9a10_00263618(void *, void *, void *) __asm__("FUN_001f9a10");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L00_001B0470[4][4] NOT_SDA;
@@ -203,13 +203,13 @@ void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float 
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
     qcopy(M[3], quad_base_position);
-    FUN_001f9a28_00263618(M[0], g_debug_camera, M[3]);
+    fast_vec_sub(M[0], g_debug_camera, M[3]);
     fast_vec_normalize(M[0], M[0], 1.0f);
     fast_vec_cross(M[1], M[0], up);
     fast_vec_normalize(M[1], M[1], 1.0f);
     fast_vec_cross(M[2], M[1], M[0]);
     FUN_001f9a68_00263618(position_offset, M[0], position_offset_scale);
-    FUN_001f9a10_00263618(M[3], M[3], position_offset);
+    fast_vec_add(M[3], M[3], position_offset);
     pk.col[3] = col;
     pk.col[2] = col;
     pk.col[1] = col;
@@ -240,7 +240,7 @@ extern f32 FUN_001f9af0_2637f8(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9bf8_2637f8(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a10_2637f8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern s32 FUN_001f96f8_2637f8(s32) __asm__("FUN_001f96f8");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern Effect *spawn_puff(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
 extern u8 D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
@@ -277,7 +277,7 @@ void cutscene_set_camera_target(u8 *moby) {
                                                    D_L00_0015F580_macro, lifetime, 0x503030ff);
                 if (effect) {
                     EffectTail *tail = &effect->tail;
-                    effect->hA = FUN_001f96f8_2637f8(6);
+                    effect->hA = scale_game_frames(6);
                     tail->w24 = w24;
                     tail->b2A = b2A;
                     tail->b2B = effect->hA;
@@ -300,7 +300,7 @@ void cutscene_set_camera_target(u8 *moby) {
                                                    D_L00_0015F580_macro, lifetime, 0x7fffffff);
                 if (effect) {
                     EffectTail *tail = &effect->tail;
-                    effect->hA = FUN_001f96f8_2637f8(2);
+                    effect->hA = scale_game_frames(2);
                     effect->b8 = random_integer_below(0xff);
                     tail->w24 = w24;
                     tail->b2A = b2A;
@@ -420,7 +420,7 @@ void FUN_L00_00263fd8_263e30(void *, int, void *, void *, int, int, void *, void
                              void *) __asm__("FUN_L00_00263fd8");
 int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
-float FUN_00213308_263e30(void) __asm__("FUN_00213308");
+float random_angle_radians(void) __asm__("FUN_00213308");
 int FUN_00213260_263e30(int) __asm__("FUN_00213260");
 void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) __asm__("FUN_L00_00263e30");
 
@@ -445,9 +445,9 @@ void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_c
         if (k) {
             for (i = 0; i < random_class_fragment_limit && i < k; i++) {
                 clear_u64_value(random_fragment_euler_rotation);
-                random_fragment_euler_rotation[0] = FUN_00213308_263e30();
-                random_fragment_euler_rotation[1] = FUN_00213308_263e30();
-                random_fragment_euler_rotation[2] = FUN_00213308_263e30();
+                random_fragment_euler_rotation[0] = random_angle_radians();
+                random_fragment_euler_rotation[1] = random_angle_radians();
+                random_fragment_euler_rotation[2] = random_angle_radians();
                 FUN_L00_00263fd8_263e30(source_moby, base + FUN_00213260_263e30(range), &fragment_spawn_positions[i], random_fragment_euler_rotation, 0, mode,
                                         D_L00_0015F580_263e30, D_L00_0015F580_263e30, 0.0f,
                                         D_L00_0015F580_263e30);

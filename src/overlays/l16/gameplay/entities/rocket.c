@@ -455,7 +455,7 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   int) __asm__("FUN_L00_0025e450");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
-void mark_moby_for_removal_a3f38(void *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern L16SparkHit D_L16_001742C0_hit __asm__("D_L16_00174240");
 extern float func_L00_0025CCF0_spark(void *, void *, float, float, float, float,
                                      int) __asm__("FUN_L00_0025bc98");
@@ -560,7 +560,7 @@ void update_homing_projectile(unsigned char *moby) {
                 moby[0x20] = impact_state;
             } else if (fast_dec_timer_s16(projectile_data + 4) || FUN_001f9b80_c(position, &player->motion.pos) > 60.0f) {
             remove:
-                mark_moby_for_removal_a3f38(moby);
+                mark_moby_for_removal(moby);
             }
         }
         break;
@@ -568,7 +568,7 @@ void update_homing_projectile(unsigned char *moby) {
     case PROJECTILE_STATE_IMPACT:
         func_L00_0025F4A8_alt(moby, &D_L16_0015F580_spark, 0, 0.0f, 0.0f, 3, 3, 5, 1.0f, 0.5f, 4.0f,
                               0.7f, 0, 7.0f, 0, 0, -1, 0);
-        mark_moby_for_removal_a3f38(moby);
+        mark_moby_for_removal(moby);
         break;
     }
 }
@@ -876,7 +876,7 @@ extern int FUN_001fa6e0(float, int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
 float absolute_float(float input) __asm__("func_001F99C0");
-extern int func_001FA8A8_caa18(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 void emit_moby_sprite_effect_particles(struct Moby *moby) __asm__("FUN_L16_002c9650");
@@ -907,7 +907,7 @@ void emit_moby_sprite_effect_particles(struct Moby *moby) {
         }
         elapsed_cycle_fraction = convert_integer_to_float(scale_game_frames(0xFF) - sprite_data->c[i]);
         elapsed_cycle_fraction = elapsed_cycle_fraction / (float)scale_game_frames(0xFF);
-        col = func_001FA8A8_caa18(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - elapsed_cycle_fraction));
+        col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - elapsed_cycle_fraction));
         FUN_L00_00272f68(d, col, func_001FA898_caa18(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0, sprite_data->d[i]);
         fast_vec_add(d, d, particle_position_step);
     }
@@ -981,7 +981,7 @@ void conveyor_belt_update(struct Moby *moby) {
 #endif
 extern float func_001F9D10_c9a50(void *, void *) __asm__("FUN_001f9b48");
 extern void func_L00_001FF4B0_c9a50(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9BD8_c9a50(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_0022ED80_cae18_c9a50(int, int, void *) __asm__("FUN_0022da68");
 extern int *D_L16_001ABFC0_c9a50[] __asm__("D_L16_001ABCC0");
 extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8");
@@ -1016,7 +1016,7 @@ void update_conveyor_group_voice(struct Moby *moby) {
             target = *(char **)(slot + 0x88);
             if (target && *(short *)(target + 0xA6) == 0x1D7) {
                 func_L00_001FF4B0_c9a50(voice_position_offset, nearest + 0xE0, 2.5f);
-                func_001F9BD8_c9a50(voice_pool + 0x90 + *(int *)(moby_data + 0x74) * 0x70, voice_position_offset,
+                fast_vec_add(voice_pool + 0x90 + *(int *)(moby_data + 0x74) * 0x70, voice_position_offset,
                                     nearest + 0x10);
                 *(char **)(voice_pool + 0x88 + *(int *)(moby_data + 0x74) * 0x70) = nearest;
                 return;
@@ -1026,7 +1026,7 @@ void update_conveyor_group_voice(struct Moby *moby) {
         *(int *)(moby_data + 0x74) = voice_slot_index;
         if (voice_slot_index >= 0) {
             func_L00_001FF4B0_c9a50(voice_position_offset, &moby->rot_row2, 2.5f);
-            func_001F9BD8_c9a50(voice_pool + 0x90 + *(int *)(moby_data + 0x74) * 0x70, voice_position_offset, &moby->pos);
+            fast_vec_add(voice_pool + 0x90 + *(int *)(moby_data + 0x74) * 0x70, voice_position_offset, &moby->pos);
         }
     }
 }
@@ -1063,7 +1063,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad_u(void *, void *, int) __asm__("draw_geometry_quad");
-extern int func_001FA8A8_caa18(int, int, float) __asm__("FUN_001fa6e0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 void draw_conveyor_belt_strips(char *moby) {
@@ -1088,7 +1088,7 @@ void draw_conveyor_belt_strips(char *moby) {
     phase = convert_integer_to_float(D_L16_0015F5CC % period);
     phase = phase / convert_integer_to_float(period);
     phase = fast_sin(phase * 6.28318f - 3.14159f) * 0.5f + 0.5f;
-    tint = func_001FA8A8_caa18(conveyor_belt_pulse_color_start_gp, conveyor_belt_pulse_color_end_gp, phase);
+    tint = fast_tween_color(conveyor_belt_pulse_color_start_gp, conveyor_belt_pulse_color_end_gp, phase);
     color = conveyor_belt_scrolling_vertex_color_gp;
     packets[0].texture = get_effect_texture(conveyor_belt_pulse_texture_id_gp);
     packets[0].mode = (long)conveyor_belt_alpha_blend_a_selector | ((long)conveyor_belt_alpha_blend_b_selector << 2) |

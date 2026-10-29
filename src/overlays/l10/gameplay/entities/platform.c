@@ -345,7 +345,7 @@ extern u8 D_001413F4_98b68[] __asm__("D_001413F4");
 extern char *D_L10_001600EC_98b68 __asm__("D_L10_001600EC");
 extern int scale_game_frames_98b68(int) __asm__("FUN_001f96f8");
 extern int try_set_help_message(int, int) __asm__("FUN_00215130");
-extern void FUN_L00_00216f90_98b68(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
@@ -414,10 +414,10 @@ void update_hero_relocation_trigger(struct Moby *moby) {
         target = (struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68);
         target->collision = *(u32 *)((char *)target->pclass + 0x10);
         if (D_0014C050_98b68[moby->mission + current_level_index * 16] == 0xFF || vars->spot_alt == -1) {
-            FUN_L00_00216f90_98b68(D_L10_001600EC_98b68 + vars->spot_alt * 128 + 0x30,
+            set_race_camera(D_L10_001600EC_98b68 + vars->spot_alt * 128 + 0x30,
                                    D_L10_001600EC_98b68 + vars->spot_alt * 128 + 0x70, 0, 1);
         } else {
-            FUN_L00_00216f90_98b68(D_L10_001600EC_98b68 + vars->spot * 128 + 0x30,
+            set_race_camera(D_L10_001600EC_98b68 + vars->spot * 128 + 0x30,
                                    D_L10_001600EC_98b68 + vars->spot * 128 + 0x70, 0, 1);
         }
         enter_hero_vehicle_mode(1, 0x43, (struct Moby *)(D_L10_0015FFD8_98b68 + (vars->target << 8)));
@@ -426,7 +426,7 @@ void update_hero_relocation_trigger(struct Moby *moby) {
     }
     if (hero.vehicle_mode == 1) {
         exit_hero_vehicle_mode();
-        FUN_L00_00216f90_98b68(D_L10_001600EC_98b68 + vars->vehicle_spot * 128 + 0x30,
+        set_race_camera(D_L10_001600EC_98b68 + vars->vehicle_spot * 128 + 0x30,
                                D_L10_001600EC_98b68 + vars->vehicle_spot * 128 + 0x70, 0, 1);
         jet_game_state(0, 5);
         ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 1;
@@ -1280,7 +1280,7 @@ extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_
 extern float func_001F9F90_2D9988(float x) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2D9988(float) __asm__("FUN_001f9de0");
 extern int func_001F9850_2D9988(int) __asm__("FUN_001f96f8");
-extern int func_001F9938_2D9988(void *) __asm__("FUN_001f9770");
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void func_L00_00251358_2D9988(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 extern void func_L00_00251328_2D9988(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
@@ -1335,7 +1335,7 @@ void FUN_L10_002d85c8(char *m) {
             }
         }
         *(unsigned char *)(m + 0xA4) = 0xFF;
-        if (func_001F9938_2D9988(data + 0x14) != 0 && resolve_bouncing_projectile_collision(m, data, v0) == 3) {
+        if (fast_dec_timer_s16(data + 0x14) != 0 && resolve_bouncing_projectile_collision(m, data, v0) == 3) {
             *(short *)(data + 0x14) = func_001F9850_2D9988(0xF0);
             *(unsigned char *)(m + 0x20) = 1;
         } else if (*(float *)(m + 0x18) < 2.0f) {
@@ -1347,7 +1347,7 @@ void FUN_L10_002d85c8(char *m) {
         rA = func_001F9850_2D9988(0xF0);
         rB = func_001F9850_2D9988(0xF0);
         func_L00_00251328_2D9988(m, ((rA - *(short *)(data + 0x14)) * 127) / rB, i60, i64);
-        if (func_001F9938_2D9988(data + 0x14) != 0) {
+        if (fast_dec_timer_s16(data + 0x14) != 0) {
             *(unsigned char *)(m + 0x20) = 3;
             break;
         }
@@ -1389,7 +1389,7 @@ void FUN_L10_002d85c8(char *m) {
         sb.s3a = *(unsigned short *)(m + 0xA6);
         func_001F9BD8_2D9988(m + 0x10, m + 0x10, data);
         *(float *)(data + 0x8) = *(float *)(data + 0x8) - D_0015ED70 * 9.8f;
-        if ((func_001F9938_2D9988(data + 0x14) != 0 && resolve_bouncing_projectile_collision(m, data, v0) != 0) || *(float *)(m + 0x18) < 2.0f) {
+        if ((fast_dec_timer_s16(data + 0x14) != 0 && resolve_bouncing_projectile_collision(m, data, v0) != 0) || *(float *)(m + 0x18) < 2.0f) {
             flag21 = 1;
         }
         if (flag21) {

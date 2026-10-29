@@ -211,7 +211,7 @@ extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 FUN_001f9b20_223450(void *) __asm__("FUN_001f9b20");
+extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
@@ -327,7 +327,7 @@ void hero_update_hop_velocity(void) {
         if (hero.target_speed < hero_low_speed_threshold_basis[0] * ED6C * 0.2f) {
             if (hero.state.control_mode == 2) {
                 speed_reduction_step = hero.stickless_decel;
-                speed = FUN_001f9b20_223450(&hero.motion.velocity);
+                speed = vector_length_xy(&hero.motion.velocity);
                 approach_value(0.0f, speed_reduction_step, &speed);
                 set_vector_length_xy(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;

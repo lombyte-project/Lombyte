@@ -337,7 +337,7 @@ extern X_20a328 D_L15_00174440_lui __asm__("D_L15_00174440") NOT_SDA;
 extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 FUN_001f9de0_20a328(f32) __asm__("FUN_001f9de0");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_20a328(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -380,10 +380,10 @@ void adjust_hero_planar_velocity_from_probes(int force) {
         g = (P_20a328 *)(hero_position - 0x80);
         secondary_offset_scale = 1.4f;
         primary_endpoint.f[0] = fast_cos(g->f98) * k;
-        primary_endpoint.f[1] = FUN_001f9de0_20a328(g->f98) * k;
+        primary_endpoint.f[1] = fast_sin(g->f98) * k;
         *(s32 *)&primary_endpoint.f[2] = 0;
         secondary_endpoint.f[0] = fast_cos(g->f98) * k * secondary_offset_scale;
-        secondary_endpoint.f[1] = FUN_001f9de0_20a328(g->f98) * k * secondary_offset_scale;
+        secondary_endpoint.f[1] = fast_sin(g->f98) * k * secondary_offset_scale;
         *(s32 *)&secondary_endpoint.f[2] = 0;
     } else {
         qcopy(&primary_endpoint, hero_position + 0x60);
@@ -429,7 +429,7 @@ extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s16 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
-extern s32 FUN_001f96f8_215e58(s32) __asm__("FUN_001f96f8");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
@@ -438,7 +438,7 @@ extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_215e58(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001f9a68_215e58(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
@@ -508,7 +508,7 @@ void update_hero_timers_and_auxiliary_state(void) {
         hero.health.hp != 0 && D_L15_0015F5C4 == 0) {
         if (hero.vehicle_mode == 3) {
             restore_saved_hero_moby_and_clear_vehicle_mode();
-            if (pad_pressed_within(0x80, FUN_001f96f8_215e58(0x12), 0)) {
+            if (pad_pressed_within(0x80, scale_game_frames(0x12), 0)) {
                 hero.force_slot0_item8 = 1;
             }
         } else {
@@ -546,7 +546,7 @@ void update_hero_timers_and_auxiliary_state(void) {
             }
             FUN_001f9a10_215e58(&sum, &sum, &sample_delta);
         }
-        FUN_001f9a68_215e58(&sum, &sum, 1.0f / (f32)sample_count);
+        fast_vec_scale(&sum, &sum, 1.0f / (f32)sample_count);
         if (fast_vec_length(&sum) < frame_time) {
             hero.still_frames++;
             goto skip;

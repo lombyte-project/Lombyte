@@ -719,7 +719,7 @@ extern float func_001F9F90_239918(float) __asm__("FUN_001f9dc8");
 extern float func_001FA748_239918(float, float) __asm__("FUN_001fa580");
 extern int func_00200198_239918(int, int) __asm__("FUN_001ff960");
 extern void func_00200468_239918(int, int, int, int, int, int) __asm__("FUN_001ffc30");
-extern void func_L00_0023BAB8_239918(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
+extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 extern int get_text(int) __asm__("FUN_001fdd10");
 extern int strlen_alt(int) __asm__("FUN_001166cc");
 extern int func_001FA8A8_239918(int, int, float) __asm__("FUN_001fa6e0");
@@ -791,9 +791,9 @@ int draw_hud_radial_selector_panel(Elem *element) {
                 alpha = frame_alpha;
             }
             if (((Arena *)D_L00_0017E5D8_239918)->unk2C != 0) {
-                func_L00_0023BAB8_239918(element, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk4), icon_x, icon_y, 1, alpha);
+                hud_frame(element, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk4), icon_x, icon_y, 1, alpha);
             } else {
-                func_L00_0023BAB8_239918(element, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk4 + 4), icon_x, icon_y, 1, frame_alpha);
+                hud_frame(element, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk4 + 4), icon_x, icon_y, 1, frame_alpha);
             }
         }
     }

@@ -348,7 +348,7 @@ void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) {
 extern char D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
 extern u8 *D_L00_0016051C_0028aa98 __asm__("D_L00_0016051C");
 void FUN_001f9fc8_0028aa98(void *) __asm__("FUN_001f9fc8");
-void FUN_0022bba0_0028aa98(void) __asm__("FUN_0022bba0");
+void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980_0028aa98(s32, u64) __asm__("FUN_00233980");
 void draw_two_sky_shells_with_particles(void) __asm__("FUN_L00_0028aa98");
 
@@ -358,7 +358,7 @@ void draw_two_sky_shells_with_particles(void) {
     if (*(s16 *)(D_L00_0016051C_0028aa98 + 8) == 0)
         sky_particles_init(0x78, 8);
     sky_particles_update();
-    FUN_0022bba0_0028aa98();
+    sky_sprite_proc();
     FUN_00233980_0028aa98(0x42, 0x8000000044ULL);
     sky_draw_shell(1);
 }

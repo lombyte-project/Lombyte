@@ -1817,7 +1817,7 @@ extern int layered_effect_texture_2c_fixed_alpha_gp __asm__("D_L11_001624F8") __
 extern int layered_effect_texture_2a_pair_zero_fixed_alpha_gp __asm__("D_L11_00162518") __attribute__((sda));
 extern int layered_effect_texture_2b_fixed_alpha_gp __asm__("D_L11_00162528") __attribute__((sda));
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void FUN_001f76a0_31db50(void) __asm__("FUN_001f76a0");
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void emit_level11_layered_effect_batches_with_pair_offset(int) __asm__("FUN_L11_0031d8d8");
 extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
@@ -1833,7 +1833,7 @@ void draw_level11_layered_effect_batches(void) {
     vu1_add_g_sregister_31db50(8, 0);
     vu1_add_g_sregister_31db50(0x14, 0xFF9000000260L);
     vu1_add_g_sregister_31db50(0x47, 0x513F1);
-    FUN_001f76a0_31db50();
+    font_queue_vu_state();
     vu1_add_g_sregister_31db50(6, get_effect_texture(0x2C));
     vu1_add_g_sregister_31db50(0x42, (long)layered_effect_texture_2c_fixed_alpha_gp << 32 | 0x44);
     emit_level11_layered_effect_batches_with_pair_offset(0);

@@ -406,7 +406,7 @@ typedef struct M_221ee0 {
 } M_221ee0;
 extern G_221ee0 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern M_221ee0 *D_L00_0015FFE4_221ee0 __asm__("D_L00_0015FFE4");
-f32 FUN_001f9b48_221ee0(void *, void *) __asm__("FUN_001f9b48");
+f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 f32 FUN_L00_0020d6b0_221ee0(M_221ee0 *, s32 *, f32, f32, f32, f32) __asm__("FUN_L00_0020d6b0");
 s32 FUN_00214720_221ee0(void *, s32) __asm__("FUN_00214720");
 s32 FUN_001efa68_221ee0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
@@ -438,7 +438,7 @@ void select_hero_grapple_swing_target(void) {
             continue;
         if (3.0f < G.q80.f[2] - *(f32 *)((u8 *)candidate_moby + 0x18))
             continue;
-        if (q->f20 != 0.0f && q->f20 < FUN_001f9b48_221ee0(&G.q80, &candidate_moby->q10))
+        if (q->f20 != 0.0f && q->f20 < fast_vec_dist(&G.q80, &candidate_moby->q10))
             continue;
         k = G.i2084;
         target_angle_limit = 0.7853982f;
@@ -3302,7 +3302,7 @@ extern Rec2C D_L00_0017BD28_228770[] __asm__("D_L00_0017BC28");
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
-extern int f_fun_l00_002223f8_227fa0(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
@@ -3367,13 +3367,13 @@ int process_hero_equipped_item_input(void) {
                     launch_hero_wrench();
                     break;
                 }
-                f_fun_l00_002223f8_227fa0(0x15, 1);
+                hero_set_state(0x15, 1);
                 break;
             }
             if (D_0013F450_h228770.f308 == 1) {
-                f_fun_l00_002223f8_227fa0(0x70, 1);
+                hero_set_state(0x70, 1);
             } else {
-                f_fun_l00_002223f8_227fa0(0x13, 1);
+                hero_set_state(0x13, 1);
             }
             break;
         }
@@ -3395,13 +3395,13 @@ int process_hero_equipped_item_input(void) {
                     if (D_0013F450_h228770.f5FC != 0) {
                         break;
                     }
-                    f_fun_l00_002223f8_227fa0(0x14, 1);
+                    hero_set_state(0x14, 1);
                     break;
                 }
                 if (D_0013F450_h228770.f12EA != 0) {
                     break;
                 }
-                f_fun_l00_002223f8_227fa0(0x13, 1);
+                hero_set_state(0x13, 1);
                 break;
             }
         }
@@ -3415,7 +3415,7 @@ int process_hero_equipped_item_input(void) {
                         break;
                     }
                     if (D_0013F450_h228770.fAA8 >= (float)rec->next_move_frame && (D_0013CA40_p228770.f1A0 & 0xA) && f_fun_l00_00266d60_227fa0(mask, scale_game_frames(0xF), 0)) {
-                        f_fun_l00_002223f8_227fa0(0x15, 1);
+                        hero_set_state(0x15, 1);
                         break;
                     }
                 }
@@ -3440,13 +3440,13 @@ int process_hero_equipped_item_input(void) {
                 break;
             }
             if (D_0013CA40_p228770.f1A0 & 0xA) {
-                f_fun_l00_002223f8_227fa0(0x15, 1);
+                hero_set_state(0x15, 1);
                 break;
             }
             if (D_0013F450_h228770.f308 == 1) {
-                f_fun_l00_002223f8_227fa0(0x70, 1);
+                hero_set_state(0x70, 1);
             } else {
-                f_fun_l00_002223f8_227fa0(0x13, 1);
+                hero_set_state(0x13, 1);
             }
         }
         break;
@@ -3472,12 +3472,12 @@ int process_hero_equipped_item_input(void) {
                             }
                         }
                         if (D_0013F450_h228770.f99E != 0 && D_0013F450_h228770.f1E6 == 0 && D_0013F450_h228770.f2084 != 0x2C) {
-                            f_fun_l00_002223f8_227fa0(0x2C, 1);
+                            hero_set_state(0x2C, 1);
                             break;
                         }
                     }
                     if (D_0013F450_h228770.f968 != 0 && D_0013F450_h228770.f1E6 == 0) {
-                        f_fun_l00_002223f8_227fa0(0x24, 1);
+                        hero_set_state(0x24, 1);
                     }
                 }
             }
@@ -3560,7 +3560,7 @@ int process_hero_equipped_item_input(void) {
                 if (get_ammo(-1)) {
                     if (D_0013F450_h228770.f208C == 0xC || D_0013F450_h228770.f208C == 0 || D_0013F450_h228770.f2084 == 3
                         || (D_0013F450_h228770.f208C == 1 && D_0013F450_h228770.f229C < 0.7f)) {
-                        f_fun_l00_002223f8_227fa0(0x23, 1);
+                        hero_set_state(0x23, 1);
                     } else {
                         start_equipped_item_animation();
                     }
@@ -3580,7 +3580,7 @@ int process_hero_equipped_item_input(void) {
 
                 if (f_fun_l00_00266d60_227fa0(mask, t <= n ? t : n, &out[2])) {
                     if (D_0013F450_h228770.f1090 != 0) {
-                        f_fun_l00_002223f8_227fa0(0x20, 1);
+                        hero_set_state(0x20, 1);
                         if (D_0013F450_h228770.f1090 != 0) {
                             allocate_voice_for_target_entry(0, 0, (int)D_0013F450_h228770.f1090);
                         }
@@ -3605,7 +3605,7 @@ int process_hero_equipped_item_input(void) {
                 if (D_0013F450_h228770.f208C < 2U || D_0013F450_h228770.f208C == 0xC
                     || ((D_0013F450_h228770.f208C == 2 || D_0013F450_h228770.f208C == 4) && D_0013F450_h228770.f300 != 0)) {
                     if ((D_0013CA40_p228770.f1A0 & 8) && (D_0013CA40_p228770.f1A4 & 8)) {
-                        f_fun_l00_002223f8_227fa0(0x81, 1);
+                        hero_set_state(0x81, 1);
                     }
                 }
             }

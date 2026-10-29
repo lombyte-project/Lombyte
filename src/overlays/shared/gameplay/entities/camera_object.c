@@ -1453,7 +1453,7 @@ typedef struct {
 extern P_2a7780 D_0013F350_2a7780 __asm__("D_0013F350");
 extern int game_frame __asm__("D_L00_0015F5CC");
 extern int FUN_001f44b8_2a7780(int) __asm__("FUN_001f44b8");
-extern s32 FUN_001fa6d0_2a7780(f32) __asm__("FUN_001fa6d0");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a68_2a7780(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f7d30_2a7780(void *, void *, int) __asm__("FUN_001f7d30");
 #define P_2a7780_G D_0013F350_2a7780
@@ -1539,7 +1539,7 @@ void draw_wrench_swing_effect(O_2a7780 *effect_owner) {
             else if (i == sel2) quad.col[j] = effect_config->col[2][j];
             else if (i == sel3) quad.col[j] = effect_config->col[3][j];
             else quad.col[j] = 0x50808080;
-            quad.col[j] = (FUN_001fa6d0_2a7780(((s32)quad.col[j] >> 24) * alpha) << 24) | color;
+            quad.col[j] = (truncate_float_to_s32(((s32)quad.col[j] >> 24) * alpha) << 24) | color;
             FUN_001f9a68_2a7780(&quad.pos[j], &effect_config->verts[vi], scale);
             uv = (f32 *)(effect_config->idx[i][j][1] * 8 + (s32)effect_config->uv);
             uv_v_offset = 1.0f - r->f70 * effect_config->f5C;
@@ -1568,7 +1568,7 @@ typedef struct {
     s32 i2090;
 } G_002a7c70;
 s32 FUN_001f96f8_002a7c70(s32) __asm__("FUN_001f96f8");
-void FUN_00212f90_002a7c70(void *, s32, s32, s32) __asm__("FUN_00212f90");
+void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) __asm__("FUN_L00_002a7c70");
 
@@ -1591,17 +1591,17 @@ void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {
                 wrench_moby->b50 = wrench_moby->b51;
             update_moby_animation_state(wrench_moby);
         } else {
-            FUN_00212f90_002a7c70(wrench_moby, k, 0, FUN_001f96f8_002a7c70(7));
+            blend_moby_animation(wrench_moby, k, 0, FUN_001f96f8_002a7c70(7));
         }
     } else if (hero_context->state.prev == 0x3B && hero_context->state_timer == 1) {
-        FUN_00212f90_002a7c70(wrench_moby, 1, 0, FUN_001f96f8_002a7c70(0x11));
+        blend_moby_animation(wrench_moby, 1, 0, FUN_001f96f8_002a7c70(0x11));
     }
 }
 
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A9030), where it is exact; names translated to the US level program. */
 
-extern char *FUN_002141f8_002a7d90(void *) __asm__("FUN_002141f8");
+extern char *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 
 /* True when the record for D_L00_00173E58 (suck_get_aim_height) has byte 9 equal to 1. */
@@ -1611,7 +1611,7 @@ int get_wrench_hit_sound_variant(void) {
     int record_byte_9_is_one = 0;
     char *x = 0;
     if (D_L00_00173E58_lui != 0)
-        x = FUN_002141f8_002a7d90(D_L00_00173E58_lui);
+        x = suck_get_aim_height(D_L00_00173E58_lui);
     if (x != 0)
         record_byte_9_is_one = *(unsigned char *)(x + 9) == 1;
     return record_byte_9_is_one;
@@ -2534,7 +2534,7 @@ void FUN_001f9bf8_2aa008(void *, void *, f32) __asm__("FUN_001f9bf8");
 s32 FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 s32 FUN_001f96f8_2aa008(s32) __asm__("FUN_001f96f8");
 s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
-void FUN_L00_001ff660_2aa008(void *, void *, void *) __asm__("FUN_L00_001ff660");
+void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *self, void *base_motion_vector) __asm__("FUN_L00_002aa008");
 
 void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *self, void *base_motion_vector) {
@@ -2589,7 +2589,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *
         qcopy(&self->v10, &k[0]);
         FUN_001f9bf8_2aa008(&collision_position_offset, &k[2], frame_time_sq * 9.7f);
         fast_vec_add(&self->v10, &self->v10, &collision_position_offset);
-        FUN_L00_001ff660_2aa008(moby_vars, moby_vars, &k[2]);
+        reflect_vector(moby_vars, moby_vars, &k[2]);
         fast_vec_scale(moby_vars, moby_vars, 0.6f);
     }
 }

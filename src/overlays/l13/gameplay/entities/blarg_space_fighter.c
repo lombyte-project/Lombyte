@@ -3170,7 +3170,7 @@ extern void func_L00_0025E4B0_2EAE80(void *, void *) __asm__("FUN_L00_0025d458")
 extern void func_0022ED80_2EAE80(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L13_002EAAB8_2EAE80(void *, void *, int) __asm__("FUN_L13_002e9680");
 extern void func_L00_0028EBF0_2EAE80(int) __asm__("FUN_0022d798");
-extern void func_L00_0025E590_2EAE80(void *, void *) __asm__("FUN_L00_0025d538");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int func_L13_002E9B30_2EAE80(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 
 void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) __asm__("FUN_L13_002e9a48");
@@ -3417,7 +3417,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
             }
         }
     }
-    func_L00_0025E590_2EAE80(moby, moby_data->q60);
+    trooper_anim_finish(moby, moby_data->q60);
 }
 /* Steers a moby toward the hero: scales by distance and orients it with the hero's angles. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB768), where it is exact; names translated to the US level program. */

@@ -1516,7 +1516,7 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void spawn_explosion_dfd10(struct Moby *, void *, void *, f32, f32, s32, s32, s32,
     f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
-extern void mark_moby_for_removal_dfd10(struct Moby *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 extern int sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
@@ -1574,7 +1574,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         trooper_play_sound(1, 0, moby, data->owner->oclass);
         spawn_explosion_dfd10(moby, position_offset, &probe, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 15.0f, 0, 3, -1, 0);
         coll_sphere(1.0f, &moby->pos, 0, (void *)D_001413D0_dfd10);
-        mark_moby_for_removal_dfd10(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     velocity = data->velocity;
@@ -1594,7 +1594,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     if (moby->pos.x < 2.0f || 1021.0f < moby->pos.x ||
         moby->pos.y < 2.0f || 1021.0f < moby->pos.y ||
         moby->pos.z < 2.0f || 1021.0f < moby->pos.z) {
-        mark_moby_for_removal_dfd10(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     fast_vec_normalize(position_offset, &moby->rot_row2, 0.52f);
@@ -1603,7 +1603,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         trooper_play_sound(0, 0, moby, data->owner->oclass);
         spawn_explosion_dfd10(moby, velocity, &moby->pos, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 15.0f, 0, 3, -1, 0);
         coll_sphere(1.0f, &moby->pos, 0, (void *)D_001413D0_dfd10);
-        mark_moby_for_removal_dfd10(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     if (random_integer_below(2) != 0)
@@ -1740,7 +1740,7 @@ int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_00274948_c(u128_2E17B8 *a, u128_2E17B8 *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern void func_L00_001FF4B0_2E17B8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9BD8_2E17B8(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_002141A8_2E17B8(void *, float, float) __asm__("FUN_00213358");
 extern Particle_2E17B8 *func_L00_002757E8_2E17B8(void *, void *, int, Moby *) __asm__("FUN_L00_00274948");
 extern float func_002140F8_2E17B8(float, float) __asm__("FUN_002132a8");
@@ -1771,7 +1771,7 @@ void emit_debris_trail_particles(Moby *moby) {
 
     debris_motion_state = *(Vars **)&moby->pvars;
     func_L00_001FF4B0_2E17B8(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
-    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
+    fast_vec_add(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
     func_002141A8_2E17B8(&particle_initial_velocity, 0.005f, 0.03f);
     particle = func_L00_002757E8_2E17B8(&pos, &particle_initial_velocity, 0x7F, moby);
     if (particle != 0) {
@@ -1807,11 +1807,11 @@ void emit_debris_trail_particles(Moby *moby) {
         func_L00_001FF4B0_2E17B8(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 1.15f);
         particle_initial_velocity.f[2] = D_0015ED60 * 0.03f;
     }
-    func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
+    fast_vec_add(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
     emission_position_offset.f[0] = func_001F9F90_2E17B8(moby->rot.z) * 0.3f;
     emission_position_offset.f[1] = func_001F9FA8_2E17B8(moby->rot.z) * 0.3f;
     emission_position_offset.f[2] = 0.0f;
-    func_001F9BD8_2E17B8(&pos, &pos, &emission_position_offset);
+    fast_vec_add(&pos, &pos, &emission_position_offset);
     if (moby->state == 1) {
         pos.f[0] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
         pos.f[1] += func_L00_00258C80_2E17B8(0.0f, 0.1f);

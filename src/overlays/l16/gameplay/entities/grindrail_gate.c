@@ -1760,7 +1760,7 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
-extern int func_0022EE28_e7208(int, int, int) __asm__("FUN_0022db10");
+extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern char item_unlocked[] __asm__("D_0013D408");
 void update_two_region_trigger_latch(char *moby) __asm__("FUN_L16_002e7208");
@@ -1789,7 +1789,7 @@ void update_two_region_trigger_latch(char *moby) {
             unsigned char *flags = (unsigned char *)item_unlocked;
             if (flags[0x19] == 0) {
                 flags[0x19] = 1;
-                func_0022EE28_e7208(1, 0, 0);
+                allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }
         }
@@ -2836,7 +2836,7 @@ typedef struct {
     float x, y, z, radius;
 } L16SingleSphere_2e98e0;
 
-void enqueue_callback_list_1_2e98e0(int arg0, int arg1) __asm__("FUN_001f4600");
+void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 extern short D_L16_00161F90_gp __asm__("D_L16_00161F90") __attribute__((sda));
 extern short D_L16_00161F98_gp __asm__("D_L16_00161F98") __attribute__((sda));
 extern L16SingleSphere_2e98e0 D_L16_00161F60_bounds_2e98e0[] __asm__("D_L16_001DF2B0")
@@ -2906,7 +2906,7 @@ void update_level16_two_mesh_render_state(unsigned char *moby) {
         break;
     }
     case TWO_MESH_RENDER_QUEUE_CALLBACK:
-        enqueue_callback_list_1_2e98e0(draw_level16_visible_textured_batches, moby);
+        add_draw_callback(draw_level16_visible_textured_batches, moby);
         break;
     }
 }
