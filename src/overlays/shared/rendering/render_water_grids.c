@@ -229,7 +229,7 @@ void render_water_grids(f32 *water_record, s32 count) {
     s32  height_index, index;
     f32 *height;
     u32 *packet;
-    u64 *data;
+    u64 *water_gs_state_payload;
 
     build_water_render_setup_packet();
     i = 0;
@@ -324,17 +324,17 @@ void render_water_grids(f32 *water_record, s32 count) {
                 l01_packet.words[3] = 0x50000005;
                 packet = l01_packet.words;
                 l01_packet.words += 4;
-                data = (u64 *)(packet + 4);
-                data[0] = 0x4000000000008001ULL;
-                data[1] = 0xeeee;
-                data[2] = ((u64) * (u8 *)((u8 *)water_record + 0x1d) << 32) | 100;
-                data[3] = 0x42;
-                data[4] = ((u64) * (u8 *)(water_record + 7) << 32) | 100;
-                data[5] = 0x43;
-                data[6] = get_effect_texture(*(s32 *)(water_record + 6));
-                data[7] = 6;
-                data[8] = get_effect_texture(*(s32 *)(water_record + 5));
-                data[9] = 7;
+                water_gs_state_payload = (u64 *)(packet + 4);
+                water_gs_state_payload[0] = 0x4000000000008001ULL;
+                water_gs_state_payload[1] = 0xeeee;
+                water_gs_state_payload[2] = ((u64) * (u8 *)((u8 *)water_record + 0x1d) << 32) | 100;
+                water_gs_state_payload[3] = 0x42;
+                water_gs_state_payload[4] = ((u64) * (u8 *)(water_record + 7) << 32) | 100;
+                water_gs_state_payload[5] = 0x43;
+                water_gs_state_payload[6] = get_effect_texture(*(s32 *)(water_record + 6));
+                water_gs_state_payload[7] = 6;
+                water_gs_state_payload[8] = get_effect_texture(*(s32 *)(water_record + 5));
+                water_gs_state_payload[9] = 7;
                 l01_packet.words = packet + 0x18;
                 {
                     u32 texture_id = *(u32 *)(water_record + 5);
