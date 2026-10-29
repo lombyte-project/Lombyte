@@ -346,12 +346,12 @@ s32 load_level_core_data(s32 full, s32 keep) {
                 base + *(s32 *)moby_class_reference_cursor;
             D_L18_001B0680[moby_class_reference_index] = *(s32 *)(moby_class_reference_cursor + 8);
             {
-                s32 o = level_moby_class_entry_indices_by_number[*(
+                s32 moby_class_texture_slots_offset = level_moby_class_entry_indices_by_number[*(
                             s32 *)(moby_class_reference_cursor + 4)] *
                             32 +
                         0x10;
                 qcopy(&l18_moby_class_reference_texture_slots[moby_class_reference_index],
-                      (char *)level_header + level_header[7] + o);
+                      (char *)level_header + level_header[7] + moby_class_texture_slots_offset);
             }
         }
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[9];
