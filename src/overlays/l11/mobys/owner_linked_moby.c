@@ -94,9 +94,9 @@ void update_owner_linked_moby_state(struct Moby *moby) {
         LINKED_MOBY_STATE_FADE_OUT = 3,
         LINKED_MOBY_STATE_REMOVE = 4
     };
-    char        *data = (char *)moby->pvars;
-    char        *health_ptr = data + 0x20;
-    struct Moby *owner_moby = *(unsigned char **)(data + 0x70);
+    char        *owner_linked_moby_vars = (char *)moby->pvars;
+    char        *health_ptr = owner_linked_moby_vars + 0x20;
+    struct Moby *owner_moby = *(unsigned char **)(owner_linked_moby_vars + 0x70);
     if (owner_moby == 0 || owner_moby->state == 0xFE || owner_moby->state == 0xFD) {
         if (moby->state < 3) {
             moby->state = 4;
@@ -116,7 +116,7 @@ void update_owner_linked_moby_state(struct Moby *moby) {
         }
         break;
     case LINKED_MOBY_STATE_HANDLE_HITS:
-        handle_owner_linked_moby_hits(moby, data, health_ptr);
+        handle_owner_linked_moby_hits(moby, owner_linked_moby_vars, health_ptr);
         if ((moby->anim_flags & 2) && moby->prev_seq != 1) {
             blend_moby_animation(moby, 1, 0, 0xA);
         }
