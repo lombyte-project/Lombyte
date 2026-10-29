@@ -3331,3 +3331,5 @@ unsigned char D_L17_00161E20 = 0x14;
 float D_L18_001620FC = 3.109f;
 
 int energy_sphere_holder_beam_color_end_gp __asm__("D_L06_00161E5C") = 0x10208080;
+
+int energy_sphere_destruction_nonzero_branch_color_end_gp __asm__("D_L06_00161E9C") = 0x40008080;

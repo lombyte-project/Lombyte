@@ -3604,3 +3604,26 @@ Cols l15_missile_burst_secondary_color_palette __asm__("D_L15_001E2678") = {{0x2
 Tbl_29E8A0 l15_missile_camera_blast_parameter_template __asm__("D_L15_001E2610") = {{0, 0, 0x3f800000, 0, 0xff0000, 0xff000980, 0xc8000, 0xd800064, 0x41a00000, 0x41a00000, 0x41a00000, 0x3c23d70a, 0x3c23d70a, 0x46, 0x80000, 0xff, 0, 0, 0x300, 0}};
 
 int group_moby_particle_lifetime_frames_gp __asm__("D_L15_001614C0") = 0x14;
+
+float group_moby_effect_quad_vertices[4][4][4] __asm__("D_L15_001CE110") = {
+    {{0.0f, 0.2f, -0.2f, 1.0f}, {0.0f, -0.2f, -0.2f, 1.0f}, {0.0f, 0.2f, 0.2f, 1.0f}, {0.0f, -0.2f, 0.2f, 1.0f}},
+    {{0.0f, 0.1f, -0.1f, 1.0f}, {0.0f, -0.1f, -0.1f, 1.0f}, {0.0f, 0.1f, 0.1f, 1.0f}, {0.0f, -0.1f, 0.1f, 1.0f}},
+    {{0.0f, 0.25f, -0.25f, 1.0f}, {0.0f, -0.25f, -0.25f, 1.0f}, {0.0f, 0.25f, 0.25f, 1.0f}, {0.0f, -0.25f, 0.25f, 1.0f}},
+    {{0.0f, 0.3f, -0.3f, 1.0f}, {0.0f, -0.3f, -0.3f, 1.0f}, {0.0f, 0.3f, 0.3f, 1.0f}, {0.0f, -0.3f, 0.3f, 1.0f}},
+};
+
+float group_moby_effect_quad_uvs[8] __asm__("D_L15_001CE210") = {1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+
+float spark_emitter_second_quad_vertex_template[4][4] __asm__("D_L15_001CE2F0") = {
+    {-0.25f, -5.0f, 5.0f, 1.0f},
+    {-0.25f, -5.0f, 6.0f, 1.0f},
+    {-0.25f, 5.0f, 5.0f, 1.0f},
+    {-0.25f, 5.0f, 6.0f, 1.0f},
+};
+
+float spark_emitter_first_quad_vertex_template[4][4] __asm__("D_L15_001CE330") = {
+    {-0.25f, -5.0f, 0.0f, 1.0f},
+    {-0.25f, -5.0f, 5.0f, 1.0f},
+    {-0.25f, 5.0f, 0.0f, 1.0f},
+    {-0.25f, 5.0f, 5.0f, 1.0f},
+};

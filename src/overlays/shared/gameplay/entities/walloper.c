@@ -5034,3 +5034,11 @@ Vec_2BE3A8 D_L00_001DD3A0_2BE3A8[3] __asm__("D_L00_001DD0A0") = {0};
 Vec_2BE3A8 D_L00_001DD3D0_2BE3A8[3] __asm__("D_L00_001DD0D0") = {0};
 
 Tab l00_beam_origin_particle_color_palette __asm__("D_L00_001E9AB0") = {{0x7f207f7f, 0x7f7f2020, 0x7f20207f, 0x7f7f207f, 0x7f7f7f20}};
+
+float D_L00_001617E8_macro[3] __asm__("D_L00_001617E8") = {0};
+
+float D_L00_00161808_macro[3] __asm__("D_L00_00161808") = {0};
+
+int D_L00_00161818_macro[3] __asm__("D_L00_00161818") = {0};
+
+V_2be890 D_L00_001DBF60_2be890 __asm__("D_L00_001DBF60") = {0};

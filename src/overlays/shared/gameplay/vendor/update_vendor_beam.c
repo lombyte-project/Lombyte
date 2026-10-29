@@ -668,3 +668,12 @@ s32 D_L14_001620C8_gp __asm__("D_L14_001620C8") = 0;
 int D_L14_001620D4_gp __asm__("D_L14_001620D4") = 0;
 
 int vendor_beam_initial_color_gp __asm__("D_L14_001620F0") = 0x401040;
+
+int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") = 0xe;
+
+float vendor_beam_base_uv[4][2] __asm__("D_L14_001E5FD0") = {
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+    {0.25f, 0.0f},
+    {0.25f, 1.0f},
+};
