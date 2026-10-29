@@ -834,7 +834,7 @@ extern float       D_L14_001614C0_lui __asm__("D_L14_001614C0");
 void draw_plasmabot_effect_quads(struct Moby *moby) __asm__("FUN_L14_002b2928");
 
 void draw_plasmabot_effect_quads(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
+    char *plasmabot_effect_private_vars = ((char *)moby->pvars);
     struct {
         Vec4_2b2928  o[4];
         unsigned int c[4];
@@ -850,7 +850,7 @@ void draw_plasmabot_effect_quads(struct Moby *moby) {
     int         j;
     int         alpha;
 
-    qcopy(&quad_transform[3], data + 0x1E0);
+    qcopy(&quad_transform[3], plasmabot_effect_private_vars + 0x1E0);
     quad_transform[3].f[3] = 1.0f;
     fast_vec_sub(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
     fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
@@ -879,11 +879,11 @@ void draw_plasmabot_effect_quads(struct Moby *moby) {
     }
     fast_draw_quad_real(&pk, 0, 0);
 
-    qcopy(&quad_transform[3], data + 0x200);
-    pp = data + 0x220;
+    qcopy(&quad_transform[3], plasmabot_effect_private_vars + 0x200);
+    pp = plasmabot_effect_private_vars + 0x220;
     fast_vec_sub(&quad_transform[0], ((char *)&D_L14_001674C0), &quad_transform[3]);
-    beam_start_position = data + 0x210;
-    nozzle_position = data + 0x1F0;
+    beam_start_position = plasmabot_effect_private_vars + 0x210;
+    nozzle_position = plasmabot_effect_private_vars + 0x1F0;
     fast_vec_normalize(&quad_transform[0], &quad_transform[0], 1.0f);
     fast_vec_cross(&quad_transform[1], &quad_transform[0], D_0013F5E0);
     fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
