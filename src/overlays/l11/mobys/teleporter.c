@@ -254,7 +254,7 @@ void draw_teleporter_ring(struct Moby *moby) __asm__("FUN_L11_002f2d58");
 void draw_teleporter_ring(struct Moby *moby) {
     QuadPacket quad;
     float      matrix[16];
-    char      *data = (char *)moby->pvars;
+    char      *teleporter_ring_vars = (char *)moby->pvars;
     float      width;
     float      angle;
     int        i, j;
@@ -286,14 +286,14 @@ void draw_teleporter_ring(struct Moby *moby) {
         } while (k >= 0);
     }
     width = 0.1f;
-    if (*(float *)(data + 0x3c) < 1.15f) {
-        float v = (1.15f - *(float *)(data + 0x3c)) + (1.15f - *(float *)(data + 0x3c));
+    if (*(float *)(teleporter_ring_vars + 0x3c) < 1.15f) {
+        float v = (1.15f - *(float *)(teleporter_ring_vars + 0x3c)) + (1.15f - *(float *)(teleporter_ring_vars + 0x3c));
         if (v > 1.0f)
             v = 1.0f;
         else if (v < 0.0f)
             v = 0.0f;
         width = v + 0.1f;
-        if (*(float *)(data + 0x3c) < 0.65f)
+        if (*(float *)(teleporter_ring_vars + 0x3c) < 0.65f)
             D_001413F5_lui = 1;
         else
             D_001413F5_lui = 0;
@@ -304,8 +304,8 @@ void draw_teleporter_ring(struct Moby *moby) {
         do {
             float *corner = quad.corner[j];
             angle = (float)(i + j / 2) * 6.28318f * 0.03125f - 3.14159f;
-            corner[0] = fast_cos(angle) * *(float *)(data + 0x3c);
-            corner[1] = fast_sin(angle) * *(float *)(data + 0x3c);
+            corner[0] = fast_cos(angle) * *(float *)(teleporter_ring_vars + 0x3c);
+            corner[1] = fast_sin(angle) * *(float *)(teleporter_ring_vars + 0x3c);
             corner[2] = 0.0f;
             if (j & 1)
                 corner[2] = teleporter_ring_local_z_center_gp + width + 0.0f;
