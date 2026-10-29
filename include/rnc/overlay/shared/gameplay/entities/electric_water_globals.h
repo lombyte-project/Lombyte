@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Scalar data read by src/overlays/shared/gameplay/entities/002d6810.c. */
+/* Scalar data read by src/overlays/shared/gameplay/entities/electric_water.c. */
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern float electric_water_on_duration_seconds __asm__("D_L15_00161BC8");
 extern float electric_water_off_duration_seconds __asm__("D_L15_00161BCC");

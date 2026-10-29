@@ -113,7 +113,7 @@ extern char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 extern struct Moby *moby_array __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
-#include "rnc/overlay/shared/gameplay/entities/002d6810_globals.h"
+#include "rnc/overlay/shared/gameplay/entities/electric_water_globals.h"
 extern float electric_water_on_duration_seconds_gp __asm__("D_L15_00161BC8") __attribute__((sda));
 extern float electric_water_off_duration_seconds_gp __asm__("D_L15_00161BCC") __attribute__((sda));
 extern unsigned char D_L15_001BB024[];
