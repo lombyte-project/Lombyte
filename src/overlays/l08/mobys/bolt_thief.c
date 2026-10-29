@@ -78,11 +78,11 @@ typedef struct {
 void bolt_thief_update(struct Moby *moby) __asm__("FUN_L08_002e2df0");
 
 void build_bolt_thief_target_list(struct Moby *moby) {
-    char  *data = (char *)moby->pvars;
+    char  *bolt_thief_vars = (char *)moby->pvars;
     int    oclass = 0x279;
     char  *base = D_L08_0015FFD8;
-    int   *ids = (int *)(data + 0x130);
-    char **output = (char **)(data + 0x158);
+    int   *ids = (int *)(bolt_thief_vars + 0x130);
+    char **output = (char **)(bolt_thief_vars + 0x158);
     int    i = 9;
     for (;;) {
         char *other = (char *)((*ids << 8) + (unsigned int)base);
