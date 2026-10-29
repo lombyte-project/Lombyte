@@ -726,7 +726,7 @@ void update_minibomber_oscillation(struct Moby *moby) __asm__("FUN_L14_002b5428"
 void update_minibomber_oscillation(struct Moby *moby) {
     int           raw = moby->state;
     unsigned char state = raw;
-    char         *data = (char *)moby->pvars;
+    char         *minibomber_instance_vars = (char *)moby->pvars;
     float         spring_target;
     if (state == 0 || state == 9 || state == 1)
         return;
@@ -734,24 +734,24 @@ void update_minibomber_oscillation(struct Moby *moby) {
     if ((raw >= 2 && raw <= 3) || state == 7) {
         spring_target = spring_target * 1.5f;
     } else {
-        FUN_L00_0025b8c0_c((float *)(data + 0x168),
-                           (float *)(data + 0x16C),
+        FUN_L00_0025b8c0_c((float *)(minibomber_instance_vars + 0x168),
+                           (float *)(minibomber_instance_vars + 0x16C),
                            *(float *)&minibomber_vertical_oscillation_phase_increment_target_gp,
                            0.002f,
                            0.2f,
                            0.0f);
         FUN_L00_00262b00_c(*(float *)&minibomber_vertical_oscillation_amplitude_gp,
-                           *(float *)(data + 0x168),
+                           *(float *)(minibomber_instance_vars + 0x168),
                            moby,
-                           (float *)(data + 0xC0),
-                           (float *)(data + 0xC4));
+                           (float *)(minibomber_instance_vars + 0xC0),
+                           (float *)(minibomber_instance_vars + 0xC4));
     }
     FUN_L00_0025b8c0_c(
-        (float *)(data + 0x160), (float *)(data + 0x164), spring_target, 0.003f, 0.2f, 0.0f);
+        (float *)(minibomber_instance_vars + 0x160), (float *)(minibomber_instance_vars + 0x164), spring_target, 0.003f, 0.2f, 0.0f);
     FUN_L00_00262b80_c(moby,
-                       data + 0xC8,
-                       data + 0xCC,
-                       *(float *)(data + 0x160),
+                       minibomber_instance_vars + 0xC8,
+                       minibomber_instance_vars + 0xCC,
+                       *(float *)(minibomber_instance_vars + 0x160),
                        *(float *)&minibomber_rotation_oscillation_first_phase_increment_gp,
                        *(float *)&minibomber_rotation_oscillation_second_phase_increment_gp);
 }
