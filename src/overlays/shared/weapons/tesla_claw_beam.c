@@ -927,7 +927,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
     WalloperBeam *beam_state = ((WalloperBeam *)beam_owner_moby->pvars);
     int           i;
     struct Moby  *best = 0, *second = 0, *candidate, **list;
-    char         *data;
+    char         *beam_target_aim_metadata;
     float         best_score = 0.0f, second_score = 0.0f;
     int           enabled = (u8)D_0013E533[0];
     float         spacing = D_L00_00161594 / 20.0f;
@@ -1032,16 +1032,16 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
     }
     primary_distance = 0.0f;
     if (beam_state->target) {
-        data = (char *)get_moby_target_info(beam_state->target);
+        beam_target_aim_metadata = (char *)get_moby_target_info(beam_state->target);
         qcopy(&target0, &beam_state->target->pos);
-        target0.f[2] += *(float *)(data + 0x10);
+        target0.f[2] += *(float *)(beam_target_aim_metadata + 0x10);
         primary_distance = fast_vec_dist(beam_state, &target0);
         spacing = primary_distance * 0.05f;
     }
     if (beam_state->second_target) {
-        data = (char *)get_moby_target_info(beam_state->second_target);
+        beam_target_aim_metadata = (char *)get_moby_target_info(beam_state->second_target);
         qcopy(&target1, &beam_state->second_target->pos);
-        target1.f[2] += *(float *)(data + 0x10);
+        target1.f[2] += *(float *)(beam_target_aim_metadata + 0x10);
         spacing = (fast_vec_dist(&target0, &target1) + primary_distance) * 0.05f;
     }
     if (enabled)
