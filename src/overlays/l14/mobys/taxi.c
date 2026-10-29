@@ -466,10 +466,10 @@ found:
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void request_taxi_stop_prompt(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int   taxi_stop_index = *(short *)(data + 0xB4);
+    char *taxi_prompt_vars = (char *)moby->pvars;
+    int   taxi_stop_index = *(short *)(taxi_prompt_vars + 0xB4);
     if (moby->state == 5) {
-        taxi_stop_index = *(short *)(data + 0xB6);
+        taxi_stop_index = *(short *)(taxi_prompt_vars + 0xB6);
     }
     switch (taxi_stop_index) {
     case TAXI_STOP_RETURN_HUB:
