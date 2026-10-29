@@ -725,35 +725,35 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         SNAPPER_RETURN_HOME = 12,
         SNAPPER_RETREAT_FROM_TARGET = 13
     };
-    BlargVars *data = (struct BlargVars *)moby->pvars;
+    BlargVars *snapper_vars = (struct BlargVars *)moby->pvars;
     int        hit;
     float      damage;
     Target    *target;
     int        reaction;
 
-    if (data->f38 != 0) {
-        data->f1AC =
+    if (snapper_vars->f38 != 0) {
+        snapper_vars->f1AC =
             truncate_float_to_s32(func_001F9878_2FA618(random_float_between(180.0f, 240.0f)));
-        data->f38 = 0;
+        snapper_vars->f38 = 0;
     }
-    fast_dec_timer(&data->f1AC);
+    fast_dec_timer(&snapper_vars->f1AC);
     damage = 0.0f;
     target = func_L00_0025B478_2FA618(moby, 0x330000, 0);
     if (target != 0 && target->owner != 0 && target->owner->oclass == 0x418) {
         target = 0;
     }
-    reaction = resolve_moby_hit_response(moby, target, &data->health, 0, &hit, &damage, 0, 4);
+    reaction = resolve_moby_hit_response(moby, target, &snapper_vars->health, 0, &hit, &damage, 0, 4);
 
     if (hit != 1 && moby->state != 0x11 && moby->state != 3) {
-        data->health = data->health - damage;
+        snapper_vars->health = snapper_vars->health - damage;
         if (moby->group != 0xFF) {
             func_L06_002FAAC8_2FA618(moby);
         }
-        if (data->health <= 0.0f) {
+        if (snapper_vars->health <= 0.0f) {
             reaction = 1;
-        } else if (data->f1CC != 0) {
+        } else if (snapper_vars->f1CC != 0) {
             reaction = 0xB;
-            data->f67 = 0xFA;
+            snapper_vars->f67 = 0xFA;
         }
 
         switch (reaction) {
@@ -768,33 +768,33 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         case HIT_RESPONSE_NONLETHAL_ANIMATION_FEEDBACK:
         case HIT_RESPONSE_NONLETHAL_KNOCKBACK:
             moby->state = 14;
-            data->f88 = frame_time + frame_time;
-            data->f8C = frame_time;
-            data->fC0 = 5.0f;
-            data->fC4 = 8.5f;
-            func_L00_0025D5B0_2FA618(moby, data->f70, 9, 1, 0, fast_arc_tan(target->x, target->y));
-            data->f67 = 0xFA;
+            snapper_vars->f88 = frame_time + frame_time;
+            snapper_vars->f8C = frame_time;
+            snapper_vars->fC0 = 5.0f;
+            snapper_vars->fC4 = 8.5f;
+            func_L00_0025D5B0_2FA618(moby, snapper_vars->f70, 9, 1, 0, fast_arc_tan(target->x, target->y));
+            snapper_vars->f67 = 0xFA;
             break;
         case REACTION_DEATH:
         case HIT_RESPONSE_DEATH_SEQUENCE:
             moby->state = 0x11;
             moby->flags &= 0xEFFF;
-            data->f88 = frame_time * 8.0f;
-            data->f8C = frame_time * 5.0f;
-            data->fC0 = 7.5f;
-            data->fC4 = 14.5f;
-            func_L00_0025D5B0_2FA618(moby, data->f70, 10, 1, 0, fast_arc_tan(target->x, target->y));
-            data->f67 = 0xFA;
+            snapper_vars->f88 = frame_time * 8.0f;
+            snapper_vars->f8C = frame_time * 5.0f;
+            snapper_vars->fC0 = 7.5f;
+            snapper_vars->fC4 = 14.5f;
+            func_L00_0025D5B0_2FA618(moby, snapper_vars->f70, 10, 1, 0, fast_arc_tan(target->x, target->y));
+            snapper_vars->f67 = 0xFA;
             mark_moby_for_removal_cf(moby, 0, -1);
             break;
         case REACTION_NO_RESPONSE:
             break;
         }
-        trooper_anim_update(moby, data->f60);
+        trooper_anim_update(moby, snapper_vars->f60);
     }
 
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, data->f60);
+    trooper_anim_finish(moby, snapper_vars->f60);
     switch (moby->state) {
     case SNAPPER_APPROACH_TARGET:
     case SNAPPER_REPOSITION_AROUND_TARGET:
@@ -805,37 +805,37 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
         }
         break;
     }
-    data->f1C8 = fast_add_rotations(
-        data->f1C8, alien_snapper_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
+    snapper_vars->f1C8 = fast_add_rotations(
+        snapper_vars->f1C8, alien_snapper_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
     moby->glow_color =
-        func_001FA8A8_2FA618(D_L06_00161EE8, D_L06_00161EEC, (fast_sin(data->f1C8) + 1.0f) * 0.5f);
+        func_001FA8A8_2FA618(D_L06_00161EE8, D_L06_00161EEC, (fast_sin(snapper_vars->f1C8) + 1.0f) * 0.5f);
 
-    if (data->f1AC != 0) {
-        data->f1A0 = D_L06_00161ED0 + 6.0f;
+    if (snapper_vars->f1AC != 0) {
+        snapper_vars->f1A0 = D_L06_00161ED0 + 6.0f;
     } else if (moby->state == 1) {
         if (moby == ((Moby *)hero.unk240) || moby == ((Moby *)hero.coll_hit_moby)) {
-            data->f1A0 = 6.0f;
+            snapper_vars->f1A0 = 6.0f;
         } else {
-            data->f1A0 = 0.0f;
+            snapper_vars->f1A0 = 0.0f;
         }
     } else {
-        data->f1A0 = D_L06_00161ED0;
+        snapper_vars->f1A0 = D_L06_00161ED0;
     }
 
-    if (activate_effect_l08(data->f1A0,
+    if (activate_effect_l08(snapper_vars->f1A0,
                             moby,
-                            data->f120,
+                            snapper_vars->f120,
                             0,
                             0,
-                            D_L06_001B0FB0_2FA618[data->f1B0] + 4,
-                            *D_L06_001B0FB0_2FA618[data->f1B0]) != 2) {
-        if (data->f1A0 < vector_distance_xy(data->f170, data->f120) ||
-            3.0f < absolute_float(moby->pos.z - data->f128)) {
-            data->f164 = 2;
+                            D_L06_001B0FB0_2FA618[snapper_vars->f1B0] + 4,
+                            *D_L06_001B0FB0_2FA618[snapper_vars->f1B0]) != 2) {
+        if (snapper_vars->f1A0 < vector_distance_xy(snapper_vars->f170, snapper_vars->f120) ||
+            3.0f < absolute_float(moby->pos.z - snapper_vars->f128)) {
+            snapper_vars->f164 = 2;
         }
     }
-    if (data->f160 == 0) {
-        data->f160 = D_001413D0[0];
+    if (snapper_vars->f160 == 0) {
+        snapper_vars->f160 = D_001413D0[0];
     }
 }
 
