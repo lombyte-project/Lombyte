@@ -143,7 +143,7 @@ void advance_hoverboard_dummy_path_node(char *patrol_moby) {
 void collect_hoverboard_dummy_boosts(struct Moby *moby) __asm__("FUN_L16_002cfc00");
 
 void collect_hoverboard_dummy_boosts(struct Moby *moby) {
-    char        *data = (char *)moby->pvars;
+    char        *moby_pvars = (char *)moby->pvars;
     struct Hero *hero_state = &hero;
     float        displacement_vector[4];
     char        *enumerated_moby;
@@ -154,7 +154,7 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
     if (hero_state->race_time_frames < scale_game_frames(0xB4)) {
         return;
     }
-    if (!fast_dec_timer((int *)(data + 0x2DC))) {
+    if (!fast_dec_timer((int *)(moby_pvars + 0x2DC))) {
         return;
     }
     other = ((char *)hero_state->hoverboard_moby);
@@ -169,7 +169,7 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
                 float adjusted_position[4];
                 float m[16];
                 char *candidate_moby = enumerated_moby;
-                qcopy(adjusted_position, data + 0x260);
+                qcopy(adjusted_position, moby_pvars + 0x260);
                 adjusted_position[2] += 0.8f;
                 fast_vec_sub(displacement_vector, candidate_moby + 0x10, adjusted_position);
                 if (!(8.0f < fast_vec_length(displacement_vector))) {
@@ -179,8 +179,8 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
                     if (absolute_float(displacement_vector[0]) < 0.5f &&
                         absolute_float(displacement_vector[1]) < 2.5f &&
                         absolute_float(displacement_vector[2]) < 2.5f) {
-                        *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
-                        *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
+                        *(unsigned short *)(moby_pvars + 0x2F6) += scale_game_frames(0x78);
+                        *(int *)(moby_pvars + 0x2DC) = scale_game_frames(0x3C);
                     }
                 }
             }
@@ -192,7 +192,7 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
         while (group_candidate_moby) {
             if (MOBY(group_candidate_moby)->oclass == 0x474) {
                 float m[16];
-                fast_vec_sub(displacement_vector, group_candidate_moby + 0x10, data + 0x260);
+                fast_vec_sub(displacement_vector, group_candidate_moby + 0x10, moby_pvars + 0x260);
                 if (!(8.0f < fast_vec_length(displacement_vector))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, group_candidate_moby + 0xC0);
@@ -200,8 +200,8 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
                     if (absolute_float(displacement_vector[0]) < 2.8f &&
                         absolute_float(displacement_vector[1]) < 1.4f &&
                         absolute_float(displacement_vector[2]) < 0.5f) {
-                        *(unsigned short *)(data + 0x2F6) += scale_game_frames(0x78);
-                        *(int *)(data + 0x2DC) = scale_game_frames(0x3C);
+                        *(unsigned short *)(moby_pvars + 0x2F6) += scale_game_frames(0x78);
+                        *(int *)(moby_pvars + 0x2DC) = scale_game_frames(0x3C);
                     }
                 }
             }
