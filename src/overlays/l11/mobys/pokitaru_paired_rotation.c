@@ -23,12 +23,12 @@ void update_pokitaru_paired_rotation(struct Moby *moby) {
         ROTATION_WAIT_FOR_TRIGGER = 1,
         ROTATION_APPROACH_OFFSET = 2
     };
-    char *data = (char *)moby->pvars;
+    char *paired_rotation_vars = (char *)moby->pvars;
     int   state = (unsigned char)MOBY(moby)->state;
     switch (state) {
     case ROTATION_INITIALIZE:
         MOBY(moby)->state = 1;
-        *(float *)(data + 4) = moby->rot.z;
+        *(float *)(paired_rotation_vars + 4) = moby->rot.z;
         if ((moby->flags & 0x8000) == 0) {
             char *partner_moby = create_moby(0x41);
             MOBY(partner_moby)->draw_dist = moby->draw_dist;
@@ -36,7 +36,7 @@ void update_pokitaru_paired_rotation(struct Moby *moby) {
             MOBY(partner_moby)->flags = moby->flags | 0x8000;
             qcopy(partner_moby + 0x10, &moby->pos);
             qcopy(partner_moby + 0x40, &moby->rot);
-            *(char **)(data + 8) = partner_moby;
+            *(char **)(paired_rotation_vars + 8) = partner_moby;
             *(float *)(((char *)MOBY(partner_moby)->pvars) + 4) = moby->rot.z;
         }
         break;
@@ -45,12 +45,12 @@ void update_pokitaru_paired_rotation(struct Moby *moby) {
     case ROTATION_APPROACH_OFFSET: {
         float target_angle;
         if ((moby->flags & 0x8000) == 0)
-            target_angle = fast_add_rotations(*(float *)(data + 4), 0.20769417f);
+            target_angle = fast_add_rotations(*(float *)(paired_rotation_vars + 4), 0.20769417f);
         else
-            target_angle = fast_subtract_rotations(*(float *)(data + 4), 0.20769417f);
+            target_angle = fast_subtract_rotations(*(float *)(paired_rotation_vars + 4), 0.20769417f);
         if (approach_angle(&moby->rot.z,
                            target_angle,
-                           (float *)data,
+                           (float *)paired_rotation_vars,
                            frame_time_sq * 0.34906584f,
                            frame_time_sq * 0.34906584f,
                            frame_time * 0.7853982f) == 0.0f)
