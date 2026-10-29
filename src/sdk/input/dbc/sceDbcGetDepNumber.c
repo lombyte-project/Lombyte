@@ -19,14 +19,14 @@ extern u8 D_0015B480[];
 extern u8 D_0015B500[];
 extern s32 DIntr();
 extern s32 EnableInterrupts();
-extern s32 synchronize_cache_range() __asm__("func_00118F88");
+extern s32 SyncDCache() __asm__("func_00118F88");
 extern s32 debug_print_stub() __asm__("func_00124A20");
 extern s32 sceSifCallRpc();
 extern struct DbCState RpcReceiveData __asm__("D_0015B080");
 s32 sceDbcGetDepNumber(s32 dependency_index) {
     s32 result;
 
-    synchronize_cache_range(D_0015B480, D_0015B480 + 0x80);
+    SyncDCache(D_0015B480, D_0015B480 + 0x80);
     DIntr();
     *(struct DbCBlob *)D_0015B500 = *(struct DbCBlob *)D_0015B480;
     EnableInterrupts();

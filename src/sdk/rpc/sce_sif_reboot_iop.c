@@ -3,7 +3,7 @@ const char D_00152960[] = "rom0:UDNL ";
 extern char iop_reboot_parameter_too_long_format[] __asm__("D_00152970");
 extern s32 scePrintf(const char *, ...);
 extern void sceSifInitRpc(u32);
-extern void InitializeRpcCommand(void);
+extern void sceSifExitRpc(void) __asm__("InitializeRpcCommand");
 extern s32 sceSifResetIop(const char *arg, s32 mode);
 
 s32 sceSifRebootIop(const char *img) {
@@ -21,7 +21,7 @@ s32 sceSifRebootIop(const char *img) {
         return 0;
     }
     sceSifInitRpc(0);
-    InitializeRpcCommand();
+    sceSifExitRpc();
     command_write_cursor = param;
     while (*prefix) {
         *command_write_cursor++ = *prefix++;

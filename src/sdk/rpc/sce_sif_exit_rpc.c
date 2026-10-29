@@ -3,9 +3,9 @@
 
 extern void exit_rpc_command(void) __asm__("sceSifExitCmd");
 
-void reset_rpc_command_state(void) __asm__("InitializeRpcCommand");
+void sceSifExitRpc(void) __asm__("InitializeRpcCommand");
 
-void reset_rpc_command_state(void) {
+void sceSifExitRpc(void) {
     exit_rpc_command();
     RpcCommandState = 0;
 }
