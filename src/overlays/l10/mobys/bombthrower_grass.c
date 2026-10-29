@@ -73,14 +73,14 @@ int spawn_bombthrower_grass_projectile(int owner, char *initial_position, char *
 }
 
 void bombthrower_grass_update(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *launch_timer = (char *)moby->pvars;
     float launch_offset[4];
     float launch_position[4];
     if (moby->state == 0) {
-        *(int *)data = scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
+        *(int *)launch_timer = scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
         moby->state = 1;
     }
-    if (fast_dec_timer((int *)data)) {
+    if (fast_dec_timer((int *)launch_timer)) {
         float x = bombthrower_grass_yaw_offset_limit_degrees_gp;
         float yaw_offset = random_float_between(-x, x) * DEG_TO_RAD;
         float launch_yaw = fast_add_rotations(moby->rot.z, yaw_offset);
@@ -96,6 +96,6 @@ void bombthrower_grass_update(struct Moby *moby) {
         fast_vec_add(launch_position, &moby->pos, launch_offset);
         spawn_bombthrower_grass_projectile(moby, launch_position, launch_offset);
         allocate_voice_for_target_entry(0, 0, (int)moby);
-        *(int *)data = scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
+        *(int *)launch_timer = scale_game_frames(random_int_between(D_L10_00161BF0, D_L10_00161BF4));
     }
 }
