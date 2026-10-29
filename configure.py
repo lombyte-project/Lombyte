@@ -137,7 +137,7 @@ ROUTE_EXCEPTIONS = {
     # only 87.8): the packet high word is (u64)(u32)n << 32 taken from the 2nd
     # argument instead of w1 >> 32, and 0x20 is OR-ed with (w1 & 0x1C) in the
     # mode>=0 branch but with (prim << 6) in the two negative branches.
-    "rendering/set_up_vis_gif_viewer": "cc_sn_padless",
+    "rendering/packets/set_up_vis_gif_viewer": "cc_sn_padless",
     "gameplay/animation/update_moby_animation_state": "cc_sn_padless",
     # patch_moby_gifs: patch moby class GIF tex words through the texture remap
     # table
@@ -484,11 +484,11 @@ DATA_OVERLAYS = {
     "ui/menus/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
     "ui/menus/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
-    "rendering/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
+    "rendering/shrubs/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
     "gameplay/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
     "ui/map/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
-    "rendering/register_object_render_class": (0x1E1900, 0xE2880, 256),
+    "rendering/ties/register_object_render_class": (0x1E1900, 0xE2880, 256),
     "gameplay/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
     "gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
     "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0, 64),
