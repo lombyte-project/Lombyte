@@ -348,12 +348,12 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
                 base + *(s32 *)class_mapping_entry_cursor;
             D_L06_001B0400[class_mapping_index] = *(s32 *)(class_mapping_entry_cursor + 8);
             {
-                s32 o =
+                s32 moby_class_texture_indices_offset =
                     level_06_moby_class_entry_indices[*(s32 *)(class_mapping_entry_cursor + 4)] *
                         32 +
                     0x10;
                 qcopy(&level_06_class_mapping_texture_indices[class_mapping_index],
-                      (char *)level_header + level_header[7] + o);
+                      (char *)level_header + level_header[7] + moby_class_texture_indices_offset);
             }
         }
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[9];
