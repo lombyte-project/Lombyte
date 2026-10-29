@@ -1004,7 +1004,7 @@ float beam_spark_vector_z_range_end_gp __asm__("D_L06_00162038") = 0.125f;
 float beam_spark_spawn_probability_gp __asm__("D_L06_0016203C") = 0.25f;
 
 void spawn_blarg_space_commando_beam_sparks(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *beam_vars = ((char *)MOBY(moby)->pvars);
     int   i, next_point_index;
     for (i = 0; i < 15; i = next_point_index) {
         float first_vector_angle, second_vector_angle;
@@ -1014,8 +1014,8 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
         char *spark_source_point;
         int   current_point_byte_offset = i * 16;
         next_point_index = i + 1;
-        if (*(float *)(data + current_point_byte_offset + 0x23C) < 0.99f &&
-            *(float *)(data - (-(next_point_index * 16)) + 0x23C) < 0.99f) {
+        if (*(float *)(beam_vars + current_point_byte_offset + 0x23C) < 0.99f &&
+            *(float *)(beam_vars - (-(next_point_index * 16)) + 0x23C) < 0.99f) {
             continue;
         }
         if (beam_spark_spawn_probability_gp < random_float_between(0.0f, 1.0f)) {
@@ -1053,7 +1053,7 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
         first_spark_vector[3] = beam_spark_first_vector_w_gp;
         fast_vec_scale(second_spark_vector, second_spark_vector, 1.0f / (float)third_frame_count);
         second_spark_vector[3] = beam_spark_second_vector_w_gp;
-        spark_source_point = data + (current_point_byte_offset + 0x230);
+        spark_source_point = beam_vars + (current_point_byte_offset + 0x230);
         lerp_vector(spark_position,
                     spark_source_point,
                     spark_source_point,
