@@ -215,7 +215,7 @@ void draw_pulsing_timer_hud(struct Moby *moby) __asm__("FUN_L18_002d8098");
 
 void draw_pulsing_timer_hud(struct Moby *moby) {
     char  timer_text[8];
-    char *data = (char *)moby->pvars;
+    char *timer_state = (char *)moby->pvars;
     float color_blend_factor;
     int   col;
 
@@ -233,14 +233,14 @@ void draw_pulsing_timer_hud(struct Moby *moby) {
     }
     col = fast_tween_color(timer_color_dim, timer_color_bright, color_blend_factor);
     timer_text[0] = 0x30;
-    timer_text[1] = *(int *)(data + 0x6c) / scale_game_frames(0xE10) + 0x30;
+    timer_text[1] = *(int *)(timer_state + 0x6c) / scale_game_frames(0xE10) + 0x30;
     timer_text[2] = 0x3A;
     timer_text[3] =
-        *(int *)(data + 0x6c) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
+        *(int *)(timer_state + 0x6c) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
     timer_text[4] =
-        *(int *)(data + 0x6c) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
+        *(int *)(timer_state + 0x6c) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
     timer_text[5] = 0x3A;
-    timer_text[6] = *(int *)(data + 0x6c) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
+    timer_text[6] = *(int *)(timer_state + 0x6c) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
     timer_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
     font_print_center_large(timer_text_x, timer_text_y, col, (int)timer_text, 8);
 }
