@@ -50,7 +50,7 @@ void update_height_adjusted_projectile(struct Moby *moby) {
         HEIGHT_MODE_FOLLOW_COLLISION_HEIGHT = 2,
         HEIGHT_MODE_FOLLOW_SELECTED_MOBY_HEIGHT = 3
     };
-    char *data = (char *)moby->pvars;
+    char *projectile_vars = (char *)moby->pvars;
     float old[4] __attribute__((aligned(16)));
     float found[20] __attribute__((aligned(16)));
     float check[4] __attribute__((aligned(16)));
@@ -60,51 +60,51 @@ void update_height_adjusted_projectile(struct Moby *moby) {
     int   i;
 
     qcopy(old, &moby->pos);
-    fast_vec_add(&moby->pos, &moby->pos, data);
+    fast_vec_add(&moby->pos, &moby->pos, projectile_vars);
     find_point_ahead(20.0f, moby, found);
-    switch (*(short *)(data + 0x12)) {
+    switch (*(short *)(projectile_vars + 0x12)) {
     case HEIGHT_MODE_SKIP_ADJUSTMENT:
         break;
     case HEIGHT_MODE_APPROACH_FIXED_HEIGHT:
-        approach_moby_height(moby, *(float *)(data + 0x1c));
+        approach_moby_height(moby, *(float *)(projectile_vars + 0x1c));
         break;
     case HEIGHT_MODE_FOLLOW_COLLISION_HEIGHT:
         qcopy(check, &moby->pos);
         qcopy(raised, &moby->pos);
         check[2] += 0.1f;
-        raised[2] -= *(float *)(data + 0x1c) + *(float *)(data + 0x1c);
+        raised[2] -= *(float *)(projectile_vars + 0x1c) + *(float *)(projectile_vars + 0x1c);
         if (collision_line(check, raised, 2, (int)moby, 0))
-            approach_moby_height(moby, *(float *)(D_L10_001742C0 + 0x28) + *(float *)(data + 0x1c));
+            approach_moby_height(moby, *(float *)(D_L10_001742C0 + 0x28) + *(float *)(projectile_vars + 0x1c));
         else
             approach_moby_height(moby, moby->pos.z - 0.1f);
         break;
     case HEIGHT_MODE_FOLLOW_SELECTED_MOBY_HEIGHT:
         if (*(int *)((char *)found + 0x40) != 0)
-            approach_moby_height(moby, found[2] + *(float *)(data + 0x1c));
+            approach_moby_height(moby, found[2] + *(float *)(projectile_vars + 0x1c));
         break;
     case 4:
         break;
     }
-    qcopy(check, data);
+    qcopy(check, projectile_vars);
     check[2] = 0.0f;
     set_vector_length_xy(check, check, 1.0f);
     check[2] = 1.0f;
-    make_hit_descriptor(hit, moby, 0x10001, *(float *)(data + 0x18), check);
-    if (fast_dec_timer_s16(data + 0x10)) {
+    make_hit_descriptor(hit, moby, 0x10001, *(float *)(projectile_vars + 0x18), check);
+    if (fast_dec_timer_s16(projectile_vars + 0x10)) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (collision_line(old, &moby->pos, 0, *(int *)(data + 0x20), (int)hit)) {
+    if (collision_line(old, &moby->pos, 0, *(int *)(projectile_vars + 0x20), (int)hit)) {
         char        *collision = D_L10_001742C0;
         struct Moby *other = *(struct Moby **)(collision + 0x18);
         if (other == 0 || other->oclass != 0x359) {
             qcopy(&moby->pos, collision + 0x20);
-            if (*(char **)(data + 0x14) != 0) {
+            if (*(char **)(projectile_vars + 0x14) != 0) {
                 if (other != 0) {
-                    if (other == D_001413D0_lui && *(struct Moby **)(data + 0x20) != 0 &&
-                        (*(struct Moby **)(data + 0x20))->state != 0xfe &&
-                        (*(struct Moby **)(data + 0x20))->state != 0xfd)
-                        **(char **)(data + 0x14) = 1;
+                    if (other == D_001413D0_lui && *(struct Moby **)(projectile_vars + 0x20) != 0 &&
+                        (*(struct Moby **)(projectile_vars + 0x20))->state != 0xfe &&
+                        (*(struct Moby **)(projectile_vars + 0x20))->state != 0xfd)
+                        **(char **)(projectile_vars + 0x14) = 1;
                 }
             }
             for (i = 0; i < 5; i++) {
@@ -113,7 +113,7 @@ void update_height_adjusted_projectile(struct Moby *moby) {
                 rand_dir[1] = random_float_between(-1.0f, 1.0f);
                 rand_dir[2] = random_float_between(-1.0f, 1.0f);
                 *(OvlQuad *)raised = *(OvlQuad *)rand_dir;
-                reflect_vector(rand_dir, data, D_L10_00174300);
+                reflect_vector(rand_dir, projectile_vars, D_L10_00174300);
                 fast_vec_normalize(raised, raised, fast_vec_length(rand_dir) * 0.5f);
                 fast_vec_add(raised, rand_dir, raised);
                 fast_vec_normalize(
