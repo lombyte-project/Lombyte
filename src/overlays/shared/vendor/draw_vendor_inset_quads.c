@@ -331,7 +331,7 @@ void draw_vendor_screen(void) __asm__("FUN_L00_002a02b0");
 
 void draw_vendor_screen(void) {
     VendorMenu *e;
-    A02b0_tab  *g;
+    A02b0_tab  *selected_item_render_entry;
 #define p (&vendor_menu)
 
     if (D_L00_0015F5D8 != 0) {
@@ -365,11 +365,11 @@ void draw_vendor_screen(void) {
         if (p->mode != 0) {
             qcopy(&p->look, &D_L00_00166DD0[0]);
             {
-                u128 *s = &D_L00_00166DD0[32];
-                D_L00_00165F80[0] = s[0];
-                D_L00_00165F80[1] = s[1];
-                D_L00_00165F80[2] = s[2];
-                qzero(s);
+                u128 *camera_basis_vectors = &D_L00_00166DD0[32];
+                D_L00_00165F80[0] = camera_basis_vectors[0];
+                D_L00_00165F80[1] = camera_basis_vectors[1];
+                D_L00_00165F80[2] = camera_basis_vectors[2];
+                qzero(camera_basis_vectors);
             }
             qzero(camera_lateral_axis);
             qzero(D_L00_00166FF0);
@@ -423,8 +423,8 @@ void draw_vendor_screen(void) {
     stash_moby_class_dists();
     if (D_L00_00161E38 == 0 && p->mode == 0) {
         if (p->rows[p->cursor].is_ammo == 1) {
-            g = &D_L00_001C8FF0[p->rows[p->cursor].item];
-            if (g->f30 != 0) {
+            selected_item_render_entry = &D_L00_001C8FF0[p->rows[p->cursor].item];
+            if (selected_item_render_entry->f30 != 0) {
                 draw_moby_list(((u8 *)p->menu_mobys) + 0x200, 1);
             }
         } else {
