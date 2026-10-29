@@ -9,7 +9,7 @@ extern f64 dpsub_f(f64 left, f64 right) __asm__("dpsub");
 extern f64 dpmul_f(f64 left, f64 right) __asm__("dpmul");
 extern f64 dpdiv_f(f64 left, f64 right) __asm__("dpdiv");
 extern u64 __fixunsdfdi(f64 value);
-extern s64 truncate_float_to_s32(s64 bits) __asm__("FUN_001fa6d0");
+extern s64 ftoi(s64 bits);
 extern s32 kprintf();
 
 void printfloat(f64 x) {
@@ -35,7 +35,7 @@ void printfloat(f64 x) {
             }
         }
     }
-    significand = truncate_float_to_s32(__fixunsdfdi(dpmul_f(x, 1000000.0)));
+    significand = ftoi(__fixunsdfdi(dpmul_f(x, 1000000.0)));
     kprintf(significand_format, significand);
     if (exponent >= 0) {
         kprintf(nonnegative_exponent_format, exponent);
