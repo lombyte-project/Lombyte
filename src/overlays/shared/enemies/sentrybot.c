@@ -1651,7 +1651,7 @@ void set_sentrybot_alarm_duration(char *moby, int duration_frames) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCF30), where it is exact; names translated to the US level program. */
 
 void prepare_sentrybot_alarm(unsigned char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *alarm_moby_data = ((char *)MOBY(moby)->pvars);
     if (moby[0x20] == 1) {
         moby[0x20] = 2;
         if (moby[0x53] != 1) {
@@ -1659,8 +1659,8 @@ void prepare_sentrybot_alarm(unsigned char *moby) {
         }
     }
     if (moby[0x20] == 3) {
-        if (*(int *)(data + 8) == 0) {
-            *(int *)(data + 0x18) = scale_game_frames(0x78);
+        if (*(int *)(alarm_moby_data + 8) == 0) {
+            *(int *)(alarm_moby_data + 0x18) = scale_game_frames(0x78);
         }
     }
 }
