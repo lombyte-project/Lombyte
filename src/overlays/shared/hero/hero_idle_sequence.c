@@ -3005,7 +3005,7 @@ void update_hero_target_tracking(void) {
     float            bestPri, bestDist;
     float            aim_position_scratch[8];
     char            *secondary_position;
-    char            *info, *info2, *selected_moby;
+    char            *candidate_targeting_metadata, *selected_targeting_metadata, *selected_moby;
     struct HeroEase *manipulator_table;
     float            yaw_delta, pitch, s;
     int              mode = *(int *)(hero_control_mode_owner + 0x208C);
@@ -3021,11 +3021,11 @@ void update_hero_target_tracking(void) {
         bestPri = 0.0f;
         best = 0;
         for (i = 0; (candidate_moby = active_mobies[i]) != 0; i++) {
-            info = (char *)get_moby_target_info(candidate_moby);
-            if (info != 0) {
+            candidate_targeting_metadata = (char *)get_moby_target_info(candidate_moby);
+            if (candidate_targeting_metadata != 0) {
                 float candidate_distance, candidate_yaw_difference, sc, pri;
                 candidate_distance = vector_distance_xy(hero_pos + 0x0, candidate_moby + 0x10);
-                if ((float)*(unsigned char *)(info + 0x38) < candidate_distance)
+                if ((float)*(unsigned char *)(candidate_targeting_metadata + 0x38) < candidate_distance)
                     continue;
                 candidate_reference_hero_state = (char *)hero_pos - 0x80;
                 candidate_yaw_difference = fast_difference_between_rotations(
@@ -3047,7 +3047,7 @@ void update_hero_target_tracking(void) {
                     if (sc < 0.0f)
                         sc = 0.0f;
                 }
-                pri = (float)*(unsigned char *)(info + 0x39);
+                pri = (float)*(unsigned char *)(candidate_targeting_metadata + 0x39);
                 if (bestPri < pri)
                     goto upd;
                 if (sc < bestDist) {
@@ -3075,9 +3075,9 @@ void update_hero_target_tracking(void) {
     if (selected_moby == 0)
         return;
     qcopy(aim_position_scratch, selected_moby + 0x10);
-    info2 = (char *)get_moby_target_info(selected_moby);
-    if (info2 != 0)
-        aim_position_scratch[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
+    selected_targeting_metadata = (char *)get_moby_target_info(selected_moby);
+    if (selected_targeting_metadata != 0)
+        aim_position_scratch[2] += (float)*(unsigned char *)(selected_targeting_metadata + 0x3A) * 0.125f;
     transform_hero_local_offset_to_world(&aim_position_scratch[4], 0.3f, 0.0f, 0.85f);
     yaw_delta =
         fast_subtract_rotations(fast_arc_tan(aim_position_scratch[0] - aim_position_scratch[4],
