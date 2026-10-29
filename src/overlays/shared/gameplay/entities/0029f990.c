@@ -104,15 +104,15 @@ void FUN_001f9a28_29fcd0(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_001f9af0_29fcd0(void *) __asm__("FUN_001f9af0");
 void FUN_001f9bf8_29fcd0(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_29fcd0(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_00237a78_29fcd0(void *, void *, int *, int *, int *, int *) __asm__("FUN_00237a78");
-void FUN_00239690_29fcd0(int, int, float) __asm__("FUN_00239690");
-void FUN_001fb740_29fcd0(int, int) __asm__("FUN_001fb740");
+void project_graphics_bounds(void *, void *, int *, int *, int *, int *) __asm__("FUN_00237a78");
+void configure_capture_target(int, int, float) __asm__("FUN_00239690");
+void draw_centered_capture_background(int, int) __asm__("FUN_001fb740");
 void FUN_00233980_29fcd0(int, long) __asm__("FUN_00233980");
 void draw_vendor_purchase_text(void *, int, int) __asm__("FUN_L00_0029ead8");
-void FUN_00239328_29fcd0(int, float, float) __asm__("FUN_00239328");
-void FUN_001f7978_29fcd0(void) __asm__("FUN_001f7978");
+void render_vendor_capture_texture_overlays_pass(int, float, float) __asm__("FUN_00239328");
+void begin_draw_frame(void) __asm__("FUN_001f7978");
 void FUN_0020d330_29fcd0(void *, int) __asm__("FUN_0020d330");
-void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long,
+void draw_textured_quad(int, int, int, int, int, int, int, int, long,
                          long) __asm__("FUN_001f5450");
 
 extern I3 D_L00_00161178 NOT_SDA;
@@ -149,17 +149,17 @@ void draw_vendor_purchase_panel(void *moby) {
     FUN_001f9a10_29fcd0(&quad_corners[3], &quad_corners[2], first_edge);
     bounds_first_corner = quad_corners[0];
     bounds_opposite_corner = quad_corners[3];
-    FUN_00237a78_29fcd0(&bounds_first_corner, &bounds_opposite_corner, &x, &y, &panel_screen_x, &panel_screen_y);
-    FUN_00239690_29fcd0(9, 7, 1.0f);
-    FUN_001fb740_29fcd0(0x200, 0x200);
+    project_graphics_bounds(&bounds_first_corner, &bounds_opposite_corner, &x, &y, &panel_screen_x, &panel_screen_y);
+    configure_capture_target(9, 7, 1.0f);
+    draw_centered_capture_background(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
     draw_vendor_purchase_text(moby, x, y);
-    FUN_00239328_29fcd0(6, (float)x, (float)y);
-    FUN_001f7978_29fcd0();
-    FUN_001fb740_29fcd0(0x200, 0x200);
+    render_vendor_capture_texture_overlays_pass(6, (float)x, (float)y);
+    begin_draw_frame();
+    draw_centered_capture_background(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
     FUN_0020d330_29fcd0(moby, 1);
-    FUN_001f5450_29fcd0(panel_screen_x, panel_screen_y, x, y, 0, 0, x, y, 0x80808080L, capture_texture_tex0);
+    draw_textured_quad(panel_screen_x, panel_screen_y, x, y, 0, 0, x, y, 0x80808080L, capture_texture_tex0);
 }
 /* Draws the four quads of the hologram cone, scrolling the texture coordinates. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A11E8), where it is exact; names translated to the US level program. */

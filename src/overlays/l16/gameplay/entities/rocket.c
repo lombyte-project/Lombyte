@@ -2850,7 +2850,7 @@ extern void FUN_L00_00216f90_q(void *, void *, int, int) __asm__("FUN_L00_00216f
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
                                int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_002ea9d8_q(void *) __asm__("FUN_L00_002ea9d8");
-extern void FUN_L00_002ea9d8_q_002eaa30(void *) __asm__("FUN_L00_002eaa30");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_002eaaa0_q(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
 extern void activate_test_dummy_group(int) __asm__("FUN_L16_002ceca8");
@@ -2917,7 +2917,7 @@ void update_triggered_group_objective(struct Moby *moby) {
     case SCENE_STATE_WAIT_FOR_LINKED_MOBYS_AND_TIMER:
         FUN_L16_002d6260_q(moby, position, rotation);
         FUN_L00_002ea9d8_q(position);
-        FUN_L00_002ea9d8_q_002eaa30(rotation);
+        set_camera_rotation(rotation);
         if (scene_data->camera >= 0)
             *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&scene_data->camera;
         if (count_active_moby_group_members(scene_data->path, -1))

@@ -17,7 +17,7 @@ extern unsigned char D_0014C050[];
 extern f32 D_0013F3D8, D_0013F3DC;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void FUN_L00_00203908(int, int) __asm__("FUN_L00_00203908");
+extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void collect_moby_and_clear_path_keys(void *) __asm__("FUN_L00_002d5830");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 typedef unsigned int L05Vector __attribute__((mode(TI), aligned(16)));
@@ -92,7 +92,7 @@ void update_moby_gameplay_events(unsigned char *moby) {
     if (is_point_inside_clip_volume(D_0013F3D0, data[20])) {
         if (*(int *)(D_0013F3D0 + 0x200c) == 0x12 && data[26]++ > scale_game_frames(0x168)) {
             if ((unsigned int)(D_00141B8C & (1 << gameplay_event_level_index)) < 1)
-                FUN_L00_00203908(0x3f0, 0x44);
+                help_request(0x3f0, 0x44);
         } else if (D_001413DC == 0x11 || menu_item_enabled_1) {
             D_00141B88 = 0xffff;
         }
@@ -101,12 +101,12 @@ void update_moby_gameplay_events(unsigned char *moby) {
         elapsed = scale_game_frames(gameplay_event_frame_count) - usage_stats.stat[9].unk2 * 600;
         limit = (int)((float)scale_game_frames(0xe10) * 60.0f);
         if (limit < elapsed && (unsigned int)(D_00141BAC & (1 << gameplay_event_level_index)) < 1)
-            FUN_L00_00203908(0x7dd, 0x48);
+            help_request(0x7dd, 0x48);
     }
     if (frame_number < scale_game_frames(60) && usage_stats.stat[12].count && !usage_stats.stat[11].count && D_00141BF4 >= 0)
-        FUN_L00_00203908(0x4e27, 0x51);
+        help_request(0x4e27, 0x51);
     if (frame_number < scale_game_frames(60) && usage_stats.stat[29].count) {
-        if (D_00141CFC >= 0) FUN_L00_00203908(0x4e28, 0x72);
+        if (D_00141CFC >= 0) help_request(0x4e28, 0x72);
         usage_stats.stat[29].count = 0;
     }
     if (!D_0013D4D6) {
@@ -114,7 +114,7 @@ void update_moby_gameplay_events(unsigned char *moby) {
             elapsed = scale_game_frames(gameplay_event_frame_count) - D_00141A82 * 600;
             limit = (int)((float)scale_game_frames(18) * 60.0f);
             if (limit < elapsed || D_00141A82 * 600 == 0)
-                FUN_L00_00203908(0x138a, 0x23);
+                help_request(0x138a, 0x23);
             else {
                 value = scale_game_frames(gameplay_event_frame_count) / 600;
                 if (D_00141A82 < value)
@@ -128,7 +128,7 @@ void update_moby_gameplay_events(unsigned char *moby) {
                 elapsed = scale_game_frames(gameplay_event_frame_count) - D_00141A8A * 600;
                 limit = (int)((float)scale_game_frames(18) * 60.0f);
                 if (limit < elapsed || D_00141A8A * 600 == 0)
-                    FUN_L00_00203908(0x138b, 0x24);
+                    help_request(0x138b, 0x24);
                 else {
                     value = scale_game_frames(gameplay_event_frame_count) / 600;
                     if (D_00141A8A < value)
@@ -163,7 +163,7 @@ void update_moby_gameplay_events(unsigned char *moby) {
                         if (scale_game_frames(18000) < elapsed) {
                             elapsed = scale_game_frames(gameplay_event_frame_count) - D_001417AA * 600;
                             if (scale_game_frames(18000) < elapsed && D_00141A9C >= 0)
-                                FUN_L00_00203908(0x138d, 0x26);
+                                help_request(0x138d, 0x26);
                         }
                     }
                 }
@@ -171,7 +171,7 @@ void update_moby_gameplay_events(unsigned char *moby) {
         }
     }
     if (D_0013D388 && D_00141A78 == 0 && D_001413DC == 0x16)
-        FUN_L00_00203908(0x1389, 0x22);
+        help_request(0x1389, 0x22);
     if (D_00141C58 == 0) {
         if (hero.state.current == 10 &&
             (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14]))) {
@@ -189,11 +189,11 @@ void update_moby_gameplay_events(unsigned char *moby) {
             }
         } else if (data[24] > 1 &&
                    (is_point_inside_clip_volume(&hero.motion.pos, data[13]) || is_point_inside_clip_volume(&hero.motion.pos, data[14])))
-            FUN_L00_00203908(0x138e, 0x5e);
+            help_request(0x138e, 0x5e);
     }
     if (!usage_stats.stat[18].count && !D_00141BB8 && D_0013D4CF &&
         is_point_inside_clip_volume(D_0013F3D0, data[18]) && D_0013D464 >= 20)
-        FUN_L00_00203908(20000, 0x4a);
+        help_request(20000, 0x4a);
     value = data[21];
     if (value != -1 && D_0014C050[data[22] + gameplay_event_level_index * 16] == 0xff &&
         D_0014C050[data[8] + gameplay_event_level_index * 16] == 0xff &&

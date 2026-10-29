@@ -734,7 +734,7 @@ typedef struct {
     char pad[0x10B0];
     int i10B0;
 } G_2bb400;
-extern void FUN_0020c828_2bb400(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int FUN_001f96f8_2bb400(int) __asm__("FUN_001f96f8");
 extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
 extern float FUN_002132a8_2bb400(float, float) __asm__("FUN_002132a8");
@@ -756,7 +756,7 @@ void update_linked_moby_scale_and_rotation(unsigned char *moby) {
     unsigned char *o = moby_vars->o;
     int old, unwrapped_angle, angle_delta;
     if (o[0x20] == 0 || (o[0x20] & 0xF0) == 0xF0) {
-        FUN_0020c828_2bb400(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     if (o != 0 && (*(u16 *)(moby + 0x34) & 1) != (*(u16 *)(o + 0x34) & 1)) {
@@ -1492,8 +1492,8 @@ extern float func_0020D830_2BDAF0(void *) __asm__("FUN_0020c9e0");
 extern int func_001F9938_2BDAF0(void *) __asm__("FUN_001f9770");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int func_001F9850_2BDAF0(int) __asm__("FUN_001f96f8");
-extern void func_L00_00250800_2BDAF0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void func_L00_00222B80_2BDAF0(int, int) __asm__("FUN_L00_002223f8");
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void func_001FA480_2BDAF0(void *, void *) __asm__("FUN_001fa2b8");
 extern void func_001FA4A0_2BDAF0(void *, void *) __asm__("FUN_001fa2d8");
 extern void func_001F9EE8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -1508,7 +1508,7 @@ extern float func_001FA888_2BDAF0(int) __asm__("FUN_001fa6c0");
 extern int func_001FFB38_2BDAF0(int, int, void *, void *, void *, int *, int) __asm__("FUN_001ff308");
 extern int func_001FA898_2BDAF0(float) __asm__("FUN_001fa6d0");
 extern int func_0022EE28_2BDAF0(int, int, int) __asm__("FUN_0022db10");
-extern void func_L00_00264DB8_2BDAF0(int, int) __asm__("FUN_L00_00263d40");
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void func_L00_002CA728_2BDAF0(void *) __asm__("FUN_L00_002c9348");
 extern void func_L00_002BE3A8_2BDAF0(void *) __asm__("FUN_L00_002bd0a0");
 extern int func_L00_0023EF78_2BDAF0(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
@@ -1572,9 +1572,9 @@ void morphoray_update(Moby *moby) {
         if (data->timer == 0) {
             data->timer = func_001F9850_2BDAF0(15);
         }
-        func_L00_00250800_2BDAF0(moby, 0, data);
+        moby_point_position(moby, 0, data);
         if (((Hero *)((char *)&hero))->state.current == 1) {
-            func_L00_00222B80_2BDAF0(30, 1);
+            hero_set_state(30, 1);
         }
         *(u128_2BDAF0 *)&direction = 0;
         if (((Hero *)((char *)&hero))->state.current == 30
@@ -1632,7 +1632,7 @@ void morphoray_update(Moby *moby) {
             if (current_level_index == 5 && data->target->oclass == 0x271 && ((Skill *)item_unlocked)->f8 == 0) {
                 ((Skill *)item_unlocked)->f8 = 1;
                 func_0022EE28_2BDAF0(1, 0, 0);
-                func_L00_00264DB8_2BDAF0(0x53D6, -1);
+                queue_dialogue_message(0x53D6, -1);
             }
             func_L00_002CA728_2BDAF0(data->target);
             data->target = 0;

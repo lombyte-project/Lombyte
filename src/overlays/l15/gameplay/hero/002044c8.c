@@ -177,7 +177,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void FUN_L00_00216de8_210ce8(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
-void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
+void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 s32 process_hero_incoming_hit(s32 apply_hit_reaction) __asm__("FUN_L15_00208e10");
 
@@ -301,7 +301,7 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
             horizontal_knockback_scale = 0.0f;
             vertical_knockback_scale = knockback_scale_factor * 1.7f;
         }
-        FUN_L00_00210c80_210ce8(&knockback_vector, flag, horizontal_knockback_scale, vertical_knockback_scale);
+        hero_knockback(&knockback_vector, flag, horizontal_knockback_scale, vertical_knockback_scale);
         if (flag != 0 && incoming_hit_record->b28 == 4) {
             knockback_vector.f[2] += knockback_vector.f[2];
         }
@@ -311,7 +311,7 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
             hero_set_state(0x5D, 1);
             remove_tracked_class_5f3_moby();
             if (hero.air_frames.s == 0) {
-                FUN_L00_00210c80_210ce8(&knockback_vector, flag, D_0015ED6C_210ce8 * 7.0f,
+                hero_knockback(&knockback_vector, flag, D_0015ED6C_210ce8 * 7.0f,
                                         D_0015ED6C_210ce8 * 3.5f);
                 break;
             }
@@ -320,7 +320,7 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_210ce8(&knockback_vector, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 2.4f);
+        hero_knockback(&knockback_vector, flag, D_0015ED6C_210ce8 * 5.0f, D_0015ED6C_210ce8 * 2.4f);
         break;
     }
     FUN_001f9a10_210ce8(&hero.motion.velocity, &hero.motion.velocity, &knockback_vector);

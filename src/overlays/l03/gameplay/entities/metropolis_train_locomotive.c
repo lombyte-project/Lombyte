@@ -3137,7 +3137,7 @@ extern float D_L03_001618E0 __attribute__((sda));
 #include "rnc/overlay/l03/gameplay/entities/metropolis_train_locomotive_data/update_kerwan_path_enemy_hit_reaction.h"
 extern float square_root(float) __asm__("FUN_001f9988");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void blend_moby_animation_c95(void *, int, int, int) __asm__("FUN_00212f90");
@@ -3184,7 +3184,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         moby_data->f270 = moby_data->f26C + 5.0f;
     }
     hit = find_moby_hit(moby, 0x330000, 0);
-    result = fun_00213928(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
+    result = trooper_take_damage(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
     if (hit != 0 && kind != 1 && moby->state != 0xD) {
         other = *(char **)(hit + 0x20);
         if (other != 0) {

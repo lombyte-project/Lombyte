@@ -207,24 +207,24 @@ typedef union {
 } HopVec;
 
 extern s32 FUN_001f96f8_223450(s32) __asm__("FUN_001f96f8");
-extern float FUN_001f9dc8_223450(float) __asm__("FUN_001f9dc8");
-extern float FUN_001f9de0_223450(float) __asm__("FUN_001f9de0");
-extern f32 FUN_001fa688_223450(f32, f32) __asm__("FUN_001fa688");
-extern f32 FUN_001fa5c8_223450(f32, f32) __asm__("FUN_001fa5c8");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 FUN_001f9b20_223450(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
-extern void FUN_L00_00212088_223450(f32, f32) __asm__("FUN_L00_00212088");
-extern void FUN_L00_00211e30_223450(int, float, float, float) __asm__("FUN_L00_00211e30");
-extern f32 FUN_L00_0025bc98_223450(float *, float *, int, float, float, float,
+extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
+extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
+extern f32 spring_angle(float *, float *, int, float, float, float,
                                    float) __asm__("FUN_L00_0025bc98");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_223450(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void FUN_001f9bf8_223450(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void FUN_001f9c48_223450(void *, void *, f32) __asm__("FUN_001f9c48");
+extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_223450(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L01_00234358_223450(f32) __asm__("FUN_L01_00234358");
+extern void air_accel(f32) __asm__("FUN_L01_00234358");
 
 #define ED64 frame_scale_sq
 #define ED6C frame_time
@@ -255,13 +255,13 @@ void hero_update_hop_velocity(void) {
         } else {
             hero.target_speed = ED6C * 3.5f;
         }
-        FUN_L00_00212088_223450(ED70 * 44.0f, ED70 * 45.0f);
+        speed_step(ED70 * 44.0f, ED70 * 45.0f);
         FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
         add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
     } else if (state == 0x1C) {
         if (FUN_001f96f8_223450(0x28) < hero.state_timer) {
-            FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);
-            FUN_L01_00234358_223450(ED70 * 20.0f);
+            turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);
+            air_accel(ED70 * 20.0f);
         }
         if (13.0f <= hero.anim_frame && hero.anim_frame <= 30.0f) {
             if (27.0f < hero.anim_frame) {
@@ -270,11 +270,11 @@ void hero_update_hop_velocity(void) {
                 approach_value(ED6C * 2.0f, ED70 * 8.0f, &hero.ledge_jump_speed);
             }
         }
-        hero.motion.velocity.f[0] = FUN_001f9dc8_223450(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
-        hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
+        hero.motion.velocity.f[0] = fast_cos(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
+        hero.motion.velocity.f[1] = fast_sin(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
     } else if (state == 11 || state == 12) {
         hero.motion.move_yaw = hero.takeoff_yaw;
-        FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
+        turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 6.981317f);
         if (hero.unk450 != 3) {
             hero.ground_speed = hero.air_target_speed;
         } else {
@@ -287,23 +287,23 @@ void hero_update_hop_velocity(void) {
                 approach_value(ED6C * 4.2f, ED70 * 8.0f, &hero.high_jump_drift_speed);
             }
         }
-        hero.motion.velocity.f[0] = FUN_001f9dc8_223450(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
-        hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
-        a = hero.air_target_speed * FUN_001f9de0_223450(FUN_001fa688_223450(hero.takeoff_yaw, hero.high_jump_drift_yaw));
-        hero.motion.velocity.f[0] += FUN_001f9dc8_223450(hero.takeoff_yaw) * a;
-        hero.motion.velocity.f[1] += FUN_001f9de0_223450(hero.takeoff_yaw) * a;
+        hero.motion.velocity.f[0] = fast_cos(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
+        hero.motion.velocity.f[1] = fast_sin(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
+        a = hero.air_target_speed * fast_sin(fast_difference_between_rotations(hero.takeoff_yaw, hero.high_jump_drift_yaw));
+        hero.motion.velocity.f[0] += fast_cos(hero.takeoff_yaw) * a;
+        hero.motion.velocity.f[1] += fast_sin(hero.takeoff_yaw) * a;
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
     } else if (state == 0x11) {
         hero.motion.move_yaw = hero.unk470.f[3];
         qcopy(&hero.motion.move_dir, &hero.unk470);
         if (FUN_001f96f8_223450(9) < hero.state_timer) {
-            FUN_L00_00211e30_223450(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
+            turn_to(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
         }
         if (FUN_001f96f8_223450(9) <= hero.state_timer) {
             if (hero.unk308 == 0) {
-                hero.motion.velocity.f[0] = FUN_001f9dc8_223450(hero.motion.move_yaw) * (ED6C * 4.9f);
-                hero.motion.velocity.f[1] = FUN_001f9de0_223450(hero.motion.move_yaw) * (ED6C * 4.9f);
+                hero.motion.velocity.f[0] = fast_cos(hero.motion.move_yaw) * (ED6C * 4.9f);
+                hero.motion.velocity.f[1] = fast_sin(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
                 FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
                 FUN_001f9bf8_223450(&velocity_addend, &hero.motion.move_dir, ED6C * 4.9f);
@@ -314,12 +314,12 @@ void hero_update_hop_velocity(void) {
     } else {
         if (state == 0x2D) {
             x = hero.motion.rot.f[2];
-            hero.motion.yaw_error = FUN_L00_0025bc98_223450(&x, &hero.motion.yaw_rate, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
+            hero.motion.yaw_error = spring_angle(&x, &hero.motion.yaw_rate, 0, hero.motion.move_yaw, ED64 * 0.018f, ED64 * 0.2f,
                                              ED6C * 7.330383f);
-            a = FUN_001fa5c8_223450(x, hero.motion.rot.f[2]);
+            a = fast_subtract_rotations(x, hero.motion.rot.f[2]);
             rotate_hero_about_fixed_local_pivot(0.0f, 0.0f, a);
         } else {
-            FUN_L00_00211e30_223450(0, ED64 * 0.04f, ED64 * 0.2f, hero.air_turn_rate);
+            turn_to(0, ED64 * 0.04f, ED64 * 0.2f, hero.air_turn_rate);
         }
         build_scaled_hero_move_impulse(0.7f, ED6C * 0.0f);
         qcopy(&hero.motion.momentum, &hero.move_impulse);
@@ -329,7 +329,7 @@ void hero_update_hop_velocity(void) {
                 speed_reduction_step = hero.stickless_decel;
                 speed = FUN_001f9b20_223450(&hero.motion.velocity);
                 approach_value(0.0f, speed_reduction_step, &speed);
-                FUN_001f9c48_223450(hero.motion.velocity.f, hero.motion.velocity.f, speed);
+                set_vector_length_xy(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;
             }
             if (hero.on_flagged_ground_moby != 0) {
@@ -338,7 +338,7 @@ void hero_update_hop_velocity(void) {
                 velocity_change_step = ED70 * 2.0f;
             }
         }
-        FUN_L01_00234358_223450(velocity_change_step);
+        air_accel(velocity_change_step);
     }
 }
 #include "sda.h"

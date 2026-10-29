@@ -42,20 +42,20 @@ extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
-extern void func_0020DAF8(void *, int, void *) __asm__("FUN_0020cca8");
-extern void func_0020EEE8(void *) __asm__("FUN_0020e098");
+extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
+extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
 void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int mode) __asm__("FUN_L12_0027b9c0");
 
 void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int mode) {
     char workspace[0x40];
-    func_0020DAF8(parent, mode, workspace);
+    build_moby_bone_transform(parent, mode, workspace);
     qcopy(child + 0x10, workspace + 0x30);
     advance_moby_animation(child);
     update_entity(child);
     copy_matrix3x4(child + 0xC0, workspace);
     normalize_vector_triplet(child + 0xC0);
-    func_0020EEE8(child);
+    refresh_moby_spatial_bounds_from_basis(child);
     if (parent->flags & 1)
         *(unsigned short *)(child + 0x34) |= 0x41;
     else

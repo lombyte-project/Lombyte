@@ -34,8 +34,8 @@ s32 find_camera_record_by_id(s32 id) {
     }
 }
 float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
-float FUN_001f99c0_001eb328(float) __asm__("FUN_001f99c0");
-float FUN_001fa580_001eb328(float, float) __asm__("FUN_001fa580");
+float absolute_float(float) __asm__("FUN_001f99c0");
+float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_001eb328");
 float rope_spring_turn(float *spring_state, float current_angle, float target_angle, float response_gain, float damping_factor, float spring_state_limit) {
     float angle_difference = FUN_001fa5c8_001eb328(target_angle, current_angle);
@@ -46,11 +46,11 @@ float rope_spring_turn(float *spring_state, float current_angle, float target_an
         else if (*spring_state < -spring_state_limit)
             *spring_state = -spring_state_limit;
     }
-    if (*spring_state > FUN_001f99c0_001eb328(angle_difference))
-        *spring_state = FUN_001f99c0_001eb328(angle_difference);
-    else if (*spring_state < -FUN_001f99c0_001eb328(angle_difference))
-        *spring_state = -FUN_001f99c0_001eb328(angle_difference);
-    return FUN_001fa580_001eb328(current_angle, *spring_state);
+    if (*spring_state > absolute_float(angle_difference))
+        *spring_state = absolute_float(angle_difference);
+    else if (*spring_state < -absolute_float(angle_difference))
+        *spring_state = -absolute_float(angle_difference);
+    return fast_add_rotations(current_angle, *spring_state);
 }
 typedef struct {
     char pad[0x7D];
@@ -319,7 +319,7 @@ extern C_1ed6a8 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern OvlQuad D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern OvlQuad g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 extern int g_debug_menu_lui[] __asm__("D_L00_0016C058") NOT_SDA;
-extern void f9a28_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
@@ -347,7 +347,7 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
         *(short *)(o + 0x8A) = 0;
         return;
     }
-    f9a28_1ed6a8(step_delta, camera_position, camera_movement_origin_snapshot);
+    fast_vec_sub(step_delta, camera_position, camera_movement_origin_snapshot);
     step_count = truncate_float_to_s32(f9af0_1ed6a8(step_delta) / (collision_radius * 0.9f)) + 1;
     divide_vector_xyz(step_delta, step_delta, convert_integer_to_float(step_count));
     qcopy(camera_position, camera_movement_origin_snapshot);

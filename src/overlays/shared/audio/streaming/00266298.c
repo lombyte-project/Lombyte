@@ -63,7 +63,7 @@ extern struct MobyRecord race_gates[] __asm__("D_0013D5B0");
 
 extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");                    /* distance */
-extern void fun_00216c48(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
+extern void SCRATCH(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern s32 FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
 extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
@@ -103,7 +103,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
     if (fast_vec_dist(&moby->pos, &hero_ptr->motion.pos) > trigger->radius + trigger->radius)
         return 0;
 
-    fun_00216c48(moby, trigger, 0);
+    SCRATCH(moby, trigger, 0);
 
     if (trigger->any_direction == 0) {
         /* the moby must face the hero ... */
@@ -136,7 +136,7 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
                 alternate_item_available[entry->cost_id] = 0;
         }
         if (entry->scene == -1) {
-            fun_00216c48(moby, trigger, 1);
+            SCRATCH(moby, trigger, 1);
             return 1;
         }
 

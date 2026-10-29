@@ -1133,7 +1133,7 @@ extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int select_group_class_29c_moby(void *argp) __asm__("FUN_L02_002d5658");
 extern void extend_group_sand_shark_timers(char *arg) __asm__("FUN_L02_002d5728");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -1184,7 +1184,7 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
     }
     dmg = 0.0f;
     hit_record = find_moby_hit(moby, 0x330000, 0);
-    fun_00213928(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
+    trooper_take_damage(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby[0x20] != 0x18) {
         extend_group_sand_shark_timers((char *)moby);
         moby_vars->i29C = 0;
@@ -1736,7 +1736,7 @@ extern float level02_bot_death_knockback_vertical_speed_gp __asm__("D_L02_00161A
 extern float level02_bot_hit_knockback_horizontal_speed_gp __asm__("D_L02_00161A6C") __attribute__((sda));
 extern float level02_bot_hit_knockback_vertical_speed_gp __asm__("D_L02_00161A70") __attribute__((sda));
 #include "rnc/overlay/l02/gameplay/entities/sand_shark_data/handle_level02_bot_damage_and_retargeting.h"
-extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int select_moby_target_goal(char *a, char *o, float best) __asm__("FUN_L02_00261c80");
@@ -1789,7 +1789,7 @@ void handle_level02_bot_damage_and_retargeting(void *owner_moby) {
     if (hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x264) {
         hit_record = 0;
     }
-    fun_00213928(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
+    trooper_take_damage(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x11) {
         moby_vars->hp -= dmg;
         moby_vars->i90 = truncate_float_to_s32(614.4f);

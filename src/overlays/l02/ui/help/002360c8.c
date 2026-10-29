@@ -18,13 +18,13 @@ typedef union {
    scalar, 0xE0 likewise with .f[2], 0x270 is a 16-byte value, and 0x20B3 is
    the u8 the switch is on. */
 extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001f9bf8_32b90(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");
-extern s32 FUN_001efa68_32b90(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
+extern s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
-extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
+extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 extern u8 D_L02_00174480[] NOT_SDA;
@@ -46,13 +46,13 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
     switch (hero.gravity_mode) {
     case HERO_TRAJECTORY_Z_AXIS_ACCELERATION:
         if (target_z < 0.0f) {
-            FUN_001f9a68_32b90(trajectory_position, &hero.motion.velocity, trajectory_parameter);
+            fast_vec_scale(trajectory_position, &hero.motion.velocity, trajectory_parameter);
             trajectory_position[2] -= ((trajectory_parameter * trajectory_parameter + trajectory_parameter) * 0.5f) * trajectory_acceleration_coefficient;
-            FUN_001f9a10_32b90(trajectory_position, trajectory_position, &hero.motion.pos);
+            fast_vec_add(trajectory_position, trajectory_position, &hero.motion.pos);
             position_or_acceleration_vector.q = hero.motion.pos.q;
             clip_negative_segment_endpoint_xyz(&position_or_acceleration_vector, trajectory_position);
             qcopy(&position_or_acceleration_vector, &hero.motion.pos);
-            if (FUN_001efa68_32b90(&position_or_acceleration_vector, trajectory_position, 0x324, 0, 0) != 0) {
+            if (collision_line(&position_or_acceleration_vector, trajectory_position, 0x324, 0, 0) != 0) {
                 if (compute_gravity_relative_vector_inclination((f32 *)D_L02_00174480) <= 0.87266463f) {
                     target_z = *(f32 *)(D_L02_00174480 - 0x18);
                 }
@@ -68,20 +68,20 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
         break;
     case HERO_TRAJECTORY_STORED_VECTOR_ACCELERATION:
         qcopy(&position_or_acceleration_vector, &hero.ground_normal);
-        FUN_001f9bf8_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, trajectory_acceleration_coefficient);
-        FUN_001f9a68_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, -1.0f);
-        FUN_001f9a68_32b90(trajectory_position, &hero.motion.velocity, trajectory_parameter);
-        FUN_001f9a68_32b90(&vector_scratch, &position_or_acceleration_vector, ((trajectory_parameter * trajectory_parameter + trajectory_parameter) * 0.5f) * trajectory_acceleration_coefficient);
-        FUN_001f9a10_32b90(trajectory_position, &vector_scratch, trajectory_position);
-        FUN_001f9a10_32b90(trajectory_position, &hero.motion.pos, trajectory_position);
+        fast_vec_normalize(&position_or_acceleration_vector, &position_or_acceleration_vector, trajectory_acceleration_coefficient);
+        fast_vec_scale(&position_or_acceleration_vector, &position_or_acceleration_vector, -1.0f);
+        fast_vec_scale(trajectory_position, &hero.motion.velocity, trajectory_parameter);
+        fast_vec_scale(&vector_scratch, &position_or_acceleration_vector, ((trajectory_parameter * trajectory_parameter + trajectory_parameter) * 0.5f) * trajectory_acceleration_coefficient);
+        fast_vec_add(trajectory_position, &vector_scratch, trajectory_position);
+        fast_vec_add(trajectory_position, &hero.motion.pos, trajectory_position);
         hero_position_copy.q = hero.motion.pos.q;
         clip_negative_segment_endpoint_xyz(&hero_position_copy, trajectory_position);
-        if (FUN_001efa68_32b90(&hero.motion.pos, trajectory_position, 0x324, 0, 0) != 0) {
+        if (collision_line(&hero.motion.pos, trajectory_position, 0x324, 0, 0) != 0) {
             f32 nb;
             nb = trajectory_acceleration_coefficient * -0.5f;
-            z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
-            x = FUN_L00_00233a78_32b90(&hero.motion.pos);
-            y = FUN_L00_00233a78_32b90(&D_L02_00174460);
+            z = gravity_z(&hero.motion.velocity) - nb;
+            x = gravity_z(&hero.motion.pos);
+            y = gravity_z(&D_L02_00174460);
             if (solve_quadratic_equation(&quadratic_roots[2], &quadratic_roots[3], nb, z, x - y) > 0 && quadratic_roots[2] > 0.0f) {
                 return quadratic_roots[2];
             }
@@ -92,20 +92,20 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
         vector_scratch.f[1] = 100.0f;
         vector_scratch.f[0] = 100.0f;
         FUN_001f9a28_32b90(&position_or_acceleration_vector, &hero.motion.pos, &vector_scratch);
-        FUN_001f9bf8_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, trajectory_acceleration_coefficient);
-        FUN_001f9a68_32b90(&position_or_acceleration_vector, &position_or_acceleration_vector, -1.0f);
-        FUN_001f9a68_32b90(trajectory_position, &hero.motion.velocity, trajectory_parameter);
-        FUN_001f9a68_32b90(&vector_scratch, &position_or_acceleration_vector, ((trajectory_parameter * trajectory_parameter + trajectory_parameter) * 0.5f) * trajectory_acceleration_coefficient);
-        FUN_001f9a10_32b90(trajectory_position, &vector_scratch, trajectory_position);
-        FUN_001f9a10_32b90(trajectory_position, &hero.motion.pos, trajectory_position);
+        fast_vec_normalize(&position_or_acceleration_vector, &position_or_acceleration_vector, trajectory_acceleration_coefficient);
+        fast_vec_scale(&position_or_acceleration_vector, &position_or_acceleration_vector, -1.0f);
+        fast_vec_scale(trajectory_position, &hero.motion.velocity, trajectory_parameter);
+        fast_vec_scale(&vector_scratch, &position_or_acceleration_vector, ((trajectory_parameter * trajectory_parameter + trajectory_parameter) * 0.5f) * trajectory_acceleration_coefficient);
+        fast_vec_add(trajectory_position, &vector_scratch, trajectory_position);
+        fast_vec_add(trajectory_position, &hero.motion.pos, trajectory_position);
         hero_position_copy.q = hero.motion.pos.q;
         clip_negative_segment_endpoint_xyz(&hero_position_copy, trajectory_position);
-        if (FUN_001efa68_32b90(&hero.motion.pos, trajectory_position, 0x324, 0, 0) != 0) {
+        if (collision_line(&hero.motion.pos, trajectory_position, 0x324, 0, 0) != 0) {
             f32 nb;
             nb = trajectory_acceleration_coefficient * -0.5f;
-            z = FUN_L00_00233a78_32b90(&hero.motion.velocity) - nb;
-            x = FUN_L00_00233a78_32b90(&hero.motion.pos);
-            y = FUN_L00_00233a78_32b90(&D_L02_00174460);
+            z = gravity_z(&hero.motion.velocity) - nb;
+            x = gravity_z(&hero.motion.pos);
+            y = gravity_z(&D_L02_00174460);
             if (solve_quadratic_equation(&quadratic_roots[4], &quadratic_roots[5], nb, z, x - y) > 0 && quadratic_roots[4] > 0.0f) {
                 return quadratic_roots[4];
             }

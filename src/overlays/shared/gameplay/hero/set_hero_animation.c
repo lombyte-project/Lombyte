@@ -1511,7 +1511,7 @@ extern s32 D_L00_0015F5C4_234808 __asm__("D_L00_0015F5C4");
 f32 FUN_001fa580_234808(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9de0_234808(f32) __asm__("FUN_001f9de0");
 s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
-void FUN_0020cb10_234808(void *, s32, void *) __asm__("FUN_0020cb10");
+void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_001fff28_234808(void *, s32, f32) __asm__("FUN_L00_001fff28");
 #define X  D_L00_0015F5C4_234808
 #define DD frame_time
@@ -1557,7 +1557,7 @@ void animate_hero_slot4_and_slot5_visuals(void) {
             fast_tween_color(0xAAC8AA, 0x965050, FUN_001f9de0_234808(hero.unk22F0) * 0.5f + 0.5f);
         if (slot5_moby) {
             if (!hero.unk1D90.attached)
-                FUN_0020cb10_234808(slot5_moby, 0, &hero.unk1D90);
+                attach_manipulator(slot5_moby, 0, &hero.unk1D90);
             else
                 FUN_L00_001fff28_234808(&hero.unk1D90.quat, 0, hero.unk22F0);
         }

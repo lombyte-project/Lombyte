@@ -283,8 +283,8 @@ typedef struct {
 } Packet;
 
 extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
-extern void FUN_001f9838_24f440(void *, void *, int) __asm__("FUN_001f9838");
-extern void FUN_00118a80_24f440(int) __asm__("FUN_00118a80");
+extern void copy_memory_aligned(void *, void *, int) __asm__("FUN_001f9838");
+extern void flush_cache(int) __asm__("FUN_00118a80");
 
 /* Defined under a local name: this unit already declares FUN_L00_0024f440
  * with a generic prototype for its callers. */
@@ -322,7 +322,7 @@ void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *out) 
         out->hE = selected_frame->hE;
         trailing_byte_count = selected_frame->qwc * 16 - nb * 8;
         if (trailing_byte_count != 0)
-            FUN_001f9838_24f440(&((u64_24f440 *)out)[na + 2], from, trailing_byte_count);
+            copy_memory_aligned(&((u64_24f440 *)out)[na + 2], from, trailing_byte_count);
     }
     ix = (unsigned char *)(*(char **)(*(char **)(animation_blend_state + 0x18) + 0x1C) + 4);
     scatter_source_cursor = selected_frame->q;
@@ -338,5 +338,5 @@ void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *out) 
     q = (u64_24f440 *)((char *)out + out->h6 * 16);
     if (*q == 0)
         *q = 1;
-    FUN_00118a80_24f440(0);
+    flush_cache(0);
 }

@@ -62,7 +62,7 @@ void interpolate_wrapped_rotations_cosine_eased(float *out, float *start_rotatio
     out[2] = fast_add_rotations(start_rotations[2], fast_subtract_rotations(target_rotations[2], start_rotations[2]) * cosine_ease_weight);
 }
 float FUN_001fa5c8_00258110(float, float) __asm__("FUN_001fa5c8");
-float FUN_001f99c0_00258110(float) __asm__("FUN_001f99c0");
+float absolute_float(float) __asm__("FUN_001f99c0");
 float FUN_001fa580_00258110(float, float) __asm__("FUN_001fa580");
 float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_00258110");
 float spring_turn(float *turn_step, float current_angle, float target_angle, float spring_strength, float damping_factor, float max_turn_step) {
@@ -79,10 +79,10 @@ float spring_turn(float *turn_step, float current_angle, float target_angle, flo
         else if (*turn_step < -max_turn_step)
             *turn_step = -max_turn_step;
     }
-    if (*turn_step > FUN_001f99c0_00258110(angle_delta))
-        *turn_step = FUN_001f99c0_00258110(angle_delta);
-    else if (*turn_step < -FUN_001f99c0_00258110(angle_delta))
-        *turn_step = -FUN_001f99c0_00258110(angle_delta);
+    if (*turn_step > absolute_float(angle_delta))
+        *turn_step = absolute_float(angle_delta);
+    else if (*turn_step < -absolute_float(angle_delta))
+        *turn_step = -absolute_float(angle_delta);
     return FUN_001fa580_00258110(current_angle, *turn_step);
 }
 extern float FUN_001f99c0(float);
@@ -152,7 +152,7 @@ extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
     __attribute__((section(".data")));
 extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern V_258490 D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
-extern float FUN_L00_00259710_258490(void *) __asm__("FUN_L00_00259710");
+extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern float FUN_001f99c0_258490(float) __asm__("FUN_001f99c0");
 extern void FUN_001f9a28_258490(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_258490(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -160,9 +160,9 @@ extern void FUN_001f9a68_258490(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9bf8_258490(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_001f9b20_258490(void *) __asm__("FUN_001f9b20");
-extern float FUN_001f9b80_258490(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_258490(float, float) __asm__("FUN_001f9e90");
-extern void FUN_00125180_258490(void *, void *) __asm__("FUN_00125180");
+extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 extern int FUN_L00_001f0d60_258490(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
 int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h, float r, float lim,
@@ -187,7 +187,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
     ok = 1;
     m2 = flags & 2;
     pos->f[2] += h;
-    gz = FUN_L00_00259710_258490(pos);
+    gz = allocate_voice_for_target_entry_cf(pos);
     pos->f[2] -= h;
     if (lim < FUN_001f99c0_258490(gz - to->f[2])) {
         if ((((flags ^ 1) & 1) && gz < to->f[2]) || to->f[2] < gz) {
@@ -207,7 +207,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
             nrm = (float *)(c + 0x40);
             if (slope <= FUN_001f9e90_258490(*(float *)(c + 0x48), FUN_001f9b20_258490(nrm))) {
                 *(int *)(c + 0x48) = 0;
-                FUN_00125180_258490(nrm, nrm);
+                sceVu0Normalize(nrm, nrm);
                 {
                     float k = -d.f[0] * *(float *)(c + 0x40) - d.f[1] * *(float *)(c + 0x44);
                     if (0.0f < k) {
@@ -231,7 +231,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
             if (!FUN_L00_001f0d60_258490(&t, r, 0x24, ign)) {
                 break;
             }
-            ang = FUN_001f9e90_258490(FUN_001f9b80_258490(pos, q60),
+            ang = FUN_001f9e90_258490(vector_distance(pos, q60),
                                       *(float *)(q40 + 0x28) - pos->f[2]);
             if (*(int *)(q40 + 0x18) != 0 || slope < ang) {
                 qcopy(pos, &D_L00_00173E70_lui);
@@ -242,7 +242,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
         } while (i < 6);
     }
     pos->f[2] += h;
-    gz = FUN_L00_00259710_258490(pos);
+    gz = allocate_voice_for_target_entry_cf(pos);
     pos->f[2] -= h;
     if (lim < FUN_001f99c0_258490(gz - to->f[2])) {
         if ((((flags ^ 1) & 1) && gz < to->f[2]) || to->f[2] < gz) {
@@ -504,35 +504,35 @@ done:
         mask |= 4;
     return mask;
 }
-void FUN_001f99f8_259028(void *) __asm__("FUN_001f99f8");
-float FUN_001f9b48_259028(void *, void *) __asm__("FUN_001f9b48");
+void clear_u64_value(void *) __asm__("FUN_001f99f8");
+float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001f9e90_259028(float, float) __asm__("FUN_001f9e90");
-void FUN_L00_00258278_259028(unsigned char *, float *, float, float, float,
+void approach_w(unsigned char *, float *, float, float, float,
                              float) __asm__("FUN_L00_00258278");
-float FUN_001fa688_259028(float, float) __asm__("FUN_001fa688");
-int FUN_001f9740_259028(void *) __asm__("FUN_001f9740");
-int FUN_001f96f8_259028(int) __asm__("FUN_001f96f8");
-int FUN_L00_00258b50_259028(unsigned char *, char *, float *, void *,
+float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
+int fast_dec_timer(void *) __asm__("FUN_001f9740");
+int scale_game_frames(int) __asm__("FUN_001f96f8");
+int move_w(unsigned char *, char *, float *, void *,
                             float) __asm__("FUN_L00_00258b50");
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
 int FUN_L00_00259028(unsigned char *moby, char *movement_control, float *target_position, void *out) {
     int navigation_result_flags = 0;
     float target_heading, heading_error;
-    FUN_001f99f8_259028(out);
-    if (FUN_001f9b48_259028(moby + 0x10, target_position) < *(float *)(movement_control + 0x2C))
+    clear_u64_value(out);
+    if (fast_vec_dist(moby + 0x10, target_position) < *(float *)(movement_control + 0x2C))
         navigation_result_flags = 4;
     target_heading = FUN_001f9e90_259028(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
-    FUN_L00_00258278_259028(moby, (float *)(movement_control + 0x14), target_heading, *(float *)(movement_control + 0x3C), *(float *)(movement_control + 0x40),
+    approach_w(moby, (float *)(movement_control + 0x14), target_heading, *(float *)(movement_control + 0x3C), *(float *)(movement_control + 0x40),
                             *(float *)(movement_control + 0x44));
-    heading_error = FUN_001fa688_259028(target_heading, *(float *)(moby + 0x48));
+    heading_error = fast_difference_between_rotations(target_heading, *(float *)(moby + 0x48));
     if (*(float *)(movement_control + 0x28) <= heading_error)
         navigation_result_flags |= 0x10;
-    FUN_001f9740_259028(movement_control + 0x48);
-    if (heading_error < *(float *)(movement_control + 0x28) && *(int *)(movement_control + 0x48) < FUN_001f96f8_259028(4)) {
-        *(int *)(movement_control + 0x48) = FUN_001f96f8_259028(4);
+    fast_dec_timer(movement_control + 0x48);
+    if (heading_error < *(float *)(movement_control + 0x28) && *(int *)(movement_control + 0x48) < scale_game_frames(4)) {
+        *(int *)(movement_control + 0x48) = scale_game_frames(4);
     }
     if (*(int *)(movement_control + 0x48) != 0) {
-        navigation_result_flags |= FUN_L00_00258b50_259028(moby, movement_control, target_position, out,
+        navigation_result_flags |= move_w(moby, movement_control, target_position, out,
                                      (*(float *)(movement_control + 0x28) - heading_error) / *(float *)(movement_control + 0x28));
         if (0.1f < heading_error)
             navigation_result_flags &= ~2;

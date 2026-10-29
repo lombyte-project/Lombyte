@@ -69,7 +69,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
-extern void FUN_L00_001edf60_2b2100(int, int, float, void *, float, int, int, float, int) __asm__("FUN_L00_001edf60");
+extern void suck_draw_reticle(int, int, float, void *, float, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern float distance_xyz_2b2100(void *, void *) __asm__("FUN_001f9b48");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -87,7 +87,7 @@ extern int allocate_voice_for_target_entry_2b2100(int, int, int) __asm__("FUN_00
 extern void emit_object_offset_particle_burst(void *) __asm__("FUN_L00_002b1de0");
 extern void *spawn_devastator_missile(void *, void *, void *, float, float, float, float, float) __asm__("FUN_L00_002afc70");
 extern float calculate_eased_step_sum(int) __asm__("FUN_L00_002aff50");
-extern void FUN_L00_002323b8_2b2100(int, int, float) __asm__("FUN_L00_002323b8");
+extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
@@ -140,7 +140,7 @@ void devastator_update(struct Moby *devastator_moby) {
                 data->target_height = hit->pos.f.z - data->target->pos.z;
             }
         }
-        FUN_L00_001edf60_2b2100((int)devastator_moby, 0xFF180A65, 1.0f,
+        suck_draw_reticle((int)devastator_moby, 0xFF180A65, 1.0f,
             0, fast_normalize_angle(convert_integer_to_float(D_L00_0015F5CC_2b2100 % scale_game_frames(240)) * 360.0f / scale_time(240.0f) * 0.017453292f),
             0x27, -1, 90.0f, 4);
         if (data->target && !data->cooldown && get_ammo(-1)) {
@@ -148,7 +148,7 @@ void devastator_update(struct Moby *devastator_moby) {
             qcopy(&point, &data->target->pos);
             point.f.z += data->target_height;
             size = absolute_float(0.9f - scaled_target_distance * 0.57f);
-            FUN_L00_001edf60_2b2100((int)devastator_moby, 0xFF0FFF0F, size,
+            suck_draw_reticle((int)devastator_moby, 0xFF0FFF0F, size,
                 &point, fast_normalize_angle(convert_integer_to_float(D_L00_0015F5CC_2b2100 % scale_game_frames(240)) * -360.0f / scale_time(240.0f) * 0.017453292f),
                 0x27, -1, 90.0f, 4);
         }
@@ -284,7 +284,7 @@ void devastator_update(struct Moby *devastator_moby) {
                 spawn_devastator_missile(devastator_moby, &launch, data->target, yaw, pitch, height, yaw0, pitch0);
             }
             if (hero.state.control_mode == 0 || (hero.state.current == 2 && hero.stick_magnitude < 0.7f)) {
-                FUN_L00_002323b8_2b2100(0x36, 1, (float)scale_game_frames(10));
+                set_hero_animation(0x36, 1, (float)scale_game_frames(10));
             } else {
                 start_equipped_item_animation();
             }
@@ -389,7 +389,7 @@ void FUN_001f9bf8_b3058(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_b3058(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_00214db0_b3058(void *, f32, f32, f32) __asm__("FUN_00214db0");
 void FUN_00212f90_b3058(void *, s32, s32, s32) __asm__("FUN_00212f90");
-void FUN_L00_00203b18_b3058(void) __asm__("FUN_L00_00203b18");
+void jet_camera_mode(void) __asm__("FUN_L00_00203b18");
 s32 FUN_L00_002b58d8_b3058(void *, void *, f32, f32) __asm__("FUN_L00_002b58d8");
 s32 FUN_001f96f8_b3058(s32) __asm__("FUN_001f96f8");
 void FUN_0022da68_b3058(s32, s32, void *) __asm__("FUN_0022da68");
@@ -455,7 +455,7 @@ void visibomb_update(O_b3058 *visibomb_moby) {
         if (visibomb_moby->b53 != 3) {
             FUN_00212f90_b3058(visibomb_moby, 3, 0, 0);
         }
-        FUN_L00_00203b18_b3058();
+        jet_camera_mode();
         v->i4 = FUN_L00_002b58d8_b3058(visibomb_moby, launch_position, launch_yaw, b);
         r = &D_00141680_b3058;
         if (r->u68 < 0xFFFF) {
@@ -485,7 +485,7 @@ typedef struct {
     int idx[4];
     unsigned char *p[4];
 } V_2b3458;
-int FUN_L00_0025a420_2b3458(void *, int, int) __asm__("FUN_L00_0025a420");
+int find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 int FUN_001f9740_2b3458(int *) __asm__("FUN_001f9740");
 void FUN_0020c828_2b3458(void *) __asm__("FUN_0020c828");
 #include "rnc/overlay/shared/gameplay/entities/devastator_globals.h"
@@ -511,7 +511,7 @@ void update_linked_moby_states(unsigned char *source_moby) {
         moby_vars->p[3] = moby_table + (moby_vars->idx[3] << 8);
         break;
     case STATE_ACTIVE:
-        matching_owned_record = FUN_L00_0025a420_2b3458(source_moby, 0x10000, 0);
+        matching_owned_record = find_moby_hit(source_moby, 0x10000, 0);
         FUN_001f9740_2b3458(&moby_vars->wC);
         if (matching_owned_record && moby_vars->wC == 0) {
             source_moby[0xA4] = 0xFF;
@@ -563,7 +563,7 @@ typedef struct Data_2b3628 { int f0; int f4; Child_2b3628 *child; char padC[0x14
 extern float D_L00_00166DC0_2b3628[] __asm__("D_L00_00166DC0");
 extern void transform_scaled_vertex_batch(void *, int, void *, void *) __asm__("FUN_0020cd48");
 extern void normalize_vector_xyz_2b3628(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001FA190_2b3628(void *) __asm__("FUN_001f9fc8");
+extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void func_001FA540_2b3628(void *, void *, void *) __asm__("FUN_001fa378");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -1198,7 +1198,7 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     qcopy(&beam_moby->rot_row1, &mtx[1]);
     qcopy(&beam_moby->rot_row2, &mtx[2]);
     qcopy(&beam_moby->pos, &mtx[3]);
-    func_001FA190_2b3628(idm);
+    set_identity_matrix(idm);
     idm[3].w = 1.0f;
     idm[3].z = -0.075f;
     idm[3].x = 0.0f;
@@ -1911,7 +1911,7 @@ typedef union {
 } V_2b58d8;
 extern float D_0015ED6C_2b58d8 __asm__("D_0015ED6C");
 extern OvlQuad D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
-unsigned char *FUN_0020c4f8_2b58d8(int) __asm__("FUN_0020c4f8");
+unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 int FUN_L00_002603d0_2b58d8(void *) __asm__("FUN_L00_002603d0");
 float FUN_001f9af0_2b58d8(void *) __asm__("FUN_001f9af0");
 int FUN_001f96f8_2b58d8(int) __asm__("FUN_001f96f8");
@@ -1919,8 +1919,8 @@ void FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
 void FUN_L00_00250df8_2b58d8(void *) __asm__("FUN_L00_00250df8");
 int initialize_mode6_orbit_camera(void *) __asm__("FUN_L00_002eb930");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-void FUN_001f97e8_2b58d8(void *, int, int) __asm__("FUN_001f97e8");
-void FUN_0020cb10_2b58d8(void *, int, void *) __asm__("FUN_0020cb10");
+void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
+void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 int FUN_L00_002bb360_2b58d8(void *) __asm__("FUN_L00_002bb360");
 void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 int FUN_0022da68_2b58d8(int, int, void *) __asm__("FUN_0022da68");
@@ -1933,7 +1933,7 @@ extern float visibomb_missile_default_speed_gp __asm__("D_L00_0016149C") __attri
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) __asm__("FUN_L00_002b58d8");
 
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *launch_position, float fa, float fb) {
-    unsigned char *spawned_moby = FUN_0020c4f8_2b58d8(0xAC);
+    unsigned char *spawned_moby = create_moby(0xAC);
     if (spawned_moby) {
         unsigned char *spawned_moby_vars = *(unsigned char **)(spawned_moby + 0x78);
         struct Hero *G = &hero;
@@ -1965,10 +1965,10 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *laun
         FUN_L00_00250df8_2b58d8(spawned_moby);
         *(int *)(spawned_moby_vars + 0x14) = initialize_mode6_orbit_camera(spawned_moby);
         hero_set_state(0x1D, 1);
-        FUN_001f97e8_2b58d8(*(void **)(spawned_moby_vars + 0x24), 0, 0x40);
-        FUN_001f97e8_2b58d8(*(void **)(spawned_moby_vars + 0x28), 0, 0x40);
-        FUN_0020cb10_2b58d8(spawned_moby, 0, *(void **)(spawned_moby_vars + 0x24));
-        FUN_0020cb10_2b58d8(spawned_moby, 1, *(void **)(spawned_moby_vars + 0x28));
+        fill_transfer_words(*(void **)(spawned_moby_vars + 0x24), 0, 0x40);
+        fill_transfer_words(*(void **)(spawned_moby_vars + 0x28), 0, 0x40);
+        attach_manipulator(spawned_moby, 0, *(void **)(spawned_moby_vars + 0x24));
+        attach_manipulator(spawned_moby, 1, *(void **)(spawned_moby_vars + 0x28));
         {
             int missile_attachment_moby = FUN_L00_002bb360_2b58d8(spawned_moby);
             float k = visibomb_missile_default_speed_gp * D_0015ED6C_2b58d8;
@@ -2187,9 +2187,9 @@ extern void func_L00_002B6E90_2b6140(void *, void *) __asm__("FUN_L00_002b5ba0")
 extern void func_L00_002B6E10_2b6140(void *, void *) __asm__("FUN_L00_002b5b20");
 extern void func_L00_002B6FF0_2b6140(void *, int) __asm__("FUN_L00_002b5d00");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int func_L00_0028F210_2b6140(int, int) __asm__("FUN_L00_0028df38");
+extern int engine_voice_set_pitch(int, int) __asm__("FUN_L00_0028df38");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern void func_L00_0025B040_2b6140(void *, float) __asm__("FUN_L00_00259fe8");
+extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -2198,7 +2198,7 @@ extern void func_L00_001FFED8_2b6140(void *, int, float) __asm__("FUN_L00_001fff
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern int collision_line_2b6140(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void normalize_vector_xyz_2b6140(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_L00_001FF610_2b6140(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int collect_mobies_in_sphere_2b6140(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -2267,7 +2267,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         missile_vars->f4 += (missile_vars->f48 - missile_vars->f4) * visibomb_missile_speed_blend_factor_gp;
         if (visibomb_missile_max_speed_gp * frame_time_macro < missile_vars->f4) missile_vars->f4 = visibomb_missile_max_speed_gp * frame_time_macro;
     }
-    func_L00_0028F210_2b6140(missile_vars->f2C, truncate_float_to_s32((missile_vars->f48 - visibomb_missile_default_speed_gp * frame_time_macro
+    engine_voice_set_pitch(missile_vars->f2C, truncate_float_to_s32((missile_vars->f48 - visibomb_missile_default_speed_gp * frame_time_macro
         / (visibomb_missile_max_speed_gp * frame_time_macro - visibomb_missile_default_speed_gp * frame_time_macro)) * visibomb_missile_speed_voice_control_scale_gp));
     if (missile_vars->f10 > 0) {
         if (missile_vars->f10 < scale_game_frames(0xBB8) - scale_game_frames(5)) {
@@ -2288,7 +2288,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 missile_moby->rot.y = -1.56979632f;
             }
             missile_moby->rot.z = fast_subtract_rotations(missile_moby->rot.z, missile_vars->f18 * (frame_scale_macro * 0.0122718466f));
-            func_L00_0025B040_2b6140(missile_moby, 0.2f);
+            jet_animate(missile_moby, 0.2f);
         }
     }
     build_spherical_offset(&v50, missile_vars->f4, missile_moby->rot.z, -missile_moby->rot.y);
@@ -2336,7 +2336,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 qcopy(&missile_moby->pos, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v20);
                 fast_vec_sub(&v60, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v60);
                 normalize_vector_xyz_2b6140(&v60, &v60, 1.0f);
-                func_L00_001FF610_2b6140(&k30, &v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40);
+                reflect_vector(&k30, &v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40);
                 normalize_vector_xyz_2b6140(&k30, &k30, frame_time_macro + frame_time_macro);
                 normalize_vector_xyz_2b6140(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
                 if (missile_vars->f2C != -1) {
@@ -2351,7 +2351,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 qcopy(&missile_moby->pos, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v20);
                 fast_vec_sub(&v60, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v60);
                 normalize_vector_xyz_2b6140(&v60, &v60, 1.0f);
-                func_L00_001FF610_2b6140(&k30, &v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40);
+                reflect_vector(&k30, &v50, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40);
                 normalize_vector_xyz_2b6140(&k30, &k30, frame_time_macro + frame_time_macro);
                 normalize_vector_xyz_2b6140(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
                 if (missile_vars->f2C != -1) {
@@ -2467,7 +2467,7 @@ extern s32 FUN_L00_00257b50_b6bc8(s32) __asm__("FUN_L00_00257b50");
 extern u8 *FUN_L00_0025c338_b6bc8(Moby *) __asm__("FUN_L00_0025c338");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern void FUN_L00_00259bc8_b6bc8(Moby *, Moby *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
+extern void spawn_nearby_effect(Moby *, Moby *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
 extern Moby *D_001ABA00_b6bc8[] __asm__("D_L00_001ABA00");
 extern s16 D_L00_001B07B0[] __asm__("D_L00_001B07B0");
 extern u8 *moby_table __asm__("D_L00_0015FFD8");
@@ -2511,7 +2511,7 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) {
                         if (vars->pad14 == limit) {
                             fast_vec_sub(&velocity, (u8 *)other + 0x10, (u8 *)taunter_moby + 0x10);
                             fast_vec_normalize(&velocity, &velocity, 1.5f);
-                            FUN_L00_00259bc8_b6bc8(other, taunter_moby, 0x10000, &g->motion.pos, &velocity, 1.0f);
+                            spawn_nearby_effect(other, taunter_moby, 0x10000, &g->motion.pos, &velocity, 1.0f);
                             vars->frame = scale_game_frames(random_int_between(5, 0x2d));
                         }
                         vars->pad14++;
@@ -3072,7 +3072,7 @@ void FUN_0020c828_2b8230(void *) __asm__("FUN_0020c828");
 void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 void FUN_0022d798_2b8230(int) __asm__("FUN_0022d798");
 int FUN_001f96f8_2b8230(int) __asm__("FUN_001f96f8");
-void FUN_L00_00203908_2b8230(int, int) __asm__("FUN_L00_00203908");
+void help_request(int, int) __asm__("FUN_L00_00203908");
 
 extern unsigned short D_00141BD8 NOT_SDA;
 void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) __asm__("FUN_L00_002b8230");
@@ -3123,7 +3123,7 @@ void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) {
     }
     *(short *)(pyrocitor_vars + 0x50) = 0;
     if (hero.unk20B4 >= 3)
-        FUN_L00_00203908_2b8230(0x4E24, 0x4E);
+        help_request(0x4E24, 0x4E);
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B9730), where it is exact; names translated to the US level program. */
 

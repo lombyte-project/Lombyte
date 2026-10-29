@@ -74,9 +74,9 @@ extern s32 D_L00_0015F5CC_2899a8 __asm__("D_L00_0015F5CC");
 extern void FUN_001f9fc8_2899a8(void *) __asm__("FUN_001f9fc8");
 extern void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 
-void FUN_L00_002899a8_2899a8(void) __asm__("FUN_L00_002899a8");
+void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");
 
-void FUN_L00_002899a8_2899a8(void) {
+void sky_shells_rotate_two(void) {
     SkyRotVec_2899a8 shell_rotation;
     *(short *)(D_L00_0016051C_2899a8 + 4) = 0;
     FUN_001f9fc8_2899a8(D_L00_001BD7E0);
@@ -394,9 +394,9 @@ extern S_28b1a0 *D_L00_0016051C_28b1a0 __asm__("D_L00_0016051C");
 extern unsigned char D_L00_001BD7E0_28b1a0[] __asm__("D_L00_001BD7E0")
     __attribute__((section(".data")));
 void FUN_001f9fc8_28b1a0(void *) __asm__("FUN_001f9fc8");
-void FUN_001f99f8_28b1a0(void *) __asm__("FUN_001f99f8");
+void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
-void FUN_001f9a80_28b1a0(void *, void *, float) __asm__("FUN_001f9a80");
+void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 
 #include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated_globals.h"
 extern float sky_shell_rotation_phase_step_gp __asm__("D_L00_001604C0") __attribute__((sda));
@@ -418,7 +418,7 @@ void draw_sky_shells_with_rotation_and_scaling(void) {
     float k;
     D_L00_0016051C_28b1a0->h4 = 0;
     FUN_001f9fc8_28b1a0(D_L00_001BD7E0_28b1a0);
-    FUN_001f99f8_28b1a0(sky_shell_transform_rotation_angles);
+    clear_u64_value(sky_shell_transform_rotation_angles);
     for (; i < D_L00_0016051C_28b1a0->h6; i++) {
         shell_rotation_phase = (float *)(D_L00_0016051C_28b1a0->e[i] + 8);
         k = 1.0f;
@@ -455,9 +455,9 @@ void draw_sky_shells_with_rotation_and_scaling(void) {
             M = D_L00_001BD7E0_28b1a0;
             sky_shell_transform_rotation_angles[2] = (float)((int)(*shell_rotation_phase + i * 2000.0f) % 10000) * 0.00062831853f - 3.1415927f;
             euler_to_matrix_ee(M, sky_shell_transform_rotation_angles);
-            FUN_001f9a80_28b1a0(M, M, k);
-            FUN_001f9a80_28b1a0(M + 0x10, M + 0x10, k);
-            FUN_001f9a80_28b1a0(M + 0x20, M + 0x20, k);
+            scale_vector(M, M, k);
+            scale_vector(M + 0x10, M + 0x10, k);
+            scale_vector(M + 0x20, M + 0x20, k);
             qcopy(M + 0x30, &D_L00_00160520);
         }
         sky_draw_shell(i);

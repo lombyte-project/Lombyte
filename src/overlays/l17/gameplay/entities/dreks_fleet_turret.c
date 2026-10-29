@@ -276,7 +276,7 @@ typedef struct {
     long q88;
 } S_a95b8;
 extern void func_001F9BF0_a95b8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void func_001F9CA0_a95b8(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void func_L00_001FF4B0_a95b8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int func_001F4868_a95b8(int) __asm__("FUN_001f44b8");
 extern void func_001F9BD8_a95b8(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -295,9 +295,9 @@ void draw_fleet_beam_quad(struct Moby *moby) {
     func_001F9BF0_a95b8(beam_end_to_start_vector, moby_vars + 0x10, moby_vars + 0x20);
     func_001F9BF0_a95b8(beam_start_vertex_offset, moby_vars + 0x10, D_L17_001676C0);
     func_001F9BF0_a95b8(beam_end_vertex_offset, moby_vars + 0x20, D_L17_001676C0);
-    func_001F9CA0_a95b8(beam_start_vertex_offset, beam_start_vertex_offset, beam_end_to_start_vector);
+    fast_vec_cross(beam_start_vertex_offset, beam_start_vertex_offset, beam_end_to_start_vector);
     func_L00_001FF4B0_a95b8(beam_start_vertex_offset, beam_start_vertex_offset, *(float *)(moby_vars + 0x4C));
-    func_001F9CA0_a95b8(beam_end_vertex_offset, beam_end_vertex_offset, beam_end_to_start_vector);
+    fast_vec_cross(beam_end_vertex_offset, beam_end_vertex_offset, beam_end_to_start_vector);
     func_L00_001FF4B0_a95b8(beam_end_vertex_offset, beam_end_vertex_offset, *(float *)(moby_vars + 0x4C));
     quad_primitive.z78 = func_001F4868_a95b8(0xE);
     quad_primitive.q80 = 0xFF9000000260L;

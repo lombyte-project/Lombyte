@@ -1699,16 +1699,16 @@ extern unsigned char D_0013E550_309ac0[] __asm__("D_0013E550");
 extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void FUN_001fa2d8_309ac0(void *, void *) __asm__("FUN_001fa2d8");
+extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void FUN_001f9cf8_309ac0(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_001f9d20_309ac0(void *, void *, void *) __asm__("FUN_001f9d20");
-extern float FUN_00213308_309ac0(void) __asm__("FUN_00213308");
-extern float advance_309ac0(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
-extern void FUN_L00_00260738_309ac0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
-extern void FUN_L00_002e8450_309ac0(int, float, float) __asm__("FUN_L00_002e8450");
-extern void FUN_L00_002e84b8_309ac0(float, float) __asm__("FUN_L00_002e84b8");
+extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
+extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
 void update_pokitaru_boat_joint_effects(struct Moby *moby) __asm__("FUN_L11_0030a500");
 
 extern void update_pokitaru_boat_joint_effects(struct Moby *) __asm__("FUN_L11_0030a500");
@@ -1761,10 +1761,10 @@ void pokitaru_boat_update(struct Moby *moby) {
         }
         tab_a8 = D_L11_001B0EB0[boat_vars->idx_a8];
         tab_ac = D_L11_001B0EB0[boat_vars->idx_ac];
-        FUN_001fa2d8_309ac0(target, &moby->rot_row0);
+        transpose_rotation_matrix(target, &moby->rot_row0);
         for (n = 0; n < tab_a8[0]; n++) {
             fast_vec_sub(point_offset_from_boat, (char *)tab_a8 + 0x10 + n * 16, &moby->pos);
-            FUN_001f9d20_309ac0((char *)tab_ac + 0x10 + n * 16, point_offset_from_boat, target);
+            transform_vector((char *)tab_ac + 0x10 + n * 16, point_offset_from_boat, target);
         }
         path = D_L11_001B0EB0[boat_vars->path_a0];
         boat_vars->path_c4 = path;
@@ -1772,7 +1772,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         boat_vars->seg_d4 = 1;
         moby->state = 1;
         for (part_angle_index = 0; part_angle_index < 4; part_angle_index++) {
-            boat_vars->wobble_f0[part_angle_index] = FUN_00213308_309ac0();
+            boat_vars->wobble_f0[part_angle_index] = random_angle_radians();
         }
         boat_vars->slot_c8 = -1;
         boat_vars->slot_cc = -1;
@@ -1866,8 +1866,8 @@ void pokitaru_boat_update(struct Moby *moby) {
                          pokitaru_boat_turn_acceleration_degrees_gp * 0.017453292f * frame_time_sq,
                          pokitaru_boat_max_turn_speed_degrees_gp * 0.017453292f * frame_time);
         if (boat_vars->flag_c0 != 0) {
-            FUN_L00_002e8450_309ac0(0, pokitaru_boat_camera_distance_gp, 0.003f);
-            FUN_L00_002e84b8_309ac0(pokitaru_boat_camera_height_gp, 0.003f);
+            follow_camera_set_distance(0, pokitaru_boat_camera_distance_gp, 0.003f);
+            follow_camera_set_height(pokitaru_boat_camera_height_gp, 0.003f);
         }
         tab_a8 = D_L11_001B0EB0[boat_vars->idx_a8];
         tab_ac = D_L11_001B0EB0[boat_vars->idx_ac];
@@ -1889,7 +1889,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         break;
     case POKITARU_BOAT_RISE_ABOVE_PATH:
         qcopy(target, (char *)boat_vars->path_c4 + 0x10 + boat_vars->seg_d4 * 16);
-        advance_309ac0(&moby->pos.z, &boat_vars->approach_d0, target[2] + 6.0f, frame_time_sq, frame_time_sq, frame_time);
+        advance_accelerated_scalar(&moby->pos.z, &boat_vars->approach_d0, target[2] + 6.0f, frame_time_sq, frame_time_sq, frame_time);
         if (target[2] + 5.9f <= moby->pos.z) {
             moby->state = 5;
         }
@@ -1898,9 +1898,9 @@ void pokitaru_boat_update(struct Moby *moby) {
         qcopy(target, (char *)boat_vars->path_c4 + 0x10 + boat_vars->seg_d4 * 16);
         if (boat_vars->flag_b0 != 0) {
             if (D_0013F3D8_lui < moby->pos.z) {
-                advance_309ac0(&moby->pos.z, &boat_vars->approach_d0, target[2] + 1.0f, frame_time_sq, frame_time_sq, frame_time);
+                advance_accelerated_scalar(&moby->pos.z, &boat_vars->approach_d0, target[2] + 1.0f, frame_time_sq, frame_time_sq, frame_time);
             } else {
-                advance_309ac0(&moby->pos.z, &boat_vars->approach_d0, target[2] + 8.0f, frame_time_sq, frame_time_sq, frame_time);
+                advance_accelerated_scalar(&moby->pos.z, &boat_vars->approach_d0, target[2] + 8.0f, frame_time_sq, frame_time_sq, frame_time);
             }
         }
         break;
@@ -1920,7 +1920,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         update_moby_rotation_oscillation(moby, &boat_vars->spr_e8, &boat_vars->spr_ec, 0.0418879017f, tilt_a, tilt_b);
     }
     fast_vec_sub(delta, &moby->pos, start_pos);
-    FUN_L00_00260738_309ac0(boat_vars->ctl60, delta, start_rot, &moby->rot);
+    update_entity_matrix(boat_vars->ctl60, delta, start_rot, &moby->rot);
 }
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */

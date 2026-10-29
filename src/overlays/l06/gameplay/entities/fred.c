@@ -5692,7 +5692,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int count_down_ffcb0(int *) __asm__("FUN_001f9740");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern void approach_two_stage_ffcb0(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -5826,7 +5826,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                 allocate_voice_for_target_entry_ffcb0(0, 0, moby);
                 spawn_moby_breakup_effect(moby);
             }
-            approach_two_stage_ffcb0((float *)(data + 6), (float *)(data + 7), 1.0f, frame_time_sq, frame_time_sq, frame_time * 1.5f);
+            advance_accelerated_scalar((float *)(data + 6), (float *)(data + 7), 1.0f, frame_time_sq, frame_time_sq, frame_time * 1.5f);
             {
                 int state;
                 int base;
@@ -5873,7 +5873,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
 
 #include "qcopy.h"
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern void moby_init_300278(char *) __asm__("FUN_L00_00250df8");
+extern void update_entity(char *) __asm__("FUN_L00_00250df8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -5902,7 +5902,7 @@ void spawn_moby_breakup_effect(char *source_moby) {
     qcopy(spawned_moby + 0x10, source_moby + 0x10);
     qcopy(spawned_moby + 0x40, source_moby + 0x40);
     *(float *)(spawned_moby + 0x2C) = *(float *)(source_moby + 0x2C);
-    moby_init_300278(spawned_moby);
+    update_entity(spawned_moby);
     *(unsigned short *)(source_moby + 0x34) |= 1;
     for (i = 0; i < 50; i++) {
         fragment_step_length = random_float_between(1.0f, 6.0f) * frame_time;
@@ -6171,12 +6171,12 @@ extern void set_moby_and_links_to_states_4_and_5(char *) __asm__("FUN_L06_002f53
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int check_all_listed_class_33b_states_fe_fd_or_10(int) __asm__("FUN_L06_002e9ea0");
-extern int FUN_001f9770_301070(void *) __asm__("FUN_001f9770");
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(float, void *) __asm__("FUN_L01_002783a8");
-extern void FUN_L00_002502a0_301070(int) __asm__("FUN_L00_002502a0");
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-extern int memcard_save_data_301070(int, int) __asm__("FUN_0020b178");
+extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_00216f90_301070(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -6262,7 +6262,7 @@ void fred_update(struct Moby *moby) {
             fred_vars->fC = 3.7f;
         }
         if (check_all_listed_class_33b_states_fe_fd_or_10(fred_vars->f170) != 0) {
-            if (FUN_001f9770_301070(&fred_vars->f174) != 0 && update_npc_dialogue(moby, fred_vars) != 0) {
+            if (fast_dec_timer_s16(&fred_vars->f174) != 0 && update_npc_dialogue(moby, fred_vars) != 0) {
                 moby->state = 2;
                 if (fred_vars->f176 != 0) {
                     Vec_301070 t;
@@ -6284,13 +6284,13 @@ void fred_update(struct Moby *moby) {
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
             if (fred_vars->f4 < 2) {
-                FUN_L00_002502a0_301070(moby->mission);
+                jet_clear_persistent(moby->mission);
                 set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
                 moby->state = 1;
             }
             if (fred_vars->f4 == 2) {
                 grant_inventory_item(0x1D, 1);
-                memcard_save_data_301070(0, -1);
+                memcard_save_data(0, -1);
                 help_request(0x1775, 0x2C);
                 D_L06_0015F3FC_macro = 1.0f;
                 fred_vars->f178 = 0.0f;
@@ -6772,7 +6772,7 @@ void mark_shuttle_linked_mobys_for_removal(char *moby) __asm__("FUN_L06_00304028
 extern void mark_shuttle_linked_mobys_for_removal(char *) __asm__("FUN_L06_00304028");
 extern int update_shuttle_path_ride(char *, int) __asm__("FUN_L06_00303160");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void FUN_L06_0030bef8_302578(void *, int, int, int) __asm__("FUN_L06_0030bef8");
+extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("FUN_L06_0030bef8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int is_point_inside_clip_volume(void *, int);
 extern void play_sound_302578(int, int) __asm__("FUN_L01_0027a248");
@@ -6789,16 +6789,16 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void initialize_moby_particle_effect_state(void *) __asm__("FUN_L06_002e6148");
 extern void FUN_L00_002eac18_302578(int) __asm__("FUN_L00_002eac18");
-extern void FUN_L00_00298840_302578(int) __asm__("FUN_L00_00298840");
-extern void FUN_L00_002607d0_302578(int) __asm__("FUN_L00_002607d0");
+extern void start_scene(int) __asm__("FUN_L00_00298840");
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void FUN_L00_002502a0_302578(int) __asm__("FUN_L00_002502a0");
-extern void FUN_L00_00284e50_302578(void *, void *) __asm__("FUN_L00_00284e50");
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int memcard_Save_302578(int, long) __asm__("FUN_0020b178");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_L00_00260738_302578(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void allocate_voice_302578(int, int, void *) __asm__("FUN_0022da68");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -6844,7 +6844,7 @@ void shuttle_update(struct Moby *moby) {
     if (class_076a_moby_spawn_requested_gp != 0) {
         class_076a_moby_spawn_requested_gp = 0;
         *(u128_302578 *)b = *(u128_302578 *)((char *)&hero.motion.pos + 0x50);
-        FUN_L06_0030bef8_302578((char *)b, scale_game_frames(class_076a_moby_rate_input_frames_gp), D_L06_0016210C, D_L06_00162110);
+        spawn_timed_projected_sprite_effect((char *)b, scale_game_frames(class_076a_moby_rate_input_frames_gp), D_L06_0016210C, D_L06_00162110);
     }
     switch (moby->state) {
     case INITIALIZE_SHUTTLE:
@@ -7014,12 +7014,12 @@ void shuttle_update(struct Moby *moby) {
             rot[2] = fast_add_rotations(rot[2], 3.14159f);
             FUN_L00_00216f90_302578(b, rot, 0x72, 1);
             play_sound_302578(0, 10);
-            FUN_L00_00298840_302578(12);
+            start_scene(12);
             delete_moby_302578(linked_moby);
-            FUN_L00_002607d0_302578(5);
+            unlock_planet(5);
             moby->state = 8;
             FUN_L00_002502a0_302578(shuttle_vars->fF8);
-            FUN_L00_00284e50_302578(b, rot);
+            jet_reset_camera(b, rot);
         }
         break;
     case WAIT_FOR_FORCED_SHUTTLE_RETURN_TRIGGER:
@@ -7042,7 +7042,7 @@ void shuttle_update(struct Moby *moby) {
     case WAIT_TO_SELECT_SHUTTLE_SAVE_FLOW:
         if (D_L06_0015F5C4 != 2) {
             if (D_0013D4D5[9] != 0) {
-                FUN_L00_00298840_302578(5);
+                start_scene(5);
                 moby->state = 9;
             } else {
                 queue_planet_unlock_message(5);
@@ -7067,7 +7067,7 @@ void shuttle_update(struct Moby *moby) {
         break;
     }
     fast_vec_sub(delta, ((float *)&moby->pos), old_pos);
-    FUN_L00_00260738_302578(shuttle_vars->area, delta, old_rot, ((float *)&moby->rot));
+    update_entity_matrix(shuttle_vars->area, delta, old_rot, ((float *)&moby->rot));
 }
 
 

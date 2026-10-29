@@ -158,10 +158,10 @@ extern char D_L00_00166EC0_2E0E50[] __asm__("D_L00_00166DC0");
 extern void func_L00_002E1660_2E0E50(Moby *) __asm__("FUN_L00_002e01b0");
 extern int func_0022ED80_2E0E50(int, int, Moby *) __asm__("FUN_0022da68");
 extern int func_001F9850_2E0E50(int) __asm__("FUN_001f96f8");
-extern int func_L00_00267BA8_2E0E50(int, int, int) __asm__("FUN_L00_00266d60");
+extern int pad_pressed_within(int, int, int) __asm__("FUN_L00_00266d60");
 extern int func_L00_002E1790_2E0E50(Moby *) __asm__("FUN_L00_002e02e0");
 extern int func_L00_00222B80_2E0E50(int, int) __asm__("FUN_L00_002223f8");
-extern void func_L00_00232C10_2E0E50(int, int, float) __asm__("FUN_L00_002323b8");
+extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void func_L00_002EBF50_2E0E50(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern float func_001F9878_2E0E50(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2E0E50(float) __asm__("FUN_001fa6d0");
@@ -236,7 +236,7 @@ void hydrodisplacer_update(Moby *moby) {
         }
         break;
     case HYDRODISPLACER_WAIT_FOR_ACTIVATION:
-        if (func_L00_00267BA8_2E0E50(((Hero *)D_0013E633_2E0E50)->items[0].button_mask, func_001F9850_2E0E50(8), 0) == 0) {
+        if (pad_pressed_within(((Hero *)D_0013E633_2E0E50)->items[0].button_mask, func_001F9850_2E0E50(8), 0) == 0) {
             break;
         }
         if ((*(int *)D_0013A5E0_2E0E50 & ((Hero *)D_0013E633_2E0E50)->items[0].button_mask) == 0) {
@@ -252,9 +252,9 @@ void hydrodisplacer_update(Moby *moby) {
         moby->state = 3;
         func_L00_00222B80_2E0E50(0x38, 0);
         if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full != 0) {
-            func_L00_00232C10_2E0E50(0x83, 0, func_001F9850_2E0E50(6));
+            set_hero_animation(0x83, 0, func_001F9850_2E0E50(6));
         } else {
-            func_L00_00232C10_2E0E50(0x46, 0, func_001F9850_2E0E50(6));
+            set_hero_animation(0x46, 0, func_001F9850_2E0E50(6));
         }
         break;
     case HYDRODISPLACER_WAIT_FOR_HERO_FLAG: {
@@ -272,9 +272,9 @@ void hydrodisplacer_update(Moby *moby) {
         linked = moby_table_macro + (platform[0] << 8);
         func_L00_00222B80_2E0E50(0x39, 0);
         if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full != 0) {
-            func_L00_00232C10_2E0E50(0x84, 0, func_001F9850_2E0E50(6));
+            set_hero_animation(0x84, 0, func_001F9850_2E0E50(6));
         } else {
-            func_L00_00232C10_2E0E50(0x47, 0, func_001F9850_2E0E50(6));
+            set_hero_animation(0x47, 0, func_001F9850_2E0E50(6));
         }
         if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full == 0) {
             func_0022ED80_2E0E50(0x14, 0, ((Hero *)D_0013E633_2E0E50)->moby);
@@ -366,9 +366,9 @@ void hydrodisplacer_update(Moby *moby) {
             moby->state = 2;
             func_L00_00222B80_2E0E50(0x3A, 0);
             if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full != 0) {
-                func_L00_00232C10_2E0E50(0x48, 0, func_001F9850_2E0E50(6));
+                set_hero_animation(0x48, 0, func_001F9850_2E0E50(6));
             } else {
-                func_L00_00232C10_2E0E50(0x85, 0, func_001F9850_2E0E50(6));
+                set_hero_animation(0x85, 0, func_001F9850_2E0E50(6));
             }
             return;
         }
@@ -392,7 +392,7 @@ void moby_point_position(char *, int, void *) __asm__("FUN_L00_0024f7c8");
 float FUN_002132a8_2e01b0(float, float) __asm__("FUN_002132a8");
 void fast_vec_normalize(V_2e01b0 *, void *, float) __asm__("FUN_001f9bf8");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-void FUN_L00_0026f548_2e01b0(V_2e01b0 *, V_2e01b0 *, int, int) __asm__("FUN_L00_0026f548");
+void spawn_debris_chunk(V_2e01b0 *, V_2e01b0 *, int, int) __asm__("FUN_L00_0026f548");
 int FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
 void emit_hydrodisplacer_effect(char *moby) __asm__("FUN_L00_002e01b0");
 
@@ -412,7 +412,7 @@ void emit_hydrodisplacer_effect(char *moby) {
     effect_motion_vector.y += player->motion.displacement.f[1] * 0.8f;
     effect_motion_vector.z += player->motion.displacement.f[2] +
            FUN_002132a8_2e01b0(D_0015ED6C_2e01b0 * -0.5f, D_0015ED6C_2e01b0 + D_0015ED6C_2e01b0);
-    FUN_L00_0026f548_2e01b0(&effect_position, &effect_motion_vector, 2, random_int_between(0x5A, 0x78));
+    spawn_debris_chunk(&effect_position, &effect_motion_vector, 2, random_int_between(0x5A, 0x78));
     countdown_lower_bound = FUN_001f96f8_2e01b0(5);
     *(int *)(moby_data + 4) = random_int_between(countdown_lower_bound, FUN_001f96f8_2e01b0(15));
 }
@@ -513,7 +513,7 @@ extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern void FUN_L00_002502a0_2e03a0(s32) __asm__("FUN_L00_002502a0");
+extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 
 extern u8 pilots_helmet_missing_cutscene_format[] __asm__("D_L00_001EA1B0");
@@ -590,7 +590,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
             debug_print(pilots_helmet_missing_segment_switch_format, moby->h);
         }
         if (moby->b0 != 0xFF)
-            FUN_L00_002502a0_2e03a0(moby->b0);
+            jet_clear_persistent(moby->b0);
         D_00141410_2e03a0[0] = 7;
         moby->state = 3;
         break;

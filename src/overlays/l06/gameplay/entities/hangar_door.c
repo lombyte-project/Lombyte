@@ -1081,7 +1081,7 @@ extern void func_L00_002EBEE0_2F69D0(void *) __asm__("FUN_L00_002eaa30");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void func_L00_002EC0C8_2F69D0(int) __asm__("FUN_L00_002eac18");
 extern int func_L00_00203F20_2F69D0(int, int) __asm__("FUN_L00_00203908");
-extern void func_L00_00264DB8_2F69D0(int, int) __asm__("FUN_L00_00263d40");
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern int func_0020BFC8_2F69D0(int, int) __asm__("FUN_0020b178");
 
 void update_drawbridge(Moby *moby) __asm__("FUN_L06_002f55a0");
@@ -1226,7 +1226,7 @@ void update_drawbridge(Moby *moby) {
         } else if (1.0f <= data->fade) {
             moby->state = 6;
             func_L00_00203F20_2F69D0(0x1776, 0x2D);
-            func_L00_00264DB8_2F69D0(0x177C, -1);
+            queue_dialogue_message(0x177C, -1);
             func_0020BFC8_2F69D0(0, -1);
         }
         break;
@@ -2414,18 +2414,18 @@ extern float func_001F9878_2FA618(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2FA618(float) __asm__("FUN_001fa6d0");
 extern int func_001F9908_2FA618(int *) __asm__("FUN_001f9740");
 extern Target *func_L00_0025B478_2FA618(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int func_L00_0025B4D0_2FA618(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void func_L06_002FAAC8_2FA618(void *) __asm__("FUN_L06_002f9698");
 extern float func_L00_001FF860_2FA618(float, float) __asm__("FUN_001f9e90");
 extern void func_L00_0025D5B0_2FA618(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
-extern void func_L00_002584A8_2FA618(void *, int, int) __asm__("FUN_L00_00257470");
+extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void func_L00_0025E4B0_2FA618(void *, void *) __asm__("FUN_L00_0025d458");
 extern void func_L00_0025E590_2FA618(void *, void *) __asm__("FUN_L00_0025d538");
 extern void func_L00_0025A8E8_2FA618(void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern float func_001FA748_2FA618(float, float) __asm__("FUN_001fa580");
 extern float func_001F9FA8_2FA618(float) __asm__("FUN_001f9de0");
 extern int func_001FA8A8_2FA618(int, int, float) __asm__("FUN_001fa6e0");
-extern int func_L00_00260FB0_2FA618(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float func_001F9D48_2FA618(void *, void *) __asm__("FUN_001f9b80");
 extern float func_001F9B88_2FA618(float) __asm__("FUN_001f99c0");
 extern int *D_L06_001B0FB0_2FA618[] __asm__("D_L06_001B0C30");
@@ -2472,7 +2472,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby)
         target->owner->oclass == 0x418) {
         target = 0;
     }
-    reaction = func_L00_0025B4D0_2FA618(moby, target, &data->health, 0, &hit, &damage, 0, 4);
+    reaction = trooper_take_damage(moby, target, &data->health, 0, &hit, &damage, 0, 4);
 
     if (hit != 1 && moby->state != 0x11 && moby->state != 3) {
         data->health = data->health - damage;
@@ -2515,7 +2515,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby)
             data->fC4 = 14.5f;
             func_L00_0025D5B0_2FA618(moby, data->f70, 10, 1, 0, func_L00_001FF860_2FA618(target->x, target->y));
             data->f67 = 0xFA;
-            func_L00_002584A8_2FA618(moby, 0, -1);
+            mark_moby_for_removal_cf(moby, 0, -1);
             break;
         case REACTION_NO_RESPONSE:
             break;
@@ -2552,7 +2552,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby)
         data->f1A0 = D_L06_00161ED0;
     }
 
-    if (func_L00_00260FB0_2FA618(data->f1A0, moby, data->f120, 0, 0,
+    if (activate_effect_l08(data->f1A0, moby, data->f120, 0, 0,
                                  D_L06_001B0FB0_2FA618[data->f1B0] + 4, *D_L06_001B0FB0_2FA618[data->f1B0]) != 2) {
         if (data->f1A0 < func_001F9D48_2FA618(data->f170, data->f120) ||
             3.0f < func_001F9B88_2FA618(moby->pos.z - data->f128)) {

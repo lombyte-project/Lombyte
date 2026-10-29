@@ -820,11 +820,11 @@ extern void burst_2D5FA8(Moby *, float *, float *, float, float, int, int, int, 
 extern void *spawn_2D5FA8(Moby *, int, float *, float *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void explode_2D5FA8(Moby *, int, int) __asm__("FUN_L00_00257470");
+extern void mark_moby_for_removal_cf(Moby *, int, int) __asm__("FUN_L00_00257470");
 extern void delete_2D5FA8(Moby *) __asm__("FUN_0020c828");
 extern int event_2D5FA8(int, int, Moby *) __asm__("FUN_0022da68");
 extern void effects_start_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d458");
-extern int follow_2D5FA8(float, Moby *, float *, int, int, char *, int) __asm__("FUN_L00_0025ff38");
+extern int activate_effect_l08(float, Moby *, float *, int, int, char *, int) __asm__("FUN_L00_0025ff38");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float length_2D5FA8(float *) __asm__("FUN_001f9b20");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -920,7 +920,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                 }
                 qcopy(burst_position_or_aim_scratch, &moby->pos);
                 burst_position_or_aim_scratch[2] += 1.0f;
-                explode_2D5FA8(moby, 0, -1);
+                mark_moby_for_removal_cf(moby, 0, -1);
                 event_2D5FA8(2, 0, moby);
                 burst_2D5FA8(moby, data->f40, burst_position_or_aim_scratch, 0.0f, 0.0f, 20, 8, 20, 4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
                 spawn_2D5FA8(moby, 0x6FE, (float *)&moby->pos, (float *)&moby->rot, 0, 0, 0.0f, D_L08_0015F580_macro, D_L08_0015F580_macro, D_L08_0015F580_macro);
@@ -941,7 +941,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
     if (data->partA != 0) data->partA->hit_slot = 0xFF;
     if (data->partB != 0) data->partB->hit_slot = 0xFF;
 
-    follow_2D5FA8(100.0f, moby, data->target, 0, 0, D_L08_001B0FB0_2D5FA8[data->path]->list, D_L08_001B0FB0_2D5FA8[data->path]->count);
+    activate_effect_l08(100.0f, moby, data->target, 0, 0, D_L08_001B0FB0_2D5FA8[data->path]->list, D_L08_001B0FB0_2D5FA8[data->path]->count);
     if (data->fF0 == 0) data->fF0 = *(int *)D_001413D0;
     if (data->mode != 2) {
         float yaw, distance, pitch;

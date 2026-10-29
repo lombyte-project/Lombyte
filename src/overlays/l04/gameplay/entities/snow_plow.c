@@ -1758,8 +1758,8 @@ extern void func_001F9BD8_298940(void *, void *, void *) __asm__("FUN_001f9a10")
 extern int func_001F9908_298940(int *) __asm__("FUN_001f9740");
 extern int func_001F9850_298940(int) __asm__("FUN_001f96f8");
 extern float func_001FA888_298940(int) __asm__("FUN_001fa6c0");
-extern int func_001FA8A8_298940(int, int, float) __asm__("FUN_001fa6e0");
-extern float func_001F9B88_298940(float) __asm__("FUN_001f99c0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, int, int, int,
                                                float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
@@ -1793,7 +1793,7 @@ void update_suck_cannon_particles(char *moby) {
         }
         timer_progress = func_001FA888_298940(func_001F9850_298940(0xFF) - sprite_data->c[i]);
         timer_progress = timer_progress / (float)func_001F9850_298940(0xFF);
-        col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - timer_progress));
+        col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - timer_progress));
         if (D_L04_0015F5C4 != 2)
             func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                      sprite_data->d[i]);

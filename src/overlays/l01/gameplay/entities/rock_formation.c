@@ -701,13 +701,13 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void func_L00_00261848_2FC140(int) __asm__("FUN_L00_002607d0");
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
-extern void func_L00_002512D8_2FC140(int) __asm__("FUN_L00_002502a0");
-extern void func_L00_00286128_2FC140(void *, void *) __asm__("FUN_L00_00284e50");
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern void func_L01_002A3680_2FC140(void) __asm__("FUN_L01_002a2480");
+extern void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
 
 extern unsigned char D_L01_0015FC88[] MACRO_ADDR;
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
@@ -881,7 +881,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         if (cutscene_mode == 2) {
             break;
         }
-        func_L00_00261848_2FC140(3);
+        unlock_planet(3);
         queue_planet_unlock_message(3);
         moby->flags = moby->flags & 0xFFBE;
         if (data->link != -1) {
@@ -903,12 +903,12 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                 record_moby_context_bytes(&ents_macro[data->f38].fBC, 1, &ents_macro[data->f38], 1, D_L01_001BAAA0);
             }
         }
-        func_L00_002512D8_2FC140(moby->fB0);
+        jet_clear_persistent(moby->fB0);
         if (data->rec != -1) {
-            func_L00_00286128_2FC140(&D_L01_001600EC_macro[data->rec].a, &D_L01_001600EC_macro[data->rec].b);
+            jet_reset_camera(&D_L01_001600EC_macro[data->rec].a, &D_L01_001600EC_macro[data->rec].b);
         }
         memcard_save_data(0, -1);
-        func_L01_002A3680_2FC140();
+        show_tracked_moby();
         moby->state = 10;
         break;
     case AGNOGG_SHIP_HOLD_TARGET_HEIGHT:

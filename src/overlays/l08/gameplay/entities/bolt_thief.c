@@ -702,7 +702,7 @@ extern void fast_vec_normalize(void *,void *,float) __asm__("FUN_001f9bf8");
 extern void func_L00_001FF328_2E16A0(void *,void *,float) __asm__("FUN_L00_001ff378");
 extern void func_L00_00217718_2E16A0(void *,void *,int,int) __asm__("FUN_L00_00216f90");
 extern void func_L08_00307FF0_2E16A0(char *,int) __asm__("FUN_L08_00306b30");
-extern void func_L00_00211908_2E16A0(void) __asm__("FUN_L00_00211250");
+extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void func_L00_002EBF50_2E16A0(void *,void *,int,int,int) __asm__("FUN_L00_002eaaa0");
 extern void func_L00_002EBE88_2E16A0(void *) __asm__("FUN_L00_002ea9d8");
 extern void func_L00_002EBEE0_2E16A0(void *) __asm__("FUN_L00_002eaa30");
@@ -713,9 +713,9 @@ extern float func_002140F8_2E16A0(float,float) __asm__("FUN_002132a8");
 extern float func_00214D28_2E16A0(float *,float,float) __asm__("FUN_00213ed8");
 extern int func_001F9850_2E16A0(int) __asm__("FUN_001f96f8");
 extern int func_L08_002E15A0_2E16A0(char *) __asm__("FUN_L08_002e0228");
-extern int func_L00_00258BC8_2E16A0(int,int) __asm__("FUN_L00_00257b90");
-extern int func_L00_001FEF78_2E16A0(void *) __asm__("FUN_L00_001fefc8");
-extern void *func_0020D348_2E16A0(int) __asm__("FUN_0020c4f8");
+extern int random_int_between(int,int) __asm__("FUN_L00_00257b90");
+extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
+extern void *create_moby(int) __asm__("FUN_0020c4f8");
 extern void func_00215C00_2E16A0(void *,float,float,float) __asm__("FUN_00214db0");
 extern void func_00213DE0_2E16A0(void *,int,int,int) __asm__("FUN_00212f90");
 extern void func_L08_002E9288_2E16A0(void *,void *,void *,int) __asm__("FUN_L08_002e7eb0");
@@ -772,7 +772,7 @@ void update_batalia_cannon(Moby *moby) {
             func_L08_00307FF0_2E16A0((char *)node, 0);
             return;
         }
-        if (visited52[D_0015ED84][moby->mission] != 0xFF && (hero52.interact & 1)) func_L00_00211908_2E16A0();
+        if (visited52[D_0015ED84][moby->mission] != 0xFF && (hero52.interact & 1)) hero_respawn();
         if (((*(int *)D_0013A5E0_2E16A0 & 0x10) || (*(unsigned char *)(l08_cannon_hero_interaction_flags) & 1)) && visited52[D_0015ED84][moby->mission] == 0xFF) {
             hero52.interact = 0;
             FUN_L08_00230b38_c(0, 1);
@@ -817,7 +817,7 @@ void update_batalia_cannon(Moby *moby) {
     case CANNON_INITIALIZE: {
         Moby *node; int *indices; int count;
         moby->state = 4; data->health = 200; data->range = 10.0f;
-        node = func_0020D348_2E16A0(0x710); data->visual = node;
+        node = create_moby(0x710); data->visual = node;
         if (node) {
             qcopy((*(float (*)[4])&node->pos), (*(float (*)[4])&moby->pos)); qcopy((*(float (*)[4])&node->rot), (*(float (*)[4])&moby->rot));
             node->draw_dist = 0x30; data->visual->visible = 1; (*(long *)&data->visual->spawn_frame) = (*(long *)&moby->spawn_frame);
@@ -880,11 +880,11 @@ void update_batalia_cannon(Moby *moby) {
                     fast_vec_add(scatter, direction, scatter);
                     fast_vec_normalize(scatter, scatter, func_002140F8_2E16A0(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
                     min_life = func_001F9850_2E16A0(5);
-                    func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)scatter, 0x5F2F4F6F, func_L00_00258BC8_2E16A0(min_life, func_001F9850_2E16A0(10)), 50000.0f);
+                    func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)scatter, 0x5F2F4F6F, random_int_between(min_life, func_001F9850_2E16A0(10)), 50000.0f);
                 } while (--count >= 0);
                 fast_vec_normalize(direction, direction, D_0015ED6C * 0.5f);
                 min_life = func_001F9850_2E16A0(4);
-                func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)direction, 0x2F4F7F7F, func_L00_00258BC8_2E16A0(min_life,func_001F9850_2E16A0(7)),500000.0f);
+                func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)direction, 0x2F4F7F7F, random_int_between(min_life,func_001F9850_2E16A0(7)),500000.0f);
             } else {
                 int count;
                 func_00215C00_2E16A0(direction, D_L08_00161B00_gp * D_0015ED6C, (*(float (*)[4])&moby->rot)[2], -(*(float (*)[4])&moby->rot)[1]);
@@ -909,11 +909,11 @@ void update_batalia_cannon(Moby *moby) {
                     fast_vec_add(scatter, direction, scatter);
                     fast_vec_normalize(scatter, scatter, func_002140F8_2E16A0(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
                     min_life = func_001F9850_2E16A0(5);
-                    func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)scatter, 0x5F2F4F6F, func_L00_00258BC8_2E16A0(min_life, func_001F9850_2E16A0(10)), 50000.0f);
+                    func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)scatter, 0x5F2F4F6F, random_int_between(min_life, func_001F9850_2E16A0(10)), 50000.0f);
                 } while (--count >= 0);
                 fast_vec_normalize(direction, direction, D_0015ED6C * 0.5f);
                 min_life = func_001F9850_2E16A0(4);
-                func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)direction, 0x2F4F7F7F, func_L00_00258BC8_2E16A0(min_life,func_001F9850_2E16A0(7)),500000.0f);
+                func_L00_0026EBC0_2E16A0((char *)muzzle, (char *)direction, 0x2F4F7F7F, random_int_between(min_life,func_001F9850_2E16A0(7)),500000.0f);
             }
         }
         if (fast_dec_timer_s16(&data->camera_timer)) {
@@ -963,7 +963,7 @@ void update_batalia_cannon(Moby *moby) {
                     }
                     break;
                 }
-                if (func_L00_001FEF78_2E16A0(&data->target_timer) || (signed char)((Moby *)D_L08_0015FFD8)[*(int *)((unsigned int)indices + (data->target_index << 2))].state < 0) {
+                if (fast_subtract_rotations_cf(&data->target_timer) || (signed char)((Moby *)D_L08_0015FFD8)[*(int *)((unsigned int)indices + (data->target_index << 2))].state < 0) {
                     data->target_timer = 1; best_angle = 3.1415927f; best = -1;
                     for (i=0; i<4; i++) {
                         Moby *node;
@@ -986,7 +986,7 @@ void update_batalia_cannon(Moby *moby) {
     }
     if (data->guns[0] == 0) {
         Moby *node;
-        node = func_0020D348_2E16A0(0x236); data->guns[0] = node;
+        node = create_moby(0x236); data->guns[0] = node;
         if (node) {
             node->update_dist = 0xFF; data->guns[0]->draw_dist = 0x7E; data->guns[0]->visible = 1;
             (*(long *)&data->guns[0]->spawn_frame) = (*(long *)&moby->spawn_frame);
@@ -1010,7 +1010,7 @@ void update_batalia_cannon(Moby *moby) {
 
     if (data->guns[1] == 0) {
         Moby *node;
-        node = func_0020D348_2E16A0(0x236); data->guns[1] = node;
+        node = create_moby(0x236); data->guns[1] = node;
         if (node) {
             node->update_dist = 0xFF; data->guns[1]->draw_dist = 0x7E; data->guns[1]->visible = 1;
             (*(long *)&data->guns[1]->spawn_frame) = (*(long *)&moby->spawn_frame);

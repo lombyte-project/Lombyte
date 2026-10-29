@@ -18,7 +18,7 @@ typedef struct {
     unsigned char alpha;
 } Level18Effect;
 
-extern Level18Effect *FUN_002141f8_00265ff8(Level18Moby *) __asm__("FUN_002141f8");
+extern Level18Effect *suck_get_aim_height(Level18Moby *) __asm__("FUN_002141f8");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
@@ -31,7 +31,7 @@ void set_moby_attached_effect_alpha_from_distance(Level18Moby *moby, float scale
     if (moby == 0) {
         return;
     }
-    effect = FUN_002141f8_00265ff8(moby);
+    effect = suck_get_aim_height(moby);
     if (effect == 0) {
         return;
     }

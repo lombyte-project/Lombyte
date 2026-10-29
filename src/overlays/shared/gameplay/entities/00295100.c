@@ -465,11 +465,11 @@ void fade_to_black(int) __asm__("FUN_001f4a58");
 void update_view_context(void) __asm__("FUN_001f2d98");
 void f20c828_298b18(M_298b18 *) __asm__("FUN_0020c828");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-float f213508_298b18(void *, int, float) __asm__("FUN_00213508");
+float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
 void f216f90_298b18(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-void fun_00216c48(F_298b18 *, void *, int) __asm__("FUN_00216c48");
+void SCRATCH(F_298b18 *, void *, int) __asm__("FUN_00216c48");
 void music_set_active_track_value(int) __asm__("FUN_L00_00265880");
 void finish_cutscene(void) __asm__("FUN_L00_00298b18");
 
@@ -499,13 +499,13 @@ void finish_cutscene(void) {
             moby->flags &= ~0x80;
     }
     hero_set_state(HERO_STATE_IDLE, 1);
-    hero_candidate_z = f213508_298b18(&hero.motion.pos, 0, 0.5f);
+    hero_candidate_z = probe_ground_height(&hero.motion.pos, 0, 0.5f);
     if (2.0f < hero_candidate_z && absolute_float(hero.motion.pos.f[2] - hero_candidate_z) < 4.5f)
         hero.motion.pos.f[2] = hero_candidate_z;
     hero.unk20A5 = 0;
     f2330d0_298b18();
     if (D_L00_0016C860_298b18.x46) {
-        f = f213508_298b18(D_L00_0016C860_298b18.v, 0, 0.5f);
+        f = probe_ground_height(D_L00_0016C860_298b18.v, 0, 0.5f);
         if (2.0f < f && absolute_float(D_L00_0016C860_298b18.x18 - f) < 2.0f)
             D_L00_0016C860_298b18.x18 = f;
         f216f90_298b18(D_L00_0016C860_298b18.v, D_L00_0016C860_298b18.v + 0x10, 0, 1);
@@ -521,7 +521,7 @@ void finish_cutscene(void) {
         void *scene_trigger = active_scene_trigger.trigger;
         active_scene_trigger.moby = 0;
         active_scene_trigger.trigger = 0;
-        fun_00216c48(scene_trigger_moby, scene_trigger, 1);
+        SCRATCH(scene_trigger_moby, scene_trigger, 1);
     }
     music_set_active_track_value(scale_game_frames(0x1E));
 }
@@ -1371,11 +1371,11 @@ extern void FUN_001f4a58_29a6b0(s32) __asm__("FUN_001f4a58");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern s32 FUN_L00_002223f8_29a6b0(s32, s32) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00232fe8_29a6b0(void) __asm__("FUN_L00_00232fe8");
-extern void FUN_00212ed8_29a6b0(void *, s32, s32) __asm__("FUN_00212ed8");
+extern void set_moby_animation(void *, s32, s32) __asm__("FUN_00212ed8");
 extern void FUN_001f9cf8_29a6b0(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void add_vec_29a6b0(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern void FUN_L00_002eaaa0_29a6b0(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
+extern void jet_mount(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002ea9d8_29a6b0(void *) __asm__("FUN_L00_002ea9d8");
 extern void FUN_L00_002eaa30_29a6b0(void *) __asm__("FUN_L00_002eaa30");
 extern void attach_manipulator(char *, s32, void *) __asm__("FUN_0020cb10");
@@ -1462,16 +1462,16 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     D_0013F350[0x20A5] = 1;
     FUN_L00_00232fe8_29a6b0();
     if (vendor_29a6b0.mode != 0) {
-        FUN_00212ed8_29a6b0(vendor_moby, 3, 0);
+        set_moby_animation(vendor_moby, 3, 0);
     } else {
-        FUN_00212ed8_29a6b0(vendor_moby, 2, 0);
+        set_moby_animation(vendor_moby, 2, 0);
     }
     vendor_moby->f58 = frame_scale_macro * 0.5f;
     if (vendor_29a6b0.mode == 0) {
         FUN_001f9cf8_29a6b0(&vendor_29a6b0.eye, &vendor_camera_eye_local_offset_x_gp, vendor_29a6b0.moby + 0xC0);
-        add_vec_29a6b0(&vendor_29a6b0.eye, &vendor_29a6b0.eye, vendor_29a6b0.moby + 0x10);
+        fast_vec_add(&vendor_29a6b0.eye, &vendor_29a6b0.eye, vendor_29a6b0.moby + 0x10);
         vendor_29a6b0.look.f[2] = fast_add_rotations(*(f32 *)(vendor_29a6b0.moby + 0x48), 3.1415927f);
-        FUN_L00_002eaaa0_29a6b0(&vendor_29a6b0.eye, &vendor_29a6b0.look, 1, 0, 0);
+        jet_mount(&vendor_29a6b0.eye, &vendor_29a6b0.look, 1, 0, 0);
         FUN_L00_002ea9d8_29a6b0(&vendor_29a6b0.eye);
         FUN_L00_002eaa30_29a6b0(&vendor_29a6b0.look);
     }
@@ -2038,7 +2038,7 @@ extern void FUN_0020d4f0_2ba78(void *, int, int, int, int) __asm__("FUN_0020d4f0
 extern s32 FUN_0022da68_2ba78(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_00212f90_2ba78(void *, int, int, int) __asm__("FUN_00212f90");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern s32 FUN_L00_00233e40_2ba78(u32, int) __asm__("FUN_L00_00233e40");
+extern s32 add_ammo(u32, int) __asm__("FUN_L00_00233e40");
 extern void FUN_L00_0029b4d8_2ba78(int) __asm__("FUN_L00_0029b4d8");
 extern void FUN_L00_0029a400_2ba78(int) __asm__("FUN_L00_0029a400");
 extern int get_help_message_text(int) __asm__("FUN_001fdd10");
@@ -2200,7 +2200,7 @@ void update_vendor_purchase(void) {
                             weapon_ammo_counts[i] = D_L00_001C40B0[i].hE;
                         }
                         k = D_L00_00161E34;
-                        k -= FUN_L00_00233e40_2ba78(CUR_ITEM.fD0, k);
+                        k -= add_ammo(CUR_ITEM.fD0, k);
                         purchase_cost = (vendor_menu.f40 ? CUR_TB.hA : CUR_TB.h8) * k;
                         ammo_bought_stats[CUR_ITEM.fD0] += k;
                         FUN_L00_0029b4d8_2ba78(3);

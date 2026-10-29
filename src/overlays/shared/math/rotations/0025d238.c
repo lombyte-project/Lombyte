@@ -511,8 +511,8 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
-extern void func_L00_001FF548_25e450(void *, void *, float) __asm__("FUN_001f9c90");
-extern void *func_L00_002B0738_25e450(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
+extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
+extern void *spawn_debris(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
 extern void func_L00_0026B890_25e450(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
@@ -593,8 +593,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
             fast_vec_normalize(&nearby_spray_vector, &nearby_spray_vector, dist / 5.0f * frame_time_macro);
             fast_vec_normalize(&effect_vector_work, &effect_vector_work, (dist + dist) * frame_time_macro);
             fast_vec_add(&nearby_spray_vector, &nearby_spray_vector, &effect_vector_work);
-            func_L00_001FF548_25e450(&nearby_spray_vector, &nearby_spray_vector, frame_time_macro * 10.0f);
-            func_L00_002B0738_25e450(explosion_position, &nearby_spray_vector, random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
+            clamp_vector_length(&nearby_spray_vector, &nearby_spray_vector, frame_time_macro * 10.0f);
+            spawn_debris(explosion_position, &nearby_spray_vector, random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
         }
         spray_count = spray_count - 1;
         for (i = 0; i < spray_count; i++) {
@@ -607,7 +607,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
             rnd.f[2] += frame_time_macro + frame_time_macro;
             sel = 0;
             if (i % 3 == 0) sel = 1;
-            func_L00_002B0738_25e450(explosion_position, &rnd, random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)), sel, 0);
+            spawn_debris(explosion_position, &rnd, random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)), sel, 0);
         }
     }
     }

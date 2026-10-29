@@ -84,9 +84,9 @@ extern S_257470 D_L00_001BA5D0_lui __asm__("D_L00_001BA5D0") NOT_SDA;
 extern S_257470 D_L00_001BB230_lui __asm__("D_L00_001BB230") NOT_SDA;
 extern unsigned char D_L00_0015FC88_257470[] __asm__("D_L00_0015FC88")
     __attribute__((section(".data")));
-extern void FUN_001e93b0_257470(void *, ...) __asm__("FUN_001e93b0");
-extern int FUN_001fa6d0_257470(float) __asm__("FUN_001fa6d0");
-extern float FUN_001f9b48_257470(void *, void *) __asm__("FUN_001f9b48");
+extern void debug_print(void *, ...) __asm__("FUN_001e93b0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
 extern unsigned char D_L00_001E8F00[] NOT_SDA;
@@ -107,7 +107,7 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     unsigned char *g;
 
     amt = *(short *)(moby + 0xB4);
-    FUN_001e93b0_257470(D_L00_001E8F00, *(short *)(moby + 0xA6), *(short *)(moby + 0xB2),
+    debug_print(D_L00_001E8F00, *(short *)(moby + 0xA6), *(short *)(moby + 0xB2),
                         *(short *)(moby + 0xB4), *(short *)(moby + 0xB6));
     if (moby[0xB1] == 0xFE) {
         return;
@@ -139,7 +139,7 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
         if (amt < 1.0f) {
             amt = 1.0f;
         }
-        FUN_001e93b0_257470(D_L00_001E8F28, FUN_001fa6d0_257470(amt));
+        debug_print(D_L00_001E8F28, truncate_float_to_s32(amt));
     }
     call_flags = 1;
     if (flags & 0x100) {
@@ -149,7 +149,7 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
         call_flags |= 2;
     }
     if (hero_lui.state.current == 0x10 &&
-        FUN_001f9b48_257470(&hero_lui.motion.pos, moby + 0x10) < 4.0f) {
+        fast_vec_dist(&hero_lui.motion.pos, moby + 0x10) < 4.0f) {
         call_flags |= 2;
     }
     cnt = D_L00_0015FFBC;
@@ -168,12 +168,12 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     if (amt > 0.0f) {
         bound_offset = 0;
         if (amt >= 8.0f) {
-            bound_offset = FUN_001fa6d0_257470(amt * 0.25f);
+            bound_offset = truncate_float_to_s32(amt * 0.25f);
         } else if (amt >= 2.0f) {
             bound_offset = 1;
         }
         {
-            int lower_bound = FUN_001fa6d0_257470(amt);
+            int lower_bound = truncate_float_to_s32(amt);
             int hi = lower_bound + bound_offset;
             lower_bound -= bound_offset;
             spawn_randomized_bolt_drop(moby, lower_bound, hi, call_flags, trajectory_target_index);

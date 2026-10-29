@@ -451,8 +451,8 @@ void draw_tresspasser_puzzle(char *moby) __asm__("FUN_L02_002d93e8");
 /* Fakematch: the first parameter is an int; as a long the 0 passed after the 64-bit pad test is set again instead of taken from the mask register, like retail. */
 extern int func_0022ED80_2D9F08(long, int, Moby *) __asm__("FUN_0022da68");
 extern int func_001F9850_2D9F08(int) __asm__("FUN_001f96f8");
-extern int func_L02_0022BE40_2D9F08(int, int) __asm__("FUN_L02_0022b728");
-extern void func_L00_00232C10_2D9F08(int, int, float) __asm__("FUN_L00_002323b8");
+extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
+extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void func_L00_002EBF50_2D9F08(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void func_L02_002DA728_2D9F08(Moby *) __asm__("FUN_L02_002d92f0");
 extern void func_L02_002D9D48_2D9F08(void *, void *, Moby *) __asm__("FUN_L02_002d8910");
@@ -544,8 +544,8 @@ void tresspasser_pad_update(Moby *moby) {
                 data->h10 = func_001F9850_2D9F08(0x12C);
                 data->h11C = 0;
                 data->h11E = 0;
-                func_L02_0022BE40_2D9F08(0x72, 0);
-                func_L00_00232C10_2D9F08(0x57, 0, func_001F9850_2D9F08(6));
+                hero_set_state(0x72, 0);
+                set_hero_animation(0x57, 0, func_001F9850_2D9F08(6));
                 func_L00_002EBF50_2D9F08(&D_L02_00167440_2D9F08[0], &D_L02_00167440_2D9F08[1], 1, 0, 0);
                 moby->state = 2;
                 data->h10 = func_001F9850_2D9F08(0x3C);
@@ -640,7 +640,7 @@ void tresspasser_pad_update(Moby *moby) {
                 }
             }
         } else if (D_0013F450_2D9F08.anim_flags & 2) {
-            func_L00_00232C10_2D9F08(0x58, 0, func_001F9850_2D9F08(6));
+            set_hero_animation(0x58, 0, func_001F9850_2D9F08(6));
         }
         if (i != 12) {
             if (((D_0013CAE4 & 0x10) && D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1)
@@ -659,7 +659,7 @@ void tresspasser_pad_update(Moby *moby) {
                 D_L02_001BADE0_2D9F08[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
             }
             func_L00_002EC0C8_2D9F08(1);
-            func_L02_0022BE40_2D9F08(0, 1);
+            hero_set_state(0, 1);
             moby->command = 1;
             moby->state = 4;
         }
@@ -1023,7 +1023,7 @@ extern float escalator_acceleration_gp __asm__("D_L02_00161C1C") __attribute__((
 extern float D_0015ED70_2dc6b0 __asm__("D_0015ED70");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern void FUN_L00_00260738_2dc6b0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
 void escalator_update(char *moby) {
@@ -1106,7 +1106,7 @@ state3:
         *(float *)(data + 0x44) = fast_sin(*(float *)(moby + 0x48)) * -(escalator_target_speed_gp * frame_time);
         *(int *)(data + 0x48) = 0;
 move:
-    FUN_L00_00260738_2dc6b0(data + 0x60, data + 0x40, moby + 0x40, moby + 0x40);
+    update_entity_matrix(data + 0x60, data + 0x40, moby + 0x40, moby + 0x40);
 }
 
 #define NOT_SDA

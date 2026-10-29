@@ -130,10 +130,10 @@ extern u8 D_L07_00179180[];
 
 extern void load_hud_banks(void) __asm__("FUN_00202a98");
 extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
-extern void FUN_001f9838_26b768(void *, void *, s32) __asm__("FUN_001f9838");
+extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
-extern s32 FUN_L00_0024d8d0_26b768(void *, char *) __asm__("FUN_L00_0024d8d0");
+extern s32 fast_decompress(void *, char *) __asm__("FUN_L00_0024d8d0");
 extern s32 log2dim(s32) __asm__("FUN_001f97a0");
 extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
 extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
@@ -151,7 +151,7 @@ extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_00
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
-extern char *FUN_L00_00241940_26b768(s32) __asm__("FUN_L00_00241940");
+extern char *load_level_gameplay(s32) __asm__("FUN_L00_00241940");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
 extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
@@ -214,11 +214,11 @@ s32 load_level_assets(s32 full, s32 keep) {
     if (full) {
         fast_mem_copy(level_header, (char *)(level_file_base[4] + (s32)level_file_base), level_file_base[5]);
         l07_texture_data_base = 0;
-        FUN_001f9838_26b768(D_L07_0015FC88_macro, visited52 + current_level_index * 16, 0x10);
+        copy_memory_aligned(D_L07_0015FC88_macro, visited52 + current_level_index * 16, 0x10);
         upload_texture_images((char *)(level_file_base[6] + (s32)level_file_base), level_header[0], (char *)level_header + level_header[1]);
         l07_asset_sound_bank_handle = sound_bank_handle;
         flush_cache(0);
-        used = FUN_L00_0024d8d0_26b768((char *)(level_file_base[0x14] + (s32)level_file_base), base);
+        used = fast_decompress((char *)(level_file_base[0x14] + (s32)level_file_base), base);
         l07_texture_data_base = (s32)(base + level_header[0x18]);
 
         D_L07_00182840[0] = GS_TEX0((gs_texture_allocation_base + level_header[0x24]) >> 8, 2, 0x13, 7, 7, 1, 0,
@@ -321,7 +321,7 @@ s32 load_level_assets(s32 full, s32 keep) {
         sound_slot_count = span->count;
         D_L07_0015F5F4 = (Slot26b768 *)free;
         l07_sound_slot_count = sound_slot_count;
-        FUN_001f9838_26b768(free, sound_table_base + span->off, sound_slot_count * 32);
+        copy_memory_aligned(free, sound_table_base + span->off, sound_slot_count * 32);
         span++;
         free += sound_slot_count * 32;
         sound_id_cursor = sound_table_base + span->off;
@@ -360,7 +360,7 @@ s32 load_level_assets(s32 full, s32 keep) {
         }
         D_L18_00174800_26b768.f18 = load_level_texture_bank((char *)((u32)end & ~0x3F), level_header);
     }
-    D_L18_00174800_26b768.f1C = FUN_L00_00241940_26b768(full);
+    D_L18_00174800_26b768.f1C = load_level_gameplay(full);
     if (full) {
         char *top;
         debug_print(D_L07_0020FA70);

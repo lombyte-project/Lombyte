@@ -227,7 +227,7 @@ void timed_activation_pads_update(unsigned char *moby)
 extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void scale_vector_xyz_310df0(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void play_sound_310df0(s32, s32, void *) __asm__("FUN_0022da68");
 
@@ -299,7 +299,7 @@ void door_update(u8 *moby)
         vectors[6] = *(f32 *)(data + 0x24);
         *(quadword *)vectors = *(quadword *)(vectors + 4);
         transform_vector_by_basis(vectors, vectors, moby + 0xc0);
-        scale_vector_xyz_310df0(vectors + 4, vectors, *(f32 *)(data + 0x28) * frame_time);
+        fast_vec_normalize(vectors + 4, vectors, *(f32 *)(data + 0x28) * frame_time);
         fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
         *(f32 *)(data + 0x0c) -= *(f32 *)(data + 0x28) * frame_time;
         if (!(*(f32 *)(data + 0x0c) < 0.0f))
@@ -341,7 +341,7 @@ void door_update(u8 *moby)
             vectors[6] = *(f32 *)(data + 0x24);
             *(quadword *)vectors = *(quadword *)(vectors + 4);
             distance = fast_vec_length(vectors);
-            scale_vector_xyz_310df0(vectors, vectors, -(*(f32 *)(data + 0x2c) * frame_time));
+            fast_vec_normalize(vectors, vectors, -(*(f32 *)(data + 0x2c) * frame_time));
             transform_vector_by_basis(vectors + 4, vectors, moby + 0xc0);
             fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
             *(f32 *)(data + 0x0c) += *(f32 *)(data + 0x2c) * frame_time;

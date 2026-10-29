@@ -32,7 +32,7 @@ extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern void set_moby_animation(struct Ent *, s32, s32) __asm__("FUN_00212ed8");
-extern void func_002191B8(void) __asm__("FUN_002191b8");
+extern void close_menu_system(void) __asm__("FUN_002191b8");
 
 void update_menu_system(void) __asm__("FUN_002192a8");
 
@@ -147,7 +147,7 @@ void update_menu_system(void) {
     }
     update_visible_resident_objects();
     if (menu_system.close_request != 0) {
-        func_002191B8();
+        close_menu_system();
     }
 }
 

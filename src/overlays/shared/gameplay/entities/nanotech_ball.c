@@ -500,14 +500,14 @@ extern void func_001F9BD8_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a10")
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void func_001F9BF0_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_00215C00_2D9EA0(void *, float, float, float) __asm__("FUN_00214db0");
-extern float func_L00_00258C80_2D9EA0(float, float) __asm__("FUN_L00_00257c48");
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float func_001F9FA8_2D9EA0(float) __asm__("FUN_001f9de0");
 extern float func_001FA748_2D9EA0(float, float) __asm__("FUN_001fa580");
 extern float func_001F9D10_2D9EA0(void *, void *) __asm__("FUN_001f9b48");
 extern int func_L00_002D9E30_2D9EA0(void *) __asm__("FUN_L00_002d8980");
 extern void func_001F9C30_2D9EA0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_002156E0_2D9EA0(void *, void *, float, void *) __asm__("FUN_00214890");
-extern int func_L00_00258BC8_2D9EA0(int, int) __asm__("FUN_L00_00257b90");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void update_nanotech_ball_slot_offsets(void) __asm__("FUN_L00_002d8908");
 extern int func_L00_00200290_2D9EA0(void *, float) __asm__("FUN_001fa728");
 extern void func_001F49B0_2D9EA0(void (*)(void), int) __asm__("FUN_001f4600");
@@ -588,7 +588,7 @@ void nanotech_ball_update(Moby *moby) {
             float yaw = func_002140F8_2D9EA0(0.0f, 6.2831855f);
             func_00215C00_2D9EA0(&data->v20, 1.0f, yaw, func_002140F8_2D9EA0(-1.5707964f, 1.5707964f));
         }
-        data->v20.w = func_L00_00258C80_2D9EA0(0.785398006f, 1.5707964f);
+        data->v20.w = randf_sym(0.785398006f, 1.5707964f);
     }
     case NANOTECH_BALL_STATE_FOLLOW_OWNER: {
         Moby *owner = data->owner;
@@ -655,7 +655,7 @@ void nanotech_ball_update(Moby *moby) {
                             dst->y = src->y;
                             dst->z = src->z;
                         }
-                        ext->h1E = ext->h1C = func_001F9850_2D9EA0(func_L00_00258BC8_2D9EA0(nanotech_ball_slot_collection_min_frames_gp, nanotech_ball_slot_collection_max_frames_gp));
+                        ext->h1E = ext->h1C = func_001F9850_2D9EA0(random_int_between(nanotech_ball_slot_collection_min_frames_gp, nanotech_ball_slot_collection_max_frames_gp));
                     }
                 }
             }
@@ -787,9 +787,9 @@ void nanotech_ball_update(Moby *moby) {
                     part->pos.x = func_L00_00258E58_2D9EA0(slot_rotation_basis_or_cull_position_or_start_tangent.x, rotated_slot_offset_or_particle_position.x, v20.x, collection_target_or_end_tangent.x, progress);
                     part->pos.y = func_L00_00258E58_2D9EA0(slot_rotation_basis_or_cull_position_or_start_tangent.y, rotated_slot_offset_or_particle_position.y, v20.y, collection_target_or_end_tangent.y, progress);
                     part->pos.z = func_L00_00258E58_2D9EA0(slot_rotation_basis_or_cull_position_or_start_tangent.z, rotated_slot_offset_or_particle_position.z, v20.z, collection_target_or_end_tangent.z, progress);
-                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.x;
-                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.y;
-                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + part->pos.z;
+                    half_displacement_or_spark_position.x = randf_sym(0.0f, 0.00999999978f) + part->pos.x;
+                    half_displacement_or_spark_position.y = randf_sym(0.0f, 0.00999999978f) + part->pos.y;
+                    half_displacement_or_spark_position.z = randf_sym(0.0f, 0.00999999978f) + part->pos.z;
                     spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
                         spark->f4 = nanotech_ball_particle_color_gp;
@@ -797,9 +797,9 @@ void nanotech_ball_update(Moby *moby) {
                     }
                     func_001F9BD8_2D9EA0(&cross_product_or_particle_midpoint, &part->pos, &cross_product_or_particle_midpoint);
                     func_001F9C30_2D9EA0(&cross_product_or_particle_midpoint, &cross_product_or_particle_midpoint, 0.5f);
-                    half_displacement_or_spark_position.x = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.x;
-                    half_displacement_or_spark_position.y = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.y;
-                    half_displacement_or_spark_position.z = func_L00_00258C80_2D9EA0(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.z;
+                    half_displacement_or_spark_position.x = randf_sym(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.x;
+                    half_displacement_or_spark_position.y = randf_sym(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.y;
+                    half_displacement_or_spark_position.z = randf_sym(0.0f, 0.00999999978f) + cross_product_or_particle_midpoint.z;
                     spark = func_L00_002745A8_2D9EA0(&half_displacement_or_spark_position, func_001F9850_2D9EA0(0x14), 0);
                     if (spark != 0) {
                         spark->f4 = nanotech_ball_particle_color_gp;
@@ -1144,12 +1144,12 @@ extern char D_L00_00166C80[] NOT_SDA;
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_002da250;
-void FUN_L00_0024f7c8_002da250(void *, s32, f32 *) __asm__("FUN_L00_0024f7c8");
+void moby_point_position(void *, s32, f32 *) __asm__("FUN_L00_0024f7c8");
 void FUN_001f9cf8_002da250(V_002da250 *, V_002da250 *, void *) __asm__("FUN_001f9cf8");
 void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) __asm__("FUN_L00_002da250");
 
 void compute_suck_cannon_suction_aim_and_origin(u8 *cannon_moby, f32 *out_suction_yaw, f32 *out_suction_pitch, f32 *out_suction_origin) {
-    FUN_L00_0024f7c8_002da250(cannon_moby, 0, out_suction_origin);
+    moby_point_position(cannon_moby, 0, out_suction_origin);
     if (hero_data.state.current == 1 || hero_data.state.current == 0x1E) {
         V_002da250 suction_origin_offset;
         C_002da250 *suction_aim_camera = &(*(C_002da250 *)D_L00_00166C80);
@@ -1900,7 +1900,7 @@ u8 *FUN_L00_002db890_002dbb20(u8 *) __asm__("FUN_L00_002db890");
 void FUN_L00_002d9fd0_002dbb20(void *, void *, void *) __asm__("FUN_L00_002d9fd0");
 void FUN_0020e098_002dbb20(void *) __asm__("FUN_0020e098");
 void FUN_0022da68_002dbb20(s32, s32, void *) __asm__("FUN_0022da68");
-void FUN_L00_00257470_002dbb20(void *, s32, s32) __asm__("FUN_L00_00257470");
+void mark_moby_for_removal_cf(void *, s32, s32) __asm__("FUN_L00_00257470");
 s32 FUN_001f96f8_002dbb20(s32) __asm__("FUN_001f96f8");
 void FUN_00212f90_002dbb20(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern u32 suck_cannon_storage_euler_offset[1] __asm__("D_L00_00161B20") __attribute__((sda));
@@ -1919,7 +1919,7 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
         if (sound_source_moby != 0 && *(s16 *)(sound_source_moby + 0xA6) == 0x351) {
             FUN_0022da68_002dbb20(5, 0, sound_source_moby);
         }
-        FUN_L00_00257470_002dbb20(moby, 0, -1);
+        mark_moby_for_removal_cf(moby, 0, -1);
         *(s16 *)(suction_record + 0x68) = 4;
         if (moby[0x53] != *(u8 *)(*(u8 **)(suction_record + 0x70) + 4)) {
             u8 stored_animation = *(u8 *)(*(u8 **)(suction_record + 0x70) + 4);
@@ -2359,7 +2359,7 @@ extern R_2DDEA0 *func_L00_002DCD40_2DDEA0(struct Moby *) __asm__("FUN_L00_002db8
 extern float func_L00_001FF860_2DDEA0(float, float) __asm__("FUN_001f9e90");
 extern float func_001FA748_2DDEA0(float, float) __asm__("FUN_001fa580");
 extern float func_001FA790_2DDEA0(float, float) __asm__("FUN_001fa5c8");
-extern void func_L00_002592B0_2DDEA0(void *, void *, float, float, float, float) __asm__("FUN_L00_00258278");
+extern void approach_w(void *, void *, float, float, float, float) __asm__("FUN_L00_00258278");
 extern void func_001F9BC0_2DDEA0(void *) __asm__("FUN_001f99f8");
 extern int func_001F9850_2DDEA0(int) __asm__("FUN_001f96f8");
 extern float func_001FA888_2DDEA0(int) __asm__("FUN_001fa6c0");
@@ -2387,9 +2387,9 @@ extern void func_0020EEE8_2DDEA0(void *) __asm__("FUN_0020e098");
 extern void func_L00_002DDDE8_2DDEA0(void *, void *, int) __asm__("FUN_L00_002dc938");
 extern float func_001F9CB8_2DDEA0(void *) __asm__("FUN_001f9af0");
 extern float func_L00_001FF3E0_2DDEA0(void *) __asm__("FUN_L00_001ff430");
-extern float func_001F9B50_2DDEA0(float) __asm__("FUN_001f9988");
+extern float square_root(float) __asm__("FUN_001f9988");
 extern void func_001F9C30_2DDEA0(void *, void *, float) __asm__("FUN_001f9a68");
-extern void func_L00_0025A8C0_2DDEA0(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void func_L00_001FF500_2DDEA0(void *, void *, float) __asm__("FUN_001f9c48");
 extern int func_L00_001F2BE8_2DDEA0(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int func_L00_001F10E0_2DDEA0(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -2430,7 +2430,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             float yaw, tolerance;
             tolerance = 0.01f;
             yaw = func_001FA748_2DDEA0(func_L00_001FF860_2DDEA0(record->x - moby->pos.x, record->y - moby->pos.y), 3.1415927f);
-            func_L00_002592B0_2DDEA0(moby, vars + 0x44, yaw, frame_scale_sq_macro * 0.19634955f, frame_scale_sq_macro * 0.19634955f, frame_scale * 0.3927f);
+            approach_w(moby, vars + 0x44, yaw, frame_scale_sq_macro * 0.19634955f, frame_scale_sq_macro * 0.19634955f, frame_scale * 0.3927f);
             if (func_001FA790_2DDEA0(yaw, tolerance) < moby->rot.z && moby->rot.z < func_001FA748_2DDEA0(yaw, tolerance)) {
                 record->state = 2;
                 record->f6C = 0.0f;
@@ -2551,7 +2551,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                     speed = func_001F9CB8_2DDEA0(&record->vel);
                     quad_a = speed * speed - func_L00_001FF3E0_2DDEA0(&work.v[2]);
                     quad_b = (work.v[2].x * work.v[1].x + work.v[2].y * work.v[1].y + work.v[2].z * work.v[1].z) * -2.0f;
-                    root = func_001F9B50_2DDEA0(quad_b * quad_b - quad_a * 4.0f * -func_L00_001FF3E0_2DDEA0(&work.v[1]));
+                    root = square_root(quad_b * quad_b - quad_a * 4.0f * -func_L00_001FF3E0_2DDEA0(&work.v[1]));
                     root1 = (-quad_b + root) / (2.0f * quad_a);
                     root2 = (-quad_b - root) / (2.0f * quad_a);
                     if (0.0f < root1 && 0.0f < root2) {
@@ -2578,7 +2578,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             one = 1.0f;
             func_001F9BD8_2DDEA0(&moby->pos, &moby->pos, &record->vel);
-            func_L00_0025A8C0_2DDEA0(&work.v[1], moby, 0x430000, 2.0f, &record->vel);
+            make_hit_descriptor(&work.v[1], moby, 0x430000, 2.0f, &record->vel);
             func_L00_001FF500_2DDEA0(&work.v[1], &work.v[1], one);
             work.h.hit.v.w = 5627.925f;
             work.h.hit.b18 = 1;

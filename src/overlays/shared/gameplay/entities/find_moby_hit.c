@@ -204,9 +204,9 @@ void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *hit_vect
     D_L00_00173E40.idx = (i + 1) & 0x3F;
 }
 typedef float V4_259d08[4] __attribute__((aligned(16)));
-float FUN_001fa6c0_00259d08(int) __asm__("FUN_001fa6c0");
+float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void FUN_001f9a68_00259d08(void *, void *, float) __asm__("FUN_001f9a68");
-void FUN_001f9a10_00259d08(void *, void *, void *) __asm__("FUN_001f9a10");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a28_00259d08(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_001efa68_00259d08(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, int f, int n) __asm__("FUN_L00_00259d08");
@@ -214,15 +214,15 @@ int sweep_hit_segment(void *first_endpoint_end, void *second_endpoint_end, void 
     V4_259d08 da, db, va, vb;
     float k, sweep_fraction;
     int i = 0;
-    k = 1.0f / FUN_001fa6c0_00259d08(sample_count);
+    k = 1.0f / convert_integer_to_float(sample_count);
     FUN_001f9a28_00259d08(da, first_endpoint_end, first_endpoint_start);
     FUN_001f9a28_00259d08(db, second_endpoint_end, second_endpoint_start);
     sweep_fraction = k;
     for (; i < sample_count; i++) {
         FUN_001f9a68_00259d08(va, da, sweep_fraction);
         FUN_001f9a68_00259d08(vb, db, sweep_fraction);
-        FUN_001f9a10_00259d08(va, va, first_endpoint_start);
-        FUN_001f9a10_00259d08(vb, vb, second_endpoint_start);
+        fast_vec_add(va, va, first_endpoint_start);
+        fast_vec_add(vb, vb, second_endpoint_start);
         if (FUN_001efa68_00259d08(va, vb, 0, hit_source_moby, hit_descriptor_address))
             return 1;
         sweep_fraction += k;
@@ -262,7 +262,7 @@ typedef struct {
 extern int D_L00_0015F434 __asm__("D_L00_0015F434");
 extern u128 D_L00_00173E80_lui __asm__("D_L00_00173E80") NOT_SDA;
 extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
-extern int FUN_001f0b58_00259fe8(void) __asm__("FUN_001f0b58");
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern float FUN_001f99c0_00259fe8(float) __asm__("FUN_001f99c0");
 
 extern E_259fe8_00259fe8 D_L00_0016E080[] NOT_SDA;
@@ -275,7 +275,7 @@ void jet_animate(unsigned char *moby, float output_scale) {
         return;
     qcopy(&D_L00_0016E080[D_L00_0015F434].u_00259fe8.a_00259fe8, moby + 0x10);
     ground_height = FUN_00213508_00259fe8(moby + 0x10, 0, 0.5f);
-    if (FUN_001f0b58_00259fe8() == 0)
+    if (collision_hit_material() == 0)
         return;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = ground_height + 0.025f;
     qcopy(&D_L00_0016E080[D_L00_0015F434].b, &D_L00_00173E80_lui);
@@ -488,16 +488,16 @@ extern void compute_moby_joint_matrices(void *, int, int) __asm__("FUN_0020fa90"
 extern void FUN_001f9a10_25aca0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a28_25aca0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_25aca0(float, void *, void *) __asm__("FUN_001f9a68");
-extern void FUN_001f9a80_25aca0(float, void *, void *) __asm__("FUN_001f9a80");
+extern void scale_vector(float, void *, void *) __asm__("FUN_001f9a80");
 extern void FUN_001251e8_25aca0(float, void *, void *) __asm__("FUN_001251e8");
 extern float FUN_001f9af0_25aca0(void *) __asm__("FUN_001f9af0");
-extern float FUN_001f9988_25aca0(float) __asm__("FUN_001f9988");
-extern void FUN_001f9cf8_25aca0(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_L00_001ff378_25aca0(float, void *, void *) __asm__("FUN_L00_001ff378");
+extern float square_root(float) __asm__("FUN_001f9988");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void divide_vector_xyz(float, void *, void *) __asm__("FUN_L00_001ff378");
 extern float FUN_001f9dc8_25aca0(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_25aca0(float) __asm__("FUN_001f9de0");
-extern float FUN_002132a8_25aca0(float, float) __asm__("FUN_002132a8");
-extern float FUN_00213308_25aca0(void) __asm__("FUN_00213308");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 int generate_random_points_from_shape_entries(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) __asm__("FUN_L00_0025aca0");
 
@@ -549,7 +549,7 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
                     case SHAPE_INDEXED_CENTER_SPHERE: {
                         if (type < 2) {
                             qcopy(&first, (void *)((entry + 0x10)));
-                            FUN_001f9a80_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
+                            scale_vector(*(float *)(entity + 0x2c) * 0.0009765625f, &first, &first);
                             radius = first.f[3];
                         } else {
                             qcopy(&first, (void *)((0x70000000 + (*(int *)list << 4))));
@@ -594,7 +594,7 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
     limit = (int)(density * total + 0.5f);
     if (maximum < limit) limit = maximum;
     for (emitted = 0; emitted < limit; emitted++) {
-        random = FUN_002132a8_25aca0(0.0f, total);
+        random = random_float_between(0.0f, total);
         for (chosen = 0; chosen < count; chosen++) {
             if (random < weights[chosen]) break;
             random -= weights[chosen];
@@ -617,17 +617,17 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
                 extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c);
             }
             extent *= 0.0009765625f;
-            FUN_L00_001ff378_25aca0(1024.0f, &first, &first);
+            divide_vector_xyz(1024.0f, &first, &first);
             do {
-                second.f[0] = FUN_002132a8_25aca0(-extent, extent);
-                second.f[1] = FUN_002132a8_25aca0(-extent, extent);
-                second.f[2] = FUN_002132a8_25aca0(-extent, extent);
+                second.f[0] = random_float_between(-extent, extent);
+                second.f[1] = random_float_between(-extent, extent);
+                second.f[2] = random_float_between(-extent, extent);
             } while (!(FUN_001f9af0_25aca0(&second) <= extent));
             /* Fakematch: the do-while (0) raises the loop-weighted refs of entity + 0x10,
              * &out[emitted] and entity + 0xc0 so global alloc gives &second the last saved register. */
             do {
                 FUN_001f9a10_25aca0(&second, &second, &first);
-                FUN_001f9cf8_25aca0(&second, &second, entity + 0xc0);
+                transform_vector_by_basis(&second, &second, entity + 0xc0);
                 FUN_001f9a10_25aca0(&out[emitted], &second, entity + 0x10);
             } while (0);
             break;
@@ -638,13 +638,13 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
             FUN_001f9a68_25aca0(*(float *)(entity + 0x2c), &first, &first);
             radius = first.f[3] * *(float *)(entity + 0x2c);
             extent = *(float *)(entry + 4) * *(float *)(entity + 0x2c);
-            FUN_L00_001ff378_25aca0(1024.0f, &first, &first);
+            divide_vector_xyz(1024.0f, &first, &first);
             radius *= 0.0009765625f;
             extent *= 0.0009765625f;
-            weight = FUN_002132a8_25aca0(0.0f, radius * radius);
-            weight = FUN_001f9988_25aca0(weight);
-            random = FUN_002132a8_25aca0(0.0f, extent);
-            angle = FUN_00213308_25aca0();
+            weight = random_float_between(0.0f, radius * radius);
+            weight = square_root(weight);
+            random = random_float_between(0.0f, extent);
+            angle = random_angle_radians();
             second.f[0] = FUN_001f9dc8_25aca0(angle) * weight;
             second.f[1] = FUN_001f9de0_25aca0(angle) * weight;
             second.f[2] = random;
@@ -658,19 +658,19 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
             FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &first, (void *)(0x70000000 + (*(short *)list << 4)));
             FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &second, (void *)(0x70000000 + (*(short *)(list + 2) << 4)));
             FUN_001f9a28_25aca0(&third, &second, &first);
-            weight = FUN_002132a8_25aca0(0.0f, 1.0f);
+            weight = random_float_between(0.0f, 1.0f);
             FUN_001f9a68_25aca0(weight, &third, &third);
             FUN_001f9a10_25aca0(&fourth, &third, &first);
-            FUN_L00_001ff378_25aca0(1024.0f, &fourth, &fourth);
+            divide_vector_xyz(1024.0f, &fourth, &fourth);
             extent = *(float *)(entry + 0xc) * *(float *)(entity + 0x2c);
             extent = extent * 0.0009765625f;
             do {
-                fifth.f[0] = FUN_002132a8_25aca0(-extent, extent);
-                fifth.f[1] = FUN_002132a8_25aca0(-extent, extent);
-                fifth.f[2] = FUN_002132a8_25aca0(-extent, extent);
+                fifth.f[0] = random_float_between(-extent, extent);
+                fifth.f[1] = random_float_between(-extent, extent);
+                fifth.f[2] = random_float_between(-extent, extent);
             } while (!(FUN_001f9af0_25aca0(&fifth) <= extent));
             FUN_001f9a10_25aca0(&fifth, &fifth, &fourth);
-            FUN_001f9cf8_25aca0(&fifth, &fifth, entity + 0xc0);
+            transform_vector_by_basis(&fifth, &fifth, entity + 0xc0);
             FUN_001f9a10_25aca0(&out[emitted], &fifth, entity + 0x10);
             break;
         }
@@ -707,14 +707,14 @@ typedef struct {
     unsigned char pad53[0x70 - 0x53];
     unsigned char b70;
 } O_25b440;
-extern float FUN_0020c9e0_25b440(void *) __asm__("FUN_0020c9e0");
-extern void FUN_00212f90_25b440(void *, int, int, int) __asm__("FUN_00212f90");
-extern void FUN_L00_00258278_25b440(void *, void *, float, float, float,
+extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern void approach_w(void *, void *, float, float, float,
                                     float) __asm__("FUN_L00_00258278");
 extern float FUN_001f9dc8_25b440(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_25b440(float) __asm__("FUN_001f9de0");
 extern void FUN_001f9a10_25b440(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float FUN_001f96b0_25b440(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_00213508_25b440(void *, int, float) __asm__("FUN_00213508");
 
 int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) __asm__("FUN_L00_0025b440");
@@ -735,24 +735,24 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         if (moving_object->b52 != arc_motion_state->b2C) {
             break;
         }
-        if (FUN_0020c9e0_25b440(moving_object) <= arc_motion_state->f24) {
+        if (compute_interpolated_record_value(moving_object) <= arc_motion_state->f24) {
             break;
         }
         if (moving_object->b70 & 2) {
-            FUN_00212f90_25b440(moving_object, arc_motion_state->b2D, 0, 10);
+            blend_moby_animation(moving_object, arc_motion_state->b2D, 0, 10);
             arc_motion_state->state = 1;
         }
     case INTEGRATE_ARC_MOTION:
-        FUN_L00_00258278_25b440(moving_object, &arc_motion_state->f30, arc_motion_state->f18, arc_motion_state->f34, arc_motion_state->f38, arc_motion_state->f3C);
+        approach_w(moving_object, &arc_motion_state->f30, arc_motion_state->f18, arc_motion_state->f34, arc_motion_state->f38, arc_motion_state->f3C);
         motion_displacement[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
         motion_displacement[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
         motion_displacement[2] = arc_motion_state->f10;
         FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, motion_displacement);
         arc_motion_state->f10 -= arc_motion_state->f1C;
         if (arc_motion_state->f10 < 0.0f) {
-            prediction_time = FUN_001f96b0_25b440(arc_motion_state->f28 + arc_motion_state->f28 + 10.0f);
+            prediction_time = scale_time(arc_motion_state->f28 + arc_motion_state->f28 + 10.0f);
             if (moving_object->z <= arc_motion_state->f8 - (arc_motion_state->f10 * prediction_time - arc_motion_state->f1C * 0.5f * prediction_time * prediction_time)) {
-                FUN_00212f90_25b440(moving_object, arc_motion_state->b2E, 0, 10);
+                blend_moby_animation(moving_object, arc_motion_state->b2E, 0, 10);
                 arc_motion_state->state = 2;
             }
         }

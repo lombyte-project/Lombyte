@@ -78,7 +78,7 @@ extern LvState D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
 extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 extern void func_0022ED80_3102C8(int, int, void *) __asm__("FUN_0022da68");
-extern int func_L00_00203F20_3102C8(int a, int b) __asm__("FUN_L00_00203908");
+extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern float func_001F9D48_3102C8(void *, void *) __asm__("FUN_001f9b80");
 extern int func_001F9850_3102C8(int) __asm__("FUN_001f96f8");
 
@@ -140,7 +140,7 @@ void thruster_pack_lock_update(Lock *moby)
             int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats *)(D_00141968_r))->best2 * 600;
             if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < elapsed ||
                 ((Stats *)(D_00141968_r))->best2 * 600 == 0) {
-                func_L00_00203F20_3102C8(0x2B02, 0x71);
+                help_request(0x2B02, 0x71);
                 return;
             }
             {
@@ -153,7 +153,7 @@ void thruster_pack_lock_update(Lock *moby)
             int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats *)(D_00141968_r))->best * 600;
             if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < elapsed ||
                 ((Stats *)(D_00141968_r))->best * 600 == 0) {
-                func_L00_00203F20_3102C8(0x2B01, 0x6C);
+                help_request(0x2B01, 0x6C);
                 return;
             }
             {

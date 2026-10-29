@@ -234,7 +234,7 @@ extern float distance_2d1688(void *, void *) __asm__("FUN_001f9b48");
 extern int tick_2d1688(void *) __asm__("FUN_001f9740");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float move_2d1688(float *, float, float *, float, float, float) __asm__("FUN_00213f38");
+extern float advance_accelerated_scalar(float *, float, float *, float, float, float) __asm__("FUN_00213f38");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
@@ -324,7 +324,7 @@ state_one:
             speed = (D_L05_001612E0_macro[2] - D_L05_00161388) - 0.5f;
             spawn_sharkigator_surface_effects(moby);
         }
-        move_2d1688((float *)(moby + 0x18), speed, (float *)(data + 0x78), frame_time_sq + frame_time_sq, frame_time_sq + frame_time_sq, frame_time + frame_time);
+        advance_accelerated_scalar((float *)(moby + 0x18), speed, (float *)(data + 0x78), frame_time_sq + frame_time_sq, frame_time_sq + frame_time_sq, frame_time + frame_time);
         return;
     }
 state_two:
@@ -544,7 +544,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int lerp_2d7020(float, int, int) __asm__("FUN_001fa6e0");
 extern int frame_number __asm__("D_L05_0015F5CC");
-extern void queue_2d7020(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 void draw_group_moby_glow_quads(unsigned char *moby) __asm__("FUN_L05_002d6f48");
 
 /* Per-frame glow: updates three parts, pulses the colour, and queues a redraw
@@ -574,7 +574,7 @@ void update_moby_glow_and_queue_draw(char *moby) {
             last_queued_frame_ptr = *(int **)(moby_data + 0x364);
             if (current_frame != *last_queued_frame_ptr) {
                 *last_queued_frame_ptr = current_frame;
-                queue_2d7020(draw_group_moby_glow_quads, moby);
+                add_draw_callback(draw_group_moby_glow_quads, moby);
             }
         }
     }
@@ -1616,7 +1616,7 @@ int D_L05_00161A78 = 0x80008000;
 extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 #include "rnc/overlay/l05/gameplay/entities/sharkigator_data/handle_extermibot_hits_and_update_targeting.h"
 extern int collision_line() __asm__("FUN_001efa68");
-extern int fun_00213928() __asm__("FUN_00213928");
+extern int trooper_take_damage() __asm__("FUN_00213928");
 extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_002628d8(char *, char *, int, float, float);
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -2365,8 +2365,8 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void *select_candidate_by_max_float_2c(void *, void *, void *, int) __asm__("FUN_L05_002899f8");
 extern void hit_update_305178(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern int allocate_voice_305178(int, int, void *) __asm__("FUN_0022da68");
-extern void stop_animation_305178(void *, int, int) __asm__("FUN_L00_00257470");
-extern void spawn_effects_305178(void *, void *, void *, float, float, int, int, int,
+extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                                  float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -2428,22 +2428,22 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
             goto update_motion;
         } else {
             allocate_voice_305178(3, 0, moby);
-            stop_animation_305178(moby, 0, -1);
+            mark_moby_for_removal_cf(moby, 0, -1);
             qcopy(position, moby + 0x10);
             position[2] += 3.0f;
-            spawn_effects_305178(moby, data + 0x40, position, 0.0f, 0.0f, 0x14, 8, 0x14,
+            spawn_explosion(moby, data + 0x40, position, 0.0f, 0.0f, 0x14, 8, 0x14,
                                   4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             qcopy(position, moby + 0x10);
             position[0] += 2.0f * fast_cos(*(float *)(moby + 0x48));
             position[1] += 2.0f * fast_sin(*(float *)(moby + 0x48));
-            spawn_effects_305178(moby, data + 0x40, position, 0.0f, 0.0f, 0x14, 8, 0x14,
+            spawn_explosion(moby, data + 0x40, position, 0.0f, 0.0f, 0x14, 8, 0x14,
                                   4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             qcopy(position, moby + 0x10);
             angle = fast_add_rotations(*(float *)(moby + 0x48), 3.14159274f);
             position[0] += 2.0f * fast_cos(angle);
             angle = fast_add_rotations(*(float *)(moby + 0x48), 3.14159274f);
             position[1] += 2.0f * fast_sin(angle);
-            spawn_effects_305178(moby, data + 0x40, position, 0.0f, 0.0f, 0x14, 8, 0x14,
+            spawn_explosion(moby, data + 0x40, position, 0.0f, 0.0f, 0x14, 8, 0x14,
                                   4.0f, 2.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             *(short *)(data + 0x19e) = scale_game_frames(D_L05_00161B74);
             moby[0x20] = 3;

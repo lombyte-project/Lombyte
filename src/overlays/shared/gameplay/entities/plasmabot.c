@@ -952,7 +952,7 @@ typedef struct {
 } DelayVars;
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern f32 FUN_001f96b0_2b2ed8(f32) __asm__("FUN_001f96b0");
+extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 tick_countdown_2b2ed8(s32 *) __asm__("FUN_001f9740");
 
@@ -964,7 +964,7 @@ void update_plasmabot_target_range(struct Moby *moby) {
 
     if (delay_state->restart != 0) {
         delay_state->delay = truncate_float_to_s32(
-            FUN_001f96b0_2b2ed8(random_float_between(180.0f, 240.0f)));
+            scale_time(random_float_between(180.0f, 240.0f)));
         delay_state->restart = 0;
     }
     tick_countdown_2b2ed8(&delay_state->delay);
@@ -1518,7 +1518,7 @@ extern void spawn_explosion_dfd10(struct Moby *, void *, void *, f32, f32, s32, 
     f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void mark_moby_for_removal_dfd10(struct Moby *) __asm__("FUN_0020c828");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int FUN_L00_0028dc90_dfd10(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
+extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 extern int sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 
 typedef struct {
@@ -1571,7 +1571,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         fast_vec_normalize(position_offset, position_offset, 0.5f);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.25f;
-        FUN_L00_0028dc90_dfd10(1, 0, moby, data->owner->oclass);
+        trooper_play_sound(1, 0, moby, data->owner->oclass);
         spawn_explosion_dfd10(moby, position_offset, &probe, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 15.0f, 0, 3, -1, 0);
         coll_sphere(1.0f, &moby->pos, 0, (void *)D_001413D0_dfd10);
         mark_moby_for_removal_dfd10(moby);
@@ -1600,7 +1600,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     fast_vec_normalize(position_offset, &moby->rot_row2, 0.52f);
     fast_vec_add(&probe, &moby->pos, position_offset);
     if (tick_countdown_dfd10(&data->timer) != 0 || coll_sphere(0.5f, &probe, 0, data->owner) != 0) {
-        FUN_L00_0028dc90_dfd10(0, 0, moby, data->owner->oclass);
+        trooper_play_sound(0, 0, moby, data->owner->oclass);
         spawn_explosion_dfd10(moby, velocity, &moby->pos, 0.0f, 0.0f, 5, 2, 4, 1.0f, 0.5f, 9.0f, 1.0f, -1, 15.0f, 0, 3, -1, 0);
         coll_sphere(1.0f, &moby->pos, 0, (void *)D_001413D0_dfd10);
         mark_moby_for_removal_dfd10(moby);
@@ -1750,7 +1750,7 @@ extern float func_001FA888_2E17B8(int) __asm__("FUN_001fa6c0");
 extern float func_001F9F90_2E17B8(float x) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2E17B8(float) __asm__("FUN_001f9de0");
 extern float func_L00_00258C80_2E17B8(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern int func_L00_00258BC8_2E17B8(int, int) __asm__("FUN_L00_00257b90");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void func_L00_0026DA50_2E17B8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern Particle_2E17B8 *func_L00_0026DEA0_2E17B8(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
@@ -1817,13 +1817,13 @@ void emit_debris_trail_particles(Moby *moby) {
         pos.f[1] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
     }
     func_L00_0026DA50_2E17B8(&pos, &particle_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
-                             func_L00_00258BC8_2E17B8(func_001F9850_2E17B8(10), func_001F9850_2E17B8(20)), 1, 60000.0f);
+                             random_int_between(func_001F9850_2E17B8(10), func_001F9850_2E17B8(20)), 1, 60000.0f);
     signed_particle_variation = func_002140B0_2E17B8(6);
     if (func_002140B0_2E17B8(2) != 0) {
         signed_particle_variation = -signed_particle_variation;
     }
     size = func_002140F8_2E17B8(60000.0f, 140000.0f);
-    color_intensity = func_L00_00258BC8_2E17B8(0x30, 0xFF);
+    color_intensity = random_int_between(0x30, 0xFF);
     alpha = 0x60000000;
     spawned_particle = func_L00_0026DEA0_2E17B8(&pos, 0.025f, 1.0f, 1.0f, signed_particle_variation, &particle_initial_velocity, size, color_intensity | ((color_intensity << 16) | ((color_intensity << 8) | alpha)));
     if (spawned_particle != 0) {

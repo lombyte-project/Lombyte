@@ -109,34 +109,34 @@ typedef struct {
     f32 f40;
     int w44;
 } B_25c558;
-float FUN_001f9dc8_0025c558(float) __asm__("FUN_001f9dc8");
-float FUN_001f9de0_0025c558(float) __asm__("FUN_001f9de0");
-float FUN_001fa580_0025c558(float, float) __asm__("FUN_001fa580");
+float fast_cos(float) __asm__("FUN_001f9dc8");
+float fast_sin(float) __asm__("FUN_001f9de0");
+float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 int FUN_001f96f8_0025c558(int) __asm__("FUN_001f96f8");
-float *FUN_002141f8_0025c558(void *) __asm__("FUN_002141f8");
-void FUN_002130d8_0025c558(void *, int, int, int, int) __asm__("FUN_002130d8");
-void FUN_00212f90_0025c558(void *, int, int, int) __asm__("FUN_00212f90");
+float *suck_get_aim_height(void *) __asm__("FUN_002141f8");
+void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
+void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_index, int animation_timing_divisor, int animation_frame_index, float knockback_angle) {
     float *moby_vars_record;
-    knockback_state->f0 = FUN_001f9dc8_0025c558(knockback_angle) * knockback_state->f18;
-    knockback_state->f4 = FUN_001f9de0_0025c558(knockback_angle) * knockback_state->f18;
+    knockback_state->f0 = fast_cos(knockback_angle) * knockback_state->f18;
+    knockback_state->f4 = fast_sin(knockback_angle) * knockback_state->f18;
     knockback_state->f8 = knockback_state->f1C;
     knockback_state->fC = 1.0f;
-    knockback_state->f40 = FUN_001fa580_0025c558(knockback_angle, 3.1415927f);
+    knockback_state->f40 = fast_add_rotations(knockback_angle, 3.1415927f);
     knockback_state->w44 = 0;
     knockback_state->h2C = FUN_001f96f8_0025c558(300);
     knockback_state->h3E = 0;
     knockback_state->b3C = 1;
-    moby_vars_record = FUN_002141f8_0025c558(moby);
+    moby_vars_record = suck_get_aim_height(moby);
     if (moby_vars_record && *moby_vars_record == 0.0f) {
         knockback_state->w24 |= 0x20;
         *(int *)(moby + 0x94) = 0;
     }
     if (knockback_state->w24 & 2)
-        FUN_002130d8_0025c558(moby, animation_index, animation_frame_index, animation_timing_divisor, 1);
+        blend_moby_animation_ex(moby, animation_index, animation_frame_index, animation_timing_divisor, 1);
     else
-        FUN_00212f90_0025c558(moby, animation_index, animation_frame_index, animation_timing_divisor);
+        blend_moby_animation(moby, animation_index, animation_frame_index, animation_timing_divisor);
 }
 #include "rnc/math/vector.h"
 

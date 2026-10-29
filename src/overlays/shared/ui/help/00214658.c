@@ -23,9 +23,9 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
-extern void FUN_L00_00212088_214658(f32, f32) __asm__("FUN_L00_00212088");
+extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void FUN_L00_00211e30_214658(int, float, float, float) __asm__("FUN_L00_00211e30");
-extern void FUN_L00_002118c8_214658(int, float) __asm__("FUN_L00_002118c8");
+extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern f32 FUN_L00_0025bc98_214658(float *, float *, int, float, float, float,
                                    float) __asm__("FUN_L00_0025bc98");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
@@ -64,7 +64,7 @@ void hero_move_state_velocity(void) {
         } else {
             hero.target_speed = ED6C * 3.5f;
         }
-        FUN_L00_00212088_214658(ED70 * 44.0f, ED70 * 45.0f);
+        speed_step(ED70 * 44.0f, ED70 * 45.0f);
         FUN_L00_00233ba0_214658(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
         FUN_L00_00233708_214658(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
     } else if (state == 0x1C) {
@@ -162,7 +162,7 @@ void hero_move_state_velocity(void) {
         if (hero.unk4A8 && hero.on_ice_ground) {
             base_planar_velocity_step = ED70 * 0.17f;
             if (hero.state.current == 15) {
-                FUN_L00_002118c8_214658(0, ED6C * 2.5f);
+                stick_target(0, ED6C * 2.5f);
                 base_planar_velocity_step = ED70 * 3.0f;
             }
             if (0.2617994f < hero.ground_slope.f) {
@@ -840,9 +840,9 @@ void release_voice_slot_cf(int voice_slot_index, int a, int b) {
 /* D_0013F350 + 0x21D8 is an array of 8 s16 slots of four s16 fields each. */
 
 
-void FUN_L00_00216ec0_00216ec0(s32, s32, s32) __asm__("FUN_L00_00216ec0");
+void help_queue_add(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
-void FUN_L00_00216ec0_00216ec0(s32 voice_entry_index, s32 voice_delay_timer, s32 voice_allocation_argument) {
+void help_queue_add(s32 voice_entry_index, s32 voice_delay_timer, s32 voice_allocation_argument) {
     struct Hero *base;
     s16 *current_slot;
     s32 slots_examined = 0;
@@ -891,13 +891,13 @@ void FUN_001fa030_00216f90(void *, void *) __asm__("FUN_001fa030");
 void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 void clear_moby_transform_history(void *) __asm__("FUN_L00_00262840");
 void FUN_001f99f8_00216f90(void *) __asm__("FUN_001f99f8");
-void FUN_00217020_00216f90(void) __asm__("FUN_00217020");
+void reset_global_state_fields(void) __asm__("FUN_00217020");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void set_hero_animation_sequence_and_frame(int, int) __asm__("FUN_L00_002325a0");
 void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
-void FUN_L00_001ed280_00216f90(void) __asm__("FUN_L00_001ed280");
+void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void apply_nearest_environment_sample(int) __asm__("FUN_L00_002500b8");
 extern char D_0013F3D0[] NOT_SDA;
 void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag);
@@ -927,7 +927,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_eu
     FUN_001f99f8_00216f90(position_destination + 0x20);
     *(int *)(hero_base + 0x184) = 0;
     *(unsigned char *)(hero_base + 0x22CA) = 0;
-    FUN_00217020_00216f90();
+    reset_global_state_fields();
     cancel_hero_item_animation();
     reset_hero_easing_records();
     if (mode != -1)
@@ -940,7 +940,7 @@ void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_eu
         D_L00_00167014_lui = 0;
     update_hero_ground_contact_and_surface_slopes();
     if (flag)
-        FUN_L00_001ed280_00216f90();
+        init_camera_system();
     apply_nearest_environment_sample(D_001413D0_lui);
 }
 extern unsigned char D_0013F350_217118[] __asm__("D_0013F350");

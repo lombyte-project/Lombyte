@@ -412,7 +412,7 @@ typedef struct {
 } TargetClass;
 
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern f32 FUN_001f9988_30d308(f32) __asm__("FUN_001f9988");
+extern f32 square_root(f32) __asm__("FUN_001f9988");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 *FUN_002141f8_30d308(struct Moby *) __asm__("FUN_002141f8");
 extern s32 collision_line_30d308(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
@@ -458,7 +458,7 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
             if (!(candidate_distance < near) || !(pitch_error_squared < nearPitch * nearPitch)) continue;
         }
         score *= pitch_error_squared;
-        score *= FUN_001f9988_30d308(fast_vec_dist(from, tp));
+        score *= square_root(fast_vec_dist(from, tp));
         if (!(score < bestScore)) continue;
         if (collision_line_30d308(from, tp, 0, moby, 0)) {
             hit = (struct Moby *)collision_hit.moby;

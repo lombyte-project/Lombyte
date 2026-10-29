@@ -94,10 +94,10 @@ extern s32 D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 FUN_001f96f8_002293a8(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002323b8_002293a8(s32, s32, f32) __asm__("FUN_L00_002323b8");
-void FUN_L00_002118c8_002293a8(s32, f32) __asm__("FUN_L00_002118c8");
+void stick_target(s32, f32) __asm__("FUN_L00_002118c8");
 void hero_queue_sequence(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_002293a8(void *, f32) __asm__("FUN_L00_0025f730");
-s32 FUN_L00_00205000_002293a8(s32) __asm__("FUN_L00_00205000");
+s32 hero_idle_sequence(s32) __asm__("FUN_L00_00205000");
 void update_hero_locomotion_state(void) __asm__("FUN_L00_002293a8");
 
 void update_hero_locomotion_state(void) {
@@ -109,7 +109,7 @@ void update_hero_locomotion_state(void) {
         hero_set_state(0x2F, 1);
         return;
     }
-    FUN_L00_002118c8_002293a8(0, 1.0f);
+    stick_target(0, 1.0f);
     if (pad_held & 0xA) {
         hero_set_state(HERO_STATE_CROUCH, 0);
         FUN_L00_002323b8_002293a8(0xD, 2, -2.0f);
@@ -144,11 +144,11 @@ void update_hero_locomotion_state(void) {
     }
     if (FUN_001f96f8_002293a8(12) < *(s32 *)(hero_stop_idle_base + 0x418) || (*(s32 *)(hero_stop_idle_base + 0xA98) & 2)) {
         if (hero_set_state(HERO_STATE_IDLE, 0)) {
-            if (FUN_L00_00205000_002293a8(0) == 0x54) {
-                animation_frames_or_id = FUN_L00_00205000_002293a8(0);
+            if (hero_idle_sequence(0) == 0x54) {
+                animation_frames_or_id = hero_idle_sequence(0);
                 FUN_L00_002323b8_002293a8(animation_frames_or_id, 0, (f32)FUN_001f96f8_002293a8(15));
             } else if (*(s32 *)(hero_stop_idle_base + 0xA98) & 2) {
-                FUN_L00_002323b8_002293a8(FUN_L00_00205000_002293a8(0), 0, -2.0f);
+                FUN_L00_002323b8_002293a8(hero_idle_sequence(0), 0, -2.0f);
             }
         }
     }
@@ -158,7 +158,7 @@ extern u8 D_0013D4C2_lui __asm__("D_0013D4C2") NOT_SDA;
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
 extern int check_pad_press_separation(int, void *, int, int) __asm__("FUN_L00_00266e00");
-extern int FUN_L00_00266d60_229660(int, int, void *) __asm__("FUN_L00_00266d60");
+extern int pad_pressed_within(int, int, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_0020d498_229660(int) __asm__("FUN_L00_0020d498");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* A second C name for hero_set_state: retail keeps the two calls apart. */
@@ -182,7 +182,7 @@ int hero_handle_jump_press(void) {
     }
     jump_press_history_limit = FUN_001f96f8_229660(9);
     if (FUN_001f96f8_229660(6) < hero.state_timer) {
-        if (!FUN_L00_00266d60_229660(0x40, jump_press_history_limit, 0))
+        if (!pad_pressed_within(0x40, jump_press_history_limit, 0))
             return 0;
         if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_lui != 0 && hero.pack_disabled == 0) {
             if ((2.5f < hero.wall_probe_distance || hero.wall_normal_pitch < 0.7853982f) && 0.7f < hero.stick_magnitude &&

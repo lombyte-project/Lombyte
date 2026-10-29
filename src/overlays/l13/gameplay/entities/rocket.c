@@ -2624,7 +2624,7 @@ collision:
 #include "rnc/gameplay/state/item_state.h"
 extern unsigned char D_0013D408[];
 extern float D_L13_0015F580[] MACRO_ADDR;
-extern void fun_00213928(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
+extern void trooper_take_damage(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
@@ -2658,7 +2658,7 @@ void blarg_ship_update(struct Moby *moby) {
     }
     data = (char *)moby->pvars;
     hit = find_moby_hit(moby, 0x10000, 0);
-    fun_00213928(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
+    trooper_take_damage(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
     case BLARG_SHIP_ENTER_DAMAGE_HANDLING:
         moby->state = 1;

@@ -2700,7 +2700,7 @@ int advance_minibomber_along_path(struct Moby *moby, char *path, int segment_ind
 
 extern float FUN_L00_0025b8c0_c2(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-extern void func_L00_002592B0_2B6AA0(char *moby, float target, float *vel, float k, float d, float max) __asm__("FUN_L00_00258278");
+extern void approach_w(char *moby, float target, float *vel, float k, float d, float max) __asm__("FUN_L00_00258278");
 
 void ease_minibomber_position_and_heading(char *moby, float *target, float target_heading, float position_error_gain, float position_velocity_damping, float position_snap_threshold_scale, float heading_error_gain, float heading_velocity_damping, float heading_velocity_limit) {
     int data;
@@ -2710,7 +2710,7 @@ void ease_minibomber_position_and_heading(char *moby, float *target, float targe
         FUN_L00_0025b8c0_c2((float *)(moby + 0x10), (float *)(data + 0xF0), target[0], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
         FUN_L00_0025b8c0_c2((float *)(moby + 0x14), (float *)(data + 0xF4), target[1], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
         FUN_L00_0025b8c0_c2((float *)(moby + 0x18), (float *)(data + 0xF8), target[2], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
-        func_L00_002592B0_2B6AA0(moby, target_heading, (float *)(data + 0xE4), heading_error_gain, heading_velocity_damping, heading_velocity_limit);
+        approach_w(moby, target_heading, (float *)(data + 0xE4), heading_error_gain, heading_velocity_damping, heading_velocity_limit);
     }
 }
 typedef struct {

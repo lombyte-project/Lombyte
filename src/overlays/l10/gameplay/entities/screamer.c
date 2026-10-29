@@ -112,7 +112,7 @@ extern float func_00214358_2E0630(void *, int, float) __asm__("FUN_00213508");
 extern int func_001FA898_2E0630(float) __asm__("FUN_001fa6d0");
 extern void func_L10_002E14F8_2E0630(void *) __asm__("FUN_L10_002e0138");
 extern float func_L00_0025CC58_2E0630(float *, int, float, float) __asm__("FUN_L00_0025bc00");
-extern void func_L00_002592B0_2E0630(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
+extern void approach_w(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern float func_001F9F90_2E0630(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2E0630(float) __asm__("FUN_001f9de0");
 extern float func_001F9D48_2E0630(void *, void *) __asm__("FUN_001f9b80");
@@ -121,7 +121,7 @@ extern float func_002140F8_2E0630(float, float) __asm__("FUN_002132a8");
 extern float func_00214158_2E0630(void) __asm__("FUN_00213308");
 extern int func_L00_001F10E0_2E0630(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int func_L00_0025D6F0_2E0630(void *, void *) __asm__("FUN_L00_0025c698");
-extern void func_L00_002584A8_2E0630(void *, int, int) __asm__("FUN_L00_00257470");
+extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void func_L00_00260460_2E0630(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern V_2E0630 D_L10_001672C0_2E0630 __asm__("D_L10_00167240");
 extern Path_2E0630 *D_L10_001B0C30_2E0630[] __asm__("D_L10_001B0930");
@@ -249,7 +249,7 @@ void screamer_update(Moby *moby) {
         float zero = 0.0f;
         float climb;
         func_L00_0025CC58_2E0630(&moby->rot.y, 0, zero, D_0015ED6C * 12.566371f);
-        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(data->home.x - moby->pos.x, data->home.y - moby->pos.y), &data->yaw_speed,
+        approach_w(moby, func_L00_001FF860_2E0630(data->home.x - moby->pos.x, data->home.y - moby->pos.y), &data->yaw_speed,
             0.02f, 0.3f, D_0015ED6C * 6.2831855f);
         data->vel.x = func_001F9F90_2E0630(moby->rot.z) * (D_0015ED6C * 6.0f);
         data->vel.y = func_001F9FA8_2E0630(moby->rot.z) * (D_0015ED6C * 6.0f);
@@ -283,7 +283,7 @@ void screamer_update(Moby *moby) {
         break;
     }
     case SCREAMER_STATE_WANDER:
-        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(data->wander_goal.x - moby->pos.x, data->wander_goal.y - moby->pos.y), &data->yaw_speed,
+        approach_w(moby, func_L00_001FF860_2E0630(data->wander_goal.x - moby->pos.x, data->wander_goal.y - moby->pos.y), &data->yaw_speed,
             0.05f, 0.3f, 0.2f);
         fast_vec_sub(&data->step, &data->wander_goal, &moby->pos);
         func_L00_002607A8_2E0630(&data->step, D_0015ED6C * 4.0f);
@@ -298,7 +298,7 @@ void screamer_update(Moby *moby) {
         break;
     case SCREAMER_STATE_DEATH_KNOCKBACK:
         if ((func_L00_0025D6F0_2E0630(moby, data->react) & 1) == 0) break;
-        func_L00_002584A8_2E0630(moby, 0x200, -1);
+        mark_moby_for_removal_cf(moby, 0x200, -1);
         func_L00_00260460_2E0630(moby, &moby->pos, -1, 0.5f, 10.0f);
         func_0020D678_2E0630(moby);
         break;
@@ -670,7 +670,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         }
         break;
     case 6:
-        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
+        approach_w(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
             0.02f, 0.3f, frame_time * 6.2831855f);
         if ((moby->anim_flags & 2) == 0) break;
         moby->state = 7;
@@ -683,7 +683,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         break;
     case 7: {
         float lim;
-        func_L00_002592B0_2E0630(moby, fast_add_rotations_2e01a8(func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), vars->side_angle), &vars->turn_speed,
+        approach_w(moby, fast_add_rotations_2e01a8(func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), vars->side_angle), &vars->turn_speed,
             0.02f, 0.3f, frame_time * 6.2831855f);
         lim = func_00214358_2E0630(&moby->pos, 0, 0.5f);
         qcopy(scratch, &target->pos);
@@ -716,7 +716,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         break;
     }
     case 8:
-        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
+        approach_w(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
             0.02f, 0.3f, frame_time * 6.2831855f);
         func_L00_0025CC58_2E0630(&moby->rot.y, 0, -func_L00_001FF860_2E0630(func_001F9D48_2E0630(&moby->pos, &vars->vE0), vars->vE0.z - moby->pos.z),
             frame_time * 12.566371f);
@@ -745,7 +745,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         float zero = 0.0f;
         float climb;
         func_L00_0025CC58_2E0630(&moby->rot.y, 0, zero, frame_time * 12.566371f);
-        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(vars->home.x - moby->pos.x, vars->home.y - moby->pos.y), &vars->turn_speed,
+        approach_w(moby, func_L00_001FF860_2E0630(vars->home.x - moby->pos.x, vars->home.y - moby->pos.y), &vars->turn_speed,
             0.02f, 0.3f, frame_time * 6.2831855f);
         vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 6.0f);
         vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 6.0f);
@@ -764,7 +764,7 @@ void FUN_L10_002e01a8(Moby *moby) {
     case 9: {
         float dist = func_001F9D10_2E0630(&moby->pos, &target->pos);
         float climb;
-        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(vars->home.x - moby->pos.x, vars->home.y - moby->pos.y), &vars->turn_speed,
+        approach_w(moby, func_L00_001FF860_2E0630(vars->home.x - moby->pos.x, vars->home.y - moby->pos.y), &vars->turn_speed,
             0.02f, 0.3f, frame_time * 0.78539819f);
         vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 4.0f);
@@ -793,7 +793,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         float dist = func_001F9D10_2E0630(&moby->pos, &target->pos);
         float climb;
         if (moby->group != 0xFF) FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
-        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
+        approach_w(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
             0.02f, 0.3f, frame_time * 1.5707964f);
         vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 4.0f);
@@ -824,7 +824,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         float zero;
         float one;
         if (moby->group != 0xFF) FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
-        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
+        approach_w(moby, func_L00_001FF860_2E0630(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), &vars->turn_speed,
             0.02f, 0.3f, frame_time * 6.2831855f);
         vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 6.0f);
         vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 6.0f);
@@ -861,7 +861,7 @@ void FUN_L10_002e01a8(Moby *moby) {
     }
     case 12: {
         float climb;
-        func_L00_002592B0_2E0630(moby, func_L00_001FF860_2E0630(vars->home.x - moby->pos.x, vars->home.y - moby->pos.y), &vars->turn_speed,
+        approach_w(moby, func_L00_001FF860_2E0630(vars->home.x - moby->pos.x, vars->home.y - moby->pos.y), &vars->turn_speed,
             0.02f, 0.3f, frame_time * 1.0471976f);
         vars->velocity.x = func_001F9F90_2E0630(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.y = func_001F9FA8_2E0630(moby->rot.z) * (frame_time * 4.0f);
@@ -884,7 +884,7 @@ void FUN_L10_002e01a8(Moby *moby) {
     }
     case 13:
         if ((func_L00_0025D6F0_2E0630(moby, vars->a60) & 1) == 0) break;
-        func_L00_002584A8_2E0630(moby, 0x200, -1);
+        mark_moby_for_removal_cf(moby, 0x200, -1);
         func_L00_00260460_2E0630(moby, &moby->pos, -1, 0.5f, 10.0f);
         func_0020D678_2E0630(moby);
         return;
@@ -2997,7 +2997,7 @@ extern unsigned char D_0013D504[];
 extern unsigned char D_00141B20[];
 s32 FUN_L00_00203908(s32 a, s32 b);
 extern int func_00215570_2E9978(void *arg0, int arg1) __asm__("FUN_00214720");
-extern int func_L00_00203F20_2E9978(int a, int b) __asm__("FUN_L00_00203908");
+extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern float func_001F9D48_2E9978(void *, void *) __asm__("FUN_001f9b80");
 extern int func_001F9850_2E9978(int) __asm__("FUN_001f96f8");
 extern char D_L10_00179890[];
@@ -3040,7 +3040,7 @@ void update_conditional_help_messages(Moby *moby)
             && ((Msg *)D_L10_00179890)->f0 == 0
             && ((Msg *)D_L10_00179890)->f24 == -1
             && *(unsigned short *)(l10_help_message_2710_gate) == 0) {
-            func_L00_00203F20_2E9978(0x2710, 0x35);
+            help_request(0x2710, 0x35);
         }
         if (func_00215570_2E9978(D_0013F3D0_r, data->f4) != 0
             && (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9)
@@ -3048,11 +3048,11 @@ void update_conditional_help_messages(Moby *moby)
             && ((Msg *)D_L10_00179890)->f24 == -1) {
             if (((Flags_2E9978 *)(D_0013D388_r))->f4 == 0) {
                 if (*(unsigned short *)(D_00141B20_r) == 0) {
-                    func_L00_00203F20_2E9978(0x2712, 0x37);
+                    help_request(0x2712, 0x37);
                 }
             } else if (((Flags_2E9978 *)(D_0013D388_r))->f5 == 0) {
                 if (*(unsigned short *)(D_00141B28_r) == 0) {
-                    func_L00_00203F20_2E9978(0x2713, 0x38);
+                    help_request(0x2713, 0x38);
                 }
             }
         }
@@ -3060,7 +3060,7 @@ void update_conditional_help_messages(Moby *moby)
             && ((Msg *)D_L10_00179890)->f0 == 0
             && ((Msg *)D_L10_00179890)->f24 == -1
             && *(unsigned short *)(l10_help_message_2711_gate) == 0) {
-            func_L00_00203F20_2E9978(0x2711, 0x36);
+            help_request(0x2711, 0x36);
         }
         if (func_00215570_2E9978(D_0013F3D0_r, data->f8) != 0
             && (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9)
@@ -3068,7 +3068,7 @@ void update_conditional_help_messages(Moby *moby)
             && ((Msg *)D_L10_00179890)->f0 == 0
             && ((Msg *)D_L10_00179890)->f24 == -1
             && *(unsigned short *)(D_00141C48) == 0) {
-            func_L00_00203F20_2E9978(0x2715, 0x5C);
+            help_request(0x2715, 0x5C);
         }
         any_active = 0;
         for (other = l10_conditional_help_moby_list_head; other != 0; other = other->next) {
@@ -3080,7 +3080,7 @@ void update_conditional_help_messages(Moby *moby)
             && data->f14 != -1
             && func_001F9D48_2E9978(D_0013F3D0_r, &D_L10_0015FFD0_m[2][data->f14].pos) < 15.0f
             && *(unsigned short *)(l10_help_message_2717_gate) == 0) {
-            func_L00_00203F20_2E9978(0x2717, 0x6A);
+            help_request(0x2717, 0x6A);
         }
         if (any_active == 0) break;
         if (func_00215570_2E9978(D_0013F3D0_r, data->f18) == 0) break;
@@ -3090,7 +3090,7 @@ void update_conditional_help_messages(Moby *moby)
         if (((Save_2E9978 *)(D_00141968_r))->f358 != 0) {
             elapsed = func_001F9850_2E9978(D_0015EEA4_gp) - ((Save_2E9978 *)(D_00141968_r))->f35A * 600;
             if ((int)((float)func_001F9850_2E9978(0x12) * 60.0f) < elapsed || ((Save_2E9978 *)(D_00141968_r))->f35A * 600 == 0) {
-                func_L00_00203F20_2E9978(0x2718, 0x6B);
+                help_request(0x2718, 0x6B);
                 break;
             }
             if (func_001F9850_2E9978(D_0015EEA4_gp) / 600 > ((Save_2E9978 *)(D_00141968_r))->f35A) {

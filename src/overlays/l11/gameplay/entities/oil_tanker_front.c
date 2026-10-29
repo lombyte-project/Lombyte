@@ -77,7 +77,7 @@ struct L11HitInfo {
 };
 
 extern struct L11HitInfo *FUN_L00_0025a420_h(void *, s32, s32) __asm__("FUN_L00_0025a420");
-extern s32 fun_00213928(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern s32 trooper_take_damage(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void spawn_color_swapped_explosion_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f3e8");
 extern s32 is_moby_in_state_five(void *) __asm__("FUN_L11_0030a830");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -143,7 +143,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     dmg = 0.0f;
     hit = FUN_L00_0025a420_h(moby, 0x330000, 0);
     {
-        s32 kind = fun_00213928(moby, hit, &patrol_vars->hp, 0, &out, &dmg, 0, 4);
+        s32 kind = trooper_take_damage(moby, hit, &patrol_vars->hp, 0, &out, &dmg, 0, 4);
         if (out != 1 && moby->state != 0xB) {
             patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {

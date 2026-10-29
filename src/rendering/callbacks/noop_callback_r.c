@@ -1,6 +1,6 @@
 #include "rnc1_functions.h"
 
-void fun_001e9478(void) __asm__("func_001E9478");
-void fun_001e9478(void) {
+void noop_callback_r(void) __asm__("func_001E9478");
+void noop_callback_r(void) {
     return;
 }

@@ -589,9 +589,9 @@ extern f32 FUN_001fa5c8_2b438(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 FUN_001f9b20_2b438(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value_2b438(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
-extern void FUN_L00_00212088_2b438(f32, f32) __asm__("FUN_L00_00212088");
+extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void FUN_L00_00211e30_2b438(int, float, float, float) __asm__("FUN_L00_00211e30");
-extern void FUN_L00_002118c8_2b438(int, float) __asm__("FUN_L00_002118c8");
+extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
 extern f32 FUN_L00_0025bc98_2b438(float *, float *, int, float, float, float,
                                   float) __asm__("FUN_L00_0025bc98");
 extern void FUN_L00_002091d8_2b438(float, float, float) __asm__("FUN_L00_002091d8");
@@ -600,7 +600,7 @@ extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_002337
 extern void FUN_001f9bf8_2b438(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9c48_2b438(float *, float *, float) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_2b438(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L01_00234358_2b438(f32) __asm__("FUN_L01_00234358");
+extern void air_accel(f32) __asm__("FUN_L01_00234358");
 
 #define ED64 frame_scale_sq
 #define ED6C D_0015ED6C_2b438
@@ -632,13 +632,13 @@ void update_hero_airborne_planar_velocity(void) {
         } else {
             hero.target_speed = ED6C * 3.5f;
         }
-        FUN_L00_00212088_2b438(ED70 * 44.0f, ED70 * 45.0f);
+        speed_step(ED70 * 44.0f, ED70 * 45.0f);
         set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
         add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
     } else if (state == 0x1C) {
         if (FUN_001f96f8_2b438(0x28) < hero.state_timer) {
             FUN_L00_00211e30_2b438(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);
-            FUN_L01_00234358_2b438(ED70 * 20.0f);
+            air_accel(ED70 * 20.0f);
         }
         if (13.0f <= hero.anim_frame && hero.anim_frame <= 30.0f) {
             if (27.0f < hero.anim_frame) {
@@ -725,7 +725,7 @@ void update_hero_airborne_planar_velocity(void) {
                 velocity_adjustment_step = ED70 * 2.0f;
             }
         }
-        FUN_L01_00234358_2b438(velocity_adjustment_step);
+        air_accel(velocity_adjustment_step);
     }
 }
 #include "rnc/math/vector.h"

@@ -962,11 +962,11 @@ extern int D_L02_001ABE40[];
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
 extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
-extern void FUN_L00_002e8450(int, float, float) __asm__("FUN_L00_002e8450");
-extern void FUN_L00_002e84b8(float, float) __asm__("FUN_L00_002e84b8");
+extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
+extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
 extern void set_follow_camera_orbit_clamp_mode(int) __asm__("FUN_L00_002e8568");
 extern void FUN_L00_002e8620(void);
-extern void FUN_L00_002e8648(void) __asm__("FUN_L00_002e8648");
+extern void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
 extern void set_follow_camera_angle_blend_from_direction(float, float, float *) __asm__("FUN_L00_002e8918");
 extern void set_follow_camera_angle_blend_from_position(float, float, void *) __asm__("FUN_L00_002e8970");
 extern float absolute_float(float);
@@ -1160,18 +1160,18 @@ void apply_moby_camera_control(char *moby) {
         }
     }
     if (*(float *)(data + 0x34) != 0.0f) {
-        FUN_L00_002e8450(0, *(float *)(data + 0x34), 0.003f);
+        follow_camera_set_distance(0, *(float *)(data + 0x34), 0.003f);
         FUN_L00_002e8620();
     }
     if (*(float *)(data + 0x38) != 0.0f)
-        FUN_L00_002e84b8(*(float *)(data + 0x38), 0.003f);
+        follow_camera_set_height(*(float *)(data + 0x38), 0.003f);
     if (*(float *)(data + 0x4c) != 0.0f)
         follow_camera_set_offset_scale(0, *(float *)(data + 0x4c), 0.005f);
     if (*(short *)(data + 0x3c) == 3) {
         float heading;
         set_follow_camera_orbit_clamp_mode(0);
         FUN_L00_002e8620();
-        FUN_L00_002e8648();
+        follow_camera_start_slide();
         follow_camera_set_up_spring(0.01f, 0.2f);
         if (*(short *)(data + 0x20) >= scale_game_frames(120))
             heading = 0.03f;
@@ -1182,18 +1182,18 @@ void apply_moby_camera_control(char *moby) {
     if ((unsigned short)(*(short *)(data + 0x3c) - 4) < 2) {
         set_follow_camera_orbit_clamp_mode(0);
         FUN_L00_002e8620();
-        FUN_L00_002e8648();
+        follow_camera_start_slide();
         follow_camera_set_up_spring(0.02f, 0.2f);
-        FUN_L00_002e8450(0, 5.84f, 0.003f);
+        follow_camera_set_distance(0, 5.84f, 0.003f);
         if (*(short *)(data + 0x3c) == 4) {
             float angle;
             fast_vec_sub(heading_vector, target + 0x10, &hero.motion.pos);
             angle = fast_arc_tan(heading_vector[0], heading_vector[1]);
             if (hit && fast_difference_between_rotations(angle, *(float *)(data + 0x40)) > 1.9198622f) {
                 if (*(float *)(data + 0x34) != 0.0f)
-                    FUN_L00_002e8450(0, *(float *)(data + 0x34) + 3.36f, 0.003f);
+                    follow_camera_set_distance(0, *(float *)(data + 0x34) + 3.36f, 0.003f);
                 else
-                    FUN_L00_002e8450(0, 8.0f, 0.003f);
+                    follow_camera_set_distance(0, 8.0f, 0.003f);
             }
         }
         set_follow_camera_control_word(176);

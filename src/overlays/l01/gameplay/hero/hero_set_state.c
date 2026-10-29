@@ -1608,7 +1608,7 @@ struct HeldGadgetVars {
 extern int D_00141660 NOT_SDA;
 int r1_double_tap_timer __asm__("D_L01_0015F674") = 0;
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
 extern int FUN_L00_0020d498(int);
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
@@ -1732,7 +1732,7 @@ int handle_hero_gadget_button(void) {
                 } else if ((controller_state.held & buttons) != 0 &&
                            FUN_L00_00233e98(-1) == 0 &&
                            voice_is_playing(hero.items[0].moby, vars->voice) == 0) {
-                    vars->voice = FUN_0022da68(0, 0, hero.items[0].moby);
+                    vars->voice = allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
                 }
             }
         }
@@ -1762,7 +1762,7 @@ int handle_hero_gadget_button(void) {
                             hero_set_state(0x23, 1);
                         else start_equipped_item_animation();
                     } else if (hero.items[0].moby != 0) {
-                        FUN_0022da68(0, 0, hero.items[0].moby);
+                        allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
                     }
                 }
             }
@@ -1777,7 +1777,7 @@ int handle_hero_gadget_button(void) {
                 if (FUN_L00_00266d60(buttons, hold < limit ? hold : limit, &out2) != 0 &&
                     hero.items[0].moby != 0) {
                     hero_set_state(0x20, 1);
-                    if (hero.items[0].moby != 0) FUN_0022da68(0, 0, hero.items[0].moby);
+                    if (hero.items[0].moby != 0) allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
                 }
             }
         }

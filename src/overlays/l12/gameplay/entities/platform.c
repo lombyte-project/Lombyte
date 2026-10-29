@@ -512,7 +512,7 @@ extern int FUN_L01_00274b78_c(char *,char *,float) __asm__("FUN_L01_00274b78");
 extern void func_00213DE0_2E2EF0(void *,int,int,int) __asm__("FUN_00212f90");
 extern void func_L01_0026E8E0_2E2EF0(char *) __asm__("FUN_L01_0026d930");
 extern int func_001F9850_2E2EF0(int) __asm__("FUN_001f96f8");
-extern int func_L00_00258BC8_2E2EF0(int,int) __asm__("FUN_L00_00257b90");
+extern int random_int_between(int,int) __asm__("FUN_L00_00257b90");
 extern int func_001160D8_2E2EF0(void) __asm__("FUN_001160d8");
 extern int func_002140B0_2E2EF0(int) __asm__("FUN_00213260");
 extern float func_00214358_2E2EF0(void *,int,float) __asm__("FUN_00213508");
@@ -545,7 +545,7 @@ extern void func_L00_0025AC00_2E2EF0(void *,int,int,void *,void *,float) __asm__
 extern int func_L00_0025A778_2E2EF0(void *,void *,int) __asm__("FUN_L00_00259740");
 extern int func_L00_002DDEA0_2E2EF0(void *,void *) __asm__("FUN_L00_002dc9f0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern void func_L00_002584A8_2E2EF0(void *,int,int) __asm__("FUN_L00_00257470");
+extern void mark_moby_for_removal_cf(void *,int,int) __asm__("FUN_L00_00257470");
 extern void spawn_type_52_particle_near_moby(char *) __asm__("FUN_L10_002e3de8");
 extern void func_L12_002E43A8_2E2EF0(void *) __asm__("FUN_L12_002e3098");
 extern void func_0020D678_2E2EF0(void *) __asm__("FUN_0020c828");
@@ -604,9 +604,9 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
         func_L01_0026E8E0_2E2EF0((char *)&data->effect_class);
         data->effect_class=0x38D; data->effect_flags|=0x10; data->effect_speed=D_0015ED6C*5.5f;
         data->effect_size1=0.5f; data->effect_size0=0.5f;
-        if(data->group_enabled) { first=func_001F9850_2E2EF0(20); data->group_timer=func_L00_00258BC8_2E2EF0(first,func_001F9850_2E2EF0(170)); }
+        if(data->group_enabled) { first=func_001F9850_2E2EF0(20); data->group_timer=random_int_between(first,func_001F9850_2E2EF0(170)); }
         qcopy(data->idle_pos,moby->pos);
-        first=func_001F9850_2E2EF0(120); data->idle_timer=func_L00_00258BC8_2E2EF0(first,func_001F9850_2E2EF0(700));
+        first=func_001F9850_2E2EF0(120); data->idle_timer=random_int_between(first,func_001F9850_2E2EF0(700));
         qcopy(work.v0,moby->pos); work.v0[2]+=0.8f;
         moby->pos[2]=func_00214358_2E2EF0(work.v0,0,0.5f);
         if(func_001160D8_2E2EF0()&1) moby->flags|=0x8000;
@@ -790,8 +790,8 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     case ANKLEBITER_DEATH_FALL:
         hit=func_L00_0025D6F0_2E2EF0(moby,data->fall);
         if((hit&0x40)||(compute_interpolated_record_value(moby)>37.0f && moby->anim_end==moby->anim)) {
-            moby->anim_rate=0.0f; func_L00_002584A8_2E2EF0(moby,0,-1); moby->state=15; moby->flags|=8;
-        } else if(moby->pos[2]<10.0f) { func_L00_002584A8_2E2EF0(moby,0,-1); { func_0020D678_2E2EF0(moby); return; } }
+            moby->anim_rate=0.0f; mark_moby_for_removal_cf(moby,0,-1); moby->state=15; moby->flags|=8;
+        } else if(moby->pos[2]<10.0f) { mark_moby_for_removal_cf(moby,0,-1); { func_0020D678_2E2EF0(moby); return; } }
         else if(hit&1) spawn_type_52_particle_near_moby((char *)moby);
         break;
     case ANKLEBITER_DEATH_EFFECTS_AND_REMOVE:
@@ -1001,7 +1001,7 @@ extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008")
 extern void alert_group_e3528(s32, s32) __asm__("FUN_L01_0026e090");
 extern void call_for_help_e3528(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
 extern AnklebiterHit *find_hit_e3528(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern void take_damage_e3528(struct Moby *, AnklebiterHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern void trooper_take_damage(struct Moby *, AnklebiterHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void start_fall_e3528(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void anim_reset_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d458");
@@ -1045,7 +1045,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
     }
     coll = find_hit_e3528(moby, 0x330000, 0);
     dmg = 0.0f;
-    take_damage_e3528(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
+    trooper_take_damage(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
     if (coll != 0 && moby->state != 0x63 && moby->state != 8) {
         if (moby->group != 0xFF) {
             alert_group_e3528(moby->group, 7);

@@ -247,8 +247,8 @@ extern char *FUN_L00_002603d0(int);
 extern void func_L00_001FF240_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void func_L00_001FF610_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void func_L00_001FF4B0_2E9358(void *, void *, float) __asm__("FUN_001f9bf8");
-extern int func_L00_00261478_2E9358(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern int probe_ground_height_cf(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern void func_L00_0025F4A8_2E9358(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern int probe_world_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
@@ -297,7 +297,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
                 moby->bBC = 1;
                 qcopy(&moby->pos, &((Tb *)D_L15_001744C0_2E9358)->v20);
                 func_L00_001FF610_2E9358(&collision_scratch_vector, data, &((Tb *)D_L15_001744C0_2E9358)->v40);
-                func_L00_001FF4B0_2E9358(&collision_scratch_vector, &collision_scratch_vector, D_0015ED6C + D_0015ED6C);
+                fast_vec_normalize(&collision_scratch_vector, &collision_scratch_vector, D_0015ED6C + D_0015ED6C);
             }
         }
         break;
@@ -312,7 +312,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
             } else if (D_L15_001744D8_2E9358 != 0) {
                 follow_context = FUN_L00_002603d0(D_L15_001744D8_2E9358);
                 if (follow_context != 0) {
-                    func_L00_00261478_2E9358(moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
+                    probe_ground_height_cf(moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
                     fast_vec_sub(&temporary_vector, &moby->pos, &previous_position);
                     *(OvlQuad *)data = temporary_vector.q;
                 }
@@ -1495,7 +1495,7 @@ typedef struct Items {
 
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
-extern int FUN_L00_0020d568_2ed398(void) __asm__("FUN_L00_0020d568");
+extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern unsigned char D_0013D4DF_2ed398[] __asm__("D_0013D4DF");
 extern int D_L15_00161AC0_macro __asm__("D_L15_00161AC0") __attribute__((section(".sdata")));
 extern char *moby_array __asm__("D_L15_0015FFD8") __attribute__((section(".sdata")));
@@ -1646,7 +1646,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
                 hint_dialogue_data->last = -1;
             }
         }
-        if (scale_game_frames(0xE10) < hint_dialogue_data->hold38 && pick != -1 && FUN_L00_0020d568_2ed398() != 0
+        if (scale_game_frames(0xE10) < hint_dialogue_data->hold38 && pick != -1 && hero_is_in_special_state() != 0
             && ((Help *)quartu_help_message_state)->busy == 0 && ((Help *)quartu_help_message_state)->cur == -1
             && l15_dwell_zone_hint_enabled[0] != 0) {
             help_request(0x4E2E, 0x78);

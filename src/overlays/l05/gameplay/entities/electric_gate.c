@@ -2328,7 +2328,7 @@ void taxi_update(struct Moby *moby) {
     FUN_L00_00260738(taxi_data + 0x20, position_delta, old_rotation, &moby->rot);
 }
 #include "qcopy.h"
-extern float func_001F9D10_19208(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC");
 extern unsigned char D_0014C050_19208[] __asm__("D_0014C050");
 
@@ -2341,7 +2341,7 @@ void initialize_taxi_stop_state(void *moby_v) {
     char *pose_table_base;
     *(short *)(data + 0xB4) = -1;
     for (i = 0; i < 5; i++) {
-        if (func_001F9D10_19208(moby + 0x10, D_L05_001600EC_19208 + (list[i] << 7) + 0x30) < 1.0f) {
+        if (fast_vec_dist(moby + 0x10, D_L05_001600EC_19208 + (list[i] << 7) + 0x30) < 1.0f) {
             *(short *)(data + 0xB4) = i;
         }
     }

@@ -32,8 +32,8 @@ typedef struct {
 extern f32 square_root(f32) __asm__("FUN_001f9988");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-int FUN_001f96f8_002acbf0(int) __asm__("FUN_001f96f8");
-float FUN_001fa6c0_002acbf0(int) __asm__("FUN_001fa6c0");
+int scale_game_frames(int) __asm__("FUN_001f96f8");
+float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern f32 fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
@@ -63,7 +63,7 @@ void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
         quad_orientation_angles.f[2] = 0.0f;
         quad_orientation_angles.f[3] = 0.0f;
         rz.f[0] = 0.0f;
-        phase_numerator = FUN_001fa6c0_002acbf0(D_L00_0015F5CC % FUN_001f96f8_002acbf0(180));
+        phase_numerator = convert_integer_to_float(D_L00_0015F5CC % scale_game_frames(180));
         {
             f32 phase_divisor = scale_time(180.0f);
             f32 signed_phase_sine;

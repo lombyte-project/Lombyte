@@ -347,7 +347,7 @@ extern int scale_game_frames_98b68(int) __asm__("FUN_001f96f8");
 extern int try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void FUN_L00_00216f90_98b68(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");
-extern void FUN_L01_0027a248_98b68(int, int) __asm__("FUN_L01_0027a248");
+extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 extern void mark_moby_for_removal_98b68(struct Moby *) __asm__("FUN_0020c828");
 
@@ -421,14 +421,14 @@ void update_hero_relocation_trigger(struct Moby *moby) {
                                    D_L10_001600EC_98b68 + vars->spot * 128 + 0x70, 0, 1);
         }
         enter_hero_vehicle_mode(1, 0x43, (struct Moby *)(D_L10_0015FFD8_98b68 + (vars->target << 8)));
-        FUN_L01_0027a248_98b68(2, 4);
+        jet_game_state(2, 4);
         return;
     }
     if (hero.vehicle_mode == 1) {
         exit_hero_vehicle_mode();
         FUN_L00_00216f90_98b68(D_L10_001600EC_98b68 + vars->vehicle_spot * 128 + 0x30,
                                D_L10_001600EC_98b68 + vars->vehicle_spot * 128 + 0x70, 0, 1);
-        FUN_L01_0027a248_98b68(0, 5);
+        jet_game_state(0, 5);
         ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 1;
         ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 2;
         ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->collision = 0;

@@ -127,7 +127,7 @@ f32 FUN_001f99c0_2c40a0(f32) __asm__("FUN_001f99c0");
 void FUN_001f9a28_2c40a0(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9b20_2c40a0(void *) __asm__("FUN_001f9b20");
 f32 FUN_001f9af0_2c40a0(void *) __asm__("FUN_001f9af0");
-f32 FUN_L00_0025b8c0_2c40a0(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
+f32 vendor_spring(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 f32 FUN_00213508_2c40a0(void *, f32, s32) __asm__("FUN_00213508");
 void FUN_001f9bf8_2c40a0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_L00_00258830_2c40a0(void *, void *, f32, f32, f32, int) __asm__("FUN_L00_00258830");
@@ -155,7 +155,7 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
         horizontal_separation_error = 0.0f;
     if (proximity_response_gate == 0)
         horizontal_separation_error = 0.0f;
-    FUN_L00_0025b8c0_2c40a0(&horizontal_separation_error, 0.0f, &moby_vars->f60, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
+    vendor_spring(&horizontal_separation_error, 0.0f, &moby_vars->f60, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f,
                             D_0015ED6C_2c40a0 * 4.0f);
     if (horizontal_separation_error == 0.0f && moby_vars->f60 == 0.0f) {
         if (FUN_001f99c0_2c40a0(self->f18 - FUN_00213508_2c40a0(self->v10, 0.5f, 0)) < 0.02f)
@@ -435,7 +435,7 @@ unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hoo
 int FUN_001f96f8_2c7070(int) __asm__("FUN_001f96f8");
 void FUN_00212f90_2c7070(void *, int, int, int) __asm__("FUN_00212f90");
 void FUN_0020c828_2c7070(void *) __asm__("FUN_0020c828");
-void FUN_0020e098_2c7070(void *) __asm__("FUN_0020e098");
+void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern unsigned char D_001413FF NOT_SDA;
 void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
 void swingshot_hook_update(unsigned char *hook_moby) {
@@ -530,7 +530,7 @@ void swingshot_hook_update(unsigned char *hook_moby) {
         hook_moby[0x20] = 1;
         break;
     }
-    FUN_0020e098_2c7070(hook_moby);
+    refresh_moby_spatial_bounds_from_basis(hook_moby);
 }
 typedef union {
     u128 q;
@@ -677,7 +677,7 @@ void FUN_001f9a10_002c82f0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a68_002c82f0(void *, void *, float) __asm__("FUN_001f9a68");
 int FUN_001efa68_002c82f0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void FUN_001f9bf8_002c82f0(void *, void *, float) __asm__("FUN_001f9bf8");
-void FUN_L00_001ff660_002c82f0(void *, void *, void *) __asm__("FUN_L00_001ff660");
+void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released_moby, void *initial_velocity) __asm__("FUN_L00_002c82f0");
 
 void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released_moby, void *initial_velocity) {
@@ -706,7 +706,7 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released
         collision_hit_cursor += 0x20;
         FUN_001f9bf8_002c82f0(&collision_position_offset, collision_hit_cursor, x * 9.0f - x * 0.1f);
         FUN_001f9a10_002c82f0(released_moby_position, released_moby_position, &collision_position_offset);
-        FUN_L00_001ff660_002c82f0(q, q, collision_hit_cursor);
+        reflect_vector(q, q, collision_hit_cursor);
         FUN_001f9a68_002c82f0(q, q, 0.6f);
     }
     released_moby[0x20] = 2;
@@ -1145,7 +1145,7 @@ float FUN_001fa580_2c1778(float, float) __asm__("FUN_001fa580");
 float FUN_001f9b80_2c1778(void *, void *) __asm__("FUN_001f9b80");
 float FUN_001f99c0_2c1778(float) __asm__("FUN_001f99c0");
 void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-float FUN_00213ed8_2c1778(void *, float, float) __asm__("FUN_00213ed8");
+float approach_value(void *, float, float) __asm__("FUN_00213ed8");
 void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
 
 extern const float l00_trespasser_pickup_initial_height_offset __asm__("D_L00_00161828") __attribute__((sda));
@@ -1184,7 +1184,7 @@ void update_trespasser_pickup(void *mv) {
         }
     } break;
     case TRESPASSER_SHRINK_FOR_REMOVAL:
-        FUN_00213ed8_2c1778(trespasser_moby + 0x2C, 0.0f, *(float *)(*(char **)(trespasser_moby + 0x24) + 0x24) * 0.02f);
+        approach_value(trespasser_moby + 0x2C, 0.0f, *(float *)(*(char **)(trespasser_moby + 0x24) + 0x24) * 0.02f);
         if (*(float *)(trespasser_moby + 0x2C) == 0.0f)
             FUN_0020c828_2c1778(trespasser_moby);
         break;
@@ -2072,8 +2072,8 @@ extern float FUN_00257be8_2c4380(float, float) __asm__("FUN_002132a8");
 extern void FUN_0028dbe8_2c4380(int, int, void *) __asm__("FUN_0022da68");
 extern int FUN_001fef20_2c4380(int) __asm__("FUN_001f96f8");
 extern int FUN_001fef68_2c4380(void *) __asm__("FUN_001f9740");
-extern int FUN_001fef98_2c4380(void *) __asm__("FUN_001f9770");
-extern int FUN_001fefc8_2c4380(void *) __asm__("FUN_L00_001fefc8");
+extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
+extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern float FUN_001ff3d8_2c4380(void *) __asm__("FUN_001f9af0");
 extern float FUN_001ff408_2c4380(void *) __asm__("FUN_001f9b20");
 extern float FUN_001ff1e0_2c4380(float) __asm__("FUN_001f9988");
@@ -2248,7 +2248,7 @@ void decoy_update(char *moby) {
                     }
                 }
                 destroy_decoy_on_selected_materials(moby);
-                if (FUN_001fefc8_2c4380(vars + 0x6f))
+                if (fast_subtract_rotations_cf(vars + 0x6f))
                     FUN_0028dbe8_2c4380(0, 0, moby), vars[0x6f] = FUN_001fef20_2c4380(20);
                 else
                     add_random_offset_to_vector_xyz(D_0015ED6C_2c4380, vars + 0x10);
@@ -2270,7 +2270,7 @@ void decoy_update(char *moby) {
             (D_0015ED60_2c4380 * 0.1f));
         update_decoy_proximity_motion((S_2c40a0 *)moby);
         FUN_001fef68_2c4380(vars + 0x5c);
-        FUN_001fef98_2c4380(vars + 0x6c);
+        fast_dec_timer_s16(vars + 0x6c);
         if (hit) {
             target = (char *)hit;
             if (*(int *)(target + 0x20) != *(int *)(vars + 0x58) ||
@@ -2355,7 +2355,7 @@ void decoy_update(char *moby) {
         } else {
             if (*(float *)(moby + 0x2c) < *(float *)(*(char **)(moby + 0x24) + 0x24))
                 *(float *)(moby + 0x2c) += D_0015ED60_2c4380 * 0.02f;
-            if (FUN_001fef98_2c4380(vars + 0x44)) {
+            if (fast_dec_timer_s16(vars + 0x44)) {
                 if (((u8 *)moby)[0x53])
                     FUN_00257880_2c4380(moby, 0, 0, FUN_001fef20_2c4380(60));
                 mine_spawn_drops(moby, D_L00_001B0830_lui);
@@ -2370,7 +2370,7 @@ void decoy_update(char *moby) {
                              moby + 0x40, moby + 0x10, moby + 0x40);
         if (moby[0x70] & 2)
             *(int *)(moby + 0x58) = 0;
-        if (FUN_001fef98_2c4380(vars + 0x44) || (moby[0x70] & 2))
+        if (fast_dec_timer_s16(vars + 0x44) || (moby[0x70] & 2))
             moby[0x20] = 6;
         break;
     case DECOY_SHRINK_FOR_REMOVAL: {
@@ -2431,7 +2431,7 @@ extern int FUN_L00_00233e40_2c53c0(int, int) __asm__("FUN_L00_00233e40");
 extern void queue_formatted_dialogue_message(int, int, int) __asm__("FUN_L00_00263db0");
 extern int FUN_001f99a8_2c53c0(int) __asm__("FUN_001f99a8");
 extern int FUN_L00_0028dc90_2c53c0(int, int, int, int) __asm__("FUN_L00_0028dc90");
-extern float FUN_L00_00250430_2c53c0(void *, void *) __asm__("FUN_L00_00250430");
+extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
 extern void FUN_0020c828_2c53c0(void *) __asm__("FUN_0020c828");
 typedef struct {
     int amount;
@@ -2575,7 +2575,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
     pickup_failed:
         if (pickup_moby->alpha < 0xFF)
             ++pickup_moby->alpha;
-        if (FUN_L00_00250430_2c53c0(pickup_moby, hero.moby) <= -0.2f) {
+        if (jet_distance(pickup_moby, hero.moby) <= -0.2f) {
             pickup_moby->state = 3;
             pickup_vars->recovery_timer = FUN_001f96f8_2c53c0(60);
         }
@@ -2632,7 +2632,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         random = FUN_001f96f8_2c53c0(30);
         FUN_00213ed8_2c53c0(value_ptr, target, (float)(128 / random));
         pickup_moby->alpha = FUN_001fa6d0_2c53c0(*value_ptr);
-        if (FUN_L00_00250430_2c53c0(pickup_moby, hero.moby) >= 0.0f) {
+        if (jet_distance(pickup_moby, hero.moby) >= 0.0f) {
             pickup_moby->state = 1;
             return;
         }
@@ -2725,8 +2725,8 @@ extern void FUN_001f9bf8_2bffa8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a10_2bffa8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float FUN_001f9af0_2bffa8(void *) __asm__("FUN_001f9af0");
 extern int FUN_001efa68_2bffa8(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int FUN_L00_00205000_2bffa8(int) __asm__("FUN_L00_00205000");
-extern void FUN_L00_002323b8_2bffa8(int, int, float) __asm__("FUN_L00_002323b8");
+extern int hero_idle_sequence(int) __asm__("FUN_L00_00205000");
+extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void draw_swingshot_cable(char *) __asm__("FUN_L00_002c5dc8");
 
 void swingshot_update(Moby *m) __asm__("FUN_L00_002c6158");
@@ -2813,7 +2813,7 @@ void swingshot_update(Moby *m) {
                 FUN_L00_002223f8_2bffa8(6, 1);
             } else {
                 FUN_L00_002223f8_2bffa8(0, 0);
-                FUN_L00_002323b8_2bffa8(FUN_L00_00205000_2bffa8(0), 0, (float)FUN_001f96f8_2bffa8(14));
+                set_hero_animation(hero_idle_sequence(0), 0, (float)FUN_001f96f8_2bffa8(14));
             }
             m->state = 6;
         } else if (speed < FUN_001f9b48_2bffa8(&d->hook->pos, &hero.grapple_target->pos)) {
@@ -2852,7 +2852,7 @@ void swingshot_update(Moby *m) {
                 if (!(controller_state.held & hero.items[0].button_mask)) {
                     hero.unk988 = 1;
                     FUN_L00_002223f8_2bffa8(0, 0);
-                    FUN_L00_002323b8_2bffa8(FUN_L00_00205000_2bffa8(0), 0, (float)FUN_001f96f8_2bffa8(14));
+                    set_hero_animation(hero_idle_sequence(0), 0, (float)FUN_001f96f8_2bffa8(14));
                     m->state = 6;
                 } else {
                     FUN_0022da68_2bffa8(2, 0, m);

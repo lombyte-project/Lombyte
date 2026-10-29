@@ -2208,7 +2208,7 @@ extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_L00_00216f90_q(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_002ea9d8_q(void *) __asm__("FUN_L00_002ea9d8");
-extern void FUN_L00_002ea9d8_q_002eaa30(void *) __asm__("FUN_L00_002eaa30");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_002eaaa0_q(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
 
@@ -2270,7 +2270,7 @@ void update_position_and_rotation_transition(struct Moby *moby) {
                *(float *)(data + 0x60);
         transition_scratch_vectors[6] = FUN_001fa580_q(*(float *)(data + 0x28), transition_scratch_vectors[6]);
         FUN_L00_002ea9d8_q(transition_scratch_vectors);
-        FUN_L00_002ea9d8_q_002eaa30(transition_scratch_vectors + 4);
+        set_camera_rotation(transition_scratch_vectors + 4);
         approach_value((float *)(data + 0x6C), 0.0f, (*(float *)&D_L18_00161A6C) * 4.0f);
         {
             float transition_progress = *(float *)(data + 0x60);
@@ -2305,7 +2305,7 @@ void update_position_and_rotation_transition(struct Moby *moby) {
                *(float *)(data + 0x60);
         transition_scratch_vectors[6] = FUN_001fa580_q(*(float *)(data + 0x28), transition_scratch_vectors[6]);
         FUN_L00_002ea9d8_q(transition_scratch_vectors);
-        FUN_L00_002ea9d8_q_002eaa30(transition_scratch_vectors + 4);
+        set_camera_rotation(transition_scratch_vectors + 4);
         if (1.0f <= *(float *)(data + 0x60) ||
             (0.2f < *(float *)(data + 0x60) && D_L18_00179E10[0] == 0 &&
              D_L18_00179E10[9] == -1)) {

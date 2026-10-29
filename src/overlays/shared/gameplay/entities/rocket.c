@@ -13,16 +13,16 @@ typedef struct {
     float d[4];
 } L10SpriteData;
 extern void func_001F9BF0_298940(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void func_L00_001FF4B0_298940(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_298940(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9908_298940(int *) __asm__("FUN_001f9740");
 extern int func_001F9850_298940(int) __asm__("FUN_001f96f8");
-extern float func_001FA888_298940(int) __asm__("FUN_001fa6c0");
-extern int func_001FA8A8_298940(int, int, float) __asm__("FUN_001fa6e0");
-extern float func_001F9B88_298940(float) __asm__("FUN_001f99c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, int, int, int,
                                                float) __asm__("FUN_L00_00272f68");
-extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 void emit_moby_sprite_particles(char *moby) __asm__("FUN_L10_00298940");
 
 void emit_moby_sprite_particles(char *moby) {
@@ -34,8 +34,8 @@ void emit_moby_sprite_particles(char *moby) {
 
     *(float *)(moby + 0x18) += 0.5f;
     func_001F9BF0_298940(d, D_L10_00167240, moby + 0x10);
-    func_L00_001FF4B0_298940(d, d, -0.3f);
-    func_L00_001FF4B0_298940(particle_position_step, d, 0.1f);
+    fast_vec_normalize(d, d, -0.3f);
+    fast_vec_normalize(particle_position_step, d, 0.1f);
     func_001F9BD8_298940(d, d, moby + 0x10);
     *(float *)(moby + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
@@ -49,26 +49,26 @@ void emit_moby_sprite_particles(char *moby) {
         if (func_001F9908_298940(&sprite_data->c[i])) {
             sprite_data->c[i] = func_001F9850_298940(0xFF);
         }
-        color_blend_offset = func_001FA888_298940(func_001F9850_298940(0xFF) - sprite_data->c[i]);
+        color_blend_offset = convert_integer_to_float(func_001F9850_298940(0xFF) - sprite_data->c[i]);
         color_blend_offset = color_blend_offset / (float)func_001F9850_298940(0xFF);
-        col = func_001FA8A8_298940(0x4040FFFF, 0x1040FFFF, func_001F9B88_298940(0.5f - color_blend_offset));
-        func_L00_00273E08_298940(d, col, func_001FA898_298940(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
+        col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - color_blend_offset));
+        func_L00_00273E08_298940(d, col, truncate_float_to_s32(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                  sprite_data->d[i]);
         func_001F9BD8_298940(d, d, particle_position_step);
     }
 }
 #include "sda.h"
 #include "qcopy.h"
-extern struct Moby *func_0020D348_m_cc1b8(int) __asm__("FUN_0020c4f8");
+extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_001F9850_cc1b8(int) __asm__("FUN_001f96f8");
 extern float func_001F9D10_cc1b8(void *, void *) __asm__("FUN_001f9b48");
 extern float func_L00_001FF860_cc1b8(float, float) __asm__("FUN_001f9e90");
 extern float func_001F9CE8_cc1b8(void *) __asm__("FUN_001f9b20");
-extern void func_L00_00251E30_cc1b8(void *) __asm__("FUN_L00_00250df8");
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) __asm__("FUN_L10_002cc1b8");
 
 char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) {
-    char *rocket = (char *)func_0020D348_m_cc1b8(0x333);
+    char *rocket = (char *)create_moby(0x333);
     char *shot_data;
     if (rocket) {
         *(float *)(rocket + 0x2C) = *(float *)(rocket + 0x2C) * scale;
@@ -88,7 +88,7 @@ char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, i
         *(int *)(shot_data + 0x34) = 0;
         *(float *)(rocket + 0x48) = func_L00_001FF860_cc1b8(*(float *)shot_data, *(float *)(shot_data + 4));
         *(float *)(rocket + 0x44) = -func_L00_001FF860_cc1b8(func_001F9CE8_cc1b8(shot_data), *(float *)(shot_data + 8));
-        func_L00_00251E30_cc1b8(rocket);
+        update_entity(rocket);
     }
     return rocket;
 }

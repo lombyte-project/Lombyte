@@ -878,7 +878,7 @@ extern void func_L17_002EBF08_f(float, float, float, float, unsigned char, unsig
                                 unsigned char, unsigned char) __asm__("FUN_L11_00311048");
 extern void *func_001FE540_id(int) __asm__("FUN_001fdd10");
 extern int func_001F6F40_c(int, int, long, void *, int) __asm__("FUN_001f6af0");
-extern int func_001F6F40_c_001f6b88(int, int, long, void *, int) __asm__("FUN_001f6b88");
+extern int font_print_center_small(int, int, long, void *, int) __asm__("FUN_001f6b88");
 
 void draw_fighter_jet_hud(struct Moby *moby) __asm__("FUN_L17_002eb9a8");
 
@@ -964,10 +964,10 @@ void draw_fighter_jet_hud(struct Moby *moby) {
     append_rotated_sprite_quad(ex, ey, 10.0f, 10.0f, 0.0f, 0x1F, 0x1F, func_001F4868_l(8), 0xFFFFF3,
                                0xFF20FF20, 0, 0, 0.5f, 0.5f);
     if (hero.ship_hp < hero.ship_hp_max / 10.0f && (D_L17_0015F5CC / 90) & 1) {
-        func_001F6F40_c_001f6b88(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
+        font_print_center_small(0x100, 0x186, 0x80000080L, func_001FE540_id(0x5269), 0x64);
     }
     if (moby->state == 8) {
-        func_001F6F40_c_001f6b88(0x100, 0xC8, 0x80005080L, func_001FE540_id(0x523E), 0x64);
+        font_print_center_small(0x100, 0xC8, 0x80005080L, func_001FE540_id(0x523E), 0x64);
     }
     hp_display_step = hero.ship_hp - *(float *)(ship_vars + 0xF0);
     hp_display_step *= 0.2f;
@@ -3720,7 +3720,7 @@ struct Dat_3CC0_f2180 {
 extern float func_00214D28_f2180(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern int func_001F9850_f2180(int) __asm__("FUN_001f96f8");
 extern int func_001FA898_r_f2180(float) __asm__("FUN_001fa6d0");
-extern void func_001F9C08_f2180(void *, void *, void *, float) __asm__("FUN_001f9a40");
+extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void func_L00_002EBE88_f2180(void *) __asm__("FUN_L00_002ea9d8");
 extern void func_L00_00217718_f2180(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern float func_L00_001FF860_f2180(float, float) __asm__("FUN_001f9e90");
@@ -3757,8 +3757,8 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
     scaled_path_position = shuttle_vars->fA4 * (float)(shuttle_movement_path->n - 1);
     moby_path_blend = scaled_path_position - camera_position_index_float;
     i3 = func_001FA898_r_f2180(scaled_path_position);
-    func_001F9C08_f2180(camera_position, &camera_position_path->p[i1], &camera_position_path->p[i1 + 1], camera_position_blend);
-    func_001F9C08_f2180(moby + 0x10, &shuttle_movement_path->p[i3], &shuttle_movement_path->p[i3 + 1], moby_path_blend);
+    lerp_vector(camera_position, &camera_position_path->p[i1], &camera_position_path->p[i1 + 1], camera_position_blend);
+    lerp_vector(moby + 0x10, &shuttle_movement_path->p[i3], &shuttle_movement_path->p[i3 + 1], moby_path_blend);
     func_L00_002EBE88_f2180(camera_position);
     {
         char *base = D_L17_001600EC + (shuttle_vars->e84 << 7);

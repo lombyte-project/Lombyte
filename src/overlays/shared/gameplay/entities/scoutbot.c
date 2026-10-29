@@ -381,14 +381,14 @@ typedef struct {
     float uv[8];
     u64 tag[4];
 } Packet_002d3878 __attribute__((aligned(16)));
-extern u64 FUN_001f44b8_002d3878(int) __asm__("FUN_001f44b8");
+extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void scale_vector_002d3878(float, void *) __asm__("FUN_L00_0025f730");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void FUN_001f7d30_002d3878(void *, void *, int) __asm__("FUN_001f7d30");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L08_00161894_lui __asm__("D_L08_00161894") NOT_SDA;
 extern u32 D_00151878_gp __asm__("D_00151878") __attribute__((sda));
 extern u32 D_0015187C_gp __asm__("D_0015187C") __attribute__((sda));
@@ -406,7 +406,7 @@ void draw_target_beam(char *moby) {
     char *source1;
     float *vertex;
     int i;
-    tag = FUN_001f44b8_002d3878(14);
+    tag = get_effect_texture(14);
     pk.color[0] = D_00151878_gp;
     pk.color[1] = D_0015187C_gp;
     pk.color[2] = D_00151880_gp;
@@ -444,14 +444,14 @@ void draw_target_beam(char *moby) {
     qcopy(&pk.vertices[3], data + 0x1d0);
     pk.vertices[3].v[0] = length * *(float *)(data + 0x1dc);
     pk.vertices[3].v[2] += 0.25f; pk.vertices[3].v[3] = 1.0f;
-    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    draw_geometry_quad(pk.vertices, matrix, 1);
     {
         for (i = 1; i < 4; i += 2) {
             if (i < 2) { pk.vertices[i].v[1] += -0.25f; pk.vertices[i].v[2] += 0.25f; }
             else { pk.vertices[i].v[1] += 0.25f; pk.vertices[i].v[2] += -0.25f; }
         }
     }
-    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    draw_geometry_quad(pk.vertices, matrix, 1);
 
     qcopy(&pk.vertices[0], data + 0x1d0);
     pk.vertices[0].v[0] = length * *(float *)(data + 0x1dc);
@@ -465,7 +465,7 @@ void draw_target_beam(char *moby) {
     qcopy(&pk.vertices[3], data + 0x1e0);
     pk.vertices[3].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[3].v[2] += 0.25f; pk.vertices[3].v[3] = 1.0f;
-    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    draw_geometry_quad(pk.vertices, matrix, 1);
     {
         float *vertex;
         for (i = 0, vertex = pk.vertices[0].v; i < 4; i++, vertex += 4) {
@@ -473,7 +473,7 @@ void draw_target_beam(char *moby) {
             else { vertex[1] += 0.25f; vertex[2] += -0.25f; }
         }
     }
-    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    draw_geometry_quad(pk.vertices, matrix, 1);
 
     qcopy(&pk.vertices[0], data + 0x1e0);
     pk.vertices[0].v[0] = length * *(float *)(data + 0x1ec);
@@ -487,7 +487,7 @@ void draw_target_beam(char *moby) {
     clear_u64_value(&pk.vertices[3]);
     pk.vertices[3].v[0] = length * *(float *)(data + 0x1dc) * 3.0f;
     pk.vertices[3].v[2] = 0.0f; pk.vertices[3].v[3] = 1.0f;
-    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    draw_geometry_quad(pk.vertices, matrix, 1);
     {
         float *vertex;
         for (i = 0, vertex = pk.vertices[0].v; i < 4; i += 2, vertex += 8) {
@@ -495,7 +495,7 @@ void draw_target_beam(char *moby) {
             else { vertex[1] += 0.25f; vertex[2] += -0.25f; }
         }
     }
-    FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
+    draw_geometry_quad(pk.vertices, matrix, 1);
 }
 
 
@@ -590,7 +590,7 @@ void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_001f9d20_002d4108(void *, void *, void *) __asm__("FUN_001f9d20");
+void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 
 extern float D_L08_001D1D80[4][4] NOT_SDA;
@@ -638,7 +638,7 @@ void draw_scoutbot_glow_quad(char *moby) {
     pk.col[0] = col;
     for (i = 0; i < 4; i++) {
         fast_vec_scale(pk.m[i], D_L08_001D1D80[i], scoutbot_glow_quad_vertex_scale_gp);
-        FUN_001f9d20_002d4108(pk.m[i], pk.m[i], M);
+        transform_vector(pk.m[i], pk.m[i], M);
     }
     FUN_001f7d30_002d4108(&pk, 0, 0);
 }
@@ -752,7 +752,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_game_frames_002e8210(float) __asm__("FUN_L08_00211a20");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int decrement_timer_002e8210(int *) __asm__("FUN_001f9740");
-extern int collision_line_002e8210(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void scale_vector_in_place_002e8210(float, void *) __asm__("FUN_L00_0025f730");
@@ -853,7 +853,7 @@ remove:
     mark_moby_for_removal(moby);
     return;
 collision:
-    if (collision_line_002e8210(position_copy, moby + 0x10, 0, moby, position) == 0)
+    if (collision_line(position_copy, moby + 0x10, 0, moby, position) == 0)
         return;
     qcopy(moby + 0x10, D_L08_00174660);
     if (15.0f < *(float *)(moby + 0x10) && 15.0f < *(float *)(moby + 0x14) &&
@@ -1560,7 +1560,7 @@ extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
-extern int scan_target_3024d8(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float D_L08_00162180 __attribute__((sda));
@@ -1721,7 +1721,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
     if (random_integer_below(4) == 0) {
         {
             char *path = D_L08_001B0CB0[*(int *)(data + 0x1d0)];
-            reaction = scan_target_3024d8(moby, data + 0x120, *(float *)(data + 0x1dc), 0, 0, path + 0x10, *(int *)path);
+            reaction = activate_effect_l08(moby, data + 0x120, *(float *)(data + 0x1dc), 0, 0, path + 0x10, *(int *)path);
         }
         if (reaction != 2) {
             distance = vector_distance(moby + 0x10, data + 0x120);

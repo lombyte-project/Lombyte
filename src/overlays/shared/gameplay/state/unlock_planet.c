@@ -10,7 +10,7 @@
 #include "sda.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
-extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 extern short D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")NOT_SDA;
@@ -43,7 +43,7 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, candidate_moby + 0x10);
+        candidate_distance_score = vector_distance(query_moby + 0x10, candidate_moby + 0x10);
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
@@ -62,7 +62,7 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
             continue;
         if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, candidate_moby + 0x10);
+        candidate_distance_score = vector_distance(query_moby + 0x10, candidate_moby + 0x10);
         if (candidate_distance_score < best) {
             selected_moby = candidate_moby;
             best = candidate_distance_score;
@@ -92,8 +92,8 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
     *(int *)(target_output + 0x44) = target_selection_status;
     return target_selection_status;
 }
-extern int FUN_00214720_25ff38(void *, int) __asm__("FUN_00214720");
-extern int FUN_L00_00259740_25ff38(void *, void *, int) __asm__("FUN_L00_00259740");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 int FUN_L00_0025ff38(char *a, char *o, float best, int *list, int n, float *v, int nv);
 int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *list, int exclusion_list_bound, float *target_region_vertices, int nv) {
     struct Hero *hero_data = &hero_lui;
@@ -114,14 +114,14 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         target_selection_status = 2;
     } else if (exclusion_list_bound > 0) {
         for (k = 0; k < exclusion_list_bound - 1; k++) {
-            if (FUN_00214720_25ff38(&hero_lui.motion.pos, list[k]) != 0) {
+            if (is_point_inside_clip_volume(&hero_lui.motion.pos, list[k]) != 0) {
                 selected_moby = 0;
                 target_selection_status = 2;
                 break;
             }
         }
     } else if (target_region_vertices != 0 && nv > 0) {
-        if (FUN_L00_00259740_25ff38(&hero_lui.motion.pos, target_region_vertices, nv) == 0) {
+        if (point_in_path_xy(&hero_lui.motion.pos, target_region_vertices, nv) == 0) {
             selected_moby = 0;
             target_selection_status = 2;
         }
@@ -134,18 +134,18 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFD) continue;
         if (*(unsigned char *)(indexed_candidate + 0x20) != 3) continue;
         ok = 1;
-        candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, indexed_candidate + 0x10);
+        candidate_distance_score = vector_distance(query_moby + 0x10, indexed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
         } else if (exclusion_list_bound > 0) {
             for (k = 0; k < exclusion_list_bound - 1; k++) {
-                if (FUN_00214720_25ff38(indexed_candidate + 0x10, list[k]) != 0) {
+                if (is_point_inside_clip_volume(indexed_candidate + 0x10, list[k]) != 0) {
                     ok = 0;
                     break;
                 }
             }
         } else if (target_region_vertices != 0 && nv > 0) {
-            if (FUN_L00_00259740_25ff38(indexed_candidate + 0x10, target_region_vertices, nv) == 0) ok = 0;
+            if (point_in_path_xy(indexed_candidate + 0x10, target_region_vertices, nv) == 0) ok = 0;
         }
         if (ok) {
             selected_moby = indexed_candidate;
@@ -161,18 +161,18 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         if (*(unsigned char *)(listed_candidate + 0x20) == 0xFD) continue;
         if (*(unsigned char *)(listed_candidate + 0xBC) == 0) continue;
         ok = 1;
-        candidate_distance_score = FUN_001f9b80_25fcb8(query_moby + 0x10, listed_candidate + 0x10);
+        candidate_distance_score = vector_distance(query_moby + 0x10, listed_candidate + 0x10);
         if (best <= candidate_distance_score) {
             ok = 0;
         } else if (exclusion_list_bound > 0) {
             for (k = 0; k < exclusion_list_bound - 1; k++) {
-                if (FUN_00214720_25ff38(listed_candidate + 0x10, list[k]) != 0) {
+                if (is_point_inside_clip_volume(listed_candidate + 0x10, list[k]) != 0) {
                     ok = 0;
                     break;
                 }
             }
         } else if (target_region_vertices != 0 && nv > 0) {
-            if (FUN_L00_00259740_25ff38(listed_candidate + 0x10, target_region_vertices, nv) == 0) ok = 0;
+            if (point_in_path_xy(listed_candidate + 0x10, target_region_vertices, nv) == 0) ok = 0;
         }
         if (ok) {
             selected_moby = listed_candidate;
@@ -234,7 +234,7 @@ u8 *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
 void FUN_001f9cf8_002604f0(void *, void *, void *) __asm__("FUN_001f9cf8");
 void FUN_001f9a10_002604f0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001fa050_002604f0(void *, void *) __asm__("FUN_001fa050");
-void FUN_001fa298_002604f0(void *, void *) __asm__("FUN_001fa298");
+void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 void FUN_001fa378_002604f0(void *, void *, void *) __asm__("FUN_001fa378");
 void FUN_00214598_002604f0(void *, void *) __asm__("FUN_00214598");
 void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
@@ -253,7 +253,7 @@ int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void 
     FUN_001f9cf8_002604f0(transformed_position, position, reference_object + 0xC0);
     FUN_001f9a10_002604f0(transformed_position, transformed_position, reference_object + 0x10);
     FUN_001fa050_002604f0(composed_attachment_rotation_matrix, rotation);
-    FUN_001fa298_002604f0(reference_basis_matrix, reference_object + 0xC0);
+    copy_matrix_rotation(reference_basis_matrix, reference_object + 0xC0);
     FUN_001fa378_002604f0(composed_attachment_rotation_matrix, reference_basis_matrix, composed_attachment_rotation_matrix);
     FUN_00214598_002604f0(composed_attachment_rotation_matrix, transformed_rotation);
     if (*(int *)(transform_record + 0x3C) & 4) {

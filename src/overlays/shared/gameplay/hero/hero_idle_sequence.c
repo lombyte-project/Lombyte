@@ -1941,8 +1941,8 @@ void FUN_001f9a68_208b60(V_208b60 *, M_208b60 *, f32) __asm__("FUN_001f9a68");
 void normalize_vector_xyz(V_208b60 *, V_208b60 *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_208b60(V_208b60 *, V_208b60 *, V_208b60 *) __asm__("FUN_001f9a10");
 s32 collision_line(V_208b60 *, V_208b60 *, s32, s32, s32) __asm__("FUN_001efa68");
-f32 FUN_001f99d0_208b60(f32, f32) __asm__("FUN_001f99d0");
-f32 FUN_001f99c8_208b60(f32, f32) __asm__("FUN_001f99c8");
+f32 min_float(f32, f32) __asm__("FUN_001f99d0");
+f32 max_float(f32, f32) __asm__("FUN_001f99c8");
 #define G D_0013F350_208b60
 extern V_208b60 l00_hero_height_probe_direction __asm__("D_L00_001AEB90");
 extern T_208b60 l00_hero_height_probe_offsets[] __asm__("D_L00_0017C300");
@@ -2011,8 +2011,8 @@ void update_hero_moby_probed_height_bounds(void) {
         normalize_vector_xyz(px, &v, ((collision_probe_start.f[2] - probe_reference_z) + 0.5f) / -v.f[2]);
         FUN_001f9a10_208b60(px, pw, px);
         if (collision_line(pw, px, 0x22, 0, 0)) {
-            lo = FUN_001f99d0_208b60(lo, u->hit_z);
-            hi = FUN_001f99c8_208b60(hi, u->hit_z);
+            lo = min_float(lo, u->hit_z);
+            hi = max_float(hi, u->hit_z);
         }
     }
     G.m2080->f84 = lo - 0.12f;
@@ -2317,7 +2317,7 @@ extern float FUN_001fa580_209638(float, float) __asm__("FUN_001fa580");
 extern float FUN_001fa5c8_209638(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_002132a8_209638(float, float) __asm__("FUN_002132a8");
 extern int FUN_00213260_209638(int) __asm__("FUN_00213260");
-extern void FUN_L00_002718d0_209638(void *, void *, void *, float,
+extern void spawn_splash(void *, void *, void *, float,
                                     float) __asm__("FUN_L00_002718d0");
 
 void fast_sin_cf(int seed, int limit) __asm__("FUN_L00_00209638");
@@ -2349,7 +2349,7 @@ void fast_sin_cf(int seed, int limit) {
                 float effect_side_value = -2.0f;
                 if (i == 0)
                     effect_side_value = 2.0f;
-                FUN_L00_002718d0_209638(pos, planar_effect_vector, &hero_state->water_surface_z, random_effect_scale, effect_side_value);
+                spawn_splash(pos, planar_effect_vector, &hero_state->water_surface_z, random_effect_scale, effect_side_value);
             }
             if (seed) {
                 hero_state->unk908 = FUN_00213260_209638(seed);
@@ -2366,7 +2366,7 @@ extern float D_0015ED6C;
 float FUN_002132a8_209848(float, float) __asm__("FUN_002132a8");
 float FUN_00213308_209848(void) __asm__("FUN_00213308");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-void FUN_L00_0026f548_209848(V_209848 *, V_209848 *, int, int) __asm__("FUN_L00_0026f548");
+void spawn_debris_chunk(V_209848 *, V_209848 *, int, int) __asm__("FUN_L00_0026f548");
 int FUN_00213260_209848(int) __asm__("FUN_00213260");
 void emit_hero_periodic_surface_particles(int counter_reset_range, int effect_spawn_counter_threshold) __asm__("FUN_L00_00209848");
 
@@ -2389,9 +2389,9 @@ void emit_hero_periodic_surface_particles(int counter_reset_range, int effect_sp
         outgoing_motion.z = FUN_002132a8_209848(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
         k = random_int_between(0x5A, 0x78);
         if (P->water_depth < 0.25f)
-            FUN_L00_0026f548_209848(&spawn_position, &outgoing_motion, 3, k);
+            spawn_debris_chunk(&spawn_position, &outgoing_motion, 3, k);
         else
-            FUN_L00_0026f548_209848(&spawn_position, &outgoing_motion, 1, k);
+            spawn_debris_chunk(&spawn_position, &outgoing_motion, 1, k);
         {
             short h = FUN_00213260_209848(counter_reset_range);
             struct Hero *Q = &hero;

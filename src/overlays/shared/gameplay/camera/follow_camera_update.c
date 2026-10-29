@@ -615,12 +615,12 @@ extern int FUN_001f96f8_2ea488(int) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9dc8_2ea488(f32) __asm__("FUN_001f9dc8");
 extern f32 FUN_001f9de0_2ea488(f32) __asm__("FUN_001f9de0");
 extern f32 FUN_001f9df8_2ea488(f32) __asm__("FUN_001f9df8");
-extern void FUN_L00_002e8918_2ea488(void *, f32, f32) __asm__("FUN_L00_002e8918");
+extern void set_follow_camera_angle_blend_from_direction(void *, f32, f32) __asm__("FUN_L00_002e8918");
 extern f32 FUN_001f9ab0_2ea488(void *, void *) __asm__("FUN_001f9ab0");
 extern void FUN_001f9a68_2ea488(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a28_2ea488(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f9af0_2ea488(void *) __asm__("FUN_001f9af0");
-extern void FUN_L00_001ed280_2ea488(void) __asm__("FUN_L00_001ed280");
+extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void FUN_001f9740_2ea488(void *) __asm__("FUN_001f9740");
 #define P D_0013F350_lui
 int camera_transition_update(u8 *, char *) __asm__("FUN_L00_002ea488");
@@ -664,7 +664,7 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
         transition_vector_scratch.f[0] = FUN_001f9dc8_2ea488(P.f98);
         transition_vector_scratch.f[1] = FUN_001f9de0_2ea488(P.f98);
         *(s32 *)&transition_vector_scratch.f[2] = 0;
-        FUN_L00_002e8918_2ea488(&transition_vector_scratch, 0.06981316953897476f, transition_vector_scratch.f[2]);
+        set_follow_camera_angle_blend_from_direction(&transition_vector_scratch, 0.06981316953897476f, transition_vector_scratch.f[2]);
         goto tail;
     off:
         q->h20 = 0;
@@ -689,7 +689,7 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
     if (transition_residual_length_product != 0.0f) {
         x = FUN_001f9df8_2ea488(FUN_001f9ab0_2ea488(&transition_hero_vector_residual, &transition_camera_vector_residual) / transition_residual_length_product);
         if (1.3962633609771729f <= 1.5707964f - x) {
-            FUN_L00_001ed280_2ea488();
+            init_camera_system();
             return 0;
         }
     }
@@ -700,7 +700,7 @@ tail:
         transition_vector_scratch.f[0] = FUN_001f9dc8_2ea488(P.f98);
         transition_vector_scratch.f[1] = FUN_001f9de0_2ea488(P.f98);
         *(s32 *)&transition_vector_scratch.f[2] = 0;
-        FUN_L00_002e8918_2ea488(&transition_vector_scratch, 0.13962633907794952f, transition_vector_scratch.f[2]);
+        set_follow_camera_angle_blend_from_direction(&transition_vector_scratch, 0.13962633907794952f, transition_vector_scratch.f[2]);
     }
     return 0;
 }
@@ -835,7 +835,7 @@ extern V_2eaaa0 D_L00_00166DC0_2eaaa0[2] __asm__("D_L00_00166DC0")
     __attribute__((section(".data")));
 extern V_2eaaa0 D_0013F3D0_2eaaa0 __asm__("D_0013F3D0") NOT_SDA;
 u8 *FUN_L00_001eb1f8_2eaaa0(s32) __asm__("FUN_L00_001eb1f8");
-void FUN_001ebf10_2eaaa0(u8 *) __asm__("FUN_001ebf10");
+void switch_active_camera_record(u8 *) __asm__("FUN_001ebf10");
 void FUN_L00_001ed630_2eaaa0(void *, V_2eaaa0 *, V_2eaaa0 *) __asm__("FUN_L00_001ed630");
 void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
 void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_frames, s32 x) {
@@ -848,7 +848,7 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
     qcopy(&requested_rotation, pb);
     qcopy(&saved_camera_position, &D_L00_00166DC0_2eaaa0[0]);
     qcopy(&saved_camera_rotation, &D_L00_00166DC0_2eaaa0[1]);
-    FUN_001ebf10_2eaaa0(camera_record);
+    switch_active_camera_record(camera_record);
     camera_state = *(u8 **)(camera_record + 0x70);
     transition_state = camera_state + 0xE0;
     target_position = camera_state + 0x80;
@@ -1760,7 +1760,7 @@ extern s32 try_select_follow_camera_volume(struct UpdateCam *) __asm__("FUN_L00_
 extern void clear_follow_camera_volume_if_current(struct UpdateCam *) __asm__("FUN_L00_002e8388");
 extern void fun_l00_002e8490(f32) __asm__("FUN_L00_002e8490");
 extern void fun_l00_002e8540(f32) __asm__("FUN_L00_002e8540");
-extern void fun_l00_002e8568(s32) __asm__("FUN_L00_002e8568");
+extern void set_follow_camera_orbit_clamp_mode(s32) __asm__("FUN_L00_002e8568");
 extern void fun_l00_002e8620(void) __asm__("FUN_L00_002e8620");
 extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 extern void fun_l00_002e8918(void *, f32, f32) __asm__("FUN_L00_002e8918");
@@ -1974,7 +1974,7 @@ stop:
         { FollowCamFlags *ctl = &FOLLOW_CAM_STATE(current_follow_cam)->tail.ctl; ctl->flags |= 1; }
     }
     if (params->keep_unk10 == 0) {
-        fun_l00_002e8568(0);
+        set_follow_camera_orbit_clamp_mode(0);
     }
     if (params->lateral_stiffness != 0.0f || params->lateral_damping != 0.0f) {
         if (params->timer >= scale_game_frames(120)) {
@@ -2162,7 +2162,7 @@ run:
         fun_l00_002e8540(params->unk28 * 0.017453292f);
     }
     if (params->keep_unk10 == 0) {
-        fun_l00_002e8568(0);
+        set_follow_camera_orbit_clamp_mode(0);
     }
 }
 

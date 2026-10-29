@@ -106,7 +106,7 @@ typedef struct {
 } O_23aaa8;
 extern int D_L00_0015F5CC_23aaa8 __asm__("D_L00_0015F5CC");
 int FUN_001f96f8_23aaa8(int) __asm__("FUN_001f96f8");
-int FUN_00213260_23aaa8(int) __asm__("FUN_00213260");
+int random_integer_below(int) __asm__("FUN_00213260");
 extern T_23aaa8 *D_L00_0017E4F4 NOT_SDA;
 int update_hud_animation_frame(O_23aaa8 *hud_frame_state) __asm__("FUN_L00_0023aaa8");
 
@@ -153,7 +153,7 @@ int update_hud_animation_frame(O_23aaa8 *hud_frame_state) {
                 } else {
                     frame_index = frame_sequence->base;
                     restart_start_offset = FUN_001f96f8_23aaa8(0xA);
-                    hud_frame_state->start = frame_sequence->n * 2 + restart_start_offset + FUN_00213260_23aaa8(FUN_001f96f8_23aaa8(0x1E));
+                    hud_frame_state->start = frame_sequence->n * 2 + restart_start_offset + random_integer_below(FUN_001f96f8_23aaa8(0x1E));
                 }
             } else {
                 frame_index = hud_frame_state->frame;
@@ -224,9 +224,9 @@ int update_hud_elements(int call) {
 extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
 extern int D_L00_0015F96C;
 extern int D_L00_0015F970;
-extern int FUN_001ff308_23adb8(int, int, void *, void *, void *, void *,
+extern int queue_animation_update(int, int, void *, void *, void *, void *,
                                int) __asm__("FUN_001ff308");
-extern void FUN_001ff570_23adb8(int, int) __asm__("FUN_001ff570");
+extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void hud_weapon_update(void) __asm__("FUN_L00_0023cdb8");
 extern void FUN_L00_0023a7a8_23adb8(void) __asm__("FUN_L00_0023a7a8");
@@ -247,20 +247,20 @@ void update_weapon_hud_state(void) {
     weapon_item_id = mode ? 0 : weapon_item_id;
     if (weapon_item_id != 0) {
         D_L00_0015F96C = weapon_item_id;
-        *(volatile int *)&D_L00_0015F970 = FUN_001ff308_23adb8(
+        *(volatile int *)&D_L00_0015F970 = queue_animation_update(
             0x10, weapon_item_id + 60000, initialize_numeric_hud_timer_and_base_dimensions, hud_weapon_update,
             FUN_L00_0023a7a8_23adb8, &weapon_ammo_counts[weapon_item_id], D_L00_001C40B0[weapon_item_id].hE);
     } else if (k = -1, mode == 2) {
         if (D_L00_0015F970 != k) {
-            FUN_001ff570_23adb8(D_L00_0015F970, 0);
+            set_animation_parameter(D_L00_0015F970, 0);
             D_L00_0015F970 = k;
         }
         hero_state->unk1634 =
-            FUN_001ff308_23adb8(0x10, 0xFFFF, reset_numeric_hud_element, hud_update_counter,
+            queue_animation_update(0x10, 0xFFFF, reset_numeric_hud_element, hud_update_counter,
                                 draw_hud_cropped_gauge_panel, &hero_state->vehicle_hp, 200);
     } else {
         if (D_L00_0015F970 != k) {
-            FUN_001ff570_23adb8(D_L00_0015F970, 0);
+            set_animation_parameter(D_L00_0015F970, 0);
             D_L00_0015F970 = k;
         }
     }

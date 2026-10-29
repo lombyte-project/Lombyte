@@ -728,7 +728,7 @@ extern int level_frame_count __asm__("D_L06_0015F5CC");
 extern int *D_L06_001B0C30[];
 extern float D_0015ED6C;
 extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern void stop_moby_sound_e94f0(void *, int, int) __asm__("FUN_L00_00257470");
+extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_direction) __asm__("FUN_L06_002ea198");
 
@@ -746,7 +746,7 @@ void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) __asm
 extern void select_hero_or_gadgebot_target(char *, char **, f32) __asm__("FUN_L06_002f34d8");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern int follow_path_e94f0(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
+extern int activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern struct MobyHit *hit_moby_e94f0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void remove_e94f0(struct Moby *) __asm__("FUN_0020c828");
 extern struct Moby *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
@@ -772,7 +772,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         if (hit != 0 && (hit->source == 0 || hit->source->oclass != 0xAF)) {
             spawn_moby_directional_spark_bursts(moby, (Vec4 *)D_L06_0015F580);
             destroy_frog_child_moby(moby);
-            stop_moby_sound_e94f0(moby, 0, -1);
+            mark_moby_for_removal_cf(moby, 0, -1);
             goto remove;
         }
     }
@@ -787,7 +787,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         switch (code) {
         case HIT_RESULT_LETHAL:
         case HIT_RESULT_REMOVE_OR_RESPAWN:
-            stop_moby_sound_e94f0(moby, 0, -1);
+            mark_moby_for_removal_cf(moby, 0, -1);
             spawn_moby_directional_spark_bursts(moby, (Vec4 *)&hit->pos);
             if (vars->sparks_pending == 1) {
                 spawn_moby_death_effect_burst((char *)moby);
@@ -852,7 +852,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
     } else {
         Vec4f *goal = &vars->target_pos;
         int *path = D_L06_001B0C30[vars->path];
-        if (follow_path_e94f0(moby, goal, vars->range, 0, 0, path + 4, *path) != 2) {
+        if (activate_effect_l08(moby, goal, vars->range, 0, 0, path + 4, *path) != 2) {
             if (vars->range < vector_distance(&vars->spawn_pos, goal) ||
                 3.0f < absolute_float(moby->pos.z - vars->target_pos.z)) {
                 vars->target_mode = 2;

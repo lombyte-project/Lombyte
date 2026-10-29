@@ -99,7 +99,7 @@ int scale_game_frames(int) __asm__("FUN_001f96f8");
 void load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
 void parse_space_scene_chunk(int) __asm__("FUN_002049f0");
 void sound_update(void) __asm__("FUN_0022ca50");
-int f122298_28e9c8(int) __asm__("FUN_00122298");
+int sce_gs_sync_v(int) __asm__("FUN_00122298");
 int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 void initialize_level_transition_with_audio(int audio_selection_mode) __asm__("FUN_L00_0028e9c8");
 
@@ -169,7 +169,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     parse_space_scene_chunk(0);
     while (music_stream_state.secondary.state != 3) {
         sound_update();
-        f122298_28e9c8(0);
+        sce_gs_sync_v(0);
     }
     continue_audio_stream_if_ready();
 }
@@ -227,7 +227,7 @@ void FUN_002335a0_0028ed58(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_0028ed58(s32) __asm__("FUN_L00_0028e9c8");
 s32 FUN_001f96f8_0028ed58(s32) __asm__("FUN_001f96f8");
 void FUN_002049f0_0028ed58(s32) __asm__("FUN_002049f0");
-s32 FUN_0020b178_0028ed58(s32, s32) __asm__("FUN_0020b178");
+s32 memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribute__((sda));
 void prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
 
@@ -256,7 +256,7 @@ void prepare_target_level_transition(s32 target_level_index) {
         FUN_002049f0_0028ed58(shared_result_record->i3C);
         shared_result_record->i38 = shared_result_record->i34 % divisor;
     } else {
-        FUN_0020b178_0028ed58(0, target_level_index);
+        memcard_save_data(0, target_level_index);
         D_L00_0015F5C0 = target_level_index;
         shared_state_record->i20 = 3;
         shared_state_record->h24 = -1;
@@ -334,12 +334,12 @@ typedef struct {
     char pad[0x22];
     short h26;
 } G_28efc8;
-void FUN_001f9a68_28efc8(float, void *, void *) __asm__("FUN_001f9a68");
-void FUN_001f9a10_28efc8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_001f9cf8_28efc8(void *, void *, void *) __asm__("FUN_001f9cf8");
-long FUN_001f44b8_28efc8(int) __asm__("FUN_001f44b8");
-int FUN_00213260_28efc8(int) __asm__("FUN_00213260");
-float FUN_001fa6c0_28efc8(int) __asm__("FUN_001fa6c0");
-void FUN_001f7d30_28efc8(void *, void *, int) __asm__("FUN_001f7d30");
+void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+long get_effect_texture(int) __asm__("FUN_001f44b8");
+int random_integer_below(int) __asm__("FUN_00213260");
+float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* FUN_L00_0028efc8 is the executable function of the same bytes (src/gameplay). */
 

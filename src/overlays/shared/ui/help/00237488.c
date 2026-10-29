@@ -416,20 +416,20 @@ extern CollisionHit D_L05_00174240 NOT_SDA;
 extern u8 D_L05_00174260[] NOT_SDA;
 extern u8 D_L05_0017AB20[] NOT_SDA;
 extern int probe_hero_forward_collision(float, float, float *) __asm__("FUN_L00_0020a240");
-extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
-extern int FUN_L00_0021e8d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_L00_0022e138(void *, void *) __asm__("FUN_001f9b48");
-extern int FUN_L00_0021f9c8(float, void *, int, int) __asm__("FUN_L00_001f0d60");
-extern void FUN_L00_0022e3b8(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void FUN_L00_0022e758(void *, void *) __asm__("FUN_001fa050");
+extern int coll_sphere(float, void *, int, int) __asm__("FUN_L00_001f0d60");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void FUN_L00_0022e3e0(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_L00_0022e9a0(void *, void *) __asm__("FUN_001fa298");
-extern void FUN_L00_0022eac0(void *, void *, void *) __asm__("FUN_001fa378");
-extern void FUN_L00_0022e9c0(void *, void *) __asm__("FUN_001fa2b8");
+extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 
 void update_hero_movement_and_collision_probes(void) __asm__("FUN_L05_0024bdc0");
 
@@ -448,7 +448,7 @@ void update_hero_movement_and_collision_probes(void) {
         hero.wall_probe_hit_moby = 0;
         if (probe_hero_forward_collision(0.7f, 4.0f, &hero.wall_probe_distance)) {
             CollisionHit *wall = &D_L05_00174240;
-            float normal_xy = FUN_L00_0022e0f0(&wall->normal_x);
+            float normal_xy = vector_length_xy(&wall->normal_x);
             hero.wall_normal_pitch = fast_arc_tan(wall->normal_z, normal_xy);
             if (wall->moby != 0) {
                 hero.wall_probe_hit_moby = 1;
@@ -464,11 +464,11 @@ void update_hero_movement_and_collision_probes(void) {
             transform_hero_local_offset_to_world(end, 1.1f, 0.0f, -20.0f);
             if (end[2] < 0.5f) end[2] = 0.5f;
             distance = 20.0f;
-            hit = FUN_L00_0021e8d8(start, end, 2, hero.moby, 0);
+            hit = collision_line(start, end, 2, hero.moby, 0);
             if (!hit || (distance = FUN_L00_0022e138(start, D_L05_00174260), distance > 3.0f)) {
                 for (offset = -0.4f; offset < 0.5f; offset += 0.1f) {
                     transform_hero_local_offset_to_world(probe, 1.1f + offset, 0.0f, 0.0f);
-                    if (!FUN_L00_0021f9c8(hero.capsule_radius, probe, 2, 0)) {
+                    if (!coll_sphere(hero.capsule_radius, probe, 2, 0)) {
                         hero.edge_ahead = 1;
                         if (!hit) hero.edge_drop_depth = 20.0f;
                         else hero.edge_drop_depth = distance;
@@ -484,13 +484,13 @@ void update_hero_movement_and_collision_probes(void) {
         qcopy(hero.hoverboard_moby + 0x10, (char *)&hero + 0x80);
         *(u128 *)start = 0;
         start[2] = 0.21f;
-        FUN_L00_0022e3b8(start, start, (char *)hero.moby + 0xc0);
-        FUN_L00_0022e758(rotation, D_L05_0017AB20);
+        transform_vector_by_basis(start, start, (char *)hero.moby + 0xc0);
+        euler_rotation_matrix(rotation, D_L05_0017AB20);
         FUN_L00_0022e3e0(start, start, rotation);
         fast_vec_add(hero.hoverboard_moby + 0x10, hero.hoverboard_moby + 0x10, start);
-        FUN_L00_0022e9a0(moby_rotation, (char *)hero.moby + 0xc0);
-        FUN_L00_0022eac0(combined, moby_rotation, rotation);
-        FUN_L00_0022e9c0(hero.hoverboard_moby + 0xc0, combined);
+        copy_matrix_rotation(moby_rotation, (char *)hero.moby + 0xc0);
+        multiply_matrix(combined, moby_rotation, rotation);
+        copy_matrix3x4(hero.hoverboard_moby + 0xc0, combined);
     }
 }
 /* Adapted from the exact FUN_L00_002279b0 (src/overlays/shared/gameplay/hero/hero_set_state.c): L05 has a wider head guard and its own level data. */
@@ -1431,13 +1431,13 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern void func_L05_00254B38_254608(void *, void *) __asm__("FUN_L05_00254358");
-extern void func_L00_00217718_254608(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void mode_freeze_init(int, void *) __asm__("FUN_001fbab8");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
-extern void func_001FFFA0_254608(void) __asm__("FUN_001ff768");
+extern void update_resource_counter(void) __asm__("FUN_001ff768");
 
 #include "rnc/overlay/shared/ui/help/00237488_data/update_hero_hoverboard_race_progress.h"
 extern float D_L05_0015F67C __attribute__((sda));
@@ -1542,7 +1542,7 @@ void update_hero_hoverboard_race_progress(void) {
                 func_L05_00254B38_254608(world_position_scratch, course_point_or_respawn_rotation);
                 hero.off_course_frames = 0;
                 hero.board_air_yaw = course_point_or_respawn_rotation[2];
-                func_L00_00217718_254608(world_position_scratch, course_point_or_respawn_rotation, 0x6B, 1);
+                set_race_camera(world_position_scratch, course_point_or_respawn_rotation, 0x6B, 1);
                 if (((Path *)hero.race_path) != 0) {
                     int r = select_point_index_by_distance(hero.motion.pos.f, (Path *)hero.race_path, 0.0f);
 
@@ -1640,7 +1640,7 @@ void update_hero_hoverboard_race_progress(void) {
             set_animation_parameter(hero.trick_hud_handle, 0);
             hero.trick_hud_handle = -1;
         }
-        func_001FFFA0_254608();
+        update_resource_counter();
     } else if (D_0015ED84_lui == 0x10) {
         if (race_pvars->f28 == -1) {
             return;
@@ -1667,7 +1667,7 @@ void update_hero_hoverboard_race_progress(void) {
             set_animation_parameter(hero.trick_hud_handle, 0);
             hero.trick_hud_handle = -1;
         }
-        func_001FFFA0_254608();
+        update_resource_counter();
     }
 }
 #include "sda.h"
@@ -1720,10 +1720,10 @@ int hero_pick_help_mode(void) {
         fast_vec_add(velocity, velocity, &player->motion.velocity);
         velocity[2] = 0.0f;
         fast_vec_add(end, start, velocity);
-        if (FUN_L00_0021e8d8(start, end, 2, 0, 0) &&
+        if (collision_line(start, end, 2, 0, 0) &&
             D_L05_00174240.moby == 0 && D_L05_00174240.unk1C != 0) {
             CollisionHit *wall = &D_L05_00174240;
-            if (1.2217305f < fast_arc_tan(wall->normal_z, FUN_L00_0022e0f0(&wall->normal_x))) {
+            if (1.2217305f < fast_arc_tan(wall->normal_z, vector_length_xy(&wall->normal_x))) {
                 player->unk8A4 = fast_add_rotations(fast_arc_tan(wall->normal_x, wall->normal_y), 3.1415927f);
                 if (fast_difference_between_rotations(fast_arc_tan(player->motion.velocity.f[0], player->motion.velocity.f[1]), player->unk8A4) < 0.7853982f) {
                     state = 0x6F;
@@ -1735,8 +1735,8 @@ int hero_pick_help_mode(void) {
     }
     level = current_level_index;
     if ((&hero)->wall_hit) {
-        float distance = FUN_L00_0022e0f0(&(&hero)->motion.displacement);
-        if (distance < FUN_L00_0022e0f0(&(&hero)->motion.velocity) * 0.25f) {
+        float distance = vector_length_xy(&(&hero)->motion.displacement);
+        if (distance < vector_length_xy(&(&hero)->motion.velocity) * 0.25f) {
             state = 0x6D;
             goto change_state;
         }

@@ -1110,17 +1110,17 @@ extern float D_L09_00166F40_edc30[] __asm__("D_L09_00166F40");
 extern void mark_moby_for_removal_edc30(struct Moby *) __asm__("FUN_0020c828");
 extern char *find_moby_hit_edc30(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_001fefc8(u8 *);
-extern void FUN_L00_00257470_edc30(struct Moby *, int, int) __asm__("FUN_L00_00257470");
+extern void mark_moby_for_removal_cf(struct Moby *, int, int) __asm__("FUN_L00_00257470");
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
-extern int allocate_target_entry_edc30(int, int, struct Moby *) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void scale_vector_edc30(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern float FUN_001f99c0_edc30(float) __asm__("FUN_001f99c0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern struct Moby *spawn_tumbling_debris(struct Moby *, Vec4 *, Vec4 *, s32, f32) __asm__("FUN_L09_002ef868");
-extern void FUN_L00_0025f090_edc30(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void FUN_L00_0025e450_edc30(struct Moby *, void *, void *, float, float, int, int, int, float, float, float,
+extern void cart_burst(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, int, int, float, float, float,
                                    float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 /* Level 9 breakable stack: when hit, swaps in the next damaged class (0x512 -> 0x513 -> 0x514), bursts debris and smoke and removes itself once gone. */
@@ -1163,7 +1163,7 @@ void display_update(struct Moby *moby) {
         case BREAKABLE_STACK_PENULTIMATE_CLASS:
             qcopy(center, &moby->pos);
             moby->pos.z += 4.0f;
-            FUN_L00_00257470_edc30(moby, 0, -1);
+            mark_moby_for_removal_cf(moby, 0, -1);
             qcopy(&moby->pos, center);
             next = 0x514;
             break;
@@ -1176,9 +1176,9 @@ void display_update(struct Moby *moby) {
     qcopy(center, top);
     add_random_offset_to_vector_xyz(center, 0.4f);
     if (moby->oclass < 0x513) {
-        allocate_target_entry_edc30(0, 0, moby);
+        allocate_voice_for_target_entry(0, 0, moby);
     } else {
-        allocate_target_entry_edc30(0, 0, moby);
+        allocate_voice_for_target_entry(0, 0, moby);
     }
     moby->hit_slot = 0xFF;
     fast_vec_sub(push, D_L09_00166F40_edc30, center);
@@ -1196,7 +1196,7 @@ void display_update(struct Moby *moby) {
         transform_vector_by_basis(pos, pos, &moby->rot_row0);
         fast_vec_add(pos, pos, top);
         fast_vec_sub(debris_offset_or_velocity, pos, center);
-        falloff = FUN_001f99c0_edc30(3.0f - fast_vec_length(debris_offset_or_velocity)) / 3.0f;
+        falloff = absolute_float(3.0f - fast_vec_length(debris_offset_or_velocity)) / 3.0f;
         fast_vec_normalize(pull, hit + 0x10, falloff * falloff * 8.0f);
         fast_vec_add(debris_offset_or_velocity, debris_offset_or_velocity, pull);
         fast_vec_normalize(debris_offset_or_velocity, debris_offset_or_velocity, falloff * (random_float_between(6.0f, 10.0f) * frame_time));
@@ -1205,12 +1205,12 @@ void display_update(struct Moby *moby) {
             spawn_tumbling_debris(moby, (Vec4 *)pos, (Vec4 *)debris_offset_or_velocity, i & 1, random_float_between(1.0f, 2.0f));
         }
         if (i % 3 == 0) {
-            FUN_L00_0025f090_edc30(moby, pos, -1, random_float_between(1.0f, 1.6f), 0.0f);
+            cart_burst(moby, pos, -1, random_float_between(1.0f, 1.6f), 0.0f);
         }
     }
     scale_vector_edc30(pos, hit + 0x10, 0.5f);
     fast_vec_add(center, center, push);
-    FUN_L00_0025e450_edc30(moby, hit + 0x10, center, 0.0f, 0.0f, 10, 3, 16, 3.0f, 2.0f, 1.0f, 1.0f, -1, 15.0f, 1, 1,
+    spawn_explosion(moby, hit + 0x10, center, 0.0f, 0.0f, 10, 3, 16, 3.0f, 2.0f, 1.0f, 1.0f, -1, 15.0f, 1, 1,
                            -1, 0);
     if (moby->oclass == 0x514 || replaced) {
         mark_moby_for_removal_edc30(moby);

@@ -225,7 +225,7 @@ typedef struct {
 extern T_0023e5e0 D_L00_001804C0_0023e5e0[] __asm__("D_L00_001804C0");
 extern P_0023e5e0 D_L00_001802C0_0023e5e0[] __asm__("D_L00_001802C0");
 void FUN_001f9810_0023e5e0(void *, int) __asm__("FUN_001f9810");
-float FUN_001fa6c0_0023e5e0(int) __asm__("FUN_001fa6c0");
+float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 u8 D_L00_00180640[8][1024] = {0};
 u8 D_L01_00180AC0[8][1024] = {0};
 u8 D_L02_00180C40[8][1024] = {0};
@@ -262,9 +262,9 @@ int allocate_packed_color_point_light_slot(u128 *position, float radius, float b
     parameter_entry = &D_L00_001802C0_0023e5e0[i];
     qcopy(&parameter_entry->pos, position);
     parameter_entry->pos.f[3] = radius;
-    parameter_entry->x = FUN_001fa6c0_0023e5e0(col & 0xFF) * 0.0078125f;
-    parameter_entry->y = FUN_001fa6c0_0023e5e0((col >> 8) & 0xFF) * 0.0078125f;
-    parameter_entry->z = FUN_001fa6c0_0023e5e0((col >> 16) & 0xFF) * 0.0078125f;
+    parameter_entry->x = convert_integer_to_float(col & 0xFF) * 0.0078125f;
+    parameter_entry->y = convert_integer_to_float((col >> 8) & 0xFF) * 0.0078125f;
+    parameter_entry->z = convert_integer_to_float((col >> 16) & 0xFF) * 0.0078125f;
     parameter_entry->b_0023e5e0 = b;
     FUN_001f9810_0023e5e0(slot_state, 0x30);
     slot_state->used = 1;

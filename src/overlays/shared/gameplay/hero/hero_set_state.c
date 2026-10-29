@@ -112,7 +112,7 @@ extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 extern s32 FUN_001f96f8_2215c8(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_00266d60_2215c8(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8_2215c8(struct Moby *) __asm__("FUN_L00_00250df8");
+extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -122,7 +122,7 @@ extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 FUN_001f9af0_2215c8(void *) __asm__("FUN_001f9af0");
 extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
 extern void FUN_L00_00233660_2215c8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
-extern void FUN_L00_00211250_2215c8(void) __asm__("FUN_L00_00211250");
+extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 
 extern Entry70 l00_hero_countdown_records[] __asm__("D_L00_001798F0");
 void update_hero_timers_and_reach_state(void) __asm__("FUN_L00_002215c8");
@@ -200,7 +200,7 @@ void update_hero_timers_and_reach_state(void) {
                 ((struct Moby *)hero.vehicle_mode3_moby)->visible = 1;
                 ((struct Moby *)hero.vehicle_mode3_moby)->glow_color = 0;
                 ((struct Moby *)hero.vehicle_mode3_moby)->spawn_frame = hero.moby->spawn_frame;
-                FUN_L00_00250df8_2215c8(hero.vehicle_mode3_moby);
+                update_entity(hero.vehicle_mode3_moby);
                 enter_hero_vehicle_mode(3, 0x53, hero.vehicle_mode3_moby);
             }
         }
@@ -266,7 +266,7 @@ skip:
         }
     }
     if (hero.motion.pos.f[2] < 1.0f) {
-        FUN_L00_00211250_2215c8();
+        hero_respawn();
     }
 }
 

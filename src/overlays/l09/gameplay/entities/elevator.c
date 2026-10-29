@@ -1327,7 +1327,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F
 float absolute_float(float input) __asm__("func_001F99C0");
 struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) __asm__("FUN_L09_002ef868");
 void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate);
-extern int func_L00_001FEF78_309688(void *) __asm__("FUN_L00_001fefc8");
+extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern void func_L00_00260108_309688(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern Hit_309688 *func_L00_0025B478_309688(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int func_L09_003095D0_309688(void *, int) __asm__("FUN_L09_00308220");
@@ -1376,7 +1376,7 @@ void barrier_update(Moby *moby)
     }
     has_next = 0;
     hit = func_L00_0025B478_309688(moby, 0x40000, 0);
-    if (func_L00_001FEF78_309688(&moby->command) == 0) return;
+    if (fast_subtract_rotations_cf(&moby->command) == 0) return;
     if (hit == 0) return;
     if (moby->oclass < 0x508) has_next = func_L09_003095D0_309688(moby, moby->oclass + 1) != 0;
     moby->command = func_001F9850_309688(10);

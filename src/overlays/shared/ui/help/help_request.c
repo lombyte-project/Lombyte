@@ -18,7 +18,7 @@ typedef struct {
 } P00203908;
 extern S00203908 D_L00_00179410_00203908 __asm__("D_L00_00179410");
 extern P00203908 D_00141968_00203908[] __asm__("D_00141968");
-void FUN_001fed30_00203908(s32) __asm__("FUN_001fed30");
+void push_help_history(s32) __asm__("FUN_001fed30");
 /* Starts help entry b with message a when no help is showing; pushes a to the help history. */
 s32 help_request(s32 a, s32 b) __asm__("FUN_L00_00203908");
 s32 help_request(s32 message_id, s32 help_record_index) {
@@ -27,7 +27,7 @@ s32 help_request(s32 message_id, s32 help_record_index) {
         music_stream_state.queued_secondary_track == help_state_ptr->cur && D_00141968_00203908[help_record_index].id != 0xFFFF) {
         help_state_ptr->idx = help_record_index;
         help_state_ptr->cur = message_id;
-        FUN_001fed30_00203908(message_id);
+        push_help_history(message_id);
         return 1;
     }
     return 0;

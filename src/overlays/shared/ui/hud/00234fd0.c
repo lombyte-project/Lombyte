@@ -16,9 +16,9 @@ typedef struct {
     T_234fd0 *t;
 } G_234fd0;
 extern G_234fd0 D_L00_0017E4D8_lui __asm__("D_L00_0017E4D8") NOT_SDA;
-void FUN_00232f20_234fd0(void *, void *, int, int, int) __asm__("FUN_00232f20");
-void FUN_L00_0024d8d0_234fd0(void *, int) __asm__("FUN_L00_0024d8d0");
-void FUN_001fefc0_234fd0(int, int) __asm__("FUN_001fefc0");
+void stash_receive_data(void *, void *, int, int, int) __asm__("FUN_00232f20");
+void fast_decompress(void *, int) __asm__("FUN_L00_0024d8d0");
+void link_hud_bank(int, int) __asm__("FUN_001fefc0");
 extern int D_L00_0017E510 NOT_SDA;
 extern int D_L00_0017E518 NOT_SDA;
 extern int D_L00_0017E51C NOT_SDA;
@@ -32,18 +32,18 @@ void decompress_and_relocate_selected_groups(int mode) {
     {
         int slot_1_size;
         if ((slot_1_size = decompression_slot_state->t->sz[1])) {
-            FUN_00232f20_234fd0(compressed_data_buffer, decompression_slot_state->t->p[1], 0, D_L00_0017E510 / 16, 0);
-            FUN_L00_0024d8d0_234fd0(compressed_data_buffer, decompression_destination);
-            FUN_001fefc0_234fd0(0, decompression_destination);
+            stash_receive_data(compressed_data_buffer, decompression_slot_state->t->p[1], 0, D_L00_0017E510 / 16, 0);
+            fast_decompress(compressed_data_buffer, decompression_destination);
+            link_hud_bank(0, decompression_destination);
             decompression_destination += slot_1_size;
         }
     }
     {
         int slot_3_size;
         if ((slot_3_size = decompression_slot_state->t->sz[3])) {
-            FUN_00232f20_234fd0(compressed_data_buffer, decompression_slot_state->t->p[3], 0, D_L00_0017E518 / 16, 0);
-            FUN_L00_0024d8d0_234fd0(compressed_data_buffer, decompression_destination);
-            FUN_001fefc0_234fd0(2, decompression_destination);
+            stash_receive_data(compressed_data_buffer, decompression_slot_state->t->p[3], 0, D_L00_0017E518 / 16, 0);
+            fast_decompress(compressed_data_buffer, decompression_destination);
+            link_hud_bank(2, decompression_destination);
             decompression_destination += slot_3_size;
         }
     }
@@ -51,9 +51,9 @@ void decompress_and_relocate_selected_groups(int mode) {
         {
             int slot_4_size;
             if ((slot_4_size = decompression_slot_state->t->sz[4])) {
-                FUN_00232f20_234fd0(compressed_data_buffer, decompression_slot_state->t->p[4], 0, D_L00_0017E51C / 16, 0);
-                FUN_L00_0024d8d0_234fd0(compressed_data_buffer, decompression_destination);
-                FUN_001fefc0_234fd0(3, decompression_destination);
+                stash_receive_data(compressed_data_buffer, decompression_slot_state->t->p[4], 0, D_L00_0017E51C / 16, 0);
+                fast_decompress(compressed_data_buffer, decompression_destination);
+                link_hud_bank(3, decompression_destination);
                 decompression_destination += slot_4_size;
             }
         }
@@ -61,9 +61,9 @@ void decompress_and_relocate_selected_groups(int mode) {
     if ((unsigned)(mode - 1) < 2) {
         G_234fd0 *group_4_decompression_state = &D_L00_0017E4D8_lui;
         if (group_4_decompression_state->t->sz[5]) {
-            FUN_00232f20_234fd0(compressed_data_buffer, group_4_decompression_state->t->p[5], 0, D_L00_0017E520 / 16, 0);
-            FUN_L00_0024d8d0_234fd0(compressed_data_buffer, decompression_destination);
-            FUN_001fefc0_234fd0(4, decompression_destination);
+            stash_receive_data(compressed_data_buffer, group_4_decompression_state->t->p[5], 0, D_L00_0017E520 / 16, 0);
+            fast_decompress(compressed_data_buffer, decompression_destination);
+            link_hud_bank(4, decompression_destination);
         }
     }
 }

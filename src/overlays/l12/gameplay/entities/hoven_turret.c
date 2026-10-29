@@ -261,7 +261,7 @@ extern void func_001F9BD8_304310(void *, void *, void *) __asm__("FUN_001f9a10")
 extern int func_L00_00200290_304310(void *, float) __asm__("FUN_001fa728");
 extern int func_00215570_304310(void *, int) __asm__("FUN_00214720");
 extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
-extern void func_L00_0025A8C0_304310(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
+extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int func_L00_001EFFF0_304310(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern Row *D_L12_001B0C30_304310[] __asm__("D_L12_001B0930");
 extern char D_L12_00167240[];
@@ -344,7 +344,7 @@ void update_oscillating_target_link(Moby *moby) {
         }
         qcopy(&start, &moby->pos.z);
         qcopy(&end, ((float *)&D_L12_0015FFD8[target].pos));
-        func_L00_0025A8C0_304310(hit, moby, 0x10001, 1.0f, D_L12_0015F580);
+        make_hit_descriptor(hit, moby, 0x10001, 1.0f, D_L12_0015F580);
         func_L00_001EFFF0_304310(&start, &end, 0, 0, hit);
         break;
     }
@@ -1026,15 +1026,15 @@ void draw_hoven_turret_destruction_fade(Level12VendorCounterMoby *moby) {
 }
 extern void find_point_ahead(struct Moby *, void *, float) __asm__("FUN_L01_00274b78");
 extern void *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern int FUN_00213928_304e00(struct Moby *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int trooper_take_damage(struct Moby *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void blend_moby_animation_304e00(struct Moby *, int, int, int) __asm__("FUN_00212f90");
+extern void blend_moby_animation(struct Moby *, int, int, int) __asm__("FUN_00212f90");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int collect_mobies_in_sphere(void *, int, struct Moby *, void *, float) __asm__("FUN_L00_001f2868");
 extern int coll_sphere(void *, int, struct Moby *, float) __asm__("FUN_L00_001f0d60");
-extern void FUN_L00_0025b8c0_304e00(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
+extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern void spawn_explosion_304e00(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void jet_animate(float, struct Moby *) __asm__("FUN_L00_00259fe8");
@@ -1083,7 +1083,7 @@ void update_homing_mine(struct Moby *moby) {
 
     find_point_ahead(moby, target, 8.0f);
     source = find_moby_hit(moby, 0x230000, 0);
-    FUN_00213928_304e00(moby, source, damage, 0, &hits, 0, 0, 4);
+    trooper_take_damage(moby, source, damage, 0, &hits, 0, 0, 4);
     if (vector_distance(&moby->pos, target) < 0.25f ||
         (hits >= 2 && source != NULL && source->moby->oclass != 0x4F5)) {
         spawn_explosion_304e00(moby, D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5,
@@ -1110,9 +1110,9 @@ void update_homing_mine(struct Moby *moby) {
             data->speed += frame_time_sq * 30.0f;
         if (scale_game_frames(30) < data->timer) {
             if (moby->prev_seq == 0)
-                blend_moby_animation_304e00(moby, 1, 0, 2);
+                blend_moby_animation(moby, 1, 0, 2);
             if (moby->prev_seq == 1 && (moby->anim_flags & 2))
-                blend_moby_animation_304e00(moby, 2, 0, 2);
+                blend_moby_animation(moby, 2, 0, 2);
         }
         if (frame_time * 5.75f < data->speed)
             data->speed = frame_time * 5.75f;
@@ -1136,7 +1136,7 @@ void update_homing_mine(struct Moby *moby) {
                 height = hero.ground_z.f;
             difference = height - moby->pos.z;
             if (difference < 0.5f && -3.0f < difference)
-                FUN_L00_0025b8c0_304e00(&moby->pos.z, &data->climb, height + 0.58f,
+                vendor_spring(&moby->pos.z, &data->climb, height + 0.58f,
                     frame_scale_sq * 0.02f, frame_scale_sq * 0.3f, frame_time * 4.0f);
         }
         if (scale_game_frames(30) < data->timer) {
@@ -1144,7 +1144,7 @@ void update_homing_mine(struct Moby *moby) {
             direction.f[1] = fast_sin(angle) * 0.3f;
             direction.f[3] = 5627.925f;
             direction.f[2] = 1.2f;
-            func_L00_0025A8C0_304310(hit_info, moby, 0x10001, 1.0f, &direction);
+            make_hit_descriptor(hit_info, moby, 0x10001, 1.0f, &direction);
             qcopy(&probe, &moby->pos);
             probe.f[2] += 0.4f;
             if (!collect_mobies_in_sphere(&probe, 0x10, moby, hit_info, 0.4f) || hit_moby == NULL ||

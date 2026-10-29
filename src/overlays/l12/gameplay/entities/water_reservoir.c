@@ -244,15 +244,15 @@ typedef struct {
 typedef struct { char pad0[0x18]; int moby; } ShotColl;
 extern ShotColl D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
 extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
-extern char *FUN_L00_0025a420_ece00(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
+extern char *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
-extern void add_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern int FUN_001efa68_ece00(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
+extern int collision_line(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
 extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_descriptor(void *, struct Moby *, int, float, void *) __asm__("FUN_L00_00259888");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
@@ -277,7 +277,7 @@ void rocket_update(struct Moby *moby) {
     ShotHit hit;
     switch (moby->state) {
     case ROCKET_STATE_FLYING: {
-        char *touch = FUN_L00_0025a420_ece00(moby, 0x230000, 0);
+        char *touch = find_moby_hit(moby, 0x230000, 0);
         int damage;
         if (touch != 0 && *(struct Moby **)(touch + 0x20) != vars->owner) {
             moby->state = 2;
@@ -294,7 +294,7 @@ void rocket_update(struct Moby *moby) {
             }
         }
         qcopy(old_pos, &moby->pos);
-        add_vector_ece00(&moby->pos, &moby->pos, vars);
+        fast_vec_add(&moby->pos, &moby->pos, vars);
         moby->rot.z = vars->yaw;
         moby->rot.x = fast_add_rotations(moby->rot.x, frame_time * 6.2831855f);
         fast_vec_normalize(side, vars, 0.2f);
@@ -304,7 +304,7 @@ void rocket_update(struct Moby *moby) {
                          random_int_between(20, 35), 1);
         spawn_effect(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between(30, 60)), 40,
                          random_int_between(50, 75), 0);
-        if (FUN_001efa68_ece00(&moby->pos, old_pos, 0, moby, 0) || coll_sphere(&moby->pos, 0.2f, 0, moby)) {
+        if (collision_line(&moby->pos, old_pos, 0, moby, 0) || coll_sphere(&moby->pos, 0.2f, 0, moby)) {
             if (D_L12_001742C0_lui.moby != 0 && D_L12_001742C0_lui.moby != (int)vars->owner) {
                 damage = 1;
                 if (current_level_index == 12 && camera_secondary_mode == 50) {
@@ -328,9 +328,9 @@ void rocket_update(struct Moby *moby) {
         break;
     }
     case ROCKET_STATE_DETONATE:
-        subtract_vector_ece00(old_pos, &moby->pos, D_L12_00167240);
+        fast_vec_sub(old_pos, &moby->pos, D_L12_00167240);
         fast_vec_normalize(old_pos, old_pos, 0.4f);
-        add_vector_ece00(&moby->pos, &moby->pos, old_pos);
+        fast_vec_add(&moby->pos, &moby->pos, old_pos);
         if (current_level_index == 12 && camera_secondary_mode == 50) {
             char *camera = D_L12_00167240 - 0x140;
             spawn_explosion(moby, &D_L12_0015F580, 0, 0.0f, 0.0f, 3, 3, 5, 0.3f, 0.2f, 0.0f, 0.15f, -1, 0.0f, 0, 0,

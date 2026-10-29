@@ -775,7 +775,7 @@ void taxi_update(struct Moby *moby) {
 }
 #include "sda.h"
 #include "qcopy.h"
-extern float func_001F9D10_e4900(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern char *D_L16_001601AC_slots_e4900 __asm__("D_L16_001600EC");
 extern unsigned char D_0013D5C8_b_e4900[] __asm__("D_0013D4C0");
 void initialize_taxi_stop_state(void *moby_v) {
@@ -787,7 +787,7 @@ void initialize_taxi_stop_state(void *moby_v) {
     char *pose_table_base;
     *(short *)(data + 0xAC) = -1;
     for (i = 0; i < 3; i++) {
-        if (func_001F9D10_e4900(moby + 0x10, D_L16_001601AC_slots_e4900 + (list[i] << 7) + 0x30) <
+        if (fast_vec_dist(moby + 0x10, D_L16_001601AC_slots_e4900 + (list[i] << 7) + 0x30) <
             1.0f) {
             *(short *)(data + 0xAC) = i;
         }
@@ -1761,7 +1761,7 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
 #endif
 extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
 extern int func_0022EE28_e7208(int, int, int) __asm__("FUN_0022db10");
-extern void func_L00_00264DB8_e7208(int, int) __asm__("FUN_L00_00263d40");
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern char item_unlocked[] __asm__("D_0013D408");
 void update_two_region_trigger_latch(char *moby) __asm__("FUN_L16_002e7208");
 
@@ -1790,7 +1790,7 @@ void update_two_region_trigger_latch(char *moby) {
             if (flags[0x19] == 0) {
                 flags[0x19] = 1;
                 func_0022EE28_e7208(1, 0, 0);
-                func_L00_00264DB8_e7208(0x53D6, -1);
+                queue_dialogue_message(0x53D6, -1);
             }
         }
         break;
@@ -2638,7 +2638,7 @@ typedef struct {
     float x, y, z, radius;
 } L16SingleSphere_2e8e80;
 
-void enqueue_callback_list_1_2e8e80(int arg0, int arg1) __asm__("FUN_001f4600");
+void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 extern int D_L16_00161EF0_gp[] __asm__("D_L16_00161EF0") __attribute__((sda));
 extern float *D_L16_00161F00_gp[] __asm__("D_L16_00161F00") __attribute__((sda));
 extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001DC600")
@@ -2709,7 +2709,7 @@ void update_level16_three_mesh_render_state(struct Moby *moby) {
         break;
     }
     case MESH_RENDER_QUEUE_CALLBACK:
-        enqueue_callback_list_1_2e8e80(FUN_L16_002e8d40_c, moby);
+        add_draw_callback(FUN_L16_002e8d40_c, moby);
         break;
     }
 }

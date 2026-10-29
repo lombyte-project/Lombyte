@@ -8,7 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 
-extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 extern short D_L04_001B09B0[] NOT_SDA;
 extern char *D_L04_001D1700[] NOT_SDA;
@@ -41,7 +41,7 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        candidate_comparison_value = FUN_001f9b80_25fcb8(reference_object + 0x10, candidate_moby + 0x10);
+        candidate_comparison_value = vector_distance(reference_object + 0x10, candidate_moby + 0x10);
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;
@@ -60,7 +60,7 @@ int select_moby_record_by_xy_distance(char *reference_object, char *output_recor
             continue;
         if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        candidate_comparison_value = FUN_001f9b80_25fcb8(reference_object + 0x10, candidate_moby + 0x10);
+        candidate_comparison_value = vector_distance(reference_object + 0x10, candidate_moby + 0x10);
         if (candidate_comparison_value < best) {
             selected_moby = candidate_moby;
             best = candidate_comparison_value;

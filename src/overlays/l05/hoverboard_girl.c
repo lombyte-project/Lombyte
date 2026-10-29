@@ -116,7 +116,7 @@ extern void set_race_camera(HoverboardGirlVector *, HoverboardGirlVector *, s32,
                             s32) __asm__("FUN_L00_00216f90");
 extern void jet_game_state(s32, s32) __asm__("FUN_L01_0027a248");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
-extern void func_0020b178(s32, s64) __asm__("FUN_0020b178");
+extern void memcard_save_data(s32, s64) __asm__("FUN_0020b178");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
@@ -257,7 +257,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             if (state->previous_dialogue_state == 4) {
                 alternate_item_available = 1;
                 queue_dialogue_message(0x1395, scale_game_frames(300));
-                func_0020b178(0, -1);
+                memcard_save_data(0, -1);
             }
         }
         break;

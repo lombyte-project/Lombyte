@@ -467,7 +467,7 @@ void rocket_update(struct Moby *moby) {
     if (fast_dec_timer(&data->timer))
         mark_moby_for_removal(moby);
 }
-extern void FUN_001f97b0_30a908(void) __asm__("FUN_001f97b0");
+extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void FUN_001f9a10_30a908(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_30a908(void *, void *, float) __asm__("FUN_001f9a68");
 extern float FUN_001f9b20_30a908(void *) __asm__("FUN_001f9b20");
@@ -501,14 +501,14 @@ typedef struct {
 typedef struct { char pad[0x140]; float x, y, z; } Cam;
 typedef struct { char pad[0x228]; float f228, f22C; } Fog;
 
-extern void FUN_00233980_30a908(int, long) __asm__("FUN_00233980");
-extern int FUN_001f44b8_30a908(int) __asm__("FUN_001f44b8");
-extern void FUN_001f76a0_30a908(void) __asm__("FUN_001f76a0");
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_001f9cf8_30a908(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_001f9a28_30a908(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float FUN_001fa6c0_30a908(int) __asm__("FUN_001fa6c0");
 extern void func_L00_001FDE48_30a908(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
-extern void FUN_001f7d30_30a908(void *, void *, int) __asm__("FUN_001f7d30");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L11_001677C0_30a908[] __asm__("D_L11_001677C0");
 extern UV_30a908 D_L11_00161E08_macro[] __asm__("D_L11_00161E08") MACRO_ADDR;
 
@@ -550,12 +550,12 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         ((Fog *)render_fog_context)->f228 = 255.0f;
         ((Fog *)render_fog_context)->f22C = 249.9f;
     }
-    FUN_00233980_30a908(0x42, 0x3200000044L);
-    FUN_00233980_30a908(8, 0);
-    FUN_00233980_30a908(0x14, 0xFF9000000260L);
-    FUN_00233980_30a908(0x47, 0x513F1);
-    FUN_00233980_30a908(6, FUN_001f44b8_30a908(0x16));
-    FUN_001f76a0_30a908();
+    vu1_add_g_sregister(0x42, 0x3200000044L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(0x47, 0x513F1);
+    vu1_add_g_sregister(6, get_effect_texture(0x16));
+    font_queue_vu_state();
     strip_length_direction.x = 1.0f;
     strip_length_direction.y = 0.0f;
     strip_length_direction.z = 0.0f;
@@ -609,7 +609,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         l11_ocean_strip_vertex_positions[i + 1].z = scratch_vector.z;
     }
     func_L00_001FDE48_30a908(0xC, l11_ocean_strip_vertex_positions, ocean_strip_vertex_colors, l11_ocean_strip_vertex_uvs, 1);
-    far_quad.z78 = FUN_001f44b8_30a908(0x16);
+    far_quad.z78 = get_effect_texture(0x16);
     far_quad.q80 = 0xFF9000000260L;
     far_quad.q88 = 0x8000000044L;
     far_quad.z70 = 0;
@@ -633,12 +633,12 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         *(u128 *)&far_quad.v[2] = *(u128 *)&strip_corners[3];
         *(u128 *)&far_quad.v[3] = *(u128 *)&strip_corners[3];
         far_quad.v[3].z = ((Cam *)D_L11_00167680)->z - ocean_vars->f24;
-        FUN_001f7d30_30a908(&far_quad, 0, 0);
+        draw_geometry_quad(&far_quad, 0, 0);
     }
-    FUN_00233980_30a908(0x42, 0x8000000048L);
-    FUN_00233980_30a908(8, 0);
-    FUN_00233980_30a908(0x14, 0xFF9000000260L);
-    FUN_00233980_30a908(0x47, 0x513F1);
+    vu1_add_g_sregister(0x42, 0x8000000048L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(0x47, 0x513F1);
     colA = ocean_vars->fC;
     colB = ocean_vars->f10;
     color_interpolation_scalar = 1.0f - (((Cam *)D_L11_00167680)->z - tide_level_macro) / ocean_vars->f2C;
@@ -650,7 +650,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         colB = FUN_001fa6e0_30a908(0, colB, color_interpolation_scalar);
         for (layer = 0; layer < 2; layer++) {
             int id = layer + 0x28;
-            FUN_00233980_30a908(6, FUN_001f44b8_30a908(ocean_vars->f1C + id));
+            vu1_add_g_sregister(6, get_effect_texture(ocean_vars->f1C + id));
             for (y = ocean_vars->f18 * -2.0f; y < ocean_vars->f18 * 2.0f; y += ocean_vars->f18) {
                 vertex_count = 0;
                 for (x = ocean_vars->f18 * -2.0f; x < ocean_vars->f18 * 2.0f; x += ocean_vars->f18) {
@@ -690,7 +690,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
                     }
                     vertex_count += 4;
                     if (vertex_count >= 0x40) {
-                        FUN_001f97b0_30a908();
+                        raise_kernel_trap();
                     }
                 }
                 func_L00_001FDE48_30a908(vertex_count, l11_ocean_wave_grid_vertex_positions, D_L11_001DA208, l11_ocean_wave_grid_vertex_uvs, 1);
@@ -699,7 +699,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     }
     ((Fog *)render_fog_context)->f228 = saved_fog_228;
     ((Fog *)render_fog_context)->f22C = s22C;
-    FUN_00233980_30a908(0x47, 0x5360B);
+    vu1_add_g_sregister(0x47, 0x5360B);
 }
 /* Ocean update: scrolls the two wave layers with the camera and the time, keeps their offsets in -1..1 and sets the level's tide values. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030C728), where it is exact; names translated to the US level program. */

@@ -1069,7 +1069,7 @@ extern struct Hero hero __asm__("D_0013F350") NOT_SDA;
 extern V_2e7a30 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern V_2e7a30 D_L00_00166E40_lui __asm__("D_L00_00166E40") NOT_SDA;
 extern void FUN_001f9bf8_2e7a30(void *, void *, float) __asm__("FUN_001f9bf8");
-extern int FUN_L00_002e4290_2e7a30(void *) __asm__("FUN_L00_002e4290");
+extern int test_follow_camera_point_in_collision_volume(void *) __asm__("FUN_L00_002e4290");
 extern int FUN_L00_001f0d60_2e7a30(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_002e79c8_2e7a30(void *, int, void *, float) __asm__("FUN_L00_002e79c8");
 extern int FUN_L00_002e7618_2e7a30(void *, void *, int, float, float) __asm__("FUN_L00_002e7618");
@@ -1107,7 +1107,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
     spd = follow_cam_min_distance_gp;
     FUN_001f9bf8_2e7a30(ndir, initial_orbit_vector, 1.0f);
     for (i = 0; i < truncate_float_to_s32(*(float *)(camera_collision_state + 0x40) - 1.0f); i++) {
-        if (i > 0 && FUN_L00_002e4290_2e7a30(probe_position) == 0) {
+        if (i > 0 && test_follow_camera_point_in_collision_volume(probe_position) == 0) {
             hero_state = &hero;
             if (FUN_L00_001f0d60_2e7a30(probe_position, D_L00_0015EF5C, ((int)hero_state->moby), spd) &&
                 FUN_L00_002e79c8_2e7a30(camera_moby, i, probe_position, spd) == 0) {

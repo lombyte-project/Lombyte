@@ -165,18 +165,18 @@ typedef union {
 
 extern s32 D_0015ED84_210ce8 __asm__("D_0015ED84");
 
-s32 FUN_001fa6d0_210ce8(f32) __asm__("FUN_001fa6d0");
+s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-void FUN_001f9a28_210ce8(void *, void *, void *) __asm__("FUN_001f9a28");
-f32 FUN_001fa580_210ce8(f32, f32) __asm__("FUN_001fa580");
-f32 FUN_001f9dc8_210ce8(f32) __asm__("FUN_001f9dc8");
-f32 FUN_001f9de0_210ce8(f32) __asm__("FUN_001f9de0");
-void FUN_001f9a10_210ce8(void *, void *, void *) __asm__("FUN_001f9a10");
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+f32 fast_sin(f32) __asm__("FUN_001f9de0");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
-void FUN_001f99f8_210ce8(void *) __asm__("FUN_001f99f8");
-void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
+void clear_u64_value(void *) __asm__("FUN_001f99f8");
+void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 extern T_210ce8 l18_moby_hurt_response_records[] __asm__("D_L18_00178B00");
 s32 process_hero_hurt_response(s32 apply_hurt_response) __asm__("FUN_L18_00218a90");
@@ -229,7 +229,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
         return 0;
     }
     if (hero.vehicle_mode == 2) {
-        hero.vehicle_hp -= FUN_001fa6d0_210ce8(response_record->f2C);
+        hero.vehicle_hp -= truncate_float_to_s32(response_record->f2C);
         if (hero.vehicle_hp < 0) {
             hero.vehicle_hp = 0;
         }
@@ -245,10 +245,10 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
             flag = 1;
         }
     } else if (response_record->p20 != 0) {
-        FUN_001f9a28_210ce8(&response_motion_delta, &hero.motion.pos, response_record->p20 + 0x10);
+        fast_vec_sub(&response_motion_delta, &hero.motion.pos, response_record->p20 + 0x10);
     } else {
-        response_motion_delta.f[0] = FUN_001f9dc8_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
-        response_motion_delta.f[1] = FUN_001f9de0_210ce8(FUN_001fa580_210ce8(hero.motion.rot.f[2], 3.1415927f));
+        response_motion_delta.f[0] = fast_cos(fast_add_rotations(hero.motion.rot.f[2], 3.1415927f));
+        response_motion_delta.f[1] = fast_sin(fast_add_rotations(hero.motion.rot.f[2], 3.1415927f));
         response_motion_delta.i[2] = 0;
     }
     switch (hero.vehicle_mode) {
@@ -305,7 +305,7 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
             horizontal_response_scale = 0.0f;
             vertical_response_scale = response_frame_time * 1.7f;
         }
-        FUN_L00_00210c80_210ce8(&response_motion_delta, flag, horizontal_response_scale, vertical_response_scale);
+        hero_knockback(&response_motion_delta, flag, horizontal_response_scale, vertical_response_scale);
         if (flag != 0 && response_record->b28 == 4) {
             response_motion_delta.f[2] += response_motion_delta.f[2];
         }
@@ -315,19 +315,19 @@ s32 process_hero_hurt_response(s32 apply_hurt_response) {
             hero_set_state(0x5D, 1);
             remove_tracked_class_5f3_moby();
             if (hero.air_frames.s == 0) {
-                FUN_L00_00210c80_210ce8(&response_motion_delta, flag, frame_time * 7.0f,
+                hero_knockback(&response_motion_delta, flag, frame_time * 7.0f,
                                         frame_time * 3.5f);
                 break;
             }
         }
-        FUN_001f99f8_210ce8(&response_motion_delta);
+        clear_u64_value(&response_motion_delta);
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_210ce8(&response_motion_delta, flag, frame_time * 5.0f, frame_time * 2.4f);
+        hero_knockback(&response_motion_delta, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
-    FUN_001f9a10_210ce8(&hero.motion.velocity, &hero.motion.velocity, &response_motion_delta);
-    FUN_001f9a10_210ce8(&hero.motion.displacement, &hero.motion.displacement, &response_motion_delta);
+    fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &response_motion_delta);
+    fast_vec_add(&hero.motion.displacement, &hero.motion.displacement, &response_motion_delta);
     return 1;
 }

@@ -8,7 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 
-extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 extern short D_L07_001B08B0[] NOT_SDA;
 extern char *D_L07_001D1600[] NOT_SDA;
@@ -41,7 +41,7 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0x20) != 3)
             continue;
-        candidate_metric = FUN_001f9b80_25fcb8(source_moby + 0x10, candidate_moby + 0x10);
+        candidate_metric = vector_distance(source_moby + 0x10, candidate_moby + 0x10);
         if (candidate_metric < best) {
             target_moby = candidate_moby;
             best = candidate_metric;
@@ -60,7 +60,7 @@ int get_target_sight(char *source_moby, char *sight_out, float best) {
             continue;
         if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
             continue;
-        candidate_metric = FUN_001f9b80_25fcb8(source_moby + 0x10, candidate_moby + 0x10);
+        candidate_metric = vector_distance(source_moby + 0x10, candidate_moby + 0x10);
         if (candidate_metric < best) {
             target_moby = candidate_moby;
             best = candidate_metric;

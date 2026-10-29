@@ -962,19 +962,19 @@ void mine_update(M910 *mine_moby) {
 typedef unsigned int u128_2ac910 __attribute__((mode(TI), aligned(16)));
 typedef union { u128_2ac910 q; float f[4]; } Q_2ac910;
 typedef struct { u128_2ac910 p; void *o; int n; float f18; short h1c; short h1e; } V_2ac910;
-unsigned char *FUN_0020c4f8_2ac910(int) __asm__("FUN_0020c4f8");
+unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 float FUN_002132a8_2ac910(float, float) __asm__("FUN_002132a8");
-void FUN_L00_002502f0_2ac910(void *, int, int, int) __asm__("FUN_L00_002502f0");
+void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 int FUN_001f96f8_2ac910(int) __asm__("FUN_001f96f8");
 float FUN_001fa6c0_2ac910(int) __asm__("FUN_001fa6c0");
-void FUN_L00_00250df8_2ac910(void *) __asm__("FUN_L00_00250df8");
+void update_entity(void *) __asm__("FUN_L00_00250df8");
 /* Spawns a particle moby with a random rotation, owned by `owner`, at `pos` with velocity `vel`, tinted red/green/blue
    and living `lifetime` frames; returns the new moby or NULL. */
 unsigned char *spawn_glow_particle(void *owner, void *pos, void *vel, int lifetime, int red, int green, int blue, int alpha, float scale) __asm__("FUN_L00_002ac910");
 unsigned char *spawn_glow_particle(void *owner, void *spawn_position, void *initial_velocity, int lifetime, int red, int green, int blue, int alpha, float scale) {
     unsigned char *moby;
     red &= 0xFF; green &= 0xFF; blue &= 0xFF; alpha &= 0xFF;
-    moby = FUN_0020c4f8_2ac910(0x70);
+    moby = create_moby(0x70);
     if (moby) {
         Q_2ac910 rot_copy, random_initial_rotation;
         V_2ac910 *data = *(V_2ac910 **)(moby + 0x78);
@@ -989,7 +989,7 @@ unsigned char *spawn_glow_particle(void *owner, void *spawn_position, void *init
         moby[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
-        FUN_L00_002502f0_2ac910(moby, red, green, blue);
+        set_moby_color(moby, red, green, blue);
         data->f18 = *(float *)(moby + 0x2C) * scale;
         *(int *)(moby + 0x2C) = 0;
         data->o = owner;
@@ -1001,7 +1001,7 @@ unsigned char *spawn_glow_particle(void *owner, void *spawn_position, void *init
         elapsed = FUN_001fa6c0_2ac910(data->n - data->h1c);
         *(float *)(moby + 0x2C) = elapsed * data->f18 / FUN_001fa6c0_2ac910(data->n);
         data->h1e = alpha;
-        FUN_L00_00250df8_2ac910(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -1581,7 +1581,7 @@ extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void FUN_L00_0026a9f0_2adb30(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
-extern void FUN_L00_0026f548_2adb30(void *, void *, int, int) __asm__("FUN_L00_0026f548");
+extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
 extern void spawn_gravity_floor_burst_particle(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002738e8");
 extern int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 extern void FUN_L00_002a3ec8_2adb30(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
@@ -1749,7 +1749,7 @@ void bomb_update(BombMoby *bomb_moby) {
                         splash_particle_velocity.f[1] = FUN_001f9de0_2adb30(ang) * r;
                         splash_particle_velocity.f[2] = FUN_002132a8_2adb30(frame_time_macro * 3.0f, frame_time_macro * 6.5f);
                         n = FUN_L00_00257b90_2adb30(0x5A, 0x78);
-                        FUN_L00_0026f548_2adb30(&p, &splash_particle_velocity, FUN_00213260_2adb30(2), n);
+                        spawn_debris_chunk(&p, &splash_particle_velocity, FUN_00213260_2adb30(2), n);
                     }
                 } else if (d->h68 != 0 || collision_hit_material() != 0) {
                     if (coll_hit.moby != 0) {

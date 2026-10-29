@@ -900,10 +900,10 @@ typedef struct {
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 item_text_variant[] __asm__("D_0013E520");
 extern void FUN_0020c828_2e1ac0(struct Moby *) __asm__("FUN_0020c828");
-extern s32 FUN_L00_002668a0_2e1ac0(struct Moby *, SaleVars *) __asm__("FUN_L00_002668a0");
+extern s32 initialize_npc_dialogue(struct Moby *, SaleVars *) __asm__("FUN_L00_002668a0");
 extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars *) __asm__("FUN_L00_00266448");
 extern void initialize_vendor_screen(struct Moby *, s32, ItemPrice *) __asm__("FUN_L01_002aea70");
-extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
+extern s32 memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 
 extern s32 gold_weapon_case_item_ids_by_slot[] __asm__("D_L01_001DEB10");
 extern ItemPrice l01_gold_weapon_case_item_prices[] __asm__("D_L01_001C4530");
@@ -930,7 +930,7 @@ void gold_weapon_case_update(struct Moby *moby) {
         if (moby->oclass != 0x130) {
             moby->state = 2;
         } else if (item_text_variant[gold_weapon_case_item_ids_by_slot[sale_vars->slot]] != 0 ||
-                   FUN_L00_002668a0_2e1ac0(moby, sale_vars) == -1) {
+                   initialize_npc_dialogue(moby, sale_vars) == -1) {
             moby->state = 3;
         } else {
             moby->state = 1;
@@ -952,7 +952,7 @@ void gold_weapon_case_update(struct Moby *moby) {
         break;
     case GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END:
         if (cutscene_mode == 0) {
-            FUN_0020b178_2e1ac0(0, -1);
+            memcard_save_data(0, -1);
             moby->state = 3;
         }
         break;
@@ -1329,7 +1329,7 @@ extern char sand_mouse_missing_start_house_message[] __asm__("D_L01_0020AEA0");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
 extern void initialize_mover_2e3f20(void *) __asm__("FUN_L01_0026d930");
 extern void rig_probe_setup(void *, int, int *, float *, float *, int *) __asm__("FUN_L01_00263a28");
-extern void face_target_2e3f20(struct Moby *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
+extern void approach_w(struct Moby *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern int FUN_L01_0023cf98(int, int);
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern int step_mover_2e3f20(void *, void *, float *, float *) __asm__("FUN_L00_00259028");
@@ -1463,7 +1463,7 @@ void sand_mouse_update(struct Moby *moby) {
             if (hero_2e3f20->helper != 0 && hero_2e3f20->i1158 == 5) {
                 desired_facing_yaw = fast_arc_tan(hero_2e3f20->pos[0] - moby->pos.x,
                                         hero_2e3f20->pos[1] - moby->pos.y);
-                face_target_2e3f20(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
+                approach_w(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
                                         frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
                 qcopy(va, ((float *)&ents_2e3f20[sand_mouse_vars->parent].pos));
                 va[2] = va[2] + 0.5f;
@@ -1510,7 +1510,7 @@ void sand_mouse_update(struct Moby *moby) {
     case SAND_MOUSE_MOVE_TOWARD_HERO:
         compute_sand_mouse_approach_target((int)moby, sand_mouse_vars);
         desired_facing_yaw = fast_arc_tan(sand_mouse_vars->target[0] - moby->pos.x, sand_mouse_vars->target[1] - moby->pos.y);
-        face_target_2e3f20(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
+        approach_w(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
                                 frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
         if ((step_mover_2e3f20(moby, &mover_2e3f20, sand_mouse_vars->target, sand_mouse_vars->vel) & 6)
             || vector_distance(((float *)&moby->pos), hero_2e3f20->pos) < 1.0f) {
@@ -1616,7 +1616,7 @@ void sand_mouse_update(struct Moby *moby) {
             int mover_result_flags;
             mover_2e3f20.owner = 0;
             desired_facing_yaw = fast_arc_tan(sand_mouse_vars->target[0] - moby->pos.x, sand_mouse_vars->target[1] - moby->pos.y);
-            face_target_2e3f20(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
+            approach_w(moby, desired_facing_yaw, &mover_2e3f20.yaw_speed,
                                     frame_time_sq * 11.519173f, frame_time_sq * 3.1415927f, frame_time * 11.519173f);
             z = moby->pos.z;
             mover_result_flags = step_mover_2e3f20(moby, &mover_2e3f20, sand_mouse_vars->target, sand_mouse_vars->vel);
@@ -2789,7 +2789,7 @@ typedef struct {
 extern int D_0015ED84;
 extern s32 *D_L01_001B0930_2f2eb8[] __asm__("D_L01_001B0930");
 extern void FUN_0020c828_2f2eb8(struct Moby *) __asm__("FUN_0020c828");
-extern s32 FUN_L00_00259740_2f2eb8(void *, void *, s32) __asm__("FUN_L00_00259740");
+extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 FUN_00214720_2f2eb8(void *, s32) __asm__("FUN_00214720");
 extern f32 FUN_001f9b80_2f2eb8(void *, void *) __asm__("FUN_001f9b80");
 
@@ -2838,7 +2838,7 @@ void update_nearest_area_moby_selection(struct Moby *moby) {
     }
     if (area_vars->area.s.path != -1) {
         path = D_L01_001B0930_2f2eb8[area_vars->area.s.path];
-        k = FUN_L00_00259740_2f2eb8(&target, path + 4, path[0]);
+        k = point_in_path_xy(&target, path + 4, path[0]);
         if (k) {
             goto in_range;
         }
