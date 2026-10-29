@@ -150,13 +150,13 @@ void draw_linked_pair_group_ribbons(struct Moby *moby) {
         do {
             char *group_moby = D_L16_0015FFD8 + ((*(unsigned short *)group_entry & 0x7FFF) << 8);
             if (MOBY(group_moby)->oclass == 0x228) {
-                char *data = ((char *)MOBY(group_moby)->pvars);
+                char *linked_pair_data = ((char *)MOBY(group_moby)->pvars);
                 int   generation = D_L16_0015F5CC;
-                if (*(int *)(data + 4) != generation) {
-                    char *partner = *(char **)data;
+                if (*(int *)(linked_pair_data + 4) != generation) {
+                    char *partner = *(char **)linked_pair_data;
                     if (partner) {
                         char *otherData = *(char **)(partner + 0x78);
-                        *(int *)(data + 4) = generation;
+                        *(int *)(linked_pair_data + 4) = generation;
                         *(int *)(otherData + 4) = generation;
                         draw_linked_pair_ribbons(group_moby, partner);
                     }
