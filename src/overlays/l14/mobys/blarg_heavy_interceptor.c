@@ -744,22 +744,22 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION = 10,
         HIT_REACTION_NONE = 11
     };
-    char *data = (char *)moby->pvars;
+    char *blarg_heavy_interceptor_vars = (char *)moby->pvars;
     int   hit_reaction_status;
     float damage_amount;
     int   hit_reaction_result;
     damage_amount = 0.0f;
     hit_reaction_result = hit_reaction(moby,
                                        find_moby_hit(moby, 0x330000, 0),
-                                       data + 0x20,
+                                       blarg_heavy_interceptor_vars + 0x20,
                                        0,
                                        &hit_reaction_status,
                                        &damage_amount,
                                        0,
                                        4);
     if (hit_reaction_status != 1 && moby->state < 7) {
-        float remaining_health = *(float *)(data + 0x20) - damage_amount;
-        *(float *)(data + 0x20) = remaining_health;
+        float remaining_health = *(float *)(blarg_heavy_interceptor_vars + 0x20) - damage_amount;
+        *(float *)(blarg_heavy_interceptor_vars + 0x20) = remaining_health;
         if (remaining_health <= 0.0f)
             hit_reaction_result = 1;
         if (moby->state == 1)
@@ -769,7 +769,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         switch (hit_reaction_result) {
         case HIT_REACTION_ANIMATE_WITH_LOW_RED_FLASH:
         case HIT_REACTION_LOW_RED_FLASH_AND_HIT_ANIMATION:
-            data[0x67] = 0x64;
+            blarg_heavy_interceptor_vars[0x67] = 0x64;
             blend_moby_animation(moby, 1, 0, 5);
             break;
         case HIT_REACTION_PLAY_HIT_ANIMATION:
@@ -778,7 +778,7 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         case HIT_REACTION_BLEND_HIT_ANIMATION_WITH_HIGH_RED_FLASH:
         case HIT_REACTION_HIGH_RED_FLASH_WITH_BLENDED_HIT_ANIMATION:
         case HIT_REACTION_BLEND_HIT_ANIMATION_AND_HIGH_RED_FLASH:
-            ((unsigned char *)data)[0x67] = 0xC8;
+            ((unsigned char *)blarg_heavy_interceptor_vars)[0x67] = 0xC8;
             blend_moby_animation(moby, 1, 0, 5);
             break;
         case HIT_REACTION_LETHAL:
@@ -791,10 +791,10 @@ void process_blarg_heavy_interceptor_hit_reactions(struct Moby *moby) {
         case HIT_REACTION_NONE:
             break;
         }
-        trooper_anim_update(moby, (short *)(data + 0x60));
+        trooper_anim_update(moby, (short *)(blarg_heavy_interceptor_vars + 0x60));
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, data + 0x60);
+    trooper_anim_finish(moby, blarg_heavy_interceptor_vars + 0x60);
 }
 
 extern s32 blarg_heavy_interceptor_light_ring_vertex_count_gp __asm__("D_L14_00161418")
