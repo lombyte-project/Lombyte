@@ -102,12 +102,12 @@ void screamer_update(Moby *moby) {
         SCREAMER_STATE_DEATH_KNOCKBACK = 11
     };
     float     waypoint[6];
-    D_2E0630 *data = (D_2E0630 *)moby->pvars;
+    D_2E0630 *screamer_data = (D_2E0630 *)moby->pvars;
     Moby     *leader;
 
     func_L10_002E0FF8_2E0630(moby);
-    leader = data->leader;
-    func_L00_00264B40_2E0630(2.5f, moby, 0, data->sound_state);
+    leader = screamer_data->leader;
+    func_L00_00264B40_2E0630(2.5f, moby, 0, screamer_data->sound_state);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L10_00167240) < 29.0f) {
         func_L00_0025B178_2E0630(moby);
         moby->shadow_range = 0x17;
@@ -115,22 +115,22 @@ void screamer_update(Moby *moby) {
     moby->anim_speed = 1.0f;
     switch (moby->state) {
     case SCREAMER_STATE_INITIALIZE:
-        data->f30 = 0.5f;
-        data->f20 = 1.0f;
-        data->h24 = 1;
-        data->b28 = 0;
-        data->b29 = 1;
+        screamer_data->f30 = 0.5f;
+        screamer_data->f20 = 1.0f;
+        screamer_data->h24 = 1;
+        screamer_data->b28 = 0;
+        screamer_data->b29 = 1;
         moby->flags |= 0x1000;
-        qcopy(&data->home, &moby->pos);
-        qcopy(&data->wander_goal, &data->home);
-        if (data->f174 != 1) {
+        qcopy(&screamer_data->home, &moby->pos);
+        qcopy(&screamer_data->wander_goal, &screamer_data->home);
+        if (screamer_data->f174 != 1) {
             mark_moby_for_removal(moby);
         } else {
             moby->state = 1;
         }
         break;
     case SCREAMER_STATE_WAIT_FOR_ACTIVATION:
-        if (data->f104 == 2 && data->f174 != 0)
+        if (screamer_data->f104 == 2 && screamer_data->f174 != 0)
             break;
         moby->state = 2;
         if (moby->prev_seq != 1)
@@ -140,7 +140,7 @@ void screamer_update(Moby *moby) {
         if ((moby->anim_flags & 2) == 0)
             break;
         moby->state = 4;
-        clear_u64_value(&data->vel);
+        clear_u64_value(&screamer_data->vel);
         if (moby->prev_seq != 4)
             blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         break;
@@ -149,8 +149,8 @@ void screamer_update(Moby *moby) {
     case SCREAMER_STATE_RISE_FROM_HOME:
         moby->anim_speed = 4.0f;
         if (advance_accelerated_scalar(&moby->pos.z,
-                                       data->home.z + 2.0f,
-                                       &data->vel.z,
+                                       screamer_data->home.z + 2.0f,
+                                       &screamer_data->vel.z,
                                        D_0015ED70 * 18.0f,
                                        D_0015ED70 * 18.0f,
                                        D_0015ED6C * 6.0f) == 0.0f) {
@@ -160,13 +160,13 @@ void screamer_update(Moby *moby) {
     case SCREAMER_STATE_FOLLOW_PATH: {
         float distance;
         moby->anim_speed = 4.0f;
-        qcopy(waypoint, &l10_paths[data->path]->points[data->node_index]);
-        waypoint[5] = fast_vec_length(&data->vel);
+        qcopy(waypoint, &l10_paths[screamer_data->path]->points[screamer_data->node_index]);
+        waypoint[5] = fast_vec_length(&screamer_data->vel);
         distance = fast_vec_dist(waypoint, &moby->pos);
         *(int *)&waypoint[4] = 0;
         func_L00_0025CE58_2E0630(&moby->rot.z,
                                  fast_arc_tan(waypoint[0] - moby->pos.x, waypoint[1] - moby->pos.y),
-                                 &data->yaw_speed,
+                                 &screamer_data->yaw_speed,
                                  D_0015ED70 * 25.132742f,
                                  D_0015ED70 * 25.132742f,
                                  D_0015ED6C * 50.265484f);
@@ -179,29 +179,29 @@ void screamer_update(Moby *moby) {
                                        D_0015ED70 * 20.0f,
                                        D_0015ED70 * 20.0f,
                                        D_0015ED6C * 20.0f);
-            fast_vec_sub(&data->vel, waypoint, &moby->pos);
-            func_L00_002607A8_2E0630(&data->vel, waypoint[5]);
+            fast_vec_sub(&screamer_data->vel, waypoint, &moby->pos);
+            func_L00_002607A8_2E0630(&screamer_data->vel, waypoint[5]);
         } else {
-            clear_u64_value(&data->vel);
+            clear_u64_value(&screamer_data->vel);
         }
-        func_L00_00259B08_2E0630(moby, &data->vel, 0.5f, 0x200, 0.0f, 0);
+        func_L00_00259B08_2E0630(moby, &screamer_data->vel, 0.5f, 0x200, 0.0f, 0);
         if (!(distance < 1.0f))
             break;
         {
-            int node_index = data->node_index++;
-            if (0.0f < l10_paths[data->path]->points[node_index].f[3]) {
+            int node_index = screamer_data->node_index++;
+            if (0.0f < l10_paths[screamer_data->path]->points[node_index].f[3]) {
                 moby->state = 6;
                 if (moby->prev_seq != 3)
                     blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             } else {
-                if (node_index + 1 != l10_paths[data->path]->count)
+                if (node_index + 1 != l10_paths[screamer_data->path]->count)
                     break;
                 moby->state = 10;
                 if (moby->prev_seq != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(10));
                 probe_ground_height(&moby->pos, 0, 0.5f);
-                qcopy(&data->home, &D_L10_00174360_2E0630);
-                qcopy(&data->wander_goal, &moby->pos);
+                qcopy(&screamer_data->home, &D_L10_00174360_2E0630);
+                qcopy(&screamer_data->wander_goal, &moby->pos);
             }
         }
         break;
@@ -210,7 +210,7 @@ void screamer_update(Moby *moby) {
         func_L00_0025CE58_2E0630(
             &moby->rot.z,
             fast_arc_tan(leader->pos.x - moby->pos.x, leader->pos.y - moby->pos.y),
-            &data->yaw_speed,
+            &screamer_data->yaw_speed,
             D_0015ED70 * 25.132742f,
             D_0015ED70 * 25.132742f,
             D_0015ED6C * 50.265484f);
@@ -219,20 +219,20 @@ void screamer_update(Moby *moby) {
         {
             char *linked =
                 (char *)D_L10_0015FFD0_macro[2] +
-                (data->linked[truncate_float_to_s32(
-                                  l10_paths[data->path]->points[data->node_index - 1].f[3]) -
+                (screamer_data->linked[truncate_float_to_s32(
+                                  l10_paths[screamer_data->path]->points[screamer_data->node_index - 1].f[3]) -
                               1]
                  << 8);
             if (linked != 0)
                 activate_waiting_moby_group_members(linked);
         }
-        if (data->node_index == l10_paths[data->path]->count) {
+        if (screamer_data->node_index == l10_paths[screamer_data->path]->count) {
             moby->state = 10;
             if (moby->prev_seq != 4)
                 blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             probe_ground_height(&moby->pos, 0, 0.5f);
-            qcopy(&data->home, &D_L10_00174360_2E0630);
-            qcopy(&data->wander_goal, &moby->pos);
+            qcopy(&screamer_data->home, &D_L10_00174360_2E0630);
+            qcopy(&screamer_data->wander_goal, &moby->pos);
         } else {
             moby->state = 5;
             if (moby->prev_seq != 4)
@@ -246,23 +246,23 @@ void screamer_update(Moby *moby) {
         float climb;
         func_L00_0025CC58_2E0630(&moby->rot.y, 0, zero, D_0015ED6C * 12.566371f);
         approach_w(moby,
-                   fast_arc_tan(data->home.x - moby->pos.x, data->home.y - moby->pos.y),
-                   &data->yaw_speed,
+                   fast_arc_tan(screamer_data->home.x - moby->pos.x, screamer_data->home.y - moby->pos.y),
+                   &screamer_data->yaw_speed,
                    0.02f,
                    0.3f,
                    D_0015ED6C * 6.2831855f);
-        data->vel.x = fast_cos(moby->rot.z) * (D_0015ED6C * 6.0f);
-        data->vel.y = fast_sin(moby->rot.z) * (D_0015ED6C * 6.0f);
-        data->vel.z = zero;
-        climb = data->home.z + 2.0f - moby->pos.z;
+        screamer_data->vel.x = fast_cos(moby->rot.z) * (D_0015ED6C * 6.0f);
+        screamer_data->vel.y = fast_sin(moby->rot.z) * (D_0015ED6C * 6.0f);
+        screamer_data->vel.z = zero;
+        climb = screamer_data->home.z + 2.0f - moby->pos.z;
         if (D_0015ED6C * 6.0f < climb) {
             climb = D_0015ED6C * 6.0f;
         } else if (climb < D_0015ED6C * -6.0f) {
             climb = D_0015ED6C * -6.0f;
         }
-        data->vel.z = climb;
-        func_L00_00259B08_2E0630(moby, &data->vel, 0.5f, 0x200, 0.0f, 0);
-        if (vector_distance_xy(&moby->pos, &data->home) < 2.0f)
+        screamer_data->vel.z = climb;
+        func_L00_00259B08_2E0630(moby, &screamer_data->vel, 0.5f, 0x200, 0.0f, 0);
+        if (vector_distance_xy(&moby->pos, &screamer_data->home) < 2.0f)
             moby->state = 7;
         break;
     }
@@ -270,42 +270,42 @@ void screamer_update(Moby *moby) {
         float radius;
         float angle;
         float zero;
-        if (!fast_dec_timer(&data->wander_timer))
+        if (!fast_dec_timer(&screamer_data->wander_timer))
             break;
         zero = 0.0f;
-        data->wander_timer = scale_game_frames(0x78);
+        screamer_data->wander_timer = scale_game_frames(0x78);
         radius = random_float_between(zero, 3.0f);
         angle = random_angle_radians();
         waypoint[0] = fast_cos(angle) * radius;
         waypoint[1] = fast_sin(angle) * radius;
         waypoint[2] = zero;
         waypoint[2] = random_float_between(5.0f, 7.0f);
-        fast_vec_add(&data->wander_goal, waypoint, &data->home);
+        fast_vec_add(&screamer_data->wander_goal, waypoint, &screamer_data->home);
         moby->state = 10;
         break;
     }
     case SCREAMER_STATE_WANDER:
         approach_w(
             moby,
-            fast_arc_tan(data->wander_goal.x - moby->pos.x, data->wander_goal.y - moby->pos.y),
-            &data->yaw_speed,
+            fast_arc_tan(screamer_data->wander_goal.x - moby->pos.x, screamer_data->wander_goal.y - moby->pos.y),
+            &screamer_data->yaw_speed,
             0.05f,
             0.3f,
             0.2f);
-        fast_vec_sub(&data->step, &data->wander_goal, &moby->pos);
-        func_L00_002607A8_2E0630(&data->step, D_0015ED6C * 4.0f);
-        fast_vec_add(waypoint, &data->step, &moby->pos);
+        fast_vec_sub(&screamer_data->step, &screamer_data->wander_goal, &moby->pos);
+        func_L00_002607A8_2E0630(&screamer_data->step, D_0015ED6C * 4.0f);
+        fast_vec_add(waypoint, &screamer_data->step, &moby->pos);
         if (func_L00_001F10E0_2E0630(0.4f, waypoint, 0, moby)) {
-            clear_u64_value(&data->step);
+            clear_u64_value(&screamer_data->step);
             moby->state = 9;
         } else {
             qcopy(&moby->pos, waypoint);
         }
-        if (fast_vec_length(&data->step) == 0.0f)
+        if (fast_vec_length(&screamer_data->step) == 0.0f)
             moby->state = 9;
         break;
     case SCREAMER_STATE_DEATH_KNOCKBACK:
-        if ((step_moby_motion(moby, data->react) & 1) == 0)
+        if ((step_moby_motion(moby, screamer_data->react) & 1) == 0)
             break;
         mark_moby_for_removal_cf(moby, 0x200, -1);
         spawn_color_swapped_explosion_burst(moby, &moby->pos, -1, 0.5f, 10.0f);
