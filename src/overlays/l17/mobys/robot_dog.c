@@ -781,7 +781,7 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 void       draw_three_moby_effect_quads(struct Moby *effect_owner) __asm__("FUN_L17_002f0448");
 
 void update_robot_dog_glow_effects(struct Moby *moby) {
-    char *data;
+    char *robot_dog_glow_vars;
     int   glow_pulse_period_frames;
     int   alpha;
     int   mode;
@@ -803,7 +803,7 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
         g = 0xB4;
         b = 0x14;
     }
-    data = (char *)moby->pvars;
+    robot_dog_glow_vars = (char *)moby->pvars;
     glow_pulse_period_frames = scale_game_frames(glow_pulse_period_frames);
     alpha = 0x80;
     mode = 0;
@@ -858,7 +858,7 @@ void update_robot_dog_glow_effects(struct Moby *moby) {
         }
         moby->glow_color = fast_tween_color(moby->glow_color, color, 0.1f);
         for (i = 0; i < 3; i++) {
-            moby_point_position(moby, i + 1, data + 0x200 + i * 16);
+            moby_point_position(moby, i + 1, robot_dog_glow_vars + 0x200 + i * 16);
         }
         add_draw_callback(draw_three_moby_effect_quads, moby);
     }
