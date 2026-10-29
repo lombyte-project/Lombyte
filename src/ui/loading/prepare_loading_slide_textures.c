@@ -19,7 +19,7 @@ extern s32 sceCdSync(s32 a0);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *load_image, s32 image_address);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *load_image, s32 block_offset, s32 buffer_width,
                                 s32 pixel_storage_format, s32 x, s32 y, s32 width, s32 height);
-extern s32 wait_for_graphics_pipeline_idle(s32 a0, s32 a1) __asm__("func_00120558");
+extern s32 sceGsSyncPath(s32 a0, s32 a1) __asm__("func_00120558");
 extern s32 decompress_wad(s32 source_address, s32 destination_address) __asm__("func_0020B618");
 extern s32 submit_audio_stream_io_request(void *a0, u32 a1, u32 a2) __asm__("func_00216728");
 
@@ -97,7 +97,7 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
         }
         FlushCache(0);
         sceGsExecLoadImage(&load_image, image_address);
-        wait_for_graphics_pipeline_idle(0, 0);
+        sceGsSyncPath(0, 0);
         *texture_base_output = gs_texture_allocation_cursor >> 8;
         gs_texture_allocation_cursor = gs_texture_allocation_cursor + upload_bytes;
         texture_base_output++;

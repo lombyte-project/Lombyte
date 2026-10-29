@@ -64,7 +64,7 @@ typedef struct {
 } sceMpeg;
 
 extern void _sysbitInit(SysBit *bs, u8 *start, u8 *bufstart, s32 bufsize);
-extern s32 SignExtendPackedValue(SysBit *bs, s32 n);
+extern s32 peek_bits(SysBit *bs, s32 n) __asm__("SignExtendPackedValue");
 extern u8 *GetSysbitPointer(SysBit *bs, s32 pos);
 extern s32 _pack_header(SysBit *bs, PackHdr *pack);
 extern s32 _PES_packet(MpegSys *sys, SysBit *bs, PesHdr *pes);
@@ -105,11 +105,11 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
         } while (i < sys->n);
     }
     for (;;) {
-        if (SignExtendPackedValue(bitstream, 32) == 0x1BA) {
+        if (peek_bits(bitstream, 32) == 0x1BA) {
             _pack_header(bitstream, &pss_header->pack);
         }
-        while (SignExtendPackedValue(bitstream, 24) == 1 && SignExtendPackedValue(bitstream, 32) != 0x1BA &&
-               SignExtendPackedValue(bitstream, 32) != 0x1B9 && bitstream->pos < size * 8 && cont) {
+        while (peek_bits(bitstream, 24) == 1 && peek_bits(bitstream, 32) != 0x1BA &&
+               peek_bits(bitstream, 32) != 0x1B9 && bitstream->pos < size * 8 && cont) {
             _PES_packet(sys, bitstream, &pss_header->pes);
             if (bitstream->pos > size * 8) {
                 continue;
@@ -141,7 +141,7 @@ int sceMpegDemuxPssRing(sceMpeg *mp, u8 *start, int size, u8 *bufstart, int bufs
                 consumed_bytes = bitstream->pos >> 3;
             }
         }
-        if (bitstream->pos > size * 8 || SignExtendPackedValue(bitstream, 32) != 0x1BA) {
+        if (bitstream->pos > size * 8 || peek_bits(bitstream, 32) != 0x1BA) {
             break;
         }
     }

@@ -33,7 +33,7 @@ extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 extern s32 sceGsSetDefLoadImage_23fa00(void *, s16, s16, s16, s16, s16, s16, s16) __asm__("FUN_00122330");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 sceGsExecLoadImage_23fa00(void *, void *) __asm__("FUN_00122658");
-extern s32 wait_for_graphics_pipeline_idle(s32, u16) __asm__("FUN_00120558");
+extern s32 sceGsSyncPath(s32, u16) __asm__("FUN_00120558");
 extern void register_moby_class(void *, void *, void *, s32) __asm__("FUN_00203640");
 
 extern s32 first_record __asm__("D_L00_0015FC00") __attribute__((sda));
@@ -90,7 +90,7 @@ char *load_level_texture_bank(char *bank, s32 *header) {
         flush_cache(0);
         i++;
         sceGsExecLoadImage_23fa00(image, upload_pixels);
-        wait_for_graphics_pipeline_idle(0, 0);
+        sceGsSyncPath(0, 0);
     } while (i < 4);
     base = bank;
     bank = bulk_copy_destination;

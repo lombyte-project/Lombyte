@@ -1,14 +1,14 @@
 #include "types.h"
 #include "rnc/sdk/sce_gs_gparam.h"
 
-extern sceGsGParam *GetCoreDataTable(void);
+extern sceGsGParam *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 
 s16 sceGszbufaddr(s16 psm, s16 width_pixels, s16 height_pixels) {
     sceGsGParam *gp;
     s32 fw;
     s32 fh;
 
-    gp = GetCoreDataTable();
+    gp = sceGsGetGParam();
     fw = (width_pixels + 63) / 64;
     if (psm & 2) {
         fh = (height_pixels + 63) / 64;

@@ -3,8 +3,8 @@
 
 extern s32 InitializeReferenceImage();
 extern s32 _initRefImages();
-extern s32 copy_object_field_backward() __asm__("func_0012BC10");
-extern s32 reserve_aligned_buffer_space() __asm__("func_0012BC20");
+extern s32 reset_work_area() __asm__("func_0012BC10");
+extern s32 alloc_work_area() __asm__("func_0012BC20");
 
 void func_0012C4C8(struct sceMpeg *mpeg) {
     struct MpegDecoder *decoder;
@@ -66,10 +66,10 @@ void func_0012C4C8(struct sceMpeg *mpeg) {
     field2 = (u8 *)decoder + 0x3F0;
     field3 = (u8 *)decoder + 0x458;
     field4 = (u8 *)decoder + 0x4C0;
-    copy_object_field_backward(pool);
-    decoder->frame_buffers[0] = reserve_aligned_buffer_space(decoder, pool, frame_size, 0x40);
-    decoder->frame_buffers[1] = reserve_aligned_buffer_space(decoder, pool, frame_size, 0x40);
-    decoder->frame_buffers[2] = reserve_aligned_buffer_space(decoder, pool, frame_size, 0x40);
+    reset_work_area(pool);
+    decoder->frame_buffers[0] = alloc_work_area(decoder, pool, frame_size, 0x40);
+    decoder->frame_buffers[1] = alloc_work_area(decoder, pool, frame_size, 0x40);
+    decoder->frame_buffers[2] = alloc_work_area(decoder, pool, frame_size, 0x40);
     _initRefImages(frame0, frame1, frame2, field0, field1, field2, field3, field4, field5,
                    decoder->frame_buffers[0], decoder->frame_buffers[1], decoder->frame_buffers[2],
                    width, height);

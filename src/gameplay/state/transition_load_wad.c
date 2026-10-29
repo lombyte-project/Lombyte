@@ -125,7 +125,7 @@ extern void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAd
 extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void FlushCache(s32);
 extern void QueueDmaTransfer(s32);
-extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
+extern void sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
 extern s32 initialize_level_render_state(u8 *) __asm__("FUN_001e9b10");
 extern void init_view_context(void) __asm__("FUN_001f2c60");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
@@ -284,7 +284,7 @@ void transition_load_wad(void)
   sceGsSetDefLoadImage(li, (gs_texture_allocation_cursor << 8) >> 16, 4, 0, 0, 0, 0x100, 0x80);
   FlushCache(0);
   sceGsExecLoadImage(li, data + hdr->x84);
-  wait_for_graphics_pipeline_idle(0, 0);
+  sceGsSyncPath(0, 0);
   D_001940C0.x18 = ((s32) D_001940C0.hdr) + size;
   v = gs_texture_allocation_cursor;
   D_0015EF48 = ((v >> 8) | 0x20010000) | (((s64) 0xB800) << 19);

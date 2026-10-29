@@ -6,7 +6,7 @@ struct PackHeaderInfo {
     s32 unkC;
 };
 
-extern s32 SignExtendPackedValue();
+extern s32 peek_bits() __asm__("SignExtendPackedValue");
 extern s32 _sysbitGet();
 extern s32 _sysbitMarker();
 extern s32 _system_header();
@@ -38,7 +38,7 @@ s32 _pack_header(s32 bitstream_context, struct PackHeaderInfo *pack_header_info)
             } while (var_21_16 < temp_20_45);
         } while (0);
     }
-    if (SignExtendPackedValue(bitstream_context, 0x20) == 0x1BB) {
+    if (peek_bits(bitstream_context, 0x20) == 0x1BB) {
         pack_header_info->unkC = 1;
         _system_header(bitstream_context, pack_header_info);
     } else {

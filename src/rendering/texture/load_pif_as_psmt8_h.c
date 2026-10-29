@@ -43,7 +43,7 @@ extern s32 log2dim(s32) __asm__("func_001F97A0");
 extern s32 sceGsSetDefLoadImage(GsLoadImage *, short, short, short, short, short, short, short);
 extern void FlushCache(int);
 extern s32 sceGsExecLoadImage(GsLoadImage *, void *);
-extern s32 wait_for_graphics_pipeline_idle(int, unsigned short) __asm__("func_00120558");
+extern s32 sceGsSyncPath(int, unsigned short) __asm__("func_00120558");
 
 /* Retail 0x001e9168..0x001e9337, also called by load_debug_font:
    palette = header + 0x20; format zero selects 0x400 palette bytes,
@@ -103,7 +103,7 @@ void load_pif_as_psmt8_h(PifHeader *pif, GsTextureRegisters *registers,
                          0, 0, 16, 16);
     FlushCache(0);
     sceGsExecLoadImage(&load_image, upload.palette);
-    wait_for_graphics_pipeline_idle(0, 0);
+    sceGsSyncPath(0, 0);
     upload.buffer_width = pif->width >> 6;
     if (upload.buffer_width <= 0) {
         upload.buffer_width = 1;
@@ -113,7 +113,7 @@ void load_pif_as_psmt8_h(PifHeader *pif, GsTextureRegisters *registers,
                          (short)pif->width, (short)pif->height);
     FlushCache(0);
     sceGsExecLoadImage(&load_image, upload.image);
-    wait_for_graphics_pipeline_idle(0, 0);
+    sceGsSyncPath(0, 0);
     format_word = (u64)(s64)0x1B << 20;
     tex0_word = (u64)(s64)upload.texel_block_offset | ((u64)(s64)upload.buffer_width << 14);
     size_word = ((u64)(s64)upload.width_log2 << 26) | format_word;

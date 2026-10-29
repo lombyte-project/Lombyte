@@ -393,7 +393,7 @@ RODATA_OVERLAYS = {
     "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0, 26),  # its RPC-collision message
     "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 77),  # its two error messages
     "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 96),  # its buffer-full message
-    "rendering/image/jump_to_image_setup": (0x153AD8, 0x54A58, 16),  # its error message
+    "sdk/video/mpeg/print_mpeg_error": (0x153AD8, 0x54A58, 16),  # its error message
     "sdk/graph/sce_gs_set_def_load_image": (0x1530B0, 0x54030, 284),  # its error message and switch table
     "update_menu_resource_stream": (0x1E87F0, 0xE9770, 28),  # stream-state switch table
     # vfprintf_r: blanks/zeroes, the xdigs strings, the short literals (kept in
@@ -470,7 +470,7 @@ SDATA_OVERLAYS = {
 # `scripts/data-refs.py --emit` writes the definition and prints the entry.
 DATA_OVERLAYS = {
     "sdk/kernel/supplement_crt0": (0x130320, 0x312A0, 8),
-    "runtime/data/get_core_data_table": (0x132D40, 0x33CC0, 16),
+    "sdk/graph/sce_gs_get_gparam": (0x132D40, 0x33CC0, 16),
     "sdk/video/ipu/send_ipu_command": (0x132E70, 0x33DF0, 64),
     "sdk/scf/sce_scf_get_language": (0x1330D4, 0x34054, 1),
     "video/display/set_pal_mode": (0x13D100, 0x3E080, 8),

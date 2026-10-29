@@ -860,7 +860,7 @@ extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern s32 sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(void *, u8 *);
-extern void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
+extern void sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
 extern void debug_print(char *, s32) __asm__("FUN_001e93b0");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern char mpeg_memory_alloc_error_format[] __asm__("D_L00_001E9480");
@@ -895,7 +895,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
         flush_cache(0);
         sceGsExecLoadImage(image, (u8 *)source);
         source += 0xC000;
-        wait_for_graphics_pipeline_idle(0, 0);
+        sceGsSyncPath(0, 0);
     }
     gs_address = D_0015EE78_macro[0];
     j = 0;
@@ -906,7 +906,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
         flush_cache(0);
         sceGsExecLoadImage(image, (u8 *)source);
         source += 0x4000;
-        wait_for_graphics_pipeline_idle(0, 0);
+        sceGsSyncPath(0, 0);
     }
     if (gs_address > 0x400000) {
         debug_print(mpeg_memory_alloc_error_format, gs_address - 0x400000);
@@ -919,7 +919,7 @@ extern S_2997c8 D_001516D0_lui __asm__("D_001516D0") NOT_SDA;
 extern s32 D_L00_0015F5C4_2997c8 __asm__("D_L00_0015F5C4");
 extern struct ActiveSceneTrigger active_scene_trigger_lui __asm__("D_L00_00179100") NOT_SDA;
 extern char D_0013E550[] NOT_SDA;
-void wait_for_graphics_pipeline_idle(s32, s32) __asm__("FUN_00120558");
+void sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
 void FUN_00122e68_2997c8(void *) __asm__("FUN_00122e68");
 void FUN_00122518_2997c8(void *, short, int, int, int, int, int, int) __asm__("FUN_00122518");
 void FUN_00118a80_2997c8(int) __asm__("FUN_00118a80");
@@ -934,7 +934,7 @@ void movie_exit_to_gameplay(void) {
     struct ActiveSceneTrigger *active;
     D_L00_0015F5D8 = 1;
     f122298_298840(0);
-    wait_for_graphics_pipeline_idle(0, 0);
+    sceGsSyncPath(0, 0);
     FUN_00122e68_2997c8(count_vsync);
     source = D_L00_00161058_macro;
     gs_address = D_0015EE78_macro[4];
@@ -948,7 +948,7 @@ void movie_exit_to_gameplay(void) {
         flush_cache(0);
         FUN_001227d8_2997c8(buf, source);
         source += 0xC000;
-        wait_for_graphics_pipeline_idle(0, 0);
+        sceGsSyncPath(0, 0);
     }
     gs_address = D_0015EE78_macro[0];
     j = 0;
@@ -959,7 +959,7 @@ void movie_exit_to_gameplay(void) {
         flush_cache(0);
         FUN_001227d8_2997c8(buf, source);
         source += 0x4000;
-        wait_for_graphics_pipeline_idle(0, 0);
+        sceGsSyncPath(0, 0);
     }
     if (decode_mode == 2) {
         decode_mode = 0;

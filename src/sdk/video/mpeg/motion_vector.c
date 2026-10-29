@@ -10,7 +10,7 @@ struct MotionVectorStore {
     s32 unk4;
 };
 
-extern s32 InitializeMemoryCardDirectory();
+extern s32 decode_dmvector() __asm__("InitializeMemoryCardDirectory");
 extern s32 _ipuVdec();
 extern s32 _nextBit();
 extern s32 decode_motion_vector() __asm__("func_001280A8");
@@ -28,7 +28,7 @@ void _motionVector(s32 decoder_state, struct MotionVector *motion_vector, struct
     }
     decode_motion_vector(motion_vector, first_component_bit_count, code, bits, use_half_scale);
     if (decode_auxiliary_vlc != 0) {
-        auxiliary_vlc_values->unk0 = InitializeMemoryCardDirectory(decoder_state);
+        auxiliary_vlc_values->unk0 = decode_dmvector(decoder_state);
     }
     code = _ipuVdec(decoder_state, 2);
     if (second_component_bit_count != 0 && code != 0) {
@@ -44,6 +44,6 @@ void _motionVector(s32 decoder_state, struct MotionVector *motion_vector, struct
         motion_vector->unk4 *= 2;
     }
     if (decode_auxiliary_vlc != 0) {
-        auxiliary_vlc_values->unk4 = InitializeMemoryCardDirectory(decoder_state);
+        auxiliary_vlc_values->unk4 = decode_dmvector(decoder_state);
     }
 }

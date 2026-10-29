@@ -4,7 +4,7 @@
 #include "types.h"
 #include "sda.h"
 
-/* libgraph global parameters; the table behind GetCoreDataTable(). */
+/* libgraph global parameters; the table behind sceGsGetGParam(). */
 typedef struct sceGsGParam {
     s16 sceGsInterMode;
     s16 sceGsOutMode;

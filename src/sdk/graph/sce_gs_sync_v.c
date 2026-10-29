@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/sce_gs_gparam.h"
 
-extern sceGsGParam *GetCoreDataTable(void);
+extern sceGsGParam *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 extern s32 VSync(void);
 extern s64 VSync2(void);
 
@@ -9,7 +9,7 @@ s32 sceGsSyncV(s32 mode) {
     sceGsGParam *gp;
     s64 field;
 
-    gp = GetCoreDataTable();
+    gp = sceGsGetGParam();
     if (gp->sceGsVSCfunc == 0) {
         VSync();
         if (gp->sceGsInterMode == 1) {

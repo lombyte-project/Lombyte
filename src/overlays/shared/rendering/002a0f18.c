@@ -5,7 +5,7 @@
 void FUN_00122518(void *, short, int, int, int, int, int, int);
 void flush_cache(int) __asm__("FUN_00118a80");
 void FUN_001227d8(void *, int);
-void wait_for_graphics_pipeline_idle(int, int) __asm__("FUN_00120558");
+void sceGsSyncPath(int, int) __asm__("FUN_00120558");
 void transfer_draw_buffer_chunks(int dst, int draw_buffer_byte_address, int size) __asm__("FUN_L00_002a0f18");
 
 void transfer_draw_buffer_chunks(int destination_byte_address, int draw_buffer_byte_address, int size) {
@@ -18,7 +18,7 @@ void transfer_draw_buffer_chunks(int destination_byte_address, int draw_buffer_b
         flush_cache(0);
         FUN_001227d8(chunk_transfer_descriptor, destination_byte_address + transfer_byte_offset);
         transfer_byte_offset += 0x4000;
-        wait_for_graphics_pipeline_idle(0, 0);
+        sceGsSyncPath(0, 0);
     }
 }
 extern int D_L00_001611C0_002a0fc8 __asm__("D_L00_001611C0");

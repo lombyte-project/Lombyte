@@ -6,9 +6,9 @@ extern void D_0012CB30();
 extern void D_0012CB40();
 extern void *memset(void *, s32, u32);
 extern void _Error(void *, u8 *);
-extern void InitializeStateRecord(void *, void *, s32);
-extern s32 reserve_aligned_buffer_space(void *, void *, s32, s32) __asm__("func_0012BC20");
-extern void copy_object_field_forward(void *) __asm__("func_0012BC00");
+extern void init_work_area(void *, void *, s32) __asm__("InitializeStateRecord");
+extern s32 alloc_work_area(void *, void *, s32, s32) __asm__("func_0012BC20");
+extern void mark_work_area(void *) __asm__("func_0012BC00");
 extern void _clearOnce(void *);
 extern s32 sceMpegReset(void *);
 extern s32 ClearMpegReferenceBuffer(void *);
@@ -28,7 +28,7 @@ s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
     }
     state = decoder + 0x108;
     W(mp, 0x40) = (s32)decoder;
-    InitializeStateRecord(state, decoder + 0x10C0, rest - 0x10C0);
+    init_work_area(state, decoder + 0x10C0, rest - 0x10C0);
     W(mp, 0x0) = 0;
     W(mp, 0x4) = 0;
     W(mp, 0x8) = 0;
@@ -61,7 +61,7 @@ s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
     L(decoder, 0xF0) = -1;
     W(decoder, 0x1C) = (s32)D_0012CB30;
     W(decoder, 0x24) = (s32)D_0012CB40;
-    decode_workspace_address = reserve_aligned_buffer_space(decoder, state, 0x600, 8);
+    decode_workspace_address = alloc_work_area(decoder, state, 0x600, 8);
     W(decoder, 0x48) = 0;
     W(decoder, 0xFC) = 0;
     W(decoder, 0x100) = 0;
@@ -90,7 +90,7 @@ s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
     W(decoder, 0x1D8) = (s32)(decoder + 0x458);
     W(decoder, 0x1DC) = (s32)(decoder + 0x4C0);
     W(decoder, 0x1E4) = (s32)(decoder + 0x528);
-    copy_object_field_forward(state);
+    mark_work_area(state);
     W(decoder, 0x850) = -1;
     W(decoder, 0x84C) = 0;
     W(decoder, 0x81C) = 0x70003600;

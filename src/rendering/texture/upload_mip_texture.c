@@ -32,7 +32,7 @@ extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("FUN_001
 extern void FlushCache(s32);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u128 *);
-extern s32 wait_for_graphics_pipeline_idle(s32, s32) __asm__("func_00120558");
+extern s32 sceGsSyncPath(s32, s32) __asm__("func_00120558");
 extern s32 log2dim(s32) __asm__("func_001F97A0");
 
 s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) __asm__("FUN_00202270");
@@ -106,7 +106,7 @@ s32 upload_mip_texture(MipTextureHeader *texture_source, u64 *regs) {
         }
         FlushCache(0);
         sceGsExecLoadImage(&load_image, (u128 *)upload.palette_address);
-        wait_for_graphics_pipeline_idle(0, 0);
+        sceGsSyncPath(0, 0);
     }
     for (mip_index = 1; mip_index < texture_source->mip_level_count; mip_index++) {
         upload.mip_sizes[mip_index] = upload.mip_sizes[mip_index - 1] >> 2;
@@ -128,7 +128,7 @@ s32 upload_mip_texture(MipTextureHeader *texture_source, u64 *regs) {
                                  texture_source->height >> mip_index);
             FlushCache(0);
             sceGsExecLoadImage(&load_image, (u128 *)upload.mip_addresses[mip_index]);
-            wait_for_graphics_pipeline_idle(0, 0);
+            sceGsSyncPath(0, 0);
             allocation_bytes = upload.mip_sizes[0] >> (mip_index * 2);
             if (allocation_bytes <= 0xFF) {
                 allocation_bytes = 0x100;

@@ -9,7 +9,7 @@ typedef struct {
     s32 pad08[2];
 } GsVideoModeState;
 
-extern GsVideoModeState *GetCoreDataTable(void);
+extern GsVideoModeState *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 extern s32 checkModelVersion(void);
 extern void InvokeKernelSyscall0080(s32 mode, s32 *horizontal, s32 *vertical,
                                      s32 *display_width, s32 *display_height);
@@ -31,7 +31,7 @@ void sceGsSetDefDispEnv(struct sceGsDispEnv *output, s16 pixel_storage_format, s
     u64 display_vertical;
     u64 progressive_width;
 
-    state = GetCoreDataTable();
+    state = sceGsGetGParam();
     if (!((u32)(state->wMode - 2) < 2) && checkModelVersion() != 0) {
         InvokeKernelSyscall0080((s16)state->wMode, &kernel_horizontal, &kernel_vertical,
                                  &kernel_width, &kernel_height);

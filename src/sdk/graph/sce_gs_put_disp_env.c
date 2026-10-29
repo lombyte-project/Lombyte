@@ -1,10 +1,10 @@
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
-extern s32 GetCoreDataTable();
+extern s32 sceGsGetGParam() __asm__("GetCoreDataTable");
 void sceGsPutDispEnv(struct sceGsDispEnv *env) {
     s32 *core;
 
-    core = (s32 *)GetCoreDataTable();
+    core = (s32 *)sceGsGetGParam();
     if (*(s16 *)((u8 *)core + 6) == 1) {
         *(volatile u64 *)0x12000000 = env->pmode;
         *(volatile u64 *)0x12000070 = env->dispfb;

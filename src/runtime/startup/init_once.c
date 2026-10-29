@@ -18,7 +18,7 @@ extern s32 EnableInterrupts();
 extern s32 fill_transfer_words() __asm__("func_001F97E8");
 extern void FlushCache();
 extern s32 reset_vif1_gif() __asm__("FUN_001204b8");
-extern s32 wait_for_graphics_pipeline_idle() __asm__("FUN_00120558");
+extern s32 sceGsSyncPath() __asm__("FUN_00120558");
 extern s32 sceCdDiskReady() __asm__("FUN_00121190");
 extern s32 wad_get_sectors() __asm__("FUN_0012f208");
 extern s32 load_disc_sectors_into_global_buffer() __asm__("func_0012F2B8");
@@ -133,7 +133,7 @@ void init_once(void) {
     sceGsSetDefLoadImage(disc_sector_and_image_descriptor_buffer, 0x3FFB, 1, 0, 0, 0, 8, 8);
     FlushCache(0);
     sceGsExecLoadImage(disc_sector_and_image_descriptor_buffer, image_clear_buffer);
-    wait_for_graphics_pipeline_idle(0, 0);
+    sceGsSyncPath(0, 0);
     load_debug_font();
     *(volatile s32 *)0x10000810 = 0x82;
     *(volatile s32 *)0x10000800 = 0;

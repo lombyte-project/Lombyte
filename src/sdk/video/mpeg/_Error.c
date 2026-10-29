@@ -7,7 +7,7 @@ struct ErrorContext {
 #define FIELD(type, object, offset) (*(type *)((unsigned char *)(object) + (offset)))
 
 void _dispatchMpegCallback(u32 state, int *arguments) __asm__("_dispatchMpegCallback");
-void JumpToImageSetup(int argument) __asm__("JumpToImageSetup");
+void print_mpeg_error(int argument) __asm__("JumpToImageSetup");
 
 void _Error(struct ErrorContext *context, int argument) __asm__("_Error");
 
@@ -21,6 +21,6 @@ void _Error(struct ErrorContext *context, int argument) {
         callback_arguments[0] = 0;
         _dispatchMpegCallback(state, callback_arguments);
     } else {
-        JumpToImageSetup(argument);
+        print_mpeg_error(argument);
     }
 }

@@ -3,9 +3,9 @@
 #include "types.h"
 #include "rnc/sdk/sce_gs_gparam.h"
 
-void *GetCoreDataTable(void) __asm__("GetCoreDataTable");
+void *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 
-void *GetCoreDataTable(void) {
+void *sceGsGetGParam(void) {
     return &CoreDataTable;
 }
 

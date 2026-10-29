@@ -7,9 +7,9 @@ typedef struct ImageBufferState {
 
 extern void SetIpuMpeg1(s32 enabled) __asm__("_ipuSetMPEG1");
 
-void clear_image_buffer_flag(ImageBufferState *image_state) __asm__("SetImageBufferFlag");
+void set_mpeg1_mode(ImageBufferState *image_state) __asm__("SetImageBufferFlag");
 
-void clear_image_buffer_flag(ImageBufferState *image_state) {
+void set_mpeg1_mode(ImageBufferState *image_state) {
     image_state->pending_flag = 0;
     SetIpuMpeg1(1);
 }

@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/sdk/sce_gs_gparam.h"
 
-extern sceGsGParam *GetCoreDataTable(void);
+extern sceGsGParam *sceGsGetGParam(void) __asm__("GetCoreDataTable");
 extern s32 GsPutIMR();
 extern s32 RemoveIntcHandler();
 extern s32 disable_intc() __asm__("func_00119028");
@@ -16,7 +16,7 @@ void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
 
     switch (mode) {
     case GS_RESET_AND_CONFIGURE_VIDEO:
-        gp = GetCoreDataTable();
+        gp = sceGsGetGParam();
         *(volatile u64 *)0x12001000 = 0x200;
         gp->sceGsInterMode = inter;
         gp->sceGsOutMode = out;
@@ -35,7 +35,7 @@ void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff) {
         *(volatile u64 *)0x12001000 = 0x100;
         break;
     case GS_UPDATE_VIDEO_MODE:
-        gp = GetCoreDataTable();
+        gp = sceGsGetGParam();
         gp->sceGsFFMode = (ff != 0);
         gp->sceGsInterMode = inter;
         gp->sceGsOutMode = out;

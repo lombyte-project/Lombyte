@@ -6,7 +6,7 @@ struct VerticalSyncCallbackState {
     s32 interrupt_handler_id;
 };
 
-extern struct VerticalSyncCallbackState *GetCoreDataTable();
+extern struct VerticalSyncCallbackState *sceGsGetGParam() __asm__("GetCoreDataTable");
 extern s32 disable_intc() __asm__("func_00119028");
 extern s32 enable_intc() __asm__("func_00119090");
 extern s32 RemoveIntcHandler();
@@ -16,7 +16,7 @@ s32 sceGsSyncVCallback(s32 callback) {
     s32 previous_callback;
     struct VerticalSyncCallbackState *callback_state;
 
-    callback_state = GetCoreDataTable();
+    callback_state = sceGsGetGParam();
     previous_callback = callback_state->callback;
     if (callback == 0) {
         disable_intc(2);
