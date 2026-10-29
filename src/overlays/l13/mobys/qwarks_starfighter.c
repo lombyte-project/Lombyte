@@ -498,8 +498,8 @@ void detach_moby_joint_attachment(void *unused, char *parent_data, int child_slo
     char **slot = (char **)(base + child_slot_byte_offset);
     char  *moby = *slot;
     if (moby != 0) {
-        char  *data = ((char *)MOBY(moby)->pvars);
-        float *child_launch_vector = (float *)(data + 0x10);
+        char  *child_moby_data = ((char *)MOBY(moby)->pvars);
+        float *child_launch_vector = (float *)(child_moby_data + 0x10);
         float  random_half_range, random_small_angle_step, random_second_angle_step,
             random_third_angle_step;
         cart_burst(unused, moby + 0x10, -1, 2.0f, 13.0f);
@@ -511,14 +511,14 @@ void detach_moby_joint_attachment(void *unused, char *parent_data, int child_slo
         random_half_range = random_half_range * 0.34906585f;
         random_small_angle_step = random_float_between(-random_half_range, random_half_range);
         random_half_range = frame_time;
-        *(float *)(data + 0x30) = random_small_angle_step;
+        *(float *)(child_moby_data + 0x30) = random_small_angle_step;
         random_half_range = random_half_range * 3.1415927f;
         random_second_angle_step = random_float_between(-random_half_range, random_half_range);
         random_half_range = frame_time;
-        *(float *)(data + 0x34) = random_second_angle_step;
+        *(float *)(child_moby_data + 0x34) = random_second_angle_step;
         random_half_range = random_half_range * 3.1415927f;
         random_third_angle_step = random_float_between(-random_half_range, random_half_range);
-        *(float *)(data + 0x38) = random_third_angle_step;
+        *(float *)(child_moby_data + 0x38) = random_third_angle_step;
         MOBY(moby)->spawn_frame = 0x40404000000000L;
         MOBY(moby)->hit_slot = 0xFF;
         *slot = 0;
