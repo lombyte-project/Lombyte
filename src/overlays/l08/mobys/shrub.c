@@ -104,8 +104,8 @@ void spawn_shrub_parts(char *moby) {
 }
 
 void process_shrub_part_hits(struct Moby *parent_moby) {
-    char  *data = ((char *)parent_moby->pvars);
-    char  *base = data + 0x60;
+    char  *shrub_hit_vars = ((char *)parent_moby->pvars);
+    char  *base = shrub_hit_vars + 0x60;
     char **part_entry_cursor = (char **)base;
     char **sq;
     int    weighted_hit_score = 0;
@@ -136,9 +136,9 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
             }
         }
     }
-    *(unsigned short *)(data + 0x13C) += weighted_hit_score;
-    if (*(short *)(data + 0x13C) >= 8) {
-        *(short *)(data + 0x13C) = *(short *)(data + 0x13C) % 8;
+    *(unsigned short *)(shrub_hit_vars + 0x13C) += weighted_hit_score;
+    if (*(short *)(shrub_hit_vars + 0x13C) >= 8) {
+        *(short *)(shrub_hit_vars + 0x13C) = *(short *)(shrub_hit_vars + 0x13C) % 8;
         if (selected_hit_part_index != 0) {
             int    selected_part_byte_offset = selected_hit_part_index * 16;
             char **selected_part_entry = (char **)(base + selected_part_byte_offset);
@@ -148,7 +148,7 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
             cart_burst(parent_moby, selected_part_moby + 0x10, -1, 2.0f, 13.0f);
             fast_vec_sub(d2,
                          *selected_part_entry + 0x10,
-                         *(char **)(selected_part_byte_offset + data + 0x64) + 0x10);
+                         *(char **)(selected_part_byte_offset + shrub_hit_vars + 0x64) + 0x10);
             fast_vec_normalize(d2, d2, D_0015ED6C * 10.0f);
             (*selected_part_entry)[0x20] = 1;
             *selected_part_entry = 0;
@@ -165,7 +165,7 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
                     char *d2 = *(char **)(*sq + 0x78);
                     cart_burst(parent_moby, *sq + 0x10, -1, 2.0f, 13.0f);
                     fast_vec_sub(
-                        d2, *sq + 0x10, *(char **)(data + fallback_part_byte_offset + 0x64) + 0x10);
+                        d2, *sq + 0x10, *(char **)(shrub_hit_vars + fallback_part_byte_offset + 0x64) + 0x10);
                     fast_vec_normalize(d2, d2, D_0015ED6C * 10.0f);
                     (*sq)[0x20] = 1;
                     *sq = 0;
