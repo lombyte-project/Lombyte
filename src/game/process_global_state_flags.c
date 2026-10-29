@@ -24,7 +24,7 @@ s32 process_global_state_flags(void) {
     u8  backup[4];
     u8  old_value;
     s32 i;
-    s32 result;
+    s32 fade_duration_frames;
 
     if ((controller_state.pressed & PAD_CIRCLE) != 0) {
         if (mode_freeze_state == 1 || mode_freeze_state == 0x10) {
@@ -47,8 +47,8 @@ s32 process_global_state_flags(void) {
         D_0015EEA0 = 1;
         memcard_save_data(0, -1);
         clear_scene_state_buffers();
-        result = scale_game_frames(0x10);
-        fade_to_black(result);
+        fade_duration_frames = scale_game_frames(0x10);
+        fade_to_black(fade_duration_frames);
         hero.fall_fade_pending = 1;
         return -1;
     }
