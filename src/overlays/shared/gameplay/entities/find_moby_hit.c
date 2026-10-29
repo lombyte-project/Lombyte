@@ -789,8 +789,10 @@ typedef struct {
 } OutPtr;
 
 /* Interpolates the four components of two copied vectors by t into dst. */
-void FUN_L00_0025b6b8(f32 *dst, f32 *a, f32 *b, f32 t);
-void FUN_L00_0025b6b8(f32 *interpolated_vector, f32 *start_vector, f32 *end_vector, f32 interpolation_factor) {
+void interpolate_vector(f32 *dst, f32 *a, f32 *b, f32 t) __asm__("FUN_L00_0025b6b8");
+void interpolate_vector(f32 *interpolated_vector, f32 *start_vector, f32 *end_vector, f32 interpolation_factor) __asm__("FUN_L00_0025b6b8");
+
+void interpolate_vector(f32 *interpolated_vector, f32 *start_vector, f32 *end_vector, f32 interpolation_factor) {
     Vec4 left, right;
     /* Fakematch: the struct copy of dst and the dead dst = 0 stores keep each store ahead of the next call's loads. */
     OutPtr out = { interpolated_vector };

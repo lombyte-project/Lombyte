@@ -219,7 +219,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
-extern void FUN_L00_0026f548(void *, void *, int, int);
+extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
 extern void spawn_gravity_floor_burst_particle(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002738e8");
 extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
@@ -378,7 +378,7 @@ void mine_update(M910 *mine_moby) {
                             n[1] = fast_sin(ang) * rr;
                             n[2] = random_float_between(frame_time * 3.0f, frame_time * 6.5f);
                             life = FUN_L00_00257b90(0x5A, 0x78);
-                            FUN_L00_0026f548(t, n, random_integer_below(2), life);
+                            spawn_debris_chunk(t, n, random_integer_below(2), life);
                         }
                     }
                 } else if (v->h50 != 0 || collision_hit_material() != 0) {

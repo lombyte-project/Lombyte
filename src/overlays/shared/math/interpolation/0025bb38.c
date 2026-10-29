@@ -41,8 +41,10 @@ extern void advance_damped_scalar_velocity(float *, float, float, float,
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_0025bc98(float) __asm__("FUN_001f99c0");
 
-float FUN_L00_0025bc98(float *p, float *q, int n, float x, float a, float b, float c);
-float FUN_L00_0025bc98(float *current_angle, float *angular_velocity, int rotation_direction, float x, float angle_error_gain, float angular_velocity_damping, float angular_velocity_limit) {
+float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
+float spring_angle(float *current_angle, float *angular_velocity, int rotation_direction, float x, float angle_error_gain, float angular_velocity_damping, float angular_velocity_limit) __asm__("FUN_L00_0025bc98");
+
+float spring_angle(float *current_angle, float *angular_velocity, int rotation_direction, float x, float angle_error_gain, float angular_velocity_damping, float angular_velocity_limit) {
     float angle_error;
     if (rotation_direction == 2) {
         if ((0.0f < x && *current_angle < 0.0f) || (x < 0.0f && 0.0f < *current_angle)) {

@@ -816,8 +816,10 @@ extern char *D_L00_00166E00 NOT_SDA;
 extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
 /* Copies src to +0x80 of the object of entry 5 (from FUN_L00_001eb1f8 if needed). */
-void FUN_L00_002ea9d8(char *src);
-void FUN_L00_002ea9d8(char *requested_position) {
+void set_camera_position(char *src) __asm__("FUN_L00_002ea9d8");
+void set_camera_position(char *requested_position) __asm__("FUN_L00_002ea9d8");
+
+void set_camera_position(char *requested_position) {
     char *current_camera_record = D_L00_00166E00;
     char *camera_record;
     if (*(short *)(current_camera_record + 0x86) != 5)
@@ -878,8 +880,10 @@ void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 void FUN_001f9bf8_2eac18(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_2eac18(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_002eac18(int mode);
-void FUN_L00_002eac18(int mode) {
+void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
+void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
+
+void jet_end_mount(int mode) {
     char *camera_globals = player_camera;
     char *current_follow_camera = *(char **)(camera_globals + 0x180);
     initialize_camera_record_handoff_defaults();

@@ -898,8 +898,10 @@ void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void apply_nearest_environment_sample(int) __asm__("FUN_L00_002500b8");
 extern char D_0013F3D0[] NOT_SDA;
-void FUN_L00_00216f90(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag);
-void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_euler_rotation, int mode, int flag) {
+void set_race_camera(Vec4_00216f90 *pos, Vec4_00216f90 *rot, int mode, int flag) __asm__("FUN_L00_00216f90");
+void set_race_camera(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_euler_rotation, int mode, int flag) __asm__("FUN_L00_00216f90");
+
+void set_race_camera(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_euler_rotation, int mode, int flag) {
     char *position_destination = D_0013F3D0;
     char *hero_base;
     char *rotation_destination;

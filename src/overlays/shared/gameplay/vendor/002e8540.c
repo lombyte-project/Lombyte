@@ -31,8 +31,10 @@ void follow_camera_set_up_spring(float up_spring_value, float up_spring_setting)
 extern char *D_L00_00166E00 NOT_SDA;
 extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
-void FUN_L00_002eaa30(char *src);
-void FUN_L00_002eaa30(char *rotation_source) {
+void set_camera_rotation(char *src) __asm__("FUN_L00_002eaa30");
+void set_camera_rotation(char *rotation_source) __asm__("FUN_L00_002eaa30");
+
+void set_camera_rotation(char *rotation_source) {
     char *current_camera_record = D_L00_00166E00;
     char *camera_record;
     if (*(short *)(current_camera_record + 0x86) != 5)

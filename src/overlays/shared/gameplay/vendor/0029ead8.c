@@ -144,7 +144,9 @@ extern f32 square_root(f32) __asm__("func_001F9988");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 /* Splash on the pool height tiles: raises the heights around (x, z) and copies the edges into the neighbour tiles. */
-void FUN_L00_002a3ec8(HeightTile *tile, int count, int mode, float x, float z, float radius, float amount) {
+void pool_splash(HeightTile *tile, int count, int mode, float x, float z, float radius, float amount) __asm__("FUN_L00_002a3ec8");
+
+void pool_splash(HeightTile *tile, int count, int mode, float x, float z, float radius, float amount) {
     HeightTile *tiles = tile;
     int row;
     int i;

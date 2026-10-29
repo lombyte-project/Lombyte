@@ -358,7 +358,9 @@ extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void update_entity(DebrisMoby *) __asm__("FUN_L00_00250df8");
 extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 
-DebrisMoby *FUN_L01_0030be70(DebrisMoby *parent_moby, void *debris_vector_source, f32 scale) {
+DebrisMoby *spawn_debris(DebrisMoby *parent_moby, void *debris_vector_source, f32 scale) __asm__("FUN_L01_0030be70");
+
+DebrisMoby *spawn_debris(DebrisMoby *parent_moby, void *debris_vector_source, f32 scale) {
     DebrisMoby *spawned_moby;
     DebrisVars *debris_vars;
 
