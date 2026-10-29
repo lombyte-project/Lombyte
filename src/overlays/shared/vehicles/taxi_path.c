@@ -58,18 +58,18 @@ char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby,
 char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int id) {
     unsigned short *moby_index_entry = D_L05_001ABCC0_9598[list_owner_moby[0x21]];
     char           *pool;
-    int             idx;
+    int             candidate_moby_pool_index;
     if (moby_index_entry != 0) {
         pool = D_L05_0015FFD8_9598;
         do {
-            idx = *moby_index_entry & 0x7FFF;
-            if (*(short *)(((M_9598 *)pool)[idx].data + 0xB4) == id)
+            candidate_moby_pool_index = *moby_index_entry & 0x7FFF;
+            if (*(short *)(((M_9598 *)pool)[candidate_moby_pool_index].data + 0xB4) == id)
                 goto found;
         } while ((short)*moby_index_entry++ >= 0);
     }
     return 0;
 found:
-    return (char *)&((M_9598 *)D_L05_0015FFD8_9598)[idx];
+    return (char *)&((M_9598 *)D_L05_0015FFD8_9598)[candidate_moby_pool_index];
 }
 
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
