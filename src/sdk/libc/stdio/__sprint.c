@@ -28,14 +28,14 @@ struct PrintIoVector {
 extern s32 __sfvwrite();
 
 s32 __sprint(s32 reent, struct PrintIoVector *vectors) {
-    s32 result;
+    s32 write_status;
 
     if (vectors->vector_count == 0) {
         vectors->remaining_bytes = 0;
         return 0;
     }
-    result = __sfvwrite(reent, vectors);
+    write_status = __sfvwrite(reent, vectors);
     vectors->vector_count = 0;
     vectors->remaining_bytes = 0;
-    return result;
+    return write_status;
 }
