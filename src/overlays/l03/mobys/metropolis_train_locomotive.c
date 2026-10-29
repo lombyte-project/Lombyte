@@ -247,7 +247,7 @@ void update_metropolis_train_idle_motion(struct Moby *moby) {
     float  old_pos[4];
     float  old_rot[4];
     float  delta[4];
-    char  *data;
+    char  *locomotive_pvars;
     char  *car;
     char  *car_data;
     char  *moby_position;
@@ -257,17 +257,17 @@ void update_metropolis_train_idle_motion(struct Moby *moby) {
     float *dp;
     char  *motion;
 
-    data = (char *)moby->pvars;
+    locomotive_pvars = (char *)moby->pvars;
     moby->unk72 = 0x40;
     moby_position = &moby->pos;
     qcopy(old_pos, moby_position);
     moby_rotation = &moby->rot;
     qcopy(old_rot, moby_rotation);
-    next_id = *(int *)(data + 0xA0);
+    next_id = *(int *)(locomotive_pvars + 0xA0);
     if (next_id != -1) {
         id = next_id;
         dp = delta;
-        motion = data + 0x60;
+        motion = locomotive_pvars + 0x60;
         do {
             car = D_L03_0015FFD8_292d10 + (id << 8);
             car_data = *(char **)(car + 0x78);
@@ -281,11 +281,11 @@ void update_metropolis_train_idle_motion(struct Moby *moby) {
         fast_vec_sub(dp, &moby->pos, old_pos);
         update_entity_matrix(motion, dp, old_rot, &moby->rot);
     } else {
-        debug_print(D_L03_001E2410, *(int *)(data + 0xB8));
+        debug_print(D_L03_001E2410, *(int *)(locomotive_pvars + 0xB8));
         mark_moby_for_removal(moby);
         return;
     }
-    *(unsigned short *)(D_L03_0015FFD8_292d10 + (*(int *)(data + 0xC4) << 8) + 0x34) |= 6;
+    *(unsigned short *)(D_L03_0015FFD8_292d10 + (*(int *)(locomotive_pvars + 0xC4) << 8) + 0x34) |= 6;
 }
 
 typedef struct {
