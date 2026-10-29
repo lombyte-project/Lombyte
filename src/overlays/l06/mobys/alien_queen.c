@@ -900,9 +900,9 @@ void activate_listed_state_15_mobys_at_raised_positions(char *moby) {
 
 void start_alien_queen_intro(char *moby) {
     float        output_position[4], output_rotation[4], moby_offset_vector[4];
-    char        *data = ((char *)MOBY(moby)->pvars);
-    LevelCuboid *base = &l06_cuboids[*(int *)(data + 0xF8)];
-    *(int *)(data + 0x118) = 0;
+    char        *alien_queen_vars = ((char *)MOBY(moby)->pvars);
+    LevelCuboid *base = &l06_cuboids[*(int *)(alien_queen_vars + 0xF8)];
+    *(int *)(alien_queen_vars + 0x118) = 0;
     set_race_camera(&base->pos, &base->rot, 0x72, 0);
     qcopy(output_position, moby + 0x10);
     output_position[2] = hero.motion.pos.f[2] + 2.0f;
@@ -917,7 +917,7 @@ void start_alien_queen_intro(char *moby) {
     jet_mount(output_position, output_rotation, 1, 0, 0);
     set_camera_position(output_position);
     set_camera_rotation(output_rotation);
-    *D_L06_001B0FB0[*(int *)(data + 0xEC)] = 0;
+    *D_L06_001B0FB0[*(int *)(alien_queen_vars + 0xEC)] = 0;
 }
 
 int update_alien_queen_intro_camera(char *moby) {
