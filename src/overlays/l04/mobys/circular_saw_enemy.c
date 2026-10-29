@@ -179,20 +179,20 @@ extern void  select_moby_combat_target(char *, float *, float) __asm__("FUN_L00_
 int check_circular_saw_melee_attack_spacing(struct Moby *moby) __asm__("FUN_L04_002c1e98");
 
 int check_circular_saw_melee_attack_spacing(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *circular_saw_pvars = (char *)moby->pvars;
     float target_selection_output[20];
     float target_distance;
     float target_selection_distance_limit;
     char *other_moby;
     int   flag = 0;
-    if (*(int *)(data + 0x38) != 0 || *(short *)(data + 0x136) != 0) {
+    if (*(int *)(circular_saw_pvars + 0x38) != 0 || *(short *)(circular_saw_pvars + 0x136) != 0) {
         flag = 1;
     }
     if (flag) {
-        float x = *(float *)(data + 0x140);
+        float x = *(float *)(circular_saw_pvars + 0x140);
         target_selection_distance_limit = x + x;
     } else {
-        target_selection_distance_limit = *(float *)(data + 0x140);
+        target_selection_distance_limit = *(float *)(circular_saw_pvars + 0x140);
     }
     select_moby_combat_target(moby, target_selection_output, target_selection_distance_limit);
     target_distance = vector_distance_xy((float *)&moby->pos, target_selection_output);
