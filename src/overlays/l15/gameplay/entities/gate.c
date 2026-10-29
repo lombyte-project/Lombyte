@@ -842,7 +842,7 @@ extern unsigned short *l15_moby_group_member_lists[] __asm__("D_L15_001ABE40");
 extern float D_L15_0015F580[] MACRO_ADDR;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
-extern float FUN_L15_001f8648(float);
+extern float scale_time(float) __asm__("FUN_L15_001f8648");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float FUN_001f9b48(void *, void *);
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -891,7 +891,7 @@ void construction_arm_update(struct Moby *moby)
     switch (moby->state) {
     case CONSTRUCTION_ARM_INITIALIZE:
         arm_vars->timer = truncate_float_to_s32(random_float_between(
-            FUN_L15_001f8648(construction_arm_wait_time_min_gp * 60.0f), FUN_L15_001f8648(construction_arm_wait_time_max_gp * 60.0f)));
+            scale_time(construction_arm_wait_time_min_gp * 60.0f), scale_time(construction_arm_wait_time_max_gp * 60.0f)));
         *(int *)&arm_vars->yaw_velocity = arm_vars->side = *(int *)&arm_vars->yaw = 0;
         moby->update_dist = 0xff;
         moby->state = 1;
@@ -971,8 +971,8 @@ void construction_arm_update(struct Moby *moby)
         break;
     case CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION:
         if (moby->prev_seq == arm_vars->side * 2 + 3 && (moby->anim_flags & 2)) {
-            minimum = FUN_L15_001f8648(construction_arm_wait_time_min_gp * 60.0f);
-            maximum = FUN_L15_001f8648(construction_arm_wait_time_max_gp * 60.0f);
+            minimum = scale_time(construction_arm_wait_time_min_gp * 60.0f);
+            maximum = scale_time(construction_arm_wait_time_max_gp * 60.0f);
             arm_vars->timer = truncate_float_to_s32(random_float_between(minimum, maximum));
             duration = scale_game_frames(6);
             blend_moby_animation(moby, 0, 0, duration);

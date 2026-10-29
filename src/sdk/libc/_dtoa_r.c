@@ -67,7 +67,7 @@ union double_union {
 #define Bfree       _Bfree
 #define d2b         _d2b
 #define hi0bits     _hi0bits
-#define i2b         func_00115808
+#define i2b         __i2b
 #define mult        _multiply
 #define pow5mult    _pow5mult
 #define lshift      _lshift
@@ -84,7 +84,7 @@ extern _Bigint *Balloc(struct _reent *, s32);
 extern void Bfree(struct _reent *, _Bigint *) __asm__("InsertLinkObject");
 extern _Bigint *d2b(struct _reent *, f64, s32 *, s32 *);
 extern s32 hi0bits(u32);
-extern _Bigint *i2b(struct _reent *, s32);
+extern _Bigint *i2b(struct _reent *, s32) __asm__("func_00115808");
 extern _Bigint *mult(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint *pow5mult(struct _reent *, _Bigint *, s32);
 extern _Bigint *lshift(struct _reent *, _Bigint *, s32);
