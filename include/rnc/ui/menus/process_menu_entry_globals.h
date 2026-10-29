@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Scalar data read by src/ui/menus/process_menu_entry.c. */
+/* Scalar data read by src/ui/menus/system/process_menu_entry.c. */
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern s32 menu_help_hud_item __asm__("D_00160070");
 

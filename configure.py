@@ -408,9 +408,9 @@ RODATA_OVERLAYS = {
     "ui/help/draw_help": (0x1E7A70, 0xE89F0, 28),  # switch table (migrated)
     "ui/help/dismiss_help": (0x1E7A20, 0xE89A0, 32),  # switch table (migrated)
     "_sceFs_Rcv_Intr": (0x1528E0, 0x53860, 100),  # retail switch table (jtbl_001528E0)
-    "ui/menus/process_menu_entry": (0x1E86A0, 0xE9620, 24),  # retail switch table (jtbl_001E86A0)
+    "ui/menus/system/process_menu_entry": (0x1E86A0, 0xE9620, 24),  # retail switch table (jtbl_001E86A0)
     "draw_sky_shells": (0x1E8910, 0xE9890, 24),  # switch table
-    "ui/menus/update_timed_menu_sequence": (0x1E8810, 0xE9790, 80),  # switch table
+    "ui/menus/system/update_timed_menu_sequence": (0x1E8810, 0xE9790, 80),  # switch table
     "gameplay/vendor/update_resident_dialogue_animation_state": (0x1E8A90, 0xE9A10, 52),  # switch table
     "update_help_state": (0x1E7A40, 0xE89C0, 36),  # switch table
     "memcard_update_state": (0x1E8200, 0xE9180, 348),  # switch table
@@ -481,7 +481,7 @@ DATA_OVERLAYS = {
     "ui/map/map_filters": (0x1A03B0, 0xA1330, 4),
     "textbin/gameplay/state/initialize_level_runtime": (0x1CAAC0, 0xCBA40, 4096),
     "textbin/world/data/select_world_object_resource_tables": (0x1CBBE0, 0xCCB60, 1152),
-    "ui/menus/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
+    "gameplay/state/render_level_effects_and_screen_sprites": (0x1CE2C0, 0xCF240, 56),
     "textbin/gameplay/gadgets/load_hand_gadget": (0x1D52E8, 0xD6268, 1776),
     "ui/menus/item_preview/update_preview_animation_and_attachments": (0x1D6080, 0xD7000, 56),
     "rendering/shrubs/register_shrub_render_class": (0x1D8030, 0xD8FB0, 128),
@@ -493,11 +493,11 @@ DATA_OVERLAYS = {
     "gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
     "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0, 64),
     "textbin/rebuild_configured_text_label_list": (0x1E8728, 0xE96A8, 60),
-    "ui/menus/update_menu_resource_stream": (0x1E87D0, 0xE9750, 24),
+    "ui/menus/system/update_menu_resource_stream": (0x1E87D0, 0xE9750, 24),
     "textbin/video/player/init_all": (0x1E8AF0, 0xE9A70, 18),
     "rendering/view/update_view_context": (0x18CFC0, 0x8DF40, 64),
     "input/pad/init_pads": (0x1CD760, 0xCE6E0, 16),
-    "ui/menus/update_timed_menu_sequence": (0x1D5298, 0xD6218, 3),
+    "ui/menus/system/update_timed_menu_sequence": (0x1D5298, 0xD6218, 3),
     "gameplay/vendor/update_resident_dialogue_animation_state": (0x1E63FC, 0xE737C, 4),
     "rendering/draw_dialog_text": (0x1E78F0, 0xE8870, 48),
 }
