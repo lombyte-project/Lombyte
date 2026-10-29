@@ -579,12 +579,12 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
     float spawn_position[4];
     float local_rotation_offset[4];
     float launch_velocity[4];
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *rocket_vars = ((char *)MOBY(moby)->pvars);
     int   i;
 
     if (flag) {
         spawn_explosion(moby,
-                        data + 0x20,
+                        rocket_vars + 0x20,
                         moby + 0x10,
                         0.0f,
                         0.0f,
@@ -603,7 +603,7 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
                         0);
     } else {
         spawn_explosion(moby,
-                        data + 0x20,
+                        rocket_vars + 0x20,
                         moby + 0x10,
                         0.0f,
                         0.0f,
