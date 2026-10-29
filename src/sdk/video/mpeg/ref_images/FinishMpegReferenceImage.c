@@ -26,7 +26,7 @@ typedef struct Obj40 {
     /* 0x178 */ char unk178[0x40];
     /* 0x1B8 */ Slot1B8 slots[3];
     /* 0x1E8 */ char unk1E8[0x638];
-    /* 0x820 */ int unk820;
+    /* 0x820 */ int picture_ready;
 } Obj40;
 /* Does the request at arg1 fit the heap described by arg0? A sized
    request (+0xE0 non-zero) has to fit both the byte budget at +0xDC and
@@ -42,7 +42,7 @@ int FinishMpegReferenceImage(void *object) {
         reference_image_object->unk008 = 2;
         reference_image_object->unk0AC = saved_reference_image_value;
     }
-    reference_image_object->unk820 = return_value;
+    reference_image_object->picture_ready = return_value;
     return return_value;
 }
 

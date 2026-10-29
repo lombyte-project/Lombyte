@@ -82,9 +82,9 @@ struct MpegMbBuffer {
 };
 
 struct MpegDecoder {
-    s32 unk0;
+    s32 is_end;                         /* set at the sequence end code; sceMpegIsEnd */
     s32 unk4;                           /* non-zero: _outputFrame displays a frame */
-    s32 unk8;
+    s32 started;                        /* set by the first decoded picture, which zeroes frameCount */
     u8 pad_C[0x40];
     u8 ipu_dma_state;                   /* &ipu_dma_state passed to suspend_mpeg_decoder_ipu_dma */
     u8 pad_4D[0x33];
@@ -168,7 +168,7 @@ struct MpegDecoder {
     s32 mb_buf_index;                   /* toggled per slice in _slice0 */
     u8 pad_814[0x8];
     u8 *mc_work;                        /* _getRef0: destination of the queued fetches */
-    s32 unk820;
+    s32 picture_ready;                  /* _getpic returns once a picture is out */
     u8 pad_824[0x1C];
 
     /* quant_matrix_extension / sequence_header */

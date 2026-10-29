@@ -24,12 +24,12 @@ s32 _getpic(struct sceMpeg *mpeg) {
     status = 0;
     decoder = mpeg->sys;
     image_addr = decoder->unkD8;
-    decoder->unk0 = 0;
+    decoder->is_end = 0;
     if (image_addr & 0x3F) {
         _Error1(decoder, image_buffer_alignment_error_format, image_addr);
         return -1;
     }
-    decoder->unk820 = 0;
+    decoder->picture_ready = 0;
     do {
         if (status == -1) {
             goto dispatch;
@@ -47,7 +47,7 @@ s32 _getpic(struct sceMpeg *mpeg) {
         switch (start_code) {
         case MPEG_SEQUENCE_END:
             _sceMpegFlush(mpeg);
-            decoder->unk0 = 1;
+            decoder->is_end = 1;
             break;
         case MPEG_INTRA_PICTURE:
             decoder->picture_count_b = 0;
@@ -66,9 +66,9 @@ s32 _getpic(struct sceMpeg *mpeg) {
             decoder->picture_count_b = (s32)(decoder->picture_count_b + 1);
             break;
         }
-        if (decoder->unk820 != 0) {
+        if (decoder->picture_ready != 0) {
             return 1;
         }
-    } while (decoder->unk0 == 0);
+    } while (decoder->is_end == 0);
     return 1;
 }

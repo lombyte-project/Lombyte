@@ -12,9 +12,9 @@ s32 _decodeOrSkipFrame(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
     flag = 0;
     mpeg_decoder = decoder->sys;
     if ((skip_threshold == -1) || (skip_comparison_value < skip_threshold)) {
-        if (mpeg_decoder->unk8 == 0) {
+        if (mpeg_decoder->started == 0) {
             decoder->frameCount = 0;
-            mpeg_decoder->unk8 = 1;
+            mpeg_decoder->started = 1;
         }
         if (_updateRefImage(mpeg_decoder, 0) == 0) {
             decode_succeeded = 0;

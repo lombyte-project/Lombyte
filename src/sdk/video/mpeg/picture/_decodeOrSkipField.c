@@ -23,9 +23,9 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
     if ((skip_threshold == (-1)) || (skip_comparison_value < skip_threshold)) {
         should_decode = 1;
     };
-    if (mpeg_decoder->unk8 == 0) {
+    if (mpeg_decoder->started == 0) {
         decoder->frameCount = 0;
-        mpeg_decoder->unk8 = 1;
+        mpeg_decoder->started = 1;
     }
     helper_result = _updateRefImage(mpeg_decoder, 0);
     if ((helper_result != 0) && (should_decode != 0)) {
@@ -35,7 +35,7 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
     helper_result = _nextHeader(mpeg_decoder);
     if (helper_result == 0) {
         _sceMpegFlush(decoder);
-        mpeg_decoder->unk0 = 1;
+        mpeg_decoder->is_end = 1;
         return 0;
     }
     expected_second_field_structure = 2;
