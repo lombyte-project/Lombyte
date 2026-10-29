@@ -296,7 +296,7 @@ void draw_batalia_cannon_hud(Moby *moby) {
     long     xy[4];
     int      color_words[4], uv_words[4];
     float    relative[4];
-    RData51 *data = (*(RData51 **)&moby->pvars);
+    RData51 *cannon_instance_vars = (*(RData51 **)&moby->pvars);
     long     texture;
     int      segments;
     int      i, j, k, indexed_target_slot, sign, color;
@@ -357,9 +357,9 @@ void draw_batalia_cannon_hud(Moby *moby) {
     uv_words[3] = batalia_cannon_hud_marker_uv3;
     for (k = 0; k < 8; k++) {
         float angle, radius;
-        if (data->linked[k]) {
-            if ((signed char)data->linked[k]->state >= 0) {
-                if (data->linked[k]->state == 2) {
+        if (cannon_instance_vars->linked[k]) {
+            if ((signed char)cannon_instance_vars->linked[k]->state >= 0) {
+                if (cannon_instance_vars->linked[k]->state == 2) {
                     if (D_L08_0015F5CC & 0x10) {
                         color_words[0] = color_words[1] = color_words[2] = color_words[3] =
                             batalia_cannon_hud_alerted_target_colour;
@@ -372,12 +372,12 @@ void draw_batalia_cannon_hud(Moby *moby) {
                         batalia_cannon_hud_linked_target_colour;
                 }
                 angle = fast_subtract_rotations(
-                    fast_arc_tan((*(float(*)[4]) & data->linked[k]->pos)[0] -
+                    fast_arc_tan((*(float(*)[4]) & cannon_instance_vars->linked[k]->pos)[0] -
                                      (*(float(*)[4]) & moby->pos)[0],
-                                 (*(float(*)[4]) & data->linked[k]->pos)[1] -
+                                 (*(float(*)[4]) & cannon_instance_vars->linked[k]->pos)[1] -
                                      (*(float(*)[4]) & moby->pos)[1]),
                     (*(float(*)[4]) & moby->rot)[2]);
-                radius = fast_vec_dist((*(float(*)[4]) & data->linked[k]->pos),
+                radius = fast_vec_dist((*(float(*)[4]) & cannon_instance_vars->linked[k]->pos),
                                        (*(float(*)[4]) & moby->pos)) *
                          batalia_cannon_hud_radar_distance_scale;
                 sign = draw_map51[0] ? -1 : 1;
@@ -437,10 +437,10 @@ void draw_batalia_cannon_hud(Moby *moby) {
                          0x8000;
                 FUN_L02_0020bc88_c(xy, uv_words, color_words, texture, 1);
             } else
-                data->linked[k] = 0;
+                cannon_instance_vars->linked[k] = 0;
         }
     }
-    indices = data->indices;
+    indices = cannon_instance_vars->indices;
     for (indexed_target_slot = 0; indexed_target_slot < 4; indexed_target_slot++) {
         float angle, radius;
         if (((Moby *)D_L08_0015FFD8)[*indices].state < 0x7F) {
@@ -562,12 +562,12 @@ void draw_batalia_cannon_hud(Moby *moby) {
     uv_words[1] = batalia_cannon_hud_health_dial_uv1;
     uv_words[2] = batalia_cannon_hud_health_dial_uv2;
     uv_words[3] = batalia_cannon_hud_health_dial_uv3;
-    if ((float)data->health > 100.0f)
+    if ((float)cannon_instance_vars->health > 100.0f)
         color =
-            func_001FA8A8_2E0258(0x6000FFFF, 0x6000FF00, ((float)data->health - 100.0f) / 100.0f);
+            func_001FA8A8_2E0258(0x6000FFFF, 0x6000FF00, ((float)cannon_instance_vars->health - 100.0f) / 100.0f);
     else
-        color = func_001FA8A8_2E0258(0x600000FF, 0x6000FFFF, (float)data->health / 100.0f);
-    segments = truncate_float_to_s32((1.0f - (float)data->health / 200.0f) * 32.0f);
+        color = func_001FA8A8_2E0258(0x600000FF, 0x6000FFFF, (float)cannon_instance_vars->health / 100.0f);
+    segments = truncate_float_to_s32((1.0f - (float)cannon_instance_vars->health / 200.0f) * 32.0f);
     for (j = 0; j < 32; j++) {
         float angle, next_angle;
         if (j >= segments) {
@@ -610,15 +610,15 @@ void draw_batalia_cannon_hud(Moby *moby) {
         xy[3] += (truncate_float_to_s32(batalia_cannon_hud_dial_center_x) << 4) + 0x8000;
         FUN_L02_0020bc88_c(xy, uv_words, color_words, texture, 1);
     }
-    if (scale_game_frames(15) < data->timer) {
+    if (scale_game_frames(15) < cannon_instance_vars->timer) {
         color = func_001FA8A8_2E0258(0x5000FFFF,
                                      0x500000FF,
-                                     convert_integer_to_float(data->timer - scale_game_frames(15)) /
+                                     convert_integer_to_float(cannon_instance_vars->timer - scale_game_frames(15)) /
                                          (float)scale_game_frames(15));
     } else {
         color = func_001FA8A8_2E0258(0x5000FF00,
                                      0x5000FFFF,
-                                     convert_integer_to_float(data->timer) /
+                                     convert_integer_to_float(cannon_instance_vars->timer) /
                                          (float)scale_game_frames(15));
     }
     uv_words[0] = batalia_cannon_hud_needle_uv0;
