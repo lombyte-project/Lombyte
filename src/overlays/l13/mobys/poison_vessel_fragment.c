@@ -36,27 +36,27 @@ char *spawn_poison_vessel_fragment(void *position,
                                    int effect_mode) {
     unsigned char *moby = (unsigned char *)create_moby(0x662);
     if (moby != 0) {
-        char *data;
+        char *effect_moby_vars;
         float rotation_x_increment, dd;
-        data = ((char *)MOBY(moby)->pvars);
+        effect_moby_vars = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x23] = random_int_between(0x40, 0x80);
         set_moby_color(moby, 0x20, 0x60, 0x10);
         qcopy(moby + 0x10, position);
-        qcopy(data, initial_velocity);
+        qcopy(effect_moby_vars, initial_velocity);
         rotation_x_increment =
             random_float_between(frame_time * 6.2831855f, frame_time * 12.566371f);
         dd = frame_time;
-        *(float *)(data + 0x10) = rotation_x_increment;
-        *(float *)(data + 0x14) = random_float_between(dd * 6.2831855f, dd * 12.566371f);
-        *(short *)(data + 0x18) = duration_frames;
-        *(short *)(data + 0x1A) = duration_frames;
+        *(float *)(effect_moby_vars + 0x10) = rotation_x_increment;
+        *(float *)(effect_moby_vars + 0x14) = random_float_between(dd * 6.2831855f, dd * 12.566371f);
+        *(short *)(effect_moby_vars + 0x18) = duration_frames;
+        *(short *)(effect_moby_vars + 0x1A) = duration_frames;
         if (effect_mode == 0) {
             MOBY(moby)->scale = MOBY(moby)->scale * random_float_between(0.5f, 0.75f);
         }
-        *(float *)(data + 0x1C) = MOBY(moby)->scale;
+        *(float *)(effect_moby_vars + 0x1C) = MOBY(moby)->scale;
         MOBY(moby)->scale = MOBY(moby)->scale * random_float_between(2.0f, 5.0f);
         moby[0xBC] = effect_mode;
         update_entity(moby);
