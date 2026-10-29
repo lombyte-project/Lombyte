@@ -38,15 +38,15 @@ void update_falling_splash_moby(struct Moby *moby) {
     float next_pos[4];
     float effect_pos[4];
     float particle_vel[4];
-    char *data = (char *)moby->pvars;
-    *(float *)(data + 8) -= *(float *)(data + 0x10);
-    moby->rot.x += *(float *)(data + 0x1C);
-    fast_vec_add(next_pos, &moby->pos, data);
+    char *falling_splash_vars = (char *)moby->pvars;
+    *(float *)(falling_splash_vars + 8) -= *(float *)(falling_splash_vars + 0x10);
+    moby->rot.x += *(float *)(falling_splash_vars + 0x1C);
+    fast_vec_add(next_pos, &moby->pos, falling_splash_vars);
     if (collision_line(&moby->pos, next_pos, 2, 0, 0)) {
         int   i;
         char *effect;
         if (!collision_hit_material()) {
-            if (*(int *)(data + 0x18) == 0) {
+            if (*(int *)(falling_splash_vars + 0x18) == 0) {
                 allocate_voice_for_target_entry(0, 0, (int)moby);
             }
             FUN_L00_002a3ec8(
@@ -54,11 +54,11 @@ void update_falling_splash_moby(struct Moby *moby) {
             {
                 float pos_unit = frame_time;
                 float pos_unit2 = frame_time_sq;
-                *(int *)(data + 0x18) = 1;
-                *(int *)(data + 0x14) = 0x78;
-                *(int *)(data + 0x1C) = 0;
-                *(float *)(data + 8) = pos_unit * -1.5f;
-                *(float *)(data + 0x10) = pos_unit2 * 0.8f;
+                *(int *)(falling_splash_vars + 0x18) = 1;
+                *(int *)(falling_splash_vars + 0x14) = 0x78;
+                *(int *)(falling_splash_vars + 0x1C) = 0;
+                *(float *)(falling_splash_vars + 8) = pos_unit * -1.5f;
+                *(float *)(falling_splash_vars + 0x10) = pos_unit2 * 0.8f;
             }
             effect_pos[0] = moby->pos.x;
             effect_pos[1] = moby->pos.y;
@@ -85,10 +85,10 @@ void update_falling_splash_moby(struct Moby *moby) {
         }
     }
     qcopy(&moby->pos, next_pos);
-    if (*(int *)(data + 0x18) != 0) {
+    if (*(int *)(falling_splash_vars + 0x18) != 0) {
         moby->scale *= 0.99f;
     }
-    if (tick_countdown_32_alt((int *)(data + 0x14))) {
+    if (tick_countdown_32_alt((int *)(falling_splash_vars + 0x14))) {
         mark_moby_for_removal(moby);
     }
 }
