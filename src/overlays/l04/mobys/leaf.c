@@ -28,10 +28,10 @@ void leaf_update(struct Moby *moby) {
     };
     Vec4   random;
     Vec4   old;
-    Vec4   work;
+    Vec4   probe_endpoint_or_drift_step;
     Vec4   initialDirection;
     Vec4   direction;
-    char  *data = (char *)moby->pvars;
+    char  *leaf_vars = (char *)moby->pvars;
     float  speed;
     float  amount;
     int    timer;
@@ -42,19 +42,19 @@ void leaf_update(struct Moby *moby) {
     old.f[1] = random_float_between(-1.0f, 1.0f);
     old.f[2] = random_float_between(-1.0f, 1.0f);
     random.q = old.q;
-    speed = vector_length_xy(data);
+    speed = vector_length_xy(leaf_vars);
     qcopy(&old, &moby->pos);
     switch (moby->state) {
     case LEAF_INITIALIZE:
-        qcopy(data + 0x30, &moby->pos);
-        *(int *)(data + 0x40) = *(int *)(data + 0x44) = random_int_between(120, 2400);
-        *(float *)(data + 0x4c) = moby->scale * random_float_between(0.8f, 1.2f);
+        qcopy(leaf_vars + 0x30, &moby->pos);
+        *(int *)(leaf_vars + 0x40) = *(int *)(leaf_vars + 0x44) = random_int_between(120, 2400);
+        *(float *)(leaf_vars + 0x4c) = moby->scale * random_float_between(0.8f, 1.2f);
         moby->state = 1;
         break;
     case LEAF_WAIT_FOR_ACTIVATION:
         if (!(vector_distance_xy(&moby->pos, D_L04_00166F40) < 32.0f))
             return;
-        if (!fast_dec_timer((int *)(data + 0x44)))
+        if (!fast_dec_timer((int *)(leaf_vars + 0x44)))
             return;
         direction.q = 0;
         direction.f[0] = random_float_between(-1.0f, 1.0f);
@@ -76,59 +76,59 @@ void leaf_update(struct Moby *moby) {
         moby->state = 2;
         return;
     case LEAF_UPDATE_MOTION:
-        fast_dec_timer((int *)(data + 0x44));
+        fast_dec_timer((int *)(leaf_vars + 0x44));
         fast_vec_normalize(&random, &random, leaf_motion_parameters[5] / 10.0f);
-        fast_vec_add(data + 0x10, data + 0x10, &random);
-        fast_vec_normalize(&work, data + 0x10, 5.0f);
-        fast_vec_normalize(data + 0x10, data + 0x10, leaf_motion_parameters[5] * 0.5f);
-        fast_vec_add(&work, &work, &moby->pos);
-        if (collision_line(&old, &work, 6, 0, 0) && !random_integer_below(8)) {
-            reflect_vector(data + 0x10, data + 0x10, D_L04_00173FE0 + 0x20);
-            *(float *)(data + 0x18) += leaf_motion_parameters[5] / 10.0f;
+        fast_vec_add(leaf_vars + 0x10, leaf_vars + 0x10, &random);
+        fast_vec_normalize(&probe_endpoint_or_drift_step, leaf_vars + 0x10, 5.0f);
+        fast_vec_normalize(leaf_vars + 0x10, leaf_vars + 0x10, leaf_motion_parameters[5] * 0.5f);
+        fast_vec_add(&probe_endpoint_or_drift_step, &probe_endpoint_or_drift_step, &moby->pos);
+        if (collision_line(&old, &probe_endpoint_or_drift_step, 6, 0, 0) && !random_integer_below(8)) {
+            reflect_vector(leaf_vars + 0x10, leaf_vars + 0x10, D_L04_00173FE0 + 0x20);
+            *(float *)(leaf_vars + 0x18) += leaf_motion_parameters[5] / 10.0f;
         }
-        fast_vec_add(data, data, data + 0x10);
-        work.f[0] = leaf_motion_parameters[5] * fast_cos(leaf_motion_parameters[1]);
-        work.f[1] = leaf_motion_parameters[5] * fast_sin(leaf_motion_parameters[1]);
-        work.f[2] = frame_time * -0.5f;
-        fast_vec_scale(&work, &work, 0.4f);
-        fast_vec_scale(data, data, 0.6f);
-        fast_vec_add(data, &work, data);
-        fast_vec_add(&moby->pos, &moby->pos, data);
+        fast_vec_add(leaf_vars, leaf_vars, leaf_vars + 0x10);
+        probe_endpoint_or_drift_step.f[0] = leaf_motion_parameters[5] * fast_cos(leaf_motion_parameters[1]);
+        probe_endpoint_or_drift_step.f[1] = leaf_motion_parameters[5] * fast_sin(leaf_motion_parameters[1]);
+        probe_endpoint_or_drift_step.f[2] = frame_time * -0.5f;
+        fast_vec_scale(&probe_endpoint_or_drift_step, &probe_endpoint_or_drift_step, 0.4f);
+        fast_vec_scale(leaf_vars, leaf_vars, 0.6f);
+        fast_vec_add(leaf_vars, &probe_endpoint_or_drift_step, leaf_vars);
+        fast_vec_add(&moby->pos, &moby->pos, leaf_vars);
         if (collision_line(&old, &moby->pos, 6, 0, 0)) {
             qcopy(&moby->pos, D_L04_00173FE0);
-            reflect_vector(data, data, D_L04_00173FE0 + 0x20);
-            fast_vec_scale(data, data, 0.25f);
-            fast_vec_add(&moby->pos, &moby->pos, data);
-            *(float *)(data + 8) += leaf_motion_parameters[5] / 5.0f;
+            reflect_vector(leaf_vars, leaf_vars, D_L04_00173FE0 + 0x20);
+            fast_vec_scale(leaf_vars, leaf_vars, 0.25f);
+            fast_vec_add(&moby->pos, &moby->pos, leaf_vars);
+            *(float *)(leaf_vars + 8) += leaf_motion_parameters[5] / 5.0f;
         }
         if (leaf_motion_parameters[5] < speed)
-            fast_vec_normalize(data, data, leaf_motion_parameters[5]);
+            fast_vec_normalize(leaf_vars, leaf_vars, leaf_motion_parameters[5]);
         {
             float amount = frame_time * -0.5f;
-            if (amount < *(float *)(data + 8))
-                *(float *)(data + 8) += amount / 10.0f;
+            if (amount < *(float *)(leaf_vars + 8))
+                *(float *)(leaf_vars + 8) += amount / 10.0f;
             else
-                *(float *)(data + 8) = amount;
+                *(float *)(leaf_vars + 8) = amount;
         }
-        moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x20));
-        moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x24));
-        moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x28));
-        if (*(int *)(data + 0x40) - scale_game_frames(10) < *(int *)(data + 0x44)) {
-            amount = convert_integer_to_float(*(int *)(data + 0x44) - *(int *)(data + 0x40));
-            moby->scale = (*(float *)(data + 0x4c) * amount) / scale_time(10.0f);
+        moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(leaf_vars + 0x20));
+        moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(leaf_vars + 0x24));
+        moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(leaf_vars + 0x28));
+        if (*(int *)(leaf_vars + 0x40) - scale_game_frames(10) < *(int *)(leaf_vars + 0x44)) {
+            amount = convert_integer_to_float(*(int *)(leaf_vars + 0x44) - *(int *)(leaf_vars + 0x40));
+            moby->scale = (*(float *)(leaf_vars + 0x4c) * amount) / scale_time(10.0f);
         } else {
-            if (*(int *)(data + 0x44) < scale_game_frames(100))
+            if (*(int *)(leaf_vars + 0x44) < scale_game_frames(100))
                 moby->scale *= 0.99f;
             else
-                moby->scale = *(float *)(data + 0x4c);
+                moby->scale = *(float *)(leaf_vars + 0x4c);
         }
-        if (*(int *)(data + 0x44) > 0)
+        if (*(int *)(leaf_vars + 0x44) > 0)
             return;
-        qcopy(&moby->pos, data + 0x30);
+        qcopy(&moby->pos, leaf_vars + 0x30);
         timer = random_int_between(120, 2400);
         /* Preserve the retail ordering of the timer reload stores. */
-        *(volatile int *)(data + 0x40) = timer;
-        *(volatile int *)(data + 0x44) = timer;
+        *(volatile int *)(leaf_vars + 0x40) = timer;
+        *(volatile int *)(leaf_vars + 0x44) = timer;
         moby->state = 1;
         break;
     default:
