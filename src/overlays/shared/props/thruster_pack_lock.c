@@ -735,7 +735,7 @@ void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");
 
 void update_moby_hit_stats_and_state(char *moby) {
     char        *moby_vars = ((char *)MOBY(moby)->pvars);
-    char        *info = find_moby_hit(moby, 0x330000, 0);
+    char        *hit_record = find_moby_hit(moby, 0x330000, 0);
     struct Hero *player_hero;
     ((unsigned char *)moby)[0xA4] = 0xFF;
     player_hero = &hero;
@@ -744,7 +744,7 @@ void update_moby_hit_stats_and_state(char *moby) {
     } else {
         MOBY(moby)->flags |= 0x1000;
     }
-    if (info != 0) {
+    if (hit_record != 0) {
         char *collection_stats_base = (char *)D_00141968;
         int   next_moby_state;
         int   current_moby_state;
@@ -758,8 +758,8 @@ void update_moby_hit_stats_and_state(char *moby) {
         }
         *(int *)(collection_stats_base + 0x157EC) =
             *(int *)(collection_stats_base + 0x157EC) | (1 << current_level_index) | 0x80000000;
-        if (current_level_index == 0xB && *(char **)(info + 0x20) != 0 &&
-            *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
+        if (current_level_index == 0xB && *(char **)(hit_record + 0x20) != 0 &&
+            *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0xAC) {
             if (++level_11_class_ac_hit_count >= 3 && item_unlocked[0x12] == 0) {
                 item_unlocked[0x12] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
