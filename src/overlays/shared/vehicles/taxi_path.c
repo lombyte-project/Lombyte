@@ -163,8 +163,8 @@ void apply_moby_position_and_rotation_wobble(char *moby) {
 void transform_moby_vector_table_to_world_space(char *moby) __asm__("FUN_L05_003198e8");
 
 void transform_moby_vector_table_to_world_space(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    int   vector_table_index = *(int *)(data + 0xDC);
+    char *moby_private_vars = ((char *)MOBY(moby)->pvars);
+    int   vector_table_index = *(int *)(moby_private_vars + 0xDC);
     if (vector_table_index != -1) {
         char *vector_table_entry = ((char *)l05_paths[vector_table_index]);
         if (*(int *)vector_table_entry == 7) {
@@ -180,7 +180,7 @@ void transform_moby_vector_table_to_world_space(char *moby) {
             }
             player_hero = &hero;
             *(unsigned short *)&player_hero->path_constrain_pending =
-                *(unsigned short *)(data + 0xDC);
+                *(unsigned short *)(moby_private_vars + 0xDC);
         }
     }
 }
