@@ -1741,8 +1741,8 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     Vec_2BE3A8 point;
     Vec_2BE3A8 beam_segment_direction;
     Vec_2BE3A8 side;
-    Vars      *data;
-    Info      *info;
+    Vars      *beam_effect_state;
+    Info      *target_aim_metadata;
     int        ring_index;
     int        slot;
     int        pulse;
@@ -1755,43 +1755,43 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     float      wave_width;
     float      spark_size;
 
-    data = (Vars *)moby->pvars;
+    beam_effect_state = (Vars *)moby->pvars;
     wave_offset.w = 1.0f;
     wave_offset.x = 0.0f;
     func_L00_002BE2A0_2BE3A8();
     D_L00_001617D0 = normalize_angle(D_L00_001617D0 + D_L00_001616F8_gp);
-    build_spherical_offset(&aim, D_L00_001617CC_macro, data->f48, data->f4C);
-    if (data->target != 0 && (info = get_moby_target_info(data->target)) != 0) {
-        qcopy(&beam_end, &data->target->pos);
-        beam_end.z = beam_end.z + info->height;
+    build_spherical_offset(&aim, D_L00_001617CC_macro, beam_effect_state->f48, beam_effect_state->f4C);
+    if (beam_effect_state->target != 0 && (target_aim_metadata = get_moby_target_info(beam_effect_state->target)) != 0) {
+        qcopy(&beam_end, &beam_effect_state->target->pos);
+        beam_end.z = beam_end.z + target_aim_metadata->height;
     } else {
-        build_spherical_offset(&beam_end, D_L00_001616DC_gp, data->f48, data->f4C);
-        func_001F9BD8_2BE3A8(&beam_end, &beam_end, data);
+        build_spherical_offset(&beam_end, D_L00_001616DC_gp, beam_effect_state->f48, beam_effect_state->f4C);
+        func_001F9BD8_2BE3A8(&beam_end, &beam_end, beam_effect_state);
     }
     beam_length = D_L00_001616DC_gp;
-    if (data->target == 0) {
-        if (func_L00_001EFFF0_2BE3A8(data, &beam_end, 20, *(void **)((char *)&D_001413D0), 0) !=
+    if (beam_effect_state->target == 0) {
+        if (func_L00_001EFFF0_2BE3A8(beam_effect_state, &beam_end, 20, *(void **)((char *)&D_001413D0), 0) !=
             0) {
-            beam_length = vector_distance(&D_L00_00173F60_2BE3A8, data);
+            beam_length = vector_distance(&D_L00_00173F60_2BE3A8, beam_effect_state);
         }
     } else {
-        beam_length = vector_distance(&data->target->pos, data);
+        beam_length = vector_distance(&beam_effect_state->target->pos, beam_effect_state);
     }
     {
         int i;
 
         D_L00_001617CC_macro = beam_length * D_L00_001616F0_gp;
-        qcopy(&beam_nodes[0], data);
-        qcopy(&beam_rail_a_points[0], data);
-        qcopy(&beam_rail_b_points[0], data);
+        qcopy(&beam_nodes[0], beam_effect_state);
+        qcopy(&beam_rail_a_points[0], beam_effect_state);
+        qcopy(&beam_rail_b_points[0], beam_effect_state);
         for (i = 1; i < 12; i++) {
             float seg_length;
 
             func_001F9BF0_2BE3A8(&segment, &beam_nodes[i], &beam_nodes[i - 1]);
             progress = func_001FA888_2BE3A8(i) * D_L00_001616F0_gp;
             factor = progress * -0.49999997f + 0.9f;
-            if (D_L00_001616F4_gp < i && data->target != 0) {
-                func_001F9BF0_2BE3A8(&point, &data->target->pos, &beam_nodes[i]);
+            if (D_L00_001616F4_gp < i && beam_effect_state->target != 0) {
+                func_001F9BF0_2BE3A8(&point, &beam_effect_state->target->pos, &beam_nodes[i]);
                 func_L00_001FF4B0_2BE3A8(&point, &point, D_L00_001617CC_macro);
                 func_001F9C08_2BE3A8(&aim, &aim, &point, 0.2f);
             }
@@ -1911,7 +1911,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             build_look_at_matrix(&out, &out, &up, wave_width);
             node_index =
                 func_001FA898_2BE3A8(beam_length * 1.2f / (D_L00_00161734_gp * frame_scale));
-            if (data->target != 0) {
+            if (beam_effect_state->target != 0) {
                 node_index = node_index * 3;
             }
             spawn_proximity_corrected_size_alpha_tween_particle(&point,
@@ -1920,7 +1920,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                                                                 0,
                                                                 sign,
                                                                 &out,
-                                                                data->target,
+                                                                beam_effect_state->target,
                                                                 spark_size * 0.1f,
                                                                 spark_size);
             spawn_proximity_corrected_size_alpha_tween_particle(&point,
@@ -1929,7 +1929,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                                                                 1,
                                                                 -sign,
                                                                 &out,
-                                                                data->target,
+                                                                beam_effect_state->target,
                                                                 spark_size * 0.07f,
                                                                 spark_size * 0.7f);
         }
@@ -1943,7 +1943,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                 D_L00_001617F8_macro[slot] = 0.0f;
                 D_L00_001618D8_2BE3A8[slot] = D_L00_0016175C_gp;
                 D_L00_001618B8_2BE3A8[slot] = func_001FA888_2BE3A8(D_L00_00161763_macro[0]);
-                qcopy(&beam_pulse_positions[slot], data);
+                qcopy(&beam_pulse_positions[slot], beam_effect_state);
                 func_001F9BF0_2BE3A8(&side, &beam_nodes[1], &beam_nodes[0]);
                 func_L00_001FF4B0_2BE3A8(&beam_pulse_directions[slot], &side, 1.0f);
                 break;
