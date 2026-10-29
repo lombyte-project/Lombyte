@@ -38,7 +38,7 @@ extern float        fast_vec_dist(void *, void *);
 typedef struct Hero Hero;
 
 void sharkigator_update(char *moby) {
-    enum { SHARKIGATOR_INITIALIZE = 0 , SHARKIGATOR_FOLLOW_PATH = 1 , SHARKIGATOR_WAIT_TO_LEAP = 2 , SHARKIGATOR_UPDATE_LEAP = 3 } ;char *data = ((char *)MOBY(moby)->pvars);
+    enum { SHARKIGATOR_INITIALIZE = 0 , SHARKIGATOR_FOLLOW_PATH = 1 , SHARKIGATOR_WAIT_TO_LEAP = 2 , SHARKIGATOR_UPDATE_LEAP = 3 } ;char *sharkigator_instance_vars = ((char *)MOBY(moby)->pvars);
     int   state = MOBY(moby)->state;
     int   one = 1;
     char *path;
@@ -65,33 +65,33 @@ void sharkigator_update(char *moby) {
     }
 state_zero: {
     float height;
-    if (*(int *)(data + 0x64) != 0) {
+    if (*(int *)(sharkigator_instance_vars + 0x64) != 0) {
         MOBY(moby)->state = 2;
         MOBY(moby)->flags |= 1;
         MOBY(moby)->update_dist = 0xff;
-        *(float *)(data + 0x74) = MOBY(moby)->pos.z;
-        *(int *)(data + 0x7c) = scale_game_frames(30);
+        *(float *)(sharkigator_instance_vars + 0x74) = MOBY(moby)->pos.z;
+        *(int *)(sharkigator_instance_vars + 0x7c) = scale_game_frames(30);
         return;
     }
-    index = *(int *)(data + 0x60);
+    index = *(int *)(sharkigator_instance_vars + 0x60);
     if (index == -1) {
         mark_moby_2d1688(moby);
         return;
     }
-    *(int *)(data + 0x68) = random_integer_below(*(int *)l05_paths[index]);
-    *(int *)(data + 0x6c) = scale_game_frames(600);
+    *(int *)(sharkigator_instance_vars + 0x68) = random_integer_below(*(int *)l05_paths[index]);
+    *(int *)(sharkigator_instance_vars + 0x6c) = scale_game_frames(600);
     if (MOBY(moby)->prev_seq != 1) {
         set_action_2d1688(moby, 1, 0, scale_game_frames(10));
     }
-    height = *(float *)(((char *)l05_paths[*(int *)(data + 0x60)]) + 0x18) - (l05_sharkigator_position_offset_distance);
+    height = *(float *)(((char *)l05_paths[*(int *)(sharkigator_instance_vars + 0x60)]) + 0x18) - (l05_sharkigator_position_offset_distance);
     MOBY(moby)->pos.z = height;
-    *(float *)(data + 0x80) = height;
+    *(float *)(sharkigator_instance_vars + 0x80) = height;
     MOBY(moby)->state = one;
     return;
 }
 state_one: {
-    path = ((char *)l05_paths[*(int *)(data + 0x60)]);
-    qcopy(working_position_or_basis_offset, path + *(int *)(data + 0x68) * 16 + 0x10);
+    path = ((char *)l05_paths[*(int *)(sharkigator_instance_vars + 0x60)]);
+    qcopy(working_position_or_basis_offset, path + *(int *)(sharkigator_instance_vars + 0x68) * 16 + 0x10);
     point = moby + 0x48;
     {
         float y = working_position_or_basis_offset[1];
@@ -102,7 +102,7 @@ state_one: {
         float pi = 3.1415927f;
         float turn_step = frame_time_sq * pi;
         steer_2d1688((float *)(point),
-                     (float *)(data + 0x70),
+                     (float *)(sharkigator_instance_vars + 0x70),
                      height,
                      turn_step,
                      turn_step,
@@ -111,11 +111,11 @@ state_one: {
     fast_vec_normalize(frame_time * 3.0f, w, moby + 0xc0);
     fast_vec_add(moby + 0x10, moby + 0x10, w);
     height = fast_vec_dist(moby + 0x10, working_position_or_basis_offset);
-    if (height < 3.0f || fast_dec_timer(data + 0x6c) != 0) {
-        index = random_integer_below(*(int *)l05_paths[*(int *)(data + 0x60)]);
-        *(int *)(data + 0x68) =
-            (*(int *)(data + 0x68) + index) % *(int *)l05_paths[*(int *)(data + 0x60)];
-        *(int *)(data + 0x6c) = scale_game_frames(600);
+    if (height < 3.0f || fast_dec_timer(sharkigator_instance_vars + 0x6c) != 0) {
+        index = random_integer_below(*(int *)l05_paths[*(int *)(sharkigator_instance_vars + 0x60)]);
+        *(int *)(sharkigator_instance_vars + 0x68) =
+            (*(int *)(sharkigator_instance_vars + 0x68) + index) % *(int *)l05_paths[*(int *)(sharkigator_instance_vars + 0x60)];
+        *(int *)(sharkigator_instance_vars + 0x6c) = scale_game_frames(600);
     }
     if ((hero.state.control_mode == 0x12 || hero.state.current == 0x12) &&
         vector_distance_xy(moby + 0x10, &hero.motion.pos) < 8.0f) {
@@ -126,7 +126,7 @@ state_one: {
     }
     advance_accelerated_scalar((float *)&MOBY(moby)->pos.z,
                                speed,
-                               (float *)(data + 0x78),
+                               (float *)(sharkigator_instance_vars + 0x78),
                                frame_time_sq + frame_time_sq,
                                frame_time_sq + frame_time_sq,
                                frame_time + frame_time);
@@ -134,11 +134,11 @@ state_one: {
 }
 state_two: {
     char *path;
-    fast_dec_timer(data + 0x7c);
-    height = absolute_float(hero.water_surface_z - *(float *)(data + 0x74));
+    fast_dec_timer(sharkigator_instance_vars + 0x7c);
+    height = absolute_float(hero.water_surface_z - *(float *)(sharkigator_instance_vars + 0x74));
     if (height < 0.33f && hero.state.control_mode == 0x12) {
         char *point;
-        if (*(int *)(data + 0x7c) != 0)
+        if (*(int *)(sharkigator_instance_vars + 0x7c) != 0)
             return;
         point = D_L05_001671C0 - 0x140;
         MOBY(moby)->rot.y = -1.5533431f;
@@ -150,7 +150,7 @@ state_two: {
         {
             float speed = frame_time * 10.0f;
             MOBY(moby)->pos.z -= 2.0f;
-            *(float *)(data + 0x78) = speed;
+            *(float *)(sharkigator_instance_vars + 0x78) = speed;
         }
         MOBY(moby)->flags &= 0xfffe;
         if (MOBY(moby)->prev_seq != state)
@@ -162,18 +162,18 @@ state_two: {
     }
     if (hero.state.current == 0x12)
         return;
-    path = ((char *)l05_paths[*(int *)(data + 0x60)]);
+    path = ((char *)l05_paths[*(int *)(sharkigator_instance_vars + 0x60)]);
     if (point_in_path_xy(&hero.motion.pos, path + 0x10, *(int *)path) != 0)
-        *(int *)(data + 0x7c) = scale_game_frames(600);
+        *(int *)(sharkigator_instance_vars + 0x7c) = scale_game_frames(600);
     else
-        *(int *)(data + 0x7c) = scale_game_frames(180);
+        *(int *)(sharkigator_instance_vars + 0x7c) = scale_game_frames(180);
     return;
 }
 state_three: {
     float speed;
     {
         struct Hero *hero_actor = &hero;
-        if (hero_actor->water_surface_z < MOBY(moby)->pos.z || *(float *)(data + 0x78) < 0.0f) {
+        if (hero_actor->water_surface_z < MOBY(moby)->pos.z || *(float *)(sharkigator_instance_vars + 0x78) < 0.0f) {
             if (hero_actor->state.current != 0x72) {
                 qcopy_nc(working_position_or_basis_offset, &hero_actor->motion.pos);
                 {
@@ -206,9 +206,9 @@ state_three: {
                    *(moby + 0x18) load below out of the join; folds to nothing. */
             moby++;
             moby--;
-            speed = *(float *)(data + 0x78);
+            speed = *(float *)(sharkigator_instance_vars + 0x78);
         } else {
-            speed = *(float *)(data + 0x78);
+            speed = *(float *)(sharkigator_instance_vars + 0x78);
         }
     }
     {
@@ -216,12 +216,12 @@ state_three: {
         float threshold = frame_time + frame_time;
         MOBY(moby)->pos.z = MOBY(moby)->pos.z + speed;
         {
-            float speed = *(float *)(data + 0x78) - acceleration;
-            *(float *)(data + 0x78) = speed;
+            float speed = *(float *)(sharkigator_instance_vars + 0x78) - acceleration;
+            *(float *)(sharkigator_instance_vars + 0x78) = speed;
             if (speed < threshold) {
                 fast_vec_normalize((l05_sharkigator_position_offset_distance), working_position_or_basis_offset, moby + 0xe0);
                 steer_2d1688((float *)&MOBY(moby)->rot.y,
-                             (float *)(data + 0x70),
+                             (float *)(sharkigator_instance_vars + 0x70),
                              1.5533431f,
                              frame_time_sq * 12.566371f,
                              frame_time_sq * 12.566371f,
@@ -233,7 +233,7 @@ state_three: {
             }
         }
     }
-    if (*(float *)(data + 0x78) < 0.0f) {
+    if (*(float *)(sharkigator_instance_vars + 0x78) < 0.0f) {
         if (MOBY(moby)->pos.z < hero.water_surface_z && MOBY(moby)->command == 0) {
             MOBY(moby)->command = 1;
             allocate_voice_for_target_entry_2d1688(0, 0, moby);
@@ -243,7 +243,7 @@ state_three: {
             spawn_sharkigator_splash_effects((int)moby, (char *)working_position_or_basis_offset);
         }
     }
-    if (*(float *)(data + 0x78) < 0.0f && MOBY(moby)->pos.z < *(float *)(data + 0x74) - 8.0f)
+    if (*(float *)(sharkigator_instance_vars + 0x78) < 0.0f && MOBY(moby)->pos.z < *(float *)(sharkigator_instance_vars + 0x74) - 8.0f)
         hero_respawn();
     if ((MOBY(moby)->anim_flags & 2) != 0 && MOBY(moby)->prev_seq != 1)
         set_action_2d1688(moby, 1, 0, scale_game_frames(10));
