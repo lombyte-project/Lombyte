@@ -205,13 +205,13 @@ void process_heavy_gunship_part_hits(struct Moby *moby) {
 void update_heavy_gunship_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e9a18");
 
 void update_heavy_gunship_parts(struct Moby *parent_moby) {
-    char *data = (char *)parent_moby->pvars;
+    char *commando_vars = (char *)parent_moby->pvars;
     float part_joint_position[4];
     float anchor_joint_position[4];
     float joint_alignment_offset[4];
     int   i;
     char *part_entry_cursor;
-    char *parts = data + 0x60;
+    char *parts = commando_vars + 0x60;
     for (i = 0; i < 16; i++) {
         char *anchor_joint_cursor = parts + 0x1C + i * 16;
         char *part = *(char **)(anchor_joint_cursor - 0xC);
@@ -225,9 +225,9 @@ void update_heavy_gunship_parts(struct Moby *parent_moby) {
             fast_vec_add(part + 0x10, part + 0x10, joint_alignment_offset);
         }
     }
-    if (*(char **)(data + 0x90) != 0) {
-        *(float *)(*(char **)(data + 0x90) + 0x40) =
-            fast_add_rotations(*(float *)(*(char **)(data + 0x90) + 0x40),
+    if (*(char **)(commando_vars + 0x90) != 0) {
+        *(float *)(*(char **)(commando_vars + 0x90) + 0x40) =
+            fast_add_rotations(*(float *)(*(char **)(commando_vars + 0x90) + 0x40),
                                heavy_gunship_part_spin_speed_degrees_gp * DEG_TO_RAD * D_0015ED6C);
     }
     part_entry_cursor = parts + 0x10;
