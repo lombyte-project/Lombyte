@@ -56,7 +56,7 @@ void floating_platform_update(struct Moby *moby) {
         STATE_WAIT_FOR_SINK_TRIGGER = 4,
         STATE_SINKING = 5
     };
-    char *data;
+    char *floating_platform_update_private_vars;
     float delta[4] __attribute__((aligned(16)));
     float old_rot[4] __attribute__((aligned(16)));
     float tilt_rate_scale;
@@ -64,27 +64,27 @@ void floating_platform_update(struct Moby *moby) {
     float sink;
     float angle;
 
-    data = (char *)moby->pvars;
+    floating_platform_update_private_vars = (char *)moby->pvars;
     fast_vec_scale(delta, &moby->pos, -1.0f);
     qcopy(old_rot, &moby->rot);
     switch (moby->state) {
     case STATE_INITIALIZE:
-        *(float *)(data + 0x60) = moby->pos.z;
-        *(float *)(data + 0x64) = moby->pos.z;
-        *(int *)(data + 0x70) = 0;
-        *(int *)(data + 0x68) = 0;
-        *(int *)(data + 0x6C) = 0;
+        *(float *)(floating_platform_update_private_vars + 0x60) = moby->pos.z;
+        *(float *)(floating_platform_update_private_vars + 0x64) = moby->pos.z;
+        *(int *)(floating_platform_update_private_vars + 0x70) = 0;
+        *(int *)(floating_platform_update_private_vars + 0x68) = 0;
+        *(int *)(floating_platform_update_private_vars + 0x6C) = 0;
         angle = random_angle_radians();
-        *(int *)(data + 0x5C) |= 1;
-        *(float *)(data + 0x74) = angle;
-        if (*(int *)(data + 0x88) != 0) {
+        *(int *)(floating_platform_update_private_vars + 0x5C) |= 1;
+        *(float *)(floating_platform_update_private_vars + 0x74) = angle;
+        if (*(int *)(floating_platform_update_private_vars + 0x88) != 0) {
             moby->state = 2;
         } else {
             moby->state = 1;
         }
         break;
     case STATE_TILT_DELAY:
-        if (fast_dec_timer((int *)(data + 0x7C)) == 0) {
+        if (fast_dec_timer((int *)(floating_platform_update_private_vars + 0x7C)) == 0) {
             break;
         }
         tilt_rate_scale = (convert_integer_to_float(D_L18_001623A8) -
@@ -97,37 +97,37 @@ void floating_platform_update(struct Moby *moby) {
             tilt_rate_scale = 0.0f;
         }
         tilt_rate_scale = 1.0f - tilt_rate_scale * 0.333f;
-        if (*(int *)(data + 0x84) != 0) {
+        if (*(int *)(floating_platform_update_private_vars + 0x84) != 0) {
             rate = floating_platform_tilt_rate_degrees_config_84_nonzero_gp * tilt_rate_scale;
         } else {
             rate = floating_platform_tilt_rate_degrees_config_84_zero_gp * tilt_rate_scale;
         }
-        *(float *)(data + 0x6C) = rate * DEG_TO_RAD * frame_time;
+        *(float *)(floating_platform_update_private_vars + 0x6C) = rate * DEG_TO_RAD * frame_time;
         moby->state = 4;
         break;
     case STATE_WAIT_FOR_SINK_TRIGGER:
-        if (moby->visible != 0 && fast_dec_timer((int *)(data + 0x8C)) != 0) {
+        if (moby->visible != 0 && fast_dec_timer((int *)(floating_platform_update_private_vars + 0x8C)) != 0) {
             spawn_floating_platform_sparks(moby);
-            *(int *)(data + 0x8C) = scale_game_frames(random_int_between(0x5A, 0x78));
+            *(int *)(floating_platform_update_private_vars + 0x8C) = scale_game_frames(random_int_between(0x5A, 0x78));
         }
         if (hero.ground_moby == moby && hero.air_frames.s == 0) {
-            *(int *)(data + 0x8C) = 0;
+            *(int *)(floating_platform_update_private_vars + 0x8C) = 0;
             moby->state = 5;
-            *(short *)(data + 0x92) = allocate_voice_for_target_entry(1, 0, moby);
+            *(short *)(floating_platform_update_private_vars + 0x92) = allocate_voice_for_target_entry(1, 0, moby);
         }
-        if (*(int *)(data + 0x80) == 0) {
+        if (*(int *)(floating_platform_update_private_vars + 0x80) == 0) {
             break;
         }
         if (vector_distance_xy(&moby->pos, &hero.motion.pos) <
             floating_platform_sink_trigger_distance_gp) {
             moby->state = 5;
-            *(short *)(data + 0x92) = allocate_voice_for_target_entry(1, 0, moby);
+            *(short *)(floating_platform_update_private_vars + 0x92) = allocate_voice_for_target_entry(1, 0, moby);
         }
         break;
     case STATE_SINKING:
-        if (moby->visible != 0 && fast_dec_timer((int *)(data + 0x8C)) != 0) {
+        if (moby->visible != 0 && fast_dec_timer((int *)(floating_platform_update_private_vars + 0x8C)) != 0) {
             spawn_floating_platform_sparks(moby);
-            *(int *)(data + 0x8C) = scale_game_frames(random_int_between(0xF, 0x1E));
+            *(int *)(floating_platform_update_private_vars + 0x8C) = scale_game_frames(random_int_between(0xF, 0x1E));
         }
         sink = (convert_integer_to_float(D_L18_001623A8) -
                 floating_platform_motion_scale_input_start_gp) /
@@ -139,24 +139,24 @@ void floating_platform_update(struct Moby *moby) {
             sink = 0.0f;
         }
         sink = 1.0f - sink * 0.333f;
-        if (*(int *)(data + 0x80) != 0 ||
-            (*(int *)(data + 0x88) != 0 && *(int *)(data + 0x84) == 0)) {
-            *(float *)(data + 0x70) -= frame_time_sq * 15.0f;
-        } else if (*(int *)(data + 0x84) != 0) {
-            *(float *)(data + 0x70) -=
+        if (*(int *)(floating_platform_update_private_vars + 0x80) != 0 ||
+            (*(int *)(floating_platform_update_private_vars + 0x88) != 0 && *(int *)(floating_platform_update_private_vars + 0x84) == 0)) {
+            *(float *)(floating_platform_update_private_vars + 0x70) -= frame_time_sq * 15.0f;
+        } else if (*(int *)(floating_platform_update_private_vars + 0x84) != 0) {
+            *(float *)(floating_platform_update_private_vars + 0x70) -=
                 floating_platform_sink_acceleration_config_84_nonzero_gp * sink * frame_time_sq;
         } else {
-            *(float *)(data + 0x70) -=
+            *(float *)(floating_platform_update_private_vars + 0x70) -=
                 floating_platform_sink_acceleration_config_84_zero_gp * sink * frame_time_sq;
         }
-        *(float *)(data + 0x64) += *(float *)(data + 0x70);
-        if (moby->pos.z < *(float *)(data + 0x60) - 10.0f) {
+        *(float *)(floating_platform_update_private_vars + 0x64) += *(float *)(floating_platform_update_private_vars + 0x70);
+        if (moby->pos.z < *(float *)(floating_platform_update_private_vars + 0x60) - 10.0f) {
             if (hero.ground_moby == moby && hero.air_frames.s == 0) {
                 if (hero.motion.pos.f[2] < D_L18_0015F638 && hero.state.current != 0x77) {
                     hero_set_state(0x77, 1);
                 }
             }
-            *(float *)(data + 0x70) -= frame_time_sq * 13.7f;
+            *(float *)(floating_platform_update_private_vars + 0x70) -= frame_time_sq * 13.7f;
             if (moby->pos.z < 15.0f) {
                 mark_moby_for_removal((struct Obj *)moby);
                 return;
@@ -172,7 +172,7 @@ void floating_platform_update(struct Moby *moby) {
     }
     update_floating_platform_tilt_and_bob(moby);
     fast_vec_add(delta, delta, &moby->pos);
-    update_entity_matrix(data + 0x20, delta, old_rot, &moby->rot);
+    update_entity_matrix(floating_platform_update_private_vars + 0x20, delta, old_rot, &moby->rot);
 }
 
 extern float floating_platform_bob_amplitude_gp __asm__("D_L18_00161A48") __attribute__((sda));
