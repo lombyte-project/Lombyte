@@ -11,17 +11,17 @@ extern f32 round_float_to_decimal_places(s32, f32) __asm__("func_00214C48");
 s32        is_value_within_interpolated_window(struct InterpolatedAnim *anim,
                                                f32                      value) __asm__("FUN_00214cc8");
 
-s32 is_value_within_interpolated_window(struct InterpolatedAnim *anim, f32 value) {
+s32 is_value_within_interpolated_window(struct InterpolatedAnim *anim, f32 threshold) {
     f32 interp_value;
     f32 window;
     f32 rounded_value_overshoot;
     s32 result;
 
     interp_value = compute_interpolated_record_value();
-    rounded_value_overshoot = round_float_to_decimal_places(4, interp_value - value);
+    rounded_value_overshoot = round_float_to_decimal_places(4, interp_value - threshold);
     window = round_float_to_decimal_places(4, anim->unk58 * anim->unk5C);
     result = 0;
-    if (value <= interp_value) {
+    if (threshold <= interp_value) {
         result = 1;
         if (!(rounded_value_overshoot < window)) {
             result = 0;
