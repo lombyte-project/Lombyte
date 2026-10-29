@@ -133,12 +133,12 @@ void spawn_circular_saw_destruction_effects(struct Moby *moby) __asm__("FUN_L04_
 void spawn_circular_saw_destruction_effects(struct Moby *moby) {
     float explosion_position[4];
     float unused_destruction_effect_argument[4];
-    char *data = (char *)moby->pvars;
+    char *circular_saw_enemy_pvars = (char *)moby->pvars;
     int   engine_voice_index;
     int   invalid_voice_index;
 
     clear_u64_value(unused_destruction_effect_argument);
-    engine_voice_index = *(int *)(data + 0x238);
+    engine_voice_index = *(int *)(circular_saw_enemy_pvars + 0x238);
     if (engine_voice_index != -1) {
         char *voice_slot_window = (char *)&voice_pool + engine_voice_index * 0x70;
         if (*(char **)(voice_slot_window + 0x88) == moby) {
@@ -147,7 +147,7 @@ void spawn_circular_saw_destruction_effects(struct Moby *moby) {
         }
     }
     invalid_voice_index = -1;
-    *(int *)(data + 0x238) = invalid_voice_index;
+    *(int *)(circular_saw_enemy_pvars + 0x238) = invalid_voice_index;
     FUN_L00_00257470(moby, 0, -1);
     moby_point_position(moby, 5, explosion_position);
     func_L00_0025F4A8_alt(moby,
