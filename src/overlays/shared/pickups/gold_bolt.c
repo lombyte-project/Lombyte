@@ -717,7 +717,7 @@ void update_gold_bolt_glow_rings(struct Moby *moby) {
 void update_gold_bolt_pickup_camera(struct Moby *moby) __asm__("FUN_L01_003087e0");
 
 void update_gold_bolt_pickup_camera(struct Moby *moby) {
-    char *data = ((char *)moby->pvars);
+    char *gold_bolt_vars = ((char *)moby->pvars);
     V4    output_position;
     V4    output_rotation;
     V4    start_rotation;
@@ -731,7 +731,7 @@ void update_gold_bolt_pickup_camera(struct Moby *moby) {
         record_value = 170.0f;
     }
     interpolation_factor = record_value / 170.0f;
-    if (*(s32 *)(data + 4) == -1 || *(s32 *)(data + 8) == -1) {
+    if (*(s32 *)(gold_bolt_vars + 4) == -1 || *(s32 *)(gold_bolt_vars + 8) == -1) {
         f32          position_offset_heading;
         f32          five = 5.0f;
         struct Hero *hero_ptr = &hero;
@@ -748,14 +748,14 @@ void update_gold_bolt_pickup_camera(struct Moby *moby) {
         output_rotation.y = interpolation_factor * -0.17000000178813934f;
     } else {
         lerp_vector(&output_position.x,
-                    &l01_cuboids[*(s32 *)(data + 4)].pos,
-                    &l01_cuboids[*(s32 *)(data + 8)].pos,
+                    &l01_cuboids[*(s32 *)(gold_bolt_vars + 4)].pos,
+                    &l01_cuboids[*(s32 *)(gold_bolt_vars + 8)].pos,
                     interpolation_factor);
         {
             LevelCuboid *cuboids = l01_cuboids;
 
-            qcopy(&start_rotation, &cuboids[*(s32 *)(data + 4)].rot);
-            qcopy(&end_rotation, &cuboids[*(s32 *)(data + 8)].rot);
+            qcopy(&start_rotation, &cuboids[*(s32 *)(gold_bolt_vars + 4)].rot);
+            qcopy(&end_rotation, &cuboids[*(s32 *)(gold_bolt_vars + 8)].rot);
         }
         output_rotation.z = fast_add_rotations(
             fast_subtract_rotations(end_rotation.z, start_rotation.z) * interpolation_factor,
