@@ -393,14 +393,14 @@ extern void request_music_track(int, int) __asm__("FUN_L01_0027a248");
 extern void jet_group_state(int, int, int, int) __asm__("FUN_L13_002650a8");
 
 void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int  *group_index_entry = (int *)(data + 0x60);
+    char *ceo_environment_group_data = (char *)moby->pvars;
+    int  *group_index_entry = (int *)(ceo_environment_group_data + 0x60);
     int   i;
     for (i = 15; i >= 0; i--) {
         jet_group_state(*group_index_entry, 1, 1, 1);
         group_index_entry++;
     }
-    group_index_entry = (int *)(data + 0xA0);
+    group_index_entry = (int *)(ceo_environment_group_data + 0xA0);
     for (i = 7; i >= 0; i--) {
         jet_group_state(*group_index_entry, 0, 0, 0);
         group_index_entry++;
