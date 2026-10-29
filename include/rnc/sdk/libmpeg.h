@@ -92,12 +92,12 @@ struct MpegDecoder {
     u8 pad_84[0x4];
     u64 unk88;
     u8 pad_90[0x4];
-    s32 unk94;
-    s32 unk98;
-    s32 unk9C;
-    s32 unkA0;
-    s32 unkA4;
-    s32 unkA8;
+    s32 decode_count_i;                 /* sceMpegSetDecodeMode ni/np/nb: pictures of each type _getpic decodes */
+    s32 decode_count_p;
+    s32 decode_count_b;
+    s32 picture_count_i;                /* pictures of each type since the last I picture */
+    s32 picture_count_p;
+    s32 picture_count_b;
     s32 frame_base;                     /* sceMpeg.frameCount = frame_count - frame_base (_sceMpegFlush) */
     s32 unkB0;                          /* non-zero: _dispRefImage uses _csc_storeRefImage, else _cpr8 */
     s32 unkB4;
