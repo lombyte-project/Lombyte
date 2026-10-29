@@ -43,7 +43,7 @@ float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") = 6.0f;
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
 
 void water_reservoir_update(struct Moby *moby) {
-    float *data = (float *)moby->pvars;
+    float *reservoir_state = (float *)moby->pvars;
     float  pos[4], offset0[4], offset1[4], pos_offset_delta[4], offset_pair_delta[4];
     float  fraction, frame_scale;
     int    scaled;
@@ -56,29 +56,29 @@ void water_reservoir_update(struct Moby *moby) {
     }
     moby->state = 1;
     moby->command = 2;
-    data[0] = random_angle_radians();
-    data[2] = 5.0f;
+    reservoir_state[0] = random_angle_radians();
+    reservoir_state[2] = 5.0f;
     goto frame_active;
 active:
     if (moby->command & 8) {
         moby->command = 1;
-        *(int *)&data[1] = scale_game_frames(water_reservoir_transition_frames);
+        *(int *)&reservoir_state[1] = scale_game_frames(water_reservoir_transition_frames);
     } else if (moby->command & 4) {
         moby->command = 2;
-        *(int *)&data[1] = scale_game_frames(water_reservoir_transition_frames);
+        *(int *)&reservoir_state[1] = scale_game_frames(water_reservoir_transition_frames);
     }
-    data[0] = fast_add_rotations(data[0],
+    reservoir_state[0] = fast_add_rotations(reservoir_state[0],
                                  water_reservoir_angle_rate_degrees_gp * 0.017453292f * frame_time);
 frame_active:
     frame_scale = D_L12_0015F3FC;
 update:
     if (frame_scale == 0.0f) {
-        if (fast_dec_timer((int *)&data[1]) == 0) {
+        if (fast_dec_timer((int *)&reservoir_state[1]) == 0) {
             if (moby->command & 1) {
-                fraction = 1.0f - convert_integer_to_float(*(int *)&data[1]) /
+                fraction = 1.0f - convert_integer_to_float(*(int *)&reservoir_state[1]) /
                                       convert_integer_to_float(water_reservoir_transition_frames);
             } else {
-                fraction = convert_integer_to_float(*(int *)&data[1]) /
+                fraction = convert_integer_to_float(*(int *)&reservoir_state[1]) /
                            convert_integer_to_float(water_reservoir_transition_frames);
             }
             if (random_float_between(0.0f, 1.0f) < fraction) {
@@ -119,10 +119,10 @@ update:
                             D_L12_001619F8);
             }
         }
-        if ((moby->command & 1) && *(int *)&data[1] == 0) {
-            approach_value(-1.0f, water_reservoir_height_approach_rate_gp * frame_time, &data[2]);
+        if ((moby->command & 1) && *(int *)&reservoir_state[1] == 0) {
+            approach_value(-1.0f, water_reservoir_height_approach_rate_gp * frame_time, &reservoir_state[2]);
         } else if (moby->command & 2) {
-            approach_value(3.0f, water_reservoir_height_approach_rate_gp * frame_time, &data[2]);
+            approach_value(3.0f, water_reservoir_height_approach_rate_gp * frame_time, &reservoir_state[2]);
         }
     }
     add_draw_callback(draw_water_reservoir, moby);
