@@ -1511,9 +1511,9 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
 }
 
 void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    char *seg = (char *)l14_paths[*(int *)(data + 0x78)];
-    int   source_segment_index = *(int *)(data + 0x84);
+    char *heavy_interceptor_vars = (char *)moby->pvars;
+    char *seg = (char *)l14_paths[*(int *)(heavy_interceptor_vars + 0x78)];
+    int   source_segment_index = *(int *)(heavy_interceptor_vars + 0x84);
     float source_path_distance = 0.0f;
     float out[4];
     int   destination_segment_index;
@@ -1526,11 +1526,11 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
     for (i = 0; i < source_segment_index; i++) {
         source_path_distance += *(float *)(seg + i * 16 + 0x1C);
     }
-    source_path_distance += *(float *)(data + 0x1CC);
-    tab = ((int *)l14_paths[*(int *)(data + 0x74)]);
+    source_path_distance += *(float *)(heavy_interceptor_vars + 0x1CC);
+    tab = ((int *)l14_paths[*(int *)(heavy_interceptor_vars + 0x74)]);
     destination_path_distance =
-        source_path_distance / *(float *)(data + 0x16C) * *(float *)(data + 0x190);
-    destination_path_loop_enabled = *(short *)(data + 0x8A);
+        source_path_distance / *(float *)(heavy_interceptor_vars + 0x16C) * *(float *)(heavy_interceptor_vars + 0x190);
+    destination_path_loop_enabled = *(short *)(heavy_interceptor_vars + 0x8A);
     destination_segment_index = 0;
     frac = 0.0f;
     FUN_L00_0025d808_2af918(tab,
@@ -1540,19 +1540,19 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
                             destination_path_loop_enabled,
                             destination_path_distance);
     FUN_L00_0025b8c0_c(&moby->pos.x,
-                       (float *)(data + 0x194),
+                       (float *)(heavy_interceptor_vars + 0x194),
                        out[0],
                        *(float *)&D_L14_001613A0_gp,
                        *(float *)&D_L14_001613A4_gp,
                        0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.y,
-                       (float *)(data + 0x198),
+                       (float *)(heavy_interceptor_vars + 0x198),
                        out[1],
                        *(float *)&D_L14_001613A0_gp,
                        *(float *)&D_L14_001613A4_gp,
                        0.0f);
     FUN_L00_0025b8c0_c(&moby->pos.z,
-                       (float *)(data + 0x19C),
+                       (float *)(heavy_interceptor_vars + 0x19C),
                        out[2],
                        *(float *)&D_L14_001613A0_gp,
                        *(float *)&D_L14_001613A4_gp,
