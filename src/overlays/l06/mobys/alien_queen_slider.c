@@ -80,9 +80,9 @@ void set_listed_alien_queen_sliders_state_2_and_clear_data_28(int moby_list_inde
         do {
             char *moby = (char *)(((*moby_index_cursor & 0x7FFF) << 8) + (int)D_L06_0015FFD8_d);
             if (MOBY(moby)->oclass == 0x16F) {
-                char *data = ((char *)MOBY(moby)->pvars);
+                char *listed_moby_vars = ((char *)MOBY(moby)->pvars);
                 moby[0x20] = 2;
-                *(int *)(data + 0x28) = 0;
+                *(int *)(listed_moby_vars + 0x28) = 0;
             }
         } while (*moby_index_cursor++ >= 0);
     }
