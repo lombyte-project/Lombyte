@@ -52,8 +52,8 @@ void set_selected_object_float_triplets(float first_triplet_middle,
 
                                         float second_triplet_last) {
     char *moby = D_L02_00167400_lui;
-    char *data = *(char **)(moby + 0x70);
-    char *second_triplet_store_base = data + 0x30;
+    char *selected_object_data = *(char **)(moby + 0x70);
+    char *second_triplet_store_base = selected_object_data + 0x30;
     *(float *)(second_triplet_store_base + 0x20) = second_triplet_first;
     *(float *)(second_triplet_store_base + 0x24) = second_triplet_middle;
     *(float *)(second_triplet_store_base + 0x28) = second_triplet_last;
