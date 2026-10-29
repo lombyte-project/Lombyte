@@ -17,14 +17,14 @@ void draw_matching_moby_slot_quads(char *self) {
     get_first_moby_in_group((int *)&current_moby, *(unsigned char *)(self + 0x21), 0, 0);
     while (current_moby != 0) {
         if (current_moby->visible != 0) {
-            char *data = ((char *)current_moby->pvars);
+            char *slot_quad_data = ((char *)current_moby->pvars);
             if (current_moby->oclass == *(short *)(self + 0xA6)) {
-                if ((*(int *)(data + 0xe0) & 0xFF) > 0x80) {
-                    char *slot_position = data + 0x80;
+                if ((*(int *)(slot_quad_data + 0xe0) & 0xFF) > 0x80) {
+                    char *slot_position = slot_quad_data + 0x80;
                     int   i;
                     for (i = 0x5; i >= 0; i--) {
                         draw_offset_textured_effect_quad(
-                            slot_position, *(int *)(data + 0xe0), 1.2f, 0.57f);
+                            slot_position, *(int *)(slot_quad_data + 0xe0), 1.2f, 0.57f);
                         slot_position += 0x10;
                     }
                 }
