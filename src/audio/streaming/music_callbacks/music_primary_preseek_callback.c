@@ -4,8 +4,8 @@
 extern void music_preseek_track(s32, s32, s32) __asm__("func_00215B68");
 void        music_primary_preseek_callback(u32 handle, s64 context) __asm__("FUN_00216a20");
 
-void music_primary_preseek_callback(u32 handle, s64 context) {
-    struct MusicStreamChannel *channel = (struct MusicStreamChannel *)(s32)context;
+void music_primary_preseek_callback(u32 handle, s64 stream_channel_address) {
+    struct MusicStreamChannel *channel = (struct MusicStreamChannel *)(s32)stream_channel_address;
 
     if (channel != 0) {
         channel->handle = handle;
