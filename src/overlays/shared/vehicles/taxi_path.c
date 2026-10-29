@@ -32,22 +32,22 @@ void reset_selected_moby_to_current_placement(void *moby_v) __asm__("FUN_L05_003
 
 void reset_selected_moby_to_current_placement(void *moby_v) {
     struct Moby *moby = moby_v;
-    char        *data = ((char *)moby->pvars);
-    char        *spawn = func_L05_0031AAA8_19510(moby, *(short *)(data + 0xB6));
+    char        *taxi_vars = ((char *)moby->pvars);
+    char        *spawn = func_L05_0031AAA8_19510(moby, *(short *)(taxi_vars + 0xB6));
     char        *position;
     if (spawn != 0) {
         int   index;
-        char *slot = data;
+        char *slot = taxi_vars;
         char *entry;
         position = spawn + 0x10;
-        slot += *(short *)(data + 0xB4) << 2;
+        slot += *(short *)(taxi_vars + 0xB4) << 2;
         index = *(int *)(slot + 0x80) << 7;
         entry = (char *)l05_cuboids;
         qcopy(position, (void *)(index + (int)entry + 0x30));
         qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
         initialize_taxi_stop_state(spawn);
     }
-    *(short *)(data + 0xB4) = *(unsigned short *)(data + 0xB6);
+    *(short *)(taxi_vars + 0xB4) = *(unsigned short *)(taxi_vars + 0xB6);
 }
 
 /* Finds the pool moby in this moby's class list whose data id at 0xB4 matches. */
