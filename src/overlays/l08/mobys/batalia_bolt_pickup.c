@@ -767,7 +767,7 @@ void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby,
 }
 
 void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) {
-    char     *data = (char *)moby->pvars;
+    char     *bolt_pickup_vars = (char *)moby->pvars;
     Quad_5188 quad;
     float     pos[4];
     float     direction[4];
@@ -779,7 +779,7 @@ void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) {
     u32       color;
     char     *projection_constants;
 
-    if (*(short *)(data + 0x6c) == 0)
+    if (*(short *)(bolt_pickup_vars + 0x6c) == 0)
         return;
 
     qcopy(pos, &moby->pos);
@@ -805,22 +805,22 @@ void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) {
         length = 16.0f;
     else if (length < 4.0f)
         length = 4.0f;
-    radius = convert_integer_to_float(*(signed char *)(data + 0x7b) + 16) * 0.015625f *
+    radius = convert_integer_to_float(*(signed char *)(bolt_pickup_vars + 0x7b) + 16) * 0.015625f *
              (50.0f - length * 2.5f);
-    x0 = radius * fast_sin(*(float *)(data + 0x74));
-    y0 = radius * fast_cos(*(float *)(data + 0x74));
-    x1 = radius * fast_sin(fast_add_rotations(*(float *)(data + 0x74), 1.57079637f));
-    y1 = radius * fast_cos(fast_add_rotations(*(float *)(data + 0x74), 1.57079637f));
-    x2 = radius * fast_sin(fast_add_rotations(*(float *)(data + 0x74), 4.71238899f));
-    y2 = radius * fast_cos(fast_add_rotations(*(float *)(data + 0x74), 4.71238899f));
-    x3 = radius * fast_sin(fast_add_rotations(*(float *)(data + 0x74), 3.14159274f));
-    y3 = radius * fast_cos(fast_add_rotations(*(float *)(data + 0x74), 3.14159274f));
+    x0 = radius * fast_sin(*(float *)(bolt_pickup_vars + 0x74));
+    y0 = radius * fast_cos(*(float *)(bolt_pickup_vars + 0x74));
+    x1 = radius * fast_sin(fast_add_rotations(*(float *)(bolt_pickup_vars + 0x74), 1.57079637f));
+    y1 = radius * fast_cos(fast_add_rotations(*(float *)(bolt_pickup_vars + 0x74), 1.57079637f));
+    x2 = radius * fast_sin(fast_add_rotations(*(float *)(bolt_pickup_vars + 0x74), 4.71238899f));
+    y2 = radius * fast_cos(fast_add_rotations(*(float *)(bolt_pickup_vars + 0x74), 4.71238899f));
+    x3 = radius * fast_sin(fast_add_rotations(*(float *)(bolt_pickup_vars + 0x74), 3.14159274f));
+    y3 = radius * fast_cos(fast_add_rotations(*(float *)(bolt_pickup_vars + 0x74), 3.14159274f));
 
     quad.texture_coordinates[0] = 0;
     quad.texture_coordinates[1] = 0x200;
     quad.texture_coordinates[2] = 0x2000000;
     quad.texture_coordinates[3] = 0x2000200;
-    color = *(u32 *)(data + 0x78);
+    color = *(u32 *)(bolt_pickup_vars + 0x78);
     quad.colors[3] = color;
     quad.colors[2] = color;
     quad.colors[1] = color;
