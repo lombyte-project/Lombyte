@@ -75,7 +75,7 @@ void update_billboard_projectile(char *moby) {
         COLLISION_CHECK_AND_COUNTDOWN = 1,
         TIMED_REMOVAL = 2
     };
-    int  *data = ((int *)MOBY(moby)->pvars);
+    int  *motion_lifetime_vars = ((int *)MOBY(moby)->pvars);
     char *camera = D_L01_00167240;
     char  hit[0x30];
     float normal[4];
@@ -86,15 +86,15 @@ void update_billboard_projectile(char *moby) {
     MOBY(moby)->rot.y = -fast_arc_tan(distance, *(float *)(camera + 0x148) - MOBY(moby)->pos.z);
     MOBY(moby)->rot.z = fast_arc_tan(*(float *)(camera + 0x140) - MOBY(moby)->pos.x,
                                      *(float *)(camera + 0x144) - MOBY(moby)->pos.y);
-    MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(data + 3));
-    fast_vec_add(moby + 0x10, moby + 0x10, data + 8);
+    MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(motion_lifetime_vars + 3));
+    fast_vec_add(moby + 0x10, moby + 0x10, motion_lifetime_vars + 8);
     switch ((u8)moby[0x20]) {
     case COLLISION_CHECK_AND_COUNTDOWN:
         spawn_type_14_particle(moby_motion_particle_random_sign_base_gp, moby);
-        fast_vec_normalize(normal, data + 8, 1.0f);
+        fast_vec_normalize(normal, motion_lifetime_vars + 8, 1.0f);
         make_hit_descriptor(hit, moby, 0, 0.0f, normal);
         if (collect_mobies_in_sphere(
-                moby_motion_collision_radius_gp, moby + 0x10, 0x10, data[6], hit) &&
+                moby_motion_collision_radius_gp, moby + 0x10, 0x10, motion_lifetime_vars[6], hit) &&
             !noop_callback_l(moby)) {
             CollisionHit *contact = (CollisionHit *)D_L01_001742C0;
             if (contact->moby != 0)
@@ -103,22 +103,22 @@ void update_billboard_projectile(char *moby) {
             ((void (*)(void *))spawn_collision_particle_bursts)(moby);
             goto remove;
         }
-        if (fast_dec_timer(data)) {
-            data[0] = scale_game_frames(0x1e);
+        if (fast_dec_timer(motion_lifetime_vars)) {
+            motion_lifetime_vars[0] = scale_game_frames(0x1e);
             moby[0x20] = 2;
-            if (data[4] != 0)
-                data[4] = 0;
+            if (motion_lifetime_vars[4] != 0)
+                motion_lifetime_vars[4] = 0;
         }
         break;
     case UPDATE_TRANSFORM_ONLY:
         break;
     case TIMED_REMOVAL:
-        if (fast_dec_timer(data)) {
+        if (fast_dec_timer(motion_lifetime_vars)) {
         remove:
             FUN_0020c828(moby);
         } else {
             int duration = scale_game_frames(0x1e);
-            moby[0x23] = truncate_float_to_s32((float)data[0] * (127.0f / (float)duration));
+            moby[0x23] = truncate_float_to_s32((float)motion_lifetime_vars[0] * (127.0f / (float)duration));
         }
         break;
     }
