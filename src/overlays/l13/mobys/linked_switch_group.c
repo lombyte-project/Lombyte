@@ -39,7 +39,7 @@ int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *heal
     };
     char *hit_record = find_moby_hit(moby, 0x330000, 0);
     int   hit_processing_status;
-    int   result = 0;
+    int   health_depleted = 0;
     char *color_animation_state;
     switch (hit_reaction(moby, hit_record, health, 0, &hit_processing_status, 0, 0, 4)) {
     case HIT_REACTION_NONE:
@@ -71,7 +71,7 @@ int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *heal
             moby->flags = fl & 0xEFFF;
             *(unsigned char *)(moby_data + 0x67) = 0x78;
             trooper_anim_update(moby, (short *)color_animation_state);
-            result = 1;
+            health_depleted = 1;
         } else {
             *health = *health - damage_amount;
             *(unsigned char *)(moby_data + 0x67) = 0xFA;
@@ -81,7 +81,7 @@ int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *heal
     }
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, color_animation_state);
-    return result;
+    return health_depleted;
 }
 
 extern void get_first_moby_in_group(char **, int, int, int) __asm__("FUN_L00_002591d0");
