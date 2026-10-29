@@ -33,30 +33,30 @@ unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
                                             float max_speed) {
     unsigned char *moby = (unsigned char *)create_moby(0x52);
     if (moby != 0) {
-        char *data = ((char *)MOBY(moby)->pvars);
+        char *homing_rocket_vars = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(char **)(data + 0x24) = target;
-        *(char **)(data + 0x20) = owner_moby;
+        *(char **)(homing_rocket_vars + 0x24) = target;
+        *(char **)(homing_rocket_vars + 0x20) = owner_moby;
         qcopy(moby + 0x10, rocket_spawn_position);
         qcopy(moby + 0x40, initial_rotation);
         {
             float *sp = &scale;
-            *(float *)(data + 0x2C) = *sp;
+            *(float *)(homing_rocket_vars + 0x2C) = *sp;
         }
-        *(float *)(data + 0x38) = max_speed;
-        *(int *)(data + 0x28) = initial_expiry_countdown;
-        *(int *)(data + 0x30) = 0;
-        *(int *)(data + 0x34) = 0;
-        qcopy(data, ((char *)MOBY(owner_moby)->pvars) + 0xC0);
+        *(float *)(homing_rocket_vars + 0x38) = max_speed;
+        *(int *)(homing_rocket_vars + 0x28) = initial_expiry_countdown;
+        *(int *)(homing_rocket_vars + 0x30) = 0;
+        *(int *)(homing_rocket_vars + 0x34) = 0;
+        qcopy(homing_rocket_vars, ((char *)MOBY(owner_moby)->pvars) + 0xC0);
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
-        fast_vec_add(moby + 0x10, moby + 0x10, data);
-        if (*(char **)(data + 0x24) != 0) {
-            qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
+        fast_vec_add(moby + 0x10, moby + 0x10, homing_rocket_vars);
+        if (*(char **)(homing_rocket_vars + 0x24) != 0) {
+            qcopy(homing_rocket_vars + 0x10, *(char **)(homing_rocket_vars + 0x24) + 0x10);
         }
         MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
         update_entity(moby);
