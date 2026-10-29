@@ -247,13 +247,13 @@ s32 classify_moby_state_two_or_three(const u8 *moby) __asm__("FUN_L18_002dfba0")
 
 s32 classify_moby_state_two_or_three(const u8 *moby) {
     u32 state = moby[0x20];
-    s32 result = 2;
+    s32 state_classification = 2;
 
     if (state == 2) {
         return 1;
     }
     if (state != 3) {
-        result = 0;
+        state_classification = 0;
     }
-    return result;
+    return state_classification;
 }
