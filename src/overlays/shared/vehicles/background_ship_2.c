@@ -151,7 +151,7 @@ void prepare_background_ship_2_joint_draw_data(char *moby) __asm__("FUN_L02_002e
 
 void prepare_background_ship_2_joint_draw_data(char *moby) {
     int   i;
-    char *data;
+    char *background_ship_2_data;
     char *joint_position_out;
     int   current_global_value;
     int   r, g, b, packed_color;
@@ -160,8 +160,8 @@ void prepare_background_ship_2_joint_draw_data(char *moby) {
     if (MOBY(moby)->group == 0xFF) {
         return;
     }
-    data = ((char *)MOBY(moby)->pvars);
-    joint_position_out = data + 0x80;
+    background_ship_2_data = ((char *)MOBY(moby)->pvars);
+    joint_position_out = background_ship_2_data + 0x80;
     for (i = 0; i < 6; i++) {
         moby_point_position(moby, i + 2, joint_position_out);
         joint_position_out += 0x10;
@@ -173,9 +173,9 @@ void prepare_background_ship_2_joint_draw_data(char *moby) {
     packed_color = (r << 16) | 0x30000000;
     packed_color |= g << 8;
     packed_color |= b;
-    *(int *)(data + 0xE0) = packed_color;
+    *(int *)(background_ship_2_data + 0xE0) = packed_color;
     if (current_global_value != 0) {
-        cached_global_value_ptr = *(int **)(data + 0xE4);
+        cached_global_value_ptr = *(int **)(background_ship_2_data + 0xE4);
         if (current_global_value != *cached_global_value_ptr) {
             *cached_global_value_ptr = current_global_value;
             add_draw_callback(draw_matching_moby_slot_quads, moby);
