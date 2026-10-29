@@ -18,9 +18,9 @@ void update_breakaway_piece(char *moby) {
         UPDATE_BOBBING_HEIGHT = 1,
         UPDATE_LINEAR_AND_ANGULAR_MOTION = 2
     };
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *bobbing_and_motion_vars = ((char *)MOBY(moby)->pvars);
     int   state;
-    if (data == 0) {
+    if (bobbing_and_motion_vars == 0) {
         mark_moby_for_removal(moby);
         return;
     }
@@ -29,24 +29,24 @@ void update_breakaway_piece(char *moby) {
     case INITIALIZE_BOBBING_HEIGHT:
         MOBY(moby)->draw_dist = 0x200;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(float *)(data + 0xC) = MOBY(moby)->pos.z;
+        *(float *)(bobbing_and_motion_vars + 0xC) = MOBY(moby)->pos.z;
         moby[0x20] = 1;
         break;
     case UPDATE_BOBBING_HEIGHT:
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {
-            MOBY(moby)->pos.z = *(float *)(data + 0xC);
+            MOBY(moby)->pos.z = *(float *)(bobbing_and_motion_vars + 0xC);
         } else {
             float bobbing_cycle_fraction = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
             float bobbing_sine_factor = fast_sin(bobbing_cycle_fraction * 6.28318f);
             MOBY(moby)->pos.z =
-                *(float *)(data + 0xC) + moby_bobbing_amplitude_gp * bobbing_sine_factor;
+                *(float *)(bobbing_and_motion_vars + 0xC) + moby_bobbing_amplitude_gp * bobbing_sine_factor;
         }
         break;
     case UPDATE_LINEAR_AND_ANGULAR_MOTION:
-        if (*(float *)(data + 0xC) > 1.0f)
-            fast_vec_scale(data, data, 0.985f);
-        fast_vec_add(moby + 0x10, moby + 0x10, data);
-        fast_vec_add(moby + 0x40, moby + 0x40, data + 0x10);
+        if (*(float *)(bobbing_and_motion_vars + 0xC) > 1.0f)
+            fast_vec_scale(bobbing_and_motion_vars, bobbing_and_motion_vars, 0.985f);
+        fast_vec_add(moby + 0x10, moby + 0x10, bobbing_and_motion_vars);
+        fast_vec_add(moby + 0x40, moby + 0x40, bobbing_and_motion_vars + 0x10);
         if (*(int *)(D_0013E533 + 0x2EA1) != 0x72)
             mark_moby_for_removal(moby);
         break;
