@@ -206,7 +206,7 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_cf58;
-extern u8 D_0013D4DD_cf58 __asm__("D_0013D4DD") NOT_SDA;
+extern u8 D_0013D4DD_lui __asm__("D_0013D4DD") NOT_SDA;
 f32 FUN_001f9b48_c(void *, V_cf58 *) __asm__("FUN_001f9b48");
 #include "rnc/overlay/path.h"
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");
@@ -217,7 +217,7 @@ void find_grind_rail(void) {
     f32 rail_query_value;
     s32 control_mode;
     f32 height_above_rail;
-    if (D_0013D4DD_cf58 == 0)
+    if (D_0013D4DD_lui == 0)
         return;
     hero.grind_rail = 0;
     if (hero.unk1C8 != 0)
@@ -598,7 +598,7 @@ s32 select_hero_condition_animation_id(s32 animation_selector) {
     }
     return 0;
 }
-extern unsigned char D_0013D4C6_20da68 __asm__("D_0013D4C6") NOT_SDA;
+extern unsigned char D_0013D4C6_lui __asm__("D_0013D4C6") NOT_SDA;
 unsigned char *FUN_002141f8_20da68(int) __asm__("FUN_002141f8");
 int FUN_L00_0020da10_20da68(int) __asm__("FUN_L00_0020da10");
 float FUN_001fa6c0_20da68(int) __asm__("FUN_001fa6c0");
@@ -644,7 +644,7 @@ void update_hero_condition_animation(void) {
         spd = 0.8f;
         anim = 0x7B;
     }
-    if (hero.state.control_mode == 0x11 && !D_0013D4C6_20da68) {
+    if (hero.state.control_mode == 0x11 && !D_0013D4C6_lui) {
         on = 1;
         anim = 0x78;
         condition_blend_base = FUN_001fa6c0_20da68(hero.underwater_air) / FUN_001fa6c0_20da68(10000);
@@ -1163,7 +1163,7 @@ extern ItemDef_ea80 item_defs_ea80[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern s32 D_L00_0015F3F8_ea80 __asm__("D_L00_0015F3F8");
 extern s32 D_0015ED90;
 extern s32 D_0015ED94;
-extern s32 D_00141660_ea80[4] __asm__("D_00141660") NOT_SDA;
+extern s32 D_00141660_lui[4] __asm__("D_00141660") NOT_SDA;
 extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA;
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
@@ -1189,7 +1189,7 @@ void spawn_hero_item_mobies(void) {
         (hero.pending_item[0] == 0 || hero.pending_item[0] == 0x24)) {
         id = hero.selected_item[0];
         if (id == 0) {
-            if (D_0015ED90 != 0 || (fallback_item_id = D_00141660_ea80[0]) == 0)
+            if (D_0015ED90 != 0 || (fallback_item_id = D_00141660_lui[0]) == 0)
                 id = 8;
             else
                 id = fallback_item_id;
@@ -1226,7 +1226,7 @@ void spawn_hero_item_mobies(void) {
     if (hero.items[3].moby == 0) {
         id3 = hero.selected_item[3];
         if (id3 == 0) {
-            id3 = D_00141660_ea80[3];
+            id3 = D_00141660_lui[3];
             if (id3 == 0)
                 id3 = D_0015ED94 != 0 ? 3 : 2;
         }
@@ -1264,11 +1264,11 @@ void spawn_hero_item_mobies(void) {
         }
     }
 
-    if (hero.items[2].moby == 0 && (D_00141660_ea80[2] != 0 || hero.selected_item[2] != 0)) {
+    if (hero.items[2].moby == 0 && (D_00141660_lui[2] != 0 || hero.selected_item[2] != 0)) {
         if (hero.selected_item[2] != 0)
             hero.items[2].item_id = hero.selected_item[2];
         else
-            hero.items[2].item_id = D_00141660_ea80[2];
+            hero.items[2].item_id = D_00141660_lui[2];
         slot_two_moby = create_moby(item_defs_ea80[hero.items[2].item_id].cls);
         if (slot_two_moby != 0) {
             slot_two_moby->draw_dist = 0x20;
@@ -1284,9 +1284,9 @@ void spawn_hero_item_mobies(void) {
         }
     }
 
-    if (hero.items[1].moby == 0 && D_00141660_ea80[1] != 0) {
-        hero.items[1].item_id = D_00141660_ea80[1];
-        created_moby = create_moby(item_defs_ea80[D_00141660_ea80[1]].cls);
+    if (hero.items[1].moby == 0 && D_00141660_lui[1] != 0) {
+        hero.items[1].item_id = D_00141660_lui[1];
+        created_moby = create_moby(item_defs_ea80[D_00141660_lui[1]].cls);
         if (created_moby != 0) {
             created_moby->draw_dist = 0x20;
             created_moby->visible = 1;
@@ -1296,7 +1296,7 @@ void spawn_hero_item_mobies(void) {
             hero.items[1].moby = created_moby;
             hero.items[1].state = 2;
         }
-        created_moby = create_moby(item_defs_ea80[D_00141660_ea80[1]].cls2);
+        created_moby = create_moby(item_defs_ea80[D_00141660_lui[1]].cls2);
         if (created_moby != 0) {
             created_moby->draw_dist = 0x20;
             created_moby->visible = 1;
@@ -2781,7 +2781,7 @@ typedef union {
     float f[4];
 } V_2118c8;
 extern unsigned char D_0015EDB4_2118c8 __asm__("D_0015EDB4");
-extern float D_L00_00166DD8_2118c8 __asm__("D_L00_00166DD8") NOT_SDA;
+extern float D_L00_00166DD8_lui __asm__("D_L00_00166DD8") NOT_SDA;
 extern unsigned char D_L00_00166FD0_2118c8[] __asm__("D_L00_00166FD0")
     __attribute__((section(".data")));
 extern float FUN_001f99c0_2118c8(float) __asm__("FUN_001f99c0");
@@ -2844,7 +2844,7 @@ void stick_target(float scale, int mode) {
     if (mode == 4) {
         hero.motion.move_yaw = FUN_001fa580_2118c8(hero.motion.move_yaw, hero.motion.rot.f[2]);
     } else {
-        hero.motion.move_yaw = FUN_001fa580_2118c8(hero.motion.move_yaw, D_L00_00166DD8_2118c8);
+        hero.motion.move_yaw = FUN_001fa580_2118c8(hero.motion.move_yaw, D_L00_00166DD8_lui);
     }
     x = stick_vector.f[0];
     y = stick_vector.f[1];
@@ -3102,8 +3102,8 @@ typedef struct {
     u8 p1[0x40 - 0x20];
     V_212318 v40;
 } X_212318;
-extern char D_0013F3D0_212318[] __asm__("D_0013F3D0") NOT_SDA;
-extern X_212318 D_L00_00173E40_212318 __asm__("D_L00_00173E40") NOT_SDA;
+extern char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
+extern X_212318 D_L00_00173E40_lui __asm__("D_L00_00173E40") NOT_SDA;
 extern f32 D_0015ED6C_212318 __asm__("D_0015ED6C");
 extern f32 FUN_L00_002339d0_212318(void *) __asm__("FUN_L00_002339d0");
 extern f32 FUN_001f9b20_212318(void *) __asm__("FUN_001f9b20");
@@ -3115,7 +3115,7 @@ extern int FUN_001efa68_212318(void *, void *, int, void *, int) __asm__("FUN_00
 extern int FUN_001f0b58_212318(void) __asm__("FUN_001f0b58");
 extern f32 FUN_001f9e90_212318(f32, f32) __asm__("FUN_001f9e90");
 extern void FUN_00125180_212318(void *, void *) __asm__("FUN_00125180");
-#define X D_L00_00173E40_212318
+#define X D_L00_00173E40_lui
 
 extern s32 D_L00_00173E5C NOT_SDA;
 void clip_hero_velocity_against_probed_surfaces(int force) __asm__("FUN_L00_00212318");
@@ -3143,7 +3143,7 @@ void clip_hero_velocity_against_probed_surfaces(int force) {
         primary_probe_height_offset = 1.5f;
         k = 5.0f;
     }
-    hero_position_base = D_0013F3D0_212318;
+    hero_position_base = D_0013F3D0_lui;
     qcopy(&primary_probe_start, hero_position_base);
     primary_probe_start.f[2] += primary_probe_height_offset;
     qcopy(&b, hero_position_base);
@@ -3548,7 +3548,7 @@ typedef union {
     u128_2133a8 q;
     f32 f[4];
 } V_2133a8;
-extern u128_2133a8 coll_2133a8[] __asm__("D_L00_00173E70") NOT_SDA;
+extern u128_2133a8 coll[] __asm__("D_L00_00173E70") NOT_SDA;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_002347c0(void);
 extern void FUN_L00_00233810(void *, void *, f32);
@@ -3615,7 +3615,7 @@ s32 resolve_hero_current_position_collisions(s32 mode) {
             if (!(collision_query_result | FUN_L00_001f3170(&hero.motion.pos.q, hero.capsule_radius)))
                 break;
         }
-        collision_result = coll_2133a8;
+        collision_result = coll;
         qcopy(&hero.motion.pos.q, collision_result);
         qcopy(&hero.wall_contact_normal.q, collision_result + 1);
         qcopy(&hero.wall_contact_point.q, collision_result - 1);

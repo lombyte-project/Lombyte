@@ -315,10 +315,10 @@ typedef struct {
     char pad2[0x30];
     char *o;
 } C_1ed6a8;
-extern C_1ed6a8 D_166C80_1ed6a8 __asm__("D_L00_00166C80") NOT_SDA;
-extern OvlQuad D_173E70_1ed6a8 __asm__("D_L00_00173E70") NOT_SDA;
-extern OvlQuad D_166DC0_1ed6a8 __asm__("D_L00_00166DC0") NOT_SDA;
-extern int D_16C058_1ed6a8[] __asm__("D_L00_0016C058") NOT_SDA;
+extern C_1ed6a8 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
+extern OvlQuad D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
+extern OvlQuad g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
+extern int g_debug_menu_lui[] __asm__("D_L00_0016C058") NOT_SDA;
 extern void f9a28_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -332,7 +332,7 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
 void resolve_camera_movement_collisions(OvlQuad *camera_position, float collision_radius) {
     OvlQuad step_delta[1];
     float camera_movement_origin_snapshot[4] __attribute__((aligned(16)));
-    char *o = D_166C80_1ed6a8.o;
+    char *o = D_L00_00166C80_lui.o;
     float *camera_movement_origin = (float *)(o + 0x64);
     int step_count, i, j;
 
@@ -342,7 +342,7 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
     ((int *)camera_movement_origin_snapshot)[3] = 0;
     if (*(short *)(o + 0x8A) != 0) {
         if (D_L00_0016C06C == 0) {
-            qcopy(&D_166C80_1ed6a8.q, camera_position);
+            qcopy(&D_L00_00166C80_lui.q, camera_position);
         }
         *(short *)(o + 0x8A) = 0;
         return;
@@ -354,16 +354,16 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
     for (i = 0; i < step_count; i++) {
         fast_vec_add(camera_position, camera_position, step_delta);
         for (j = 0; j < 6 && coll_sphere(camera_position, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
-            qcopy(camera_position, &D_173E70_1ed6a8);
+            qcopy(camera_position, &D_L00_00173E70_lui);
             {
-                char *current_camera_record = D_166C80_1ed6a8.o;
+                char *current_camera_record = D_L00_00166C80_lui.o;
                 if (*(unsigned char *)(current_camera_record + 0x89) == 0) {
                     *(unsigned char *)(current_camera_record + 0x89) = 1;
                 }
             }
         }
     }
-    if (D_16C058_1ed6a8[5] == 0) {
-        qcopy(&D_166DC0_1ed6a8, camera_position);
+    if (g_debug_menu_lui[5] == 0) {
+        qcopy(&g_debug_camera_lui, camera_position);
     }
 }

@@ -3472,7 +3472,7 @@ update:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
 
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
-extern int D_L15_001ABE40_q[] __asm__("D_L15_001ABE40") NOT_SDA;
+extern int D_L15_001ABE40_lui[] __asm__("D_L15_001ABE40") NOT_SDA;
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 
 void set_sentrybot_alarm_duration(char *moby, int duration_frames) {
@@ -3489,7 +3489,7 @@ void set_sentrybot_alarm_duration(char *moby, int duration_frames) {
         *(int *)(moby_data + 8) = flag;
         return;
     }
-    group_moby_entry = (short *)D_L15_001ABE40_q[((unsigned char *)moby)[0x21]];
+    group_moby_entry = (short *)D_L15_001ABE40_lui[((unsigned char *)moby)[0x21]];
     if (group_moby_entry) {
         do {
             char *listed_moby = (char *)(((*(unsigned short *)group_moby_entry & 0x7FFF) << 8) + D_L15_0015FFD8_m);

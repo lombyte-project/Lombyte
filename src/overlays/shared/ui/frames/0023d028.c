@@ -7,8 +7,8 @@
 #include "rnc/rendering/render_globals.h"
 
 extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
-extern char D_L00_001C5B00_23d028[] __asm__("D_L00_001C5B00") NOT_SDA;
-extern char D_L00_001BC1B0_23d028[] __asm__("D_L00_001BC1B0") NOT_SDA;
+extern char D_L00_001C5B00_lui[] __asm__("D_L00_001C5B00") NOT_SDA;
+extern char D_L00_001BC1B0_lui[] __asm__("D_L00_001BC1B0") NOT_SDA;
 void FUN_00215420_23d028(void) __asm__("FUN_00215420");
 void FUN_002335a0_23d028(void) __asm__("FUN_002335a0");
 void FUN_002015d8_23d028(void) __asm__("FUN_002015d8");
@@ -41,10 +41,10 @@ void init_level_runtime_state(void) {
     FUN_001f97e8_23d028(D_L00_00197BC0_lui, -1, 0x800);
     FUN_001f97e8_23d028(D_L00_0019A980, -1, 0xE00);
     FUN_001f97e8_23d028(D_L00_0019A280, 0, 0xE0);
-    FUN_001f97e8_23d028(D_L00_001C5B00_23d028, -1, 0xC00);
+    FUN_001f97e8_23d028(D_L00_001C5B00_lui, -1, 0xC00);
     FUN_001f97e8_23d028(D_L00_001C7700, -1, 0x800);
     FUN_001f97e8_23d028(D_L00_001C6F00, 0, 0x80);
-    FUN_001f97e8_23d028(D_L00_001BC1B0_23d028, -1, 0x400);
+    FUN_001f97e8_23d028(D_L00_001BC1B0_lui, -1, 0x400);
     FUN_001f97e8_23d028(D_L00_001BD3B0, -1, 0x400);
     FUN_001f97e8_23d028(D_L00_001BCDB0, 0, 0x40);
     FUN_001f2c60_23d028();

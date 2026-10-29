@@ -25,7 +25,7 @@ typedef struct {
 } Moby257218;
 extern int D_0015ED84;
 extern int D_0014C190[][64];
-extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") MACRO_ADDR;
+extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 extern u8 D_0013D4C0[];
 extern int weapon_ammo_counts[] __asm__("D_0013D428");
 extern Item257218 D_L00_001C40B0[] NOT_SDA;
@@ -39,8 +39,8 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
     int drops = 1;
 
     if (*out <= 0 || (m != 0 && (D_0014C190[D_0015ED84][(s16)m->uid >> 5] >> (m->uid & 0x1F)) & 1)) {
-        for (i = 0; i < 12 && D_0015EDD0_257218[i] != 0xFF; i++) {
-            x = D_0015EDD0_257218[i] & 0x3F;
+        for (i = 0; i < 12 && D_0015EDD0_macro[i] != 0xFF; i++) {
+            x = D_0015EDD0_macro[i] & 0x3F;
             if (D_0013D4C0[x]) {
                 if (((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo) with_max++;
                 owned++;
@@ -52,18 +52,18 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             i = FUN_00213260(not_full);
             while (i >= 0) {
                 idx++;
-                x = D_0015EDD0_257218[idx] & 0x3F;
+                x = D_0015EDD0_macro[idx] & 0x3F;
                 if (D_0013D4C0[x]) i -= ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo > weapon_ammo_counts[x];
             }
-            *out = D_0015EDD0_257218[idx] & 0x3F;
+            *out = D_0015EDD0_macro[idx] & 0x3F;
         } else if (owned) {
             i = FUN_00213260(with_max);
             while (i >= 0) {
                 idx++;
-                x = D_0015EDD0_257218[idx] & 0x3F;
+                x = D_0015EDD0_macro[idx] & 0x3F;
                 if (D_0013D4C0[x] && ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo) i--;
             }
-            *out = D_0015EDD0_257218[idx] & 0x3F;
+            *out = D_0015EDD0_macro[idx] & 0x3F;
         } else {
             *out = 10;
         }
@@ -75,13 +75,13 @@ extern int current_level_index __asm__("D_0015ED84");
 extern int D_0015ED84_257470b __asm__("D_0015ED84");
 extern unsigned char D_0014C050_257470[][16] __asm__("D_0014C050")
     __attribute__((section(".data")));
-extern short D_0014D590_257470[][64][2] __asm__("D_0014D590") NOT_SDA;
+extern short D_0014D590_lui[][64][2] __asm__("D_0014D590") NOT_SDA;
 typedef struct {
     unsigned char p[0x454];
     unsigned char a[1];
 } S_257470;
-extern S_257470 D_L00_001BA5D0_257470 __asm__("D_L00_001BA5D0") NOT_SDA;
-extern S_257470 D_L00_001BB230_257470 __asm__("D_L00_001BB230") NOT_SDA;
+extern S_257470 D_L00_001BA5D0_lui __asm__("D_L00_001BA5D0") NOT_SDA;
+extern S_257470 D_L00_001BB230_lui __asm__("D_L00_001BB230") NOT_SDA;
 extern unsigned char D_L00_0015FC88_257470[] __asm__("D_L00_0015FC88")
     __attribute__((section(".data")));
 extern void FUN_001e93b0_257470(void *, ...) __asm__("FUN_001e93b0");
@@ -119,17 +119,17 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     level_moby_killed[lvl][*(short *)(moby + 0xB2) >> 5] |= 1
                                                          << (*(unsigned short *)(moby + 0xB2) & 0x1F);
     D_L00_001BA4D0_lui[*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-    D_L00_001BA5D0_257470.a[*(short *)(moby + 0xB2)] = moby[0xB0] + 2;
+    D_L00_001BA5D0_lui.a[*(short *)(moby + 0xB2)] = moby[0xB0] + 2;
     k = moby[0xB0];
     {
         unsigned int moby_lookup_index = k & 0xFF;
         if (k == 0xFF || (D_L00_0015FC88_257470[moby_lookup_index] != 0xFF && D_0014C050_257470[lvl][moby_lookup_index] == 0xFF)) {
-            D_L00_001BB230_257470.a[*(short *)(moby + 0xB2)] = k + 2;
+            D_L00_001BB230_lui.a[*(short *)(moby + 0xB2)] = k + 2;
         }
     }
     if ((signed char)moby[0xB1] >= 0) {
         int delta_base_amount = *(short *)(moby + 0xB6);
-        amount_delta = delta_base_amount - D_0014D590_257470[D_0015ED84_257470b][moby[0xB1]][1];
+        amount_delta = delta_base_amount - D_0014D590_lui[D_0015ED84_257470b][moby[0xB1]][1];
         {
             int x = (delta_base_amount + 1) / 2 < amount_delta ? amount_delta : 0;
             if (x) {

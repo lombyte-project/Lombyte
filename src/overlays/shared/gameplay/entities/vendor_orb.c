@@ -145,13 +145,13 @@ void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002e
 void FUN_L00_002eac18_c(int mode) __asm__("FUN_L00_002eac18");
 extern char D_0013E633_2E0E50[] __asm__("D_0013F350");
 extern char D_0013A5E0_2E0E50[] __asm__("D_0013CAE0");
-extern int D_L00_0015F6A8_2E0E50 __asm__("D_L00_0015F5C4") MACRO_ADDR;
+extern int D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") MACRO_ADDR;
 extern int D_L00_0015F404_macro __asm__("D_L00_0015F404") MACRO_ADDR;
-extern char *D_L00_00160098_2E0E50 __asm__("D_L00_0015FFD8") MACRO_ADDR;
-extern char *D_L00_001601AC_2E0E50 __asm__("D_L00_001600EC") MACRO_ADDR;
+extern char *moby_table_macro __asm__("D_L00_0015FFD8") MACRO_ADDR;
+extern char *D_L00_001600EC_macro __asm__("D_L00_001600EC") MACRO_ADDR;
 extern float fade_level __asm__("D_L00_0015F3FC") MACRO_ADDR;
-extern float D_L00_00161C84_2E0E50 __asm__("D_L00_00161BB4") MACRO_ADDR;
-extern float D_0015EE6C_2E0E50 __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_L00_00161BB4_macro __asm__("D_L00_00161BB4") MACRO_ADDR;
+extern float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern float frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
 extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern char D_L00_00166EC0_2E0E50[] __asm__("D_L00_00166DC0");
@@ -200,7 +200,7 @@ void hydrodisplacer_update(Moby *moby) {
         return;
     }
     if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full != 0) {
-        if (D_L00_0015F6A8_2E0E50 == 0 && !((unsigned int)(((Hero *)D_0013E633_2E0E50)->state.current - 0x38) < 2)) {
+        if (D_L00_0015F5C4_macro == 0 && !((unsigned int)(((Hero *)D_0013E633_2E0E50)->state.current - 0x38) < 2)) {
             func_L00_002E1660_2E0E50(moby);
         }
         if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full != 0) {
@@ -269,7 +269,7 @@ void hydrodisplacer_update(Moby *moby) {
             break;
         }
         platform = (void *)((Hero *)D_0013E633_2E0E50)->ground_moby->pvars;
-        linked = D_L00_00160098_2E0E50 + (platform[0] << 8);
+        linked = moby_table_macro + (platform[0] << 8);
         func_L00_00222B80_2E0E50(0x39, 0);
         if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full != 0) {
             func_L00_00232C10_2E0E50(0x84, 0, func_001F9850_2E0E50(6));
@@ -296,7 +296,7 @@ void hydrodisplacer_update(Moby *moby) {
             break;
         }
         moby->state = 5;
-        data->i0 = func_001FA898_2E0E50(func_001F9878_2E0E50(D_L00_00161C84_2E0E50));
+        data->i0 = func_001FA898_2E0E50(func_001F9878_2E0E50(D_L00_00161BB4_macro));
         if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full == 0) {
             ((Moby *)linked)->command = 8;
             ((Hero *)D_0013E633_2E0E50)->hydro_tank_full = 1;
@@ -319,10 +319,10 @@ void hydrodisplacer_update(Moby *moby) {
             if (!(1.0f <= fade_level)) {
                 break;
             }
-            linked = D_L00_00160098_2E0E50 + (*(int *)((Hero *)D_0013E633_2E0E50)->ground_moby->pvars << 8);
+            linked = moby_table_macro + (*(int *)((Hero *)D_0013E633_2E0E50)->ground_moby->pvars << 8);
             moby->command = 1;
-            func_L00_002EBE88_2E0E50(D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x30);
-            func_L00_002EBEE0_2E0E50(D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x70);
+            func_L00_002EBE88_2E0E50(D_L00_001600EC_macro + (data->i8 << 7) + 0x30);
+            func_L00_002EBEE0_2E0E50(D_L00_001600EC_macro + (data->i8 << 7) + 0x70);
             D_L00_0015F404_macro = 1;
             if (((Hero *)D_0013E633_2E0E50)->hydro_tank_full == 0) {
                 ((Moby *)linked)->command = 8;
@@ -339,13 +339,13 @@ void hydrodisplacer_update(Moby *moby) {
                 return;
             }
             if (data->f10 < 1.0f) {
-                func_00214D88_2E0E50(&data->f10, &data->f14, 1.0f, frame_time_sq_macro * 0.666f, frame_time_sq_macro * 0.666f, D_0015EE6C_2E0E50 * 0.5f);
-                func_001F9C08_2E0E50(&camera_pos, D_L00_001601AC_2E0E50 + (data->i8 << 7) + 0x30, D_L00_001601AC_2E0E50 + (data->iC << 7) + 0x30, data->f10);
+                func_00214D88_2E0E50(&data->f10, &data->f14, 1.0f, frame_time_sq_macro * 0.666f, frame_time_sq_macro * 0.666f, frame_time_macro * 0.5f);
+                func_001F9C08_2E0E50(&camera_pos, D_L00_001600EC_macro + (data->i8 << 7) + 0x30, D_L00_001600EC_macro + (data->iC << 7) + 0x30, data->f10);
                 func_001F9BC0_2E0E50(&camera_rot);
-                camera_rot.y = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->iC].v70.y, ((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->i8].v70.y) * data->f10;
-                camera_rot.y = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->i8].v70.y, camera_rot.y);
-                camera_rot.z = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->iC].v70.z, ((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->i8].v70.z) * data->f10;
-                camera_rot.z = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001601AC_2E0E50)[data->i8].v70.z, camera_rot.z);
+                camera_rot.y = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001600EC_macro)[data->iC].v70.y, ((Node_2E0E50 *)D_L00_001600EC_macro)[data->i8].v70.y) * data->f10;
+                camera_rot.y = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001600EC_macro)[data->i8].v70.y, camera_rot.y);
+                camera_rot.z = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001600EC_macro)[data->iC].v70.z, ((Node_2E0E50 *)D_L00_001600EC_macro)[data->i8].v70.z) * data->f10;
+                camera_rot.z = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001600EC_macro)[data->i8].v70.z, camera_rot.z);
                 func_L00_002EBE88_2E0E50(&camera_pos);
                 func_L00_002EBEE0_2E0E50(&camera_rot);
                 return;
@@ -657,37 +657,37 @@ void emit_moby_color_cycling_particles(unsigned char *moby) {
     }
 }
 typedef int s32_2e1f28;
-extern s32_2e1f28 D_BF8_2e1f28[] __asm__("D_L00_00161BF8") MACRO_ADDR;
-extern s32_2e1f28 D_C08_2e1f28[] __asm__("D_L00_00161C08") MACRO_ADDR;
-extern s32_2e1f28 D_C18_2e1f28[] __asm__("D_L00_00161C18") MACRO_ADDR;
-extern s32_2e1f28 D_C28_2e1f28[] __asm__("D_L00_00161C28") MACRO_ADDR;
-extern s32_2e1f28 D_C38_2e1f28[] __asm__("D_L00_00161C38") MACRO_ADDR;
-extern s32_2e1f28 D_C48_2e1f28[] __asm__("D_L00_00161C48") MACRO_ADDR;
-extern s32_2e1f28 D_C58_2e1f28[] __asm__("D_L00_00161C58") MACRO_ADDR;
-extern s32_2e1f28 D_C68_2e1f28[] __asm__("D_L00_00161C68") MACRO_ADDR;
-extern s32_2e1f28 D_C78_2e1f28[] __asm__("D_L00_00161C78") MACRO_ADDR;
-extern s32_2e1f28 D_C88_2e1f28[] __asm__("D_L00_00161C88") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161BF8_macro[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161C08_macro[] __asm__("D_L00_00161C08") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161C18_macro[] __asm__("D_L00_00161C18") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161C28_macro[] __asm__("D_L00_00161C28") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161C38_macro[] __asm__("D_L00_00161C38") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161C48_macro[] __asm__("D_L00_00161C48") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161C58_macro[] __asm__("D_L00_00161C58") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161C68_macro[] __asm__("D_L00_00161C68") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161C78_macro[] __asm__("D_L00_00161C78") MACRO_ADDR;
+extern s32_2e1f28 D_L00_00161C88_macro[] __asm__("D_L00_00161C88") MACRO_ADDR;
 s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 endpoint_effect_flags, s32_2e1f28 endpoint_spark_tag_mode) __asm__("FUN_L00_002e1f28");
 
 s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) __asm__("FUN_L00_002e1f28");
 s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 endpoint_effect_flags, s32_2e1f28 endpoint_spark_tag_mode) {
     s32_2e1f28 i, j;
     for (i = 0; i < 3; i++) {
-        if (D_C88_2e1f28[i] == id)
+        if (D_L00_00161C88_macro[i] == id)
             return 1;
     }
     for (j = 0; j < 3; j++) {
-        if (D_C88_2e1f28[j] == 0) {
-            D_C88_2e1f28[j] = id;
-            D_C08_2e1f28[j] = 0;
-            D_C18_2e1f28[j] = 0;
-            D_C28_2e1f28[j] = 0;
-            D_C38_2e1f28[j] = -1;
-            D_C48_2e1f28[j] = -1;
-            D_C58_2e1f28[j] = endpoint_effect_flags;
-            D_C68_2e1f28[j] = endpoint_spark_tag_mode;
-            D_C78_2e1f28[j] = 0;
-            D_BF8_2e1f28[j] = 1;
+        if (D_L00_00161C88_macro[j] == 0) {
+            D_L00_00161C88_macro[j] = id;
+            D_L00_00161C08_macro[j] = 0;
+            D_L00_00161C18_macro[j] = 0;
+            D_L00_00161C28_macro[j] = 0;
+            D_L00_00161C38_macro[j] = -1;
+            D_L00_00161C48_macro[j] = -1;
+            D_L00_00161C58_macro[j] = endpoint_effect_flags;
+            D_L00_00161C68_macro[j] = endpoint_spark_tag_mode;
+            D_L00_00161C78_macro[j] = 0;
+            D_L00_00161BF8_macro[j] = 1;
             return 1;
         }
     }
@@ -853,7 +853,7 @@ extern Q_2E3700 D_L00_001E7160_2E3700[] __asm__("D_L00_001E6E10");
 extern Pt_2E3700 D_L00_001E7190_2E3700[][20] __asm__("D_L00_001E6E40");
 extern Snd_2E3700 D_L00_001803C0_2E3700[] __asm__("D_L00_001802C0");
 extern char D_0013E633_2E3700[] __asm__("D_0013F5E0");
-extern char D_L00_0015F660_2E3700[] __asm__("D_L00_0015F580") MACRO_ADDR;
+extern char D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
 extern int D_L00_00161CC8_2E3700[] __asm__("D_L00_00161BF8") MACRO_ADDR;
 extern float D_L00_00161CD8_2E3700[] __asm__("D_L00_00161C08") MACRO_ADDR;
 extern float D_L00_00161CE8_2E3700[] __asm__("D_L00_00161C18") MACRO_ADDR;
@@ -988,7 +988,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
 
             fast_vec_scale(first_endpoint_effect_position, &D_L00_001E7070_2E3700[beam], 0.3f);
             func_001F9BD8_2E3700(first_endpoint_effect_position, first_endpoint_effect_position, D_L00_001E7070_2E3700[beam].v30);
-            spark = func_L00_002757E8_2E3700(first_endpoint_effect_position, D_L00_0015F660_2E3700, 0x7F, D_L00_00161D58_2E3700[beam]);
+            spark = func_L00_002757E8_2E3700(first_endpoint_effect_position, D_L00_0015F580_macro, 0x7F, D_L00_00161D58_2E3700[beam]);
             if (spark != 0) {
                 PartSub_2E3700 *sub = &spark->sub;
 
@@ -1003,7 +1003,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
         func_002141A8_2E3700(&particle_velocity, 0.01f, 0.05f);
         func_L00_002757E8_2E3700(tip, &particle_velocity, 0x7F, D_L00_00161D58_2E3700[beam]);
         if (func_002140B0_2E3700(3) == 0) {
-            Part_2E3700 *spark = func_L00_002757E8_2E3700(tip, D_L00_0015F660_2E3700, 0x7F, D_L00_00161D58_2E3700[beam]);
+            Part_2E3700 *spark = func_L00_002757E8_2E3700(tip, D_L00_0015F580_macro, 0x7F, D_L00_00161D58_2E3700[beam]);
 
             if (spark != 0) {
                 PartSub_2E3700 *sub = &spark->sub;
@@ -1108,7 +1108,7 @@ void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *point
     *(int *)&quads[1].texture_coordinates[0][1] = 0;
     glow_color = (glow_alpha << 24) | 0x7F4040;
     zero = quads[1].texture_coordinates[0][1];
-    uv_offset = *(float *)&D_C78_2e1f28[slot];
+    uv_offset = *(float *)&D_L00_00161C78_macro[slot];
     quads[1].colors[0] = quads[1].colors[1] = quads[1].colors[2] = quads[1].colors[3] = glow_color;
     quads[1].primitive = quads[0].primitive;
     quads[1].texture_state = quads[0].texture_state;
@@ -1599,7 +1599,7 @@ typedef struct {
     void *p2080;
 } G_002e42c0;
 extern struct Hero hero_data __asm__("D_0013F350") NOT_SDA;
-extern u8 D_L00_00166E10_002e42c0[] __asm__("D_L00_00166E10") NOT_SDA;
+extern u8 D_L00_00166E10_lui[] __asm__("D_L00_00166E10") NOT_SDA;
 extern OvlQuad D_L00_00173E60_002e42c0 __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
 void FUN_L00_002e4168_002e42c0(s32, OvlQuad *) __asm__("FUN_L00_002e4168");
@@ -1613,7 +1613,7 @@ s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out, s32 flag) _
 s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out, s32 flag) {
     OvlQuad position_and_offset_vectors[4];
     struct Hero *player = &hero_data;
-    u8 *camera_view = D_L00_00166E10_002e42c0;
+    u8 *camera_view = D_L00_00166E10_lui;
     f32 ground_distance;
     if (player->frames_off_ground.s == 0) {
         FUN_L00_002e4168_002e42c0(*(s32 *)(camera_view - 0x10), out);
@@ -2505,11 +2505,11 @@ int try_select_follow_camera_volume(int candidate_object, int unused) {
     }
     return 0;
 }
-extern u8 *vd_2e8450 __asm__("D_L00_00166E00") NOT_SDA;
+extern u8 *D_L00_00166E00_lui __asm__("D_L00_00166E00") NOT_SDA;
 /* Sets a flag and floats a/b at +0x130 of D_L00_00166E00+0x70; f also stores a at +0x58. */
 void follow_camera_set_distance(s32 f, f32 a, f32 b) __asm__("FUN_L00_002e8450");
 void follow_camera_set_distance(s32 copy_distance_to_secondary_slot, f32 distance, f32 distance_override_companion_value) {
-    u8 *current_camera = vd_2e8450;
+    u8 *current_camera = D_L00_00166E00_lui;
     if (*(s16 *)(current_camera + 0x86) == 0) {
         u8 *camera_distance_state = *(u8 **)(current_camera + 0x70) + 0x130;
         *(s16 *)(camera_distance_state + 0x3C) = 1;

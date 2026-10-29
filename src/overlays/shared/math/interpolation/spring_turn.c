@@ -150,8 +150,8 @@ typedef union {
 } V_258490;
 extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
     __attribute__((section(".data")));
-extern V_258490 D_L00_00173E60_258490 __asm__("D_L00_00173E60") NOT_SDA;
-extern V_258490 D_L00_00173E70_258490 __asm__("D_L00_00173E70") NOT_SDA;
+extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
+extern V_258490 D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern float FUN_L00_00259710_258490(void *) __asm__("FUN_L00_00259710");
 extern float FUN_001f99c0_258490(float) __asm__("FUN_001f99c0");
 extern void FUN_001f9a28_258490(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -222,7 +222,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
     }
     if (!(flags & 2)) {
         zz = h + r;
-        q60 = (unsigned char *)&D_L00_00173E60_258490;
+        q60 = (unsigned char *)&D_L00_00173E60_lui;
         q40 = q60 - 0x20;
         i = 0;
         do {
@@ -234,7 +234,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
             ang = FUN_001f9e90_258490(FUN_001f9b80_258490(pos, q60),
                                       *(float *)(q40 + 0x28) - pos->f[2]);
             if (*(int *)(q40 + 0x18) != 0 || slope < ang) {
-                qcopy(pos, &D_L00_00173E70_258490);
+                qcopy(pos, &D_L00_00173E70_lui);
                 ok = 0;
                 pos->f[2] -= zz;
             }

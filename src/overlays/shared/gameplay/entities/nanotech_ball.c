@@ -147,7 +147,7 @@ typedef struct {
     float f28;
 } G_2d81b8;
 extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
-extern float D_L00_00173E68_2d81b8 __asm__("D_L00_00173E68") NOT_SDA;
+extern float D_L00_00173E68_lui __asm__("D_L00_00173E68") NOT_SDA;
 extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
@@ -163,7 +163,7 @@ void update_nanotech_ball_grounding_and_fall(unsigned char *moby) {
     qcopy(&probe_end_position, &probe_start_position);
     probe_end_position.f[2] -= 1.5f;
     if (FUN_001efa68_2d81b8(&probe_start_position, &probe_end_position, 2, moby, 0)) {
-        z = D_L00_00173E68_2d81b8;
+        z = D_L00_00173E68_lui;
         hit = 1;
     } else {
         z = probe_end_position.f[2];
@@ -273,7 +273,7 @@ typedef struct {
     u8 *pF8;
 } T_2d8510;
 extern char g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
-extern T_2d8510 D_L00_001B2080_2d8510 __asm__("D_L00_001B2080") NOT_SDA;
+extern T_2d8510 D_L00_001B2080_lui __asm__("D_L00_001B2080") NOT_SDA;
 extern s32 D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
 void FUN_001f9a28_2d8510(void *, void *, void *) __asm__("FUN_001f9a28");
 void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -328,12 +328,12 @@ s32 update_nanotech_ball_collection_effects(M_2d8510 *moby) {
         effect_record = FUN_L00_00272f68_2d8510(&effect_position, c, FUN_001fa6d0_2d8510(effect_data->f60[i]), nanotech_ball_collection_particle_byte_source_index, 0,
                                     2, 1, nanotech_ball_collection_particle_scale_factors[i] * color_progress_or_size_factor);
         if (effect_record)
-            effect_record[2] = *D_L00_001B2080_2d8510.pF8;
+            effect_record[2] = *D_L00_001B2080_lui.pF8;
         effect_record = FUN_L00_00272f68_2d8510(&effect_position, al | 0xFFFFFF, FUN_001fa6d0_2d8510(effect_data->f60[i]),
                                     nanotech_ball_collection_particle_byte_source_index, nanotech_ball_collection_second_particle_mode_selector, 2, 1,
                                     nanotech_ball_collection_particle_scale_factors[i] * (color_progress_or_size_factor * 0.7f));
         if (effect_record)
-            effect_record[2] = *D_L00_001B2080_2d8510.pF8;
+            effect_record[2] = *D_L00_001B2080_lui.pF8;
         fast_vec_add(&effect_position, &effect_position, &effect_position_step);
     }
     return any_effect_timer_above_threshold;
@@ -1275,7 +1275,7 @@ typedef struct {
     s32 i2078;
     s32 i207C;
 } G_002da660;
-extern G_002da660 D_0013F350_002da660 __asm__("D_0013F350") NOT_SDA;
+extern G_002da660 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 typedef struct {
     u8 p[9];
     u8 b9;
@@ -1288,22 +1288,22 @@ void refresh_suck_cannon_slots(void) __asm__("FUN_L00_002da660");
 
 void refresh_suck_cannon_slots(void) {
     s32 i;
-    D_0013F350_002da660.i207C = 0;
-    D_0013F350_002da660.i2078 = 0;
+    D_0013F350_lui.i207C = 0;
+    D_0013F350_lui.i2078 = 0;
     for (i = 0; i < (item_text_variant.b9 == 0 ? 5 : 10); i++) {
         u8 *suction_record;
         s32 k;
-        if (D_0013F350_002da660.slot[i] == 0)
+        if (D_0013F350_lui.slot[i] == 0)
             continue;
-        suction_record = FUN_L00_002db890_002da660(D_0013F350_002da660.slot[i]);
+        suction_record = FUN_L00_002db890_002da660(D_0013F350_lui.slot[i]);
         if (suction_record == 0 || (k = *(s16 *)(suction_record + 0x68)) < 3 || k >= 5 || *(s16 *)(suction_record + 0x6A) == -1) {
-            u8 *slot_moby = D_0013F350_002da660.slot[i];
+            u8 *slot_moby = D_0013F350_lui.slot[i];
             FUN_001e93b0_002da660(D_L00_001E9FE8, *(s16 *)(slot_moby + 0xB2), *(s16 *)(slot_moby + 0xA6));
-            D_0013F350_002da660.slot[i] = 0;
+            D_0013F350_lui.slot[i] = 0;
         } else if (k == 3) {
-            D_0013F350_002da660.i207C++;
+            D_0013F350_lui.i207C++;
         } else if (k == 4) {
-            D_0013F350_002da660.i2078++;
+            D_0013F350_lui.i2078++;
         }
     }
 }
@@ -1895,7 +1895,7 @@ missing:
 fail:
     return 0;
 }
-extern u8 *D_001403E0_002dbb20 __asm__("D_001403E0") NOT_SDA;
+extern u8 *D_001403E0_lui __asm__("D_001403E0") NOT_SDA;
 u8 *FUN_L00_002db890_002dbb20(u8 *) __asm__("FUN_L00_002db890");
 void FUN_L00_002d9fd0_002dbb20(void *, void *, void *) __asm__("FUN_L00_002d9fd0");
 void FUN_0020e098_002dbb20(void *) __asm__("FUN_0020e098");
@@ -1915,7 +1915,7 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
         qcopy(moby + 0x10, position);
         FUN_L00_002d9fd0_002dbb20(*(void **)(suction_record + 0x60), moby, suck_cannon_storage_euler_offset);
         FUN_0020e098_002dbb20(moby);
-        sound_source_moby = D_001403E0_002dbb20;
+        sound_source_moby = D_001403E0_lui;
         if (sound_source_moby != 0 && *(s16 *)(sound_source_moby + 0xA6) == 0x351) {
             FUN_0022da68_002dbb20(5, 0, sound_source_moby);
         }
@@ -1930,7 +1930,7 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
     }
     return 0;
 }
-extern u8 D_0013F3D0_002dbc30[] __asm__("D_0013F3D0") NOT_SDA;
+extern u8 D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 u8 *FUN_L00_002db890_002dbc30(u8 *) __asm__("FUN_L00_002db890");
 u8 *FUN_002141f8_002dbc30(u8 *) __asm__("FUN_002141f8");
 void FUN_0022da68_002dbc30(s32, s32, void *) __asm__("FUN_0022da68");
@@ -1975,7 +1975,7 @@ s32 launch_suck_cannon_projectile(u8 *moby, u8 *launch_velocity, u8 *target, f32
         *(f32 *)(projectile_record + 0x90) = target_height_offset;
         *(f32 *)(projectile_record + 0x48) += target_height_offset;
     }
-    if (FUN_001f9b80_002dbc30(moby + 0x10, D_0013F3D0_002dbc30) < 1.0f) {
+    if (FUN_001f9b80_002dbc30(moby + 0x10, D_0013F3D0_lui) < 1.0f) {
         FUN_001f9a10_002dbc30(moby + 0x10, moby + 0x10, projectile_record + 0x10);
     }
     if (*(s16 *)(projectile_record + 0x9C) >= 0) {
@@ -3260,7 +3260,7 @@ typedef struct {
     T_2df1e0 *p24;
 } O_2df1e0;
 extern short D_L00_001E6008[] NOT_SDA;
-extern u8 D_L00_001E5F40_2df1e0[][16] __asm__("D_L00_001E5F40") NOT_SDA;
+extern u8 D_L00_001E5F40_lui[][16] __asm__("D_L00_001E5F40") NOT_SDA;
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(O_2df1e0 *) __asm__("FUN_L00_0025e3f8");
 f32 FUN_001f9b48(void *, void *);
@@ -3286,7 +3286,7 @@ void scatter_moby_from_hazards(O_2df1e0 *pickup_moby) {
         beam_segment_collection_radius = i * 0.3f + 0.1f;
         if (beam_segment_collection_radius < 2.0f)
             beam_segment_collection_radius = 2.0f;
-        if (FUN_001f9b48(pickup_moby->v10, D_L00_001E5F40_2df1e0[i]) < beam_segment_collection_radius) {
+        if (FUN_001f9b48(pickup_moby->v10, D_L00_001E5F40_lui[i]) < beam_segment_collection_radius) {
             if (pickup_moby && pickup_moby->p24 && pickup_moby->p24->h46 == 0x13) {
                 begin_bolt_attraction(pickup_moby, hero.moby, 0.0f, 0.0f);
             } else {

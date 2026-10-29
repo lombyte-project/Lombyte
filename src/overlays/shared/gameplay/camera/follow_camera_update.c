@@ -149,9 +149,9 @@ typedef struct {
     short h0, h2, h4, h6;
     float f8, fC;
 } S_2e9518;
-extern C_2e9518 D_166E10_2e9518 __asm__("D_L00_00166E10") NOT_SDA;
-extern char *D_001413D0_2e9518 __asm__("D_001413D0") NOT_SDA;
-extern unsigned char D_001413F4_2e9518 __asm__("D_001413F4") NOT_SDA;
+extern C_2e9518 D_L00_00166E10_lui __asm__("D_L00_00166E10") NOT_SDA;
+extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
+extern unsigned char D_001413F4_lui __asm__("D_001413F4") NOT_SDA;
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -164,14 +164,14 @@ extern float orbit_distance_default_damping_gp __asm__("D_L00_00161CF0") __attri
 extern float orbit_distance_pull_back_stiffness_gp __asm__("D_L00_00161D14") __attribute__((sda));
 extern float orbit_distance_pull_back_damping_gp __asm__("D_L00_00161D18") __attribute__((sda));
 void follow_camera_pull_back(char *camera_object, float *x, float *y) {
-    C_2e9518 *C = &D_166E10_2e9518;
+    C_2e9518 *C = &D_L00_00166E10_lui;
     char *camera_state = *(char **)(camera_object + 0x70);
     S_2e9518 *pull_back_state = (S_2e9518 *)(camera_state + 0x220);
     char *reference_orbit_state = camera_state + 0x130;
     float k, pull_back_target, interpolated_pull_back_value;
 
     if (pull_back_state->h6 == 0) {
-        if (pull_back_state->h4 != 0 && C->fA4 == 0.0f && fast_vec_dot(D_001413D0_2e9518 + 0xC0, camera_object) <= -0.3f) {
+        if (pull_back_state->h4 != 0 && C->fA4 == 0.0f && fast_vec_dot(D_001413D0_lui + 0xC0, camera_object) <= -0.3f) {
             goto on;
         }
         if (0.0001f < absolute_float(C->fA4) && fast_vec_dot(C->v80, camera_object) <= -0.3f) {
@@ -180,7 +180,7 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
             k = C->fA4 * 14.2857f;
             if (1.0f < k)
                 k = 1.0f;
-            pull_back_target = D_001413F4_2e9518 == 1 ? 4.0f : pull_back_state->fC;
+            pull_back_target = D_001413F4_lui == 1 ? 4.0f : pull_back_state->fC;
             interpolated_pull_back_value = *(float *)(reference_orbit_state + 0x58) + (pull_back_target - *(float *)(reference_orbit_state + 0x58)) * k;
             if (pull_back_state->f8 < interpolated_pull_back_value)
                 pull_back_state->f8 = interpolated_pull_back_value;
@@ -404,7 +404,7 @@ void update_hero_aligned_camera_position(char *camera_object) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern u128 D_0013F3D0_2e9dd0 __asm__("D_0013F3D0");
-extern void *D_L00_00166E04_2e9dd0 __asm__("D_L00_00166E04") NOT_SDA;
+extern void *D_L00_00166E04_lui __asm__("D_L00_00166E04") NOT_SDA;
 extern void FUN_001f9bf8_2e9dd0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_2e9dd0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_2e9dd0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -426,7 +426,7 @@ void initialize_hero_aligned_camera_pose(char *camera_object) {
     }
     FUN_001f9a10_2e9dd0(camera_object + 0x30, &D_0013F3D0_2e9dd0, &scaled_hero_up_axis);
     {
-        void *side_axis_reference = D_L00_00166E04_2e9dd0;
+        void *side_axis_reference = D_L00_00166E04_lui;
         qcopy(camera_object + 0x20, &hero_up_axis);
         FUN_001f9ad8_2e9dd0(camera_object + 0x10, side_axis_reference, &hero_up_axis);
     }
@@ -605,10 +605,10 @@ typedef struct {
     u8 p[0x3C];
     V_2ea488 v;
 } S_2ea488;
-extern P_2ea488 D_0013F350_2ea488 __asm__("D_0013F350") NOT_SDA;
-extern OvlQuad D_0013F3D0_2ea488 __asm__("D_0013F3D0") NOT_SDA;
+extern P_2ea488 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
+extern OvlQuad D_0013F3D0_lui __asm__("D_0013F3D0") NOT_SDA;
 extern E_2ea488 *D_L00_0015EF50_2ea488 __asm__("D_L00_0015EF50");
-extern char *D_L00_00166E00_2ea488 __asm__("D_L00_00166E00") NOT_SDA;
+extern char *D_L00_00166E00_lui __asm__("D_L00_00166E00") NOT_SDA;
 extern char D_L00_00166E10_2ea488[] __asm__("D_L00_00166E10") NOT_SDA;
 extern char *find_camera_collision_volume_for_point(void *, f32) __asm__("FUN_L00_001ee1b0");
 extern int FUN_001f96f8_2ea488(int) __asm__("FUN_001f96f8");
@@ -622,7 +622,7 @@ extern void FUN_001f9a28_2ea488(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f9af0_2ea488(void *) __asm__("FUN_001f9af0");
 extern void FUN_L00_001ed280_2ea488(void) __asm__("FUN_L00_001ed280");
 extern void FUN_001f9740_2ea488(void *) __asm__("FUN_001f9740");
-#define P D_0013F350_2ea488
+#define P D_0013F350_lui
 int camera_transition_update(u8 *, char *) __asm__("FUN_L00_002ea488");
 
 int camera_transition_update(u8 *transition_camera_record, char *mode_check_object) {
@@ -642,14 +642,14 @@ int camera_transition_update(u8 *transition_camera_record, char *mode_check_obje
     g = &P;
     requested_camera_mode = g->i2284;
     if (requested_camera_mode == *(s16 *)(transition_camera_record + 0x86) || requested_camera_mode == 0x51) {
-        active_transition_camera_record = D_L00_00166E00_2ea488;
+        active_transition_camera_record = D_L00_00166E00_lui;
         checked_object_mode = *(s16 *)(mode_check_object + 0x86);
         if (checked_object_mode != 0 && checked_object_mode != 10 && checked_object_mode != 14 && checked_object_mode != 2)
             goto off;
         active_camera_mode = *(s16 *)(active_transition_camera_record + 0x86);
         if (active_camera_mode != 0 && active_camera_mode != 10 && active_camera_mode != 14 && active_camera_mode != 2)
             goto off;
-        *(OvlQuad *)&transition_vector_scratch = D_0013F3D0_2ea488;
+        *(OvlQuad *)&transition_vector_scratch = D_0013F3D0_lui;
         r = find_camera_collision_volume_for_point(&transition_vector_scratch, 0.25f);
         if (r && (*(s32 *)(r + 0x18) & 1))
             return 0;
@@ -759,13 +759,13 @@ typedef struct {
     unsigned char pad0[0x7E];
     short s7E;
 } A_2ea810;
-extern Q_2ea810 D_L00_00166C80_2ea810 __asm__("D_L00_00166C80") NOT_SDA;
+extern Q_2ea810 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern float FUN_001f9ab0_2ea810(void *, void *) __asm__("FUN_001f9ab0");
 extern void FUN_001f9a68_2ea810(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a28_2ea810(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float FUN_001f9af0_2ea810(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9df8_2ea810(float) __asm__("FUN_001f9df8");
-#define Q D_L00_00166C80_2ea810
+#define Q D_L00_00166C80_lui
 
 void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) __asm__("FUN_L00_002ea810");
 
@@ -2200,14 +2200,14 @@ typedef struct {
     u8 p2[0x8C - 0x75];
     void *o;
 } E_2ed950;
-#define ENT_2ed950(i) ((E_2ed950 *)((u8 *)D_0013E550_2ed950 + (i) * 0x70))
+#define ENT_2ed950(i) ((E_2ed950 *)((u8 *)voice_pool_lui + (i) * 0x70))
 typedef struct {
     u8 p[0x18];
     u8 b18;
     u8 p2[7];
 } T_2ed950;
 extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
-extern E_2ed950 D_0013E550_2ed950[] __asm__("D_0013E550") NOT_SDA;
+extern E_2ed950 voice_pool_lui[] __asm__("D_0013E550") NOT_SDA;
 extern T_2ed950 *D_L00_0015F5F4_2ed950 __asm__("D_L00_0015F5F4");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 s32 FUN_001f9740_2ed950(s32 *) __asm__("FUN_001f9740");
@@ -2258,7 +2258,7 @@ typedef struct {
 typedef struct {
     f32 f[4];
 } V_2edad8;
-extern u8 D_L00_00166DC0_2edad8[] __asm__("D_L00_00166DC0") NOT_SDA;
+extern u8 g_debug_camera_lui[] __asm__("D_L00_00166DC0") NOT_SDA;
 extern u8 voice_pool[] __asm__("D_0013E550");
 extern void sub_2edad8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2287,7 +2287,7 @@ void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) {
         uniform_range_vector.f[1] = g;
         uniform_range_vector.f[2] = g;
     }
-    sub_2edad8(&reference_position_delta, D_L00_00166DC0_2edad8, sound_emitter + 0x40);
+    sub_2edad8(&reference_position_delta, g_debug_camera_lui, sound_emitter + 0x40);
     reference_position_delta.f[3] = 0;
     transform_vector_by_basis(&transformed_reference_position_delta, &reference_position_delta, sound_emitter + 0x50);
     transform_vector_by_basis(&b, &uniform_range_vector, sound_emitter + 0x50);

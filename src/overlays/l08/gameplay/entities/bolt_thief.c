@@ -268,7 +268,7 @@ extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int D_0015EDB4_d __asm__("D_0015EDB4") NOT_SDA; /* no foreign declaration */
+extern int D_0015EDB4_lui __asm__("D_0015EDB4") NOT_SDA; /* no foreign declaration */
 extern int D_L08_0015F5CC_lui __asm__("D_L08_0015F5CC") NOT_SDA; /* no foreign declaration */
 extern f32 D_L08_00161AC0_gp __asm__("D_L08_00161AC0") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161AC8_gp __asm__("D_L08_00161AC8") __attribute__((sda)); /* no foreign declaration */

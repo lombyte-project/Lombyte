@@ -31,7 +31,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float D_0015ED6C_a[] __asm__("D_0015ED6C") MACRO_ADDR;
+extern float frame_time_macro[] __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_L18_001677C0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float step_angle_toward_target(float *p, int n, float x, float y) __asm__("FUN_L00_0025bc00");
@@ -79,7 +79,7 @@ void drek_fight_missile_update(struct Moby *moby) {
     }
     switch (moby->state) {
     case DREK_MISSILE_INITIALIZE: {
-        float wander_acceleration_scale = D_0015ED6C_a[1];
+        float wander_acceleration_scale = frame_time_macro[1];
         float initialization_frame_time = frame_time;
         *(float *)(missile_vars + 0x158) = wander_acceleration_scale * 10.0f;
         *(float *)(missile_vars + 0x154) = initialization_frame_time * 12.566371f;
@@ -525,7 +525,7 @@ extern int scale_game_frames(int);
 extern int tick_countdown_32(int *) __asm__("func_001F9740");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short *D_L18_001AC240[];
-extern float D_L18_0015F580_c[] __asm__("D_L18_0015F580") MACRO_ADDR;
+extern float D_L18_0015F580_macro[] __asm__("D_L18_0015F580") MACRO_ADDR;
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_linked_moby_group_transform_and_fall.h"
 extern unsigned char *D_L18_0015FFD8;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
@@ -655,7 +655,7 @@ void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
                     debris_spawn_position[2] = 15.0f;
                     fast_vec_add(debris_spawn_position, debris_spawn_position, &hero.motion.pos);
                     debris_spawn_frames = scale_game_frames(240);
-                    spawn_debris_chunk(debris_spawn_position, D_L18_0015F580_c, 0x2B8, debris_spawn_frames, group_transform_debris_scale_multiplier_gp, 2.0f, 1.0f,
+                    spawn_debris_chunk(debris_spawn_position, D_L18_0015F580_macro, 0x2B8, debris_spawn_frames, group_transform_debris_scale_multiplier_gp, 2.0f, 1.0f,
                                      0.75f, 0);
                 }
             }
@@ -3601,7 +3601,7 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4;
 extern int game_frame __asm__("D_L18_0015F5CC");
 extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
-extern int D_L18_00162384_w[] __asm__("D_L18_00162384") MACRO_ADDR;
+extern int D_L18_00162384_macro[] __asm__("D_L18_00162384") MACRO_ADDR;
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 
 void update_moby_scene_visibility_and_height_reflection(M *moby) __asm__("FUN_L18_002f7ad8");
@@ -3625,7 +3625,7 @@ void update_moby_scene_visibility_and_height_reflection(M *moby) {
         }
         break;
     case MOBY_WAIT_FOR_SCENE_END:
-        if (D_L18_00162384_w[7] != 0 && moby->f40 == 0.0f) {
+        if (D_L18_00162384_macro[7] != 0 && moby->f40 == 0.0f) {
             float height_reflection_delta = 101.6f - moby->f18;
             moby->f40 = fast_add_rotations(moby->f40, 3.14159274f);
             moby->f18 += height_reflection_delta + height_reflection_delta;

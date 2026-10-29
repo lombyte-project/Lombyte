@@ -255,7 +255,7 @@ typedef struct {
 } Varsd3e50;
 
 extern float D_0015ED6C;
-extern struct Moby *D_L02_0015FFD8_e50 __asm__("D_L02_0015FFD8") MACRO_ADDR;
+extern struct Moby *D_L02_0015FFD8_macro __asm__("D_L02_0015FFD8") MACRO_ADDR;
 extern int D_L02_0015F5CC_e50 __asm__("D_L02_0015F5CC");
 extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern int *D_L02_001B0AB0_e50[] __asm__("D_L02_001B0AB0");
@@ -424,7 +424,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     case SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE:
-        if (((struct Moby *)((char *)D_L02_0015FFD8_e50 + (vars->unk258 << 8)))->state >= 5 && camera_secondary_mode != 0x72) {
+        if (((struct Moby *)((char *)D_L02_0015FFD8_macro + (vars->unk258 << 8)))->state >= 5 && camera_secondary_mode != 0x72) {
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
             moby->collision = moby->pclass->collision;
             vars->unk258 = -1;
@@ -783,7 +783,7 @@ void sand_shark_update(struct Moby *moby) {
             in = is_point_inside_clip_volume(&hero.motion.pos, vars->unk270) != 0;
         }
         if (in) {
-            struct Moby *dest = &D_L02_0015FFD8_e50[vars->unk28C];
+            struct Moby *dest = &D_L02_0015FFD8_macro[vars->unk28C];
             float dz = dest->pos.z - vars->home.f[2];
             float up = random_float_between(6.0f, 10.0f) * D_0015ED6C;
             float flight_duration = (square_root(2.0f * (frame_time_sq * 10.8f) * dz) + 2.0f * up) / (frame_time_sq * 10.8f);
@@ -2219,7 +2219,7 @@ typedef struct {
     int i150;
 } Spawnercb38;
 
-extern unsigned short D_0014D590_cb38[][64][2] __asm__("D_0014D590") NOT_SDA;
+extern unsigned short D_0014D590_lui[][64][2] __asm__("D_0014D590") NOT_SDA;
 extern int D_0014EE90[];
 extern int D_L02_0015FFD8;
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -2260,7 +2260,7 @@ void sand_shark_nest_update(unsigned char *moby) {
     }
     switch (moby[0x20]) {
     case SAND_SHARK_NEST_INITIALIZE:
-        *(short *)(moby + 0xB4) -= D_0014D590_cb38[2][moby[0xB1]][1];
+        *(short *)(moby + 0xB4) -= D_0014D590_lui[2][moby[0xB1]][1];
         if (*(short *)(moby + 0xB4) <= 0) {
             *(short *)(moby + 0xB4) = 1;
         }

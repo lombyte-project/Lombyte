@@ -987,7 +987,7 @@ typedef struct {
     f32 pos[4] __attribute__((aligned(16)));
     E_273448 e;
 } P_273448;
-extern u8 *tab_273448 __asm__("D_L00_001B2174") NOT_SDA;
+extern u8 *D_L00_001B2174_lui __asm__("D_L00_001B2174") NOT_SDA;
 extern float g_debug_camera[4] __asm__("D_L00_00166DC0") NOT_SDA;
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -1022,7 +1022,7 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
     }
     e->unk8 += frame_scale * 0.001f;
     particle->b8 = truncate_float_to_s32(e->unk8 * 255.0f);
-    particle->b2 = tab_273448[e->hC];
+    particle->b2 = D_L00_001B2174_lui[e->hC];
     if (particle->unkC <= 159600.0f || 0.0f < e->unk10) {
         f32 *alpha_fraction_ptr = &e->unk4;
         *alpha_fraction_ptr += alpha_fraction_ptr[3];

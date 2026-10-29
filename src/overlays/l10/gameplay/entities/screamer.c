@@ -63,7 +63,7 @@ typedef struct D_2E0630 {
     char sound_state[4];
 } D_2E0630;
 
-extern char *D_L10_0015FFD0_g[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
+extern char *D_L10_0015FFD0_macro[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
@@ -229,7 +229,7 @@ void screamer_update(Moby *moby) {
             D_0015ED70 * 25.132742f, D_0015ED70 * 25.132742f, D_0015ED6C * 50.265484f);
         if ((moby->anim_flags & 2) == 0) break;
         {
-            char *linked = D_L10_0015FFD0_g[2] + (data->linked[func_001FA898_2E0630(D_L10_001B0C30_2E0630[data->path]->nodes[data->node_index - 1].w) - 1] << 8);
+            char *linked = D_L10_0015FFD0_macro[2] + (data->linked[func_001FA898_2E0630(D_L10_001B0C30_2E0630[data->path]->nodes[data->node_index - 1].w) - 1] << 8);
             if (linked != 0) func_L10_002E14F8_2E0630(linked);
         }
         if (data->node_index == D_L10_001B0C30_2E0630[data->path]->count) {
@@ -2781,7 +2781,7 @@ extern f32 directional_particle_speed_range_end_gp __asm__("D_L10_00161EF8") __a
 extern f32 directional_particle_speed_range_start_gp __asm__("D_L10_00161EFC") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/emit_moby_directional_particles.h"
 extern s32 directional_particle_variant_threshold_percent_gp __asm__("D_L10_00161F04") __attribute__((sda));
-extern f32 frame_time_absolute_4a88 __asm__("D_L10_0015ED6C") MACRO_ADDR;
+extern f32 frame_time_absolute __asm__("D_L10_0015ED6C") MACRO_ADDR;
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_L10_001f2578");
 extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
@@ -2833,7 +2833,7 @@ void emit_moby_directional_particles(struct Moby *moby) {
             radius = x;
             if (radius < y) radius = y;
             if (radius < z) radius = z;
-            build_spherical_offset(velocity.f, radius * frame_time_absolute_4a88, moby->rot.z,
+            build_spherical_offset(velocity.f, radius * frame_time_absolute, moby->rot.z,
                                    -moby->rot.y);
 
             if (variant) {

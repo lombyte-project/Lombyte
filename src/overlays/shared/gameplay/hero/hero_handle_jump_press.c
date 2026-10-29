@@ -153,8 +153,8 @@ void update_hero_locomotion_state(void) {
         }
     }
 }
-extern s32 D_0013CAE0_229660 __asm__("D_0013CAE0") NOT_SDA;
-extern u8 D_0013D4C2_229660 __asm__("D_0013D4C2") NOT_SDA;
+extern s32 pad_held_lui __asm__("D_0013CAE0") NOT_SDA;
+extern u8 D_0013D4C2_lui __asm__("D_0013D4C2") NOT_SDA;
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
 extern int check_pad_press_separation(int, void *, int, int) __asm__("FUN_L00_00266e00");
@@ -173,7 +173,7 @@ int hero_handle_jump_press(void) {
         return 0;
     input_history_separation_limit = get_hero_high_jump_input_window_frames();
     input_history_window_padding = FUN_001f96f8_229660(5);
-    if ((D_0013CAE0_229660 & 0xA) && input_history_separation_limit > 0 &&
+    if ((pad_held_lui & 0xA) && input_history_separation_limit > 0 &&
         check_pad_press_separation(0x40, (void *)0x1F000, input_history_window_padding + input_history_separation_limit, input_history_separation_limit)) {
         next_state = 0xB;
     found:
@@ -184,7 +184,7 @@ int hero_handle_jump_press(void) {
     if (FUN_001f96f8_229660(6) < hero.state_timer) {
         if (!FUN_L00_00266d60_229660(0x40, jump_press_history_limit, 0))
             return 0;
-        if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_229660 != 0 && hero.pack_disabled == 0) {
+        if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_lui != 0 && hero.pack_disabled == 0) {
             if ((2.5f < hero.wall_probe_distance || hero.wall_normal_pitch < 0.7853982f) && 0.7f < hero.stick_magnitude &&
                 frame_time * 0.9f < hero.motion.forward_speed) {
                 next_state = 0xA;
@@ -202,7 +202,7 @@ int hero_handle_jump_press(void) {
             next_state = 0xD;
             goto found;
         }
-        if (FUN_L00_0020d498_229660(3) == 2 && hero.pack_disabled == 0 && D_0013D4C2_229660) {
+        if (FUN_L00_0020d498_229660(3) == 2 && hero.pack_disabled == 0 && D_0013D4C2_lui) {
             next_state = 0xF;
             goto found;
         }
@@ -218,7 +218,7 @@ typedef union {
     u128_229910_00229910 q_00229910;
     float f[4];
 } V_229910_00229910;
-extern float D_L00_00173E68_00229910 __asm__("D_L00_00173E68") NOT_SDA;
+extern float D_L00_00173E68_lui __asm__("D_L00_00173E68") NOT_SDA;
 extern int FUN_001f96f8_00229910(int) __asm__("FUN_001f96f8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -242,7 +242,7 @@ int check_hero_forward_collision_height(void) {
     collision_line_start.f[2] += 0.47f;
     collision_line_end.f[2] -= 1.0f;
     if (collision_line(&collision_line_start, &collision_line_end, 2, ((void *)hero_ptr->moby), 0)) {
-        height_delta = D_L00_00173E68_00229910 - hero_ptr->motion.pos.f[2];
+        height_delta = D_L00_00173E68_lui - hero_ptr->motion.pos.f[2];
         if (height_delta < 0.37f && -1.0f < height_delta)
             return 1;
     }

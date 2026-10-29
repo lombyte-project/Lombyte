@@ -187,7 +187,7 @@ typedef struct {
     s32 v;
     u8 pad3[0x90 - 0x80];
 } T_235e18;
-extern T_235e18 D_L00_0017DC50_235e18[] __asm__("D_L00_0017DC50") NOT_SDA;
+extern T_235e18 D_L00_0017DC50_lui[] __asm__("D_L00_0017DC50") NOT_SDA;
 s32 hud_keep_visible(s32 key, s32 val) __asm__("FUN_L00_00235e18");
 s32 hud_keep_visible(s32 key, s32 val) {
     s32 i;
@@ -195,11 +195,11 @@ s32 hud_keep_visible(s32 key, s32 val) {
     T_235e18 *hud_element;
     r = 1;
     for (i = 0; i < 13; i++) {
-        if (D_L00_0017DC50_235e18[i].key == key)
+        if (D_L00_0017DC50_lui[i].key == key)
             break;
     }
-    if (i < 13 && D_L00_0017DC50_235e18[i].f68 == 0) {
-        hud_element = D_L00_0017DC50_235e18 + i;
+    if (i < 13 && D_L00_0017DC50_lui[i].f68 == 0) {
+        hud_element = D_L00_0017DC50_lui + i;
         hud_element->v = (val < hud_element->v) ? hud_element->v : val;
         return 0;
     }

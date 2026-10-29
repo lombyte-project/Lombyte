@@ -117,7 +117,7 @@ extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern char D_L08_001746D8_2B94B0[] __asm__("D_L08_00174658");
-extern int D_L08_001746D8_2B94B0i __asm__("D_L08_00174658") NOT_SDA;
+extern int D_L08_00174658_lui __asm__("D_L08_00174658") NOT_SDA;
 extern char D_L08_00174700_2B94B0[] __asm__("D_L08_00174680");
 extern s32 level_bolts[] __asm__("D_0013DF38");
 
@@ -161,7 +161,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
         if (D_L08_0015F5CC % 2 == (((char *)moby - D_L08_0015FFD8) >> 8) % 2
             && func_L00_001F39B0_2B94B0(B, C, 2, 0, 0) != 0) {
             ok = 1;
-            if (D_L08_001746D8_2B94B0i == 0 || moby_data->ticks >= 10) {
+            if (D_L08_00174658_lui == 0 || moby_data->ticks >= 10) {
                 if (f20 < bolt_pickup_collision_stop_speed_threshold_gp) {
                     ok = 0;
                 } else {
@@ -335,7 +335,7 @@ void update_bomb(char *moby) {
     bomb_vars = *(char **)(moby + 0x78);
     if (*(unsigned char *)(moby + 0x20) != 0x37) {
         if (coll_sphere(0.5f, moby + 0x10, 0x11, moby)) {
-            int sphere_hit_moby = D_L08_001746D8_2B94B0i;
+            int sphere_hit_moby = D_L08_00174658_lui;
             if (sphere_hit_moby != 0 && (sphere_hit_moby != *(int *)(bomb_vars + 0x30) || *(int *)(bomb_vars + 0x24) != 0)) {
                 if (!(*(unsigned char *)(moby + 0xBC) & 2)) *(unsigned char *)(moby + 0x20) = 0x62; else *(unsigned char *)(moby + 0x20) = 0x63;
                 qcopy((moby + 0x10), ((char *)D_L08_00174660));

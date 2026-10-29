@@ -238,14 +238,14 @@ typedef struct {
     char p1[0x180 - 0x15C];
     char *c;
 } C_2a4e48;
-extern C_2a4e48 D_166C80_2a4e48 __asm__("D_L00_00166C80") NOT_SDA;
+extern C_2a4e48 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern float frame_time __asm__("D_0015ED6C");
 
 void camera_object_update(char *o) __asm__("FUN_L00_002a4e48");
 void camera_object_update(char *camera_object) {
     OvlQuad difference_vector[1];
     OvlQuad scaled_vector[1];
-    C_2a4e48 *C = &D_166C80_2a4e48;
+    C_2a4e48 *C = &D_L00_00166C80_lui;
     char *object_position;
     char *pos;
     G_2a4e48 *P;
@@ -331,7 +331,7 @@ void draw_vendor_effects(char *m) {
     register float *d0_arg __asm__("$5");
     int k, i, i0, i1, i2, i3, col;
 
-    h = (char *)&D_166C80_2a4e48;
+    h = (char *)&D_L00_00166C80_lui;
     d0[2] = *(float *)(h + 0x158);
     d0[0] = 0.0f;
     d0[1] = 0.0f;
@@ -427,7 +427,7 @@ void draw_vendor_effects(char *m) {
         M[3].q = T[3].q;
     }
 
-    g = (char *)&D_166C80_2a4e48;
+    g = (char *)&D_L00_00166C80_lui;
     off = *(float *)(g + 0x158);
     d0[0] = 0.0f;
     d0[2] = off;
@@ -533,7 +533,7 @@ typedef struct {
     u8 b20A4;
 } G_2a57a8;
 extern V_2a57a8 hero_pos __asm__("D_0013F3D0") NOT_SDA;
-extern s32 D_0013CAE4_2a57a8 __asm__("D_0013CAE4") NOT_SDA;
+extern s32 D_0013CAE4_lui __asm__("D_0013CAE4") NOT_SDA;
 extern s32 D_L00_0015F5CC_2a57a8 __asm__("D_L00_0015F5CC");
 f32 fast_sin(f32) __asm__("FUN_001f9de0");
 M_2a57a8 *FUN_0020c4f8_2a57a8(s32) __asm__("FUN_0020c4f8");
@@ -656,7 +656,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         help_message_succeeded = 0;
         if (help_message_allowed)
             help_message_succeeded = try_set_help_message(1, 0x53E3) != 0;
-        if ((D_0013CAE4_2a57a8 & 0x10) && interaction_allowed && help_message_succeeded) {
+        if ((D_0013CAE4_lui & 0x10) && interaction_allowed && help_message_succeeded) {
             open_vendor_menu(vendor_moby);
             vendor_moby->b20 = 3;
         }
@@ -1602,7 +1602,7 @@ void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A9030), where it is exact; names translated to the US level program. */
 
 extern char *FUN_002141f8_002a7d90(void *) __asm__("FUN_002141f8");
-extern void *D_L00_00173E58_002a7d90 __asm__("D_L00_00173E58") NOT_SDA;
+extern void *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 
 /* True when the record for D_L00_00173E58 (suck_get_aim_height) has byte 9 equal to 1. */
 int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
@@ -1610,8 +1610,8 @@ int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
 int get_wrench_hit_sound_variant(void) {
     int record_byte_9_is_one = 0;
     char *x = 0;
-    if (D_L00_00173E58_002a7d90 != 0)
-        x = FUN_002141f8_002a7d90(D_L00_00173E58_002a7d90);
+    if (D_L00_00173E58_lui != 0)
+        x = FUN_002141f8_002a7d90(D_L00_00173E58_lui);
     if (x != 0)
         record_byte_9_is_one = *(unsigned char *)(x + 9) == 1;
     return record_byte_9_is_one;
@@ -1663,8 +1663,8 @@ typedef union {
     u128 q;
     f32 f[4];
 } V2a8028;
-extern V2a8028 D_L00_00173E60_2a8028 __asm__("D_L00_00173E60") NOT_SDA;
-extern f32 D_L00_00173E40_2a8028[] __asm__("D_L00_00173E40") NOT_SDA;
+extern V2a8028 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
+extern f32 D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -1683,27 +1683,27 @@ void spawn_wrench_impact_effects(u8 *wrench_moby) {
     f32 randomized_direction_angle;
     s32 i;
     s32 random_frame_lower_bound;
-    fast_vec_sub(&effect_direction_scratch, &g_debug_camera, &D_L00_00173E60_2a8028);
+    fast_vec_sub(&effect_direction_scratch, &g_debug_camera, &D_L00_00173E60_lui);
     pitch = -fast_arc_tan(vector_length_xy(&effect_direction_scratch), effect_direction_scratch.f[2]);
     fast_arc_tan(effect_direction_scratch.f[0], effect_direction_scratch.f[1]);
     for (i = 19; i >= 0; i--) {
         randomized_direction_angle = fast_add_rotations(randf_sym(0.0f, 3.1415927f), pitch);
         build_spherical_offset(&effect_direction_scratch, 0.2f, fast_add_rotations(randf_sym(0.0f, 3.1415927f), pitch), randomized_direction_angle);
         fast_vec_scale(&effect_spawn_position, &effect_direction_scratch, random_float_between(1.0f, 3.0f));
-        fast_vec_add(&effect_spawn_position, &effect_spawn_position, &D_L00_00173E60_2a8028);
+        fast_vec_add(&effect_spawn_position, &effect_spawn_position, &D_L00_00173E60_lui);
         spawn_two_point_effect_particle(&effect_spawn_position, &effect_direction_scratch);
     }
     for (i = 9; i >= 0; i--) {
-        effect_spawn_position.f[0] = D_L00_00173E40_2a8028[8] + randf_sym(0.0f, 0.1f);
-        effect_spawn_position.f[1] = D_L00_00173E40_2a8028[9] + randf_sym(0.0f, 0.1f);
-        effect_spawn_position.f[2] = D_L00_00173E40_2a8028[10] + randf_sym(0.0f, 0.1f);
+        effect_spawn_position.f[0] = D_L00_00173E40_lui[8] + randf_sym(0.0f, 0.1f);
+        effect_spawn_position.f[1] = D_L00_00173E40_lui[9] + randf_sym(0.0f, 0.1f);
+        effect_spawn_position.f[2] = D_L00_00173E40_lui[10] + randf_sym(0.0f, 0.1f);
         randomized_direction_angle = fast_add_rotations(randf_sym(0.0f, 3.1415927f), pitch);
         build_spherical_offset(&effect_direction_scratch, 0.05f, fast_add_rotations(randf_sym(0.0f, 3.1415927f), pitch), randomized_direction_angle);
         random_frame_lower_bound = scale_game_frames(10);
         spawn_burst(&effect_spawn_position, &effect_direction_scratch, 0x4F007FFF, 0x1FFFFFFF, random_int_between(random_frame_lower_bound, scale_game_frames(20)), 1, 20000.0f);
     }
     if (*(s16 *)(*(u8 **)(wrench_moby + 0x78) + 0x78) == 0x2B) {
-        FUN_L00_002a7e20_c(&D_L00_00173E60_2a8028, 10);
+        FUN_L00_002a7e20_c(&D_L00_00173E60_lui, 10);
     }
 }
 typedef struct N_2a82c0 {

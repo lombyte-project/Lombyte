@@ -201,7 +201,7 @@ typedef struct {
     s16 id;
 } BurstMoby;
 
-extern s32 D_0015ED84_e[] __asm__("D_0015ED80") MACRO_ADDR;
+extern s32 pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
 typedef struct {
     u8 pad0[0x454];
@@ -249,7 +249,7 @@ void bridge_piece_1_update(BurstMoby *self) {
             FUN_L01_002f8530(&pos, &debris_velocity, colors.c[random_integer_below(3)],
                              FUN_L00_00257b90(0xB4, 0x12C), 0.05f, 1.0f, 1.0f, 0.75f, 0);
         }
-        D_0014C190_257218[D_0015ED84_e[1]][self->id >> 5] |= 1 << (self->id & 0x1F);
+        D_0014C190_257218[pal_mode_macro[1]][self->id >> 5] |= 1 << (self->id & 0x1F);
         moby_killed[self->id >> 5] |= 1 << (self->id & 0x1F);
         mark_moby_for_removal(self);
     } else {

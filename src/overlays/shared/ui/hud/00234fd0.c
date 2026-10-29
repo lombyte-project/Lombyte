@@ -15,7 +15,7 @@ typedef struct {
     char pad[0x18];
     T_234fd0 *t;
 } G_234fd0;
-extern G_234fd0 D_L00_0017E4D8_234fd0 __asm__("D_L00_0017E4D8") NOT_SDA;
+extern G_234fd0 D_L00_0017E4D8_lui __asm__("D_L00_0017E4D8") NOT_SDA;
 void FUN_00232f20_234fd0(void *, void *, int, int, int) __asm__("FUN_00232f20");
 void FUN_L00_0024d8d0_234fd0(void *, int) __asm__("FUN_L00_0024d8d0");
 void FUN_001fefc0_234fd0(int, int) __asm__("FUN_001fefc0");
@@ -26,7 +26,7 @@ extern int D_L00_0017E520 NOT_SDA;
 void decompress_and_relocate_selected_groups(int mode) __asm__("FUN_L00_00234fd0");
 
 void decompress_and_relocate_selected_groups(int mode) {
-    G_234fd0 *decompression_slot_state = &D_L00_0017E4D8_234fd0;
+    G_234fd0 *decompression_slot_state = &D_L00_0017E4D8_lui;
     int decompression_destination = D_L00_001B9CF0.unk104;
     void *compressed_data_buffer = (void *)D_L00_001B9CF0.unk10;
     {
@@ -59,7 +59,7 @@ void decompress_and_relocate_selected_groups(int mode) {
         }
     }
     if ((unsigned)(mode - 1) < 2) {
-        G_234fd0 *group_4_decompression_state = &D_L00_0017E4D8_234fd0;
+        G_234fd0 *group_4_decompression_state = &D_L00_0017E4D8_lui;
         if (group_4_decompression_state->t->sz[5]) {
             FUN_00232f20_234fd0(compressed_data_buffer, group_4_decompression_state->t->p[5], 0, D_L00_0017E520 / 16, 0);
             FUN_L00_0024d8d0_234fd0(compressed_data_buffer, decompression_destination);

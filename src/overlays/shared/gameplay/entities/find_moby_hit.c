@@ -127,26 +127,26 @@ typedef struct {
     char pad[0x14];
     int idx;
 } G_259a88;
-extern G_259a88 D_L00_00173E40_259a88 __asm__("D_L00_00173E40") NOT_SDA;
-extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") NOT_SDA;
+extern G_259a88 D_L00_00173E40_lui __asm__("D_L00_00173E40") NOT_SDA;
+extern T_259a88 D_L00_00178100_lui[] __asm__("D_L00_00178100") NOT_SDA;
 void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
 void record_moby_hit(unsigned char *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
 void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
     L_259a88 hit_descriptor_copy;
-    int i = D_L00_00173E40_259a88.idx;
+    int i = D_L00_00173E40_lui.idx;
     T_259a88 *hit_record;
     ((u128_259a88 *)&hit_descriptor_copy)[0] = ((u128_259a88 *)hit_descriptor)[0];
     ((u128_259a88 *)&hit_descriptor_copy)[1] = ((u128_259a88 *)hit_descriptor)[1];
     ((u128_259a88 *)&hit_descriptor_copy)[2] = ((u128_259a88 *)hit_descriptor)[2];
     hit_descriptor = &hit_descriptor_copy;
     if (owner_moby[0xA4] != 0xFF) {
-        T_259a88 *existing_hit = &D_L00_00178100_259a88[owner_moby[0xA4]];
+        T_259a88 *existing_hit = &D_L00_00178100_lui[owner_moby[0xA4]];
         if (existing_hit->owner == owner_moby && hit_descriptor_copy.f < existing_hit->f)
             return;
     }
-    hit_record = &D_L00_00178100_259a88[i];
+    hit_record = &D_L00_00178100_lui[i];
     FUN_001f99f8_259a88(hit_record);
-    qcopy(&D_L00_00178100_259a88[i].b, &hit_descriptor->v);
+    qcopy(&D_L00_00178100_lui[i].b, &hit_descriptor->v);
     hit_record->x = hit_descriptor->x;
     hit_record->y = hit_descriptor->y;
     hit_record->b0 = hit_descriptor->b0;
@@ -157,7 +157,7 @@ void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
     hit_record->owner = owner_moby;
     hit_record->z = 0;
     owner_moby[0xA4] = i;
-    D_L00_00173E40_259a88.idx = (i + 1) & 0x3F;
+    D_L00_00173E40_lui.idx = (i + 1) & 0x3F;
 }
 #include "eetypes.h"
 typedef struct {
@@ -260,7 +260,7 @@ typedef struct {
     u128 b;
 } E_259fe8_00259fe8;
 extern int D_L00_0015F434 __asm__("D_L00_0015F434");
-extern u128 D_L00_00173E80_00259fe8 __asm__("D_L00_00173E80") NOT_SDA;
+extern u128 D_L00_00173E80_lui __asm__("D_L00_00173E80") NOT_SDA;
 extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
 extern int FUN_001f0b58_00259fe8(void) __asm__("FUN_001f0b58");
 extern float FUN_001f99c0_00259fe8(float) __asm__("FUN_001f99c0");
@@ -278,7 +278,7 @@ void jet_animate(unsigned char *moby, float output_scale) {
     if (FUN_001f0b58_00259fe8() == 0)
         return;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = ground_height + 0.025f;
-    qcopy(&D_L00_0016E080[D_L00_0015F434].b, &D_L00_00173E80_00259fe8);
+    qcopy(&D_L00_0016E080[D_L00_0015F434].b, &D_L00_00173E80_lui);
     y = (8.0f - FUN_001f99c0_00259fe8(*(float *)(moby + 0x18) - ground_height)) * 0.125f;
     if (y < 0.25f)
         y = 0.25f;

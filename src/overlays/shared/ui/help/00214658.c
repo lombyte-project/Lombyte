@@ -285,9 +285,9 @@ typedef struct {
     u8 p3[0x1240 - 0x119C];
     f32 f1240;
 } X_215b68;
-extern X_215b68 D_L00_0017A680_215b68 __asm__("D_L00_0017A680") NOT_SDA;
+extern X_215b68 D_L00_0017A680_lui __asm__("D_L00_0017A680") NOT_SDA;
 extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
-#define X D_L00_0017A680_215b68
+#define X D_L00_0017A680_lui
 
 void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 
@@ -884,8 +884,8 @@ void update_hero_delayed_voice_requests(void) {
 typedef struct {
     float f[4];
 } __attribute__((aligned(16))) Vec4_00216f90;
-extern int D_L00_00167014_00216f90 __asm__("D_L00_00167014") NOT_SDA;
-extern int D_001413D0_00216f90 __asm__("D_001413D0") NOT_SDA;
+extern int D_L00_00167014_lui __asm__("D_L00_00167014") NOT_SDA;
+extern int D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa030_00216f90(void *, void *) __asm__("FUN_001fa030");
 void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
@@ -935,13 +935,13 @@ void FUN_L00_00216f90(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_eu
     set_hero_animation_sequence_and_frame(*(unsigned char *)(*(char **)(hero_base + 0x2080) + 0x53),
                               *(unsigned char *)(*(char **)(hero_base + 0x2080) + 0x51));
     if (*(int *)(hero_base + 0x208C) == 0x11)
-        D_L00_00167014_00216f90 = 1;
+        D_L00_00167014_lui = 1;
     else
-        D_L00_00167014_00216f90 = 0;
+        D_L00_00167014_lui = 0;
     update_hero_ground_contact_and_surface_slopes();
     if (flag)
         FUN_L00_001ed280_00216f90();
-    apply_nearest_environment_sample(D_001413D0_00216f90);
+    apply_nearest_environment_sample(D_001413D0_lui);
 }
 extern unsigned char D_0013F350_217118[] __asm__("D_0013F350");
 extern unsigned char coll_hit[] __asm__("D_L00_00173E40")

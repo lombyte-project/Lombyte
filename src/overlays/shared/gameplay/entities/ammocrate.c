@@ -136,7 +136,7 @@ void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, fl
 
 extern float frame_time __asm__("D_0015ED6C");
 extern struct Moby *moby_base __asm__("D_L13_0015FFD8");
-extern int D_L13_00174158_1cc8 __asm__("D_L13_00174158") NOT_SDA;
+extern int D_L13_00174158_lui __asm__("D_L13_00174158") NOT_SDA;
 
 extern int timer_expired_1cc8(void *) __asm__("FUN_001f9740");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -221,8 +221,8 @@ void ammocrate_update(char *moby) {
         if (1003.0f < *(float *)(moby + 0x18)) *(float *)(moby + 0x18) = 1003.0f;
         moby_point_position(moby, 0, position);
         *(float *)(moby + 0x2c) += (*(float *)(*(char **)(moby + 0x24) + 0x24) - *(float *)(moby + 0x2c)) * 0.1f;
-        if (coll_sphere(2.0f, position, 1, moby) && D_L13_00174158_1cc8 != 0) {
-            short moby_class = *(short *)(D_L13_00174158_1cc8 + 0xa6);
+        if (coll_sphere(2.0f, position, 1, moby) && D_L13_00174158_lui != 0) {
+            short moby_class = *(short *)(D_L13_00174158_lui + 0xa6);
             if (moby_class == 0x4da || moby_class == 0x45 || moby_class == 0x563) hit = 1;
         }
         if (hero.state.current == 0x32 && hero_moby != 0 &&

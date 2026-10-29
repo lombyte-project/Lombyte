@@ -993,7 +993,7 @@ typedef struct {
 } AnklebiterHit_e3528;
 
 extern f32 D_0015ED6C_e3528 __asm__("D_0015ED6C");
-extern s32 D_001413D0_e3528 __asm__("D_001413D0") NOT_SDA;
+extern s32 D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -1040,7 +1040,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
             help_direction_or_hit_position.f[0] = fast_cos(fast_add_rotations(moby->rot.z, 3.1415927f));
             help_direction_or_hit_position.f[1] = fast_sin(fast_add_rotations(moby->rot.z, 3.1415927f));
             help_direction_or_hit_position.f[2] = 0.0f;
-            call_for_help_e3528(moby, D_001413D0_e3528, 0x10000, &moby->pos, help_direction_or_hit_position.f, 1.0f);
+            call_for_help_e3528(moby, D_001413D0_lui, 0x10000, &moby->pos, help_direction_or_hit_position.f, 1.0f);
         }
     }
     coll = find_hit_e3528(moby, 0x330000, 0);
@@ -2897,7 +2897,7 @@ typedef struct {
     int hidden;
 } L12WatchGlobals;
 
-extern L12WatchGlobals D_0013D5B0_b570 __asm__("D_0013D5B0") NOT_SDA;
+extern L12WatchGlobals D_0013D5B0_lui __asm__("D_0013D5B0") NOT_SDA;
 extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern float D_0015ED64_b570 __asm__("D_0015ED64");
 extern void attach_shared_manipulator_to_matching_class_moby(void *) __asm__("FUN_L03_002db480");
@@ -2917,7 +2917,7 @@ void edwina_update(L16WatchMoby *moby) {
     float head_rate;
     int tracking;
     attach_shared_manipulator_to_matching_class_moby(moby);
-    if (D_0013D5B0_b570.hidden == 0) {
+    if (D_0013D5B0_lui.hidden == 0) {
         if (moby->animation != 1)
             blend_moby_animation_b570(moby, 1, 0, 2);
     } else if (moby->animation != 0) {
@@ -2998,7 +2998,7 @@ void edwina_update(L16WatchMoby *moby) {
             qcopy(scratch.target, moby_data->target);
         }
     }
-    if (D_0013D5B0_b570.hidden == 0) {
+    if (D_0013D5B0_lui.hidden == 0) {
         if (moby_data->turret == 0) {
             char *o = func_0020D348_m_x(0x4C1);
             moby_data->turret = o;

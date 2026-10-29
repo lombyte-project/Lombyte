@@ -184,7 +184,7 @@ typedef struct {
 int D_L14_00161A3C = 0x8c;
 #include "rnc/overlay/l14/gameplay/entities/platform_data/update_racer_path_and_weapon.h"
 extern char D_L14_001809C0[];
-extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") MACRO_ADDR;
+extern char D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void spring_67e8(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -375,7 +375,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
             char *muzzle = moby_data + 0xD0;
             fast_vec_scale(&ray, moby_data + 0xA0, muzzle_flash_joint_axis_offset);
             fast_vec_add(&ray, &ray, muzzle);
-            muzzle_flash_particle = FUN_L00_00274948_c(&ray, D_L14_0015F580_67e8, 0x7F, racer_moby);
+            muzzle_flash_particle = FUN_L00_00274948_c(&ray, D_L14_0015F580_macro, 0x7F, racer_moby);
             if (muzzle_flash_particle != 0) {
                 char *muzzle_flash_particle_state = muzzle_flash_particle + 0x20;
                 int lifetime_frames;

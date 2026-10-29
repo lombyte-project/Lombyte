@@ -116,7 +116,7 @@ typedef struct {
 } R_297f78;
 extern S_297f78 D_L00_0016C058;
 extern C_297f78 D_0013C940_c __asm__("D_0013C940");
-extern s32 D_L00_0015F5C0_m[] __asm__("D_L00_0015F5C0") MACRO_ADDR;
+extern s32 D_L00_0015F5C0_macro[] __asm__("D_L00_0015F5C0") MACRO_ADDR;
 extern s32 level_timer __asm__("D_L00_0015F5C8");
 extern s32 game_frame __asm__("D_L00_0015F5CC");
 extern s32 D_L00_001B9DE0 NOT_SDA;
@@ -176,7 +176,7 @@ void handle_pause_input(void) {
         D_0013C940_c.w1A8 = ~D_0013C940_c.w1A0 & D_L00_0016C058.wA0;
         D_L00_0016C058.wA0 = D_0013C940_c.w1A0 & ~0x200;
     }
-    lvl = D_L00_0015F5C0_m[1];
+    lvl = D_L00_0015F5C0_macro[1];
     if (lvl == 0 && (mode_freeze_flags & 1) && level_timer >= 8) {
         mode_freeze_init(3, 0);
         return;
@@ -333,12 +333,12 @@ typedef struct {
     char pad20a6[0x202];
     int x22a8;
 } P_298840;
-extern C_298840 D_L00_0016C860_298840 __asm__("D_L00_0016C860") NOT_SDA;
+extern C_298840 D_L00_0016C860_lui __asm__("D_L00_0016C860") NOT_SDA;
 extern int D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
-extern char D_L00_0017C340_298840[] __asm__("D_L00_0017C340") NOT_SDA;
+extern char D_L00_0017C340_lui[] __asm__("D_L00_0017C340") NOT_SDA;
 extern char D_L00_0017C380_lui[] __asm__("D_L00_0017C380") NOT_SDA;
-extern char D_L00_0017C400_298840[] __asm__("D_L00_0017C400") NOT_SDA;
-extern char D_L00_0017C3C0_298840[] __asm__("D_L00_0017C3C0") NOT_SDA;
+extern char D_L00_0017C400_lui[] __asm__("D_L00_0017C400") NOT_SDA;
+extern char D_L00_0017C3C0_lui[] __asm__("D_L00_0017C3C0") NOT_SDA;
 extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_298840 __asm__("D_L00_00173E00") __attribute__((section(".data")));
@@ -374,24 +374,24 @@ void start_scene(int scene_id) {
     music_pause(0);
     update_audio_stream_until_idle(0);
     D_L00_0015F5D8 = 1;
-    fill_transfer_words(&D_L00_0016C860_298840, 0, 0x1C0);
+    fill_transfer_words(&D_L00_0016C860_lui, 0, 0x1C0);
     fill_transfer_words(D_L00_0017C440, 0, 0x40);
-    fill_transfer_words(D_L00_0017C340_298840, 0, 0x40);
+    fill_transfer_words(D_L00_0017C340_lui, 0, 0x40);
     fill_transfer_words(D_L00_0017C380_lui, 0, 0x40);
-    fill_transfer_words(D_L00_0017C400_298840, 0, 0x40);
-    fill_transfer_words(D_L00_0017C3C0_298840, 0, 0x40);
+    fill_transfer_words(D_L00_0017C400_lui, 0, 0x40);
+    fill_transfer_words(D_L00_0017C3C0_lui, 0, 0x40);
     scene_buffer_base = D_L00_001611CC - 0x3C000;
-    D_L00_0016C860_298840.x30 = scene_id;
+    D_L00_0016C860_lui.x30 = scene_id;
     D_L00_0015F59C = 1.0f;
     D_L00_0015F5A0_298840 = 0;
-    D_L00_0016C860_298840.x34 = 0;
-    D_L00_0016C860_298840.x3c = 0;
+    D_L00_0016C860_lui.x34 = 0;
+    D_L00_0016C860_lui.x3c = 0;
     D_L00_001611CC = scene_buffer_base;
-    D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + scene_buffer_base;
-    D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + scene_buffer_base;
+    D_L00_0016C860_lui.x58 = D_L00_00173E00_298840.x4 + scene_buffer_base;
+    D_L00_0016C860_lui.x5c = D_L00_00173E00_298840.x8 + scene_buffer_base;
     clear_active_help_record();
     fade_level = 1.0f;
-    D_L00_0015F5C0_m[1] = 2;
+    D_L00_0015F5C0_macro[1] = 2;
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
     hero.unk20A5 = 1;
@@ -408,15 +408,15 @@ void start_scene(int scene_id) {
         if (!(moby->st & 0x80) && (moby->type == 0x4A || moby->type == 0xCB))
             moby->flags |= 0x80;
     }
-    music_stream_state.queued_secondary_track = D_L00_0016C860_298840.x30;
+    music_stream_state.queued_secondary_track = D_L00_0016C860_lui.x30;
     while (music_stream_state.secondary.state != 3) {
         sound_update();
         f122298_298840(0);
     }
-    D_L00_0016C860_298840.x48 = -3;
+    D_L00_0016C860_lui.x48 = -3;
     f215b10_298840();
     FUN_L00_002451b8_c(1);
-    for (i = 0; D_L00_0016C860_298840.x48 < i; i--)
+    for (i = 0; D_L00_0016C860_lui.x48 < i; i--)
         f122298_298840(0);
 }
 typedef struct {
@@ -482,7 +482,7 @@ void finish_cutscene(void) {
     D_L00_0015F5D8 = 1;
     calculate_dma_transfer_address();
     fade_to_black(0xC);
-    D_L00_0015F5C0_m[1] = 0;
+    D_L00_0015F5C0_macro[1] = 0;
     D_L00_0016CAF0_lui = 0.63f;
     (*(int *)&fade_level) = 0;
     update_view_context();
@@ -534,7 +534,7 @@ typedef struct {
     char *p54;
 } H_298de8;
 extern H_298de8 D_L00_0016C860_298de8 __asm__("D_L00_0016C860") NOT_SDA;
-extern char D_L00_0016CA40_298de8[] __asm__("D_L00_0016CA40") NOT_SDA;
+extern char D_L00_0016CA40_lui[] __asm__("D_L00_0016CA40") NOT_SDA;
 extern unsigned char D_0015EDB0_298de8 __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB0_298de8b __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB4_298de8 __asm__("D_0015EDB4");
@@ -556,7 +556,7 @@ int apply_cutscene_camera_key(void) {
     char *camera_key = D_L00_0016C860_298de8.p54 + D_L00_0016C860_298de8.i38 * 32;
     float *camera_key_values = (float *)(camera_key + 0x10);
     int camera_key_flag = *(unsigned char *)(camera_key + 0xC);
-    char *x = D_L00_0016CA40_298de8;
+    char *x = D_L00_0016CA40_lui;
     char *camera_position;
     char *camera_state;
     float k;
@@ -919,7 +919,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
 }
 typedef struct { u8 pad[0x38]; s16 h38; } S_2997c8;
 typedef struct { u8 pad[0x6B]; u8 f; } M_2997c8;
-extern S_2997c8 D_001516D0_2997c8 __asm__("D_001516D0") NOT_SDA;
+extern S_2997c8 D_001516D0_lui __asm__("D_001516D0") NOT_SDA;
 extern s32 D_L00_0015F5C4_2997c8 __asm__("D_L00_0015F5C4");
 extern struct ActiveSceneTrigger active_scene_trigger_lui __asm__("D_L00_00179100") NOT_SDA;
 extern char D_0013E550[] NOT_SDA;
@@ -969,7 +969,7 @@ void movie_exit_to_gameplay(void) {
         decode_mode = 0;
     }
     fade_to_black(4);
-    music_start_track(D_001516D0_2997c8.h38, 1, 0x400);
+    music_start_track(D_001516D0_lui.h38, 1, 0x400);
     D_L00_0015F5C4_2997c8 = 0;
     active = &active_scene_trigger_lui;
     if (active->moby != 0) {
@@ -1076,7 +1076,7 @@ void end_slideshow(void) {
     vu1_sync_chain(1);
     fade_to_black(0xC);
     request_audio_stream_break();
-    D_L00_0015F5C0_m[1] = 0;
+    D_L00_0015F5C0_macro[1] = 0;
     D_L00_0015F5D8 = 1;
     D_L00_0015F3FC = 0;
     calculate_dma_transfer_address();
@@ -1168,8 +1168,8 @@ void update_slideshow(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/update_0029B6A0.c: func_L00_0029B6A0), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_00197300_d[] __asm__("D_L00_00197300") NOT_SDA;
-extern int D_L00_001CA4C0_d[] __asm__("D_L00_001CA4C0") NOT_SDA;
+extern char *D_L00_00197300_lui[] __asm__("D_L00_00197300") NOT_SDA;
+extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") NOT_SDA;
 extern void fast_decompress(int, int) __asm__("FUN_L00_0024d8d0");
 extern void FlushCache(s32);
 extern void relocate_asset_entry_pointers(char *arg0, int idx) __asm__("FUN_002032e0");
@@ -1182,16 +1182,16 @@ void decompress_and_relocate_vendor_moby_assets(void) {
     int *entry_offset_cursor;
     char *base;
     int compressed_source_address;
-    compressed_source_address = D_L00_001CA4C0_d[6] + 0x80000;
+    compressed_source_address = D_L00_001CA4C0_lui[6] + 0x80000;
     FlushCache(0);
-    fast_decompress(compressed_source_address, D_L00_001CA4C0_d[6]);
+    fast_decompress(compressed_source_address, D_L00_001CA4C0_lui[6]);
     FlushCache(0);
-    entry_offset_cursor = (int *)D_L00_001CA4C0_d[6];
-    base = D_L00_00197300_d[D_L00_00197BCC];
+    entry_offset_cursor = (int *)D_L00_001CA4C0_lui[6];
+    base = D_L00_00197300_lui[D_L00_00197BCC];
     for (i = 0; i < 16; i++) {
         int entry_offset = *entry_offset_cursor++;
         if (entry_offset) {
-            *(int *)(base + 0x48 + i * 4) = D_L00_001CA4C0_d[6] + entry_offset;
+            *(int *)(base + 0x48 + i * 4) = D_L00_001CA4C0_lui[6] + entry_offset;
             relocate_asset_entry_pointers(base, i);
         }
     }
@@ -1218,7 +1218,7 @@ extern VendorSound_29a400 vendor_sound[] __asm__("D_L00_001C2108") NOT_SDA;
 /* Stocked item ids (low 6 bits; bit 0x40 = listed as selected), 0xFF-terminated. */
 extern u8 D_0013D4C0[];
 
-extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") MACRO_ADDR;
+extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 /* Builds the vendor list: the stocked items (up to 12, 0xFF-terminated), then
    every other available item (D_0013D4C0 set, h8 non-zero) not already listed. */
 void build_vendor_menu_rows(s32 skip_unflagged) __asm__("FUN_L00_0029a400");
@@ -1226,12 +1226,12 @@ void build_vendor_menu_rows(s32 skip_unflagged) {
     s32 count, i, j, value, item, k;
 
     count = 0;
-    if (D_0015EDD0_257218[0] != 0xFF) {
-        do count++; while (count < 12 && D_0015EDD0_257218[count] != 0xFF);
+    if (D_0015EDD0_macro[0] != 0xFF) {
+        do count++; while (count < 12 && D_0015EDD0_macro[count] != 0xFF);
     }
     vendor_list.count = 0;
     for (i = 0; i < count; i++) {
-        value = D_0015EDD0_257218[i];
+        value = D_0015EDD0_macro[i];
         if (value == 0xFF) continue;
         item = value & 0x3F;
         if (value & 0x40) {
@@ -1627,16 +1627,16 @@ void start_vendor_exit_cutscene(void) {
     clear_u64_value((char *)vendor_state + 0xB0);
     *(f32 *)((char *)vendor_state + 0xB8) = fast_add_rotations(((VendorMoby_29a6b0 *)vendor_state->moby)->rot.f[2], 3.1415927f);
     euler_rotation_basis((char *)vendor_state + 0x80, (char *)vendor_state + 0xB0);
-    fill_transfer_words(&D_L00_0016C860_298840, 0, 0x1C0);
-    fill_transfer_words(D_L00_0017C340_298840, 0, 0x40);
+    fill_transfer_words(&D_L00_0016C860_lui, 0, 0x1C0);
+    fill_transfer_words(D_L00_0017C340_lui, 0, 0x40);
     vu1_sync_chain(1);
     calculate_dma_transfer_address();
     selected = (s32 *)((char *)vendor_state + 0x48);
     offset = D_L00_001611CC - 0x40000;
     D_L00_001611CC = offset;
     index = D_L00_001CA4C0_29ad08.f48;
-    D_L00_0016C860_298840.x58 = D_L00_00173E00_298840.x4 + offset;
-    D_L00_0016C860_298840.x5c = D_L00_00173E00_298840.x8 + offset;
+    D_L00_0016C860_lui.x58 = D_L00_00173E00_298840.x4 + offset;
+    D_L00_0016C860_lui.x5c = D_L00_00173E00_298840.x8 + offset;
     item = vendor_exit_cutscene_ids_by_item[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400 = 0;
@@ -1792,8 +1792,8 @@ typedef struct {
     char p1[0x4C - 0x14];
 } T_29b680;
 extern P_29b680 D_L00_001CA4C0_29b680 __asm__("D_L00_001CA4C0") NOT_SDA;
-extern T_29b680 D_L00_00179AC0_29b680[] __asm__("D_L00_00179AC0") NOT_SDA;
-extern int D_L00_001C8FF0_29b680[][16] __asm__("D_L00_001C8FF0") NOT_SDA;
+extern T_29b680 D_L00_00179AC0_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
+extern int D_L00_001C8FF0_lui[][16] __asm__("D_L00_001C8FF0") NOT_SDA;
 extern unsigned char discount_purchase_pricing __asm__("D_0013D4E3") NOT_SDA;
 extern int D_L00_00161E38;
 extern void FUN_00204a40_29b680(int, int) __asm__("FUN_00204a40");
@@ -1818,7 +1818,7 @@ void initialize_vendor_selected_item_mobys(void) {
     int x;
 
     k = P.ent[P.i58].k;
-    id = D_L00_00179AC0_29b680[k].id;
+    id = D_L00_00179AC0_lui[k].id;
     if (k == 0x18) {
         id = 0x1DF;
     } else {
@@ -1853,7 +1853,7 @@ void initialize_vendor_selected_item_mobys(void) {
     FUN_0020c880_29b680(P.p20 + 0x100);
     FUN_0020d4f0_29b680(P.p20 + 0x100, 0x202020, 0xE, 0xE, 0);
     {
-        int(*t)[16] = D_L00_001C8FF0_29b680;
+        int(*t)[16] = D_L00_001C8FF0_lui;
         x = t[P.ent[P.i58].k][12];
     }
     if (x) {

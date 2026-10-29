@@ -248,7 +248,7 @@ typedef struct {
     short h36;
     char pad2[0x14];
 } E_2c5be8;
-extern E_2c5be8 D_179AC0_2c5be8[] __asm__("D_L00_00179AC0") NOT_SDA;
+extern E_2c5be8 D_L00_00179AC0_lui[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern float D_0015ED60_2c5be8 __asm__("D_0015ED60");
 extern float D_0015ED6C_2c5be8 __asm__("D_0015ED6C");
 extern int D_15F5CC_2c5be8 __asm__("D_L00_0015F5CC");
@@ -279,8 +279,8 @@ int try_collect_ammo_pickup(char *pickup_moby) {
         goto fail;
     }
     ammo_added = weapon_ammo_counts[pickup_vars[2]] - before;
-    queue_formatted_dialogue_message(ammo_added == 1 ? ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_179AC0_2c5be8))->h36
-                         : ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_179AC0_2c5be8))->h34,
+    queue_formatted_dialogue_message(ammo_added == 1 ? ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_L00_00179AC0_lui))->h36
+                         : ((E_2c5be8 *)(pickup_vars[2] * 0x4C + (char *)D_L00_00179AC0_lui))->h34,
                   ammo_added, -1);
     if (excess_ammo_amount < (float)pickup_vars[0]) {
         weapon_ammo_pickup_totals[pickup_vars[2]] += weapon_ammo_counts[pickup_vars[2]] - before;
@@ -317,7 +317,7 @@ typedef struct {
     char *x14;
     float x18, x1c, x20;
 } Vars_2c5dc8;
-extern V_2c5dc8 D_L00_00166DC0_2c5dc8 __asm__("D_L00_00166DC0") NOT_SDA;
+extern V_2c5dc8 g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 long get_effect_texture(int) __asm__("FUN_001f44b8");
 void pos_2c5dc8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 void sub_2c5dc8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -387,7 +387,7 @@ void draw_swingshot_cable(char *moby) {
         fast_vec_add(&segment_center, &segment_center, &segment_direction);
         qcopy(&segment_quad.corner[1], &segment_center);
         qcopy(&segment_quad.corner[3], &segment_center);
-        sub_2c5dc8(&segment_to_reference, &D_L00_00166DC0_2c5dc8, &segment_center);
+        sub_2c5dc8(&segment_to_reference, &g_debug_camera_lui, &segment_center);
         fast_vec_cross(&k, &segment_to_reference, &segment_direction);
         fast_vec_normalize(&k, &k, 0.05f);
         fast_vec_add(&segment_quad.corner[1], &segment_quad.corner[1], &k);
@@ -1138,7 +1138,7 @@ Contact:
         moby->pos.z<2.0f || moby->pos.z>1021.0f) mark_moby_for_removal(moby);
     return;
 }
-extern float D_L00_00173E68_2c1778 __asm__("D_L00_00173E68") NOT_SDA;
+extern float D_L00_00173E68_lui __asm__("D_L00_00173E68") NOT_SDA;
 extern int D_L00_0015F5CC_2c1778[1] __asm__("D_L00_0015F5CC");
 void FUN_00213508_2c1778(void *, int, float) __asm__("FUN_00213508");
 float FUN_001fa580_2c1778(float, float) __asm__("FUN_001fa580");
@@ -1164,7 +1164,7 @@ void update_trespasser_pickup(void *mv) {
         FUN_00213508_2c1778(trespasser_moby + 0x10, 0, 0.5f);
         *(float *)(trespasser_moby + 0x40) = 1.5707964f;
         *(float *)(trespasser_moby + 0x44) = 3.1415927f;
-        *(float *)(trespasser_moby + 0x18) = D_L00_00173E68_2c1778 + l00_trespasser_pickup_initial_height_offset;
+        *(float *)(trespasser_moby + 0x18) = D_L00_00173E68_lui + l00_trespasser_pickup_initial_height_offset;
         trespasser_moby[0x20] = 1;
         break;
     case TRESPASSER_WAIT_FOR_HERO_PROXIMITY: {
@@ -1465,7 +1465,7 @@ typedef union {
     f32 f[4];
     s32 i[4];
 } V2c2488;
-extern s32 D_0013CAE0[] __asm__("D_0013CAE0") NOT_SDA;
+extern s32 pad_held_lui[] __asm__("D_0013CAE0") NOT_SDA;
 extern u8 bomb_glove_aimed_range_modifier[] __asm__("D_0013E52A");
 extern f32 D_0015ED6C __asm__("D_0015ED6C");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -1512,7 +1512,7 @@ void aim_throw_arc(V2c2488 *origin_position, V2c2488 *target_position, f32 *out,
     out[1] = fast_sin(launch_heading) * horizontal_speed;
     *(s32 *)&out[2] = 0;
     out[2] = FUN_L00_0025abf0(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
-    if (D_0013CAE0[0] & 5) {
+    if (pad_held_lui[0] & 5) {
         k = scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f;
         k = k / horizontal_speed;
     } else {
@@ -1537,7 +1537,7 @@ typedef struct {
     u32 levels;
 } DeliveryStats_2c26c8;
 extern DeliveryStats_2c26c8 D_00141680_2c26c8 __asm__("D_00141680");
-extern struct Moby *D_L00_001ABA00_2c26c8[] __asm__("D_L00_001ABA00") NOT_SDA;
+extern struct Moby *D_L00_001ABA00_lui[] __asm__("D_L00_001ABA00") NOT_SDA;
 extern u8 *FUN_002141f8_2c26c8(struct Moby *) __asm__("FUN_002141f8");
 #include "rnc/input/pad_state.h"
 extern struct Moby *FUN_L00_002ace70(struct Moby *, void *);
@@ -1696,7 +1696,7 @@ void bomb_glove_update(struct Moby *moby) {
             s32 entry = 0;
             struct Moby *candidate;
             hero.throw_target = 0;
-            while ((candidate = D_L00_001ABA00_2c26c8[entry]) != 0) {
+            while ((candidate = D_L00_001ABA00_lui[entry]) != 0) {
                 u8 *data = FUN_002141f8_2c26c8(candidate);
                 if ((s8)candidate->state >= 0 && data && (candidate->flags & 0x1000)) {
                     f32 candidateAngle, elevation, difference;
@@ -2393,8 +2393,8 @@ void decoy_update(char *moby) {
         moby[0x20] = 0;
     }
 }
-extern int D_L00_0015F5CC_2c53c0 __asm__("D_L00_0015F5CC") MACRO_ADDR;
-extern float D_0015ED60_2c53c0 __asm__("D_0015ED60") MACRO_ADDR;
+extern int D_L00_0015F5CC_macro __asm__("D_L00_0015F5CC") MACRO_ADDR;
+extern float frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 extern float D_0015ED6C_2c53c0 __asm__("D_0015ED6C") MACRO_ADDR;
 extern int FUN_001f96f8_2c53c0(int) __asm__("FUN_001f96f8");
 extern float FUN_001f99c0_2c53c0(float) __asm__("FUN_001f99c0");
@@ -2561,14 +2561,14 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
             account_idx = pickup_vars->weapon;
             weapon_ammo_pickup_totals[account_idx] += weapon_ammo_counts[account_idx] - before;
             pickup_moby->state = 2;
-            pickup_moby->scale *= D_0015ED60_2c53c0 * 0.20000005f + 1.0f;
+            pickup_moby->scale *= frame_scale_macro * 0.20000005f + 1.0f;
             FUN_001f99f8_2c53c0(&pickup_vars->velocity);
-            elapsed = D_L00_0015F5CC_2c53c0 - D_L00_00161838_macro;
+            elapsed = D_L00_0015F5CC_macro - D_L00_00161838_macro;
             pickup_vars->rise_speed = D_0015ED6C_2c53c0 * 8.0f;
             random = FUN_001f99a8_2c53c0(elapsed);
             if (FUN_001f96f8_2c53c0(10) < random) {
                 FUN_L00_0028dc90_2c53c0(0, 0, (int)pickup_moby, 0xD5);
-                D_L00_00161838_macro = D_L00_0015F5CC_2c53c0;
+                D_L00_00161838_macro = D_L00_0015F5CC_macro;
             }
             return;
         }
@@ -2619,7 +2619,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         int phase;
         int random;
         int idx;
-        phase = D_L00_0015F5CC_2c53c0 % 60;
+        phase = D_L00_0015F5CC_macro % 60;
         value = (float)pickup_moby->alpha;
         angle = (float)phase / 60.0f;
         angle = angle * 6.28318f;
@@ -2646,7 +2646,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
     case AMMO_PICKUP_RESTORE_SCALE:
         current = pickup_moby->scale;
         target = pickup_moby->pclass->scale;
-        step = D_0015ED60_2c53c0 * 0.03f;
+        step = frame_scale_macro * 0.03f;
         current += (target - current) * step;
         pickup_moby->scale = current;
         target = pickup_moby->pclass->scale;

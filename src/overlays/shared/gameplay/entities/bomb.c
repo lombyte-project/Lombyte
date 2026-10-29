@@ -32,7 +32,7 @@ extern float D_0015ED70 MACRO_ADDR;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* coll_hit_2c8440's normal as a whole quadword (CollisionHit names only x/y/z) */
 extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") NOT_SDA;
-extern Vec4 D_L00_00166DC0_2c8440 __asm__("D_L00_00166DC0") NOT_SDA;
+extern Vec4 g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 FUN_001f9dc8_2c8440(f32) __asm__("FUN_001f9dc8");                        /* cos */
@@ -53,7 +53,7 @@ extern s32 FUN_001f0b58_2c8440(void) __asm__("FUN_001f0b58");
  * Predicts where a thrown moby lands: steps the velocity (with gravity) from
  * its start until collision_line_2c8440 hits ground (or a moby other than the hero
  * and the holder), for up to `timer` steps. Stores the landing point and
- * normal in vars and pulls the point 5% toward D_L00_00166DC0_2c8440. mode 0 needs
+ * normal in vars and pulls the point 5% toward g_debug_camera_lui. mode 0 needs
  * a live hit moby; mode 1 starts from the hero's hand. Returns 1 on a hit.
  */
 s32 predict_doom_bot_spawner_landing(ThrowVars_2c8440 *throw_vars, struct Moby *thrown_moby, s32 mode) __asm__("FUN_L00_002c8440");
@@ -151,9 +151,9 @@ s32 predict_doom_bot_spawner_landing(ThrowVars_2c8440 *throw_vars, struct Moby *
     if (mode != 2 || coll_hit.moby == 0 || !FUN_L00_002603d0_2c8440(coll_hit.moby))
         FUN_001f4600_2c8440(FUN_L00_002c7df8_2c8440, thrown_moby);
     throw_vars->normal.q = coll_hit_normal.q;
-    fast_vec_sub(&position_scratch, &throw_vars->landing, &D_L00_00166DC0_2c8440);
+    fast_vec_sub(&position_scratch, &throw_vars->landing, &g_debug_camera_lui);
     scale_vector_xyz_2c8440(&position_scratch, &position_scratch, 0.94999998807907104492f);
-    add_vector_xyz_2c8440(&throw_vars->landing, &position_scratch, &D_L00_00166DC0_2c8440);
+    add_vector_xyz_2c8440(&throw_vars->landing, &position_scratch, &g_debug_camera_lui);
     return 1;
 ret0:
     /* a second return 0 block, as in retail */
@@ -1277,7 +1277,7 @@ extern unsigned char D_L00_00173E60[];      /* +0x20: hit normal */
 extern char D_L00_00166DC0_2cb418[] __asm__("D_L00_00166DC0");
 extern char D_L00_00166FF0_2cb418[] __asm__("D_L00_00166FF0");
 extern char D_0013F3D0[];
-extern Moby *D_001403E0_2cb418 __asm__("D_001403E0") NOT_SDA;
+extern Moby *D_001403E0_lui __asm__("D_001403E0") NOT_SDA;
 /* D_L00_00161894 again, through the symbol below it: retail's second load stays lui */
 extern float D_0015ED70_lui __asm__("D_0015ED70");
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
@@ -1427,9 +1427,9 @@ void update_homing_shot(Moby *shot_moby) {
             vars->pitch_rate = 0.0f;
             fast_vec_normalize(&spark_and_pushout_scratch, ((char *)D_L00_00173E60) + 0x20, 0.05f);
             add_vector_xyz_2cb418((Vec4A *)&shot_moby->pos, ((char *)D_L00_00173E60), &spark_and_pushout_scratch);
-            if (D_001403E0_2cb418 != 0 && D_001403E0_2cb418->oclass == 0xA8
-                && D_001403E0_2cb418->state != 0xFE && D_001403E0_2cb418->state != 0xFD) {
-                play_sound_2cb418(4, 0, D_001403E0_2cb418);
+            if (D_001403E0_lui != 0 && D_001403E0_lui->oclass == 0xA8
+                && D_001403E0_lui->state != 0xFE && D_001403E0_lui->state != 0xFD) {
+                play_sound_2cb418(4, 0, D_001403E0_lui);
             }
         }
     }
@@ -1551,7 +1551,7 @@ void clear_homing_shot_trail_and_spawn_end_effects(u8 *shot_moby, s32 enabled)
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
-extern unsigned char D_0013E535_2cbf68 __asm__("D_0013E535") NOT_SDA;
+extern unsigned char D_0013E535_lui __asm__("D_0013E535") NOT_SDA;
 unsigned char *FUN_0020c4f8_2cbf68(int) __asm__("FUN_0020c4f8");
 float random_float_between(float, float) __asm__("FUN_002132a8");
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
@@ -1609,7 +1609,7 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
             float k = feather_scale_multiplier_gp;
             *(float *)(spawned_moby + 0x2C) *= k;
         }
-        if (D_0013E535_2cbf68)
+        if (D_0013E535_lui)
             *(float *)(spawned_moby + 0x2C) *= 2.0f;
         *(float *)(moby_vars + 0x20) = random_float_between(-1.2f, -0.4f) * D_0015ED6C_lui;
         FUN_L00_00250df8_2cbf68(spawned_moby);
@@ -1768,7 +1768,7 @@ typedef struct { float radius; char pad4[0xC]; float height; } Bounds_2cc608;
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern Vec4 camera_rot_2cc608 __asm__("D_L00_00166DD0");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
-extern int play_frames_2cc608 __asm__("D_0015EEA4") MACRO_ADDR;
+extern int play_frames __asm__("D_0015EEA4") MACRO_ADDR;
 extern int D_0015ED84 MACRO_ADDR;
 extern struct UsageStats item_usage __asm__("D_00141680");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
@@ -1873,7 +1873,7 @@ void ryno_update(struct Moby *ryno_moby) {
             struct UsageStats *s = &item_usage;
             if (s->stat[23].count <= 0xFFFE) s->stat[23].count++;
             per = 600;
-            if (scale_game_frames(play_frames_2cc608) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(play_frames_2cc608) / 600;
+            if (scale_game_frames(play_frames) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(play_frames) / 600;
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].switch_lock = 2;
@@ -1902,7 +1902,7 @@ void ryno_update(struct Moby *ryno_moby) {
             struct UsageStats *s = &item_usage;
             if (s->stat[23].count <= 0xFFFE) s->stat[23].count++;
             per = 600;
-            if (scale_game_frames(play_frames_2cc608) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(play_frames_2cc608) / 600;
+            if (scale_game_frames(play_frames) / per > s->stat[23].unk2) s->stat[23].unk2 = scale_game_frames(play_frames) / 600;
             s->stat[23].level_mask = s->stat[23].level_mask | (1 << D_0015ED84) | 0x80000000;
         }
         hero.items[0].switch_lock = 2;
@@ -1989,7 +1989,7 @@ typedef union {
 } V_2ccee0;
 extern float D_0015ED60;
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
-extern unsigned char *D_001413D0_2ccee0 __asm__("D_001413D0") NOT_SDA;
+extern unsigned char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern unsigned char D_L00_00173E60_2ccee0[] __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
 extern unsigned char *FUN_0020c4f8_2ccee0(int) __asm__("FUN_0020c4f8");
@@ -2066,7 +2066,7 @@ unsigned char *spawn_ryno_rocket(int owner_moby, V_2ccee0 *spawn_position, unsig
         FUN_0022da68_2ccee0(1, 0, spawned_moby);
         z.q = 0;
         z.f[2] = D_0015ED6C_lui * 8.0f;
-        collision_ignore_moby = D_001413D0_2ccee0;
+        collision_ignore_moby = D_001413D0_lui;
         explosion_direction.q = z.q;
         collision_start.q = ((V_2ccee0 *)(collision_ignore_moby + 0x10))->q;
         collision_start.f[2] = spawn_position->f[2];
@@ -2297,7 +2297,7 @@ done:
         gg = (char *)((int *)&D_L00_00173E40);
         p = *(char **)(gg + 0x18);
         if (p != 0) {
-            if (p == (char *)D_001413D0_2ccee0 || p == *(char **)(rocket_vars + 0x20)
+            if (p == (char *)D_001413D0_lui || p == *(char **)(rocket_vars + 0x20)
                 || *(short *)(p + 0xA6) == 0x1C9 || *(short *)(p + 0xA6) == 0) goto keep;
             rocket_moby[0xBC] = 2;
             qcopy(rocket_moby + 0x10, gg + 0x20);
@@ -2318,7 +2318,7 @@ done:
         }
     } else {
         if (fast_dec_timer((int *)(rocket_vars + 0x24)) == 0
-            && !(200.0f < vector_distance(rocket_moby + 0x10, (char *)D_001413D0_2ccee0 + 0x10))) goto keep;
+            && !(200.0f < vector_distance(rocket_moby + 0x10, (char *)D_001413D0_lui + 0x10))) goto keep;
     }
 del:
     mark_moby_for_removal_c(rocket_moby);
@@ -2779,7 +2779,7 @@ state2:
         clamp_vector_length(&target_pos, &target_pos, frame_time * 10.0f);
         if (func_L00_00259868_2CF808(0.0f, 0.18f, 0.0f, updated_moby, &target_pos, 0) & 1) {
             if (!updated_moby->visible) {
-                Vec4 *hitv = &D_L00_00166DC0_2c8440;
+                Vec4 *hitv = &g_debug_camera_lui;
                 add_vector_xyz(&updated_moby->pos, hitv, hitv + 0x23);
                 fast_vec_sub(&updated_moby->pos, &updated_moby->pos, hitv + 0x21);
             }

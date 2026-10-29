@@ -390,7 +390,7 @@ typedef struct {
 } Moby;
 
 extern char D_L00_00196D00[] NOT_SDA;
-extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") MACRO_ADDR;
+extern unsigned char D_0015EDB4_macro[4] __asm__("D_0015EDB4") MACRO_ADDR;
 extern int FUN_L00_0024f698(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short hero_blend_curve_frame_counts __asm__("D_L00_0015F6E0") __attribute__((sda));
@@ -416,7 +416,7 @@ void set_hero_animation(int requested_animation_id, int starting_frame_index, fl
     if (hero_base->anim_flags & 2) {
         *(int *)(hero_animation_moby + 0x54) = 0;
     }
-    if (D_0015EDB4_m[1] != 0) {
+    if (D_0015EDB4_macro[1] != 0) {
         if (requested_animation_id == 0x31) {
             requested_animation_id = 0x32;
         } else if (requested_animation_id == 0x32) {
@@ -1237,14 +1237,14 @@ int add_ammo(int weapon_index, int ammo_amount) {
     }
     return 0;
 }
-extern s32 D_00140408_c __asm__("D_00140408") NOT_SDA;
+extern s32 D_00140408_lui __asm__("D_00140408") NOT_SDA;
 
 /* 1 if entry idx of D_L00_001C40B0 has no limit at 0xE, else weapon_ammo_counts[idx]; -1: D_00140408. */
 s32 get_ammo(s32 idx) __asm__("FUN_L00_00233e98");
 s32 get_ammo(s32 weapon_index) {
     u8 *vendor_item_entry;
     if (weapon_index == -1)
-        weapon_index = D_00140408_c;
+        weapon_index = D_00140408_lui;
     vendor_item_entry = ((u8 *)D_L00_001C40B0) + weapon_index * 0x18;
     if (*(u16 *)(vendor_item_entry + 0xE) == 0)
         return 1;

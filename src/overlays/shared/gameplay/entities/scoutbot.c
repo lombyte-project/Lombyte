@@ -389,7 +389,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void FUN_001f7d30_002d3878(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L08_00161894_002d3878 __asm__("D_L08_00161894") NOT_SDA;
+extern float D_L08_00161894_lui __asm__("D_L08_00161894") NOT_SDA;
 extern u32 D_00151878_gp __asm__("D_00151878") __attribute__((sda));
 extern u32 D_0015187C_gp __asm__("D_0015187C") __attribute__((sda));
 extern u32 D_00151880_gp __asm__("D_00151880") __attribute__((sda));
@@ -433,7 +433,7 @@ void draw_target_beam(char *moby) {
     direction.v[3] = 1.0f;
 
     clear_u64_value(&pk.vertices[0]);
-    pk.vertices[0].v[2] = D_L08_00161894_002d3878;
+    pk.vertices[0].v[2] = D_L08_00161894_lui;
     pk.vertices[0].v[3] = 1.0f;
     qcopy(&pk.vertices[1], data + 0x1d0);
     pk.vertices[1].v[0] = length * *(float *)(data + 0x1dc);
@@ -480,7 +480,7 @@ void draw_target_beam(char *moby) {
     pk.vertices[0].v[2] += -0.25f; pk.vertices[0].v[3] = 1.0f;
     clear_u64_value(&pk.vertices[1]);
     pk.vertices[1].v[0] = length * *(float *)(data + 0x1dc) * 3.0f;
-    pk.vertices[1].v[2] += D_L08_00161894_002d3878; pk.vertices[1].v[3] = 1.0f;
+    pk.vertices[1].v[2] += D_L08_00161894_lui; pk.vertices[1].v[3] = 1.0f;
     qcopy(&pk.vertices[2], data + 0x1e0);
     pk.vertices[2].v[0] = length * *(float *)(data + 0x1ec);
     pk.vertices[2].v[2] += 0.25f; pk.vertices[2].v[3] = 1.0f;
@@ -583,7 +583,7 @@ typedef struct {
     float uv[8];
     u64 a, b, c, d;
 } Pk_002d4108;
-extern u8 D_L08_001675C0_002d4108[] __asm__("D_L08_001675C0") NOT_SDA;
+extern u8 D_L08_001675C0_lui[] __asm__("D_L08_001675C0") NOT_SDA;
 u64 FUN_001f44b8_002d4108(s32) __asm__("FUN_001f44b8");
 void FUN_001f9a28_002d4108(void *, void *, void *) __asm__("FUN_001f9a28");
 void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -624,7 +624,7 @@ void draw_scoutbot_glow_quad(char *moby) {
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
     qcopy(M[3], (float *)(data + 0x220));
-    FUN_001f9a28_002d4108(M[0], D_L08_001675C0_002d4108, M[3]);
+    FUN_001f9a28_002d4108(M[0], D_L08_001675C0_lui, M[3]);
     fast_vec_normalize(M[0], M[0], 1.0f);
     fast_vec_cross(M[1], M[0], up);
     fast_vec_normalize(M[1], M[1], 1.0f);

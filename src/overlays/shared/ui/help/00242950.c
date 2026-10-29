@@ -17,7 +17,7 @@ typedef union {
    listing: 0x80 is a 16-byte value (lq/sq) whose .f[1] is also read as a
    scalar, 0xE0 likewise with .f[2], 0x270 is a 16-byte value, and 0x20B3 is
    the u8 the switch is on. */
-extern u8 D_L00_00173E80_32b90[] __asm__("D_L06_00174600") NOT_SDA;
+extern u8 D_L06_00174600_lui[] __asm__("D_L06_00174600") NOT_SDA;
 extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -53,8 +53,8 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
             clip_negative_segment_endpoint_xyz(&position_or_acceleration_vector, predicted_position);
             qcopy(&position_or_acceleration_vector, &hero.motion.pos);
             if (FUN_001efa68_32b90(&position_or_acceleration_vector, predicted_position, 0xd24, 0, 0) != 0) {
-                if (compute_gravity_relative_vector_inclination((f32 *)D_L00_00173E80_32b90) <= 0.87266463f) {
-                    target_z = *(f32 *)(D_L00_00173E80_32b90 - 0x18);
+                if (compute_gravity_relative_vector_inclination((f32 *)D_L06_00174600_lui) <= 0.87266463f) {
+                    target_z = *(f32 *)(D_L06_00174600_lui - 0x18);
                 }
             }
         }

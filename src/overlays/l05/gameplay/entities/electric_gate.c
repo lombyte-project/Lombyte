@@ -1448,7 +1448,7 @@ void ocean_rilgar_update(char *moby) {
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 extern void FUN_L00_001fff28(void *, int, float);
 extern float FUN_001f9b48(void *, void *);
-extern char *D_001413D0_316258 __asm__("D_001413D0") NOT_SDA;
+extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
 void update_triggered_moby_motion_and_manipulator_angle(char *moby) __asm__("FUN_L05_00316258");
 
@@ -1488,7 +1488,7 @@ void update_triggered_moby_motion_and_manipulator_angle(char *moby) {
             *(float *)(data + 0x60) = 0.5934119f;
             FUN_L00_001fff28(data + 0x20, 0, 0.5934119f);
         }
-        *(long long *)(moby + 0x38) = *(long long *)(D_001413D0_316258 + 0x38);
+        *(long long *)(moby + 0x38) = *(long long *)(D_001413D0_lui + 0x38);
         break;
     case MOBY_WAIT_FOR_TRIGGER:
     case MOBY_WAIT_TO_RETURN_TO_SAVED_POSITION:

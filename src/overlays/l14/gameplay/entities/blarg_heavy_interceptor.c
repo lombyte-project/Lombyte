@@ -434,7 +434,7 @@ extern LockOn_c618 D_L14_00174540;
 extern char D_L14_001674C0[];
 #include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_globals.h"
 extern f32 blarg_heavy_interceptor_culling_sphere_radius_gp __asm__("D_L14_0016139C") __attribute__((sda));
-extern char *D_001413D0_c618 __asm__("D_001413D0") NOT_SDA;
+extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern char D_L14_0015F580[] MACRO_ADDR;
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
 #include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_blarg_heavy_interceptor.h"
@@ -566,7 +566,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
                 FUN_L00_001f2868_c618(*(float *)(moby_vars + 0x214) * 0.9f, secondary_vector_scratch, 0, 0, 0)) {
                 struct Moby *t = D_L14_00174540.target;
 
-                if ((char *)t == D_001413D0_c618 || (t != 0 && (t->oclass == 0xCB || t->oclass == 0x10E))) {
+                if ((char *)t == D_001413D0_lui || (t != 0 && (t->oclass == 0xCB || t->oclass == 0x10E))) {
                     found = 1;
                     *(struct Moby **)(moby_vars + 0x18C) = D_L14_00174540.target;
                 }
@@ -1191,7 +1191,7 @@ typedef struct {
     u64 a, b, c, d;
 } Pk_2af4a0;
 
-extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") NOT_SDA;
+extern char D_L14_001674C0_lui[] __asm__("D_L14_001674C0") NOT_SDA;
 float D_L14_001D8640[4][4] = {
     {-1.0f, 1.0f, 0.0f, 1.0f},
     {-1.0f, -1.0f, 0.0f, 1.0f},
@@ -1226,7 +1226,7 @@ void draw_blarg_heavy_interceptor_camera_pulled_glow(struct Moby *m) {
     pk.a = 0;
     vu1_add_g_sregister(0x4A, 0);
     vu1_add_g_sregister(0x47, 0x51001);
-    fast_vec_sub(glow_to_camera_vector, D_L14_001674C0_d, glow_quad_position);
+    fast_vec_sub(glow_to_camera_vector, D_L14_001674C0_lui, glow_quad_position);
     glow_to_camera_distance = fast_vec_length(glow_to_camera_vector);
     if (0.0f < glow_to_camera_distance) {
         float camera_pull_distance = *(float *)(d + 0x218);
@@ -1994,7 +1994,7 @@ void process_machinegun_turret_hit_reactions(struct Moby *moby) {
 /* Returns 0 unless every object on the list is ready, then wakes the waiting ones and sets their timers. */
 extern short *D_L14_001ABF40_b45[] __asm__("D_L14_001ABF40");
 extern unsigned char *D_L14_0015FFD8_b45 __asm__("D_L14_0015FFD8");
-extern unsigned char *D_L14_0015FFD0_m45[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
+extern unsigned char *D_L14_0015FFD0_macro[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
 extern int D_L14_0016150C_gp __asm__("D_L14_0016150C") __attribute__((sda));
 extern float D_L14_00161510_gp __asm__("D_L14_00161510") __attribute__((sda));
 extern void FUN_00212ed8_b45(unsigned char *, int, int) __asm__("FUN_00212ed8");
@@ -2028,7 +2028,7 @@ int try_retract_turret_group(int index) {
     list_entry = D_L14_001ABF40_b45[index];
     do {
         moby_index_or_retract_frames = *(unsigned short *)list_entry & 0x7FFF;
-        retracting_moby = D_L14_0015FFD0_m45[2] + (moby_index_or_retract_frames << 8);
+        retracting_moby = D_L14_0015FFD0_macro[2] + (moby_index_or_retract_frames << 8);
         if (retracting_moby[0x20] == 3) {
             turret_vars = *(unsigned char **)(retracting_moby + 0x78);
             FUN_00212ed8_b45(retracting_moby, 4, 0);

@@ -626,7 +626,7 @@ extern f32 D_0015ED60_gp __asm__("D_0015ED60_gp") __attribute__((sda));
 extern f32 D_0015EE18_gp __attribute__((sda));
 extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") MACRO_ADDR;
 extern s32 D_L00_0015F5CC MACRO_ADDR;
-extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") NOT_SDA;
+extern f32 D_L00_0017B85C_lui __asm__("D_L00_0017B85C") NOT_SDA;
 extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 extern void FUN_L00_00211670(void);
 extern void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
@@ -708,7 +708,7 @@ void update_hero_in_vehicle_mode(void) {
     update_hero_scalar_pulse();
     apply_hero_and_item_scale_sequence();
     if (*(u8 *)(g + 0x20a4) == 1) {
-        D_L00_0017B85C_002062b0 = D_0015EE18_macro;
+        D_L00_0017B85C_lui = D_0015EE18_macro;
         update_hero_glow_and_extra_manipulators();
         if (*(char **)(g + 0x1624) == 0) {
             *(char **)(g + 0x1624) = create_moby(0x4b4);
@@ -824,7 +824,7 @@ void update_hero_in_vehicle_mode(void) {
     reveal_map_around_position(&hero.motion.pos);
     if (hero.vehicle_mode == 2) {
         char *g = (char *)&hero;
-        if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x210) = 1.4f * D_0015EE18_gp;
+        if (D_0015EDB3_macro) *(f32 *)((char *)&D_L00_0017B85C_lui + 0x210) = 1.4f * D_0015EE18_gp;
         update_hero_glow_and_extra_manipulators();
         update_hero_bone_attachment();
         g = (char *)&hero;
@@ -838,7 +838,7 @@ void update_hero_in_vehicle_mode(void) {
     if (hero.vehicle_mode == 3) {
         s32 color;
         /* D_0015EDB1 is the byte two bytes before the checked D_0015EDB3 base. */
-        if (*((u8 *)&D_0015EDB3_macro - 2)) *(f32 *)((char *)&D_L00_0017B85C_002062b0 + 0x370) = 1.9f;
+        if (*((u8 *)&D_0015EDB3_macro - 2)) *(f32 *)((char *)&D_L00_0017B85C_lui + 0x370) = 1.9f;
         {
             char *g = (char *)&hero;
             alpha = 0x80;
@@ -1251,11 +1251,11 @@ void update_item_tint_from_hero(void *item_moby, char *hero_moby) {
     global_float_base[0xC3] = -0.3f;
 }
 extern int D_15F5CC_207430 __asm__("D_L00_0015F5CC");
-extern unsigned char D_0015EDB3_207430 __asm__("D_0015EDB3") NOT_SDA;
+extern unsigned char D_0015EDB3_lui __asm__("D_0015EDB3") NOT_SDA;
 extern float D_0015EE18 __asm__("D_0015EE18");
-extern unsigned char D_17C380_207430[] __asm__("D_L00_0017C380") NOT_SDA;
-extern unsigned char D_17C3C0_207430[] __asm__("D_L00_0017C3C0") NOT_SDA;
-extern unsigned char D_17C400_207430[] __asm__("D_L00_0017C400") NOT_SDA;
+extern unsigned char D_L00_0017C380_lui[] __asm__("D_L00_0017C380") NOT_SDA;
+extern unsigned char D_L00_0017C3C0_lui[] __asm__("D_L00_0017C3C0") NOT_SDA;
+extern unsigned char D_L00_0017C400_lui[] __asm__("D_L00_0017C400") NOT_SDA;
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void f4f7c8_207430(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00208038_c(void *, int, float, float) __asm__("FUN_L00_00208038");
@@ -1297,11 +1297,11 @@ void update_moby_pulsing_glow_effects(char *moby) {
         v.f[2] -= 0.00700000022f;
         FUN_L00_00208038_c(&v, 0x200000C0, 0.0469999984f, 0.15f);
     }
-    manipulator = D_17C380_207430;
+    manipulator = D_L00_0017C380_lui;
     if (*(short *)(moby + 0xA6) == 0x1A3) {
-        manipulator = D_17C3C0_207430;
+        manipulator = D_L00_0017C3C0_lui;
     } else if (*(short *)(moby + 0xA6) == 0x555) {
-        manipulator = D_17C400_207430;
+        manipulator = D_L00_0017C400_lui;
     }
     if (*(unsigned char *)0x15EDB3 && manipulator[1] == 0) {
         float x;
@@ -1544,11 +1544,11 @@ typedef struct {
     u8 p6[2];
     s32 i2300;
 } P_207d40;
-extern P_207d40 D_0013F350_207d40 __asm__("D_0013F350") NOT_SDA;
+extern P_207d40 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern void draw_offset_textured_effect_quad(void *, s32, f32, f32) __asm__("FUN_L00_00263618");
 extern int FUN_L00_0020d498_207d40(int) __asm__("FUN_L00_0020d498");
 extern void FUN_00213ed8_207d40(void *, f32, f32) __asm__("FUN_00213ed8");
-#define P D_0013F350_207d40
+#define P D_0013F350_lui
 
 void draw_hero_glow_quads(void) {
     f32 k;
@@ -2611,11 +2611,11 @@ s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_rad
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020A990), where it is exact; names translated to the US level program. */
 
 extern V collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
-extern char D_L00_0017A680_d[] __asm__("D_L00_0017A680") NOT_SDA;
+extern char D_L00_0017A680_lui[] __asm__("D_L00_0017A680") NOT_SDA;
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L00_0020a240_u(int, float, float) __asm__("FUN_L00_0020a240");
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") NOT_SDA;
+extern void *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 
 void update_hero_collision_ease_target(void) {
     char *hero_state_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
@@ -2630,7 +2630,7 @@ void update_hero_collision_ease_target(void) {
     if (hero_slot_item_id(0) == 0x1A)
         return;
     if (*(int *)(hero_state_base + 0x2084) == 0x81) {
-        state_ease_table = D_L00_0017A680_d;
+        state_ease_table = D_L00_0017A680_lui;
         state_frame_scale_squared = frame_scale_sq;
         *(float *)(state_ease_table + 0x694) = -0.349065840f;
         *(float *)(state_ease_table + 0x6D4) = state_frame_scale_squared * 0.05f;
@@ -2645,13 +2645,13 @@ void update_hero_collision_ease_target(void) {
     if (FUN_L00_0020a240_u(0, probe_z_offset, probe_end_radius) == 0)
         return;
     if (*(unsigned char *)(hero_state_base + 0x20A8) != 0) {
-        if (D_L00_00173E58_d != 0) {
-            if (is_moby_in_class_range_500_to_540(D_L00_00173E58_d) != 0)
+        if (D_L00_00173E58_lui != 0) {
+            if (is_moby_in_class_range_500_to_540(D_L00_00173E58_lui) != 0)
                 return;
         }
     }
     frame_scale_squared = frame_scale_sq;
-    hit_ease_table = D_L00_0017A680_d;
+    hit_ease_table = D_L00_0017A680_lui;
     *(float *)(hit_ease_table + 0x6D4) = frame_scale_squared * 0.05f;
     *(float *)(hit_ease_table + 0x6D8) = frame_scale_squared * 0.3f;
     hero_position = (char *)((unsigned char *)&D_0013E533) + 0xE9D;

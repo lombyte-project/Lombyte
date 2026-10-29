@@ -419,7 +419,7 @@ typedef struct {
     V_2291d0 v40;
 } X_2291d0;
 extern P_2291d0 D_0013F350_2291d0 __asm__("D_0013F350") NOT_SDA;
-extern X_2291d0 D_L06_001745C0_2291d0 __asm__("D_L06_001745C0") NOT_SDA;
+extern X_2291d0 D_L06_001745C0_lui __asm__("D_L06_001745C0") NOT_SDA;
 extern f32 FUN_L00_002339d0_2291d0(void *) __asm__("FUN_L00_002339d0");
 extern f32 FUN_001f9b20_2291d0(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9dc8_2291d0(f32) __asm__("FUN_001f9dc8");
@@ -431,7 +431,7 @@ extern int FUN_001f0b58_2291d0(void) __asm__("FUN_001f0b58");
 extern f32 FUN_001f9e90_2291d0(f32, f32) __asm__("FUN_001f9e90");
 extern void FUN_00125180_2291d0(void *, void *) __asm__("FUN_00125180");
 #define P D_0013F350_2291d0
-#define X D_L06_001745C0_2291d0
+#define X D_L06_001745C0_lui
 
 extern s32 D_L06_001745DC NOT_SDA;
 extern char D_0013F3D0[] NOT_SDA;
@@ -531,7 +531,7 @@ typedef union {
     u128_22a1d0 q;
     f32 f[4];
 } V_22a1d0;
-extern u128_22a1d0 coll_22a1d0[] __asm__("D_L06_001745F0") NOT_SDA;
+extern u128_22a1d0 coll[] __asm__("D_L06_001745F0") NOT_SDA;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void f2347c0_22a1d0(void) __asm__("FUN_L00_002347c0");
 extern void f233810_22a1d0(void *, void *, f32) __asm__("FUN_L00_00233810");
@@ -590,7 +590,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
             if (!(collision_query_result | coll3_22a1d0(&hero.motion.pos.q, hero.capsule_radius)))
                 break;
         }
-        collision_result_position = coll_22a1d0;
+        collision_result_position = coll;
         qcopy(&hero.motion.pos.q, collision_result_position);
         qcopy(&hero.wall_contact_normal.q, collision_result_position + 1);
         qcopy(&hero.wall_contact_point.q, collision_result_position - 1);

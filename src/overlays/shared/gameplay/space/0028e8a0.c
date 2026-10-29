@@ -83,14 +83,14 @@ typedef struct {
     int x5c;
 } C_28e9c8;
 extern E_28e9c8 D_0013E030_28e9c8 __asm__("D_0013E030");
-extern C_28e9c8 D_L00_0016C860_28e9c8 __asm__("D_L00_0016C860") NOT_SDA;
+extern C_28e9c8 D_L00_0016C860_lui __asm__("D_L00_0016C860") NOT_SDA;
 extern int D_L00_0015F5D8;
 extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_28e9c8 __asm__("D_L00_00173E00") __attribute__((section(".data")));
-extern unsigned char D_001413F5_28e9c8 __asm__("D_001413F5") NOT_SDA;
+extern unsigned char D_001413F5_lui __asm__("D_001413F5") NOT_SDA;
 extern O_28e9c8 *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
-extern unsigned char D_0013D4C6_28e9c8 __asm__("D_0013D4C6") NOT_SDA;
+extern unsigned char D_0013D4C6_lui __asm__("D_0013D4C6") NOT_SDA;
 void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -110,19 +110,19 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     D_L00_0015F5D8 = 1;
     D_0013E030_28e9c8.x20 = audio_selection_mode;
     D_0013E030_28e9c8.x8 = 0;
-    fill_transfer_words(&D_L00_0016C860_28e9c8, 0, 0x1C0);
+    fill_transfer_words(&D_L00_0016C860_lui, 0, 0x1C0);
     fill_transfer_words(D_L00_0017C340, 0, 0x40);
     fill_transfer_words(D_L00_0017C380, 0, 0x40);
     calculate_dma_transfer_address();
     shared_table_offset = D_L00_001611CC - 0x60000;
-    D_L00_0016C860_28e9c8.x58 = D_L00_00173E00_28e9c8.x4 + shared_table_offset;
-    D_L00_0016C860_28e9c8.x5c = D_L00_00173E00_28e9c8.x8 + shared_table_offset;
+    D_L00_0016C860_lui.x58 = D_L00_00173E00_28e9c8.x4 + shared_table_offset;
+    D_L00_0016C860_lui.x5c = D_L00_00173E00_28e9c8.x8 + shared_table_offset;
     fade_level = 1.0f;
     D_L00_0015F5C4 = 6;
     D_L00_001611CC = shared_table_offset;
     D_L00_0015F400 = 0;
     hero_set_state(100, 2);
-    D_001413F5_28e9c8 = 1;
+    D_001413F5_lui = 1;
     f232fe8_28e9c8();
     D_0013E030_28e9c8.x0->flags |= 1;
     for (moby = D_L00_0015FFDC_28e9c8; moby->st != 0xFF; moby++) {
@@ -133,7 +133,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
         base_audio_selection_index = D_0013E030_28e9c8.x26;
         audio_stream_table_index = base_audio_selection_index + 1;
         secondary_track_index = base_audio_selection_index + 6;
-        if (current_level_index == 10 && base_audio_selection_index == 1 && D_0013D4C6_28e9c8 == 0) {
+        if (current_level_index == 10 && base_audio_selection_index == 1 && D_0013D4C6_lui == 0) {
             audio_stream_table_index = 0;
             secondary_track_index = 11;
         } else if (current_level_index == 14 && D_0013E030_28e9c8.x26 == 2) {
@@ -149,7 +149,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
         if (k)
             secondary_track_index = base_audio_selection_index;
         alternate_audio_stream_table_index = base_audio_selection_index + 5;
-        if (current_level_index == 10 && base_audio_selection_index == 1 && D_0013D4C6_28e9c8 == 0) {
+        if (current_level_index == 10 && base_audio_selection_index == 1 && D_0013D4C6_lui == 0) {
             secondary_track_index = 10;
             if (k)
                 secondary_track_index = 9;
@@ -203,7 +203,7 @@ typedef struct {
     s16 h24;
     s16 h26;
 } A_0028ed58;
-extern A_0028ed58 D_0013E030_0028ed58 __asm__("D_0013E030") NOT_SDA;
+extern A_0028ed58 level_render_state_lui __asm__("D_0013E030") NOT_SDA;
 
 typedef struct {
     s32 i0;
@@ -232,7 +232,7 @@ extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribut
 void prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
 
 void prepare_target_level_transition(s32 target_level_index) {
-    A_0028ed58 *shared_state_record = &D_0013E030_0028ed58;
+    A_0028ed58 *shared_state_record = &level_render_state_lui;
     C_0028ed58 *shared_result_record;
     s32 shared_table_offset;
     (&D_L00_0015F5C4)[5] = 1; /* D_L00_0015F5D8: the unit declares it sda */

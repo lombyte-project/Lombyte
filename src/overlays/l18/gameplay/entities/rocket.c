@@ -361,7 +361,7 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void mark_moby_for_removal_a7220(void *obj) __asm__("FUN_0020c828");
-extern char *D_L18_001B2DDC_c __asm__("D_L18_001B2ADC") NOT_SDA;
+extern char *D_L18_001B2ADC_lui __asm__("D_L18_001B2ADC") NOT_SDA;
 
 void update_projectile_motion_collision_and_trail(char *moby) __asm__("FUN_L18_002a7220");
 
@@ -418,7 +418,7 @@ void update_projectile_motion_collision_and_trail(char *moby) {
         particle = FUN_L00_002712b8(effect_spawn_position, effect_vector, scale_game_frames(10), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
                              1.0f, -0.0002f, 0.0f);
         if (particle != 0) {
-            particle[2] = *D_L18_001B2DDC_c;
+            particle[2] = *D_L18_001B2ADC_lui;
             particle[3] = 0x44;
         }
         *(OvlQuad *)world_effect_direction = 0;
@@ -615,7 +615,7 @@ void spawn_rocket_trail_effects(void *mobyp, void *movement_step) {
     particle = FUN_L00_002712b8(effect_spawn_position, effect_vector, scale_game_frames(0x14), 0x7F, 0x606060, 3, 40000.0f, 1000.0f,
                          1.0f, -0.0002f, 0.0f);
     if (particle != 0) {
-        particle[2] = *(unsigned char *)D_L18_001B2DDC_c;
+        particle[2] = *(unsigned char *)D_L18_001B2ADC_lui;
         particle[3] = 0x44;
     }
     world_effect_direction.q = 0;
@@ -847,7 +847,7 @@ extern float D_0015EE70 __asm__("D_0015ED70");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025abf0_q(float *a, float *b, float *out, float speed,
                                 float g) __asm__("FUN_L00_0025abf0");
-extern int *D_L18_001AC240_q[] __asm__("D_L18_001AC240") NOT_SDA;
+extern int *D_L18_001AC240_lui[] __asm__("D_L18_001AC240") NOT_SDA;
 extern int D_L18_0015FFD8_m __asm__("D_L18_0015FFD8");
 extern f32 D_L18_00161994_gp __asm__("D_L18_00161994") __attribute__((sda));
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
@@ -860,7 +860,7 @@ char *launch_class_238_moby_from_list(float horizontal_speed, int launching_moby
     float pitch_and_target_setback_scalar;
     float ballistic_gravity_magnitude;
     char *found = 0;
-    short *moby_list_entry = (short *)D_L18_001AC240_q[moby_list_index];
+    short *moby_list_entry = (short *)D_L18_001AC240_lui[moby_list_index];
     char *moby;
     char *data;
     char *d2;
@@ -1141,7 +1141,7 @@ typedef struct {
     int f90;
 } Obj_q;
 
-extern char *D_L18_00174858_q __asm__("D_L18_00174858") NOT_SDA;
+extern char *D_L18_00174858_lui __asm__("D_L18_00174858") NOT_SDA;
 extern char *func_0020D348_m_q(int) __asm__("FUN_0020c4f8");
 extern short D_L18_00161A6C __asm__("D_0015ED6C");
 extern float D_0015EE70 __asm__("D_0015ED70");
@@ -1171,7 +1171,7 @@ void thruster_pack_lock_green_update(char *moby) {
         *(int *)(moby + 0x94) = 0;
         *(float *)(moby + 0x18) = probe_ground_height(moby + 0x10, 0, 0.5f);
         qcopy(moby_vars, moby + 0x10);
-        if (D_L18_00174858_q != 0) {
+        if (D_L18_00174858_lui != 0) {
             moby_vars->i38 = 1;
         }
         {
@@ -2200,7 +2200,7 @@ void draw_class_274_ring_effect(char *moby) {
 /* UpdateMoby state machine for the vendor moby (state at +0x20). */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E09F8), where it is exact; names translated to the US level program. */
 
-extern char D_001413D4_q[] __asm__("D_001413D4") NOT_SDA;
+extern char camera_secondary_mode_lui[] __asm__("D_001413D4") NOT_SDA;
 extern short D_L18_00161A6C __asm__("D_0015ED6C");
 extern float D_L18_0015F3FC_d __asm__("D_L18_0015F3FC");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -2282,7 +2282,7 @@ void update_position_and_rotation_transition(struct Moby *moby) {
                 FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors + 8, 0, 0);
                 FUN_L00_002eac18_q(2);
                 moby->state = 5;
-            } else if (*(int *)(D_001413D4_q) != 0x72) {
+            } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {
                 clear_u64_value(transition_scratch_vectors + 8);
                 transition_scratch_vectors[10] = *(float *)(data + 0x4C);
                 FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors + 8, 0x72, 1);
@@ -2322,7 +2322,7 @@ void update_position_and_rotation_transition(struct Moby *moby) {
                 FUN_L00_002eac18_q(3);
                 moby->state = 5;
             }
-        } else if (*(int *)(D_001413D4_q) != 0x72) {
+        } else if (*(int *)(camera_secondary_mode_lui) != 0x72) {
             clear_u64_value(transition_scratch_vectors + 8);
             transition_scratch_vectors[10] = *(float *)(data + 0x4C);
             FUN_L00_00216f90_q(data + 0x40, transition_scratch_vectors + 8, 0x72, 1);

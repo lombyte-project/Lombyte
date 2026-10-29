@@ -404,13 +404,13 @@ typedef struct M_221ee0 {
     u8 p5[0xA6 - 0x7C];
     s16 hA6;
 } M_221ee0;
-extern G_221ee0 D_0013F350_221ee0 __asm__("D_0013F350") NOT_SDA;
+extern G_221ee0 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern M_221ee0 *D_L00_0015FFE4_221ee0 __asm__("D_L00_0015FFE4");
 f32 FUN_001f9b48_221ee0(void *, void *) __asm__("FUN_001f9b48");
 f32 FUN_L00_0020d6b0_221ee0(M_221ee0 *, s32 *, f32, f32, f32, f32) __asm__("FUN_L00_0020d6b0");
 s32 FUN_00214720_221ee0(void *, s32) __asm__("FUN_00214720");
 s32 FUN_001efa68_221ee0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-#define G D_0013F350_221ee0
+#define G D_0013F350_lui
 void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 
 void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");

@@ -61,7 +61,7 @@ typedef struct { u8 p0[0x18]; M_2cfcb8 *moby; u8 p1c[0x28 - 0x1C]; f32 point_z; 
 
 extern s32 D_0014EE90_lui[] __asm__("D_0014EE90") NOT_SDA;
 extern int D_L00_00173E40 NOT_SDA;
-extern R_2cfcb8 *D_L00_001B04B0_2cfcb8[] __asm__("D_L00_001B04B0") NOT_SDA;
+extern R_2cfcb8 *D_L00_001B04B0_lui[] __asm__("D_L00_001B04B0") NOT_SDA;
 
 extern s32 FUN_00213260_2cfcb8(s32) __asm__("FUN_00213260");
 extern f32 FUN_001fa580_2cfcb8(f32, f32) __asm__("FUN_001fa580");
@@ -223,7 +223,7 @@ void ground_attached_update(M_2cfcb8 *moby) {
                     }
                 }
                 if ((vars->hC6 != 0 || moby->oclass == 0x1F5) && vars->next_member != 0 && vars->route_index != -1) {
-                    route = D_L00_001B04B0_2cfcb8[vars->route_index];
+                    route = D_L00_001B04B0_lui[vars->route_index];
                     if (route->count == 0) {
                         vars->route_index = -1;
                     } else {
@@ -240,8 +240,8 @@ void ground_attached_update(M_2cfcb8 *moby) {
                             }
                         } else {
                             route->entries[0].state = 0x11;
-                            for (i = 0; i < D_L00_001B04B0_2cfcb8[vars->route_index]->count; i++) {
-                                D_L00_001B04B0_2cfcb8[vars->route_index]->entries[i].state = 0;
+                            for (i = 0; i < D_L00_001B04B0_lui[vars->route_index]->count; i++) {
+                                D_L00_001B04B0_lui[vars->route_index]->entries[i].state = 0;
                             }
                         }
                     }
@@ -499,7 +499,7 @@ extern s32 D_L00_001618D8_2d09b8 __asm__("D_L00_001618D8");
 extern s32 D_L00_0015FFBC __asm__("D_L00_0015FFBC");
 extern f32 D_0015ED6C_2d09b8 __asm__("D_0015ED6C");
 extern f32 D_L00_0015F5D0 __asm__("D_L00_0015F5D0");
-extern s32 D_001413DC_2d09b8 __asm__("D_001413DC") NOT_SDA;
+extern s32 D_001413DC_lui __asm__("D_001413DC") NOT_SDA;
 extern int D_001413D0[] NOT_SDA;
 extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern char camera_position[] __asm__("D_L00_00166DC0");
@@ -669,7 +669,7 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
     *(u16 *)((u8 *)moby + 0x34) |= 1;
     moby->bBC = FUN_001fef20_2d09b8(15);
     if (hit) {
-        if (D_001413DC_2d09b8 == 22)
+        if (D_001413DC_lui == 22)
             vars[0xCA] = FUN_001fef20_2d09b8(5);
         else
             vars[0xCA] = 1;
@@ -3677,7 +3677,7 @@ void reset_smoke_fire_spawner_particle(P *spawner, int i) {
 typedef struct {
     float x, y, z, w;
 } V_2d7d58;
-extern V_2d7d58 D_L00_001CB7E0_2d7d58[] __asm__("D_L00_001CB7E0") NOT_SDA;
+extern V_2d7d58 D_L00_001CB7E0_lui[] __asm__("D_L00_001CB7E0") NOT_SDA;
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 float FUN_002132a8_2d7d58(float, float) __asm__("FUN_002132a8");
 extern float D_L00_001D02E0_lui[] __asm__("D_L00_001D02E0") NOT_SDA;
@@ -3692,7 +3692,7 @@ void initialize_smoke_fire_spawner_mesh_particle(char *spawner, int i) {
     float base_particle_height;
     V_2d7d58 *particle_position;
     float sampled_x = randf_sym(0.0f, 1.0f);
-    particle_position = &D_L00_001CB7E0_2d7d58[i];
+    particle_position = &D_L00_001CB7E0_lui[i];
     particle_position->x = sampled_x;
     particle_position->y = randf_sym(0.0f, 1.0f);
     particle_position->z = randf_sym(0.0f, 1.0f);

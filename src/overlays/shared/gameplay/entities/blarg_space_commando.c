@@ -616,7 +616,7 @@ void process_blarg_space_commando_hits(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300530), where it is exact; names translated to the US level program. */
 
-extern char D_L06_00174600_d[] __asm__("D_L06_00174600") NOT_SDA;
+extern char D_L06_00174600_lui[] __asm__("D_L06_00174600") NOT_SDA;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -634,7 +634,7 @@ void initialize_blarg_space_commando_beam(char *moby) {
     float point_offset[4];
     int i;
     probe_ground_height(moby + 0x10, 0, 0.5f);
-    fast_vec_normalize(vars + 0x220, D_L06_00174600_d, 1.0f);
+    fast_vec_normalize(vars + 0x220, D_L06_00174600_lui, 1.0f);
     add_vector_xyz_cf(moby, 0, vars + 0x210);
     *(float *)(vars + 0x218) = *(float *)(moby + 0x18);
     for (i = 0; i < 16; i++) {

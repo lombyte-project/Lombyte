@@ -9,7 +9,7 @@
 #include "qzero.h"
 #include "sda.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
-extern char *D_L00_001DD100_25fcb8[] __asm__("D_L00_001DD100") NOT_SDA;
+extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
@@ -51,7 +51,7 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
         }
     }
     for (j = 0; j < 20; j++) {
-        candidate_moby = D_L00_001DD100_25fcb8[j];
+        candidate_moby = D_L00_001DD100_lui[j];
         if (candidate_moby == 0)
             continue;
         if (*(short *)(candidate_moby + 0xA6) != 0x10E)
@@ -154,7 +154,7 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         }
     }
     for (j = 0; j < 20; j++) {
-        listed_candidate = D_L00_001DD100_25fcb8[j];
+        listed_candidate = D_L00_001DD100_lui[j];
         if (listed_candidate == 0) continue;
         if (*(short *)(listed_candidate + 0xA6) != 0x10E) continue;
         if (*(unsigned char *)(listed_candidate + 0x20) == 0xFE) continue;
@@ -353,7 +353,7 @@ extern int D_00141410 NOT_SDA;
 extern int D_00141414 NOT_SDA;
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 
-extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") MACRO_ADDR;
+extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 void grant_inventory_item(int id, int flag) __asm__("FUN_L00_00260860");
 void grant_inventory_item(int id, int flag) {
     unsigned char *pa = &D_0013D4C0[id];
@@ -387,9 +387,9 @@ void grant_inventory_item(int id, int flag) {
             if (id != 0 && D_L00_001C3E98[i] == id) {
                 int j;
                 for (j = 0;; j++) {
-                    unsigned char packed_item_entry = D_0015EDD0_257218[j];
+                    unsigned char packed_item_entry = D_0015EDD0_macro[j];
                     if ((packed_item_entry & 0x3F) == id || packed_item_entry == 0xFF) {
-                        D_0015EDD0_257218[j] = id | 0x40;
+                        D_0015EDD0_macro[j] = id | 0x40;
                         break;
                     }
                 }

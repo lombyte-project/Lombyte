@@ -57,7 +57,7 @@ void hud_frame(O0023b120 *hud_element, s32 id, s32 x, s32 y, u32 flags, s32 extr
 }
 extern char *D_L00_001611C0_23b6c0 __asm__("D_L00_001611C0");
 extern int screen_extent[] __asm__("D_0013E500");
-extern int D_L00_0017E4D8_23b6c0[] __asm__("D_L00_0017E4D8") NOT_SDA;
+extern int D_L00_0017E4D8_lui[] __asm__("D_L00_0017E4D8") NOT_SDA;
 extern u64 FUN_001ffa10_23b6c0(int) __asm__("FUN_001ffa10");
 
 void draw_cropped_hud_sprite(int tex, int x, int y, int draw_width, int draw_height, int alpha) __asm__("FUN_L00_0023b6c0");
@@ -79,7 +79,7 @@ void draw_cropped_hud_sprite(int frame_id, int x, int y, int draw_width, int dra
     packet_words[4] = ((u64)alpha << 24) | 0x7F7F7F;
     packet_words[5] = 0;
     coordinate_offsets = screen_extent;
-    vertex_depth_source = D_L00_0017E4D8_23b6c0;
+    vertex_depth_source = D_L00_0017E4D8_lui;
     packet_words[6] = (u64)(((x << 4) + coordinate_offsets[4] - 8) | (((u64)((y << 4) + coordinate_offsets[5] - 8)) << 16)) | ((u64)vertex_depth_source[3] << 32);
     packet_words[7] = (draw_height << 20) + (draw_width << 4);
     x += draw_width;

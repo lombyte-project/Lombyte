@@ -6761,9 +6761,9 @@ extern char *D_L06_001600EC_302578 __asm__("D_L06_001600EC");
 extern char *D_L06_0015FFD8_302578 __asm__("D_L06_0015FFD8");
 extern int D_L06_00179B90[] __asm__("D_L06_00179B90");
 extern char *D_L06_001B0C30_302578[] __asm__("D_L06_001B0C30");
-extern char D_0013D3AC_302578[] __asm__("D_0013D3A7") NOT_SDA;
+extern char D_0013D3A7_lui[] __asm__("D_0013D3A7") NOT_SDA;
 extern char alternate_item_available[] __asm__("D_0013D388") NOT_SDA;
-extern char D_0013A4E0_302578[] __asm__("D_0013A4E0") NOT_SDA;
+extern char D_0013A4E0_lui[] __asm__("D_0013A4E0") NOT_SDA;
 void update_shuttle_route_selection_and_prompt(char *shuttle_moby) __asm__("FUN_L06_00302fd8");
 
 extern void update_shuttle_route_selection_and_prompt(char *) __asm__("FUN_L06_00302fd8");
@@ -6852,7 +6852,7 @@ void shuttle_update(struct Moby *moby) {
         if (*(unsigned char *)(shuttle_vars->fF8 + (current_level_index << 4) + (int)visited52) == 0xFF) {
             mark_shuttle_linked_mobys_for_removal((char *)moby);
         } else {
-            D_0013D3AC_302578[5] = 0;
+            D_0013D3A7_lui[5] = 0;
         }
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x80;
@@ -6875,7 +6875,7 @@ void shuttle_update(struct Moby *moby) {
             || shuttle_forced_return_requested_gp != 0) {
             update_shuttle_route_selection_and_prompt((char *)moby);
             now = shuttle_forced_return_requested_gp;
-            if (now != 0 || ((*(int *)(D_0013A4E0_302578 + 0x2604) & 0x10) && D_L06_0015F594 == 10 && shuttle_vars->f9C >= 0)) {
+            if (now != 0 || ((*(int *)(D_0013A4E0_lui + 0x2604) & 0x10) && D_L06_0015F594 == 10 && shuttle_vars->f9C >= 0)) {
                 shuttle_vars->go = 1;
                 D_L06_0015FDF8 = 0;
                 if (now != 0) {
@@ -6995,7 +6995,7 @@ void shuttle_update(struct Moby *moby) {
             rot[2] = fast_add_rotations(moby->rot.z, 3.1415927f);
             FUN_L00_00216f90_302578(b, rot, 0, 0);
             if (shuttle_vars->f114 != 0) {
-                D_0013D3AC_302578[5] = 1;
+                D_0013D3A7_lui[5] = 1;
                 initialize_moby_particle_effect_state(D_L06_0015FFD8_302578 + (shuttle_vars->f10C << 8));
                 shuttle_vars->f114 = 0;
                 moby->state = 6;
@@ -7481,7 +7481,7 @@ extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
 extern char D_0013F3D0[] NOT_SDA;
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
 typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx_304098;
-extern Fx_304098 D_L06_00167400_304098 __asm__("D_L06_00167400") NOT_SDA;
+extern Fx_304098 D_L06_00167400_lui __asm__("D_L06_00167400") NOT_SDA;
 
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -7634,8 +7634,8 @@ void red_button_update(struct Moby *moby) {
             camera_rotation.y = -0.2617993878f;
             camera_rotation.z = *(float *)(D_0013E633 + 0xDB5);
             jet_mount(&next_position, &camera_rotation, 2, scale_game_frames(0x12C), 0);
-            D_L06_00167400_304098.f160 = 0.3f;
-            D_L06_00167400_304098.f168 = scale_game_frames(0x2D);
+            D_L06_00167400_lui.f160 = 0.3f;
+            D_L06_00167400_lui.f168 = scale_game_frames(0x2D);
             event_304098(0, 0, moby);
         }
         break;

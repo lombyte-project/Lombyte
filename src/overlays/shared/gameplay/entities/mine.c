@@ -1526,7 +1526,7 @@ typedef struct {
     float fDC;
     int iE0;
 } BombHit_2adb30;
-extern float D_0015ED6C_2adb30 __asm__("D_0015ED6C") MACRO_ADDR;
+extern float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int D_L00_0015F5CC_2adb30 __asm__("D_L00_0015F5CC");
 extern s32 D_L00_001612D0_gp __asm__("D_L00_001612D0") __attribute__((sda));
@@ -1621,7 +1621,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
     Vec_2adb30 proj;
     BombData_2adb30 *d;
     b.q = 0;
-    b.f[2] = D_0015ED6C_2adb30 * 2.0f;
+    b.f[2] = frame_time_macro * 2.0f;
     blast_velocity.q = b.q;
     b.q = 0;
     b.f[2] = 1.0f;
@@ -1676,7 +1676,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     int spark_vertical_offset_scale;
                     int spark_jittered_frame_count;
                     FUN_001f9a68_2adb30(&spark_velocity, d, *(float *)&bomb_spark_velocity_scale);
-                    random_vector(random_velocity_offset.f, 0.0f, *(float *)&bomb_spark_random_velocity_radius * D_0015ED6C_2adb30);
+                    random_vector(random_velocity_offset.f, 0.0f, *(float *)&bomb_spark_random_velocity_radius * frame_time_macro);
                     FUN_001f9a10_2adb30(&spark_velocity, &random_velocity_offset, &spark_velocity);
                     FUN_001f99f8_2adb30(v2.f);
                     spark_velocity.f[3] = FUN_002132a8_2adb30(*(float *)&D_L00_0016140C, *(float *)&D_L00_00161410);
@@ -1693,8 +1693,8 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
         }
         {
             BombHit_2adb30 q;
-            bomb_moby->rx = FUN_001fa580_2adb30(bomb_moby->rx, D_0015ED6C_2adb30 * 2.0943952f);
-            bomb_moby->ry = FUN_001fa580_2adb30(bomb_moby->ry, D_0015ED6C_2adb30 * 7.8539815f);
+            bomb_moby->rx = FUN_001fa580_2adb30(bomb_moby->rx, frame_time_macro * 2.0943952f);
+            bomb_moby->ry = FUN_001fa580_2adb30(bomb_moby->ry, frame_time_macro * 7.8539815f);
             qcopy_nc(&old, &bomb_moby->pos);
             FUN_001f9a10_2adb30(&bomb_moby->pos, &bomb_moby->pos, d);
             if (d->h68 == 0) {
@@ -1733,7 +1733,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     FUN_L00_002a3ec8_2adb30(*(int *)&D_L00_001612D0_gp, *(int *)&D_L00_001612D8_gp, 1, bomb_moby->pos.f[0], bomb_moby->pos.f[1], 0.5f, -0.35f);
                     d->h68 = 1;
                     FUN_001f99f8_2adb30(d->v.f);
-                    d->v.f[2] = D_0015ED6C_2adb30 * -1.5f;
+                    d->v.f[2] = frame_time_macro * -1.5f;
                     p.f[0] = bomb_moby->pos.f[0];
                     p.f[1] = bomb_moby->pos.f[1];
                     p.f[2] = D_L00_00173E68_2adb30[0];
@@ -1743,11 +1743,11 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     }
                     for (i = 0; i < 16; i++) {
                         float ang = FUN_00213308_2adb30();
-                        float r = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 0.0f, D_0015ED6C_2adb30 * 3.0f);
+                        float r = FUN_002132a8_2adb30(frame_time_macro * 0.0f, frame_time_macro * 3.0f);
                         int n;
                         splash_particle_velocity.f[0] = FUN_001f9dc8_2adb30(ang) * r;
                         splash_particle_velocity.f[1] = FUN_001f9de0_2adb30(ang) * r;
-                        splash_particle_velocity.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 3.0f, D_0015ED6C_2adb30 * 6.5f);
+                        splash_particle_velocity.f[2] = FUN_002132a8_2adb30(frame_time_macro * 3.0f, frame_time_macro * 6.5f);
                         n = FUN_L00_00257b90_2adb30(0x5A, 0x78);
                         FUN_L00_0026f548_2adb30(&p, &splash_particle_velocity, FUN_00213260_2adb30(2), n);
                     }
@@ -1759,7 +1759,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                                 bomb_moby->bBC = 1;
                                 qcopy(&bomb_moby->pos, &h->pos);
                                 FUN_L00_001ff660_2adb30(&blast_velocity, d, &h->nrm);
-                                FUN_001f9bf8_2adb30(&blast_velocity, &blast_velocity, D_0015ED6C_2adb30 * 2.0f);
+                                FUN_001f9bf8_2adb30(&blast_velocity, &blast_velocity, frame_time_macro * 2.0f);
                                 FUN_001f9bf8_2adb30(&b, &h->nrm, 1.0f);
                             }
                         }
@@ -1768,7 +1768,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                         bomb_moby->bBC = 1;
                         qcopy(&bomb_moby->pos, &h->pos);
                         FUN_L00_001ff660_2adb30(&blast_velocity, d, &h->nrm);
-                        FUN_001f9bf8_2adb30(&blast_velocity, &blast_velocity, D_0015ED6C_2adb30 * 2.0f);
+                        FUN_001f9bf8_2adb30(&blast_velocity, &blast_velocity, frame_time_macro * 2.0f);
                         FUN_001f9bf8_2adb30(&b, &h->nrm, 1.0f);
                     }
                 }
@@ -1805,7 +1805,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                         FUN_001f9a28_2adb30(&v, &v, &proj);
                         FUN_001f9bf8_2adb30(&proj, &b, FUN_002132a8_2adb30(0.0f, 1.0f));
                         FUN_001f9a10_2adb30(&v, &v, &proj);
-                        FUN_001f9bf8_2adb30(&v, &v, s * FUN_002132a8_2adb30(3.5f, 6.5f) * D_0015ED6C_2adb30);
+                        FUN_001f9bf8_2adb30(&v, &v, s * FUN_002132a8_2adb30(3.5f, 6.5f) * frame_time_macro);
                         FUN_001f9a10_2adb30(&v, &v, &blast_velocity);
                         FUN_L00_002af450_2adb30((char *)&bomb_moby->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x78)), 0, (unsigned char)D_E910.p0[0xA]);
                     }
@@ -1830,7 +1830,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             FUN_001f9a28_2adb30(&v, &v, &proj);
                             FUN_001f9bf8_2adb30(&proj, &b, FUN_002132a8_2adb30(0.0f, 1.0f));
                             FUN_001f9a10_2adb30(&v, &v, &proj);
-                            FUN_001f9bf8_2adb30(&v, &v, s * FUN_002132a8_2adb30(6.5f, 10.0f) * D_0015ED6C_2adb30);
+                            FUN_001f9bf8_2adb30(&v, &v, s * FUN_002132a8_2adb30(6.5f, 10.0f) * frame_time_macro);
                             FUN_001f9a10_2adb30(&v, &v, &blast_velocity);
                             FUN_L00_002af450_2adb30((char *)&bomb_moby->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x5A)), 1, (unsigned char)D_E910.p0[0xA]);
                         }
@@ -1841,10 +1841,10 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     t.f[2] = FUN_002132a8_2adb30(-1.0f, 1.0f);
                     v.q = t.q;
                     delta.f[2] += camera_distance * 0.5f;
-                    FUN_001f9bf8_2adb30(&v, &v, camera_distance / 5.0f * D_0015ED6C_2adb30);
-                    FUN_001f9bf8_2adb30(&delta, &delta, camera_distance * 2.0f * D_0015ED6C_2adb30);
+                    FUN_001f9bf8_2adb30(&v, &v, camera_distance / 5.0f * frame_time_macro);
+                    FUN_001f9bf8_2adb30(&delta, &delta, camera_distance * 2.0f * frame_time_macro);
                     FUN_001f9a10_2adb30(&v, &v, &delta);
-                    FUN_001f9c90_2adb30(&v, &v, D_0015ED6C_2adb30 * 10.0f);
+                    FUN_001f9c90_2adb30(&v, &v, frame_time_macro * 10.0f);
                     FUN_L00_002af450_2adb30((char *)&bomb_moby->pos, (char *)&v, FUN_L00_00257b90_2adb30(FUN_001f96f8_2adb30(0x3C), FUN_001f96f8_2adb30(0x5A)), 1, (unsigned char)D_E910.p0[0xA]);
                     if (camera_distance < 6.0f) {
                         blast_effect_count = FUN_001fa6d0_2adb30(camera_distance) + 1;
@@ -1856,7 +1856,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                         g = 7.0f - camera_distance;
                     }
                     for (i = 0; i < blast_effect_count; i++) {
-                        float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * D_0015ED6C_2adb30 - g * D_0015ED6C_2adb30;
+                        float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * frame_time_macro - g * frame_time_macro;
                         Colors6_2adb30 c1 = l00_bomb_blast_effect_primary_palette;
                         Colors6_2adb30 blast_effect_secondary_palette = l00_bomb_blast_effect_secondary_palette;
                         FUN_L00_0026a9f0_2adb30(&bomb_moby->pos, &blast_velocity,
@@ -1909,7 +1909,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             t.f[1] = FUN_002132a8_2adb30(-1.0f, 1.0f);
                             t.f[2] = FUN_002132a8_2adb30(-0.5f, 2.0f);
                             u.q = t.q;
-                            FUN_001f9bf8_2adb30(&u, &u, s * FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 4.0f, D_0015ED6C_2adb30 * 8.0f));
+                            FUN_001f9bf8_2adb30(&u, &u, s * FUN_002132a8_2adb30(frame_time_macro * 4.0f, frame_time_macro * 8.0f));
                             random_integer_below_cf(&bomb_moby->pos, &u, FUN_002132a8_2adb30(0.05f, 0.1f) * 210000.0f, h);
                         }
                     }
@@ -1943,9 +1943,9 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             float r;
                             float ang;
                             particle_work_vector.q = 0;
-                            particle_work_vector.f[0] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * -0.75f, D_0015ED6C_2adb30 * 0.75f);
-                            particle_work_vector.f[1] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * -0.75f, D_0015ED6C_2adb30 * 0.75f);
-                            particle_work_vector.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 4.0f, D_0015ED6C_2adb30 * 14.0f);
+                            particle_work_vector.f[0] = FUN_002132a8_2adb30(frame_time_macro * -0.75f, frame_time_macro * 0.75f);
+                            particle_work_vector.f[1] = FUN_002132a8_2adb30(frame_time_macro * -0.75f, frame_time_macro * 0.75f);
+                            particle_work_vector.f[2] = FUN_002132a8_2adb30(frame_time_macro * 4.0f, frame_time_macro * 14.0f);
                             v2.q = particle_work_vector.q;
                             r = FUN_002132a8_2adb30(0.0f, 0.35f);
                             ang = FUN_00213308_2adb30();
@@ -1954,7 +1954,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             particle_work_vector.f[2] = 0.0f;
                             FUN_001f9a10_2adb30(&particle_work_vector, &particle_work_vector, &bomb_moby->pos);
                             particle_work_vector.f[2] = gz + 0.5f;
-                            v2.f[2] -= r * D_0015ED6C_2adb30 * 8.0f;
+                            v2.f[2] -= r * frame_time_macro * 8.0f;
                             spawn_gravity_floor_burst_particle(&particle_work_vector, &v2, delay, FUN_002132a8_2adb30(0.25f, 1.0f), gz, frame_time_sq_macro * 20.0f, (0x16 << 24) | (cb << 16) | (cg << 8) | cr, (cb << 16) | (cg << 8) | cr, 1);
                         }
                         for (j = 0; j < 20; j++) {
@@ -1964,9 +1964,9 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                             int life;
                             particle_work_vector.f[0] = FUN_002132a8_2adb30(-3.0f, 3.0f);
                             particle_work_vector.f[1] = FUN_002132a8_2adb30(-3.0f, 3.0f);
-                            particle_work_vector.f[2] = FUN_002132a8_2adb30(D_0015ED6C_2adb30 * 4.0f, D_0015ED6C_2adb30 * 14.0f);
-                            FUN_001f9bf8_2adb30(&particle_work_vector, &particle_work_vector, FUN_002132a8_2adb30(1.5f, 3.0f) * D_0015ED6C_2adb30);
-                            particle_work_vector.f[2] = FUN_002132a8_2adb30(3.0f, 6.0f) * D_0015ED6C_2adb30;
+                            particle_work_vector.f[2] = FUN_002132a8_2adb30(frame_time_macro * 4.0f, frame_time_macro * 14.0f);
+                            FUN_001f9bf8_2adb30(&particle_work_vector, &particle_work_vector, FUN_002132a8_2adb30(1.5f, 3.0f) * frame_time_macro);
+                            particle_work_vector.f[2] = FUN_002132a8_2adb30(3.0f, 6.0f) * frame_time_macro;
                             v2.q = bomb_moby->pos.q;
                             v2.f[2] = gz;
                             sz = FUN_002132a8_2adb30(31500.002f, 52500.0f);
@@ -2245,8 +2245,8 @@ typedef union {
 } V_2afc70;
 extern float D_0015ED6C_2afc70 __asm__("D_0015ED6C");
 extern V_2afc70 hero_pos __asm__("D_0013F3D0") NOT_SDA;
-extern unsigned char D_0013F490_2afc70[] __asm__("D_0013F490") NOT_SDA;
-extern void *D_001413D0_2afc70 __asm__("D_001413D0") NOT_SDA;
+extern unsigned char D_0013F490_lui[] __asm__("D_0013F490") NOT_SDA;
+extern void *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern unsigned char D_L00_00173E60_2afc70[] __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
 extern s16 D_L00_001B0770_lui[] __asm__("D_L00_001B0770") NOT_SDA;
@@ -2313,7 +2313,7 @@ unsigned char *spawn_devastator_missile(unsigned char *owner, V_2afc70 *spawn_po
             *(float *)(missile_data + 0x1C) = target_height_offset;
             *(float *)(missile_data + 8) += target_height_offset;
         }
-        x = FUN_001f9af0_2afc70(D_0013F490_2afc70);
+        x = FUN_001f9af0_2afc70(D_0013F490_lui);
         turn_period = FUN_001f96f8_2afc70(D_0015ED6C_2afc70 * 0.1f < x ? 0x3C : 0xF);
         *(short *)(missile_data + 0x3E) = turn_period;
         *(short *)(missile_data + 0x3C) = turn_period;
@@ -2324,7 +2324,7 @@ unsigned char *spawn_devastator_missile(unsigned char *owner, V_2afc70 *spawn_po
             collision_start.f[2] += 0.6f;
         }
         collision_start.f[2] = spawn_position->f[2];
-        if (FUN_001efa68_2afc70(&collision_start, spawn_position, 0, D_001413D0_2afc70, 0)) {
+        if (FUN_001efa68_2afc70(&collision_start, spawn_position, 0, D_001413D0_lui, 0)) {
             missile_moby[0xBC] = 1;
             qcopy(missile_moby + 0x10, D_L00_00173E60_2afc70);
         }

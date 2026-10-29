@@ -18,7 +18,7 @@ typedef struct {
     unsigned char pad20[4];
     float f24;
 } S_2e89b0;
-extern float D_0013CA40_2e89b0[] __asm__("D_0013CA40") NOT_SDA;
+extern float D_0013CA40_lui[] __asm__("D_0013CA40") NOT_SDA;
 extern int FUN_001f96f8_2e89b0(int) __asm__("FUN_001f96f8");
 
 void follow_camera_read_stick(char *o, float *a, float *b) __asm__("FUN_L00_002e89b0");
@@ -29,7 +29,7 @@ void follow_camera_read_stick(char *camera_object, float *turn_input_out, float 
     if (turn_pitch_state->flags & 1) {
         *turn_input_out = 0.0f;
     } else {
-        *turn_input_out = D_0013CA40_2e89b0[0];
+        *turn_input_out = D_0013CA40_lui[0];
         if (opt_cam_invert == 0) {
             *turn_input_out = -*turn_input_out;
         }
@@ -61,7 +61,7 @@ void follow_camera_read_stick(char *camera_object, float *turn_input_out, float 
         *pitch_input_out = 0.0f;
         *pitch_input_out = turn_pitch_state->f24 / 0.6981317f;
     } else {
-        float raw_pitch_input = D_0013CA40_2e89b0[1];
+        float raw_pitch_input = D_0013CA40_lui[1];
         *pitch_input_out = -raw_pitch_input;
         if (invert52 == 0) {
             *pitch_input_out = raw_pitch_input;

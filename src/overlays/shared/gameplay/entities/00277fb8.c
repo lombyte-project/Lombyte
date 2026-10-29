@@ -40,18 +40,18 @@ typedef struct {
     short f;
 } GG_q;
 
-extern GG_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0") NOT_SDA;
+extern GG_q D_L01_0016CCE0_lui __asm__("D_L01_0016CCE0") NOT_SDA;
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void begin_dialogue_camera_transition(float scale, char *moby) __asm__("FUN_L01_002783a8");
 void begin_dialogue_camera_transition(float scale, char *moby) {
-    D_L01_0016CCE0_q.f = 1;
-    qcopy(D_L01_0016CCE0_q.p, moby + 0x10);
-    D_L01_0016CCE0_q.p[0] += fast_cos(*(float *)(moby + 0x48)) * scale;
-    D_L01_0016CCE0_q.p[1] += fast_sin(*(float *)(moby + 0x48)) * scale;
-    clear_u64_value(D_L01_0016CCE0_q.q);
-    D_L01_0016CCE0_q.a = fast_add_rotations(*(float *)(moby + 0x48), 3.14159274101257324f);
+    D_L01_0016CCE0_lui.f = 1;
+    qcopy(D_L01_0016CCE0_lui.p, moby + 0x10);
+    D_L01_0016CCE0_lui.p[0] += fast_cos(*(float *)(moby + 0x48)) * scale;
+    D_L01_0016CCE0_lui.p[1] += fast_sin(*(float *)(moby + 0x48)) * scale;
+    clear_u64_value(D_L01_0016CCE0_lui.q);
+    D_L01_0016CCE0_lui.a = fast_add_rotations(*(float *)(moby + 0x48), 3.14159274101257324f);
 }
 
 

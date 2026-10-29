@@ -1745,8 +1745,8 @@ extern int D_0015EEA4_q __asm__("D_0015EEA4");
 extern int D_L09_0015F5CC;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C2_q[] __asm__("D_0013D4C2");
-extern unsigned char D_0013F3D0_q[] __asm__("D_0013F3D0") NOT_SDA;
-extern unsigned char D_00141968_q[] __asm__("D_00141968") NOT_SDA;
+extern unsigned char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
+extern unsigned char D_00141968_lui[] __asm__("D_00141968") NOT_SDA;
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -1774,7 +1774,7 @@ void update_level09_item_unlock_and_frame_record(struct Moby *moby) {
             D_L09_001613C8 = 0;
         }
     }
-    frame_and_level_record = D_00141968_q;
+    frame_and_level_record = D_00141968_lui;
     tp = (unsigned short *)(frame_and_level_record + 0x2D8);
     if (*tp == 0) {
         if (D_0013D4C2_q[9] != 0) {
@@ -1785,7 +1785,7 @@ void update_level09_item_unlock_and_frame_record(struct Moby *moby) {
             *(unsigned short *)(frame_and_level_record + 0x2DA) = scale_game_frames(D_0015EEA4_q) / 600;
         }
         *(int *)(frame_and_level_record + 0x2DC) = *(int *)(frame_and_level_record + 0x2DC) | (1 << current_level_index) | 0x80000000;
-        if (is_point_inside_clip_volume(D_0013F3D0_q, *data) != 0) {
+        if (is_point_inside_clip_volume(D_0013F3D0_lui, *data) != 0) {
             help_request(0x2329, 0x5B);
         }
     }

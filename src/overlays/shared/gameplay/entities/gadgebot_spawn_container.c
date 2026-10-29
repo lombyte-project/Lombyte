@@ -749,7 +749,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int follow_path_e94f0(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern struct MobyHit *hit_moby_e94f0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void remove_e94f0(struct Moby *) __asm__("FUN_0020c828");
-extern struct Moby *D_001413D0_e94f0 __asm__("D_001413D0") NOT_SDA;
+extern struct Moby *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
 void update_frog_health_respawn_and_target(struct Moby *moby) __asm__("FUN_L06_002e94f0");
 
@@ -860,7 +860,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
         }
     }
     if (vars->target == 0) {
-        vars->target = D_001413D0_e94f0;
+        vars->target = D_001413D0_lui;
     }
 }
 

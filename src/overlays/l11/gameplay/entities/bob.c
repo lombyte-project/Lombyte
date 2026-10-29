@@ -1238,10 +1238,10 @@ void fred_pokitaru_update(struct Moby *moby) {
 extern float D_0013F3D8_lui __asm__("D_0013F3D8") NOT_SDA;          /* hero z */
 extern int current_level_index __asm__("D_0015ED84");
 extern unsigned char D_0014C050_2518[] __asm__("D_0014C050");
-extern int D_0013CAE4_2518 __asm__("D_0013CAE4") NOT_SDA;
+extern int D_0013CAE4_lui __asm__("D_0013CAE4") NOT_SDA;
 extern int D_L11_0015F594 __asm__("D_L11_0015F594");
 extern char *D_L11_0015FFD8_2518 __asm__("D_L11_0015FFD8");
-extern unsigned char D_001413F5_2518 __asm__("D_001413F5") NOT_SDA;
+extern unsigned char D_001413F5_lui __asm__("D_001413F5") NOT_SDA;
 extern float D_0015ED6C_2518 __asm__("D_0015ED6C");
 extern float D_0015ED70_2518 __asm__("D_0015ED70");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
@@ -1323,7 +1323,7 @@ void teleporter_update(struct Moby *moby) {
         if (g->air_frames.s != 0)
             break;
         FUN_L11_002f2cd0_2518(moby);
-        if (!(D_0013CAE4_2518 & 0x10))
+        if (!(D_0013CAE4_lui & 0x10))
             break;
         if (D_L11_0015F594 != 0xB)
             break;
@@ -1373,7 +1373,7 @@ void teleporter_update(struct Moby *moby) {
             qcopy(destination_position, destination_moby + 0x10);
             destination_position[2] += 0.2f;
             FUN_L00_00216f90_2518(destination_position, destination_moby + 0x40, 0, 1);
-            D_001413F5_2518 = 1;
+            D_001413F5_lui = 1;
             if (*(int *)(data + 0x30) != -1 && *(int *)(data + 0x34) != -1) {
                 FUN_L01_0027a248_2518(*(int *)(data + 0x30), *(int *)(data + 0x34));
             }
@@ -1509,9 +1509,9 @@ void draw_teleporter_ring(struct Moby *moby) {
             v = 0.0f;
         width = v + 0.1f;
         if (*(float *)(data + 0x3c) < 0.65f)
-            D_001413F5_2518 = 1;
+            D_001413F5_lui = 1;
         else
-            D_001413F5_2518 = 0;
+            D_001413F5_lui = 0;
     }
     i = 0;
     do {
@@ -1696,7 +1696,7 @@ struct PokPv_309ac0 {
 };
 
 extern unsigned char D_0013E550_309ac0[] __asm__("D_0013E550");
-extern void *D_0013F64C_309ac0 __asm__("D_0013F64C") NOT_SDA;
+extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void FUN_001fa2d8_309ac0(void *, void *) __asm__("FUN_001fa2d8");
@@ -1799,7 +1799,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         int i;
 
         qcopy(target, (char *)boat_vars->path_c4 + 0x10 + boat_vars->seg_d4 * 16);
-        if (D_0013F64C_309ac0 == moby) {
+        if (D_0013F64C_lui == moby) {
             if (!voice_is_playing(moby, boat_vars->slot_cc)) {
                 boat_vars->slot_cc = allocate_voice_for_target_entry(1, 4, moby);
             }

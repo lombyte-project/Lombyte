@@ -510,7 +510,7 @@ extern float FUN_001fa6c0_30a908(int) __asm__("FUN_001fa6c0");
 extern void func_L00_001FDE48_30a908(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
 extern void FUN_001f7d30_30a908(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L11_001677C0_30a908[] __asm__("D_L11_001677C0");
-extern UV_30a908 D_L11_00161E08_30a908[] __asm__("D_L11_00161E08") MACRO_ADDR;
+extern UV_30a908 D_L11_00161E08_macro[] __asm__("D_L11_00161E08") MACRO_ADDR;
 
 extern char render_fog_context[] __asm__("D_L11_0016D440");
 extern char ocean_strip_orientation_basis[] __asm__("D_L11_001679D0");
@@ -654,26 +654,26 @@ void draw_pokitaru_ocean(struct Moby *moby) {
             for (y = ocean_vars->f18 * -2.0f; y < ocean_vars->f18 * 2.0f; y += ocean_vars->f18) {
                 vertex_count = 0;
                 for (x = ocean_vars->f18 * -2.0f; x < ocean_vars->f18 * 2.0f; x += ocean_vars->f18) {
-                    l11_ocean_wave_grid_vertex_uvs[vertex_count].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    l11_ocean_wave_grid_vertex_uvs[vertex_count].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    l11_ocean_wave_grid_vertex_uvs[vertex_count].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].u;
+                    l11_ocean_wave_grid_vertex_uvs[vertex_count].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].v;
                     l11_ocean_wave_grid_vertex_positions[vertex_count].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[vertex_count].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[vertex_count].z = tide_level_macro;
                     i = vertex_count + 1;
-                    l11_ocean_wave_grid_vertex_uvs[i].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    l11_ocean_wave_grid_vertex_uvs[i].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].u;
+                    l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].v;
                     l11_ocean_wave_grid_vertex_positions[i].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     i = vertex_count + 2;
-                    l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    l11_ocean_wave_grid_vertex_uvs[i].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].u;
+                    l11_ocean_wave_grid_vertex_uvs[i].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].v;
                     l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     i = vertex_count + 3;
-                    l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].u;
-                    l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_30a908[layer].v;
+                    l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].u;
+                    l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].v;
                     l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;

@@ -832,7 +832,7 @@ extern int D_L00_001616CC;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer() __asm__("func_001F9740");
 extern float D_L00_001616A4 __attribute__((sda));
-extern short D_L00_00161660_e[] __asm__("D_L00_00161660") MACRO_ADDR;
+extern short D_L00_00161660_macro[] __asm__("D_L00_00161660") MACRO_ADDR;
 short D_L00_001DBED8[10] = {0};
 short D_L01_001DC358[10] = {0};
 short D_L02_001D0958[10] = {0};
@@ -924,12 +924,12 @@ void walloper_update(char *walloper_moby) {
             float interpolated_record_value = compute_interpolated_record_value(walloper_moby);
             if (6.0f <= interpolated_record_value) {
                 flag = 1;
-                if (func_001F9908_r(&D_L00_00161660_e[54]) == 0) {
+                if (func_001F9908_r(&D_L00_00161660_macro[54]) == 0) {
                     float a = convert_integer_to_float(D_L00_001616CC);
                     a = a / convert_integer_to_float(scale_game_frames(*(int *)&walloper_effect_fade_in_duration_frames));
                     walloper_effect_alpha_scale = 1.0f - a;
                 } else if (12.0f <= interpolated_record_value) {
-                    if (func_001F9908_r(&D_L00_00161660_e[56]) == 0) {
+                    if (func_001F9908_r(&D_L00_00161660_macro[56]) == 0) {
                         float a = convert_integer_to_float(walloper_effect_fade_out_countdown);
                         a = a / convert_integer_to_float(scale_game_frames(*(int *)&walloper_effect_fade_out_duration_frames));
                         walloper_effect_alpha_scale = a;
@@ -1706,7 +1706,7 @@ extern float D_L00_001617D0 MACRO_ADDR;
 extern s32 D_L00_00161824;
 extern s32 D_L00_00161818;
 extern s32 D_L00_001DBF50 NOT_SDA;
-extern u128 D_L00_001DBF60_2bcf98 __asm__("D_L00_001DBF60") NOT_SDA;
+extern u128 D_L00_001DBF60_lui __asm__("D_L00_001DBF60") NOT_SDA;
 extern s32 D_L00_001DD0D0 NOT_SDA;
 extern void scale_vector_2bcf98(float, void *, void *) __asm__("FUN_001f9a68");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1725,9 +1725,9 @@ void reset_beam_chain_and_pulse_state(u8 *moby) {
         scale = D_L00_001616DC_gp / convert_integer_to_float(12);
         D_L00_001617CC_macro = scale;
         scale_vector_2bcf98(-scale, &step, moby + 0xD0);
-        qcopy(&D_L00_001DBF60_2bcf98, source);
+        qcopy(&D_L00_001DBF60_lui, source);
         for (i = 1; i < 12; i++) {
-            fast_vec_add(&D_L00_001DBF60_2bcf98 + i, (u128 *)&D_L00_001DBF50 + i, &step);
+            fast_vec_add(&D_L00_001DBF60_lui + i, (u128 *)&D_L00_001DBF50 + i, &step);
         }
         D_L00_00161718_gp = 0;
         D_L00_00161720_gp = 0;
@@ -1815,14 +1815,14 @@ extern int D_L00_00161750_gp __asm__("D_L00_00161750") __attribute__((sda));
 extern float D_L00_00161758_gp __asm__("D_L00_00161758") __attribute__((sda));
 extern float D_L00_0016175C_gp __asm__("D_L00_0016175C") __attribute__((sda));
 extern float D_L00_00161768_gp __asm__("D_L00_00161768") __attribute__((sda));
-extern signed char D_L00_00161833_2BE3A8[] __asm__("D_L00_00161763") MACRO_ADDR;
+extern signed char D_L00_00161763_macro[] __asm__("D_L00_00161763") MACRO_ADDR;
 extern float D_L00_001617CC_macro __asm__("D_L00_001617CC") MACRO_ADDR;
 extern int D_L00_00161824_macro __asm__("D_L00_00161824") MACRO_ADDR;
 extern float frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
-extern int D_L00_001618A8_2BE3A8[3] __asm__("D_L00_001617D8") MACRO_ADDR;
+extern int D_L00_001617D8_macro[3] __asm__("D_L00_001617D8") MACRO_ADDR;
 extern float D_L00_001618B8_2BE3A8[3] __asm__("D_L00_001617E8") MACRO_ADDR;
-extern float D_L00_001618C8_2BE3A8[3] __asm__("D_L00_001617F8") MACRO_ADDR;
+extern float D_L00_001617F8_macro[3] __asm__("D_L00_001617F8") MACRO_ADDR;
 extern float D_L00_001618D8_2BE3A8[3] __asm__("D_L00_00161808") MACRO_ADDR;
 extern int D_L00_001618E8_2BE3A8[3] __asm__("D_L00_00161818") MACRO_ADDR;
 extern Vec_2BE3A8 D_L00_001DC250_2BE3A8[12] __asm__("D_L00_001DBF50");
@@ -2033,10 +2033,10 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         for (slot = 0; slot < 3; slot++) {
             if (D_L00_001618E8_2BE3A8[slot] == 0) {
                 D_L00_001618E8_2BE3A8[slot] = 1;
-                D_L00_001618A8_2BE3A8[slot] = func_001F9850_2BE3A8(D_L00_0016174C_gp);
-                D_L00_001618C8_2BE3A8[slot] = 0.0f;
+                D_L00_001617D8_macro[slot] = func_001F9850_2BE3A8(D_L00_0016174C_gp);
+                D_L00_001617F8_macro[slot] = 0.0f;
                 D_L00_001618D8_2BE3A8[slot] = D_L00_0016175C_gp;
-                D_L00_001618B8_2BE3A8[slot] = func_001FA888_2BE3A8(D_L00_00161833_2BE3A8[0]);
+                D_L00_001618B8_2BE3A8[slot] = func_001FA888_2BE3A8(D_L00_00161763_macro[0]);
                 qcopy(&D_L00_001DD3A0_2BE3A8[slot], data);
                 func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
                 func_L00_001FF4B0_2BE3A8(&D_L00_001DD3D0_2BE3A8[slot], &side, 1.0f);
@@ -2056,18 +2056,18 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         if (D_L00_001618E8_2BE3A8[pulse] == 0) {
             continue;
         }
-        if (func_001F9908_2BE3A8(&D_L00_001618A8_2BE3A8[pulse]) != 0) {
+        if (func_001F9908_2BE3A8(&D_L00_001617D8_macro[pulse]) != 0) {
             D_L00_001618E8_2BE3A8[pulse] = 0;
             continue;
         }
-        if (D_L00_001618A8_2BE3A8[pulse] < D_L00_00161750_gp) {
+        if (D_L00_001617D8_macro[pulse] < D_L00_00161750_gp) {
             D_L00_001618B8_2BE3A8[pulse] = D_L00_001618B8_2BE3A8[pulse] - D_L00_00161768_gp;
         }
         dt = D_L00_00161748_gp * D_0015ED6C_gp;
-        travelled = D_L00_001618C8_2BE3A8[pulse] + dt;
+        travelled = D_L00_001617F8_macro[pulse] + dt;
         max_length = D_L00_001616DC_gp;
         ratio = travelled / max_length;
-        D_L00_001618C8_2BE3A8[pulse] = travelled;
+        D_L00_001617F8_macro[pulse] = travelled;
         if (1.0f < ratio) {
             ratio = 1.0f;
         }
@@ -2078,7 +2078,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             continue;
         }
         node_index = func_001FA898_2BE3A8(travelled / D_L00_001617CC_macro);
-        remainder = D_L00_001618C8_2BE3A8[pulse] - func_001FA888_2BE3A8(node_index) * D_L00_001617CC_macro;
+        remainder = D_L00_001617F8_macro[pulse] - func_001FA888_2BE3A8(node_index) * D_L00_001617CC_macro;
         qcopy(&D_L00_001DD3A0_2BE3A8[pulse], &D_L00_001DC260_2BE3A8[node_index]);
         if (node_index == 11) {
             func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[node_index], &D_L00_001DC250_2BE3A8[node_index]);

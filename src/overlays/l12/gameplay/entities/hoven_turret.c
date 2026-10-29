@@ -506,7 +506,7 @@ extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/hoven_turret_update.h"
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float approach_value(float *, float, float);
-extern float D_L12_0015F580_f[] __asm__("D_L12_0015F580") MACRO_ADDR;
+extern float D_L12_0015F580_macro[] __asm__("D_L12_0015F580") MACRO_ADDR;
 extern int D_L12_0015F5C4_macro __asm__("D_L12_0015F5C4") MACRO_ADDR;
 extern int D_L12_001619A0 MACRO_ADDR;
 extern int D_L12_00161F00 __attribute__((sda));
@@ -544,7 +544,7 @@ void FUN_L12_003032e8_c(struct Moby *moby) __asm__("FUN_L12_003032e8");
 extern int pad_held[] __asm__("D_0013CAE0") NOT_SDA;
 extern char D_0013E533[];
 extern unsigned char D_0014171B_304920[] __asm__("D_0014C050");
-extern int D_0015EED0_304920[] __asm__("D_0015EDDC") MACRO_ADDR;
+extern int invert52_macro[] __asm__("D_0015EDDC") MACRO_ADDR;
 extern Moby *D_L12_0015FFD8_gp __asm__("D_L12_0015FFD8") MACRO_ADDR;
 extern char D_L12_00167180_304920[] __asm__("D_L12_00167100");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -699,7 +699,7 @@ void hoven_turret_update(struct Moby *moby) {
 
             joy[0] = ((Hero *)(D_0013E533 + 0xE1D))->stick_x;
             y = ((Hero *)(D_0013E533 + 0xE1D))->stick_y;
-            if (D_0015EED0_304920[0] == 0) {
+            if (invert52_macro[0] == 0) {
                 y = -y;
             }
             joy[1] = y;
@@ -791,7 +791,7 @@ void hoven_turret_update(struct Moby *moby) {
             qcopy(explosion_position, ((Cam_304920 *)D_L12_00167180_304920)->f140);
             FUN_L00_00262cf0(explosion_position, explosion_position, randomized_view_offset_distance, randomized_view_yaw, randomized_view_pitch);
             t = random_float_between(0.5f, 1.3f);
-            spawn_explosion(moby, D_L12_0015F580_f, explosion_position, 0.0f, 0.0f, 7, 0xF, 0x19, t, t * 0.57f, 10.0f, 3, 0.7f, 0.0f, 0, 0, -1, 0);
+            spawn_explosion(moby, D_L12_0015F580_macro, explosion_position, 0.0f, 0.0f, 7, 0xF, 0x19, t, t * 0.57f, 10.0f, 3, 0.7f, 0.0f, 0, 0, -1, 0);
             data->fAE = scale_game_frames(random_int_between(5, 0xD));
         }
         if (fast_dec_timer_s16(&data->fAC)) {

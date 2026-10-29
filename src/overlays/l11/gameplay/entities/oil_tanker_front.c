@@ -14,7 +14,7 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
-extern float D_0015ED6C_n[] __asm__("D_0015ED68") MACRO_ADDR;
+extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
 extern char *path_table[] __asm__("D_L11_001B0EB0");
@@ -950,9 +950,9 @@ void update_oil_tanker_link_effects_and_destruction(struct Moby *moby) {
             moby->visible != 0 && *(int *)&D_L11_0015FFBC >= 0x47) {
             transform_vector_by_basis(effect_scratch_vector, &oil_tanker_link_effect_local_spawn_offset_gp, &moby->rot_row0);
             fast_vec_add(effect_scratch_vector, effect_scratch_vector, &moby->pos);
-            random_vector(random_motion_offset, 0.0f, *(float *)&oil_tanker_link_effect_random_motion_radius_scale_gp * D_0015ED6C_n[1]);
+            random_vector(random_motion_offset, 0.0f, *(float *)&oil_tanker_link_effect_random_motion_radius_scale_gp * frame_scale_inv_macro[1]);
             fast_vec_sub(effect_motion_vector, &moby->pos, link_vars);
-            effect_motion_vector[2] -= D_0015ED6C_n[1] + D_0015ED6C_n[1];
+            effect_motion_vector[2] -= frame_scale_inv_macro[1] + frame_scale_inv_macro[1];
             fast_vec_add(effect_motion_vector, effect_motion_vector, random_motion_offset);
             func_L11_0031C210_5(
                 effect_scratch_vector, effect_motion_vector, D_L11_00161E18, 0,
@@ -991,8 +991,8 @@ void start_oil_tanker_link_destruction(struct Moby *link_moby) {
     link_moby->state = 1;
     link_moby->collision = 0;
     fast_vec_sub(link_vars + 0x10, &link_moby->pos, link_vars);
-    *(float *)(link_vars + 0x20) = random_float_between(20.0f, 60.0f) * DEG_TO_RAD * D_0015ED6C_n[1];
-    *(float *)(link_vars + 0x24) = random_float_between(20.0f, 60.0f) * DEG_TO_RAD * D_0015ED6C_n[1];
+    *(float *)(link_vars + 0x20) = random_float_between(20.0f, 60.0f) * DEG_TO_RAD * frame_scale_inv_macro[1];
+    *(float *)(link_vars + 0x24) = random_float_between(20.0f, 60.0f) * DEG_TO_RAD * frame_scale_inv_macro[1];
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319FA0), where it is exact; names translated to the US level program. */
 
@@ -1219,10 +1219,10 @@ void spawn_energy_sphere_spark(struct Moby *moby) {
     float second_spark_vector[4];
     int first_spark_color;
     int second_spark_color;
-    random_vector(first_spark_vector, *(float *)&energy_sphere_spark_radial_range_start_gp * D_0015ED6C_n[1],
-                     *(float *)&energy_sphere_spark_radial_range_end_gp * D_0015ED6C_n[1]);
-    random_vector(second_spark_vector, *(float *)&energy_sphere_spark_radial_range_start_gp * D_0015ED6C_n[1],
-                     *(float *)&energy_sphere_spark_radial_range_end_gp * D_0015ED6C_n[1]);
+    random_vector(first_spark_vector, *(float *)&energy_sphere_spark_radial_range_start_gp * frame_scale_inv_macro[1],
+                     *(float *)&energy_sphere_spark_radial_range_end_gp * frame_scale_inv_macro[1]);
+    random_vector(second_spark_vector, *(float *)&energy_sphere_spark_radial_range_start_gp * frame_scale_inv_macro[1],
+                     *(float *)&energy_sphere_spark_radial_range_end_gp * frame_scale_inv_macro[1]);
     first_spark_vector[3] = *(float *)&energy_sphere_spark_first_vector_w_gp;
     second_spark_vector[3] = *(float *)&energy_sphere_spark_second_vector_w_gp;
     first_spark_color = fast_tween_color(*(int *)&energy_sphere_spark_color_range_start_gp, *(int *)&energy_sphere_spark_color_range_end_gp,
@@ -1306,7 +1306,7 @@ void blarg_ship_update(struct Moby *moby) {
             moby->state = 1;
             *(float *)(moby_vars + 0x6C) = randf_sym(0.3f, 0.5f);
             *(float *)(moby_vars + 0x70) = random_angle_radians();
-            *(float *)(moby_vars + 0x74) = randf_sym(60.0f, 120.0f) * DEG_TO_RAD * D_0015ED6C_n[1];
+            *(float *)(moby_vars + 0x74) = randf_sym(60.0f, 120.0f) * DEG_TO_RAD * frame_scale_inv_macro[1];
             *(float *)(moby_vars + 0x78) = random_float_between(8.0f, 12.0f);
         } else {
             moby->state = 4;
@@ -1397,13 +1397,13 @@ void blarg_ship_update(struct Moby *moby) {
         distance_to_target = fast_vec_length(scratch_vector);
         if (*(char *)&hero.ship_flags & 2) {
             advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), distance_to_target, frame_time_sq + frame_time_sq,
-                                       frame_time_sq * 20.0f, D_0015ED6C_n[1]);
+                                       frame_time_sq * 20.0f, frame_scale_inv_macro[1]);
         } else if (moby->command) {
             advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), distance_to_target, frame_time_sq + frame_time_sq,
-                                       frame_time_sq * 20.0f, D_0015ED6C_n[1] * 15.0f);
+                                       frame_time_sq * 20.0f, frame_scale_inv_macro[1] * 15.0f);
         } else {
             advance_accelerated_scalar(&movement_distance_scratch, (float *)(moby_vars + 0x6C), distance_to_target, frame_time_sq + frame_time_sq,
-                                       frame_time_sq * 20.0f, D_0015ED6C_n[1] * 5.0f);
+                                       frame_time_sq * 20.0f, frame_scale_inv_macro[1] * 5.0f);
         }
         FUN_L00_0025f730(scratch_vector, *(float *)(moby_vars + 0x6C));
         fast_vec_add(&moby->pos.x, &moby->pos.x, scratch_vector);
@@ -1424,10 +1424,10 @@ void blarg_ship_update(struct Moby *moby) {
             fast_vec_sub(direction_to_hero, hero_position, &moby->pos.x);
             steering_target_angle = fast_arc_tan(direction_to_hero[0], direction_to_hero[1]);
             approach_angle(yaw, (float *)(moby_vars + 0x8C), steering_target_angle, frame_time_sq * 12.566371f,
-                             frame_time_sq * 12.566371f, D_0015ED6C_n[1] * 12.566371f);
+                             frame_time_sq * 12.566371f, frame_scale_inv_macro[1] * 12.566371f);
             steering_target_angle = -fast_arc_tan(vector_length_xy(direction_to_hero), direction_to_hero[2]);
             approach_angle(pitch, (float *)(moby_vars + 0x90), steering_target_angle, frame_time_sq * 12.566371f,
-                             frame_time_sq * 12.566371f, D_0015ED6C_n[1] * 12.566371f);
+                             frame_time_sq * 12.566371f, frame_scale_inv_macro[1] * 12.566371f);
             if (level_frame % 10 == 0) {
                 allocate_voice_for_target_entry(2, 0, (int)moby);
                 approach_value((float *)(moby_vars + 0x94), 0.0f, 0.25f);
@@ -1440,7 +1440,7 @@ void blarg_ship_update(struct Moby *moby) {
                 }
                 fast_vec_add(sA0, sA0, &moby->pos.x);
                 fast_vec_sub(shot_displacement, sB0, sA0);
-                fast_vec_normalize(shot_velocity, shot_displacement, *(float *)&blarg_ship_shot_speed_gp * D_0015ED6C_n[1]);
+                fast_vec_normalize(shot_velocity, shot_displacement, *(float *)&blarg_ship_shot_speed_gp * frame_scale_inv_macro[1]);
                 fast_vec_add(shot_velocity, shot_velocity, hero_position_delta);
                 spawned_shot = spawn_class_3f9_moby((int)moby, shot_velocity, sA0, 128.0f, -1.0f, 10.0f);
                 if (spawned_shot) {
@@ -1541,7 +1541,7 @@ char *activate_listed_blarg_ship(int list) {
         qcopy(selected_moby + 0x10, B);
         selected_moby[0x20] = 5;
         selected_moby[0xBC] = 1;
-        *(float *)(moby_vars + 0x6C) = D_0015ED6C_n[1] * 20.0f;
+        *(float *)(moby_vars + 0x6C) = frame_scale_inv_macro[1] * 20.0f;
         *(float *)(moby_vars + 0x94) = 5.0f;
         *(int *)(moby_vars + 0x98) = 0;
         if (*(unsigned char *)(selected_moby + 0x53))
@@ -1642,7 +1642,7 @@ void update_bubble_motion_and_scale(struct Moby *bubble_moby) {
         rate = bubble_moby->pclass->scale / (float)scale_game_frames(0x3C);
         if ((level_frame & 3) == 0) {
             spawn_bubble_surface_effects((struct Moby *)bubble_moby, *(float **)(bubble_vars + 0x24), 0, 1);
-            random_vector(randomized_effect_vector, 0.0f, D_0015ED6C_n[1]);
+            random_vector(randomized_effect_vector, 0.0f, frame_scale_inv_macro[1]);
             randomized_effect_vector[2] = absolute_float(randomized_effect_vector[2]);
             spawned_effect = func_L00_0026FF20_p(&bubble_moby->pos, randomized_effect_vector, *(float *)&D_L11_00162414,
                                     **(float **)(bubble_vars + 0x24));
@@ -1716,11 +1716,11 @@ void spawn_bubble_surface_effects(struct Moby *source_moby, float *ground, int s
     int i;
     for (i = 0; i < spark_count; i++) {
         float emission_angle = random_angle_radians();
-        float horizontal_emission_scale = random_float_between(D_0015ED6C_n[1] * 0.0f, D_0015ED6C_n[1] * 6.0f);
+        float horizontal_emission_scale = random_float_between(frame_scale_inv_macro[1] * 0.0f, frame_scale_inv_macro[1] * 6.0f);
         int k;
         effect_spawn_scratch[0] = fast_cos(emission_angle) * horizontal_emission_scale;
         effect_spawn_scratch[1] = fast_sin(emission_angle) * horizontal_emission_scale;
-        effect_spawn_scratch[2] = random_float_between(D_0015ED6C_n[1] * 3.0f, D_0015ED6C_n[1] * 6.5f);
+        effect_spawn_scratch[2] = random_float_between(frame_scale_inv_macro[1] * 3.0f, frame_scale_inv_macro[1] * 6.5f);
         k = random_int_between(0x5A, 0x78);
         FUN_L00_0026f548(&source_moby->pos, effect_spawn_scratch, random_integer_below(2), k);
     }
@@ -1770,11 +1770,11 @@ void spawn_bubble_spark(struct Moby *source_moby) {
     char *moby_vars;
     int initial_spark_color, second_spark_color, spark_frame_count, second_spark_frame_count, third_spark_frame_count;
     moby_vars = (char *)source_moby->pvars;
-    random_vector(randomized_velocity, 0.0f, *(float *)&bubble_spark_random_velocity_radius_gp * D_0015ED6C_n[1]);
+    random_vector(randomized_velocity, 0.0f, *(float *)&bubble_spark_random_velocity_radius_gp * frame_scale_inv_macro[1]);
     fast_vec_add(randomized_velocity, randomized_velocity, moby_vars);
     clear_u64_value(vertical_spark_vector);
     vertical_spark_vector[2] = random_float_between(*(float *)&bubble_spark_vertical_range_start_gp, *(float *)&bubble_spark_vertical_range_end_gp) *
-            D_0015ED6C_n[1];
+            frame_scale_inv_macro[1];
     randomized_velocity[3] = *(float *)&bubble_spark_first_vector_w_gp;
     vertical_spark_vector[3] = *(float *)&bubble_spark_second_vector_w_gp;
     initial_spark_color = fast_tween_color(*(int *)&bubble_spark_initial_color_range_start_gp, *(int *)&bubble_spark_initial_color_range_end_gp,

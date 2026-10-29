@@ -29,7 +29,7 @@ extern int fast_dec_timer() __asm__("func_001F9740");
 extern unsigned char D_0013D408[];
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern unsigned char D_0013D4DF NOT_SDA;
-extern int D_0015ED80_e[] __asm__("D_0015ED80") MACRO_ADDR;
+extern int pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 extern void DebugPrint();
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
@@ -188,7 +188,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(pvars + 0x20)) && fleet_help_request_gate_state[0] == 0 &&
             fleet_help_request_gate_state[9] == -1 && D_0013D408_b[0xBC] == 0) {
             int help_gate_flags = *(int *)(((char *)&fleet_clip_volume_help_suppression_flags));
-            mask = 1 << D_0015ED80_e[1];
+            mask = 1 << pal_mode_macro[1];
             if (!(help_gate_flags & mask)) {
                 help_request(0x3A9D, 0x82);
             }

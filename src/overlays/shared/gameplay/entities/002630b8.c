@@ -243,7 +243,7 @@ extern s32 FUN_00213260_2637f8(s32) __asm__("FUN_00213260");
 extern s32 FUN_001f96f8_2637f8(s32) __asm__("FUN_001f96f8");
 extern Effect_2637f8 *FUN_L00_0026d000_2637f8(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
-extern u8 D_L00_0015F580_2637f8[] __asm__("D_L00_0015F580") MACRO_ADDR;
+extern u8 D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
 void cutscene_set_camera_target(u8 *m) __asm__("FUN_L00_002637f8");
 void cutscene_set_camera_target(u8 *moby) {
     Vec4_2634f8 vectors[4];
@@ -274,7 +274,7 @@ void cutscene_set_camera_target(u8 *moby) {
                 if (FUN_00213260_2637f8(2) != 0)
                     signed_random_value = -signed_random_value;
                 effect = FUN_L00_0026d000_2637f8(&effect_spawn_position, size, 1.0f, 0.75f, signed_random_value,
-                                                   D_L00_0015F580_2637f8, lifetime, 0x503030ff);
+                                                   D_L00_0015F580_macro, lifetime, 0x503030ff);
                 if (effect) {
                     EffectTail_2637f8 *tail = &effect->tail;
                     effect->hA = FUN_001f96f8_2637f8(6);
@@ -297,7 +297,7 @@ void cutscene_set_camera_target(u8 *moby) {
             count = 4;
             do {
                 effect = FUN_L00_0026d000_2637f8(&effect_spawn_position, size, 1.0f, 1.0f, 0x10,
-                                                   D_L00_0015F580_2637f8, lifetime, 0x7fffffff);
+                                                   D_L00_0015F580_macro, lifetime, 0x7fffffff);
                 if (effect) {
                     EffectTail_2637f8 *tail = &effect->tail;
                     effect->hA = FUN_001f96f8_2637f8(2);

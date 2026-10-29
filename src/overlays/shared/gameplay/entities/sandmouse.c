@@ -1474,8 +1474,8 @@ typedef struct {
     short unk84;
 } Cam_316730;
 
-extern Ent50_316730 *D_L01_0015EF50_c __asm__("D_L01_0015EF50") MACRO_ADDR;
-extern Ent7EC_316730 *D_L01_0015F70C_c __asm__("D_L01_0015F70C") MACRO_ADDR;
+extern Ent50_316730 *D_L01_0015EF50_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
+extern Ent7EC_316730 *D_L01_0015F70C_macro __asm__("D_L01_0015F70C") MACRO_ADDR;
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float camera_basis_reference_direction[] __asm__("D_L01_001672B0");
@@ -1487,7 +1487,7 @@ extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __as
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
-extern int D_0015EE84_c __asm__("D_0015ED84") MACRO_ADDR;
+extern int current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern Path_316730 *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
 
 void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) __asm__("FUN_L01_00315358");
@@ -1506,7 +1506,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
     SubA_316730 *look = &data->a;
     SubB_316730 *follow = &data->b;
     SubC_316730 *progress = &data->c;
-    Parm_316730 *params = D_L01_0015EF50_c[camera_to_update->unk84].unk1C;
+    Parm_316730 *params = D_L01_0015EF50_macro[camera_to_update->unk84].unk1C;
     float rate = 0.01f;
     int mode = params->unk30;
     int path_index = params->unk20;
@@ -1535,7 +1535,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
     } else if (mode == 2) {
         Path_316730 *pathA = D_L01_001B0C30_316730[path_index];
-        Path_316730 *pathD = D_L01_0015F70C_c[params->unk24].unk10;
+        Path_316730 *pathD = D_L01_0015F70C_macro[params->unk24].unk10;
         Path_316730 *pathC = D_L01_001B0C30_316730[params->unk28];
         Path_316730 *pathB = D_L01_001B0C30_316730[params->unk2C];
         int i;
@@ -1637,7 +1637,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
         Path_316730 *path = D_L01_001B0C30_316730[params->unk20];
 
         FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, look_target, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
-        if (D_0015EE84_c == 0xE && params->unk30 == 0) {
+        if (current_level_index_macro == 0xE && params->unk30 == 0) {
             sample_path(path, delta, &segment, &fraction, lead, 0);
         } else {
             sample_path(path, delta, &segment, &fraction, lead, 1);

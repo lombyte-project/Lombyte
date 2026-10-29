@@ -644,13 +644,13 @@ extern void FUN_L05_0024cee8(int, int);
 extern void create_class_5c3_moby(void *, void *, void *, float, float) __asm__("FUN_L05_002d4168");
 extern void fast_dec_timer(s32 *) __asm__("func_001F9740");
 extern PadState D_0013CA40_p2523C8 __asm__("D_0013C940");
-extern int D_00141760_2523C8 __asm__("D_00141660") NOT_SDA;
+extern int D_00141660_lui __asm__("D_00141660") NOT_SDA;
 extern unsigned char D_0013D5C8_2523C8[] __asm__("D_0013D4DC");
 extern Rec2C_2523C8 D_L05_0017C188_2523C8[] __asm__("D_L05_0017C088");
 extern int D_L05_0015F674_gp __asm__("D_L05_0015F674") __attribute__((sda));
 extern int func_L05_0024D680_2523C8(int, int) __asm__("FUN_L05_0024cee8");
 extern int func_001F9908_2523C8(int *) __asm__("FUN_001f9740");
-extern Moby *D_L05_00160098_2523C8 __asm__("D_L05_0015FFD8") MACRO_ADDR;
+extern Moby *D_L05_0015FFD8_macro __asm__("D_L05_0015FFD8") MACRO_ADDR;
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern int D_0015ED84_gp __asm__("D_0015ED84") MACRO_ADDR;
 
@@ -836,7 +836,7 @@ int process_hero_primary_item_input(void) {
         if (!FUN_L00_00266d60(mask, scale_game_frames(7), 0)) {
             break;
         }
-        if (D_00141760_2523C8 != 0x1F) {
+        if (D_00141660_lui != 0x1F) {
             break;
         }
         if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby)->oclass != 0x1E3) {
@@ -985,7 +985,7 @@ int process_hero_primary_item_input(void) {
                         i++;
                         continue;
                     }
-                    candidate = (Moby *)((char *)D_L05_00160098_2523C8 + (id << 8));
+                    candidate = (Moby *)((char *)D_L05_0015FFD8_macro + (id << 8));
                     yaw_error = fast_difference_between_rotations((*(Hero *)((char *)&hero)).motion.rot.f[2], fast_arc_tan(candidate->pos.x - (*(Hero *)((char *)&hero)).motion.pos.f[0], candidate->pos.y - (*(Hero *)((char *)&hero)).motion.pos.f[1]));
                     if (!(yaw_error > 0.7853982f)) {
                         pitch_error = fast_difference_between_rotations(fast_arc_tan(vector_distance((*(Hero *)((char *)&hero)).motion.pos.f, &candidate->pos), candidate->pos.z - (*(Hero *)((char *)&hero)).motion.pos.f[2]), 0.0f);
@@ -1418,9 +1418,9 @@ typedef struct {
 } Ent_254608;
 typedef struct { char pad0[9]; unsigned char f9; } Flags_254608;
 
-extern unsigned char D_0013D388_254608[] __asm__("D_0013D388") NOT_SDA;
-extern unsigned char D_0013D408_254608[] __asm__("D_0013D408") NOT_SDA;
-extern unsigned char D_0013D4DF_254608 __asm__("D_0013D4DF") NOT_SDA;
+extern unsigned char alternate_item_available_lui[] __asm__("D_0013D388") NOT_SDA;
+extern unsigned char item_unlocked_lui[] __asm__("D_0013D408") NOT_SDA;
+extern unsigned char D_0013D4DF_lui __asm__("D_0013D4DF") NOT_SDA;
 extern char *D_L05_001B0930[];
 extern Ent_254608 *D_L05_0015FFD8_254608 __asm__("D_L05_0015FFD8") MACRO_ADDR;
 extern int D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
@@ -1592,7 +1592,7 @@ void update_hero_hoverboard_race_progress(void) {
     if (hero.race_lap < 3) {
         return;
     }
-    if (*(D_0013D388_254608) != 0) {
+    if (*(alternate_item_available_lui) != 0) {
         D_L05_0015F6A8 = 1;
     }
     if (D_0015ED84_lui == 5) {
@@ -1609,8 +1609,8 @@ void update_hero_hoverboard_race_progress(void) {
             fast_finish_threshold_frames = FUN_001f96f8_254608(0x1644);
         }
         if (fast_finish_threshold_frames >= hero.race_time_frames) {
-            if (((Flags_254608 *)D_0013D408_254608)->f9 == 0) {
-                ((Flags_254608 *)D_0013D408_254608)->f9 = 1;
+            if (((Flags_254608 *)item_unlocked_lui)->f9 == 0) {
+                ((Flags_254608 *)item_unlocked_lui)->f9 = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }
@@ -1618,7 +1618,7 @@ void update_hero_hoverboard_race_progress(void) {
         if (race_pvars->f28 == -1) {
             return;
         }
-        if (*(D_0013D388_254608) == 0 && hero.race_position == 1) {
+        if (*(alternate_item_available_lui) == 0 && hero.race_position == 1) {
             D_L05_0015FFD8_254608[race_pvars->f28].fBC = 1;
         } else {
             hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[race_pvars->f28]);
@@ -1645,7 +1645,7 @@ void update_hero_hoverboard_race_progress(void) {
         if (race_pvars->f28 == -1) {
             return;
         }
-        if (D_0013D4DF_254608 == 0 && hero.race_position == 1) {
+        if (D_0013D4DF_lui == 0 && hero.race_position == 1) {
             D_L05_0015FFD8_254608[race_pvars->f28].fBC = 1;
         } else {
             hero.unk890 = (u8 *)(&D_L05_0015FFD8_254608[race_pvars->f28]);
@@ -1803,9 +1803,9 @@ change_state:
     hero_set_state(state, 1);
     return 1;
 continue_fall:
-    if (D_0013D388_254608[0]) {
-        if (current_level_index == 5 && (&hero)->tricks_landed[4] == 4 && (&hero)->unk70C > 3 && D_0013D408_254608[7] == 0) {
-            D_0013D408_254608[7] = 1;
+    if (alternate_item_available_lui[0]) {
+        if (current_level_index == 5 && (&hero)->tricks_landed[4] == 4 && (&hero)->unk70C > 3 && item_unlocked_lui[7] == 0) {
+            item_unlocked_lui[7] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }

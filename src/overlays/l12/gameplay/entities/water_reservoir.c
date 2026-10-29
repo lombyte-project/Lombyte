@@ -242,7 +242,7 @@ typedef struct {
 } ShotHit_ece00;
 
 typedef struct { char pad0[0x18]; int moby; } ShotColl_ece00;
-extern ShotColl_ece00 D_L12_001742C0_ece00 __asm__("D_L12_001742C0") NOT_SDA;
+extern ShotColl_ece00 D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
 extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern char *FUN_L00_0025a420_ece00(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
@@ -305,7 +305,7 @@ void rocket_update(struct Moby *moby) {
         spawn_effect(back, side, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between(30, 60)), 40,
                          random_int_between(50, 75), 0);
         if (FUN_001efa68_ece00(&moby->pos, old_pos, 0, moby, 0) || coll_sphere(&moby->pos, 0.2f, 0, moby)) {
-            if (D_L12_001742C0_ece00.moby != 0 && D_L12_001742C0_ece00.moby != (int)vars->owner) {
+            if (D_L12_001742C0_lui.moby != 0 && D_L12_001742C0_lui.moby != (int)vars->owner) {
                 damage = 1;
                 if (current_level_index == 12 && camera_secondary_mode == 50) {
                     damage = D_L12_00161F20 >= 16 ? 2 : 3;
@@ -318,7 +318,7 @@ void rocket_update(struct Moby *moby) {
                 hit.unk18 = 1;
                 hit.unk19 = 1;
                 hit.oclass = moby->oclass;
-                record_moby_hit(D_L12_001742C0_ece00.moby, &hit);
+                record_moby_hit(D_L12_001742C0_lui.moby, &hit);
             }
             moby->state = 2;
         }

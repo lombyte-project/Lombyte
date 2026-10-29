@@ -177,7 +177,7 @@ void update_enabled_item_tint_from_hero(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_00200D70), where it is exact; names translated to the US level program. */
 
-extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") NOT_SDA;
+extern float D_L15_0017ACC0_lui __asm__("D_L15_0017ACC0") NOT_SDA;
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
@@ -201,7 +201,7 @@ void update_hero_bobbing_and_target_position(void) {
             *(u128 *)position_offset = 0;
             position_offset[2] = 0.21f;
             transform_vector_by_basis(position_offset, position_offset, hero_moby + 0xC0);
-            euler_rotation_matrix(rotation_matrix, &D_L15_0017ACC0_d);
+            euler_rotation_matrix(rotation_matrix, &D_L15_0017ACC0_lui);
             transform_vector(position_offset, position_offset, rotation_matrix);
             fast_vec_add(((char *)base->hoverboard_moby) + 0x10, ((char *)base->hoverboard_moby) + 0x10, position_offset);
         }
@@ -332,8 +332,8 @@ typedef struct {
     u8 p1[0x40 - 0x20];
     V_20a328 v40;
 } X_20a328;
-extern P_20a328 D_0013F350_20a328 __asm__("D_0013F350") NOT_SDA;
-extern X_20a328 D_L15_00174440_20a328 __asm__("D_L15_00174440") NOT_SDA;
+extern P_20a328 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
+extern X_20a328 D_L15_00174440_lui __asm__("D_L15_00174440") NOT_SDA;
 extern f32 FUN_L00_002339d0_20a328(void *) __asm__("FUN_L00_002339d0");
 extern f32 FUN_001f9b20_20a328(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9dc8_20a328(f32) __asm__("FUN_001f9dc8");
@@ -344,8 +344,8 @@ extern int FUN_001efa68_20a328(void *, void *, int, void *, int) __asm__("FUN_00
 extern int FUN_001f0b58_20a328(void) __asm__("FUN_001f0b58");
 extern f32 FUN_001f9e90_20a328(f32, f32) __asm__("FUN_001f9e90");
 extern void FUN_00125180_20a328(void *, void *) __asm__("FUN_00125180");
-#define P D_0013F350_20a328
-#define X D_L15_00174440_20a328
+#define P D_0013F350_lui
+#define X D_L15_00174440_lui
 
 extern s32 D_L15_0017445C NOT_SDA;
 extern char D_0013F3D0[] NOT_SDA;

@@ -766,7 +766,7 @@ typedef struct {
 extern G_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0");
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
 #include "rnc/gameplay/state/options.h"
-extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") NOT_SDA;
+extern unsigned char D_L01_0017C8C0_lui[] __asm__("D_L01_0017C8C0") NOT_SDA;
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 #include "rnc/overlay/shared/gameplay/entities/rock_globals.h"
@@ -780,7 +780,7 @@ void attach_cutscene_big_head_manipulator(char *class_reference_moby) {
             char *moby = D_L01_0016CCE0_q.m[i];
             short c = *(short *)(moby + 0xA6);
             if (c == *(short *)(class_reference_moby + 0xA6) || c == 0x32B) {
-                unsigned char *manipulator_record = D_L01_0017C8C0_q;
+                unsigned char *manipulator_record = D_L01_0017C8C0_lui;
                 if (manipulator_record[1] == 0) {
                     attach_manipulator(moby, 0, manipulator_record);
                     *(float *)(manipulator_record + 0x20) = cutscene_big_head_scale_gp;
@@ -1984,7 +1984,7 @@ typedef struct {
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float moby_radius_ring_quad_uvs[] __asm__("D_L01_00201630");
-extern char D_001413F5_c __asm__("D_001413F5") NOT_SDA;
+extern char D_001413F5_lui __asm__("D_001413F5") NOT_SDA;
 extern int moby_radius_ring_blend_minuend_selector_gp __asm__("D_L01_00161FB8") __attribute__((sda));
 extern int moby_radius_ring_blend_subtrahend_selector_gp __asm__("D_L01_00161FBC") __attribute__((sda));
 extern int moby_radius_ring_blend_alpha_factor_selector_gp __asm__("D_L01_00161FC0") __attribute__((sda));
@@ -2025,9 +2025,9 @@ void draw_moby_radius_ring(char *moby) {
         ring_half_height = ring_half_height_increase + 0.1f;
         if (((unsigned char *)moby)[0x20] != 7 && ((unsigned char *)moby)[0x20] != 8) {
             if (*(float *)(moby_data + 0x34) < 0.65f) {
-                D_001413F5_c = 1;
+                D_001413F5_lui = 1;
             } else {
-                D_001413F5_c = 0;
+                D_001413F5_lui = 0;
             }
         }
     }
