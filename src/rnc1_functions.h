@@ -27,20 +27,20 @@ int get_state_offset_address(int *state_fields, int **address_out) __asm__("func
 void sc_tag2(unsigned long long *output, unsigned int high_word, unsigned int middle_word,
                     unsigned int low_word) __asm__("func_0023BC20");
 
-void set_global_state_slot(int value) __asm__("func_001160C8");
+void srand(int value) __asm__("func_001160C8");
 
-int *get_state_resource(void *state_resource) __asm__("func_001144D8");
+int *_localeconv_r(void *state_resource) __asm__("func_001144D8");
 
-int *get_global_state_pointer(void) __asm__("func_001138A8");
+int *__errno(void) __asm__("func_001138A8");
 
 void noop_core_utility(void) __asm__("func_001154C0");
 
 void noop_core_utility_secondary(void) __asm__("func_001154C8");
 
 void clear_core_global(void) __asm__("func_00118BC0");
-int return_minus_one(void) __asm__("func_00118E00");
-int return_minus_one_00118e08(void) __asm__("func_00118E08");
-int return_success_code(void) __asm__("func_00118EC0");
+int _close(void) __asm__("func_00118E00");
+int _lseek(void) __asm__("func_00118E08");
+int isatty(void) __asm__("func_00118EC0");
 int return_success_0012b9e0(void) __asm__("func_0012B9E0");
 int fun_0012ba48(int *object) __asm__("func_0012BA48");
 int fun_0012ba58(int *object) __asm__("func_0012BA58");
@@ -88,14 +88,14 @@ int vo_buf_is_empty(int *state_fields) __asm__("func_0023D2C8");
 
 void vo_buf_dec_count(volatile int *state_fields) __asm__("func_0023D340");
 
-s64 CheckStateRange(int value) __asm__("CheckStateRange");
-int *get_state_resource_wrapper(void) __asm__("GetStateResourceWrapper");
-int convert_multibyte_character(void *runtime_state, int *wide_character,
+s64 atoi(int value) __asm__("CheckStateRange");
+int *localeconv(void) __asm__("GetStateResourceWrapper");
+int _mbtowc_r(void *runtime_state, int *wide_character,
                               const char *multibyte_string,
                               unsigned int byte_count) __asm__("ConvertMultibyteCharacter");
-void InsertLinkObject(void *link_owner, void *link_object) __asm__("InsertLinkObject");
+void _Bfree(void *link_owner, void *link_object) __asm__("InsertLinkObject");
 void *fun_00115808(void *unused, void *object) __asm__("func_00115808");
-int classify_double_nan(f64 value) __asm__("func_001161B0");
+int isnan(f64 value) __asm__("func_001161B0");
 int fun_00116408(void *resource) __asm__("func_00116408");
 int CallDebugCharacter(int value, int character) __asm__("CallDebugCharacter");
 int EnableInterrupts(void) __asm__("EnableInterrupts");

@@ -91,10 +91,10 @@ typedef struct _reent {
     _Bigint *_p5s;
 } _reent;
 extern s32 small_powers_of_five[] __asm__("D_001523B8");
-extern _Bigint *initialize_object_resource(struct _reent *, s32) __asm__("func_00115808");
+extern _Bigint *__i2b(struct _reent *, s32) __asm__("func_00115808");
 extern _Bigint *_multiply(struct _reent *, _Bigint *, _Bigint *);
 extern _Bigint *_multadd(struct _reent *, _Bigint *, s32, s32);
-extern void InsertLinkObject(struct _reent *, _Bigint *);
+extern void _Bfree(struct _reent *, _Bigint *) __asm__("InsertLinkObject");
 
 _Bigint *_pow5mult(struct _reent *bigint_context, _Bigint *accumulator, s32 k) {
     _Bigint *product, *cached_power_of_five, *next_power_of_five;
@@ -105,13 +105,13 @@ _Bigint *_pow5mult(struct _reent *bigint_context, _Bigint *accumulator, s32 k) {
     if (!(k >>= 2))
         return accumulator;
     if (!(cached_power_of_five = bigint_context->_p5s)) {
-        cached_power_of_five = bigint_context->_p5s = initialize_object_resource(bigint_context, 625);
+        cached_power_of_five = bigint_context->_p5s = __i2b(bigint_context, 625);
         cached_power_of_five->_next = 0;
     }
     for (;;) {
         if (k & 1) {
             product = _multiply(bigint_context, accumulator, cached_power_of_five);
-            InsertLinkObject(bigint_context, accumulator);
+            _Bfree(bigint_context, accumulator);
             accumulator = product;
         }
         if (!(k >>= 1))

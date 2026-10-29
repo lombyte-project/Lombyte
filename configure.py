@@ -398,7 +398,7 @@ RODATA_OVERLAYS = {
     "update_menu_resource_stream": (0x1E87F0, 0xE9770, 28),  # stream-state switch table
     # vfprintf_r: blanks/zeroes, the xdigs strings, the short literals (kept in
     # .rodata via section attributes, in source order) and its switch table.
-    "runtime/newlib/vfprintf_r": (0x1524E0, 0x53460, 516),
+    "sdk/libc/_vfprintf_r": (0x1524E0, 0x53460, 516),
     "dispatch_game_state_update": (0x1E8960, 0xE98E0, 36),  # retail switch table
     "gameplay/missions/check_mission_condition": (0x1E8390, 0xE9310, 40),  # unlock-condition switch table
     "draw_menu_preview_objects": (0x1E87A0, 0xE9720, 48),  # item-handle release switch table

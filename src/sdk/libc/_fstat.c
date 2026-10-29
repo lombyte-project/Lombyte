@@ -1,5 +1,5 @@
 /* newlib's _fstat stub: every descriptor is a character device. _fstat_r
-   (reentrant_syscall_with_two_arguments) calls it with the stat buffer. */
+   (_fstat_r) calls it with the stat buffer. */
 
 int _fstat(int file_descriptor, int *stat_buffer) __asm__("func_00118EC8");
 

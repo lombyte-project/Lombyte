@@ -32,8 +32,8 @@ typedef char *va_list;
 #define _CONST const
 extern RncReent *D_0012F76C[];
 extern s32 D_0012F770[];
-extern char **get_state_resource_wrapper(void) __asm__("GetStateResourceWrapper");
-extern s32 convert_multibyte_character(RncReent *, s32 *, const char *, s32, s32 *) __asm__("ConvertMultibyteCharacter");
+extern char **localeconv(void) __asm__("GetStateResourceWrapper");
+extern s32 _mbtowc_r(RncReent *, s32 *, const char *, s32, s32 *) __asm__("ConvertMultibyteCharacter");
 extern s32 __swsetup(RncFile *);
 extern s32 __sbprintf(RncFile *, const char *, va_list);
 extern s32 __sprint(RncFile *, RncStdioUio *);
@@ -68,7 +68,7 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
 	int prec;		/* precision from format (%.3d), or -1 */
 	char sign;		/* sign prefix (' ', '+', '-', or \0) */
 	s32 wc;
-	char *decimal_point = *get_state_resource_wrapper();
+	char *decimal_point = *localeconv();
 	char softsign;		/* temporary negative sign for floats */
 	double _double;		/* double precision arguments %[eEfgG] */
 	int expt;		/* integer value of exponent */
@@ -158,7 +158,7 @@ s32 _vfprintf_r(RncReent *data, RncFile *fp, const char *fmt0, va_list ap)
 	 */
 	for (;;) {
 	        cp = fmt;
-	        while ((n = convert_multibyte_character(_REENT, &wc, fmt, MB_CUR_MAX, &state)) > 0) {
+	        while ((n = _mbtowc_r(_REENT, &wc, fmt, MB_CUR_MAX, &state)) > 0) {
 			fmt += n;
 			if (wc == '%') {
 				fmt--;

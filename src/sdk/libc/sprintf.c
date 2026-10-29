@@ -27,7 +27,7 @@ s32 sprintf(s8 *str, const s8 *format, ...) {
     output_stream._flags = (u16)(__SWR | __SSTR);
     output_stream._bf._base = output_stream._p = (u8 *)str;
     output_stream._bf._size = output_stream._w = INT_MAX;
-    output_stream._data = GlobalStateResource;
+    output_stream._data = _impure_ptr;
     arguments = __builtin_next_arg(format) - 0x30;
     formatter_result = Vfprintf(&output_stream, format, arguments);
     *output_stream._p = 0;

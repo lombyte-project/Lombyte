@@ -35,7 +35,7 @@ struct SkyEffect {
 
 extern struct LevelSkyEffectData *level_sky_effect_data __asm__("D_0016045C");
 extern u8 sky_matrix[] __asm__("D_001D96E0");
-extern void set_global_state_slot(s32) __asm__("func_001160C8");
+extern void srand(s32) __asm__("func_001160C8");
 extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -73,7 +73,7 @@ void update_sky_effects(void) {
     sky_draw_shell(1);
     if (level_sky_effect_data->effect_count == 0) {
         level_sky_effect_data->effect_count = 0x100;
-        set_global_state_slot(0x3039);
+        srand(0x3039);
         for (initialization_index = 0; initialization_index < level_sky_effect_data->effect_count;
              initialization_index++) {
             radius = 50.0f;

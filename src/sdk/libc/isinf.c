@@ -17,8 +17,9 @@ typedef union {
         (ix1) = ew_u.parts.lsw; \
     } while (0)
 
-s32 classify_double_nan(f64 x) __asm__("ClassifyDoubleNaN");
-s32 classify_double_nan(f64 x) {
+s32 isinf(f64 x) __asm__("FUN_00116168");
+
+s32 isinf(f64 x) {
     s32 hx;
     s32 lx;
 
@@ -26,5 +27,7 @@ s32 classify_double_nan(f64 x) {
     hx &= 0x7fffffff;
     hx |= (u32)(lx | (-lx)) >> 31;
     hx = 0x7ff00000 - hx;
-    return (u32)hx >> 31;
+    return 1 - (s32)(((u32)(hx | (-hx))) >> 31);
 }
+
+extern __typeof__(isinf) func_00116168 __attribute__((alias("FUN_00116168")));

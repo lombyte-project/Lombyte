@@ -3,7 +3,7 @@
 #include "sda.h"
 
 extern void *EndOfHeap(void);
-extern int *get_global_state_pointer(void) __asm__("func_001138A8");
+extern int *__errno(void) __asm__("func_001138A8");
 /* Current program break, raised by sbrk. */
 extern char *heap_break __asm__("D_0012FBF4") NOT_SDA;
 
@@ -23,7 +23,7 @@ void *sbrk(s32 increment) {
     }
     next = heap_break + increment;
     if ((char *)EndOfHeap() < next) {
-        *get_global_state_pointer() = 12;
+        *__errno() = 12;
         if (status) {
             CpuEnableInt();
         }

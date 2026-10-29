@@ -13,9 +13,9 @@ struct LinkOwner {
     LinkObject **link_table;
 };
 
-void InsertLinkObject(LinkOwner *link_owner, LinkObject *link_object) __asm__("InsertLinkObject");
+void _Bfree(LinkOwner *link_owner, LinkObject *link_object) __asm__("InsertLinkObject");
 
-void InsertLinkObject(LinkOwner *link_owner, LinkObject *link_object) {
+void _Bfree(LinkOwner *link_owner, LinkObject *link_object) {
     if (link_object != 0) {
         LinkObject **link_slot = link_owner->link_table - (-link_object->index);
         link_object->next_object = *link_slot;

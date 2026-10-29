@@ -27,7 +27,7 @@
  */
 
 #include "types.h"
-/* Layout evidence: src/sdk/libc/lshift.c and src/runtime/containers/insert_link_object.c. */
+/* Layout evidence: src/sdk/libc/lshift.c and src/sdk/libc/_Bfree.c. */
 typedef struct _Bigint {
     struct _Bigint *_next;
     s32 _k, _maxwds, _sign, _wds;
@@ -64,7 +64,7 @@ union double_union {
 #define Bndry_mask  0xfffffU
 #define Log2P       1
 #define Balloc      _Balloc
-#define Bfree       InsertLinkObject
+#define Bfree       _Bfree
 #define d2b         _d2b
 #define hi0bits     _hi0bits
 #define i2b         func_00115808
@@ -81,7 +81,7 @@ extern const f64 tens[23], bigtens[5];
 extern const f64 dtoa_quick_overflow_divisor[] __asm__("D_001524B0");
 extern char D_00152310[], D_00152320[], D_00152328[];
 extern _Bigint *Balloc(struct _reent *, s32);
-extern void Bfree(struct _reent *, _Bigint *);
+extern void Bfree(struct _reent *, _Bigint *) __asm__("InsertLinkObject");
 extern _Bigint *d2b(struct _reent *, f64, s32 *, s32 *);
 extern s32 hi0bits(u32);
 extern _Bigint *i2b(struct _reent *, s32);

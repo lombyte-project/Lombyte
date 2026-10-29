@@ -498,7 +498,7 @@ extern void update_camera(void) __asm__("func_001EDAA8");
 extern void update_fog(void) __asm__("func_001F2588");
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 void reset_global_state_fields(void) __asm__("func_00217020");
-void set_global_state_slot(int value) __asm__("func_001160C8");
+void srand(int value) __asm__("func_001160C8");
 void init_moby_instance(void *moby_mem, int oClass) __asm__("FUN_0020c5f0");
 extern void load(void *, int, int) __asm__("FUN_00216828");
 extern GameState137B80 D_00137B80;
@@ -532,7 +532,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     FillTransferWords(&D_0013F350, 0, 0x2310);
     FillTransferWords(player_camera, 0, 0x3A0);
     FillTransferWords(D_L00_0018EB40, 0, 0x180);
-    set_global_state_slot(0x4D2);
+    srand(0x4D2);
     if (pal_mode != 0) {
         if (frame_scale == 1.0f) {
             set_video_timing(1);

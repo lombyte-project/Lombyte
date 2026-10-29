@@ -30,13 +30,13 @@ typedef struct __sFILE {
 
 #define __SOFF 0x1000
 
-extern s64 reentrant_syscall_with_three_arguments() __asm__("func_00114518");
+extern s64 _lseek_r() __asm__("func_00114518");
 
 s64 __sseek(void *cookie, s32 offset, s32 whence) {
     register FILE *fp = (FILE *)cookie;
     register s64 ret;
 
-    ret = reentrant_syscall_with_three_arguments(fp->_data, fp->_file, offset, whence);
+    ret = _lseek_r(fp->_data, fp->_file, offset, whence);
     if (ret == -1L)
         fp->_flags &= ~__SOFF;
     else {

@@ -5,7 +5,7 @@
 extern s32 sceOpen(const char *path, s32 flags);
 extern s32 sceRead(s32 fd, void *buf, s32 size);
 extern s32 sceClose(s32 fd);
-extern s32 CheckStateRange(const char *str);
+extern s32 atoi(const char *str) __asm__("CheckStateRange");
 const u8 D_00153030[] = "rom0:ROMVER";
 
 s32 checkModelVersion(void) {
@@ -24,5 +24,5 @@ s32 checkModelVersion(void) {
     }
 
     sceClose(fd);
-    return 0x1315670 < CheckStateRange((const char *)&rom_version_string[i - 9]);
+    return 0x1315670 < atoi((const char *)&rom_version_string[i - 9]);
 }

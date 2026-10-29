@@ -9,12 +9,12 @@ typedef struct __sFILE {
 } FILE;
 #define __SAPP 0x0100
 #define __SOFF 0x1000
-extern s64 reentrant_syscall_with_three_arguments() __asm__("func_00114518");
-extern long reentrant_write() __asm__("func_001185D0");
+extern s64 _lseek_r() __asm__("func_00114518");
+extern long _write_r() __asm__("func_001185D0");
 int __swrite(void *cookie, char const *write_source, s32 byte_count) {
     register FILE *fp = (FILE *)cookie;
     if (fp->_flags & __SAPP)
-        (void)reentrant_syscall_with_three_arguments(fp->_data, fp->_file, 0, 2);
+        (void)_lseek_r(fp->_data, fp->_file, 0, 2);
     fp->_flags &= ~__SOFF;
-    return reentrant_write(fp->_data, fp->_file, write_source, byte_count);
+    return _write_r(fp->_data, fp->_file, write_source, byte_count);
 }

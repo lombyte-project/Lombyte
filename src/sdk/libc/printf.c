@@ -18,7 +18,7 @@ int Printf(const char *format, ...) __asm__("printf");
 
 int Printf(const char *format, ...) {
     va_list arguments;
-    PrintReent *reent = GlobalStateResource;
+    PrintReent *reent = _impure_ptr;
 
     reent->stdout_file->data = reent;
     arguments = __builtin_next_arg(format) - 0x38;

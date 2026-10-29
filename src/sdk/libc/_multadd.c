@@ -30,7 +30,7 @@ typedef struct _Bigint {
     u32 _x[1];
 } _Bigint;
 
-extern s32 InsertLinkObject();
+extern s32 _Bfree() __asm__("InsertLinkObject");
 extern _Bigint *_Balloc();
 extern s32 memcpy();
 
@@ -57,7 +57,7 @@ _Bigint *_multadd(s32 reent_context, _Bigint *bigint_operand, s32 multiplier, s3
         if (wds >= bigint_operand->_maxwds) {
             expanded_bigint = _Balloc(reent_context, bigint_operand->_k + 1);
             Bcopy(expanded_bigint, bigint_operand);
-            InsertLinkObject(reent_context, bigint_operand);
+            _Bfree(reent_context, bigint_operand);
             bigint_operand = expanded_bigint;
         }
         bigint_operand->_x[wds++] = carry;
