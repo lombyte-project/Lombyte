@@ -609,7 +609,7 @@ void update_scoutbot_movement(struct Moby *moby) {
 void *enter_scoutbot_return_home_state(struct Moby *moby) __asm__("FUN_L08_002d4050");
 
 void *enter_scoutbot_return_home_state(struct Moby *moby) {
-    void *result = cancel_suck_cannon_suction(moby);
+    void *suction_cancel_status = cancel_suck_cannon_suction(moby);
     char *scoutbot_data = ((char *)moby->pvars);
     moby->state = 3;
     *(float *)(scoutbot_data + 0x200) = 4.0f;
@@ -618,7 +618,7 @@ void *enter_scoutbot_return_home_state(struct Moby *moby) {
         blend_moby_animation(moby, 2, 0, 3);
     }
     *(short *)(scoutbot_data + 0xC8) = 0;
-    return result;
+    return suction_cancel_status;
 }
 
 void draw_scoutbot_glow_quad(struct Moby *moby) {
