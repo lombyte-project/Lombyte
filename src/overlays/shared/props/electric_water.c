@@ -729,7 +729,7 @@ extern float    D_L15_00167440_2d8fa0[] __asm__("D_L15_001673C0");
 void update_electric_water_bolt_effect(Moby *moby) {
     V_2d8fa0      vectors[10];
     V_2d8fa0      jitter[5];
-    Data         *data = (Data *)moby->pvars;
+    Data         *bolt_endpoints = (Data *)moby->pvars;
     unsigned char flag = *(unsigned char *)D_0013E533;
     float         scale;
     int           i;
@@ -745,19 +745,19 @@ void update_electric_water_bolt_effect(Moby *moby) {
     *(float *)&D_L15_00161C30 =
         fast_add_rotations(*(float *)&D_L15_00161C30,
                            *(float *)&electric_water_bolt_paired_height_frame_phase_step_gp);
-    scale = fast_vec_dist(&data->a, &data->c) * 0.05f;
+    scale = fast_vec_dist(&bolt_endpoints->a, &bolt_endpoints->c) * 0.05f;
     if (flag) {
         *(int *)&D_L15_00161C60_gp = 0x7F2040;
     } else {
         *(int *)&D_L15_00161C60_gp = 0x7F2020;
     }
-    fast_vec_sub(&vectors[0], &data->b, &data->a);
+    fast_vec_sub(&vectors[0], &bolt_endpoints->b, &bolt_endpoints->a);
     fast_vec_normalize(&vectors[0], &vectors[0], 1.0f);
     fast_vec_cross(&vectors[1], &vectors[0], D_0013F6E0_2d8fa0);
     build_look_at_matrix(&vectors[0], &vectors[0], &vectors[1], 0.17453292f);
     scale_vector_xyz(&vectors[3], &vectors[0], scale);
-    qcopy(D_L15_001D3750[0], &data->a);
-    qcopy(D_L15_001D3750[1], &data->a);
+    qcopy(D_L15_001D3750[0], &bolt_endpoints->a);
+    qcopy(D_L15_001D3750[1], &bolt_endpoints->a);
     for (i = 1; i < 20; i++) {
         float wave;
         float remaining;
@@ -794,7 +794,7 @@ void update_electric_water_bolt_effect(Moby *moby) {
         }
         D_L15_001D3750[0][i].f[2] = D_L15_001D3750[0][i].f[2] + wave;
         fast_vec_sub(&vectors[1], &D_L15_001D3750[0][i], &D_L15_001D3740[i]);
-        fast_vec_sub(&vectors[5], &data->c, &D_L15_001D3750[0][i]);
+        fast_vec_sub(&vectors[5], &bolt_endpoints->c, &D_L15_001D3750[0][i]);
         remaining = fast_vec_length(&vectors[5]);
         if (remaining != 0.0f) {
             float blend;
@@ -850,10 +850,10 @@ void update_electric_water_bolt_effect(Moby *moby) {
     for (k = 0; k < 4; k++) {
         float bend;
         if (k < 2) {
-            qcopy(&vectors[8], &data->a);
+            qcopy(&vectors[8], &bolt_endpoints->a);
             bend = 0.4f;
         } else {
-            qcopy(&vectors[8], &data->b);
+            qcopy(&vectors[8], &bolt_endpoints->b);
             bend = 0.5f;
         }
         if (fast_dec_timer_s16(D_L15_00161CC0 + k)) {
@@ -921,7 +921,7 @@ void update_electric_water_bolt_effect(Moby *moby) {
     if (random_integer_below(2))
         spin = -spin;
     angle = random_float_between(0.2f, 0.6f);
-    spawn_2d8fa0(&data->a,
+    spawn_2d8fa0(&bolt_endpoints->a,
                  scale_game_frames(15),
                  angle * 0.3f,
                  angle,
@@ -931,7 +931,7 @@ void update_electric_water_bolt_effect(Moby *moby) {
                  &vectors[5],
                  0.0f);
     spin = -spin;
-    spawn_2d8fa0(&data->a,
+    spawn_2d8fa0(&bolt_endpoints->a,
                  scale_game_frames(15),
                  angle * 0.15f,
                  angle * 0.5f,
@@ -944,7 +944,7 @@ void update_electric_water_bolt_effect(Moby *moby) {
     if (random_integer_below(2))
         spin = -spin;
     angle = random_float_between(0.15f, 3.0f);
-    spawn_2d8fa0(&data->c,
+    spawn_2d8fa0(&bolt_endpoints->c,
                  scale_game_frames(12),
                  angle * 0.1f,
                  angle,
