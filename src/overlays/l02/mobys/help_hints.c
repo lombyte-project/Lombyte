@@ -44,10 +44,10 @@ void update_help_hints(struct Moby *moby) {
         AIRBORNE_DIALOGUE_UNARMED = 0,
         AIRBORNE_DIALOGUE_ARMED = 1
     };
-    int *data = (int *)moby->pvars;
+    int *tutorial_hint_trigger_vars = (int *)moby->pvars;
     moby->update_dist = 0xFF;
 
-    if (is_point_inside_clip_volume(&hero.motion.pos, data[0x17]) != 0 &&
+    if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[0x17]) != 0 &&
         ((unsigned int)hero.state.control_mode) < 2) {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x278) == 0 && D_001418E8 == 0) {
@@ -66,19 +66,19 @@ void update_help_hints(struct Moby *moby) {
         }
     }
 
-    switch (data[0x15]) {
+    switch (tutorial_hint_trigger_vars[0x15]) {
     case AIRBORNE_DIALOGUE_UNARMED:
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[0x12]) != 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[0x12]) != 0) {
             if (hero.state.current == 0x2C) {
-                data[0x15] = 1;
+                tutorial_hint_trigger_vars[0x15] = 1;
             }
         }
         break;
     case AIRBORNE_DIALOGUE_ARMED: {
         struct Hero *h = &hero;
         if (h->grounded_frames != 0) {
-            data[0x15] = 0;
-        } else if (is_point_inside_clip_volume(&h->motion.pos, data[0x13]) != 0) {
+            tutorial_hint_trigger_vars[0x15] = 0;
+        } else if (is_point_inside_clip_volume(&h->motion.pos, tutorial_hint_trigger_vars[0x13]) != 0) {
             unsigned char *dialogue_latch_bytes = item_unlocked;
             if (dialogue_latch_bytes[1] == 0) {
                 dialogue_latch_bytes[1] = 1;
@@ -93,8 +93,8 @@ void update_help_hints(struct Moby *moby) {
     {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x60) == 0) {
-            if (is_point_inside_clip_volume(&hero.motion.pos, data[4]) != 0) {
-                int lvl = data[0];
+            if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[4]) != 0) {
+                int lvl = tutorial_hint_trigger_vars[0];
                 if (D_0014C050[current_level_index][lvl] != 0xFF) {
                     unsigned char *f = item_available;
                     if (f[0x10] != 0 && ((int *)(((char *)&D_0014EE90)))[lvl] >= 6) {
@@ -108,10 +108,10 @@ void update_help_hints(struct Moby *moby) {
         }
     }
 
-    if (is_point_inside_clip_volume(&hero.motion.pos, data[0x10]) != 0) {
-        data[0x16] = 1;
+    if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[0x10]) != 0) {
+        tutorial_hint_trigger_vars[0x16] = 1;
     }
-    if (data[0x16] != 0) {
+    if (tutorial_hint_trigger_vars[0x16] != 0) {
         if (D_00141888 < 3) {
             char *b = ((char *)&D_00141968);
             if (!(*(unsigned int *)(b + 0x264) & (1 << current_level_index))) {
@@ -132,8 +132,8 @@ void update_help_hints(struct Moby *moby) {
     {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x68) == 0) {
-            if (is_point_inside_clip_volume(&hero.motion.pos, data[4]) != 0) {
-                int lvl = data[0];
+            if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[4]) != 0) {
+                int lvl = tutorial_hint_trigger_vars[0];
                 if (D_0014C050[current_level_index][lvl] != 0xFF) {
                     unsigned char *f = item_available;
                     if (f[0x10] == 0 && (float)((int *)(((char *)&D_0014EE90)))[lvl] >= 3.0f) {
@@ -149,16 +149,16 @@ void update_help_hints(struct Moby *moby) {
         if (*(unsigned short *)(b + 0x80) == 0) {
             char *g = (char *)&hero.motion.pos;
             char *h;
-            if (is_point_inside_clip_volume(g, data[6]) != 0) {
+            if (is_point_inside_clip_volume(g, tutorial_hint_trigger_vars[6]) != 0) {
                 *(unsigned short *)(b + 0x80) = 0xFFFF;
             }
             h = g - 0x80;
             if (*(int *)(h + 0x2084) != 0x2C && *(int *)(h + 0x2090) == 0x2C &&
                 *(int *)(h + 0x198) == 1) {
-                data[0xC]++;
+                tutorial_hint_trigger_vars[0xC]++;
             }
-            if (data[0xC] >= 2) {
-                if (is_point_inside_clip_volume(&hero.motion.pos, data[7]) != 0) {
+            if (tutorial_hint_trigger_vars[0xC] >= 2) {
+                if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[7]) != 0) {
                     help_request(0x7D6, 0x10);
                 }
             }
@@ -166,7 +166,7 @@ void update_help_hints(struct Moby *moby) {
     }
 
     if (((Flags_0013D5C8 *)(item_available))->b[0xC] == 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[5]) != 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[5]) != 0) {
             char *b = ((char *)&D_00141968);
             int   t = scale_game_frames(D_0015EEA4) - *(unsigned short *)(b + 0x8A) * 600;
             if ((int)(scale_game_frames(0x12) * 60.0f) < t ||
@@ -181,7 +181,7 @@ void update_help_hints(struct Moby *moby) {
         }
     }
     if (((Flags_0013D5C8 *)(item_available))->b[0xC] != 0 &&
-        is_point_inside_clip_volume(&hero.motion.pos, data[5]) != 0) {
+        is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[5]) != 0) {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x90) != 0) {
             int t = scale_game_frames(D_0015EEA4) - *(unsigned short *)(b + 0x92) * 600;
@@ -203,7 +203,7 @@ void update_help_hints(struct Moby *moby) {
             }
             *(int *)(b + 0x94) = *(int *)(b + 0x94) | (1 << current_level_index) | 0x80000000;
         }
-    } else if (is_point_inside_clip_volume(&hero.motion.pos, data[7]) != 0) {
+    } else if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[7]) != 0) {
         char *b = ((char *)&D_00141968);
         *(unsigned short *)(b + 0x90) = 0xFFFF;
     }
@@ -219,8 +219,8 @@ void update_help_hints(struct Moby *moby) {
                     if (v == 0) {
                         help_request(0x7DB, 0x46);
                     } else if (*(unsigned short *)(b + 0x238) == 0) {
-                        data[0x14]++;
-                        if (scale_game_frames(600) < data[0x14]) {
+                        tutorial_hint_trigger_vars[0x14]++;
+                        if (scale_game_frames(600) < tutorial_hint_trigger_vars[0x14]) {
                             help_request(0x7DC, 0x47);
                         }
                     }
@@ -232,10 +232,10 @@ void update_help_hints(struct Moby *moby) {
     {
         unsigned char *g = alternate_item_available;
         if (g[0x14] == 0) {
-            if (is_point_inside_clip_volume(&hero.motion.pos, data[0x11]) != 0) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, tutorial_hint_trigger_vars[0x11]) != 0) {
                 g[0x14] = 1;
             }
         }
     }
-    qcopy(data + 8, &hero.motion.pos);
+    qcopy(tutorial_hint_trigger_vars + 8, &hero.motion.pos);
 }
