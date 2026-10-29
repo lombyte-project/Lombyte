@@ -45,10 +45,10 @@ void set_big_axebot_and_axe_animation_speed(struct Moby *moby,
                                             float animation_speed) __asm__("FUN_L04_002ba448");
 
 void set_big_axebot_and_axe_animation_speed(struct Moby *moby, float animation_speed) {
-    char *data = ((char *)moby->pvars);
+    char *big_axebot_pvars = ((char *)moby->pvars);
     moby->anim_speed = animation_speed;
-    if (*(char **)(data + 0x424) != 0) {
-        *(float *)(*(char **)(data + 0x424) + 0x58) = animation_speed;
+    if (*(char **)(big_axebot_pvars + 0x424) != 0) {
+        *(float *)(*(char **)(big_axebot_pvars + 0x424) + 0x58) = animation_speed;
     }
 }
 /* Spawns an effect on the moby at its marker vector. */
