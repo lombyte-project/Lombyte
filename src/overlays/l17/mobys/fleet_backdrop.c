@@ -64,7 +64,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) __asm__("FUN_L17_002f32f0");
 void draw_fleet_backdrop_quads(struct Moby *moby) {
     Pkt      pkt;
     OvlQuad  vv[4];
-    char    *data = (char *)moby->pvars;
+    char    *backdrop_pvars = (char *)moby->pvars;
     char    *backdrop_endpoint_position;
     int      i;
     int      k;
@@ -74,19 +74,19 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
     float   *quad_vertex_v_coordinates;
     vu1_add_g_sregister(0x47, 0x513F1);
     vb = &vv[2];
-    backdrop_endpoint_position = data + 0x10;
+    backdrop_endpoint_position = backdrop_pvars + 0x10;
     pu = &pkt.uv[0];
     quad_vertex_v_coordinates = &pkt.uv[1];
     D_L17_0016D3E4 = 8192000.0f;
-    *(float *)(data + 0x14) = -8000.0f;
+    *(float *)(backdrop_pvars + 0x14) = -8000.0f;
     for (i = 0; i < 2; i++) {
-        fast_vec_sub(vb, data, backdrop_endpoint_position);
-        fast_vec_sub(&vv[0], data, D_L17_001676C0);
+        fast_vec_sub(vb, backdrop_pvars, backdrop_endpoint_position);
+        fast_vec_sub(&vv[0], backdrop_pvars, D_L17_001676C0);
         fast_vec_sub(&vv[1], backdrop_endpoint_position, D_L17_001676C0);
         fast_vec_cross(&vv[0], &vv[0], vb);
         fast_vec_normalize(&vv[0], &vv[0], backdrop_scrolling_quad_start_half_widths[i]);
         fast_vec_cross(&vv[1], &vv[1], vb);
-        fast_vec_normalize(&vv[1], &vv[1], *(float *)(data + 0x28));
+        fast_vec_normalize(&vv[1], &vv[1], *(float *)(backdrop_pvars + 0x28));
         *(long *)&pkt.q[4] = 0x0000FF9000000260LL;
         *(long *)&pkt.q[6] = 0x0000008000000048LL;
         *(long *)&pkt.q[0] = 0;
@@ -103,9 +103,9 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
                 qv[m * 2] = backdrop_scrolling_quad_base_uv_coordinates[m * 2 + 1];
             }
         }
-        fast_vec_sub(&vv[3], data, &vv[0]);
+        fast_vec_sub(&vv[3], backdrop_pvars, &vv[0]);
         pkt.m[0] = vv[3];
-        fast_vec_add(&vv[3], data, &vv[0]);
+        fast_vec_add(&vv[3], backdrop_pvars, &vv[0]);
         pkt.m[1] = vv[3];
         fast_vec_sub(&vv[3], backdrop_endpoint_position, &vv[1]);
         pkt.m[2] = vv[3];
@@ -124,11 +124,11 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
     for (k = 0; k < 5; k++) {
         float quad_side_length = backdrop_quad_side_lengths[k];
         float uv_rotation_angle = backdrop_quad_uv_rotation_angles[k];
-        float x = *(float *)(data + 0x10) - quad_side_length * 0.5f;
+        float x = *(float *)(backdrop_pvars + 0x10) - quad_side_length * 0.5f;
         float z;
         ((float *)&pkt)[0] = x;
-        ((float *)&pkt)[1] = *(float *)(data + 0x14) + 1000.0f;
-        z = *(float *)(data + 0x18) + quad_side_length * 0.5f;
+        ((float *)&pkt)[1] = *(float *)(backdrop_pvars + 0x14) + 1000.0f;
+        z = *(float *)(backdrop_pvars + 0x18) + quad_side_length * 0.5f;
         ((float *)&pkt)[3] = 1.0f;
         ((float *)&pkt)[2] = z;
         pkt.m[3] = pkt.m[0];
