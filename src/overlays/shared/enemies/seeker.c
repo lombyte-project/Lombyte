@@ -437,48 +437,48 @@ void update_seeker_damage_and_target(Moby *moby) {
     float       damage;
     float       knock_angle;
     float       knock_angle_fatal;
-    Data       *data;
+    Data       *seeker_vars;
     Hit_2C73D0 *source;
     int         response;
-    int         result;
+    int         target_selection_status;
     int         lost_state;
 
-    data = (struct Data *)moby->pvars;
+    seeker_vars = (struct Data *)moby->pvars;
     if (moby->state == 0) {
         return;
     }
     moby->scale =
         moby->scale + ((((Cls *)moby->pclass)->scale * D_L09_0016140C) - moby->scale) * 0.1f;
-    if (fast_dec_timer(&data->timer) == 2) {
+    if (fast_dec_timer(&seeker_vars->timer) == 2) {
         moby->state = 7;
         return;
     }
-    if (data->timer == scale_game_frames(0xA) || data->timer == scale_game_frames(0x14) ||
-        data->timer == scale_game_frames(0x28) || data->timer == scale_game_frames(0x3C) ||
-        data->timer == scale_game_frames(0x78) || data->timer == scale_game_frames(0xB3)) {
-        data->reactTime = 0xF0;
-        func_L00_0025E4B0_2C73D0(moby, data->react);
+    if (seeker_vars->timer == scale_game_frames(0xA) || seeker_vars->timer == scale_game_frames(0x14) ||
+        seeker_vars->timer == scale_game_frames(0x28) || seeker_vars->timer == scale_game_frames(0x3C) ||
+        seeker_vars->timer == scale_game_frames(0x78) || seeker_vars->timer == scale_game_frames(0xB3)) {
+        seeker_vars->reactTime = 0xF0;
+        func_L00_0025E4B0_2C73D0(moby, seeker_vars->react);
     }
     damage = 0.0f;
     source = find_moby_hit(moby, 0x330000, 0);
-    response = resolve_moby_hit_response(moby, source, &data->health, 0, &hit, &damage, 0, 4);
+    response = resolve_moby_hit_response(moby, source, &seeker_vars->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 6) {
-        data->health = data->health - damage;
-        if (data->health <= 0.0f) {
+        seeker_vars->health = seeker_vars->health - damage;
+        if (seeker_vars->health <= 0.0f) {
             response = 1;
         }
-        data->f90 = truncate_float_to_s32(512.0f);
-        data->f80 = seeker_knockback_gravity_scale * D_0015ED70;
-        data->f84 = D_0015ED70 * 30.0f;
-        data->f98 = 0.0f;
-        data->f94 = 1;
-        data->bAD = 0;
+        seeker_vars->f90 = truncate_float_to_s32(512.0f);
+        seeker_vars->f80 = seeker_knockback_gravity_scale * D_0015ED70;
+        seeker_vars->f84 = D_0015ED70 * 30.0f;
+        seeker_vars->f98 = 0.0f;
+        seeker_vars->f94 = 1;
+        seeker_vars->bAD = 0;
         allocate_voice_for_target_entry(8, 0, moby);
 
         switch (response) {
         case RESPONSE_REACTION_ONLY:
         case 10:
-            data->reactTime = 0xFA;
+            seeker_vars->reactTime = 0xFA;
             break;
         case RESPONSE_HURT_KNOCKBACK:
         case 4:
@@ -486,87 +486,87 @@ void update_seeker_damage_and_target(Moby *moby) {
         case 6:
         case 7:
         case 8:
-            data->fC0 = 3.0f;
-            data->fC4 = 6.0f;
-            data->f88 = seeker_hurt_knockback_xy_scale * D_0015ED6C;
-            data->f8C = 0.0f;
+            seeker_vars->fC0 = 3.0f;
+            seeker_vars->fC4 = 6.0f;
+            seeker_vars->f88 = seeker_hurt_knockback_xy_scale * D_0015ED6C;
+            seeker_vars->f8C = 0.0f;
             knock_angle = fast_arc_tan(moby->pos.x - source->owner->pos.x,
                                        moby->pos.y - source->owner->pos.y);
             *(Q_2C73D0 *)hit_pos = source->pos;
-            func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle, &data->f88, &data->f8C);
-            func_L00_0025D5B0_2C73D0(moby, data->f70, knock_angle, 4, 1, 0);
+            func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle, &seeker_vars->f88, &seeker_vars->f8C);
+            func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle, 4, 1, 0);
             moby->state = 5;
             if (moby->group != 0xFF) {
                 func_L01_0026F040_2C73D0(moby->group, 1);
             }
-            data->reactTime = 0x78;
+            seeker_vars->reactTime = 0x78;
             break;
         case RESPONSE_FATAL_KNOCKBACK:
         case 2:
             moby->flags &= 0xEFFF;
-            data->f80 = seeker_knockback_gravity_scale * D_0015ED70;
-            data->f88 = seeker_fatal_knockback_xy_scale * D_0015ED6C;
-            data->f8C = seeker_fatal_knockback_z_scale * D_0015ED6C;
-            data->fC0 = 14.0f;
-            data->fC4 = 28.0f;
+            seeker_vars->f80 = seeker_knockback_gravity_scale * D_0015ED70;
+            seeker_vars->f88 = seeker_fatal_knockback_xy_scale * D_0015ED6C;
+            seeker_vars->f8C = seeker_fatal_knockback_z_scale * D_0015ED6C;
+            seeker_vars->fC0 = 14.0f;
+            seeker_vars->fC4 = 28.0f;
             knock_angle_fatal = fast_arc_tan(moby->pos.x - source->owner->pos.x,
                                              moby->pos.y - source->owner->pos.y);
             *(Q_2C73D0 *)hit_pos = source->pos;
-            func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle_fatal, &data->f88, &data->f8C);
-            func_L00_0025D5B0_2C73D0(moby, data->f70, knock_angle_fatal, 4, 1, 0);
+            func_L00_0025BBA0_2C73D0(hit_pos, &knock_angle_fatal, &seeker_vars->f88, &seeker_vars->f8C);
+            func_L00_0025D5B0_2C73D0(moby, seeker_vars->f70, knock_angle_fatal, 4, 1, 0);
             mark_moby_for_removal_cf(moby, 0, -1);
             moby->state = 6;
-            data->reactTime = 0xF0;
+            seeker_vars->reactTime = 0xF0;
             break;
         case RESPONSE_NONE:
         case RESPONSE_NO_REACTION:
         default:
             break;
         }
-        func_L00_0025E4B0_2C73D0(moby, data->react);
+        func_L00_0025E4B0_2C73D0(moby, seeker_vars->react);
     }
     moby->hit_slot = 0xFF;
-    trooper_anim_finish(moby, data->react);
-    if (data->f38 != 0 || moby->command == 1) {
-        data->retreat =
+    trooper_anim_finish(moby, seeker_vars->react);
+    if (seeker_vars->f38 != 0 || moby->command == 1) {
+        seeker_vars->retreat =
             truncate_float_to_s32(func_001F9878_2C73D0(random_float_between(180.0f, 240.0f)));
-        data->f38 = 0;
+        seeker_vars->f38 = 0;
         moby->command = 0;
     }
-    fast_dec_timer(&data->retreat);
+    fast_dec_timer(&seeker_vars->retreat);
     if (random_integer_below(4) == 0) {
         float *goal;
-        if (data->retreat != 0) {
-            data->reach = 24.0f;
-            goal = data->target;
-            result = func_L00_00260D30_2C73D0(moby, goal, 24.0f);
+        if (seeker_vars->retreat != 0) {
+            seeker_vars->reach = 24.0f;
+            goal = seeker_vars->target;
+            target_selection_status = func_L00_00260D30_2C73D0(moby, goal, 24.0f);
             lost_state = 2;
         } else {
             Path *path;
-            data->reach = 12.0f;
-            path = ((Path *)l09_paths[data->path]);
-            goal = data->target;
-            result = activate_effect_l08(moby, goal, 12.0f, 0, 0, path->pts, path->count);
+            seeker_vars->reach = 12.0f;
+            path = ((Path *)l09_paths[seeker_vars->path]);
+            goal = seeker_vars->target;
+            target_selection_status = activate_effect_l08(moby, goal, 12.0f, 0, 0, path->pts, path->count);
             lost_state = 2;
         }
-        if (result != lost_state && data->retreat == 0) {
-            if (data->reach < vector_distance_xy(&moby->pos, goal)) {
-                data->f164 = lost_state;
-            } else if (3.0f < absolute_float(moby->pos.z - data->target[2])) {
-                data->f164 = lost_state;
+        if (target_selection_status != lost_state && seeker_vars->retreat == 0) {
+            if (seeker_vars->reach < vector_distance_xy(&moby->pos, goal)) {
+                seeker_vars->f164 = lost_state;
+            } else if (3.0f < absolute_float(moby->pos.z - seeker_vars->target[2])) {
+                seeker_vars->f164 = lost_state;
             }
         }
     } else {
-        Moby *target = data->f160;
+        Moby *target = seeker_vars->f160;
         if (target != 0 && target->state != 0xFE && target->state != 0xFD) {
-            qcopy(data->target, &target->pos);
+            qcopy(seeker_vars->target, &target->pos);
         } else {
-            data->f160 = 0;
-            data->f164 = 2;
+            seeker_vars->f160 = 0;
+            seeker_vars->f164 = 2;
         }
     }
-    if (data->f160 == 0) {
-        data->f160 = *(Moby **)D_0013E633_2C73D0;
+    if (seeker_vars->f160 == 0) {
+        seeker_vars->f160 = *(Moby **)D_0013E633_2C73D0;
     }
 }
 
