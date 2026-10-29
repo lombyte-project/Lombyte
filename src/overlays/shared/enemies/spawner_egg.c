@@ -186,11 +186,11 @@ char *spawn_spawner_egg(int           owner,
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030C790), where it is exact; names translated to the US level program. */
 void remove_spawner_egg(void *moby, char *data) __asm__("FUN_L09_0030b350");
 
-void remove_spawner_egg(void *moby, char *data) {
-    char *other = *(char **)(data + 0x10);
+void remove_spawner_egg(void *moby, char *egg_vars) {
+    char *other = *(char **)(egg_vars + 0x10);
     if (other != 0 && *(short *)(other + 0xA6) == 0x75D && (unsigned char)other[0x20] != 0xFE &&
         (unsigned char)other[0x20] != 0xFD) {
-        int   index = (unsigned char)data[0x1C];
+        int   index = (unsigned char)egg_vars[0x1C];
         char *base = *(char **)(other + 0x78);
         base += index * 4;
         *(int *)(base + 0xB0) = 0;
