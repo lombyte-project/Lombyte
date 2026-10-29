@@ -394,7 +394,7 @@ RODATA_OVERLAYS = {
     "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 77),  # its two error messages
     "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 96),  # its buffer-full message
     "rendering/image/jump_to_image_setup": (0x153AD8, 0x54A58, 16),  # its error message
-    "sdk/dma/sce_gs_set_def_load_image": (0x1530B0, 0x54030, 284),  # its error message and switch table
+    "sdk/graph/sce_gs_set_def_load_image": (0x1530B0, 0x54030, 284),  # its error message and switch table
     "update_menu_resource_stream": (0x1E87F0, 0xE9770, 28),  # stream-state switch table
     # vfprintf_r: blanks/zeroes, the xdigs strings, the short literals (kept in
     # .rodata via section attributes, in source order) and its switch table.
@@ -422,20 +422,20 @@ RODATA_OVERLAYS = {
     "update_menu_entry_actions": (0x1E8770, 0xE96F0, 48),  # menu action switch table
     "draw_dialog_text": (0x1E7920, 0xE88A0, 124),  # switch table
     "sdk/rpc/sce_sif_reboot_iop": (0x152960, 0x538E0, 11),
-    "sdk/storage/cd_check_ncmd": (0x152EB0, 0x53E30, 39),
-    "sdk/storage/cd_check_scmd": (0x152F10, 0x53E90, 39),
-    "sdk/library/checkModelVersion": (0x153030, 0x53FB0, 12),
+    "sdk/storage/cdvd/cd_check_ncmd": (0x152EB0, 0x53E30, 39),
+    "sdk/storage/cdvd/cd_check_scmd": (0x152F10, 0x53E90, 39),
+    "sdk/storage/cdvd/checkModelVersion": (0x153030, 0x53FB0, 12),
     "sdk/dma/wait_dma": (0x1533E0, 0x54360, 22),
-    "sdk/library/sceDbcInit": (0x153518, 0x54498, 57),
-    "sdk/library/mb_address_increment": (0x1537A8, 0x54728, 50),
-    "sdk/library/slicea0": (0x153800, 0x54780, 38),
-    "sdk/library/_quantMatrixExtension": (0x153910, 0x54890, 44),
-    "sdk/library/is_out_size_ok": (0x153980, 0x54900, 41),
-    "sdk/callbacks/report_mpeg_sequence_scalable_unsupported": (0x153B48, 0x54AC8, 48),
-    "sdk/callbacks/report_unknown_mpeg_extension": (0x153B78, 0x54AF8, 18),
-    "sdk/callbacks/report_mpeg_picture_spatial_scalable_unsupported": (0x153B90, 0x54B10, 50),
-    "sdk/callbacks/report_mpeg_picture_temporal_scalable_unsupported": (0x153BC8, 0x54B48, 51),
-    "sdk/library/GetRomName": (0x153C00, 0x54B80, 12),
+    "sdk/input/dbc/sceDbcInit": (0x153518, 0x54498, 57),
+    "sdk/video/mpeg/mb_address_increment": (0x1537A8, 0x54728, 50),
+    "sdk/video/mpeg/slicea0": (0x153800, 0x54780, 38),
+    "sdk/video/mpeg/_quantMatrixExtension": (0x153910, 0x54890, 44),
+    "sdk/video/mpeg/is_out_size_ok": (0x153980, 0x54900, 41),
+    "sdk/video/mpeg/report_mpeg_sequence_scalable_unsupported": (0x153B48, 0x54AC8, 48),
+    "sdk/video/mpeg/report_unknown_mpeg_extension": (0x153B78, 0x54AF8, 18),
+    "sdk/video/mpeg/report_mpeg_picture_spatial_scalable_unsupported": (0x153B90, 0x54B10, 50),
+    "sdk/video/mpeg/report_mpeg_picture_temporal_scalable_unsupported": (0x153BC8, 0x54B48, 51),
+    "sdk/scf/GetRomName": (0x153C00, 0x54B80, 12),
     "draw_scrolling_sky_shells": (0x1E88F0, 0xE9870, 20),  # switch table
     "update_streamed_moby_animation": (0x1E88B0, 0xE9830, 28),  # switch table
     "update_mode_freeze": (0x1E79A0, 0xE8920, 124),  # switch table
@@ -469,10 +469,10 @@ SDATA_OVERLAYS = {
 # The same for a unit's `.data`: data only that unit reads, defined in it.
 # `scripts/data-refs.py --emit` writes the definition and prints the entry.
 DATA_OVERLAYS = {
-    "sdk/library/supplement_crt0": (0x130320, 0x312A0, 8),
+    "sdk/kernel/supplement_crt0": (0x130320, 0x312A0, 8),
     "runtime/data/get_core_data_table": (0x132D40, 0x33CC0, 16),
     "sdk/video/ipu/send_ipu_command": (0x132E70, 0x33DF0, 64),
-    "sdk/debug/sce_scf_get_language": (0x1330D4, 0x34054, 1),
+    "sdk/scf/sce_scf_get_language": (0x1330D4, 0x34054, 1),
     "video/display/set_pal_mode": (0x13D100, 0x3E080, 8),
     "rendering/texture/append_palette_transfer_packet": (0x151B60, 0x52AE0, 656),
     "textbin/render_queued_rotated_sprites": (0x189300, 0x8A280, 196),
