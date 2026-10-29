@@ -518,8 +518,8 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
 
 int can_release_linked_robot_dog(struct Moby *moby) {
     unsigned char state;
-    char         *data;
-    data = (char *)moby->pvars;
+    char         *partner_pvars;
+    partner_pvars = (char *)moby->pvars;
     if (!moby)
         return 0;
     state = moby->state;
@@ -531,7 +531,7 @@ int can_release_linked_robot_dog(struct Moby *moby) {
         return 0;
     if (moby->seq == 10 && compute_interpolated_record_value(moby) >= 10.0f)
         return 1;
-    if (moby->state == 10 || moby->state == 13 || *(int *)(data + 0x284) == -1)
+    if (moby->state == 10 || moby->state == 13 || *(int *)(partner_pvars + 0x284) == -1)
         return 1;
     return 0;
 }
