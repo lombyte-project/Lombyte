@@ -2404,8 +2404,8 @@ int select_drek_boss_next_action(struct Moby *moby) {
         BOSS_ACTION_CHOICE_TARGET_SIDE_GROUND_POINTS = 4,
         BOSS_ACTION_CHOICE_FOLLOW_HERO = 5
     };
-    char *data = (char *)moby->pvars;
-    int   state = *(int *)(data + 0x350);
+    char *boss_action_vars = (char *)moby->pvars;
+    int   state = *(int *)(boss_action_vars + 0x350);
     int   tries = 0;
     int   boss_action_choice_index;
     int   ok;
@@ -2432,21 +2432,21 @@ int select_drek_boss_next_action(struct Moby *moby) {
             break;
         }
         ok = *(short *)((char *)drek_boss_action_eligibility_by_phase +
-                        boss_action_choice_index * 2 + *(int *)(data + 0x34C) * 12);
-        if (state == *(int *)(data + 0x350))
+                        boss_action_choice_index * 2 + *(int *)(boss_action_vars + 0x34C) * 12);
+        if (state == *(int *)(boss_action_vars + 0x350))
             ok = 0;
         if (state == 0x13) {
-            if (*(int *)(data + 0x364) != 0) {
+            if (*(int *)(boss_action_vars + 0x364) != 0) {
                 ok = 0;
             } else {
                 float d = vector_distance_xy(D_0013E533 + 0xE9D,
-                                             D_L18_001600EC + *(int *)(data + 0x25C) * 128 + 0x30);
+                                             D_L18_001600EC + *(int *)(boss_action_vars + 0x25C) * 128 + 0x30);
                 if (*(float *)&D_L18_00162378_gp + 2.0f < d)
                     ok = 0;
             }
         }
         if (state == 0x11) {
-            if (*(int *)(data + 0x350) == 0xE)
+            if (*(int *)(boss_action_vars + 0x350) == 0xE)
                 ok = 0;
         }
         if (ok != 0)
