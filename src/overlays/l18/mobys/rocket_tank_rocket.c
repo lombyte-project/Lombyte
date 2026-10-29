@@ -69,27 +69,27 @@ void update_projectile_motion_collision_and_trail(char *moby) {
     float  effect_vector[4];
     float  effect_spawn_position[4];
     float  world_effect_direction[4];
-    char  *data = ((char *)MOBY(moby)->pvars);
+    char  *projectile_private_vars = ((char *)MOBY(moby)->pvars);
     float *p;
     float  movement_step_length, target_distance;
     char  *referenced_moby;
 
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, frame_time * 6.2831855f);
-    if (*(short *)(data + 0x12) != 0) {
-        movement_step_length = fast_vec_length(data);
-        fast_vec_sub(data, &hero.motion.near_ground_point, moby + 0x10);
-        target_distance = fast_vec_length(data);
+    if (*(short *)(projectile_private_vars + 0x12) != 0) {
+        movement_step_length = fast_vec_length(projectile_private_vars);
+        fast_vec_sub(projectile_private_vars, &hero.motion.near_ground_point, moby + 0x10);
+        target_distance = fast_vec_length(projectile_private_vars);
         if (movement_step_length < target_distance) {
-            fast_vec_normalize(data, data, movement_step_length);
-            MOBY(moby)->rot.z = fast_arc_tan(*(float *)data, *(float *)(data + 4));
-            MOBY(moby)->rot.y = -fast_arc_tan(vector_length_xy(data), *(float *)(data + 8));
+            fast_vec_normalize(projectile_private_vars, projectile_private_vars, movement_step_length);
+            MOBY(moby)->rot.z = fast_arc_tan(*(float *)projectile_private_vars, *(float *)(projectile_private_vars + 4));
+            MOBY(moby)->rot.y = -fast_arc_tan(vector_length_xy(projectile_private_vars), *(float *)(projectile_private_vars + 8));
         } else if (target_distance < 0.1f) {
             mark_moby_for_removal(moby);
             return;
         }
     }
-    fast_vec_add(next_position, moby + 0x10, data);
-    referenced_moby = *(char **)(data + 0x14);
+    fast_vec_add(next_position, moby + 0x10, projectile_private_vars);
+    referenced_moby = *(char **)(projectile_private_vars + 0x14);
     if (referenced_moby != 0 && MOBY(referenced_moby)->oclass == 0x2E &&
         ((unsigned char *)referenced_moby)[0x20] != 0xFE &&
         ((unsigned char *)referenced_moby)[0x20] != 0xFD) {
@@ -98,15 +98,15 @@ void update_projectile_motion_collision_and_trail(char *moby) {
         fast_vec_normalize(hit_direction_vector, hit_direction_vector, 2.0f);
         hit_direction_vector[3] = 5627.925f;
     } else {
-        fast_vec_normalize(hit_direction_vector, data, 2.0f);
+        fast_vec_normalize(hit_direction_vector, projectile_private_vars, 2.0f);
     }
     make_hit_descriptor(hit_descriptor, (int)moby, 1, hit_direction_vector, 2.0f);
     *(short *)(hit_descriptor + 0x1A) = ((unsigned short)MOBY(moby)->oclass);
-    if (collision_line(moby + 0x10, next_position, 0, *(void **)(data + 0x14), hit_descriptor) !=
+    if (collision_line(moby + 0x10, next_position, 0, *(void **)(projectile_private_vars + 0x14), hit_descriptor) !=
             0 ||
-        fast_dec_timer_s16(data + 0x10) != 0) {
+        fast_dec_timer_s16(projectile_private_vars + 0x10) != 0) {
         func_L00_0025F4A8_alt(moby,
-                              data,
+                              projectile_private_vars,
                               moby + 0x10,
                               1.5f,
                               1.0f,
@@ -128,7 +128,7 @@ void update_projectile_motion_collision_and_trail(char *moby) {
         unsigned char *particle;
         qcopy(moby + 0x10, next_position);
         FUN_L00_00257d78(effect_vector, frame_time * 0.1f, frame_time * 0.2f);
-        fast_vec_scale(effect_spawn_position, data, random_float_between(0.0f, 1.0f));
+        fast_vec_scale(effect_spawn_position, projectile_private_vars, random_float_between(0.0f, 1.0f));
         fast_vec_add(effect_spawn_position, effect_spawn_position, moby + 0x10);
         particle = FUN_L00_002712b8(effect_spawn_position,
                                     effect_vector,
