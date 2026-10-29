@@ -140,7 +140,7 @@ void update_metropolis_train_motion(char *moby) {
     float        car_position_adjustment[4];
     float        rear[4];
     char        *coupling;
-    Train292890 *data;
+    Train292890 *locomotive_state;
     char        *coupling_data;
     char        *car;
     Car292890   *car_data;
@@ -149,13 +149,13 @@ void update_metropolis_train_motion(char *moby) {
     int          id;
     float        distance_margin_or_target_angle;
 
-    data = ((Train292890 *)MOBY(moby)->pvars);
-    coupling = D_L03_0015FFD8_292890 + (data->iC4 << 8);
+    locomotive_state = ((Train292890 *)MOBY(moby)->pvars);
+    coupling = D_L03_0015FFD8_292890 + (locomotive_state->iC4 << 8);
     coupling_data = *(char **)(coupling + 0x78);
     ((unsigned char *)moby)[0x72] = 0xFF;
     qcopy(old_pos, moby + 0x10);
     qcopy(old_rot, moby + 0x40);
-    next_id = data->iA0;
+    next_id = locomotive_state->iA0;
     if (next_id != -1) {
         /* Fakematch: writing the unchanged next car id back is a no-op, but the
          * test-and-store survives until after register allocation (reload's cse
@@ -163,41 +163,41 @@ void update_metropolis_train_motion(char *moby) {
          * then the branch's label stops reload from reusing the $4 copy of
          * `coupling` below, which gives retail's reload of it from the stack. */
         if (next_id != 0) {
-            data->iA0 = next_id;
+            locomotive_state->iA0 = next_id;
         }
         id = next_id;
         target = coupling + 0x10;
-        distance_margin_or_target_angle = data->fDC - vector_distance_xy(moby + 0x10, target);
+        distance_margin_or_target_angle = locomotive_state->fDC - vector_distance_xy(moby + 0x10, target);
         *(float *)(coupling_data + 0xFC) = distance_margin_or_target_angle;
         if (distance_margin_or_target_angle < 0.0f) {
             *(float *)(coupling_data + 0xFC) = 0.0f;
         }
         gunship_follow_path(coupling);
         build_spherical_offset(
-            delta, data->fC8, fast_add_rotations(MOBY(moby)->rot.z, 3.1415927f), MOBY(moby)->rot.y);
-        fast_vec_normalize(delta, delta, data->fC8);
+            delta, locomotive_state->fC8, fast_add_rotations(MOBY(moby)->rot.z, 3.1415927f), MOBY(moby)->rot.y);
+        fast_vec_normalize(delta, delta, locomotive_state->fC8);
         fast_vec_add(moby + 0x10, moby + 0x10, delta);
         distance_margin_or_target_angle =
             fast_add_rotations(fast_arc_tan(*(float *)(coupling + 0x10) - MOBY(moby)->pos.x,
                                             *(float *)(coupling + 0x14) - MOBY(moby)->pos.y),
                                3.1415927f);
         MOBY(moby)->rot.z =
-            spring_turn(&data->fCC,
+            spring_turn(&locomotive_state->fCC,
                         MOBY(moby)->rot.z,
                         distance_margin_or_target_angle,
-                        (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * frame_time_sq,
-                        (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * frame_time_sq,
-                        (data->fC8 * 60.0f / data->fC0) * frame_time);
+                        (locomotive_state->fC8 * 60.0f / locomotive_state->fC0) * 0.25f * DEG_TO_RAD * frame_time_sq,
+                        (locomotive_state->fC8 * 60.0f / locomotive_state->fC0) * 0.5f * DEG_TO_RAD * frame_time_sq,
+                        (locomotive_state->fC8 * 60.0f / locomotive_state->fC0) * frame_time);
         distance_margin_or_target_angle =
             fast_arc_tan(vector_distance_xy(moby + 0x10, target),
                          *(float *)(coupling + 0x18) - MOBY(moby)->pos.z);
         MOBY(moby)->rot.y =
-            spring_turn(&data->fD0,
+            spring_turn(&locomotive_state->fD0,
                         MOBY(moby)->rot.y,
                         distance_margin_or_target_angle,
-                        (data->fC8 * 60.0f / data->fC0) * 0.25f * DEG_TO_RAD * frame_time_sq,
-                        (data->fC8 * 60.0f / data->fC0) * 0.5f * DEG_TO_RAD * frame_time_sq,
-                        (data->fC8 * 60.0f / data->fC0) * frame_time);
+                        (locomotive_state->fC8 * 60.0f / locomotive_state->fC0) * 0.25f * DEG_TO_RAD * frame_time_sq,
+                        (locomotive_state->fC8 * 60.0f / locomotive_state->fC0) * 0.5f * DEG_TO_RAD * frame_time_sq,
+                        (locomotive_state->fC8 * 60.0f / locomotive_state->fC0) * frame_time);
         moby_point_position(moby, 0, front);
         do {
             car = D_L03_0015FFD8_292890 + (id << 8);
@@ -229,9 +229,9 @@ void update_metropolis_train_motion(char *moby) {
             id = car_data->iC0;
         } while (id != -1);
         fast_vec_sub(delta, moby + 0x10, old_pos);
-        update_entity_matrix(data->motion, delta, old_rot, moby + 0x40);
+        update_entity_matrix(locomotive_state->motion, delta, old_rot, moby + 0x40);
     } else {
-        debug_print(D_L03_001E2410, data->iB8);
+        debug_print(D_L03_001E2410, locomotive_state->iB8);
         mark_moby_for_removal(moby);
         return;
     }
