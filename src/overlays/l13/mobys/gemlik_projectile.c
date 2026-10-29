@@ -145,8 +145,8 @@ void update_gemlik_projectile(struct Moby *moby) {
                     l13_moby_hit_entries[(unsigned char)ent[0xA4]].s2A =
                         *(unsigned short *)((char *)moby + 0xA6);
                     {
-                        struct L13Ent00178480 *t = &l13_moby_hit_entries[(unsigned char)ent[0xA4]];
-                        t->i24 = hit_mask;
+                        struct L13Ent00178480 *matched_target_hit_entry = &l13_moby_hit_entries[(unsigned char)ent[0xA4]];
+                        matched_target_hit_entry->i24 = hit_mask;
                     }
                 }
                 break;
