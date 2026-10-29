@@ -882,8 +882,8 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
 }
 
 void activate_listed_state_15_mobys_at_raised_positions(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
-    short *moby_index_list = D_L06_001ABFC0_c[*(int *)(data + 0xF0)];
+    char  *activation_source_moby_vars = ((char *)MOBY(moby)->pvars);
+    short *moby_index_list = D_L06_001ABFC0_c[*(int *)(activation_source_moby_vars + 0xF0)];
     short *moby_index_cursor;
     if (moby_index_list != 0) {
         moby_index_cursor = moby_index_list;
