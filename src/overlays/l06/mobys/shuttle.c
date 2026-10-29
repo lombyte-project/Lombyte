@@ -849,8 +849,8 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
 
 /* Marks every moby in the moby's list for removal; the list ends after its first negative entry. */
 void mark_shuttle_linked_mobys_for_removal(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
-    short *moby_list_entry = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
+    char  *shuttle_link_vars = ((char *)MOBY(moby)->pvars);
+    short *moby_list_entry = D_L06_001ABFC0_c[*(int *)(shuttle_link_vars + 0xCC)];
     do {
         mark_moby_for_removal(D_L06_0015FFD8_u + ((*moby_list_entry & 0x7FFF) << 8));
     } while (*moby_list_entry++ >= 0);
