@@ -1473,39 +1473,39 @@ extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
 extern int FUN_L00_0025d808_2af918(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
 
 void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *interceptor_instance_vars = (char *)moby->pvars;
     float path_target_position[4];
-    float save = *(float *)(data + 0x1CC);
-    int   save2 = *(int *)(data + 0x84);
-    int   r = FUN_L00_0025d808_2af918(((int *)l14_paths[*(int *)(data + 0x78)]),
+    float save = *(float *)(interceptor_instance_vars + 0x1CC);
+    int   save2 = *(int *)(interceptor_instance_vars + 0x84);
+    int   r = FUN_L00_0025d808_2af918(((int *)l14_paths[*(int *)(interceptor_instance_vars + 0x78)]),
                                     path_target_position,
-                                    (int *)(data + 0x84),
-                                    (float *)(data + 0x1CC),
-                                    *(short *)(data + 0x8A),
-                                    *(float *)(data + 0x168));
-    FUN_L00_0025b8c0_c((float *)(data + 0x170),
-                       (float *)(data + 0x180),
+                                    (int *)(interceptor_instance_vars + 0x84),
+                                    (float *)(interceptor_instance_vars + 0x1CC),
+                                    *(short *)(interceptor_instance_vars + 0x8A),
+                                    *(float *)(interceptor_instance_vars + 0x168));
+    FUN_L00_0025b8c0_c((float *)(interceptor_instance_vars + 0x170),
+                       (float *)(interceptor_instance_vars + 0x180),
                        path_target_position[0],
                        *(float *)&D_L14_001613A0_gp,
                        *(float *)&D_L14_001613A4_gp,
                        0.0f);
-    FUN_L00_0025b8c0_c((float *)(data + 0x174),
-                       (float *)(data + 0x184),
+    FUN_L00_0025b8c0_c((float *)(interceptor_instance_vars + 0x174),
+                       (float *)(interceptor_instance_vars + 0x184),
                        path_target_position[1],
                        *(float *)&D_L14_001613A0_gp,
                        *(float *)&D_L14_001613A4_gp,
                        0.0f);
-    FUN_L00_0025b8c0_c((float *)(data + 0x178),
-                       (float *)(data + 0x188),
+    FUN_L00_0025b8c0_c((float *)(interceptor_instance_vars + 0x178),
+                       (float *)(interceptor_instance_vars + 0x188),
                        path_target_position[2],
                        *(float *)&D_L14_001613A0_gp,
                        *(float *)&D_L14_001613A4_gp,
                        0.0f);
-    if (*(short *)(data + 0x8A) == 0) {
+    if (*(short *)(interceptor_instance_vars + 0x8A) == 0) {
         if (r != 0) {
-            *(float *)(data + 0x1CC) = save;
-            *(int *)(data + 0x84) = save2;
-            *(float *)(data + 0x168) = -*(float *)(data + 0x168);
+            *(float *)(interceptor_instance_vars + 0x1CC) = save;
+            *(int *)(interceptor_instance_vars + 0x84) = save2;
+            *(float *)(interceptor_instance_vars + 0x168) = -*(float *)(interceptor_instance_vars + 0x168);
         }
     }
 }
