@@ -8,9 +8,9 @@ extern s32 audio_dec_is_preset(struct AudioDec *dec) __asm__("func_0023AEE0");
 s32 is_audio_ok(void) __asm__("FUN_0023a790");
 
 s32 is_audio_ok(void) {
-    s32 result;
-    result = audio_dec_is_preset(&movie_player->audio_dec);
-    return result;
+    s32 state_field_is_large;
+    state_field_is_large = audio_dec_is_preset(&movie_player->audio_dec);
+    return state_field_is_large;
 }
 
 extern s32 func_0023A790(void) __attribute__((alias("FUN_0023a790")));
