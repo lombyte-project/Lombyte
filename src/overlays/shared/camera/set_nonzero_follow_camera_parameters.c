@@ -26,15 +26,15 @@ void set_nonzero_follow_camera_parameters(float x, float y, float z) __asm__("FU
 void set_nonzero_follow_camera_parameters(float x, float y, float z) {
     char *moby = D_L02_00167400_lui;
     if (MOBY(moby)->unk86 == 0) {
-        char *data = *(char **)(moby + 0x70) + 0x1D0;
-        if (*(float *)(data + 0x3C) != 0.0f) {
-            *(float *)(data + 0x3C) = x;
+        char *follow_camera_parameter_base = *(char **)(moby + 0x70) + 0x1D0;
+        if (*(float *)(follow_camera_parameter_base + 0x3C) != 0.0f) {
+            *(float *)(follow_camera_parameter_base + 0x3C) = x;
         }
-        if (*(float *)(data + 0x40) != 0.0f) {
-            *(float *)(data + 0x40) = y;
+        if (*(float *)(follow_camera_parameter_base + 0x40) != 0.0f) {
+            *(float *)(follow_camera_parameter_base + 0x40) = y;
         }
-        if (*(float *)(data + 0x44) != 0.0f) {
-            *(float *)(data + 0x44) = z;
+        if (*(float *)(follow_camera_parameter_base + 0x44) != 0.0f) {
+            *(float *)(follow_camera_parameter_base + 0x44) = z;
         }
     }
 }
