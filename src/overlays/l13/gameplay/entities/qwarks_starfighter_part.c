@@ -1491,7 +1491,7 @@ extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern int debug_print_alt_q() __asm__("FUN_001e93b0");
 void mmr_q(struct Obj_q *obj) __asm__("FUN_0020c828");
 
-extern char D_L13_001F51B0[] __attribute__((section(".data")));
+extern char D_L13_001F51B0[] NOT_SDA;
 void update_moby_state_relay(char *moby) __asm__("FUN_L13_002f8880");
 
 void update_moby_state_relay(char *moby) {

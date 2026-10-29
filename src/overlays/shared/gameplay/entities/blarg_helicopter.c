@@ -7,6 +7,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/collision.h"
+#include "sda.h"
 
 
 
@@ -260,8 +261,8 @@ typedef struct {
     f32 z;
     f32 w;
 } __attribute__((aligned(16))) Vec4A_2bef68;
-extern char * D_L03_00160064_p __asm__("D_L03_0015FFE4") __attribute__((section(".sdata")));
-extern char * D_L03_00160058_p __asm__("D_L03_0015FFD8") __attribute__((section(".sdata")));
+extern char * D_L03_00160064_p __asm__("D_L03_0015FFE4") MACRO_ADDR;
+extern char * D_L03_00160058_p __asm__("D_L03_0015FFD8") MACRO_ADDR;
 extern int FUN_001f9770_2bef68(void *) __asm__("FUN_001f9770");
 extern void FUN_001f9a10_2bef68(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float FUN_001fa6c0_2bef68(int) __asm__("FUN_001fa6c0");
@@ -338,10 +339,10 @@ extern int FUN_001f96f8_2bef68(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025d538_2bef68(void *, void *) __asm__("FUN_L00_0025d538");
 extern char D_L03_00166EC0[];
 extern char D_0013E533_2bef68[] __asm__("D_0013E533");
-extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
-extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") MACRO_ADDR;
+extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 
-extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 /* Update of moby class 455 (spawner): counts its living children, takes hits, runs its state machine and spawns class 0x221 children at a point picked by its mode. */
 void spawner_update(struct Moby *moby) __asm__("FUN_L03_002bef68");
 void spawner_update(struct Moby *moby) {
@@ -752,7 +753,7 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float FUN_002132a8(float, float);
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 extern void FUN_0020c828(void *);
-extern CollisionHit D_L03_00173F40 __attribute__((section(".data")));
+extern CollisionHit D_L03_00173F40 NOT_SDA;
 
 /* Drifts and bounces off walls (state 0), lands and spawns its child moby (1), then shrinks while the child grows (2). */
 void FUN_L03_002c4718(struct Moby *moby)
@@ -983,12 +984,12 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") __attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[] __asm__("D_L03_0015F580") MACRO_ADDR;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_0014C050; /* no foreign declaration */
-extern int D_0015ED68_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
+extern int D_0015ED68_e[] __asm__("D_0015ED68") MACRO_ADDR;
 extern float blarg_helicopter_bob_period __asm__("D_L03_00161994") __attribute__((sda)); /* no foreign declaration */
 extern float blarg_helicopter_bob_amplitude __asm__("D_L03_00161998") __attribute__((sda)); /* no foreign declaration */
 #include "rnc/overlay/shared/gameplay/entities/blarg_helicopter_globals.h"
@@ -1522,7 +1523,7 @@ typedef struct {
     void *moby;
 } Tgt_2D5B88;
 
-extern Moby *D_L03_00173F58 __attribute__((section(".data")));
+extern Moby *D_L03_00173F58 NOT_SDA;
 extern char *FUN_L00_0026dd20(void *pos, void *vel, int c, int d, float f);
 extern char D_0013E533[];
 extern CollisionHit coll_hit __asm__("D_L03_00173F60");
@@ -1531,7 +1532,7 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C_c __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_c __asm__("D_0015ED6C") MACRO_ADDR;
 extern float homing_spark_turn_rate_degrees_gp __asm__("D_L03_00161B30") __attribute__((sda));
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");

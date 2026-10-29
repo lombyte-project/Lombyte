@@ -389,8 +389,8 @@ typedef struct {
     char _pad7F[0x100 - 0x7F];
 } Moby;
 
-extern char D_L00_00196D00[] __attribute__((section(".data")));
-extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") __attribute__((section(".sdata")));
+extern char D_L00_00196D00[] NOT_SDA;
+extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") MACRO_ADDR;
 extern int FUN_L00_0024f698(void *);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short hero_blend_curve_frame_counts __asm__("D_L00_0015F6E0") __attribute__((sda));
@@ -529,8 +529,8 @@ typedef union {
     f32 f[4];
 } V4_32b90;
 
-extern u8 coll_hit_normal[] __asm__("D_L00_00173E80") __attribute__((section(".data")));
-extern f32 collision_hit_point __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern u8 coll_hit_normal[] __asm__("D_L00_00173E80") NOT_SDA;
+extern f32 collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
 extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1237,7 +1237,7 @@ int add_ammo(int weapon_index, int ammo_amount) {
     }
     return 0;
 }
-extern s32 D_00140408_c __asm__("D_00140408") __attribute__((section(".data")));
+extern s32 D_00140408_c __asm__("D_00140408") NOT_SDA;
 
 /* 1 if entry idx of D_L00_001C40B0 has no limit at 0xE, else weapon_ammo_counts[idx]; -1: D_00140408. */
 s32 get_ammo(s32 idx) __asm__("FUN_L00_00233e98");
@@ -1339,7 +1339,7 @@ extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 /* The hero on a moving platform: finds the platform the hero stands on or hangs from, tracks the platform's motion
    between frames (its attach points at 0x310-0x330) and carries the hero (position, facing, ledge-grab point) with it. */
 void update_hero_attachment(void) __asm__("FUN_L00_00233f80");

@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /*
  * Hero movement step: clamps the velocity, moves the hero by it (plus the
@@ -387,7 +388,7 @@ extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float hero_ledge_shimmy_speed_by_animation_frame[] __asm__("D_L01_001C4130");
 extern float D_L01_00167450;
-extern float D_L01_00167258_lui __asm__("D_L01_00167258") __attribute__((section(".data")));
+extern float D_L01_00167258_lui __asm__("D_L01_00167258") NOT_SDA;
 extern float hero_swim_animation_speed_weights[] __asm__("D_L01_0017C440");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");

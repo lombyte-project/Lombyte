@@ -1063,11 +1063,11 @@ int reject_follow_camera_first_step_backward_hit(void *camera_moby, int step_ind
 typedef float V_2e7a30[4] __attribute__((aligned(16)));
 extern float follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
 extern float D_L00_00161CC8_gp __asm__("D_L00_00161CC8") __attribute__((sda));
-extern float D_0013CA40_2e7a30 __asm__("D_0013CA40") __attribute__((section(".data")));
+extern float D_0013CA40_2e7a30 __asm__("D_0013CA40") NOT_SDA;
 extern int D_L00_0015EF5C __asm__("D_L00_0015EF5C");
-extern struct Hero hero __asm__("D_0013F350") __attribute__((section(".data")));
-extern V_2e7a30 D_L00_00173E60_2e7a30 __asm__("D_L00_00173E60") __attribute__((section(".data")));
-extern V_2e7a30 D_L00_00166E40_2e7a30 __asm__("D_L00_00166E40") __attribute__((section(".data")));
+extern struct Hero hero __asm__("D_0013F350") NOT_SDA;
+extern V_2e7a30 D_L00_00173E60_2e7a30 __asm__("D_L00_00173E60") NOT_SDA;
+extern V_2e7a30 D_L00_00166E40_2e7a30 __asm__("D_L00_00166E40") NOT_SDA;
 extern void FUN_001f9bf8_2e7a30(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int FUN_L00_002e4290_2e7a30(void *) __asm__("FUN_L00_002e4290");
 extern int FUN_L00_001f0d60_2e7a30(void *, int, int, float) __asm__("FUN_L00_001f0d60");
@@ -1168,16 +1168,16 @@ typedef struct {
     u8 pad2088[0x20A4 - 0x2088];
     u8 b20A4;
 } GS_2e7d20;
-extern GS_2e7d20 D_0013F350_2e7d20  __asm__("D_0013F350")__attribute__((section(".data")));
-extern u8 camera_view[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
-extern u8 D_L00_00166DC0[] __attribute__((section(".data")));
-extern u8 *D_L00_00177F00_2e7d20[] __asm__("D_L00_00177F00") __attribute__((section(".data")));
-extern u8 *D_L00_001E75C0[] __attribute__((section(".data")));
+extern GS_2e7d20 D_0013F350_2e7d20  __asm__("D_0013F350")NOT_SDA;
+extern u8 camera_view[] __asm__("D_L00_00166E10") NOT_SDA;
+extern u8 D_L00_00166DC0[] NOT_SDA;
+extern u8 *D_L00_00177F00_2e7d20[] __asm__("D_L00_00177F00") NOT_SDA;
+extern u8 *D_L00_001E75C0[] NOT_SDA;
 extern f32 follow_camera_minimum_retracted_orbit_distance_gp __asm__("D_L00_00161CD0") __attribute__((sda));
 typedef struct { u8 pad[0x100]; f32 x; f32 y; } C940_2e7d20_t;
-extern C940_2e7d20_t D_0013C940_2e7d20  __asm__("D_0013C940")__attribute__((section(".data")));
+extern C940_2e7d20_t D_0013C940_2e7d20  __asm__("D_0013C940")NOT_SDA;
 typedef struct { u8 pad[0x18]; s32 p18; s32 p1C; u8 v20[0x10]; } E40_2e7d20_t;
-extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
 
 void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern s32 probe_world_sphere(void *, s32, void *, s32, f32) __asm__("FUN_L00_001f2868");
@@ -1212,7 +1212,7 @@ void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
 /* Follow-camera leaf, called from follow_camera_build_view. */
 void follow_camera_avoid_mobies(u8 *m) __asm__("FUN_L00_002e7d20");
-extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern s32 camera_collision_mask __asm__("D_L00_0015EF58") __attribute__((sda));
 void follow_camera_avoid_mobies(u8 *camera_moby) {
     V_2e7d20 probe_center, moby_offset_or_camera_endpoint, v20, planar_moby_direction, orbit_side_direction;

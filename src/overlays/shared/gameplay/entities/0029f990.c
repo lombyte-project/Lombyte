@@ -10,6 +10,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/level_globals.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A0C20), where it is exact; names translated to the US level program. */
 
@@ -114,7 +115,7 @@ void FUN_0020d330_29fcd0(void *, int) __asm__("FUN_0020d330");
 void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long,
                          long) __asm__("FUN_001f5450");
 
-extern I3_29fcd0 D_L00_00161178 __attribute__((section(".data")));
+extern I3_29fcd0 D_L00_00161178 NOT_SDA;
 void draw_vendor_purchase_panel(void *moby) __asm__("FUN_L00_0029fcd0");
 
 void draw_vendor_purchase_panel(void *moby) {
@@ -174,12 +175,12 @@ struct HoloPacket {
 
 extern float vendor_hologram_vertex_offsets[][4] __asm__("D_L00_001CA380");
 extern float vendor_hologram_vertex_uvs[][2] __asm__("D_L00_001CA410");
-extern int D_L00_001CA458[] __attribute__((section(".data")));
-extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
+extern int D_L00_001CA458[] NOT_SDA;
+extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") NOT_SDA;
 extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
 #include "rnc/overlay/shared/gameplay/entities/0029f990_globals.h"
 extern float vendor_hologram_v_scroll_offset_gp __asm__("D_L00_00161184") __attribute__((sda));
-extern struct Quad D_L00_001CA480[] __attribute__((section(".data")));
+extern struct Quad D_L00_001CA480[] NOT_SDA;
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 

@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
@@ -176,7 +177,7 @@ extern float ground_particle_scatter_minimum_z_scale_override_gp __asm__("D_L08_
 extern int ground_particle_scatter_distant_spawn_argument_gp __asm__("D_L08_00162358") __attribute__((sda));
 extern float ground_particle_scatter_ground_height_floor_offset_gp __asm__("D_L08_0016235C") __attribute__((sda));
 extern int update_float_countdown() __asm__("FUN_L08_00211b08");
-extern u128_3091B0 D_L08_00160250 __attribute__((section(".sdata")));
+extern u128_3091B0 D_L08_00160250 MACRO_ADDR;
 extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
 float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
 void FUN_L00_00262cf0(void *a, void *b);
@@ -447,7 +448,7 @@ void spawn_moby_radial_particles(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00315068), where it is exact; names translated to the US level program. */
 
 
-extern char *D_L08_00167600 __attribute__((section(".data")));
+extern char *D_L08_00167600 NOT_SDA;
 void FUN_L08_00313ba8(void) {
     D_L08_00167600[0x88] = 1;
 }

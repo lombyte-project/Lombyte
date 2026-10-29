@@ -12,6 +12,7 @@
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_00223630), where it is exact; names translated to the US level program. */
 
@@ -299,9 +300,9 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_L06_001745C0[] __attribute__((section(".data")));
-extern u8 D_L06_001745E0[] __attribute__((section(".data")));
-extern f32 D_L06_001745E8 __attribute__((section(".data")));
+extern u8 D_L06_001745C0[] NOT_SDA;
+extern u8 D_L06_001745E0[] NOT_SDA;
+extern f32 D_L06_001745E8 NOT_SDA;
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
@@ -394,11 +395,11 @@ typedef struct {
     u8 pad20b3[0x23];
     u8 xB20b3;
 } GS;
-extern CollisionHit HH __asm__("D_L06_001745C0") __attribute__((section(".data")));
+extern CollisionHit HH __asm__("D_L06_001745C0") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L06_001745C0 + (o)))
 #define HF(o) (*(f32 *)(D_L06_001745C0 + (o)))
 
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 void update_hero_ground_contact(void) __asm__("FUN_L06_00229650");
 
 void update_hero_ground_contact(void) {

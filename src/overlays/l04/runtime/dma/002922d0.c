@@ -9,12 +9,13 @@
 #include "qcopy.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
-extern float D_L04_00173FE8 __attribute__((section(".data")));
+extern float D_L04_00173FE8 NOT_SDA;
 float probe_leg_rig_ground_height(float *probe_origin) __asm__("FUN_L04_002922d0");
 
 float probe_leg_rig_ground_height(float *probe_origin) {
@@ -363,7 +364,7 @@ extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f
 extern f32 FUN_001f99c0(f32);
 extern f32 D_0015ED60;
 extern f32 D_0015ED68;
-extern s32 D_L04_00173FF0[] __attribute__((section(".data")));
+extern s32 D_L04_00173FF0[] NOT_SDA;
 
 s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) __asm__("FUN_L04_00295778");
 s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) {

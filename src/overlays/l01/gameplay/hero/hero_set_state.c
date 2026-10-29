@@ -15,6 +15,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/help_0023D688.c: func_L01_0023D688), where it is exact; names translated to the US level program. */
 
@@ -1604,7 +1605,7 @@ struct HeldGadgetVars {
     int voice;
 };
 
-extern int D_00141660 __attribute__((section(".data")));
+extern int D_00141660 NOT_SDA;
 int r1_double_tap_timer __asm__("D_L01_0015F674") = 0;
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int FUN_0022da68(int, int, struct Moby *) __asm__("FUN_0022da68");

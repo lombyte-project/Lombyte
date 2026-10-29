@@ -1284,7 +1284,7 @@ void emit_phase_selected_moby_effects(struct Moby *moby) {
 /* Draws the moby's 10-piece overlay when its trigger is visible, with its own GS state. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */
 
-extern float D_L12_00162108[2] __attribute__((section(".sdata")));
+extern float D_L12_00162108[2] MACRO_ADDR;
 extern char hoven_scrolling_clipped_scrolled_uv_buffer[] __asm__("D_L12_00208B00");
 extern int hoven_scrolling_clipped_vertex_counts[] __asm__("D_L12_001FBD10");
 extern int hoven_scrolling_clipped_vertex_position_tables[] __asm__("D_L12_002059E0");
@@ -1326,7 +1326,7 @@ extern int hoven_scrolling_color_tables_initialized_gp __asm__("D_L12_001620F0")
 /* The ready flag is followed, 8 bytes on, by two pairs of phases. */
 extern float hoven_scrolling_layer_phase_rates[1] __asm__("D_L12_001620E0") __attribute__((sda));
 extern float hoven_scrolling_clipped_uv_scroll_rates[2] __asm__("D_L12_001620D8") __attribute__((sda));
-extern float frame_delta_time __asm__("D_0015ED7C") __attribute__((section(".sdata")));
+extern float frame_delta_time __asm__("D_0015ED7C") MACRO_ADDR;
 extern int *hoven_scrolling_color_tables[] __asm__("D_L12_00208AE0");
 extern int hoven_scrolling_color_table_entry_counts[] __asm__("D_L12_00205A80");
 extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");

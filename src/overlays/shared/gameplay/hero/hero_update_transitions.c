@@ -13,6 +13,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/data_labels.h"
+#include "sda.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (shared build, levels 00, 04, 07, 09, 10, 13). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0022A340.c: func_L00_0022A340), where it is exact; names translated to the US level program. */
@@ -53,7 +54,7 @@ extern S17BEB8 D_L00_0017BDB8;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L00_0015F638;
-extern float D_L00_00166DD8 __attribute__((section(".data")));
+extern float D_L00_00166DD8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -72,11 +73,11 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern int D_00141660 __attribute__((section(".data")));
+extern int D_00141660 NOT_SDA;
 extern int D_L00_0015F678_gp __asm__("D_L00_0015F678") __attribute__((sda));
 extern int D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int D_L00_0015F594 __attribute__((sda));
-extern int D_L00_0016C780 __attribute__((section(".data")));
+extern int D_L00_0016C780 NOT_SDA;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int hero_idle_sequence(int a) __asm__("FUN_L00_00205000");

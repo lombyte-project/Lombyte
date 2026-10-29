@@ -11,6 +11,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
 
@@ -179,7 +180,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 #include "rnc/gameplay/state/options.h"
 #include "rnc/overlay/shared/gameplay/entities/blarg_elite_commando_data/blarg_elite_commando_update.h"
 extern int D_L16_0015F5C4;
-extern int D_L16_0016CC90 __attribute__((section(".data")));
+extern int D_L16_0016CC90 NOT_SDA;
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -187,7 +188,7 @@ extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int truncate_float_to_s32(float);
-extern int D_001413DC __attribute__((section(".data")));
+extern int D_001413DC NOT_SDA;
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void update_blarg_elite_commando_damage_and_pursuit(struct Moby *) __asm__("FUN_L16_002d38b0");

@@ -13,6 +13,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/data_labels.h"
+#include "sda.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 11 build). */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/help_00254158.c: func_L11_00254158), where it is exact; names translated to the US level program. */
@@ -38,7 +39,7 @@ extern S17C838 D_L11_0017C7B8;
 extern float absolute_float(float) __asm__("func_001F99C0");
 #include "rnc/overlay/l11/gameplay/hero/00253a18_globals.h"
 #include "rnc/math/fast_math.h"
-extern float D_L11_001677D8 __attribute__((section(".data")));
+extern float D_L11_001677D8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
@@ -52,11 +53,11 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern int D_00141660 __attribute__((section(".data")));
+extern int D_00141660 NOT_SDA;
 int r1_repeat_timer __asm__("D_L11_0015F678") = 0;
 extern int D_L11_0015F6DC_d __asm__("D_L11_0015F6DC");
 extern int D_L11_0015F594_gp __asm__("D_L11_0015F594") __attribute__((sda));
-extern int D_L11_0016D180 __attribute__((section(".data")));
+extern int D_L11_0016D180 NOT_SDA;
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");

@@ -121,7 +121,7 @@ extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void queue_level09_strip_texture_packets(int, int) __asm__("FUN_L09_0021e560");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
-extern int *D_L09_001611B8[] __attribute__((section(".sdata")));
+extern int *D_L09_001611B8[] MACRO_ADDR;
 void draw_level09_scrolling_textured_strips(char *list, int count, float unused, long first_texture_index, long second_texture_index) __asm__("FUN_L09_0021e8c0");
 
 void draw_level09_scrolling_textured_strips(char *list, int count, float unused, long first_texture_index, long second_texture_index) {
@@ -194,7 +194,7 @@ extern char D_L09_00166EC0[];
 extern float D_L09_00166F40[];
 extern float level09_view_context[] __asm__("D_L09_0016CBC0");
 #include "rnc/overlay/l09/gameplay/entities/asteroid_data/build_packet_and_draw_scaled_entries.h"
-extern float D_L09_00161304 __attribute__((section(".sdata")));
+extern float D_L09_00161304 MACRO_ADDR;
 #include "rnc/overlay/quad.h"
 #include "qcopy.h"
 #define PACKET_CURSOR (*(int * volatile *)&D_L09_001611C0)
@@ -689,8 +689,8 @@ V6_2EC188 D_L09_00208B18 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2
 extern char *FUN_L09_002efe48_c(void *, void *, void *, float, float) __asm__("FUN_L09_002efe48");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern float D_L09_00173FE8 __attribute__((section(".data")));
-extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_L09_00173FE8 NOT_SDA;
+extern float D_0015ED6C MACRO_ADDR;
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_00257b90(int, int);
@@ -702,7 +702,7 @@ extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
-extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 void update_falling_asteroid(Moby *falling_rock) __asm__("FUN_L09_002eaea8");
 
 void update_falling_asteroid(Moby *falling_rock) {
@@ -1745,8 +1745,8 @@ extern int D_0015EEA4_q __asm__("D_0015EEA4");
 extern int D_L09_0015F5CC;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C2_q[] __asm__("D_0013D4C2");
-extern unsigned char D_0013F3D0_q[] __asm__("D_0013F3D0") __attribute__((section(".data")));
-extern unsigned char D_00141968_q[] __asm__("D_00141968") __attribute__((section(".data")));
+extern unsigned char D_0013F3D0_q[] __asm__("D_0013F3D0") NOT_SDA;
+extern unsigned char D_00141968_q[] __asm__("D_00141968") NOT_SDA;
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");

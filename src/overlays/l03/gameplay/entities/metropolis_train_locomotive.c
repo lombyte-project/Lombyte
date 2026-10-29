@@ -11,6 +11,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 
 
@@ -1139,7 +1140,7 @@ void update_spline_moby_orientation(struct Moby *moby) {
 }
 extern char D_0013E550_29d2e0[] __asm__("D_0013E550");
 extern unsigned char D_0013D408_29d2e0[] __asm__("D_0013D408");
-extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")MACRO_ADDR;
 extern void *D_L03_00160770;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -1589,7 +1590,7 @@ extern char *D_L03_0015FFD8_c5bb8 __asm__("D_L03_0015FFD8");
 extern char *D_L03_001B05B0_c5bb8[] __asm__("D_L03_001B05B0");
 char D_L03_001618D0 = 3;
 extern char D_L03_00166EC0[];
-extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -2199,7 +2200,7 @@ extern char D_L03_00166EC0[];
 extern CollisionHit D_L03_00173F40;
 extern char sphere_collision_resolved_position[] __asm__("D_L03_00173F70");
 extern char D_L03_00173F80[];
-extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
+extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")MACRO_ADDR;
 extern float FUN_001efa68_cf(void *) __asm__("FUN_001f9af0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa5c8");

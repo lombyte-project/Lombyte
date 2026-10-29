@@ -706,7 +706,7 @@ extern HeroTableRow2C D_L02_0017C228[];
 extern S17BEB8 D_L02_0017C3B8;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L02_001673D8 __attribute__((section(".data")));
+extern float D_L02_001673D8 NOT_SDA;
 extern float ledge_shimmy_planar_speed_by_anim_frame[] __asm__("D_L02_001C42B0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_L00_001ff600_cf(void *) __asm__("FUN_001f9b20");

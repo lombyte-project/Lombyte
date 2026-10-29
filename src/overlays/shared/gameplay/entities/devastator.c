@@ -1575,7 +1575,7 @@ extern int D_0015ED84;
 extern int D_0015EEA4;
 extern int D_L00_0015F5C4; /* no foreign declaration */
 extern int D_L00_00173E58; /* no foreign declaration */
-extern float D_L00_0017ACF4 __attribute__((section(".data")));
+extern float D_L00_0017ACF4 NOT_SDA;
 extern unsigned char D_L00_001802C0[];
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -1606,7 +1606,7 @@ void transform_hero_local_offset_to_world(float *out, float x, float y, float z)
 void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4");
-extern struct Moby *coll_hit_moby __asm__("D_L00_00173E58") __attribute__((section(".data")));
+extern struct Moby *coll_hit_moby __asm__("D_L00_00173E58") NOT_SDA;
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
@@ -1829,8 +1829,8 @@ void blaster_update(struct Moby *moby) {
 extern unsigned char D_L00_0015F444_e[] __asm__("D_L00_0015F444")
     __attribute__((section(".sdata")));
 extern float D_L00_0015F448;
-extern float D_L00_0015F448_e[] __asm__("D_L00_0015F448") __attribute__((section(".sdata")));
-extern int D_L00_00169FF8 __attribute__((section(".data")));
+extern float D_L00_0015F448_e[] __asm__("D_L00_0015F448") MACRO_ADDR;
+extern int D_L00_00169FF8 NOT_SDA;
 extern void PackDmaTag(s32 arg0, unsigned long arg1, unsigned long arg2);
 
 void moby_save_globals_state(void *m_) __asm__("FUN_L00_002b56d0");
@@ -1869,7 +1869,7 @@ void moby_save_globals_state(void *m_) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B6AE0), where it is exact; names translated to the US level program. */
 
-extern char D_L00_0016CA40[] __attribute__((section(".data")));
+extern char D_L00_0016CA40[] NOT_SDA;
 extern unsigned char D_L00_0015F444;
 extern float D_L00_0015F448;
 extern void set_background_color(int, int, int) __asm__("FUN_001fb280");
@@ -1910,7 +1910,7 @@ typedef union {
     float f[4];
 } V_2b58d8;
 extern float D_0015ED6C_2b58d8 __asm__("D_0015ED6C");
-extern OvlQuad D_L00_00173E60_2b58d8 __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern OvlQuad D_L00_00173E60_2b58d8 __asm__("D_L00_00173E60") NOT_SDA;
 unsigned char *FUN_0020c4f8_2b58d8(int) __asm__("FUN_0020c4f8");
 int FUN_L00_002603d0_2b58d8(void *) __asm__("FUN_L00_002603d0");
 float FUN_001f9af0_2b58d8(void *) __asm__("FUN_001f9af0");
@@ -1927,7 +1927,7 @@ int FUN_0022da68_2b58d8(int, int, void *) __asm__("FUN_0022da68");
 int FUN_001efa68_2b58d8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void FUN_002151d8_2b58d8(int, int) __asm__("FUN_002151d8");
 
-extern int D_L00_0017E508 __attribute__((section(".data")));
+extern int D_L00_0017E508 NOT_SDA;
 extern int D_L00_0015F608;
 extern float visibomb_missile_default_speed_gp __asm__("D_L00_0016149C") __attribute__((sda));
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos, float fa, float fb) __asm__("FUN_L00_002b58d8");
@@ -2062,9 +2062,9 @@ typedef struct {
     int v[6];
 } V6;
 
-extern V6 D_L00_001E9A58 __attribute__((section(".data")));
-extern V6 D_L00_001E9A70 __attribute__((section(".data")));
-extern char D_L00_00166DC0[] __attribute__((section(".data")));
+extern V6 D_L00_001E9A58 NOT_SDA;
+extern V6 D_L00_001E9A70 NOT_SDA;
+extern char D_L00_00166DC0[] NOT_SDA;
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -2130,7 +2130,7 @@ void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) {
     }
 }
 #include "rnc/input/pad_state.h"
-extern float D_0015ED6C_2b6140 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_2b6140 __asm__("D_0015ED6C") MACRO_ADDR;
 extern char D_L00_00173E40_2b6140[] __asm__("D_L00_00173E40");
 
 typedef int u128_2b6140 __attribute__((mode(TI)));
@@ -2176,9 +2176,9 @@ typedef struct Hit_2b6140 {
 typedef struct Hit2_2b6140 { char p0[0x24]; Tgt_2b6140 *f24; } Hit2_2b6140;
 typedef struct Row_2b6140 { char p0[0x74]; unsigned char f74; char p1[0x13]; struct Moby *f88; } Row_2b6140;
 extern char voice_pool[] __asm__("D_0013E550");
-extern Hit2_2b6140 *D_L00_00173E58_2b6140 __asm__("D_L00_00173E58") __attribute__((section(".data")));
+extern Hit2_2b6140 *D_L00_00173E58_2b6140 __asm__("D_L00_00173E58") NOT_SDA;
 extern char D_L00_00177F00_2b6140[] __asm__("D_L00_00177F00");
-extern float D_0015ED60_2b6140 __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern float D_0015ED60_2b6140 __asm__("D_0015ED60") MACRO_ADDR;
 extern void func_L00_00204130_2b6140(void) __asm__("FUN_L00_00203b18");
 extern int force_help_message(int, int) __asm__("FUN_002151d8");
 extern int update_orbit_camera_from_target_moby(void *, void *) __asm__("FUN_L00_002eb648");
@@ -2210,7 +2210,7 @@ extern int D_L00_0015F458 __attribute__((sda));
 extern float visibomb_missile_max_speed_gp __asm__("D_L00_001614A0") __attribute__((sda));
 extern float visibomb_missile_speed_target_blend_factor_gp __asm__("D_L00_001614A4") __attribute__((sda));
 extern float visibomb_missile_speed_blend_factor_gp __asm__("D_L00_001614A8") __attribute__((sda));
-extern int D_L00_0015F608_macro __asm__("D_L00_0015F608") __attribute__((section(".sdata")));
+extern int D_L00_0015F608_macro __asm__("D_L00_0015F608") MACRO_ADDR;
 /* visibomb_missile update (moby class 172): drift, homing toward the target, arming countdown. */
 void visibomb_missile_update(struct Moby *m) __asm__("FUN_L00_002b6140");
 void visibomb_missile_update(struct Moby *missile_moby) {
@@ -2679,12 +2679,12 @@ typedef struct {
 extern E8690 D_L00_001DB440[];
 extern int D_L00_001614D0;
 extern float D_L00_001614DC;
-extern char D_L00_001614E0[] __attribute__((section(".sdata")));
+extern char D_L00_001614E0[] MACRO_ADDR;
 extern int taunter_effect_spawn_interval_frames_gp __asm__("D_L00_001614B0") __attribute__((sda));
 extern float taunter_effect_travel_distance_gp __asm__("D_L00_001614B4") __attribute__((sda));
 extern float taunter_effect_travel_speed_gp __asm__("D_L00_001614B8") __attribute__((sda));
 extern unsigned short D_L00_001614BC __attribute__((sda));
-extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") __attribute__((section(".sdata")));
+extern int D_L00_001614D0_e[] __asm__("D_L00_001614D0") MACRO_ADDR;
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_dec_timer(int *arg0) __asm__("func_001F9740");
@@ -2755,7 +2755,7 @@ typedef struct {
     s16 on;
     s16 pad2;
 } E_2b7568;
-extern E_2b7568 D_L00_001DB440_2b7568[] __asm__("D_L00_001DB440") __attribute__((section(".data")));
+extern E_2b7568 D_L00_001DB440_2b7568[] __asm__("D_L00_001DB440") NOT_SDA;
 extern V_2b7568 D_L00_001614E0_2b7568[] __asm__("D_L00_001614E0")
     __attribute__((section(".sdata")));
 extern f32 D_L00_001614DC;
@@ -2766,7 +2766,7 @@ extern void setlen_2b7568(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
-extern V_2b7568 D_L00_001DB400[] __attribute__((section(".data")));
+extern V_2b7568 D_L00_001DB400[] NOT_SDA;
 extern f32 taunter_effect_quad_final_scale_gp __asm__("D_L00_001614C8") __attribute__((sda));
 extern f32 taunter_effect_quad_initial_scale_gp __asm__("D_L00_001614C4") __attribute__((sda));
 extern u32 taunter_effect_quad_rgb_gp __asm__("D_L00_001614C0") __attribute__((sda));
@@ -2847,7 +2847,7 @@ typedef struct FlameHit {
 } FlameHit;
 
 typedef Vec_2b2100 Vec_2b77f0;
-extern Vec_2b77f0 D_L00_0015F580 __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
+extern Vec_2b77f0 D_L00_0015F580 __asm__("D_L00_0015F580") MACRO_ADDR;
 extern f32 pyrocitor_light_color_start_x_gp __asm__("D_L00_001614F0") __attribute__((sda));
 extern f32 pyrocitor_light_color_end_x_gp __asm__("D_L00_00161500") __attribute__((sda));
 extern f32 D_L00_00161510 __attribute__((sda));
@@ -3074,7 +3074,7 @@ void FUN_0022d798_2b8230(int) __asm__("FUN_0022d798");
 int FUN_001f96f8_2b8230(int) __asm__("FUN_001f96f8");
 void FUN_L00_00203908_2b8230(int, int) __asm__("FUN_L00_00203908");
 
-extern unsigned short D_00141BD8 __attribute__((section(".data")));
+extern unsigned short D_00141BD8 NOT_SDA;
 void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) __asm__("FUN_L00_002b8230");
 
 void update_pyrocitor_usage_and_cleanup(unsigned char *pyrocitor_moby) {
@@ -3615,12 +3615,12 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int D_L00_0016167C __attribute__((sda));
 extern int tesla_beam_initial_frame_count_gp __asm__("D_L00_00161624") __attribute__((sda));
 extern float D_L00_00161594 __attribute__((sda));
-extern short D_L00_00161658[] __attribute__((section(".sdata")));
-extern short D_L00_00161668[] __attribute__((section(".sdata")));
+extern short D_L00_00161658[] MACRO_ADDR;
+extern short D_L00_00161668[] MACRO_ADDR;
 extern short D_L00_0016166A;
 extern short D_L00_0016166C;
 extern short D_L00_0016166E;
-extern short D_L00_00161670[] __attribute__((section(".sdata")));
+extern short D_L00_00161670[] MACRO_ADDR;
 extern short D_L00_00161672;
 extern short D_L00_00161674;
 extern short D_L00_00161676;

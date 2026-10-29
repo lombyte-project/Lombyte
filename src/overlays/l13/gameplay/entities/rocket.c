@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/quad.h"
+#include "sda.h"
 
 /* Spawns a Gemlik moby that copies its look and transform from a source moby. */
 
@@ -1190,8 +1191,8 @@ struct WalkerVars_8d10 {
 extern f32 D_L13_00161E58 __attribute__((sda));
 #include "rnc/overlay/l13/gameplay/entities/rocket_data/update_blarg_space_commando_damage_targeting_and_ground_motion.h"
 extern s32 *walker_paths[] __asm__("D_L13_001B07B0");
-extern char D_L13_00160680[] __attribute__((section(".sdata")));
-extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
+extern char D_L13_00160680[] MACRO_ADDR;
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern CollisionHit coll_hit_8d10 __asm__("D_L13_00174140");
 void update_gemlik_trail(struct Moby *moby) __asm__("FUN_L13_003094f8");
 
@@ -2026,7 +2027,7 @@ extern int D_L13_0015F5C4;
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern char *D_L13_001600EC;
 extern u8 alternate_item_available[128] __asm__("D_0013D388");
-extern unsigned char D_001413F5 __attribute__((section(".data")));
+extern unsigned char D_001413F5 NOT_SDA;
 extern float D_L13_0015F3FC;
 extern int D_L13_0015F404;
 extern float D_0013E090, D_0013E0A8, D_0013E094, D_0013E098;
@@ -2036,7 +2037,7 @@ extern struct {
     char pad6C[0xC];
     float unk78;
 } D_0013E030;
-extern unsigned char D_L13_0015FC88[] __attribute__((section(".sdata")));
+extern unsigned char D_L13_0015FC88[] MACRO_ADDR;
 extern char D_0013F3D0[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -2504,7 +2505,7 @@ extern void FUN_0020c828(void *);
 extern void FUN_L13_0030c2b0(void *);
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float D_0015ED70;
-extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 #include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks_4.h"
 extern float D_L13_00161F2C __attribute__((sda));
 #include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks_3.h"
@@ -2622,7 +2623,7 @@ collision:
 #include "types.h"
 #include "rnc/gameplay/state/item_state.h"
 extern unsigned char D_0013D408[];
-extern float D_L13_0015F580[] __attribute__((section(".sdata")));
+extern float D_L13_0015F580[] MACRO_ADDR;
 extern void fun_00213928(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");

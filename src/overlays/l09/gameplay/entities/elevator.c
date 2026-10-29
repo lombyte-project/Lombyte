@@ -7,6 +7,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_globals.h"
+#include "sda.h"
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Moves a moby along a path between its ends once its collectable flag is set, easing between nodes. */
@@ -1642,7 +1643,7 @@ extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern u8 D_0013F3D0[];
 extern u8 D_0014C050[];
-extern s32 D_L09_0015F5CC __attribute__((section(".data")));
+extern s32 D_L09_0015F5CC NOT_SDA;
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");

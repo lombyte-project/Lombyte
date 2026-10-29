@@ -11,6 +11,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* Finds the path segments nearest to the two target points and sums the segment lengths between them. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
@@ -183,7 +184,7 @@ typedef struct {
 int D_L14_00161A3C = 0x8c;
 #include "rnc/overlay/l14/gameplay/entities/platform_data/update_racer_path_and_weapon.h"
 extern char D_L14_001809C0[];
-extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
+extern char D_L14_0015F580_67e8[] __asm__("D_L14_0015F580") MACRO_ADDR;
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void spring_67e8(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -513,7 +514,7 @@ void draw_racer_glow_quads(struct Moby *m) {
 extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, void *) __asm__("FUN_L00_00274948");
 extern char D_L14_001809C0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L14_0015F580[] __attribute__((section(".sdata")));
+extern float D_L14_0015F580[] MACRO_ADDR;
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern s32 random_integer_below(s32) __asm__("func_00213260");

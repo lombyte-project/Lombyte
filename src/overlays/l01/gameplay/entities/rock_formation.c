@@ -1684,7 +1684,7 @@ extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int pool_draw_count __asm__("D_L01_001612D8"); /* no foreign declaration */
 extern int D_L01_001612D0; /* no foreign declaration */
-extern float D_L01_001742E8 __attribute__((section(".data"))); /* no foreign declaration */
+extern float D_L01_001742E8 NOT_SDA; /* no foreign declaration */
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00257b90(int lo, int hi);

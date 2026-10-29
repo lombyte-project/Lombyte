@@ -1097,7 +1097,7 @@ extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED6C;
-extern char D_L00_0015F580[] __attribute__((section(".sdata")));
+extern char D_L00_0015F580[] MACRO_ADDR;
 extern float D_L00_00161890_gp __asm__("D_L00_00161890") __attribute__((sda));
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
@@ -1277,7 +1277,7 @@ extern unsigned char D_L00_00173E60[];      /* +0x20: hit normal */
 extern char D_L00_00166DC0_2cb418[] __asm__("D_L00_00166DC0");
 extern char D_L00_00166FF0_2cb418[] __asm__("D_L00_00166FF0");
 extern char D_0013F3D0[];
-extern Moby *D_001403E0_2cb418 __asm__("D_001403E0") __attribute__((section(".data")));
+extern Moby *D_001403E0_2cb418 __asm__("D_001403E0") NOT_SDA;
 /* D_L00_00161894 again, through the symbol below it: retail's second load stays lui */
 extern float D_0015ED70_lui __asm__("D_0015ED70");
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
@@ -1551,7 +1551,7 @@ void clear_homing_shot_trail_and_spawn_end_effects(u8 *shot_moby, s32 enabled)
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
-extern unsigned char D_0013E535_2cbf68 __asm__("D_0013E535") __attribute__((section(".data")));
+extern unsigned char D_0013E535_2cbf68 __asm__("D_0013E535") NOT_SDA;
 unsigned char *FUN_0020c4f8_2cbf68(int) __asm__("FUN_0020c4f8");
 float random_float_between(float, float) __asm__("FUN_002132a8");
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
@@ -1768,8 +1768,8 @@ typedef struct { float radius; char pad4[0xC]; float height; } Bounds_2cc608;
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern Vec4 camera_rot_2cc608 __asm__("D_L00_00166DD0");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
-extern int play_frames_2cc608 __asm__("D_0015EEA4") __attribute__((section(".sdata")));
-extern int D_0015ED84 __attribute__((section(".sdata")));
+extern int play_frames_2cc608 __asm__("D_0015EEA4") MACRO_ADDR;
+extern int D_0015ED84 MACRO_ADDR;
 extern struct UsageStats item_usage __asm__("D_00141680");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
@@ -1989,7 +1989,7 @@ typedef union {
 } V_2ccee0;
 extern float D_0015ED60;
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
-extern unsigned char *D_001413D0_2ccee0 __asm__("D_001413D0") __attribute__((section(".data")));
+extern unsigned char *D_001413D0_2ccee0 __asm__("D_001413D0") NOT_SDA;
 extern unsigned char D_L00_00173E60_2ccee0[] __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
 extern unsigned char *FUN_0020c4f8_2ccee0(int) __asm__("FUN_0020c4f8");
@@ -2964,10 +2964,10 @@ extern u8 D_0013D4C0[];
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_L00_00197BC0[];
 extern struct MobyClass *D_L00_00197300[];
-extern s32 D_0015ED84 __attribute__((section(".sdata")));
-extern int D_L00_0015F5CC_macro __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
-extern void *D_001413D0 __attribute__((section(".data")));
-extern s32 D_001413DC __attribute__((section(".data")));
+extern s32 D_0015ED84 MACRO_ADDR;
+extern int D_L00_0015F5CC_macro __asm__("D_L00_0015F5CC") MACRO_ADDR;
+extern void *D_001413D0 NOT_SDA;
+extern s32 D_001413DC NOT_SDA;
 
 extern s32 is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern void update_crate_stack_motion(struct Moby *) __asm__("FUN_L00_002d1428");

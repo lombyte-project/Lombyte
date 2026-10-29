@@ -766,7 +766,7 @@ typedef struct {
 extern G_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0");
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
 #include "rnc/gameplay/state/options.h"
-extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") __attribute__((section(".data")));
+extern unsigned char D_L01_0017C8C0_q[] __asm__("D_L01_0017C8C0") NOT_SDA;
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 #include "rnc/overlay/shared/gameplay/entities/rock_globals.h"
@@ -859,7 +859,7 @@ extern void FUN_L00_0025a120(void *);
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern int D_0015ED84_c __asm__("D_0015ED84");
 extern int D_0015ED84_m __asm__("D_0015ED84");
-extern unsigned char D_0013DD42 __attribute__((section(".data")));
+extern unsigned char D_0013DD42 NOT_SDA;
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern char plumber_level_one_dialogue_data[] __asm__("D_L01_0020B600");
 extern char plumber_level_eight_dialogue_data[] __asm__("D_L01_00161D38");
@@ -1064,8 +1064,8 @@ extern L01LevelState D_L01_001BAA50;
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern s32 D_0014C190[][64];
 extern u8 D_0014C050[];
-extern u8 D_001413F4 __attribute__((section(".data")));
-extern u32 D_001413DC __attribute__((section(".data")));
+extern u8 D_001413F4 NOT_SDA;
+extern u32 D_001413DC NOT_SDA;
 extern f32 FUN_001f99c0(f32);
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
@@ -1984,7 +1984,7 @@ typedef struct {
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float moby_radius_ring_quad_uvs[] __asm__("D_L01_00201630");
-extern char D_001413F5_c __asm__("D_001413F5") __attribute__((section(".data")));
+extern char D_001413F5_c __asm__("D_001413F5") NOT_SDA;
 extern int moby_radius_ring_blend_minuend_selector_gp __asm__("D_L01_00161FB8") __attribute__((sda));
 extern int moby_radius_ring_blend_subtrahend_selector_gp __asm__("D_L01_00161FBC") __attribute__((sda));
 extern int moby_radius_ring_blend_alpha_factor_selector_gp __asm__("D_L01_00161FC0") __attribute__((sda));

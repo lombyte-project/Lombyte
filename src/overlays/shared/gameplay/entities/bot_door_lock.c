@@ -7,6 +7,7 @@
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -169,7 +170,7 @@ extern float bot_door_lock_number_bob_period_gp __asm__("D_L06_001622E0") __attr
 extern float bot_door_lock_color_pulse_period_gp __asm__("D_L06_001622E4") __attribute__((sda));
 extern float bot_door_lock_number_color_pulse_amplitude_gp __asm__("D_L06_001622E8") __attribute__((sda));
 extern float bot_door_lock_max_effect_horizontal_scale_gp __asm__("D_L06_001622EC") __attribute__((sda));
-extern unsigned char D_001413F4 __attribute__((section(".data")));
+extern unsigned char D_001413F4 NOT_SDA;
 extern unsigned char D_0015EDB4;
 extern unsigned char D_0014C050[];
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");

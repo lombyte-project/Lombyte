@@ -1100,7 +1100,7 @@ extern void FUN_0022da68_f728(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal_f728(void *) __asm__("FUN_0020c828");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 
-extern struct Moby *D_L11_00174858 __attribute__((section(".data")));
+extern struct Moby *D_L11_00174858 NOT_SDA;
 /* Ship ammo / health pickup: falls and bounces, is pulled toward the hero's ship, and refills it on contact. */
 void ammocrate_update(struct Moby *m) __asm__("FUN_L11_0030f728");
 void ammocrate_update(struct Moby *pickup) {
@@ -1454,7 +1454,7 @@ struct PokiPathVars {
     u8 unk1E0[0x10];            /* 0x1E0 */
 };
 
-extern struct Moby *D_001413D0 __attribute__((section(".data")));
+extern struct Moby *D_001413D0 NOT_SDA;
 extern char D_L11_001677C0[];
 extern s32 *D_L11_001B0EB0[];
 extern float psytcopus_projectile_forward_offset_length_gp __asm__("D_L11_00161FC8") __attribute__((sda));
@@ -2318,8 +2318,8 @@ typedef struct {
     float fade;
 } ShipVars_2838;
 
-extern unsigned short D_00141C10 __attribute__((section(".data")));
-extern float D_L11_0016D4F0 __attribute__((section(".data")));
+extern unsigned short D_00141C10 NOT_SDA;
+extern float D_L11_0016D4F0 NOT_SDA;
 extern char jet_fighter_collision_query_result[] __asm__("D_L11_00174840");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 int D_L11_00161FF0 = 120;
@@ -3005,7 +3005,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern char *D_L11_001600EC;
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern char (*D_L17_001600EC_t)[128] __asm__("D_L11_001600EC") __attribute__((section(".sdata")));
+extern char (*D_L17_001600EC_t)[128] __asm__("D_L11_001600EC") MACRO_ADDR;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
 void adjust_ship_steering_for_flight_bounds(struct Moby *moby, float *horizontal_steering_input, float *vertical_steering_input) {

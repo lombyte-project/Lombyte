@@ -1320,7 +1320,7 @@ typedef struct {
     s16 unk6E;                     /* random 0 .. 600 frames */
 } BoltVars_u;
 
-extern void *D_001413D0 __attribute__((section(".data")));
+extern void *D_001413D0 NOT_SDA;
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");       /* sets the moby colour */
@@ -1602,7 +1602,7 @@ void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A9030), where it is exact; names translated to the US level program. */
 
 extern char *FUN_002141f8_002a7d90(void *) __asm__("FUN_002141f8");
-extern void *D_L00_00173E58_002a7d90 __asm__("D_L00_00173E58") __attribute__((section(".data")));
+extern void *D_L00_00173E58_002a7d90 __asm__("D_L00_00173E58") NOT_SDA;
 
 /* True when the record for D_L00_00173E58 (suck_get_aim_height) has byte 9 equal to 1. */
 int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
@@ -1616,7 +1616,7 @@ int get_wrench_hit_sound_variant(void) {
         record_byte_9_is_one = *(unsigned char *)(x + 9) == 1;
     return record_byte_9_is_one;
 }
-extern int D_L00_00173E58 __attribute__((section(".data")));
+extern int D_L00_00173E58 NOT_SDA;
 char *FUN_L00_0025c338(int);
 /* True when FUN_L00_0025c338(D_L00_00173E58) is set and has flag 2 at 0x1E. */
 int should_trigger_wrench_hit_reaction(void) __asm__("FUN_L00_002a7de0");
@@ -1663,8 +1663,8 @@ typedef union {
     u128 q;
     f32 f[4];
 } V2a8028;
-extern V2a8028 D_L00_00173E60_2a8028 __asm__("D_L00_00173E60") __attribute__((section(".data")));
-extern f32 D_L00_00173E40_2a8028[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern V2a8028 D_L00_00173E60_2a8028 __asm__("D_L00_00173E60") NOT_SDA;
+extern f32 D_L00_00173E40_2a8028[] __asm__("D_L00_00173E40") NOT_SDA;
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -2369,7 +2369,7 @@ extern s32 D_L00_0015F5CC;
 /* Spin angles of the second quad: x is read through $gp, the rest as an
    array through the unsplit address macro (from rac1-decomp's form). */
 extern f32 spin_angles_x __asm__("D_L00_001613E0") __attribute__((sda));
-extern f32 spin_angles[] __asm__("D_L00_001613E0") __attribute__((section(".sdata")));
+extern f32 spin_angles[] __asm__("D_L00_001613E0") MACRO_ADDR;
 extern f32 square_root(f32) __asm__("FUN_001f9988");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -2528,7 +2528,7 @@ typedef struct {
 } Q_2aa008;
 extern f32 D_0015ED6C_2aa008 __asm__("D_0015ED6C");
 extern N_2aa008 *D_L00_0015FFE4_2aa008 __asm__("D_L00_0015FFE4");
-extern V_2aa008 D_L00_00173E60_2aa008[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern V_2aa008 D_L00_00173E60_2aa008[] __asm__("D_L00_00173E60") NOT_SDA;
 f32 FUN_002132a8_2aa008(f32, f32) __asm__("FUN_002132a8");
 void FUN_001f9bf8_2aa008(void *, void *, f32) __asm__("FUN_001f9bf8");
 s32 FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");

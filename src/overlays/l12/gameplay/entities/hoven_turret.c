@@ -502,17 +502,17 @@ extern char *FUN_L00_0026dd20(void *, void *, int, int, float);
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/hoven_turret_update.h"
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float approach_value(float *, float, float);
-extern float D_L12_0015F580_f[] __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
-extern int D_L12_0015F5C4_macro __asm__("D_L12_0015F5C4") __attribute__((section(".sdata")));
-extern int D_L12_001619A0 __attribute__((section(".sdata")));
+extern float D_L12_0015F580_f[] __asm__("D_L12_0015F580") MACRO_ADDR;
+extern int D_L12_0015F5C4_macro __asm__("D_L12_0015F5C4") MACRO_ADDR;
+extern int D_L12_001619A0 MACRO_ADDR;
 extern int D_L12_00161F00 __attribute__((sda));
 extern int D_L12_00161F04 __attribute__((sda));
-extern int D_L12_00161F20 __attribute__((section(".sdata")));
-extern int D_L12_00161F24 __attribute__((section(".sdata")));
+extern int D_L12_00161F20 MACRO_ADDR;
+extern int D_L12_00161F24 MACRO_ADDR;
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L12_002400d0(int, int);
@@ -541,17 +541,17 @@ extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 void FUN_L12_003032e8_c(struct Moby *moby) __asm__("FUN_L12_003032e8");
-extern int pad_held[] __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern int pad_held[] __asm__("D_0013CAE0") NOT_SDA;
 extern char D_0013E533[];
 extern unsigned char D_0014171B_304920[] __asm__("D_0014C050");
-extern int D_0015EED0_304920[] __asm__("D_0015EDDC") __attribute__((section(".sdata")));
-extern Moby *D_L12_0015FFD8_gp __asm__("D_L12_0015FFD8") __attribute__((section(".sdata")));
+extern int D_0015EED0_304920[] __asm__("D_0015EDDC") MACRO_ADDR;
+extern Moby *D_L12_0015FFD8_gp __asm__("D_L12_0015FFD8") MACRO_ADDR;
 extern char D_L12_00167180_304920[] __asm__("D_L12_00167100");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int func_0020BFC8_304920(int, int) __asm__("FUN_0020b178");
 
-extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 void hoven_turret_update(struct Moby *moby) __asm__("FUN_L12_00303540");
 void hoven_turret_update(struct Moby *moby) {
     enum {
@@ -1057,7 +1057,7 @@ typedef struct {
     struct Moby *moby;
 } HitSource_304e00;
 
-extern struct Moby *hit_moby __asm__("D_L12_001742D8") __attribute__((section(".data")));
+extern struct Moby *hit_moby __asm__("D_L12_001742D8") NOT_SDA;
 /* A homing mine: rises, then steers toward the point ahead and blows up near it or on contact. */
 void update_homing_mine(struct Moby *moby) __asm__("FUN_L12_00304e00");
 

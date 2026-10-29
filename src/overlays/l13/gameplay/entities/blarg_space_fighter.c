@@ -2011,7 +2011,7 @@ char *spawn_asteroid_fragment(char *owner, char *spawn_position, char *initial_v
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2690), where it is exact; names translated to the US level program. */
 
 char *spawn_asteroid_fragment(char *owner, char *pos, char *vec, int a3, float f) __asm__("FUN_L13_002e1140");
-extern char D_L13_00160680[] __attribute__((section(".sdata")));
+extern char D_L13_00160680[] MACRO_ADDR;
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int FUN_L00_00257b90(int, int);

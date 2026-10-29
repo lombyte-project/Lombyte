@@ -6,6 +6,7 @@
 #include "asm.h"
 
 #include "rnc/rendering/dma_tag.h"
+#include "sda.h"
 
 /* One scrolling two-texture overlay layer (0x60 bytes). */
 typedef struct {
@@ -34,7 +35,7 @@ typedef struct {
     u8 pad54[0xC];
 } ScrollLayer;
 
-extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
+extern union PacketCursor l01_packet __asm__("D_L01_001611C0") MACRO_ADDR;
 extern u8 D_L01_001CAC80[];
 extern s32 fast_bsphere_check(void *, f32) __asm__("FUN_001fa728");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
@@ -637,7 +638,7 @@ extern char *D_L01_001600EC;
 extern char *spawn_colored_half_scale_moby(void *, void *, void *, float, float, int) __asm__("FUN_L01_002fa068");
 extern char birdbot_missing_path_format[] __asm__("D_L01_0020AF80");
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L01_0015F580[] __attribute__((section(".sdata")));
+extern float D_L01_0015F580[] MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_001f9b48(void *, void *);
@@ -1498,7 +1499,7 @@ extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 s32 D_L01_00161A70 = 0x9020202;
 extern s32 D_L01_001B0930[];
 extern MobyNode *D_L01_0015FFE4;
-extern u8 D_L01_00161A80[] __attribute__((section(".sdata")));
+extern u8 D_L01_00161A80[] MACRO_ADDR;
 
 extern s32 FUN_001160d8();
 extern f32 FUN_L04_001f1978(f32);
@@ -2322,7 +2323,7 @@ void cave_door_update(Moby *self) {
 
 extern char D_L01_00167240[];
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
-extern unsigned char D_0013D408 __attribute__((section(".data")));
+extern unsigned char D_0013D408 NOT_SDA;
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern short D_L01_0015FFD8_c __asm__("D_L01_0015FFD8");
 extern short fighter_jet_minimum_distance_scale_gp __asm__("D_L01_00161AF4") __attribute__((sda));
@@ -3019,8 +3020,8 @@ extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8")
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern GunshipMoby *spawn_beam(void *, void *, void *, void *, s32, s32) __asm__("FUN_L01_002f68a0");
 
-extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
-extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
+extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 /* Ported from rac1-decomp src/overlays/l01_novalis/vendor_002BA898.c (func_L01_002F8B00) */
 void bomber_jet_update(GunshipMoby *m) __asm__("FUN_L01_002f7728");
 void bomber_jet_update(GunshipMoby *bomber_jet_moby) {

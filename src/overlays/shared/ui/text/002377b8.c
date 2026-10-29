@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/hud.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "sda.h"
 
 extern unsigned char D_0013E529[];
 void hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
@@ -198,17 +199,17 @@ typedef struct {
     int w1D8;
 } G_t;
 extern G_t D_0013C940;
-extern int D_L00_0017E504 __attribute__((section(".data")));
+extern int D_L00_0017E504 NOT_SDA;
 extern int D_L00_0015FA90;
 extern int D_L00_0015F780_gp __asm__("D_L00_0015F780") __attribute__((sda));
 extern int saved_hud_selector_slot_index_gp __asm__("D_L00_0015FA9C") __attribute__((sda));
 extern Ent **D_L00_0015FAC0_c __asm__("D_L00_0015FAC0");
-extern int D_L00_0017DC38 __attribute__((section(".data")));
-extern int D_L00_0017DC3C __attribute__((section(".data")));
-extern int D_L00_0017DC40 __attribute__((section(".data")));
-extern int D_L00_0017DC44 __attribute__((section(".data")));
+extern int D_L00_0017DC38 NOT_SDA;
+extern int D_L00_0017DC3C NOT_SDA;
+extern int D_L00_0017DC40 NOT_SDA;
+extern int D_L00_0017DC44 NOT_SDA;
 extern int D_00141610[];
-extern int D_L00_0015FA98 __attribute__((section(".sdata")));
+extern int D_L00_0015FA98 MACRO_ADDR;
 extern int D_L00_0015FA94;
 extern int D_L00_0015F3F8;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -224,13 +225,13 @@ typedef struct {
     int w20B8;
 } Progress;
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
-extern u8 D_00141622[] __attribute__((section(".data")));
+extern u8 D_00141622[] NOT_SDA;
 extern float hud_item_selector_even_slot_edge_fraction_gp __asm__("D_L00_0015F788") __attribute__((sda));
 extern float hud_item_selector_slot_angle_offset_gp __asm__("D_L00_0015F784") __attribute__((sda));
-extern int D_L00_0017DC18 __attribute__((section(".data")));
-extern int D_L00_0017DC1C __attribute__((section(".data")));
-extern int D_L00_0017DC20 __attribute__((section(".data")));
-extern int D_L00_0017DC24 __attribute__((section(".data")));
+extern int D_L00_0017DC18 NOT_SDA;
+extern int D_L00_0017DC1C NOT_SDA;
+extern int D_L00_0017DC20 NOT_SDA;
+extern int D_L00_0017DC24 NOT_SDA;
 extern int D_0015EEA4;
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
@@ -239,7 +240,7 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern int FUN_001fa6d0(float);
 extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
 void update_hud_item_selector_selection_and_visibility(Obj *hud_element) __asm__("FUN_L00_00237ba0");
 
@@ -1117,7 +1118,7 @@ void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
  * digits (an apostrophe, or a dot for languages 3 and 5). Returns the element width.
  */
 
-extern s32 camera_secondary_mode __asm__("D_001413D4") __attribute__((section(".data")));
+extern s32 camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 /* read through a volatile one-element array: retail reloads it */
 extern volatile s32 pal_mode_reload[1] __asm__("D_0015ED80");
 extern s32 bolt_panel_open_steps_gp __asm__("D_L00_0015F824") __attribute__((sda));
@@ -1127,7 +1128,7 @@ extern s32 bolt_text_color_opaque __asm__("D_L00_0015F830") __attribute__((sda))
 /* separator offsets: apostrophe, then dot */
 extern s32 digit_width __asm__("D_L00_0015F84C") __attribute__((sda));
 /* "%d" */
-extern char bolt_count_format[] __asm__("D_L00_0015F850") __attribute__((section(".data")));
+extern char bolt_count_format[] __asm__("D_L00_0015F850") NOT_SDA;
 
 extern f32 convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
@@ -1144,8 +1145,8 @@ extern s32 D_L00_0015F83C __attribute__((sda));
 extern s32 D_L00_0015F840 __attribute__((sda));
 extern s32 bolt_dot_separator_x_offset_gp __asm__("D_L00_0015F844") __attribute__((sda));
 extern s32 bolt_dot_separator_y_offset_gp __asm__("D_L00_0015F848") __attribute__((sda));
-extern char D_L00_0015F858[] __attribute__((section(".data")));
-extern char D_L00_0015F860[] __attribute__((section(".data")));
+extern char D_L00_0015F858[] NOT_SDA;
+extern char D_L00_0015F860[] NOT_SDA;
 int draw_bolt_counter_hud_panel(HudElem *hud_element) __asm__("FUN_L00_00239df8");
 
 int draw_bolt_counter_hud_panel(HudElem *hud_element)
@@ -1247,7 +1248,7 @@ void update_hud_panel_visibility(u8 *hud_element) {
         }
     }
 }
-extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
+extern s32 frame_size __asm__("D_0013E504") NOT_SDA;
 extern s32 D_L00_0015F5CC;
 extern char bolt_exclamation_label_format[] __asm__("D_L00_0015F918");
 extern s32 bolt_exclamation_panel_max_alpha_gp __asm__("D_L00_0015F8F8") __attribute__((sda));
@@ -1325,7 +1326,7 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
 out:
     return hud_element->ret;
 }
-extern short D_00140986 __attribute__((section(".data")));
+extern short D_00140986 NOT_SDA;
 int hud_screen_position(char *, int *, int *) __asm__("FUN_L00_00235a70");
 void apply_hud_slide_offset(char *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
 int get_icon_frame(int, int) __asm__("FUN_001ff960");

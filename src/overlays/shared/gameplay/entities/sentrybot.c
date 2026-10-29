@@ -1629,7 +1629,7 @@ void spawn_rocket_trail_spark(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
 
-extern float D_L15_0015F580[] __attribute__((section(".sdata")));
+extern float D_L15_0015F580[] MACRO_ADDR;
 extern void spawn_glow_particle(char *, char *, int, int, float, int, int, int, int) __asm__("FUN_L00_002ac910");
 
 extern float rocket_detonation_glow_scale_gp __asm__("D_L15_00161458") __attribute__((sda));
@@ -1737,7 +1737,7 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below_c3(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
-extern unsigned char *D_L15_001B26DC __attribute__((section(".data")));
+extern unsigned char *D_L15_001B26DC NOT_SDA;
 extern unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
 extern void *FUN_L00_0026bb70_c(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern void suck_draw_reticle(void *, int, float, float, void *, int, int, float, int) __asm__("FUN_L00_001edf60");
@@ -2183,8 +2183,8 @@ typedef struct {
     long reg;
 } Fade29FF90;
 
-extern Fade29FF90 D_L15_0015F330 __attribute__((section(".sdata")));
-extern Fade29FF90 D_L15_0015F320 __attribute__((section(".sdata")));
+extern Fade29FF90 D_L15_0015F330 MACRO_ADDR;
+extern Fade29FF90 D_L15_0015F320 MACRO_ADDR;
 extern Light29FF90 D_L15_001808C0[];
 extern s32 D_L15_00178500[];
 extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, void *) __asm__("FUN_L00_00274948");
@@ -2192,15 +2192,15 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C __attribute__((section(".sdata")));
-extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
+extern float D_0015ED6C MACRO_ADDR;
+extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") MACRO_ADDR;
 extern int charged_blast_removal_target __asm__("D_L15_00161484"); /* no foreign declaration */
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
-extern unsigned char *D_L15_001B26AC __attribute__((section(".data")));
+extern unsigned char *D_L15_001B26AC NOT_SDA;
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
@@ -2216,7 +2216,7 @@ extern int func_L00_001F2BE8_29FF90(void *, float, int, void *, void *) __asm__(
 extern char *func_L00_0026E940_29FF90(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
 extern void *func_L00_0026CA10_29FF90(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 
-extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 void update_charged_blast(Moby29FF90 *moby) __asm__("FUN_L15_0029edb0");
 
 void update_charged_blast(Moby29FF90 *moby) {
@@ -2386,8 +2386,8 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0015ED6C __attribute__((section(".sdata")));
-extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
+extern float D_0015ED6C MACRO_ADDR;
+extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") MACRO_ADDR;
 extern int D_L15_00161AB8_lui __asm__("D_L15_00161AB8"); /* no foreign declaration */
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
@@ -2907,11 +2907,11 @@ typedef struct {
     u8 pad75[0x13];
     struct Moby *owner;
 } VoiceSlot;
-extern KillFlags D_L15_001BABD0 __attribute__((section(".data")));
-extern KillFlags D_L15_001BB830 __attribute__((section(".data")));
+extern KillFlags D_L15_001BABD0 NOT_SDA;
+extern KillFlags D_L15_001BB830 NOT_SDA;
 extern u8 secondary_kill_record_gate_by_mission[8] __asm__("D_L15_0015FC88");
-extern u8 D_0014C050[][16] __attribute__((section(".data")));
-extern u8 D_0013E550[] __attribute__((section(".data")));
+extern u8 D_0014C050[][16] NOT_SDA;
+extern u8 D_0013E550[] NOT_SDA;
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 /* Marks the moby as killed in the level's spawn tables and releases the voice slot it still owns. */
@@ -3472,7 +3472,7 @@ update:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCE50), where it is exact; names translated to the US level program. */
 
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
-extern int D_L15_001ABE40_q[] __asm__("D_L15_001ABE40") __attribute__((section(".data")));
+extern int D_L15_001ABE40_q[] __asm__("D_L15_001ABE40") NOT_SDA;
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 
 void set_sentrybot_alarm_duration(char *moby, int duration_frames) {

@@ -730,7 +730,7 @@ void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *sec
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4;
-extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
+extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 
 void update_moby_visibility_and_half_turn(struct Moby *moby) __asm__("FUN_L18_002fa640");
 

@@ -2654,10 +2654,10 @@ typedef struct {
     s32 table; /* -1, or an index into D_L00_001B04B0 */
     f32 key;
 } KeyVars;
-extern KillFlags D_L00_001BA5D0 __attribute__((section(".data")));
-extern KillFlags D_L00_001BB230 __attribute__((section(".data")));
+extern KillFlags D_L00_001BA5D0 NOT_SDA;
+extern KillFlags D_L00_001BB230 NOT_SDA;
 extern u8 mission_state[8] __asm__("D_L00_0015FC88");
-extern u8 D_0014C050[][16] __attribute__((section(".data")));
+extern u8 D_0014C050[][16] NOT_SDA;
 
 /* Kills a live moby: marks it in the level's spawn tables, starts its death sound and
  * clears its key out of the shared key table. */
@@ -3240,7 +3240,7 @@ typedef struct {
     int c[4];
     float d[4];
 } P_2d6cd0;
-extern char camera_position[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern char camera_position[] __asm__("D_L00_00166DC0") NOT_SDA;
 extern int D_15F5C4_2d6cd0 __asm__("D_L00_0015F5C4");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -3677,14 +3677,14 @@ void reset_smoke_fire_spawner_particle(P *spawner, int i) {
 typedef struct {
     float x, y, z, w;
 } V_2d7d58;
-extern V_2d7d58 D_L00_001CB7E0_2d7d58[] __asm__("D_L00_001CB7E0") __attribute__((section(".data")));
+extern V_2d7d58 D_L00_001CB7E0_2d7d58[] __asm__("D_L00_001CB7E0") NOT_SDA;
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 float FUN_002132a8_2d7d58(float, float) __asm__("FUN_002132a8");
-extern float D_L00_001D02E0_lui[] __asm__("D_L00_001D02E0") __attribute__((section(".data")));
-extern float D_L00_001D15A0_lui[] __asm__("D_L00_001D15A0") __attribute__((section(".data")));
-extern float D_L00_001D31C0_lui[] __asm__("D_L00_001D31C0") __attribute__((section(".data")));
-extern float D_L00_001D4480_lui[] __asm__("D_L00_001D4480") __attribute__((section(".data")));
-extern u8 D_L00_001D2D10_lui[] __asm__("D_L00_001D2D10") __attribute__((section(".data")));
+extern float D_L00_001D02E0_lui[] __asm__("D_L00_001D02E0") NOT_SDA;
+extern float D_L00_001D15A0_lui[] __asm__("D_L00_001D15A0") NOT_SDA;
+extern float D_L00_001D31C0_lui[] __asm__("D_L00_001D31C0") NOT_SDA;
+extern float D_L00_001D4480_lui[] __asm__("D_L00_001D4480") NOT_SDA;
+extern u8 D_L00_001D2D10_lui[] __asm__("D_L00_001D2D10") NOT_SDA;
 void initialize_smoke_fire_spawner_mesh_particle(char *spawner, int i) __asm__("FUN_L00_002d7d58");
 
 void initialize_smoke_fire_spawner_mesh_particle(char *spawner, int i) {

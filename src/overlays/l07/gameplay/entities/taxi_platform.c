@@ -332,7 +332,7 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003108B0), where it is exact; names translated to the US level program. */
 
-extern int D_L07_00173ED8 __attribute__((section(".data")));
+extern int D_L07_00173ED8 NOT_SDA;
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) __asm__("FUN_L07_0030f4d0");
@@ -601,7 +601,7 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_L07_0015FC88[] __attribute__((section(".sdata")));
+extern unsigned char D_L07_0015FC88[] MACRO_ADDR;
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -1300,7 +1300,7 @@ typedef struct {
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                             float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern struct Moby *debris_target __asm__("D_L07_00173ED8") __attribute__((section(".data")));
+extern struct Moby *debris_target __asm__("D_L07_00173ED8") NOT_SDA;
 extern char debris_far_point[] __asm__("D_L07_00166E40");
 
 /* Debris update: moves and spins it, bursts it on impact, removes it out of bounds. */
@@ -1714,7 +1714,7 @@ void initialize_level07_water_grid_neighbors(int selected_entry_index) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E370), where it is exact; names translated to the US level program. */
-extern s32 D_L07_00184528[] __attribute__((section(".data")));
+extern s32 D_L07_00184528[] NOT_SDA;
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 typedef struct {
@@ -1876,15 +1876,15 @@ extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
-extern float D_L07_0015F580[] __attribute__((section(".sdata")));
+extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015ED70 MACRO_ADDR;
+extern float D_L07_0015F580[] MACRO_ADDR;
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern int D_L07_0015F5CC __attribute__((section(".sdata")));
+extern int D_L07_0015F5CC MACRO_ADDR;
 extern int FUN_L00_00257b90(int, int);
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);

@@ -583,7 +583,7 @@ typedef struct {
     float uv[8];
     u64 a, b, c, d;
 } Pk_002d4108;
-extern u8 D_L08_001675C0_002d4108[] __asm__("D_L08_001675C0") __attribute__((section(".data")));
+extern u8 D_L08_001675C0_002d4108[] __asm__("D_L08_001675C0") NOT_SDA;
 u64 FUN_001f44b8_002d4108(s32) __asm__("FUN_001f44b8");
 void FUN_001f9a28_002d4108(void *, void *, void *) __asm__("FUN_001f9a28");
 void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -593,7 +593,7 @@ void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9d20_002d4108(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 
-extern float D_L08_001D1D80[4][4] __attribute__((section(".data")));
+extern float D_L08_001D1D80[4][4] NOT_SDA;
 #include "rnc/overlay/shared/gameplay/entities/scoutbot_globals.h"
 extern float scoutbot_glow_position_offset_scale_gp __asm__("D_L08_00161898") __attribute__((sda));
 extern float scoutbot_glow_quad_vertex_scale_gp __asm__("D_L08_0016189C") __attribute__((sda));
@@ -891,7 +891,7 @@ void draw_scrolled_mesh_batch(int pair_index) {
                          1);
     }
 }
-extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
+extern Pair D_L08_00161E10[] MACRO_ADDR;
 extern int D_L08_001DDF40[];
 extern int eleven_entry_scrolled_base_uv_tables[] __asm__("D_L08_001E27C8");
 extern int eleven_entry_scrolled_vertex_position_tables[] __asm__("D_L08_001E2798");
@@ -998,11 +998,11 @@ void advance_scroll_offsets(int scroll_pair_index) {
         D_L08_001E8348_12a0[scroll_pair_index].y += 1.0f;
     }
 }
-extern float scroll_pos_x[] __asm__("D_L08_00161E10") __attribute__((section(".sdata")));
-extern float scroll_pos_y[] __asm__("D_L08_00161E14") __attribute__((section(".sdata")));
+extern float scroll_pos_x[] __asm__("D_L08_00161E10") MACRO_ADDR;
+extern float scroll_pos_y[] __asm__("D_L08_00161E14") MACRO_ADDR;
 
 extern float scroll_entry_x_rates_gp[2] __asm__("D_L08_00161DE0") __attribute__((sda));
-extern float D_L08_00161DE4[] __attribute__((section(".sdata")));
+extern float D_L08_00161DE4[] MACRO_ADDR;
 /* Advances the X and Y scroll offsets of entry `i` by speed * frame step, wrapping them into [-1, 1]. */
 void advance_scroll_entry(int i) __asm__("FUN_L08_002f1378");
 void advance_scroll_entry(int i) {
@@ -1169,7 +1169,7 @@ extern char paratrooper_invalid_jump_path_format[] __asm__("D_L08_001FC630");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_L08_0015F580[4] __attribute__((section(".sdata")));
+extern float D_L08_0015F580[4] MACRO_ADDR;
 extern float D_L08_0015F5D0;
 extern float D_L08_0015F5D4;
 extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -1198,7 +1198,7 @@ void FUN_L01_0026d930(char *p);
 void update_blarg_paratrooper_damage_and_state(char *m) __asm__("FUN_L08_003024d8");
 extern char D_0013F350[];
 extern int level_game_mode __asm__("D_L08_0015F5C4");
-extern char *target302618 __asm__("D_L08_00174658") __attribute__((section(".data")));
+extern char *target302618 __asm__("D_L08_00174658") NOT_SDA;
 extern float D_L08_0015F5D4;
 extern float speed302618 __asm__("D_L08_001621C4") __attribute__((sda));
 extern float accel302618 __asm__("D_L08_001621C0") __attribute__((sda));

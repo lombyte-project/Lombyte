@@ -775,16 +775,16 @@ typedef struct {
     s32 slot;       /* 0x64 */
 } Pv_30F318;
 
-extern char voice_pool_lui[] __asm__("D_0013E550") __attribute__((section(".data")));
-extern struct Moby *D_L01_001742D8 __attribute__((section(".data")));
-extern L01LevelState D_L01_001BB6B0 __attribute__((section(".data")));
-extern struct HoverTuning D_L01_001DEB38_lui __asm__("D_L01_001DEB38") __attribute__((section(".data")));
+extern char voice_pool_lui[] __asm__("D_0013E550") NOT_SDA;
+extern struct Moby *D_L01_001742D8 NOT_SDA;
+extern L01LevelState D_L01_001BB6B0 NOT_SDA;
+extern struct HoverTuning D_L01_001DEB38_lui __asm__("D_L01_001DEB38") NOT_SDA;
 extern char *D_L01_0015FFD8;
-extern char *D_L01_00167280 __attribute__((section(".data")));
-extern char D_0013F350[] __attribute__((section(".data")));
-extern char D_L01_0020BA10[] __attribute__((section(".data")));
-extern char D_L01_0020BA30[] __attribute__((section(".data")));
-extern f32 D_L01_001DEB4C __attribute__((section(".data")));
+extern char *D_L01_00167280 NOT_SDA;
+extern char D_0013F350[] NOT_SDA;
+extern char D_L01_0020BA10[] NOT_SDA;
+extern char D_L01_0020BA30[] NOT_SDA;
+extern f32 D_L01_001DEB4C NOT_SDA;
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -809,8 +809,8 @@ extern short sandmouse_fade_particle_min_size_gp __asm__("D_L01_001620B4") __att
 extern short sandmouse_fade_particle_max_size_gp __asm__("D_L01_001620B8") __attribute__((sda));
 extern short sandmouse_fade_particle_color_high_byte_gp __asm__("D_L01_001620BC") __attribute__((sda));
 extern short D_L01_001620C0 __attribute__((sda));
-extern unsigned char D_0013D4C5 __attribute__((section(".data")));
-extern unsigned char D_0014C190[] __attribute__((section(".data")));
+extern unsigned char D_0013D4C5 NOT_SDA;
+extern unsigned char D_0014C190[] NOT_SDA;
 extern void *FUN_L00_00272060(void *, int, f32, f32, int, int, int, void *, f32);
 extern void FUN_L00_002323b8(f32, int, int);
 extern void FUN_L00_00258278_df40(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_00258278");
@@ -1474,8 +1474,8 @@ typedef struct {
     short unk84;
 } Cam_316730;
 
-extern Ent50_316730 *D_L01_0015EF50_c __asm__("D_L01_0015EF50") __attribute__((section(".sdata")));
-extern Ent7EC_316730 *D_L01_0015F70C_c __asm__("D_L01_0015F70C") __attribute__((section(".sdata")));
+extern Ent50_316730 *D_L01_0015EF50_c __asm__("D_L01_0015EF50") MACRO_ADDR;
+extern Ent7EC_316730 *D_L01_0015F70C_c __asm__("D_L01_0015F70C") MACRO_ADDR;
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float camera_basis_reference_direction[] __asm__("D_L01_001672B0");
@@ -1487,7 +1487,7 @@ extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __as
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
-extern int D_0015EE84_c __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015EE84_c __asm__("D_0015ED84") MACRO_ADDR;
 extern Path_316730 *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
 
 void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) __asm__("FUN_L01_00315358");
@@ -1678,7 +1678,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
     fast_vec_normalize(camera_to_update->unk10, camera_to_update->unk10, 1.0f);
     fast_vec_cross(camera_to_update->unk20, camera_to_update->unk10, camera_to_update->unk0);
 }
-extern Camera *D_L01_00167284 __attribute__((section(".data")));
+extern Camera *D_L01_00167284 NOT_SDA;
 extern OvlVec4 D_0013F3D0_315de0 __asm__("D_0013F3D0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
@@ -1790,7 +1790,7 @@ void update_camera_mode_from_preset(CamUser_316030 *camera_user) {
 
 extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
-extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
+extern char *D_L01_00167280_lui __asm__("D_L01_00167280") NOT_SDA;
 void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera_track_accel_z) __asm__("FUN_L01_00316e88");
 
 void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera_track_accel_z) {

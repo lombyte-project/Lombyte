@@ -8,6 +8,7 @@
 #include "rnc/overlay/collision.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 
 
@@ -161,8 +162,8 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V_u;
-extern u8 D_L16_00174240[] __attribute__((section(".data")));
-extern u8 D_L16_00174260[] __attribute__((section(".data")));
+extern u8 D_L16_00174240[] NOT_SDA;
+extern u8 D_L16_00174260[] NOT_SDA;
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
@@ -185,7 +186,7 @@ void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L0
 void FUN_L00_002334d0(void *, void *, f32);
 f32 FUN_001f99c0(f32);
 
-extern CollisionHit HH __asm__("D_L16_00174240") __attribute__((section(".data")));
+extern CollisionHit HH __asm__("D_L16_00174240") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L16_00174240 + (o)))
 #define HF(o) (*(f32 *)(D_L16_00174240 + (o)))
 
@@ -380,7 +381,7 @@ extern void FUN_L00_002334d0(void *, void *, f32);
 extern s32 coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 FUN_L00_001f3170(void *, f32);
-extern u128_2133a8 D_L16_00174270[] __attribute__((section(".data")));
+extern u128_2133a8 D_L16_00174270[] NOT_SDA;
 s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L16_00210b60");
 
 s32 resolve_hero_position_collisions(s32 mode) {
@@ -537,7 +538,7 @@ extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f8
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void update_hero_ground_contact(void) __asm__("FUN_L16_0020ffb0");
-extern char D_0013F430[] __attribute__((section(".sdata")));
+extern char D_0013F430[] MACRO_ADDR;
 
 void integrate_hero_motion(void) __asm__("FUN_L16_00211098");
 

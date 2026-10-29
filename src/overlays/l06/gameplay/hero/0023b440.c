@@ -14,6 +14,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 06 build). */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_0023BBE8.c: func_L06_0023BBE8), where it is exact; names translated to the US level program. */
@@ -56,8 +57,8 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern int D_00141660 __attribute__((section(".data")));
-extern int D_L06_0016CF00 __attribute__((section(".data")));
+extern int D_00141660 NOT_SDA;
+extern int D_L06_0016CF00 NOT_SDA;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
@@ -124,7 +125,7 @@ void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 
-extern float D_L06_00167558_lui __asm__("D_L06_00167558") __attribute__((section(".data")));
+extern float D_L06_00167558_lui __asm__("D_L06_00167558") NOT_SDA;
 void update_hero_state_machine(void) __asm__("FUN_L06_0023b440");
 
 void update_hero_state_machine(void) {

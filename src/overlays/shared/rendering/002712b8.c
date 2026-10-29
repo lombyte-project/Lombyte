@@ -410,7 +410,7 @@ void update_color_size_tween_particle(char *particle) {
 }
 int FUN_00213260_272060(int) __asm__("FUN_00213260");
 int FUN_001fa6d0_272060(float) __asm__("FUN_001fa6d0");
-extern unsigned char *D_L00_001B2154 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2154 NOT_SDA;
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x,
                                 float y, float z);
 unsigned char *FUN_L00_00272060(void *initial_position, int lifetime_frames, int color, int mode, int rotation_increment, float *initial_velocity, float x,
@@ -559,7 +559,7 @@ typedef struct {
     f32 unk2C;
     S_2725d8 s;
 } P_2725d8;
-extern u8 *D_L00_001B215C __attribute__((section(".data")));
+extern u8 *D_L00_001B215C NOT_SDA;
 P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
 s32 FUN_001fa6d0(f32);
 void add_vector_xyz_cf(u8 *, u8 *, void *) __asm__("FUN_L00_0024f7c8");
@@ -678,7 +678,7 @@ void update_expanding_alpha_pulse_particle(unsigned char *particle) {
 int FUN_001fa6d0_2729c8(float) __asm__("FUN_001fa6d0");
 float FUN_002132a8_2729c8(float, float) __asm__("FUN_002132a8");
 void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern unsigned char *D_L00_001B2168 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2168 NOT_SDA;
 unsigned char *spawn_color_tween_emitter_particle(void *initial_position, unsigned char particle_mode, unsigned char b, unsigned char emission_duration_frames,
                                 unsigned char particles_per_update, unsigned char emitted_lifetime_frames, int g, float x, float y) __asm__("FUN_L00_002729c8");
 
@@ -741,7 +741,7 @@ typedef struct {
     char p1[0x2080 - 0x8C];
     int i2080;
 } P_272bc0;
-extern char D_0013F3D0[] __attribute__((section(".data")));
+extern char D_0013F3D0[] NOT_SDA;
 extern unsigned char *D_L00_0016016C_272bc0 __asm__("D_L00_0016016C");
 extern float FUN_001fa6c0_272bc0(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
@@ -839,9 +839,9 @@ void update_color_tween_emitter_particle(unsigned char *particle) {
         break;
     }
 }
-extern char D_0013F3D0[] __attribute__((section(".data")));
+extern char D_0013F3D0[] NOT_SDA;
 int FUN_001fa6d0_00272f68(float) __asm__("FUN_001fa6d0");
-extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") NOT_SDA;
 unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode,
                                 float f);
 unsigned char *FUN_L00_00272f68(u128 *position, int packed_color, unsigned char initial_rotation, int particle_texture_index, int flag, int lifetime_frames, int mode,
@@ -987,8 +987,8 @@ typedef struct {
     f32 pos[4] __attribute__((aligned(16)));
     E_273448 e;
 } P_273448;
-extern u8 *tab_273448 __asm__("D_L00_001B2174") __attribute__((section(".data")));
-extern float g_debug_camera[4] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern u8 *tab_273448 __asm__("D_L00_001B2174") NOT_SDA;
+extern float g_debug_camera[4] __asm__("D_L00_00166DC0") NOT_SDA;
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void pos_273448(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
@@ -1058,7 +1058,7 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
 
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
-extern unsigned char *D_L00_001B2178 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2178 NOT_SDA;
 unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alpha_fade_divisor, int particle_mode) __asm__("FUN_L00_00273708");
 
 unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alpha_fade_divisor, int particle_mode) {
@@ -1237,7 +1237,7 @@ void update_gravity_floor_burst_particle(struct EmberParticle *ember_particle) {
     }
     free_effect_particle(ember_particle);
 }
-extern V00271d20 D_L00_00173E60 __attribute__((section(".data")));
+extern V00271d20 D_L00_00173E60 NOT_SDA;
 void FUN_001f9a10_273ee0(void *, void *, void *) __asm__("FUN_001f9a10");
 int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -1293,7 +1293,7 @@ extern int FUN_00213260_2741a0(int) __asm__("FUN_00213260");
 extern int FUN_001fa6d0_2741a0(float) __asm__("FUN_001fa6d0");
 extern float FUN_002132a8_2741a0(float, float) __asm__("FUN_002132a8");
 
-extern unsigned char *D_L00_001B2188 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2188 NOT_SDA;
 unsigned char *spawn_random_planar_drift_particle(void *position, int color, float size_scale, float z) __asm__("FUN_L00_002741a0");
 
 unsigned char *spawn_random_planar_drift_particle(void *position, int color, float size_scale, float z) {
@@ -1349,7 +1349,7 @@ void update_moving_resizing_periodic_alpha_fade_particle(char *particle) {
         free_effect_particle(particle);
     }
 }
-extern unsigned char *D_L00_001B218C __attribute__((section(".data")));
+extern unsigned char *D_L00_001B218C NOT_SDA;
 unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int FUN_001fa6d0(float);
 int FUN_00213260(int);
@@ -1540,7 +1540,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_001f96f8_274948(int) __asm__("FUN_001f96f8");
 extern float FUN_001fa6c0_274948(int) __asm__("FUN_001fa6c0");
 
-extern unsigned char *D_L00_001B2194 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2194 NOT_SDA;
 unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *a, u128 *b, int c, int d) __asm__("FUN_L00_00274948");
 unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *position, u128 *initial_velocity, int initial_alpha, int moby_reference) {
     unsigned char *particle = create_part(0x45);
@@ -1618,7 +1618,7 @@ void update_mode_controlled_rotating_alpha_fade_particle(u8 *particle) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275B98), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern unsigned char *D_L00_001B2198 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2198 NOT_SDA;
 
 unsigned char *spawn_texture_indexed_rotated_particle(void *position, int particle_texture_index, float initial_rotation_radians) __asm__("FUN_L00_00274cf8");
 
@@ -1756,7 +1756,7 @@ typedef struct {
     float unk1C;
 } Q_275158;
 
-extern unsigned char *D_L00_001B21A0 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B21A0 NOT_SDA;
 unsigned char *spawn_random_size_rotated_particle(void *position, void *initial_particle_vector, int n, float particle_vector_w) __asm__("FUN_L00_00275158");
 
 unsigned char *spawn_random_size_rotated_particle(void *position, void *initial_particle_vector, int n, float particle_vector_w) {
@@ -2007,7 +2007,7 @@ extern int FUN_001fa6d0_275910(float) __asm__("FUN_001fa6d0");
 extern int FUN_00213260_275910(int) __asm__("FUN_00213260");
 extern unsigned char *FUN_002141f8_275910(int) __asm__("FUN_002141f8");
 
-extern unsigned char *D_L00_001B21B8 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B21B8 NOT_SDA;
 unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(OvlQuad *pos, int lifetime_frames, int col, int mode, int rotation_increment, float *initial_velocity, int lookup_object_reference,
                                 float x, float y) __asm__("FUN_L00_00275910");
 
@@ -2194,7 +2194,7 @@ typedef struct {
     P2_276078 e[20];
 } T1_276078;
 
-extern s32 D_L00_00173E08 __attribute__((section(".data")));
+extern s32 D_L00_00173E08 NOT_SDA;
 extern T1_276078 D_00137B80;
 extern u8 misc_animation_stash_tag[] __asm__("D_L00_001602D0");
 void load(s32, s32, s32) __asm__("FUN_00216828");

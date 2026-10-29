@@ -1211,7 +1211,7 @@ typedef struct {
     int moving_timer;
     int target_timer;
 } WD8;
-extern unsigned char D_0013D3B4 __attribute__((section(".data")));
+extern unsigned char D_0013D3B4 NOT_SDA;
 extern char commando_name_string[] __asm__("D_L08_001621E0");
 extern int commando_height_probe_distance_limit_gp __asm__("D_L08_001621D8") __attribute__((sda));
 extern char *D_L08_001600EC;

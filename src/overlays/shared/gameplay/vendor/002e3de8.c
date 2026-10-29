@@ -401,7 +401,7 @@ extern char *D_L10_0015FFD8_5f18 __asm__("D_L10_0015FFD8");
 extern f32 D_L10_0015F3FC;
 extern s32 D_L10_0015F404;
 extern char D_L10_00167450[];
-extern float D_L10_00167358 __attribute__((section(".data")));
+extern float D_L10_00167358 NOT_SDA;
 extern float D_0013F5E0_5f18[] __asm__("D_0013F5E0");
 extern VendorView_5f18 D_L10_0016CEC0;
 extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");

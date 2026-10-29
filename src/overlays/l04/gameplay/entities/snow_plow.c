@@ -41,7 +41,7 @@ extern int *D_L04_001B0630[];
 extern char *D_L04_001600EC;
 extern char snow_plow_missing_path_warning_format[] __asm__("D_L04_001DBE10");
 extern char D_L04_00166E00[];
-extern float D_L04_0015F580[] __attribute__((section(".sdata")));
+extern float D_L04_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/l04/gameplay/entities/snow_plow_globals.h"
 extern int snow_plow_hit_count_gp __asm__("D_L04_0015EDF8") __attribute__((sda));
 extern unsigned char D_0013D408[];
@@ -738,7 +738,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_L04_00166F40[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_L04_0015F580[] __attribute__((section(".sdata")));
+extern float D_L04_0015F580[] MACRO_ADDR;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1425,7 +1425,7 @@ extern int *D_L04_001B0630[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern char *D_L04_0015FFD0[] __attribute__((section(".sdata")));
+extern char *D_L04_0015FFD0[] MACRO_ADDR;
 void interpolate_moby_and_linked_moby_positions_on_path(char *moby) __asm__("FUN_L04_002d6f68");
 
 void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {

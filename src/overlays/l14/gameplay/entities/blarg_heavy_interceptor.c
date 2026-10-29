@@ -434,8 +434,8 @@ extern LockOn_c618 D_L14_00174540;
 extern char D_L14_001674C0[];
 #include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_globals.h"
 extern f32 blarg_heavy_interceptor_culling_sphere_radius_gp __asm__("D_L14_0016139C") __attribute__((sda));
-extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data")));
-extern char D_L14_0015F580[] __attribute__((section(".sdata")));
+extern char *D_001413D0_c618 __asm__("D_001413D0") NOT_SDA;
+extern char D_L14_0015F580[] MACRO_ADDR;
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
 #include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_blarg_heavy_interceptor.h"
 extern f32 D_L14_001613A0_gp __asm__("D_L14_001613A0") __attribute__((sda));
@@ -1191,7 +1191,7 @@ typedef struct {
     u64 a, b, c, d;
 } Pk_2af4a0;
 
-extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") __attribute__((section(".data")));
+extern char D_L14_001674C0_d[] __asm__("D_L14_001674C0") NOT_SDA;
 float D_L14_001D8640[4][4] = {
     {-1.0f, 1.0f, 0.0f, 1.0f},
     {-1.0f, -1.0f, 0.0f, 1.0f},
@@ -1658,7 +1658,7 @@ typedef struct Moby Moby;
 char *spawn_flying_bolt(void *a, float *b, int c, int d) __asm__("FUN_L14_002eccf0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern int D_L14_0015F5CC __attribute__((section(".sdata"))); /* no foreign declaration */
+extern int D_L14_0015F5CC MACRO_ADDR; /* no foreign declaration */
 extern int D_L14_001600EC; /* no foreign declaration */
 extern float machinegun_turret_retraction_depth_gp __asm__("D_L14_00161508") __attribute__((sda)); /* no foreign declaration */
 extern int D_L14_0016150C __attribute__((sda)); /* no foreign declaration */
@@ -1994,7 +1994,7 @@ void process_machinegun_turret_hit_reactions(struct Moby *moby) {
 /* Returns 0 unless every object on the list is ready, then wakes the waiting ones and sets their timers. */
 extern short *D_L14_001ABF40_b45[] __asm__("D_L14_001ABF40");
 extern unsigned char *D_L14_0015FFD8_b45 __asm__("D_L14_0015FFD8");
-extern unsigned char *D_L14_0015FFD0_m45[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
+extern unsigned char *D_L14_0015FFD0_m45[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
 extern int D_L14_0016150C_gp __asm__("D_L14_0016150C") __attribute__((sda));
 extern float D_L14_00161510_gp __asm__("D_L14_00161510") __attribute__((sda));
 extern void FUN_00212ed8_b45(unsigned char *, int, int) __asm__("FUN_00212ed8");
@@ -2051,7 +2051,7 @@ int try_retract_turret_group(int index) {
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B58C0), where it is exact; names translated to the US level program. */
 
-extern char *D_L14_ffd0_e[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
+extern char *D_L14_ffd0_e[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
 extern short *D_L14_001AC2C0_2B0168[] __asm__("D_L14_001ABF40");
 
 int is_turret_group_activated_or_empty(int index) {
@@ -2739,7 +2739,7 @@ extern void build_look_at_matrix(void *, void *, void *, float);
 extern void spawn_two_point_effect_particle(void *, void *) __asm__("FUN_L00_0026c6e8");
 extern void mine_camera_blast(int, void *, int, int) __asm__("FUN_L00_002d3838");
 extern char l14_minibomber_bomb_release_blast_template[] __asm__("D_L14_001D88D0");
-extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
+extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") MACRO_ADDR;
 extern PuffParticle *spawn_puff(void *, float, float, float, int, void *, float,
                                 int) __asm__("FUN_L00_0026d000");
 
@@ -2894,7 +2894,7 @@ void initialize_minibomber_path_following(struct Moby *moby) {
 }
 /* Exhaust puffs: two red sparks and three white puffs of shrinking size behind the moby. */
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
+extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") MACRO_ADDR;
 
 void emit_minibomber_exhaust_puffs(struct Moby *moby) __asm__("FUN_L14_002b5dd8");
 
@@ -3157,7 +3157,7 @@ struct L14RaceState {
 };
 
 extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
-extern struct L14RaceState *race_state __asm__("D_L14_00167500") __attribute__((section(".data")));
+extern struct L14RaceState *race_state __asm__("D_L14_00167500") NOT_SDA;
 extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_00161A2C") __attribute__((sda));
 #include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_level14_racer.h"
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");

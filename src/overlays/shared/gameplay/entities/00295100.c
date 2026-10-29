@@ -14,6 +14,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
+#include "sda.h"
 
 
 
@@ -115,15 +116,15 @@ typedef struct {
 } R_297f78;
 extern S_297f78 D_L00_0016C058;
 extern C_297f78 D_0013C940_c __asm__("D_0013C940");
-extern s32 D_L00_0015F5C0_m[] __asm__("D_L00_0015F5C0") __attribute__((section(".sdata")));
+extern s32 D_L00_0015F5C0_m[] __asm__("D_L00_0015F5C0") MACRO_ADDR;
 extern s32 level_timer __asm__("D_L00_0015F5C8");
 extern s32 game_frame __asm__("D_L00_0015F5CC");
-extern s32 D_L00_001B9DE0 __attribute__((section(".data")));
-extern P_297f78 *D_L00_00166E00 __attribute__((section(".data")));
-extern s32 D_0013D384 __attribute__((section(".data")));
+extern s32 D_L00_001B9DE0 NOT_SDA;
+extern P_297f78 *D_L00_00166E00 NOT_SDA;
+extern s32 D_0013D384 NOT_SDA;
 extern R_297f78 D_0013D388;
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
-extern s32 D_L00_00184214 __attribute__((section(".data")));
+extern s32 D_L00_00184214 NOT_SDA;
 extern s32 D_0015EEA4;
 extern s32 D_L00_0015F630;
 extern u8 D_L00_00160FF8[], D_L00_00161008[], D_L00_00161018[], D_L00_00161028[], D_L00_00161038[];
@@ -332,12 +333,12 @@ typedef struct {
     char pad20a6[0x202];
     int x22a8;
 } P_298840;
-extern C_298840 D_L00_0016C860_298840 __asm__("D_L00_0016C860") __attribute__((section(".data")));
+extern C_298840 D_L00_0016C860_298840 __asm__("D_L00_0016C860") NOT_SDA;
 extern int D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
-extern char D_L00_0017C340_298840[] __asm__("D_L00_0017C340") __attribute__((section(".data")));
-extern char D_L00_0017C380_lui[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
-extern char D_L00_0017C400_298840[] __asm__("D_L00_0017C400") __attribute__((section(".data")));
-extern char D_L00_0017C3C0_298840[] __asm__("D_L00_0017C3C0") __attribute__((section(".data")));
+extern char D_L00_0017C340_298840[] __asm__("D_L00_0017C340") NOT_SDA;
+extern char D_L00_0017C380_lui[] __asm__("D_L00_0017C380") NOT_SDA;
+extern char D_L00_0017C400_298840[] __asm__("D_L00_0017C400") NOT_SDA;
+extern char D_L00_0017C3C0_298840[] __asm__("D_L00_0017C3C0") NOT_SDA;
 extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_298840 __asm__("D_L00_00173E00") __attribute__((section(".data")));
@@ -358,7 +359,7 @@ void update_world_object_animation(void) __asm__("FUN_00204790");
 void sound_update(void) __asm__("FUN_0022ca50");
 int f122298_298840(int) __asm__("FUN_00122298");
 int f215b10_298840(void) __asm__("FUN_00215b10");
-extern char D_L00_0017C440[] __attribute__((section(".data")));
+extern char D_L00_0017C440[] NOT_SDA;
 extern float D_L00_0015F59C;
 void start_scene(int a) __asm__("FUN_L00_00298840");
 void start_scene(int scene_id) {
@@ -455,10 +456,10 @@ extern struct {
     unsigned short x5a;
 } D_001516D0_298b18 __asm__("D_001516D0");
 extern int D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
-extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
+extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern float fade_level __asm__("D_L00_0015F3FC");
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
-extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") __attribute__((section(".data")));
+extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void fade_to_black(int) __asm__("FUN_001f4a58");
 void update_view_context(void) __asm__("FUN_001f2d98");
@@ -532,13 +533,13 @@ typedef struct {
     char pad2[0x54 - 0x3C];
     char *p54;
 } H_298de8;
-extern H_298de8 D_L00_0016C860_298de8 __asm__("D_L00_0016C860") __attribute__((section(".data")));
-extern char D_L00_0016CA40_298de8[] __asm__("D_L00_0016CA40") __attribute__((section(".data")));
+extern H_298de8 D_L00_0016C860_298de8 __asm__("D_L00_0016C860") NOT_SDA;
+extern char D_L00_0016CA40_298de8[] __asm__("D_L00_0016CA40") NOT_SDA;
 extern unsigned char D_0015EDB0_298de8 __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB0_298de8b __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB4_298de8 __asm__("D_0015EDB4");
 extern float D_L00_0015F5A0_298de8 __asm__("D_L00_0015F5A0");
-extern char player_camera[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern char player_camera[] __asm__("D_L00_00166C80") NOT_SDA;
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void sce_vu0_unit_matrix(void *) __asm__("FUN_00125218");
 extern void sce_vu0_rot_matrix_x(void *, void *, float) __asm__("FUN_00125360");
@@ -846,16 +847,16 @@ void queue_movie_with_game_language(s32 i) {
     }
     prepare_movie_playback(movie_sector, movie_size, game_language);
 }
-extern int D_L00_00161048_macro __asm__("D_L00_00161048") __attribute__((section(".sdata")));
-extern int D_L00_0016104C_macro __asm__("D_L00_0016104C") __attribute__((section(".sdata")));
-extern s32 D_L00_00161050_macro __asm__("D_L00_00161050") __attribute__((section(".sdata")));
-extern s32 D_L00_00161054_macro __asm__("D_L00_00161054") __attribute__((section(".sdata")));
-extern s32 D_L00_00161058_macro __asm__("D_L00_00161058") __attribute__((section(".sdata")));
-extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") __attribute__((section(".sdata")));
-extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") __attribute__((section(".sdata")));
-extern s32 D_L00_00173E04_lui __asm__("D_L00_00173E04") __attribute__((section(".data")));
+extern int D_L00_00161048_macro __asm__("D_L00_00161048") MACRO_ADDR;
+extern int D_L00_0016104C_macro __asm__("D_L00_0016104C") MACRO_ADDR;
+extern s32 D_L00_00161050_macro __asm__("D_L00_00161050") MACRO_ADDR;
+extern s32 D_L00_00161054_macro __asm__("D_L00_00161054") MACRO_ADDR;
+extern s32 D_L00_00161058_macro __asm__("D_L00_00161058") MACRO_ADDR;
+extern s32 D_L00_0015F40C_macro __asm__("D_L00_0015F40C") MACRO_ADDR;
+extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") MACRO_ADDR;
+extern s32 D_L00_00173E04_lui __asm__("D_L00_00173E04") NOT_SDA;
 /* [0] is gs_texture_allocation_start, [4] depth_buffer_address. */
-extern s32 D_0015EE78_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
+extern s32 D_0015EE78_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern void sound_stop_all_sounds(void) __asm__("FUN_0022dcd0");
 extern void music_stop(void) __asm__("FUN_00215ee8");
@@ -918,10 +919,10 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
 }
 typedef struct { u8 pad[0x38]; s16 h38; } S_2997c8;
 typedef struct { u8 pad[0x6B]; u8 f; } M_2997c8;
-extern S_2997c8 D_001516D0_2997c8 __asm__("D_001516D0") __attribute__((section(".data")));
+extern S_2997c8 D_001516D0_2997c8 __asm__("D_001516D0") NOT_SDA;
 extern s32 D_L00_0015F5C4_2997c8 __asm__("D_L00_0015F5C4");
-extern struct ActiveSceneTrigger active_scene_trigger_lui __asm__("D_L00_00179100") __attribute__((section(".data")));
-extern char D_0013E550[] __attribute__((section(".data")));
+extern struct ActiveSceneTrigger active_scene_trigger_lui __asm__("D_L00_00179100") NOT_SDA;
+extern char D_0013E550[] NOT_SDA;
 void FUN_00120558_2997c8(s32, s32) __asm__("FUN_00120558");
 void FUN_00122e68_2997c8(void *) __asm__("FUN_00122e68");
 void FUN_00122518_2997c8(void *, short, int, int, int, int, int, int) __asm__("FUN_00122518");
@@ -1023,15 +1024,15 @@ typedef struct { int a; int b; } LL9;
 typedef struct { char pad[0x16A8]; LL9 normal[20]; LL9 alt[20]; } G9;
 
 extern Tab D_00137B80;
-extern float fade_level_gp __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
-extern int D_L00_0015F5C4 __attribute__((section(".sdata")));
-extern int D_L00_0015F5D8_gp __asm__("D_L00_0015F5D8") __attribute__((section(".sdata")));
+extern float fade_level_gp __asm__("D_L00_0015F3FC") MACRO_ADDR;
+extern int D_L00_0015F5C4 MACRO_ADDR;
+extern int D_L00_0015F5D8_gp __asm__("D_L00_0015F5D8") MACRO_ADDR;
 typedef struct { s16 state; s16 slide; s16 timer; s16 frame; s32 *dst; s32 *src; } Slideshow;
-extern Slideshow slideshow __asm__("D_L00_0015F620") __attribute__((section(".sdata")));
+extern Slideshow slideshow __asm__("D_L00_0015F620") MACRO_ADDR;
 extern int D_L00_00173E00[];
-extern int D_L00_001611CC __attribute__((section(".sdata")));
+extern int D_L00_001611CC MACRO_ADDR;
 extern int update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
-extern int D_0015ED80_gp __asm__("D_0015ED80") __attribute__((section(".sdata")));
+extern int D_0015ED80_gp __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 start_audio_stream_read(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216788");
 extern void FillTransferWords(void *, s32, s32);
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
@@ -1167,13 +1168,13 @@ void update_slideshow(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/update_0029B6A0.c: func_L00_0029B6A0), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_00197300_d[] __asm__("D_L00_00197300") __attribute__((section(".data")));
-extern int D_L00_001CA4C0_d[] __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
+extern char *D_L00_00197300_d[] __asm__("D_L00_00197300") NOT_SDA;
+extern int D_L00_001CA4C0_d[] __asm__("D_L00_001CA4C0") NOT_SDA;
 extern void fast_decompress(int, int) __asm__("FUN_L00_0024d8d0");
 extern void FlushCache(s32);
 extern void relocate_asset_entry_pointers(char *arg0, int idx) __asm__("FUN_002032e0");
 
-extern unsigned char D_L00_00197BCC __attribute__((section(".data")));
+extern unsigned char D_L00_00197BCC NOT_SDA;
 void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_0029a330");
 
 void decompress_and_relocate_vendor_moby_assets(void) {
@@ -1217,7 +1218,7 @@ extern VendorSound_29a400 vendor_sound[] __asm__("D_L00_001C2108") NOT_SDA;
 /* Stocked item ids (low 6 bits; bit 0x40 = listed as selected), 0xFF-terminated. */
 extern u8 D_0013D4C0[];
 
-extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
+extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") MACRO_ADDR;
 /* Builds the vendor list: the stocked items (up to 12, 0xFF-terminated), then
    every other available item (D_0013D4C0 set, h8 non-zero) not already listed. */
 void build_vendor_menu_rows(s32 skip_unflagged) __asm__("FUN_L00_0029a400");
@@ -1385,8 +1386,8 @@ extern f32 vendor_camera_eye_local_offset_x_gp __asm__("D_L00_00161060") __attri
 extern Vec4 D_L00_00180250;
 #include "rnc/overlay/shared/gameplay/entities/00295100_data/open_vendor_menu.h"
 extern f32 D_L00_001610E0 __attribute__((sda));
-extern s32 game_language_macro __asm__("D_0015ED88") __attribute__((section(".sdata")));
-extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern s32 game_language_macro __asm__("D_0015ED88") MACRO_ADDR;
+extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 /* Opens the vendor: clears its state, spawns the vendor moby when none is given, builds the item list and its texts, then sets up the camera and the four slot offsets. */
 void open_vendor_menu(VendorMoby_29a6b0 *m) __asm__("FUN_L00_0029a6b0");
 void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
@@ -1790,10 +1791,10 @@ typedef struct {
     int id;
     char p1[0x4C - 0x14];
 } T_29b680;
-extern P_29b680 D_L00_001CA4C0_29b680 __asm__("D_L00_001CA4C0") __attribute__((section(".data")));
-extern T_29b680 D_L00_00179AC0_29b680[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
-extern int D_L00_001C8FF0_29b680[][16] __asm__("D_L00_001C8FF0") __attribute__((section(".data")));
-extern unsigned char discount_purchase_pricing __asm__("D_0013D4E3") __attribute__((section(".data")));
+extern P_29b680 D_L00_001CA4C0_29b680 __asm__("D_L00_001CA4C0") NOT_SDA;
+extern T_29b680 D_L00_00179AC0_29b680[] __asm__("D_L00_00179AC0") NOT_SDA;
+extern int D_L00_001C8FF0_29b680[][16] __asm__("D_L00_001C8FF0") NOT_SDA;
+extern unsigned char discount_purchase_pricing __asm__("D_0013D4E3") NOT_SDA;
 extern int D_L00_00161E38;
 extern void FUN_00204a40_29b680(int, int) __asm__("FUN_00204a40");
 extern void FUN_0020c5f0_29b680(void *, int) __asm__("FUN_0020c5f0");
@@ -1805,8 +1806,8 @@ extern void FUN_0020c880_29b680(void *) __asm__("FUN_0020c880");
 extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f0");
 #define P D_L00_001CA4C0_29b680
 
-extern float D_L00_001C8920[][12] __attribute__((section(".data")));
-extern float D_L00_001C8900[][12] __attribute__((section(".data")));
+extern float D_L00_001C8920[][12] NOT_SDA;
+extern float D_L00_001C8900[][12] NOT_SDA;
 extern int vendor_selected_item_local_offset_gp __asm__("D_L00_00161090") __attribute__((sda));
 void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
 
@@ -1953,7 +1954,7 @@ extern s32 D_0015ED80;
 extern Vec4 D_L00_00165F80[3];
 extern void *D_L00_00197300[];
 extern ViewCamera D_L00_00166C80;
-extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
+extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 
 extern void reset_frame_counters(void) __asm__("FUN_L00_00297e30");
 extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");

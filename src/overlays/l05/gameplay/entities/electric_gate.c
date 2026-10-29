@@ -13,6 +13,7 @@
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/audio/voice_pool.h"
+#include "sda.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -82,7 +83,7 @@ void record_grid_entry_neighbor_indices(int selected_entry_index) {
 extern char D_0013E550[];
 extern char D_L05_001671C0[];
 extern float FUN_001f9b48(void *, void *);
-extern int D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") __attribute__((section(".sdata")));
+extern int D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8");
 extern void draw_electric_gate_beams(char *moby) __asm__("FUN_L05_0030de90");
@@ -990,7 +991,7 @@ extern void spawn_splash(float, float, void *, void *, void *) __asm__("FUN_L00_
 extern unsigned char D_0014C050[][16];
 extern struct Moby *D_L05_0015FFD8;
 extern struct FloorRow *D_L05_001612D0;
-extern char D_L05_0015F580_macro[]  __asm__("D_L05_0015F580")__attribute__((section(".sdata")));
+extern char D_L05_0015F580_macro[]  __asm__("D_L05_0015F580")MACRO_ADDR;
 #include "rnc/overlay/l05/gameplay/entities/electric_gate_data/update_triggered_particle_spray_emitter.h"
 
 void update_triggered_particle_spray_emitter(struct Moby *emitter_moby) __asm__("FUN_L05_003150f0");
@@ -1148,7 +1149,7 @@ typedef struct {
     LiftVoice voice;
 } LiftVoiceWindow;
 
-extern u16 D_0014162A __attribute__((section(".data")));
+extern u16 D_0014162A NOT_SDA;
 extern LiftPose *D_L05_001600EC_l __asm__("D_L05_001600EC");
 
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
@@ -1447,7 +1448,7 @@ void ocean_rilgar_update(char *moby) {
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 extern void FUN_L00_001fff28(void *, int, float);
 extern float FUN_001f9b48(void *, void *);
-extern char *D_001413D0_316258 __asm__("D_001413D0") __attribute__((section(".data")));
+extern char *D_001413D0_316258 __asm__("D_001413D0") NOT_SDA;
 
 void update_triggered_moby_motion_and_manipulator_angle(char *moby) __asm__("FUN_L05_00316258");
 
@@ -1755,7 +1756,7 @@ extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
-extern unsigned char D_0013DD47 __attribute__((section(".data")));
+extern unsigned char D_0013DD47 NOT_SDA;
 /* Watcher moby update (variant of shady_salesman_update): turns its head toward the hero or a random target. */
 void qwarks_bouncer_update(WM_c *m) __asm__("FUN_L05_00317470");
 void qwarks_bouncer_update(WM_c *bouncer_moby) {
@@ -1923,7 +1924,7 @@ typedef struct {
 } L16WatchFlags;
 
 extern char D_L05_001671C0[];
-extern unsigned char D_0013D4FF __attribute__((section(".data")));
+extern unsigned char D_0013D4FF NOT_SDA;
 extern f32 FUN_001f9b48(void *, void *);
 extern void FUN_L00_0025a120(void *);
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");

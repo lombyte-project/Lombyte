@@ -6,6 +6,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* 1 when m is the hero's current moby of interest: unk4F8 in control mode 3
    or state 0x1C, otherwise unk2FC while unk30E is clear. */
@@ -39,7 +40,7 @@ typedef struct {
     short f;
 } GG_q;
 
-extern GG_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0") __attribute__((section(".data")));
+extern GG_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0") NOT_SDA;
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 

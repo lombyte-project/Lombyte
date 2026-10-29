@@ -9,6 +9,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "sda.h"
 
 
 
@@ -146,7 +147,7 @@ void emit_sand_shark_dust_puffs_along_segment(void *moby, void *segment_start, v
 /* Transforms two table vectors by the moby's matrix and passes them on. */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D5098), where it is exact; names translated to the US level program. */
 
-extern float D_L02_001D3230[][4] __attribute__((section(".data")));
+extern float D_L02_001D3230[][4] NOT_SDA;
 float D_L02_001619C0[4] __attribute__((section(".sdata"))) = {-3.25f, 0.0f, 0.2f, 0.0f};
 extern short sand_shark_dust_endpoint_size_scale_gp __asm__("D_L02_001619D0") __attribute__((sda));
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -254,9 +255,9 @@ typedef struct {
 } Varsd3e50;
 
 extern float D_0015ED6C;
-extern struct Moby *D_L02_0015FFD8_e50 __asm__("D_L02_0015FFD8") __attribute__((section(".sdata")));
+extern struct Moby *D_L02_0015FFD8_e50 __asm__("D_L02_0015FFD8") MACRO_ADDR;
 extern int D_L02_0015F5CC_e50 __asm__("D_L02_0015F5CC");
-extern int camera_secondary_mode __asm__("D_001413D4") __attribute__((section(".data")));
+extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern int *D_L02_001B0AB0_e50[] __asm__("D_L02_001B0AB0");
 extern char D_L02_001673C0_e50[] __asm__("D_L02_001673C0");
 extern char sand_shark_missing_path_message_format[] __asm__("D_L02_001FA8A0");
@@ -1380,7 +1381,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
-extern float D_L02_0015F580[] __attribute__((section(".sdata")));
+extern float D_L02_0015F580[] MACRO_ADDR;
 extern int D_L02_0015F5CC_i __asm__("D_L02_0015F5CC");
 #include "rnc/overlay/l02/gameplay/entities/sand_shark_data/update_level02_bot.h"
 int D_L02_00161A88 = 0x40808080;
@@ -1889,7 +1890,7 @@ typedef struct {
 
 extern char *level02_elevator_transform_table __asm__("D_L02_001600FC");
 extern float level02_elevator_stop_height_offset_gp __asm__("D_L02_00161BD0") __attribute__((sda));
-extern unsigned char D_0013D4DA __attribute__((section(".data")));
+extern unsigned char D_0013D4DA NOT_SDA;
 extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
 extern float level02_elevator_max_vertical_speed_gp __asm__("D_L02_00161BDC") __attribute__((sda));
 extern float level02_elevator_vertical_acceleration_gp __asm__("D_L02_00161BE0") __attribute__((sda));
@@ -2218,7 +2219,7 @@ typedef struct {
     int i150;
 } Spawnercb38;
 
-extern unsigned short D_0014D590_cb38[][64][2] __asm__("D_0014D590") __attribute__((section(".data")));
+extern unsigned short D_0014D590_cb38[][64][2] __asm__("D_0014D590") NOT_SDA;
 extern int D_0014EE90[];
 extern int D_L02_0015FFD8;
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -2563,7 +2564,7 @@ extern float D_L02_00161C30_gp __asm__("D_L02_00161C30") __attribute__((sda));
 extern float D_L02_00161C34_gp __asm__("D_L02_00161C34") __attribute__((sda));
 extern int *D_L02_001B0AB0_dc88[] __asm__("D_L02_001B0AB0");
 extern unsigned char D_0014C050_dc88[] __asm__("D_0014C050");
-extern unsigned int D_00141BAC __attribute__((section(".data")));
+extern unsigned int D_00141BAC NOT_SDA;
 extern float D_0015ED6C;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -3100,7 +3101,7 @@ typedef struct {
     struct Moby *owner;
 } TurretVoiceSlot;
 
-extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_0015ED6C MACRO_ADDR;
 extern f32 rocket_launcher_projectile_speed_gp __asm__("D_L02_00161C6C") __attribute__((sda));
 #include "rnc/overlay/l02/gameplay/entities/sand_shark_data/rocket_launcher_update_2.h"
 s32 D_L02_00161C78 = 0x800000ff;
@@ -3125,7 +3126,7 @@ extern void turret_spawn_debris(struct Moby *, void *, void *, f32, f32, s32, s3
 extern f32 turret_anim_progress(struct Moby *) __asm__("FUN_0020c9e0");
 extern s32 turret_lerp_colour(f32, s32, s32) __asm__("FUN_001fa6e0");
 
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 /* Swivel turret update: waits a random time, turns to a random heading with a loop sound, then fires one shot with debris and fades its colour while the recoil animation plays. */
 void rocket_launcher_update(struct Moby *m) __asm__("FUN_L02_002df3d8");
 void rocket_launcher_update(struct Moby *moby) {
@@ -3199,7 +3200,7 @@ void rocket_launcher_update(struct Moby *moby) {
 extern char D_L02_001673C0[];
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern float D_0015ED6C;
-extern int D_001413D4 __attribute__((section(".data")));
+extern int D_001413D4 NOT_SDA;
 extern int engine_voice_set_pitch(int, int) __asm__("FUN_L00_0028df38");
 extern int FUN_L02_0028d618(int, int);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");

@@ -8,13 +8,14 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *, int, int, float, float, float, float, float) __asm__("FUN_L00_0026b790");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern char *D_001413D0 __attribute__((section(".data")));
+extern char *D_001413D0 NOT_SDA;
 extern float D_0015ED6C;
 extern unsigned char *spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 
@@ -344,14 +345,14 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy_c(void *) __asm__("FUN_001f9b20");
-extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
+extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015ED70 MACRO_ADDR;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int *D_L06_001B0C30[];
-extern int D_L06_0015F5C4 __attribute__((section(".sdata")));
-extern int D_L06_0015FDF8 __attribute__((section(".sdata")));
+extern int D_L06_0015F5C4 MACRO_ADDR;
+extern int D_L06_0015FDF8 MACRO_ADDR;
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern int FUN_L00_002dc9f0(void *, void *);
@@ -719,7 +720,7 @@ struct RespawnVars {
     f32 glow_phase;
 };
 
-extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
+extern f32 D_L06_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/update_frog_health_respawn_and_target.h"
 extern struct Moby *D_L06_0015FFD8_e94f0 __asm__("D_L06_0015FFD8");
 extern u8 D_001413F4_e94f0[] __asm__("D_001413F4");
@@ -748,7 +749,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int follow_path_e94f0(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern struct MobyHit *hit_moby_e94f0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void remove_e94f0(struct Moby *) __asm__("FUN_0020c828");
-extern struct Moby *D_001413D0_e94f0 __asm__("D_001413D0") __attribute__((section(".data")));
+extern struct Moby *D_001413D0_e94f0 __asm__("D_001413D0") NOT_SDA;
 
 void update_frog_health_respawn_and_target(struct Moby *moby) __asm__("FUN_L06_002e94f0");
 
@@ -907,8 +908,8 @@ void probe_frog_local_z_collision(char *moby) {
 }
 extern void resolve_point_path_segment_xy_clearance(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern f32 D_0015ED6C;
-extern u128 D_L06_001745E0 __attribute__((section(".data")));
-extern u128 D_L06_001745F0 __attribute__((section(".data")));
+extern u128 D_L06_001745E0 NOT_SDA;
+extern u128 D_L06_001745F0 NOT_SDA;
 
 void move_frog_with_collision_resolution(float scale, float threshold, char *moby, float *out, int follow_path) __asm__("FUN_L06_002e9b60");
 
@@ -950,7 +951,7 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
-extern f32 D_L06_0015F580[] __attribute__((section(".sdata")));
+extern f32 D_L06_0015F580[] MACRO_ADDR;
 
 /* Bursts 4 then 8 particles up from the moby, then removes the moby stored at vars+0x20C. */
 void destroy_frog_child_moby(struct Moby *moby) {
@@ -1316,7 +1317,7 @@ char *spawn_gadgebot_spawn_container(char *owner) __asm__("FUN_L06_002d8510");
 char *spawn_gadgebot_pad(char *owner) __asm__("FUN_L06_002d8b98");
 extern GbHit D_L06_001745C0;
 extern Moby *D_L06_0015FFD8;
-extern GbMoby *D_L06_001745D8 __attribute__((section(".data")));
+extern GbMoby *D_L06_001745D8 NOT_SDA;
 extern GbStats l06_gadgebot_command_range_stats __asm__("D_L06_0017EC58");
 extern char *spawn_source_attached_fading_effect_particle(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
 extern char D_L06_00167540[];
@@ -2669,7 +2670,7 @@ void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) {
     *current = best.moby;
 }
 typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
-extern char *D_001413D0 __attribute__((section(".data")));
+extern char *D_001413D0 NOT_SDA;
 extern void trooper_set_knockback(void *, float, float) __asm__("FUN_L03_00250a78");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");

@@ -83,14 +83,14 @@ typedef struct {
     int x5c;
 } C_28e9c8;
 extern E_28e9c8 D_0013E030_28e9c8 __asm__("D_0013E030");
-extern C_28e9c8 D_L00_0016C860_28e9c8 __asm__("D_L00_0016C860") __attribute__((section(".data")));
+extern C_28e9c8 D_L00_0016C860_28e9c8 __asm__("D_L00_0016C860") NOT_SDA;
 extern int D_L00_0015F5D8;
 extern struct {
     int x0, x4, x8;
 } D_L00_00173E00_28e9c8 __asm__("D_L00_00173E00") __attribute__((section(".data")));
-extern unsigned char D_001413F5_28e9c8 __asm__("D_001413F5") __attribute__((section(".data")));
+extern unsigned char D_001413F5_28e9c8 __asm__("D_001413F5") NOT_SDA;
 extern O_28e9c8 *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
-extern unsigned char D_0013D4C6_28e9c8 __asm__("D_0013D4C6") __attribute__((section(".data")));
+extern unsigned char D_0013D4C6_28e9c8 __asm__("D_0013D4C6") NOT_SDA;
 void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -174,7 +174,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     continue_audio_stream_if_ready();
 }
 extern int D_L00_0015F5D8;
-extern short D_0013E05C __attribute__((section(".data")));
+extern short D_0013E05C NOT_SDA;
 void music_pause(int) __asm__("FUN_00216050");
 void sound_update(void) __asm__("FUN_0022ca50");
 void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
@@ -203,7 +203,7 @@ typedef struct {
     s16 h24;
     s16 h26;
 } A_0028ed58;
-extern A_0028ed58 D_0013E030_0028ed58 __asm__("D_0013E030") __attribute__((section(".data")));
+extern A_0028ed58 D_0013E030_0028ed58 __asm__("D_0013E030") NOT_SDA;
 
 typedef struct {
     s32 i0;
@@ -271,7 +271,7 @@ typedef struct {
     s16 x2a;
     s16 x2c;
 } E_eed0;
-extern E_eed0 D_0013E030_eed0 __asm__("D_0013E030") __attribute__((section(".data")));
+extern E_eed0 D_0013E030_eed0 __asm__("D_0013E030") NOT_SDA;
 extern struct {
     int x0, x4, x8_c;
 } D_L00_00173E00_eed0 __asm__("D_L00_00173E00") __attribute__((section(".data")));
@@ -281,7 +281,7 @@ extern struct {
 } D_L00_0016C860_eed0 __asm__("D_L00_0016C860") __attribute__((section(".data")));
 void FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
-extern u8 D_0013DD43 __attribute__((section(".data")));
+extern u8 D_0013DD43 NOT_SDA;
 extern u8 level_14_entry_transition_gate[] __asm__("D_0013D3F0");
 void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
 

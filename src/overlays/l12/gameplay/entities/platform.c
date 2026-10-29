@@ -993,7 +993,7 @@ typedef struct {
 } AnklebiterHit_e3528;
 
 extern f32 D_0015ED6C_e3528 __asm__("D_0015ED6C");
-extern s32 D_001413D0_e3528 __asm__("D_001413D0") __attribute__((section(".data")));
+extern s32 D_001413D0_e3528 __asm__("D_001413D0") NOT_SDA;
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -1785,7 +1785,7 @@ extern void ease_blarg_trooper_height_to_ground(char *) __asm__("FUN_L12_002e87b
 void steer_blarg_trooper_toward_point(struct Moby *moby, float *target, float max_angle, float approach_speed) __asm__("FUN_L12_002e8808");
 
 extern void steer_blarg_trooper_toward_point(struct Moby *, float *, float, float) __asm__("FUN_L12_002e8808");
-extern s32 D_001413D0_e81e0 __asm__("D_001413D0") __attribute__((section(".data")));
+extern s32 D_001413D0_e81e0 __asm__("D_001413D0") NOT_SDA;
 extern void call_for_help_e81e0(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -2144,7 +2144,7 @@ typedef struct {
     struct Moby *moby;   /* 0x20 */
 } BlargTrooperHit_e81e0;
 
-extern s32 D_001413D0_e81e0 __asm__("D_001413D0") __attribute__((section(".data")));
+extern s32 D_001413D0_e81e0 __asm__("D_001413D0") NOT_SDA;
 extern f32 D_0015ED6C_e81e0 __asm__("D_0015ED6C");
 extern f32 D_0015ED70_e81e0 __asm__("D_0015ED70");
 extern s32 tick_countdown_16_e81e0(s16 *) __asm__("FUN_001f9770");
@@ -2418,18 +2418,18 @@ extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern char *spawn_rocket(void *, void *, int, int, float, float, float) __asm__("FUN_L12_002ecce8");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern unsigned char D_001413F4 __attribute__((section(".data")));
-extern int D_L12_00161F00 __attribute__((section(".sdata")));
-extern int D_L12_00161F20 __attribute__((section(".sdata")));
+extern unsigned char D_001413F4 NOT_SDA;
+extern int D_L12_00161F00 MACRO_ADDR;
+extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_001619A0 __attribute__((sda));
 typedef struct { char pad[0x25c]; struct Moby *moby; int count; } Tracking_e9f68;
 extern Tracking_e9f68 D_L12_00167100;
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/audio/voice_pool.h"
 extern unsigned char D_0013E550[];
-extern unsigned char D_0013D4CB __attribute__((section(".data")));
-extern unsigned short D_00141C50 __attribute__((section(".data")));
-extern int D_L12_0015F580_gp __asm__("D_L12_0015F580") __attribute__((section(".sdata")));
+extern unsigned char D_0013D4CB NOT_SDA;
+extern unsigned short D_00141C50 NOT_SDA;
+extern int D_L12_0015F580_gp __asm__("D_L12_0015F580") MACRO_ADDR;
 
 void blarg_helicopter_update(struct Moby *moby) __asm__("FUN_L12_002e9f68");
 void blarg_helicopter_update(struct Moby *moby) {
@@ -2897,7 +2897,7 @@ typedef struct {
     int hidden;
 } L12WatchGlobals;
 
-extern L12WatchGlobals D_0013D5B0_b570 __asm__("D_0013D5B0") __attribute__((section(".data")));
+extern L12WatchGlobals D_0013D5B0_b570 __asm__("D_0013D5B0") NOT_SDA;
 extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern float D_0015ED64_b570 __asm__("D_0015ED64");
 extern void attach_shared_manipulator_to_matching_class_moby(void *) __asm__("FUN_L03_002db480");

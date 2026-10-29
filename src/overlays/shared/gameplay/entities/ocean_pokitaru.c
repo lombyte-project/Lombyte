@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 extern float FUN_001f9b48_b7(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_001f96f8_b7(int) __asm__("FUN_001f96f8");
@@ -509,7 +510,7 @@ extern float FUN_001fa6c0_30a908(int) __asm__("FUN_001fa6c0");
 extern void func_L00_001FDE48_30a908(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
 extern void FUN_001f7d30_30a908(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L11_001677C0_30a908[] __asm__("D_L11_001677C0");
-extern UV_30a908 D_L11_00161E08_30a908[] __asm__("D_L11_00161E08") __attribute__((section(".sdata")));
+extern UV_30a908 D_L11_00161E08_30a908[] __asm__("D_L11_00161E08") MACRO_ADDR;
 
 extern char render_fog_context[] __asm__("D_L11_0016D440");
 extern char ocean_strip_orientation_basis[] __asm__("D_L11_001679D0");
@@ -520,7 +521,7 @@ extern Pos_30a908 l11_ocean_wave_grid_vertex_positions[] __asm__("D_L11_001D9F08
 extern int D_L11_001DA208[];
 extern UV_30a908 l11_ocean_wave_grid_vertex_uvs[] __asm__("D_L11_001DA510");
 extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
-extern float tide_level_macro __asm__("D_L11_00161E18") __attribute__((section(".sdata")));
+extern float tide_level_macro __asm__("D_L11_00161E18") MACRO_ADDR;
 /* Draws the level's water sheet: a fading edge strip, a far quad, and two scrolling layers of grid cells around the camera. */
 void draw_pokitaru_ocean(struct Moby *moby) __asm__("FUN_L11_0030a908");
 
@@ -725,7 +726,7 @@ typedef struct {
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L11_0030a908_b358(void) __asm__("FUN_L11_0030a908");
-extern UV_30b358 wave_offset[] __asm__("D_L11_00161E08") __attribute__((section(".sdata")));
+extern UV_30b358 wave_offset[] __asm__("D_L11_00161E08") MACRO_ADDR;
 extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern char last_camera_pos[4] __asm__("D_L11_00162840") __attribute__((sda)); /* a 16-byte vector; declared small so it is reached through $gp */
 extern float ocean_level __asm__("D_L11_00161E1C");

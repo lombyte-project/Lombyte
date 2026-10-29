@@ -240,7 +240,7 @@ void door_update(struct Moby *door_moby) {
 /* Updates moby 1368: a drone that drifts toward the hero, tags what it hits and sprays sparks until its timer runs out. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EA8F8), where it is exact; names translated to the US level program. */
 
-extern char D_L17_00174740_lui[] __asm__("D_L17_00174740") __attribute__((section(".data")));
+extern char D_L17_00174740_lui[] __asm__("D_L17_00174740") NOT_SDA;
 extern float FUN_001f9b80_q(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_q(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa688_q(float, float) __asm__("FUN_001fa688");
@@ -264,7 +264,7 @@ void mmr_q_q(struct Obj *obj) __asm__("FUN_0020c828");
 extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale,
                                     void *src) __asm__("FUN_L00_00259888");
 
-extern char D_L17_00174760_lui[] __asm__("D_L17_00174760") __attribute__((section(".data")));
+extern char D_L17_00174760_lui[] __asm__("D_L17_00174760") NOT_SDA;
 void update_drone_flight_and_sparks(struct Moby *moby) __asm__("FUN_L17_002e8e08");
 
 void update_drone_flight_and_sparks(struct Moby *moby) {
@@ -777,7 +777,7 @@ extern int select_fighter_jet_target_and_draw_contacts(int, char *, char *, char
 #define B(p, o) (*(unsigned char *)((char *)(p) + (o)))
 #define FLAG    (hero.ship_ammo)
 
-extern char D_L17_001676D0_lui[] __asm__("D_L17_001676D0") __attribute__((section(".data")));
+extern char D_L17_001676D0_lui[] __asm__("D_L17_001676D0") NOT_SDA;
 void update_fighter_jet_target_lock(int ship_moby, char *ship_vars) __asm__("FUN_L17_002eb768");
 
 void update_fighter_jet_target_lock(int ship_moby, char *ship_vars) {
@@ -1124,7 +1124,7 @@ extern char D_L17_00174740[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float D_L17_0016D3F0 __attribute__((section(".data")));
+extern float D_L17_0016D3F0 NOT_SDA;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
@@ -1992,7 +1992,7 @@ void fighter_jet_update(ShipMoby *moby) {
 extern char *D_L17_001600EC;
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern char (*D_L17_001600EC_t)[128] __asm__("D_L17_001600EC") __attribute__((section(".sdata")));
+extern char (*D_L17_001600EC_t)[128] __asm__("D_L17_001600EC") MACRO_ADDR;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
 void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *horizontal_steering_input, float *vertical_steering_input) {
@@ -2389,7 +2389,7 @@ s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
-extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
+extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;
 void robot_dog_update(unsigned char *m) __asm__("FUN_L17_002eeb68");
 void robot_dog_update(unsigned char *robot_dog_moby) {
     Vars1382 *robot_dog_vars;

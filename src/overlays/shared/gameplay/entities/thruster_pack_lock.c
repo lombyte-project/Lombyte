@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 
 
@@ -180,7 +181,7 @@ void thruster_pack_lock_update(Lock_3102C8 *moby)
 /* Builds one GIF packet for a rotated textured sprite and advances the packet pointer. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_003121C0), where it is exact; names translated to the US level program. */
 
-extern int D_L11_001611C0 __attribute__((section(".sdata")));
+extern int D_L11_001611C0 MACRO_ADDR;
 extern unsigned char screen_extent_c[] __asm__("D_0013E500");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");

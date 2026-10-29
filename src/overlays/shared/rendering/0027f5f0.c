@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/quad.h"
+#include "sda.h"
 
 
 
@@ -14,7 +15,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern unsigned char *D_L08_001B29A4 __attribute__((section(".data")));
+extern unsigned char *D_L08_001B29A4 NOT_SDA;
 void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_override) __asm__("FUN_L08_0027f5f0");
 
 void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_override) {

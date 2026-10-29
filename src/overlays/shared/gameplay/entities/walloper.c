@@ -8,6 +8,7 @@
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/overlay/beam_vector.h"
+#include "sda.h"
 extern float D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
 extern float D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
 extern float D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
@@ -37,9 +38,9 @@ extern float primary_beam_vertical_jitter_range_end __asm__("D_L00_001615E8") __
 extern int D_L00_001615F8 __attribute__((sda));
 extern float beam_origin_particle_direction_scale __asm__("D_L00_00161628") __attribute__((sda));
 extern float beam_target_camera_alignment_score_weight __asm__("D_L00_0016162C") __attribute__((sda));
-extern short D_L00_00161658[] __attribute__((section(".sdata")));
-extern short D_L00_00161668[] __attribute__((section(".sdata")));
-extern short D_L00_00161670[] __attribute__((section(".sdata")));
+extern short D_L00_00161658[] MACRO_ADDR;
+extern short D_L00_00161668[] MACRO_ADDR;
+extern short D_L00_00161670[] MACRO_ADDR;
 extern s16 D_L00_00161660;
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -75,7 +76,7 @@ extern int collision_line(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001ef
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_0022da68(int, int, void *);
 extern char D_L00_0015F580_lui[] __asm__("D_L00_0015F580");
-extern char D_L00_0015F580_macro[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
+extern char D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
 extern unsigned char *FUN_L00_00272060(void *, int, float, float, int, int, int, float *, float) __asm__("FUN_L00_00272060");
 
 typedef struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } HitDescriptor;
@@ -640,7 +641,7 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Q_2bb0b0;
 extern unsigned int D_L00_001615F8_gp __asm__("D_L00_001615F8") __attribute__((sda));
-extern float g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern float g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
 extern char D_0013F5E0[];
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -654,8 +655,8 @@ void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern unsigned int l00_beam_anchor_first_pass_vertex_color __asm__("D_L00_00161640") __attribute__((sda));
 extern float beam_anchor_first_pass_base_corner_scale_gp __asm__("D_L00_00161648") __attribute__((sda));
 extern float beam_anchor_second_pass_base_corner_scale_gp __asm__("D_L00_0016164C") __attribute__((sda));
-extern V_2bb0b0 D_L00_001DB560[] __attribute__((section(".data")));
-extern UV_2bb0b0 D_L00_001DB5A0[] __attribute__((section(".data")));
+extern V_2bb0b0 D_L00_001DB560[] NOT_SDA;
+extern UV_2bb0b0 D_L00_001DB5A0[] NOT_SDA;
 void draw_beam_anchor_camera_facing_quads(void *mv) {
     Q_2bb0b0 quad;
     V_2bb0b0 camera_facing_transform[4];
@@ -822,7 +823,7 @@ SparkleArc D_L18_001D0A20[10] = {0};
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/walloper_update_2.h"
 extern float D_L00_00166DC0[];
-extern float D_L00_0017AEBC __attribute__((section(".data")));
+extern float D_L00_0017AEBC NOT_SDA;
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -831,7 +832,7 @@ extern int D_L00_001616CC;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer() __asm__("func_001F9740");
 extern float D_L00_001616A4 __attribute__((sda));
-extern short D_L00_00161660_e[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
+extern short D_L00_00161660_e[] __asm__("D_L00_00161660") MACRO_ADDR;
 short D_L00_001DBED8[10] = {0};
 short D_L01_001DC358[10] = {0};
 short D_L02_001D0958[10] = {0};
@@ -1007,7 +1008,7 @@ void walloper_update(char *walloper_moby) {
     }
     add_draw_callback(FUN_L00_002bbb00_c, walloper_moby);
 }
-extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") __attribute__((section(".sdata")));
+extern f32 D_L00_00161660_f[] __asm__("D_L00_00161660") MACRO_ADDR;
 extern f32 walloper_arc_first_pass_half_width_gp __asm__("D_L00_00161690") __attribute__((sda));
 extern f32 walloper_arc_second_pass_half_width_gp __asm__("D_L00_00161694") __attribute__((sda));
 f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
@@ -1192,7 +1193,7 @@ typedef struct {
     float unk68, unk6C;
     long unk70, tex, unk80, unk88;
 } Q_2bc1a0;
-extern float g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern float g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
 extern char D_0013F5E0[];
 void FUN_001f9a68_2bc1a0(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10_2bc1a0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1210,7 +1211,7 @@ extern float walloper_quad_corner_scale_gp __asm__("D_L00_001616B8") __attribute
 extern int walloper_quad_texture_index_gp __asm__("D_L00_001616C8") __attribute__((sda));
 extern unsigned int l00_walloper_quad_common_base_vertex_color __asm__("D_L00_001616C0") __attribute__((sda));
 extern unsigned int l00_walloper_quad_rare_base_vertex_color __asm__("D_L00_001616C4") __attribute__((sda));
-extern V_2bc1a0 D_L00_001DBB60[] __attribute__((section(".data")));
+extern V_2bc1a0 D_L00_001DBB60[] NOT_SDA;
 void draw_walloper_camera_facing_quad(void *mv) {
     char *moby_bytes = mv;
     Q_2bc1a0 quad;
@@ -1697,16 +1698,16 @@ void morphoray_update(Moby *moby) {
     }
 }
 extern f32 D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
-extern f32 D_L00_001617CC_macro __asm__("D_L00_001617CC") __attribute__((section(".sdata")));
+extern f32 D_L00_001617CC_macro __asm__("D_L00_001617CC") MACRO_ADDR;
 extern s32 D_L00_00161718_gp __asm__("D_L00_00161718") __attribute__((sda));
 extern s32 D_L00_00161720_gp __asm__("D_L00_00161720") __attribute__((sda));
 extern s32 D_L00_00161724_gp __asm__("D_L00_00161724") __attribute__((sda));
-extern float D_L00_001617D0 __attribute__((section(".sdata")));
+extern float D_L00_001617D0 MACRO_ADDR;
 extern s32 D_L00_00161824;
 extern s32 D_L00_00161818;
-extern s32 D_L00_001DBF50 __attribute__((section(".data")));
-extern u128 D_L00_001DBF60_2bcf98 __asm__("D_L00_001DBF60") __attribute__((section(".data")));
-extern s32 D_L00_001DD0D0 __attribute__((section(".data")));
+extern s32 D_L00_001DBF50 NOT_SDA;
+extern u128 D_L00_001DBF60_2bcf98 __asm__("D_L00_001DBF60") NOT_SDA;
+extern s32 D_L00_001DD0D0 NOT_SDA;
 extern void scale_vector_2bcf98(float, void *, void *) __asm__("FUN_001f9a68");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
@@ -1814,16 +1815,16 @@ extern int D_L00_00161750_gp __asm__("D_L00_00161750") __attribute__((sda));
 extern float D_L00_00161758_gp __asm__("D_L00_00161758") __attribute__((sda));
 extern float D_L00_0016175C_gp __asm__("D_L00_0016175C") __attribute__((sda));
 extern float D_L00_00161768_gp __asm__("D_L00_00161768") __attribute__((sda));
-extern signed char D_L00_00161833_2BE3A8[] __asm__("D_L00_00161763") __attribute__((section(".sdata")));
-extern float D_L00_001617CC_macro __asm__("D_L00_001617CC") __attribute__((section(".sdata")));
-extern int D_L00_00161824_macro __asm__("D_L00_00161824") __attribute__((section(".sdata")));
-extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
-extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern int D_L00_001618A8_2BE3A8[3] __asm__("D_L00_001617D8") __attribute__((section(".sdata")));
-extern float D_L00_001618B8_2BE3A8[3] __asm__("D_L00_001617E8") __attribute__((section(".sdata")));
-extern float D_L00_001618C8_2BE3A8[3] __asm__("D_L00_001617F8") __attribute__((section(".sdata")));
-extern float D_L00_001618D8_2BE3A8[3] __asm__("D_L00_00161808") __attribute__((section(".sdata")));
-extern int D_L00_001618E8_2BE3A8[3] __asm__("D_L00_00161818") __attribute__((section(".sdata")));
+extern signed char D_L00_00161833_2BE3A8[] __asm__("D_L00_00161763") MACRO_ADDR;
+extern float D_L00_001617CC_macro __asm__("D_L00_001617CC") MACRO_ADDR;
+extern int D_L00_00161824_macro __asm__("D_L00_00161824") MACRO_ADDR;
+extern float frame_scale __asm__("D_0015ED60") MACRO_ADDR;
+extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
+extern int D_L00_001618A8_2BE3A8[3] __asm__("D_L00_001617D8") MACRO_ADDR;
+extern float D_L00_001618B8_2BE3A8[3] __asm__("D_L00_001617E8") MACRO_ADDR;
+extern float D_L00_001618C8_2BE3A8[3] __asm__("D_L00_001617F8") MACRO_ADDR;
+extern float D_L00_001618D8_2BE3A8[3] __asm__("D_L00_00161808") MACRO_ADDR;
+extern int D_L00_001618E8_2BE3A8[3] __asm__("D_L00_00161818") MACRO_ADDR;
 extern Vec_2BE3A8 D_L00_001DC250_2BE3A8[12] __asm__("D_L00_001DBF50");
 extern Vec_2BE3A8 D_L00_001DC260_2BE3A8[12] __asm__("D_L00_001DBF60");
 extern Vec_2BE3A8 D_L00_001DC320_2BE3A8[12] __asm__("D_L00_001DC020");
@@ -1850,7 +1851,7 @@ Vec_2BE3A8 D_L18_001D1020[12][20] = {0};
 extern Vec_2BE3A8 D_L00_001DD3A0_2BE3A8[3] __asm__("D_L00_001DD0A0");
 extern Vec_2BE3A8 D_L00_001DD3D0_2BE3A8[3] __asm__("D_L00_001DD0D0");
 extern Vec_2BE3A8 D_L00_00173F60_2BE3A8 __asm__("D_L00_00173E60");
-extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
+extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") MACRO_ADDR;
 #include "rnc/data_labels.h"
 extern void func_L00_002BE2A0_2BE3A8(void) __asm__("FUN_L00_002bcf98");
 extern float func_L00_0025F368_2BE3A8(float) __asm__("FUN_L00_0025e310");
@@ -1882,7 +1883,7 @@ extern void func_L00_002767B0_2BE3A8(void *, int, int, int, int, void *, struct 
 extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/update_beam_ring_rail_and_pulse_effects.h"
-extern float D_L00_001617D0 __attribute__((section(".sdata")));
+extern float D_L00_001617D0 MACRO_ADDR;
 extern Tab_2BE3A8 l00_beam_origin_particle_color_palette __asm__("D_L00_001E9AB0");
 void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) __asm__("FUN_L00_002bd0a0");
 
@@ -2104,7 +2105,7 @@ typedef struct {
     float uv[8];
     long unk70, tex, unk80, unk88;
 } Quad;
-extern u8 D_0013E535 __attribute__((section(".data")));
+extern u8 D_0013E535 NOT_SDA;
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects_4.h"
 extern float D_L00_00161718 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects_3.h"
@@ -2113,11 +2114,11 @@ extern float D_L00_00161724 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects_2.h"
 extern int D_L00_00161798 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects.h"
-extern float g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern OvlVec4 D_L00_001DC020[] __attribute__((section(".data")));
-extern OvlVec4 D_L00_001DC0E0[] __attribute__((section(".data")));
-extern OvlQuad D_L00_001DC060[][20] __attribute__((section(".data")));
-extern OvlQuad D_L00_001DC1A0[][20] __attribute__((section(".data")));
+extern float g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
+extern OvlVec4 D_L00_001DC020[] NOT_SDA;
+extern OvlVec4 D_L00_001DC0E0[] NOT_SDA;
+extern OvlQuad D_L00_001DC060[][20] NOT_SDA;
+extern OvlQuad D_L00_001DC1A0[][20] NOT_SDA;
 void draw_scrolling_ribbon_colored(void *, int, int, float, float, float, int, int) __asm__("FUN_L00_002be078");
 void draw_beam_pulse_quads(void *unused) __asm__("FUN_L00_002be650");
 
@@ -2323,10 +2324,10 @@ void draw_scrolling_ribbon_colored(void *mv, int ribbon_first_pass_alpha, int ri
 #include "rnc/rendering/geometry_quad.h"
 extern int beam_pulse_default_rgb_gp __asm__("D_L00_00161760") __attribute__((sda));
 extern int D_L00_00161764 __attribute__((sda));
-extern float D_L00_001617E8_macro[3] __asm__("D_L00_001617E8") __attribute__((section(".sdata")));
-extern float D_L00_00161808_macro[3] __asm__("D_L00_00161808") __attribute__((section(".sdata")));
-extern int D_L00_00161818_macro[3] __asm__("D_L00_00161818") __attribute__((section(".sdata")));
-extern OvlVec4 D_L00_001DBF20[] __attribute__((section(".data")));
+extern float D_L00_001617E8_macro[3] __asm__("D_L00_001617E8") MACRO_ADDR;
+extern float D_L00_00161808_macro[3] __asm__("D_L00_00161808") MACRO_ADDR;
+extern int D_L00_00161818_macro[3] __asm__("D_L00_00161818") MACRO_ADDR;
+extern OvlVec4 D_L00_001DBF20[] NOT_SDA;
 
 void draw_beam_pulse_quads(void *unused) {
     struct GeometryQuad quad;
@@ -2387,8 +2388,8 @@ typedef struct {
     float unk68, unk6C;
     long unk70, tex, unk80, unk88;
 } Q_2be890;
-extern float g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern V_2be890 D_L00_001DBF60_2be890 __asm__("D_L00_001DBF60") __attribute__((section(".data")));
+extern float g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
+extern V_2be890 D_L00_001DBF60_2be890 __asm__("D_L00_001DBF60") NOT_SDA;
 extern char D_0013F5E0[];
 void FUN_001f9a68_2be890(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10_2be890(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2563,7 +2564,7 @@ typedef struct {
     u8 pad2[0xC];
     float f28;
 } S173E40_2bec80;
-extern int D_L00_00173E40[] __attribute__((section(".data")));
+extern int D_L00_00173E40[] NOT_SDA;
 int FUN_001efa68_002bec80(Vec4_2bec80 *, Vec4_2bec80 *, int, void *, int) __asm__("FUN_001efa68");
 unsigned int FUN_001f0b58_002bec80(void) __asm__("FUN_001f0b58");
 float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby) __asm__("FUN_L00_002bec80");
@@ -2604,7 +2605,7 @@ float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby)
     return 0.0f;
 }
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
-extern char D_0013F3D0[] __attribute__((section(".data")));
+extern char D_0013F3D0[] NOT_SDA;
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -3116,7 +3117,7 @@ unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initi
     return spawned_moby;
 }
 #include "rnc/math/vector.h"
-extern char *D_L00_00173E58 __attribute__((section(".data")));
+extern char *D_L00_00173E58 NOT_SDA;
 int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
 unsigned int collision_hit_material(void) __asm__("FUN_001f0b58");
 int compute_moby_state_from_vertical_probe(unsigned char *moby) __asm__("FUN_L00_002bfec8");

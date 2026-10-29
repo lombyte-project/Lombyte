@@ -8,6 +8,7 @@
 #include "rnc/overlay/quad.h"
 
 #include "rnc/overlay/shared/gameplay/entities/vendor_orb_globals.h"
+#include "sda.h"
 extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
 float random_angle_radians(void) __asm__("FUN_00213308");
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
@@ -119,8 +120,8 @@ typedef struct {
     Vec_2E0E50 v70;
 } Node_2E0E50;
 
-extern char D_0013F350[] __attribute__((section(".data")));
-extern char D_L00_00166DC0[] __attribute__((section(".data")));
+extern char D_0013F350[] NOT_SDA;
+extern char D_L00_00166DC0[] NOT_SDA;
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
@@ -144,15 +145,15 @@ void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002e
 void FUN_L00_002eac18_c(int mode) __asm__("FUN_L00_002eac18");
 extern char D_0013E633_2E0E50[] __asm__("D_0013F350");
 extern char D_0013A5E0_2E0E50[] __asm__("D_0013CAE0");
-extern int D_L00_0015F6A8_2E0E50 __asm__("D_L00_0015F5C4") __attribute__((section(".sdata")));
-extern int D_L00_0015F404_macro __asm__("D_L00_0015F404") __attribute__((section(".sdata")));
-extern char *D_L00_00160098_2E0E50 __asm__("D_L00_0015FFD8") __attribute__((section(".sdata")));
-extern char *D_L00_001601AC_2E0E50 __asm__("D_L00_001600EC") __attribute__((section(".sdata")));
-extern float fade_level __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
-extern float D_L00_00161C84_2E0E50 __asm__("D_L00_00161BB4") __attribute__((section(".sdata")));
-extern float D_0015EE6C_2E0E50 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
-extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern int D_L00_0015F6A8_2E0E50 __asm__("D_L00_0015F5C4") MACRO_ADDR;
+extern int D_L00_0015F404_macro __asm__("D_L00_0015F404") MACRO_ADDR;
+extern char *D_L00_00160098_2E0E50 __asm__("D_L00_0015FFD8") MACRO_ADDR;
+extern char *D_L00_001601AC_2E0E50 __asm__("D_L00_001600EC") MACRO_ADDR;
+extern float fade_level __asm__("D_L00_0015F3FC") MACRO_ADDR;
+extern float D_L00_00161C84_2E0E50 __asm__("D_L00_00161BB4") MACRO_ADDR;
+extern float D_0015EE6C_2E0E50 __asm__("D_0015ED6C") MACRO_ADDR;
+extern float frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
+extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern char D_L00_00166EC0_2E0E50[] __asm__("D_L00_00166DC0");
 extern void func_L00_002E1660_2E0E50(Moby *) __asm__("FUN_L00_002e01b0");
 extern int func_0022ED80_2E0E50(int, int, Moby *) __asm__("FUN_0022da68");
@@ -497,7 +498,7 @@ typedef struct {
     u8 pad[0x454];
     u8 arr[1];
 } T_2e03a0_2e03a0;
-extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
+extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern u8 D_0014C050_2e03a0[] __asm__("D_0014C050");
 extern s32 D_00141410_2e03a0[] __asm__("D_00141410");
 extern u8 item_available[] __asm__("D_0013D4C0");
@@ -599,7 +600,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
         break;
     }
 }
-extern char D_L00_00166DC0[] __attribute__((section(".data")));
+extern char D_L00_00166DC0[] NOT_SDA;
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vscl_2e0788(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -656,16 +657,16 @@ void emit_moby_color_cycling_particles(unsigned char *moby) {
     }
 }
 typedef int s32_2e1f28;
-extern s32_2e1f28 D_BF8_2e1f28[] __asm__("D_L00_00161BF8") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_C08_2e1f28[] __asm__("D_L00_00161C08") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_C18_2e1f28[] __asm__("D_L00_00161C18") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_C28_2e1f28[] __asm__("D_L00_00161C28") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_C38_2e1f28[] __asm__("D_L00_00161C38") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_C48_2e1f28[] __asm__("D_L00_00161C48") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_C58_2e1f28[] __asm__("D_L00_00161C58") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_C68_2e1f28[] __asm__("D_L00_00161C68") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_C78_2e1f28[] __asm__("D_L00_00161C78") __attribute__((section(".sdata")));
-extern s32_2e1f28 D_C88_2e1f28[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
+extern s32_2e1f28 D_BF8_2e1f28[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern s32_2e1f28 D_C08_2e1f28[] __asm__("D_L00_00161C08") MACRO_ADDR;
+extern s32_2e1f28 D_C18_2e1f28[] __asm__("D_L00_00161C18") MACRO_ADDR;
+extern s32_2e1f28 D_C28_2e1f28[] __asm__("D_L00_00161C28") MACRO_ADDR;
+extern s32_2e1f28 D_C38_2e1f28[] __asm__("D_L00_00161C38") MACRO_ADDR;
+extern s32_2e1f28 D_C48_2e1f28[] __asm__("D_L00_00161C48") MACRO_ADDR;
+extern s32_2e1f28 D_C58_2e1f28[] __asm__("D_L00_00161C58") MACRO_ADDR;
+extern s32_2e1f28 D_C68_2e1f28[] __asm__("D_L00_00161C68") MACRO_ADDR;
+extern s32_2e1f28 D_C78_2e1f28[] __asm__("D_L00_00161C78") MACRO_ADDR;
+extern s32_2e1f28 D_C88_2e1f28[] __asm__("D_L00_00161C88") MACRO_ADDR;
 s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 endpoint_effect_flags, s32_2e1f28 endpoint_spark_tag_mode) __asm__("FUN_L00_002e1f28");
 
 s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) __asm__("FUN_L00_002e1f28");
@@ -694,10 +695,10 @@ s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 endpoint_effect_flags, s
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E34F0), where it is exact; names translated to the US level program. */
 
-extern s32 D_L00_00161BF8_c[] __asm__("D_L00_00161BF8") __attribute__((section(".sdata")));
-extern s32 D_L00_00161C38_c[] __asm__("D_L00_00161C38") __attribute__((section(".sdata")));
-extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") __attribute__((section(".sdata")));
-extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
+extern s32 D_L00_00161BF8_c[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern s32 D_L00_00161C38_c[] __asm__("D_L00_00161C38") MACRO_ADDR;
+extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") MACRO_ADDR;
+extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") MACRO_ADDR;
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 int release_beam_slot_by_id(int id) __asm__("FUN_L00_002e2040");
@@ -823,7 +824,7 @@ typedef struct {
 } T_e3388;
 
 extern Pane_2e3fa0 D_L00_001E6E40[];
-extern char D_L00_0015F580[] __attribute__((section(".sdata")));
+extern char D_L00_0015F580[] MACRO_ADDR;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -852,16 +853,16 @@ extern Q_2E3700 D_L00_001E7160_2E3700[] __asm__("D_L00_001E6E10");
 extern Pt_2E3700 D_L00_001E7190_2E3700[][20] __asm__("D_L00_001E6E40");
 extern Snd_2E3700 D_L00_001803C0_2E3700[] __asm__("D_L00_001802C0");
 extern char D_0013E633_2E3700[] __asm__("D_0013F5E0");
-extern char D_L00_0015F660_2E3700[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
-extern int D_L00_00161CC8_2E3700[] __asm__("D_L00_00161BF8") __attribute__((section(".sdata")));
-extern float D_L00_00161CD8_2E3700[] __asm__("D_L00_00161C08") __attribute__((section(".sdata")));
-extern float D_L00_00161CE8_2E3700[] __asm__("D_L00_00161C18") __attribute__((section(".sdata")));
-extern float D_L00_00161CF8_2E3700[] __asm__("D_L00_00161C28") __attribute__((section(".sdata")));
-extern int D_L00_00161D08_2E3700[] __asm__("D_L00_00161C38") __attribute__((section(".sdata")));
-extern int D_L00_00161D18_2E3700[] __asm__("D_L00_00161C48") __attribute__((section(".sdata")));
-extern int D_L00_00161D28_2E3700[] __asm__("D_L00_00161C58") __attribute__((section(".sdata")));
-extern int D_L00_00161D38_2E3700[] __asm__("D_L00_00161C68") __attribute__((section(".sdata")));
-extern int D_L00_00161D58_2E3700[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
+extern char D_L00_0015F660_2E3700[] __asm__("D_L00_0015F580") MACRO_ADDR;
+extern int D_L00_00161CC8_2E3700[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern float D_L00_00161CD8_2E3700[] __asm__("D_L00_00161C08") MACRO_ADDR;
+extern float D_L00_00161CE8_2E3700[] __asm__("D_L00_00161C18") MACRO_ADDR;
+extern float D_L00_00161CF8_2E3700[] __asm__("D_L00_00161C28") MACRO_ADDR;
+extern int D_L00_00161D08_2E3700[] __asm__("D_L00_00161C38") MACRO_ADDR;
+extern int D_L00_00161D18_2E3700[] __asm__("D_L00_00161C48") MACRO_ADDR;
+extern int D_L00_00161D28_2E3700[] __asm__("D_L00_00161C58") MACRO_ADDR;
+extern int D_L00_00161D38_2E3700[] __asm__("D_L00_00161C68") MACRO_ADDR;
+extern int D_L00_00161D58_2E3700[] __asm__("D_L00_00161C88") MACRO_ADDR;
 extern float D_L00_00161BF0_gp __asm__("D_L00_00161BF0") __attribute__((sda));
 extern void func_001F9BF0_2E3700(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -1047,9 +1048,9 @@ void update_slot_panes_and_effects(int unused, int beam) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E3FA0), where it is exact; names translated to the US level program. */
 
 extern Pane_2e3fa0 D_L00_001E6E40[];
-extern float D_L00_00161C78_f[] __asm__("D_L00_00161C78") __attribute__((section(".sdata")));
-extern int D_L00_00161BF8_c2[] __asm__("D_L00_00161BF8") __attribute__((section(".sdata")));
-extern int D_L00_00161C88_c2[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
+extern float D_L00_00161C78_f[] __asm__("D_L00_00161C78") MACRO_ADDR;
+extern int D_L00_00161BF8_c2[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern int D_L00_00161C88_c2[] __asm__("D_L00_00161C88") MACRO_ADDR;
 extern void draw_beam_strand_with_glow(int, int, void *, int, int, int) __asm__("FUN_L00_002e2c88");
 extern void FUN_L00_002e3388_c(int, int) __asm__("FUN_L00_002e3388");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
@@ -1351,7 +1352,7 @@ typedef struct {
     int i70;
     float f74;
 } D_2e3a88;
-extern int *toad_paths[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
+extern int *toad_paths[] __asm__("D_L00_001B04B0") NOT_SDA;
 extern float D_0015ED6C_2e3a88 __asm__("D_0015ED6C");
 void FUN_0020c828_2e3a88(void *) __asm__("FUN_0020c828");
 float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -1427,7 +1428,7 @@ void red_plant_update(unsigned char *moby) {
 /* Update of an effect-group moby: state machine over its life, then it steers a sprite along its path and bounces it off surfaces. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5238), where it is exact; names translated to the US level program. */
 
-extern char D_L00_0015F580[] __attribute__((section(".sdata")));
+extern char D_L00_0015F580[] MACRO_ADDR;
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -1452,7 +1453,7 @@ extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int func_L00_001F10E0_s(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-extern float coll_hit_normal[] __asm__("D_L00_00173E80") __attribute__((section(".data")));
+extern float coll_hit_normal[] __asm__("D_L00_00173E80") NOT_SDA;
 void robot_arm_update(char *m) __asm__("FUN_L00_002e3d88");
 void robot_arm_update(char *moby) {
     enum {
@@ -1597,8 +1598,8 @@ typedef struct {
     u8 p2[0x2080 - 0x30E];
     void *p2080;
 } G_002e42c0;
-extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
-extern u8 D_L00_00166E10_002e42c0[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
+extern struct Hero hero_data __asm__("D_0013F350") NOT_SDA;
+extern u8 D_L00_00166E10_002e42c0[] __asm__("D_L00_00166E10") NOT_SDA;
 extern OvlQuad D_L00_00173E60_002e42c0 __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
 void FUN_L00_002e4168_002e42c0(s32, OvlQuad *) __asm__("FUN_L00_002e4168");
@@ -1638,7 +1639,7 @@ s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out, s32 flag) {
     }
 }
 typedef float V4_2e4430[4] __attribute__((aligned(16)));
-extern char D_L00_00166E10_002e4430[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
+extern char D_L00_00166E10_002e4430[] __asm__("D_L00_00166E10") NOT_SDA;
 void FUN_001f9a68_002e4430(void *, void *, float) __asm__("FUN_001f9a68");
 void FUN_001f9a10_002e4430(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a28_002e4430(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -1807,10 +1808,10 @@ typedef struct {
     unsigned char hit;
 } CamAttach;
 
-extern int D_001413D4 __attribute__((section(".data")));
-extern int D_001413DC __attribute__((section(".data")));
+extern int D_001413D4 NOT_SDA;
+extern int D_001413DC NOT_SDA;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L00_00166EEC __attribute__((section(".data")));
+extern float D_L00_00166EEC NOT_SDA;
 extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
@@ -2504,7 +2505,7 @@ int try_select_follow_camera_volume(int candidate_object, int unused) {
     }
     return 0;
 }
-extern u8 *vd_2e8450 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern u8 *vd_2e8450 __asm__("D_L00_00166E00") NOT_SDA;
 /* Sets a flag and floats a/b at +0x130 of D_L00_00166E00+0x70; f also stores a at +0x58. */
 void follow_camera_set_distance(s32 f, f32 a, f32 b) __asm__("FUN_L00_002e8450");
 void follow_camera_set_distance(s32 copy_distance_to_secondary_slot, f32 distance, f32 distance_override_companion_value) {
@@ -2525,7 +2526,7 @@ void FUN_L00_002e8490(float camera_state_value) {
         *(float *)(*(char **)(current_camera + 0x70) + 0x22C) = camera_state_value;
     }
 }
-extern char *D_L00_00166E00_002e84b8 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern char *D_L00_00166E00_002e84b8 __asm__("D_L00_00166E00") NOT_SDA;
 /* Sets a flag and two floats at +0x130 of D_L00_00166E00+0x70 while its short at 0x86 is 0. */
 void follow_camera_set_height(float a, float b) __asm__("FUN_L00_002e84b8");
 void follow_camera_set_height(float height, float height_override_companion_value) {
@@ -2537,8 +2538,8 @@ void follow_camera_set_height(float height, float height_override_companion_valu
         *(float *)(camera_height_state + 0x54) = height_override_companion_value;
     }
 }
-extern char *D_L00_00166E00_c3 __asm__("D_L00_00166E00") __attribute__((section(".data")));
-extern char *D_L00_00168FC0 __attribute__((section(".data")));
+extern char *D_L00_00166E00_c3 __asm__("D_L00_00166E00") NOT_SDA;
+extern char *D_L00_00168FC0 NOT_SDA;
 /* Sets a flag and floats +0xF4/+0xF8 of D_L00_00166E00+0x70; add offsets a by 00168FC0+0xF0. */
 void follow_camera_set_offset_scale(int add, float a, float b) __asm__("FUN_L00_002e84f0");
 void follow_camera_set_offset_scale(int add, float offset_scale, float offset_scale_companion_value) {
@@ -2587,7 +2588,7 @@ void follow_camera_set_lateral_spring(float lateral_spring_value, float lateral_
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E9AD0), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_00166E00_002e8620 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern char *D_L00_00166E00_002e8620 __asm__("D_L00_00166E00") NOT_SDA;
 
 /* Sets the short at +0x226 of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
 void FUN_L00_002e8620(void);
@@ -2597,7 +2598,7 @@ void FUN_L00_002e8620(void) {
         *(short *)(*(char **)(current_camera + 0x70) + 0x226) = 1;
     }
 }
-extern u8 *vd_2e8648 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern u8 *vd_2e8648 __asm__("D_L00_00166E00") NOT_SDA;
 /* Sets the byte at +0x116 of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
 void follow_camera_start_slide(void) __asm__("FUN_L00_002e8648");
 void follow_camera_start_slide(void) {
@@ -2606,7 +2607,7 @@ void follow_camera_start_slide(void) {
         *(u8 *)(*(u8 **)(current_camera + 0x70) + 0x116) = 1;
     }
 }
-extern char *D_L00_00166E00_002e8680 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern char *D_L00_00166E00_002e8680 __asm__("D_L00_00166E00") NOT_SDA;
 void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
 
 void set_follow_camera_blend_output_flags(void) {
@@ -2685,7 +2686,7 @@ float update_follow_camera_angle_blend_from_position(char *camera, void *target_
     FUN_001f9a28_c2(focus_to_target_direction, target_position, *(char **)(camera + 0x70) + 0x40);
     return update_follow_camera_angle_blend_from_direction(camera, focus_to_target_direction, x);
 }
-extern char *D_L00_00166E00_002e8918 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern char *D_L00_00166E00_002e8918 __asm__("D_L00_00166E00") NOT_SDA;
 void FUN_L00_002e86b0_002e8918(char *, char *, float) __asm__("FUN_L00_002e86b0");
 /* For non-zero x: stores x at +0x1BC of D_L00_00166E00+0x70 and calls FUN_L00_002e86b0. */
 void set_follow_camera_angle_blend_from_direction(char *input_direction, float x, float y) __asm__("FUN_L00_002e8918");
@@ -2697,7 +2698,7 @@ void set_follow_camera_angle_blend_from_direction(char *input_direction, float x
         FUN_L00_002e86b0_002e8918(current_camera, input_direction, y);
     }
 }
-extern char *D_L00_00166E00_002e8970 __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern char *D_L00_00166E00_002e8970 __asm__("D_L00_00166E00") NOT_SDA;
 void FUN_L00_002e88c8_002e8970(char *, char *, float) __asm__("FUN_L00_002e88c8");
 /* Stores x at +0x1BC of D_L00_00166E00+0x70 and calls FUN_L00_002e88c8 with a and y. */
 void set_follow_camera_angle_blend_from_position(char *target_position, float x, float y) __asm__("FUN_L00_002e8970");

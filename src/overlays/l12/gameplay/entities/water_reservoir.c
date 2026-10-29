@@ -8,6 +8,7 @@
 #include "rnc/input/pad_globals.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -241,8 +242,8 @@ typedef struct {
 } ShotHit_ece00;
 
 typedef struct { char pad0[0x18]; int moby; } ShotColl_ece00;
-extern ShotColl_ece00 D_L12_001742C0_ece00 __asm__("D_L12_001742C0") __attribute__((section(".data")));
-extern int camera_secondary_mode __asm__("D_001413D4") __attribute__((section(".data")));
+extern ShotColl_ece00 D_L12_001742C0_ece00 __asm__("D_L12_001742C0") NOT_SDA;
+extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern char *FUN_L00_0025a420_ece00(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void add_vector_ece00(void *, void *, void *) __asm__("FUN_001f9a10");

@@ -75,7 +75,7 @@ void FUN_L00_00269b70_2c3440(float *, unsigned char, unsigned char, unsigned cha
                              int) __asm__("FUN_L00_00269b70");
 void FUN_L00_0025f800_2c3440(void *, void *) __asm__("FUN_L00_0025f800");
 void FUN_0020c828_2c3440(void *) __asm__("FUN_0020c828");
-extern s16 D_L00_001B0830_lui[] __asm__("D_L00_001B0830") __attribute__((section(".data")));
+extern s16 D_L00_001B0830_lui[] __asm__("D_L00_001B0830") NOT_SDA;
 void destroy_decoy_with_particles(unsigned char *moby) __asm__("FUN_L00_002c3440");
 
 void destroy_decoy_with_particles(unsigned char *moby) {
@@ -248,7 +248,7 @@ typedef struct {
     short h36;
     char pad2[0x14];
 } E_2c5be8;
-extern E_2c5be8 D_179AC0_2c5be8[] __asm__("D_L00_00179AC0") __attribute__((section(".data")));
+extern E_2c5be8 D_179AC0_2c5be8[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern float D_0015ED60_2c5be8 __asm__("D_0015ED60");
 extern float D_0015ED6C_2c5be8 __asm__("D_0015ED6C");
 extern int D_15F5CC_2c5be8 __asm__("D_L00_0015F5CC");
@@ -317,7 +317,7 @@ typedef struct {
     char *x14;
     float x18, x1c, x20;
 } Vars_2c5dc8;
-extern V_2c5dc8 D_L00_00166DC0_2c5dc8 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern V_2c5dc8 D_L00_00166DC0_2c5dc8 __asm__("D_L00_00166DC0") NOT_SDA;
 long get_effect_texture(int) __asm__("FUN_001f44b8");
 void pos_2c5dc8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 void sub_2c5dc8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -436,7 +436,7 @@ int FUN_001f96f8_2c7070(int) __asm__("FUN_001f96f8");
 void FUN_00212f90_2c7070(void *, int, int, int) __asm__("FUN_00212f90");
 void FUN_0020c828_2c7070(void *) __asm__("FUN_0020c828");
 void FUN_0020e098_2c7070(void *) __asm__("FUN_0020e098");
-extern unsigned char D_001413FF __attribute__((section(".data")));
+extern unsigned char D_001413FF NOT_SDA;
 void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
 void swingshot_hook_update(unsigned char *hook_moby) {
     enum {
@@ -537,7 +537,7 @@ typedef union {
     f32 f[4];
     s32 i[4];
 } V2c7320;
-extern s32 pad_held[] __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern s32 pad_held[] __asm__("D_0013CAE0") NOT_SDA;
 extern f32 D_0015ED6C_2c7320 __asm__("D_0015ED6C");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void sub_2c7320(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -671,7 +671,7 @@ typedef struct {
 } S13F350_2c82f0;
 extern S13F350_2c82f0 D_0013F350_002c82f0 __asm__("D_0013F350");
 extern float D_0015ED70_002c82f0 __asm__("D_0015ED70");
-extern char collision_hit_point[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern char collision_hit_point[] __asm__("D_L00_00173E60") NOT_SDA;
 void *FUN_L00_002603d0_002c82f0(void *) __asm__("FUN_L00_002603d0");
 void FUN_001f9a10_002c82f0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a68_002c82f0(void *, void *, float) __asm__("FUN_001f9a68");
@@ -742,7 +742,7 @@ typedef struct {
     int f1F08; char pad1F0C[4]; DoomBotJump config;
     char pad1F50[0x130]; struct Moby *moby;
 } DoomBotParams;
-extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 extern char D_L00_00177F00[],D_L00_001E9B48[],D_L00_001E9B70[];
 extern s32 D_L00_0015F5C4;
 extern int find_moby_hit(void *,int,int) __asm__("FUN_L00_0025a420");
@@ -1138,7 +1138,7 @@ Contact:
         moby->pos.z<2.0f || moby->pos.z>1021.0f) mark_moby_for_removal(moby);
     return;
 }
-extern float D_L00_00173E68_2c1778 __asm__("D_L00_00173E68") __attribute__((section(".data")));
+extern float D_L00_00173E68_2c1778 __asm__("D_L00_00173E68") NOT_SDA;
 extern int D_L00_0015F5CC_2c1778[1] __asm__("D_L00_0015F5CC");
 void FUN_00213508_2c1778(void *, int, float) __asm__("FUN_00213508");
 float FUN_001fa580_2c1778(float, float) __asm__("FUN_001fa580");
@@ -1205,14 +1205,14 @@ typedef struct {
 extern DeliveryStats_2c1ad0 D_00141680_2c1ad0 __asm__("D_00141680");
 extern u8 D_0013E531;
 extern f32 D_0015ED68;
-extern f32 D_0015ED6C __attribute__((section(".sdata")));
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern f32 D_0015ED6C MACRO_ADDR;
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern s32 D_0015EEA4;
-extern u32 D_0013CAE4 __attribute__((section(".data")));
-extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
-extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")__attribute__((section(".data")));
+extern u32 D_0013CAE4 NOT_SDA;
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
+extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") NOT_SDA;
+extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") NOT_SDA;
+extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")NOT_SDA;
 extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
 extern struct Moby *FUN_L00_002a9ed0(void *, void *, void *);
 extern void append_unique_moby_index(void *, void *, int) __asm__("FUN_L00_0025f780");
@@ -1255,12 +1255,12 @@ extern CollisionHit coll_hit __asm__("D_L00_00173E40");
 extern Vec4 D_L00_00166DC0;
 extern char D_L00_00166C80[];
 extern short D_L00_001B07B0[];
-extern f32 frame_scale_inv_macro __asm__("D_0015ED68") __attribute__((section(".sdata")));
-extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
-extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
-extern s32 D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
-extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern f32 frame_scale_inv_macro __asm__("D_0015ED68") MACRO_ADDR;
+extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
+extern s32 D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
+extern u32 D_0013CAE4 NOT_SDA;
 extern void FUN_L00_0024f7c8(void *, int, void *);
 /* Float arguments first: the order they are evaluated in gives retail's registers. */
 extern void FUN_L00_002c1928_f(f32, f32, f32, f32 *, f32 *, f32 *) __asm__("FUN_L00_002c1928");
@@ -1465,7 +1465,7 @@ typedef union {
     f32 f[4];
     s32 i[4];
 } V2c2488;
-extern s32 D_0013CAE0[] __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern s32 D_0013CAE0[] __asm__("D_0013CAE0") NOT_SDA;
 extern u8 bomb_glove_aimed_range_modifier[] __asm__("D_0013E52A");
 extern f32 D_0015ED6C __asm__("D_0015ED6C");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -1537,21 +1537,21 @@ typedef struct {
     u32 levels;
 } DeliveryStats_2c26c8;
 extern DeliveryStats_2c26c8 D_00141680_2c26c8 __asm__("D_00141680");
-extern struct Moby *D_L00_001ABA00_2c26c8[] __asm__("D_L00_001ABA00") __attribute__((section(".data")));
+extern struct Moby *D_L00_001ABA00_2c26c8[] __asm__("D_L00_001ABA00") NOT_SDA;
 extern u8 *FUN_002141f8_2c26c8(struct Moby *) __asm__("FUN_002141f8");
 #include "rnc/input/pad_state.h"
 extern struct Moby *FUN_L00_002ace70(struct Moby *, void *);
 extern void launch_bomb(void *, struct Moby *, void *) __asm__("FUN_L00_002acfd8");
 extern u8 D_0013E531;
 extern f32 D_0015ED68;
-extern f32 D_0015ED6C __attribute__((section(".sdata")));
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern f32 D_0015ED6C MACRO_ADDR;
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern s32 D_0015EEA4;
-extern u32 D_0013CAE4 __attribute__((section(".data")));
-extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
-extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")__attribute__((section(".data")));
+extern u32 D_0013CAE4 NOT_SDA;
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
+extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") NOT_SDA;
+extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") NOT_SDA;
+extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")NOT_SDA;
 extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
 extern struct Moby *FUN_L00_002a9ed0(void *, void *, void *);
 extern void append_unique_moby_index(void *, void *, int) __asm__("FUN_L00_0025f780");
@@ -1770,7 +1770,7 @@ void bomb_glove_update(struct Moby *moby) {
 }
 extern u8 D_0013E539;
 extern s32 moby_table __asm__("D_L00_0015FFD8");
-extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
+extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")NOT_SDA;
 extern f32 FUN_002132a8_2c35c0(f32, f32) __asm__("FUN_002132a8");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
@@ -1917,12 +1917,12 @@ typedef struct {
 } ThrowVars;
 
 extern s32 D_L00_0015F5C4;                          /* nonzero: no throws */
-extern f32 D_0015ED6C __attribute__((section(".sdata")));   /* frame-rate scale */
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
-extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern f32 D_0015ED6C MACRO_ADDR;   /* frame-rate scale */
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* coll_hit's normal as a whole quadword (CollisionHit names only x/y/z) */
-extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") __attribute__((section(".data")));
-extern Vec4 D_L00_00166DC0 __attribute__((section(".data")));
+extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") NOT_SDA;
+extern Vec4 D_L00_00166DC0 NOT_SDA;
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");                        /* cos */
@@ -2393,9 +2393,9 @@ void decoy_update(char *moby) {
         moby[0x20] = 0;
     }
 }
-extern int D_L00_0015F5CC_2c53c0 __asm__("D_L00_0015F5CC") __attribute__((section(".sdata")));
-extern float D_0015ED60_2c53c0 __asm__("D_0015ED60") __attribute__((section(".sdata")));
-extern float D_0015ED6C_2c53c0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern int D_L00_0015F5CC_2c53c0 __asm__("D_L00_0015F5CC") MACRO_ADDR;
+extern float D_0015ED60_2c53c0 __asm__("D_0015ED60") MACRO_ADDR;
+extern float D_0015ED6C_2c53c0 __asm__("D_0015ED6C") MACRO_ADDR;
 extern int FUN_001f96f8_2c53c0(int) __asm__("FUN_001f96f8");
 extern float FUN_001f99c0_2c53c0(float) __asm__("FUN_001f99c0");
 extern void FUN_001f9a10_2c53c0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -2420,7 +2420,7 @@ typedef struct {
 extern char item_defs[] __asm__("D_L00_00179AC0");
 extern FxVec D_L00_00173E70_2c53c0 __asm__("D_L00_00173E70");
 extern FxVec D_L00_00173E60_2c53c0 __asm__("D_L00_00173E60");
-extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int FUN_001f9740_2c53c0(int *) __asm__("FUN_001f9740");
 extern int FUN_L00_001f0d60_2c53c0(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_001efa68_2c53c0(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -2445,7 +2445,7 @@ typedef struct {
     float resting_height;
 } AmmoPickup_2c53c0;
 
-extern int D_L00_00161838_macro __asm__("D_L00_00161838") __attribute__((section(".sdata")));
+extern int D_L00_00161838_macro __asm__("D_L00_00161838") MACRO_ADDR;
 /* Update ammunition pickup physics, collection, animation and scale.
    Animation states share one stack value; index reloads follow calls. */
 void devestator_ammo_update(struct Moby *m) __asm__("FUN_L00_002c53c0");
@@ -2986,7 +2986,7 @@ extern s32 D_00140400_2c6158 __asm__("D_00140400");
 extern s32 D_0013FCC8_2c6158 __asm__("D_0013FCC8");
 extern s32 D_0013FCD8_2c6158 __asm__("D_0013FCD8");
 extern s32 D_0013FCEC_2c6158 __asm__("D_0013FCEC");
-extern u32 D_0013CAE0_2c6158 __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern u32 D_0013CAE0_2c6158 __asm__("D_0013CAE0") NOT_SDA;
 extern float D_0015ED6C_2c6158 __asm__("D_0015ED6C");
 extern float D_0015ED60_2c6158 __asm__("D_0015ED60");
 extern float D_0013F8C4_2c6158 __asm__("D_0013F8C4");
@@ -3283,7 +3283,7 @@ typedef float Mat3_2c7548[3][4] __attribute__((aligned(16)));
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
-extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -3397,7 +3397,7 @@ typedef struct {
 } DeliveryStats;
 
 extern DeliveryStats D_00141680;
-extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern u32 D_0013CAE4 NOT_SDA;
 extern s32 D_0015EEA4;
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");

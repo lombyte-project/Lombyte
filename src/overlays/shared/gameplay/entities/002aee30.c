@@ -92,7 +92,7 @@ extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");  /* distance
 extern void spawn_source_attached_fading_effect_particle(struct Moby *, int color, int life, int, float size) __asm__("FUN_L00_0026daa0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
-extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 /*
  * Spawns a class 0xB8 shot for `owner` at `pos` heading along `dir`, living
  * `life` frames, with two glows (bluish, or reddish for an owner of class

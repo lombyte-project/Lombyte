@@ -8,6 +8,7 @@
 
 #include "eetypes.h"
 #include "qcopy.h"
+#include "sda.h"
 
 /* Shuttle route selection; independent of Moby.state. */
 enum ShuttleRoute {
@@ -5987,11 +5988,11 @@ typedef struct {
     FVec4_l06 v;
 } FRow_l06;
 
-extern FRow_l06 D_L06_001FAFF0[] __attribute__((section(".data")));
-extern FRow_l06 D_L06_001FA2F0[] __attribute__((section(".data")));
-extern FRow_l06 D_L06_001F77B0[] __attribute__((section(".data")));
-extern float D_L06_001F84B0[][2] __attribute__((section(".data")));
-extern short D_L06_001F7EB0[][4][2] __attribute__((section(".data")));
+extern FRow_l06 D_L06_001FAFF0[] NOT_SDA;
+extern FRow_l06 D_L06_001FA2F0[] NOT_SDA;
+extern FRow_l06 D_L06_001F77B0[] NOT_SDA;
+extern float D_L06_001F84B0[][2] NOT_SDA;
+extern short D_L06_001F7EB0[][4][2] NOT_SDA;
 extern float D_L06_00167540[];
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -6198,19 +6199,19 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
 extern float D_L06_00167540[];
-extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
-extern float D_L06_0015F3FC_macro __asm__("D_L06_0015F3FC") __attribute__((section(".sdata")));
+extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") MACRO_ADDR;
+extern float D_L06_0015F3FC_macro __asm__("D_L06_0015F3FC") MACRO_ADDR;
 extern s32 D_L06_00179B90[] __asm__("D_L06_00179B90");
-extern unsigned char big_head_cheat_enabled[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
-extern unsigned char big_head_cheat_enabled[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
-extern int D_0013D8AC_lui __asm__("D_0013D8AC") __attribute__((section(".data")));
+extern unsigned char big_head_cheat_enabled[] __asm__("D_0015EDB0") MACRO_ADDR;
+extern unsigned char big_head_cheat_enabled[] __asm__("D_0015EDB0") MACRO_ADDR;
+extern int D_0013D8AC_lui __asm__("D_0013D8AC") NOT_SDA;
 
 char D_L06_00201880[] = "Scrawny Scientist";
-extern Obj_301070 *D_L06_00167580 __attribute__((section(".data")));
+extern Obj_301070 *D_L06_00167580 NOT_SDA;
 extern unsigned char D_0013D505[];
-extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
-extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
+extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern f32 frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
 /* Update of moby class 1105 (fred): steps the conversation and camera states, then turns the head toward the hero. */
 void fred_update(struct Moby *m) __asm__("FUN_L06_00301070");
 void fred_update(struct Moby *moby) {
@@ -6760,9 +6761,9 @@ extern char *D_L06_001600EC_302578 __asm__("D_L06_001600EC");
 extern char *D_L06_0015FFD8_302578 __asm__("D_L06_0015FFD8");
 extern int D_L06_00179B90[] __asm__("D_L06_00179B90");
 extern char *D_L06_001B0C30_302578[] __asm__("D_L06_001B0C30");
-extern char D_0013D3AC_302578[] __asm__("D_0013D3A7") __attribute__((section(".data")));
-extern char alternate_item_available[] __asm__("D_0013D388") __attribute__((section(".data")));
-extern char D_0013A4E0_302578[] __asm__("D_0013A4E0") __attribute__((section(".data")));
+extern char D_0013D3AC_302578[] __asm__("D_0013D3A7") NOT_SDA;
+extern char alternate_item_available[] __asm__("D_0013D388") NOT_SDA;
+extern char D_0013A4E0_302578[] __asm__("D_0013A4E0") NOT_SDA;
 void update_shuttle_route_selection_and_prompt(char *shuttle_moby) __asm__("FUN_L06_00302fd8");
 
 extern void update_shuttle_route_selection_and_prompt(char *) __asm__("FUN_L06_00302fd8");
@@ -6810,7 +6811,7 @@ extern int shuttle_forced_return_requested_gp __asm__("D_L06_00162100") __attrib
 #include "rnc/overlay/l06/gameplay/entities/fred_data/shuttle_update.h"
 extern int D_L06_0016210C __attribute__((sda));
 extern int D_L06_00162110 __attribute__((sda));
-extern unsigned char D_0013D4D5[] __attribute__((section(".data")));
+extern unsigned char D_0013D4D5[] NOT_SDA;
 /* Update of moby class 1109 (shuttle): waits at one of three camera points, takes the hero's choice of destination, flies there through a cutscene and hands over to the level's travel sequence. */
 void shuttle_update(struct Moby *moby) __asm__("FUN_L06_00302578");
 void shuttle_update(struct Moby *moby) {
@@ -7078,7 +7079,7 @@ extern int D_0015EE1C;
 extern int D_0015EE1D;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 #include "rnc/gameplay/state/game_globals.h"
-extern unsigned short D_00141C00 __attribute__((section(".data")));
+extern unsigned short D_00141C00 NOT_SDA;
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 
 void update_shuttle_route_selection_and_prompt(char *shuttle_moby) {
@@ -7477,10 +7478,10 @@ typedef struct {
 
 extern Cut_304098 *D_L06_001600EC_304098 __asm__("D_L06_001600EC");
 extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
-extern char D_0013F3D0[] __attribute__((section(".data")));
+extern char D_0013F3D0[] NOT_SDA;
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
 typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx_304098;
-extern Fx_304098 D_L06_00167400_304098 __asm__("D_L06_00167400") __attribute__((section(".data")));
+extern Fx_304098 D_L06_00167400_304098 __asm__("D_L06_00167400") NOT_SDA;
 
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -7507,15 +7508,15 @@ void emit_red_button_particle_burst(int unused, void *effect_position) __asm__("
 extern void emit_red_button_particle_burst(int, void *) __asm__("FUN_L06_00304818");
 extern void set_moby_state_two(unsigned char *) __asm__("FUN_L06_00303150");
 
-extern char D_0013A5E0[] __attribute__((section(".data")));
-extern char D_0013D3AA __attribute__((section(".data")));
+extern char D_0013A5E0[] NOT_SDA;
+extern char D_0013D3AA NOT_SDA;
 extern float D_L06_00162198 __attribute__((sda));
 extern float D_L06_0016219C __attribute__((sda));
 extern float D_L06_001621A0 __attribute__((sda));
 extern float D_L06_001621A4 __attribute__((sda));
 extern float D_L06_001621A8 __attribute__((sda));
 extern float D_L06_001621B0 __attribute__((sda));
-extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[] __attribute__((section(".data")));
+extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[] NOT_SDA;
 void red_button_update(struct Moby *moby) __asm__("FUN_L06_00304098");
 void red_button_update(struct Moby *moby) {
     enum {

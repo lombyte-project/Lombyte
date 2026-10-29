@@ -6,6 +6,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_001FFED0), where it is exact; names translated to the US level program. */
 
@@ -176,7 +177,7 @@ void update_enabled_item_tint_from_hero(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_00200D70), where it is exact; names translated to the US level program. */
 
-extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") __attribute__((section(".data")));
+extern float D_L15_0017ACC0_d __asm__("D_L15_0017ACC0") NOT_SDA;
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
@@ -331,8 +332,8 @@ typedef struct {
     u8 p1[0x40 - 0x20];
     V_20a328 v40;
 } X_20a328;
-extern P_20a328 D_0013F350_20a328 __asm__("D_0013F350") __attribute__((section(".data")));
-extern X_20a328 D_L15_00174440_20a328 __asm__("D_L15_00174440") __attribute__((section(".data")));
+extern P_20a328 D_0013F350_20a328 __asm__("D_0013F350") NOT_SDA;
+extern X_20a328 D_L15_00174440_20a328 __asm__("D_L15_00174440") NOT_SDA;
 extern f32 FUN_L00_002339d0_20a328(void *) __asm__("FUN_L00_002339d0");
 extern f32 FUN_001f9b20_20a328(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9dc8_20a328(f32) __asm__("FUN_001f9dc8");
@@ -346,8 +347,8 @@ extern void FUN_00125180_20a328(void *, void *) __asm__("FUN_00125180");
 #define P D_0013F350_20a328
 #define X D_L15_00174440_20a328
 
-extern s32 D_L15_0017445C __attribute__((section(".data")));
-extern char D_0013F3D0[] __attribute__((section(".data")));
+extern s32 D_L15_0017445C NOT_SDA;
+extern char D_0013F3D0[] NOT_SDA;
 void adjust_hero_planar_velocity_from_probes(int force) __asm__("FUN_L15_0020a328");
 
 void adjust_hero_planar_velocity_from_probes(int force) {
@@ -422,7 +423,7 @@ typedef struct {
 } Entry70_215e58;
 
 extern s32 D_L15_0015F5C4;
-extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")));
+extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") NOT_SDA;
 
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_215e58(s32 *) __asm__("FUN_001f9740");

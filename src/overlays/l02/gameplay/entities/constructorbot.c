@@ -7,6 +7,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 typedef struct {
     Vec4f vel;
     s32 timer;
@@ -149,9 +150,9 @@ extern unsigned char opt_cam_invert[4] __asm__("D_0015EDE0");
 extern int D_0015EEA4;
 extern unsigned char D_0013D388[];
 extern unsigned char D_0013D408[];
-extern unsigned short D_001417A2 __attribute__((section(".data")));
-extern unsigned short D_00141888 __attribute__((section(".data")));
-extern unsigned short D_001418E8 __attribute__((section(".data")));
+extern unsigned short D_001417A2 NOT_SDA;
+extern unsigned short D_00141888 NOT_SDA;
+extern unsigned short D_001418E8 NOT_SDA;
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
 extern char D_00141968[];
 extern s32 D_0014EE90[];

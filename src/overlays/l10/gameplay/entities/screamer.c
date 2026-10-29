@@ -432,7 +432,7 @@ typedef struct {
 } Ent;
 
 /* Retail reaches D_L10_0015FFD8 here with the lui/lw macro; toxic_crab_update reaches it through $gp. An alias 8 bytes lower keeps the macro form under SN. */
-extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
+extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern short *moby_group_member_lists[] __asm__("D_L10_001ABCC0");
 
 void activate_waiting_moby_group_members(struct Moby *moby) __asm__("FUN_L10_002e0138");
@@ -1243,7 +1243,7 @@ typedef struct Moby2E30F8 {
 extern char D_L10_00167240[];
 extern char D_L10_001742C0[];
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float D_L10_0015F580[] __attribute__((section(".sdata")));
+extern float D_L10_0015F580[] MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1260,7 +1260,7 @@ extern float fast_sin(float);
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int D_L10_0015F5CC;
 extern int D_L10_0015FFD8;
-extern char *D_L10_0015FFD0_w[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
+extern char *D_L10_0015FFD0_w[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
@@ -2307,7 +2307,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
 /* Computes the aim angle of a moby relative to its owner, narrowed by nearby table entries. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E5C00), where it is exact; names translated to the US level program. */
 
-extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
+extern Ent *D_L10_0015FFD0_e[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern float FUN_001f9b48(void *, void *);
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -2426,7 +2426,7 @@ typedef struct ShipD_5E48 {
     unsigned char a1D0[4];
 } ShipD_5E48;
 
-extern Ship_5E48 *D_L10_001742D8 __attribute__((section(".data")));
+extern Ship_5E48 *D_L10_001742D8 NOT_SDA;
 extern char *create_rocket(void *vel, void *pos, int a, int b, int c, float scale) __asm__("FUN_L10_002cc1b8");
 extern char D_L10_00179890[];
 extern char blarg_ship_missing_path_error_format[] __asm__("D_L10_001DD390");
@@ -2781,7 +2781,7 @@ extern f32 directional_particle_speed_range_end_gp __asm__("D_L10_00161EF8") __a
 extern f32 directional_particle_speed_range_start_gp __asm__("D_L10_00161EFC") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/emit_moby_directional_particles.h"
 extern s32 directional_particle_variant_threshold_percent_gp __asm__("D_L10_00161F04") __attribute__((sda));
-extern f32 frame_time_absolute_4a88 __asm__("D_L10_0015ED6C") __attribute__((section(".sdata")));
+extern f32 frame_time_absolute_4a88 __asm__("D_L10_0015ED6C") MACRO_ADDR;
 extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_L10_001f2578");
 extern void scale_vector_xyz(f32 *, f32 *, f32) __asm__("FUN_001f9a68");
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
@@ -2864,9 +2864,9 @@ extern int try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void FUN_L00_00298840_vendor(int) __asm__("FUN_L00_00298840");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void FUN_L00_00263d40_vendor(int, int) __asm__("FUN_L00_00263d40");
-extern int D_0013ED98 __attribute__((section(".sdata")));
+extern int D_0013ED98 MACRO_ADDR;
 extern int purchased_nanotech_health_gp __asm__("D_0013EDA0") __attribute__((sda));
-extern int D_L10_0013F640 __asm__("D_L10_0013F640") __attribute__((section(".sdata")));
+extern int D_L10_0013F640 __asm__("D_L10_0013F640") MACRO_ADDR;
 
 void nanotech_upgrade_vendor_update(struct Moby *moby) __asm__("FUN_L10_002e8358");
 void nanotech_upgrade_vendor_update(struct Moby *moby) {
@@ -2986,7 +2986,7 @@ extern unsigned char D_00141B28_r[] __asm__("D_00141B28");
 extern unsigned char D_0013D504_r[] __asm__("D_0013D504");
 extern unsigned char D_00141968_r[] __asm__("D_00141968");
 extern Moby *D_L10_0015FFD8_c2 __asm__("D_L10_0015FFD8");
-extern Moby *D_L10_0015FFD0_m[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
+extern Moby *D_L10_0015FFD0_m[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern int D_0013D388; /* no foreign declaration */
 extern int D_00141B28; /* no foreign declaration */
 extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda)); /* no foreign declaration */

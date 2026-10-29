@@ -367,7 +367,7 @@ extern void trooper_start_knockback(f32, struct Moby *, void *, s32, s32, s32) _
 extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(struct Moby *, void *) __asm__("FUN_L00_0025d538");
 
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 /* Trooper hit handler: takes damage, then knocks back away from the attacker by hit strength (dying on lethal hits). */
 void handle_mine_layer_damage(struct Moby *damaged_moby) {
     enum {

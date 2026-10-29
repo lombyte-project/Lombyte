@@ -317,7 +317,7 @@ extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00200228(float, void *);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int FUN_0022da68(int, int, void *);
-extern int D_001413D4 __attribute__((section(".data")));
+extern int D_001413D4 NOT_SDA;
 extern char *scene_points __asm__("D_L07_001600EC");
 extern char voice_slot_state_base[] __asm__("D_0013E5C4");
 
@@ -1881,8 +1881,8 @@ extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
 extern int D_L07_00161B80 __attribute__((sda));
 extern int D_L07_00161B84;
 #include "rnc/overlay/l07/gameplay/entities/snagglebeast_globals.h"
-extern char D_L07_00161B90[] __attribute__((section(".sdata")));
-extern char D_L07_00161BA0[] __attribute__((section(".sdata")));
+extern char D_L07_00161B90[] MACRO_ADDR;
+extern char D_L07_00161BA0[] MACRO_ADDR;
 extern RopeVec rope_previous_points[] __asm__("D_L07_0020DAF0");
 extern RopeVec rope_points[] __asm__("D_L07_0020DB00");
 /* A particle travelling down the rope: it moves along segment toward the anchor, and between
@@ -2351,7 +2351,7 @@ typedef struct {
     s32 bob_timer;         /* 0x7C */
 } Mine_19040;
 
-extern struct Moby *debris_target __asm__("D_L07_00173ED8") __attribute__((section(".data")));
+extern struct Moby *debris_target __asm__("D_L07_00173ED8") NOT_SDA;
 /* Floating mine: wakes when its target or a seen point comes close, then bobs and chases the seen
    point. It blows up when a hit lands (not from classes 0x456/0x365/0x367), on contact with a
    solid moby or when its timer runs out, and is removed once 64 units from home. */
@@ -2715,7 +2715,7 @@ typedef struct {
     Vec3 size;            /* 0x04: local extent of the prop */
 } BreakableVars;
 
-extern float D_0015ED6C __attribute__((section(".sdata")));
+extern float D_0015ED6C MACRO_ADDR;
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");

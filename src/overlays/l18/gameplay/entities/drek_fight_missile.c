@@ -8,6 +8,7 @@
 #include "asm.h"
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
+#include "sda.h"
 
 /* Drek missile Moby.state shared by its update and response helpers. */
 enum DrekMissileState {
@@ -30,16 +31,16 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float D_0015ED6C_a[] __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_a[] __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_L18_001677C0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float step_angle_toward_target(float *p, int n, float x, float y) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern float D_L18_0015F580[] __attribute__((section(".sdata")));
+extern float D_L18_0015F580[] MACRO_ADDR;
 extern int D_L18_0015F5C4;
-extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
+extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_position) __asm__("FUN_L18_002f0120");
 
 extern int update_drek_fight_missile_wander_movement(char *moby, float *vec) __asm__("FUN_L18_002f0120");
@@ -512,7 +513,7 @@ typedef struct {
 
 extern char *D_L18_001600EC;
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_linked_moby_group_transform_and_fall_2.h"
-extern float D_L18_001677D8 __attribute__((section(".data")));
+extern float D_L18_001677D8 NOT_SDA;
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
 extern float fast_add_rotations(float, float);
@@ -524,7 +525,7 @@ extern int scale_game_frames(int);
 extern int tick_countdown_32(int *) __asm__("func_001F9740");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern short *D_L18_001AC240[];
-extern float D_L18_0015F580_c[] __asm__("D_L18_0015F580") __attribute__((section(".sdata")));
+extern float D_L18_0015F580_c[] __asm__("D_L18_0015F580") MACRO_ADDR;
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_linked_moby_group_transform_and_fall.h"
 extern unsigned char *D_L18_0015FFD8;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
@@ -925,8 +926,8 @@ extern void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970"
 extern int lift_alternate_height_requested_gp __asm__("D_L18_001622FC") __attribute__((sda));
 extern int next_lift_instance_index_gp __asm__("D_L18_001622F8") __attribute__((sda));
 extern float lift_texture_u_scroll_rate_gp __asm__("D_L18_0016230C") __attribute__((sda));
-extern unsigned char D_00141400 __attribute__((section(".data")));
-extern unsigned char D_0013D406 __attribute__((section(".data")));
+extern unsigned char D_00141400 NOT_SDA;
+extern unsigned char D_0013D406 NOT_SDA;
 void update_lift_state_and_queue_draw(struct Moby *lift_moby) __asm__("FUN_L18_002f2310");
 
 void update_lift_state_and_queue_draw(struct Moby *lift_moby) {
@@ -1065,9 +1066,9 @@ extern short lift_mesh_blend_upper_word_gp __asm__("D_L18_00162320") __attribute
 extern short lift_mesh_effect_texture_index_gp __asm__("D_L18_00162324") __attribute__((sda));
 extern short lift_mesh_quad_color_gp __asm__("D_L18_00162328") __attribute__((sda));
 extern f32 D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
-extern float D_L18_001DA7A0[][2] __attribute__((section(".data")));
-extern FRow D_L18_001DA3C0[] __attribute__((section(".data")));
-extern short D_L18_001DA610[][4][2] __attribute__((section(".data")));
+extern float D_L18_001DA7A0[][2] NOT_SDA;
+extern FRow D_L18_001DA3C0[] NOT_SDA;
+extern short D_L18_001DA610[][4][2] NOT_SDA;
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
@@ -1113,9 +1114,9 @@ typedef struct {
     FVec4_l18 v;
 } FRow_l18;
 
-extern float D_L18_001DAE80[][2] __attribute__((section(".data")));
-extern FRow_l18 D_L18_001DA8D0[] __attribute__((section(".data")));
-extern short D_L18_001DAC20[][4][2] __attribute__((section(".data")));
+extern float D_L18_001DAE80[][2] NOT_SDA;
+extern FRow_l18 D_L18_001DA8D0[] NOT_SDA;
+extern short D_L18_001DAC20[][4][2] NOT_SDA;
 extern int get_effect_texture_l18(int) __asm__("FUN_001f44b8");
 
 void draw_lift_38_quad_mesh(struct Moby *moby) {
@@ -1159,9 +1160,9 @@ void draw_lift_38_quad_mesh(struct Moby *moby) {
 /* Draws 22 textured quads from the L18 tables, in the moby's frame. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3DD0), where it is exact; names translated to the US level program. */
 
-extern float D_L18_001DB3A0[][2] __attribute__((section(".data")));
-extern FRow_l18 D_L18_001DB030[] __attribute__((section(".data")));
-extern short D_L18_001DB240[][4][2] __attribute__((section(".data")));
+extern float D_L18_001DB3A0[][2] NOT_SDA;
+extern FRow_l18 D_L18_001DB030[] NOT_SDA;
+extern short D_L18_001DB240[][4][2] NOT_SDA;
 extern int get_effect_texture_l18(int) __asm__("FUN_001f44b8");
 extern f32 D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
@@ -1429,9 +1430,9 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
-extern float D_0015ED6C_e[] __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_e[] __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_L18_0015F3FC;
-extern float D_L18_0015F580[] __attribute__((section(".sdata")));
+extern float D_L18_0015F580[] MACRO_ADDR;
 extern float D_L18_001677C0[];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
@@ -3600,8 +3601,8 @@ extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int D_L18_0015F5C4;
 extern int game_frame __asm__("D_L18_0015F5CC");
 extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
-extern int D_L18_00162384_w[] __asm__("D_L18_00162384") __attribute__((section(".sdata")));
-extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
+extern int D_L18_00162384_w[] __asm__("D_L18_00162384") MACRO_ADDR;
+extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 
 void update_moby_scene_visibility_and_height_reflection(M *moby) __asm__("FUN_L18_002f7ad8");
 

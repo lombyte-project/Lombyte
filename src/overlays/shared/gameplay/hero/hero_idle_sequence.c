@@ -148,7 +148,7 @@ int get_hero_easing_moby_by_kind(int ease_kind) {
     return 0;
 }
 #include "qcopy.h"
-extern u8 D_001413F4 __attribute__((section(".data")));
+extern u8 D_001413F4 NOT_SDA;
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void detach_manipulator(s32, void *) __asm__("FUN_0020cb88");
@@ -359,7 +359,7 @@ struct HeroExtraManipulators { u8 pad[0xEF0]; struct HeroManipulator m[4]; u8 pa
 #define HERO_EXTRA ((struct HeroExtraManipulators *)&hero)
 #define EXTRA_MANIPS (HERO_EXTRA->m)
 
-extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
+extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") MACRO_ADDR;
 extern f32 D_0015EE18 __asm__("D_0015EE18");
 #include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence_globals.h"
 extern s32 hero_extra_manipulator_attachment_indices_gp __asm__("D_L00_0015F6F8") __attribute__((sda));
@@ -619,14 +619,14 @@ void update_hero_bone_attachment(void) {
 }
 #include "rnc/overlay/quad.h"
 extern char D_0013F350_002062b0[] __asm__("D_0013F350");
-extern f32 D_0015EE18_macro __asm__("D_0015EE18") __attribute__((section(".sdata")));
-extern volatile f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern f32 D_0015EE18_macro __asm__("D_0015EE18") MACRO_ADDR;
+extern volatile f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 extern f32 D_0015ED60_gp __asm__("D_0015ED60_gp") __attribute__((sda));
 extern f32 D_0015EE18_gp __attribute__((sda));
-extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") __attribute__((section(".sdata")));
-extern s32 D_L00_0015F5CC __attribute__((section(".sdata")));
-extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") __attribute__((section(".data")));
+extern u8 D_0015EDB3_macro __asm__("D_0015EDB3") MACRO_ADDR;
+extern s32 D_L00_0015F5CC MACRO_ADDR;
+extern f32 D_L00_0017B85C_002062b0 __asm__("D_L00_0017B85C") NOT_SDA;
 extern void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 extern void FUN_L00_00211670(void);
 extern void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
@@ -974,7 +974,7 @@ extern s32 D_L00_0015F5CC_00206cf8 __asm__("D_L00_0015F5CC");
 extern E00206cf8 D_L00_00179AC0_00206cf8[] __asm__("D_L00_00179AC0");
 s32 FUN_L00_0020d568_00206cf8(void) __asm__("FUN_L00_0020d568");
 s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern u16 D_001418F0 __attribute__((section(".data")));
+extern u16 D_001418F0 NOT_SDA;
 void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 
 void check_hero_item_reward_conditions(void) {
@@ -1002,11 +1002,11 @@ void check_hero_item_reward_conditions(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00207418), where it is exact; names translated to the US level program. */
 
-extern int D_0015EEA0 __attribute__((section(".sdata")));
+extern int D_0015EEA0 MACRO_ADDR;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_0015EDB0[] __attribute__((section(".sdata")));
-extern unsigned char D_0015EDB4[4] __attribute__((section(".sdata")));
-extern unsigned char D_0015EDC0[] __attribute__((section(".sdata")));
+extern unsigned char D_0015EDB0[] MACRO_ADDR;
+extern unsigned char D_0015EDB4[4] MACRO_ADDR;
+extern unsigned char D_0015EDC0[] MACRO_ADDR;
 extern void FUN_L00_00263d40(int, int);
 
 void scan_hero_input_sequences(void) __asm__("FUN_L00_00206e00");
@@ -1227,7 +1227,7 @@ typedef struct {
     float x, y, z, w;
 } Vx __attribute__((aligned(16)));
 
-extern char D_L00_001801D0[] __attribute__((section(".data")));
+extern char D_L00_001801D0[] NOT_SDA;
 extern void FUN_0020d510(void *, void *);
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void FUN_L00_002503c0(void *, void *);
@@ -1251,11 +1251,11 @@ void update_item_tint_from_hero(void *item_moby, char *hero_moby) {
     global_float_base[0xC3] = -0.3f;
 }
 extern int D_15F5CC_207430 __asm__("D_L00_0015F5CC");
-extern unsigned char D_0015EDB3_207430 __asm__("D_0015EDB3") __attribute__((section(".data")));
+extern unsigned char D_0015EDB3_207430 __asm__("D_0015EDB3") NOT_SDA;
 extern float D_0015EE18 __asm__("D_0015EE18");
-extern unsigned char D_17C380_207430[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
-extern unsigned char D_17C3C0_207430[] __asm__("D_L00_0017C3C0") __attribute__((section(".data")));
-extern unsigned char D_17C400_207430[] __asm__("D_L00_0017C400") __attribute__((section(".data")));
+extern unsigned char D_17C380_207430[] __asm__("D_L00_0017C380") NOT_SDA;
+extern unsigned char D_17C3C0_207430[] __asm__("D_L00_0017C3C0") NOT_SDA;
+extern unsigned char D_17C400_207430[] __asm__("D_L00_0017C400") NOT_SDA;
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void f4f7c8_207430(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00208038_c(void *, int, float, float) __asm__("FUN_L00_00208038");
@@ -1394,7 +1394,7 @@ void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern char D_L00_0017A6C0[] __attribute__((section(".data")));
+extern char D_L00_0017A6C0[] NOT_SDA;
 void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 
 void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
@@ -1441,7 +1441,7 @@ void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
 
-extern float D_L00_001797D8[] __attribute__((section(".data")));
+extern float D_L00_001797D8[] NOT_SDA;
 void apply_hero_and_item_scale_sequence(void) {
     struct Hero *G = &hero;
     OvlQuad planar_offset[1];
@@ -1544,7 +1544,7 @@ typedef struct {
     u8 p6[2];
     s32 i2300;
 } P_207d40;
-extern P_207d40 D_0013F350_207d40 __asm__("D_0013F350") __attribute__((section(".data")));
+extern P_207d40 D_0013F350_207d40 __asm__("D_0013F350") NOT_SDA;
 extern void draw_offset_textured_effect_quad(void *, s32, f32, f32) __asm__("FUN_L00_00263618");
 extern int FUN_L00_0020d498_207d40(int) __asm__("FUN_L00_0020d498");
 extern void FUN_00213ed8_207d40(void *, f32, f32) __asm__("FUN_00213ed8");
@@ -1638,7 +1638,7 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 
 // Hero gadget glow: pulses the colour of the hero's gadget moby (hero state 13, 16, 17, 19, 20) and
 // queues its glow sprites. c and g are shared by cases 17 and 20 (one pseudo each, retail's $s0/$s1).
@@ -2171,7 +2171,7 @@ typedef struct {
     s32 v[9];
 } T00209240;
 extern T00209240 l00_hero_world_matrix_selection_indices __asm__("D_L00_001E7C10");
-extern int D_001413D0[] __attribute__((section(".data")));
+extern int D_001413D0[] NOT_SDA;
 void compute_selected_world_matrices(s32, s32, T00209240 *, void *) __asm__("FUN_L00_0024f8f0");
 /* Calls 0024f8f0 with mode 9 and a copy of D_L00_001E7C10 on a, or on D_001413D0 when a is 0. */
 void update_hero_world_matrices(s32 moby_override) {
@@ -2512,7 +2512,7 @@ float FUN_00213308_209ec8(void) __asm__("FUN_00213308");
 void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 void FUN_L00_00269958(void *, void *, int, int, int, int, int,
                              int);
-extern char D_0013F7EE[] __attribute__((section(".data")));
+extern char D_0013F7EE[] NOT_SDA;
 void emit_hero_timed_effects(void) __asm__("FUN_L00_00209ec8");
 
 void emit_hero_timed_effects(void) {
@@ -2610,12 +2610,12 @@ s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_rad
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020A990), where it is exact; names translated to the US level program. */
 
-extern V collision_hit_point __asm__("D_L00_00173E60") __attribute__((section(".data")));
-extern char D_L00_0017A680_d[] __asm__("D_L00_0017A680") __attribute__((section(".data")));
+extern V collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
+extern char D_L00_0017A680_d[] __asm__("D_L00_0017A680") NOT_SDA;
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L00_0020a240_u(int, float, float) __asm__("FUN_L00_0020a240");
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") __attribute__((section(".data")));
+extern void *D_L00_00173E58_d __asm__("D_L00_00173E58") NOT_SDA;
 
 void update_hero_collision_ease_target(void) {
     char *hero_state_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;

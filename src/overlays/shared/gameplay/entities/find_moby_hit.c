@@ -2,6 +2,7 @@
 #include "types.h"
 
 #include "asm.h"
+#include "sda.h"
 
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 /* Calls probe_ground_height(a, 0x20, 0.5f). */
@@ -126,8 +127,8 @@ typedef struct {
     char pad[0x14];
     int idx;
 } G_259a88;
-extern G_259a88 D_L00_00173E40_259a88 __asm__("D_L00_00173E40") __attribute__((section(".data")));
-extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") __attribute__((section(".data")));
+extern G_259a88 D_L00_00173E40_259a88 __asm__("D_L00_00173E40") NOT_SDA;
+extern T_259a88 D_L00_00178100_259a88[] __asm__("D_L00_00178100") NOT_SDA;
 void FUN_001f99f8_259a88(void *) __asm__("FUN_001f99f8");
 void record_moby_hit(unsigned char *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
 void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
@@ -174,8 +175,8 @@ typedef struct {
     char pad[0x14];
     int idx;
 } G_259bc8;
-extern G_259bc8 D_L00_00173E40 __attribute__((section(".data")));
-extern T_259bc8 moby_hits[] __asm__("D_L00_00178100") __attribute__((section(".data")));
+extern G_259bc8 D_L00_00173E40 NOT_SDA;
+extern T_259bc8 moby_hits[] __asm__("D_L00_00178100") NOT_SDA;
 
 void spawn_nearby_effect(unsigned char *m, int x, int y, u128 *p, u128 *q, float f) __asm__("FUN_L00_00259bc8");
 void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *hit_vector_source, u128 *direction_vector, float f) {
@@ -259,12 +260,12 @@ typedef struct {
     u128 b;
 } E_259fe8_00259fe8;
 extern int D_L00_0015F434 __asm__("D_L00_0015F434");
-extern u128 D_L00_00173E80_00259fe8 __asm__("D_L00_00173E80") __attribute__((section(".data")));
+extern u128 D_L00_00173E80_00259fe8 __asm__("D_L00_00173E80") NOT_SDA;
 extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
 extern int FUN_001f0b58_00259fe8(void) __asm__("FUN_001f0b58");
 extern float FUN_001f99c0_00259fe8(float) __asm__("FUN_001f99c0");
 
-extern E_259fe8_00259fe8 D_L00_0016E080[] __attribute__((section(".data")));
+extern E_259fe8_00259fe8 D_L00_0016E080[] NOT_SDA;
 void jet_animate(unsigned char *m, float r) __asm__("FUN_L00_00259fe8");
 void jet_animate(unsigned char *moby, float output_scale) {
     float ground_height, y;
@@ -315,7 +316,7 @@ struct Ent_z {
     u8 *f34;
     s32 b[2];
 };
-extern struct Ent_z D_L00_00178100_c[] __asm__("D_L00_00178100") __attribute__((section(".data")));
+extern struct Ent_z D_L00_00178100_c[] __asm__("D_L00_00178100") NOT_SDA;
 static inline u8 load_u8_0025a420(u8 *p) {
     return *p;
 }

@@ -8,6 +8,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 
 
@@ -486,7 +487,7 @@ typedef struct {
 } P_B7B0;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern float D_L04_0015F580[] __attribute__((section(".sdata")));
+extern float D_L04_0015F580[] MACRO_ADDR;
 extern float D_L04_00166F40[4];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
@@ -2278,7 +2279,7 @@ struct Shot5BD0 {
 };
 
 extern char *D_L04_0015FFD8;
-extern char *D_L04_00173FD8 __attribute__((section(".data")));
+extern char *D_L04_00173FD8 NOT_SDA;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_L04_00166E00[];
 extern char blarg_trooper_missing_path_fields_format[] __asm__("D_L04_001DBC80");
@@ -3111,7 +3112,7 @@ extern int FUN_L00_0028d8c0(void *, int);
 extern int start_moby_sound(int, int, int) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern struct Moby *level_moby_table __asm__("D_L04_0015FFD8") __attribute__((section(".sdata")));
+extern struct Moby *level_moby_table __asm__("D_L04_0015FFD8") MACRO_ADDR;
 extern struct Moby *level_mobys __asm__("D_L04_0015FFD8");
 extern u8 voice_slots[] __asm__("D_0013E550");
 

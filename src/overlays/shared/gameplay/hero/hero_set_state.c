@@ -404,7 +404,7 @@ typedef struct M_221ee0 {
     u8 p5[0xA6 - 0x7C];
     s16 hA6;
 } M_221ee0;
-extern G_221ee0 D_0013F350_221ee0 __asm__("D_0013F350") __attribute__((section(".data")));
+extern G_221ee0 D_0013F350_221ee0 __asm__("D_0013F350") NOT_SDA;
 extern M_221ee0 *D_L00_0015FFE4_221ee0 __asm__("D_L00_0015FFE4");
 f32 FUN_001f9b48_221ee0(void *, void *) __asm__("FUN_001f9b48");
 f32 FUN_L00_0020d6b0_221ee0(M_221ee0 *, s32 *, f32, f32, f32, f32) __asm__("FUN_L00_0020d6b0");
@@ -3050,7 +3050,7 @@ int try_start_hero_weapon_fire_state(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00228180), where it is exact; names translated to the US level program. */
 
-extern float D_L00_00173E68 __attribute__((section(".data")));
+extern float D_L00_00173E68 NOT_SDA;
 extern int D_L00_0015F5CC;
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
@@ -3166,7 +3166,7 @@ typedef struct {
     u8 pa[0x20A0 - 0x2098];
     s32 i20A0;
 } G_227d40;
-extern G_227d40 D_0013F350_227d40 __asm__("D_0013F350") __attribute__((section(".data")));
+extern G_227d40 D_0013F350_227d40 __asm__("D_0013F350") NOT_SDA;
 s32 FUN_001f96f8_227d40(s32) __asm__("FUN_001f96f8");
 f32 FUN_001f99c0_227d40(f32) __asm__("FUN_001f99c0");
 void FUN_L00_0025b8c0_227d40(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -3319,7 +3319,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state_data/process_hero_equipped_item_input.h"
-extern s32 D_00141660 __attribute__((section(".data")));
+extern s32 D_00141660 NOT_SDA;
 int process_hero_equipped_item_input(void) __asm__("FUN_L00_00227fa0");
 
 int process_hero_equipped_item_input(void) {

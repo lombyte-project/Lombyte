@@ -546,7 +546,7 @@ void update_moby_motion_collision_and_lifetime(char *moby) {
     }
 }
 extern int D_0015ED84;
-extern unsigned char menu_item_enabled_1_lui __asm__("D_0013D395") __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_1_lui __asm__("D_0013D395") NOT_SDA;
 /* On level 1, when a state-5 moby of type 0x118 has sub-id 0x34 or 0x35, sets the matching flag byte (D_0013D394 / D_0013D395). */
 void set_novalis_bolt_crank_completion_flags(char *moby) __asm__("FUN_L01_002e0bd8");
 
@@ -589,8 +589,8 @@ typedef struct {
 
 extern char *D_L01_001600EC;
 extern char D_L01_001BAAA0[];
-extern f32 D_L01_00167258_lui __asm__("D_L01_00167258") __attribute__((section(".data")));
-extern char *D_L01_00167280_lui __asm__("D_L01_00167280") __attribute__((section(".data")));
+extern f32 D_L01_00167258_lui __asm__("D_L01_00167258") NOT_SDA;
+extern char *D_L01_00167280_lui __asm__("D_L01_00167280") NOT_SDA;
 extern f32 bolt_crank_radial_correction_step_gp __asm__("D_L01_001618A0") __attribute__((sda));
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void euler_rotation_matrix(float *, void *) __asm__("FUN_001fa050");
@@ -1351,7 +1351,7 @@ extern void sand_mouse_compute_target(char *, char *) __asm__("FUN_L01_002e3110"
 extern s32 update_sand_mouse_fall_motion(void *, struct Moby *) __asm__("FUN_L01_002e3208");
 extern void update_sand_mouse_targeted_spawning(char *, char *) __asm__("FUN_L01_002e35a8");
 extern void update_hover_moby_steering(struct Moby *, char *) __asm__("FUN_L01_002e3830");
-extern unsigned char D_0013D4C5 __attribute__((section(".data")));
+extern unsigned char D_0013D4C5 NOT_SDA;
 void sand_mouse_update(struct Moby *moby) __asm__("FUN_L01_002e3f20");
 void sand_mouse_update(struct Moby *moby) {
     enum {
@@ -1755,10 +1755,10 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int FUN_001fa6d0(float);
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern void FUN_0020c828(void *);
-extern float frame_time_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
+extern float frame_time_gp __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015ED70 MACRO_ADDR;
 extern float D_0013F420[4];
-extern float D_L01_0015F580[] __attribute__((section(".sdata")));
+extern float D_L01_0015F580[] MACRO_ADDR;
 
 extern char D_L01_00161A40 __attribute__((sda));
 extern char D_L01_00161A50 __attribute__((sda));

@@ -16,6 +16,7 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */
 
@@ -1804,10 +1805,10 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern int D_00141660 __attribute__((section(".data")));
+extern int D_00141660 NOT_SDA;
 int r1_repeat_timer __asm__("D_L02_0015F678") = 0;
 extern int D_L02_0015F6DC_d __asm__("D_L02_0015F6DC");
-extern int D_L02_0016CD80 __attribute__((section(".data")));
+extern int D_L02_0016CD80 NOT_SDA;
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");

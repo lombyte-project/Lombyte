@@ -361,7 +361,7 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void mark_moby_for_removal_a7220(void *obj) __asm__("FUN_0020c828");
-extern char *D_L18_001B2DDC_c __asm__("D_L18_001B2ADC") __attribute__((section(".data")));
+extern char *D_L18_001B2DDC_c __asm__("D_L18_001B2ADC") NOT_SDA;
 
 void update_projectile_motion_collision_and_trail(char *moby) __asm__("FUN_L18_002a7220");
 
@@ -847,7 +847,7 @@ extern float D_0015EE70 __asm__("D_0015ED70");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025abf0_q(float *a, float *b, float *out, float speed,
                                 float g) __asm__("FUN_L00_0025abf0");
-extern int *D_L18_001AC240_q[] __asm__("D_L18_001AC240") __attribute__((section(".data")));
+extern int *D_L18_001AC240_q[] __asm__("D_L18_001AC240") NOT_SDA;
 extern int D_L18_0015FFD8_m __asm__("D_L18_0015FFD8");
 extern f32 D_L18_00161994_gp __asm__("D_L18_00161994") __attribute__((sda));
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
@@ -1141,14 +1141,14 @@ typedef struct {
     int f90;
 } Obj_q;
 
-extern char *D_L18_00174858_q __asm__("D_L18_00174858") __attribute__((section(".data")));
+extern char *D_L18_00174858_q __asm__("D_L18_00174858") NOT_SDA;
 extern char *func_0020D348_m_q(int) __asm__("FUN_0020c4f8");
 extern short D_L18_00161A6C __asm__("D_0015ED6C");
 extern float D_0015EE70 __asm__("D_0015ED70");
 extern float FUN_001fa580_q(float, float) __asm__("FUN_001fa580");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern int D_L18_0015F5C4_d __asm__("D_L18_0015F5C4");
-extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") __attribute__((section(".data")));
+extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 extern void FUN_001f9bf8_q(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
@@ -1364,7 +1364,7 @@ extern float l18_thruster_pack_lock_red_grounded_trigger_wait_height_offset __as
 extern float l18_thruster_pack_lock_red_approach_height_offset __asm__("D_L18_00161A18") __attribute__((sda));
 extern unsigned int D_L18_00162390 __asm__("D_L18_00162390") __attribute__((sda));
 extern unsigned int D_0015EEA4 __asm__("D_0015EEA4") __attribute__((sda));
-extern unsigned char menu_item_enabled_115 __asm__("D_0013D407") __attribute__((section(".data")));
+extern unsigned char menu_item_enabled_115 __asm__("D_0013D407") NOT_SDA;
 /* Help message records (same layout as the usage counters): count, best play time, level mask. */
 extern struct UsageStat D_00141968_7b20[] __asm__("D_00141968");
 extern void draw_pulsing_timer_hud(void) __asm__("FUN_L18_002d8098");
@@ -2200,7 +2200,7 @@ void draw_class_274_ring_effect(char *moby) {
 /* UpdateMoby state machine for the vendor moby (state at +0x20). */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002E09F8), where it is exact; names translated to the US level program. */
 
-extern char D_001413D4_q[] __asm__("D_001413D4") __attribute__((section(".data")));
+extern char D_001413D4_q[] __asm__("D_001413D4") NOT_SDA;
 extern short D_L18_00161A6C __asm__("D_0015ED6C");
 extern float D_L18_0015F3FC_d __asm__("D_L18_0015F3FC");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -2212,8 +2212,8 @@ extern void FUN_L00_002ea9d8_q_002eaa30(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_002eaaa0_q(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
 
-extern int D_L18_00179E10[] __attribute__((section(".data")));
-extern int D_L18_0017EF08 __attribute__((section(".data")));
+extern int D_L18_00179E10[] NOT_SDA;
+extern int D_L18_0017EF08 NOT_SDA;
 void update_position_and_rotation_transition(struct Moby *moby) __asm__("FUN_L18_002df608");
 
 void update_position_and_rotation_transition(struct Moby *moby) {
@@ -2636,7 +2636,7 @@ typedef struct {
     float shake_offset;
     int shake_frames;
 } L18FlareView;
-extern L18FlareView D_L18_00167680 __attribute__((section(".data")));
+extern L18FlareView D_L18_00167680 NOT_SDA;
 extern float D_L18_001D9B50[][2];
 extern float D_L18_001D9B70[][4][4];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -2801,9 +2801,9 @@ extern int explosion_burst_particle_second_color_choices[] __asm__("D_L18_001D9C
 extern unsigned char l18_explosion_burst_first_glow_color_channel __asm__("D_L18_00161FC8") __attribute__((sda));
 extern unsigned char l18_explosion_burst_second_glow_color_channel __asm__("D_L18_00161FD4") __attribute__((sda));
 extern unsigned char l18_explosion_burst_third_glow_color_channel __asm__("D_L18_00161FE0") __attribute__((sda));
-extern unsigned char D_L18_00161FC9[3] __attribute__((section(".sdata")));
-extern unsigned char D_L18_00161FD5[3] __attribute__((section(".sdata")));
-extern unsigned char D_L18_00161FE1[3] __attribute__((section(".sdata")));
+extern unsigned char D_L18_00161FC9[3] MACRO_ADDR;
+extern unsigned char D_L18_00161FD5[3] MACRO_ADDR;
+extern unsigned char D_L18_00161FE1[3] MACRO_ADDR;
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EBBF0). */
 void spawn_explosion_burst(void *arg) __asm__("FUN_L18_002ea800");
@@ -2993,10 +2993,10 @@ extern float secondary_bolt_z_phase_step_gp __asm__("D_L18_0016202C") __attribut
 extern s32 D_L18_00162054_gp __asm__("D_L18_00162054") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/rocket_data/update_electric_bolt_geometry_and_particles.h"
 extern float primary_bolt_random_step_blend_weight_gp __asm__("D_L18_0016208C") __attribute__((sda));
-extern short D_L18_001620B8[] __attribute__((section(".sdata")));
-extern short D_L18_001620C0[] __attribute__((section(".sdata")));
-extern short D_L18_001620C8[] __attribute__((section(".sdata")));
-extern short D_L18_001620D0[] __attribute__((section(".sdata")));
+extern short D_L18_001620B8[] MACRO_ADDR;
+extern short D_L18_001620C0[] MACRO_ADDR;
+extern short D_L18_001620C8[] MACRO_ADDR;
+extern short D_L18_001620D0[] MACRO_ADDR;
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
@@ -3004,7 +3004,7 @@ extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z);
 extern void spawn_ec290(void *, int, float, float, int, int, int, void *, float) __asm__("FUN_L00_00272060");
 
-extern f32 frame_scale_macro __asm__("D_0015ED60") __attribute__((section(".sdata")));
+extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 void update_electric_bolt_geometry_and_particles(void *moby) {
     V_ec290 scratch_vectors[10];
     V_ec290 side_arc_segment_offsets[5];
@@ -3192,9 +3192,9 @@ extern unsigned int l18_billboard_quad_pair_first_color __asm__("D_L18_001620A0"
 extern unsigned int D_L18_00162054 __asm__("D_L18_00162054") __attribute__((sda));
 extern float l18_billboard_quad_pair_first_corner_scale_base __asm__("D_L18_001620A8") __attribute__((sda));
 extern float l18_billboard_quad_pair_second_corner_scale_base __asm__("D_L18_001620AC") __attribute__((sda));
-extern Vec130 D_L18_001677C0 __asm__("D_L18_001677C0") __attribute__((section(".data")));
-extern Vec130 D_L18_001D9CA0[] __asm__("D_L18_001D9CA0") __attribute__((section(".data")));
-extern UVec130 D_L18_001D9CE0[] __asm__("D_L18_001D9CE0") __attribute__((section(".data")));
+extern Vec130 D_L18_001677C0 __asm__("D_L18_001677C0") NOT_SDA;
+extern Vec130 D_L18_001D9CA0[] __asm__("D_L18_001D9CA0") NOT_SDA;
+extern UVec130 D_L18_001D9CE0[] __asm__("D_L18_001D9CE0") NOT_SDA;
 extern void vscl_ec130(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void vmul_ec130(float, void *, void *) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");

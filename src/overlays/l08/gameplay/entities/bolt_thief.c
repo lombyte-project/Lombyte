@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "sda.h"
 
 
 
@@ -258,7 +259,7 @@ typedef struct RData51_2E0258 RData51_2E0258;
 
 struct RData51_2E0258 { char pad0[0x58]; int health, pad5C; Moby *linked[8]; int indices[4]; char pad90[0x10]; int timer; };
 
-extern char *D_L08_0015FFD8_lui __asm__("D_L08_0015FFD8") __attribute__((section(".data")));
+extern char *D_L08_0015FFD8_lui __asm__("D_L08_0015FFD8") NOT_SDA;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
@@ -267,8 +268,8 @@ extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int D_0015EDB4_d __asm__("D_0015EDB4") __attribute__((section(".data"))); /* no foreign declaration */
-extern int D_L08_0015F5CC_lui __asm__("D_L08_0015F5CC") __attribute__((section(".data"))); /* no foreign declaration */
+extern int D_0015EDB4_d __asm__("D_0015EDB4") NOT_SDA; /* no foreign declaration */
+extern int D_L08_0015F5CC_lui __asm__("D_L08_0015F5CC") NOT_SDA; /* no foreign declaration */
 extern f32 D_L08_00161AC0_gp __asm__("D_L08_00161AC0") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161AC8_gp __asm__("D_L08_00161AC8") __attribute__((sda)); /* no foreign declaration */
 extern int D_L08_00161AD4_gp __asm__("D_L08_00161AD4") __attribute__((sda)); /* no foreign declaration */
@@ -614,7 +615,7 @@ extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int D_0013CAE4 __attribute__((section(".data"))); /* no foreign declaration */
+extern int D_0013CAE4 NOT_SDA; /* no foreign declaration */
 extern int D_0013F350;
 extern int D_0015EDDC;
 extern int D_L08_00161A90 __attribute__((sda));
@@ -1068,14 +1069,14 @@ typedef struct {
     int v[2];
 } Pair_2E2A38;
 
-extern Pair_2E2A38 D_L08_00161C30 __attribute__((section(".data")));
+extern Pair_2E2A38 D_L08_00161C30 NOT_SDA;
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
+extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015ED70 MACRO_ADDR;
 extern float FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
 #include "rnc/overlay/l08/gameplay/entities/bolt_thief_data/update_falling_debris_2.h"
 extern int D_L08_00161C04 __attribute__((sda));
@@ -2041,7 +2042,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned char *FUN_L00_002603d0(int);
 extern unsigned char *FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
 extern unsigned char D_0014BEC0[][4];
-extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") __attribute__((section(".sdata")));
+extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") MACRO_ADDR;
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
@@ -2065,7 +2066,7 @@ extern char D_0013F490[];
 extern void func_L00_0023A658_4BE8(void) __asm__("FUN_L08_002444a8");
 extern void func_L00_0023A690_4BE8(void) __asm__("FUN_L08_002444e0");
 extern void func_L00_0023A788_4BE8(void) __asm__("FUN_L08_002445d8");
-extern int D_L08_00174658_lui __asm__("D_L08_00174658") __attribute__((section(".data")));
+extern int D_L08_00174658_lui __asm__("D_L08_00174658") NOT_SDA;
 
 void update_batalia_bolt_pickup(struct Moby *moby) __asm__("FUN_L08_002e3870");
 
@@ -2612,7 +2613,7 @@ extern void vu1_add_g_sregister(int, u64) __asm__("FUN_00233980");
 extern u64 get_effect_texture_5188(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad_5188(void *, void *, void *, u64, int) __asm__("FUN_L02_0020bc88");
 #include "rnc/overlay/l08/gameplay/entities/bolt_thief_data/draw_batalia_bolt_pickup_rotating_quad.h"
-extern char D_L08_0016D240[] __attribute__((section(".data")));
+extern char D_L08_0016D240[] NOT_SDA;
 
 void draw_batalia_bolt_pickup_rotating_quad(struct Moby *moby) __asm__("FUN_L08_002e5188");
 
@@ -2772,7 +2773,7 @@ typedef struct {
 extern s32 shrub_updates_disabled_gp __asm__("D_L08_00161D30") __attribute__((sda));
 extern f32 shrub_path_speed_gp __asm__("D_L08_00161D24") __attribute__((sda));
 extern s32 level_game_mode __asm__("D_L08_0015F5C4");
-extern s64 D_L08_0016D090 __attribute__((section(".data")));
+extern s64 D_L08_0016D090 NOT_SDA;
 extern u8 D_0014C050[];
 extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");

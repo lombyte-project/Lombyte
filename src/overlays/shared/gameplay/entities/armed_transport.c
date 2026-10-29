@@ -12,6 +12,7 @@
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E3740), where it is exact; names translated to the US level program. */
 
@@ -25,7 +26,7 @@ extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_L16_0015F580[] __attribute__((section(".sdata")));
+extern float D_L16_0015F580[] MACRO_ADDR;
 extern float armed_transport_passenger_attachment_offset[4] __asm__("D_L16_001D9680");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_vec_dist(void *) __asm__("FUN_001f9b48");

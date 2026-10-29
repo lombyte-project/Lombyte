@@ -908,7 +908,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_002144d8");
 extern void reset_hero_follow_camera_from_preset(Camera *) __asm__("FUN_L05_003296e0");
 
-extern char *D_L05_00167204 __attribute__((section(".data")));
+extern char *D_L05_00167204 NOT_SDA;
 void reset_camera_from_source_transform(char *out) __asm__("FUN_L05_0032a6e0");
 
 void reset_camera_from_source_transform(char *out) {

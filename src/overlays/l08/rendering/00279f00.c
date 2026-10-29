@@ -55,7 +55,7 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
 extern s32 rand(void);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern unsigned char *D_L08_001B292C __attribute__((section(".data")));
+extern unsigned char *D_L08_001B292C NOT_SDA;
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -91,7 +91,7 @@ unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *initi
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern unsigned char *D_L08_001B29B4 __attribute__((section(".data")));
+extern unsigned char *D_L08_001B29B4 NOT_SDA;
 
 void spawn_effect_with_initial_motion(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) __asm__("FUN_L08_0027fe00");
 

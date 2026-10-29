@@ -412,9 +412,9 @@ void apply_hero_item_slot_selection(int i) {
     }
 }
 extern int frame_number __asm__("D_L05_0015F5CC");
-extern CollisionHit D_L05_00174240 __attribute__((section(".data")));
-extern u8 D_L05_00174260[] __attribute__((section(".data")));
-extern u8 D_L05_0017AB20[] __attribute__((section(".data")));
+extern CollisionHit D_L05_00174240 NOT_SDA;
+extern u8 D_L05_00174260[] NOT_SDA;
+extern u8 D_L05_0017AB20[] NOT_SDA;
 extern int probe_hero_forward_collision(float, float, float *) __asm__("FUN_L00_0020a240");
 extern float FUN_L00_0022e0f0(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -495,7 +495,7 @@ void update_hero_movement_and_collision_probes(void) {
 }
 /* Adapted from the exact FUN_L00_002279b0 (src/overlays/shared/gameplay/hero/hero_set_state.c): L05 has a wider head guard and its own level data. */
 
-extern float D_L05_00174268 __attribute__((section(".data")));
+extern float D_L05_00174268 NOT_SDA;
 extern int frame_number __asm__("D_L05_0015F5CC");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
@@ -633,8 +633,8 @@ extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern unsigned short D_00141920[] __attribute__((section(".data")));
-extern unsigned short D_00141D80[] __attribute__((section(".data")));
+extern unsigned short D_00141920[] NOT_SDA;
+extern unsigned short D_00141D80[] NOT_SDA;
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
@@ -644,15 +644,15 @@ extern void FUN_L05_0024cee8(int, int);
 extern void create_class_5c3_moby(void *, void *, void *, float, float) __asm__("FUN_L05_002d4168");
 extern void fast_dec_timer(s32 *) __asm__("func_001F9740");
 extern PadState D_0013CA40_p2523C8 __asm__("D_0013C940");
-extern int D_00141760_2523C8 __asm__("D_00141660") __attribute__((section(".data")));
+extern int D_00141760_2523C8 __asm__("D_00141660") NOT_SDA;
 extern unsigned char D_0013D5C8_2523C8[] __asm__("D_0013D4DC");
 extern Rec2C_2523C8 D_L05_0017C188_2523C8[] __asm__("D_L05_0017C088");
 extern int D_L05_0015F674_gp __asm__("D_L05_0015F674") __attribute__((sda));
 extern int func_L05_0024D680_2523C8(int, int) __asm__("FUN_L05_0024cee8");
 extern int func_001F9908_2523C8(int *) __asm__("FUN_001f9740");
-extern Moby *D_L05_00160098_2523C8 __asm__("D_L05_0015FFD8") __attribute__((section(".sdata")));
-extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
-extern int D_0015ED84_gp __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern Moby *D_L05_00160098_2523C8 __asm__("D_L05_0015FFD8") MACRO_ADDR;
+extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
+extern int D_0015ED84_gp __asm__("D_0015ED84") MACRO_ADDR;
 
 int process_hero_primary_item_input(void) __asm__("FUN_L05_00251be8");
 
@@ -1394,7 +1394,7 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
         out_rotation[2] = fast_arc_tan(heading_target_path_record[4] - selected_path_record[4], heading_target_path_record[5] - selected_path_record[5]);
     }
 }
-extern int D_0015ED84_lui __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int D_0015ED84_lui __asm__("D_0015ED84") MACRO_ADDR;
 extern int FUN_001f96f8_254608(int) __asm__("FUN_001f96f8");
 typedef int u128_254608 __attribute__((mode(TI)));
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Node_254608;
@@ -1418,15 +1418,15 @@ typedef struct {
 } Ent_254608;
 typedef struct { char pad0[9]; unsigned char f9; } Flags_254608;
 
-extern unsigned char D_0013D388_254608[] __asm__("D_0013D388") __attribute__((section(".data")));
-extern unsigned char D_0013D408_254608[] __asm__("D_0013D408") __attribute__((section(".data")));
-extern unsigned char D_0013D4DF_254608 __asm__("D_0013D4DF") __attribute__((section(".data")));
+extern unsigned char D_0013D388_254608[] __asm__("D_0013D388") NOT_SDA;
+extern unsigned char D_0013D408_254608[] __asm__("D_0013D408") NOT_SDA;
+extern unsigned char D_0013D4DF_254608 __asm__("D_0013D4DF") NOT_SDA;
 extern char *D_L05_001B0930[];
-extern Ent_254608 *D_L05_0015FFD8_254608 __asm__("D_L05_0015FFD8") __attribute__((section(".sdata")));
-extern int D_0015EE38_macro __asm__("D_0015EE38") __attribute__((section(".sdata")));
-extern int D_0015EE3C_macro __asm__("D_0015EE3C") __attribute__((section(".sdata")));
-extern int freeze_stats_time_ref_macro[2] __asm__("D_0015EE58") __attribute__((section(".sdata")));
-extern int freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") __attribute__((section(".sdata")));
+extern Ent_254608 *D_L05_0015FFD8_254608 __asm__("D_L05_0015FFD8") MACRO_ADDR;
+extern int D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
+extern int D_0015EE3C_macro __asm__("D_0015EE3C") MACRO_ADDR;
+extern int freeze_stats_time_ref_macro[2] __asm__("D_0015EE58") MACRO_ADDR;
+extern int freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") MACRO_ADDR;
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
@@ -1442,9 +1442,9 @@ extern void func_001FFFA0_254608(void) __asm__("FUN_001ff768");
 #include "rnc/overlay/shared/ui/help/00237488_data/update_hero_hoverboard_race_progress.h"
 extern float D_L05_0015F67C __attribute__((sda));
 extern int D_L05_0015F6A8 __attribute__((sda));
-extern f32 frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
-extern s32 pal_mode __asm__("D_0015ED80") __attribute__((section(".sdata")));
-extern s32 current_bolt_count_macro __asm__("D_0015ED98") __attribute__((section(".sdata")));
+extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
+extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
+extern s32 current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
 /* Hoverboard race tick: advances the hero's and the opponents' path nodes and laps, handles wrong-way and fall resets, ranks everyone and finishes the race after three laps. */
 void update_hero_hoverboard_race_progress(void) __asm__("FUN_L05_00254608");
 
@@ -1697,7 +1697,7 @@ int hero_select_anim_id_by_flags(void) {
 
 
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
-extern float frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float frame_time __asm__("D_0015ED6C") MACRO_ADDR;
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int offset_path_index(void *, int, int, int) __asm__("FUN_L00_0025d7a0");

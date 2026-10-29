@@ -564,8 +564,8 @@ void apply_vendor_beam_damage(char *self) {
 /* Slot update of moby class 1331: state 0 clears the two slot arrays, state 1 services the pending slots and frees a slot whose moby has died. Level 14 relative of func_L00_002E32A0. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00304E68), where it is exact; names translated to the US level program. */
 
-extern int D_L14_00162148[] __attribute__((section(".sdata")));
-extern int D_L14_001621D8[] __attribute__((section(".sdata")));
+extern int D_L14_00162148[] MACRO_ADDR;
+extern int D_L14_001621D8[] MACRO_ADDR;
 extern void release_beam_slot(int) __asm__("FUN_L00_002e20f8");
 extern void update_slot_panes_and_effects(int, int) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots(void) __asm__("FUN_L00_002e2af0");

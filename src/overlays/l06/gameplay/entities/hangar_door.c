@@ -313,7 +313,7 @@ void activate_listed_state_15_mobys_at_raised_positions(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC6D8), where it is exact; names translated to the US level program. */
 
-extern char D_L06_00167540[] __attribute__((section(".data")));
+extern char D_L06_00167540[] NOT_SDA;
 extern f32 D_0015ED70_s __asm__("D_0015ED70");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_00213f38(float *, float *, float, float, float, float);
@@ -1353,10 +1353,10 @@ void update_drawbridge_segment_transforms(Moby *moby)
 #include "rnc/ui/help/help_record.h"
 
 typedef struct GbMoby GbMoby;
-extern GbMoby *D_L06_001745D8 __attribute__((section(".data")));
+extern GbMoby *D_L06_001745D8 NOT_SDA;
 extern float D_L06_001DAFD0[];
 extern float D_L06_001DB060[];
-extern int D_L06_00161E40[] __attribute__((section(".sdata")));
+extern int D_L06_00161E40[] MACRO_ADDR;
 extern int D_L06_00161E50;
 extern int D_L06_00161E54;
 extern f32 D_L06_00161E08 __attribute__((sda));
@@ -1370,9 +1370,9 @@ extern int beam_barrier_burst_lifetime_min_frames_gp __asm__("D_L06_00161E2C") _
 extern int beam_barrier_burst_lifetime_max_frames_gp __asm__("D_L06_00161E30") __attribute__((sda));
 extern float beam_barrier_burst_drift_min_speed_gp __asm__("D_L06_00161E34") __attribute__((sda));
 extern float beam_barrier_burst_drift_max_speed_gp __asm__("D_L06_00161E38") __attribute__((sda));
-extern float frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern int current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
-extern int D_0015EEA4_macro __asm__("D_0015EEA4") __attribute__((section(".sdata")));
+extern float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern int current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
+extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float approach_value(float *, float, float);
@@ -1657,7 +1657,7 @@ extern float beam_barrier_texture_u_step_gp __asm__("D_L06_00161DF8") __attribut
 float D_L06_00161DFC = 0;
 extern int D_L06_00161E50;
 extern int D_L06_00161E54;
-extern int D_L06_00161E40[] __attribute__((section(".sdata")));
+extern int D_L06_00161E40[] MACRO_ADDR;
 extern float D_L06_001DAFD0[];
 extern float D_L06_001DB060[];
 Vec4 D_L06_001DB0F0[4][30] = {0};
@@ -1739,7 +1739,7 @@ extern f32 beam_barrier_render_phase_speed_gp __asm__("D_L06_00161E00") __attrib
 extern f32 beam_barrier_class_scale_multiplier_gp __asm__("D_L06_00161E14") __attribute__((sda));
 extern f32 D_L06_00161E08 __attribute__((sda));
 extern f32 beam_barrier_strand_jitter_max_speed_gp __asm__("D_L06_00161E04") __attribute__((sda));
-extern int D_L06_00161E40[4] __attribute__((section(".sdata")));
+extern int D_L06_00161E40[4] MACRO_ADDR;
 extern int D_L06_00161E50;
 Vec4 D_L06_001DB870[4][30] = {0};
 extern float fast_add_rotations(float, float);
@@ -3044,11 +3044,11 @@ extern int FUN_L00_0025ff38(void *, void *, int, int, void *, int, float);
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L06_002fb148_recovery_high(char *) __asm__("FUN_L06_002fb508");
 extern void FUN_L06_002fb148_recovery_low(char *) __asm__("FUN_L06_002fb8c8");
-extern short D_L06_0014162A __attribute__((section(".data")));
-extern int D_L06_00140408 __attribute__((section(".data")));
-extern int D_0013CAE0 __attribute__((section(".data")));
+extern short D_L06_0014162A NOT_SDA;
+extern int D_L06_00140408 NOT_SDA;
+extern int D_0013CAE0 NOT_SDA;
 extern float D_L06_0015F3FC;
-extern int D_L06_001413D0 __attribute__((section(".data")));
+extern int D_L06_001413D0 NOT_SDA;
 #include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_alien_queen_hit_response_and_recovery.h"
 int D_L06_00161F10 = 0x80808080;
 int D_L06_00161F14 = 0x80804080;
@@ -3581,15 +3581,15 @@ typedef struct {
     unsigned char f20;
 } Flags_2FDA70;
 
-extern char *D_L06_001600EC_c __asm__("D_L06_001600EC") __attribute__((section(".sdata")));
-extern char *D_L06_0015FFD8_c __asm__("D_L06_0015FFD8") __attribute__((section(".sdata")));
+extern char *D_L06_001600EC_c __asm__("D_L06_001600EC") MACRO_ADDR;
+extern char *D_L06_0015FFD8_c __asm__("D_L06_0015FFD8") MACRO_ADDR;
 extern char D_0013F350[];
-extern float D_0015ED6C __attribute__((section(".sdata")));
-extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float D_0015ED6C MACRO_ADDR;
+extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int D_0013D388; /* no foreign declaration */
 extern int D_0013D3A8; /* no foreign declaration */
 extern int D_0013D4C6; /* no foreign declaration */
-extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") __attribute__((section(".sdata")));
+extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") MACRO_ADDR;
 extern int D_0013D3A8; /* no foreign declaration */
 extern float D_L06_00161F60 __attribute__((sda));
 extern float height_cycle_max_speed_gp __asm__("D_L06_00161F64") __attribute__((sda));

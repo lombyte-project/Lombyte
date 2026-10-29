@@ -404,7 +404,7 @@ void update_hero_aligned_camera_position(char *camera_object) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern u128 D_0013F3D0_2e9dd0 __asm__("D_0013F3D0");
-extern void *D_L00_00166E04_2e9dd0 __asm__("D_L00_00166E04") __attribute__((section(".data")));
+extern void *D_L00_00166E04_2e9dd0 __asm__("D_L00_00166E04") NOT_SDA;
 extern void FUN_001f9bf8_2e9dd0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_2e9dd0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_2e9dd0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -605,11 +605,11 @@ typedef struct {
     u8 p[0x3C];
     V_2ea488 v;
 } S_2ea488;
-extern P_2ea488 D_0013F350_2ea488 __asm__("D_0013F350") __attribute__((section(".data")));
-extern OvlQuad D_0013F3D0_2ea488 __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern P_2ea488 D_0013F350_2ea488 __asm__("D_0013F350") NOT_SDA;
+extern OvlQuad D_0013F3D0_2ea488 __asm__("D_0013F3D0") NOT_SDA;
 extern E_2ea488 *D_L00_0015EF50_2ea488 __asm__("D_L00_0015EF50");
-extern char *D_L00_00166E00_2ea488 __asm__("D_L00_00166E00") __attribute__((section(".data")));
-extern char D_L00_00166E10_2ea488[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
+extern char *D_L00_00166E00_2ea488 __asm__("D_L00_00166E00") NOT_SDA;
+extern char D_L00_00166E10_2ea488[] __asm__("D_L00_00166E10") NOT_SDA;
 extern char *find_camera_collision_volume_for_point(void *, f32) __asm__("FUN_L00_001ee1b0");
 extern int FUN_001f96f8_2ea488(int) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9dc8_2ea488(f32) __asm__("FUN_001f9dc8");
@@ -759,7 +759,7 @@ typedef struct {
     unsigned char pad0[0x7E];
     short s7E;
 } A_2ea810;
-extern Q_2ea810 D_L00_00166C80_2ea810 __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern Q_2ea810 D_L00_00166C80_2ea810 __asm__("D_L00_00166C80") NOT_SDA;
 extern float FUN_001f9ab0_2ea810(void *, void *) __asm__("FUN_001f9ab0");
 extern void FUN_001f9a68_2ea810(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a28_2ea810(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -814,7 +814,7 @@ void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
 /* Copies a vector into the current object's slot, switching to state 5 first. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBE88), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_00166E00 __attribute__((section(".data")));
+extern char *D_L00_00166E00 NOT_SDA;
 extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
 /* Copies src to +0x80 of the object of entry 5 (from FUN_L00_001eb1f8 if needed). */
@@ -833,7 +833,7 @@ typedef struct {
 } __attribute__((aligned(16))) V_2eaaa0;
 extern V_2eaaa0 D_L00_00166DC0_2eaaa0[2] __asm__("D_L00_00166DC0")
     __attribute__((section(".data")));
-extern V_2eaaa0 D_0013F3D0_2eaaa0 __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern V_2eaaa0 D_0013F3D0_2eaaa0 __asm__("D_0013F3D0") NOT_SDA;
 u8 *FUN_L00_001eb1f8_2eaaa0(s32) __asm__("FUN_L00_001eb1f8");
 void FUN_001ebf10_2eaaa0(u8 *) __asm__("FUN_001ebf10");
 void FUN_L00_001ed630_2eaaa0(void *, V_2eaaa0 *, V_2eaaa0 *) __asm__("FUN_L00_001ed630");
@@ -874,7 +874,7 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
     *(s32 *)(transition_state + 4) = transition_duration_frames;
     *(s32 *)(camera_state + 0xE0) = transition_duration_frames;
 }
-extern char player_camera[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern char player_camera[] __asm__("D_L00_00166C80") NOT_SDA;
 void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
 void FUN_001fa050_2eac18(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eac18(void *, void *) __asm__("FUN_001fa2b8");
@@ -948,7 +948,7 @@ void initialize_camera_pose_springs(char *camera_object) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC2D0), where it is exact; names translated to the US level program. */
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L00_00166DD8 __attribute__((section(".data")));
+extern float D_L00_00166DD8 NOT_SDA;
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
@@ -1198,8 +1198,8 @@ void update_orbit_camera_pose(char *camera_object) {
     FUN_001fa2b8_2eb480(camera_object, rotation_matrix);
 }
 #undef F
-extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
-extern char D_L00_00166C80_2eb648[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern struct Hero hero_data __asm__("D_0013F350") NOT_SDA;
+extern char D_L00_00166C80_2eb648[] __asm__("D_L00_00166C80") NOT_SDA;
 void FUN_001f9cf8_2eb648(void *, void *, void *) __asm__("FUN_001f9cf8");
 void FUN_001f9a10_2eb648(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_001eb0c8_2eb648(void *, void *, float) __asm__("FUN_L00_001eb0c8");
@@ -1208,7 +1208,7 @@ float FUN_001fa580_2eb648(float, float) __asm__("FUN_001fa580");
 float FUN_001f9e90_2eb648(float, float) __asm__("FUN_001f9e90");
 float FUN_001fa688_2eb648(float, float) __asm__("FUN_001fa688");
 float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float D_L00_00161DD4 __attribute__((section(".data")));
+extern float D_L00_00161DD4 NOT_SDA;
 int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby) __asm__("FUN_L00_002eb648");
 
 int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby) {
@@ -1359,11 +1359,11 @@ void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
 /* Sets up the camera activation moby: tuning floats, then the pose copied from the current camera. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002ED088), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[] __attribute__((section(".data")));
+extern char D_0013F350[] NOT_SDA;
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern int D_0015ED84 __attribute__((section(".sdata")));
+extern int D_0015ED84 MACRO_ADDR;
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1579,7 +1579,7 @@ float FUN_L00_001eb328_2ec4a8(void *, float, float, float, float,
 void FUN_001f9ad8_2ec4a8(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_00214890_2ec4a8(void *, void *, void *, float) __asm__("FUN_00214890");
 
-extern u8 D_L00_00166E30_lui[] __asm__("D_L00_00166E30") __attribute__((section(".data")));
+extern u8 D_L00_00166E30_lui[] __asm__("D_L00_00166E30") NOT_SDA;
 void turn_camera_view_toward_hero(unsigned char *camera_object) __asm__("FUN_L00_002ec4a8");
 
 void turn_camera_view_toward_hero(unsigned char *camera_object) {
@@ -1744,11 +1744,11 @@ typedef struct {
 
 extern CameraDescriptor *camera_descriptors __asm__("D_L00_0015EF50");
 /* controller_state.held (the label sits inside struct PadState). */
-extern s32 pad_held __asm__("D_0013CAE0") __attribute__((section(".data")));
-extern f32 D_L00_00166DD8 __asm__("D_L00_00166DD8") __attribute__((section(".data")));
-extern f32 D_L00_00166EB4 __asm__("D_L00_00166EB4") __attribute__((section(".data")));
-extern u8 D_001413F4 __asm__("D_001413F4") __attribute__((section(".data")));
-extern s32 D_001413DC __asm__("D_001413DC") __attribute__((section(".data")));
+extern s32 pad_held __asm__("D_0013CAE0") NOT_SDA;
+extern f32 D_L00_00166DD8 __asm__("D_L00_00166DD8") NOT_SDA;
+extern f32 D_L00_00166EB4 __asm__("D_L00_00166EB4") NOT_SDA;
+extern u8 D_001413F4 __asm__("D_001413F4") NOT_SDA;
+extern s32 D_001413DC __asm__("D_001413DC") NOT_SDA;
 extern s32 hero_requested_camera_mode[] __asm__("D_001415D4");
 extern u8 *toad_paths[] __asm__("D_L00_001B04B0");
 
@@ -2206,8 +2206,8 @@ typedef struct {
     u8 b18;
     u8 p2[7];
 } T_2ed950;
-extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern E_2ed950 D_0013E550_2ed950[] __asm__("D_0013E550") __attribute__((section(".data")));
+extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
+extern E_2ed950 D_0013E550_2ed950[] __asm__("D_0013E550") NOT_SDA;
 extern T_2ed950 *D_L00_0015F5F4_2ed950 __asm__("D_L00_0015F5F4");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 s32 FUN_001f9740_2ed950(s32 *) __asm__("FUN_001f9740");
@@ -2258,7 +2258,7 @@ typedef struct {
 typedef struct {
     f32 f[4];
 } V_2edad8;
-extern u8 D_L00_00166DC0_2edad8[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern u8 D_L00_00166DC0_2edad8[] __asm__("D_L00_00166DC0") NOT_SDA;
 extern u8 voice_pool[] __asm__("D_0013E550");
 extern void sub_2edad8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");

@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/globals.h"
+#include "sda.h"
 
 
 
@@ -149,8 +150,8 @@ typedef union {
 } V_258490;
 extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
     __attribute__((section(".data")));
-extern V_258490 D_L00_00173E60_258490 __asm__("D_L00_00173E60") __attribute__((section(".data")));
-extern V_258490 D_L00_00173E70_258490 __asm__("D_L00_00173E70") __attribute__((section(".data")));
+extern V_258490 D_L00_00173E60_258490 __asm__("D_L00_00173E60") NOT_SDA;
+extern V_258490 D_L00_00173E70_258490 __asm__("D_L00_00173E70") NOT_SDA;
 extern float FUN_L00_00259710_258490(void *) __asm__("FUN_L00_00259710");
 extern float FUN_001f99c0_258490(float) __asm__("FUN_001f99c0");
 extern void FUN_001f9a28_258490(void *, void *, void *) __asm__("FUN_001f9a28");

@@ -876,7 +876,7 @@ extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8,
                               float *v11, float scale, float *v12);
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
-extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") __attribute__((section(".sdata")));
+extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;
 void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) __asm__("FUN_L17_002f5390");
 
 void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) {

@@ -5,6 +5,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 typedef struct {
     char pad09[0x86];
@@ -314,17 +315,17 @@ typedef struct {
     char pad2[0x30];
     char *o;
 } C_1ed6a8;
-extern C_1ed6a8 D_166C80_1ed6a8 __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern OvlQuad D_173E70_1ed6a8 __asm__("D_L00_00173E70") __attribute__((section(".data")));
-extern OvlQuad D_166DC0_1ed6a8 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern int D_16C058_1ed6a8[] __asm__("D_L00_0016C058") __attribute__((section(".data")));
+extern C_1ed6a8 D_166C80_1ed6a8 __asm__("D_L00_00166C80") NOT_SDA;
+extern OvlQuad D_173E70_1ed6a8 __asm__("D_L00_00173E70") NOT_SDA;
+extern OvlQuad D_166DC0_1ed6a8 __asm__("D_L00_00166DC0") NOT_SDA;
+extern int D_16C058_1ed6a8[] __asm__("D_L00_0016C058") NOT_SDA;
 extern void f9a28_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern int coll_sphere(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
-extern int D_L00_0016C06C __attribute__((section(".data")));
+extern int D_L00_0016C06C NOT_SDA;
 extern int D_L00_0015EF5C_gp __asm__("D_L00_0015EF5C") __attribute__((sda));
 void resolve_camera_movement_collisions(OvlQuad *camera_position, float collision_radius) __asm__("FUN_L00_001ed6a8");
 

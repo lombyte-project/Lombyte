@@ -5,6 +5,7 @@
 
 
 #include "qcopy.h"
+#include "sda.h"
 
 /* Spawn a particle moby at pos with a colour, lifetime and size. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/partupd_0029D2B8.c: func_L07_0029D2B8), where it is exact; names translated to the US level program. */
@@ -15,7 +16,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern unsigned char *D_L07_001B2164 __attribute__((section(".data")));
+extern unsigned char *D_L07_001B2164 NOT_SDA;
 void spawn_white_particle_with_payload(void *particle_position_source, void *particle_payload_source) __asm__("FUN_L07_0029c4e8");
 
 void spawn_white_particle_with_payload(void *particle_position_source, void *particle_payload_source) {

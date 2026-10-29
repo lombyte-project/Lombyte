@@ -4,6 +4,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 
 
@@ -135,7 +136,7 @@ void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, fl
 
 extern float frame_time __asm__("D_0015ED6C");
 extern struct Moby *moby_base __asm__("D_L13_0015FFD8");
-extern int D_L13_00174158_1cc8 __asm__("D_L13_00174158") __attribute__((section(".data")));
+extern int D_L13_00174158_1cc8 __asm__("D_L13_00174158") NOT_SDA;
 
 extern int timer_expired_1cc8(void *) __asm__("FUN_001f9740");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");

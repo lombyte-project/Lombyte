@@ -211,7 +211,7 @@ extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
-extern unsigned char D_0013D4C3 __attribute__((section(".data")));
+extern unsigned char D_0013D4C3 NOT_SDA;
 extern int D_L11_0015F5C4;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -516,8 +516,8 @@ extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern int is_moby_in_state_five(struct Moby *arg) __asm__("FUN_L11_0030a830");
 extern void FUN_L11_0030a840(unsigned char *arg);
-extern unsigned char D_0013D4EE __attribute__((section(".data")));
-extern unsigned char D_0013D3DC __attribute__((section(".data")));
+extern unsigned char D_0013D4EE NOT_SDA;
+extern unsigned char D_0013D3DC NOT_SDA;
 extern int D_0015ED84;
 extern unsigned char D_0014C050[];
 /* One of the level's path/spawn points (D_L11_001600EC, 0x80 bytes each). */
@@ -529,7 +529,7 @@ struct PokPathPoint {
 };
 extern struct PokPathPoint *path_points_14b0 __asm__("D_L11_001600EC");
 extern int D_L11_0015FFD8;
-extern int camera_secondary_mode __asm__("D_001413D4") __attribute__((section(".data")));
+extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern char resort_owner_completion_dialogue_pose[] __asm__("D_L11_0016D270");
 #include "rnc/overlay/l11/gameplay/entities/bob_globals.h"
 extern float resort_owner_gate_jump_target_local_z_offset_gp __asm__("D_L11_00161410") __attribute__((sda));
@@ -1097,11 +1097,11 @@ struct PokSentryVars {
     int target_timer;
 };
 
-extern unsigned char D_0013D50B __attribute__((section(".data")));
+extern unsigned char D_0013D50B NOT_SDA;
 extern int D_0015ED84;
 extern unsigned char D_0014C050[];
 extern char *D_L11_001600EC;
-extern struct UsageStat help_records[] __asm__("D_00141968") __attribute__((section(".data")));
+extern struct UsageStat help_records[] __asm__("D_00141968") NOT_SDA;
 extern void mark_moby_for_removal_f0e40(void *) __asm__("FUN_0020c828");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -1235,13 +1235,13 @@ void fred_pokitaru_update(struct Moby *moby) {
 }
 #include "qcopy.h"
 
-extern float D_0013F3D8_lui __asm__("D_0013F3D8") __attribute__((section(".data")));          /* hero z */
+extern float D_0013F3D8_lui __asm__("D_0013F3D8") NOT_SDA;          /* hero z */
 extern int current_level_index __asm__("D_0015ED84");
 extern unsigned char D_0014C050_2518[] __asm__("D_0014C050");
-extern int D_0013CAE4_2518 __asm__("D_0013CAE4") __attribute__((section(".data")));
+extern int D_0013CAE4_2518 __asm__("D_0013CAE4") NOT_SDA;
 extern int D_L11_0015F594 __asm__("D_L11_0015F594");
 extern char *D_L11_0015FFD8_2518 __asm__("D_L11_0015FFD8");
-extern unsigned char D_001413F5_2518 __asm__("D_001413F5") __attribute__((section(".data")));
+extern unsigned char D_001413F5_2518 __asm__("D_001413F5") NOT_SDA;
 extern float D_0015ED6C_2518 __asm__("D_0015ED6C");
 extern float D_0015ED70_2518 __asm__("D_0015ED70");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
@@ -1696,7 +1696,7 @@ struct PokPv_309ac0 {
 };
 
 extern unsigned char D_0013E550_309ac0[] __asm__("D_0013E550");
-extern void *D_0013F64C_309ac0 __asm__("D_0013F64C") __attribute__((section(".data")));
+extern void *D_0013F64C_309ac0 __asm__("D_0013F64C") NOT_SDA;
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void FUN_001fa2d8_309ac0(void *, void *) __asm__("FUN_001fa2d8");

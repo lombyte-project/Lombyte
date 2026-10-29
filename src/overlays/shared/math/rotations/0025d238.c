@@ -6,6 +6,7 @@
 
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 typedef union {
     u128 q;
     f32 f[4];
@@ -521,9 +522,9 @@ extern void func_L00_002D4CE8_25e450(void *, void *, int, int) __asm__("FUN_L00_
 
 extern char default_explosion_flash_descriptor[] __asm__("D_L00_001B0250");
 extern char alternate_explosion_flash_descriptor[] __asm__("D_L00_001B02A0");
-extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_L00_0015F5D4_macro __asm__("D_L00_0015F5D4") __attribute__((section(".sdata")));
-extern float D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") __attribute__((section(".sdata")));
+extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_L00_0015F5D4_macro __asm__("D_L00_0015F5D4") MACRO_ADDR;
+extern float D_L00_0015F5D0_macro __asm__("D_L00_0015F5D0") MACRO_ADDR;
 /* Beam explosion at moby m: a spark burst from a spawn event, optional glow sparks and a flash, with a cam tint. */
 void spawn_explosion(char *m, void *unused, char *pos, float fA, float fB, int n, int k8, int k9,
                        float fC, float fD, float fE, float fF, int k10, float fG, int k11,
@@ -895,7 +896,7 @@ typedef struct {
     V25f878 *p78;
     u8 pad7c[0x100 - 0x7C];
 } M25f878;
-extern s16 D_L00_001B0770[] __attribute__((section(".data")));
+extern s16 D_L00_001B0770[] NOT_SDA;
 extern u8 *D_L00_0015FFD8_c3 __asm__("D_L00_0015FFD8");
 /* Finds the moby in the D_L00_001B0770 index list whose data id matches id; 0 when none. */
 M25f878 *find_listed_moby_by_data_id(s32 id) __asm__("FUN_L00_0025f878");

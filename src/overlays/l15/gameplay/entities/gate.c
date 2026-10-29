@@ -6,6 +6,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 
 
@@ -228,11 +229,11 @@ extern unsigned char D_001413F4[];
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int func_0022ED80_2A48B0(int, int, GateMoby_2A48B0 *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern unsigned char D_0013DD50 __attribute__((section(".data")));
+extern unsigned char D_0013DD50 NOT_SDA;
 extern unsigned char D_0013F3D0_2A48B0[] __asm__("D_0013F3D0");
 extern char D_0013E550[];
 extern char D_L15_00167440_2A48B0[] __asm__("D_L15_001673C0");
-extern int D_L15_00184B28_2A48B0 __asm__("D_L15_00184AA8") __attribute__((section(".data")));
+extern int D_L15_00184B28_2A48B0 __asm__("D_L15_00184AA8") NOT_SDA;
 
 void update_vertical_gate(GateMoby_2A48B0 *gate_moby) __asm__("FUN_L15_002a36d0");
 
@@ -850,7 +851,7 @@ extern float construction_arm_effect_speed_max_gp __asm__("D_L15_001619FC") __at
 extern float construction_arm_wait_time_min_gp __asm__("D_L15_00161A00") __attribute__((sda));
 extern float construction_arm_wait_time_max_gp __asm__("D_L15_00161A04") __attribute__((sda));
 extern unsigned short *l15_moby_group_member_lists[] __asm__("D_L15_001ABE40");
-extern float D_L15_0015F580[] __attribute__((section(".sdata")));
+extern float D_L15_0015F580[] MACRO_ADDR;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_00251fd0(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern float FUN_L15_001f8648(float);
@@ -1945,7 +1946,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int scale_game_frames(int);
 extern int fast_dec_timer(int *) __asm__("func_001F9740");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
-extern float D_L15_0015F580[] __attribute__((section(".sdata")));
+extern float D_L15_0015F580[] MACRO_ADDR;
 extern short ultramech_path_horizontal_speed_gp __asm__("D_L15_00161B14") __attribute__((sda));
 extern short ultramech_path_gravity_gp __asm__("D_L15_00161B18") __attribute__((sda));
 extern short ultramech_projectile_speed_gp __asm__("D_L15_00161B20") __attribute__((sda));
@@ -2490,7 +2491,7 @@ void ultramech_unlimited_update(UMoby *ultramech_moby) {
 extern float ultramech_pre_hit_scale_multiplier_gp __asm__("D_L15_00161B2C") __attribute__((sda));
 extern float ultramech_post_hit_scale_multiplier_gp __asm__("D_L15_00161B30") __attribute__((sda));
 extern float D_0015ED70;
-extern int D_001413D0 __attribute__((section(".data")));
+extern int D_001413D0 NOT_SDA;
 extern char D_00178700[] __asm__("D_L15_00178700");
 extern int FUN_00249d60(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_001f99c8_f(float) __asm__("FUN_001fa6d0");

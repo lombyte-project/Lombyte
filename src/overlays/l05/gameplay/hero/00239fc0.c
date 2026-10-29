@@ -352,7 +352,7 @@ extern void FUN_L00_002334d0(void *, void *, f32);
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 FUN_L00_001f3170(void *, f32);
-extern u128_2133a8 D_L05_00174270[] __attribute__((section(".data")));
+extern u128_2133a8 D_L05_00174270[] NOT_SDA;
 s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L05_00240ed0");
 
 s32 resolve_hero_position_collisions(s32 mode) {

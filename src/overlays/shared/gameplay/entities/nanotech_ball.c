@@ -1071,7 +1071,7 @@ typedef struct {
 } G_2db508;
 
 extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern unsigned char D_0013E529 __attribute__((section(".data")));
+extern unsigned char D_0013E529 NOT_SDA;
 extern char *suck_cannon_moby_slots[] __asm__("D_001413A0");
 extern G_2db508 D_0013F350;
 extern G_2db508 D_0013F350_a __asm__("D_0013F350");
@@ -1132,7 +1132,7 @@ int dispatch_suck_cannon_suction_cancel(char *moby) {
     }
     return 1;
 }
-extern struct Hero hero_data __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero_data __asm__("D_0013F350") NOT_SDA;
 typedef struct {
     char p0[0x154];
     f32 f154;
@@ -1140,7 +1140,7 @@ typedef struct {
     char p1[0x350 - 0x15C];
     char m350[0x40];
 } C_002da250;
-extern char D_L00_00166C80[] __attribute__((section(".data")));
+extern char D_L00_00166C80[] NOT_SDA;
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_002da250;
@@ -1275,15 +1275,15 @@ typedef struct {
     s32 i2078;
     s32 i207C;
 } G_002da660;
-extern G_002da660 D_0013F350_002da660 __asm__("D_0013F350") __attribute__((section(".data")));
+extern G_002da660 D_0013F350_002da660 __asm__("D_0013F350") NOT_SDA;
 typedef struct {
     u8 p[9];
     u8 b9;
 } H_002da660;
-extern H_002da660 item_text_variant __asm__("D_0013E520") __attribute__((section(".data")));
+extern H_002da660 item_text_variant __asm__("D_0013E520") NOT_SDA;
 u8 *FUN_L00_002db890_002da660(u8 *) __asm__("FUN_L00_002db890");
 void FUN_001e93b0_002da660(void *, s32, s32) __asm__("FUN_001e93b0");
-extern char D_L00_001E9FE8[] __attribute__((section(".data")));
+extern char D_L00_001E9FE8[] NOT_SDA;
 void refresh_suck_cannon_slots(void) __asm__("FUN_L00_002da660");
 
 void refresh_suck_cannon_slots(void) {
@@ -1472,7 +1472,7 @@ extern void suck_delete_callback(void) __asm__("FUN_L00_00237798");
 extern void suck_reset(SuckMoby *) __asm__("FUN_L00_002ddca0");
 extern void suck_draw_reticle(int,int,float,float,int,int,int,float,int) __asm__("FUN_L00_001edf60");
 extern SuckAimHeight *suck_get_aim_height(void *) __asm__("FUN_002141f8");
-extern float D_L00_00173E68 __attribute__((section(".data")));
+extern float D_L00_00173E68 NOT_SDA;
 void suckcannon_update(SuckMoby *self) __asm__("FUN_L00_002da790");
 void suckcannon_update(SuckMoby *self) {
     enum {
@@ -1895,7 +1895,7 @@ missing:
 fail:
     return 0;
 }
-extern u8 *D_001403E0_002dbb20 __asm__("D_001403E0") __attribute__((section(".data")));
+extern u8 *D_001403E0_002dbb20 __asm__("D_001403E0") NOT_SDA;
 u8 *FUN_L00_002db890_002dbb20(u8 *) __asm__("FUN_L00_002db890");
 void FUN_L00_002d9fd0_002dbb20(void *, void *, void *) __asm__("FUN_L00_002d9fd0");
 void FUN_0020e098_002dbb20(void *) __asm__("FUN_0020e098");
@@ -1930,7 +1930,7 @@ s32 store_moby_in_suck_cannon(u8 *moby, OvlQuad *position) {
     }
     return 0;
 }
-extern u8 D_0013F3D0_002dbc30[] __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern u8 D_0013F3D0_002dbc30[] __asm__("D_0013F3D0") NOT_SDA;
 u8 *FUN_L00_002db890_002dbc30(u8 *) __asm__("FUN_L00_002db890");
 u8 *FUN_002141f8_002dbc30(u8 *) __asm__("FUN_002141f8");
 void FUN_0022da68_002dbc30(s32, s32, void *) __asm__("FUN_0022da68");
@@ -2345,9 +2345,9 @@ void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int
 void spawn_effect_particle_with_transformed_random_offset(void *pos, void *mat) __asm__("FUN_L00_0026c3d0");
 void FUN_L00_002dc938_c(char *p, char *q, int flag) __asm__("FUN_L00_002dc938");
 void noop_main_callback(void *) __asm__("FUN_001e93e8");
-extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
-extern float frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
-extern float frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern float frame_scale __asm__("D_0015ED60") MACRO_ADDR;
+extern float frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
+extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern unsigned char D_0013E629_2DDEA0[] __asm__("D_0013E529");
 extern unsigned char D_001404FC_2DDEA0[] __asm__("D_001403FC");
 extern char D_0013F450_2DDEA0[] __asm__("D_0013F350");
@@ -2701,13 +2701,13 @@ typedef struct {
     long word0, word1, word2, word3;
 } Pkt;
 
-extern char g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern char D_L00_001E5EE0[] __attribute__((section(".data")));
-extern char D_L00_001E6020[] __attribute__((section(".data")));
+extern char g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
+extern char D_L00_001E5EE0[] NOT_SDA;
+extern char D_L00_001E6020[] NOT_SDA;
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 #include "rnc/overlay/shared/gameplay/entities/nanotech_ball_data/suck_beam_draw_mesh.h"
 extern float D_L00_00161B50 __attribute__((sda));
-extern short D_L00_001E6008[] __attribute__((section(".data")));
+extern short D_L00_001E6008[] NOT_SDA;
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
@@ -2789,7 +2789,7 @@ void suck_beam_draw_mesh(void) {
 }
 extern int D_L00_00161B44_gp __asm__("D_L00_00161B44") __attribute__((sda));
 extern int D_L00_00161B40_gp __asm__("D_L00_00161B40") __attribute__((sda));
-extern short D_L00_001E6008[] __attribute__((section(".data")));
+extern short D_L00_001E6008[] NOT_SDA;
 /* Sets D_L00_00161B40_gp and D_L00_00161B44_gp to 1 and clears D_L00_001E6008. */
 void FUN_L00_002ddca0(void) {
     D_L00_00161B40_gp = 1;
@@ -2807,14 +2807,14 @@ typedef struct { int pad[5]; int f14; } E04_DF168;
 typedef struct { short idx; short angle; float f; float phase; float phase_step; float speed; char *p; } E04;
 
 extern E04 D_L00_001E4C80[];
-extern char D_L00_00161B60[] __attribute__((section(".sdata")));
-extern char D_L00_00161B70[] __attribute__((section(".sdata")));
+extern char D_L00_00161B60[] MACRO_ADDR;
+extern char D_L00_00161B70[] MACRO_ADDR;
 extern char D_L00_00166FD0[];
 extern char D_L00_001E5F30[];
 extern char D_L00_001E5F40[];
 extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern float D_L00_00161B80 __attribute__((section(".sdata")));
-extern float D_L00_00161B84 __attribute__((section(".sdata")));
+extern float D_L00_00161B80 MACRO_ADDR;
+extern float D_L00_00161B84 MACRO_ADDR;
 extern int D_L00_00161B40 __attribute__((sda));
 extern int D_L00_00161B44 __attribute__((sda));
 extern int D_L00_00161B54 __attribute__((sda));
@@ -3259,8 +3259,8 @@ typedef struct {
     u8 pad2[3];
     T_2df1e0 *p24;
 } O_2df1e0;
-extern short D_L00_001E6008[] __attribute__((section(".data")));
-extern u8 D_L00_001E5F40_2df1e0[][16] __asm__("D_L00_001E5F40") __attribute__((section(".data")));
+extern short D_L00_001E6008[] NOT_SDA;
+extern u8 D_L00_001E5F40_2df1e0[][16] __asm__("D_L00_001E5F40") NOT_SDA;
 s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(O_2df1e0 *) __asm__("FUN_L00_0025e3f8");
 f32 FUN_001f9b48(void *, void *);
