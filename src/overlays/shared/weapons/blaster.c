@@ -212,7 +212,7 @@ void blaster_update(struct Moby *moby) {
     BlasterVec     velocity;
     BlasterVec     aim_point;
     BlasterVec     launch;
-    BlasterWork    work;
+    BlasterWork    camera_aim_and_effect_scratch;
     BlasterMatrix4 inverse;
     BlasterVec     reach;
     BlasterVec     end;
@@ -221,7 +221,7 @@ void blaster_update(struct Moby *moby) {
     float          pitch;
     float          base_yaw, base_pitch;
     float          red, green, blue;
-    BlasterVars   *data;
+    BlasterVars   *blaster_vars;
     BlasterUsage  *stats;
     int            i;
     int            never;
@@ -230,21 +230,21 @@ void blaster_update(struct Moby *moby) {
     target = 0;
     never = 0;
     pitch = 0.0f;
-    data = (BlasterVars *)moby->pvars;
+    blaster_vars = (BlasterVars *)moby->pvars;
     if (moby->state == 0) {
         moby->state = 1;
-        data->light = -1;
-        data->glow = 0;
+        blaster_vars->light = -1;
+        blaster_vars->glow = 0;
     }
-    fast_dec_timer_s16(&data->lock);
-    fast_dec_timer(&data->cooldown);
+    fast_dec_timer_s16(&blaster_vars->lock);
+    fast_dec_timer(&blaster_vars->cooldown);
     if (hero.state.current == 1)
         hero_set_state(30, 1);
     if (moby->prev_seq == 0 && moby->prev_frame < 3)
-        data->cooldown = scale_game_frames(7);
+        blaster_vars->cooldown = scale_game_frames(7);
     if (hero.state.current == 30 && (hero.moby->flags & 1)) {
-        copy_matrix3x4(&work.rotation, l00_camera.unk0);
-        transpose_rotation_matrix(&inverse, &work.rotation);
+        copy_matrix3x4(&camera_aim_and_effect_scratch.rotation, l00_camera.unk0);
+        transpose_rotation_matrix(&inverse, &camera_aim_and_effect_scratch.rotation);
         velocity.f.z = frame_time * 40.0f;
         transform_vector(&velocity, &velocity, &inverse);
         clear_u64_value(&launch);
@@ -289,20 +289,20 @@ void blaster_update(struct Moby *moby) {
         }
         target = FUN_L00_002b46a8_49a8(moby, &launch, &yaw, &pitch);
     }
-    if (target && data->lock == 0) {
+    if (target && blaster_vars->lock == 0) {
         if (get_ammo(-1)) {
             AimTarget *aim = (AimTarget *)get_moby_target_info(target);
             float      distance = fast_vec_dist(g_debug_camera.position, &target->pos) / 50.0f;
             float      height;
-            qcopy(&work.point, &target->pos);
+            qcopy(&camera_aim_and_effect_scratch.point, &target->pos);
             height = 0.5f;
             if (aim)
                 height = aim->height;
-            work.point.f.z += height;
+            camera_aim_and_effect_scratch.point.f.z += height;
             FUN_L00_001edf60_49a8((int)moby,
                                   0xFF0FFF0F,
                                   absolute_float(0.9f - distance * 0.65f),
-                                  &work.point,
+                                  &camera_aim_and_effect_scratch.point,
                                   0.0f,
                                   0x26,
                                   -1,
@@ -312,9 +312,9 @@ void blaster_update(struct Moby *moby) {
     }
     if (hero.item_anim_active && hero.state.current != 0x72 && D_L00_0015F5C4_macro != 2) {
         if (scale_game_frames(5 - item_text_variant[15]) < hero.item_anim_frames &&
-            data->cooldown == 0) {
+            blaster_vars->cooldown == 0) {
             if (use_ammo(-1, 1) && !hero.item_use_locked) {
-                data->cooldown = scale_game_frames(6);
+                blaster_vars->cooldown = scale_game_frames(6);
                 if (target) {
                     float      speed = frame_time * 40.0f;
                     AimTarget *aim;
@@ -334,46 +334,46 @@ void blaster_update(struct Moby *moby) {
                     } else if (pitch < fast_add_rotations(base_pitch, -0.17453292f)) {
                         base_pitch = fast_add_rotations(base_pitch, -0.17453292f);
                     }
-                    build_spherical_offset(&work.point, speed, base_yaw, -base_pitch);
-                    fast_vec_add(&work.point, &work.point, &launch);
-                    yaw = fast_arc_tan(aim_point.f.x - work.point.f.x,
-                                       aim_point.f.y - work.point.f.y);
-                    pitch = -fast_arc_tan(vector_distance_xy(&work.point, &aim_point),
-                                          aim_point.f.z - work.point.f.z);
+                    build_spherical_offset(&camera_aim_and_effect_scratch.point, speed, base_yaw, -base_pitch);
+                    fast_vec_add(&camera_aim_and_effect_scratch.point, &camera_aim_and_effect_scratch.point, &launch);
+                    yaw = fast_arc_tan(aim_point.f.x - camera_aim_and_effect_scratch.point.f.x,
+                                       aim_point.f.y - camera_aim_and_effect_scratch.point.f.y);
+                    pitch = -fast_arc_tan(vector_distance_xy(&camera_aim_and_effect_scratch.point, &aim_point),
+                                          aim_point.f.z - camera_aim_and_effect_scratch.point.f.z);
                 } else if (hero.state.current != 30) {
                     pitch -= hero.ground_pitch.f * 0.5f;
                     base_pitch -= hero.ground_pitch.f * 0.5f;
                 }
-                work.spawn.flags = 0x10000;
-                work.spawn.owner = moby;
-                work.spawn.f1C = 0.25f;
-                work.spawn.i20 = 1;
-                work.spawn.pos.f.x = fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y));
-                work.spawn.pos.f.y = fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y));
-                work.spawn.pos.f.z = 1.0f;
-                work.spawn.pos.f.w = 5627.9248f;
-                work.spawn.b18 = 1;
-                work.spawn.b19 = 1;
-                work.spawn.cls = (*(unsigned short *)&moby->oclass);
+                camera_aim_and_effect_scratch.spawn.flags = 0x10000;
+                camera_aim_and_effect_scratch.spawn.owner = moby;
+                camera_aim_and_effect_scratch.spawn.f1C = 0.25f;
+                camera_aim_and_effect_scratch.spawn.i20 = 1;
+                camera_aim_and_effect_scratch.spawn.pos.f.x = fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y));
+                camera_aim_and_effect_scratch.spawn.pos.f.y = fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y));
+                camera_aim_and_effect_scratch.spawn.pos.f.z = 1.0f;
+                camera_aim_and_effect_scratch.spawn.pos.f.w = 5627.9248f;
+                camera_aim_and_effect_scratch.spawn.b18 = 1;
+                camera_aim_and_effect_scratch.spawn.b19 = 1;
+                camera_aim_and_effect_scratch.spawn.cls = (*(unsigned short *)&moby->oclass);
                 transform_hero_local_offset_to_world(&inverse, 0.7f, -0.15f, 0.5f);
-                collect_mobies_in_sphere(&inverse, 0.42f, 5, hero.moby, &work.spawn);
+                collect_mobies_in_sphere(&inverse, 0.42f, 5, hero.moby, &camera_aim_and_effect_scratch.spawn);
                 FUN_L00_002caf70_49a8(hero.moby, yaw, pitch, base_yaw, base_pitch, &launch, target);
-                data->glow = scale_game_frames(15);
+                blaster_vars->glow = scale_game_frames(15);
                 for (i = 0; i < 5; i++) {
-                    work.spray.rnd.q = 0;
-                    work.spray.rnd.f.x = random_float_between(-1.0f, 1.0f);
-                    work.spray.rnd.f.y = random_float_between(-1.0f, 1.0f);
-                    work.spray.rnd.f.z = random_float_between(-1.0f, 1.0f);
-                    work.spray.v.q = work.spray.rnd.q;
+                    camera_aim_and_effect_scratch.spray.rnd.q = 0;
+                    camera_aim_and_effect_scratch.spray.rnd.f.x = random_float_between(-1.0f, 1.0f);
+                    camera_aim_and_effect_scratch.spray.rnd.f.y = random_float_between(-1.0f, 1.0f);
+                    camera_aim_and_effect_scratch.spray.rnd.f.z = random_float_between(-1.0f, 1.0f);
+                    camera_aim_and_effect_scratch.spray.v.q = camera_aim_and_effect_scratch.spray.rnd.q;
                     fast_vec_normalize(
-                        &work.spray.v, &work.spray.v, fast_vec_length(&velocity) * 0.65f);
-                    fast_vec_add(&work.spray.v, &velocity, &work.spray.v);
-                    fast_vec_normalize(&work.spray.v,
-                                       &work.spray.v,
+                        &camera_aim_and_effect_scratch.spray.v, &camera_aim_and_effect_scratch.spray.v, fast_vec_length(&velocity) * 0.65f);
+                    fast_vec_add(&camera_aim_and_effect_scratch.spray.v, &velocity, &camera_aim_and_effect_scratch.spray.v);
+                    fast_vec_normalize(&camera_aim_and_effect_scratch.spray.v,
+                                       &camera_aim_and_effect_scratch.spray.v,
                                        random_float_between(frame_time * 3.0f, frame_time * 6.0f));
                     FUN_L00_0026dd20(
                         &launch,
-                        &work.spray.v,
+                        &camera_aim_and_effect_scratch.spray.v,
                         0x5F2F4F6F,
                         random_int_between(scale_game_frames(5), scale_game_frames(10)),
                         10000.0f);
@@ -407,37 +407,37 @@ void blaster_update(struct Moby *moby) {
             advance_moby_animation(moby);
         }
         cancel_hero_item_animation();
-        data->cooldown = 0;
+        blaster_vars->cooldown = 0;
     }
-    if (moby->seq != 2 && data->glow > 0) {
-        red = convert_integer_to_float(data->glow < scale_game_frames(9) ? data->glow
+    if (moby->seq != 2 && blaster_vars->glow > 0) {
+        red = convert_integer_to_float(blaster_vars->glow < scale_game_frames(9) ? blaster_vars->glow
                                                                          : scale_game_frames(9)) *
               0.7f / (float)scale_game_frames(9);
-        green = convert_integer_to_float(data->glow < scale_game_frames(9) ? data->glow
+        green = convert_integer_to_float(blaster_vars->glow < scale_game_frames(9) ? blaster_vars->glow
                                                                            : scale_game_frames(9)) *
                 0.7f / (float)scale_game_frames(9);
-        blue = convert_integer_to_float(data->glow < scale_game_frames(9) ? data->glow
+        blue = convert_integer_to_float(blaster_vars->glow < scale_game_frames(9) ? blaster_vars->glow
                                                                           : scale_game_frames(9)) *
                0.7f / (float)scale_game_frames(9);
-        work.point.f.x =
+        camera_aim_and_effect_scratch.point.f.x =
             hero.motion.pos.f[0] + fast_cos(fast_arc_tan(hero.facing_x, hero.facing_y)) * 2.0f;
-        work.point.f.y =
+        camera_aim_and_effect_scratch.point.f.y =
             hero.motion.pos.f[1] + fast_sin(fast_arc_tan(hero.facing_x, hero.facing_y)) * 2.0f;
-        work.point.f.z = hero.motion.pos.f[2] + 1.0f;
-        if (data->light == -1) {
-            data->light = allocate_colored_effect_slot(&work.point, 6.0f, 0.0f, red, green, blue);
+        camera_aim_and_effect_scratch.point.f.z = hero.motion.pos.f[2] + 1.0f;
+        if (blaster_vars->light == -1) {
+            blaster_vars->light = allocate_colored_effect_slot(&camera_aim_and_effect_scratch.point, 6.0f, 0.0f, red, green, blue);
         } else {
-            PointLight *light = &point_lights[data->light];
-            qcopy(&light->position, &work.point);
+            PointLight *light = &point_lights[blaster_vars->light];
+            qcopy(&light->position, &camera_aim_and_effect_scratch.point);
             light->position.f[3] = 6.0f;
             light->color[0] = red;
             light->color[1] = green;
             light->color[2] = blue;
         }
-        fast_dec_timer(&data->glow);
-    } else if (data->light != -1) {
-        release_point_light_slot(data->light);
-        data->light = -1;
-        data->glow = 0;
+        fast_dec_timer(&blaster_vars->glow);
+    } else if (blaster_vars->light != -1) {
+        release_point_light_slot(blaster_vars->light);
+        blaster_vars->light = -1;
+        blaster_vars->glow = 0;
     }
 }
