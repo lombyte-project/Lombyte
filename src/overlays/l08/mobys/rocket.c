@@ -542,14 +542,14 @@ struct Moby *spawn_rocket(void        *pos,
 
 struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
     struct Moby *moby = create_moby(0x1B3);
-    char        *data;
+    char        *projectile_vars;
     float       *reference;
     float        distance;
     float        scale;
     struct Moby *target_copy = target;
     void        *velocity_copy = velocity;
     if (moby != 0) {
-        data = (char *)moby->pvars;
+        projectile_vars = (char *)moby->pvars;
         qcopy(&moby->pos, pos);
         reference = D_L08_001675C0;
         distance = vector_distance_xy(reference, &moby->pos);
@@ -565,11 +565,11 @@ struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float 
         moby->draw_dist = 0xFF;
         moby->scale = scale;
         set_moby_color(moby, rocket_color_red_gp, rocket_color_green_gp, rocket_color_blue_gp);
-        *(float *)(data + 0x40) = pitch;
-        *(float *)(data + 0x48) = 70.0f;
-        *(float *)(data + 0x44) = yaw;
-        *(struct Moby **)(data + 0x4C) = target_copy;
-        qcopy(data + 0x20, velocity_copy);
+        *(float *)(projectile_vars + 0x40) = pitch;
+        *(float *)(projectile_vars + 0x48) = 70.0f;
+        *(float *)(projectile_vars + 0x44) = yaw;
+        *(struct Moby **)(projectile_vars + 0x4C) = target_copy;
+        qcopy(projectile_vars + 0x20, velocity_copy);
         update_entity(moby);
     }
     return moby;
