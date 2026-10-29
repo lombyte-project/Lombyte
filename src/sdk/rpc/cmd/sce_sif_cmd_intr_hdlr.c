@@ -27,7 +27,7 @@ typedef struct SifCmdData {
     s32 system_handler_count;
     SifCmdHandlerEntry *user_handlers;
     s32 user_handler_count;
-    s32 *unk1C;
+    s32 *sregs;
 } SifCmdData;
 
 extern s32 EnableInterrupts(void);

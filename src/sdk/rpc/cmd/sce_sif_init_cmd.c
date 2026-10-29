@@ -27,7 +27,7 @@ typedef struct SifCmdData {
     s32 system_handler_count;
     SifCmdHandlerEntry *user_handlers;
     s32 user_handler_count;
-    s32 *unk1C;
+    s32 *sregs;
 } SifCmdData;
 
 /* Tells the IOP where the EE receives command packets. */
@@ -38,7 +38,7 @@ typedef struct SifCmdInitPacket {
 
 extern u32 D_0012FC04[];
 extern u32 D_00154E54[];
-extern int LookupTable[] __asm__("D_00154F80");
+extern int sif_sregs[] __asm__("D_00154F80");
 extern u8 sif_cmd_packet_buffer[] __asm__("D_00154D80");
 extern u8 sif_cmd_send_buffer[] __asm__("D_00154E00");
 extern SifCmdData sif_cmd_data __asm__("D_00154E58");
@@ -78,13 +78,13 @@ void sceSifInitCmd(void) {
     sif_cmd_data.system_handler_count = 0x20;
     sif_cmd_data.user_handlers = 0;
     sif_cmd_data.user_handler_count = 0;
-    sif_cmd_data.unk1C = LookupTable;
+    sif_cmd_data.sregs = sif_sregs;
     for (i = 0; i < 32; i++) {
         sif_system_handlers[i].handler = 0;
         sif_system_handlers[i].argument = 0;
     }
     for (i = 0; i < 32; i++) {
-        LookupTable[i] = 0;
+        sif_sregs[i] = 0;
     }
     sif_system_handlers[0].handler = (SifCmdHandler)handle_sif_initialize_command;
     sif_system_handlers[1].handler = (SifCmdHandler)handle_sif_set_system_register;

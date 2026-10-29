@@ -1,7 +1,7 @@
 #include "types.h"
 
-/* SIO transmit callback: stores the channel index field at a0+0x14 into the
-   array a1+0x1C at slot a0+0x10.  Returns nothing (SIO calls it void). */
+/* System command 1 (sceSifInitCmd): stores the packet's value (+0x14) into
+   the SIF register table (sif_cmd_data.sregs, +0x1C) at its index (+0x10). */
 void handle_sif_set_system_register(s32 *packet, s32 *command_state) __asm__("FUN_0011a428");
 
 void handle_sif_set_system_register(s32 *packet, s32 *command_state) {
