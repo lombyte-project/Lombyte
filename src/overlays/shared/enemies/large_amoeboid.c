@@ -878,7 +878,7 @@ char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) 
 }
 
 void spawn_amoeboid_movement_particles(unsigned char *moby) {
-    char *data = (char *)MOBY(moby)->pvars;
+    char *amoeboid_vars = (char *)MOBY(moby)->pvars;
     float pos[3];
     float angle, radius, lower, upper;
     int   time;
@@ -889,10 +889,10 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
         angle = random_angle_radians();
         radius = random_float_between(0.0f, amoeboid_movement_particle_max_spawn_radius_gp);
         lower = random_float_between(0.0f, amoeboid_first_movement_particle_base_scale_max_gp) *
-                *(float *)(data + 0x250);
+                *(float *)(amoeboid_vars + 0x250);
         upper = random_float_between(amoeboid_first_movement_particle_base_scale_max_gp,
                                      amoeboid_first_movement_particle_secondary_sample_max_gp) *
-                *(float *)(data + 0x250);
+                *(float *)(amoeboid_vars + 0x250);
         time = truncate_float_to_s32(
             random_float_between((float)amoeboid_first_movement_particle_lifetime_min_gp,
                                  (float)amoeboid_first_movement_particle_lifetime_max_gp));
@@ -912,10 +912,10 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
         angle = random_angle_radians();
         radius = random_float_between(0.0f, amoeboid_movement_particle_max_spawn_radius_gp);
         lower = random_float_between(0.0f, amoeboid_second_movement_particle_base_scale_max_gp) *
-                *(float *)(data + 0x250);
+                *(float *)(amoeboid_vars + 0x250);
         upper = random_float_between(amoeboid_second_movement_particle_base_scale_max_gp,
                                      amoeboid_second_movement_particle_secondary_sample_max_gp) *
-                *(float *)(data + 0x250);
+                *(float *)(amoeboid_vars + 0x250);
         time = truncate_float_to_s32(
             random_float_between((float)amoeboid_second_movement_particle_lifetime_min_gp,
                                  (float)amoeboid_second_movement_particle_lifetime_max_gp));
