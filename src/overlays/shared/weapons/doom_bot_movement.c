@@ -528,26 +528,26 @@ void initialize_moby_hop_trajectory(unsigned char *m,
                                     unsigned char *o,
                                     u128          *src) __asm__("FUN_L00_002bf8b0");
 
-void initialize_moby_hop_trajectory(unsigned char *m, unsigned char *o, u128 *src) {
-    float s, t, r, lim;
+void initialize_moby_hop_trajectory(unsigned char *hopping_moby, unsigned char *hop_trajectory, u128 *landing_position) {
+    float squared_horizontal_distance, uncapped_horizontal_speed, uncapped_vertical_launch_speed, vertical_launch_speed_limit;
 #define F2BF(p, x) (*(float *)((p) + (x)))
-    *(int *)(o + 0x30) = 0;
-    qcopy(o, src);
-    s = vector_distance(m + 0x10, o);
-    s = s * s;
-    t = F2BF(o, 0x1C) * 35.0f * F2BF(o, 0x20) / (FUN_001f99c0(F2BF(o, 8) - F2BF(m, 0x18)) + 1.0f) *
-        (s + 0.25f);
-    F2BF(o, 0x14) = t;
-    if (F2BF(o, 0x20) < t)
-        F2BF(o, 0x14) = F2BF(o, 0x20);
-    F2BF(o, 0x18) = fast_arc_tan(F2BF(o, 0) - F2BF(m, 0x10), F2BF(o, 4) - F2BF(m, 0x14));
-    r = FUN_L00_0025abf0(m + 0x10, o, 0, F2BF(o, 0x14), -F2BF(o, 0x1C));
-    lim = frame_time * 7.0f;
-    F2BF(o, 0x10) = r;
-    if (lim < r)
-        F2BF(o, 0x10) = lim;
-    o[0x2F] = 0;
-    F2BF(o, 0x14) = F2BF(o, 0x14) * (r / F2BF(o, 0x10));
+    *(int *)(hop_trajectory + 0x30) = 0;
+    qcopy(hop_trajectory, landing_position);
+    squared_horizontal_distance = vector_distance(hopping_moby + 0x10, hop_trajectory);
+    squared_horizontal_distance = squared_horizontal_distance * squared_horizontal_distance;
+    uncapped_horizontal_speed = F2BF(hop_trajectory, 0x1C) * 35.0f * F2BF(hop_trajectory, 0x20) / (FUN_001f99c0(F2BF(hop_trajectory, 8) - F2BF(hopping_moby, 0x18)) + 1.0f) *
+        (squared_horizontal_distance + 0.25f);
+    F2BF(hop_trajectory, 0x14) = uncapped_horizontal_speed;
+    if (F2BF(hop_trajectory, 0x20) < uncapped_horizontal_speed)
+        F2BF(hop_trajectory, 0x14) = F2BF(hop_trajectory, 0x20);
+    F2BF(hop_trajectory, 0x18) = fast_arc_tan(F2BF(hop_trajectory, 0) - F2BF(hopping_moby, 0x10), F2BF(hop_trajectory, 4) - F2BF(hopping_moby, 0x14));
+    uncapped_vertical_launch_speed = FUN_L00_0025abf0(hopping_moby + 0x10, hop_trajectory, 0, F2BF(hop_trajectory, 0x14), -F2BF(hop_trajectory, 0x1C));
+    vertical_launch_speed_limit = frame_time * 7.0f;
+    F2BF(hop_trajectory, 0x10) = uncapped_vertical_launch_speed;
+    if (vertical_launch_speed_limit < uncapped_vertical_launch_speed)
+        F2BF(hop_trajectory, 0x10) = vertical_launch_speed_limit;
+    hop_trajectory[0x2F] = 0;
+    F2BF(hop_trajectory, 0x14) = F2BF(hop_trajectory, 0x14) * (uncapped_vertical_launch_speed / F2BF(hop_trajectory, 0x10));
 }
 
 /* Tries a hop of the moby toward q: probes the ground at the landing point and the path to it, and sets the jump
