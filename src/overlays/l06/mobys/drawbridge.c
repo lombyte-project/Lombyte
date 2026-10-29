@@ -131,7 +131,7 @@ void update_drawbridge(Moby *moby) {
         DRAWBRIDGE_COMPLETE = 6
     };
     Vec_2F69D0 position, rotation, from_pos, from_rot, to_pos, to_rot;
-    Data      *data = (struct Data *)moby->pvars;
+    Data      *drawbridge_control_vars = (struct Data *)moby->pvars;
     float      previous_fade, blend;
     int        i, j, slot;
 
@@ -147,36 +147,36 @@ void update_drawbridge(Moby *moby) {
             moby->state = 1;
         }
         for (i = 0; i < 20; i++) {
-            data->a[i] = create_moby(0x405);
-            data->a[i]->draw_dist = 0x40;
-            data->a[i]->visible = 1;
-            data->a[i]->spawn_frame = (*(long *)&hero.moby->spawn_frame);
-            data->a[i]->flags = moby->flags;
-            qcopy_nc(&data->a[i]->pos, &moby->pos);
-            qcopy_nc(&data->a[i]->rot, &moby->rot);
-            data->b[i] = create_moby(0x405);
-            data->b[i]->draw_dist = 0x40;
-            data->b[i]->visible = 1;
-            data->b[i]->spawn_frame = (*(long *)&moby->spawn_frame);
-            data->b[i]->flags = moby->flags;
-            qcopy_nc(&data->b[i]->pos, &moby->pos);
-            qcopy_nc(&data->b[i]->rot, &moby->rot);
+            drawbridge_control_vars->a[i] = create_moby(0x405);
+            drawbridge_control_vars->a[i]->draw_dist = 0x40;
+            drawbridge_control_vars->a[i]->visible = 1;
+            drawbridge_control_vars->a[i]->spawn_frame = (*(long *)&hero.moby->spawn_frame);
+            drawbridge_control_vars->a[i]->flags = moby->flags;
+            qcopy_nc(&drawbridge_control_vars->a[i]->pos, &moby->pos);
+            qcopy_nc(&drawbridge_control_vars->a[i]->rot, &moby->rot);
+            drawbridge_control_vars->b[i] = create_moby(0x405);
+            drawbridge_control_vars->b[i]->draw_dist = 0x40;
+            drawbridge_control_vars->b[i]->visible = 1;
+            drawbridge_control_vars->b[i]->spawn_frame = (*(long *)&moby->spawn_frame);
+            drawbridge_control_vars->b[i]->flags = moby->flags;
+            qcopy_nc(&drawbridge_control_vars->b[i]->pos, &moby->pos);
+            qcopy_nc(&drawbridge_control_vars->b[i]->rot, &moby->rot);
         }
         for (j = 0; j < 10; j++) {
-            data->c[j] = create_moby(0x406);
-            data->c[j]->draw_dist = 0x40;
-            data->c[j]->visible = 1;
-            data->c[j]->spawn_frame = (*(long *)&hero.moby->spawn_frame);
-            data->c[j]->flags = moby->flags;
-            qcopy_nc(&data->c[j]->pos, &moby->pos);
-            qcopy_nc(&data->c[j]->rot, &moby->rot);
-            data->d[j] = create_moby(0x406);
-            data->d[j]->draw_dist = 0x40;
-            data->d[j]->visible = 1;
-            data->d[j]->spawn_frame = (*(long *)&moby->spawn_frame);
-            data->d[j]->flags = moby->flags;
-            qcopy_nc(&data->d[j]->pos, &moby->pos);
-            qcopy_nc(&data->d[j]->rot, &moby->rot);
+            drawbridge_control_vars->c[j] = create_moby(0x406);
+            drawbridge_control_vars->c[j]->draw_dist = 0x40;
+            drawbridge_control_vars->c[j]->visible = 1;
+            drawbridge_control_vars->c[j]->spawn_frame = (*(long *)&hero.moby->spawn_frame);
+            drawbridge_control_vars->c[j]->flags = moby->flags;
+            qcopy_nc(&drawbridge_control_vars->c[j]->pos, &moby->pos);
+            qcopy_nc(&drawbridge_control_vars->c[j]->rot, &moby->rot);
+            drawbridge_control_vars->d[j] = create_moby(0x406);
+            drawbridge_control_vars->d[j]->draw_dist = 0x40;
+            drawbridge_control_vars->d[j]->visible = 1;
+            drawbridge_control_vars->d[j]->spawn_frame = (*(long *)&moby->spawn_frame);
+            drawbridge_control_vars->d[j]->flags = moby->flags;
+            qcopy_nc(&drawbridge_control_vars->d[j]->pos, &moby->pos);
+            qcopy_nc(&drawbridge_control_vars->d[j]->rot, &moby->rot);
         }
         update_drawbridge_segment_transforms(moby);
         break;
@@ -185,22 +185,22 @@ void update_drawbridge(Moby *moby) {
         if (D_001413F4_r[0] == 1 && D_0013D4D6[0] != 0 && D_L06_0015F5C4 == 0) {
             D_L06_0015F3FC = 1.0f;
             moby->state = 3;
-            data->fade = -0.01f;
+            drawbridge_control_vars->fade = -0.01f;
         }
         break;
     case 2:
         break;
     case FADE_BEFORE_DRAWBRIDGE_ANIMATION:
-        previous_fade = data->fade;
-        approach_value(&data->fade, 1.0f, 1.0f / scale_game_frames(20));
-        D_L06_0015F3FC = 1.0f - absolute_float(data->fade);
-        if (previous_fade < 0.0f && 0.0f <= data->fade) {
+        previous_fade = drawbridge_control_vars->fade;
+        approach_value(&drawbridge_control_vars->fade, 1.0f, 1.0f / scale_game_frames(20));
+        D_L06_0015F3FC = 1.0f - absolute_float(drawbridge_control_vars->fade);
+        if (previous_fade < 0.0f && 0.0f <= drawbridge_control_vars->fade) {
             set_race_camera((unsigned char *)&hero + 0x80, (unsigned char *)&hero + 0x90, 0x72, 1);
             jet_mount(
                 &l06_cuboids[data->node_start].pos, &l06_cuboids[data->node_start].rot, 1, 0, 0);
-        } else if (1.0f <= data->fade) {
+        } else if (1.0f <= drawbridge_control_vars->fade) {
             moby->state = 4;
-            moby->command = allocate_voice_for_target_entry(0, 4, data->c[9]);
+            moby->command = allocate_voice_for_target_entry(0, 4, drawbridge_control_vars->c[9]);
         }
         break;
     case ANIMATE_DRAWBRIDGE_AND_CAMERA:
@@ -233,13 +233,13 @@ void update_drawbridge(Moby *moby) {
         }
         if (1000.0f <= drawbridge_yaw_degrees_gp) {
             moby->state = 5;
-            data->fade = -1.0f;
+            drawbridge_control_vars->fade = -1.0f;
         }
         slot = moby->command;
         if (20.0f <= drawbridge_extension_gp) {
-            if (func_L00_0028EB98_2F69D0(data->c[9], slot) != 0) {
+            if (func_L00_0028EB98_2F69D0(drawbridge_control_vars->c[9], slot) != 0) {
                 if (slot != -1 &&
-                    ((Slot *)((char *)&voice_pool + slot * 0x70))->p88 == data->c[9] &&
+                    ((Slot *)((char *)&voice_pool + slot * 0x70))->p88 == drawbridge_control_vars->c[9] &&
                     ((Slot *)((char *)&voice_pool + slot * 0x70))->b74 != 0) {
                     release_voice_slot(slot);
                 }
@@ -250,16 +250,16 @@ void update_drawbridge(Moby *moby) {
         update_drawbridge_segment_transforms(moby);
         if (drawbridge_extension_gp < 20.0f) {
             blend = drawbridge_extension_gp / 20.0f;
-            qcopy_nc(&from_pos, &l06_cuboids[data->node_start].pos);
-            qcopy_nc(&to_pos, &l06_cuboids[data->node_mid].pos);
-            qcopy_nc(&from_rot, &l06_cuboids[data->node_start].rot);
-            qcopy_nc(&to_rot, &l06_cuboids[data->node_mid].rot);
+            qcopy_nc(&from_pos, &l06_cuboids[drawbridge_control_vars->node_start].pos);
+            qcopy_nc(&to_pos, &l06_cuboids[drawbridge_control_vars->node_mid].pos);
+            qcopy_nc(&from_rot, &l06_cuboids[drawbridge_control_vars->node_start].rot);
+            qcopy_nc(&to_rot, &l06_cuboids[drawbridge_control_vars->node_mid].rot);
         } else {
             blend = drawbridge_yaw_degrees_gp / 1000.0f;
-            qcopy_nc(&from_pos, &l06_cuboids[data->node_mid].pos);
-            qcopy_nc(&to_pos, &l06_cuboids[data->node_end].pos);
-            qcopy_nc(&from_rot, &l06_cuboids[data->node_mid].rot);
-            qcopy_nc(&to_rot, &l06_cuboids[data->node_end].rot);
+            qcopy_nc(&from_pos, &l06_cuboids[drawbridge_control_vars->node_mid].pos);
+            qcopy_nc(&to_pos, &l06_cuboids[drawbridge_control_vars->node_end].pos);
+            qcopy_nc(&from_rot, &l06_cuboids[drawbridge_control_vars->node_mid].rot);
+            qcopy_nc(&to_rot, &l06_cuboids[drawbridge_control_vars->node_end].rot);
         }
         lerp_vector(&position, &from_pos, &to_pos, blend);
         rotation.x = fast_subtract_rotations(to_rot.x, from_rot.x) * blend;
@@ -272,13 +272,13 @@ void update_drawbridge(Moby *moby) {
         set_camera_rotation(&rotation);
         break;
     case FADE_AFTER_DRAWBRIDGE_ANIMATION:
-        previous_fade = data->fade;
-        approach_value(&data->fade, 1.0f, 1.0f / scale_game_frames(20));
-        D_L06_0015F3FC = 1.0f - absolute_float(data->fade);
-        if (previous_fade < 0.0f && 0.0f <= data->fade) {
+        previous_fade = drawbridge_control_vars->fade;
+        approach_value(&drawbridge_control_vars->fade, 1.0f, 1.0f / scale_game_frames(20));
+        D_L06_0015F3FC = 1.0f - absolute_float(drawbridge_control_vars->fade);
+        if (previous_fade < 0.0f && 0.0f <= drawbridge_control_vars->fade) {
             enter_hero_idle_state_for_current_vehicle_mode();
             jet_end_mount(3);
-        } else if (1.0f <= data->fade) {
+        } else if (1.0f <= drawbridge_control_vars->fade) {
             moby->state = 6;
             help_request(0x1776, 0x2D);
             queue_dialogue_message(0x177C, -1);
