@@ -296,15 +296,15 @@ extern int select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_002
 void update_blarg_turret_target_and_state(struct Moby *moby) __asm__("FUN_L13_002b48d8");
 
 void update_blarg_turret_target_and_state(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *turret_vars = (char *)moby->pvars;
     float distance;
     if (moby->state == 3)
         distance = 22.0f;
     else
         distance = 20.0f;
-    select_moby_combat_target(moby, data, distance);
-    if (*(int *)(data + 0x40) == 0) {
-        *(int *)(data + 0x40) = ((int)hero.moby);
+    select_moby_combat_target(moby, turret_vars, distance);
+    if (*(int *)(turret_vars + 0x40) == 0) {
+        *(int *)(turret_vars + 0x40) = ((int)hero.moby);
     }
     if (moby->command >= 4)
         moby->state = moby->command;
