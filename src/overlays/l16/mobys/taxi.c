@@ -343,22 +343,22 @@ void transfer_moby_placement_to_linked_moby(void *moby_v) __asm__("FUN_L16_002e4
 
 void transfer_moby_placement_to_linked_moby(void *moby_v) {
     struct Moby *moby = moby_v;
-    char        *data = ((char *)moby->pvars);
-    char        *spawn = find_group_moby_by_data_id(moby, *(short *)(data + 0xae));
+    char        *source_moby_pvars = ((char *)moby->pvars);
+    char        *spawn = find_group_moby_by_data_id(moby, *(short *)(source_moby_pvars + 0xae));
     char        *position;
     if (spawn != 0) {
         int   index;
-        char *slot = data;
+        char *slot = source_moby_pvars;
         char *entry;
         position = spawn + 0x10;
-        slot += *(short *)(data + 0xac) << 2;
+        slot += *(short *)(source_moby_pvars + 0xac) << 2;
         index = *(int *)(slot + 0x80) << 7;
         entry = D_L16_001601AC_m_19510;
         qcopy(position, (void *)(index + (int)entry + 0x30));
         qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
         initialize_taxi_stop_state(spawn);
     }
-    *(short *)(data + 0xac) = *(unsigned short *)(data + 0xae);
+    *(short *)(source_moby_pvars + 0xac) = *(unsigned short *)(source_moby_pvars + 0xae);
 }
 
 /* Finds the listed moby whose data id at 0xAC matches, or returns null. */
