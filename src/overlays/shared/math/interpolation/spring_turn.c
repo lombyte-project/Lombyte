@@ -5,8 +5,6 @@
 #include "rnc/globals.h"
 #include "sda.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -46,9 +44,7 @@ void interpolate_vector_xyz_cosine_eased(void *interpolated_vector_output, void 
     fast_vec_add(interpolated_vector_output, start_vector, interpolation_delta);
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259088), where it is exact; names translated to the US level program. */
-
 
 /* Blends three angles from a toward b with a cosine ease; ang 0 gives a, 1 gives b. */
 void interpolate_wrapped_rotations_cosine_eased(float *out, float *start_rotations, float *target_rotations, float interpolation_fraction) __asm__("FUN_L00_00258050");
@@ -251,8 +247,6 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
     return ok;
 }
 
-
-
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259868), where it is exact; names translated to the US level program. */
@@ -260,7 +254,6 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
 typedef struct {
     float a[4];
 } Vs __attribute__((aligned(16)));
-
 
 typedef union {
     OvlQuad q;
@@ -620,8 +613,6 @@ int get_next_moby_in_group(char **out, char *target, int include_sign_bit_set_en
     return -1;
 }
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
 
 /* Lowers the top byte of *p by b (not below 0); true once it reaches 0. */
@@ -635,7 +626,6 @@ int decrement_packed_countdown(int *packed_countdown, int decrement_amount) {
     *packed_countdown = (original_packed_word & 0xFFFFFF) | (remaining_countdown << 24);
     return remaining_countdown == 0;
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A4A0), where it is exact; names translated to the US level program. */
 
@@ -654,9 +644,7 @@ float calculate_triangular_corrected_scalar(float *base_values, float *linear_te
     return corrected_scalar_value;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A540), where it is exact; names translated to the US level program. */
-
 
 void predict_position_with_vertical_drop(void *destination, void *base_position, void *velocity, int frame_count, float vertical_drop_coefficient) __asm__("FUN_L00_00259508");
 
@@ -692,3 +680,75 @@ int solve_quadratic_equation(float *larger_root_output, float *smaller_root_outp
         return real_root_count;
     }
 }
+
+int D_L01_0015FFF4 = 0;
+char *D_L01_00160114 = 0;
+unsigned short *D_L01_0016010C = 0;
+short D_L01_00160110 = 0;
+int D_L02_0015FFF4 = 0;
+char *D_L02_00160114 = 0;
+unsigned short *D_L02_0016010C = 0;
+short D_L02_00160110 = 0;
+int D_L03_0015FFF4 = 0;
+char *D_L03_00160114 = 0;
+unsigned short *D_L03_0016010C = 0;
+short D_L03_00160110 = 0;
+int D_L04_0015FFF4 = 0;
+char *D_L04_00160114 = 0;
+unsigned short *D_L04_0016010C = 0;
+short D_L04_00160110 = 0;
+unsigned short *D_L04_001AB9C0 NOT_SDA = 0;
+int D_L05_0015FFF4 = 0;
+char *D_L05_00160114 = 0;
+unsigned short *D_L05_0016010C = 0;
+short D_L05_00160110 = 0;
+int D_L06_0015FFF4 = 0;
+char *D_L06_00160114 = 0;
+unsigned short *D_L06_0016010C = 0;
+short D_L06_00160110 = 0;
+int D_L07_0015FFF4 = 0;
+char *D_L07_00160114 = 0;
+unsigned short *D_L07_0016010C = 0;
+short D_L07_00160110 = 0;
+int D_L08_0015FFF4 = 0;
+char *D_L08_00160114 = 0;
+unsigned short *D_L08_0016010C = 0;
+short D_L08_00160110 = 0;
+int D_L09_0015FFF4 = 0;
+char *D_L09_00160114 = 0;
+unsigned short *D_L09_0016010C = 0;
+short D_L09_00160110 = 0;
+int D_L10_0015FFF4 = 0;
+char *D_L10_00160114 = 0;
+unsigned short *D_L10_0016010C = 0;
+short D_L10_00160110 = 0;
+char *D_L11_00160114 = 0;
+unsigned short *D_L11_0016010C = 0;
+short D_L11_00160110 = 0;
+int D_L12_0015FFF4 = 0;
+char *D_L12_00160114 = 0;
+unsigned short *D_L12_0016010C = 0;
+short D_L12_00160110 = 0;
+int D_L13_0015FFF4 = 0;
+char *D_L13_00160114 = 0;
+unsigned short *D_L13_0016010C = 0;
+short D_L13_00160110 = 0;
+char *D_L14_00160114 = 0;
+unsigned short *D_L14_0016010C = 0;
+short D_L14_00160110 = 0;
+int D_L15_0015FFF4 = 0;
+char *D_L15_00160114 = 0;
+unsigned short *D_L15_0016010C = 0;
+short D_L15_00160110 = 0;
+int D_L16_0015FFF4 = 0;
+char *D_L16_00160114 = 0;
+unsigned short *D_L16_0016010C = 0;
+short D_L16_00160110 = 0;
+int D_L17_0015FFF4 = 0;
+char *D_L17_00160114 = 0;
+unsigned short *D_L17_0016010C = 0;
+short D_L17_00160110 = 0;
+int D_L18_0015FFF4 = 0;
+char *D_L18_00160114 = 0;
+unsigned short *D_L18_0016010C = 0;
+short D_L18_00160110 = 0;

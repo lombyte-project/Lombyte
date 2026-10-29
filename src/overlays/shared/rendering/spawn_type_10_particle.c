@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-
-
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
@@ -352,7 +350,6 @@ int advance_path_node_index(char *path_descriptor) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C690), where it is exact; names translated to the US level program. */
 
-
 extern void *get_path_node(void *, int) __asm__("FUN_L01_0028b7b0");
 extern void *memset(void *, int, unsigned int);
 extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
@@ -394,7 +391,6 @@ void compute_path_node_tangent(void *out, int *path_descriptor, int node_index_o
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
-
 
 void evaluate_cubic_hermite_segment(float segment_parameter, void *out, void *start_point, void *end_point, void *start_tangent, void *end_tangent) __asm__("FUN_L01_0028ba80");
 
@@ -486,3 +482,17 @@ s32 D_L13_001B2450[1] __attribute__((section(".data"))) = {0};
 s32 D_L14_001B278C[1] __attribute__((section(".data"))) = {0};
 s32 D_L15_001B26B8[1] __attribute__((section(".data"))) = {0};
 s32 D_L17_001B29B8[1] __attribute__((section(".data"))) = {0};
+
+int D_L02_001B27A8 NOT_SDA = 0;
+unsigned char *D_L03_001B218C NOT_SDA = 0;
+int D_L03_001B22A8 NOT_SDA = 0;
+int D_L04_001B2328 NOT_SDA = 0;
+int D_L05_001B2628 NOT_SDA = 0;
+int D_L06_001B2928 NOT_SDA = 0;
+int D_L08_001B29A8 NOT_SDA = 0;
+unsigned char *D_L09_001B2238 NOT_SDA = 0;
+int D_L11_001B2BA8 NOT_SDA = 0;
+int D_L12_001B2628 NOT_SDA = 0;
+int D_L13_001B24A8 NOT_SDA = 0;
+int D_L14_001B28A8 NOT_SDA = 0;
+int D_L17_001B2AA8 NOT_SDA = 0;

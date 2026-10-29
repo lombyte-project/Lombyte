@@ -298,7 +298,6 @@ extern u32 sky_type2_base_colors[1] __asm__("D_L00_001604F0") __attribute__((sda
 extern char D_L00_001BD7E0_lui[] __asm__("D_L00_001BD7E0") NOT_SDA;
 extern u8 D_L00_001BD7B0[] NOT_SDA;
 
-
 /* Render particles with phase, byte-state and randomized-color variants. */
 void draw_three_sky_shells_with_three_particle_types(void) __asm__("FUN_L00_00289cb8");
 
@@ -528,3 +527,41 @@ void render_three_shell_particle_sky(void) {
     sky_draw_shell(2);
 }
 #undef SKY
+
+G_288ec0 *D_L01_0016051C = 0;
+char D_L01_001BDC60 NOT_SDA = 0;
+G_288ec0 *D_L02_0016051C = 0;
+char D_L02_001BDDE0 NOT_SDA = 0;
+G_288ec0 *D_L03_0016051C = 0;
+char D_L03_001BD8E0 NOT_SDA = 0;
+G_288ec0 *D_L04_0016051C = 0;
+char D_L04_001BD960 NOT_SDA = 0;
+G_288ec0 *D_L05_0016051C = 0;
+char D_L05_001BDC60 NOT_SDA = 0;
+char D_L06_001BDF60 NOT_SDA = 0;
+u32 D_L06_00160500[1] = {0x802020f0};
+u32 D_L06_001604F0[1] = {0x386070};
+u8 D_L06_001BDF30 NOT_SDA = 0;
+char D_L07_001BD860 NOT_SDA = 0;
+G_288ec0 *D_L08_0016051C = 0;
+char D_L08_001BDFE0 NOT_SDA = 0;
+G_288ec0 *D_L09_0016051C = 0;
+char D_L09_001BD960 NOT_SDA = 0;
+G_288ec0 *D_L10_0016051C = 0;
+char D_L10_001BDC60 NOT_SDA = 0;
+G_288ec0 *D_L11_0016051C = 0;
+char D_L11_001BE1E0 NOT_SDA = 0;
+G_288ec0 *D_L12_0016051C = 0;
+char D_L12_001BDC60 NOT_SDA = 0;
+G_288ec0 *D_L13_0016051C = 0;
+char D_L13_001BDAE0 NOT_SDA = 0;
+G_288ec0 *D_L14_0016051C = 0;
+char D_L14_001BDEE0 NOT_SDA = 0;
+G_288ec0 *D_L15_0016051C = 0;
+char D_L15_001BDDE0 NOT_SDA = 0;
+G_288ec0 *D_L16_0016051C = 0;
+char D_L16_001BDC60 NOT_SDA = 0;
+G_288ec0 *D_L17_0016051C = 0;
+char D_L17_001BE0E0 NOT_SDA = 0;
+u32 D_L17_00160500[1] = {0x802020f0};
+char D_L18_001BE1E0 NOT_SDA = 0;

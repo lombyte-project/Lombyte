@@ -929,7 +929,6 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -1044,3 +1043,39 @@ void draw_pulsing_timer_display(char *moby) {
 }
 
 f32 D_L10_001DA10C[1] __attribute__((section(".data"))) = {0};
+
+f32 D_L10_00161CB8 = 2.5f;
+s32 D_L10_00161CD0 = 0x5a;
+f32 D_L10_00161CD4 = 4.0f;
+f32 D_L10_00161CDC = 0.125f;
+float D_L10_00161CE4 = 45.0f;
+int D_L10_00161CE8 = 0x96;
+f32 D_L10_00161CE0 = 6.0f;
+s32 D_L10_00161D00 = 0xb;
+s32 D_L10_00161D04 = 0;
+s32 D_L10_00161D08 = 0x600040ff;
+s32 D_L10_00161D0C = 0;
+s32 D_L10_00161D10 = 0x6000cccc;
+
+f32 D_L10_001DA0F0[4][2] = {
+    {0.5f, 0.5f},
+    {0.5f, 0.0f},
+    {0.5f, 0.5f},
+    {0.5f, 0.0f},
+};
+
+float D_L10_00161D1C = 0.25f;
+float D_L10_00161D20 = 0.1f;
+float D_L10_00161D24 = 1e+01f;
+float D_L10_00161D28 = 2e+01f;
+float D_L10_00161D2C = 1e+01f;
+float D_L10_00161D30 = 2e+01f;
+float D_L10_00161D34 = 1e+01f;
+float D_L10_00161D38 = 2e+01f;
+float D_L10_00161D3C = 0.25f;
+float D_L10_00161D40 = 0.75f;
+float D_L10_00161D44 = -0.065f;
+float D_L10_00161D48 = 0.125f;
+float D_L10_00161D4C = 0.25f;
+f32 D_L10_00161D6C = 0.1f;
+f32 D_L13_00161D34 = 0.1f;

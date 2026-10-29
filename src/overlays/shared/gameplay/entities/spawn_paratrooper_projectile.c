@@ -4,8 +4,6 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-
-
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
@@ -402,7 +400,6 @@ void scatter_ground_particles(Moby *moby) {
 /* While the player is within range, scatters spawned particles around the moby on a random disc. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
 
-
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 
@@ -444,7 +441,6 @@ void spawn_moby_radial_particles(char *moby) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00315068), where it is exact; names translated to the US level program. */
-
 
 extern char *D_L08_00167600 NOT_SDA;
 void FUN_L08_00313ba8(void) {
@@ -508,3 +504,24 @@ void update_ground_height_modulated_voice(char *moby) {
         }
     }
 }
+
+float D_L12_00162020[2] = {0};
+short D_L12_0016200C = 0;
+short D_L12_00162010 = 0;
+float D_L12_00160260 = 0;
+float D_L12_00162000 = 0.5f;
+float D_L12_00162004 = 1e+01f;
+float D_L12_00162008 = 18.0f;
+float D_L12_00162014 = -1.0f;
+int D_L12_00162018 = 1;
+float D_L12_0016201C = 5.0f;
+short D_L14_0016221C = 0;
+short D_L14_00162220 = 0;
+float D_L14_00160260 = 0;
+float D_L14_00162210 = 0.5f;
+float D_L14_00162214 = 1e+01f;
+float D_L14_00162218 = 18.0f;
+float D_L14_00162224 = -1.0f;
+int D_L14_00162228 = 1;
+float D_L14_0016222C = 5.0f;
+float D_L14_001624D0 = 0;

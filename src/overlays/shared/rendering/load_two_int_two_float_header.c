@@ -2,8 +2,6 @@
 #include "types.h"
 #include "asm.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/lights_0023FA70.c: func_L00_0023FA70), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_0015FCA8;
@@ -47,3 +45,64 @@ void relocate_counted_pointer_table(s32 *data_cursor) {
         *(u32 *)(*(u32 *)(D_L00_0015F440 + j * 4) + 4) += D_L00_0015F440;
     }
 }
+
+int D_L01_0015FC9C = 0;
+u32 D_L01_0015F43C = 0;
+s32 D_L01_0015F438 = 0;
+u32 D_L01_0015F440 = 0;
+int D_L02_0015FC9C = 0;
+u32 D_L02_0015F43C = 0;
+s32 D_L02_0015F438 = 0;
+u32 D_L02_0015F440 = 0;
+int D_L03_0015FC9C = 0;
+u32 D_L03_0015F43C = 0;
+s32 D_L03_0015F438 = 0;
+u32 D_L03_0015F440 = 0;
+int D_L04_0015FC9C = 0;
+u32 D_L04_0015F43C = 0;
+s32 D_L04_0015F438 = 0;
+u32 D_L04_0015F440 = 0;
+int D_L05_0015FC9C = 0;
+u32 D_L05_0015F43C = 0;
+s32 D_L05_0015F438 = 0;
+u32 D_L05_0015F440 = 0;
+int D_L08_0015FC9C = 0;
+u32 D_L08_0015F43C = 0;
+s32 D_L08_0015F438 = 0;
+u32 D_L08_0015F440 = 0;
+int D_L09_0015FC9C = 0;
+u32 D_L09_0015F43C = 0;
+s32 D_L09_0015F438 = 0;
+u32 D_L09_0015F440 = 0;
+int D_L10_0015FC9C = 0;
+u32 D_L10_0015F43C = 0;
+s32 D_L10_0015F438 = 0;
+u32 D_L10_0015F440 = 0;
+int D_L11_0015FC9C = 0;
+u32 D_L11_0015F43C = 0;
+s32 D_L11_0015F438 = 0;
+u32 D_L11_0015F440 = 0;
+int D_L12_0015FC9C = 0;
+u32 D_L12_0015F43C = 0;
+s32 D_L12_0015F438 = 0;
+u32 D_L12_0015F440 = 0;
+int D_L13_0015FC9C = 0;
+u32 D_L13_0015F43C = 0;
+s32 D_L13_0015F438 = 0;
+u32 D_L13_0015F440 = 0;
+int D_L14_0015FC9C = 0;
+u32 D_L14_0015F43C = 0;
+s32 D_L14_0015F438 = 0;
+u32 D_L14_0015F440 = 0;
+int D_L15_0015FC9C = 0;
+u32 D_L15_0015F43C = 0;
+s32 D_L15_0015F438 = 0;
+u32 D_L15_0015F440 = 0;
+int D_L16_0015FC9C = 0;
+u32 D_L16_0015F43C = 0;
+s32 D_L16_0015F438 = 0;
+u32 D_L16_0015F440 = 0;
+int D_L17_0015FC9C = 0;
+u32 D_L17_0015F43C = 0;
+s32 D_L17_0015F438 = 0;
+u32 D_L17_0015F440 = 0;

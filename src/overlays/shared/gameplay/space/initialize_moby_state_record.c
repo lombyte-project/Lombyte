@@ -7,8 +7,6 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
 
-
-
 /* Start the moby's camera-follow state: stash it in the global record, point its update at func_L00_0028F458. */
 /* Ported from rac1-decomp (src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */
 
@@ -342,3 +340,39 @@ float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* FUN_L00_0028efc8 is the executable function of the same bytes (src/gameplay). */
 
+s32 D_L01_00160540 = 0;
+s32 D_L01_00160570[1] = {0xf0};
+s32 D_L02_00160540 = 0;
+s32 D_L02_00160570[1] = {0xf0};
+s32 D_L03_00160540 = 0;
+s32 D_L03_00160570[1] = {0xf0};
+s32 D_L04_00160540 = 0;
+s32 D_L04_00160570[1] = {0xf0};
+s32 D_L05_00160540 = 0;
+s32 D_L05_00160570[1] = {0xf0};
+s32 D_L06_00160540 = 0;
+s32 D_L06_00160570[1] = {0xf0};
+s32 D_L07_00160540 = 0;
+s32 D_L07_00160570[1] = {0xf0};
+s32 D_L08_00160540 = 0;
+s32 D_L08_00160570[1] = {0xf0};
+s32 D_L09_00160540 = 0;
+s32 D_L09_00160570[1] = {0xf0};
+s32 D_L10_00160540 = 0;
+s32 D_L10_00160570[1] = {0xf0};
+s32 D_L11_00160540 = 0;
+s32 D_L11_00160570[1] = {0xf0};
+s32 D_L12_00160540 = 0;
+s32 D_L12_00160570[1] = {0xf0};
+s32 D_L13_00160540 = 0;
+s32 D_L13_00160570[1] = {0xf0};
+s32 D_L14_00160540 = 0;
+s32 D_L14_00160570[1] = {0xf0};
+s32 D_L15_00160540 = 0;
+s32 D_L15_00160570[1] = {0xf0};
+s32 D_L16_00160540 = 0;
+s32 D_L16_00160570[1] = {0xf0};
+s32 D_L17_00160540 = 0;
+s32 D_L17_00160570[1] = {0xf0};
+s32 D_L18_00160540 = 0;
+s32 D_L18_00160570[1] = {0xf0};

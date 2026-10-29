@@ -791,7 +791,6 @@ void update_hero_planar_movement_velocity(void) {
     }
 }
 
-
 /* passes a pointer chosen by a mode byte to func_0022ED80, copying a vector first in mode 3 */
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217570), where it is exact; names translated to the US level program. */
 
@@ -815,7 +814,6 @@ int allocate_hero_voice_for_entry(int entry_index, int voice_allocation_flags) {
     return -1;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_002175D0), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -836,7 +834,6 @@ void release_voice_slot_cf(int voice_slot_index, int a, int b) {
     hero_state->b[voice_slot_index] = a;
 }
 /* D_0013F350 + 0x21D8 is an array of 8 s16 slots of four s16 fields each. */
-
 
 void help_queue_add(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 
@@ -1220,3 +1217,40 @@ f32 D_L17_0017BC88[1] __attribute__((section(".data"))) = {0};
 f32 D_L18_0017B194[1] __attribute__((section(".data"))) = {0};
 f32 D_L18_0017BD84[1] __attribute__((section(".data"))) = {0};
 f32 D_L18_0017BD88[1] __attribute__((section(".data"))) = {0};
+
+f32 D_L01_0017B80C NOT_SDA = 1.0f;
+int D_L01_00167494 NOT_SDA = 0;
+f32 D_L02_0017B98C NOT_SDA = 1.0f;
+int D_L02_00167614 NOT_SDA = 0;
+f32 D_L03_0017B48C NOT_SDA = 1.0f;
+int D_L03_00167114 NOT_SDA = 0;
+f32 D_L04_0017B50C NOT_SDA = 1.0f;
+int D_L04_00167194 NOT_SDA = 0;
+f32 D_L05_0017B7EC NOT_SDA = 1.0f;
+int D_L05_00167414 NOT_SDA = 0;
+f32 D_L06_0017BB0C NOT_SDA = 1.0f;
+int D_L06_00167794 NOT_SDA = 0;
+f32 D_L07_0017B40C NOT_SDA = 1.0f;
+int D_L07_00167094 NOT_SDA = 0;
+f32 D_L08_0017BB8C NOT_SDA = 1.0f;
+int D_L08_00167814 NOT_SDA = 0;
+f32 D_L09_0017B50C NOT_SDA = 1.0f;
+int D_L09_00167194 NOT_SDA = 0;
+f32 D_L10_0017B80C NOT_SDA = 1.0f;
+int D_L10_00167494 NOT_SDA = 0;
+f32 D_L11_0017BD8C NOT_SDA = 1.0f;
+int D_L11_00167A14 NOT_SDA = 0;
+f32 D_L12_0017B80C NOT_SDA = 1.0f;
+int D_L12_00167494 NOT_SDA = 0;
+f32 D_L13_0017B68C NOT_SDA = 1.0f;
+int D_L13_00167314 NOT_SDA = 0;
+f32 D_L14_0017BA8C NOT_SDA = 1.0f;
+int D_L14_00167714 NOT_SDA = 0;
+f32 D_L15_0017B98C NOT_SDA = 1.0f;
+int D_L15_00167614 NOT_SDA = 0;
+f32 D_L16_0017B7EC NOT_SDA = 1.0f;
+int D_L16_00167414 NOT_SDA = 0;
+f32 D_L17_0017BC8C NOT_SDA = 1.0f;
+int D_L17_00167914 NOT_SDA = 0;
+f32 D_L18_0017BD8C NOT_SDA = 1.0f;
+int D_L18_00167A14 NOT_SDA = 0;

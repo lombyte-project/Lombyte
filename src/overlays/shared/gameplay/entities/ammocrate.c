@@ -6,8 +6,6 @@
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002BB2F8), where it is exact; names translated to the US level program. */
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -341,8 +339,6 @@ unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *
 }
 #include "rnc/gameplay/entities/moby.h"
 
-
-
 #include "qcopy.h"
 
 /* Update for the rocket (class 295): smoke trail, steering toward its target, collision and expiry. */
@@ -482,3 +478,6 @@ void update_ship_rocket(Moby *rocket) {
         mark_moby_for_removal(rocket);
     }
 }
+
+int D_L17_001611C0 = 0;
+Tex D_L17_001B2980 = {0};

@@ -31,3 +31,5 @@ void queue_oil_tanker_front_texture_2b_batches(int pair_index) {
                          1);
     }
 }
+
+Pair D_L12_001620F8 = {0};

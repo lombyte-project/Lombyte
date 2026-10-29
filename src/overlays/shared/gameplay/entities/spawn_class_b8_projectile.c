@@ -8,8 +8,6 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
 
-
-
 #include "qcopy.h"
 
 /* Builds two direction vectors from a table and relative to a moby, then hands them to the L04 effect spawner. */
@@ -261,13 +259,10 @@ void update_class_b8_projectile(struct Moby *moby)
     mark_moby_for_removal(moby);
 }
 
-
-
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D48B8), where it is exact; names translated to the US level program. */
-
 
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
@@ -292,3 +287,13 @@ void *spawn_moby_attachment(char *source_moby, char *spawn_position) {
     }
     return spawned_moby;
 }
+
+short D_L08_00161994 = 0;
+short D_L08_001619B0 = 0xa;
+short D_L08_001619B4 = 0xa;
+short D_L08_001619B8 = 0xa;
+short D_L08_001619BC = 0xa;
+short D_L08_001619C0 = 8;
+short D_L08_001619C4 = 0x14;
+short D_L08_001619C8 = 8;
+short D_L08_001619CC = 0x14;

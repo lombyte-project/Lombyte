@@ -251,7 +251,6 @@ unsigned char *spawn_random_alpha_rotated_particle(u128 *position, u128 *initial
     return particle;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272A88), where it is exact; names translated to the US level program. */
 
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
@@ -271,7 +270,6 @@ void update_expanding_damped_fading_particle(char *particle) {
         free_effect_particle(particle);
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272B28), where it is exact; names translated to the US level program. */
 
@@ -380,9 +378,7 @@ void update_damped_fading_particle(u8 *particle) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272E60), where it is exact; names translated to the US level program. */
-
 
 void update_color_size_tween_particle(char *particle) __asm__("FUN_L00_00271fc0");
 
@@ -1068,9 +1064,7 @@ unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alp
     return particle;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002746A0), where it is exact; names translated to the US level program. */
-
 
 void update_mode_controlled_alpha_fade_particle(char *particle) __asm__("FUN_L00_00273800");
 
@@ -1309,9 +1303,7 @@ unsigned char *spawn_random_planar_drift_particle(void *position, int color, flo
     return particle;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002751A8), where it is exact; names translated to the US level program. */
-
 
 void update_moving_resizing_periodic_alpha_fade_particle(char *particle) __asm__("FUN_L00_00274308");
 
@@ -1620,9 +1612,7 @@ unsigned char *spawn_texture_indexed_rotated_particle(void *position, int partic
     return particle;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275C80), where it is exact; names translated to the US level program. */
-
 
 /* Every second tick lowers the top byte at a+4 by 1; calls 00267a08 once it reaches 0. */
 void update_periodic_alpha_fade_particle(char *particle) __asm__("FUN_L00_00274de0");
@@ -1775,9 +1765,7 @@ unsigned char *spawn_random_size_rotated_particle(void *position, void *initial_
     return particle;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00276180), where it is exact; names translated to the US level program. */
-
 
 /* Adds byte 0x38 to byte 8; calls free_effect_particle once the float at 0xC is <= 0. */
 void update_size_gated_rotating_particle(char *particle) __asm__("FUN_L00_002752e0");
@@ -1854,8 +1842,6 @@ void update_gravity_ground_culled_particle(O_275320 *particle) {
     FUN_001f9a10_275320(vel, &particle_vector_scratch, vel);
     vel->f[3] = ground_height_threshold + particle_clearance;
 }
-
-
 
 /* Update a particle following a parent moby with a scaled offset. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002763B0), where it is exact; names translated to the US level program. */
@@ -2253,3 +2239,284 @@ s32 D_L18_001B2B34[1] __attribute__((section(".data"))) = {0};
 s32 D_L18_001B2B38[1] __attribute__((section(".data"))) = {0};
 s32 D_L18_001B2B74[1] __attribute__((section(".data"))) = {0};
 s32 D_L18_001B2B88[1] __attribute__((section(".data"))) = {0};
+
+unsigned char *D_L01_001B25B0 NOT_SDA = 0;
+unsigned char *D_L01_001B25B4 NOT_SDA = 0;
+unsigned char *D_L01_001B25B8 NOT_SDA = 0;
+unsigned char *D_L01_001B25BC NOT_SDA = 0;
+float D_L01_00160210 = 0.25f;
+unsigned char *D_L01_001B25D4 NOT_SDA = 0;
+u8 *D_L01_001B25DC NOT_SDA = 0;
+unsigned char *D_L01_001B25E8 NOT_SDA = 0;
+unsigned char *D_L01_0016016C = 0;
+u8 *D_L01_001B25F4 NOT_SDA = 0;
+unsigned char *D_L01_001B25F8 NOT_SDA = 0;
+u32 D_L01_00160228 = 0xf;
+unsigned char *D_L01_001B2608 NOT_SDA = 0;
+unsigned char *D_L01_001B260C NOT_SDA = 0;
+unsigned char *D_L01_001B2620 NOT_SDA = 0;
+int D_L01_00160240 = 0x13;
+unsigned char *D_L01_001B2638 NOT_SDA = 0;
+short D_L01_0016024C = -13107;
+s32 D_L01_00174288 NOT_SDA = 0;
+unsigned char *D_L02_001B2734 NOT_SDA = 0;
+float D_L02_00160210 = 0.25f;
+unsigned char *D_L02_001B2754 NOT_SDA = 0;
+u8 *D_L02_001B275C NOT_SDA = 0;
+unsigned char *D_L02_001B2768 NOT_SDA = 0;
+unsigned char *D_L02_0016016C = 0;
+unsigned char *D_L02_001B2778 NOT_SDA = 0;
+u32 D_L02_00160228 = 0xf;
+unsigned char *D_L02_001B278C NOT_SDA = 0;
+unsigned char *D_L02_001B27A0 NOT_SDA = 0;
+int D_L02_00160240 = 0x13;
+unsigned char *D_L02_001B27B8 NOT_SDA = 0;
+short D_L02_0016024C = -13107;
+s32 D_L02_00174408 NOT_SDA = 0;
+unsigned char *D_L03_001B2230 NOT_SDA = 0;
+unsigned char *D_L03_001B2234 NOT_SDA = 0;
+unsigned char *D_L03_001B2238 NOT_SDA = 0;
+unsigned char *D_L03_001B223C NOT_SDA = 0;
+float D_L03_00160210 = 0.25f;
+unsigned char *D_L03_001B2254 NOT_SDA = 0;
+u8 *D_L03_001B225C NOT_SDA = 0;
+unsigned char *D_L03_001B2268 NOT_SDA = 0;
+unsigned char *D_L03_0016016C = 0;
+u8 *D_L03_001B2274 NOT_SDA = 0;
+unsigned char *D_L03_001B2278 NOT_SDA = 0;
+u32 D_L03_00160228 = 0xf;
+unsigned char *D_L03_001B2288 NOT_SDA = 0;
+unsigned char *D_L03_001B228C NOT_SDA = 0;
+unsigned char *D_L03_001B22A0 NOT_SDA = 0;
+int D_L03_00160240 = 0x13;
+unsigned char *D_L03_001B22B8 NOT_SDA = 0;
+short D_L03_0016024C = -13107;
+s32 D_L03_00173F08 NOT_SDA = 0;
+unsigned char *D_L04_001B22B0 NOT_SDA = 0;
+unsigned char *D_L04_001B22B4 NOT_SDA = 0;
+unsigned char *D_L04_001B22B8 NOT_SDA = 0;
+unsigned char *D_L04_001B22BC NOT_SDA = 0;
+float D_L04_00160210 = 0.25f;
+unsigned char *D_L04_001B22D4 NOT_SDA = 0;
+u8 *D_L04_001B22DC NOT_SDA = 0;
+unsigned char *D_L04_001B22E8 NOT_SDA = 0;
+unsigned char *D_L04_0016016C = 0;
+u8 *D_L04_001B22F4 NOT_SDA = 0;
+unsigned char *D_L04_001B22F8 NOT_SDA = 0;
+u32 D_L04_00160228 = 0xf;
+unsigned char *D_L04_001B2308 NOT_SDA = 0;
+unsigned char *D_L04_001B230C NOT_SDA = 0;
+unsigned char *D_L04_001B2318 NOT_SDA = 0;
+unsigned char *D_L04_001B2320 NOT_SDA = 0;
+int D_L04_00160240 = 0x13;
+unsigned char *D_L04_001B2338 NOT_SDA = 0;
+short D_L04_0016024C = -13107;
+s32 D_L04_00173F88 NOT_SDA = 0;
+float D_L05_00160210 = 0.25f;
+unsigned char *D_L05_001B25D4 NOT_SDA = 0;
+u8 *D_L05_001B25DC NOT_SDA = 0;
+unsigned char *D_L05_001B25E8 NOT_SDA = 0;
+unsigned char *D_L05_0016016C = 0;
+u8 *D_L05_001B25F4 NOT_SDA = 0;
+unsigned char *D_L05_001B25F8 NOT_SDA = 0;
+u32 D_L05_00160228 = 0xf;
+unsigned char *D_L05_001B260C NOT_SDA = 0;
+unsigned char *D_L05_001B2620 NOT_SDA = 0;
+int D_L05_00160240 = 0x13;
+unsigned char *D_L05_001B2638 NOT_SDA = 0;
+short D_L05_0016024C = -13107;
+s32 D_L05_00174208 NOT_SDA = 0;
+unsigned char *D_L06_001B28B4 NOT_SDA = 0;
+float D_L06_00160210 = 0.25f;
+unsigned char *D_L06_001B28D4 NOT_SDA = 0;
+u8 *D_L06_001B28DC NOT_SDA = 0;
+unsigned char *D_L06_001B28E8 NOT_SDA = 0;
+unsigned char *D_L06_001B28F8 NOT_SDA = 0;
+u32 D_L06_00160228 = 0xf;
+unsigned char *D_L06_001B290C NOT_SDA = 0;
+unsigned char *D_L06_001B2920 NOT_SDA = 0;
+int D_L06_00160240 = 0x13;
+unsigned char *D_L06_001B2938 NOT_SDA = 0;
+short D_L06_0016024C = -13107;
+s32 D_L06_00174588 NOT_SDA = 0;
+unsigned char *D_L07_001B21BC NOT_SDA = 0;
+float D_L07_00160210 = 0.25f;
+unsigned char *D_L07_001B21D4 NOT_SDA = 0;
+u8 *D_L07_001B21DC NOT_SDA = 0;
+unsigned char *D_L07_001B21E8 NOT_SDA = 0;
+unsigned char *D_L07_001B21F8 NOT_SDA = 0;
+u32 D_L07_00160228 = 0xf;
+unsigned char *D_L07_001B2208 NOT_SDA = 0;
+unsigned char *D_L07_001B220C NOT_SDA = 0;
+unsigned char *D_L07_001B2218 NOT_SDA = 0;
+unsigned char *D_L07_001B2220 NOT_SDA = 0;
+int D_L07_00160240 = 0x13;
+unsigned char *D_L07_001B2238 NOT_SDA = 0;
+short D_L07_0016024C = -13107;
+s32 D_L07_00173E88 NOT_SDA = 0;
+unsigned char *D_L08_001B293C NOT_SDA = 0;
+float D_L08_00160210 = 0.25f;
+unsigned char *D_L08_001B2954 NOT_SDA = 0;
+u8 *D_L08_001B295C NOT_SDA = 0;
+unsigned char *D_L08_001B2968 NOT_SDA = 0;
+unsigned char *D_L08_0016016C = 0;
+unsigned char *D_L08_001B2978 NOT_SDA = 0;
+u32 D_L08_00160228 = 0xf;
+unsigned char *D_L08_001B298C NOT_SDA = 0;
+int D_L08_00160240 = 0x13;
+unsigned char *D_L08_001B29B8 NOT_SDA = 0;
+short D_L08_0016024C = -13107;
+s32 D_L08_00174608 NOT_SDA = 0;
+unsigned char *D_L09_001B22B0 NOT_SDA = 0;
+unsigned char *D_L09_001B22B4 NOT_SDA = 0;
+unsigned char *D_L09_001B22B8 NOT_SDA = 0;
+unsigned char *D_L09_001B22BC NOT_SDA = 0;
+float D_L09_00160210 = 0.25f;
+unsigned char *D_L09_001B22D4 NOT_SDA = 0;
+u8 *D_L09_001B22DC NOT_SDA = 0;
+unsigned char *D_L09_001B22E8 NOT_SDA = 0;
+unsigned char *D_L09_0016016C = 0;
+u8 *D_L09_001B22F4 NOT_SDA = 0;
+unsigned char *D_L09_001B22F8 NOT_SDA = 0;
+u32 D_L09_00160228 = 0xf;
+unsigned char *D_L09_001B2308 NOT_SDA = 0;
+unsigned char *D_L09_001B230C NOT_SDA = 0;
+unsigned char *D_L09_001B2318 NOT_SDA = 0;
+unsigned char *D_L09_001B2320 NOT_SDA = 0;
+int D_L09_00160240 = 0x13;
+unsigned char *D_L09_001B2338 NOT_SDA = 0;
+short D_L09_0016024C = -13107;
+s32 D_L09_00173F88 NOT_SDA = 0;
+unsigned char *D_L10_001B25BC NOT_SDA = 0;
+float D_L10_00160210 = 0.25f;
+unsigned char *D_L10_001B25D4 NOT_SDA = 0;
+u8 *D_L10_001B25DC NOT_SDA = 0;
+unsigned char *D_L10_001B25E8 NOT_SDA = 0;
+unsigned char *D_L10_0016016C = 0;
+u8 *D_L10_001B25F4 NOT_SDA = 0;
+unsigned char *D_L10_001B25F8 NOT_SDA = 0;
+u32 D_L10_00160228 = 0xf;
+unsigned char *D_L10_001B260C NOT_SDA = 0;
+unsigned char *D_L10_001B2618 NOT_SDA = 0;
+unsigned char *D_L10_001B2620 NOT_SDA = 0;
+int D_L10_00160240 = 0x13;
+unsigned char *D_L10_001B2638 NOT_SDA = 0;
+short D_L10_0016024C = -13107;
+s32 D_L10_00174288 NOT_SDA = 0;
+unsigned char *D_L11_001B2B38 NOT_SDA = 0;
+float D_L11_00160210 = 0.25f;
+unsigned char *D_L11_001B2B54 NOT_SDA = 0;
+u8 *D_L11_001B2B5C NOT_SDA = 0;
+unsigned char *D_L11_001B2B68 NOT_SDA = 0;
+unsigned char *D_L11_0016016C = 0;
+unsigned char *D_L11_001B2B78 NOT_SDA = 0;
+u32 D_L11_00160228 = 0xf;
+unsigned char *D_L11_001B2B8C NOT_SDA = 0;
+unsigned char *D_L11_001B2BA0 NOT_SDA = 0;
+int D_L11_00160240 = 0x13;
+unsigned char *D_L11_001B2BB8 NOT_SDA = 0;
+short D_L11_0016024C = -13107;
+s32 D_L11_00174808 NOT_SDA = 0;
+unsigned char *D_L12_001B25B8 NOT_SDA = 0;
+float D_L12_00160210 = 0.25f;
+unsigned char *D_L12_001B25D4 NOT_SDA = 0;
+u8 *D_L12_001B25DC NOT_SDA = 0;
+unsigned char *D_L12_001B25E8 NOT_SDA = 0;
+unsigned char *D_L12_0016016C = 0;
+u8 *D_L12_001B25F4 NOT_SDA = 0;
+unsigned char *D_L12_001B25F8 NOT_SDA = 0;
+u32 D_L12_00160228 = 0xf;
+unsigned char *D_L12_001B260C NOT_SDA = 0;
+unsigned char *D_L12_001B2618 NOT_SDA = 0;
+int D_L12_00160240 = 0x13;
+unsigned char *D_L12_001B2638 NOT_SDA = 0;
+short D_L12_0016024C = -13107;
+s32 D_L12_00174288 NOT_SDA = 0;
+unsigned char *D_L13_001B243C NOT_SDA = 0;
+float D_L13_00160210 = 0.25f;
+unsigned char *D_L13_001B2454 NOT_SDA = 0;
+u8 *D_L13_001B245C NOT_SDA = 0;
+unsigned char *D_L13_001B2468 NOT_SDA = 0;
+unsigned char *D_L13_0016016C = 0;
+unsigned char *D_L13_001B2478 NOT_SDA = 0;
+u32 D_L13_00160228 = 0xf;
+unsigned char *D_L13_001B248C NOT_SDA = 0;
+unsigned char *D_L13_001B2498 NOT_SDA = 0;
+unsigned char *D_L13_001B24A0 NOT_SDA = 0;
+int D_L13_00160240 = 0x13;
+unsigned char *D_L13_001B24B8 NOT_SDA = 0;
+short D_L13_0016024C = -13107;
+s32 D_L13_00174108 NOT_SDA = 0;
+unsigned char *D_L14_001B2834 NOT_SDA = 0;
+float D_L14_00160210 = 0.25f;
+unsigned char *D_L14_001B2854 NOT_SDA = 0;
+u8 *D_L14_001B285C NOT_SDA = 0;
+unsigned char *D_L14_001B2868 NOT_SDA = 0;
+unsigned char *D_L14_0016016C = 0;
+unsigned char *D_L14_001B2878 NOT_SDA = 0;
+u32 D_L14_00160228 = 0xf;
+unsigned char *D_L14_001B288C NOT_SDA = 0;
+unsigned char *D_L14_001B2898 NOT_SDA = 0;
+int D_L14_00160240 = 0x13;
+unsigned char *D_L14_001B28B8 NOT_SDA = 0;
+short D_L14_0016024C = -13107;
+s32 D_L14_00174508 NOT_SDA = 0;
+unsigned char *D_L15_001B273C NOT_SDA = 0;
+float D_L15_00160210 = 0.25f;
+unsigned char *D_L15_001B2754 NOT_SDA = 0;
+u8 *D_L15_001B275C NOT_SDA = 0;
+unsigned char *D_L15_001B2768 NOT_SDA = 0;
+unsigned char *D_L15_0016016C = 0;
+u8 *D_L15_001B2774 NOT_SDA = 0;
+unsigned char *D_L15_001B2778 NOT_SDA = 0;
+u32 D_L15_00160228 = 0xf;
+unsigned char *D_L15_001B278C NOT_SDA = 0;
+unsigned char *D_L15_001B27A0 NOT_SDA = 0;
+int D_L15_00160240 = 0x13;
+unsigned char *D_L15_001B27B8 NOT_SDA = 0;
+short D_L15_0016024C = -13107;
+s32 D_L15_00174408 NOT_SDA = 0;
+unsigned char *D_L16_001B25BC NOT_SDA = 0;
+float D_L16_00160210 = 0.25f;
+unsigned char *D_L16_001B25D4 NOT_SDA = 0;
+u8 *D_L16_001B25DC NOT_SDA = 0;
+unsigned char *D_L16_001B25E8 NOT_SDA = 0;
+unsigned char *D_L16_0016016C = 0;
+u8 *D_L16_001B25F4 NOT_SDA = 0;
+unsigned char *D_L16_001B25F8 NOT_SDA = 0;
+u32 D_L16_00160228 = 0xf;
+unsigned char *D_L16_001B260C NOT_SDA = 0;
+unsigned char *D_L16_001B2620 NOT_SDA = 0;
+int D_L16_00160240 = 0x13;
+unsigned char *D_L16_001B2638 NOT_SDA = 0;
+short D_L16_0016024C = -13107;
+s32 D_L16_00174208 NOT_SDA = 0;
+unsigned char *D_L17_001B2A3C NOT_SDA = 0;
+float D_L17_00160210 = 0.25f;
+u8 *D_L17_001B2A5C NOT_SDA = 0;
+unsigned char *D_L17_001B2A68 NOT_SDA = 0;
+unsigned char *D_L17_0016016C = 0;
+u8 *D_L17_001B2A74 NOT_SDA = 0;
+unsigned char *D_L17_001B2A78 NOT_SDA = 0;
+u32 D_L17_00160228 = 0xf;
+unsigned char *D_L17_001B2A8C NOT_SDA = 0;
+unsigned char *D_L17_001B2A98 NOT_SDA = 0;
+unsigned char *D_L17_001B2AA0 NOT_SDA = 0;
+int D_L17_00160240 = 0x13;
+unsigned char *D_L17_001B2AB8 NOT_SDA = 0;
+short D_L17_0016024C = -13107;
+s32 D_L17_00174708 NOT_SDA = 0;
+unsigned char *D_L18_001B2B3C NOT_SDA = 0;
+float D_L18_00160210 = 0.25f;
+unsigned char *D_L18_001B2B54 NOT_SDA = 0;
+u8 *D_L18_001B2B5C NOT_SDA = 0;
+unsigned char *D_L18_001B2B68 NOT_SDA = 0;
+unsigned char *D_L18_001B2B78 NOT_SDA = 0;
+u32 D_L18_00160228 = 0xf;
+unsigned char *D_L18_001B2B8C NOT_SDA = 0;
+unsigned char *D_L18_001B2B94 NOT_SDA = 0;
+unsigned char *D_L18_001B2BA0 NOT_SDA = 0;
+int D_L18_00160240 = 0x13;
+unsigned char *D_L18_001B2BB8 NOT_SDA = 0;
+short D_L18_0016024C = -13107;
+s32 D_L18_00174808 NOT_SDA = 0;

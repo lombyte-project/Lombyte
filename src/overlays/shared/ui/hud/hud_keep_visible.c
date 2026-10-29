@@ -3,8 +3,6 @@
 #include "asm.h"
 #include "rnc/overlay/hud.h"
 
-
-
 /* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
    0xFFFF, 0, 0, 0, 0, 1), +0x7C = 0, +0x6C = -6, then reloads it with
@@ -39,7 +37,6 @@ void reset_hud_animation_channels(void) {
         apply_pending_animation(&hud_elements[i]);
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236400), where it is exact; names translated to the US level program. */
 
@@ -276,7 +273,6 @@ void hud_update_counter(e) HudElem *e __asm__("FUN_L00_00235ea0");
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236AB8), where it is exact; names translated to the US level program. */
 
-
 void update_numeric_hud_element_direct_value(HudElem *hud_element) __asm__("FUN_L00_00236128");
 
 void update_numeric_hud_element_direct_value(HudElem *hud_element) {
@@ -363,7 +359,6 @@ void hud_init_particles(HudElem *elem) {
     bands++;
     bands--;
 }
-
 
 extern int D_L00_0015F3F8;
 void hud_update_counter() __asm__("FUN_L00_00235ea0");
@@ -555,7 +550,6 @@ int draw_hud_stars(HudElem *element) {
     return element->w;
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_002377E0), where it is exact; names translated to the US level program. */
-
 
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
@@ -750,3 +744,202 @@ int draw_hud_text_panel(HudElem *hud_element) {
     /* Fakematch: the never-taken text_color use keeps the then-branch color copy in its own register. */
     return hud_element->w + (text_color & never);
 }
+
+float D_L01_0015F750 = 6.0f;
+float D_L01_0015F754 = 4.5f;
+float D_L01_0015F758 = 3.0f;
+int D_L01_0015F75C = 6;
+int D_L01_0015F760 = 0x2a;
+int D_L01_0015F764 = 0xc0;
+float D_L01_0015F768 = 0.5f;
+float D_L01_0015F76C = 0.9f;
+s32 D_L01_0015F770 = 0x20;
+s32 D_L01_0015F648 = 0;
+u8 D_L01_0017E9B0 NOT_SDA = 0;
+float D_L02_0015F750 = 6.0f;
+float D_L02_0015F754 = 4.5f;
+float D_L02_0015F758 = 3.0f;
+int D_L02_0015F75C = 6;
+int D_L02_0015F760 = 0x2a;
+int D_L02_0015F764 = 0xc0;
+float D_L02_0015F768 = 0.5f;
+float D_L02_0015F76C = 0.9f;
+s32 D_L02_0015F770 = 0x20;
+s32 D_L02_0015F648 = 0;
+u8 D_L02_0017EB30 NOT_SDA = 0;
+float D_L03_0015F750 = 6.0f;
+float D_L03_0015F754 = 4.5f;
+float D_L03_0015F758 = 3.0f;
+int D_L03_0015F75C = 6;
+int D_L03_0015F760 = 0x2a;
+int D_L03_0015F764 = 0xc0;
+float D_L03_0015F768 = 0.5f;
+float D_L03_0015F76C = 0.9f;
+s32 D_L03_0015F770 = 0x20;
+s32 D_L03_0015F648 = 0;
+u8 D_L03_0017E630 NOT_SDA = 0;
+float D_L04_0015F750 = 6.0f;
+float D_L04_0015F754 = 4.5f;
+float D_L04_0015F758 = 3.0f;
+int D_L04_0015F75C = 6;
+int D_L04_0015F760 = 0x2a;
+int D_L04_0015F764 = 0xc0;
+float D_L04_0015F768 = 0.5f;
+float D_L04_0015F76C = 0.9f;
+s32 D_L04_0015F770 = 0x20;
+s32 D_L04_0015F648 = 0;
+u8 D_L04_0017E6B0 NOT_SDA = 0;
+float D_L05_0015F760 = 6.0f;
+float D_L05_0015F764 = 4.5f;
+float D_L05_0015F768 = 3.0f;
+int D_L05_0015F76C = 6;
+int D_L05_0015F770 = 0x2a;
+int D_L05_0015F774 = 0xc0;
+float D_L05_0015F778 = 0.5f;
+float D_L05_0015F77C = 0.9f;
+s32 D_L05_0015F780 = 0x20;
+s32 D_L05_0015F648 = 0;
+u8 D_L05_0017E9B0 NOT_SDA = 0;
+float D_L06_0015F750 = 6.0f;
+float D_L06_0015F754 = 4.5f;
+float D_L06_0015F758 = 3.0f;
+int D_L06_0015F75C = 6;
+int D_L06_0015F760 = 0x2a;
+int D_L06_0015F764 = 0xc0;
+float D_L06_0015F768 = 0.5f;
+float D_L06_0015F76C = 0.9f;
+s32 D_L06_0015F770 = 0x20;
+s32 D_L06_0015F648 = 0;
+u8 D_L06_0017ECB0 NOT_SDA = 0;
+float D_L07_0015F750 = 6.0f;
+float D_L07_0015F754 = 4.5f;
+float D_L07_0015F758 = 3.0f;
+int D_L07_0015F75C = 6;
+int D_L07_0015F760 = 0x2a;
+int D_L07_0015F764 = 0xc0;
+float D_L07_0015F768 = 0.5f;
+float D_L07_0015F76C = 0.9f;
+s32 D_L07_0015F770 = 0x20;
+s32 D_L07_0015F648 = 0;
+u8 D_L07_0017E5B0 NOT_SDA = 0;
+float D_L08_0015F750 = 6.0f;
+float D_L08_0015F754 = 4.5f;
+float D_L08_0015F758 = 3.0f;
+int D_L08_0015F75C = 6;
+int D_L08_0015F760 = 0x2a;
+int D_L08_0015F764 = 0xc0;
+float D_L08_0015F768 = 0.5f;
+float D_L08_0015F76C = 0.9f;
+s32 D_L08_0015F770 = 0x20;
+s32 D_L08_0015F648 = 0;
+u8 D_L08_0017ED30 NOT_SDA = 0;
+float D_L09_0015F750 = 6.0f;
+float D_L09_0015F754 = 4.5f;
+float D_L09_0015F758 = 3.0f;
+int D_L09_0015F75C = 6;
+int D_L09_0015F760 = 0x2a;
+int D_L09_0015F764 = 0xc0;
+float D_L09_0015F768 = 0.5f;
+float D_L09_0015F76C = 0.9f;
+s32 D_L09_0015F770 = 0x20;
+s32 D_L09_0015F648 = 0;
+u8 D_L09_0017E6B0 NOT_SDA = 0;
+float D_L10_0015F750 = 6.0f;
+float D_L10_0015F754 = 4.5f;
+float D_L10_0015F758 = 3.0f;
+int D_L10_0015F75C = 6;
+int D_L10_0015F760 = 0x2a;
+int D_L10_0015F764 = 0xc0;
+float D_L10_0015F768 = 0.5f;
+float D_L10_0015F76C = 0.9f;
+s32 D_L10_0015F770 = 0x20;
+s32 D_L10_0015F648 = 0;
+u8 D_L10_0017E9B0 NOT_SDA = 0;
+float D_L11_0015F750 = 6.0f;
+float D_L11_0015F754 = 4.5f;
+float D_L11_0015F758 = 3.0f;
+int D_L11_0015F75C = 6;
+int D_L11_0015F760 = 0x2a;
+int D_L11_0015F764 = 0xc0;
+float D_L11_0015F768 = 0.5f;
+float D_L11_0015F76C = 0.9f;
+s32 D_L11_0015F770 = 0x20;
+s32 D_L11_0015F648 = 0;
+u8 D_L11_0017EF30 NOT_SDA = 0;
+float D_L12_0015F750 = 6.0f;
+float D_L12_0015F754 = 4.5f;
+float D_L12_0015F758 = 3.0f;
+int D_L12_0015F75C = 6;
+int D_L12_0015F760 = 0x2a;
+int D_L12_0015F764 = 0xc0;
+float D_L12_0015F768 = 0.5f;
+float D_L12_0015F76C = 0.9f;
+s32 D_L12_0015F770 = 0x20;
+s32 D_L12_0015F648 = 0;
+u8 D_L12_0017E9B0 NOT_SDA = 0;
+float D_L13_0015F750 = 6.0f;
+float D_L13_0015F754 = 4.5f;
+float D_L13_0015F758 = 3.0f;
+int D_L13_0015F75C = 6;
+int D_L13_0015F760 = 0x2a;
+int D_L13_0015F764 = 0xc0;
+float D_L13_0015F768 = 0.5f;
+float D_L13_0015F76C = 0.9f;
+s32 D_L13_0015F770 = 0x20;
+s32 D_L13_0015F648 = 0;
+u8 D_L13_0017E830 NOT_SDA = 0;
+float D_L14_0015F750 = 6.0f;
+float D_L14_0015F754 = 4.5f;
+float D_L14_0015F758 = 3.0f;
+int D_L14_0015F75C = 6;
+int D_L14_0015F760 = 0x2a;
+int D_L14_0015F764 = 0xc0;
+float D_L14_0015F768 = 0.5f;
+float D_L14_0015F76C = 0.9f;
+s32 D_L14_0015F770 = 0x20;
+s32 D_L14_0015F648 = 0;
+u8 D_L14_0017EC30 NOT_SDA = 0;
+float D_L15_0015F750 = 6.0f;
+float D_L15_0015F754 = 4.5f;
+float D_L15_0015F758 = 3.0f;
+int D_L15_0015F75C = 6;
+int D_L15_0015F760 = 0x2a;
+int D_L15_0015F764 = 0xc0;
+float D_L15_0015F768 = 0.5f;
+float D_L15_0015F76C = 0.9f;
+s32 D_L15_0015F770 = 0x20;
+s32 D_L15_0015F648 = 0;
+u8 D_L15_0017EB30 NOT_SDA = 0;
+float D_L16_0015F760 = 6.0f;
+float D_L16_0015F764 = 4.5f;
+float D_L16_0015F768 = 3.0f;
+int D_L16_0015F76C = 6;
+int D_L16_0015F770 = 0x2a;
+int D_L16_0015F774 = 0xc0;
+float D_L16_0015F778 = 0.5f;
+float D_L16_0015F77C = 0.9f;
+s32 D_L16_0015F780 = 0x20;
+s32 D_L16_0015F648 = 0;
+u8 D_L16_0017E9B0 NOT_SDA = 0;
+float D_L17_0015F750 = 6.0f;
+float D_L17_0015F754 = 4.5f;
+float D_L17_0015F758 = 3.0f;
+int D_L17_0015F75C = 6;
+int D_L17_0015F760 = 0x2a;
+int D_L17_0015F764 = 0xc0;
+float D_L17_0015F768 = 0.5f;
+float D_L17_0015F76C = 0.9f;
+s32 D_L17_0015F770 = 0x20;
+s32 D_L17_0015F648 = 0;
+u8 D_L17_0017EE30 NOT_SDA = 0;
+float D_L18_0015F750 = 6.0f;
+float D_L18_0015F754 = 4.5f;
+float D_L18_0015F758 = 3.0f;
+int D_L18_0015F75C = 6;
+int D_L18_0015F760 = 0x2a;
+int D_L18_0015F764 = 0xc0;
+float D_L18_0015F768 = 0.5f;
+float D_L18_0015F76C = 0.9f;
+s32 D_L18_0015F770 = 0x20;
+s32 D_L18_0015F648 = 0;
+u8 D_L18_0017EF30 NOT_SDA = 0;

@@ -428,7 +428,6 @@ void novalis_elevator_update(unsigned char *moby) {
     }
 }
 
-
 /* spawns two bursts of particles around a point */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002C84D8), where it is exact; names translated to the US level program. */
 
@@ -960,7 +959,6 @@ void gold_weapon_case_update(struct Moby *moby) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002E4430), where it is exact; names translated to the US level program. */
-
 
 void compute_sand_mouse_approach_target(int unused, void *out) __asm__("FUN_L01_002e30b8");
 
@@ -2612,8 +2610,6 @@ s32 reserve_expired_frame_slot(s32 *values, s32 count, s32 offset) {
     return index;
 }
 
-
-
 /* runs the moby update and sets its state byte */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F30F0), where it is exact; names translated to the US level program. */
 
@@ -3459,3 +3455,135 @@ next_entity:
     l01_packet.words[3] = 0;
     l01_packet.words += 4;
 }
+
+struct DriftEmitter D_L02_001D3110 = {0};
+float D_L02_0016189C = 2e+01f;
+float D_L02_001618A0 = 1.8e+02f;
+float D_L02_001618A4 = 9e+01f;
+float D_L02_001618A8 = 0.3f;
+float D_L02_001618AC = 0.3f;
+int D_L02_00161898 = 6;
+s32 D_L02_00161A60 = 0;
+s32 D_L03_00161990 = 0;
+char D_L04_001BA7A0 NOT_SDA = 0;
+f32 D_L04_00161840 = 0;
+struct DriftEmitter D_L04_001D2E10 = {0};
+float D_L04_0016190C = 2e+01f;
+float D_L04_00161910 = 1.8e+02f;
+float D_L04_00161914 = 9e+01f;
+float D_L04_00161918 = 0.3f;
+float D_L04_0016191C = 0.3f;
+int D_L04_00161908 = 6;
+s32 D_L04_001619E0 = 0;
+s32 D_L05_0015F5E0 = 0;
+u32 D_L05_00161228 = 0xffffffff;
+u32 D_L05_0016122C = 0xffffffff;
+u32 D_L05_00161230 = 0xffffffff;
+u32 D_L05_00161234 = 0xffffffff;
+char D_L05_001619F0 = 1;
+char D_L05_00161A00 = 1;
+float D_L05_00161950 = 15.0f;
+float D_L05_00161954 = 5.0f;
+short D_L05_00161948 = -32640;
+short D_L05_0016194C = -32704;
+int D_L05_00161990 = 0x14;
+int D_L05_00161994 = 5;
+float D_L05_00161998 = 0.1f;
+float D_L05_00161968 = 1.0f;
+int D_L05_00161970 = 0x78;
+int D_L05_00161974 = 0xb4;
+float D_L05_00161980 = 3.5f;
+int D_L05_00161988 = 0x78;
+int D_L05_0016198C = 0xb4;
+s32 D_L05_0016199C = 0x14;
+s32 D_L05_001619A0 = 0xa;
+f32 D_L05_001619A4 = 0.5f;
+f32 D_L05_001619A8 = 0.2f;
+f32 D_L05_001619AC = 0.5f;
+f32 D_L05_001619B0 = 1.0f;
+f32 D_L05_001619B4 = 8.0f;
+f32 D_L05_001619B8 = 2.0f;
+f32 D_L05_001619BC = 6.0f;
+f32 D_L05_001619C0 = 2e+01f;
+f32 D_L05_001619C4 = 0.125f;
+f32 D_L05_001619C8 = 0.065f;
+s32 D_L05_001619DC = 0xa;
+s32 D_L05_001619E4 = 0xa;
+f32 D_L05_001619E8 = 0;
+s32 D_L05_00161A70 = 0;
+s32 D_L06_00161464 = 8;
+f32 D_L06_0016146C = 0.25f;
+s32 D_L06_00161960 = 0;
+s32 D_L07_0015F5E0 = 0;
+u32 D_L07_00161228 = 0xffffffff;
+u32 D_L07_0016122C = 0xffffffff;
+u32 D_L07_00161230 = 0xffffffff;
+u32 D_L07_00161234 = 0xffffffff;
+s32 D_L07_00161930 = 0;
+s32 D_L08_0016148C = 8;
+f32 D_L08_00161494 = 0.25f;
+char D_L08_001BAE20 NOT_SDA = 0;
+f32 D_L08_00161930 = 0;
+s32 D_L08_00161E30 = 0;
+s32 D_L09_001614F4 = 8;
+f32 D_L09_001614FC = 0.25f;
+s32 D_L09_001619F0 = 0;
+s32 D_L10_00161950 = 0;
+s32 D_L11_0015F5E0 = 0;
+u32 D_L11_00161228 = 0xffffffff;
+u32 D_L11_0016122C = 0xffffffff;
+u32 D_L11_00161230 = 0xffffffff;
+u32 D_L11_00161234 = 0xffffffff;
+struct DriftEmitter D_L11_001D3550 = {0};
+char D_L11_00161A40 = 1;
+char D_L11_00161A50 = 1;
+float D_L11_001619A0 = 15.0f;
+float D_L11_001619A4 = 5.0f;
+short D_L11_00161998 = -32640;
+short D_L11_0016199C = -32704;
+int D_L11_001619E0 = 0x14;
+int D_L11_001619E4 = 5;
+float D_L11_001619E8 = 0.1f;
+float D_L11_001619B8 = 1.0f;
+int D_L11_001619C0 = 0x78;
+int D_L11_001619C4 = 0xb4;
+float D_L11_001619D0 = 3.5f;
+int D_L11_001619D8 = 0x78;
+int D_L11_001619DC = 0xb4;
+s32 D_L11_001619EC = 0x14;
+s32 D_L11_001619F0 = 0xa;
+f32 D_L11_001619F4 = 0.5f;
+f32 D_L11_001619F8 = 0.2f;
+f32 D_L11_001619FC = 0.5f;
+f32 D_L11_00161A00 = 1.0f;
+f32 D_L11_00161A04 = 8.0f;
+f32 D_L11_00161A08 = 2.0f;
+f32 D_L11_00161A0C = 6.0f;
+f32 D_L11_00161A10 = 2e+01f;
+f32 D_L11_00161A14 = 0.125f;
+f32 D_L11_00161A18 = 0.065f;
+s32 D_L11_00161A2C = 0xa;
+s32 D_L11_00161A34 = 0xa;
+f32 D_L11_00161A38 = 0;
+s32 D_L11_00161AC0 = 0;
+s32 D_L12_0015F5E0 = 0;
+u32 D_L12_00161228 = 0xffffffff;
+u32 D_L12_0016122C = 0xffffffff;
+u32 D_L12_00161230 = 0xffffffff;
+u32 D_L12_00161234 = 0xffffffff;
+s32 D_L12_00161B20 = 0;
+s32 D_L13_0015F5E0 = 0;
+u32 D_L13_00161228 = 0xffffffff;
+u32 D_L13_0016122C = 0xffffffff;
+u32 D_L13_00161230 = 0xffffffff;
+u32 D_L13_00161234 = 0xffffffff;
+s32 D_L13_00161A20 = 0;
+s32 D_L14_00161C00 = 0;
+s32 D_L15_001615F4 = 8;
+f32 D_L15_001615FC = 0.25f;
+s32 D_L15_00161BC0 = 0;
+s32 D_L16_00161A70 = 0;
+s32 D_L17_0016154C = 8;
+f32 D_L17_00161554 = 0.25f;
+s32 D_L17_00161A50 = 0;
+s32 D_L18_00161AB8 = 0;

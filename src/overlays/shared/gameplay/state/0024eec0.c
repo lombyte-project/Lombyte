@@ -40,7 +40,6 @@ void set_moby_local_table_entry(char *moby, int table_entry_index, void *v, floa
     e->v.w = unscaled_entry_w * k;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8), where it is exact; names translated to the US level program. */
 
 /* Offsets the point pairs of each of the a[4] + a[5] entries by dx, dy. */
@@ -65,7 +64,6 @@ void offset_moby_class_point_pairs(unsigned char *moby_class, int dx, int dy) {
         }
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250060), where it is exact; names translated to the US level program. */
 
@@ -160,8 +158,6 @@ void release_moby_animation_slot(ListOwner *owner, ListNode **slot) {
     fill_transfer_words(*slot, 0, 0x40);
     *slot = 0;
 }
-
-
 
 /* advances an animation blend timer and steps through its frame table */
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002501C8), where it is exact; names translated to the US level program. */
@@ -340,3 +336,22 @@ void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *out) 
         *q = 1;
     flush_cache(0);
 }
+
+Slot D_L01_0018EFC0 = {0};
+Slot D_L02_0018F140 = {0};
+Slot D_L03_0018EC40 = {0};
+Slot D_L04_0018ECC0 = {0};
+Slot D_L05_0018EFC0 = {0};
+Slot D_L06_0018F2C0 = {0};
+Slot D_L07_0018EBC0 = {0};
+Slot D_L08_0018F340 = {0};
+Slot D_L09_0018ECC0 = {0};
+Slot D_L10_0018EFC0 = {0};
+Slot D_L11_0018F540 = {0};
+Slot D_L12_0018EFC0 = {0};
+Slot D_L13_0018EE40 = {0};
+Slot D_L14_0018F240 = {0};
+Slot D_L15_0018F140 = {0};
+Slot D_L16_0018EFC0 = {0};
+Slot D_L17_0018F440 = {0};
+Slot D_L18_0018F540 = {0};

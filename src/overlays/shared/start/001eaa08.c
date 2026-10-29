@@ -20,4 +20,3 @@ extern L00Entry D_L00_00166000[8];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 /* FUN_L00_001eaa08 is the executable function of the same bytes (src/gameplay). */
-

@@ -90,3 +90,40 @@ void process_unlock_code_input(void) {
         *(int *)&unlock_code_input_count = 0;
     }
 }
+
+char D_L01_001B4C50 NOT_SDA = 0xd;
+short D_L01_001603F8 = 0;
+char D_L02_001B4DD0 NOT_SDA = 0xd;
+short D_L02_001603F8 = 0;
+char D_L03_001B48D0 NOT_SDA = 0xd;
+short D_L03_001603F8 = 0;
+char D_L04_001B4950 NOT_SDA = 0xd;
+short D_L04_001603F8 = 0;
+char D_L05_001B4C50 NOT_SDA = 0xd;
+short D_L05_001603F8 = 0;
+char D_L06_001B4F50 NOT_SDA = 0xd;
+short D_L06_001603F8 = 0;
+char D_L07_001B4850 NOT_SDA = 0xd;
+short D_L07_001603F8 = 0;
+char D_L08_001B4FD0 NOT_SDA = 0xd;
+short D_L08_001603F8 = 0;
+char D_L09_001B4950 NOT_SDA = 0xd;
+short D_L09_001603F8 = 0;
+char D_L10_001B4C50 NOT_SDA = 0xd;
+short D_L10_001603F8 = 0;
+char D_L11_001B51D0 NOT_SDA = 0xd;
+short D_L11_001603F8 = 0;
+char D_L12_001B4C50 NOT_SDA = 0xd;
+short D_L12_001603F8 = 0;
+char D_L13_001B4AD0 NOT_SDA = 0xd;
+short D_L13_001603F8 = 0;
+char D_L14_001B4ED0 NOT_SDA = 0xd;
+short D_L14_001603F8 = 0;
+char D_L15_001B4DD0 NOT_SDA = 0xd;
+short D_L15_001603F8 = 0;
+char D_L16_001B4C50 NOT_SDA = 0xd;
+short D_L16_001603F8 = 0;
+char D_L17_001B50D0 NOT_SDA = 0xd;
+short D_L17_001603F8 = 0;
+char D_L18_001B51D0 NOT_SDA = 0xd;
+short D_L18_001603F8 = 0;

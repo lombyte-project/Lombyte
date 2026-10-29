@@ -9,8 +9,6 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/state/options.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00179410[];
@@ -36,7 +34,6 @@ void clear_jet_camera_mode_latch(void) {
     *(short *)jet_camera_mode_setup_latch = 0;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205598), where it is exact; names translated to the US level program. */
 
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -60,7 +57,6 @@ void reset_hero_to_idle(void) {
     clear_hero_queued_animation();
     hero_set_state(HERO_STATE_IDLE, 1);
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205618), where it is exact; names translated to the US level program. */
 
@@ -260,7 +256,6 @@ void reset_hero_easing_records(void) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205C18), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015F5CC;
@@ -285,7 +280,6 @@ void update_hero_random_timer(void) {
 }
 typedef u32 Quad_56a8 __attribute__((mode(TI), aligned(16)));
 extern u8 D_L00_0017A680_56a8[] __asm__("D_L00_0017A680");
-
 
 extern Quad_56a8 l00_hero_random_manipulator_initial_quaternions[] __asm__("D_L00_0017C040");
 extern Quad_56a8 l00_hero_random_manipulator_initial_scales[] __asm__("D_L00_0017C0B0");
@@ -479,7 +473,6 @@ void update_hero_glow_and_extra_manipulators(void) {
 }
 #undef EXTRA_MANIPS
 #undef HERO_EXTRA
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_002064C0), where it is exact; names translated to the US level program. */
 
@@ -1198,9 +1191,7 @@ void coordinate_hero_frame_update(void) {
     update_hero_moby_probed_height_bounds();
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_002078E0), where it is exact; names translated to the US level program. */
-
 
 void copy_hero_color_to_item_mobys(void) __asm__("FUN_L00_002072c8");
 
@@ -1422,7 +1413,6 @@ void apply_hero_vertical_oscillation(void) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00208000), where it is exact; names translated to the US level program. */
 
 extern void update_moby_rotation_oscillation(int, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
@@ -1503,7 +1493,6 @@ void update_hero_scalar_pulse(void) {
             hero_scalar_pulse_active_gp = 0;
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00208318), where it is exact; names translated to the US level program. */
 
@@ -2079,7 +2068,6 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame, f32 anim
     return 0.0f;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00209690), where it is exact; names translated to the US level program. */
 
 extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
@@ -2144,7 +2132,6 @@ void rotate_hero_about_local_pivot(float *inf, float x, float y, float z) {
     FUN_001f9a10_002090d0(hero_rotation - 1, hero_rotation - 1, &L_002090d0.d);
     FUN_00214598_002090d0(&L_002090d0.m, hero_rotation);
 }
-
 
 /* Builds a {0,0,0.6,0} param vector and forwards it (plus the caller's
    position) to func_L00_00209748. */
@@ -3207,7 +3194,6 @@ void probe_hero_airborne_wall_contact(void) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020BFA8), where it is exact; names translated to the US level program. */
 
 extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
@@ -3627,3 +3613,176 @@ f32 D_L16_0017AB84[1] __attribute__((section(".data"))) = {0};
 f32 D_L16_0017AB88[1] __attribute__((section(".data"))) = {0};
 f32 D_L17_0017B024[1] __attribute__((section(".data"))) = {0};
 f32 D_L17_0017B028[1] __attribute__((section(".data"))) = {0};
+
+s32 D_L01_0015F6F8 = 2;
+char D_L01_00180650 NOT_SDA = 0;
+char D_L01_0017AB40 NOT_SDA = 0;
+float D_L01_00179C58 NOT_SDA = 0;
+int D_L01_0015F680 = 0;
+int D_L01_0015F684 = 0;
+float D_L01_0015F67C = 0.1f;
+V_208b60 D_L01_001AF010 = {0};
+T00209240 D_L01_00208C70 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+s32 D_L02_0015F6F8 = 2;
+char D_L02_001807D0 NOT_SDA = 0;
+char D_L02_0017ACC0 NOT_SDA = 0;
+float D_L02_00179DD8 NOT_SDA = 0;
+int D_L02_0015F680 = 0;
+int D_L02_0015F684 = 0;
+float D_L02_0015F67C = 0.1f;
+V_208b60 D_L02_001AF190 = {0};
+T00209240 D_L02_001F8510 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+s32 D_L03_0015F6F8 = 2;
+char D_L03_001802D0 NOT_SDA = 0;
+char D_L03_0017A7C0 NOT_SDA = 0;
+float D_L03_001798D8 NOT_SDA = 0;
+int D_L03_0015F680 = 0;
+int D_L03_0015F684 = 0;
+float D_L03_0015F67C = 0.1f;
+V_208b60 D_L03_001AEC90 = {0};
+T00209240 D_L03_001E0890 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+s32 D_L04_0015F6F8 = 2;
+f32 D_L04_0017B9DC NOT_SDA = 1.0f;
+char D_L04_00180350 NOT_SDA = 0;
+char D_L04_0017A840 NOT_SDA = 0;
+float D_L04_00179958 NOT_SDA = 0;
+int D_L04_0015F680 = 0;
+int D_L04_0015F684 = 0;
+float D_L04_0015F67C = 0.1f;
+V_208b60 D_L04_001AED10 = {0};
+T00209240 D_L04_001D9A00 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+S0020a1e0 D_L04_0017A800 = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0}, 0.0f, 0.0f};
+char D_L05_00179810 NOT_SDA = 0;
+s32 D_L05_0015F708 = 2;
+char D_L05_00180650 NOT_SDA = 0;
+float D_L05_00179C38 NOT_SDA = 0;
+V_208b60 D_L05_001AF010 = {0};
+T00209240 D_L05_00216300 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+s32 D_L06_0015F6F8 = 2;
+char D_L06_00180950 NOT_SDA = 0;
+char D_L06_0017AE40 NOT_SDA = 0;
+float D_L06_00179F58 NOT_SDA = 0;
+int D_L06_0015F680 = 0;
+int D_L06_0015F684 = 0;
+float D_L06_0015F67C = 0.1f;
+V_208b60 D_L06_001AF310 = {0};
+T00209240 D_L06_001FF060 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+char D_L07_00179490 NOT_SDA = 0;
+s32 D_L07_0015F6F8 = 2;
+f32 D_L07_0017B8DC NOT_SDA = 1.0f;
+char D_L07_00180250 NOT_SDA = 0;
+char D_L07_0017A740 NOT_SDA = 0;
+float D_L07_00179858 NOT_SDA = 0;
+int D_L07_0015F680 = 0;
+int D_L07_0015F684 = 0;
+float D_L07_0015F67C = 0.1f;
+V_208b60 D_L07_001AEC10 = {0};
+T00209240 D_L07_0020EF00 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+S0020a1e0 D_L07_0017A700 = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0}, 0.0f, 0.0f};
+s32 D_L08_0015F6F8 = 2;
+char D_L08_001809D0 NOT_SDA = 0;
+char D_L08_0017AEC0 NOT_SDA = 0;
+float D_L08_00179FD8 NOT_SDA = 0;
+int D_L08_0015F680 = 0;
+int D_L08_0015F684 = 0;
+float D_L08_0015F67C = 0.1f;
+V_208b60 D_L08_001AF390 = {0};
+T00209240 D_L08_001F9B50 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+char D_L09_00179590 NOT_SDA = 0;
+s32 D_L09_0015F6F8 = 2;
+f32 D_L09_0017B9DC NOT_SDA = 1.0f;
+char D_L09_00180350 NOT_SDA = 0;
+char D_L09_0017A840 NOT_SDA = 0;
+float D_L09_00179958 NOT_SDA = 0;
+int D_L09_0015F680 = 0;
+int D_L09_0015F684 = 0;
+float D_L09_0015F67C = 0.1f;
+V_208b60 D_L09_001AED10 = {0};
+T00209240 D_L09_00206770 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+S0020a1e0 D_L09_0017A800 = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0}, 0.0f, 0.0f};
+s32 D_L10_0015F6F8 = 2;
+f32 D_L10_0017BCDC NOT_SDA = 1.0f;
+char D_L10_00180650 NOT_SDA = 0;
+char D_L10_0017AB40 NOT_SDA = 0;
+float D_L10_00179C58 NOT_SDA = 0;
+int D_L10_0015F680 = 0;
+int D_L10_0015F684 = 0;
+float D_L10_0015F67C = 0.1f;
+V_208b60 D_L10_001AF010 = {0};
+T00209240 D_L10_001DA9E0 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+S0020a1e0 D_L10_0017AB00 = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0}, 0.0f, 0.0f};
+s32 D_L11_0015F6F8 = 2;
+char D_L11_00180BD0 NOT_SDA = 0;
+char D_L11_0017B0C0 NOT_SDA = 0;
+float D_L11_0017A1D8 NOT_SDA = 0;
+int D_L11_0015F680 = 0;
+int D_L11_0015F684 = 0;
+float D_L11_0015F67C = 0.1f;
+V_208b60 D_L11_001AF590 = {0};
+T00209240 D_L11_00218D60 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+char D_L12_00179890 NOT_SDA = 0;
+s32 D_L12_0015F6F8 = 2;
+char D_L12_00180650 NOT_SDA = 0;
+char D_L12_0017AB40 NOT_SDA = 0;
+float D_L12_00179C58 NOT_SDA = 0;
+int D_L12_0015F680 = 0;
+int D_L12_0015F684 = 0;
+float D_L12_0015F67C = 0.1f;
+V_208b60 D_L12_001AF010 = {0};
+T00209240 D_L12_0020A0F0 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+s32 D_L13_0015F6F8 = 2;
+f32 D_L13_0017BB5C NOT_SDA = 1.0f;
+char D_L13_001804D0 NOT_SDA = 0;
+char D_L13_0017A9C0 NOT_SDA = 0;
+float D_L13_00179AD8 NOT_SDA = 0;
+int D_L13_0015F680 = 0;
+int D_L13_0015F684 = 0;
+float D_L13_0015F67C = 0.1f;
+V_208b60 D_L13_001AEE90 = {0};
+T00209240 D_L13_001F26D0 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+S0020a1e0 D_L13_0017A980 = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0}, 0.0f, 0.0f};
+char D_L14_00179B10 NOT_SDA = 0;
+s32 D_L14_0015F6F8 = 2;
+char D_L14_001808D0 NOT_SDA = 0;
+char D_L14_0017ADC0 NOT_SDA = 0;
+float D_L14_00179ED8 NOT_SDA = 0;
+int D_L14_0015F680 = 0;
+int D_L14_0015F684 = 0;
+float D_L14_0015F67C = 0.1f;
+V_208b60 D_L14_001AF290 = {0};
+T00209240 D_L14_001F9F60 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+s32 D_L15_0015F6F8 = 2;
+char D_L15_001807D0 NOT_SDA = 0;
+float D_L15_00179DD8 NOT_SDA = 0;
+int D_L15_0015F680 = 0;
+int D_L15_0015F684 = 0;
+float D_L15_0015F67C = 0.1f;
+V_208b60 D_L15_001AF190 = {0};
+T00209240 D_L15_001E07D0 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+char D_L16_00179810 NOT_SDA = 0;
+s32 D_L16_0015F708 = 2;
+char D_L16_00180650 NOT_SDA = 0;
+char D_L16_0017AB20 NOT_SDA = 0;
+float D_L16_00179C38 NOT_SDA = 0;
+int D_L16_0015F680 = 0;
+int D_L16_0015F684 = 0;
+float D_L16_0015F67C = 0.1f;
+V_208b60 D_L16_001AF010 = {0};
+T00209240 D_L16_001E5EC0 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+s32 D_L17_0015F6F8 = 2;
+char D_L17_00180AD0 NOT_SDA = 0;
+char D_L17_0017AFC0 NOT_SDA = 0;
+float D_L17_0017A0D8 NOT_SDA = 0;
+int D_L17_0015F680 = 0;
+int D_L17_0015F684 = 0;
+float D_L17_0015F67C = 0.1f;
+V_208b60 D_L17_001AF490 = {0};
+T00209240 D_L17_001E4620 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+s32 D_L18_0015F6F8 = 2;
+char D_L18_00180BD0 NOT_SDA = 0;
+float D_L18_0017A1D8 NOT_SDA = 0;
+int D_L18_0015F680 = 0;
+int D_L18_0015F684 = 0;
+float D_L18_0015F67C = 0.1f;
+V_208b60 D_L18_001AF590 = {0};
+T00209240 D_L18_001F0340 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};

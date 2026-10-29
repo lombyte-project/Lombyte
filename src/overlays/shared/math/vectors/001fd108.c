@@ -34,7 +34,6 @@ int allocate_glint_slot(u128 *input_payload, int b, float x) {
     return -1;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/drawquad_001FD1D8.c: func_L00_001FE9C8), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -112,3 +111,22 @@ f32 D_L14_0016F158[1] __attribute__((section(".data"))) = {0};
 f32 D_L15_0016F058[1] __attribute__((section(".data"))) = {0};
 f32 D_L16_0016EE58[1] __attribute__((section(".data"))) = {0};
 f32 D_L17_0016F358[1] __attribute__((section(".data"))) = {0};
+
+P D_L01_0016EEC0[16] = {0};
+P D_L02_0016F040[16] = {0};
+P D_L03_0016EB40[16] = {0};
+P D_L04_0016EBC0[16] = {0};
+P D_L05_0016EE40[16] = {0};
+P D_L06_0016F1C0[16] = {0};
+P D_L07_0016EAC0[16] = {0};
+P D_L08_0016F240[16] = {0};
+P D_L09_0016EBC0[16] = {0};
+P D_L10_0016EEC0[16] = {0};
+P D_L11_0016F440[16] = {0};
+P D_L12_0016EEC0[16] = {0};
+P D_L13_0016ED40[16] = {0};
+P D_L14_0016F140[16] = {0};
+P D_L15_0016F040[16] = {0};
+P D_L16_0016EE40[16] = {0};
+P D_L17_0016F340[16] = {0};
+P D_L18_0016F440[16] = {0};

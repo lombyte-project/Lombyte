@@ -27,7 +27,6 @@ void remove_moby_when_near_hero(char *moby) {
     }
 }
 
-
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309A40), where it is exact; names translated to the US level program. */
@@ -77,7 +76,6 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
     }
     return best;
 }
-
 
 #include "qcopy.h"
 
@@ -797,3 +795,20 @@ s32 D_L16_001D9230[1] __attribute__((section(".data"))) = {0};
 s32 D_L16_001D9234[1] __attribute__((section(".data"))) = {0};
 s32 D_L16_001D9238[1] __attribute__((section(".data"))) = {0};
 s32 D_L16_001D923C[1] __attribute__((section(".data"))) = {0};
+
+int D_L13_00161D20 = 0x80802000;
+int D_L13_00161D24 = 0x80808020;
+int D_L13_00161D28 = 0xa;
+int D_L13_00161D2C = 0x5208;
+float D_L13_00161D30 = 0.5f;
+int D_L16_001D9128 NOT_SDA = 0;
+float D_L16_00161C50[2] = {2.0f, 3.0f};
+float D_L16_00161C70 = 0;
+
+char D_L16_00162240[4] __attribute__((section(".bss")));
+
+int D_L17_00161DB0 = 0x80802000;
+int D_L17_00161DB4 = 0x80808020;
+int D_L17_00161DB8 = 0xa;
+int D_L17_00161DBC = 0x5208;
+float D_L17_00161DC0 = 0.5f;

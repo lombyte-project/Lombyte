@@ -241,12 +241,10 @@ void draw_moby_offset_textured_quad(char *moby) {
     draw_geometry_quad(&local.quad, 0, 0);
 }
 
-
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030DC70), where it is exact; names translated to the US level program. */
-
 
 extern char *func_0020D348_m(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -382,7 +380,6 @@ void update_sandmouse_projectile(char *moby) {
     mark_moby_for_removal(moby);
 }
 
-
 /* offset a position by two camera-relative vectors, then raise z by 1 */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030E638), where it is exact; names translated to the US level program. */
 
@@ -472,7 +469,6 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
     return best;
 }
 #include "sda.h"
-
 
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -678,7 +674,6 @@ void update_sandmouse_hover_movement(struct Moby *moby, struct HoverVars *hover_
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F178), where it is exact; names translated to the US level program. */
 
-
 extern char sandmouse_first_particle_config __asm__("D_L01_001620E0") __attribute__((sda));
 extern char sandmouse_second_particle_config __asm__("D_L01_001620F0") __attribute__((sda));
 extern char sandmouse_third_particle_config __asm__("D_L01_00162100") __attribute__((sda));
@@ -701,7 +696,6 @@ void emit_sandmouse_particles(char *source_moby) {
         spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &sandmouse_third_particle_config, 1);
     }
 }
-
 
 /* Initialize both consecutive effect entries. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
@@ -741,13 +735,7 @@ void update_sandmouse_billboard_quads(char *moby) {
 #include "qzero.h"
 /* Ported from rac1-decomp (func_L01_0030F318). */
 
-
-
-
-
-
 typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
-
 
 typedef struct Moby Moby;
 
@@ -1929,8 +1917,6 @@ void update_listener_following_voice(int sound_owner) {
     }
 }
 
-
-
 /* sound instance update: fade/stop test against a listener distance */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B500), where it is exact; names translated to the US level program. */
 
@@ -2033,3 +2019,273 @@ s32 D_L14_001DFB88[1] __attribute__((section(".data"))) = {0};
 f32 D_L14_001DFB8C[1] __attribute__((section(".data"))) = {0};
 f32 D_L14_001DFB90[1] __attribute__((section(".data"))) = {0};
 f32 D_L14_001DFB94[1] __attribute__((section(".data"))) = {0};
+
+float D_L02_001621C4 = 2e+01f;
+float D_L02_001621C8 = 1.8e+02f;
+float D_L02_001621CC = 9e+01f;
+float D_L02_001621D0 = 0.3f;
+float D_L02_001621D4 = 0.3f;
+int D_L02_001621C0 = 8;
+f32 D_L02_001D3124 NOT_SDA = 0;
+f32 D_L02_00162204 = 1.22e+03f;
+f32 D_L02_00162208 = 9e+01f;
+f32 D_L02_0016220C = 1.22e+03f;
+f32 D_L02_00162210 = 5.0f;
+f32 D_L02_00162214 = 2.0f;
+f32 D_L02_00162218 = 0.1f;
+f32 D_L02_0016221C = 0.05f;
+char D_L02_00162220 = -1;
+char D_L02_00162230 = -1;
+char D_L02_00162240 = 0x4f;
+char D_L02_001FAEA0 NOT_SDA = 0x6d;
+char D_L02_001FAEC0 NOT_SDA = 0x6e;
+short D_L02_001621D8 = 0x1518;
+short D_L02_001621DC = 0x64;
+short D_L02_001621E4 = 0x1e;
+short D_L02_001621E8 = 0x14;
+short D_L02_001621EC = 0x28;
+short D_L02_001621F0 = -26214;
+short D_L02_001621F4 = 0;
+short D_L02_001621F8 = 0;
+short D_L02_001621FC = 0xff;
+short D_L02_00162200 = 0;
+float D_L03_00161C8C = 2e+01f;
+float D_L03_00161C90 = 1.8e+02f;
+float D_L03_00161C94 = 9e+01f;
+float D_L03_00161C98 = 0.3f;
+float D_L03_00161C9C = 0.3f;
+int D_L03_00161C88 = 8;
+f32 D_L03_001D2C24 NOT_SDA = 0;
+f32 D_L03_00161CCC = 1.22e+03f;
+f32 D_L03_00161CD0 = 9e+01f;
+f32 D_L03_00161CD4 = 1.22e+03f;
+f32 D_L03_00161CD8 = 5.0f;
+f32 D_L03_00161CDC = 2.0f;
+f32 D_L03_00161CE0 = 0.1f;
+f32 D_L03_00161CE4 = 0.05f;
+char D_L03_00161CE8 = -1;
+char D_L03_00161CF8 = -1;
+char D_L03_00161D08 = 0x4f;
+char D_L03_001E3760 NOT_SDA = 0x6d;
+char D_L03_001E3780 NOT_SDA = 0x6e;
+short D_L03_00161CA0 = 0x1518;
+short D_L03_00161CA4 = 0x64;
+short D_L03_00161CAC = 0x1e;
+short D_L03_00161CB0 = 0x14;
+short D_L03_00161CB4 = 0x28;
+short D_L03_00161CB8 = -26214;
+short D_L03_00161CBC = 0;
+short D_L03_00161CC0 = 0;
+short D_L03_00161CC4 = 0xff;
+short D_L03_00161CC8 = 0;
+float D_L04_00161D84 = 2e+01f;
+float D_L04_00161D88 = 1.8e+02f;
+float D_L04_00161D8C = 9e+01f;
+float D_L04_00161D90 = 0.3f;
+float D_L04_00161D94 = 0.3f;
+int D_L04_00161D80 = 8;
+f32 D_L04_001D2E24 NOT_SDA = 0;
+f32 D_L04_00161DC4 = 1.22e+03f;
+f32 D_L04_00161DC8 = 9e+01f;
+f32 D_L04_00161DCC = 1.22e+03f;
+f32 D_L04_00161DD0 = 5.0f;
+f32 D_L04_00161DD4 = 2.0f;
+f32 D_L04_00161DD8 = 0.1f;
+f32 D_L04_00161DDC = 0.05f;
+char D_L04_00161DE0 = -1;
+char D_L04_00161DF0 = -1;
+char D_L04_00161E00 = 0x4f;
+char D_L04_001DC830 NOT_SDA = 0x6d;
+char D_L04_001DC850 NOT_SDA = 0x6e;
+short D_L04_00161D98 = 0x1518;
+short D_L04_00161D9C = 0x64;
+short D_L04_00161DA4 = 0x1e;
+short D_L04_00161DA8 = 0x14;
+short D_L04_00161DAC = 0x28;
+short D_L04_00161DB0 = -26214;
+short D_L04_00161DB4 = 0;
+short D_L04_00161DB8 = 0;
+short D_L04_00161DBC = 0xff;
+short D_L04_00161DC0 = 0;
+float D_L05_00161FDC = 2e+01f;
+float D_L05_00161FE0 = 1.8e+02f;
+float D_L05_00161FE4 = 9e+01f;
+float D_L05_00161FE8 = 0.3f;
+float D_L05_00161FEC = 0.3f;
+int D_L05_00161FD8 = 8;
+f32 D_L05_001D2FC4 NOT_SDA = 0;
+f32 D_L05_0016201C = 1.22e+03f;
+f32 D_L05_00162020 = 9e+01f;
+f32 D_L05_00162024 = 1.22e+03f;
+f32 D_L05_00162028 = 5.0f;
+f32 D_L05_0016202C = 2.0f;
+f32 D_L05_00162030 = 0.1f;
+f32 D_L05_00162034 = 0.05f;
+char D_L05_00162038 = -1;
+char D_L05_00162048 = -1;
+char D_L05_00162058 = 0x4f;
+char D_L05_00218BA0 NOT_SDA = 0x6d;
+char D_L05_00218BC0 NOT_SDA = 0x6e;
+short D_L05_00161FF0 = 0x1518;
+short D_L05_00161FF4 = 0x64;
+short D_L05_00161FFC = 0x1e;
+short D_L05_00162000 = 0x14;
+short D_L05_00162004 = 0x28;
+short D_L05_00162008 = -26214;
+short D_L05_0016200C = 0;
+short D_L05_00162010 = 0;
+short D_L05_00162014 = 0xff;
+short D_L05_00162018 = 0;
+CameraTarget *D_L05_0015F71C = 0;
+float D_L06_00162384 = 2e+01f;
+float D_L06_00162388 = 1.8e+02f;
+float D_L06_0016238C = 9e+01f;
+float D_L06_00162390 = 0.3f;
+float D_L06_00162394 = 0.3f;
+int D_L06_00162380 = 8;
+f32 D_L06_001D48D4 NOT_SDA = 0;
+f32 D_L06_001623C4 = 1.22e+03f;
+f32 D_L06_001623C8 = 9e+01f;
+f32 D_L06_001623CC = 1.22e+03f;
+f32 D_L06_001623D0 = 5.0f;
+f32 D_L06_001623D4 = 2.0f;
+f32 D_L06_001623D8 = 0.1f;
+f32 D_L06_001623DC = 0.05f;
+char D_L06_001623E0 = -1;
+char D_L06_001623F0 = -1;
+char D_L06_00162400 = 0x4f;
+char D_L06_00201A70 NOT_SDA = 0x6d;
+char D_L06_00201A90 NOT_SDA = 0x6e;
+short D_L06_00162398 = 0x1518;
+short D_L06_0016239C = 0x64;
+short D_L06_001623A4 = 0x1e;
+short D_L06_001623A8 = 0x14;
+short D_L06_001623AC = 0x28;
+short D_L06_001623B0 = -26214;
+short D_L06_001623B4 = 0;
+short D_L06_001623B8 = 0;
+short D_L06_001623BC = 0xff;
+short D_L06_001623C0 = 0;
+float D_L08_0016241C = 2e+01f;
+float D_L08_00162420 = 1.8e+02f;
+float D_L08_00162424 = 9e+01f;
+float D_L08_00162428 = 0.3f;
+float D_L08_0016242C = 0.3f;
+int D_L08_00162418 = 8;
+f32 D_L08_001DB314 NOT_SDA = 0;
+f32 D_L08_0016245C = 1.22e+03f;
+f32 D_L08_00162460 = 9e+01f;
+f32 D_L08_00162464 = 1.22e+03f;
+f32 D_L08_00162468 = 5.0f;
+f32 D_L08_0016246C = 2.0f;
+f32 D_L08_00162470 = 0.1f;
+f32 D_L08_00162474 = 0.05f;
+char D_L08_00162478 = -1;
+char D_L08_00162488 = -1;
+char D_L08_00162498 = 0x4f;
+char D_L08_001FC7E0 NOT_SDA = 0x6d;
+char D_L08_001FC800 NOT_SDA = 0x6e;
+short D_L08_00162430 = 0x1518;
+short D_L08_00162434 = 0x64;
+short D_L08_0016243C = 0x1e;
+short D_L08_00162440 = 0x14;
+short D_L08_00162444 = 0x28;
+short D_L08_00162448 = -26214;
+short D_L08_0016244C = 0;
+short D_L08_00162450 = 0;
+short D_L08_00162454 = 0xff;
+short D_L08_00162458 = 0;
+CameraTarget *D_L08_0015F70C = 0;
+float D_L11_0016245C = 2e+01f;
+float D_L11_00162460 = 1.8e+02f;
+float D_L11_00162464 = 9e+01f;
+float D_L11_00162468 = 0.3f;
+float D_L11_0016246C = 0.3f;
+int D_L11_00162458 = 8;
+f32 D_L11_001D3564 NOT_SDA = 0;
+f32 D_L11_0016249C = 1.22e+03f;
+f32 D_L11_001624A0 = 9e+01f;
+f32 D_L11_001624A4 = 1.22e+03f;
+f32 D_L11_001624A8 = 5.0f;
+f32 D_L11_001624AC = 2.0f;
+f32 D_L11_001624B0 = 0.1f;
+f32 D_L11_001624B4 = 0.05f;
+char D_L11_001624B8 = -1;
+char D_L11_001624C8 = -1;
+char D_L11_001624D8 = 0x4f;
+char D_L11_0021B820 NOT_SDA = 0x6d;
+char D_L11_0021B840 NOT_SDA = 0x6e;
+short D_L11_00162470 = 0x1518;
+short D_L11_00162474 = 0x64;
+short D_L11_0016247C = 0x1e;
+short D_L11_00162480 = 0x14;
+short D_L11_00162484 = 0x28;
+short D_L11_00162488 = -26214;
+short D_L11_0016248C = 0;
+short D_L11_00162490 = 0;
+short D_L11_00162494 = 0xff;
+short D_L11_00162498 = 0;
+float D_L12_00162044 = 2e+01f;
+float D_L12_00162048 = 1.8e+02f;
+float D_L12_0016204C = 9e+01f;
+float D_L12_00162050 = 0.3f;
+float D_L12_00162054 = 0.3f;
+int D_L12_00162040 = 8;
+f32 D_L12_001F5B74 NOT_SDA = 0;
+f32 D_L12_00162084 = 1.22e+03f;
+f32 D_L12_00162088 = 9e+01f;
+f32 D_L12_0016208C = 1.22e+03f;
+f32 D_L12_00162090 = 5.0f;
+f32 D_L12_00162094 = 2.0f;
+f32 D_L12_00162098 = 0.1f;
+f32 D_L12_0016209C = 0.05f;
+char D_L12_001620A0 = -1;
+char D_L12_001620B0 = -1;
+char D_L12_001620C0 = 0x4f;
+char D_L12_0020CAC0 NOT_SDA = 0x6d;
+char D_L12_0020CAE0 NOT_SDA = 0x6e;
+short D_L12_00162058 = 0x1518;
+short D_L12_0016205C = 0x64;
+short D_L12_00162064 = 0x1e;
+short D_L12_00162068 = 0x14;
+short D_L12_0016206C = 0x28;
+short D_L12_00162070 = -26214;
+short D_L12_00162074 = 0;
+short D_L12_00162078 = 0;
+short D_L12_0016207C = 0xff;
+short D_L12_00162080 = 0;
+f32 D_L14_00161B24 = -0.258f;
+f32 D_L14_00161B2C = 0.448f;
+float D_L14_001622B4 = 2e+01f;
+float D_L14_001622B8 = 1.8e+02f;
+float D_L14_001622BC = 9e+01f;
+float D_L14_001622C0 = 0.3f;
+float D_L14_001622C4 = 0.3f;
+int D_L14_001622B0 = 8;
+f32 D_L14_001DFB64 NOT_SDA = 0;
+f32 D_L14_001622F4 = 1.22e+03f;
+f32 D_L14_001622F8 = 9e+01f;
+f32 D_L14_001622FC = 1.22e+03f;
+f32 D_L14_00162300 = 5.0f;
+f32 D_L14_00162304 = 2.0f;
+f32 D_L14_00162308 = 0.1f;
+f32 D_L14_0016230C = 0.05f;
+char D_L14_00162310 = -1;
+char D_L14_00162320 = -1;
+char D_L14_00162330 = 0x4f;
+char D_L14_001FD1A0 NOT_SDA = 0x6d;
+char D_L14_001FD1C0 NOT_SDA = 0x6e;
+short D_L14_001622C8 = 0x1518;
+short D_L14_001622CC = 0x64;
+short D_L14_001622D4 = 0x1e;
+short D_L14_001622D8 = 0x14;
+short D_L14_001622DC = 0x28;
+short D_L14_001622E0 = -26214;
+short D_L14_001622E4 = 0;
+short D_L14_001622E8 = 0;
+short D_L14_001622EC = 0xff;
+short D_L14_001622F0 = 0;
+f32 D_L15_00161A8C = -0.258f;
+f32 D_L15_00161A94 = 0.448f;
+CameraTarget *D_L16_0015F71C = 0;
+CameraTarget *D_L17_0015F70C = 0;

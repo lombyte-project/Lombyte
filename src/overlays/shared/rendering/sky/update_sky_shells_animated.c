@@ -299,7 +299,6 @@ void draw_sky_shells_with_slow_medium_and_fast_rotation(void) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028BBF8), where it is exact; names translated to the US level program. */
 
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
@@ -452,3 +451,22 @@ void draw_sky_shells_with_rotation_and_scaling(void) {
         sky_draw_shell(i);
     }
 }
+
+float D_L01_001604C0 = 0;
+float D_L02_001604C0 = 0;
+float D_L03_001604C0 = 0;
+float D_L04_001604C0 = 0;
+float D_L05_001604C0 = 0;
+float D_L06_001604C0 = 0;
+float D_L07_001604C0 = 0;
+float D_L08_001604C0 = 0;
+float D_L09_001604C0 = 0;
+float D_L10_001604C0 = 0;
+float D_L11_001604C0 = 0;
+float D_L12_001604C0 = 0;
+float D_L13_001604C0 = 0;
+float D_L14_001604C0 = 0;
+float D_L15_001604C0 = 0;
+float D_L16_001604C0 = 0;
+float D_L17_001604C0 = 0;
+float D_L18_001604C0 = 0;

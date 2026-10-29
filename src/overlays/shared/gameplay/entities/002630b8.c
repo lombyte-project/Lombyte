@@ -455,7 +455,6 @@ void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_c
     }
 }
 
-
 #include "qcopy.h"
 
 /* Spawns a break-effect fragment moby of class cls from src, and initialises its motion data. */
@@ -597,3 +596,318 @@ void update_timed_hud_visibility(void) {
         hud_keep_visible(D_L00_00161E04, 10);
     }
 }
+
+int D_L01_0015FC98 = 0;
+unsigned char *D_L01_0015FCA8 = 0;
+float D_L01_0015FCA0 = 0;
+float D_L01_0015FCA4 = 0;
+
+float D_L01_001B08F0[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+u8 D_L01_00179598 NOT_SDA = 0;
+s32 D_L01_0015F590 = 0;
+
+s32 D_L01_00162284 __attribute__((section(".bss")));
+
+struct Moby *D_L02_0015FFE4 = 0;
+int D_L02_0015FC98 = 0;
+unsigned char *D_L02_0015FCA8 = 0;
+float D_L02_0015FCA0 = 0;
+float D_L02_0015FCA4 = 0;
+
+float D_L02_001B0A70[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+u8 D_L02_00179718 NOT_SDA = 0;
+s32 D_L02_0015F590 = 0;
+
+s32 D_L02_00162404 __attribute__((section(".bss")));
+
+int D_L03_0015FC98 = 0;
+unsigned char *D_L03_0015FCA8 = 0;
+float D_L03_0015FCA0 = 0;
+float D_L03_0015FCA4 = 0;
+
+float D_L03_001B0570[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L03_0015F640 = 0;
+u8 D_L03_00179218 NOT_SDA = 0;
+s32 D_L03_0015F590 = 0;
+
+s32 D_L03_00161F04 __attribute__((section(".bss")));
+
+int D_L04_0015FC98 = 0;
+unsigned char *D_L04_0015FCA8 = 0;
+float D_L04_0015FCA0 = 0;
+float D_L04_0015FCA4 = 0;
+
+float D_L04_001B05F0[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+u8 D_L04_00179298 NOT_SDA = 0;
+s32 D_L04_0015F590 = 0;
+s32 D_L04_0015F594 = 0;
+
+s32 D_L04_00161F84 __attribute__((section(".bss")));
+
+struct Moby *D_L05_0015FFE4 = 0;
+int D_L05_0015FC98 = 0;
+unsigned char *D_L05_0015FCA8 = 0;
+float D_L05_0015FCA0 = 0;
+float D_L05_0015FCA4 = 0;
+
+float D_L05_001B08F0[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L05_0015F640 = 0;
+u8 D_L05_00179518 NOT_SDA = 0;
+s32 D_L05_0015F590 = 0;
+
+s32 D_L05_00162204 __attribute__((section(".bss")));
+
+struct Moby *D_L06_0015FFE4 = 0;
+
+float D_L06_001B0BF0[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L06_0015F640 = 0;
+u8 D_L06_00179898 NOT_SDA = 0;
+s32 D_L06_0015F590 = 0;
+
+s32 D_L06_00162584 __attribute__((section(".bss")));
+
+float D_L07_001B04F0[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L07_0015F640 = 0;
+u8 D_L07_00179198 NOT_SDA = 0;
+s32 D_L07_0015F590 = 0;
+s32 D_L07_0015F594 = 0;
+
+s32 D_L07_00161E84 __attribute__((section(".bss")));
+
+struct Moby *D_L08_0015FFE4 = 0;
+int D_L08_0015FC98 = 0;
+unsigned char *D_L08_0015FCA8 = 0;
+float D_L08_0015FCA0 = 0;
+float D_L08_0015FCA4 = 0;
+
+float D_L08_001B0C70[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L08_0015F640 = 0;
+u8 D_L08_00179918 NOT_SDA = 0;
+s32 D_L08_0015F590 = 0;
+
+s32 D_L08_00162604 __attribute__((section(".bss")));
+
+int D_L09_0015FC98 = 0;
+unsigned char *D_L09_0015FCA8 = 0;
+float D_L09_0015FCA0 = 0;
+float D_L09_0015FCA4 = 0;
+
+float D_L09_001B05F0[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L09_0015F640 = 0;
+u8 D_L09_00179298 NOT_SDA = 0;
+s32 D_L09_0015F590 = 0;
+s32 D_L09_0015F594 = 0;
+
+s32 D_L09_00161F84 __attribute__((section(".bss")));
+
+int D_L10_0015FC98 = 0;
+unsigned char *D_L10_0015FCA8 = 0;
+float D_L10_0015FCA0 = 0;
+float D_L10_0015FCA4 = 0;
+
+float D_L10_001B08F0[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+u8 D_L10_00179598 NOT_SDA = 0;
+s32 D_L10_0015F590 = 0;
+s32 D_L10_0015F594 = 0;
+
+s32 D_L10_00162284 __attribute__((section(".bss")));
+
+int D_L11_0015FC98 = 0;
+unsigned char *D_L11_0015FCA8 = 0;
+float D_L11_0015FCA0 = 0;
+float D_L11_0015FCA4 = 0;
+
+float D_L11_001B0E70[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+s32 D_L11_0015F590 = 0;
+
+s32 D_L11_00162804 __attribute__((section(".bss")));
+
+struct Moby *D_L12_0015FFE4 = 0;
+int D_L12_0015FC98 = 0;
+unsigned char *D_L12_0015FCA8 = 0;
+float D_L12_0015FCA0 = 0;
+float D_L12_0015FCA4 = 0;
+
+float D_L12_001B08F0[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L12_0015F640 = 0;
+u8 D_L12_00179598 NOT_SDA = 0;
+s32 D_L12_0015F590 = 0;
+
+s32 D_L12_00162284 __attribute__((section(".bss")));
+
+int D_L13_0015FC98 = 0;
+unsigned char *D_L13_0015FCA8 = 0;
+float D_L13_0015FCA0 = 0;
+float D_L13_0015FCA4 = 0;
+
+float D_L13_001B0770[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L13_0015F640 = 0;
+u8 D_L13_00179418 NOT_SDA = 0;
+s32 D_L13_0015F590 = 0;
+s32 D_L13_0015F594 = 0;
+
+s32 D_L13_00162104 __attribute__((section(".bss")));
+
+struct Moby *D_L14_0015FFE4 = 0;
+int D_L14_0015FC98 = 0;
+unsigned char *D_L14_0015FCA8 = 0;
+float D_L14_0015FCA0 = 0;
+float D_L14_0015FCA4 = 0;
+
+float D_L14_001B0B70[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L14_0015F640 = 0;
+u8 D_L14_00179818 NOT_SDA = 0;
+s32 D_L14_0015F590 = 0;
+
+s32 D_L14_00162504 __attribute__((section(".bss")));
+
+int D_L15_0015FC98 = 0;
+unsigned char *D_L15_0015FCA8 = 0;
+float D_L15_0015FCA0 = 0;
+float D_L15_0015FCA4 = 0;
+
+float D_L15_001B0A70[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+u8 D_L15_00179718 NOT_SDA = 0;
+s32 D_L15_0015F590 = 0;
+
+s32 D_L15_00162404 __attribute__((section(".bss")));
+
+struct Moby *D_L16_0015FFE4 = 0;
+int D_L16_0015FC98 = 0;
+unsigned char *D_L16_0015FCA8 = 0;
+float D_L16_0015FCA0 = 0;
+float D_L16_0015FCA4 = 0;
+
+float D_L16_001B08F0[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L16_0015F640 = 0;
+u8 D_L16_00179518 NOT_SDA = 0;
+s32 D_L16_0015F590 = 0;
+
+s32 D_L16_00162204 __attribute__((section(".bss")));
+
+int D_L17_0015FC98 = 0;
+unsigned char *D_L17_0015FCA8 = 0;
+float D_L17_0015FCA0 = 0;
+float D_L17_0015FCA4 = 0;
+
+float D_L17_001B0D70[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L17_0015F640 = 0;
+u8 D_L17_00179A18 NOT_SDA = 0;
+s32 D_L17_0015F590 = 0;
+
+s32 D_L17_00162704 __attribute__((section(".bss")));
+
+float D_L18_001B0E70[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+int D_L18_0015F640 = 0;
+u8 D_L18_00179B18 NOT_SDA = 0;
+s32 D_L18_0015F590 = 0;
+
+s32 D_L18_00162804 __attribute__((section(".bss")));

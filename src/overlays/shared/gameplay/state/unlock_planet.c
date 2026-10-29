@@ -271,7 +271,6 @@ int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void 
     return 1;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002616E0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002603d0(char *);
@@ -333,7 +332,6 @@ void unlock_planet(s32 id) {
 }
 /* Gives item ID to the player: plays its sound, raises its count and records it in the slot lists. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002618D8), where it is exact; names translated to the US level program. */
-
 
 typedef struct {
     char pad[8];
@@ -653,3 +651,40 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
         }
     }
 }
+
+int D_L01_001B07C0 NOT_SDA = -1;
+int D_L01_001C4318 NOT_SDA = 0;
+int D_L02_001B0940 NOT_SDA = -1;
+int D_L02_001C4498 NOT_SDA = 0;
+int D_L03_001B0440 NOT_SDA = -1;
+int D_L03_001C3F98 NOT_SDA = 0;
+int D_L04_001B04C0 NOT_SDA = -1;
+int D_L04_001C4018 NOT_SDA = 0;
+int D_L05_001B07C0 NOT_SDA = -1;
+int D_L05_001C4318 NOT_SDA = 0;
+int D_L06_001B0AC0 NOT_SDA = -1;
+int D_L06_001C4618 NOT_SDA = 0;
+int D_L07_001B03C0 NOT_SDA = -1;
+int D_L07_001C3F18 NOT_SDA = 0;
+int D_L08_001B0B40 NOT_SDA = -1;
+int D_L08_001C4698 NOT_SDA = 0;
+int D_L09_001B04C0 NOT_SDA = -1;
+int D_L09_001C4018 NOT_SDA = 0;
+int D_L10_001B07C0 NOT_SDA = -1;
+int D_L10_001C4318 NOT_SDA = 0;
+int D_L11_001B0D40 NOT_SDA = -1;
+int D_L11_001C4898 NOT_SDA = 0;
+int D_L12_001B07C0 NOT_SDA = -1;
+int D_L12_001C4318 NOT_SDA = 0;
+int D_L13_001B0640 NOT_SDA = -1;
+int D_L13_001C4198 NOT_SDA = 0;
+int D_L14_001B0A40 NOT_SDA = -1;
+int D_L14_001C4598 NOT_SDA = 0;
+int D_L15_001B0940 NOT_SDA = -1;
+int D_L15_001C4498 NOT_SDA = 0;
+int D_L16_001B07C0 NOT_SDA = -1;
+int D_L16_001C4318 NOT_SDA = 0;
+int D_L17_001B0C40 NOT_SDA = -1;
+int D_L17_001C4798 NOT_SDA = 0;
+int D_L18_001B0D40 NOT_SDA = -1;
+int D_L18_001C4898 NOT_SDA = 0;

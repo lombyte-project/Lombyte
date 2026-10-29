@@ -4,8 +4,6 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-
-
 #include "qcopy.h"
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/quad.h"
@@ -3165,3 +3163,19 @@ void hero_update_transitions(void) {
         hero.anim_seq_frames = 0;
     }
 }
+
+float D_L04_0015F638 = 0;
+int D_L04_0015F678 = 0;
+int D_L04_0016C900 NOT_SDA = 0;
+float D_L07_0015F638 = 0;
+int D_L07_0015F678 = 0;
+int D_L07_0016C800 NOT_SDA = 0;
+float D_L09_0015F638 = 0;
+int D_L09_0015F678 = 0;
+int D_L09_0016C900 NOT_SDA = 0;
+float D_L10_0015F638 = 0;
+int D_L10_0015F678 = 0;
+int D_L10_0016CC00 NOT_SDA = 0;
+float D_L13_0015F638 = 0;
+int D_L13_0015F678 = 0;
+int D_L13_0016CA80 NOT_SDA = 0;

@@ -8,8 +8,6 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "asm.h"
 #include "rnc/gameplay/state/usage_stats.h"
 
-
-
 /* Steps two floats of arg toward a target and clamps them to [-1, 1]. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00237B00), where it is exact; names translated to the US level program. */
 
@@ -66,7 +64,6 @@ int hero_anim_tilt_lookup(int id, float *out) {
    state.control_mode != 0x16. The second condition is negated: retail's `beq` skips the
    store when state.control_mode == 0x16, which is what makes this spelling the only one
    that lands `beq` there. */
-
 
 typedef struct {
     char pad[0x20];
@@ -502,7 +499,6 @@ extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa6
 extern void hero_get_collision_ray_endpoints(void *, void *, int, float, float) __asm__("FUN_L00_002126b8");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 float absolute_float(float input) __asm__("FUN_001f99c0");
-
 
 int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_002515d0");
 
@@ -1046,7 +1042,6 @@ typedef struct {
     int bank;
     int seq;
 } SndPair;
-
 
 extern SndPair l05_hoverboard_trick_animation_frame_bounds[] __asm__("D_L05_00179BC0");
 extern char pad_held[] __asm__("D_0013CAE0");
@@ -1667,7 +1662,6 @@ void update_hero_hoverboard_race_progress(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_002559A0), where it is exact; names translated to the US level program. */
 
-
 int select_hero_hoverboard_animation_variant(void) {
     unsigned char animation_variant_selector = hero.race_ammo; // selected help mode
     int animation_id = 0x7F;
@@ -1687,7 +1681,6 @@ int hero_select_anim_id_by_flags(void) {
     }
     { return hero_variant_selector == 0 ? 0x68 : 0x7E; }
 }
-
 
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C") MACRO_ADDR;
@@ -1842,3 +1835,7 @@ void hero_update_linked_target(void) {
         }
     }
 }
+
+int D_L16_0015F674 = 0;
+struct ScoreTable D_L16_001E65B8 = {{1.0f, 1.0f, 1.5f, 2.25f, 4.0f}};
+int D_L16_0015F698 = 0x19;

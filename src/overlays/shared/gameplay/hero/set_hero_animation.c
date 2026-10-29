@@ -11,8 +11,6 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
-
-
 /* With both objects at hero +0x1180 and +0x1184 present and the
    first's byte 0x53 equal to 1, asks func_L00_00232850 for a pair of
    sequences and starts one on each object (func_00213DE0). Each
@@ -48,8 +46,6 @@ void blend_hero_slot3_animation_pair(void) {
     seq = mapped_animation_ids[1];
     blend_moby_animation(slot3_secondary_moby, seq, 0, scale_game_frames(7));
 }
-
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232608), where it is exact; names translated to the US level program. */
 
@@ -195,7 +191,6 @@ int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_an
     }
 }
 
-
 /* Unless the flag at hero +0x20A4 is set, and only while state
    +0x11A4 is 2: asks func_L00_00232850 for a pair of values for the
    current animation's id (+0x2080, byte 0x53), and when it finds one,
@@ -203,7 +198,6 @@ int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_an
    +0x1184 that exist. The pair goes in a two-int stack array (&buf[1] is
    retail's `ori $6, $sp, 4`). */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232980), where it is exact; names translated to the US level program. */
-
 
 /* Copies &hero.anim_speed to +0x58 of the objects at 0x1180/0x1184 when the lookup succeeds. */
 void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
@@ -277,12 +271,10 @@ void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float b
     }
 }
 
-
 /* With the animation at hero +0x2278 set and enabled (+0x227C),
    and a sequence ready for the current id (func_L00_00232A18), copies
    the float at +0xA90 to the animation's field 0x58. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232B20), where it is exact; names translated to the US level program. */
-
 
 /* Copies &hero.anim_speed to +0x58 of the object at +0x2278 when FUN_L00_002321c0 succeeds. */
 void sync_hero_mapped_moby_animation_speed(void) __asm__("FUN_L00_002322c8");
@@ -296,7 +288,6 @@ void sync_hero_mapped_moby_animation_speed(void) {
         *(float *)(((char *)base->unk2278) + 0x58) = base->anim_speed;
     }
 }
-
 
 /* Syncs the animation at hero +0x2278 to the one at +0x2080:
    takes the float at +0xA94 into 0x5C, copies the source's 0x54 and its
@@ -506,10 +497,8 @@ void clear_hero_queued_animation(void) {
     hero_base->queued_frame_request = 0;
 }
 
-
 /* Stores ID at hero +0xAB8, or func_001F9850(5) when ID is -1. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232EC0), where it is exact; names translated to the US level program. */
-
 
 /* Stores id at &hero.queued_frame_request; -1 stands for 5 frames. */
 void hero_set_attack_ticks(int id) __asm__("FUN_L00_00232640");
@@ -620,7 +609,6 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
     }
     return prediction_frames;
 }
-
 
 /* Sets bit 0 of the flags (0x34) of every object the hero
    holds: the one at +0xA88, both of each of the seven pairs at +0x1090,
@@ -741,7 +729,6 @@ void FUN_L00_002330d0(void) {
     }
 }
 
-
 /* Sets bit 0 of the flags (0x34) of the objects at hero +0x2080
    and, when present, +0x1620. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233A90), where it is exact; names translated to the US level program. */
@@ -758,7 +745,6 @@ void set_hero_moby_flag_bit0(void) {
         *(unsigned short *)(optional_hero_flag_target + 0x34) |= 1;
     }
 }
-
 
 /* Clears what func_L00_00233A90 sets: bit 0 of the flags (0x34) of the
    objects at hero +0x2080 and, when present, +0x1620. */
@@ -883,7 +869,6 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
     }
 }
 
-
 /* The polar form of func_L00_00233EE0: sets OUT to (R cos ANGLE,
    R sin ANGLE, Z) via func_001F9F90 / func_001F9FA8, then transforms it
    by the matrix at hero and adds the vector at hero +0x80. */
@@ -1005,7 +990,6 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234150), where it is exact; names translated to the US level program. */
 
-
 void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 void gravity_flatten(float *flattened_vector, float *input_vector) {
     struct Hero *base = &hero;
@@ -1027,7 +1011,6 @@ void gravity_flatten(float *flattened_vector, float *input_vector) {
         break;
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
 
@@ -1055,9 +1038,7 @@ float gravity_length_xy(float *input_vector) {
     return 0.0f;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002342F8), where it is exact; names translated to the US level program. */
-
 
 float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 float gravity_z(float *input_vector) {
@@ -1097,7 +1078,6 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) {
     }
 }
 
-
 /* Like func_L00_002343A0, but instead of setting z it scales the point's
    xy to length Z (func_L00_001FF500): in view mode 0 (hero +
    0x20B3) directly, in modes 1 and 2 between the transforms by the
@@ -1123,8 +1103,6 @@ void set_gravity_relative_vector_length_xy(float *output_vector, float *input_ve
         break;
     }
 }
-
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002344B0), where it is exact; names translated to the US level program. */
 
@@ -1483,7 +1461,6 @@ void update_hero_attachment(void) {
     ((Hero_234800 *)hero_233f80)->fFC = fast_subtract_rotations(((Hero_234800 *)hero_233f80)->v90.z, saved_hero_yaw);
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00235040), where it is exact; names translated to the US level program. */
 
 extern int resolve_point_path_segment_clearance(int, void *, void *, float) __asm__("FUN_L00_00262030");
@@ -1739,3 +1716,111 @@ f32 D_L16_0017C7C0[1] __attribute__((section(".data"))) = {0};
 f32 D_L16_0017C7C4[1] __attribute__((section(".data"))) = {0};
 f32 D_L17_0017CC60[1] __attribute__((section(".data"))) = {0};
 f32 D_L17_0017CC64[1] __attribute__((section(".data"))) = {0};
+
+SeqEntry D_L01_0017C050 NOT_SDA = {0, 3, 3};
+SeqEntry D_L01_0017C070 NOT_SDA = {0, 4, 0xb};
+short D_L01_0015F6B8 = 0x65;
+char D_L01_00197180 NOT_SDA = 0;
+short D_L01_0015F6E0 = 0xb;
+SeqEntry D_L02_0017C1D0 NOT_SDA = {0, 3, 3};
+SeqEntry D_L02_0017C1F0 NOT_SDA = {0, 4, 0xb};
+short D_L02_0015F6B8 = 0x65;
+char D_L02_00197300 NOT_SDA = 0;
+short D_L02_0015F6E0 = 0xb;
+A_00234b38 D_L02_0017C940 = {0};
+SeqEntry D_L03_0017BCD0 NOT_SDA = {0, 3, 3};
+SeqEntry D_L03_0017BCF0 NOT_SDA = {0, 4, 0xb};
+short D_L03_0015F6B8 = 0x65;
+char D_L03_00196E00 NOT_SDA = 0;
+short D_L03_0015F6E0 = 0xb;
+A_00234b38 D_L03_0017C440 = {0};
+SeqEntry D_L04_0017BD50 NOT_SDA = {0, 3, 3};
+SeqEntry D_L04_0017BD70 NOT_SDA = {0, 4, 0xb};
+short D_L04_0015F6B8 = 0x65;
+char D_L04_00196E80 NOT_SDA = 0;
+short D_L04_0015F6E0 = 0xb;
+A_00234b38 D_L04_0017C4C0 = {0};
+SeqEntry D_L05_0017C030 NOT_SDA = {0, 3, 3};
+SeqEntry D_L05_0017C050 NOT_SDA = {0, 4, 0xb};
+short D_L05_0015F6C8 = 0x65;
+char D_L05_00197180 NOT_SDA = 0;
+short D_L05_0015F6F0 = 0xb;
+A_00234b38 D_L05_0017C7A0 = {0};
+SeqEntry D_L06_0017C350 NOT_SDA = {0, 3, 3};
+SeqEntry D_L06_0017C370 NOT_SDA = {0, 4, 0xb};
+short D_L06_0015F6B8 = 0x65;
+char D_L06_00197480 NOT_SDA = 0;
+short D_L06_0015F6E0 = 0xb;
+A_00234b38 D_L06_0017CAC0 = {0};
+SeqEntry D_L07_0017BC50 NOT_SDA = {0, 3, 3};
+SeqEntry D_L07_0017BC70 NOT_SDA = {0, 4, 0xb};
+short D_L07_0015F6B8 = 0x65;
+char D_L07_00196D80 NOT_SDA = 0;
+short D_L07_0015F6E0 = 0xb;
+A_00234b38 D_L07_0017C3C0 = {0};
+SeqEntry D_L08_0017C3D0 NOT_SDA = {0, 3, 3};
+SeqEntry D_L08_0017C3F0 NOT_SDA = {0, 4, 0xb};
+short D_L08_0015F6B8 = 0x65;
+char D_L08_00197500 NOT_SDA = 0;
+short D_L08_0015F6E0 = 0xb;
+A_00234b38 D_L08_0017CB40 = {0};
+SeqEntry D_L09_0017BD50 NOT_SDA = {0, 3, 3};
+SeqEntry D_L09_0017BD70 NOT_SDA = {0, 4, 0xb};
+short D_L09_0015F6B8 = 0x65;
+char D_L09_00196E80 NOT_SDA = 0;
+short D_L09_0015F6E0 = 0xb;
+A_00234b38 D_L09_0017C4C0 = {0};
+SeqEntry D_L10_0017C050 NOT_SDA = {0, 3, 3};
+SeqEntry D_L10_0017C070 NOT_SDA = {0, 4, 0xb};
+short D_L10_0015F6B8 = 0x65;
+char D_L10_00197180 NOT_SDA = 0;
+short D_L10_0015F6E0 = 0xb;
+A_00234b38 D_L10_0017C7C0 = {0};
+SeqEntry D_L11_0017C5D0 NOT_SDA = {0, 3, 3};
+SeqEntry D_L11_0017C5F0 NOT_SDA = {0, 4, 0xb};
+short D_L11_0015F6B8 = 0x65;
+char D_L11_00197700 NOT_SDA = 0;
+short D_L11_0015F6E0 = 0xb;
+A_00234b38 D_L11_0017CD40 = {0};
+SeqEntry D_L12_0017C050 NOT_SDA = {0, 3, 3};
+SeqEntry D_L12_0017C070 NOT_SDA = {0, 4, 0xb};
+short D_L12_0015F6B8 = 0x65;
+char D_L12_00197180 NOT_SDA = 0;
+short D_L12_0015F6E0 = 0xb;
+A_00234b38 D_L12_0017C7C0 = {0};
+SeqEntry D_L13_0017BED0 NOT_SDA = {0, 3, 3};
+SeqEntry D_L13_0017BEF0 NOT_SDA = {0, 4, 0xb};
+short D_L13_0015F6B8 = 0x65;
+char D_L13_00197000 NOT_SDA = 0;
+short D_L13_0015F6E0 = 0xb;
+A_00234b38 D_L13_0017C640 = {0};
+SeqEntry D_L14_0017C2D0 NOT_SDA = {0, 3, 3};
+SeqEntry D_L14_0017C2F0 NOT_SDA = {0, 4, 0xb};
+short D_L14_0015F6B8 = 0x65;
+char D_L14_00197400 NOT_SDA = 0;
+short D_L14_0015F6E0 = 0xb;
+A_00234b38 D_L14_0017CA40 = {0};
+SeqEntry D_L15_0017C1D0 NOT_SDA = {0, 3, 3};
+SeqEntry D_L15_0017C1F0 NOT_SDA = {0, 4, 0xb};
+short D_L15_0015F6B8 = 0x65;
+char D_L15_00197300 NOT_SDA = 0;
+short D_L15_0015F6E0 = 0xb;
+A_00234b38 D_L15_0017C940 = {0};
+SeqEntry D_L16_0017C030 NOT_SDA = {0, 3, 3};
+SeqEntry D_L16_0017C050 NOT_SDA = {0, 4, 0xb};
+short D_L16_0015F6C8 = 0x65;
+char D_L16_00197180 NOT_SDA = 0;
+short D_L16_0015F6F0 = 0xb;
+A_00234b38 D_L16_0017C7A0 = {0};
+SeqEntry D_L17_0017C4D0 NOT_SDA = {0, 3, 3};
+SeqEntry D_L17_0017C4F0 NOT_SDA = {0, 4, 0xb};
+short D_L17_0015F6B8 = 0x65;
+char D_L17_00197600 NOT_SDA = 0;
+short D_L17_0015F6E0 = 0xb;
+A_00234b38 D_L17_0017CC40 = {0};
+SeqEntry D_L18_0017C5D0 NOT_SDA = {0, 3, 3};
+SeqEntry D_L18_0017C5F0 NOT_SDA = {0, 4, 0xb};
+short D_L18_0015F6B8 = 0x65;
+char D_L18_00197700 NOT_SDA = 0;
+short D_L18_0015F6E0 = 0xb;
+A_00234b38 D_L18_0017CD40 = {0};

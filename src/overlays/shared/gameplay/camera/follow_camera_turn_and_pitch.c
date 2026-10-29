@@ -166,7 +166,6 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     build_look_at_matrix(turn_pitch_vector, turn_pitch_vector, axis, *(float *)(turn_pitch_vector + 0x38));
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EA3F0), where it is exact; names translated to the US level program. */
 
 extern void lerp_vector(float, void *, void *, void *) __asm__("FUN_001f9a40");
@@ -198,3 +197,40 @@ void follow_camera_auto_turn(int camera_object) {
         }
     }
 }
+
+float D_L01_00162124 = 1.0f;
+float D_L01_00162128 = 1.0f;
+float D_L02_0016225C = 1.0f;
+float D_L02_00162260 = 1.0f;
+float D_L03_00161D24 = 1.0f;
+float D_L03_00161D28 = 1.0f;
+float D_L04_00161E1C = 1.0f;
+float D_L04_00161E20 = 1.0f;
+float D_L05_00162074 = 1.0f;
+float D_L05_00162078 = 1.0f;
+float D_L06_0016243C = 1.0f;
+float D_L06_00162440 = 1.0f;
+float D_L07_00161CF4 = 1.0f;
+float D_L07_00161CF8 = 1.0f;
+float D_L08_001624B4 = 1.0f;
+float D_L08_001624B8 = 1.0f;
+float D_L09_00161E0C = 1.0f;
+float D_L09_00161E10 = 1.0f;
+float D_L10_001620DC = 1.0f;
+float D_L10_001620E0 = 1.0f;
+float D_L11_00162644 = 1.0f;
+float D_L11_00162648 = 1.0f;
+float D_L12_0016211C = 1.0f;
+float D_L12_00162120 = 1.0f;
+float D_L13_00161F94 = 1.0f;
+float D_L13_00161F98 = 1.0f;
+float D_L14_0016234C = 1.0f;
+float D_L14_00162350 = 1.0f;
+float D_L15_0016229C = 1.0f;
+float D_L15_001622A0 = 1.0f;
+float D_L16_00162064 = 1.0f;
+float D_L16_00162068 = 1.0f;
+float D_L17_0016254C = 1.0f;
+float D_L17_00162550 = 1.0f;
+float D_L18_00162664 = 1.0f;
+float D_L18_00162668 = 1.0f;

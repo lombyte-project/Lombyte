@@ -9,8 +9,6 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/collision.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C2A20), where it is exact; names translated to the US level program. */
 
 extern unsigned char D_0013A4E0[];
@@ -1792,7 +1790,6 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
 /* Tests a movement vector against the player and turns a colliding moby. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C4B90), where it is exact; names translated to the US level program. */
 
-
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -2592,17 +2589,13 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-
-
 #include "qcopy.h"
 
 /* Swingshot (class 208) update: keeps the hook at the glove, shows the targets, fires the hook to the swing target
    or the grind target, swings the hero, and reels the hook back. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C74B8), where it is exact; names translated to the US level program. */
 
-
 typedef struct Moby Moby;
-
 
 typedef int OvlQuad_6158 __attribute__((mode(TI)));
 
@@ -3414,3 +3407,58 @@ void glove_of_doom_update(struct Moby *moby) {
 
 s32 D_L03_00173F64[1] __attribute__((section(".data"))) = {0};
 s32 D_L09_00173FE4[1] __attribute__((section(".data"))) = {0};
+
+int D_L01_00161868 = 0;
+float D_L01_00161858 = 0.2f;
+float D_L01_00161860 = 0;
+int D_L02_00161808 = 0;
+float D_L02_001617F8 = 0.2f;
+float D_L02_00161800 = 0;
+int D_L03_00161818 = 0;
+float D_L03_00161808 = 0.2f;
+float D_L03_00161810 = 0;
+int D_L04_00161808 = 0;
+float D_L04_001617F8 = 0.2f;
+float D_L04_00161800 = 0;
+int D_L05_00161858 = 0;
+float D_L05_00161848 = 0.2f;
+float D_L05_00161850 = 0;
+int D_L06_00161838 = 0;
+float D_L06_00161828 = 0.2f;
+float D_L06_00161830 = 0;
+int D_L07_00161808 = 0;
+float D_L07_001617F8 = 0.2f;
+float D_L07_00161800 = 0;
+int D_L08_00161858 = 0;
+float D_L08_00161848 = 0.2f;
+float D_L08_00161850 = 0;
+int D_L09_001618E8 = 0;
+float D_L09_001618B8 = 0.2f;
+float D_L09_001618C0 = 0;
+int D_L10_00161818 = 0;
+float D_L10_00161808 = 0.2f;
+float D_L10_00161810 = 0;
+int D_L11_00161898 = 0;
+float D_L11_00161888 = 0.2f;
+float D_L11_00161890 = 0;
+int D_L12_00161818 = 0;
+float D_L12_00161808 = 0.2f;
+float D_L12_00161810 = 0;
+int D_L13_001618E8 = 0;
+float D_L13_001618D8 = 0.2f;
+float D_L13_001618E0 = 0;
+int D_L14_00161A28 = 0;
+float D_L14_00161A18 = 0.2f;
+float D_L14_00161A20 = 0;
+int D_L15_001619E8 = 0;
+float D_L15_001619B8 = 0.2f;
+float D_L15_001619C0 = 0;
+int D_L16_001618C8 = 0;
+float D_L16_001618B8 = 0.2f;
+float D_L16_001618C0 = 0;
+int D_L17_00161918 = 0;
+float D_L17_00161908 = 0.2f;
+float D_L17_00161910 = 0;
+int D_L18_001618A8 = 0;
+float D_L18_00161898 = 0.2f;
+float D_L18_001618A0 = 0;

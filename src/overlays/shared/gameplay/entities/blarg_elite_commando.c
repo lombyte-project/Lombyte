@@ -7,8 +7,6 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-
-
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "sda.h"
@@ -515,7 +513,6 @@ typedef struct {
     int reward_hits;
 } L16DamageData;
 
-
 typedef struct {
     OvlQuad vector;
     int status;
@@ -1012,3 +1009,7 @@ void emit_blarg_elite_commando_joint_sparks(char *commando_moby) {
         spawn_spark(matrix + 12, velocity, acceleration, color1, color2, time1, time2, time3, -1);
     }
 }
+
+float D_L18_001613E0 = 3e+01f;
+float D_L18_001613E4 = 2e+01f;
+L16ParticleChoices D_L18_001F2710 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};

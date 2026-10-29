@@ -1043,3 +1043,8 @@ void update_ground_melee_enemy(Moby *moby) {
     }
     effects_update_2E39E0(moby, data->effects);
 }
+
+int D_L15_001619D8 = 0x7000000;
+float D_L15_001619C8 = 7.0f;
+float D_L15_001619CC = 3.0f;
+float D_L16_0016143C = 0.5f;

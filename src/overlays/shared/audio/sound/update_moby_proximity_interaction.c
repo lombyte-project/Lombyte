@@ -114,3 +114,21 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         }
     }
 }
+
+int D_L01_0015F630 = 0;
+int D_L02_0015F630 = 0;
+int D_L03_0015F630 = 0;
+int D_L04_0015F630 = 0;
+int D_L05_0015F630 = 0;
+int D_L06_0015F630 = 0;
+int D_L07_0015F630 = 0;
+int D_L08_0015F630 = 0;
+int D_L09_0015F630 = 0;
+int D_L10_0015F630 = 0;
+int D_L11_0015F630 = 0;
+int D_L12_0015F630 = 0;
+int D_L14_0015F630 = 0;
+int D_L15_0015F630 = 0;
+int D_L16_0015F630 = 0;
+int D_L17_0015F630 = 0;
+int D_L18_0015F630 = 0;

@@ -14,7 +14,6 @@ void pool_set_scale(float requested_scale) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B90E8), where it is exact; names translated to the US level program. */
 
 extern void FUN_L01_00261c10(char *a, char *b);
@@ -133,3 +132,24 @@ f32 D_L07_001CABE0[1] __attribute__((section(".data"))) = {0};
 f32 D_L11_001CB560[1] __attribute__((section(".data"))) = {0};
 f32 D_L12_001CAFE0[1] __attribute__((section(".data"))) = {0};
 f32 D_L13_001CAE60[1] __attribute__((section(".data"))) = {0};
+
+short D_L05_00161218 = 0;
+short D_L05_0016121C = 1;
+short D_L05_00161220 = 2;
+short D_L05_00161224 = -13107;
+short D_L07_00161218 = 0;
+short D_L07_0016121C = 1;
+short D_L07_00161220 = 2;
+short D_L07_00161224 = -13107;
+short D_L11_00161218 = 0;
+short D_L11_0016121C = 1;
+short D_L11_00161220 = 2;
+short D_L11_00161224 = -13107;
+short D_L12_00161218 = 0;
+short D_L12_0016121C = 1;
+short D_L12_00161220 = 2;
+short D_L12_00161224 = -13107;
+short D_L13_00161218 = 0;
+short D_L13_0016121C = 1;
+short D_L13_00161220 = 2;
+short D_L13_00161224 = -13107;

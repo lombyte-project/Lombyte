@@ -174,7 +174,6 @@ void underwater_ring_update(struct Moby *moby) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002EC490), where it is exact; names translated to the US level program. */
 
 extern void draw_moby_radial_ripple_mesh_buffers(void) __asm__("FUN_L15_002eac90");
@@ -192,7 +191,6 @@ void ripple_strips_moby_update(char *moby) {
     }
 }
 #include "sda.h"
-
 
 /* Update for moby class 1428: a four-state trigger that spins and then deletes itself. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002ED168), where it is exact; names translated to the US level program. */
@@ -377,3 +375,5 @@ void giant_clank_pad_update(struct Moby *moby) {
     }
     *(int *)((u8 *)linked + 0x68) = -1;
 }
+
+float D_L17_001623A0 = 1.0f;

@@ -38,4 +38,3 @@ none:
     }
     return fourth_candidate;
 }
-

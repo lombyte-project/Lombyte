@@ -61,3 +61,22 @@ void suck_draw_reticle(int source_entity, int queued_reticle_value, OvlQuad *pos
 done:
     l00_reticle_submission_queue.count++;
 }
+
+T1edf60 D_L01_001694C0 = {0};
+T1edf60 D_L02_00169640 = {0};
+T1edf60 D_L03_00169140 = {0};
+T1edf60 D_L04_001691C0 = {0};
+T1edf60 D_L05_00169440 = {0};
+T1edf60 D_L06_001697C0 = {0};
+T1edf60 D_L07_001690C0 = {0};
+T1edf60 D_L08_00169840 = {0};
+T1edf60 D_L09_001691C0 = {0};
+T1edf60 D_L10_001694C0 = {0};
+T1edf60 D_L11_00169A40 = {0};
+T1edf60 D_L12_001694C0 = {0};
+T1edf60 D_L13_00169340 = {0};
+T1edf60 D_L14_00169740 = {0};
+T1edf60 D_L15_00169640 = {0};
+T1edf60 D_L16_00169440 = {0};
+T1edf60 D_L17_00169940 = {0};
+T1edf60 D_L18_00169A40 = {0};

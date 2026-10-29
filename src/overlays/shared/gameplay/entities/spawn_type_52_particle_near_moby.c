@@ -4,8 +4,6 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -39,8 +37,6 @@ void spawn_type_52_particle_near_moby(char *moby) {
     particle_data_value = *(int *)&type_52_particle_data_value;
     spawn_type_52_particle(spawn_position, particle_scale, random_particle_value, particle_header_value, particle_data_value, random_divisor);
 }
-
-
 
 /* UpdateMoby_1378 (names.tsv role). State 0 sets flag bit 0 and goes to state 1. In state 1,
  * when the hero (D_0013E633 + 0xE9D) is within 8.0: takes the vector from the moby to the point
@@ -582,3 +578,18 @@ int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_obj
     }
     return 1;
 }
+
+short D_L12_00161820 = 0x2028;
+short D_L12_00161824 = 0x2020;
+short D_L12_00161828 = 0;
+short D_L12_0016182C = 0x6666;
+short D_L12_00161830 = 0x64;
+short D_L12_00161834 = 0xb4;
+short D_L12_00161838 = -13107;
+float D_L13_001671D8 NOT_SDA = 0;
+float D_L15_001674D8 NOT_SDA = 0;
+int D_L17_00161FB0 = 6;
+int D_L17_00161FB8[2] = {0, 1};
+int D_L17_00161FC0[2] = {2, 0};
+int D_L17_00161FC8[2] = {2, 2};
+int D_L17_00161FD0[2] = {1, 2};

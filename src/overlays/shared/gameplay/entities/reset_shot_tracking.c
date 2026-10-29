@@ -3,8 +3,6 @@
 #include "asm.h"
 #include "sda.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E58), where it is exact; names translated to the US level program. */
 
 void reset_shot_tracking(char *moby) __asm__("FUN_L02_00264e40");
@@ -137,3 +135,9 @@ void collect_mobies_around_tracked_objects(char **slots, int excluded_moby, int 
         }
     }
 }
+
+float D_L16_001600D0 = 16.0f;
+int D_L16_001600D4 = 2;
+int D_L16_001600D8 = 2;
+float D_L16_001600DC = 1.0f;
+float D_L16_001600E0 = 3.0f;

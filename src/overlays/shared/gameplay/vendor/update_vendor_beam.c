@@ -5,8 +5,6 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-
-
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -346,7 +344,6 @@ extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/vendor/update_vendor_beam_data/draw_vendor_beam.h"
 
-
 extern float vendor_beam_base_uv[4][2] __asm__("D_L14_001E5FD0");
 
 /* Fakematch: an empty scope with a declaration adds two block notes (see the corner loops). */
@@ -611,3 +608,55 @@ void update_beam_slots(unsigned char *moby) {
         break;
     }
 }
+
+int D_L15_00161F54 = 0;
+int D_L15_00161F58 = 0;
+int D_L15_00161F44 = 0;
+int D_L15_00161F5C = 0;
+int D_L15_00161F60 = 0;
+int D_L15_00161F64 = 0;
+int D_L15_00161F48 = 0xa;
+int D_L15_00161F4C = 0x28;
+float D_L15_00161F88 = 0.3f;
+float D_L15_00161F8C = 1.0f;
+int D_L15_00161F94 = 0x10806080;
+int D_L15_00161F98 = 0x10806060;
+int D_L15_00161FA8 = 0x18;
+int D_L15_00161F50 = 0xf;
+int D_L15_00161F7C = 0x401040;
+int D_L15_00161F80 = 0x80403040;
+int D_L15_00161F84 = 0x400000;
+int D_L15_00161F68 = 0xe;
+
+float D_L15_001D94F0[4][2] = {
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+    {0.25f, 0.0f},
+    {0.25f, 1.0f},
+};
+
+int D_L17_00161F34 = 0;
+int D_L17_00161F38 = 0;
+int D_L17_00161F24 = 0;
+int D_L17_00161F3C = 0;
+int D_L17_00161F40 = 0;
+int D_L17_00161F44 = 0;
+int D_L17_00161F28 = 0xa;
+int D_L17_00161F2C = 0x28;
+float D_L17_00161F68 = 0.3f;
+float D_L17_00161F6C = 1.0f;
+int D_L17_00161F74 = 0x10806080;
+int D_L17_00161F78 = 0x10806060;
+int D_L17_00161F88 = 0x18;
+int D_L17_00161F30 = 0xf;
+int D_L17_00161F5C = 0x401040;
+int D_L17_00161F60 = 0x80403040;
+int D_L17_00161F64 = 0x400000;
+int D_L17_00161F48 = 0xe;
+
+float D_L17_001D9860[4][2] = {
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+    {0.25f, 0.0f},
+    {0.25f, 1.0f},
+};

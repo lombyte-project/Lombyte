@@ -7,8 +7,6 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
 extern int D_L11_0015FFD8; /* no foreign declaration */
@@ -300,7 +298,6 @@ void append_rotated_textured_screen_quad(float x, float y, float width, float he
     *(char **)&D_L11_001611C0 += 0x70;
 }
 
-
 /* Draws four quads with the angle advanced by a quarter turn each time. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312510), where it is exact; names translated to the US level program. */
 
@@ -345,7 +342,6 @@ void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yo
 #include "rnc/overlay/quad.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
-
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern f32 D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
@@ -538,7 +534,6 @@ int draw_linked_moby_trails(char *moby) {
 /* Advances a trail ring buffer and records two offset points each fourth frame. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 
-
 extern int draw_linked_moby_trails();
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
@@ -584,8 +579,6 @@ void update_moby_trail_points(char *moby) {
         }
     }
 }
-
-
 
 /* Collectable crate: when hit, updates the totals (count, best time, levels mask, a level-11 bonus) and breaks open. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B630), where it is exact; names translated to the US level program. */
@@ -762,3 +755,9 @@ void update_moby_path_transform(char *moby) {
     fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
 }
 
+short D_L17_00162198 = 0xff;
+short D_L17_001621A8 = -1;
+short D_L17_001621B8 = 0x7f4f;
+short D_L17_001621C8 = -32513;
+short D_L17_001621D8 = 0x7f00;
+short D_L17_001623EC = 0;

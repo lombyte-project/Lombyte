@@ -84,7 +84,6 @@ s32 find_camera_table_index_by_id(s32 id) {
     return table_index;
 }
 
-
 #include "qcopy.h"
 
 /* resets the camera behind the hero */
@@ -140,8 +139,6 @@ void init_camera_system(void) {
     vector_copy_destination[1] = vector_copy_source[1];
     vector_copy_destination[2] = vector_copy_source[2];
 }
-
-
 
 #include "qcopy.h"
 
@@ -269,9 +266,7 @@ void setup_level_cameras(void) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED900), where it is exact; names translated to the US level program. */
-
 
 void compute_position_from_spherical_offset(float *output_position, float *angles_and_distance, void *origin_position) __asm__("FUN_L00_001ed580");
 
@@ -282,7 +277,6 @@ void compute_position_from_spherical_offset(float *output_position, float *angle
     *(int *)(output_position + 3) = 0;
     fast_vec_add(output_position, output_position, origin_position);
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED9B0), where it is exact; names translated to the US level program. */
 
@@ -366,3 +360,55 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
         qcopy(&g_debug_camera_lui, camera_position);
     }
 }
+
+Elem D_L01_001675D0 = {0};
+int D_L01_0015EF4C = 0;
+int D_L01_0016C4EC NOT_SDA = 0;
+Elem D_L02_00167750 = {0};
+int D_L02_0016C66C NOT_SDA = 0;
+Elem D_L03_00167250 = {0};
+int D_L03_0015EF4C = 0;
+int D_L03_0016C16C NOT_SDA = 0;
+Elem D_L04_001672D0 = {0};
+int D_L04_0015EF4C = 0;
+int D_L04_0016C1EC NOT_SDA = 0;
+Elem D_L05_00167550 = {0};
+int D_L05_0015EF4C = 0;
+int D_L05_0016C46C NOT_SDA = 0;
+int D_L06_0015EF4C = 0;
+int D_L06_0016C7EC NOT_SDA = 0;
+Elem D_L07_001671D0 = {0};
+int D_L07_0015EF4C = 0;
+int D_L07_0016C0EC NOT_SDA = 0;
+Elem D_L08_00167950 = {0};
+int D_L08_0015EF4C = 0;
+int D_L08_0016C86C NOT_SDA = 0;
+Elem D_L09_001672D0 = {0};
+int D_L09_0015EF4C = 0;
+int D_L09_0016C1EC NOT_SDA = 0;
+Elem D_L10_001675D0 = {0};
+int D_L10_0015EF4C = 0;
+int D_L10_0016C4EC NOT_SDA = 0;
+Elem D_L11_00167B50 = {0};
+int D_L11_0015EF4C = 0;
+int D_L11_0016CA6C NOT_SDA = 0;
+Elem D_L12_001675D0 = {0};
+int D_L12_0015EF4C = 0;
+int D_L12_0016C4EC NOT_SDA = 0;
+Elem D_L13_00167450 = {0};
+int D_L13_0015EF4C = 0;
+int D_L13_0016C36C NOT_SDA = 0;
+Elem D_L14_00167850 = {0};
+int D_L14_0015EF4C = 0;
+int D_L14_0016C76C NOT_SDA = 0;
+Elem D_L15_00167750 = {0};
+int D_L15_0015EF4C = 0;
+int D_L15_0016C66C NOT_SDA = 0;
+Elem D_L16_00167550 = {0};
+int D_L16_0015EF4C = 0;
+int D_L16_0016C46C NOT_SDA = 0;
+Elem D_L17_00167A50 = {0};
+int D_L17_0015EF4C = 0;
+int D_L17_0016C96C NOT_SDA = 0;
+int D_L18_0015EF4C = 0;
+int D_L18_0016CA6C NOT_SDA = 0;

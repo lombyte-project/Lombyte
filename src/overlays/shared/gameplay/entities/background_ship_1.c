@@ -9,8 +9,6 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/gameplay/state/item_state.h"
 
-
-
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
 
@@ -1191,7 +1189,6 @@ void apply_moby_camera_control(char *moby) {
     return;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
 
 extern char *D_L02_00167400_lui __asm__("D_L02_00167400") NOT_SDA;
@@ -1246,3 +1243,114 @@ s32 D_L16_00167404[1] __attribute__((section(".data"))) = {0};
 f32 D_L16_00167408[1] __attribute__((section(".data"))) = {0};
 f32 D_L16_0016740C[1] __attribute__((section(".data"))) = {0};
 s32 D_L16_00167410[1] __attribute__((section(".data"))) = {0};
+
+short D_L03_00161E54 = -15729;
+char *D_L03_00166FDC NOT_SDA = 0;
+int D_L03_001AB940 NOT_SDA = 0;
+short D_L04_00161F4C = -15729;
+short D_L05_001621A4 = -15729;
+S_2fa6d8 D_L06_00167780 = {0};
+float D_L06_0016778C NOT_SDA = 0;
+short D_L06_0016256C = -15729;
+char *D_L06_0016765C NOT_SDA = 0;
+S_2fa6d8 D_L07_00167080 = {0};
+float D_L07_0016708C NOT_SDA = 0;
+short D_L07_00161E24 = -15729;
+char *D_L07_00166F5C NOT_SDA = 0;
+int D_L07_001AB8C0 NOT_SDA = 0;
+char *D_L08_001676DC NOT_SDA = 0;
+float D_L09_00161CD0 = 2e+01f;
+float D_L09_00161CDC = 3.6e+02f;
+short D_L09_00161CE0 = 0x2020;
+short D_L09_00161CE4 = 0x30c0;
+short D_L09_00161CF0 = 0x7efa;
+short D_L09_00161CF4 = 0x7efa;
+short D_L09_00161CF8 = 0;
+short D_L09_00161CFC = 0x17;
+short D_L09_00161D00 = 0xb;
+short D_L09_00161D04 = 0xb;
+short D_L09_00161D08 = 0;
+short D_L09_00161D0C = 0x7efa;
+short D_L09_00161D10 = 0;
+short D_L09_00161D14 = 0;
+short D_L09_00161D18 = 0;
+short D_L09_00161D1C = -32513;
+short D_L09_00161D20 = -24384;
+short D_L09_00161D24 = 0x2040;
+short D_L09_00161D28 = 0x1020;
+float D_L09_00161D2C = 2e+01f;
+float D_L09_00161D30 = 3.6e+02f;
+int D_L09_00161D34 = 0x80302020;
+int D_L09_00161D38 = 0x803030c0;
+short D_L09_00161D44 = 0x7efa;
+short D_L09_00161D48 = 0x7efa;
+short D_L09_00161D4C = 0;
+short D_L09_00161D50 = 0xf;
+short D_L09_00161D54 = 0xf;
+short D_L09_00161D58 = 0xf;
+short D_L09_00161D5C = 0;
+short D_L09_00161D60 = 0x7efa;
+short D_L09_00161D64 = 0;
+short D_L09_00161D68 = 0;
+short D_L09_00161D6C = 0;
+short D_L09_00161D70 = -32513;
+short D_L09_00161D74 = 0x4060;
+short D_L09_00161D78 = 0x2040;
+short D_L09_00161D7C = 0x1020;
+short D_L09_00161D80 = 0x7efa;
+short D_L09_00161D84 = 0x7efa;
+short D_L09_00161D88 = 0;
+short D_L09_00161D8C = -32513;
+short D_L09_00161D90 = 0x4060;
+short D_L09_00161D94 = 0x6020;
+short D_L09_00161D98 = 0x6050;
+short D_L09_00161F3C = -15729;
+float D_L10_0016205C = 2e+01f;
+float D_L10_00162060 = 3.6e+02f;
+int D_L10_00162064 = 0x80302020;
+int D_L10_00162068 = 0x803030c0;
+short D_L10_00162074 = 0x7efa;
+short D_L10_00162078 = 0x7efa;
+short D_L10_0016207C = 0;
+short D_L10_00162080 = 0xf;
+short D_L10_00162084 = 0xf;
+short D_L10_00162088 = 0xf;
+short D_L10_0016208C = 0;
+short D_L10_00162090 = 0x7efa;
+short D_L10_00162094 = 0;
+short D_L10_00162098 = 0;
+short D_L10_0016209C = 0;
+short D_L10_001620A0 = -32513;
+short D_L10_001620A4 = 0x4060;
+short D_L10_001620A8 = 0x2040;
+short D_L10_001620AC = 0x1020;
+short D_L10_001620B0 = 0x7efa;
+short D_L10_001620B4 = 0x7efa;
+short D_L10_001620B8 = 0;
+short D_L10_001620BC = -32513;
+short D_L10_001620C0 = 0x4060;
+short D_L10_001620C4 = 0x6020;
+short D_L10_001620C8 = 0x6050;
+S_2fa6d8 D_L10_00167480 = {0};
+float D_L10_0016748C NOT_SDA = 0;
+short D_L10_0016220C = -15729;
+S_2fa6d8 D_L11_00167A00 = {0};
+float D_L11_00167A0C NOT_SDA = 0;
+short D_L11_00162774 = -15729;
+short D_L12_0016224C = -15729;
+char *D_L12_0016735C NOT_SDA = 0;
+S_2fa6d8 D_L13_00167300 = {0};
+float D_L13_0016730C NOT_SDA = 0;
+short D_L13_001620C4 = -15729;
+S_2fa6d8 D_L14_00167700 = {0};
+float D_L14_0016770C NOT_SDA = 0;
+short D_L14_0016247C = -15729;
+short D_L15_001623CC = -15729;
+short D_L16_00162194 = -15729;
+S_2fa6d8 D_L17_00167900 = {0};
+float D_L17_0016790C NOT_SDA = 0;
+short D_L17_0016267C = -15729;
+S_2fa6d8 D_L18_00167A00 = {0};
+float D_L18_00167A0C NOT_SDA = 0;
+short D_L18_00162794 = -15729;
+char *D_L18_001678DC NOT_SDA = 0;

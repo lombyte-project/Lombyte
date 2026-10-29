@@ -8,8 +8,6 @@
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
@@ -83,7 +81,6 @@ void initialize_plasmabot_path_state(char *moby) {
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B47C8), where it is exact; names translated to the US level program. */
-
 
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_globals.h"
 extern float plasmabot_planar_velocity_base_scale_gp __asm__("D_L14_001614DC") __attribute__((sda));
@@ -180,7 +177,6 @@ void initialize_moby_path_state(char *moby) {
 }
 /* rebuilds two vectors from the moby's transform and applies them to its linked object */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_003000B0), where it is exact; names translated to the US level program. */
-
 
 extern float linked_moby_initial_offset_length_gp __asm__("D_L14_00161FC4") __attribute__((sda));
 extern float linked_moby_additional_offset_length_gp __asm__("D_L14_00161FC8") __attribute__((sda));
@@ -972,8 +968,6 @@ void update_plasmabot_target_range(struct Moby *moby) {
         delay_state->unk234 = plasmabot_base_target_range_gp;
     }
 }
-
-
 
 /* Enemy hit reaction: takes damage from attacks (not from its own kind), staggers or is knocked away and dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B41B0), where it is exact; names translated to the US level program. */
@@ -1831,7 +1825,6 @@ void emit_debris_trail_particles(Moby *moby) {
 extern P_eca8 *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern float D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 
-
 extern float particle_pair_moby_c0_offset_scale_gp __asm__("D_L14_00161FCC") __attribute__((sda));
 extern float particle_pair_moby_e0_offset_scale_gp __asm__("D_L14_00161FD0") __attribute__((sda));
 extern float particle_trio_moby_c0_offset_scale_gp __asm__("D_L14_00161FD4") __attribute__((sda));
@@ -2019,3 +2012,49 @@ void update_floating_mine(struct Moby *moby) {
     moby->rot.y = fast_add_rotations(moby->rot.y, vars->spin[1]);
     moby->rot.z = fast_add_rotations(moby->rot.z, vars->spin[2]);
 }
+
+float D_L15_001613BC = 0.92f;
+float D_L15_001613C4 = 25.0f;
+float D_L15_001613C8 = 0.5235988f;
+int D_L15_001613CC = 0x78;
+float D_L15_001613D4 = 0.25f;
+float D_L15_0016138C = 0.3f;
+float D_L15_0016139C = 0.3f;
+float D_L15_001613A0 = 0.15f;
+f32 D_L15_001613A4 = 4e+01f;
+float D_L15_001613A8 = 3.0f;
+float D_L15_001613B8 = 6.0f;
+
+float D_L15_001CBFA0[4][4] = {
+    {-1.0f, 1.0f, 0.0f, 1.0f},
+    {-1.0f, -1.0f, 0.0f, 1.0f},
+    {1.0f, 1.0f, 0.0f, 1.0f},
+    {1.0f, -1.0f, 0.0f, 1.0f},
+};
+
+float D_L15_001613D8 = 2.0f;
+float D_L15_001613DC = 0.4f;
+float D_L15_001613E0 = 2.0f;
+u32 D_L15_001613E4 = 0x207f6060;
+f32 D_L15_00161A80 = 0.003f;
+f32 D_L15_00161A84 = 0.97f;
+f32 D_L15_00161A88 = 0.05f;
+float D_L15_00161A70 = 0.075f;
+float D_L15_00161A74 = 0.2f;
+float D_L15_00161A78 = 0.2f;
+float D_L15_00161A7C = 0.3f;
+RacePath *D_L15_0015F70C = 0;
+f32 D_L15_00161AA8 = 0.003f;
+f32 D_L15_00161AAC = 0.97f;
+f32 D_L15_00161AB0 = 0.05f;
+float D_L15_00161A98 = 0.075f;
+float D_L15_00161A9C = 0.2f;
+float D_L15_00161AA0 = 0.2f;
+float D_L15_00161AA4 = 0.2f;
+float D_L16_00161D9C = 0.1f;
+float D_L16_00161DA0 = 0.1f;
+float D_L16_00161DA4 = -0.5f;
+float D_L16_00161DA8 = 0.6f;
+float D_L16_00161DAC = -0.4f;
+float D_L16_00161DB0 = 0.7f;
+int D_L16_00161DBC = 0x7f204080;

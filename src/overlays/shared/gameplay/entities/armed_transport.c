@@ -7,9 +7,6 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-
-
-
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "sda.h"
@@ -358,7 +355,6 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
     }
 }
 
-
 /* Advance a path segment and ease the remaining travel distance. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E42F0), where it is exact; names translated to the US level program. */
 
@@ -424,7 +420,6 @@ void compute_armed_transport_path_headings(void *path_data) {
         heading_destination->pts[0].heading = heading_source->pts[0].heading;
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E44B8), where it is exact; names translated to the US level program. */
 
@@ -673,3 +668,42 @@ void moby_update_draw_only(unsigned char *moby) {
         break;
     }
 }
+
+float D_L18_001DA310[4] = {1.0f, 0.0f, -3.0f, 0.0f};
+short D_L18_00162274 = 0;
+short D_L18_00162278 = 0;
+short D_L18_00162280 = 0;
+short D_L18_00162284 = -26214;
+float D_L18_00162270 = 1.0f;
+float D_L18_0016227C = 15.0f;
+short D_L18_00162588 = 0;
+short D_L18_0016258C = 0;
+short D_L18_00162590 = 0;
+
+float D_L18_001EFC10[4][2] = {
+    {0.5f, 0.5f},
+    {0.5f, 1.0f},
+    {0.5f, 0.5f},
+    {0.5f, 1.0f},
+};
+
+float D_L18_001EFC50[4][4] = {
+    {0.0f, -4.0f, 0.9f, 1.0f},
+    {0.0f, -4.0f, 0.4f, 1.0f},
+    {0.0f, 4.0f, 0.9f, 1.0f},
+    {0.0f, 4.0f, 0.4f, 1.0f},
+};
+
+float D_L18_001EFC30[4][2] = {
+    {1.0f, 0.0f},
+    {1.0f, 1.0f},
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+};
+
+float D_L18_001EFC90[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};

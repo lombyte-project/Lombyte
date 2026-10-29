@@ -491,7 +491,6 @@ void draw_target_beam(char *moby) {
     draw_geometry_quad(pk.vertices, matrix, 1);
 }
 
-
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
@@ -549,7 +548,6 @@ void update_scoutbot_movement(char *moby) {
         fast_vec_add((float *)(moby + 0x10), (float *)(moby + 0x10), probe_position_or_correction);
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5358), where it is exact; names translated to the US level program. */
 
@@ -846,7 +844,6 @@ collision:
     mark_moby_for_removal(moby);
 }
 
-
 /* Runs the two per-entry update calls over a 13-entry table. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
 
@@ -884,8 +881,6 @@ void draw_eleven_entry_scrolled_texture_batch(int scroll_pair_index) {
                          1);
     }
 }
-
-
 
 /* Scales every RGBA word of a set of colour tables by four factors, optionally using the flat 255 for colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2428), where it is exact; names translated to the US level program. */
@@ -1693,3 +1688,54 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
         if (height < *(float *)(moby + 0x18)) *(float *)(moby + 0x18) = height;
     }
 }
+
+float D_L09_00161C14 = 2e+01f;
+float D_L09_00161C10 = 1.0f;
+int D_L09_00161C0C = 5;
+int D_L09_00161C1C = 5;
+float D_L09_00161C18 = 3.3f;
+float D_L09_00161C20 = 2.0f;
+float D_L09_00161C04 = 0.6f;
+float D_L09_00161C08 = 0.6f;
+float D_L09_00161BD0 = 1.0f;
+float D_L09_00161BD4 = 37.0f;
+float D_L09_00161BDC = 1e+01f;
+float D_L09_00161BE0 = 11.0f;
+float D_L09_00161BE4 = 15.0f;
+float D_L09_00161C00 = 3.0f;
+s32 D_L10_00161954 = 0x20706060;
+s32 D_L10_00161958 = 0x20f0d0d0;
+f32 D_L10_0016195C = 0.4f;
+f32 D_L10_00161960 = 0;
+f32 D_L10_00161964 = 0.4f;
+f32 D_L10_00161968 = 0.3f;
+s32 D_L10_00161978 = 0x3c;
+f32 D_L10_00161984 = 0;
+f32 D_L10_00161988 = 0.3f;
+int D_L12_00161A88 = 7;
+int D_L12_00161A8C = 8;
+int D_L12_00161A90 = 0xf;
+float D_L12_00161A58 = 2.4e+02f;
+float D_L12_00161A60 = 1e+01f;
+int D_L12_00161A70 = 0x10b0c0c0;
+int D_L12_00161A74 = 0x8708080;
+int D_L12_00161A78 = 0x4f0090f0;
+int D_L12_00161A7C = 0x4f0000f0;
+float D_L12_00161A84 = 2.0f;
+float D_L12_00161A5C = 2.0f;
+float D_L12_00161A64 = 3.2e+02f;
+int D_L12_00161A68 = 0x30e0ffff;
+int D_L12_00161A6C = 0x1080c0c0;
+float D_L12_00161A80 = 1.0f;
+short D_L14_00161A78 = 0x202;
+float D_L14_00161A84 = -0.0f;
+
+float D_L14_001DE580[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+float D_L14_00161A88 = 0.2f;
+float D_L14_00161A8C = 0.175f;

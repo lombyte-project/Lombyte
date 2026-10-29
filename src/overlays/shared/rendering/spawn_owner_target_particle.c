@@ -91,3 +91,5 @@ unsigned char *create_type_47_particle(void *particle_position, float *p_vector,
 }
 
 s32 D_L17_001B2A70[1] __attribute__((section(".data"))) = {0};
+
+int D_L18_001601FC = 0x5a;

@@ -7,11 +7,8 @@
 #include "rnc/globals.h"
 #include "rnc/gameplay/state/item_state.h"
 
-
-
 /* Sets up a HUD element: timer, 128x128 size, zero offsets. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266B90), where it is exact; names translated to the US level program. */
-
 
 void initialize_hud_element_defaults(HudElem *hud_element) __asm__("FUN_L05_002661a0");
 
@@ -203,3 +200,15 @@ int draw_hud_timer(HudElem *hud_element) {
     print_text_with_texture_3(x, y2, hud_timer_value_color_gp, formatted_hud_text, -1);
     return hud_element->w;
 }
+
+int D_L16_0015FA14 = 0x8c;
+int D_L16_0015FA18 = 0x2e;
+int D_L16_0015FA1C = 0xeb;
+int D_L16_0015FA20 = 0x20;
+int D_L16_0015FA24 = 0x60;
+int D_L16_0015FA28 = 0x80e08060;
+int D_L16_0015FA2C = 0x80ffb080;
+int D_L16_0015FA30 = 0x100;
+int D_L16_0015FA34 = 0x26;
+int D_L16_0015FA44 = 0xc;
+char D_L16_0015F860 = 0x25;

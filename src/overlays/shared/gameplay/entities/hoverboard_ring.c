@@ -227,7 +227,6 @@ void update_moby_glow_and_contact_explosion(struct Moby *moby) {
 /* Draws the moby's camera-facing glow sprite, flickering its alpha at random. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031E468), where it is exact; names translated to the US level program. */
 
-
 typedef struct {
     float m[4][4];
     u32 col[4];
@@ -312,7 +311,6 @@ char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
 }
 /* Sets up a moby's vector from the level table and clamps its height for the current state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032A868), where it is exact; names translated to the US level program. */
-
 
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 
@@ -897,7 +895,6 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     fast_vec_cross(&camera->side, &camera->up, &camera->fwd);
 }
 
-
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0032BBF0), where it is exact; names translated to the US level program. */
@@ -917,3 +914,18 @@ void reset_camera_from_source_transform(char *out) {
     extract_matrix_rotation_quaternion(out + 0x40, out);
     reset_hero_follow_camera_from_preset((Camera *)out);
 }
+
+f32 D_L14_0016229C = 4.0f;
+f32 D_L14_001622A4 = 0.075f;
+f32 D_L14_001622A8 = 0.08f;
+
+float D_L14_001F6200[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+short D_L14_001622A0 = -13107;
+float D_L16_00162198 = 2.0f;
+float D_L16_00174278 NOT_SDA = 0;

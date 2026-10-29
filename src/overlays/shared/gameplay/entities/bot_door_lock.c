@@ -131,7 +131,6 @@ void draw_bot_door_lock_glow(char *moby) {
     draw_geometry_quad(&quad, 0, 1);
 }
 
-
 /* state transitions of a moby depending on its id at 0xA6 */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00309088), where it is exact; names translated to the US level program. */
 
@@ -396,7 +395,6 @@ void update_timed_sprite_effect(char *moby) {
     }
 }
 
-
 void spawn_timed_projected_sprite_effect(char *world_position, int duration_updates, int start_color, int end_color) __asm__("FUN_L06_0030bef8");
 
 void spawn_timed_projected_sprite_effect(char *world_position, int duration_updates, int start_color, int end_color) {
@@ -499,3 +497,17 @@ void FUN_L06_00316330(char *moby) {
 
 s32 D_L06_001FE9D0[1] __attribute__((section(".data"))) = {0};
 s32 D_L10_001DA210[1] __attribute__((section(".data"))) = {0};
+
+float D_L10_001DA1A0 NOT_SDA = 0;
+u32 D_L10_001DA1E8 NOT_SDA = 0x10808080;
+float D_L10_00161F24 = 0.025f;
+float D_L10_00161F28 = 2.5f;
+float D_L10_00161F2C = 2.0f;
+float D_L10_00161F30 = 36.0f;
+float D_L10_00161F34 = 0.75f;
+s32 D_L18_001625D4 = 0xb;
+s32 D_L18_001625D8 = 0x320;
+s32 D_L18_001625DC = 0;
+s32 D_L18_001625E0 = 0x4000000;
+s32 D_L18_001625E4 = 0x400;
+s32 D_L18_001625E8 = 0x4000400;

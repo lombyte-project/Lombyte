@@ -178,3 +178,56 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
         }
     }
 }
+
+unsigned char D_L01_00209F60 NOT_SDA = 0x43;
+unsigned char D_L01_00209F88 NOT_SDA = 0x20;
+Item257218 D_L02_001C46B0 = {0};
+unsigned char D_L02_001F9800 NOT_SDA = 0x43;
+unsigned char D_L02_001F9828 NOT_SDA = 0x20;
+Item257218 D_L03_001C41B0 = {0};
+unsigned char D_L03_001E1B80 NOT_SDA = 0x43;
+unsigned char D_L03_001E1BA8 NOT_SDA = 0x20;
+Item257218 D_L04_001C4230 = {0};
+unsigned char D_L04_001DACA0 NOT_SDA = 0x43;
+unsigned char D_L04_001DACC8 NOT_SDA = 0x20;
+Item257218 D_L05_001C4530 = {0};
+unsigned char D_L05_00217610 NOT_SDA = 0x43;
+unsigned char D_L05_00217638 NOT_SDA = 0x20;
+Item257218 D_L06_001C4830 = {0};
+unsigned char D_L06_00200300 NOT_SDA = 0x43;
+unsigned char D_L06_00200328 NOT_SDA = 0x20;
+unsigned char D_L07_002101A0 NOT_SDA = 0x43;
+unsigned char D_L07_002101C8 NOT_SDA = 0x20;
+Item257218 D_L08_001C48B0 = {0};
+unsigned char D_L08_001FAE40 NOT_SDA = 0x43;
+unsigned char D_L08_001FAE68 NOT_SDA = 0x20;
+Item257218 D_L09_001C4230 = {0};
+unsigned char D_L09_00207A10 NOT_SDA = 0x43;
+unsigned char D_L09_00207A38 NOT_SDA = 0x20;
+Item257218 D_L10_001C4530 = {0};
+unsigned char D_L10_001DBC80 NOT_SDA = 0x43;
+unsigned char D_L10_001DBCA8 NOT_SDA = 0x20;
+Item257218 D_L11_001C4AB0 = {0};
+unsigned char D_L11_0021A050 NOT_SDA = 0x43;
+unsigned char D_L11_0021A078 NOT_SDA = 0x20;
+Item257218 D_L12_001C4530 = {0};
+unsigned char D_L12_0020B3E0 NOT_SDA = 0x43;
+unsigned char D_L12_0020B408 NOT_SDA = 0x20;
+Item257218 D_L13_001C43B0 = {0};
+unsigned char D_L13_001F3970 NOT_SDA = 0x43;
+unsigned char D_L13_001F3998 NOT_SDA = 0x20;
+Item257218 D_L14_001C47B0 = {0};
+unsigned char D_L14_001FB250 NOT_SDA = 0x43;
+unsigned char D_L14_001FB278 NOT_SDA = 0x20;
+Item257218 D_L15_001C46B0 = {0};
+unsigned char D_L15_001E1AC0 NOT_SDA = 0x43;
+unsigned char D_L15_001E1AE8 NOT_SDA = 0x20;
+Item257218 D_L16_001C4530 = {0};
+unsigned char D_L16_001E71D0 NOT_SDA = 0x43;
+unsigned char D_L16_001E71F8 NOT_SDA = 0x20;
+Item257218 D_L17_001C49B0 = {0};
+unsigned char D_L17_001E58C0 NOT_SDA = 0x43;
+unsigned char D_L17_001E58E8 NOT_SDA = 0x20;
+Item257218 D_L18_001C4AB0 = {0};
+unsigned char D_L18_001F1630 NOT_SDA = 0x43;
+unsigned char D_L18_001F1658 NOT_SDA = 0x20;

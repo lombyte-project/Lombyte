@@ -11,7 +11,6 @@ void FUN_L00_00259710(void *position) {
     probe_ground_height(position, 0x20, 0.5f);
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A778), where it is exact; names translated to the US level program. */
 
 int point_in_path_xy(float *p, float *v, int n) __asm__("FUN_L00_00259740");
@@ -43,7 +42,6 @@ int test_moby_linked_record_word8(char *moby) {
         return 1;
     return 0;
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A890), where it is exact; names translated to the US level program. */
 
@@ -229,7 +227,6 @@ int sweep_hit_segment(void *first_endpoint_end, void *second_endpoint_end, void 
     }
     return 0;
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025AFA8), where it is exact; names translated to the US level program. */
 
@@ -455,7 +452,6 @@ void trooper_knockback_arc(OvlQuad *input_vector, float *output_xy_angle, float 
     input_vector_copy.f[3] = 0;
     *z_scaled_value *= input_vector_copy.f[2];
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025BC48), where it is exact; names translated to the US level program. */
 
@@ -810,7 +806,6 @@ void interpolate_vector(f32 *interpolated_vector, f32 *start_vector, f32 *end_ve
     out.p[3] = interpolate_scalar_linear(left.f[3], end_vector[3], interpolation_factor);
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7A8), where it is exact; names translated to the US level program. */
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -822,7 +817,6 @@ float interpolate_angle(float start_angle, float target_angle, float blend_fract
     float angle_difference = fast_subtract_rotations(target_angle, start_angle);
     return fast_add_rotations(start_angle, angle_difference * blend_fraction);
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7F0), where it is exact; names translated to the US level program. */
 
@@ -851,3 +845,22 @@ void advance_damped_scalar_velocity(float *velocity, float rate, float error_gai
 s32 D_L03_00173F54[1] __attribute__((section(".data"))) = {0};
 s32 D_L09_00173FD4[1] __attribute__((section(".data"))) = {0};
 s32 D_L14_00174554[1] __attribute__((section(".data"))) = {0};
+
+E_259fe8_00259fe8 D_L01_0016E500 = {0};
+E_259fe8_00259fe8 D_L02_0016E680 = {0};
+E_259fe8_00259fe8 D_L03_0016E180 = {0};
+E_259fe8_00259fe8 D_L04_0016E200 = {0};
+E_259fe8_00259fe8 D_L05_0016E480 = {0};
+E_259fe8_00259fe8 D_L06_0016E800 = {0};
+E_259fe8_00259fe8 D_L07_0016E100 = {0};
+E_259fe8_00259fe8 D_L08_0016E880 = {0};
+E_259fe8_00259fe8 D_L09_0016E200 = {0};
+E_259fe8_00259fe8 D_L10_0016E500 = {0};
+E_259fe8_00259fe8 D_L11_0016EA80 = {0};
+E_259fe8_00259fe8 D_L12_0016E500 = {0};
+E_259fe8_00259fe8 D_L13_0016E380 = {0};
+E_259fe8_00259fe8 D_L14_0016E780 = {0};
+E_259fe8_00259fe8 D_L15_0016E680 = {0};
+E_259fe8_00259fe8 D_L16_0016E480 = {0};
+E_259fe8_00259fe8 D_L17_0016E980 = {0};
+E_259fe8_00259fe8 D_L18_0016EA80 = {0};

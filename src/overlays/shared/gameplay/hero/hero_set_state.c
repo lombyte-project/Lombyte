@@ -270,7 +270,6 @@ skip:
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002222F0), where it is exact; names translated to the US level program. */
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -323,7 +322,6 @@ void update_hero_planar_distance_spring_motion(void) {
         *(int *)(hero_base + 0x244) = 0;
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00222520), where it is exact; names translated to the US level program. */
 
@@ -567,8 +565,6 @@ int select_hero_grapple_target(void) {
     return *(int *)(hero_target_result_base + 0x968);
 }
 
-
-
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00222B80), where it is exact; names translated to the US level program. */
@@ -667,8 +663,6 @@ extern char D_0013F350[];
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern char hero_velocity_profile_jump_keys[] __asm__("D_L00_0017BF20");
 int hero_set_state(int a, int b) {
-
-
 
     int old2088;
     char *moby;
@@ -2996,9 +2990,7 @@ int hero_set_state(int a, int b) {
     return 1;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00227E08), where it is exact; names translated to the US level program. */
-
 
 void set_hero_idle_state_for_vehicle_mode(void) {
     switch (D_0013E533[0x2EC1]) {
@@ -3017,9 +3009,7 @@ void set_hero_idle_state_for_vehicle_mode(void) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00227E90), where it is exact; names translated to the US level program. */
-
 
 int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
 
@@ -3613,7 +3603,6 @@ int process_hero_equipped_item_input(void) {
     return D_0013F450_h228770.f198 < start;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00229348), where it is exact; names translated to the US level program. */
 
 extern int D_0013A4E0[];
@@ -3746,7 +3735,6 @@ void update_hero_animation_for_movement_speed(void) {
     }
 }
 
-
 /* Deletes and clears any moby cached at D_0013F450+0x1614, then clears
    flag bits 0x41 on the two moby pointers cached at +0x1180 and +0x1184,
    when set. */
@@ -3778,3 +3766,42 @@ void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) {
         *(unsigned short *)((char *)secondary_item_moby + 0x34) &= 0xFFBE;
     }
 }
+
+s32 D_L01_0015F6C8 = 0;
+s32 D_L02_0015F6C8 = 0;
+s32 D_L03_0015F6C8 = 0;
+char D_L04_0015F6E8[4] = {0, 0, 0x40, 0x42};
+float D_L04_0017BF70 NOT_SDA = 0.15f;
+s32 D_L04_0015F688 = 0;
+short D_L04_0015F6D8 = 8;
+s32 D_L04_0015F6C8 = 0;
+s32 D_L05_0015F6D8 = 0;
+s32 D_L06_0015F6C8 = 0;
+char D_L07_0015F6E8[4] = {0, 0, 0x40, 0x42};
+float D_L07_0017BE70 NOT_SDA = 0.15f;
+s32 D_L07_0015F688 = 0;
+short D_L07_0015F6D8 = 8;
+s32 D_L07_0015F6C8 = 0;
+s32 D_L08_0015F6C8 = 0;
+char D_L09_0015F6E8[4] = {0, 0, 0x40, 0x42};
+float D_L09_0017BF70 NOT_SDA = 0.15f;
+s32 D_L09_0015F688 = 0;
+short D_L09_0015F6D8 = 8;
+s32 D_L09_0015F6C8 = 0;
+char D_L10_0015F6E8[4] = {0, 0, 0x40, 0x42};
+float D_L10_0017C270 NOT_SDA = 0.15f;
+s32 D_L10_0015F688 = 0;
+short D_L10_0015F6D8 = 8;
+s32 D_L10_0015F6C8 = 0;
+s32 D_L11_0015F6C8 = 0;
+s32 D_L12_0015F6C8 = 0;
+char D_L13_0015F6E8[4] = {0, 0, 0x40, 0x42};
+float D_L13_0017C0F0 NOT_SDA = 0.15f;
+s32 D_L13_0015F688 = 0;
+short D_L13_0015F6D8 = 8;
+s32 D_L13_0015F6C8 = 0;
+s32 D_L14_0015F6C8 = 0;
+s32 D_L15_0015F6C8 = 0;
+s32 D_L16_0015F6D8 = 0;
+s32 D_L17_0015F6C8 = 0;
+s32 D_L18_0015F6C8 = 0;

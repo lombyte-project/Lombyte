@@ -90,7 +90,6 @@ void apply_spatial_trigger_to_moby(int index, int trigger_arg, int inside) {
     }
 }
 
-
 /* Runs func_L05_002F62E8 for each entry of list i until an entry without the top bit set. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F6518), where it is exact; names translated to the US level program. */
 
@@ -370,9 +369,6 @@ void hoverboard_update(unsigned char *moby) {
     }
     moby[0xbc] = 0;
 }
-
-
-
 
 #include "qcopy.h"
 
@@ -895,7 +891,6 @@ found:
     return (char *)&((M_9598 *)D_L05_0015FFD8_9598)[idx];
 }
 
-
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AB08), where it is exact; names translated to the US level program. */
 
@@ -948,7 +943,6 @@ void request_moby_variant_help_message(char *moby) {
 
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
-
 
 void apply_moby_position_and_rotation_wobble(char *moby) __asm__("FUN_L05_00319740");
 
@@ -1005,3 +999,37 @@ void transform_moby_vector_table_to_world_space(char *moby) {
         }
     }
 }
+
+short D_L07_00161870 = -32640;
+short D_L07_00161874 = -32640;
+short D_L07_00161878 = -16288;
+short D_L07_0016187C = -32640;
+short D_L07_00161880 = 0x60c0;
+int D_L07_00161A98 = 0;
+int D_L07_00161A9C = 2;
+int D_L07_00161AA0 = 0;
+int D_L07_00161AA4 = 1;
+int D_L07_00161AA8 = 0x40807070;
+int D_L07_00161AAC = 0x804040;
+int D_L07_00161AB0 = 0x13;
+int *D_L09_001AB9C0 NOT_SDA = 0;
+short D_L11_00161944 = -32640;
+short D_L11_00161948 = -32640;
+short D_L11_0016194C = -16288;
+short D_L11_00161950 = -32640;
+short D_L11_00161954 = 0x60c0;
+short D_L11_001613C0 = 0x6666;
+short D_L12_001619B8 = -32640;
+short D_L12_001619BC = -32640;
+short D_L12_001619C0 = -16288;
+short D_L12_001619C4 = -32640;
+short D_L12_001619C8 = 0x60c0;
+int D_L16_0015F6A8 = 0;
+int D_L16_00161968 = 0x4f0090f0;
+int D_L16_0016196C = 0x4f0000f0;
+unsigned char D_L17_0015FC88 = 0;
+short D_L18_00161910 = -32640;
+short D_L18_00161914 = -32640;
+short D_L18_00161918 = -16288;
+short D_L18_0016191C = -32640;
+short D_L18_00161920 = 0x60c0;

@@ -36,7 +36,6 @@ void emit_sine_modulated_rgba_draw_packet(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
 
-
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
@@ -60,3 +59,8 @@ int hero_is_near_ground(void) {
     }
     return 0;
 }
+
+signed char D_L17_001619A3 = 0x20;
+short D_L17_001619A0 = 0xff;
+short D_L17_001619A4 = -13107;
+short D_L17_001619A8 = 0x28;

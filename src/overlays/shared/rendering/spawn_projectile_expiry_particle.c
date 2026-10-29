@@ -78,3 +78,5 @@ unsigned char *spawn_moby_point_offset_particle(void *moby, short index, float a
 }
 
 s32 D_L13_001B244C[1] __attribute__((section(".data"))) = {0};
+
+unsigned char *D_L14_001B284C NOT_SDA = 0;

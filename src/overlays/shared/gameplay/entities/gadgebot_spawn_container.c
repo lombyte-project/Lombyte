@@ -80,7 +80,6 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
     moby[0xbc] = (unsigned char)scale_game_frames(15);
 }
 
-
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
@@ -1142,8 +1141,6 @@ s32 cancel_moby_suction_and_save_state(unsigned char *moby) {
     }
     return helper_result;
 }
-
-
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -2784,8 +2781,6 @@ void update_gadgebot_glow_effects(char *moby) {
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-
-
 #include "qcopy.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F6330), where it is exact; names translated to the US level program. */
@@ -3080,8 +3075,6 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
     }
 }
 
-
-
 /* Watches the moby's two 32-entry trigger lists against the hero and fires the matching events. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8D60), where it is exact; names translated to the US level program. */
 
@@ -3266,3 +3259,73 @@ void spawn_energy_sphere_destruction_particles(char *moby) {
 f32 D_L10_001D4060[1] __attribute__((section(".data"))) = {0};
 f32 D_L10_001D4064[1] __attribute__((section(".data"))) = {0};
 s32 D_L10_001D9F20[1] __attribute__((section(".data"))) = {0};
+
+short D_L10_00161850 = 0;
+short D_L10_00161854 = 1;
+short D_L10_00161858 = 2;
+short D_L10_0016185C = 1;
+short D_L10_00161860 = 0x20;
+short D_L10_00161864 = 0x29;
+short D_L10_00161868 = -32640;
+short D_L10_0016186C = -13107;
+int D_L10_0015FDF8 = 0;
+int D_L10_00161B00 = 0;
+int D_L10_00161B04 = 0;
+short D_L10_00161AE0[1] = {0x404};
+float D_L10_00161AF0 = 0.1f;
+s32 D_L10_00161B08 = 0x14;
+s32 D_L10_00161B0C = 0xa;
+f32 D_L10_00161B10 = 0.25f;
+f32 D_L10_00161B14 = 0.125f;
+f32 D_L10_00161B18 = 0.5f;
+f32 D_L10_00161B1C = 1.0f;
+f32 D_L10_00161B20 = 8.0f;
+f32 D_L10_00161B24 = 2.0f;
+f32 D_L10_00161B28 = 6.0f;
+f32 D_L10_00161B30 = 0.125f;
+f32 D_L10_00161B34 = 0.065f;
+f32 D_L10_00161B54 = 0;
+GbStats D_L10_0017E958 = {0};
+int D_L10_001ABE80 NOT_SDA = 0;
+s32 D_L10_00161BD8 = -1;
+s32 D_L10_00161BD4 = 0;
+int D_L10_00161C14 = 0x40ff4040;
+int D_L10_00161C18 = 0x10208080;
+int D_L10_00161C20 = 0x35;
+int D_L10_00161C24 = 0x30ff3040;
+float D_L10_00161C28 = 0.5f;
+int D_L10_00161C2C = 0x14;
+float D_L10_00161C30 = 5.8e+02f;
+float D_L10_00161C34 = 1.8e+02f;
+float D_L10_00161C38 = 1.4e+02f;
+float D_L10_00161C3C = 3.0f;
+float D_L10_00161C40 = 1.0f;
+float D_L10_00161C44 = 2.0f;
+int D_L10_00161C54 = 0x5040c0c0;
+int D_L10_00161C58 = 0x40008080;
+int D_L10_00161C5C = 0x50804040;
+int D_L10_00161C60 = 0x40c02020;
+float D_L10_00161C64 = 0.5f;
+float D_L10_00161C68 = 0.3f;
+unsigned char D_L10_00161C50 = 0x14;
+float D_L17_00161DE0 = 3.109f;
+int D_L17_00161DE4 = 0x40ff4040;
+int D_L17_00161DE8 = 0x10208080;
+int D_L17_00161DF0 = 0x35;
+int D_L17_00161DF4 = 0x30ff3040;
+float D_L17_00161DF8 = 0.5f;
+int D_L17_00161DFC = 0x14;
+float D_L17_00161E00 = 5.8e+02f;
+float D_L17_00161E04 = 1.8e+02f;
+float D_L17_00161E08 = 1.4e+02f;
+float D_L17_00161E0C = 3.0f;
+float D_L17_00161E10 = 1.0f;
+float D_L17_00161E14 = 2.0f;
+int D_L17_00161E24 = 0x5040c0c0;
+int D_L17_00161E28 = 0x40008080;
+int D_L17_00161E2C = 0x50804040;
+int D_L17_00161E30 = 0x40c02020;
+float D_L17_00161E34 = 0.5f;
+float D_L17_00161E38 = 0.3f;
+unsigned char D_L17_00161E20 = 0x14;
+float D_L18_001620FC = 3.109f;

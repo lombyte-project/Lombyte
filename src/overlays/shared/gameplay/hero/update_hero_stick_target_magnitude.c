@@ -46,7 +46,6 @@ void update_hero_stick_target_magnitude(void) {
  *   motion.unk16C  slope: vertical / horizontal change, clamped to +-0.5
  */
 
-
 /* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
    0x20B3: 0 = world z up, otherwise the frame of the hero's moby). */
 extern void update_hero_attachment(s32, void *, void *) __asm__("FUN_L00_00233f80");
@@ -644,3 +643,11 @@ s32 process_hero_item_action_input(void)
     }
     return hero.state_timer < saved;
 }
+
+s32 D_L06_0015F674 = 0;
+s32 D_L08_0015F674 = 0;
+s32 D_L11_0015F674 = 0;
+s32 D_L12_0015F674 = 0;
+s32 D_L14_0015F674 = 0;
+s32 D_L15_0015F674 = 0;
+s32 D_L18_0015F674 = 0;

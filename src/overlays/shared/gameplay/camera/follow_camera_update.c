@@ -198,7 +198,6 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     *y = orbit_distance_default_damping_gp;
 }
 
-
 /* Aims a camera rig at its target: updates yaw/pitch smoothing and clamps roll. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EABD0), where it is exact; names translated to the US level program. */
 
@@ -321,7 +320,6 @@ void run_type5_grid_record_noop_callbacks(int unused_camera_moby) {
         }
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EB060), where it is exact; names translated to the US level program. */
 
@@ -703,7 +701,6 @@ tail:
     return 0;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBC50), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -915,7 +912,6 @@ void jet_end_mount(int mode) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC210), where it is exact; names translated to the US level program. */
 
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -1035,7 +1031,6 @@ void update_camera_pose_from_targets(void *camera) {
     copy_matrix3x4(camera_object, mtx);
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC6C8), where it is exact; names translated to the US level program. */
 
 extern void resolve_camera_movement_collisions(void *, float) __asm__("FUN_L00_001ed6a8");
@@ -1052,7 +1047,6 @@ void update_camera_pose_with_optional_collision(char *camera_object) {
         resolve_camera_movement_collisions(camera_object + 0x30, 0.5f);
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC728), where it is exact; names translated to the US level program. */
 
@@ -1656,9 +1650,7 @@ done:
     *(int *)(*(char **)(camera_object + 0x70) + 0x80) = 0;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDC60), where it is exact; names translated to the US level program. */
-
 
 /* Resets moby bytes 0x7D/0x7E unless its id at 0x86 is &hero.unk2284 or 0x2084 is 6. */
 void conditionally_set_camera_state_three(char *camera_object) __asm__("FUN_L00_002ec7b0");
@@ -2167,9 +2159,7 @@ run:
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EED60), where it is exact; names translated to the US level program. */
-
 
 /* Runs volume_camera_aim unless the camera is done. While D_L00_0015F5C4 is
    set and the hero is in the volumes, resets the camera instead. */
@@ -2321,3 +2311,385 @@ void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) {
         playback_state->h = -1;
     }
 }
+
+float D_L01_00162164 = 0.02f;
+float D_L01_00162168 = 0.2f;
+float D_L01_0016218C = 0.04f;
+float D_L01_00162190 = 0.3f;
+short D_L01_0016216C = -15729;
+short D_L01_00162170 = -13107;
+short D_L01_00162174 = -15729;
+short D_L01_00162178 = -13107;
+int *D_L01_0015EF80 = 0;
+char *D_L01_001600F4 = 0;
+f32 D_L01_00162228[2] = {0.017453292f, 0.02268928f};
+float D_L01_00162238 = 0;
+float D_L01_0016223C = 0.02617994f;
+float D_L01_00162240 = 0.03f;
+float D_L01_00162244 = 0.4f;
+float D_L01_00162248 = 0;
+float D_L01_0016224C = -0.0f;
+float D_L01_00162250 = 0.0035f;
+f32 D_L01_00167334 NOT_SDA = 0;
+T_2ed950 *D_L01_0015F5F4 = 0;
+u8 D_L02_00167430 NOT_SDA = 0;
+float D_L02_0016229C = 0.02f;
+float D_L02_001622A0 = 0.2f;
+float D_L02_001622C4 = 0.04f;
+float D_L02_001622C8 = 0.3f;
+short D_L02_001622A4 = -15729;
+short D_L02_001622A8 = -13107;
+short D_L02_001622AC = -15729;
+short D_L02_001622B0 = -13107;
+int *D_L02_0015EF80 = 0;
+char *D_L02_001600F4 = 0;
+f32 D_L02_00162360[2] = {0.017453292f, 0.02268928f};
+float D_L02_00162370 = 0;
+float D_L02_00162374 = 0.02617994f;
+float D_L02_00162378 = 0.03f;
+float D_L02_0016237C = 0.4f;
+float D_L02_00162380 = 0;
+float D_L02_00162384 = -0.0f;
+float D_L02_00162388 = 0.0035f;
+f32 D_L02_001674B4 NOT_SDA = 0;
+T_2ed950 *D_L02_0015F5F4 = 0;
+float D_L03_00161D64 = 0.02f;
+float D_L03_00161D68 = 0.2f;
+float D_L03_00161D8C = 0.04f;
+float D_L03_00161D90 = 0.3f;
+short D_L03_00161D6C = -15729;
+short D_L03_00161D70 = -13107;
+short D_L03_00161D74 = -15729;
+short D_L03_00161D78 = -13107;
+int *D_L03_0015EF80 = 0;
+char *D_L03_001600F4 = 0;
+f32 D_L03_00161E28[2] = {0.017453292f, 0.02268928f};
+float D_L03_00161E38 = 0;
+float D_L03_00161E3C = 0.02617994f;
+float D_L03_00161E40 = 0.03f;
+float D_L03_00161E44 = 0.4f;
+float D_L03_00161E48 = 0;
+float D_L03_00161E4C = -0.0f;
+float D_L03_00161E50 = 0.0035f;
+f32 D_L03_00166FB4 NOT_SDA = 0;
+T_2ed950 *D_L03_0015F5F4 = 0;
+u8 D_L04_00166FB0 NOT_SDA = 0;
+float D_L04_00161E5C = 0.02f;
+float D_L04_00161E60 = 0.2f;
+float D_L04_00161E84 = 0.04f;
+float D_L04_00161E88 = 0.3f;
+short D_L04_00161E64 = -15729;
+short D_L04_00161E68 = -13107;
+short D_L04_00161E6C = -15729;
+short D_L04_00161E70 = -13107;
+int *D_L04_0015EF80 = 0;
+char *D_L04_001600F4 = 0;
+f32 D_L04_00161F20[2] = {0.017453292f, 0.02268928f};
+float D_L04_00161F30 = 0;
+float D_L04_00161F34 = 0.02617994f;
+float D_L04_00161F38 = 0.03f;
+float D_L04_00161F3C = 0.4f;
+float D_L04_00161F40 = 0;
+E_2ea488 *D_L04_0015EF50 = 0;
+float D_L04_00166F58 NOT_SDA = 0;
+float D_L04_00161F44 = -0.0f;
+float D_L04_00161F48 = 0.0035f;
+f32 D_L04_00167034 NOT_SDA = 0;
+T_2ed950 *D_L04_0015F5F4 = 0;
+u8 D_L05_00167230 NOT_SDA = 0;
+float D_L05_001620B4 = 0.02f;
+float D_L05_001620B8 = 0.2f;
+float D_L05_001620DC = 0.04f;
+float D_L05_001620E0 = 0.3f;
+short D_L05_001620BC = -15729;
+short D_L05_001620C0 = -13107;
+short D_L05_001620C4 = -15729;
+short D_L05_001620C8 = -13107;
+int *D_L05_0015EF80 = 0;
+char *D_L05_001600F4 = 0;
+f32 D_L05_00162178[2] = {0.017453292f, 0.02268928f};
+float D_L05_00162188 = 0;
+float D_L05_0016218C = 0.02617994f;
+float D_L05_00162190 = 0.03f;
+float D_L05_00162194 = 0.4f;
+float D_L05_00162198 = 0;
+float D_L05_0016219C = -0.0f;
+float D_L05_001621A0 = 0.0035f;
+f32 D_L05_001672B4 NOT_SDA = 0;
+T_2ed950 *D_L05_0015F5F4 = 0;
+u8 D_L06_001675B0 NOT_SDA = 0;
+float D_L06_0016247C = 0.02f;
+float D_L06_00162480 = 0.2f;
+float D_L06_001624A4 = 0.04f;
+float D_L06_001624A8 = 0.3f;
+short D_L06_00162484 = -15729;
+short D_L06_00162488 = -13107;
+short D_L06_0016248C = -15729;
+short D_L06_00162490 = -13107;
+int *D_L06_0015EF80 = 0;
+char *D_L06_001600F4 = 0;
+f32 D_L06_00162540[2] = {0.017453292f, 0.02268928f};
+float D_L06_00162550 = 0;
+float D_L06_00162554 = 0.02617994f;
+float D_L06_00162558 = 0.03f;
+float D_L06_0016255C = 0.4f;
+float D_L06_00162560 = 0;
+float D_L06_00162564 = -0.0f;
+float D_L06_00162568 = 0.0035f;
+f32 D_L06_00167634 NOT_SDA = 0;
+u8 D_L07_00166EB0 NOT_SDA = 0;
+float D_L07_00161D34 = 0.02f;
+float D_L07_00161D38 = 0.2f;
+float D_L07_00161D5C = 0.04f;
+float D_L07_00161D60 = 0.3f;
+short D_L07_00161D3C = -15729;
+short D_L07_00161D40 = -13107;
+short D_L07_00161D44 = -15729;
+short D_L07_00161D48 = -13107;
+int *D_L07_0015EF80 = 0;
+char *D_L07_001600F4 = 0;
+f32 D_L07_00161DF8[2] = {0.017453292f, 0.02268928f};
+float D_L07_00161E08 = 0;
+float D_L07_00161E0C = 0.02617994f;
+float D_L07_00161E10 = 0.03f;
+float D_L07_00161E14 = 0.4f;
+float D_L07_00161E18 = 0;
+E_2ea488 *D_L07_0015EF50 = 0;
+float D_L07_00166E58 NOT_SDA = 0;
+float D_L07_00161E1C = -0.0f;
+float D_L07_00161E20 = 0.0035f;
+u8 D_L08_00167630 NOT_SDA = 0;
+float D_L08_001624F4 = 0.02f;
+float D_L08_001624F8 = 0.2f;
+float D_L08_0016251C = 0.04f;
+float D_L08_00162520 = 0.3f;
+short D_L08_001624FC = -15729;
+short D_L08_00162500 = -13107;
+short D_L08_00162504 = -15729;
+short D_L08_00162508 = -13107;
+int *D_L08_0015EF80 = 0;
+char *D_L08_001600F4 = 0;
+f32 D_L08_001625B8[2] = {0.017453292f, 0.02268928f};
+float D_L08_001625C8 = 0;
+float D_L08_001625CC = 0.02617994f;
+float D_L08_001625D0 = 0.03f;
+float D_L08_001625D4 = 0.4f;
+float D_L08_001625D8 = 0;
+E_2ea488 *D_L08_0015EF50 = 0;
+float D_L08_001625DC = -0.0f;
+float D_L08_001625E0 = 0.0035f;
+T_2ed950 *D_L08_0015F5F4 = 0;
+u8 D_L09_00166FB0 NOT_SDA = 0;
+float D_L09_00161E4C = 0.02f;
+float D_L09_00161E50 = 0.2f;
+float D_L09_00161E74 = 0.04f;
+float D_L09_00161E78 = 0.3f;
+short D_L09_00161E54 = -15729;
+short D_L09_00161E58 = -13107;
+short D_L09_00161E5C = -15729;
+short D_L09_00161E60 = -13107;
+int *D_L09_0015EF80 = 0;
+char *D_L09_001600F4 = 0;
+f32 D_L09_00161F10[2] = {0.017453292f, 0.02268928f};
+float D_L09_00161F20 = 0;
+float D_L09_00161F24 = 0.02617994f;
+float D_L09_00161F28 = 0.03f;
+float D_L09_00161F2C = 0.4f;
+float D_L09_00161F30 = 0;
+E_2ea488 *D_L09_0015EF50 = 0;
+float D_L09_00166F58 NOT_SDA = 0;
+float D_L09_00161F34 = -0.0f;
+float D_L09_00161F38 = 0.0035f;
+f32 D_L09_00167034 NOT_SDA = 0;
+T_2ed950 *D_L09_0015F5F4 = 0;
+u8 D_L10_001672B0 NOT_SDA = 0;
+float D_L10_0016211C = 0.02f;
+float D_L10_00162120 = 0.2f;
+float D_L10_00162144 = 0.04f;
+float D_L10_00162148 = 0.3f;
+short D_L10_00162124 = -15729;
+short D_L10_00162128 = -13107;
+short D_L10_0016212C = -15729;
+short D_L10_00162130 = -13107;
+int *D_L10_0015EF80 = 0;
+char *D_L10_001600F4 = 0;
+f32 D_L10_001621E0[2] = {0.017453292f, 0.02268928f};
+float D_L10_001621F0 = 0;
+float D_L10_001621F4 = 0.02617994f;
+float D_L10_001621F8 = 0.03f;
+float D_L10_001621FC = 0.4f;
+float D_L10_00162200 = 0;
+float D_L10_00167258 NOT_SDA = 0;
+float D_L10_00162204 = -0.0f;
+float D_L10_00162208 = 0.0035f;
+f32 D_L10_00167334 NOT_SDA = 0;
+T_2ed950 *D_L10_0015F5F4 = 0;
+u8 D_L11_00167830 NOT_SDA = 0;
+float D_L11_00162684 = 0.02f;
+float D_L11_00162688 = 0.2f;
+float D_L11_001626AC = 0.04f;
+float D_L11_001626B0 = 0.3f;
+short D_L11_0016268C = -15729;
+short D_L11_00162690 = -13107;
+short D_L11_00162694 = -15729;
+short D_L11_00162698 = -13107;
+int *D_L11_0015EF80 = 0;
+char *D_L11_001600F4 = 0;
+f32 D_L11_00162748[2] = {0.017453292f, 0.02268928f};
+float D_L11_00162758 = 0;
+float D_L11_0016275C = 0.02617994f;
+float D_L11_00162760 = 0.03f;
+float D_L11_00162764 = 0.4f;
+float D_L11_00162768 = 0;
+E_2ea488 *D_L11_0015EF50 = 0;
+float D_L11_0016276C = -0.0f;
+float D_L11_00162770 = 0.0035f;
+f32 D_L11_001678B4 NOT_SDA = 0;
+T_2ed950 *D_L11_0015F5F4 = 0;
+u8 D_L12_001672B0 NOT_SDA = 0;
+float D_L12_0016215C = 0.02f;
+float D_L12_00162160 = 0.2f;
+float D_L12_00162184 = 0.04f;
+float D_L12_00162188 = 0.3f;
+short D_L12_00162164 = -15729;
+short D_L12_00162168 = -13107;
+short D_L12_0016216C = -15729;
+short D_L12_00162170 = -13107;
+int *D_L12_0015EF80 = 0;
+char *D_L12_001600F4 = 0;
+f32 D_L12_00162220[2] = {0.017453292f, 0.02268928f};
+float D_L12_00162230 = 0;
+float D_L12_00162234 = 0.02617994f;
+float D_L12_00162238 = 0.03f;
+float D_L12_0016223C = 0.4f;
+float D_L12_00162240 = 0;
+E_2ea488 *D_L12_0015EF50 = 0;
+float D_L12_00162244 = -0.0f;
+float D_L12_00162248 = 0.0035f;
+f32 D_L12_00167334 NOT_SDA = 0;
+T_2ed950 *D_L12_0015F5F4 = 0;
+u8 D_L13_00167130 NOT_SDA = 0;
+float D_L13_00161FD4 = 0.02f;
+float D_L13_00161FD8 = 0.2f;
+float D_L13_00161FFC = 0.04f;
+float D_L13_00162000 = 0.3f;
+short D_L13_00161FDC = -15729;
+short D_L13_00161FE0 = -13107;
+short D_L13_00161FE4 = -15729;
+short D_L13_00161FE8 = -13107;
+int *D_L13_0015EF80 = 0;
+char *D_L13_001600F4 = 0;
+f32 D_L13_00162098[2] = {0.017453292f, 0.02268928f};
+float D_L13_001620A8 = 0;
+float D_L13_001620AC = 0.02617994f;
+float D_L13_001620B0 = 0.03f;
+float D_L13_001620B4 = 0.4f;
+float D_L13_001620B8 = 0;
+float D_L13_001670D8 NOT_SDA = 0;
+float D_L13_001620BC = -0.0f;
+float D_L13_001620C0 = 0.0035f;
+T_2ed950 *D_L13_0015F5F4 = 0;
+u8 D_L14_00167530 NOT_SDA = 0;
+float D_L14_0016238C = 0.02f;
+float D_L14_00162390 = 0.2f;
+float D_L14_001623B4 = 0.04f;
+float D_L14_001623B8 = 0.3f;
+short D_L14_00162394 = -15729;
+short D_L14_00162398 = -13107;
+short D_L14_0016239C = -15729;
+short D_L14_001623A0 = -13107;
+int *D_L14_0015EF80 = 0;
+char *D_L14_001600F4 = 0;
+f32 D_L14_00162450[2] = {0.017453292f, 0.02268928f};
+float D_L14_00162460 = 0;
+float D_L14_00162464 = 0.02617994f;
+float D_L14_00162468 = 0.03f;
+float D_L14_0016246C = 0.4f;
+float D_L14_00162470 = 0;
+float D_L14_00162474 = -0.0f;
+float D_L14_00162478 = 0.0035f;
+f32 D_L14_001675B4 NOT_SDA = 0;
+T_2ed950 *D_L14_0015F5F4 = 0;
+u8 D_L15_00167430 NOT_SDA = 0;
+float D_L15_001622DC = 0.02f;
+float D_L15_001622E0 = 0.2f;
+float D_L15_00162304 = 0.04f;
+float D_L15_00162308 = 0.3f;
+short D_L15_001622E4 = -15729;
+short D_L15_001622E8 = -13107;
+short D_L15_001622EC = -15729;
+short D_L15_001622F0 = -13107;
+int *D_L15_0015EF80 = 0;
+char *D_L15_001600F4 = 0;
+f32 D_L15_001623A0[2] = {0.017453292f, 0.02268928f};
+float D_L15_001623B0 = 0;
+float D_L15_001623B4 = 0.02617994f;
+float D_L15_001623B8 = 0.03f;
+float D_L15_001623BC = 0.4f;
+float D_L15_001623C0 = 0;
+float D_L15_001623C4 = -0.0f;
+float D_L15_001623C8 = 0.0035f;
+f32 D_L15_001674B4 NOT_SDA = 0;
+T_2ed950 *D_L15_0015F5F4 = 0;
+u8 D_L16_00167230 NOT_SDA = 0;
+float D_L16_001620A4 = 0.02f;
+float D_L16_001620A8 = 0.2f;
+float D_L16_001620CC = 0.04f;
+float D_L16_001620D0 = 0.3f;
+short D_L16_001620AC = -15729;
+short D_L16_001620B0 = -13107;
+short D_L16_001620B4 = -15729;
+short D_L16_001620B8 = -13107;
+int *D_L16_0015EF80 = 0;
+char *D_L16_001600F4 = 0;
+f32 D_L16_00162168[2] = {0.017453292f, 0.02268928f};
+float D_L16_00162178 = 0;
+float D_L16_0016217C = 0.02617994f;
+float D_L16_00162180 = 0.03f;
+float D_L16_00162184 = 0.4f;
+float D_L16_00162188 = 0;
+E_2ea488 *D_L16_0015EF50 = 0;
+float D_L16_0016218C = -0.0f;
+float D_L16_00162190 = 0.0035f;
+T_2ed950 *D_L16_0015F5F4 = 0;
+u8 D_L17_00167730 NOT_SDA = 0;
+float D_L17_0016258C = 0.02f;
+float D_L17_00162590 = 0.2f;
+float D_L17_001625B4 = 0.04f;
+float D_L17_001625B8 = 0.3f;
+short D_L17_00162594 = -15729;
+short D_L17_00162598 = -13107;
+short D_L17_0016259C = -15729;
+short D_L17_001625A0 = -13107;
+int *D_L17_0015EF80 = 0;
+char *D_L17_001600F4 = 0;
+f32 D_L17_00162650[2] = {0.017453292f, 0.02268928f};
+float D_L17_00162660 = 0;
+float D_L17_00162664 = 0.02617994f;
+float D_L17_00162668 = 0.03f;
+float D_L17_0016266C = 0.4f;
+float D_L17_00162670 = 0;
+E_2ea488 *D_L17_0015EF50 = 0;
+float D_L17_00162674 = -0.0f;
+float D_L17_00162678 = 0.0035f;
+f32 D_L17_001677B4 NOT_SDA = 0;
+T_2ed950 *D_L17_0015F5F4 = 0;
+u8 D_L18_00167830 NOT_SDA = 0;
+float D_L18_001626A4 = 0.02f;
+float D_L18_001626A8 = 0.2f;
+float D_L18_001626CC = 0.04f;
+float D_L18_001626D0 = 0.3f;
+short D_L18_001626AC = -15729;
+short D_L18_001626B0 = -13107;
+short D_L18_001626B4 = -15729;
+short D_L18_001626B8 = -13107;
+int *D_L18_0015EF80 = 0;
+char *D_L18_001600F4 = 0;
+f32 D_L18_00162768[2] = {0.017453292f, 0.02268928f};
+float D_L18_00162778 = 0;
+float D_L18_0016277C = 0.02617994f;
+float D_L18_00162780 = 0.03f;
+float D_L18_00162784 = 0.4f;
+float D_L18_00162788 = 0;
+float D_L18_0016278C = -0.0f;
+float D_L18_00162790 = 0.0035f;

@@ -16,8 +16,6 @@
 #include "rnc/rendering/debug/debug_menu.h"
 #include "sda.h"
 
-
-
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015F2F0;
@@ -1681,8 +1679,6 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     snd_flush_sound_commands();
 }
 
-
-
 /* steps the pickup-spawn state machine for the given mode */
 /* Ported from rac1-decomp (src/overlays/shared/update_0029B6A0.c: func_L00_0029C840), where it is exact; names translated to the US level program. */
 
@@ -1868,7 +1864,6 @@ void initialize_vendor_selected_item_mobys(void) {
  * cutscene). The item list itself (D_L00_001CA4C0) is shared with the
  * buy/consume half FUN_L00_0029ba78, which this function calls every frame. */
 
-
 typedef struct { s32 fD0; s32 fD4; s32 fD8; char pad[0x14 - 0xC]; } VendorItem;
 
 typedef struct {
@@ -1905,7 +1900,6 @@ typedef struct { char pad0[0x10]; f32 f10; f32 f14; char pad18[8]; Vec4 v20; cha
 typedef struct { f32 f0; f32 f4; f32 f8; char padC[4]; f32 f10; f32 f14; char pad18[8]; Vec4 v20; } VendorItemSlot30;
 typedef struct { char pad0; u8 b1; char pad2[0x3E]; } VendorRow;
 typedef struct { char pad0[0x140]; Vec4 pos; char pad150[0x200]; f32 basis[12]; } ViewCamera;
-
 
 extern VendorMenu vendor_menu __asm__("D_L00_001CA4C0");
 extern struct PadState controller_state __asm__("D_0013C940");
@@ -1998,7 +1992,6 @@ extern void FUN_0022ca50(void);
  * drives advance_moby_animation/FUN_L00_00250df8 on g->f20+0x400 and updates the
  * progress tables D_L00_001C40B0 / weapon_ammo_counts / D_0013DD70 / D_0015ED98. */
 
-
 extern s32 ammo_bought_stats[] __asm__("D_0013DD70");
 extern u8 D_0013D4E3[];
 extern s32 D_0015ED98;
@@ -2028,7 +2021,6 @@ extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b68
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
-
 
 #define CUR_TB (D_L00_001C40B0[CUR_ITEM.fD0])
 void update_vendor_purchase(void) {
@@ -2747,3 +2739,1308 @@ s32 D_L18_001CAED8[1] __attribute__((section(".data"))) = {0};
 s32 D_L18_001CAEE4[1] __attribute__((section(".data"))) = {0};
 s32 D_L18_001CAEE8[1] __attribute__((section(".data"))) = {0};
 s32 D_L18_001CAF14[1] __attribute__((section(".data"))) = {0};
+
+int D_L01_0015F2F0 = 0;
+int D_L01_0015F2F4 = 0;
+int D_L01_0015F424 = 0;
+int D_L01_0015F428 = 0;
+int D_L01_0015F42C = 0;
+int D_L01_0015F430 = 0;
+int D_L01_0015F434 = 0;
+int D_L01_00160FF0 = 0;
+int D_L01_0015F598 = 0;
+S_297f78 D_L01_0016C4D8 = {0};
+s32 D_L01_0015F5C8 = 0;
+s32 D_L01_001BA260 NOT_SDA = 0;
+s32 D_L01_00184694 NOT_SDA = 0;
+u8 D_L01_00160FF8 = 0x6d;
+int D_L01_0015F5A0 = 0;
+O_298840 *D_L01_0015FFDC = 0;
+float D_L01_0015F59C = 1.0f;
+float D_L01_0016CF70 NOT_SDA = 0;
+int D_L01_00161048 = 0;
+int D_L01_0016104C = 0;
+s32 D_L01_00161050 = 0;
+s32 D_L01_00161054 = 0;
+s32 D_L01_00161058 = 0;
+s32 D_L01_0015F40C = 0;
+s32 D_L01_00174284 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L01_00179580 = {0};
+Slideshow D_L01_0015F620 = {0};
+unsigned char D_L01_0019804C NOT_SDA = 0;
+
+VendorSlot D_L01_00166300[4] __attribute__((section(".bss")));
+
+s32 D_L01_00162298 __attribute__((section(".bss")));
+
+s32 D_L01_001622A0 __attribute__((section(".bss")));
+
+s32 D_L01_001622A4 __attribute__((section(".bss")));
+
+s32 D_L01_001622B0 __attribute__((section(".bss")));
+
+s32 D_L01_001622B4 __attribute__((section(".bss")));
+
+Vec4 D_L01_001806E0 = {0};
+s32 D_L01_00161188 = 0;
+s32 D_L01_0016118C = 0;
+f32 D_L01_00161060 = 3.8f;
+Vec4 D_L01_001806D0 = {0};
+f32 D_L01_001610E0 = 0.9f;
+int D_L01_00161070 = 0x40600000;
+s32 D_L01_001610F0 = 0x40800000;
+int D_L01_0015F3F8 = 0;
+int D_L01_00161194 = 0;
+
+int D_L01_001622B8 __attribute__((section(".bss")));
+
+float D_L01_001C8DA0 NOT_SDA = 0;
+float D_L01_001C8D80 NOT_SDA = 0;
+int D_L01_00161090 = 0;
+VendorItemSound D_L01_001C2588 = {0};
+
+Vec4 D_L01_00166400[3] __attribute__((section(".bss")));
+
+void *D_L01_00197780 NOT_SDA = 0;
+
+s32 D_L01_0016228C __attribute__((section(".bss")));
+
+s32 D_L01_00162290 __attribute__((section(".bss")));
+
+int D_L02_0015F2F0 = 0;
+int D_L02_0015F2F4 = 0;
+int D_L02_0015F424 = 0;
+int D_L02_0015F428 = 0;
+int D_L02_0015F42C = 0;
+int D_L02_0015F430 = 0;
+int D_L02_0015F434 = 0;
+int D_L02_00160FF0 = 0;
+int D_L02_0015F598 = 0;
+S_297f78 D_L02_0016C658 = {0};
+s32 D_L02_0015F5C8 = 0;
+s32 D_L02_001BA3E0 NOT_SDA = 0;
+s32 D_L02_00184814 NOT_SDA = 0;
+u8 D_L02_00160FF8 = 0x6d;
+int D_L02_0015F5D8 = 0;
+int D_L02_0015F5A0 = 0;
+int D_L02_0015F400 = 0;
+float D_L02_0015F59C = 1.0f;
+float D_L02_0016D0F0 NOT_SDA = 0;
+int D_L02_00161048 = 0;
+int D_L02_0016104C = 0;
+s32 D_L02_00161050 = 0;
+s32 D_L02_00161054 = 0;
+s32 D_L02_00161058 = 0;
+s32 D_L02_0015F40C = 0;
+s32 D_L02_00174404 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L02_00179700 = {0};
+Slideshow D_L02_0015F620 = {0};
+int D_L02_00174400 NOT_SDA = 0;
+int D_L02_001611CC = 0;
+unsigned char D_L02_001981CC NOT_SDA = 0;
+VendorList D_L02_001CAAC0 = {0};
+
+VendorSlot D_L02_00166480[4] __attribute__((section(".bss")));
+
+s32 D_L02_00162418 __attribute__((section(".bss")));
+
+s32 D_L02_00162420 __attribute__((section(".bss")));
+
+s32 D_L02_00162424 __attribute__((section(".bss")));
+
+s32 D_L02_00162430 __attribute__((section(".bss")));
+
+s32 D_L02_00162434 __attribute__((section(".bss")));
+
+Vec4 D_L02_00180860 = {0};
+s32 D_L02_00161188 = 0;
+s32 D_L02_0016118C = 0;
+f32 D_L02_00161060 = 3.8f;
+Vec4 D_L02_00180850 = {0};
+f32 D_L02_001610E0 = 0.9f;
+int D_L02_00161070 = 0x40600000;
+s32 D_L02_00161100 = 0;
+s32 D_L02_001610F0 = 0x40800000;
+int D_L02_0015F3F8 = 0;
+int D_L02_00161194 = 0;
+
+int D_L02_00162438 __attribute__((section(".bss")));
+
+float D_L02_001C8F20 NOT_SDA = 0;
+float D_L02_001C8F00 NOT_SDA = 0;
+int D_L02_00161090 = 0;
+VendorItemSound D_L02_001C2708 = {0};
+
+Vec4 D_L02_00166580[3] __attribute__((section(".bss")));
+
+void *D_L02_00197900 NOT_SDA = 0;
+
+s32 D_L02_0016240C __attribute__((section(".bss")));
+
+s32 D_L02_00162410 __attribute__((section(".bss")));
+
+int D_L03_0015F2F0 = 0;
+int D_L03_0015F2F4 = 0;
+int D_L03_0015F424 = 0;
+int D_L03_0015F428 = 0;
+int D_L03_0015F42C = 0;
+int D_L03_0015F430 = 0;
+int D_L03_0015F434 = 0;
+int D_L03_00160FF0 = 0;
+int D_L03_0015F598 = 0;
+S_297f78 D_L03_0016C158 = {0};
+s32 D_L03_0015F5C8 = 0;
+s32 D_L03_001B9EE0 NOT_SDA = 0;
+s32 D_L03_00184314 NOT_SDA = 0;
+u8 D_L03_00160FF8 = 0x6d;
+int D_L03_0015F5D8 = 0;
+float D_L03_0015F3FC = 0;
+int D_L03_0015F400 = 0;
+O_298840 *D_L03_0015FFDC = 0;
+float D_L03_0015F59C = 1.0f;
+float D_L03_0016CBF0 NOT_SDA = 0;
+int D_L03_00161048 = 0;
+int D_L03_0016104C = 0;
+s32 D_L03_00161050 = 0;
+s32 D_L03_00161054 = 0;
+s32 D_L03_00161058 = 0;
+s32 D_L03_0015F40C = 0;
+s32 D_L03_00173F04 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L03_00179200 = {0};
+Slideshow D_L03_0015F620 = {0};
+int D_L03_00173F00 NOT_SDA = 0;
+int D_L03_001611CC = 0;
+unsigned char D_L03_00197CCC NOT_SDA = 0;
+VendorList D_L03_001CA5C0 = {0};
+
+VendorSlot D_L03_00165F80[4] __attribute__((section(".bss")));
+
+s32 D_L03_00161F18 __attribute__((section(".bss")));
+
+s32 D_L03_00161F20 __attribute__((section(".bss")));
+
+s32 D_L03_00161F24 __attribute__((section(".bss")));
+
+s32 D_L03_00161F30 __attribute__((section(".bss")));
+
+s32 D_L03_00161F34 __attribute__((section(".bss")));
+
+Vec4 D_L03_00180360 = {0};
+s32 D_L03_00161188 = 0;
+s32 D_L03_0016118C = 0;
+f32 D_L03_00161060 = 3.8f;
+Vec4 D_L03_00180350 = {0};
+f32 D_L03_001610E0 = 0.9f;
+int D_L03_00161070 = 0x40600000;
+s32 D_L03_00161100 = 0;
+s32 D_L03_001610F0 = 0x40800000;
+int D_L03_0015F3F8 = 0;
+int D_L03_00161194 = 0;
+
+int D_L03_00161F38 __attribute__((section(".bss")));
+
+float D_L03_001C8A20 NOT_SDA = 0;
+float D_L03_001C8A00 NOT_SDA = 0;
+int D_L03_00161090 = 0;
+VendorItemSound D_L03_001C2208 = {0};
+
+Vec4 D_L03_00166080[3] __attribute__((section(".bss")));
+
+void *D_L03_00197400 NOT_SDA = 0;
+
+s32 D_L03_00161F0C __attribute__((section(".bss")));
+
+s32 D_L03_00161F10 __attribute__((section(".bss")));
+
+int D_L04_0015F2F0 = 0;
+int D_L04_0015F2F4 = 0;
+int D_L04_0015F424 = 0;
+int D_L04_0015F428 = 0;
+int D_L04_0015F42C = 0;
+int D_L04_0015F430 = 0;
+int D_L04_0015F434 = 0;
+int D_L04_0017E684 NOT_SDA = 0;
+int D_L04_00160FF0 = 0;
+int D_L04_0015F598 = 0;
+S_297f78 D_L04_0016C1D8 = {0};
+s32 D_L04_0015F5C8 = 0;
+s32 D_L04_001B9F60 NOT_SDA = 0;
+s32 D_L04_00184394 NOT_SDA = 0;
+u8 D_L04_00160FF8 = 0x6d;
+int D_L04_0015F5D8 = 0;
+int D_L04_0015F5A0 = 0;
+float D_L04_0015F3FC = 0;
+int D_L04_0015F400 = 0;
+O_298840 *D_L04_0015FFDC = 0;
+char D_L04_0017C5C0 NOT_SDA = 0;
+float D_L04_0015F59C = 1.0f;
+float D_L04_0016CC70 NOT_SDA = 0;
+int D_L04_00161048 = 0;
+int D_L04_0016104C = 0;
+s32 D_L04_00161050 = 0;
+s32 D_L04_00161054 = 0;
+s32 D_L04_00161058 = 0;
+s32 D_L04_0015F40C = 0;
+s32 D_L04_00173F84 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L04_00179280 = {0};
+Slideshow D_L04_0015F620 = {0};
+int D_L04_00173F80 NOT_SDA = 0;
+int D_L04_001611CC = 0;
+unsigned char D_L04_00197D4C NOT_SDA = 0;
+VendorList D_L04_001CA640 = {0};
+
+VendorSlot D_L04_00166000[4] __attribute__((section(".bss")));
+
+s32 D_L04_00161F98 __attribute__((section(".bss")));
+
+s32 D_L04_00161FA0 __attribute__((section(".bss")));
+
+s32 D_L04_00161FA4 __attribute__((section(".bss")));
+
+s32 D_L04_00161FB0 __attribute__((section(".bss")));
+
+s32 D_L04_00161FB4 __attribute__((section(".bss")));
+
+Vec4 D_L04_001803E0 = {0};
+s32 D_L04_00161188 = 0;
+s32 D_L04_0016118C = 0;
+f32 D_L04_00161060 = 3.8f;
+Vec4 D_L04_001803D0 = {0};
+f32 D_L04_001610E0 = 0.9f;
+int D_L04_00161070 = 0x40600000;
+s32 D_L04_00161100 = 0;
+s32 D_L04_001610F0 = 0x40800000;
+int D_L04_0015F3F8 = 0;
+int D_L04_00161194 = 0;
+
+int D_L04_00161FB8 __attribute__((section(".bss")));
+
+float D_L04_001C8AA0 NOT_SDA = 0;
+float D_L04_001C8A80 NOT_SDA = 0;
+int D_L04_00161090 = 0;
+VendorItemSound D_L04_001C2288 = {0};
+
+Vec4 D_L04_00166100[3] __attribute__((section(".bss")));
+
+s32 D_L04_00161F8C __attribute__((section(".bss")));
+
+s32 D_L04_00161F90 __attribute__((section(".bss")));
+
+int D_L05_0015F2F0 = 0;
+int D_L05_0015F2F4 = 0;
+int D_L05_0015F424 = 0;
+int D_L05_0015F428 = 0;
+int D_L05_0015F42C = 0;
+int D_L05_0015F430 = 0;
+int D_L05_0015F434 = 0;
+int D_L05_00160FF0 = 0;
+int D_L05_0015F598 = 0;
+S_297f78 D_L05_0016C458 = {0};
+s32 D_L05_0015F5C8 = 0;
+s32 D_L05_001BA260 NOT_SDA = 0;
+s32 D_L05_00184694 NOT_SDA = 0;
+u8 D_L05_00160FF8 = 0x6d;
+int D_L05_0015F5D8 = 0;
+int D_L05_0015F5A0 = 0;
+int D_L05_0015F400 = 0;
+O_298840 *D_L05_0015FFDC = 0;
+float D_L05_0015F59C = 1.0f;
+float D_L05_0016CEF0 NOT_SDA = 0;
+int D_L05_00161048 = 0;
+int D_L05_0016104C = 0;
+s32 D_L05_00161050 = 0;
+s32 D_L05_00161054 = 0;
+s32 D_L05_00161058 = 0;
+s32 D_L05_0015F40C = 0;
+s32 D_L05_00174204 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L05_00179500 = {0};
+Slideshow D_L05_0015F620 = {0};
+int D_L05_00174200 NOT_SDA = 0;
+int D_L05_001611CC = 0;
+unsigned char D_L05_0019804C NOT_SDA = 0;
+VendorList D_L05_001CA940 = {0};
+
+VendorSlot D_L05_00166280[4] __attribute__((section(".bss")));
+
+s32 D_L05_00162218 __attribute__((section(".bss")));
+
+s32 D_L05_00162220 __attribute__((section(".bss")));
+
+s32 D_L05_00162224 __attribute__((section(".bss")));
+
+s32 D_L05_00162230 __attribute__((section(".bss")));
+
+s32 D_L05_00162234 __attribute__((section(".bss")));
+
+Vec4 D_L05_001806E0 = {0};
+s32 D_L05_00161188 = 0;
+s32 D_L05_0016118C = 0;
+f32 D_L05_00161060 = 3.8f;
+Vec4 D_L05_001806D0 = {0};
+f32 D_L05_001610E0 = 0.9f;
+int D_L05_00161070 = 0x40600000;
+s32 D_L05_00161100 = 0;
+s32 D_L05_001610F0 = 0x40800000;
+int D_L05_0015F3F8 = 0;
+int D_L05_00161194 = 0;
+
+int D_L05_00162238 __attribute__((section(".bss")));
+
+float D_L05_001C8DA0 NOT_SDA = 0;
+float D_L05_001C8D80 NOT_SDA = 0;
+int D_L05_00161090 = 0;
+VendorItemSound D_L05_001C2588 = {0};
+
+Vec4 D_L05_00166380[3] __attribute__((section(".bss")));
+
+void *D_L05_00197780 NOT_SDA = 0;
+
+s32 D_L05_0016220C __attribute__((section(".bss")));
+
+s32 D_L05_00162210 __attribute__((section(".bss")));
+
+int D_L06_0015F2F0 = 0;
+int D_L06_0015F2F4 = 0;
+int D_L06_0015F424 = 0;
+int D_L06_0015F428 = 0;
+int D_L06_0015F42C = 0;
+int D_L06_0015F430 = 0;
+int D_L06_0015F434 = 0;
+int D_L06_0017EC84 NOT_SDA = 0;
+int D_L06_00160FF0 = 0;
+int D_L06_0015F598 = 0;
+S_297f78 D_L06_0016C7D8 = {0};
+s32 D_L06_0015F5C8 = 0;
+s32 D_L06_001BA560 NOT_SDA = 0;
+s32 D_L06_00184994 NOT_SDA = 0;
+u8 D_L06_00160FF8 = 0x6d;
+int D_L06_0015F5D8 = 0;
+int D_L06_0015F5A0 = 0;
+O_298840 *D_L06_0015FFDC = 0;
+char D_L06_0017CBC0 NOT_SDA = 0;
+float D_L06_0015F59C = 1.0f;
+float D_L06_0016D270 NOT_SDA = 0;
+int D_L06_00161048 = 0;
+int D_L06_0016104C = 0;
+s32 D_L06_00161050 = 0;
+s32 D_L06_00161054 = 0;
+s32 D_L06_00161058 = 0;
+s32 D_L06_00174584 NOT_SDA = 0;
+Slideshow D_L06_0015F620 = {0};
+int D_L06_001611CC = 0;
+unsigned char D_L06_0019834C NOT_SDA = 0;
+VendorList D_L06_001CAC40 = {0};
+
+VendorSlot D_L06_00166600[4] __attribute__((section(".bss")));
+
+s32 D_L06_00162598 __attribute__((section(".bss")));
+
+s32 D_L06_001625A0 __attribute__((section(".bss")));
+
+s32 D_L06_001625A4 __attribute__((section(".bss")));
+
+s32 D_L06_001625B0 __attribute__((section(".bss")));
+
+s32 D_L06_001625B4 __attribute__((section(".bss")));
+
+Vec4 D_L06_001809E0 = {0};
+s32 D_L06_00161188 = 0;
+s32 D_L06_0016118C = 0;
+f32 D_L06_00161060 = 3.8f;
+Vec4 D_L06_001809D0 = {0};
+f32 D_L06_001610E0 = 0.9f;
+int D_L06_00161070 = 0x40600000;
+s32 D_L06_00161100 = 0;
+s32 D_L06_001610F0 = 0x40800000;
+int D_L06_0015F3F8 = 0;
+int D_L06_00161194 = 0;
+
+int D_L06_001625B8 __attribute__((section(".bss")));
+
+float D_L06_001C90A0 NOT_SDA = 0;
+float D_L06_001C9080 NOT_SDA = 0;
+int D_L06_00161090 = 0;
+VendorItemSound D_L06_001C2888 = {0};
+
+Vec4 D_L06_00166700[3] __attribute__((section(".bss")));
+
+s32 D_L06_0016258C __attribute__((section(".bss")));
+
+s32 D_L06_00162590 __attribute__((section(".bss")));
+
+int D_L07_0015F2F0 = 0;
+int D_L07_0015F2F4 = 0;
+int D_L07_0015F424 = 0;
+int D_L07_0015F428 = 0;
+int D_L07_0015F42C = 0;
+int D_L07_0015F430 = 0;
+int D_L07_0015F434 = 0;
+int D_L07_0017E584 NOT_SDA = 0;
+int D_L07_00160FF0 = 0;
+int D_L07_0015F598 = 0;
+S_297f78 D_L07_0016C0D8 = {0};
+s32 D_L07_0015F5C8 = 0;
+s32 D_L07_001B9E60 NOT_SDA = 0;
+s32 D_L07_00184294 NOT_SDA = 0;
+u8 D_L07_00160FF8 = 0x6d;
+int D_L07_0015F5D8 = 0;
+int D_L07_0015F5A0 = 0;
+float D_L07_0015F3FC = 0;
+int D_L07_0015F400 = 0;
+O_298840 *D_L07_0015FFDC = 0;
+char D_L07_0017C4C0 NOT_SDA = 0;
+float D_L07_0015F59C = 1.0f;
+float D_L07_0016CB70 NOT_SDA = 0;
+int D_L07_00161048 = 0;
+int D_L07_0016104C = 0;
+s32 D_L07_00161050 = 0;
+s32 D_L07_00161054 = 0;
+s32 D_L07_00161058 = 0;
+s32 D_L07_00173E84 NOT_SDA = 0;
+Slideshow D_L07_0015F620 = {0};
+int D_L07_001611CC = 0;
+unsigned char D_L07_00197C4C NOT_SDA = 0;
+VendorList D_L07_001CA540 = {0};
+
+VendorSlot D_L07_00165F00[4] __attribute__((section(".bss")));
+
+s32 D_L07_00161E98 __attribute__((section(".bss")));
+
+s32 D_L07_00161EA0 __attribute__((section(".bss")));
+
+s32 D_L07_00161EA4 __attribute__((section(".bss")));
+
+s32 D_L07_00161EB0 __attribute__((section(".bss")));
+
+s32 D_L07_00161EB4 __attribute__((section(".bss")));
+
+Vec4 D_L07_001802E0 = {0};
+s32 D_L07_00161188 = 0;
+s32 D_L07_0016118C = 0;
+f32 D_L07_00161060 = 3.8f;
+Vec4 D_L07_001802D0 = {0};
+f32 D_L07_001610E0 = 0.9f;
+int D_L07_00161070 = 0x40600000;
+s32 D_L07_00161100 = 0;
+s32 D_L07_001610F0 = 0x40800000;
+int D_L07_0015F3F8 = 0;
+int D_L07_00161194 = 0;
+
+int D_L07_00161EB8 __attribute__((section(".bss")));
+
+float D_L07_001C89A0 NOT_SDA = 0;
+float D_L07_001C8980 NOT_SDA = 0;
+int D_L07_00161090 = 0;
+VendorItemSound D_L07_001C2188 = {0};
+
+Vec4 D_L07_00166000[3] __attribute__((section(".bss")));
+
+s32 D_L07_00161E8C __attribute__((section(".bss")));
+
+s32 D_L07_00161E90 __attribute__((section(".bss")));
+
+int D_L08_0015F2F0 = 0;
+int D_L08_0015F2F4 = 0;
+int D_L08_0015F424 = 0;
+int D_L08_0015F428 = 0;
+int D_L08_0015F42C = 0;
+int D_L08_0015F430 = 0;
+int D_L08_0015F434 = 0;
+int D_L08_00160FF0 = 0;
+int D_L08_0015F598 = 0;
+S_297f78 D_L08_0016C858 = {0};
+s32 D_L08_0015F5C8 = 0;
+s32 D_L08_001BA5E0 NOT_SDA = 0;
+s32 D_L08_00184A14 NOT_SDA = 0;
+u8 D_L08_00160FF8 = 0x6d;
+int D_L08_0015F5D8 = 0;
+float D_L08_0015F3FC = 0;
+int D_L08_0015F400 = 0;
+float D_L08_0016D2F0 NOT_SDA = 0;
+int D_L08_00161048 = 0;
+int D_L08_0016104C = 0;
+s32 D_L08_00161050 = 0;
+s32 D_L08_00161054 = 0;
+s32 D_L08_00161058 = 0;
+s32 D_L08_0015F40C = 0;
+s32 D_L08_00174604 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L08_00179900 = {0};
+Slideshow D_L08_0015F620 = {0};
+int D_L08_00174600 NOT_SDA = 0;
+int D_L08_001611CC = 0;
+unsigned char D_L08_001983CC NOT_SDA = 0;
+VendorList D_L08_001CACC0 = {0};
+
+VendorSlot D_L08_00166680[4] __attribute__((section(".bss")));
+
+s32 D_L08_00162618 __attribute__((section(".bss")));
+
+s32 D_L08_00162620 __attribute__((section(".bss")));
+
+s32 D_L08_00162624 __attribute__((section(".bss")));
+
+s32 D_L08_00162630 __attribute__((section(".bss")));
+
+s32 D_L08_00162634 __attribute__((section(".bss")));
+
+Vec4 D_L08_00180A60 = {0};
+s32 D_L08_00161188 = 0;
+s32 D_L08_0016118C = 0;
+f32 D_L08_00161060 = 3.8f;
+Vec4 D_L08_00180A50 = {0};
+f32 D_L08_001610E0 = 0.9f;
+int D_L08_00161070 = 0x40600000;
+s32 D_L08_00161100 = 0;
+s32 D_L08_001610F0 = 0x40800000;
+int D_L08_00161194 = 0;
+
+int D_L08_00162638 __attribute__((section(".bss")));
+
+float D_L08_001C9120 NOT_SDA = 0;
+float D_L08_001C9100 NOT_SDA = 0;
+int D_L08_00161090 = 0;
+VendorItemSound D_L08_001C2908 = {0};
+
+Vec4 D_L08_00166780[3] __attribute__((section(".bss")));
+
+void *D_L08_00197B00 NOT_SDA = 0;
+
+s32 D_L08_0016260C __attribute__((section(".bss")));
+
+s32 D_L08_00162610 __attribute__((section(".bss")));
+
+int D_L09_0015F2F0 = 0;
+int D_L09_0015F2F4 = 0;
+int D_L09_0015F424 = 0;
+int D_L09_0015F428 = 0;
+int D_L09_0015F42C = 0;
+int D_L09_0015F430 = 0;
+int D_L09_0015F434 = 0;
+int D_L09_0017E684 NOT_SDA = 0;
+int D_L09_00160FF0 = 0;
+int D_L09_0015F598 = 0;
+S_297f78 D_L09_0016C1D8 = {0};
+s32 D_L09_0015F5C8 = 0;
+s32 D_L09_001B9F60 NOT_SDA = 0;
+s32 D_L09_00184394 NOT_SDA = 0;
+u8 D_L09_00160FF8 = 0x6d;
+C_298840 D_L09_0016C9E0 = {0};
+int D_L09_0015F5D8 = 0;
+int D_L09_0015F5A0 = 0;
+float D_L09_0015F3FC = 0;
+int D_L09_0015F400 = 0;
+O_298840 *D_L09_0015FFDC = 0;
+char D_L09_0017C5C0 NOT_SDA = 0;
+float D_L09_0015F59C = 1.0f;
+float D_L09_0016CC70 NOT_SDA = 0;
+int D_L09_00161048 = 0;
+int D_L09_0016104C = 0;
+s32 D_L09_00161050 = 0;
+s32 D_L09_00161054 = 0;
+s32 D_L09_00161058 = 0;
+s32 D_L09_0015F40C = 0;
+s32 D_L09_00173F84 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L09_00179280 = {0};
+Slideshow D_L09_0015F620 = {0};
+int D_L09_00173F80 NOT_SDA = 0;
+int D_L09_001611CC = 0;
+unsigned char D_L09_00197D4C NOT_SDA = 0;
+VendorList D_L09_001CA640 = {0};
+
+VendorSlot D_L09_00166000[4] __attribute__((section(".bss")));
+
+s32 D_L09_00161F98 __attribute__((section(".bss")));
+
+s32 D_L09_00161FA0 __attribute__((section(".bss")));
+
+s32 D_L09_00161FA4 __attribute__((section(".bss")));
+
+s32 D_L09_00161FB0 __attribute__((section(".bss")));
+
+s32 D_L09_00161FB4 __attribute__((section(".bss")));
+
+Vec4 D_L09_001803E0 = {0};
+s32 D_L09_00161188 = 0;
+s32 D_L09_0016118C = 0;
+f32 D_L09_00161060 = 3.8f;
+Vec4 D_L09_001803D0 = {0};
+f32 D_L09_001610E0 = 0.9f;
+int D_L09_00161070 = 0x40600000;
+s32 D_L09_00161100 = 0;
+s32 D_L09_001610F0 = 0x40800000;
+int D_L09_0015F3F8 = 0;
+int D_L09_00161194 = 0;
+
+int D_L09_00161FB8 __attribute__((section(".bss")));
+
+float D_L09_001C8AA0 NOT_SDA = 0;
+float D_L09_001C8A80 NOT_SDA = 0;
+int D_L09_00161090 = 0;
+VendorItemSound D_L09_001C2288 = {0};
+
+Vec4 D_L09_00166100[3] __attribute__((section(".bss")));
+
+void *D_L09_00197480 NOT_SDA = 0;
+
+s32 D_L09_00161F8C __attribute__((section(".bss")));
+
+s32 D_L09_00161F90 __attribute__((section(".bss")));
+
+int D_L10_0015F2F0 = 0;
+int D_L10_0015F2F4 = 0;
+int D_L10_0015F424 = 0;
+int D_L10_0015F428 = 0;
+int D_L10_0015F42C = 0;
+int D_L10_0015F430 = 0;
+int D_L10_0015F434 = 0;
+int D_L10_0017E984 NOT_SDA = 0;
+int D_L10_00160FF0 = 0;
+int D_L10_0015F598 = 0;
+S_297f78 D_L10_0016C4D8 = {0};
+s32 D_L10_0015F5C8 = 0;
+s32 D_L10_001BA260 NOT_SDA = 0;
+s32 D_L10_00184694 NOT_SDA = 0;
+u8 D_L10_00160FF8 = 0x6d;
+int D_L10_0015F5D8 = 0;
+int D_L10_0015F5A0 = 0;
+int D_L10_0015F400 = 0;
+O_298840 *D_L10_0015FFDC = 0;
+char D_L10_0017C8C0 NOT_SDA = 0;
+float D_L10_0015F59C = 1.0f;
+float D_L10_0016CF70 NOT_SDA = 0;
+int D_L10_00161048 = 0;
+int D_L10_0016104C = 0;
+s32 D_L10_00161050 = 0;
+s32 D_L10_00161054 = 0;
+s32 D_L10_00161058 = 0;
+s32 D_L10_0015F40C = 0;
+s32 D_L10_00174284 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L10_00179580 = {0};
+Slideshow D_L10_0015F620 = {0};
+int D_L10_00174280 NOT_SDA = 0;
+int D_L10_001611CC = 0;
+unsigned char D_L10_0019804C NOT_SDA = 0;
+VendorList D_L10_001CA940 = {0};
+
+VendorSlot D_L10_00166300[4] __attribute__((section(".bss")));
+
+s32 D_L10_00162298 __attribute__((section(".bss")));
+
+s32 D_L10_001622A0 __attribute__((section(".bss")));
+
+s32 D_L10_001622A4 __attribute__((section(".bss")));
+
+s32 D_L10_001622B0 __attribute__((section(".bss")));
+
+s32 D_L10_001622B4 __attribute__((section(".bss")));
+
+Vec4 D_L10_001806E0 = {0};
+s32 D_L10_00161188 = 0;
+s32 D_L10_0016118C = 0;
+f32 D_L10_00161060 = 3.8f;
+Vec4 D_L10_001806D0 = {0};
+f32 D_L10_001610E0 = 0.9f;
+int D_L10_00161070 = 0x40600000;
+s32 D_L10_00161100 = 0;
+s32 D_L10_001610F0 = 0x40800000;
+int D_L10_00161194 = 0;
+
+int D_L10_001622B8 __attribute__((section(".bss")));
+
+float D_L10_001C8DA0 NOT_SDA = 0;
+float D_L10_001C8D80 NOT_SDA = 0;
+int D_L10_00161090 = 0;
+VendorItemSound D_L10_001C2588 = {0};
+
+Vec4 D_L10_00166400[3] __attribute__((section(".bss")));
+
+void *D_L10_00197780 NOT_SDA = 0;
+
+s32 D_L10_0016228C __attribute__((section(".bss")));
+
+s32 D_L10_00162290 __attribute__((section(".bss")));
+
+int D_L11_0015F2F0 = 0;
+int D_L11_0015F2F4 = 0;
+int D_L11_0015F424 = 0;
+int D_L11_0015F428 = 0;
+int D_L11_0015F42C = 0;
+int D_L11_0015F430 = 0;
+int D_L11_0015F434 = 0;
+int D_L11_0017EF04 NOT_SDA = 0;
+int D_L11_00160FF0 = 0;
+int D_L11_0015F598 = 0;
+S_297f78 D_L11_0016CA58 = {0};
+s32 D_L11_0015F5C8 = 0;
+s32 D_L11_001BA7E0 NOT_SDA = 0;
+s32 D_L11_00184C14 NOT_SDA = 0;
+u8 D_L11_00160FF8 = 0x6d;
+int D_L11_0015F5D8 = 0;
+int D_L11_0015F5A0 = 0;
+int D_L11_0015F400 = 0;
+O_298840 *D_L11_0015FFDC = 0;
+char D_L11_0017CE40 NOT_SDA = 0;
+float D_L11_0015F59C = 1.0f;
+int D_L11_00161048 = 0;
+int D_L11_0016104C = 0;
+s32 D_L11_00161050 = 0;
+s32 D_L11_00161054 = 0;
+s32 D_L11_00161058 = 0;
+s32 D_L11_0015F40C = 0;
+s32 D_L11_00174804 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L11_00179B00 = {0};
+Slideshow D_L11_0015F620 = {0};
+int D_L11_00174800 NOT_SDA = 0;
+int D_L11_001611CC = 0;
+unsigned char D_L11_001985CC NOT_SDA = 0;
+VendorList D_L11_001CAEC0 = {0};
+
+VendorSlot D_L11_001668C0[4] __attribute__((section(".bss")));
+
+s32 D_L11_00162818 __attribute__((section(".bss")));
+
+s32 D_L11_00162820 __attribute__((section(".bss")));
+
+s32 D_L11_00162824 __attribute__((section(".bss")));
+
+s32 D_L11_00162830 __attribute__((section(".bss")));
+
+s32 D_L11_00162834 __attribute__((section(".bss")));
+
+Vec4 D_L11_00180C60 = {0};
+s32 D_L11_00161188 = 0;
+s32 D_L11_0016118C = 0;
+f32 D_L11_00161060 = 3.8f;
+Vec4 D_L11_00180C50 = {0};
+f32 D_L11_001610E0 = 0.9f;
+int D_L11_00161070 = 0x40600000;
+s32 D_L11_00161100 = 0;
+s32 D_L11_001610F0 = 0x40800000;
+int D_L11_0015F3F8 = 0;
+int D_L11_00161194 = 0;
+
+int D_L11_00162838 __attribute__((section(".bss")));
+
+float D_L11_001C9320 NOT_SDA = 0;
+float D_L11_001C9300 NOT_SDA = 0;
+int D_L11_00161090 = 0;
+VendorItemSound D_L11_001C2B08 = {0};
+
+Vec4 D_L11_001669C0[3] __attribute__((section(".bss")));
+
+void *D_L11_00197D00 NOT_SDA = 0;
+
+s32 D_L11_0016280C __attribute__((section(".bss")));
+
+s32 D_L11_00162810 __attribute__((section(".bss")));
+
+int D_L12_0015F2F0 = 0;
+int D_L12_0015F2F4 = 0;
+int D_L12_0015F424 = 0;
+int D_L12_0015F428 = 0;
+int D_L12_0015F42C = 0;
+int D_L12_0015F430 = 0;
+int D_L12_0015F434 = 0;
+int D_L12_00160FF0 = 0;
+int D_L12_0015F598 = 0;
+S_297f78 D_L12_0016C4D8 = {0};
+s32 D_L12_0015F5C8 = 0;
+s32 D_L12_001BA260 NOT_SDA = 0;
+s32 D_L12_00184694 NOT_SDA = 0;
+u8 D_L12_00160FF8 = 0x6d;
+int D_L12_0015F5D8 = 0;
+int D_L12_0015F5A0 = 0;
+int D_L12_0015F400 = 0;
+O_298840 *D_L12_0015FFDC = 0;
+float D_L12_0015F59C = 1.0f;
+float D_L12_0016CF70 NOT_SDA = 0;
+int D_L12_00161048 = 0;
+int D_L12_0016104C = 0;
+s32 D_L12_00161050 = 0;
+s32 D_L12_00161054 = 0;
+s32 D_L12_00161058 = 0;
+s32 D_L12_0015F40C = 0;
+s32 D_L12_00174284 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L12_00179580 = {0};
+Slideshow D_L12_0015F620 = {0};
+int D_L12_00174280 NOT_SDA = 0;
+int D_L12_001611CC = 0;
+unsigned char D_L12_0019804C NOT_SDA = 0;
+VendorList D_L12_001CA940 = {0};
+
+VendorSlot D_L12_00166300[4] __attribute__((section(".bss")));
+
+s32 D_L12_00162298 __attribute__((section(".bss")));
+
+s32 D_L12_001622A0 __attribute__((section(".bss")));
+
+s32 D_L12_001622A4 __attribute__((section(".bss")));
+
+s32 D_L12_001622B0 __attribute__((section(".bss")));
+
+s32 D_L12_001622B4 __attribute__((section(".bss")));
+
+Vec4 D_L12_001806E0 = {0};
+s32 D_L12_00161188 = 0;
+s32 D_L12_0016118C = 0;
+f32 D_L12_00161060 = 3.8f;
+Vec4 D_L12_001806D0 = {0};
+f32 D_L12_001610E0 = 0.9f;
+int D_L12_00161070 = 0x40600000;
+s32 D_L12_00161100 = 0;
+s32 D_L12_001610F0 = 0x40800000;
+int D_L12_0015F3F8 = 0;
+int D_L12_00161194 = 0;
+
+int D_L12_001622B8 __attribute__((section(".bss")));
+
+float D_L12_001C8DA0 NOT_SDA = 0;
+float D_L12_001C8D80 NOT_SDA = 0;
+int D_L12_00161090 = 0;
+VendorItemSound D_L12_001C2588 = {0};
+
+Vec4 D_L12_00166400[3] __attribute__((section(".bss")));
+
+void *D_L12_00197780 NOT_SDA = 0;
+
+s32 D_L12_0016228C __attribute__((section(".bss")));
+
+s32 D_L12_00162290 __attribute__((section(".bss")));
+
+int D_L13_0015F2F0 = 0;
+int D_L13_0015F2F4 = 0;
+int D_L13_0015F424 = 0;
+int D_L13_0015F428 = 0;
+int D_L13_0015F42C = 0;
+int D_L13_0015F430 = 0;
+int D_L13_0015F434 = 0;
+int D_L13_0017E804 NOT_SDA = 0;
+int D_L13_00160FF0 = 0;
+int D_L13_0015F598 = 0;
+S_297f78 D_L13_0016C358 = {0};
+s32 D_L13_0015F5C8 = 0;
+s32 D_L13_001BA0E0 NOT_SDA = 0;
+s32 D_L13_00184514 NOT_SDA = 0;
+u8 D_L13_00160FF8 = 0x6d;
+int D_L13_0015F5D8 = 0;
+int D_L13_0015F5A0 = 0;
+int D_L13_0015F400 = 0;
+O_298840 *D_L13_0015FFDC = 0;
+char D_L13_0017C740 NOT_SDA = 0;
+float D_L13_0015F59C = 1.0f;
+int D_L13_00161048 = 0;
+int D_L13_0016104C = 0;
+s32 D_L13_00161050 = 0;
+s32 D_L13_00161054 = 0;
+s32 D_L13_00161058 = 0;
+s32 D_L13_0015F40C = 0;
+s32 D_L13_00174104 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L13_00179400 = {0};
+Slideshow D_L13_0015F620 = {0};
+int D_L13_00174100 NOT_SDA = 0;
+int D_L13_001611CC = 0;
+unsigned char D_L13_00197ECC NOT_SDA = 0;
+VendorList D_L13_001CA7C0 = {0};
+
+VendorSlot D_L13_00166180[4] __attribute__((section(".bss")));
+
+s32 D_L13_00162118 __attribute__((section(".bss")));
+
+s32 D_L13_00162120 __attribute__((section(".bss")));
+
+s32 D_L13_00162124 __attribute__((section(".bss")));
+
+s32 D_L13_00162130 __attribute__((section(".bss")));
+
+s32 D_L13_00162134 __attribute__((section(".bss")));
+
+Vec4 D_L13_00180560 = {0};
+s32 D_L13_00161188 = 0;
+s32 D_L13_0016118C = 0;
+f32 D_L13_00161060 = 3.8f;
+Vec4 D_L13_00180550 = {0};
+f32 D_L13_001610E0 = 0.9f;
+int D_L13_00161070 = 0x40600000;
+s32 D_L13_00161100 = 0;
+s32 D_L13_001610F0 = 0x40800000;
+int D_L13_0015F3F8 = 0;
+int D_L13_00161194 = 0;
+
+int D_L13_00162138 __attribute__((section(".bss")));
+
+float D_L13_001C8C20 NOT_SDA = 0;
+float D_L13_001C8C00 NOT_SDA = 0;
+int D_L13_00161090 = 0;
+VendorItemSound D_L13_001C2408 = {0};
+
+Vec4 D_L13_00166280[3] __attribute__((section(".bss")));
+
+void *D_L13_00197600 NOT_SDA = 0;
+
+s32 D_L13_0016210C __attribute__((section(".bss")));
+
+s32 D_L13_00162110 __attribute__((section(".bss")));
+
+int D_L14_0015F2F0 = 0;
+int D_L14_0015F2F4 = 0;
+int D_L14_0015F424 = 0;
+int D_L14_0015F428 = 0;
+int D_L14_0015F42C = 0;
+int D_L14_0015F430 = 0;
+int D_L14_0015F434 = 0;
+int D_L14_00160FF0 = 0;
+int D_L14_0015F598 = 0;
+S_297f78 D_L14_0016C758 = {0};
+s32 D_L14_0015F5C8 = 0;
+s32 D_L14_001BA4E0 NOT_SDA = 0;
+s32 D_L14_00184914 NOT_SDA = 0;
+u8 D_L14_00160FF8 = 0x6d;
+int D_L14_0015F5D8 = 0;
+int D_L14_0015F5A0 = 0;
+float D_L14_0015F3FC = 0;
+int D_L14_0015F400 = 0;
+char D_L14_0017CB40 NOT_SDA = 0;
+float D_L14_0015F59C = 1.0f;
+float D_L14_0016D1F0 NOT_SDA = 0;
+int D_L14_00161048 = 0;
+int D_L14_0016104C = 0;
+s32 D_L14_00161050 = 0;
+s32 D_L14_00161054 = 0;
+s32 D_L14_00161058 = 0;
+s32 D_L14_0015F40C = 0;
+s32 D_L14_00174504 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L14_00179800 = {0};
+Slideshow D_L14_0015F620 = {0};
+int D_L14_00174500 NOT_SDA = 0;
+int D_L14_001611CC = 0;
+unsigned char D_L14_001982CC NOT_SDA = 0;
+VendorList D_L14_001CABC0 = {0};
+
+VendorSlot D_L14_00166580[4] __attribute__((section(".bss")));
+
+s32 D_L14_00162518 __attribute__((section(".bss")));
+
+s32 D_L14_00162520 __attribute__((section(".bss")));
+
+s32 D_L14_00162524 __attribute__((section(".bss")));
+
+s32 D_L14_00162530 __attribute__((section(".bss")));
+
+s32 D_L14_00162534 __attribute__((section(".bss")));
+
+Vec4 D_L14_00180960 = {0};
+s32 D_L14_00161188 = 0;
+s32 D_L14_0016118C = 0;
+f32 D_L14_00161060 = 3.8f;
+Vec4 D_L14_00180950 = {0};
+f32 D_L14_001610E0 = 0.9f;
+int D_L14_00161070 = 0x40600000;
+s32 D_L14_00161100 = 0;
+s32 D_L14_001610F0 = 0x40800000;
+int D_L14_0015F3F8 = 0;
+int D_L14_00161194 = 0;
+
+int D_L14_00162538 __attribute__((section(".bss")));
+
+float D_L14_001C9020 NOT_SDA = 0;
+float D_L14_001C9000 NOT_SDA = 0;
+int D_L14_00161090 = 0;
+VendorItemSound D_L14_001C2808 = {0};
+
+Vec4 D_L14_00166680[3] __attribute__((section(".bss")));
+
+void *D_L14_00197A00 NOT_SDA = 0;
+
+s32 D_L14_0016250C __attribute__((section(".bss")));
+
+s32 D_L14_00162510 __attribute__((section(".bss")));
+
+int D_L15_0015F2F0 = 0;
+int D_L15_0015F2F4 = 0;
+int D_L15_0015F424 = 0;
+int D_L15_0015F428 = 0;
+int D_L15_0015F42C = 0;
+int D_L15_0015F430 = 0;
+int D_L15_0015F434 = 0;
+int D_L15_00160FF0 = 0;
+int D_L15_0015F598 = 0;
+S_297f78 D_L15_0016C658 = {0};
+s32 D_L15_0015F5C8 = 0;
+s32 D_L15_001BA3E0 NOT_SDA = 0;
+s32 D_L15_00184814 NOT_SDA = 0;
+u8 D_L15_00160FF8 = 0x6d;
+int D_L15_0015F5D8 = 0;
+int D_L15_0015F5A0 = 0;
+int D_L15_0015F400 = 0;
+O_298840 *D_L15_0015FFDC = 0;
+char D_L15_0017CA40 NOT_SDA = 0;
+float D_L15_0015F59C = 1.0f;
+float D_L15_0016D0F0 NOT_SDA = 0;
+int D_L15_00161048 = 0;
+int D_L15_0016104C = 0;
+s32 D_L15_00161050 = 0;
+s32 D_L15_00161054 = 0;
+s32 D_L15_00161058 = 0;
+s32 D_L15_0015F40C = 0;
+s32 D_L15_00174404 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L15_00179700 = {0};
+Slideshow D_L15_0015F620 = {0};
+int D_L15_00174400 NOT_SDA = 0;
+int D_L15_001611CC = 0;
+unsigned char D_L15_001981CC NOT_SDA = 0;
+VendorList D_L15_001CAAC0 = {0};
+
+VendorSlot D_L15_00166480[4] __attribute__((section(".bss")));
+
+s32 D_L15_00162418 __attribute__((section(".bss")));
+
+s32 D_L15_00162420 __attribute__((section(".bss")));
+
+s32 D_L15_00162424 __attribute__((section(".bss")));
+
+s32 D_L15_00162430 __attribute__((section(".bss")));
+
+s32 D_L15_00162434 __attribute__((section(".bss")));
+
+Vec4 D_L15_00180860 = {0};
+s32 D_L15_00161188 = 0;
+s32 D_L15_0016118C = 0;
+f32 D_L15_00161060 = 3.8f;
+Vec4 D_L15_00180850 = {0};
+f32 D_L15_001610E0 = 0.9f;
+int D_L15_00161070 = 0x40600000;
+s32 D_L15_00161100 = 0;
+s32 D_L15_001610F0 = 0x40800000;
+int D_L15_00161194 = 0;
+
+int D_L15_00162438 __attribute__((section(".bss")));
+
+float D_L15_001C8F20 NOT_SDA = 0;
+float D_L15_001C8F00 NOT_SDA = 0;
+int D_L15_00161090 = 0;
+VendorItemSound D_L15_001C2708 = {0};
+
+Vec4 D_L15_00166580[3] __attribute__((section(".bss")));
+
+void *D_L15_00197900 NOT_SDA = 0;
+
+s32 D_L15_0016240C __attribute__((section(".bss")));
+
+s32 D_L15_00162410 __attribute__((section(".bss")));
+
+int D_L16_0015F2F0 = 0;
+int D_L16_0015F2F4 = 0;
+int D_L16_0015F424 = 0;
+int D_L16_0015F428 = 0;
+int D_L16_0015F42C = 0;
+int D_L16_0015F430 = 0;
+int D_L16_0015F434 = 0;
+int D_L16_00160FF0 = 0;
+int D_L16_0015F598 = 0;
+S_297f78 D_L16_0016C458 = {0};
+s32 D_L16_0015F5C8 = 0;
+s32 D_L16_001BA260 NOT_SDA = 0;
+s32 D_L16_00184694 NOT_SDA = 0;
+u8 D_L16_00160FF8 = 0x6d;
+int D_L16_0015F5D8 = 0;
+int D_L16_0015F5A0 = 0;
+float D_L16_0015F3FC = 0;
+int D_L16_0015F400 = 0;
+O_298840 *D_L16_0015FFDC = 0;
+char D_L16_0017C8A0 NOT_SDA = 0;
+float D_L16_0015F59C = 1.0f;
+float D_L16_0016CEF0 NOT_SDA = 0;
+int D_L16_00161048 = 0;
+int D_L16_0016104C = 0;
+s32 D_L16_00161050 = 0;
+s32 D_L16_00161054 = 0;
+s32 D_L16_00161058 = 0;
+s32 D_L16_0015F40C = 0;
+s32 D_L16_00174204 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L16_00179500 = {0};
+Slideshow D_L16_0015F620 = {0};
+int D_L16_00174200 NOT_SDA = 0;
+int D_L16_001611CC = 0;
+unsigned char D_L16_0019804C NOT_SDA = 0;
+VendorList D_L16_001CA940 = {0};
+
+VendorSlot D_L16_001662C0[4] __attribute__((section(".bss")));
+
+s32 D_L16_00162218 __attribute__((section(".bss")));
+
+s32 D_L16_00162220 __attribute__((section(".bss")));
+
+s32 D_L16_00162224 __attribute__((section(".bss")));
+
+s32 D_L16_00162230 __attribute__((section(".bss")));
+
+s32 D_L16_00162234 __attribute__((section(".bss")));
+
+Vec4 D_L16_001806E0 = {0};
+s32 D_L16_00161188 = 0;
+s32 D_L16_0016118C = 0;
+f32 D_L16_00161060 = 3.8f;
+Vec4 D_L16_001806D0 = {0};
+f32 D_L16_001610E0 = 0.9f;
+int D_L16_00161070 = 0x40600000;
+s32 D_L16_00161100 = 0;
+s32 D_L16_001610F0 = 0x40800000;
+int D_L16_0015F3F8 = 0;
+int D_L16_00161194 = 0;
+
+int D_L16_00162238 __attribute__((section(".bss")));
+
+float D_L16_001C8DA0 NOT_SDA = 0;
+float D_L16_001C8D80 NOT_SDA = 0;
+int D_L16_00161090 = 0;
+VendorItemSound D_L16_001C2588 = {0};
+
+Vec4 D_L16_001663C0[3] __attribute__((section(".bss")));
+
+void *D_L16_00197780 NOT_SDA = 0;
+
+s32 D_L16_0016220C __attribute__((section(".bss")));
+
+s32 D_L16_00162210 __attribute__((section(".bss")));
+
+int D_L17_0015F2F0 = 0;
+int D_L17_0015F2F4 = 0;
+int D_L17_0015F424 = 0;
+int D_L17_0015F428 = 0;
+int D_L17_0015F42C = 0;
+int D_L17_0015F430 = 0;
+int D_L17_0015F434 = 0;
+int D_L17_0017EE04 NOT_SDA = 0;
+int D_L17_00160FF0 = 0;
+int D_L17_0015F598 = 0;
+S_297f78 D_L17_0016C958 = {0};
+s32 D_L17_0015F5C8 = 0;
+s32 D_L17_001BA6E0 NOT_SDA = 0;
+s32 D_L17_00184B14 NOT_SDA = 0;
+u8 D_L17_00160FF8 = 0x6d;
+int D_L17_0015F5D8 = 0;
+int D_L17_0015F5A0 = 0;
+int D_L17_0015F400 = 0;
+char D_L17_0017CD40 NOT_SDA = 0;
+float D_L17_0015F59C = 1.0f;
+int D_L17_00161048 = 0;
+int D_L17_0016104C = 0;
+s32 D_L17_00161050 = 0;
+s32 D_L17_00161054 = 0;
+s32 D_L17_00161058 = 0;
+s32 D_L17_0015F40C = 0;
+s32 D_L17_00174704 NOT_SDA = 0;
+struct ActiveSceneTrigger D_L17_00179A00 = {0};
+Slideshow D_L17_0015F620 = {0};
+int D_L17_00174700 NOT_SDA = 0;
+int D_L17_001611CC = 0;
+unsigned char D_L17_001984CC NOT_SDA = 0;
+VendorList D_L17_001CADC0 = {0};
+
+VendorSlot D_L17_00166780[4] __attribute__((section(".bss")));
+
+s32 D_L17_00162718 __attribute__((section(".bss")));
+
+s32 D_L17_00162720 __attribute__((section(".bss")));
+
+s32 D_L17_00162724 __attribute__((section(".bss")));
+
+s32 D_L17_00162730 __attribute__((section(".bss")));
+
+s32 D_L17_00162734 __attribute__((section(".bss")));
+
+Vec4 D_L17_00180B60 = {0};
+s32 D_L17_00161188 = 0;
+s32 D_L17_0016118C = 0;
+f32 D_L17_00161060 = 3.8f;
+Vec4 D_L17_00180B50 = {0};
+f32 D_L17_001610E0 = 0.9f;
+int D_L17_00161070 = 0x40600000;
+s32 D_L17_00161100 = 0;
+s32 D_L17_001610F0 = 0x40800000;
+int D_L17_0015F3F8 = 0;
+int D_L17_00161194 = 0;
+
+int D_L17_00162738 __attribute__((section(".bss")));
+
+float D_L17_001C9220 NOT_SDA = 0;
+float D_L17_001C9200 NOT_SDA = 0;
+int D_L17_00161090 = 0;
+VendorItemSound D_L17_001C2A08 = {0};
+
+Vec4 D_L17_00166880[3] __attribute__((section(".bss")));
+
+void *D_L17_00197C00 NOT_SDA = 0;
+
+s32 D_L17_0016270C __attribute__((section(".bss")));
+
+s32 D_L17_00162710 __attribute__((section(".bss")));
+
+int D_L18_0015F2F0 = 0;
+int D_L18_0015F2F4 = 0;
+int D_L18_0015F424 = 0;
+int D_L18_0015F428 = 0;
+int D_L18_0015F42C = 0;
+int D_L18_0015F430 = 0;
+int D_L18_0015F434 = 0;
+int D_L18_0017EF04 NOT_SDA = 0;
+int D_L18_00160FF0 = 0;
+int D_L18_0015F598 = 0;
+S_297f78 D_L18_0016CA58 = {0};
+s32 D_L18_0015F5C8 = 0;
+s32 D_L18_001BA7E0 NOT_SDA = 0;
+s32 D_L18_00184C14 NOT_SDA = 0;
+u8 D_L18_00160FF8 = 0x6d;
+int D_L18_0015F5D8 = 0;
+int D_L18_0015F5A0 = 0;
+int D_L18_0015F400 = 0;
+O_298840 *D_L18_0015FFDC = 0;
+float D_L18_0015F59C = 1.0f;
+float D_L18_0016D4F0 NOT_SDA = 0;
+int D_L18_00161048 = 0;
+int D_L18_0016104C = 0;
+s32 D_L18_00161050 = 0;
+s32 D_L18_00161054 = 0;
+s32 D_L18_00161058 = 0;
+s32 D_L18_00174804 NOT_SDA = 0;
+Slideshow D_L18_0015F620 = {0};
+int D_L18_001611CC = 0;
+unsigned char D_L18_001985CC NOT_SDA = 0;
+VendorList D_L18_001CAEC0 = {0};
+
+VendorSlot D_L18_00166880[4] __attribute__((section(".bss")));
+
+s32 D_L18_00162818 __attribute__((section(".bss")));
+
+s32 D_L18_00162820 __attribute__((section(".bss")));
+
+s32 D_L18_00162824 __attribute__((section(".bss")));
+
+s32 D_L18_00162830 __attribute__((section(".bss")));
+
+s32 D_L18_00162834 __attribute__((section(".bss")));
+
+Vec4 D_L18_00180C60 = {0};
+s32 D_L18_00161188 = 0;
+s32 D_L18_0016118C = 0;
+f32 D_L18_00161060 = 3.8f;
+Vec4 D_L18_00180C50 = {0};
+f32 D_L18_001610E0 = 0.9f;
+int D_L18_00161070 = 0x40600000;
+s32 D_L18_00161100 = 0;
+s32 D_L18_001610F0 = 0x40800000;
+int D_L18_0015F3F8 = 0;
+int D_L18_00161194 = 0;
+
+int D_L18_00162838 __attribute__((section(".bss")));
+
+float D_L18_001C9320 NOT_SDA = 0;
+float D_L18_001C9300 NOT_SDA = 0;
+int D_L18_00161090 = 0;
+VendorItemSound D_L18_001C2B08 = {0};
+
+Vec4 D_L18_00166980[3] __attribute__((section(".bss")));
+
+s32 D_L18_0016280C __attribute__((section(".bss")));
+
+s32 D_L18_00162810 __attribute__((section(".bss")));

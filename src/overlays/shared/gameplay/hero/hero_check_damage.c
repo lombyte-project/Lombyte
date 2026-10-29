@@ -291,7 +291,6 @@ void find_grind_rail(void) {
     hero.grind_rail = 1;
 }
 
-
 /* OUT = the camera-space point (0.3, 0, 1.34) in world space
    (func_L00_00233EE0). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020D990), where it is exact; names translated to the US level program. */
@@ -371,7 +370,6 @@ int hero_slot_item_id(int i) {
     }
     return -1;
 }
-
 
 /* Whether func_L00_0020DB30(ARG) is one of 10, 17, 20 or 25. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020DB68), where it is exact; names translated to the US level program. */
@@ -482,7 +480,6 @@ int hero_get_state_aim_pitch(int mode, float *out) {
     }
     return 0;
 }
-
 
 /* The value BACK entries ago (at most 31, and at most the entry count
    hero.yaw_ring_count) in the 32-float ring hero.yaw_history whose newest entry is
@@ -999,7 +996,6 @@ void start_equipped_item_animation(void) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020ED30), where it is exact; names translated to the US level program. */
 
 extern int hero_idle_sequence(int) __asm__("FUN_L00_00205000");
@@ -1341,7 +1337,6 @@ void spawn_hero_item_mobies(void) {
         }
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020F750), where it is exact; names translated to the US level program. */
 
@@ -1757,7 +1752,6 @@ void clear_hero_item_slot(int i, int respawn_threshold) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210418), where it is exact; names translated to the US level program. */
 
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -1781,9 +1775,7 @@ void set_hero_condition_animation_timer_for_item(int id) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210478), where it is exact; names translated to the US level program. */
-
 
 /* Sets the short at hero.unk1DA to scale_game_frames(0x46) for the listed ids. */
 void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
@@ -2346,7 +2338,6 @@ void exit_hero_vehicle_mode(void) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211338), where it is exact; names translated to the US level program. */
 
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
@@ -2726,7 +2717,6 @@ void hero_update(void)
     update_hero_timers_and_reach_state();
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211EE8), where it is exact; names translated to the US level program. */
 
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -2740,7 +2730,6 @@ float get_capped_hero_stick_magnitude(void) {
     }
     return stick_magnitude;
 }
-
 
 /* Whether T lies in the window that ends at D_0013F450 + 0xAA8 and is
    +0xAAC long (T before the end, within that length of it). */
@@ -2877,7 +2866,6 @@ void update_hero_target_speed_from_stick(void) {
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002123B0), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533_lui[];
@@ -2918,7 +2906,6 @@ void turn_hero_toward_transformed_move_direction(int rotation_direction, float x
     apply_hero_rotation_offset(zero, zero, out);
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
 
 extern void turn_hero_toward_transformed_move_direction(int, float, float, float) __asm__("FUN_L00_00211d78");
@@ -2934,7 +2921,6 @@ void turn_to(int rotation_direction, float x, float y, float z) {
             spring_angle(&hero_state->motion.rot.f[2], &hero_state->motion.yaw_rate, rotation_direction, hero_state->motion.move_yaw, x, y, z);
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00212550), where it is exact; names translated to the US level program. */
 
@@ -3488,7 +3474,6 @@ void correct_hero_ground_penetration(void) {
         }
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00213970), where it is exact; names translated to the US level program. */
 
@@ -4226,3 +4211,164 @@ f32 D_L16_0017AE74[1] __attribute__((section(".data"))) = {0};
 f32 D_L17_0017B264[1] __attribute__((section(".data"))) = {0};
 f32 D_L17_0017B314[1] __attribute__((section(".data"))) = {0};
 f32 D_L18_0017B6A4[1] __attribute__((section(".data"))) = {0};
+
+s32 D_L01_0015F710 = 0;
+s32 D_L01_0015F6A0[2] = {0xc, 0xd};
+u8 D_L01_0017CF00 NOT_SDA = 0;
+int D_L01_0015F694 = 0xb;
+u8 D_L01_0017AA88 NOT_SDA = 7;
+u8 D_L01_0017CB00 NOT_SDA = 0;
+u8 D_L01_0015F6A8 = 7;
+s32 D_L01_0015F690 = 1;
+struct LedgeSpot *D_L02_0015F70C = 0;
+s32 D_L02_0015F710 = 0;
+s32 D_L02_0015F6A0[2] = {0xc, 0xd};
+u8 D_L02_0017D080 NOT_SDA = 0;
+int D_L02_0015F694 = 0xb;
+u8 D_L02_0017AC08 NOT_SDA = 7;
+u8 D_L02_0017CC80 NOT_SDA = 0;
+u8 D_L02_0015F6A8 = 7;
+s32 D_L02_0015F690 = 1;
+s32 D_L03_0015F6A0[2] = {0xc, 0xd};
+u8 D_L03_0017CB80 NOT_SDA = 0;
+int D_L03_0015F694 = 0xb;
+u8 D_L03_0017A708 NOT_SDA = 7;
+u8 D_L03_0017C780 NOT_SDA = 0;
+u8 D_L03_0015F6A8 = 7;
+s32 D_L03_0015F690 = 1;
+struct LedgeSpot *D_L04_0015F70C = 0;
+s32 D_L04_0015F710 = 0;
+s32 D_L04_0015F6A0[2] = {0xc, 0xd};
+u8 D_L04_0017CC00 NOT_SDA = 0;
+int D_L04_0015F694 = 0xb;
+u8 D_L04_0017A788 NOT_SDA = 7;
+u8 D_L04_0017C800 NOT_SDA = 0;
+u8 D_L04_0015F6A8 = 7;
+s32 D_L04_0015F690 = 1;
+float D_L04_0017BF38 NOT_SDA = 0;
+s32 D_L04_00173FDC NOT_SDA = 0;
+s32 D_L05_0015F720 = 0;
+s32 D_L05_0015F6B0[2] = {0xc, 0xd};
+u8 D_L05_0017CF00 NOT_SDA = 0;
+int D_L05_0015F694 = 0xb;
+u8 D_L05_0017AA68 NOT_SDA = 7;
+u8 D_L05_0017CB00 NOT_SDA = 0;
+u8 D_L05_0015F6B8 = 7;
+s32 D_L05_0015F690 = 1;
+struct LedgeSpot *D_L06_0015F70C = 0;
+s32 D_L06_0015F710 = 0;
+s32 D_L06_0015F6A0[2] = {0xc, 0xd};
+u8 D_L06_0017D200 NOT_SDA = 0;
+int D_L06_0015F694 = 0xb;
+u8 D_L06_0017AD88 NOT_SDA = 7;
+u8 D_L06_0017CE00 NOT_SDA = 0;
+u8 D_L06_0015F6A8 = 7;
+s32 D_L06_0015F690 = 1;
+struct LedgeSpot *D_L07_0015F70C = 0;
+s32 D_L07_0015F710 = 0;
+s32 D_L07_0015F6A0[2] = {0xc, 0xd};
+u8 D_L07_0017CB00 NOT_SDA = 0;
+int D_L07_0015F694 = 0xb;
+u8 D_L07_0017A688 NOT_SDA = 7;
+u8 D_L07_0017C700 NOT_SDA = 0;
+u8 D_L07_0015F6A8 = 7;
+s32 D_L07_0015F690 = 1;
+float D_L07_0017BE38 NOT_SDA = 0;
+s32 D_L07_00173EDC NOT_SDA = 0;
+s32 D_L08_0015F710 = 0;
+s32 D_L08_0015F6A0[2] = {0xc, 0xd};
+u8 D_L08_0017D280 NOT_SDA = 0;
+u8 D_L08_0017AE08 NOT_SDA = 7;
+u8 D_L08_0017CE80 NOT_SDA = 0;
+u8 D_L08_0015F6A8 = 7;
+s32 D_L08_0015F690 = 1;
+struct LedgeSpot *D_L09_0015F70C = 0;
+s32 D_L09_0015F710 = 0;
+s32 D_L09_0015F6A0[2] = {0xc, 0xd};
+u8 D_L09_0017CC00 NOT_SDA = 0;
+int D_L09_0015F694 = 0xb;
+u8 D_L09_0017A788 NOT_SDA = 7;
+u8 D_L09_0017C800 NOT_SDA = 0;
+u8 D_L09_0015F6A8 = 7;
+s32 D_L09_0015F690 = 1;
+float D_L09_0017BF38 NOT_SDA = 0;
+s32 D_L09_00173FDC NOT_SDA = 0;
+struct LedgeSpot *D_L10_0015F70C = 0;
+s32 D_L10_0015F710 = 0;
+s32 D_L10_0015F6A0[2] = {0xc, 0xd};
+u8 D_L10_0017CF00 NOT_SDA = 0;
+int D_L10_0015F694 = 0xb;
+u8 D_L10_0017AA88 NOT_SDA = 7;
+u8 D_L10_0017CB00 NOT_SDA = 0;
+u8 D_L10_0015F6A8 = 7;
+s32 D_L10_0015F690 = 1;
+float D_L10_0017C238 NOT_SDA = 0;
+s32 D_L10_001742DC NOT_SDA = 0;
+struct LedgeSpot *D_L11_0015F70C = 0;
+s32 D_L11_0015F710 = 0;
+s32 D_L11_0015F6A0[2] = {0xc, 0xd};
+u8 D_L11_0017D480 NOT_SDA = 0;
+int D_L11_0015F694 = 0xb;
+u8 D_L11_0017B008 NOT_SDA = 7;
+u8 D_L11_0017D080 NOT_SDA = 0;
+u8 D_L11_0015F6A8 = 7;
+s32 D_L11_0015F690 = 1;
+struct LedgeSpot *D_L12_0015F70C = 0;
+s32 D_L12_0015F710 = 0;
+s32 D_L12_0015F6A0[2] = {0xc, 0xd};
+u8 D_L12_0017CF00 NOT_SDA = 0;
+int D_L12_0015F694 = 0xb;
+u8 D_L12_0017AA88 NOT_SDA = 7;
+u8 D_L12_0017CB00 NOT_SDA = 0;
+u8 D_L12_0015F6A8 = 7;
+s32 D_L12_0015F690 = 1;
+struct LedgeSpot *D_L13_0015F70C = 0;
+s32 D_L13_0015F710 = 0;
+s32 D_L13_0015F6A0[2] = {0xc, 0xd};
+u8 D_L13_0017CD80 NOT_SDA = 0;
+int D_L13_0015F694 = 0xb;
+u8 D_L13_0017A908 NOT_SDA = 7;
+u8 D_L13_0017C980 NOT_SDA = 0;
+u8 D_L13_0015F6A8 = 7;
+s32 D_L13_0015F690 = 1;
+float D_L13_0017C0B8 NOT_SDA = 0;
+s32 D_L13_0017415C NOT_SDA = 0;
+s32 D_L14_0015F710 = 0;
+s32 D_L14_0015F6A0[2] = {0xc, 0xd};
+u8 D_L14_0017D180 NOT_SDA = 0;
+int D_L14_0015F694 = 0xb;
+u8 D_L14_0017AD08 NOT_SDA = 7;
+u8 D_L14_0017CD80 NOT_SDA = 0;
+u8 D_L14_0015F6A8 = 7;
+s32 D_L14_0015F690 = 1;
+s32 D_L15_0015F710 = 0;
+s32 D_L15_0015F6A0[2] = {0xc, 0xd};
+u8 D_L15_0017D080 NOT_SDA = 0;
+int D_L15_0015F694 = 0xb;
+u8 D_L15_0017AC08 NOT_SDA = 7;
+u8 D_L15_0017CC80 NOT_SDA = 0;
+u8 D_L15_0015F6A8 = 7;
+s32 D_L15_0015F690 = 1;
+s32 D_L16_0015F720 = 0;
+s32 D_L16_0015F6B0[2] = {0xc, 0xd};
+u8 D_L16_0017CF00 NOT_SDA = 0;
+int D_L16_0015F694 = 0xb;
+u8 D_L16_0017AA68 NOT_SDA = 7;
+u8 D_L16_0017CB00 NOT_SDA = 0;
+u8 D_L16_0015F6B8 = 7;
+s32 D_L16_0015F690 = 1;
+s32 D_L17_0015F710 = 0;
+s32 D_L17_0015F6A0[2] = {0xc, 0xd};
+u8 D_L17_0017D380 NOT_SDA = 0;
+int D_L17_0015F694 = 0xb;
+u8 D_L17_0017AF08 NOT_SDA = 7;
+u8 D_L17_0017CF80 NOT_SDA = 0;
+u8 D_L17_0015F6A8 = 7;
+s32 D_L17_0015F690 = 1;
+s32 D_L18_0015F6A0[2] = {0xc, 0xd};
+u8 D_L18_0017D480 NOT_SDA = 0;
+int D_L18_0015F694 = 0xb;
+u8 D_L18_0017B008 NOT_SDA = 7;
+u8 D_L18_0017D080 NOT_SDA = 0;
+u8 D_L18_0015F6A8 = 7;
+s32 D_L18_0015F690 = 1;

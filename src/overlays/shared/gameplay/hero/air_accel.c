@@ -14,8 +14,6 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/item_state.h"
 
-
-
 /* Looks up the value of the current help record, or 0/0x54 in the special cases. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
 
@@ -178,7 +176,6 @@ void hero_frame_update(void) {
     update_hero_moby_probed_height_bounds();
     FUN_L00_00257024(hero.moby);
 }
-
 
 /* Per-frame update of the help/menu state: validates the cursor, then runs the update chain. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00228E08), where it is exact; names translated to the US level program. */
@@ -1629,3 +1626,12 @@ void clear_hero_moby_flag_bit_zero(void) __asm__("FUN_L01_00248900");
 void clear_hero_moby_flag_bit_zero(void) {
     *(unsigned short *)((char *)(*(char **)(D_0013E533 + 0x2E9D)) + 0x34) &= ~1;
 }
+
+int D_L02_0017445C NOT_SDA = 0;
+int D_L03_00173F5C NOT_SDA = 0;
+int D_L05_0017425C NOT_SDA = 0;
+int D_L08_0017465C NOT_SDA = 0;
+int D_L11_0017485C NOT_SDA = 0;
+int D_L12_001742DC NOT_SDA = 0;
+int D_L14_0017455C NOT_SDA = 0;
+int D_L16_0017425C NOT_SDA = 0;

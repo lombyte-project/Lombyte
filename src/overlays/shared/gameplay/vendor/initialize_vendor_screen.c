@@ -110,3 +110,5 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     update_item_tint_from_hero(*(int *)(relocated_address_source_block + 0x17C), ((int)hero_moby_owner->moby));
     continue_audio_stream_if_ready();
 }
+
+R_2afd00 D_L13_00179DC0 = {{0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, -1}, -1, {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};

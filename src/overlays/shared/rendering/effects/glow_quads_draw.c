@@ -326,3 +326,22 @@ void release_point_light_slot(int i) {
     clear_blocks_16(D_L00_001802C0 + i * 32, 32);
     clear_blocks_16(D_L00_001804C0 + i * 48, 48);
 }
+
+char D_L01_00180940 NOT_SDA = 0;
+char D_L02_00180AC0 NOT_SDA = 0;
+char D_L03_001805C0 NOT_SDA = 0;
+char D_L04_00180640 NOT_SDA = 0;
+char D_L05_00180940 NOT_SDA = 0;
+char D_L06_00180C40 NOT_SDA = 0;
+char D_L07_00180540 NOT_SDA = 0;
+char D_L08_00180CC0 NOT_SDA = 0;
+char D_L09_00180640 NOT_SDA = 0;
+char D_L10_00180940 NOT_SDA = 0;
+char D_L11_00180EC0 NOT_SDA = 0;
+char D_L12_00180940 NOT_SDA = 0;
+char D_L13_001807C0 NOT_SDA = 0;
+char D_L14_00180BC0 NOT_SDA = 0;
+char D_L15_00180AC0 NOT_SDA = 0;
+char D_L16_00180940 NOT_SDA = 0;
+char D_L17_00180DC0 NOT_SDA = 0;
+char D_L18_00180EC0 NOT_SDA = 0;

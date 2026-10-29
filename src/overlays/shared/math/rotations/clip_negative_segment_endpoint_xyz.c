@@ -460,7 +460,6 @@ f32 normalize_angle(f32 angle_radians) {
     return x - pi;
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025F3C0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
@@ -837,9 +836,7 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
     }
 }
 
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
-
 
 /* Clamps vector a to length x: normalizes it to x when vector_length_xyz is longer. */
 void FUN_L00_0025f730(void *a, float x);
@@ -848,7 +845,6 @@ void FUN_L00_0025f730(void *vector, float x) {
         fast_vec_normalize(vector, vector, x);
     }
 }
-
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607F8), where it is exact; names translated to the US level program. */
 
@@ -933,3 +929,56 @@ s32 is_moby_in_class_range_500_to_540(u8 *moby) {
     moby_class_id = *(u16 *)(moby + 0xA6);
     return (moby_class_id - 0x1F4) < 0x29;
 }
+
+S6 D_L01_0020A090 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L01_0020A0A8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L01_0015FFE0 = 0;
+S6 D_L02_001F9930 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L02_001F9948 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L02_0015FFE0 = 0;
+S6 D_L03_001E1CB0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L03_001E1CC8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L03_0015FFE0 = 0;
+S6 D_L04_001DADD0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L04_001DADE8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L04_0015FFE0 = 0;
+S6 D_L05_00217740 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L05_00217758 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L05_0015FFE0 = 0;
+S6 D_L06_00200430 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L06_00200448 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L06_0015FFE0 = 0;
+S6 D_L07_002102D0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L07_002102E8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L07_0015FFE0 = 0;
+S6 D_L08_001FAF70 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L08_001FAF88 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L08_0015FFE0 = 0;
+S6 D_L09_00207B40 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L09_00207B58 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L09_0015FFE0 = 0;
+S6 D_L10_001DBDB0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L10_001DBDC8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L10_0015FFE0 = 0;
+S6 D_L11_0021A180 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L11_0021A198 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L11_0015FFE0 = 0;
+S6 D_L12_0020B510 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L12_0020B528 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L12_0015FFE0 = 0;
+S6 D_L13_001F3AA0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L13_001F3AB8 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+S6 D_L14_001FB380 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L14_001FB398 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L14_0015FFE0 = 0;
+S6 D_L15_001E1BF0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L15_001E1C08 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L15_0015FFE0 = 0;
+S6 D_L16_001E7300 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L16_001E7318 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L16_0015FFE0 = 0;
+S6 D_L17_001E59F0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L17_001E5A08 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+S6 D_L18_001F1760 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L18_001F1778 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+u8 *D_L18_0015FFE0 = 0;
