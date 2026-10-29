@@ -670,21 +670,21 @@ float advance_blarg_elite_commando_base_position(char  *moby,
                                                  float *target) __asm__("FUN_L16_002d3eb8");
 
 float advance_blarg_elite_commando_base_position(char *moby, float *target) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    char *base_position = data + 0x2C0;
+    char *commando_motion_data = ((char *)MOBY(moby)->pvars);
+    char *base_position = commando_motion_data + 0x2C0;
     float distance = fast_vec_dist(base_position, target);
     float acceleration_braking_step = frame_time_sq * 4.0f;
     int   zero[1];
     float movement_step[4];
     zero[0] = 0;
     advance_accelerated_scalar((float *)zero,
-                               (float *)(data + 0x2D4),
+                               (float *)(commando_motion_data + 0x2D4),
                                distance,
                                acceleration_braking_step,
                                acceleration_braking_step,
                                frame_time * 5.0f);
     fast_vec_sub(movement_step, target, base_position);
-    fast_vec_normalize(movement_step, movement_step, *(float *)(data + 0x2D4));
+    fast_vec_normalize(movement_step, movement_step, *(float *)(commando_motion_data + 0x2D4));
     fast_vec_add(base_position, base_position, movement_step);
     return distance;
 }
