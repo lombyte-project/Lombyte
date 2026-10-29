@@ -5,19 +5,19 @@ f32 round_float_to_decimal_places(s32 decimal_places, f32 input_value) __asm__("
 
 f32 round_float_to_decimal_places(s32 decimal_places, f32 input_value) {
     s32 count;
-    s32 value;
+    s32 decimal_scale_factor;
     f32 scale;
     f32 half;
 
     count = decimal_places;
-    value = 1;
+    decimal_scale_factor = 1;
     if (count > 0) {
         do {
             count--;
-            value *= 10;
+            decimal_scale_factor *= 10;
         } while (count != 0);
     }
-    scale = (f32)value;
+    scale = (f32)decimal_scale_factor;
     half = 1.0f / (2.0f * scale);
     input_value = input_value + half;
     input_value = input_value * scale;
