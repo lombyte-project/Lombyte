@@ -15,16 +15,16 @@ void update_poison_vessel_spawner(struct Moby *moby) {
         INITIALIZE_SPAWN_TIMER = 0,
         WAIT_FOR_SPAWN_TIMER = 1
     };
-    int *data = (int *)moby->pvars;
+    int *spawn_timer_data = (int *)moby->pvars;
     switch (moby->state) {
     case INITIALIZE_SPAWN_TIMER:
-        data[0] = truncate_float_to_s32(multiply_global_factor_ed64(*(float *)(data + 1) * 60.0f));
+        spawn_timer_data[0] = truncate_float_to_s32(multiply_global_factor_ed64(*(float *)(spawn_timer_data + 1) * 60.0f));
         moby->state = 1;
         moby->update_dist = 0xFF;
         break;
     case WAIT_FOR_SPAWN_TIMER:
-        if (fast_dec_timer(data)) {
-            data[0] = truncate_float_to_s32(
+        if (fast_dec_timer(spawn_timer_data)) {
+            spawn_timer_data[0] = truncate_float_to_s32(
                 multiply_global_factor_ed64(*(float *)&poison_vessel_spawn_interval * 60.0f));
             spawn_poison_vessel(moby, &moby->pos);
         }
