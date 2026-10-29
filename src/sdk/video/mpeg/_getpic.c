@@ -42,7 +42,7 @@ s32 _getpic(struct sceMpeg *mpeg) {
             if (temp_16_12->picture_structure == temp_16_12->unkD4) {
                 break;
             }
-        } while (temp_16_12->unk848 != 0);
+        } while (temp_16_12->mpeg2 != 0);
     dispatch:
         switch (var_19_6) {
         case MPEG_SEQUENCE_END:

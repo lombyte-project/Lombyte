@@ -4,7 +4,7 @@ typedef struct MbCtx {
     u8 pad_0[0x11C];
     s32 unk11C;
     u8 pad_120[0x728];
-    s32 unk848;
+    s32 mpeg2;
 } MbCtx;
 
 extern s32 _ipuVdec();
@@ -36,7 +36,7 @@ s32 _mbAddressIncrement(MbCtx *ctx) {
             break;
         case MACROBLOCK_ADDRESS_INCREMENT_VLC_FAILURE:
             bits = _peepBit(ctx, 0xB);
-            if (ctx->unk848 != 0 && bits == 0xF) {
+            if (ctx->mpeg2 != 0 && bits == 0xF) {
                 _flushBuf(ctx, 0xB);
                 ret = 1;
                 break;

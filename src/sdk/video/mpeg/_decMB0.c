@@ -88,24 +88,24 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
         decoder->quantiser_scale_code = _nextBit(decoder, 5);
     }
     if (((*mb_type) & 8) || (((*mb_type) & 1) && (decoder->concealment_motion_vectors != 0))) {
-        if (decoder->unk848 != 0) {
+        if (decoder->mpeg2 != 0) {
             _motionVectors(decoder, motion_vector_state, differential_motion_vector, motion_field_select_output, 0, var_19_84, var_20_86, decoder->f_code_forward_h - 1,
                            decoder->f_code_forward_v - 1, motion_flag, var_23_95);
         } else {
-            temp_7_163 = decoder->unk158 - 1;
-            _motionVector(decoder, motion_vector_state, differential_motion_vector, temp_7_163, temp_7_163, 0, 0, decoder->unk154);
+            temp_7_163 = decoder->forward_f_code - 1;
+            _motionVector(decoder, motion_vector_state, differential_motion_vector, temp_7_163, temp_7_163, 0, 0, decoder->full_pel_forward_vector);
         }
     }
     var_2_172 = 0;
     if (decoder->unk11C == 0) {
         if ((*mb_type) & 4) {
-            if (decoder->unk848 != 0) {
+            if (decoder->mpeg2 != 0) {
                 _motionVectors(decoder, motion_vector_state, differential_motion_vector, motion_field_select_output, 1, var_19_84, var_20_86, decoder->f_code_backward_h - 1,
                                decoder->f_code_backward_v - 1, 0, var_23_95);
             } else {
-                temp_7_200 = decoder->unk160 - 1;
+                temp_7_200 = decoder->backward_f_code - 1;
                 _motionVector(decoder, ((u8 *)motion_vector_state) + 8, differential_motion_vector, temp_7_200, temp_7_200, 0, 0,
-                              decoder->unk15C);
+                              decoder->full_pel_backward_vector);
             }
         }
         var_2_172 = 0;

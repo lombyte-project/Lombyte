@@ -26,17 +26,17 @@ void func_0012C4C8(struct sceMpeg *mpeg) {
     u32 frame_size;
 
     decoder = mpeg->sys;
-    mpeg2 = decoder->unk848;
+    mpeg2 = decoder->mpeg2;
     if (mpeg2 == 0) {
         decoder->picture_structure = 3;
-        decoder->unk13C = 1;
-        decoder->unk140 = 1;
+        decoder->progressive_sequence = 1;
+        decoder->chroma_format = 1;
         decoder->progressive_frame = 1;
         decoder->frame_pred_frame_dct = 1;
         decoder->matrix_coefficients = 5;
     }
     decoder->mb_width = (s32)(decoder->horizontal_size + 15) >> 4;
-    if (mpeg2 != 0 && decoder->unk13C == 0) {
+    if (mpeg2 != 0 && decoder->progressive_sequence == 0) {
         mb_height = ((decoder->vertical_size + 31) >> 5) * 2;
     } else {
         mb_height = (decoder->vertical_size + 15) >> 4;

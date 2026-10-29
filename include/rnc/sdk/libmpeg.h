@@ -132,8 +132,8 @@ struct MpegDecoder {
     s32 mb_height;
     u32 bit_rate;                       /* 18 bits */
     s32 vbv_buffer_size;                /* 10 bits */
-    s32 unk13C;                         /* 0: mb_height rounded to 32-line pairs (_sequenceHeader) */
-    s32 unk140;
+    s32 progressive_sequence;           /* sequence_extension; 0: mb_height rounded to 32-line pairs */
+    s32 chroma_format;                  /* sequence_extension; only 1 (4:2:0) is supported */
 
     /* sequence_display_extension */
     s32 matrix_coefficients;            /* 3rd 8-bit colour_description field */
@@ -141,10 +141,10 @@ struct MpegDecoder {
     s32 display_vertical_size;          /* 14 bits */
 
     s32 picture_coding_type;            /* 1 I, 2 P (_skipMB0 zeroes motion), 3 B (_outputFrame) */
-    s32 unk154;
-    s32 unk158;
-    s32 unk15C;
-    s32 unk160;
+    s32 full_pel_forward_vector;        /* MPEG-1 picture_header */
+    s32 forward_f_code;
+    s32 full_pel_backward_vector;
+    s32 backward_f_code;
 
     /* picture_coding_extension */
     s32 f_code_forward_h;
@@ -174,7 +174,7 @@ struct MpegDecoder {
     /* quant_matrix_extension / sequence_header */
     s32 load_intra_quantiser_matrix;    /* set -> IPU SETIQ intra (0x50000000) */
     s32 load_non_intra_quantiser_matrix;/* set -> IPU SETIQ non-intra (0x58000000) */
-    s32 unk848;                         /* 0: _sequenceHeader loads frame-picture defaults */
+    s32 mpeg2;                          /* set by sequence_extension; 0: _sequenceHeader loads MPEG-1 defaults */
     s32 unk84C;
     s32 unk850;
     s32 unk854;

@@ -10,16 +10,16 @@ typedef float f32;
 typedef double f64;
 typedef struct SeqExtContext {
     u8 pad_0[0x124];
-    s32 unk124;
-    s32 unk128;
+    s32 horizontal_size;
+    s32 vertical_size;
     u8 pad_12C[0x8];
-    s32 unk134;
-    s32 unk138;
-    s32 unk13C;
-    s32 unk140;
+    s32 bit_rate;
+    s32 vbv_buffer_size;
+    s32 progressive_sequence;
+    s32 chroma_format;
     u8 pad_144[0x204];
     u8 pad_348[0x500];
-    s32 unk848;
+    s32 mpeg2;
 } SeqExtContext;
 extern void _Error();
 extern s32 _nextBit();
@@ -35,26 +35,26 @@ void _sequenceExtension(SeqExtContext *ctx) {
     s32 horizontal_size_extension;
     s32 profile_and_level_indication;
     s32 vbv_buffer_size_extension;
-    ctx->unk848 = 1;
+    ctx->mpeg2 = 1;
     _ipuSetMPEG1(0);
     bits = _nextBit(ctx, 0x1C);
     bit_rate_extension = (bits >> 1) & 0xFFF;
     chroma_format = (bits >> 17) & 0x3;
     vertical_size_extension = (bits >> 13) & 0x3;
     horizontal_size_extension = (bits >> 15) & 0x3;
-    ctx->unk140 = chroma_format;
+    ctx->chroma_format = chroma_format;
     if (chroma_format != 1) {
         _Error(ctx, unsupported_chroma_format_message);
     }
-    ctx->unk13C = (bits >> 19) & 0x1;
+    ctx->progressive_sequence = (bits >> 19) & 0x1;
     profile_and_level_indication = bits >> 20;
     bits2 = _nextBit(ctx, 0x10);
     vbv_buffer_size_extension = bits2 >> 8;
     if (((profile_and_level_indication != 0x48) && (profile_and_level_indication != 0x58)) && (profile_and_level_indication != 0x44)) {
         _Error(ctx, unsupported_profile_level_message);
     }
-    ctx->unk124 = (horizontal_size_extension << 12) | (ctx->unk124 & 0xFFF);
-    ctx->unk128 = (vertical_size_extension << 12) | (ctx->unk128 & 0xFFF);
-    ctx->unk134 += bit_rate_extension << 18;
-    ctx->unk138 = ctx->unk138 + (vbv_buffer_size_extension << 10);
+    ctx->horizontal_size = (horizontal_size_extension << 12) | (ctx->horizontal_size & 0xFFF);
+    ctx->vertical_size = (vertical_size_extension << 12) | (ctx->vertical_size & 0xFFF);
+    ctx->bit_rate += bit_rate_extension << 18;
+    ctx->vbv_buffer_size = ctx->vbv_buffer_size + (vbv_buffer_size_extension << 10);
 }
