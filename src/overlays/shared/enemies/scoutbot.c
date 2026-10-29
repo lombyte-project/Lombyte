@@ -554,8 +554,8 @@ void draw_target_beam(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5080), where it is exact; names translated to the US level program. */
 
 void update_scoutbot_movement(struct Moby *moby) {
-    char  *data = ((char *)moby->pvars);
-    float  movement_length = fast_vec_length((float *)(data + 0x40)) - frame_time_sq * 6.0f;
+    char  *scoutbot_instance_state = ((char *)moby->pvars);
+    float  movement_length = fast_vec_length((float *)(scoutbot_instance_state + 0x40)) - frame_time_sq * 6.0f;
     float  movement_length_limit = frame_time * 3.0f;
     float  target_height;
     float  vertical_step;
@@ -566,15 +566,15 @@ void update_scoutbot_movement(struct Moby *moby) {
     } else if (movement_length < 0.0f) {
         movement_length = 0.0f;
     }
-    velocity_ptr = (float *)(data + 0x40);
+    velocity_ptr = (float *)(scoutbot_instance_state + 0x40);
     fast_vec_normalize(velocity_ptr, velocity_ptr, movement_length);
     fast_vec_add((float *)&moby->pos, (float *)&moby->pos, velocity_ptr);
-    *(float *)(data + 0x204) =
-        fast_add_rotations(*(float *)(data + 0x204), *(float *)(data + 0x20C));
+    *(float *)(scoutbot_instance_state + 0x204) =
+        fast_add_rotations(*(float *)(scoutbot_instance_state + 0x204), *(float *)(scoutbot_instance_state + 0x20C));
     target_height =
-        *(float *)(data + 0x1C8) + *(float *)(data + 0x208) * fast_sin(*(float *)(data + 0x204));
-    if (*(short *)(data + 0x216))
-        target_height += *(float *)(data + 0x200);
+        *(float *)(scoutbot_instance_state + 0x1C8) + *(float *)(scoutbot_instance_state + 0x208) * fast_sin(*(float *)(scoutbot_instance_state + 0x204));
+    if (*(short *)(scoutbot_instance_state + 0x216))
+        target_height += *(float *)(scoutbot_instance_state + 0x200);
     vertical_step = target_height - moby->pos.z;
     {
         float vertical_step_limit = frame_time * 3.0f;
@@ -586,7 +586,7 @@ void update_scoutbot_movement(struct Moby *moby) {
                 vertical_step = vertical_step_limit;
         }
     }
-    *(float *)(data + 0x48) = vertical_step;
+    *(float *)(scoutbot_instance_state + 0x48) = vertical_step;
     qcopy(probe_position_or_correction, (float *)&moby->pos);
     probe_position_or_correction[2] += 0.5f;
     if (FUN_L08_002025d0(probe_position_or_correction, 0x190, 0, moby, 0)) {
