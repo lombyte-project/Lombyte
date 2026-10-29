@@ -143,6 +143,7 @@ void apply_hero_ground_type_effects(void) {
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     u8 pad0[0x10];
@@ -167,11 +168,7 @@ extern s32 D_0015ED84_210ce8 __asm__("D_0015ED84");
 
 s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-f32 fast_sin(f32) __asm__("FUN_001f9de0");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void clear_u64_value(void *) __asm__("FUN_001f99f8");

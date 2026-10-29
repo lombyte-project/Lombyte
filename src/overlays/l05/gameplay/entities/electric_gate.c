@@ -1697,23 +1697,18 @@ extern void FUN_0020c828_c(void *) __asm__("FUN_0020c828");
 extern void FUN_0020b178_c(int, int) __asm__("FUN_0020b178");
 extern int FUN_001f9740_c(void *) __asm__("FUN_001f9740");
 extern void FUN_00212f90_c(void *, int, int, int) __asm__("FUN_00212f90");
-extern int FUN_001f96f8_c(int) __asm__("FUN_001f96f8");
 extern float FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_001f9e90_cf_c(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf_c(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations_c(float, float) __asm__("fast_add_rotations");
 extern float fast_subtract_rotations_c(float, float) __asm__("fast_subtract_rotations");
 extern float vector_length_xy_c(void *) __asm__("vector_length_xy");
-extern float vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 extern int FUN_L00_00266448_c(void *, void *) __asm__("FUN_L00_00266448");
 extern int FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
 extern int scale_game_frames_c(int) __asm__("scale_game_frames");
 extern int tick_countdown_32_c(int *) __asm__("FUN_001f9740");
 extern unsigned char D_0015EDB0_b_c __asm__("D_0015EDB0");
 extern void FUN_L00_002628d8_c(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
-extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern L16WatchPlayer_c D_0013E633_watch_c __asm__("D_0013E533");
 typedef struct {
     char pad00[4];
@@ -1787,9 +1782,9 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
             if (random_integer_below(2))
                 idle_animation = 1;
             if (bouncer_moby->animation != idle_animation)
-                FUN_00212f90_c(bouncer_moby, idle_animation, 0, FUN_001f96f8_c(10));
+                FUN_00212f90_c(bouncer_moby, idle_animation, 0, scale_game_frames(10));
         } else if ((bouncer_moby->flags70 & 2) && bouncer_moby->animation) {
-            FUN_00212f90_c(bouncer_moby, 0, 0, FUN_001f96f8_c(10));
+            FUN_00212f90_c(bouncer_moby, 0, 0, scale_game_frames(10));
         }
         break;
     }
@@ -1800,13 +1795,13 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
         char *player = (char *)&D_0013E633_watch_c + 0xE9D;
         tracking = 1;
         if (FUN_001f9b80_c(bouncer_moby->position, player) < 8.0f &&
-            FUN_001f9e90_cf_c(
+            fast_difference_between_rotations(
                 bouncer_moby->yaw, FUN_001fa688_cf_c(
                             ((L16WatchPlayer_c *)((char *)&D_0013E633_watch_c + 0xE1D))->aim[0] -
                                 bouncer_moby->position[0],
                             ((L16WatchPlayer_c *)((char *)&D_0013E633_watch_c + 0xE1D))->aim[1] -
                                 bouncer_moby->position[1])) < 1.5707964f) {
-            if (vector_length_xyz_c(player + 0x80) > 0.01f)
+            if (fast_vec_length(player + 0x80) > 0.01f)
                 bouncer_data->moving_timer = scale_game_frames_c(120);
             else
                 tick_countdown_32_c(&bouncer_data->moving_timer);
@@ -1822,7 +1817,7 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
                                                        DEG_TO_RAD);
             build_spherical_offset(bouncer_data->target, 6.0f, heading,
                                    random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            add_vector_xyz_c(bouncer_data->target, bouncer_data->target, bouncer_moby->position);
+            fast_vec_add(bouncer_data->target, bouncer_data->target, bouncer_moby->position);
         }
         if (bouncer_data->moving_timer) {
             qcopy(scratch.target, (char *)&D_0013E633_watch_c + 0xEED);
@@ -1837,7 +1832,7 @@ void qwarks_bouncer_update(WM_c *bouncer_moby) {
         float pitch;
         qcopy(scratch.eye, bouncer_moby->position);
         scratch.eye[2] += 1.0f;
-        subtract_vector_xyz_c(scratch.delta, scratch.target, scratch.eye);
+        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
         yaw = fast_subtract_rotations_c(FUN_001fa688_cf_c(scratch.delta[0], scratch.delta[1]),
                                         bouncer_moby->yaw);
         pitch = -FUN_001fa688_cf_c(vector_length_xy_c(scratch.delta), scratch.delta[2]);
@@ -1922,7 +1917,6 @@ extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
@@ -2002,7 +1996,7 @@ void shady_salesman_update(WM *moby) {
         char *player = (char *)&D_0013E633_watch + 0xE9D;
         tracking = 1;
         if (vector_distance(moby->position, player) < 8.0f &&
-            FUN_001f9e90_cf(
+            fast_difference_between_rotations(
                 moby->yaw,
                 FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -
                                     moby->position[0],

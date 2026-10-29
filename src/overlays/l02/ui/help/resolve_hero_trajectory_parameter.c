@@ -18,7 +18,6 @@ typedef union {
    listing: 0x80 is a 16-byte value (lq/sq) whose .f[1] is also read as a
    scalar, 0xE0 likewise with .f[2], 0x270 is a 16-byte value, and 0x20B3 is
    the u8 the switch is on. */
-extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");
 extern s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
@@ -89,7 +88,7 @@ f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_a
         vector_scratch.f[2] = 100.0f;
         vector_scratch.f[1] = 100.0f;
         vector_scratch.f[0] = 100.0f;
-        FUN_001f9a28_32b90(&position_or_acceleration_vector, &hero.motion.pos, &vector_scratch);
+        fast_vec_sub(&position_or_acceleration_vector, &hero.motion.pos, &vector_scratch);
         fast_vec_normalize(&position_or_acceleration_vector, &position_or_acceleration_vector, trajectory_acceleration_coefficient);
         fast_vec_scale(&position_or_acceleration_vector, &position_or_acceleration_vector, -1.0f);
         fast_vec_scale(trajectory_position, &hero.motion.velocity, trajectory_parameter);

@@ -258,8 +258,6 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
 extern float D_6C_e[] __asm__("D_0015ED68") MACRO_ADDR;
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
-extern float FUN_001f9dc8_c(float) __asm__("FUN_001f9dc8");
-extern float FUN_001f9de0_c(float) __asm__("FUN_001f9de0");
 extern void FUN_L00_0025be00_c(char *, char *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float FUN_0020c9e0_c(char *) __asm__("FUN_0020c9e0");
 extern void FUN_L00_00258b50_c(char *, char *, float *, float *, float) __asm__("FUN_L00_00258b50");
@@ -277,8 +275,8 @@ void update_moby_target_heading_and_conditional_movement(char *moby, float *targ
     target_heading_or_record_value = FUN_0020c9e0_c(moby);
     if (*(u8 *)(moby + 0x52) == *(u8 *)(moby + 0x53) && 8.0f < target_heading_or_record_value && target_heading_or_record_value < 22.0f) {
         *(float *)(moby_vars + 0x1A4) = D_L11_001622FC_gp * frame_time;
-        planar_heading_vector[0] = FUN_001f9dc8_c(*(float *)(moby + 0x48)) * 2.0f;
-        planar_heading_vector[1] = FUN_001f9de0_c(*(float *)(moby + 0x48)) * 2.0f;
+        planar_heading_vector[0] = fast_cos(*(float *)(moby + 0x48)) * 2.0f;
+        planar_heading_vector[1] = fast_sin(*(float *)(moby + 0x48)) * 2.0f;
         *(int *)&planar_heading_vector[2] = 0;
         FUN_L00_00258b50_c(moby, moby_vars + 0x180, planar_heading_vector, helper_scratch_buffer, 1.0f);
     }

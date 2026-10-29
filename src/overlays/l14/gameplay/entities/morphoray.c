@@ -668,10 +668,6 @@ int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 int trooper_play_sound(int i, int a1, int v, int k) __asm__("FUN_L00_0028dc90");
 u8 *FUN_L14_00306158_c(u8 *self) __asm__("FUN_L14_00306158");
 extern Moby_3071B0 *func_L14_003075E0_3071B0(Moby_3071B0 *owner) __asm__("FUN_L14_00306158");
-extern void func_001F9C30_3071B0(void *, void *, float) __asm__("FUN_001f9a68");
-extern void func_001F9BD8_3071B0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int func_001F9850_3071B0(int) __asm__("FUN_001f96f8");
-extern float func_001FA888_3071B0(int) __asm__("FUN_001fa6c0");
 extern int func_L00_0028EF68_3071B0(int i, int a1, Moby_3071B0 *v, int k) __asm__("FUN_L00_0028dc90");
 extern int func_001F9938_3071B0(void *) __asm__("FUN_001f9770");
 extern int func_L00_0028EB98_3071B0(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -697,14 +693,14 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         int i;
         if (data->owner == 0) {
             data->owner = func_L14_003075E0_3071B0(moby);
-            func_001F9C30_3071B0(position_offset, moby->rot, helper_sequence_initial_position_offset_scale);
-            func_001F9BD8_3071B0(data->owner->pos, moby->pos, position_offset);
+            fast_vec_scale(position_offset, moby->rot, helper_sequence_initial_position_offset_scale);
+            fast_vec_add(data->owner->pos, moby->pos, position_offset);
         }
         for (i = 0; i < 6; i++) {
             if (data->slots.m[i] == 0) {
                 data->slots.m[i] = (Moby_3071B0 *)(D_L14_0015FFD8_c + (data->idx[i] << 8));
-                func_001F9C30_3071B0(position_offset, moby->rot, helper_sequence_initial_position_offset_scale);
-                func_001F9BD8_3071B0(data->slots.m[i]->pos, moby->pos, position_offset);
+                fast_vec_scale(position_offset, moby->rot, helper_sequence_initial_position_offset_scale);
+                fast_vec_add(data->slots.m[i]->pos, moby->pos, position_offset);
                 data->slots.m[i]->pos[2] = data->slots.m[i]->pos[2] + (helper_sequence_slot_spacing * (float)i + helper_sequence_first_slot_offset);
             }
         }
@@ -718,8 +714,8 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         if (((Moby_3071B0 *)(D_L14_0015FFD8_c + (data->trigger << 8)))->state == 2) {
             moby->state = 2;
             data->cur = 5;
-            data->timer = func_001F9850_3071B0(helper_sequence_slot_animation_duration_frames);
-            data->rate = 1.0f / func_001FA888_3071B0(data->timer);
+            data->timer = scale_game_frames(helper_sequence_slot_animation_duration_frames);
+            data->rate = 1.0f / convert_integer_to_float(data->timer);
             func_L00_0028EF68_3071B0(0, 0, data->slots.m[data->cur], 0x575);
         }
         break;
@@ -727,14 +723,14 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         Slots *slots = &data->slots;
         Moby_3071B0 *current_slot_moby = slots->m[data->cur];
         func_001F9938_3071B0(&data->timer);
-        current_slot_moby->f44 = interpolate_angle(1.5707964f, 0.0f, func_001FA888_3071B0(data->timer) * data->rate);
+        current_slot_moby->f44 = interpolate_angle(1.5707964f, 0.0f, convert_integer_to_float(data->timer) * data->rate);
         if (data->timer == 0) {
-            data->timer = func_001F9850_3071B0(helper_sequence_slot_animation_duration_frames);
+            data->timer = scale_game_frames(helper_sequence_slot_animation_duration_frames);
             data->cur--;
             if (data->cur < 0) {
                 moby->state = 3;
-                data->timer = func_001F9850_3071B0(helper_sequence_owner_animation_duration_frames);
-                data->rate = 1.0f / func_001FA888_3071B0(data->timer);
+                data->timer = scale_game_frames(helper_sequence_owner_animation_duration_frames);
+                data->rate = 1.0f / convert_integer_to_float(data->timer);
             } else {
                 func_L00_0028EF68_3071B0(0, 0, slots->m[data->cur], 0x575);
             }
@@ -751,11 +747,11 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         }
         func_001F9938_3071B0(&data->timer);
         slots = data->slots.m;
-        remaining_timer_fraction = func_001FA888_3071B0(data->timer) * data->rate;
+        remaining_timer_fraction = convert_integer_to_float(data->timer) * data->rate;
         owner->f44 = func_L00_0025C700_3071B0(helper_sequence_owner_final_angle_degrees * 0.017453292f, 0.0f, remaining_timer_fraction);
         for (i = 0; i < 6; i++) {
-            func_001F9C30_3071B0(position_offset, owner->fE0, helper_sequence_slot_spacing * (float)i + helper_sequence_first_slot_offset);
-            func_001F9BD8_3071B0(slots[i]->pos, owner->pos, position_offset);
+            fast_vec_scale(position_offset, owner->fE0, helper_sequence_slot_spacing * (float)i + helper_sequence_first_slot_offset);
+            fast_vec_add(slots[i]->pos, owner->pos, position_offset);
         }
         if (data->timer == 0) {
             int j;
@@ -1446,7 +1442,6 @@ extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void reset_racer_group_to_hero_path_position(struct Moby *m) __asm__("FUN_L14_002d6570");
 extern float FUN_001f9b48_5290(void *, void *) __asm__("FUN_001f9b48");
-extern void sub_5290(void *, void *, void *) __asm__("FUN_001f9a28");
 extern s32 tick_countdown_16_5290(s16 *) __asm__("FUN_001f9770");
 
 void update_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L14_00315290");
@@ -1483,9 +1478,9 @@ void update_path_camera(struct UpdateCam *path_camera) {
             t[3] = 0.0f;
             transform_vector_by_basis(t, t, path_camera_target_offset_basis);
             fast_vec_add(u, &o->pos, t);
-            sub_5290(initial_look_direction_or_previous_position, u, &path_camera->pos);
+            fast_vec_sub(initial_look_direction_or_previous_position, u, &path_camera->pos);
         } else {
-            sub_5290(initial_look_direction_or_previous_position, pb + 0x10, &path_camera->pos);
+            fast_vec_sub(initial_look_direction_or_previous_position, pb + 0x10, &path_camera->pos);
         }
         fast_vec_scale(t, D_0013F5E0_5290, -1.0f);
         fast_vec_normalize(&path_camera->m0, initial_look_direction_or_previous_position, 1.0f);
@@ -1521,7 +1516,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         tt = hero.rail_seg_frac;
         sample_path(hp, u, &seg, &tt, 0, 0.0f);
         u[2] += 1.5f;
-        sub_5290(t, u, &path_camera->pos);
+        fast_vec_sub(t, u, &path_camera->pos);
         fast_vec_normalize(&path_camera->m0, t, 1.0f);
         fast_vec_cross(&path_camera->m1, &path_camera->m0, &hero.gravity_dir);
         fast_vec_normalize(&path_camera->m1, &path_camera->m1, -1.0f);
@@ -1557,13 +1552,13 @@ void update_path_camera(struct UpdateCam *path_camera) {
         u[3] = 0.0f;
         transform_vector_by_basis(u, u, path_camera_target_offset_basis);
         fast_vec_add(v, &o->pos, u);
-        sub_5290(t, v, &path_camera->pos);
+        fast_vec_sub(t, v, &path_camera->pos);
     } else {
         char *look = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
         seg2 = 0;
         tt2 = 0.0f;
         sample_path(look, u, &seg2, &tt2, 0, camera_run->dist / camera_run->len_a * camera_run->len_b);
-        sub_5290(t, u, &path_camera->pos);
+        fast_vec_sub(t, u, &path_camera->pos);
     }
     fast_vec_scale(u, D_0013F5E0_5290, -1.0f);
     fast_vec_normalize(&path_camera->m0, t, 1.0f);
@@ -1608,7 +1603,6 @@ extern float D_L14_001F6C80[][1000];
 extern float D_L14_001F6488_59d8[] __asm__("D_L14_001F6488");
 extern float D_L14_001624A8 __attribute__((sda));
 extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
-extern void sub_59d8(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void initialize_path_key_camera(struct UpdateCam *cam) __asm__("FUN_L14_003159d8");
 
@@ -1680,7 +1674,7 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     camera_placement_parameters[0] = hero_heading_radians;
     camera_placement_parameters[2] = camera_parameters[2];
     compute_position_from_spherical_offset(&cam->pos, camera_placement_parameters, &hero.motion);
-    sub_59d8(hero_look_direction, &hero.motion, &cam->pos);
+    fast_vec_sub(hero_look_direction, &hero.motion, &cam->pos);
     fast_vec_scale(up, &hero.gravity_dir, -1.5f);
     fast_vec_add(hero_look_direction, hero_look_direction, up);
     fast_vec_normalize(&cam->m0, hero_look_direction, 1.0f);

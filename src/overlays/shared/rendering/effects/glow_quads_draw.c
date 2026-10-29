@@ -225,7 +225,6 @@ typedef struct {
 extern T_0023e5e0 D_L00_001804C0_0023e5e0[] __asm__("D_L00_001804C0");
 extern P_0023e5e0 D_L00_001802C0_0023e5e0[] __asm__("D_L00_001802C0");
 void FUN_001f9810_0023e5e0(void *, int) __asm__("FUN_001f9810");
-float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 u8 D_L00_00180640[8][1024] = {0};
 u8 D_L01_00180AC0[8][1024] = {0};
 u8 D_L02_00180C40[8][1024] = {0};

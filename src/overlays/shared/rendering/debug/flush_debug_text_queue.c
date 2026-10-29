@@ -402,8 +402,6 @@ typedef struct {
 } B001f4490;
 extern B001f4490 D_L00_0016C058;
 f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-f32 fast_sin(f32) __asm__("FUN_001f9de0");
 void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 void update_entity(void *) __asm__("FUN_L00_00250df8");

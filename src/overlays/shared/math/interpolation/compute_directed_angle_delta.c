@@ -2,6 +2,7 @@
 /* Mixed file: float step/approach helpers; 0025bfe0, 0025c088 and 0025c0e8 pack and swizzle RGBA colours. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 
 
@@ -39,7 +40,6 @@ extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025b
 extern void advance_damped_scalar_velocity(float *, float, float, float,
                                       float) __asm__("FUN_L00_0025b798");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float FUN_001f99c0_0025bc98(float) __asm__("FUN_001f99c0");
 
 float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 float spring_angle(float *current_angle, float *angular_velocity, int rotation_direction, float x, float angle_error_gain, float angular_velocity_damping, float angular_velocity_limit) __asm__("FUN_L00_0025bc98");
@@ -58,7 +58,7 @@ float spring_angle(float *current_angle, float *angular_velocity, int rotation_d
     angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle);
     advance_damped_scalar_velocity(angular_velocity, angle_error, angle_error_gain, angular_velocity_damping, angular_velocity_limit);
     angle_error = FUN_L00_0025bb38_0025bc98(x, rotation_direction, *current_angle = fast_add_rotations(*current_angle, *angular_velocity));
-    if (FUN_001f99c0_0025bc98(angle_error) < angular_velocity_limit * 0.01f) {
+    if (absolute_float(angle_error) < angular_velocity_limit * 0.01f) {
         *current_angle = x;
         *angular_velocity = 0;
         return *angular_velocity;
@@ -66,7 +66,6 @@ float spring_angle(float *current_angle, float *angular_velocity, int rotation_d
     return angle_error;
 }
 extern float FUN_001fa580_25be00(float, float) __asm__("FUN_001fa580");
-extern float FUN_001f99c0_25be00(float) __asm__("FUN_001f99c0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float approach_value(float, float, float *) __asm__("FUN_00213ed8");
 extern void step_angle_toward_target(float *, void *, float, float) __asm__("FUN_L00_0025bc00");
@@ -82,9 +81,9 @@ float approach_angle(float *current_angle, float *angular_velocity, float target
     initial_angular_velocity = *angular_velocity;
     if (initial_angular_velocity * angle_error >= 0.0f && angle_error != 0.0f) {
         stop = initial_angular_velocity * initial_angular_velocity / angular_braking_step * 0.5f;
-        if (FUN_001f99c0_25be00(angle_error) < stop) {
-            maxv = FUN_001f99c0_25be00(angle_error);
-            maxv += FUN_001f99c0_25be00(*angular_velocity);
+        if (absolute_float(angle_error) < stop) {
+            maxv = absolute_float(angle_error);
+            maxv += absolute_float(*angular_velocity);
             if (stop < maxv) {
                 approach_value(0.0f, angular_braking_step, angular_velocity);
             } else {
@@ -101,8 +100,8 @@ float approach_angle(float *current_angle, float *angular_velocity, float target
                 step_angle_toward_target(angular_velocity, 0, target_angular_speed, angular_velocity_step_limit);
             }
         }
-        maxv = FUN_001f99c0_25be00(angle_error);
-        if (!(FUN_001f99c0_25be00(*angular_velocity) < maxv)) {
+        maxv = absolute_float(angle_error);
+        if (!(absolute_float(*angular_velocity) < maxv)) {
             *current_angle = target;
             return angle_error;
         }

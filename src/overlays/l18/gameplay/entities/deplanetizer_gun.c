@@ -360,7 +360,6 @@ typedef struct { char pad[0x30]; int state; int n; } ML_9780;
 extern ML_9780 D_L18_0016D260_9780 __asm__("D_L18_0016D260");
 extern unsigned long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
-extern void sub_9780(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 #include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/draw_three_scaled_camera_facing_quads_2.h"
@@ -405,7 +404,7 @@ void draw_three_scaled_camera_facing_quads(void) {
     target = deplanetizer_camera_rotation_basis;
     target -= 0x210;
     fast_vec_add(quad_transform[3], quad_transform[3], target);
-    sub_9780(quad_transform[0], quad_transform[3], target);
+    fast_vec_sub(quad_transform[0], quad_transform[3], target);
     fast_vec_normalize(quad_transform[0], quad_transform[0], 1.0f);
     *(u128_9780 *)up = 0;
     up[2] = 1.0f;
@@ -502,7 +501,6 @@ typedef struct {
 } ML_9c20;
 extern ML_9c20 D_L18_0016D260_9c20 __asm__("D_L18_0016D260");
 extern char D_L18_001677C0_9c20[] __asm__("D_L18_001677C0");
-extern void sub_9c20(void *, void *, void *) __asm__("FUN_001f9a28");
 
 extern int deplanetizer_glow_first_quad_base_tint_gp __asm__("D_L18_00162504") __attribute__((sda));
 extern float deplanetizer_glow_first_quad_scale_gp __asm__("D_L18_00162508") __attribute__((sda));
@@ -529,7 +527,7 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     vu1_add_g_sregister(0x47, 0x51001);
     transform_vector_by_basis(quad_transform[3], &deplanetizer_glow_local_offset_x, &m->rot_row0);
     fast_vec_add(quad_transform[3], quad_transform[3], &m->pos);
-    sub_9c20(quad_transform[0], quad_transform[3], D_L18_001677C0_9c20);
+    fast_vec_sub(quad_transform[0], quad_transform[3], D_L18_001677C0_9c20);
     fast_vec_normalize(quad_transform[0], quad_transform[0], 1.0f);
     *(u128_9c20 *)up = 0;
     up[2] = 1.0f;
@@ -591,7 +589,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     up[2] = -1.0f;
     up[3] = 1.0f;
     transform_vector_by_basis(quad_transform[0], up, &m->rot_row0);
-    sub_9c20(quad_transform[1], quad_transform[3], D_L18_001677C0_9c20);
+    fast_vec_sub(quad_transform[1], quad_transform[3], D_L18_001677C0_9c20);
     fast_vec_cross(quad_transform[2], quad_transform[1], quad_transform[0]);
     fast_vec_normalize(quad_transform[2], quad_transform[2], 1.0f);
     fast_vec_cross(quad_transform[1], quad_transform[0], quad_transform[2]);
@@ -1373,7 +1371,6 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_c860;
 extern char D_L18_001677C0_g[] __asm__("D_L18_001677C0");
-extern void sub_g(void *, void *, void *) __asm__("FUN_001f9a28");
 
 extern int gadgebot_launch_glow_blend_minuend_selector_gp __asm__("D_L18_0016262C") __attribute__((sda));
 extern int gadgebot_launch_glow_blend_subtrahend_selector_gp __asm__("D_L18_00162630") __attribute__((sda));
@@ -1401,7 +1398,7 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     quad_transform[3][2] -= gadgebot_launch_glow_z_offset_gp;
     clear_u64_value(quad_transform[2]);
     quad_transform[2][2] = vertical_axis_scale;
-    sub_g(quad_transform[0], D_L18_001677C0_g, &m->pos);
+    fast_vec_sub(quad_transform[0], D_L18_001677C0_g, &m->pos);
     fast_vec_cross(quad_transform[1], quad_transform[0], quad_transform[2]);
     fast_vec_cross(quad_transform[0], quad_transform[1], quad_transform[2]);
     fast_vec_normalize(quad_transform[0], quad_transform[0], horizontal_axis_scale);

@@ -3112,11 +3112,9 @@ extern void begin_starfighter_death_sequence();
 int FUN_L13_002e86f8_c(void *unused, unsigned char *p, int base, int n) __asm__("FUN_L13_002e86f8");
 void FUN_L13_002e9680_c(void *unused, char *p, int idx) __asm__("FUN_L13_002e9680");
 extern char D_0013F450_2EAE80[] __asm__("D_0013F350");
-extern float func_001FA888_2EAE80(int) __asm__("FUN_001fa6c0");
 extern Hit_2EAE80 *func_L00_0025B478_2EAE80(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int func_L00_0025B4D0_2EAE80(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern void func_L13_002EAC18_2EAE80(void *, void *, void *, void *) __asm__("FUN_L13_002e97e0");
-extern int func_001F9850_2EAE80(int) __asm__("FUN_001f96f8");
 extern void func_L00_0025E4B0_2EAE80(void *, void *) __asm__("FUN_L00_0025d458");
 extern void func_0022ED80_2EAE80(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L13_002EAAB8_2EAE80(void *, void *, int) __asm__("FUN_L13_002e9680");
@@ -3160,9 +3158,9 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
         rf = 0;
         k6 = 6.0f;
         step = (float)dd->h4 / k6;
-        hi = (k6 - func_001FA888_2EAE80(moby->bBC)) * step;
+        hi = (k6 - convert_integer_to_float(moby->bBC)) * step;
         if (moby->bBC >= 5) {
-            hi = (k6 - func_001FA888_2EAE80(moby->bBC - 1)) * step;
+            hi = (k6 - convert_integer_to_float(moby->bBC - 1)) * step;
         }
         lo = hi + step * 0.3f;
         if (moby_data->first != 0) {
@@ -3186,7 +3184,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     dd->f0 = dd->f0 - r->f2C;
                     moby_data->b67 = 0xFA;
                     mode = 1;
-                    moby_data->sub.h6 = func_001F9850_2EAE80(0);
+                    moby_data->sub.h6 = scale_game_frames(0);
                     func_L00_0025E4B0_2EAE80(moby, moby_data->q60);
                     moby_data->first->bA4 = 0xFF;
                 }
@@ -3277,7 +3275,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 dd->f0 = dd->f0 - r->f2C;
                 moby_data->b67 = 0xFA;
                 mode = 1;
-                moby_data->sub.h6 = func_001F9850_2EAE80(0);
+                moby_data->sub.h6 = scale_game_frames(0);
                 func_L00_0025E4B0_2EAE80(moby, moby_data->q60);
                 moby_data->list[i]->bA4 = 0xFF;
             }
@@ -3341,7 +3339,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     func_L13_002E9B30_2EAE80(moby, moby_data, 0xC, 4);
                     break;
                 case DAMAGE_STAGE_START_TIMER_AND_QUEUE_LINE:
-                    moby_data->f100 = func_001F9850_2EAE80(0x78);
+                    moby_data->f100 = scale_game_frames(0x78);
                     func_L13_002E9B30_2EAE80(moby, moby_data, 0x10, 1);
                     break;
                 case DAMAGE_STAGE_QUEUE_SINGLE_LINE:
@@ -3426,7 +3424,6 @@ extern int FUN_001160d8_e5(void) __asm__("FUN_001160d8");
 extern void FUN_L00_0024f7c8_e5(char *, int, float *) __asm__("FUN_L00_0024f7c8");
 extern unsigned char *FUN_L13_002c13b0_e5(char *, char *, char *, char *, float, int, float) __asm__("FUN_L13_002c13b0");
 extern void FUN_L13_002ea400_c(float *, float *, float *, float) __asm__("FUN_L13_002ea400");
-extern int FUN_001f96f8_e5(int) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_e5(int, int, char *) __asm__("FUN_0022da68");
 
 unsigned char *fire_starfighter_homing_rocket(struct Moby *firing_moby, unsigned char *starfighter_data) __asm__("FUN_L13_002ea540");
@@ -3458,7 +3455,7 @@ unsigned char *fire_starfighter_homing_rocket(struct Moby *firing_moby, unsigned
     s.c = firing_moby->rot.z;
     s.b = 0.43633232f;
     spawned_rocket_moby = FUN_L13_002c13b0_e5(firing_moby, (char *)muzzle_position, ((char *)hero_state->ship_moby), (char *)&s,
-                         projectile_speed, FUN_001f96f8_e5(300), D_0015ED6C_e5 * 18.0f);
+                         projectile_speed, scale_game_frames(300), D_0015ED6C_e5 * 18.0f);
     if (spawned_rocket_moby != 0) {
         FUN_0022da68_e5(2, 0, firing_moby);
     }

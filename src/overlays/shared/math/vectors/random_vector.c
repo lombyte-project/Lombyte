@@ -1,11 +1,10 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 float random_float_between(float *, float, float) __asm__("FUN_002132a8");
 float random_angle_radians(void) __asm__("FUN_00213308");
-float fast_cos(float) __asm__("FUN_001f9dc8");
-float fast_sin(float) __asm__("FUN_001f9de0");
 void random_vector(float *out, float lo, float hi) __asm__("FUN_L00_00257d78");
 void random_vector(float *out, float lo, float hi) {
     float radial_scale = random_float_between(out, lo, hi);

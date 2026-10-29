@@ -447,7 +447,6 @@ void FUN_L02_002d92f0_c(char *moby) __asm__("FUN_L02_002d92f0");
 void draw_tresspasser_puzzle(char *moby) __asm__("FUN_L02_002d93e8");
 /* Fakematch: the first parameter is an int; as a long the 0 passed after the 64-bit pad test is set again instead of taken from the mask register, like retail. */
 extern int func_0022ED80_2D9F08(long, int, Moby *) __asm__("FUN_0022da68");
-extern int func_001F9850_2D9F08(int) __asm__("FUN_001f96f8");
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void func_L00_002EBF50_2D9F08(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
@@ -536,14 +535,14 @@ void tresspasser_pad_update(Moby *moby) {
                 holding_tool = 0;
             }
             if (holding_tool && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby->command != 0) {
-                data->h10 = func_001F9850_2D9F08(0x12C);
+                data->h10 = scale_game_frames(0x12C);
                 data->h11C = 0;
                 data->h11E = 0;
                 hero_set_state(0x72, 0);
-                set_hero_animation(0x57, 0, func_001F9850_2D9F08(6));
+                set_hero_animation(0x57, 0, scale_game_frames(6));
                 func_L00_002EBF50_2D9F08(&D_L02_00167440_2D9F08[0], &D_L02_00167440_2D9F08[1], 1, 0, 0);
                 moby->state = 2;
-                data->h10 = func_001F9850_2D9F08(0x3C);
+                data->h10 = scale_game_frames(0x3C);
                 data->f110 = 0.0f;
                 qcopy(&data->vF0, &D_L02_00167440_2D9F08[0]);
                 qcopy(&data->v100, &D_L02_00167440_2D9F08[1]);
@@ -635,7 +634,7 @@ void tresspasser_pad_update(Moby *moby) {
                 }
             }
         } else if (D_0013F450_2D9F08.anim_flags & 2) {
-            set_hero_animation(0x58, 0, func_001F9850_2D9F08(6));
+            set_hero_animation(0x58, 0, scale_game_frames(6));
         }
         if (i != 12) {
             if (((D_0013CAE4 & 0x10) && D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1)
@@ -643,7 +642,7 @@ void tresspasser_pad_update(Moby *moby) {
                 moby->state = 1;
                 func_L00_002EC0C8_2D9F08(1);
                 request_hero_idle_state_for_vehicle_mode();
-                data->h10 = func_001F9850_2D9F08(0x3C);
+                data->h10 = scale_game_frames(0x3C);
             }
         }
         break;
@@ -668,7 +667,6 @@ void tresspasser_pad_update(Moby *moby) {
 #endif
 extern void func_L00_00250800_d92f0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
-extern void func_001F9BD8_d92f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float func_001FA748_d92f0(float, float) __asm__("FUN_001fa580");
 extern float func_001FA790_d92f0(float, float) __asm__("FUN_001fa5c8");
 extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C");
@@ -684,7 +682,7 @@ void align_hero_to_tresspasser_pad(char *moby) {
     hero_position = (char *)&hero.motion.pos;
     fast_vec_sub(position_delta, position_delta, hero_position);
     func_L00_002607A8_d92f0(position_delta, D_0015EE6C_d92f0 * 4.0f);
-    func_001F9BD8_d92f0(hero_position, hero_position, position_delta);
+    fast_vec_add(hero_position, hero_position, position_delta);
     f = func_001FA748_d92f0(*(float *)(moby + 0x48), 3.14159f);
     f = func_001FA790_d92f0(f, *(float *)(hero_position + 0x18));
     max_yaw_step = D_0015EE6C_d92f0 * 6.2831855f;
@@ -1395,11 +1393,7 @@ typedef struct {
     int c[4];
     float d[4];
 } L02SpriteData;
-extern void func_001F9BF0_ea8b0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void func_001F9BD8_ea8b0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int func_001F9850_ea8b0(int) __asm__("FUN_001f96f8");
 extern int func_001FA8A8_2ebce8_ea8b0(int, int, float) __asm__("FUN_001fa6e0");
-extern float func_001F9B88_ea8b0(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_ea8b0(void *, int, unsigned char, int, int, int, int,
                                               float) __asm__("FUN_L00_00272f68");
 extern int func_001FA898_2ebce8_ea8b0(float) __asm__("FUN_001fa6d0");
@@ -1414,10 +1408,10 @@ void update_collectible_sprite_effect(char *moby) {
     float timer_elapsed_fraction;
 
     *(float *)(moby + 0x18) += 0.5f;
-    func_001F9BF0_ea8b0(d, D_L02_00167440_ea8b0, moby + 0x10);
+    fast_vec_sub(d, D_L02_00167440_ea8b0, moby + 0x10);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(sprite_position_step, d, 0.1f);
-    func_001F9BD8_ea8b0(d, d, moby + 0x10);
+    fast_vec_add(d, d, moby + 0x10);
     *(float *)(moby + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
         float unwrapped_sprite_value = sprite_data->a[i] + sprite_data->b[i];
@@ -1428,14 +1422,14 @@ void update_collectible_sprite_effect(char *moby) {
             sprite_data->a[i] = unwrapped_sprite_value + 255.0f;
         }
         if (fast_dec_timer(&sprite_data->c[i])) {
-            sprite_data->c[i] = func_001F9850_ea8b0(0xFF);
+            sprite_data->c[i] = scale_game_frames(0xFF);
         }
-        timer_elapsed_fraction = convert_integer_to_float(func_001F9850_ea8b0(0xFF) - sprite_data->c[i]);
-        timer_elapsed_fraction = timer_elapsed_fraction / (float)func_001F9850_ea8b0(0xFF);
-        col = func_001FA8A8_2ebce8_ea8b0(0x4040FFFF, 0x1040FFFF, func_001F9B88_ea8b0(0.5f - timer_elapsed_fraction));
+        timer_elapsed_fraction = convert_integer_to_float(scale_game_frames(0xFF) - sprite_data->c[i]);
+        timer_elapsed_fraction = timer_elapsed_fraction / (float)scale_game_frames(0xFF);
+        col = func_001FA8A8_2ebce8_ea8b0(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - timer_elapsed_fraction));
         func_L00_00273E08_ea8b0(d, col, func_001FA898_2ebce8_ea8b0(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                 sprite_data->d[i]);
-        func_001F9BD8_ea8b0(d, d, sprite_position_step);
+        fast_vec_add(d, d, sprite_position_step);
     }
 }
 

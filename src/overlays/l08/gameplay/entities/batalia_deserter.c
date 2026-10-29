@@ -57,7 +57,6 @@ void attach_batalia_deserter_class_manipulator(struct Moby *moby) {
 }
 #include "qcopy.h"
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 #include "sda.h"
 typedef struct {
     char pad00[4];
@@ -104,13 +103,11 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern float vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
@@ -119,7 +116,6 @@ extern int tick_countdown_32(int *) __asm__("func_001F9740");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 typedef struct {
     char pad00[0x24];
@@ -227,13 +223,13 @@ void batalia_deserter_update(WM *moby) {
         char *player = (char *)&D_0013E633_watch + 0xE9D;
         tracking = 1;
         if (vector_distance(moby->position, player) < 8.0f &&
-            FUN_001f9e90_cf(
+            fast_difference_between_rotations(
                 moby->yaw,
                 FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -
                                     moby->position[0],
                                 ((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[1] -
                                     moby->position[1])) < 1.5707964f) {
-            if (vector_length_xyz_c(player + 0x80) > 0.01f)
+            if (fast_vec_length(player + 0x80) > 0.01f)
                 deserter_data->moving_timer = scale_game_frames_c(120);
             else
                 tick_countdown_32(&deserter_data->moving_timer);
@@ -264,7 +260,7 @@ void batalia_deserter_update(WM *moby) {
         float pitch;
         qcopy(scratch.eye, moby->position);
         scratch.eye[2] += 1.0f;
-        subtract_vector_xyz_c(scratch.delta, scratch.target, scratch.eye);
+        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
         yaw = fast_subtract_rotations(FUN_001fa688_cf(scratch.delta[0], scratch.delta[1]), moby->yaw);
         pitch = -FUN_001fa688_cf(vector_length_xy(scratch.delta), scratch.delta[2]);
         if (yaw > 1.5707964f)

@@ -11,10 +11,6 @@ typedef union {
     u128 q;
     f32 f[4];
 } V0025d238;
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-f32 absolute_float(f32) __asm__("FUN_001f99c0");
-void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void clip_negative_segment_endpoint_xyz(V0025d238 *src, V0025d238 *inout_vector) __asm__("FUN_L00_0025d238");
 
 void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *inout_vector) {
@@ -46,8 +42,6 @@ typedef struct {
     short lo;
     short hi;
 } S;
-int scale_game_frames(int) __asm__("FUN_001f96f8");
-float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
 void trooper_anim_update(void *a, S *s) __asm__("FUN_L00_0025d458");
@@ -79,10 +73,8 @@ typedef struct {
     s16 d0;
     s16 d1;
 } S_25d538;
-f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_25d538(f32) __asm__("FUN_001fa6d0");
 s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
-s32 FUN_001f96f8_25d538(s32) __asm__("FUN_001f96f8");
 void set_moby_color(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void trooper_anim_finish(s32 id, S_25d538 *s) __asm__("FUN_L00_0025d538");
 void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
@@ -96,10 +88,10 @@ void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
             return;
         }
         animation_state->phase = 1;
-        animation_state->t = FUN_001f96f8_25d538(animation_state->d1);
+        animation_state->t = scale_game_frames(animation_state->d1);
     }
     if (animation_state->phase == 0) {
-        phase_duration_frames = convert_integer_to_float(FUN_001f96f8_25d538(animation_state->d0));
+        phase_duration_frames = convert_integer_to_float(scale_game_frames(animation_state->d0));
         phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
         if (animation_state->r1 != 0)
             r = FUN_001fa6d0_25d538(animation_state->r0 + (animation_state->r1 - animation_state->r0) * phase_progress);
@@ -114,7 +106,7 @@ void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
         else
             b = animation_state->b0;
     } else {
-        phase_duration_frames = convert_integer_to_float(FUN_001f96f8_25d538(animation_state->d1));
+        phase_duration_frames = convert_integer_to_float(scale_game_frames(animation_state->d1));
         phase_progress = (phase_duration_frames - animation_state->t) / phase_duration_frames;
         if (animation_state->r1 != 0)
             r = FUN_001fa6d0_25d538(animation_state->r1 + (animation_state->r0 - animation_state->r1) * phase_progress);
@@ -226,7 +218,6 @@ typedef unsigned int u128_0025da70 __attribute__((mode(TI), aligned(16)));
 typedef struct {
     float x, y, z, w_0025da70;
 } __attribute__((aligned(16))) Vec4_0025da70;
-float FUN_001f99c0_0025da70(float) __asm__("FUN_001f99c0");
 void FUN_001f9b80_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b80");
 void FUN_001f9b48_0025da70(Vec4_0025da70 *, Vec4_0025da70 *) __asm__("FUN_001f9b48");
 void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, float z_difference_threshold) {
@@ -235,7 +226,7 @@ void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, f
     Vec4_0025da70 *pb = &point_copies[1];
     *(u128_0025da70 *)pa = *first_point;
     *(u128_0025da70 *)pb = *second_point;
-    if (0.0f < z_difference_threshold && FUN_001f99c0_0025da70(pa->z - pb->z) < z_difference_threshold) {
+    if (0.0f < z_difference_threshold && absolute_float(pa->z - pb->z) < z_difference_threshold) {
         FUN_001f9b80_0025da70(pa, pb);
     } else {
         FUN_001f9b48_0025da70(pa, pb);
@@ -243,9 +234,7 @@ void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, f
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
-float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
 float project_level_path_point_onto_segment(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) __asm__("FUN_L00_0025db00");
 
@@ -264,7 +253,7 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
     qcopy(planar_endpoint_copy, segment_start);
     *(int *)&((float *)planar_endpoint_copy)[2] = 0;
     set_vector_length_xy(planar_normal, planar_normal, 1.0f);
-    k = -FUN_001f9ab0_25db00(planar_normal, planar_endpoint_copy) + (planar_normal[0] * query_point[0] + planar_normal[1] * query_point[1]);
+    k = -fast_vec_dot(planar_normal, planar_endpoint_copy) + (planar_normal[0] * query_point[0] + planar_normal[1] * query_point[1]);
     out[0] = query_point[0] - k * planar_normal[0];
     out[1] = query_point[1] - k * planar_normal[1];
     *(int *)&out[2] = 0;

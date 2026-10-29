@@ -24,10 +24,7 @@ float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float vector_length_xy(void *) __asm__("FUN_001f9b20");
 float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 float fast_arc_sin(float) __asm__("FUN_001f9df8");
-float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void build_spherical_offset(Vec4 *, float, float, float) __asm__("FUN_00214db0");
 MobyBound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 int collision_line(void *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
@@ -134,7 +131,6 @@ extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
 float FUN_L00_00263468_002634f8(Vec4_2634f8 *) __asm__("FUN_L00_00263468");
 int FUN_001efa68_002634f8(Vec4_2634f8 *, Vec4_2634f8 *, int, void *, int) __asm__("FUN_001efa68");
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 float vector_length_xy(void *) __asm__("FUN_001f9b20");
 void spawn_timed_effect_particle(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
 void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) __asm__("FUN_L00_002634f8");
@@ -169,11 +165,6 @@ typedef struct {
 } Pk;
 extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
 u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-void FUN_001f9a68_00263618(void *, void *, float) __asm__("FUN_001f9a68");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 extern float D_L00_001B0470[4][4] NOT_SDA;
@@ -207,14 +198,14 @@ void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float 
     fast_vec_cross(M[1], M[0], up);
     fast_vec_normalize(M[1], M[1], 1.0f);
     fast_vec_cross(M[2], M[1], M[0]);
-    FUN_001f9a68_00263618(position_offset, M[0], position_offset_scale);
+    fast_vec_scale(position_offset, M[0], position_offset_scale);
     fast_vec_add(M[3], M[3], position_offset);
     pk.col[3] = col;
     pk.col[2] = col;
     pk.col[1] = col;
     pk.col[0] = col;
     for (i = 0; i < 4; i++) {
-        FUN_001f9a68_00263618(pk.m[i], D_L00_001B0470[i], quad_scale);
+        fast_vec_scale(pk.m[i], D_L00_001B0470[i], quad_scale);
         transform_vector(pk.m[i], pk.m[i], M);
     }
     draw_geometry_quad(&pk, 0, 0);
@@ -235,11 +226,7 @@ typedef struct {
     EffectTail tail;
 } Effect;
 extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
-extern f32 FUN_001f9af0_2637f8(void *) __asm__("FUN_001f9af0");
-extern void FUN_001f9bf8_2637f8(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void FUN_001f9a10_2637f8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern Effect *spawn_puff(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
 extern u8 D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
@@ -254,7 +241,7 @@ void cutscene_set_camera_target(u8 *moby) {
     Effect *effect;
     if (*(s16 *)(moby + 0xa6) == 0x2ee && moby != 0) {
         build_moby_bone_transform(moby, 0, vectors);
-        fraction = FUN_001f9af0_2637f8(vectors) / 1.026f;
+        fraction = fast_vec_length(vectors) / 1.026f;
         if (1.0f < fraction)
             fraction = 1.0f;
         {
@@ -263,8 +250,8 @@ void cutscene_set_camera_target(u8 *moby) {
             lifetime = fraction * 44000.0f + 6000.0f;
             size = fraction * 0.02f + 0.01f;
             w24 = 2;
-            FUN_001f9bf8_2637f8(&scaled, &vectors[2], scale);
-            FUN_001f9a10_2637f8(&effect_spawn_position, &vectors[3], &scaled);
+            fast_vec_normalize(&scaled, &vectors[2], scale);
+            fast_vec_add(&effect_spawn_position, &vectors[3], &scaled);
             b2A = 0x50;
             count = 1;
             do {
@@ -291,8 +278,8 @@ void cutscene_set_camera_target(u8 *moby) {
             size = fraction * 0.015000001f + 0.01f;
             w24 = 2;
             b2A = 0x7f;
-            FUN_001f9bf8_2637f8(&scaled, &vectors[2], scale);
-            FUN_001f9a10_2637f8(&effect_spawn_position, &vectors[3], &scaled);
+            fast_vec_normalize(&scaled, &vectors[2], scale);
+            fast_vec_add(&effect_spawn_position, &vectors[3], &scaled);
             count = 4;
             do {
                 effect = spawn_puff(&effect_spawn_position, size, 1.0f, 1.0f, 0x10,
@@ -349,7 +336,6 @@ typedef struct {
     T_263b70 tail;
 } P_263b70;
 int FUN_00213260_263b70(int) __asm__("FUN_00213260");
-int FUN_001f96f8_263b70(int) __asm__("FUN_001f96f8");
 int FUN_001fa6d0_263b70(float) __asm__("FUN_001fa6d0");
 P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float,
                                   int) __asm__("FUN_L00_0026d000");
@@ -364,7 +350,7 @@ void draw_trail(void *first_spawn_position, void *second_spawn_position, void *p
                                        0.9f, first_spawn_particle_value, 0x7F204080);
         if (part) {
             tail = &part->tail;
-            part->hA = FUN_001f96f8_263b70(0x1E);
+            part->hA = scale_game_frames(0x1E);
             part->b9 = FUN_001fa6d0_263b70(4.0f) + 0x40;
             tail->w4 = 2;
             tail->bA = 0x7F;
@@ -378,7 +364,7 @@ void draw_trail(void *first_spawn_position, void *second_spawn_position, void *p
         if (part) {
             tail = &part->tail;
             part->b9 = FUN_001fa6d0_263b70(4.0f) + 0x40;
-            part->hA = FUN_001f96f8_263b70(6);
+            part->hA = scale_game_frames(6);
             part->b8 = FUN_00213260_263b70(0xFF);
             tail->w4 = 2;
             tail->bA = 0x7F;
@@ -388,19 +374,17 @@ void draw_trail(void *first_spawn_position, void *second_spawn_position, void *p
 }
 extern int D_L00_0015F640;
 extern u8 D_L00_00179118[];
-int FUN_001f96f8_00263d40(int) __asm__("FUN_001f96f8");
 int FUN_001fdd10_00263d40(int) __asm__("FUN_001fdd10");
 void FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");
 /* Calls strcpy with D_L00_00179118 and get_help_message_text(a); stores b (default 0xB4 frames). */
 void queue_dialogue_message(int a, int b) __asm__("FUN_L00_00263d40");
 void queue_dialogue_message(int message_id, int message_duration_frames) {
     if (message_duration_frames == -1)
-        message_duration_frames = FUN_001f96f8_00263d40(0xB4);
+        message_duration_frames = scale_game_frames(0xB4);
     FUN_001165b8_00263d40(D_L00_00179118, FUN_001fdd10_00263d40(message_id));
     D_L00_0015F640 = message_duration_frames;
 }
 extern s32 D_L00_0015F640;
-s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");
 void sprintf() __asm__("FUN_00116248");
 /* Calls sprintf on D_L00_00179118 with help message a and b; c frames (default 0xB4). */

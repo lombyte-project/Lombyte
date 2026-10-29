@@ -2184,19 +2184,14 @@ extern char *D_L03_001B05B0[];
 extern CollisionHit D_L03_00173F40;
 extern char sphere_collision_resolved_position[] __asm__("D_L03_00173F70");
 extern char D_L03_00173F80[];
-extern float FUN_001efa68_cf(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_00258278_cf(void *) __asm__("FUN_0020c9e0");
-extern float FUN_L00_0025a120_cf(int) __asm__("FUN_001fa6c0");
 extern float FUN_L00_002603d0_cf(void *, int, float) __asm__("FUN_00213508");
 extern float FUN_L00_002628d8_cf(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L03_002c6e18_cf(float) __asm__("FUN_001f99c0");
-extern float FUN_L03_002c9ca0_cf(float, float) __asm__("FUN_001fa688");
 extern float add_vector_xyz_cf(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern float approach_value_cf(void *) __asm__("FUN_001f9b20");
 extern float fast_cos_cf(float, float) __asm__("FUN_001fa580");
-extern float fast_sin_cf(float) __asm__("FUN_001f9dc8");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float truncate_float_to_s32_cf(float) __asm__("FUN_001f96b0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -2211,7 +2206,6 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_0024f7c8_cf(char *, float) __asm__("FUN_00214cc8");
 extern int FUN_L00_0025df68_cf(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
 extern int FUN_L00_0025e450_cf(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L03_002c6d98_cf(int) __asm__("FUN_001f96f8");
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern int is_point_inside_clip_volume_cf(int) __asm__("FUN_L03_002c6d98");
 extern int probe_ground_height_cf(int unused, char *m, char *a, void *b, char *c,
@@ -2226,7 +2220,6 @@ extern void FUN_001f9b48_cf(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9c48_cf(char *moby, float *vel, float target, float k, float d,
                             float max) __asm__("FUN_L00_00258278");
 extern void FUN_L00_001fefc8_cf(void *) __asm__("FUN_L03_002c95a8");
-extern void FUN_L00_001ff290_cf(void *, void *, float) __asm__("FUN_001f9a68");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void FUN_L00_00259710_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void FUN_L00_00259a88_cf(void *, void *, float) __asm__("FUN_001f9c48");
@@ -2244,12 +2237,9 @@ extern void FUN_L03_002c95a8_cf(void *) __asm__("FUN_0020c828");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void compute_interpolated_record_value_cf(void *, void *, void *, int, float, float,
                                                  float) __asm__("FUN_L03_002d4288");
-extern void fast_add_rotations_cf(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void is_value_within_interpolated_window_cf(void *) __asm__("FUN_L03_002c9ca0");
 extern void mark_moby_for_removal_cf(void *, void *, float) __asm__("FUN_L03_0024fba8");
-extern void normalize_vector_xyz_cf(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void vector_length_xyz_cf(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void update_kerwan_path_enemy(Moby2C8398 *m) __asm__("FUN_L03_002c6fd0");
 
@@ -2372,13 +2362,13 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             }
         }
         if (moby_data->i284 != -1 && moby_data->i290 == -1) {
-            blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+            blend_moby_animation(m, 0, 0, scale_game_frames(10));
             m->state = 2;
         }
         break;
     case ENEMY_WAIT_FOR_ACTIVATION:
         if ((m->b70 & 2) && m->b52 != 0) {
-            blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+            blend_moby_animation(m, 0, 0, scale_game_frames(10));
         }
         if (moby_data->i290 != -1) {
             char *np = D_L03_001B05B0[moby_data->i290];
@@ -2387,15 +2377,15 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                                             *(float *)(np + 0x24) - *(float *)(np + 0x14));
             if (is_point_inside_clip_volume_cf(m->b21) || is_point_inside_clip_volume(&selected_target, moby_data->i29C) ||
                 (visited52)[m->bB0 + (current_level_index << 4)] == 0xFF ||
-                (target_distance < moby_data->f294 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 4.0f)) {
+                (target_distance < moby_data->f294 && absolute_float(selected_target.pos[2] - m->pos[2]) < 4.0f)) {
                 moby_data->i298 = 0;
                 m->state = 9;
                 if (m->anim != 1) {
-                    blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 }
             }
         } else if (moby_data->i284 != -1) {
-            blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+            blend_moby_animation(m, 0, 0, scale_game_frames(10));
             m->state = 2;
         } else {
             if (target_distance < moby_data->f270 || target_distance < moby_data->f27C) {
@@ -2405,28 +2395,28 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                     break;
                 }
             }
-            if (target_distance < moby_data->f27C && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 4.0f) {
+            if (target_distance < moby_data->f27C && absolute_float(selected_target.pos[2] - m->pos[2]) < 4.0f) {
                 moby_data->f27C = 0.0f;
                 moby_data->s256 = 1;
                 m->state = 8;
                 if (m->anim != 1) {
-                    blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 }
             }
-            if (target_distance < 3.5f && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 3.0f) {
+            if (target_distance < 3.5f && absolute_float(selected_target.pos[2] - m->pos[2]) < 3.0f) {
                 m->state = 6;
                 if (m->anim != 2) {
-                    blend_moby_animation(m, 2, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 2, 0, scale_game_frames(10));
                 }
-            } else if (target_distance < moby_data->f270 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f &&
+            } else if (target_distance < moby_data->f270 && absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f &&
                        FUN_001fa688_cf(&moby_data->s250)) {
-                if (FUN_L03_002c9ca0_cf(m->rot[2], FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0],
+                if (fast_difference_between_rotations(m->rot[2], FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0],
                                                                        selected_target.pos[1] - m->pos[1])) <
                     0.7853982f) {
                     if (m->b31 != 0) {
                         m->state = 4;
                         if (m->anim != 3) {
-                            blend_moby_animation(m, 3, 0, FUN_L03_002c6d98_cf(10));
+                            blend_moby_animation(m, 3, 0, scale_game_frames(10));
                         }
                     }
                 }
@@ -2434,17 +2424,17 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         }
         break;
     case ENEMY_WAIT_FOR_LINKED_MOBY:
-        if (target_distance < moby_data->f270 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 4.0f &&
+        if (target_distance < moby_data->f270 && absolute_float(selected_target.pos[2] - m->pos[2]) < 4.0f &&
             m->anim != 0xA) {
-            blend_moby_animation(m, 0xA, 0, FUN_L03_002c6d98_cf(10));
+            blend_moby_animation(m, 0xA, 0, scale_game_frames(10));
             break;
         }
         {
             Moby2C8398 *o = &D_L03_0015FFD8_m[moby_data->i284];
             if (o == 0 || o->state == 0xFE || o->state == 0xFD || (m->b52 == 0xA && (m->b70 & 2))) {
                 m->state = 1;
-                blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
-                moby_data->s250 = FUN_L03_002c6d98_cf(0x3C);
+                blend_moby_animation(m, 0, 0, scale_game_frames(10));
+                moby_data->s250 = scale_game_frames(0x3C);
                 moby_data->i284 = -1;
             } else {
                 FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
@@ -2459,26 +2449,26 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             if (m->anim != 4) {
                 blend_moby_animation(m, 4, 0, 0);
             }
-        } else if (target_distance < 3.5f && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 3.0f) {
+        } else if (target_distance < 3.5f && absolute_float(selected_target.pos[2] - m->pos[2]) < 3.0f) {
             m->state = 6;
             if (m->anim != 2) {
-                blend_moby_animation(m, 2, 0, FUN_L03_002c6d98_cf(10));
+                blend_moby_animation(m, 2, 0, scale_game_frames(10));
             }
-        } else if (target_distance < moby_data->f278 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f) {
+        } else if (target_distance < moby_data->f278 && absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f) {
             if (moby_data->i274 != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
                     d2->pf.idx++;
                     m->state = 7;
                     if (m->anim != 1) {
-                        blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 1, 0, scale_game_frames(10));
                     }
                 }
             } else {
                 is_value_within_interpolated_window_cf(m);
                 m->state = 7;
                 if (m->anim != 1) {
-                    blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 }
             }
         }
@@ -2493,81 +2483,81 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             float df;
             moby_data->b254++;
             moby_point_position(m, 0, a);
-            normalize_vector_xyz_cf(b, selected_target.dir, a);
-            fast_add_rotations_cf(b, b, frame_time * 6.0f);
+            fast_vec_sub(b, selected_target.dir, a);
+            fast_vec_normalize(b, b, frame_time * 6.0f);
             b[2] *= 0.5f;
             ang = FUN_L00_002628d8_cf(b[0], b[1]);
             df = FUN_001f9e90_cf(ang, m->rot[2]);
             if (df > 0.5235988f) {
                 ang = fast_cos_cf(m->rot[2], 0.5235988f);
-                b[0] = fast_sin_cf(ang) * (frame_time * 6.0f);
+                b[0] = fast_cos(ang) * (frame_time * 6.0f);
                 b[1] = fast_sin(ang) * (frame_time * 6.0f);
                 b[2] = 0.0f;
             } else if (df < -0.5235988f) {
                 ang = fast_cos_cf(m->rot[2], -0.5235988f);
-                b[0] = fast_sin_cf(ang) * (frame_time * 6.0f);
+                b[0] = fast_cos(ang) * (frame_time * 6.0f);
                 b[1] = fast_sin(ang) * (frame_time * 6.0f);
                 b[2] = 0.0f;
             }
-            FUN_L00_001ff290_cf(scaled_launch_vector, b, truncate_float_to_s32_cf(10.0f));
+            fast_vec_scale(scaled_launch_vector, b, truncate_float_to_s32_cf(10.0f));
             FUN_L03_00250ae8_cf(launch_endpoint, scaled_launch_vector, a);
             emit_radial_particle_burst(m, scaled_launch_vector, 0);
-            compute_interpolated_record_value_cf(b, a, m, FUN_L03_002c6d98_cf(0x82), ang,
+            compute_interpolated_record_value_cf(b, a, m, scale_game_frames(0x82), ang,
                                                  frame_time * 6.0f, 0.75f);
         }
         if (m->b70 & 2) {
             if (moby_data->b254 == 0) {
                 break;
             }
-            if (target_distance < moby_data->f27C && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 4.0f) {
+            if (target_distance < moby_data->f27C && absolute_float(selected_target.pos[2] - m->pos[2]) < 4.0f) {
                 moby_data->f27C = 0.0f;
                 m->state = 8;
                 if (m->anim != 1) {
-                    blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 }
             }
             if (FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
                                 (unsigned char *)m, (char *)&selected_target)) {
                 break;
             }
-            if (target_distance < moby_data->f270 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f &&
+            if (target_distance < moby_data->f270 && absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f &&
                 FUN_001fa688_cf(&moby_data->s250) &&
-                FUN_L03_002c9ca0_cf(m->rot[2], FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0],
+                fast_difference_between_rotations(m->rot[2], FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0],
                                                                    selected_target.pos[1] - m->pos[1])) <
                     0.08726646f &&
                 m->b31 != 0) {
                 break;
             }
-            if (target_distance < 3.5f && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 3.0f) {
+            if (target_distance < 3.5f && absolute_float(selected_target.pos[2] - m->pos[2]) < 3.0f) {
                 m->state = 6;
                 if (m->anim != 2) {
-                    blend_moby_animation(m, 2, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 2, 0, scale_game_frames(10));
                 }
             }
-        } else if (target_distance < 3.5f && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 3.0f) {
+        } else if (target_distance < 3.5f && absolute_float(selected_target.pos[2] - m->pos[2]) < 3.0f) {
             if (FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
                                 (unsigned char *)m, (char *)&selected_target)) {
                 break;
             }
             m->state = 6;
             if (m->anim != 2) {
-                blend_moby_animation(m, 2, 0, FUN_L03_002c6d98_cf(10));
+                blend_moby_animation(m, 2, 0, scale_game_frames(10));
             }
-        } else if (target_distance < moby_data->f278 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f) {
+        } else if (target_distance < moby_data->f278 && absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f) {
             if (moby_data->i274 != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
                     d2->pf.idx++;
                     m->state = 7;
                     if (m->anim != 1) {
-                        blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 1, 0, scale_game_frames(10));
                     }
                 }
             } else {
                 is_value_within_interpolated_window_cf(m);
                 m->state = 7;
                 if (m->anim != 1) {
-                    blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 }
             }
         }
@@ -2583,15 +2573,15 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             ang = FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]);
             FUN_001f9c48_cf((char *)m, &moby_data->f258, ang, 0.03f, 0.3f, 0.3f);
             moby_point_position(m, 0, v);
-            if (25.0f <= fr && fr <= 31.0f && FUN_L03_002c6e18_cf(m->pos[2] - selected_target.pos[2]) < 2.0f &&
+            if (25.0f <= fr && fr <= 31.0f && absolute_float(m->pos[2] - selected_target.pos[2]) < 2.0f &&
                 vector_distance(m->pos, &selected_target) < 3.5f &&
-                FUN_L03_002c9ca0_cf(
+                fast_difference_between_rotations(
                     FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
                     m->rot[2]) < 0.2617994f) {
                 hit.m = m;
                 hit.flags = 0x10001;
                 hit.f = 1.0f;
-                hit.v[0] = fast_sin_cf(m->rot[2]) * 0.2f;
+                hit.v[0] = fast_cos(m->rot[2]) * 0.2f;
                 hit.v[1] = fast_sin(m->rot[2]) * 0.2f;
                 hit.v[2] = 0.0f;
                 FUN_L00_00259a88_cf(hit.v, hit.v, 1.0f);
@@ -2610,12 +2600,12 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                         d2->pf.idx++;
                         m->state = 7;
                         if (m->anim != 1) {
-                            blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                            blend_moby_animation(m, 1, 0, scale_game_frames(10));
                         }
                     } else {
                         m->state = 1;
                         if (m->anim != 0) {
-                            blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+                            blend_moby_animation(m, 0, 0, scale_game_frames(10));
                         }
                         FUN_001f9770_cf(
                             FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
@@ -2625,7 +2615,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                     is_value_within_interpolated_window_cf(m);
                     m->state = 7;
                     if (m->anim != 1) {
-                        blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 1, 0, scale_game_frames(10));
                     }
                 }
             }
@@ -2651,19 +2641,19 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
               0x14)) {
             break;
         }
-        if (target_distance < moby_data->f278 && FUN_L03_002c6e18_cf(selected_target.pos[2] - m->pos[2]) < 10.0f) {
+        if (target_distance < moby_data->f278 && absolute_float(selected_target.pos[2] - m->pos[2]) < 10.0f) {
             if (moby_data->i274 != 0) {
                 Data2C8398 *d2 = m->data;
                 if (d2->pf.idx < *(int *)d2->pf.path - 1) {
                     d2->pf.idx++;
                     m->state = 7;
                     if (m->anim != 1) {
-                        blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 1, 0, scale_game_frames(10));
                     }
                 } else {
                     m->state = 1;
                     if (m->anim != 0) {
-                        blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 0, 0, scale_game_frames(10));
                     }
                     FUN_001f9770_cf(
                         FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
@@ -2673,13 +2663,13 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 is_value_within_interpolated_window_cf(m);
                 m->state = 7;
                 if (m->anim != 1) {
-                    blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 }
             }
         } else {
             m->state = 1;
             if (m->anim != 0) {
-                blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+                blend_moby_animation(m, 0, 0, scale_game_frames(10));
             }
             FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
                             (unsigned char *)m, (char *)&selected_target);
@@ -2706,7 +2696,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             } else {
                 m->state = 1;
                 if (m->anim != 0) {
-                    blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 0, 0, scale_game_frames(10));
                 }
                 FUN_001f9770_cf(FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
                                 (unsigned char *)m, (char *)&selected_target);
@@ -2735,10 +2725,10 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 moby_data->i290 = -1;
                 m->state = 1;
                 if (m->anim != 0) {
-                    blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 0, 0, scale_game_frames(10));
                 }
                 if (moby_data->i284 != -1) {
-                    blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 0, 0, scale_game_frames(10));
                     m->state = 2;
                 } else {
                     FUN_001f9770_cf(
@@ -2766,12 +2756,12 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                     d2->pf.idx++;
                     m->state = 7;
                     if (m->anim != 1) {
-                        blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 1, 0, scale_game_frames(10));
                     }
                 } else {
                     m->state = 1;
                     if (m->anim != 0) {
-                        blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 0, 0, scale_game_frames(10));
                     }
                     FUN_001f9770_cf(
                         FUN_L00_002628d8_cf(selected_target.pos[0] - m->pos[0], selected_target.pos[1] - m->pos[1]),
@@ -2781,7 +2771,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 is_value_within_interpolated_window_cf(m);
                 m->state = 7;
                 if (m->anim != 1) {
-                    blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                    blend_moby_animation(m, 1, 0, scale_game_frames(10));
                 }
             }
         } else if (m->pos[2] < 5.0f || (fl & 0x20)) {
@@ -2816,7 +2806,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         m->pos[2] = m->pos[2] - 2.0f;
         if (g + 5.0f < m->pos[2]) {
             vector_length_xy_cf(0xA, 0x21, (int)m);
-            blend_moby_animation(m, 0xB, 0, FUN_L03_002c6d98_cf(10));
+            blend_moby_animation(m, 0xB, 0, scale_game_frames(10));
             m->state = 0xB;
         }
         break;
@@ -2838,14 +2828,14 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             FUN_L00_00259a88_cf(q, q, speed);
             qcopy(a, m->pos);
             a[2] += q->f28;
-            vector_length_xyz_cf(m->pos, m->pos, q);
+            fast_vec_add(m->pos, m->pos, q);
             qcopy(b, m->pos);
             b[2] += q->f28;
-            if (FUN_001efa68_cf(q) > (float)q->i20) {
+            if (fast_vec_length(q) > (float)q->i20) {
                 collision_line(a, b, 0x24, m, 0);
                 qcopy(b, &D_L03_00173F40.point);
             }
-            if (coll_sphere(FUN_L00_0025a120_cf(q->i20) * 0.0009765625f, b, 0x24, m)) {
+            if (coll_sphere(convert_integer_to_float(q->i20) * 0.0009765625f, b, 0x24, m)) {
                 qcopy(m->pos, sphere_collision_resolved_position);
                 m->pos[2] = a[2] + q->f8 - q->f28;
             }
@@ -2882,44 +2872,44 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         switch (m->anim) {
         case ENEMY_ANIM_LOCOMOTION:
             FUN_001f9c48_cf((char *)m, &moby_data->f258, moby_data->f28C, 0.09f, 0.27f, 0.15f);
-            if (FUN_L03_002c9ca0_cf(m->rot[2], moby_data->f28C) < 0.034906585f) {
-                moby_data->b263 = FUN_L03_002c6d98_cf(0x3C);
+            if (fast_difference_between_rotations(m->rot[2], moby_data->f28C) < 0.034906585f) {
+                moby_data->b263 = scale_game_frames(0x3C);
                 if (m->bBC >= 7 && m->bBC <= 8) {
                     if (m->bBC == 7) {
                         is_value_within_interpolated_window_cf(m);
                     }
                     m->state = m->bBC;
                     if (m->anim != 1) {
-                        blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 1, 0, scale_game_frames(10));
                     }
                     m->f58 = 1.0f;
                 } else {
                     m->state = 1;
                     if (m->anim != 0) {
-                        blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 0, 0, scale_game_frames(10));
                     }
-                    moby_data->s250 = FUN_L03_002c6d98_cf(10);
+                    moby_data->s250 = scale_game_frames(10);
                 }
             }
             break;
         case ENEMY_ANIM_HEADING_TURN:
             FUN_001f9c48_cf((char *)m, &moby_data->f258, moby_data->f28C, 0.01f, 0.3f, 0.2f);
-            if (FUN_L03_002c9ca0_cf(m->rot[2], moby_data->f28C) < 0.034906585f) {
-                moby_data->b263 = FUN_L03_002c6d98_cf(0x3C);
+            if (fast_difference_between_rotations(m->rot[2], moby_data->f28C) < 0.034906585f) {
+                moby_data->b263 = scale_game_frames(0x3C);
                 if (m->bBC >= 7 && m->bBC <= 8) {
                     if (m->bBC == 7) {
                         is_value_within_interpolated_window_cf(m);
                     }
                     m->state = m->bBC;
                     if (m->anim != 1) {
-                        blend_moby_animation(m, 1, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 1, 0, scale_game_frames(10));
                     }
                 } else {
                     m->state = 1;
                     if (m->anim != 0) {
-                        blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+                        blend_moby_animation(m, 0, 0, scale_game_frames(10));
                     }
-                    moby_data->s250 = FUN_L03_002c6d98_cf(10);
+                    moby_data->s250 = scale_game_frames(10);
                 }
             }
             break;
@@ -2984,7 +2974,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
     case ENEMY_HIDDEN_AT_PATH_START: {
         PathF2C8398 *pf = &moby_data->pf;
         if (m->anim != 0) {
-            blend_moby_animation(m, 0, 0, FUN_L03_002c6d98_cf(10));
+            blend_moby_animation(m, 0, 0, scale_game_frames(10));
         }
         m->flags &= 0xEFFF;
         *(OvlQuad *)m->pos = *(OvlQuad *)(pf->path + 0x10);
@@ -2999,7 +2989,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         }
         m->i94 = *(int *)(m->p24 + 0x10);
         m->flags = (m->flags & 0xFFBE) | 0x1000;
-        moby_data->f20 = FUN_L00_0025a120_cf(moby_data->s24);
+        moby_data->f20 = convert_integer_to_float(moby_data->s24);
         qcopy(m->pos, moby_data->pf.path + 0x10);
         m->state = 1;
         break;
@@ -3071,7 +3061,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 mark_moby_for_removal_cf(a, b, m->rot[2]);
             }
         } else if (g + 5.0f < m->pos[2]) {
-            blend_moby_animation(m, 0xB, 0, FUN_L03_002c6d98_cf(10));
+            blend_moby_animation(m, 0xB, 0, scale_game_frames(10));
             m->state = 0xB;
             FUN_001f9b48_cf(&moby_data->q);
             moby_data->q.f8 = -moby_data->mv.f18;

@@ -75,8 +75,6 @@ extern unsigned char D_L00_00166E10_2e8bb8[] __asm__("D_L00_00166E10")
     __attribute__((section(".data")));
 extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
-extern float FUN_001f9af0_2e8bb8(void *) __asm__("FUN_001f9af0");
-extern void FUN_001f9bf8_2e8bb8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -136,9 +134,9 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
         build_look_at_matrix(turn_pitch_vector, turn_pitch_vector, base + 0x20, *(float *)(turn_pitch_vector + 0x34));
     }
     reference_dot_product = fast_vec_dot(turn_pitch_vector, base + 0x20);
-    turn_pitch_vector_length = FUN_001f9af0_2e8bb8(turn_pitch_vector);
+    turn_pitch_vector_length = fast_vec_length(turn_pitch_vector);
     fast_vec_cross(axis, base + 0x20, turn_pitch_vector);
-    FUN_001f9bf8_2e8bb8(axis, axis, 1.0f);
+    fast_vec_normalize(axis, axis, 1.0f);
     current_pitch_angle = fast_arc_tan(turn_pitch_vector_length, reference_dot_product);
     if (absolute_float(current_pitch_angle) < absolute_float(target_pitch_angle) && sel == follow_camera_pitch_input_return_step_limit) {
         *(float *)(turn_pitch_state + 8) = current_pitch_angle / 0.69813168f;

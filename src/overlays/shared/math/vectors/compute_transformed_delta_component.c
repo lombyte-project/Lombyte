@@ -109,10 +109,7 @@ typedef struct {
     f32 f40;
     int w44;
 } B_25c558;
-float fast_cos(float) __asm__("FUN_001f9dc8");
-float fast_sin(float) __asm__("FUN_001f9de0");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-int FUN_001f96f8_0025c558(int) __asm__("FUN_001f96f8");
 float *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -125,7 +122,7 @@ void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_
     knockback_state->fC = 1.0f;
     knockback_state->f40 = fast_add_rotations(knockback_angle, 3.1415927f);
     knockback_state->w44 = 0;
-    knockback_state->h2C = FUN_001f96f8_0025c558(300);
+    knockback_state->h2C = scale_game_frames(300);
     knockback_state->h3E = 0;
     knockback_state->b3C = 1;
     moby_vars_record = suck_get_aim_height(moby);

@@ -345,7 +345,6 @@ void trooper_knockback_arc(void *v, float *ang, float *s1, float *s2) __asm__("F
 void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void FUN_L01_0026e090_c(int i, int v) __asm__("FUN_L01_0026e090");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern int func_001F9850_2C73D0(int) __asm__("FUN_001f96f8");
 extern void func_L00_0025E4B0_2C73D0(void *, void *) __asm__("FUN_L00_0025d458");
 extern Hit_2C73D0 *func_L00_0025B478_2C73D0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int func_L00_0025B4D0_2C73D0(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -362,7 +361,6 @@ extern int func_002140B0_2C73D0(int) __asm__("FUN_00213260");
 extern int func_L00_00260D30_2C73D0(void *, void *, float) __asm__("FUN_L04_00252e18");
 extern int activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float func_001F9D48_2C73D0(void *, void *) __asm__("FUN_001f9b80");
-extern float func_001F9B88_2C73D0(float) __asm__("FUN_001f99c0");
 extern Path *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
 extern char D_0013E633_2C73D0[] __asm__("D_001413D0");
 
@@ -396,9 +394,9 @@ void update_seeker_damage_and_target(Moby *moby) {
         moby->state = 7;
         return;
     }
-    if (data->timer == func_001F9850_2C73D0(0xA) || data->timer == func_001F9850_2C73D0(0x14)
-        || data->timer == func_001F9850_2C73D0(0x28) || data->timer == func_001F9850_2C73D0(0x3C)
-        || data->timer == func_001F9850_2C73D0(0x78) || data->timer == func_001F9850_2C73D0(0xB3)) {
+    if (data->timer == scale_game_frames(0xA) || data->timer == scale_game_frames(0x14)
+        || data->timer == scale_game_frames(0x28) || data->timer == scale_game_frames(0x3C)
+        || data->timer == scale_game_frames(0x78) || data->timer == scale_game_frames(0xB3)) {
         data->reactTime = 0xF0;
         func_L00_0025E4B0_2C73D0(moby, data->react);
     }
@@ -492,7 +490,7 @@ void update_seeker_damage_and_target(Moby *moby) {
         if (result != lost_state && data->retreat == 0) {
             if (data->reach < func_001F9D48_2C73D0(&moby->pos, goal)) {
                 data->f164 = lost_state;
-            } else if (3.0f < func_001F9B88_2C73D0(moby->pos.z - data->target[2])) {
+            } else if (3.0f < absolute_float(moby->pos.z - data->target[2])) {
                 data->f164 = lost_state;
             }
         }
@@ -660,7 +658,6 @@ extern int recover_2E39E0(Moby *, void *) __asm__("FUN_L00_002dc9f0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fixed_2E39E0(short) __asm__("FUN_001fa6c0");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void cart_burst(Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void delete_2E39E0(Moby *) __asm__("FUN_0020c828");
@@ -1026,7 +1023,7 @@ void update_ground_melee_enemy(Moby *moby) {
             data->fall = 0.0f;
             moby->pos.z = ground;
         }
-        if (data->anchor == 0 || vector_distance(&moby->pos, &data->anchor->pos) > fixed_2E39E0(data->leash)) {
+        if (data->anchor == 0 || vector_distance(&moby->pos, &data->anchor->pos) > convert_integer_to_float(data->leash)) {
             moby->state = 5;
             if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         }

@@ -401,7 +401,6 @@ extern int sample_path(char *path, float *out, void *seg, void *t, int dir, floa
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_002223f8(s32, s32);
@@ -445,7 +444,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
                 offset[2] = ofs[2];
                 offset[3] = 0.0f;
                 transform_vector_by_basis(offset, offset, D_L10_00167450);
-                add_vector_xyz(point, &anchor->pos, offset);
+                fast_vec_add(point, &anchor->pos, offset);
                 fast_vec_sub(dir, point, &cam->pos);
             } else {
                 fast_vec_sub(dir, look_path + 0x10, &cam->pos);
@@ -527,7 +526,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         point[2] = ofs[2];
         point[3] = 0.0f;
         transform_vector_by_basis(point, point, D_L10_00167450);
-        add_vector_xyz(look_point, &anchor->pos, point);
+        fast_vec_add(look_point, &anchor->pos, point);
         fast_vec_sub(offset, look_point, &cam->pos);
     } else {
         char *look = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];

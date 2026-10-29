@@ -63,7 +63,6 @@ typedef union {
 extern unsigned char *D_L00_001600EC_1ee318 __asm__("D_L00_001600EC");
 extern unsigned char *D_L00_001600FC_1ee318 __asm__("D_L00_001600FC");
 extern unsigned char *D_L00_001600F4_1ee318 __asm__("D_L00_001600F4");
-extern void FUN_001f9a28_1ee318(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float FUN_001f9b20_1ee318(void *) __asm__("FUN_001f9b20");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -90,7 +89,7 @@ int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) {
         unsigned char *e;
         e = D_L00_001600EC_1ee318;
         e += vol[5] << 7;
-        FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
+        fast_vec_sub(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
         transform_vector_by_basis(&transformed_test_vector, &volume_delta, e + 0x40);
         return -1.0f <= transformed_test_vector.f[0] && transformed_test_vector.f[0] <= 1.0f && -1.0f <= transformed_test_vector.f[1] && transformed_test_vector.f[1] <= 1.0f &&
@@ -101,7 +100,7 @@ int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) {
         e = D_L00_001600FC_1ee318;
         e += vol[5] << 7;
         is_inside_cylinder = 0;
-        FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
+        fast_vec_sub(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
         transform_vector_by_basis(&transformed_test_vector, &volume_delta, e + 0x40);
         if (FUN_001f9b20_1ee318(&transformed_test_vector) < 1.0f && -1.0f <= transformed_test_vector.f[2] && transformed_test_vector.f[2] <= 1.0f) {
@@ -121,7 +120,7 @@ int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) {
     case VOLUME_TYPE_CYLINDER_WITH_ENDPOINT_SPHERES: {
         unsigned char *e;
         e = D_L00_001600E4 + vol[5] * 0x90;
-        FUN_001f9a28_1ee318(&volume_delta, pt, e + 0x30);
+        fast_vec_sub(&volume_delta, pt, e + 0x30);
         volume_delta.i[3] = 0;
         transform_vector_by_basis(&transformed_test_vector, &volume_delta, e + 0x40);
         if (FUN_001f9b20_1ee318(&transformed_test_vector) < 1.0f && -1.0f <= transformed_test_vector.f[2] && transformed_test_vector.f[2] <= 1.0f) {
@@ -133,7 +132,7 @@ int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) {
         endpoint_test_vector.f[3] = 1.0f;
         transform_vector_by_basis(&transformed_test_vector, &endpoint_test_vector, e);
         fast_vec_add(&transformed_test_vector, &transformed_test_vector, e + 0x30);
-        FUN_001f9a28_1ee318(&endpoint_test_vector, pt, &transformed_test_vector);
+        fast_vec_sub(&endpoint_test_vector, pt, &transformed_test_vector);
         if (fast_vec_length(&endpoint_test_vector) < *(float *)(e + 0x80)) {
             return 1;
         }
@@ -143,7 +142,7 @@ int test_point_in_camera_collision_volume(V_1ee318 *pt, int *vol, float rad) {
         endpoint_test_vector.i[1] = 0;
         transform_vector_by_basis(&transformed_test_vector, &endpoint_test_vector, e);
         fast_vec_add(&transformed_test_vector, &transformed_test_vector, e + 0x30);
-        FUN_001f9a28_1ee318(&endpoint_test_vector, pt, &transformed_test_vector);
+        fast_vec_sub(&endpoint_test_vector, pt, &transformed_test_vector);
         if (fast_vec_length(&endpoint_test_vector) < *(float *)(e + 0x80)) {
             return 1;
         }

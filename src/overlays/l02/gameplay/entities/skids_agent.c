@@ -560,7 +560,6 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
 extern struct Moby *D_L02_0015FFD8;
 extern unsigned char D_0014C050[][16];
 extern char voice_pool[] __asm__("D_0013E550");
-extern void scale_vector(void *out, void *in, float s) __asm__("FUN_001f9a68");
 extern float distance_xyz(void *a, void *b) __asm__("FUN_001f9b80");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -590,7 +589,7 @@ void liftcar_platform_update(struct Moby *moby) {
     int ride;
     int voice;
 
-    scale_vector(&delta, &moby->pos, -1.0f);
+    fast_vec_scale(&delta, &moby->pos, -1.0f);
     qcopy(&old_rot, &moby->rot);
     moby_point_position(driver, 0, &pos);
     qcopy(&moby->pos, &pos);

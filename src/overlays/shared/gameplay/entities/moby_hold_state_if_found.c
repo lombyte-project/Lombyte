@@ -5,6 +5,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
 
 
 extern int store_moby_in_suck_cannon(void *) __asm__("FUN_L00_002dbb20");
@@ -100,7 +101,6 @@ typedef struct {
     M_FUN_L01_00308470 *m;
 } O_FUN_L01_00308470;
 s32 random_integer_below(s32) __asm__("FUN_00213260");
-s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 /* Fills a moby data block: four random values, fixed constants, four frame-scaled counts. */
 void initialize_gold_bolt_data(O_FUN_L01_00308470 *moby) __asm__("FUN_L01_00308470");
 

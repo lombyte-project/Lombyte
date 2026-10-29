@@ -492,13 +492,10 @@ extern float D_L04_00166F40[4];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_00259bc8_cf(float) __asm__("FUN_001f99c0");
-extern float add_vector_xyz_cf(float) __asm__("FUN_001f9de0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_add_rotations_cf(float, float) __asm__("FUN_001fa5c8");
 extern float fast_cos_cf(float cur, float target, float *vel, float k, float d,
                          float max) __asm__("FUN_L00_00258110");
-extern float fast_sin_cf(float) __asm__("FUN_001f9dc8");
 extern float fast_subtract_rotations_cf(float, float) __asm__("FUN_001fa580");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int absolute_float_cf(void *, void *, int) __asm__("FUN_L00_00259740");
@@ -524,7 +521,6 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_00258490_cf(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L00_00259740_cf(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
 extern void FUN_L00_0025a120(void *);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -886,10 +882,10 @@ void big_axebot_update(M_B7B0 *moby) {
                          path->pts[data->f438][1] - moby->pos[1]);
         moby->rot[2] = fast_cos_cf(moby->rot[2], a, &data->f410, frame_time_sq * 12.566371f,
                                    frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
-        vector_quaternion_scratch[0] = fast_sin_cf(moby->rot[2]) * (frame_time * 6.0f);
-        vector_quaternion_scratch[1] = add_vector_xyz_cf(moby->rot[2]) * (frame_time * 6.0f);
+        vector_quaternion_scratch[0] = fast_cos(moby->rot[2]) * (frame_time * 6.0f);
+        vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * (frame_time * 6.0f);
         vector_quaternion_scratch[2] = 0.0f;
-        FUN_L00_00258490_cf(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
+        fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
         FUN_L04_00295de8_cf(moby, moby->pos, vector_quaternion_scratch, 1, 0.25f, 1.5f, 0.75f, 0.87266463f);
         break;
     }
@@ -905,10 +901,10 @@ void big_axebot_update(M_B7B0 *moby) {
             blend_big_axebot_and_axe_animation((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
         } else if (data->f41C != -1) {
-            vector_quaternion_scratch[0] = fast_sin_cf(moby->rot[2]) * 2.0f;
-            vector_quaternion_scratch[1] = add_vector_xyz_cf(moby->rot[2]) * 2.0f;
+            vector_quaternion_scratch[0] = fast_cos(moby->rot[2]) * 2.0f;
+            vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * 2.0f;
             vector_quaternion_scratch[2] = 0.0f;
-            FUN_L00_00258490_cf(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
+            fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
             if (absolute_float_cf(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
                                  D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                 data->f410 = 0.0f;
@@ -941,10 +937,10 @@ void big_axebot_update(M_B7B0 *moby) {
                 moby->state = 1;
             }
             if (data->f41C != -1) {
-                vector_quaternion_scratch[0] = fast_sin_cf(moby->rot[2]) * 2.0f;
-                vector_quaternion_scratch[1] = add_vector_xyz_cf(moby->rot[2]) * 2.0f;
+                vector_quaternion_scratch[0] = fast_cos(moby->rot[2]) * 2.0f;
+                vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * 2.0f;
                 vector_quaternion_scratch[2] = 0.0f;
-                FUN_L00_00258490_cf(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
+                fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
                 if (absolute_float_cf(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
                                      D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                     data->f410 = 0.0f;
@@ -962,12 +958,12 @@ void big_axebot_update(M_B7B0 *moby) {
     case BIG_AXEBOT_STATE_MELEE_ATTACK:
         if (moby->f52 == moby->f53 && compute_interpolated_record_value(moby) >= 17.0f &&
             compute_interpolated_record_value(moby) < 20.0f &&
-            FUN_L00_00259bc8_cf(moby->pos[2] - tg.pos[2]) < 2.0f &&
+            absolute_float(moby->pos[2] - tg.pos[2]) < 2.0f &&
             vector_distance(moby->pos, (float *)&tg) < 4.5f) {
             float p[4];
 
-            vector_quaternion_scratch[0] = fast_sin_cf(target_yaw) * 0.2f;
-            vector_quaternion_scratch[1] = add_vector_xyz_cf(target_yaw) * 0.2f;
+            vector_quaternion_scratch[0] = fast_cos(target_yaw) * 0.2f;
+            vector_quaternion_scratch[1] = fast_sin(target_yaw) * 0.2f;
             vector_quaternion_scratch[2] = 0.0f;
             qcopy(p, tg.pos);
             p[2] += 0.75f;
@@ -1010,13 +1006,13 @@ void big_axebot_update(M_B7B0 *moby) {
                     data->f418 = hit_recovery_displacement_limit;
                 }
                 FUN_L00_0025c698_cf(vector_quaternion_scratch, data->f418, data->f414, moby->rot[1]);
-                FUN_L00_00258490_cf(moby->pos, moby->pos, vector_quaternion_scratch);
+                fast_vec_add(moby->pos, moby->pos, vector_quaternion_scratch);
                 moby->rot[2] = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
                                            frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
             } else if (data->f418 > 0.0f) {
                 data->f418 -= frame_time_sq * 200.0f;
                 FUN_L00_0025c698_cf(vector_quaternion_scratch, data->f418, data->f414, moby->rot[1]);
-                FUN_L00_00258490_cf(moby->pos, moby->pos, vector_quaternion_scratch);
+                fast_vec_add(moby->pos, moby->pos, vector_quaternion_scratch);
                 moby->rot[2] = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
                                            frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
             } else {
@@ -1062,12 +1058,12 @@ void big_axebot_update(M_B7B0 *moby) {
     if (data->f42C > 0.0f) {
         struct Hero *h = &hero;
 
-        vector_quaternion_scratch[0] = fast_sin_cf(fast_arc_tan(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1])) *
+        vector_quaternion_scratch[0] = fast_cos(fast_arc_tan(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1])) *
                data->f42C;
-        vector_quaternion_scratch[1] = add_vector_xyz_cf(fast_arc_tan(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1])) *
+        vector_quaternion_scratch[1] = fast_sin(fast_arc_tan(moby->pos[0] - h->motion.pos.f[0], moby->pos[1] - h->motion.pos.f[1])) *
                data->f42C;
         vector_quaternion_scratch[2] = 0.0f;
-        FUN_L00_00258490_cf(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
+        fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
         if (data->f420 == 0.0f) {
             data->f42C += -3.4f / (scale_time(7.0f) * scale_time(7.0f));
         }
@@ -1261,10 +1257,7 @@ void spawn_circular_saw_destruction_effects(struct Moby *moby) {
  * to out and returns the yaw toward it. (The passed speed is recomputed from the moby's state.) */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C3338), where it is exact; names translated to the US level program. */
 
-extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
-extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_00260D30_k(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 
 extern float circular_saw_flock_separation_weight_gp __asm__("D_L04_00161884") __attribute__((sda));
@@ -1295,16 +1288,16 @@ float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float sp
     for (; other != 0; other = *(char **)(other + 0x28)) {
         if (other == moby || *(short *)(other + 0xA6) != moby->oclass) continue;
         if (vector_distance((float *)(other + 0x10), (float *)&moby->pos) < 3.0f) {
-            subtract_vector_xyz_c(away, &moby->pos, other + 0x10);
+            fast_vec_sub(away, &moby->pos, other + 0x10);
             fast_vec_scale(away, away, circular_saw_flock_separation_weight_gp);
-            add_vector_xyz_c(out, out, away);
+            fast_vec_add(out, out, away);
             weight += circular_saw_flock_separation_weight_gp;
         }
         if (vector_distance((float *)(other + 0x10), target) < target_dist) is_closest = 0;
     }
     if (!is_closest) {
         float offset_dir;
-        subtract_vector_xyz_c(away, &moby->pos, target);
+        fast_vec_sub(away, &moby->pos, target);
         if (target_dist < 4.5f) {
             offset_dir = 5.0f;
         } else if (5.5f < target_dist) {
@@ -1312,11 +1305,11 @@ float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float sp
         } else {
             offset_dir = 0.0f;
         }
-        normalize_vector_xyz_c(away, away, offset_dir * 10.0f);
+        fast_vec_normalize(away, away, offset_dir * 10.0f);
         weight += 10.0f;
-        add_vector_xyz_c(out, out, away);
+        fast_vec_add(out, out, away);
         fast_vec_scale(out, out, 1.0f / weight);
-        add_vector_xyz_c(out, out, &moby->pos);
+        fast_vec_add(out, out, &moby->pos);
     } else {
         qcopy(out, target);
     }
@@ -1524,11 +1517,9 @@ extern void update_object_wander_movement(char *moby, char *d, float a, float b)
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void FUN_L01_0026d930(char *p);
 extern void update_circular_saw_engine_sound(struct Moby *) __asm__("FUN_L04_002c1b80");
-extern void add_vector_xyz(void *, void *, void *) __asm__("func_001F9A10");
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, void *, void *, void *) __asm__("FUN_00212f90");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void release_voice_slot(int);
-extern void subtract_vector_xyz(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *);
 int check_circular_saw_melee_attack_spacing(struct Moby *moby) __asm__("FUN_L04_002c1e98");
 void spawn_circular_saw_destruction_effects(struct Moby *moby) __asm__("FUN_L04_002c1d70");
@@ -1698,8 +1689,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 melee_hit_parameters.moby = moby;
                 melee_hit_parameters.f14 = 0x10001;
                 melee_hit_parameters.f1C = 1.0f;
-                subtract_vector_xyz(melee_hit_parameters.v, &hero.motion.pos, moby->pos);
-                normalize_vector_xyz(melee_hit_parameters.v, melee_hit_parameters.v, frame_time * 10.0f);
+                fast_vec_sub(melee_hit_parameters.v, &hero.motion.pos, moby->pos);
+                fast_vec_normalize(melee_hit_parameters.v, melee_hit_parameters.v, frame_time * 10.0f);
                 melee_hit_parameters.f20 = 1;
                 collect_mobies_in_sphere(jp, 0x10, moby, &melee_hit_parameters, 0.5f);
                 if (D_L04_00173FC0.f18 == target_moby) {
@@ -2001,7 +1992,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             v[0] = fast_cos(fast_add_rotations(moby->rot, 3.1415927f)) * data->f13C;
             v[1] = fast_sin(fast_add_rotations(moby->rot, 3.1415927f)) * data->f13C;
             v[2] = 0.0f;
-            add_vector_xyz(v, v, moby->pos);
+            fast_vec_add(v, v, moby->pos);
             data->f13C += -10.0f / (scale_time(15.0f) * scale_time(15.0f));
             FUN_L00_00258490(moby, moby->pos, v, 1, 0.25f, 0.57f, 0.5f, 0.5235988f);
         }
@@ -2019,7 +2010,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             v[0] = fast_cos(moby->rot) * (frame_time * 2.0f);
             v[1] = fast_sin(moby->rot) * (frame_time * 2.0f);
             v[2] = 0.0f;
-            add_vector_xyz(v, v, moby->pos);
+            fast_vec_add(v, v, moby->pos);
             qcopy(np, moby->pos);
             FUN_L00_00258490(moby, np, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
             if (data->f138 == -1 ||
@@ -2053,7 +2044,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 v[0] = fast_cos(fast_add_rotations(moby->rot, movement_relative_yaw)) * (frame_time * 3.0f);
                 v[1] = fast_sin(fast_add_rotations(moby->rot, movement_relative_yaw)) * (frame_time * 3.0f);
                 v[2] = 0.0f;
-                add_vector_xyz(v, v, moby->pos);
+                fast_vec_add(v, v, moby->pos);
             } else {
                 qcopy(v, moby->pos);
                 anim = 0;
@@ -2085,7 +2076,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 v[1] = fast_sin(fast_arc_tan(dest[0] - moby->pos[0], dest[1] - moby->pos[1])) *
                        (frame_time * 2.0f);
                 v[2] = 0.0f;
-                add_vector_xyz(v, v, moby->pos);
+                fast_vec_add(v, v, moby->pos);
                 qcopy(np, moby->pos);
                 FUN_L00_00258490(moby, np, v, 0, 0.25f, 1.25f, 0.5f, 0.5235988f);
                 if (data->f138 == -1 ||
@@ -2157,7 +2148,6 @@ typedef struct {
     PuffTail tail;   /* 0x20 */
 } Puff;
 
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 extern void spawn_burst(void *, void *, int, int, int, int, f32) __asm__("FUN_L00_0026cbb0");
@@ -2180,7 +2170,7 @@ void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner, void *from, void *
     PuffTail *tail;
     int spin;
 
-    subtract_vector_xyz_c(&step, to, from);
+    fast_vec_sub(&step, to, from);
     fast_vec_scale(&step, &step, 1.0f / (float)count);
     grow = (to_puff_scale - from_puff_scale) / (float)count;
     particle_spawn_velocity.q = 0;
@@ -2188,7 +2178,7 @@ void spawn_smoke_puff_trail_with_endpoint_bursts(void *owner, void *from, void *
     particle_spawn_velocity.f[2] = 0.01f;
     for (i = 0; i < count; i++) {
         fast_vec_scale(&at, &step, convert_integer_to_float(i));
-        add_vector_xyz(&at, from, &at);
+        fast_vec_add(&at, from, &at);
         particle_spawn_velocity.f[0] = randf_sym(0.0f, 0.005f);
         particle_spawn_velocity.f[1] = randf_sym(0.0f, 0.005f);
         particle_spawn_velocity.f[2] = random_float_between(smoke_trail_puff_vertical_velocity_scale_gp * 0.1f, smoke_trail_puff_vertical_velocity_scale_gp);
@@ -2553,8 +2543,8 @@ void blarg_trooper_update(struct Moby *moby) {
             if (*(short *)(data + 0xF2) == 0) {
                 *(OvlQuad *)update_scratch.w.p.v90 = 0;
                 update_scratch.w.p.v90[2] = 0.5f;
-                add_vector_xyz(update_scratch.w.p.v70, pos, update_scratch.w.p.v90);
-                add_vector_xyz(update_scratch.w.p.v80, update_scratch.v50, update_scratch.w.p.v90);
+                fast_vec_add(update_scratch.w.p.v70, pos, update_scratch.w.p.v90);
+                fast_vec_add(update_scratch.w.p.v80, update_scratch.v50, update_scratch.w.p.v90);
                 if (collision_line(update_scratch.w.p.v70, update_scratch.w.p.v80, 0, moby, 0) != 0 &&
                     D_L04_00173FD8 == target) {
                     moby->state = 5;
@@ -2594,7 +2584,7 @@ void blarg_trooper_update(struct Moby *moby) {
             update_scratch.w.p.v70[0] = fast_cos(moby->rot.z) * (frame_time * 2.5f);
             update_scratch.w.p.v70[1] = fast_sin(moby->rot.z) * (frame_time * 2.5f);
             update_scratch.w.p.v70[2] = 0.0f;
-            add_vector_xyz(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
+            fast_vec_add(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
             func_L00_002594C8_o(moby, pos, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 0);
         }
         break;
@@ -2611,7 +2601,7 @@ void blarg_trooper_update(struct Moby *moby) {
             update_scratch.w.p.v70[0] = fast_cos(moby->rot.z) * (frame_time * 6.0f);
             update_scratch.w.p.v70[1] = fast_sin(moby->rot.z) * (frame_time * 6.0f);
             update_scratch.w.p.v70[2] = 0.0f;
-            add_vector_xyz(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
+            fast_vec_add(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
             qcopy(update_scratch.w.p.v80, pos);
             if (func_L00_002594C8_o(moby, update_scratch.w.p.v80, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f,
                                     0) != 0) {
@@ -2665,7 +2655,7 @@ void blarg_trooper_update(struct Moby *moby) {
                 update_scratch.w.p.v70[0] = fast_cos(moby->rot.z) * (frame_time * 6.0f);
                 update_scratch.w.p.v70[1] = fast_sin(moby->rot.z) * (frame_time * 6.0f);
                 update_scratch.w.p.v70[2] = 0.0f;
-                add_vector_xyz(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
+                fast_vec_add(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
                 func_L00_002594C8_o(moby, pos, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 0);
             }
         }
@@ -2745,7 +2735,7 @@ void blarg_trooper_update(struct Moby *moby) {
             alive >= 2.0f && (o = *(char **)(data + 0xF8)) != 0) {
             float a;
             moby_point_position(o, 0, update_scratch.w.p.v70);
-            subtract_vector_xyz(update_scratch.w.p.v80, update_scratch.v50, update_scratch.w.p.v70);
+            fast_vec_sub(update_scratch.w.p.v80, update_scratch.v50, update_scratch.w.p.v70);
             a = fast_arc_tan(update_scratch.w.p.v80[0], update_scratch.w.p.v80[1]);
             a = (fast_difference_between_rotations(a, moby->rot.z) > 0.2617994f)
                     ? moby->rot.z
@@ -2811,7 +2801,7 @@ void blarg_trooper_update(struct Moby *moby) {
             update_scratch.w.p.v70[1] = fast_sin(fast_add_rotations(moby->rot.z, 3.1415927f)) *
                             *(float *)(data + 0xF4);
             update_scratch.w.p.v70[2] = 0.0f;
-            add_vector_xyz(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
+            fast_vec_add(update_scratch.w.p.v70, update_scratch.w.p.v70, pos);
             *(float *)(data + 0xF4) =
                 *(float *)(data + 0xF4) + -2.0f / (scale_time(15.0f) * scale_time(15.0f));
             func_L00_002594C8_o(moby, pos, update_scratch.w.p.v70, 0.5f, 1.0f, 0.5f, 0.5235988f, 1);

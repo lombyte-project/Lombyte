@@ -71,7 +71,6 @@ extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[];
 float D_L16_001D96C0[8] = {300.73f, 206.04f, 123.22f, 0.0f, 0.0f, 0.11f, 0.0f, 0.0f};
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
@@ -159,7 +158,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
         char *player = (char *)&D_0013E633_watch + 0xE9D;
         tracking = 1;
         if (vector_distance(moby->position, player) < 8.0f &&
-            FUN_001f9e90_cf(
+            fast_difference_between_rotations(
                 moby->yaw,
                 FUN_001fa688_cf(((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[0] -
                                     moby->position[0],
@@ -1599,7 +1598,7 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         char *player = (char *)&D_0013E633_challenge + 0xE9D;
         tracking = 1;
         if (vector_distance(ceo_moby->position, player) < 8.0f &&
-            FUN_001f9e90_cf(
+            fast_difference_between_rotations(
                 ceo_moby->yaw,
                 FUN_001fa688_cf(
                     ((L16ChallengePlayer *)((char *)&D_0013E633_challenge + 0xE1D))->aim[0] -

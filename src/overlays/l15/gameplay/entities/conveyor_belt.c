@@ -1669,12 +1669,10 @@ void emit_cutscene_mode_moby_effects(struct Moby *moby) {
         break;
     }
 }
-extern float FUN_001fa6c0_2edbe0(int) __asm__("FUN_001fa6c0");
 extern int FUN_001f44b8_2edbe0(int) __asm__("FUN_001f44b8");
 extern void FUN_00233980_2edbe0(int, long) __asm__("FUN_00233980");
 extern float FUN_001f96b0_2edbe0(float) __asm__("FUN_001f96b0");
 extern float FUN_001fa580_2edbe0(float, float) __asm__("FUN_001fa580");
-extern float FUN_001f9de0_2edbe0(float) __asm__("FUN_001f9de0");
 extern float FUN_L00_00200260_2edbe0(float, float) __asm__("FUN_L00_00200260");
 extern float FUN_001fa610_2edbe0(float x) __asm__("FUN_001fa610");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -1813,7 +1811,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     int b;
     int color;
     float scale;
-    scale = FUN_001fa6c0_2edbe0(D_L15_0015F5CC_macro) * (scaled_ripple_uv_scroll_rate_gp * frame_time_macro);
+    scale = convert_integer_to_float(D_L15_0015F5CC_macro) * (scaled_ripple_uv_scroll_rate_gp * frame_time_macro);
     FUN_00233980_2edbe0(6, FUN_001f44b8_2edbe0(D_L15_001621E8));
     FUN_00233980_2edbe0(0x42, ((long)D_L15_001621E4 << 32) | 0x44);
     FUN_00233980_2edbe0(8, 0);
@@ -1829,7 +1827,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
         float rad = square_root(x * x + y * y);
         float radius_remainder = FUN_L00_00200260_2edbe0(rad, scaled_ripple_radial_wavelength_gp);
         float w = FUN_001fa610_2edbe0(radius_remainder * 6.2831855f / scaled_ripple_radial_wavelength_gp);
-        float z = FUN_001f9de0_2edbe0(FUN_001fa580_2edbe0(w, data->angle));
+        float z = fast_sin(FUN_001fa580_2edbe0(w, data->angle));
         D_L15_001DECB0[i][0] = scaled_ripple_template_vertex_scale_gp * template_vertex[0] + moby->pos.x;
         D_L15_001DECB0[i][1] = scaled_ripple_template_vertex_scale_gp * template_vertex[1] + moby->pos.y;
         D_L15_001DECB0[i][2] = scaled_ripple_template_vertex_scale_gp * template_vertex[2] + moby->pos.z + scaled_ripple_z_amplitude_gp * z;
@@ -1852,10 +1850,8 @@ extern int FUN_001f44b8_2edfc0(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0_2edfc0(void) __asm__("FUN_001f76a0");
 extern float FUN_001f96b0_2edfc0(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9988_2edfc0(float) __asm__("FUN_001f9988");
-extern float FUN_001f9de0_2edfc0(float) __asm__("FUN_001f9de0");
 extern float FUN_001fa580_2edfc0(float, float) __asm__("FUN_001fa580");
 extern float FUN_001fa610_2edfc0(float x) __asm__("FUN_001fa610");
-extern float FUN_001fa6c0_2edfc0(int) __asm__("FUN_001fa6c0");
 extern void FUN_00233980_2edfc0(int, long) __asm__("FUN_00233980");
 extern void FUN_L00_001fde98_2edfc0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");
 extern float FUN_L00_00200260_2edfc0(float, float) __asm__("FUN_L00_00200260");
@@ -2076,7 +2072,7 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
     int b;
     int color;
     float scale;
-    scale = FUN_001fa6c0_2edfc0(D_L15_0015F5CC_macro) * (ripple_88_uv_scroll_rate_gp * D_0015ED6C_2edfc0);
+    scale = convert_integer_to_float(D_L15_0015F5CC_macro) * (ripple_88_uv_scroll_rate_gp * D_0015ED6C_2edfc0);
     FUN_00233980_2edfc0(6, FUN_001f44b8_2edfc0(D_L15_00162258));
     FUN_00233980_2edfc0(0x42, ((long)D_L15_00162254 << 32) | 0x44);
     FUN_00233980_2edfc0(8, 0);
@@ -2092,7 +2088,7 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
         float rad = FUN_001f9988_2edfc0(x * x + y * y);
         float radius_remainder = FUN_L00_00200260_2edfc0(rad, ripple_88_radial_wavelength_gp);
         float w = FUN_001fa610_2edfc0(radius_remainder * 6.2831855f / ripple_88_radial_wavelength_gp);
-        float z = FUN_001f9de0_2edfc0(FUN_001fa580_2edfc0(w, data->angle));
+        float z = fast_sin(FUN_001fa580_2edfc0(w, data->angle));
         D_L15_001DF940[i][0] = ripple_88_template_vertex_scale_gp * template_vertex[0] + moby->pos.x;
         D_L15_001DF940[i][1] = ripple_88_template_vertex_scale_gp * template_vertex[1] + moby->pos.y;
         D_L15_001DF940[i][2] = ripple_88_template_vertex_scale_gp * template_vertex[2] + moby->pos.z + ripple_88_z_amplitude_gp * z;

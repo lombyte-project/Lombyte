@@ -824,8 +824,6 @@ extern float func_001FA748_f(float, float) __asm__("FUN_001fa580");
 extern void func_L00_00251E30_u(void *) __asm__("FUN_L00_00250df8");
 extern void func_0022ED80_u(int, int, void *) __asm__("FUN_0022da68");
 extern float func_00214D88_f(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void func_L00_001FF4B0_u(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9BD8_u(void *, void *, void *) __asm__("FUN_001f9a10");
 extern char D_0013D355_t[] __asm__("D_0013D388");
 
 void update_link_triggered_moby_motion(struct Moby *moving_moby) __asm__("FUN_L11_0030e978");
@@ -879,8 +877,8 @@ void update_link_triggered_moby_motion(struct Moby *moving_moby) {
     case LINKED_MOTION_STATE_MOVE_ALONG_LOCAL_AXIS:
         func_00214D88_f((float *)private_data, (float *)(private_data + 4), *(float *)(private_data + 0x10), frame_time_sq, frame_time_sq,
                         frame_time + frame_time);
-        func_L00_001FF4B0_u(motion_displacement, &moving_moby->rot_row1, -*(float *)(private_data + 4));
-        func_001F9BD8_u(&moving_moby->pos, &moving_moby->pos, motion_displacement);
+        fast_vec_normalize(motion_displacement, &moving_moby->rot_row1, -*(float *)(private_data + 4));
+        fast_vec_add(&moving_moby->pos, &moving_moby->pos, motion_displacement);
         break;
     }
 }
@@ -3104,7 +3102,6 @@ extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void smoke_4318(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern int FUN_L00_002dc9f0_4318(struct Moby *, void *) __asm__("FUN_L00_002dc9f0");
 extern void mark_for_removal_4318(struct Moby *) __asm__("FUN_0020c828");
-extern void sub_vector_4318(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 
 /* Update for the class 0x4DE creature: spawns on a path or a carrier moby, wanders, chases and attacks
@@ -3211,7 +3208,7 @@ void puffoid_update(struct Moby *moby) {
             if (moby->prev_seq != 0) {
                 set_anim_4318(moby, 0, 0, 5);
             }
-            sub_vector_4318(puffoid_vars->vel, path_table[puffoid_vars->path] + 0x20, &moby->pos);
+            fast_vec_sub(puffoid_vars->vel, path_table[puffoid_vars->path] + 0x20, &moby->pos);
             set_vector_length_xy(puffoid_vars->vel, puffoid_vars->vel, puffoid_jump_horizontal_speed_gp * frame_time);
             puffoid_vars->vel[2] = jump_speed_4318(&moby->pos, path_table[puffoid_vars->path] + 0x20, 0,
                                         puffoid_jump_horizontal_speed_gp * frame_time, -(D_L11_001622F0 * frame_time_sq));
@@ -3288,7 +3285,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     case PUFFOID_STATE_REPOSITION_AND_FACE_TARGET:
-        sub_vector_4318(pos, puffoid_vars->unk1D0, &moby->pos);
+        fast_vec_sub(pos, puffoid_vars->unk1D0, &moby->pos);
         pos[2] = 0.0f;
         fast_vec_normalize(pos, pos, 2.5f);
         fast_vec_add(pos, pos, &moby->pos);
@@ -3380,7 +3377,7 @@ void puffoid_update(struct Moby *moby) {
         if (puffoid_vars->unk214 != 2 && count_group_class_4de_mobys_in_states_13_to_17(moby) < 5) {
             struct Moby *carrier_moby = (struct Moby *)(D_L11_0015FFD8_4318 + (puffoid_vars->carrier << 8));
             transpose_rotation_matrix(basis, &carrier_moby->rot_row0);
-            sub_vector_4318(pos, &moby->pos, &carrier_moby->pos);
+            fast_vec_sub(pos, &moby->pos, &carrier_moby->pos);
             transform_vector(pos, pos, basis);
             if (pos[0] < puffoid_vars->unk258 && pos[0] > -3.1f) {
                 float lo;
@@ -3399,7 +3396,7 @@ void puffoid_update(struct Moby *moby) {
                 if (moby->prev_seq != 1) {
                     set_anim_4318(moby, 1, 0, 5);
                 }
-                sub_vector_4318(puffoid_vars->vel, dest, &moby->pos);
+                fast_vec_sub(puffoid_vars->vel, dest, &moby->pos);
                 scaled_animation_frames = scale_game_frames(0x3C);
                 moby->anim_speed = (float)scaled_animation_frames * (puffoid_jump_horizontal_speed_gp * frame_time) / fast_vec_length(puffoid_vars->vel);
                 set_vector_length_xy(puffoid_vars->vel, puffoid_vars->vel, puffoid_jump_horizontal_speed_gp * frame_time);

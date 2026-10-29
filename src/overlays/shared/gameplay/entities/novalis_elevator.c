@@ -2635,7 +2635,6 @@ int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int launch_dat
 }
 extern float FUN_L00_00258110_w7(float *vel, float cur, float target, float k, float d,
                                  float max) __asm__("FUN_L00_00258110");
-extern int FUN_001f96f8_w7(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation(void *m, int a, int b, int c) __asm__("FUN_00212f90");
 extern float D_0015ED70_lui __asm__("D_0015ED70");
 
@@ -2670,7 +2669,7 @@ void sandmouse_house_update(unsigned char *moby) {
     switch (moby[0x20]) {
     case SANDMOUSE_HOUSE_INITIALIZE:
         if (moby[0x53] != 0) {
-            blend_moby_animation(moby, 0, 0, FUN_001f96f8_w7(0));
+            blend_moby_animation(moby, 0, 0, scale_game_frames(0));
         }
         moby[0x20] = 1;
         *(float *)house_vars = *(float *)(moby + 0x48);
@@ -2678,7 +2677,7 @@ void sandmouse_house_update(unsigned char *moby) {
     case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND:
         if ((unsigned char)(moby[0xBC] - 3) < 3) {
             if (moby[0x53] != 1) {
-                blend_moby_animation(moby, 1, 0, FUN_001f96f8_w7(10));
+                blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             }
             moby[0x20] = 2;
         }
@@ -2686,7 +2685,7 @@ void sandmouse_house_update(unsigned char *moby) {
     case SANDMOUSE_HOUSE_WAIT_FOR_INITIAL_COMMAND_ANIMATION_END:
         if (moby[0x70] & 2) {
             if (moby[0x53] != 2) {
-                blend_moby_animation(moby, 2, 0, FUN_001f96f8_w7(3));
+                blend_moby_animation(moby, 2, 0, scale_game_frames(3));
             }
             moby[0x20] = 3;
         }
@@ -2694,12 +2693,12 @@ void sandmouse_house_update(unsigned char *moby) {
     case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND:
         if ((unsigned char)(moby[0xBC] - 4) < 2) {
             if (moby[0x53] != 3) {
-                blend_moby_animation(moby, 3, 0, FUN_001f96f8_w7(3));
+                blend_moby_animation(moby, 3, 0, scale_game_frames(3));
             }
             moby[0x20] = 4;
         } else if (moby[0xBC] == 7 || moby[0xBC] == 1) {
             if (moby[0x53] != 6) {
-                blend_moby_animation(moby, 6, 0, FUN_001f96f8_w7(3));
+                blend_moby_animation(moby, 6, 0, scale_game_frames(3));
             }
             moby[0x20] = 7;
         }
@@ -2707,7 +2706,7 @@ void sandmouse_house_update(unsigned char *moby) {
     case SANDMOUSE_HOUSE_WAIT_FOR_FOLLOWUP_COMMAND_ANIMATION_END:
         if (moby[0x70] & 2) {
             if (moby[0x53] != 4) {
-                blend_moby_animation(moby, 4, 0, FUN_001f96f8_w7(3));
+                blend_moby_animation(moby, 4, 0, scale_game_frames(3));
             }
             moby[0x20] = 5;
         }
@@ -2715,7 +2714,7 @@ void sandmouse_house_update(unsigned char *moby) {
     case SANDMOUSE_HOUSE_WAIT_FOR_POST_FOLLOWUP_COMMAND:
         if (moby[0xBC] == 3 || moby[0xBC] == 6 || moby[0xBC] == 7 || moby[0xBC] == 1) {
             if (moby[0x53] != 5) {
-                blend_moby_animation(moby, 5, 0, FUN_001f96f8_w7(3));
+                blend_moby_animation(moby, 5, 0, scale_game_frames(3));
             }
             moby[0x20] = 6;
         }
@@ -2724,12 +2723,12 @@ void sandmouse_house_update(unsigned char *moby) {
         if (moby[0x70] & 2) {
             if (moby[0xBC] == 7 || moby[0xBC] == 1) {
                 if (moby[0x53] != 6) {
-                    blend_moby_animation(moby, 6, 0, FUN_001f96f8_w7(3));
+                    blend_moby_animation(moby, 6, 0, scale_game_frames(3));
                 }
                 moby[0x20] = 7;
             } else {
                 if (moby[0x53] != 2) {
-                    blend_moby_animation(moby, 2, 0, FUN_001f96f8_w7(3));
+                    blend_moby_animation(moby, 2, 0, scale_game_frames(3));
                 }
                 moby[0x20] = 3;
             }
@@ -2738,7 +2737,7 @@ void sandmouse_house_update(unsigned char *moby) {
     case SANDMOUSE_HOUSE_RESTORE_INITIAL_ANIMATION:
         if (moby[0x70] & 2) {
             if (moby[0x53] != 0) {
-                blend_moby_animation(moby, 0, 0, FUN_001f96f8_w7(3));
+                blend_moby_animation(moby, 0, 0, scale_game_frames(3));
             }
             moby[0x20] = 1;
         }

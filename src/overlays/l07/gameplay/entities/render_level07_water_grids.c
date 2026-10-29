@@ -34,7 +34,6 @@ struct L07MovingVars {
 };
 
 extern struct Moby *D_L07_0015FFD8;
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void update_moby_offset_motion(struct Moby *moby) __asm__("FUN_L07_0031a9e8");
@@ -114,7 +113,7 @@ void update_moby_offset_motion(struct Moby *moby) {
         start.f[2] = vars->destination.z;
         next.q = start.q;
         transform_vector_by_basis(&next, &next, &moby->rot_row0);
-        scale_vector_xyz(&start, &next, vars->destination.w * frame_time);
+        fast_vec_normalize(&start, &next, vars->destination.w * frame_time);
         fast_vec_add(&moby->pos, &moby->pos, &start);
         time = vars->home.w - vars->destination.w * frame_time;
         vars->home.w = time;
@@ -155,7 +154,7 @@ void update_moby_offset_motion(struct Moby *moby) {
         start.f[2] = vars->destination.z;
         next.q = start.q;
         distance = fast_vec_length(&next);
-        scale_vector_xyz(&next, &next, -(vars->speed * frame_time));
+        fast_vec_normalize(&next, &next, -(vars->speed * frame_time));
         transform_vector_by_basis(&start, &next, &moby->rot_row0);
         fast_vec_add(&moby->pos, &moby->pos, &start);
         time = vars->home.w + vars->speed * frame_time;

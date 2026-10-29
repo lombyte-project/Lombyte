@@ -84,10 +84,8 @@ extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L12_00306350_c2(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float func_001F9B88_304310(float) __asm__("FUN_001f99c0");
 extern int func_001F9908_304920(void *) __asm__("FUN_001f9740");
 extern int func_001FA898_3055F8(float) __asm__("FUN_001fa6d0");
-extern float func_001FA888_3055F8(int) __asm__("FUN_001fa6c0");
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
 extern int D_L12_00161F04_gp __asm__("D_L12_00161F04") MACRO_ADDR;
 extern int D_L12_00161F20 __attribute__((sda));
@@ -144,7 +142,7 @@ void update_planetbuster_maximus_guns(char *moby) {
             }
         } else {
             float sweep_target_yaw = fast_add_rotations(yaw, md->f8C * 0.55850536f);
-            if (func_001F9B88_304310(spring_angle(ent + 0x18, sweep_target_yaw, (char *)md + 0x94, 0, frame_scale_sq_macro * 0.022f, frame_scale_sq_macro * 0.3f,
+            if (absolute_float(spring_angle(ent + 0x18, sweep_target_yaw, (char *)md + 0x94, 0, frame_scale_sq_macro * 0.022f, frame_scale_sq_macro * 0.3f,
                                                 D_0015ED6C_gp * 0.2617994f + (float)i * (D_0015ED6C_gp * 0.05235988f)))
                 < 0.017453292f) {
                 md->f8C = -md->f8C;
@@ -153,7 +151,7 @@ void update_planetbuster_maximus_guns(char *moby) {
         flag = 0;
         hp = (float *)(((char *)&hero) + 0x80);
         owner_to_hero_distance_xy = vector_distance(moby + 0x10, hp);
-        dz = func_001F9B88_304310(hp[2] - *(float *)(moby + 0x18));
+        dz = absolute_float(hp[2] - *(float *)(moby + 0x18));
         if (scale_game_frames(0x4B0) < D_L12_00161F34) {
             if (owner_to_hero_distance_xy < 80.0f && dz < 4.0f) {
                 flag = 1;
@@ -330,8 +328,8 @@ void update_planetbuster_maximus_guns(char *moby) {
                 scratch_vector[0] = fast_cos(particle_xy_angle) * radial_scale;
                 scratch_vector[1] = fast_sin(particle_xy_angle) * radial_scale;
                 scratch_vector[2] = 0.0f;
-                scratch_vector[2] = random_float_between(D_0015ED6C_gp * 7.0f, D_0015ED6C_gp * 17.0f) * func_001FA888_3055F8(lvl) * 1.5f
-                        / func_001FA888_3055F8(5);
+                scratch_vector[2] = random_float_between(D_0015ED6C_gp * 7.0f, D_0015ED6C_gp * 17.0f) * convert_integer_to_float(lvl) * 1.5f
+                        / convert_integer_to_float(5);
                 spawn_effect_particle_with_target_scalar(position_buffer, scratch_vector, (random_int_between(0x46, 0xCD) << 8) | 0x460A00AA, 0xA0A46, 420000.0f, c);
             }
             for (j = 0; j < 3; j++) {

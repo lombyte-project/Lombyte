@@ -56,7 +56,6 @@ void interpolate_wrapped_rotations_cosine_eased(float *out, float *start_rotatio
     out[2] = fast_add_rotations(start_rotations[2], fast_subtract_rotations(target_rotations[2], start_rotations[2]) * cosine_ease_weight);
 }
 float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-float absolute_float(float) __asm__("FUN_001f99c0");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_00258110");
 float spring_turn(float *turn_step, float current_angle, float target_angle, float spring_strength, float damping_factor, float max_turn_step) {
@@ -146,9 +145,6 @@ extern unsigned char D_L00_00173E40_258490[] __asm__("D_L00_00173E40")
 extern V_258490 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern V_258490 D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
-extern void FUN_001f9a28_258490(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001f9a68_258490(void *, void *, float) __asm__("FUN_001f9a68");
-extern void FUN_001f9bf8_258490(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int FUN_001efa68_258490(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float FUN_001f9b20_258490(void *) __asm__("FUN_001f9b20");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -186,8 +182,8 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
             ok = 0;
         }
     }
-    FUN_001f9a28_258490(&d, pos, to);
-    FUN_001f9bf8_258490(&n, &d, r * 1.2f);
+    fast_vec_sub(&d, pos, to);
+    fast_vec_normalize(&n, &d, r * 1.2f);
     up.q = 0;
     up.f[2] = h;
     fast_vec_add(&a, to, &up);
@@ -202,7 +198,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
                 {
                     float k = -d.f[0] * *(float *)(c + 0x40) - d.f[1] * *(float *)(c + 0x44);
                     if (0.0f < k) {
-                        FUN_001f9a68_258490(nrm, nrm, k);
+                        fast_vec_scale(nrm, nrm, k);
                         ok = 0;
                         fast_vec_add(&d, &d, nrm);
                     }
@@ -330,7 +326,6 @@ int FUN_L00_00258830_c(char *moving_object, char *movement_displacement, int fla
     fast_vec_sub(movement_displacement, collision_position, &original_position);
     return r;
 }
-float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void FUN_L00_00258830(int, int, float, float, float, int);
 /* Calls FUN_L00_00258830 with c converted to float and divided by 1024. */
 void move_moby_with_collision_integer_radius(int moby, int movement_displacement, float x, float y, int collision_radius_fixed, int collision_flags) __asm__("FUN_L00_00258ad0");
@@ -378,10 +373,8 @@ typedef struct {
 extern Glob D_L00_00173E40_c __asm__("D_L00_00173E40");
 
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 FUN_001f9dc8_c(f32) __asm__("FUN_001f9dc8");
 extern s32 FUN_L00_002583f0_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002583f0");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
@@ -421,10 +414,10 @@ s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Ve
     else if (movement_control->f10 < -horizontal_step_cap_or_probe_height_threshold)
         movement_control->f10 = -horizontal_step_cap_or_probe_height_threshold;
     if (movement_control->i38 & 4) {
-        displacement.f[0] = FUN_001f9dc8_c(movement_control->f4C) * movement_control->f10;
+        displacement.f[0] = fast_cos(movement_control->f4C) * movement_control->f10;
         displacement.f[1] = fast_sin(movement_control->f4C) * movement_control->f10;
     } else {
-        displacement.f[0] = FUN_001f9dc8_c(moby->f48) * movement_control->f10;
+        displacement.f[0] = fast_cos(moby->f48) * movement_control->f10;
         displacement.f[1] = fast_sin(moby->f48) * movement_control->f10;
     }
     if (movement_control->i38 & 1) {
@@ -469,7 +462,7 @@ s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Ve
 done:
     if (!(mask & 2)) {
         intended_displacement_length_xy = vector_length_xy(&displacement);
-        FUN_001f9a68_c(&probe_or_direction, &displacement, 1.0f / intended_displacement_length_xy);
+        fast_vec_scale(&probe_or_direction, &displacement, 1.0f / intended_displacement_length_xy);
         movement_collision_flags = FUN_L00_00258ad0_c(moby, &displacement, movement_control->f04, movement_control->i00, movement_control->f30, movement_control->i38);
         if (movement_collision_flags & 2)
             movement_control->f18 = frame_scale * -0.01f;
@@ -497,9 +490,7 @@ float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001f9e90_259028(float, float) __asm__("FUN_001f9e90");
 void approach_w(unsigned char *, float *, float, float, float,
                              float) __asm__("FUN_L00_00258278");
-float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 int fast_dec_timer(void *) __asm__("FUN_001f9740");
-int scale_game_frames(int) __asm__("FUN_001f96f8");
 int move_w(unsigned char *, char *, float *, void *,
                             float) __asm__("FUN_L00_00258b50");
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);

@@ -205,7 +205,6 @@ typedef union {
     f32 f[4];
 } HopVec;
 
-extern s32 FUN_001f96f8_223450(s32) __asm__("FUN_001f96f8");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
@@ -216,9 +215,7 @@ extern f32 spring_angle(float *, float *, int, float, float, float,
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_223450(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
-extern void FUN_001f9bf8_223450(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
-extern void FUN_001f9a10_223450(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
 
 #define ED64 frame_scale_sq
@@ -242,10 +239,10 @@ void hero_update_hop_velocity(void) {
         qcopy(&hero.motion.momentum, &hero.move_impulse);
         hero.ground_speed = hero.motion.flat_speed;
     } else if (state == 16) {
-        if (FUN_001f96f8_223450(0x36) < hero.state_timer) {
+        if (scale_game_frames(0x36) < hero.state_timer) {
             approach_value(ED70 * 25.0f, ED70 * 7.0f, &hero.jump_gravity);
         }
-        if (hero.state_timer < FUN_001f96f8_223450(0x37)) {
+        if (hero.state_timer < scale_game_frames(0x37)) {
             hero.target_speed = hero.long_jump_speed;
         } else {
             hero.target_speed = ED6C * 3.5f;
@@ -254,7 +251,7 @@ void hero_update_hop_velocity(void) {
         FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
         add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
     } else if (state == 0x1C) {
-        if (FUN_001f96f8_223450(0x28) < hero.state_timer) {
+        if (scale_game_frames(0x28) < hero.state_timer) {
             turn_to(0, ED64 * 0.04f, ED64 * 0.2f, ED6C * 15.009831f);
             air_accel(ED70 * 20.0f);
         }
@@ -276,7 +273,7 @@ void hero_update_hop_velocity(void) {
             hero.ground_speed = 0.0f;
         }
         if (hero.state.current == HERO_STATE_HIGH_JUMP) {
-            if (hero.past_jump_apex != 0 && hero.frames_to_land < FUN_001f96f8_223450(0xC)) {
+            if (hero.past_jump_apex != 0 && hero.frames_to_land < scale_game_frames(0xC)) {
                 approach_value(0.0f, ED70 * 8.0f, &hero.high_jump_drift_speed);
             } else {
                 approach_value(ED6C * 4.2f, ED70 * 8.0f, &hero.high_jump_drift_speed);
@@ -292,17 +289,17 @@ void hero_update_hop_velocity(void) {
     } else if (state == 0x11) {
         hero.motion.move_yaw = hero.unk470.f[3];
         qcopy(&hero.motion.move_dir, &hero.unk470);
-        if (FUN_001f96f8_223450(9) < hero.state_timer) {
+        if (scale_game_frames(9) < hero.state_timer) {
             turn_to(-1, ED64 * 0.042f, ED64 * 0.2f, ED6C * 11.868238f);
         }
-        if (FUN_001f96f8_223450(9) <= hero.state_timer) {
+        if (scale_game_frames(9) <= hero.state_timer) {
             if (hero.unk308 == 0) {
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.move_yaw) * (ED6C * 4.9f);
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
                 FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
-                FUN_001f9bf8_223450(&velocity_addend, &hero.motion.move_dir, ED6C * 4.9f);
-                FUN_001f9a10_223450(&hero.motion.velocity, &hero.motion.velocity, &velocity_addend);
+                fast_vec_normalize(&velocity_addend, &hero.motion.move_dir, ED6C * 4.9f);
+                fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &velocity_addend);
             }
         }
         hero.ground_speed = hero.motion.flat_speed;

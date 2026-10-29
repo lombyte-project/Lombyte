@@ -619,7 +619,6 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern float beam_spread_degrees_gp __asm__("D_L06_00161FD4") __attribute__((sda));
 extern int beam_duration_frames_gp __asm__("D_L06_00161FD8") __attribute__((sda));
@@ -639,7 +638,7 @@ void initialize_blarg_space_commando_beam(char *moby) {
         point_offset[0] = fast_cos(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
         point_offset[1] = fast_sin(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
         point_offset[2] = 0.15f;
-        add_vector_xyz((float *)(vars + 0x230 + i * 16), (float *)(vars + 0x210), point_offset);
+        fast_vec_add((float *)(vars + 0x230 + i * 16), (float *)(vars + 0x210), point_offset);
         if (i == 0 || i == 15) {
             float *endpoint_color_blend_factor = (float *)(vars + 0x23C + i * 16);
             *endpoint_color_blend_factor = *endpoint_color_blend_factor = 0.0f;
@@ -715,7 +714,7 @@ void update_blarg_space_commando_beam(void *owner_moby) {
         fast_vec_sub(point, &data->pts[i], &data->base);
         point[2] = 0.0f;
         fast_vec_normalize(point, point, step);
-        add_vector_xyz(point, (float *)&data->pts[i], point);
+        fast_vec_add(point, (float *)&data->pts[i], point);
         fast_vec_sub(relative, point, moby + 0x10);
         alignment = fast_vec_dot(relative, &data->dir);
         if (0.4f < alignment) {
@@ -1004,7 +1003,6 @@ extern short timer_frame_left_x_addend_gp __asm__("D_L06_001620E0") __attribute_
 extern short timer_frame_right_x_addend_gp __asm__("D_L06_001620E4") __attribute__((sda));
 extern short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") __attribute__((sda));
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
-extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
@@ -1024,7 +1022,7 @@ void draw_pulsing_timer_display(char *moby) {
     draw_ui_frame(W(timer_frame_x_addend_gp) + W(timer_text_y_gp), W(timer_frame_y_addend_gp) + W(timer_text_y_gp),
                 W(timer_frame_left_x_addend_gp) + W(timer_text_center_x_gp), W(timer_frame_right_x_addend_gp) + W(timer_text_center_x_gp),
                 W(timer_frame_fill_high_byte_gp));
-    color_blend_factor = fast_sin(func_001FA888(level_frame_count % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    color_blend_factor = fast_sin(convert_integer_to_float(level_frame_count % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (color_blend_factor > 1.0f) {
         color_blend_factor = 1.0f;
     } else if (color_blend_factor < 0.0f) {

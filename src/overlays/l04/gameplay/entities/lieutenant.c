@@ -52,7 +52,6 @@ extern int FUN_00214720(char *, s32);
 extern int update_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_00266448");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void add_vector_xyz(Vec4 *, Vec4 *, void *) __asm__("FUN_001f9a10");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
@@ -98,7 +97,7 @@ void lieutenant_update(struct Moby *moby) {
             unlock_planet(6);
             jet_clear_persistent(((struct VendorMobyView *)moby)->slot);
             fast_vec_normalize(&pos, &((struct VendorMobyView *)moby)->facing, 2.0f);
-            add_vector_xyz(&pos, &pos, &moby->pos);
+            fast_vec_add(&pos, &pos, &moby->pos);
             rotation_ptr = &rot;
             qcopy(rotation_ptr, &moby->rot);
             rot.f[2] = fast_add_rotations(rot.f[2], 3.14159f);

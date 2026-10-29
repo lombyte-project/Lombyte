@@ -382,9 +382,7 @@ void initialize_hero_relative_camera(void *camera_instance) {
     D_L03_00167074 = 0x78;
 }
 #include "sda.h"
-extern void func_L00_001FF4B0_ebb00(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float func_001EC120_ebb00(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
-extern void func_001F9BD8_ebb00(void *, void *, void *) __asm__("FUN_001f9a10");
 void update_smoothed_hero_relative_camera_position(void *camera_instance) __asm__("FUN_L03_002ebb00");
 
 void update_smoothed_hero_relative_camera_position(void *camera_instance) {
@@ -400,8 +398,8 @@ void update_smoothed_hero_relative_camera_position(void *camera_instance) {
     if (hero_for_height_update->unk2284 != 0x50 || hero_for_height_update->state.current == 0x11) {
         *(float *)(camera_back_direction_data + 0x34) = hero_for_height_update->motion.pos.f[2];
     }
-    func_L00_001FF4B0_ebb00(gravity_offset, &hero.gravity_dir, -*(float *)(camera_offset_params + 0x10));
-    func_L00_001FF4B0_ebb00(camera_back_offset, camera_back_direction_data, -*(float *)camera_offset_params);
+    fast_vec_normalize(gravity_offset, &hero.gravity_dir, -*(float *)(camera_offset_params + 0x10));
+    fast_vec_normalize(camera_back_offset, camera_back_direction_data, -*(float *)camera_offset_params);
     hero_ptr = &hero;
     *(float *)camera_data =
         func_001EC120_ebb00(camera_data + 0x10, *(float *)camera_data, hero_ptr->motion.pos.f[0], *(float *)(camera_data + 0x20),
@@ -412,8 +410,8 @@ void update_smoothed_hero_relative_camera_position(void *camera_instance) {
     *(float *)(camera_data + 8) =
         func_001EC120_ebb00(camera_data + 0x18, *(float *)(camera_data + 8), *(float *)(camera_back_direction_data + 0x34), *(float *)(camera_data + 0x20),
                             *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
-    func_001F9BD8_ebb00(camera_position, camera_data, gravity_offset);
-    func_001F9BD8_ebb00(camera_position, camera_position, camera_back_offset);
+    fast_vec_add(camera_position, camera_data, gravity_offset);
+    fast_vec_add(camera_position, camera_position, camera_back_offset);
     *(float *)(camera + 0x30) = camera_position[0];
     *(float *)(camera + 0x34) = camera_position[1];
     *(float *)(camera + 0x38) = camera_position[2];

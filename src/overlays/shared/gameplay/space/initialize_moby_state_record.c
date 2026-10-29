@@ -43,6 +43,7 @@ void initialize_moby_state_record(char *moby) {
     *(int *)(moby_state_record + 0x38) = moby_state_copy_source[2];
 }
 #include "sda.h"
+#include "rnc/math/fast_math.h"
 extern u8 *D_0013E030 NOT_SDA;
 /* Flags the moby in D_0013E030 (bits 0 and 1) and clears its field 0x94. */
 void deactivate_recorded_moby(void) {
@@ -93,7 +94,6 @@ void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
-int scale_game_frames(int) __asm__("FUN_001f96f8");
 void load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
 void parse_space_scene_chunk(int) __asm__("FUN_002049f0");
 void sound_update(void) __asm__("FUN_0022ca50");
@@ -222,7 +222,6 @@ extern C_0028ed58 D_L00_0016C860_0028ed58 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void FUN_L00_0028e9c8_0028ed58(s32) __asm__("FUN_L00_0028e9c8");
-s32 FUN_001f96f8_0028ed58(s32) __asm__("FUN_001f96f8");
 void FUN_002049f0_0028ed58(s32) __asm__("FUN_002049f0");
 s32 memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribute__((sda));
@@ -248,7 +247,7 @@ void prepare_target_level_transition(s32 target_level_index) {
         s32 divisor;
         FUN_L00_0028e9c8_0028ed58(8);
         divisor = pal_mode ? 0x50 : 0x60;
-        shared_result_record->i34 = FUN_001f96f8_0028ed58(transition_sequence_positions[shared_state_record->h26]);
+        shared_result_record->i34 = scale_game_frames(transition_sequence_positions[shared_state_record->h26]);
         shared_result_record->i3C = shared_result_record->i34 / divisor;
         FUN_002049f0_0028ed58(shared_result_record->i3C);
         shared_result_record->i38 = shared_result_record->i34 % divisor;
@@ -331,12 +330,9 @@ typedef struct {
     char pad[0x22];
     short h26;
 } G_28efc8;
-void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 long get_effect_texture(int) __asm__("FUN_001f44b8");
 int random_integer_below(int) __asm__("FUN_00213260");
-float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* FUN_L00_0028efc8 is the executable function of the same bytes (src/gameplay). */
 

@@ -7,6 +7,7 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/math/fast_math.h"
 
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
@@ -96,7 +97,6 @@ extern const char race_girl_name[] __asm__("D_L05_00161ED8");
 extern HoverboardGirlVector race_camera_vectors[] __asm__("D_L05_00215BC0");
 extern HoverboardGirlVector saved_camera_vectors[] __asm__("D_00141050");
 
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -118,17 +118,12 @@ extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(s32, s64) __asm__("FUN_0020b178");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void build_spherical_offset(f32, f32, f32, void *) __asm__("FUN_00214db0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation(HoverboardGirlMoby *, HoverboardGirlJoint *, s32, f32,
                                    f32) __asm__("FUN_L00_002628d8");
-extern f32 fast_cos(f32) __asm__("FUN_001f9de0");
 extern void
 update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *) __asm__("FUN_L05_00316990");
 void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *,
@@ -153,7 +148,7 @@ void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, Hoverboard
             state_window->joints[2].target_scale = animation_value;
             animation_value = (f32)(frame_number & 0x7F) * 0.0078125f;
             state_window->joints[2].target_rotation[1] =
-                fast_cos(animation_value * 3.1415927f) * 0.61086524f;
+                fast_sin(animation_value * 3.1415927f) * 0.61086524f;
         }
         update_joint_animation(moby, joint, joint_index + 2, frame_scale_sq * 0.05f,
                                frame_scale_sq * 0.3f);

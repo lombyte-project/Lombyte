@@ -29,6 +29,7 @@ void update_moby_draw_registration(struct Moby *moby) {
     }
 }
 #include "eetypes.h"
+#include "rnc/math/fast_math.h"
 typedef struct {
     u8 p0[0x20];
     f32 r[4];
@@ -41,7 +42,6 @@ typedef struct {
     M_FUN_L14_00305a38 *m;
 } O_FUN_L14_00305a38;
 s32 random_integer_below(s32) __asm__("FUN_00213260");
-s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void initialize_morphoray_private_state(O_FUN_L14_00305a38 *moby) __asm__("FUN_L14_00305a38");
 
 void initialize_morphoray_private_state(O_FUN_L14_00305a38 *moby) {

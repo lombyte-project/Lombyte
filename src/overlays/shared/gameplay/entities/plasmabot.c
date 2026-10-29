@@ -1259,7 +1259,6 @@ void draw_plasmabot_glow_quad(char *m) {
 }
 
 extern u8 *D_L14_00167500 NOT_SDA;
-extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
 
 void plasmabot_hatch_update(struct Moby *moby) __asm__("FUN_L14_002d96e0");
@@ -1284,7 +1283,7 @@ void plasmabot_hatch_update(struct Moby *moby) {
     case HATCH_WAIT_ACTIVATION:
         if (*(s32 *)data != 0 && *(s16 *)(D_L14_00167500 + 0x86) == 0x14) {
             moby->state = 1;
-            *(s32 *)(data + 8) = FUN_001f96f8_c(*(s32 *)(data + 4));
+            *(s32 *)(data + 8) = scale_game_frames(*(s32 *)(data + 4));
         }
         break;
     case HATCH_WAIT_ACTIVATION_DELAY:
@@ -1725,15 +1724,10 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_00274948_c(u128_2E17B8 *a, u128_2E17B8 *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
-extern void func_L00_001FF4B0_2E17B8(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_002141A8_2E17B8(void *, float, float) __asm__("FUN_00213358");
 extern Particle_2E17B8 *func_L00_002757E8_2E17B8(void *, void *, int, Moby *) __asm__("FUN_L00_00274948");
 extern float func_002140F8_2E17B8(float, float) __asm__("FUN_002132a8");
 extern int func_002140B0_2E17B8(int) __asm__("FUN_00213260");
-extern int func_001F9850_2E17B8(int) __asm__("FUN_001f96f8");
-extern float func_001FA888_2E17B8(int) __asm__("FUN_001fa6c0");
-extern float func_001F9F90_2E17B8(float x) __asm__("FUN_001f9dc8");
-extern float func_001F9FA8_2E17B8(float) __asm__("FUN_001f9de0");
 extern float func_L00_00258C80_2E17B8(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void func_L00_0026DA50_2E17B8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
@@ -1755,7 +1749,7 @@ void emit_debris_trail_particles(Moby *moby) {
     float size;
 
     debris_motion_state = *(Vars **)&moby->pvars;
-    func_L00_001FF4B0_2E17B8(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
+    fast_vec_normalize(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
     fast_vec_add(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
     func_002141A8_2E17B8(&particle_initial_velocity, 0.005f, 0.03f);
     particle = func_L00_002757E8_2E17B8(&pos, &particle_initial_velocity, 0x7F, moby);
@@ -1775,8 +1769,8 @@ void emit_debris_trail_particles(Moby *moby) {
         } else {
             particle->life = func_002140F8_2E17B8(80000.0f, 120000.0f);
         }
-        particle->frames = func_001F9850_2E17B8(2);
-        f = 1.0f / func_001FA888_2E17B8(particle->frames);
+        particle->frames = scale_game_frames(2);
+        f = 1.0f / convert_integer_to_float(particle->frames);
         color = 0x7F7F7F;
         fade->mode = 4;
         fade->color = color;
@@ -1787,14 +1781,14 @@ void emit_debris_trail_particles(Moby *moby) {
     particle_initial_velocity.f[2] = 0.0f;
     particle_initial_velocity.f[3] = 1.0f;
     if (moby->state == 0) {
-        func_L00_001FF4B0_2E17B8(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.95f);
+        fast_vec_normalize(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.95f);
     } else {
-        func_L00_001FF4B0_2E17B8(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 1.15f);
+        fast_vec_normalize(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 1.15f);
         particle_initial_velocity.f[2] = D_0015ED60 * 0.03f;
     }
     fast_vec_add(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
-    emission_position_offset.f[0] = func_001F9F90_2E17B8(moby->rot.z) * 0.3f;
-    emission_position_offset.f[1] = func_001F9FA8_2E17B8(moby->rot.z) * 0.3f;
+    emission_position_offset.f[0] = fast_cos(moby->rot.z) * 0.3f;
+    emission_position_offset.f[1] = fast_sin(moby->rot.z) * 0.3f;
     emission_position_offset.f[2] = 0.0f;
     fast_vec_add(&pos, &pos, &emission_position_offset);
     if (moby->state == 1) {
@@ -1802,7 +1796,7 @@ void emit_debris_trail_particles(Moby *moby) {
         pos.f[1] += func_L00_00258C80_2E17B8(0.0f, 0.1f);
     }
     func_L00_0026DA50_2E17B8(&pos, &particle_initial_velocity, 0x4F007FFF, 0x1FFFFFFF,
-                             random_int_between(func_001F9850_2E17B8(10), func_001F9850_2E17B8(20)), 1, 60000.0f);
+                             random_int_between(scale_game_frames(10), scale_game_frames(20)), 1, 60000.0f);
     signed_particle_variation = func_002140B0_2E17B8(6);
     if (func_002140B0_2E17B8(2) != 0) {
         signed_particle_variation = -signed_particle_variation;
@@ -1815,7 +1809,7 @@ void emit_debris_trail_particles(Moby *moby) {
         ParticleFade_2E17B8 *ef;
         ef = &spawned_particle->fade;
         spawned_particle->b3 = 0x44;
-        spawned_particle->frames = func_001F9850_2E17B8(0x3C);
+        spawned_particle->frames = scale_game_frames(0x3C);
         ef->i4 = 2;
         ef->bA = 0x60;
         ef->bB = spawned_particle->frames;

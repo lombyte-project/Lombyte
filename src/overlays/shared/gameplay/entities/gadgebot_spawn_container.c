@@ -2707,7 +2707,6 @@ void draw_gadgebot_group_glow_effects(char *owner) {
     }
 }
 extern float fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern float FUN_001f9de0_c(float) __asm__("FUN_001f9de0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int FUN_001fa6e0_c(int, int, float) __asm__("FUN_001fa6e0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -2737,7 +2736,7 @@ void update_gadgebot_glow_effects(char *moby) {
     }
 
     *(f32 *)(moby_vars + 0x28C) = fast_add_rotations(*(f32 *)(moby_vars + 0x28C), frame_time * 2.9670596f);
-    color_pulse_multiplier = 0.5f * FUN_001f9de0_c(*(f32 *)(moby_vars + 0x28C)) + 1.0f;
+    color_pulse_multiplier = 0.5f * fast_sin(*(f32 *)(moby_vars + 0x28C)) + 1.0f;
 
     r = tint & 0xFF;
     b = (tint >> 16) & 0xFF;

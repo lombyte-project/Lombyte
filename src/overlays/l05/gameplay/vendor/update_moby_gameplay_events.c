@@ -15,7 +15,6 @@ extern int D_001417E0[];
 extern int D_0014EE90[];
 extern unsigned char D_0014C050[];
 extern f32 D_0013F3D8, D_0013F3DC;
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void collect_moby_and_clear_path_keys(void *) __asm__("FUN_L00_002d5830");
@@ -82,6 +81,7 @@ extern L05Fields_0013D4C0 item_available __asm__("D_0013D4C0");
 #define D_0013F65E (*(short *)(D_0013F3D0 + 0x28e))
 
 #include "rnc/overlay/l05/gameplay/vendor/update_moby_gameplay_events_globals.h"
+#include "rnc/math/fast_math.h"
 void update_moby_gameplay_events(unsigned char *moby) __asm__("FUN_L05_0031bf40");
 
 void update_moby_gameplay_events(unsigned char *moby) {

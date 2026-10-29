@@ -92,7 +92,6 @@ extern u8 D_0013F350_002293a8[] __asm__("D_0013F350");
 extern s32 pad_held __asm__("D_0013CAE0") NOT_SDA;
 extern s32 D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 void stick_target(s32, f32) __asm__("FUN_L00_002118c8");
 void hero_queue_sequence(s32, s32) __asm__("FUN_L00_002325e0");
@@ -156,7 +155,6 @@ void update_hero_locomotion_state(void) {
 extern s32 pad_held_lui __asm__("D_0013CAE0") NOT_SDA;
 extern u8 D_0013D4C2_lui __asm__("D_0013D4C2") NOT_SDA;
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
-extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
 extern int check_pad_press_separation(int, void *, int, int) __asm__("FUN_L00_00266e00");
 extern int pad_pressed_within(int, int, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_0020d498_229660(int) __asm__("FUN_L00_0020d498");
@@ -171,7 +169,7 @@ int hero_handle_jump_press(void) {
     if (hero.state.current == 0xE)
         return 0;
     input_history_separation_limit = get_hero_high_jump_input_window_frames();
-    input_history_window_padding = FUN_001f96f8_229660(5);
+    input_history_window_padding = scale_game_frames(5);
     if ((pad_held_lui & 0xA) && input_history_separation_limit > 0 &&
         check_pad_press_separation(0x40, (void *)0x1F000, input_history_window_padding + input_history_separation_limit, input_history_separation_limit)) {
         next_state = 0xB;
@@ -179,8 +177,8 @@ int hero_handle_jump_press(void) {
         hero_set_state(next_state, 1);
         return 1;
     }
-    jump_press_history_limit = FUN_001f96f8_229660(9);
-    if (FUN_001f96f8_229660(6) < hero.state_timer) {
+    jump_press_history_limit = scale_game_frames(9);
+    if (scale_game_frames(6) < hero.state_timer) {
         if (!pad_pressed_within(0x40, jump_press_history_limit, 0))
             return 0;
         if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_lui != 0 && hero.pack_disabled == 0) {
@@ -218,7 +216,6 @@ typedef union {
     float f[4];
 } V_229910_00229910;
 extern float D_L00_00173E68_lui __asm__("D_L00_00173E68") NOT_SDA;
-extern int FUN_001f96f8_00229910(int) __asm__("FUN_001f96f8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
@@ -228,7 +225,7 @@ int check_hero_forward_collision_height(void) {
     struct Hero *hero_ptr = &hero;
     V_229910_00229910 collision_line_start, collision_line_end;
     float height_delta;
-    if (hero_ptr->motion.flat_speed < hero_ptr->capsule_radius / (float)FUN_001f96f8_00229910(20))
+    if (hero_ptr->motion.flat_speed < hero_ptr->capsule_radius / (float)scale_game_frames(20))
         return 0;
     if (0.52359879f < fast_difference_between_rotations(fast_arc_tan(hero_ptr->motion.displacement.f[0],
                                                                   hero_ptr->motion.displacement.f[1]),
@@ -255,7 +252,6 @@ typedef struct {
 extern E00229a98 item_defs[] __asm__("D_L00_00179AC0");
 s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 

@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/fast_math.h"
 
 /* Draws the weapon HUD tile: three-part frame, weapon icon and ammo text with shadow, faded by the slide-in timers. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
@@ -105,7 +106,6 @@ typedef struct {
     int start;
 } O_23aaa8;
 extern int D_L00_0015F5CC_23aaa8 __asm__("D_L00_0015F5CC");
-int scale_game_frames(int) __asm__("FUN_001f96f8");
 int random_integer_below(int) __asm__("FUN_00213260");
 extern T_23aaa8 *D_L00_0017E4F4 NOT_SDA;
 int update_hud_animation_frame(O_23aaa8 *hud_frame_state) __asm__("FUN_L00_0023aaa8");
@@ -187,7 +187,6 @@ void update_weapon_hud_state(void) __asm__("FUN_L00_0023adb8");
 extern void update_weapon_hud_state(void) __asm__("FUN_L00_0023adb8");
 extern void apply_pending_animation(void *) __asm__("FUN_001ff418");
 
-int scale_game_frames(int) __asm__("FUN_001f96f8");
 int update_hud_elements(int call) __asm__("FUN_L00_0023ac78");
 
 int update_hud_elements(int call) {

@@ -48,7 +48,6 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-float absolute_float(float input) __asm__("FUN_001f99c0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -243,7 +242,6 @@ void door_update(struct Moby *door_moby) {
 extern char D_L17_00174740_lui[] __asm__("D_L17_00174740") NOT_SDA;
 extern float FUN_001f9b80_q(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_q(float, float) __asm__("FUN_001f9e90");
-extern float FUN_001fa688_q(float, float) __asm__("FUN_001fa688");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_0015EEA4_q __asm__("D_0015EEA4");
 extern int FUN_001efa68_q(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -298,7 +296,7 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
             FUN_001f9a40_q(target_position, lowered_hero_position, target_position, 0.99f);
         }
         if (FUN_001f9b80_q(&moby->pos, target_position) > 4.0f) {
-            if (FUN_001fa688_q(moby->rot.z,
+            if (fast_difference_between_rotations(moby->rot.z,
                                FUN_001f9e90_q(*(float *)(drone_vars + 0x10) - moby->pos.x,
                                               *(float *)(drone_vars + 0x14) - moby->pos.y)) <
                 0.7853982f) {
@@ -3644,12 +3642,10 @@ struct Dat_3CC0_f2180 {
     float fA4;
 };
 extern float func_00214D28_f2180(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern int func_001F9850_f2180(int) __asm__("FUN_001f96f8");
 extern int func_001FA898_r_f2180(float) __asm__("FUN_001fa6d0");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float func_001FA748_f2180(float, float) __asm__("FUN_001fa580");
 extern float func_001FA790_f2180(float, float) __asm__("FUN_001fa5c8");
-extern float func_001F9F90_f2180(float) __asm__("FUN_001f9dc8");
 extern float approach_angle(float *p, float *v, float a, float b, float c,
                                      float d) __asm__("FUN_L00_0025be00");
 int update_shuttle_travel_and_camera(char *moby, int route_index) {
@@ -3661,7 +3657,7 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
     float scaled_path_position, camera_position_index_float, camera_position_blend, camera_aim_blend, moby_path_blend, interpolation_start_angle, turn;
     int i1, i2, i3;
 
-    func_00214D28_f2180(&shuttle_vars->fA4, 1.0f, 1.0f / (float)func_001F9850_f2180(0x384));
+    func_00214D28_f2180(&shuttle_vars->fA4, 1.0f, 1.0f / (float)scale_game_frames(0x384));
     scaled_path_position = shuttle_vars->fA4 * (float)(camera_position_path->n - 1);
     i1 = func_001FA898_r_f2180(scaled_path_position);
     camera_position_index_float = (float)i1;
@@ -3699,7 +3695,7 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
                 interpolation_start_angle) *
                 moby_path_blend,
             interpolation_start_angle);
-        *(float *)(moby + 0x44) = *(float *)(moby + 0x44) * func_001F9F90_f2180(shuttle_vars->f88);
+        *(float *)(moby + 0x44) = *(float *)(moby + 0x44) * fast_cos(shuttle_vars->f88);
         *(float *)(moby + 0x48) = func_001FA748_f2180(*(float *)(moby + 0x48), shuttle_vars->f88);
     } else {
         *(float *)(moby + 0x44) = -fast_arc_tan(

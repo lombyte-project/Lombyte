@@ -1141,7 +1141,6 @@ int can_sentrybot_advance_patrol(void *input_moby) {
 /* Wakes every linked switch that can see this moby, or rearms the timer when there is no list. */
 extern short *D_L15_001ABE40_a0[] __asm__("D_L15_001ABE40");
 extern int D_L15_0015FFD8_a0 __asm__("D_L15_0015FFD8");
-extern int FUN_001f96f8_a0(int) __asm__("FUN_001f96f8");
 extern int FUN_001efa68_a0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 void set_sentrybot_attention_target(char *source_moby, char *recipient_moby) __asm__("FUN_L15_0029a248");
 
@@ -1162,7 +1161,7 @@ void alert_visible_group_sentrybots(void *mp) {
         return;
     }
     if (source_moby[0x21] == 0xFF) {
-        *(short *)(moby_data + 0x156) = FUN_001f96f8_a0(0xB4);
+        *(short *)(moby_data + 0x156) = scale_game_frames(0xB4);
         return;
     }
     group_moby_entry = D_L15_001ABE40_a0[source_moby[0x21]];
@@ -1179,7 +1178,7 @@ void alert_visible_group_sentrybots(void *mp) {
             listed_line_endpoint[2] += 1.0f;
             if (FUN_001efa68_a0(listed_line_endpoint, source_line_endpoint, 2, 0, 0) == 0) {
                 moby_data = *(char **)((char *)(listed_moby_byte_offset + D_L15_0015FFD8_a0) + 0x78);
-                ((D_a0d0 *)moby_data)->h156 = FUN_001f96f8_a0(300);
+                ((D_a0d0 *)moby_data)->h156 = scale_game_frames(300);
                 moby_data[0x15B] = 0;
                 set_sentrybot_attention_target((char *)source_moby, (char *)(D_L15_0015FFD8_a0 + listed_moby_byte_offset));
             }
@@ -2603,13 +2602,9 @@ extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BB830");
 extern unsigned char D_0013E650_2A3DD0[] __asm__("D_0013E550");
 extern float func_002140F8_2A3DD0(float, float) __asm__("FUN_002132a8");
 extern int func_002140B0_2A3DD0(int) __asm__("FUN_00213260");
-extern int func_001F9850_2A3DD0(int) __asm__("FUN_001f96f8");
-extern float func_001F9B88_2A3DD0(float) __asm__("FUN_001f99c0");
 extern int func_001FA898_2A3DD0(float) __asm__("FUN_001fa6d0");
-extern void func_001F9BF0_2A3DD0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void func_L00_001FF4B0_2A3DD0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001FA4A0_2A3DD0(void *, void *) __asm__("FUN_001fa2d8");
 extern void func_L15_002A47B8_2A3DD0(void *) __asm__("FUN_L15_002a35d8");
 extern int func_0022ED80_2A3DD0(int, int, void *) __asm__("FUN_0022da68");
@@ -2659,7 +2654,7 @@ void update_spark_emitter_moby(unsigned char *moby) {
             if (e->owner != (char *)moby || e->active == 0) {
                 moby[0xBC] = func_0022ED80_2A3DD0(0, 4, moby);
             }
-            func_001F9BF0_2A3DD0(V, D_0013F420, moby + 0x10);
+            fast_vec_sub(V, D_0013F420, moby + 0x10);
             func_001FA4A0_2A3DD0(W, moby + 0xC0);
             transform_vector(V, V, W);
             V[0] = 0.0f;
@@ -2684,8 +2679,8 @@ void update_spark_emitter_moby(unsigned char *moby) {
                 transform_vector_by_basis(B, B, moby + 0xC0);
                 transform_vector_by_basis(C, C, moby + 0xC0);
                 fast_vec_add(A, A, moby + 0x10);
-                func_L00_001FF4B0_2A3DD0(B, B, one / (float)func_001F9850_2A3DD0(30));
-                func_L00_001FF4B0_2A3DD0(C, C, one / (float)func_001F9850_2A3DD0(30));
+                fast_vec_normalize(B, B, one / (float)scale_game_frames(30));
+                fast_vec_normalize(C, C, one / (float)scale_game_frames(30));
                 B[3] = 0.125f;
                 {
                     int ra = func_002140B0_2A3DD0(0x10);
@@ -2695,12 +2690,12 @@ void update_spark_emitter_moby(unsigned char *moby) {
                     col = ((ra + 0x20) << 16) | partial_spark_color;
                     col |= rc + 0x60;
                 }
-                fa = func_001FA898_2A3DD0((float)(func_001F9850_2A3DD0(30) / 4));
-                fb = func_001FA898_2A3DD0((float)(func_001F9850_2A3DD0(30) / 2));
-                fc = func_001FA898_2A3DD0((float)(func_001F9850_2A3DD0(30) / 4));
+                fa = func_001FA898_2A3DD0((float)(scale_game_frames(30) / 4));
+                fb = func_001FA898_2A3DD0((float)(scale_game_frames(30) / 2));
+                fc = func_001FA898_2A3DD0((float)(scale_game_frames(30) / 4));
                 func_L15_002655D0_2A3DD0(A, B, C, col, 0x60808080, fa, fb, fc, moby);
             } while (i >= 0);
-            if (func_001F9B88_2A3DD0(V[1]) < hi && z < V[2] && V[2] < hi) {
+            if (absolute_float(V[1]) < hi && z < V[2] && V[2] < hi) {
                 transform_vector_by_basis(moby_data, V, moby + 0xC0);
                 fast_vec_add(moby_data, moby_data, moby + 0x10);
             } else {

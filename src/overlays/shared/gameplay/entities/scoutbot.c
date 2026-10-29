@@ -576,11 +576,6 @@ typedef struct {
 } Pk;
 extern u8 D_L08_001675C0_lui[] __asm__("D_L08_001675C0") NOT_SDA;
 u64 FUN_001f44b8_002d4108(s32) __asm__("FUN_001f44b8");
-void FUN_001f9a28_002d4108(void *, void *, void *) __asm__("FUN_001f9a28");
-void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 
@@ -615,7 +610,7 @@ void draw_scoutbot_glow_quad(char *moby) {
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
     qcopy(M[3], (float *)(data + 0x220));
-    FUN_001f9a28_002d4108(M[0], D_L08_001675C0_lui, M[3]);
+    fast_vec_sub(M[0], D_L08_001675C0_lui, M[3]);
     fast_vec_normalize(M[0], M[0], 1.0f);
     fast_vec_cross(M[1], M[0], up);
     fast_vec_normalize(M[1], M[1], 1.0f);

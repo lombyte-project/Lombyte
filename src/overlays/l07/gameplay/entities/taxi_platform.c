@@ -3616,13 +3616,8 @@ extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 unsigned char *spawn_color_tween_emitter_particle(void *pos, unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, int g, float x, float y) __asm__("FUN_L00_002729c8");
-extern float FUN_001fa6c0_2cd2b0(int) __asm__("FUN_001fa6c0");
-extern float FUN_001f9dc8_2cd2b0(float) __asm__("FUN_001f9dc8");
-extern float FUN_001f9de0_2cd2b0(float) __asm__("FUN_001f9de0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_001f9bf8_2cd2b0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int FUN_001efa68_2cd2b0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern int FUN_001f96f8_2cd2b0(int) __asm__("FUN_001f96f8");
 extern void *FUN_L00_002729c8_2cd2b0(float *pos, unsigned char a1, unsigned char a2, unsigned char a3,
     unsigned char a4, unsigned char a5, void *a6, float f0, float f1) __asm__("FUN_L00_002729c8");
 extern long FUN_001f44b8_2cd2b0(int) __asm__("FUN_001f44b8");
@@ -3640,15 +3635,15 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby)
     int k;
     Packet pkt;
 
-    frame_phase_work_value = FUN_001fa6c0_2cd2b0(D_L07_0015F5CC_lui);
+    frame_phase_work_value = convert_integer_to_float(D_L07_0015F5CC_lui);
     qcopy(oscillating_reference_position, moby_effect_data->f140);
-    oscillation_work_value = FUN_001f9dc8_2cd2b0(normalize_angle(frame_phase_work_value / 11.0f));
+    oscillation_work_value = fast_cos(normalize_angle(frame_phase_work_value / 11.0f));
     frame_phase_work_value = frame_phase_work_value / 10.0f;
     oscillation_work_value = normalize_angle(frame_phase_work_value + oscillation_work_value * 1.5707964f);
-    oscillating_reference_position[0] = oscillating_reference_position[0] + FUN_001f9de0_2cd2b0(oscillation_work_value);
+    oscillating_reference_position[0] = oscillating_reference_position[0] + fast_sin(oscillation_work_value);
     moby_point_position(effect_owner_moby, 2, attachment_position);
     fast_vec_sub(endpoint_work_vector, oscillating_reference_position, attachment_position);
-    FUN_001f9bf8_2cd2b0(endpoint_work_vector, endpoint_work_vector, 30.0f);
+    fast_vec_normalize(endpoint_work_vector, endpoint_work_vector, 30.0f);
     fast_vec_add(line_endpoint, oscillating_reference_position, endpoint_work_vector);
     if (FUN_001efa68_2cd2b0(attachment_position, line_endpoint, 2, effect_owner_moby, 0)) {
         qcopy(line_endpoint, D_L07_00173EE0_2cd2b0);
@@ -3657,33 +3652,33 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby)
     }
     fast_vec_sub(endpoint_to_attachment, attachment_position, line_endpoint);
     fast_vec_cross(quad_side_offset, D_L07_00167050_2cd2b0, endpoint_to_attachment);
-    FUN_001f9bf8_2cd2b0(quad_side_offset, quad_side_offset, 0.25f);
+    fast_vec_normalize(quad_side_offset, quad_side_offset, 0.25f);
     fast_vec_add(endpoint_work_vector, quad_side_offset, line_endpoint);
     if (flag) {
-        FUN_L00_002729c8_2cd2b0(line_endpoint, 0, FUN_001f96f8_2cd2b0((rand() & 1) + 0x2D),
-            FUN_001f96f8_2cd2b0((rand() & 7) + 0x37), 1,
-            FUN_001f96f8_2cd2b0((rand() & 3) + 0xD), effect_owner_moby, 1.0f, 1.0f);
+        FUN_L00_002729c8_2cd2b0(line_endpoint, 0, scale_game_frames((rand() & 1) + 0x2D),
+            scale_game_frames((rand() & 7) + 0x37), 1,
+            scale_game_frames((rand() & 3) + 0xD), effect_owner_moby, 1.0f, 1.0f);
         if (moby_effect_data->f15C != 0.0f) {
             fast_vec_sub(effect_sample_step, line_endpoint, moby_effect_data->f150);
-            FUN_001f9bf8_2cd2b0(effect_sample_step, effect_sample_step, 0.2f);
+            fast_vec_normalize(effect_sample_step, effect_sample_step, 0.2f);
             qcopy(effect_sample_position, moby_effect_data->f150);
             for (k = 0; k < 4; k++) {
                 fast_vec_add(effect_sample_position, effect_sample_position, effect_sample_step);
                 fast_vec_sub(sample_probe_offset, effect_sample_position, attachment_position);
-                FUN_001f9bf8_2cd2b0(sample_probe_offset, sample_probe_offset, 5.0f);
+                fast_vec_normalize(sample_probe_offset, sample_probe_offset, 5.0f);
                 fast_vec_sub(ii, effect_sample_position, sample_probe_offset);
                 fast_vec_add(jj, effect_sample_position, sample_probe_offset);
                 if (FUN_001efa68_2cd2b0(ii, jj, 2, effect_owner_moby, 0)) {
                     qcopy(effect_sample_position, D_L07_00173EE0_2cd2b0);
                 }
                 if (k == 2) {
-                    FUN_L00_002729c8_2cd2b0(effect_sample_position, 0, FUN_001f96f8_2cd2b0((rand() & 1) + 0x2D),
-                        FUN_001f96f8_2cd2b0((rand() & 7) + 0x37), 1,
-                        FUN_001f96f8_2cd2b0((rand() & 3) + 0xD), effect_owner_moby, 1.0f, 1.0f);
+                    FUN_L00_002729c8_2cd2b0(effect_sample_position, 0, scale_game_frames((rand() & 1) + 0x2D),
+                        scale_game_frames((rand() & 7) + 0x37), 1,
+                        scale_game_frames((rand() & 3) + 0xD), effect_owner_moby, 1.0f, 1.0f);
                 } else {
-                    FUN_L00_002729c8_2cd2b0(effect_sample_position, 1, FUN_001f96f8_2cd2b0(0x2D),
-                        FUN_001f96f8_2cd2b0(0x37), 1,
-                        FUN_001f96f8_2cd2b0(0xD), effect_owner_moby, 1.0f, 1.0f);
+                    FUN_L00_002729c8_2cd2b0(effect_sample_position, 1, scale_game_frames(0x2D),
+                        scale_game_frames(0x37), 1,
+                        scale_game_frames(0xD), effect_owner_moby, 1.0f, 1.0f);
                 }
             }
         }

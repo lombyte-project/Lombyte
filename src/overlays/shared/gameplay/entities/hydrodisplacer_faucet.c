@@ -267,9 +267,7 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
     }
 }
 #include "rnc/gameplay/state/item_state.h"
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -337,7 +335,7 @@ void hoverboard_update(unsigned char *moby) {
     }
     {
         unsigned char *position_ptr = moby + 0x10;
-        subtract_vector_xyz(delta, position_ptr, data);
+        fast_vec_sub(delta, position_ptr, data);
         qcopy(data, position_ptr);
     }
     delta_length = fast_vec_length(delta);
@@ -345,8 +343,8 @@ void hoverboard_update(unsigned char *moby) {
         moby_point_position(moby, frame_number_gp & 1, position);
         angle = random_angle_radians();
         distance_scale = frame_time * 0.25f;
-        normalize_vector_xyz(effect_position, moby + 0xe0, distance_scale * fast_cos(angle));
-        normalize_vector_xyz(offset, moby + 0xd0, distance_scale * fast_sin(angle));
+        fast_vec_normalize(effect_position, moby + 0xe0, distance_scale * fast_cos(angle));
+        fast_vec_normalize(offset, moby + 0xd0, distance_scale * fast_sin(angle));
         fast_vec_add(effect_position, effect_position, delta);
         fast_vec_add(effect_position, effect_position, offset);
         qcopy(effect_position, delta);
@@ -413,7 +411,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
                 char *candidate_moby = group_member_moby;
                 qcopy(offset_test_position, data + 0x200);
                 offset_test_position[2] += 0.8f;
-                subtract_vector_xyz(position_delta, candidate_moby + 0x10, offset_test_position);
+                fast_vec_sub(position_delta, candidate_moby + 0x10, offset_test_position);
                 if (!(8.0f < fast_vec_length(position_delta))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, group_member_moby + 0xC0);
@@ -433,7 +431,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
         while (proximity_candidate_moby) {
             if (*(short *)(proximity_candidate_moby + 0xA6) == 0x474) {
                 float m[16];
-                subtract_vector_xyz(position_delta, proximity_candidate_moby + 0x10, data + 0x200);
+                fast_vec_sub(position_delta, proximity_candidate_moby + 0x10, data + 0x200);
                 if (!(8.0f < fast_vec_length(position_delta))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, proximity_candidate_moby + 0xC0);
@@ -503,8 +501,6 @@ void update_moby_wobble(unsigned char *moby) {
     }
 }
 extern void clear_u64_value(float *) __asm__("FUN_001f99f8");
-extern void subtract_vector_xyz_30c220(float *, const float *, const float *) __asm__("FUN_001f9a28");
-extern void normalize_vector_xyz_30c220(float *, float *, float) __asm__("FUN_001f9bf8");
 extern void rotation_vector_30c220(float *, float *) __asm__("FUN_001fa050");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, float *, int) __asm__("FUN_001f7d30");
@@ -554,8 +550,8 @@ void draw_moby_wobble_quads(struct Moby *moby) {
     side = matrix;
     rotation_vector_30c220(side, rotation);
     direction = matrix + 4;
-    subtract_vector_xyz_30c220(direction, D_L05_001671C0_30c220, position);
-    normalize_vector_xyz_30c220(direction, direction, 1.0f);
+    fast_vec_sub(direction, D_L05_001671C0_30c220, position);
+    fast_vec_normalize(direction, direction, 1.0f);
     up = matrix + 8;
     fast_vec_cross(side, direction, up);
     fast_vec_cross(direction, up, side);
@@ -800,7 +796,7 @@ void blarg_gun_update(char *moby)
             euler_rotation_matrix(rotation_workspace, moby + 0x40);
             copy_matrix3x4(moby + 0xC0, rotation_workspace);
             moby_point_position(moby, *(int *)(data + 4), rotation_workspace + 0x50);
-            subtract_vector_xyz(rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
+            fast_vec_sub(rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
         } else {
             transform_vector_by_basis(rotation_workspace + 0x40, data + 0x10, moby + 0xC0);
             *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(data + 0x20));
@@ -811,7 +807,7 @@ void blarg_gun_update(char *moby)
                 fast_vec_scale(rotation_workspace + 0x10, rotation_workspace + 0x10, -1.0f);
             copy_matrix3x4(moby + 0xC0, rotation_workspace);
             transform_vector_by_basis(rotation_workspace + 0x50, data + 0x10, moby + 0xC0);
-            subtract_vector_xyz(rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
+            fast_vec_sub(rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
             fast_vec_add(rotation_workspace + 0x50, rotation_workspace + 0x50, moby + 0x10);
         }
 

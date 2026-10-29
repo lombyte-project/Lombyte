@@ -173,8 +173,6 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 float absolute_float(float input) __asm__("func_001F99C0");
 float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
 extern void func_001F9BC0_2939E8(float *) __asm__("FUN_001f99f8");
-extern float func_001F9F90_2939E8(float) __asm__("FUN_001f9dc8");
-extern float func_001F9FA8_2939E8(float) __asm__("FUN_001f9de0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
 
@@ -237,8 +235,8 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
             }
         }
         if (push[0] != 0.0f || push[1] != 0.0f || push[2] != 0.0f) {
-            tilt_direction[0] = func_001F9F90_2939E8(moby->rotz);
-            tilt_direction[1] = func_001F9FA8_2939E8(moby->rotz);
+            tilt_direction[0] = fast_cos(moby->rotz);
+            tilt_direction[1] = fast_sin(moby->rotz);
             tilt_direction[2] = 0.0f;
             fast_vec_cross(tilt_direction, tilt_direction, push);
             fast_vec_cross(tilt_direction, tilt_direction, push);

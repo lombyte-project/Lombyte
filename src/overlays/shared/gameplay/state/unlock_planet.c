@@ -208,8 +208,6 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
 typedef float M4_260400[16] __attribute__((aligned(16)));
 extern char *FUN_L00_002603d0_c(char *) __asm__("FUN_L00_002603d0");
 void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
@@ -234,7 +232,6 @@ int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *in
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
 u8 *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");

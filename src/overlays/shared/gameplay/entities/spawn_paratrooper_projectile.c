@@ -186,11 +186,8 @@ void randomize_ground_particle_scatter_parameters(int arg) __asm__("FUN_L08_0030
 extern char D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
 extern void randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_00307b90");
 extern int update_float_countdown(float *) __asm__("FUN_L08_00211b08");
-extern void func_001F9BF0_3091B0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern float func_002140F8_3091B0(float, float) __asm__("FUN_002132a8");
-extern float func_001F9F90_3091B0(float) __asm__("FUN_001f9dc8");
-extern float func_001F9FA8_3091B0(float) __asm__("FUN_001f9de0");
 extern float func_001F9CE8_3091B0(void *) __asm__("FUN_001f9b20");
 extern float func_L00_002644E0_3091B0(void *) __asm__("FUN_L00_00263468");
 extern void func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
@@ -261,7 +258,7 @@ void scatter_ground_particles(Moby *moby) {
         break;
     case GROUND_PARTICLES_STATE_SCATTER:
         if (update_float_countdown(&ground_particle_scatter_refresh_countdown)) randomize_ground_particle_scatter_parameters(flag);
-        func_001F9BF0_3091B0(&dv, D_L08_00167640_3091B0, &moby_data->v30);
+        fast_vec_sub(&dv, D_L08_00167640_3091B0, &moby_data->v30);
         D_L08_00160250 = *(u128_3091B0 *)&dv;
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
         pass_attempt_count = ground_particle_scatter_base_attempt_count;
@@ -276,13 +273,13 @@ void scatter_ground_particles(Moby *moby) {
                 float t;
                 float u;
                 *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
-                w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
+                w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range_gp);
                 pt.x += w;
-                w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
+                w = fast_sin(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, ground_particle_scatter_xy_offset_random_range_gp);
                 pt.y += w;
-                func_001F9BF0_3091B0(po, &pt, D_L08_00167640_3091B0);
+                fast_vec_sub(po, &pt, D_L08_00167640_3091B0);
                 origin_distance_xy = func_001F9CE8_3091B0(po);
                 if (origin_distance_xy <= 8.0f) {
                     w = -spread;
@@ -333,10 +330,10 @@ void scatter_ground_particles(Moby *moby) {
                 *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
                 origin_delta_or_spawn_vector.y = ground_particle_scatter_spawn_vector_y_bias + u;
                 origin_delta_or_spawn_vector.z = -t;
-                w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
+                w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, 8.0f);
                 pt.x += w;
-                w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
+                w = fast_sin(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, 8.0f);
                 pt.y += w;
                 D_L08_00160260 = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset_gp;
@@ -365,10 +362,10 @@ void scatter_ground_particles(Moby *moby) {
                 remaining_pass_attempts = pass_attempt_count;
                 do {
                         *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
-                    w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
+                    w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 30.0f);
                     pt.x += w;
-                    w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
+                    w = fast_sin(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 30.0f);
                     pt.y += w;
                     spawn_ground_contact_effect_particle(&pt);
@@ -383,10 +380,10 @@ void scatter_ground_particles(Moby *moby) {
                         remaining_pass_attempts = h;
                 do {
                         *(u128_3091B0 *)&pt = *(u128_3091B0 *)&base;
-                    w = func_001F9F90_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
+                    w = fast_cos(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 8.0f);
                     pt.x += w;
-                    w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
+                    w = fast_sin(func_002140F8_3091B0(0.0f, 6.2831855f));
                     w = w * func_002140F8_3091B0(0.0f, 8.0f);
                     pt.y += w;
                     spawn_ground_contact_effect_particle(&pt);

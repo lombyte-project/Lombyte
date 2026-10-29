@@ -425,7 +425,6 @@ extern void lift_remove(void *) __asm__("FUN_0020c828");
 extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void lift_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int lift_sound(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_001fff28(void *, int, float);
@@ -495,7 +494,7 @@ void shuttle_update(struct Moby *shuttle_moby) {
             qcopy(&base, &shuttle_moby->pos);
         euler_rotation_matrix(shuttle_rotation_matrix, &shuttle_moby->rot);
         transform_vector(&rotated_rider_offset, shuttle_vars->offset, shuttle_rotation_matrix);
-        lift_add(&rider->pos, &base, &rotated_rider_offset);
+        fast_vec_add(&rider->pos, &base, &rotated_rider_offset);
     }
     if (shuttle_vars->sound == -1 || (voice_is_playing(shuttle_moby, shuttle_vars->sound) == 0 && shuttle_vars->sound == -1))
         shuttle_vars->sound = lift_sound(0, 4, shuttle_moby);
@@ -568,7 +567,6 @@ char D_L14_001FC9E0[] = "*Error: Moby 610 (wind-control) with no fxArea cuboid (
 char D_L14_001FCA38[] = "*Error: Moby 610 (wind-control) with no fxAct cuboid (fx activation area). UID: %d - RAR\n";
 extern void wind_remove(struct Moby *) __asm__("FUN_0020c828");
 extern int wind_inside(void *, int) __asm__("FUN_00214720");
-extern void wind_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void update_wind_sparks(struct Moby *wind_control_moby) __asm__("FUN_L14_002eb568");
 
 void update_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb568");
@@ -644,7 +642,7 @@ void update_wind_control(struct Moby *wind_control_moby) {
             wind_direction_or_push_delta[0] = fast_cos(wind_control_moby->rot.z) * t;
             wind_direction_or_push_delta[1] = fast_sin(wind_control_moby->rot.z) * t;
             wind_direction_or_push_delta[2] = 0.0f;
-            wind_add(pos + 0x70, pos + 0x70, wind_direction_or_push_delta);
+            fast_vec_add(pos + 0x70, pos + 0x70, wind_direction_or_push_delta);
             wind_vars->push_timer = scale_game_frames(wind_push_decay_frames_gp);
             wind_vars->push_inv = 1.0f / convert_integer_to_float(wind_vars->push_timer);
             return;
@@ -667,14 +665,13 @@ void update_wind_control(struct Moby *wind_control_moby) {
         wind_direction_or_push_delta[0] = fast_cos(wind_control_moby->rot.z) * t;
         wind_direction_or_push_delta[1] = fast_sin(wind_control_moby->rot.z) * t;
         wind_direction_or_push_delta[2] = 0.0f;
-        wind_add(&hero.motion.platform_delta, &hero.motion.platform_delta, wind_direction_or_push_delta);
+        fast_vec_add(&hero.motion.platform_delta, &hero.motion.platform_delta, wind_direction_or_push_delta);
     }
 }
 /* Starts one spark: places it at a random spot around the emitter, picks its speed and its life. */
 #include "qcopy.h"
 extern struct { char pad[0x30]; float v[4]; char rest[0x40]; } *D_L14_001600EC_k __asm__("D_L14_001600EC");
 extern float D_0015ED6C_k __asm__("D_0015ED6C");
-extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int ftoi_k(float) __asm__("FUN_001fa6d0");
 
@@ -715,11 +712,11 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
     z = randf_sym(0.0f, spark_vars->f1C);
     fast_vec_scale(position_offset, fwd, x);
     spark_position = (char *)spark_vars->pos[i];
-    add_k(spark_position, spark_position, position_offset);
+    fast_vec_add(spark_position, spark_position, position_offset);
     fast_vec_scale(position_offset, side, y);
-    add_k(spark_position, spark_position, position_offset);
+    fast_vec_add(spark_position, spark_position, position_offset);
     fast_vec_scale(position_offset, up, z);
-    add_k(spark_position, spark_position, position_offset);
+    fast_vec_add(spark_position, spark_position, position_offset);
     spark_vars->pos[i][3] = random_float_between(wind_spark_size_range_start_gp, wind_spark_size_range_end_gp);
     spark_vars->f440[i] = random_float_between(wind_spark_speed_range_start_gp, wind_spark_speed_range_end_gp) * D_0015ED6C_k;
     lifetime_frames = scale_game_frames(ftoi_k(spark_vars->f14 * 2.0f / spark_vars->f440[i]));
@@ -729,7 +726,6 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
 }
 extern int spark_float_to_integer(float) __asm__("FUN_001fa6d0");
 extern int spark_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void spark_add_vector(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void spark_enqueue_callback(void (*)(struct Moby *), struct Moby *) __asm__("FUN_001f4600");
 struct L14SparkTarget {
     char pad0[0x140];
@@ -790,7 +786,7 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
                 }
             }
             fast_vec_scale(work, spark_travel_direction, spark_vars->f440[i]);
-            spark_add_vector(pos, pos, work);
+            fast_vec_add(pos, pos, work);
             if (in_clip != 0 &&
                 absolute_float(pos[0] - D_L14_00167380_spark.x) < 8.0f &&
                 absolute_float(pos[1] - D_L14_00167380_spark.y) < 8.0f &&
@@ -817,7 +813,6 @@ typedef struct {
 extern char D_L14_001674C0_m[] __asm__("D_L14_001674C0");
 extern unsigned long tex_m(s32) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
-extern void sub_m(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 extern int wind_spark_base_color_gp __asm__("D_L14_00161C0C") __attribute__((sda));
@@ -860,7 +855,7 @@ void draw_wind_sparks(struct Moby *m) {
             *(u128_m *)up = 0;
             up[2] = 1.0f;
             up[3] = 1.0f;
-            sub_m(spark_quad_to_world[0], d->pos[i], D_L14_001674C0_m);
+            fast_vec_sub(spark_quad_to_world[0], d->pos[i], D_L14_001674C0_m);
             fast_vec_normalize(spark_quad_to_world[0], spark_quad_to_world[0], 1.0f);
             fast_vec_cross(spark_quad_to_world[1], spark_quad_to_world[0], up);
             fast_vec_normalize(spark_quad_to_world[1], spark_quad_to_world[1], 1.0f);
@@ -1049,7 +1044,6 @@ typedef struct {
     u8 pad1A[0x16];
 } L14BoltSweep;
 
-extern void bolt_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -1088,7 +1082,7 @@ void update_flying_bolt(struct Moby *projectile_moby) {
     int j;
 
     qcopy(&old, &projectile_moby->pos);
-    bolt_add(&projectile_moby->pos, &projectile_moby->pos, &bolt_vars->vel);
+    fast_vec_add(&projectile_moby->pos, &projectile_moby->pos, &bolt_vars->vel);
     qcopy(&target, &projectile_moby->pos);
     ignore = bolt_vars->ignore;
     qcopy(&aim, &bolt_vars->vel);
@@ -1109,7 +1103,7 @@ void update_flying_bolt(struct Moby *projectile_moby) {
                 spark.f[2] = random_float_between(-1.0f, 1.0f);
                 particle_launch_vector.q = spark.q;
                 fast_vec_normalize(&particle_launch_vector, &particle_launch_vector, fast_vec_length(&spark) * 0.1f);
-                bolt_add(&particle_launch_vector, &spark, &particle_launch_vector);
+                fast_vec_add(&particle_launch_vector, &spark, &particle_launch_vector);
                 fast_vec_normalize(&particle_launch_vector, &particle_launch_vector, random_float_between(frame_time + frame_time, frame_time * 4.0f));
                 spawn_projectile_expiry_particle(&projectile_moby->pos, &particle_launch_vector);
             }
@@ -1136,7 +1130,7 @@ void update_flying_bolt(struct Moby *projectile_moby) {
                 particle_launch_vector.q = spark.q;
                 reflect_vector(&spark, &bolt_vars->vel, bolt_impact_reflection_normal);
                 fast_vec_normalize(&particle_launch_vector, &particle_launch_vector, fast_vec_length(&spark) * 0.5f);
-                bolt_add(&particle_launch_vector, &spark, &particle_launch_vector);
+                fast_vec_add(&particle_launch_vector, &spark, &particle_launch_vector);
                 fast_vec_normalize(&particle_launch_vector, &particle_launch_vector, random_float_between(frame_time * 3.0f, frame_time * 6.0f));
                 FUN_L00_0026dd20((char *)&projectile_moby->pos, (char *)&particle_launch_vector, 0x7F2F4F6F,
                                  FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
@@ -2069,7 +2063,6 @@ void mark_elevator_collected(Level14VendorMoby *vendor_moby) {
 extern u8 elevator_local_path_points[] __asm__("D_L14_001E03B0");
 extern u8 *D_L14_001B0BB0_u[] __asm__("D_L14_001B0BB0");
 extern void transform_vector_by_basis(u8 *, u8 *, u8 *) __asm__("FUN_001f9cf8");
-extern void add_vector_xyz(u8 *, u8 *, u8 *) __asm__("FUN_001f9a10");
 
 /* 0x002EF630, 192 bytes.  Rebuilds the 11 vectors of a table entry from the
  * moby's matrix and position.
@@ -2087,7 +2080,7 @@ void rebuild_elevator_world_path(u8 *moby) {
         transform_vector_by_basis(world_path_point_cursor, local_path_point_cursor, moby + 0xC0);
         local_path_point_cursor += 0x10;
         i--;
-        add_vector_xyz(world_path_point_cursor, world_path_point_cursor, moby + 0x10);
+        fast_vec_add(world_path_point_cursor, world_path_point_cursor, moby + 0x10);
         *(f32 *)(world_path_point_cursor + 0xC) = one;
         world_path_point_cursor += 0x10;
     } while (i >= 0);
@@ -2551,7 +2544,6 @@ void request_taxi_stop_prompt(struct Moby *moby) {
         break;
     }
 }
-extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 #include "sda.h"
 extern unsigned char D_0015EDB0;
 typedef struct {
@@ -2746,7 +2738,7 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
                 fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(moby_vars->target, 6.0f, heading,
                                    random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
-            FUN_001f9a10_c(moby_vars->target, moby_vars->target, moby->position);
+            fast_vec_add(moby_vars->target, moby_vars->target, moby->position);
         }
         if (moby_vars->moving_timer) {
             qcopy(scratch.target, hero.motion.body_center.f);
@@ -2922,7 +2914,6 @@ typedef struct {
 
 #include "rnc/overlay/l14/gameplay/entities/jet_data/spawn_enemy_fighter_exhaust.h"
 extern char D_L14_0015F580[] MACRO_ADDR;
-extern void exhaust_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int exhaust_ftoi(float) __asm__("FUN_001fa6d0");
 extern L14Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 
@@ -2942,12 +2933,12 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     if (emitter_moby->state == 0 || emitter_moby->state == 2 || emitter_moby->visible == 0)
         return;
     fast_vec_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_base_row0_offset_gp);
-    exhaust_add(&pos, &emitter_moby->pos, &step);
+    fast_vec_add(&pos, &emitter_moby->pos, &step);
     fast_vec_scale(&step, &emitter_moby->rot_row2, enemy_fighter_exhaust_base_row2_offset_gp);
-    exhaust_add(&pos, &pos, &step);
+    fast_vec_add(&pos, &pos, &step);
     qcopy(&base, &pos);
     fast_vec_scale(&step, &emitter_moby->rot_row1, enemy_fighter_exhaust_paired_emitter_offset_gp);
-    exhaust_add(&pos, &pos, &step);
+    fast_vec_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
         spin = random_integer_below(16);
         puff = spawn_puff(&pos, 0.2f, 1.0f, 0.9f, random_integer_below(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, enemy_fighter_exhaust_paired_puff_color_gp);
@@ -2963,7 +2954,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     spin = 16;
     size = 100000.0f;
     fast_vec_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_ring_row0_offset_gp);
-    exhaust_add(&pos, &pos, &step);
+    fast_vec_add(&pos, &pos, &step);
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
         puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
@@ -2997,7 +2988,7 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     spin = 16;
     size = 100000.0f;
     fast_vec_scale(&step, &emitter_moby->rot_row0, enemy_fighter_exhaust_ring_row0_offset_gp);
-    exhaust_add(&pos, &pos, &step);
+    fast_vec_add(&pos, &pos, &step);
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
         puff = spawn_puff(&pos, 0.05f, 1.0f, 1.0f, spin, D_L14_0015F580, size, 0x7FFFFFFF);
@@ -3102,7 +3093,6 @@ extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void tram_remove(void *) __asm__("FUN_0020c828");
 extern int tram_tick(void *) __asm__("FUN_001f9740");
-extern void tram_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
 void spawn_moby_exhaust_puffs(struct Moby *m) __asm__("FUN_L14_002fd310");
 int advance_moby_along_flight_path(struct Moby *moby) __asm__("FUN_L14_002fd918");
@@ -3254,8 +3244,8 @@ void update_enemy_fighter_921(struct Moby *moby) {
                 moby_vars->stage = 1;
             fast_vec_scale(&carrier_position, &moby->rot_row0, 0.21f);
             fast_vec_scale(&rider_view_target_or_carrier_offset, &moby->rot_row2, -1.24f);
-            tram_add(&carrier_position, &carrier_position, &rider_view_target_or_carrier_offset);
-            tram_add(&carrier_position, &moby->pos, &carrier_position);
+            fast_vec_add(&carrier_position, &carrier_position, &rider_view_target_or_carrier_offset);
+            fast_vec_add(&carrier_position, &moby->pos, &carrier_position);
             c = &D_L14_0015FFD8_t[moby_vars->carrier];
             qcopy(&c->pos, &carrier_position);
             qcopy(&c->rot, &moby->rot);
@@ -3308,12 +3298,12 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
     if (moby->state == 0 || moby->state == 3 || moby->state == 1)
         return;
     fast_vec_scale(&step, &moby->rot_row0, moby_exhaust_base_row0_offset_gp);
-    exhaust_add(&pos, &moby->pos, &step);
+    fast_vec_add(&pos, &moby->pos, &step);
     fast_vec_scale(&step, &moby->rot_row2, moby_exhaust_base_row2_offset_gp);
-    exhaust_add(&pos, &pos, &step);
+    fast_vec_add(&pos, &pos, &step);
     qcopy(&base, &pos);
     fast_vec_scale(&step, &moby->rot_row1, moby_exhaust_paired_emitter_offset_gp);
-    exhaust_add(&pos, &pos, &step);
+    fast_vec_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
         spin = random_integer_below(16);
         puff = spawn_puff(&pos, 0.2f, 1.0f, 0.9f, random_integer_below(2) == 0 ? spin : -spin, D_L14_0015F580, 200000.0f, moby_exhaust_paired_puff_color_gp);
@@ -3327,7 +3317,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
     }
     size = 100000.0f;
     fast_vec_scale(&step, &moby->rot_row0, moby_exhaust_ring_row0_offset_gp);
-    exhaust_add(&pos, &pos, &step);
+    fast_vec_add(&pos, &pos, &step);
     spin = 16;
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
@@ -3346,7 +3336,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
     }
     size = 300000.0f;
     fast_vec_scale(&step, &moby->rot_row0, moby_exhaust_grey_puff_row0_offset_gp);
-    exhaust_add(&pos, &base, &step);
+    fast_vec_add(&pos, &base, &step);
     grey = FUN_L00_00257b90(0x40, 0x80);
     grey = 0x7F000000 | grey << 16 | grey << 8 | grey;
     if (random_integer_below(3) != 0) {
@@ -3378,7 +3368,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
     }
     size = 100000.0f;
     fast_vec_scale(&step, &moby->rot_row0, moby_exhaust_ring_row0_offset_gp);
-    exhaust_add(&pos, &pos, &step);
+    fast_vec_add(&pos, &pos, &step);
     spin = 16;
     life = scale_game_frames(2);
     for (i = 0; i < 3; i++) {
@@ -3539,7 +3529,7 @@ void rocket_update(struct Moby *moby) {
         moby->rot.y = interpolate_angle(moby->rot.y, -fast_arc_tan(vector_length_xy(&destination_delta), destination_delta.z), rocket_steering_blend_fraction_gp);
         moby->rot.z = interpolate_angle(moby->rot.z, fast_arc_tan(destination_delta.x, destination_delta.y), rocket_steering_blend_fraction_gp);
         fast_vec_scale(&step, &moby->rot_row0, speed);
-        add_vector_xyz((u8 *)&moby->pos, (u8 *)&moby->pos, (u8 *)&step);
+        fast_vec_add((u8 *)&moby->pos, (u8 *)&moby->pos, (u8 *)&step);
         spawn_moby_offset_puffs(moby);
         if (voice_is_playing(moby, vars->sound) == 0) {
             vars->sound = allocate_voice_for_target_entry(1, 4, (int)moby);

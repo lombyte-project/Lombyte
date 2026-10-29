@@ -266,10 +266,8 @@ extern void FUN_001e93b0_e50(char *, short) __asm__("FUN_001e93b0");
 extern int rand_e50(void) __asm__("FUN_001160d8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern float square_root(float) __asm__("FUN_001f9988");
-extern float FUN_001f9af0_e50(void *) __asm__("FUN_001f9af0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float FUN_001f9b80_e50(void *, void *) __asm__("FUN_001f9b80");
-extern void FUN_001f9bf8_e50(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float sub_rotations_e50(float, float) __asm__("FUN_001fa5c8");
@@ -656,7 +654,7 @@ void sand_shark_update(struct Moby *moby) {
         FUN_L00_00258278_c(moby, fast_arc_tan(vars->target.f[0] - moby->pos.x, vars->target.f[1] - moby->pos.y), &vars->turn_vel,
                  0.05f, 0.3f, 0.2f);
         if (moby->seq == moby->prev_seq && is_value_within_interpolated_window(moby, 13.0f)) {
-            FUN_001f9bf8_e50(&position_or_offset_scratch, &moby->rot_row0, 0.75f);
+            fast_vec_normalize(&position_or_offset_scratch, &moby->rot_row0, 0.75f);
             fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
             position_or_offset_scratch.f[2] += 0.5f;
             FUN_L00_002598b0_e50(moby, &position_or_offset_scratch, 0.5f, 1, 1.0f, 1.0f, 0, 1, 0);
@@ -727,7 +725,7 @@ void sand_shark_update(struct Moby *moby) {
                         moby->state = 5;
                         vars->walk_step = vars->unk254 * D_0015ED6C;
                     }
-                } else if (FUN_001f9af0_e50(&target_home_delta) < vars->unk24C) {
+                } else if (fast_vec_length(&target_home_delta) < vars->unk24C) {
                     if (moby->state == 7) {
                         moby->state = 5;
                     } else {
@@ -748,7 +746,7 @@ void sand_shark_update(struct Moby *moby) {
             }
         } else {
             extern float frame_time __asm__("D_0015ED6C") __attribute__((sda));
-            FUN_001f9bf8_e50(&particle_position_or_forward_step, &moby->rot_row0, frame_time * 0.5f);
+            fast_vec_normalize(&particle_position_or_forward_step, &moby->rot_row0, frame_time * 0.5f);
             fast_vec_add(&moby->pos, &moby->pos, &particle_position_or_forward_step);
         }
         break;
@@ -788,7 +786,7 @@ void sand_shark_update(struct Moby *moby) {
 
             fast_vec_sub(&vars->vel, &vars->home, &dest->pos);
             vars->vel.f[2] = 0.0f;
-            FUN_001f9bf8_e50(&vars->vel, &vars->vel, speed);
+            fast_vec_normalize(&vars->vel, &vars->vel, speed);
             vars->vel.f[2] = up;
             qcopy(&moby->pos, &dest->pos);
             moby->collision = moby->pclass->collision;

@@ -5,6 +5,7 @@ int advance_moby_animation_blend() __asm__("FUN_L00_0024f190");
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 typedef struct {
     float m[16];
 } __attribute__((aligned(16))) Mtx;
@@ -22,9 +23,7 @@ typedef struct {
     Ent32 e[1];
 } Tbl;
 void transpose_rotation_matrix(Mtx *, void *) __asm__("FUN_001fa2d8");
-void fast_vec_sub(Vec4 *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector(Vec4 *, Vec4 *, Mtx *) __asm__("FUN_001f9d20");
-void fast_vec_scale(Vec4 *, Vec4 *, float) __asm__("FUN_001f9a68");
 void set_moby_local_table_entry(char *p, int idx, void *v, float a, float b) __asm__("FUN_L00_0024eed8");
 void set_moby_local_table_entry(char *moby, int table_entry_index, void *v, float unscaled_entry_w, float b) {
     Mtx transposed_rotation;
