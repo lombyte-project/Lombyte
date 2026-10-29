@@ -1,6 +1,6 @@
 #include "types.h"
 
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
@@ -21,10 +21,10 @@ void compute_camera_angles(f32 *out, void *position, void *focus, void *orbit_re
     f32 angle1, angle2;
     f32 yaw, pitch;
 
-    subtract_vector_xyz(orbit_offset, position, focus);
+    fast_vec_sub(orbit_offset, position, focus);
     offset_axis_dot = fast_vec_dot(orbit_offset, axis);
     fast_vec_normalize(proj, axis, offset_axis_dot);
-    subtract_vector_xyz(perp, orbit_offset, proj);
+    fast_vec_sub(perp, orbit_offset, proj);
 
     planar_reference_dot = fast_vec_dot(orbit_reference_direction, perp);
     lenPerp = fast_vec_length(perp);

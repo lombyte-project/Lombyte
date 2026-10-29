@@ -39,7 +39,7 @@ typedef struct {
     s16 h32;
 } FlagMoby;
 extern void draw_level01_scroll_layers(void) __asm__("FUN_L01_00309bf8");
-void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
+void add_draw_callback(void *fn, void *arg) __asm__("FUN_001f4600");
 
 /* Sets both flag fields to 0xFF and queues FUN_L01_00309bf8 for the moby. */
 void set_moby_flags_and_queue_draw_callback(FlagMoby *moby) __asm__("FUN_L01_00309c98");
@@ -48,7 +48,7 @@ void set_moby_flags_and_queue_draw_callback(FlagMoby *moby) {
     int flag_init_value = 0xFF;
     moby->h32 = flag_init_value;
     moby->b30 = flag_init_value;
-    enqueue_callback_list_1(draw_level01_scroll_layers, moby);
+    add_draw_callback(draw_level01_scroll_layers, moby);
 }
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/state/usage_stats.h"
@@ -76,10 +76,10 @@ extern s32 cutscene_mode_macro __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern s32 D_L01_0015F688 MACRO_ADDR;
 extern s32 D_L01_0015F68C MACRO_ADDR;
 extern struct Moby *moby_list __asm__("D_L01_0015FFE4") MACRO_ADDR;
-extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 is_moby_in_state_one(void *) __asm__("FUN_L00_002d8128");
 extern s32 check_scaled_vector_bsphere(f32, void *) __asm__("FUN_L01_00275690");
@@ -100,7 +100,7 @@ void update_level01_tutorial_hints(struct Moby *moby) {
     s32 usage_time_value;
 
     data = (s32 *)moby->pvars;
-    tick_countdown_32(&data[6]);
+    fast_dec_timer(&data[6]);
     switch (moby->state) {
     case TUTORIAL_HINT_STATE_INITIALIZE:
         data[5] = 0;
@@ -154,7 +154,7 @@ void update_level01_tutorial_hints(struct Moby *moby) {
         if (help_records[0x42].id < 2 && is_point_inside_clip_volume(&hero.motion.pos, data[12]) && hero.state.prev == 0x3B &&
             hero.state_timer == 0) {
             for (hint_candidate_moby = moby_list; hint_candidate_moby != 0; hint_candidate_moby = hint_candidate_moby->next) {
-                if (hint_candidate_moby->oclass == 0x118 && distance_xyz(&hint_candidate_moby->pos, &hero.motion.pos) < 3.0f &&
+                if (hint_candidate_moby->oclass == 0x118 && fast_vec_dist(&hint_candidate_moby->pos, &hero.motion.pos) < 3.0f &&
                     *(f32 *)hint_candidate_moby->pvars != 1.0f) {
                     data[13]++;
                     if (data[13] == 3 || data[13] == 6) {
@@ -196,7 +196,7 @@ void update_level01_tutorial_hints(struct Moby *moby) {
             data[11] = 0;
         }
         for (health_hint_candidate_moby = moby_list; health_hint_candidate_moby != 0; health_hint_candidate_moby = health_hint_candidate_moby->next) {
-            if (health_hint_candidate_moby->oclass == 0x326 && distance_xyz(&health_hint_candidate_moby->pos, &hero.motion.pos) < 10.0f && help_state.state == 0 &&
+            if (health_hint_candidate_moby->oclass == 0x326 && fast_vec_dist(&health_hint_candidate_moby->pos, &hero.motion.pos) < 10.0f && help_state.state == 0 &&
                 help_state.cur == -1 && help_records[1].id == 0 && help_records[2].id == 0 &&
                 usage_stats.stat[13].count == 0 && is_moby_in_state_one(health_hint_candidate_moby) == 0) {
                 if (hero.health.hp < hero_max_health) {
@@ -242,16 +242,16 @@ extern BlobHitInfo collision_hit __asm__("D_L01_001742C0");
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern s32 tick_countdown_32(s32 *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32,
                              s32, s32, s32, s32);
-extern void spark_cbb0(void *, void *, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026cbb0");
+extern void spawn_burst(void *, void *, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026cbb0");
 extern int FUN_L00_00257b90(int lo, int hi);
 extern u8 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -274,9 +274,9 @@ void update_explosive_moby(struct Moby *moby) {
 
     blob_vars = (BlobVars *)moby->pvars;
     if (random_integer_below(2)) {
-        enqueue_callback_list_1(draw_moby_offset_textured_quad, moby);
+        add_draw_callback(draw_moby_offset_textured_quad, moby);
     }
-    add_vector_xyz(&moby->pos, &moby->pos, blob_vars);
+    fast_vec_add(&moby->pos, &moby->pos, blob_vars);
     if (FUN_001f99c0(blob_vars->vel.x) > explosive_moby_horizontal_damping_threshold_gp * frame_scale) {
         blob_vars->vel.x *= (explosive_moby_velocity_multiplier_gp - 1.0f) * frame_scale + 1.0f;
     }
@@ -296,12 +296,12 @@ void update_explosive_moby(struct Moby *moby) {
         return;
     }
     hit = coll_sphere(2.0f, &moby->pos, 0, (void *)blob_vars->owner);
-    if (tick_countdown_32(&blob_vars->timer) || hit) {
+    if (fast_dec_timer(&blob_vars->timer) || hit) {
         if (hit) {
             if (collision_hit.have_normal) {
                 reflect_vector(blob_vars, blob_vars, &collision_hit.normal);
             } else {
-                clear_vector(blob_vars);
+                clear_u64_value(blob_vars);
             }
         }
         FUN_L00_0025e450(moby, blob_vars, &moby->pos, 0.0f, 0.0f, 0x14, 3, 4, 4.0f, 2.0f, 100000.0f, 0, 3.0f, 15.0f, 1, 1,
@@ -310,7 +310,7 @@ void update_explosive_moby(struct Moby *moby) {
         return;
     }
     s = random_float_between(0.5f, 1.5f) * 210000.0f;
-    spark_cbb0(&moby->pos, &D_L01_0015F580, 0x4F007FFF, 0x1FFFFFFF, s,
+    spawn_burst(&moby->pos, &D_L01_0015F580, 0x4F007FFF, 0x1FFFFFFF, s,
                FUN_L00_00257b90(scale_game_frames(10), scale_game_frames(20)), 1);
     alpha = 0x60000000;
     for (i = 0; i < 2; i++) {
@@ -442,11 +442,11 @@ extern FxSpark *spawn_spark(void *, f32, f32, f32, s32, void *, f32, s32) __asm_
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32,
                        s32) __asm__("FUN_L00_0025e450");
 extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b70");
-extern void clear_vector(void *) __asm__("FUN_001f99f8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 
 /* Cutscene effects: camera targets, splashes, sparks and trails keyed on the cutscene scene and frame. */
@@ -525,7 +525,7 @@ void update_level01_cutscene_effects(struct Moby *moby) {
             if (fx_cutscene.scene == 4) {
                 cutscene_moby = fx_cutscene.slot[4];
                 if (cutscene_moby != 0 && cutscene_moby->oclass == 0x213) {
-                    enqueue_callback_list_1(render_environment_mapped_object, cutscene_moby);
+                    add_draw_callback(render_environment_mapped_object, cutscene_moby);
                     if (fx_cutscene.frame >= scale_game_frames(850) && fx_cutscene.frame <= scale_game_frames(1160)) {
                         color = 0x7F204080;
                         for (node = 1; node < 7; node++) {
@@ -558,29 +558,29 @@ void update_level01_cutscene_effects(struct Moby *moby) {
                     effect_position_or_motion_delta.q = 0;
                     moby_point_position(cutscene_moby, 5, &debris_vector_or_effect_position);
                     if (fx_cutscene.frame >= 2) {
-                        subtract_vector_xyz(&effect_position_or_motion_delta, &debris_vector_or_effect_position, &fx_prev_pos);
+                        fast_vec_sub(&effect_position_or_motion_delta, &debris_vector_or_effect_position, &fx_prev_pos);
                         qcopy(&fx_prev_pos, &debris_vector_or_effect_position);
                     } else {
                         qcopy(&fx_prev_pos, &debris_vector_or_effect_position);
                     }
                     if (fx_cutscene.frame == scale_game_frames(118)) {
-                        clear_vector(&primary_trail_position);
+                        clear_u64_value(&primary_trail_position);
                         spawn_explosion(cutscene_moby, &primary_trail_position, &debris_vector_or_effect_position, 0.0f, 0.0f, 3, 200, 200, 5.0f, 2.5f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
                         qcopy(&secondary_effect_position, &debris_vector_or_effect_position);
                         secondary_effect_position.f[2] = secondary_effect_position.f[2] - 1.0f;
                         spawn_explosion(cutscene_moby, &primary_trail_position, &secondary_effect_position, 0.0f, 0.0f, 300, 2, 2, 1.0f, 0.5f, 9.0f, 1.0f, -1, 60.0f, 0, 0, -1, 0);
                     }
-                    enqueue_callback_list_1(render_environment_mapped_object, cutscene_moby);
+                    add_draw_callback(render_environment_mapped_object, cutscene_moby);
                     moby_point_position(cutscene_moby, 1, &primary_trail_position);
                     moby_point_position(cutscene_moby, 2, &secondary_effect_position);
-                    subtract_vector_xyz(&primary_trail_position, &primary_trail_position, &effect_position_or_motion_delta);
-                    subtract_vector_xyz(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
-                    scale_vector_xyz(&effect_position_or_motion_delta, &effect_position_or_motion_delta, 0.25f);
+                    fast_vec_sub(&primary_trail_position, &primary_trail_position, &effect_position_or_motion_delta);
+                    fast_vec_sub(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
+                    fast_vec_scale(&effect_position_or_motion_delta, &effect_position_or_motion_delta, 0.25f);
                     for (step = 0; step < 4; step++) {
                         draw_trail(&primary_trail_position, &primary_trail_position, &D_L01_0015F580, 150000.0f, 60000.0f);
                         draw_trail(&secondary_effect_position, &secondary_effect_position, &D_L01_0015F580, 150000.0f, 60000.0f);
-                        add_vector_xyz(&primary_trail_position, &primary_trail_position, &effect_position_or_motion_delta);
-                        add_vector_xyz(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
+                        fast_vec_add(&primary_trail_position, &primary_trail_position, &effect_position_or_motion_delta);
+                        fast_vec_add(&secondary_effect_position, &secondary_effect_position, &effect_position_or_motion_delta);
                     }
                 }
             }
@@ -721,7 +721,7 @@ typedef struct {
 
 extern f32 frame_delta_time __asm__("D_0015ED7C");
 void draw_level01_environment_mapped_meshes(void) __asm__("FUN_L01_0030f0e0");
-void enqueue_callback_list_1(void *fn, void *arg) __asm__("FUN_001f4600");
+void add_draw_callback(void *fn, void *arg) __asm__("FUN_001f4600");
 
 void update_level01_environment_map_uv_scroll(ScrollMoby *moby) __asm__("FUN_L01_0030f208");
 
@@ -754,7 +754,7 @@ void update_level01_environment_map_uv_scroll(ScrollMoby *moby) {
         if (level01_environment_map_uv_scroll_offsets[1] < -1.0f) {
             level01_environment_map_uv_scroll_offsets[1] += 1.0f;
         }
-        enqueue_callback_list_1(draw_level01_environment_mapped_meshes, moby);
+        add_draw_callback(draw_level01_environment_mapped_meshes, moby);
         break;
     }
 }

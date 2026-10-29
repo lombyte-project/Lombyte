@@ -40,7 +40,7 @@ extern S17AF00 D_L06_0017AE00;
 extern S17C638 D_L06_0017C538;
 extern float absolute_float(float) __asm__("func_001F99C0");
 #include "rnc/overlay/l06/gameplay/hero/0023b440_globals.h"
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -59,7 +59,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern float vector_length_xyz(void *a);
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int D_00141660 __attribute__((section(".data")));
 extern int D_L06_0016CF00 __attribute__((section(".data")));
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -121,10 +121,10 @@ extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void quantize_hero_input_target_speed(void) __asm__("FUN_L06_00228b40");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
-extern void add_vector_xyz(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void scale_vector_xyz(void *, void *, float);
-extern void tick_countdown_32(int *counter);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_dec_timer(int *counter) __asm__("func_001F9740");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
@@ -287,7 +287,7 @@ void update_hero_state_machine(void) {
                                 hero.fidget_index = record_index;
                                 rec = &l06_idle_fidget_records[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
-                                rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
+                                rec->duration_frames = scale_time(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
                                     hero_set_state(HERO_STATE_FIDGET, 1);
                                 } else {
@@ -980,7 +980,7 @@ void update_hero_state_machine(void) {
                                 scratch_motion_vector[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
                                 scratch_motion_vector[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
                                 scratch_motion_vector[2] = 0.0f;
-                                add_vector_xyz(scratch_motion_vector, scratch_motion_vector, scratch_position);
+                                fast_vec_add(scratch_motion_vector, scratch_motion_vector, scratch_position);
                                 if (collision_line(scratch_position, scratch_motion_vector, 2, 0, 0)) {
                                     ok = 0;
                                 }
@@ -1149,9 +1149,9 @@ void update_hero_state_machine(void) {
                                     /* Step a copy of the hero position along its current path. */
                                     if (sample_path((int *)hero.rail_spline, scratch_position, &path_seg,
                                                          &path_t, hero.rail_spline_loops, d)) {
-                                        scale_vector_xyz(scratch_motion_vector, hero.motion.displacement.f,
+                                        fast_vec_scale(scratch_motion_vector, hero.motion.displacement.f,
                                                          scale_game_frames(0x30));
-                                        add_vector_xyz(scratch_position, hero.motion.pos.f, scratch_motion_vector);
+                                        fast_vec_add(scratch_position, hero.motion.pos.f, scratch_motion_vector);
                                     }
                                     scratch_position[0] += fast_cos(ang) * f;
                                     scratch_position[1] += fast_sin(ang) * f;
@@ -1716,9 +1716,9 @@ void update_hero_state_machine(void) {
                     } else if (hero.rail_land_frames == 0 &&
                                (hero.state.current == HERO_STATE_PACK_JUMP || hero.state.current == HERO_STATE_PACK_LONG_JUMP) &&
                                hero.wall_probe_distance < 0.9f && hero.wall_hit != 0) {
-                        if (vector_length_xyz(hero.motion.velocity.f) > frame_time * 7.0f) {
-                            float displacement_length = vector_length_xyz(hero.motion.displacement.f);
-                            if (displacement_length < vector_length_xyz(hero.motion.velocity.f) * 0.5f &&
+                        if (fast_vec_length(hero.motion.velocity.f) > frame_time * 7.0f) {
+                            float displacement_length = fast_vec_length(hero.motion.displacement.f);
+                            if (displacement_length < fast_vec_length(hero.motion.velocity.f) * 0.5f &&
                                 hero.ledge_found == 0 && hero.ground_distance < 2.0f) {
                                 hero_set_state(HERO_STATE_WALL_BONK, 1);
                                 break;
@@ -1832,7 +1832,7 @@ void update_hero_state_machine(void) {
                                 break;
                             }
                             set_hero_animation(5, 0, -2.0f);
-                            scale_vector_xyz(hero.motion.momentum.f, hero.motion.momentum.f, 0.8f);
+                            fast_vec_scale(hero.motion.momentum.f, hero.motion.momentum.f, 0.8f);
                             break;
                         }
                         if (hero.on_slip_ground == 0 && hero.move_lock_timer == 0) {

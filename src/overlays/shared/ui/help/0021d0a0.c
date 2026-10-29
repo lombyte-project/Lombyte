@@ -539,17 +539,17 @@ typedef union {
     f32 f[4];
 } V_22a1d0;
 extern u128_22a1d0 coll_22a1d0[] __asm__("D_L06_001745F0") __attribute__((section(".data")));
-extern void vzero_22a1d0(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void f2347c0_22a1d0(void) __asm__("FUN_L00_002347c0");
 extern void f233810_22a1d0(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern void f2334d0_22a1d0(void *, void *, f32) __asm__("FUN_L00_002334d0");
-extern void vadd_22a1d0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vsub_22a1d0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 vlen_22a1d0(void *) __asm__("FUN_001f9af0");
-extern s32 coll1_22a1d0(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
-extern s32 coll2_22a1d0(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
+extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_22a1d0(void *, f32) __asm__("FUN_L00_001f3170");
-extern void vscl_22a1d0(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L06_0022a1d0");
 
 s32 resolve_hero_position_collisions(s32 mode) {
@@ -564,7 +564,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         return 1;
     }
     qcopy(&old, &hero.motion.pos.q);
-    vzero_22a1d0(&collision_query_offset);
+    clear_u64_value(&collision_query_offset);
     if (hero.path_constrain_pending != 0) {
         f2347c0_22a1d0();
         hero.path_constrain_pending = 0;
@@ -580,16 +580,16 @@ s32 resolve_hero_position_collisions(s32 mode) {
             collision_query_offset.f[2] = hero.capsule_bottom;
         }
     }
-    vadd_22a1d0(&hero.motion.pos.q, &hero.motion.pos.q, &collision_query_offset);
+    fast_vec_add(&hero.motion.pos.q, &hero.motion.pos.q, &collision_query_offset);
     mask = 0xD24;
     if (hero.state.current == HERO_STATE_SINK)
         mask = 0xD24;
     for (i = 0; i < 8; i++) {
         if (hero.gravity_mode != 0) {
-            if (!coll1_22a1d0(&hero.motion.pos.q, mask, hero.moby, frame_scale * 0.4f))
+            if (!coll_sphere(&hero.motion.pos.q, mask, hero.moby, frame_scale * 0.4f))
                 break;
         } else if (hero.state.control_mode == 0xF) {
-            if (!coll1_22a1d0(&hero.motion.pos.q, mask, hero.moby, frame_scale * 0.45f))
+            if (!coll_sphere(&hero.motion.pos.q, mask, hero.moby, frame_scale * 0.45f))
                 break;
         } else {
             s32 collision_query_result;
@@ -597,7 +597,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
             if (query_height_or_displacement_length < 0.05f) {
                 query_height_or_displacement_length = 0.05f;
             }
-            collision_query_result = coll2_22a1d0(&hero.motion.pos.q, mask, hero.capsule_radius, hero.moby, query_height_or_displacement_length);
+            collision_query_result = rig_probe(&hero.motion.pos.q, mask, hero.capsule_radius, hero.moby, query_height_or_displacement_length);
             if (!(collision_query_result | coll3_22a1d0(&hero.motion.pos.q, hero.capsule_radius)))
                 break;
         }
@@ -608,9 +608,9 @@ s32 resolve_hero_position_collisions(s32 mode) {
         hero.wall_hit = 1;
         hero.coll_hit_moby = ((s32 *)collision_result_position)[-6];
     }
-    vsub_22a1d0(&hero.motion.pos.q, &hero.motion.pos.q, &collision_query_offset);
-    vsub_22a1d0(&position_displacement, &hero.motion.pos.q, &old);
-    query_height_or_displacement_length = vlen_22a1d0(&position_displacement);
+    fast_vec_sub(&hero.motion.pos.q, &hero.motion.pos.q, &collision_query_offset);
+    fast_vec_sub(&position_displacement, &hero.motion.pos.q, &old);
+    query_height_or_displacement_length = fast_vec_length(&position_displacement);
     if (hero.capsule_radius * 1.5f < query_height_or_displacement_length) {
         if (mode == 0xF) {
             if (512.0f < position_displacement.f[0])
@@ -625,8 +625,8 @@ s32 resolve_hero_position_collisions(s32 mode) {
                 position_displacement.f[2] = 512.0f;
             else if (position_displacement.f[2] < -512.0f)
                 position_displacement.f[2] = -512.0f;
-            vscl_22a1d0(&position_displacement, &position_displacement, hero.capsule_radius);
-            vadd_22a1d0(&hero.motion.pos.q, &old, &position_displacement);
+            fast_vec_normalize(&position_displacement, &position_displacement, hero.capsule_radius);
+            fast_vec_add(&hero.motion.pos.q, &old, &position_displacement);
         }
         return -1;
     }

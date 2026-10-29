@@ -4,7 +4,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/camera/camera_globals.h"
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern char D_00187080[];
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
@@ -34,7 +34,7 @@ int step_camera_blend(void *to_blend, void *cam_blend) {
         return 1;
     }
     eased_blend_factor = cosine_interpolate(0.0f, 1.0f, camera_blend_state[3]);
-    add_vector_xyz(camera_blend_state + 12, D_0013F490, camera_blend_state + 12);
+    fast_vec_add(camera_blend_state + 12, D_0013F490, camera_blend_state + 12);
     camera_publication_state = occl_cam_state;
     camera_blend_state[16] = camera_blend_state[12] + (to[12] - camera_blend_state[12]) * eased_blend_factor;
     camera_blend_state[17] = camera_blend_state[13] + (to[13] - camera_blend_state[13]) * eased_blend_factor;
@@ -60,6 +60,6 @@ int step_camera_blend(void *to_blend, void *cam_blend) {
     }
     return 0;
 }
-extern void add_vector_xyz(void *dst, void *a, void *b) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *dst, void *a, void *b) __asm__("FUN_001f9a10");
 
 extern __typeof__(step_camera_blend) func_001ECAF8 __attribute__((alias("FUN_001ecaf8")));

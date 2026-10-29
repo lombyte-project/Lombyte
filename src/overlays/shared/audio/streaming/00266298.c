@@ -63,7 +63,7 @@ extern u8 item_flags[] __asm__("D_0013D388");
 extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");                    /* distance */
 extern void fun_00216c48(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
-extern f32 atan2_f(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32 FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
 extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
@@ -109,12 +109,12 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
     if (trigger->any_direction == 0) {
         /* the moby must face the hero ... */
         if (fast_difference_between_rotations(
-                atan2_f(hero_ptr->motion.pos.f[0] - moby->pos.x, hero_ptr->motion.pos.f[1] - moby->pos.y),
+                fast_arc_tan(hero_ptr->motion.pos.f[0] - moby->pos.x, hero_ptr->motion.pos.f[1] - moby->pos.y),
                 moby->rot.z) > trigger->radius)
             return 0;
         /* ... and the hero the moby, within 1.57 (about 90 degrees) */
         if (fast_difference_between_rotations(
-                atan2_f(moby->pos.x - hero_ptr->motion.pos.f[0], moby->pos.y - hero_ptr->motion.pos.f[1]),
+                fast_arc_tan(moby->pos.x - hero_ptr->motion.pos.f[0], moby->pos.y - hero_ptr->motion.pos.f[1]),
                 hero_ptr->motion.rot.f[2]) > 1.57f)
             return 0;
     }

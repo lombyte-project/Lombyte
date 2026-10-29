@@ -13,7 +13,7 @@ void copy_matrix_rotation(Mtx *, void *) __asm__("FUN_001fa298");
 void get_moby_joint_matrices(char *, int, int, M4 *) __asm__("FUN_00210850");
 void multiply_matrix(void *, Mtx *, void *) __asm__("FUN_001fa378");
 void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void compute_selected_world_matrices(char *transform_source, int matrix_count, int matrix_selection_indices, M4 *out) __asm__("FUN_L00_0024f8f0");
 
 void compute_selected_world_matrices(char *transform_source, int matrix_count, int matrix_selection_indices, M4 *out) {
@@ -25,6 +25,6 @@ void compute_selected_world_matrices(char *transform_source, int matrix_count, i
     for (i = 0; i < matrix_count; i++) {
         multiply_matrix(&out[i], &rotation_matrix, &out[i]);
         fast_vec_scale(out[i].t, out[i].t, translation_scale);
-        add_vector_xyz(out[i].t, out[i].t, transform_source + 0x10);
+        fast_vec_add(out[i].t, out[i].t, transform_source + 0x10);
     }
 }

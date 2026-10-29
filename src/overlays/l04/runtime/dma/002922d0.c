@@ -13,7 +13,7 @@
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
-extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 
 extern float D_L04_00173FE8 __attribute__((section(".data")));
 float probe_leg_rig_ground_height(float *probe_origin) __asm__("FUN_L04_002922d0");
@@ -27,7 +27,7 @@ float probe_leg_rig_ground_height(float *probe_origin) {
         clamped_probe_point[2] = 0.1f;
     qcopy(raised_probe_point, probe_origin);
     raised_probe_point[2] = raised_probe_point[2] + 0.75f;
-    if (coll_line_fix(raised_probe_point, clamped_probe_point, 2, 0, 0) != 0)
+    if (collision_line(raised_probe_point, clamped_probe_point, 2, 0, 0) != 0)
         return D_L04_00173FE8;
     return 0.0f;
 }
@@ -47,13 +47,13 @@ void initialize_leg_rig_angle_defaults(void *unused, char *movement_data) {
 }
 extern char invalid_animation_message[] __asm__("D_L04_001DB360");
 extern char rig_size_message[] __asm__("D_L04_001DB3F0");
-extern void stub_printf() __asm__("FUN_001e93b0");
+extern void debug_print() __asm__("FUN_001e93b0");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float animation_end(int, int) __asm__("FUN_L04_00241910");
 extern float FUN_L04_001f1978(float);
 extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
-extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
+extern void build_moby_bone_transform(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
 
@@ -68,7 +68,7 @@ void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
 
     for (i = 0; i < 13; i++) {
         if (rig->anims[i]->id < 0) {
-            stub_printf(invalid_animation_message, i, moby->oclass);
+            debug_print(invalid_animation_message, i, moby->oclass);
             raise_kernel_trap();
         }
         rig->anims[i]->start = animation_start(moby->class_slot, rig->anims[i]->id);
@@ -93,7 +93,7 @@ void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
     joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(moby, 6, joints, rig);
     for (k = 0; k < 2; k++) {
-        get_joint_matrix(moby, rig->legs[k].joint, matrix[0]);
+        build_moby_bone_transform(moby, rig->legs[k].joint, matrix[0]);
         rig->legs[k].upper_turn = 0;
         rig->legs[k].lower_turn = 0;
         rig->legs[k].yaw = fast_arc_tan(matrix[1][0], matrix[1][1]);
@@ -113,7 +113,7 @@ void initialize_leg_rig(struct Moby *moby, LegRig *rig) {
     rig->unkE4 = 0;
     rig->unkEC = 0;
     rig->mode = 5;
-    stub_printf(rig_size_message, 0x250);
+    debug_print(rig_size_message, 0x250);
 }
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293990), where it is exact; names translated to the US level program. */
 
@@ -171,16 +171,16 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 float absolute_float(float input) __asm__("func_001F99C0");
 float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
 extern void func_001F9BC0_2939E8(float *) __asm__("FUN_001f99f8");
 extern float func_001F9F90_2939E8(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2939E8(float) __asm__("FUN_001f9de0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
 
 int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_state) __asm__("FUN_L04_00292828");
@@ -225,7 +225,7 @@ int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_stat
                     xy_abs_sum_or_tilt = absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.x);
                     xy_abs_sum_or_tilt = xy_abs_sum_or_tilt + absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.y);
                     if (xy_abs_sum_or_tilt < absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.z)) {
-                        add_vector_xyz(push, push, &((StTab_2939E8 *)D_L04_00174040_2939E8)->v40);
+                        fast_vec_add(push, push, &((StTab_2939E8 *)D_L04_00174040_2939E8)->v40);
                         height_correction_divisor += 4.0f;
                         dz += ground_height - probe_point->z;
                     }
@@ -245,9 +245,9 @@ int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_stat
             tilt_direction[0] = func_001F9F90_2939E8(moby->rotz);
             tilt_direction[1] = func_001F9FA8_2939E8(moby->rotz);
             tilt_direction[2] = 0.0f;
-            cross_vectors_xyz(tilt_direction, tilt_direction, push);
-            cross_vectors_xyz(tilt_direction, tilt_direction, push);
-            steer_state->tilt = angle_atan2(vector_length_xy(tilt_direction), tilt_direction[2]);
+            fast_vec_cross(tilt_direction, tilt_direction, push);
+            fast_vec_cross(tilt_direction, tilt_direction, push);
+            steer_state->tilt = fast_arc_tan(vector_length_xy(tilt_direction), tilt_direction[2]);
         } else {
             steer_state->tilt = 0.0f;
         }
@@ -255,7 +255,7 @@ int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_stat
             excessive_tilt_flags = 2;
         }
         if (steer_state->kind == 0xD && 0.0f < steer_state->ground && (steer_state->mask & 0xF) == 0) {
-            xy_abs_sum_or_tilt = -angle_atan2(steer_state->f8C[1], steer_state->ground - moby->pos.z);
+            xy_abs_sum_or_tilt = -fast_arc_tan(steer_state->f8C[1], steer_state->ground - moby->pos.z);
             if (absolute_float(xy_abs_sum_or_tilt) < 0.5235988f) {
                 pinned = 1;
                 dz += steer_state->ground - moby->pos.z;
@@ -288,13 +288,13 @@ int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_stat
     moby->pos.z = moby->pos.z + dz;
     return excessive_tilt_flags;
 }
-extern void get_joint_matrix_2d48(struct Moby *, int, float *) __asm__("FUN_0020cca8");
-extern float atan2_2d48(float, float) __asm__("FUN_001f9e90");
-extern float fast_add_rotations_2d48(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations_2d48(float, float) __asm__("FUN_001fa5c8");
+extern void build_moby_bone_transform(struct Moby *, int, float *) __asm__("FUN_0020cca8");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float rig_turn_2d48(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
 extern void axis_rotation_2d48(float *, int, float) __asm__("FUN_L00_001fff28");
-extern void quat_multiply_2d48(float *, float *, float *) __asm__("FUN_001fa3c0");
+extern void multiply_quaternions(float *, float *, float *) __asm__("FUN_001fa3c0");
 
 void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
     float joint[16];
@@ -309,12 +309,12 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
     mask = 3;
     for (i = 0; i < 2; i++) {
         leg = &rig->legs[i];
-        get_joint_matrix_2d48(moby, leg->joint, joint);
-        heading = atan2_2d48(joint[4], joint[5]);
-        twist = fast_add_rotations_2d48(
-            fast_add_rotations_2d48(fast_subtract_rotations_2d48(leg->yaw, heading), leg->upper_turn),
+        build_moby_bone_transform(moby, leg->joint, joint);
+        heading = fast_arc_tan(joint[4], joint[5]);
+        twist = fast_add_rotations(
+            fast_add_rotations(fast_subtract_rotations(leg->yaw, heading), leg->upper_turn),
             leg->lower_turn);
-        base_yaw = fast_subtract_rotations_2d48(heading, twist);
+        base_yaw = fast_subtract_rotations(heading, twist);
         if (rig->unkB7 == 0 || (flags & mask) == 0) {
             leg->upper_turn = rig_turn_2d48(leg->upper_turn, 0.0f, &rig->legs[i].upper_turn_speed, 0.1f, 0.1f,
                                            frame_scale * 0.034906585f);
@@ -327,7 +327,7 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
             else
                 leg->upper_turn = rig_turn_2d48(leg->upper_turn, twist * 0.5f, &rig->legs[i].upper_turn_speed, 0.1f,
                                                0.1f, frame_scale * 0.034906585f);
-            leg->lower_turn = fast_subtract_rotations_2d48(twist, leg->upper_turn);
+            leg->lower_turn = fast_subtract_rotations(twist, leg->upper_turn);
             leg->lower_turn_speed = 0.0f;
         }
         if (rig->legs[i].upper_turn < rig->legs[i].angle_min)
@@ -338,15 +338,15 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
             rig->legs[i].lower_turn = rig->legs[i].angle_min;
         if (rig->legs[i].lower_turn > rig->legs[i].angle_max)
             rig->legs[i].lower_turn = rig->legs[i].angle_max;
-        rig->legs[i].yaw = fast_add_rotations_2d48(rig->legs[i].upper_turn, base_yaw);
-        rig->legs[i].yaw = fast_add_rotations_2d48(rig->legs[i].lower_turn, rig->legs[i].yaw);
+        rig->legs[i].yaw = fast_add_rotations(rig->legs[i].upper_turn, base_yaw);
+        rig->legs[i].yaw = fast_add_rotations(rig->legs[i].lower_turn, rig->legs[i].yaw);
         if (rig->legs[i].manip_b.attached)
             axis_rotation_2d48(rig->legs[i].manip_b.rot, 2, rig->legs[i].upper_turn);
         if (rig->legs[i].manip_a.attached) {
             axis_rotation_2d48(rig->legs[i].manip_a.rot, 2, rig->legs[i].lower_turn);
             if (flags & mask) {
                 axis_rotation_2d48(tilt, 0, -moby->rot.x);
-                quat_multiply_2d48(rig->legs[i].manip_a.rot, rig->legs[i].manip_a.rot, tilt);
+                multiply_quaternions(rig->legs[i].manip_a.rot, rig->legs[i].manip_a.rot, tilt);
             }
         }
         mask <<= 2;
@@ -359,11 +359,11 @@ extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 rig_pick_mode(struct Moby *, LegRig *, f32) __asm__("FUN_L04_002927d0");
 extern f32 spring_turn(f32 cur, f32 target, f32 k, f32 d, f32 max, f32 *vel) __asm__("FUN_L00_00258110");
 extern void rig_animate(struct Moby *, LegRig *, s32, f32) __asm__("FUN_L04_00292d48");
-extern void zero_vector(void *) __asm__("FUN_001f99f8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void divide_vector_xyz(void *, void *, f32) __asm__("FUN_L00_001ff378");
-extern f32 fast_cos_c(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin_c(f32) __asm__("FUN_001f9de0");
+extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
+extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_L04_00292828_c(struct Moby *, LegRig *) __asm__("FUN_L04_00292828");
 extern void rig_step(struct Moby *, LegRig *, f32, f32, f32, s32) __asm__("FUN_L00_002a1670");
 extern void rig_probe_setup(struct Moby *, s32, s32 *, void *, f32 *, f32 *) __asm__("FUN_L01_00263a28");
@@ -426,13 +426,13 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         RigVec *moved = transformed;
         RigVec *point = (RigVec *)rig->pts;
 
-        zero_vector(&shift);
+        clear_u64_value(&shift);
         pos = &moby->pos;
         for (i = 5; i >= 0; i--) {
             if (active & bit) {
                 count += 1.0f;
-                add_vector_xyz(&shift, &shift, point);
-                subtract_vector_xyz(&shift, &shift, moved);
+                fast_vec_add(&shift, &shift, point);
+                fast_vec_sub(&shift, &shift, moved);
             }
             bit <<= 1;
             moved++;
@@ -441,8 +441,8 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         divide_vector_xyz(&shift, &shift, count);
     } else {
         pos = &moby->pos;
-        shift.x = fast_cos_c(rig->heading) * rig->speed;
-        shift.y = fast_sin_c(rig->heading) * rig->speed;
+        shift.x = fast_cos(rig->heading) * rig->speed;
+        shift.y = fast_sin(rig->heading) * rig->speed;
         *(s32 *)&shift.z = 0;
     }
     {
@@ -450,12 +450,12 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         RigVec *point = (RigVec *)rig->pts;
 
         for (i = 5; i >= 0; i--) {
-            add_vector_xyz(point, moved, &shift);
+            fast_vec_add(point, moved, &shift);
             moved++;
             point++;
         }
     }
-    add_vector_xyz(pos, pos, &shift);
+    fast_vec_add(pos, pos, &shift);
     {
         f32 max_step = rig->unkC4;
         s32 old = rig->mode;
@@ -485,13 +485,13 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
         }
         local.v.ground.z += *(f32 *)&rig->unkE8;
         probe_end -= *(f32 *)&rig->unkE8;
-        subtract_vector_xyz(&local.v.offset, pos, &local.v.ground);
+        fast_vec_sub(&local.v.offset, pos, &local.v.ground);
         for (tries = 0; tries < 8 && rig_probe(&local.v.ground, 4, probe_start, moby, probe_end); tries++) {
             qcopy(&local.v.ground, D_L04_00173FF0);
             flags |= 1;
         }
-        subtract_vector_xyz(transformed, &local.v.ground, pos);
-        add_vector_xyz(pos, &local.v.ground, &local.v.offset);
+        fast_vec_sub(transformed, &local.v.ground, pos);
+        fast_vec_add(pos, &local.v.ground, &local.v.offset);
         if (vector_length_xy(transformed) < rig->speed * 0.5f) flags |= 2;
     }
     local.joints[0] = rig->legs[0].joint;
@@ -546,7 +546,7 @@ u8 D_L04_001CA938[13][4] = {
     {0x14, 0, 0, 0},
 };
 extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
-extern void get_joint_matrix(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
+extern void build_moby_bone_transform(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
 extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
@@ -573,7 +573,7 @@ void reset_leg_rig_from_animation(struct Moby *moby, LegRig *rig) {
     joints[5] = rig->jointB5;
     transform_scaled_vertex_batch(moby, 6, joints, rig);
     for (i = 0; i < 2; i++) {
-        get_joint_matrix(moby, rig->legs[i].joint, mtx[0]);
+        build_moby_bone_transform(moby, rig->legs[i].joint, mtx[0]);
         rig->legs[i].upper_turn = 0;
         rig->legs[i].lower_turn = 0;
         rig->legs[i].yaw = fast_arc_tan(mtx[1][0], mtx[1][1]);

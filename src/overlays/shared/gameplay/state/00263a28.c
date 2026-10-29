@@ -4,9 +4,9 @@
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
 #include "qcopy.h"
-extern void rotation_matrix_263a28(void *matrix, void *rotation) __asm__("FUN_001fa050");
-extern void apply_matrix_263a28(void *out, void *in, void *matrix) __asm__("FUN_001f9d20");
-extern void scale_joint_263a28(float scale, void *out, void *joint) __asm__("FUN_001f9a80");
+extern void euler_rotation_matrix(void *matrix, void *rotation) __asm__("FUN_001fa050");
+extern void transform_vector(void *out, void *in, void *matrix) __asm__("FUN_001f9d20");
+extern void scale_vector(float scale, void *out, void *joint) __asm__("FUN_001f9a80");
 extern void compute_moby_joint_matrices(void *moby, short joint, int flags) __asm__("FUN_0020fa90");
 
 /* Joint positions in scratchpad, 16 bytes each. */
@@ -31,12 +31,12 @@ int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
     entry += index * 0x20 + 0x10;
     *type = *(unsigned char *)entry;
     scale = *(float *)(moby + 0x2c) * 0.0009765625f;
-    rotation_matrix_263a28(matrix, moby + 0x40);
+    euler_rotation_matrix(matrix, moby + 0x40);
 
     if (*type < 2 || *type == 3) {
         qcopy(result, entry + 0x10);
         fast_vec_scale(result, result, scale);
-        apply_matrix_263a28(result, result, matrix);
+        transform_vector(result, result, matrix);
         fast_vec_add(result, result, moby + 0x10);
         *radius = result[3] * scale;
         if (*type < 2) {
@@ -52,7 +52,7 @@ int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
         }
         qcopy(result, (void *)(JOINT_POSITIONS + *(int *)(entry + 4) * 0x10));
         fast_vec_scale(result, result, scale);
-        apply_matrix_263a28(result, result, matrix);
+        transform_vector(result, result, matrix);
         fast_vec_add(result, result, moby + 0x10);
         *radius = *(float *)(entry + 0xc) * scale;
         *distance = 0.0f;
@@ -63,14 +63,14 @@ int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
             compute_moby_joint_matrices(moby, joint, 0);
         }
         joints = (short *)(entry + 4);
-        scale_joint_263a28(scale, first, (void *)(JOINT_POSITIONS + joints[0] * 0x10));
-        scale_joint_263a28(scale, second, (void *)(JOINT_POSITIONS + joints[1] * 0x10));
+        scale_vector(scale, first, (void *)(JOINT_POSITIONS + joints[0] * 0x10));
+        scale_vector(scale, second, (void *)(JOINT_POSITIONS + joints[1] * 0x10));
         if (first[2] < second[2]) {
             qcopy(result, first);
         } else {
             qcopy(result, second);
         }
-        apply_matrix_263a28(result, result, matrix);
+        transform_vector(result, result, matrix);
         fast_vec_add(result, result, moby + 0x10);
         *radius = *(float *)(entry + 0xc) * scale;
         fast_vec_sub(second, second, first);

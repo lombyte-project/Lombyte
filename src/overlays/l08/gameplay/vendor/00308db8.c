@@ -45,7 +45,7 @@ extern int batalia_texture_3a_blend_factor_gp __asm__("D_L08_00162390") __attrib
 extern int batalia_texture_3c_pair_zero_blend_factor_gp __asm__("D_L08_001623B0") __attribute__((sda));
 extern int batalia_texture_3d_blend_factor_gp __asm__("D_L08_001623C0") __attribute__((sda));
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_001623F0");
-extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void queue_batalia_eight_textured_batches(int) __asm__("FUN_L08_00308db8");
 extern void queue_batalia_six_textured_batches(int) __asm__("FUN_L08_00308e90");
@@ -60,20 +60,20 @@ void queue_batalia_textured_batch_passes(void) {
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(0x47, 0x513F1);
     font_queue_vu_state();
-    vu1_add_g_sregister(6, get_effect_texture_alt(0x3A));
+    vu1_add_g_sregister(6, get_effect_texture(0x3A));
     vu1_add_g_sregister(0x42, (long)batalia_texture_3a_blend_factor_gp << 32 | 0x64);
     queue_batalia_eight_textured_batches(0);
-    vu1_add_g_sregister(6, get_effect_texture_alt(0x3B));
+    vu1_add_g_sregister(6, get_effect_texture(0x3B));
     vu1_add_g_sregister(0x42, (long)((batalia_texture_3b_pair_one_blend_factor_base * D_L08_00161E08_u) >> 8) << 32 | 0x62);
     queue_batalia_eight_textured_batches(1);
     vu1_add_g_sregister(0x42, (long)((batalia_texture_3b_pair_two_blend_factor_base * D_L08_00161E08_u) >> 8) << 32 | 0x68);
     queue_batalia_eight_textured_batches(2);
-    vu1_add_g_sregister(6, get_effect_texture_alt(0x3C));
+    vu1_add_g_sregister(6, get_effect_texture(0x3C));
     vu1_add_g_sregister(0x42, (long)batalia_texture_3c_pair_zero_blend_factor_gp << 32 | 0x48);
     queue_batalia_six_textured_batches(0);
     vu1_add_g_sregister(0x42, (long)batalia_texture_3c_pair_one_blend_factor << 32 | 0x48);
     queue_batalia_six_textured_batches(1);
-    vu1_add_g_sregister(6, get_effect_texture_alt(0x3D));
+    vu1_add_g_sregister(6, get_effect_texture(0x3D));
     vu1_add_g_sregister(0x42, (long)batalia_texture_3d_blend_factor_gp << 32 | 0x48);
     queue_batalia_offset_textured_batches(0);
 }

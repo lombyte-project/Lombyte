@@ -44,7 +44,7 @@ extern void font_print_small(s32, s32, u64, char *, s32) __asm__("func_001F65B0"
 extern void format_scaled_display_value(char *, s32) __asm__("func_00238688");
 extern void font_print_right_small(s32, s32, u64, char *, s32) __asm__("func_001F69D0");
 extern s32 measure_text_width_regular(char *, s32) __asm__("FUN_001f6250");
-extern void append_screen_sprite(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
+extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 
 void render_vendor_item_details_pass(void) __asm__("FUN_002389e0");
 
@@ -64,13 +64,13 @@ void render_vendor_item_details_pass(void) {
         font_print_right_small(0x76, 0x65, 0x80F0F0F0, text, -1);
         if (D_001E63C0.unk40 != 0) {
             text_width = measure_text_width_regular(text, -1);
-            append_screen_sprite(0x75 - text_width, 0x6D, 0x7B, 0x70, 0x20959544, 0);
-            append_screen_sprite(0x76 - text_width, 0x6D, 0x7A, 0x70, 0x30959544, 0);
-            append_screen_sprite(0x77 - text_width, 0x6D, 0x79, 0x70, 0x40959544, 0);
-            append_screen_sprite(0x78 - text_width, 0x6D, 0x78, 0x70, 0x50959544, 0);
-            append_screen_sprite(0x79 - text_width, 0x6D, 0x77, 0x70, 0x60959544, 0);
-            append_screen_sprite(0x7A - text_width, 0x6D, 0x76, 0x70, 0x70959544, 0);
-            append_screen_sprite(0x7B - text_width, 0x6D, 0x75, 0x70, 0x80959544, 0);
+            append_screen_rect_packet(0x75 - text_width, 0x6D, 0x7B, 0x70, 0x20959544, 0);
+            append_screen_rect_packet(0x76 - text_width, 0x6D, 0x7A, 0x70, 0x30959544, 0);
+            append_screen_rect_packet(0x77 - text_width, 0x6D, 0x79, 0x70, 0x40959544, 0);
+            append_screen_rect_packet(0x78 - text_width, 0x6D, 0x78, 0x70, 0x50959544, 0);
+            append_screen_rect_packet(0x79 - text_width, 0x6D, 0x77, 0x70, 0x60959544, 0);
+            append_screen_rect_packet(0x7A - text_width, 0x6D, 0x76, 0x70, 0x70959544, 0);
+            append_screen_rect_packet(0x7B - text_width, 0x6D, 0x75, 0x70, 0x80959544, 0);
             format_scaled_display_value(
                 text, D_001E63C0.unk40 ? D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].d
                                        : D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].c);
@@ -84,13 +84,13 @@ void render_vendor_item_details_pass(void) {
         font_print_right_small(0x76, 0x65, ITEM_DISCOUNT_FLAG ? 0x80808080 : 0x80F0F0F0, text, -1);
         if (ITEM_DISCOUNT_FLAG != 0) {
             text_width = measure_text_width_regular(text, -1);
-            append_screen_sprite(0x75 - text_width, 0x6D, 0x7B, 0x70, 0x20959544, 0);
-            append_screen_sprite(0x76 - text_width, 0x6D, 0x7A, 0x70, 0x30959544, 0);
-            append_screen_sprite(0x77 - text_width, 0x6D, 0x79, 0x70, 0x40959544, 0);
-            append_screen_sprite(0x78 - text_width, 0x6D, 0x78, 0x70, 0x50959544, 0);
-            append_screen_sprite(0x79 - text_width, 0x6D, 0x77, 0x70, 0x60959544, 0);
-            append_screen_sprite(0x7A - text_width, 0x6D, 0x76, 0x70, 0x70959544, 0);
-            append_screen_sprite(0x7B - text_width, 0x6D, 0x75, 0x70, 0x80959544, 0);
+            append_screen_rect_packet(0x75 - text_width, 0x6D, 0x7B, 0x70, 0x20959544, 0);
+            append_screen_rect_packet(0x76 - text_width, 0x6D, 0x7A, 0x70, 0x30959544, 0);
+            append_screen_rect_packet(0x77 - text_width, 0x6D, 0x79, 0x70, 0x40959544, 0);
+            append_screen_rect_packet(0x78 - text_width, 0x6D, 0x78, 0x70, 0x50959544, 0);
+            append_screen_rect_packet(0x79 - text_width, 0x6D, 0x77, 0x70, 0x60959544, 0);
+            append_screen_rect_packet(0x7A - text_width, 0x6D, 0x76, 0x70, 0x70959544, 0);
+            append_screen_rect_packet(0x7B - text_width, 0x6D, 0x75, 0x70, 0x80959544, 0);
             format_scaled_display_value(
                 text, ITEM_DISCOUNT_FLAG ? D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].b
                                        : D_001DFFB0[D_001E63C0.items[D_001E63C0.sel].id].a);

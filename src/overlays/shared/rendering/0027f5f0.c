@@ -10,7 +10,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/partupd_002803B8.c: func_L08_002803B8), where it is exact; names translated to the US level program. */
 
 
-extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
@@ -32,12 +32,12 @@ void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_ov
         case 0:
             packed_high_byte = 0x20;
             particle_scalar_factor = 0.12f;
-            random_float_between_alt(0.25f, 0.25f);
+            random_float_between(0.25f, 0.25f);
             break;
         case 1:
             packed_high_byte = 0xD;
             particle_scalar_factor = 0.5f;
-            random_float_between_alt(1.0f, 1.0f);
+            random_float_between(1.0f, 1.0f);
             break;
         }
         *(short *)(particle + 0xA) = scale_game_frames(0x37);
@@ -47,7 +47,7 @@ void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_ov
         particle[1] = 0;
         particle[2] = D_L08_001B29A4[kind];
         *(float *)(particle + 0xC) = particle_scalar_factor * 210000.0f;
-        particle[8] = (int)random_float_between_alt(0.0f, 360.0f);
+        particle[8] = (int)random_float_between(0.0f, 360.0f);
         *(OvlQuad *)(particle + 0x10) = *(OvlQuad *)pos;
         *(OvlQuad *)(particle + 0x20) = *(OvlQuad *)vp;
         *(float *)(particle + 0x2C) = velocity_w_override;

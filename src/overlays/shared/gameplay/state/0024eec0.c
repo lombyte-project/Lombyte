@@ -22,7 +22,7 @@ typedef struct {
     Ent32 e[1];
 } Tbl;
 void transpose_rotation_matrix(Mtx *, void *) __asm__("FUN_001fa2d8");
-void subtract_vector_xyz(Vec4 *, void *, void *) __asm__("FUN_001f9a28");
+void fast_vec_sub(Vec4 *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector(Vec4 *, Vec4 *, Mtx *) __asm__("FUN_001f9d20");
 void fast_vec_scale(Vec4 *, Vec4 *, float) __asm__("FUN_001f9a68");
 void set_moby_local_table_entry(char *p, int idx, void *v, float a, float b) __asm__("FUN_L00_0024eed8");
@@ -32,7 +32,7 @@ void set_moby_local_table_entry(char *moby, int table_entry_index, void *v, floa
     Ent32 *e = &(*(Tbl **)(moby + 0x94))->e[table_entry_index];
     float k = 1024.0f / *(float *)(moby + 0x2C);
     transpose_rotation_matrix(&transposed_rotation, moby + 0xC0);
-    subtract_vector_xyz(&local_offset, v, moby + 0x10);
+    fast_vec_sub(&local_offset, v, moby + 0x10);
     transform_vector(&local_offset, &local_offset, &transposed_rotation);
     fast_vec_scale(&local_offset, &local_offset, k);
     qcopy(&e->v, &local_offset);
@@ -143,7 +143,7 @@ typedef struct {
     ListNode_24f0e8 *head; /* 0x60 */
 } ListOwner_24f0e8;
 
-extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
+extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 
 void release_moby_animation_slot(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) __asm__("FUN_L00_0024f0e8");
 
@@ -161,7 +161,7 @@ void release_moby_animation_slot(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot
         if (list_cursor->next == *slot)
             list_cursor->next = (*slot)->next;
     }
-    memset_words(*slot, 0, 0x40);
+    fill_transfer_words(*slot, 0, 0x40);
     *slot = 0;
 }
 
@@ -288,7 +288,7 @@ typedef struct {
     u64_24f440 q[1];  /* 0x10 */
 } Packet_24f440;
 
-extern void section(void *, int) __asm__("FUN_001f9810");
+extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern void FUN_001f9838_24f440(void *, void *, int) __asm__("FUN_001f9838");
 extern void FUN_00118a80_24f440(int) __asm__("FUN_00118a80");
 
@@ -314,7 +314,7 @@ void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet_24f440
         Frame_24f440 **ss = (Frame_24f440 **)(r + 0x1C);
         selected_frame = ss[j];
     }
-    section(out, ((na + 3) * 8) & 0xFF0);
+    clear_blocks_16(out, ((na + 3) * 8) & 0xFF0);
     k = na + selected_frame->hA;
     k += selected_frame->hE;
     out->h8 = na * 8;

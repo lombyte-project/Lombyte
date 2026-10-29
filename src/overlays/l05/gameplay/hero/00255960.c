@@ -47,7 +47,7 @@ extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 #include "rnc/overlay/l05/gameplay/hero/00255960_globals.h"
 extern float D_L05_001671D8 __attribute__((section(".data")));
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
@@ -61,7 +61,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern float vector_length_xyz(void *a);
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L05_0015F678") = 0;
 extern int D_L05_0016CB80 __attribute__((section(".data")));
@@ -129,8 +129,8 @@ extern void update_hero_hoverboard_trick_score(void) __asm__("FUN_L05_00254058")
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void scale_vector_xyz(void *, void *, float);
-extern void tick_countdown_32(int *counter);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_dec_timer(int *counter) __asm__("func_001F9740");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
@@ -273,7 +273,7 @@ void update_hero_state_machine(void) {
                                 hero.fidget_index = record_index;
                                 rec = &l05_idle_fidget_entries[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
-                                rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
+                                rec->duration_frames = scale_time(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
                                     hero_set_state(HERO_STATE_FIDGET, 1);
                                 } else {
@@ -1585,9 +1585,9 @@ void update_hero_state_machine(void) {
                     } else if (hero.rail_land_frames == 0 &&
                                (hero.state.current == HERO_STATE_PACK_JUMP || hero.state.current == HERO_STATE_PACK_LONG_JUMP) &&
                                hero.wall_probe_distance < 0.9f && hero.wall_hit != 0) {
-                        if (vector_length_xyz(hero.motion.velocity.f) > frame_time * 7.0f) {
-                            float displacement_length = vector_length_xyz(hero.motion.displacement.f);
-                            if (displacement_length < vector_length_xyz(hero.motion.velocity.f) * 0.5f &&
+                        if (fast_vec_length(hero.motion.velocity.f) > frame_time * 7.0f) {
+                            float displacement_length = fast_vec_length(hero.motion.displacement.f);
+                            if (displacement_length < fast_vec_length(hero.motion.velocity.f) * 0.5f &&
                                 hero.ledge_found == 0 && hero.ground_distance < 2.0f) {
                                 hero_set_state(HERO_STATE_WALL_BONK, 1);
                                 break;
@@ -1701,7 +1701,7 @@ void update_hero_state_machine(void) {
                                 break;
                             }
                             set_hero_animation(5, 0, -2.0f);
-                            scale_vector_xyz(hero.motion.momentum.f, hero.motion.momentum.f, 0.8f);
+                            fast_vec_scale(hero.motion.momentum.f, hero.motion.momentum.f, 0.8f);
                             break;
                         }
                         if (hero.on_slip_ground == 0 && hero.move_lock_timer == 0) {

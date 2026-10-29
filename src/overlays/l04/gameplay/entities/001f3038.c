@@ -9,7 +9,7 @@
 /* index of the nearest of n vectors to a + 0x10 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
 
-extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 
 int find_nearest_point_index_xy(char *moby, char *points, int count) __asm__("FUN_L04_001f3038");
 
@@ -18,7 +18,7 @@ int find_nearest_point_index_xy(char *moby, char *points, int count) {
     int i;
     float best_distance = 32767.0f;
     for (i = 0; i < count; i++) {
-        float distance = vector_distance_xy(moby + 0x10, points + i * 0x10);
+        float distance = vector_distance(moby + 0x10, points + i * 0x10);
         if (distance < best_distance) {
             best_distance = distance;
             best = i;
@@ -71,21 +71,21 @@ typedef struct {
 } Coll_1F3010;
 
 extern s32 D_L04_00173FF0[];
-extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int coll_line_fix() __asm__("FUN_001efa68");
+extern int collision_line() __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int set_vector_length_xy() __asm__("FUN_001f9c48");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void normalize_vector_xyz_c(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_L04_001f3038_c(char *a, char *b, int n) __asm__("FUN_L04_001f3038");
 int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __asm__("FUN_L04_0024c7d8");
 extern PathEl_1F3010 *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
@@ -338,8 +338,8 @@ extern s32 D_L04_00173FF0[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void add_vector_xyz(void *, void *, void *);
-extern void normalize_vector_xyz(void *, void *, float);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void update_moby_movement_with_sphere_collision(char *moby, char *movement_state, char *movement_params, float collision_z_offset) __asm__("FUN_L04_001f3a80");
 
@@ -348,10 +348,10 @@ void update_moby_movement_with_sphere_collision(char *moby, char *movement_state
     int i;
     float collision_probe_position[4];
     char *movement_delta = movement_state + 0x10;
-    add_vector_xyz(movement_delta, movement_delta, movement_state);
-    normalize_vector_xyz(movement_delta, movement_delta, *(float *)(movement_params + 0x1C));
+    fast_vec_add(movement_delta, movement_delta, movement_state);
+    fast_vec_normalize(movement_delta, movement_delta, *(float *)(movement_params + 0x1C));
     *(float *)(movement_state + 0x18) = *(float *)(movement_state + 0x18) / *(float *)(movement_state + 0x48);
-    add_vector_xyz(moby + 0x10, moby + 0x10, movement_delta);
+    fast_vec_add(moby + 0x10, moby + 0x10, movement_delta);
     for (i = 0; i < 6; i++) {
         qcopy(collision_probe_position, moby + 0x10);
         collision_probe_position[2] = collision_probe_position[2] + collision_z_offset;

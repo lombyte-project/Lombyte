@@ -11,8 +11,8 @@
 extern char D_L00_0015F7C8[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int find_valid_animation_frame_index_alt(int, int) __asm__("FUN_001ff960");
-extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
+extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
+extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 D_L00_0015F91C_gp __asm__("D_L00_0015F91C") __attribute__((sda));
 extern s32 D_L00_0015F920_gp __asm__("D_L00_0015F920") __attribute__((sda));
@@ -64,16 +64,16 @@ int draw_weapon_ammo_hud_panel(char *hud_element) {
             base_frame_width = *(int *)&ammo_hud_frame_width_at_least_100;
         x4 = x + 4;
         wd = x + truncate_float_to_s32((float)base_frame_width * hud_fade_factor);
-        draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 1), x - 0x1C, y, 0x20, 0x20,
+        draw_hud_sprite(get_icon_frame(0x7580, 1), x - 0x1C, y, 0x20, 0x20,
                         frame_alpha);
-        draw_hud_sprite(find_valid_animation_frame_index_alt(0x7580, 0), x4, y, wd, 0x20, frame_alpha);
-        draw_hud_sprite_flipped(find_valid_animation_frame_index_alt(0x7580, 1), x4 + wd, y, 0x20,
+        draw_hud_sprite(get_icon_frame(0x7580, 0), x4, y, wd, 0x20, frame_alpha);
+        draw_hud_sprite_flipped(get_icon_frame(0x7580, 1), x4 + wd, y, 0x20,
                                 0x20, frame_alpha);
-        icon_frame_index = find_valid_animation_frame_index_alt(*(int *)hud_element, 3);
+        icon_frame_index = get_icon_frame(*(int *)hud_element, 3);
         *(int *)(hud_element + 0x44) = icon_frame_index;
         hud_frame(hud_element, icon_frame_index, x, y, 0, alpha);
         displayed_numerator = *(int *)(hud_element + 0x74);
-        sprintf_alt(formatted_count_text, D_L00_0015F7C8, displayed_numerator, *(int *)(hud_element + 8));
+        sprintf(formatted_count_text, D_L00_0015F7C8, displayed_numerator, *(int *)(hud_element + 8));
         if (displayed_numerator != 0)
             text_color = fast_tween_color(*(int *)&ammo_hud_nonzero_text_color_blend_start, *(int *)&ammo_hud_nonzero_text_color_blend_end, text_color_blend_factor);
         else

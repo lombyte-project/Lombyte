@@ -6,9 +6,9 @@
 /* Semantic names are bound to the original address-keyed ELF symbols. */
 void reset_global_state_fields(void) __asm__("func_00217020");
 
-void enable_global_state_flag(void) __asm__("func_001F61E8");
+void enable_global_flag(void) __asm__("func_001F61E8");
 
-void disable_global_state_flag(void) __asm__("func_001F61F8");
+void disable_global_flag(void) __asm__("func_001F61F8");
 
 int set_state_fields(int *state_fields, int first_field, int second_field) __asm__("func_0023BA48");
 
@@ -33,9 +33,9 @@ int *get_state_resource(void *state_resource) __asm__("func_001144D8");
 
 int *get_global_state_pointer(void) __asm__("func_001138A8");
 
-void no_op_core_utility(void) __asm__("func_001154C0");
+void noop_core_utility(void) __asm__("func_001154C0");
 
-void no_op_core_utility_secondary(void) __asm__("func_001154C8");
+void noop_core_utility_secondary(void) __asm__("func_001154C8");
 
 void clear_core_global(void) __asm__("func_00118BC0");
 int return_minus_one(void) __asm__("func_00118E00");
@@ -51,13 +51,13 @@ int lookup_index(int index) __asm__("func_0011A458");
 void fun_0011ad90(unsigned int *p) __asm__("func_0011AD90");
 int init_block_fn(int value) __asm__("func_00119568");
 
-void no_op_memory_callback(void) __asm__("func_00208810");
+void noop_memory_callback(void) __asm__("func_00208810");
 
 int point_is_clockwise(int a0, int a1, int a2, int a3, int t0, int t1) __asm__("func_00208818");
 
 void no_op_graphics_callback(void) __asm__("func_00237A70");
 
-void no_op_main_callback(void) __asm__("func_001E93E8");
+void noop_main_callback(void) __asm__("func_001E93E8");
 
 int is_state_field_large(int *state_fields) __asm__("func_0023AEE0");
 
@@ -76,9 +76,9 @@ void clear_state_fields(volatile int *state_fields) __asm__("func_0023D1E8");
 
 void no_op_state_update(void) __asm__("func_0023D1E0");
 
-void no_op_core_callback(void) __asm__("func_001F21B0");
+void noop_core_callback(void) __asm__("func_001F21B0");
 
-void no_op_core_callback_secondary(void) __asm__("func_001F21B8");
+void noop_core_callback_secondary(void) __asm__("func_001F21B8");
 
 int get_state_callback_result(void) __asm__("func_0023BA58");
 

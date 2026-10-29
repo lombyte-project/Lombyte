@@ -7,8 +7,8 @@
 
 extern s32 registered_object_render_class_count __asm__("D_00160F4C");
 extern u8 object_render_class_slot_by_id[] __asm__("D_001E1A00");
-extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
-extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s32 log2dim(s32) __asm__("func_001F97A0");
 
 void register_object_render_class(ObjectRenderClass *render_class,
                                   ResidentRenderTextureDefinition *textures, u128 *material_map,
@@ -49,7 +49,7 @@ void register_object_render_class(ObjectRenderClass *render_class,
     object_render_class_slot_by_id[class_id] = registered_object_render_class_count;
     object_render_classes[registered_object_render_class_count] = render_class;
     render_class->class_slot = registered_object_render_class_count;
-    fixed_threshold = convert_float_to_word(render_class->scale * 1024.0f);
+    fixed_threshold = truncate_float_to_s32(render_class->scale * 1024.0f);
     slot = registered_object_render_class_count;
     registered_object_render_class_count = slot + 1;
     object_render_class_fixed_thresholds[slot] = fixed_threshold;
@@ -102,8 +102,8 @@ void register_object_render_class(ObjectRenderClass *render_class,
             if (width_units_128 <= 0) {
                 width_units_128 = 1;
             }
-            width_log2 = highest_set_bit_index(width_bits >> 16);
-            height_log2 = highest_set_bit_index(texture->height);
+            width_log2 = log2dim(width_bits >> 16);
+            height_log2 = log2dim(texture->height);
             gs_block_base = gs_texture_allocation_base >> 8;
             mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
             mip_block_0 = texture->mip_block_offset_0 + gs_block_base;

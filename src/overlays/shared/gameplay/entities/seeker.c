@@ -59,7 +59,7 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void clear_vector(Vec4 *) __asm__("FUN_001f99f8");
 extern f32 FUN_001f9af0(Vec4 *);
 extern f32 FUN_001f9b48(void *, void *);
-extern f32 vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
@@ -195,7 +195,7 @@ void seeker_update(struct Moby *moby) {
                          fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                          &vars->heading_speed, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f,
                          frame_time * 12.566371f);
-        target_distance_xy = vector_distance_xy(&moby->pos, &target->pos);
+        target_distance_xy = vector_distance(&moby->pos, &target->pos);
         if (target_distance_xy > 1.9f) {
             vars->moving = 1;
         }
@@ -327,18 +327,18 @@ typedef struct { int count; int pad[3]; float pts[1][4]; } Path_2C73D0;
 typedef int OvlQuad __attribute__((mode(TI)));
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 #include "rnc/overlay/shared/gameplay/entities/seeker_data/update_seeker_damage_and_target.h"
 extern float D_L09_0016140C __attribute__((sda));
-extern int multiply_global_factor_ed64() __asm__("FUN_001f96b0");
+extern int scale_time() __asm__("FUN_001f96b0");
 extern int FUN_001f9b80_c() __asm__("FUN_001f9b80");
 extern int fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern s32 allocate_voice_for_target_entry_alt(s32, s32, struct Moby *) __asm__("FUN_0022da68");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -593,15 +593,15 @@ typedef struct { char pad0[0x20]; Moby *moby; char pad24[6]; unsigned short kind
 typedef struct { float x, y, z; char padC[0x34]; Moby *who; char pad44[0xC]; } __attribute__((aligned(16))) Target_2E39E0;
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern f32 random_float_between_c2(f32, f32) __asm__("func_002132A8");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern float probe_ground_height_c(void *, int, float) __asm__("func_00213508");
+extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_L09_001618D8; /* no foreign declaration */
 extern int FUN_001f9b80_c2() __asm__("FUN_001f9b80");
 extern int FUN_L00_002dc9f0();
@@ -609,12 +609,12 @@ extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 rand(void);
 extern void FUN_L00_00257470_c2(void *, int, int) __asm__("FUN_L00_00257470");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_00257b90_c(int lo, int hi) __asm__("FUN_L00_00257b90");
@@ -640,49 +640,49 @@ extern Moby *D_L09_00160064_2E39E0 __asm__("D_L09_0015FFE4");
 extern float impulse_2E39E0 __asm__("D_L09_001618C8") __attribute__((sda));
 extern float lift_2E39E0 __asm__("D_L09_001618CC") __attribute__((sda));
 extern unsigned char settings_2E39E0 __asm__("D_L09_001618D8") __attribute__((sda));
-extern Hit_2E39E0 *hit_query_2E39E0(Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern int hit_check_2E39E0(Moby *, Hit_2E39E0 *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern Hit_2E39E0 *find_moby_hit(Moby *, int, int) __asm__("FUN_L00_0025a420");
+extern int trooper_take_damage(Moby *, Hit_2E39E0 *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern int timer16_2E39E0(short *) __asm__("FUN_001f9770");
 extern int timer32_2E39E0(int *) __asm__("FUN_001f9740");
-extern int ticks_2E39E0(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L01_0026e090(int, int);
-extern float angle_2E39E0(float, float) __asm__("FUN_001f9e90");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void knock_2E39E0(Moby *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void explode_2E39E0(Moby *, int, int) __asm__("FUN_L00_00257470");
 extern void effects_start_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void sound_2E39E0(float, Moby *, int, void *) __asm__("FUN_L00_00263ac8");
-extern float distance_2E39E0(void *, void *) __asm__("FUN_001f9b48");
-extern float fast_distance_2E39E0(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void wake_2E39E0(Moby *) __asm__("FUN_L00_0025a120");
 extern int FUN_L04_00252e18_c(Moby *, void *, float) __asm__("FUN_L04_00252e18");
 extern void steer_init_2E39E0(int *) __asm__("FUN_L01_0026d930");
 extern int rand_2E39E0(void) __asm__("FUN_001160d8");
-extern int range_2E39E0(int, int) __asm__("FUN_L00_00257b90");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void animate_2E39E0(Moby *, int, int, int) __asm__("FUN_00212f90");
-extern float ground_2E39E0(void *, int, float) __asm__("FUN_00213508");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float fabs_2E39E0(float) __asm__("FUN_001f99c0");
-extern int status_2E39E0(int) __asm__("FUN_00213260");
-extern float range_float_2E39E0(float, float) __asm__("FUN_002132a8");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void turn_2E39E0(Moby *, float, void *, float, float, float) __asm__("FUN_L00_00258278");
 extern void FUN_L01_0028b5e0_c(Moby *, char *, void *, void *) __asm__("FUN_L01_0028b5e0");
-extern float sine_2E39E0(float) __asm__("FUN_001f9dc8");
-extern float cosine_2E39E0(float) __asm__("FUN_001f9de0");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int move_2E39E0(Moby *, int *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern float frame_2E39E0(Moby *) __asm__("FUN_0020c9e0");
-extern float angle_dist_2E39E0(float, float) __asm__("FUN_001fa688");
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern void hurt_2E39E0(Moby *, Moby *, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern int knock_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025c698");
 extern int recover_2E39E0(Moby *, void *) __asm__("FUN_L00_002dc9f0");
 extern void zero_2E39E0(void *) __asm__("FUN_001f99f8");
-extern float angle_delta_2E39E0(float, float) __asm__("FUN_001fa5c8");
-extern float angle_add_2E39E0(float, float) __asm__("FUN_001fa580");
+extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fixed_2E39E0(short) __asm__("FUN_001fa6c0");
-extern int hazard_2E39E0(void) __asm__("FUN_001f0b58");
-extern void splash_2E39E0(Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern int collision_hit_material(void) __asm__("FUN_001f0b58");
+extern void cart_burst(Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void delete_2E39E0(Moby *) __asm__("FUN_0020c828");
 extern void effects_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d538");
 
@@ -718,10 +718,10 @@ void update_ground_melee_enemy(Moby *moby) {
     if (moby->state != 99 && moby->state != 7) {
         Hit_2E39E0 *hit;
         damage = 0.0f;
-        hit = hit_query_2E39E0(moby, 0x330000, 0);
-        hit_check_2E39E0(moby, hit, &data->health, 0, &hit_index, &damage, 0, 4);
+        hit = find_moby_hit(moby, 0x330000, 0);
+        trooper_take_damage(moby, hit, &data->health, 0, &hit_index, &damage, 0, 4);
         timer16_2E39E0(&data->cooldown);
-        if (data->cooldown < ticks_2E39E0(45) && hit != 0) {
+        if (data->cooldown < scale_game_frames(45) && hit != 0) {
             if ((unsigned short)(hit->moby->oclass - 0xB0) < 2) {
                 if (data->cooldown != 0) hit->damage = 0.0f;
                 else hit->damage = 1.0f;
@@ -748,7 +748,7 @@ void update_ground_melee_enemy(Moby *moby) {
                         data->up = up_die * 1.35f;
                         data->back = back_die * 1.35f;
                     }
-                    knock_2E39E0(moby, data->motion, angle_2E39E0(moby->pos.x - query.x, moby->pos.y - query.y), 5, 1, 0);
+                    knock_2E39E0(moby, data->motion, fast_arc_tan(moby->pos.x - query.x, moby->pos.y - query.y), 5, 1, 0);
                     data->f170 = 11.0f;
                     data->f174 = 18.0f;
                     if (D_001413F4[0] == 2) explode_2E39E0(moby, 0x200, -1);
@@ -762,23 +762,23 @@ void update_ground_melee_enemy(Moby *moby) {
                         data->up = lift * 1.35f;
                         data->back = back * 1.35f;
                     }
-                    knock_2E39E0(moby, data->motion, angle_2E39E0(moby->pos.x - query.x, moby->pos.y - query.y), 6, 1, 0);
+                    knock_2E39E0(moby, data->motion, fast_arc_tan(moby->pos.x - query.x, moby->pos.y - query.y), 6, 1, 0);
                     data->f170 = 5.0f;
                     data->f174 = 10.0f;
                     moby->state = 6;
                     data->f117 = 250;
-                    data->cooldown = ticks_2E39E0(60);
+                    data->cooldown = scale_game_frames(60);
                     effects_start_2E39E0(moby, data->effects);
                 }
             }
         }
         moby->hit_slot = 0xFF;
         sound_2E39E0(2.1f, moby, 0, data->sound);
-        if (moby->visible != 0 && distance_2E39E0(&moby->pos, D_L09_00166FC0_2E39E0) < 38.0f) {
+        if (moby->visible != 0 && fast_vec_dist(&moby->pos, D_L09_00166FC0_2E39E0) < 38.0f) {
             wake_2E39E0(moby);
             moby->shadow_range = 30;
         }
-        if (fast_distance_2E39E0(&moby->pos, D_0013E633_2E39E0) > 40.0f) return;
+        if (vector_distance(&moby->pos, D_0013E633_2E39E0) > 40.0f) return;
         if (data->hidden != 0) {
             if ((*(unsigned char *)&((Hero *)D_0013E633_2E39E0)->unk2020[1]) != 2) {
                 moby->update_dist = 0xFF;
@@ -791,7 +791,7 @@ void update_ground_melee_enemy(Moby *moby) {
             moby->update_dist = 0x40;
             moby->flags |= 0x1000;
         }
-        if (data->hurt != 0) data->alert = ticks_2E39E0(240);
+        if (data->hurt != 0) data->alert = scale_game_frames(240);
         data->hurt = 0;
         timer32_2E39E0(&data->f208);
         if (timer16_2E39E0(&data->alert)) data->range = 12.0f;
@@ -818,20 +818,20 @@ void update_ground_melee_enemy(Moby *moby) {
         data->f1A4 = data->speed * D_0015EE6C_2E39E0;
         if (rand_2E39E0() & 1) moby->flags |= 0x8000;
         data->settings = &settings_2E39E0;
-        if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        ground = moby->pos.z = ground_2E39E0(&moby->pos, 0, 0.5f);
+        if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
+        ground = moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f);
         break;
     case GROUND_ENEMY_STATE_IDLE:
         fast_vec_sub(&step, &query, &moby->pos);
-        if ((kind < 2 || fast_vec_length(&step) < data->range + 4.0f) && fabs_2E39E0(moby->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
+        if ((kind < 2 || fast_vec_length(&step) < data->range + 4.0f) && absolute_float(moby->pos.z - query.z) < 8.0f && !random_integer_below(19)) {
             moby->state = 2;
-            if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        } else if (moby->command == 1 && !status_2E39E0(19)) {
-            if (status_2E39E0(0x100) & 1) data->side_deg = -data->side_deg;
+            if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, scale_game_frames(random_int_between(10, 13)));
+        } else if (moby->command == 1 && !random_integer_below(19)) {
+            if (random_integer_below(0x100) & 1) data->side_deg = -data->side_deg;
             data->side = data->side_deg * 0.017453292f;
-            data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
+            data->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             moby->command = 0;
         }
         break;
@@ -839,51 +839,51 @@ void update_ground_melee_enemy(Moby *moby) {
     case 8:
     case 10:
     case 11:
-        turn_2E39E0(moby, angle_2E39E0(query.x - moby->pos.x, query.y - moby->pos.y), data->turn, 0.02f, 0.3f, 0.1f);
+        turn_2E39E0(moby, fast_arc_tan(query.x - moby->pos.x, query.y - moby->pos.y), data->turn, 0.02f, 0.3f, 0.1f);
         fast_vec_sub(&step, &query, &moby->pos);
-        if ((kind < 2 || fast_vec_length(&step) < data->range) && fabs_2E39E0(moby->pos.z - query.z) < 8.0f && !status_2E39E0(19)) {
+        if ((kind < 2 || fast_vec_length(&step) < data->range) && absolute_float(moby->pos.z - query.z) < 8.0f && !random_integer_below(19)) {
             if (moby->group != 0xFF) FUN_L01_0026e090(moby->group, 1);
-            if (status_2E39E0(0x100) & 1) data->side_deg = -data->side_deg;
+            if (random_integer_below(0x100) & 1) data->side_deg = -data->side_deg;
             data->side = data->side_deg * 0.017453292f;
-            data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
+            data->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             moby->command = 0;
-        } else if (moby->command == 1 && !status_2E39E0(19)) {
-            if (status_2E39E0(0x100) & 1) data->side_deg = -data->side_deg;
+        } else if (moby->command == 1 && !random_integer_below(19)) {
+            if (random_integer_below(0x100) & 1) data->side_deg = -data->side_deg;
             data->side = data->side_deg * 0.017453292f;
-            data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
+            data->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             moby->command = 0;
         }
-        if (moby->prev_seq == 4 && (moby->anim_flags & 2)) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+        if (moby->prev_seq == 4 && (moby->anim_flags & 2)) animate_2E39E0(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
         break;
     case GROUND_ENEMY_STATE_CHASE: {
         int flags;
         float steep;
-        steep = fabs_2E39E0(moby->pos.z - query.z);
-        steep /= fast_distance_2E39E0(&moby->pos, &query);
+        steep = absolute_float(moby->pos.z - query.z);
+        steep /= vector_distance(&moby->pos, &query);
         if (data->path != -1) FUN_L01_0028b5e0_c(moby, D_L09_001B0930_2E39E0[data->path], &query, &goal);
         else qcopy(&goal, &query);
-        turn_2E39E0(moby, angle_2E39E0(goal.x - moby->pos.x, goal.y - moby->pos.y) + data->side, data->turn, 0.05f, 0.3f, 0.2f);
-        step.x = 2.0f * sine_2E39E0(moby->rot.z);
-        step.y = 2.0f * cosine_2E39E0(moby->rot.z);
+        turn_2E39E0(moby, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y) + data->side, data->turn, 0.05f, 0.3f, 0.2f);
+        step.x = 2.0f * fast_cos(moby->rot.z);
+        step.y = 2.0f * fast_sin(moby->rot.z);
         step.z = 0.0f;
         fast_vec_add(&goal, &moby->pos, &step);
         flags = move_2E39E0(moby, &data->steer, &goal, &step, 1.0f);
         if (timer32_2E39E0(&data->side_timer)) {
-            data->side_timer = ticks_2E39E0((int)range_float_2E39E0(30.0f, 90.0f));
+            data->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             data->side = -data->side;
         }
         fast_vec_sub(&away, &query, &data->home);
-        if ((flags & 4) || (fast_distance_2E39E0(&moby->pos, &query) < 1.5f && !(flags & 2))) {
+        if ((flags & 4) || (vector_distance(&moby->pos, &query) < 1.5f && !(flags & 2))) {
             moby->state = 4;
-            if (moby->prev_seq != 1) animate_2E39E0(moby, 1, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 1) animate_2E39E0(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (data->f190 < D_0015EE6C_2E39E0 || 1.0f < steep || (flags & 2)) {
-            data->home_timer = ticks_2E39E0(50);
+            data->home_timer = scale_game_frames(50);
             moby->state = 5;
-        } else if (fast_vec_length(&away) < data->range + 4.0f && fabs_2E39E0(moby->pos.z - query.z) < 8.0f) {
+        } else if (fast_vec_length(&away) < data->range + 4.0f && absolute_float(moby->pos.z - query.z) < 8.0f) {
             if (moby->group != 0xFF) FUN_L01_0026e090(moby->group, 1);
         } else if (moby->command != 1) {
             moby->state = 5;
@@ -892,22 +892,22 @@ void update_ground_melee_enemy(Moby *moby) {
         break;
     }
     case GROUND_ENEMY_STATE_MELEE_ATTACK:
-        turn_2E39E0(moby, angle_2E39E0(query.x - moby->pos.x, query.y - moby->pos.y), data->turn, 0.05f, 0.3f, 0.2f);
-        if (moby->seq == moby->prev_seq && frame_2E39E0(moby) == 13.0f && fabs_2E39E0(moby->pos.z - query.z) < 0.5f
-            && fast_distance_2E39E0(&moby->pos, &query) < 2.0f
-            && angle_dist_2E39E0(angle_2E39E0(query.x - moby->pos.x, query.y - moby->pos.y), moby->rot.z) < 0.2617994f) {
-            step.x = sine_2E39E0(moby->rot.z) * 0.2f;
-            step.y = cosine_2E39E0(moby->rot.z) * 0.2f;
+        turn_2E39E0(moby, fast_arc_tan(query.x - moby->pos.x, query.y - moby->pos.y), data->turn, 0.05f, 0.3f, 0.2f);
+        if (moby->seq == moby->prev_seq && frame_2E39E0(moby) == 13.0f && absolute_float(moby->pos.z - query.z) < 0.5f
+            && vector_distance(&moby->pos, &query) < 2.0f
+            && fast_difference_between_rotations(fast_arc_tan(query.x - moby->pos.x, query.y - moby->pos.y), moby->rot.z) < 0.2617994f) {
+            step.x = fast_cos(moby->rot.z) * 0.2f;
+            step.y = fast_sin(moby->rot.z) * 0.2f;
             step.z = 0.0f;
             qcopy(&goal, &query);
             goal.z += 0.75f;
             hurt_2E39E0(query.who, moby, 1, &goal, &step, 1.0f);
         }
-        if ((moby->anim_flags & 2) && fast_distance_2E39E0(&moby->pos, &query) > 1.5f) {
+        if ((moby->anim_flags & 2) && vector_distance(&moby->pos, &query) > 1.5f) {
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         }
-        ground = ground_2E39E0(&moby->pos, 0, 0.5f);
+        ground = probe_ground_height(&moby->pos, 0, 0.5f);
         data->fall = data->fall - D_0015EE70_2E39E0 * 9.8f;
         moby->pos.z = moby->pos.z + data->fall;
         if (moby->pos.z < ground) {
@@ -919,29 +919,29 @@ void update_ground_melee_enemy(Moby *moby) {
         int flags;
         if (data->path != -1) FUN_L01_0028b5e0_c(moby, D_L09_001B0930_2E39E0[data->path], &data->home, &goal);
         else qcopy(&goal, &data->home);
-        turn_2E39E0(moby, angle_2E39E0(goal.x - moby->pos.x, goal.y - moby->pos.y), data->turn, 0.02f, 0.3f, 0.1f);
-        step.x = 2.0f * sine_2E39E0(moby->rot.z);
-        step.y = 2.0f * cosine_2E39E0(moby->rot.z);
+        turn_2E39E0(moby, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y), data->turn, 0.02f, 0.3f, 0.1f);
+        step.x = 2.0f * fast_cos(moby->rot.z);
+        step.y = 2.0f * fast_sin(moby->rot.z);
         step.z = 0.0f;
         fast_vec_add(&goal, &moby->pos, &step);
         flags = move_2E39E0(moby, &data->steer, &goal, &step, 1.0f);
-        if (fast_distance_2E39E0(&moby->pos, &data->home) < 2.0f) {
+        if (vector_distance(&moby->pos, &data->home) < 2.0f) {
             moby->state = 1;
-            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
         }
         fast_vec_sub(&away, &query, &data->home);
         if (expired && fast_vec_length(&away) < data->range) {
             if (moby->group != 0xFF) FUN_L01_0026e090(moby->group, 1);
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (expired && moby->command == 1) {
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (flags & 2) {
             moby->pos.x = previous.x;
             moby->pos.y = previous.y;
             moby->state = 12;
-            if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, scale_game_frames(random_int_between(10, 13)));
         }
         moby->command = 0;
         break;
@@ -949,7 +949,7 @@ void update_ground_melee_enemy(Moby *moby) {
     case GROUND_ENEMY_STATE_HURT_KNOCKBACK:
         if (knock_update_2E39E0(moby, data->motion) & 1) {
             moby->state = 9;
-            if (moby->prev_seq != 3) animate_2E39E0(moby, 3, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 3) animate_2E39E0(moby, 3, 0, scale_game_frames(random_int_between(10, 13)));
             return;
         }
         if (moby->pos.z < 0.0f) {
@@ -967,14 +967,14 @@ void update_ground_melee_enemy(Moby *moby) {
     case GROUND_ENEMY_STATE_HURT_RECOVERY:
         if (frame_2E39E0(moby) > 29.0f) {
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             return;
         }
         break;
     case GROUND_ENEMY_STATE_FATAL_KNOCKBACK:
         if (knock_update_2E39E0(moby, data->motion) & 0x40) {
             zero_2E39E0(&step);
-            splash_2E39E0(moby, &moby->pos, 6, 0.5f, 13.0f);
+            cart_burst(moby, &moby->pos, 6, 0.5f, 13.0f);
             delete_2E39E0(moby);
             return;
         }
@@ -986,51 +986,51 @@ void update_ground_melee_enemy(Moby *moby) {
     case GROUND_ENEMY_STATE_BLOCKED_RETURN_HOME: {
         int flags;
         float steep;
-        steep = fabs_2E39E0(moby->pos.z - query.z);
-        steep /= fast_distance_2E39E0(&moby->pos, &query);
+        steep = absolute_float(moby->pos.z - query.z);
+        steep /= vector_distance(&moby->pos, &query);
         if (data->path != -1) FUN_L01_0028b5e0_c(moby, D_L09_001B0930_2E39E0[data->path], &data->home, &goal);
         else qcopy(&goal, &data->home);
-        turn_2E39E0(moby, angle_2E39E0(goal.x - moby->pos.x, goal.y - moby->pos.y), data->turn, 0.05f, 0.3f, 0.2f);
-        step.x = 2.0f * sine_2E39E0(moby->rot.z);
-        step.y = 2.0f * cosine_2E39E0(moby->rot.z);
+        turn_2E39E0(moby, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y), data->turn, 0.05f, 0.3f, 0.2f);
+        step.x = 2.0f * fast_cos(moby->rot.z);
+        step.y = 2.0f * fast_sin(moby->rot.z);
         step.z = 0.0f;
         fast_vec_add(&goal, &moby->pos, &step);
         flags = move_2E39E0(moby, &data->steer, &goal, &step, 1.0f);
         fast_vec_sub(&away, &query, &data->home);
-        if ((flags & 4) || (fast_distance_2E39E0(&moby->pos, &query) < 1.5f && steep <= 1.0f)) {
+        if ((flags & 4) || (vector_distance(&moby->pos, &query) < 1.5f && steep <= 1.0f)) {
             moby->state = 4;
-            if (moby->prev_seq != 1) animate_2E39E0(moby, 1, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 1) animate_2E39E0(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (steep <= 1.0f && !(flags & 2)) {
             moby->state = 5;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         } else if ((flags & 2) && expired) {
             moby->state = 1;
-            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (moby->anim_flags & 2) {
             int animation;
-            status_2E39E0(4);
-            animation = status_2E39E0(4) ? 2 : 4;
-            animate_2E39E0(moby, animation, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            random_integer_below(4);
+            animation = random_integer_below(4) ? 2 : 4;
+            animate_2E39E0(moby, animation, 0, scale_game_frames(random_int_between(10, 13)));
         }
         moby->command = 0;
         break;
     }
     case GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK: {
         Moby *other;
-        if (moby->seq != 0 && moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
-        step.x = sine_2E39E0(moby->rot.z) * (data->speed * D_0015EE6C_2E39E0);
-        step.y = cosine_2E39E0(moby->rot.z) * (data->speed * D_0015EE6C_2E39E0);
+        if (moby->seq != 0 && moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+        step.x = fast_cos(moby->rot.z) * (data->speed * D_0015EE6C_2E39E0);
+        step.y = fast_sin(moby->rot.z) * (data->speed * D_0015EE6C_2E39E0);
         step.z = 0.0f;
         fast_vec_add(&goal, &moby->pos, &step);
         for (other = D_L09_00160064_2E39E0; other != 0; other = other->next) {
             if (other != moby && (signed char)other->state >= 0 && (other->oclass == 0 || other->oclass == 193)) {
-                if (fast_distance_2E39E0(&goal, &other->pos) < 2.0f) {
+                if (vector_distance(&goal, &other->pos) < 2.0f) {
                     float old_z = moby->pos.z;
-                    float bearing = angle_2E39E0(other->pos.x - moby->pos.x, other->pos.y - moby->pos.y);
-                    float turn_side = angle_delta_2E39E0(moby->rot.z, bearing);
+                    float bearing = fast_arc_tan(other->pos.x - moby->pos.x, other->pos.y - moby->pos.y);
+                    float turn_side = fast_subtract_rotations(moby->rot.z, bearing);
                     float turn = D_0015EE6C_2E39E0 * 1.5707964f;
                     if (!(turn_side > 0.0f)) turn = -turn;
-                    moby->rot.z = angle_add_2E39E0(moby->rot.z, turn);
+                    moby->rot.z = fast_add_rotations(moby->rot.z, turn);
                     fast_vec_sub(&goal, &moby->pos, &other->pos);
                     fast_vec_normalize(&goal, &goal, 2.0f);
                     fast_vec_add(&goal, &goal, &other->pos);
@@ -1039,24 +1039,24 @@ void update_ground_melee_enemy(Moby *moby) {
             }
         }
         qcopy(&moby->pos, &goal);
-        ground = ground_2E39E0(&moby->pos, 0, 0.5f);
+        ground = probe_ground_height(&moby->pos, 0, 0.5f);
         data->fall = data->fall - D_0015EE70_2E39E0 * 9.8f;
         moby->pos.z = moby->pos.z + data->fall;
         if (moby->pos.z < ground) {
             data->fall = 0.0f;
             moby->pos.z = ground;
         }
-        if (data->anchor == 0 || fast_distance_2E39E0(&moby->pos, &data->anchor->pos) > fixed_2E39E0(data->leash)) {
+        if (data->anchor == 0 || vector_distance(&moby->pos, &data->anchor->pos) > fixed_2E39E0(data->leash)) {
             moby->state = 5;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, ticks_2E39E0(range_2E39E0(10, 13)));
+            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         }
         moby->command = 0;
         break;
     }
     }
-    if (ground == -1.0f) ground = ground_2E39E0(&moby->pos, 0, 0.5f);
-    if (ground != 0.0f && moby->pos.z - ground < 0.1f && hazard_2E39E0() == 1) {
-        splash_2E39E0(moby, &moby->pos, 6, 0.5f, 13.0f);
+    if (ground == -1.0f) ground = probe_ground_height(&moby->pos, 0, 0.5f);
+    if (ground != 0.0f && moby->pos.z - ground < 0.1f && collision_hit_material() == 1) {
+        cart_burst(moby, &moby->pos, 6, 0.5f, 13.0f);
         delete_2E39E0(moby);
         return;
     }

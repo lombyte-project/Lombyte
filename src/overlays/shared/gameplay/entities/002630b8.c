@@ -20,13 +20,13 @@ extern struct Moby *suck_moby_list __asm__("D_L00_0015FFE4");
 extern u8 D_L00_00166DC0[];
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float vector_length_xy(void *) __asm__("FUN_001f9b20");
-float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 float FUN_001f99c0(float);
 float fast_arc_sin(float) __asm__("FUN_001f9df8");
 float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void build_spherical_offset(Vec4 *, float, float, float) __asm__("FUN_00214db0");
 MobyBound *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
 int collision_line(void *, Vec4 *, int, void *, int) __asm__("FUN_001efa68");
@@ -63,7 +63,7 @@ struct Moby *select_auto_aim_target_moby(void *ignore, Vec4 *pos_in, Vec4 *dir_i
         if (!(candidate_moby->flags & 0x1000) || !candidate_moby || !candidate_moby->pclass || candidate_moby->pclass->type != 5)
             continue;
         t_yaw = fast_arc_tan(target.f[0] - pp->f[0], target.f[1] - pp->f[1]);
-        t_pitch = fast_arc_tan(vector_distance_xy(pp, &target), target.f[2] - pp->f[2]);
+        t_pitch = fast_arc_tan(vector_distance(pp, &target), target.f[2] - pp->f[2]);
         target_distance = fast_vec_dist(pp, &target);
         if (target_distance < 7.5f &&
             fast_difference_between_rotations(hero.moby->rot.z,
@@ -77,7 +77,7 @@ struct Moby *select_auto_aim_target_moby(void *ignore, Vec4 *pos_in, Vec4 *dir_i
         if (best_dist < target_distance)
             continue;
         build_spherical_offset(&probe, target_distance, *yaw, *pitch + hero.ground_pitch.f * 0.5f);
-        add_vector_xyz(&probe, &probe, pp);
+        fast_vec_add(&probe, &probe, pp);
         aim_angle_error = fast_arc_sin(fast_vec_dist(&probe, &target) / (target_distance + target_distance));
         aim_angle_error = aim_angle_error + aim_angle_error;
         if (max_angle < aim_angle_error && aim_bounds) {
@@ -502,9 +502,9 @@ extern float D_0015ED6C_s[] __asm__("D_0015ED6C") __attribute__((sda));
 extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
@@ -537,21 +537,21 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *fragment_sp
         *(int *)(fragment_moby + 0x94) = 0;
         if (random_default_override == 0)
             *(int *)(fragment_pvars + 0x30) =
-                func_001FA898_r(multiply_global_factor_ed64(random_float_between_alt(60.0f, 120.0f)));
+                func_001FA898_r(scale_time(random_float_between(60.0f, 120.0f)));
         else
             *(int *)(fragment_pvars + 0x30) = random_default_override;
         *(int *)(fragment_pvars + 0x34) = fragment_mode;
         if (*(float *)(fragment_pvars + 0x38) == 0.0f)
-            *(float *)(fragment_pvars + 0x38) = random_float_between_alt(10.0f, 15.0f) * frame_time_sq;
+            *(float *)(fragment_pvars + 0x38) = random_float_between(10.0f, 15.0f) * frame_time_sq;
         else
             *(float *)(fragment_pvars + 0x38) = scale;
         if (fast_vec_length(initial_velocity) == 0.0f) {
             horizontal_velocity_angle = random_angle_radians();
-            k = random_float_between_alt(2.0f, 4.0f) * frame_time;
+            k = random_float_between(2.0f, 4.0f) * frame_time;
             vector_scratch[0] = fast_cos(horizontal_velocity_angle) * k;
             vector_scratch[1] = fast_sin(horizontal_velocity_angle) * k;
             vector_scratch[2] = 0.0f;
-            vector_scratch[2] = random_float_between_alt(5.0f, 8.0f) * frame_time;
+            vector_scratch[2] = random_float_between(5.0f, 8.0f) * frame_time;
             qcopy(fragment_pvars, vector_scratch);
         } else {
             qcopy(fragment_pvars, initial_velocity);

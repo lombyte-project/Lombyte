@@ -41,7 +41,7 @@ extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e
 extern void update_hero_ground_material_effects(void) __asm__("FUN_L01_0022cd48");
 extern void update_hero_ledge_probe(void) __asm__("FUN_L01_0022d090");
 extern void update_hero_state_machine(void) __asm__("FUN_L03_0021c668");
-extern void no_op_main_callback_alt(void *) __asm__("FUN_001e93e8");
+extern void noop_main_callback(void *) __asm__("FUN_001e93e8");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
 void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
@@ -92,7 +92,7 @@ void update_hero_frame_pipeline(void) {
     update_hero_bolt_exclamation_hud();
     dispatch_hero_animation_timed_events();
     scan_hero_input_sequences();
-    no_op_main_callback_alt(*(void **)(hero_state + 0x2080));
+    noop_main_callback(*(void **)(hero_state + 0x2080));
     if (*(int *)(hero_state + 0x208C) != 0x16 && *(int *)(hero_state + 0x2084) != 0x32) {
         reveal_map_around_position(hero_state + 0x80);
     }

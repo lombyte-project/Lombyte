@@ -11,12 +11,12 @@
 
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
-extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
@@ -60,31 +60,31 @@ void draw_starfighter_tractor_beam(struct Moby *moby) {
     quad.texture_coordinates[2][1] = one;
     quad.texture_coordinates[3][1] = one;
     moby_point_position(moby, 0x13, start);
-    subtract_vector_xyz(direction, vars + 0x80, start);
+    fast_vec_sub(direction, vars + 0x80, start);
     clamp_vector_length(direction, direction, 100.0f);
-    length = vector_length_xyz(direction);
+    length = fast_vec_length(direction);
     scale = length / 100.0f;
     if (scale < 1.0f)
         step = 1.0f;
     else
         step = scale;
-    normalize_vector_xyz(direction, direction, step);
+    fast_vec_normalize(direction, direction, step);
     qcopy(position, start);
     distance = zero;
-    normalize_vector_xyz(offset, direction, convert_integer_to_float(frame_count % 20) / 20.0f);
-    subtract_vector_xyz(position, position, offset);
+    fast_vec_normalize(offset, direction, convert_integer_to_float(frame_count % 20) / 20.0f);
+    fast_vec_sub(position, position, offset);
     while (distance < length) {
         width = (distance * 0.0f) / (length + length) + 0.5f;
-        cross_vectors_xyz(side, direction, D_L13_00160680);
-        normalize_vector_xyz(side, side, width);
-        cross_vectors_xyz(up, direction, side);
-        normalize_vector_xyz(up, up, width);
-        subtract_vector_xyz(edge, position, up);
-        subtract_vector_xyz(&quad.positions[0], edge, side);
-        add_vector_xyz(&quad.positions[1], edge, side);
-        add_vector_xyz(edge, position, up);
-        subtract_vector_xyz(&quad.positions[2], edge, side);
-        add_vector_xyz(&quad.positions[3], edge, side);
+        fast_vec_cross(side, direction, D_L13_00160680);
+        fast_vec_normalize(side, side, width);
+        fast_vec_cross(up, direction, side);
+        fast_vec_normalize(up, up, width);
+        fast_vec_sub(edge, position, up);
+        fast_vec_sub(&quad.positions[0], edge, side);
+        fast_vec_add(&quad.positions[1], edge, side);
+        fast_vec_add(edge, position, up);
+        fast_vec_sub(&quad.positions[2], edge, side);
+        fast_vec_add(&quad.positions[3], edge, side);
         if (10.0f < length && length - 10.0f < distance) {
             int color = truncate_float_to_s32((length - distance) * 6.4f) << 24 | 0x808080;
             quad.colors[3] = color;
@@ -94,7 +94,7 @@ void draw_starfighter_tractor_beam(struct Moby *moby) {
         }
         draw_geometry_quad(&quad, 0, 1);
         distance += step;
-        add_vector_xyz(position, position, direction);
+        fast_vec_add(position, position, direction);
     }
 }
 #include "qcopy.h"
@@ -102,12 +102,12 @@ void draw_starfighter_tractor_beam(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002EC038), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern int FUN_L00_001fefc8(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int queue_starfighter_voice_line(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern unsigned char *fire_class_53_projectile(char *, char *) __asm__("FUN_L13_002ea6b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -164,14 +164,14 @@ s1:
         return;
     }
     fire_starfighter_homing_rocket(moby, starfighter_data);
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x3C);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x3C);
     ((unsigned char *)starfighter_data)[0xFD]++;
     if (((unsigned char *)starfighter_data)[0xFD] < 11) {
         return;
     }
     ((unsigned char *)starfighter_data)[0xFD] = 0;
     moby[0x20] = 3;
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x12C);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x12C);
     return;
 
 s1b:
@@ -183,7 +183,7 @@ s1b:
             *(unsigned short *)(starfighter_data + 0x138) |= 1;
         }
     }
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x1E);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x1E);
     moby[0x20] = 4;
     return;
 
@@ -203,7 +203,7 @@ s3:
         *(int *)(starfighter_data + 0x11C) = -1;
     }
     moby_point_position(moby, 0x13, sv);
-    joint_to_hero_distance = distance_xyz(sv, ((char *)&D_0013F3D0));
+    joint_to_hero_distance = fast_vec_dist(sv, ((char *)&D_0013F3D0));
     if (*(int *)(starfighter_data + 0x100) == 0) {
         if (joint_to_hero_distance < 100.0f) {
           if (60.0f < joint_to_hero_distance) {
@@ -213,7 +213,7 @@ s3:
             if (*(int *)(starfighter_data + 0x124) != 0) {
                 return;
             }
-            *(int *)(starfighter_data + 0x100) = scale_game_frames_alt(0x258);
+            *(int *)(starfighter_data + 0x100) = scale_game_frames(0x258);
             qcopy(starfighter_data + 0x80, sv);
             ((unsigned char *)starfighter_data)[0xFF] = 0;
             moby[0x20] = 5;
@@ -246,7 +246,7 @@ s3:
         ((unsigned char *)starfighter_data)[0xFD] = random_int_between(0x14, 0x32);
         moby[0x20] = 3;
     }
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x78);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x78);
     return;
 
 s2e:
@@ -254,8 +254,8 @@ s2e:
         goto s380;
     }
     fire_class_53_projectile(moby, starfighter_data);
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x14);
-    *(int *)(starfighter_data + 0x124) = scale_game_frames_alt(0xF0);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x14);
+    *(int *)(starfighter_data + 0x124) = scale_game_frames(0xF0);
     return;
 
 s308:
@@ -265,8 +265,8 @@ s308:
     if (*(int *)(starfighter_data + 0x124) != 0) {
         return;
     }
-    *(int *)(starfighter_data + 0x100) = scale_game_frames_alt(0x258);
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x78);
+    *(int *)(starfighter_data + 0x100) = scale_game_frames(0x258);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x78);
     moby[0x20] = 4;
     allocate_voice_for_target_entry(5, 0, (int)moby);
     return;
@@ -278,8 +278,8 @@ s358:
 s380:
 s384:
     fire_starfighter_homing_rocket(moby, starfighter_data);
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x3C);
-    *(int *)(starfighter_data + 0x124) = scale_game_frames_alt(0x78);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x3C);
+    *(int *)(starfighter_data + 0x124) = scale_game_frames(0x78);
     return;
 
 s2:
@@ -301,7 +301,7 @@ s2:
         ((unsigned char *)starfighter_data)[0xFD] = random_int_between(0x14, 0x32);
         moby[0x20] = 3;
     }
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x3C);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x3C);
     return;
 
 s2z:
@@ -309,18 +309,18 @@ s2z:
         goto s2y;
     }
     fire_starfighter_homing_rocket(moby, starfighter_data);
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x3C);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x3C);
     return;
 
 s2y:
     fire_class_53_projectile(moby, starfighter_data);
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x14);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x14);
     return;
 
 s2b:
     moby[0x20] = 3;
     fire_class_53_projectile(moby, starfighter_data);
-    *(int *)(starfighter_data + 0xF8) = scale_game_frames_alt(0x14);
+    *(int *)(starfighter_data + 0xF8) = scale_game_frames(0x14);
     return;
 
 s4:
@@ -453,7 +453,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_L13_00160660[] __attribute__((section(".sdata")));
-extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
@@ -473,10 +473,10 @@ extern int allocate_colored_effect_slot(float *, float, float, float, float, flo
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int advance_moby_along_selected_path(void *, void *, int, int) __asm__("FUN_L13_002e9160");
 extern int update_moby_path_following_away_from_hero(void *, void *, int, int) __asm__("FUN_L13_002e9408");
-extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern int continue_audio_stream_if_ready_alt(void) __asm__("FUN_00215b10");
-extern int queue_animation_update_alt(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
+extern int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
+extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short dialogue_playback_phase[] __asm__("D_0015172A");
@@ -488,7 +488,7 @@ extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, floa
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void emit_gated_moby_joint_effects(void *, void *) __asm__("FUN_L13_002e8920");
-extern void splash_L13(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void update_moby_joint_attachments(void *, void *) __asm__("FUN_L13_002e8d28");
 extern void update_moby_spring_steering_and_banking(void *, void *, float, float) __asm__("FUN_L13_002e9018");
 extern void detach_moby_joint_attachment(void *, void *, int) __asm__("FUN_L13_002e9680");
@@ -496,12 +496,12 @@ extern void process_moby_attachment_damage(void *, void *) __asm__("FUN_L13_002e
 extern void draw_starfighter_tractor_beam();
 extern void update_qwarks_starfighter_attack_commands(void *, void *) __asm__("FUN_L13_002eac00");
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L06_00249738();
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
@@ -562,7 +562,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         data->owner = (char *)moby;
         for (j = 0; j < 5; j++) {
             char *path = walker_paths[data->paths[j]];
-            if (distance_xyz(path + 0x10, path + *(int *)path * 16) < 0.5f) {
+            if (fast_vec_dist(path + 0x10, path + *(int *)path * 16) < 0.5f) {
                 *(int *)path -= 1;
             }
         }
@@ -634,7 +634,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                 (*(Moby388 **)(hero + 0x15F0))->bBC = 0;
             }
         }
-        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
+        data->hud104 = queue_animation_update(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
                                   (int)FUN_L06_00249738, (int)&data->i108,
                                   (data->s24 << 4) | 0xF);
         data->fAC += (frame_time * 42.0f - data->fAC) * 0.1f;
@@ -648,7 +648,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             *(int *)(ship + 0x8C) = 0;
             *(int *)(ship + 0x118) = 0;
             data->b13B = qwarks_starfighter_command_path_slots[moby->bBC];
-            data->iF8 = scale_game_frames_alt(0x14);
+            data->iF8 = scale_game_frames(0x14);
             moby->state = 3;
             data->s9C = select_point_index_by_distance(moby->pos, walker_paths[data->paths[data->b13B]], 0.0f);
             data->s9C = *(unsigned short *)((char *)data + 0x9C) + random_int_between(3, 7);
@@ -662,7 +662,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
     }
     case STARFIGHTER_STATE_FOLLOW_COMMAND_PATH:
     case STARFIGHTER_STATE_FOLLOW_COMMAND_PATH_WITH_TIMED_VOLLEY:
-        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
+        data->hud104 = queue_animation_update(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
                                   (int)FUN_L06_00249738, (int)&data->i108,
                                   (data->s24 << 4) | 0xF);
         if (*(Moby388 **)(((char *)&D_00140940)) != 0 && (*(Moby388 **)(((char *)&D_00140940)))->cls_id == 0x45) {
@@ -689,18 +689,18 @@ void update_qwarks_starfighter(Moby388 *moby) {
         break;
     case STARFIGHTER_STATE_TRACTOR_BEAM: {
         float hero_distance;
-        data->hud104 = queue_animation_update_alt(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
+        data->hud104 = queue_animation_update(0x11, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
                                   (int)FUN_L06_00249738, (int)&data->i108,
                                   (data->s24 << 4) | 0xF);
         update_qwarks_starfighter_attack_commands(moby, data);
         FUN_L00_0024f7c8(moby, 0x13, joint);
-        hero_distance = distance_xyz(data->v80, ((char *)&D_0013F3D0));
+        hero_distance = fast_vec_dist(data->v80, ((char *)&D_0013F3D0));
         if (data->snd11C != -1) {
             char *voice = D_0013E633_snd + 0x1D + data->snd11C * 0x70;
             if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) goto have11C;
         }
         data->snd11C = -1;
-        data->snd11C = allocate_voice_for_target_entry_alt(4, 4, (int)moby);
+        data->snd11C = allocate_voice_for_target_entry(4, 4, (int)moby);
     have11C:
         if (data->bFF == 0) {
             {
@@ -711,12 +711,12 @@ void update_qwarks_starfighter(Moby388 *moby) {
             }
             data->fAC += (frame_time * 30.0f - data->fAC) * 0.1f;
             if (frame_time * 40.0f < hero_distance) {
-                subtract_vector_xyz(offset, ((char *)&D_0013F3D0), data->v80);
-                normalize_vector_xyz(offset, offset, frame_time * 40.0f);
-                add_vector_xyz(data->v80, data->v80, offset);
+                fast_vec_sub(offset, ((char *)&D_0013F3D0), data->v80);
+                fast_vec_normalize(offset, offset, frame_time * 40.0f);
+                fast_vec_add(data->v80, data->v80, offset);
             } else {
                 qcopy(offset, ((char *)&D_0013F3D0));
-                data->iF8 = scale_game_frames_alt(0x78);
+                data->iF8 = scale_game_frames(0x78);
                 if (!(data->h138 & 4)) {
                     if (queue_starfighter_voice_line(moby, data, 0x17, 4) != 0) {
                         data->h138 |= 4;
@@ -736,9 +736,9 @@ void update_qwarks_starfighter(Moby388 *moby) {
                     }
                 }
             }
-            subtract_vector_xyz(ray_start, data->v80, joint);
-            normalize_vector_xyz(ray_start, ray_start, 8.0f);
-            add_vector_xyz(ray_start, ray_start, joint);
+            fast_vec_sub(ray_start, data->v80, joint);
+            fast_vec_normalize(ray_start, ray_start, 8.0f);
+            fast_vec_add(ray_start, ray_start, joint);
             if (collision_line(ray_start, data->v80, 0, moby, 0) != 0) {
                 if (D_L13_00174158[0] == 0 || D_L13_00174158[0]->cls_id == 0xD4) {
                     data->i100 = 0;
@@ -750,7 +750,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                 DebugPrint_alt(qwarks_starfighter_tractor_offscreen_abort_message);
                 data->i100 = 0;
             }
-            if (distance_xyz(ray_start, ((char *)&D_0013F3D0)) > 100.0f) {
+            if (fast_vec_dist(ray_start, ((char *)&D_0013F3D0)) > 100.0f) {
                 DebugPrint_alt(D_L13_001F4F38);
                 data->i100 = 0;
             }
@@ -758,22 +758,22 @@ void update_qwarks_starfighter(Moby388 *moby) {
             char *hero = ((char *)&D_0013F350);
             float yaw, pitch, distance;
             yaw = fast_arc_tan(*(float *)(hero + 0x80) - moby->pos[0], *(float *)(hero + 0x84) - moby->pos[1]);
-            pitch = -fast_arc_tan(vector_distance_xy(moby->pos, hero + 0x80), *(float *)(hero + 0x88) - moby->pos[2]);
+            pitch = -fast_arc_tan(vector_distance(moby->pos, hero + 0x80), *(float *)(hero + 0x88) - moby->pos[2]);
             update_moby_spring_steering_and_banking(moby, data, yaw, pitch);
             if (*(Moby388 **)(hero + 0x15F0) != 0 && (*(Moby388 **)(hero + 0x15F0))->cls_id == 0x45) {
                 (*(Moby388 **)(hero + 0x15F0))->bBC = 1;
             }
             data->fAC *= 0.8f;
-            distance_xyz(moby->pos, ((char *)&D_0013F3D0));
+            fast_vec_dist(moby->pos, ((char *)&D_0013F3D0));
             FUN_L00_0024f7c8(moby, 0x13, probe);
-            subtract_vector_xyz(ray_start, data->v80, probe);
-            normalize_vector_xyz(ray_start, ray_start, 30.0f);
-            add_vector_xyz(ray_start, ray_start, probe);
-            subtract_vector_xyz(offset, ray_start, data->v80);
-            distance = distance_xyz(ray_start, ((char *)&D_0013F3D0));
+            fast_vec_sub(ray_start, data->v80, probe);
+            fast_vec_normalize(ray_start, ray_start, 30.0f);
+            fast_vec_add(ray_start, ray_start, probe);
+            fast_vec_sub(offset, ray_start, data->v80);
+            distance = fast_vec_dist(ray_start, ((char *)&D_0013F3D0));
             if (distance != 30.0f) {
-                normalize_vector_xyz(offset, offset, (frame_time * 15.0f < distance) ? frame_time * 15.0f : distance);
-                add_vector_xyz(data->v80, data->v80, offset);
+                fast_vec_normalize(offset, offset, (frame_time * 15.0f < distance) ? frame_time * 15.0f : distance);
+                fast_vec_add(data->v80, data->v80, offset);
             }
             {
                 char *hero = ((char *)&D_0013F350);
@@ -785,7 +785,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
                     ship = (char *)ship_moby->d;
                     yaw_error = fast_subtract_rotations(fast_arc_tan(moby->pos[0] - ship_moby->pos[0], moby->pos[1] - ship_moby->pos[1]), *(float *)(ship + 0x38));
                     abs_yaw_error = absolute_float(yaw_error);
-                    pitch_error = fast_subtract_rotations(-fast_arc_tan(vector_distance_xy((*(Moby388 **)(hero + 0x15F0))->pos, moby->pos),
+                    pitch_error = fast_subtract_rotations(-fast_arc_tan(vector_distance((*(Moby388 **)(hero + 0x15F0))->pos, moby->pos),
                                                          moby->pos[2] - (*(Moby388 **)(hero + 0x15F0))->pos[2]),
                                       *(float *)(ship + 0x34));
                     abs_pitch_error = absolute_float(pitch_error);
@@ -806,7 +806,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         {
             char *hero = ((char *)&D_0013F350);
             if (fast_difference_between_rotations(moby->rot[2], fast_arc_tan(*(float *)(hero + 0x80) - moby->pos[0], *(float *)(hero + 0x84) - moby->pos[1])) < 1.0471976f) {
-                enqueue_callback_list_1(draw_starfighter_tractor_beam, moby);
+                add_draw_callback(draw_starfighter_tractor_beam, moby);
             }
         }
         break;
@@ -836,12 +836,12 @@ void update_qwarks_starfighter(Moby388 *moby) {
         }
         if (data->iF8 == 1) {
             detach_moby_joint_attachment(moby, data, 8);
-            allocate_voice_for_target_entry_alt(7, 0, (int)moby);
+            allocate_voice_for_target_entry(7, 0, (int)moby);
         }
-        tick_countdown_32_alt(&data->iF8);
+        fast_dec_timer(&data->iF8);
         if (advance_moby_along_selected_path(moby, data, data->b13B, 0) != 0 ||
             data->s9C >= *(int *)walker_paths[data->paths[data->b13B]] - 1) {
-            data->iF8 = scale_game_frames_alt(0xB4);
+            data->iF8 = scale_game_frames(0xB4);
             moby->state = 8;
         }
         moby->rot[0] = fast_add_rotations(moby->rot[0], frame_time * 4.1887903f);
@@ -856,7 +856,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             char *path = walker_paths[data->paths[data->b13B]];
             int i = data->s9C;
             int n = *(int *)path;
-            float flat_distance = vector_distance_xy(path + (i * 16 + 0x10), path + (((i + 3 >= n - 1) ? n - 1 : i + 3) * 16 + 0x10));
+            float flat_distance = vector_distance(path + (i * 16 + 0x10), path + (((i + 3 >= n - 1) ? n - 1 : i + 3) * 16 + 0x10));
             Path388 *path2 = (Path388 *)walker_paths[data->paths[data->b13B]];
             int i2 = data->s9C;
             int path_point_count = path2->n;
@@ -868,23 +868,23 @@ void update_qwarks_starfighter(Moby388 *moby) {
         data->fAC *= 0.9992f;
         if (random_integer_below(0x11) == 0) {
             float size_ratio = moby->scale / (*(float *)(moby->cls + 0x24) * 3.0f);
-            normalize_vector_xyz(joint, moby->mat[0], random_float_between(-5.0f, 5.0f) * size_ratio);
-            add_vector_xyz(offset, moby->pos, joint);
-            normalize_vector_xyz(joint, moby->mat[1], random_float_between(-4.0f, 4.0f) * size_ratio);
-            add_vector_xyz(offset, offset, joint);
-            normalize_vector_xyz(joint, moby->mat[2], random_float_between(-4.0f, 4.0f) * size_ratio);
-            add_vector_xyz(offset, offset, joint);
-            splash_L13(moby, offset, -1, size_ratio * 1.6f, 13.0f);
+            fast_vec_normalize(joint, moby->mat[0], random_float_between(-5.0f, 5.0f) * size_ratio);
+            fast_vec_add(offset, moby->pos, joint);
+            fast_vec_normalize(joint, moby->mat[1], random_float_between(-4.0f, 4.0f) * size_ratio);
+            fast_vec_add(offset, offset, joint);
+            fast_vec_normalize(joint, moby->mat[2], random_float_between(-4.0f, 4.0f) * size_ratio);
+            fast_vec_add(offset, offset, joint);
+            cart_burst(moby, offset, -1, size_ratio * 1.6f, 13.0f);
         }
         func_L13_002E9F90_2(moby, data);
         {
             char *dialog = (char *)((char *)&D_001516D0);
             if (*(int *)(dialog + 0x50) == 0 && *(int *)(dialog + 0x1C) == -1) {
-                if (data->iF8 < scale_game_frames_alt(0x1A4) && data->i13C < 0) {
+                if (data->iF8 < scale_game_frames(0x1A4) && data->i13C < 0) {
                     if (queue_starfighter_voice_line(moby, data, 0x23, 1) != 0) {
                         data->i13C &= 0x7FFFFFFF;
                     }
-                } else if (data->iF8 < scale_game_frames_alt(0xB4) && (data->i13C & 0x40000000) &&
+                } else if (data->iF8 < scale_game_frames(0xB4) && (data->i13C & 0x40000000) &&
                            queue_starfighter_voice_line(moby, data, 0x24, 1) != 0) {
                     data->i13C &= 0xBFFFFFFF;
                 }
@@ -902,11 +902,11 @@ void update_qwarks_starfighter(Moby388 *moby) {
         moby->rot[2] = *(float *)(view + 0x158);
         moby->rot[1] = *(float *)(view + 0x154);
         moby->scale *= 0.98f;
-        if (data->iF8 == scale_game_frames_alt(0x1E)) {
+        if (data->iF8 == scale_game_frames(0x1E)) {
             spawn_explosion(moby, &data->f70, 0, 0.0f, 0.0f, 0x1E, 8, 0x20, 5.0f, 3.0f, 0.0f, 7, 1.0f, 0.0f, 1, 5, -1, 0);
         }
         func_L13_002E9F90_2(moby, data);
-        if (tick_countdown_32_alt(&data->iF8) != 0) {
+        if (fast_dec_timer(&data->iF8) != 0) {
             Moby388 *owner = (Moby388 *)(D_L13_00160058_m + (data->i134 << 8));
             owner->state = 8;
             owner->flags |= 2;
@@ -1019,7 +1019,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
             if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) goto have118;
         }
         data->snd118 = -1;
-        data->snd118 = allocate_voice_for_target_entry_alt(6, 4, (int)moby);
+        data->snd118 = allocate_voice_for_target_entry(6, 4, (int)moby);
     have118:;
     } else {
         if (data->child110 != 0) {
@@ -1048,7 +1048,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
 
     if (moby->state >= 2) {
         update_moby_joint_attachments(moby, data);
-        if (moby->state != 8 || scale_game_frames_alt(0x78) < data->iF8) {
+        if (moby->state != 8 || scale_game_frames(0x78) < data->iF8) {
             emit_gated_moby_joint_effects(moby, data);
         }
         if (data->snd114 != -1) {
@@ -1056,11 +1056,11 @@ void update_qwarks_starfighter(Moby388 *moby) {
             if (*(Moby388 **)(voice + 0x88) == moby && *(unsigned char *)(voice + 0x74) != 0) goto have114;
         }
         data->snd114 = -1;
-        data->snd114 = allocate_voice_for_target_entry_alt(0, 4, (int)moby);
+        data->snd114 = allocate_voice_for_target_entry(0, 4, (int)moby);
     have114:
         transform_vector_by_basis(offset, D_L13_00160660, moby->mat[0]);
-        normalize_vector_xyz(offset, offset, 7.0f);
-        subtract_vector_xyz(offset, moby->pos, offset);
+        fast_vec_normalize(offset, offset, 7.0f);
+        fast_vec_sub(offset, moby->pos, offset);
         offset[3] = 50.0f;
         if (data->light120 == -1) {
             data->light120 = allocate_colored_effect_slot(offset, 50.0f, 0.0f, 3.0f, 0.5f, 0.01f);
@@ -1088,9 +1088,9 @@ void update_qwarks_starfighter(Moby388 *moby) {
 
     if (data->b13A != 0) {
         if (dialogue_playback_phase[0] == 3) {
-            continue_audio_stream_if_ready_alt();
-            data->h144 = scale_game_frames_alt(0x168);
-            data->h146 = scale_game_frames_alt(0x3C);
+            continue_audio_stream_if_ready();
+            data->h144 = scale_game_frames(0x168);
+            data->h146 = scale_game_frames(0x3C);
             data->b13A = 0;
         }
     } else {
@@ -1153,13 +1153,13 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
     }
     return moby;
 }
-extern int coll_sphere_ece00(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
-extern void scale_vector_ece00(void *, void *, float) __asm__("FUN_001f9a68");
-extern void reflect_ece00(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern float fast_add_rotations_ece00(float, float) __asm__("FUN_001fa580");
-extern int tick_ece00(void *) __asm__("FUN_001f9740");
+extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void remove_ece00(struct Moby *) __asm__("FUN_0020c828");
-extern void burst_ece00(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern char coll_hit_1638[] __asm__("D_L13_00174140");
 
 struct PieceVars {
@@ -1203,22 +1203,22 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
     case PART_STATE_IDLE:
         break;
     case PART_STATE_MOVE_AND_SPIN:
-        add_vector_xyz(&moby->pos, &moby->pos, &vars->vel);
-        scale_vector_ece00(&vars->vel, &vars->vel, 0.995f);
-        if (coll_sphere_ece00(&moby->pos, 2.0f, 0, moby) != 0) {
+        fast_vec_add(&moby->pos, &moby->pos, &vars->vel);
+        fast_vec_scale(&vars->vel, &vars->vel, 0.995f);
+        if (coll_sphere(&moby->pos, 2.0f, 0, moby) != 0) {
             coll = coll_hit_1638;
             hit = *(struct Moby **)(coll + 0x18);
             if (hit == 0 || (hit->oclass != 0x191 && hit->oclass != 0x184 && hit->oclass != 0x185 &&
                              hit->oclass != 0x186 && hit->oclass != 0x187 && hit->oclass != 0x188 &&
                              hit->oclass != 0x189 && hit->oclass != 0x18A && hit->oclass != 0x18B &&
                              hit->oclass != 0x18C && hit->oclass != 0x18F && hit->oclass != 0x190)) {
-                reflect_ece00(&vars->vel, &vars->vel, coll + 0x40);
+                reflect_vector(&vars->vel, &vars->vel, coll + 0x40);
                 moby->state = 4;
             }
         }
-        moby->rot.x = fast_add_rotations_ece00(moby->rot.x, vars->spin[0]);
-        moby->rot.y = fast_add_rotations_ece00(moby->rot.y, vars->spin[1]);
-        moby->rot.z = fast_add_rotations_ece00(moby->rot.z, vars->spin[2]);
+        moby->rot.x = fast_add_rotations(moby->rot.x, vars->spin[0]);
+        moby->rot.y = fast_add_rotations(moby->rot.y, vars->spin[1]);
+        moby->rot.z = fast_add_rotations(moby->rot.z, vars->spin[2]);
         vars->spin[0] *= 0.999f;
         vars->spin[1] *= 0.999f;
         vars->spin[2] *= 0.999f;
@@ -1226,14 +1226,14 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
             moby->pos.z < 10.0f || 1013.0f < moby->pos.z) {
             goto remove;
         }
-        if (tick_ece00(&vars->timer) == 0 || moby->visible != 0) {
+        if (fast_dec_timer(&vars->timer) == 0 || moby->visible != 0) {
             break;
         }
     remove:
         remove_ece00(moby);
         break;
     case PART_STATE_BURST_AND_REMOVE:
-        burst_ece00(moby, &vars->vel, 0, 2.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
+        spawn_explosion(moby, &vars->vel, 0, 2.0f, 4.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
         remove_ece00(moby);
         break;
     }
@@ -1311,9 +1311,9 @@ void spawn_forcefield_contact_effects(void *moby, void *data) {
 extern int D_L13_0015FFD8_n __asm__("D_L13_0015FFD8");
 extern int D_0015ED84_n __asm__("D_0015ED84");
 extern void stub_printf(char *, int, int) __asm__("FUN_001e93b0");
-extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_forcefield_contact_effects(void *, void *) __asm__("FUN_L13_002ed158");
-extern int ftoi_n(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_0024efb0_c(void *, int, int) __asm__("FUN_L00_0024efb0");
@@ -1337,7 +1337,7 @@ void forcefield_update(unsigned char *moby) {
         *(unsigned short *)(moby + 0x34) |= 0xA08;
         *(short *)(forcefield_data + 0xE) = -1;
         *(float *)(forcefield_data + 4) = 1.0f;
-        glow_n(moby, 0x80, 0x80, 0x80);
+        set_moby_color(moby, 0x80, 0x80, 0x80);
         break;
     case FORCEFIELD_STATE_MONITOR_LINKED_MOBY:
         if (*(int *)forcefield_data != -1) {
@@ -1359,7 +1359,7 @@ void forcefield_update(unsigned char *moby) {
         if (*(float *)(forcefield_data + 4) < 0.0f)
             moby[0x20] = 3;
         else
-            moby[0x23] = ftoi_n(*(float *)(forcefield_data + 4) * 20.0f);
+            moby[0x23] = truncate_float_to_s32(*(float *)(forcefield_data + 4) * 20.0f);
         break;
     case FORCEFIELD_STATE_REMOVE:
         if (*(short *)(forcefield_data + 0xE) != -1) {

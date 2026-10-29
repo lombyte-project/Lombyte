@@ -122,10 +122,10 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 extern s32 sceCdSync(s32);
 extern void FlushCache(s32);
-extern s32 fast_decompress(void *, void *) __asm__("func_0020B618");
+extern s32 decompress_wad(void *, void *) __asm__("func_0020B618");
 extern void upload_texture_images(s32 arg0, s32 count, s32 p) __asm__("FUN_00203120");
-extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
-extern void copy_blocks_16_forward(void *, void *, s32) __asm__("func_001F98D0");
+extern s32 log2dim(s32) __asm__("func_001F97A0");
+extern void fast_mem_copy(void *, void *, s32) __asm__("func_001F98D0");
 extern void relocate_sky_definition(s32 f) __asm__("FUN_002028e0");
 extern void register_moby_class(s32 moby, s32 arg1, s32 arg2, s32 oclass) __asm__("FUN_00203640");
 extern void unpack_point_records(s32 src, s32 count) __asm__("FUN_00202800");
@@ -188,7 +188,7 @@ void initialize_level_runtime(void) {
     fade_to_black(scale_game_frames(0xC));
     sceCdSync(0);
     FlushCache(0);
-    archive_size = fast_decompress(D_001940C0.buffer + 0x400000, D_001940C0.buffer);
+    archive_size = decompress_wad(D_001940C0.buffer + 0x400000, D_001940C0.buffer);
     FlushCache(0);
     header = (LevelHeader *)D_001940C0.buffer;
     upload_texture_images((s32)header + header->tex, header->texCount,
@@ -203,9 +203,9 @@ void initialize_level_runtime(void) {
     D_0015FF08 = header->classCount;
     for (i = 0; i < D_0015FF08; i++) {
         D_001B5980[i] = class_data_base + class_entries[i].offset +
-                        (highest_set_bit_index(class_entries[i].id) << 28);
+                        (log2dim(class_entries[i].id) << 28);
     }
-    copy_blocks_16_forward(resident_indexed_textures, class_entries, D_0015FF08 * 16);
+    fast_mem_copy(resident_indexed_textures, class_entries, D_0015FF08 * 16);
     relocate_sky_definition(data_base + header->sky);
     moby_entry = (MobyEntry *)((s32)header + header->mobys);
     D_0015FF00 = 0;
@@ -243,7 +243,7 @@ void initialize_level_runtime(void) {
     clear_blocks_16(point_lights, 0x100);
     clear_blocks_16(point_light_data, 0x180);
     clear_blocks_16(dir_lights, 0x400);
-    copy_blocks_16_forward(dir_lights, default_directional_light_template, 0x40);
+    fast_mem_copy(dir_lights, default_directional_light_template, 0x40);
     D_0015FF18 = allocation_cursor;
     fill_transfer_words(allocation_cursor, 0, 0x4000);
     allocation_cursor += 0x4000;

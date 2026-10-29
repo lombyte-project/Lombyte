@@ -65,7 +65,7 @@ extern float FUN_00213308_2c26c8(void) __asm__("FUN_00213308");
 extern float FUN_001f9dc8_2c26c8(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2c26c8(float) __asm__("FUN_001f9de0");
 extern float FUN_001f96b0_2c26c8(float) __asm__("FUN_001f96b0");
-extern int truncate_float_to_s32_r(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern char D_0013D388_2c26c8[] __asm__("D_0013D388");
 
 extern char airship_part_missing_parent_format[] __asm__("D_L09_002082A0");
@@ -253,9 +253,9 @@ void update_airship_part(struct Moby *moby) {
                 point_offset_and_effect_scratch[3] = D_L09_00161390;
                 transform_and_effect_scratch.m[0][3] = D_L09_00161394;
                 FUN_00218888_2c26c8(transform_and_effect_scratch.m[1], point_offset_and_effect_scratch, transform_and_effect_scratch.m[0], D_L09_0016136C, D_L09_00161370,
-                    truncate_float_to_s32_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161384, D_L09_00161384 * 2))),
-                    truncate_float_to_s32_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161388, D_L09_00161388 * 2))),
-                    truncate_float_to_s32_r(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_0016138C, D_L09_0016138C * 2))),
+                    truncate_float_to_s32(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161384, D_L09_00161384 * 2))),
+                    truncate_float_to_s32(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_00161388, D_L09_00161388 * 2))),
+                    truncate_float_to_s32(FUN_001f96b0_2c26c8(FUN_002132a8_2c26c8(D_L09_0016138C, D_L09_0016138C * 2))),
                     -1);
             }
             FUN_001f9a68_2c26c8(part_vars->vel, part_vars->vel, 0.45f);

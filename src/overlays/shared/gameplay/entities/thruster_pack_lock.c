@@ -69,7 +69,7 @@ extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_0014C050; /* no foreign declaration */
 extern int D_L11_0015FC88; /* no foreign declaration */
-extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern unsigned char D_0013F350[];
 s32 FUN_L00_00203908(s32 a, s32 b);
@@ -184,9 +184,9 @@ void thruster_pack_lock_update(Lock_3102C8 *moby)
 
 extern int D_L11_001611C0 __attribute__((section(".sdata")));
 extern unsigned char screen_extent_c[] __asm__("D_0013E500");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern int ftoi(float) __asm__("FUN_001fa6d0");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
@@ -236,10 +236,10 @@ void append_rotated_textured_screen_quad(float x, float y, float width, float he
     vertical[1] = height * fast_cos(angle);
     horizontal[0] = width * fast_cos(angle);
     horizontal[1] = -width * fast_sin(angle);
-    add_vector_xyz(top_left, center, vertical);
-    subtract_vector_xyz(top_left, top_left, horizontal);
-    add_vector_xyz(bottom_left, center, vertical);
-    subtract_vector_xyz(top_right, center, horizontal);
+    fast_vec_add(top_left, center, vertical);
+    fast_vec_sub(top_left, top_left, horizontal);
+    fast_vec_add(bottom_left, center, vertical);
+    fast_vec_sub(top_right, center, horizontal);
     qcopy(bottom_right, center);
 
     *(int *)(D_L11_001611C0 + 0) = 0x10000007;
@@ -272,28 +272,28 @@ void append_rotated_textured_screen_quad(float x, float y, float width, float he
     packet[5] = tex_size;
 
     {
-        int a = ftoi(top_left[0] * scale);
-        int b = ftoi(top_left[1] * scale);
+        int a = truncate_float_to_s32(top_left[0] * scale);
+        int b = truncate_float_to_s32(top_left[1] * scale);
         extent = (int *)(screen_extent_c);
         packet[6] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
         packet[7] = u_end;
     }
     {
-        int a = ftoi(bottom_left[0] * scale);
-        int b = ftoi(bottom_left[1] * scale);
+        int a = truncate_float_to_s32(bottom_left[0] * scale);
+        int b = truncate_float_to_s32(bottom_left[1] * scale);
         packet[8] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
         packet[9] = v_end;
     }
     {
-        int a = ftoi(top_right[0] * scale);
-        int b = ftoi(top_right[1] * scale);
+        int a = truncate_float_to_s32(top_right[0] * scale);
+        int b = truncate_float_to_s32(top_right[1] * scale);
         v_end = v_end + u_end;
         packet[10] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
         packet[11] = v_end;
     }
     {
-        int a = ftoi(bottom_right[0] * scale);
-        int b = ftoi(bottom_right[1] * scale);
+        int a = truncate_float_to_s32(bottom_right[0] * scale);
+        int b = truncate_float_to_s32(bottom_right[1] * scale);
         packet[12] = (unsigned long)(a + extent[4] - 8) | ((unsigned long)(b + extent[5] - 8) << 16) | packed_depth;
         packet[13] = 0;
     }
@@ -351,7 +351,7 @@ void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yo
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
 
 
-extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern f32 D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
@@ -390,38 +390,38 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
         add_random_offset_to_vector_xyz(second_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.02f);
         add_random_offset_to_vector_xyz(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.02f);
         initial_particle_velocity[0] =
-            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) * frame_time) *
+            -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) * frame_time) *
             scale;
         spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &first_position_particle_config, 1);
         initial_particle_velocity[0] =
-            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) * frame_time) *
+            -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) * frame_time) *
             scale;
         spawn_type_74_particle(moby, second_particle_position, initial_particle_velocity, &second_position_particle_config, 1);
         initial_particle_velocity[0] =
-            -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) * frame_time) *
+            -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) * frame_time) *
             scale;
         spawn_type_74_particle(moby, third_particle_position, initial_particle_velocity, &third_position_particle_config, 1);
         if (*(float *)(particle_emission_data + 0xC4) > 0.5f) {
             add_random_offset_to_vector_xyz(first_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
             add_random_offset_to_vector_xyz(second_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.02f + 0.01f);
             add_random_offset_to_vector_xyz(third_particle_position, *(float *)(particle_emission_data + 0xC4) * 0.01f + 0.01f);
-            initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
                        frame_time) *
                      scale;
             spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &first_position_particle_config, 1);
-            initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
                        frame_time) *
                      scale;
             spawn_type_74_particle(moby, second_particle_position, initial_particle_velocity, &second_position_particle_config, 1);
-            initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) *
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 4.0f) *
                        frame_time) *
                      scale;
             spawn_type_74_particle(moby, third_particle_position, initial_particle_velocity, &third_position_particle_config, 1);
-            initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 2.0f) *
                        frame_time) *
                      scale;
             spawn_type_74_particle(moby, first_particle_position, initial_particle_velocity, &extra_scattered_joint_particle_config, 1);
-            initial_particle_velocity[0] = -((random_float_between_alt(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
+            initial_particle_velocity[0] = -((random_float_between(6.0f, 7.0f) + *(float *)(particle_emission_data + 0xC4) * 3.0f) *
                        frame_time) *
                      scale;
             spawn_type_74_particle(moby, joint_world_position, initial_particle_velocity, &extra_joint_position_particle_config, 1);
@@ -432,10 +432,10 @@ extern unsigned char linked_moby_trail_long_span_enabled __asm__("D_0015EDB2");
 extern float trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
-extern float integer_to_float(int) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void draw_packet(void *, int, int) __asm__("FUN_001f7d30");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern int level_frame __asm__("D_L11_0015F5CC");
 extern int D_L11_0015FFD8;
 extern short *D_L11_001AC240[];
@@ -477,12 +477,12 @@ int draw_linked_moby_trails(char *moby) {
         quad->packet[2] = 0xFF9000000260L;
         quad->packet[0] = 0;
         quad->packet[3] = 0x8000000048L;
-        base = integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
+        base = convert_integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
         for (j = 0; j < 4; j++) {
             half = (j >> 1) - 1;
             quads[i].texture_coordinates[j][0] = ((float (*)[2])trail_quad_texture_coordinates)[j][0];
             quads[i].texture_coordinates[j][1] = ((float (*)[2])trail_quad_texture_coordinates)[j][1];
-            blend = integer_to_float(i - half) / *(float *)&D_L11_001623F0_d + base;
+            blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_d + base;
             if (1.0f < blend) {
                 blend = 1.0f;
             } else if (blend < 0.0f) {
@@ -502,7 +502,7 @@ int draw_linked_moby_trails(char *moby) {
         /* Fakematch: the never-taken call keeps more insns through gcse; its bigger expression
            table orders the spill slots of the two hoisted stack addresses as retail. */
         if (never) {
-            draw_packet(0, 0, 0);
+            draw_geometry_quad(0, 0, 0);
         }
         skip = 1;
         other = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
@@ -527,10 +527,10 @@ int draw_linked_moby_trails(char *moby) {
                         next_side = side + 1;
                         for (corner = 0; corner < 4; corner++) {
                             int point = (slot + (corner >> 1)) % 16;
-                            add_vector_xyz(quads[segment].positions[corner], &((float (*)[16][4])(trail + 0xC0))[side][point][0],
+                            fast_vec_add(quads[segment].positions[corner], &((float (*)[16][4])(trail + 0xC0))[side][point][0],
                                            offset[corner & 1]);
                         }
-                        draw_packet(&quads[segment], 0, 0);
+                        draw_geometry_quad(&quads[segment], 0, 0);
                         side = next_side;
                     } while (side < 2);
                     segment = next_segment;
@@ -549,7 +549,7 @@ extern int level_frame __asm__("D_L11_0015F5CC");
 extern int draw_linked_moby_trails();
 extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void f49(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L11_003192c8_c(void) __asm__("FUN_L11_003192c8");
@@ -575,14 +575,14 @@ void update_moby_trail_points(char *moby) {
     first_trail_offset[0] = -1.2f;
     first_trail_offset[2] = 0.3f;
     transform_vector_by_basis(first_trail_offset, first_trail_offset, moby + 0xC0);
-    add_vector_xyz(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0), first_trail_offset, moby + 0x10);
+    fast_vec_add(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0xC0), first_trail_offset, moby + 0x10);
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0xCC) = 1.0f;
     *(OvlQuad *)second_trail_offset = 0;
     second_trail_offset[0] = -1.2f;
     second_trail_offset[1] = -0.7f;
     second_trail_offset[2] = 0.3f;
     transform_vector_by_basis(second_trail_offset, second_trail_offset, moby + 0xC0);
-    add_vector_xyz(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0x1C0), second_trail_offset, moby + 0x10);
+    fast_vec_add(trail_data + ((*(int *)(trail_data + 0x2C4) << 4) + 0x1C0), second_trail_offset, moby + 0x10);
     current_frame = level_frame;
     *(float *)(trail_data + (*(int *)(trail_data + 0x2C4) << 4) + 0x1CC) = 1.0f;
     if (current_frame != 0) {
@@ -676,8 +676,8 @@ void update_moby_hit_stats_and_state(char *moby) {
 typedef unsigned int u128_ad0 __attribute__((mode(TI)));
 extern int D_L11_001611C0_lui __asm__("D_L11_001611C0");
 extern int screen_extent[] __asm__("D_0013E500");
-extern float itof_g(int) __asm__("FUN_001fa6c0");
-extern int ftoi_g(float) __asm__("FUN_001fa6d0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 extern u128_ad0 l11_screen_triangle_strip_setup_gif_tag_template __asm__("D_L11_001608E0");
 extern u128_ad0 l11_screen_triangle_strip_vertex_gif_tag_template __asm__("D_L11_001608F0");
@@ -713,23 +713,23 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
     D_L11_001611C0 += 0x10;
     vertex_payload = (unsigned long long *)D_L11_001611C0;
     for (i = 0; i < point_count; i++) {
-        x = ftoi_g((itof_g(pts[i * 2]) * scale + x0) * 16.0f);
-        y = ftoi_g((itof_g(pts[i * 2 + 1]) * scale + y0) * 16.0f);
+        x = truncate_float_to_s32((convert_integer_to_float(pts[i * 2]) * scale + x0) * 16.0f);
+        y = truncate_float_to_s32((convert_integer_to_float(pts[i * 2 + 1]) * scale + y0) * 16.0f);
         vertex_payload[i] = (unsigned long long)(x + screen_extent[4] - 8) | ((unsigned long long)(y + screen_extent[5] - 8) << 16) | ((unsigned long long)col << 32);
     }
     D_L11_001611C0 += ((point_count + 1) / 2) * 16;
 }
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void interpolate_vector_xyz(void *, void *, void *, float) __asm__("FUN_001f9a40");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float vector_distance_xyz(void *, void *) __asm__("FUN_001f9b48");
-extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float fast_atan2(float, float) __asm__("FUN_001f9e90");
-extern void rotation_matrix_from_euler(void *, void *) __asm__("FUN_001fa050");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -756,10 +756,10 @@ void update_moby_path_transform(char *moby) {
     qcopy(next_path_point, table + (i + 1) % count * 16 + 0x10);
     qcopy(lookahead_path_point, table + (i + 2) % count * 16 + 0x10);
     clear_u64_value(turn);
-    angle_a = fast_atan2(current_path_point[0] - next_path_point[0], current_path_point[1] - next_path_point[1]);
-    angle_b = fast_atan2(next_path_point[0] - lookahead_path_point[0], next_path_point[1] - lookahead_path_point[1]);
-    slope_a = fast_atan2(vector_distance_xy(current_path_point, next_path_point), next_path_point[2] - current_path_point[2]);
-    slope_b = fast_atan2(vector_distance_xy(next_path_point, lookahead_path_point), lookahead_path_point[2] - next_path_point[2]);
+    angle_a = fast_arc_tan(current_path_point[0] - next_path_point[0], current_path_point[1] - next_path_point[1]);
+    angle_b = fast_arc_tan(next_path_point[0] - lookahead_path_point[0], next_path_point[1] - lookahead_path_point[1]);
+    slope_a = fast_arc_tan(vector_distance(current_path_point, next_path_point), next_path_point[2] - current_path_point[2]);
+    slope_b = fast_arc_tan(vector_distance(next_path_point, lookahead_path_point), lookahead_path_point[2] - next_path_point[2]);
     turn[1] = fast_add_rotations(fast_subtract_rotations(slope_b, slope_a) * *(float *)(moby_vars + 0x68), slope_a);
     turn[2] = fast_add_rotations(fast_subtract_rotations(angle_b, angle_a) * *(float *)(moby_vars + 0x68), angle_a);
     qcopy(&MOBY(moby)->rot, turn);
@@ -767,17 +767,17 @@ void update_moby_path_transform(char *moby) {
         MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, 3.14159f);
         MOBY(moby)->rot.y = -MOBY(moby)->rot.y;
     }
-    interpolate_vector_xyz(point, current_path_point, next_path_point, *(float *)(moby_vars + 0x68));
-    rotation_matrix_from_euler(matrix, turn);
-    normalize_vector_xyz(direction, matrix + 4, *(float *)(moby_vars + 0x78) * fast_sin(*(float *)(moby_vars + 0x70)));
-    add_vector_xyz(point, point, direction);
-    normalize_vector_xyz(direction, matrix + 8, *(float *)(moby_vars + 0x78) * fast_cos(*(float *)(moby_vars + 0x70)));
-    add_vector_xyz(point, point, direction);
+    lerp_vector(point, current_path_point, next_path_point, *(float *)(moby_vars + 0x68));
+    euler_rotation_matrix(matrix, turn);
+    fast_vec_normalize(direction, matrix + 4, *(float *)(moby_vars + 0x78) * fast_sin(*(float *)(moby_vars + 0x70)));
+    fast_vec_add(point, point, direction);
+    fast_vec_normalize(direction, matrix + 8, *(float *)(moby_vars + 0x78) * fast_cos(*(float *)(moby_vars + 0x70)));
+    fast_vec_add(point, point, direction);
     speed = 0.0f;
     distance = vector_distance_xyz(&MOBY(moby)->pos, point);
     advance_accelerated_scalar(&speed, (float *)(moby_vars + 0x80), distance, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f);
-    subtract_vector_xyz(direction, point, &MOBY(moby)->pos);
-    normalize_vector_xyz(direction, direction, *(float *)(moby_vars + 0x80));
-    add_vector_xyz(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
+    fast_vec_sub(direction, point, &MOBY(moby)->pos);
+    fast_vec_normalize(direction, direction, *(float *)(moby_vars + 0x80));
+    fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
 }
 

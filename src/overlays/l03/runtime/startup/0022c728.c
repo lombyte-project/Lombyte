@@ -17,7 +17,7 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
-extern void clear_vector(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void emit_level3_state5_moby_effects(void) __asm__("FUN_L03_0022c728");
@@ -42,7 +42,7 @@ void emit_level3_state5_moby_effects(void) {
         return;
     for (i = 0; i < 4; i++) {
         float azimuth_angle, elevation_angle;
-        clear_vector(spherical_offset);
+        clear_u64_value(spherical_offset);
         moby_point_position(moby, i % 2, world_position);
         azimuth_angle = random_angle_radians();
         elevation_angle = random_angle_radians();

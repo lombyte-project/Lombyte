@@ -40,10 +40,10 @@ typedef struct {
 } Path_276a48;
 
 extern Path_276a48 *D_L01_001B0930_276a48[] __asm__("D_L01_001B0930");
-extern void vec_sub_276a48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
-extern void vec_add_276a48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
-extern void vec_cross_276a48(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ad8");
-extern void vec_normalize_276a48(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
+extern void fast_vec_cross(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ad8");
+extern void fast_vec_normalize(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
 extern s32 test_path_segment_strict_crossing(s32, OvlVec4 *, OvlVec4 *) __asm__("FUN_L00_00261968");
 
 /* Bit i set for each point i of the path that none of the n segments in ids
@@ -67,11 +67,11 @@ s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_i
             if (radius != 0.0f) {
                 up.q = 0;
                 up.f[2] = 1.0f;
-                vec_sub_276a48(&side, segment_origin, &path->pts[i]);
-                vec_cross_276a48(&side, &side, &up);
-                vec_normalize_276a48(&side, &side, radius);
-                vec_sub_276a48(&left, segment_origin, &side);
-                vec_add_276a48(&right, segment_origin, &side);
+                fast_vec_sub(&side, segment_origin, &path->pts[i]);
+                fast_vec_cross(&side, &side, &up);
+                fast_vec_normalize(&side, &side, radius);
+                fast_vec_sub(&left, segment_origin, &side);
+                fast_vec_add(&right, segment_origin, &side);
                 if (test_path_segment_strict_crossing(ids[j], &left, &path->pts[i])) {
                     hit = 1;
                 } else if (test_path_segment_strict_crossing(ids[j], &right, &path->pts[i])) {
@@ -90,7 +90,7 @@ s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_i
     }
     return mask;
 }
-extern f32 vec_distance_276fe8(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9b80");
+extern f32 vector_distance(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9b80");
 
 s32 follow_path(s32 *ids, s32 n, s32 path_index, f32 radius,
                        OvlVec4 *pos, OvlVec4 *target, OvlVec4 *out) __asm__("FUN_L01_00276fe8");
@@ -111,14 +111,14 @@ s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
 
     for (j = 0; j < id_count; j++) {
         if (radius != 0.0f) {
-            vec_sub_276a48(&side, start_position, target);
-            vec_normalize_276a48(&side, &side, radius);
+            fast_vec_sub(&side, start_position, target);
+            fast_vec_normalize(&side, &side, radius);
             x = side.f[0];
             side.f[3] = x;
             side.f[0] = side.f[1];
             side.f[1] = -x;
-            vec_sub_276a48(&left, start_position, &side);
-            vec_add_276a48(&right, start_position, &side);
+            fast_vec_sub(&left, start_position, &side);
+            fast_vec_add(&right, start_position, &side);
             if (test_path_segment_strict_crossing(ids[j], &left, target)) {
                 hit = 1;
             } else if (test_path_segment_strict_crossing(ids[j], &right, target)) {
@@ -139,7 +139,7 @@ s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
             best = -1;
             for (i = 0; i < path->count; i++) {
                 if ((mask >> i) & 1) {
-                    f32 distance = vec_distance_276fe8(&path->pts[i], target);
+                    f32 distance = vector_distance(&path->pts[i], target);
                     if (distance < nearest) {
                         nearest = distance;
                         best = i;

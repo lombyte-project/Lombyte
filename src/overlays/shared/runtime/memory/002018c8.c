@@ -55,7 +55,7 @@ extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
-extern s32 find_valid_animation_frame_index_alt(s32, s32) __asm__("FUN_001ff960");
+extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern s64 get_frame_texture(s32) __asm__("FUN_001ffa10");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 /* Same registers as (w, h, tex, x, y, cx, cy, angle); floats are listed first so they are evaluated first. */
@@ -141,11 +141,11 @@ void level_draw_dialog_text(void) {
         mid = (y + box.anchor_y) >> 1;
         vu1_add_g_sregister(0x47, 0x3004B);
         top = mid - 0x20;
-        draw_hud_sprite(find_valid_animation_frame_index_alt(0x755D, 0), 0xE0, top, 0x40, 0x40, 0x80);
+        draw_hud_sprite(get_icon_frame(0x755D, 0), 0xE0, top, 0x40, 0x40, 0x80);
         rotated_sprite_y = (f32)(mid << 4);
         angle = (f32)(D_L00_0015F3F8 % 55) * -6.2831855f / 55.0f;
         draw_rotated_sprite(4096.0f, rotated_sprite_y, pivot, pivot, angle, 0x40, 0x40,
-                            get_frame_texture(find_valid_animation_frame_index_alt(0x755D, 1)));
+                            get_frame_texture(get_icon_frame(0x755D, 1)));
         break;
     }
     case MESSAGE_BOX_FREEZE_MODE_DIALOG: {

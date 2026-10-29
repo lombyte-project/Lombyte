@@ -39,9 +39,9 @@ extern int rand(void);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") __attribute__((section(".data")));
 extern float debris_far_point[] __asm__("D_L07_00166E40");
 
@@ -74,9 +74,9 @@ unsigned char *spawn_moby_point_offset_particle(void *moby, short index, float a
         *(short *)(particle_payload + 0xe) = index;
         particle[8] = func_001FA898_r(*(float *)(particle_payload + 8) * 255.0f);
         moby_point_position(*(void **)particle_payload, *(short *)(particle_payload + 0xe), moby_point_world_position);
-        subtract_vector_xyz(position_offset, debris_far_point, moby_point_world_position);
-        normalize_vector_xyz(position_offset, position_offset, *(float *)(particle_payload + 0x14));
-        add_vector_xyz(particle + 0x10, moby_point_world_position, position_offset);
+        fast_vec_sub(position_offset, debris_far_point, moby_point_world_position);
+        fast_vec_normalize(position_offset, position_offset, *(float *)(particle_payload + 0x14));
+        fast_vec_add(particle + 0x10, moby_point_world_position, position_offset);
     }
     return particle;
 }

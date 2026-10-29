@@ -179,8 +179,8 @@ extern Elem D_L00_00167150[];
 extern S D_L00_00166C80;
 extern int D_L00_0015EF4C;
 extern int level_camera_present_flags[] __asm__("D_L00_00169890");
-extern void clear_vector(void *);
-extern void normalize_vector_xyz(void *, void *, float);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
@@ -209,10 +209,10 @@ void setup_level_cameras(void) {
     normalized_hero_vector = camera_system_state_alias + 0x1B0;
     *(int *)(camera_system_state_alias + 0x184) = 0;
     *(short *)(camera_system_state_alias + 0x270) = 0;
-    normalize_vector_xyz(normalized_hero_vector, (char *)(((int)base->moby) + 0xE0), 1.0f);
+    fast_vec_normalize(normalized_hero_vector, (char *)(((int)base->moby) + 0xE0), 1.0f);
     qcopy(camera_system_state_alias + 0x1C0, normalized_hero_vector);
     qcopy(camera_system_state_alias + 0x1D0, normalized_hero_vector);
-    clear_vector(camera_system_state_alias + 0x1E0);
+    clear_u64_value(camera_system_state_alias + 0x1E0);
     qcopy(camera_system_state_alias + 0x1F0, &base->motion.pos);
     {
         float hero_rotation_z = base->motion.rot.f[2];
@@ -279,7 +279,7 @@ void setup_level_cameras(void) {
 
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void compute_position_from_spherical_offset(float *output_position, float *angles_and_distance, void *origin_position) __asm__("FUN_L00_001ed580");
 
@@ -288,7 +288,7 @@ void compute_position_from_spherical_offset(float *output_position, float *angle
     output_position[1] = angles_and_distance[2] * fast_cos(angles_and_distance[1]) * fast_sin(angles_and_distance[0]);
     output_position[2] = angles_and_distance[2] * fast_sin(angles_and_distance[1]);
     *(int *)(output_position + 3) = 0;
-    add_vector_xyz(output_position, output_position, origin_position);
+    fast_vec_add(output_position, output_position, origin_position);
 }
 #define NOT_SDA
 
@@ -332,11 +332,11 @@ extern OvlQuad D_166DC0_1ed6a8 __asm__("D_L00_00166DC0") __attribute__((section(
 extern int D_16C058_1ed6a8[] __asm__("D_L00_0016C058") __attribute__((section(".data")));
 extern void f9a28_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");
-extern int fa6d0_1ed6a8(float) __asm__("FUN_001fa6d0");
-extern float fa6c0_1ed6a8(int) __asm__("FUN_001fa6c0");
-extern void ff378_1ed6a8(void *, void *, float) __asm__("FUN_L00_001ff378");
-extern void f9a10_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int f0d60_1ed6a8(void *, int, int, float) __asm__("FUN_L00_001f0d60");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int coll_sphere(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
 extern int D_L00_0016C06C __attribute__((section(".data")));
 extern int D_L00_0015EF5C_gp __asm__("D_L00_0015EF5C") __attribute__((sda));
@@ -361,12 +361,12 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
         return;
     }
     f9a28_1ed6a8(step_delta, camera_position, camera_movement_origin_snapshot);
-    step_count = fa6d0_1ed6a8(f9af0_1ed6a8(step_delta) / (collision_radius * 0.9f)) + 1;
-    ff378_1ed6a8(step_delta, step_delta, fa6c0_1ed6a8(step_count));
+    step_count = truncate_float_to_s32(f9af0_1ed6a8(step_delta) / (collision_radius * 0.9f)) + 1;
+    divide_vector_xyz(step_delta, step_delta, convert_integer_to_float(step_count));
     qcopy(camera_position, camera_movement_origin_snapshot);
     for (i = 0; i < step_count; i++) {
-        f9a10_1ed6a8(camera_position, camera_position, step_delta);
-        for (j = 0; j < 6 && f0d60_1ed6a8(camera_position, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
+        fast_vec_add(camera_position, camera_position, step_delta);
+        for (j = 0; j < 6 && coll_sphere(camera_position, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
             qcopy(camera_position, &D_173E70_1ed6a8);
             {
                 char *current_camera_record = D_166C80_1ed6a8.o;

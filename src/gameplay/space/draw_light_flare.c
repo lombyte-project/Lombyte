@@ -3,10 +3,10 @@
 #include "rnc/rendering/level_render_state.h"
 #include "types.h"
 #include "rnc/data_labels.h"
-extern void copy_blocks_16_forward(void *, void *, int) __asm__("FUN_001f98d0");
+extern void fast_mem_copy(void *, void *, int) __asm__("FUN_001f98d0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 typedef struct {
     float positions[4][4];          /* 0x00 */
@@ -52,8 +52,8 @@ void draw_light_flare(char *object) {
     quad.gs_state[2] = 0xFF9000000260;
     quad.gs_state[3] = 0x8000000044;
     quad.gs_state[0] = 0;
-    copy_blocks_16_forward(quad.texture_coordinates, D_001D97B0, 0x20);
-    scale_vector_xyz(scaled_position_copy, object, 1.0f / 1024.0f);
+    fast_mem_copy(quad.texture_coordinates, D_001D97B0, 0x20);
+    fast_vec_scale(scaled_position_copy, object, 1.0f / 1024.0f);
     depth = *(float *)(object + 0x18) + 0.1f;
     if (game_mode_macro == 6) {
         depth = probe_ground_height(object + 0x10, 0, 0.5f) + 0.1f;
@@ -65,7 +65,7 @@ void draw_light_flare(char *object) {
         vertex_position = quad.positions[corner_index];
         transform_vector_by_basis(vertex_position, light_flare_corner_offsets[level_render_state.content_variant][corner_index],
                      object + 0xC0);
-        add_vector_xyz(vertex_position, vertex_position, object + 0x10);
+        fast_vec_add(vertex_position, vertex_position, object + 0x10);
         vertex_position[2] = depth;
     }
     draw_geometry_quad(&quad, 0, 0);

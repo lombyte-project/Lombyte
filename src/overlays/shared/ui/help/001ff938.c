@@ -183,7 +183,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void update_hero_bobbing_and_target_position(void) __asm__("FUN_L15_002007d8");
 
@@ -205,7 +205,7 @@ void update_hero_bobbing_and_target_position(void) {
             transform_vector_by_basis(position_offset, position_offset, hero_moby + 0xC0);
             euler_rotation_matrix(rotation_matrix, &D_L15_0017ACC0_d);
             transform_vector(position_offset, position_offset, rotation_matrix);
-            add_vector_xyz(((char *)base->hoverboard_moby) + 0x10, ((char *)base->hoverboard_moby) + 0x10, position_offset);
+            fast_vec_add(((char *)base->hoverboard_moby) + 0x10, ((char *)base->hoverboard_moby) + 0x10, position_offset);
         }
     }
 }
@@ -263,7 +263,7 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
 }
 extern f32 D_0013F570[] __asm__("D_0013F570");
 f32 FUN_001f9b80_209450(void *, void *) __asm__("FUN_001f9b80");
-f32 approach_value_209450(f32, f32, f32 *) __asm__("FUN_00213ed8");
+f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_209450(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void update_hero_smoothing_parameters(void) __asm__("FUN_L15_00209450");
 
@@ -302,8 +302,8 @@ void update_hero_smoothing_parameters(void) {
         FUN_001f9b80_209450(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
         f32 *smoothing_state = D_0013F570;
         struct Hero *hero_base = (struct Hero *)((u8 *)smoothing_state - 0x220);
-        approach_value_209450(hero_base->capsule_top_target, frame_scale * 0.02f, smoothing_state);
-        approach_value_209450(hero_base->capsule_bottom_target, frame_scale * 0.02f, smoothing_state + 1);
+        approach_value(hero_base->capsule_top_target, frame_scale * 0.02f, smoothing_state);
+        approach_value(hero_base->capsule_bottom_target, frame_scale * 0.02f, smoothing_state + 1);
         FUN_L00_0025b8c0_209450(smoothing_state + 5, smoothing_state + 6, hero_base->capsule_radius_target, frame_scale_sq * 0.02f,
                                 frame_scale_sq * 0.3f, frame_time * 4.0f);
     }

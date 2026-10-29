@@ -11,7 +11,7 @@
 /* Spawn a particle moby at pos with a colour, lifetime and size. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/partupd_0029D2B8.c: func_L07_0029D2B8), where it is exact; names translated to the US level program. */
 
-extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -30,7 +30,7 @@ void spawn_white_particle_with_payload(void *particle_position_source, void *par
         particle[9] = func_001FA898_r(4.0f) + 0x40;
         particle[1] = 0;
         particle[3] = 0x48;
-        *(float *)(particle + 0xC) = random_float_between_alt(20000.0f, 120000.0f);
+        *(float *)(particle + 0xC) = random_float_between(20000.0f, 120000.0f);
         particle[8] = 0;
         particle[2] = *D_L07_001B2164;
         particle_payload[4] = 1.0f;
@@ -43,14 +43,14 @@ void spawn_white_particle_with_payload(void *particle_position_source, void *par
 }
 #include "rnc/math/vector.h"
 
-extern void seg_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void seg_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void seg_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 seg_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern f32 seg_len(void *) __asm__("FUN_001f9af0");
-extern f32 seg_dist(void *, void *) __asm__("FUN_001f9b48");
-extern f32 seg_sqrt(f32) __asm__("FUN_001f9988");
-extern f32 seg_fabs(f32) __asm__("FUN_001f99c0");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern f32 square_root(f32) __asm__("FUN_001f9988");
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 
 /* Finds the point of segment a-b nearest to the surface of the sphere (center, radius), preferring
    the one closer to ref when both hits are equally good. Writes it to out and returns its distance
@@ -62,16 +62,16 @@ f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *cent
     f32 line_projection_t, lower_segment_t, upper_segment_t, intersection_t_offset, dd, center_distance_or_surface_error, lower_surface_error, upper_surface_error, eps;
     Vec4f *upper_segment_point_ptr;
 
-    seg_vec_sub(&center_to_segment_start, segment_start, center);
-    seg_vec_sub(&segment_displacement, segment_end, segment_start);
-    dd = seg_dot(&segment_displacement, &segment_displacement);
-    line_projection_t = -seg_dot(&center_to_segment_start, &segment_displacement) / dd;
-    seg_vec_scale(&line_projection_point, &segment_displacement, line_projection_t);
-    seg_vec_add(&line_projection_point, &line_projection_point, segment_start);
-    center_distance_or_surface_error = seg_dist(&line_projection_point, center);
+    fast_vec_sub(&center_to_segment_start, segment_start, center);
+    fast_vec_sub(&segment_displacement, segment_end, segment_start);
+    dd = fast_vec_dot(&segment_displacement, &segment_displacement);
+    line_projection_t = -fast_vec_dot(&center_to_segment_start, &segment_displacement) / dd;
+    fast_vec_scale(&line_projection_point, &segment_displacement, line_projection_t);
+    fast_vec_add(&line_projection_point, &line_projection_point, segment_start);
+    center_distance_or_surface_error = fast_vec_dist(&line_projection_point, center);
     if (center_distance_or_surface_error < radius) {
-        intersection_t_offset = seg_sqrt(radius * radius - center_distance_or_surface_error * center_distance_or_surface_error);
-        intersection_t_offset /= seg_len(&segment_displacement);
+        intersection_t_offset = square_root(radius * radius - center_distance_or_surface_error * center_distance_or_surface_error);
+        intersection_t_offset /= fast_vec_length(&segment_displacement);
         lower_segment_t = line_projection_t - intersection_t_offset;
         if (lower_segment_t < 0.0f)
             lower_segment_t = 0.0f;
@@ -82,19 +82,19 @@ f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *cent
             upper_segment_t = 0.0f;
         else if (1.0f < upper_segment_t)
             upper_segment_t = 1.0f;
-        seg_vec_scale(&lower_segment_point, &segment_displacement, lower_segment_t);
-        seg_vec_add(&lower_segment_point, &lower_segment_point, segment_start);
-        lower_surface_error = seg_fabs(seg_dist(&lower_segment_point, center) - radius);
+        fast_vec_scale(&lower_segment_point, &segment_displacement, lower_segment_t);
+        fast_vec_add(&lower_segment_point, &lower_segment_point, segment_start);
+        lower_surface_error = absolute_float(fast_vec_dist(&lower_segment_point, center) - radius);
         eps = radius * 0.01f;
         if (lower_surface_error < eps)
             lower_surface_error = 0.0f;
         upper_segment_point_ptr = &upper_segment_point;
-        seg_vec_scale(upper_segment_point_ptr, &segment_displacement, upper_segment_t);
-        seg_vec_add(upper_segment_point_ptr, upper_segment_point_ptr, segment_start);
-        upper_surface_error = seg_fabs(seg_dist(upper_segment_point_ptr, center) - radius);
+        fast_vec_scale(upper_segment_point_ptr, &segment_displacement, upper_segment_t);
+        fast_vec_add(upper_segment_point_ptr, upper_segment_point_ptr, segment_start);
+        upper_surface_error = absolute_float(fast_vec_dist(upper_segment_point_ptr, center) - radius);
         if (upper_surface_error < eps)
             upper_surface_error = 0.0f;
-        if (lower_surface_error < upper_surface_error || (lower_surface_error == upper_surface_error && seg_dist(&lower_segment_point, ref) < seg_dist(upper_segment_point_ptr, ref))) {
+        if (lower_surface_error < upper_surface_error || (lower_surface_error == upper_surface_error && fast_vec_dist(&lower_segment_point, ref) < fast_vec_dist(upper_segment_point_ptr, ref))) {
             qcopy(out, &lower_segment_point);
             center_distance_or_surface_error = lower_surface_error;
         } else {
@@ -104,10 +104,10 @@ f32 select_segment_point_near_sphere_surface(Vec4f *out, Vec4f *ref, Vec4f *cent
     } else {
     if (line_projection_t < 0.0f) {
         qcopy(out, segment_start);
-        center_distance_or_surface_error = seg_fabs(seg_dist(out, center) - radius);
+        center_distance_or_surface_error = absolute_float(fast_vec_dist(out, center) - radius);
     } else if (1.0f < line_projection_t) {
         qcopy(out, segment_end);
-        center_distance_or_surface_error = seg_fabs(seg_dist(out, center) - radius);
+        center_distance_or_surface_error = absolute_float(fast_vec_dist(out, center) - radius);
     } else {
         qcopy(out, &line_projection_point);
     }

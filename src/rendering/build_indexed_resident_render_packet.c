@@ -4,7 +4,7 @@
 #include "rnc/rendering/render_globals.h"
 
 #include "rnc/rendering/material_templates.h"
-extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
+extern s32 log2dim(s32) __asm__("func_001F97A0");
 
 void build_indexed_resident_render_packet(u64 *packet,
                                           struct ResidentRenderTextureDefinition *texture,
@@ -42,8 +42,8 @@ void build_indexed_resident_render_packet(u64 *packet,
     if (width_units_128 <= 0) {
         width_units_128 = 1;
     }
-    width_log2 = highest_set_bit_index(texture->width);
-    height_log2 = highest_set_bit_index(texture->height);
+    width_log2 = log2dim(texture->width);
+    height_log2 = log2dim(texture->height);
     gs_block_base = gs_texture_allocation_base >> 8;
     mip_block_1 = texture->mip_block_offset_1 + gs_block_base;
     texture_block = texture->clut_block_offset + gs_block_base;

@@ -28,7 +28,7 @@ extern u8 *parse_typed_resource_record(u8 *) __asm__("func_002270E8");
 extern void func_00228520(f32 *, f32 *);
 extern void func_00227A08(u32, s32, s32);
 extern void emit_selected_graphics_dma_packets(s32, s32, s32) __asm__("func_00227140");
-extern void emit_gs_register_write(s32, s64) __asm__("func_00233980");
+extern void vu1_add_g_sregister(s32, s64) __asm__("func_00233980");
 extern void append_fullscreen_clear_strips(s64) __asm__("func_00227378");
 void submit_graphics_setup_command_stream(u8 *command_stream) __asm__("FUN_00227548");
 
@@ -65,14 +65,14 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
         record = (struct GraphicsSetupRecord *)command_stream;
     }
     if (pal_mode.v) {
-        emit_gs_register_write(0x4C, 0x80080);
+        vu1_add_g_sregister(0x4C, 0x80080);
     } else {
-        emit_gs_register_write(0x4C, 0x80070);
+        vu1_add_g_sregister(0x4C, 0x80070);
     }
-    emit_gs_register_write(0x42, 0x2000000064LL);
+    vu1_add_g_sregister(0x42, 0x2000000064LL);
     append_fullscreen_clear_strips(0);
-    emit_gs_register_write(0x47, 0x5360B);
-    emit_gs_register_write(0x42, 0x8000000044LL);
+    vu1_add_g_sregister(0x47, 0x5360B);
+    vu1_add_g_sregister(0x42, 0x8000000044LL);
 }
 extern __typeof__(submit_graphics_setup_command_stream) func_00227548
     __attribute__((alias("FUN_00227548")));

@@ -1,6 +1,6 @@
 #include "types.h"
 extern f32 D_00187080[4];
-extern void subtract_vector_xyz(f32 *, f32 *, f32 *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(f32 *, f32 *, f32 *) __asm__("FUN_001f9a28");
 extern void transform_vector(f32 *, f32 *, void *) __asm__("FUN_001f9d20");
 extern f32 vector_length_xy(f32 *) __asm__("FUN_001f9b20");
 extern f32 clamp_float(f32, f32, f32) __asm__("FUN_001f99e8");
@@ -12,7 +12,7 @@ s32 calculate_voice_pan(s32 unused, f32 *position, void *listener_matrix) {
     f32 listener_relative_position[4] __attribute__((aligned(16)));
     f32 pan_scale;
 
-    subtract_vector_xyz(listener_relative_position, position, D_00187080);
+    fast_vec_sub(listener_relative_position, position, D_00187080);
     transform_vector(listener_relative_position, listener_relative_position, listener_matrix);
     pan_scale = clamp_float(vector_length_xy(listener_relative_position) - 1.0f, 0.0f, 1.0f);
     return truncate_float_to_s32(

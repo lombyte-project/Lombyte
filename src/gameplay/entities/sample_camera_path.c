@@ -10,13 +10,13 @@ struct CameraPath {
     u128 points[1];
 };
 
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
 void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *rotation, s32 flags,
                         f32 progress) __asm__("FUN_00214e58");
@@ -41,7 +41,7 @@ void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *
     f32 next_pitch;
 
     clamped = 0;
-    point_index = convert_float_to_word(progress);
+    point_index = truncate_float_to_s32(progress);
     if (loop == 0) {
         s32 last_segment_index = path->count - 2;
         if (!(point_index < last_segment_index)) {
@@ -66,7 +66,7 @@ void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *
     qcopy(&next_point.q, &path->points[next_index]);
     lerp_vector(position, &current_point, &next_point, fraction);
     if (!(flags & 1)) {
-        subtract_vector_xyz(&segment, &next_point, &current_point);
+        fast_vec_sub(&segment, &next_point, &current_point);
         heading = fast_arc_tan(segment.f[0], segment.f[1]);
         pitch = fast_arc_tan(vector_length_xy(&segment), segment.f[2]);
         bank = current_point.f[3];
@@ -76,7 +76,7 @@ void sample_camera_path(struct CameraPath *path, s32 loop, void *position, f32 *
             bank = next_bank;
         } else {
             qcopy(&following_point.q, &path->points[following_index]);
-            subtract_vector_xyz(&segment, &following_point, &next_point);
+            fast_vec_sub(&segment, &following_point, &next_point);
             next_heading = fast_arc_tan(segment.f[0], segment.f[1]);
             next_pitch = fast_arc_tan(vector_length_xy(&segment), segment.f[2]);
             next_bank = next_point.f[3];

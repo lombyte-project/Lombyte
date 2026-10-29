@@ -50,7 +50,7 @@ typedef struct {
     void *unk80;
 } HudElem_237840;
 
-extern s32 find_valid_animation_frame_index_alt(s32, s32) __asm__("func_001FF960");
+extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern int D_L00_0015F760 __attribute__((sda));
 extern int D_L00_0015F764 __attribute__((sda));
 extern void FUN_L00_00235ad8_c(HudElem_237840 *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
@@ -106,7 +106,7 @@ int hud_draw_gauge_frame(HudElem_237840 *e) {
         top -= 16;
         append_screen_rect_packet(left, top, right, top + 32, 0x80000000, 1);
     } while (i < e->unk74);
-    w = find_valid_animation_frame_index_alt(*(int *)e, 0);
+    w = get_icon_frame(*(int *)e, 0);
     draw_rotated_hud_sprite(w, pos[0] + e->unk48, pos[1] + e->unk4A, D_L00_0015F760, D_L00_0015F764, 0x80);
     return e->w;
 }
@@ -348,15 +348,15 @@ extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 #include "rnc/overlay/level_labels.h"
 extern char D_L00_0015F7C8[];
-extern f32 convert_integer_to_float_c2(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float fast_add_rotations_c(float, float) __asm__("func_001FA580");
+extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern void * D_L00_0015FAC0;
-extern s32 fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
+extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
 extern s32 sprintf(char *, const char *, ...);
-extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern int D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
 extern int D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int D_L00_0015F720_gp __asm__("D_L00_0015F720") __attribute__((sda));
@@ -377,7 +377,7 @@ extern float D_L00_0015F7C4_gp __asm__("D_L00_0015F7C4") __attribute__((sda));
 extern u32 strlen(const char *);
 extern unsigned char D_0013E520[];
 extern void FUN_L00_0023b120(char *, int, int, int, int, int);
-extern void draw_hud_sprite_c2(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
+extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 int FUN_L00_00235a70_c3(HudElem *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
 
@@ -394,59 +394,59 @@ int draw_hud_item_selector_panel(HudElem *rec) {
     unsigned char *counters = rec->cnt;
     char formatted[80];
 
-    open = convert_integer_to_float_c2(counters[0]) / convert_integer_to_float_c2(D_L00_0015F780_gp);
+    open = convert_integer_to_float(counters[0]) / convert_integer_to_float(D_L00_0015F780_gp);
     if (1.0f < open) open = 1.0f;
     else if (open < 0.0f) open = 0.0f;
-    fade = convert_integer_to_float_c2(counters[1]) / convert_integer_to_float_c2(D_L00_0015F780_gp);
+    fade = convert_integer_to_float(counters[1]) / convert_integer_to_float(D_L00_0015F780_gp);
     if (1.0f < fade) fade = 1.0f;
     else if (fade < 0.0f) fade = 0.0f;
     {
         float phase, angle, radius;
-        phase = convert_integer_to_float_c2(D_L00_0015F5CC % D_L00_0015F7B0_gp);
-        phase /= convert_integer_to_float_c2(D_L00_0015F7B0_gp);
+        phase = convert_integer_to_float(D_L00_0015F5CC % D_L00_0015F7B0_gp);
+        phase /= convert_integer_to_float(D_L00_0015F7B0_gp);
         phase *= 6.28318f;
         angle = fast_sin(phase - 3.14159f);
         radius = open * 128.0f;
-        alpha = truncate_float_to_s32_c2(radius);
+        alpha = truncate_float_to_s32(radius);
         angle *= 0.125f;
         angle += 0.875f;
-        marker_alpha = truncate_float_to_s32_c2(radius * angle);
+        marker_alpha = truncate_float_to_s32(radius * angle);
     }
     x = rec->unk50;
     y = rec->unk54;
     FUN_L00_00235a70_c3(rec, &x, &y);
     half_w = D_L00_0015F718_gp / 2;
     half_h = D_L00_0015F71C_gp / 2;
-    draw_hud_sprite_c2(find_valid_animation_frame_index_alt(0xe934, 0), x, y, half_w, half_h, alpha);
-    draw_hud_sprite_c2(find_valid_animation_frame_index_alt(0xe934, 0), x + D_L00_0015F718_gp,
+    draw_hud_sprite(get_icon_frame(0xe934, 0), x, y, half_w, half_h, alpha);
+    draw_hud_sprite(get_icon_frame(0xe934, 0), x + D_L00_0015F718_gp,
                   y + D_L00_0015F71C_gp, -half_w, -half_h, alpha);
-    draw_hud_sprite_c2(find_valid_animation_frame_index_alt(0xe934, 0), x + D_L00_0015F718_gp,
+    draw_hud_sprite(get_icon_frame(0xe934, 0), x + D_L00_0015F718_gp,
                   y, -half_w, half_h, alpha);
-    draw_hud_sprite_c2(find_valid_animation_frame_index_alt(0xe934, 0), x,
+    draw_hud_sprite(get_icon_frame(0xe934, 0), x,
                   y + D_L00_0015F71C_gp, half_w, -half_h, alpha);
     for (i = 0; i < D_L00_0015FA90; i++) {
-        angle = fast_add_rotations_c(((float)i + (float)i) * 3.1415927f /
+        angle = fast_add_rotations(((float)i + (float)i) * 3.1415927f /
                               (float)D_L00_0015FA90 - 3.1415927f, 1.5707964f);
         icon_x = x + D_L00_0015F720_gp +
                  (int)(D_L00_0015F78C_gp * fast_cos(angle) * D_L00_0015F7C4_gp);
         icon_y = y + D_L00_0015F724_gp +
                  (int)(D_L00_0015F78C_gp * fast_sin(angle));
         if (rec->unk74 == i && ((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0)
-            draw_hud_sprite_c2(find_valid_animation_frame_index_alt(0xe99c, 0), icon_x - 0x13,
+            draw_hud_sprite(get_icon_frame(0xe99c, 0), icon_x - 0x13,
                           icon_y - 0x13, 0x26, 0x26, marker_alpha);
         if (((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id != 0) {
             int icon_alpha;
             if (i != rec->unk74)
-                icon_alpha = truncate_float_to_s32_c2((float)alpha * D_L00_0015F7C0);
+                icon_alpha = truncate_float_to_s32((float)alpha * D_L00_0015F7C0);
             else
                 icon_alpha = alpha;
-            FUN_L00_0023b120((char *)rec, find_valid_animation_frame_index_alt(((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id,
+            FUN_L00_0023b120((char *)rec, get_icon_frame(((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id,
                           ((unsigned char *)D_0013E520)[((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].item] ? 4 : 0), icon_x, icon_y, 1, icon_alpha);
         }
     }
     selected = rec->unk74;
     if (selected >= 0 && *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C) != 0) {
-        color = fast_tween_color_c(l00_hud_item_selector_text_shadow_color_from, hud_item_selector_text_shadow_color_to, open * fade);
+        color = fast_tween_color(l00_hud_item_selector_text_shadow_color_from, hud_item_selector_text_shadow_color_to, open * fade);
         {
         int id;
         id = *(int *)((char *)D_00141EA0 + selected * 4);
@@ -456,15 +456,15 @@ int draw_hud_item_selector_panel(HudElem *rec) {
             item = weapon_ammo_counts[id];
             sprintf(formatted, D_L00_0015F7C8, item, *(unsigned short *)(weapon_entry + 0xE));
             if (item != 0)
-                shadow = fast_tween_color_c(l00_hud_item_selector_nonzero_ammo_text_color_from, hud_item_selector_nonzero_ammo_text_color_to, open * fade);
+                shadow = fast_tween_color(l00_hud_item_selector_nonzero_ammo_text_color_from, hud_item_selector_nonzero_ammo_text_color_to, open * fade);
             else
-                shadow = fast_tween_color_c(l00_hud_item_selector_zero_ammo_text_color_from, l00_hud_item_selector_zero_ammo_text_color_to, open * fade);
+                shadow = fast_tween_color(l00_hud_item_selector_zero_ammo_text_color_from, l00_hud_item_selector_zero_ammo_text_color_to, open * fade);
             font_print_center(x + D_L00_0015F720_gp + 1, y + D_L00_0015F724_gp + 13, color, formatted, -1);
             font_print_center(x + D_L00_0015F720_gp, y + D_L00_0015F724_gp + 12, shadow, formatted, -1);
         }
         }
         prefix_length = 0;
-        shadow = fast_tween_color_c(l00_hud_item_selector_title_color_from, l00_hud_item_selector_title_color_to, open * fade);
+        shadow = fast_tween_color(l00_hud_item_selector_title_color_from, l00_hud_item_selector_title_color_to, open * fade);
         {
             int item, id;
             item = *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C + 0x18);
@@ -683,7 +683,7 @@ typedef struct {
 } Elem_239918;
 
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -702,12 +702,12 @@ extern int radial_selector_label_color_to __asm__("D_L00_0015F7D8") __attribute_
 extern int radial_selector_label_y_offset __asm__("D_L00_0015F7DC") __attribute__((sda)); /* no foreign declaration */
 extern Ent_239918 **D_L00_0015FAC0_c2 __asm__("D_L00_0015FAC0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
-extern s32 find_valid_animation_frame_index_alt(s32, s32) __asm__("func_001FF960");
+extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
-extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern u32 strlen(const char *);
 extern void FUN_L00_0023b120(char *, int, int, int, int, int);
-extern void draw_hud_sprite_c(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
+extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 int FUN_L00_00235a70_c(HudElem_238f88 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 extern Ids_239918 D_L00_0015F8C0_239918 __asm__("D_L00_0015F7E0");
 extern char D_L00_0017E5D8_239918[] __asm__("D_L00_0017E4D8");
@@ -1137,7 +1137,7 @@ extern f32 convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
-extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
+extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 /* int return and no prototype are load-bearing */
 extern int sprintf_alt() __asm__("FUN_00116248");
 extern void font_print_right(int, int, int, char *, int) __asm__("FUN_001f6940");
@@ -1199,7 +1199,7 @@ int draw_bolt_counter_hud_panel(HudElem *hud_element)
     panel_x -= slide;
     draw_hud_sprite(get_icon_frame(0x7580, 0), panel_x, y, slide + 0x10, 32, alpha);
     draw_hud_sprite(get_icon_frame(0x7580, 1), panel_x - 0x20, y, 32, 32, alpha);
-    draw_hud_icon(hud_element, get_icon_frame(0x754F, *frame >> 1), icon_x, y, 0, 0x80);
+    hud_frame(hud_element, get_icon_frame(0x754F, *frame >> 1), icon_x, y, 0, 0x80);
 
     /* the count, shadow first */
     color = fast_tween_color(bolt_text_color_clear, bolt_text_color_opaque, text);
@@ -1311,7 +1311,7 @@ s32 draw_hud_bolt_exclamation_panel(Hud *hud_element) {
     panel_left = panel_right - slide;
     draw_hud_sprite(get_icon_frame(0x7580, 0), panel_left, y, slide + 16, 32, alpha);
     draw_hud_sprite(get_icon_frame(0x7580, 1), panel_left - 32, y, 32, 32, alpha);
-    draw_hud_icon(hud_element, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
+    hud_frame(hud_element, get_icon_frame(0x754f, D_L00_0015F5CC % 60 >> 1), x - 32, y, 0, text_alpha);
 
     sprintf_alt(formatted_label_text, bolt_exclamation_label_format);
     text_x = x + bolt_exclamation_label_x_offset_gp;

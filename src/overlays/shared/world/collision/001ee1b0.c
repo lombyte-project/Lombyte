@@ -11,7 +11,7 @@ typedef union {
     s32 i[4];
 } V;
 
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
@@ -44,7 +44,7 @@ s32 *find_camera_collision_volume_for_point(OvlQuad *input_point, f32 rad) {
     cell_volume_list += (s32)D_L00_0015EF80;
     for (k = 0; k < *(s32 *)cell_volume_list; k++) {
         volume_record = cell_volume_list + 0x10 + k * 0x30;
-        subtract_vector_xyz(&volume_delta, volume_record, tp);
+        fast_vec_sub(&volume_delta, volume_record, tp);
         f = *(f32 *)(volume_record + 0xC);
         volume_delta.f[3] = 1.0f;
         if (vector_length_xy(&volume_delta) < f + rad) {

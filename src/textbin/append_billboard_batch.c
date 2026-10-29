@@ -45,7 +45,7 @@ extern void transform_vector(Vec4 *, Vec4 *, void *) __asm__("func_001F9D20");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 
 void append_billboard_batch(void) __asm__("FUN_001f92b0");
@@ -88,9 +88,9 @@ void append_billboard_batch(void) {
         fast_vec_scale(&projected_position, &projected_position,
                        view_context.projection_scale / projected_position.w);
         color = (record->alpha << 24) | 0x808080;
-        x = convert_float_to_integer(projected_position.x * 16.0f) + 0x8000;
-        y = convert_float_to_integer(projected_position.y * 16.0f) + 0x8000;
-        packed_position = ((s64)convert_float_to_integer(projected_position.z * 0.9997f +
+        x = truncate_float_to_s32(projected_position.x * 16.0f) + 0x8000;
+        y = truncate_float_to_s32(projected_position.y * 16.0f) + 0x8000;
+        packed_position = ((s64)truncate_float_to_s32(projected_position.z * 0.9997f +
                                                          view_context.depth_offset)
                            << 32) |
                           ((s64)y << 16) | x;
@@ -101,8 +101,8 @@ void append_billboard_batch(void) {
         }
         radius = record->radius_scale * (convert_integer_to_float(record->alpha + 16) * 0.015625f) *
                  ((24.0f - distance) * 16.0f);
-        sine_offset = convert_float_to_integer(radius * fast_sin(record->angle));
-        cosine_offset = convert_float_to_integer(radius * fast_cos(record->angle));
+        sine_offset = truncate_float_to_s32(radius * fast_sin(record->angle));
+        cosine_offset = truncate_float_to_s32(radius * fast_cos(record->angle));
         render_packet_cursor.tag->tag = 0x10000009;
         render_packet_cursor.tag->addr = 0;
         render_packet_cursor.tag->vif0 = 0;

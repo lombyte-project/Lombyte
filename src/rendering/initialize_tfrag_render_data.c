@@ -38,7 +38,7 @@ typedef struct {
 extern s32 tfrag_render_record_count __asm__("D_00160E90");
 extern f32 tfrag_render_ranges[3] __asm__("D_00160EA0");
 extern TfragRenderRecord *tfrag_render_records __asm__("D_00160E8C");
-extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
+extern s32 log2dim(s32) __asm__("func_001F97A0");
 extern void set_tfrag_dists(void) __asm__("func_00233068");
 
 void initialize_tfrag_render_data(TfragRenderHeader *header,
@@ -96,8 +96,8 @@ void initialize_tfrag_render_data(TfragRenderHeader *header,
             if (width_units_128 <= 0) {
                 width_units_128 = 1;
             }
-            width_log2 = highest_set_bit_index(bits >> 16);
-            height_log2 = highest_set_bit_index(texture->height);
+            width_log2 = log2dim(bits >> 16);
+            height_log2 = log2dim(texture->height);
             gs_block_base = gs_texture_allocation_base >> 8;
             /* Fakematch: the signed/unsigned casts keep game cc1 from regrouping the ORs. */
             tex0_word = (s64)((u64)(((s64)width_units_64 << 14) | ((s64)0x13 << 20) |

@@ -426,7 +426,7 @@ extern int D_L00_0015F764 __attribute__((sda));
 extern float D_L00_0015F768 __attribute__((sda));
 extern float D_L00_0015F76C __attribute__((sda));
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
-extern float scale_game_seconds(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
@@ -470,14 +470,14 @@ int draw_hud_stars(HudElem *element) {
 
     if (element->unk74 * 3 < 10001) {
         frames = scale_game_frames(1);
-        seconds = scale_game_seconds(0.75f);
+        seconds = scale_time(0.75f);
         previous = (D_L00_0015F3F8 - 1) % (int)((float)frames * 60.0f) < (int)(seconds * 60.0f);
     } else {
         previous = 0;
     }
     if (element->unk74 * 3 < 10001) {
         frames = scale_game_frames(1);
-        seconds = scale_game_seconds(0.75f);
+        seconds = scale_time(0.75f);
         current = D_L00_0015F3F8 % (int)((float)frames * 60.0f) < (int)(seconds * 60.0f);
     } else {
         current = 0;
@@ -681,7 +681,7 @@ int draw_hud_text_panel(HudElem *hud_element) {
         y = l00_hud_text_panel_base_y + 0x12;
     }
     fade = convert_integer_to_float(*opacity);
-    fade /= scale_game_seconds(8.0f);
+    fade /= scale_time(8.0f);
     if (fade < 0.0f) fade = 0.0f;
     if (fade > 1.0f) fade = 1.0f;
     text_y = y + 8;

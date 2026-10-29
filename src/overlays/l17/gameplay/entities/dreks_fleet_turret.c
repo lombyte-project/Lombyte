@@ -75,11 +75,11 @@ extern float FUN_001f9b48(void *, void *);
 extern float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float dot_vectors_xyz(void *, void *);
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float vector_length_xyz(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_L17_0015FFD8_t; /* no foreign declaration */
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -91,11 +91,11 @@ extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 
 extern void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
-extern void add_vector_xyz(void *, void *, void *);
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-extern void normalize_vector_xyz(void *, void *, float);
-extern void scale_vector_xyz(void *, void *, float);
-extern void subtract_vector_xyz(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *);
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
 extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
@@ -153,12 +153,12 @@ void update_fleet_beam(struct Moby *beam_moby) {
         *(OvlQuad *)beam_vector_scratch = 0;
         beam_vector_scratch[0] = 13.0f;
         transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
-        add_vector_xyz(beam_geometry_scratch, &beam_moby->pos, beam_vector_scratch);
+        fast_vec_add(beam_geometry_scratch, &beam_moby->pos, beam_vector_scratch);
         *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)beam_geometry_scratch;
         if (collision_line(&beam_moby->pos, beam_endpoint_and_offset_scratch, 2, 0, 0)) {
             *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)D_L17_00174760;
         }
-        subtract_vector_xyz(beam_geometry_scratch, beam_endpoint_and_offset_scratch, &beam_moby->pos);
+        fast_vec_sub(beam_geometry_scratch, beam_endpoint_and_offset_scratch, &beam_moby->pos);
         *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)beam_geometry_scratch;
         break;
     case BEAM_UPDATE_STATIONARY:
@@ -188,13 +188,13 @@ void update_fleet_beam(struct Moby *beam_moby) {
             *(OvlQuad *)beam_vector_scratch = 0;
             beam_vector_scratch[0] = 13.0f;
             transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
-            add_vector_xyz(beam_geometry_scratch, &beam_moby->pos, beam_vector_scratch);
+            fast_vec_add(beam_geometry_scratch, &beam_moby->pos, beam_vector_scratch);
             *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)beam_geometry_scratch;
             if (collision_line(&beam_moby->pos, beam_endpoint_and_offset_scratch, 2, 0, 0)) {
                 *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)D_L17_00174760;
             }
             flag = 1;
-            subtract_vector_xyz(beam_geometry_scratch, beam_endpoint_and_offset_scratch, &beam_moby->pos);
+            fast_vec_sub(beam_geometry_scratch, beam_endpoint_and_offset_scratch, &beam_moby->pos);
             *(OvlQuad *)(beam_vars + 0x30) = *(OvlQuad *)beam_geometry_scratch;
         }
         break;
@@ -202,15 +202,15 @@ void update_fleet_beam(struct Moby *beam_moby) {
     *(OvlQuad *)beam_vector_scratch = 0;
     beam_vector_scratch[0] = 12.0f;
     transform_vector_by_basis(beam_vector_scratch, beam_vector_scratch, &beam_moby->rot_row0);
-    add_vector_xyz(beam_geometry_scratch, &beam_moby->pos, beam_vars + 0x30);
+    fast_vec_add(beam_geometry_scratch, &beam_moby->pos, beam_vars + 0x30);
     *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)beam_geometry_scratch;
     if (*(int *)(beam_vars + 0x60) != 0) {
-        normalize_vector_xyz(beam_vars + 0x20, beam_vector_scratch, -(*(float *)&fleet_beam_endpoint_axis_offset - 0.2f));
-        normalize_vector_xyz(*(char **)(beam_vars + 0x60) + 0x10, beam_vector_scratch, -*(float *)&fleet_beam_endpoint_axis_offset);
-        add_vector_xyz(beam_geometry_scratch, beam_vars + 0x20, beam_endpoint_and_offset_scratch);
+        fast_vec_normalize(beam_vars + 0x20, beam_vector_scratch, -(*(float *)&fleet_beam_endpoint_axis_offset - 0.2f));
+        fast_vec_normalize(*(char **)(beam_vars + 0x60) + 0x10, beam_vector_scratch, -*(float *)&fleet_beam_endpoint_axis_offset);
+        fast_vec_add(beam_geometry_scratch, beam_vars + 0x20, beam_endpoint_and_offset_scratch);
         beam_endpoint_record = *(char **)(beam_vars + 0x60);
         *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_geometry_scratch;
-        add_vector_xyz(beam_geometry_scratch, beam_endpoint_record + 0x10, beam_endpoint_and_offset_scratch);
+        fast_vec_add(beam_geometry_scratch, beam_endpoint_record + 0x10, beam_endpoint_and_offset_scratch);
         *(OvlQuad *)(beam_endpoint_record + 0x10) = *(OvlQuad *)beam_geometry_scratch;
     } else {
         *(OvlQuad *)(beam_vars + 0x20) = *(OvlQuad *)beam_endpoint_and_offset_scratch;
@@ -222,44 +222,44 @@ void update_fleet_beam(struct Moby *beam_moby) {
                                 *(float *)(beam_vars + 0x5C))) *
                 0.02f +
             0.09f;
-        normalize_vector_xyz(beam_vars + 0x10, beam_vector_scratch, 0.2f);
-        subtract_vector_xyz(beam_endpoint_position_scratch, &beam_moby->pos, beam_vars + 0x10);
+        fast_vec_normalize(beam_vars + 0x10, beam_vector_scratch, 0.2f);
+        fast_vec_sub(beam_endpoint_position_scratch, &beam_moby->pos, beam_vars + 0x10);
         *(OvlQuad *)(beam_vars + 0x10) = *(OvlQuad *)beam_endpoint_position_scratch;
-        signed_beam_length = vector_length_xyz(beam_vars + 0x30);
+        signed_beam_length = fast_vec_length(beam_vars + 0x30);
         lerp_vector(beam_geometry_scratch, beam_vars + 0x10, beam_vars + 0x20, 0.5f);
         beam_geometry_scratch[3] = signed_beam_length * 0.5f;
         if (fast_bsphere_check((char *)beam_geometry_scratch, 32.0f) != -1) {
-            subtract_vector_xyz(hero_offset, &hero.motion.pos, &beam_moby->pos);
-            normalize_vector_xyz(axis_aligned_hero_offset, &beam_moby->rot_row0, dot_vectors_xyz(&beam_moby->rot_row0, hero_offset));
-            subtract_vector_xyz(hero_offset, hero_offset, axis_aligned_hero_offset);
+            fast_vec_sub(hero_offset, &hero.motion.pos, &beam_moby->pos);
+            fast_vec_normalize(axis_aligned_hero_offset, &beam_moby->rot_row0, fast_vec_dot(&beam_moby->rot_row0, hero_offset));
+            fast_vec_sub(hero_offset, hero_offset, axis_aligned_hero_offset);
             func_L00_0025A8C0_alt((char *)hit_descriptor_and_vector_scratch, (int)beam_moby, 0x10001, 1.0f, hero_offset);
             collision_line(&beam_moby->pos, beam_vars + 0x20, 9, beam_moby, hit_descriptor_and_vector_scratch);
-            signed_beam_length = vector_length_xyz(beam_vars + 0x30);
+            signed_beam_length = fast_vec_length(beam_vars + 0x30);
             *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x10);
             for (i = 0; i < 7; i++) {
-                scale_vector_xyz(beam_endpoint_and_offset_scratch, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
+                fast_vec_scale(beam_endpoint_and_offset_scratch, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
                 add_vectors(hit_descriptor_and_vector_scratch, beam_endpoint_and_offset_scratch, beam_endpoint_position_scratch);
-                normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
+                fast_vec_normalize(beam_vector_scratch, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
                 spawn_trail_particle(beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
             }
             signed_beam_length = -signed_beam_length;
             *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x20);
             for (i = 0; i < 8; i++) {
-                scale_vector_xyz(beam_endpoint_and_offset_scratch, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
-                subtract_vector_xyz(hit_descriptor_and_vector_scratch, beam_endpoint_position_scratch, beam_endpoint_and_offset_scratch);
+                fast_vec_scale(beam_endpoint_and_offset_scratch, beam_vars + 0x30, random_float_between(0.0f, 0.9f));
+                fast_vec_sub(hit_descriptor_and_vector_scratch, beam_endpoint_position_scratch, beam_endpoint_and_offset_scratch);
                 *(OvlQuad *)beam_endpoint_and_offset_scratch = *(OvlQuad *)hit_descriptor_and_vector_scratch;
-                normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30,
+                fast_vec_normalize(beam_vector_scratch, beam_vars + 0x30,
                                      random_float_between(frame_time * 10.0f, signed_beam_length / 20.0f));
                 spawn_trail_particle(beam_moby, beam_endpoint_and_offset_scratch, beam_vector_scratch);
             }
-            normalize_vector_xyz(beam_vector_scratch, beam_vars + 0x30, -random_float_between(frame_time * 0.5f, frame_time));
+            fast_vec_normalize(beam_vector_scratch, beam_vars + 0x30, -random_float_between(frame_time * 0.5f, frame_time));
             beam_vector_scratch[0] += random_float_between(-0.01f, 0.01f);
             beam_vector_scratch[1] += random_float_between(-0.01f, 0.01f);
             beam_vector_scratch[2] += random_float_between(-0.01f, 0.01f);
             spawn_trail_particle(0, beam_vars + 0x20, beam_vector_scratch);
         }
-        enqueue_callback_list_1(draw_fleet_beam_quad, beam_moby);
+        add_draw_callback(draw_fleet_beam_quad, beam_moby);
     }
 }
 #ifndef NOT_SDA
@@ -371,7 +371,7 @@ extern float approach_angle(float *p, float *v, float a, float b, float c, float
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -386,10 +386,10 @@ extern void process_dreks_fleet_turret_hits(char *m) __asm__("FUN_L17_002cbc10")
 void distribute_class_733_group_mobys_along_path(char *turret_moby) __asm__("FUN_L17_002cbd38");
 
 extern void distribute_class_733_group_mobys_along_path(char *m) __asm__("FUN_L17_002cbd38");
-extern void add_vector_xyz(void *, void *, void *);
-extern void normalize_vector_xyz(void *, void *, float);
-extern void scale_vector_xyz(void *, void *, float);
-extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -424,9 +424,9 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
         if (g->unk308 != 0) {
             qcopy(targeting_vector_scratch, &turret_moby->pos);
             targeting_vector_scratch[2] += 10.0f;
-            subtract_vector_xyz(from, D_L17_001600EC + (turret_vars->zone << 7) + 0x30, targeting_vector_scratch);
-            scale_vector_xyz(from, from, 0.9f);
-            add_vector_xyz(from, from, targeting_vector_scratch);
+            fast_vec_sub(from, D_L17_001600EC + (turret_vars->zone << 7) + 0x30, targeting_vector_scratch);
+            fast_vec_scale(from, from, 0.9f);
+            fast_vec_add(from, from, targeting_vector_scratch);
             from[2] += 0.5f;
             if (collision_line(targeting_vector_scratch, from, 2, turret_moby, 0) == 0) {
                 turret_moby->state = 2;
@@ -456,16 +456,16 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             float off;
 
             transform_scaled_vertex_batch(turret_moby, 2, fleet_turret_aim_vertex_indices, (char *)j);
-            scale_vector_xyz(tmp, D_L17_001600EC + (turret_vars->zone << 7),
+            fast_vec_scale(tmp, D_L17_001600EC + (turret_vars->zone << 7),
                              random_float_between(0.0f, 1.0f));
-            add_vector_xyz(acc, tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x30);
-            scale_vector_xyz(tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x10,
+            fast_vec_add(acc, tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x30);
+            fast_vec_scale(tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x10,
                              random_float_between(0.0f, 1.0f));
-            add_vector_xyz(acc, acc, tmp);
-            scale_vector_xyz(tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x20,
+            fast_vec_add(acc, acc, tmp);
+            fast_vec_scale(tmp, D_L17_001600EC + (turret_vars->zone << 7) + 0x20,
                              random_float_between(0.0f, 1.0f));
-            add_vector_xyz(acc, acc, tmp);
-            subtract_vector_xyz(targeting_vector_scratch, acc, j);
+            fast_vec_add(acc, acc, tmp);
+            fast_vec_sub(targeting_vector_scratch, acc, j);
             qcopy(from, j + 4);
             yaw = &turret_moby->rot.z;
             ang = fast_arc_tan(targeting_vector_scratch[0], targeting_vector_scratch[1]);
@@ -483,8 +483,8 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
                                      *(float *)(D_L17_001600EC + turret_vars->zone * 0x80 + 0x34) -
                                          turret_moby->pos.y)) < 0.034906585f) {
                     char *p;
-                    normalize_vector_xyz(j, targeting_vector_scratch, frame_time * 60.0f);
-                    add_vector_xyz(j + 4, j, j + 4);
+                    fast_vec_normalize(j, targeting_vector_scratch, frame_time * 60.0f);
+                    fast_vec_add(j + 4, j, j + 4);
                     qzero(zero);
                     p = FUN_L00_0026dd20((char *)(j + 4), (char *)zero, 0x80FF8F6F, 3, 1260000.0f);
                     if (p != 0) {
@@ -516,7 +516,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
 
             transform_scaled_vertex_batch(turret_moby, 2, fleet_turret_aim_vertex_indices, (char *)j);
             select_moby_combat_target(turret_moby, &aim, 512.0f);
-            subtract_vector_xyz(targeting_vector_scratch, aim.pos, j);
+            fast_vec_sub(targeting_vector_scratch, aim.pos, j);
             qcopy(from, j + 4);
             yaw = &turret_moby->rot.z;
             ang = fast_arc_tan(targeting_vector_scratch[0], targeting_vector_scratch[1]);
@@ -526,7 +526,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             update_joint_animation(turret_moby, turret_vars->a90, 0, frame_scale_sq * 0.02f, frame_scale_sq * 0.3f);
             off = fast_difference_between_rotations(turret_vars->fD4,
                                                     -fast_arc_tan(vector_length_xy(targeting_vector_scratch), targeting_vector_scratch[2]));
-            if (tick_countdown_32_alt(&turret_vars->timer) && off < 0.034906585f) {
+            if (fast_dec_timer(&turret_vars->timer) && off < 0.034906585f) {
                 if (fast_difference_between_rotations(
                         turret_moby->rot.z, fast_arc_tan(aim.pos[0] - turret_moby->pos.x,
                                                            aim.pos[1] - turret_moby->pos.y)) <
@@ -534,9 +534,9 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
                     if (collision_line(from, aim.pos, 2, ((char *)g->ship_moby), 0) == 0) {
                         char *p;
                         qzero(zero);
-                        subtract_vector_xyz(tmp, j + 4, j);
-                        normalize_vector_xyz(tmp, tmp, 250.0f);
-                        add_vector_xyz(tmp, tmp, j + 4);
+                        fast_vec_sub(tmp, j + 4, j);
+                        fast_vec_normalize(tmp, tmp, 250.0f);
+                        fast_vec_add(tmp, tmp, j + 4);
                         p = FUN_L00_0026dd20((char *)(j + 4), (char *)zero, 0x80FF8F6F, 3,
                                              1260000.0f);
                         if (p != 0) {
@@ -635,13 +635,13 @@ struct Blk {
 };
 
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
-extern float dot_vectors_xyz(void *, void *);
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float vector_length_xyz(void *);
-extern float wrap_angle(float);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern float fast_normalize_angle(float) __asm__("func_001FA610");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
@@ -665,13 +665,13 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
-extern void normalize_vector_xyz(void *, void *, float);
-extern void scale_vector_xyz(void *, void *, float);
-extern void subtract_vector_xyz(void *, void *, void *);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *);
-extern void vu_euler_rotation_basis(void *, void *);
+extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_fleet_rotating_radial_effect(char *moby) __asm__("FUN_L17_002d77f0");
@@ -711,14 +711,14 @@ void update_fleet_rotating_radial_effect(char *moby) {
             break;
         case RING_ROTATE_AND_DRAW:
             *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), ring_vars[1]);
-            enqueue_callback_list_1(draw_fleet_scrolling_radial_quads, moby);
+            add_draw_callback(draw_fleet_scrolling_radial_quads, moby);
             break;
         }
-        subtract_vector_xyz(moby_to_hero_vector, &hero.motion.pos, (moby + 0x10));
-        if (dot_vectors_xyz(moby_to_hero_vector, (moby + 0xC0)) > 0.0f) {
-            normalize_vector_xyz(hero_facing_unit_axis, (moby + 0xC0), 1.0f);
+        fast_vec_sub(moby_to_hero_vector, &hero.motion.pos, (moby + 0x10));
+        if (fast_vec_dot(moby_to_hero_vector, (moby + 0xC0)) > 0.0f) {
+            fast_vec_normalize(hero_facing_unit_axis, (moby + 0xC0), 1.0f);
         } else {
-            normalize_vector_xyz(hero_facing_unit_axis, (moby + 0xC0), -1.0f);
+            fast_vec_normalize(hero_facing_unit_axis, (moby + 0xC0), -1.0f);
         }
         {
             int i;
@@ -731,14 +731,14 @@ void update_fleet_rotating_radial_effect(char *moby) {
             blk.fC = 5627.9248046875f;
             blk.c19 = 1;
             blk.h1A = *(unsigned short *)(moby + 0xA6);
-            vu_euler_rotation_basis(normalized_moby_rotation_basis, moby + 0x40);
+            euler_rotation_basis(normalized_moby_rotation_basis, moby + 0x40);
             normalize_vector_triplet(normalized_moby_rotation_basis);
             copy_matrix_rotation(moby_rotation_matrix, normalized_moby_rotation_basis);
             i = 0;
             do {
                 j = 0;
                 do {
-                    elevation_angle_offset = wrap_angle(*(float *)&D_L17_00161B80_gp * DEG_TO_RAD *
+                    elevation_angle_offset = fast_normalize_angle(*(float *)&D_L17_00161B80_gp * DEG_TO_RAD *
                                      convert_integer_to_float(j) * 0.5f) -
                           *(float *)&D_L17_00161B80_gp * DEG_TO_RAD;
                     base_elevation_angle = *(float *)&fleet_radial_base_elevation_degrees * DEG_TO_RAD;
@@ -746,7 +746,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
                         spC0, *(float *)&fleet_radial_radius, 1.5707964f,
                         fast_add_rotations(
                             fast_add_rotations(base_elevation_angle,
-                                               wrap_angle(convert_integer_to_float(i) * 2.0943952f)),
+                                               fast_normalize_angle(convert_integer_to_float(i) * 2.0943952f)),
                             elevation_angle_offset));
                     transform_vector(spC0, spC0, moby_rotation_matrix);
                     add_vectors(spD0, spC0, (moby + 0x10));
@@ -764,24 +764,24 @@ void update_fleet_rotating_radial_effect(char *moby) {
                                 particle_direction_sign_or_minimum_speed = -1.0f;
                                 if (rand() & 1)
                                     particle_direction_sign_or_minimum_speed = 1.0f;
-                                particle_lifetime = func_001FA898_r(multiply_global_factor_ed64(random_float_between(
+                                particle_lifetime = func_001FA898_r(scale_time(random_float_between(
                                     *(float *)&fleet_radial_particle_lifetime_range_end * 0.5f, *(float *)&fleet_radial_particle_lifetime_range_end)));
                                 if (particle_lifetime <= 0)
                                     particle_lifetime = 1;
-                                subtract_vector_xyz(particle_vector_scratch, spC0, (moby + 0x10));
+                                fast_vec_sub(particle_vector_scratch, spC0, (moby + 0x10));
                                 spF0[0] = particle_vector_scratch[0];
-                                scale_vector_xyz(spF0, spF0, particle_direction_sign_or_minimum_speed);
-                                particle_direction_length = vector_length_xyz(spF0);
+                                fast_vec_scale(spF0, spF0, particle_direction_sign_or_minimum_speed);
+                                particle_direction_length = fast_vec_length(spF0);
                                 if (particle_direction_sign_or_minimum_speed < 0.0f)
                                     spE0[0] = spC0[0];
                                 else
                                     spE0[0] = *(OvlQuad *)(moby + 0x10);
-                                scale_vector_xyz(spF0, spF0, random_float_between(0.0f, 0.9f));
+                                fast_vec_scale(spF0, spF0, random_float_between(0.0f, 0.9f));
                                 particle_vector_scratch_destination = (char *)particle_vector_scratch;
                                 add_vectors(particle_vector_scratch_destination, spE0, spF0);
                                 particle_direction_sign_or_minimum_speed = frame_time;
                                 particle_direction_sign_or_minimum_speed *= 10.0f;
-                                normalize_vector_xyz(
+                                fast_vec_normalize(
                                     spF0, spF0,
                                     random_float_between(particle_direction_sign_or_minimum_speed, particle_direction_length / convert_integer_to_float(particle_lifetime * 4)));
                                 spawn_moving_hero_relative_alpha_fade_particle((float *)spE0, (char *)spF0,
@@ -828,7 +828,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 #include "rnc/overlay/l17/gameplay/entities/dreks_fleet_turret_globals.h"
 extern float fleet_radial_uv_scroll_rate_gp __asm__("D_L17_00161BBC") __attribute__((sda));
 extern float FUN_L00_00200260(float, float);
-extern float build_spherical_offset_alt(float) __asm__("FUN_001fa610");
+extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 extern int fleet_radial_alpha_base_value_gp __asm__("D_L17_00161B98") __attribute__((sda));
 #include "rnc/overlay/l17/gameplay/entities/dreks_fleet_turret_data/draw_fleet_scrolling_radial_quads.h"
 extern int fleet_radial_quad_rgba_gp __asm__("D_L17_00161BB8") __attribute__((sda));
@@ -837,7 +837,7 @@ extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern RingStep D_L17_00161BC8 __attribute__((section(".data")));
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void draw_geometry_quad(void *, void *, int);
-extern void wrap_angle_alt(void *, float, float, float) __asm__("FUN_00214db0");
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
     RingPrim quad_primitive;
@@ -878,8 +878,8 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
                     radius = *(float *)&fleet_radial_radius;
                 }
                 vj = quad_primitive.v[j];
-                wrap_angle_alt(vj, radius, 1.5707964f,
-                               build_spherical_offset_alt(*(float *)&fleet_radial_base_elevation_degrees * DEG_TO_RAD +
+                build_spherical_offset(vj, radius, 1.5707964f,
+                               fast_normalize_angle(*(float *)&fleet_radial_base_elevation_degrees * DEG_TO_RAD +
                                                           convert_integer_to_float(i) * 2.0943952f +
                                                           spread[j]));
                 vj[3] = 1.0f;
@@ -903,7 +903,7 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
 extern char *D_L17_00174758;
 extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
@@ -911,8 +911,8 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
 extern short D_L17_00161D2C __attribute__((sda));
 extern short fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") __attribute__((sda));
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
-extern void clear_vector(void *) __asm__("FUN_001f99f8");
-extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 f32 resolve_camera_surface_height(struct CameraProbePosition *position,
                                   s32 optional_output) __asm__("FUN_002135f0");
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
@@ -940,7 +940,7 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
     struct Hero *hero_contact_context;
     float yy;
     int i;
-    clear_vector(zero_vector);
+    clear_u64_value(zero_vector);
     hit_record = find_moby_hit(moby, 0x230000, 0);
     hit_reaction(moby, hit_record, data + 0x20, 0, &out, 0, 0, 4);
     if (out >= 2 && hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x343) {
@@ -974,13 +974,13 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
                 i = 0x95;
                 do {
                     *(OvlQuad *)random_direction = 0;
-                    random_direction[0] = random_float_between_alt(-1.0f, 1.0f);
-                    random_direction[1] = random_float_between_alt(-1.0f, 1.0f);
-                    random_direction[2] = random_float_between_alt(-0.5f, 2.0f);
+                    random_direction[0] = random_float_between(-1.0f, 1.0f);
+                    random_direction[1] = random_float_between(-1.0f, 1.0f);
+                    random_direction[2] = random_float_between(-0.5f, 2.0f);
                     *(OvlQuad *)scaled_particle_vector = *(OvlQuad *)random_direction;
-                    normalize_vector_xyz(
-                        scaled_particle_vector, scaled_particle_vector, random_float_between_alt(frame_time * 4.0f, frame_time * 8.0f));
-                    FUN_L00_0026f080(&moby->pos, scaled_particle_vector, random_float_between_alt(0.05f, 0.1f) * 210000.0f,
+                    fast_vec_normalize(
+                        scaled_particle_vector, scaled_particle_vector, random_float_between(frame_time * 4.0f, frame_time * 8.0f));
+                    FUN_L00_0026f080(&moby->pos, scaled_particle_vector, random_float_between(0.05f, 0.1f) * 210000.0f,
                                      yy);
                 } while (--i >= 0);
                 mark_moby_for_removal_u(moby);

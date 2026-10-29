@@ -74,8 +74,8 @@ extern void music_stop(void) __asm__("FUN_00215ee8");
 extern void memcard_update_state(void) __asm__("FUN_002093d8");
 extern void run_state_handler(void) __asm__("FUN_00208840");
 extern void setup_gif_paging(int) __asm__("FUN_001f4280");
-extern void vu1_add_gs_register(int, long) __asm__("FUN_00233980");
-extern int find_hud_sprite(int, int) __asm__("FUN_001ff960");
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
+extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern long get_frame_texture(int) __asm__("FUN_001ffa10");
 extern void draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
@@ -242,11 +242,11 @@ void run_level_main_loop(void) {
 
                 setup_gif_paging(0);
                 size = 272.0f;
-                vu1_add_gs_register(0x47, 0x3004B);
-                hud_sprite = find_hud_sprite(0x755D, 0);
+                vu1_add_g_sregister(0x47, 0x3004B);
+                hud_sprite = get_icon_frame(0x755D, 0);
                 draw_hud_sprite(hud_sprite, 0x32, 0x12C, 0x40, 0x40, 0x80);
                 sprite_rotation_radians = (float)(D_L00_0015F3F8 % rotation_period_frames) * -6.2831855f / (float)rotation_period_frames;
-                draw_rotated_sprite(1312.0f, 5312.0f, 0x40, 0x40, get_frame_texture(find_hud_sprite(0x755D, 1)),
+                draw_rotated_sprite(1312.0f, 5312.0f, 0x40, 0x40, get_frame_texture(get_icon_frame(0x755D, 1)),
                                     size, size, sprite_rotation_radians);
                 do_gif_paging();
             }
@@ -378,7 +378,7 @@ extern unsigned char D_0013D4C0[];
 extern unsigned char D_0014161B[];
 extern unsigned char l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
 extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
-extern void fast_mem_copy_alt(void *, void *, int) __asm__("FUN_001f98d0");
+extern void fast_mem_copy(void *, void *, int) __asm__("FUN_001f98d0");
 extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
 s32 load(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
 s32 stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
@@ -441,12 +441,12 @@ void initialize_level_map_archive(void) {
         archive = archive_base;
         first_size = archive[1] - archive[0];
         state->first_data = hud_heap_alloc(first_size, 0, (char *)heap_tag, 0x2DB);
-        fast_mem_copy_alt((void *)state->first_data, (char *)archive + archive[0], first_size);
+        fast_mem_copy((void *)state->first_data, (char *)archive + archive[0], first_size);
         state->first_data += 8;
         state->second_data = state->first_data;
         second_size = archive[2] - archive[1];
         state->second_raw = hud_heap_alloc(second_size, 0, (char *)heap_tag, 0x2EC);
-        fast_mem_copy_alt((void *)state->second_raw, (char *)archive + archive[1], second_size);
+        fast_mem_copy((void *)state->second_raw, (char *)archive + archive[1], second_size);
         state->scratch_data = hud_heap_alloc(0x1000, 0, (char *)heap_tag, 0x2F3);
         for (i = 0; i < 8; i++) {
             D_L00_001841F0.slots[i].unk0 = -1;

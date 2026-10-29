@@ -420,7 +420,7 @@ extern char level_gameplay_tfrag_occlusion_outdated_message[] __asm__("D_L00_001
 extern char level_gameplay_tie_occlusion_outdated_format[] __asm__("D_L00_001E8708");
 extern char level_gameplay_no_occlusion_message[] __asm__("D_L00_001E8740");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float D_L00_0015F448 MACRO_ADDR;
 extern float D_L00_0015F44C MACRO_ADDR;
 extern float D_L00_0015F450 MACRO_ADDR;
@@ -471,7 +471,7 @@ extern unsigned char D_L00_001802C0[];
 extern unsigned char D_L00_001804C0[];
 extern unsigned char D_L00_001BC1B0[];
 extern unsigned char D_L00_001C5B00[];
-extern void enable_global_state_flag(void) __asm__("func_001F61E8");
+extern void enable_global_flag(void) __asm__("func_001F61E8");
 extern void copy_memory_aligned(void *, void *, int) __asm__("FUN_001f9838");
 extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 extern void FUN_0022a5e0(void *);
@@ -489,9 +489,9 @@ extern void FillTransferWords(void *, s32, s32);
 extern void FlushCache(s32);
 extern void PackDmaTag(unsigned long, unsigned long, unsigned long);
 extern void PackRenderCommandFields(void *, s32, s32, s32, s32);
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_blocks_16(void *, s32) __asm__("func_001F9810");
-extern void copy_blocks_16_forward(void *dst, void *src, s32 size) __asm__("func_001F98D0");
+extern void fast_mem_copy(void *dst, void *src, s32 size) __asm__("func_001F98D0");
 extern void reset_draw_globals(void) __asm__("FUN_001f37e8");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern void set_video_timing(s32) __asm__("func_00214970");
@@ -714,14 +714,14 @@ char *load_level_gameplay(int skip_gameplay_read) {
             p += 0x50;
             mtx->f3C = D_L00_001C5800[inst->f1A]->f40;
             transform_vector_by_basis(inst, D_L00_001C5800[inst->f1A]->f30, mtx);
-            scale = vector_length_xyz(mtx);
-            scale = max_float(scale, vector_length_xyz(mtx->m1));
-            inst->fC = D_L00_001C5800[inst->f1A]->f3C * max_float(scale, vector_length_xyz(mtx->m2));
+            scale = fast_vec_length(mtx);
+            scale = max_float(scale, fast_vec_length(mtx->m1));
+            inst->fC = D_L00_001C5800[inst->f1A]->f3C * max_float(scale, fast_vec_length(mtx->m2));
             scale_vector(inst, inst, mtx->f3C);
-            add_vector_xyz(inst, inst, mtx->m3);
-            D_L00_00160FC8[i].fC = 1.0f / vector_length_xyz(&D_L00_00160FC8[i]);
-            D_L00_00160FC8[i].f1C = 1.0f / vector_length_xyz(D_L00_00160FC8[i].m1);
-            D_L00_00160FC8[i].f2C = 1.0f / vector_length_xyz(D_L00_00160FC8[i].m2);
+            fast_vec_add(inst, inst, mtx->m3);
+            D_L00_00160FC8[i].fC = 1.0f / fast_vec_length(&D_L00_00160FC8[i]);
+            D_L00_00160FC8[i].f1C = 1.0f / fast_vec_length(D_L00_00160FC8[i].m1);
+            D_L00_00160FC8[i].f2C = 1.0f / fast_vec_length(D_L00_00160FC8[i].m2);
             copy_memory_aligned(mtx->f140, p, 0x80);
             p += 0x80;
             inst->f1C = *(unsigned short *)p;
@@ -802,8 +802,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
             p += 0x50;
             mtx->f3C = D_L00_001BC030[shrub_class_index]->f20;
             {
-                float a = (vector_length_xyz(mtx) + vector_length_xyz(mtx->m1)) * 0.5f;
-                float b = vector_length_xyz(mtx->m2);
+                float a = (fast_vec_length(mtx) + fast_vec_length(mtx->m1)) * 0.5f;
+                float b = fast_vec_length(mtx->m2);
                 int ia = truncate_float_to_s32(a * 4096.0f);
                 int ib = truncate_float_to_s32(b * 4096.0f);
 
@@ -832,11 +832,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
             inst->f1C = *(unsigned short *)p;
             p += 0x10;
             transform_vector_by_basis(inst, D_L00_001BC030[shrub_class_index], mtx);
-            scale = vector_length_xyz(mtx);
-            scale = max_float(scale, vector_length_xyz(mtx->m1));
-            inst->fC = D_L00_001BC030[shrub_class_index]->fC * max_float(scale, vector_length_xyz(mtx->m2));
+            scale = fast_vec_length(mtx);
+            scale = max_float(scale, fast_vec_length(mtx->m1));
+            inst->fC = D_L00_001BC030[shrub_class_index]->fC * max_float(scale, fast_vec_length(mtx->m2));
             scale_vector(inst, inst, mtx->f3C);
-            add_vector_xyz(inst, inst, mtx->m3);
+            fast_vec_add(inst, inst, mtx->m3);
         }
     }
     {
@@ -1116,7 +1116,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 char *src = pv + tbl[k].f0;
 
                 D_L00_0015EF50[i].f1C = (int)mem;
-                copy_blocks_16_forward(mem, src, size);
+                fast_mem_copy(mem, src, size);
                 tbl[k].f0 = (int)mem;
                 mem += size;
             }
@@ -1131,7 +1131,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 char *src = pv + tbl[k].f0;
 
                 D_0013E550.fD94[i].f8 = (int)mem;
-                copy_blocks_16_forward(mem, src, size);
+                fast_mem_copy(mem, src, size);
                 tbl[k].f0 = (int)mem;
                 mem += size;
             }
@@ -1146,7 +1146,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 char *src = pv + tbl[k].f0;
 
                 m->f78 = (int)mem;
-                copy_blocks_16_forward(mem, src, size);
+                fast_mem_copy(mem, src, size);
                 tbl[k].f0 = (int)mem;
                 mem += size;
             }
@@ -1203,7 +1203,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         q = (char *)offs + (n << 2);
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         if (size != 0) {
-            copy_blocks_16_forward(base, q, size);
+            fast_mem_copy(base, q, size);
         }
         FillTransferWords(D_L00_001AB840, 0, 0x1C0);
         for (i = 0; i < n; i++, offs++) {
@@ -1257,7 +1257,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         mem += size;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         if (size != 0) {
-            copy_blocks_16_forward(base, q, size);
+            fast_mem_copy(base, q, size);
         }
         q += size;
         tbl = (PvarEntry *)((char *)hdr + hdr->f54);
@@ -1286,7 +1286,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         q += 0x10;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         if (size != 0) {
-            copy_blocks_16_forward(D_L00_00160108_macro, src, size);
+            fast_mem_copy(D_L00_00160108_macro, src, size);
         }
         for (i = 0; i < D_L00_00160104; i++) {
             toad_paths[i] = D_L00_00160108_macro + *(int *)q;
@@ -1325,7 +1325,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         mem += size;
         mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
         if (size != 0) {
-            copy_blocks_16_forward(base, src, size);
+            fast_mem_copy(base, src, size);
         }
         for (i = 0; i < D_L00_0015F710; i++) {
             D_L00_0015F70C[i].f10 = base + *(int *)q;
@@ -1646,7 +1646,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     setup_level_cameras();
     update_camera();
     reset_global_state_fields();
-    enable_global_state_flag();
+    enable_global_flag();
     D_L00_001B0770[0] = 0;
     D_L00_001B07B0[0] = 0;
     D_L00_001B0830[0] = 0;
@@ -1802,7 +1802,7 @@ extern void parse_particle_textures(void *, char *, void *, s32) __asm__("FUN_00
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
 extern char *FUN_L00_00241940_244110(s32) __asm__("FUN_L00_00241940");
-extern f32 int_to_float(s32) __asm__("FUN_001fa6c0");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
 extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
@@ -1811,7 +1811,7 @@ extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
     ((u64)(tbp0) | ((u64)(tbw) << 14) | ((u64)(psm) << 20) | ((u64)(tw) << 26) \
      | ((u64)(th) << 30) | ((u64)(tcc) << 34) | ((u64)(tfx) << 35) | ((u64)(cbp) << 37) \
      | ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
-#define KB(x) (int_to_float((s32)(x)) * (1.0f / 1024.0f))
+#define KB(x) (convert_integer_to_float((s32)(x)) * (1.0f / 1024.0f))
 
 /* Reads the level's core data. Its index lists the object classes:
  *   0x18  moby classes, 0x20 bytes per entry
@@ -2054,11 +2054,11 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         debug_print(D_L00_001E8A00, KB(D_L00_0016016C - D_L00_00160108));
         debug_print(D_L00_001E8A18, 128.0);
         debug_print(level_memory_map_newline);
-        debug_print(D_L00_001E8A30, int_to_float((s32)D_L00_0016016C + 0x20000) * (1.0f / 1048576.0f));
+        debug_print(D_L00_001E8A30, convert_integer_to_float((s32)D_L00_0016016C + 0x20000) * (1.0f / 1048576.0f));
         debug_print(level_memory_map_newline);
         {
             char *lo = D_L00_00173E00_244110.f0 - 0x2D0000;
-            debug_print(D_L00_001E8A48, int_to_float(D_L00_00173E00_244110.f1C - lo) * (1.0f / 1048576.0f));
+            debug_print(D_L00_001E8A48, convert_integer_to_float(D_L00_00173E00_244110.f1C - lo) * (1.0f / 1048576.0f));
         }
         debug_print(level_memory_map_newline);
     }

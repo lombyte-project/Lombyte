@@ -432,18 +432,18 @@ extern char *FUN_L06_00300c60_c(int unused, char *pa, char *pb) __asm__("FUN_L06
 extern f32 D_0015ED6C;
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin_c2(f32) __asm__("func_001F9DE0");
-extern f32 random_angle_radians_c(void) __asm__("func_00213308");
-extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
-extern f32 vector_distance_xy_alt(void *, void *) __asm__("FUN_001f9b80");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
+extern f32 random_angle_radians(void) __asm__("func_00213308");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_L04_001f1978(float);
 extern float FUN_L00_00257c48(float lo, float hi);
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern int *D_L06_001B0C30[];
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
-extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 extern float D_L06_00161FA8 __attribute__((sda));
 extern unsigned char D_0013D408[];
@@ -494,10 +494,10 @@ void process_blarg_space_commando_hits(char *moby) {
     *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00161FA8;
     update_blarg_space_commando_beam(moby);
     if (*(int *)(vars + 0x38) != 0) {
-        *(int *)(vars + 0x188) = truncate_float_to_s32_c(FUN_L04_001f1978(random_float_between_c(180.0f, 240.0f)));
+        *(int *)(vars + 0x188) = truncate_float_to_s32(FUN_L04_001f1978(random_float_between(180.0f, 240.0f)));
         *(int *)(vars + 0x38) = 0;
     }
-    tick_countdown_32_alt((s32 *)(vars + 0x188));
+    fast_dec_timer((s32 *)(vars + 0x188));
     *(int *)&dt = 0;
     hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
     hit_response_index = fun_00213928(moby, hit_record, vars + 0x20, 0, &hit, &dt, 0, 4);
@@ -571,14 +571,14 @@ void process_blarg_space_commando_hits(char *moby) {
                 vv[0] = vv[0] + FUN_L00_00257c48(lo, hi);
                 vv[1] = vv[1] + FUN_L00_00257c48(lo, hi);
                 vv[2] = vv[2] + FUN_L00_00257c48(lo, hi);
-                fragment_scatter_angle = random_angle_radians_c();
-                spd = random_float_between_c(minimum_fragment_speed, 5.7f) * D_0015ED6C;
+                fragment_scatter_angle = random_angle_radians();
+                spd = random_float_between(minimum_fragment_speed, 5.7f) * D_0015ED6C;
                 fragment_velocity[0] = fast_cos(fragment_scatter_angle) * spd;
-                fragment_velocity[1] = fast_sin_c2(fragment_scatter_angle) * spd;
+                fragment_velocity[1] = fast_sin(fragment_scatter_angle) * spd;
                 fragment_velocity[2] = lo;
                 fragment_velocity[0] = fragment_velocity[0] + fast_cos(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
-                fragment_velocity[1] = fragment_velocity[1] + fast_sin_c2(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
-                fragment_velocity[2] = random_float_between_c(minimum_fragment_speed, 8.5f) * D_0015ED6C;
+                fragment_velocity[1] = fragment_velocity[1] + fast_sin(fast_arc_tan(*(float *)(hit_record + 0x10), *(float *)(hit_record + 0x14))) * (D_0015ED6C * pull);
+                fragment_velocity[2] = random_float_between(minimum_fragment_speed, 8.5f) * D_0015ED6C;
                 fragment = FUN_L06_00300c60_c((int)moby, (char *)vv, (char *)fragment_velocity);
                 if (fragment != 0) {
                     *(float *)(fragment + 0x2C) = *(float *)(fragment + 0x2C) * 0.4f;
@@ -606,7 +606,7 @@ void process_blarg_space_commando_hits(char *moby) {
     char *q = vars + 0x120;
     route_record = D_L06_001B0C30[*(int *)(vars + 0x180)];
     if (FUN_L00_0025ff38(*(float *)(vars + 0x198), moby, q, 0, 0, route_record + 4, *route_record) != 2) {
-        if (*(float *)(vars + 0x198) < vector_distance_xy_alt(vars + 0x170, vars + 0x120)) {
+        if (*(float *)(vars + 0x198) < vector_distance(vars + 0x170, vars + 0x120)) {
             *(int *)(vars + 0x164) = 2;
         } else if (3.0f < absolute_float(*(float *)(moby + 0x18) - *(float *)(vars + 0x128))) {
             *(int *)(vars + 0x164) = 2;
@@ -623,11 +623,11 @@ extern char D_L06_00174600_d[] __asm__("D_L06_00174600") __attribute__((section(
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin_c(f32) __asm__("func_001F9DE0");
+extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 extern float beam_spread_degrees_gp __asm__("D_L06_00161FD4") __attribute__((sda));
 extern int beam_duration_frames_gp __asm__("D_L06_00161FD8") __attribute__((sda));
@@ -638,14 +638,14 @@ void initialize_blarg_space_commando_beam(char *moby) {
     float point_offset[4];
     int i;
     probe_ground_height(moby + 0x10, 0, 0.5f);
-    normalize_vector_xyz(vars + 0x220, D_L06_00174600_d, 1.0f);
+    fast_vec_normalize(vars + 0x220, D_L06_00174600_d, 1.0f);
     add_vector_xyz_cf(moby, 0, vars + 0x210);
     *(float *)(vars + 0x218) = *(float *)(moby + 0x18);
     for (i = 0; i < 16; i++) {
         float angle_offset = convert_integer_to_float(i) * 0.0625f - 0.5f;
         angle_offset = angle_offset * (beam_spread_degrees_gp * 0.017453292f);
         point_offset[0] = fast_cos(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
-        point_offset[1] = fast_sin_c(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
+        point_offset[1] = fast_sin(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
         point_offset[2] = 0.15f;
         add_vector_xyz((float *)(vars + 0x230 + i * 16), (float *)(vars + 0x210), point_offset);
         if (i == 0 || i == 15) {
@@ -683,9 +683,9 @@ void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
 void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
 
 void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void update_blarg_space_commando_beam(void *owner_moby) {
     char *moby = owner_moby;
@@ -722,11 +722,11 @@ void update_blarg_space_commando_beam(void *owner_moby) {
         } else {
             step = beam_point_horizontal_speed_gp * frame_time;
         }
-        subtract_vector_xyz(point, &data->pts[i], &data->base);
+        fast_vec_sub(point, &data->pts[i], &data->base);
         point[2] = 0.0f;
         fast_vec_normalize(point, point, step);
         add_vector_xyz(point, (float *)&data->pts[i], point);
-        subtract_vector_xyz(relative, point, moby + 0x10);
+        fast_vec_sub(relative, point, moby + 0x10);
         alignment = fast_vec_dot(relative, &data->dir);
         if (0.4f < alignment) {
             point[2] = point[2] - (frame_time + frame_time);
@@ -768,7 +768,7 @@ void update_blarg_space_commando_beam(void *owner_moby) {
         j = next;
     } while (j < 15);
 
-    enqueue_callback_list_1((void *)draw_blarg_space_commando_beam, moby);
+    add_draw_callback((void *)draw_blarg_space_commando_beam, moby);
     spawn_blarg_space_commando_beam_sparks(moby);
 }
 
@@ -789,11 +789,11 @@ extern s32 beam_inset_corner_color_at_unit_weight_gp __asm__("D_L06_00162000") _
 /* Scrolling texture coordinates of the four corners. */
 extern f32 beam_quad_corner_uvs[4][2] __asm__("D_L06_001F2E90");
 
-extern void vu1_add_gs_register(s32, s64) __asm__("FUN_00233980");
+extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 
@@ -811,7 +811,7 @@ void draw_blarg_space_commando_beam(char *moby) {
     f32 *corner_position;
     u64 regs;
 
-    vu1_add_gs_register(0x47, 0x5380B);
+    vu1_add_g_sregister(0x47, 0x5380B);
     i = 0;
     pk[0].tag[1] = get_effect_texture(beam_effect_texture_index_gp);
     pk[1].tag[1] = get_effect_texture(beam_effect_texture_index_gp);
@@ -839,9 +839,9 @@ void draw_blarg_space_commando_beam(char *moby) {
             /* The colour call in both arms: retail merges the two calls and
                leaves the address add in each arm. */
             if (j & 1) {
-                subtract_vector_xyz(corner_inset_vector, corner_position, data + 0x210);
-                normalize_vector_xyz(corner_inset_vector, corner_inset_vector, 0.5f);
-                subtract_vector_xyz(corner_position, corner_position, corner_inset_vector);
+                fast_vec_sub(corner_inset_vector, corner_position, data + 0x210);
+                fast_vec_normalize(corner_inset_vector, corner_inset_vector, 0.5f);
+                fast_vec_sub(corner_position, corner_position, corner_inset_vector);
                 corner_position[2] -= 0.125f;
                 pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C), beam_inset_corner_color_at_zero_weight_gp,
                                                 beam_inset_corner_color_at_unit_weight_gp);
@@ -864,14 +864,14 @@ void draw_blarg_space_commando_beam(char *moby) {
         i++;
         draw_geometry_quad(pk, quad_identity_matrix, 0);
     } while (i < 15);
-    vu1_add_gs_register(0x47, 0x5360B);
+    vu1_add_g_sregister(0x47, 0x5360B);
 }
 
 /* Spawns a burst of effects for each pair of ready entries in the moby's table. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300DA8), where it is exact; names translated to the US level program. */
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -890,7 +890,7 @@ extern float beam_spark_vector_z_range_start_gp __asm__("D_L06_00162034") __attr
 extern float beam_spark_vector_z_range_end_gp __asm__("D_L06_00162038") __attribute__((sda));
 extern float beam_spark_spawn_probability_gp __asm__("D_L06_0016203C") __attribute__((sda));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void spawn_blarg_space_commando_beam_sparks(char *moby) {
@@ -925,15 +925,15 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
         second_spark_vector[2] = 0;
         first_spark_vector[2] = random_float_between(beam_spark_vector_z_range_start_gp, beam_spark_vector_z_range_end_gp);
         second_spark_vector[2] = random_float_between(beam_spark_vector_z_range_start_gp, beam_spark_vector_z_range_end_gp);
-        frame_count = func_001FA898_r(multiply_global_factor_ed64(
+        frame_count = func_001FA898_r(scale_time(
             random_float_between(beam_spark_frame_count_range_start_gp, beam_spark_frame_count_range_end_gp)));
-        second_frame_count = func_001FA898_r(multiply_global_factor_ed64(
+        second_frame_count = func_001FA898_r(scale_time(
             random_float_between(beam_spark_second_frame_count_range_start_gp, beam_spark_second_frame_count_range_end_gp)));
-        third_frame_count = func_001FA898_r(multiply_global_factor_ed64(
+        third_frame_count = func_001FA898_r(scale_time(
             random_float_between(beam_spark_third_frame_count_range_start_gp, beam_spark_third_frame_count_range_end_gp)));
-        scale_vector_xyz(first_spark_vector, first_spark_vector, 1.0f / (float)frame_count);
+        fast_vec_scale(first_spark_vector, first_spark_vector, 1.0f / (float)frame_count);
         first_spark_vector[3] = beam_spark_first_vector_w_gp;
-        scale_vector_xyz(second_spark_vector, second_spark_vector, 1.0f / (float)third_frame_count);
+        fast_vec_scale(second_spark_vector, second_spark_vector, 1.0f / (float)third_frame_count);
         second_spark_vector[3] = beam_spark_second_vector_w_gp;
         spark_source_point = data + (current_point_byte_offset + 0x230);
         lerp_vector(spark_position, spark_source_point, spark_source_point, random_float_between(0.0f, 1.0f));
@@ -972,9 +972,9 @@ void update_falling_spinning_moby(struct Moby *moby) {
 
 #include "eetypes.h"
 extern unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-extern void upd_a(unsigned char *) __asm__("FUN_L00_00250df8");
+extern void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 extern float D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
-extern int ftoi_300c60(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
 /* Spawns one fragment of the break-apart at pos, flying along vel with a
@@ -990,7 +990,7 @@ unsigned char *spawn_spinning_moby_fragment(char *unused_source_moby, float *fra
 
     *pp = *(u128 *)fragment_spawn_position;
     *saved_velocity = *(u128 *)fragment_initial_velocity;
-    fragment_moby = create_moby(ftoi_300c60(random_float_between(1085.0f, 1089.0f)));
+    fragment_moby = create_moby(truncate_float_to_s32(random_float_between(1085.0f, 1089.0f)));
 
     if (fragment_moby != 0) {
         fragment_vars = *(char **)(fragment_moby + 0x78);
@@ -1003,8 +1003,8 @@ unsigned char *spawn_spinning_moby_fragment(char *unused_source_moby, float *fra
         *(float *)(fragment_vars + 0x10) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
         *(float *)(fragment_vars + 0x14) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
         *(float *)(fragment_vars + 0x18) = random_float_between(-360.0f, 360.0f) * DEG_TO_RAD * frame_time;
-        fragment_moby[0xBC] = ftoi_300c60(scale_time(random_float_between(60.0f, 120.0f)));
-        upd_a(fragment_moby);
+        fragment_moby[0xBC] = truncate_float_to_s32(scale_time(random_float_between(60.0f, 120.0f)));
+        update_entity(fragment_moby);
     }
     return fragment_moby;
 }
@@ -1024,11 +1024,11 @@ extern short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") __attribute
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
-extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
-extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
+extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
 #define W(x) (*(int *)&(x))
 
@@ -1052,14 +1052,14 @@ void draw_pulsing_timer_display(char *moby) {
     }
     col = fast_tween_color_local(W(timer_text_color_at_zero_blend_gp), W(timer_text_color_at_unit_blend_gp), color_blend_factor);
     timer_text[0] = 0x30;
-    timer_text[1] = *(int *)(data + 0xB4) / scale_ticks(0xE10) + 0x30;
+    timer_text[1] = *(int *)(data + 0xB4) / scale_game_frames(0xE10) + 0x30;
     timer_text[2] = 0x3A;
-    timer_text[3] = *(int *)(data + 0xB4) % scale_ticks(0xE10) / scale_ticks(0x258) + 0x30;
-    timer_text[4] = *(int *)(data + 0xB4) % scale_ticks(0x258) / scale_ticks(0x3C) + 0x30;
+    timer_text[3] = *(int *)(data + 0xB4) % scale_game_frames(0xE10) / scale_game_frames(0x258) + 0x30;
+    timer_text[4] = *(int *)(data + 0xB4) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
     timer_text[5] = 0x3A;
-    timer_text[6] = *(int *)(data + 0xB4) % scale_ticks(0x3C) / scale_ticks(6) + 0x30;
+    timer_text[6] = *(int *)(data + 0xB4) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
     timer_text[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
-    font_print_center_large_001f6c20(W(timer_text_center_x_gp), W(timer_text_y_gp), col, (int)timer_text, 8);
+    font_print_center_large(W(timer_text_center_x_gp), W(timer_text_y_gp), col, (int)timer_text, 8);
 }
 
 f32 D_L10_001DA10C[1] __attribute__((section(".data"))) = {0};

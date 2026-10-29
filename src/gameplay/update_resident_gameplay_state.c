@@ -154,19 +154,19 @@ extern void noop_callback_k(void *, void *, s32, s32) __asm__("func_001E9440");
 extern void noop_callback_m(ResidentRenderObject *, ResidentRenderObject *) __asm__("func_001E9450");
 extern void update_camera(void) __asm__("func_001EDAA8");
 extern void update_view_context(void) __asm__("func_001F2D98");
-extern void enqueue_callback_list_1(void *, ResidentRenderObject *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, ResidentRenderObject *) __asm__("FUN_001f4600");
 extern void enqueue_callback_list_4(void *, ResidentRenderObject *) __asm__("FUN_001f47b8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern f32 multiply_global_scale(f32) __asm__("func_001F96E8");
-extern s32 scale_ticks(s32) __asm__("func_001F96F8");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
-extern f32 vector_distance_xy(void *, void *, void *) __asm__("func_001F9B80");
+extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
+extern f32 vector_distance(void *, void *, void *) __asm__("func_001F9B80");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
@@ -179,7 +179,7 @@ extern ResidentRenderObject *create_moby(s32) __asm__("func_0020C4F8");
 extern void mark_moby_for_removal(ResidentRenderObject *) __asm__("func_0020C828");
 extern void update_moby_animation_state(ResidentRenderObject *) __asm__("func_0020C880");
 extern void update_resident_packed_direction(void) __asm__("func_0020CFD0");
-extern void refresh_resident_object_spatial_bounds(ResidentRenderObject *) __asm__("func_0020DEF8");
+extern void refresh_moby_spatial_bounds(ResidentRenderObject *) __asm__("func_0020DEF8");
 extern void update_visible_resident_objects(void) __asm__("func_00212E28");
 extern void update_moby_shadow_range(ResidentRenderObject *) __asm__("func_00213700");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
@@ -248,15 +248,15 @@ void update_resident_gameplay_state(void) {
         }
         ticks_per_bank = pal_mode ? 0x50 : 0x60;
         skip = level_render_state.skip;
-        if ((controller_state.pressed & (PAD_TRIANGLE | PAD_CROSS)) && scale_ticks(30) < render_sequence.time &&
+        if ((controller_state.pressed & (PAD_TRIANGLE | PAD_CROSS)) && scale_game_frames(30) < render_sequence.time &&
             sequence == 0.0f) {
             if (level_render_state.state == 0 &&
                 render_sequence.time <
-                    scale_ticks(playback_skip_target_frames[level_render_state.content_variant] - 30)) {
+                    scale_game_frames(playback_skip_target_frames[level_render_state.content_variant] - 30)) {
                 skip = 1;
             }
             if (level_render_state.state == 8 &&
-                render_sequence.time < render_sequence.end - scale_ticks(30)) {
+                render_sequence.time < render_sequence.end - scale_game_frames(30)) {
                 skip = 1;
             }
         }
@@ -265,7 +265,7 @@ void update_resident_gameplay_state(void) {
                 music_stream_state.secondary.state = 5;
             }
             if (level_render_state.state == 0) {
-                render_sequence.time = scale_ticks(playback_skip_target_frames[level_render_state.content_variant]);
+                render_sequence.time = scale_game_frames(playback_skip_target_frames[level_render_state.content_variant]);
                 render_sequence.sequence_frame = render_sequence.time / ticks_per_bank;
                 parse_space_scene_chunk(render_sequence.sequence_frame);
                 render_sequence.frame = render_sequence.time % ticks_per_bank;
@@ -335,7 +335,7 @@ void update_resident_gameplay_state(void) {
         qcopy(&D_00186F40.position, &keyframe->position);
         transform_vector_by_basis(&D_00186F40.position, &D_00186F40.position,
                       level_render_state.player->transform);
-        add_vectors(&D_00186F40.position, &D_00186F40.position,
+        fast_vec_add(&D_00186F40.position, &D_00186F40.position,
                     &level_render_state.player->position);
         segment_angle = fast_add_rotations(keyframe_angles[2],
                                            level_render_state.player->rotation.components[2]);
@@ -370,23 +370,23 @@ void update_resident_gameplay_state(void) {
                          1.0f - object->blend);
             scale_vector(&scratch_vectors[1], animation_positions + object->next_frame * 16,
                          object->blend);
-            add_vectors(&object->position, &scratch_vectors[0], &scratch_vectors[1]);
+            fast_vec_add(&object->position, &scratch_vectors[0], &scratch_vectors[1]);
             transform_vector_by_basis(&object->position, &object->position,
                           level_render_state.player->transform);
-            add_vectors(&object->position, &object->position, &level_render_state.player->position);
+            fast_vec_add(&object->position, &object->position, &level_render_state.player->position);
             object->rotation.components[2] = level_render_state.player->rotation.components[2];
             object->cached_selector = 0xFF;
-            refresh_resident_object_spatial_bounds(object);
+            refresh_moby_spatial_bounds(object);
             if (object->class_id == 0) {
                 if (level_render_state.state == 0) {
                     if (current_level_index == 10 && item_available[6] == 0) {
                         object->unk7F = 0;
-                    } else if (render_sequence.time <= scale_ticks(0x3E)) {
+                    } else if (render_sequence.time <= scale_game_frames(0x3E)) {
                         object->unk7F = 0x18;
                     } else {
                         object->unk7F = 0;
                     }
-                } else if (scale_ticks(360) < render_sequence.time) {
+                } else if (scale_game_frames(360) < render_sequence.time) {
                     if (current_level_index == 10 && item_available[6] == 0) {
                         object->unk7F = 0;
                     } else {
@@ -397,12 +397,12 @@ void update_resident_gameplay_state(void) {
                 }
             } else if (object->class_id == 10) {
                 if (level_render_state.state == 0) {
-                    if (render_sequence.time <= scale_ticks(350)) {
+                    if (render_sequence.time <= scale_game_frames(350)) {
                         object->unk7F = 0x18;
                     } else {
                         object->unk7F = 0;
                     }
-                } else if (render_sequence.time <= scale_ticks(524)) {
+                } else if (render_sequence.time <= scale_game_frames(524)) {
                     object->unk7F = 0;
                 } else {
                     object->unk7F = 0x18;
@@ -432,9 +432,9 @@ void update_resident_gameplay_state(void) {
             }
             if ((u16)object->class_id - 0x213U < 3) {
                 enqueue_callback_list_4(render_environment_mapped_object, object);
-                enqueue_callback_list_1(draw_light_flare, object);
+                add_draw_callback(draw_light_flare, object);
                 if (level_render_state.state == 0) {
-                    if (render_sequence.time < scale_ticks(360)) {
+                    if (render_sequence.time < scale_game_frames(360)) {
                         s32 color_intensity =
                             (s32)(fast_cos(
                                       convert_integer_to_float((render_sequence.time & 0x3F) - 32) *
@@ -448,7 +448,7 @@ void update_resident_gameplay_state(void) {
                             object->color =
                                 color_intensity | (color_intensity << 8) | (color_intensity << 16);
                         }
-                    } else if (render_sequence.time < scale_ticks(0x1F8)) {
+                    } else if (render_sequence.time < scale_game_frames(0x1F8)) {
                         s32 color_intensity =
                             (s32)(((f32)render_sequence.time - multiply_global_scale(360.0f)) *
                                   (frame_scale * 1.25f));
@@ -461,14 +461,14 @@ void update_resident_gameplay_state(void) {
                             object->color =
                                 color_intensity | (color_intensity << 8) | (color_intensity << 16);
                         }
-                        if (scale_ticks(0x1A4) < render_sequence.time) {
+                        if (scale_game_frames(0x1A4) < render_sequence.time) {
                             level_render_state.player->unkBC =
                                 (s32)(((f32)render_sequence.time - multiply_global_scale(420.0f)) *
                                       (frame_scale * 1.2f));
                             level_render_state.player->unkB2 = 0;
-                            enqueue_callback_list_1(build_variant_effect_quads, level_render_state.player);
+                            add_draw_callback(build_variant_effect_quads, level_render_state.player);
                         }
-                        if (scale_ticks(0x1D0) < render_sequence.time) {
+                        if (scale_game_frames(0x1D0) < render_sequence.time) {
                             D_0015F440 += 0.025f;
                             if (D_0015F440 > 1.0f) {
                                 D_0015F440 = 1.0f;
@@ -481,9 +481,9 @@ void update_resident_gameplay_state(void) {
                             D_0015F440 = 0.0f;
                         }
                     }
-                } else if (render_sequence.time < scale_ticks(0xF0)) {
+                } else if (render_sequence.time < scale_game_frames(0xF0)) {
                     s32 color_intensity;
-                    if (render_sequence.time < scale_ticks(0xC8)) {
+                    if (render_sequence.time < scale_game_frames(0xC8)) {
                         emit_six_spark_effects(object, frame_time * -4.0f);
                         emit_six_spark_effects(object, frame_time * -3.0f);
                     }
@@ -501,15 +501,15 @@ void update_resident_gameplay_state(void) {
                     }
                     object->unkBC = 0x32;
                     object->unkB2 = 10;
-                    enqueue_callback_list_1(build_variant_effect_quads, object);
-                } else if (render_sequence.time <= scale_ticks(360)) {
+                    add_draw_callback(build_variant_effect_quads, object);
+                } else if (render_sequence.time <= scale_game_frames(360)) {
                     s32 color_intensity;
-                    if (render_sequence.time < scale_ticks(300)) {
+                    if (render_sequence.time < scale_game_frames(300)) {
                         level_render_state.player->unkBC =
                             (s32)((multiply_global_scale(300.0f) - (f32)render_sequence.time) *
                                   (frame_scale * 1.5f));
                         level_render_state.player->unkB2 = 0;
-                        enqueue_callback_list_1(build_variant_effect_quads, level_render_state.player);
+                        add_draw_callback(build_variant_effect_quads, level_render_state.player);
                     }
                     color_intensity = (s32)((multiply_global_scale(360.0f) - (f32)render_sequence.time) *
                                             (frame_scale * 1.25f));
@@ -551,7 +551,7 @@ void update_resident_gameplay_state(void) {
             music_pause(0);
             update_audio_stream_until_idle(0);
             music_stream_state.queued_secondary_track = level_render_state.content_variant + 0x9C4F;
-            fade_to_black(scale_ticks(12));
+            fade_to_black(scale_game_frames(12));
             while ((s16)music_stream_state.secondary.state != 3) {
                 sound_update();
                 sceGsSyncV(0);
@@ -615,7 +615,7 @@ void update_resident_gameplay_state(void) {
                 for (point_index = 0; point_index < path->point_count; point_index++) {
                     path->p[point_index].components[3] *= turn_scale;
                 }
-                level_render_state.path_segment_length = distance_xyz(&path->p[0], &path->p[1]);
+                level_render_state.path_segment_length = fast_vec_dist(&path->p[0], &path->p[1]);
                 level_render_state.path_progress = 0.0f;
                 level_render_state.speed = 0.0f;
                 level_render_state.history_index = 0;
@@ -625,7 +625,7 @@ void update_resident_gameplay_state(void) {
                 qcopy(&level_render_state.pathPos, &path->p[0]);
                 qcopy(&level_render_state.startRot, &player->rotation);
                 level_render_state.rotY = fast_arc_tan(
-                    vector_distance_xy(&path->p[1], &path->p[0], &level_render_state.startPos),
+                    vector_distance(&path->p[1], &path->p[0], &level_render_state.startPos),
                     path->p[0].components[2] - path->p[1].components[2]);
                 level_render_state.rotZ =
                     fast_arc_tan(path->p[1].components[0] - path->p[0].components[0],
@@ -663,12 +663,12 @@ void update_resident_gameplay_state(void) {
             noop_callback_c(&scratch_vectors[1]);
         }
         if (level_render_state.path >= 0) {
-            if (level_render_state.timer < scale_ticks(150)) {
+            if (level_render_state.timer < scale_game_frames(150)) {
                 blend =
                     (1.0f - fast_cos(convert_integer_to_float(level_render_state.timer) *
-                                     (3.1415927f / convert_integer_to_float(scale_ticks(120))))) *
+                                     (3.1415927f / convert_integer_to_float(scale_game_frames(120))))) *
                     0.5f;
-                if (level_render_state.timer >= scale_ticks(120)) {
+                if (level_render_state.timer >= scale_game_frames(120)) {
                     blend = 1.0f;
                 }
                 level_render_state.player->blend = blend;
@@ -711,7 +711,7 @@ void update_resident_gameplay_state(void) {
                 if (level_render_state.content_variant < 2) {
                     level_render_state.player->unkBC = 0x32;
                     level_render_state.player->unkB2 = 10;
-                    enqueue_callback_list_1(build_variant_effect_quads, level_render_state.player);
+                    add_draw_callback(build_variant_effect_quads, level_render_state.player);
                 }
                 level_render_state.path_progress +=
                     level_render_state.speed * frame_time / level_render_state.path_segment_length;
@@ -732,18 +732,18 @@ void update_resident_gameplay_state(void) {
                     transform_vector_by_basis(&level_render_state.primary_history[level_render_state.history_index],
                                   &resident_path_history_local_offset_pairs[level_render_state.content_variant].a,
                                   level_render_state.player->transform);
-                    add_vectors(&level_render_state.primary_history[level_render_state.history_index],
+                    fast_vec_add(&level_render_state.primary_history[level_render_state.history_index],
                                 &level_render_state.primary_history[level_render_state.history_index],
                                 &level_render_state.player->position);
                     level_render_state.primary_history[level_render_state.history_index].f[3] = 1.0f;
                     transform_vector_by_basis(&level_render_state.secondary_history[level_render_state.history_index],
                                   &resident_path_history_local_offset_pairs[level_render_state.content_variant].b,
                                   level_render_state.player->transform);
-                    add_vectors(&level_render_state.secondary_history[level_render_state.history_index],
+                    fast_vec_add(&level_render_state.secondary_history[level_render_state.history_index],
                                 &level_render_state.secondary_history[level_render_state.history_index],
                                 &level_render_state.player->position);
                     level_render_state.secondary_history[level_render_state.history_index].f[3] = 1.0f;
-                    enqueue_callback_list_1(build_resident_indexed_texture_warp_meshes,
+                    add_draw_callback(build_resident_indexed_texture_warp_meshes,
                                             level_render_state.player);
                     if (sequence > 0.0f) {
                         sequence += 0.0625f;
@@ -760,10 +760,10 @@ void update_resident_gameplay_state(void) {
                 transform_vector_by_basis(&scratch_vectors->position,
                               &resident_path_companion_a_local_offsets[level_render_state.content_variant], p->transform);
             }
-            add_vectors(&level_render_state.companion_a->position,
+            fast_vec_add(&level_render_state.companion_a->position,
                         &level_render_state.companion_a->position,
                         &level_render_state.player->position);
-            refresh_resident_object_spatial_bounds(level_render_state.companion_a);
+            refresh_moby_spatial_bounds(level_render_state.companion_a);
             {
                 ResidentRenderObject *scratch_vectors = level_render_state.companion_b;
                 ResidentRenderObject *p = level_render_state.player;
@@ -771,10 +771,10 @@ void update_resident_gameplay_state(void) {
                 transform_vector_by_basis(&scratch_vectors->position,
                               &resident_path_companion_b_local_offsets[level_render_state.content_variant], p->transform);
             }
-            add_vectors(&level_render_state.companion_b->position,
+            fast_vec_add(&level_render_state.companion_b->position,
                         &level_render_state.companion_b->position,
                         &level_render_state.player->position);
-            refresh_resident_object_spatial_bounds(level_render_state.companion_b);
+            refresh_moby_spatial_bounds(level_render_state.companion_b);
         }
         update_camera();
         sound_update();

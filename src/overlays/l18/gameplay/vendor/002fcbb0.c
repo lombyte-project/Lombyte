@@ -24,7 +24,7 @@ int update_moby_suck_cannon_state(struct Moby *moby) {
 }
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/moby_anim.h"
-extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -35,7 +35,7 @@ void hide_moby_and_clear_collision(struct Moby *moby) {
     unsigned short flags;
     moby->state = 0x8;
     if (moby->prev_seq != 0) {
-        blend_moby_animation(moby, 0, 0, scale_ticks(10));
+        blend_moby_animation(moby, 0, 0, scale_game_frames(10));
     }
     flags = moby->flags;
     moby->visible = 0;

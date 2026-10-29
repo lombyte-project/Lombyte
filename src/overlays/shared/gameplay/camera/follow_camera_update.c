@@ -151,10 +151,10 @@ typedef struct {
 extern C_2e9518 D_166E10_2e9518 __asm__("D_L00_00166E10") __attribute__((section(".data")));
 extern char *D_001413D0_2e9518 __asm__("D_001413D0") __attribute__((section(".data")));
 extern unsigned char D_001413F4_2e9518 __asm__("D_001413F4") __attribute__((section(".data")));
-extern float dot_2e9518(void *, void *) __asm__("FUN_001f9ab0");
-extern float fabs_2e9518(float) __asm__("FUN_001f99c0");
-extern int fr_2e9518(int) __asm__("FUN_001f96f8");
-extern void pitch_s(int, float, float) __asm__("FUN_L00_002e8450");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
 
 void follow_camera_pull_back(char *o, float *x, float *y) __asm__("FUN_L00_002e9518");
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_update_globals.h"
@@ -170,12 +170,12 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     float k, pull_back_target, interpolated_pull_back_value;
 
     if (pull_back_state->h6 == 0) {
-        if (pull_back_state->h4 != 0 && C->fA4 == 0.0f && dot_2e9518(D_001413D0_2e9518 + 0xC0, camera_object) <= -0.3f) {
+        if (pull_back_state->h4 != 0 && C->fA4 == 0.0f && fast_vec_dot(D_001413D0_2e9518 + 0xC0, camera_object) <= -0.3f) {
             goto on;
         }
-        if (0.0001f < fabs_2e9518(C->fA4) && dot_2e9518(C->v80, camera_object) <= -0.3f) {
+        if (0.0001f < absolute_float(C->fA4) && fast_vec_dot(C->v80, camera_object) <= -0.3f) {
         on:
-            pull_back_state->h4 = fr_2e9518(0x78);
+            pull_back_state->h4 = scale_game_frames(0x78);
             k = C->fA4 * 14.2857f;
             if (1.0f < k)
                 k = 1.0f;
@@ -183,7 +183,7 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
             interpolated_pull_back_value = *(float *)(reference_orbit_state + 0x58) + (pull_back_target - *(float *)(reference_orbit_state + 0x58)) * k;
             if (pull_back_state->f8 < interpolated_pull_back_value)
                 pull_back_state->f8 = interpolated_pull_back_value;
-            pitch_s(0, pull_back_state->f8, 0.003f);
+            follow_camera_set_distance(0, pull_back_state->f8, 0.003f);
             *x = orbit_distance_default_stiffness_gp + (orbit_distance_pull_back_stiffness_gp - orbit_distance_default_stiffness_gp) * k;
             *y = orbit_distance_default_damping_gp + (orbit_distance_pull_back_damping_gp - orbit_distance_default_damping_gp) * k;
             return;
@@ -209,7 +209,7 @@ extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(float *, float *, float *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -247,7 +247,7 @@ void follow_camera_orbit(int camera_moby) {
     char *reference_orbit_offset = camera_state + 0x130;
     char *current_orbit_offset = camera_state + 0x140;
     char *p1d0 = camera_state + 0x1D0;
-    add_vector_xyz(camera_state, camera_state + 0x90, reference_orbit_offset);
+    fast_vec_add(camera_state, camera_state + 0x90, reference_orbit_offset);
     x = *(float *)(reference_orbit_offset + 0x2C);
     x -= *(float *)(p1d0 + 0x30);
     bc = fast_vec_length(current_orbit_offset);
@@ -278,7 +278,7 @@ void follow_camera_orbit(int camera_moby) {
     build_look_at_matrix(rotated_orbit_offset, rotated_orbit_offset, orbit_cross_scratch, i);
     fast_vec_normalize(current_orbit_offset, rotated_orbit_offset, bc);
     fast_vec_scale(scaled_up_offset, up, *(float *)(reference_orbit_offset + 0x30));
-    add_vector_xyz(orbit_base_position, scaled_up_offset, camera_state + 0xA0);
+    fast_vec_add(orbit_base_position, scaled_up_offset, camera_state + 0xA0);
     dot_product = fast_vec_dot(current_orbit_offset, fw);
     current_orbit_length = fast_vec_length(current_orbit_offset);
     if (current_orbit_length != 0.0f) {
@@ -292,12 +292,12 @@ void follow_camera_orbit(int camera_moby) {
             *(float *)(reference_orbit_offset + 0x24) = 0.0f;
         }
     }
-    add_vector_xyz(camera_object + 0x30, orbit_base_position, reference_orbit_offset + 0x10);
+    fast_vec_add(camera_object + 0x30, orbit_base_position, reference_orbit_offset + 0x10);
 }
 extern int *D_L00_0015EF80_9aa0 __asm__("D_L00_0015EF80");
 extern char *D_L00_001600F4_9aa0 __asm__("D_L00_001600F4");
 extern float FUN_001f9af0_9aa0(void *) __asm__("FUN_001f9af0");
-extern void no_op_main_callback_alt(void *, float) __asm__("FUN_001e93e8");
+extern void noop_main_callback(void *, float) __asm__("FUN_001e93e8");
 typedef struct {
     int pad[4];
     int type;
@@ -316,7 +316,7 @@ void run_type5_grid_record_noop_callbacks(int unused_camera_moby) {
                 for (k = 0; k < *(int *)grid_cell_block; k++) {
                     if (((E_9aa0 *)(grid_cell_block + 16))[k].type == 5) {
                         char *referenced_record = D_L00_001600F4_9aa0 + ((E_9aa0 *)(grid_cell_block + 16))[k].idx * 128;
-                        no_op_main_callback_alt(referenced_record + 0x30, FUN_001f9af0_9aa0(referenced_record));
+                        noop_main_callback(referenced_record + 0x30, FUN_001f9af0_9aa0(referenced_record));
                     }
                 }
             }
@@ -960,7 +960,7 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern float interpolate_wrapped_angle_cosine_eased(float, float, float) __asm__("FUN_L00_00257ef0");
-extern float cosine_interpolate_alt(float, float, float) __asm__("FUN_002133d0");
+extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 extern void compute_spherical_offset_from_positions(void *, void *, void *) __asm__("FUN_L00_001ed630");
@@ -1007,7 +1007,7 @@ void update_camera_pose_from_targets(void *camera) {
                 } else if (transition_azimuth_delta > z && y < z) {
                     transition_azimuth_delta = -transition_azimuth_delta;
                 }
-                F(transition_state, 0x1C) += cosine_interpolate_alt(0, transition_azimuth_delta, t);
+                F(transition_state, 0x1C) += cosine_interpolate(0, transition_azimuth_delta, t);
             } else {
                 F(transition_state, 0x1C) = interpolate_wrapped_angle_cosine_eased(F(transition_state, 0x1C), F(transition_state, 8), t);
             }
@@ -1371,12 +1371,12 @@ void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002ED088), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[] __attribute__((section(".data")));
-extern f32 fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
+extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern int D_0015ED84 __attribute__((section(".sdata")));
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
@@ -1416,7 +1416,7 @@ void initialize_target_tracking_camera(void *camera) {
     *(float *)(camera_reset_state + 0x14) = 0.3f;
     *(short *)(camera_reset_state + 0x1E) = scale_game_frames_c(0x78);
     *(short *)(camera_reset_state + 0x1C) = 0;
-    clear_u64_value_c(camera_reset_state);
+    clear_u64_value(camera_reset_state);
     camera_state = *(char **)(camera_object + 0x70);
     view_turn_spring_state = camera_state + 0x30;
     *(float *)(view_turn_spring_state + 4) = 0.02f;
@@ -1446,7 +1446,7 @@ void initialize_target_tracking_camera(void *camera) {
         *(int *)(follow_block + 0x38) = 0;
         *(int *)(follow_block + 0x3C) = 0;
         fast_vec_normalize(follow_block + 0x30, follow_block + 0x30, 1.0f);
-        *(float *)(camera_data + 0xB8) = fast_arc_tan_c(*(float *)(follow_block + 0x30), *(float *)(follow_block + 0x34));
+        *(float *)(camera_data + 0xB8) = fast_arc_tan(*(float *)(follow_block + 0x30), *(float *)(follow_block + 0x34));
         *(int *)(camera_target_state + 8) = *(int *)(hero_data + 0x964);
     }
     gg = (char *)&D_L00_00166C80;
@@ -1460,7 +1460,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001ff500_2ebe70(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void FUN_001ff300_2ebe70(float, void *, void *) __asm__("FUN_001f9a68");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int coll_line_fix(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_001f0d60_2ebe70(float, void *, int, int) __asm__("FUN_L00_001f0d60");
 extern unsigned short *D_L00_001AB840_2ebe70[] __asm__("D_L00_001AB840");
 extern char *D_0015FFD8_2ebe70 __asm__("D_L00_0015FFD8");
@@ -1559,7 +1559,7 @@ void update_target_tracking_camera_position(char *camera_object) {
     FUN_001ff500_2ebe70(-*distance, position, follow + 0x30);
     position[2] += distance[4];
     fast_vec_add(position, position, &hero.motion.pos);
-    if (coll_line_fix(camera_object + 0x30, position, 0x12, 0, 0) != 0) {
+    if (collision_line(camera_object + 0x30, position, 0x12, 0, 0) != 0) {
         fast_vec_sub(offset, &D_L00_00173E60_2ebe70, camera_object + 0x30);
         collision_position = &D_L00_00173E60_2ebe70;
         length = fast_vec_length(offset);
@@ -2224,7 +2224,7 @@ typedef struct {
 extern u8 D_L00_00166DC0_2ed950[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern E_2ed950 D_0013E550_2ed950[] __asm__("D_0013E550") __attribute__((section(".data")));
 extern T_2ed950 *D_L00_0015F5F4_2ed950 __asm__("D_L00_0015F5F4");
-f32 distance_xyz(void *, void *) __asm__("FUN_001f9b48");
+f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 s32 FUN_001f9740_2ed950(s32 *) __asm__("FUN_001f9740");
 s32 FUN_L00_0028ddd8_2ed950(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
 s32 FUN_00213260_2ed950(s32) __asm__("FUN_00213260");
@@ -2237,7 +2237,7 @@ void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
     f32 reference_distance, playback_radius;
     if (playback_state->id < 0)
         return;
-    reference_distance = distance_xyz(D_L00_00166DC0_2ed950, sound_emitter + 0x40);
+    reference_distance = fast_vec_dist(D_L00_00166DC0_2ed950, sound_emitter + 0x40);
     playback_radius = *(f32 *)(sound_emitter + 0xC);
     if (reference_distance < playback_radius) {
         E_2ed950 *e = ENT_2ed950(playback_state->snd);
@@ -2276,14 +2276,14 @@ typedef struct {
 extern u8 D_L00_00166DC0_2edad8[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern u8 D_0013E550_2edad8[] __asm__("D_0013E550");
 extern void sub_2edad8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_2edad8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void mul_2edad8(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern f32 fabs_2edad8(f32) __asm__("FUN_001f99c0");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern s32 tick_2edad8(void *) __asm__("FUN_001f9740");
-extern s32 play_2edad8(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
+extern s32 play_voice(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 irand_2edad8(s32) __asm__("FUN_00213260");
-extern s32 scale_2edad8(s32) __asm__("FUN_001f96f8");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) __asm__("FUN_L00_002edad8");
 
 void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) {
@@ -2304,32 +2304,32 @@ void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) {
     }
     sub_2edad8(&reference_position_delta, D_L00_00166DC0_2edad8, sound_emitter + 0x40);
     reference_position_delta.f[3] = 0;
-    mul_2edad8(&transformed_reference_position_delta, &reference_position_delta, sound_emitter + 0x50);
-    mul_2edad8(&b, &uniform_range_vector, sound_emitter + 0x50);
-    f = fabs_2edad8(transformed_reference_position_delta.f[0]);
-    if (!(f <= fabs_2edad8(b.f[0]) + 1.0f))
+    transform_vector_by_basis(&transformed_reference_position_delta, &reference_position_delta, sound_emitter + 0x50);
+    transform_vector_by_basis(&b, &uniform_range_vector, sound_emitter + 0x50);
+    f = absolute_float(transformed_reference_position_delta.f[0]);
+    if (!(f <= absolute_float(b.f[0]) + 1.0f))
         return;
-    f = fabs_2edad8(transformed_reference_position_delta.f[1]);
-    if (!(f <= fabs_2edad8(b.f[1]) + 1.0f))
+    f = absolute_float(transformed_reference_position_delta.f[1]);
+    if (!(f <= absolute_float(b.f[1]) + 1.0f))
         return;
-    f = fabs_2edad8(transformed_reference_position_delta.f[2]);
-    if (!(f <= fabs_2edad8(b.f[2]) + 1.0f))
+    f = absolute_float(transformed_reference_position_delta.f[2]);
+    if (!(f <= absolute_float(b.f[2]) + 1.0f))
         return;
     sound_slot_entry = D_0013E550_2edad8 + playback_state->h * 0x70;
     if (*(u8 **)(sound_slot_entry + 0x8C) == sound_emitter && sound_slot_entry[0x74] != 0)
         return;
     if (tick_2edad8(&playback_state->timer) != 0) {
-        playback_state->h = play_2edad8(playback_state->snd, 0, sound_emitter, 0x400);
+        playback_state->h = play_voice(playback_state->snd, 0, sound_emitter, 0x400);
         if (playback_state->h != -1) {
             r.f[0] = random_float_between(-1.0f, 1.0f);
             r.f[1] = random_float_between(-1.0f, 1.0f);
             r.f[2] = random_float_between(-1.0f, 1.0f);
-            mul_2edad8(&r, &r, sound_emitter + 0x10);
-            add_2edad8(&r, &r, sound_emitter + 0x40);
+            transform_vector_by_basis(&r, &r, sound_emitter + 0x10);
+            fast_vec_add(&r, &r, sound_emitter + 0x40);
             qcopy(D_0013E550_2edad8 + 0x90 + playback_state->h * 0x70, &r);
         }
         if (playback_state->hi > 0) {
-            playback_state->timer = (f32)scale_2edad8(playback_state->lo + irand_2edad8(playback_state->hi - playback_state->lo)) * 60.0f;
+            playback_state->timer = (f32)scale_game_frames(playback_state->lo + random_integer_below(playback_state->hi - playback_state->lo)) * 60.0f;
         }
     } else {
         playback_state->h = -1;

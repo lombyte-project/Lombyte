@@ -9,7 +9,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0027C260.c: func_L12_0027C368), where it is exact; names translated to the US level program. */
 
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
@@ -33,7 +33,7 @@ void apply_linked_moby_relative_transforms(char *parent, char *list, int entry_c
             multiply_matrix(composed_rotation_matrix, parent_rotation_matrix, composed_rotation_matrix);
             matrix_to_euler(composed_rotation_matrix, linked_object + 0x40);
             transform_vector(rotated_offset, list + i * 0x30, parent_rotation_matrix);
-            add_vector_xyz(linked_object + 0x10, parent + 0x10, rotated_offset);
+            fast_vec_add(linked_object + 0x10, parent + 0x10, rotated_offset);
             update_entity(linked_object);
         }
     }
@@ -50,8 +50,8 @@ extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-extern void subtract_vector_xyz(void *, void *, void *);
-extern void vu_euler_rotation_basis(void *, void *);
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 
 void capture_linked_moby_relative_transforms(char *moby, char *arr, int entry_count) __asm__("FUN_L12_0027b268");
 
@@ -60,14 +60,14 @@ void capture_linked_moby_relative_transforms(char *moby, char *arr, int entry_co
     float inverse_moby_rotation_matrix[16];
     float relative_rotation_matrix[16];
     int i;
-    vu_euler_rotation_basis(moby_rotation_basis, moby + 0x40);
+    euler_rotation_basis(moby_rotation_basis, moby + 0x40);
     transpose_rotation_matrix(inverse_moby_rotation_matrix, moby_rotation_basis);
     for (i = 0; i < entry_count; i++) {
         char *entry = arr + i * 0x30;
         int linked_moby_index = *(int *)(entry + 0x20);
         if (linked_moby_index != -1) {
             char *linked_moby = D_L12_0015FFD8_p + (linked_moby_index << 8);
-            subtract_vector_xyz(entry, linked_moby + 0x10, moby + 0x10);
+            fast_vec_sub(entry, linked_moby + 0x10, moby + 0x10);
             transform_vector(entry, entry, inverse_moby_rotation_matrix);
             euler_rotation_matrix(relative_rotation_matrix, linked_moby + 0x40);
             multiply_matrix(relative_rotation_matrix, inverse_moby_rotation_matrix, relative_rotation_matrix);

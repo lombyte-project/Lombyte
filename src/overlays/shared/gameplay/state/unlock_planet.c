@@ -205,8 +205,8 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
 typedef float M4_260400[16] __attribute__((aligned(16)));
 extern char *FUN_L00_002603d0_c(char *) __asm__("FUN_L00_002603d0");
 void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
@@ -217,10 +217,10 @@ int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *in
     if (transform_record == 0)
         return 0;
     euler_rotation_matrix(basis_rotation_matrix, transform_record);
-    add_vector_xyz(output_position, input_position, transform_record + 0x10);
-    subtract_vector_xyz(output_position, output_position, reference_object + 0x10);
+    fast_vec_add(output_position, input_position, transform_record + 0x10);
+    fast_vec_sub(output_position, output_position, reference_object + 0x10);
     transform_vector_by_basis(output_position, output_position, basis_rotation_matrix);
-    add_vector_xyz(output_position, output_position, reference_object + 0x10);
+    fast_vec_add(output_position, output_position, reference_object + 0x10);
     euler_rotation_matrix(composed_rotation_matrix, input_rotation);
     multiply_matrix(composed_rotation_matrix, basis_rotation_matrix, composed_rotation_matrix);
     matrix_to_euler(composed_rotation_matrix, out);
@@ -274,7 +274,7 @@ int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002616E0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002603d0(char *);
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
@@ -289,7 +289,7 @@ int convert_pose_to_reference_local(int x, char *reference_object, float *input_
     float pad[12];
     if (FUN_L00_002603d0(reference_object) == 0)
         return 0;
-    subtract_vector_xyz(position_offset, input_position, reference_object + 0x10);
+    fast_vec_sub(position_offset, input_position, reference_object + 0x10);
     transpose_rotation_matrix(transposed_rotation_matrix, reference_object + 0xC0);
     transform_vector(output_position, position_offset, transposed_rotation_matrix);
     euler_rotation_matrix(composed_rotation_matrix, input_rotation);
@@ -622,7 +622,7 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
         spread[1] = velocity[1];
         spread[2] = 0.0f;
         fast_vec_normalize(spread, spread, 0.5f);
-        add_vector_xyz(position, position, spread);
+        fast_vec_add(position, position, spread);
         if (path_index >= 0) {
             gravity = frame_time_sq_macro * 10.8f * -0.5f;
             rise = velocity[2] - gravity;
@@ -637,17 +637,17 @@ void spawn_randomized_bolt_drop(struct Moby *moby, int min_bolts, int max_bolts,
                 }
             }
             fast_vec_scale(landing, velocity, time);
-            add_vector_xyz(landing, landing, &moby->pos);
+            fast_vec_add(landing, landing, &moby->pos);
             roots = FUN_L00_00261b48(path_index, &moby->pos, landing, path_point);
-            subtract_vector_xyz(landing, path_point, position);
+            fast_vec_sub(landing, path_point, position);
             landing[2] = 0.0f;
             fast_vec_normalize(quarter, landing, 0.25f);
-            subtract_vector_xyz(landing, landing, quarter);
+            fast_vec_sub(landing, landing, quarter);
             fast_vec_scale(landing, landing, 1.0f / time);
             velocity[0] = landing[0];
             velocity[1] = landing[1];
         }
-        add_vector_xyz(velocity, velocity, base_velocity);
+        fast_vec_add(velocity, velocity, base_velocity);
         if (fifties) {
             spawn_bolt_by_value(moby, position, velocity, flags, 50, counted);
             fifties--;

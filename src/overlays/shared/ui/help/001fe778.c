@@ -77,7 +77,7 @@ f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
-void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_c(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -181,7 +181,7 @@ void update_hero_ground_contact(void) {
         FUN_00125180_c(&hero.ground_normal, (u8 *)&HH.normal_x);
         hero.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&HH.normal_x);
         hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
-        subtract_vector_xyz(&ground_displacement_or_angles, &hero.ground_point, &hero.motion.pos);
+        fast_vec_sub(&ground_displacement_or_angles, &hero.ground_point, &hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&ground_displacement_or_angles, &hero.ground_normal)) {
             hero.ground_distance = -hero.ground_distance;
         }
@@ -214,7 +214,7 @@ d1:
         FUN_001f9a68_c(&hero.gravity_dir, &hero.gravity_dir, -1.0f);
         break;
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        subtract_vector_xyz(&hero.gravity_dir, &hero.motion.gravity_point, &hero.motion.pos);
+        fast_vec_sub(&hero.gravity_dir, &hero.motion.gravity_point, &hero.motion.pos);
         FUN_001f9bf8_c(&hero.gravity_dir, &hero.gravity_dir, 1.0f);
         break;
     }

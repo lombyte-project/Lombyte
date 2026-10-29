@@ -15,7 +15,7 @@ extern struct Moby *moby_table __asm__("D_L00_0015FFD8"); /* first moby */
 extern struct Moby *D_L00_0015FFDC; /* end of the moby table */
 extern s32 D_L00_00160540;
 extern struct HeroEase D_L00_0017A680[] NOT_SDA;
-extern void memset_words(void *, s32, s32) __asm__("FUN_001f97e8");
+extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern f32 probe_ground_height(Vec4f *, s32, f32) __asm__("FUN_00213508");
 extern void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
@@ -38,7 +38,7 @@ void initialize_hero(void) {
 
     for (i = 0; i < 7; i++)
         save[i] = hero.items[i].item_id;
-    memset_words(&hero, 0, 0x2310);
+    fill_transfer_words(&hero, 0, 0x2310);
     for (i = 0; i < 7; i++)
         save[i] = hero.items[i].item_id;
 

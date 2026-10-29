@@ -200,7 +200,7 @@ void update_trick_combo_hud(HudCounter *element) {
         break;
     }
 }
-extern int sprintf_alt(char *, const char *, ...) __asm__("FUN_00116248");
+extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
@@ -254,7 +254,7 @@ s32 draw_trick_combo_hud(char *element) {
         return *(s32 *)(element + 0x58);
     }
     if (state_bytes[2] != 0) {
-        sprintf_alt(text, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
+        sprintf(text, D_L05_0015F860, D_L05_0015FAD4 * 0x168);
         delay_left = convert_integer_to_float(state_bytes[1]);
         delay_total = scale_game_frames(*(s32 *)&trick_combo_hud_delay_reload_gp);
         blend = delay_left / (f32)delay_total;
@@ -268,7 +268,7 @@ s32 draw_trick_combo_hud(char *element) {
         if (state_bytes[2] == 1 || state_bytes[2] == 2) {
             font_print_center_large(trick_combo_rotation_text_center_x_gp + 1, trick_combo_rotation_text_y_gp + 1, shadow_color, text, -1);
             font_print_center_large(trick_combo_rotation_text_center_x_gp, trick_combo_rotation_text_y_gp, color, text, -1);
-            sprintf_alt(text, trick_combo_pose_count_format, D_L05_0015FAD8);
+            sprintf(text, trick_combo_pose_count_format, D_L05_0015FAD8);
             font_print_center_large(trick_combo_pose_count_center_x_gp + 1, trick_combo_pose_count_y_gp + 1, shadow_color, text, -1);
             font_print_center_large(trick_combo_pose_count_center_x_gp, trick_combo_pose_count_y_gp, color, text, -1);
         } else if (state_bytes[2] == 3) {
@@ -302,9 +302,9 @@ s32 draw_trick_combo_hud(char *element) {
                     }
                 }
                 D_L05_0015FB00 = D_L05_0015FB00 / repeats;
-                sprintf_alt(text, D_L05_0015F860, D_L05_0015FB00);
+                sprintf(text, D_L05_0015F860, D_L05_0015FB00);
                 draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp - 0x18, color, text);
-                sprintf_alt(text, trick_combo_trick_name_format, get_help_message_text(trick_index + 0x5092));
+                sprintf(text, trick_combo_trick_name_format, get_help_message_text(trick_index + 0x5092));
                 draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp, color, text);
             } else if (D_L05_0015FAD8 > 0) {
                 s32 count = 0;
@@ -317,15 +317,15 @@ s32 draw_trick_combo_hud(char *element) {
                 }
                 if (D_L05_0015FAD8 == 1) {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 10;
-                    sprintf_alt(text, D_L05_0015F860, D_L05_0015FB00);
+                    sprintf(text, D_L05_0015F860, D_L05_0015FB00);
                     draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp - 0x18, color, text);
-                    sprintf_alt(text, trick_combo_single_pose_flips_format, get_help_message_text(pose_ids[0] + 0x517E), D_L05_0015FAD4);
+                    sprintf(text, trick_combo_single_pose_flips_format, get_help_message_text(pose_ids[0] + 0x517E), D_L05_0015FAD4);
                     draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp, color, text);
                 } else {
                     D_L05_0015FB00 = D_L05_0015FAD4 * 20;
-                    sprintf_alt(text, D_L05_0015F860, D_L05_0015FB00);
+                    sprintf(text, D_L05_0015F860, D_L05_0015FB00);
                     draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp - 0x18, color, text);
-                    sprintf_alt(text, trick_combo_two_pose_flips_format, get_help_message_text(pose_ids[0] + 0x517E),
+                    sprintf(text, trick_combo_two_pose_flips_format, get_help_message_text(pose_ids[0] + 0x517E),
                                 get_help_message_text(pose_ids[1] + 0x517E), D_L05_0015FAD4);
                     draw_framed_text(trick_combo_reward_text_x_gp, trick_combo_reward_label_y_gp, color, text);
                 }
@@ -350,7 +350,7 @@ s32 draw_trick_combo_hud(char *element) {
         pulse = convert_integer_to_float(frame_number % blink_period) / (f32)blink_period;
         pulse = fast_sin(pulse * 6.283180236816406f - 3.141590118408203f);
         blink_color = fast_tween_color(trick_combo_pulsing_label_trough_color_gp, trick_combo_pulsing_label_peak_color_gp, pulse * 0.5f + 0.5f);
-        sprintf_alt(text, get_help_message_text(0x531A));
+        sprintf(text, get_help_message_text(0x531A));
         draw_framed_text(trick_combo_pulsing_label_x_gp + 1, trick_combo_pulsing_label_y_gp + 1, 0x80000000, text);
         draw_framed_text(trick_combo_pulsing_label_x_gp, trick_combo_pulsing_label_y_gp, blink_color, text);
     }

@@ -119,31 +119,31 @@ typedef struct {
 } Rot_cc2e8;
 
 extern unsigned char D_0013F350_cc2e8[] __asm__("D_0013F350");
-extern float vlen_cc2e8(void *) __asm__("FUN_001f9af0");
-extern float vlenxy_cc2e8(void *) __asm__("FUN_001f9b20");
-extern float vdist_cc2e8(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float lensq_cc2e8(void *) __asm__("FUN_L00_001ff430");
-extern float sqrt_cc2e8(float) __asm__("FUN_001f9988");
-extern float atan2_cc2e8(float, float) __asm__("FUN_001f9e90");
-extern float addrot_cc2e8(float, float) __asm__("FUN_001fa580");
-extern float ground_cc2e8(void *, int, float) __asm__("FUN_00213508");
-extern void vsub_cc2e8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void vadd_cc2e8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vscale_cc2e8(void *, void *, float) __asm__("FUN_001f9a68");
-extern void vdir_cc2e8(void *, void *, float) __asm__("FUN_001f9c48");
-extern void vclear_cc2e8(void *) __asm__("FUN_001f99f8");
-extern int frames_cc2e8(int) __asm__("FUN_001f96f8");
-extern int expired_cc2e8(int *) __asm__("FUN_001f9740");
-extern float turn_cc2e8(float, float, float, float, float, float *) __asm__("FUN_L00_00258110");
-extern void setvel_cc2e8(float, float, float, void *) __asm__("FUN_00214db0");
-extern int randint_cc2e8(int, int) __asm__("FUN_L00_00257b90");
-extern void spark_cc2e8(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern int sound_cc2e8(int, int, void *) __asm__("FUN_0022da68");
-extern int hit_cc2e8(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void damage_cc2e8(float, int, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
-extern void burst_cc2e8(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void sfx_cc2e8(int, int, void *, int) __asm__("FUN_L00_0028dc90");
-extern void kill_cc2e8(void *) __asm__("FUN_0020c828");
+extern float square_root(float) __asm__("FUN_001f9988");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
+extern float spring_turn(float, float, float, float, float, float *) __asm__("FUN_L00_00258110");
+extern void build_spherical_offset(float, float, float, void *) __asm__("FUN_00214db0");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
+extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern void spawn_nearby_effect(float, int, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
+extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
+extern void trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void rocket_update(char *m) __asm__("FUN_L10_002cc2e8");
 void rocket_update(char *rocket) {
@@ -174,18 +174,18 @@ void rocket_update(char *rocket) {
         rocket_position = rocket + 0x10;
         homing_target_state = D_0013F350_cc2e8;
         if ((unsigned char)(homing_target_state[0x20A4] - 1) < 2 && (tg = shot_data->target) == *(char **)(homing_target_state + 0x2080)) {
-            speed = vlen_cc2e8(shot_data);
+            speed = fast_vec_length(shot_data);
             qcopy(tp, tg + 0x10);
-            ground_aim_height = ground_cc2e8(tp, 0, 0.5f) + 0.2f;
+            ground_aim_height = probe_ground_height(tp, 0, 0.5f) + 0.2f;
             *(Q_cc2e8 *)hv = *(Q_cc2e8 *)(homing_target_state + 0x100);
             hv[2] = 0.0f;
             tp[2] = ground_aim_height;
             if (homing_target_state[0x20A4] == 2)
                 tp[2] = ground_aim_height + 2.0f;
-            vsub_cc2e8(target_displacement_or_damage_vector, tp, rocket_position);
+            fast_vec_sub(target_displacement_or_damage_vector, tp, rocket_position);
             intercept_time_squared_coefficient = speed * speed - lensq_cc2e8(hv);
             intercept_time_linear_coefficient = (hv[0] * target_displacement_or_damage_vector[0] + hv[1] * target_displacement_or_damage_vector[1] + hv[2] * target_displacement_or_damage_vector[2]) * -2.0f;
-            discriminant_sqrt = sqrt_cc2e8(intercept_time_linear_coefficient * intercept_time_linear_coefficient - intercept_time_squared_coefficient * 4.0f * -lensq_cc2e8(target_displacement_or_damage_vector));
+            discriminant_sqrt = square_root(intercept_time_linear_coefficient * intercept_time_linear_coefficient - intercept_time_squared_coefficient * 4.0f * -lensq_cc2e8(target_displacement_or_damage_vector));
             intercept_time_plus_root = (-intercept_time_linear_coefficient + discriminant_sqrt) / (intercept_time_squared_coefficient + intercept_time_squared_coefficient);
             intercept_time_minus_root = (-intercept_time_linear_coefficient - discriminant_sqrt) / (intercept_time_squared_coefficient + intercept_time_squared_coefficient);
             if (intercept_time_plus_root > 0.0f && intercept_time_minus_root > 0.0f) {
@@ -201,58 +201,58 @@ void rocket_update(char *rocket) {
                     intercept_time = intercept_time_minus_root;
             }
             if (intercept_time > 0.0f) {
-                vscale_cc2e8(aim, hv, intercept_time);
-                vadd_cc2e8(aim, aim, target_displacement_or_damage_vector);
-                yaw = atan2_cc2e8(aim[0], aim[1]);
-                pitch = -atan2_cc2e8(vlenxy_cc2e8(aim), aim[2]);
+                fast_vec_scale(aim, hv, intercept_time);
+                fast_vec_add(aim, aim, target_displacement_or_damage_vector);
+                yaw = fast_arc_tan(aim[0], aim[1]);
+                pitch = -fast_arc_tan(vector_length_xy(aim), aim[2]);
             } else {
-                yaw = atan2_cc2e8(target_displacement_or_damage_vector[0], target_displacement_or_damage_vector[1]);
-                pitch = -atan2_cc2e8(vlenxy_cc2e8(target_displacement_or_damage_vector), target_displacement_or_damage_vector[2]);
+                yaw = fast_arc_tan(target_displacement_or_damage_vector[0], target_displacement_or_damage_vector[1]);
+                pitch = -fast_arc_tan(vector_length_xy(target_displacement_or_damage_vector), target_displacement_or_damage_vector[2]);
             }
-            ((Rot_cc2e8 *)rocket)->rz = turn_cc2e8(((Rot_cc2e8 *)rocket)->rz, yaw, frame_time_sq * 6.2831855f,
+            ((Rot_cc2e8 *)rocket)->rz = spring_turn(((Rot_cc2e8 *)rocket)->rz, yaw, frame_time_sq * 6.2831855f,
                                               frame_time_sq * 3.1415927f, frame_time * 6.2831855f,
                                               &shot_data->yawSpeed);
-            ((Rot_cc2e8 *)rocket)->ry = turn_cc2e8(((Rot_cc2e8 *)rocket)->ry, pitch, frame_time_sq * 6.2831855f,
+            ((Rot_cc2e8 *)rocket)->ry = spring_turn(((Rot_cc2e8 *)rocket)->ry, pitch, frame_time_sq * 6.2831855f,
                                               frame_time_sq * 3.1415927f, frame_time * 6.2831855f,
                                               &shot_data->pitchSpeed);
-            ((Rot_cc2e8 *)rocket)->rx = addrot_cc2e8(((Rot_cc2e8 *)rocket)->rx, frame_time * 6.2831855f);
-            setvel_cc2e8(speed, ((Rot_cc2e8 *)rocket)->rz, -((Rot_cc2e8 *)rocket)->ry, shot_data);
+            ((Rot_cc2e8 *)rocket)->rx = fast_add_rotations(((Rot_cc2e8 *)rocket)->rx, frame_time * 6.2831855f);
+            build_spherical_offset(speed, ((Rot_cc2e8 *)rocket)->rz, -((Rot_cc2e8 *)rocket)->ry, shot_data);
         }
-        vclear_cc2e8(spark_zero_vector);
-        spark_cc2e8(rocket_position, spark_zero_vector, 0x6F00AFFF, 0xFF, frames_cc2e8(randint_cc2e8(15, 22)), 0x28,
-                    randint_cc2e8(20, 35), 1);
-        spark_cc2e8(rocket_position, spark_zero_vector, 0x1FFFFFFF, 0x4F4F4F, frames_cc2e8(randint_cc2e8(30, 60)), 0x28,
-                    randint_cc2e8(50, 75), 0);
-        dist = vdist_cc2e8(rocket_position, &hero.motion.pos);
-        vadd_cc2e8(rocket_position, rocket_position, shot_data);
+        clear_u64_value(spark_zero_vector);
+        spawn_effect(rocket_position, spark_zero_vector, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between(15, 22)), 0x28,
+                    random_int_between(20, 35), 1);
+        spawn_effect(rocket_position, spark_zero_vector, 0x1FFFFFFF, 0x4F4F4F, scale_game_frames(random_int_between(30, 60)), 0x28,
+                    random_int_between(50, 75), 0);
+        dist = fast_vec_dist(rocket_position, &hero.motion.pos);
+        fast_vec_add(rocket_position, rocket_position, shot_data);
         if (shot_data->warned == 0 && shot_data->passed != 0 && shot_data->dist < dist && dist < 5.0f) {
-            sound_cc2e8(0, 0, rocket);
+            allocate_voice_for_target_entry(0, 0, rocket);
             shot_data->warned = 1;
         }
         if (dist < shot_data->dist)
             shot_data->passed = 1;
         shot_data->dist = dist;
-        if (hit_cc2e8(rocket_position, previous_rocket_position, 0x10, shot_data->owner, 0)) {
+        if (collision_line(rocket_position, previous_rocket_position, 0x10, shot_data->owner, 0)) {
             tb = ground_hit;
             if (*(int *)(tb + 0x18) != shot_data->owner) {
                 if (*(int *)(tb + 0x18) != 0) {
-                    vdir_cc2e8(target_displacement_or_damage_vector, shot_data, 1.0f);
+                    set_vector_length_xy(target_displacement_or_damage_vector, shot_data, 1.0f);
                     shot_data->vel[2] = 1.0f;
-                    damage_cc2e8(1.0f, *(int *)(tb + 0x18), rocket, 0x10003, tb + 0x20, target_displacement_or_damage_vector);
+                    spawn_nearby_effect(1.0f, *(int *)(tb + 0x18), rocket, 0x10003, tb + 0x20, target_displacement_or_damage_vector);
                 }
                 rocket[0x20] = 2;
             }
         }
-        if (expired_cc2e8(&shot_data->timer))
+        if (fast_dec_timer(&shot_data->timer))
             rocket[0x20] = 2;
         break;
     case ROCKET_STATE_BURST:
         if (current_level_index != 10)
-            burst_cc2e8(rocket, rocket + 0x10, -1, 0.25f, 13.0f);
+            cart_burst(rocket, rocket + 0x10, -1, 0.25f, 13.0f);
         else
-            burst_cc2e8(rocket, rocket + 0x10, -1, 0.25f, 0.0f);
-        sfx_cc2e8(0, 0, rocket, 0x99);
-        kill_cc2e8(rocket);
+            cart_burst(rocket, rocket + 0x10, -1, 0.25f, 0.0f);
+        trooper_play_sound(0, 0, rocket, 0x99);
+        mark_moby_for_removal(rocket);
         break;
     }
 }

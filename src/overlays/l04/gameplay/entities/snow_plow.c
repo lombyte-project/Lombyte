@@ -57,11 +57,11 @@ extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
 extern void FUN_L00_00258278(void *, float, void *, float, float, float);
@@ -189,8 +189,8 @@ void snow_plow_update(struct Moby *moby) {
                 *(short *)(data + 0x14a) = scale_game_frames(300);
             }
             fast_vec_sub(&delta, D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x30, &moby->pos);
-            normalize_vector_xyz(&delta, &delta, frame_time * 3.0f);
-            add_vector_xyz(&moby->pos, &moby->pos, &delta);
+            fast_vec_normalize(&delta, &delta, frame_time * 3.0f);
+            fast_vec_add(&moby->pos, &moby->pos, &delta);
             break;
         case SNOW_PLOW_WAIT_BEFORE_RETURN:
             if (*(short *)(data + 0x14a) == 0) {
@@ -219,8 +219,8 @@ void snow_plow_update(struct Moby *moby) {
                 length -= step; /* distance left after this step */
                 speed = step;
             }
-            normalize_vector_xyz(return_delta_ptr, return_delta_ptr, speed);
-            add_vector_xyz(&moby->pos, &moby->pos, &delta);
+            fast_vec_normalize(return_delta_ptr, return_delta_ptr, speed);
+            fast_vec_add(&moby->pos, &moby->pos, &delta);
             break;
         }
     }
@@ -264,7 +264,7 @@ void snow_plow_update(struct Moby *moby) {
             delta.f[0] = 0.5f;
             delta.f[2] = -5.0f;
             transform_vector_by_basis(&delta, &delta, &moby->rot_row0);
-            add_vector_xyz(&other->pos, &moby->pos, &delta);
+            fast_vec_add(&other->pos, &moby->pos, &delta);
             qcopy(&other->rot, &moby->rot);
             other->rot.y = fast_add_rotations(other->rot.y, 1.5707964f);
             break;
@@ -272,7 +272,7 @@ void snow_plow_update(struct Moby *moby) {
             delta.q = 0;
             delta.f[2] = -2.0f;
             transform_vector_by_basis(&delta, &delta, &moby->rot_row0);
-            add_vector_xyz(&other->pos, &moby->pos, &delta);
+            fast_vec_add(&other->pos, &moby->pos, &delta);
             qcopy(&other->rot, &moby->rot);
             break;
         default:
@@ -298,14 +298,14 @@ hit:
             sphere.flags = 0x810000;
             sphere.scale = 1.0f;
             sphere.moby = moby;
-            clear_vector(&sphere_pos);
+            clear_u64_value(&sphere_pos);
             sphere.zero = 0;
             collect_mobies_in_sphere(&moby->pos, 4.0f, 0x10, moby, &sphere_pos);
         case SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ONE: case SNOW_PLOW_CLASS_OFFSET_WITH_QUARTER_TURN_LINKED_MOBY: case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_ROTATING_MANIPULATORS: case SNOW_PLOW_CLASS_OFFSET_WITH_HIT_SPAWNS_647_648_649: case SNOW_PLOW_CLASS_OFFSET_WITH_ALIGNED_LINKED_MOBY: case SNOW_PLOW_CLASS_OFFSET_WITH_FOUR_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ONE: case SNOW_PLOW_CLASS_OFFSET_WITH_THREE_HIT_SPAWNS_AND_TARGET_VOICE_SELECTOR_ZERO: case SNOW_PLOW_CLASS_OFFSET_WITH_TARGET_VOICE_SELECTOR_ZERO:
             delta.q = 0;
             delta.f[2] = 0.75f;
-            clear_vector(&sphere_pos);
-            add_vector_xyz(&delta, &delta, &moby->pos);
+            clear_u64_value(&sphere_pos);
+            fast_vec_add(&delta, &delta, &moby->pos);
             func_L00_0025F4A8_alt(moby, &sphere_pos, &delta, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f,
                 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
             if (moby->oclass == 0x1f2 || moby->oclass == 0x22b) allocate_voice_for_target_entry(0, 0, moby);
@@ -316,28 +316,28 @@ hit:
         case SNOW_PLOW_CLASS_OFFSET_WITH_TWO_POINT_CART_BURST:
             sphere_pos.q = 0;
             sphere_pos.f[2] = 0.75f;
-            clear_vector(&sphere);
+            clear_u64_value(&sphere);
             moby_point_position(moby, 0, &delta);
-            add_vector_xyz(&delta, &delta, &sphere_pos);
+            fast_vec_add(&delta, &delta, &sphere_pos);
             cart_burst(moby, &delta, -1, 1.0f, 13.0f);
             moby_point_position(moby, 1, &delta);
-            add_vector_xyz(&delta, &delta, &sphere_pos);
+            fast_vec_add(&delta, &delta, &sphere_pos);
             cart_burst(moby, &delta, -1, 1.0f, 13.0f);
-            add_vector_xyz(&delta, &sphere_pos, &moby->pos);
+            fast_vec_add(&delta, &sphere_pos, &moby->pos);
             func_L00_0025F4A8_alt(moby, &sphere, &delta, 0.0f, 0.0f, 20, 5, 4, 2.0f, 1.0f,
                 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
             allocate_voice_for_target_entry(1, 0, moby);
             sphere2.flags = 0x810000;
             sphere2.scale = 2.0f;
             sphere2.moby = moby;
-            clear_vector(&sphere2.vector);
+            clear_u64_value(&sphere2.vector);
             sphere2.zero = 0;
             collect_mobies_in_sphere(&moby->pos, 6.0f, 0x10, moby, &sphere2);
             *(int *)(data + 0x170) = scale_game_frames(600);
             *(int *)(data + 0x174) = 1;
             break;
         }
-        scale_vector_xyz(&delta, &moby->rot_row0, frame_scale * 0.075f);
+        fast_vec_scale(&delta, &moby->rot_row0, frame_scale * 0.075f);
         delta.f[2] += frame_scale * 0.08f;
         if (moby->oclass == 0x1d2) {
             timer = scale_game_frames(90);
@@ -487,7 +487,7 @@ extern short floating_platform_ring_rotation_rate_degrees __asm__("D_L04_0016195
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 
 void floating_platform_update(char *moby) __asm__("FUN_L04_002cdda0");
@@ -541,7 +541,7 @@ void floating_platform_update(char *moby) {
         break;
     }
     }
-    subtract_vector_xyz(delta, moby + 0x10, old);
+    fast_vec_sub(delta, moby + 0x10, old);
     update_entity_matrix(data + 0x60, delta, moby + 0x40, moby + 0x40);
 }
 
@@ -621,14 +621,14 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void clear_vector(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void emit_woodcut_bot_death_effects(void *moby) __asm__("FUN_L04_002d1608");
 
 void emit_woodcut_bot_death_effects(void *moby) {
     char joint_world_position[16];
     char zero_vector[16];
-    clear_vector(zero_vector);
+    clear_u64_value(zero_vector);
     moby_point_position(moby, 12, joint_world_position);
     func_L00_0025F4A8_alt(moby, zero_vector, joint_world_position, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1, 15.0f,
                           1, 1, -1, 0);
@@ -747,7 +747,7 @@ extern char D_L04_00166F40[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L04_0015F580[] __attribute__((section(".sdata")));
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -788,12 +788,12 @@ extern void reset_walker_gait_helpers(void *) __asm__("FUN_L00_002a1538");
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void initialize_woodcut_bot_movement_data(void *) __asm__("FUN_L04_002d1418");
-extern void add_vector_xyz(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void normalize_vector_xyz(void *, void *, float);
-extern void scale_vector_xyz(void *, void *, float);
-extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 void emit_woodcut_bot_death_effects(void *m) __asm__("FUN_L04_002d1608");
@@ -921,7 +921,7 @@ void woodcut_bot_update(WBMoby *m) {
                 FUN_L00_00257470(m, 0, -1);
                 d->fB7 = 0x78;
                 trooper_anim_update(m, d->fB0);
-                d->f3E4 = (2.0f / multiply_global_factor_ed64(15.0f)) * 2.0f;
+                d->f3E4 = (2.0f / scale_time(15.0f)) * 2.0f;
                 break;
             case WOODCUT_BOT_REACTION_HIT_RECOVERY_AND_REPOSITION:
             case WOODCUT_BOT_REACTION_HIT_RECOVERY_WITH_MELEE_WINDOW_GUARD:
@@ -935,9 +935,9 @@ void woodcut_bot_update(WBMoby *m) {
                     m->state = 9;
                     hit_source_moby_class = *(short *)(*(char **)(p + 0x20) + 0xA6);
                     if (hit_source_moby_class == 0x131 || hit_source_moby_class == 0xB0) {
-                        d->f3E4 = (2.0f / multiply_global_factor_ed64(15.0f)) * 0.5f;
+                        d->f3E4 = (2.0f / scale_time(15.0f)) * 0.5f;
                     } else {
-                        d->f3E4 = 2.0f / multiply_global_factor_ed64(15.0f);
+                        d->f3E4 = 2.0f / scale_time(15.0f);
                     }
                     *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
                     trooper_knockback_arc(v, &angle, &d->f3E4, &one);
@@ -952,7 +952,7 @@ void woodcut_bot_update(WBMoby *m) {
                 blend_moby_animation(m, 6, 0, scale_game_frames(10));
                 reset_walker_gait_helpers(d->f160);
                 m->state = 1;
-                d->f3E4 = 2.0f / multiply_global_factor_ed64(15.0f);
+                d->f3E4 = 2.0f / scale_time(15.0f);
                 *(OvlQuad *)v = *(OvlQuad *)(p + 0x10);
                 trooper_knockback_arc(v, &angle, &d->f3E4, &one);
                 m->rot[2] = fast_add_rotations(3.1415927f, angle);
@@ -989,14 +989,14 @@ void woodcut_bot_update(WBMoby *m) {
             melee_hit_query.f14 = 0x10001;
             melee_hit_query.f1C = 1.0f;
             melee_hit_query.m = m;
-            subtract_vector_xyz(&melee_hit_query, &hero.motion.pos, pos);
-            normalize_vector_xyz(&melee_hit_query, &melee_hit_query, frame_time * 5.0f);
+            fast_vec_sub(&melee_hit_query, &hero.motion.pos, pos);
+            fast_vec_normalize(&melee_hit_query, &melee_hit_query, frame_time * 5.0f);
             melee_hit_query.f20 = 1;
             transform_scaled_vertex_batch(m, 6, &joints, pts);
             for (i = 0; i < 5; i++)
                 coll_line_fix(pts[i], pts[i + 1], 9, m, &melee_hit_query);
-            add_vector_xyz(mid, pts[0], pts[4]);
-            scale_vector_xyz(mid, mid, 0.5f);
+            fast_vec_add(mid, pts[0], pts[4]);
+            fast_vec_scale(mid, mid, 0.5f);
             collect_mobies_in_sphere(mid, FUN_001f9b48(pts[0], pts[4]) * 0.5f, 0x10, m, &melee_hit_query);
             moby_point_position(m, 0x11, mid);
             collect_mobies_in_sphere(mid, 0.5f, 0x10, m, &melee_hit_query);
@@ -1107,7 +1107,7 @@ void woodcut_bot_update(WBMoby *m) {
                 debris_horizontal_step[0] = fast_cos(m->rot[2]) * -(random_float_between(5.0f, 10.0f) * frame_time);
                 debris_horizontal_step[1] = fast_sin(m->rot[2]) * -(random_float_between(5.0f, 10.0f) * frame_time);
                 debris_horizontal_step[2] = 0.0f;
-                normalize_vector_xyz(upward_biased_random_direction, upward_biased_random_direction, frame_time * 3.0f);
+                fast_vec_normalize(upward_biased_random_direction, upward_biased_random_direction, frame_time * 3.0f);
                 upward_biased_random_direction[2] += frame_time * 3.0f;
                 add_vectors(mtx, debris_horizontal_step, upward_biased_random_direction);
                 rot[0] = random_angle_radians();
@@ -1177,7 +1177,7 @@ void woodcut_bot_update(WBMoby *m) {
             v[1] = fast_sin(m->rot[2]) * 2.0f;
             v[2] = 0.0f;
             p = (unsigned char *)v;
-            add_vector_xyz(p, p, pos);
+            fast_vec_add(p, p, pos);
             if (point_in_path_xy(p, D_L04_001B0630[d->f3DC] + 4, *D_L04_001B0630[d->f3DC]) == 0) {
                 if (excited && point_in_path_xy(selected_target_position, D_L04_001B0630[d->f3DC] + 4,
                                                 *D_L04_001B0630[d->f3DC]) == 0) {
@@ -1225,7 +1225,7 @@ void woodcut_bot_update(WBMoby *m) {
                     v[0] = fast_cos(m->rot[2]) * 2.0f;
                     v[1] = fast_sin(m->rot[2]) * 2.0f;
                     v[2] = 0.0f;
-                    add_vector_xyz(v, v, pos);
+                    fast_vec_add(v, v, pos);
                     if (point_in_path_xy(v, D_L04_001B0630[d->f3DC] + 4,
                                          *D_L04_001B0630[d->f3DC]) == 0) {
                         d->f3D0 = 0.0f;
@@ -1294,7 +1294,7 @@ void woodcut_bot_update(WBMoby *m) {
                                                  fast_arc_tan(m->pos[0] - h->motion.pos.f[0],
                                                               m->pos[1] - h->motion.pos.f[1]));
                         build_spherical_offset(v, 6.0f, candidate_reposition_bearing, m->rot[1]);
-                        add_vector_xyz(v, v, pos);
+                        fast_vec_add(v, v, pos);
                         if (point_in_path_xy(v, D_L04_001B0630[d->f3DC] + 4,
                                              *D_L04_001B0630[d->f3DC]) != 0) {
                             found = 1;
@@ -1332,14 +1332,14 @@ void woodcut_bot_update(WBMoby *m) {
                         d->f3D8 = reposition_step_limit;
                     }
                     build_spherical_offset(v, d->f3D8, d->f3D4, m->rot[1]);
-                    add_vector_xyz(pos, pos, v);
+                    fast_vec_add(pos, pos, v);
                     m->rot[2] = spring_turn(
                         m->rot[2], fast_arc_tan(selected_target_position[0] - m->pos[0], selected_target_position[1] - m->pos[1]), &d->f3D0,
                         frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
                 } else if (d->f3D8 > 0.0f) {
                     d->f3D8 -= frame_time_sq * 200.0f;
                     build_spherical_offset(v, d->f3D8, d->f3D4, m->rot[1]);
-                    add_vector_xyz(pos, pos, v);
+                    fast_vec_add(pos, pos, v);
                     m->rot[2] = spring_turn(
                         m->rot[2], fast_arc_tan(selected_target_position[0] - m->pos[0], selected_target_position[1] - m->pos[1]), &d->f3D0,
                         frame_time_sq * 3.1415927f, frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
@@ -1400,8 +1400,8 @@ void woodcut_bot_update(WBMoby *m) {
                                          m->pos[1] - h->motion.pos.f[1])) *
                    d->f3E4;
             recoil_scratch[2] = 0.0f;
-            add_vector_xyz(recoil_scratch, recoil_scratch, pos);
-            d->f3E4 += -2.0f / (multiply_global_factor_ed64(15.0f) * multiply_global_factor_ed64(15.0f));
+            fast_vec_add(recoil_scratch, recoil_scratch, pos);
+            d->f3E4 += -2.0f / (scale_time(15.0f) * scale_time(15.0f));
             FUN_L00_00258490(m, pos, recoil_scratch, 1, 0.25f, 1.0f, 0.75f, 0.87266463f);
         }
         d->f3C8 *= 0.96f;
@@ -1435,8 +1435,8 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_L00_00200260(float, float);
 extern int *D_L04_001B0630[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern char *D_L04_0015FFD0[] __attribute__((section(".sdata")));
@@ -1463,9 +1463,9 @@ void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {
     if (path_interpolation_factor == 0.0f)
         second_point_index = 0;
     second_point_index += first_point_index;
-    scale_vector_xyz(weighted_first_point, (char *)path_data + (first_point_index * 16 + 0x10), one - path_interpolation_factor);
-    scale_vector_xyz(weighted_second_point, (char *)path_data + (second_point_index * 16 + 0x10), path_interpolation_factor);
-    add_vector_xyz(moby + 0x10, weighted_first_point, weighted_second_point);
+    fast_vec_scale(weighted_first_point, (char *)path_data + (first_point_index * 16 + 0x10), one - path_interpolation_factor);
+    fast_vec_scale(weighted_second_point, (char *)path_data + (second_point_index * 16 + 0x10), path_interpolation_factor);
+    fast_vec_add(moby + 0x10, weighted_first_point, weighted_second_point);
     qcopy(destination_moby + 0x10, moby + 0x10);
 }
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -1524,44 +1524,44 @@ void leaf_update(struct Moby *moby) {
         moby->scale = 0.0f;
         motion = (float *)moby->pvars;
         initialDirection.q = direction.q;
-        normalize_vector_xyz(&initialDirection, &initialDirection, leaf_motion_parameters[5] / 5.0f);
+        fast_vec_normalize(&initialDirection, &initialDirection, leaf_motion_parameters[5] / 5.0f);
         motion[0] = leaf_motion_parameters[5] * fast_cos(leaf_motion_parameters[1]);
         motion[1] = leaf_motion_parameters[5] * fast_sin(leaf_motion_parameters[1]);
         motion[2] = frame_time * -0.5f;
-        normalize_vector_xyz(&moby->rot, &initialDirection, 3.1415927f);
-        normalize_vector_xyz(motion + 8, &initialDirection, 0.098174773f);
-        normalize_vector_xyz(motion + 4, &initialDirection, leaf_motion_parameters[5] * 0.5f);
+        fast_vec_normalize(&moby->rot, &initialDirection, 3.1415927f);
+        fast_vec_normalize(motion + 8, &initialDirection, 0.098174773f);
+        fast_vec_normalize(motion + 4, &initialDirection, leaf_motion_parameters[5] * 0.5f);
         *(int *)(motion + 16) = *(int *)(motion + 17) = random_int_between(720, 1200);
         moby->state = 2;
         return;
     case LEAF_UPDATE_MOTION:
         fast_dec_timer((int *)(data + 0x44));
-        normalize_vector_xyz(&random, &random, leaf_motion_parameters[5] / 10.0f);
-        add_vector_xyz(data + 0x10, data + 0x10, &random);
-        normalize_vector_xyz(&work, data + 0x10, 5.0f);
-        normalize_vector_xyz(data + 0x10, data + 0x10, leaf_motion_parameters[5] * 0.5f);
-        add_vector_xyz(&work, &work, &moby->pos);
+        fast_vec_normalize(&random, &random, leaf_motion_parameters[5] / 10.0f);
+        fast_vec_add(data + 0x10, data + 0x10, &random);
+        fast_vec_normalize(&work, data + 0x10, 5.0f);
+        fast_vec_normalize(data + 0x10, data + 0x10, leaf_motion_parameters[5] * 0.5f);
+        fast_vec_add(&work, &work, &moby->pos);
         if (collision_line(&old, &work, 6, 0, 0) && !random_integer_below(8)) {
             reflect_vector(data + 0x10, data + 0x10, D_L04_00173FE0 + 0x20);
             *(float *)(data + 0x18) += leaf_motion_parameters[5] / 10.0f;
         }
-        add_vector_xyz(data, data, data + 0x10);
+        fast_vec_add(data, data, data + 0x10);
         work.f[0] = leaf_motion_parameters[5] * fast_cos(leaf_motion_parameters[1]);
         work.f[1] = leaf_motion_parameters[5] * fast_sin(leaf_motion_parameters[1]);
         work.f[2] = frame_time * -0.5f;
-        scale_vector_xyz(&work, &work, 0.4f);
-        scale_vector_xyz(data, data, 0.6f);
-        add_vector_xyz(data, &work, data);
-        add_vector_xyz(&moby->pos, &moby->pos, data);
+        fast_vec_scale(&work, &work, 0.4f);
+        fast_vec_scale(data, data, 0.6f);
+        fast_vec_add(data, &work, data);
+        fast_vec_add(&moby->pos, &moby->pos, data);
         if (collision_line(&old, &moby->pos, 6, 0, 0)) {
             qcopy(&moby->pos, D_L04_00173FE0);
             reflect_vector(data, data, D_L04_00173FE0 + 0x20);
-            scale_vector_xyz(data, data, 0.25f);
-            add_vector_xyz(&moby->pos, &moby->pos, data);
+            fast_vec_scale(data, data, 0.25f);
+            fast_vec_add(&moby->pos, &moby->pos, data);
             *(float *)(data + 8) += leaf_motion_parameters[5] / 5.0f;
         }
         if (leaf_motion_parameters[5] < speed)
-            normalize_vector_xyz(data, data, leaf_motion_parameters[5]);
+            fast_vec_normalize(data, data, leaf_motion_parameters[5]);
         {
             float amount = frame_time * -0.5f;
             if (amount < *(float *)(data + 8))
@@ -1574,7 +1574,7 @@ void leaf_update(struct Moby *moby) {
         moby->rot.z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x28));
         if (*(int *)(data + 0x40) - scale_game_frames(10) < *(int *)(data + 0x44)) {
             amount = convert_integer_to_float(*(int *)(data + 0x44) - *(int *)(data + 0x40));
-            moby->scale = (*(float *)(data + 0x4c) * amount) / multiply_global_factor_ed64(10.0f);
+            moby->scale = (*(float *)(data + 0x4c) * amount) / scale_time(10.0f);
         } else {
             if (*(int *)(data + 0x44) < scale_game_frames(100))
                 moby->scale *= 0.99f;

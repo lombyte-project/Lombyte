@@ -142,7 +142,7 @@ extern void register_object_render_class(u8 *, u8 *, u8 *, s32) __asm__("func_00
 extern void register_shrub_render_class(u8 *, u8 *, u8 *, u8 *, s32) __asm__("func_00203B08");
 extern void initialize_tfrag_render_data(u8 *, u8 *) __asm__("func_002040E0");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
-extern s32 fast_decompress(u8 *, u8 *) __asm__("FUN_0020b618");
+extern s32 decompress_wad(u8 *, u8 *) __asm__("FUN_0020b618");
 extern void start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
 extern volatile unsigned int load(s32, s32, s32) __asm__("func_00216828");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
@@ -198,7 +198,7 @@ void transition_load_wad(void)
   start_audio_stream_read(D_001940C0.hdr + 0x1000000, disc_table.unk14E8.sector, disc_table.unk14E8.size);
   update_audio_stream_until_idle(1);
   FlushCache(0);
-  size = fast_decompress(D_001940C0.hdr + 0x1000000, D_001940C0.hdr);
+  size = decompress_wad(D_001940C0.hdr + 0x1000000, D_001940C0.hdr);
   FlushCache(0);
   hdr = (WadHeader *) D_001940C0.hdr;
   upload_texture_images(((u8 *) hdr) + hdr->x0, hdr->x8, ((u8 *) hdr) + hdr->xC);

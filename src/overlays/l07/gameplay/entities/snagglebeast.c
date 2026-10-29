@@ -25,7 +25,7 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 
 static inline int tint_color(int color) {
@@ -113,8 +113,8 @@ void draw_snagglebeast_sphere_quad_strips(char *moby, int phase, float speed, fl
                 quad.positions[2].f[2] = quad.positions[2].f[2] - 0.375f;
                 quad.positions[3].f[2] = quad.positions[3].f[2] - 0.375f;
             }
-            add_vector_xyz(&quad.positions[2], &quad.positions[2], &origin);
-            add_vector_xyz(&quad.positions[3], &quad.positions[3], &origin);
+            fast_vec_add(&quad.positions[2], &quad.positions[2], &origin);
+            fast_vec_add(&quad.positions[3], &quad.positions[3], &origin);
             draw_geometry_quad(&quad, 0, 1);
         }
     }
@@ -154,7 +154,7 @@ extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void draw_snagglebeast_rope_attack_layer(char *moby, float radius, int phase, float speed, int color) __asm__("FUN_L07_00312e70");
 
@@ -219,7 +219,7 @@ void draw_snagglebeast_rope_attack_layer(char *moby, float radius, int phase, fl
         offset[2] = radius * fast_sin(wrapped);
         offset[0] = 0.0f;
         transform_vector_by_basis(offset, offset, moby + 0xC0);
-        add_vector_xyz(&quad.positions[3], vars + 0x140, offset);
+        fast_vec_add(&quad.positions[3], vars + 0x140, offset);
         if (angle != -3.1415927f) {
             draw_geometry_quad(&quad, 0, 1);
             qcopy(&inner.positions[2], &quad.positions[2]);
@@ -237,15 +237,15 @@ typedef union {
     float f[4];
 } RopeQuad;
 typedef float RopeVec[4] __attribute__((aligned(16)));
-extern void normalize_vector_xyz(void *, void *, float);
-extern void add_vector_xyz(void *, void *, void *);
-extern void subtract_vector_xyz(void *, void *, void *);
-extern void scale_vector_xyz(void *, void *, float);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
+extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern void make_hit_descriptor(void *, void *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_00258278(struct Moby *, f32, void *, f32, f32, f32);
 extern void draw_snagglebeast_rope_attack_layer(char *, float, int, float, int) __asm__("FUN_L07_00312e70");
@@ -263,18 +263,18 @@ void draw_and_probe_snagglebeast_rope_attack(char *moby) {
     data = *(char **)(moby + 0x78);
     qzero(&rope_offset);
     one = 1.0f;
-    normalize_vector_xyz(&rope_offset, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
-    add_vector_xyz(data + 0x140, &rope_offset, data + 0x110);
-    normalize_vector_xyz(&rope_offset, &rope_offset, *(float *)(data + 0x16C));
-    add_vector_xyz(data + 0x120, &rope_offset, data + 0x110);
+    fast_vec_normalize(&rope_offset, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
+    fast_vec_add(data + 0x140, &rope_offset, data + 0x110);
+    fast_vec_normalize(&rope_offset, &rope_offset, *(float *)(data + 0x16C));
+    fast_vec_add(data + 0x120, &rope_offset, data + 0x110);
     draw_snagglebeast_rope_attack_layer(moby, one, 0, one, 0x20000080);
     draw_snagglebeast_rope_attack_layer(moby, 0.7f, 10, 2.0f, 0x28008080);
     draw_snagglebeast_rope_attack_layer(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
-    subtract_vector_xyz(rope_direction, data + 0x120, data + 0x110);
-    normalize_vector_xyz(rope_direction, rope_direction, one);
+    fast_vec_sub(rope_direction, data + 0x120, data + 0x110);
+    fast_vec_normalize(rope_direction, rope_direction, one);
     make_hit_descriptor(blk, moby, 0x30000, 1.00012302f, rope_direction);
     if (collision_line(data + 0x110, data + 0x120, 0, moby, blk) == 0) {
-        probe_world_sphere(0.5f, data + 0x120, 0, moby, blk);
+        collect_mobies_in_sphere(0.5f, data + 0x120, 0, moby, blk);
     }
 }
 
@@ -539,9 +539,9 @@ int update_snagglebeast_chase_movement(struct Moby *chaser_moby, struct ChaserVa
     if (range < goal_distance) {
         navigation_result = FUN_L00_00259028(chaser_moby, chaser_vars->nav, mode, chaser_vars->navOut);
         if (navigation_result == 2) {
-            subtract_vector_xyz(position_delta, path + (select_point_index_by_distance(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
+            fast_vec_sub(position_delta, path + (select_point_index_by_distance(&chaser_moby->pos, path, 0.0f) * 16 + 0x10), &chaser_moby->pos);
             clamp_vector_length(position_delta, position_delta, chaser_vars->pullSpeed);
-            add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, position_delta);
+            fast_vec_add(&chaser_moby->pos, &chaser_moby->pos, position_delta);
         }
     } else {
         FUN_L00_00258278(chaser_moby, fast_arc_tan(hero.motion.pos.f[0] - chaser_moby->pos.x, hero.motion.pos.f[1] - chaser_moby->pos.y),
@@ -551,10 +551,10 @@ int update_snagglebeast_chase_movement(struct Moby *chaser_moby, struct ChaserVa
         target_moby = D_L07_00173EC0.moby;
         if (target_moby != 0 && D_L07_00173EC0.count > 0 && target_moby->oclass == 0x42D && target_moby->command == 0) {
             if (((struct ChaserTargetVars *)target_moby->pvars)->sticky) {
-                subtract_vector_xyz(position_delta, &target_moby->pos, &chaser_moby->pos);
+                fast_vec_sub(position_delta, &target_moby->pos, &chaser_moby->pos);
                 *(s32 *)&position_delta[2] = 0;
-                scale_vector_xyz(position_delta, position_delta, 0.5f);
-                add_vector_xyz(&chaser_moby->pos, &chaser_moby->pos, position_delta);
+                fast_vec_scale(position_delta, position_delta, 0.5f);
+                fast_vec_add(&chaser_moby->pos, &chaser_moby->pos, position_delta);
             }
             D_L07_00173EC0.moby->command = 1;
         }
@@ -708,7 +708,7 @@ extern int FUN_L00_001fefc8(void *);
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float FUN_001f99c0(float);
 extern void suck_beam_queue_draw(int) __asm__("FUN_L00_002defe0");
-extern void enqueue_callback_list_1(void (*)(), void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void (*)(), void *) __asm__("FUN_001f4600");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
@@ -716,7 +716,7 @@ extern void FUN_L06_00249738(void);
 extern void build_symmetric_adjacency_masks(int *, int, int) __asm__("FUN_L05_0028be78");
 extern void suck_reset(void *) __asm__("FUN_L00_002ddca0");
 extern int FUN_001160d8(void);
-extern int tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern int FUN_00213260(int);
 extern void spawn_moby_point_offset_particle(char *, int, float, float) __asm__("FUN_L07_0029b8d8");
 extern int update_alternating_joint_emission_burst(void *, char *, float *) __asm__("FUN_L07_003122b0");
@@ -951,7 +951,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
         if (*(float *)(data + 0x1C8) < 0.0f) *(float *)(data + 0x1C8) = 0.0f;
     }
-    if (*(float *)(data + 0x1C8) > 0.0f) enqueue_callback_list_1(draw_snagglebeast_sphere_effect, moby);
+    if (*(float *)(data + 0x1C8) > 0.0f) add_draw_callback(draw_snagglebeast_sphere_effect, moby);
     update_snagglebeast_target_joint_animation((char *)moby, (char *)data, (float *)(((char *)&hero) + 0x80));
     if (moby[0x20] != 0 && moby[0x20] != 0xA && moby[0x20] != 0x10) {
         *(int *)(data + 0x1B0) = queue_animation_update(0x16, 0xFFFF, (int)reset_numeric_hud_element, (int)hud_update_counter,
@@ -1013,7 +1013,7 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_00212f90(moby, r1, r2, random_int_between(0x1E, 0x2A));
             }
         }
-        if (tick_countdown_32_alt((int *)(data + 0x160))) {
+        if (fast_dec_timer((int *)(data + 0x160))) {
             if (timer19a) {
                 *(int *)(data + 0x164) = 0;
                 *(int *)(data + 0x160) = 0;
@@ -1085,8 +1085,8 @@ void snagglebeast_update(unsigned char *moby) {
         if (moby[0x52] == 9 || moby[0x52] == 0xD) moby[0x20] = update_alternating_joint_emission_burst(moby, (char *)data, (float *)&sight);
         if ((moby[0xBC] % 3U == 0 && vector_distance(&sight, moby + 0x10) > 13.0f)
             || (moby[0xBC] % 3U == 1 && vector_distance(&sight, moby + 0x10) > 20.0f)) {
-            *(short *)(data + 0x198) = scale_ticks(0x23);
-            *(int *)(data + 0x160) = scale_ticks(0x1E);
+            *(short *)(data + 0x198) = scale_game_frames(0x23);
+            *(int *)(data + 0x160) = scale_game_frames(0x1E);
             moby[0x20] = 1;
         }
         break;
@@ -1101,15 +1101,15 @@ void snagglebeast_update(unsigned char *moby) {
             *(int *)(data + 0x168) = 0;
             spawn_moby_class_1046((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, speed, 1.0f);
             FUN_L00_0024f7c8(moby, (*(int *)(data + 0x164) & 1) + 5, &position);
-            configure_timed_point_light(moby, data, 1, &position, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
+            configure_timed_point_light(moby, data, 1, &position, scale_game_frames(0x1E), 0x800060FF, 0, 10.0f);
             position.f[2] = *(float *)(moby + 0x18);
             for (i = 0; i < 55; i++) {
                 float r1 = random_angle_radians();
                 float r2 = random_float_between(0.3926991f, 0.78539819f);
                 FUN_00214db0(&velocity, frame_time * 5.0f, r1, r2);
-                normalize_vector_xyz(&direction, &velocity, 0.75f);
+                fast_vec_normalize(&direction, &velocity, 0.75f);
                 direction.f[2] += 0.1f;
-                add_vector_xyz(&direction, &direction, &position);
+                fast_vec_add(&direction, &direction, &position);
                 *(int *)&velocity.f[3] = 0;
                 spawn_white_particle_with_payload(&direction, &velocity);
             }
@@ -1120,9 +1120,9 @@ void snagglebeast_update(unsigned char *moby) {
                 *(short *)(data + 0x194) = 0xC0;
                 *(int *)(data + 0x160) = 0xAA;
             } else {
-                *(short *)(data + 0x194) = scale_ticks(0x3C);
-                *(int *)(data + 0x160) = scale_ticks(0x37);
-                if (*(short *)(data + 0x19A) <= scale_ticks(0x37)) *(short *)(data + 0x19A) += scale_ticks(0x3C);
+                *(short *)(data + 0x194) = scale_game_frames(0x3C);
+                *(int *)(data + 0x160) = scale_game_frames(0x37);
+                if (*(short *)(data + 0x19A) <= scale_game_frames(0x37)) *(short *)(data + 0x19A) += scale_game_frames(0x3C);
             }
             *(float *)(moby + 0x58) = 1.0f;
             if (moby[0x53] != (FUN_001160d8() & 1)) {
@@ -1135,9 +1135,9 @@ void snagglebeast_update(unsigned char *moby) {
         break;
     case SNAGGLEBEAST_SWEEP_BEAM_ATTACK:
         if (start_snagglebeast_turn_toward_target(moby, data, (float *)(((char *)&hero) + 0x80), 5, 0)) break;
-        if (*(int *)(data + 0x160) < scale_ticks(0x3C) / 2) {
+        if (*(int *)(data + 0x160) < scale_game_frames(0x3C) / 2) {
             FUN_L00_0024f7c8(moby, 2, &position);
-            configure_timed_point_light(moby, data, 2, &position, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
+            configure_timed_point_light(moby, data, 2, &position, scale_game_frames(0x1E), 0x800060FF, 0, 10.0f);
             if ((level_frame_count & 7) == 0) spawn_moby_point_offset_particle((char *)moby, 2, 0.0f, 0.2f);
             if (((level_frame_count - 4) & 7) == 0) spawn_moby_point_offset_particle((char *)moby, 3, 0.0f, 0.2f);
         }
@@ -1146,55 +1146,55 @@ void snagglebeast_update(unsigned char *moby) {
             position.f[2] = probe_ground_height(&position, 0, 0.5f);
             *(int *)(data + 0x160) += 1;
             if (*(int *)(data + 0x164) == 0) {
-                subtract_vector_xyz(&velocity, moby + 0x10, &position);
+                fast_vec_sub(&velocity, moby + 0x10, &position);
                 velocity.f[2] = 0.0f;
-                normalize_vector_xyz(&velocity, &velocity, 1.0f);
-                normalize_vector_xyz(&step, &velocity, 0.075f);
+                fast_vec_normalize(&velocity, &velocity, 1.0f);
+                fast_vec_normalize(&step, &velocity, 0.075f);
                 direction.f[0] = fast_cos(sight.rotation.f[2]);
                 direction.f[1] = fast_sin(sight.rotation.f[2]);
                 direction.f[2] = 0.0f;
                 {
                     float direction_velocity_dot = fast_vec_dot(&direction, &velocity);
-                    normalize_vector_xyz(&projection, &velocity, direction_velocity_dot);
+                    fast_vec_normalize(&projection, &velocity, direction_velocity_dot);
                 }
-                subtract_vector_xyz(&direction, &direction, &projection);
+                fast_vec_sub(&direction, &direction, &projection);
                 direction.f[2] = 0.0f;
-                normalize_vector_xyz(&start, &velocity, 8.0f);
-                normalize_vector_xyz(&direction, &direction, 4.0f);
-                add_vector_xyz(&start, &start, &position);
-                subtract_vector_xyz(&start, &start, &direction);
-                normalize_vector_xyz(&direction, &direction, 8.0f);
-                add_vector_xyz(&direction, &direction, &position);
-                normalize_vector_xyz(&velocity, &velocity, 2.0f);
-                subtract_vector_xyz(&direction, &direction, &velocity);
+                fast_vec_normalize(&start, &velocity, 8.0f);
+                fast_vec_normalize(&direction, &direction, 4.0f);
+                fast_vec_add(&start, &start, &position);
+                fast_vec_sub(&start, &start, &direction);
+                fast_vec_normalize(&direction, &direction, 8.0f);
+                fast_vec_add(&direction, &direction, &position);
+                fast_vec_normalize(&velocity, &velocity, 2.0f);
+                fast_vec_sub(&direction, &direction, &velocity);
                 qcopy(&projection, ((char *)&hero) + 0x100);
                 projection.f[2] = 0.0f;
-                scale_vector_xyz(&offset, &projection, (float)scale_ticks(0x28));
-                subtract_vector_xyz(&velocity, &direction, &start);
-                scale_vector_xyz(&velocity, &velocity, 0.5f);
-                add_vector_xyz(&velocity, &velocity, &start);
-                subtract_vector_xyz(&velocity, &velocity, &position);
-                subtract_vector_xyz(&velocity, &velocity, &step);
-                subtract_vector_xyz(&velocity, &offset, &velocity);
-                add_vector_xyz(&start, &start, &velocity);
-                add_vector_xyz(&direction, &direction, &velocity);
+                fast_vec_scale(&offset, &projection, (float)scale_game_frames(0x28));
+                fast_vec_sub(&velocity, &direction, &start);
+                fast_vec_scale(&velocity, &velocity, 0.5f);
+                fast_vec_add(&velocity, &velocity, &start);
+                fast_vec_sub(&velocity, &velocity, &position);
+                fast_vec_sub(&velocity, &velocity, &step);
+                fast_vec_sub(&velocity, &offset, &velocity);
+                fast_vec_add(&start, &start, &velocity);
+                fast_vec_add(&direction, &direction, &velocity);
                 qcopy(data + 0x110, &start);
                 qcopy(data + 0x120, &direction);
                 qcopy(data + 0x140, &start);
-                subtract_vector_xyz(data + 0x130, &direction, &start);
-                scale_vector_xyz(data + 0x130, data + 0x130, 1.0f / (float)scale_ticks(0x3C));
+                fast_vec_sub(data + 0x130, &direction, &start);
+                fast_vec_scale(data + 0x130, data + 0x130, 1.0f / (float)scale_game_frames(0x3C));
                 qcopy(data + 0x150, data + 0x140);
                 *(int *)(data + 0x15C) = 0;
                 *(int *)(data + 0x164) = 1;
             } else {
-                if (*(int *)(data + 0x160) < scale_ticks(0x3C)) {
-                    add_vector_xyz(data + 0x140, data + 0x140, data + 0x130);
-                    enqueue_callback_list_1(draw_collision_clipped_moby_beam, moby);
+                if (*(int *)(data + 0x160) < scale_game_frames(0x3C)) {
+                    fast_vec_add(data + 0x140, data + 0x140, data + 0x130);
+                    add_draw_callback(draw_collision_clipped_moby_beam, moby);
                     *(int *)(data + 0x164) = 2;
                 } else {
                     *(int *)(data + 0x164) = 0;
-                    *(short *)(data + 0x19A) = scale_ticks(0xF0);
-                    *(int *)(data + 0x160) = scale_ticks(0xC8);
+                    *(short *)(data + 0x19A) = scale_game_frames(0xF0);
+                    *(int *)(data + 0x160) = scale_game_frames(0xC8);
                     moby[0x20] = 1;
                 }
             }
@@ -1259,7 +1259,7 @@ void snagglebeast_update(unsigned char *moby) {
                 if (hit == 4 || !moving) goto stop;
             } else if (hit == 4 || !moving) {
             stop:
-                data[0x1F7] = scale_ticks(0x5A);
+                data[0x1F7] = scale_game_frames(0x5A);
                 if (moby[0x53] != (FUN_001160d8() & 1)) {
                     int r1 = FUN_001160d8() & 1;
                     int r2 = random_int_between(0, 9);
@@ -1274,7 +1274,7 @@ void snagglebeast_update(unsigned char *moby) {
             } else {
                 if (near && (moby[0x70] & 2)) FUN_00212f90(moby, 0xC, 5, random_int_between(0xA, 0xD));
             }
-            if (tick_countdown_32_alt((int *)(data + 0x160))) {
+            if (fast_dec_timer((int *)(data + 0x160))) {
                 if (timer19a) {
                     *(int *)(data + 0x164) = 0;
                     *(int *)(data + 0x160) = 0;
@@ -1419,16 +1419,16 @@ void snagglebeast_update(unsigned char *moby) {
         }
         if (moby[0xBC] == 8) {
             float z = *(float *)(data + 0x108);
-            scale_vector_xyz(data + 0x100, data + 0x100, 0.7f);
+            fast_vec_scale(data + 0x100, data + 0x100, 0.7f);
             ((float *)(data + 0x100))[2] = z;
             ((float *)(data + 0x100))[2] -= frame_time * 9.8f;
-            add_vector_xyz(moby + 0x10, moby + 0x10, data + 0x100);
+            fast_vec_add(moby + 0x10, moby + 0x10, data + 0x100);
             if (*(float *)(moby + 0x18) < *(float *)(data + 0x1B8)) done = 1;
         } else {
             if (FUN_0020c9e0(moby) > 79.0f) done = 1;
         }
         if (done) {
-            *(int *)(data + 0x160) = scale_ticks(0xA);
+            *(int *)(data + 0x160) = scale_game_frames(0xA);
             data[0x1C5] = 2;
             moby[0x20] = 0xE;
             *(int *)(data + 0x164) = *(short *)(data + 0x24) / 6;
@@ -1436,8 +1436,8 @@ void snagglebeast_update(unsigned char *moby) {
         break;
     }
     case SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH:
-        scale_vector_xyz(data + 0x100, data + 0x100, 0.4f);
-        add_vector_xyz(moby + 0x10, moby + 0x10, data + 0x100);
+        fast_vec_scale(data + 0x100, data + 0x100, 0.4f);
+        fast_vec_add(moby + 0x10, moby + 0x10, data + 0x100);
         if (FUN_0020c9e0(moby) < 168.0f) {
             FUN_L00_0024f7c8(moby, 0xA, &position);
             position.f[2] = 34.6f;
@@ -1453,7 +1453,7 @@ void snagglebeast_update(unsigned char *moby) {
             rumble_by_distance((char *)moby);
         }
         if (*(int *)(data + 0x164) > 0) {
-            if (tick_countdown_32_alt((int *)(data + 0x160))) {
+            if (fast_dec_timer((int *)(data + 0x160))) {
                 *(int *)(data + 0x164) -= 1;
                 *health -= 1.0f;
                 data[0x67] = 0xFA;
@@ -1470,14 +1470,14 @@ void snagglebeast_update(unsigned char *moby) {
                     moby[0x20] = 0xA;
                 } else {
                     if (*(int *)(data + 0x164) > 0) {
-                        *(int *)(data + 0x160) = scale_ticks(0xA);
+                        *(int *)(data + 0x160) = scale_game_frames(0xA);
                     } else {
-                        *(int *)(data + 0x160) = scale_ticks(0x14);
+                        *(int *)(data + 0x160) = scale_game_frames(0x14);
                     }
                 }
             }
         } else {
-            if (tick_countdown_32_alt((int *)(data + 0x160))) {
+            if (fast_dec_timer((int *)(data + 0x160))) {
                 switch (data[0x19D]) {
                 case SNAGGLEBEAST_PATH_SELECT_FIRST_POINT:
                     qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x10);
@@ -1526,7 +1526,7 @@ void snagglebeast_update(unsigned char *moby) {
             moby[0xBC] += 1;
             *(int *)(data + 0x298) = 0;
             moby[0x20] = 6;
-            *(int *)(data + 0x160) = scale_ticks(0x37);
+            *(int *)(data + 0x160) = scale_game_frames(0x37);
         }
         break;
     }
@@ -1547,7 +1547,7 @@ void snagglebeast_update(unsigned char *moby) {
             *(int *)(data + 0x160) = 0;
             *(float *)(data + 0x16C) += step_time;
         } else {
-            if (data[0x1C4] != 0 || (tick_countdown_32_alt((int *)(data + 0x160)) && fr < 0.6f)) {
+            if (data[0x1C4] != 0 || (fast_dec_timer((int *)(data + 0x160)) && fr < 0.6f)) {
                 int slot;
                 char *g = ((char *)&hero);
                 data[0x1C4] = 1;
@@ -1564,9 +1564,9 @@ void snagglebeast_update(unsigned char *moby) {
                     *(float *)(data + 0x1AC) = 20.0f;
                     *(short *)(data + 0x19E) = 0;
                 }
-                subtract_vector_xyz(&velocity, data + 0x120, data + 0x110);
-                scale_vector_xyz(&velocity, &velocity, frame_scale * 0.1f);
-                add_vector_xyz(data + 0x110, data + 0x110, &velocity);
+                fast_vec_sub(&velocity, data + 0x120, data + 0x110);
+                fast_vec_scale(&velocity, &velocity, frame_scale * 0.1f);
+                fast_vec_add(data + 0x110, data + 0x110, &velocity);
                 qcopy(((char *)&hero) + 0x1D30, data + 0x110);
                 qcopy(((char *)&hero) + 0x80, data + 0x110);
                 {
@@ -1578,8 +1578,8 @@ void snagglebeast_update(unsigned char *moby) {
                 slot = snagglebeast_ammo_drain_entries[*(int *)(data + 0x164)][0];
                 if (slot == -1) {
                     *(int *)(data + 0x164) = 0;
-                    *(short *)(data + 0x196) = scale_ticks(0x320);
-                    *(int *)(data + 0x160) = scale_ticks(0xF0);
+                    *(short *)(data + 0x196) = scale_game_frames(0x320);
+                    *(int *)(data + 0x160) = scale_game_frames(0xF0);
                     detach_snagglebeast_rope_particles((int)moby);
                     { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
                     data[0x1C7] = 0;
@@ -1614,8 +1614,8 @@ void snagglebeast_update(unsigned char *moby) {
                         if (*(int *)(data + 0x18C) == -1) {
                             FUN_L00_00257d78((float *)&velocity, frame_time * 4.0f, frame_time * 10.0f);
                             if (velocity.f[2] < frame_time * 2.0f) velocity.f[2] = random_float_between(frame_time * 3.0f, frame_time * 6.0f);
-                            normalize_vector_xyz(&direction, &velocity, 0.9f);
-                            add_vector_xyz(&direction, &direction, ((char *)&hero) + 0x80);
+                            fast_vec_normalize(&direction, &velocity, 0.9f);
+                            fast_vec_add(&direction, &direction, ((char *)&hero) + 0x80);
                         } else {
                             char *path = D_L07_001B0530[*(int *)(data + 0x18C)];
                             int pidx = 0;
@@ -1630,13 +1630,13 @@ void snagglebeast_update(unsigned char *moby) {
                                 moby_to_sample_distance = vector_distance(moby + 0x10, &start);
                             } while (d1 < 8.0f || moby_to_sample_distance < 12.0f);
                             add_random_xy_offset((float *)&start, 0.5f);
-                            subtract_vector_xyz(&direction, &start, ((char *)&hero) + 0x80);
+                            fast_vec_sub(&direction, &start, ((char *)&hero) + 0x80);
                             zv = start.f[2];
-                            normalize_vector_xyz(&direction, &direction, 0.9f);
+                            fast_vec_normalize(&direction, &direction, 0.9f);
                             qcopy(&velocity, &direction);
                             velocity.f[2] = 0.0f;
-                            normalize_vector_xyz(&velocity, &velocity, frame_time * 15.0f);
-                            add_vector_xyz(&direction, &direction, ((char *)&hero) + 0x80);
+                            fast_vec_normalize(&velocity, &velocity, frame_time * 15.0f);
+                            fast_vec_add(&direction, &direction, ((char *)&hero) + 0x80);
                             velocity.f[2] = FUN_L00_0025abf0(&direction, &start, 0, frame_time * 15.0f, frame_time_sq * -9.8f);
                             *(float *)(data + 0x1AC) += random_float_between(0.7f, 2.0f);
                         }
@@ -1647,7 +1647,7 @@ void snagglebeast_update(unsigned char *moby) {
                                 qcopy_nc(*(char **)(spawned_moby + 0x78) + 0x10, &velocity);
                                 *(float *)(*(char **)(spawned_moby + 0x78) + 0x28) = zv;
                                 ((int *)&weapon_ammo_counts)[slot] -= ammo_transfer_count;
-                                *(int *)(data + 0x160) = scale_ticks(0);
+                                *(int *)(data + 0x160) = scale_game_frames(0);
                             }
                         }
                     }
@@ -1656,10 +1656,10 @@ void snagglebeast_update(unsigned char *moby) {
         }
         if (!sight_ready) {
             *(int *)(data + 0x164) = 0;
-            *(short *)(data + 0x196) = scale_ticks(0xF);
+            *(short *)(data + 0x196) = scale_game_frames(0xF);
             detach_snagglebeast_rope_particles((int)moby);
             { char *g3 = ((char *)&hero); if (*(int *)(g3 + 0x2084) == 0x78) FUN_L00_002223f8(0, 1); }
-            *(int *)(data + 0x160) = scale_ticks(0x46);
+            *(int *)(data + 0x160) = scale_game_frames(0x46);
             data[0x1C7] = 0;
             if (*(int *)(data + 0x1F8) != -1) {
                 char *sl = (voice_slot_state_base - 0x74) + *(int *)(data + 0x1F8) * 0x70;
@@ -1671,7 +1671,7 @@ void snagglebeast_update(unsigned char *moby) {
             moby[0x20] = 1;
         }
         if (target_close) {
-            *(short *)(data + 0x196) = scale_ticks(0x1E);
+            *(short *)(data + 0x196) = scale_game_frames(0x1E);
             if (moby[0x53] != 9) {
                 int r = random_int_between(0, 2);
                 FUN_00212f90(moby, 9, r, random_int_between(0x10, 0x19));
@@ -1709,11 +1709,11 @@ void snagglebeast_update(unsigned char *moby) {
                 if (FUN_0020c9e0(moby) >= 9.5f) {
                     FUN_L00_0024f7c8(moby, 0, &velocity);
                     FUN_L00_0024f7c8(moby, 1, &direction);
-                    add_vector_xyz(&position, &velocity, &direction);
-                    scale_vector_xyz(&position, &position, 0.5f);
+                    fast_vec_add(&position, &velocity, &direction);
+                    fast_vec_scale(&position, &position, 0.5f);
                     qcopy(data + 0x110, &position);
-                    subtract_vector_xyz(data + 0x130, data + 0x150, data + 0x110);
-                    normalize_vector_xyz(data + 0x130, data + 0x130, frame_scale);
+                    fast_vec_sub(data + 0x130, data + 0x150, data + 0x110);
+                    fast_vec_normalize(data + 0x130, data + 0x130, frame_scale);
                     *(int *)(data + 0x164) = 2;
                 }
             }
@@ -1722,8 +1722,8 @@ void snagglebeast_update(unsigned char *moby) {
             if ((*(u64 *)(moby + 0x50) & 0xFFFF0000) != 0x07070000 && moby[0x53] != 7) {
                 FUN_00212f90(moby, 7, 0, random_int_between(7, 0xA));
             }
-            if (tick_countdown_32_alt((int *)(data + 0x160))) {
-                *(int *)(data + 0x160) = scale_ticks(0xA);
+            if (fast_dec_timer((int *)(data + 0x160))) {
+                *(int *)(data + 0x160) = scale_game_frames(0xA);
                 spawn_moby_point_offset_particle((char *)moby, 0, 800000.0f, 5.0f);
                 spawn_moby_point_offset_particle((char *)moby, 1, 800000.0f, 5.0f);
             }
@@ -1737,19 +1737,19 @@ void snagglebeast_update(unsigned char *moby) {
             float r = vector_distance(moby + 0x10, &sight.position30);
             *(float *)(data + 0x16C) += frame_scale;
             if (r <= *(float *)(data + 0x16C)) *(int *)(data + 0x164) = 4;
-            if (tick_countdown_32_alt((int *)(data + 0x160))) *(int *)(data + 0x160) = scale_ticks(0x14);
-            enqueue_callback_list_1(draw_and_probe_snagglebeast_rope_attack, moby);
+            if (fast_dec_timer((int *)(data + 0x160))) *(int *)(data + 0x160) = scale_game_frames(0x14);
+            add_draw_callback(draw_and_probe_snagglebeast_rope_attack, moby);
             break;
         }
         case SNAGGLEBEAST_ROPE_RETRACT:
-            subtract_vector_xyz(&position, data + 0x120, data + 0x110);
-            normalize_vector_xyz(&position, &position, frame_scale);
-            add_vector_xyz(data + 0x110, data + 0x110, &position);
-            configure_timed_point_light(moby, data, 3, data + 0x110, scale_ticks(0x1E), 0x800060FF, 0, 10.0f);
+            fast_vec_sub(&position, data + 0x120, data + 0x110);
+            fast_vec_normalize(&position, &position, frame_scale);
+            fast_vec_add(data + 0x110, data + 0x110, &position);
+            configure_timed_point_light(moby, data, 3, data + 0x110, scale_game_frames(0x1E), 0x800060FF, 0, 10.0f);
             if (*(int *)(data + 0x164) != 0) {
-                if (tick_countdown_32_alt((int *)(data + 0x160))) *(int *)(data + 0x164) = 5;
+                if (fast_dec_timer((int *)(data + 0x160))) *(int *)(data + 0x164) = 5;
             }
-            enqueue_callback_list_1(draw_and_probe_snagglebeast_rope_attack, moby);
+            add_draw_callback(draw_and_probe_snagglebeast_rope_attack, moby);
             break;
         case SNAGGLEBEAST_ROPE_RETURN_TO_IDLE:
             *(float *)(moby + 0x58) = 1.0f;
@@ -1770,7 +1770,7 @@ void snagglebeast_update(unsigned char *moby) {
             *(int *)(data + 0x1B0) = -1;
         }
         if (moby[0x70] & 2) {
-            normalize_vector_xyz(data + 0x100, data + 0x100, 1.0f);
+            fast_vec_normalize(data + 0x100, data + 0x100, 1.0f);
             *(float *)(data + 0x108) = 1.0f;
             qcopy(&position, moby + 0x10);
             position.f[2] = *(float *)(data + 0x1B8) + 1.0f;
@@ -1805,7 +1805,7 @@ void snagglebeast_update(unsigned char *moby) {
     case 17:
         break;
     }
-    subtract_vector_xyz(data + 0x100, moby + 0x10, &oldpos);
+    fast_vec_sub(data + 0x100, moby + 0x10, &oldpos);
     if (moby[0x20] < 0xA) jet_animate((struct Moby *)moby, 2.5f);
     update_timed_point_light_color((char *)data);
 }
@@ -1933,14 +1933,14 @@ void initialize_snagglebeast_rope(char *moby, void *anchor) {
         return;
     }
     D_L07_00161B6C_gp = 0;
-    normalize_vector_xyz(step, moby + 0xC0, 2.8f);
-    normalize_vector_xyz(up, moby + 0xE0, 1.0f);
+    fast_vec_normalize(step, moby + 0xC0, 2.8f);
+    fast_vec_normalize(up, moby + 0xE0, 1.0f);
     qcopy(rope_points, anchor);
     pc = &rotation_input_vector;
     pd = &rotation_axis;
     rope_row_alpha[0] = 0;
     for (i = 1; i < 10; i++) {
-        add_vector_xyz(rope_points[i], rope_previous_points[i], step);
+        fast_vec_add(rope_points[i], rope_previous_points[i], step);
         rope_row_alpha[i] = 0;
     }
     clear_u64_value(D_L07_00161B90);
@@ -1997,9 +1997,9 @@ extern float rope_spring_turn(void *, float, float, float, float, float) __asm__
 extern float select_segment_point_near_sphere_surface(void *, void *, void *, void *, void *, float) __asm__("FUN_L07_0029e6d8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
-extern void release_particle(void *) __asm__("FUN_L00_00267a08");
+extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void enqueue_callback_list_1(void (*)(), void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void (*)(), void *) __asm__("FUN_001f4600");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float FUN_001f99c0(float);
 extern int D_L07_00161B84_gp __asm__("D_L07_00161B84") __attribute__((sda));
@@ -2039,16 +2039,16 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
             rope_row_alpha[row] = rope_row_alpha[row - 1] - 0x20;
         }
     }
-    subtract_vector_xyz(step, D_0013F3D0, anchor);
+    fast_vec_sub(step, D_0013F3D0, anchor);
     step[2] += 0.6f;
-    normalize_vector_xyz(step, step, 2.8f);
+    fast_vec_normalize(step, step, 2.8f);
     fast_vec_cross(axis, step, (char *)moby + 0xD0);
-    normalize_vector_xyz(axis, axis, 1.0f);
+    fast_vec_normalize(axis, axis, 1.0f);
     qcopy(rope_points, anchor);
     transform_vector_by_basis(start, D_L07_00161B90, (char *)moby + 0xC0);
-    add_vector_xyz(start, start, step);
+    fast_vec_add(start, start, step);
     transform_vector_by_basis(end, D_L07_00161BA0, (char *)moby + 0xC0);
-    add_vector_xyz(end, end, step);
+    fast_vec_add(end, end, step);
     {
         float swing_fraction = (float)D_L07_00161B80 / convert_integer_to_float(scale_game_frames(60));
         D_L07_00161B80++;
@@ -2058,7 +2058,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
     }
     if (D_L07_00161B80 >= scale_game_frames(60)) {
         qcopy(D_L07_00161B90, D_L07_00161BA0);
-        normalize_vector_xyz(up, (char *)moby + 0xC0, 2.8f);
+        fast_vec_normalize(up, (char *)moby + 0xC0, 2.8f);
         *(RopeU128 *)delta = 0;
         *(RopeU128 *)basis = 0;
         delta[2] = 0.1f;
@@ -2073,17 +2073,17 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
         D_L07_00161B80 = 0;
     }
     (*(float *)&D_L07_00161B84_gp) = fast_add_rotations((*(float *)&D_L07_00161B84_gp), 0.1f);
-    normalize_vector_xyz(up, (D_0013F3D0 + 0x210), -1.0f);
+    fast_vec_normalize(up, (D_0013F3D0 + 0x210), -1.0f);
     qcopy(ring_basis.reference, up);
     fast_vec_cross(ring_basis.cross, step, ring_basis.reference);
-    normalize_vector_xyz(ring_basis.cross, ring_basis.cross, 1.0f);
+    fast_vec_normalize(ring_basis.cross, ring_basis.cross, 1.0f);
     fast_vec_cross(ring_basis.matrix, ring_basis.reference, ring_basis.cross);
     {
         int column;
         for (column = 0; column < 20; column++) {
-            scale_vector_xyz(delta, l07_rope_ring_profile_vectors[column], 0.02f);
+            fast_vec_scale(delta, l07_rope_ring_profile_vectors[column], 0.02f);
             transform_vector_by_basis(delta, delta, ring_basis.matrix);
-            add_vector_xyz(rope_grid[0][column], rope_points[0], delta);
+            fast_vec_add(rope_grid[0][column], rope_points[0], delta);
         }
     }
     {
@@ -2095,7 +2095,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
     float index;
     int i;
     for (i = 1; i < 10; i++) {
-        subtract_vector_xyz(delta, rope_points[i], rope_previous_points[i]);
+        fast_vec_sub(delta, rope_points[i], rope_previous_points[i]);
         qcopy(basis, step);
         fast_vec_cross(velocity, basis, delta);
         dot = fast_vec_dot(delta, basis);
@@ -2107,19 +2107,19 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
             turn = fast_add_rotations(turn, fast_subtract_rotations(difference, 0.31415927f));
         }
         build_look_at_matrix(extension, delta, velocity, turn);
-        normalize_vector_xyz(direction, extension, 2.8f);
+        fast_vec_normalize(direction, extension, 2.8f);
         lerp_vector(extension, extension, direction, 1.0f);
         {
             float extension_length = fast_vec_length(extension);
             if (extension_length > 3.9f) {
-                scale_vector_xyz(extension, extension, 3.9f / extension_length);
+                fast_vec_scale(extension, extension, 3.9f / extension_length);
             }
         }
         if (i >= 6) {
             lerp_vector(extension, extension, delta, (float)i / convert_integer_to_float(10) + 0.0f);
         }
         index = i;
-        add_vector_xyz(rope_points[i], rope_previous_points[i], extension);
+        fast_vec_add(rope_points[i], rope_previous_points[i], extension);
         {
             float distance = select_segment_point_near_sphere_surface(tangent, center, center, rope_previous_points[i], rope_points[i], 0.0f);
             if (distance < minimum) {
@@ -2130,20 +2130,20 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
         if (FUN_001f99c0(step[2]) > 2.1f) {
             qcopy(normal, up);
             fast_vec_cross(offset, normal, step);
-            subtract_vector_xyz(previous_cross, l07_rope_previous_segment_start_points[i], rope_previous_points[i]);
+            fast_vec_sub(previous_cross, l07_rope_previous_segment_start_points[i], rope_previous_points[i]);
             fast_vec_cross(previous, normal, previous_cross);
             {
                 float facing = fast_vec_dot(offset, previous);
                 if (facing > 0.0f) {
-                    scale_vector_xyz(normal, normal, -1.0f);
+                    fast_vec_scale(normal, normal, -1.0f);
                 }
             }
         } else {
-            normalize_vector_xyz(normal, (D_0013F3D0 + 0x210), -1.0f);
+            fast_vec_normalize(normal, (D_0013F3D0 + 0x210), -1.0f);
         }
-        normalize_vector_xyz(side, tangent, 1.0f);
+        fast_vec_normalize(side, tangent, 1.0f);
         fast_vec_cross(perpendicular, side, normal);
-        normalize_vector_xyz(perpendicular, perpendicular, 1.0f);
+        fast_vec_normalize(perpendicular, perpendicular, 1.0f);
         fast_vec_cross(normal, perpendicular, side);
         qcopy(up, normal);
         {
@@ -2152,15 +2152,15 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
             for (column = 0; column < 20; column++) {
                 radius = index * 0.2f + 0.02f;
                 radius += radius * 0.25f * fast_sin(fast_add_rotations((*(float *)&D_L07_00161B84_gp) + index * 0.7f, 0.0f));
-                scale_vector_xyz(offset, l07_rope_ring_profile_vectors[column], radius);
+                fast_vec_scale(offset, l07_rope_ring_profile_vectors[column], radius);
                 transform_vector_by_basis(offset, offset, side);
-                add_vector_xyz(rope_grid[i][column], rope_points[i], offset);
+                fast_vec_add(rope_grid[i][column], rope_points[i], offset);
             }
         }
-        normalize_vector_xyz(step, extension, 2.8f);
+        fast_vec_normalize(step, extension, 2.8f);
     }
     }
-    enqueue_callback_list_1(draw_rope_strips, moby);
+    add_draw_callback(draw_rope_strips, moby);
     {
     int created;
     int extras;
@@ -2200,9 +2200,9 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
                     puff = FUN_L00_0026d000(delta, 0.0f, 1.0f, 1.03f, random_integer_below(5) + 1, basis, lifetime, 0x404040);
                     if (puff != 0) {
                         RopeTail *tail = &puff->tail;
-                        subtract_vector_xyz(extension, delta, velocity);
+                        fast_vec_sub(extension, delta, velocity);
                         extras++;
-                        normalize_vector_xyz(tail->vel, extension, 0.01f);
+                        fast_vec_normalize(tail->vel, extension, 0.01f);
                         tail->vel[2] += 0.02f;
                     }
                 }
@@ -2228,18 +2228,18 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
             }
         }
         if (rope_particles[k].particle != 0) {
-            subtract_vector_xyz(delta, rope_previous_points[rope_particles[k].segment],
+            fast_vec_sub(delta, rope_previous_points[rope_particles[k].segment],
                           rope_points[rope_particles[k].segment]);
             length = fast_vec_length(delta);
             rope_particles[k].distance += rope_particles[k].speed;
             *(short *)(rope_particles[k].particle + 0xA) = life;
             if (length < rope_particles[k].distance) {
                 if (--rope_particles[k].segment <= 0) {
-                    release_particle(rope_particles[k].particle);
+                    free_effect_particle(rope_particles[k].particle);
                     rope_particles[k].particle = 0;
                 } else {
                     rope_particles[k].distance -= length;
-                    subtract_vector_xyz(delta, rope_previous_points[rope_particles[k].segment],
+                    fast_vec_sub(delta, rope_previous_points[rope_particles[k].segment],
                                   rope_points[rope_particles[k].segment]);
                     length = fast_vec_length(delta);
                 }
@@ -2255,24 +2255,24 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
                     }
                 }
                 if (rope_particles[k].segment == 1) {
-                    subtract_vector_xyz(basis, anchor, rope_particles[k].particle + 0x10);
-                    normalize_vector_xyz(basis, basis, rope_particles[k].speed);
-                    add_vector_xyz(rope_particles[k].particle + 0x10, rope_particles[k].particle + 0x10, basis);
+                    fast_vec_sub(basis, anchor, rope_particles[k].particle + 0x10);
+                    fast_vec_normalize(basis, basis, rope_particles[k].speed);
+                    fast_vec_add(rope_particles[k].particle + 0x10, rope_particles[k].particle + 0x10, basis);
                     *(float *)(rope_particles[k].particle + 0xC) *= frame_scale * -0.050000012f + 1.0f;
                 } else {
-                    scale_vector_xyz(delta, delta, fraction);
-                    add_vector_xyz(rope_particles[k].particle + 0x10,
+                    fast_vec_scale(delta, delta, fraction);
+                    fast_vec_add(rope_particles[k].particle + 0x10,
                                rope_points[rope_particles[k].segment], delta);
                     column = rope_particles[k].column;
-                    subtract_vector_xyz(basis, rope_grid[rope_particles[k].segment][column],
+                    fast_vec_sub(basis, rope_grid[rope_particles[k].segment][column],
                                   rope_points[rope_particles[k].segment]);
-                    subtract_vector_xyz(velocity, l07_rope_previous_ring_rows[rope_particles[k].segment][column],
+                    fast_vec_sub(velocity, l07_rope_previous_ring_rows[rope_particles[k].segment][column],
                                   rope_previous_points[rope_particles[k].segment]);
                     interpolate_vector(extension, basis, velocity, fraction);
                     column = (column + 19) % 20;
-                    subtract_vector_xyz(direction, rope_grid[rope_particles[k].segment][column],
+                    fast_vec_sub(direction, rope_grid[rope_particles[k].segment][column],
                                   rope_points[rope_particles[k].segment]);
-                    subtract_vector_xyz(tangent, l07_rope_previous_ring_rows[rope_particles[k].segment][column],
+                    fast_vec_sub(tangent, l07_rope_previous_ring_rows[rope_particles[k].segment][column],
                                   rope_previous_points[rope_particles[k].segment]);
                     interpolate_vector(side, direction, tangent, fraction);
                     interpolate_vector(extension, extension, side, rope_particles[k].blend);
@@ -2281,7 +2281,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
                         rope_particles[k].blend -= 1.0f;
                         rope_particles[k].column = column;
                     }
-                    add_vector_xyz(rope_particles[k].particle + 0x10, rope_particles[k].particle + 0x10, extension);
+                    fast_vec_add(rope_particles[k].particle + 0x10, rope_particles[k].particle + 0x10, extension);
                 }
             }
         }
@@ -2297,7 +2297,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
 /* Pulls each pending moby toward its target point and smooths its velocity. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031A268), where it is exact; names translated to the US level program. */
 
-extern float vector_length_xyz(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int D_L07_00161B6C_gp __asm__("D_L07_00161B6C") __attribute__((sda));
 extern int D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
@@ -2324,15 +2324,15 @@ void detach_snagglebeast_rope_particles(int target_entry) {
         particle = rope_particles[i].particle;
         if (particle != 0) {
             rope_particles[i].particle = 0;
-            subtract_vector_xyz(segment_offset, (char *)rope_previous_points + rope_particles[i].segment * 16,
+            fast_vec_sub(segment_offset, (char *)rope_previous_points + rope_particles[i].segment * 16,
                                 (char *)rope_points + rope_particles[i].segment * 16);
-            segment_length = vector_length_xyz(segment_offset);
-            scale_vector_xyz(segment_offset, segment_offset, rope_particles[i].distance / segment_length);
-            add_vector_xyz(interpolated_segment_position, (char *)rope_points + rope_particles[i].segment * 16, segment_offset);
-            subtract_vector_xyz(particle_offset, particle + 0x10, interpolated_segment_position);
-            normalize_vector_xyz(particle_offset, particle_offset, 0.03f);
-            scale_vector_xyz(segment_offset, segment_offset, 0.1f / segment_length);
-            add_vector_xyz(particle + 0x30, particle_offset, segment_offset);
+            segment_length = fast_vec_length(segment_offset);
+            fast_vec_scale(segment_offset, segment_offset, rope_particles[i].distance / segment_length);
+            fast_vec_add(interpolated_segment_position, (char *)rope_points + rope_particles[i].segment * 16, segment_offset);
+            fast_vec_sub(particle_offset, particle + 0x10, interpolated_segment_position);
+            fast_vec_normalize(particle_offset, particle_offset, 0.03f);
+            fast_vec_scale(segment_offset, segment_offset, 0.1f / segment_length);
+            fast_vec_add(particle + 0x30, particle_offset, segment_offset);
             *(short *)(particle + 0xA) = 0x46;
         }
     }
@@ -2348,14 +2348,14 @@ extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 FUN_001f99c0(f32);
 extern void FUN_L00_0025a120(struct Moby *);
-extern void make_hit_descriptor_19040(void *, void *, s32, f32, void *) __asm__("FUN_L00_00259888");
+extern void make_hit_descriptor(void *, void *, s32, f32, void *) __asm__("FUN_L00_00259888");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00257470(void *, int, int);
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
-extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
-extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_00212f90(void *, int, int, int);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -2430,7 +2430,7 @@ void homing_mine_update(struct Moby *moby) {
         moby->state = 1;
         break;
     case HOMING_MINE_WAIT_FOR_PROXIMITY:
-        timer = scale_ticks(600);
+        timer = scale_game_frames(600);
         turn = D_0015ED6C * 6.2831855f;
         vars->timeout = timer;
         moby->rot.z = fast_add_rotations(moby->rot.z, turn);
@@ -2439,9 +2439,9 @@ void homing_mine_update(struct Moby *moby) {
              FUN_001f99c0(moby->pos.z - (vars->target)->pos.z) < 3.0f) ||
             (*(s32 *)(sight + 0x40) != 0 && FUN_001f9b48(&moby->pos, sight) < 8.0f)) {
             vars->speed = 0.0f;
-            vars->timeout = scale_ticks(600);
+            vars->timeout = scale_game_frames(600);
             moby->command = 1;
-            vars->bob_timer = scale_ticks(7);
+            vars->bob_timer = scale_game_frames(7);
             moby->state = 3;
             if (vars->sound != -1) set_moby_list_state(vars->sound, 2);
             moby->state = 2;
@@ -2462,25 +2462,25 @@ void homing_mine_update(struct Moby *moby) {
             vars->speed = max_speed;
         if (moby->command == 1) {
             moby->pos.z += frame_scale * 0.1f;
-            if (tick_countdown_32_alt(&vars->bob_timer)) {
-                vars->bob_timer = scale_ticks(7);
+            if (fast_dec_timer(&vars->bob_timer)) {
+                vars->bob_timer = scale_game_frames(7);
                 moby->command = 2;
             }
         } else if (moby->command == 2) {
             moby->pos.z -= frame_scale * 0.1f;
-            if (tick_countdown_32_alt(&vars->bob_timer)) moby->command = 0;
+            if (fast_dec_timer(&vars->bob_timer)) moby->command = 0;
         }
-        subtract_vector_xyz(&chase_step, sight, &moby->pos);
-        normalize_vector_xyz(&chase_step, &chase_step, vars->speed);
-        add_vector_xyz(&moby->pos, &moby->pos, &chase_step);
+        fast_vec_sub(&chase_step, sight, &moby->pos);
+        fast_vec_normalize(&chase_step, &chase_step, vars->speed);
+        fast_vec_add(&moby->pos, &moby->pos, &chase_step);
         if (FUN_001f9b48(&moby->pos, &vars->home) > 64.0f) {
             mark_moby_for_removal(moby);
             return;
         }
-        make_hit_descriptor_19040(contact, moby, 0x10001, 1.0f, &chase_step);
+        make_hit_descriptor(contact, moby, 0x10001, 1.0f, &chase_step);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.75f;
-        if (probe_world_sphere(0.75f, &probe, 0x10, moby, contact) &&
+        if (collect_mobies_in_sphere(0.75f, &probe, 0x10, moby, contact) &&
             debris_target != NULL && debris_target->oclass != 0x363 &&
             debris_target->oclass != 0x456 && debris_target->oclass != 0x458 &&
             debris_target->oclass != 0x365 && debris_target->oclass != 0x367) {
@@ -2491,10 +2491,10 @@ void homing_mine_update(struct Moby *moby) {
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.55f;
         if (coll_sphere(0.55f, &probe, 0, moby)) {
-            subtract_vector_xyz(&push, &l07_sphere_collision_resolved_center, &probe);
-            add_vector_xyz(&moby->pos, &moby->pos, &push);
+            fast_vec_sub(&push, &l07_sphere_collision_resolved_center, &probe);
+            fast_vec_add(&moby->pos, &moby->pos, &push);
         }
-        if (!tick_countdown_32_alt(&vars->timeout)) break;
+        if (!fast_dec_timer(&vars->timeout)) break;
         spawn_explosion(moby, &chase_step, NULL, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 2, 7.0f, 0, 1, -1, 0);
         mark_moby_for_removal(moby);
         return;
@@ -2503,7 +2503,7 @@ void homing_mine_update(struct Moby *moby) {
     }
     jet_animate(moby, 0.7f);
 }
-extern int scale_ticks(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 #define NOT_SDA
@@ -2567,7 +2567,7 @@ void mark_swooper_for_removal(struct Moby *moby, SwooperSpawnerVars *spawner_var
     SwooperVars *vars = (SwooperVars *)moby->pvars;
 
     if (spawner_vars != NULL) {
-        vars->life_timer = scale_ticks(spawner_vars->linger_time);
+        vars->life_timer = scale_game_frames(spawner_vars->linger_time);
     }
     mark_moby_for_removal(moby);
 }
@@ -2587,7 +2587,7 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void FUN_L00_00257470(void *, int, int);
 extern void clamp_vector_length(void *, void *, f32) __asm__("FUN_001f9c90");
 extern f32 spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
-extern s32 tick_countdown_32_alt(s32 *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 
@@ -2650,7 +2650,7 @@ void update_swooper(struct Moby *moby) {
         moby->command = 0;
         break;
     case SWOOPER_WAIT_AT_GOAL:
-        subtract_vector_xyz(&vars->velocity, &vars->goal, &moby->pos);
+        fast_vec_sub(&vars->velocity, &vars->goal, &moby->pos);
         FUN_L00_00258278(moby, fast_arc_tan(vars->goal.f[0] - moby->pos.x, vars->goal.f[1] - moby->pos.y),
                          &vars->turn_speed, frame_time_sq * 6.2831855f, D_0015ED6C * 3.1415927f,
                          D_0015ED6C * 6.2831855f);
@@ -2666,9 +2666,9 @@ void update_swooper(struct Moby *moby) {
                 blend_moby_animation((MobyAnim *)moby, 1, 0, 10);
             }
             vars->dive_speed = spawner_vars->speed * D_0015ED6C;
-            vars->life_timer = scale_ticks(600);
+            vars->life_timer = scale_game_frames(600);
             moby->command = 1;
-            vars->bob_timer = scale_ticks(7);
+            vars->bob_timer = scale_game_frames(7);
             moby->state = 2;
         }
         break;
@@ -2678,13 +2678,13 @@ void update_swooper(struct Moby *moby) {
         }
         if (moby->command == 1) {
             moby->pos.z += frame_scale * 0.1f;
-            if (tick_countdown_32_alt(&vars->bob_timer)) {
-                vars->bob_timer = scale_ticks(7);
+            if (fast_dec_timer(&vars->bob_timer)) {
+                vars->bob_timer = scale_game_frames(7);
                 moby->command = 2;
             }
         } else if (moby->command == 2) {
             moby->pos.z -= frame_scale * 0.1f;
-            if (tick_countdown_32_alt(&vars->bob_timer)) {
+            if (fast_dec_timer(&vars->bob_timer)) {
                 moby->command = 0;
             }
         }
@@ -2694,21 +2694,21 @@ void update_swooper(struct Moby *moby) {
         pitch = fast_arc_tan(vector_distance(&moby->pos, &sight.pos), sight.pos.f[2] - moby->pos.z);
         moby->rot.y = spring_turn(&vars->pitch_speed, moby->rot.y, pitch,
                                        frame_time_sq * 3.1415927f, D_0015ED6C * 3.1415927f, D_0015ED6C * 6.2831855f);
-        subtract_vector_xyz(&chase_acceleration, &sight.pos, &moby->pos);
+        fast_vec_sub(&chase_acceleration, &sight.pos, &moby->pos);
         if (moby->command != 0) {
             chase_acceleration.f[2] = 0.0f;
         }
-        normalize_vector_xyz(&chase_acceleration, &chase_acceleration, frame_time_sq * 30.0f);
-        add_vector_xyz(&vars->velocity, &vars->velocity, &chase_acceleration);
+        fast_vec_normalize(&chase_acceleration, &chase_acceleration, frame_time_sq * 30.0f);
+        fast_vec_add(&vars->velocity, &vars->velocity, &chase_acceleration);
         clamp_vector_length(&vars->velocity, &vars->velocity, D_0015ED6C * 10.0f);
-        add_vector_xyz(&moby->pos, &moby->pos, &vars->velocity);
+        fast_vec_add(&moby->pos, &moby->pos, &vars->velocity);
         if (FUN_001f9b48(&moby->pos, &vars->home) > 64.0f) {
             mark_swooper_for_removal(moby, spawner_vars);
         }
         make_hit_descriptor(contact, moby, 0x10001, 1.0f, &vars->velocity);
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.75f;
-        if (probe_world_sphere(0.75f, &probe, 0x10, moby, contact) && debris_target != NULL &&
+        if (collect_mobies_in_sphere(0.75f, &probe, 0x10, moby, contact) && debris_target != NULL &&
             debris_target->oclass != 0x363 && debris_target->oclass != 0x456 &&
             debris_target->oclass != 0x458 && debris_target->oclass != 0x365 &&
             debris_target->oclass != 0x367) {
@@ -2718,8 +2718,8 @@ void update_swooper(struct Moby *moby) {
         qcopy(&probe, &moby->pos);
         probe.f[2] += 0.55f;
         if (coll_sphere(0.55f, &probe, 0, moby)) {
-            subtract_vector_xyz(&push, &l07_sphere_collision_resolved_center, &probe);
-            add_vector_xyz(&moby->pos, &moby->pos, &push);
+            fast_vec_sub(&push, &l07_sphere_collision_resolved_center, &probe);
+            fast_vec_add(&moby->pos, &moby->pos, &push);
         }
         if (vars->life_timer == 0) {
             mark_swooper_for_removal(moby, spawner_vars);
@@ -2742,9 +2742,9 @@ typedef struct {
 } BreakableVars;
 
 extern float D_0015ED6C __attribute__((section(".sdata")));
-extern void break_rotate(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void break_rand_vec(void *, f32, f32) __asm__("FUN_L00_00257d78");
-extern struct Moby *break_spawn_shard(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
+extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 
 /* Breakable prop: when hit by moby 0x415 in state 8 or 0x452 in state 9 with hit kind 1.000123, scatters its shard count of pieces over its rotated extent, spawns debris and removes itself. */
 void process_breakable_prop_hit(struct Moby *moby) __asm__("FUN_L07_00319f48");
@@ -2765,20 +2765,20 @@ void process_breakable_prop_hit(struct Moby *moby) {
         ext.x = breakable_vars->size.x;
         ext.y = breakable_vars->size.y;
         ext.z = breakable_vars->size.z;
-        break_rotate(&ext, &ext, &moby->rot_row0);
+        transform_vector_by_basis(&ext, &ext, &moby->rot_row0);
         for (i = 0; i < breakable_vars->shards; i++) {
             shard_position.x = random_float_between(-ext.x, ext.x) * 0.5f;
             shard_position.y = random_float_between(-ext.y, ext.y) * 0.5f;
             shard_position.z = random_float_between(1.5f, ext.z);
-            add_vector_xyz(&shard_position, &shard_position, &moby->pos);
-            break_rand_vec(&shard_velocity, D_0015ED6C * 5.0f, D_0015ED6C * 10.0f);
+            fast_vec_add(&shard_position, &shard_position, &moby->pos);
+            random_vector(&shard_velocity, D_0015ED6C * 5.0f, D_0015ED6C * 10.0f);
             if (shard_velocity.z < 0.0f)
                 shard_velocity.z = -shard_velocity.z;
             if (shard_velocity.z < D_0015ED6C + D_0015ED6C)
                 shard_velocity.z = shard_velocity.z + (D_0015ED6C + D_0015ED6C);
             shard_class = i % 3 + 0x2B8;
             scale = random_float_between(0.41f, 0.5f);
-            break_spawn_shard(&shard_position, &shard_velocity, shard_class, scale, random_int_between(0x32, 0x50), 1.0f, 1.0f,
+            spawn_debris_chunk(&shard_position, &shard_velocity, shard_class, scale, random_int_between(0x32, 0x50), 1.0f, 1.0f,
                               0.75f, 0);
         }
         spawn_explosion(moby, &hit->pos, hit, 3.0f, 1.0f, 10, 3, 16, 4.0f, 2.0f, 9.0f, 1.0f, 0, 15.0f, 1, 1, -1, 0);

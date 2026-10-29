@@ -158,11 +158,11 @@ typedef struct {
     unsigned int mask;
 } Help_2E57F8;
 
-extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
+extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern int D_L04_00179590[] __attribute__((section(".data")));
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4D4 __attribute__((section(".data")));
 extern unsigned char D_0013D4E3[];
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
@@ -205,8 +205,8 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
                 if (usage[0x18].count < 0xFFFF) {
                     usage[0x18].count++;
                 }
-                if (scale_game_frames_alt(D_0015EEA4_macro) / 600 > usage[0x18].unk2) {
-                    usage[0x18].unk2 = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                if (scale_game_frames(D_0015EEA4_macro) / 600 > usage[0x18].unk2) {
+                    usage[0x18].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
                 }
                 usage[0x18].level_mask = usage[0x18].level_mask | (1 << current_level_index_macro) | 0x80000000;
             } else if (D_00141908 >= 3) {
@@ -216,8 +216,8 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
                         help_request(0xFA1, 0x1D);
                     }
                 } else {
-                    int elapsed = scale_game_frames_alt(D_0015EEA4_macro) - D_001417C2 * 600;
-                    if (scale_game_frames_alt(0x4650) < elapsed) {
+                    int elapsed = scale_game_frames(D_0015EEA4_macro) - D_001417C2 * 600;
+                    if (scale_game_frames(0x4650) < elapsed) {
                         Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
                         if (help[0x1C].count == 0) {
                             help_request(0xFA0, 0x1C);
@@ -237,7 +237,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
                         Moby *other;
                         for (other = D_L04_00160064_2E57F8; other != 0; other = other->next) {
                             if (other->oclass == 0x118
-                                && distance_xyz(((float *)&other->pos), ((char *)&D_0013F3D0)) < 3.0f
+                                && fast_vec_dist(((float *)&other->pos), ((char *)&D_0013F3D0)) < 3.0f
                                 && *(float *)*(void **)&other->pvars != 1.0f) {
                                 data->f20++;
                                 if (data->f20 == 3 || data->f20 == 6) {
@@ -294,13 +294,13 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
             if (D_0013D4DA == 0) {
                 Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
-                int elapsed = scale_game_frames_alt(D_0015EEA4_macro) - help[0x1F].time * 600;
-                if ((int)(scale_game_frames_alt(0x12) * 60.0f) < elapsed || help[0x1F].time * 600 == 0) {
+                int elapsed = scale_game_frames(D_0015EEA4_macro) - help[0x1F].time * 600;
+                if ((int)(scale_game_frames(0x12) * 60.0f) < elapsed || help[0x1F].time * 600 == 0) {
                     help_request(0xFA3, 0x1F);
                 } else {
-                    int now = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                    int now = scale_game_frames(D_0015EEA4_macro) / 600;
                     if (help[0x1F].time < now) {
-                        help[0x1F].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                        help[0x1F].time = scale_game_frames(D_0015EEA4_macro) / 600;
                     }
                 }
             } else {
@@ -310,8 +310,8 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
                     if (count <= 0xFFFE) {
                         usage[0x11].count = count + 1;
                     }
-                    if (scale_game_frames_alt(D_0015EEA4_macro) / 600 > usage[0x11].unk2) {
-                        usage[0x11].unk2 = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                    if (scale_game_frames(D_0015EEA4_macro) / 600 > usage[0x11].unk2) {
+                        usage[0x11].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
                     }
                     usage[0x11].level_mask = usage[0x11].level_mask | (1 << current_level_index_macro) | 0x80000000;
                 } else if (data->fC == 0) {
@@ -320,21 +320,21 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
                         data->f8++;
                         help = (Help_2E57F8 *)(((char *)&D_00141968));
                         if (help[0x20].count != 0) {
-                            int elapsed = scale_game_frames_alt(D_0015EEA4_macro) - help[0x20].time * 600;
-                            if ((int)(scale_game_frames_alt(0x12) * 60.0f) < elapsed || help[0x20].time * 600 == 0) {
+                            int elapsed = scale_game_frames(D_0015EEA4_macro) - help[0x20].time * 600;
+                            if ((int)(scale_game_frames(0x12) * 60.0f) < elapsed || help[0x20].time * 600 == 0) {
                                 help_request(0xFA4, 0x20);
                             } else {
-                                int now = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                                int now = scale_game_frames(D_0015EEA4_macro) / 600;
                                 if (help[0x20].time < now) {
-                                    help[0x20].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                                    help[0x20].time = scale_game_frames(D_0015EEA4_macro) / 600;
                                 }
                             }
                         } else {
                             int now;
                             help[0x20].count++;
-                            now = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                            now = scale_game_frames(D_0015EEA4_macro) / 600;
                             if (help[0x20].time < now) {
-                                help[0x20].time = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                                help[0x20].time = scale_game_frames(D_0015EEA4_macro) / 600;
                             }
                             help[0x20].mask = help[0x20].mask | (1 << current_level_index_macro) | 0x80000000;
                         }
@@ -350,8 +350,8 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f50) != 0
             && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
-            int elapsed = scale_game_frames_alt(D_0015EEA4_macro) - D_00141892 * 600;
-            if (scale_game_frames_alt(0x34BC0) < elapsed) {
+            int elapsed = scale_game_frames(D_0015EEA4_macro) - D_00141892 * 600;
+            if (scale_game_frames(0x34BC0) < elapsed) {
                 Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
                 if (!(help[0x43].mask & (1 << current_level_index_macro))) {
                     help_request(0x3EF, 0x43);
@@ -370,7 +370,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
                         help_request(0x7DB, 0x46);
                     } else if (help[0x47].count == 0) {
                         data->f1C++;
-                        if (scale_game_frames_alt(0x708) < data->f1C) {
+                        if (scale_game_frames(0x708) < data->f1C) {
                             help_request(0x7DC, 0x47);
                         }
                     }
@@ -386,9 +386,9 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
                 && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)) {
                 int now;
                 usage[0x19].count++;
-                now = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                now = scale_game_frames(D_0015EEA4_macro) / 600;
                 if (usage[0x19].unk2 < now) {
-                    usage[0x19].unk2 = scale_game_frames_alt(D_0015EEA4_macro) / 600;
+                    usage[0x19].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
                 }
                 usage[0x19].level_mask = usage[0x19].level_mask | (1 << current_level_index_macro) | 0x80000000;
             }
@@ -398,7 +398,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
             && ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) >= 2 && ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) != 9
             && data->f28 == 0) {
             data->f24++;
-            data->f28 = scale_game_frames_alt(0xB4);
+            data->f28 = scale_game_frames(0xB4);
         } else if (data->f28 != 0) {
             if (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9) {
                 data->f28 = 0;
@@ -444,14 +444,14 @@ extern f32 g48_2e5178 __asm__("D_L04_00161D78") __attribute__((sda));
 extern f32 g4c_2e5178 __asm__("D_L04_00161D7C") __attribute__((sda));
 extern u128 tgt_2e5178[] __asm__("D_L04_00174000") __attribute__((section(".data")));
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 appr_2e5178(f32, f32) __asm__("FUN_001fa580");
-extern s32 tick_2e5178(void *) __asm__("FUN_001f9770");
-extern s32 coll_2e5178(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
+extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
+extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void refl_2e5178(void *, void *, void *) __asm__("FUN_L00_001ff660");
+extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 rnd_2e5178(f32, f32) __asm__("FUN_L00_00257c48");
-extern void kill_2e5178(void *) __asm__("FUN_0020c828");
+extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void update_entity_bounce_and_decay(M2e5178 *entity) __asm__("FUN_L04_002e5178");
 
 void update_entity_bounce_and_decay(M2e5178 *entity) {
@@ -465,30 +465,30 @@ void update_entity_bounce_and_decay(M2e5178 *entity) {
     qcopy(&old, entity->pos);
     pv->vel[2] -= frame_time_sq * 20.0f;
     fast_vec_add(entity->pos, entity->pos, pv->vel);
-    entity->f40 = appr_2e5178(entity->f40, pv->f20);
-    entity->f44 = appr_2e5178(entity->f44, pv->f24);
-    entity->f48 = appr_2e5178(entity->f48, pv->f28);
+    entity->f40 = fast_add_rotations(entity->f40, pv->f20);
+    entity->f44 = fast_add_rotations(entity->f44, pv->f24);
+    entity->f48 = fast_add_rotations(entity->f48, pv->f28);
     switch (entity->b20) {
     case ENTITY_MOTION_STATE_BOUNCE:
         if (entity->pos[2] < pv->f4 - 3.0f) {
             entity->b20 = 1;
-        } else if (tick_2e5178(&pv->hE) && pv->hC != 0 && coll_2e5178(entity->pos, 2, 0, pv->f8)) {
+        } else if (fast_dec_timer_s16(&pv->hE) && pv->hC != 0 && coll_sphere(entity->pos, 2, 0, pv->f8)) {
             collision_normal = tgt_2e5178;
             if (fast_vec_dot(pv->vel, collision_normal) < 0.0f) {
                 qcopy(entity->pos, collision_normal - 1);
                 pv->hC--;
-                refl_2e5178(pv->vel, pv->vel, collision_normal);
+                reflect_vector(pv->vel, pv->vel, collision_normal);
                 fast_vec_scale(pv->vel, pv->vel, 0.75f);
                 pv->f20 = 0.0f;
-                pv->f24 = rnd_2e5178(g48_2e5178, g4c_2e5178) * DEG_TO_RAD * frame_time;
-                pv->f28 = rnd_2e5178(g48_2e5178, g4c_2e5178) * DEG_TO_RAD * frame_time;
+                pv->f24 = randf_sym(g48_2e5178, g4c_2e5178) * DEG_TO_RAD * frame_time;
+                pv->f28 = randf_sym(g48_2e5178, g4c_2e5178) * DEG_TO_RAD * frame_time;
             }
         }
         break;
     case ENTITY_MOTION_STATE_DECAY_AND_REMOVE:
         entity->f2c *= 0.9f;
         if (entity->b23 < 4) {
-            kill_2e5178(entity);
+            mark_moby_for_removal(entity);
         } else {
             entity->b23 -= 4;
         }

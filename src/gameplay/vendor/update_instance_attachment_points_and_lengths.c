@@ -1,7 +1,7 @@
 #include "types.h"
 extern u8 attachment_point_indices[] __asm__("D_00160ED0");
 extern void transform_scaled_vertex_batch() __asm__("func_0020CD48");
-extern void subtract_vector_xyz() __asm__("func_001F9A28");
+extern void fast_vec_sub() __asm__("func_001F9A28");
 extern f32 fast_vec_length() __asm__("func_001F9AF0");
 struct Node {
     u8 pad[0x40];
@@ -24,8 +24,8 @@ void update_instance_attachment_points_and_lengths(struct Arg *instance) {
     node = instance->node;
     *(struct Pair64 *)(sp_slot + 0x20) = *(struct Pair64 *)attachment_point_indices;
     transform_scaled_vertex_batch(instance, 4, sp_slot + 0x20, node);
-    subtract_vector_xyz(sp_slot, (u8 *)node + 0x10, node);
-    subtract_vector_xyz(sp_slot + 0x10, (u8 *)node + 0x20, node);
+    fast_vec_sub(sp_slot, (u8 *)node + 0x10, node);
+    fast_vec_sub(sp_slot + 0x10, (u8 *)node + 0x20, node);
     node->a = fast_vec_length(sp_slot);
     node->b = fast_vec_length(sp_slot + 0x10);
 }

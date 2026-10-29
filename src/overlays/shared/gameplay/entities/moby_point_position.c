@@ -8,7 +8,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250800), where it is exact; names translated to the US level program. */
 
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void get_moby_joint_matrices(void *, int, int *, void *) __asm__("FUN_00210850");
@@ -25,5 +25,5 @@ void moby_point_position(char *moby, int joint_index, void *world_position_out) 
     get_moby_joint_matrices(moby, 1, &joint_index_copy, joint_point_data);
     fast_vec_scale(world_position_out, joint_point_data + 0x30, point_scale);
     transform_vector_by_basis(world_position_out, world_position_out, moby + 0xC0);
-    add_vector_xyz(world_position_out, world_position_out, moby + 0x10);
+    fast_vec_add(world_position_out, world_position_out, moby + 0x10);
 }

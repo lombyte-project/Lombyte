@@ -41,7 +41,7 @@ extern u8 D_0013D4C0[];
 
 extern s32 is_point_inside_clip_volume(void *point, s32 volume) __asm__("FUN_00214720");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern s32 tick_countdown(s32 *) __asm__("FUN_001f9740");
+extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
@@ -62,7 +62,7 @@ void update_kerwan_tutorial_hints(u8 *moby) {
     s32 i;
     s32 scaled_time_value;
 
-    tick_countdown(&data[22]);
+    fast_dec_timer(&data[22]);
     switch (moby[0x20]) {
     case TUTORIAL_HINTS_INITIALIZE:
         data[20] = 0;
@@ -292,10 +292,10 @@ void update_kerwan_cutscene_effects(char *owner_moby) {
     }
 }
 #include "qcopy.h"
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 /* places the camera behind the hero and rebuilds its orientation axes */
 void rebuild_hero_relative_camera_transform(char *camera) __asm__("FUN_L03_002eb7e0");
@@ -311,23 +311,23 @@ void rebuild_hero_relative_camera_transform(char *camera) {
     float look[4];
     float camera_look_displacement[4];
 
-    normalize_vector_xyz(side, &hero.gravity_dir, -*(float *)(camera_data + 0xE0));
-    normalize_vector_xyz(back, camera_offset_direction, -*(float *)(camera_data + 0xD0));
-    add_vector_xyz(pos, &hero.motion.pos, side);
-    add_vector_xyz(camera + 0x30, pos, back);
-    normalize_vector_xyz(look, &hero.gravity_dir, -camera_target_data[5]);
-    add_vector_xyz(look, &hero.motion.pos, look);
-    subtract_vector_xyz(camera_look_displacement, look, camera + 0x30);
-    normalize_vector_xyz(camera_look_direction, camera_look_displacement, 1.0f);
-    normalize_vector_xyz(camera, camera_look_direction, 1.0f);
-    normalize_vector_xyz(camera + 0x40, camera, 1.0f);
+    fast_vec_normalize(side, &hero.gravity_dir, -*(float *)(camera_data + 0xE0));
+    fast_vec_normalize(back, camera_offset_direction, -*(float *)(camera_data + 0xD0));
+    fast_vec_add(pos, &hero.motion.pos, side);
+    fast_vec_add(camera + 0x30, pos, back);
+    fast_vec_normalize(look, &hero.gravity_dir, -camera_target_data[5]);
+    fast_vec_add(look, &hero.motion.pos, look);
+    fast_vec_sub(camera_look_displacement, look, camera + 0x30);
+    fast_vec_normalize(camera_look_direction, camera_look_displacement, 1.0f);
+    fast_vec_normalize(camera, camera_look_direction, 1.0f);
+    fast_vec_normalize(camera + 0x40, camera, 1.0f);
     qcopy(camera, camera + 0x40);
-    cross_vectors_xyz(camera + 0x10, camera, &hero.gravity_dir);
-    normalize_vector_xyz(camera + 0x10, camera + 0x10, -1.0f);
-    cross_vectors_xyz(camera + 0x20, camera + 0x10, camera);
+    fast_vec_cross(camera + 0x10, camera, &hero.gravity_dir);
+    fast_vec_normalize(camera + 0x10, camera + 0x10, -1.0f);
+    fast_vec_cross(camera + 0x20, camera + 0x10, camera);
 }
 #include "sda.h"
-extern void clear_u64_value_eb978(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern s32 D_L03_00167074 NOT_SDA;
 /* vendor camera init: aims the camera data at the hero, resets its blend state and places it (FUN_L03_002eb7e0) */
@@ -363,7 +363,7 @@ void initialize_hero_relative_camera(void *camera_instance) {
     *(s32 *)(pos + 0x28) = 0;
     *(float *)(pos + 0x20) = 0.01f;
     *(float *)(pos + 0x24) = 0.2f;
-    clear_u64_value_eb978(pos + 0x10);
+    clear_u64_value(pos + 0x10);
     qcopy(pos, &hero.motion.pos);
     timer = *(char **)(camera + 0x70);
     ((s32 *)timer)[12] = scale_game_frames(0x78);
@@ -433,10 +433,10 @@ void update_smoothed_hero_relative_camera_position(void *camera_instance) {
 extern char camera_look_offset_direction[] __asm__("D_L03_00166F40");
 extern short camera_target_height_stiffness __asm__("D_L03_00161E70") __attribute__((sda));
 extern short camera_target_height_damping __asm__("D_L03_00161E74") __attribute__((sda));
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 
@@ -452,14 +452,14 @@ void rebuild_camera_orientation_axes(void *camera_instance) {
     qcopy(look_point, camera_data);
     camera_target_data[2] = cam_interp_values(camera_data + 0xBC, camera_target_data[2], hero.motion.pos.f[2],
                              *(float *)&camera_target_height_stiffness, *(float *)&camera_target_height_damping, 0.0f);
-    normalize_vector_xyz(look_offset, camera_look_offset_direction, camera_target_data[5]);
-    add_vector_xyz(look_point, look_offset, look_point);
-    subtract_vector_xyz(look_direction, look_point, camera + 0x30);
-    normalize_vector_xyz(camera, look_direction, 1.0f);
+    fast_vec_normalize(look_offset, camera_look_offset_direction, camera_target_data[5]);
+    fast_vec_add(look_point, look_offset, look_point);
+    fast_vec_sub(look_direction, look_point, camera + 0x30);
+    fast_vec_normalize(camera, look_direction, 1.0f);
     qcopy(camera + 0x40, camera);
-    cross_vectors_xyz(camera + 0x10, camera, camera_look_offset_direction - 0x10);
-    normalize_vector_xyz(camera + 0x10, camera + 0x10, 1.0f);
-    cross_vectors_xyz(camera + 0x20, camera + 0x10, camera);
+    fast_vec_cross(camera + 0x10, camera, camera_look_offset_direction - 0x10);
+    fast_vec_normalize(camera + 0x10, camera + 0x10, 1.0f);
+    fast_vec_cross(camera + 0x20, camera + 0x10, camera);
 }
 
 
@@ -481,18 +481,18 @@ int FUN_L03_002ebd70(void) {
 
 extern void update_smoothed_hero_relative_camera_position(void *) __asm__("FUN_L03_002ebb00");
 extern void rebuild_camera_orientation_axes(void *) __asm__("FUN_L03_002ebc58");
-void no_op_main_callback(void *) __asm__("FUN_001e93e8");
+void noop_main_callback(void *) __asm__("FUN_001e93e8");
 
 void update_camera_position_and_orientation(void *camera) __asm__("FUN_L03_002ebdb0");
 
 void update_camera_position_and_orientation(void *camera) {
     update_smoothed_hero_relative_camera_position(camera);
-    no_op_main_callback(camera);
+    noop_main_callback(camera);
     rebuild_camera_orientation_axes(camera);
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002ED1B0), where it is exact; names translated to the US level program. */
 
-extern int is_point_inside_clip_volume_alt(void *, int) __asm__("FUN_00214720");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 void update_camera_state_outside_clip_volume(char *moby) __asm__("FUN_L03_002ebde8");
 
@@ -500,7 +500,7 @@ void update_camera_state_outside_clip_volume(char *moby) {
     char *entry = (char *)((*(short *)(moby + 0x84) << 5) + D_L03_0015EF50);
     char *sub = *(char **)(entry + 0x1C);
     int value = *(int *)(sub + 0xC);
-    if (value >= 0 && is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, value) == 0) {
+    if (value >= 0 && is_point_inside_clip_volume(D_0013E533 + 0xE9D, value) == 0) {
         *(short *)(moby + 0x7E) = 3;
     }
 }

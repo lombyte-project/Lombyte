@@ -35,10 +35,10 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float dot_vectors_xyz(void *a, void *b);
+extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
-extern float vector_length_xyz(void *a);
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int D_L16_001612D8;
 extern int D_L16_0015F5C4;
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
@@ -92,11 +92,11 @@ extern void FUN_L05_002661e8(void);
 extern void draw_hud_progress_and_rank(void) __asm__("FUN_L05_00266320");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_vector(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void draw_hud_timer(void) __asm__("FUN_L05_00266710");
-extern void normalize_vector_xyz(void *, void *, float);
-extern void scale_vector_xyz(void *, void *, float);
-extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L16_0021e398");
@@ -190,7 +190,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
-        clear_vector(&p->motion.momentum);
+        clear_u64_value(&p->motion.momentum);
         p->rand_timer.range = 0x68;
         if (b) {
             if (get_hero_idle_animation_index(0) == 0x54) {
@@ -539,7 +539,7 @@ int hero_set_state(int a, int b) {
                 queue_animation_update(7, 0xFFFF, (int)initialize_hud_element_defaults, (int)FUN_L05_002661e8,
                                        (int)draw_hud_timer, 0, 0);
             } else {
-                q->board_vertical_speed = -dot_vectors_xyz(&q->gravity_dir, &q->motion.displacement);
+                q->board_vertical_speed = -fast_vec_dot(&q->gravity_dir, &q->motion.displacement);
             }
         }
         if (b) {
@@ -568,7 +568,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         release_and_clear_hero_voice_slots();
         p->boost_pad_timer = 0;
-        scale_vector_xyz(&p->motion.velocity, &p->motion.resolved_velocity, 0.7f);
+        fast_vec_scale(&p->motion.velocity, &p->motion.resolved_velocity, 0.7f);
         p->motion.velocity.f[2] = frame_time * 10.0f;
         set_hero_animation(0x61, 3, (float)scale_game_frames(4));
         break;
@@ -604,7 +604,7 @@ int hero_set_state(int a, int b) {
         {
             char *velocity_bytes = (char *)&hero.motion.velocity;
             char *w;
-            clear_vector(velocity_bytes);
+            clear_u64_value(velocity_bytes);
             w = velocity_bytes + 0x70;
             qcopy(w, velocity_bytes + 0x30);
             gravity_flatten((float *)w, (float *)w);
@@ -935,7 +935,7 @@ int hero_set_state(int a, int b) {
             q->swing_rope_spring_k = frame_scale_sq * 0.025f;
             q->unk9C8 = frame_scale_sq * 0.33f;
             q->swing_rope_max_speed = frame_time * 11.0f;
-            clear_vector(&q->motion.rot_spring_vel);
+            clear_u64_value(&q->motion.rot_spring_vel);
             q->grapple_lockout_timer = scale_game_frames(0x28);
             if (*(float *)(d + 0x24) != 0.0f)
                 q->swing_rope_spring_k = *(float *)(d + 0x24);
@@ -967,7 +967,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
-        clear_vector(&p->motion.rot_spring_vel);
+        clear_u64_value(&p->motion.rot_spring_vel);
         qcopy(&p->motion.velocity, &p->motion.resolved_velocity);
         if (b)
             set_hero_animation(0xB, 0, (float)scale_game_frames(0xF));
@@ -1009,11 +1009,11 @@ int hero_set_state(int a, int b) {
         seg = p->rail_segment;
         t = p->rail_seg_frac;
         sample_path(*(int **)&p->rail_spline, pos, &seg, &t, p->rail_spline_loops, 1.0f);
-        subtract_vector_xyz(vec, pos, &p->motion.pos);
-        if (0.001f < vector_length_xyz(vec)) {
-            normalize_vector_xyz(vec, vec, 1.0f);
+        fast_vec_sub(vec, pos, &p->motion.pos);
+        if (0.001f < fast_vec_length(vec)) {
+            fast_vec_normalize(vec, vec, 1.0f);
             if (p->state.prev_control_mode != 0xF) {
-                p->grind_base_speed = dot_vectors_xyz(&p->motion.displacement, vec);
+                p->grind_base_speed = fast_vec_dot(&p->motion.displacement, vec);
             }
         }
         {
@@ -1932,8 +1932,8 @@ int hero_set_state(int a, int b) {
         if (frame_time * 2.5f < p->grind_base_speed)
             p->grind_base_speed = frame_time * 2.5f;
         p->unk5AC.i = 0;
-        clear_vector(&p->motion.velocity);
-        clear_vector(&p->motion.displacement);
+        clear_u64_value(&p->motion.velocity);
+        clear_u64_value(&p->motion.displacement);
         p->motion.velocity.f[2] = frame_time * 10.0f;
         if (b)
             set_hero_animation(0x10, 2, -3.0f);
@@ -1997,7 +1997,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->item_select_blocked = 1;
         p->item_use_locked = 1;
-        clear_vector(&p->motion.velocity);
+        clear_u64_value(&p->motion.velocity);
         if (b)
             set_hero_animation(0xB, 0, -1.0f);
         break;

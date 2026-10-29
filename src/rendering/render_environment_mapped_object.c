@@ -48,14 +48,14 @@ extern float environment_mapping_saved_vertex_uvs[][2] __asm__("D_001DCE70");
 
 extern u64 get_effect_texture(int) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern int scale_ticks(int) __asm__("func_001F96F8");
-extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
-extern float square_root_float(float) __asm__("func_001F9988");
+extern int scale_game_frames(int) __asm__("func_001F96F8");
+extern void fast_dec_timer(s32 *) __asm__("func_001F9740");
+extern float square_root(float) __asm__("func_001F9988");
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern void subtract_vectors(void *, void *, void *) __asm__("func_001F9A28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void scale_vector(void *, void *, float) __asm__("func_001F9A68");
-extern float vector_dot_product(void *, void *) __asm__("func_001F9AB0");
-extern void normalize_vector(void *, void *, float) __asm__("func_001F9BF8");
+extern float fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
+extern void fast_vec_normalize(void *, void *, float) __asm__("func_001F9BF8");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern void calculate_object_transform(EnvironmentMappedObject *, int,
@@ -116,21 +116,21 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     }
     if (mapping_enabled != 0 || environment_mapping_uv_refresh_state == 1) {
         environment_mapping_was_active_gp = 1;
-        tick_countdown_32(&D_001604AC);
+        fast_dec_timer(&D_001604AC);
         transition_fraction =
-            convert_integer_to_float(D_001604AC) / convert_integer_to_float(scale_ticks(0x3C));
+            convert_integer_to_float(D_001604AC) / convert_integer_to_float(scale_game_frames(0x3C));
         for (element_index = 0; element_index < vertex_count; element_index++) {
             transform_vector(&environment_mapping_transformed_vertex_positions[element_index], &positions[element_index],
                              object_transform);
-            subtract_vectors(view_direction, &environment_mapping_transformed_vertex_positions[element_index], camera_position);
-            normalize_vector(view_direction, view_direction, 1.0f);
+            fast_vec_sub(view_direction, &environment_mapping_transformed_vertex_positions[element_index], camera_position);
+            fast_vec_normalize(view_direction, view_direction, 1.0f);
             transform_vector(normal, &normals[element_index], object_transform);
-            normalize_vector(normal, normal, 0.1f);
-            scale_vector(reflection, normal, vector_dot_product(normal, view_direction) * 2.0f);
-            subtract_vectors(reflection, view_direction, reflection);
-            normalize_vector(reflection, reflection, 1.0f);
+            fast_vec_normalize(normal, normal, 0.1f);
+            scale_vector(reflection, normal, fast_vec_dot(normal, view_direction) * 2.0f);
+            fast_vec_sub(reflection, view_direction, reflection);
+            fast_vec_normalize(reflection, reflection, 1.0f);
             reflection[2] += 1.0f;
-            sphere_denominator = square_root_float(reflection[2] * 2.0f) * 2.0f;
+            sphere_denominator = square_root(reflection[2] * 2.0f) * 2.0f;
             if (environment_mapping_uv_refresh_state == 1 || D_001604AC == 0) {
                 environment_mapping_vertex_uvs[element_index][0] = reflection[0] / sphere_denominator + 0.5f;
                 environment_mapping_vertex_uvs[element_index][1] = reflection[1] / sphere_denominator + 0.5f;
@@ -161,7 +161,7 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
                                  object_transform);
             }
         }
-        D_001604AC = scale_ticks(0x3C);
+        D_001604AC = scale_game_frames(0x3C);
     }
     for (element_index = 0; element_index < quad_count; element_index++) {
         for (corner_index = 0; corner_index < 4; corner_index++) {

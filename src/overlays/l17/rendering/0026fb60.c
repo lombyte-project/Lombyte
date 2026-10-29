@@ -51,10 +51,10 @@ unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *recor
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/partupd_00270A28.c: func_L17_00270C98), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float_q(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
-extern int random_integer_below_q(int) __asm__("FUN_00213260");
-extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r_q(float) __asm__("FUN_001fa6d0");
 
@@ -80,10 +80,10 @@ unsigned char *create_drone_flight_trail_record(char *position_source, int mode,
                 *(float *)(record + 0xC) = 630000.0f;
                 *(short *)(record + 0xA) = d;
                 if (step != 0) {
-                    float a = convert_integer_to_float_q((short)d - 1);
+                    float a = convert_integer_to_float((short)d - 1);
                     *(int *)(record + 4) =
                         FUN_001fa6e0_q(0x603F1008, *(int *)(record + 4),
-                                       a / convert_integer_to_float_q(*(short *)(record + 0xA)));
+                                       a / convert_integer_to_float(*(short *)(record + 0xA)));
                 }
             } else {
                 int d = 5 - step;
@@ -92,14 +92,14 @@ unsigned char *create_drone_flight_trail_record(char *position_source, int mode,
                 *(float *)(record + 0xC) = 420000.0f;
                 *(short *)(record + 0xA) = d;
                 if (step != 0) {
-                    float a = convert_integer_to_float_q((short)d - 1);
+                    float a = convert_integer_to_float((short)d - 1);
                     *(int *)(record + 4) =
                         FUN_001fa6e0_q(0x30FFFFFF, *(int *)(record + 4),
-                                       a / convert_integer_to_float_q(*(short *)(record + 0xA)));
+                                       a / convert_integer_to_float(*(short *)(record + 0xA)));
                 }
             }
             record[1] = 0;
-            record[8] = random_integer_below_q(0xFF);
+            record[8] = random_integer_below(0xFF);
             record[2] = *D_L17_001B2A54;
         }
         return record;

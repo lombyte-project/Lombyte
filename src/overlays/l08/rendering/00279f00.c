@@ -11,9 +11,9 @@
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern short moby_offset_effect_size_gp __asm__("D_L08_00160200") __attribute__((sda));
@@ -30,9 +30,9 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
     if (effect != 0) {
         source_position = source_moby + 0x10;
         effect_data = (char *)effect + 0x20;
-        subtract_vector_xyz(position_offset, source_position, D_L08_001675C0);
-        normalize_vector_xyz(position_offset, position_offset, *(float *)&moby_offset_effect_offset_length_gp);
-        add_vector_xyz(effect + 0x10, source_position, position_offset);
+        fast_vec_sub(position_offset, source_position, D_L08_001675C0);
+        fast_vec_normalize(position_offset, position_offset, *(float *)&moby_offset_effect_offset_length_gp);
+        fast_vec_add(effect + 0x10, source_position, position_offset);
         *(int *)(effect + 4) = *(int *)&moby_offset_effect_color_gp;
         effect[9] = func_001FA898_r(4.0f) + 0x40;
         effect[3] = 0x48;
@@ -92,8 +92,8 @@ unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *initi
     return effect;
 }
 #include "eetypes.h"
-extern unsigned char *p27fe00_alloc(int) __asm__("FUN_L00_002678b8");
-extern int p27fe00_trunc(float) __asm__("FUN_001fa6d0");
+extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern unsigned char *D_L08_001B29B4 __attribute__((section(".data")));
 
@@ -102,12 +102,12 @@ void spawn_effect_with_initial_motion(u128 *spawn_position, u128 *initial_motion
 void spawn_effect_with_initial_motion(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) {
     unsigned char *effect;
     unsigned char *effect_data;
-    effect = p27fe00_alloc(0x4D);
+    effect = create_part(0x4D);
     if (effect != 0) {
         qcopy(effect + 0x10, spawn_position);
         effect_data = effect + 0x20;
         *(int *)(effect + 4) = 0x50504040;
-        effect[9] = p27fe00_trunc(2.0f) + 0x40;
+        effect[9] = truncate_float_to_s32(2.0f) + 0x40;
         effect[3] = 0x48;
         effect[1] = 0;
         effect[2] = *D_L08_001B29B4;

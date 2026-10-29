@@ -93,14 +93,14 @@ void initialize_transform_state_from_level_table(char *transform_state) {
 /* smooths a direction and rebuilds its orthogonal matrix axes */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002E9AF8), where it is exact; names translated to the US level program. */
 
-extern f32 approximate_arcsine(f32) __asm__("func_001F9DF8");
-extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
+extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float transform_basis_reference_vector[] __asm__("D_L03_00166F30");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern void rotate_vector_by_scaled_angle_between_vectors(float, float *, float *, float *, int) __asm__("FUN_L03_0024e6f8");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void smooth_transform_orientation_toward_hero(char *transform_state) __asm__("FUN_L03_002e8730");
 
@@ -114,20 +114,20 @@ void smooth_transform_orientation_toward_hero(char *transform_state) {
     qcopy(position, hero.motion.pos.f);
     position[2] += height[19];
     result = transform_state + 0x40;
-    subtract_vector_xyz(direction, position, transform_state + 0x30);
-    normalize_vector_xyz(direction, direction, 1.0f);
-    angle = approximate_arcsine(dot_vectors_xyz(direction, transform_state));
+    fast_vec_sub(direction, position, transform_state + 0x30);
+    fast_vec_normalize(direction, direction, 1.0f);
+    angle = fast_arc_sin(fast_vec_dot(direction, transform_state));
     rotation_scale = rope_spring_turn(data, 0.0f, 1.57079637f - angle, *(float *)(data + 4),
                          *(float *)(data + 8), *(float *)(data + 12));
     rotate_vector_by_scaled_angle_between_vectors(rotation_scale, (float *)transform_state, (float *)result, direction, 1);
-    normalize_vector_xyz(result, transform_state, 1.0f);
+    fast_vec_normalize(result, transform_state, 1.0f);
     qcopy(transform_state, result);
-    cross_vectors_xyz(transform_state + 0x10, transform_state, transform_basis_reference_vector);
-    normalize_vector_xyz(transform_state + 0x10, transform_state + 0x10, 1.0f);
-    cross_vectors_xyz(transform_state + 0x20, transform_state + 0x10, transform_state);
+    fast_vec_cross(transform_state + 0x10, transform_state, transform_basis_reference_vector);
+    fast_vec_normalize(transform_state + 0x10, transform_state + 0x10, 1.0f);
+    fast_vec_cross(transform_state + 0x20, transform_state + 0x10, transform_state);
 }
 extern int D_L03_0015EF50;
-extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 
 int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_object) __asm__("FUN_L03_002e8870");
 
@@ -141,8 +141,8 @@ int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_obje
     if (comparison_object != 0 && *(short *)(comparison_object + 0x7E) == 0 &&
         !(*(unsigned char *)(candidate_object + 0x7C) > *(unsigned char *)(comparison_object + 0x7C)))
         return 0;
-    if (is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) != 0) {
-        if (is_point_inside_clip_volume_alt(D_L03_00166EC0, *(int *)(sub + 0xC)) != 0)
+    if (is_point_inside_clip_volume(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) != 0) {
+        if (is_point_inside_clip_volume(D_L03_00166EC0, *(int *)(sub + 0xC)) != 0)
             return 1;
         global_state_base = D_L03_00166EC0 - 0x140;
         five = *(int *)(global_state_base + 0x180);
@@ -157,7 +157,7 @@ int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_obje
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002E9D48), where it is exact; names translated to the US level program. */
 
 extern int D_L03_0015EF50;
-extern int is_point_inside_clip_volume_alt(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 
 void set_transform_state_three_when_outside_clip_volume(char *moby) __asm__("FUN_L03_002e8980");
 
@@ -165,7 +165,7 @@ void set_transform_state_three_when_outside_clip_volume(char *moby) {
     char *entry = (char *)(D_L03_0015EF50 + (*(short *)(moby + 0x84) << 5));
     char *sub = *(char **)(entry + 0x1C);
     if (*(int *)(moby + 0x74) == 4) {
-        if (is_point_inside_clip_volume_alt(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) == 0) {
+        if (is_point_inside_clip_volume(D_0013E533 + 0xE9D, *(int *)(sub + 0xC)) == 0) {
             *(short *)(moby + 0x7E) = 3;
         }
     }

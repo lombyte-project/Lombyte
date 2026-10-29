@@ -20,14 +20,14 @@ typedef struct {
 } QuadPkt;
 
 extern float vendor_quad_inset_parameters[][4] __asm__("D_L00_001CA318");
-extern float vector_length_xyz(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
                                           float *) __asm__("FUN_00237c80");
-extern void add_vector_xyz(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void draw_geometry_quad(void *, void *, int);
-extern void normalize_vector_xyz(void *, void *, float);
-extern void subtract_vector_xyz(void *, void *, void *);
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 extern void vu1_add_g_sregister(int, long);
@@ -53,23 +53,23 @@ void draw_vendor_inset_quads(char *vertex_batch) {
         vertex_indices[2] = i * 4 + 2;
         transform_scaled_vertex_batch(vertex_batch, 3, vertex_indices, (char *)P);
         qcopy(C, P[0]);
-        subtract_vector_xyz(A, P[1], P[0]);
-        subtract_vector_xyz(B, P[2], P[0]);
-        edge_length = vector_length_xyz(A);
-        normalize_vector_xyz(E, A, vendor_quad_inset_parameters[i][0]);
-        add_vector_xyz(C, C, E);
-        normalize_vector_xyz(A, A, edge_length - vendor_quad_inset_parameters[i][2] * 2.0f);
-        edge_length = vector_length_xyz(B);
-        normalize_vector_xyz(E, B, vendor_quad_inset_parameters[i][1]);
-        add_vector_xyz(C, C, E);
-        normalize_vector_xyz(B, B, edge_length - vendor_quad_inset_parameters[i][3] * 2.0f);
-        add_vector_xyz(E, C, A);
-        add_vector_xyz(E, E, B);
+        fast_vec_sub(A, P[1], P[0]);
+        fast_vec_sub(B, P[2], P[0]);
+        edge_length = fast_vec_length(A);
+        fast_vec_normalize(E, A, vendor_quad_inset_parameters[i][0]);
+        fast_vec_add(C, C, E);
+        fast_vec_normalize(A, A, edge_length - vendor_quad_inset_parameters[i][2] * 2.0f);
+        edge_length = fast_vec_length(B);
+        fast_vec_normalize(E, B, vendor_quad_inset_parameters[i][1]);
+        fast_vec_add(C, C, E);
+        fast_vec_normalize(B, B, edge_length - vendor_quad_inset_parameters[i][3] * 2.0f);
+        fast_vec_add(E, C, A);
+        fast_vec_add(E, E, B);
         project_graphics_bounds_float(C, E, &projected_bounds[0], &projected_bounds[1], &projected_bounds[2], &projected_bounds[3]);
         qcopy(quad_packet.v[0], C);
-        add_vector_xyz(quad_packet.v[1], C, A);
-        add_vector_xyz(quad_packet.v[2], C, B);
-        add_vector_xyz(quad_packet.v[3], quad_packet.v[2], A);
+        fast_vec_add(quad_packet.v[1], C, A);
+        fast_vec_add(quad_packet.v[2], C, B);
+        fast_vec_add(quad_packet.v[3], quad_packet.v[2], A);
         quad_packet.gs[0] = 5;
         quad_packet.gs[2] = 1;
         quad_packet.gs[3] = 0x8000000044L;
@@ -182,7 +182,7 @@ extern s64 get_effect_texture_c(s32) __asm__("func_001F44B8");
 #include "rnc/overlay/shared/gameplay/entities/0029f990_globals.h"
 extern float vendor_hologram_v_scroll_offset_gp __asm__("D_L00_00161184") __attribute__((sda));
 extern struct Quad D_L00_001CA480[] __attribute__((section(".data")));
-extern void fast_draw_quad_real(void *, void *, int);
+extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 void draw_vendor_hologram_cone(void) __asm__("FUN_L00_0029ff58");
@@ -299,7 +299,7 @@ extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
-extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
+extern void clear_blocks_16(void *, s32) __asm__("FUN_001f9810");
 extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void append_draw_buffer_upload_packets(s32, u32, u32) __asm__("FUN_L00_002a0fc8");
 extern void setup_gif_paging(s32) __asm__("FUN_001f4280");
@@ -386,7 +386,7 @@ void draw_vendor_screen(void) {
         pack_render_command_fields(p->f20 + 0x500, 0x202020, 0xE, 0xE, 0);
         initialize_vendor_selected_item_mobys();
         p->f2C = p->f14 + 0x1400;
-        fast_mem_zero16(p->f2C, 0x400);
+        clear_blocks_16(p->f2C, 0x400);
         p->f18 = p->f2C + 0x400;
         if (cd_read_active[0] == 0) {
             if (start_audio_stream_read(p->f18 + 0x80000, disc_table.animation_streams[48].sector,

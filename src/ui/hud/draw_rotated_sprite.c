@@ -11,8 +11,8 @@ struct Vec4 {
     f32 w;
 };
 
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
@@ -36,14 +36,14 @@ void draw_rotated_sprite(s32 texture_width, s32 texture_height, s64 texture_regi
     sz.y = cy * fast_cos(rotation_angle);
     rotated_half_width_offset.x = -cx * fast_cos(rotation_angle);
     rotated_half_width_offset.y = cx * fast_sin(rotation_angle);
-    add_vector_xyz(&uv_u_extent_vertex, &sprite_center, &sz);
-    subtract_vector_xyz(&uv_u_extent_vertex, &uv_u_extent_vertex, &rotated_half_width_offset);
-    add_vector_xyz(&uv_extent_vertex, &sprite_center, &sz);
-    add_vector_xyz(&uv_extent_vertex, &uv_extent_vertex, &rotated_half_width_offset);
-    subtract_vector_xyz(&uv_origin_vertex, &sprite_center, &sz);
-    subtract_vector_xyz(&uv_origin_vertex, &uv_origin_vertex, &rotated_half_width_offset);
-    subtract_vector_xyz(&uv_v_extent_vertex, &sprite_center, &sz);
-    add_vector_xyz(&uv_v_extent_vertex, &uv_v_extent_vertex, &rotated_half_width_offset);
+    fast_vec_add(&uv_u_extent_vertex, &sprite_center, &sz);
+    fast_vec_sub(&uv_u_extent_vertex, &uv_u_extent_vertex, &rotated_half_width_offset);
+    fast_vec_add(&uv_extent_vertex, &sprite_center, &sz);
+    fast_vec_add(&uv_extent_vertex, &uv_extent_vertex, &rotated_half_width_offset);
+    fast_vec_sub(&uv_origin_vertex, &sprite_center, &sz);
+    fast_vec_sub(&uv_origin_vertex, &uv_origin_vertex, &rotated_half_width_offset);
+    fast_vec_sub(&uv_v_extent_vertex, &sprite_center, &sz);
+    fast_vec_add(&uv_v_extent_vertex, &uv_v_extent_vertex, &rotated_half_width_offset);
     render_packet_cursor.tag->tag = 0x10000007;
     render_packet_cursor.tag->addr = 0;
     render_packet_cursor.tag->vif0 = 0;

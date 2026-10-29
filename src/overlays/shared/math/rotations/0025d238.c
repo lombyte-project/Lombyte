@@ -9,10 +9,10 @@ typedef union {
     u128 q;
     f32 f[4];
 } V0025d238;
-void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void clip_negative_segment_endpoint_xyz(V0025d238 *src, V0025d238 *inout_vector) __asm__("FUN_L00_0025d238");
 
 void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *inout_vector) {
@@ -26,9 +26,9 @@ void clip_negative_segment_endpoint_xyz(V0025d238 *segment_start, V0025d238 *ino
     delta_component = scaled_delta.f;
     for (i = 2; i >= 0; i--) {
         if (*inout_component < 0.0f) {
-            subtract_vector_xyz(scaled_delta_ptr, inout_vector, source_copy_ptr);
+            fast_vec_sub(scaled_delta_ptr, inout_vector, source_copy_ptr);
             fast_vec_scale(scaled_delta_ptr, scaled_delta_ptr, absolute_float((*source_component - 0.1f) / *delta_component));
-            add_vector_xyz(inout_vector, source_copy_ptr, scaled_delta_ptr);
+            fast_vec_add(inout_vector, source_copy_ptr, scaled_delta_ptr);
         }
         inout_component++;
         delta_component++;
@@ -81,7 +81,7 @@ f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32 FUN_001fa6d0_25d538(f32) __asm__("FUN_001fa6d0");
 s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
 s32 FUN_001f96f8_25d538(s32) __asm__("FUN_001f96f8");
-void glow_n(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
+void set_moby_color(s32, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void trooper_anim_finish(s32 id, S_25d538 *s) __asm__("FUN_L00_0025d538");
 void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
     f32 phase_duration_frames, phase_progress;
@@ -90,7 +90,7 @@ void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
         return;
     if (fast_dec_timer(animation_state)) {
         if (animation_state->phase != 0) {
-            glow_n(id, animation_state->r0, animation_state->g0, animation_state->b0);
+            set_moby_color(id, animation_state->r0, animation_state->g0, animation_state->b0);
             return;
         }
         animation_state->phase = 1;
@@ -127,7 +127,7 @@ void trooper_anim_finish(s32 id, S_25d538 *animation_state) {
         else
             b = animation_state->b0;
     }
-    glow_n(id, r, g, b);
+    set_moby_color(id, r, g, b);
 }
 s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) __asm__("FUN_L00_0025d7a0");
 
@@ -148,9 +148,9 @@ s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) {
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025E860), where it is exact; names translated to the US level program. */
-extern void vec_sub_25d808(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void vec_scale_25d808(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void vec_add_25d808(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 typedef struct { float x, y, z, w; } Pt_0025E860;
 typedef struct { int n; int pad[3]; Pt_0025E860 pt[1]; } Spline_0025E860;
 
@@ -217,9 +217,9 @@ int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, floa
     if (j >= path->n) {
         j %= path->n;
     }
-    vec_sub_25d808(segment_delta, &path->pt[j], &path->pt[i]);
-    vec_scale_25d808(segment_delta, segment_delta, *segment_offset);
-    vec_add_25d808(out, out, segment_delta);
+    fast_vec_sub(segment_delta, &path->pt[j], &path->pt[i]);
+    fast_vec_normalize(segment_delta, segment_delta, *segment_offset);
+    fast_vec_add(out, out, segment_delta);
     return crossed_path_boundary;
 }
 
@@ -245,7 +245,7 @@ void FUN_L00_0025da70(u128_0025da70 *first_point, u128_0025da70 *second_point, f
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 void FUN_001f9a28_25db00(void *, void *, void *) __asm__("FUN_001f9a28");
-void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
+void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 float FUN_001f9ab0_25db00(void *, void *) __asm__("FUN_001f9ab0");
 float FUN_001f9b80_25db00(void *, void *) __asm__("FUN_001f9b80");
 float project_level_path_point_onto_segment(float *out, float *query_point, OvlQuad *segment_start, OvlQuad *segment_end) __asm__("FUN_L00_0025db00");
@@ -264,7 +264,7 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
     *(int *)&planar_normal[2] = 0;
     qcopy(planar_endpoint_copy, segment_start);
     *(int *)&((float *)planar_endpoint_copy)[2] = 0;
-    trooper_scale(planar_normal, planar_normal, 1.0f);
+    set_vector_length_xy(planar_normal, planar_normal, 1.0f);
     k = -FUN_001f9ab0_25db00(planar_normal, planar_endpoint_copy) + (planar_normal[0] * query_point[0] + planar_normal[1] * query_point[1]);
     out[0] = query_point[0] - k * planar_normal[0];
     out[1] = query_point[1] - k * planar_normal[1];
@@ -287,16 +287,16 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
     }
     return FUN_001f9b80_25db00(query_point, out);
 }
-extern float fabs_25dcd8(float) __asm__("FUN_001f99c0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern float FUN_L00_0025db00_c(void *, void *, void *, void *) __asm__("FUN_L00_0025db00");
-extern float dist_25dcd8(void *, void *) __asm__("FUN_001f9b80");
-extern float dsq_25dcd8(void *, void *) __asm__("FUN_001f9b48");
-extern void b6b8_25dcd8(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
-extern void vsub_25dcd8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void vadd_25dcd8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vscl_25dcd8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern float dot_25dcd8(void *, void *) __asm__("FUN_001f9ab0");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
 float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
 
@@ -309,24 +309,24 @@ float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQu
     float *output_component, *fa, *fb;
     float planar_distance, negative_query_direction_dot, segment_length_or_start_direction_dot;
     int i;
-    if (r > 0.0f && fabs_25dcd8(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
-        fabs_25dcd8(((float *)query_point)[2] - ((float *)b)[2]) < r) {
+    if (r > 0.0f && absolute_float(((float *)query_point)[2] - ((float *)segment_start)[2]) < r &&
+        absolute_float(((float *)query_point)[2] - ((float *)b)[2]) < r) {
         planar_distance = FUN_L00_0025db00_c(out, query_point, segment_start, b);
-        r = dist_25dcd8(segment_start, out);
-        segment_length_or_start_direction_dot = dist_25dcd8(segment_start, b);
+        r = vector_distance(segment_start, out);
+        segment_length_or_start_direction_dot = vector_distance(segment_start, b);
         segment_workspace[0] = *segment_start;
         segment_workspace[1] = *b;
-        b6b8_25dcd8(out, &segment_workspace[0], &segment_workspace[1], r / segment_length_or_start_direction_dot);
+        interpolate_vector(out, &segment_workspace[0], &segment_workspace[1], r / segment_length_or_start_direction_dot);
         return planar_distance;
     }
-    vsub_25dcd8(segment_workspace, b, segment_start);
+    fast_vec_sub(segment_workspace, b, segment_start);
     segment_workspace[1] = *segment_start;
-    vscl_25dcd8(segment_workspace, segment_workspace, 1.0f);
+    fast_vec_normalize(segment_workspace, segment_workspace, 1.0f);
     qcopy(direction_copy, segment_workspace);
-    negative_query_direction_dot = -dot_25dcd8(query_point, segment_workspace);
-    segment_length_or_start_direction_dot = dot_25dcd8(&segment_workspace[1], direction_copy);
-    scale_vector_xyz(out, segment_workspace, -(negative_query_direction_dot + segment_length_or_start_direction_dot) / dot_25dcd8(segment_workspace, direction_copy));
-    vadd_25dcd8(out, out, &segment_workspace[1]);
+    negative_query_direction_dot = -fast_vec_dot(query_point, segment_workspace);
+    segment_length_or_start_direction_dot = fast_vec_dot(&segment_workspace[1], direction_copy);
+    fast_vec_scale(out, segment_workspace, -(negative_query_direction_dot + segment_length_or_start_direction_dot) / fast_vec_dot(segment_workspace, direction_copy));
+    fast_vec_add(out, out, &segment_workspace[1]);
     i = 0;
     fb = (float *)b;
     fa = (float *)segment_start;
@@ -342,7 +342,7 @@ float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQu
         output_component++;
     } while (i < 3);
     if (i < 3) {
-        if (dsq_25dcd8(out, segment_start) < dsq_25dcd8(out, b)) {
+        if (fast_vec_dist(out, segment_start) < fast_vec_dist(out, b)) {
             qcopy(out, segment_start);
         } else {
             qcopy(out, b);
@@ -353,7 +353,7 @@ float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQu
     return FUN_L00_0025da70_c(query_point_copy, g, 0.0f);
 }
 extern f32 path_distance_25df68(void *, void *, f32) __asm__("FUN_L00_0025da70");
-extern void clear_vector_25df68(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern s32 sample_path(s32 *, OvlQuad *, s32 *, f32 *, f32, s32)
     __asm__("FUN_L00_0025d808");
 
@@ -379,7 +379,7 @@ s32 FUN_L00_0025df68(s32 *path, OvlQuad *point, OvlQuad *nearest,
     distance = path_distance_25df68(&work[0], &work[1], height_tolerance);
     best_segment = 0;
     if (*path == 0) {
-        clear_vector_25df68(nearest);
+        clear_u64_value(nearest);
         return 0;
     }
 
@@ -510,27 +510,27 @@ extern char D_L00_00166DC0_25e450[] __asm__("D_L00_00166DC0");
 extern char D_L00_00166C80_25e450[] __asm__("D_L00_00166C80");
 extern S6_25e450 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
 extern S6_25e450 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
-extern int scale_game_frames_25e450(int) __asm__("FUN_001f96f8");
-extern float random_float_between_25e450(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians_25e450(void) __asm__("FUN_00213308");
-extern float convert_integer_to_float_25e450(int) __asm__("FUN_001fa6c0");
-extern int truncate_float_to_s32_25e450(float) __asm__("FUN_001fa6d0");
-extern int random_integer_below_25e450(int) __asm__("FUN_00213260");
-extern void build_spherical_offset_25e450(void *, float, float, float) __asm__("FUN_00214db0");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
-extern int random_int_between_25e450(int, int) __asm__("FUN_L00_00257b90");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
-extern int collect_mobies_in_sphere_25e450(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
+extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
-extern void subtract_vector_xyz_25e450(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float vector_length_xyz_25e450(void *) __asm__("FUN_001f9af0");
-extern void normalize_vector_xyz_25e450(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void add_vector_xyz_25e450(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_L00_001FF548_25e450(void *, void *, float) __asm__("FUN_001f9c90");
 extern void *func_L00_002B0738_25e450(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
 extern void func_L00_0026B890_25e450(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void func_L00_0026B368_25e450(void *, void *, int, int, int, float) __asm__("FUN_L00_0026a4c8");
-extern int spawn_glow_particle_25e450(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
+extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern int func_L00_00200290_25e450(void *, float) __asm__("FUN_001fa728");
 extern int allocate_voice_for_target_entry_25e450(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_002D4CE8_25e450(void *, void *, int, int) __asm__("FUN_L00_002d3838");
@@ -574,7 +574,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         ev.b18 = 2;
         ev.b19 = 1;
         ev.h1A = *(unsigned short *)(owner_moby + 0xA6);
-        collect_mobies_in_sphere_25e450(fA, explosion_position, 0x10, owner_moby, &ev);
+        collect_mobies_in_sphere(fA, explosion_position, 0x10, owner_moby, &ev);
     }
     }
     for (i = 0; i < burst_particle_count; i++) {
@@ -582,52 +582,52 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         Q_25e450 burst_particle_vector;
         float a;
         float b;
-        a = random_float_between_25e450(0.2617994f, 1.3962634f);
-        b = random_angle_radians_25e450();
-        build_spherical_offset_25e450(&burst_particle_vector, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
+        a = random_float_between(0.2617994f, 1.3962634f);
+        b = random_angle_radians();
+        build_spherical_offset(&burst_particle_vector, fF * (random_float_between(7.0f, 10.5f) * frame_time_macro), b, a);
         burst_particle_vector.f[2] += frame_time_macro * 3.0f;
         dist = fF * 40000.0f;
         spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(explosion_position, &burst_particle_vector, swap_packed_color_channels(0x4F007FFF, flag), swap_packed_color_channels(0x1F00007F, flag),
-            random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
+            random_int_between(scale_game_frames(0x3C), scale_game_frames(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
         }
     }
-    subtract_vector_xyz_25e450(&effect_vector_work, D_L00_00166DC0_25e450, explosion_position);
-    dist = vector_length_xyz_25e450(&effect_vector_work);
+    fast_vec_sub(&effect_vector_work, D_L00_00166DC0_25e450, explosion_position);
+    dist = fast_vec_length(&effect_vector_work);
     {
     if (spray_count != 0) {
         Q_25e450 nearby_spray_vector;
         Q_25e450 rnd;
         int i;
         *(u128_25e450 *)&rnd = 0;
-        rnd.f[0] = random_float_between_25e450(-1.0f, 1.0f);
-        rnd.f[1] = random_float_between_25e450(-1.0f, 1.0f);
-        rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
+        rnd.f[0] = random_float_between(-1.0f, 1.0f);
+        rnd.f[1] = random_float_between(-1.0f, 1.0f);
+        rnd.f[2] = random_float_between(-1.0f, 1.0f);
         *(u128_25e450 *)&nearby_spray_vector = *(u128_25e450 *)&rnd;
         if (dist < 14.0f) {
             effect_vector_work.f[2] += dist * 0.5f;
-            normalize_vector_xyz_25e450(&nearby_spray_vector, &nearby_spray_vector, dist / 5.0f * frame_time_macro);
-            normalize_vector_xyz_25e450(&effect_vector_work, &effect_vector_work, (dist + dist) * frame_time_macro);
-            add_vector_xyz_25e450(&nearby_spray_vector, &nearby_spray_vector, &effect_vector_work);
+            fast_vec_normalize(&nearby_spray_vector, &nearby_spray_vector, dist / 5.0f * frame_time_macro);
+            fast_vec_normalize(&effect_vector_work, &effect_vector_work, (dist + dist) * frame_time_macro);
+            fast_vec_add(&nearby_spray_vector, &nearby_spray_vector, &effect_vector_work);
             func_L00_001FF548_25e450(&nearby_spray_vector, &nearby_spray_vector, frame_time_macro * 10.0f);
-            func_L00_002B0738_25e450(explosion_position, &nearby_spray_vector, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), 0, 0);
+            func_L00_002B0738_25e450(explosion_position, &nearby_spray_vector, random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)), 0, 0);
         }
         spray_count = spray_count - 1;
         for (i = 0; i < spray_count; i++) {
             float a;
             float b;
             int sel;
-            a = random_float_between_25e450(0.2617994f, 1.3089969f);
-            b = random_angle_radians_25e450();
-            build_spherical_offset_25e450(&rnd, fF * (random_float_between_25e450(7.0f, 10.5f) * frame_time_macro), b, a);
+            a = random_float_between(0.2617994f, 1.3089969f);
+            b = random_angle_radians();
+            build_spherical_offset(&rnd, fF * (random_float_between(7.0f, 10.5f) * frame_time_macro), b, a);
             rnd.f[2] += frame_time_macro + frame_time_macro;
             sel = 0;
             if (i % 3 == 0) sel = 1;
-            func_L00_002B0738_25e450(explosion_position, &rnd, random_int_between_25e450(scale_game_frames_25e450(0x3C), scale_game_frames_25e450(0x5A)), sel, 0);
+            func_L00_002B0738_25e450(explosion_position, &rnd, random_int_between(scale_game_frames(0x3C), scale_game_frames(0x5A)), sel, 0);
         }
     }
     }
-    if (dist < convert_integer_to_float_25e450(k8) * 2.0f) {
-        distance_limited_particle_pair_count = truncate_float_to_s32_25e450(dist) / 2;
+    if (dist < convert_integer_to_float(k8) * 2.0f) {
+        distance_limited_particle_pair_count = truncate_float_to_s32(dist) / 2;
     } else {
         distance_limited_particle_pair_count = k8;
     }
@@ -639,18 +639,18 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         S6_25e450 c0;
         S6_25e450 c1;
         float sp;
-        sp = random_float_between_25e450(8.0f, 10.0f) * frame_time_macro;
+        sp = random_float_between(8.0f, 10.0f) * frame_time_macro;
         c0 = D_L00_001E9030_25e450;
         c1 = D_L00_001E9048_25e450;
         sp = sp - proximity_speed_reduction * frame_time_macro;
         sp = sp * fF;
-        func_L00_0026B890_25e450(explosion_position, &vb, swap_packed_color_channels(c0.v[random_integer_below_25e450(6)], flag),
-            swap_packed_color_channels(c1.v[random_integer_below_25e450(6)], flag), fF * 400000.0f,
-            random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - effect_reduction_level * 3,
-            random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 0, 0, sp);
+        func_L00_0026B890_25e450(explosion_position, &vb, swap_packed_color_channels(c0.v[random_integer_below(6)], flag),
+            swap_packed_color_channels(c1.v[random_integer_below(6)], flag), fF * 400000.0f,
+            random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)) - effect_reduction_level * 3,
+            random_int_between(scale_game_frames(0x1E), scale_game_frames(0x2D)) - effect_reduction_level * 5, 0, 0, sp);
         func_L00_0026B890_25e450(explosion_position, &vb, 0x7FFFFFFF, 0xFFFFFF, fF * 400000.0f,
-            random_int_between_25e450(scale_game_frames_25e450(5), scale_game_frames_25e450(0xA)) - effect_reduction_level * 2,
-            random_int_between_25e450(scale_game_frames_25e450(0xF), scale_game_frames_25e450(0x14)) - effect_reduction_level * 3, 0, 0, sp * 0.5f);
+            random_int_between(scale_game_frames(5), scale_game_frames(0xA)) - effect_reduction_level * 2,
+            random_int_between(scale_game_frames(0xF), scale_game_frames(0x14)) - effect_reduction_level * 3, 0, 0, sp * 0.5f);
     }
     }
     {
@@ -663,15 +663,15 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         int first_packed_color;
         int second_packed_color;
         *(u128_25e450 *)&rnd = 0;
-        rnd.f[0] = random_float_between_25e450(-1.0f, 1.0f);
-        rnd.f[1] = random_float_between_25e450(-1.0f, 1.0f);
-        rnd.f[2] = random_float_between_25e450(-1.0f, 1.0f);
+        rnd.f[0] = random_float_between(-1.0f, 1.0f);
+        rnd.f[1] = random_float_between(-1.0f, 1.0f);
+        rnd.f[2] = random_float_between(-1.0f, 1.0f);
         *(u128_25e450 *)&randomized_particle_vector = *(u128_25e450 *)&rnd;
-        normalize_vector_xyz_25e450(&randomized_particle_vector, &randomized_particle_vector, fF * (random_float_between_25e450(0.0f, 3.0f) * frame_time_macro));
-        first_packed_color = swap_packed_color_channels(c0.v[random_integer_below_25e450(6)], flag);
-        second_packed_color = swap_packed_color_channels(c1.v[random_integer_below_25e450(6)], flag);
+        fast_vec_normalize(&randomized_particle_vector, &randomized_particle_vector, fF * (random_float_between(0.0f, 3.0f) * frame_time_macro));
+        first_packed_color = swap_packed_color_channels(c0.v[random_integer_below(6)], flag);
+        second_packed_color = swap_packed_color_channels(c1.v[random_integer_below(6)], flag);
         func_L00_0026B368_25e450(explosion_position, &randomized_particle_vector, first_packed_color, second_packed_color,
-            random_int_between_25e450(scale_game_frames_25e450(0x1E), scale_game_frames_25e450(0x2D)) - effect_reduction_level * 5, 200000.0f);
+            random_int_between(scale_game_frames(0x1E), scale_game_frames(0x2D)) - effect_reduction_level * 5, 200000.0f);
     }
     }
     if (owner_moby != 0 && fC > 0.0f) {
@@ -686,13 +686,13 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         }
         u = later_glow_red & 0xFF;
         if (D_L00_0015F5D0_macro < 0.95f && fE < dist) {
-            spawn_glow_particle_25e450(owner_moby, explosion_position, &vb, fC, scale_game_frames_25e450(0x10), first_glow_red, 0x96, first_glow_blue, 0x20);
-            spawn_glow_particle_25e450(owner_moby, explosion_position, &vb, fC, scale_game_frames_25e450(0x16), u, 0x7F, 0x50, 0x20);
+            spawn_glow_particle(owner_moby, explosion_position, &vb, fC, scale_game_frames(0x10), first_glow_red, 0x96, first_glow_blue, 0x20);
+            spawn_glow_particle(owner_moby, explosion_position, &vb, fC, scale_game_frames(0x16), u, 0x7F, 0x50, 0x20);
         }
-        spawn_glow_particle_25e450(owner_moby, explosion_position, &vb, fC, scale_game_frames_25e450(0x1E), u, 0x7F, 0, 0x30);
+        spawn_glow_particle(owner_moby, explosion_position, &vb, fC, scale_game_frames(0x1E), u, 0x7F, 0, 0x30);
     }
     if (owner_moby != 0 && fD > 0.0f) {
-        spawn_glow_particle_25e450(owner_moby, explosion_position, &vb, fD, scale_game_frames_25e450(0x1B), 0xFF, 0xFF, 0xFF, 0x20);
+        spawn_glow_particle(owner_moby, explosion_position, &vb, fD, scale_game_frames(0x1B), 0xFF, 0xFF, 0xFF, 0x20);
     }
     {
     if (k11) {
@@ -701,7 +701,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         v.f[3] = 2.0f;
         if (func_L00_00200290_25e450(&v, 10.0f) != -1) {
             ((Cam_25e450 *)D_L00_00166C80_25e450)->f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
-            ((Cam_25e450 *)D_L00_00166C80_25e450)->f168 = scale_game_frames_25e450(0x19);
+            ((Cam_25e450 *)D_L00_00166C80_25e450)->f168 = scale_game_frames(0x19);
         }
     }
     }
@@ -738,7 +738,7 @@ typedef struct { int v[6]; } S6y10;
 
 extern S6y10 D_L00_001E9030;
 extern S6y10 D_L00_001E9048;
-extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
+extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
 extern int FUN_L00_00257b90(int, int);
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
@@ -773,7 +773,7 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
     for (i = 2; i >= 0; i--) {
         S6y10 first_particle_color_palette;
         S6y10 second_particle_color_palette;
-        sp = random_float_between_c(8.0f, 10.0f) * frame_time;
+        sp = random_float_between(8.0f, 10.0f) * frame_time;
         big = scale * 400000.0f;
         first_particle_color_palette = D_L00_001E9030;
         second_particle_color_palette = D_L00_001E9048;
@@ -825,7 +825,7 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
     clear_u64_value(&zero_vec);
     k5 = 500000.0f;
     for (i = 2; i >= 0; i--) {
-        sp = random_float_between_c(8.0f, 10.0f) * frame_time;
+        sp = random_float_between(8.0f, 10.0f) * frame_time;
         big = scale * k5;
         first_particle_color_palette = D_L00_001E9030;
         second_particle_color_palette = D_L00_001E9048;

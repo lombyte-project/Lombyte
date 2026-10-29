@@ -398,7 +398,7 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 FUN_001f9af0_c(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 /* hit_reaction is the executable function of the same bytes (src/gameplay). */
@@ -478,13 +478,13 @@ typedef struct {
 } Vc0 __attribute__((aligned(16)));
 
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 float FUN_L00_0025abf0(float *start_position, float *target_position, float *out, float speed, float vertical_acceleration) {
     Vc0 displacement;
     float travel_time;
-    subtract_vector_xyz(&displacement, target_position, start_position);
+    fast_vec_sub(&displacement, target_position, start_position);
     travel_time = vector_length_xy(&displacement) / speed;
     if (out) {
         *out = travel_time;

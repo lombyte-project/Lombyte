@@ -330,10 +330,10 @@ typedef struct {
 } PointPath;
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern f32 s32_to_float(s32) __asm__("FUN_001fa6c0");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 /* Samples path at distance dist (points spacing apart): stores the segment, the distance into it and the point. */
 void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) __asm__("FUN_L00_00262360");
@@ -355,11 +355,11 @@ void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *ou
         out->q = (path->points + *seg_out)->q;
         return;
     }
-    *along = dist - s32_to_float(seg) * spacing;
-    subtract_vector_xyz(&tmp, &path->points[*seg_out + 1], &path->points[*seg_out]);
+    *along = dist - convert_integer_to_float(seg) * spacing;
+    fast_vec_sub(&tmp, &path->points[*seg_out + 1], &path->points[*seg_out]);
     out->q = tmp.q;
     scale_vector_xyz(out, out, *along);
-    add_vector_xyz(&tmp, out, &path->points[*seg_out]);
+    fast_vec_add(&tmp, out, &path->points[*seg_out]);
     out->q = tmp.q;
 }
 #define NOT_SDA

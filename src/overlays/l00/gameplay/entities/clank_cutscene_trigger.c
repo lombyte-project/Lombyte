@@ -159,11 +159,11 @@ typedef union {
     f32 f[4];
 } VeldinVec;
 
-void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern f32 veldin_random_range(f32, f32) __asm__("FUN_002132a8");
-extern f32 veldin_random_angle(void) __asm__("FUN_00213308");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
+extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern void glow_quads_draw() __asm__("FUN_L00_0023db30");
 extern void FUN_L00_002935b8();
@@ -193,7 +193,7 @@ void apply_level_specific_cutscene_moby_effects(void) {
     if (current_level_index == 0) {
         for (i = 0; i < D_L00_0016C860.count; i++) {
             if (D_L00_0016C860.mobys[i]->oClass == 0x212) {
-                enqueue_callback_list_1((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.mobys[i]);
+                add_draw_callback((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.mobys[i]);
             }
         }
     }
@@ -213,10 +213,10 @@ void apply_level_specific_cutscene_moby_effects(void) {
             for (effect_spawn_attempt_index = 0; effect_spawn_attempt_index < 4; effect_spawn_attempt_index++) {
                 clear_u64_value(&spherical_offset);
                 moby_point_position(joint_position_source_moby, effect_spawn_attempt_index % 2, &joint_world_position);
-                azimuth_angle = veldin_random_angle();
-                elevation_angle = veldin_random_angle();
+                azimuth_angle = random_angle_radians();
+                elevation_angle = random_angle_radians();
                 build_spherical_offset(
-                    spherical_offset.f, veldin_random_range(frame_time * 0.7f, frame_time * 2.2f), azimuth_angle, elevation_angle);
+                    spherical_offset.f, random_float_between(frame_time * 0.7f, frame_time * 2.2f), azimuth_angle, elevation_angle);
                 r = scale_game_frames(0xC);
                 spawn_effect_particle_with_target_scalar(&joint_world_position, &spherical_offset, 0x80808080, 0x808080,
                                  random_int_between(r, scale_game_frames(0x23)), 147000.0f);
@@ -225,13 +225,13 @@ void apply_level_specific_cutscene_moby_effects(void) {
     }
     if (current_level_index == 7 && D_L00_0016C860.state == 4 && D_L00_0016C860.unk188 != 0 &&
         D_L00_0016C860.unk188->oClass == 0x214) {
-        enqueue_callback_list_1((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.unk188);
+        add_draw_callback((s32)FUN_L00_002935b8, (s32)D_L00_0016C860.unk188);
     }
     if (current_level_index == 14 && D_L00_0016C860.state == 0) {
         particle_source_moby = D_L00_0016C860.unk17C;
         if (particle_source_moby != 0 && (u32)(D_L00_0016C860.timer - 0x1C) < 6) {
             emit_moby_particle_pairs(particle_source_moby);
-            enqueue_callback_list_1((s32)glow_quads_draw, (s32)particle_source_moby);
+            add_draw_callback((s32)glow_quads_draw, (s32)particle_source_moby);
         }
     }
     if (current_level_index == 15 && (u32)(D_L00_0016C860.state - 3) < 2) {

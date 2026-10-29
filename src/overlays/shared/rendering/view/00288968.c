@@ -8,8 +8,8 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00289960.c: func_L07_00289960), where it is exact; names translated to the US level program. */
 
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
@@ -23,8 +23,8 @@ void reorient_position_about_pivot(void *input_position, void *output_position, 
     euler_rotation_matrix(inverse_rotation_matrix, inverse_rotation_angles);
     transpose_rotation_matrix(inverse_rotation_matrix, inverse_rotation_matrix);
     euler_rotation_matrix(forward_rotation_matrix, forward_rotation_angles);
-    subtract_vector_xyz(pivot_relative_position, input_position, pivot_position);
+    fast_vec_sub(pivot_relative_position, input_position, pivot_position);
     transform_vector(pivot_relative_position, pivot_relative_position, inverse_rotation_matrix);
     transform_vector(pivot_relative_position, pivot_relative_position, forward_rotation_matrix);
-    add_vector_xyz(output_position, pivot_relative_position, pivot_position);
+    fast_vec_add(output_position, pivot_relative_position, pivot_position);
 }

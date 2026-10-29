@@ -39,7 +39,7 @@ typedef struct {
 } GsTextureRegisters;
 
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
-extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
+extern s32 log2dim(s32) __asm__("func_001F97A0");
 extern s32 sceGsSetDefLoadImage(GsLoadImage *, short, short, short, short, short, short, short);
 extern void FlushCache(int);
 extern s32 sceGsExecLoadImage(GsLoadImage *, void *);
@@ -72,7 +72,7 @@ extern s32 wait_for_graphics_pipeline_idle(int, unsigned short) __asm__("func_00
    input fields, so preserve sign extension and spill into adjacent fields.
    The output is three consecutive 64-bit words: TEX0, TEX1=1, CLAMP=0.
    Dimensions need not be powers of two for this code to run: TW/TH use
-   highest_set_bit_index, not a rounded logarithm. No upload return is tested.
+   log2dim, not a rounded logarithm. No upload return is tested.
  */
 void load_pif_as_psmt8_h(PifHeader *pif, GsTextureRegisters *registers,
                          s32 texel_destination, s32 palette_destination)
@@ -95,8 +95,8 @@ void load_pif_as_psmt8_h(PifHeader *pif, GsTextureRegisters *registers,
         upload.palette_size = 0x200;
     }
     palette_block_offset = palette_destination >> 8;
-    upload.width_log2 = highest_set_bit_index(pif->width);
-    upload.height_log2 = highest_set_bit_index(pif->height);
+    upload.width_log2 = log2dim(pif->width);
+    upload.height_log2 = log2dim(pif->height);
     upload.image = (u8 *)pif + (upload.palette_size + 0x20);
     upload.image_size = pif->width * pif->height;
     sceGsSetDefLoadImage(&load_image, palette_block_offset, 1, (short)pif->palette_storage_format,

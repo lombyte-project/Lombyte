@@ -49,7 +49,7 @@ extern s32 sceGsSyncV(s32);
 extern void put_disp_buffer(void) __asm__("func_001FB2A8");
 extern void PackDmaTag(s32, u64, u64);
 extern void FlushCache(s32);
-extern void fast_decompress(s32, s32) __asm__("func_0020B618");
+extern void decompress_wad(s32, s32) __asm__("func_0020B618");
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void draw_boot_image(s32) __asm__("func_002012B8");
@@ -123,7 +123,7 @@ void startlevel(void) {
                 notice_language_chunks = hdr->loading;
             }
             FlushCache(0);
-            fast_decompress(notice_language_chunks[game_language].off + (s32)hdr, hdr->code + (s32)hdr);
+            decompress_wad(notice_language_chunks[game_language].off + (s32)hdr, hdr->code + (s32)hdr);
             FlushCache(0);
             vu1_init_chain();
             PackDmaTag(0, 0, 0);
@@ -158,9 +158,9 @@ void startlevel(void) {
     fade_to_black(scale_game_frames(0x12));
     FlushCache(0);
     if (pal_mode_macro != 0) {
-        fast_decompress(hdr->gfx_alt + (s32)hdr, hdr->code + (s32)hdr);
+        decompress_wad(hdr->gfx_alt + (s32)hdr, hdr->code + (s32)hdr);
     } else {
-        fast_decompress(hdr->gfx + (s32)hdr, hdr->code + (s32)hdr);
+        decompress_wad(hdr->gfx + (s32)hdr, hdr->code + (s32)hdr);
     }
     FlushCache(0);
     vu1_init_chain();

@@ -9,7 +9,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
 
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
@@ -19,7 +19,7 @@ float compute_transformed_delta_component(void *subtrahend_vector, void *rotatio
 float compute_transformed_delta_component(void *subtrahend_vector, void *rotation_matrix_source, void *minuend_vector, int component_index) {
     float delta[4], transformed_delta[4], transposed_rotation_matrix[16];
     float *transformed_delta_ptr = transformed_delta;
-    subtract_vector_xyz(delta, minuend_vector, subtrahend_vector);
+    fast_vec_sub(delta, minuend_vector, subtrahend_vector);
     transpose_rotation_matrix(transposed_rotation_matrix, rotation_matrix_source);
     transform_vector(transformed_delta_ptr, delta, transposed_rotation_matrix);
     return transformed_delta_ptr[component_index];
@@ -35,7 +35,7 @@ typedef struct {
 } Vq __attribute__((aligned(16)));
 
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
@@ -47,7 +47,7 @@ void subtract_homogeneous_scaled_vector_xyz(void *destination_vector, void *minu
     Vq scaled_vector, normalized_vector;
     fast_vec_normalize(&normalized_vector, direction_vector, 1.0f);
     fast_vec_scale(&scaled_vector, &normalized_vector, fast_vec_dot(&normalized_vector, minuend_vector) * projection_scale);
-    subtract_vector_xyz(destination_vector, minuend_vector, &scaled_vector);
+    fast_vec_sub(destination_vector, minuend_vector, &scaled_vector);
 }
 
 #define NOT_SDA
@@ -67,7 +67,7 @@ extern int generate_random_points_from_shape_entries(void *, int, void *, void *
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E520[];
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void add_vector_xyz(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 void spawn_particles_at_shape_points(void *source_object, void *base_vector, void *point_source_mask) __asm__("FUN_L00_0025c398");
@@ -88,7 +88,7 @@ void spawn_particles_at_shape_points(void *source_object, void *base_vector, voi
         int randomized_frame_count, randomized_record_value;
 
         build_spherical_offset(randomized_vector, frame_time * 1.8f, y, z);
-        add_vector_xyz(randomized_vector, randomized_vector, base_vector);
+        fast_vec_add(randomized_vector, randomized_vector, base_vector);
         randomized_vector[2] += frame_time * 0.9f;
         if (flag[0x10]) {
             randomized_frame_count = scale_game_frames(random_int_between(20, 35));
@@ -159,7 +159,7 @@ void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_
 extern Vec4 D_L00_00173E70;
 extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_vec_dot_c(void *a, void *b) __asm__("func_001F9AB0");
+extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float approach_value(float *p, float target, float maxstep);
@@ -171,9 +171,9 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-extern void add_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale_c(void *, void *, f32) __asm__("func_001F9A68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
@@ -240,7 +240,7 @@ int mine_fall(char *moby, char *motion_state) {
         ground_reference_height = func_L00_0025A748_f((moby + 0x10));
     } else {
         if ((*(int *)(motion_state + 0x24) & 0x10) || *(short *)(motion_state + 0x3E) == 2) {
-            add_vector_xyz_c(collision_probe_position, (moby + 0x10), motion_state);
+            fast_vec_add(collision_probe_position, (moby + 0x10), motion_state);
             if (func_L00_0025A748_f(collision_probe_position) < ground_reference_height - 0.25f) {
                 set_vector_length_xy((float *)motion_state, (float *)motion_state, 0.0f);
             }
@@ -249,7 +249,7 @@ int mine_fall(char *moby, char *motion_state) {
 
     if (*(float *)(motion_state + 0x5C) != 0.0f) {
         if (*(float *)(motion_state + 0x5C) < 4.0f) {
-            fast_vec_scale_c(motion_state, motion_state, 0.7f);
+            fast_vec_scale(motion_state, motion_state, 0.7f);
         }
         if (*(float *)(motion_state + 0x5C) < 7.0f) {
             *(float *)(motion_state + 0x5C) = *(float *)(motion_state + 0x5C) + 1.0f;
@@ -316,10 +316,10 @@ int mine_fall(char *moby, char *motion_state) {
     i = 0;
     qcopy(eye, (moby + 0x10));
     eye[2] = eye[2] + *(float *)(motion_state + 0x28);
-    add_vector_xyz_c((moby + 0x10), (moby + 0x10), motion_state);
+    fast_vec_add((moby + 0x10), (moby + 0x10), motion_state);
     qcopy(collision_probe_position, (moby + 0x10));
     collision_probe_position[2] = collision_probe_position[2] + *(float *)(motion_state + 0x28);
-    add_vector_xyz_c(predicted_query_position, collision_probe_position, motion_state);
+    fast_vec_add(predicted_query_position, collision_probe_position, motion_state);
     result_count = func_L00_001F2BE8_d6f0(convert_integer_to_float(*(int *)(motion_state + 0x20)) * 0.0010742187732830644f, predicted_query_position, 16, moby, 0);
     if (i < result_count) {
         int **pp = D_L00_00177F00;
@@ -350,29 +350,29 @@ int mine_fall(char *moby, char *motion_state) {
         qcopy((moby + 0x10), collision_result_position);
         one = 1.0f;
         *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - *(float *)(motion_state + 0x28);
-        fast_vec_normalize_c(surface_normal, (char *)collision_result_position + 0x10, one);
+        fast_vec_normalize(surface_normal, (char *)collision_result_position + 0x10, one);
         if (0.7070000171661377f <= surface_normal[2]) {
-            float motion_normal_dot = fast_vec_dot_c(motion_state, surface_normal);
+            float motion_normal_dot = fast_vec_dot(motion_state, surface_normal);
             if (motion_normal_dot < 0.0f) {
                 collision_metadata = (char *)collision_result_position - 0x30;
                 if (*(int *)(collision_metadata + 0x18) == 0 || *(int *)(collision_metadata + 0x1C) > 0) {
                     flags |= 1;
                     *(short *)(motion_state + 0x3E) = 2;
                 }
-                fast_vec_normalize_c(normal_response_vector, surface_normal, motion_normal_dot);
-                subtract_vector_xyz(motion_state, motion_state, normal_response_vector);
+                fast_vec_normalize(normal_response_vector, surface_normal, motion_normal_dot);
+                fast_vec_sub(motion_state, motion_state, normal_response_vector);
                 if (*(short *)(motion_state + 0x3E) == 2) {
                     f6c = fast_vec_length(motion_state);
                     approach_value(&f6c, 0.0f, *(float *)(motion_state + 0x10));
-                    fast_vec_normalize_c(motion_state, motion_state, f6c);
+                    fast_vec_normalize(motion_state, motion_state, f6c);
                 }
             }
         } else {
-            float normal_response_scale = fast_vec_dot_c(motion_state, surface_normal);
+            float normal_response_scale = fast_vec_dot(motion_state, surface_normal);
             if (normal_response_scale < 0.0f) {
                 normal_response_scale = normal_response_scale * -(*(float *)(motion_state + 0x30) + one);
-                fast_vec_normalize_c(normal_response_vector, surface_normal, normal_response_scale);
-                add_vector_xyz_c(motion_state, motion_state, normal_response_vector);
+                fast_vec_normalize(normal_response_vector, surface_normal, normal_response_scale);
+                fast_vec_add(motion_state, motion_state, normal_response_vector);
             }
         }
     }

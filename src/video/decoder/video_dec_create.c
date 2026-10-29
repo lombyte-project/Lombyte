@@ -7,7 +7,7 @@ extern u8 D_0023D140[];
 extern s32 sceMpegCreate();
 extern s32 AddMpegCallback();
 extern s32 vi_buf_create() __asm__("func_0023BC48");
-extern s32 video_dec_reset() __asm__("func_0023CC30");
+extern s32 clear_state_field() __asm__("func_0023CC30");
 s32 video_dec_create(s32 video_dec, s32 arg1, s32 arg2, s32 data, s32 tag, s32 size, s32 ts,
                      s32 ts_count) __asm__("FUN_0023cac8");
 
@@ -19,7 +19,7 @@ s32 video_dec_create(s32 video_dec, s32 mpeg_work_area, s32 mpeg_work_area_size,
     AddMpegCallback(video_dec, 2, mpeg_stop_dma, 0);
     AddMpegCallback(video_dec, 3, mpeg_restart_video_dma, 0);
     AddMpegCallback(video_dec, 5, D_0023D140, 0);
-    video_dec_reset(video_dec);
+    clear_state_field(video_dec);
     vi_buf_create(video_dec + 0x48, data, tag, size, ts, ts_count);
     return 1;
 }

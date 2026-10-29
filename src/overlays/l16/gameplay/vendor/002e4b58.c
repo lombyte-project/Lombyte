@@ -151,7 +151,7 @@ void apply_moby_wobble(struct Moby *moby) {
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
 
 extern char table_entry_source_vectors[] __asm__("D_L16_001D96E0");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void transform_moby_table_entry_vectors(struct Moby *moby) __asm__("FUN_L16_002e4f30");
@@ -166,7 +166,7 @@ void transform_moby_table_entry_vectors(struct Moby *moby) {
             struct Hero *hero_state;
             for (i = 0; i < 7; i++) {
                 transform_vector_by_basis(table_entry + 0x10 + i * 16, table_entry_source_vectors + i * 16, &moby->rot_row0);
-                add_vector_xyz(table_entry + 0x10 + i * 16, table_entry + 0x10 + i * 16, &moby->pos);
+                fast_vec_add(table_entry + 0x10 + i * 16, table_entry + 0x10 + i * 16, &moby->pos);
             }
             hero_state = &hero;
             *(unsigned short *)&hero_state->path_constrain_pending = *(unsigned short *)(data + 0xa0);
@@ -177,7 +177,7 @@ void transform_moby_table_entry_vectors(struct Moby *moby) {
 
 extern char D_L16_001DF2D0[] __attribute__((section(".data")));
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
-extern int get_effect_texture_l16(int) __asm__("FUN_001f44b8");
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float D_L16_001DE720[];
 extern float D_L16_001DEA90[];
 float *D_L16_00161FA0[2] = {D_L16_001DE720, D_L16_001DEA90};
@@ -190,7 +190,7 @@ float *D_L16_00161FB0[2] = {D_L16_001DF0C0, D_L16_001DF278};
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void compute_level16_reflection_map_coordinates(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
-extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 
 void draw_level16_visible_textured_batches(void) __asm__("FUN_L16_002e97a0");
 
@@ -202,10 +202,10 @@ void draw_level16_visible_textured_batches(void) {
     int *packet_word_tables = (int *)D_L16_00161FB0;
     int i;
 
-    vu1_add_g_sregister_l16(6, get_effect_texture_l16(0x29));
-    vu1_add_g_sregister_l16(0x42, 0x4000000064);
-    vu1_add_g_sregister_l16(8, 0);
-    vu1_add_g_sregister_l16(0x14, 0xFF9000000260);
+    vu1_add_g_sregister(6, get_effect_texture(0x29));
+    vu1_add_g_sregister(0x42, 0x4000000064);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260);
     font_queue_vu_state();
     for (i = 0; i < 0x2; i++) {
         if (fast_bsphere_check(D_L16_001DF2B0[i], 512.0f) != -1) {

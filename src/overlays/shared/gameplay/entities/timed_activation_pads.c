@@ -16,7 +16,7 @@
 extern char draw_registration_value_target[] __asm__("D_L07_001D3400");
 extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void l07_moby_draw_callback(void) __asm__("FUN_L07_0030d420");
-void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void update_moby_draw_registration(unsigned char *moby) __asm__("FUN_L07_002f8058");
 
@@ -32,7 +32,7 @@ void update_moby_draw_registration(unsigned char *moby) {
         prepare_scaled_float_table_with_target_byte(draw_registration_value_target, 0x80, 1.0f);
         break;
     case DRAW_REGISTRATION_ENQUEUE_CALLBACK:
-        enqueue_callback_list_1(l07_moby_draw_callback, moby);
+        add_draw_callback(l07_moby_draw_callback, moby);
         break;
     }
 }
@@ -46,7 +46,7 @@ extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int set_moby_color() __asm__("FUN_L00_002502f0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_dec_timer(s32 *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -114,7 +114,7 @@ void timed_activation_pads_update(unsigned char *moby)
             if (vector_distance(moby + 0x10, activation_reference_data + 0x80) < 2.0f) {
                 if (*(int *)(activation_reference_data + 0x2084) == 0x11) {
                     if (*(float *)(activation_reference_data + 0xAA8) < 7.0f) {
-                        subtract_vector_xyz(activation_offset, moby + 0x10, activation_reference_data + 0x80);
+                        fast_vec_sub(activation_offset, moby + 0x10, activation_reference_data + 0x80);
                         func_001FA190_30D370(transposed_pad_rotation);
                         func_001FA4A0_30D370(transposed_pad_rotation, moby + 0xC0);
                         transform_vector(activation_offset, activation_offset, transposed_pad_rotation);
@@ -227,10 +227,10 @@ void timed_activation_pads_update(unsigned char *moby)
     }
 }
 extern char *level_mobys __asm__("D_L07_0015FFD8");
-extern void add_vector_xyz_310df0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 vector_length_xyz_310df0(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void scale_vector_xyz_310df0(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz_310df0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void play_sound_310df0(s32, s32, void *) __asm__("FUN_0022da68");
 
 void door_update(u8 *moby) __asm__("FUN_L07_00310df0");
@@ -277,7 +277,7 @@ void door_update(u8 *moby)
         vectors[5] = *(f32 *)(data + 0x20);
         vectors[6] = *(f32 *)(data + 0x24);
         *(quadword *)vectors = *(quadword *)(vectors + 4);
-        *(f32 *)(data + 0x0c) = vector_length_xyz_310df0(vectors);
+        *(f32 *)(data + 0x0c) = fast_vec_length(vectors);
         if (*(s32 *)(data + 0x30) != -1)
             play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
         moby[0x20] = 2;
@@ -300,13 +300,13 @@ void door_update(u8 *moby)
         vectors[5] = *(f32 *)(data + 0x20);
         vectors[6] = *(f32 *)(data + 0x24);
         *(quadword *)vectors = *(quadword *)(vectors + 4);
-        subtract_vector_xyz_310df0(vectors, vectors, moby + 0xc0);
+        transform_vector_by_basis(vectors, vectors, moby + 0xc0);
         scale_vector_xyz_310df0(vectors + 4, vectors, *(f32 *)(data + 0x28) * frame_time);
-        add_vector_xyz_310df0(moby + 0x10, moby + 0x10, vectors + 4);
+        fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
         *(f32 *)(data + 0x0c) -= *(f32 *)(data + 0x28) * frame_time;
         if (!(*(f32 *)(data + 0x0c) < 0.0f))
             return;
-        add_vector_xyz_310df0(moby + 0x10, data, vectors);
+        fast_vec_add(moby + 0x10, data, vectors);
         *(f32 *)(data + 0x0c) = 0.0f;
         moby[0x20] = 3;
         if (*(s32 *)(data + 0x34) != -1)
@@ -342,10 +342,10 @@ void door_update(u8 *moby)
             vectors[5] = *(f32 *)(data + 0x20);
             vectors[6] = *(f32 *)(data + 0x24);
             *(quadword *)vectors = *(quadword *)(vectors + 4);
-            distance = vector_length_xyz_310df0(vectors);
+            distance = fast_vec_length(vectors);
             scale_vector_xyz_310df0(vectors, vectors, -(*(f32 *)(data + 0x2c) * frame_time));
-            subtract_vector_xyz_310df0(vectors + 4, vectors, moby + 0xc0);
-            add_vector_xyz_310df0(moby + 0x10, moby + 0x10, vectors + 4);
+            transform_vector_by_basis(vectors + 4, vectors, moby + 0xc0);
+            fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
             *(f32 *)(data + 0x0c) += *(f32 *)(data + 0x2c) * frame_time;
             if (!(distance < *(f32 *)(data + 0x0c)))
                 return;
@@ -362,13 +362,13 @@ void door_update(u8 *moby)
         return;
     }
 }
-extern void scale_vector_xyz_31aee0(f32, void *, void *) __asm__("FUN_001f9a68");
-extern void add_vector_xyz_31aee0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 vector_length_xyz_31aee0(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void scale_vector_xyz_alt_31aee0(f32, void *, void *) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz_31aee0(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void play_sound_31aee0(s32, s32, void *) __asm__("FUN_0022da68");
-extern void update_moby_motion_31aee0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
+extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern char *level_mobys __asm__("D_L07_0015FFD8");
 
 void bridge_update(u8 *moby) __asm__("FUN_L07_0031aee0");
@@ -390,7 +390,7 @@ void bridge_update(u8 *moby)
     u8 state;
     typedef u32 quadword __attribute__((mode(TI), aligned(16)));
 
-    scale_vector_xyz_31aee0(-1.0f, delta, moby + 0x10);
+    fast_vec_scale(-1.0f, delta, moby + 0x10);
     qcopy(old_rotation, moby + 0x40);
 
     if (moby[0xb0] != 0xff &&
@@ -418,7 +418,7 @@ void bridge_update(u8 *moby)
         vectors[5] = *(f32 *)(data + 0xc0);
         vectors[6] = *(f32 *)(data + 0xc4);
         *(quadword *)vectors = *(quadword *)(vectors + 4);
-        *(f32 *)(data + 0xac) = vector_length_xyz_31aee0(vectors);
+        *(f32 *)(data + 0xac) = fast_vec_length(vectors);
         if (*(s32 *)(data + 0xd0) != -1)
             play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
         moby[0x20] = 2;
@@ -439,12 +439,12 @@ void bridge_update(u8 *moby)
         vectors[5] = *(f32 *)(data + 0xc0);
         vectors[6] = *(f32 *)(data + 0xc4);
         *(quadword *)vectors = *(quadword *)(vectors + 4);
-        subtract_vector_xyz_31aee0(vectors, vectors, moby + 0xc0);
+        transform_vector_by_basis(vectors, vectors, moby + 0xc0);
         scale_vector_xyz_alt_31aee0(*(f32 *)(data + 0xc8) * frame_time, vectors + 4, vectors);
-        add_vector_xyz_31aee0(moby + 0x10, moby + 0x10, vectors + 4);
+        fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
         *(f32 *)(data + 0xac) -= *(f32 *)(data + 0xc8) * frame_time;
         if (*(f32 *)(data + 0xac) < 0.0f) {
-            add_vector_xyz_31aee0(moby + 0x10, data + 0xa0, vectors);
+            fast_vec_add(moby + 0x10, data + 0xa0, vectors);
             *(f32 *)(data + 0xac) = 0.0f;
             if (*(s32 *)(data + 0xd8) != -1)
                 D_L07_00184528[*(s32 *)(data + 0xd8)] = 1;
@@ -479,10 +479,10 @@ void bridge_update(u8 *moby)
             vectors[5] = *(f32 *)(data + 0xc0);
             vectors[6] = *(f32 *)(data + 0xc4);
             *(quadword *)vectors = *(quadword *)(vectors + 4);
-                distance = vector_length_xyz_31aee0(vectors);
+                distance = fast_vec_length(vectors);
             scale_vector_xyz_alt_31aee0(-(*(f32 *)(data + 0xcc) * frame_time), vectors, vectors);
-            subtract_vector_xyz_31aee0(vectors + 4, vectors, moby + 0xc0);
-            add_vector_xyz_31aee0(moby + 0x10, moby + 0x10, vectors + 4);
+            transform_vector_by_basis(vectors + 4, vectors, moby + 0xc0);
+            fast_vec_add(moby + 0x10, moby + 0x10, vectors + 4);
             *(f32 *)(data + 0xac) += *(f32 *)(data + 0xcc) * frame_time;
             if (distance < *(f32 *)(data + 0xac)) {
                 qcopy(moby + 0x10, data + 0xa0);
@@ -497,6 +497,6 @@ void bridge_update(u8 *moby)
     case 5:
         break;
     }
-    add_vector_xyz_31aee0(delta, delta, moby + 0x10);
-    update_moby_motion_31aee0(data + 0x60, delta, old_rotation, moby + 0x40);
+    fast_vec_add(delta, delta, moby + 0x10);
+    update_entity_matrix(data + 0x60, delta, old_rotation, moby + 0x40);
 }

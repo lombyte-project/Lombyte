@@ -12,14 +12,14 @@ typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
 
 extern Vec4 D_L00_00173E70;
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_L00_00173E40[];
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
@@ -36,15 +36,15 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
     char *position;
 
     qcopy(&old_pos, pos);
-    add_vector_xyz(pos, pos, velocity);
-    if (radius < vector_length_xyz(velocity)) {
+    fast_vec_add(pos, pos, velocity);
+    if (radius < fast_vec_length(velocity)) {
         qcopy(&ray_start, &old_pos);
         ray_start.a[2] += step_height;
-        normalize_vector_xyz(&reach, velocity, radius);
-        add_vector_xyz(&ray_end, &reach, pos);
+        fast_vec_normalize(&reach, velocity, radius);
+        fast_vec_add(&ray_end, &reach, pos);
         ray_end.a[2] += step_height;
         if (collision_line(&ray_start, &ray_end, coll_flags, (int)moby, 0)) {
-            subtract_vector_xyz(pos, (char *)&D_94C8_60, &reach);
+            fast_vec_sub(pos, (char *)&D_94C8_60, &reach);
             result = 1;
             *(float *)(moby + 0x18) -= step_height;
         }
@@ -79,6 +79,6 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
             }
         }
     }
-    subtract_vector_xyz(velocity, position, &old_pos);
+    fast_vec_sub(velocity, position, &old_pos);
     return result;
 }

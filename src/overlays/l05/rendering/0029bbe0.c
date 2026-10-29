@@ -42,11 +42,11 @@ unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particl
 /* spawn a particle at a position with a velocity and random parameters */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/partupd_0029CA28.c: func_L05_0029CCB8), where it is exact; names translated to the US level program. */
 
-extern float random_float_between_alt_q(float, float) __asm__("FUN_002132a8");
-extern s32 scale_game_frames_q(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32_q(f32) __asm__("FUN_001fa6d0");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
-extern int truncate_float_to_s32_q(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L05_001B25C8 __attribute__((section(".data")));
 unsigned char *create_particle_with_velocity_and_randomized_parameters(void *initial_position_source, void *initial_velocity_source, int initial_word_at_04, int byte_table_index, float unscaled_particle_scalar, float b,
@@ -59,17 +59,17 @@ unsigned char *create_particle_with_velocity_and_randomized_parameters(void *ini
     if (allocated_object != 0) {
         velocity_block = allocated_object + 0x20;
         qcopy(allocated_object + 0x10, initial_position_source);
-        allocated_object[9] = truncate_float_to_s32_q(1.0f) + 0x40;
+        allocated_object[9] = truncate_float_to_s32(1.0f) + 0x40;
         allocated_object[3] = 0x44;
         allocated_object[1] = 0;
         allocated_object[2] = D_L05_001B25C8[byte_table_index];
         *(int *)(allocated_object + 4) = initial_word_at_04;
         *(float *)(allocated_object + 0xC) = unscaled_particle_scalar * 210000.0f;
-        allocated_object[8] = (int)random_float_between_alt_q(0.0f, 255.0f);
-        *(short *)(allocated_object + 0xA) = scale_game_frames_q(0xF);
+        allocated_object[8] = (int)random_float_between(0.0f, 255.0f);
+        *(short *)(allocated_object + 0xA) = scale_game_frames(0xF);
         qcopy(velocity_block, initial_velocity_source);
         *(float *)(velocity_block + 0x10) = initial_velocity_block_scalar;
-        *(int *)(velocity_block + 0x14) = truncate_float_to_s32_q(random_float_between_alt_q(-3.0f, 3.0f));
+        *(int *)(velocity_block + 0x14) = truncate_float_to_s32(random_float_between(-3.0f, 3.0f));
         *(float *)(velocity_block + 0x18) = initial_particle_scalar;
     }
     return allocated_object;

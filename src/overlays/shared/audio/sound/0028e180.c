@@ -22,9 +22,9 @@ extern unsigned char l00_moby_followup_scene_gate[] __asm__("D_0013DD4B");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_light_flare() __asm__("func_0022DF40");
-extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
@@ -50,15 +50,15 @@ void update_moby_proximity_interaction(unsigned char *moby) {
             } else {
                 *(int *)(moby + 0x90) = color_pulse_intensity | (color_pulse_intensity << 8) | (color_pulse_intensity << 16);
             }
-            enqueue_callback_list_1_alt(render_environment_mapped_object, moby);
+            add_draw_callback(render_environment_mapped_object, moby);
             if (vector_distance(moby + 0x10, D_L00_00166DC0) < 32.0f) {
-                enqueue_callback_list_1_alt(draw_light_flare, moby);
+                add_draw_callback(draw_light_flare, moby);
             }
         }
         moby_position = (float *)(moby + 0x10);
         if (*(short *)(proximity_state_data + 0xC) != 0) {
             transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
-            add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
+            fast_vec_add(proximity_test_position, proximity_test_position, moby_position);
             if (FUN_001f9b48(proximity_test_position, &hero.motion.pos) > 4.1f) {
                 *(short *)(proximity_state_data + 0xC) = 0;
             }
@@ -66,7 +66,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
             hero_position_or_scene_flags = (unsigned char *)(&hero.motion.pos);
             if (vector_distance(moby_position, hero_position_or_scene_flags) < 6.0f) {
                 transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
-                add_vector_xyz(proximity_test_position, proximity_test_position, moby_position);
+                fast_vec_add(proximity_test_position, proximity_test_position, moby_position);
                 if (FUN_001f9b48(proximity_test_position, hero_position_or_scene_flags) < 4.0f) {
                     *(short *)(proximity_state_data + 0xC) = 1;
                 }

@@ -58,7 +58,7 @@ extern float FUN_001f9de0_235c08(float) __asm__("FUN_001f9de0");
 extern f32 FUN_001fa688_235c08(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001fa5c8_235c08(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 FUN_001f9b20_235c08(void *) __asm__("FUN_001f9b20");
-extern f32 approach_value_235c08(f32, f32, f32 *) __asm__("FUN_00213ed8");
+extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void FUN_L00_00212088_235c08(f32, f32) __asm__("FUN_L00_00212088");
 extern void FUN_L00_00211e30_235c08(int, float, float, float) __asm__("FUN_L00_00211e30");
@@ -95,7 +95,7 @@ void hero_update_hop_movement(void) {
         hero.ground_speed = hero.motion.flat_speed;
     } else if (state == 16) {
         if (FUN_001f96f8_235c08(0x36) < hero.state_timer) {
-            approach_value_235c08(ED70 * 25.0f, ED70 * 7.0f, &hero.jump_gravity);
+            approach_value(ED70 * 25.0f, ED70 * 7.0f, &hero.jump_gravity);
         }
         if (hero.state_timer < FUN_001f96f8_235c08(0x37)) {
             hero.target_speed = hero.long_jump_speed;
@@ -112,9 +112,9 @@ void hero_update_hop_movement(void) {
         }
         if (13.0f <= hero.anim_frame && hero.anim_frame <= 30.0f) {
             if (27.0f < hero.anim_frame) {
-                approach_value_235c08(0.0f, ED70 * 8.0f, &hero.ledge_jump_speed);
+                approach_value(0.0f, ED70 * 8.0f, &hero.ledge_jump_speed);
             } else {
-                approach_value_235c08(ED6C * 2.0f, ED70 * 8.0f, &hero.ledge_jump_speed);
+                approach_value(ED6C * 2.0f, ED70 * 8.0f, &hero.ledge_jump_speed);
             }
         }
         hero.motion.velocity.f[0] = FUN_001f9dc8_235c08(hero.motion.rot.f[2]) * hero.ledge_jump_speed;
@@ -129,9 +129,9 @@ void hero_update_hop_movement(void) {
         }
         if (hero.state.current == HERO_STATE_HIGH_JUMP) {
             if (hero.past_jump_apex != 0 && hero.frames_to_land < FUN_001f96f8_235c08(0xC)) {
-                approach_value_235c08(0.0f, ED70 * 8.0f, &hero.high_jump_drift_speed);
+                approach_value(0.0f, ED70 * 8.0f, &hero.high_jump_drift_speed);
             } else {
-                approach_value_235c08(ED6C * 4.2f, ED70 * 8.0f, &hero.high_jump_drift_speed);
+                approach_value(ED6C * 4.2f, ED70 * 8.0f, &hero.high_jump_drift_speed);
             }
         }
         hero.motion.velocity.f[0] = FUN_001f9dc8_235c08(hero.high_jump_drift_yaw) * hero.high_jump_drift_speed;
@@ -177,7 +177,7 @@ void hero_update_hop_movement(void) {
                 if (hero.on_ice_ground)
                     speed_decay_step = ED70 * 0.17f;
                 speed = FUN_001f9b20_235c08(&hero.motion.velocity);
-                approach_value_235c08(0.0f, speed_decay_step, &speed);
+                approach_value(0.0f, speed_decay_step, &speed);
                 FUN_001f9c48_235c08(hero.motion.velocity.f, hero.motion.velocity.f, speed);
                 return;
             }

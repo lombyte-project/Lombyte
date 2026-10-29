@@ -6,8 +6,8 @@
 extern s32 registered_shrub_render_class_count __asm__("D_001603CC");
 #include "rnc/rendering/render_globals.h"
 #include "rnc/rendering/material_templates.h"
-extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
-extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
+extern s32 log2dim(s32) __asm__("func_001F97A0");
 void register_shrub_render_class(ShrubRenderClass *render_class,
                                  ResidentRenderTextureDefinition *textures, u128 *material_map,
                                  ShrubMipTextureDefinition *mip_texture,
@@ -29,7 +29,7 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
     shrub_render_class_ids[registered_shrub_render_class_count] = class_id;
     shrub_render_classes[registered_shrub_render_class_count] = render_class;
     render_class->class_slot = registered_shrub_render_class_count;
-    fixed_threshold = convert_float_to_word(render_class->scale * 1024.0f);
+    fixed_threshold = truncate_float_to_s32(render_class->scale * 1024.0f);
     shrub_render_class_fixed_thresholds[registered_shrub_render_class_count] = fixed_threshold;
     registered_shrub_render_class_count++;
     render_class->first_instance = 0;
@@ -75,8 +75,8 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                 }
             }
 
-            width_log2 = highest_set_bit_index(mip_texture->width);
-            height_log2 = highest_set_bit_index(mip_texture->height);
+            width_log2 = log2dim(mip_texture->width);
+            height_log2 = log2dim(mip_texture->height);
             draw_control_count = mip_texture->draw_control_count;
             texture_block = mip_texture->texture_block_offset;
             gs_block_base = gs_texture_allocation_base >> 8;
@@ -163,8 +163,8 @@ void register_shrub_render_class(ShrubRenderClass *render_class,
                 if (width_units_128 <= 0) {
                     width_units_128 = 1;
                 }
-                width_log2 = highest_set_bit_index(width_bits >> 16);
-                height_log2 = highest_set_bit_index(texture->height);
+                width_log2 = log2dim(width_bits >> 16);
+                height_log2 = log2dim(texture->height);
                 gs_block_base = gs_texture_allocation_base >> 8;
                 draw_control_count = texture->draw_control_count;
                 width_bits = texture->clut_block_offset + gs_block_base;

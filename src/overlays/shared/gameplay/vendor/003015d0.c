@@ -37,7 +37,7 @@ typedef struct {
 } VendorBeamFrame;
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float vector_length_xyz(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern VendorBeamFrame *D_L14_001600EC;
 extern int D_L14_001620C8;   /* no foreign declaration */
 extern int D_L14_001620D8_t; /* no foreign declaration */
@@ -52,7 +52,7 @@ extern void draw_vendor_beam(char *) __asm__("FUN_L14_00301fa8");
 void apply_vendor_beam_damage(char *self) __asm__("FUN_L14_00302538");
 
 extern void apply_vendor_beam_damage(char *) __asm__("FUN_L14_00302538");
-extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int D_L14_0016219C_s __asm__("D_L14_001620CC") __attribute__((sda));
 extern int D_L14_00162188_s __asm__("D_L14_001620B8") __attribute__((sda));
 extern int D_L14_001621A0_s __asm__("D_L14_001620D0") __attribute__((sda));
@@ -90,7 +90,7 @@ void update_vendor_beam(unsigned char *moby) {
         start_vendor_beam_pulse((char *)moby);
         beam_vars->s10 = scale_game_frames(beam_vars->wC);
         moby[0x20] = 2;
-        beam_vars->f624 = vector_length_xyz(&D_L14_001600EC[beam_vars->w0].axis[1]);
+        beam_vars->f624 = fast_vec_length(&D_L14_001600EC[beam_vars->w0].axis[1]);
         beam_vars->s8 = 1;
         beam_vars->sA = 1;
         break;
@@ -136,19 +136,19 @@ void update_vendor_beam(unsigned char *moby) {
             if (D_L14_001621A4_s != 0) {
                 return;
             }
-            enqueue_callback_list_1(draw_vendor_beam, moby);
+            add_draw_callback(draw_vendor_beam, moby);
         }
     }
 }
-extern int random_integer_between(int, int) __asm__("FUN_L00_00257b90");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void set_vector_xyz(void *, float, float) __asm__("FUN_L00_00257d78");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern int spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -197,10 +197,10 @@ void start_vendor_beam_pulse(char *moby) {
         low = scale_game_frames(ticks);
     }
     high = scale_game_frames(vendor_beam_max_pulse_duration_frames_gp);
-    duration = random_integer_between(low, high);
+    duration = random_int_between(low, high);
     beam->countdown = (short)duration;
     beam->duration = (short)duration;
-    length = vector_length_xyz(&D_L14_001600EC[beam->frame].axis[1]);
+    length = fast_vec_length(&D_L14_001600EC[beam->frame].axis[1]);
     length = length + length;
 
     for (i = 0; i < 32; i++) {
@@ -213,8 +213,8 @@ void start_vendor_beam_pulse(char *moby) {
             clear_u64_value(&path[i]);
             clear_u64_value(&path_steps[i]);
         } else {
-            set_vector_xyz(&path[i], 0.0f, vendor_beam_displacement_radius_gp);
-            set_vector_xyz(&path_steps[i], 0.0f, vendor_beam_max_point_speed_gp * frame_time);
+            random_vector(&path[i], 0.0f, vendor_beam_displacement_radius_gp);
+            random_vector(&path_steps[i], 0.0f, vendor_beam_max_point_speed_gp * frame_time);
         }
         y = path[i].f[1];
         path[i].f[3] = 1.0f;
@@ -226,28 +226,28 @@ void start_vendor_beam_pulse(char *moby) {
             qcopy(&beam->points[j], &path[j]);
             qcopy(&beam->point_steps[j], &path_steps[j]);
         } else {
-            add_vector_xyz(&work, &path[j - 1], &path[j]);
-            add_vector_xyz(&work, &work, &path[j + 1]);
-            scale_vector_xyz(&beam->points[j], &work, 0.333f);
-            add_vector_xyz(&work, &path_steps[j - 1], &path_steps[j]);
-            add_vector_xyz(&work, &work, &path_steps[j + 1]);
-            scale_vector_xyz(&beam->point_steps[j], &work, 0.333f);
+            fast_vec_add(&work, &path[j - 1], &path[j]);
+            fast_vec_add(&work, &work, &path[j + 1]);
+            fast_vec_scale(&beam->points[j], &work, 0.333f);
+            fast_vec_add(&work, &path_steps[j - 1], &path_steps[j]);
+            fast_vec_add(&work, &work, &path_steps[j + 1]);
+            fast_vec_scale(&beam->point_steps[j], &work, 0.333f);
         }
     }
 
     for (branch = 0; branch < 4; branch++) {
         int start;
         float spread = vendor_beam_displacement_radius_gp;
-        set_vector_xyz(&work, spread, spread);
+        random_vector(&work, spread, spread);
         start = truncate_float_to_s32(random_float_between((float)branch * 6.0f, (float)(branch + 1) * 6.0f)) + 4;
         beam->branch_start[branch] = (unsigned char)start;
         qcopy(&beam->branches[0][branch], &beam->points[start]);
         qcopy(&beam->branch_steps[0][branch], &beam->point_steps[start]);
         for (k = 1; k < 4; k++) {
-            set_vector_xyz(&delta, 0.1f, 0.1f);
-            set_vector_xyz(&beam->branch_steps[k][branch], 0.0f, vendor_beam_max_point_speed_gp * frame_time);
-            add_vector_xyz(&beam->branches[k][branch], &beam->branches[k - 1][branch], &work);
-            add_vector_xyz(&beam->branches[k][branch], &beam->branches[k][branch], &delta);
+            random_vector(&delta, 0.1f, 0.1f);
+            random_vector(&beam->branch_steps[k][branch], 0.0f, vendor_beam_max_point_speed_gp * frame_time);
+            fast_vec_add(&beam->branches[k][branch], &beam->branches[k - 1][branch], &work);
+            fast_vec_add(&beam->branches[k][branch], &beam->branches[k][branch], &delta);
         }
     }
 
@@ -287,7 +287,7 @@ extern int vendor_beam_transition_color_gp __asm__("D_L14_001620F4") __attribute
 extern int vendor_beam_final_color_gp __asm__("D_L14_001620F8") __attribute__((sda));
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void update_vendor_beam_animation(char *moby) {
     char *vars = *(char **)(moby + 0x78);
     char *beam_point, *src;
@@ -301,7 +301,7 @@ void update_vendor_beam_animation(char *moby) {
         src = vars + 0x260;
         beam_point = vars + 0x60;
         for (j = 22; j >= 0; j--) {
-            add_vector_xyz(beam_point, beam_point, src);
+            fast_vec_add(beam_point, beam_point, src);
             beam_point += 0x10;
             src += 0x10;
         }
@@ -310,7 +310,7 @@ void update_vendor_beam_animation(char *moby) {
             next_i = i + 1;
             for (k = 2; k >= 0; k--) {
                 char *row = vars + (i << 4) + (2 - k) * 0x40;
-                add_vector_xyz(row + 0x460, row + 0x460, row + 0x560);
+                fast_vec_add(row + 0x460, row + 0x460, row + 0x560);
             }
             i = next_i;
         } while ((float)i < 4.0f);
@@ -348,10 +348,10 @@ typedef struct {
 
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void transform_vector_xyz(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
@@ -386,8 +386,8 @@ void draw_vendor_beam(char *moby) {
     euler_rotation_matrix(world, &D_L14_001600EC[beam->frame].rotation);
     transpose_rotation_matrix(inverse, world);
     qcopy_nc(&world[12], &D_L14_001600EC[beam->frame].origin);
-    subtract_vector_xyz(camera, D_L14_001674C0, &D_L14_001600EC[beam->frame].origin);
-    transform_vector_xyz(camera, camera, inverse);
+    fast_vec_sub(camera, D_L14_001674C0, &D_L14_001600EC[beam->frame].origin);
+    transform_vector_by_basis(camera, camera, inverse);
     texture = get_effect_texture(vendor_beam_effect_texture_index_gp);
     gs_state = (u64)vendor_beam_blend_minuend_selector_gp | ((u64)vendor_beam_blend_subtrahend_selector_gp << 2) | ((u64)vendor_beam_blend_alpha_factor_selector_gp << 4)
                | ((u64)vendor_beam_blend_addend_selector_gp << 6) | (0x8000ULL << 24);
@@ -420,22 +420,22 @@ void draw_vendor_beam(char *moby) {
         for (point = 0; point < 31; point++) {
             qcopy(prev_offset, offset);
             if (point < 30) {
-                subtract_vector_xyz(tangent, &beam->points[point], &beam->points[point + 2]);
-                subtract_vector_xyz(view, &beam->points[point + 1], camera);
-                cross_vectors_xyz(offset, view, tangent);
-                normalize_vector_xyz(offset, offset, 0.1f);
+                fast_vec_sub(tangent, &beam->points[point], &beam->points[point + 2]);
+                fast_vec_sub(view, &beam->points[point + 1], camera);
+                fast_vec_cross(offset, view, tangent);
+                fast_vec_normalize(offset, offset, 0.1f);
             } else {
                 clear_u64_value(offset);
             }
             for (corner = 0; corner < 4; corner++) {
                 if (corner < 2) {
                     qcopy(&packet[0].vertices[corner], &beam->points[point]);
-                    if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
-                    else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    if (corner & 1) fast_vec_add(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    else fast_vec_sub(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
                 } else {
                     qcopy(&packet[0].vertices[corner], &beam->points[point + 1]);
-                    if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
-                    else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    if (corner & 1) fast_vec_add(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    else fast_vec_sub(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
                 }
                 /* Fakematch: 34 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
@@ -453,10 +453,10 @@ void draw_vendor_beam(char *moby) {
         for (node = 0; node < 3; node++) {
             qcopy(prev_offset, offset);
             if (node < 2) {
-                subtract_vector_xyz(tangent, &beam->branches[node][branch], &beam->branches[node + 2][branch]);
-                subtract_vector_xyz(view, &beam->branches[node + 1][branch], camera);
-                cross_vectors_xyz(offset, view, tangent);
-                normalize_vector_xyz(offset, offset, 0.1f);
+                fast_vec_sub(tangent, &beam->branches[node][branch], &beam->branches[node + 2][branch]);
+                fast_vec_sub(view, &beam->branches[node + 1][branch], camera);
+                fast_vec_cross(offset, view, tangent);
+                fast_vec_normalize(offset, offset, 0.1f);
             } else {
                 clear_u64_value(offset);
             }
@@ -464,12 +464,12 @@ void draw_vendor_beam(char *moby) {
             for (corner = 0; corner < 4; corner++) {
                 if (corner < 2) {
                     qcopy(&packet[0].vertices[corner], &beam->branches[node][branch]);
-                    if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
-                    else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    if (corner & 1) fast_vec_add(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
+                    else fast_vec_sub(&packet[0].vertices[corner], &packet[0].vertices[corner], prev_offset);
                 } else {
                     qcopy(&packet[0].vertices[corner], &beam->branches[node + 1][branch]);
-                    if (corner & 1) add_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
-                    else subtract_vector_xyz(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    if (corner & 1) fast_vec_add(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
+                    else fast_vec_sub(&packet[0].vertices[corner], &packet[0].vertices[corner], offset);
                 }
                 /* Fakematch: 32 block notes push this loop past haifa-sched's 100-insn region limit,
                  * so sched1 moves nothing between its blocks, as in retail. */
@@ -496,10 +496,10 @@ extern u8 D_L14_00174560[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern f32 dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
@@ -525,35 +525,35 @@ void apply_vendor_beam_damage(char *self) {
     damage_push_direction.f[0] = fast_cos(beam_moby->rot.z);
     damage_push_direction.f[1] = fast_sin(beam_moby->rot.z);
     damage_push_direction.f[2] = 0.0f;
-    subtract_vector_xyz(&to_hero, &hero.motion.pos, &beam_moby->pos);
+    fast_vec_sub(&to_hero, &hero.motion.pos, &beam_moby->pos);
     to_hero.f[2] = 0.0f;
-    dot = dot_vectors_xyz(&damage_push_direction, &to_hero);
-    if (vector_length_xyz(&to_hero) != 0.0f) {
+    dot = fast_vec_dot(&damage_push_direction, &to_hero);
+    if (fast_vec_length(&to_hero) != 0.0f) {
         if (dot < 0.0f)
-            scale_vector_xyz(&damage_push_direction, &damage_push_direction, -1.0f);
+            fast_vec_scale(&damage_push_direction, &damage_push_direction, -1.0f);
         req.v[0] = damage_push_direction.f[0];
         req.v[1] = damage_push_direction.f[1];
     }
     qcopy_nc(&base, &D_L14_001600EC[beam_vars->w0].origin);
     if (beam_vars->s8) {
-        add_vector_xyz(&end_a, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
+        fast_vec_add(&end_a, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
         if (collision_line(&base, &end_a, 0, beam_moby, 0)) {
-            subtract_vector_xyz(&from, D_L14_00174560, &base);
-            collision_offset_length = vector_length_xyz(&from);
-            scale_vector_xyz(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
-            add_vector_xyz(&beam_vars->end_a, &base, &from);
+            fast_vec_sub(&from, D_L14_00174560, &base);
+            collision_offset_length = fast_vec_length(&from);
+            fast_vec_scale(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
+            fast_vec_add(&beam_vars->end_a, &base, &from);
             beam_vars->s8 = 0;
         } else {
             qcopy(&beam_vars->end_a, &end_a);
         }
     }
     if (beam_vars->sA) {
-        subtract_vector_xyz(&end_b, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
+        fast_vec_sub(&end_b, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
         if (collision_line(&base, &end_b, 0, beam_moby, 0)) {
-            subtract_vector_xyz(&from, D_L14_00174560, &base);
-            collision_offset_length = vector_length_xyz(&from);
-            scale_vector_xyz(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
-            add_vector_xyz(&beam_vars->end_b, &base, &from);
+            fast_vec_sub(&from, D_L14_00174560, &base);
+            collision_offset_length = fast_vec_length(&from);
+            fast_vec_scale(&from, &from, collision_offset_length * 0.98f / collision_offset_length);
+            fast_vec_add(&beam_vars->end_b, &base, &from);
             beam_vars->sA = 0;
         } else {
             qcopy(&beam_vars->end_b, &end_b);
@@ -561,19 +561,19 @@ void apply_vendor_beam_damage(char *self) {
     }
     qcopy(&end_a, &beam_vars->end_a);
     qcopy(&end_b, &beam_vars->end_b);
-    normalize_vector_xyz(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[0], beam_vars->radius);
-    add_vector_xyz(&from, &end_a, &beam_radius_offset);
-    add_vector_xyz(&to, &end_b, &beam_radius_offset);
+    fast_vec_normalize(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[0], beam_vars->radius);
+    fast_vec_add(&from, &end_a, &beam_radius_offset);
+    fast_vec_add(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    subtract_vector_xyz(&from, &end_a, &beam_radius_offset);
-    subtract_vector_xyz(&to, &end_b, &beam_radius_offset);
+    fast_vec_sub(&from, &end_a, &beam_radius_offset);
+    fast_vec_sub(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    normalize_vector_xyz(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[2], beam_vars->radius);
-    add_vector_xyz(&from, &end_a, &beam_radius_offset);
-    add_vector_xyz(&to, &end_b, &beam_radius_offset);
+    fast_vec_normalize(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[2], beam_vars->radius);
+    fast_vec_add(&from, &end_a, &beam_radius_offset);
+    fast_vec_add(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    subtract_vector_xyz(&from, &end_a, &beam_radius_offset);
-    subtract_vector_xyz(&to, &end_b, &beam_radius_offset);
+    fast_vec_sub(&from, &end_a, &beam_radius_offset);
+    fast_vec_sub(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
 }
 #include "sda.h"
@@ -626,7 +626,7 @@ void update_beam_slots(unsigned char *moby) {
             }
         }
         if (started_slot_count != 0) {
-            enqueue_callback_list_1(draw_active_beam_slots, moby);
+            add_draw_callback(draw_active_beam_slots, moby);
         }
         break;
     }

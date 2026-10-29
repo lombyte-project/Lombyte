@@ -7,7 +7,7 @@
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
-extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
 void project_graphics_bounds(u128 *first, u128 *opposite, s32 *width, s32 *height, s32 *x,
                              s32 *y) __asm__("FUN_00237a78");
@@ -51,10 +51,10 @@ void project_graphics_bounds(u128 *first, u128 *opposite, s32 *width, s32 *heigh
     first_projected.f[1] *= scale_y;
     opposite_pointer->f[0] *= scale_x;
     opposite_pointer->f[1] *= scale_y;
-    *x = convert_float_to_integer(first_projected.f[0] * 0.25f + (f32)screen_extent.half_width);
-    *y = convert_float_to_integer(first_projected.f[1] * 0.25f + (f32)screen_extent.half_height);
-    *width = convert_float_to_integer((opposite_pointer->f[0] - first_projected.f[0]) * 0.25f);
-    *height = convert_float_to_integer((opposite_pointer->f[1] - first_projected.f[1]) * 0.25f);
+    *x = truncate_float_to_s32(first_projected.f[0] * 0.25f + (f32)screen_extent.half_width);
+    *y = truncate_float_to_s32(first_projected.f[1] * 0.25f + (f32)screen_extent.half_height);
+    *width = truncate_float_to_s32((opposite_pointer->f[0] - first_projected.f[0]) * 0.25f);
+    *height = truncate_float_to_s32((opposite_pointer->f[1] - first_projected.f[1]) * 0.25f);
 }
 
 extern __typeof__(project_graphics_bounds) func_00237A78 __attribute__((alias("FUN_00237a78")));

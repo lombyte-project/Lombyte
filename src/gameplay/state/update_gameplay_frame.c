@@ -53,7 +53,7 @@ extern void noop_callback_h(void) __asm__("func_001E9428");
 extern void noop_callback_i(void) __asm__("func_001E9430");
 extern void transition_update_movie_camera(void) __asm__("func_001EAF88");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void add_vector_xyz(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9A10");
+extern void fast_vec_add(Vec4 *, Vec4 *, Vec4 *) __asm__("func_001F9A10");
 extern void fast_vec_scale(Vec4 *, Vec4 *, f32) __asm__("func_001F9A68");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -109,7 +109,7 @@ void update_gameplay_frame(void) {
         }
         fast_vec_scale(&next_position, &animation_positions[actor->next_frame],
                       actor->frame_fraction);
-        add_vector_xyz(&actor->position, &first_position, &next_position);
+        fast_vec_add(&actor->position, &first_position, &next_position);
         actor->cached_frame = 0xFF;
         refresh_moby_spatial_bounds(actor);
         actor->update_enabled = 0;

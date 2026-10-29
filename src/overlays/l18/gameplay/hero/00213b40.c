@@ -11,7 +11,7 @@
 extern int D_0015ED84_d __asm__("D_0015ED84");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
+extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -23,7 +23,7 @@ void apply_hero_ground_type_effects(void) {
     int keep = hero_state->ground_sound_class;
     int saved_ground_type = hero_state->ground_type;
     int collision_check_selector;
-    fast_mem_zero16(&hero_state->ground_type, 0x10);
+    clear_blocks_16(&hero_state->ground_type, 0x10);
     hero_state->ground_sound_class = keep;
     hero_state->ground_type = -1;
     hero_state->wading = 0;

@@ -9,14 +9,14 @@
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;
-extern int frames_9780(int) __asm__("FUN_001f96f8");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void rot_9780(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void add_9780(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void norm_9780(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 extern void enqueue_callback_list_1_overlay(void *, void *) __asm__("FUN_L18_002020c8");
@@ -66,7 +66,7 @@ extern char D_L18_0015F580[] __attribute__((section(".sdata")));
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void rotate_vector_about_axis(void *, void *, void *, float) __asm__("FUN_00214890");
+extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void update_beam_ring_rail_and_pulse_effects(void *) __asm__("FUN_L00_002bd0a0");
 
 extern int deplanetizer_camera_quad_start_frame_gp __asm__("D_L18_00162498") __attribute__((sda));
@@ -118,25 +118,25 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
                 }
             }
         }
-        if (frames_9780(500) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n <= frames_9780(860)) {
+        if (scale_game_frames(500) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n <= scale_game_frames(860)) {
             int i;
             scratch.radii = l18_deplanetizer_object_trail_base_radii;
             for (i = 3; i < 8; i++) {
                 if (D_L18_0016D260_update.objects[i]) {
                     moby_point_position(D_L18_0016D260_update.objects[i], 0, &direction);
                     radius = scratch.radii.radius[i - 3];
-                    if (i != 3 || D_L18_0016D260_update.n < frames_9780(645) ||
-                        frames_9780(736) < D_L18_0016D260_update.n) {
-                        if (i == 5 && frames_9780(645) <= D_L18_0016D260_update.n &&
-                            D_L18_0016D260_update.n <= frames_9780(730))
+                    if (i != 3 || D_L18_0016D260_update.n < scale_game_frames(645) ||
+                        scale_game_frames(736) < D_L18_0016D260_update.n) {
+                        if (i == 5 && scale_game_frames(645) <= D_L18_0016D260_update.n &&
+                            D_L18_0016D260_update.n <= scale_game_frames(730))
                         radius = 300000.0f;
                         draw_trail(&direction, &direction, D_L18_0015F580, radius, radius * 0.4f);
                     }
                 }
             }
         }
-        if (D_L18_0016D260_update.n == frames_9780(706)) {
+        if (D_L18_0016D260_update.n == scale_game_frames(706)) {
             struct Moby *target = D_L18_0016D260_update.objects[7];
             if (target) {
                 moby_point_position(target, 0, &scratch.vectors.pos);
@@ -146,7 +146,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
                     8.0f, 4.0f, 9.0f, 1.0f, -1, 30.0f, 0, 15, -1, 0);
             }
         }
-        if (D_L18_0016D260_update.n == frames_9780(710)) {
+        if (D_L18_0016D260_update.n == scale_game_frames(710)) {
             struct Moby *target = D_L18_0016D260_update.objects[4];
             if (target) {
                 moby_point_position(target, 0, &scratch.vectors.pos);
@@ -156,7 +156,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
                     8.0f, 4.0f, 9.0f, 1.0f, -1, 30.0f, 0, 15, -1, 0);
             }
         }
-        if (D_L18_0016D260_update.n == frames_9780(720)) {
+        if (D_L18_0016D260_update.n == scale_game_frames(720)) {
             struct Moby *target = D_L18_0016D260_update.objects[6];
             if (target) {
                 moby_point_position(target, 0, &scratch.vectors.pos);
@@ -166,7 +166,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
                     8.0f, 4.0f, 9.0f, 1.0f, -1, 30.0f, 0, 15, -1, 0);
             }
         }
-        if (D_L18_0016D260_update.n == frames_9780(730)) {
+        if (D_L18_0016D260_update.n == scale_game_frames(730)) {
             struct Moby *target = D_L18_0016D260_update.objects[5];
             if (target) {
                 moby_point_position(target, 0, &scratch.vectors.pos);
@@ -176,7 +176,7 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
                     8.0f, 4.0f, 9.0f, 1.0f, -1, 30.0f, 0, 15, -1, 0);
             }
         }
-        if (D_L18_0016D260_update.n == frames_9780(748)) {
+        if (D_L18_0016D260_update.n == scale_game_frames(748)) {
             scratch.vectors.pos.q = 0;
             scratch.vectors.pos.f[0] = 634.556030273f;
             scratch.vectors.pos.f[1] = 454.162994385f;
@@ -187,32 +187,32 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             func_L00_0025F4A8_alt(moby, &scratch.vectors.velocity, &scratch.vectors.pos, 0.0f, 0.0f, 300, 200, 200,
                 12.0f, 6.0f, 9.0f, 1.0f, -1, 60.0f, 0, 60, -1, 0);
         }
-        if (frames_9780(deplanetizer_glow_alpha_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_glow_alpha_ramp_end_frame_gp)) {
-            numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(deplanetizer_glow_alpha_ramp_start_frame_gp));
-            denominator = convert_integer_to_float(frames_9780(deplanetizer_glow_alpha_ramp_end_frame_gp - deplanetizer_glow_alpha_ramp_start_frame_gp));
+        if (scale_game_frames(deplanetizer_glow_alpha_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < scale_game_frames(deplanetizer_glow_alpha_ramp_end_frame_gp)) {
+            numerator = convert_integer_to_float(D_L18_0016D260_update.n - scale_game_frames(deplanetizer_glow_alpha_ramp_start_frame_gp));
+            denominator = convert_integer_to_float(scale_game_frames(deplanetizer_glow_alpha_ramp_end_frame_gp - deplanetizer_glow_alpha_ramp_start_frame_gp));
             numerator = numerator / denominator;
             deplanetizer_glow_quad_alpha = truncate_float_to_s32(numerator * 255.0f);
             enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, l18_deplanetizer_class_059b_glow_moby);
         }
-        if (frames_9780(deplanetizer_three_quad_scale_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_three_quad_scale_ramp_end_frame_gp)) {
-            numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(deplanetizer_three_quad_scale_ramp_start_frame_gp));
-            denominator = convert_integer_to_float(frames_9780(deplanetizer_three_quad_scale_ramp_end_frame_gp - deplanetizer_three_quad_scale_ramp_start_frame_gp));
+        if (scale_game_frames(deplanetizer_three_quad_scale_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < scale_game_frames(deplanetizer_three_quad_scale_ramp_end_frame_gp)) {
+            numerator = convert_integer_to_float(D_L18_0016D260_update.n - scale_game_frames(deplanetizer_three_quad_scale_ramp_start_frame_gp));
+            denominator = convert_integer_to_float(scale_game_frames(deplanetizer_three_quad_scale_ramp_end_frame_gp - deplanetizer_three_quad_scale_ramp_start_frame_gp));
             numerator = numerator / denominator;
             numerator *= 200.0f;
             numerator += 0.25f;
             deplanetizer_three_quad_local_x_scale = numerator;
             enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, l18_deplanetizer_class_059b_glow_moby);
         }
-        if (frames_9780(deplanetizer_camera_quad_start_frame_gp) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_camera_quad_end_frame_gp)) {
+        if (scale_game_frames(deplanetizer_camera_quad_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < scale_game_frames(deplanetizer_camera_quad_end_frame_gp)) {
             enqueue_callback_list_1_overlay(draw_three_scaled_camera_facing_quads, D_L18_0016D260_update.objects[0]);
-            if (D_L18_0016D260_update.n >= frames_9780(deplanetizer_camera_quad_scale_ramp_end_frame_gp)) {
+            if (D_L18_0016D260_update.n >= scale_game_frames(deplanetizer_camera_quad_scale_ramp_end_frame_gp)) {
                 deplanetizer_camera_quad_base_scale = 10.0f;
             } else {
-                numerator = convert_integer_to_float(D_L18_0016D260_update.n - frames_9780(deplanetizer_camera_quad_start_frame_gp));
-                denominator = convert_integer_to_float(frames_9780(deplanetizer_camera_quad_scale_ramp_end_frame_gp - deplanetizer_camera_quad_start_frame_gp));
+                numerator = convert_integer_to_float(D_L18_0016D260_update.n - scale_game_frames(deplanetizer_camera_quad_start_frame_gp));
+                denominator = convert_integer_to_float(scale_game_frames(deplanetizer_camera_quad_scale_ramp_end_frame_gp - deplanetizer_camera_quad_start_frame_gp));
                 numerator = numerator / denominator;
                 deplanetizer_camera_quad_base_scale = deplanetizer_camera_quad_scale_ramp_start_value_gp + (deplanetizer_camera_quad_scale_ramp_end_value_gp - deplanetizer_camera_quad_scale_ramp_start_value_gp) * numerator;
             }
@@ -236,16 +236,16 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
                 }
             }
         }
-        if (frames_9780(deplanetizer_glow_alpha_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_glow_alpha_ramp_end_frame_gp)) {
+        if (scale_game_frames(deplanetizer_glow_alpha_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < scale_game_frames(deplanetizer_glow_alpha_ramp_end_frame_gp)) {
             numerator = convert_integer_to_float(D_L18_0016D260_update.n - deplanetizer_glow_alpha_ramp_start_frame_gp);
             denominator = convert_integer_to_float(deplanetizer_glow_alpha_ramp_end_frame_gp - deplanetizer_glow_alpha_ramp_start_frame_gp);
             numerator = numerator / denominator;
             deplanetizer_glow_quad_alpha = truncate_float_to_s32(numerator * 255.0f);
             enqueue_callback_list_1_overlay(draw_moby_two_tint_glow_quads, l18_deplanetizer_class_059b_glow_moby);
         }
-        if (frames_9780(deplanetizer_three_quad_scale_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_three_quad_scale_ramp_end_frame_gp)) {
+        if (scale_game_frames(deplanetizer_three_quad_scale_ramp_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < scale_game_frames(deplanetizer_three_quad_scale_ramp_end_frame_gp)) {
             numerator = convert_integer_to_float(D_L18_0016D260_update.n - deplanetizer_three_quad_scale_ramp_start_frame_gp);
             denominator = convert_integer_to_float(deplanetizer_three_quad_scale_ramp_end_frame_gp - deplanetizer_three_quad_scale_ramp_start_frame_gp);
             numerator = numerator / denominator;
@@ -254,8 +254,8 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             deplanetizer_three_quad_local_x_scale = numerator;
             enqueue_callback_list_1_overlay(draw_moby_three_scaled_two_tint_quads, l18_deplanetizer_class_059b_glow_moby);
         }
-        if (frames_9780(deplanetizer_camera_quad_start_frame_gp) <= D_L18_0016D260_update.n &&
-            D_L18_0016D260_update.n < frames_9780(deplanetizer_camera_quad_end_frame_gp)) {
+        if (scale_game_frames(deplanetizer_camera_quad_start_frame_gp) <= D_L18_0016D260_update.n &&
+            D_L18_0016D260_update.n < scale_game_frames(deplanetizer_camera_quad_end_frame_gp)) {
             enqueue_callback_list_1_overlay(draw_three_scaled_camera_facing_quads, D_L18_0016D260_update.objects[0]);
             if (D_L18_0016D260_update.n >= deplanetizer_camera_quad_scale_ramp_end_frame_gp) {
                 deplanetizer_camera_quad_base_scale = 10.0f;
@@ -269,11 +269,11 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
     }
     if (D_L18_0016D260_update.state == 1 && D_L18_0016D260_update.objects[3])
     enqueue_callback_list_1_overlay(draw_moby_color_cycling_bone_glows, D_L18_0016D260_update.objects[3]);
-    if (D_L18_0016D260_update.state == 5 && frames_9780(138) <= D_L18_0016D260_update.n &&
-        D_L18_0016D260_update.n <= frames_9780(264)) {
+    if (D_L18_0016D260_update.state == 5 && scale_game_frames(138) <= D_L18_0016D260_update.n &&
+        D_L18_0016D260_update.n <= scale_game_frames(264)) {
         struct Moby *target = D_L18_0016D260_update.objects[2];
         if (target) {
-            if (frames_9780(140) < D_L18_0016D260_update.n) {
+            if (scale_game_frames(140) < D_L18_0016D260_update.n) {
                 int i;
                 moby_point_position(target, 0, &scratch.vectors.pos);
                 moby_point_position(target, 2, &scratch.vectors.velocity);
@@ -292,8 +292,8 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             }
         }
     }
-    if (D_L18_0016D260_update.state == 1 && frames_9780(446) <= D_L18_0016D260_update.n &&
-        D_L18_0016D260_update.n < frames_9780(502)) {
+    if (D_L18_0016D260_update.state == 1 && scale_game_frames(446) <= D_L18_0016D260_update.n &&
+        D_L18_0016D260_update.n < scale_game_frames(502)) {
         int color, color2;
         struct Moby *target = D_L18_0016D260_update.objects[4];
         if (target) {
@@ -301,8 +301,8 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
             data[4] = 0.0f;
             moby_point_position(target, 3, &scratch.vectors.pos);
             moby_point_position(target, 10, &scratch.vectors.velocity);
-            subtract_vector_xyz(&direction, &scratch.vectors.velocity, &scratch.vectors.pos);
-            norm_9780(&moby->rot_row1, &direction, 1.0f);
+            fast_vec_sub(&direction, &scratch.vectors.velocity, &scratch.vectors.pos);
+            fast_vec_normalize(&moby->rot_row1, &direction, 1.0f);
             qcopy(data, &scratch.vectors.velocity);
             color = 0x207F7F;
             color2 = 0x7F7F20;
@@ -319,21 +319,21 @@ void update_deplanetizer_gun_sequence_effects(struct Moby *moby) {
     if (D_L18_0016D260_update.state != 2 && D_L18_0016D260_update.state != 0) {
         if (D_L18_0016D260_update.state != 3)
         return;
-        if (frames_9780(586) <= D_L18_0016D260_update.n)
+        if (scale_game_frames(586) <= D_L18_0016D260_update.n)
         goto burst;
     }
     if (D_L18_0016D260_update.objects[2])
     enqueue_callback_list_1_overlay(draw_moby_color_cycling_bone_glows, D_L18_0016D260_update.objects[2]);
 burst:
-    if (D_L18_0016D260_update.state == 3 && D_L18_0016D260_update.n == frames_9780(586)) {
+    if (D_L18_0016D260_update.state == 3 && D_L18_0016D260_update.n == scale_game_frames(586)) {
         char *matrix = deplanetizer_camera_rotation_basis;
-        rot_9780(&scratch.vectors.pos, &deplanetizer_burst_local_spawn_offset_x_gp, matrix);
-        add_9780(&scratch.vectors.pos, &scratch.vectors.pos, matrix - 0x210);
+        transform_vector_by_basis(&scratch.vectors.pos, &deplanetizer_burst_local_spawn_offset_x_gp, matrix);
+        fast_vec_add(&scratch.vectors.pos, &scratch.vectors.pos, matrix - 0x210);
         qcopy(&scratch.vectors.velocity, matrix + 0x10);
         for (i = 0; i < 32; i++) {
-            rotate_vector_about_axis(&direction, &scratch.vectors.velocity, deplanetizer_camera_rotation_basis,
+            build_look_at_matrix(&direction, &scratch.vectors.velocity, deplanetizer_camera_rotation_basis,
                 convert_integer_to_float(i) * 0.19634955f);
-            norm_9780(&direction, &direction, deplanetizer_burst_velocity_scale_gp * D_L18_0015ED60);
+            fast_vec_normalize(&direction, &direction, deplanetizer_burst_velocity_scale_gp * D_L18_0015ED60);
             n = random_integer_below(16);
             if (random_integer_below(2))
             n = -n;
@@ -341,7 +341,7 @@ burst:
                 0.0f, 1.0f, 1.01f, deplanetizer_burst_particle_size_gp, 0x7F7F7F7F);
             if (effect) {
                 unsigned char *data = effect + 0x20;
-                *(short *)(effect + 10) = frames_9780(60);
+                *(short *)(effect + 10) = scale_game_frames(60);
                 effect[9] = truncate_float_to_s32(4.0f) + 64;
                 *(int *)(data + 4) = 2;
                 data[10] = 127;
@@ -360,17 +360,17 @@ typedef struct {
 } Pk_9780;
 typedef struct { char pad[0x30]; int state; int n; } ML_9780;
 extern ML_9780 D_L18_0016D260_9780 __asm__("D_L18_0016D260");
-extern int frames_9780(int) __asm__("FUN_001f96f8");
-extern unsigned long tex_9780(int) __asm__("FUN_001f44b8");
-extern void gs_9780(int, long) __asm__("FUN_00233980");
-extern void rot_9780(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void add_9780(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern unsigned long get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void sub_9780(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void norm_9780(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void cross_9780(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void scale_9780(void *, void *, float) __asm__("FUN_001f9a68");
-extern void xform_9780(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void draw_9780(void *, void *, int) __asm__("FUN_001f7d30");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 #include "rnc/overlay/l18/gameplay/entities/deplanetizer_gun_data/draw_three_scaled_camera_facing_quads_2.h"
 extern volatile float l18_deplanetizer_camera_quad_local_offset_y __asm__("D_L18_00162554");
 extern volatile float D_L18_00162558;
@@ -392,7 +392,7 @@ void draw_three_scaled_camera_facing_quads(void) {
     float tilt;
     char *target;
 
-    if (D_L18_0016D260_9780.n == frames_9780(deplanetizer_camera_quad_start_frame_gp + 1)) {
+    if (D_L18_0016D260_9780.n == scale_game_frames(deplanetizer_camera_quad_start_frame_gp + 1)) {
         deplanetizer_camera_quad_local_offset_x = 1.0f;
         l18_deplanetizer_camera_quad_local_offset_y = 0.0f;
         if (D_L18_0016D260_9780.state == 7) {
@@ -403,24 +403,24 @@ void draw_three_scaled_camera_facing_quads(void) {
         D_L18_00162558 = tilt;
         deplanetizer_camera_quad_local_offset_w = 1.0f;
     }
-    pk.b = tex_9780(0xB);
+    pk.b = get_effect_texture(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
-    gs_9780(0x4A, 0);
-    gs_9780(0x47, 0x51001);
-    rot_9780(quad_transform[3], &deplanetizer_camera_quad_local_offset_x, deplanetizer_camera_rotation_basis);
+    vu1_add_g_sregister(0x4A, 0);
+    vu1_add_g_sregister(0x47, 0x51001);
+    transform_vector_by_basis(quad_transform[3], &deplanetizer_camera_quad_local_offset_x, deplanetizer_camera_rotation_basis);
     target = deplanetizer_camera_rotation_basis;
     target -= 0x210;
-    add_9780(quad_transform[3], quad_transform[3], target);
+    fast_vec_add(quad_transform[3], quad_transform[3], target);
     sub_9780(quad_transform[0], quad_transform[3], target);
-    norm_9780(quad_transform[0], quad_transform[0], 1.0f);
+    fast_vec_normalize(quad_transform[0], quad_transform[0], 1.0f);
     *(u128_9780 *)up = 0;
     up[2] = 1.0f;
     up[3] = 1.0f;
-    cross_9780(quad_transform[1], quad_transform[0], up);
-    norm_9780(quad_transform[1], quad_transform[1], 1.0f);
-    cross_9780(quad_transform[2], quad_transform[1], quad_transform[0]);
+    fast_vec_cross(quad_transform[1], quad_transform[0], up);
+    fast_vec_normalize(quad_transform[1], quad_transform[1], 1.0f);
+    fast_vec_cross(quad_transform[2], quad_transform[1], quad_transform[0]);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
     pk.uv[2] = 0.0f;
@@ -435,25 +435,25 @@ void draw_three_scaled_camera_facing_quads(void) {
     pk.col[1] = color;
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
-        scale_9780(pk.m[i], D_L18_001DFB90[i], deplanetizer_camera_quad_base_scale);
-        xform_9780(pk.m[i], pk.m[i], quad_transform);
+        fast_vec_scale(pk.m[i], D_L18_001DFB90[i], deplanetizer_camera_quad_base_scale);
+        transform_vector(pk.m[i], pk.m[i], quad_transform);
     }
-    draw_9780(&pk, 0, 0);
+    draw_geometry_quad(&pk, 0, 0);
     color = deplanetizer_camera_quad_smaller_color_gp;
     pk.col[3] = color;
     pk.col[2] = color;
     pk.col[1] = color;
     pk.col[0] = color;
     for (i = 0; i < 4; i++) {
-        scale_9780(pk.m[i], D_L18_001DFB90[i], deplanetizer_camera_quad_base_scale * 0.75f);
-        xform_9780(pk.m[i], pk.m[i], quad_transform);
+        fast_vec_scale(pk.m[i], D_L18_001DFB90[i], deplanetizer_camera_quad_base_scale * 0.75f);
+        transform_vector(pk.m[i], pk.m[i], quad_transform);
     }
-    draw_9780(&pk, 0, 0);
+    draw_geometry_quad(&pk, 0, 0);
     for (i = 0; i < 4; i++) {
-        scale_9780(pk.m[i], D_L18_001DFB90[i], deplanetizer_camera_quad_base_scale * 0.5f);
-        xform_9780(pk.m[i], pk.m[i], quad_transform);
+        fast_vec_scale(pk.m[i], D_L18_001DFB90[i], deplanetizer_camera_quad_base_scale * 0.5f);
+        transform_vector(pk.m[i], pk.m[i], quad_transform);
     }
-    draw_9780(&pk, 0, 0);
+    draw_geometry_quad(&pk, 0, 0);
 }
 #include "sda.h"
 
@@ -471,8 +471,8 @@ extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
-extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern float D_L18_00162454 ;
 extern float D_L18_00162450 ;
 
@@ -491,12 +491,12 @@ void draw_moby_color_cycling_bone_glows(void *moby) {
     color_cycle_value = fast_sin(color_cycle_value - 3.14159f);
     tweened_color = fast_tween_color(D_L18_00162458, D_L18_0016245C, color_cycle_value * 0.5f + 0.5f);
     build_moby_bone_transform(moby, 1, bone_transform_rows0_1);
-    scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&deplanetizer_bone_glow_offset_scale_gp);
-    subtract_vector_xyz(glow_position, bone_world_position, scaled_bone_offset);
+    fast_vec_scale(scaled_bone_offset, bone_transform_row2, *(float *)&deplanetizer_bone_glow_offset_scale_gp);
+    fast_vec_sub(glow_position, bone_world_position, scaled_bone_offset);
     draw_offset_textured_effect_quad(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
     build_moby_bone_transform(moby, 2, bone_transform_rows0_1);
-    scale_vector_xyz(scaled_bone_offset, bone_transform_row2, *(float *)&deplanetizer_bone_glow_offset_scale_gp);
-    subtract_vector_xyz(glow_position, bone_world_position, scaled_bone_offset);
+    fast_vec_scale(scaled_bone_offset, bone_transform_row2, *(float *)&deplanetizer_bone_glow_offset_scale_gp);
+    fast_vec_sub(glow_position, bone_world_position, scaled_bone_offset);
     draw_offset_textured_effect_quad(glow_position, tweened_color, D_L18_00162450, D_L18_00162454);
 }
 /* Draws the moby's two glow quads facing the camera, in the inner and outer tints. */
@@ -513,17 +513,17 @@ typedef struct {
 } ML_9c20;
 extern ML_9c20 D_L18_0016D260_9c20 __asm__("D_L18_0016D260");
 extern char D_L18_001677C0_9c20[] __asm__("D_L18_001677C0");
-extern int frames_9c20(int) __asm__("FUN_001f96f8");
-extern unsigned long tex_9c20(int) __asm__("FUN_001f44b8");
-extern void gs_9c20(int, long) __asm__("FUN_00233980");
-extern void rot_9c20(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void add_9c20(void *, void *, void *) __asm__("FUN_001f9a10");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern unsigned long get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void sub_9c20(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void norm_9c20(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void cross_9c20(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void scale_9c20(void *, void *, float) __asm__("FUN_001f9a68");
-extern void xform_9c20(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void draw_9c20(void *, void *, int) __asm__("FUN_001f7d30");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int deplanetizer_glow_first_quad_base_tint_gp __asm__("D_L18_00162504") __attribute__((sda));
 extern float deplanetizer_glow_first_quad_scale_gp __asm__("D_L18_00162508") __attribute__((sda));
@@ -536,28 +536,28 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     int c;
     int second_quad_color;
     int i;
-    if (D_L18_0016D260_9c20.n == frames_9c20(deplanetizer_glow_alpha_ramp_start_frame_gp + 1)) {
+    if (D_L18_0016D260_9c20.n == scale_game_frames(deplanetizer_glow_alpha_ramp_start_frame_gp + 1)) {
         deplanetizer_glow_local_offset_z = -45.0f;
         deplanetizer_glow_local_offset_w = 1.0f;
         deplanetizer_glow_local_offset_x = 0;
         deplanetizer_glow_local_offset_y = 0;
     }
-    pk.b = tex_9c20(0xB);
+    pk.b = get_effect_texture(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
-    gs_9c20(0x4A, 0);
-    gs_9c20(0x47, 0x51001);
-    rot_9c20(quad_transform[3], &deplanetizer_glow_local_offset_x, &m->rot_row0);
-    add_9c20(quad_transform[3], quad_transform[3], &m->pos);
+    vu1_add_g_sregister(0x4A, 0);
+    vu1_add_g_sregister(0x47, 0x51001);
+    transform_vector_by_basis(quad_transform[3], &deplanetizer_glow_local_offset_x, &m->rot_row0);
+    fast_vec_add(quad_transform[3], quad_transform[3], &m->pos);
     sub_9c20(quad_transform[0], quad_transform[3], D_L18_001677C0_9c20);
-    norm_9c20(quad_transform[0], quad_transform[0], 1.0f);
+    fast_vec_normalize(quad_transform[0], quad_transform[0], 1.0f);
     *(u128_9c20 *)up = 0;
     up[2] = 1.0f;
     up[3] = 1.0f;
-    cross_9c20(quad_transform[1], quad_transform[0], up);
-    norm_9c20(quad_transform[1], quad_transform[1], 1.0f);
-    cross_9c20(quad_transform[2], quad_transform[1], quad_transform[0]);
+    fast_vec_cross(quad_transform[1], quad_transform[0], up);
+    fast_vec_normalize(quad_transform[1], quad_transform[1], 1.0f);
+    fast_vec_cross(quad_transform[2], quad_transform[1], quad_transform[0]);
     c = deplanetizer_glow_first_quad_base_tint_gp | (deplanetizer_glow_quad_alpha << 24);
     pk.uv[0] = 1.0f;
     pk.uv[1] = 1.0f;
@@ -572,20 +572,20 @@ void draw_moby_two_tint_glow_quads(struct Moby *m) {
     pk.col[1] = c;
     pk.col[0] = c;
     for (i = 0; i < 4; i++) {
-        scale_9c20(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_first_quad_scale_gp);
-        xform_9c20(pk.m[i], pk.m[i], quad_transform);
+        fast_vec_scale(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_first_quad_scale_gp);
+        transform_vector(pk.m[i], pk.m[i], quad_transform);
     }
-    draw_9c20(&pk, 0, 0);
+    draw_geometry_quad(&pk, 0, 0);
     second_quad_color = deplanetizer_glow_second_quad_base_tint_gp | (deplanetizer_glow_quad_alpha << 24);
     pk.col[3] = second_quad_color;
     pk.col[2] = second_quad_color;
     pk.col[1] = second_quad_color;
     pk.col[0] = second_quad_color;
     for (i = 0; i < 4; i++) {
-        scale_9c20(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_second_quad_scale_gp);
-        xform_9c20(pk.m[i], pk.m[i], quad_transform);
+        fast_vec_scale(pk.m[i], D_L18_001DFB90[i], deplanetizer_glow_second_quad_scale_gp);
+        transform_vector(pk.m[i], pk.m[i], quad_transform);
     }
-    draw_9c20(&pk, 0, 0);
+    draw_geometry_quad(&pk, 0, 0);
 }
 
 extern float deplanetizer_first_quad_local_z_scale_gp __asm__("D_L18_00162514") __attribute__((sda));
@@ -600,22 +600,22 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     int i = 0;
     int color;
 
-    pk.b = tex_9c20(0xB);
+    pk.b = get_effect_texture(0xB);
     pk.c = 0x0000FF9000000260ULL;
     pk.d = 0x8000000048ULL;
     pk.a = 0;
-    gs_9c20(0x4A, 0);
-    gs_9c20(0x47, 0x51001);
-    rot_9c20(quad_transform[3], &deplanetizer_glow_local_offset_x, &m->rot_row0);
-    add_9c20(quad_transform[3], quad_transform[3], &m->pos);
+    vu1_add_g_sregister(0x4A, 0);
+    vu1_add_g_sregister(0x47, 0x51001);
+    transform_vector_by_basis(quad_transform[3], &deplanetizer_glow_local_offset_x, &m->rot_row0);
+    fast_vec_add(quad_transform[3], quad_transform[3], &m->pos);
     *(u128_9c20 *)up = 0;
     up[2] = -1.0f;
     up[3] = 1.0f;
-    rot_9c20(quad_transform[0], up, &m->rot_row0);
+    transform_vector_by_basis(quad_transform[0], up, &m->rot_row0);
     sub_9c20(quad_transform[1], quad_transform[3], D_L18_001677C0_9c20);
-    cross_9c20(quad_transform[2], quad_transform[1], quad_transform[0]);
-    norm_9c20(quad_transform[2], quad_transform[2], 1.0f);
-    cross_9c20(quad_transform[1], quad_transform[0], quad_transform[2]);
+    fast_vec_cross(quad_transform[2], quad_transform[1], quad_transform[0]);
+    fast_vec_normalize(quad_transform[2], quad_transform[2], 1.0f);
+    fast_vec_cross(quad_transform[1], quad_transform[0], quad_transform[2]);
 
     color = deplanetizer_glow_first_quad_base_tint_gp | 0xFF000000;
     pk.uv[0] = 1.0f;
@@ -641,9 +641,9 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
         i++;
     } while (i < 4);
     for (i = 0; i < 4; i++) {
-        xform_9c20(pk.m[i], &vertices[i], quad_transform);
+        transform_vector(pk.m[i], &vertices[i], quad_transform);
     }
-    draw_9c20(&pk, 0, 0);
+    draw_geometry_quad(&pk, 0, 0);
 
     pk.col[3] = deplanetizer_glow_second_quad_base_tint_gp | 0x7F000000;
     pk.col[2] = pk.col[3];
@@ -659,9 +659,9 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
         i++;
     } while (i < 4);
     for (i = 0; i < 4; i++) {
-        xform_9c20(pk.m[i], &vertices[i], quad_transform);
+        transform_vector(pk.m[i], &vertices[i], quad_transform);
     }
-    draw_9c20(&pk, 0, 0);
+    draw_geometry_quad(&pk, 0, 0);
 
     pk.col[3] = deplanetizer_glow_second_quad_base_tint_gp | 0x7F000000;
     pk.col[2] = pk.col[3];
@@ -677,9 +677,9 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
         i++;
     } while (i < 4);
     for (i = 0; i < 4; i++) {
-        xform_9c20(pk.m[i], &vertices[i], quad_transform);
+        transform_vector(pk.m[i], &vertices[i], quad_transform);
     }
-    draw_9c20(&pk, 0, 0);
+    draw_geometry_quad(&pk, 0, 0);
 }
 #define NOT_SDA
 
@@ -985,11 +985,11 @@ extern void update_gadgebot_damage_target_and_glow(struct Moby *) __asm__("FUN_L
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
 
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
-extern void add_vector_xyz(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-extern void scale_vector_xyz(void *, void *, float);
-extern void vu_euler_rotation_basis(void *, void *);
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 float move_gadgebot_toward_target(char *self, float *src) __asm__("FUN_L18_002fc4e0");
 extern float FUN_L18_002fc4e0_c(void *, void *) __asm__("FUN_L18_002fc4e0");
 extern float f9d48_i(void *, void *) __asm__("FUN_001f9b80");
@@ -1044,7 +1044,7 @@ void gadgebot_update(unsigned char *moby) {
         float r;
         moby_transform_ptr = moby + 0x10;
         *(float *)(moby_vars + 0x1D8) = *(float *)(moby_vars + 0x1D8) - frame_time_sq * launch_gravity_and_minimum_z;
-        add_vector_xyz(moby_transform_ptr, moby_transform_ptr, moby_vars + 0x1D0);
+        fast_vec_add(moby_transform_ptr, moby_transform_ptr, moby_vars + 0x1D0);
         qcopy(position_scratch, moby_transform_ptr);
         ((float *)position_scratch)[2] += 1.0f;
         r = probe_ground_height(position_scratch, 0, 0.5f);
@@ -1135,16 +1135,16 @@ void gadgebot_update(unsigned char *moby) {
         break;
     }
     moby_transform_ptr = moby + 0xC0;
-    vu_euler_rotation_basis(moby_transform_ptr, moby + 0x40);
+    euler_rotation_basis(moby_transform_ptr, moby + 0x40);
     if (*(float *)(moby_vars + 0x1F4) != 0.0f) {
         float g;
         approach_value((float *)(moby_vars + 0x1F4), 0.0f, frame_time * 4.0f);
         g = 1.0f;
-        scale_vector_xyz(moby + 0xE0, moby + 0xE0, *(float *)(moby_vars + 0x1F4) + g);
+        fast_vec_scale(moby + 0xE0, moby + 0xE0, *(float *)(moby_vars + 0x1F4) + g);
         g = g - *(float *)(moby_vars + 0x1F4);
-        scale_vector_xyz(moby_transform_ptr, moby_transform_ptr, g);
-        scale_vector_xyz(moby + 0xD0, moby + 0xD0, g);
-        enqueue_callback_list_1(draw_gadgebot_launch_glow_quad, moby);
+        fast_vec_scale(moby_transform_ptr, moby_transform_ptr, g);
+        fast_vec_scale(moby + 0xD0, moby + 0xD0, g);
+        add_draw_callback(draw_gadgebot_launch_glow_quad, moby);
     }
 }
 #include "rnc/gameplay/hero.h"
@@ -1155,18 +1155,18 @@ extern int *D_L18_001B0EB0[] __asm__("D_L18_001B0EB0");
 void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
 
 extern void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
-extern float fast_add_rotations_c100(float, float) __asm__("FUN_001fa580");
-extern float fast_sin_c100(float) __asm__("FUN_001f9de0");
-extern int tween_color_c100(int, int, float) __asm__("FUN_001fa6e0");
-extern void blend_moby_animation_c100(void *, int, int, int) __asm__("FUN_00212f90");
-extern int scale_game_frames_c100(int) __asm__("FUN_001f96f8");
-extern char *find_moby_hit_c100(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int hit_reaction_c100(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
-extern int random_integer_below_c100(int) __asm__("FUN_00213260");
-extern void knockback_c100(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void start_fall_c100(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
-extern void anim_reset_c100(void *, void *) __asm__("FUN_L00_0025d458");
-extern void anim_update_c100(void *, void *) __asm__("FUN_L00_0025d538");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int trooper_take_damage(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
+extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
+extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int FUN_L00_0025ff38_c100(float, void *, void *, int, int, int *, int) __asm__("FUN_L00_0025ff38");
 
 typedef struct {
@@ -1225,15 +1225,15 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     }
     if (moby->state != 7 && game_frame != gadgebot_joint_glows_last_queued_frame_gp) {
         gadgebot_joint_glows_last_queued_frame_gp = game_frame;
-        enqueue_callback_list_1(draw_group_class_0772_joint_glows, moby);
+        add_draw_callback(draw_group_class_0772_joint_glows, moby);
     }
     speed = gadgebot_glow_default_phase_speed_degrees_per_second_gp;
     if (moby->state == 4 || moby->state == 5) {
         speed = gadgebot_glow_state_4_or_5_phase_speed_degrees_per_second_gp;
     }
-    sentry_vars->spin = fast_add_rotations_c100(sentry_vars->spin, speed * DEG_TO_RAD * frame_time);
-    moby->glow_color = tween_color_c100(gadgebot_glow_tint_start_gp, gadgebot_glow_tint_end_gp,
-                                fast_sin_c100(sentry_vars->spin) * 0.5f + 0.5f);
+    sentry_vars->spin = fast_add_rotations(sentry_vars->spin, speed * DEG_TO_RAD * frame_time);
+    moby->glow_color = fast_tween_color(gadgebot_glow_tint_start_gp, gadgebot_glow_tint_end_gp,
+                                fast_sin(sentry_vars->spin) * 0.5f + 0.5f);
     if (moby->pos.z < 100.0f && moby->state != 7) {
         moby->state = 6;
     }
@@ -1242,7 +1242,7 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
         if (moby->state != 7) {
             moby->state = 8;
             if (moby->prev_seq != 0) {
-                blend_moby_animation_c100(moby, 0, 0, scale_game_frames_c100(10));
+                blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             }
             moby->collision = 0;
             moby->flags = (moby->flags | 0x41) & ~0x1000;
@@ -1250,12 +1250,12 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
         }
     }
     dmg = 0.0f;
-    coll = find_moby_hit_c100(moby, 0x330000, 0);
-    hit_reaction_c100(moby, coll, &sentry_vars->health, 0, &hit, &dmg, 0, 4);
+    coll = find_moby_hit(moby, 0x330000, 0);
+    trooper_take_damage(moby, coll, &sentry_vars->health, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby->state != 6 && dmg != 0.0f) {
         sentry_vars->health -= dmg;
         if (sentry_vars->health <= 0.0f) {
-            if (random_integer_below_c100(2) != 0) {
+            if (random_integer_below(2) != 0) {
                 moby->state = 6;
             } else {
                 fall_setup_value_or_path_slot_address = 0x200;
@@ -1271,19 +1271,19 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
                 sentry_vars->unkBC = frame_time + frame_time;
                 moby->flags &= ~0x1000;
                 v.q = *(u128 *)(coll + 0x10);
-                knockback_c100(&v, &angle, &sentry_vars->unk88, &sentry_vars->unk8C);
-                start_fall_c100(moby, sentry_vars->fall, 3, 1, 0, angle);
+                trooper_knockback_arc(&v, &angle, &sentry_vars->unk88, &sentry_vars->unk8C);
+                trooper_start_knockback(moby, sentry_vars->fall, 3, 1, 0, angle);
                 sentry_vars->unkC0 = 7.5f;
                 sentry_vars->unkC4 = 15.0f;
                 moby->state = 5;
                 moby->collision = 0;
                 sentry_vars->anim_flags = 0x78;
-                anim_reset_c100(moby, sentry_vars->anim);
+                trooper_anim_update(moby, sentry_vars->anim);
             }
         }
     }
     moby->hit_slot = 0xFF;
-    anim_update_c100(moby, sentry_vars->anim);
+    trooper_anim_finish(moby, sentry_vars->anim);
     fall_setup_value_or_path_slot_address = (int)&D_L18_001B0EB0[sentry_vars->path];
     reaction_value_or_path_address = *(int *)fall_setup_value_or_path_slot_address;
     FUN_L00_0025ff38_c100(512.0f, moby, &sentry_vars->target, 0, 0, (int *)(reaction_value_or_path_address + 0x10), *(int *)reaction_value_or_path_address);
@@ -1427,12 +1427,12 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_c860;
 extern char D_L18_001677C0_g[] __asm__("D_L18_001677C0");
-extern void clear_g(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void sub_g(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void cross_g(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void norm_g(void *, void *, float) __asm__("FUN_001f9bf8");
-extern unsigned long tex_g(int) __asm__("FUN_001f44b8");
-extern void draw_g(void *, void *, int) __asm__("FUN_001f7d30");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern unsigned long get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int gadgebot_launch_glow_blend_minuend_selector_gp __asm__("D_L18_0016262C") __attribute__((sda));
 extern int gadgebot_launch_glow_blend_subtrahend_selector_gp __asm__("D_L18_00162630") __attribute__((sda));
@@ -1458,14 +1458,14 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
     horizontal_axis_scale = 1.0f - *(float *)(d + 0x1F4) + gadgebot_launch_glow_horizontal_scale_adjustment_gp;
     qcopy(quad_transform[3], &m->pos);
     quad_transform[3][2] -= gadgebot_launch_glow_z_offset_gp;
-    clear_g(quad_transform[2]);
+    clear_u64_value(quad_transform[2]);
     quad_transform[2][2] = vertical_axis_scale;
     sub_g(quad_transform[0], D_L18_001677C0_g, &m->pos);
-    cross_g(quad_transform[1], quad_transform[0], quad_transform[2]);
-    cross_g(quad_transform[0], quad_transform[1], quad_transform[2]);
-    norm_g(quad_transform[0], quad_transform[0], horizontal_axis_scale);
-    norm_g(quad_transform[1], quad_transform[1], horizontal_axis_scale);
-    pk.b = tex_g(gadgebot_launch_glow_texture_index_gp);
+    fast_vec_cross(quad_transform[1], quad_transform[0], quad_transform[2]);
+    fast_vec_cross(quad_transform[0], quad_transform[1], quad_transform[2]);
+    fast_vec_normalize(quad_transform[0], quad_transform[0], horizontal_axis_scale);
+    fast_vec_normalize(quad_transform[1], quad_transform[1], horizontal_axis_scale);
+    pk.b = get_effect_texture(gadgebot_launch_glow_texture_index_gp);
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 0;
     pk.d = (unsigned long)gadgebot_launch_glow_blend_minuend_selector_gp | ((unsigned long)gadgebot_launch_glow_blend_subtrahend_selector_gp << 2) | ((unsigned long)gadgebot_launch_glow_blend_alpha_factor_selector_gp << 4) |
@@ -1475,7 +1475,7 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
         pk.uv[i][0] = gadgebot_launch_glow_quad_uvs[i][0];
         pk.uv[i][1] = gadgebot_launch_glow_quad_uvs[i][1];
         quad_vertex = pk.m[i];
-        clear_g(quad_vertex);
+        clear_u64_value(quad_vertex);
         if (i & 1)
             quad_vertex[2] = 1.0f;
         else
@@ -1487,7 +1487,7 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
         quad_vertex[3] = 1.0f;
         pk.col[i] = c;
     }
-    draw_g(&pk, quad_transform, 0);
+    draw_geometry_quad(&pk, quad_transform, 0);
 }
 #include "sda.h"
 

@@ -157,7 +157,7 @@ typedef struct WalkData {
 extern char walker_jump_distance_debug_format[] __asm__("D_L00_001611E0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float vector_distance_xy(void *, void *) __asm__("FUN_001f9b80");
+extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
@@ -167,8 +167,8 @@ extern int walker_gait_animation_index_by_state[] __asm__("D_L00_001CA760");
 extern int find_nearest_animation_sequence_entry(char *a, float time) __asm__("FUN_L00_0024ed18");
 extern int FUN_L00_002a13f0_c(WalkAnim *a, float t) __asm__("FUN_L00_002a13f0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void debug_print_alt() __asm__("FUN_001e93b0");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void debug_print() __asm__("FUN_001e93b0");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float compute_walker_time_to_landing(char *a, char *b) __asm__("FUN_L00_002a15c8");
@@ -311,9 +311,9 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
                     ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[gait_animation_index]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
                     if (flags & 1) {
-                        add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m10);
+                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m10);
                     } else {
-                        add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m30);
+                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m30);
                     }
                     ground_height = probe_ground_height(ground_probe_position, 0, 0.5f);
                     gait_data->fE4 = ground_height;
@@ -816,9 +816,9 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
                     ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[0]->f04 * 0.5f;
                     ground_probe_position[2] = 0.0f;
                     if (flags & 1) {
-                        add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m10);
+                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m10);
                     } else {
-                        add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m30);
+                        fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m30);
                     }
                     ground_probe_position[2] += 1.0f;
                     gait_data->fE4 = probe_ground_height(ground_probe_position, 0, 0.5f);
@@ -837,8 +837,8 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
         break;
     case WALKER_GAIT_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
-            float dist = vector_distance_xy(walker_moby->pos, gait_data->v60);
-            debug_print_alt(walker_jump_distance_debug_format, dist);
+            float dist = vector_distance(walker_moby->pos, gait_data->v60);
+            debug_print(walker_jump_distance_debug_format, dist);
             gait_data->fD8 = FUN_L00_0025abf0(walker_moby->pos, gait_data->v60, 0, gait_data->fC0, -gait_data->fDC);
             gait_data->uEE |= 4;
             gait_data->f6C = fast_arc_tan(gait_data->v60[0] - walker_moby->pos[0], gait_data->v60[1] - walker_moby->pos[1]);
@@ -868,7 +868,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
     case WALKER_GAIT_ALTERNATE_TAKEOFF_ANIMATION:
         if (flags & 0x30) {
             float dist = fast_vec_dist(walker_moby->pos, gait_data->v60);
-            debug_print_alt(walker_jump_distance_debug_format, dist);
+            debug_print(walker_jump_distance_debug_format, dist);
             gait_data->fD8 = FUN_L00_0025abf0(walker_moby->pos, gait_data->v60, 0, gait_data->fC0, -gait_data->fDC);
             gait_data->uEE |= 4;
             gait_data->f6C = fast_arc_tan(gait_data->v60[0] - walker_moby->pos[0], gait_data->v60[1] - walker_moby->pos[1]);
@@ -981,7 +981,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
             ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[2] = 0.0f;
-            add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m10);
+            fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m10);
             ground_probe_position[2] += 1.0f;
             gait_data->fE4 = probe_ground_height(ground_probe_position, 0, 0.5f);
         }
@@ -1004,7 +1004,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
             ground_probe_position[0] = fast_cos(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[1] = fast_sin(movement_heading) * gait_data->anim[7]->f04 * 0.5f;
             ground_probe_position[2] = 0.0f;
-            add_vector_xyz(ground_probe_position, ground_probe_position, gait_data->m10);
+            fast_vec_add(ground_probe_position, ground_probe_position, gait_data->m10);
             ground_probe_position[2] += 1.0f;
             gait_data->fE4 = probe_ground_height(ground_probe_position, 0, 0.5f);
         }

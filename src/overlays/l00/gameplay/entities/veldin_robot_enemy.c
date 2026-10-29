@@ -214,8 +214,8 @@ extern void mark_moby_for_removal(ElectroidMoby *) __asm__("FUN_0020c828");
 extern s32 scale_game_frames_s32(s32) __asm__("FUN_001f96f8");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void approach_angle(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_0025be00");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -325,7 +325,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         ELECTROID_TURN(moby, vars,
                   fast_arc_tan(delta.f[0] - moby->pos.f[0], delta.f[1] - moby->pos.f[1]),
                   12.566371f);
-        subtract_vector_xyz(&dir, &delta, &moby->pos);
+        fast_vec_sub(&dir, &delta, &moby->pos);
         advance_accelerated_scalar(FUN_001f9b48(&moby->pos, &path->pts[path->count - 1]),
                                    frame_time_sq * 8.0f, frame_time_sq * 16.0f, frame_time * 12.0f, &path_step_distance,
                                    &vars->speed);
@@ -337,7 +337,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
             }
         }
         fast_vec_normalize(&dir, &dir, vars->speed);
-        add_vector_xyz(&moby->pos, &moby->pos, &dir);
+        fast_vec_add(&moby->pos, &moby->pos, &dir);
         break;
     case VELDIN_ROBOT_STATE_FACE_TARGET:
         ELECTROID_TURN(
@@ -379,7 +379,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         qcopy(&delta, &moby->unkC0);
         delta.f[2] = 0.0f;
         fast_vec_normalize(&delta, &delta, veldin_robot_probe_length_gp);
-        add_vector_xyz(&dir, &mtx[3], &delta);
+        fast_vec_add(&dir, &mtx[3], &delta);
         hit = 0;
         query.flags = 0x10000;
         query.moby = moby;
@@ -613,7 +613,7 @@ extern SparkPart *spawn_mode_controlled_rotating_alpha_fade_particle(void *, voi
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void draw_veldin_robot_effect_quad() __asm__("FUN_L00_002e1c78");
-void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void update_veldin_robot_effects(SparkMoby *moby) {
     SparkVars *vars;
@@ -649,7 +649,7 @@ void update_veldin_robot_effects(SparkMoby *moby) {
             particle_tail->unk16 = 3;
         }
     }
-    enqueue_callback_list_1((s32)draw_veldin_robot_effect_quad, (s32)moby);
+    add_draw_callback((s32)draw_veldin_robot_effect_quad, (s32)moby);
 }
 typedef union {
     u128 q;
@@ -687,7 +687,7 @@ extern GlowVec glow_origin __asm__("D_L00_00166DC0");
 extern GlowVec l00_veldin_robot_effect_quad_template_corners[4] __asm__("D_L00_001E6CA0");
 extern void fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
+extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
@@ -702,7 +702,7 @@ void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     qcopy(&quad_transform[3], &moby->vars->pos);
     one = 1.0f;
     quad_transform[3].f[3] = one;
-    subtract_vector_xyz(&quad_transform[0], &glow_origin, &quad_transform[3]);
+    fast_vec_sub(&quad_transform[0], &glow_origin, &quad_transform[3]);
     fast_vec_normalize(&quad_transform[0], &quad_transform[0], one);
     fast_vec_cross(&quad_transform[1], &quad_transform[0], (GlowVec *)&hero.gravity_dir);
     fast_vec_normalize(&quad_transform[1], &quad_transform[1], -1.0f);
@@ -728,7 +728,7 @@ void draw_veldin_robot_effect_quad(GlowMoby *moby) {
     for (i = 0; i < 4; i++) {
         fast_vec_scale(0.2f, quad_corner++, template_corner++);
     }
-    fast_draw_quad_real(&quad, quad_transform, 0);
+    draw_geometry_quad(&quad, quad_transform, 0);
 }
 typedef struct {
     u8 pad0[0x20];
@@ -742,7 +742,7 @@ extern s32 D_L00_00161C88[] MACRO_ADDR;
 extern void release_beam_slot(s32) __asm__("FUN_L00_002e20f8");
 extern void update_slot_panes_and_effects(s32, s32) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");
-void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void update_beam_slot_controller(SlotMoby *slot_controller) __asm__("FUN_L00_002e1df0");
 
@@ -779,7 +779,7 @@ void update_beam_slot_controller(SlotMoby *slot_controller) {
             }
         }
         if (dispatched_slot_count != 0) {
-            enqueue_callback_list_1((s32)draw_active_beam_slots, (s32)slot_controller);
+            add_draw_callback((s32)draw_active_beam_slots, (s32)slot_controller);
         }
         break;
     }

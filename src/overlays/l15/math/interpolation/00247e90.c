@@ -10,8 +10,8 @@
 
 extern CollisionHit coll_hit __asm__("D_L15_00174440") __attribute__((section(".data")));
 extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 
@@ -25,7 +25,7 @@ int move_moby_with_sphere_collision(struct Moby *moving_moby, u128 *delta, int f
     int mask;
 
     qcopy(&start, &moving_moby->pos);
-    add_vector_xyz(&moving_moby->pos, &moving_moby->pos, delta);
+    fast_vec_add(&moving_moby->pos, &moving_moby->pos, delta);
     i = 0;
     do {
         mask = (flags << 1) & 0x20;
@@ -41,6 +41,6 @@ int move_moby_with_sphere_collision(struct Moby *moving_moby, u128 *delta, int f
         }
         i++;
     } while (i < 6);
-    subtract_vector_xyz(delta, &moving_moby->pos, &start);
+    fast_vec_sub(delta, &moving_moby->pos, &start);
     return pushed;
 }

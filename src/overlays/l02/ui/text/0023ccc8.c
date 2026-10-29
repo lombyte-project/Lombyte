@@ -38,11 +38,11 @@ void update_hud_counter_transition(char *transition_state) {
 extern int hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern int sprintf_alt(char *str, const char *fmt, ...) __asm__("FUN_00116248");
+extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
-extern void draw_hud_icon(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
+extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940");
 extern s32 frame_size[] __asm__("D_0013E504");
@@ -104,7 +104,7 @@ s32 draw_hud_counter(HudElem *hud_element) {
     } else if (shade < 0.0f) {
         shade = 0.0f;
     }
-    sprintf_alt(text, hud_counter_decimal_format, hud_element->unk74);
+    sprintf(text, hud_counter_decimal_format, hud_element->unk74);
     alpha = truncate_float_to_s32((f32)truncate_float_to_s32(grow * 128.0f) * 0.7f);
     if (hud_element->unk08 < 10) {
         full_bar_width = D_L02_0015F958;
@@ -131,9 +131,9 @@ s32 draw_hud_counter(HudElem *hud_element) {
         draw_hud_sprite(frame, px - 0x20, y, 0x20, 0x20, alpha);
     }
     if (left) {
-        draw_hud_icon(hud_element, hud_element->icon, x, y, 0, 0x80);
+        hud_frame(hud_element, hud_element->icon, x, y, 0, 0x80);
     } else {
-        draw_hud_icon(hud_element, hud_element->icon, x - 0x16, y, 0, 0x80);
+        hud_frame(hud_element, hud_element->icon, x - 0x16, y, 0, 0x80);
     }
     bright = fast_tween_color(D_L02_0015F950, D_L02_0015F954, shade);
     dark = fast_tween_color(0, 0x80000000, shade);

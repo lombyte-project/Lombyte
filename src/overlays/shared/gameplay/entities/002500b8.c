@@ -15,8 +15,8 @@
 
 extern char no_environment_sample_message[] __asm__("D_L00_001E8ED8");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void debug_print_alt() __asm__("FUN_001e93b0");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void debug_print() __asm__("FUN_001e93b0");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
 void apply_nearest_environment_sample(char *object) __asm__("FUN_L00_002500b8");
@@ -35,7 +35,7 @@ void apply_nearest_environment_sample(char *object) {
     unsigned char *entry_update_destination;
 
     for (i = 0; i < D_L00_00160014; i++) {
-        subtract_vector_xyz(position_delta, object + 0x10, D_L00_00160040 + i * 0x30);
+        fast_vec_sub(position_delta, object + 0x10, D_L00_00160040 + i * 0x30);
         entry_distance = fast_vec_length(position_delta);
         if (entry_distance <= 8.0f && entry_distance < best) {
             best = entry_distance;
@@ -43,7 +43,7 @@ void apply_nearest_environment_sample(char *object) {
         }
     }
     if (nearest_entry_index == -1) {
-        debug_print_alt(no_environment_sample_message);
+        debug_print(no_environment_sample_message);
         return;
     }
     selected_entry_byte_offset = nearest_entry_index * 0x30;

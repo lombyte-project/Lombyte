@@ -32,16 +32,16 @@ struct AmmoPreviewMoby {
     f32 basis[12];
 };
 
-extern void clear_vector(void *) __asm__("func_001F99F8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("func_001F9A10");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
+extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
-extern void multiply_matrix_basis_columns(void *, void *, void *) __asm__("func_001FA328");
+extern void multiply_matrix3x3(void *, void *, void *) __asm__("func_001FA328");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32 wrap_angle(f32) __asm__("func_001FA610");
+extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void advance_moby_animation(void *) __asm__("func_0020D580");
 extern void refresh_moby_spatial_bounds(void *) __asm__("func_0020DEF8");
@@ -85,7 +85,7 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
     phase_angle = ((phase * 6.28318f) / convert_integer_to_float(6)) - 3.14159f;
     bob_angle = (((f32)(game_frame_counter % 170) / convert_integer_to_float(170)) * 6.28318f) - 3.14159f;
     double_phase = (phase * 12.56636f) / convert_integer_to_float(6);
-    wrap_angle(double_phase);
+    fast_normalize_angle(double_phase);
     zero = 0.0f;
     orbit_angle = fast_add_rotations(orbit_angle, phase_angle);
     bob_angle = fast_add_rotations(bob_angle, double_phase);
@@ -99,11 +99,11 @@ void update_ammo_preview_transform(struct AmmoPreviewMoby *moby) {
     offset[2] = zero;
     offset[2] = fast_sin(bob_angle) * 0.25f + 0.5f + ammo_preview_offsets[moby->slot];
     transform_vector_by_basis(offset, offset, source_moby->basis);
-    add_vector_xyz(moby->position, moby->position, offset);
-    clear_vector(angles);
+    fast_vec_add(moby->position, moby->position, offset);
+    clear_u64_value(angles);
     angles[2] = fast_add_rotations(orbit_angle, 1.5707964f);
-    vu_euler_rotation_basis(rotation_basis, angles);
-    multiply_matrix_basis_columns(moby->basis, rotation_basis, moby->basis);
+    euler_rotation_basis(rotation_basis, angles);
+    multiply_matrix3x3(moby->basis, rotation_basis, moby->basis);
     refresh_moby_spatial_bounds_from_basis(moby);
 }
 

@@ -47,8 +47,8 @@ typedef union {
 } R_2df808;
 extern unsigned char *FUN_L00_0024e838_2df808(int) __asm__("FUN_L00_0024e838");
 extern float FUN_L00_00257be8_2df808(float, float) __asm__("FUN_L00_00257be8");
-extern void glow_n(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void upd_a(unsigned char *) __asm__("FUN_L00_00250df8");
+extern void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
+extern void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position, V_2df808 *vector,
                                  int flags, unsigned char red, unsigned char green,
                                  unsigned char blue, unsigned char alpha,
@@ -74,7 +74,7 @@ unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position
         moby[0x30] = 0xff;
         *(unsigned short *)(moby + 0x32) = 0xff;
         moby[0x31] = 1;
-        glow_n(moby, red, green, blue);
+        set_moby_color(moby, red, green, blue);
         *(float *)(data + 0x18) = *(float *)(moby + 0x2c) * scale;
         *(int *)(moby + 0x2c) = 0;
         *(int *)(data + 0x10) = owner;
@@ -84,7 +84,7 @@ unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position
         *(unsigned short *)(data + 0x1e) = alpha;
         *(int *)(data + 0x14) = flags;
         *(unsigned short *)(data + 0x1c) = *(unsigned short *)(data + 0x14);
-        upd_a(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -123,19 +123,19 @@ extern char D_0013F350[] __attribute__((section(".data")));
 extern char D_L00_00166DC0[] __attribute__((section(".data")));
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
-extern f32 fast_add_rotations_c2(f32, f32) __asm__("func_001FA580");
-extern f32 fast_subtract_rotations_c2(f32, f32) __asm__("func_001FA5C8");
+extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
+extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern int FUN_001f96b0_c() __asm__("FUN_001f96b0");
 extern int FUN_001f9a40_c() __asm__("FUN_001f9a40");
 extern int hero_set_state() __asm__("FUN_L00_002223f8");
 extern int FUN_L00_00266d60();
-extern int allocate_voice_for_target_entry_alt(int,int,int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int,int,int) __asm__("FUN_0022da68");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_002323b8(int,int);
-extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
+extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 s32 FUN_L00_002e02e0_c(void) __asm__("FUN_L00_002e02e0");
-s32 scale_game_frames_alt_c(s32) __asm__("FUN_001f96f8");
+s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002e01b0_c(char *m) __asm__("FUN_L00_002e01b0");
 void FUN_L00_002e0340_c(char *a) __asm__("FUN_L00_002e0340");
 void set_camera_position(char *src) __asm__("FUN_L00_002ea9d8");
@@ -387,7 +387,7 @@ typedef struct {
 } __attribute__((aligned(16))) V_2e01b0;
 extern float D_0015ED6C_2e01b0 __asm__("D_0015ED6C");
 int FUN_001f9740_2e01b0(void *) __asm__("FUN_001f9740");
-void add_vector_xyz_cf(char *, int, void *) __asm__("FUN_L00_0024f7c8");
+void moby_point_position(char *, int, void *) __asm__("FUN_L00_0024f7c8");
 float FUN_002132a8_2e01b0(float, float) __asm__("FUN_002132a8");
 void fast_vec_normalize(V_2e01b0 *, void *, float) __asm__("FUN_001f9bf8");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -403,7 +403,7 @@ void emit_hydrodisplacer_effect(char *moby) {
     float normalization_scale;
     if (FUN_001f9740_2e01b0(moby_data + 4) == 0)
         return;
-    add_vector_xyz_cf(moby, 0, &effect_position);
+    moby_point_position(moby, 0, &effect_position);
     normalization_scale = -FUN_002132a8_2e01b0(D_0015ED6C_2e01b0, D_0015ED6C_2e01b0 * 3.0f);
     fast_vec_normalize(&effect_motion_vector, moby + 0xD0, normalization_scale);
     player = &hero;
@@ -505,7 +505,7 @@ extern s32 D_00141410_2e03a0[] __asm__("D_00141410");
 extern u8 item_available[] __asm__("D_0013D4C0");
 extern f32 FUN_001fa580_2e03a0(f32, f32) __asm__("FUN_001fa580");
 extern void initialize_moby_particle_effect(void *) __asm__("FUN_L00_002d6bf0");
-extern void stub_printf() __asm__("FUN_001e93b0");
+extern void debug_print() __asm__("FUN_001e93b0");
 extern void FUN_0020c828_2e03a0(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -513,7 +513,7 @@ extern f32 FUN_001f99c0_2e03a0(f32) __asm__("FUN_001f99c0");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
-extern void give_reward(s32, s32) __asm__("FUN_L00_00203908");
+extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern void FUN_L00_002502a0_2e03a0(s32) __asm__("FUN_L00_002502a0");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 
@@ -544,9 +544,9 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     case PILOTS_HELMET_INITIALIZE:
         initialize_moby_particle_effect(moby);
         if (p->fa_2e03a0 == -1)
-            stub_printf(pilots_helmet_missing_cutscene_format, moby->h);
+            debug_print(pilots_helmet_missing_cutscene_format, moby->h);
         if (item_available[7]) {
-            stub_printf(pilots_helmet_already_owned_message);
+            debug_print(pilots_helmet_already_owned_message);
             FUN_0020c828_2e03a0(moby);
             return;
         }
@@ -563,7 +563,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
                 if (p->fa_2e03a0 != -1)
                     start_scene(p->fa_2e03a0);
                 else
-                    stub_printf(pilots_helmet_missing_cutscene_format, moby->h);
+                    debug_print(pilots_helmet_missing_cutscene_format, moby->h);
                 moby->state = 2;
             }
         }
@@ -571,12 +571,12 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     case PILOTS_HELMET_GRANT_REWARD:
         if (D_L00_0015F5C4_2e03a0 == 2)
             return;
-        stub_printf(pilots_helmet_acquired_message);
+        debug_print(pilots_helmet_acquired_message);
         queue_dialogue_message(0x232A, -1);
         D_L00_0015F640 = 0xB4;
         grant_inventory_item(7, 1);
         if (pilots_helmet_help_record[0] == 0)
-            give_reward(0x2328, 0x34);
+            help_request(0x2328, 0x34);
         if (p->b != -1) {
             D_L00_001BA5D0.arr[D_L00_0015FFD8_2e03a0[p->b].h] =
                 D_L00_0015FFD8_2e03a0[p->b].b0 + 2;
@@ -588,7 +588,7 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
                     D_L00_0015FFD8_2e03a0[p->b].b0 + 2;
             }
         } else {
-            stub_printf(pilots_helmet_missing_segment_switch_format, moby->h);
+            debug_print(pilots_helmet_missing_segment_switch_format, moby->h);
         }
         if (moby->b0 != 0xFF)
             FUN_L00_002502a0_2e03a0(moby->b0);
@@ -606,11 +606,11 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void vscl_2e0788(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int f9740_2e0788(void *) __asm__("FUN_001f9740");
-extern int ticks_2e0788(int) __asm__("FUN_001f96f8");
-extern float i2f_2e0788(int) __asm__("FUN_001fa6c0");
-extern float f99c0_2e0788(float) __asm__("FUN_001f99c0");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int f2i_2e0788(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern unsigned char *spr_2e0788(OvlQuad *, int, unsigned char, int, int, int, int,
                                  float) __asm__("FUN_L00_00272f68");
 typedef struct {
@@ -646,13 +646,13 @@ void emit_moby_color_cycling_particles(unsigned char *moby) {
             *a = pre_wrap_sum + 255.0f;
         }
         if (f9740_2e0788(t)) {
-            moby_data->t[j] = ticks_2e0788(0xff);
+            moby_data->t[j] = scale_game_frames(0xff);
         }
         t++;
-        color_cycle_progress = i2f_2e0788(ticks_2e0788(0xff) - moby_data->t[j]);
-        color_cycle_progress = color_cycle_progress / (float)ticks_2e0788(0xff);
-        c = fast_tween_color(0x4040FFFF, 0x1040FFFF, f99c0_2e0788(0.5f - color_cycle_progress));
-        spr_2e0788(sprite_position_and_step, c, f2i_2e0788(*a++), 0x35, 1, 2, 0, moby_data->c[j]);
+        color_cycle_progress = convert_integer_to_float(scale_game_frames(0xff) - moby_data->t[j]);
+        color_cycle_progress = color_cycle_progress / (float)scale_game_frames(0xff);
+        c = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - color_cycle_progress));
+        spr_2e0788(sprite_position_and_step, c, truncate_float_to_s32(*a++), 0x35, 1, 2, 0, moby_data->c[j]);
         j++;
         fast_vec_add(sprite_position_and_step, sprite_position_and_step, &sprite_position_and_step[1]);
     }
@@ -826,21 +826,21 @@ typedef struct {
 
 extern Pane_2e3fa0 D_L00_001E6E40[];
 extern char D_L00_0015F580[] __attribute__((section(".sdata")));
-extern f32 convert_integer_to_float_c2(s32) __asm__("func_001FA6C0");
-extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern int scale_game_frames_alt(int) __asm__("FUN_001f96f8");
-extern s32 random_integer_below_c(s32) __asm__("func_00213260");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void transform_vector_c(void *, void *, void *) __asm__("func_001F9D20");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 f32 FUN_L00_00257c48(f32, f32);
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
@@ -1087,7 +1087,7 @@ typedef struct { OvlVec4 axis, unk10, position, unk30; } TrailSlot;
 extern TrailSlot l00_beam_strand_axis_and_origin_slots[] __asm__("D_L00_001E6D30");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void fast_draw_quad_real(void *, int, int) __asm__("FUN_001f7d30");
+extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *points, int alpha, int glow_alpha, int slot)
 {
     struct GeometryQuad quads[2];
@@ -1137,18 +1137,18 @@ void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *point
     glow_width.f[3] = 1.0f;
 
     qcopy(&basis[0], &l00_beam_strand_axis_and_origin_slots[slot].axis);
-    subtract_vector_xyz(&basis[1], D_L00_00166DC0, &l00_beam_strand_axis_and_origin_slots[slot].position);
+    fast_vec_sub(&basis[1], D_L00_00166DC0, &l00_beam_strand_axis_and_origin_slots[slot].position);
     fast_vec_scale(&basis[1], &basis[1], 1.0f);
-    cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
+    fast_vec_cross(&basis[2], &basis[1], &basis[0]);
     normalize_vector_xyz(&basis[2], &basis[2], 1.0f);
-    cross_vectors_xyz(&basis[0], &basis[2], &basis[1]);
+    fast_vec_cross(&basis[0], &basis[2], &basis[1]);
     qcopy(&basis[3], &l00_beam_strand_axis_and_origin_slots[slot].position);
     qcopy(&transform[3], &l00_beam_strand_axis_and_origin_slots[slot].position);
-    subtract_vector_xyz(&direction, &D_L00_001E6DE0[slot], &transform[3]);
+    fast_vec_sub(&direction, &D_L00_001E6DE0[slot], &transform[3]);
     normalize_vector_xyz(&transform[0], &direction, 1.0f);
-    cross_vectors_xyz(&transform[1], &transform[0], D_0013E633_2E3700);
+    fast_vec_cross(&transform[1], &transform[0], D_0013E633_2E3700);
     normalize_vector_xyz(&transform[1], &transform[1], -1.0f);
-    cross_vectors_xyz(&transform[2], &transform[1], &transform[0]);
+    fast_vec_cross(&transform[2], &transform[1], &transform[0]);
 
     qcopy(&quads[0].positions[0], &width);
     fast_vec_scale(&quads[0].positions[1], &quads[0].positions[0], -1.0f);
@@ -1166,19 +1166,19 @@ void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *point
             qcopy(glow_dst, glow);
         }
         fast_vec_scale(&quads[1].positions[1], &quads[1].positions[0], -1.0f);
-        transform_vector_c(&from, &((OvlVec4 *)points)[0], transform);
-        transform_vector_c(&to, &((OvlVec4 *)points)[1], transform);
-        subtract_vector_xyz(&basis[0], &to, &from);
+        transform_vector(&from, &((OvlVec4 *)points)[0], transform);
+        transform_vector(&to, &((OvlVec4 *)points)[1], transform);
+        fast_vec_sub(&basis[0], &to, &from);
         normalize_vector_xyz(&basis[0], &basis[0], 1.0f);
-        subtract_vector_xyz(&basis[1], D_L00_00166DC0, &from);
-        cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
+        fast_vec_sub(&basis[1], D_L00_00166DC0, &from);
+        fast_vec_cross(&basis[2], &basis[1], &basis[0]);
         normalize_vector_xyz(&basis[2], &basis[2], 1.0f);
-        cross_vectors_xyz(&basis[1], &basis[0], &basis[2]);
+        fast_vec_cross(&basis[1], &basis[0], &basis[2]);
         qcopy(&basis[3], &from);
-        transform_vector_c(&quads[0].positions[0], &quads[0].positions[0], basis);
-        transform_vector_c(&quads[0].positions[1], &quads[0].positions[1], basis);
-        transform_vector_c(&quads[1].positions[0], &quads[1].positions[0], basis);
-        transform_vector_c(&quads[1].positions[1], &quads[1].positions[1], basis);
+        transform_vector(&quads[0].positions[0], &quads[0].positions[0], basis);
+        transform_vector(&quads[0].positions[1], &quads[0].positions[1], basis);
+        transform_vector(&quads[1].positions[0], &quads[1].positions[0], basis);
+        transform_vector(&quads[1].positions[1], &quads[1].positions[1], basis);
 
         i = 1;
         do {
@@ -1187,37 +1187,37 @@ void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *point
             fast_vec_scale(&quads[0].positions[3], &quads[0].positions[2], -1.0f);
             qcopy(&quads[1].positions[2], glow);
             fast_vec_scale(&quads[1].positions[3], &quads[1].positions[2], -1.0f);
-            transform_vector_c(&from, &((OvlVec4 *)points)[i], transform);
-            transform_vector_c(&to, &((OvlVec4 *)points)[i + 1], transform);
-            subtract_vector_xyz(&basis[0], &to, &from);
+            transform_vector(&from, &((OvlVec4 *)points)[i], transform);
+            transform_vector(&to, &((OvlVec4 *)points)[i + 1], transform);
+            fast_vec_sub(&basis[0], &to, &from);
             normalize_vector_xyz(&basis[0], &basis[0], 1.0f);
-            subtract_vector_xyz(&basis[1], D_L00_00166DC0, &from);
-            cross_vectors_xyz(&basis[2], &basis[1], &basis[0]);
+            fast_vec_sub(&basis[1], D_L00_00166DC0, &from);
+            fast_vec_cross(&basis[2], &basis[1], &basis[0]);
             normalize_vector_xyz(&basis[2], &basis[2], 1.0f);
-            cross_vectors_xyz(&basis[1], &basis[0], &basis[2]);
+            fast_vec_cross(&basis[1], &basis[0], &basis[2]);
             qcopy(&basis[3], &from);
-            transform_vector_c(&quads[0].positions[2], &quads[0].positions[2], basis);
-            transform_vector_c(&quads[0].positions[3], &quads[0].positions[3], basis);
-            transform_vector_c(&quads[1].positions[2], &quads[1].positions[2], basis);
-            transform_vector_c(&quads[1].positions[3], &quads[1].positions[3], basis);
+            transform_vector(&quads[0].positions[2], &quads[0].positions[2], basis);
+            transform_vector(&quads[0].positions[3], &quads[0].positions[3], basis);
+            transform_vector(&quads[1].positions[2], &quads[1].positions[2], basis);
+            transform_vector(&quads[1].positions[3], &quads[1].positions[3], basis);
             if (i == 1) {
                 int saved_color = quads[0].colors[0];
                 int saved_glow_color = quads[1].colors[0];
                 quads[0].colors[0] = quads[0].colors[1] = 0xFFFFFF;
                 quads[1].colors[0] = quads[1].colors[1] = 0x7F4040;
-                fast_draw_quad_real(&quads[0], 0, 0);
-                fast_draw_quad_real(&quads[1], 0, 0);
+                draw_geometry_quad(&quads[0], 0, 0);
+                draw_geometry_quad(&quads[1], 0, 0);
                 quads[0].colors[0] = quads[0].colors[1] = quads[0].colors[2] = quads[0].colors[3] = saved_color;
                 quads[1].colors[0] = quads[1].colors[1] = quads[1].colors[2] = quads[1].colors[3] = saved_glow_color;
             } else {
-                fast_draw_quad_real(&quads[0], 0, 0);
-                fast_draw_quad_real(&quads[1], 0, 0);
+                draw_geometry_quad(&quads[0], 0, 0);
+                draw_geometry_quad(&quads[1], 0, 0);
             }
             qcopy(&quads[0].positions[0], &quads[0].positions[2]);
             qcopy(&quads[0].positions[1], &quads[0].positions[3]);
             qcopy(&quads[1].positions[0], &quads[1].positions[2]);
             qcopy(&quads[1].positions[1], &quads[1].positions[3]);
-            taper = cubic_hermite_scalar(-1.0f, zero, 1.0f, zero, convert_integer_to_float_c2(i) / convert_integer_to_float_c2(20));
+            taper = cubic_hermite_scalar(-1.0f, zero, 1.0f, zero, convert_integer_to_float(i) / convert_integer_to_float(20));
             scroll = D_L00_00161C78_f[slot];
             quads[0].texture_coordinates[0][0] = scroll + zero;
             quads[0].texture_coordinates[0][1] = zero;
@@ -1254,7 +1254,7 @@ void FUN_001f9bf8_e3388(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9ad8_e3388(void *, void *, void *) __asm__("FUN_001f9ad8");
 s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 f32 FUN_002132a8_e3388(f32, f32) __asm__("FUN_002132a8");
-f32 spread_k(f32, f32) __asm__("FUN_L00_00257c48");
+f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 void FUN_001f9a68_e3388(void *, void *, f32) __asm__("FUN_001f9a68");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1298,9 +1298,9 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     geometry_quad.uv[3][0] = 1.0f;
     geometry_quad.uv[3][1] = 1.0f;
     quad_scale = FUN_002132a8_e3388(0.3f, 0.325f);
-    core_quad_jitter_offset[0] = spread_k(0.0f, 0.05f);
-    core_quad_jitter_offset[1] = spread_k(0.0f, 0.05f);
-    core_quad_jitter_offset[2] = spread_k(0.0f, 0.05f);
+    core_quad_jitter_offset[0] = randf_sym(0.0f, 0.05f);
+    core_quad_jitter_offset[1] = randf_sym(0.0f, 0.05f);
+    core_quad_jitter_offset[2] = randf_sym(0.0f, 0.05f);
     for (i = 0; i < 4; i++) {
         FUN_001f9a68_e3388(geometry_quad.v[i], beam_endpoint_quad_local_vertices[i], quad_scale);
         transform_vector(geometry_quad.v[i], geometry_quad.v[i], endpoint_to_camera_axis);
@@ -1356,7 +1356,7 @@ typedef struct {
 extern int *vend_paths[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
 extern float D_0015ED6C_2e3a88 __asm__("D_0015ED6C");
 void FUN_0020c828_2e3a88(void *) __asm__("FUN_0020c828");
-float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
+float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float FUN_001f99c0_2e3a88(float) __asm__("FUN_001f99c0");
 void sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
 int random_integer_below(int) __asm__("FUN_00213260");
@@ -1379,8 +1379,8 @@ void pterodactyl_update(unsigned char *moby) {
             return;
         }
         {
-            float first_segment_length = distance_xyz(path + 4, path + 8);
-            float first_to_last_distance = distance_xyz(path + 4, path + *path * 4);
+            float first_segment_length = fast_vec_dist(path + 4, path + 8);
+            float first_to_last_distance = fast_vec_dist(path + 4, path + *path * 4);
             moby_data->f74 = pterodactyl_path_speed_gp * D_0015ED6C_2e3a88 / first_segment_length;
             moby_data->i70 = FUN_001f99c0_2e3a88(first_segment_length - first_to_last_distance) < 0.1f;
         }
@@ -1430,9 +1430,9 @@ void red_plant_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5238), where it is exact; names translated to the US level program. */
 
 extern char D_L00_0015F580[] __attribute__((section(".sdata")));
-extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
@@ -1440,16 +1440,16 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void spawn_explosion(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void multiply_matrix_basis_columns(void *, void *, void *) __asm__("func_001FA328");
+extern void multiply_matrix3x3(void *, void *, void *) __asm__("func_001FA328");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
+extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int func_L00_001F10E0_s(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
@@ -1483,13 +1483,13 @@ void robot_arm_update(char *moby) {
     case ROBOT_ARM_WAIT_FOR_TIMER:
         if (func_001F9908_r((int *)(moby_data + 0x30))) {
             moby[0x20] = (*(int *)(moby_data + 0x34) & 1) ? 3 : 2;
-            *(int *)(moby_data + 0x30) = func_001FA898_r(multiply_global_factor_ed64(10.0f));
+            *(int *)(moby_data + 0x30) = func_001FA898_r(scale_time(10.0f));
             return;
         }
         break;
     case ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE:
         transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
-        add_vector_xyz(effect_offset_or_world_position, effect_offset_or_world_position, moby + 0x10);
+        fast_vec_add(effect_offset_or_world_position, effect_offset_or_world_position, moby + 0x10);
         if (*(int *)(moby_data + 0x34) & 2) {
             spawn_color_swapped_explosion_burst(moby, effect_offset_or_world_position, -1, *(float *)(moby_data + 0x2C) * 0.5f, 0.0f);
         } else {
@@ -1503,35 +1503,35 @@ void robot_arm_update(char *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        moby[0x23] = func_001FA898_r((float)*(int *)(moby_data + 0x30) / multiply_global_factor_ed64(10.0f) * 128.0f);
+        moby[0x23] = func_001FA898_r((float)*(int *)(moby_data + 0x30) / scale_time(10.0f) * 128.0f);
         break;
     }
     rotation_step_euler = moby_data + 0x10;
-    vu_euler_rotation_basis(rotation_step_basis, rotation_step_euler);
+    euler_rotation_basis(rotation_step_basis, rotation_step_euler);
     transform_vector_by_basis(effect_offset_or_world_position, moby_data + 0x20, moby + 0xC0);
-    multiply_matrix_basis_columns(moby + 0xC0, rotation_step_basis, moby + 0xC0);
+    multiply_matrix3x3(moby + 0xC0, rotation_step_basis, moby + 0xC0);
     transform_vector_by_basis(offset_after_rotation, moby_data + 0x20, moby + 0xC0);
-    subtract_vector_xyz(rotation_offset_delta, offset_after_rotation, effect_offset_or_world_position);
-    subtract_vector_xyz((float *)(moby + 0x10), (float *)(moby + 0x10), rotation_offset_delta);
-    add_vector_xyz(moby + 0x10, moby + 0x10, moby_data);
+    fast_vec_sub(rotation_offset_delta, offset_after_rotation, effect_offset_or_world_position);
+    fast_vec_sub((float *)(moby + 0x10), (float *)(moby + 0x10), rotation_offset_delta);
+    fast_vec_add(moby + 0x10, moby + 0x10, moby_data);
     collision_radius = *(float *)(moby_data + 0x2C);
     *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - *(float *)(moby_data + 0x38);
     transform_vector_by_basis(collision_probe_position, moby_data + 0x20, moby + 0xC0);
-    add_vector_xyz(collision_probe_position, collision_probe_position, moby + 0x10);
+    fast_vec_add(collision_probe_position, collision_probe_position, moby + 0x10);
     if (func_L00_001F10E0_s(collision_probe_position, collision_radius, 0, moby)) {
         float speed, approach;
         collision_normal = coll_hit_normal;
         normalize_vector_xyz(collision_normal, collision_normal, 1.0f);
-        speed = vector_length_xyz(moby_data);
-        approach = dot_vectors_xyz(moby_data, collision_normal);
+        speed = fast_vec_length(moby_data);
+        approach = fast_vec_dot(moby_data, collision_normal);
         if (approach < 0.0f) {
             reflect_vector(moby_data, moby_data, collision_normal);
             normalize_vector_xyz(aD0, collision_normal, approach * 0.5f);
-            add_vector_xyz(moby_data, moby_data, aD0);
+            fast_vec_add(moby_data, moby_data, aD0);
             normalize_vector_xyz(moby_data, moby_data, speed);
-            cross_vectors_xyz(aE0, collision_normal, moby_data);
+            fast_vec_cross(aE0, collision_normal, moby_data);
             normalize_vector_xyz(aE0, aE0, 1.0f);
-            build_quaternion_from_axis_angle(aE0, aE0, vector_length_xyz(rotation_step_euler));
+            build_quaternion_from_axis_angle(aE0, aE0, fast_vec_length(rotation_step_euler));
             quaternion_to_matrix(aE0, bounce_rotation_matrix);
             matrix_to_euler(bounce_rotation_matrix, rotation_step_euler);
         }
@@ -1811,7 +1811,7 @@ typedef struct {
 
 extern int D_001413D4 __attribute__((section(".data")));
 extern int D_001413DC __attribute__((section(".data")));
-extern f32 convert_integer_to_float_c(s32) __asm__("func_001FA6C0");
+extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L00_00166EEC __attribute__((section(".data")));
 extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -1846,16 +1846,16 @@ void FUN_L00_002e4930(char *camera) {
             attach_state->prev = attach_state->state;
             attach_state->state = 1;
             attach_state->timer = D_L00_00161D3C_gp;
-            attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+            attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         } else {
             struct Hero *current_player = &hero;
             if (current_player->state.current == 0xF && D_L00_00166EEC == 0.0f) {
                 attach_state->prev = attach_state->state;
                 attach_state->state = 3;
                 attach_state->moveTimer = scale_game_frames(*(int *)&follow_camera_project_hero_focus_blend_base_frames_gp);
-                attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+                attach_state->invMove = 1.0f / convert_integer_to_float(attach_state->moveTimer);
                 attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
-                inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+                inv = 1.0f / convert_integer_to_float(attach_state->timer);
                 attach_state->dist = *(float *)&follow_camera_project_hero_focus_offset_gp;
                 attach_state->hit = 0;
                 x = *(float *)&follow_camera_project_hero_focus_offset_gp;
@@ -1868,16 +1868,16 @@ void FUN_L00_002e4930(char *camera) {
                     attach_state->prev = attach_state->state;
                     attach_state->state = 8;
                     attach_state->timer = follow_camera_hold_focus_transition_frames_gp;
-                    attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+                    attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
                 } else {
                     struct Hero *hero_state_player = &hero;
                     if (hero_state_player->state.current == 0xB && D_L00_00166EEC == 0.0f) {
                         attach_state->prev = attach_state->state;
                         attach_state->state = 6;
                         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
-                        attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+                        attach_state->invMove = 1.0f / convert_integer_to_float(attach_state->moveTimer);
                         attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
-                        inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+                        inv = 1.0f / convert_integer_to_float(attach_state->timer);
                         attach_state->dist = *(float *)&follow_camera_blend_out_focus_offset_gp;
                         attach_state->hit = 0;
                         x = *(float *)&follow_camera_blend_out_focus_offset_gp;
@@ -1891,9 +1891,9 @@ void FUN_L00_002e4930(char *camera) {
                             attach_state->prev = attach_state->state;
                             attach_state->state = 5;
                             attach_state->moveTimer = scale_game_frames(*(int *)&follow_camera_hold_focus_blend_base_frames_gp);
-                            attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+                            attach_state->invMove = 1.0f / convert_integer_to_float(attach_state->moveTimer);
                             attach_state->timer = follow_camera_hold_focus_transition_frames_gp;
-                            inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+                            inv = 1.0f / convert_integer_to_float(attach_state->timer);
                             attach_state->dist = *(float *)&follow_camera_hold_focus_blend_offset_gp;
                             attach_state->hit = 0;
                             x = *(float *)&follow_camera_hold_focus_blend_offset_gp;
@@ -1906,7 +1906,7 @@ void FUN_L00_002e4930(char *camera) {
                                 attach_state->prev = attach_state->state;
                                 attach_state->state = 2;
                                 attach_state->timer = follow_camera_ground_aware_focus_transition_frames_gp;
-                                attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+                                attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
                             }
                         }
                     }
@@ -1920,7 +1920,7 @@ void FUN_L00_002e4930(char *camera) {
         attach_state->prev = attach_state->state;
         attach_state->state = 9;
         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D6C_gp);
-        r = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+        r = 1.0f / convert_integer_to_float(attach_state->moveTimer);
         y = *(float *)&follow_camera_projected_focus_blend_offset_gp;
         attach_state->hit = 0;
         attach_state->timer = 0;
@@ -1944,9 +1944,9 @@ void FUN_L00_002e4930(char *camera) {
             attach_state->prev = attach_state->state;
             attach_state->state = 6;
             attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
-            attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+            attach_state->invMove = 1.0f / convert_integer_to_float(attach_state->moveTimer);
             attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
-            inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+            inv = 1.0f / convert_integer_to_float(attach_state->timer);
             attach_state->dist = *(float *)&follow_camera_blend_out_focus_offset_gp;
             attach_state->hit = 0;
             x = *(float *)&follow_camera_blend_out_focus_offset_gp;
@@ -1959,7 +1959,7 @@ void FUN_L00_002e4930(char *camera) {
             attach_state->prev = attach_state->state;
             attach_state->state = 1;
             attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-            attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+            attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
             return;
         }
     }
@@ -1968,12 +1968,12 @@ void FUN_L00_002e4930(char *camera) {
             attach_state->prev = 4;
             attach_state->state = 1;
             attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-            attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+            attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         } else {
             attach_state->prev = 4;
             attach_state->state = 0;
             attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-            attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+            attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         }
         return;
     }
@@ -1981,9 +1981,9 @@ void FUN_L00_002e4930(char *camera) {
         attach_state->prev = attach_state->state;
         attach_state->state = 6;
         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
-        attach_state->invMove = 1.0f / convert_integer_to_float_c(attach_state->moveTimer);
+        attach_state->invMove = 1.0f / convert_integer_to_float(attach_state->moveTimer);
         attach_state->timer = follow_camera_focus_blend_transition_frames_gp;
-        inv = 1.0f / convert_integer_to_float_c(attach_state->timer);
+        inv = 1.0f / convert_integer_to_float(attach_state->timer);
         attach_state->dist = *(float *)&follow_camera_blend_out_focus_offset_gp;
         attach_state->hit = 0;
         x = *(float *)&follow_camera_blend_out_focus_offset_gp;
@@ -1996,28 +1996,28 @@ void FUN_L00_002e4930(char *camera) {
         attach_state->prev = attach_state->state;
         attach_state->state = 8;
         attach_state->timer = follow_camera_hold_focus_transition_frames_gp;
-        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+        attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
     if (attach_state->state == 8 && D_001413D4 != 0xC) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
         attach_state->timer = scale_game_frames(*(int *)&follow_camera_hold_focus_exit_base_frames_gp);
-        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+        attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
     if (attach_state->state == 6 && D_001413D4 != 0xB) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
         attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+        attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
     if ((attach_state->state == 3 || attach_state->state == 5) && D_001413DC != 4) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
         attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+        attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
     if (attach_state->state == 9) {
@@ -2034,7 +2034,7 @@ void FUN_L00_002e4930(char *camera) {
             attach_state->prev = attach_state->state;
             attach_state->state = 1;
             attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-            r = 1.0f / convert_integer_to_float_c(attach_state->timer);
+            r = 1.0f / convert_integer_to_float(attach_state->timer);
             camera_timer_base_frames = *(int *)&D_L00_00161D24_gp;
             attach_state->invTimer = r;
             timer_camera_state = *(char **)(camera + 0x70);
@@ -2047,21 +2047,21 @@ void FUN_L00_002e4930(char *camera) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0xA;
         attach_state->timer = follow_camera_continue_projected_focus_transition_frames_gp;
-        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+        attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
     if (attach_state->state == 0xA && FUN_001f9770_c2(&attach_state->moveTimer)) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
         attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
-        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+        attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
     if (attach_state->state == 5 && D_001413D4 == 0x10) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
         attach_state->timer = scale_game_frames(*(int *)&follow_camera_hold_focus_exit_base_frames_gp);
-        attach_state->invTimer = 1.0f / convert_integer_to_float_c(attach_state->timer);
+        attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
     }
 }
 /* per-frame state machine that eases a moby's attach pose toward the camera block's vector */
@@ -2322,9 +2322,9 @@ extern s32 camera_collision_mask __asm__("D_L00_0015EF58");
 /* Point where the last collision line stopped (CollisionHit.point). */
 extern f32 collision_hit_point[4] __asm__("D_L00_00173E60") __attribute__((aligned(16)));
 
-extern f32 vector_length_xyz(void *v) __asm__("FUN_001f9af0");
-extern void add_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern f32 fast_vec_length(void *v) __asm__("FUN_001f9af0");
+extern void fast_vec_add(void *out, void *a, void *b) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void lerp_vector(f32 t, void *out, void *a, void *b) __asm__("FUN_001f9a40");
 extern f32 convert_integer_to_float(s32 i) __asm__("FUN_001fa6c0");
@@ -2335,7 +2335,7 @@ extern void follow_cam_hero_position(void *cam, void *out) __asm__("FUN_L00_002e
 extern void follow_cam_update_mode(void *cam) __asm__("FUN_L00_002e4930");
 extern void follow_cam_focus_velocity(void *cam, f32 *out) __asm__("FUN_L00_002e4fe8");
 extern void follow_cam_spring_offset(void *cam, f32 *offset) __asm__("FUN_L00_002e5730");
-extern void follow_cam_turn_towards(f32 amount, f32 rate) __asm__("FUN_L00_002e84b8");
+extern void follow_camera_set_height(f32 amount, f32 rate) __asm__("FUN_L00_002e84b8");
 
 /* Updates the follow camera: eases its focus and offset vectors, then places
    the eye behind the hero, pulled in where collision lines hit. */
@@ -2353,31 +2353,31 @@ void follow_camera_springs(void *camera_moby) {
     follow_cam_focus_velocity(camera_moby, velocity);
     qcopy(&camera_state->follow.velocity, velocity);
     qcopy(focus, follow_block);
-    up_projection_or_collision_clearance = dot_vectors_xyz(view + 0x30, camera_state->follow.offset);
+    up_projection_or_collision_clearance = fast_vec_dot(view + 0x30, camera_state->follow.offset);
     scale_vector_xyz(up, view + 0x30, up_projection_or_collision_clearance);
-    subtract_vector_xyz(lateral, camera_state->follow.offset, up);
+    fast_vec_sub(lateral, camera_state->follow.offset, up);
     up[0] = cam_interp_values(&camera_state->follow.up_ease[0], up[0], follow_block->velocity[0], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
     up[1] = cam_interp_values(&camera_state->follow.up_ease[1], up[1], follow_block->velocity[1], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
     up[2] = cam_interp_values(&camera_state->follow.up_ease[2], up[2], follow_block->velocity[2], follow_block->up_stiffness, follow_block->up_damping, 0.0f);
     lateral[0] = cam_interp_values(&camera_state->follow.lateral_ease[0], lateral[0], follow_block->focus[0], follow_block->lateral_stiffness, follow_block->lateral_damping, 0.0f);
     lateral[1] = cam_interp_values(&camera_state->follow.lateral_ease[1], lateral[1], follow_block->focus[1], follow_block->lateral_stiffness, follow_block->lateral_damping, 0.0f);
     lateral[2] = cam_interp_values(&camera_state->follow.lateral_ease[2], lateral[2], follow_block->focus[2], follow_block->lateral_stiffness, follow_block->lateral_damping, 0.0f);
-    add_vector_xyz(follow_block, follow_block, camera_state->follow.velocity);
-    add_vector_xyz(camera_state->follow.offset, lateral, up);
+    fast_vec_add(follow_block, follow_block, camera_state->follow.velocity);
+    fast_vec_add(camera_state->follow.offset, lateral, up);
     scale_vector_xyz(look, view + 0x20, follow_block->look_height);
     if (follow_block->blending_in) {
         if (++follow_block->blend_timer > scale_game_frames(follow_cam_blend_frames)) {
             follow_block->blend_timer = scale_game_frames(follow_cam_blend_frames);
         }
         lerp_vector((f32)follow_block->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, follow_block, camera_state->follow.offset);
-        add_vector_xyz(camera_state->follow.look_target, look, base);
+        fast_vec_add(camera_state->follow.look_target, look, base);
     } else {
         fast_dec_timer(&camera_state->follow.blend_timer);
         if (follow_block->blend_timer < 0) {
             follow_block->blend_timer = 0;
         }
         lerp_vector((f32)follow_block->blend_timer / convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)), base, follow_block, camera_state->follow.offset);
-        add_vector_xyz(camera_state->follow.look_target, look, base);
+        fast_vec_add(camera_state->follow.look_target, look, base);
     }
     follow_cam_spring_offset(camera_moby, look);
     if (hero.vehicle_mode == 2) {
@@ -2387,47 +2387,47 @@ void follow_camera_springs(void *camera_moby) {
     } else {
         scale_vector_xyz(look, view + 0x20, 0.5f);
     }
-    add_vector_xyz(base, hero_pos, look);
+    fast_vec_add(base, hero_pos, look);
     scale_vector_xyz(look, view + 0x20, camera_tail->distance);
-    add_vector_xyz(follow_block->eye, look, follow_block);
+    fast_vec_add(follow_block->eye, look, follow_block);
     up_projection_or_collision_clearance = follow_cam_min_distance_gp + FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_range * FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom_scale * (FOLLOW_CAM_STATE(current_follow_cam)->tail.zoom - 1.0f);
     scale_vector_xyz(probe, view + 0x20, 20.0f);
-    add_vector_xyz(probe, base, probe);
+    fast_vec_add(probe, base, probe);
     if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
         qcopy(left, collision_hit_point);
     } else {
         qcopy(left, probe);
     }
     scale_vector_xyz(probe, view + 0x20, 20.0f);
-    subtract_vector_xyz(probe, base, probe);
+    fast_vec_sub(probe, base, probe);
     if (collision_line(base, probe, camera_collision_mask, (s32)hero.moby, 0)) {
         qcopy(probe, collision_hit_point);
     }
-    subtract_vector_xyz(collision_resolution_delta, probe, left);
-    if (vector_length_xyz(collision_resolution_delta) < up_projection_or_collision_clearance + up_projection_or_collision_clearance) {
-        add_vector_xyz(mid, left, probe);
+    fast_vec_sub(collision_resolution_delta, probe, left);
+    if (fast_vec_length(collision_resolution_delta) < up_projection_or_collision_clearance + up_projection_or_collision_clearance) {
+        fast_vec_add(mid, left, probe);
         scale_vector_xyz(mid, mid, 0.5f);
         qcopy(follow_block->eye, mid);
-        subtract_vector_xyz(collision_resolution_delta, mid, follow_block);
-        follow_cam_turn_towards(dot_vectors_xyz(collision_resolution_delta, view + 0x20), 0.003f);
+        fast_vec_sub(collision_resolution_delta, mid, follow_block);
+        follow_camera_set_height(fast_vec_dot(collision_resolution_delta, view + 0x20), 0.003f);
     } else {
         f32 reach;
-        subtract_vector_xyz(collision_resolution_delta, left, follow_block);
-        back = vector_length_xyz(collision_resolution_delta);
+        fast_vec_sub(collision_resolution_delta, left, follow_block);
+        back = fast_vec_length(collision_resolution_delta);
         reach = camera_tail->distance;
         if (back <= reach + up_projection_or_collision_clearance) {
             scale_vector_xyz(mid, view + 0x20, up_projection_or_collision_clearance);
-            subtract_vector_xyz(mid, left, mid);
+            fast_vec_sub(mid, left, mid);
             qcopy(follow_block->eye, mid);
-            subtract_vector_xyz(collision_resolution_delta, mid, follow_block);
-            follow_cam_turn_towards(dot_vectors_xyz(collision_resolution_delta, view + 0x20), 0.003f);
+            fast_vec_sub(collision_resolution_delta, mid, follow_block);
+            follow_camera_set_height(fast_vec_dot(collision_resolution_delta, view + 0x20), 0.003f);
         } else {
-            up_projection_or_collision_clearance = dot_vectors_xyz(follow_block, view + 0x30);
-            if (dot_vectors_xyz(probe, view + 0x30) < up_projection_or_collision_clearance) {
+            up_projection_or_collision_clearance = fast_vec_dot(follow_block, view + 0x30);
+            if (fast_vec_dot(probe, view + 0x30) < up_projection_or_collision_clearance) {
                 qcopy(probe, follow_block);
             }
             scale_vector_xyz(look, view + 0x20, reach);
-            add_vector_xyz(follow_block->eye, look, probe);
+            fast_vec_add(follow_block->eye, look, probe);
         }
     }
 }

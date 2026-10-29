@@ -34,7 +34,7 @@ extern struct CamColl cam_coll_state __asm__("D_001870D0");
 extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damping,
                              f32 max) __asm__("FUN_001ebd78");
 extern float absolute_float(float input) __asm__("func_001F99C0");
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern f32 fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
@@ -67,13 +67,13 @@ void update_camera_tracking_state(void) {
         cam_interp_values(&camera_tracking_state->dir_vel[2], camera_tracking_state->dir.f[2], dir.f[2], 0.015f, 0.2f, 0.0f);
     fast_vec_normalize(&camera_tracking_state->dir, &camera_tracking_state->dir, 1.0f);
 
-    subtract_vector_xyz(&camera_tracking_state->unk70, &hero.motion.pos, &camera_tracking_state->unk60);
+    fast_vec_sub(&camera_tracking_state->unk70, &hero.motion.pos, &camera_tracking_state->unk60);
     camera_tracking_state->unkA0 = fast_vec_length(&camera_tracking_state->unk70);
     displacement_dot_direction = fast_vec_dot(&camera_tracking_state->unk70, &dir);
     camera_tracking_state->unkA8 = displacement_dot_direction;
     fast_vec_normalize(&proj, &dir, displacement_dot_direction);
     qcopy(&camera_tracking_state->unk90, &proj);
-    subtract_vector_xyz(&camera_tracking_state->unk80, &camera_tracking_state->unk70, &proj);
+    fast_vec_sub(&camera_tracking_state->unk80, &camera_tracking_state->unk70, &proj);
     camera_tracking_state->unkA4 = fast_vec_length(&camera_tracking_state->unk80);
     fast_vec_scale(&camera_tracking_state->unk80, &camera_tracking_state->unk80, 1.0f / camera_tracking_state->unkA4);
     qcopy(&camera_tracking_state->unk60, &hero.motion.pos);

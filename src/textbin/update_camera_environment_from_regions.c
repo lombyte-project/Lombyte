@@ -23,7 +23,7 @@ struct CameraEnvironmentRegion {
 
 extern struct CameraEnvironmentRegion camera_environment_regions[] __asm__("D_0019ADC0");
 extern s32 find_camera_environment_region(void *, f32 *, s32 *) __asm__("func_00212C28");
-extern s32 convert_float_to_word(f32) __asm__("func_001FA6D0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
 /* The color blend uses weights summing to 255 and shifts the sums by eight. */
 void update_camera_environment_from_regions(void *position) __asm__("FUN_001ee4b0");
@@ -53,7 +53,7 @@ void update_camera_environment_from_regions(void *position) {
     if (!(region->flags & 2)) {
         return;
     }
-    positive_weight = convert_float_to_word(blend * 255.0f);
+    positive_weight = truncate_float_to_s32(blend * 255.0f);
     negative_weight = 255 - positive_weight;
     inverse_blend = 1.0f - blend;
     positive_color = region->positive_color;

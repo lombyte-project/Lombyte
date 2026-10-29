@@ -129,17 +129,17 @@ extern void PackDmaTag(s32 arg0, u64 arg1, u64 arg2);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void reset_draw_globals(void) __asm__("func_001F37E8");
 extern void enable_global_flag(void) __asm__("func_001F61E8");
-extern void fast_mem_zero16(void *, s32) __asm__("FUN_001f9810");
+extern void clear_blocks_16(void *, s32) __asm__("FUN_001f9810");
 extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern f32 max_float(f32, f32) __asm__("FUN_001f99c8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void set_video_timing(s32) __asm__("func_00214970");
-extern void reset_global_state(void) __asm__("func_00217020");
+extern void reset_global_state_fields(void) __asm__("func_00217020");
 extern void FUN_0022a5e0(void *);
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 extern void light_tfrags(void *) __asm__("FUN_00234f98");
@@ -206,8 +206,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     coll_output.xC = 0;
     coll_output.x10 = 0;
     coll_output.x14 = 0;
-    fast_mem_zero16(moby_grids, 0x10000);
-    fast_mem_zero16(D_001C76E0, 0x60);
+    clear_blocks_16(moby_grids, 0x10000);
+    clear_blocks_16(D_001C76E0, 0x60);
 
     environment = (u8 *)header + header->x0;
     D_0018CD00.x23C = *(s32 *)environment;
@@ -234,9 +234,9 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     part_clip_dist = 0x1F4000;
     PackDmaTag(D_0018CD00.x23C, D_0018CD00.x240, D_0018CD00.x244);
     vu0_load_micro_program(D_00100AE0);
-    fast_mem_zero16(point_lights, 0x100);
-    fast_mem_zero16(point_light_data, 0x180);
-    fast_mem_zero16(dir_lights, 0x400);
+    clear_blocks_16(point_lights, 0x100);
+    clear_blocks_16(point_light_data, 0x180);
+    clear_blocks_16(dir_lights, 0x400);
 
     light_record = (u8 *)header + header->directional_lights_offset;
     light_count = *(s32 *)light_record;
@@ -309,7 +309,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         max_axis_length = max_float(max_axis_length, fast_vec_length(&tie_data->m[2]));
         tie->scale = object_render_classes[tie->cls]->bounding_sphere[3] * max_axis_length;
         scale_vector(tie, tie, tie_data->m[3].w);
-        add_vector_xyz(tie, tie, &tie_data->m[3]);
+        fast_vec_add(tie, tie, &tie_data->m[3]);
         tie_data_table[tie_index].m[0].w = 1.0f / fast_vec_length(&tie_data_table[tie_index].m[0]);
         tie_data_table[tie_index].m[1].w = 1.0f / fast_vec_length(&tie_data_table[tie_index].m[1]);
         tie_data_table[tie_index].m[2].w = 1.0f / fast_vec_length(&tie_data_table[tie_index].m[2]);
@@ -413,7 +413,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
         max_axis_length = max_float(max_axis_length, fast_vec_length(&shrub_data->m[2]));
         shrub->scale = shrub_render_classes[shrub_class]->bounding_sphere[3] * max_axis_length;
         scale_vector(shrub, shrub, shrub_data->m3.w);
-        add_vector_xyz(shrub, shrub, &shrub_data->m3);
+        fast_vec_add(shrub, shrub, &shrub_data->m3);
     }
     shrub_list = (u16 *)0x70000000;
     for (shrub_light_index = 0; shrub_light_index < shrub_count; shrub_light_index++) {
@@ -458,7 +458,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     D_001600B4 = -1;
     D_001600B0 = 0;
     D_001600B8 = 0;
-    fast_mem_zero16(D_001CD780, 0x200);
+    clear_blocks_16(D_001CD780, 0x200);
     for (moby = D_0015FF18; moby != moby_instance_perm_end; moby++) {
         moby->x36 = 0x7F80;
     }
@@ -470,7 +470,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     }
     ((OcclCamState *)occl_cam_state)->x1C = 0;
     reset_draw_globals();
-    reset_global_state();
+    reset_global_state_fields();
     enable_global_flag();
     world_update_time = 0;
     sequence = 1.0f;

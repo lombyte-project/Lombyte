@@ -913,7 +913,7 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
 
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 
 void transform_hero_polar_offset_to_world(float *out, float radius, float angle, float z) __asm__("FUN_L00_002335c8");
@@ -926,7 +926,7 @@ void transform_hero_polar_offset_to_world(float *out, float radius, float angle,
     base = &hero;
     out[2] = z;
     transform_vector(out, out, base->rot_matrix);
-    add_vector_xyz(out, out, &base->motion.pos);
+    fast_vec_add(out, out, &base->motion.pos);
 }
 /* Sets OUT to the point (X, Y, Z, 0) (cleared first by func_001F9BC0),
    then transforms it by the matrix at hero and adds the vector at
@@ -945,7 +945,7 @@ void transform_hero_local_offset_to_world(float *out, float x, float y, float z)
     out[1] = y;
     out[2] = z;
     transform_vector(out, out, base->rot_matrix);
-    add_vector_xyz(out, out, &base->motion.pos);
+    fast_vec_add(out, out, &base->motion.pos);
 }
 void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
 /* Calls FUN_L00_002334d0 with -x. */
@@ -1027,9 +1027,9 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
         break;
     }
 }
-extern float dot_vectors_xyz(void *, void *) __asm__("FUN_001f9ab0");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234150), where it is exact; names translated to the US level program. */
 
@@ -1047,12 +1047,12 @@ void gravity_flatten(float *flattened_vector, float *input_vector) {
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
         fast_vec_normalize(gravity_axis_projection, &base->ground_normal, 1.0f);
-        scale_vector_xyz(gravity_axis_projection, gravity_axis_projection, dot_vectors_xyz(gravity_axis_projection, input_vector));
-        subtract_vector_xyz(flattened_vector, input_vector, gravity_axis_projection);
+        fast_vec_scale(gravity_axis_projection, gravity_axis_projection, fast_vec_dot(gravity_axis_projection, input_vector));
+        fast_vec_sub(flattened_vector, input_vector, gravity_axis_projection);
         break;
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        scale_vector_xyz(gravity_axis_projection, &base->gravity_dir, dot_vectors_xyz(&base->gravity_dir, input_vector));
-        subtract_vector_xyz(flattened_vector, input_vector, gravity_axis_projection);
+        fast_vec_scale(gravity_axis_projection, &base->gravity_dir, fast_vec_dot(&base->gravity_dir, input_vector));
+        fast_vec_sub(flattened_vector, input_vector, gravity_axis_projection);
         break;
     }
 }
@@ -1366,22 +1366,22 @@ typedef struct {
 extern char hero_233f80[] __asm__("D_0013F350");
 extern int scale_game_frames_233f80(int) __asm__("FUN_001f96f8");
 extern void scale_game_frames_v_233f80(int) __asm__("FUN_001f96f8");
-extern float f_001fa6c0(int) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern Plat_234800 *f_L00_002603d0(void *) __asm__("FUN_L00_002603d0");
-extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float f_001fa580(float, float) __asm__("FUN_001fa580");
-extern float f_001f9dc8(float) __asm__("FUN_001f9dc8");
-extern float f_001f9de0(float) __asm__("FUN_001f9de0");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void probe_ground_height_cf(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern int convert_pose_to_reference_local(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void transform_attachment_pose(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
-extern void f_001f99f8(void *) __asm__("FUN_001f99f8");
-extern float f_001f9b20(void *) __asm__("FUN_001f9b20");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
-extern void f_001f9a28(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void f_001f9a10(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float f_001f9e90(float, float) __asm__("FUN_001f9e90");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
@@ -1419,7 +1419,7 @@ void update_hero_attachment(void) {
         mode = 1;
     } else if (((Hero_234800 *)hero_233f80)->p360 != 0) {
         mode = 1;
-        f_001fa6c0(scale_game_frames_233f80(120) - ((Hero_234800 *)hero_233f80)->h30E);
+        convert_integer_to_float(scale_game_frames_233f80(120) - ((Hero_234800 *)hero_233f80)->h30E);
         scale_game_frames_v_233f80(120);
         amt = ((Hero_234800 *)hero_233f80)->h30E;
     } else {
@@ -1434,13 +1434,13 @@ void update_hero_attachment(void) {
     if (plat == 0) {
         return;
     }
-    if (((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) && vector_length_xyz(&((Hero_234800 *)hero_233f80)->v150) == 0.0f && ((Hero_234800 *)hero_233f80)->h30E == 0 && ((Hero_234800 *)hero_233f80)->h1F6 == 0)
+    if (((((Hero_234800 *)hero_233f80)->i208C == 0 || ((Hero_234800 *)hero_233f80)->i208C == 12) && fast_vec_length(&((Hero_234800 *)hero_233f80)->v150) == 0.0f && ((Hero_234800 *)hero_233f80)->h30E == 0 && ((Hero_234800 *)hero_233f80)->h1F6 == 0)
         || (unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
         if ((((Hero_234800 *)hero_233f80)->i364 ^ 1) & 1) {
             if ((unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
                 qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v4D0);
-                attachment_motion_scratch.x += f_001f9dc8(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
-                attachment_motion_scratch.y += f_001f9de0(f_001fa580(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
+                attachment_motion_scratch.x += fast_cos(fast_add_rotations(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
+                attachment_motion_scratch.y += fast_sin(fast_add_rotations(((Hero_234800 *)hero_233f80)->f4E4, 3.1415925f)) * 0.45f;
                 attachment_motion_scratch.z -= -1.43f;
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->v4D0, &((Hero_234800 *)hero_233f80)->v90, &attachment_position_motion_scratch, &probe_transform_scratch);
                 probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v90, &attachment_motion_scratch, &probe_transform_scratch);
@@ -1468,10 +1468,10 @@ void update_hero_attachment(void) {
     if (((Hero_234800 *)hero_233f80)->i364 & 3) {
         mode = 2;
     }
-    f_001f99f8(&attachment_motion_scratch);
-    f_001f99f8(&attachment_position_motion_scratch);
+    clear_u64_value(&attachment_motion_scratch);
+    clear_u64_value(&attachment_position_motion_scratch);
     if (amt != 0.0f) {
-        sB4 = f_001f9b20(&((Hero_234800 *)hero_233f80)->v350);
+        sB4 = vector_length_xy(&((Hero_234800 *)hero_233f80)->v350);
         sB0 = ((Hero_234800 *)hero_233f80)->v350.z;
         if (!(plat->i3C & 2)) {
             approach_value(&sB0, 0.0f, frame_time_sq_macro * 25.0f * amt);
@@ -1485,7 +1485,7 @@ void update_hero_attachment(void) {
     } else if (mode == 1) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &probed_position, &unanchored_probe_rotation);
         ((Hero_234800 *)hero_233f80)->v90.z = unanchored_probe_rotation.z;
-        f_001f9a28(&attachment_motion_scratch, &probed_position, &((Hero_234800 *)hero_233f80)->pos);
+        fast_vec_sub(&attachment_motion_scratch, &probed_position, &((Hero_234800 *)hero_233f80)->pos);
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     } else if (mode == 2) {
         probe_ground_height_cf(((Hero_234800 *)hero_233f80)->i2080, ((Hero_234800 *)hero_233f80)->p360, &((Hero_234800 *)hero_233f80)->pos, &((Hero_234800 *)hero_233f80)->v90, &probe_transform_scratch, &anchored_probe_rotation);
@@ -1500,40 +1500,40 @@ void update_hero_attachment(void) {
         }
         if (((Hero_234800 *)hero_233f80)->i364 & 1) {
             if ((unsigned int)(((Hero_234800 *)hero_233f80)->i2084 - 0x18) < 2) {
-                vA0.x = f_001f9dc8(((Hero_234800 *)hero_233f80)->f4E4) * 0.45f;
-                vA0.y = f_001f9de0(((Hero_234800 *)hero_233f80)->f4E4) * 0.45f;
+                vA0.x = fast_cos(((Hero_234800 *)hero_233f80)->f4E4) * 0.45f;
+                vA0.y = fast_sin(((Hero_234800 *)hero_233f80)->f4E4) * 0.45f;
                 vA0.z = 0.0f;
-                f_001f9a10(&vA0, &vA0, &secondary_attachment_position);
+                fast_vec_add(&vA0, &vA0, &secondary_attachment_position);
                 vA0.z += -1.43f;
-                f_001f9a28(&attachment_motion_scratch, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
+                fast_vec_sub(&attachment_motion_scratch, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
                 qcopy(&((Hero_234800 *)hero_233f80)->v4D0, &vA0);
-                ((Hero_234800 *)hero_233f80)->f4E4 = f_001f9e90(primary_attachment_position.x - secondary_attachment_position.x, primary_attachment_position.y - secondary_attachment_position.y);
+                ((Hero_234800 *)hero_233f80)->f4E4 = fast_arc_tan(primary_attachment_position.x - secondary_attachment_position.x, primary_attachment_position.y - secondary_attachment_position.y);
             } else {
                 float attachment_distance;
 
-                f_001f9a28(&attachment_motion_scratch, &primary_attachment_position, &((Hero_234800 *)hero_233f80)->pos);
-                attachment_distance = vector_length_xyz(&attachment_motion_scratch);
+                fast_vec_sub(&attachment_motion_scratch, &primary_attachment_position, &((Hero_234800 *)hero_233f80)->pos);
+                attachment_distance = fast_vec_length(&attachment_motion_scratch);
                 if (attachment_distance < 0.0001f) {
-                    f_001f99f8(&attachment_motion_scratch);
+                    clear_u64_value(&attachment_motion_scratch);
                     qcopy(&((Hero_234800 *)hero_233f80)->pos, &primary_attachment_position);
                 } else if (2.0f < attachment_distance) {
-                    f_001f99f8(&attachment_motion_scratch);
+                    clear_u64_value(&attachment_motion_scratch);
                     ((Hero_234800 *)hero_233f80)->i364 &= ~2;
                     ((Hero_234800 *)hero_233f80)->i364 &= ~1;
                 }
-                f_001f9a10(hero_233f80 + 0x4D0, hero_233f80 + 0x4D0, &attachment_motion_scratch);
-                f_001f9a28(&vA0, &attachment_motion_scratch, hero_233f80 + 0x140);
-                if (0.1f < vector_length_xyz(&vA0)) {
+                fast_vec_add(hero_233f80 + 0x4D0, hero_233f80 + 0x4D0, &attachment_motion_scratch);
+                fast_vec_sub(&vA0, &attachment_motion_scratch, hero_233f80 + 0x140);
+                if (0.1f < fast_vec_length(&vA0)) {
                     ((Hero_234800 *)hero_233f80)->i364 &= ~1;
                 }
             }
         } else {
-            f_001f9a28(&attachment_motion_scratch, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
+            fast_vec_sub(&attachment_motion_scratch, &probe_transform_scratch, &((Hero_234800 *)hero_233f80)->pos);
             qcopy(&attachment_position_motion_scratch, &attachment_motion_scratch);
         }
         qcopy((Vec_234800 *)(hero_233f80 + 0x350), &attachment_motion_scratch);
     }
-    f_001f9a10(hero_233f80 + 0xF0, hero_233f80 + 0xF0, &attachment_motion_scratch);
+    fast_vec_add(hero_233f80 + 0xF0, hero_233f80 + 0xF0, &attachment_motion_scratch);
     ((Hero_234800 *)hero_233f80)->fFC = fast_subtract_rotations(((Hero_234800 *)hero_233f80)->v90.z, saved_hero_yaw);
 }
 #define NOT_SDA

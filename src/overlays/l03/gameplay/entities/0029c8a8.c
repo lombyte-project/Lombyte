@@ -14,9 +14,9 @@
 
 extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001fa050_q(float *, float *) __asm__("FUN_001fa050");
-extern void add_vector_xyz_q(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void cross_vectors_xyz_q(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void scale_vector_xyz_q(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
 void add_moby_rotation_based_offsets(struct Moby *moby, float *out) __asm__("FUN_L03_0029c8a8");
 
@@ -36,12 +36,12 @@ void add_moby_rotation_based_offsets(struct Moby *moby, float *out) {
         FUN_001f9d20_q(transformed_x_axis, unit_x_axis, rotation_matrix);
         *(OvlQuad *)z_shifted_x_axis = *(OvlQuad *)transformed_x_axis;
         z_shifted_x_axis[2] = z_shifted_x_axis[2] - 1.0f;
-        cross_vectors_xyz_q(first_offset, transformed_x_axis, z_shifted_x_axis);
-        cross_vectors_xyz_q(second_offset, transformed_x_axis, first_offset);
-        scale_vector_xyz_q(first_offset, first_offset, *(float *)(data + 0x140));
-        scale_vector_xyz_q(second_offset, second_offset, *(float *)(data + 0x144));
-        add_vector_xyz_q(out, out, first_offset);
-        add_vector_xyz_q(out, out, second_offset);
+        fast_vec_cross(first_offset, transformed_x_axis, z_shifted_x_axis);
+        fast_vec_cross(second_offset, transformed_x_axis, first_offset);
+        fast_vec_scale(first_offset, first_offset, *(float *)(data + 0x140));
+        fast_vec_scale(second_offset, second_offset, *(float *)(data + 0x144));
+        fast_vec_add(out, out, first_offset);
+        fast_vec_add(out, out, second_offset);
     }
 }
 

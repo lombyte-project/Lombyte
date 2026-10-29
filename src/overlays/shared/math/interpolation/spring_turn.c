@@ -21,10 +21,10 @@ float interpolate_wrapped_angle_cosine_eased(float x, float y, float z) {
     return fast_add_rotations(x, wrapped_angle_delta * ((1.0f - phase_cosine) * 0.5f));
 }
 #include "qcopy.h"
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Vector cosine interpolation: dst = a + (b - a) * ((1 - cos(t * pi)) * 0.5).
    Scalar analogue matched at src/game/mobyutil.c:func_00214220. */
@@ -45,9 +45,9 @@ void interpolate_vector_xyz_cosine_eased(void *interpolated_vector_output, void 
         return;
     }
     ease = (1.0f - fast_cos(interpolation_fraction * 3.14159274f)) * 0.5f;
-    subtract_vector_xyz(interpolation_delta, target_vector, start_vector);
-    scale_vector_xyz(interpolation_delta, interpolation_delta, ease);
-    add_vector_xyz(interpolated_vector_output, start_vector, interpolation_delta);
+    fast_vec_sub(interpolation_delta, target_vector, start_vector);
+    fast_vec_scale(interpolation_delta, interpolation_delta, ease);
+    fast_vec_add(interpolated_vector_output, start_vector, interpolation_delta);
 }
 #define NOT_SDA
 
@@ -283,13 +283,13 @@ typedef union {
 extern V_94C8 D_L00_00173E70;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_length_xy(void *);
-extern float vector_length_xyz(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_L00_00173E40[];
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
-extern void add_vector_xyz(void *, void *, void *);
-extern void normalize_vector_xyz(void *, void *, float);
-extern void subtract_vector_xyz(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern V_94C8 D_94C8_60 __asm__("D_L00_00173E60");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
@@ -307,15 +307,15 @@ int FUN_L00_00258830_c(char *moving_object, char *movement_displacement, int fla
     char *collision_position;
 
     qcopy(&original_position, movement_position);
-    add_vector_xyz(movement_position, movement_position, movement_displacement);
-    if (b < vector_length_xyz(movement_displacement)) {
+    fast_vec_add(movement_position, movement_position, movement_displacement);
+    if (b < fast_vec_length(movement_displacement)) {
         qcopy(&raised_position, &original_position);
         raised_position.a[2] += a;
-        normalize_vector_xyz(&scaled_displacement, movement_displacement, b);
-        add_vector_xyz(&probe_end, &scaled_displacement, movement_position);
+        fast_vec_normalize(&scaled_displacement, movement_displacement, b);
+        fast_vec_add(&probe_end, &scaled_displacement, movement_position);
         probe_end.a[2] += a;
         if (collision_line(&raised_position, &probe_end, fl, (int)moving_object, 0)) {
-            subtract_vector_xyz(movement_position, (char *)&D_94C8_60, &scaled_displacement);
+            fast_vec_sub(movement_position, (char *)&D_94C8_60, &scaled_displacement);
             r = 1;
             *(float *)(moving_object + 0x18) -= a;
         }
@@ -351,7 +351,7 @@ int FUN_L00_00258830_c(char *moving_object, char *movement_displacement, int fla
             }
         }
     }
-    subtract_vector_xyz(movement_displacement, collision_position, &original_position);
+    fast_vec_sub(movement_displacement, collision_position, &original_position);
     return r;
 }
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");

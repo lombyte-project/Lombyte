@@ -143,15 +143,15 @@ extern void snd_reset_state_and_flush_commands(void) __asm__("func_0012EB00");
 extern void noop_callback_h(void) __asm__("func_001E9428");
 extern void noop_callback_i(void) __asm__("func_001E9430");
 extern void update_view_context(void) __asm__("func_001F2D98");
-extern s32 scale_ticks(s32) __asm__("func_001F96F8");
+extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern u32 fast_mem_copy(void *, void *, s32) __asm__("func_001F98D0");
-extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 extern void mark_moby_for_removal(LevelRenderObject *) __asm__("func_0020C828");
 extern void update_moby_animation_state(LevelRenderObject *) __asm__("func_0020C880");
-extern void calculate_object_transform(LevelRenderObject *, s32, void *) __asm__("func_0020CCA8");
+extern void build_moby_bone_transform(LevelRenderObject *, s32, void *) __asm__("func_0020CCA8");
 extern void refresh_moby_spatial_bounds(LevelRenderObject *) __asm__("func_0020DEF8");
 extern void build_object_rotation_matrix(void) __asm__("func_0022DE10");
 extern s32 rand(void);
@@ -263,10 +263,10 @@ void update_level_gameplay_frame(void) {
     if (level_render_state.mode == 4) {
         scale = (f32)(render_sequence.end - render_sequence.time) / (f32)render_sequence.end;
         scale_vector(&first_position, &mode4_render_vector_delta_gp, scale);
-        add_vectors(&D_001604F0, &D_001604F0, &first_position);
+        fast_vec_add(&D_001604F0, &D_001604F0, &first_position);
     }
     scale_vector(&D_00160460, &level_render_motion_vectors_by_mode[level_render_state.mode],
-                 (f32)(render_sequence.time - scale_ticks(0x78)) * 20.0f * scale);
+                 (f32)(render_sequence.time - scale_game_frames(0x78)) * 20.0f * scale);
     D_00160404 = level_render_depth_by_mode[level_render_state.mode];
     for (object_index = 0; object_index < render_sequence.count; object_index++) {
         object = D_0018CC98[object_index];
@@ -287,7 +287,7 @@ void update_level_gameplay_frame(void) {
             scale_vector(&second_position, animation_positions + next_frame * 16, object->blend);
             /* Fakematch: the u16 copy gives the second 2 its own register. */
             transform_count = 2;
-            add_vectors(object->position, &first_position, &second_position);
+            fast_vec_add(object->position, &first_position, &second_position);
             object->selected_a = 2;
             object->selected_b = transform_count;
             object->state_a = 0;
@@ -301,8 +301,8 @@ void update_level_gameplay_frame(void) {
             refresh_moby_spatial_bounds(object);
             object->selected_a = object->model->count - 1;
             object->selected_b = object->model->count - 1;
-            calculate_object_transform(object, 1, &first_transform);
-            calculate_object_transform(object, 2, &second_transform);
+            build_moby_bone_transform(object, 1, &first_transform);
+            build_moby_bone_transform(object, 2, &second_transform);
             level_render_state.history_index = (level_render_state.history_index + 1) & 0x1F;
             if (level_render_state.history_count < 0x20) {
                 level_render_state.history_count++;

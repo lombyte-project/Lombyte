@@ -202,7 +202,7 @@ typedef struct {
 /* read through a one-field struct: a plain f32 changes the addressing */
 extern ParticleClearance particle_clearance __asm__("D_L00_00160258");
 extern f32 particle_min_ground __asm__("D_L00_00160260");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 ground_height_at(Vec4 *) __asm__("FUN_L00_00263468");
 extern void free_effect_particle(FallingParticle *) __asm__("FUN_L00_00267a08");
 
@@ -222,9 +222,9 @@ void update_falling_effect_particle(FallingParticle *particle)
 
     cell_x = particle->probe.f[0];
     cell_y = particle->probe.f[1];
-    add_vector_xyz(&step, vel, &particle_drift);
-    add_vector_xyz(&particle->probe, &particle->probe, &step);
-    add_vector_xyz(&particle->pos, &particle->pos, &step);
+    fast_vec_add(&step, vel, &particle_drift);
+    fast_vec_add(&particle->probe, &particle->probe, &step);
+    fast_vec_add(&particle->pos, &particle->pos, &step);
     if (particle->unk0A != 2) {
         if (cell_x != (s32)particle->probe.f[0] || cell_y != (s32)particle->probe.f[1]) {
             ground_test_probe.q = particle->probe.q;

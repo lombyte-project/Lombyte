@@ -13,7 +13,7 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern s32 FUN_L00_001efc70(void *, void *, s32, void *, s32);
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern f32 multiply_global_factor_ed64(f32) __asm__("FUN_001f96b0");
+extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 
 /* Idle fidget picker: lists the eligible entries of idle_fidgets, then
    picks one weighted by 1 / (interval * 60). Returns 1 and the index in
@@ -72,7 +72,7 @@ s32 pick_idle_fidget(s32 *index) {
     total = 0.0f;
     for (i = 0; i < count; i++) {
         HeroTableEntry70 *choice = &idle_fidgets[choices[i]];
-        total += 1.0f / (f32)(s32)(multiply_global_factor_ed64(choice->interval) * 60.0f);
+        total += 1.0f / (f32)(s32)(scale_time(choice->interval) * 60.0f);
     }
     pick = random_float_between(0.0f, 1.0f);
     if (pick < total) {
@@ -81,7 +81,7 @@ s32 pick_idle_fidget(s32 *index) {
             HeroTableEntry70 *choice;
             *index = picked;
             choice = &idle_fidgets[picked];
-            total -= 1.0f / (f32)(s32)(multiply_global_factor_ed64(choice->interval) * 60.0f);
+            total -= 1.0f / (f32)(s32)(scale_time(choice->interval) * 60.0f);
             if (total < pick) break;
         }
         return 1;
@@ -219,7 +219,7 @@ typedef union {
 } V_229910_00229910;
 extern float D_L00_00173E68_00229910 __asm__("D_L00_00173E68") __attribute__((section(".data")));
 extern int FUN_001f96f8_00229910(int) __asm__("FUN_001f96f8");
-extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
@@ -233,7 +233,7 @@ int check_hero_forward_collision_height(void) {
     float height_delta;
     if (hero_ptr->motion.flat_speed < hero_ptr->capsule_radius / (float)FUN_001f96f8_00229910(20))
         return 0;
-    if (0.52359879f < fast_difference_between_rotations(angle_atan2(hero_ptr->motion.displacement.f[0],
+    if (0.52359879f < fast_difference_between_rotations(fast_arc_tan(hero_ptr->motion.displacement.f[0],
                                                                   hero_ptr->motion.displacement.f[1]),
                                             hero_ptr->motion.rot.f[2]))
         return 0;

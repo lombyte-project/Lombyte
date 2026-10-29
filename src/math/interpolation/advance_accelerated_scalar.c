@@ -1,7 +1,7 @@
 #include "types.h"
 
 extern f32 absolute_float(f32) __asm__("func_001F99C0");
-extern f32 square_root_scalar(f32) __asm__("func_001F9988");
+extern f32 square_root(f32) __asm__("func_001F9988");
 extern f32 approach_value(f32 target, f32 step, f32 *value) __asm__("FUN_00213ed8");
 f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 acceleration_step,
                                f32 braking_step, f32 maximum_speed) __asm__("FUN_00213f38");
@@ -28,7 +28,7 @@ f32 advance_accelerated_scalar(f32 *value, f32 *velocity, f32 target, f32 accele
                 approach_value(0.0f, braking_step * 1.1f, velocity);
             }
         } else {
-            desired_speed = square_root_scalar(2.0f * braking_step * distance);
+            desired_speed = square_root(2.0f * braking_step * distance);
             if (maximum_speed < desired_speed) {
                 desired_speed = maximum_speed;
             }

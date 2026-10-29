@@ -22,7 +22,7 @@ typedef struct {
 extern SurfaceHeightTile *surface_height_tiles __asm__("D_00161190");
 extern s32 surface_height_layer __asm__("D_001610E0") __attribute__((sda));
 
-extern s32 find_surface_height_map(f32, f32, f32) __asm__("func_00239D60");
+extern s32 find_zone_at_point(f32, f32, f32) __asm__("func_00239D60");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void fast_vec_cross(f32 *, f32 *, f32 *) __asm__("func_001F9AD8");
@@ -52,7 +52,7 @@ s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     f32 weight_x;
     f32 weight_y;
 
-    tile_index = find_surface_height_map(x, y, z);
+    tile_index = find_zone_at_point(x, y, z);
     if (tile_index < 0) {
         return 0;
     }

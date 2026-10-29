@@ -4,12 +4,12 @@
 extern u8 cd_read_start_failure_message[] __asm__("D_001E8650");
 extern s32 DebugPrint();
 extern s32 RaiseKernelTrap();
-extern s32 snd_stream_safe_cd_read() __asm__("func_0012ED58");
+extern s32 snd_StreamSafeCdRead() __asm__("func_0012ED58");
 s32 start_audio_stream_read(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216788");
 
 s32 start_audio_stream_read(s32 read_destination, s32 sector, s32 sector_count) {
     if ((music_stream_state.read_state == 0) && (sector_count != 0)) {
-        if (snd_stream_safe_cd_read(sector, sector_count, read_destination, &music_stream_state.cd_mode) != 0) {
+        if (snd_StreamSafeCdRead(sector, sector_count, read_destination, &music_stream_state.cd_mode) != 0) {
             music_stream_state.read_dst = read_destination;
             music_stream_state.read_state = 1;
             music_stream_state.read_sector = sector;

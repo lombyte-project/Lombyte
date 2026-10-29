@@ -9,15 +9,15 @@
 
 
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float vector_length_xyz(void *);
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int tick_countdown_32(int *);
+extern int fast_dec_timer(int *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void subtract_vector_xyz(void *, void *, void *);
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Same routine as FUN_L05_00307010, with this level's data offsets. */
 void accumulate_moby_frames_in_group_bounds(struct Moby *moby) __asm__("FUN_L16_002cfc00");
@@ -34,7 +34,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
     if (hero_state->race_time_frames < scale_game_frames(0xB4)) {
         return;
     }
-    if (!tick_countdown_32((int *)(data + 0x2DC))) {
+    if (!fast_dec_timer((int *)(data + 0x2DC))) {
         return;
     }
     other = ((char *)hero_state->hoverboard_moby);
@@ -51,8 +51,8 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
                 char *candidate_moby = enumerated_moby;
                 qcopy(adjusted_position, data + 0x260);
                 adjusted_position[2] += 0.8f;
-                subtract_vector_xyz(displacement_vector, candidate_moby + 0x10, adjusted_position);
-                if (!(8.0f < vector_length_xyz(displacement_vector))) {
+                fast_vec_sub(displacement_vector, candidate_moby + 0x10, adjusted_position);
+                if (!(8.0f < fast_vec_length(displacement_vector))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, enumerated_moby + 0xC0);
                     transform_vector(displacement_vector, displacement_vector, m);
@@ -71,8 +71,8 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
         while (group_candidate_moby) {
             if (*(short *)(group_candidate_moby + 0xA6) == 0x474) {
                 float m[16];
-                subtract_vector_xyz(displacement_vector, group_candidate_moby + 0x10, data + 0x260);
-                if (!(8.0f < vector_length_xyz(displacement_vector))) {
+                fast_vec_sub(displacement_vector, group_candidate_moby + 0x10, data + 0x260);
+                if (!(8.0f < fast_vec_length(displacement_vector))) {
                     set_identity_matrix(m);
                     transpose_rotation_matrix(m, group_candidate_moby + 0xC0);
                     transform_vector(displacement_vector, displacement_vector, m);

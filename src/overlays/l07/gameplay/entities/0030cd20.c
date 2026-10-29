@@ -33,10 +33,10 @@ struct L07MovingVars {
 };
 
 extern struct Moby *D_L07_0015FFD8;
-extern float vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void transform_vector_xyz(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void update_moby_offset_motion(struct Moby *moby) __asm__("FUN_L07_0031a9e8");
 
@@ -94,7 +94,7 @@ void update_moby_offset_motion(struct Moby *moby) {
         start.f[1] = vars->destination.y;
         start.f[2] = vars->destination.z;
         next.q = start.q;
-        vars->home.w = vector_length_xyz(&next);
+        vars->home.w = fast_vec_length(&next);
         if (vars->startSound != -1)
             FUN_0022da68(vars->startSound, 0, moby);
         moby->state = 2;
@@ -114,14 +114,14 @@ void update_moby_offset_motion(struct Moby *moby) {
         start.f[1] = vars->destination.y;
         start.f[2] = vars->destination.z;
         next.q = start.q;
-        transform_vector_xyz(&next, &next, &moby->rot_row0);
+        transform_vector_by_basis(&next, &next, &moby->rot_row0);
         scale_vector_xyz(&start, &next, vars->destination.w * frame_time);
-        add_vector_xyz(&moby->pos, &moby->pos, &start);
+        fast_vec_add(&moby->pos, &moby->pos, &start);
         time = vars->home.w - vars->destination.w * frame_time;
         vars->home.w = time;
         if (!(time < 0.0f))
             return;
-        add_vector_xyz(&moby->pos, &vars->home, &next);
+        fast_vec_add(&moby->pos, &vars->home, &next);
         vars->home.w = 0;
         if (vars->indicator != -1)
             D_L07_00184528[vars->indicator] = 1;
@@ -155,10 +155,10 @@ void update_moby_offset_motion(struct Moby *moby) {
         start.f[1] = vars->destination.y;
         start.f[2] = vars->destination.z;
         next.q = start.q;
-        distance = vector_length_xyz(&next);
+        distance = fast_vec_length(&next);
         scale_vector_xyz(&next, &next, -(vars->speed * frame_time));
-        transform_vector_xyz(&start, &next, &moby->rot_row0);
-        add_vector_xyz(&moby->pos, &moby->pos, &start);
+        transform_vector_by_basis(&start, &next, &moby->rot_row0);
+        fast_vec_add(&moby->pos, &moby->pos, &start);
         time = vars->home.w + vars->speed * frame_time;
         vars->home.w = time;
         if (!(distance < time))

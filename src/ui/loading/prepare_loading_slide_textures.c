@@ -21,7 +21,7 @@ extern s32 sceGsSetDefLoadImage(sceGsLoadImage *load_image, s32 block_offset, s3
                                 s32 pixel_storage_format, s32 x, s32 y, s32 width, s32 height);
 extern s32 wait_for_graphics_pipeline_idle(s32 a0, s32 a1) __asm__("func_00120558");
 extern s32 decompress_wad(s32 source_address, s32 destination_address) __asm__("func_0020B618");
-extern s32 submit_cd_read_request(void *a0, u32 a1, u32 a2) __asm__("func_00216728");
+extern s32 submit_audio_stream_io_request(void *a0, u32 a1, u32 a2) __asm__("func_00216728");
 
 void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 second_slide,
                                     u64 *shared_texture, u64 *first_texture,
@@ -44,7 +44,7 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     second_output = second_texture;
     archive_memory = &D_001940C0;
     upload_index = 0;
-    submit_cd_read_request((void *)(archive_memory->archive_base + 0x100000),
+    submit_audio_stream_io_request((void *)(archive_memory->archive_base + 0x100000),
                            disc_table.loading_slides[language_index].sector,
                            disc_table.loading_slides[language_index].size);
     sceCdSync(0);

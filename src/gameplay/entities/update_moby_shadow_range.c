@@ -2,7 +2,7 @@
 #include "sda.h"
 #include "qcopy.h"
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float D_001CAA80[] NOT_SDA;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern char coll_output[] __asm__("D_00194100");
@@ -42,7 +42,7 @@ void update_moby_shadow_range(char *moby) {
         segment_start[0] = segment_start[0] + shadow_probe_direction[0] * *(float *)(moby + 0xC) * 0.000732421875f;
         segment_start[1] = segment_start[1] + shadow_probe_direction[1] * *(float *)(moby + 0xC) * 0.000732421875f;
         fast_vec_normalize(shadow_probe_direction, shadow_probe_direction, (segment_start[2] - first_hit_height) / -shadow_probe_direction[2]);
-        add_vector_xyz(segment_end, segment_start, shadow_probe_direction);
+        fast_vec_add(segment_end, segment_start, shadow_probe_direction);
         second_hit_height = first_hit_height;
         if (collision_line(segment_start, segment_end, 0x22, 0, 0) != 0) {
             second_hit_height = *(float *)(hit + 0x28);

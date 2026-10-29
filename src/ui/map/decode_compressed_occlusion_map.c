@@ -1,7 +1,7 @@
 #include "types.h"
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void copy_blocks_16_forward(void *, void *, s32) __asm__("FUN_001f98d0");
+extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream,
                                      u8 *span_stream) __asm__("FUN_00207c28");
 
@@ -71,7 +71,7 @@ void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream, u8 *sp
             packed_write++;
         } while (bit_read < scratchpad_end);
 
-        copy_blocks_16_forward(destination, (void *)0x70000000, 0x400);
+        fast_mem_copy(destination, (void *)0x70000000, 0x400);
         destination = next_start;
         if (destination == destination_end) {
             return;

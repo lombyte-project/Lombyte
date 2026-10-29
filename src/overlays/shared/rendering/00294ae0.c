@@ -10,11 +10,11 @@ typedef struct {
     Vec4 point[1];
 } PathPoints;
 
-extern void subtract_vector_xyz(Vec4 *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(Vec4 *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern f32 fast_vec_length(Vec4 *v) __asm__("FUN_001f9af0");
 extern void fast_vec_normalize(Vec4 *out, Vec4 *v, f32 len) __asm__("FUN_001f9bf8");
 extern f32 fast_vec_dot(Vec4 *a, Vec4 *b) __asm__("FUN_001f9ab0");
-extern void add_vector_xyz(Vec4 *out, Vec4 *a, Vec4 *b) __asm__("FUN_001f9a10");
+extern void fast_vec_add(Vec4 *out, Vec4 *a, Vec4 *b) __asm__("FUN_001f9a10");
 
 static inline s32 path_next(PathPoints *path, s32 i, s32 dir) {
     if (i == path->count - 1) {
@@ -36,19 +36,19 @@ s32 compute_advanced_moby_path_position(struct Moby *moby, PathPoints *path, Vec
     f32 along;
 
     next = path_next(path, i, path_index_step);
-    subtract_vector_xyz(&seg, &path->point[next], &path->point[i]);
+    fast_vec_sub(&seg, &path->point[next], &path->point[i]);
     segment_length = fast_vec_length(&seg);
     fast_vec_normalize(&seg, &seg, 1.0f);
-    subtract_vector_xyz(&rel, &moby->pos, &path->point[i]);
+    fast_vec_sub(&rel, &moby->pos, &path->point[i]);
     along = fast_vec_dot(&rel, &seg) + advance_distance;
     if (segment_length < along) {
         i = next;
         next = path_next(path, i, path_index_step);
-        subtract_vector_xyz(&seg, &path->point[next], &path->point[i]);
+        fast_vec_sub(&seg, &path->point[next], &path->point[i]);
         along = along - segment_length;
         fast_vec_normalize(&seg, &seg, 1.0f);
     }
     fast_vec_normalize(&seg, &seg, along);
-    add_vector_xyz(out, &seg, &path->point[i]);
+    fast_vec_add(out, &seg, &path->point[i]);
     return i;
 }

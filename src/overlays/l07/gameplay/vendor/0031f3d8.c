@@ -34,8 +34,8 @@ extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
-extern char *mk_a(int) __asm__("FUN_0020c4f8");
-extern void upd_a(void *) __asm__("FUN_L00_00250df8");
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void mushroom_update(char *self) __asm__("FUN_L07_0031f3d8");
 void mushroom_update(char *self) {
@@ -68,14 +68,14 @@ void mushroom_update(char *self) {
                          D_L07_0015F580, D_L07_0015F580);
         FUN_L00_00263fd8(self, 0x676, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L07_0015F580,
                          D_L07_0015F580, D_L07_0015F580);
-        spawned_moby = mk_a(0x673);
+        spawned_moby = create_moby(0x673);
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;
             *(short *)(spawned_moby + 0x32) = 0xFF;
             qcopy(spawned_moby + 0x10, self + 0x10);
             qcopy(spawned_moby + 0x40, self + 0x40);
             *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
-            upd_a(spawned_moby);
+            update_entity(spawned_moby);
         }
         mark_moby_for_removal_c(self);
         break;
@@ -117,14 +117,14 @@ void robot_head_update(char *self) {
                          D_L07_0015F580, D_L07_0015F580);
         FUN_L00_00263fd8(self, 0x690, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L07_0015F580,
                          D_L07_0015F580, D_L07_0015F580);
-        spawned_moby = mk_a(0x68d);
+        spawned_moby = create_moby(0x68d);
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;
             *(short *)(spawned_moby + 0x32) = 0xFF;
             qcopy(spawned_moby + 0x10, self + 0x10);
             qcopy(spawned_moby + 0x40, self + 0x40);
             *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
-            upd_a(spawned_moby);
+            update_entity(spawned_moby);
         }
         mark_moby_for_removal_c_c(self);
         break;

@@ -12,7 +12,7 @@
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void fast_vec_add(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
@@ -30,9 +30,9 @@ void spawn_type_52_particle_near_moby(char *moby) {
     float spawn_position[3];
     int particle_header_value, particle_data_value;
     float offset_angle_radians = random_angle_radians();
-    float offset_radius = random_float_between_alt(0.0f, *(float *)&type_52_particle_offset_radius_upper_bound);
-    float particle_scale = random_float_between_alt(0.0f, *(float *)&type_52_particle_scale_upper_bound);
-    float random_particle_value = random_float_between_alt(*(float *)&type_52_particle_scale_upper_bound, *(float *)&type_52_particle_random_value_upper_bound);
+    float offset_radius = random_float_between(0.0f, *(float *)&type_52_particle_offset_radius_upper_bound);
+    float particle_scale = random_float_between(0.0f, *(float *)&type_52_particle_scale_upper_bound);
+    float random_particle_value = random_float_between(*(float *)&type_52_particle_scale_upper_bound, *(float *)&type_52_particle_random_value_upper_bound);
     int random_divisor = random_int_between(*(int *)&type_52_particle_divisor_lower_bound, *(int *)&type_52_particle_divisor_upper_bound);
     spawn_position[0] = fast_cos(offset_angle_radians) * offset_radius;
     spawn_position[1] = fast_sin(offset_angle_radians) * offset_radius;
@@ -59,8 +59,8 @@ extern float FUN_001f9b48(void *, void *);
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void draw_moby_animated_quad_layers(unsigned char *m) __asm__("FUN_L10_002e91b8");
-extern void enqueue_callback_list_1(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void subtract_vector_xyz(void *, void *, void *);
+extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void update_hero_flag_from_moby_local_box(unsigned char *moby) __asm__("FUN_L10_002e9028");
 
@@ -82,7 +82,7 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
     case MOBY_UPDATE_ACTIVE:
         player = (&hero.motion.pos);
         if (FUN_001f9b48(moby + 0x10, player) < 8.0f) {
-            subtract_vector_xyz(hero_point_local_offset, player + 0x50, moby + 0x10);
+            fast_vec_sub(hero_point_local_offset, player + 0x50, moby + 0x10);
             transpose_rotation_matrix(mtx, moby + 0xC0);
             transform_vector(hero_point_local_offset, hero_point_local_offset, mtx);
             if (-5.0f < hero_point_local_offset[0] && hero_point_local_offset[0] < 5.0f && 0.0f < hero_point_local_offset[2] && hero_point_local_offset[2] < 8.0f) {
@@ -95,7 +95,7 @@ void update_hero_flag_from_moby_local_box(unsigned char *moby) {
                 hero.vent_updraft = 0;
             }
         }
-        enqueue_callback_list_1(draw_moby_animated_quad_layers, moby);
+        add_draw_callback(draw_moby_animated_quad_layers, moby);
         break;
     }
 }
@@ -130,7 +130,7 @@ extern int quad_layer_alpha_b_selectors[2] __asm__("D_L10_00161F50") __attribute
 extern int quad_layer_alpha_c_selectors[2] __asm__("D_L10_00161F58") __attribute__((sda));
 extern int quad_layer_alpha_d_selectors[2] __asm__("D_L10_00161F60") __attribute__((sda));
 extern void copy_matrix_rotation(void *, void *) __asm__("func_001FA298");
-extern void fast_draw_quad_real(void *, void *, int);
+extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 #define GS_ALPHA(a, b, k, d, fix) \
     ((unsigned long)(a) | ((unsigned long)(b) << 2) | ((unsigned long)(k) << 4) | \
@@ -210,8 +210,8 @@ void draw_moby_animated_quad_layers(unsigned char *moby) {
             second.uv[2][k] = first.uv[3][k];
             second.uv[3][k] = first.uv[3][k] + step;
         }
-        fast_draw_quad_real(&first, transform, 0);
-        fast_draw_quad_real(second_quad, transform, 0);
+        draw_geometry_quad(&first, transform, 0);
+        draw_geometry_quad(second_quad, transform, 0);
         {
             float *second_corner_cursor = (float *)second_quad;
             float *first_corner_cursor = (float *)&first;
@@ -292,10 +292,10 @@ typedef struct {
 #include "qcopy.h"
 #include "rnc/gameplay/camera/update_cam.h"
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
-extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float s32_to_float(int) __asm__("FUN_001fa6c0");
+extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Retail retains this global base and loads the four-block source at +0x184. */
 extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
@@ -332,7 +332,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     pos = &path_camera->pos;
     m1 = (Vec4f *)&path_camera->m1;
     m2 = (Vec4f *)&path_camera->m2;
-    stops->fov_end = angle_atan2(1.0f, D_L10_0016CEC0.tan_half_fov) * 2.0f;
+    stops->fov_end = fast_arc_tan(1.0f, D_L10_0016CEC0.tan_half_fov) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
         char *path = D_L10_001B0930_5a78[*(int *)(rec + 0x20)];
         int i = 0;
@@ -353,7 +353,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
                     stop_seg++;
                 }
                 next = i + 1;
-                length = distance_xyz(&((Vec4f *)(path + 0x10))[i], &((Vec4f *)(path + 0x10))[next % *(int *)path]);
+                length = fast_vec_dist(&((Vec4f *)(path + 0x10))[i], &((Vec4f *)(path + 0x10))[next % *(int *)path]);
                 {
                     char *point = path + i * 16;
                     *(f32 *)(point + 0x1C) = length;
@@ -367,14 +367,14 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     {
         s16 frames = *(s16 *)(rec + 0x3A);
         if (frames > 0)
-            *(f32 *)(rec + 0x3C) = run->path_length / s32_to_float(scale_game_frames(frames)) * 60.0f;
+            *(f32 *)(rec + 0x3C) = run->path_length / convert_integer_to_float(scale_game_frames(frames)) * 60.0f;
     }
     if (*(int *)(rec + 0x24) >= 0) {
         char *path = D_L10_001B0930_5a78[*(int *)(rec + 0x24)];
         int i;
         for (i = 0; i < *(int *)path; i++) {
             int offset = i * 16;
-            f32 length = distance_xyz(path + (offset + 0x10), path + ((i + 1) % *(int *)path * 16 + 0x10));
+            f32 length = fast_vec_dist(path + (offset + 0x10), path + ((i + 1) % *(int *)path * 16 + 0x10));
             *(f32 *)(path + offset + 0x1C) = length;
             if (i < *(int *)path - 1)
                 run->look_path_length += length;
@@ -413,21 +413,21 @@ extern char D_L10_00167450[];
 extern float D_L10_00167358 __attribute__((section(".data")));
 extern float D_0013F5E0_5f18[] __asm__("D_0013F5E0");
 extern VendorView_5f18 D_L10_0016CEC0;
-extern int path_step_5f18(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
-extern void transform_vector_by_basis_5f18(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern float cosine_interpolate_5f18(float, float, float) __asm__("FUN_002133d0");
-extern void update_view_context_5f18(void) __asm__("FUN_001f2d98");
-extern float fast_sin_5f18(float) __asm__("FUN_001f9de0");
-extern float fast_cos_5f18(float) __asm__("FUN_001f9dc8");
-extern float distance_xyz(void *, void *) __asm__("FUN_001f9b48");
-extern void subtract_vector_xyz_5f18(void *, void *, void *) __asm__("FUN_001f9a28");
+extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
+extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
+extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
+extern void update_view_context(void) __asm__("FUN_001f2d98");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern s32 tick_countdown_16_5f18(s16 *) __asm__("FUN_001f9770");
-extern s32 truncate_float_to_s32_5f18(f32) __asm__("FUN_001fa6d0");
-extern s32 scale_game_frames_5f18(s32) __asm__("FUN_001f96f8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
+extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
+extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_002223f8(s32, s32);
 extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 extern void debug_line_5f18(void *, void *) __asm__("FUN_001e93e8");
@@ -468,17 +468,17 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
                 offset[1] = ofs[1];
                 offset[2] = ofs[2];
                 offset[3] = 0.0f;
-                transform_vector_by_basis_5f18(offset, offset, D_L10_00167450);
+                transform_vector_by_basis(offset, offset, D_L10_00167450);
                 add_vector_xyz(point, &anchor->pos, offset);
-                subtract_vector_xyz_5f18(dir, point, &cam->pos);
+                fast_vec_sub(dir, point, &cam->pos);
             } else {
-                subtract_vector_xyz_5f18(dir, look_path + 0x10, &cam->pos);
+                fast_vec_sub(dir, look_path + 0x10, &cam->pos);
             }
-            scale_vector_xyz(offset, D_0013F5E0_5f18, -1.0f);
-            normalize_vector_xyz(&cam->m0, dir, 1.0f);
-            cross_vectors_xyz(&cam->m1, &cam->m0, offset);
-            normalize_vector_xyz(&cam->m1, &cam->m1, 1.0f);
-            cross_vectors_xyz(&cam->m2, &cam->m1, &cam->m0);
+            fast_vec_scale(offset, D_0013F5E0_5f18, -1.0f);
+            fast_vec_normalize(&cam->m0, dir, 1.0f);
+            fast_vec_cross(&cam->m1, &cam->m0, offset);
+            fast_vec_normalize(&cam->m1, &cam->m1, 1.0f);
+            fast_vec_cross(&cam->m2, &cam->m1, &cam->m0);
         }
         return;
     }
@@ -489,8 +489,8 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             run->started = 3;
             D_L10_0015F3FC = 1.0f;
             ang = stops->fov_end * 0.5f;
-            D_L10_0016CEC0.tan_half_fov = fast_sin_5f18(ang) / fast_cos_5f18(ang);
-            update_view_context_5f18();
+            D_L10_0016CEC0.tan_half_fov = fast_sin(ang) / fast_cos(ang);
+            update_view_context();
             *(u8 *)(rec + 0x39) = 1;
             D_L10_00167358 = 0.05f;
             cam->transition_state = 4;
@@ -509,11 +509,11 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     }
     path = D_L10_001B0930_5f18[*(int *)(rec + 0x20)];
     qcopy(dir, &cam->pos);
-    done = path_step_5f18(path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
+    done = sample_path(path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
     if (run->timer != 0) {
-        if (tick_countdown_16_5f18(&run->timer) != 0)
+        if (fast_dec_timer_s16(&run->timer) != 0)
             done = 1;
-        else if (*(int *)(rec + 0x40) != 0 && run->timer < scale_game_frames_5f18(truncate_float_to_s32_5f18(20.0f)))
+        else if (*(int *)(rec + 0x40) != 0 && run->timer < scale_game_frames(truncate_float_to_s32(20.0f)))
             done = 1;
     }
     if (*(u8 *)(rec + 0x39) != 0)
@@ -537,12 +537,12 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
             sum += run->t;
             for (after = run->seg; after < stops->seg[i + 1]; after++)
                 total += *(float *)(path + (after * 16 + 0x1C));
-            ang = cosine_interpolate_5f18(stops->fov[i], stops->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
-            D_L10_0016CEC0.tan_half_fov = fast_sin_5f18(ang) / fast_cos_5f18(ang);
-            update_view_context_5f18();
+            ang = cosine_interpolate(stops->fov[i], stops->fov[i + 1], sum / total) * 0.017453292f * 0.5f;
+            D_L10_0016CEC0.tan_half_fov = fast_sin(ang) / fast_cos(ang);
+            update_view_context();
         }
     }
-    run->dist += distance_xyz(dir, &cam->pos);
+    run->dist += fast_vec_dist(dir, &cam->pos);
     if (*(int *)(rec + 0x28) >= 0) {
         struct Moby *anchor = (struct Moby *)(D_L10_0015FFD8_5f18 + *(int *)(rec + 0x28) * 256);
         float *ofs = (float *)(rec + 0x2C);
@@ -550,23 +550,23 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         point[1] = ofs[1];
         point[2] = ofs[2];
         point[3] = 0.0f;
-        transform_vector_by_basis_5f18(point, point, D_L10_00167450);
+        transform_vector_by_basis(point, point, D_L10_00167450);
         add_vector_xyz(look_point, &anchor->pos, point);
-        subtract_vector_xyz_5f18(offset, look_point, &cam->pos);
+        fast_vec_sub(offset, look_point, &cam->pos);
     } else {
         char *look = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
         look_seg = 0;
         look_t = 0.0f;
-        path_step_5f18(look, point, &look_seg, &look_t, 0, run->dist / run->path_length * run->look_path_length);
+        sample_path(look, point, &look_seg, &look_t, 0, run->dist / run->path_length * run->look_path_length);
         debug_point_5f18(point, 0.2f);
         debug_line_5f18(look + 0x10, look + *(int *)look * 16);
-        subtract_vector_xyz_5f18(offset, point, &cam->pos);
+        fast_vec_sub(offset, point, &cam->pos);
     }
-    scale_vector_xyz(point, D_0013F5E0_5f18, -1.0f);
-    normalize_vector_xyz(&cam->m0, offset, 1.0f);
-    cross_vectors_xyz(&cam->m1, &cam->m0, point);
-    normalize_vector_xyz(&cam->m1, &cam->m1, 1.0f);
-    cross_vectors_xyz(&cam->m2, &cam->m1, &cam->m0);
+    fast_vec_scale(point, D_0013F5E0_5f18, -1.0f);
+    fast_vec_normalize(&cam->m0, offset, 1.0f);
+    fast_vec_cross(&cam->m1, &cam->m0, point);
+    fast_vec_normalize(&cam->m1, &cam->m1, 1.0f);
+    fast_vec_cross(&cam->m2, &cam->m1, &cam->m0);
 }
 #include "sda.h"
 

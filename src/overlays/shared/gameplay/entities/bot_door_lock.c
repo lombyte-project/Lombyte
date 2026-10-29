@@ -180,7 +180,7 @@ extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float FUN_001f9b48(void *, void *);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern void enqueue_callback_list_1(int, int) __asm__("FUN_001f4600");
+extern void add_draw_callback(int, int) __asm__("FUN_001f4600");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FUN_L01_00285768");
 
@@ -225,7 +225,7 @@ void bot_door_lock_update(char *moby) {
             if (data[9] < 0.0f) data[9] = 0.0f;
         }
         if (0.0f < data[9]) {
-            enqueue_callback_list_1((int)draw_bot_door_lock_glow, (int)moby);
+            add_draw_callback((int)draw_bot_door_lock_glow, (int)moby);
             data[6] = fast_add_rotations(data[6], (360.0f / bot_door_lock_number_bob_period_gp) * 0.017453292f * frame_time);
             number_anchor_position[2] += bot_door_lock_number_bob_amplitude_gp * fast_cos(data[6]);
             value = truncate_float_to_s32(bot_door_lock_number_color_pulse_amplitude_gp * fast_cos(data[10]));
@@ -279,7 +279,7 @@ void bot_door_lock_update(char *moby) {
     case BOT_DOOR_LOCK_STATE_SHRINK_EFFECT:
         data[9] -= frame_time + frame_time;
         if (data[9] < 0.0f) data[9] = 0.0f;
-        if (0.0f < data[9]) enqueue_callback_list_1((int)draw_bot_door_lock_glow, (int)moby);
+        if (0.0f < data[9]) add_draw_callback((int)draw_bot_door_lock_glow, (int)moby);
         return;
     default:
         return;
@@ -319,8 +319,8 @@ extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
-extern char *mk_a(int) __asm__("FUN_0020c4f8");
-extern void upd_a(void *) __asm__("FUN_L00_00250df8");
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
+extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void update_hit_triggered_moby_breakup(char *self) __asm__("FUN_L06_00309860");
 
@@ -354,14 +354,14 @@ void update_hit_triggered_moby_breakup(char *self) {
                          D_L06_0015F580, D_L06_0015F580);
         FUN_L00_00263fd8(self, 0x67b, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
                          D_L06_0015F580, D_L06_0015F580);
-        spawned_moby = mk_a(0x678);
+        spawned_moby = create_moby(0x678);
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;
             *(short *)(spawned_moby + 0x32) = 0xFF;
             qcopy(spawned_moby + 0x10, self + 0x10);
             qcopy(spawned_moby + 0x40, self + 0x40);
             *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
-            upd_a(spawned_moby);
+            update_entity(spawned_moby);
         }
         mark_moby_for_removal_c(self);
         break;
@@ -374,7 +374,7 @@ void update_hit_triggered_moby_breakup(char *self) {
 void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
 
 void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
-void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_timed_sprite_effect(char *moby) __asm__("FUN_L06_0030be60");
@@ -390,7 +390,7 @@ void update_timed_sprite_effect(char *moby) {
         mark_moby_for_removal(moby);
         break;
     case SPRITE_EFFECT_STATE_ANIMATE:
-        enqueue_callback_list_1(draw_projected_fading_quad, moby);
+        add_draw_callback(draw_projected_fading_quad, moby);
         effect_data[0] = effect_data[0] + effect_data[1];
         if (2.0f < effect_data[0]) {
             mark_moby_for_removal(moby);
@@ -398,7 +398,7 @@ void update_timed_sprite_effect(char *moby) {
         break;
     }
 }
-extern char *mk_b(int) __asm__("FUN_0020c4f8");
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 
@@ -409,7 +409,7 @@ void spawn_timed_projected_sprite_effect(char *world_position, int duration_upda
     char *vp = (char *)&position_copy;
     unsigned char *effect_moby;
     position_copy = *(OvlQuad *)world_position;
-    effect_moby = (unsigned char *)mk_b(0x76A);
+    effect_moby = (unsigned char *)create_moby(0x76A);
     if (effect_moby) {
         char *effect_data = *(char **)(effect_moby + 0x78);
         float duration_as_float;

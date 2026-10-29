@@ -88,12 +88,12 @@ extern void snd_set_sound_params_cb() __asm__("FUN_0012e4c0");
 extern void snd_reset_state_and_flush_commands() __asm__("FUN_0012eb00");
 extern void snd_set_reverb_ex(s32, s32, s32, s32, s32) __asm__("FUN_0012ef68");
 extern void snd_auto_reverb(s32, s32, s32, s32) __asm__("FUN_0012efe0");
-extern void add_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-extern void scale_vector_xyz(void *out, void *a, f32 scale) __asm__("FUN_001f9a68");
-extern f32 dot_vectors_xyz(void *a, void *b) __asm__("FUN_001f9ab0");
-extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
-extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void fast_vec_add(void *out, void *a, void *b) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_scale(void *out, void *a, f32 scale) __asm__("FUN_001f9a68");
+extern f32 fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
+extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
+extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *out, void *a, void *b) __asm__("FUN_001f9cf8");
 extern void transpose_rotation_matrix(void *out, void *a) __asm__("FUN_001fa2d8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -176,19 +176,19 @@ s32 sound_update(void) {
     previous_history_index = (current_index + 3) % 4;
     if (previous_history_index != current_index) {
         do {
-            subtract_vector_xyz(&relative_velocity, &D_0013E550.listener_history[current_index],
+            fast_vec_sub(&relative_velocity, &D_0013E550.listener_history[current_index],
                                 &D_0013E550.listener_history[previous_history_index]);
-            if (!(vector_length_xyz(&relative_velocity) < frame_time * 60.0f)) {
+            if (!(fast_vec_length(&relative_velocity) < frame_time * 60.0f)) {
                 break;
             }
             listener_sample_count++;
-            add_vector_xyz(&listener_velocity, &listener_velocity, &relative_velocity);
+            fast_vec_add(&listener_velocity, &listener_velocity, &relative_velocity);
             current_index = previous_history_index;
             previous_history_index = (current_index + 3) % 4;
         } while (previous_history_index != D_0013E550.listener_history_position);
     }
     if (listener_sample_count >= 2) {
-        scale_vector_xyz(&listener_velocity, &listener_velocity,
+        fast_vec_scale(&listener_velocity, &listener_velocity,
                          1.0f / convert_integer_to_float(listener_sample_count));
     }
 
@@ -265,13 +265,13 @@ s32 sound_update(void) {
             if (D_0013E550.voices[slot_index].flags & 0x40) {
                 transform_vector_by_basis(&direction, &D_0013E550.voices[slot_index].position_offset,
                               &moby->rotation);
-                add_vector_xyz(&direction, &direction, &moby->position);
-                subtract_vector_xyz(&relative_velocity, &direction,
+                fast_vec_add(&direction, &direction, &moby->position);
+                fast_vec_sub(&relative_velocity, &direction,
                                     &D_0013E550.voices[slot_index].position);
                 qcopy(&D_0013E550.voices[slot_index].position, &direction);
             } else {
                 D_0013E550.voices[slot_index].position.f[2] -= 1.0f;
-                subtract_vector_xyz(&relative_velocity,
+                fast_vec_sub(&relative_velocity,
                                     &D_0013E550.voices[slot_index].moby->position,
                                     &D_0013E550.voices[slot_index].position);
                 qcopy(&D_0013E550.voices[slot_index].position,
@@ -281,10 +281,10 @@ s32 sound_update(void) {
         } else {
             qzero(&relative_velocity);
         }
-        subtract_vector_xyz(&relative_velocity, &relative_velocity, &listener_velocity);
-        subtract_vector_xyz(&direction, camera_position, &D_0013E550.voices[slot_index].position);
-        normalize_vector_xyz(&direction, &direction, 1.0f);
-        radial_velocities[slot_index] = dot_vectors_xyz(&direction, &relative_velocity);
+        fast_vec_sub(&relative_velocity, &relative_velocity, &listener_velocity);
+        fast_vec_sub(&direction, camera_position, &D_0013E550.voices[slot_index].position);
+        fast_vec_normalize(&direction, &direction, 1.0f);
+        radial_velocities[slot_index] = fast_vec_dot(&direction, &relative_velocity);
 
         if (!(D_0013E550.voices[slot_index].flags & 0x10)) {
             distance_volume = calculate_voice_volume(&D_0013E550.voices[slot_index],

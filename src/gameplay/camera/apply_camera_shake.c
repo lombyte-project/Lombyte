@@ -15,7 +15,7 @@ extern char camera_rows[] __asm__("D_00187290");
 extern u8 D_001872B0[];
 
 extern s32 fast_dec_timer(s32 *) __asm__("func_001F9740");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("FUN_001f9bf8");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_normalize_angle(f32) __asm__("func_001FA610");
@@ -53,7 +53,7 @@ void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
             } else {
                 fast_vec_normalize(sp_slot, camera_rows, val);
             }
-            add_vector_xyz(D_00187080, D_00187080, sp_slot);
+            fast_vec_add(D_00187080, D_00187080, sp_slot);
         } else {
             shake->unkC = 0;
         }

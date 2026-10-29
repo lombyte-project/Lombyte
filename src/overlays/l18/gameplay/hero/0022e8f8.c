@@ -56,7 +56,7 @@ extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L18_0015F638;
 extern float D_L18_001677D8 __attribute__((section(".data")));
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -75,7 +75,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern float vector_length_xyz(void *a);
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L18_0015F678") = 0;
 extern int D_L18_0015F6DC_d __asm__("D_L18_0015F6DC");
@@ -141,12 +141,12 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void set_hero_state_for_vehicle_mode(void) __asm__("FUN_L15_0021ab60");
-extern void add_vector_xyz(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_vector(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void scale_vector_xyz(void *, void *, float);
-extern void tick_countdown_32(int *arg0);
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_dec_timer(int *arg0) __asm__("func_001F9740");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
@@ -298,7 +298,7 @@ void process_hero_state_transitions(void) {
                                 hero.fidget_index = record_index;
                                 rec = &l18_hero_idle_fidget_entries[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
-                                rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
+                                rec->duration_frames = scale_time(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
                                     hero_set_state(HERO_STATE_FIDGET, 1);
                                 } else {
@@ -996,7 +996,7 @@ void process_hero_state_transitions(void) {
                     }
                     if (controller_state.no_direction != 0 && !(hero.state_timer < scale_game_frames(0x1E))) {
                         if (hero_set_state(HERO_STATE_IDLE, 0)) {
-                            clear_vector(hero.motion.momentum.f);
+                            clear_u64_value(hero.motion.momentum.f);
                             set_hero_animation(get_hero_help_value(0), 0, scale_game_frames(0xF));
                         }
                     }
@@ -1238,7 +1238,7 @@ void process_hero_state_transitions(void) {
                                 trajectory_and_probe_workspace[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
                                 trajectory_and_probe_workspace[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
                                 trajectory_and_probe_workspace[2] = 0.0f;
-                                add_vector_xyz(trajectory_and_probe_workspace, trajectory_and_probe_workspace, temporary_position);
+                                fast_vec_add(trajectory_and_probe_workspace, trajectory_and_probe_workspace, temporary_position);
                                 if (collision_line(temporary_position, trajectory_and_probe_workspace, 2, 0, 0)) {
                                     ok = 0;
                                 }
@@ -1407,9 +1407,9 @@ void process_hero_state_transitions(void) {
                                     /* Step a copy of the hero position along its current path. */
                                     if (sample_path((int *)hero.rail_spline, temporary_position, &path_seg,
                                                          &path_t, hero.rail_spline_loops, d)) {
-                                        scale_vector_xyz(trajectory_and_probe_workspace, hero.motion.displacement.f,
+                                        fast_vec_scale(trajectory_and_probe_workspace, hero.motion.displacement.f,
                                                          scale_game_frames(0x30));
-                                        add_vector_xyz(temporary_position, hero.motion.pos.f, trajectory_and_probe_workspace);
+                                        fast_vec_add(temporary_position, hero.motion.pos.f, trajectory_and_probe_workspace);
                                     }
                                     temporary_position[0] += fast_cos(ang) * f;
                                     temporary_position[1] += fast_sin(ang) * f;
@@ -1973,9 +1973,9 @@ void process_hero_state_transitions(void) {
                     } else if (hero.rail_land_frames == 0 &&
                                (hero.state.current == HERO_STATE_PACK_JUMP || hero.state.current == HERO_STATE_PACK_LONG_JUMP) &&
                                hero.wall_probe_distance < 0.9f && hero.wall_hit != 0) {
-                        if (vector_length_xyz(hero.motion.velocity.f) > frame_time * 7.0f) {
-                            float displacement_length = vector_length_xyz(hero.motion.displacement.f);
-                            if (displacement_length < vector_length_xyz(hero.motion.velocity.f) * 0.5f &&
+                        if (fast_vec_length(hero.motion.velocity.f) > frame_time * 7.0f) {
+                            float displacement_length = fast_vec_length(hero.motion.displacement.f);
+                            if (displacement_length < fast_vec_length(hero.motion.velocity.f) * 0.5f &&
                                 hero.ledge_found == 0 && hero.ground_distance < 2.0f) {
                                 hero_set_state(HERO_STATE_WALL_BONK, 1);
                                 break;
@@ -2089,7 +2089,7 @@ void process_hero_state_transitions(void) {
                                 break;
                             }
                             set_hero_animation(5, 0, -2.0f);
-                            scale_vector_xyz(hero.motion.momentum.f, hero.motion.momentum.f, 0.8f);
+                            fast_vec_scale(hero.motion.momentum.f, hero.motion.momentum.f, 0.8f);
                             break;
                         }
                         if (hero.on_slip_ground == 0 && hero.move_lock_timer == 0) {

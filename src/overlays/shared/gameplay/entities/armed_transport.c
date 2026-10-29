@@ -29,7 +29,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L16_0015F580[] __attribute__((section(".sdata")));
 extern float armed_transport_passenger_attachment_offset[4] __asm__("D_L16_001D9680");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float distance_xyz(void *) __asm__("FUN_001f9b48");
+extern float fast_vec_dist(void *) __asm__("FUN_001f9b48");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_L16_0015F5C4;
@@ -56,12 +56,12 @@ extern void compute_armed_transport_path_headings(void *) __asm__("FUN_L16_002e2
 void update_armed_transport_joint_animation(char *moby) __asm__("FUN_L16_002e3050");
 
 extern void update_armed_transport_joint_animation(char *) __asm__("FUN_L16_002e3050");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 void set_blarg_elite_commando_parent_transform(char *moby, void *owner, void *position, char *vector) __asm__("FUN_L16_002d3dc0");
 void start_blarg_elite_commando_return_to_initial_position(char *moby, int arg) __asm__("FUN_L16_002d3de0");
@@ -173,7 +173,7 @@ void armed_transport_update(char *transport_moby) {
                 clear_u64_value(rotation.f);
                 rotation.f[2] = fast_add_rotations(*(float *)(transport_moby + 0x48), 3.14159f);
                 transform_vector_by_basis(vector.f, armed_transport_passenger_attachment_offset, transport_moby + 0xC0);
-                add_vector_xyz(vector.f, vector.f, transport_moby + 0x10);
+                fast_vec_add(vector.f, vector.f, transport_moby + 0x10);
                 start_blarg_elite_commando_return_to_initial_position(passenger, scale_game_frames(90));
                 *slot = -1;
                 *(int *)(transport_data + 0x184) = scale_game_frames(30);
@@ -229,8 +229,8 @@ void armed_transport_update(char *transport_moby) {
     }
     case ARMED_TRANSPORT_STATE_SPAWN_DIRECTED_MOBY:
         moby_point_position(transport_moby, 1, vector.f);
-        subtract_vector_xyz(rotation.f, transport_data + 0x70, vector.f);
-        normalize_vector_xyz(rotation.f, rotation.f, *(float *)&armed_transport_spawn_direction_scale * frame_time);
+        fast_vec_sub(rotation.f, transport_data + 0x70, vector.f);
+        fast_vec_normalize(rotation.f, rotation.f, *(float *)&armed_transport_spawn_direction_scale * frame_time);
         func_0022ED80_update(1, 0, transport_moby);
         spawn_class_32_moby(transport_moby, (char *)rotation.f, vector.f, transport_data + 0x70, scale_game_frames(45));
         transport_moby[0x20] = 6;
@@ -522,7 +522,7 @@ typedef struct {
 typedef struct { char pad00[8]; float yaw, phase; float cardinal_angles[4]; } RingData;
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_add_rotations_c(f32, f32) __asm__("func_001FA580");
+extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern float grindrail_barrier_ring_uvs[4][2] __asm__("D_L16_001D9780");
 extern float D_L16_001D9A70[4][2];
 extern float grindrail_barrier_ring_vertex_positions[4][4] __asm__("D_L16_001D97C0");
@@ -535,8 +535,8 @@ extern float grindrail_barrier_accent_vertex_positions[4][4] __asm__("D_L16_001D
 extern int fast_tween_color(int,int,float) __asm__("FUN_001fa6e0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void vu_euler_rotation_basis(void *, void *) __asm__("func_001FA030");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 
 void draw_grindrail_barrier_effect(char *barrier_moby) __asm__("FUN_L16_002e58d8");
 
@@ -570,7 +570,7 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
             v[k * 2] = grindrail_barrier_ring_uvs[k][1];
             color_base[k] = *(int *)&grindrail_barrier_ring_base_color;
             qcopy(quad.position[k], grindrail_barrier_ring_vertex_positions[k]);
-            scale_vector_xyz(quad.position[k], quad.position[k], scale);
+            fast_vec_scale(quad.position[k], quad.position[k], scale);
         }
     }
     angles = data->cardinal_angles;
@@ -582,8 +582,8 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
     for (i = 0; i < *(int *)&grindrail_barrier_ring_quad_count;) {
         float blend;
         int color, j;
-        rotation[0] = fast_add_rotations_c(data->yaw, (float)i * angle_step);
-        vu_euler_rotation_basis(transform, rotation);
+        rotation[0] = fast_add_rotations(data->yaw, (float)i * angle_step);
+        euler_rotation_basis(transform, rotation);
         if (phase > 0.5f) blend = (-phase + 1.0f) + (-phase + 1.0f);
         else blend = phase + phase;
         ++i;
@@ -608,7 +608,7 @@ void draw_grindrail_barrier_effect(char *barrier_moby) {
         int count;
         for (count = 3; count >= 0; --count) {
             rotation[0] = angles[3 - count];
-            vu_euler_rotation_basis(transform, rotation);
+            euler_rotation_basis(transform, rotation);
             draw_geometry_quad(&quad, transform, 0);
         }
     }

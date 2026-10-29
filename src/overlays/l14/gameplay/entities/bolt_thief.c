@@ -51,8 +51,8 @@ extern float bolt_thief_puff_final_right_offset_gp __asm__("D_L14_00161FA0") __a
 int D_L14_00161FA4 = 0x7f204080;
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
 extern Part_2FF358 *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
@@ -69,13 +69,13 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     int i, j, puff_signed_amount, puff_lifetime_frames, k, col;
     float puff_size;
 
-    scale_vector_xyz(A, source_moby->right, bolt_thief_puff_initial_right_offset_gp);
-    add_vector_xyz(B, source_moby->pos, A);
-    scale_vector_xyz(A, source_moby->up, bolt_thief_puff_up_offset_gp);
-    add_vector_xyz(B, B, A);
+    fast_vec_scale(A, source_moby->right, bolt_thief_puff_initial_right_offset_gp);
+    fast_vec_add(B, source_moby->pos, A);
+    fast_vec_scale(A, source_moby->up, bolt_thief_puff_up_offset_gp);
+    fast_vec_add(B, B, A);
     qcopy(C, B);
-    scale_vector_xyz(A, source_moby->fwd, bolt_thief_puff_forward_offset_gp);
-    add_vector_xyz(B, B, A);
+    fast_vec_scale(A, source_moby->fwd, bolt_thief_puff_forward_offset_gp);
+    fast_vec_add(B, B, A);
     for (i = 1; i >= 0; i--) {
         puff_signed_amount = func_002140B0_2FF358(0x10);
         k = func_002140B0_2FF358(2) == 0 ? puff_signed_amount : -puff_signed_amount;
@@ -89,9 +89,9 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
             f->bB = puff->life;
         }
     }
-    scale_vector_xyz(A, source_moby->right, bolt_thief_puff_middle_right_offset_delta_gp);
+    fast_vec_scale(A, source_moby->right, bolt_thief_puff_middle_right_offset_delta_gp);
     puff_size = 100000.0f;
-    add_vector_xyz(B, B, A);
+    fast_vec_add(B, B, A);
     puff_signed_amount = 0x10;
     puff_lifetime_frames = scale_game_frames(2);
     for (j = 0; j < 3; j++) {
@@ -110,8 +110,8 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
         puff_size = puff_size - 20000.0f;
     }
     puff_size = 300000.0f;
-    scale_vector_xyz(A, source_moby->right, bolt_thief_puff_final_right_offset_gp);
-    add_vector_xyz(B, C, A);
+    fast_vec_scale(A, source_moby->right, bolt_thief_puff_final_right_offset_gp);
+    fast_vec_add(B, C, A);
     col = random_int_between(0x40, 0x80);
     k = (col << 8) | 0x7F000000;
     col = col | ((col << 16) | k);
@@ -231,7 +231,7 @@ extern char *spawn_floating_mine(void *, void *) __asm__("FUN_L14_002ffaf8");
 extern char D_L14_001FCF20[], D_L14_001FCF58[], D_L14_001FCFA0[], D_L14_001FCFD8[], D_L14_001FD020[];
 extern float fast_arc_tan(float,float) __asm__("FUN_001f9e90");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
-extern int stub_printf() __asm__("FUN_001e93b0");
+extern int debug_print() __asm__("FUN_001e93b0");
 extern int mine_fall(void *,void *) __asm__("FUN_L00_0025c698");
 int update_bolt_thief_path_movement(struct Moby *moby) __asm__("FUN_L14_002fea80");
 
@@ -294,29 +294,29 @@ void bolt_thief_update(L16CrateMoby *moby) {
             set_moby_animation(moby, 4, 0);
         } else {
             if (moby_data->path == -1) {
-                stub_printf(D_L14_001FCF20, moby->id);
+                debug_print(D_L14_001FCF20, moby->id);
                 mark_moby_for_removal(moby);
                 return;
             }
             if (*(int *)D_L14_001B0BB0[moby_data->path] == 0) {
-                stub_printf(D_L14_001FCF58, moby->id);
+                debug_print(D_L14_001FCF58, moby->id);
                 mark_moby_for_removal(moby);
                 return;
             }
             if (moby_data->mode != 1) {
                 if (moby_data->other_path == -1) {
-                    stub_printf(D_L14_001FCFA0, moby->id);
+                    debug_print(D_L14_001FCFA0, moby->id);
                     mark_moby_for_removal(moby);
                     return;
                 }
                 if (*(int *)D_L14_001B0BB0[moby_data->other_path] == 0) {
-                    stub_printf(D_L14_001FCFD8, moby->id);
+                    debug_print(D_L14_001FCFD8, moby->id);
                     mark_moby_for_removal(moby);
                     return;
                 }
             }
             if (moby_data->trigger == -1) {
-                stub_printf(D_L14_001FD020, moby->id);
+                debug_print(D_L14_001FD020, moby->id);
                 mark_moby_for_removal(moby);
                 return;
             }
@@ -435,7 +435,7 @@ extern float vendor_spring(float *p, float *v, float t, float u1, float u2, floa
 extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") __attribute__((sda));
 extern char *D_L14_001B0BB0[];
-extern void subtract_vector_xyz(void *, void *, void *);
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);
 
 int update_bolt_thief_path_movement(struct Moby *moby) {
@@ -460,7 +460,7 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
                      bolt_thief_path_spring_damping_gp, 0.0f);
     vendor_spring(&moby->pos.z, (float *)(data + 0xEC), pos[2], bolt_thief_path_spring_gain_gp,
                      bolt_thief_path_spring_damping_gp, 0.0f);
-    subtract_vector_xyz(delta, pos, &moby->pos);
+    fast_vec_sub(delta, pos, &moby->pos);
     if (absolute_float(delta[0]) > 0.01f) {
         if (absolute_float(delta[1]) > 0.01f) {
             FUN_L00_00258278(moby, fast_arc_tan(delta[0], delta[1]), (float *)(data + 0xF0),
@@ -533,7 +533,7 @@ typedef struct {
     float aim[4];
 } L14Player;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -675,7 +675,7 @@ void sam_update(L14WatchMoby *moby) {
         if (fast_dec_timer(&moby_data->target_timer)) {
             float heading;
             moby_data->target_timer =
-                truncate_float_to_s32(multiply_global_factor_ed64(random_float_between(180.0f, 300.0f)));
+                truncate_float_to_s32(scale_time(random_float_between(180.0f, 300.0f)));
             heading =
                 fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(moby_data->target, 6.0f, heading,

@@ -18,7 +18,7 @@ extern u8 *occl_previous_grid __asm__("D_0015F650");
 
 extern u8 *parse_occlusion_grid(s32, s32, s32) __asm__("FUN_001f2690");
 extern u8 *get_occlusion_grid_from_pair(s32, s32, s32, s32, s32, s32, f32) __asm__("FUN_001f2768");
-extern void fast_mem_zero16(u8 *, s32) __asm__("FUN_001f9810");
+extern void clear_blocks_16(u8 *, s32) __asm__("FUN_001f9810");
 extern void fast_mem_copy(u8 *, u8 *, s32) __asm__("FUN_001f98d0");
 extern void fast_mem_or16(u8 *, u8 *, u8 *, s32) __asm__("FUN_001f98f8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -58,7 +58,7 @@ void build_occlusion_visibility(void) {
             gz = get_occlusion_grid_from_pair(x, y, z - 1, x, y, z + 1,
                                               D_00186F40.z * scale - convert_integer_to_float(z));
             if (gx != 0 || gy != 0 || gz != 0) {
-                fast_mem_zero16(occl_visibility_merged, 0x80);
+                clear_blocks_16(occl_visibility_merged, 0x80);
                 if (gx != 0) {
                     fast_mem_or16(occl_visibility_merged, occl_visibility_merged, gx, 0x80);
                 }

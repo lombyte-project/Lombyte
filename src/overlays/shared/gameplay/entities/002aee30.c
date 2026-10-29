@@ -17,7 +17,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
 
 extern char moby_segment_puff_local_endpoint_table[] __asm__("D_L04_001D2C90");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void spawn_smoke_puff_trail_with_endpoint_bursts(void *, void *, void *, int, float, float) __asm__("FUN_L04_002c41e0");
 
@@ -31,12 +31,12 @@ void spawn_moby_table_segment_puffs(char *moby, int i, int j, int k) {
     qcopy(first_world_position, pi);
     first_world_position[3] = 1.0f;
     transform_vector_by_basis(first_world_position, first_world_position, moby + 0xC0);
-    add_vector_xyz(first_world_position, first_world_position, moby + 0x10);
+    fast_vec_add(first_world_position, first_world_position, moby + 0x10);
     pj = moby_segment_puff_local_endpoint_table + j * 16;
     qcopy(second_world_position, pj);
     second_world_position[3] = 1.0f;
     transform_vector_by_basis(second_world_position, second_world_position, moby + 0xC0);
-    add_vector_xyz(second_world_position, second_world_position, moby + 0x10);
+    fast_vec_add(second_world_position, second_world_position, moby + 0x10);
     spawn_smoke_puff_trail_with_endpoint_bursts(moby, first_world_position, second_world_position, k, *(float *)(pi + 0xC) * *(float *)&moby_segment_puff_scale_multiplier,
                      *(float *)(pj + 0xC) * *(float *)&moby_segment_puff_scale_multiplier);
 }
@@ -88,7 +88,7 @@ typedef struct {
 } ShotVars;
 
 extern struct Moby *create_moby(int oclass) __asm__("FUN_0020c4f8");
-extern float atan2_f(float, float) __asm__("FUN_001f9e90");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");  /* distance between two points */
 extern void spawn_source_attached_fading_effect_particle(struct Moby *, int color, int life, int, float size) __asm__("FUN_L00_0026daa0");
@@ -124,7 +124,7 @@ struct Moby *spawn_class_b8_projectile(struct Moby *owner, void *pos, void *dir,
             spawned_moby->scale = spawned_moby->scale * 0.5f;
         spawned_moby->rot.x = 0.0f;
         spawned_moby->rot.y = 0.0f;
-        spawned_moby->rot.z = atan2_f(direction_copy->x, direction_copy->y);
+        spawned_moby->rot.z = fast_arc_tan(direction_copy->x, direction_copy->y);
         qcopy(&spawned_moby->pos, position_copy);
         qcopy(&vars->dir, direction_copy);
         vars->spin = random_float_between(-(frame_time_macro * 1.5707964f), frame_time_macro * 1.5707964f);
@@ -171,8 +171,8 @@ extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");                   
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line(void *, void *, s32, struct Moby *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
@@ -204,7 +204,7 @@ void update_class_b8_projectile(struct Moby *moby)
         range = 100.0f;
     hero_distance = fast_vec_dist(&moby->pos, &hero.motion.pos);
     qcopy(&old, &moby->pos);
-    add_vector_xyz(&moby->pos, &moby->pos, &v->dir);
+    fast_vec_add(&moby->pos, &moby->pos, &v->dir);
     if (v->unk28 == 0 && v->unk24 != 0 && v->hero_dist < hero_distance && hero_distance < 3.0f) {
         allocate_voice_for_target_entry(0, 0, moby);
         v->unk28 = 1;
@@ -256,9 +256,9 @@ void update_class_b8_projectile(struct Moby *moby)
             random_vector.f[2] = random_float_between(-1.0f, 1.0f);
             push.q = random_vector.q;
             reflect_vector(&random_vector, v, D_L04_00174000);
-            normalize_vector_xyz(&push, &push, vector_length_xyz(&random_vector) * 0.5f);
-            add_vector_xyz(&push, &random_vector, &push);
-            normalize_vector_xyz(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
+            fast_vec_normalize(&push, &push, fast_vec_length(&random_vector) * 0.5f);
+            fast_vec_add(&push, &random_vector, &push);
+            fast_vec_normalize(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
             FUN_L00_0026dd20(&moby->pos, &push, 0x7F2F4F6F,
                              random_int_between(scale_game_frames(10), scale_game_frames(15)), 30000.0f);
         }

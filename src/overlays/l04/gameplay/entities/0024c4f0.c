@@ -31,9 +31,9 @@ int find_first_positive_polygon_edge_cross_xy(float *query_point, float *poly, i
 /* closest point on a line to a point: writes the point, returns the parameter */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/mobyutil_0024D4A8.c: func_L04_0024D618), where it is exact; names translated to the US level program. */
 
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 float find_closest_point_on_segment_xy(float *closest_point, float *segment_start, float *segment_end, float *query_point) __asm__("FUN_L04_0024c660");
@@ -45,12 +45,12 @@ float find_closest_point_on_segment_xy(float *closest_point, float *segment_star
     float perpendicular_offset_point_xy[4];
     float det, unclamped_segment_parameter, clamped_segment_parameter;
 
-    subtract_vector_xyz(segment_direction, segment_end, segment_start);
-    subtract_vector_xyz(query_to_start_offset, segment_start, query_point);
+    fast_vec_sub(segment_direction, segment_end, segment_start);
+    fast_vec_sub(query_to_start_offset, segment_start, query_point);
     perpendicular_offset_point_xy[0] = segment_direction[1];
     perpendicular_offset_point_xy[1] = -segment_direction[0];
-    add_vector_xyz(perpendicular_offset_point_xy, query_point, perpendicular_offset_point_xy);
-    subtract_vector_xyz(perpendicular_direction_xy, query_point, perpendicular_offset_point_xy);
+    fast_vec_add(perpendicular_offset_point_xy, query_point, perpendicular_offset_point_xy);
+    fast_vec_sub(perpendicular_direction_xy, query_point, perpendicular_offset_point_xy);
     det = segment_direction[1] * perpendicular_direction_xy[0] - segment_direction[0] * perpendicular_direction_xy[1];
     if (absolute_float(det) < 0.0001f) {
         qcopy(closest_point, segment_start);
@@ -64,8 +64,8 @@ float find_closest_point_on_segment_xy(float *closest_point, float *segment_star
         clamped_segment_parameter = 0.0f;
     if (1.0f < clamped_segment_parameter)
         clamped_segment_parameter = 1.0f;
-    scale_vector_xyz(closest_point, segment_direction, clamped_segment_parameter);
-    add_vector_xyz(closest_point, closest_point, segment_start);
+    fast_vec_scale(closest_point, segment_direction, clamped_segment_parameter);
+    fast_vec_add(closest_point, closest_point, segment_start);
     return unclamped_segment_parameter;
 }
 #define NOT_SDA

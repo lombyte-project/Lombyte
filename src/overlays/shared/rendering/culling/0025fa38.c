@@ -14,7 +14,7 @@ typedef struct {
 } Vp __attribute__((aligned(16)));
 
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 int test_point_in_transformed_unit_cylinder(void *point, int i) __asm__("FUN_L00_0025fa38");
@@ -27,7 +27,7 @@ int test_point_in_transformed_unit_cylinder(void *point, int i) {
         return 0;
     }
     volume_entry = D_L00_001600FC + i * 128;
-    subtract_vector_xyz(&point_offset, point, volume_entry + 0x30);
+    fast_vec_sub(&point_offset, point, volume_entry + 0x30);
     point_offset.w = 0;
     transform_vector_by_basis(&transformed_point_offset, &point_offset, volume_entry + 0x40);
     if (vector_length_xy(&transformed_point_offset) < 1.0f) {
@@ -44,7 +44,7 @@ int test_point_in_transformed_unit_cylinder(void *point, int i) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260B68), where it is exact; names translated to the US level program. */
 
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 /* True when p lies inside the unit box of D_L00_001600F4 entry idx. */
@@ -56,7 +56,7 @@ int test_point_in_transformed_unit_sphere(float *point, int volume_index) {
     char *volume_entry;
     if (volume_index >= 0) {
         volume_entry = (char *)D_L00_001600F4 + volume_index * 128;
-        subtract_vector_xyz(volume_relative_offset, point, volume_entry + 0x30);
+        fast_vec_sub(volume_relative_offset, point, volume_entry + 0x30);
         volume_relative_offset[3] = 0;
         transform_vector_by_basis(transformed_volume_offset, volume_relative_offset, volume_entry + 0x40);
         if (fast_vec_length(transformed_volume_offset) < 1.0f)

@@ -13,8 +13,8 @@ typedef struct {
 } VoicePositionRecord;
 extern VoicePositionRecord voice_positions[] __asm__("D_0013E5E0");
 extern u8 voice_volume_records[] __asm__("D_0013E5C0");
-extern void clear_voice_position(VoiceVector *) __asm__("func_001F99F8");
-extern s32 game_random_remainder(s32) __asm__("func_00213260");
+extern void clear_u64_value(VoiceVector *) __asm__("func_001F99F8");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 calculate_voice_volume(VoiceSlot *, VoiceVector *) __asm__("FUN_0022c7e8");
 
 s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *,
@@ -105,7 +105,7 @@ copy_explicit_position:
     goto calculate_volume;
 clear_position:
     flags |= 0x11;
-    clear_voice_position(&voice_positions[slot_index].value);
+    clear_u64_value(&voice_positions[slot_index].value);
 calculate_volume:
     if (flags & 0x10) {
         goto commit_if_audible;
@@ -129,7 +129,7 @@ check_calculated_volume:
     pitch_bend_min = definition->pitch_bend_min;
     if (pitch_bend_max != pitch_bend_min) {
         pitch_bend =
-            game_random_remainder(pitch_bend_max - pitch_bend_min) + definition->pitch_bend_min;
+            random_integer_below(pitch_bend_max - pitch_bend_min) + definition->pitch_bend_min;
     } else {
         pitch_bend = pitch_bend_max;
     }

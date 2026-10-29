@@ -16,10 +16,10 @@ extern f32 warp_trail_widths __asm__("D_001604D0") __attribute__((sda));
 
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, s32, s32) __asm__("func_001F7D30");
-extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
-extern void normalize_vector(void *, void *, f32) __asm__("func_001F9BF8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("func_001F9BF8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern u32 fast_tween_color(u32, u32, f32) __asm__("func_001FA6E0");
 
@@ -112,16 +112,16 @@ texture_ready:
                     if (page == 0) {
                         qcopy(&workspace.edge_normals[3], &workspace.edge_normals[1]);
                     }
-                    cross_vectors_xyz(&workspace.edge_normals[0],
+                    fast_vec_cross(&workspace.edge_normals[0],
                                       &workspace.cross_strip_differences[0],
                                       &workspace.edge_normals[1]);
-                    cross_vectors_xyz(&workspace.edge_normals[1],
+                    fast_vec_cross(&workspace.edge_normals[1],
                                       &workspace.cross_strip_differences[1],
                                       &workspace.edge_normals[1]);
-                    cross_vectors_xyz(&workspace.edge_normals[2],
+                    fast_vec_cross(&workspace.edge_normals[2],
                                       &workspace.cross_strip_differences[2],
                                       &workspace.edge_normals[3]);
-                    cross_vectors_xyz(&workspace.edge_normals[3],
+                    fast_vec_cross(&workspace.edge_normals[3],
                                       &workspace.cross_strip_differences[3],
                                       &workspace.edge_normals[3]);
                     position = &quad.positions[0];
@@ -137,10 +137,10 @@ texture_ready:
                             warp_trail_colors[level_render_state.content_variant].w0,
                             warp_trail_colors[level_render_state.content_variant].w1, progress);
                         progress = 1.0f - progress * progress;
-                        normalize_vector(position, &workspace.edge_normals[vertex],
+                        fast_vec_normalize(position, &workspace.edge_normals[vertex],
                                          progress *
                                              (&warp_trail_widths)[level_render_state.content_variant]);
-                        add_vectors(position, position,
+                        fast_vec_add(position, position,
                                     get_history_position(strip, (history_index + history_step) & 0x1F));
                         position++;
                     }
@@ -155,10 +155,10 @@ texture_ready:
                         age = history_step;
                         age--;
                         progress = convert_integer_to_float(page - age) * 0.03125f;
-                        normalize_vector(side_position, side_normal,
+                        fast_vec_normalize(side_position, side_normal,
                                          (1.0f - progress * progress) *
                                              (&warp_trail_widths)[level_render_state.content_variant]);
-                        add_vectors(side_position, side_position,
+                        fast_vec_add(side_position, side_position,
                                     get_history_position(strip, (history_index + history_step) & 0x1F));
                         side_normal++;
                         side_position++;

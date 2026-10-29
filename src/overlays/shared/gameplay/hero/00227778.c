@@ -13,7 +13,7 @@ extern void queue_animation_update(int, int, void *, void *, void *, void *, int
 extern void hud_init_particles(void) __asm__("FUN_L00_00236268");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
 extern void draw_hud_stars(void) __asm__("FUN_L00_002365a8");
-extern int ray_hits(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* The same function under a void-returning prototype, as an older
    declaration of it would have read; see the 0x33 call below. */
@@ -62,7 +62,7 @@ collision_mode:
     start.f[2] = hero.water_surface_z + 0.01f;
     qcopy(&end, &start);
     end.f[2] += 0.3f;
-    if (ray_hits(&start, &end, 2, hero.moby, 0)) {
+    if (collision_line(&start, &end, 2, hero.moby, 0)) {
         if (D_0013D4C0[4] != 0 && (D_0013CAE0 & 10) != 0) {
             state = 0x35;
             goto change_state;

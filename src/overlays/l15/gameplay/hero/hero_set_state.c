@@ -77,7 +77,7 @@ extern void pool_splash(void *, int, int, float, float, float, float) __asm__("F
 extern void set_hero_state_for_vehicle_mode(void) __asm__("FUN_L15_0021ab60");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_vector(void *);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
@@ -171,7 +171,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
-        clear_vector(&p->motion.momentum);
+        clear_u64_value(&p->motion.momentum);
         p->rand_timer.range = 0x68;
         if (b) {
             if (get_hero_help_value(0) == 0x54) {
@@ -718,7 +718,7 @@ int hero_set_state(int a, int b) {
             q->swing_rope_spring_k = frame_scale_sq * 0.025f;
             q->unk9C8 = frame_scale_sq * 0.33f;
             q->swing_rope_max_speed = frame_time * 11.0f;
-            clear_vector(&q->motion.rot_spring_vel);
+            clear_u64_value(&q->motion.rot_spring_vel);
             q->grapple_lockout_timer = scale_game_frames(0x28);
             if (*(float *)(d + 0x24) != 0.0f)
                 q->swing_rope_spring_k = *(float *)(d + 0x24);
@@ -750,7 +750,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
-        clear_vector(&p->motion.rot_spring_vel);
+        clear_u64_value(&p->motion.rot_spring_vel);
         qcopy(&p->motion.velocity, &p->motion.resolved_velocity);
         if (b)
             set_hero_animation(0xB, 0, (float)scale_game_frames(0xF));
@@ -1735,8 +1735,8 @@ int hero_set_state(int a, int b) {
         if (frame_time * 2.5f < p->grind_base_speed)
             p->grind_base_speed = frame_time * 2.5f;
         p->unk5AC.i = 0;
-        clear_vector(&p->motion.velocity);
-        clear_vector(&p->motion.displacement);
+        clear_u64_value(&p->motion.velocity);
+        clear_u64_value(&p->motion.displacement);
         p->motion.velocity.f[2] = frame_time * 10.0f;
         if (b)
             set_hero_animation(0x10, 2, -3.0f);
@@ -1800,7 +1800,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->item_select_blocked = 1;
         p->item_use_locked = 1;
-        clear_vector(&p->motion.velocity);
+        clear_u64_value(&p->motion.velocity);
         if (b)
             set_hero_animation(0xB, 0, -1.0f);
         break;

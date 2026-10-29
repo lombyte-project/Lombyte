@@ -39,7 +39,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) __asm__("FUN_00213928");
@@ -110,7 +110,7 @@ s32 fun_00213928(O_25a478 *hit_recipient_moby, P_25a478 *hit_record, Q_25a478 *q
             hit_blend_vector.f[2] = 1.0f;
             fast_vec_normalize(&hit_blend_vector, &hit_blend_vector, fast_vec_length(hit_vector) * 0.7f);
             fast_vec_scale(hit_vector, hit_vector, 0.3f);
-            add_vector_xyz(&combined_hit_vector, hit_vector, &hit_blend_vector);
+            fast_vec_add(&combined_hit_vector, hit_vector, &hit_blend_vector);
             hit_vector->q = combined_hit_vector.q;
             set_vector_length_xy(hit_vector, hit_vector, 1.0f);
         }

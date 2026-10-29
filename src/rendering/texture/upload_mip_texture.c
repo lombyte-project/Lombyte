@@ -33,7 +33,7 @@ extern void FlushCache(s32);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);
 extern s32 sceGsExecLoadImage(sceGsLoadImage *, u128 *);
 extern s32 wait_for_graphics_pipeline_idle(s32, s32) __asm__("func_00120558");
-extern s32 highest_set_bit_index(s32) __asm__("func_001F97A0");
+extern s32 log2dim(s32) __asm__("func_001F97A0");
 
 s32 upload_mip_texture(MipTextureHeader *tex, u64 *regs) __asm__("FUN_00202270");
 
@@ -76,8 +76,8 @@ s32 upload_mip_texture(MipTextureHeader *texture_source, u64 *regs) {
         }
         break;
     }
-    upload.width_log2 = highest_set_bit_index(texture_source->width);
-    upload.height_log2 = highest_set_bit_index(texture_source->height);
+    upload.width_log2 = log2dim(texture_source->width);
+    upload.height_log2 = log2dim(texture_source->height);
     upload.mip_addresses[0] = (s32)texture_source->data + upload.palette_size;
     switch (texture_source->pixel_storage_format) {
     case PIXEL_FORMAT_32_BIT:

@@ -17,7 +17,7 @@
 
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void fast_mem_zero16(void *, int) __asm__("FUN_001f9810");
+extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L16_0021e398");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -29,7 +29,7 @@ void apply_hero_ground_material_effects(void) {
     int keep = hero_data->ground_sound_class;
     int saved_ground_type = hero_data->ground_type;
     int level_index;
-    fast_mem_zero16(&hero_data->ground_type, 0x10);
+    clear_blocks_16(&hero_data->ground_type, 0x10);
     hero_data->ground_sound_class = keep;
     hero_data->ground_type = -1;
     hero_data->wading = 0;
@@ -377,18 +377,18 @@ typedef union {
     u128_2133a8 q;
     f32 f[4];
 } V_2133a8;
-extern void vzero_2133a8(void *) __asm__("FUN_001f99f8");
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_002347c0(void);
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00233810(void *, void *, f32);
 extern void FUN_L00_002334d0(void *, void *, f32);
-extern void vadd_2133a8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void vsub_2133a8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 vlen_2133a8(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern s32 coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
-extern s32 coll2_2133a8(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
+extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 FUN_L00_001f3170(void *, f32);
-extern void vscl_2133a8(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_2133a8 D_L16_00174270[] __attribute__((section(".data")));
 s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L16_00210b60");
 
@@ -404,7 +404,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
         return 1;
     }
     qcopy(&old, &hero.motion.pos.q);
-    vzero_2133a8(&collision_position_offset);
+    clear_u64_value(&collision_position_offset);
     if (hero.path_constrain_pending != 0) {
         FUN_L00_002347c0();
         hero.path_constrain_pending = 0;
@@ -412,7 +412,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     if (hero.state.control_mode != 0x11) {
         if (hero.state.control_mode == 0x16) {
             transform_hero_local_offset_to_world(&collision_position_offset, 0.0f, 0.0f, 0.7f);
-            vsub_2133a8(&collision_position_offset, &collision_position_offset, &hero.motion.pos.q);
+            fast_vec_sub(&collision_position_offset, &collision_position_offset, &hero.motion.pos.q);
         } else if (hero.gravity_mode != 0 || hero.unk1F8 != 0) {
             if (hero.gravity_mode == 1 || hero.unk1F8 != 0 ||
                 (unsigned)(hero.state.control_mode - 0x15) < 2) {
@@ -424,7 +424,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
             collision_position_offset.f[2] = hero.capsule_bottom;
         }
     }
-    vadd_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &collision_position_offset);
+    fast_vec_add(&hero.motion.pos.q, &hero.motion.pos.q, &collision_position_offset);
     mask = 0x24;
     if (hero.state.current == HERO_STATE_SINK) {
         mask = 0xD24;
@@ -448,7 +448,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
             if (collision_extent_or_displacement_length < 0.05f) {
                 collision_extent_or_displacement_length = 0.05f;
             }
-            collision_result = coll2_2133a8(&hero.motion.pos.q, mask, hero.capsule_radius, ((s32)hero.moby), collision_extent_or_displacement_length);
+            collision_result = rig_probe(&hero.motion.pos.q, mask, hero.capsule_radius, ((s32)hero.moby), collision_extent_or_displacement_length);
             if (!(collision_result | FUN_L00_001f3170(&hero.motion.pos.q, hero.capsule_radius)))
                 break;
         }
@@ -459,9 +459,9 @@ s32 resolve_hero_position_collisions(s32 mode) {
         hero.wall_hit = 1;
         hero.coll_hit_moby = ((u8 **)collision_output)[-6];
     }
-    vsub_2133a8(&hero.motion.pos.q, &hero.motion.pos.q, &collision_position_offset);
-    vsub_2133a8(&resolved_position_delta, &hero.motion.pos.q, &old);
-    collision_extent_or_displacement_length = vlen_2133a8(&resolved_position_delta);
+    fast_vec_sub(&hero.motion.pos.q, &hero.motion.pos.q, &collision_position_offset);
+    fast_vec_sub(&resolved_position_delta, &hero.motion.pos.q, &old);
+    collision_extent_or_displacement_length = fast_vec_length(&resolved_position_delta);
     if (hero.capsule_radius * 1.5f < collision_extent_or_displacement_length) {
         if (mode == 0xF) {
             if (512.0f < resolved_position_delta.f[0])
@@ -476,8 +476,8 @@ s32 resolve_hero_position_collisions(s32 mode) {
                 resolved_position_delta.f[2] = 512.0f;
             else if (resolved_position_delta.f[2] < -512.0f)
                 resolved_position_delta.f[2] = -512.0f;
-            vscl_2133a8(&resolved_position_delta, &resolved_position_delta, hero.capsule_radius);
-            vadd_2133a8(&hero.motion.pos.q, &old, &resolved_position_delta);
+            fast_vec_normalize(&resolved_position_delta, &resolved_position_delta, hero.capsule_radius);
+            fast_vec_add(&hero.motion.pos.q, &old, &resolved_position_delta);
         }
         return -1;
     }
@@ -533,9 +533,9 @@ typedef struct {
 } L16MovementPlayer;
 
 extern char *D_L16_00174258[];
-extern f32 dot_vectors_xyz(void *, void *) __asm__("func_001F9AB0");
+extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
@@ -546,11 +546,11 @@ extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f80");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void update_hero_ground_contact(void) __asm__("FUN_L16_0020ffb0");
 extern char D_0013F430[] __attribute__((section(".sdata")));
@@ -590,7 +590,7 @@ void integrate_hero_motion(void) {
             position = (float *)((char *)position + 0x60);
             length = gravity_length_xy(position);
             limit = player->speed_limit - 0.02f;
-            if (limit < length) normalize_vector_xyz(position, position, limit);
+            if (limit < length) fast_vec_normalize(position, position, limit);
         }
         limited_velocity = (float *)(&hero.motion.velocity);
         magnitude = gravity_z(limited_velocity);
@@ -616,12 +616,12 @@ void integrate_hero_motion(void) {
         if (!player->unconstrained) {
             float *limited_velocity = (float *)((char *)position + 0x60);
 
-            if (vector_length_xyz(limited_velocity) > limit) normalize_vector_xyz(limited_velocity, limited_velocity, limit);
+            if (fast_vec_length(limited_velocity) > limit) fast_vec_normalize(limited_velocity, limited_velocity, limit);
         }
     } else if (player->mode == 22) {
         qcopy(work.f, position);
         work.f[2] += 0.5f;
-        add_vector_xyz(plane.f, work.f, (char *)position + 0x60);
+        fast_vec_add(plane.f, work.f, (char *)position + 0x60);
         if (collision_line(position, plane.f, 2, 0, 0)) {
             char *hit = D_L16_00174258[0];
 
@@ -645,24 +645,24 @@ void integrate_hero_motion(void) {
                 float limit;
 
                 position = (float *)((char *)position + 0x60);
-                length = vector_length_xyz(position);
+                length = fast_vec_length(position);
                 limit = player->speed_limit - 0.02f;
-                if (limit < length) normalize_vector_xyz(position, position, limit);
+                if (limit < length) fast_vec_normalize(position, position, limit);
             }
         }
     }
     position = (float *)(&hero.motion.pos);
-    add_vector_xyz(position, position, (char *)position + 0x60);
+    fast_vec_add(position, position, (char *)position + 0x60);
     extra_step = (float *)((char *)position + 0x8A0);
-    add_vector_xyz(position, position, extra_step);
+    fast_vec_add(position, position, extra_step);
     clear_u64_value(extra_step);
     contact_player = (L16MovementPlayer *)((char *)position - 0x80);
     contact_player->contact_flag = 0;
     contact_player->contact_state = 0;
-    if (vector_length_xyz((char *)position + 0x70) <= 0.0001f) {
+    if (fast_vec_length((char *)position + 0x70) <= 0.0001f) {
         resolve_hero_collisions_with_history();
         update_hero_ground_contact();
-        subtract_vector_xyz((char *)position + 0x80, position, previous.f);
+        fast_vec_sub((char *)position + 0x80, position, previous.f);
         correct_hero_ground_penetration();
     } else {
         update_hero_ground_contact();
@@ -670,31 +670,31 @@ void integrate_hero_motion(void) {
     delta = (float *)(&hero.motion.resolved_velocity);
     new_position = (float *)((char *)delta - 0x90);
     horizontal = (float *)((char *)delta + 0x20);
-    subtract_vector_xyz(delta, new_position, previous.f);
+    fast_vec_sub(delta, new_position, previous.f);
     qcopy(horizontal, delta);
     vertical = (float *)((char *)delta + 0x10);
     qcopy(vertical, delta);
     velocity = (float *)((char *)delta - 0x30);
-    normalize_vector_xyz(delta, delta, 1.0f);
-    magnitude = dot_vectors_xyz(delta, velocity);
+    fast_vec_normalize(delta, delta, 1.0f);
+    magnitude = fast_vec_dot(delta, velocity);
     if (magnitude < 0.0f) magnitude = 0.0f;
-    normalize_vector_xyz(delta, velocity, magnitude);
+    fast_vec_normalize(delta, velocity, magnitude);
     qcopy(work.f, velocity);
     gravity_flatten(work.f, work.f);
     gravity_flatten(horizontal, horizontal);
-    normalize_vector_xyz(horizontal, horizontal, 1.0f);
-    magnitude = dot_vectors_xyz(horizontal, work.f);
+    fast_vec_normalize(horizontal, horizontal, 1.0f);
+    magnitude = fast_vec_dot(horizontal, work.f);
     if (magnitude < 0.0f) magnitude = 0.0f;
-    normalize_vector_xyz(horizontal, work.f, magnitude);
+    fast_vec_normalize(horizontal, work.f, magnitude);
     qcopy(plane.f, velocity);
     set_gravity_relative_vector_length_xy(plane.f, plane.f, 0.0f);
     set_gravity_relative_vector_length_xy(vertical, vertical, 0.0f);
-    normalize_vector_xyz(vertical, vertical, 1.0f);
-    magnitude = dot_vectors_xyz(vertical, plane.f);
+    fast_vec_normalize(vertical, vertical, 1.0f);
+    magnitude = fast_vec_dot(vertical, plane.f);
     if (magnitude < 0.0f) magnitude = 0.0f;
-    normalize_vector_xyz(vertical, plane.f, magnitude);
+    fast_vec_normalize(vertical, plane.f, magnitude);
     motion_player = (L16MovementPlayer *)((char *)delta - 0x110);
-    motion_player->speed = vector_length_xyz(delta);
+    motion_player->speed = fast_vec_length(delta);
     motion_player->horizontal_speed = vector_length_xy(delta);
     work.q = *(OvlQuad *)delta;
     motion_player->vertical_speed = forward_component(work.f);
@@ -702,22 +702,22 @@ void integrate_hero_motion(void) {
     qcopy(work.f, new_position);
     contact = (float *)((char *)delta - 0x20);
     external = (float *)((char *)delta - 0x10);
-    if (vector_length_xyz(contact) > 0.0001f) {
+    if (fast_vec_length(contact) > 0.0001f) {
         float saved;
 
-        add_vector_xyz(new_position, new_position, contact);
+        fast_vec_add(new_position, new_position, contact);
         saved = motion_player->contact[3];
         clear_u64_value(contact);
         motion_player->contact[3] = saved;
         resolve_hero_collisions_with_history();
         update_hero_ground_contact();
-        subtract_vector_xyz(external, new_position, previous.f);
+        fast_vec_sub(external, new_position, previous.f);
         correct_hero_ground_penetration();
     }
-    subtract_vector_xyz((char *)delta + 0x30, new_position, work.f);
+    fast_vec_sub((char *)delta + 0x30, new_position, work.f);
     motion_player->frame_delta[3] = motion_player->contact[3];
     motion_player->contact[3] = 0.0f;
-    subtract_vector_xyz(external, new_position, previous.f);
+    fast_vec_sub(external, new_position, previous.f);
     motion_player->slope = 0.0f;
     if (motion_player->horizontal_speed > 0.004f) {
         motion_player->slope = motion_player->external[2] / motion_player->horizontal_speed;
@@ -727,7 +727,7 @@ void integrate_hero_motion(void) {
     cap_player = (L16MovementPlayer *)(((char *)((char *)&hero)));
     magnitude = frame_time * 52.0f;
     if (magnitude < cap_player->speed) {
-        scale_vector_xyz(cap_player->external, cap_player->external, magnitude / cap_player->speed);
+        fast_vec_scale(cap_player->external, cap_player->external, magnitude / cap_player->speed);
         cap_player->speed = frame_time * 52.0f;
     }
 }

@@ -25,7 +25,7 @@ extern struct Globals_0015FA00 *hud_bank_main __asm__("D_0015FA00");
 extern s32 hud_bank_main_start_gp __asm__("D_0015FA04") __attribute__((sda));
 extern s32 hud_bank_end __asm__("D_0015FA08");
 extern s32 hud_bank_aux __asm__("D_0015FA0C");
-extern s32 fast_mem_zero16() __asm__("func_001F9810");
+extern s32 clear_blocks_16() __asm__("func_001F9810");
 extern s32 hud_heap_alloc() __asm__("func_001FF288");
 extern s32 queue_animation_update() __asm__("func_001FF308");
 /* retail small-data globals, declared to GAS before the body */
@@ -62,6 +62,6 @@ void init_hud(void) {
     }
     hud_bank_end = (s32)((u8 *)hud_bank_main + 0x2800);
     hud_bank_main_start_gp = (s32)hud_bank_main;
-    fast_mem_zero16(hud_bank_main, 0x2800);
+    clear_blocks_16(hud_bank_main, 0x2800);
     hud_bank_main->unk20 = 0xFF;
 }

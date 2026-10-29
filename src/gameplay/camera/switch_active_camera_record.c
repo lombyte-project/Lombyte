@@ -42,8 +42,8 @@ extern struct CameraTransitionState camera_transition_state __asm__("D_00186F40"
 
 extern void backup_current_cam(void) __asm__("FUN_001ebc90");
 extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");
-extern void copy_blocks_16_forward(void *dst, void *src, s32 size) __asm__("func_001F98D0");
-extern s32 convert_float_to_word(f32 transition_duration) __asm__("func_001FA6D0");
+extern void fast_mem_copy(void *dst, void *src, s32 size) __asm__("func_001F98D0");
+extern s32 truncate_float_to_s32(f32 transition_duration) __asm__("func_001FA6D0");
 
 void switch_active_camera_record(struct UpdateCam *next_camera) __asm__("FUN_001ebf10");
 
@@ -84,7 +84,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
             camera_transition_state.transition_mode = 2;
             if (transition_duration > 0.0f) {
                 camera_transition_state.configured_frames =
-                    convert_float_to_word(transition_duration);
+                    truncate_float_to_s32(transition_duration);
             } else {
                 camera_transition_state.configured_frames = 40;
             }
@@ -130,7 +130,7 @@ void switch_active_camera_record(struct UpdateCam *next_camera) {
     previous_camera->handoff_state = 0;
     previous_camera->activation_blocked = 0;
     camera_transition_state.previous = previous_camera;
-    copy_blocks_16_forward(&camera_saved_states[1], &camera_saved_states[0], 0x280);
+    fast_mem_copy(&camera_saved_states[1], &camera_saved_states[0], 0x280);
     camera_transition_state.previous->saved_state = &camera_saved_states[1];
     camera_transition_state.current = next_camera;
     next_camera->saved_state = &camera_saved_states[0];

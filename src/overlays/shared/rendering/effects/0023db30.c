@@ -26,7 +26,7 @@ extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_moby_bone_transform(char *moby, int bone, char *out);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_draw_quad_real(void *quads, void *matrix, int count);
+extern void fast_draw_quad_real(void *quads, void *matrix, int count) __asm__("FUN_001f7d30");
 
 /* Builds the object's tilted frame and emits three batches of four quads offset around it. */
 void glow_quads_draw(char *moby) __asm__("FUN_L00_0023db30");
@@ -165,16 +165,16 @@ void glow_quads_draw(char *moby) {
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-extern void getpos_23e008(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern float rndf_23e008(float, float) __asm__("FUN_002132a8");
-extern int rndi_23e008(int) __asm__("FUN_00213260");
-extern float rnda_23e008(void) __asm__("FUN_00213308");
-extern void dir_23e008(void *, float, float, float) __asm__("FUN_00214db0");
-extern float rnd_23e008(float, float) __asm__("FUN_L00_00257c48");
-extern int fr_23e008(int) __asm__("FUN_001f96f8");
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern float random_angle_radians(void) __asm__("FUN_00213308");
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
+extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
+extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, int, int,
                                   void *);
-extern int rf_23e008(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void emit_moby_particle_pairs(void *moby) __asm__("FUN_L00_0023e008");
 
@@ -184,27 +184,27 @@ void emit_moby_particle_pairs(void *moby) {
     float particle_spawn_position[4] __attribute__((aligned(16)));
     int i;
     unsigned char *particle;
-    getpos_23e008(moby, 0, particle_spawn_position);
+    moby_point_position(moby, 0, particle_spawn_position);
     for (i = 3; i >= 0; i--) {
-        float particle_size_scale = rndf_23e008(0.15f, 0.5f);
-        int k = rndi_23e008(2);
+        float particle_size_scale = random_float_between(0.15f, 0.5f);
+        int k = random_integer_below(2);
         float azimuth_angle, elevation_angle;
         if (k == 0)
             k--;
-        azimuth_angle = rnda_23e008();
-        elevation_angle = rndf_23e008(0.34906584f, 1.53588974f);
-        dir_23e008(initial_velocity, rndf_23e008(0.05f, 0.2f) * frame_scale, azimuth_angle, elevation_angle);
+        azimuth_angle = random_angle_radians();
+        elevation_angle = random_float_between(0.34906584f, 1.53588974f);
+        build_spherical_offset(initial_velocity, random_float_between(0.05f, 0.2f) * frame_scale, azimuth_angle, elevation_angle);
         qcopy(old, particle_spawn_position);
-        particle_spawn_position[0] += rnd_23e008(0.0f, 0.15f);
-        particle_spawn_position[1] += rnd_23e008(0.0f, 0.15f);
-        particle_spawn_position[2] += rnd_23e008(0.0f, 0.15f);
-        particle = FUN_L00_00272060(particle_spawn_position, fr_23e008(0x3C), particle_size_scale * 0.1f, particle_size_scale, 0.009f, 0x7F7F2020, 0, k, initial_velocity);
+        particle_spawn_position[0] += randf_sym(0.0f, 0.15f);
+        particle_spawn_position[1] += randf_sym(0.0f, 0.15f);
+        particle_spawn_position[2] += randf_sym(0.0f, 0.15f);
+        particle = FUN_L00_00272060(particle_spawn_position, scale_game_frames(0x3C), particle_size_scale * 0.1f, particle_size_scale, 0.009f, 0x7F7F2020, 0, k, initial_velocity);
         if (particle)
-            particle[9] = rf_23e008(4.0f) + 0x70;
+            particle[9] = truncate_float_to_s32(4.0f) + 0x70;
         k = -k;
-        particle = FUN_L00_00272060(particle_spawn_position, fr_23e008(0x3C), particle_size_scale * 0.07f, particle_size_scale * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, initial_velocity);
+        particle = FUN_L00_00272060(particle_spawn_position, scale_game_frames(0x3C), particle_size_scale * 0.07f, particle_size_scale * 0.7f, 0.009f, 0x7F7F7F7F, 1, k, initial_velocity);
         if (particle)
-            particle[9] = rf_23e008(4.0f) + 0x70;
+            particle[9] = truncate_float_to_s32(4.0f) + 0x70;
     }
 }
 #include "eetypes.h"
@@ -319,11 +319,11 @@ int allocate_colored_effect_slot(u128 *position, float position_w, float b_0023e
 extern char D_L00_001802C0[];
 extern char D_L00_001804C0[];
 void detach_point_light() __asm__("FUN_00201f88");
-void fast_mem_zero16() __asm__("FUN_001f9810");
+void clear_blocks_16() __asm__("FUN_001f9810");
 /* Detaches the point light and clears entry i of D_L00_001802C0 and D_L00_001804C0. */
 void release_point_light_slot(int i) __asm__("FUN_L00_0023e838");
 void release_point_light_slot(int i) {
     detach_point_light();
-    fast_mem_zero16(D_L00_001802C0 + i * 32, 32);
-    fast_mem_zero16(D_L00_001804C0 + i * 48, 48);
+    clear_blocks_16(D_L00_001802C0 + i * 32, 32);
+    clear_blocks_16(D_L00_001804C0 + i * 48, 48);
 }

@@ -12,7 +12,7 @@
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
 
-extern float random_float_between_alt(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -31,7 +31,7 @@ void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocit
         particle[9] = func_001FA898_r(8.0f) - 0x60;
         particle[1] = 0;
         particle[3] = 0x48;
-        *(float *)(particle + 0xC) = random_float_between_alt(60900.0f, 90300.0f);
+        *(float *)(particle + 0xC) = random_float_between(60900.0f, 90300.0f);
         particle[8] = 0;
         particle[2] = *D_L01_001B250C;
         *(float *)(particle_data + 0x10) = 0.425f;
@@ -90,7 +90,7 @@ char *spawn_type_14_particle(int particle_value, char *position_source) {
 
 extern char *number_particle_lookup_tables[] __asm__("D_L01_001B25A4");
 extern char *alloc_285768(int) __asm__("FUN_L00_002678b8");
-extern int trunc_285768(float) __asm__("FUN_001fa6d0");
+extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 /* Allocates a type 0x29 particle and fills it from the arguments; kind 0xFF
  * derives the frame from flags and picks one of two blend modes. */
@@ -102,7 +102,7 @@ char *draw_number(float scale, void *particle_spawn_position, int source_moby, i
         qcopy(particle + 0x10, particle_spawn_position);
         *(int *)(particle + 4) = particle_color;
         if (kind == 0xFF) {
-            particle[9] = (flags >> 5) * 16 + trunc_285768(4.0f);
+            particle[9] = (flags >> 5) * 16 + truncate_float_to_s32(4.0f);
             if (flags & 1) {
                 particle[3] = 0x48;
             } else {
@@ -164,9 +164,9 @@ unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_
 
 extern int D_L01_001B2628; /* no foreign declaration */
 extern s32 rand(void);
-extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
+extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
 
@@ -192,7 +192,7 @@ unsigned char *spawn_type_74_particle(char *source_moby, char *particle_spawn_po
         *(float *)particle_data = initial_particle_velocity[0];
         *(float *)(particle_data + 4) = initial_particle_velocity[1];
         *(float *)(particle_data + 8) = initial_particle_velocity[2];
-        subtract_vector_xyz_c(transformed_spawn_offset, particle_spawn_position, source_moby + 0x10);
+        fast_vec_sub(transformed_spawn_offset, particle_spawn_position, source_moby + 0x10);
         qzero(spawn_offset_transform);
         qzero(spawn_offset_transform + 4);
         qzero(spawn_offset_transform + 8);
@@ -358,13 +358,13 @@ int advance_path_node_index(char *path_descriptor) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C690), where it is exact; names translated to the US level program. */
 
 
-extern f32 vector_length_xyz(void *a) __asm__("FUN_001f9af0");
+extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern void *get_path_node(void *, int) __asm__("FUN_L01_0028b7b0");
 extern void *memset(void *, int, unsigned int);
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void normalize_vector_xyz(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern void subtract_vector_xyz(void *out, void *a, void *b) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
+extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
+extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
 
 void compute_path_node_tangent(void *out, int *path_descriptor, int node_index_offset, float tangent_tension, float tangent_bias) __asm__("FUN_L01_0028b8c8");
@@ -390,15 +390,15 @@ void compute_path_node_tangent(void *out, int *path_descriptor, int node_index_o
         delta_length_limit = incoming_segment_distance;
     else
         delta_length_limit = outgoing_segment_distance;
-    subtract_vector_xyz(weighted_incoming_delta, neighboring_points[1], neighboring_points[0]);
-    scale_vector_xyz(weighted_incoming_delta, weighted_incoming_delta, wb);
-    subtract_vector_xyz(weighted_outgoing_delta, neighboring_points[2], neighboring_points[1]);
-    scale_vector_xyz(weighted_outgoing_delta, weighted_outgoing_delta, wa);
-    add_vector_xyz(blended_delta, weighted_incoming_delta, weighted_outgoing_delta);
+    fast_vec_sub(weighted_incoming_delta, neighboring_points[1], neighboring_points[0]);
+    fast_vec_scale(weighted_incoming_delta, weighted_incoming_delta, wb);
+    fast_vec_sub(weighted_outgoing_delta, neighboring_points[2], neighboring_points[1]);
+    fast_vec_scale(weighted_outgoing_delta, weighted_outgoing_delta, wa);
+    fast_vec_add(blended_delta, weighted_incoming_delta, weighted_outgoing_delta);
     delta_length_limit = delta_length_limit * 1.1f;
-    blended_delta_length = vector_length_xyz(blended_delta);
+    blended_delta_length = fast_vec_length(blended_delta);
     if (delta_length_limit < blended_delta_length) {
-        normalize_vector_xyz(out, blended_delta, delta_length_limit);
+        fast_vec_normalize(out, blended_delta, delta_length_limit);
     } else {
         *(OvlQuad *)out = *(OvlQuad *)blended_delta;
     }

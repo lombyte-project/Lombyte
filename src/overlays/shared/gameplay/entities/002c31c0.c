@@ -29,17 +29,17 @@ typedef struct {
     u8 pad0[0x78];
     PV_2acbf0_002acbf0 *pv;
 } M_2acbf0_002acbf0;
-extern f32 sqrt_2acbf0(f32) __asm__("FUN_001f9988");
-extern f32 atan2_2acbf0(f32, f32) __asm__("FUN_001f9e90");
-extern f32 appr_2acbf0(f32, f32) __asm__("FUN_001fa580");
+extern f32 square_root(f32) __asm__("FUN_001f9988");
+extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
+extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 int FUN_001f96f8_002acbf0(int) __asm__("FUN_001f96f8");
 float FUN_001fa6c0_002acbf0(int) __asm__("FUN_001fa6c0");
-extern f32 i2f_2acbf0(f32) __asm__("FUN_001f96b0");
-extern f32 sin_2acbf0(f32) __asm__("FUN_001fa610");
-extern void rmat_2acbf0(void *, void *) __asm__("FUN_001fa050");
-extern void mmul_2acbf0(void *, void *, void *) __asm__("FUN_001fa378");
-extern s64 tex_2acbf0(s32) __asm__("FUN_001f44b8");
-extern void draw_2acbf0(void *, void *, s32) __asm__("FUN_001f7d30");
+extern f32 scale_time(f32) __asm__("FUN_001f96b0");
+extern f32 fast_normalize_angle(f32) __asm__("FUN_001fa610");
+extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
+extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
+extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) __asm__("FUN_L00_002c31c0");
 
 void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
@@ -57,18 +57,18 @@ void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
     }
     for (i = 0; i < 2; i++) {
         odd = i & 1;
-        polar_angle = atan2_2acbf0(sqrt_2acbf0(pv->f20 * pv->f20 + pv->f28 * pv->f28), pv->f24);
-        quad_orientation_angles.f[0] = appr_2acbf0(-polar_angle, 1.57079637f);
-        quad_orientation_angles.f[1] = atan2_2acbf0(pv->f28, pv->f20);
+        polar_angle = fast_arc_tan(square_root(pv->f20 * pv->f20 + pv->f28 * pv->f28), pv->f24);
+        quad_orientation_angles.f[0] = fast_add_rotations(-polar_angle, 1.57079637f);
+        quad_orientation_angles.f[1] = fast_arc_tan(pv->f28, pv->f20);
         quad_orientation_angles.f[2] = 0.0f;
         quad_orientation_angles.f[3] = 0.0f;
         rz.f[0] = 0.0f;
         phase_numerator = FUN_001fa6c0_002acbf0(D_L00_0015F5CC % FUN_001f96f8_002acbf0(180));
         {
-            f32 phase_divisor = i2f_2acbf0(180.0f);
+            f32 phase_divisor = scale_time(180.0f);
             f32 signed_phase_sine;
             phase_numerator *= 6.28318548f;
-            signed_phase_sine = sin_2acbf0(phase_numerator / phase_divisor);
+            signed_phase_sine = fast_normalize_angle(phase_numerator / phase_divisor);
             if (odd) {
                 signed_phase_sine = -signed_phase_sine;
             }
@@ -76,15 +76,15 @@ void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
         }
         rz.f[2] = 0.0f;
         rz.f[3] = 0.0f;
-        rmat_2acbf0(mz, &rz);
-        rmat_2acbf0(quad_transform, &quad_orientation_angles);
-        mmul_2acbf0(quad_transform, quad_transform, mz);
+        euler_rotation_matrix(mz, &rz);
+        euler_rotation_matrix(quad_transform, &quad_orientation_angles);
+        multiply_matrix(quad_transform, quad_transform, mz);
         qcopy(&quad_transform[3], &pv->pos);
         quad.color[0] = 0x80808080;
         quad.color[1] = 0x80808080;
         quad.color[2] = 0x80808080;
         quad.color[3] = 0x80808080;
-        quad.tex = tex_2acbf0(odd ? 0x12 : 0x11);
+        quad.tex = get_effect_texture(odd ? 0x12 : 0x11);
         quad.unk80 = 0xFF9000000260L;
         quad.unk88 = 0x8000000048L;
         quad.unk70 = 0;
@@ -112,7 +112,7 @@ void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
         quad.uv[5] = 0.0f;
         quad.uv[6] = 1.0f;
         quad.uv[7] = 0.0f;
-        draw_2acbf0(&quad, quad_transform, 1);
+        draw_geometry_quad(&quad, quad_transform, 1);
     }
 }
 #include "eetypes.h"

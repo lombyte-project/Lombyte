@@ -24,8 +24,8 @@ typedef struct {
     s32 enabled;
 } VendorVars_2e5958;
 
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
+extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern f32 FUN_001f9b48(void *, void *);
@@ -57,8 +57,8 @@ void underwater_ring_update(struct Moby *moby) {
     s32 near_parent = 0;
 
     if ((u8)(moby->state - 1) < 2) {
-        subtract_vector_xyz(delta, &moby->pos, D_0013F3D0);
-        if (vector_length_xyz(delta) < vars->distance) {
+        fast_vec_sub(delta, &moby->pos, D_0013F3D0);
+        if (fast_vec_length(delta) < vars->distance) {
             transpose_rotation_matrix(matrix, &moby->rot_row0);
             transform_vector(delta, delta, matrix);
             if (*(f32 *)(delta + 4) < 0.2f) near_parent = 1;
@@ -184,7 +184,7 @@ void underwater_ring_update(struct Moby *moby) {
 
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void draw_moby_radial_ripple_mesh_buffers(void) __asm__("FUN_L15_002eac90");
-void enqueue_callback_list_1(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
+void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void ripple_strips_moby_update(char *moby) __asm__("FUN_L15_002eb0a0");
 void ripple_strips_moby_update(char *moby) {
@@ -192,7 +192,7 @@ void ripple_strips_moby_update(char *moby) {
         set_moby_color(moby, 0x40, 0x40, 0x40);
         moby[0x20] = 1;
     } else {
-        enqueue_callback_list_1((void *)draw_moby_radial_ripple_mesh_buffers, moby);
+        add_draw_callback((void *)draw_moby_radial_ripple_mesh_buffers, moby);
         *(short *)(moby + 0x32) = 0;
         *(unsigned short *)(moby + 0x34) |= 1;
     }

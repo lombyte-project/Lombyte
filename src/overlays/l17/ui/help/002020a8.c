@@ -221,7 +221,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
 /* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/gameplay/hero/hero_check_damage.c); L17 has no mode-2 case in the b20A4 switch. */
 
 f32 FUN_001f9b80_211380(void *, void *) __asm__("FUN_001f9b80");
-f32 approach_value_211380(f32, f32, f32 *) __asm__("FUN_00213ed8");
+f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void FUN_L00_0025b8c0_211380(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void update_hero_smoothing(void) __asm__("FUN_L17_0020e1c0");
 
@@ -263,8 +263,8 @@ void update_hero_smoothing(void) {
         FUN_001f9b80_211380(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
         f32 *smoothing_state = D_0013F570;
         struct Hero *hero_for_smoothing_targets = (struct Hero *)((u8 *)smoothing_state - 0x220);
-        approach_value_211380(hero_for_smoothing_targets->capsule_top_target, frame_scale * 0.02f, smoothing_state);
-        approach_value_211380(hero_for_smoothing_targets->capsule_bottom_target, frame_scale * 0.02f, smoothing_state + 1);
+        approach_value(hero_for_smoothing_targets->capsule_top_target, frame_scale * 0.02f, smoothing_state);
+        approach_value(hero_for_smoothing_targets->capsule_bottom_target, frame_scale * 0.02f, smoothing_state + 1);
         FUN_L00_0025b8c0_211380(smoothing_state + 5, smoothing_state + 6, hero_for_smoothing_targets->capsule_radius_target, frame_scale_sq * 0.02f,
                                 frame_scale_sq * 0.3f, frame_time * 4.0f);
     }

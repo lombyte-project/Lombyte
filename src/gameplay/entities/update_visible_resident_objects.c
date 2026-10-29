@@ -9,8 +9,8 @@
 
 extern struct Moby *visible_moby_list __asm__("D_0015FF24") __attribute__((sda));
 extern struct Moby *build_resident_visibility_list(void) __asm__("FUN_0020d868");
-extern void advance_resident_object_animation(struct Moby *) __asm__("FUN_0020d580");
-extern void refresh_resident_object_spatial_bounds(struct Moby *) __asm__("FUN_0020def8");
+extern void advance_moby_animation(struct Moby *) __asm__("FUN_0020d580");
+extern void refresh_moby_spatial_bounds(struct Moby *) __asm__("FUN_0020def8");
 void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 
 /* Each live moby on the visible list: its animation step, its class update
@@ -25,11 +25,11 @@ void update_visible_resident_objects(void) {
     while (moby != 0) {
         if ((s8)moby->state >= 0) {
             if (!(moby->flags & MOBY_SKIP_ANIMATION)) {
-                advance_resident_object_animation(moby);
+                advance_moby_animation(moby);
             }
             MOBY_CALL_UPDATE(moby->update, moby);
             if (!(((volatile struct Moby *)moby)->flags & MOBY_SKIP_BOUNDS)) {
-                refresh_resident_object_spatial_bounds(moby);
+                refresh_moby_spatial_bounds(moby);
             }
         }
         moby = moby->next;

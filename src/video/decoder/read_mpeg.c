@@ -22,17 +22,17 @@ extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void switch_thread(void) __asm__("func_0023A770");
 extern s32 is_audio_ok(void) __asm__("func_0023A790");
 extern s32 proceed_audio(void) __asm__("func_0023ABA0");
-extern void audio_dec_start(s32) __asm__("func_0023ACB8");
+extern void audioDecStart(s32) __asm__("func_0023ACB8");
 extern void audio_dec_reset(s32) __asm__("FUN_0023ad10");
 extern void start_display(s32) __asm__("func_0023B590");
 extern void end_display(void) __asm__("ClearStageStateFlag");
-extern s32 read_buf_begin_put(struct ReadBuf *, u8 **) __asm__("func_0023B960");
+extern s32 get_state_offset_address(struct ReadBuf *, u8 **) __asm__("func_0023B960");
 extern void read_buf_end_put(struct ReadBuf *, s32) __asm__("func_0023B990");
 extern s32 read_buf_begin_get(struct ReadBuf *, u8 **) __asm__("func_0023B9D8");
 extern s32 read_buf_end_get(struct ReadBuf *, s32) __asm__("GetStateTableWord");
 extern s32 read_cd_stream_sectors(struct MpegCdStream *, u8 *, s32, s32) __asm__("func_0023BA60");
 extern s32 video_dec_abort(s32) __asm__("func_0023CC70");
-extern s32 video_dec_get_state(struct VideoDec *) __asm__("func_0023CC80");
+extern s32 get_state_field(struct VideoDec *) __asm__("func_0023CC80");
 extern s32 video_dec_flush(struct VideoDec *) __asm__("func_0023CD08");
 extern s32 video_dec_is_flushed(struct VideoDec *) __asm__("FUN_0023cde0");
 extern s32 vo_buf_is_full(s32) __asm__("func_0023D1F8");
@@ -81,7 +81,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
     read_remaining = decode_remaining;
     FlushCache(2);
     sceGsSyncV(0);
-    while (decode_remaining >= 5 && video_dec_get_state(video_dec) != 3) {
+    while (decode_remaining >= 5 && get_state_field(video_dec) != 3) {
         update_primary_pad_state();
         mode = decode_mode;
         if (mode != -1) {
@@ -98,7 +98,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
                 video_dec_abort(D_0016120C + 0xD9048);
             }
         }
-        space = read_buf_begin_put(read_buf, &write_ptr);
+        space = get_state_offset_address(read_buf, &write_ptr);
         if (read_remaining > 0 && space > 0xFFFF) {
             count = read_cd_stream_sectors(cd_stream, write_ptr, 0x10000, 0);
             read_remaining -= count;
@@ -117,14 +117,14 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
         if (!started && vo_buf_is_full(D_0016120C + 0xD9168) && is_audio_ok()) {
             started = 1;
             start_display(1);
-            audio_dec_start(D_0016120C + 0xD9100);
+            audioDecStart(D_0016120C + 0xD9100);
         }
     }
     while (!video_dec_flush(video_dec)) {
         proceed_audio();
         switch_thread();
     }
-    while (!video_dec_is_flushed(video_dec) && video_dec_get_state(video_dec) != 3) {
+    while (!video_dec_is_flushed(video_dec) && get_state_field(video_dec) != 3) {
         proceed_audio();
         switch_thread();
     }

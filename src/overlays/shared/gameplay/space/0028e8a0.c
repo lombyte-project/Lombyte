@@ -93,16 +93,16 @@ extern struct {
 extern unsigned char D_001413F5_28e9c8 __asm__("D_001413F5") __attribute__((section(".data")));
 extern O_28e9c8 *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
 extern unsigned char D_0013D4C6_28e9c8 __asm__("D_0013D4C6") __attribute__((section(".data")));
-void memset_28e9c8(void *, int, int) __asm__("FUN_001f97e8");
-void f2335a0_28e9c8(void) __asm__("FUN_002335a0");
+void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
+void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
-int fr_28e9c8(int) __asm__("FUN_001f96f8");
+int scale_game_frames(int) __asm__("FUN_001f96f8");
 void load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
-void f2049f0_28e9c8(int) __asm__("FUN_002049f0");
-void f22ca50_28e9c8(void) __asm__("FUN_0022ca50");
+void parse_space_scene_chunk(int) __asm__("FUN_002049f0");
+void sound_update(void) __asm__("FUN_0022ca50");
 int f122298_28e9c8(int) __asm__("FUN_00122298");
-int f215b10_28e9c8(void) __asm__("FUN_00215b10");
+int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 void initialize_level_transition_with_audio(int audio_selection_mode) __asm__("FUN_L00_0028e9c8");
 
 void initialize_level_transition_with_audio(int audio_selection_mode) {
@@ -112,10 +112,10 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     D_L00_0015F5D8 = 1;
     D_0013E030_28e9c8.x20 = audio_selection_mode;
     D_0013E030_28e9c8.x8 = 0;
-    memset_28e9c8(&D_L00_0016C860_28e9c8, 0, 0x1C0);
-    memset_28e9c8(D_L00_0017C340, 0, 0x40);
-    memset_28e9c8(D_L00_0017C380, 0, 0x40);
-    f2335a0_28e9c8();
+    fill_transfer_words(&D_L00_0016C860_28e9c8, 0, 0x1C0);
+    fill_transfer_words(D_L00_0017C340, 0, 0x40);
+    fill_transfer_words(D_L00_0017C380, 0, 0x40);
+    calculate_dma_transfer_address();
     shared_table_offset = D_L00_001611CC - 0x60000;
     D_L00_0016C860_28e9c8.x58 = D_L00_00173E00_28e9c8.x4 + shared_table_offset;
     D_L00_0016C860_28e9c8.x5c = D_L00_00173E00_28e9c8.x8 + shared_table_offset;
@@ -142,7 +142,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
             audio_stream_table_index = 8;
             secondary_track_index = 14;
         }
-        load_chunks_with_optional_fade(audio_stream_table_index, fr_28e9c8(6));
+        load_chunks_with_optional_fade(audio_stream_table_index, scale_game_frames(6));
     } else {
         int k, fade_frame_count;
         base_audio_selection_index = D_0013E030_28e9c8.x26;
@@ -164,16 +164,16 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
         }
         fade_frame_count = 0;
         if (!D_0013E030_28e9c8.x2c)
-            fade_frame_count = fr_28e9c8(6);
+            fade_frame_count = scale_game_frames(6);
         load_chunks_with_optional_fade(alternate_audio_stream_table_index, fade_frame_count);
     }
     music_stream_state.queued_secondary_track = secondary_track_index + 40000;
-    f2049f0_28e9c8(0);
+    parse_space_scene_chunk(0);
     while (music_stream_state.secondary.state != 3) {
-        f22ca50_28e9c8();
+        sound_update();
         f122298_28e9c8(0);
     }
-    f215b10_28e9c8();
+    continue_audio_stream_if_ready();
 }
 extern int D_L00_0015F5D8;
 extern short D_0013E05C __attribute__((section(".data")));

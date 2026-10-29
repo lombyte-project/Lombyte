@@ -146,8 +146,8 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
@@ -189,7 +189,7 @@ void update_debug_camera(void) {
                 if (free_look) {
                     fast_vec_normalize(&step, player_camera.camera.basis,
                                  g_debug_menu.movement_speed);
-                    add_vector_xyz(player_camera.camera.position,
+                    fast_vec_add(player_camera.camera.position,
                                  player_camera.camera.position, &step);
                 } else {
                     player_camera.camera.position[0] +=
@@ -205,7 +205,7 @@ void update_debug_camera(void) {
                 if (free_look) {
                     fast_vec_normalize(&step, player_camera.camera.basis,
                                  g_debug_menu.movement_speed);
-                    subtract_vector_xyz(player_camera.camera.position,
+                    fast_vec_sub(player_camera.camera.position,
                                  player_camera.camera.position, &step);
                 } else {
                     player_camera.camera.position[0] -=
@@ -221,7 +221,7 @@ void update_debug_camera(void) {
                 if (free_look) {
                     fast_vec_normalize(&step, player_camera.camera.basis + 4,
                                  g_debug_menu.movement_speed);
-                    add_vector_xyz(player_camera.camera.position,
+                    fast_vec_add(player_camera.camera.position,
                                  player_camera.camera.position, &step);
                 } else {
                     player_camera.camera.position[0] -=
@@ -237,7 +237,7 @@ void update_debug_camera(void) {
                 if (free_look) {
                     fast_vec_normalize(&step, player_camera.camera.basis + 4,
                                  g_debug_menu.movement_speed);
-                    subtract_vector_xyz(player_camera.camera.position,
+                    fast_vec_sub(player_camera.camera.position,
                                  player_camera.camera.position, &step);
                 } else {
                     player_camera.camera.position[0] +=
@@ -376,7 +376,7 @@ void update_debug_camera(void) {
         Vec4 r[3];
         if (free_look) {
             fast_vec_normalize(&r[0], player_camera.camera.basis + 8, g_debug_menu.vertical_speed);
-            add_vector_xyz(player_camera.camera.position, player_camera.camera.position,
+            fast_vec_add(player_camera.camera.position, player_camera.camera.position,
                          &r[0]);
         } else {
             player_camera.camera.position[2] += g_debug_menu.vertical_speed;
@@ -613,7 +613,7 @@ void update_debug_menu(void) {
                     break;
                 case DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET:
                     g_debug_menu.update_flags = 0;
-                    subtract_vector_xyz(scratch.sample.hero_offset, &hero.motion.pos,
+                    fast_vec_sub(scratch.sample.hero_offset, &hero.motion.pos,
                                         player_camera.camera.position);
                     g_debug_menu.target_distance = vector_length_xy(scratch.sample.hero_offset);
                     g_debug_menu.target_angle = fast_subtract_rotations(
@@ -1058,7 +1058,7 @@ extern u8 D_L00_0015F446;
 extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
 extern void append_gif_transfer_packet() __asm__("func_001FB368");
 void print_debug_text(s32 x, s32 y, s32 color, char *text) __asm__("FUN_001f0bd0");
-extern double promote_float60(float) __asm__("FUN_00120478");
+extern double fptodp(float) __asm__("FUN_00120478");
 
 static __inline__ int flag_offset60(int flags) {
     if (!flags) return 0;
@@ -1222,16 +1222,16 @@ void draw_debug_menu(void) {
             print_debug_text(0xB9, (g_debug_menu.selected_row * 0xF) + 0x112, 0x800000C0, debug_menu_selection_marker);
         }
         print_debug_text(0xC4, 0x114, 0x8000C0C0, debug_menu_fog_near_distance_label);
-        sprintf(menu_value_text, debug_menu_fog_float_format, promote_float60(D_L00_0015F448 * 0.0009765625f));
+        sprintf(menu_value_text, debug_menu_fog_float_format, fptodp(D_L00_0015F448 * 0.0009765625f));
         print_debug_text(0x11C, 0x114, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x123, 0x8000C0C0, debug_menu_fog_near_intensity_label);
-        sprintf(menu_value_text, debug_menu_fog_float_format, promote_float60(100.0f - (D_L00_0015F450 / 2.55f)));
+        sprintf(menu_value_text, debug_menu_fog_float_format, fptodp(100.0f - (D_L00_0015F450 / 2.55f)));
         print_debug_text(0x11C, 0x123, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x132, 0x8000C0C0, debug_menu_fog_far_distance_label);
-        sprintf(menu_value_text, debug_menu_fog_float_format, promote_float60(D_L00_0015F44C * 0.0009765625f));
+        sprintf(menu_value_text, debug_menu_fog_float_format, fptodp(D_L00_0015F44C * 0.0009765625f));
         print_debug_text(0x11C, 0x132, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x141, 0x8000C0C0, debug_menu_fog_far_intensity_label);
-        sprintf(menu_value_text, debug_menu_fog_float_format, promote_float60(100.0f - (D_L00_0015F454 / 2.55f)));
+        sprintf(menu_value_text, debug_menu_fog_float_format, fptodp(100.0f - (D_L00_0015F454 / 2.55f)));
         print_debug_text(0x11C, 0x141, 0x80F0F0F0, menu_value_text);
         print_debug_text(0xC4, 0x150, 0x8000C0C0, debug_menu_fog_red_label);
         sprintf(menu_value_text, fmt, (s32) D_L00_0015F444);

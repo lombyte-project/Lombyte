@@ -33,10 +33,10 @@ extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa6
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float dot_vectors_xyz(void *a, void *b);
+extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
-extern float vector_length_xyz(void *a);
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int D_L18_001612D8;
 extern int D_L18_0015F5C4;
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
@@ -79,9 +79,9 @@ extern void pool_splash(void *, int, int, float, float, float, float) __asm__("F
 extern void set_hero_state_for_vehicle_mode(void) __asm__("FUN_L15_0021ab60");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_vector(void *);
-extern void normalize_vector_xyz(void *, void *, float);
-extern void subtract_vector_xyz(void *dst, void *a, void *b);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
+extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
@@ -175,7 +175,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 0;
         p->unk2284 = 0;
-        clear_vector(&p->motion.momentum);
+        clear_u64_value(&p->motion.momentum);
         p->rand_timer.range = 0x68;
         if (b) {
             if (get_hero_help_value(0) == 0x54) {
@@ -762,7 +762,7 @@ int hero_set_state(int a, int b) {
             q->swing_rope_spring_k = frame_scale_sq * 0.025f;
             q->unk9C8 = frame_scale_sq * 0.33f;
             q->swing_rope_max_speed = frame_time * 11.0f;
-            clear_vector(&q->motion.rot_spring_vel);
+            clear_u64_value(&q->motion.rot_spring_vel);
             q->grapple_lockout_timer = scale_game_frames(0x28);
             if (*(float *)(d + 0x24) != 0.0f)
                 q->swing_rope_spring_k = *(float *)(d + 0x24);
@@ -794,7 +794,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         p->state.control_mode = 2;
         p->unk2284 = 7;
-        clear_vector(&p->motion.rot_spring_vel);
+        clear_u64_value(&p->motion.rot_spring_vel);
         qcopy(&p->motion.velocity, &p->motion.resolved_velocity);
         if (b)
             set_hero_animation(0xB, 0, (float)scale_game_frames(0xF));
@@ -836,11 +836,11 @@ int hero_set_state(int a, int b) {
         seg = p->rail_segment;
         t = p->rail_seg_frac;
         sample_path(*(int **)&p->rail_spline, pos, &seg, &t, p->rail_spline_loops, 1.0f);
-        subtract_vector_xyz(grind_direction_or_jump_probe_position, pos, &p->motion.pos);
-        if (0.001f < vector_length_xyz(grind_direction_or_jump_probe_position)) {
-            normalize_vector_xyz(grind_direction_or_jump_probe_position, grind_direction_or_jump_probe_position, 1.0f);
+        fast_vec_sub(grind_direction_or_jump_probe_position, pos, &p->motion.pos);
+        if (0.001f < fast_vec_length(grind_direction_or_jump_probe_position)) {
+            fast_vec_normalize(grind_direction_or_jump_probe_position, grind_direction_or_jump_probe_position, 1.0f);
             if (p->state.prev_control_mode != 0xF) {
-                p->grind_base_speed = dot_vectors_xyz(&p->motion.displacement, grind_direction_or_jump_probe_position);
+                p->grind_base_speed = fast_vec_dot(&p->motion.displacement, grind_direction_or_jump_probe_position);
             }
         }
         {
@@ -1931,8 +1931,8 @@ int hero_set_state(int a, int b) {
         if (frame_time * 2.5f < p->grind_base_speed)
             p->grind_base_speed = frame_time * 2.5f;
         p->unk5AC.i = 0;
-        clear_vector(&p->motion.velocity);
-        clear_vector(&p->motion.displacement);
+        clear_u64_value(&p->motion.velocity);
+        clear_u64_value(&p->motion.displacement);
         p->motion.velocity.f[2] = frame_time * 10.0f;
         if (b)
             set_hero_animation(0x10, 2, -3.0f);
@@ -1996,7 +1996,7 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         p->item_select_blocked = 1;
         p->item_use_locked = 1;
-        clear_vector(&p->motion.velocity);
+        clear_u64_value(&p->motion.velocity);
         if (b)
             set_hero_animation(0xB, 0, -1.0f);
         break;

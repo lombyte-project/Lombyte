@@ -42,7 +42,7 @@ extern float D_L02_001600DC __attribute__((sda));
 extern float D_L02_001600E0 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
 extern void spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
@@ -71,7 +71,7 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
     }
     qcopy(origin, position);
     fast_vec_normalize(adjusted, direction, distance + 0.75f);
-    add_vector_xyz(end, adjusted, origin);
+    fast_vec_add(end, adjusted, origin);
     if (collision_line(origin, end, 2, 0, 0)) {
         travel = fast_vec_dist(origin, D_L02_00174460) - 0.75f;
         if (travel < 0.0f) travel = 0.0f;
@@ -88,9 +88,9 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
     for (i = 0; i < n + first_count; i++) {
         FUN_L00_00257d78(offset, 0.0f,
             (((D_L02_001600DC) - (D_L02_001600E0)) * (travel / distance) + (D_L02_001600E0)) * frame_time_macro);
-        add_vector_xyz(offset, offset, adjusted);
+        fast_vec_add(offset, offset, adjusted);
         fast_vec_scale(velocity, adjusted, random_float_between(0.0f, 1.0f));
-        add_vector_xyz(velocity, velocity, origin);
+        fast_vec_add(velocity, velocity, origin);
         if (i < first_count) fl = 1; else fl = 0;
         shot = spawn_spinning_and_fading_effect_particle(velocity, offset, fl, travel);
         if (i == 2 && save_shot) {
@@ -109,7 +109,7 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
         ((Slots_265E88 *)slots)->timer = truncate_float_to_s32(sp2);
         FUN_L00_00257d78(offset, 0.0f, frame_time_macro + frame_time_macro);
         fast_vec_scale(velocity, adjusted, random_float_between(0.5f, 0.1f));
-        add_vector_xyz(velocity, velocity, offset);
+        fast_vec_add(velocity, velocity, offset);
         velocity[3] = 0.0f;
         spawn_color_decaying_effect_particle(position, velocity, 0);
     }

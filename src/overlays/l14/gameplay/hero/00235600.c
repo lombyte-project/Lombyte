@@ -40,7 +40,7 @@ extern S17C5B8 D_L14_0017C4B8;
 extern float absolute_float(float) __asm__("func_001F99C0");
 #include "rnc/overlay/l14/gameplay/hero/00235600_globals.h"
 extern float D_L14_001674D8 __attribute__((section(".data")));
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
+extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -59,7 +59,7 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern float vector_length_xyz(void *a);
+extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L14_0015F678") = 0;
 extern int D_L14_0015F6DC_d __asm__("D_L14_0015F6DC");
@@ -120,11 +120,11 @@ extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
-extern void add_vector_xyz(void *, void *, void *);
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_vector(void *);
-extern void scale_vector_xyz(void *, void *, float);
-extern void tick_countdown_32(int *arg0);
+extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
+extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
+extern void fast_dec_timer(int *arg0) __asm__("func_001F9740");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");
@@ -276,7 +276,7 @@ void process_hero_state_transitions(void) {
                                 hero.fidget_index = record_index;
                                 rec = &l14_idle_fidget_entries[record_index];
                                 hero.fidget_cooldown = scale_game_frames(0x78);
-                                rec->duration_frames = multiply_global_factor_ed64(rec->duration) * 60.0f;
+                                rec->duration_frames = scale_time(rec->duration) * 60.0f;
                                 if (rec->use_state_40 != 0) {
                                     hero_set_state(HERO_STATE_FIDGET, 1);
                                 } else {
@@ -840,7 +840,7 @@ void process_hero_state_transitions(void) {
                     }
                     if (controller_state.no_direction != 0 && !(hero.state_timer < scale_game_frames(0x1E))) {
                         if (hero_set_state(HERO_STATE_IDLE, 0)) {
-                            clear_vector(hero.motion.momentum.f);
+                            clear_u64_value(hero.motion.momentum.f);
                             set_hero_animation(hero_get_gadget_anim_id(0), 0, scale_game_frames(0xF));
                         }
                     }
@@ -1066,7 +1066,7 @@ void process_hero_state_transitions(void) {
                                 motion_query_vector[0] = fast_cos(hero.rail_dir_yaw) * 5.0f;
                                 motion_query_vector[1] = fast_sin(hero.rail_dir_yaw) * 5.0f;
                                 motion_query_vector[2] = 0.0f;
-                                add_vector_xyz(motion_query_vector, motion_query_vector, query_position);
+                                fast_vec_add(motion_query_vector, motion_query_vector, query_position);
                                 if (collision_line(query_position, motion_query_vector, 2, 0, 0)) {
                                     ok = 0;
                                 }
@@ -1230,9 +1230,9 @@ void process_hero_state_transitions(void) {
                                     /* Step a copy of the hero position along its current path. */
                                     if (sample_path((int *)hero.rail_spline, query_position, &path_seg,
                                                          &path_t, hero.rail_spline_loops, t)) {
-                                        scale_vector_xyz(motion_query_vector, hero.motion.displacement.f,
+                                        fast_vec_scale(motion_query_vector, hero.motion.displacement.f,
                                                          scale_game_frames(0x30));
-                                        add_vector_xyz(query_position, hero.motion.pos.f, motion_query_vector);
+                                        fast_vec_add(query_position, hero.motion.pos.f, motion_query_vector);
                                     }
                                     query_position[0] += fast_cos(ang) * d;
                                     query_position[1] += fast_sin(ang) * d;
@@ -1797,9 +1797,9 @@ void process_hero_state_transitions(void) {
                     } else if (hero.rail_land_frames == 0 &&
                                (hero.state.current == HERO_STATE_PACK_JUMP || hero.state.current == HERO_STATE_PACK_LONG_JUMP) &&
                                hero.wall_probe_distance < 0.9f && hero.wall_hit != 0) {
-                        if (vector_length_xyz(hero.motion.velocity.f) > frame_time * 7.0f) {
-                            float len = vector_length_xyz(hero.motion.displacement.f);
-                            if (len < vector_length_xyz(hero.motion.velocity.f) * 0.5f &&
+                        if (fast_vec_length(hero.motion.velocity.f) > frame_time * 7.0f) {
+                            float len = fast_vec_length(hero.motion.displacement.f);
+                            if (len < fast_vec_length(hero.motion.velocity.f) * 0.5f &&
                                 hero.ledge_found == 0 && hero.ground_distance < 2.0f) {
                                 hero_set_state(HERO_STATE_WALL_BONK, 1);
                                 break;
@@ -1913,7 +1913,7 @@ void process_hero_state_transitions(void) {
                                 break;
                             }
                             set_hero_animation(5, 0, -2.0f);
-                            scale_vector_xyz(hero.motion.momentum.f, hero.motion.momentum.f, 0.8f);
+                            fast_vec_scale(hero.motion.momentum.f, hero.motion.momentum.f, 0.8f);
                             break;
                         }
                         if (hero.on_slip_ground == 0 && hero.move_lock_timer == 0) {
