@@ -647,10 +647,10 @@ int move_test_dummy_toward_position_and_heading(char *moby, void *target_positio
     float movement_delta[4] __attribute__((aligned(16)));
     float speed;
     float distance_to_target;
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *test_dummy_motion_data = ((char *)MOBY(moby)->pvars);
     *(OvlQuad *)target_position_copy = *(OvlQuad *)target_position;
     approach_angle((float *)&MOBY(moby)->rot.z,
-                   (float *)(data + 0x100),
+                   (float *)(test_dummy_motion_data + 0x100),
                    angle,
                    frame_time_sq * 12.566371f,
                    frame_time_sq * 12.566371f,
@@ -663,11 +663,11 @@ int move_test_dummy_toward_position_and_heading(char *moby, void *target_positio
                                frame_time_sq * 12.0f,
                                D_0015ED6C * 6.0f,
                                &speed,
-                               (float *)(data + 0xFC));
-    fast_vec_normalize(movement_delta, movement_delta, *(float *)(data + 0xFC));
+                               (float *)(test_dummy_motion_data + 0xFC));
+    fast_vec_normalize(movement_delta, movement_delta, *(float *)(test_dummy_motion_data + 0xFC));
     fast_vec_add(moby + 0x10, moby + 0x10, movement_delta);
     if (distance_to_target < 0.05f) {
-        if (*(float *)(data + 0xFC) < 0.005f)
+        if (*(float *)(test_dummy_motion_data + 0xFC) < 0.005f)
             return 1;
         else
             return 0;
