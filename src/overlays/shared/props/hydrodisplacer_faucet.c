@@ -69,11 +69,11 @@ void hydrodisplacer_faucet_update(char *faucet_moby) {
 void update_hydrodisplacer_faucet_pulse_color(void *mv) {
     struct Moby *moby = mv;
     struct Hero *base = &hero;
-    char        *data = ((char *)moby->pvars);
+    char        *faucet_pulse_vars = ((char *)moby->pvars);
     int          pulse_color;
     float        pulse_phase;
     if (((char *)base->ground_moby) == moby) {
-        approach_value((float *)(data + 0x1C), 1.0f, frame_time + frame_time);
+        approach_value((float *)(faucet_pulse_vars + 0x1C), 1.0f, frame_time + frame_time);
         if (((int)base->items[0].moby) != 0) {
             if (base->items[0].item_id == 0x16)
                 ((unsigned char *)moby)[0xBC] = 1;
@@ -83,11 +83,11 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
             ((unsigned char *)moby)[0xBC] = 0;
         }
     } else {
-        approach_value((float *)(data + 0x1C), 0.0f, *(float *)&D_0015EE6C_s);
+        approach_value((float *)(faucet_pulse_vars + 0x1C), 0.0f, *(float *)&D_0015EE6C_s);
     }
-    if (*(float *)(data + 0x1C) != 0.0f) {
-        pulse_phase = fast_add_rotations(*(float *)(data + 0x18), frame_time * 6.2831855f);
-        *(float *)(data + 0x18) = pulse_phase;
+    if (*(float *)(faucet_pulse_vars + 0x1C) != 0.0f) {
+        pulse_phase = fast_add_rotations(*(float *)(faucet_pulse_vars + 0x18), frame_time * 6.2831855f);
+        *(float *)(faucet_pulse_vars + 0x18) = pulse_phase;
         if (((unsigned char *)moby)[0xBC] == 1) {
             pulse_color = fast_tween_color(*(int *)&faucet_item_16_pulse_start_color_gp,
                                            *(int *)&faucet_item_16_pulse_end_color_gp,
@@ -98,7 +98,7 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
                                            (fast_sin(pulse_phase) + 1.0f) * 0.5f);
         }
         moby->glow_color =
-            fast_tween_color(*(int *)&faucet_base_color_gp, pulse_color, *(float *)(data + 0x1C));
+            fast_tween_color(*(int *)&faucet_base_color_gp, pulse_color, *(float *)(faucet_pulse_vars + 0x1C));
     } else {
         moby->glow_color = *(int *)&faucet_base_color_gp;
     }
