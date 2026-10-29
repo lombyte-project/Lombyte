@@ -222,18 +222,18 @@ float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float sp
     float away[4];
     float target[4];
     float pad[4][4];
-    char *data = (char *)moby->pvars;
+    char *circular_saw_flock_pvars = (char *)moby->pvars;
     char *other;
     float target_dist;
     float weight;
     int   is_closest;
     int   is_alert = 0;
-    if (*(int *)(data + 0x38) != 0 || *(short *)(data + 0x136) != 0)
+    if (*(int *)(circular_saw_flock_pvars + 0x38) != 0 || *(short *)(circular_saw_flock_pvars + 0x136) != 0)
         is_alert = 1;
     if (is_alert) {
-        speed = *(float *)(data + 0x140) + *(float *)(data + 0x140);
+        speed = *(float *)(circular_saw_flock_pvars + 0x140) + *(float *)(circular_saw_flock_pvars + 0x140);
     } else {
-        speed = *(float *)(data + 0x140);
+        speed = *(float *)(circular_saw_flock_pvars + 0x140);
     }
     select_moby_combat_target(moby, target, speed);
     target_dist = vector_distance_xy((float *)&moby->pos, target);
