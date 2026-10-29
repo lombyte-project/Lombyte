@@ -320,21 +320,21 @@ int select_list_point_toward_target(char *reference_object, List *list, char *pt
 void *get_path_node(void *descriptor, s32 index) __asm__("FUN_L01_0028b7b0");
 
 void *get_path_node(void *descriptor, s32 index) {
-    char *data;
+    char *path_storage_base;
     s32   last;
 
     if (*(s8 *)((char *)descriptor + 4) >= 0) {
         last = (s32)((u32) * *(s32 **)((char *)descriptor + 0x10) - 1);
-        data = *(char **)((char *)descriptor + 0x10);
+        path_storage_base = *(char **)((char *)descriptor + 0x10);
     } else {
-        data = *(char **)((char *)descriptor + 0x10);
+        path_storage_base = *(char **)((char *)descriptor + 0x10);
         last = 0;
     }
     if (index < 0)
-        return data + ((((u32)last + (u32)index) << 4) + 0x20);
+        return path_storage_base + ((((u32)last + (u32)index) << 4) + 0x20);
     if (index > last)
-        return data + (((u32)(index % (s32)((u32)last + 1)) << 4) + 0x10);
-    return data + (((u32)index << 4) + 0x10);
+        return path_storage_base + (((u32)(index % (s32)((u32)last + 1)) << 4) + 0x10);
+    return path_storage_base + (((u32)index << 4) + 0x10);
 }
 
 typedef struct {
