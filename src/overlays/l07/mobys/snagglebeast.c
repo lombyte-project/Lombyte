@@ -905,7 +905,7 @@ void snagglebeast_update(unsigned char *moby) {
     Vec4           offset;
     Vec4           step;
     Vec4           projection;
-    unsigned char *data = ((unsigned char *)MOBY(moby)->pvars);
+    unsigned char *snagglebeast_instance_state = ((unsigned char *)MOBY(moby)->pvars);
     int            follow_target;
     int            timer194;
     int            timer19a;
@@ -920,12 +920,12 @@ void snagglebeast_update(unsigned char *moby) {
     int            i;
     float         *health;
 
-    FUN_L00_00263ac8(2.5f, (int)moby, 0xB, data + 0x2A0);
+    FUN_L00_00263ac8(2.5f, (int)moby, 0xB, snagglebeast_instance_state + 0x2A0);
     apply_snagglebeast_big_head_cheat((char *)moby);
     if (scene_state == 2)
         return;
-    if (*(int *)(data + 0x1A4) != -1 &&
-        !is_point_inside_clip_volume(((char *)&hero) + 0x80, *(int *)(data + 0x1A4)))
+    if (*(int *)(snagglebeast_instance_state + 0x1A4) != -1 &&
+        !is_point_inside_clip_volume(((char *)&hero) + 0x80, *(int *)(snagglebeast_instance_state + 0x1A4)))
         return;
     if (moby[0x31] != 0) {
         if (fast_vec_dist(moby + 0x10, &D_L07_00166E40) < 35.0f) {
@@ -934,8 +934,8 @@ void snagglebeast_update(unsigned char *moby) {
         }
     }
     qcopy(&oldpos, moby + 0x10);
-    health = (float *)(data + 0x20);
-    process_snagglebeast_damage((char *)moby, (char *)data, health);
+    health = (float *)(snagglebeast_instance_state + 0x20);
+    process_snagglebeast_damage((char *)moby, (char *)snagglebeast_instance_state, health);
     follow_target = 0;
     get_target_sight((struct Moby *)moby, &sight, 30.0f);
     target_distance = vector_distance_xy(&sight, moby + 0x10);
@@ -947,7 +947,7 @@ void snagglebeast_update(unsigned char *moby) {
         hero_angle = fast_arc_tan(*(float *)(g + 0x80) - MOBY(moby)->pos.x,
                                   *(float *)(g + 0x84) - MOBY(moby)->pos.y);
     }
-    if (FUN_L00_001fefc8(data + 0x1F7)) {
+    if (FUN_L00_001fefc8(snagglebeast_instance_state + 0x1F7)) {
         if ((vector_distance_xy(moby + 0x10, ((char *)&hero) + 0x80) > 8.0f && moby[0x20] != 5) ||
             (vector_distance_xy(moby + 0x10, ((char *)&hero) + 0x80) > 6.0f &&
              (moby[0x20] == 5 || moby[0xBC] % 3U == 1))) {
@@ -955,11 +955,11 @@ void snagglebeast_update(unsigned char *moby) {
         }
     }
     timer19a = 0;
-    timer194 = fast_dec_timer_s16(data + 0x194) != 0;
-    if (fast_dec_timer_s16(data + 0x19A) && target_distance > 9.0f)
+    timer194 = fast_dec_timer_s16(snagglebeast_instance_state + 0x194) != 0;
+    if (fast_dec_timer_s16(snagglebeast_instance_state + 0x19A) && target_distance > 9.0f)
         timer19a = 1;
     sight_ready = 0;
-    if (data[0x1C7] != 0) {
+    if (snagglebeast_instance_state[0x1C7] != 0) {
         char *g = ((char *)&hero);
         if (sight.moby == *(void **)(g + 0x2080) && target_distance < 30.0f &&
             absolute_float(fast_subtract_rotations(target_angle, MOBY(moby)->rot.z)) < 1.3962634f) {
@@ -967,7 +967,7 @@ void snagglebeast_update(unsigned char *moby) {
         }
     }
     target_close = 0;
-    if (fast_dec_timer_s16(data + 0x198)) {
+    if (fast_dec_timer_s16(snagglebeast_instance_state + 0x198)) {
         if (((moby[0x20] == 5 || moby[0xBC] % 3U == 1) && target_distance < 14.0f) ||
             (moby[0x20] != 5 && target_distance < 10.0f))
             target_close = 1;
@@ -989,7 +989,7 @@ void snagglebeast_update(unsigned char *moby) {
         sight_ready = 0;
         break;
     case SNAGGLEBEAST_PHASE_AFTER_FIRST_TIMED_DAMAGE:
-        if (*(int *)(data + 0x1A8) != -1) {
+        if (*(int *)(snagglebeast_instance_state + 0x1A8) != -1) {
             follow_target = 1;
             path_point_ready = 1;
             timer194 = 0;
@@ -1000,7 +1000,7 @@ void snagglebeast_update(unsigned char *moby) {
         sight_ready = 0;
         break;
     case SNAGGLEBEAST_PHASE_AFTER_SECOND_TIMED_DAMAGE:
-        if (*(int *)(data + 0x1A8) != -1) {
+        if (*(int *)(snagglebeast_instance_state + 0x1A8) != -1) {
             follow_target = 1;
             path_point_ready = 1;
             timer194 = 0;
@@ -1026,89 +1026,89 @@ void snagglebeast_update(unsigned char *moby) {
         timer19a = 0;
         break;
     }
-    *(int *)(data + 0x1B4) = truncate_float_to_s32(*(float *)(data + 0x20) * 16.0f) & 0xFFF0;
-    if (*(int *)(data + 0x1B4) >=
-        truncate_float_to_s32(((float)*(short *)(data + 0x24) - 0.5f) * 16.0f)) {
-        *(int *)(data + 0x1B4) |= 0xF;
+    *(int *)(snagglebeast_instance_state + 0x1B4) = truncate_float_to_s32(*(float *)(snagglebeast_instance_state + 0x20) * 16.0f) & 0xFFF0;
+    if (*(int *)(snagglebeast_instance_state + 0x1B4) >=
+        truncate_float_to_s32(((float)*(short *)(snagglebeast_instance_state + 0x24) - 0.5f) * 16.0f)) {
+        *(int *)(snagglebeast_instance_state + 0x1B4) |= 0xF;
     }
     if (moby[0xBC] % 3U == 0) {
-        if (*(float *)(data + 0x20) > 0.5f) {
+        if (*(float *)(snagglebeast_instance_state + 0x20) > 0.5f) {
             int r =
-                ((truncate_float_to_s32(*(float *)(data + 0x20)) % (*(short *)(data + 0x24) / 6)) *
+                ((truncate_float_to_s32(*(float *)(snagglebeast_instance_state + 0x20)) % (*(short *)(snagglebeast_instance_state + 0x24) / 6)) *
                  16) /
-                (*(short *)(data + 0x24) / 6);
+                (*(short *)(snagglebeast_instance_state + 0x24) / 6);
             if (r < 0)
                 r = 0;
-            *(int *)(data + 0x1B4) += r & 0xF;
+            *(int *)(snagglebeast_instance_state + 0x1B4) += r & 0xF;
         } else {
-            *(int *)(data + 0x1B4) = 0;
+            *(int *)(snagglebeast_instance_state + 0x1B4) = 0;
         }
     }
     if (moby[0xBC] % 3U == 2)
-        *(int *)(data + 0x1B4) += 0xF;
+        *(int *)(snagglebeast_instance_state + 0x1B4) += 0xF;
     if (moby[0x20] != 8 && moby[0x20] != 0)
         suck_beam_queue_draw((int)moby);
-    if ((int)data[0x1C5] - 1 == 0) {
-        if (*(int *)(data + 0x1F8) == -1)
-            *(int *)(data + 0x1F8) = FUN_0022da68(0xF, 4, (int)moby);
-        *(float *)(data + 0x1C8) += frame_scale * 0.01f;
-        if (*(float *)(data + 0x1C8) >= 1.0f)
-            data[0x1C5] = 0;
-        if (*(float *)(data + 0x1C8) > 1.0f)
-            *(float *)(data + 0x1C8) = 1.0f;
+    if ((int)snagglebeast_instance_state[0x1C5] - 1 == 0) {
+        if (*(int *)(snagglebeast_instance_state + 0x1F8) == -1)
+            *(int *)(snagglebeast_instance_state + 0x1F8) = FUN_0022da68(0xF, 4, (int)moby);
+        *(float *)(snagglebeast_instance_state + 0x1C8) += frame_scale * 0.01f;
+        if (*(float *)(snagglebeast_instance_state + 0x1C8) >= 1.0f)
+            snagglebeast_instance_state[0x1C5] = 0;
+        if (*(float *)(snagglebeast_instance_state + 0x1C8) > 1.0f)
+            *(float *)(snagglebeast_instance_state + 0x1C8) = 1.0f;
     }
-    if (data[0x1C5] == 2) {
-        if (*(int *)(data + 0x1F8) == -1)
-            *(int *)(data + 0x1F8) = FUN_0022da68(0xF, 4, (int)moby);
-        *(float *)(data + 0x1C8) -= frame_scale * 0.01f;
-        if (*(float *)(data + 0x1C8) <= 0.0f) {
-            if (*(int *)(data + 0x1F8) != -1) {
-                char *sl = (voice_slot_state_base - 0x74) + *(int *)(data + 0x1F8) * 0x70;
+    if (snagglebeast_instance_state[0x1C5] == 2) {
+        if (*(int *)(snagglebeast_instance_state + 0x1F8) == -1)
+            *(int *)(snagglebeast_instance_state + 0x1F8) = FUN_0022da68(0xF, 4, (int)moby);
+        *(float *)(snagglebeast_instance_state + 0x1C8) -= frame_scale * 0.01f;
+        if (*(float *)(snagglebeast_instance_state + 0x1C8) <= 0.0f) {
+            if (*(int *)(snagglebeast_instance_state + 0x1F8) != -1) {
+                char *sl = (voice_slot_state_base - 0x74) + *(int *)(snagglebeast_instance_state + 0x1F8) * 0x70;
                 if (*(void **)(sl + 0x88) == moby && *(unsigned char *)(sl + 0x74) != 0) {
-                    release_voice_slot(*(int *)(data + 0x1F8));
+                    release_voice_slot(*(int *)(snagglebeast_instance_state + 0x1F8));
                 }
             }
-            data[0x1C5] = 0;
-            *(int *)(data + 0x1F8) = -1;
+            snagglebeast_instance_state[0x1C5] = 0;
+            *(int *)(snagglebeast_instance_state + 0x1F8) = -1;
         }
-        if (*(float *)(data + 0x1C8) < 0.0f)
-            *(float *)(data + 0x1C8) = 0.0f;
+        if (*(float *)(snagglebeast_instance_state + 0x1C8) < 0.0f)
+            *(float *)(snagglebeast_instance_state + 0x1C8) = 0.0f;
     }
-    if (*(float *)(data + 0x1C8) > 0.0f)
+    if (*(float *)(snagglebeast_instance_state + 0x1C8) > 0.0f)
         add_draw_callback(draw_snagglebeast_sphere_effect, moby);
     update_snagglebeast_target_joint_animation(
-        (char *)moby, (char *)data, (float *)(((char *)&hero) + 0x80));
+        (char *)moby, (char *)snagglebeast_instance_state, (float *)(((char *)&hero) + 0x80));
     if (moby[0x20] != 0 && moby[0x20] != 0xA && moby[0x20] != 0x10) {
-        *(int *)(data + 0x1B0) = queue_animation_update(0x16,
+        *(int *)(snagglebeast_instance_state + 0x1B0) = queue_animation_update(0x16,
                                                         0xFFFF,
                                                         (int)reset_numeric_hud_element,
                                                         (int)hud_update_counter,
                                                         (int)FUN_L06_00249738,
-                                                        (int)(data + 0x1B4),
-                                                        (*(short *)(data + 0x24) << 4) | 0xF);
+                                                        (int)(snagglebeast_instance_state + 0x1B4),
+                                                        (*(short *)(snagglebeast_instance_state + 0x24) << 4) | 0xF);
     }
     switch (moby[0x20]) {
     case SNAGGLEBEAST_INITIALIZE:
         *(int *)&D_L07_00161B64 = 0;
         moby[0x20] = 1;
         moby[0xBC] = 0;
-        *(short *)(data + 0x280) = -1;
-        *(float *)(data + 0x190) = 0.0f;
-        if (*(int *)(data + 0x18C) != -1) {
+        *(short *)(snagglebeast_instance_state + 0x280) = -1;
+        *(float *)(snagglebeast_instance_state + 0x190) = 0.0f;
+        if (*(int *)(snagglebeast_instance_state + 0x18C) != -1) {
             int i;
-            for (i = 0; i < *(int *)D_L07_001B0530[*(int *)(data + 0x18C)]; i++) {
-                ((LevelPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i].f[3] =
+            for (i = 0; i < *(int *)D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x18C)]; i++) {
+                ((LevelPath *)D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x18C)])->points[i].f[3] =
                     fast_vec_dist(
-                        D_L07_001B0530[*(int *)(data + 0x18C)] + (i * 16 + 0x10),
-                        D_L07_001B0530[*(int *)(data + 0x18C)] +
-                            (((i + 1) % *(int *)D_L07_001B0530[*(int *)(data + 0x18C)]) * 16 +
+                        D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x18C)] + (i * 16 + 0x10),
+                        D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x18C)] +
+                            (((i + 1) % *(int *)D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x18C)]) * 16 +
                              0x10));
-                *(float *)(data + 0x190) +=
-                    ((LevelPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i].f[3];
+                *(float *)(snagglebeast_instance_state + 0x190) +=
+                    ((LevelPath *)D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x18C)])->points[i].f[3];
             }
         }
-        if (*(int *)(data + 0x290) != -1) {
-            char *chase_path = D_L07_001B0530[*(int *)(data + 0x290)];
+        if (*(int *)(snagglebeast_instance_state + 0x290) != -1) {
+            char *chase_path = D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x290)];
             int   i;
             for (i = 0; i < *(int *)chase_path; i++) {
                 ((LevelPath *)chase_path)->points[i].f[3] =
@@ -1116,32 +1116,32 @@ void snagglebeast_update(unsigned char *moby) {
                                   chase_path + (((i + 1) % *(int *)chase_path) * 16 + 0x10));
             }
         }
-        if (*(int *)(data + 0x188) != -1) {
+        if (*(int *)(snagglebeast_instance_state + 0x188) != -1) {
             int i;
-            for (i = 0; i < *(int *)D_L07_001B0530[*(int *)(data + 0x188)]; i++) {
+            for (i = 0; i < *(int *)D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x188)]; i++) {
                 int k = truncate_float_to_s32(
-                    ((LevelPath *)D_L07_001B0530[*(int *)(data + 0x188)])->points[i].f[3]);
+                    ((LevelPath *)D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x188)])->points[i].f[3]);
                 if ((unsigned int)k < 4)
-                    ((ChaserPathPoints *)data)->path_points[k] = i;
+                    ((ChaserPathPoints *)snagglebeast_instance_state)->path_points[k] = i;
             }
         }
-        *(int *)(data + 0xA8) &= ~8;
+        *(int *)(snagglebeast_instance_state + 0xA8) &= ~8;
         MOBY(moby)->flags |= 0x1000;
-        build_symmetric_adjacency_masks((int *)(data + 0x170), 3, *(int *)(data + 0x188));
-        data[0x19C] = 7;
+        build_symmetric_adjacency_masks((int *)(snagglebeast_instance_state + 0x170), 3, *(int *)(snagglebeast_instance_state + 0x188));
+        snagglebeast_instance_state[0x19C] = 7;
         moby[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
-        *(int *)(data + 0x1A8) = -1;
-        *(int *)(data + 0x1B0) = -1;
-        *(int *)(data + 0x1C0) = select_point_index_by_distance(
-            moby + 0x10, D_L07_001B0530[*(int *)(data + 0x188)], 0.0f);
+        *(int *)(snagglebeast_instance_state + 0x1A8) = -1;
+        *(int *)(snagglebeast_instance_state + 0x1B0) = -1;
+        *(int *)(snagglebeast_instance_state + 0x1C0) = select_point_index_by_distance(
+            moby + 0x10, D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x188)], 0.0f);
         suck_reset(moby);
         MOBY(moby)->scale *= 1.75f;
-        data[0x1C7] = 0;
-        *(float *)(data + 0x98) = 1.7453293f;
-        data[0x29] = 1;
-        data[0x58] = truncate_float_to_s32(30.0f);
-        data[0x5A] = truncate_float_to_s32(40.0f);
+        snagglebeast_instance_state[0x1C7] = 0;
+        *(float *)(snagglebeast_instance_state + 0x98) = 1.7453293f;
+        snagglebeast_instance_state[0x29] = 1;
+        snagglebeast_instance_state[0x58] = truncate_float_to_s32(30.0f);
+        snagglebeast_instance_state[0x5A] = truncate_float_to_s32(40.0f);
         break;
     case SNAGGLEBEAST_IDLE:
         if (moby[0x70] & 2) {
@@ -1151,10 +1151,10 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_00212f90(moby, r1, r2, random_int_between(0x1E, 0x2A));
             }
         }
-        if (fast_dec_timer((int *)(data + 0x160))) {
+        if (fast_dec_timer((int *)(snagglebeast_instance_state + 0x160))) {
             if (timer19a) {
-                *(int *)(data + 0x164) = 0;
-                *(int *)(data + 0x160) = 0;
+                *(int *)(snagglebeast_instance_state + 0x164) = 0;
+                *(int *)(snagglebeast_instance_state + 0x160) = 0;
                 if (moby[0x53] != 5) {
                     int r = random_int_between(0, 2);
                     FUN_00212f90(moby, 5, r, random_int_between(0x12, 0x14));
@@ -1163,7 +1163,7 @@ void snagglebeast_update(unsigned char *moby) {
             }
             if (timer194) {
                 if (moby[0x20] != 5 || FUN_00213260(4) == 0) {
-                    *(int *)(data + 0x164) = 0;
+                    *(int *)(snagglebeast_instance_state + 0x164) = 0;
                     if (moby[0x53] != 4) {
                         int r = random_int_between(0, 9);
                         FUN_00212f90(moby, 4, r, random_int_between(0x14, 0x28));
@@ -1177,12 +1177,12 @@ void snagglebeast_update(unsigned char *moby) {
                     int r = random_int_between(0, 2);
                     FUN_00212f90(moby, 6, r, random_int_between(0xF, 0x19));
                 }
-                *(int *)(data + 0x164) = 0;
-                *(float *)(data + 0x16C) = 0.0f;
-                data[0x1C4] = 0;
+                *(int *)(snagglebeast_instance_state + 0x164) = 0;
+                *(float *)(snagglebeast_instance_state + 0x16C) = 0.0f;
+                snagglebeast_instance_state[0x1C4] = 0;
                 moby[0x20] = 8;
-                *(int *)(data + 0x294) = 0;
-                *(int *)(data + 0x1F8) = FUN_0022da68(9, 4, (int)moby);
+                *(int *)(snagglebeast_instance_state + 0x294) = 0;
+                *(int *)(snagglebeast_instance_state + 0x1F8) = FUN_0022da68(9, 4, (int)moby);
             }
             if (target_close) {
                 if (moby[0x53] != 9) {
@@ -1198,7 +1198,7 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_00212f90(moby, 0xA, r, random_int_between(0x14, 0x1E));
             }
             MOBY(moby)->anim_speed = 1.5f;
-            *(int *)(data + 0x298) = 0;
+            *(int *)(snagglebeast_instance_state + 0x298) = 0;
             moby[0x20] = 5;
         }
         break;
@@ -1210,11 +1210,11 @@ void snagglebeast_update(unsigned char *moby) {
         if ((level_frame_count_lui - 2) % 6 == 0)
             spawn_moby_point_offset_particle((char *)moby, 1, 600000.0f, 5.0f);
         if (start_snagglebeast_turn_toward_target(
-                moby, data, (float *)(((char *)&hero) + 0x80), 9, 0))
+                moby, snagglebeast_instance_state, (float *)(((char *)&hero) + 0x80), 9, 0))
             break;
         FUN_L00_00258278((struct Moby *)moby,
                          target_angle,
-                         (float *)(data + 0x168),
+                         (float *)(snagglebeast_instance_state + 0x168),
                          frame_time_sq * 2.0943952f,
                          frame_time_sq * 0.6981317f,
                          frame_time * 2.0943952f);
@@ -1231,11 +1231,11 @@ void snagglebeast_update(unsigned char *moby) {
         }
         if (moby[0x52] == 9 || moby[0x52] == 0xD)
             moby[0x20] =
-                update_alternating_joint_emission_burst(moby, (char *)data, (float *)&sight);
+                update_alternating_joint_emission_burst(moby, (char *)snagglebeast_instance_state, (float *)&sight);
         if ((moby[0xBC] % 3U == 0 && vector_distance_xy(&sight, moby + 0x10) > 13.0f) ||
             (moby[0xBC] % 3U == 1 && vector_distance_xy(&sight, moby + 0x10) > 20.0f)) {
-            *(short *)(data + 0x198) = scale_game_frames(0x23);
-            *(int *)(data + 0x160) = scale_game_frames(0x1E);
+            *(short *)(snagglebeast_instance_state + 0x198) = scale_game_frames(0x23);
+            *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0x1E);
             moby[0x20] = 1;
         }
         break;
@@ -1243,7 +1243,7 @@ void snagglebeast_update(unsigned char *moby) {
     case SNAGGLEBEAST_TRIPLE_SPAWN_ATTACK:
         FUN_L00_00258278((struct Moby *)moby,
                          target_angle,
-                         (float *)(data + 0x168),
+                         (float *)(snagglebeast_instance_state + 0x168),
                          frame_time_sq * 1.5707964f,
                          frame_time_sq * 0.6981317f,
                          frame_time * 1.0471976f);
@@ -1251,14 +1251,14 @@ void snagglebeast_update(unsigned char *moby) {
             is_value_within_interpolated_window(moby, 67.0f) ||
             is_value_within_interpolated_window(moby, 101.0f)) {
             float speed;
-            *(int *)(data + 0x164) += 1;
+            *(int *)(snagglebeast_instance_state + 0x164) += 1;
             qcopy(&position, moby + 0x10);
             speed = frame_time * 8.0f;
-            *(int *)(data + 0x168) = 0;
+            *(int *)(snagglebeast_instance_state + 0x168) = 0;
             spawn_fading_ring_effect((int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, speed, 1.0f);
-            FUN_L00_0024f7c8(moby, (*(int *)(data + 0x164) & 1) + 5, &position);
+            FUN_L00_0024f7c8(moby, (*(int *)(snagglebeast_instance_state + 0x164) & 1) + 5, &position);
             configure_timed_point_light(
-                moby, data, 1, &position, scale_game_frames(0x1E), 0x800060FF, 0, 10.0f);
+                moby, snagglebeast_instance_state, 1, &position, scale_game_frames(0x1E), 0x800060FF, 0, 10.0f);
             position.f[2] = MOBY(moby)->pos.z;
             for (i = 0; i < 55; i++) {
                 float r1 = random_angle_radians();
@@ -1272,15 +1272,15 @@ void snagglebeast_update(unsigned char *moby) {
             }
             rumble_by_distance((char *)moby);
         }
-        if (*(int *)(data + 0x164) >= 3 && is_value_within_interpolated_window(moby, 51.0f)) {
+        if (*(int *)(snagglebeast_instance_state + 0x164) >= 3 && is_value_within_interpolated_window(moby, 51.0f)) {
             if (timer19a) {
-                *(short *)(data + 0x194) = 0xC0;
-                *(int *)(data + 0x160) = 0xAA;
+                *(short *)(snagglebeast_instance_state + 0x194) = 0xC0;
+                *(int *)(snagglebeast_instance_state + 0x160) = 0xAA;
             } else {
-                *(short *)(data + 0x194) = scale_game_frames(0x3C);
-                *(int *)(data + 0x160) = scale_game_frames(0x37);
-                if (*(short *)(data + 0x19A) <= scale_game_frames(0x37))
-                    *(short *)(data + 0x19A) += scale_game_frames(0x3C);
+                *(short *)(snagglebeast_instance_state + 0x194) = scale_game_frames(0x3C);
+                *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0x37);
+                if (*(short *)(snagglebeast_instance_state + 0x19A) <= scale_game_frames(0x37))
+                    *(short *)(snagglebeast_instance_state + 0x19A) += scale_game_frames(0x3C);
             }
             MOBY(moby)->anim_speed = 1.0f;
             if (moby[0x53] != (rand() & 1)) {
@@ -1293,12 +1293,12 @@ void snagglebeast_update(unsigned char *moby) {
         break;
     case SNAGGLEBEAST_SWEEP_BEAM_ATTACK:
         if (start_snagglebeast_turn_toward_target(
-                moby, data, (float *)(((char *)&hero) + 0x80), 5, 0))
+                moby, snagglebeast_instance_state, (float *)(((char *)&hero) + 0x80), 5, 0))
             break;
-        if (*(int *)(data + 0x160) < scale_game_frames(0x3C) / 2) {
+        if (*(int *)(snagglebeast_instance_state + 0x160) < scale_game_frames(0x3C) / 2) {
             FUN_L00_0024f7c8(moby, 2, &position);
             configure_timed_point_light(
-                moby, data, 2, &position, scale_game_frames(0x1E), 0x800060FF, 0, 10.0f);
+                moby, snagglebeast_instance_state, 2, &position, scale_game_frames(0x1E), 0x800060FF, 0, 10.0f);
             if ((level_frame_count & 7) == 0)
                 spawn_moby_point_offset_particle((char *)moby, 2, 0.0f, 0.2f);
             if (((level_frame_count - 4) & 7) == 0)
@@ -1307,8 +1307,8 @@ void snagglebeast_update(unsigned char *moby) {
         if (moby[0x52] == 5) {
             qcopy(&position, &sight);
             position.f[2] = probe_ground_height(&position, 0, 0.5f);
-            *(int *)(data + 0x160) += 1;
-            if (*(int *)(data + 0x164) == 0) {
+            *(int *)(snagglebeast_instance_state + 0x160) += 1;
+            if (*(int *)(snagglebeast_instance_state + 0x164) == 0) {
                 fast_vec_sub(&velocity, moby + 0x10, &position);
                 velocity.f[2] = 0.0f;
                 fast_vec_normalize(&velocity, &velocity, 1.0f);
@@ -1341,23 +1341,23 @@ void snagglebeast_update(unsigned char *moby) {
                 fast_vec_sub(&velocity, &offset, &velocity);
                 fast_vec_add(&start, &start, &velocity);
                 fast_vec_add(&direction, &direction, &velocity);
-                qcopy(data + 0x110, &start);
-                qcopy(data + 0x120, &direction);
-                qcopy(data + 0x140, &start);
-                fast_vec_sub(data + 0x130, &direction, &start);
-                fast_vec_scale(data + 0x130, data + 0x130, 1.0f / (float)scale_game_frames(0x3C));
-                qcopy(data + 0x150, data + 0x140);
-                *(int *)(data + 0x15C) = 0;
-                *(int *)(data + 0x164) = 1;
+                qcopy(snagglebeast_instance_state + 0x110, &start);
+                qcopy(snagglebeast_instance_state + 0x120, &direction);
+                qcopy(snagglebeast_instance_state + 0x140, &start);
+                fast_vec_sub(snagglebeast_instance_state + 0x130, &direction, &start);
+                fast_vec_scale(snagglebeast_instance_state + 0x130, snagglebeast_instance_state + 0x130, 1.0f / (float)scale_game_frames(0x3C));
+                qcopy(snagglebeast_instance_state + 0x150, snagglebeast_instance_state + 0x140);
+                *(int *)(snagglebeast_instance_state + 0x15C) = 0;
+                *(int *)(snagglebeast_instance_state + 0x164) = 1;
             } else {
-                if (*(int *)(data + 0x160) < scale_game_frames(0x3C)) {
-                    fast_vec_add(data + 0x140, data + 0x140, data + 0x130);
+                if (*(int *)(snagglebeast_instance_state + 0x160) < scale_game_frames(0x3C)) {
+                    fast_vec_add(snagglebeast_instance_state + 0x140, snagglebeast_instance_state + 0x140, snagglebeast_instance_state + 0x130);
                     add_draw_callback(draw_collision_clipped_moby_beam, moby);
-                    *(int *)(data + 0x164) = 2;
+                    *(int *)(snagglebeast_instance_state + 0x164) = 2;
                 } else {
-                    *(int *)(data + 0x164) = 0;
-                    *(short *)(data + 0x19A) = scale_game_frames(0xF0);
-                    *(int *)(data + 0x160) = scale_game_frames(0xC8);
+                    *(int *)(snagglebeast_instance_state + 0x164) = 0;
+                    *(short *)(snagglebeast_instance_state + 0x19A) = scale_game_frames(0xF0);
+                    *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0xC8);
                     moby[0x20] = 1;
                 }
             }
@@ -1368,50 +1368,50 @@ void snagglebeast_update(unsigned char *moby) {
         float thr = 2.0f;
         float rot = MOBY(moby)->rot.z;
         float dd;
-        collect_snagglebeast_navigation_ids(moby, data, &direction);
+        collect_snagglebeast_navigation_ids(moby, snagglebeast_instance_state, &direction);
         if (!path_point_ready) {
             thr = 6.0f;
-            if (*(int *)(data + 0x29C) != -1 && (data[0x19C] & 3) == 0 &&
-                is_point_inside_clip_volume(&sight, *(int *)(data + 0x29C))) {
+            if (*(int *)(snagglebeast_instance_state + 0x29C) != -1 && (snagglebeast_instance_state[0x19C] & 3) == 0 &&
+                is_point_inside_clip_volume(&sight, *(int *)(snagglebeast_instance_state + 0x29C))) {
                 qcopy(&velocity,
-                      D_L07_001B0530[*(int *)(data + 0x1A0)] +
+                      D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x1A0)] +
                           select_point_index_by_distance(
-                              &sight, D_L07_001B0530[*(int *)(data + 0x1A0)], 0.0f) *
+                              &sight, D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x1A0)], 0.0f) *
                               16 +
                           0x10);
                 dd = vector_distance_xy(moby + 0x10, &velocity);
             } else {
                 qcopy(&velocity, &sight);
                 qcopy(&velocity,
-                      D_L07_001B0530[*(int *)(data + 0x290)] +
+                      D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x290)] +
                           select_point_index_by_distance(
-                              &velocity, D_L07_001B0530[*(int *)(data + 0x290)], 0.0f) *
+                              &velocity, D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x290)], 0.0f) *
                               16 +
                           0x10);
                 dd = vector_distance_xy(moby + 0x10, &velocity);
-                if (dd < *(float *)(data + 0x9C) + 1.0f)
+                if (dd < *(float *)(snagglebeast_instance_state + 0x9C) + 1.0f)
                     qcopy(&velocity, &sight);
             }
         } else {
             qcopy(&velocity,
-                  D_L07_001B0530[*(int *)(data + 0x188)] + *(int *)(data + 0x1A8) * 16 + 0x10);
+                  D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x188)] + *(int *)(snagglebeast_instance_state + 0x1A8) * 16 + 0x10);
             dd = vector_distance_xy(moby + 0x10, &velocity);
         }
         update_snagglebeast_chase_speed(
-            (struct ChaserAnim *)moby, (struct ChaserSpeed *)data, dd, thr, 1.5f);
-        if ((*(int *)(data + 0x298) & 3) == 0)
-            select_snagglebeast_chase_waypoint((char *)moby, (char *)data, &velocity, data + 0x140);
-        qcopy(&position, data + 0x140);
-        *(int *)(data + 0x298) += 1;
-        if (*(float *)(data + 0x98) <
+            (struct ChaserAnim *)moby, (struct ChaserSpeed *)snagglebeast_instance_state, dd, thr, 1.5f);
+        if ((*(int *)(snagglebeast_instance_state + 0x298) & 3) == 0)
+            select_snagglebeast_chase_waypoint((char *)moby, (char *)snagglebeast_instance_state, &velocity, snagglebeast_instance_state + 0x140);
+        qcopy(&position, snagglebeast_instance_state + 0x140);
+        *(int *)(snagglebeast_instance_state + 0x298) += 1;
+        if (*(float *)(snagglebeast_instance_state + 0x98) <
             fast_difference_between_rotations(MOBY(moby)->rot.z,
                                               fast_arc_tan(position.f[0] - MOBY(moby)->pos.x,
                                                            position.f[1] - MOBY(moby)->pos.y))) {
             MOBY(moby)->anim_speed = 1.0f;
-            data[0x1F4] = moby[0x20];
-            data[0x1F6] = 0xA;
-            data[0x1F5] = 1;
-            qcopy(data + 0xC0, &position);
+            snagglebeast_instance_state[0x1F4] = moby[0x20];
+            snagglebeast_instance_state[0x1F6] = 0xA;
+            snagglebeast_instance_state[0x1F5] = 1;
+            qcopy(snagglebeast_instance_state + 0xC0, &position);
             if (moby[0x53] != 3) {
                 int r = random_int_between(0, 1);
                 FUN_00212f90(moby, 3, r, random_int_between(0xF, 0x16));
@@ -1419,13 +1419,13 @@ void snagglebeast_update(unsigned char *moby) {
             moby[0x20] = 7;
         } else {
             int hit = update_snagglebeast_chase_movement(
-                (struct Moby *)moby, (struct ChaserVars *)data, &velocity, (int)&position, thr);
+                (struct Moby *)moby, (struct ChaserVars *)snagglebeast_instance_state, &velocity, (int)&position, thr);
             float spd;
             int   near;
             int   moving;
             int   four;
             fast_difference_between_rotations(MOBY(moby)->rot.z, rot);
-            spd = fast_vec_length(data + 0x100);
+            spd = fast_vec_length(snagglebeast_instance_state + 0x100);
             near = 0;
             if (!path_point_ready && target_distance < 20.0f)
                 near = 1;
@@ -1443,13 +1443,13 @@ void snagglebeast_update(unsigned char *moby) {
                     goto stop;
             } else if (hit == 4 || !moving) {
             stop:
-                data[0x1F7] = scale_game_frames(0x5A);
+                snagglebeast_instance_state[0x1F7] = scale_game_frames(0x5A);
                 if (moby[0x53] != (rand() & 1)) {
                     int r1 = rand() & 1;
                     int r2 = random_int_between(0, 9);
                     FUN_00212f90(moby, r1, r2, random_int_between(0x14, 0x28));
                 }
-                *(int *)(data + 0x1A8) = -1;
+                *(int *)(snagglebeast_instance_state + 0x1A8) = -1;
                 moby[0x20] = 1;
                 break;
             }
@@ -1460,10 +1460,10 @@ void snagglebeast_update(unsigned char *moby) {
                 if (near && (moby[0x70] & 2))
                     FUN_00212f90(moby, 0xC, 5, random_int_between(0xA, 0xD));
             }
-            if (fast_dec_timer((int *)(data + 0x160))) {
+            if (fast_dec_timer((int *)(snagglebeast_instance_state + 0x160))) {
                 if (timer19a) {
-                    *(int *)(data + 0x164) = 0;
-                    *(int *)(data + 0x160) = 0;
+                    *(int *)(snagglebeast_instance_state + 0x164) = 0;
+                    *(int *)(snagglebeast_instance_state + 0x160) = 0;
                     MOBY(moby)->anim_speed = 1.0f;
                     if (moby[0x53] != 5) {
                         int r = random_int_between(0, 2);
@@ -1472,7 +1472,7 @@ void snagglebeast_update(unsigned char *moby) {
                     moby[0x20] = 4;
                 }
                 if (timer194) {
-                    *(int *)(data + 0x164) = 0;
+                    *(int *)(snagglebeast_instance_state + 0x164) = 0;
                     if (moby[0x53] != 4) {
                         int r = random_int_between(0, 5);
                         FUN_00212f90(moby, 4, r, random_int_between(0x14, 0x28));
@@ -1481,12 +1481,12 @@ void snagglebeast_update(unsigned char *moby) {
                     MOBY(moby)->anim_speed = 1.0f;
                 }
                 if (target_above) {
-                    *(int *)(data + 0x164) = 0;
+                    *(int *)(snagglebeast_instance_state + 0x164) = 0;
                     {
                         char *g = ((char *)&hero);
-                        qcopy(data + 0x150, *(char **)(g + 0x2FC) + 0x10);
+                        qcopy(snagglebeast_instance_state + 0x150, *(char **)(g + 0x2FC) + 0x10);
                     }
-                    *(float *)(data + 0x158) += 3.0f;
+                    *(float *)(snagglebeast_instance_state + 0x158) += 3.0f;
                     moby[0x20] = 9;
                 }
                 if (sight_ready) {
@@ -1495,12 +1495,12 @@ void snagglebeast_update(unsigned char *moby) {
                         int r = random_int_between(0, 2);
                         FUN_00212f90(moby, 6, r, random_int_between(0x14, 0x19));
                     }
-                    *(int *)(data + 0x164) = 0;
-                    *(float *)(data + 0x16C) = 0.0f;
-                    data[0x1C4] = 0;
-                    *(int *)(data + 0x294) = 0;
+                    *(int *)(snagglebeast_instance_state + 0x164) = 0;
+                    *(float *)(snagglebeast_instance_state + 0x16C) = 0.0f;
+                    snagglebeast_instance_state[0x1C4] = 0;
+                    *(int *)(snagglebeast_instance_state + 0x294) = 0;
                     moby[0x20] = 8;
-                    *(int *)(data + 0x1F8) = FUN_0022da68(9, 4, (int)moby);
+                    *(int *)(snagglebeast_instance_state + 0x1F8) = FUN_0022da68(9, 4, (int)moby);
                 }
             }
             if (!follow_target) {
@@ -1513,7 +1513,7 @@ void snagglebeast_update(unsigned char *moby) {
                 moby[0x20] = 1;
             }
             if (moby[0x52] == 0xC)
-                update_alternating_joint_emission_burst(moby, (char *)data, (float *)&sight);
+                update_alternating_joint_emission_burst(moby, (char *)snagglebeast_instance_state, (float *)&sight);
         }
         if (moby[0x52] == 0xA || moby[0x52] == 0xC) {
             if (is_value_within_interpolated_window(moby, 27.5f))
@@ -1525,11 +1525,11 @@ void snagglebeast_update(unsigned char *moby) {
     }
     case SNAGGLEBEAST_TURN_TOWARD_TARGET: {
         float target_heading_delta;
-        if (data[0x1F5] == 0)
-            qcopy(data + 0xC0, ((char *)&hero) + 0x80);
+        if (snagglebeast_instance_state[0x1F5] == 0)
+            qcopy(snagglebeast_instance_state + 0xC0, ((char *)&hero) + 0x80);
         target_heading_delta =
-            fast_subtract_rotations(fast_arc_tan(*(float *)(data + 0xC0) - MOBY(moby)->pos.x,
-                                                 *(float *)(data + 0xC4) - MOBY(moby)->pos.y),
+            fast_subtract_rotations(fast_arc_tan(*(float *)(snagglebeast_instance_state + 0xC0) - MOBY(moby)->pos.x,
+                                                 *(float *)(snagglebeast_instance_state + 0xC4) - MOBY(moby)->pos.y),
                                     MOBY(moby)->rot.z);
         if (!target_close && (moby[0x70] & 2)) {
             if (target_heading_delta < 0.0001f) {
@@ -1544,9 +1544,9 @@ void snagglebeast_update(unsigned char *moby) {
             float dz = compute_interpolated_record_value(moby);
             if (dz < 14.5f || (dz > 19.0f && dz < 35.5f) || dz > 40.5f) {
                 FUN_L00_00258278((struct Moby *)moby,
-                                 fast_arc_tan(*(float *)(data + 0xC0) - MOBY(moby)->pos.x,
-                                              *(float *)(data + 0xC4) - MOBY(moby)->pos.y),
-                                 (float *)(data + 0x168),
+                                 fast_arc_tan(*(float *)(snagglebeast_instance_state + 0xC0) - MOBY(moby)->pos.x,
+                                              *(float *)(snagglebeast_instance_state + 0xC4) - MOBY(moby)->pos.y),
+                                 (float *)(snagglebeast_instance_state + 0x168),
                                  frame_time_sq * 2.0943952f,
                                  frame_time_sq * 0.6981317f,
                                  frame_time * 2.0943952f);
@@ -1557,20 +1557,20 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_00212f90(moby, 3, 5, random_int_between(0xA, 0xD));
             }
         } else {
-            *(int *)(data + 0x84) = 0;
+            *(int *)(snagglebeast_instance_state + 0x84) = 0;
         }
         if (fast_difference_between_rotations(
                 MOBY(moby)->rot.z,
-                fast_arc_tan(*(float *)(data + 0xC0) - MOBY(moby)->pos.x,
-                             *(float *)(data + 0xC4) - MOBY(moby)->pos.y)) <
-            *(float *)(data + 0x98) * 0.25f) {
-            qzero(data + 0x100);
-            if (moby[0x53] != data[0x1F6]) {
-                int anim = data[0x1F6];
+                fast_arc_tan(*(float *)(snagglebeast_instance_state + 0xC0) - MOBY(moby)->pos.x,
+                             *(float *)(snagglebeast_instance_state + 0xC4) - MOBY(moby)->pos.y)) <
+            *(float *)(snagglebeast_instance_state + 0x98) * 0.25f) {
+            qzero(snagglebeast_instance_state + 0x100);
+            if (moby[0x53] != snagglebeast_instance_state[0x1F6]) {
+                int anim = snagglebeast_instance_state[0x1F6];
                 int r = random_int_between(0, 2);
                 FUN_00212f90(moby, anim, r, random_int_between(0xF, 0x1B));
             }
-            moby[0x20] = data[0x1F4];
+            moby[0x20] = snagglebeast_instance_state[0x1F4];
         }
         if (moby[0x52] == 3 || moby[0x52] == 0xE) {
             if (is_value_within_interpolated_window(moby, 16.0f))
@@ -1587,7 +1587,7 @@ void snagglebeast_update(unsigned char *moby) {
     }
     case SNAGGLEBEAST_START_TIMED_DAMAGE_SEQUENCE: {
         int k;
-        if (*(float *)(data + 0x20) <= convert_integer_to_float(*(short *)(data + 0x24) / 6)) {
+        if (*(float *)(snagglebeast_instance_state + 0x20) <= convert_integer_to_float(*(short *)(snagglebeast_instance_state + 0x24) / 6)) {
             if (moby[0x53] != 8)
                 FUN_00212f90(moby, 8, 0x35, random_int_between(0xA, 0xD));
         } else {
@@ -1595,23 +1595,23 @@ void snagglebeast_update(unsigned char *moby) {
                 FUN_00212f90(moby, 0xB, 0x3D, 1);
         }
         moby[0x20] = 0xD;
-        *(float *)(data + 0x108) = 0.0f;
+        *(float *)(snagglebeast_instance_state + 0x108) = 0.0f;
         if (moby[0xBC] % 3U < 2)
             moby[0xBC] += 1;
         if (moby[0xBC] % 3U < 2)
             moby[0xBC] += 1;
         if (moby[0xBC] >= 8)
             moby[0xBC] = 8;
-        if (((ChaserPathPoints *)data)->linked_mobys[data[0x19D]] != -1) {
+        if (((ChaserPathPoints *)snagglebeast_instance_state)->linked_mobys[snagglebeast_instance_state[0x19D]] != -1) {
             int k2;
-            k = data[0x19D];
+            k = snagglebeast_instance_state[0x19D];
             k2 = k + 3;
-            if (((ChaserPathPoints *)data)->linked_mobys[k2] != -1) {
+            if (((ChaserPathPoints *)snagglebeast_instance_state)->linked_mobys[k2] != -1) {
                 char *linked_moby_vars =
-                    *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k] << 8) +
+                    *(char **)(level_mobys + (((ChaserPathPoints *)snagglebeast_instance_state)->linked_mobys[k] << 8) +
                                0x78);
                 char *paired_linked_moby_vars =
-                    *(char **)(level_mobys + (((ChaserPathPoints *)data)->linked_mobys[k2] << 8) +
+                    *(char **)(level_mobys + (((ChaserPathPoints *)snagglebeast_instance_state)->linked_mobys[k2] << 8) +
                                0x78);
                 if (*(int *)(linked_moby_vars + 0x28) != -1 &&
                     *(int *)(paired_linked_moby_vars + 0x28) != -1) {
@@ -1633,7 +1633,7 @@ void snagglebeast_update(unsigned char *moby) {
                         *(float *)((char *)l07_cuboids + sel * 0x80 + 0x34) - MOBY(moby)->pos.y);
                 }
             }
-            *(unsigned char *)(level_mobys + ((ChaserPathPoints *)data)->linked_mobys[k] * 0x100 +
+            *(unsigned char *)(level_mobys + ((ChaserPathPoints *)snagglebeast_instance_state)->linked_mobys[k] * 0x100 +
                                0xBC) = 1;
         }
         break;
@@ -1648,28 +1648,28 @@ void snagglebeast_update(unsigned char *moby) {
                     &position, 0, 0x40103080, 1.6f, 14700.0f);
         }
         if (moby[0xBC] == 8) {
-            float z = *(float *)(data + 0x108);
-            fast_vec_scale(data + 0x100, data + 0x100, 0.7f);
-            ((float *)(data + 0x100))[2] = z;
-            ((float *)(data + 0x100))[2] -= frame_time * 9.8f;
-            fast_vec_add(moby + 0x10, moby + 0x10, data + 0x100);
-            if (MOBY(moby)->pos.z < *(float *)(data + 0x1B8))
+            float z = *(float *)(snagglebeast_instance_state + 0x108);
+            fast_vec_scale(snagglebeast_instance_state + 0x100, snagglebeast_instance_state + 0x100, 0.7f);
+            ((float *)(snagglebeast_instance_state + 0x100))[2] = z;
+            ((float *)(snagglebeast_instance_state + 0x100))[2] -= frame_time * 9.8f;
+            fast_vec_add(moby + 0x10, moby + 0x10, snagglebeast_instance_state + 0x100);
+            if (MOBY(moby)->pos.z < *(float *)(snagglebeast_instance_state + 0x1B8))
                 done = 1;
         } else {
             if (compute_interpolated_record_value(moby) > 79.0f)
                 done = 1;
         }
         if (done) {
-            *(int *)(data + 0x160) = scale_game_frames(0xA);
-            data[0x1C5] = 2;
+            *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0xA);
+            snagglebeast_instance_state[0x1C5] = 2;
             moby[0x20] = 0xE;
-            *(int *)(data + 0x164) = *(short *)(data + 0x24) / 6;
+            *(int *)(snagglebeast_instance_state + 0x164) = *(short *)(snagglebeast_instance_state + 0x24) / 6;
         }
         break;
     }
     case SNAGGLEBEAST_APPLY_TIMED_DAMAGE_AND_SELECT_PATH:
-        fast_vec_scale(data + 0x100, data + 0x100, 0.4f);
-        fast_vec_add(moby + 0x10, moby + 0x10, data + 0x100);
+        fast_vec_scale(snagglebeast_instance_state + 0x100, snagglebeast_instance_state + 0x100, 0.4f);
+        fast_vec_add(moby + 0x10, moby + 0x10, snagglebeast_instance_state + 0x100);
         if (compute_interpolated_record_value(moby) < 168.0f) {
             FUN_L00_0024f7c8(moby, 0xA, &position);
             position.f[2] = 34.6f;
@@ -1688,62 +1688,62 @@ void snagglebeast_update(unsigned char *moby) {
                 (int)moby, &position, 0x3A, 1.0f, 25.0f, 2.0f, frame_time * 8.0f, 1.0f);
             rumble_by_distance((char *)moby);
         }
-        if (*(int *)(data + 0x164) > 0) {
-            if (fast_dec_timer((int *)(data + 0x160))) {
-                *(int *)(data + 0x164) -= 1;
+        if (*(int *)(snagglebeast_instance_state + 0x164) > 0) {
+            if (fast_dec_timer((int *)(snagglebeast_instance_state + 0x160))) {
+                *(int *)(snagglebeast_instance_state + 0x164) -= 1;
                 *health -= 1.0f;
-                data[0x67] = 0xFA;
-                trooper_anim_update(moby, (short *)(data + 0x60));
+                snagglebeast_instance_state[0x67] = 0xFA;
+                trooper_anim_update(moby, (short *)(snagglebeast_instance_state + 0x60));
                 if (*health <= 0.0f) {
                     *health = 0.0f;
                     if (moby[0x53] != 8)
                         FUN_00212f90(moby, 8, 0, random_int_between(0xA, 0xD));
-                    if (*(int *)(data + 0x1F0) != -1) {
+                    if (*(int *)(snagglebeast_instance_state + 0x1F0) != -1) {
                         set_moby_dialogue_record_value(moby, 1);
                         FUN_L00_00257470(moby, 0, -1);
                         jet_clear_persistent(moby[0xB0]);
-                        jet_reset_camera((char *)l07_cuboids + (*(int *)(data + 0x1F0) << 7) + 0x30,
-                                         (char *)l07_cuboids + (*(int *)(data + 0x1F0) << 7) +
+                        jet_reset_camera((char *)l07_cuboids + (*(int *)(snagglebeast_instance_state + 0x1F0) << 7) + 0x30,
+                                         (char *)l07_cuboids + (*(int *)(snagglebeast_instance_state + 0x1F0) << 7) +
                                              0x70);
                     }
                     moby[0x20] = 0xA;
                 } else {
-                    if (*(int *)(data + 0x164) > 0) {
-                        *(int *)(data + 0x160) = scale_game_frames(0xA);
+                    if (*(int *)(snagglebeast_instance_state + 0x164) > 0) {
+                        *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0xA);
                     } else {
-                        *(int *)(data + 0x160) = scale_game_frames(0x14);
+                        *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0x14);
                     }
                 }
             }
         } else {
-            if (fast_dec_timer((int *)(data + 0x160))) {
-                switch (data[0x19D]) {
+            if (fast_dec_timer((int *)(snagglebeast_instance_state + 0x160))) {
+                switch (snagglebeast_instance_state[0x19D]) {
                 case SNAGGLEBEAST_PATH_SELECT_FIRST_POINT:
-                    qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x10);
-                    data[0x19C] &= 0xFE;
+                    qcopy(snagglebeast_instance_state + 0x120, D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x1A0)] + 0x10);
+                    snagglebeast_instance_state[0x19C] &= 0xFE;
                     break;
                 case SNAGGLEBEAST_PATH_SELECT_SECOND_POINT:
-                    qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x20);
-                    data[0x19C] &= 0xFD;
+                    qcopy(snagglebeast_instance_state + 0x120, D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x1A0)] + 0x20);
+                    snagglebeast_instance_state[0x19C] &= 0xFD;
                     break;
                 case SNAGGLEBEAST_PATH_SELECT_FARTHER_PAIRED_POINT: {
                     float d1 = vector_distance_xy(((char *)&hero) + 0x80,
-                                                  D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x30);
+                                                  D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x1A0)] + 0x30);
                     if (vector_distance_xy(((char *)&hero) + 0x80,
-                                           D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x40) < d1) {
-                        qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x30);
+                                           D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x1A0)] + 0x40) < d1) {
+                        qcopy(snagglebeast_instance_state + 0x120, D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x1A0)] + 0x30);
                     } else {
-                        qcopy(data + 0x120, D_L07_001B0530[*(int *)(data + 0x1A0)] + 0x40);
+                        qcopy(snagglebeast_instance_state + 0x120, D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x1A0)] + 0x40);
                     }
-                    data[0x19C] &= 0xFB;
+                    snagglebeast_instance_state[0x19C] &= 0xFB;
                     break;
                 }
                 }
-                *(int *)(data + 0x1A8) = ((ChaserPathPoints *)data)->path_points[data[0x19D]];
+                *(int *)(snagglebeast_instance_state + 0x1A8) = ((ChaserPathPoints *)snagglebeast_instance_state)->path_points[snagglebeast_instance_state[0x19D]];
                 build_symmetric_adjacency_masks(
                     (int *)&position,
-                    (int)collect_snagglebeast_navigation_ids(moby, data, &position),
-                    *(int *)(data + 0x188));
+                    (int)collect_snagglebeast_navigation_ids(moby, snagglebeast_instance_state, &position),
+                    *(int *)(snagglebeast_instance_state + 0x188));
                 moby[0x20] = 0xF;
             }
         }
@@ -1754,40 +1754,40 @@ void snagglebeast_update(unsigned char *moby) {
             if (moby[0x53] != 0xA)
                 FUN_00212f90(moby, 0xA, 0, 0);
             FUN_L00_0024f7c8(moby, 0xA, &position);
-            qcopy(data + 0xC0, &position);
-            *(float *)(data + 0xC8) = *(float *)(data + 0x128);
+            qcopy(snagglebeast_instance_state + 0xC0, &position);
+            *(float *)(snagglebeast_instance_state + 0xC8) = *(float *)(snagglebeast_instance_state + 0x128);
             point = 0xA;
             get_moby_joint_matrices(moby, 1, &point, &velocity);
             matrix_to_euler(&velocity, &step);
-            *(float *)(data + 0xCC) = fast_add_rotations(MOBY(moby)->rot.z, step.f[2]);
+            *(float *)(snagglebeast_instance_state + 0xCC) = fast_add_rotations(MOBY(moby)->rot.z, step.f[2]);
         }
         if (moby[0x52] == 0xA) {
-            qcopy(moby + 0x10, data + 0xC0);
-            MOBY(moby)->rot.z = *(float *)(data + 0xCC);
-            if (((ChaserPathPoints *)data)->linked_mobys[data[0x19D]] != -1) {
+            qcopy(moby + 0x10, snagglebeast_instance_state + 0xC0);
+            MOBY(moby)->rot.z = *(float *)(snagglebeast_instance_state + 0xCC);
+            if (((ChaserPathPoints *)snagglebeast_instance_state)->linked_mobys[snagglebeast_instance_state[0x19D]] != -1) {
                 *(unsigned char *)(level_mobys +
-                                   ((ChaserPathPoints *)data)->linked_mobys[data[0x19D]] * 0x100 +
+                                   ((ChaserPathPoints *)snagglebeast_instance_state)->linked_mobys[snagglebeast_instance_state[0x19D]] * 0x100 +
                                    0xBC) = 0;
             }
             MOBY(moby)->anim_speed = 1.5f;
             moby[0xBC] += 1;
-            *(int *)(data + 0x298) = 0;
+            *(int *)(snagglebeast_instance_state + 0x298) = 0;
             moby[0x20] = 6;
-            *(int *)(data + 0x160) = scale_game_frames(0x37);
+            *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0x37);
         }
         break;
     }
     case SNAGGLEBEAST_CAPTURE_HERO_AND_DRAIN_AMMO: {
         float fr;
-        if (*(int *)(data + 0x294) <= 0) {
+        if (*(int *)(snagglebeast_instance_state + 0x294) <= 0) {
             if (start_snagglebeast_turn_toward_target(
-                    moby, data, (float *)(((char *)&hero) + 0x80), 6, 0))
+                    moby, snagglebeast_instance_state, (float *)(((char *)&hero) + 0x80), 6, 0))
                 break;
         }
-        ((int *)data)[0xA5] = 1;
+        ((int *)snagglebeast_instance_state)[0xA5] = 1;
         FUN_L00_00258278((struct Moby *)moby,
                          hero_angle,
-                         (float *)(data + 0x168),
+                         (float *)(snagglebeast_instance_state + 0x168),
                          frame_time_sq * 2.0943952f,
                          frame_time_sq * 0.6981317f,
                          frame_time * 2.0943952f);
@@ -1795,35 +1795,35 @@ void snagglebeast_update(unsigned char *moby) {
         fr = update_snagglebeast_rope(moby, &position);
         if (moby[0x52] != 6)
             break;
-        qcopy(data + 0x140, ((char *)&hero) + 0x80);
-        *(float *)(data + 0x148) += 0.6f;
-        if (*(float *)(data + 0x16C) < hero_distance) {
+        qcopy(snagglebeast_instance_state + 0x140, ((char *)&hero) + 0x80);
+        *(float *)(snagglebeast_instance_state + 0x148) += 0.6f;
+        if (*(float *)(snagglebeast_instance_state + 0x16C) < hero_distance) {
             float step_time = frame_time * 15.0f;
-            *(int *)(data + 0x160) = 0;
-            *(float *)(data + 0x16C) += step_time;
+            *(int *)(snagglebeast_instance_state + 0x160) = 0;
+            *(float *)(snagglebeast_instance_state + 0x16C) += step_time;
         } else {
-            if (data[0x1C4] != 0 || (fast_dec_timer((int *)(data + 0x160)) && fr < 0.6f)) {
+            if (snagglebeast_instance_state[0x1C4] != 0 || (fast_dec_timer((int *)(snagglebeast_instance_state + 0x160)) && fr < 0.6f)) {
                 int   slot;
                 char *g = ((char *)&hero);
-                data[0x1C4] = 1;
+                snagglebeast_instance_state[0x1C4] = 1;
                 if (*(int *)(g + 0x2084) != 0x78) {
-                    qcopy(data + 0x110, ((char *)&hero) + 0x80);
-                    qcopy(data + 0x120, ((char *)&hero) + 0x80);
+                    qcopy(snagglebeast_instance_state + 0x110, ((char *)&hero) + 0x80);
+                    qcopy(snagglebeast_instance_state + 0x120, ((char *)&hero) + 0x80);
                     if (MOBY(moby)->pos.z < *(float *)(g + 0x88)) {
-                        *(float *)(data + 0x128) = *(float *)(g + 0x88) + 2.0f;
+                        *(float *)(snagglebeast_instance_state + 0x128) = *(float *)(g + 0x88) + 2.0f;
                     } else {
-                        *(float *)(data + 0x128) = MOBY(moby)->pos.z + 2.0f;
+                        *(float *)(snagglebeast_instance_state + 0x128) = MOBY(moby)->pos.z + 2.0f;
                     }
                     hero_set_state(0x78, 1);
-                    *(int *)(data + 0x164) = 0;
-                    *(float *)(data + 0x1AC) = 20.0f;
-                    *(short *)(data + 0x19E) = 0;
+                    *(int *)(snagglebeast_instance_state + 0x164) = 0;
+                    *(float *)(snagglebeast_instance_state + 0x1AC) = 20.0f;
+                    *(short *)(snagglebeast_instance_state + 0x19E) = 0;
                 }
-                fast_vec_sub(&velocity, data + 0x120, data + 0x110);
+                fast_vec_sub(&velocity, snagglebeast_instance_state + 0x120, snagglebeast_instance_state + 0x110);
                 fast_vec_scale(&velocity, &velocity, frame_scale * 0.1f);
-                fast_vec_add(data + 0x110, data + 0x110, &velocity);
-                qcopy(((char *)&hero) + 0x1D30, data + 0x110);
-                qcopy(((char *)&hero) + 0x80, data + 0x110);
+                fast_vec_add(snagglebeast_instance_state + 0x110, snagglebeast_instance_state + 0x110, &velocity);
+                qcopy(((char *)&hero) + 0x1D30, snagglebeast_instance_state + 0x110);
+                qcopy(((char *)&hero) + 0x80, snagglebeast_instance_state + 0x110);
                 {
                     char *captured_hero = ((char *)&hero);
                     *(float *)(captured_hero + 0x1D48) = fast_add_rotations(
@@ -1831,50 +1831,50 @@ void snagglebeast_update(unsigned char *moby) {
                     *(float *)(captured_hero + 0x98) = fast_add_rotations(
                         *(float *)(captured_hero + 0x1D48), frame_time * 25.132742f);
                 }
-                *(float *)(data + 0x16C) = hero_distance;
-                slot = snagglebeast_ammo_drain_entries[*(int *)(data + 0x164)][0];
+                *(float *)(snagglebeast_instance_state + 0x16C) = hero_distance;
+                slot = snagglebeast_ammo_drain_entries[*(int *)(snagglebeast_instance_state + 0x164)][0];
                 if (slot == -1) {
-                    *(int *)(data + 0x164) = 0;
-                    *(short *)(data + 0x196) = scale_game_frames(0x320);
-                    *(int *)(data + 0x160) = scale_game_frames(0xF0);
+                    *(int *)(snagglebeast_instance_state + 0x164) = 0;
+                    *(short *)(snagglebeast_instance_state + 0x196) = scale_game_frames(0x320);
+                    *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0xF0);
                     detach_snagglebeast_rope_particles((int)moby);
                     {
                         char *g3 = ((char *)&hero);
                         if (*(int *)(g3 + 0x2084) == 0x78)
                             hero_set_state(0, 1);
                     }
-                    data[0x1C7] = 0;
-                    if (*(int *)(data + 0x1F8) != -1) {
-                        char *sl = (voice_slot_state_base - 0x74) + *(int *)(data + 0x1F8) * 0x70;
+                    snagglebeast_instance_state[0x1C7] = 0;
+                    if (*(int *)(snagglebeast_instance_state + 0x1F8) != -1) {
+                        char *sl = (voice_slot_state_base - 0x74) + *(int *)(snagglebeast_instance_state + 0x1F8) * 0x70;
                         if (*(void **)(sl + 0x88) == moby && *(unsigned char *)(sl + 0x74) != 0) {
-                            release_voice_slot(*(int *)(data + 0x1F8));
+                            release_voice_slot(*(int *)(snagglebeast_instance_state + 0x1F8));
                         }
                     }
-                    *(int *)(data + 0x1F8) = -1;
+                    *(int *)(snagglebeast_instance_state + 0x1F8) = -1;
                     moby[0x20] = 1;
                 } else {
                     int ammo_transfer_count = (l07_ammo_transfer_records + slot)->count;
                     int rem;
                     int pos;
-                    if (*(short *)(data + 0x19E) == 0) {
-                        *(short *)(data + 0x19E) = ((int *)&weapon_ammo_counts)[slot] / 8;
-                        if (*(short *)(data + 0x19E) < ammo_transfer_count)
-                            *(short *)(data + 0x19E) = ammo_transfer_count;
-                        *(float *)(data + 0x1AC) = random_float_between(
-                            *(float *)(data + 0x1AC) + 20.0f, *(float *)(data + 0x1AC) + 100.0f);
+                    if (*(short *)(snagglebeast_instance_state + 0x19E) == 0) {
+                        *(short *)(snagglebeast_instance_state + 0x19E) = ((int *)&weapon_ammo_counts)[slot] / 8;
+                        if (*(short *)(snagglebeast_instance_state + 0x19E) < ammo_transfer_count)
+                            *(short *)(snagglebeast_instance_state + 0x19E) = ammo_transfer_count;
+                        *(float *)(snagglebeast_instance_state + 0x1AC) = random_float_between(
+                            *(float *)(snagglebeast_instance_state + 0x1AC) + 20.0f, *(float *)(snagglebeast_instance_state + 0x1AC) + 100.0f);
                     }
-                    ammo_transfer_count = *(short *)(data + 0x19E);
+                    ammo_transfer_count = *(short *)(snagglebeast_instance_state + 0x19E);
                     if (((int *)&weapon_ammo_counts)[slot] < ammo_transfer_count) {
                         ammo_transfer_count = ((int *)&weapon_ammo_counts)[slot];
-                        *(short *)(data + 0x19E) = 0;
-                        *(int *)(data + 0x164) += 1;
+                        *(short *)(snagglebeast_instance_state + 0x19E) = 0;
+                        *(int *)(snagglebeast_instance_state + 0x164) += 1;
                     }
                     rem = ((int *)&weapon_ammo_counts)[slot] - ammo_transfer_count * 8;
                     pos = rem > 0;
                     ammo_transfer_count = ammo_transfer_count + pos * rem;
                     if (ammo_transfer_count > 0) {
                         float zv = 0.0f;
-                        if (*(int *)(data + 0x18C) == -1) {
+                        if (*(int *)(snagglebeast_instance_state + 0x18C) == -1) {
                             FUN_L00_00257d78(
                                 (float *)&velocity, frame_time * 4.0f, frame_time * 10.0f);
                             if (velocity.f[2] < frame_time * 2.0f)
@@ -1883,7 +1883,7 @@ void snagglebeast_update(unsigned char *moby) {
                             fast_vec_normalize(&direction, &velocity, 0.9f);
                             fast_vec_add(&direction, &direction, ((char *)&hero) + 0x80);
                         } else {
-                            char *path = D_L07_001B0530[*(int *)(data + 0x18C)];
+                            char *path = D_L07_001B0530[*(int *)(snagglebeast_instance_state + 0x18C)];
                             int   pidx = 0;
                             float pfrac = 0.0f;
                             float d1;
@@ -1891,9 +1891,9 @@ void snagglebeast_update(unsigned char *moby) {
                             pidx =
                                 select_point_index_by_distance(((char *)&hero) + 0x80, path, 0.0f);
                             do {
-                                *(float *)(data + 0x1AC) += 10.0f;
+                                *(float *)(snagglebeast_instance_state + 0x1AC) += 10.0f;
                                 sample_path(
-                                    path, &start, &pidx, &pfrac, *(float *)(data + 0x1AC), 1);
+                                    path, &start, &pidx, &pfrac, *(float *)(snagglebeast_instance_state + 0x1AC), 1);
                                 d1 = vector_distance_xy(((char *)&hero) + 0x80, &start);
                                 moby_to_sample_distance = vector_distance_xy(moby + 0x10, &start);
                             } while (d1 < 8.0f || moby_to_sample_distance < 12.0f);
@@ -1907,7 +1907,7 @@ void snagglebeast_update(unsigned char *moby) {
                             fast_vec_add(&direction, &direction, ((char *)&hero) + 0x80);
                             velocity.f[2] = FUN_L00_0025abf0(
                                 &direction, &start, 0, frame_time * 15.0f, frame_time_sq * -9.8f);
-                            *(float *)(data + 0x1AC) += random_float_between(0.7f, 2.0f);
+                            *(float *)(snagglebeast_instance_state + 0x1AC) += random_float_between(0.7f, 2.0f);
                         }
                         FUN_0022da68(0xB, 0, (int)moby);
                         {
@@ -1917,7 +1917,7 @@ void snagglebeast_update(unsigned char *moby) {
                                 qcopy_nc(((char *)MOBY(spawned_moby)->pvars) + 0x10, &velocity);
                                 *(float *)(((char *)MOBY(spawned_moby)->pvars) + 0x28) = zv;
                                 ((int *)&weapon_ammo_counts)[slot] -= ammo_transfer_count;
-                                *(int *)(data + 0x160) = scale_game_frames(0);
+                                *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0);
                             }
                         }
                     }
@@ -1925,27 +1925,27 @@ void snagglebeast_update(unsigned char *moby) {
             }
         }
         if (!sight_ready) {
-            *(int *)(data + 0x164) = 0;
-            *(short *)(data + 0x196) = scale_game_frames(0xF);
+            *(int *)(snagglebeast_instance_state + 0x164) = 0;
+            *(short *)(snagglebeast_instance_state + 0x196) = scale_game_frames(0xF);
             detach_snagglebeast_rope_particles((int)moby);
             {
                 char *g3 = ((char *)&hero);
                 if (*(int *)(g3 + 0x2084) == 0x78)
                     hero_set_state(0, 1);
             }
-            *(int *)(data + 0x160) = scale_game_frames(0x46);
-            data[0x1C7] = 0;
-            if (*(int *)(data + 0x1F8) != -1) {
-                char *sl = (voice_slot_state_base - 0x74) + *(int *)(data + 0x1F8) * 0x70;
+            *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0x46);
+            snagglebeast_instance_state[0x1C7] = 0;
+            if (*(int *)(snagglebeast_instance_state + 0x1F8) != -1) {
+                char *sl = (voice_slot_state_base - 0x74) + *(int *)(snagglebeast_instance_state + 0x1F8) * 0x70;
                 if (*(void **)(sl + 0x88) == moby && *(unsigned char *)(sl + 0x74) != 0) {
-                    release_voice_slot(*(int *)(data + 0x1F8));
+                    release_voice_slot(*(int *)(snagglebeast_instance_state + 0x1F8));
                 }
             }
-            *(int *)(data + 0x1F8) = -1;
+            *(int *)(snagglebeast_instance_state + 0x1F8) = -1;
             moby[0x20] = 1;
         }
         if (target_close) {
-            *(short *)(data + 0x196) = scale_game_frames(0x1E);
+            *(short *)(snagglebeast_instance_state + 0x196) = scale_game_frames(0x1E);
             if (moby[0x53] != 9) {
                 int r = random_int_between(0, 2);
                 FUN_00212f90(moby, 9, r, random_int_between(0x10, 0x19));
@@ -1956,35 +1956,35 @@ void snagglebeast_update(unsigned char *moby) {
                 if (*(int *)(g3 + 0x2084) == 0x78)
                     hero_set_state(0, 1);
             }
-            if (*(int *)(data + 0x1F8) != -1) {
-                char *sl = (voice_slot_state_base - 0x74) + *(int *)(data + 0x1F8) * 0x70;
+            if (*(int *)(snagglebeast_instance_state + 0x1F8) != -1) {
+                char *sl = (voice_slot_state_base - 0x74) + *(int *)(snagglebeast_instance_state + 0x1F8) * 0x70;
                 if (*(void **)(sl + 0x88) == moby && *(unsigned char *)(sl + 0x74) != 0) {
-                    release_voice_slot(*(int *)(data + 0x1F8));
+                    release_voice_slot(*(int *)(snagglebeast_instance_state + 0x1F8));
                 }
             }
-            *(int *)(data + 0x1F8) = -1;
+            *(int *)(snagglebeast_instance_state + 0x1F8) = -1;
             moby[0x20] = 2;
         }
         break;
     }
     case SNAGGLEBEAST_ROPE_ATTACK:
-        if (*(int *)(data + 0x164) <= 0) {
-            if (start_snagglebeast_turn_toward_target(moby, data, (float *)(data + 0x150), 7, 1))
+        if (*(int *)(snagglebeast_instance_state + 0x164) <= 0) {
+            if (start_snagglebeast_turn_toward_target(moby, snagglebeast_instance_state, (float *)(snagglebeast_instance_state + 0x150), 7, 1))
                 break;
         }
         FUN_L00_00258278((struct Moby *)moby,
-                         fast_arc_tan(*(float *)(data + 0x150) - MOBY(moby)->pos.x,
-                                      *(float *)(data + 0x154) - MOBY(moby)->pos.y),
-                         (float *)(data + 0x168),
+                         fast_arc_tan(*(float *)(snagglebeast_instance_state + 0x150) - MOBY(moby)->pos.x,
+                                      *(float *)(snagglebeast_instance_state + 0x154) - MOBY(moby)->pos.y),
+                         (float *)(snagglebeast_instance_state + 0x168),
                          frame_time_sq * 2.0943952f,
                          frame_time_sq * 0.6981317f,
                          frame_time * 2.0943952f);
-        switch (*(int *)(data + 0x164)) {
+        switch (*(int *)(snagglebeast_instance_state + 0x164)) {
         case SNAGGLEBEAST_ROPE_START_ATTACK_ANIMATION:
             if (moby[0x53] != 7)
                 FUN_00212f90(moby, 7, 0, random_int_between(0xA, 0xD));
-            *(int *)(data + 0x160) = 0;
-            *(int *)(data + 0x164) = 1;
+            *(int *)(snagglebeast_instance_state + 0x160) = 0;
+            *(int *)(snagglebeast_instance_state + 0x164) = 1;
             break;
         case SNAGGLEBEAST_ROPE_WAIT_FOR_ORIGIN_FRAME:
             if ((*(u64 *)(moby + 0x50) & 0xFFFF0000) != 0x07070000 && moby[0x53] != 7) {
@@ -1996,10 +1996,10 @@ void snagglebeast_update(unsigned char *moby) {
                     FUN_L00_0024f7c8(moby, 1, &direction);
                     fast_vec_add(&position, &velocity, &direction);
                     fast_vec_scale(&position, &position, 0.5f);
-                    qcopy(data + 0x110, &position);
-                    fast_vec_sub(data + 0x130, data + 0x150, data + 0x110);
-                    fast_vec_normalize(data + 0x130, data + 0x130, frame_scale);
-                    *(int *)(data + 0x164) = 2;
+                    qcopy(snagglebeast_instance_state + 0x110, &position);
+                    fast_vec_sub(snagglebeast_instance_state + 0x130, snagglebeast_instance_state + 0x150, snagglebeast_instance_state + 0x110);
+                    fast_vec_normalize(snagglebeast_instance_state + 0x130, snagglebeast_instance_state + 0x130, frame_scale);
+                    *(int *)(snagglebeast_instance_state + 0x164) = 2;
                 }
             }
             break;
@@ -2007,43 +2007,43 @@ void snagglebeast_update(unsigned char *moby) {
             if ((*(u64 *)(moby + 0x50) & 0xFFFF0000) != 0x07070000 && moby[0x53] != 7) {
                 FUN_00212f90(moby, 7, 0, random_int_between(7, 0xA));
             }
-            if (fast_dec_timer((int *)(data + 0x160))) {
-                *(int *)(data + 0x160) = scale_game_frames(0xA);
+            if (fast_dec_timer((int *)(snagglebeast_instance_state + 0x160))) {
+                *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0xA);
                 spawn_moby_point_offset_particle((char *)moby, 0, 800000.0f, 5.0f);
                 spawn_moby_point_offset_particle((char *)moby, 1, 800000.0f, 5.0f);
             }
             if (compute_interpolated_record_value(moby) >= 31.5f) {
-                *(float *)(data + 0x16C) = 0.0f;
-                *(int *)(data + 0x164) = 3;
-                *(int *)(data + 0x11C) = 0;
+                *(float *)(snagglebeast_instance_state + 0x16C) = 0.0f;
+                *(int *)(snagglebeast_instance_state + 0x164) = 3;
+                *(int *)(snagglebeast_instance_state + 0x11C) = 0;
             }
             break;
         case SNAGGLEBEAST_ROPE_EXTEND: {
             float r = vector_distance_xy(moby + 0x10, &sight.position30);
-            *(float *)(data + 0x16C) += frame_scale;
-            if (r <= *(float *)(data + 0x16C))
-                *(int *)(data + 0x164) = 4;
-            if (fast_dec_timer((int *)(data + 0x160)))
-                *(int *)(data + 0x160) = scale_game_frames(0x14);
+            *(float *)(snagglebeast_instance_state + 0x16C) += frame_scale;
+            if (r <= *(float *)(snagglebeast_instance_state + 0x16C))
+                *(int *)(snagglebeast_instance_state + 0x164) = 4;
+            if (fast_dec_timer((int *)(snagglebeast_instance_state + 0x160)))
+                *(int *)(snagglebeast_instance_state + 0x160) = scale_game_frames(0x14);
             add_draw_callback(draw_and_probe_snagglebeast_rope_attack, moby);
             break;
         }
         case SNAGGLEBEAST_ROPE_RETRACT:
-            fast_vec_sub(&position, data + 0x120, data + 0x110);
+            fast_vec_sub(&position, snagglebeast_instance_state + 0x120, snagglebeast_instance_state + 0x110);
             fast_vec_normalize(&position, &position, frame_scale);
-            fast_vec_add(data + 0x110, data + 0x110, &position);
+            fast_vec_add(snagglebeast_instance_state + 0x110, snagglebeast_instance_state + 0x110, &position);
             configure_timed_point_light(
-                moby, data, 3, data + 0x110, scale_game_frames(0x1E), 0x800060FF, 0, 10.0f);
-            if (*(int *)(data + 0x164) != 0) {
-                if (fast_dec_timer((int *)(data + 0x160)))
-                    *(int *)(data + 0x164) = 5;
+                moby, snagglebeast_instance_state, 3, snagglebeast_instance_state + 0x110, scale_game_frames(0x1E), 0x800060FF, 0, 10.0f);
+            if (*(int *)(snagglebeast_instance_state + 0x164) != 0) {
+                if (fast_dec_timer((int *)(snagglebeast_instance_state + 0x160)))
+                    *(int *)(snagglebeast_instance_state + 0x164) = 5;
             }
             add_draw_callback(draw_and_probe_snagglebeast_rope_attack, moby);
             break;
         case SNAGGLEBEAST_ROPE_RETURN_TO_IDLE:
             MOBY(moby)->anim_speed = 1.0f;
-            *(int *)(data + 0x164) = 0;
-            *(int *)(data + 0x160) = 0;
+            *(int *)(snagglebeast_instance_state + 0x164) = 0;
+            *(int *)(snagglebeast_instance_state + 0x160) = 0;
             if (moby[0x53] != (rand() & 1)) {
                 int r1 = rand() & 1;
                 int r2 = random_int_between(0, 7);
@@ -2054,17 +2054,17 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     case SNAGGLEBEAST_DEATH_EXPLOSION:
-        if (*(int *)(data + 0x1B0) != -1) {
-            set_animation_parameter(*(int *)(data + 0x1B0), 0);
-            *(int *)(data + 0x1B0) = -1;
+        if (*(int *)(snagglebeast_instance_state + 0x1B0) != -1) {
+            set_animation_parameter(*(int *)(snagglebeast_instance_state + 0x1B0), 0);
+            *(int *)(snagglebeast_instance_state + 0x1B0) = -1;
         }
         if (moby[0x70] & 2) {
-            fast_vec_normalize(data + 0x100, data + 0x100, 1.0f);
-            *(float *)(data + 0x108) = 1.0f;
+            fast_vec_normalize(snagglebeast_instance_state + 0x100, snagglebeast_instance_state + 0x100, 1.0f);
+            *(float *)(snagglebeast_instance_state + 0x108) = 1.0f;
             qcopy(&position, moby + 0x10);
-            position.f[2] = *(float *)(data + 0x1B8) + 1.0f;
+            position.f[2] = *(float *)(snagglebeast_instance_state + 0x1B8) + 1.0f;
             spawn_explosion(moby,
-                            data + 0x100,
+                            snagglebeast_instance_state + 0x100,
                             &position,
                             0.0f,
                             0.0f,
@@ -2082,8 +2082,8 @@ void snagglebeast_update(unsigned char *moby) {
                             -1,
                             0);
             MOBY(moby)->flags |= 0x41;
-            if (*(int *)(data + 0x1CC) != -1)
-                initialize_moby_particle_effect_state(level_mobys + (*(int *)(data + 0x1CC) << 8));
+            if (*(int *)(snagglebeast_instance_state + 0x1CC) != -1)
+                initialize_moby_particle_effect_state(level_mobys + (*(int *)(snagglebeast_instance_state + 0x1CC) << 8));
             moby[0x20] = 0x10;
             MOBY(moby)->pos.z = 20.0f;
         }
@@ -2091,12 +2091,12 @@ void snagglebeast_update(unsigned char *moby) {
     case SNAGGLEBEAST_WAIT_AFTER_HEALTH_THRESHOLD_HIT:
         if (moby[0x70] & 2) {
             if (target_above) {
-                *(int *)(data + 0x164) = 0;
+                *(int *)(snagglebeast_instance_state + 0x164) = 0;
                 {
                     char *g = ((char *)&hero);
-                    qcopy(data + 0x150, *(char **)(g + 0x2FC) + 0x10);
+                    qcopy(snagglebeast_instance_state + 0x150, *(char **)(g + 0x2FC) + 0x10);
                 }
-                *(float *)(data + 0x158) += 3.0f;
+                *(float *)(snagglebeast_instance_state + 0x158) += 3.0f;
                 moby[0x20] = 9;
             } else {
                 moby[0x20] = 1;
@@ -2104,23 +2104,23 @@ void snagglebeast_update(unsigned char *moby) {
         }
         break;
     case SNAGGLEBEAST_POST_DEATH_CLEANUP:
-        if (*(short *)(data + 0x280) != -1)
-            release_point_light_slot(*(short *)(data + 0x280));
-        if (*(int *)(data + 0x1D0) == -1 ||
-            !(*(float *)(level_mobys + (*(int *)(data + 0x1D0) << 8) + 0x18) < 34.5f)) {
+        if (*(short *)(snagglebeast_instance_state + 0x280) != -1)
+            release_point_light_slot(*(short *)(snagglebeast_instance_state + 0x280));
+        if (*(int *)(snagglebeast_instance_state + 0x1D0) == -1 ||
+            !(*(float *)(level_mobys + (*(int *)(snagglebeast_instance_state + 0x1D0) << 8) + 0x18) < 34.5f)) {
             mark_moby_for_removal(moby);
             return;
         }
-        *(float *)(level_mobys + (*(int *)(data + 0x1D0) << 8) + 0x18) +=
-            (34.6f - *(float *)(level_mobys + (*(int *)(data + 0x1D0) << 8) + 0x18)) * 0.1f;
+        *(float *)(level_mobys + (*(int *)(snagglebeast_instance_state + 0x1D0) << 8) + 0x18) +=
+            (34.6f - *(float *)(level_mobys + (*(int *)(snagglebeast_instance_state + 0x1D0) << 8) + 0x18)) * 0.1f;
         break;
     case 17:
         break;
     }
-    fast_vec_sub(data + 0x100, moby + 0x10, &oldpos);
+    fast_vec_sub(snagglebeast_instance_state + 0x100, moby + 0x10, &oldpos);
     if (moby[0x20] < 0xA)
         jet_animate((struct Moby *)moby, 2.5f);
-    update_timed_point_light_color((char *)data);
+    update_timed_point_light_color((char *)snagglebeast_instance_state);
 }
 
 float scroll_phase __asm__("D_L07_00161B74") = 0;
