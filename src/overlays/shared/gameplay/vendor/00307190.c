@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -16,7 +17,6 @@
 extern char *func_0020D348_m(int);
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_paratrooper_projectile(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
@@ -55,9 +55,6 @@ extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001F9908_i(void *) __asm__("FUN_001f9740");
 
@@ -119,7 +116,6 @@ void update_fire_bolt(char *fire_bolt) {
 extern float ground_particle_scatter_spawn_vector_xy_bias[2] __asm__("D_L08_00162360");
 #include "rnc/overlay/shared/gameplay/vendor/00307190_globals.h"
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 extern short ground_particle_scatter_count_interpolation_start_override_gp __asm__("D_L08_0016234C") __attribute__((sda));
@@ -184,7 +180,6 @@ extern float ground_particle_scatter_ground_height_floor_offset_gp __asm__("D_L0
 extern int update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 __attribute__((section(".sdata")));
 extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
 void FUN_L00_00262cf0(void *a, void *b);
 void spawn_ground_contact_effect_particle(void *v) __asm__("FUN_L00_002634f8");
@@ -409,12 +404,10 @@ void scatter_ground_particles(Moby *moby) {
 
 
 extern char D_L08_001675C0[];
-extern f32 fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
 

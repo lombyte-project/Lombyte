@@ -11,6 +11,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/math/fast_math.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L18_00213b40, without states 0, 4 and 0xE). */
 extern int D_0015ED84_c __asm__("D_0015ED84");
@@ -540,13 +541,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void f2347c0_222270(void) __asm__("FUN_L00_002347c0");
 extern void f233810_222270(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern void f2334d0_222270(void *, void *, f32) __asm__("FUN_L00_002334d0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern s32 coll1_222270(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_222270(void *, f32) __asm__("FUN_L00_001f3170");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_222270 D_L02_00174470[] __attribute__((section(".data")));
 s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L02_00222270");
 
@@ -713,7 +710,6 @@ extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L02_001673D8 __attribute__((section(".data")));
 extern float ledge_shimmy_planar_speed_by_anim_frame[] __asm__("D_L02_001C42B0");
 extern float square_root(float) __asm__("FUN_001f9988");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_001ff600_cf(void *) __asm__("FUN_001f9b20");
 extern float adjust_hero_animation_speed_for_target_frame(float, float, float, float) __asm__("FUN_L00_00208f20");
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
@@ -724,7 +720,6 @@ extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L
 extern float spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_0015EEA4;
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
@@ -733,7 +728,6 @@ extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600"
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern int get_hero_idle_animation_index(int) __asm__("FUN_L01_00226f10");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("func_001F9740");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int vector_length_xy_cf(float) __asm__("FUN_001fa6d0");

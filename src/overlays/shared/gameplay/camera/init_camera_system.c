@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     char pad09[0x86];
@@ -180,7 +181,6 @@ extern S D_L00_00166C80;
 extern int D_L00_0015EF4C;
 extern int level_camera_present_flags[] __asm__("D_L00_00169890");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
@@ -277,9 +277,6 @@ void setup_level_cameras(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED900), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void compute_position_from_spherical_offset(float *output_position, float *angles_and_distance, void *origin_position) __asm__("FUN_L00_001ed580");
 
@@ -298,7 +295,6 @@ void compute_position_from_spherical_offset(float *output_position, float *angle
 
 typedef float W[4] __attribute__((aligned(16)));
 
-extern float fast_vec_length(float *) __asm__("FUN_001f9af0");
 extern float vector_length_xy(float *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void subtract_vector_xyz(float *) __asm__("FUN_001f9a28");
@@ -333,9 +329,7 @@ extern int D_16C058_1ed6a8[] __asm__("D_L00_0016C058") __attribute__((section(".
 extern void f9a28_1ed6a8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int coll_sphere(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 
 extern int D_L00_0016C06C __attribute__((section(".data")));

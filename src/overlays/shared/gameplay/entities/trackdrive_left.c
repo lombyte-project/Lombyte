@@ -3,6 +3,9 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/ui/text/font_state.h"
+#include "rnc/gameplay/state/item_state.h"
 
 extern u8 scaled_table_output[] __asm__("D_L02_001CB9C0");
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
@@ -80,14 +83,11 @@ typedef struct QuadFrame { char pad0[8]; unsigned short a; unsigned short b; cha
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int, float);
 extern char level02_camera_view_state[] __asm__("D_L02_0016D040");
 extern char D_L02_001673C0[];
-extern unsigned short font_vu_program_tag[] __asm__("D_0010E800");
-extern u8 font_vu_program[] __asm__("D_0010E810");
 extern char interpolated_draw_gif_preamble[] __asm__("D_L02_001CB8F0");
 extern QuadFrame l02_interpolated_frame_source_index_table[] __asm__("D_L02_0016D780");
 extern char *interpolated_frame_source_data __asm__("D_L02_0015F420");
@@ -318,12 +318,7 @@ typedef struct {
 extern H2d8910 D_L02_00167280_2d8910 __asm__("D_L02_00167280") __attribute__((section(".data")));
 extern char *D_L02_001600EC_2d8910 __asm__("D_L02_001600EC");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 /* Spawn point for the moby: its slot's stored position and rotation, or, with no slot, a point beside it on the side facing the hero. */
 void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation_output, char *moby) __asm__("FUN_L02_002d8910");
@@ -441,7 +436,6 @@ extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int lerp_vector() __asm__("FUN_001f9a40");
 extern int FUN_L00_002323b8();
 extern int FUN_L02_0022b728();
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 force_help_message(s32 arg0, s32 arg1) __asm__("FUN_002151d8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -680,7 +674,6 @@ void tresspasser_pad_update(Moby *moby) {
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 extern void func_L00_00250800_d92f0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void func_001F9BD8_d92f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float func_001FA748_d92f0(float, float) __asm__("FUN_001fa580");
@@ -872,8 +865,6 @@ extern char *tresspasser_radial_strip_fixed_third_vertex_uv_gp __asm__("D_L02_00
 extern char *tresspasser_radial_strip_fixed_fourth_vertex_uv_gp __asm__("D_L02_00161B08") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_data/draw_tresspasser_puzzle_radial_strip.h"
 
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_001f44b8(s32);
 extern void FUN_L02_0020bc88_u(void *, void *, void *, s32, s32) __asm__("FUN_L02_0020bc88");
@@ -1031,12 +1022,7 @@ extern float escalator_target_speed_gp __asm__("D_L02_00161C14") __attribute__((
 extern float escalator_acceleration_gp __asm__("D_L02_00161C1C") __attribute__((sda));
 extern float D_0015ED70_2dc6b0 __asm__("D_0015ED70");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void FUN_L00_00260738_2dc6b0(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
@@ -1145,8 +1131,6 @@ extern float versatarget_particle_scale_gp __asm__("D_L02_00161CB8") __attribute
 extern float D_L02_00161CBC;
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 void initialize_camera_offset_effect_state(void) __asm__("FUN_L02_002fa6d8");
 void try_select_camera_offset_effect_moby(char *m) __asm__("FUN_L02_002fa7c8");
 extern unsigned char D_0014171B_x[] __asm__("D_0015ED84");
@@ -1258,13 +1242,11 @@ void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) {
         }
     }
 }
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L02_002ea7d0_c(struct Moby *) __asm__("FUN_L02_002ea7d0");
 extern void FUN_L02_002ea8b0_c(struct Moby *) __asm__("FUN_L02_002ea8b0");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -1285,7 +1267,6 @@ extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern int D_L02_0015F640 __attribute__((sda));
-extern unsigned char items_acquired[] __asm__("D_0013D4E8");
 extern char D_0013F3D0[];
 extern float D_L02_00174468 __attribute__((section(".data")));
 extern int D_L02_00167400 __attribute__((section(".data")));
@@ -1406,7 +1387,6 @@ void tresspasser_update(struct Moby *moby) {
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void initialize_collectible_sprite_state(char *moby) __asm__("FUN_L02_002ea7d0");
@@ -1440,11 +1420,9 @@ typedef struct {
     float d[4];
 } L02SpriteData_ea8b0;
 extern void func_001F9BF0_ea8b0(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_ea8b0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9908_ea8b0(int *) __asm__("FUN_001f9740");
 extern int func_001F9850_ea8b0(int) __asm__("FUN_001f96f8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int func_001FA8A8_2ebce8_ea8b0(int, int, float) __asm__("FUN_001fa6e0");
 extern float func_001F9B88_ea8b0(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_ea8b0(void *, int, unsigned char, int, int, int, int,

@@ -5,6 +5,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/overlay/entities.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -126,7 +127,6 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4AE0), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern short *D_L14_001ABF40[];
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/fun_l14_002b3890.h"
 
@@ -182,8 +182,6 @@ void initialize_moby_path_state(char *moby) {
 /* rebuilds two vectors from the moby's transform and applies them to its linked object */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_003000B0), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 extern float linked_moby_initial_offset_length_gp __asm__("D_L14_00161FC4") __attribute__((sda));
 extern float linked_moby_additional_offset_length_gp __asm__("D_L14_00161FC8") __attribute__((sda));
@@ -288,10 +286,8 @@ extern void FUN_L00_0024f7c8(char *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025e450_c(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(float, char *, int, char *);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform_c(char *, int, void *) __asm__("build_moby_bone_transform");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
@@ -734,12 +730,6 @@ extern void FUN_00213358(void *, f32, f32);
 extern Particle *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, s32, struct Moby *) __asm__("FUN_L00_00274948");
 extern f32 FUN_002132a8(f32, f32);
 extern s32 FUN_00213260(s32);
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 /* Ship engine effects: puffs exhaust particles from joint 1 and places the nozzle and beam points from joints 7 and 2. */
 void update_plasmabot_visual_effects(struct Moby *moby) __asm__("FUN_L14_002b2600");
@@ -819,11 +809,9 @@ extern float D_L14_001614AC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614BC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614C0 __attribute__((sda)); /* no foreign declaration */
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void fast_draw_quad_real(void *, void *, s32) __asm__("FUN_001f7d30");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern float D_L14_001614AC_lui __asm__("D_L14_001614AC");
 extern float D_L14_001614BC_lui __asm__("D_L14_001614BC");
@@ -1099,7 +1087,6 @@ void process_plasmabot_hit_reaction(char *moby) {
 
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float func_L00_0025CE58_2B4668(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
 extern float plasmabot_path_traversal_speed_gp __asm__("D_L14_001614D8") __attribute__((sda));
@@ -1129,7 +1116,6 @@ extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float func_L00_0025CE58_2B4828(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 
 /* Eases the moby's yaw offset toward target_angle (clamped to about 70 degrees); with `flag` also eases the pitch toward its owner.
@@ -1225,12 +1211,8 @@ extern float plasmabot_glow_quad_scale_gp __asm__("D_L14_001614F8") __attribute_
 extern float plasmabot_glow_camera_pull_distance_limit_gp __asm__("D_L14_001614FC") __attribute__((sda));
 extern float plasmabot_glow_camera_clearance_distance_gp __asm__("D_L14_00161500") __attribute__((sda));
 extern u32 plasmabot_glow_vertex_color_gp __asm__("D_L14_00161504") __attribute__((sda));
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void draw_geometry_quad(void *, void *, int);
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
 unsigned long get_effect_texture_alt(s32) __asm__("FUN_001f44b8");
 
@@ -1398,11 +1380,8 @@ extern float D_0015ED60;
 extern void *D_001413D0_de670 __asm__("D_001413D0") __attribute__((section(".data")));
 extern void FUN_L14_002dec40(struct Moby *);
 extern void add_draw_callback(void (*)(struct Moby *), struct Moby *) __asm__("FUN_001f4600");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern f32 fast_add_rotations(f32, f32);
 extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -1492,8 +1471,6 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 extern float plasmabot_debris_launch_magnitude_range_start_gp __asm__("D_L14_00161B08") __attribute__((sda));
 extern float plasmabot_debris_launch_magnitude_range_end_gp __asm__("D_L14_00161B0C") __attribute__((sda));
@@ -1535,10 +1512,6 @@ unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
 extern void emit_debris_trail_particles(struct Moby *) __asm__("FUN_L14_002e03b8");
 extern s32 D_001413D0_dfd10 __asm__("D_001413D0") __attribute__((section(".data")));
 extern s32 tick_countdown_dfd10(s32 *) __asm__("FUN_001f9740");
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void spawn_explosion_dfd10(struct Moby *, void *, void *, f32, f32, s32, s32, s32,
@@ -1637,10 +1610,6 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         emit_debris_trail_particles(moby);
 }
 extern unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void build_look_at_2e0170(void *, void *, void *, float) __asm__("FUN_00214890");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
@@ -1766,10 +1735,7 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED60;
 extern int D_L14_0015F580_c __asm__("D_L14_0015F580");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_00274948_c(u128_2E17B8 *a, u128_2E17B8 *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
@@ -1872,9 +1838,6 @@ void emit_debris_trail_particles(Moby *moby) {
 }
 /* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern P_eca8 *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern float D_L14_0015F580_y[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 
@@ -1974,7 +1937,6 @@ extern void explode_ff640(struct Moby *, void *, void *, float, float, int, int,
 extern void remove_moby_ff640(struct Moby *) __asm__("FUN_0020c828");
 extern int fast_bsphere_check(float *, float) __asm__("FUN_001fa728");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 /* Floating mine: spins and pulses (and bobs in level 16); blows up on a hit and respawns once out of view. */

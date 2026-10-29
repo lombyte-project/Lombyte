@@ -4,6 +4,8 @@
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/camera/follow_cam.h"
 
 #define NOT_SDA
 
@@ -100,7 +102,6 @@ extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern int debug_print() __asm__("FUN_001e93b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015ED60;
 extern float D_L02_0015F580;
 extern float background_ship_1_path_travel_speed_gp __asm__("D_L02_00161F64") __attribute__((sda));
@@ -114,7 +115,6 @@ extern void spawn_background_ship_1_joint_sparks(char *m, void *arg1) __asm__("F
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void delete_moby(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void prepare_background_ship_1_joint_billboards(char *moby) __asm__("FUN_L02_002ec3f0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -281,9 +281,6 @@ extern short background_ship_1_first_spark_color_tween_start_gp __asm__("D_L02_0
 extern short background_ship_1_first_spark_color_tween_end_gp __asm__("D_L02_00161FB4") __attribute__((sda));
 extern short background_ship_1_second_spark_color_tween_start_gp __asm__("D_L02_00161FB8") __attribute__((sda));
 extern short background_ship_1_second_spark_color_tween_end_gp __asm__("D_L02_00161FBC") __attribute__((sda));
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -743,7 +740,6 @@ void initialize_camera_offset_effect_state(void) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
 
 extern float D_L02_0016760C __attribute__((section(".data")));
-extern void follow_camera_set_offset_scale(int, float, float) __asm__("FUN_L00_002e84f0");
 extern void register_camera_update_callback(void (*)(void)) __asm__("FUN_L02_001fc008");
 void update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
 
@@ -786,10 +782,7 @@ void update_camera_offset_effect_state(void) {
 extern char D_0013CA44[];
 extern char D_L02_00167280_c[] __asm__("D_L02_00167280");
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
-extern f32 fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern short D_L02_0016238C;
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void try_select_camera_offset_effect_moby(char *candidate_moby) __asm__("FUN_L02_002fa7c8");
@@ -902,10 +895,7 @@ rejected:
 extern char *D_L02_0015EF50;
 extern char D_L02_00167410[] __attribute__((section(".data")));
 extern char D_L02_00167280[] __attribute__((section(".data")));
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001f99c0(float);
 
@@ -975,14 +965,10 @@ extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
 extern void FUN_L00_002e8450(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e84b8(float, float) __asm__("FUN_L00_002e84b8");
 extern void set_follow_camera_orbit_clamp_mode(int) __asm__("FUN_L00_002e8568");
-extern void follow_camera_set_lateral_spring(float, float) __asm__("FUN_L00_002e8590");
-extern void follow_camera_set_up_spring(float, float) __asm__("FUN_L00_002e85d8");
 extern void FUN_L00_002e8620(void);
 extern void FUN_L00_002e8648(void) __asm__("FUN_L00_002e8648");
 extern void set_follow_camera_angle_blend_from_direction(float, float, float *) __asm__("FUN_L00_002e8918");
 extern void set_follow_camera_angle_blend_from_position(float, float, void *) __asm__("FUN_L00_002e8970");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float absolute_float(float);
 
 void apply_moby_camera_control(char *moby) __asm__("FUN_L02_002fb9c8");

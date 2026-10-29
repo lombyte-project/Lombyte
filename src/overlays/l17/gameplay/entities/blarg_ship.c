@@ -7,6 +7,7 @@
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
@@ -16,7 +17,6 @@ extern char D_0013E52B[];
 extern char D_L17_00167580[];
 extern char fleet_camera_box_configuration_error_format[] __asm__("D_L17_001E6F60");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int D_00141DC4 __attribute__((section(".data")));
 extern int fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
@@ -321,16 +321,10 @@ typedef struct {
 extern char D_L17_001676C0[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern float frame_delta_time __asm__("D_0015ED7C");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 float D_L17_001623C0[4] __attribute__((section(".sdata"))) = {-0.5f, -1.0f, 1.0f, 1.0f};
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 void vu1_add_g_sregister(s32 register_id, s64 value) __asm__("FUN_00233980");
 
 extern float D_L17_0016D3E4 __attribute__((section(".data")));
@@ -542,7 +536,6 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
@@ -561,9 +554,6 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
 extern void update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
 extern void update_moby_path_transform(void *) __asm__("FUN_L11_0031a438");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -784,13 +774,8 @@ void blarg_ship_update(struct Moby *moby) {
 
 extern char D_0013E533[];
 extern char D_L17_001676C0[];
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -944,11 +929,6 @@ typedef struct {
 } V4;
 
 extern char D_L17_001676C0[];
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void compute_reflection_sphere_map_uvs(int vertex_count, V3 *input_directions, V3 *vertex_positions, int unused, float *out) __asm__("FUN_L17_002f54d8");
 

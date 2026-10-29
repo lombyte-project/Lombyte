@@ -7,6 +7,7 @@
 #include "rnc/gameplay/entities/moby.h"
 
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 /* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
 typedef struct {
@@ -30,13 +31,7 @@ extern s32 D_0015ED84;
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 extern s32 sample_path(void *, void *, s32 *, f32 *, s32, f32) __asm__("FUN_L00_0025d808");
@@ -204,7 +199,6 @@ extern char D_L01_00167240[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_L01_0015F5D0 __attribute__((section(".sdata")));
 extern int cutscene_active_macro __asm__("D_L01_0015F404") __attribute__((section(".sdata")));
@@ -213,18 +207,14 @@ extern int FUN_L00_00257b90_c(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002ac910(void *, void *, void *, float, int, int, int, int, int);
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value_c(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern char D_0013F3D0[];
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -487,8 +477,6 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
 #include "rnc/overlay/collision.h"
 
 extern CollisionHit collision_hit __asm__("D_L01_001742C0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -805,7 +793,6 @@ void attach_cutscene_big_head_manipulator(char *class_reference_moby) {
     }
 }
 extern float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 #include "sda.h"
 extern unsigned char D_0015EDB0_c __asm__("D_0015EDB0");
 #include "qcopy.h"
@@ -865,7 +852,6 @@ typedef struct {
 } L01Player;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
@@ -1149,7 +1135,6 @@ void spawn_point_update(struct Moby *moby) {
     }
 }
 #include "rnc/rendering/screen.h"
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
@@ -1287,7 +1272,6 @@ extern u8 D_0014BEC0[];
 /* MACRO_ADDR aliases: retail loads these with the one-register lui form */
 extern f32 D_0015ED6C_f __asm__("D_0015ED6C") MACRO_ADDR;
 extern s32 D_0015ED84_n __asm__("D_0015ED84") MACRO_ADDR;
-extern u8 opt_mirror_anim __asm__("D_0015EDB5") MACRO_ADDR;
 extern s32 D_L01_0015F640 MACRO_ADDR;
 extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
 extern f32 D_L01_00161F10_gp __asm__("D_L01_00161F10") __attribute__((sda));
@@ -1512,9 +1496,6 @@ extern int gold_bolt_glow_ring_particle_texture_index_gp __asm__("D_L01_00161F4C
 extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern float func_0020D830_m(void *) __asm__("FUN_0020c9e0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -1574,7 +1555,6 @@ typedef struct {
 
 extern f32 compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern f32 FUN_001fa580_c(f32, f32) __asm__("FUN_001fa580");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void clear_u64_value(f32 *) __asm__("FUN_001f99f8");
 extern void lerp_vector(f32 *, void *, void *, f32) __asm__("FUN_001f9a40");
@@ -1636,7 +1616,6 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
 extern float gold_bolt_particle_initial_speed_min_gp __asm__("D_L01_00161F54") __attribute__((sda));
 extern float gold_bolt_particle_initial_speed_max_gp __asm__("D_L01_00161F58") __attribute__((sda));

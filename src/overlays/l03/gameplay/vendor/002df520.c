@@ -8,6 +8,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
@@ -40,7 +41,6 @@ extern u8 D_0013D408[];
 extern u8 D_0013D4C0[];
 
 extern s32 is_point_inside_clip_volume(void *point, s32 volume) __asm__("FUN_00214720");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
@@ -238,7 +238,6 @@ extern void cutscene_set_camera_target(void *) __asm__("FUN_L00_002637f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 /* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */
@@ -292,10 +291,6 @@ void update_kerwan_cutscene_effects(char *owner_moby) {
     }
 }
 #include "qcopy.h"
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 /* places the camera behind the hero and rebuilds its orientation axes */
 void rebuild_hero_relative_camera_transform(char *camera) __asm__("FUN_L03_002eb7e0");
@@ -433,10 +428,6 @@ void update_smoothed_hero_relative_camera_position(void *camera_instance) {
 extern char camera_look_offset_direction[] __asm__("D_L03_00166F40");
 extern short camera_target_height_stiffness __asm__("D_L03_00161E70") __attribute__((sda));
 extern short camera_target_height_damping __asm__("D_L03_00161E74") __attribute__((sda));
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max,
                       f32 vel) __asm__("FUN_001ebd78");
 

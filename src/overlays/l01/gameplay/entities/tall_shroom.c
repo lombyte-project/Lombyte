@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     u8 pad0[0x5C];
@@ -15,8 +16,6 @@ extern Ent l01_sine_modulated_scroll_layers[] __asm__("D_L01_00202D80");
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void update_and_draw_scrolling_overlay_layers(s32, void *) __asm__("FUN_L01_002b96e0");
-extern float convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void draw_level01_scroll_layers(void) __asm__("FUN_L01_00309bf8");
 
@@ -77,7 +76,6 @@ extern s32 D_L01_0015F688 MACRO_ADDR;
 extern s32 D_L01_0015F68C MACRO_ADDR;
 extern struct Moby *moby_list __asm__("D_L01_0015FFE4") MACRO_ADDR;
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
@@ -242,7 +240,6 @@ extern BlobHitInfo collision_hit __asm__("D_L01_001742C0");
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -255,7 +252,6 @@ extern void spawn_burst(void *, void *, s32, s32, f32, s32, s32) __asm__("FUN_L0
 extern int FUN_L00_00257b90(int lo, int hi);
 extern u8 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void update_explosive_moby(struct Moby *moby) __asm__("FUN_L01_0030ba18");
@@ -362,10 +358,8 @@ typedef struct {
 
 extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void update_entity(DebrisMoby *) __asm__("FUN_L00_00250df8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 DebrisMoby *FUN_L01_0030be70(DebrisMoby *parent_moby, void *debris_vector_source, f32 scale) {
     DebrisMoby *spawned_moby;
@@ -425,15 +419,12 @@ typedef struct {
 extern CutsceneFx fx_cutscene __asm__("D_L01_0016CCE0");
 /* MACRO_ADDR: retail rebuilds this address with lui/addiu at each use */
 extern u128 fx_prev_pos __asm__("D_L01_00162070") MACRO_ADDR;
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void cutscene_set_camera_target(struct Moby *) __asm__("FUN_L00_002637f8");
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern char *spawn_splash(f32, f32, void *, void *, void *) __asm__("FUN_L00_002718d0");
 extern char *spawn_burst_moby(void *, f32) __asm__("FUN_L00_002d7e90");
@@ -443,9 +434,6 @@ extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32
                        s32) __asm__("FUN_L00_0025e450");
 extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b70");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 
@@ -649,10 +637,6 @@ typedef struct {
 
 extern EnvVec camera_pos __asm__("D_L01_00167240");
 extern f32 level01_environment_map_uv_scroll_offsets[2] __asm__("D_L01_00162110");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 
 void generate_level01_environment_map_uvs(s32 vertex_count, f32 (*normals)[3], f32 (*verts)[3], s32 unused, f32 (*uv)[2]) __asm__("FUN_L01_0030ef18");
 

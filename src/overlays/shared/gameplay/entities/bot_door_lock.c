@@ -6,6 +6,7 @@
 
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/math/fast_math.h"
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -174,8 +175,6 @@ extern unsigned char D_001413F4 __attribute__((section(".data")));
 extern unsigned char D_0015EDB4;
 extern unsigned char D_0014C050[];
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float FUN_001f9b48(void *, void *);
@@ -399,7 +398,6 @@ void update_timed_sprite_effect(char *moby) {
     }
 }
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 
 
 void spawn_timed_projected_sprite_effect(char *world_position, int duration_updates, int start_color, int end_color) __asm__("FUN_L06_0030bef8");

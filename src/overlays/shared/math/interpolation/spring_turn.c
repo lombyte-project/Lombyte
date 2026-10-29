@@ -1,6 +1,8 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/globals.h"
 
 #define NOT_SDA
 
@@ -8,7 +10,6 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
@@ -21,10 +22,6 @@ float interpolate_wrapped_angle_cosine_eased(float x, float y, float z) {
     return fast_add_rotations(x, wrapped_angle_delta * ((1.0f - phase_cosine) * 0.5f));
 }
 #include "qcopy.h"
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Vector cosine interpolation: dst = a + (b - a) * ((1 - cos(t * pi)) * 0.5).
    Scalar analogue matched at src/game/mobyutil.c:func_00214220. */
@@ -55,7 +52,6 @@ void interpolate_vector_xyz_cosine_eased(void *interpolated_vector_output, void 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259088), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
@@ -283,13 +279,10 @@ typedef union {
 extern V_94C8 D_L00_00173E70;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_length_xy(void *);
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_L00_00173E40[];
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern V_94C8 D_94C8_60 __asm__("D_L00_00173E60");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
@@ -401,20 +394,15 @@ typedef struct {
 
 extern Glob D_L00_00173E40_c __asm__("D_L00_00173E40");
 
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9dc8_c(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 FUN_L00_002583f0_c(void *, void *, s32, f32, f32) __asm__("FUN_L00_002583f0");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern s32 FUN_L00_00258ad0_c(void *, void *, f32, s32, f32, s32) __asm__("FUN_L00_00258ad0");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 
 extern f32 frame_time_sq_gp __asm__("D_0015ED70") __attribute__((sda));
-extern f32 frame_scale __asm__("D_0015ED60") __attribute__((sda));
 s32 FUN_L00_00258b50(Obj *m, Ctl *c, void *v, Vec4 *out, f32 f);
 s32 FUN_L00_00258b50(Obj *moby, Ctl *movement_control, void *target_position, Vec4 *out, f32 f) {
     Vec4 save;
@@ -688,8 +676,6 @@ float calculate_triangular_corrected_scalar(float *base_values, float *linear_te
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A540), where it is exact; names translated to the US level program. */
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void predict_position_with_vertical_drop(void *destination, void *base_position, void *velocity, int frame_count, float vertical_drop_coefficient) __asm__("FUN_L00_00259508");
 

@@ -5,6 +5,9 @@
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
+#include "rnc/gameplay/state/options.h"
 
 #define NOT_SDA
 
@@ -13,7 +16,6 @@
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00179410[];
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void dismiss_help(void) __asm__("FUN_001fdc08");
 
 /* Once (flag 0x38): starts a 0x3C-frame timer, dismisses help, sets the first word to 8 if 0. */
@@ -270,7 +272,6 @@ void reset_hero_easing_records(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205C18), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015F5CC;
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void update_hero_random_timer(void) __asm__("FUN_L00_00205600");
@@ -375,12 +376,9 @@ extern u128 hero_extra_manipulator_initial_scales[] __asm__("D_L00_0017C220");
 extern u128 hero_extra_manipulator_initial_translations[] __asm__("D_L00_0017C260");
 extern f32 hero_extra_manipulator_blend_by_phase[] __asm__("D_L00_0017C2A0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9770");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 
 /* Pulses the glow colour of the hero's moby (or of the item slot 3 moby2),
    then attaches the four extra manipulators while their timer runs. */
@@ -530,8 +528,6 @@ void update_hero_bolt_exclamation_hud(void) {
 }
 extern void request_grouped_voice(int, char *, int, int, int) __asm__("FUN_L00_0028de68");
 extern void add_vector_xyz_cf(int, char *, float *) __asm__("FUN_L00_0024f7c8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float probe_ground_height(float *, int, float) __asm__("FUN_00213508");
 extern void spawn_texture_indexed_rotated_particle(float *, int, float) __asm__("FUN_L00_00274cf8");
 
@@ -986,7 +982,6 @@ typedef struct {
 extern G00206cf8 help_records __asm__("D_00141968");
 extern s32 D_L00_0015F5CC_00206cf8 __asm__("D_L00_0015F5CC");
 extern E00206cf8 D_L00_00179AC0_00206cf8[] __asm__("D_L00_00179AC0");
-extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA;
 s32 FUN_L00_0020d568_00206cf8(void) __asm__("FUN_L00_0020d568");
 s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern u16 D_001418F0 __attribute__((section(".data")));
@@ -1017,7 +1012,6 @@ void check_hero_item_reward_conditions(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00207418), where it is exact; names translated to the US level program. */
 
-extern int alternate_animation_sequence __asm__("D_0015EE20") __attribute__((section(".sdata")));
 extern int D_0015EEA0 __attribute__((section(".sdata")));
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern unsigned char D_0015EDB0[] __attribute__((section(".sdata")));
@@ -1274,11 +1268,8 @@ extern float D_0015EE18 __asm__("D_0015EE18");
 extern unsigned char D_17C380_207430[] __asm__("D_L00_0017C380") __attribute__((section(".data")));
 extern unsigned char D_17C3C0_207430[] __asm__("D_L00_0017C3C0") __attribute__((section(".data")));
 extern unsigned char D_17C400_207430[] __asm__("D_L00_0017C400") __attribute__((section(".data")));
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void f4f7c8_207430(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void FUN_L00_00208038_c(void *, int, float, float) __asm__("FUN_L00_00208038");
 extern void fcb10_207430(void *, int, void *) __asm__("FUN_0020cb10");
 
@@ -1340,7 +1331,6 @@ void update_moby_pulsing_glow_effects(char *moby) {
 }
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void get_moby_color(void *, int *, int *, int *) __asm__("FUN_L00_00250320");
-extern u8 item_text_variant[] __asm__("D_0013E520");
 
 void update_hero_color_and_item_tint(void) {
     struct Hero *player = &hero;
@@ -1661,12 +1651,9 @@ typedef union { u128_2080b0 q; float f[4]; } Vec4_2080b0 __attribute__((aligned(
 extern void moby_point_position_2080b0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void queue_glow_sprite_2080b0(void *vec, int a, float f0, float f1) __asm__("FUN_L00_00208038");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 
 // Hero gadget glow: pulses the colour of the hero's gadget moby (hero state 13, 16, 17, 19, 20) and
@@ -2533,7 +2520,6 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
         FUN_L00_0026f548(&start, &effect_vector, color, life);
     }
 }
-extern struct Hero hero __asm__("D_0013F350") __attribute__((section(".data")));
 extern float D_0015ED6C;
 int fast_dec_timer(void *) __asm__("FUN_001f9770");
 float FUN_001fa580_209ec8(float, float) __asm__("FUN_001fa580");
@@ -2760,7 +2746,6 @@ extern P_a540 D_L00_0017A680_a540 __asm__("D_L00_0017A680");
 extern f32 D_0015EE14 __asm__("D_0015EE14");
 extern f32 D_0015EE18 __asm__("D_0015EE18");
 
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern void FUN_00213ed8_a540(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void FUN_L00_0020a1e0_a540(f32, f32) __asm__("FUN_L00_0020a1e0");
@@ -2904,7 +2889,6 @@ extern char *D_L00_001ABD80[] __asm__("D_L00_001ABA00");
 extern char D_L00_0017A780[] __asm__("D_L00_0017A680");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern int D_L00_0015F6B0 __asm__("D_L00_0015F5CC");
 extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int suck_get_aim_height(char *) __asm__("FUN_002141f8");
@@ -3457,7 +3441,6 @@ extern float fast_difference_between_rotations(float, float) __asm__("func_001FA
 extern int FUN_001efa68_c(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int rig_probe() __asm__("FUN_L00_001f19a0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013F350[];
 f32 FUN_001f9e90_c2(f32, f32) __asm__("FUN_001f9e90");
 void predict_position_with_vertical_drop(void *a, void *b, void *c, int d, float f) __asm__("FUN_L00_00259508");

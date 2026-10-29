@@ -3,6 +3,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -12,7 +13,6 @@
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C8D8), where it is exact; names translated to the US level program. */
 
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float absolute_float(float input) __asm__("func_001F99C0");
 

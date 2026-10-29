@@ -6,6 +6,8 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
 #define NOT_SDA
@@ -19,7 +21,6 @@ extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
    retail holds it in a saved register across it. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232560), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_animation_id, int *out_secondary_animation_id) __asm__("FUN_L00_00231ff8");
 
 extern int select_hero_slot3_animation_pair(int, int *, int *) __asm__("FUN_L00_00231ff8");
@@ -523,7 +524,6 @@ void clear_hero_queued_animation(void) {
 /* Stores ID at hero +0xAB8, or func_001F9850(5) when ID is -1. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232EC0), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 /* Stores id at &hero.queued_frame_request; -1 stands for 5 frames. */
 void hero_set_attack_ticks(int id) __asm__("FUN_L00_00232640");
@@ -911,9 +911,6 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
    by the matrix at hero and adds the vector at hero +0x80. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233E48), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 
 void transform_hero_polar_offset_to_world(float *out, float radius, float angle, float z) __asm__("FUN_L00_002335c8");
@@ -1027,13 +1024,9 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
         break;
     }
 }
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234150), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 void gravity_flatten(float *flattened_vector, float *input_vector) {
@@ -1092,7 +1085,6 @@ float gravity_length_xy(float *input_vector) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002342F8), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
@@ -1171,7 +1163,6 @@ void set_gravity_relative_vector_length_xy(float *output_vector, float *input_ve
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002344B0), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_00233a78_c(void *) __asm__("FUN_L00_00233a78");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 float predict_hero_trajectory_z(float *initial_position, float *initial_velocity, int *steps, float step) __asm__("FUN_L00_00233c30");
@@ -1233,7 +1224,6 @@ f32 compute_gravity_relative_vector_inclination(f32 *input_vector) {
     return 0.0f;
 }
 extern s32 D_00140408[];
-extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 weapon_ammo_used_counts[] __asm__("D_0013DEA0");
 /* Moves amount from weapon_ammo_counts[idx] to D_0013DEA0[idx]; 0 if too little, else 1. */
 s32 use_ammo(s32 idx, s32 amount) __asm__("FUN_L00_00233db8");
@@ -1257,7 +1247,6 @@ s32 use_ammo(s32 weapon_index, s32 amount) {
     weapon_ammo_used_counts[weapon_index] = weapon_ammo_used_counts[weapon_index] + amount;
     return 1;
 }
-extern int weapon_ammo_counts[] __asm__("D_0013D428");
 /* Adds b to counter a, capping it at the entry's limit; returns the overflow or 0. */
 int add_ammo(int a, int b) __asm__("FUN_L00_00233e40");
 int add_ammo(int weapon_index, int ammo_amount) {
@@ -1366,12 +1355,8 @@ typedef struct {
 extern char hero_233f80[] __asm__("D_0013F350");
 extern int scale_game_frames_233f80(int) __asm__("FUN_001f96f8");
 extern void scale_game_frames_v_233f80(int) __asm__("FUN_001f96f8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern Plat_234800 *f_L00_002603d0(void *) __asm__("FUN_L00_002603d0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void probe_ground_height_cf(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern int convert_pose_to_reference_local(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void transform_attachment_pose(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
@@ -1379,8 +1364,6 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 

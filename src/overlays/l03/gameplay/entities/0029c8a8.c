@@ -9,14 +9,12 @@
 #include "qzero.h"
 #include "sda.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/math/fast_math.h"
 /* Builds two scaled offset vectors from the moby's matrix and adds them to out. */
 
 
 extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001fa050_q(float *, float *) __asm__("FUN_001fa050");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
 void add_moby_rotation_based_offsets(struct Moby *moby, float *out) __asm__("FUN_L03_0029c8a8");
 

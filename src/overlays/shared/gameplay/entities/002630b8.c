@@ -7,6 +7,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/fast_math.h"
 
 /* Record suck_get_aim_height returns for a moby: collision size and aim height. */
 typedef struct MobyBound {
@@ -499,14 +500,10 @@ typedef struct {
 } Moby;
 
 extern float D_0015ED6C_s[] __asm__("D_0015ED6C") __attribute__((sda));
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");

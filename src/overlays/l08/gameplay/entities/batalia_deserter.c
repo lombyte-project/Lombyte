@@ -9,6 +9,7 @@
 #include "rnc/overlay/watch.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA __attribute__((section(".data")))
 
@@ -57,7 +58,6 @@ void attach_batalia_deserter_class_manipulator(struct Moby *moby) {
 }
 #include "qcopy.h"
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 #include "sda.h"
 typedef struct {
@@ -103,7 +103,6 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
@@ -398,14 +397,11 @@ typedef struct {
     float aim[4];
 } L14Player;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern char batalia_plumber_name_text[] __asm__("D_L08_00162308");
@@ -567,11 +563,9 @@ extern VendorEventRecord help_records[] __asm__("D_00141968");
 extern u8 D_0013D413 NOT_SDA;
 extern u8 D_0013D3B7 NOT_SDA;
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 
 typedef struct {
     s32 first;
@@ -736,7 +730,6 @@ void update_batalia_selected_moby_effects(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void spawn_effect_with_initial_motion(float *, float *, int, float) __asm__("FUN_L08_0027fe00");
@@ -814,7 +807,6 @@ extern s32 D_L08_001F4C60[];
 extern s32 D_L08_001F8528[];
 extern char batalia_effect_sine_offsets[] __asm__("D_L08_001F8550");
 #include "rnc/overlay/l08/gameplay/entities/batalia_deserter_globals.h"
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_L08_001623F0;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32();
@@ -829,7 +821,6 @@ extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm
 extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
 extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_batalia_textured_effect(struct Moby *moby) __asm__("FUN_L08_003097b0");

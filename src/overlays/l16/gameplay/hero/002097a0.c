@@ -7,6 +7,7 @@
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/data_labels.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -145,8 +146,6 @@ void apply_hero_ground_material_effects(void) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_0020FEC8), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_0025f730(void *a, float x);
 
 void compose_and_limit_hero_velocity(void) __asm__("FUN_L16_0020f8b0");
@@ -382,13 +381,9 @@ extern void FUN_L00_002347c0(void);
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00233810(void *, void *, f32);
 extern void FUN_L00_002334d0(void *, void *, f32);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern s32 coll1_2133a8(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 FUN_L00_001f3170(void *, f32);
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_2133a8 D_L16_00174270[] __attribute__((section(".data")));
 s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L16_00210b60");
 
@@ -535,7 +530,6 @@ typedef struct {
 extern char *D_L16_00174258[];
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
@@ -546,11 +540,7 @@ extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f80");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void update_hero_ground_contact(void) __asm__("FUN_L16_0020ffb0");
 extern char D_0013F430[] __attribute__((section(".sdata")));

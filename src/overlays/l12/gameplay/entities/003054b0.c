@@ -10,6 +10,7 @@
 #include "rnc/math/vector.h"
 
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct Moby Moby;
 
@@ -585,14 +586,11 @@ extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
 extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
 void FUN_L12_00306350_c(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((section(".sdata")));
@@ -975,7 +973,6 @@ void homing_mine_spawner_update(struct Moby *spawner) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308E98), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int select_moby_combat_target(char *, char *, float) __asm__("FUN_L00_0025fcb8");
 float absolute_float(float input) __asm__("func_001F99C0");

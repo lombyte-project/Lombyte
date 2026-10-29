@@ -5,6 +5,8 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/camera/follow_cam.h"
 
 #define NOT_SDA
 
@@ -13,8 +15,6 @@
 /* Updates a moby: initialises its vector, then applies an angle-based offset. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E87B0), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
@@ -234,8 +234,6 @@ extern void *suck_get_aim_height(struct Moby_A4D88 *) __asm__("FUN_002141f8");
 extern void collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
 int FUN_L00_0028dc90(int i, int a1, int v, int k);
 void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0, s32 c1, f32 f, f32 spd, f32 z) __asm__("FUN_L00_0025a9f8");
@@ -984,12 +982,8 @@ extern int D_L15_0015ED98;
 extern volatile int D_L15_00184AAC __attribute__((section(".data")));
 extern int D_L15_0015FFD8;
 extern float D_0013F3D0[];
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_L15_002f78b8(int);
 int can_spawn_codebot_slot_effect(int slot) __asm__("FUN_L15_002f78e0");
@@ -1134,10 +1128,8 @@ extern char *D_L15_0015FFE4 __attribute__((section(".sdata")));
 extern char D_0013E533[];
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((section(".sdata")));
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
@@ -1501,7 +1493,6 @@ typedef struct Items_2ed398 {
     unsigned char f6F;
 } Items_2ed398;
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d568_2ed398(void) __asm__("FUN_L00_0020d568");
@@ -2215,13 +2206,8 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
 extern char *D_L15_001600EC;
 extern char angular_limit_projection_axis_record[] __asm__("D_L15_00167410");
 extern char D_L15_00167280[];
-extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float FUN_001f99c0(float);
 
 int check_moby_target_angular_limits(char *moby, float projected_angle_limit_degrees, float b) __asm__("FUN_L15_002f8698");
@@ -2284,14 +2270,9 @@ typedef struct { char pad[0x100]; float x; float y; } G_88e8;
 extern G_88e8 D_0013C940_s __asm__("D_0013C940") __attribute__((section(".data")));
 extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
 extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void set_nonzero_follow_camera_parameters(float, float, float) __asm__("FUN_L02_002f6598");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void set_follow_camera_angle_blend_from_position(void *, float, float) __asm__("FUN_L00_002e8970");
-extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
 extern void FUN_L00_002e8620(void);
-extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
-extern void follow_camera_set_offset_scale(int, float, float) __asm__("FUN_L00_002e84f0");
 
 /* Runs the aim timer while the player holds the target in view; spins the target once aimed. */
 void update_moby_follow_camera(char *moby) __asm__("FUN_L15_002f88e8");

@@ -9,6 +9,8 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 
 /* Spawns the effect pieces for a moby: two sparks, the ring of three and a final coloured one. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF358), where it is exact; names translated to the US level program. */
@@ -49,10 +51,7 @@ extern float bolt_thief_puff_up_offset_gp __asm__("D_L14_00161F98") __attribute_
 extern float bolt_thief_puff_middle_right_offset_delta_gp __asm__("D_L14_00161F9C") __attribute__((sda));
 extern float bolt_thief_puff_final_right_offset_gp __asm__("D_L14_00161FA0") __attribute__((sda));
 int D_L14_00161FA4 = 0x7f204080;
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
 extern Part_2FF358 *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
@@ -435,7 +434,6 @@ extern float vendor_spring(float *p, float *v, float t, float u1, float u2, floa
 extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") __attribute__((sda));
 extern char *D_L14_001B0BB0[];
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);
 
 int update_bolt_thief_path_movement(struct Moby *moby) {
@@ -470,7 +468,6 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
     return path_sample_result;
 }
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 #include "sda.h"
 extern unsigned char D_0015EDB0;
@@ -535,15 +532,12 @@ typedef struct {
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 typedef struct {
@@ -574,7 +568,6 @@ extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
-extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 /* Watcher moby update: gated by its collectable and trigger, primes a camera target, then turns its head toward the hero. */
 void sam_update(L14WatchMoby *m) __asm__("FUN_L14_002fefe0");
 void sam_update(L14WatchMoby *moby) {

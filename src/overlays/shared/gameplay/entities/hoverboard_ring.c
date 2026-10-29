@@ -10,6 +10,7 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
@@ -86,14 +87,10 @@ extern f32 debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") __attribute__((
 extern f32 debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") __attribute__((sda));
 extern f32 vector_distance_c8e0(void *, void *) __asm__("FUN_001f9b80");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void add_draw_callback(void (*)(char *), struct Moby *) __asm__("FUN_001f4600");
 extern char *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern struct Moby *spawn_debris_c8e0(f32, struct Moby *, s32, void *, void *, s32, s32, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void spawn_proximity_gated_bolts(struct Moby *) __asm__("FUN_L01_002787a0");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -245,9 +242,6 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, void *, int);
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
 extern short glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") __attribute__((sda));
@@ -323,8 +317,6 @@ char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
 
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 void update_hero_follow_camera_focus(char *moby) __asm__("FUN_L05_00329358");
 
@@ -597,13 +589,6 @@ void reset_hero_follow_camera_from_preset(Camera *camera_to_reset) {
     camera_to_reset->unk7E = 0;
 }
 
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern void build_look_at_matrix(void *out, void *v, void *axis, f32 ang) __asm__("FUN_00214890");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
@@ -768,21 +753,13 @@ typedef struct { char pad0[0x1C]; Preset_32B1F8 *preset; } Row_32B1F8;
 
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
 extern Row_32B1F8 *D_L05_0015F050_32B1F8 __asm__("D_L05_0015EF50") __attribute__((section(".sdata")));
 extern float D_L05_00162268_32B1F8 __asm__("D_L05_001621A8") __attribute__((sda));
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float spring_32B1F8(float, float, float *, float, float, float) __asm__("FUN_001ebd78");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void FUN_L05_003298d8_c(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
 
 extern float D_L05_00174278 __attribute__((section(".data")));

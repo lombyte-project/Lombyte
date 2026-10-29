@@ -11,6 +11,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/math/fast_math.h"
 
 /* Moby.state for the resort-owner callbacks; path progression is separate. */
 enum ResortOwnerState {
@@ -218,19 +219,14 @@ extern unsigned char D_0013D4C3 __attribute__((section(".data")));
 extern int D_L11_0015F5C4;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void FUN_00214db0(void *, float, float, float);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
 /* Watcher update, same routine as commando_update with this level's states and data layout. */
@@ -369,16 +365,10 @@ void resort_owner_update(struct Moby *moby) {
     update_resort_owner_look_tracking(moby);
 }
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int FUN_00214cc8(void *, float);
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float FUN_L00_0025abf0(void *, void *, float, int, float);
 extern void transform_attachment_pose(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_00212f90(void *, int, int, int);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float D_0015ED70;
@@ -484,7 +474,6 @@ void update_resort_owner_state_actions(void *mp) {
 /* moves the parts' positions and stores the moby's displacement since last frame */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D2500), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
 
@@ -524,8 +513,6 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *out) __asm__("FU
 extern int try_find_resort_owner_jump_target(struct Moby *m, float *out) __asm__("FUN_L11_002d25e8");
 extern void FUN_L11_002d2088_c(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
 extern float ground_height_14b0(void *) __asm__("FUN_L00_00259710");
-extern void fast_vec_normalize(void *out, void *a, f32 s) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void build_symmetric_adjacency_masks(void *, int, int) __asm__("FUN_L05_0028be78");
@@ -800,11 +787,9 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         break;
     }
 }
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_00212f90(void *, int, int, int);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float resort_owner_follow_hero_speed_gp __asm__("D_L11_001613D0") __attribute__((sda));
 extern float resort_owner_distant_follow_and_path_speed_gp __asm__("D_L11_001613D4") __attribute__((sda));
 float D_L11_00161400 = -3.0f;
@@ -982,11 +967,7 @@ int classify_resort_owner_target_proximity(struct Moby *moby) {
 /* Tests whether a moby can drop onto the ground, writing the landing point. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002D37A8), where it is exact; names translated to the US level program. */
 
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void FUN_L00_00259710(void *a);
@@ -1126,7 +1107,6 @@ extern unsigned char D_0014C050[];
 extern char *D_L11_001600EC;
 extern struct UsageStat help_records[] __asm__("D_00141968") __attribute__((section(".data")));
 extern void mark_moby_for_removal_f0e40(void *) __asm__("FUN_0020c828");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
@@ -1477,8 +1457,6 @@ typedef struct {
 
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern unsigned long long get_effect_texture(int) __asm__("FUN_001f44b8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern float teleporter_ring_quad_uvs[] __asm__("D_L11_001D3530");
@@ -1651,7 +1629,6 @@ typedef struct {
 
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern void *suck_get_aim_height(char *) __asm__("FUN_002141f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation_309378(MobyAnim_309378 *arg0, int arg1, int arg2,
                                  int arg3) __asm__("FUN_00212f90");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -1741,7 +1718,6 @@ extern void FUN_L00_002e84b8_309ac0(float, float) __asm__("FUN_L00_002e84b8");
 void update_pokitaru_boat_joint_effects(struct Moby *moby) __asm__("FUN_L11_0030a500");
 
 extern void update_pokitaru_boat_joint_effects(struct Moby *) __asm__("FUN_L11_0030a500");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 int is_pokitaru_boat_target_group_clear(struct Moby *moby) __asm__("FUN_L11_0030a850");
 
 extern int is_pokitaru_boat_target_group_clear(struct Moby *) __asm__("FUN_L11_0030a850");
@@ -1952,7 +1928,6 @@ void pokitaru_boat_update(struct Moby *moby) {
     fast_vec_sub(delta, &moby->pos, start_pos);
     FUN_L00_00260738_309ac0(boat_vars->ctl60, delta, start_rot, &moby->rot);
 }
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
 
@@ -1977,8 +1952,6 @@ extern void FUN_L00_001fff28(void *, int, float);
 extern void moby_point_position(struct Moby *, int, float *) __asm__("FUN_L00_0024f7c8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void FUN_L00_0026f080(float *, float *, float, float);
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int level_frame __asm__("D_L11_0015F5CC");
 
 struct PartA500 {

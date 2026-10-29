@@ -5,6 +5,7 @@
 #include "qcopy.h"
 
 #include "eetypes.h"
+#include "rnc/math/fast_math.h"
 typedef union {
     u128 q;
     f32 f[4];
@@ -148,9 +149,6 @@ s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) {
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025E860), where it is exact; names translated to the US level program. */
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 typedef struct { float x, y, z, w; } Pt_0025E860;
 typedef struct { int n; int pad[3]; Pt_0025E860 pt[1]; } Spline_0025E860;
 
@@ -287,16 +285,10 @@ float project_level_path_point_onto_segment(float *out, float *query_point, OvlQ
     }
     return FUN_001f9b80_25db00(query_point, out);
 }
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern float FUN_L00_0025db00_c(void *, void *, void *, void *) __asm__("FUN_L00_0025db00");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float FUN_L00_0025da70_c(void *, void *, float) __asm__("FUN_L00_0025da70");
 float resolve_level_path_segment_point(OvlQuad *out, OvlQuad *query_point, OvlQuad *segment_start, OvlQuad *b, float r) __asm__("FUN_L00_0025dcd8");
 
@@ -510,10 +502,8 @@ extern char D_L00_00166DC0_25e450[] __asm__("D_L00_00166DC0");
 extern char D_L00_00166C80_25e450[] __asm__("D_L00_00166C80");
 extern S6_25e450 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
 extern S6_25e450 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -522,10 +512,6 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, int, int, int, int, float) __asm__("FUN_L00_0026bb70");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void func_L00_001FF548_25e450(void *, void *, float) __asm__("FUN_001f9c90");
 extern void *func_L00_002B0738_25e450(void *, void *, int, int, int) __asm__("FUN_L00_002af450");
 extern void func_L00_0026B890_25e450(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
@@ -862,8 +848,6 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Clamps vector a to length x: normalizes it to x when vector_length_xyz is longer. */
 void FUN_L00_0025f730(void *a, float x);

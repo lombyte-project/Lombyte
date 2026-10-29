@@ -3,6 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -37,13 +38,11 @@ typedef struct {
 } VendorBeamFrame;
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern VendorBeamFrame *D_L14_001600EC;
 extern int D_L14_001620C8;   /* no foreign declaration */
 extern int D_L14_001620D8_t; /* no foreign declaration */
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void start_vendor_beam_pulse(char *) __asm__("FUN_L14_003017f8");
 void update_vendor_beam_animation(char *moby) __asm__("FUN_L14_00301de8");
 
@@ -143,11 +142,8 @@ void update_vendor_beam(unsigned char *moby) {
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
@@ -285,9 +281,7 @@ extern int vendor_beam_color_transition_countdown_gp __asm__("D_L14_001620C4") _
 extern int vendor_beam_initial_color_gp __asm__("D_L14_001620F0") __attribute__((sda));
 extern int vendor_beam_transition_color_gp __asm__("D_L14_001620F4") __attribute__((sda));
 extern int vendor_beam_final_color_gp __asm__("D_L14_001620F8") __attribute__((sda));
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void update_vendor_beam_animation(char *moby) {
     char *vars = *(char **)(moby + 0x78);
     char *beam_point, *src;
@@ -349,9 +343,6 @@ typedef struct {
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
@@ -494,12 +485,6 @@ typedef struct {
 
 extern u8 D_L14_00174560[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */

@@ -2,6 +2,9 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/rendering/render_globals.h"
 
 #define NOT_SDA
 
@@ -20,14 +23,11 @@ typedef struct {
 } QuadPkt;
 
 extern float vendor_quad_inset_parameters[][4] __asm__("D_L00_001CA318");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
                                           float *) __asm__("FUN_00237c80");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void draw_geometry_quad(void *, void *, int);
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 extern void vu1_add_g_sregister(int, long);
@@ -275,9 +275,7 @@ extern volatile s32 D_L00_0015F3F8_v[1] __asm__("D_L00_0015F3F8");
 extern s32 D_L00_0016118C;
 extern s32 D_L00_00161E38;
 extern s32 D_L00_001BA4C0;
-extern s16 cd_read_active[] __asm__("D_001516D8");
 extern u32 frame_size[] __asm__("D_0013E504");
-extern s32 draw_buffer_address __asm__("D_0015EE84");
 extern u128 D_L00_00166DD0[];
 extern u128 D_L00_00165F80[];
 extern u128 camera_lateral_axis[] __asm__("D_L00_00166FE0");
@@ -294,7 +292,6 @@ extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
 extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void capture_draw_buffer(s32) __asm__("FUN_L00_001f99c0");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");

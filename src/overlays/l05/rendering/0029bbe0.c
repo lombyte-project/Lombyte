@@ -3,9 +3,9 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 unsigned char *D_L05_001B25C0 __attribute__((section(".data"))) = 0;
 

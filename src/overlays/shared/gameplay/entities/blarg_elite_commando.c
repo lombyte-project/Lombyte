@@ -5,6 +5,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -18,7 +19,6 @@
 extern char *func_0020D348_m(int);
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 char *spawn_blarg_elite_commando_rocket(char *owner, float *initial_movement_vector, char *spawn_position) __asm__("FUN_L16_002a09a0");
 
@@ -57,7 +57,6 @@ extern char D_0013E633[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern float fast_vec_dist(void *) __asm__("FUN_001f9b48");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
@@ -67,8 +66,6 @@ extern void play_entity_sound(int, float, void *, int, float, float, int, int, i
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void spawn_rocket_trail_spark(char *) __asm__("FUN_L15_0029ae18");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
@@ -122,7 +119,6 @@ void rocket_update(char *rocket_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1F78), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 #include "rnc/overlay/shared/gameplay/entities/blarg_elite_commando_globals.h"
 extern float class_32_symmetric_angle_bound_degrees_gp __asm__("D_L16_001613E0") __attribute__((sda));
@@ -204,8 +200,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *);
 float advance_blarg_elite_commando_base_position(char *moby, float *target) __asm__("FUN_L16_002d3eb8");
 extern void FUN_L16_002d41f8_2(void *, void *) __asm__("FUN_L16_002d41f8");
@@ -756,9 +750,6 @@ void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby, in
 extern float fast_vec_dist(void *) __asm__("FUN_001f9b48");
 extern float advance_accelerated_scalar(float *, float *, float, float, float,
                                         float) __asm__("FUN_00213f38");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 float advance_blarg_elite_commando_base_position(char *moby, float *target) {
     char *data = *(char **)(moby + 0x78);
@@ -859,7 +850,6 @@ typedef struct {
 extern L16ParticleChoices D_L16_001E8300, D_L16_001E8618;
 extern L16ParticleChoices D_L16_001E8600, D_L16_001E8318;
 extern char D_L16_001671C0[], D_0013E633[];
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -869,7 +859,6 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void emit_blarg_elite_commando_death_particles(void *moby) __asm__("FUN_L16_002d41f8");
 
@@ -934,8 +923,6 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 void update_blarg_elite_commando_joint_aim(char *commando_moby) {
     float position[4], target[4], matrix[16], delta[4], aim[4], aimDelta[4], velocity[4];

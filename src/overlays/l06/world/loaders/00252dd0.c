@@ -14,6 +14,7 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     char *f0;     /* 0x00 */
@@ -60,7 +61,6 @@ extern char *D_L18_00174840_252dd0[] __asm__("D_L06_001745C0");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg252dd0;
 extern Ldg252dd0 D_0015EE48;
 #include "rnc/overlay/l06/world/loaders/00252dd0_globals.h"
-extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L06_00182F40[3];
 extern u64 level_06_texture_64x64_gs_state[3] __asm__("D_L06_00182F58");
 extern u64 D_L06_00182F70[3];
@@ -152,7 +152,6 @@ extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
 extern char *FUN_L00_00241940_252dd0(s32) __asm__("FUN_L00_00241940");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
 extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");

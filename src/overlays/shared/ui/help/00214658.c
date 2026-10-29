@@ -8,6 +8,7 @@
 
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 typedef union {
     u128 q;
@@ -17,7 +18,6 @@ typedef union {
 extern s32 FUN_001f96f8_214658(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9dc8_214658(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_214658(float) __asm__("FUN_001f9de0");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
@@ -30,7 +30,6 @@ extern f32 FUN_L00_0025bc98_214658(float *, float *, int, float, float, float,
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void FUN_L00_00233ba0_214658(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void FUN_L00_00233708_214658(void *, void *, f32) __asm__("FUN_L00_00233708");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 extern void FUN_001f9a10_214658(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
@@ -377,7 +376,6 @@ extern f32 D_0015EE18;
 /* read by absolute address: retail has no symbol relocation here, and a
    symbol (D_0015EDB0[3]) changes the code */
 #define BYTE_0015EDB3 (*(u8 *)0x15EDB3)
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 
 /* In hero state 2, sets the lean values from motion.unk188 (clamped to
    +-1.4); needs the moby in item slot 3. */
@@ -545,7 +543,6 @@ typedef struct {
 extern P_2163f0 D_0013F350_2163f0 __asm__("D_0013F350");
 extern void FUN_001f9d20_2163f0(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001f9a68_2163f0(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_2163f0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_001f96f8_2163f0(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_00216130_2163f0(void *, void *, float, float, float,
@@ -664,19 +661,11 @@ extern s32 D_0013CB14[];
 
 extern void FUN_L00_002118c8_c(s32, f32) __asm__("FUN_L00_002118c8");
 extern void turn_to(s32, f32, f32, f32) __asm__("FUN_L00_00211e30");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void clip_hero_velocity_against_probed_surfaces(s32) __asm__("FUN_L00_00212318");
 extern f32 FUN_001f99c0(f32);
 

@@ -4,6 +4,7 @@
 
 #include "rnc/overlay/quad.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     s32 count;
@@ -100,9 +101,7 @@ typedef struct {
 
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
@@ -330,10 +329,7 @@ typedef struct {
 } PointPath;
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 /* Samples path at distance dist (points spacing apart): stores the segment, the distance into it and the point. */
 void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) __asm__("FUN_L00_00262360");
@@ -600,7 +596,6 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263B78), where it is exact; names translated to the US level program. */
 
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 /* Advances angle *p by y and swaps the old x*sin offset in a+0x18 for the new one. */
@@ -616,7 +611,6 @@ void update_moby_vertical_oscillation(float x, float y, char *moby, float *phase
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263BF8), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
 
 /* Sets o[16] and o[17] from r and the sines/cosines of the two angles, then advances the angles by l1 and l2. */
 void update_moby_rotation_oscillation(float *moby, float *first_phase_angle, float *second_phase_angle, float oscillation_amplitude, float first_phase_increment, float second_phase_increment) __asm__("FUN_L00_00262b80");

@@ -8,6 +8,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/math/fast_math.h"
 
 /*
  * Hero movement step: clamps the velocity, moves the hero by it (plus the
@@ -32,13 +33,7 @@ extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern f32 forward_component(void *) __asm__("FUN_L00_00213350");  /* dot with (cos, sin) of the hero yaw */
 
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
@@ -189,10 +184,6 @@ typedef union {
 } HopVec;
 
 extern f32 hero_air_control_speed_reference[] __asm__("D_L01_0017C250");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
@@ -200,9 +191,7 @@ extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern void FUN_L00_00233ba0_u(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9c48_u(float *, float *, float) __asm__("FUN_001f9c48");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
 
 void update_hero_airborne_planar_motion(void) __asm__("FUN_L01_00234b40");
@@ -404,7 +393,6 @@ extern float D_L01_00167258_lui __asm__("D_L01_00167258") __attribute__((section
 extern float hero_swim_animation_speed_weights[] __asm__("D_L01_0017C440");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_001ff600_cf(void *) __asm__("FUN_001f9b20");
 extern float adjust_hero_animation_speed_for_target_frame(float, float, float, float) __asm__("FUN_L00_00208f20");
 extern float FUN_L00_0020a1e0_cf(float) __asm__("FUN_001f9dc8");
@@ -416,9 +404,7 @@ extern float vendor_spring(float *, float *, float, float, float, float) __asm__
 extern float compute_directed_angle_delta(int, float, float) __asm__("FUN_L00_0025bb38");
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float FUN_L00_00262cf0_cf(float, float) __asm__("FUN_002132a8");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float build_spherical_offset_cf(float, float) __asm__("FUN_001fa580");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_cos_cf(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_subtract_rotations_cf(void *, float, void *, int, float, float,
                                         float) __asm__("FUN_L00_0025bc98");
@@ -508,10 +494,7 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern void fast_sin_cf(int, int) __asm__("FUN_L00_00209638");
 extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot_cf(int, int, int) __asm__("FUN_L00_00216e48");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *);
 extern s32 D_0013CB14[];
 

@@ -8,16 +8,12 @@
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
@@ -107,7 +103,6 @@ extern int FUN_L00_001fefc8(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int queue_starfighter_voice_line(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern unsigned char *fire_class_53_projectile(char *, char *) __asm__("FUN_L13_002ea6b8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -496,12 +491,9 @@ extern void process_moby_attachment_damage(void *, void *) __asm__("FUN_L13_002e
 extern void draw_starfighter_tractor_beam();
 extern void update_qwarks_starfighter_attack_commands(void *, void *) __asm__("FUN_L13_002eac00");
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L06_00249738();
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
@@ -1154,7 +1146,6 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
     return moby;
 }
 extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -1241,8 +1232,6 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
 #include "types.h"
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -1318,7 +1307,6 @@ extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_0024efb0_c(void *, int, int) __asm__("FUN_L00_0024efb0");
 
-extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 extern char forcefield_missing_trigger_format[] __asm__("D_L13_001F4FB0");
 void forcefield_update(unsigned char *m) __asm__("FUN_L13_002ed4a8");
 void forcefield_update(unsigned char *moby) {

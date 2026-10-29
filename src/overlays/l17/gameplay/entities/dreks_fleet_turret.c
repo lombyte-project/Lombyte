@@ -8,6 +8,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -75,11 +76,9 @@ extern float FUN_001f9b48(void *, void *);
 extern float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_L17_0015FFD8_t; /* no foreign declaration */
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -93,9 +92,6 @@ void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 extern void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *);
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
 extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
@@ -366,7 +362,6 @@ extern char *spawn_class_558_moby_toward_target(char *src, char *pos, float *v, 
 extern char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
@@ -387,9 +382,6 @@ void distribute_class_733_group_mobys_along_path(char *turret_moby) __asm__("FUN
 
 extern void distribute_class_733_group_mobys_along_path(char *m) __asm__("FUN_L17_002cbd38");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -637,10 +629,8 @@ struct Blk {
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_normalize_angle(float) __asm__("func_001FA610");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -667,9 +657,6 @@ extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *);
 extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -912,7 +899,6 @@ extern short D_L17_00161D2C __attribute__((sda));
 extern short fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") __attribute__((sda));
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 f32 resolve_camera_surface_height(struct CameraProbePosition *position,
                                   s32 optional_output) __asm__("FUN_002135f0");
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");

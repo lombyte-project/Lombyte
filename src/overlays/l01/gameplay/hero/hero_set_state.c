@@ -5,6 +5,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -31,7 +32,6 @@ extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float level_01_hero_animation_blend_curves[][25] __asm__("D_L01_0017C270");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
@@ -45,7 +45,6 @@ extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int get_hero_idle_animation_index(int a) __asm__("FUN_L01_00226f10");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 int D_L01_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 struct HeroVelocityKey D_L01_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};

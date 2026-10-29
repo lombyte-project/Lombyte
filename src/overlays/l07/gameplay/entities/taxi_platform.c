@@ -8,6 +8,8 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 
 /* Taxi command byte (+0xBC); distinct from Moby.state (+0x20). */
 enum TaxiCommand {
@@ -42,7 +44,6 @@ void purple_ship_update(char *purple_ship_moby) {
 extern char *func_0020D348_m(int);
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
@@ -148,8 +149,6 @@ void ocean_umbris_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F4C0), where it is exact; names translated to the US level program. */
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos, void *vel) __asm__("FUN_L00_00259bc8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -293,7 +292,6 @@ void set_sharkigator_idle_state_from_water_height_gap(char *sharkigator_moby) {
 extern float advance_accelerated_scalar(float *, float *, float, float, float,
                                         float) __asm__("FUN_00213f38");
 extern int move_moby_with_collision_integer_radius(int a, int b, int g, int e, float c, float d) __asm__("FUN_L00_00258ad0");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void advance_sharkigator_swim_movement(char *moby, char *moby_data, float acceleration_step, float braking_step, float maximum_speed) __asm__("FUN_L07_0030f0f8");
 
@@ -312,9 +310,6 @@ void advance_sharkigator_swim_movement(char *moby, char *moby_data, float accele
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_003105C0), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 int update_sharkigator_horizontal_velocity_by_heading(char *moby, char *moby_data, float target_heading, float lo, float up, float hi, float down,
                      float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
@@ -456,10 +451,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 
@@ -620,7 +612,6 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 
@@ -801,7 +792,6 @@ typedef struct {
 } ScenePoints;
 
 extern u8 umbris_open_volume_triggered[] __asm__("D_0013D3B1");
-extern u8 alternate_item_available[128] __asm__("D_0013D388");
 extern struct Moby *level_mobys __asm__("D_L07_0015FFD8");
 extern int scene_state __asm__("D_L07_0015F5C4");
 extern ScenePoints *scene_points __asm__("D_L07_001600EC");
@@ -1056,7 +1046,6 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Views of the crate and follower pvars: a typed field store keeps retail's load order. */
 typedef struct { char pad[0x74]; int group; int child_count; } CrateGroupView;
@@ -1232,11 +1221,8 @@ typedef struct {
 } BoltVars;
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
@@ -1459,7 +1445,6 @@ extern int water_grid_geometry_descriptors[][4] __asm__("D_L07_00204700");
 extern int pool_splash() __asm__("FUN_L00_002a3ec8");
 extern int pool_init_tiles() __asm__("FUN_L01_002b7a48");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *counter) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern unsigned short l07_water_grid_saved_control_values[] __asm__("D_L07_00204680");
@@ -1920,7 +1905,6 @@ extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, i
 extern void get_target_sight(void *, void *, float) __asm__("FUN_L07_002886d8");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
@@ -2587,8 +2571,6 @@ struct WalkerData {
     f32 turnStep;              /* 0x140 */
 };
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001f99c0(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
@@ -2758,7 +2740,6 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 int initialize_sharkigator(char *moby, char *data) __asm__("FUN_L07_0030ed30");
 int update_sharkigator_horizontal_velocity_by_heading(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
@@ -3277,22 +3258,14 @@ end:
     }
 }
 extern int rand(void) __asm__("FUN_001160d8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern float step_angle_toward_target(float *, float, int, float) __asm__("FUN_L00_0025bc00");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void reorient_position_about_pivot(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern char *D_L07_0015FFD8_3112c8 __asm__("D_L07_0015FFD8");
 extern char D_0013F3D0[];

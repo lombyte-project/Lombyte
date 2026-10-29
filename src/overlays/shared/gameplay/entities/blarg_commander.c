@@ -3,6 +3,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/math/fast_math.h"
 
 
 extern char *FUN_0020c4f8_8670(int) __asm__("FUN_0020c4f8");
@@ -32,8 +33,6 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");

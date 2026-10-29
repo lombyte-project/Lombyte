@@ -5,6 +5,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -36,14 +37,12 @@ extern float sentrybot_negative_heading_delta_offsets_degrees[] __asm__("D_L15_0
 extern float sentrybot_turn_around_heading_offsets_degrees[] __asm__("D_L15_001CC0E0");
 extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_sin(float);
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float vector_length_xy(void *);
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int *D_L15_001B0AB0[];
 extern int D_L15_0015F5C4;
 extern int D_L15_0015F5CC;
@@ -96,8 +95,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -1003,7 +1000,6 @@ void begin_sentrybot_turn_toward_point(char *moby, void *moby_data, float *point
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float FUN_001f9b80(float *, float *);
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -1210,7 +1206,6 @@ void alert_visible_group_sentrybots(void *mp) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void set_sentrybot_attention_target(char *source_moby, char *recipient_moby) {
@@ -1228,7 +1223,6 @@ void set_sentrybot_attention_target(char *source_moby, char *recipient_moby) {
 
 extern f32 vector_length_xy_c(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void update_sentrybot_joint_aim(void *mv) {
     char *moby = mv;
@@ -1542,8 +1536,6 @@ extern float D_0015ED6C;
 extern float dist_y(void *, void *) __asm__("FUN_001f9b48");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int randbelow_y(int) __asm__("FUN_00213260");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -1613,8 +1605,6 @@ extern float rocket_trail_spark_second_noise_radius_factor_gp __asm__("D_L15_001
 extern float rocket_trail_spark_second_velocity_scale_gp __asm__("D_L15_0016144C") __attribute__((sda));
 extern int rocket_trail_spark_lookup_index_and_flags_gp __asm__("D_L15_00161454") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void spawn_rocket_trail_spark(char *moby) {
@@ -1774,13 +1764,11 @@ extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d383
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -2218,7 +2206,6 @@ extern int charged_blast_removal_target __asm__("D_L15_00161484"); /* no foreign
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L15_001B26AC __attribute__((section(".data")));
@@ -2227,7 +2214,6 @@ extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void spawn_owner_target_particle(int a0, void *a1, char *a2) __asm__("FUN_L15_0025e2c0");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *a, void *b, int c, int d, float f, int n, int e, int g, int h) __asm__("FUN_L00_0026bb70");
 unsigned char *spawn_source_attached_fading_effect_particle(char *src, int color, int n, int h, float f) __asm__("FUN_L00_0026daa0");
 void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigned char blue, int target, float a, float b);
@@ -2411,7 +2397,6 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 extern int D_L15_00161AB8_lui __asm__("D_L15_00161AB8"); /* no foreign declaration */
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern float group_moby_seeking_speed_gp __asm__("D_L15_001614B4") __attribute__((sda));
@@ -2789,9 +2774,6 @@ void update_spark_emitter_moby(unsigned char *moby) {
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern int interpolate_color_2a3138(float, int, int) __asm__("FUN_001fa6e0");
 extern int truncate_float_2a3138(float) __asm__("FUN_001fa6d0");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/draw_spark_emitter_effect_quads.h"
 extern int spark_emitter_pass_colors[] __asm__("D_L15_001CE230");
 extern float spark_emitter_uv_phase_divisors_by_pass[][2] __asm__("D_L15_001CE250");
@@ -2998,7 +2980,6 @@ extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __as
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 extern unsigned char *func_L00_00273F80_r(float *pos, char *vel, int color, unsigned char life, unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 
@@ -3167,8 +3148,6 @@ extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void draw_spiderbot_effect_quad(char *moby) __asm__("FUN_L15_002a7628");
 
@@ -3225,9 +3204,6 @@ typedef struct {
 } MovingMobyVars;
 
 extern f32 FUN_001f99c0(f32);
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void door_update(struct Moby *moby) __asm__("FUN_L15_002bddb0");
 void door_update(struct Moby *moby) {
@@ -3505,7 +3481,6 @@ update:
 
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40_q[] __asm__("D_L15_001ABE40") __attribute__((section(".data")));
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 
 void set_sentrybot_alarm_duration(char *moby, int duration_frames) {

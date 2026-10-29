@@ -12,6 +12,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 /* Shuttle destination selection shared by its route helpers. */
 enum ShuttleStop {
@@ -42,13 +43,10 @@ enum RobotDogState {
 
 extern char D_L17_001676C0[];
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int D_L17_0015F5C4;
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern unsigned char D_0013E633[] __asm__("D_0013F3D0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -253,7 +251,6 @@ extern int D_0015EEA4_q __asm__("D_0015EEA4");
 extern int FUN_001efa68_q(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_001f0d60_q(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel, int color, unsigned char life,
                                          unsigned char b, int mode,
                                          float scale) __asm__("FUN_L00_002730e0");
@@ -262,10 +259,6 @@ extern unsigned char D_00141968_x_q[] __asm__("D_00141968");
 extern void FUN_001f9a40_q(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
                                int) __asm__("FUN_L00_002598b0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
 void build_spherical_offset_q(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -419,9 +412,6 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
 extern char *func_0020D348_m(int);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 char *spawn_class_558_moby_toward_target(struct Moby *source_moby, char *spawn_position, float *target_position, float movement_speed) __asm__("FUN_L17_002e94d8");
 
@@ -474,7 +464,6 @@ typedef struct {
 extern IconEC5D0 l17_fighter_jet_radar_contact_icon_definitions[] __asm__("D_L17_001D9B38");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern unsigned char frame_size[] __asm__("D_0013E504");
@@ -482,8 +471,6 @@ extern unsigned char D_0015EDB4[4];
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -536,18 +523,14 @@ void draw_fighter_jet_radar_contact_icon(char *radar_rotation, char *from, char 
 extern char *fighter_jet_contact_moby_list_head __asm__("D_L17_0015FFE4");
 extern char fighter_jet_arrow_direction_basis[] __asm__("D_L17_001678D0");
 extern char fighter_jet_screen_marker_vertices[] __asm__("D_L17_001D9AC0");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float fighter_jet_aim_radius_offset_vector[] __asm__("D_L17_001678E0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_001f9b48(void *, void *);
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char D_0013E500[];
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
@@ -792,7 +775,6 @@ extern unsigned char D_0013C940_u[] __asm__("D_0013C940");
 extern int D_L17_0015F5C4;
 int D_L17_0016216C = 600;
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int select_fighter_jet_target_and_draw_contacts(int, char *, char *, char *, float, float, float, char *,
                               char *) __asm__("FUN_L17_002eace8");
 #define W(p, o) (*(int *)((char *)(p) + (o)))
@@ -1028,8 +1010,6 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern f32 D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
 extern unsigned char D_0013A4E0_u[] __asm__("D_0013A4E0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -1160,7 +1140,6 @@ extern float spring_angle(char *, char *, int, float, float, float, float) __asm
 extern float interpolate_value_with_repeated_squaring(int, int, float, float, float, float, float) __asm__("FUN_L13_002ba088");
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 #include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_8.h"
 int D_L17_00162000 = 120;
 #include "rnc/overlay/l17/gameplay/entities/door_data/update_fighter_jet_flight_7.h"
@@ -1202,9 +1181,7 @@ extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void draw_fighter_jet_hud();
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *);
 extern void update_view_context() __asm__("func_001F2D98");
 extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
@@ -1618,7 +1595,6 @@ extern int force_help_message(int, int) __asm__("FUN_002151d8");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
@@ -1639,7 +1615,6 @@ extern void update_moby_class_flags_and_link(int, int, int, int) __asm__("FUN_L1
 extern int allocate_voice_ed(int, int, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void spherical_offset_ed(void *, float, float, float) __asm__("FUN_00214db0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 #include "rnc/overlay/l17/gameplay/entities/door_data/fighter_jet_update.h"
 extern int D_L17_0015F608;
@@ -2027,8 +2002,6 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern char (*D_L17_001600EC_t)[128] __asm__("D_L17_001600EC") __attribute__((section(".sdata")));
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *horizontal_steering_input, float *vertical_steering_input) {
     char *ship_vars = *(char **)(moby + 0x78);
@@ -2300,8 +2273,6 @@ void magnet_elevator_update(struct Moby *moby) {
     update_entity_matrix(state + 0x20, delta, rot, &moby->rot);
 }
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 #define NOT_SDA
 
@@ -2392,7 +2363,6 @@ typedef struct {
 } Vars1382;
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -2845,7 +2815,6 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
@@ -2923,8 +2892,6 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1858), where it is exact; names translated to the US level program. */
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 
@@ -2947,7 +2914,6 @@ int move_robot_dog_toward_position(struct Moby *moby, float *target, float speed
     FUN_L00_00258830((int)moby, (int)movement_delta, 0.5f, 0.5f, 0.0f, 0);
     return vector_distance(&moby->pos, target) < 0.2f;
 }
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F19B8), where it is exact; names translated to the US level program. */
 
@@ -2993,7 +2959,6 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_length_xy(void *);
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 
 void update_robot_dog_aim_joint(struct Moby *moby) {
     AimData_1BB0 *moby_vars = (AimData_1BB0 *)moby->pvars;
@@ -3534,8 +3499,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 int update_shuttle_travel_and_camera(char *moby, int idx) __asm__("FUN_L17_002f2180");
 void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");

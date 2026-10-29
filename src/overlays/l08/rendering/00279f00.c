@@ -4,6 +4,7 @@
 
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 /* Spawns an effect moby at the position of moby a. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027ACC8), where it is exact; names translated to the US level program. */
@@ -11,9 +12,6 @@
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern short moby_offset_effect_size_gp __asm__("D_L08_00160200") __attribute__((sda));

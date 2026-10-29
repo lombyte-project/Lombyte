@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -9,7 +10,6 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
@@ -34,10 +34,6 @@ typedef struct {
     int a[4];
 } Vq __attribute__((aligned(16)));
 
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 /* Sets a to b plus c (normalised) scaled by s times the dot of c and b. */
 void subtract_homogeneous_scaled_vector_xyz(void *destination_vector, void *minuend_vector, void *direction_vector, float projection_scale) __asm__("FUN_L00_0025c2b0");
@@ -64,7 +60,6 @@ typedef struct {
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__("FUN_L00_0025aca0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E520[];
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
@@ -164,15 +159,12 @@ extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float approach_value(float *p, float target, float maxstep);
 extern int *D_L00_00177F00[];
-extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60"); /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
@@ -188,7 +180,6 @@ extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern float frame_scale __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
 int mine_fall(char *moby, char *st) __asm__("FUN_L00_0025c698");

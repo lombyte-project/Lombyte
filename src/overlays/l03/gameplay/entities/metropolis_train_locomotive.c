@@ -10,6 +10,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -19,7 +20,6 @@
 
 extern char D_L03_00166EC0[];
 extern float FUN_001f9b48(void *, void *);
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -119,9 +119,7 @@ extern short metropolis_train_carriage_spacing __asm__("D_L03_00161368") __attri
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void place_metropolis_train(struct Moby *moby, float *pos, float heading) __asm__("FUN_L03_00292578");
 
@@ -188,11 +186,9 @@ void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
 }
 extern char *D_L03_0015FFD8_292890 __asm__("D_L03_0015FFD8");
 extern char D_L03_001E2410[];
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern void debug_print(void *, int) __asm__("FUN_001e93b0");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -449,8 +445,6 @@ extern int D_L03_0015FDFC;
 extern char train_missing_master_warning_format[] __asm__("D_L03_001E2448");
 extern char train_end_path_missing_stop_node_warning[] __asm__("D_L03_001E2478");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
@@ -756,16 +750,13 @@ void metropolis_train_locomotive_update(char *moby) {
 }
 extern char *D_L03_001B05B0_294c08[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_294c08[] __asm__("D_0013E550");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern void noop_main_callback(void *) __asm__("FUN_001e93e8");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_0025f730(void *, float);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void fast_vec_scale(void *out, void *a, float s) __asm__("FUN_001f9a68");
 
 /* Path platform update: waits, then glides along its path one way and back (ease in/out over 240 frames),
  * or steps node to node towards the path end, pausing between runs and playing its loop sound. */
@@ -935,7 +926,6 @@ void moving_platform_small_update(char *moby) {
 
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void metropolis_train_carriage_update(struct Moby *moby) __asm__("FUN_L03_002953f8");
 void metropolis_train_carriage_update(struct Moby *moby) {
@@ -1005,12 +995,10 @@ void maintain_emitter_sound_voice(struct Moby *moby) {
         break;
     }
 }
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_001fefc8(void *);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, int, float) __asm__("FUN_L00_0026ced0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void fast_vec_scale(void *out, void *a, float s) __asm__("FUN_001f9a68");
 struct Moby;
 char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) __asm__("FUN_L03_002bad40");
 
@@ -1124,7 +1112,6 @@ extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 void update_spline_moby_orientation(struct Moby *moby) __asm__("FUN_L03_0029cff0");
 
@@ -1161,8 +1148,6 @@ extern unsigned char D_0013D408_29d2e0[] __asm__("D_0013D408");
 extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
 extern void *D_L03_00160770;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void allocate_voice_for_group_entry(int, int, void *) __asm__("FUN_0022dba0");
 extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
@@ -1172,7 +1157,6 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void spawn_debris_29d2e0(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void fast_vec_scale(void *out, void *a, float s) __asm__("FUN_001f9a68");
 void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
 
 #define SPAWN_DEBRIS(id) \
@@ -1285,11 +1269,9 @@ extern char *D_L03_0015FFD8_29dba8 __asm__("D_L03_0015FFD8");
 extern char *D_L03_001B05B0_29dba8[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_29dba8[] __asm__("D_0013E550");
 extern char spline_moby_missing_path_warning_format[] __asm__("D_L03_001E2A28");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
@@ -1614,14 +1596,10 @@ extern char *D_L03_001B05B0_c5bb8[] __asm__("D_L03_001B05B0");
 char D_L03_001618D0 = 3;
 extern char D_L03_00166EC0[];
 extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")__attribute__((section(".sdata")));
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern float FUN_L04_001f1978(float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float compute_interpolated_record_value_c5bb8(void *) __asm__("FUN_0020c9e0");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_001160d8(void);
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -2245,7 +2223,6 @@ extern float approach_value_cf(void *) __asm__("FUN_001f9b20");
 extern float fast_cos_cf(float, float) __asm__("FUN_001fa580");
 extern float fast_sin_cf(float) __asm__("FUN_001f9dc8");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float truncate_float_to_s32_cf(float) __asm__("FUN_001f96b0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -3168,7 +3145,6 @@ extern float D_L03_001618E0 __attribute__((sda));
 extern float square_root(float) __asm__("FUN_001f9988");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void blend_moby_animation_c95(void *, int, int, int) __asm__("FUN_00212f90");
@@ -3329,7 +3305,6 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
 }
 extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__("FUN_L03_0024e830");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 /* Picks the path node to head for next: walks the path ring from the start and keeps the node best aligned
  * with the target direction, else the one nearest the target (but at least 16 units away). */

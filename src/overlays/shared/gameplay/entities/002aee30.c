@@ -6,6 +6,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -17,7 +18,6 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
 
 extern char moby_segment_puff_local_endpoint_table[] __asm__("D_L04_001D2C90");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void spawn_smoke_puff_trail_with_endpoint_bursts(void *, void *, void *, int, float, float) __asm__("FUN_L04_002c41e0");
 
@@ -171,9 +171,6 @@ extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");                   
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line(void *, void *, s32, struct Moby *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
 

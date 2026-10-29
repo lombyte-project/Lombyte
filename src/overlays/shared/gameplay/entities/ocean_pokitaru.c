@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 extern float FUN_001f9b48_b7(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_001f96f8_b7(int) __asm__("FUN_001f96f8");
@@ -37,7 +38,6 @@ extern float square_root(float) __asm__("FUN_001f9988");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 char *select_homing_missile_target(float *targeting_origin, float *aim, float max_yaw_error, float max_pitch_error, float maxd) __asm__("FUN_L11_00308670");
 
@@ -88,11 +88,9 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309C18), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -160,21 +158,16 @@ extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
 extern char D_L11_00174880[];
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -310,7 +303,6 @@ char *spawn_class_3f9_moby(int owner, float *launch_direction, float *spawn_posi
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char D_L11_00174880[];
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
 extern int projectile_trail_color_end_gp __asm__("D_L11_00161DC4") __attribute__((sda));
 extern int projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute__((sda));
@@ -324,10 +316,7 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 /* Per-frame update of a projectile moby: moves it by its velocity and leaves a trail particle; on impact it bursts into
    five sparks and removes itself, otherwise it shrinks when its timer runs out and is removed once tiny. */
 void update_projectile_with_trail(char *moby) __asm__("FUN_L11_00309098");
@@ -737,11 +726,7 @@ typedef struct {
     OceanVars_30b358 *vars; /* 0x78 */
 } OceanMoby_30b358;
 
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L11_0030a908_b358(void) __asm__("FUN_L11_0030a908");
 extern UV_30b358 wave_offset[] __asm__("D_L11_00161E08") __attribute__((section(".sdata")));

@@ -11,6 +11,7 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/math/fast_math.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {
@@ -82,20 +83,14 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void blend_anim(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void update_joint_animation(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
 
@@ -107,7 +102,6 @@ extern f32 skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribut
 extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (usage_stats + 0x120) */
 extern u8 item_available[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
 extern s32 level_game_mode __asm__("D_L02_0015F5C4");
-extern u8 big_head_cheat_enabled __asm__("D_0015EDB0");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void initialize_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_002668a0");
 extern s32 update_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_00266448");
@@ -494,11 +488,8 @@ extern char *D_L02_0015FFD8_n __asm__("D_L02_0015FFD8");
 extern int FUN_00214720_n(void *, int) __asm__("FUN_00214720");
 extern void FUN_001ff570_n(int, int) __asm__("FUN_001ff570");
 extern int tick_n(int *) __asm__("FUN_001f9770");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f4a58_n(int) __asm__("FUN_001f4a58");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_00216f90_n(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -570,7 +561,6 @@ extern struct Moby *D_L02_0015FFD8;
 extern unsigned char D_0014C050[][16];
 extern char D_0013E550[];
 extern void scale_vector(void *out, void *in, float s) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *out, void *a, void *b) __asm__("FUN_001f9a10");
 extern float distance_xyz(void *a, void *b) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");

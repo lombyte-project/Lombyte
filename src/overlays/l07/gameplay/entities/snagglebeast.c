@@ -10,13 +10,13 @@
 
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
+#include "rnc/math/fast_math.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/effect_00313D28.c: func_L07_00313D28). */
 
 extern s32 level_frame_count __asm__("D_L07_0015F5CC");
 /* [4] is depth_buffer_address. */
 extern s32 gs_texture_allocation_start_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
@@ -25,7 +25,6 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern float split_float_fraction(void *, float) __asm__("FUN_L00_00200228");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 
 static inline int tint_color(int color) {
@@ -145,16 +144,11 @@ void draw_snagglebeast_sphere_effect(char *moby) {
 #include "rnc/rendering/geometry_quad.h"
 
 extern s32 level_frame_count __asm__("D_L07_0015F5CC");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void draw_snagglebeast_rope_attack_layer(char *moby, float radius, int phase, float speed, int color) __asm__("FUN_L07_00312e70");
 
@@ -237,10 +231,7 @@ typedef union {
     float f[4];
 } RopeQuad;
 typedef float RopeVec[4] __attribute__((aligned(16)));
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
@@ -325,7 +316,6 @@ extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_0026685
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00200228(float, void *);
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int FUN_0022da68(int, int, void *);
 extern int D_001413D4 __attribute__((section(".data")));
@@ -586,7 +576,6 @@ float update_snagglebeast_chase_speed(struct ChaserAnim *chaser_anim, struct Cha
 /* latches onto a target when it is turned toward enough, then picks a turn animation */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003151C0), where it is exact; names translated to the US level program. */
 
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
@@ -728,8 +717,6 @@ extern void FUN_00214db0(void *, float, float, float);
 extern void spawn_white_particle_with_payload(void *, void *) __asm__("FUN_L07_0029c4e8");
 extern void rumble_by_distance(char *) __asm__("FUN_L07_003120d8");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void draw_collision_clipped_moby_beam(void) __asm__("FUN_L07_00312420");
 extern float FUN_0020c9e0(void *);
 extern void *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
@@ -1990,15 +1977,12 @@ extern RopeVec l07_rope_ring_profile_vectors[] __asm__("D_L07_0020C700");
 extern RopeVec l07_rope_previous_ring_rows[][20] __asm__("D_L07_0020DAA0");
 extern RopeVec l07_rope_previous_segment_start_points[] __asm__("D_L07_0020DAE0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float rope_segment_angular_velocities[] __asm__("D_L07_0020DBA0");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float select_segment_point_near_sphere_surface(void *, void *, void *, void *, void *, float) __asm__("FUN_L07_0029e6d8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void add_draw_callback(void (*)(), void *) __asm__("FUN_001f4600");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float FUN_001f99c0(float);
@@ -2297,7 +2281,6 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
 /* Pulls each pending moby toward its target point and smooths its velocity. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031A268), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int D_L07_00161B6C_gp __asm__("D_L07_00161B6C") __attribute__((sda));
 extern int D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
@@ -2355,7 +2338,6 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_00212f90(void *, int, int, int);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -2503,7 +2485,6 @@ void homing_mine_update(struct Moby *moby) {
     }
     jet_animate(moby, 0.7f);
 }
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 #define NOT_SDA
@@ -2787,12 +2768,8 @@ void process_breakable_prop_hit(struct Moby *moby) {
     }
     moby->hit_slot = 0xFF;
 }
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");

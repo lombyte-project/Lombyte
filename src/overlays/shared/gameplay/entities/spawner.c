@@ -9,6 +9,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 /* pvars of the projectile moby FUN_L09_00307ba8 spawns */
 typedef struct {
@@ -93,8 +94,6 @@ extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
 extern char D_L09_00174000[] __asm__("D_L09_00174000");
 extern f32 distance_307d68(void *, void *) __asm__("FUN_001f9b48");
 extern f32 FUN_001f9b80_307d68(void *, void *) __asm__("FUN_001f9b80");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9c48_307d68(void *, void *, f32) __asm__("FUN_001f9c48");
 extern s32 allocate_voice_307d68(s32, s32, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal_307d68(struct Moby *) __asm__("FUN_0020c828");
@@ -102,9 +101,6 @@ extern s32 tick_countdown_16_307d68(s16 *) __asm__("FUN_001f9770");
 extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe_307d68 *) __asm__("FUN_001efa68");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_L00_001ff660_307d68(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026dd20_307d68(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
 extern void FUN_L00_0025e450_307d68(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32,
@@ -342,21 +338,15 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int pick_target_30ab80(void *, void *, float, void *, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern int refresh_spawner_population_and_find_free_slot(int, char *) __asm__("FUN_L09_0030aae0");
 extern float distance_30ab80(void *, void *) __asm__("FUN_001f9b48");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9c90_30ab80(void *, void *, float) __asm__("FUN_001f9c90");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void generate_random_scaled_vector2(float *, float) __asm__("FUN_L09_00277758");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float FUN_00213508_30ab80(void *, int, float) __asm__("FUN_00213508");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *, float) __asm__("FUN_L00_0025f8e0");
 extern float FUN_L00_0025abf0_30ab80(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
 extern char *spawn_spawner_egg(int, void *, void *, unsigned char, unsigned char) __asm__("FUN_L09_0030b218");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_L00_0025e450_30ab80(void *, void *, void *, float, float, int, int, int, float, float, float, float, int,
                                     float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void *FUN_L00_00263fd8_30ab80(char *, int, void *, void *, int, int, float, float *, float *,
@@ -532,7 +522,6 @@ void spawner_update(char *moby)
 
 extern char *func_0020D348_m(int);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_spawner_egg(int owner, void *initial_position, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
@@ -602,12 +591,7 @@ extern CollisionHit D_L09_00173FC0;
 extern s32 collision_line(void *, void *, s32, struct Moby *, s32) __asm__("FUN_001efa68");
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");

@@ -5,6 +5,7 @@
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -65,9 +66,6 @@ typedef struct {
 } CollectedFlags_29aff0;
 
 extern CollectedFlags_29aff0 D_L15_001BB830_29aff0 __asm__("D_L15_001BB830");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -76,8 +74,6 @@ extern char D_L15_001673C0[];
 extern char D_0013E550[];
 extern char D_0014C190[];
 extern int D_L15_001BAAD0[];
-extern s32 current_level_index __asm__("D_0015ED84");
-extern f32 frame_time __asm__("D_0015ED6C");
 
 void update_sliding_gate(struct Moby *gate_moby) __asm__("FUN_L15_0029aff0");
 
@@ -529,23 +525,15 @@ extern u32 D_L15_00161580;
 extern u8 D_001413F4[];
 extern u8 D_0013DD50;
 extern char D_0014C190[];
-extern int current_level_index __asm__("D_0015ED84");
-extern float frame_time __asm__("D_0015ED6C");
 extern void normalize_vector_xyz_7880(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_7880(float, void *, void *) __asm__("FUN_001f9a68");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int FUN_L00_00257b90_7880(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002371e0_7880(float, int, int) __asm__("FUN_L15_00249ce8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L00_00257470_7880(void *, int, long long) __asm__("FUN_L00_00257470");
 extern void FUN_L00_0025e450_7880(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -709,20 +697,12 @@ extern u8 D_0013DD50;
 extern char D_0014C190[];
 extern char destructible_hit_debris_color_palette[] __asm__("D_L15_001615B8");
 extern struct { u32 words[3]; } D_L15_001615C8;
-extern void fast_vec_normalize(void *out, void *a, f32 length) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *out, void *a, f32 scale) __asm__("FUN_001f9a68");
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
-extern void fast_vec_add(void *out, void *a, void *b) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void add_vectors(void *out, void *a, void *b) __asm__("FUN_L00_001ff290");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int blend_color(float t, int from, int to) __asm__("FUN_L15_00249ce8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_explosion(void *m, void *unused, void *pos, float fA, float fB, int n, int k8, int k9,
@@ -878,14 +858,12 @@ extern void FUN_00251fd0(float, float, void *, void *, int) __asm__("FUN_L00_002
 extern float FUN_L15_001f8648(float);
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float FUN_001f9b48(void *, void *);
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -1047,15 +1025,12 @@ typedef struct {
 } SteeringVars_4f88;
 
 extern float FUN_001f9b48(void *, void *);
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9bf8_4f88(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_4f88(float, void *, void *) __asm__("FUN_001f9a68");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void move_moby_with_sphere_collision(float, float, struct Moby *, void *, int) __asm__("FUN_L15_00247e90");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 
 void steer_helicopter(struct Moby *moby, SteeringVec_4f88 *goal, SteeringVec_4f88 *look) __asm__("FUN_L15_002c4f88");
@@ -1161,11 +1136,9 @@ typedef struct {
 
 extern char *D_L15_0015FFE4;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_52b8(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 /* Flocking step toward goal (cf. FUN_L15_002cf110): separates from live
@@ -1329,8 +1302,6 @@ extern void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
@@ -1791,7 +1762,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_0025fcb8");
 extern void func_L00_00260D30_t(void *, float *, float) __asm__("FUN_L00_0025fcb8");
 
@@ -1963,7 +1933,6 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_L15_001BAAD0[];
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_00257b90(int, int);
@@ -2009,7 +1978,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *);
 extern char D_0013E550[];
 extern char D_0014C190[];

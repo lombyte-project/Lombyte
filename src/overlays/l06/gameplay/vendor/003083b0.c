@@ -7,6 +7,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/data_labels.h"
+#include "rnc/math/fast_math.h"
 
 extern struct UsageStat help_records[] __asm__("D_00141968");
 extern char *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
@@ -14,7 +15,6 @@ extern u8 level06_help_hint_variant_selector[] __asm__("D_0013D4CE");
 extern u8 D_0013D388_83b0[] __asm__("D_0013D388");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 
 /* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
@@ -109,9 +109,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 
 
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
@@ -285,7 +283,6 @@ void activate_listed_class_5e8_mobys(int moby_list_index) {
 
 extern char level06_camera_target_update_data[] __asm__("D_L06_0016CFE0");
 extern int D_L06_0015F5C4;
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
 void update_gated_moby_effects(unsigned char *moby) __asm__("FUN_L06_00309348");

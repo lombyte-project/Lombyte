@@ -13,6 +13,7 @@
 #include "qzero.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/fast_math.h"
 
 typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
 typedef union {
@@ -85,7 +86,6 @@ typedef struct {
 } ViewSettings;
 extern Ent *l00_pause_menu_page_mobys[] __asm__("D_L00_001B9E90");
 extern s32 D_L00_0015F5D8;
-extern s32 current_bolt_count __asm__("D_0015ED98");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
@@ -122,7 +122,6 @@ extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
 extern void debug_print(void *, s32) __asm__("FUN_001e93b0");
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern s32 fade_to_black(s32) __asm__("FUN_001f4a58");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void mode_freeze_init(s32, void *) __asm__("FUN_001fbab8");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
@@ -158,7 +157,6 @@ extern s32 D_L00_0015F3F8;
 extern int D_L00_00173E00[];
 extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");

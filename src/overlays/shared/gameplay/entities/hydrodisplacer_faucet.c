@@ -9,8 +9,8 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/math/fast_math.h"
 extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
 char *create_class_5c3_moby(int owner, char *initial_position, int arg, float initial_rotation_z, float initial_rotation_y) __asm__("FUN_L05_002d4168");
 
@@ -227,7 +227,6 @@ void hydrodisplacer_faucet_update(char *faucet_moby) {
 /* eases the pulse level of the moby that holds the focus and mixes its colour from two palettes */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F95B0), where it is exact; names translated to the US level program. */
 
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -271,15 +270,9 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
     }
 }
 #include "rnc/gameplay/state/item_state.h"
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void normalize_vector_xyz(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -390,7 +383,6 @@ void hoverboard_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0FC8), where it is exact; names translated to the US level program. */
 
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int fast_dec_timer(int *) __asm__("func_001F9740");
@@ -469,7 +461,6 @@ void add_moby_frames_for_group_proximity(char *moby) {
 /* UpdateMoby_823: pick random wobble parameters, then animate them each frame */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_L00_001fff28(void *, int, float);
@@ -524,7 +515,6 @@ void update_moby_wobble(unsigned char *moby) {
 extern void clear_u64_value(float *) __asm__("FUN_001f99f8");
 extern void subtract_vector_xyz_30c220(float *, const float *, const float *) __asm__("FUN_001f9a28");
 extern void normalize_vector_xyz_30c220(float *, float *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_cross(float *, float *, float *) __asm__("FUN_001f9ad8");
 extern void rotation_vector_30c220(float *, float *) __asm__("FUN_001fa050");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, float *, int) __asm__("FUN_001f7d30");
@@ -636,12 +626,10 @@ typedef struct {
 extern SaveFlags_30c5b0 D_L05_001BB6B0;
 extern SaveFlags_30c5b0 D_L05_001BAA50_s __asm__("D_L05_001BAA50");
 extern unsigned char D_L05_0015FC88[] __attribute__((section(".sdata")));
-extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 extern char *D_L05_001B0930[];
 extern u8 D_0014C050[];
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
@@ -790,10 +778,8 @@ extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
@@ -975,7 +961,6 @@ void request_moby_variant_help_message(char *moby) {
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AC50), where it is exact; names translated to the US level program. */
 
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void apply_moby_position_and_rotation_wobble(char *moby) __asm__("FUN_L05_00319740");
 
@@ -1012,7 +997,6 @@ void apply_moby_position_and_rotation_wobble(char *moby) {
 
 extern char *D_L05_001B0930[];
 extern char moby_vector_table_local_vectors[] __asm__("D_L05_00215C00");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void transform_moby_vector_table_to_world_space(char *moby) __asm__("FUN_L05_003198e8");

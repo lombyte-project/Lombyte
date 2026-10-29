@@ -5,6 +5,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     s32 a, b, c, d;
@@ -141,13 +142,7 @@ typedef struct {
 } DebugCameraBlock;
 extern DebugCameraBlock player_camera __asm__("D_L00_00166C80");
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
@@ -486,7 +481,6 @@ extern s32 sound_update(void) __asm__("FUN_0022ca50");
 extern void set_background_color(s32, s32, s32) __asm__("FUN_001fb280");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern s32 sprintf(char *, const char *, ...);
@@ -976,7 +970,6 @@ extern char *debug_menu_television_mode_texts[] __asm__("D_L00_00160CE0");
 extern char *debug_menu_screen_mode_texts[] __asm__("D_L00_00160CF0");
 extern char *debug_menu_occlusion_mode_texts[] __asm__("D_L00_00160D08");
 extern char *debug_menu_profiler_mode_texts[] __asm__("D_L00_001C3E28");
-extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 D_0015ED84;
 extern char debug_menu_title_text[] __asm__("D_L00_0015F008");
 extern char debug_menu_title_underline[] __asm__("D_L00_0015F010");

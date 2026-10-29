@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/globals.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -70,11 +71,9 @@ unsigned char *spawn_ship_pickup(char *position, int moby_class) {
 /* Queues a GIF packet that draws a line strip through the points, rotated, scaled and offset to the screen. */
 typedef unsigned int u128_7d50 __attribute__((mode(TI)));
 extern int D_0013E500_7d50[] __asm__("D_0013E500");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern int D_L13_001611C0;
 extern u128_7d50 l13_transformed_2d_primitive_setup_template __asm__("D_L13_001608E0");
@@ -146,9 +145,6 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float square_root(float) __asm__("FUN_001f9988");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void update_moby_vertical_oscillation(float, float, void *, void *, void *) __asm__("FUN_L00_00262b00");
@@ -298,7 +294,6 @@ frame_tail:
 
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern void *suck_get_aim_height(char *) __asm__("FUN_002141f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
@@ -390,11 +385,9 @@ extern int vector_distance_xy() __asm__("FUN_001f9b80");
 extern int fast_arc_tan() __asm__("FUN_001f9e90");
 extern int FUN_L00_0024f7c8();
 extern s32 scale_game_frames() __asm__("func_001F96F8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv);

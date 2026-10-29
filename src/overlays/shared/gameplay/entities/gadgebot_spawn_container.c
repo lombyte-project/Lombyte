@@ -7,16 +7,13 @@
 #include "asm.h"
 
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *, int, int, float, float, float, float, float) __asm__("FUN_L00_0026b790");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern char *D_001413D0 __attribute__((section(".data")));
 extern float D_0015ED6C;
 extern unsigned char *spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
@@ -113,7 +110,6 @@ char *spawn_gadgebot_spawn_container(char *owner) {
     return moby;
 }
 extern int level_frame_count __asm__("D_L06_0015F5CC");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int FUN_L00_001fefc8(void *);
@@ -170,7 +166,6 @@ typedef struct { float corner[4][4]; int color[4]; float uv[4][2]; long unk70; l
 typedef struct { char pad[0x140]; float position[4]; } L06ReferencePosition;
 extern L06ReferencePosition referencePosition __asm__("D_L06_00167400");
 extern char D_L06_00167540[];
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 square_root(f32) __asm__("func_001F9988");
 extern float gadgebot_container_local_vertices[][4] __asm__("D_L06_001D3290");
 extern float gadgebot_container_static_uvs[][2] __asm__("D_L06_001D38C0");
@@ -190,7 +185,6 @@ extern short gadgebot_container_quad_color_gp __asm__("D_L06_00161888") __attrib
 extern short gadgebot_container_vertex_normal_scale_gp __asm__("D_L06_0016188C") __attribute__((sda));
 extern short gadgebot_container_face_vertex_uv_indices[][8] __asm__("D_L06_001D3620");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
@@ -308,7 +302,6 @@ char *spawn_gadgebot_pad(char *owner) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D9FF0), where it is exact; names translated to the US level program. */
 
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int level_frame_count __asm__("D_L06_0015F5CC"); /* no foreign declaration */
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 level_frame_count __asm__("D_L06_0015F5CC");
@@ -364,7 +357,6 @@ extern int D_L06_0015FDF8 __attribute__((section(".sdata")));
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern int FUN_L00_002dc9f0(void *, void *);
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -379,10 +371,8 @@ extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void blend_frog_rotation_to_facing_frame(char *, float *, float *) __asm__("FUN_L06_002e9998");
 extern void probe_frog_local_z_collision(char *) __asm__("FUN_L06_002e9aa8");
 extern void FUN_L06_002e9b60_c(void *, void *, int, float, float) __asm__("FUN_L06_002e9b60");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void FUN_L00_0025c558_c(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
@@ -747,7 +737,6 @@ extern void spawn_moby_directional_spark_bursts(struct Moby *, Vec4 *) __asm__("
 extern void destroy_frog_child_moby(struct Moby *) __asm__("FUN_L06_002e9f30");
 extern void spawn_moby_death_effect_burst(char *) __asm__("FUN_L06_002ea498");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -759,7 +748,6 @@ extern void select_hero_or_gadgebot_target(char *, char **, f32) __asm__("FUN_L0
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int follow_path_e94f0(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern struct MobyHit *hit_moby_e94f0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void remove_e94f0(struct Moby *) __asm__("FUN_0020c828");
 extern struct Moby *D_001413D0_e94f0 __asm__("D_001413D0") __attribute__((section(".data")));
@@ -880,13 +868,9 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
 /* Build an orthogonal frame from two vectors and apply it to the matrix at moby+0xC0. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EADC8), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void quaternion_nlerp(void *, void *, void *, float) __asm__("FUN_001fa400");
 extern void quaternion_rotation_basis(void *, void *) __asm__("FUN_001fa480");
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("FUN_002144d8");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 
 #include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_globals.h"
 extern float frog_facing_rotation_blend_factor_gp __asm__("D_L06_00161C00") __attribute__((sda));
@@ -910,7 +894,6 @@ void blend_frog_rotation_to_facing_frame(char *moby, float *reference_axis, floa
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EAED8), where it is exact; names translated to the US level program. */
 
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void probe_frog_local_z_collision(char *moby) {
     float collision_line_end[4];
@@ -924,7 +907,6 @@ void probe_frog_local_z_collision(char *moby) {
     fast_vec_add(collision_line_end, collision_line_end, axis_offset);
     collision_line(collision_line_start, collision_line_end, 2, 0, 0);
 }
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void resolve_point_path_segment_xy_clearance(float, int, void *, void *) __asm__("FUN_L00_00261d78");
 extern f32 D_0015ED6C;
 extern u128 D_L06_001745E0 __attribute__((section(".data")));
@@ -1029,10 +1011,8 @@ extern f32 moby_spark_push_scale_range_end_gp __asm__("D_L06_00161C64") __attrib
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -1092,9 +1072,7 @@ void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_dir
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002EB8C8), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -1122,7 +1100,6 @@ void spawn_moby_death_effect_burst(char *moby) {
 #include "rnc/gameplay/entities/moby.h"
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 /* Grabbed check: while FUN_L00_002db8f8 holds the moby, park it in state 0x10 (remembering the state it came from)
@@ -1363,7 +1340,6 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int *D_L06_001B0C30[];
 extern int D_00141610[];
 extern int level_frame_count __asm__("D_L06_0015F5CC");
@@ -1411,8 +1387,6 @@ extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void gadgebot_update(GbMoby *moby) __asm__("FUN_L06_002f0040");
 void gadgebot_update(GbMoby *moby) {
@@ -2160,7 +2134,6 @@ void gadgebot_update(GbMoby *moby) {
 
 extern char D_L06_00167400[];
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) __asm__("FUN_L06_002f2148");
@@ -2473,8 +2446,6 @@ extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int FUN_L00_00257b90(int, int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_normalize_angle(f32) __asm__("FUN_001fa610");
 extern Moby *D_L06_0015FFD8;
 
@@ -2884,8 +2855,6 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
 #include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/update_moby_rotation_group.h"
 extern float rotation_group_position_offset_distance_gp __asm__("D_L06_00161D48") __attribute__((sda));
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
@@ -3111,10 +3080,7 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, float, void *, int, int, int, int) __asm__("FUN_L00_002730e0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 unsigned char *FUN_L00_00272f68(OvlQuad *a, int c, unsigned char b, int idx, int flag, int n, int mode, float f);
 extern int func_001FA898_g(float) __asm__("FUN_001fa6d0");

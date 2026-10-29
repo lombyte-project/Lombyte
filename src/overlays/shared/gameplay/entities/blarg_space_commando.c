@@ -9,6 +9,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/math/fast_math.h"
 
 /* Movement controller block at vars + 0xC0 (FUN_L01_0026d930 init, FUN_L00_00258b50 step). */
 typedef struct {
@@ -79,14 +80,10 @@ extern Vec4f D_L06_00167540;
 extern s32 *D_L06_001B0C30[];
 extern f32 D_L06_0015F580[] MACRO_ADDR;
 
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
@@ -627,7 +624,6 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 extern float beam_spread_degrees_gp __asm__("D_L06_00161FD4") __attribute__((sda));
 extern int beam_duration_frames_gp __asm__("D_L06_00161FD8") __attribute__((sda));
@@ -684,8 +680,6 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff97
 
 void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void update_blarg_space_commando_beam(void *owner_moby) {
     char *moby = owner_moby;
@@ -793,7 +787,6 @@ extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 
@@ -890,7 +883,6 @@ extern float beam_spark_vector_z_range_start_gp __asm__("D_L06_00162034") __attr
 extern float beam_spark_vector_z_range_end_gp __asm__("D_L06_00162038") __attribute__((sda));
 extern float beam_spark_spawn_probability_gp __asm__("D_L06_0016203C") __attribute__((sda));
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void spawn_blarg_space_commando_beam_sparks(char *moby) {
@@ -949,7 +941,6 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
 
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern f32 D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
-extern void fast_vec_add(float *, float *, float *) __asm__("FUN_001f9a10");
 
 void update_falling_spinning_moby(struct Moby *moby) __asm__("FUN_L06_00300b90");
 
@@ -1024,7 +1015,6 @@ extern short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") __attribute
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");

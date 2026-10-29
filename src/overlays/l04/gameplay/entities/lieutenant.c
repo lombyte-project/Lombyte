@@ -10,6 +10,8 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */
@@ -50,7 +52,6 @@ extern int FUN_00214720(char *, s32);
 extern int update_npc_dialogue(struct Moby *, struct VendorVars *) __asm__("FUN_L00_00266448");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void fast_vec_normalize(Vec4 *, Vec4 *, float) __asm__("FUN_001f9bf8");
 extern void add_vector_xyz(Vec4 *, Vec4 *, void *) __asm__("FUN_001f9a10");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
@@ -162,7 +163,6 @@ extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern int D_L04_00179590[] __attribute__((section(".data")));
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4D4 __attribute__((section(".data")));
 extern unsigned char D_0013D4E3[];
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
@@ -173,7 +173,6 @@ extern unsigned short D_00141908 __attribute__((section(".data")));
 extern unsigned short D_00141910 __attribute__((section(".data")));
 extern unsigned short D_00141940 __attribute__((section(".data")));
 extern char D_00141968[];
-extern u8 items_acquired[] __asm__("D_0013D4E8");
 extern Moby *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4");
 extern Moby *D_L04_00160058_2E57F8 __asm__("D_L04_0015FFD8");
 
@@ -443,13 +442,10 @@ typedef struct {
 extern f32 g48_2e5178 __asm__("D_L04_00161D78") __attribute__((sda));
 extern f32 g4c_2e5178 __asm__("D_L04_00161D7C") __attribute__((sda));
 extern u128 tgt_2e5178[] __asm__("D_L04_00174000") __attribute__((section(".data")));
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void update_entity_bounce_and_decay(M2e5178 *entity) __asm__("FUN_L04_002e5178");

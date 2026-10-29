@@ -5,6 +5,7 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -85,7 +86,6 @@ typedef struct Hero_2B94B0 {
 
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float D_0015ED70;
 extern int D_0015ED84;
@@ -101,15 +101,11 @@ extern int reflect_vector() __asm__("FUN_L00_001ff660");
 extern int FUN_L08_002025d0(void*,int,int,void*,int);
 extern int allocate_voice_for_target_entry(int,int,void*) __asm__("FUN_0022da68");
 extern s32 queue_animation_update() __asm__("func_001FF308");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L08_002b8228_c(struct Moby *moby) __asm__("FUN_L08_002b8228");
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int func_L00_001F39B0_2B94B0(void *, void *, int, int, int) __asm__("FUN_L08_002025d0");
 extern void func_L00_001FF610_2B94B0(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern float func_001FA748_2B94B0(float, float) __asm__("FUN_001fa580");
@@ -237,7 +233,6 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
 
 extern char *func_0020D348_m(int);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_bomb_with_velocity(int source_moby, char *spawn_position, char *initial_velocity) __asm__("FUN_L08_002d22e0");
@@ -316,9 +311,7 @@ extern void FUN_L00_0025e450_c3(void *, void *, void *, float, float, int, int, 
 extern void FUN_L00_0025f090_c(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00269958_c(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float D_0015ED70_gp __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_0015ED6C __attribute__((section(".sdata")));
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") __attribute__((section(".sdata")));
@@ -485,7 +478,6 @@ extern char *spawn_bomber_tank_projectile(char *src, char *pos, char *vec) __asm
 extern char D_0013D388[] __attribute__((section(".data")));
 extern s32 D_001413D0[];
 extern const float D_L08_001618CC __attribute__((sda));
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float bomber_tank_projectile_speed_gp __asm__("D_L08_001618A8") __attribute__((sda));
 extern float D_L08_001618D0 __attribute__((sda));
 extern int D_L08_001B0CB0[];
@@ -802,7 +794,6 @@ extern int multiply_quaternions() __asm__("FUN_001fa3c0");
 extern s32 fun_00213928(void *, void *, void *, u32, s32 *, f32 *, s32 *, s32) __asm__("FUN_00213928");
 extern int FUN_L00_001fff28();
 extern int allocate_voice_for_target_entry_alt(int,int,void*) __asm__("FUN_0022da68");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void *FUN_L00_0025a420(void*,int,int);
 extern void spawn_explosion(void *,void *,void *,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263d40(int, int);
@@ -826,7 +817,6 @@ extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D408");
 extern Hit_2D5FA8 *find_2D5FA8(Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern Hit_2D5FA8 *FUN_L05_002899f8_c(Hit_2D5FA8 *, Hit_2D5FA8 *, Hit_2D5FA8 *, int) __asm__("FUN_L05_002899f8");
 extern int damage_2D5FA8(Moby *, Hit_2D5FA8 *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void animate_2D5FA8(Moby *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void burst_2D5FA8(Moby *, float *, float *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -838,7 +828,6 @@ extern void delete_2D5FA8(Moby *) __asm__("FUN_0020c828");
 extern int event_2D5FA8(int, int, Moby *) __asm__("FUN_0022da68");
 extern void effects_start_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d458");
 extern int follow_2D5FA8(float, Moby *, float *, int, int, char *, int) __asm__("FUN_L00_0025ff38");
-extern void fast_vec_sub(float *, float *, float *) __asm__("FUN_001f9a28");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float length_2D5FA8(float *) __asm__("FUN_001f9b20");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -1001,17 +990,12 @@ extern float bomber_tank_part_reference_speed_gp __asm__("D_L08_001618A0") __att
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle_l08(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void approach_value_l08(float *, float, float) __asm__("FUN_00213ed8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int sound_valid_l08(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int play_sound_l08(int, int, void *) __asm__("FUN_0022da68");
 extern void vendor_volume(int, int) __asm__("FUN_L01_002a1968");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 typedef struct {
     u8 pad0[0x80];
@@ -1112,14 +1096,11 @@ extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("
 extern int FUN_L00_0024f7c8();
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_L00_00250800_2D6C58(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_0020DAF8_2D6C58(char *, int, char *) __asm__("FUN_0020cca8");
 extern float func_00214158_2D6C58(void) __asm__("FUN_00213308");
 extern float func_002140F8_2D6C58(float, float) __asm__("FUN_002132a8");
 extern void func_L00_001FF4B0_2D6C58(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float func_001F9F90_2D6C58(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2D6C58(float) __asm__("FUN_001f9de0");
 extern float func_001F9878_2D6C58(float) __asm__("FUN_001f96b0");
@@ -1364,8 +1345,6 @@ extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int FUN_L00_00257b90(int, int);
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void FUN_L00_0026f548(void *, void *, int, int);
@@ -1428,8 +1407,6 @@ void update_hero_water_entry_effects(struct Moby *moby) {
 extern float line_puff_initial_z_velocity_range_end_gp __asm__("D_L08_00161998") __attribute__((sda));
 extern float line_puff_position_jitter_range_end_gp __asm__("D_L08_001619A0") __attribute__((sda));
 extern u16 line_puff_duration_frames_gp __asm__("D_L08_001619A8") __attribute__((sda));
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern unsigned char *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
 extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
@@ -1500,7 +1477,6 @@ void spawn_particle_line_effect(struct Moby *moby, void *from, void *to, int cou
 
 extern char *D_L08_0015FFD8;
 extern float FUN_001f9b48(void *, void *);
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 
 char *select_blarg_bombthrower_waypoint(struct Moby *moby) __asm__("FUN_L08_002daa10");
 
@@ -2989,7 +2965,6 @@ extern int moby_motion_spark_initial_color_end_gp __asm__("D_L08_00161A78") __at
 extern int moby_motion_spark_second_color_start_gp __asm__("D_L08_00161A7C") __attribute__((sda));
 extern int moby_motion_spark_second_color_end_gp __asm__("D_L08_00161A80") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 

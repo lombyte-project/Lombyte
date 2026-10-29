@@ -5,6 +5,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math_consts.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 
 #define NOT_SDA
@@ -56,12 +57,9 @@ extern void compute_armed_transport_path_headings(void *) __asm__("FUN_L16_002e2
 void update_armed_transport_joint_animation(char *moby) __asm__("FUN_L16_002e3050");
 
 extern void update_armed_transport_joint_animation(char *) __asm__("FUN_L16_002e3050");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 void set_blarg_elite_commando_parent_transform(char *moby, void *owner, void *position, char *vector) __asm__("FUN_L16_002d3dc0");
 void start_blarg_elite_commando_return_to_initial_position(char *moby, int arg) __asm__("FUN_L16_002d3de0");
@@ -282,7 +280,6 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, char *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void mark_moby_for_removal_u(char *) __asm__("FUN_0020c828");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
@@ -535,7 +532,6 @@ extern float grindrail_barrier_accent_vertex_positions[4][4] __asm__("D_L16_001D
 extern int fast_tween_color(int,int,float) __asm__("FUN_001fa6e0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 
 void draw_grindrail_barrier_effect(char *barrier_moby) __asm__("FUN_L16_002e58d8");

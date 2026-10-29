@@ -4,6 +4,7 @@
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/math/fast_math.h"
 
 extern float D_L02_0017C3B8[];
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
@@ -56,13 +57,7 @@ extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern f32 forward_component(void *) __asm__("FUN_L00_00213350");  /* dot with (cos, sin) of the hero yaw */
 
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
@@ -363,7 +358,6 @@ extern HeroTableRow2C D_L02_0017C228[];
 #include "rnc/overlay/shared/ui/help/00220b80_globals.h"
 extern s32 hero_button_8_double_press_countdown_gp __asm__("D_L02_0015F674") __attribute__((sda));
 
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");

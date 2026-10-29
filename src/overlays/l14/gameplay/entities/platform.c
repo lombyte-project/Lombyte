@@ -10,6 +10,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/math/fast_math.h"
 
 /* Finds the path segments nearest to the two target points and sums the segment lengths between them. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
@@ -99,7 +100,6 @@ typedef struct {
     float f568;
 } G_6570;
 extern int FUN_L00_0025df68_c(void *, void *, void *, int *, float *, int, float, float, float) __asm__("FUN_L00_0025df68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -191,16 +191,10 @@ extern void spring_67e8(void *, void *, float, float, float, float) __asm__("FUN
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float sub_rot_67e8(float, float) __asm__("FUN_001fa5c8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void build_moby_bone_transform(struct Moby *, int, void *) __asm__("FUN_0020cca8");
 extern void joint_pos_67e8(struct Moby *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void sub_67e8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
@@ -212,8 +206,6 @@ extern int collision_line(void *, void *, int, struct Moby *, void *) __asm__("F
 extern char *FUN_L00_00274948_c(void *, void *, int, struct Moby *) __asm__("FUN_L00_00274948");
 extern int FUN_L00_0023e738_c(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 
 void update_racer_path_and_weapon(struct Moby *racer_moby) __asm__("FUN_L14_002d67e8");
 
@@ -455,10 +447,7 @@ float D_L14_001DE540[4][4] = {
     {0.0f, 1.0f, 1.0f, 1.0f},
     {0.0f, 1.0f, -1.0f, 1.0f},
 };
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void sub_g(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern unsigned long get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
@@ -539,8 +528,6 @@ extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358"
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_racer_glow_quads(struct Moby *) __asm__("FUN_L14_002d71f0");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 
 void update_moby_joint_visual_effects(struct Moby *moby) __asm__("FUN_L14_002d7490");
@@ -632,15 +619,12 @@ typedef int u128_s07 __attribute__((mode(TI)));
 
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 #include "rnc/overlay/l14/gameplay/entities/platform_data/update_platform_tilt_basis.h"
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F3D0[];
 
@@ -743,8 +727,6 @@ typedef struct {
 } Obj;
 
 extern char D_0013E633[] __asm__("D_0013F3D0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int D_L14_0015F7EC __asm__("D_L14_0015F70C");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");

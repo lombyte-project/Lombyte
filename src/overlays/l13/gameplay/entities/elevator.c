@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/entities.h"
+#include "rnc/math/fast_math.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -202,12 +203,10 @@ typedef struct {
 extern char D_L13_001670C0_2b39e0[] __asm__("D_L13_001670C0");
 extern float D_0015ED70_2b39e0 __asm__("D_0015ED70");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 allocate_voice_2b39e0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -221,9 +220,6 @@ extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void compute_elevator_camera_pose(struct Moby *moby, float *camera_position, float *camera_rotation) __asm__("FUN_L13_002b4060");
 
 extern void compute_elevator_camera_pose(struct Moby *, float *, float *) __asm__("FUN_L13_002b4060");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Updates the lift: rides between its two heights, blends the camera while the hero rides it and pulses its colour while it waits. */
 void elevator_update(struct Moby *moby) __asm__("FUN_L13_002b39e0");
@@ -383,14 +379,11 @@ void elevator_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5210), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern unsigned char D_0013E533[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void compute_elevator_camera_pose(struct Moby *moby, float *v, float *w) __asm__("FUN_L13_002b4060");
 void compute_elevator_camera_pose(struct Moby *moby, float *camera_position, float *camera_rotation) {
@@ -480,7 +473,6 @@ extern void *FUN_L13_002b4958_2b0e80(void *) __asm__("FUN_L13_002b4958");
 extern void FUN_L00_00263ac8_2b0e80(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void FUN_00212f90_2b0e80(void *, int, int, int) __asm__("FUN_00212f90");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
@@ -1111,7 +1103,6 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float D_L13_0015F62C;
 extern float D_L13_0015F630;
 extern float robosquawker_damage_knockback_vertical_speed_gp __asm__("D_L13_00161390") __attribute__((sda));
@@ -1142,7 +1133,6 @@ extern int select_list_point_toward_target(void *, void *, void *, void *) __asm
 extern int reserve_expired_frame_slot(int *, int, int) __asm__("FUN_L01_002efbf8");
 extern int select_robosquawker_target(void *, void *, float) __asm__("FUN_L13_0026bd00");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 rand(void);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 short D_L13_001613A0 = 0x505;
@@ -1159,12 +1149,9 @@ extern void FUN_L00_0025f730(void *, float);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void FUN_L01_0026d930(char *p);
 extern void FUN_L01_0026e090(int, int);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -2080,14 +2067,11 @@ typedef struct {
 } IconEC5D0;
 extern IconEC5D0 l13_fighter_jet_radar_icon_definitions[] __asm__("D_L13_001CBDB8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern unsigned char frame_size[] __asm__("D_0013E504");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -2169,10 +2153,7 @@ extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void emit_transformed_2d_vertex_packet(void *, int, int, long, float, float, float, float) __asm__("FUN_L13_002b7d50");
 extern void draw_fighter_jet_radar_icon(char *rot, char *from, char *moby, int icon, long color, int tex) __asm__("FUN_L13_002b89f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void project_to_screen(f32 *, void *) __asm__("func_001F2070");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -2359,7 +2340,6 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
 extern char fighter_jet_radar_rotation[] __asm__("D_L13_001670D0");
 extern int D_L13_0015F5C4;
 extern char D_0013C940[];
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 int select_fighter_jet_target_and_draw_indicators(int a, char *p, char *a2, void *a3, float f0, float f1, float f2, char *cur, char *g) __asm__("FUN_L13_002b8be0");
 extern void tick_countdown_32(int *arg0) __asm__("FUN_001f9740");
 
@@ -2441,7 +2421,6 @@ extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char fighter_jet_ammo_icon_vertices[] __asm__("D_L13_001CBC60");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int fighter_jet_health_palette_backup[] __asm__("D_L13_001CBE70");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 font_print_center_large(s32, s32, u64, s32, s32) __asm__("func_001F6C20");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s32 get_effect_texture_c(s32) __asm__("func_001F44B8");
@@ -2567,7 +2546,6 @@ void draw_fighter_jet_hud(char *moby) {
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern unsigned char D_0013A4E0[];
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
@@ -2680,7 +2658,6 @@ extern u64 fighter_jet_steering_reference_position __asm__("D_L13_00161430") __a
 extern char *D_L13_00167100 __attribute__((section(".data")));
 extern char coll_hit_1638[] __asm__("D_L13_00174140");
 extern char fighter_jet_camera_mode_correction_message[] __asm__("D_L13_001F4450");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern float spring_angle(char *, char *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern float interpolate_value_with_repeated_squaring(int, int, float, float, float, float, float) __asm__("FUN_L13_002ba088");
@@ -3002,12 +2979,10 @@ extern int jet_fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern JetHit *jet_find_hit(void *,int,int) __asm__("FUN_L00_0025a420");
 extern void build_spherical_offset(float *,float,float,float) __asm__("FUN_00214db0");
 extern void clamp_vector_length(void *,void *,float) __asm__("FUN_001f9c90");
-extern void fast_vec_add(void *,void *,void *) __asm__("FUN_001f9a10");
 extern float fast_arc_tan(float,float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float,float) __asm__("FUN_001fa5c8");
 extern float fast_add_rotations(float,float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void jet_group_state(int,int,int,int) __asm__("FUN_L13_002650a8");
 extern void jet_group_switch(void *,int,int,int) __asm__("FUN_L13_002651c8");
 extern void jet_group_flag(int,int) __asm__("FUN_L13_00265170");

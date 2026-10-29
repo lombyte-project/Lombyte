@@ -11,6 +11,8 @@
 #include "qcopy.h"
 #include "rnc/math/circle_offset.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 
 #define NOT_SDA
 
@@ -185,7 +187,6 @@ void hero_frame_update(void) {
 /* Per-frame update of the help/menu state: validates the cursor, then runs the update chain. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00228E08), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
@@ -279,7 +280,6 @@ void update_hero_frame(void) {
     update_hero_blink_and_gold_weapon_tint();
     update_hero_moby_probed_height_bounds();
 }
-extern unsigned char item_text_variant[] __asm__("D_0013E520");
 extern void get_moby_color(struct Moby *, int *, int *, int *) __asm__("FUN_L00_00250320");
 extern void set_moby_color(struct Moby *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void copy_hero_color_to_item_mobys(void) __asm__("FUN_L00_002072c8");
@@ -440,7 +440,6 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern void predict_position_with_vertical_drop(void *, void *, void *, int, float) __asm__("FUN_L00_00259508");
 extern char *FUN_L00_002603d0(char *);
 extern u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
@@ -605,7 +604,6 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 
 /*
  * Ledge probe, FUN_L00_0020c758 without its hero.vehicle_mode == 1 variant:
@@ -1027,15 +1025,11 @@ void hero_speed_from_table(void) {
 
 extern char D_L01_001742C0_d[] __asm__("D_L01_001742C0") __attribute__((section(".data")));
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern int D_L01_001742DC __attribute__((section(".data")));
 void clip_hero_horizontal_velocity(int flag) __asm__("FUN_L01_00232978");
@@ -1330,13 +1324,9 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void f2347c0_233940(void) __asm__("FUN_L00_002347c0");
 extern void f233810_233940(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern void f2334d0_233940(void *, void *, f32) __asm__("FUN_L00_002334d0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_233940(void *, f32) __asm__("FUN_L00_001f3170");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_233940 D_L01_001742F0[] __attribute__((section(".data")));
 s32 resolve_hero_position_with_collision_queries(s32 mode) __asm__("FUN_L01_00233940");
 

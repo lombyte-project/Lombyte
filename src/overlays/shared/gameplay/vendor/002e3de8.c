@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -9,12 +10,9 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void fast_vec_add(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
 
 extern short type_52_particle_header_value __asm__("D_L10_00161E58") __attribute__((sda));
@@ -60,7 +58,6 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void draw_moby_animated_quad_layers(unsigned char *m) __asm__("FUN_L10_002e91b8");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void update_hero_flag_from_moby_local_box(unsigned char *moby) __asm__("FUN_L10_002e9028");
 
@@ -291,11 +288,9 @@ typedef struct {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/gameplay/camera/update_cam.h"
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* Retail retains this global base and loads the four-block source at +0x184. */
 extern struct { char pad0[0x184]; char *source; } D_L10_00167100;
@@ -417,17 +412,10 @@ extern int sample_path(char *path, float *out, void *seg, void *t, int dir, floa
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_002223f8(s32, s32);
 extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 extern void debug_line_5f18(void *, void *) __asm__("FUN_001e93e8");

@@ -9,6 +9,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     char *f0;     /* 0x00 */
@@ -55,7 +56,6 @@ extern char *D_L18_00174840_2463f8[] __asm__("D_L18_00174840");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg2463f8;
 extern Ldg2463f8 D_0015EE48;
 #include "rnc/overlay/l18/world/loaders/002463f8_globals.h"
-extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern u64 D_L18_001831C0[3];
 extern u64 level_texture_state_64x64[3] __asm__("D_L18_001831D8");
 extern u64 D_L18_001831F0[3];
@@ -148,7 +148,6 @@ extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
 extern char *FUN_L00_00241940_2463f8(s32) __asm__("FUN_L00_00241940");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
 extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
@@ -435,9 +434,7 @@ int timer_frame_right __asm__("D_L18_00161A38") = 52;
 int D_L18_00161A3C = 96;
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");

@@ -9,6 +9,8 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 
 typedef union {
     u128 q;
@@ -29,12 +31,7 @@ extern void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_L00_00257b90(int lo, int hi);
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void FUN_L00_00257470(void *, s32, s32);
@@ -141,7 +138,6 @@ extern s32 rand(void) __asm__("FUN_001160d8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void collect_mobies_in_sphere(void *, s32, void *, void *, f32) __asm__("FUN_L00_001f2868");
 extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 
 void fan_update(SwayMoby *m) __asm__("FUN_L01_002f9bf0");
@@ -217,14 +213,9 @@ extern void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_L00_00257b90(int lo, int hi);
 extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
-extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void bridge_piece_1_update(BurstMoby *self) __asm__("FUN_L01_002f9d80");
 void bridge_piece_1_update(BurstMoby *self) {
     BurstTarget *hit_result;
@@ -444,7 +435,6 @@ typedef struct {
 } DropProbe;
 
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
@@ -700,10 +690,8 @@ extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
 extern Lv_2FC140 D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
 extern char D_L01_001BAAA0[] __asm__("D_L01_001BAAA0");
 extern unsigned char D_0014C050_u[] __asm__("D_0014C050");
-extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern void apply_cutscene_big_head_cheat(void) __asm__("FUN_L01_002fac80");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9770");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
@@ -960,9 +948,6 @@ extern u8 D_0013E550[];
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern s32 FUN_0022da68(s32, s32, void *);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 
 void bridge_half_update(PendulumMoby *self) __asm__("FUN_L01_002fb8a8");
 void bridge_half_update(PendulumMoby *self) {
@@ -1071,8 +1056,6 @@ extern void pool_flush(void *, s32) __asm__("FUN_L01_002b7fe0");
 extern void pool_ripple(f32, f32, f32, f32, void *, s32) __asm__("FUN_L01_002b8288");
 extern void pool_splash(f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_002a3ec8");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void render_level_water_grids(void) __asm__("FUN_L01_002fd0c0");
@@ -1283,9 +1266,6 @@ extern void spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void green_mushroom_update(SparkMoby *m) __asm__("FUN_L01_002fd9a0");
 void green_mushroom_update(SparkMoby *mushroom_moby) {
@@ -1349,8 +1329,6 @@ typedef struct {
 extern WaterLayer D_L01_001FBC80[];
 s32 D_L01_00161CE0 = 0;
 extern s32 level_frame_count __asm__("D_L01_0015F5CC");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void draw_four_scroll_layers(void) __asm__("FUN_L01_002feb28");
 extern int add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
@@ -1611,7 +1589,6 @@ typedef struct {
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern s32 FUN_0022da68(s32, s32, void *);
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_L00_00257b90(int lo, int hi);
 extern void FUN_L00_0026ced0_u(void *, void *, u32, u32, f32, s32) __asm__("FUN_L00_0026ced0");
 
@@ -1718,7 +1695,6 @@ extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
 /* Per-frame update of a falling debris moby: moves it, bursts into particles when it hits the ground, and removes it when its timer runs out. */
