@@ -488,12 +488,12 @@ void cache_path_segment_lengths(char *data) {
     }
 }
 
-int classify_sharkigator_water_height_gap(char *moby, char *data) {
+int classify_sharkigator_water_height_gap(char *moby, char *sharkigator_vars) {
     float distance = FUN_L00_00259710(moby + 0x10);
     float delta;
-    *(float *)(data + 0x130) = distance;
-    delta = **(float **)(data + 0x12C) - distance;
-    *(float *)(data + 0x138) = distance + delta * 0.5f;
+    *(float *)(sharkigator_vars + 0x130) = distance;
+    delta = **(float **)(sharkigator_vars + 0x12C) - distance;
+    *(float *)(sharkigator_vars + 0x138) = distance + delta * 0.5f;
     if (delta < 0.41f)
         return 2;
     if (delta > 0.68f)
