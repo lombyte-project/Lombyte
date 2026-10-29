@@ -1710,32 +1710,32 @@ extern void FUN_L14_002ae260_u(void) __asm__("FUN_L14_002ae260");
 
 int update_blarg_heavy_interceptor_aim_transforms(struct Moby *moby, int flag) {
     int   ok = 0;
-    char *data = (char *)moby->pvars;
+    char *blarg_heavy_interceptor_private_vars = (char *)moby->pvars;
     float bounding_sphere[4];
     float half_span_vector[4];
     float rotation_angle;
-    fast_vec_sub(half_span_vector, data + 0x170, data + 0xD0);
+    fast_vec_sub(half_span_vector, blarg_heavy_interceptor_private_vars + 0x170, blarg_heavy_interceptor_private_vars + 0xD0);
     fast_vec_scale(half_span_vector, half_span_vector, 0.5f);
-    fast_vec_add(bounding_sphere, data + 0xD0, half_span_vector);
+    fast_vec_add(bounding_sphere, blarg_heavy_interceptor_private_vars + 0xD0, half_span_vector);
     bounding_sphere[3] = fast_vec_length(half_span_vector) + 2.0f;
     if (fast_bsphere_check((char *)bounding_sphere, convert_integer_to_float(moby->draw_dist)) >=
         0) {
-        build_moby_bone_transform(moby, 1, data + 0xA0);
+        build_moby_bone_transform(moby, 1, blarg_heavy_interceptor_private_vars + 0xA0);
         ok = 1;
-        fast_vec_normalize(data + 0xA0, data + 0xA0, 1.0f);
-        fast_vec_normalize(data + 0xB0, data + 0xB0, 1.0f);
-        fast_vec_normalize(data + 0xC0, data + 0xC0, 1.0f);
+        fast_vec_normalize(blarg_heavy_interceptor_private_vars + 0xA0, blarg_heavy_interceptor_private_vars + 0xA0, 1.0f);
+        fast_vec_normalize(blarg_heavy_interceptor_private_vars + 0xB0, blarg_heavy_interceptor_private_vars + 0xB0, 1.0f);
+        fast_vec_normalize(blarg_heavy_interceptor_private_vars + 0xC0, blarg_heavy_interceptor_private_vars + 0xC0, 1.0f);
         rotation_angle = fast_subtract_rotations(
             fast_arc_tan(half_span_vector[0], half_span_vector[1]), moby->rot.z);
-        FUN_L00_001fff28(data + 0xF0, 2, rotation_angle);
-        *(float *)(data + 0x1BC) = rotation_angle;
+        FUN_L00_001fff28(blarg_heavy_interceptor_private_vars + 0xF0, 2, rotation_angle);
+        *(float *)(blarg_heavy_interceptor_private_vars + 0x1BC) = rotation_angle;
         rotation_angle = -fast_arc_tan(vector_length_xy(half_span_vector), half_span_vector[2]);
-        FUN_L00_001fff28(data + 0x130, 1, rotation_angle);
-        *(float *)(data + 0x1C0) = rotation_angle;
-        qcopy(data + 0x90, data + 0x170);
+        FUN_L00_001fff28(blarg_heavy_interceptor_private_vars + 0x130, 1, rotation_angle);
+        *(float *)(blarg_heavy_interceptor_private_vars + 0x1C0) = rotation_angle;
+        qcopy(blarg_heavy_interceptor_private_vars + 0x90, blarg_heavy_interceptor_private_vars + 0x170);
         if (flag != 0) {
             add_draw_callback(FUN_L14_002ae260_u, moby);
-            *(int *)(data + 0x20C) |= 2;
+            *(int *)(blarg_heavy_interceptor_private_vars + 0x20C) |= 2;
         }
     }
     return ok;
