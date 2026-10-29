@@ -69,22 +69,22 @@ unsigned char *spawn_fading_ring_effect(int   spawning_moby,
                                         float f4) {
     unsigned char *moby = (unsigned char *)create_moby(0x416);
     if (moby != 0) {
-        char *data;
+        char *spawned_moby_vars;
         char *distance_reference_position;
         char *distance_response_state;
-        data = ((char *)MOBY(moby)->pvars);
+        spawned_moby_vars = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         qcopy(moby + 0x10, spawn_position);
-        *(int *)(data + 0x14) = spawning_moby;
-        *(float *)(data + 4) = f1;
-        *(float *)(data + 0x10) = f2;
-        *(float *)(data + 0xC) = spawn_speed;
-        *(float *)data = f0;
-        *(float *)(data + 8) = f0;
-        *(int *)(data + 0x18) = b;
-        *(float *)(data + 0x1C) = f4;
+        *(int *)(spawned_moby_vars + 0x14) = spawning_moby;
+        *(float *)(spawned_moby_vars + 4) = f1;
+        *(float *)(spawned_moby_vars + 0x10) = f2;
+        *(float *)(spawned_moby_vars + 0xC) = spawn_speed;
+        *(float *)spawned_moby_vars = f0;
+        *(float *)(spawned_moby_vars + 8) = f0;
+        *(int *)(spawned_moby_vars + 0x18) = b;
+        *(float *)(spawned_moby_vars + 0x1C) = f4;
         MOBY(moby)->flags |= 0x200;
         distance_reference_position = D_L07_00166E40;
         distance_response_state = distance_reference_position - 0x140;
