@@ -439,13 +439,14 @@ s32 resolve_moby_animation_id(u8 *moby_bytes, s32 animation_id) {
 }
 /* hero_get_state_aim_pitch -- per-mode angle helper.
  *
- * Writes 0.0f to *out, then looks up the mode (0x1C..0x6F) in a jump table.
- * Modes 0x1C/0x1D/0x1F optionally overwrite *out with the sloped angle, modes
- * 0x32/0x33/0x5F/0x60/0x6B/0x6D/0x6E only report "handled", and everything
- * else (including a mode outside the table) falls through to 0.
+ * Writes 0.0f to *out, then looks up the mode (0x1C..0x6E) in a jump table.
+ * Modes 0x1C/0x1D/0x1F optionally overwrite *out with the sloped angle, mode
+ * 0x37 writes a fixed angle, modes 0x31/0x32/0x4A/0x4B/0x50/0x60/0x6D/0x6E only
+ * report "handled", and everything else (including a mode outside the table)
+ * falls through to 0.
  *
  * The 25.0f threshold is held in a local so it lands in $f1 and the load in $f0.
- * The case groups are written 33, then 22..., then 0/1/3: gcc emits the blocks
+ * The case groups are written 27, then 21..., then 0/1/3: gcc emits the blocks
  * in source order, and retail lays them out in exactly that order.
  */
 
@@ -456,14 +457,15 @@ int hero_get_state_aim_pitch(int mode, float *out) {
     *out = 0.0f;
     i = mode - 0x1C;
     switch (i) {
-    case 33:
+    case 27:
         *out = -0.9599311f;
         return 1;
+    case 21:
     case 22:
-    case 23:
-    case 63:
-    case 64:
-    case 79:
+    case 46:
+    case 47:
+    case 52:
+    case 68:
     case 81:
     case 82:
         return 1;
