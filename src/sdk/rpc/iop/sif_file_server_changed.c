@@ -13,15 +13,15 @@ extern u8                  FsResetBuffer[] __asm__("D_00157FA8");
 s32                        sif_file_server_changed(void) __asm__("FUN_0011bbb8");
 
 s32 sif_file_server_changed(void) {
-    s32 result;
+    s32 all_version_records_differ;
     u8 *new_var;
-    result = 0;
+    all_version_records_differ = 0;
     new_var = D_0012FBEC;
     if ((memcmp(FsResetBuffer, new_var, 4) != 0) &&
         (memcmp(FsResetBuffer, server_version_record_address[0], 4) != 0)) {
-        result = memcmp(new_var, server_version_record_address[0], 4) != 0;
+        all_version_records_differ = memcmp(new_var, server_version_record_address[0], 4) != 0;
     }
-    return result;
+    return all_version_records_differ;
 }
 
 extern s32 func_0011BBB8(void) __attribute__((alias("FUN_0011bbb8")));
