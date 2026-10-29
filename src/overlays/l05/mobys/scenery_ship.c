@@ -22,17 +22,17 @@ void draw_group_moby_glow_quads(unsigned char *moby) __asm__("FUN_L05_002d6f48")
 void draw_group_moby_glow_quads(unsigned char *moby) {
     unsigned char *it;
     int            i;
-    char          *data;
+    char          *group_member_vars;
     char          *glow_position;
     get_first_moby_in_group((int *)&it, moby[0x21], 0, 0);
     while (it != 0) {
         if (it[0x31] != 0) {
-            data = *(char **)(it + 0x78);
+            group_member_vars = *(char **)(it + 0x78);
             if (*(short *)(it + 0xA6) == MOBY(moby)->oclass) {
-                glow_position = data + 0x330;
+                glow_position = group_member_vars + 0x330;
                 for (i = 2; i >= 0; i--) {
                     draw_offset_textured_effect_quad(
-                        glow_position, *(int *)(data + 0x360), 0.45f, 0.4f);
+                        glow_position, *(int *)(group_member_vars + 0x360), 0.45f, 0.4f);
                     glow_position += 0x10;
                 }
             }
