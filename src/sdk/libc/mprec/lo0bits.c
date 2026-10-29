@@ -23,8 +23,8 @@
 
 s32 CountTrailingZeroBits(u32 *value) __asm__("_lo0bits");
 
-s32 CountTrailingZeroBits(u32 *value) {
-    u32 word = *value;
+s32 CountTrailingZeroBits(u32 *word_to_normalize) {
+    u32 word = *word_to_normalize;
     s32 bit_count;
 
     if (word & 7) {
@@ -33,11 +33,11 @@ s32 CountTrailingZeroBits(u32 *value) {
         }
         if (word & 2) {
             word >>= 1;
-            *value = word;
+            *word_to_normalize = word;
             return 1;
         }
         word >>= 2;
-        *value = word;
+        *word_to_normalize = word;
         return 2;
     }
 
@@ -66,6 +66,6 @@ s32 CountTrailingZeroBits(u32 *value) {
             return 32;
         }
     }
-    *value = word;
+    *word_to_normalize = word;
     return bit_count;
 }
