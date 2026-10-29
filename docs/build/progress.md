@@ -75,7 +75,9 @@ Data counts as matched when C defines it and a check covers it:
   `DATA_OVERLAYS` (`configure.py`) links the unit's section in place of the
   raw bytes, so the executable's hash covers it;
 - levels: a row in `config/overlays/us/data.tsv`, checked by `make overlays`.
-  A `D_XXXXXXXX` row counts in every level.
+  A `D_XXXXXXXX` row counts in every level. The switch tables and float
+  literals in `config/overlays/us/compiler_data.tsv` count too. A byte two
+  rows cover counts once.
 
 `decomp_map.json` also has `bytes_matching_c_zero`: the part of the matched
 data that is zeros.

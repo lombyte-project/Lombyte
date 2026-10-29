@@ -72,6 +72,13 @@ resolved for that level, to what the level loads there. A row named
 the zero globals in `src/overlays/shared/data/level_globals.c`; it is checked
 and counted in every level.
 
+The compiler's own data for a function in C, its switch tables and float
+literals, is checked too: each table word must point into the function at the
+place the level's table holds, and each literal must equal the level's bytes.
+`config/overlays/us/compiler_data.tsv` lists these places (level, address,
+size); `make overlays` fails when it is out of date, and
+`scripts/overlay_unit.py --write` rewrites it.
+
 ## Progress
 
 Every distinct function counts once: an `exe` copy counts with the

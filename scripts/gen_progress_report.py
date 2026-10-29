@@ -33,7 +33,9 @@ What the report counts (the same contract as ``assets/decomp_map.json``):
   (``core_data`` .. ``lvl_sndvtbl``) and each level's ``.lit``, ``.data`` and
   vtables; matched are the bytes C defines and the proofs check: the
   ``*_OVERLAYS`` entries of ``configure.py`` (the boot gate) and
-  ``config/overlays/us/data.tsv`` (``make overlays``). bss is not counted.
+  ``config/overlays/us/data.tsv`` plus the switch tables and literals the
+  overlay C compiles to (``compiler_data.tsv``), both proven by ``make
+  overlays``. bss is not counted.
 * report units are grouped by their source folder; a clicked group shows
   its member functions;
 * a function's symbol is its C name; a unit still in assembly takes the name
@@ -179,18 +181,33 @@ def data_totals(repo: Path) -> dict[str, tuple[int, int]]:
 
 
 def read_level_data(repo: Path) -> dict[int, int]:
-    """Level -> bytes of its data defined in C (config/overlays/us/data.tsv)."""
-    path = repo / "config" / "overlays" / "us" / "data.tsv"
+    """Level -> bytes of its data in C: the objects config/overlays/us/data.tsv
+    lists, and the switch tables and float literals the overlay C compiles to
+    (config/overlays/us/compiler_data.tsv). A byte both cover counts once."""
+    folder = repo / "config" / "overlays" / "us"
+    levels = [int(p.stem[-2:]) for p in folder.glob("level-??.json")]
+    spans: dict[int, list[tuple[int, int]]] = {}
+    path = folder / "data.tsv"
+    for line in path.read_text().splitlines() if path.is_file() else []:
+        m = re.match(r"^D_L(\d{2})_([0-9A-Fa-f]{8})\t(\d+)", line)
+        if m:
+            spans.setdefault(int(m.group(1)), []).append((int(m.group(2), 16), int(m.group(3))))
+        m = re.match(r"^D_([0-9A-Fa-f]{8})\t(\d+)", line)
+        if m:  # data every level holds at that address, proven in all of them
+            for level in levels:
+                spans.setdefault(level, []).append((int(m.group(1), 16), int(m.group(2))))
+    path = folder / "compiler_data.tsv"
+    for line in path.read_text().splitlines() if path.is_file() else []:
+        if line and not line.startswith("#"):
+            level, address, size = line.split("\t")[:3]
+            spans.setdefault(int(level), []).append((int(address, 16), int(size)))
     out: dict[int, int] = {}
-    if path.is_file():
-        for line in path.read_text().splitlines():
-            m = re.match(r"^D_L(\d{2})_[0-9A-Fa-f]{8}\t(\d+)", line)
-            if m:
-                out[int(m.group(1))] = out.get(int(m.group(1)), 0) + int(m.group(2))
-            m = re.match(r"^D_[0-9A-Fa-f]{8}\t(\d+)", line)
-            if m:  # data every level holds at that address, proven in all of them
-                for level in (int(p.stem[-2:]) for p in path.parent.glob("level-??.json")):
-                    out[level] = out.get(level, 0) + int(m.group(1))
+    for level, rows in spans.items():
+        covered, end = 0, 0
+        for address, size in sorted(rows):
+            covered += max(0, address + size - max(address, end))
+            end = max(end, address + size)
+        out[level] = covered
     return out
 
 
