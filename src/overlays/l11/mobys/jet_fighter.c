@@ -199,14 +199,14 @@ project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L
 float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
     struct Moby *moby = moby_v;
     char        *target_moby = o_v;
-    char        *data = ((char *)moby->pvars);
+    char        *ship_reticle_vars = ((char *)moby->pvars);
     if (MOBY(target_moby)->visible != 0) {
         char target_projection_point[16];
         int  ax, ay, cx, cy;
         int  dx, dy, reticle_axis_limit;
         project_world_point_to_screen_pixels(target_moby + 0x10, &ax, &ay, 0);
-        dx = ax - *(int *)(data + 0xE0);
-        dy = ay - *(int *)(data + 0xE4);
+        dx = ax - *(int *)(ship_reticle_vars + 0xE0);
+        dy = ay - *(int *)(ship_reticle_vars + 0xE4);
         if (dx < 0)
             dx = -dx;
         if (dy < 0)
