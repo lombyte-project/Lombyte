@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
-#include "rnc/ui/menus/tick_space_transition_globals.h"
+#include "rnc/gameplay/state/tick_space_transition_globals.h"
 void tick_space_transition(void) __asm__("FUN_00226e08");
 void tick_space_transition(void) {
     s32 new_value;

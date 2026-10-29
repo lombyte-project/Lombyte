@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_L05_GAMEPLAY_HERO_00255960_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_L05_GAMEPLAY_HERO_00255960_GLOBALS_H
+#ifndef LOMBYTE_RNC_OVERLAY_L05_GAMEPLAY_HERO_UPDATE_HERO_STATE_MACHINE_GLOBALS_H
+#define LOMBYTE_RNC_OVERLAY_L05_GAMEPLAY_HERO_UPDATE_HERO_STATE_MACHINE_GLOBALS_H
 
 #include "types.h"
 
@@ -8,4 +8,4 @@ extern float fatal_fall_entry_z_threshold __asm__("D_L05_0015F638");
 extern int item_selector_hud_open_blocker __asm__("D_L05_0015F594") __attribute__((sda));
 extern int landing_run_entry_animation_frame __asm__("D_L05_0015F6EC");
 
-#endif /* LOMBYTE_RNC_OVERLAY_L05_GAMEPLAY_HERO_00255960_GLOBALS_H */
+#endif /* LOMBYTE_RNC_OVERLAY_L05_GAMEPLAY_HERO_UPDATE_HERO_STATE_MACHINE_GLOBALS_H */

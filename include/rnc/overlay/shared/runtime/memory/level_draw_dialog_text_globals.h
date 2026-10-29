@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_RUNTIME_MEMORY_002018C8_GLOBALS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_RUNTIME_MEMORY_002018C8_GLOBALS_H
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_RUNTIME_MEMORY_LEVEL_DRAW_DIALOG_TEXT_GLOBALS_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_RUNTIME_MEMORY_LEVEL_DRAW_DIALOG_TEXT_GLOBALS_H
 
 #include "types.h"
 
@@ -28,4 +28,4 @@ extern s32 first_place_or_record_tween_end_color __asm__("D_L00_0015F4F8") __att
 extern s32 other_place_or_no_record_tween_start_color __asm__("D_L00_0015F4FC") __attribute__((sda));
 extern s32 other_place_or_no_record_tween_end_color __asm__("D_L00_0015F500") __attribute__((sda));
 
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_RUNTIME_MEMORY_002018C8_GLOBALS_H */
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_RUNTIME_MEMORY_LEVEL_DRAW_DIALOG_TEXT_GLOBALS_H */

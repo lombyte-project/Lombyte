@@ -1,5 +1,5 @@
-#ifndef LOMBYTE_RNC_UI_MENUS_PROCESS_MENU_ENTRY_GLOBALS_H
-#define LOMBYTE_RNC_UI_MENUS_PROCESS_MENU_ENTRY_GLOBALS_H
+#ifndef LOMBYTE_RNC_UI_MENUS_SYSTEM_PROCESS_MENU_ENTRY_GLOBALS_H
+#define LOMBYTE_RNC_UI_MENUS_SYSTEM_PROCESS_MENU_ENTRY_GLOBALS_H
 
 #include "types.h"
 
@@ -7,4 +7,4 @@
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern s32 menu_help_hud_item __asm__("D_00160070");
 
-#endif /* LOMBYTE_RNC_UI_MENUS_PROCESS_MENU_ENTRY_GLOBALS_H */
+#endif /* LOMBYTE_RNC_UI_MENUS_SYSTEM_PROCESS_MENU_ENTRY_GLOBALS_H */
