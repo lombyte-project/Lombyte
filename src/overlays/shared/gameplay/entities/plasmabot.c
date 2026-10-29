@@ -7,9 +7,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
@@ -1264,7 +1262,6 @@ void draw_plasmabot_glow_quad(char *m) {
     }
     draw_geometry_quad(&pk, 0, 0);
 }
-#define NOT_SDA __attribute__((section(".data")))
 
 extern u8 *D_L14_00167500 NOT_SDA;
 extern s32 FUN_001f96f8_c(s32) __asm__("FUN_001f96f8");

@@ -8,9 +8,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/moby_anim.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D8190), where it is exact; names translated to the US level program. */
 
@@ -90,9 +88,7 @@ void handle_amoeboid_hits(unsigned char *moby) {
 #include "qcopy.h"
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002F9B10), where it is exact; names translated to the US level program. */
 
@@ -164,9 +160,7 @@ void start_racer_branch_jump(char *moby) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003088C8), where it is exact; names translated to the US level program. */
 
@@ -479,9 +473,7 @@ void spawn_sharkigator_surface_effects(char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Spawns a burst of particles and a ring of sparks around a position. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002D3220), where it is exact; names translated to the US level program. */
@@ -1882,11 +1874,10 @@ int test_extermibot_offset_path_clearance(char *moby, float *goal, float probe_o
     FUN_001f9a10_c(offset_probe_position, offset_probe_position, (float *)(moby + 0x10));
     return test_path_segment_strict_crossing(*(int *)(moby_data + 0x2C0), probe_position, offset_probe_position) == 0;
 }
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
+#include "sda.h"
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 typedef struct {
     char p0[0x10];

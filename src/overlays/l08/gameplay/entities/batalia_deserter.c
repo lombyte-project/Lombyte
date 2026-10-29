@@ -11,9 +11,8 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 
-#define MACRO_ADDR __attribute__((section(".sdata")))
 
 /* triggers objects matching the moby's class */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003065F8), where it is exact; names translated to the US level program. */
@@ -717,9 +716,7 @@ void update_batalia_selected_moby_effects(struct Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
 
@@ -753,9 +750,7 @@ void spawn_batalia_moby_effects_with_random_motion(struct Moby *moby) {
         spawn_effect_with_initial_motion(effect_position, effect_direction, *(int *)(data + 0x10), *(float *)(data + 0xC));
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Runs the two-entry setup loop for slot `x`: one call fills from the tables, the second applies them. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A428), where it is exact; names translated to the US level program. */

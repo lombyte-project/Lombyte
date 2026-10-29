@@ -33,9 +33,7 @@ void prepare_scaled_float_table_with_target_byte(char *value_target, int val, fl
         source++;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002A52B0), where it is exact; names translated to the US level program. */
 
@@ -666,11 +664,9 @@ void tresspasser_pad_update(Moby *moby) {
     }
     func_L00_0025E590_2D9F08(moby, data);
 }
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 extern void func_L00_00250800_d92f0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
@@ -754,9 +750,7 @@ void draw_tresspasser_puzzle_ring_arc(int texture, u32 color, float start_angle,
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Draws the rotating radar arrow sprite (style sel) at angle a and scale s, twice. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002DBAF8), where it is exact; names translated to the US level program. */
@@ -1108,9 +1102,7 @@ move:
     update_entity_matrix(data + 0x60, data + 0x40, moby + 0x40, moby + 0x40);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Hideable flower: appears when its slot is free, faces and sparkles at the hero (class 0x323), hides again
  * when its slot is used. */

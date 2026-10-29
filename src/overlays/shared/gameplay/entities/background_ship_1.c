@@ -7,9 +7,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/camera/follow_cam.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
@@ -953,7 +951,7 @@ int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_
 }
 #include "rnc/input/pad_state.h"
 
-extern int D_L02_0015FFD8 MACRO_ADDR;
+extern int D_L02_0015FFD8;
 extern int D_L02_001ABE40[];
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
@@ -1196,9 +1194,7 @@ void apply_moby_camera_control(char *moby) {
     }
     return;
 }
-#define NOT_SDA __attribute__((section(".data")))
 
-#define MACRO_ADDR __attribute__((section(".sdata")))
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
 

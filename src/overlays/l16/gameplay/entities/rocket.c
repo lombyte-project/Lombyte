@@ -7,9 +7,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Check whether this vendor moby is in state six. */
 /* Ported from rac1-decomp (src/overlays/l16/vendor_002A50F0.c: func_L16_002C5A08), where it is exact; names translated to the US level program. */
@@ -966,10 +964,8 @@ void conveyor_belt_update(struct Moby *moby) {
         FUN_L16_002c9a50_u(moby);
 }
 #ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
 #endif
 #ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 extern float func_001F9D10_c9a50(void *, void *) __asm__("FUN_001f9b48");
 extern void func_L00_001FF4B0_c9a50(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -1975,9 +1971,7 @@ void draw_linked_pair_group_ribbons(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2037,9 +2031,7 @@ void draw_linked_pair_ribbons(char *moby, char *partner) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Choose the path node to steer for: step on while the current one is behind the moby or reached. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0DC0), where it is exact; names translated to the US level program. */
@@ -2260,9 +2252,7 @@ void update_hoverboard_dummy_jump_animation_and_pitch(L16LeapMoby_u *leap_moby) 
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2638,9 +2628,7 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

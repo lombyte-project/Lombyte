@@ -344,9 +344,7 @@ int update_moby_suck_cannon_suction_state(struct Moby *moby) {
     }
     return grab_check_result;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00317680), where it is exact; names translated to the US level program. */
 
@@ -894,9 +892,7 @@ void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_in
     } while (*(short *)list++ >= 0);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -1234,7 +1230,7 @@ extern char blarg_ship_positive_y_local_shot_offset[] __asm__("D_L11_001F14B0");
 extern char blarg_ship_negative_y_local_shot_offset[] __asm__("D_L11_001F14C0");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float D_L11_0015F580[] MACRO_ADDR;
+extern float D_L11_0015F580[];
 extern float D_L11_001677C0_c[] __asm__("D_L11_001677C0");
 extern float D_L11_001677D0[];
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -1666,9 +1662,7 @@ char *spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, vo
     return moby;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Bursts n1 sparks and n2 smoke puffs at the moby, the puffs sitting on the ground height. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C2D8), where it is exact; names translated to the US level program. */
@@ -1719,9 +1713,7 @@ void spawn_bubble_surface_effects(struct Moby *source_moby, float *ground, int s
         }
     }
 }
-#define NOT_SDA __attribute__((section(".data")))
 
-#define MACRO_ADDR __attribute__((section(".sdata")))
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C508), where it is exact; names translated to the US level program. */
 
@@ -1946,9 +1938,7 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_0031EFC0.c: func_L11_0031FDA0), where it is exact; names translated to the US level program. */
 

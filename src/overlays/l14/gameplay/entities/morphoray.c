@@ -548,9 +548,7 @@ void morphoray_update(struct Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Updates and draws four scrolling particle streaks for an Oltanis moby. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306FA0), where it is exact; names translated to the US level program. */
@@ -1576,11 +1574,9 @@ void update_path_camera(struct UpdateCam *path_camera) {
     fast_vec_normalize(&path_camera->m1, &path_camera->m1, 1.0f);
     fast_vec_cross(&path_camera->m2, &path_camera->m1, &path_camera->m0);
 }
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 extern int check_descriptor_hero_trigger(void *) __asm__("FUN_L10_002f5a78");
 extern char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50");

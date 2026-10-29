@@ -10,9 +10,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Steps a moby's countdown from a helper's output and retires it when it runs out. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002CD088), where it is exact; names translated to the US level program. */
@@ -258,11 +256,10 @@ void update_fleet_beam(struct Moby *beam_moby) {
         add_draw_callback(draw_fleet_beam_quad, beam_moby);
     }
 }
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
+#include "sda.h"
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 typedef struct {
     char pad[0x40];
@@ -603,9 +600,7 @@ void distribute_class_733_group_mobys_along_path(char *turret_moby) {
     } while (*group_entry++ >= 0);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Fleet moby 669 update: spins up, then sprays particles from points on a rotating ring. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002D8CC8), where it is exact; names translated to the US level program. */

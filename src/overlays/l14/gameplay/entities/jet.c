@@ -146,9 +146,7 @@ void animate_ribbon_effect_paths(u8 *moby) {
     }
     enqueue_callback_l14(draw_ribbon_effect, moby);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002E0858), where it is exact; names translated to the US level program. */
 
@@ -1155,9 +1153,7 @@ void update_flying_bolt(struct Moby *projectile_moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2043,9 +2039,7 @@ void settle_elevator_at_path_endpoint(struct Moby *elevator_moby) {
         FUN_L00_0025b8c0(&elevator_moby->rot.z, (float *)(moby_vars + 0x108), rot[2], 0.003f, 0.2f, 0.0f);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Select the vendor moby's state from its value and mark it initialized. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0A00), where it is exact; names translated to the US level program. */
@@ -2114,9 +2108,7 @@ void rebuild_elevator_world_path(u8 *moby) {
     x->path_constrain_pending = *(u16 *)(data + 0x114);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0B78), where it is exact; names translated to the US level program. */
 
@@ -2552,11 +2544,9 @@ struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) {
 found:
     return &D_L14_0015FFD8_12f0[group_moby_index];
 }
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 extern void func_00215F80_f13f8(int, int) __asm__("FUN_00215130");
 void request_taxi_stop_prompt(struct Moby *moby) {
@@ -3450,9 +3440,7 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002FEDA0), where it is exact; names translated to the US level program. */
 

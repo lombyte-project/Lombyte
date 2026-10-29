@@ -2,9 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
@@ -41,11 +39,10 @@ void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocit
         qcopy(particle_data, initial_particle_velocity);
     }
 }
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
+#include "sda.h"
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 extern unsigned char *func_00218928_80970(int) __asm__("FUN_L00_002678b8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");

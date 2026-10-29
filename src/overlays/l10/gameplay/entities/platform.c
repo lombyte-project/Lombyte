@@ -12,9 +12,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/camera/follow_cam.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* update: on a timer, fire a projectile from the moby's angle, then rearm the timer */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002D9FC0), where it is exact; names translated to the US level program. */
@@ -68,9 +66,7 @@ void bombthrower_grass_update(struct Moby *moby) {
 #include "rnc/overlay/quad.h"
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEC08), where it is exact; names translated to the US level program. */
 
@@ -95,11 +91,9 @@ char *spawn_fixed_height_destruction_moby(struct Moby *owner) {
     return moby;
 }
 
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 extern int debug_print() __asm__("FUN_001e93b0");
 extern void delete_moby(void *) __asm__("FUN_0020c828");
@@ -1213,9 +1207,7 @@ int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2360,7 +2352,7 @@ void update_path_spark_effect(char *moby) {
 
 extern char moby_pair_records[] __asm__("D_L10_00178580");
 extern int D_0015ED84_m __asm__("D_0015ED84");
-extern unsigned char D_0014C190[] NOT_SDA;
+extern unsigned char D_0014C190[];
 void mark_moby_for_removal_d650(struct Obj *obj) __asm__("FUN_0020c828");
 
 void block_cave_update(struct Moby *m) __asm__("FUN_L10_002dd650");

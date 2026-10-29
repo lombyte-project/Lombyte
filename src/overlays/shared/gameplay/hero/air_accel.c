@@ -14,9 +14,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/item_state.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Looks up the value of the current help record, or 0/0x54 in the special cases. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
@@ -180,9 +178,7 @@ void hero_frame_update(void) {
     update_hero_moby_probed_height_bounds();
     FUN_L00_00257024(hero.moby);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Per-frame update of the help/menu state: validates the cursor, then runs the update chain. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00228E08), where it is exact; names translated to the US level program. */
@@ -321,11 +317,9 @@ void update_hero_blink_and_gold_weapon_tint(void)
         && hero.items[0].moby != 0)
         update_item_tint_from_hero(hero.items[0].moby, hero.moby);
 }
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 extern void func_001F99D8_2cd48(void *, int) __asm__("FUN_001f9810");
 extern int func_L00_001F10E0_2cd48(float, void *, int, void *) __asm__("FUN_L00_001f0d60");

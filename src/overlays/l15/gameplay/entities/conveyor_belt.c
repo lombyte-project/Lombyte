@@ -8,9 +8,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/camera/follow_cam.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Updates a moby: initialises its vector, then applies an angle-based offset. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E87B0), where it is exact; names translated to the US level program. */
@@ -53,9 +51,7 @@ void conveyor_belt_update(struct Moby *moby) {
 #include "qcopy.h"
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002E92C8), where it is exact; names translated to the US level program. */
 
@@ -785,9 +781,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
     if (D_L15_0015F5C4 == 2)
         add_draw_callback(draw_quartu_cutscene_messages, moby);
 }
-#define NOT_SDA __attribute__((section(".data")))
 
-#define MACRO_ADDR __attribute__((section(".sdata")))
 
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECAA8), where it is exact; names translated to the US level program. */
 

@@ -7,9 +7,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
@@ -217,9 +215,7 @@ void help_desk_lady_update(L16WatchMoby *moby) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, watch_data->body, 0);
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, watch_data->head, 2);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* UpdateMoby: on the first tick scales two data floats by 0.25 into the moby and sets its state. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
@@ -239,9 +235,7 @@ void initialize_moby_rotation_scales(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4BD8), where it is exact; names translated to the US level program. */
 
@@ -257,9 +251,7 @@ void set_class_056b_collision_enabled(void *moby, int on) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -1052,9 +1044,7 @@ void grindrail_button_update(struct Moby *button_moby) {
         button_moby->glow_color = FUN_001fa6e0_u(glow_blend_factor, 0x80202080, 0x80202020);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Start the vendor moby's turn and mark it active. */
 /* Ported from rac1-decomp (src/overlays/l16/vendor_002A50F0.c: func_L16_002E6B48), where it is exact; names translated to the US level program. */
@@ -1205,9 +1195,7 @@ void chomper_update(struct Moby *chomper_moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -1741,11 +1729,9 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
     challenge_set_layout_param(100.0f);
     jet_game_state(0, 8);
 }
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -1786,9 +1772,7 @@ void update_two_region_trigger_latch(char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -1974,9 +1958,7 @@ void emit_path_walker_particle(unsigned char *source_moby, void *previous_positi
                            final_size, scale_game_frames(0x23));
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Start of a walker group: lists the group's mobys and spaces them along the path in random order. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9018), where it is exact; names translated to the US level program. */
@@ -2059,9 +2041,7 @@ void initialize_path_walker_group(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Waits one tick, then pushes two pairs of the player's points apart along their difference. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9278), where it is exact; names translated to the US level program. */
@@ -2109,9 +2089,7 @@ void update_paired_joint_particle_trails(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2504,9 +2482,7 @@ void update_target_reposition_cycle(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9F80), where it is exact; names translated to the US level program. */
 

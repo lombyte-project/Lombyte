@@ -173,9 +173,7 @@ void underwater_ring_update(struct Moby *moby) {
     }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002EC490), where it is exact; names translated to the US level program. */
 
@@ -194,9 +192,8 @@ void ripple_strips_moby_update(char *moby) {
         *(unsigned short *)(moby + 0x34) |= 1;
     }
 }
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 
-#define MACRO_ADDR __attribute__((section(".sdata")))
 
 /* Update for moby class 1428: a four-state trigger that spins and then deletes itself. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002ED168), where it is exact; names translated to the US level program. */

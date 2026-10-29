@@ -89,9 +89,7 @@ void apply_spatial_trigger_to_moby(int index, int trigger_arg, int inside) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Runs func_L05_002F62E8 for each entry of list i until an entry without the top bit set. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_002F6518), where it is exact; names translated to the US level program. */
@@ -374,9 +372,7 @@ void hoverboard_update(unsigned char *moby) {
 }
 
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -853,11 +849,9 @@ void blarg_gun_update(char *moby)
         break;
     }
 }
-#ifndef NOT_SDA
-#define NOT_SDA __attribute__((section(".data")))
+#ifndef
 #endif
-#ifndef MACRO_ADDR
-#define MACRO_ADDR __attribute__((section(".sdata")))
+#ifndef
 #endif
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L05_00319598");
 extern void initialize_taxi_stop_state(void *) __asm__("FUN_L05_00319208");
@@ -903,9 +897,7 @@ char *find_moby_in_owner_list_by_id(unsigned char *list_owner_moby, int id) {
 found:
     return (char *)&((M_9598 *)D_L05_0015FFD8_9598)[idx];
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031AB08), where it is exact; names translated to the US level program. */

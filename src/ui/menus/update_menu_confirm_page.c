@@ -2,7 +2,7 @@
 /* Confirm page update: pad bit 0x20 answers yes, 0x10 no; both go back. */
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
-#define NOT_SDA __attribute__((section(".data")))
+#include "sda.h"
 extern unsigned char D_0013A4E0[] NOT_SDA;
 int update_menu_confirm_page(void) __asm__("FUN_00221af0");
 
