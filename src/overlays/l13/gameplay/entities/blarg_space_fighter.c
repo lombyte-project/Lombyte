@@ -2894,7 +2894,7 @@ int advance_moby_along_selected_path(struct Moby *moby, char *moby_data, int pat
     return wrapped;
 }
 /* Picks the racer's direction along its path from where the hero is, eases its speed, then steps it; bit 1 of the result is set past a marked node. */
-extern char *D_L13_001B07B0_9408[] __asm__("D_L13_001B07B0");
+extern char *walker_paths[] __asm__("D_L13_001B07B0");
 extern float D_0015ED60_9408 __asm__("D_0015ED60");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_L13_002e9160_c(char *, char *, int, int) __asm__("FUN_L13_002e9160");
@@ -2902,7 +2902,7 @@ extern int FUN_L13_002e9160_c(char *, char *, int, int) __asm__("FUN_L13_002e916
 int update_moby_path_following_away_from_hero(struct Moby *moby, char *path_following_data, int path_slot_index, int aim) __asm__("FUN_L13_002e9408");
 
 int update_moby_path_following_away_from_hero(struct Moby *moby, char *path_following_data, int path_slot_index, int aim) {
-    char *path = D_L13_001B07B0_9408[*(int *)(&path_following_data[path_slot_index << 2] + 0xB0)];
+    char *path = walker_paths[*(int *)(&path_following_data[path_slot_index << 2] + 0xB0)];
     int result_flags = 0;
     float ahead[4];
     float behind[4];

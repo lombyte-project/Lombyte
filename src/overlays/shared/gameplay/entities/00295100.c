@@ -540,7 +540,7 @@ extern unsigned char D_0015EDB0_298de8 __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB0_298de8b __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB4_298de8 __asm__("D_0015EDB4");
 extern float D_L00_0015F5A0_298de8 __asm__("D_L00_0015F5A0");
-extern char D_L00_00166C80_298de8[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern char player_camera[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void sce_vu0_unit_matrix(void *) __asm__("FUN_00125218");
 extern void sce_vu0_rot_matrix_x(void *, void *, float) __asm__("FUN_00125360");
@@ -566,13 +566,13 @@ int apply_cutscene_camera_key(void) {
     if (D_0015EDB0_298de8)
         *(float *)(x + 0xB0) = unscaled_camera_value * D_L00_0015F59C;
     update_view_context();
-    camera_position = D_L00_00166C80_298de8 + 0x140;
+    camera_position = player_camera + 0x140;
     qcopy(camera_position, camera_key);
     sce_vu0_unit_matrix(camera_key_rotation_matrix);
     sce_vu0_rot_matrix_x(camera_key_rotation_matrix, camera_key_rotation_matrix, camera_key_values[0]);
     sce_vu0_rot_matrix_y(camera_key_rotation_matrix, camera_key_rotation_matrix, camera_key_values[1]);
     sceVu0RotMatrixZ(camera_key_rotation_matrix, camera_key_rotation_matrix, camera_key_values[2]);
-    camera_state = D_L00_00166C80_298de8;
+    camera_state = player_camera;
     *(float *)(camera_state + 0x350) = -camera_key_rotation_matrix[8];
     *(float *)(camera_state + 0x360) = -camera_key_rotation_matrix[0];
     *(float *)(camera_state + 0x370) = camera_key_rotation_matrix[4];

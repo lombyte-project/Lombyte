@@ -312,7 +312,7 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-extern char D_L00_00173F60_a[] __asm__("D_L00_00173E60");
+extern char collision_hit_point[] __asm__("D_L00_00173E60");
 
 /* Updates the follow camera: when `snap` is set, re-places the eye behind the followed target (backing off from walls found by
    ray traces, nudging it sideways when directly above or below), then rebuilds the camera basis looking at the target. */
@@ -344,11 +344,11 @@ void rebuild_follow_camera_pose(int snap) {
         fast_vec_scale(rise, *(char **)(target + 0xC0) + 0xE0, *(float *)(target + 0xB0));
         fast_vec_add(eye, target, rise);
         if (FUN_001efa68(eye, camera_moby + 0x30, mask, (int)player->moby, 0)) {
-            if (vector_distance(D_L00_00173F60_a, eye) < 0.001f) mask = 0x96;
+            if (vector_distance(collision_hit_point, eye) < 0.001f) mask = 0x96;
         }
         hero2 = &hero;
         if (FUN_001efa68(eye, camera_moby + 0x30, mask, (int)hero2->moby, 0)) {
-            subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
+            subtract_vector_xyz(delta, (float *)collision_hit_point, eye);
             length = fast_vec_length(delta);
             if (length == 0.0f) {
                 qcopy(camera_moby + 0x30, target);
@@ -377,7 +377,7 @@ void rebuild_follow_camera_pose(int snap) {
                     fast_vec_add(camera_moby + 0x30, start, delta);
                     hero3 = &hero;
                     if (FUN_001efa68(start, camera_moby + 0x30, mask, (int)hero3->moby, 0)) {
-                        subtract_vector_xyz(delta, (float *)D_L00_00173F60_a, eye);
+                        subtract_vector_xyz(delta, (float *)collision_hit_point, eye);
                         length = fast_vec_length(delta);
                         if (length == 0.0f) {
                             qcopy(camera_moby + 0x30, target);
@@ -1171,7 +1171,7 @@ typedef struct {
     u8 b20A4;
 } GS_2e7d20;
 extern GS_2e7d20 D_0013F350_2e7d20  __asm__("D_0013F350")__attribute__((section(".data")));
-extern u8 D_L00_00166E10_2e7d20[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
+extern u8 camera_view[] __asm__("D_L00_00166E10") __attribute__((section(".data")));
 extern u8 D_L00_00166DC0[] __attribute__((section(".data")));
 extern u8 *D_L00_00177F00_2e7d20[] __asm__("D_L00_00177F00") __attribute__((section(".data")));
 extern u8 *D_L00_001E75C0[] __attribute__((section(".data")));
@@ -1235,7 +1235,7 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
     f32 orbit_distance;
     u8 *restored_moby;
 
-    base = D_L00_00166E10_2e7d20;
+    base = camera_view;
     x = *(u8 **)(camera_moby + 0x70);
     orbit_state = x + 0x130;
     camera_collision_state = x + 0x1D0;

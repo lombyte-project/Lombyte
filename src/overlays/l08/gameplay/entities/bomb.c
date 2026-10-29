@@ -120,7 +120,7 @@ extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern char D_L08_001746D8_2B94B0[] __asm__("D_L08_00174658");
 extern int D_L08_001746D8_2B94B0i __asm__("D_L08_00174658") __attribute__((section(".data")));
 extern char D_L08_00174700_2B94B0[] __asm__("D_L08_00174680");
-extern s32 D_0013DF38_arr[] __asm__("D_0013DF38");
+extern s32 level_bolts[] __asm__("D_0013DF38");
 
 void update_bolt_pickup(Moby_2B94B0 *moby) __asm__("FUN_L08_002b82a0");
 
@@ -203,7 +203,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
         if (hit == 0) break;
         if (moby_data->target != 0) moby_data->target->fA = 0;
         current_bolt_count = current_bolt_count + moby_data->f20;
-        ((int *)D_0013DF38_arr)[D_0015ED84] = ((int *)D_0013DF38_arr)[D_0015ED84] + moby_data->f20;
+        ((int *)level_bolts)[D_0015ED84] = ((int *)level_bolts)[D_0015ED84] + moby_data->f20;
         allocate_voice_for_target_entry(0, 0, moby);
         func_001FFB38_2B94B0(2, 0x754E, initialize_bolt_counter_hud, update_bolt_counter_hud_animation_and_visibility,
                              draw_bolt_counter_hud_panel, &current_bolt_count, 0x98967F);

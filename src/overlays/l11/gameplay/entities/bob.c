@@ -533,7 +533,7 @@ struct PokPathPoint {
 };
 extern struct PokPathPoint *path_points_14b0 __asm__("D_L11_001600EC");
 extern int D_L11_0015FFD8;
-extern int D_001413D4_14b0 __asm__("D_001413D4") __attribute__((section(".data")));
+extern int camera_secondary_mode __asm__("D_001413D4") __attribute__((section(".data")));
 extern char resort_owner_completion_dialogue_pose[] __asm__("D_L11_0016D270");
 #include "rnc/overlay/l11/gameplay/entities/bob_globals.h"
 extern float resort_owner_gate_jump_target_local_z_offset_gp __asm__("D_L11_00161410") __attribute__((sda));
@@ -771,7 +771,7 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         }
         break;
     case RESORT_OWNER_CHECK_POST_PATH_DIALOGUE:
-        if (D_0014C050[moby_vars->unk118 + D_0015ED84 * 16] == 0xFF && D_001413D4_14b0 != 0x32 &&
+        if (D_0014C050[moby_vars->unk118 + D_0015ED84 * 16] == 0xFF && camera_secondary_mode != 0x32 &&
             update_npc_dialogue(moby, moby_vars->talk)) {
             begin_dialogue_camera_transition(moby, 2.5f);
             FUN_L11_002d2088_c(moby, 0xF);
@@ -1240,7 +1240,7 @@ void fred_pokitaru_update(struct Moby *moby) {
 #include "qcopy.h"
 
 extern float D_0013F3D8_lui __asm__("D_0013F3D8") __attribute__((section(".data")));          /* hero z */
-extern int D_0015ED84_2518 __asm__("D_0015ED84");
+extern int current_level_index __asm__("D_0015ED84");
 extern unsigned char D_0014C050_2518[] __asm__("D_0014C050");
 extern int D_0013CAE4_2518 __asm__("D_0013CAE4") __attribute__((section(".data")));
 extern int D_L11_0015F594 __asm__("D_L11_0015F594");
@@ -1301,7 +1301,7 @@ void teleporter_update(struct Moby *moby) {
             *(float *)(slots[i] + 0x48) =
                 fast_add_rotations(*(float *)(child_moby + 0x48), (float)i * 2.0943952f);
         }
-        if (*(int *)(data + 8) >= 0 && D_0014C050_2518[*(int *)(data + 8) + D_0015ED84_2518 * 16] != 0xFF) {
+        if (*(int *)(data + 8) >= 0 && D_0014C050_2518[*(int *)(data + 8) + current_level_index * 16] != 0xFF) {
             moby->visible = 0;
             moby->flags |= 1;
             moby->collision = 0;
@@ -1319,7 +1319,7 @@ void teleporter_update(struct Moby *moby) {
         if (*(int *)data == -1)
             break;
         if ((moby->flags & 1) && *(int *)(data + 8) >= 0 &&
-            D_0014C050_2518[*(int *)(data + 8) + D_0015ED84_2518 * 16] == 0xFF)
+            D_0014C050_2518[*(int *)(data + 8) + current_level_index * 16] == 0xFF)
             FUN_L11_002f3040_2518(moby);
         g = &hero;
         if (((char *)g->ground_moby) != moby)
@@ -1371,7 +1371,7 @@ void teleporter_update(struct Moby *moby) {
             char *td;
             float destination_position[4];
             if (*(int *)(data + 4) != -1 &&
-                D_0014C050_2518[*(int *)(data + 0xC) + D_0015ED84_2518 * 16] == 0xFF)
+                D_0014C050_2518[*(int *)(data + 0xC) + current_level_index * 16] == 0xFF)
                 destination_moby = D_L11_0015FFD8_2518 + (*(int *)(data + 4) << 8);
             td = *(char **)(destination_moby + 0x78);
             qcopy(destination_position, destination_moby + 0x10);

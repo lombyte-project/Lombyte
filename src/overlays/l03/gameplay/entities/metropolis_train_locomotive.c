@@ -491,14 +491,14 @@ void update_metropolis_train_motion(char *moby) __asm__("FUN_L03_00292890");
     {                                                                                                           \
         int idx_ = (v);                                                                                         \
         if (idx_ != -1) {                                                                                       \
-            unsigned char *e_ = (unsigned char *)D_0013E550_292e98 + idx_ * 0x70;                               \
+            unsigned char *e_ = (unsigned char *)voice_pool + idx_ * 0x70;                               \
             if (*(char **)(e_ + 0x88) == moby && e_[0x74]) {                                                    \
                 release_voice_slot(idx_);                                                                       \
             }                                                                                                   \
         }                                                                                                       \
     }
 
-extern char D_0013E550_292e98[] __asm__("D_0013E550");
+extern char voice_pool[] __asm__("D_0013E550");
 
 /* Kerwan train engine: waits for the hero to board (clip volume 0xB4), then runs the ride: accelerates
  * along its path pulling the cars, keeps the turret cars aimed at the hero, throws him off if he falls

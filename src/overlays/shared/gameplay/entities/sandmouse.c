@@ -19,8 +19,8 @@ extern void interpolate_vector(void *, void *, void *, f32) __asm__("FUN_L00_002
 extern s32 allocate_colored_effect_slot(void *, f32, f32, f32, f32, f32) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern char D_L01_00167240_b618[] __asm__("D_L01_00167240");
-extern char *D_L01_0015FFD8_b618 __asm__("D_L01_0015FFD8");
+extern char camera_pos[] __asm__("D_L01_00167240");
+extern char *ents __asm__("D_L01_0015FFD8");
 
 extern char point_light_slot_parameters[] __asm__("D_L01_00180740");
 void update_moby_interpolated_point_light(u8 *moby) __asm__("FUN_L01_0030b618");
@@ -71,14 +71,14 @@ void update_moby_interpolated_point_light(u8 *moby) {
         return;
     }
 
-    elapsed = vector_distance(moby + 0x10, D_L01_00167240_b618);
+    elapsed = vector_distance(moby + 0x10, camera_pos);
     active = elapsed < *(f32 *)(effect_vars + 0x5c) ? 1.0f : 0.0f;
     if (active != 0.0f && *(s32 *)(effect_vars + 0x80) != -1) {
-        if (!is_point_inside_clip_volume(D_L01_00167240_b618, *(s32 *)(effect_vars + 0x80)))
+        if (!is_point_inside_clip_volume(camera_pos, *(s32 *)(effect_vars + 0x80)))
             active = 0.0f;
     }
     i = *(s32 *)(effect_vars + 0x84);
-    if (i != -1 && *(s8 *)((D_L01_0015FFD8_b618 + 0x20) + i * 0x100) < 0) {
+    if (i != -1 && *(s8 *)((ents + 0x20) + i * 0x100) < 0) {
         slot = *(s32 *)(effect_vars + 0x68);
         if (slot != -1)
             release_point_light_slot(slot);

@@ -88,7 +88,7 @@ s32 pick_idle_fidget(s32 *index) {
     return 0;
 }
 extern u8 D_0013F350_002293a8[] __asm__("D_0013F350");
-extern s32 D_0013CAE0_002293a8 __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern s32 pad_held __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern s32 D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 FUN_001f96f8_002293a8(s32) __asm__("FUN_001f96f8");
@@ -109,7 +109,7 @@ void update_hero_locomotion_state(void) {
         return;
     }
     FUN_L00_002118c8_002293a8(0, 1.0f);
-    if (D_0013CAE0_002293a8 & 0xA) {
+    if (pad_held & 0xA) {
         hero_set_state(HERO_STATE_CROUCH, 0);
         FUN_L00_002323b8_002293a8(0xD, 2, -2.0f);
         hero_queue_sequence(3, 0x12);

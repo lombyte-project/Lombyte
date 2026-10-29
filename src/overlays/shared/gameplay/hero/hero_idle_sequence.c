@@ -2885,7 +2885,7 @@ void update_hero_idle_random_rotation_targets(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B310), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_001ABD80[] __asm__("D_L00_001ABA00");
+extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char D_L00_0017A780[] __asm__("D_L00_0017A680");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
@@ -2922,7 +2922,7 @@ void update_hero_target_tracking(void) {
         bestDist = 100000000.0f;
         bestPri = 0.0f;
         best = 0;
-        for (i = 0; (candidate_moby = D_L00_001ABD80[i]) != 0; i++) {
+        for (i = 0; (candidate_moby = active_mobies[i]) != 0; i++) {
             info = (char *)suck_get_aim_height(candidate_moby);
             if (info != 0) {
                 float candidate_distance, candidate_yaw_difference, sc, pri;

@@ -1156,7 +1156,7 @@ int can_sentrybot_advance_patrol(void *input_moby) {
     return 1;
 }
 /* Wakes every linked switch that can see this moby, or rearms the timer when there is no list. */
-extern int D_001413D4_a0[] __asm__("D_001413D4");
+extern int camera_secondary_mode[] __asm__("D_001413D4");
 extern short *D_L15_001ABE40_a0[] __asm__("D_L15_001ABE40");
 extern int D_L15_0015FFD8_a0 __asm__("D_L15_0015FFD8");
 extern int FUN_001f96f8_a0(int) __asm__("FUN_001f96f8");
@@ -1175,7 +1175,7 @@ void alert_visible_group_sentrybots(void *mp) {
     short *group_moby_entry;
     int listed_moby_byte_offset;
     char *listed_moby;
-    if (D_001413D4_a0[0] == 0x65) {
+    if (camera_secondary_mode[0] == 0x65) {
         *(short *)(moby_data + 0x156) = 0;
         return;
     }

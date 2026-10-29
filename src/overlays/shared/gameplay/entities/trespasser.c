@@ -539,7 +539,7 @@ typedef union {
     f32 f[4];
     s32 i[4];
 } V2c7320;
-extern s32 D_0013CAE0_2c7320[] __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern s32 pad_held[] __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern f32 D_0015ED6C_2c7320 __asm__("D_0015ED6C");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void sub_2c7320(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -584,7 +584,7 @@ void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position, V2c7320 *ta
     out[1] = fast_sin(launch_heading) * horizontal_speed;
     *(s32 *)&out[2] = 0;
     out[2] = fn_2c7320(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
-    if (D_0013CAE0_2c7320[0] & 5) {
+    if (pad_held[0] & 5) {
         k = 3.5f / horizontal_speed;
     } else {
         k = 2.5f / horizontal_speed;
@@ -673,7 +673,7 @@ typedef struct {
 } S13F350_2c82f0;
 extern S13F350_2c82f0 D_0013F350_002c82f0 __asm__("D_0013F350");
 extern float D_0015ED70_002c82f0 __asm__("D_0015ED70");
-extern char D_L00_00173E60_002c82f0[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
+extern char collision_hit_point[] __asm__("D_L00_00173E60") __attribute__((section(".data")));
 void *FUN_L00_002603d0_002c82f0(void *) __asm__("FUN_L00_002603d0");
 void FUN_001f9a10_002c82f0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a68_002c82f0(void *, void *, float) __asm__("FUN_001f9a68");
@@ -701,7 +701,7 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released
     collision_start.q = ((Vec4_2c82f0 *)(collision_reference_moby + 0x10))->q;
     collision_start.f[2] = release_position->f[2];
     if (FUN_001efa68_002c82f0(&collision_start, release_position, 0, collision_reference_moby, 0)) {
-        char *collision_hit_cursor = D_L00_00173E60_002c82f0;
+        char *collision_hit_cursor = collision_hit_point;
         float x;
         qcopy(released_moby_position, collision_hit_cursor);
         x = D_0015ED70_002c82f0;
@@ -1771,7 +1771,7 @@ void bomb_glove_update(struct Moby *moby) {
         vars->held = FUN_L00_002ace70(moby, &vars->grip);
 }
 extern u8 D_0013E539;
-extern s32 D_L00_0015FFD8_2c35c0 __asm__("D_L00_0015FFD8");
+extern s32 moby_table __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
 extern f32 FUN_002132a8_2c35c0(f32, f32) __asm__("FUN_002132a8");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
@@ -1816,7 +1816,7 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
             candidate = 0;
             best_value = 0;
             for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
-                u8 *entry = (u8 *)(D_L00_0015FFD8_2c35c0 + (D_L00_001B0830_lui[i] << 8));
+                u8 *entry = (u8 *)(moby_table + (D_L00_001B0830_lui[i] << 8));
                 if (entry != 0 &&
                     (*(s16 *)(entry + 0xa6) == 0xcb || *(s16 *)(entry + 0xa6) == 0x76c) &&
                     entry[0x20] < 5) {

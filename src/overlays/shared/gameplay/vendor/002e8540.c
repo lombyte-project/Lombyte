@@ -5,10 +5,10 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
-extern char *D_L00_00166E00_002e8490 __asm__("D_L00_00166E00");
+extern char *current_follow_cam __asm__("D_L00_00166E00");
 /* Stores f at +0x1CC of D_L00_00166E00+0x70 while the short at 0x86 is 0. */
 void FUN_L00_002e8540(float stored_value) {
-    char *camera_record = D_L00_00166E00_002e8490;
+    char *camera_record = current_follow_cam;
     if (*(short *)(camera_record + 0x86) == 0) {
         *(float *)(*(char **)(camera_record + 0x70) + 0x1cc) = stored_value;
     }

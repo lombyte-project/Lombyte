@@ -339,7 +339,7 @@ int D_L10_00161388 = 1;
 extern char *D_L10_0015FFD8_98b68 __asm__("D_L10_0015FFD8");
 extern u8 D_0014C050_98b68[] __asm__("D_0014C050");
 extern LevelState_98b68 D_L10_001BB6B0_98b68 __asm__("D_L10_001BB6B0");
-extern int D_0014C190_98b68[][64] __asm__("D_0014C190");
+extern int level_moby_killed[][64] __asm__("D_0014C190");
 extern int D_L10_001BA950[];
 extern u8 D_001413F4_98b68[] __asm__("D_001413F4");
 extern char *D_L10_001600EC_98b68 __asm__("D_L10_001600EC");
@@ -382,7 +382,7 @@ void update_hero_relocation_trigger(struct Moby *moby) {
         }
     }
     if (D_L10_001BB6B0_98b68.collected[(short)moby->save_id] != 0 ||
-        ((D_0014C190_98b68[current_level_index][(short)moby->save_id >> 5] >> (moby->save_id & 31)) & 1) != 0) {
+        ((level_moby_killed[current_level_index][(short)moby->save_id >> 5] >> (moby->save_id & 31)) & 1) != 0) {
         if (D_0013D4C6[0] != 0) {
             ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 1;
             ((struct Moby *)((vars->target << 8) + (int)D_L10_0015FFD8_98b68))->flags |= 2;
@@ -405,7 +405,7 @@ void update_hero_relocation_trigger(struct Moby *moby) {
             }
         }
     }
-    D_0014C190_98b68[current_level_index][(short)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
+    level_moby_killed[current_level_index][(short)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
     D_L10_001BA950[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 31);
     if (vars->spot == -1 || vars->target == -1) {
         return;

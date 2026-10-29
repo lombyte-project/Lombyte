@@ -5,7 +5,7 @@
 
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern char D_00187080[];
-extern char D_0018CB20_c[] __asm__("D_0018CB20");
+extern char render_sequence[] __asm__("D_0018CB20");
 extern float view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
 extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") MACRO_ADDR;
 extern void sceVu0UnitMatrix(float *);
@@ -16,7 +16,7 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 unsigned char build_object_rotation_matrix(void) __asm__("FUN_0022de10");
 
 unsigned char build_object_rotation_matrix(void) {
-    char *gameplay_state = D_0018CB20_c;
+    char *gameplay_state = render_sequence;
     char *key = *(char **)(gameplay_state + 0x54) + *(int *)(gameplay_state + 0x38) * 32;
     unsigned char flag = key[0xC];
     float *keyframe_angles = (float *)(key + 0x10);

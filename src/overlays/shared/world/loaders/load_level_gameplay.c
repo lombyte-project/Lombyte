@@ -506,7 +506,7 @@ extern void load(void *, int, int) __asm__("FUN_00216828");
 extern GameState137B80 D_00137B80;
 
 char *load_level_gameplay(int arg0) __asm__("FUN_L00_00241940");
-extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
+extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 extern unsigned char l00_moby_load_exclusion_flags_by_uid[] __asm__("D_L00_001BB684");
 extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
@@ -987,7 +987,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                         }
                     } else {
                         if (flags & 1) {
-                            if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
+                            if ((level_moby_killed[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                                 adjusted_bolt_count = (bolts + 1) / 2;
                             }
                         } else {
@@ -999,7 +999,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                         skip = 1;
                     }
                 } else if ((flags & 0xC) == 4) {
-                    if ((D_0014C190_257218[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
+                    if ((level_moby_killed[D_0015ED84][uid >> 5] >> (uid & 0x1F)) & 1) {
                         skip = 1;
                     }
                 }

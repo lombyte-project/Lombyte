@@ -6,7 +6,7 @@
 #include "qcopy.h"
 #include "qzero.h"
 
-extern char *D_L00_0015FFD8_25fcb8 __asm__("D_L13_0015FFD8");
+extern char *moby_base __asm__("D_L13_0015FFD8");
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
 extern short D_L13_001B0B30[] __attribute__((section(".data")));
@@ -30,7 +30,7 @@ int select_robosquawker_target(char *source_object, char *selection_output, floa
         selection_status = 2;
     }
     for (i = 1; i <= D_L13_001B0B30[0]; i++) {
-        candidate_object = D_L00_0015FFD8_25fcb8 + (D_L13_001B0B30[i] << 8);
+        candidate_object = moby_base + (D_L13_001B0B30[i] << 8);
         if (candidate_object == 0)
             continue;
         if (*(short *)(candidate_object + 0xA6) != 0xCB && *(short *)(candidate_object + 0xA6) != 0x76C)

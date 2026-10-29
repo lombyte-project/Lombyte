@@ -99,7 +99,7 @@ void draw_vendor_inset_quads(char *vertex_batch) {
 typedef struct {
     int a, b, c;
 } I3_29fcd0;
-extern long D_0015EED0_29fcd0 __asm__("D_0015EED0");
+extern long capture_texture_tex0 __asm__("D_0015EED0");
 void FUN_0020cd48_29fcd0(void *, int, void *, void *) __asm__("FUN_0020cd48");
 void FUN_001f9a28_29fcd0(void *, void *, void *) __asm__("FUN_001f9a28");
 float FUN_001f9af0_29fcd0(void *) __asm__("FUN_001f9af0");
@@ -160,7 +160,7 @@ void draw_vendor_purchase_panel(void *moby) {
     FUN_001fb740_29fcd0(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
     FUN_0020d330_29fcd0(moby, 1);
-    FUN_001f5450_29fcd0(panel_screen_x, panel_screen_y, x, y, 0, 0, x, y, 0x80808080L, D_0015EED0_29fcd0);
+    FUN_001f5450_29fcd0(panel_screen_x, panel_screen_y, x, y, 0, 0, x, y, 0x80808080L, capture_texture_tex0);
 }
 /* Draws the four quads of the hologram cone, scrolling the texture coordinates. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A11E8), where it is exact; names translated to the US level program. */

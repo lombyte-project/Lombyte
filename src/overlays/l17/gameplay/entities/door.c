@@ -1542,7 +1542,7 @@ typedef struct {
     int flags;
 } ShipHit;
 
-extern char D_0013E550_ed[] __asm__("D_0013E550");
+extern char voice_pool[] __asm__("D_0013E550");
 extern unsigned char D_0014C050_ed[][16] __asm__("D_0014C050");
 extern char D_0013CAE4_ed[] __asm__("D_0013CAE4");
 typedef struct {
@@ -1808,7 +1808,7 @@ void fighter_jet_update(ShipMoby *moby) {
         case FIGHTER_JET_STATE_PILOTED_FLIGHT:
             force_help_message(6, 0);
             D_L17_0015F608 = 2;
-            e = D_0013E550_ed + ship_vars->voice * 0x70;
+            e = voice_pool + ship_vars->voice * 0x70;
             if (*(ShipMoby **)(e + 0x88) != moby || *(unsigned char *)(e + 0x74) == 0) {
                 ship_vars->voice = -1;
                 ship_vars->voice = allocate_voice_ed(0, 4, moby);
@@ -1846,7 +1846,7 @@ void fighter_jet_update(ShipMoby *moby) {
             jet_game_state(0, 5);
             idx = ship_vars->voice;
             if (idx != -1) {
-                char *e = D_0013E550_ed + idx * 0x70;
+                char *e = voice_pool + idx * 0x70;
                 if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(idx);
                 }
@@ -1854,7 +1854,7 @@ void fighter_jet_update(ShipMoby *moby) {
             ship_vars->voice = -1;
             idx = ship_vars->voice2;
             if (idx != -1) {
-                char *e = D_0013E550_ed + idx * 0x70;
+                char *e = voice_pool + idx * 0x70;
                 if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(idx);
                 }
@@ -1880,7 +1880,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 refresh_moby_spatial_bounds_from_basis(moby);
                 idx = ship_vars->voice;
                 if (idx != -1) {
-                    char *e = D_0013E550_ed + idx * 0x70;
+                    char *e = voice_pool + idx * 0x70;
                     if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }
@@ -1888,7 +1888,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 ship_vars->voice = -1;
                 idx = ship_vars->voice2;
                 if (idx != -1) {
-                    char *e = D_0013E550_ed + idx * 0x70;
+                    char *e = voice_pool + idx * 0x70;
                     if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }
@@ -1939,7 +1939,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 }
                 idx = ship_vars->voice;
                 if (idx != -1) {
-                    char *e = D_0013E550_ed + idx * 0x70;
+                    char *e = voice_pool + idx * 0x70;
                     if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }
@@ -1947,7 +1947,7 @@ void fighter_jet_update(ShipMoby *moby) {
                 ship_vars->voice = -1;
                 idx = ship_vars->voice2;
                 if (idx != -1) {
-                    char *e = D_0013E550_ed + idx * 0x70;
+                    char *e = voice_pool + idx * 0x70;
                     if (*(ShipMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                         release_voice_slot(idx);
                     }

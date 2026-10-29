@@ -41,7 +41,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 #define F(p, o) (*(float *)((p) + (o)))
 
-extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
+extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 void elevator_update(unsigned char *moby) __asm__("FUN_L09_003033a0");
 void elevator_update(unsigned char *moby) {
     enum {
@@ -61,9 +61,9 @@ void elevator_update(unsigned char *moby) {
         unsigned short id;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xC0)) ||
             l09_moby_collection_state.collected[(short)(id = *(unsigned short *)(moby + 0xB2))] != 0 ||
-            (D_0014C190_257218[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
+            (level_moby_killed[current_level_index][(short)id >> 5] >> (id & 0x1F)) & 1) {
             if (*(int *)(data + 0xC0) != -1) {
-                D_0014C190_257218[current_level_index][(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
+                level_moby_killed[current_level_index][(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
                     1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
                 elevator_activation_save_id_bits[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
                     1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);

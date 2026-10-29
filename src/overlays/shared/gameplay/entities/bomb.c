@@ -1095,7 +1095,7 @@ typedef int w128 __attribute__((mode(TI)));
 
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern char *func_0020D348_m(int);
-extern char D_L00_00173E60_c[] __asm__("D_L00_00173E60");
+extern char collision_hit_point[] __asm__("D_L00_00173E60");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
@@ -1188,7 +1188,7 @@ char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, fl
         result = collision_line(probe, start, 0, (int)owner, 0);
         if (result != 0) {
             build_spherical_offset(direction, D_0015ED6C * 40.0f, *(float *)(moby + 0x48), -*(float *)(moby + 0x44));
-            qcopy(moby + 0x10, D_L00_00173E60_c);
+            qcopy(moby + 0x10, collision_hit_point);
             start = scaled;
             sparks = 4;
             do {

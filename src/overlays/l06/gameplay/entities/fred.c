@@ -6767,7 +6767,7 @@ extern char *D_L06_0015FFD8_302578 __asm__("D_L06_0015FFD8");
 extern int D_L06_00179B90[] __asm__("D_L06_00179B90");
 extern char *D_L06_001B0C30_302578[] __asm__("D_L06_001B0C30");
 extern char D_0013D3AC_302578[] __asm__("D_0013D3A7") __attribute__((section(".data")));
-extern char D_0013D388_302578[] __asm__("D_0013D388") __attribute__((section(".data")));
+extern char alternate_item_available[] __asm__("D_0013D388") __attribute__((section(".data")));
 extern char D_0013A4E0_302578[] __asm__("D_0013A4E0") __attribute__((section(".data")));
 void update_shuttle_route_selection_and_prompt(char *shuttle_moby) __asm__("FUN_L06_00302fd8");
 
@@ -6944,8 +6944,8 @@ void shuttle_update(struct Moby *moby) {
                 qcopy(((float *)&moby->rot), (char *)(ofs + base + 0x70));
                 shuttle_vars->sel = 1;
                 D_L06_0015FDF8 = 1;
-                if (((Flags_302578 *)(D_0013D388_302578))->f21 == 0) {
-                    ((Flags_302578 *)(D_0013D388_302578))->f21 = 1;
+                if (((Flags_302578 *)(alternate_item_available))->f21 == 0) {
+                    ((Flags_302578 *)(alternate_item_available))->f21 = 1;
                 }
             }
         }
@@ -6986,8 +6986,8 @@ void shuttle_update(struct Moby *moby) {
             moby->scale = moby->pclass->scale;
             if (shuttle_vars->sel == 1) {
                 D_L06_0015FDF8 = 1;
-                if (((Flags_302578 *)(D_0013D388_302578))->f21 == 0) {
-                    ((Flags_302578 *)(D_0013D388_302578))->f21 = 1;
+                if (((Flags_302578 *)(alternate_item_available))->f21 == 0) {
+                    ((Flags_302578 *)(alternate_item_available))->f21 = 1;
                 }
             } else {
                 D_L06_0015FDF8 = 0;

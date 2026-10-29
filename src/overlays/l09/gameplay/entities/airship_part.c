@@ -66,7 +66,7 @@ extern float FUN_001f9dc8_2c26c8(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2c26c8(float) __asm__("FUN_001f9de0");
 extern float FUN_001f96b0_2c26c8(float) __asm__("FUN_001f96b0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern char D_0013D388_2c26c8[] __asm__("D_0013D388");
+extern char alternate_item_available[] __asm__("D_0013D388");
 
 extern char airship_part_missing_parent_format[] __asm__("D_L09_002082A0");
 extern Pair_2c26c8 D_L09_001613D0 __attribute__((section(".data")));
@@ -116,7 +116,7 @@ void update_airship_part(struct Moby *moby) {
         float joint_offset_scale;
 
         FUN_L00_0024f7c8_2c26c8(moby, 0, point_offset_and_effect_scratch);
-        if (part_vars->f68 != -1 && ((Flags_2c26c8 *)(D_0013D388_2c26c8 + part_vars->f68))->b39 != 0) {
+        if (part_vars->f68 != -1 && ((Flags_2c26c8 *)(alternate_item_available + part_vars->f68))->b39 != 0) {
             FUN_0020c828_2c26c8(moby);
             return;
         }
@@ -191,9 +191,9 @@ void update_airship_part(struct Moby *moby) {
     }
     case AIRSHIP_PART_STATE_BEGIN_BREAKUP: {
         FUN_001f9770_2c26c8(&part_vars->h2A);
-        ((Flags_2c26c8 *)(D_0013D388_2c26c8))->b38 = 1;
+        ((Flags_2c26c8 *)(alternate_item_available))->b38 = 1;
         if (part_vars->f68 != -1) {
-            ((Flags_2c26c8 *)(D_0013D388_2c26c8 + part_vars->f68))->b39 = 1;
+            ((Flags_2c26c8 *)(alternate_item_available + part_vars->f68))->b39 = 1;
         }
         FUN_L00_00257470_2c26c8(moby, 0x200, -1);
         FUN_L00_0025f090_2c26c8(moby, ((f32 *)&moby->pos), -1, 4.0f, 13.0f);

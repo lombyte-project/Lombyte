@@ -362,7 +362,7 @@ void prepare_background_ship_2_joint_draw_data(char *moby) {
 extern float background_ship_2_path_travel_speed_gp __asm__("D_L02_00161FC0") __attribute__((sda));
 extern char background_ship_2_missing_path_message[] __asm__("D_L02_001FADB0");
 extern char background_ship_2_empty_path_message[] __asm__("D_L02_001FADD0");
-extern float D_0015ED60_f __asm__("D_0015ED60");
+extern float frame_scale __asm__("D_0015ED60");
 extern float background_ship_2_color_phase_rate_degrees_gp __asm__("D_L02_00161FC4") __attribute__((sda));
 extern int background_ship_2_color_tween_start_gp __asm__("D_L02_00161FC8") __attribute__((sda));
 extern int background_ship_2_color_tween_end_gp __asm__("D_L02_00161FCC") __attribute__((sda));
@@ -493,8 +493,8 @@ void background_ship_2_update(char *moby) {
             }
         }
         func_0022ED80_r(0, 0, (int)moby);
-        fast_vec_scale(tv, moby + 0xC0, background_ship_2_removal_effect_vector_scale_gp * D_0015ED60_f);
-        tv[2] = tv[2] + background_ship_2_removal_effect_vector_z_bias_gp * D_0015ED60_f;
+        fast_vec_scale(tv, moby + 0xC0, background_ship_2_removal_effect_vector_scale_gp * frame_scale);
+        tv[2] = tv[2] + background_ship_2_removal_effect_vector_z_bias_gp * frame_scale;
         first_effect_frame_count = scale_game_frames(90);
         FUN_L00_00263fd8(moby, 0x5F6, (float *)(moby + 0x10), (void *)(moby + 0x40), first_effect_frame_count, 0, frame_time_sq * 12.0f, tv, &D_L02_0015F580, &D_L02_0015F580);
         second_effect_frame_count = scale_game_frames(90);

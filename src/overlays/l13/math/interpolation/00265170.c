@@ -23,7 +23,7 @@ void jet_group_flag(int id, int state) {
         } while ((unsigned long)D_L13_0015FFE0 >= (unsigned long)moby);
     }
 }
-extern int D_L13_0015FFD8_d __asm__("D_L13_0015FFD8");
+extern int moby_base __asm__("D_L13_0015FFD8");
 extern int D_L13_0015FFE0_d __asm__("D_L13_0015FFE0");
 /* 0x002651c8, 268 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
@@ -32,7 +32,7 @@ extern int D_L13_0015FFE0_d __asm__("D_L13_0015FFE0");
 void jet_group_switch(short *ids, int a, int b, int c) __asm__("FUN_L13_002651c8");
 void jet_group_switch(short *ids, int clear_flag_bit_1, int clear_flag_bit_0, int copy_data_pointer) {
     char *moby;
-    for (moby = D_L13_0015FFD8_d; moby <= D_L13_0015FFE0_d; moby += 0x100) {
+    for (moby = moby_base; moby <= D_L13_0015FFE0_d; moby += 0x100) {
         int id_index;
         for (id_index = 0; ids[id_index] != 0 && ids[id_index] < 0x800 && id_index < 0xE0; id_index++) {
             if (*(short *)(moby + 0xA6) == ids[id_index] && moby[0x20] >= 0) {

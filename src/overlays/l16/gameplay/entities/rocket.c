@@ -986,7 +986,7 @@ extern int func_0022ED80_cae18_c9a50(int, int, void *) __asm__("FUN_0022da68");
 extern int *D_L16_001ABFC0_c9a50[] __asm__("D_L16_001ABCC0");
 extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8");
 extern char D_L16_001671C0[];
-extern char D_0013E633_c9a50[] __asm__("D_0013E550");
+extern char voice_pool[] __asm__("D_0013E550");
 void update_conveyor_group_voice(struct Moby *moby) __asm__("FUN_L16_002c9a50");
 
 void update_conveyor_group_voice(struct Moby *moby) {
@@ -1012,13 +1012,13 @@ void update_conveyor_group_voice(struct Moby *moby) {
         char *slot;
         if (voice_slot_index >= 0) {
             char *target;
-            slot = D_0013E633_c9a50 + voice_slot_index * 0x70;
+            slot = voice_pool + voice_slot_index * 0x70;
             target = *(char **)(slot + 0x88);
             if (target && *(short *)(target + 0xA6) == 0x1D7) {
                 func_L00_001FF4B0_c9a50(voice_position_offset, nearest + 0xE0, 2.5f);
-                func_001F9BD8_c9a50(D_0013E633_c9a50 + 0x90 + *(int *)(moby_data + 0x74) * 0x70, voice_position_offset,
+                func_001F9BD8_c9a50(voice_pool + 0x90 + *(int *)(moby_data + 0x74) * 0x70, voice_position_offset,
                                     nearest + 0x10);
-                *(char **)(D_0013E633_c9a50 + 0x88 + *(int *)(moby_data + 0x74) * 0x70) = nearest;
+                *(char **)(voice_pool + 0x88 + *(int *)(moby_data + 0x74) * 0x70) = nearest;
                 return;
             }
         }
@@ -1026,7 +1026,7 @@ void update_conveyor_group_voice(struct Moby *moby) {
         *(int *)(moby_data + 0x74) = voice_slot_index;
         if (voice_slot_index >= 0) {
             func_L00_001FF4B0_c9a50(voice_position_offset, &moby->rot_row2, 2.5f);
-            func_001F9BD8_c9a50(D_0013E633_c9a50 + 0x90 + *(int *)(moby_data + 0x74) * 0x70, voice_position_offset, &moby->pos);
+            func_001F9BD8_c9a50(voice_pool + 0x90 + *(int *)(moby_data + 0x74) * 0x70, voice_position_offset, &moby->pos);
         }
     }
 }

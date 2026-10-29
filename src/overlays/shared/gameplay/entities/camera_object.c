@@ -239,7 +239,7 @@ typedef struct {
     char *c;
 } C_2a4e48;
 extern C_2a4e48 D_166C80_2a4e48 __asm__("D_L00_00166C80") __attribute__((section(".data")));
-extern float D_0015ED6C_2a4e48 __asm__("D_0015ED6C");
+extern float frame_time __asm__("D_0015ED6C");
 
 void camera_object_update(char *o) __asm__("FUN_L00_002a4e48");
 void camera_object_update(char *camera_object) {
@@ -263,7 +263,7 @@ void camera_object_update(char *camera_object) {
         if (absolute_float(dot_product_or_threshold) < 2.5f) {
             dot_product_or_threshold = 0.1f;
             if (fast_vec_length(difference_vector) < dot_product_or_threshold || fast_difference_between_rotations(P->f98, C->f158) < 2.3561945f ||
-                P->f164 < D_0015ED6C_2a4e48 * dot_product_or_threshold) {
+                P->f164 < frame_time * dot_product_or_threshold) {
                 *(float *)(camera_object + 0x18) = 15.0f;
                 *(float *)(camera_object + 0x14) = 15.0f;
                 *(float *)(camera_object + 0x10) = 15.0f;

@@ -258,7 +258,7 @@ typedef struct {
 extern float D_0015ED6C;
 extern struct Moby *D_L02_0015FFD8_e50 __asm__("D_L02_0015FFD8") __attribute__((section(".sdata")));
 extern int D_L02_0015F5CC_e50 __asm__("D_L02_0015F5CC");
-extern int D_001413D4_e50 __asm__("D_001413D4") __attribute__((section(".data")));
+extern int camera_secondary_mode __asm__("D_001413D4") __attribute__((section(".data")));
 extern int *D_L02_001B0AB0_e50[] __asm__("D_L02_001B0AB0");
 extern char D_L02_001673C0_e50[] __asm__("D_L02_001673C0");
 extern char sand_shark_missing_path_message_format[] __asm__("D_L02_001FA8A0");
@@ -425,7 +425,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     case SAND_SHARK_WAIT_FOR_LINKED_MOBY_BEFORE_INITIALIZE:
-        if (((struct Moby *)((char *)D_L02_0015FFD8_e50 + (vars->unk258 << 8)))->state >= 5 && D_001413D4_e50 != 0x72) {
+        if (((struct Moby *)((char *)D_L02_0015FFD8_e50 + (vars->unk258 << 8)))->state >= 5 && camera_secondary_mode != 0x72) {
             moby->flags = (moby->flags & 0xFFBE) | 0x1000;
             moby->collision = moby->pclass->collision;
             vars->unk258 = -1;
@@ -751,8 +751,8 @@ void sand_shark_update(struct Moby *moby) {
                 vars->unk274 = -1;
             }
         } else {
-            extern float D_0015ED6C_e50s __asm__("D_0015ED6C") __attribute__((sda));
-            FUN_001f9bf8_e50(&particle_position_or_forward_step, &moby->rot_row0, D_0015ED6C_e50s * 0.5f);
+            extern float frame_time __asm__("D_0015ED6C") __attribute__((sda));
+            FUN_001f9bf8_e50(&particle_position_or_forward_step, &moby->rot_row0, frame_time * 0.5f);
             fast_vec_add(&moby->pos, &moby->pos, &particle_position_or_forward_step);
         }
         break;

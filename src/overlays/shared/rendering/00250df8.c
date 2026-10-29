@@ -70,7 +70,7 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
     if (FUN_00213260(5) == 0) drops = 2;
     return drops;
 }
-extern int D_0015ED84_257470 __asm__("D_0015ED84");
+extern int current_level_index __asm__("D_0015ED84");
 extern int D_0015ED84_257470b __asm__("D_0015ED84");
 extern unsigned char D_0014C050_257470[][16] __asm__("D_0014C050")
     __attribute__((section(".data")));
@@ -90,7 +90,7 @@ extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_
 
 extern unsigned char D_L00_001E8F00[] __attribute__((section(".data")));
 extern unsigned char D_L00_001E8F28[] __attribute__((section(".data")));
-extern s32 D_0014C190_257218[][64] __asm__("D_0014C190") __attribute__((section(".data")));
+extern s32 level_moby_killed[][64] __asm__("D_0014C190") __attribute__((section(".data")));
 extern int D_L00_001BA4D0_lui[] __asm__("D_L00_001BA4D0") __attribute__((section(".data")));
 extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
@@ -114,8 +114,8 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     if (*(short *)(moby + 0xB2) < 0) {
         return;
     }
-    lvl = D_0015ED84_257470;
-    D_0014C190_257218[lvl][*(short *)(moby + 0xB2) >> 5] |= 1
+    lvl = current_level_index;
+    level_moby_killed[lvl][*(short *)(moby + 0xB2) >> 5] |= 1
                                                          << (*(unsigned short *)(moby + 0xB2) & 0x1F);
     D_L00_001BA4D0_lui[*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
     D_L00_001BA5D0_257470.a[*(short *)(moby + 0xB2)] = moby[0xB0] + 2;

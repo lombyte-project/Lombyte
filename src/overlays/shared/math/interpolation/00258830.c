@@ -17,7 +17,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_L00_00173E40[];
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
-extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
+extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
 int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, float radius, float height);
@@ -41,7 +41,7 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
         fast_vec_add(&ray_end, &reach, pos);
         ray_end.a[2] += step_height;
         if (collision_line(&ray_start, &ray_end, coll_flags, (int)moby, 0)) {
-            fast_vec_sub(pos, (char *)&D_94C8_60, &reach);
+            fast_vec_sub(pos, (char *)&collision_hit_point, &reach);
             result = 1;
             *(float *)(moby + 0x18) -= step_height;
         }

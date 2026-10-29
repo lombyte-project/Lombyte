@@ -5,7 +5,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 
-extern u8 D_L00_00166E10_2e9010[] __asm__("D_L00_00166E10");
+extern u8 camera_view[] __asm__("D_L00_00166E10");
 extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
 extern s32 D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 
@@ -51,7 +51,7 @@ void follow_camera_build_view(u8 *camera) {
     f32 view_direction[4];
     f32 adjusted_aim_position[4];
 
-    base = D_L00_00166E10_2e9010;
+    base = camera_view;
     camera_state = *(u8 **)(camera + 0x70);
     follow_state_block = camera_state + 0x40;
     view_blend_and_smoothing_state = camera_state + 0x20;
@@ -879,7 +879,7 @@ void jet_mount(V_2eaaa0 *pa, V_2eaaa0 *pb, s32 mode, s32 transition_duration_fra
     *(s32 *)(transition_state + 4) = transition_duration_frames;
     *(s32 *)(camera_state + 0xE0) = transition_duration_frames;
 }
-extern char D_L00_00166C80_2eac18[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern char player_camera[] __asm__("D_L00_00166C80") __attribute__((section(".data")));
 void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
 void FUN_001fa050_2eac18(void *, void *) __asm__("FUN_001fa050");
 void FUN_001fa2b8_2eac18(void *, void *) __asm__("FUN_001fa2b8");
@@ -887,7 +887,7 @@ void FUN_001f9bf8_2eac18(void *, void *, float) __asm__("FUN_001f9bf8");
 void FUN_001f9a10_2eac18(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002eac18(int mode);
 void FUN_L00_002eac18(int mode) {
-    char *camera_globals = D_L00_00166C80_2eac18;
+    char *camera_globals = player_camera;
     char *current_follow_camera = *(char **)(camera_globals + 0x180);
     initialize_camera_record_handoff_defaults();
     if (mode == 0) {
@@ -1463,7 +1463,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_001f0d60_2ebe70(float, void *, int, int) __asm__("FUN_L00_001f0d60");
 extern unsigned short *D_L00_001AB840_2ebe70[] __asm__("D_L00_001AB840");
-extern char *D_0015FFD8_2ebe70 __asm__("D_L00_0015FFD8");
+extern char *moby_table __asm__("D_L00_0015FFD8");
 extern OvlQuad D_L00_00173E60_2ebe70 __asm__("D_L00_00173E60");
 extern float D_L00_00173E70_2ebe70[] __asm__("D_L00_00173E70");
 extern float D_L00_00161DD8_2ebe70 __asm__("D_L00_00161DD8") __attribute__((sda));
@@ -1519,7 +1519,7 @@ void update_target_tracking_camera_position(char *camera_object) {
             neighbours = D_L00_001AB840_2ebe70[*(unsigned char *)(current_target + 0x21)];
             if (neighbours != 0) {
                 do {
-                    candidate = D_0015FFD8_2ebe70 + (*neighbours & 0x7fff) * 0x100;
+                    candidate = moby_table + (*neighbours & 0x7fff) * 0x100;
                     if (candidate != current_target &&
                         (*(short *)(candidate + 0xa6) == 0x323 || *(short *)(candidate + 0xa6) == 0x2f6)) {
                         fast_vec_sub(offset, candidate + 0x10, current_target + 0x10);
@@ -2221,7 +2221,7 @@ typedef struct {
     u8 b18;
     u8 p2[7];
 } T_2ed950;
-extern u8 D_L00_00166DC0_2ed950[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern E_2ed950 D_0013E550_2ed950[] __asm__("D_0013E550") __attribute__((section(".data")));
 extern T_2ed950 *D_L00_0015F5F4_2ed950 __asm__("D_L00_0015F5F4");
 f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -2237,7 +2237,7 @@ void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
     f32 reference_distance, playback_radius;
     if (playback_state->id < 0)
         return;
-    reference_distance = fast_vec_dist(D_L00_00166DC0_2ed950, sound_emitter + 0x40);
+    reference_distance = fast_vec_dist(g_debug_camera, sound_emitter + 0x40);
     playback_radius = *(f32 *)(sound_emitter + 0xC);
     if (reference_distance < playback_radius) {
         E_2ed950 *e = ENT_2ed950(playback_state->snd);
@@ -2274,7 +2274,7 @@ typedef struct {
     f32 f[4];
 } V_2edad8;
 extern u8 D_L00_00166DC0_2edad8[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern u8 D_0013E550_2edad8[] __asm__("D_0013E550");
+extern u8 voice_pool[] __asm__("D_0013E550");
 extern void sub_2edad8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -2315,7 +2315,7 @@ void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) {
     f = absolute_float(transformed_reference_position_delta.f[2]);
     if (!(f <= absolute_float(b.f[2]) + 1.0f))
         return;
-    sound_slot_entry = D_0013E550_2edad8 + playback_state->h * 0x70;
+    sound_slot_entry = voice_pool + playback_state->h * 0x70;
     if (*(u8 **)(sound_slot_entry + 0x8C) == sound_emitter && sound_slot_entry[0x74] != 0)
         return;
     if (tick_2edad8(&playback_state->timer) != 0) {
@@ -2326,7 +2326,7 @@ void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) {
             r.f[2] = random_float_between(-1.0f, 1.0f);
             transform_vector_by_basis(&r, &r, sound_emitter + 0x10);
             fast_vec_add(&r, &r, sound_emitter + 0x40);
-            qcopy(D_0013E550_2edad8 + 0x90 + playback_state->h * 0x70, &r);
+            qcopy(voice_pool + 0x90 + playback_state->h * 0x70, &r);
         }
         if (playback_state->hi > 0) {
             playback_state->timer = (f32)scale_game_frames(playback_state->lo + random_integer_below(playback_state->hi - playback_state->lo)) * 60.0f;

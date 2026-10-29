@@ -193,7 +193,7 @@ typedef struct {
 extern Cols_2F7E08 l01_explosive_projectile_initial_color_palette __asm__("D_L01_0020B470");
 extern Cols_2F7E08 l01_explosive_projectile_secondary_color_palette __asm__("D_L01_0020B488");
 extern struct Moby *D_L01_001742D8 __attribute__((section(".data")));
-extern char *D_L01_0015FFD8_c __asm__("D_L01_0015FFD8") __attribute__((section(".sdata")));
+extern char *ents __asm__("D_L01_0015FFD8") __attribute__((section(".sdata")));
 extern char D_0013E533[];
 extern char D_L01_00167240[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -393,8 +393,8 @@ void update_explosive_projectile(struct Moby *moby) {
         }
         for (link = 0; link < 4; link++) {
             if (cutscene_active_macro == 0 && data->ids[link] != -1) {
-                if (((struct Moby *)D_L01_0015FFD8_c)[data->ids[link]].oclass == 0x2BC) {
-                    Tgt_2F7E08 *target = (*(void **)&((struct Moby *)D_L01_0015FFD8_c)[data->ids[link]].pvars);
+                if (((struct Moby *)ents)[data->ids[link]].oclass == 0x2BC) {
+                    Tgt_2F7E08 *target = (*(void **)&((struct Moby *)ents)[data->ids[link]].pvars);
                     if (target->h4 == 0 && target->timer == 0 && is_point_inside_clip_volume(((char *)&D_0013F3D0), target->vol) != 0
                         && is_point_inside_clip_volume(D_L01_00167240, target->vol) != 0) {
                         target->timer = scale_game_frames(FUN_L00_00257b90_c(0x3C, 0xB4));
@@ -643,7 +643,7 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 void FUN_L01_002fb4b8_c(void) __asm__("FUN_L01_002fb4b8");
 extern void func_L01_002FC890_m(char *) __asm__("FUN_L01_002fb4b8");
 extern TpLevelState_fc988 D_L01_001BB9C0_s __asm__("D_L01_001BB6B0");
-extern char D_L01_001672C0_c[] __asm__("D_L01_00167240");
+extern char camera_pos[] __asm__("D_L01_00167240");
 extern char D_0014171B_c[] __asm__("D_0014C190");
 extern int debug_print(void *, int, int) __asm__("FUN_001e93b0");
 
@@ -692,8 +692,8 @@ void update_cutscene_trigger(char *moby) {
         if (is_point_inside_clip_volume(hero_position, *(int *)(trigger_vars + 0x20)) == 0 &&
             ((unsigned char *)moby)[0xBC] != 1)
             break;
-        qcopy(saved_camera_position, D_L01_001672C0_c);
-        qcopy(saved_camera_rotation, D_L01_001672C0_c + 0x10);
+        qcopy(saved_camera_position, camera_pos);
+        qcopy(saved_camera_rotation, camera_pos + 0x10);
         if (*(int *)(trigger_vars + 0x28) == -1) {
             set_race_camera(hero_position, hero_position + 0x10, 0x72, 1);
         } else {
@@ -867,7 +867,7 @@ extern char plumber_level_eight_dialogue_data[] __asm__("D_L01_00161D38");
 extern char plumber_fallback_dialogue_data[] __asm__("D_L01_00161D48");
 extern char D_L01_00167240_c[] __asm__("D_L01_00167240");
 extern char D_L01_001BAAA0[];
-extern char *D_L01_001600EC_c __asm__("D_L01_001600EC");
+extern char *camera_points __asm__("D_L01_001600EC");
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
 extern struct {
     char pad[0x80];
@@ -944,7 +944,7 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
         if (D_0014C050_c[plumber_moby->bB0 + D_0015ED84_c * 16] != 0xFF) {
             jet_clear_persistent(plumber_moby->bB0);
             if (plumber_vars->i4C != -1) {
-                char *camera_record = D_L01_001600EC_c + plumber_vars->i4C * 128;
+                char *camera_record = camera_points + plumber_vars->i4C * 128;
                 jet_reset_camera(camera_record + 0x30, camera_record + 0x70);
             }
         }
@@ -1195,7 +1195,7 @@ typedef struct {
     s32 count;
 } ZoneVars_302648;
 
-extern s32 D_001413D4_302648[] __asm__("D_001413D4");
+extern s32 camera_secondary_mode[] __asm__("D_001413D4");
 extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
 extern s32 *D_L01_001B0930_302648[] __asm__("D_L01_001B0930");
 extern s32 absolute_float_cf(void *, void *, s32) __asm__("FUN_L00_00259740");
@@ -1217,7 +1217,7 @@ void update_target_outside_zone_timeout(struct Moby *moby) {
     s32 *path;
 
     moby->update_dist = 0xFF;
-    if (D_001413D4_302648[0] != 0x1D) {
+    if (camera_secondary_mode[0] != 0x1D) {
         zone_vars->count = 0;
         return;
     }
@@ -1686,7 +1686,7 @@ typedef struct L01Moby L01Moby;
 
 extern L01LevelState D_L01_001BB6B0;
 extern int D_0015ED84_c __asm__("D_0015ED84");
-extern s32 D_0014C190_c[][64] __asm__("D_0014C190");
+extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 extern unsigned char D_0014C050[];
 extern int alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 extern int D_0013CAE4[];
@@ -1731,7 +1731,7 @@ void teleporter_update(struct Moby *moby) {
     int active = 0;
 
     if (D_L01_001BB6B0.collected[(short)moby->save_id] != 0 ||
-        (D_0014C190_c[D_0015ED84_c][((short)moby->save_id) >> 5] >>
+        (level_moby_killed[D_0015ED84_c][((short)moby->save_id) >> 5] >>
          (moby->save_id & 0x1F)) &
             1) {
         active = 1;

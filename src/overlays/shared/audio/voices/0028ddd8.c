@@ -28,7 +28,7 @@ int play_voice(int voice_definition_index, int voice_flags, int sound_owner, int
 }
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028F140), where it is exact; names translated to the US level program. */
 
-extern char D_0013E550_c[] __asm__("D_0013E550");
+extern char voice_pool[] __asm__("D_0013E550");
 
 extern unsigned char l00_grouped_voice_definition_offsets_by_level[] __asm__("D_L00_001BD820");
 #include "rnc/overlay/shared/audio/voices/0028ddd8_globals.h"
@@ -50,7 +50,7 @@ int request_grouped_voice(int voice_group_index, int voice_pair_index, int voice
     }
     voice_slot_index = allocate_voice_slot(D_L00_0015F5F4 + voice_definition_index * 32, voice_flags, voice_moby, 0, 0x400);
     if (voice_slot_index >= 0) {
-        char *rec = D_0013E550_c + voice_slot_index * 0x70;
+        char *rec = voice_pool + voice_slot_index * 0x70;
         *(int *)(rec + 0x88) = voice_moby;
         *(short *)(rec + 0x7E) = voice_definition_index;
     }

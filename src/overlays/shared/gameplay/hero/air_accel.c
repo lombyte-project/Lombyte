@@ -1422,7 +1422,7 @@ typedef struct {
 } Entry70_23c710;
 
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
-extern u8 D_0013D4C0_23c710[] __asm__("D_0013D4C0");
+extern u8 item_available[] __asm__("D_0013D4C0");
 
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_23c710(s32 *) __asm__("FUN_001f9740");
@@ -1551,7 +1551,7 @@ void update_hero_timers_and_vehicle_transitions(void) {
 skip:
     update_hero_planar_distance_spring_motion();
     transform_hero_local_offset_to_world(&hero.motion.body_center, 0.0f, 0.0f, 0.7f);
-    if (D_0013D4C0_23c710[0x22]) {
+    if (item_available[0x22]) {
         hero.reach_distance = 12.0f;
         hero.reach_height = 4.5f;
     } else {
@@ -1585,7 +1585,7 @@ void request_hero_idle_state_for_vehicle_mode(void) {
         break;
     }
 }
-extern s32 D_0013CAE0_242198 __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern s32 pad_held __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 s32 FUN_001f96f8_242198(s32) __asm__("FUN_001f96f8");
 void FUN_L00_002323b8_242198(s32, s32, f32) __asm__("FUN_L00_002323b8");
@@ -1601,7 +1601,7 @@ void select_hero_locomotion_state(void) {
     hero_ptr = &hero;
     hero_ptr->unk2284 = 0;
     FUN_L00_002118c8_242198(0, 1.0f);
-    if (D_0013CAE0_242198 & 0xA) {
+    if (pad_held & 0xA) {
         hero_set_state(HERO_STATE_CROUCH, 0);
         FUN_L00_002323b8_242198(0xD, 2, -2.0f);
         hero_queue_sequence(3, 0x12);

@@ -2179,7 +2179,7 @@ typedef struct Hit_2b6140 {
 } Hit_2b6140;
 typedef struct Hit2_2b6140 { char p0[0x24]; Tgt_2b6140 *f24; } Hit2_2b6140;
 typedef struct Row_2b6140 { char p0[0x74]; unsigned char f74; char p1[0x13]; struct Moby *f88; } Row_2b6140;
-extern char D_0013E550_2b6140[] __asm__("D_0013E550");
+extern char voice_pool[] __asm__("D_0013E550");
 extern Hit2_2b6140 *D_L00_00173E58_2b6140 __asm__("D_L00_00173E58") __attribute__((section(".data")));
 extern char D_L00_00177F00_2b6140[] __asm__("D_L00_00177F00");
 extern float D_0015ED60_2b6140 __asm__("D_0015ED60") __attribute__((section(".sdata")));
@@ -2344,7 +2344,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 normalize_vector_xyz_2b6140(&k30, &k30, D_0015ED6C_2b6140 + D_0015ED6C_2b6140);
                 normalize_vector_xyz_2b6140(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
                 if (missile_vars->f2C != -1) {
-                    Row_2b6140 *e = (Row_2b6140 *)(D_0013E550_2b6140 + missile_vars->f2C * 0x70);
+                    Row_2b6140 *e = (Row_2b6140 *)(voice_pool + missile_vars->f2C * 0x70);
                     if (e->f88 == missile_moby) {
                         if (e->f74 != 0) release_voice_slot(missile_vars->f2C);
                     }
@@ -2359,7 +2359,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 normalize_vector_xyz_2b6140(&k30, &k30, D_0015ED6C_2b6140 + D_0015ED6C_2b6140);
                 normalize_vector_xyz_2b6140(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
                 if (missile_vars->f2C != -1) {
-                    Row_2b6140 *e = (Row_2b6140 *)(D_0013E550_2b6140 + missile_vars->f2C * 0x70);
+                    Row_2b6140 *e = (Row_2b6140 *)(voice_pool + missile_vars->f2C * 0x70);
                     if (e->f88 == missile_moby) {
                         if (e->f74 != 0) release_voice_slot(missile_vars->f2C);
                     }
@@ -2375,7 +2375,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         if (controller_state.pressed & 0x20) {
             missile_moby->command = 1;
             if (missile_vars->f2C != -1) {
-                Row_2b6140 *e = (Row_2b6140 *)(D_0013E550_2b6140 + missile_vars->f2C * 0x70);
+                Row_2b6140 *e = (Row_2b6140 *)(voice_pool + missile_vars->f2C * 0x70);
                 if (e->f88 == missile_moby) {
                     if (e->f74 != 0) release_voice_slot(missile_vars->f2C);
                 }

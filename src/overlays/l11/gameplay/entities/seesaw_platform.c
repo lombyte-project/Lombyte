@@ -3126,7 +3126,7 @@ typedef struct {
     u8 unk280[0x10];      /* 0x280 */
 } CreatureVars_4318;
 
-extern char *D_L11_001B0EB0_4318[] __asm__("D_L11_001B0EB0");
+extern char *path_table[] __asm__("D_L11_001B0EB0");
 extern char *D_L11_0015FFD8_4318 __asm__("D_L11_0015FFD8");
 extern char D_L11_001677C0_4318[] __asm__("D_L11_001677C0");
 extern char D_0013F3D0_4318[] __asm__("D_0013F3D0");
@@ -3243,13 +3243,13 @@ void puffoid_update(struct Moby *moby) {
             if (moby->prev_seq != 4) {
                 set_anim_4318(moby, 4, 0, scale_game_frames(10));
             }
-            qcopy(&moby->pos, D_L11_001B0EB0_4318[puffoid_vars->path] + 0x10);
+            qcopy(&moby->pos, path_table[puffoid_vars->path] + 0x10);
             puffoid_vars->point = 1;
         } else if (puffoid_vars->mode == 1) {
             moby->state = 1;
-            qcopy(&moby->pos, D_L11_001B0EB0_4318[puffoid_vars->path] + 0x10);
+            qcopy(&moby->pos, path_table[puffoid_vars->path] + 0x10);
             moby->pos.z -= 1.0f;
-            qcopy(puffoid_vars->home, D_L11_001B0EB0_4318[puffoid_vars->path] + 0x20);
+            qcopy(puffoid_vars->home, path_table[puffoid_vars->path] + 0x20);
         } else if (puffoid_vars->carrier >= 0) {
             moby->state = 0xC;
             puffoid_vars->unk258 = random_float_between(-3.0f, 3.0f);
@@ -3266,7 +3266,7 @@ void puffoid_update(struct Moby *moby) {
         }
         break;
     case PUFFOID_STATE_WAIT_FOR_HOME_JUMP: {
-        char *path = D_L11_001B0EB0_4318[puffoid_vars->path];
+        char *path = path_table[puffoid_vars->path];
         float ang = fast_arc_tan(*(float *)(path + 0x20) - moby->pos.x, *(float *)(path + 0x24) - moby->pos.y);
         turn_to_4318(&moby->rot.z, &puffoid_vars->unk250, ang,
                      frame_time_sq * 8.726646f, frame_time_sq * 8.726646f, frame_time * 12.566371f);
@@ -3275,9 +3275,9 @@ void puffoid_update(struct Moby *moby) {
             if (moby->prev_seq != 0) {
                 set_anim_4318(moby, 0, 0, 5);
             }
-            sub_vector_4318(puffoid_vars->vel, D_L11_001B0EB0_4318[puffoid_vars->path] + 0x20, &moby->pos);
+            sub_vector_4318(puffoid_vars->vel, path_table[puffoid_vars->path] + 0x20, &moby->pos);
             set_vector_length_xy(puffoid_vars->vel, puffoid_vars->vel, puffoid_jump_horizontal_speed_gp * frame_time);
-            puffoid_vars->vel[2] = jump_speed_4318(&moby->pos, D_L11_001B0EB0_4318[puffoid_vars->path] + 0x20, 0,
+            puffoid_vars->vel[2] = jump_speed_4318(&moby->pos, path_table[puffoid_vars->path] + 0x20, 0,
                                         puffoid_jump_horizontal_speed_gp * frame_time, -(D_L11_001622F0 * frame_time_sq));
         }
         break;
@@ -3413,7 +3413,7 @@ void puffoid_update(struct Moby *moby) {
                 mark_for_removal_4318(moby);
                 return;
             }
-            path = D_L11_001B0EB0_4318[puffoid_vars->unk230];
+            path = path_table[puffoid_vars->unk230];
             if (point_in_path_xy(&moby->pos, path + 0x10, *(int *)path) == 0) {
                 mark_for_removal_4318(moby);
                 return;
@@ -3541,7 +3541,7 @@ void puffoid_update(struct Moby *moby) {
                 mark_for_removal_4318(moby);
                 return;
             }
-            path = D_L11_001B0EB0_4318[puffoid_vars->unk230];
+            path = path_table[puffoid_vars->unk230];
             if (point_in_path_xy(&moby->pos, path + 0x10, *(int *)path) == 0) {
                 mark_for_removal_4318(moby);
                 return;
@@ -3572,7 +3572,7 @@ void puffoid_update(struct Moby *moby) {
         float vel[4];
         float path_vertical_step_limit;
         float path_spray_distance_metric;
-        qcopy(pos, D_L11_001B0EB0_4318[puffoid_vars->path] + puffoid_vars->point * 16 + 0x10);
+        qcopy(pos, path_table[puffoid_vars->path] + puffoid_vars->point * 16 + 0x10);
         if (puffoid_vars->carrier >= 0) {
             float h = ((struct Moby *)D_L11_0015FFD8_4318)[puffoid_vars->carrier].pos.z - 1.0f;
             if (h < pos[2]) {
@@ -3596,7 +3596,7 @@ void puffoid_update(struct Moby *moby) {
         }
         move_4318(moby, vel, 0.5f, 0.5f, 0.0f, 0x10);
         if (fast_vec_dist(pos, &moby->pos) < 1.0f) {
-            puffoid_vars->point = (puffoid_vars->point + 1) % *(int *)D_L11_001B0EB0_4318[puffoid_vars->path];
+            puffoid_vars->point = (puffoid_vars->point + 1) % *(int *)path_table[puffoid_vars->path];
         }
         if (moby->anim_time == 0.0f) {
             path_spray_distance_metric = vector_distance(&moby->pos, D_0013F3D0_4318);

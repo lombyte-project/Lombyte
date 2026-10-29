@@ -148,7 +148,7 @@ extern int D_L00_0015F6A8_2E0E50 __asm__("D_L00_0015F5C4") __attribute__((sectio
 extern int D_L00_0015F404_macro __asm__("D_L00_0015F404") __attribute__((section(".sdata")));
 extern char *D_L00_00160098_2E0E50 __asm__("D_L00_0015FFD8") __attribute__((section(".sdata")));
 extern char *D_L00_001601AC_2E0E50 __asm__("D_L00_001600EC") __attribute__((section(".sdata")));
-extern float D_L00_0015F4FC_2E0E50 __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
+extern float fade_level __asm__("D_L00_0015F3FC") __attribute__((section(".sdata")));
 extern float D_L00_00161C84_2E0E50 __asm__("D_L00_00161BB4") __attribute__((section(".sdata")));
 extern float D_0015EE6C_2E0E50 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern float frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
@@ -314,8 +314,8 @@ void hydrodisplacer_update(Moby *moby) {
         case HYDRODISPLACER_CAMERA_PREPARE_INTERPOLATION: {
             char *linked;
 
-            func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 1.0f, 1.0f / func_001F9850_2E0E50(15));
-            if (!(1.0f <= D_L00_0015F4FC_2E0E50)) {
+            func_00214D28_2E0E50(&fade_level, 1.0f, 1.0f / func_001F9850_2E0E50(15));
+            if (!(1.0f <= fade_level)) {
                 break;
             }
             linked = D_L00_00160098_2E0E50 + (*(int *)((Hero *)D_0013E633_2E0E50)->ground_moby->pvars << 8);
@@ -333,8 +333,8 @@ void hydrodisplacer_update(Moby *moby) {
             break;
         }
         case HYDRODISPLACER_CAMERA_INTERPOLATE:
-            if (data->f10 == 0.0f && 0.0f < D_L00_0015F4FC_2E0E50) {
-                func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 0.0f, 1.0f / func_001F9850_2E0E50(15));
+            if (data->f10 == 0.0f && 0.0f < fade_level) {
+                func_00214D28_2E0E50(&fade_level, 0.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
             }
             if (data->f10 < 1.0f) {
@@ -349,8 +349,8 @@ void hydrodisplacer_update(Moby *moby) {
                 func_L00_002EBEE0_2E0E50(&camera_rot);
                 return;
             }
-            if (D_L00_0015F4FC_2E0E50 < 1.0f) {
-                func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 1.0f, 1.0f / func_001F9850_2E0E50(15));
+            if (fade_level < 1.0f) {
+                func_00214D28_2E0E50(&fade_level, 1.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
             }
             moby->command = 2;
@@ -358,8 +358,8 @@ void hydrodisplacer_update(Moby *moby) {
             func_L00_002EC0C8_2E0E50(3);
             return;
         case HYDRODISPLACER_CAMERA_RETURN_TO_ACTIVATION:
-            if (0.0f < D_L00_0015F4FC_2E0E50) {
-                func_00214D28_2E0E50(&D_L00_0015F4FC_2E0E50, 0.0f, 1.0f / func_001F9850_2E0E50(15));
+            if (0.0f < fade_level) {
+                func_00214D28_2E0E50(&fade_level, 0.0f, 1.0f / func_001F9850_2E0E50(15));
                 return;
             }
             moby->state = 2;

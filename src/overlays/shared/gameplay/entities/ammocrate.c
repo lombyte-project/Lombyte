@@ -70,7 +70,7 @@ unsigned char *spawn_ship_pickup(char *position, int moby_class) {
 
 /* Queues a GIF packet that draws a line strip through the points, rotated, scaled and offset to the screen. */
 typedef unsigned int u128_7d50 __attribute__((mode(TI)));
-extern int D_0013E500_7d50[] __asm__("D_0013E500");
+extern int screen_extent[] __asm__("D_0013E500");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -128,14 +128,14 @@ void emit_transformed_2d_vertex_packet(short *pts, int point_count, float x0, fl
         transformed_point[1] += y0;
         x = truncate_float_to_s32(transformed_point[0] * 16.0f);
         y = truncate_float_to_s32(transformed_point[1] * 16.0f);
-        vertex_output[i] = (unsigned long long)(x + D_0013E500_7d50[4] - 8) | ((unsigned long long)(y + D_0013E500_7d50[5] - 8) << 16) | ((unsigned long long)col << 32);
+        vertex_output[i] = (unsigned long long)(x + screen_extent[4] - 8) | ((unsigned long long)(y + screen_extent[5] - 8) << 16) | ((unsigned long long)col << 32);
     }
     D_L13_001611C0 += ((point_count + 1) / 2) * 16;
 }
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-extern float D_0015ED6C_1cc8 __asm__("D_0015ED6C");
+extern float frame_time __asm__("D_0015ED6C");
 extern struct Moby *moby_base __asm__("D_L13_0015FFD8");
 extern int D_L13_00174158_1cc8 __asm__("D_L13_00174158") __attribute__((section(".data")));
 
@@ -213,7 +213,7 @@ void ammocrate_update(char *moby) {
         *(float *)(moby + 0x2c) = activated_size * 0.1f;
         break;
     case SHIP_PICKUP_ACTIVE:
-        *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), D_0015ED6C_1cc8 * 0.7853982f);
+        *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), frame_time * 0.7853982f);
         if (*(float *)(moby + 0x10) < 20.0f) *(float *)(moby + 0x10) = 20.0f;
         if (1003.0f < *(float *)(moby + 0x10)) *(float *)(moby + 0x10) = 1003.0f;
         if (*(float *)(moby + 0x14) < 20.0f) *(float *)(moby + 0x14) = 20.0f;
@@ -281,7 +281,7 @@ collected:
         break;
     }
 frame_tail:
-    speed = D_0015ED6C_1cc8;
+    speed = frame_time;
     update_moby_vertical_oscillation(0.7f, speed * 1.2217305f, moby, vars + 6, vars + 5);
     if (*(float *)(moby + 0x10) < 20.0f) *(float *)(moby + 0x10) = 20.0f;
     if (1003.0f < *(float *)(moby + 0x10)) *(float *)(moby + 0x10) = 1003.0f;

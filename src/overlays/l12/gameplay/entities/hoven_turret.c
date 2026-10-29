@@ -542,7 +542,7 @@ extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 extern void tick_countdown_32(s32 *) __asm__("func_001F9740");
 void FUN_L12_003032e8_c(struct Moby *moby) __asm__("FUN_L12_003032e8");
-extern int D_0013A5E0_e[] __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern int pad_held[] __asm__("D_0013CAE0") __attribute__((section(".data")));
 extern char D_0013E533[];
 extern unsigned char D_0014171B_304920[] __asm__("D_0014C050");
 extern int D_0015EED0_304920[] __asm__("D_0015EDDC") __attribute__((section(".sdata")));
@@ -729,7 +729,7 @@ void hoven_turret_update(struct Moby *moby) {
                 blend_moby_animation_c(moby, 5, 0, 1);
             }
             fast_dec_timer_s16(&data->f70);
-            if ((D_0013A5E0_e[0] & 0xA0) && data->f70 == 0) {
+            if ((pad_held[0] & 0xA0) && data->f70 == 0) {
                 Vec_304920 firing_offset;
                 Vec_304920 muz;
                 float yaw;

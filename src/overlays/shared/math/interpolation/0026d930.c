@@ -70,7 +70,7 @@ void FUN_L01_0026e090(int i, int moby_byte_value) {
         } while (*(short *)moby_index_entry++ >= 0);
     }
 }
-extern char *D_L01_0015FFD8_e0e0 __asm__("D_L01_0015FFD8");
+extern char *ents __asm__("D_L01_0015FFD8");
 /* 0x0026e0e0, 88 bytes.
  * Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c:
  * func_L01_0026F090), where it is exact; names translated to the US level
@@ -84,7 +84,7 @@ void set_moby_list_state(int list, int state) {
     if (moby_index_list != 0) {
         moby_index_entry = moby_index_list;
         do {
-            char *moby = (char *)(((*moby_index_entry & 0x7FFF) << 8) + (int)D_L01_0015FFD8_e0e0);
+            char *moby = (char *)(((*moby_index_entry & 0x7FFF) << 8) + (int)ents);
 
             if (moby[0x20] >= 0) {
                 moby[0x20] = state;

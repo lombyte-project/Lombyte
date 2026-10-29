@@ -18,7 +18,7 @@ extern int debug_print() __asm__("FUN_001e93b0");
 extern void delete_moby(void *) __asm__("FUN_0020c828");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
-extern char *D_L13_00160058_m_b0e80 __asm__("D_L13_0015FFD8");
+extern char *moby_base __asm__("D_L13_0015FFD8");
 extern char moby_volume_trigger_missing_volume_format[] __asm__("D_L13_001F41F8");
 void update_moby_volume_trigger(char *moby) __asm__("FUN_L13_002b0e80");
 
@@ -34,7 +34,7 @@ void update_moby_volume_trigger(char *moby) {
             {
                 int uid = *(int *)(data + 0x4);
                 if (uid != -1) {
-                    char *m = D_L13_00160058_m_b0e80 + (uid << 8);
+                    char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
@@ -51,7 +51,7 @@ void update_moby_volume_trigger(char *moby) {
             {
                 int uid = *(int *)(data + 0x8);
                 if (uid != -1) {
-                    char *m = D_L13_00160058_m_b0e80 + (uid << 8);
+                    char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
@@ -68,7 +68,7 @@ void update_moby_volume_trigger(char *moby) {
             {
                 int uid = *(int *)(data + 0xC);
                 if (uid != -1) {
-                    char *m = D_L13_00160058_m_b0e80 + (uid << 8);
+                    char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
@@ -85,7 +85,7 @@ void update_moby_volume_trigger(char *moby) {
             {
                 int uid = *(int *)(data + 0x10);
                 if (uid != -1) {
-                    char *m = D_L13_00160058_m_b0e80 + (uid << 8);
+                    char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
@@ -110,7 +110,7 @@ void update_moby_volume_trigger(char *moby) {
             {
                 int uid = *(int *)(data + 0x4);
                 if (uid != -1) {
-                    char *m = D_L13_00160058_m_b0e80 + (uid << 8);
+                    char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
@@ -127,7 +127,7 @@ void update_moby_volume_trigger(char *moby) {
             {
                 int uid = *(int *)(data + 0x8);
                 if (uid != -1) {
-                    char *m = D_L13_00160058_m_b0e80 + (uid << 8);
+                    char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
@@ -144,7 +144,7 @@ void update_moby_volume_trigger(char *moby) {
             {
                 int uid = *(int *)(data + 0xC);
                 if (uid != -1) {
-                    char *m = D_L13_00160058_m_b0e80 + (uid << 8);
+                    char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {
@@ -161,7 +161,7 @@ void update_moby_volume_trigger(char *moby) {
             {
                 int uid = *(int *)(data + 0x10);
                 if (uid != -1) {
-                    char *m = D_L13_00160058_m_b0e80 + (uid << 8);
+                    char *m = moby_base + (uid << 8);
                     if (m != 0) {
                         unsigned char st = m[0x20];
                         if (st != 0xFE) {

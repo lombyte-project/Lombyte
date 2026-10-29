@@ -1762,7 +1762,7 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
 extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
 extern int func_0022EE28_e7208(int, int, int) __asm__("FUN_0022db10");
 extern void func_L00_00264DB8_e7208(int, int) __asm__("FUN_L00_00263d40");
-extern char D_0013D50F_e7208[] __asm__("D_0013D408");
+extern char item_unlocked[] __asm__("D_0013D408");
 void update_two_region_trigger_latch(char *moby) __asm__("FUN_L16_002e7208");
 
 void update_two_region_trigger_latch(char *moby) {
@@ -1786,7 +1786,7 @@ void update_two_region_trigger_latch(char *moby) {
         if (player->state.current == 0x42) {
             *(int *)(data + 8) = 0;
         } else if (func_00215570_e7208(&player->motion.pos, *(int *)(data + 4)) != 0) {
-            unsigned char *flags = (unsigned char *)D_0013D50F_e7208;
+            unsigned char *flags = (unsigned char *)item_unlocked;
             if (flags[0x19] == 0) {
                 flags[0x19] = 1;
                 func_0022EE28_e7208(1, 0, 0);

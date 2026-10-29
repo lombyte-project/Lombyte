@@ -498,8 +498,8 @@ typedef struct { char p0[0x18]; unsigned char b18; unsigned char b19; unsigned s
 typedef struct { int v[6]; } S6_25e450;
 typedef struct { char pad[0x160]; float f160; int f164; int f168; } Cam_25e450;
 typedef struct { float f[11]; } Fl_25e450;
-extern char D_L00_00166DC0_25e450[] __asm__("D_L00_00166DC0");
-extern char D_L00_00166C80_25e450[] __asm__("D_L00_00166C80");
+extern char g_debug_camera[] __asm__("D_L00_00166DC0");
+extern char player_camera[] __asm__("D_L00_00166C80");
 extern S6_25e450 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
 extern S6_25e450 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -577,7 +577,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
             random_int_between(scale_game_frames(0x3C), scale_game_frames(0x78)) - effect_reduction_level * 10, 1, -1, -1, dist);
         }
     }
-    fast_vec_sub(&effect_vector_work, D_L00_00166DC0_25e450, explosion_position);
+    fast_vec_sub(&effect_vector_work, g_debug_camera, explosion_position);
     dist = fast_vec_length(&effect_vector_work);
     {
     if (spray_count != 0) {
@@ -686,8 +686,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         *(u128_25e450 *)&v = *(u128_25e450 *)explosion_position;
         v.f[3] = 2.0f;
         if (func_L00_00200290_25e450(&v, 10.0f) != -1) {
-            ((Cam_25e450 *)D_L00_00166C80_25e450)->f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
-            ((Cam_25e450 *)D_L00_00166C80_25e450)->f168 = scale_game_frames(0x19);
+            ((Cam_25e450 *)player_camera)->f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
+            ((Cam_25e450 *)player_camera)->f168 = scale_game_frames(0x19);
         }
     }
     }

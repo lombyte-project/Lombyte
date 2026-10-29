@@ -2021,7 +2021,7 @@ typedef struct {
 
 extern LevelCollected D_L03_001BB330;
 
-extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
+extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 /*
  * Rises once its moby (unkB2) is collected: waits in state 0 (keeping the
@@ -2047,7 +2047,7 @@ void garage_door_update(struct Moby *door_moby)
         id = door_moby->save_id;
         save_id_index = id;
         if (D_L03_001BB330.collected[save_id_index] == 0) {
-            if (!((D_0014C190_257218[current_level_index_gp][save_id_index >> 5] >> (id & 0x1F)) & 1))
+            if (!((level_moby_killed[current_level_index_gp][save_id_index >> 5] >> (id & 0x1F)) & 1))
                 return;
         }
         door_moby->state = 1;

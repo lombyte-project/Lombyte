@@ -7,7 +7,7 @@
 
 #include "qcopy.h"
 #include "qzero.h"
-extern char *D_L00_0015FFD8_25fcb8 __asm__("D_L00_0015FFD8");
+extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_25fcb8[] __asm__("D_L00_001DD100") __attribute__((section(".data")));
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
@@ -31,7 +31,7 @@ int select_moby_combat_target(char *query_moby, char *target_output, float best)
         target_selection_status = 2;
     }
     for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
-        candidate_moby = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_lui[i] << 8);
+        candidate_moby = moby_table + (D_L00_001B0830_lui[i] << 8);
         if (candidate_moby == 0)
             continue;
         if (*(short *)(candidate_moby + 0xA6) != 0xCB && *(short *)(candidate_moby + 0xA6) != 0x76C)
@@ -126,7 +126,7 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
         }
     }
     for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
-        indexed_candidate = D_L00_0015FFD8_25fcb8 + (D_L00_001B0830_lui[i] << 8);
+        indexed_candidate = moby_table + (D_L00_001B0830_lui[i] << 8);
         if (indexed_candidate == 0) continue;
         if (*(short *)(indexed_candidate + 0xA6) != 0xCB && *(short *)(indexed_candidate + 0xA6) != 0x76C) continue;
         if (*(unsigned char *)(indexed_candidate + 0x20) == 0xFE) continue;

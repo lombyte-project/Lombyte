@@ -167,7 +167,7 @@ typedef struct {
     float uv[8];
     u64 a, b, c, d;
 } Pk_00263618;
-extern u8 D_L00_00166DC0_00263618[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 u64 FUN_001f44b8_00263618(s32) __asm__("FUN_001f44b8");
 void FUN_001f9a28_00263618(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_00263618(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -202,7 +202,7 @@ void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float 
     pk.uv[6] = 1.0f;
     pk.uv[7] = 1.0f;
     qcopy(M[3], quad_base_position);
-    FUN_001f9a28_00263618(M[0], D_L00_00166DC0_00263618, M[3]);
+    FUN_001f9a28_00263618(M[0], g_debug_camera, M[3]);
     FUN_001f9bf8_00263618(M[0], M[0], 1.0f);
     FUN_001f9ad8_00263618(M[1], M[0], up);
     FUN_001f9bf8_00263618(M[1], M[1], 1.0f);
