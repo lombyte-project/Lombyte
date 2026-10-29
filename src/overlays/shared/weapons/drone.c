@@ -216,7 +216,7 @@ void ensure_drone_attached_particles(struct Moby *owner_moby) {
 char *select_nearest_drone_target(char *search_position, int *excl) __asm__("FUN_L00_002cdf28");
 
 char *select_nearest_drone_target(char *search_position, int *excl) {
-    char *result = 0;
+    char *nearest_target_moby = 0;
     char *candidate_moby;
     float best = 1e9f;
     float candidate_position_scratch[4];
@@ -296,10 +296,10 @@ char *select_nearest_drone_target(char *search_position, int *excl) {
         if (collision_line(
                 search_position, candidate_position_scratch, 6, (int)candidate_moby, 0) == 0) {
             best = search_to_candidate_distance;
-            result = candidate_moby;
+            nearest_target_moby = candidate_moby;
         }
     }
-    return result;
+    return nearest_target_moby;
 }
 
 /* Spawns moby 0x1DF at pos, aims it at the player and puts it in the first
