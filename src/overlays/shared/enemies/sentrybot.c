@@ -1390,7 +1390,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
         SENTRYBOT_NO_KNOCKBACK_START_RESPONSE = 11
     };
     unsigned char *moby = object;
-    unsigned char *data = ((unsigned char *)MOBY(moby)->pvars);
+    unsigned char *sentrybot_data = ((unsigned char *)MOBY(moby)->pvars);
     char          *hit;
     float          impact;
     int            kind;
@@ -1410,29 +1410,29 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
         *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * sentrybot_class_scale_multiplier_gp;
     impact = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
-    code = resolve_moby_hit_response(moby, hit, data + 0x20, 0, &kind, &impact, 0, 4);
+    code = resolve_moby_hit_response(moby, hit, sentrybot_data + 0x20, 0, &kind, &impact, 0, 4);
     if (kind != 1 && moby[0x20] != 0x17) {
         if ((unsigned char)D_001413F4[0] == 0)
             alert_visible_group_sentrybots(moby);
-        *(float *)(data + 0x20) -= impact;
+        *(float *)(sentrybot_data + 0x20) -= impact;
         if (*(short *)(*(char **)(hit + 0x20) + 0xA6) == 0x47)
             code = 3;
-        if (*(float *)(data + 0x20) <= 0.0f)
+        if (*(float *)(sentrybot_data + 0x20) <= 0.0f)
             code = 1;
         amount = truncate_float_to_s32(512.0f);
         speed = sentrybot_knockback_gravity_gp * frame_time_sq;
-        *(int *)(data + 0x90) = amount;
-        *(float *)(data + 0x98) = 0.5f;
-        *(int *)(data + 0x94) = 9;
-        *(float *)(data + 0x80) = speed;
-        data[0xAD] = 0;
+        *(int *)(sentrybot_data + 0x90) = amount;
+        *(float *)(sentrybot_data + 0x98) = 0.5f;
+        *(int *)(sentrybot_data + 0x94) = 9;
+        *(float *)(sentrybot_data + 0x80) = speed;
+        sentrybot_data[0xAD] = 0;
         switch (code) {
         case SENTRYBOT_NO_KNOCKBACK_SETUP_RESPONSE:
         case SENTRYBOT_NO_KNOCKBACK_START_RESPONSE:
             break;
         case SENTRYBOT_FIRST_CHANNEL_BLEND_HIT_RESPONSE:
         case SENTRYBOT_FIRST_CHANNEL_BLEND_TARGET_HIT_RESPONSE:
-            data[0x67] = 0xFA;
+            sentrybot_data[0x67] = 0xFA;
             break;
         case NONLETHAL_KNOCKBACK_HIT_RESPONSE:
         case NONLETHAL_ARC_HIT_RESPONSE:
@@ -1453,12 +1453,12 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
             forward = sentrybot_recoverable_knockback_horizontal_speed_gp * step;
             lateral = sentrybot_recoverable_knockback_vertical_speed_gp * step;
             vz = sentrybot_recoverable_knockback_horizontal_speed_approach_rate_gp * step;
-            *(float *)(data + 0x80) = fall_speed;
-            *(float *)(data + 0x88) = forward;
-            *(float *)(data + 0x8C) = lateral;
-            *(float *)(data + 0x84) = vz;
-            *(float *)(data + 0xC0) = 5.0f;
-            *(float *)(data + 0xC4) = 10.0f;
+            *(float *)(sentrybot_data + 0x80) = fall_speed;
+            *(float *)(sentrybot_data + 0x88) = forward;
+            *(float *)(sentrybot_data + 0x8C) = lateral;
+            *(float *)(sentrybot_data + 0x84) = vz;
+            *(float *)(sentrybot_data + 0xC0) = 5.0f;
+            *(float *)(sentrybot_data + 0xC4) = 10.0f;
         }
             {
                 float heading =
@@ -1468,11 +1468,11 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
                 angle = heading;
             }
             trooper_knockback_arc(
-                hit_vector_or_sight_line_origin, &angle, data + 0x88, data + 0x8C);
-            trooper_start_knockback(moby, data + 0x70, 7, 1, 0, angle);
+                hit_vector_or_sight_line_origin, &angle, sentrybot_data + 0x88, sentrybot_data + 0x8C);
+            trooper_start_knockback(moby, sentrybot_data + 0x70, 7, 1, 0, angle);
             moby[0x20] = 0x15;
             moby[0xBC] = 2;
-            data[0x67] = 0x78;
+            sentrybot_data[0x67] = 0x78;
             break;
         case LETHAL_HIT_RESPONSE:
         case DEATH_KNOCKBACK_HIT_RESPONSE: {
@@ -1490,12 +1490,12 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
             lateral = sentrybot_death_knockback_vertical_speed_gp * step;
             vz = sentrybot_death_knockback_horizontal_speed_approach_rate_gp * step;
             MOBY(moby)->flags &= 0xEFFF;
-            *(float *)(data + 0x80) = fall_speed;
-            *(float *)(data + 0x88) = forward;
-            *(float *)(data + 0x8C) = lateral;
-            *(float *)(data + 0x84) = vz;
-            *(float *)(data + 0xC0) = 8.0f;
-            *(float *)(data + 0xC4) = 16.0f;
+            *(float *)(sentrybot_data + 0x80) = fall_speed;
+            *(float *)(sentrybot_data + 0x88) = forward;
+            *(float *)(sentrybot_data + 0x8C) = lateral;
+            *(float *)(sentrybot_data + 0x84) = vz;
+            *(float *)(sentrybot_data + 0xC0) = 8.0f;
+            *(float *)(sentrybot_data + 0xC4) = 16.0f;
         }
             {
                 float heading =
@@ -1505,81 +1505,81 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
                 fall_angle = heading;
             }
             trooper_knockback_arc(
-                hit_vector_or_sight_line_origin, &fall_angle, data + 0x88, data + 0x8C);
-            trooper_start_knockback(moby, data + 0x70, 8, 1, 0, fall_angle);
+                hit_vector_or_sight_line_origin, &fall_angle, sentrybot_data + 0x88, sentrybot_data + 0x8C);
+            trooper_start_knockback(moby, sentrybot_data + 0x70, 8, 1, 0, fall_angle);
             moby[0x20] = 0x17;
             moby[0xBC] = 2;
-            data[0x67] = 0xF0;
+            sentrybot_data[0x67] = 0xF0;
             break;
         }
-        trooper_anim_update(moby, data + 0x60);
+        trooper_anim_update(moby, sentrybot_data + 0x60);
     }
     moby[0xA4] = 0xFF;
-    trooper_anim_finish(moby, data + 0x60);
+    trooper_anim_finish(moby, sentrybot_data + 0x60);
     if (flag != 0)
         return;
-    if (*(int *)(data + 0x38) != 0) {
-        float value;
+    if (*(int *)(sentrybot_data + 0x38) != 0) {
+        float random_target_countdown_duration;
         int   rounded;
-        value = random_float_between(180.0f, 240.0f);
-        rounded = truncate_float_to_s32(scale_time(value));
-        *(int *)(data + 0x38) = 0;
-        *(float *)(data + 0x130) = (float)rounded;
+        random_target_countdown_duration = random_float_between(180.0f, 240.0f);
+        rounded = truncate_float_to_s32(scale_time(random_target_countdown_duration));
+        *(int *)(sentrybot_data + 0x38) = 0;
+        *(float *)(sentrybot_data + 0x130) = (float)rounded;
     }
-    update_float_countdown(data + 0x130);
+    update_float_countdown(sentrybot_data + 0x130);
     if (fast_vec_dist(moby + 0x10, D_0013F420) < 64.0f) {
         group = 0;
         qcopy(hit_vector_or_sight_line_origin, moby + 0x10);
         hit_vector_or_sight_line_origin[2] += 1.0f;
-        if (*(int *)(data + 0x12C) != -1)
-            group = (int)l15_moby_array + (*(int *)(data + 0x12C) << 8);
-        data[0x15A] =
+        if (*(int *)(sentrybot_data + 0x12C) != -1)
+            group = (int)l15_moby_array + (*(int *)(sentrybot_data + 0x12C) << 8);
+        sentrybot_data[0x15A] =
             collision_line(hit_vector_or_sight_line_origin, D_0013F420, 2, (void *)group, 0) == 0;
     } else {
-        data[0x15A] = 0;
+        sentrybot_data[0x15A] = 0;
     }
-    path = D_L15_001B0AB0[*(int *)(data + 0x120)];
-    if (FUN_L00_0025ff38(moby, data + 0xD0, 128.0f, 0, 0, path + 4, *path) != 2) {
+    path = D_L15_001B0AB0[*(int *)(sentrybot_data + 0x120)];
+    if (FUN_L00_0025ff38(moby, sentrybot_data + 0xD0, 128.0f, 0, 0, path + 4, *path) != 2) {
         float target_angle;
         seen = 0;
-        target_angle = fast_arc_tan(*(float *)(data + 0xD0) - MOBY(moby)->pos.x,
-                                    *(float *)(data + 0xD4) - MOBY(moby)->pos.y);
+        target_angle = fast_arc_tan(*(float *)(sentrybot_data + 0xD0) - MOBY(moby)->pos.x,
+                                    *(float *)(sentrybot_data + 0xD4) - MOBY(moby)->pos.y);
         if ((fast_difference_between_rotations(MOBY(moby)->rot.z, target_angle) < 1.5707964f &&
              (sentrybot_target_visibility_height_check_gate[0] == 0 ||
-              absolute_float(MOBY(moby)->pos.z - *(float *)(data + 0xD8)) < 4.0f)) ||
+              absolute_float(MOBY(moby)->pos.z - *(float *)(sentrybot_data + 0xD8)) < 4.0f)) ||
             moby[0x20] == 0x10 || moby[0x20] == 0x11) {
-            seen = data[0x15A];
+            seen = sentrybot_data[0x15A];
         }
-        if (*(int *)(data + 0x114) == 1)
-            data[0x15E] = data[0x15B] + 1;
+        if (*(int *)(sentrybot_data + 0x114) == 1)
+            sentrybot_data[0x15E] = sentrybot_data[0x15B] + 1;
         else if ((unsigned char)D_001413F4[0] != 3)
-            data[0x15E] = 0;
-        else if (data[0x15E] >= 2)
-            data[0x15B] = 1;
-        data[0x19F] = 1;
+            sentrybot_data[0x15E] = 0;
+        else if (sentrybot_data[0x15E] >= 2)
+            sentrybot_data[0x15B] = 1;
+        sentrybot_data[0x19F] = 1;
         if (seen == 0) {
-            if (data[0x15A] == 0)
-                data[0x15B] = 1;
-            data[0x19F] = 0;
-            *(int *)(data + 0x114) = 2;
-            *(short *)(data + 0x158) = 0;
-        } else if (((*(short *)(data + 0x156) == 0 || data[0x15B] != 0) &&
+            if (sentrybot_data[0x15A] == 0)
+                sentrybot_data[0x15B] = 1;
+            sentrybot_data[0x19F] = 0;
+            *(int *)(sentrybot_data + 0x114) = 2;
+            *(short *)(sentrybot_data + 0x158) = 0;
+        } else if (((*(short *)(sentrybot_data + 0x156) == 0 || sentrybot_data[0x15B] != 0) &&
                     (unsigned char)D_001413F4[0] == 3) ||
-                   (data[0x15E] != 0 && *(int *)(data + 0x114) != 1)) {
-            *(int *)(data + 0x114) = 2;
-            *(short *)(data + 0x158) = 1;
-        } else if ((unsigned char)D_001413F4[0] != 3 && *(int *)(data + 0x114) != 2) {
-            data[0x15B] = 0;
+                   (sentrybot_data[0x15E] != 0 && *(int *)(sentrybot_data + 0x114) != 1)) {
+            *(int *)(sentrybot_data + 0x114) = 2;
+            *(short *)(sentrybot_data + 0x158) = 1;
+        } else if ((unsigned char)D_001413F4[0] != 3 && *(int *)(sentrybot_data + 0x114) != 2) {
+            sentrybot_data[0x15B] = 0;
         }
         if (D_L15_0015F5C4 == 2)
-            *(int *)(data + 0x114) = 2;
+            *(int *)(sentrybot_data + 0x114) = 2;
     } else {
-        data[0x19F] = 0;
-        data[0x15B] = 1;
-        *(short *)(data + 0x158) = 0;
+        sentrybot_data[0x19F] = 0;
+        sentrybot_data[0x15B] = 1;
+        *(short *)(sentrybot_data + 0x158) = 0;
     }
-    if (*(int *)(data + 0x110) == 0)
-        *(int *)(data + 0x110) = (*(int *)&D_001413D0_lui);
+    if (*(int *)(sentrybot_data + 0x110) == 0)
+        *(int *)(sentrybot_data + 0x110) = (*(int *)&D_001413D0_lui);
 }
 
 /* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
