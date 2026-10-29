@@ -160,17 +160,17 @@ void draw_snagglebeast_sphere_quad_strips(char *moby,
 void draw_snagglebeast_sphere_effect(char *moby) __asm__("FUN_L07_00312dc8");
 
 void draw_snagglebeast_sphere_effect(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *snagglebeast_vars = ((char *)MOBY(moby)->pvars);
     float latitude_span;
-    if (*(float *)(data + 0x1C8) < 0.8f) {
-        latitude_span = *(float *)(data + 0x1C8) * 3.0434179f / 0.8f + 0.09817477f;
+    if (*(float *)(snagglebeast_vars + 0x1C8) < 0.8f) {
+        latitude_span = *(float *)(snagglebeast_vars + 0x1C8) * 3.0434179f / 0.8f + 0.09817477f;
         if (latitude_span > 3.14159274f)
             latitude_span = 3.14159274f;
     } else {
         latitude_span = 3.14159274f;
     }
     draw_snagglebeast_sphere_quad_strips(
-        moby, 0, 1.0f, 5.8f, latitude_span, 1.0f, *(float *)(data + 0x1C8));
+        moby, 0, 1.0f, 5.8f, latitude_span, 1.0f, *(float *)(snagglebeast_vars + 0x1C8));
 }
 
 void draw_snagglebeast_rope_attack_layer(
