@@ -178,7 +178,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
     EffectQuad first, second;
     float      transform[12];
     float      position[4];
-    int       *data = ((int *)MOBY(moby)->pvars);
+    int       *spark_emitter_data = ((int *)MOBY(moby)->pvars);
     int        pass, corner, axis, component;
     float     *transformPointer;
     float     *firstUv1, *firstUv3, *secondUv0, *secondUv1;
@@ -223,9 +223,9 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
                        ((unsigned long long)spark_emitter_alpha_c_by_pass_parity[parity] << 4) |
                        ((unsigned long long)spark_emitter_alpha_d_by_pass_parity[parity] << 6) |
                        0x8000000000ULL;
-        if (data[5] != 0) {
+        if (spark_emitter_data[5] != 0) {
             second.col[2] =
-                fast_tween_color((float)data[5] / 60.0f, spark_emitter_pass_colors[pass], 0);
+                fast_tween_color((float)spark_emitter_data[5] / 60.0f, spark_emitter_pass_colors[pass], 0);
             second.col[0] = second.col[2];
             first.col[3] = second.col[2];
             first.col[2] = second.col[2];
@@ -250,7 +250,7 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
             int base = corner * 8;
             axis = 1;
             do {
-                int   limit, value;
+                int   limit, use_cosine;
                 float angle, delta;
                 float step;
                 float radians;
@@ -260,11 +260,11 @@ int draw_spark_emitter_effect_quads(unsigned char *moby) {
                     convert_integer_to_float(spark_emitter_uv_phase_input % limit) / *frequency -
                     180.0f;
                 frequency++;
-                value = *(int *)((char *)spark_emitter_uv_cosine_flags_by_pass + waveform);
+                use_cosine = *(int *)((char *)spark_emitter_uv_cosine_flags_by_pass + waveform);
                 waveform += 4;
                 radians = 0.017453292f;
                 step = 0.125f;
-                if (value != 0) {
+                if (use_cosine != 0) {
                     angle = fast_cos(angle * radians);
                 } else {
                     angle = fast_sin(angle * radians);
