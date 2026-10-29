@@ -343,7 +343,7 @@ extern int  camera_secondary_mode_lui __asm__("D_001413D4") NOT_SDA;
 extern char voice_slot_state_base[] __asm__("D_0013E5C4");
 void process_snagglebeast_damage(char *moby, char *data, float *health) __asm__("FUN_L07_00313420");
 
-void process_snagglebeast_damage(char *moby, char *data, float *health) {
+void process_snagglebeast_damage(char *moby, char *snagglebeast_instance_vars, float *health) {
     enum {
         SNAGGLEBEAST_HIT_KIND_FORCE_UNIT_DAMAGE = 0x79,
         SNAGGLEBEAST_HIT_KIND_UNIT_DAMAGE_OVERRIDE = 0xba,
@@ -388,7 +388,7 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
             } else
                 scratch.contact = 1;
         }
-        if (*(float *)(data + 0x1c8) > 0.0f || *(u8 *)(data + 0x1c5) != 0)
+        if (*(float *)(snagglebeast_instance_vars + 0x1c8) > 0.0f || *(u8 *)(snagglebeast_instance_vars + 0x1c5) != 0)
             goto blocked_hit;
         if (scratch.contact >= 2) {
             original_health = *health;
@@ -398,17 +398,17 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
                 *health = 0.0f;
                 MOBY(moby)->flags &= 0xefff;
                 FUN_L00_00257470(moby, 0, -1);
-                data[0x67] = 0x78;
-                trooper_anim_update(moby, data + 0x60);
+                snagglebeast_instance_vars[0x67] = 0x78;
+                trooper_anim_update(moby, snagglebeast_instance_vars + 0x60);
                 if ((u8)moby[0x53] != 2)
                     FUN_00212f90(moby, 2, 0, random_int_between(10, 13));
                 if (camera_secondary_mode_lui == 0x78)
                     hero_set_state(0, 1);
-                if (*(int *)(data + 0x1f0) != -1) {
+                if (*(int *)(snagglebeast_instance_vars + 0x1f0) != -1) {
                     set_moby_dialogue_record_value(moby, 1);
                     FUN_L00_00257470(moby, 0, -1);
                     jet_clear_persistent((u8)moby[0xb0]);
-                    owner = (char *)l07_cuboids + (*(int *)(data + 0x1f0) << 7);
+                    owner = (char *)l07_cuboids + (*(int *)(snagglebeast_instance_vars + 0x1f0) << 7);
                     jet_reset_camera(owner + 0x30, owner + 0x70);
                 }
                 moby[0x20] = 10;
@@ -419,15 +419,15 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
                 remaining = -2.0f;
                 if (!(2.0f < damage + damage))
                     remaining = -(damage + damage);
-                *(float *)(data + 0x1fc) = remaining;
+                *(float *)(snagglebeast_instance_vars + 0x1fc) = remaining;
                 FUN_L00_00200228(original_health / frame, (void *)((unsigned)&scratch | 4));
-                if ((float)*(short *)(data + 0x24) - 1.0f < original_health)
+                if ((float)*(short *)(snagglebeast_instance_vars + 0x24) - 1.0f < original_health)
                     scratch.threshold = 5.0f;
                 scratch.threshold *= frame;
                 *health -= *(float *)(hit + 0x2c);
-                *(u8 *)(data + 0x67) = 0xfa;
-                *(short *)(data + 0x26) = scale_game_frames(0);
-                trooper_anim_update(moby, data + 0x60);
+                *(u8 *)(snagglebeast_instance_vars + 0x67) = 0xfa;
+                *(short *)(snagglebeast_instance_vars + 0x26) = scale_game_frames(0);
+                trooper_anim_update(moby, snagglebeast_instance_vars + 0x60);
                 if ((u8)moby[0x20] < 10 && *health < scratch.threshold) {
                     int slot;
                     if (camera_secondary_mode_lui == 0x78)
@@ -436,41 +436,41 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
                         int first = random_int_between(0, 2);
                         FUN_00212f90(moby, 2, first, random_int_between(20, 22));
                     }
-                    slot = *(int *)(data + 0x1f8);
-                    *(float *)(data + 0x1c8) = 0.0f;
-                    data[0x1c5] = 1;
+                    slot = *(int *)(snagglebeast_instance_vars + 0x1f8);
+                    *(float *)(snagglebeast_instance_vars + 0x1c8) = 0.0f;
+                    snagglebeast_instance_vars[0x1c5] = 1;
                     if (slot != -1) {
                         owner = voice_slot_state_base - 0x74 + slot * 0x70;
                         if (*(char **)(owner + 0x88) == moby && *(u8 *)(owner + 0x74) != 0)
                             release_voice_slot(slot);
                     }
-                    *(int *)(data + 0x1f8) = -1;
+                    *(int *)(snagglebeast_instance_vars + 0x1f8) = -1;
                     voice = FUN_0022da68(15, 4, moby);
-                    *(int *)(data + 0x1f8) = voice;
+                    *(int *)(snagglebeast_instance_vars + 0x1f8) = voice;
                     moby[0x20] = 11;
                     moby[0xbc]++;
                 }
                 if ((wide < original_health && *health <= wide) ||
                     (narrow < original_health && *health <= narrow))
-                    data[0x1c7] = 1;
+                    snagglebeast_instance_vars[0x1c7] = 1;
             }
         }
         goto decay_hit;
     blocked_hit:
         if (scratch.contact >= 2)
-            *(u8 *)(data + 0x1c6) = 0xff;
+            *(u8 *)(snagglebeast_instance_vars + 0x1c6) = 0xff;
     decay_hit:
-        if ((u8)data[0x1c6] >= 21)
-            data[0x1c6] -= 20;
+        if ((u8)snagglebeast_instance_vars[0x1c6] >= 21)
+            snagglebeast_instance_vars[0x1c6] -= 20;
         else
-            data[0x1c6] = 0;
+            snagglebeast_instance_vars[0x1c6] = 0;
         MOBY(moby)->hit_slot = 0xff;
     }
-    trooper_anim_finish(moby, data + 0x60);
-    output = *(float *)(data + 0x1fc) + 0.3f;
-    *(float *)(data + 0x1fc) = output;
+    trooper_anim_finish(moby, snagglebeast_instance_vars + 0x60);
+    output = *(float *)(snagglebeast_instance_vars + 0x1fc) + 0.3f;
+    *(float *)(snagglebeast_instance_vars + 0x1fc) = output;
     if (output > 0.0f)
-        *(float *)(data + 0x1fc) = 0.0f;
+        *(float *)(snagglebeast_instance_vars + 0x1fc) = 0.0f;
 }
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
