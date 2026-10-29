@@ -164,9 +164,9 @@ void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) {
             do {
                 char *moby = D_L14_ffd0_e_macro[2] +
                              ((*(unsigned short *)listed_moby_entry_cursor & 0x7FFF) << 8);
-                char *data = ((char *)MOBY(moby)->pvars);
+                char *listed_moby_private_vars = ((char *)MOBY(moby)->pvars);
                 if (MOBY(moby)->oclass == 0x1C) {
-                    *(short *)(data + 0x260) = scale_game_frames(plasmabot_beam_cooldown_frames);
+                    *(short *)(listed_moby_private_vars + 0x260) = scale_game_frames(plasmabot_beam_cooldown_frames);
                 }
             } while (*listed_moby_entry_cursor++ >= 0);
         }
