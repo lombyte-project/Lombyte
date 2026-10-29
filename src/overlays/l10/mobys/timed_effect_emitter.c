@@ -29,16 +29,16 @@ void update_timed_effect_emitter(struct Moby *moby) {
         MOBY_STATE_WAIT_FOR_ACTIVATION = 0,
         MOBY_STATE_ACTIVE_WITH_SOUND = 1
     };
-    char *data = (char *)moby->pvars;
+    char *emitter_vars = (char *)moby->pvars;
     float rotation_matrix[16];
     float position[4];
     float rotated_vector[4];
     float position_step[4];
     switch (moby->state) {
     case MOBY_STATE_WAIT_FOR_ACTIVATION:
-        *(int *)(data + 0x10) = -1;
-        if (fast_dec_timer((int *)(data + 0xC))) {
-            *(int *)(data + 0xC) = *(int *)(data + 4);
+        *(int *)(emitter_vars + 0x10) = -1;
+        if (fast_dec_timer((int *)(emitter_vars + 0xC))) {
+            *(int *)(emitter_vars + 0xC) = *(int *)(emitter_vars + 4);
             moby->state = 1;
         }
         break;
@@ -46,7 +46,7 @@ void update_timed_effect_emitter(struct Moby *moby) {
         qcopy(position, &moby->pos);
         euler_rotation_matrix(rotation_matrix, &moby->rot.x);
         clear_u64_value(rotated_vector);
-        rotated_vector[2] = *(float *)data * 3.0f * frame_time;
+        rotated_vector[2] = *(float *)emitter_vars * 3.0f * frame_time;
         transform_vector(rotated_vector, rotated_vector, rotation_matrix);
         fast_vec_scale(position_step, rotated_vector, 0.33f);
         spawn_splitting_effect_particle_with_collision_response_and_fade(
@@ -57,21 +57,21 @@ void update_timed_effect_emitter(struct Moby *moby) {
         fast_vec_add(position, position, position_step);
         spawn_splitting_effect_particle_with_collision_response_and_fade(
             (char *)position, (char *)rotated_vector, 0x40, (int)moby);
-        if (voice_is_playing(moby, *(int *)(data + 0x10)) == 0) {
-            *(int *)(data + 0x10) = FUN_L00_0028dc90(0, 4, (int)moby, 0x519);
+        if (voice_is_playing(moby, *(int *)(emitter_vars + 0x10)) == 0) {
+            *(int *)(emitter_vars + 0x10) = FUN_L00_0028dc90(0, 4, (int)moby, 0x519);
         }
-        if (fast_dec_timer((int *)(data + 0xC))) {
+        if (fast_dec_timer((int *)(emitter_vars + 0xC))) {
             int k;
-            *(int *)(data + 0xC) = *(int *)(data + 8);
+            *(int *)(emitter_vars + 0xC) = *(int *)(emitter_vars + 8);
             moby->state = 0;
-            k = *(int *)(data + 0x10);
+            k = *(int *)(emitter_vars + 0x10);
             if (k != -1) {
                 unsigned char *voice_entry = (unsigned char *)&voice_pool + k * 0x70;
                 if (*(unsigned char **)(voice_entry + 0x88) == moby && voice_entry[0x74] != 0) {
                     release_voice_slot(k);
                 }
             }
-            *(int *)(data + 0x10) = -1;
+            *(int *)(emitter_vars + 0x10) = -1;
         }
         break;
     }
