@@ -112,7 +112,7 @@ void update_homing_spark_projectile(Moby *moby) {
     Vec_2D5B88 tracer_offset;
     float      heading;
     int       *voice_slot = 0;
-    Data      *data = (Data *)((char *)moby->pvars);
+    Data      *homing_spark_pvars = (Data *)((char *)moby->pvars);
     int        state;
     int        i;
     int        j;
@@ -120,19 +120,19 @@ void update_homing_spark_projectile(Moby *moby) {
     float      target_distance;
 
     select_moby_target_with_hero_fallback(moby, &target_info, 20.0f);
-    if (data->target->oclass == 0x277) {
-        voice_slot = (int *)(((char *)data->target->pvars) + 0x250);
-    } else if (data->target->oclass == 0xE9) {
-        voice_slot = (int *)(((char *)data->target->pvars) + 0x1B8);
-        if (data->target->state == 0x40 || data->target->state == 1) {
+    if (homing_spark_pvars->target->oclass == 0x277) {
+        voice_slot = (int *)(((char *)homing_spark_pvars->target->pvars) + 0x250);
+    } else if (homing_spark_pvars->target->oclass == 0xE9) {
+        voice_slot = (int *)(((char *)homing_spark_pvars->target->pvars) + 0x1B8);
+        if (homing_spark_pvars->target->state == 0x40 || homing_spark_pvars->target->state == 1) {
             moby->state = 2;
         }
     }
     state = moby->state;
     switch (state) {
     case SPARK_HOME_AND_EMIT:
-        set_vector_length_xy(&direction, data, 1.0f);
-        data->vel.z = 1.0f;
+        set_vector_length_xy(&direction, homing_spark_pvars, 1.0f);
+        homing_spark_pvars->vel.z = 1.0f;
         make_hit_descriptor(&hit, moby, 0x10003, 2.0f, &direction);
         set_vector_length_xy(&hit, &hit, 1.0f);
         hit.dir.z = 1.0f;
@@ -141,14 +141,14 @@ void update_homing_spark_projectile(Moby *moby) {
         hit.b19 = state;
         hit.h1A = moby->oclass;
         qcopy(&start_pos, &moby->pos);
-        data->vel.z = -(moby->pos.z - data->vel.w) / 10.0f;
+        homing_spark_pvars->vel.z = -(moby->pos.z - homing_spark_pvars->vel.w) / 10.0f;
         max_climb = frame_time_macro * 8.0f;
-        if (data->vel.z > max_climb) {
-            data->vel.z = max_climb;
-        } else if (data->vel.z < -max_climb) {
-            data->vel.z = -max_climb;
+        if (homing_spark_pvars->vel.z > max_climb) {
+            homing_spark_pvars->vel.z = max_climb;
+        } else if (homing_spark_pvars->vel.z < -max_climb) {
+            homing_spark_pvars->vel.z = -max_climb;
         }
-        heading = fast_arc_tan(data->vel.x, data->vel.y);
+        heading = fast_arc_tan(homing_spark_pvars->vel.x, homing_spark_pvars->vel.y);
         if (fast_difference_between_rotations(
                 heading,
                 fast_arc_tan(target_info.pos.x - moby->pos.x, target_info.pos.y - moby->pos.y)) <
@@ -158,21 +158,21 @@ void update_homing_spark_projectile(Moby *moby) {
                 0,
                 fast_arc_tan(target_info.pos.x - moby->pos.x, target_info.pos.y - moby->pos.y),
                 homing_spark_turn_rate_degrees_gp * 0.017453292f * frame_time_macro);
-            data->vel.x = fast_cos(heading) * vector_length_xy(data);
-            data->vel.y = fast_sin(heading) * vector_length_xy(data);
+            homing_spark_pvars->vel.x = fast_cos(heading) * vector_length_xy(homing_spark_pvars);
+            homing_spark_pvars->vel.y = fast_sin(heading) * vector_length_xy(homing_spark_pvars);
         }
-        fast_vec_add(&moby->pos, &moby->pos, data);
-        target_distance = vector_distance_xy(&moby->pos, &data->target->pos);
+        fast_vec_add(&moby->pos, &moby->pos, homing_spark_pvars);
+        target_distance = vector_distance_xy(&moby->pos, &homing_spark_pvars->target->pos);
         if (voice_slot != 0) {
             int voice = *voice_slot;
-            if (data->target->pos.z - target_info.pos.z < target_distance) {
-                if (voice_is_playing(data->target, voice) == 0) {
-                    *voice_slot = allocate_voice_for_target_entry(0, 4, (int)data->target);
+            if (homing_spark_pvars->target->pos.z - target_info.pos.z < target_distance) {
+                if (voice_is_playing(homing_spark_pvars->target, voice) == 0) {
+                    *voice_slot = allocate_voice_for_target_entry(0, 4, (int)homing_spark_pvars->target);
                 }
             } else {
                 if (voice != -1) {
                     char *entry = ((char *)&voice_pool) + voice * 0x70;
-                    if (*(Moby **)(entry + 0x88) == data->target &&
+                    if (*(Moby **)(entry + 0x88) == homing_spark_pvars->target &&
                         *(unsigned char *)(entry + 0x74) != 0) {
                         release_voice_slot(voice);
                     }
@@ -180,18 +180,18 @@ void update_homing_spark_projectile(Moby *moby) {
                 *voice_slot = -1;
             }
         }
-        if (data->target->pos.z - target_info.pos.z < target_distance) {
-            if (data->timer % scale_game_frames(6) == 0) {
-                data->flip ^= 1;
+        if (homing_spark_pvars->target->pos.z - target_info.pos.z < target_distance) {
+            if (homing_spark_pvars->timer % scale_game_frames(6) == 0) {
+                homing_spark_pvars->flip ^= 1;
                 side_offset.x =
-                    fast_cos(fast_add_rotations(heading, data->flip ? 1.5707964f : -1.5707964f)) *
+                    fast_cos(fast_add_rotations(heading, homing_spark_pvars->flip ? 1.5707964f : -1.5707964f)) *
                     0.25f;
                 side_offset.y =
-                    fast_sin(fast_add_rotations(heading, data->flip ? 1.5707964f : -1.5707964f)) *
+                    fast_sin(fast_add_rotations(heading, homing_spark_pvars->flip ? 1.5707964f : -1.5707964f)) *
                     0.25f;
                 side_offset.z = 0.0f;
                 fast_vec_add(&gun_pos, &moby->pos, &side_offset);
-                FUN_L00_0024f7c8(data->target, 3 - data->flip, &muzzle);
+                FUN_L00_0024f7c8(homing_spark_pvars->target, 3 - homing_spark_pvars->flip, &muzzle);
                 fast_vec_sub(&aim, &gun_pos, &muzzle);
                 fast_vec_scale(&ray_end, &aim, 2.0f);
                 fast_vec_add(&ray_end, &ray_end, &muzzle);
@@ -220,7 +220,7 @@ void update_homing_spark_projectile(Moby *moby) {
                                  0x2F4F7F7F,
                                  random_int_between(scale_game_frames(4), scale_game_frames(7)),
                                  400000.0f);
-                fast_vec_scale(&spark_dir, data, scale_time(6.0f));
+                fast_vec_scale(&spark_dir, homing_spark_pvars, scale_time(6.0f));
                 fast_vec_add(&spark_dir, &spark_dir, &moby->pos);
                 fast_vec_sub(&spark_dir, &spark_dir, &side_offset);
                 fast_vec_sub(&tracer_vel, &spark_dir, &muzzle);
@@ -230,8 +230,8 @@ void update_homing_spark_projectile(Moby *moby) {
                 fast_vec_add(&spark_dir, &spark_dir, &spark_vel);
                 fast_vec_normalize(&tracer_vel, &tracer_vel, frame_time_macro * 100.0f);
                 create_type_31_part(
-                    data->target, &spark_vel, &spark_dir, &tracer_vel, scale_game_frames(0x2D));
-                if (collision_line(&muzzle, &ray_end, 0, data->target, 0) != 0) {
+                    homing_spark_pvars->target, &spark_vel, &spark_dir, &tracer_vel, scale_game_frames(0x2D));
+                if (collision_line(&muzzle, &ray_end, 0, homing_spark_pvars->target, 0) != 0) {
                     qcopy(&muzzle, &coll_hit);
                     fast_vec_normalize(&aim, &aim, frame_time_macro * 10.0f);
                     for (j = 0; j < 10; j++) {
@@ -257,7 +257,7 @@ void update_homing_spark_projectile(Moby *moby) {
                     }
                     fast_vec_normalize(&aim, &aim, -1.0f);
                     fast_vec_add(&ray_end, &muzzle, &aim);
-                    if (collision_line(&muzzle, &ray_end, 0x10, data->target, &hit) != 0 &&
+                    if (collision_line(&muzzle, &ray_end, 0x10, homing_spark_pvars->target, &hit) != 0 &&
                         D_L03_00173F58 != 0 &&
                         (D_L03_00173F58 == ((Hero *)(D_0013E533 + 0xE1D))->moby ||
                          D_L03_00173F58->oclass == 0x1DF)) {
@@ -265,7 +265,7 @@ void update_homing_spark_projectile(Moby *moby) {
                     }
                     qcopy(&ray_end, &muzzle);
                     ray_end.z += 2.0f;
-                    if (collision_line(&muzzle, &ray_end, 0x10, data->target, &hit) != 0 &&
+                    if (collision_line(&muzzle, &ray_end, 0x10, homing_spark_pvars->target, &hit) != 0 &&
                         D_L03_00173F58 != 0 &&
                         (D_L03_00173F58 == ((Hero *)(D_0013E533 + 0xE1D))->moby ||
                          D_L03_00173F58->oclass == 0x1DF)) {
@@ -280,8 +280,8 @@ void update_homing_spark_projectile(Moby *moby) {
                 }
             }
         }
-        if (fast_dec_timer(&data->timer) != 0 || data->target == 0 || data->target->state == 0xFE ||
-            data->target->state == 0xFD) {
+        if (fast_dec_timer(&homing_spark_pvars->timer) != 0 || homing_spark_pvars->target == 0 || homing_spark_pvars->target->state == 0xFE ||
+            homing_spark_pvars->target->state == 0xFD) {
             moby->state = 2;
         }
         break;
@@ -290,7 +290,7 @@ void update_homing_spark_projectile(Moby *moby) {
             int voice = *voice_slot;
             if (voice != -1) {
                 char *entry = ((char *)&voice_pool) + voice * 0x70;
-                if (*(Moby **)(entry + 0x88) == data->target &&
+                if (*(Moby **)(entry + 0x88) == homing_spark_pvars->target &&
                     *(unsigned char *)(entry + 0x74) != 0) {
                     release_voice_slot(voice);
                 }
