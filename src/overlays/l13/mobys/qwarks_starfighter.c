@@ -2290,24 +2290,24 @@ extern char *create_moby(int) __asm__("FUN_0020c4f8");
 char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index, int id) {
     char *moby = create_moby(id);
     if (moby != 0) {
-        char *data;
+        char *attachment_vars;
         float f = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * MOBY(parent_moby)->scale /
                   *(float *)(((char *)MOBY(parent_moby)->pclass) + 0x24);
-        data = ((char *)MOBY(moby)->pvars);
+        attachment_vars = ((char *)MOBY(moby)->pvars);
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         MOBY(moby)->scale = f;
-        *(int *)(data + 0x44) = attachment_joint_index;
+        *(int *)(attachment_vars + 0x44) = attachment_joint_index;
         moby_point_position(parent_moby, attachment_joint_index, moby + 0x10);
-        *(char **)(data + 0x3C) = parent_moby;
+        *(char **)(attachment_vars + 0x3C) = parent_moby;
         update_entity(moby);
         qcopy(moby + 0x40, parent_moby + 0x40);
         *(OvlQuad *)&MOBY(moby)->rot_row0 = *(OvlQuad *)&MOBY(parent_moby)->rot_row0;
         *(OvlQuad *)&MOBY(moby)->rot_row1 = *(OvlQuad *)&MOBY(parent_moby)->rot_row1;
         *(OvlQuad *)&MOBY(moby)->rot_row2 = *(OvlQuad *)&MOBY(parent_moby)->rot_row2;
-        *(int *)(data + 0x40) = scale_game_frames(0x258);
+        *(int *)(attachment_vars + 0x40) = scale_game_frames(0x258);
         update_entity(moby);
     }
     return moby;
