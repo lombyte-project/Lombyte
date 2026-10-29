@@ -14,7 +14,7 @@ struct DbCState {
     s32 unk2C;
 };
 extern u8 dbc_get_dep_number_rpc_error_message[] __asm__("D_001535B8");
-extern u8 D_0015B008[];
+extern u8 RpcQueueData[] __asm__("D_0015B008");
 extern u8 D_0015B480[];
 extern u8 D_0015B500[];
 extern s32 DIntr();
@@ -32,7 +32,7 @@ s32 sceDbcGetDepNumber(s32 dependency_index) {
     EnableInterrupts();
     if (((s32 *)D_0015B500)[dependency_index] == 1) {
         RpcReceiveData.unk0 = dependency_index;
-        if (sceSifCallRpc(D_0015B008, 0x80000903, 0, &RpcReceiveData, 0x400, &RpcReceiveData, 0x400, 0, 0) <
+        if (sceSifCallRpc(RpcQueueData, 0x80000903, 0, &RpcReceiveData, 0x400, &RpcReceiveData, 0x400, 0, 0) <
             0) {
             debug_print_stub(dbc_get_dep_number_rpc_error_message);
             return 0;

@@ -36,19 +36,19 @@ typedef struct ExitReent {
     struct _atexit *_atexit;
 } ExitReent;
 
-extern ExitReent *D_0012F76C NOT_SDA;
+extern ExitReent *_impure_ptr_lui __asm__("D_0012F76C")NOT_SDA;
 extern void JumpToRfuStatus(int code);
 
 void exit(int code) {
     struct _atexit *atexit_block;
     int callback_index;
 
-    for (atexit_block = D_0012F76C->_atexit; atexit_block != 0; atexit_block = atexit_block->_next)
+    for (atexit_block = _impure_ptr_lui->_atexit; atexit_block != 0; atexit_block = atexit_block->_next)
         for (callback_index = atexit_block->_ind; --callback_index >= 0;)
             (*atexit_block->_fns[callback_index])();
 
-    if (D_0012F76C->__cleanup != 0)
-        (*D_0012F76C->__cleanup)(D_0012F76C);
+    if (_impure_ptr_lui->__cleanup != 0)
+        (*_impure_ptr_lui->__cleanup)(_impure_ptr_lui);
 
     JumpToRfuStatus(code);
 }

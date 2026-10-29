@@ -243,7 +243,7 @@ extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 float absolute_float(float input) __asm__("func_001F99C0");
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 #define F(p, o) (*(float *)((p) + (o)))
@@ -361,7 +361,7 @@ void novalis_elevator_update(unsigned char *moby) {
             r = *(int *)(data + 0xC4);
             *(int *)(data + 0xA8) = 0;
             if (r != -1) {
-                unsigned char *s = (unsigned char *)((char *)&D_0013E550) + r * 0x70;
+                unsigned char *s = (unsigned char *)((char *)&voice_pool) + r * 0x70;
                 if (*(unsigned char **)(s + 0x88) == moby && s[0x74] != 0) {
                     release_voice_slot(r);
                 }
@@ -392,7 +392,7 @@ void novalis_elevator_update(unsigned char *moby) {
                 *(short *)(data + 0xBA) = scale_game_frames(15);
                 r = *(int *)(data + 0xC4);
                 if (r != -1) {
-                    unsigned char *s = (unsigned char *)((char *)&D_0013E550) + r * 0x70;
+                    unsigned char *s = (unsigned char *)((char *)&voice_pool) + r * 0x70;
                     if (*(unsigned char **)(s + 0x88) == moby && s[0x74] != 0) {
                         release_voice_slot(r);
                     }
@@ -2139,7 +2139,7 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_vec_dist(void *, void *);
 extern char *D_L01_0015FFD8;
-extern int D_L01_001612D0;
+extern int pool_draw_tiles __asm__("D_L01_001612D0");
 extern float D_L01_001619A0;
 extern float D_L01_001619A4;
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
@@ -2297,7 +2297,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     *(unsigned char *)(moby + 0xA4) = 0xFF;
     removal_height_entry_index = *(int *)(moby_vars + 0x258);
     if (removal_height_entry_index != 0 && *(unsigned char *)(moby + 0x20) != 0
-        && *(float *)(moby + 0x18) < *(float *)(removal_height_entry_index * 0x1190 + D_L01_001612D0 + 8)) {
+        && *(float *)(moby + 0x18) < *(float *)(removal_height_entry_index * 0x1190 + pool_draw_tiles + 8)) {
         clear_u64_value(&scratch_vector);
         spawn_amoeboid_burst_sparks((unsigned char *)moby, (float *)&scratch_vector);
         mark_moby_for_removal(moby);
@@ -3163,7 +3163,7 @@ void gunship_follow_path(struct Moby *moby) {
             return;
         moby->state = 0;
         if (v->unk11E != -1) {
-            u8 *e = (u8 *)D_0013E550 + v->unk11E * 0x70;
+            u8 *e = (u8 *)voice_pool + v->unk11E * 0x70;
             if (*(struct Moby **)(e + 0x88) == moby && e[0x74] != 0)
                 FUN_0022d798(v->unk11E);
         }
@@ -3318,7 +3318,7 @@ void gunship_follow_path(struct Moby *moby) {
     moby->collision = 0;
     moby->flags |= 0x41;
     if (v->unk11E != -1) {
-        u8 *e = (u8 *)D_0013E550 + v->unk11E * 0x70;
+        u8 *e = (u8 *)voice_pool + v->unk11E * 0x70;
         if (*(struct Moby **)(e + 0x88) == moby && e[0x74] != 0)
             FUN_0022d798(v->unk11E);
     }

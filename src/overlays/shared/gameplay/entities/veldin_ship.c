@@ -1485,7 +1485,7 @@ typedef struct VoiceSlot2d2ee8 {
     struct Moby *owner; /* 0x88 */
 } VoiceSlot2d2ee8;
 
-extern u8 D_0013E550[] NOT_SDA;
+extern u8 voice_pool_lui[] __asm__("D_0013E550")NOT_SDA;
 extern u128 D_L00_001E1160 NOT_SDA;
 extern u8 D_L00_001E1170[] NOT_SDA;
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/metal_detector_update.h"
@@ -1674,7 +1674,7 @@ void metal_detector_update(struct Moby *moby) {
                     vars->unk8 = 0x7FFF;
                     allocate_voice_for_target_entry(3, 0, moby);
                     if (vars->voice2 != -1) {
-                        VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice2 * 0x70);
+                        VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice2 * 0x70);
 
                         if (e->owner == moby && e->active != 0) {
                             release_voice_slot(vars->voice2);
@@ -1685,7 +1685,7 @@ void metal_detector_update(struct Moby *moby) {
             } else {
                 moby->glow_color = 0x80808080;
                 if (vars->voice0 != -1) {
-                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice0 * 0x70);
+                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice0 * 0x70);
 
                     if (e->owner == moby && e->active != 0) {
                         release_voice_slot(vars->voice0);
@@ -1693,7 +1693,7 @@ void metal_detector_update(struct Moby *moby) {
                 }
                 vars->voice0 = -1;
                 if (vars->voice1 != -1) {
-                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice1 * 0x70);
+                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice1 * 0x70);
 
                     if (e->owner == moby && e->active != 0) {
                         release_voice_slot(vars->voice1);
@@ -1701,7 +1701,7 @@ void metal_detector_update(struct Moby *moby) {
                 }
                 vars->voice1 = -1;
                 if (vars->voice2 != -1) {
-                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice2 * 0x70);
+                    VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice2 * 0x70);
 
                     if (e->owner == moby && e->active != 0) {
                         release_voice_slot(vars->voice2);
@@ -1714,7 +1714,7 @@ void metal_detector_update(struct Moby *moby) {
         }
         moby->glow_color = 0x80808080;
         if (vars->voice0 != -1) {
-            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice0 * 0x70);
+            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice0 * 0x70);
 
             if (e->owner == moby && e->active != 0) {
                 release_voice_slot(vars->voice0);
@@ -1722,7 +1722,7 @@ void metal_detector_update(struct Moby *moby) {
         }
         vars->voice0 = -1;
         if (vars->voice1 != -1) {
-            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice1 * 0x70);
+            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice1 * 0x70);
 
             if (e->owner == moby && e->active != 0) {
                 release_voice_slot(vars->voice1);
@@ -1730,7 +1730,7 @@ void metal_detector_update(struct Moby *moby) {
         }
         vars->voice1 = -1;
         if (vars->voice2 != -1) {
-            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(D_0013E550 + vars->voice2 * 0x70);
+            VoiceSlot2d2ee8 *e = (VoiceSlot2d2ee8 *)(voice_pool_lui + vars->voice2 * 0x70);
 
             if (e->owner == moby && e->active != 0) {
                 release_voice_slot(vars->voice2);

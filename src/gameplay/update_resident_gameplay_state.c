@@ -123,7 +123,7 @@ extern s32 space_load_in_progress[1] __asm__("D_0015F618");
 extern ResidentRenderObject *moby_instance_end __asm__("D_0015FF1C");
 extern CameraBlendNode *D_00160034;
 extern s32 playback_skip_target_frames[1] __asm__("D_00160510") __attribute__((sda));
-extern ResidentCameraState D_00186F40;
+extern ResidentCameraState preview_camera __asm__("D_00186F40");
 extern ResidentPlaybackState render_sequence __asm__("D_0018CB20");
 extern f32 view_tan_half_fov[4] __asm__("D_0018CDB0");
 extern ScriptedPath *resident_scripted_path_table[] __asm__("D_001CC3B0");
@@ -332,10 +332,10 @@ void update_resident_gameplay_state(void) {
         keyframe_flags = keyframe->position.bytes[12];
         view_tan_half_fov[0] = keyframe_angles[3];
         update_view_context();
-        qcopy(&D_00186F40.position, &keyframe->position);
-        transform_vector_by_basis(&D_00186F40.position, &D_00186F40.position,
+        qcopy(&preview_camera.position, &keyframe->position);
+        transform_vector_by_basis(&preview_camera.position, &preview_camera.position,
                       level_render_state.player->transform);
-        fast_vec_add(&D_00186F40.position, &D_00186F40.position,
+        fast_vec_add(&preview_camera.position, &preview_camera.position,
                     &level_render_state.player->position);
         segment_angle = fast_add_rotations(keyframe_angles[2],
                                            level_render_state.player->rotation.components[2]);
@@ -343,17 +343,17 @@ void update_resident_gameplay_state(void) {
         SceVu0RotMatrixX(scratch_vectors, scratch_vectors, keyframe->rotation[0]);
         SceVu0RotMatrixY(scratch_vectors, scratch_vectors, keyframe_angles[1]);
         sceVu0RotMatrixZ(scratch_vectors, scratch_vectors, segment_angle);
-        D_00186F40.forward.components[0] = -scratch_vectors[2].components[0];
-        D_00186F40.right.components[0] = -scratch_vectors[0].components[0];
-        D_00186F40.up.components[0] = scratch_vectors[1].components[0];
-        D_00186F40.forward.components[1] = -scratch_vectors[2].components[1];
-        D_00186F40.right.components[1] = -scratch_vectors[0].components[1];
-        D_00186F40.up.components[1] = scratch_vectors[1].components[1];
-        D_00186F40.forward.components[2] = -scratch_vectors[2].components[2];
-        D_00186F40.right.components[2] = -scratch_vectors[0].components[2];
-        D_00186F40.up.components[2] = scratch_vectors[1].components[2];
+        preview_camera.forward.components[0] = -scratch_vectors[2].components[0];
+        preview_camera.right.components[0] = -scratch_vectors[0].components[0];
+        preview_camera.up.components[0] = scratch_vectors[1].components[0];
+        preview_camera.forward.components[1] = -scratch_vectors[2].components[1];
+        preview_camera.right.components[1] = -scratch_vectors[0].components[1];
+        preview_camera.up.components[1] = scratch_vectors[1].components[1];
+        preview_camera.forward.components[2] = -scratch_vectors[2].components[2];
+        preview_camera.right.components[2] = -scratch_vectors[0].components[2];
+        preview_camera.up.components[2] = scratch_vectors[1].components[2];
         if (D_0015EDB4 != 0) {
-            fast_vec_cross(&D_00186F40.right, &D_00186F40.up, &D_00186F40.forward);
+            fast_vec_cross(&preview_camera.right, &preview_camera.up, &preview_camera.forward);
         }
         for (object_index = 0; object_index < render_sequence.count; object_index++) {
             object = render_sequence.objects[object_index];
@@ -579,7 +579,7 @@ void update_resident_gameplay_state(void) {
                 level_render_state.companion_b->lifetime_stamp =
                     ((ResidentRenderObject *)hero.moby)->lifetime_stamp;
             }
-            noop_callback_a(&D_00186F40.position, &D_00186F40.unk150, 1, 0, 0);
+            noop_callback_a(&preview_camera.position, &preview_camera.unk150, 1, 0, 0);
             level_render_state.blend = 0.0f;
             level_render_state.interpolation_velocity = 0.0f;
             if (level_render_state.path >= 0) {

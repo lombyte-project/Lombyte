@@ -1784,7 +1784,7 @@ typedef struct {
     unsigned char hit;
 } CamAttach;
 
-extern int D_001413D4 NOT_SDA;
+extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA;
 extern int D_001413DC NOT_SDA;
 extern float D_L00_00166EEC NOT_SDA;
 extern int FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
@@ -1889,7 +1889,7 @@ void FUN_L00_002e4930(char *camera) {
         }
         return;
     }
-    if (attach_state->state != 9 && attach_state->state != 1 && D_001413D4 == 0x14) {
+    if (attach_state->state != 9 && attach_state->state != 1 && camera_secondary_mode_lui == 0x14) {
         float r;
         attach_state->prev = attach_state->state;
         attach_state->state = 9;
@@ -1951,7 +1951,7 @@ void FUN_L00_002e4930(char *camera) {
         }
         return;
     }
-    if (attach_state->state == 3 && D_001413D4 == 0xB) {
+    if (attach_state->state == 3 && camera_secondary_mode_lui == 0xB) {
         attach_state->prev = attach_state->state;
         attach_state->state = 6;
         attach_state->moveTimer = scale_game_frames(*(int *)&D_L00_00161D40_gp);
@@ -1966,21 +1966,21 @@ void FUN_L00_002e4930(char *camera) {
         qcopy(attach_state->v20, attach_state->v10);
         return;
     }
-    if (attach_state->state == 5 && D_001413D4 == 0xC) {
+    if (attach_state->state == 5 && camera_secondary_mode_lui == 0xC) {
         attach_state->prev = attach_state->state;
         attach_state->state = 8;
         attach_state->timer = follow_camera_hold_focus_transition_frames_gp;
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
-    if (attach_state->state == 8 && D_001413D4 != 0xC) {
+    if (attach_state->state == 8 && camera_secondary_mode_lui != 0xC) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
         attach_state->timer = scale_game_frames(*(int *)&follow_camera_hold_focus_exit_base_frames_gp);
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
-    if (attach_state->state == 6 && D_001413D4 != 0xB) {
+    if (attach_state->state == 6 && camera_secondary_mode_lui != 0xB) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
         attach_state->timer = scale_game_frames(*(int *)&D_L00_00161D54_gp);
@@ -2017,7 +2017,7 @@ void FUN_L00_002e4930(char *camera) {
             return;
         }
     }
-    if (attach_state->state == 9 && D_001413D4 != 0x14) {
+    if (attach_state->state == 9 && camera_secondary_mode_lui != 0x14) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0xA;
         attach_state->timer = follow_camera_continue_projected_focus_transition_frames_gp;
@@ -2031,7 +2031,7 @@ void FUN_L00_002e4930(char *camera) {
         attach_state->invTimer = 1.0f / convert_integer_to_float(attach_state->timer);
         return;
     }
-    if (attach_state->state == 5 && D_001413D4 == 0x10) {
+    if (attach_state->state == 5 && camera_secondary_mode_lui == 0x10) {
         attach_state->prev = attach_state->state;
         attach_state->state = 0;
         attach_state->timer = scale_game_frames(*(int *)&follow_camera_hold_focus_exit_base_frames_gp);

@@ -80,7 +80,7 @@ extern int hero_get_gadget_anim_id(int a) __asm__("FUN_L12_00227f10");
 extern int hero_set_state(int, int) __asm__("FUN_L12_002400d0");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern unsigned char D_0013D4C0[];
+extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void emit_hero_animation_voice_and_ground_particle(int a0, int a1, int a2) __asm__("FUN_L00_00205f60");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
@@ -208,7 +208,7 @@ void update_hero_state_transitions(void) {
                     }
                     clear_hero_queued_animation();
                     if (hero.unk22CA != 0) {
-                        if (hero.unk308 == 0 || D_0013D4C0[0x1C] == 0) {
+                        if (hero.unk308 == 0 || item_available[0x1C] == 0) {
                             hero_set_state(0x81, 1);
                             break;
                         }
@@ -475,7 +475,7 @@ void update_hero_state_transitions(void) {
                             break;
                         }
                     }
-                    if (D_0013D4C0[4] != 0 && (controller_state.held & 0xA)) {
+                    if (item_available[4] != 0 && (controller_state.held & 0xA)) {
                         if (hero.state.current == 0x33 && scale_game_frames(0x14) < hero.state_timer) {
                             hero_set_state(0x35, 1);
                             break;
@@ -497,8 +497,8 @@ void update_hero_state_transitions(void) {
                         }
                     }
                     if (0.2f < hero.stick_magnitude || (controller_state.held & 0xC0) ||
-                        (D_0013D4C0[4] != 0 && (controller_state.held & 0xA))) {
-                        if (D_0013D4C0[4] != 0 && (controller_state.held & 0xA)) {
+                        (item_available[4] != 0 && (controller_state.held & 0xA))) {
+                        if (item_available[4] != 0 && (controller_state.held & 0xA)) {
                             hero_set_state(0x35, 1);
                             break;
                         }
@@ -517,9 +517,9 @@ void update_hero_state_transitions(void) {
                     hero.item_select_blocked = 1;
                     if (hero.unk1DE == 0) {
                         if (pad_pressed_within(0x80, scale_game_frames(7), 0) ||
-                            (D_0013D4C0[4] != 0 &&
+                            (item_available[4] != 0 &&
                              pad_pressed_within(0xA, scale_game_frames(7), 0))) {
-                            if (D_0013D4C0[4] != 0 && (controller_state.held & 0xA)) {
+                            if (item_available[4] != 0 && (controller_state.held & 0xA)) {
                                 hero_set_state(0x35, 1);
                                 break;
                             }
@@ -547,7 +547,7 @@ void update_hero_state_transitions(void) {
                     }
                     if (hero.unk1DE == 0) {
                         if (pad_pressed_within(0x80, scale_game_frames(7), 0)) {
-                            if (D_0013D4C0[4] != 0 && (controller_state.held & 0xA)) {
+                            if (item_available[4] != 0 && (controller_state.held & 0xA)) {
                                 hero_set_state(0x35, 1);
                                 break;
                             }
@@ -1367,7 +1367,7 @@ void update_hero_state_transitions(void) {
                     if (hero.health.hp <= 0) {
                         break;
                     }
-                    if ((controller_state.held & 0x40) && D_0013D4C0[2] != 0 &&
+                    if ((controller_state.held & 0x40) && item_available[2] != 0 &&
                         hero_slot_item_id(3) != 4 && hero.pack_disabled == 0 && hero.move_lock_timer == 0 &&
                         hero.ground_distance > 0.6f) {
                         hero_set_state(HERO_STATE_LAND, 1);
@@ -1594,7 +1594,7 @@ void update_hero_state_transitions(void) {
                         hero.state.current != 0x12 && hero.state.current != 0x3C &&
                         hero.state.current != 0x11 && hero.state.current != 0xE &&
                         hero.state.current != 0x69) {
-                        if (hero_slot_item_id(3) == 2 && D_0013D4C0[2] != 0 &&
+                        if (hero_slot_item_id(3) == 2 && item_available[2] != 0 &&
                             hero.pack_disabled == 0 && frame_time * 0.9f < hero.motion.forward_speed) {
                             hero_set_state(HERO_STATE_PACK_JUMP, 1);
                         } else if (hero_slot_item_id(3) == 3 && hero.pack_disabled == 0 &&
@@ -1837,7 +1837,7 @@ void update_hero_state_transitions(void) {
                                       absolute_float(gravity_z(hero.motion.velocity.f)) <
                                           frame_time * 5.8f))) {
                                     hero_set_state(0xE, 1);
-                                } else if (D_0013D4C0[2] != 0 && hero_slot_item_id(3) != 4 &&
+                                } else if (item_available[2] != 0 && hero_slot_item_id(3) != 4 &&
                                            hero.pack_disabled == 0 && (controller_state.held & 0x40) &&
                                            delay < hero.state_timer &&
                                            hero.unk4A6 < hero.state_timer) {

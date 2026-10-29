@@ -468,7 +468,7 @@ typedef struct {
 } G680;
 extern C940 D_0013C940;
 extern G680 D_L00_00166C80_c __asm__("D_L00_00166C80");
-extern int D_0015EDDC;
+extern int invert52 __asm__("D_0015EDDC");
 extern float hero_aligned_camera_rotation_gain_at_zero_input_gp __asm__("D_L00_00161DC0") __attribute__((sda));
 extern float hero_aligned_camera_rotation_gain_at_unit_input_gp __asm__("D_L00_00161DC4") __attribute__((sda));
 extern float hero_aligned_camera_input_stiffness_gp __asm__("D_L00_00161DC8") __attribute__((sda));
@@ -521,7 +521,7 @@ void update_hero_aligned_camera_from_input(u8 *camera_object) {
         rotation_input_target = -convert_integer_to_float((D_0013C940.i1A0 >> 14) & 1);
     if (D_L00_00166C80_c.s270 != 0 && hero.state.prev == 2)
         rotation_input_target = 0.0f;
-    if (D_0015EDDC == 0)
+    if (invert52 == 0)
         rotation_input_target = -rotation_input_target;
     rotation_input_scratch = FUN_001f99c0(camera_rotation_state->b);
     k = hero_aligned_camera_rotation_gain_at_zero_input_gp + (hero_aligned_camera_rotation_gain_at_unit_input_gp - hero_aligned_camera_rotation_gain_at_zero_input_gp) * rotation_input_scratch;
@@ -1360,7 +1360,7 @@ extern char D_0013F350[] NOT_SDA;
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern int D_0015ED84 MACRO_ADDR;
+extern int current_level_index_macro __asm__("D_0015ED84")MACRO_ADDR;
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -1371,7 +1371,7 @@ void initialize_target_tracking_camera(void *camera) __asm__("FUN_L00_002ebbd8")
 void initialize_target_tracking_camera(void *camera) {
     char *camera_object = camera;
     char *hero_data;
-    int lvl0 = D_0015ED84;
+    int lvl0 = current_level_index_macro;
     int lvl;
     char *follow_block = *(char **)(camera_object + 0x70) + 0x40;
     float f;

@@ -30,9 +30,9 @@ typedef struct {
     s32 f3C;
 } TransferState;
 
-extern s32 D_0015ED80 MACRO_ADDR;
+extern s32 pal_mode_macro __asm__("D_0015ED80")MACRO_ADDR;
 extern s32 D_0015ED88 __attribute__((sda));
-extern volatile s32 D_0015EE8C;
+extern volatile s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern s32 intro_overlay_timer_macro __asm__("D_0015EF58") MACRO_ADDR;
 extern f32 sequence_macro __asm__("D_0015F43C") MACRO_ADDR;
 extern s32 game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
@@ -187,11 +187,11 @@ void transition_do_transition(void) {
             vu1_init_chain();
             continue;
         }
-        if (requested_video_mode != D_0015ED80) {
-            D_0015ED80 = D_0015ED80 == 0;
+        if (requested_video_mode != pal_mode_macro) {
+            pal_mode_macro = pal_mode_macro == 0;
             fade_to_black(4);
             reset_vif1_gif();
-            sceGsResetGraph(0, 1, D_0015ED80 != 0 ? 3 : 2, 0);
+            sceGsResetGraph(0, 1, pal_mode_macro != 0 ? 3 : 2, 0);
             old = gs_texture_allocation_start;
             sequence_macro = 1.0f;
             set_pal_mode();
@@ -201,10 +201,10 @@ void transition_do_transition(void) {
         sceGsSyncV(0);
         game_frame_counter_macro++;
     }
-    if (D_0015ED80 == 0) {
-        D_0015EE8C = 0x280000;
+    if (pal_mode_macro == 0) {
+        gs_texture_allocation_base = 0x280000;
     }
-    gs_texture_allocation_cursor = gs_texture_allocation_start = D_0015EE8C;
+    gs_texture_allocation_cursor = gs_texture_allocation_start = gs_texture_allocation_base;
 }
 
 extern __typeof__(transition_do_transition) func_001EB798 __attribute__((alias("FUN_001eb798")));

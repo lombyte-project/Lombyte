@@ -10,7 +10,7 @@ typedef struct {
     char _pad0[0xD9048];
     struct VideoDec videoDec; /* 0xD9048 */
 } MovieGlobals;
-extern MovieGlobals *D_0016120C MACRO_ADDR;
+extern MovieGlobals *decoder_state_macro __asm__("D_0016120C")MACRO_ADDR;
 typedef struct {
     void *data;
     void *tag;
@@ -18,7 +18,7 @@ typedef struct {
     volatile int count;
     int size;
 } VoBuf;
-#define voBuf (*(VoBuf *)((char *)D_0016120C + 0xD9168))
+#define voBuf (*(VoBuf *)((char *)decoder_state_macro + 0xD9168))
 typedef struct {
     char hdr[0x40];
     char body[0x138C0 - 0x40];

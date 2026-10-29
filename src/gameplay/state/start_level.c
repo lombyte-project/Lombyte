@@ -3,7 +3,7 @@
 #include "rnc/storage/disc_table.h"
 #include "types.h"
 extern int decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/globals.h"
@@ -44,7 +44,7 @@ void start_level(int level) {
         movie_size_bytes = disc_table.start_movies[level].size;
     }
     decode_mode_macro = 2;
-    D_0013E550[0x6B] |= 8;
+    voice_pool[0x6B] |= 8;
     FlushCache(0);
     sound_stop_all_sounds();
     music_stop();
@@ -74,7 +74,7 @@ void start_level(int level) {
     decode_mode_macro = 0;
     fade_to_black(4);
     game_mode_macro = 0;
-    D_0013E550[0x6B] |= 0x10;
+    voice_pool[0x6B] |= 0x10;
 }
 
 extern __typeof__(start_level) func_001E9488 __attribute__((alias("FUN_001e9488")));

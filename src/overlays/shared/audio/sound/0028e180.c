@@ -8,7 +8,7 @@
 #include "rnc/math/fast_math.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
-extern char D_L00_00166DC0[];
+extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -18,7 +18,7 @@ extern char ship_proximity_local_offsets[] __asm__("D_L00_001BD880");
 extern int D_L00_0015F630 __asm__("D_L00_0015F630");
 extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern unsigned char D_0013CAE4[];
-extern unsigned char D_0013D388[];
+extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern unsigned char l00_moby_followup_scene_gate[] __asm__("D_0013DD4B");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
@@ -51,7 +51,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
                 *(int *)(moby + 0x90) = color_pulse_intensity | (color_pulse_intensity << 8) | (color_pulse_intensity << 16);
             }
             add_draw_callback(render_environment_mapped_object, moby);
-            if (vector_distance(moby + 0x10, D_L00_00166DC0) < 32.0f) {
+            if (vector_distance(moby + 0x10, g_debug_camera) < 32.0f) {
                 add_draw_callback(draw_light_flare, moby);
             }
         }
@@ -91,17 +91,17 @@ void update_moby_proximity_interaction(unsigned char *moby) {
         }
     } else {
         if (D_L00_0015F5C4 != 2) {
-            hero_position_or_scene_flags = D_0013D388;
+            hero_position_or_scene_flags = alternate_item_available;
             if (hero_position_or_scene_flags[0x48] == 0 && D_0013D4DC[0] != 0) {
                 start_scene(4);
                 hero_position_or_scene_flags[0x48] = 1;
-            } else if ((hero_position_or_scene_flags = D_0013D388)[0x49] == 0 && l00_moby_followup_scene_gate[0] != 0) {
+            } else if ((hero_position_or_scene_flags = alternate_item_available)[0x49] == 0 && l00_moby_followup_scene_gate[0] != 0) {
                 start_scene(5);
                 hero_position_or_scene_flags[0x49] = 1;
-            } else if ((hero_position_or_scene_flags = D_0013D388)[0x4A] == 0 && l00_moby_followup_scene_gate[0] != 0) {
+            } else if ((hero_position_or_scene_flags = alternate_item_available)[0x4A] == 0 && l00_moby_followup_scene_gate[0] != 0) {
                 queue_scene_movie_with_game_language(0xB);
                 hero_position_or_scene_flags[0x4A] = 1;
-            } else if ((hero_position_or_scene_flags = D_0013D388)[0x4B] == 0 && l00_moby_followup_scene_gate[0] != 0) {
+            } else if ((hero_position_or_scene_flags = alternate_item_available)[0x4B] == 0 && l00_moby_followup_scene_gate[0] != 0) {
                 start_scene(6);
                 hero_position_or_scene_flags[0x4B] = 1;
             } else {

@@ -1800,7 +1800,7 @@ void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera
 }
 extern char *D_L00_0015F5F4;
 extern char D_0013E550[];
-extern char D_0013E5E0[];
+extern char voice_positions[] __asm__("D_0013E5E0");
 extern char D_L01_00167240[];
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern int calculate_voice_distance_volume(float, float, float, void *) __asm__("FUN_0022c6f8");
@@ -1861,7 +1861,7 @@ void update_box_positional_voice(char *moby) {
             vendor_volume(sound_data[4], volume);
             transform_vector_by_basis(&delta, &box_size, moby + 0x10);
             fast_vec_add(&delta, &delta, moby + 0x40);
-            qcopy(D_0013E5E0 + sound_data[4] * 0x70, &delta);
+            qcopy(voice_positions + sound_data[4] * 0x70, &delta);
         }
     } else {
         if (sound_data[4] != -1) {
@@ -1914,8 +1914,8 @@ void update_listener_following_voice(int sound_owner) {
     int voice_slot_index = *(int *)(sound_data + 4);
     char *voice_slot;
     int flag;
-    qcopy(D_0013E5E0 + voice_slot_index * 0x70, D_L01_00167240);
-    voice_slot = D_0013E5E0 - 0x90 + voice_slot_index * 0x70;
+    qcopy(voice_positions + voice_slot_index * 0x70, D_L01_00167240);
+    voice_slot = voice_positions - 0x90 + voice_slot_index * 0x70;
     flag = *(int *)(voice_slot + 0x8C) == sound_owner && *(unsigned char *)(voice_slot + 0x74) != 0;
     if (*(int *)(D_L01_00167240 + 0x254) != 0) {
         if (!flag) {

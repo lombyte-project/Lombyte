@@ -59,7 +59,7 @@ typedef struct {
 } WatcherLook;
 
 extern u8 D_0013D506 NOT_SDA;
-extern u8 D_0015EDB0 MACRO_ADDR;
+extern u8 big_head_cheat_enabled_macro __asm__("D_0015EDB0")MACRO_ADDR;
 extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") MACRO_ADDR;
 extern WatcherReward D_L02_0016CE60;
 extern char skid_mcmarx_dialogue_data[] __asm__("D_L02_00161D00");
@@ -478,7 +478,7 @@ void skid_mcmarx_update(struct Moby *moby) {
         watcher_vars->yaw = yaw * 0.6f;
         watcher_vars->head_yaw = yaw * 0.4f;
     }
-    if (D_0015EDB0)
+    if (big_head_cheat_enabled_macro)
         watcher_vars->height = 2.75f;
     update_joint_animation(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, watcher_vars->body, 0);
     update_joint_animation(rate * frame_scale_sq_macro, head_rate * frame_scale_sq_macro, moby, watcher_vars->head, 1);
@@ -559,7 +559,7 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
 }
 extern struct Moby *D_L02_0015FFD8;
 extern unsigned char D_0014C050[][16];
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern void scale_vector(void *out, void *in, float s) __asm__("FUN_001f9a68");
 extern float distance_xyz(void *a, void *b) __asm__("FUN_001f9b80");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
@@ -640,7 +640,7 @@ void liftcar_platform_update(struct Moby *moby) {
             driver->anim_speed = 0.0f;
             voice = *(int *)(data + 0xA4);
             if (voice != -1) {
-                char *e = D_0013E550 + voice * 0x70;
+                char *e = voice_pool + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(voice);
                 }
@@ -659,7 +659,7 @@ void liftcar_platform_update(struct Moby *moby) {
         if (driver->anim_flags & 2) {
             voice = *(int *)(data + 0xA4);
             if (voice != -1) {
-                char *e = D_0013E550 + voice * 0x70;
+                char *e = voice_pool + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(voice);
                 }

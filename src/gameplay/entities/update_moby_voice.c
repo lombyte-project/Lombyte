@@ -11,7 +11,7 @@ struct MobyVoiceEntry {
     s32 unk88;
 };
 
-extern u8 D_0013E550[];
+extern u8 voice_pool[] __asm__("D_0013E550");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
@@ -23,7 +23,7 @@ void update_moby_voice(struct MobyVoiceFlags *moby) {
 
     if (moby->unk7D != 0xFF) {
         voice_slot_index = moby->unk7D;
-        voice_slot = (struct MobyVoiceEntry *)(voice_slot_index * 0x70 + D_0013E550);
+        voice_slot = (struct MobyVoiceEntry *)(voice_slot_index * 0x70 + voice_pool);
         if (voice_slot->unk88 != (s32)moby) {
             moby->unk7D = 0xFF;
         } else if (voice_slot->unk7E != moby->unk7C) {

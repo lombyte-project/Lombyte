@@ -1353,7 +1353,7 @@ extern unsigned char menu_item_enabled_115 __asm__("D_0013D407") NOT_SDA;
 extern struct UsageStat D_00141968_7b20[] __asm__("D_00141968");
 extern void draw_pulsing_timer_hud(void) __asm__("FUN_L18_002d8098");
 extern void enqueue_callback_list_1_overlay(void (*)(void), void *) __asm__("FUN_L18_002020c8");
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 
@@ -1400,7 +1400,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             allocate_voice_int_7b20(0, 0, (int)moby);
             index = *(int *)(data + 0x70);
             if (index != -1) {
-                unsigned char *entry = (unsigned char *)D_0013E550 + index * 0x70;
+                unsigned char *entry = (unsigned char *)voice_pool + index * 0x70;
                 if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
                     release_voice_slot(index);
             }
@@ -1460,7 +1460,7 @@ void end_thruster_pack_lock_red_wait(struct Moby *moby) {
         moby->state = 3;
         voice_slot_index = data[0x70 / 4];
         if (voice_slot_index != -1) {
-            unsigned char *voice_slot_entry = (unsigned char *)D_0013E550 + voice_slot_index * 0x70;
+            unsigned char *voice_slot_entry = (unsigned char *)voice_pool + voice_slot_index * 0x70;
             if (*(unsigned char **)(voice_slot_entry + 0x88) == moby && voice_slot_entry[0x74]) {
                 release_voice_slot(voice_slot_index);
             }

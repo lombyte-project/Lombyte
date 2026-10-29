@@ -5,7 +5,7 @@
 
 extern char render_sequence[] __asm__("D_0018CB20");
 extern float view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
-extern char D_00187080[];
+extern char camera_position[] __asm__("D_00187080");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void sceVu0UnitMatrix(float *);
 extern void SceVu0RotMatrixX(float *, float *, float);
@@ -24,7 +24,7 @@ unsigned char transition_update_movie_camera(void) {
 
     view_tan_half_fov = 0.63f;
     update_view_context();
-    active_camera_position = D_00187080;
+    active_camera_position = camera_position;
     qcopy(active_camera_position, key);
     sceVu0UnitMatrix(camera_rotation_matrix);
     SceVu0RotMatrixX(camera_rotation_matrix, camera_rotation_matrix, *(float *)(key + 0x10));

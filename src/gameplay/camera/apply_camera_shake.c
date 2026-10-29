@@ -12,7 +12,7 @@ struct CameraShake {
 };
 
 extern struct UpdateCam *cur_cam[] __asm__("D_001870C0");
-extern u8 D_00187080[];
+extern u8 camera_position[] __asm__("D_00187080");
 extern u8 D_001872B0[];
 
 extern s32 fast_dec_timer(s32 *) __asm__("func_001F9740");
@@ -52,7 +52,7 @@ void apply_camera_shake(struct CameraShake *shake, s32 axis_index) {
             } else {
                 fast_vec_normalize(sp_slot, camera_rows, val);
             }
-            fast_vec_add(D_00187080, D_00187080, sp_slot);
+            fast_vec_add(camera_position, camera_position, sp_slot);
         } else {
             shake->unkC = 0;
         }

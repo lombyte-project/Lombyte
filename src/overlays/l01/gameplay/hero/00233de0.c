@@ -383,7 +383,7 @@ extern Cam D_L01_00167100;
 extern Moby *l01_sphere_query_moby_results[] __asm__("D_L01_00178380");
 extern HeroTableRow2C D_L01_0017C0A8[];
 extern S17BEB8 D_L01_0017C238;
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float hero_ledge_shimmy_speed_by_animation_frame[] __asm__("D_L01_001C4130");
 extern float D_L01_00167450;
@@ -429,10 +429,10 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern int vector_length_xy_cf(float) __asm__("FUN_001fa6d0");
 extern s32 D_L01_0015F688 __attribute__((sda));
 extern s32 D_L01_0015F68C __attribute__((sda));
-extern unsigned char *D_L01_001612D0;
+extern unsigned char *pool_draw_tiles __asm__("D_L01_001612D0");
 extern unsigned char *FUN_L00_00250df8_cf(int) __asm__("FUN_0020c4f8");
 extern unsigned char *spawn_random_alpha_rotated_particle(void *, void *, float) __asm__("FUN_L00_00271b18");
-extern unsigned char D_0013D4C0[];
+extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void FUN_001efa68_cf(float *, float *, float) __asm__("FUN_L00_00233810");
 extern void FUN_001f9770_cf(int) __asm__("FUN_0022d798");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
@@ -632,7 +632,7 @@ void update_hero_motion_for_current_state(void) {
         speed_step(0.0f, speed);
         clear_u64_value(hero.motion.velocity.f);
         reduce_and_apply_hero_planar_velocity_addend(speed);
-        if (hero.on_magnet_ground != 0 && D_0013D4C0[0x1C] != 0) {
+        if (hero.on_magnet_ground != 0 && item_available[0x1C] != 0) {
             if (hero.ground_distance > 0.2f) {
                 FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.resolved_velocity.f, frame_time_sq * 24.0f);
             } else {
@@ -712,7 +712,7 @@ void update_hero_motion_for_current_state(void) {
             release_voice_slot_cf(5, (int)((Moby *)hero.moby), 0x13);
         } else {
             if (hero.pack_swim_voice != -1) {
-                Row13E650 *e = (Row13E650 *)(D_0013E550 + hero.pack_swim_voice * 0x70);
+                Row13E650 *e = (Row13E650 *)(voice_pool + hero.pack_swim_voice * 0x70);
 
                 if (e->f88 == ((Moby *)hero.moby)) {
                     if (e->f74 != 0) {
@@ -744,8 +744,8 @@ void update_hero_motion_for_current_state(void) {
         if (hero.state.step == 1) {
             if (hero.state_timer == 1) {
                 emit_hero_surface_effect_burst(3, 0x10, 0);
-                if (D_L01_001612D0 != 0) {
-                    FUN_L00_0025bc98_cf(D_L01_001612D0, pool_draw_count, 0, hero.motion.pos.f[0],
+                if (pool_draw_tiles != 0) {
+                    FUN_L00_0025bc98_cf(pool_draw_tiles, pool_draw_count, 0, hero.motion.pos.f[0],
                                         hero.motion.pos.f[1], 0.4f, -0.3f);
                 }
                 hero.splash_effect_timer = scale_game_frames(0x46);
@@ -1852,7 +1852,7 @@ void update_hero_motion_for_current_state(void) {
 
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
-                Row13E650 *e = (Row13E650 *)(D_0013E550 + hero.voice_slot4 * 0x70);
+                Row13E650 *e = (Row13E650 *)(voice_pool + hero.voice_slot4 * 0x70);
 
                 if (e->f88 == ((Moby *)hero.moby) && e->f74 != 0) {
                     FUN_001f9770_cf(hero.voice_slot4);
@@ -1862,7 +1862,7 @@ void update_hero_motion_for_current_state(void) {
             release_voice_slot_cf(3, (int)((Moby *)hero.moby), 2);
         } else {
             if (hero.unk2224 != -1) {
-                Row13E650 *e = (Row13E650 *)(D_0013E550 + hero.unk2224 * 0x70);
+                Row13E650 *e = (Row13E650 *)(voice_pool + hero.unk2224 * 0x70);
 
                 if (e->f88 == ((Moby *)hero.moby) && e->f74 != 0) {
                     FUN_001f9770_cf(hero.unk2224);
@@ -1920,8 +1920,8 @@ void update_hero_motion_for_current_state(void) {
         if (hero.state.current == 0x12) {
             if (hero.state_timer == scale_game_frames(0x14)) {
                 emit_hero_surface_effect_burst(3, 0x10, 1);
-                if (D_L01_001612D0 != 0) {
-                    FUN_L00_0025bc98_cf(D_L01_001612D0, pool_draw_count, 0, hero.motion.pos.f[0],
+                if (pool_draw_tiles != 0) {
+                    FUN_L00_0025bc98_cf(pool_draw_tiles, pool_draw_count, 0, hero.motion.pos.f[0],
                                         hero.motion.pos.f[1], 0.4f, 0.35f);
                 }
             }

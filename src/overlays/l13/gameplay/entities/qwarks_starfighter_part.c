@@ -107,7 +107,7 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern unsigned char *fire_class_53_projectile(char *, char *) __asm__("FUN_L13_002ea6b8");
 extern void fire_starfighter_homing_rocket(void *, void *) __asm__("FUN_L13_002ea540");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern char D_0013F3D0[];
 extern char D_00140940[];
 
@@ -190,7 +190,7 @@ s3:
     }
     voice_slot_index = *(int *)(starfighter_data + 0x11C);
     if (voice_slot_index != -1) {
-        voice_slot_entry = ((char *)&D_0013E550) + voice_slot_index * 0x70;
+        voice_slot_entry = ((char *)&voice_pool) + voice_slot_index * 0x70;
         if (*(int *)(voice_slot_entry + 0x88) == (int)moby && ((unsigned char *)voice_slot_entry)[0x74]) {
             release_voice_slot(voice_slot_index);
         }
@@ -1370,11 +1370,11 @@ typedef struct {
     int field94;
 } Level13VendorMoby;
 
-extern char D_0013E030[];
+extern char level_render_state[] __asm__("D_0013E030");
 
 void purple_ship_update(Level13VendorMoby *moby) __asm__("FUN_L13_002f3750");
 void purple_ship_update(Level13VendorMoby *moby) {
-    if (*(void **)(D_0013E030) != moby) {
+    if (*(void **)(level_render_state) != moby) {
         moby->field94 = 0;
         moby->flags |= 3;
     }

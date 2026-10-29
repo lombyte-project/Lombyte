@@ -925,7 +925,7 @@ typedef struct {
 
 /* moby the sound collision probe ignores (clamp_voice_position_to_collision) */
 extern struct Moby *sound_probe_ignore[] __asm__("D_0013E5BC");
-extern s32 D_0015EDDC;
+extern s32 invert52 __asm__("D_0015EDDC");
 #include "rnc/overlay/l09/gameplay/entities/elevator_globals.h"
 extern f32 turret_camera_offset_length_gp __asm__("D_L09_00161CB0") __attribute__((sda));
 extern f32 turret_camera_z_offset_gp __asm__("D_L09_00161CB4") __attribute__((sda));
@@ -1091,7 +1091,7 @@ void turret_update(struct Moby *moby) {
         }
         work_vector.f[0] = hero.stick_x;
         stick_y = -hero.stick_y;
-        if (!D_0015EDDC) {
+        if (!invert52) {
             stick_y = hero.stick_y;
         }
         work_vector.f[1] = stick_y;

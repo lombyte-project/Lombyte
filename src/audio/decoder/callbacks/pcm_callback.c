@@ -9,7 +9,7 @@ struct AudioBuf {
     u8 data[0x50008];
     s32 size;
 };
-extern u8 *D_0016120C;
+extern u8 *decoder_state __asm__("D_0016120C");
 extern void audio_dec_begin_put(void *, void **, s32 *, void **, s32 *) __asm__("func_0023AD58");
 extern s32 cpy2area(void *, s32, void *, s32, u8 *, s32, struct AudioBuf *,
                                     s32) __asm__("func_0023B810");
@@ -39,9 +39,9 @@ s32 pcm_callback(void *mp, struct CbDataStr *cb, struct AudioBuf *ab) {
         first_source_byte_count = len;
     }
     rest = len - first_source_byte_count;
-    audio_dec_begin_put(D_0016120C + 0xD9100, &first_destination, &first_destination_byte_count, &second_destination, &second_destination_byte_count);
+    audio_dec_begin_put(decoder_state + 0xD9100, &first_destination, &first_destination_byte_count, &second_destination, &second_destination_byte_count);
     copied_byte_count = cpy2area(first_destination, first_destination_byte_count, second_destination, second_destination_byte_count, ps, first_source_byte_count, ab, rest);
-    audio_dec_end_put(D_0016120C + 0xD9100, copied_byte_count);
+    audio_dec_end_put(decoder_state + 0xD9100, copied_byte_count);
     return copied_byte_count > 0;
 }
 

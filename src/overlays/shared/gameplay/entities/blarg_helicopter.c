@@ -1515,7 +1515,7 @@ extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN
 extern void select_moby_target_with_hero_fallback(void *, void *, float) __asm__("FUN_L03_0024e830");
 extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FUN_L03_00260130");
 extern void mark_moby_for_removal_c_c(void *) __asm__("func_0020C828");
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 
 void update_homing_spark_projectile(Moby *moby) __asm__("FUN_L03_002d47c0");
 
@@ -1591,7 +1591,7 @@ void update_homing_spark_projectile(Moby *moby) {
                 }
             } else {
                 if (voice != -1) {
-                    char *entry = ((char *)&D_0013E550) + voice * 0x70;
+                    char *entry = ((char *)&voice_pool) + voice * 0x70;
                     if (*(Moby **)(entry + 0x88) == data->target && *(unsigned char *)(entry + 0x74) != 0) {
                         release_voice_slot(voice);
                     }
@@ -1675,7 +1675,7 @@ void update_homing_spark_projectile(Moby *moby) {
         if (voice_slot != 0) {
             int voice = *voice_slot;
             if (voice != -1) {
-                char *entry = ((char *)&D_0013E550) + voice * 0x70;
+                char *entry = ((char *)&voice_pool) + voice * 0x70;
                 if (*(Moby **)(entry + 0x88) == data->target && *(unsigned char *)(entry + 0x74) != 0) {
                     release_voice_slot(voice);
                 }

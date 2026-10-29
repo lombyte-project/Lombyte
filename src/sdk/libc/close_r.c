@@ -6,16 +6,16 @@
 /* Source: newlib. */
 
 #include "types.h"
-extern u32 D_0015EC10[];
+extern u32 SbrkErrno[] __asm__("D_0015EC10");
 extern s32 _close() __asm__("func_00118E00");
 s32 _close_r(s32 *reentrancy_error, s32 file_descriptor) {
     s32 close_result;
 
-    D_0015EC10[0] = 0;
+    SbrkErrno[0] = 0;
     close_result = _close(file_descriptor);
     if (close_result == -1) {
-        if (D_0015EC10[0] != 0) {
-            *reentrancy_error = D_0015EC10[0];
+        if (SbrkErrno[0] != 0) {
+            *reentrancy_error = SbrkErrno[0];
         }
     }
     return close_result;

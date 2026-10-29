@@ -458,8 +458,8 @@ extern int play_voice(int sound, int flags, int moby, int volume) __asm__("FUN_L
 extern int vendor_volume(int, int) __asm__("FUN_L01_002a1968");
 extern float smoothed_below_reference_ground_fraction_gp __asm__("D_L08_001625E8") __attribute__((sda));
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 angle) __asm__("FUN_00214890");
-extern char D_0013E550[];
-extern char D_0013E5E0[];
+extern char voice_pool[] __asm__("D_0013E550");
+extern char voice_positions[] __asm__("D_0013E5E0");
 
 void update_ground_height_modulated_voice(char *moby) __asm__("FUN_L08_00316fa8");
 
@@ -494,15 +494,15 @@ void update_ground_height_modulated_voice(char *moby) {
         smoothed_below_reference_ground_fraction_gp = 0.0f;
     }
     {
-        char *slot = ((char *)&D_0013E550) + *(int *)(data + 8) * 0x70;
+        char *slot = ((char *)&voice_pool) + *(int *)(data + 8) * 0x70;
         if (*(char **)(slot + 0x8C) == moby && ((unsigned char *)slot)[0x74] != 0) {
             vendor_volume(*(int *)(data + 8),
                               (int)((*(float *)(data + 4) + smoothed_below_reference_ground_fraction_gp) / (*(float *)(data + 4) + 1.0f) * 1024.0f));
         }
     }
-    qcopy_nc(((char *)&D_0013E550) + 0x90 + *(int *)(data + 8) * 0x70, D_L08_001675C0);
+    qcopy_nc(((char *)&voice_pool) + 0x90 + *(int *)(data + 8) * 0x70, D_L08_001675C0);
     {
-        char *slot = ((char *)&D_0013E550) + *(int *)(data + 8) * 0x70;
+        char *slot = ((char *)&voice_pool) + *(int *)(data + 8) * 0x70;
         if (*(char **)(slot + 0x8C) != moby || ((unsigned char *)slot)[0x74] == 0) {
             *(int *)(data + 8) = play_voice(*(int *)data, 0x15, (int)moby, 0x400);
         }

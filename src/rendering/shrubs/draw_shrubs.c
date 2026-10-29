@@ -3,7 +3,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
 
-extern volatile s32 D_0015EE74;
+extern volatile s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
 extern u8 shrub_textures_label[] __asm__("D_001603B0");
 extern u8 shrub_draw_label[] __asm__("D_001603C0");
 struct ShrubDrawState {
@@ -25,7 +25,7 @@ void draw_shrubs(void) {
 
     packet = render_packet_cursor.addr;
     D_001603F0 = packet;
-    D_0015EE74 = gs_texture_allocation_start;
+    gs_texture_allocation_cursor = gs_texture_allocation_start;
     packet += 0x10;
     render_packet_cursor.addr = packet;
     noop_core_callback_secondary(shrub_textures_label, 1);

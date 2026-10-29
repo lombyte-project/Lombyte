@@ -27,7 +27,7 @@ struct AnimClass670 {
 #define SEQ(m, s) (((struct AnimClass670 *)(m)->pclass)->seqs[s])
 
 extern s32 D_L00_0015F5C4 __attribute__((sda));
-extern u8 D_0013E550[];
+extern u8 voice_pool[] __asm__("D_0013E550");
 extern void clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void sync_hero_mapped_moby_animation_frames(void) __asm__("FUN_L00_00232320");
@@ -124,7 +124,7 @@ void advance_hero_animation(void) {
         }
     }
     if (hero_moby->sound_slot != 0xFF) {
-        struct VoiceSlot670 *active_voice_slot = (struct VoiceSlot670 *)(D_0013E550 + hero_moby->sound_slot * 0x70);
+        struct VoiceSlot670 *active_voice_slot = (struct VoiceSlot670 *)(voice_pool + hero_moby->sound_slot * 0x70);
         if (active_voice_slot->owner != hero_moby) {
             hero_moby->sound_slot = 0xFF;
         } else if (active_voice_slot->sound != hero_moby->unk7C) {

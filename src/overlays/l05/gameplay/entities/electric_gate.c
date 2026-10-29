@@ -37,14 +37,14 @@ typedef struct {
     char rest[0x1170];
 } Ent;
 
-extern Ent D_L05_001D6880[];
+extern Ent water_records[] __asm__("D_L05_001D6880");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void record_grid_entry_neighbor_indices(int selected_entry_index) __asm__("FUN_L05_0030d6a0");
 
 void record_grid_entry_neighbor_indices(int selected_entry_index) {
     int i;
-    Ent *entry_table = D_L05_001D6880;
+    Ent *entry_table = water_records;
     for (i = 0; i < 48; i++) {
         if (selected_entry_index != i) {
             Ent *selected_entry = &entry_table[selected_entry_index];

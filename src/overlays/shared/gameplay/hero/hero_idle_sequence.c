@@ -1004,7 +1004,7 @@ void check_hero_item_reward_conditions(void) {
 
 extern int D_0015EEA0 MACRO_ADDR;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_0015EDB0[] MACRO_ADDR;
+extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0")MACRO_ADDR;
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
 extern unsigned char D_0015EDC0[] MACRO_ADDR;
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -1083,9 +1083,9 @@ void scan_hero_input_sequences(void) {
             if (k >= 16) k -= 16;
         }
         if (j == sequence_length) {
-            int toggled_selector = D_0015EDB0[i] == 0;
+            int toggled_selector = big_head_cheat_enabled_macro[i] == 0;
             D_0015EDC0[i] = 1;
-            D_0015EDB0[i] = toggled_selector;
+            big_head_cheat_enabled_macro[i] = toggled_selector;
             queue_dialogue_message(toggled_selector ? 0x4FBE : 0x4FBF, -1);
             break;
         }
@@ -1486,20 +1486,20 @@ void apply_hero_and_item_scale_sequence(void) {
 extern int hero_scalar_pulse_active_gp __asm__("D_L00_0015F680") __attribute__((sda));
 extern int hero_scalar_pulse_phase_gp __asm__("D_L00_0015F684") __attribute__((sda));
 extern float hero_scalar_pulse_step_gp __asm__("D_L00_0015F67C") __attribute__((sda));
-extern float D_L00_0015F3FC;
+extern float fade_level __asm__("D_L00_0015F3FC");
 float FUN_00213ed8(float *, float, float);
 void update_hero_scalar_pulse(void) {
     if (hero_scalar_pulse_active_gp == 0)
         return;
     if (hero_scalar_pulse_phase_gp == 0) {
-        FUN_00213ed8(&D_L00_0015F3FC, 1.0f, hero_scalar_pulse_step_gp);
-        if (D_L00_0015F3FC == 1.0f)
+        FUN_00213ed8(&fade_level, 1.0f, hero_scalar_pulse_step_gp);
+        if (fade_level == 1.0f)
             hero_scalar_pulse_phase_gp = 1;
     } else if (hero_scalar_pulse_phase_gp == 1) {
         hero_scalar_pulse_phase_gp = 2;
     } else if (hero_scalar_pulse_phase_gp == 2) {
-        FUN_00213ed8(&D_L00_0015F3FC, 0.0f, hero_scalar_pulse_step_gp);
-        if (D_L00_0015F3FC == 0.0f)
+        FUN_00213ed8(&fade_level, 0.0f, hero_scalar_pulse_step_gp);
+        if (fade_level == 0.0f)
             hero_scalar_pulse_active_gp = 0;
     }
 }

@@ -1183,7 +1183,7 @@ void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_0021
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern char D_0013C940[];
 extern char D_0013E550[];
-extern char D_0013CAE0[];
+extern char pad_held[] __asm__("D_0013CAE0");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
@@ -1284,7 +1284,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
         kb = fighter_jet_vertical_steering_settle_threshold_scale_gp;
         horizontal_steering_input = x;
         vertical_steering_input = y;
-        if (*(int *)(((char *)&D_0013CAE0)) & 0x200) {
+        if (*(int *)(((char *)&pad_held)) & 0x200) {
             horizontal_steering_input = x / D_L17_00162028 * D_L17_00162030;
             vertical_steering_input = y / D_L17_00162024 * D_L17_0016202C;
             ka = fighter_jet_rescaled_horizontal_steering_settle_threshold_scale_gp;

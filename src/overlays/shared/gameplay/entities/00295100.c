@@ -122,7 +122,7 @@ extern s32 game_frame __asm__("D_L00_0015F5CC");
 extern s32 D_L00_001B9DE0 NOT_SDA;
 extern P_297f78 *D_L00_00166E00 NOT_SDA;
 extern s32 D_0013D384 NOT_SDA;
-extern R_297f78 D_0013D388;
+extern R_297f78 alternate_item_available __asm__("D_0013D388");
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_L00_00184214 NOT_SDA;
 extern s32 D_0015EEA4;
@@ -226,11 +226,11 @@ void handle_pause_input(void) {
         pause_all_sounds(10);
         return;
     }
-    if (D_0013D384 && !D_0013D388.b10 && level_timer >= 8 && !alternate_animation_sequence &&
+    if (D_0013D384 && !alternate_item_available.b10 && level_timer >= 8 && !alternate_animation_sequence &&
         !hero.fall_fade_pending && hero.health.hp && FUN_001f96f8_c(0x1E) < game_frame &&
         current_level_index) {
         mode_freeze_init(5, 0);
-        D_0013D388.b10 = 1;
+        alternate_item_available.b10 = 1;
         return;
     }
     if (hero.state.current != 0x1D && hero.state.current != 0x32)
@@ -918,7 +918,7 @@ typedef struct { u8 pad[0x6B]; u8 f; } M_2997c8;
 extern S_2997c8 D_001516D0_lui __asm__("D_001516D0") NOT_SDA;
 extern s32 D_L00_0015F5C4_2997c8 __asm__("D_L00_0015F5C4");
 extern struct ActiveSceneTrigger active_scene_trigger_lui __asm__("D_L00_00179100") NOT_SDA;
-extern char D_0013E550[] NOT_SDA;
+extern char voice_pool_lui[] __asm__("D_0013E550")NOT_SDA;
 void sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
 void FUN_00122e68_2997c8(void *) __asm__("FUN_00122e68");
 void FUN_00122518_2997c8(void *, short, int, int, int, int, int, int) __asm__("FUN_00122518");
@@ -975,7 +975,7 @@ void movie_exit_to_gameplay(void) {
         active->trigger = 0;
         FUN_00216c48_2997c8(moby, trigger, 1);
     }
-    (*(M_2997c8 *)D_0013E550).f |= 0x10;
+    (*(M_2997c8 *)voice_pool_lui).f |= 0x10;
 }
 /* Stop sound, wait for the loader to go idle, then start the movie load. */
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_0029AD18), where it is exact; names translated to the US level program. */
@@ -1208,11 +1208,11 @@ typedef struct {
 extern VendorList vendor_list __asm__("D_L00_001CA4C0") NOT_SDA;
 extern VendorSound vendor_sound[] __asm__("D_L00_001C2108") NOT_SDA;
 /* Stocked item ids (low 6 bits; bit 0x40 = listed as selected), 0xFF-terminated. */
-extern u8 D_0013D4C0[];
+extern u8 item_available[] __asm__("D_0013D4C0");
 
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 /* Builds the vendor list: the stocked items (up to 12, 0xFF-terminated), then
-   every other available item (D_0013D4C0 set, h8 non-zero) not already listed. */
+   every other available item (item_available set, h8 non-zero) not already listed. */
 void build_vendor_menu_rows(s32 skip_unflagged) __asm__("FUN_L00_0029a400");
 void build_vendor_menu_rows(s32 skip_unflagged) {
     s32 count, i, j, value, item, k;
@@ -1248,7 +1248,7 @@ void build_vendor_menu_rows(s32 skip_unflagged) {
     }
     for (k = 0; k < 37; k++) {
         s32 sound;
-        if (!D_0013D4C0[k]) continue;
+        if (!item_available[k]) continue;
         if (!D_L00_001C40B0[k].h8) continue;
         for (j = 0; j < vendor_list.count; j++) {
             if (vendor_list.entries[j].item == k) break;

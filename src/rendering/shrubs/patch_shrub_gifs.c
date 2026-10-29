@@ -16,7 +16,7 @@ struct TieClass {
     struct GifSlot slots[1];
 };
 extern s32 shrub_gif_patch_class_ids[] __asm__("D_001D8DB0");
-extern struct TieClass *D_001D7F30[];
+extern struct TieClass *shrub_render_classes[] __asm__("D_001D7F30");
 extern struct TexRemap shrub_paging_table[] __asm__("D_001D88B0");
 void patch_shrub_gifs(void) __asm__("FUN_00228a30");
 
@@ -30,7 +30,7 @@ void patch_shrub_gifs(void) {
     struct TexRemap *texture_remap;
 
     for (id = shrub_gif_patch_class_ids; *id >= 0; id++) {
-        tc = D_001D7F30[*id];
+        tc = shrub_render_classes[*id];
         for (i = 0; i < tc->count; i++) {
             pkt = tc->slots[i].pkt + 1;
             gif = (u8 *)(pkt + pkt->skip) + 0x10;

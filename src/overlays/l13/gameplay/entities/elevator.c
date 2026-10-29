@@ -1087,7 +1087,7 @@ typedef struct {
     float f2C;
 } RsHit;
 
-extern char *D_L13_001B07B0[];
+extern char *walker_paths[] __asm__("D_L13_001B07B0");
 extern char *level13_moby_list_head __asm__("D_L13_0015FFE4");
 extern char *FUN_L00_0025a420(void *, int, int);
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -1311,7 +1311,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         }
         robosquawker_vars->pD0 = &D_L13_001613A0;
         if (robosquawker_vars->w220 != -1) {
-            robosquawker_vars->w224 = select_point_index_by_distance(&robosquawker_moby->pos, D_L13_001B07B0[robosquawker_vars->w220], 0.0f);
+            robosquawker_vars->w224 = select_point_index_by_distance(&robosquawker_moby->pos, walker_paths[robosquawker_vars->w220], 0.0f);
         }
         break;
     case ROBOSQUAWKER_STATE_FLIGHT_IDLE: {
@@ -1345,7 +1345,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         } else if (robosquawker_vars->w220 != -1) {
             char *path;
 
-            path = D_L13_001B07B0[robosquawker_vars->w220];
+            path = walker_paths[robosquawker_vars->w220];
             if (fast_vec_dist(&robosquawker_moby->pos, path + (robosquawker_vars->w224 * 16 + 16)) < 0.25f) {
                 robosquawker_vars->w224 += 1;
                 if (robosquawker_vars->w224 >= *(int *)path) {
@@ -1418,7 +1418,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         float a;
         float d;
 
-        path = D_L13_001B07B0[robosquawker_vars->w220];
+        path = walker_paths[robosquawker_vars->w220];
         a = fast_arc_tan(robosquawker_vars->v1E0.f[0] - robosquawker_moby->pos.f[0], robosquawker_vars->v1E0.f[1] - robosquawker_moby->pos.f[1]);
         FUN_L00_00258278((char *)robosquawker_moby, &robosquawker_vars->f1F0, a, 0.018f, 0.8f, 0.09f);
         fast_vec_sub(&robosquawker_vars->v40, &robosquawker_vars->v1E0, &robosquawker_moby->pos);
@@ -1676,7 +1676,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         r = absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]);
         r = r / vector_distance(&robosquawker_moby->pos, &selected_target_record);
         if (robosquawker_vars->w21C != -1) {
-            select_list_point_toward_target(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &selected_target_record, &vb);
+            select_list_point_toward_target(robosquawker_moby, walker_paths[robosquawker_vars->w21C], &selected_target_record, &vb);
         } else {
             qcopy(&vb, &selected_target_record);
         }
@@ -1768,7 +1768,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         float a;
 
         if (robosquawker_vars->w21C != -1) {
-            select_list_point_toward_target(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
+            select_list_point_toward_target(robosquawker_moby, walker_paths[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
         } else {
             qcopy(&vb, &robosquawker_vars->v1D0);
         }
@@ -1860,7 +1860,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
         r = absolute_float(robosquawker_moby->pos.f[2] - selected_target_record.pos.f[2]);
         r = r / vector_distance(&robosquawker_moby->pos, &selected_target_record);
         if (robosquawker_vars->w21C != -1) {
-            select_list_point_toward_target(robosquawker_moby, D_L13_001B07B0[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
+            select_list_point_toward_target(robosquawker_moby, walker_paths[robosquawker_vars->w21C], &robosquawker_vars->v1D0, &vb);
         } else {
             qcopy(&vb, &robosquawker_vars->v1D0);
         }
@@ -2956,7 +2956,7 @@ extern JetPlayer jet_player47 __asm__("D_0013F350");
 extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
 extern JetTransition D_001516D0[];
 #include "rnc/gameplay/state/game_globals.h"
-extern unsigned char D_0013E550[];
+extern unsigned char voice_pool[] __asm__("D_0013E550");
 #include "rnc/overlay/l13/gameplay/entities/elevator_data/fighter_jet_update.h"
 extern JetTexture l13_texture_descriptors[] __asm__("D_L13_0016D480");
 extern unsigned int l13_texture_palette_data_base __asm__("D_L13_0015F420");
@@ -3131,7 +3131,7 @@ void fighter_jet_update(Jet *jet_moby) {
         unsigned char *audio;
         if (jet_data->blend!=0.0f) { approach_value(&jet_data->blend,0.0f,frame_time*4.0f); D_L13_0015F3FC=jet_data->blend; }
         force_help_message(6,0); D_L13_0015F608=2;
-        audio=D_0013E550+jet_data->engine_sound*0x70;
+        audio=voice_pool+jet_data->engine_sound*0x70;
         if (*(Jet**)(audio+0x88)!=jet_moby || !audio[0x74]) { jet_data->engine_sound=-1; jet_data->engine_sound=jet_allocate_voice(0,4,(int)jet_moby); }
         update_fighter_jet_flight(jet_moby,jet_data);
         if (((JetPlayer*)(&jet_player47))->pad160F&1) jet_moby->state=5;
@@ -3151,10 +3151,10 @@ void fighter_jet_update(Jet *jet_moby) {
         {
             int id=jet_data->engine_sound;
             unsigned char *audio;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->engine_sound=-1;
             id=jet_data->weapon_sound;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->weapon_sound=-1;
         }
         jet_game_state(0,5); jet_data->blend=0.99f; D_L13_0015F3FC=0.99f; jet_moby->state=1;
@@ -3164,10 +3164,10 @@ void fighter_jet_update(Jet *jet_moby) {
         {
             int id=jet_data->engine_sound;
             unsigned char *audio;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->engine_sound=-1;
             id=jet_data->weapon_sound;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->weapon_sound=-1;
         }
         jet_moby->state=7; break;
@@ -3184,10 +3184,10 @@ void fighter_jet_update(Jet *jet_moby) {
                 {
             int id=jet_data->engine_sound;
             unsigned char *audio;
-            if (id!=active) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=active) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->engine_sound=-1;
             id=jet_data->weapon_sound;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->weapon_sound=-1;
         }
                 jet_moby->state=0;
@@ -3213,10 +3213,10 @@ void fighter_jet_update(Jet *jet_moby) {
         {
             int id=jet_data->engine_sound;
             unsigned char *audio;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->engine_sound=-1;
             id=jet_data->weapon_sound;
-            if (id!=-1) { audio=D_0013E550+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->weapon_sound=-1;
         }
         jet_reset_camera((char *)&jet_player47+0x80,(char *)&jet_player47+0x90); jet_moby->state=9;

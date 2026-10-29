@@ -295,7 +295,7 @@ typedef struct {
     DoorVars *vars;
 } DoorMoby;
 
-extern u8 D_0013D388[];
+extern u8 alternate_item_available[] __asm__("D_0013D388");
 extern s16 D_00141628[];
 extern s32 initialize_npc_dialogue(DoorMoby *, void *) __asm__("FUN_L00_002668a0");
 extern s32 update_npc_dialogue(DoorMoby *, void *) __asm__("FUN_L00_00266448");
@@ -323,14 +323,14 @@ void clank_cutscene_trigger_update(DoorMoby *moby) {
     case CLANK_TRIGGER_INITIALIZE_DIALOGUE:
         D_00141628[0] = 1;
         initialize_npc_dialogue(moby, vars->unk20);
-        if (D_0013D388[8] != 0) {
+        if (alternate_item_available[8] != 0) {
             vars->unk56 = 1;
             vars->unk2C = 3.0f;
             vars->unk24 = 0;
         } else {
             vars->unk2C = 255.0f;
         }
-        D_0013D388[8] = 1;
+        alternate_item_available[8] = 1;
         moby->alpha = 0xFF;
         moby->state = 1;
         break;

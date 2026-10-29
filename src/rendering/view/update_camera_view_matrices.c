@@ -7,7 +7,7 @@
 struct G {
     f32 f[0x50];
 };
-extern struct G D_00186F40;
+extern struct G preview_camera __asm__("D_00186F40");
 #include "rnc/gameplay/camera/update_cam.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
@@ -38,11 +38,11 @@ void update_camera_view_matrices(void) {
         qcopy(&camera_basis_matrix[2].q, camera_rows + 0x20);
     } else {
         sceVu0UnitMatrix(camera_basis_matrix);
-        SceVu0RotMatrixX(camera_basis_matrix, camera_basis_matrix, D_00186F40.f[0x150 / 4]);
-        SceVu0RotMatrixY(camera_basis_matrix, camera_basis_matrix, D_00186F40.f[0x154 / 4]);
-        sceVu0RotMatrixZ(camera_basis_matrix, camera_basis_matrix, D_00186F40.f[0x158 / 4]);
+        SceVu0RotMatrixX(camera_basis_matrix, camera_basis_matrix, preview_camera.f[0x150 / 4]);
+        SceVu0RotMatrixY(camera_basis_matrix, camera_basis_matrix, preview_camera.f[0x154 / 4]);
+        sceVu0RotMatrixZ(camera_basis_matrix, camera_basis_matrix, preview_camera.f[0x158 / 4]);
     }
-    camera_view_matrices = &D_00186F40;
+    camera_view_matrices = &preview_camera;
     x = D_0018CD00 + 0xC0;
     xf = (f32 *)D_0018CD00;
     camera_view_matrices->f[0] = -camera_basis_matrix[1].f[0];

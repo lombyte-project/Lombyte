@@ -1983,7 +1983,7 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int transform_attachment_pose(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern int queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern s32 level_bolts[] __asm__("D_0013DF38");
-extern s32 D_0015ED98;
+extern s32 current_bolt_count __asm__("D_0015ED98");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned char *FUN_L00_002603d0(int);
 extern unsigned char *FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
@@ -2289,9 +2289,9 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                 if (source && !(source->id & 0x80)) {
                     bolt_source_stats[current_level_index][source->id].bolts += value;
                 }
-                D_0015ED98 += value;
+                current_bolt_count += value;
                 level_bolts[current_level_index] += value;
-                queue_animation_update(2, 0x754E, func_L00_0023A658_4BE8, func_L00_0023A690_4BE8, func_L00_0023A788_4BE8, &D_0015ED98, 9999999);
+                queue_animation_update(2, 0x754E, func_L00_0023A658_4BE8, func_L00_0023A690_4BE8, func_L00_0023A788_4BE8, &current_bolt_count, 9999999);
                 if (moby < D_L08_0015FFDC) {
                     l08_bolt_pickup_collection_marks_by_save_id.killed[(short)moby->save_id] = moby->mission + 2;
                     if (moby->mission == 0xFF || (D_L08_0015FC88_macro[moby->mission] != 0xFF && D_0014C050[moby->mission + current_level_index * 16] == 0xFF)) {
@@ -2330,7 +2330,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
             if (source && !(source->id & 0x80)) {
                 bolt_source_stats[current_level_index][source->id].bolts += value;
             }
-            D_0015ED98 += value;
+            current_bolt_count += value;
             level_bolts[current_level_index] += value;
             mark_moby_for_removal(moby);
             return;

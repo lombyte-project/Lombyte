@@ -896,7 +896,7 @@ void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_in
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319660), where it is exact; names translated to the US level program. */
 
 char *spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, void *owner, float scale) __asm__("FUN_L11_0031ada0");
-extern char D_L11_00161E18[] MACRO_ADDR;
+extern char tide_level_macro[] __asm__("D_L11_00161E18")MACRO_ADDR;
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern char D_L11_0015FFBC[4] __attribute__((sda));
@@ -939,7 +939,7 @@ void update_oil_tanker_link_effects_and_destruction(struct Moby *moby) {
             effect_motion_vector[2] -= frame_scale_inv_macro[1] + frame_scale_inv_macro[1];
             fast_vec_add(effect_motion_vector, effect_motion_vector, random_motion_offset);
             func_L11_0031C210_5(
-                effect_scratch_vector, effect_motion_vector, D_L11_00161E18, 0,
+                effect_scratch_vector, effect_motion_vector, tide_level_macro, 0,
                 random_float_between(*(float *)&oil_tanker_link_effect_scale_range_start_gp, *(float *)&oil_tanker_link_effect_scale_range_end_gp));
         }
         qcopy(link_vars, &moby->pos);
@@ -1524,7 +1524,7 @@ char *activate_listed_blarg_ship(int list) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
 
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
-extern unsigned char D_0013D408[];
+extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -1536,7 +1536,7 @@ void update_moby_list_empty_dialogue_trigger(struct Moby *moby) {
     if (data[0] == -1) {
         mark_moby_for_removal(moby);
     } else if (data[1] != -1 && count_active_moby_group_members(data[1], -1) == 0) {
-        unsigned char *dialogue_latch_base = D_0013D408;
+        unsigned char *dialogue_latch_base = item_unlocked;
         if (dialogue_latch_base[0x13] == 0) {
             dialogue_latch_base[0x13] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);

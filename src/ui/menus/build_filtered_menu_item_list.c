@@ -31,7 +31,7 @@ extern struct Slot D_001CEC60[];
 extern struct Slot D_001CEC80[];
 extern struct Slot D_001CECA0[];
 #include "rnc/gameplay/state/item_state.h"
-extern struct Info D_001863D0[];
+extern struct Info menu_item_info[] __asm__("D_001863D0");
 extern struct Item filtered_menu_item_records[] __asm__("D_001D61B8");
 extern s32 D_001D6248[];
 extern s32 D_001D6280[];
@@ -57,7 +57,7 @@ s32 build_filtered_menu_item_list(void) {
             id = D_001CECA0[i - 12].id;
         }
         if (item_available[id] != 0) {
-            item_info = &D_001863D0[id];
+            item_info = &menu_item_info[id];
             filtered_menu_item_records[filtered_item_count].icon = item_info->icon;
             filtered_menu_item_records[filtered_item_count].unk2 = 0;
             filtered_menu_item_records[filtered_item_count].unk4 = 0;

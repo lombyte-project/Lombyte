@@ -2073,7 +2073,7 @@ typedef struct { float x, y, z, w; char *p; int c; unsigned char b18; unsigned c
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 square_root(f32) __asm__("func_001F9988");
-extern float D_0015ED64;
+extern float frame_scale_sq __asm__("D_0015ED64");
 extern float D_0015ED70;
 extern float FUN_L00_001ff430(void *);
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
@@ -2123,7 +2123,7 @@ void rocket_update(char *rocket_moby) {
     *(u128_cd *)&explosion_direction = *(u128_cd *)&z;
     k60 = D_0015ED60;
     {
-        float k64 = D_0015ED64;
+        float k64 = frame_scale_sq;
         *(float *)(rocket_moby + 0x2C) = a + (*(float *)(*(char **)(rocket_moby + 0x24) + 0x24) - a) * (k60 * 0.05f);
         {
             float e = *(float *)(rocket_vars + 0x30);
@@ -2911,7 +2911,7 @@ typedef struct {
 
 /* D_L00_001C40B0 rows (0x18 bytes); unkE is compared with weapon_ammo_counts. */
 
-extern u8 D_0013D4C0[];
+extern u8 item_available[] __asm__("D_0013D4C0");
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_L00_00197BC0[];
 extern struct MobyClass *D_L00_00197300[];
@@ -3154,7 +3154,7 @@ void crate_update(struct Moby *moby) {
                 s32 i;
 
                 for (i = 0; i < 0x25; i++) {
-                    if (D_0013D4C0[i] != 0) {
+                    if (item_available[i] != 0) {
                         VendorItemInfo *weapon_item_info = &D_L00_001C40B0[i];
 
                         total++;

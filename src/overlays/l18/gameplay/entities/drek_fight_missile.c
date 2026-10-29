@@ -748,7 +748,7 @@ void mark_block_entries_within_transform_xy_bounds(int block_lookup_index, int t
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3268), where it is exact; names translated to the US level program. */
 
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern int FUN_0022da68(int, int, int);
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -784,7 +784,7 @@ void update_glow_moby_state_and_voice(struct Moby *moby) {
                 if (voice_is_playing(moby, moby_vars[1]) != 0) {
                     int i = moby_vars[1];
                     if (i != -1) {
-                        char *voice_slot_entry = D_0013E550 + i * 0x70;
+                        char *voice_slot_entry = voice_pool + i * 0x70;
                         if (*(unsigned char **)(voice_slot_entry + 0x88) == moby &&
                             *(unsigned char *)(voice_slot_entry + 0x74) != 0) {
                             release_voice_slot(i);
@@ -1679,7 +1679,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
                     if (voice_is_playing(moby, boss_data->f3B0) != 0) {
                         int i = boss_data->f3B0;
                         if (i != -1) {
-                            char *e = D_0013E550 + i * 0x70;
+                            char *e = voice_pool + i * 0x70;
                             if (*(BossMoby **)(e + 0x88) == moby &&
                                 *(unsigned char *)(e + 0x74) != 0) {
                                 release_voice_slot(i);
@@ -2351,7 +2351,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
             int i = boss_data->f3B0;
 
             if (i != -1) {
-                char *e = D_0013E550 + i * 0x70;
+                char *e = voice_pool + i * 0x70;
                 if (*(BossMoby **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(i);
                 }
@@ -2726,7 +2726,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                     if (FUN_L00_0028d8c0_5e80(moby, *(int *)(boss_data + 0x3B0)) != 0) {
                         int i = *(int *)(boss_data + 0x3B0);
                         if (i != -1) {
-                            char *e = D_0013E550 + i * 0x70;
+                            char *e = voice_pool + i * 0x70;
                             if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                                 release_voice_slot(i);
                             }
@@ -2859,7 +2859,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                 if (FUN_L00_0028d8c0_5e80(moby, *(int *)(boss_data + 0x3B0)) != 0) {
                     int i = *(int *)(boss_data + 0x3B0);
                     if (i != -1) {
-                        char *e = D_0013E550 + i * 0x70;
+                        char *e = voice_pool + i * 0x70;
                         if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                             release_voice_slot(i);
                         }

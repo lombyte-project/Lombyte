@@ -273,7 +273,7 @@ typedef struct {
     u8 pad0[0x80];
     s32 volume;          /* 0x80 */
 } VoiceView;
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern u8 D_0013D388[];
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -315,17 +315,17 @@ void update_swing_gate_from_driver(struct Moby *moby) {
             if (!voice_is_playing(moby, vars->voice)) {
                 vars->voice = allocate_voice_for_target_entry(0, 4, moby);
                 vendor_volume(vars->voice, 1);
-            } else if (((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume < 0x400) {
-                vendor_volume(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume +
+            } else if (((VoiceView *)(voice_pool + vars->voice * 0x70))->volume < 0x400) {
+                vendor_volume(vars->voice, ((VoiceView *)(voice_pool + vars->voice * 0x70))->volume +
                                                   0x400 / scale_game_frames(60));
             }
         }
     } else if (moby->oclass == 0x1D4 && voice_is_playing(moby, vars->voice)) {
-        if (((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume < 0x100) {
+        if (((VoiceView *)(voice_pool + vars->voice * 0x70))->volume < 0x100) {
             release_voice_slot(vars->voice);
             vars->voice = -1;
         } else {
-            vendor_volume(vars->voice, ((VoiceView *)(D_0013E550 + vars->voice * 0x70))->volume -
+            vendor_volume(vars->voice, ((VoiceView *)(voice_pool + vars->voice * 0x70))->volume -
                                               0x400 / scale_game_frames(60));
         }
     }
@@ -737,7 +737,7 @@ typedef struct {
 /* interpolate_sample_ring(float, char *) with the arguments the other way round: the
    real prototype evaluates the operands in the other order and moves two words. */
 extern float interpolate_sample_ring_data_first(char *, float) __asm__("FUN_L08_002f5d98");
-extern float D_0015ED60;
+extern float frame_scale __asm__("D_0015ED60");
 extern int l08_effect_animation_time __asm__("D_L08_0015F3F8");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 square_root(f32) __asm__("FUN_001f9988");
@@ -973,9 +973,9 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     fast_vec_normalize(&sv1,&step,fraction*width);
                     fast_vec_add(&sv1,&sv1,&moby->pos);
                     fast_vec_add(&sv1,&sv1,&sv2);
-                    sv0.f[0]=random_float_between(-data->particle_xy,data->particle_xy)*D_0015ED60;
-                    sv0.f[1]=random_float_between(-data->particle_xy,data->particle_xy)*D_0015ED60;
-                    sv0.f[2]=random_float_between(0.0f,data->particle_z)*D_0015ED60;
+                    sv0.f[0]=random_float_between(-data->particle_xy,data->particle_xy)*frame_scale;
+                    sv0.f[1]=random_float_between(-data->particle_xy,data->particle_xy)*frame_scale;
+                    sv0.f[2]=random_float_between(0.0f,data->particle_z)*frame_scale;
                     size=random_float_between(data->particle_size0,data->particle_size1);
                     life=scale_game_frames(data->particle_life);
                     r=data->particle_r; g=data->particle_g; b=data->particle_b;
@@ -999,16 +999,16 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     fast_vec_normalize(&sv1,&step,fraction*width);
                     fast_vec_add(&sv1,&sv1,&moby->pos);
                     fast_vec_add(&sv1,&sv1,&sv2);
-                    sv0.f[0]=random_float_between(-data->puff_xy,data->puff_xy)*D_0015ED60;
-                    sv0.f[1]=random_float_between(-data->puff_xy,data->puff_xy)*D_0015ED60;
-                    sv0.f[2]=random_float_between(0.0f,data->puff_z)*D_0015ED60;
+                    sv0.f[0]=random_float_between(-data->puff_xy,data->puff_xy)*frame_scale;
+                    sv0.f[1]=random_float_between(-data->puff_xy,data->puff_xy)*frame_scale;
+                    sv0.f[2]=random_float_between(0.0f,data->puff_z)*frame_scale;
                     fast_vec_scale(&sv0,&sv0,1.0f-data->puff_blend+shape*data->puff_blend);
                     spawn_effect_particle_with_target_scalar(&sv1,&sv0,puff_spawn_color,c1,size,life);
                 }
             }
             if (data->light!=-1) {
                 PointLight *light=&l08_point_light_slots[data->light];
-                if (fast_vec_dist(&data->light_pos,&light->pos)<data->light_speed*D_0015ED60) {
+                if (fast_vec_dist(&data->light_pos,&light->pos)<data->light_speed*frame_scale) {
                     float x=(random_float_between(-(int)data->light_range_x,data->light_range_x)+data->size_x)*0.5f;
                     float y=(random_float_between(-(int)data->light_range_y,data->light_range_y)+data->size_y)*0.5f;
                     fast_vec_normalize(&sv0,&step,x);
@@ -1018,7 +1018,7 @@ void draw_flickering_mesh_effect(struct Moby *moby) {
                     fast_vec_add(&data->light_pos,&data->light_pos,&moby->pos);
                 } else {
                     fast_vec_sub(&sv0,&data->light_pos,&light->pos);
-                    fast_vec_normalize(&sv0,&sv0,data->light_speed*D_0015ED60);
+                    fast_vec_normalize(&sv0,&sv0,data->light_speed*frame_scale);
                     fast_vec_add(&light->pos,&light->pos,&sv0);
                     light->pos.f[3]=convert_integer_to_float(data->radius);
                 }

@@ -15,7 +15,7 @@ typedef struct {
     SndVoice voices[30];
 } SndState;
 
-extern SndState D_0013E550;
+extern SndState voice_pool __asm__("D_0013E550");
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_stop_all_sounds() __asm__("func_0012E3B8");
 extern s32 snd_reset_state_and_flush_commands() __asm__("func_0012EB00");
@@ -34,9 +34,9 @@ void sound_stop_all_sounds(void) {
     while (snd_flush_sound_commands() != 0) {
     }
     for (i = 0; i < 4; i++) {
-        qzero(&D_0013E550.q[i]);
+        qzero(&voice_pool.q[i]);
     }
-    sound_state = &D_0013E550;
+    sound_state = &voice_pool;
     sound_state->x40 = 0;
     voice_clear_cursor = (s32)sound_state;
     end = voice_clear_cursor + 0xD20;

@@ -18,7 +18,7 @@ struct Pair {
     s16 unk2;
 };
 extern s32 D_001E3000[];
-extern struct Obj *D_001E1700[];
+extern struct Obj *object_render_classes[] __asm__("D_001E1700");
 extern struct Pair D_001E2A00[];
 
 void patch_tie_texture_fields(void) __asm__("FUN_00235780");
@@ -31,7 +31,7 @@ void patch_tie_texture_fields(void) {
     struct Pair *render_address_offsets;
 
     for (active_class_index_cursor = D_001E3000; *active_class_index_cursor >= 0; active_class_index_cursor++) {
-        render_class_descriptor = D_001E1700[*active_class_index_cursor];
+        render_class_descriptor = object_render_classes[*active_class_index_cursor];
         render_record = render_class_descriptor->unk2C;
         for (i = 0; i < render_class_descriptor->unk23; i++, render_record++) {
             render_address_offsets = &D_001E2A00[render_record->unk33];

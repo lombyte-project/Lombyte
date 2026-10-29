@@ -2,7 +2,7 @@
 #include "sda.h"
 #include "rnc/rendering/dma_tag.h"
 
-extern s32 D_0015ED80[] MACRO_ADDR;
+extern s32 pal_mode_macro[] __asm__("D_0015ED80")MACRO_ADDR;
 extern s32 D_0015EE78[] MACRO_ADDR;
 extern s32 D_0015EE78_gp;
 extern s32 space_load_in_progress[] __asm__("D_0015F618") MACRO_ADDR;
@@ -28,7 +28,7 @@ void reset_graphics(void) {
     dmac_vif1_disable();
     sceDmaReset(1);
     init_dma();
-    sceGsResetGraph(0, 1, (D_0015ED80[0] != 0) ? 3 : 2, 0);
+    sceGsResetGraph(0, 1, (pal_mode_macro[0] != 0) ? 3 : 2, 0);
     reset_vif1_gif();
     /* Fakematch: see the note at the top of the function. */
     do {

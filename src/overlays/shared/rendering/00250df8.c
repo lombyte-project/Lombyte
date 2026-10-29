@@ -27,7 +27,7 @@ typedef struct {
 extern int D_0015ED84;
 extern int D_0014C190[][64];
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
-extern u8 D_0013D4C0[];
+extern u8 item_available[] __asm__("D_0013D4C0");
 extern Item257218 D_L00_001C40B0[] NOT_SDA;
 int FUN_00213260(int);
 int FUN_L00_00257218_u3(Moby257218 *, int *) __asm__("FUN_L00_00257218");
@@ -41,7 +41,7 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
     if (*out <= 0 || (m != 0 && (D_0014C190[D_0015ED84][(s16)m->uid >> 5] >> (m->uid & 0x1F)) & 1)) {
         for (i = 0; i < 12 && D_0015EDD0_macro[i] != 0xFF; i++) {
             x = D_0015EDD0_macro[i] & 0x3F;
-            if (D_0013D4C0[x]) {
+            if (item_available[x]) {
                 if (((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo) with_max++;
                 owned++;
                 not_full += weapon_ammo_counts[x] < ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo;
@@ -53,7 +53,7 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             while (i >= 0) {
                 idx++;
                 x = D_0015EDD0_macro[idx] & 0x3F;
-                if (D_0013D4C0[x]) i -= ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo > weapon_ammo_counts[x];
+                if (item_available[x]) i -= ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo > weapon_ammo_counts[x];
             }
             *out = D_0015EDD0_macro[idx] & 0x3F;
         } else if (owned) {
@@ -61,7 +61,7 @@ int FUN_L00_00257218_u3(Moby257218 *m, int *out) {
             while (i >= 0) {
                 idx++;
                 x = D_0015EDD0_macro[idx] & 0x3F;
-                if (D_0013D4C0[x] && ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo) i--;
+                if (item_available[x] && ((Item257218 *)(x * 0x18 + (u8 *)D_L00_001C40B0))->max_ammo) i--;
             }
             *out = D_0015EDD0_macro[idx] & 0x3F;
         } else {

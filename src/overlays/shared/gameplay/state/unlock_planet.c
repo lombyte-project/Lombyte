@@ -344,7 +344,7 @@ typedef struct {
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern int D_L00_001B0340[] NOT_SDA;
 extern int D_L00_001C3E98[] NOT_SDA;
-extern unsigned char D_0013D4C0[];
+extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern int D_00141408 NOT_SDA;
 extern int D_00141410 NOT_SDA;
 extern int D_00141414 NOT_SDA;
@@ -353,7 +353,7 @@ extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 void grant_inventory_item(int id, int flag) __asm__("FUN_L00_00260860");
 void grant_inventory_item(int id, int flag) {
-    unsigned char *pa = &D_0013D4C0[id];
+    unsigned char *pa = &item_available[id];
     unsigned char *pb = &items_acquired[id];
     int dialogue_message_index = id + 0x25;
     int *dialogue_message_id_ptr;

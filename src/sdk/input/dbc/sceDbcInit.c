@@ -5,7 +5,7 @@ typedef struct {
     void *server;
 } SifClientData;
 
-extern SifClientData D_0015B008;
+extern SifClientData RpcQueueData __asm__("D_0015B008");
 extern SifClientData dbc_transfer_rpc_client __asm__("D_0015B030");
 extern char dbc_rpc_bind_failure_message[] __asm__("D_001534D8");
 extern char dbc_module_version_mismatch_message[] __asm__("D_001534F0");
@@ -26,11 +26,11 @@ s32 sceDbcInit(void) {
 
     sceSifInitRpc(0);
     while (1) {
-        if (sceSifBindRpc(&D_0015B008, 0x80000900, 0) < 0) {
+        if (sceSifBindRpc(&RpcQueueData, 0x80000900, 0) < 0) {
             debug_print_stub(dbc_rpc_bind_failure_message);
             exit(-1);
         }
-        if (D_0015B008.server != 0) {
+        if (RpcQueueData.server != 0) {
             break;
         }
         i = 0x10000;

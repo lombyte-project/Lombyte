@@ -15,7 +15,7 @@ struct HudItemEntry {
     u16 unk38;
 };
 
-extern u8 D_001863D0[];
+extern u8 menu_item_info[] __asm__("D_001863D0");
 extern struct HudMenuState D_001E63C0;
 extern s32 SubtractIntegerWithClamp();
 extern void draw_framebuffer_rect() __asm__("func_001FB8F0");
@@ -53,7 +53,7 @@ void render_vendor_item_icon_strip_pass(void) {
             do {
                 item = (s32 *)(void *)((u8 *)&D_001E63C0 + 0xD4 + item_index * 0x14);
                 temp_4_73 =
-                    ((struct HudItemEntry *)(void *)((u8 *)D_001863D0 + item[-1] * 0x4C))
+                    ((struct HudItemEntry *)(void *)((u8 *)menu_item_info + item[-1] * 0x4C))
                         ->unk38;
                 if (item[0] == 1) {
                     frame_index = get_icon_frame(temp_4_73, 2);
@@ -86,7 +86,7 @@ void render_vendor_item_icon_strip_pass(void) {
                 ((s32)((D_001E63C0.unk210 * 2) + var_17_145 + temp_58_3) % (s32)D_001E63C0.unk210) *
                 0x14;
             temp_4_170 =
-                ((struct HudItemEntry *)(void *)((u8 *)D_001863D0 +
+                ((struct HudItemEntry *)(void *)((u8 *)menu_item_info +
                                                    *(s32 *)(void *)(temp_3_162 +
                                                                     ((u8 *)&D_001E63C0 + 0xD0)) *
                                                        0x4C))

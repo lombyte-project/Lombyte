@@ -3,7 +3,7 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/video/decoder/read_mpeg.h"
 
-extern struct Globals_0013E550 D_0013E550;
+extern struct Globals_0013E550 voice_pool __asm__("D_0013E550");
 extern struct PadStateWords pad_words __asm__("D_0013C940");
 extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_0015EEA0;
@@ -12,7 +12,7 @@ extern s32 D_0015EEA0;
    again inside the skip-allowed test, with no store or call in between;
    this compiler only repeats such a load for a volatile object. */
 extern volatile s32 decode_mode __asm__("D_0015EED8");
-extern s32 D_0016120C;
+extern s32 decoder_state __asm__("D_0016120C");
 extern void FlushCache(s32);
 extern s32 sceGsSyncV(s32);
 extern s32 sceMpegDemuxPssRing(struct VideoDec *, u8 *, s32, struct ReadBuf *, s32);
@@ -95,7 +95,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
             }
             if (skip) {
                 skipped = 1;
-                video_dec_abort(D_0016120C + 0xD9048);
+                video_dec_abort(decoder_state + 0xD9048);
             }
         }
         space = get_state_offset_address(read_buf, &write_ptr);
@@ -114,10 +114,10 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
             read_buf_end_get(read_buf, count);
         }
         proceed_audio();
-        if (!started && vo_buf_is_full(D_0016120C + 0xD9168) && is_audio_ok()) {
+        if (!started && vo_buf_is_full(decoder_state + 0xD9168) && is_audio_ok()) {
             started = 1;
             start_display(1);
-            audioDecStart(D_0016120C + 0xD9100);
+            audioDecStart(decoder_state + 0xD9100);
         }
     }
     while (!video_dec_flush(video_dec)) {
@@ -129,8 +129,8 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
         switch_thread();
     }
     end_display();
-    audio_dec_reset(D_0016120C + 0xD9100);
-    snd_set_master_volume(5, D_0013E550.unk5C);
+    audio_dec_reset(decoder_state + 0xD9100);
+    snd_set_master_volume(5, voice_pool.unk5C);
     snd_flush_sound_commands();
     return skipped;
 }

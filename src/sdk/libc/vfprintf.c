@@ -7,14 +7,14 @@ typedef struct {
     u8 pad0[0x54];
     struct _reent *_data;
 } FILE;
-extern struct _reent *D_0012F76C[];
+extern struct _reent *_impure_ptr[] __asm__("D_0012F76C");
 extern void __sinit(struct _reent *);
 extern s32 _vfprintf_r(struct _reent *, FILE *, const char *, void *);
 /* newlib local.h */
 #define CHECK_INIT(fp) \
     do { \
         if ((fp)->_data == 0) { \
-            (fp)->_data = D_0012F76C[0]; \
+            (fp)->_data = _impure_ptr[0]; \
         } \
         if (!(fp)->_data->__sdidinit) { \
             __sinit((fp)->_data); \

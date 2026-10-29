@@ -36,9 +36,9 @@ extern struct L03HelpState l03_help_message_playback_state __asm__("D_L03_001795
 extern struct L03HelpRecord help_records[] __asm__("D_00141968");
 extern struct L03ItemEntry D_L03_00179BC0[];
 extern struct Moby *D_L03_0015FFE4;
-extern u8 D_0013D388[];
-extern u8 D_0013D408[];
-extern u8 D_0013D4C0[];
+extern u8 alternate_item_available[] __asm__("D_0013D388");
+extern u8 item_unlocked[] __asm__("D_0013D408");
+extern u8 item_available[] __asm__("D_0013D4C0");
 
 extern s32 is_point_inside_clip_volume(void *point, s32 volume) __asm__("FUN_00214720");
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
@@ -73,9 +73,9 @@ void update_kerwan_tutorial_hints(u8 *moby) {
     case TUTORIAL_HINTS_UPDATE:
         if (is_point_inside_clip_volume(&hero.motion.pos, data[30]) &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
-            D_0013D388[0x1A] = 1;
+            alternate_item_available[0x1A] = 1;
         }
-        if (D_0013D388[0x1A] == 0) {
+        if (alternate_item_available[0x1A] == 0) {
             if (is_point_inside_clip_volume(&hero.motion.pos, data[0]) &&
                 ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && l03_help_message_playback_state.state == 0 &&
                 l03_help_message_playback_state.cur == -1 && help_records[0x14].v >= 0) {
@@ -130,7 +130,7 @@ void update_kerwan_tutorial_hints(u8 *moby) {
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[15]) && count == 0 &&
             ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9) && hero.state.current != 0x1E &&
-            D_0013D4C0[0xF] != 0 && get_ammo(0xF) >= 0x15 && l03_help_message_playback_state.state == 0 &&
+            item_available[0xF] != 0 && get_ammo(0xF) >= 0x15 && l03_help_message_playback_state.state == 0 &&
             l03_help_message_playback_state.cur == -1 && help_records[0x4A].id == 0 && usage_stats.stat[19].count == 0) {
             help_request(0x4E20, 0x4A);
         } else if (hero.state.current == 0x1E) {
@@ -159,7 +159,7 @@ void update_kerwan_tutorial_hints(u8 *moby) {
             l03_help_message_playback_state.cur == -1 && help_records[0x54].id == 0) {
             help_request(0xBC0, 0x54);
         }
-        if (D_L03_0015F5C4 == 0 && D_0013D4C0[0x34] != 0 && l03_help_message_playback_state.state == 0 &&
+        if (D_L03_0015F5C4 == 0 && item_available[0x34] != 0 && l03_help_message_playback_state.state == 0 &&
             l03_help_message_playback_state.cur == -1 && help_records[0x19].id == 0) {
             help_request(0xBBD, 0x19);
         }
@@ -203,7 +203,7 @@ void update_kerwan_tutorial_hints(u8 *moby) {
             s32 owned = 0;
             for (i = 0; i < 37; i++) {
                 if (D_L03_00179BC0[i].active == 0 && i != 8 && i != 24) {
-                    if (D_0013D4C0[i] != 0) {
+                    if (item_available[i] != 0) {
                         owned++;
                     }
                 }
@@ -213,10 +213,10 @@ void update_kerwan_tutorial_hints(u8 *moby) {
             }
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, data[28])) {
-            D_0013D388[0x18] = 1;
+            alternate_item_available[0x18] = 1;
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, data[29]) && D_0013D408[3] == 0) {
-            D_0013D408[3] = 1;
+        if (is_point_inside_clip_volume(&hero.motion.pos, data[29]) && item_unlocked[3] == 0) {
+            item_unlocked[3] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }

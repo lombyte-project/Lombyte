@@ -1,11 +1,11 @@
 #include "sda.h"
-extern char *D_0016120C MACRO_ADDR;
+extern char *decoder_state_macro __asm__("D_0016120C")MACRO_ADDR;
 extern void vi_buf_restart_dma(void *) __asm__("FUN_0023c280");
 
 int mpeg_restart_video_dma(void) __asm__("FUN_0023d110");
 
 int mpeg_restart_video_dma(void) {
-    vi_buf_restart_dma(D_0016120C + 0xD9090);
+    vi_buf_restart_dma(decoder_state_macro + 0xD9090);
     return 1;
 }
 

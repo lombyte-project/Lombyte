@@ -2559,7 +2559,7 @@ collision:
 }
 #include "types.h"
 #include "rnc/gameplay/state/item_state.h"
-extern unsigned char D_0013D408[];
+extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern float D_L13_0015F580[] MACRO_ADDR;
 extern void trooper_take_damage(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
@@ -2615,8 +2615,8 @@ void blarg_ship_update(struct Moby *moby) {
         void *pos;
         void *rot;
         void *zero_vector;
-        if (moby->group != 0xff && count_active_moby_group_members(moby->group, -1) == 1 && D_0013D408[0x16] == 0) {
-            D_0013D408[0x16] = 1;
+        if (moby->group != 0xff && count_active_moby_group_members(moby->group, -1) == 1 && item_unlocked[0x16] == 0) {
+            item_unlocked[0x16] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53d6, -1);
         }

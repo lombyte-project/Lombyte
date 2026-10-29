@@ -664,7 +664,7 @@ void gate_update(unsigned char *gate_moby) {
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
 
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
@@ -717,7 +717,7 @@ void update_timed_effect_emitter(struct Moby *moby) {
             moby->state = 0;
             k = *(int *)(data + 0x10);
             if (k != -1) {
-                unsigned char *voice_entry = (unsigned char *)D_0013E550 + k * 0x70;
+                unsigned char *voice_entry = (unsigned char *)voice_pool + k * 0x70;
                 if (*(unsigned char **)(voice_entry + 0x88) == moby && voice_entry[0x74] != 0) {
                     release_voice_slot(k);
                 }
@@ -1605,7 +1605,7 @@ void update_path_spark_emitter(char *moby) {
             *(int *)(spark_vars + 0xC) = -1;
         }
         if (*(int *)(spark_vars + 0x10) != -1) {
-            char *voice_entry = ((char *)&D_0013E550) + *(int *)(spark_vars + 0x10) * 0x70;
+            char *voice_entry = ((char *)&voice_pool) + *(int *)(spark_vars + 0x10) * 0x70;
             if (*(char **)(voice_entry + 0x88) == moby && ((unsigned char *)voice_entry)[0x74] != 0) {
                 release_voice_slot(*(int *)(spark_vars + 0x10));
             }
@@ -1680,7 +1680,7 @@ int test_point_in_lab_door_local_xy_bounds(struct Moby *moby, float *world_point
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA468), where it is exact; names translated to the US level program. */
 
 
-extern char D_0013D388[];
+extern char alternate_item_available[] __asm__("D_0013D388");
 char D_L10_001DD160[] = "Moby Class %d Instance %d has no pVars!  May be in the art file.\n\tMobyDeleted\n";
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
@@ -1759,7 +1759,7 @@ void lab_door_update(unsigned char *door_moby) {
             *(float *)(door_moby + 0x18) = raised_height;
             door_moby[0x20] = 4;
             if (door_vars[5] != -1)
-                D_0013D388[door_vars[5] + 0x4C] = 1;
+                alternate_item_available[door_vars[5] + 0x4C] = 1;
         }
         break;
     }
@@ -2016,7 +2016,7 @@ void update_data_processor_linked_effect(struct Moby *moby) {
         tick_countdown_32(data + 0x34);
         voice = *(int *)(data + 0x30);
         if (voice != -1) {
-            unsigned char *entry = (unsigned char *)D_0013E550 + voice * 0x70;
+            unsigned char *entry = (unsigned char *)voice_pool + voice * 0x70;
             if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
                 release_voice_slot(voice);
         }

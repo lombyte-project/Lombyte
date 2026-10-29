@@ -12,7 +12,7 @@ extern s32 alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
 extern char pause_menu_chain_head[] __asm__("D_001CE5B8");
 extern char pause_menu_chain_tail[] __asm__("D_001CE748");
 extern char D_001CE798[];
-extern s32 D_001A0314[];
+extern s32 selected_level_index[] __asm__("D_001A0314");
 extern s32 D_001D0398[];
 
 extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
@@ -70,9 +70,9 @@ void pause_all_sounds(s32 mode) {
     {
         s32 level_index_snapshot = *(volatile s32 *)&current_level_index;
         if (level_index_snapshot < 0x13) {
-            D_001A0314[0] = level_index_snapshot;
+            selected_level_index[0] = level_index_snapshot;
         } else {
-            D_001A0314[0] = 0;
+            selected_level_index[0] = 0;
         }
     }
     update_mission_list();

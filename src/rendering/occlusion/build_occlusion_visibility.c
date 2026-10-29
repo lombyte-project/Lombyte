@@ -9,7 +9,7 @@ typedef struct {
     f32 z;
 } Camera;
 
-extern Camera D_00186F40;
+extern Camera preview_camera __asm__("D_00186F40");
 extern u8 occl_visibility_merged[] __asm__("D_00194040");
 extern f32 *occl_oct __asm__("D_0015F644");
 extern s32 occl_invalid_grid __asm__("D_0015F64C");
@@ -40,9 +40,9 @@ void build_occlusion_visibility(void) {
     f32 *octant_mask_data;
     s32 bx, by, bz;
 
-    x = truncate_float_to_s32(D_00186F40.x * scale);
-    y = truncate_float_to_s32(D_00186F40.y * scale);
-    z = truncate_float_to_s32(D_00186F40.z * scale);
+    x = truncate_float_to_s32(preview_camera.x * scale);
+    y = truncate_float_to_s32(preview_camera.y * scale);
+    z = truncate_float_to_s32(preview_camera.z * scale);
     vis = parse_occlusion_grid(x, y, z);
     if (vis != 0) {
         occl_invalid_grid = 0;
@@ -52,11 +52,11 @@ void build_occlusion_visibility(void) {
         occl_invalid_grid = 1;
         if (D_0015F648 == 0) {
             gx = get_occlusion_grid_from_pair(x - 1, y, z, x + 1, y, z,
-                                              D_00186F40.x * scale - convert_integer_to_float(x));
+                                              preview_camera.x * scale - convert_integer_to_float(x));
             gy = get_occlusion_grid_from_pair(x, y - 1, z, x, y + 1, z,
-                                              D_00186F40.y * scale - convert_integer_to_float(y));
+                                              preview_camera.y * scale - convert_integer_to_float(y));
             gz = get_occlusion_grid_from_pair(x, y, z - 1, x, y, z + 1,
-                                              D_00186F40.z * scale - convert_integer_to_float(z));
+                                              preview_camera.z * scale - convert_integer_to_float(z));
             if (gx != 0 || gy != 0 || gz != 0) {
                 clear_blocks_16(occl_visibility_merged, 0x80);
                 if (gx != 0) {
@@ -88,9 +88,9 @@ void build_occlusion_visibility(void) {
             case OCCLUSION_FALLBACK_OCTANT_MASK:
                 octant_mask_data = occl_oct;
                 if (octant_mask_data != 0) {
-                    bx = 0.0f < D_00186F40.x - octant_mask_data[0];
-                    by = 0.0f < D_00186F40.y - octant_mask_data[1];
-                    bz = 0.0f < D_00186F40.z - octant_mask_data[2];
+                    bx = 0.0f < preview_camera.x - octant_mask_data[0];
+                    by = 0.0f < preview_camera.y - octant_mask_data[1];
+                    bz = 0.0f < preview_camera.z - octant_mask_data[2];
                     fast_mem_copy(occl_visibility, (u8 *)octant_mask_data + ((bz + by * 2 + bx * 4) * 0x80 + 0x10),
                                  0x80);
                 } else if (camera_position_publication_suppressed[0] == 0 && occl_previous_grid != 0) {

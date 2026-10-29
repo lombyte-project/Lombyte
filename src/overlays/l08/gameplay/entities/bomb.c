@@ -971,7 +971,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
         }
     }
 }
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern float bomber_tank_part_reference_speed_gp __asm__("D_L08_001618A0") __attribute__((sda));
 extern float approach_angle_l08(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern void approach_value_l08(float *, float, float) __asm__("FUN_00213ed8");
@@ -986,7 +986,7 @@ typedef struct {
     int volume;
 } SoundSlot;
 
-#define SOUND_SLOT_2d55c8(id) ((SoundSlot *)(D_0013E550 + (id) * 0x70))
+#define SOUND_SLOT_2d55c8(id) ((SoundSlot *)(voice_pool + (id) * 0x70))
 
 typedef struct {
     u8 pad0[0x40];
@@ -2782,7 +2782,7 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
  * or on a hit. */
 
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern int D_001413D4 NOT_SDA;
+extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA;
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 #include "rnc/overlay/l08/gameplay/entities/bomb_data/update_path_following_moby.h"
 extern unsigned char D_0013D408[];
@@ -2866,7 +2866,7 @@ void update_path_following_moby(char *moby) {
         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
     }
     if (find_moby_hit(moby, 0x10000, 0) != 0 && *(unsigned char *)(moby + 0x20) != 2) {
-        if (D_001413D4 == 0x32 && D_0013D408[0xC] == 0) {
+        if (camera_secondary_mode_lui == 0x32 && D_0013D408[0xC] == 0) {
             D_0013D408[0xC] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             FUN_L00_00263d40(0x53D6, -1);

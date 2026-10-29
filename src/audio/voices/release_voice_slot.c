@@ -11,7 +11,7 @@ struct VoiceReleaseWindow {
     s32 owner_context;
 };
 
-extern u8 D_0013E550[];
+extern u8 voice_pool[] __asm__("D_0013E550");
 void release_voice_slot(s32 slot_index) __asm__("FUN_0022d798");
 
 /* Cancel a queued start immediately; otherwise request asynchronous stop.
@@ -25,7 +25,7 @@ void release_voice_slot(s32 slot_index) {
     if (slot_index < 0) {
         goto done;
     }
-    slot = (struct VoiceReleaseWindow *)((slot_index * 0x70) + D_0013E550);
+    slot = (struct VoiceReleaseWindow *)((slot_index * 0x70) + voice_pool);
     state = slot->state;
     if (state != VOICE_SLOT_START_QUEUED) {
         goto request_release;

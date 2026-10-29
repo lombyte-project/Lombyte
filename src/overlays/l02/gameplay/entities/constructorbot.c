@@ -142,13 +142,13 @@ extern Entry_L02_0017A140 D_L02_0017A0C0[];
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern unsigned char D_0013D4C0[];
+extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern unsigned char D_0014C050[][16];
-extern unsigned char D_0015EDDC[4];
+extern unsigned char invert52[4] __asm__("D_0015EDDC");
 extern unsigned char opt_cam_invert[4] __asm__("D_0015EDE0");
 extern int D_0015EEA4;
-extern unsigned char D_0013D388[];
-extern unsigned char D_0013D408[];
+extern unsigned char alternate_item_available[] __asm__("D_0013D388");
+extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern unsigned short D_001417A2 NOT_SDA;
 extern unsigned short D_00141888 NOT_SDA;
 extern unsigned short D_001418E8 NOT_SDA;
@@ -174,7 +174,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
             int i;
             for (i = 0; i < 37; i++) {
                 if (D_L02_0017A0C0[i].active == 0 && i != 8 && i != 24) {
-                    if ((D_0013D4C0)[i] != 0) {
+                    if ((item_available)[i] != 0) {
                         count++;
                     }
                 }
@@ -198,7 +198,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
         if (h->grounded_frames != 0) {
             data[0x15] = 0;
         } else if (is_point_inside_clip_volume(&h->motion.pos, data[0x13]) != 0) {
-            unsigned char *dialogue_latch_bytes = D_0013D408;
+            unsigned char *dialogue_latch_bytes = item_unlocked;
             if (dialogue_latch_bytes[1] == 0) {
                 dialogue_latch_bytes[1] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
@@ -215,7 +215,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
             if (is_point_inside_clip_volume(&hero.motion.pos, data[4]) != 0) {
                 int lvl = data[0];
                 if (D_0014C050[current_level_index][lvl] != 0xFF) {
-                    unsigned char *f = D_0013D4C0;
+                    unsigned char *f = item_available;
                     if (f[0x10] != 0 && ((int *)(((char *)&D_0014EE90)))[lvl] >= 6) {
                         int t = scale_game_frames(D_0015EEA4) - D_001417A2 * 600;
                         if (scale_game_frames(0x4650) < t) {
@@ -237,7 +237,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
                 help_request(0x4E22, 0x4C);
             }
         }
-        if (D_0015EDDC[0] != 0 && opt_cam_invert[0] != 0) {
+        if (invert52[0] != 0 && opt_cam_invert[0] != 0) {
             char *b = ((char *)&D_00141968);
             if (!(*(unsigned int *)(b + 0x3B4) & (1 << current_level_index))) {
                 help_request(0x4E2C, 0x76);
@@ -254,7 +254,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
             if (is_point_inside_clip_volume(&hero.motion.pos, data[4]) != 0) {
                 int lvl = data[0];
                 if (D_0014C050[current_level_index][lvl] != 0xFF) {
-                    unsigned char *f = D_0013D4C0;
+                    unsigned char *f = item_available;
                     if (f[0x10] == 0 && (float)((int *)(((char *)&D_0014EE90)))[lvl] >= 3.0f) {
                         help_request(0x7D3, 0xD);
                     }
@@ -284,7 +284,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
         }
     }
 
-    if (((Flags_0013D5C8 *)(D_0013D4C0))->b[0xC] == 0) {
+    if (((Flags_0013D5C8 *)(item_available))->b[0xC] == 0) {
         if (is_point_inside_clip_volume(&hero.motion.pos, data[5]) != 0) {
             char *b = ((char *)&D_00141968);
             int t = scale_game_frames(D_0015EEA4) - *(unsigned short *)(b + 0x8A) * 600;
@@ -299,7 +299,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
             }
         }
     }
-    if (((Flags_0013D5C8 *)(D_0013D4C0))->b[0xC] != 0 &&
+    if (((Flags_0013D5C8 *)(item_available))->b[0xC] != 0 &&
         is_point_inside_clip_volume(&hero.motion.pos, data[5]) != 0) {
         char *b = ((char *)&D_00141968);
         if (*(unsigned short *)(b + 0x90) != 0) {
@@ -349,7 +349,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
     }
 
     {
-        unsigned char *g = D_0013D388;
+        unsigned char *g = alternate_item_available;
         if (g[0x14] == 0) {
             if (is_point_inside_clip_volume(&hero.motion.pos, data[0x11]) != 0) {
                 g[0x14] = 1;

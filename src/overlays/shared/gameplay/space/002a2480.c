@@ -7,15 +7,15 @@
 /* clears two moby flags and refreshes its linked value */
 /* Ported from rac1-decomp (src/overlays/shared/space_002A3680.c: func_L01_002A3680), where it is exact; names translated to the US level program. */
 
-extern char D_0013E030[];
+extern char level_render_state[] __asm__("D_0013E030");
 
 void show_tracked_moby(void) __asm__("FUN_L01_002a2480");
 void show_tracked_moby(void) {
-    char *first = *(char **)D_0013E030;
+    char *first = *(char **)level_render_state;
     if (first != 0) {
         char *moby;
         *(unsigned short *)(first + 0x34) &= 0xfffc;
-        moby = *(char **)D_0013E030;
+        moby = *(char **)level_render_state;
         *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
     }
 }

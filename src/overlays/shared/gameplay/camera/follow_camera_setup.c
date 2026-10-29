@@ -111,7 +111,7 @@ extern A_2e6000 player_camera[] __asm__("D_L00_00166C80");
 extern C_2e6000 D_0013C940_2e6000 __asm__("D_0013C940");
 extern L_2e6000 D_0013F3D0_2e6000 __asm__("D_0013F3D0");
 extern s32 D_L00_00177F00[];
-extern s32 D_0013CAE0[];
+extern s32 pad_held[] __asm__("D_0013CAE0");
 extern f32 D_L00_00166E10[];
 extern f32 D_L00_0015EF40;
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_data/follow_camera_apply_overrides_2.h"
@@ -239,7 +239,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             }
         }
     }
-    if (hero.state.current == 0x81 && (D_0013CAE0[0] & 3)) {
+    if (hero.state.current == 0x81 && (pad_held[0] & 3)) {
         set_follow_camera_orbit_clamp_mode(0);
         follow_camera_start_slide();
         follow_camera_set_lateral_spring(0.04f, 0.2f);
@@ -1158,7 +1158,7 @@ typedef struct {
 } GS_2e7d20;
 extern GS_2e7d20 D_0013F350_lui  __asm__("D_0013F350")NOT_SDA;
 extern u8 camera_view[] __asm__("D_L00_00166E10") NOT_SDA;
-extern u8 D_L00_00166DC0[] NOT_SDA;
+extern u8 g_debug_camera_lui[] __asm__("D_L00_00166DC0")NOT_SDA;
 extern u8 *D_L00_00177F00_lui[] __asm__("D_L00_00177F00") NOT_SDA;
 extern u8 *D_L00_001E75C0[] NOT_SDA;
 extern f32 follow_camera_minimum_retracted_orbit_distance_gp __asm__("D_L00_00161CD0") __attribute__((sda));
@@ -1331,7 +1331,7 @@ move:
         goto clear;
     }
     if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 != 0 && is_moby_in_class_range_500_to_540((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18)) {
-        FUN_001f9a28_2e7d20(&v20, (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 + 0x10, D_L00_00166DC0);
+        FUN_001f9a28_2e7d20(&v20, (u8 *)(*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 + 0x10, g_debug_camera_lui);
         v20.i[2] = 0;
         FUN_001f9bf8_2e7d20(&v20, &v20, 1.0f);
         v20.f[3] = 5627.9248046875f;

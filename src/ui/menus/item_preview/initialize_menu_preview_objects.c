@@ -3,7 +3,7 @@
 #include "rnc/gameplay/gadgets/hand_gadget.h"
 
 extern u8 D_00186310[];
-extern char D_00186F40[];
+extern char preview_camera[] __asm__("D_00186F40");
 extern int active_class_resource_index __asm__("D_0015FF4C");
 extern void gadget_moby_update_noop() __asm__("FUN_00224b60");
 extern int noop_callback_e() __asm__("func_001E9410");
@@ -57,7 +57,7 @@ int initialize_menu_preview_objects(char *preview) {
         held_flag--;
     }
     if (object != 0) {
-        char *camera = D_00186F40;
+        char *camera = preview_camera;
         struct MenuSystem *g;
 
         *(char **)(preview + 0x44) = object;

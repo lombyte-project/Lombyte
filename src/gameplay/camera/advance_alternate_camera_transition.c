@@ -9,7 +9,7 @@ typedef struct {
 extern u8 cam_trans_state[] __asm__("D_001871B0");
 extern char D_0013F3D0[];
 extern char D_0013F5E0[];
-extern char D_00187080[];
+extern char camera_position[] __asm__("D_00187080");
 extern char camera_rows[] __asm__("D_00187290");
 #include "rnc/gameplay/camera/update_cam.h"
 
@@ -94,7 +94,7 @@ int advance_alternate_camera_transition(char *target_camera, f32 *transition_sta
     build_look_at_matrix(&camera_offset, &camera_offset, &horizontal_axis, transition_state[1]);
     fast_vec_add(transition_state + 20, &focus_position, &camera_offset);
     if (camera_position_publication_suppressed[0] == 0) {
-        qcopy(D_00187080, transition_state + 20);
+        qcopy(camera_position, transition_state + 20);
     }
     quaternion_rotation_basis(transition_state + 16, rotation_matrix);
     projection = fast_vec_dot(&rotation_matrix[2], target_camera);

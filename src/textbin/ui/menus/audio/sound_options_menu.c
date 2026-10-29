@@ -28,12 +28,12 @@ struct SoundMenu {
 };
 
 extern struct SoundMenuInput D_0013C940;
-extern struct SoundMenuMixer D_0013E550;
+extern struct SoundMenuMixer voice_pool __asm__("D_0013E550");
 extern s32 D_001D5D14 NOT_SDA;
 extern s32 music_volume __asm__("D_0015EDEC") MACRO_ADDR;
 extern s32 sound_volume __asm__("D_0015EDF0") MACRO_ADDR;
 extern s32 playback_mode __asm__("D_0015EDE8") MACRO_ADDR;
-extern s32 D_001A0314 NOT_SDA;
+extern s32 selected_level_index_lui __asm__("D_001A0314")NOT_SDA;
 extern s32 allocate_voice_for_target_entry(s32 flags, s32 sound_index,
                                            s32 sound_owner) __asm__("func_0022DA68");
 void snd_set_playback_mode(s32 menu) __asm__("FUN_0012e240");
@@ -70,7 +70,7 @@ s32 sound_options_menu(struct SoundMenu *menu) {
     if ((menu->selected_option != previous_selection) || (menu_system.current->pending_focus != 0)) {
         allocate_voice_for_target_entry(1, 0x11, menu->sound_owner);
         if (menu->flags & 0x20) {
-            D_001A0314 = menu_level_indices[menu->selected_option];
+            selected_level_index_lui = menu_level_indices[menu->selected_option];
         }
     }
     previous_music_volume = music_volume;
@@ -93,12 +93,12 @@ s32 sound_options_menu(struct SoundMenu *menu) {
         }
     }
     if ((previous_music_volume != music_volume) || (previous_sound_volume != *sound_volume_ptr)) {
-        D_0013E550.group_0_volume = *sound_volume_ptr * 8 / 10;
-        D_0013E550.group_2_volume = D_0013E550.group_1_volume = music_volume;
-        D_0013E550.group_3_volume = *sound_volume_ptr * 7 / 10;
+        voice_pool.group_0_volume = *sound_volume_ptr * 8 / 10;
+        voice_pool.group_2_volume = voice_pool.group_1_volume = music_volume;
+        voice_pool.group_3_volume = *sound_volume_ptr * 7 / 10;
         scaled_sound_volume = *sound_volume_ptr * 7 / 10;
-        D_0013E550.group_4_volume = scaled_sound_volume;
-        D_0013E550.group_5_volume = *sound_volume_ptr;
+        voice_pool.group_4_volume = scaled_sound_volume;
+        voice_pool.group_5_volume = *sound_volume_ptr;
     }
     if (D_0013C940.pressed_buttons & 0x40) {
         if (menu->selected_option == 2) {

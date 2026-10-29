@@ -1459,7 +1459,7 @@ f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float absolute_float(float input) __asm__("func_001F99C0");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 #include "rnc/gameplay/state/game_globals.h"
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern int func_001F9908_r(void *) __asm__("FUN_001f9740");
 extern SuckHero suck_hero __asm__("D_0013F350");
 extern SuckItemVariant suck_item_variant __asm__("D_0013E520");
@@ -1539,7 +1539,7 @@ void suckcannon_update(SuckMoby *self) {
         if (is_suck_cannon_suction_blocked_by_hero_state()!=0 || suck_hero.unk20AC || suck_hero.unk20A7) {
             sound = cannon->sound;
             if (sound!=-1) {
-                SuckVoice *s=(SuckVoice *)(((char *)&D_0013E550))+sound;
+                SuckVoice *s=(SuckVoice *)(((char *)&voice_pool))+sound;
                 if (s[1].owner==self && s[1].active) release_voice_slot(sound);
             }
             cannon->sound=-1;
@@ -1571,7 +1571,7 @@ void suckcannon_update(SuckMoby *self) {
             cancel_hero_item_animation();
             sound=cannon->sound;
             if(sound!=-1) {
-                SuckVoice *s=(SuckVoice *)(((char *)&D_0013E550))+sound;
+                SuckVoice *s=(SuckVoice *)(((char *)&voice_pool))+sound;
                 if(s[1].owner==self && s[1].active) release_voice_slot(sound);
             }
             cannon->sound=-1;
@@ -1769,7 +1769,7 @@ done:
     if(slot_released) {
         sound=cannon->sound;
         if(sound!=-1) {
-            SuckVoice *s=(SuckVoice *)(((char *)&D_0013E550))+sound;
+            SuckVoice *s=(SuckVoice *)(((char *)&voice_pool))+sound;
             if(s[1].owner==self && s[1].active) release_voice_slot(sound);
         }
         cannon->sound=-1;

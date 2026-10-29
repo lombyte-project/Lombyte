@@ -10,7 +10,7 @@ typedef struct {
     s32 ticks;
 } MobyProfile;
 
-extern u64 D_0013CAE0[];
+extern u64 pad_held[] __asm__("D_0013CAE0");
 extern s32 D_L00_0015F3F8;
 extern struct Moby *D_L00_0015FFE4;
 extern s16 D_L00_00197A00[];
@@ -41,7 +41,7 @@ void update_all_mobys_profiled(void) {
     s32 *entry;
     s16 profile_label;
 
-    if ((D_0013CAE0[0] & 0x800000007LL) != 0x800000007LL) {
+    if ((pad_held[0] & 0x800000007LL) != 0x800000007LL) {
         update_all_mobys();
         return;
     }

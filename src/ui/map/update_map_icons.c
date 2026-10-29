@@ -33,7 +33,7 @@ typedef struct {
 extern struct MapIcon *map_icon_lists_by_level[] __asm__("D_001A2BC0");
 extern s32 D_001A01F4[];
 extern s32 D_0015FD60 __attribute__((sda));
-extern MapWorldObject *D_00199478[];
+extern MapWorldObject *menu_action_messages[] __asm__("D_00199478");
 extern MapPoint D_0013D5B0[];
 extern s32 D_0013D5BC[];
 extern struct {
@@ -111,10 +111,10 @@ void update_map_icons(s32 level, s32 flag) {
                 icon->y = 0.72265625f;
             } else {
                 if (level == current_level_index) {
-                    if (D_00199478[icon->id] != 0) {
-                        world_to_map_coords(D_00199478[icon->id]->x, D_00199478[icon->id]->y,
+                    if (menu_action_messages[icon->id] != 0) {
+                        world_to_map_coords(menu_action_messages[icon->id]->x, menu_action_messages[icon->id]->y,
                                             &icon->x, &icon->y, level);
-                        level_map_selection.icons[icon_index].angle = D_00199478[icon->id]->z;
+                        level_map_selection.icons[icon_index].angle = menu_action_messages[icon->id]->z;
                     }
                 } else {
                     world_to_map_coords(D_0013D5B0[icon->id].x, D_0013D5B0[icon->id].y, &icon->x,

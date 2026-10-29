@@ -4,7 +4,7 @@ struct Globals_0013E550 {
     s32 unk44;
 };
 
-extern struct Globals_0013E550 D_0013E550;
+extern struct Globals_0013E550 voice_pool __asm__("D_0013E550");
 extern s32 snd_bank_load_by_loc() __asm__("FUN_0012df20");
 extern s32 snd_resolve_bank_xrefs() __asm__("FUN_0012e1a8");
 extern s32 snd_stream_safe_check_cd_idle() __asm__("FUN_0012ed30");
@@ -16,14 +16,14 @@ s32 load_audio_bank_by_location(s32 location) {
     s32 result;
 
     result = 0;
-    if (D_0013E550.unk44 == 0) {
-        D_0013E550.unk44 = 1;
+    if (voice_pool.unk44 == 0) {
+        voice_pool.unk44 = 1;
         sceCdSync(0);
         result = snd_bank_load_by_loc(location, 0);
         snd_stream_safe_check_cd_idle(1);
         snd_stream_safe_cd_sync(0);
         snd_resolve_bank_xrefs();
-        D_0013E550.unk44 = 0;
+        voice_pool.unk44 = 0;
     }
     return result;
 }

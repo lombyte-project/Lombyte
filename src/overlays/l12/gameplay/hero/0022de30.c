@@ -521,7 +521,7 @@ struct VoiceSlot {
     u8 pad75[0x13];
     struct MobyView *pm88;
 };
-extern u8 D_0013E550[];
+extern u8 voice_pool[] __asm__("D_0013E550");
 extern s32 D_L12_001612D0;
 extern s32 D_L12_001612D8;
 extern s32 D_L12_0015F5CC;
@@ -575,7 +575,7 @@ extern f32 forward_component(void *) __asm__("FUN_L00_00213350");
 extern struct HeroTableRow2C D_L12_0017C0A8[];
 extern struct LevelTable_QS D_L12_00167100;
 #define Q D_L12_00167100
-extern s32 D_0013CAE0[];
+extern s32 pad_held[] __asm__("D_0013CAE0");
 extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void offset_hero_position_against_gravity(void *, void *, f32) __asm__("FUN_L00_002336e8");
@@ -838,7 +838,7 @@ void update_hero_motion_for_current_state(void) {
         } else {
             s32 voice_slot_index = hero.pack_swim_voice;
             if (voice_slot_index != -1) {
-                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + voice_slot_index * 0x70);
+                struct VoiceSlot *e = (struct VoiceSlot *)(voice_pool + voice_slot_index * 0x70);
                 if (e->pm88 == MV(hero.moby) && e->b74 != 0) {
                     release_voice_slot(voice_slot_index);
                 }
@@ -1629,7 +1629,7 @@ void update_hero_motion_for_current_state(void) {
             if (test_hero_animation_frame_window(84.0f) != 0) {
                 f32 a = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
                 f32 s = frame_time * 2.5f;
-                if (D_0013CAE0[0] & 0xA) {
+                if (pad_held[0] & 0xA) {
                     s = frame_time * 3.0f;
                 }
                 hero.motion.velocity.f[0] += fast_cos(a) * s;
@@ -2193,7 +2193,7 @@ void update_hero_motion_for_current_state(void) {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
-                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + hero.voice_slot4 * 0x70);
+                struct VoiceSlot *e = (struct VoiceSlot *)(voice_pool + hero.voice_slot4 * 0x70);
                 if (e->pm88 == MV(hero.moby) && e->b74 != 0) {
                     release_voice_slot(hero.voice_slot4);
                 }
@@ -2202,7 +2202,7 @@ void update_hero_motion_for_current_state(void) {
             release_voice_slot_cf(3, MV(hero.moby), 2);
         } else {
             if (hero.unk2224 != -1) {
-                struct VoiceSlot *e = (struct VoiceSlot *)(D_0013E550 + hero.unk2224 * 0x70);
+                struct VoiceSlot *e = (struct VoiceSlot *)(voice_pool + hero.unk2224 * 0x70);
                 if (e->pm88 == MV(hero.moby) && e->b74 != 0) {
                     release_voice_slot(hero.unk2224);
                 }

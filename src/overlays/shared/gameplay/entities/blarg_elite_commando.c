@@ -538,7 +538,7 @@ typedef struct {
 } L16DamageReward;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern unsigned char D_0013D408[];
+extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int blarg_elite_commando_reward_kill_count_gp __asm__("D_0015EE10") __attribute__((sda));
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
@@ -637,8 +637,8 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             if (current_level_index == 18 && commando_data->reward_hits) {
                 ++*(int *)&blarg_elite_commando_reward_kill_count_gp;
                 if (*(int *)&blarg_elite_commando_reward_kill_count_gp >= 10) {
-                    if (D_0013D408[0x1D] == 0) {
-                        D_0013D408[0x1D] = 1;
+                    if (item_unlocked[0x1D] == 0) {
+                        item_unlocked[0x1D] = 1;
                         allocate_voice_for_bank_entry(1, 0, 0);
                         queue_dialogue_message(0x53D6, -1);
                     }

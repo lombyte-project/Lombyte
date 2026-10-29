@@ -1255,13 +1255,13 @@ void request_hero_target_pose(void *source_position, float f, int state_entry_op
         hero_set_state(0x65, 1);
     }
 }
-extern s32 D_001413D4[];
+extern s32 camera_secondary_mode[] __asm__("D_001413D4");
 
-/* Maps D_001413D4[0]: 0x65/0x66 to 1, 0x67 to 2, others to 0. */
+/* Maps camera_secondary_mode[0]: 0x65/0x66 to 1, 0x67 to 2, others to 0. */
 s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 
 s32 get_hero_target_pose_status(void) {
-    s32 current_hero_state = D_001413D4[0];
+    s32 current_hero_state = camera_secondary_mode[0];
     switch (current_hero_state) {
     case HERO_STATE_APPROACH_TARGET_POSE:
     case HERO_STATE_BRAKE_AT_TARGET_POSITION:

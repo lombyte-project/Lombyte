@@ -907,7 +907,7 @@ typedef struct {
     struct Moby *owner;
 } VoiceSlot;
 
-extern u8 D_0013E550[];
+extern u8 voice_pool[] __asm__("D_0013E550");
 extern f32 rail_flyer_speed_acceleration_gp __asm__("D_L03_00161B0C") __attribute__((sda));
 extern f32 rail_flyer_yaw_acceleration_degrees_gp __asm__("D_L03_00161B14") __attribute__((sda));
 extern f32 D_L03_00161B1C __attribute__((sda));
@@ -963,7 +963,7 @@ s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) {
             *snd = play_moby_sound(0, 4, rail_moby, 0x330);
     } else {
         if (sound_voice != -1) {
-            VoiceSlot *voice_slot = (VoiceSlot *)(D_0013E550 + sound_voice * 0x70);
+            VoiceSlot *voice_slot = (VoiceSlot *)(voice_pool + sound_voice * 0x70);
             if (voice_slot->owner == rail_moby && voice_slot->active)
                 release_voice_slot(sound_voice);
         }
@@ -1834,8 +1834,8 @@ typedef struct {
 } TalkerHit;
 
 extern s32 D_L03_001BA5D0[];
-extern u8 D_0013D388[];
-extern u8 D_0013D408[];
+extern u8 alternate_item_available[] __asm__("D_0013D388");
+extern u8 item_unlocked[] __asm__("D_0013D408");
 extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
 extern TalkerHit *talker_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -1879,8 +1879,8 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
     if (hit != 0 && hit->source != 0 && (type = hit->type) == 3 &&
         D_L03_001BB330.collected[(s16)robot_qwark_moby->save_id] == 0 &&
         (((D_0014C190_257218[current_level_index][(s16)robot_qwark_moby->save_id >> 5] >> (robot_qwark_moby->save_id & 0x1F)) ^ 1) & 1)) {
-        if (D_0013D408[5] == 0) {
-            D_0013D408[5] = 1;
+        if (item_unlocked[5] == 0) {
+            item_unlocked[5] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }
@@ -1902,14 +1902,14 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         robot_qwark_moby->spawn_frame = *(u64 *)(D_001413D0[0] + 0x38);
         robot_qwark_moby->state = 1;
         talker_init(robot_qwark_moby, dialogue_state);
-        if (D_0013D388[0x19] != 0) {
+        if (alternate_item_available[0x19] != 0) {
             dialogue_state->mode = 1;
             dialogue_state->unk36 = 2;
         }
         break;
     case ROBOT_QWARK_UPDATE_DIALOGUE:
         if (talker_update(robot_qwark_moby, dialogue_state)) {
-            D_0013D388[0x19] = 1;
+            alternate_item_available[0x19] = 1;
             begin_dialogue_camera_transition(robot_qwark_moby, 2.7f);
             robot_qwark_moby->state = 2;
         }

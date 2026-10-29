@@ -72,7 +72,7 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern unsigned char D_0013F350[];
 s32 FUN_L00_00203908(s32 a, s32 b);
-extern u8 D_0013D4C0[];
+extern u8 item_available[] __asm__("D_0013D4C0");
 extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
 extern LvState D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
 extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
@@ -109,7 +109,7 @@ void thruster_pack_lock_update(Lock *moby)
         break;
     }
     case THRUSTER_PACK_LOCK_STATE_ACTIVE:
-        if (((void *)((Hero *)(D_0013F350_r))->ground_moby) == moby && D_0013D4C0[3] != 0 &&
+        if (((void *)((Hero *)(D_0013F350_r))->ground_moby) == moby && item_available[3] != 0 &&
             ((Hero *)(D_0013F350_r))->air_frames.s == 0 && ((Hero *)(D_0013F350_r))->state.current == 0x22) {
             if (current_level_index == 0xB && moby->bB0 != 0xFF) {
                 int group;
@@ -135,7 +135,7 @@ void thruster_pack_lock_update(Lock *moby)
         if (!((unsigned int)*(int *)(D_0013F3D0_r + 0x200C) < 2)) {
             return;
         }
-        if (D_0013D4C0[3] == 0) {
+        if (item_available[3] == 0) {
             int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats *)(D_00141968_r))->best2 * 600;
             if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < elapsed ||
                 ((Stats *)(D_00141968_r))->best2 * 600 == 0) {
@@ -594,7 +594,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 #include "rnc/overlay/shared/gameplay/entities/thruster_pack_lock_globals.h"
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_0013D408[];
+extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern unsigned char D_00141968[];
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
@@ -626,8 +626,8 @@ void update_moby_hit_stats_and_state(char *moby) {
         *(int *)(collection_stats_base + 0x157EC) = *(int *)(collection_stats_base + 0x157EC) | (1 << current_level_index) | 0x80000000;
         if (current_level_index == 0xB && *(char **)(info + 0x20) != 0 &&
             *(short *)(*(char **)(info + 0x20) + 0xA6) == 0xAC) {
-            if (++level_11_class_ac_hit_count >= 3 && D_0013D408[0x12] == 0) {
-                D_0013D408[0x12] = 1;
+            if (++level_11_class_ac_hit_count >= 3 && item_unlocked[0x12] == 0) {
+                item_unlocked[0x12] = 1;
                 allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }

@@ -30,7 +30,7 @@ struct Locals {
     f32 v9C;
 };
 
-extern struct CameraView D_00186F40;
+extern struct CameraView preview_camera __asm__("D_00186F40");
 extern f32 D_0018CF10[];
 extern void transform_vector(void *a, void *b, void *c) __asm__("FUN_001f9d20");
 extern void set_identity_matrix(void *a) __asm__("FUN_001f9fc8");
@@ -44,10 +44,10 @@ void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) {
     f32 x;
 
     set_identity_matrix(&L);
-    L.v30 = -D_00186F40.unk140 * 1024.0f;
-    L.v34 = -D_00186F40.unk144 * 1024.0f;
-    L.v38 = -D_00186F40.unk148 * 1024.0f;
-    multiply_matrix(&L.v40, (u8 *)&D_00186F40 + 0x40, &L);
+    L.v30 = -preview_camera.unk140 * 1024.0f;
+    L.v34 = -preview_camera.unk144 * 1024.0f;
+    L.v38 = -preview_camera.unk148 * 1024.0f;
+    multiply_matrix(&L.v40, (u8 *)&preview_camera + 0x40, &L);
     fast_vec_scale(&L.blk80, world_pos, 1024.0f);
     L.v8C = 1.0f;
     transform_vector(&L.v90, &L.blk80, &L.v40);

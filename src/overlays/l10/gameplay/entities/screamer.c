@@ -1214,7 +1214,7 @@ typedef struct Moby2E30F8 {
 } Moby2E30F8;
 
 extern char D_L10_00167240[];
-extern char D_L10_001742C0[];
+extern char ground_hit[] __asm__("D_L10_001742C0");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L10_0015F580[] MACRO_ADDR;
 extern float FUN_001f9b48(void *, void *);
@@ -1497,7 +1497,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                     *(OvlQuad *)to2 = *(OvlQuad *)(target_moby + 0x10);
                     to2[2] += 1.0f;
                     if (collision_line(from2, to2, 2, m, 0)) {
-                        char *h = D_L10_001742C0;
+                        char *h = ground_hit;
                         if ((*(char **)(h + 0x18) == 0 ||
                              *(short *)(*(char **)(h + 0x18) + 0xA6) != 0x31A) &&
                             FUN_001f9b48(from2, h + 0x20) < toxic_crab_obstacle_pause_distance_gp) {
@@ -1592,7 +1592,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             *(OvlQuad *)to2 = *(OvlQuad *)(target_moby + 0x10);
             to2[2] += 1.0f;
             if (collision_line(from2, to2, 2, m, 0)) {
-                char *h = D_L10_001742C0;
+                char *h = ground_hit;
                 if ((*(char **)(h + 0x18) == 0 ||
                      *(short *)(*(char **)(h + 0x18) + 0xA6) != 0x31A) &&
                     FUN_001f9b48(from2, h + 0x20) < toxic_crab_obstacle_pause_distance_gp) {

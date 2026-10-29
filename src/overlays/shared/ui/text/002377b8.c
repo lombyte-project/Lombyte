@@ -374,7 +374,7 @@ extern int l00_hud_item_selector_single_line_title_without_ammo_y_offset __asm__
 extern float D_L00_0015F7C0;
 extern float D_L00_0015F7C4_gp __asm__("D_L00_0015F7C4") __attribute__((sda));
 extern u32 strlen(const char *);
-extern unsigned char D_0013E520[];
+extern unsigned char item_text_variant[] __asm__("D_0013E520");
 extern void FUN_L00_0023b120(char *, int, int, int, int, int);
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 int FUN_L00_00235a70_c3(HudElem *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
@@ -440,7 +440,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
             else
                 icon_alpha = alpha;
             FUN_L00_0023b120((char *)rec, get_icon_frame(((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].id,
-                          ((unsigned char *)D_0013E520)[((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].item] ? 4 : 0), icon_x, icon_y, 1, icon_alpha);
+                          ((unsigned char *)item_text_variant)[((E_238C30 **)D_L00_0015FAC0)[D_L00_0015F72C_gp][i].item] ? 4 : 0), icon_x, icon_y, 1, icon_alpha);
         }
     }
     selected = rec->unk74;
@@ -467,7 +467,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
         {
             int item, id;
             item = *(int *)(((char **)D_L00_0015FAC0)[D_L00_0015F72C_gp] + selected * 0x1C + 0x18);
-            if (((unsigned char *)D_0013E520)[item])
+            if (((unsigned char *)item_text_variant)[item])
                 id = ((TI_238C30 *)item_defs)[item].h48;
             else
                 id = ((TI_238C30 *)item_defs)[item].h46;

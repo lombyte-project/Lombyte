@@ -312,7 +312,7 @@ extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void FUN_L00_00200228(float, void *);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int FUN_0022da68(int, int, void *);
-extern int D_001413D4 NOT_SDA;
+extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA;
 extern char *scene_points __asm__("D_L07_001600EC");
 extern char voice_slot_state_base[] __asm__("D_0013E5C4");
 
@@ -365,7 +365,7 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
                 data[0x67] = 0x78;
                 trooper_anim_update(moby, data + 0x60);
                 if ((u8)moby[0x53] != 2) FUN_00212f90(moby, 2, 0, random_int_between(10, 13));
-                if (D_001413D4 == 0x78) hero_set_state(0, 1);
+                if (camera_secondary_mode_lui == 0x78) hero_set_state(0, 1);
                 if (*(int *)(data + 0x1f0) != -1) {
                     set_moby_dialogue_record_value(moby, 1);
                     FUN_L00_00257470(moby, 0, -1);
@@ -390,7 +390,7 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
                 trooper_anim_update(moby, data + 0x60);
                 if ((u8)moby[0x20] < 10 && *health < scratch.threshold) {
                     int slot;
-                    if (D_001413D4 == 0x78) hero_set_state(0, 1);
+                    if (camera_secondary_mode_lui == 0x78) hero_set_state(0, 1);
                     if ((u8)moby[0x53] != 2) {
                         int first = random_int_between(0, 2);
                         FUN_00212f90(moby, 2, first, random_int_between(20, 22));

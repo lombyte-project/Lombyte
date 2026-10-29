@@ -76,7 +76,7 @@ typedef struct {
 
 extern char D_0013C940[];
 extern char D_00141660[];
-extern unsigned char D_0013D4C0[];
+extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern int D_0015ED8C;
 extern int D_0015ED90;
 extern int D_0015ED94;
@@ -186,7 +186,7 @@ void apply_hero_item_slot_selection(int i) {
             }
         }
         g = &hero;
-        if (g->state.control_mode == 0xF && D_0013D4C0[0x1D] != 0) {
+        if (g->state.control_mode == 0xF && item_available[0x1D] != 0) {
             if (*(int *)(D_00141660 + 4) != 0x1D || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
                 int v;
                 g->pending_item[1] = 0x1D;
@@ -199,7 +199,7 @@ void apply_hero_item_slot_selection(int i) {
             }
         }
         g = &hero;
-        if (*(unsigned char *)((char *)g + 0x12E7) != 0 && D_0013D4C0[0x1C] != 0) {
+        if (*(unsigned char *)((char *)g + 0x12E7) != 0 && item_available[0x1C] != 0) {
             if (*(int *)(D_00141660 + 4) != 0x1C || *(int *)((char *)g + i * 0x50 + 0x10B8) == 0) {
                 int v;
                 g->pending_item[1] = 0x1C;
@@ -223,7 +223,7 @@ void apply_hero_item_slot_selection(int i) {
                 (equipped_item_check_hero = &hero, *(int *)((char *)equipped_item_check_hero + i * 0x50 + 0x10B8) == 0)) {
                 h = &hero;
                 if (*(int *)((char *)h + i * 0x50 + 0x10B8) != 6 && h->selected_item[i] != 6 &&
-                    D_0013D4C0[6] != 0) {
+                    item_available[6] != 0) {
                     int v;
                     h->pending_item[i] = 6;
                     flag6 = 1;
@@ -247,7 +247,7 @@ void apply_hero_item_slot_selection(int i) {
                 int v;
                 g = &hero;
                 v = *(int *)((char *)g + 0x11A8);
-                if (v != 4 && D_0013D4C0[4] != 0) {
+                if (v != 4 && item_available[4] != 0) {
                     g->saved_item[3] = v;
                     flag4 = 1;
                     g->pending_item[3] = 4;
@@ -1049,7 +1049,7 @@ typedef struct {
 
 
 extern SndPair l05_hoverboard_trick_animation_frame_bounds[] __asm__("D_L05_00179BC0");
-extern char D_0013CAE0[];
+extern char pad_held[] __asm__("D_0013CAE0");
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -1063,7 +1063,7 @@ void update_hero_hoverboard_trick_animations(void) {
     int pad;
     hero_ptr->board_jump_land_frames =
         truncate_float_to_s32(predict_hero_trajectory_intercept_time(60.0f, hero_ptr->board_gravity, -1.0f));
-    if (hero_ptr->trick_input != 0 && ((pad = *(int *)(D_0013CAE0)) & 0xF) != 0) {
+    if (hero_ptr->trick_input != 0 && ((pad = *(int *)(pad_held)) & 0xF) != 0) {
         hero_ptr->air_pose_index = 0;
         if (pad & 8)
             hero_ptr->air_pose_index = 1;
@@ -1086,7 +1086,7 @@ void update_hero_hoverboard_trick_animations(void) {
     }
     {
         struct Hero *k = &hero;
-        if ((k->air_frames.s == 0 || (*(int *)(D_0013CAE0) & 0xF) == 0) &&
+        if ((k->air_frames.s == 0 || (*(int *)(pad_held) & 0xF) == 0) &&
             (unsigned int)(((unsigned char *)((char *)k->moby))[0x53] - 0x69) < 4 &&
             k->anim_changing == 0 &&
             k->anim_loop_frame < ((unsigned char *)((char *)k->moby))[0x51] &&

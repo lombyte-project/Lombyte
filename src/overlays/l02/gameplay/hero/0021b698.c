@@ -704,7 +704,7 @@ extern Cam D_L02_00167280;
 extern Moby *l02_sphere_query_moby_results[] __asm__("D_L02_00178500");
 extern HeroTableRow2C D_L02_0017C228[];
 extern S17BEB8 D_L02_0017C3B8;
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L02_001673D8 NOT_SDA;
 extern float ledge_shimmy_planar_speed_by_anim_frame[] __asm__("D_L02_001C42B0");
@@ -733,7 +733,7 @@ extern int vector_length_xy_cf(float) __asm__("FUN_001fa6d0");
 extern short D_L02_0015F688 __attribute__((sda));
 s32 D_L02_0015F68C = 0;
 extern unsigned char *FUN_L00_00250df8_cf(int) __asm__("FUN_0020c4f8");
-extern unsigned char D_0013D4C0[];
+extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void FUN_001efa68_cf(float *dst, float *src, float dz) __asm__("FUN_L00_00233810");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -937,7 +937,7 @@ void update_hero_state_motion(void) {
         speed_step(0.0f, speed);
         clear_u64_value(hero.motion.velocity.f);
         reduce_and_apply_hero_planar_velocity_addend(speed);
-        if (hero.on_magnet_ground != 0 && D_0013D4C0[0x1C] != 0) {
+        if (hero.on_magnet_ground != 0 && item_available[0x1C] != 0) {
             if (hero.ground_distance > 0.2f) {
                 FUN_L00_002334d0(hero.motion.velocity.f, hero.motion.resolved_velocity.f, frame_time_sq * 24.0f);
             } else {
@@ -1969,7 +1969,7 @@ void update_hero_state_motion(void) {
 
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
-                Row13E650 *e = (Row13E650 *)(D_0013E550 + hero.voice_slot4 * 0x70);
+                Row13E650 *e = (Row13E650 *)(voice_pool + hero.voice_slot4 * 0x70);
 
                 if (e->f88 == ((Moby *)hero.moby) && e->f74 != 0) {
                     release_voice_slot(hero.voice_slot4);
@@ -1979,7 +1979,7 @@ void update_hero_state_motion(void) {
             release_voice_slot_cf(3, (int)((Moby *)hero.moby), 2);
         } else {
             if (hero.unk2224 != -1) {
-                Row13E650 *e = (Row13E650 *)(D_0013E550 + hero.unk2224 * 0x70);
+                Row13E650 *e = (Row13E650 *)(voice_pool + hero.unk2224 * 0x70);
 
                 if (e->f88 == ((Moby *)hero.moby) && e->f74 != 0) {
                     release_voice_slot(hero.unk2224);

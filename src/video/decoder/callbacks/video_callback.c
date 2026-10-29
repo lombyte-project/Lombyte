@@ -13,7 +13,7 @@ struct VdecBuf {
     s32 size;
 };
 
-extern u8 *D_0016120C;
+extern u8 *decoder_state __asm__("D_0016120C");
 extern u8 pts_buffer_overflow_message[] __asm__("D_001E8B08");
 extern void err_message(u8 *) __asm__("func_0023AB78");
 extern s32 cpy2area(u32, s32, u32, s32, u8 *, s32, struct VdecBuf *,
@@ -44,15 +44,15 @@ s32 video_callback(s32 unused_callback_arg, struct VdecCb *cb, struct VdecBuf *a
         first_source_byte_count = len;
     }
     rest = len - first_source_byte_count;
-    video_dec_begin_put(D_0016120C + 0xD9048, &first_destination_address, &first_destination_byte_capacity, &second_destination_address, &second_destination_byte_capacity);
+    video_dec_begin_put(decoder_state + 0xD9048, &first_destination_address, &first_destination_byte_capacity, &second_destination_address, &second_destination_byte_capacity);
     copied_byte_count = cpy2area((first_destination_address & 0x0FFFFFFF) | 0x20000000, first_destination_byte_capacity,
                                    (second_destination_address & 0x0FFFFFFF) | 0x20000000, second_destination_byte_capacity, ps, first_source_byte_count, ab, rest);
     if (copied_byte_count > 0) {
-        if (video_dec_put_ts(D_0016120C + 0xD9048, cb->pts, cb->dts, first_destination_address, copied_byte_count) == 0) {
+        if (video_dec_put_ts(decoder_state + 0xD9048, cb->pts, cb->dts, first_destination_address, copied_byte_count) == 0) {
             err_message(pts_buffer_overflow_message);
         }
     }
-    video_dec_end_put(D_0016120C + 0xD9048, copied_byte_count);
+    video_dec_end_put(decoder_state + 0xD9048, copied_byte_count);
     return copied_byte_count > 0;
 }
 

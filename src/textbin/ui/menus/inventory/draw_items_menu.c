@@ -12,7 +12,7 @@ typedef struct {
     s32 help_tip;
 } ItemsMenu;
 
-extern s32 D_0015ED88[] MACRO_ADDR;
+extern s32 game_language_macro[] __asm__("D_0015ED88")MACRO_ADDR;
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
@@ -77,7 +77,7 @@ s32 draw_items_menu(ItemsMenu *menu) {
         text_window = window_fields;
         text_window.anchor_x = add_offset(text_window.left, text_window.right) >> 1;
         strcpy(text_buffer, get_help_message_text(0x4F4E));
-        if (D_0015ED88[0] == column_divisor) {
+        if (game_language_macro[0] == column_divisor) {
             hyphen = strchr(text_buffer, 0x2D);
             if (hyphen != 0) {
                 text_length = strlen(text_buffer);

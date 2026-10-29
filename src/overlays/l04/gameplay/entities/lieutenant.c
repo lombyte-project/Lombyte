@@ -164,7 +164,7 @@ extern int D_L04_00179590[] NOT_SDA;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern unsigned char D_0013D4D4 NOT_SDA;
-extern unsigned char D_0013D4E3[];
+extern unsigned char discount_purchase_pricing[] __asm__("D_0013D4E3");
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern unsigned short D_001417C2 NOT_SDA;
 extern unsigned short D_00141892 NOT_SDA;

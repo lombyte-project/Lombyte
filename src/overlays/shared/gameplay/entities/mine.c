@@ -235,7 +235,7 @@ f32 resolve_camera_surface_height(void *position, s32 optional_output) __asm__("
 float absolute_float(float input) __asm__("func_001F99C0");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern E910 D_E910 __asm__("D_0013E520");
 extern H910 coll_hit __asm__("D_L00_00173E40");
 
@@ -500,7 +500,7 @@ void mine_update(M910 *mine_moby) {
                         mine_moby->state = 1;
                         s = v->i68;
                         if (s != -1) {
-                            char *tab = ((char *)&D_0013E550);
+                            char *tab = ((char *)&voice_pool);
                             char *e = tab + s * 0x70;
 
                             if (*(M910 **)(e + 0x88) == mine_moby && *(unsigned char *)(e + 0x74) != 0) {
@@ -526,7 +526,7 @@ void mine_update(M910 *mine_moby) {
                         mine_moby->state = 1;
                         s = v->i68;
                         if (s != -1) {
-                            char *tab = ((char *)&D_0013E550);
+                            char *tab = ((char *)&voice_pool);
                             char *e = tab + s * 0x70;
 
                             if (*(M910 **)(e + 0x88) == mine_moby && *(unsigned char *)(e + 0x74) != 0) {
@@ -546,7 +546,7 @@ void mine_update(M910 *mine_moby) {
                     mine_moby->state = 1;
                     s = v->i68;
                     if (s != -1) {
-                        char *tab = ((char *)&D_0013E550);
+                        char *tab = ((char *)&voice_pool);
                         char *e = tab + s * 0x70;
 
                         if (*(M910 **)(e + 0x88) == mine_moby && *(unsigned char *)(e + 0x74) != 0) {

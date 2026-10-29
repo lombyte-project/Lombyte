@@ -6,7 +6,7 @@ struct SoundEnvironmentFlags {
     u8 flags;
 };
 extern s32 D_001940D4[];
-extern struct SoundEnvironmentFlags D_0013E550;
+extern struct SoundEnvironmentFlags voice_pool __asm__("D_0013E550");
 extern void count_vsync() __asm__("FUN_0012f1c8");
 extern void play_mpeg_movie(s32, s32, s32, s32, s32) __asm__("func_0023A3B8");
 extern s32 sceGsSyncV(s32);
@@ -28,14 +28,14 @@ void play_level_transition_movie(s32 movie_index) {
         stream_size = disc_table.movies[movie_index].size;
     }
     archive_base = D_001940D4[0];
-    D_0013E550.flags |= 8;
+    voice_pool.flags |= 8;
     play_mpeg_movie(stream_start, stream_size, (archive_base + 0x3F) & ~0x3F,
                      (archive_base + 0x30003F) & ~0x3F, game_language);
     sceGsSyncV(0);
     sceGsSyncPath(0, 0);
     sceGsSyncVCallback(count_vsync);
     fade_to_black(4);
-    D_0013E550.flags |= 0x10;
+    voice_pool.flags |= 0x10;
 }
 
 extern __typeof__(play_level_transition_movie) func_00231608 __attribute__((alias("FUN_00231608")));

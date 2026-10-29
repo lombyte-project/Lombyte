@@ -50,7 +50,7 @@ typedef struct {
     struct Moby *owner;
 } VoiceSlot;
 
-extern u8 D_0013E550[];
+extern u8 voice_pool[] __asm__("D_0013E550");
 #include "rnc/overlay/shared/gameplay/entities/seeker_globals.h"
 extern Vec4f D_L09_00166F40;
 extern u8 seeker_invalid_bound_path_format[] __asm__("D_L09_00208320");
@@ -267,7 +267,7 @@ void seeker_update(struct Moby *moby) {
     case SEEKER_STATE_FATAL_KNOCKBACK:
         voice = vars->voice;
         if (voice != -1) {
-            slot = (VoiceSlot *)(D_0013E550 + voice * 0x70);
+            slot = (VoiceSlot *)(voice_pool + voice * 0x70);
             if (slot->owner == moby && slot->active != 0) {
                 release_voice_slot(voice);
             }
@@ -282,7 +282,7 @@ void seeker_update(struct Moby *moby) {
         FUN_L00_00257470(moby, 0, -1);
         voice = vars->voice;
         if (voice != -1) {
-            slot = (VoiceSlot *)(D_0013E550 + voice * 0x70);
+            slot = (VoiceSlot *)(voice_pool + voice * 0x70);
             if (slot->owner == moby && slot->active != 0) {
                 release_voice_slot(voice);
             }

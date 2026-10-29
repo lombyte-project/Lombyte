@@ -935,7 +935,7 @@ typedef struct {
 } PendulumMoby;
 
 extern u8 D_0014C050[];
-extern u8 D_0013E550[];
+extern u8 voice_pool[] __asm__("D_0013E550");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
@@ -974,7 +974,7 @@ void bridge_half_update(PendulumMoby *self) {
         if (pendulum_vars->swing == 0.0f) {
             voice_slot_index = pendulum_vars->sound;
             if (voice_slot_index != -1) {
-                voice = D_0013E550 + voice_slot_index * 0x70;
+                voice = voice_pool + voice_slot_index * 0x70;
                 if (*(void **)(voice + 0x88) == self && voice[0x74] != 0) {
                     release_voice_slot(voice_slot_index);
                 }

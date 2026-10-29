@@ -2724,7 +2724,7 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
 extern int D_L05_00178300[];
 extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
-extern unsigned char D_0013D388[];
+extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern void copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
 extern void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -2767,7 +2767,7 @@ void skid_mcmarx_update(Moby *moby) {
         moby->rot.z = fast_arc_tan(path->points[1].x - path->points[0].x, path->points[1].y - path->points[0].y);
         data->cruise_speed = D_0015ED6C_gp * 17.0f + (float)data->racer_index * (D_0015ED6C_gp * 1.55f);
         data->launch_speed = D_0015ED6C_gp * 24.0f + (float)data->racer_index * (D_0015ED6C_gp * 1.55f);
-        if (D_0013D388[0] == 0) {
+        if (alternate_item_available[0] == 0) {
             float handicap = (float)(D_0015EE38_macro - 4);
 
             if (handicap < 0.0f) {

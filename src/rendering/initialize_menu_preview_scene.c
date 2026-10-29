@@ -37,7 +37,7 @@ extern struct MenuPage menu_preview_initial_page __asm__("D_001D45C8"); /* page 
 extern u8 D_0019C150[];
 extern u8 D_0019C160[];
 extern void quad_moby_update() __asm__("FUN_0023a2c0");
-extern struct S D_00186F40;
+extern struct S preview_camera __asm__("D_00186F40");
 #include "rnc/rendering/initialize_menu_preview_scene_globals.h"
 #include "rnc/math/fast_math.h"
 extern u8 menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
@@ -88,9 +88,9 @@ void initialize_menu_preview_scene(void) {
                 s32 k;
                 preview_moby->f34 &= 0xFFFD;
                 ((struct O2 *)panel_slots[i])->f74 = quad_moby_update;
-                ((struct O2 *)panel_slots[i])->f10 = D_00186F40.f140;
-                ((struct O2 *)panel_slots[i])->f14 = D_00186F40.f144;
-                ((struct O2 *)panel_slots[i])->f18 = D_00186F40.f148;
+                ((struct O2 *)panel_slots[i])->f10 = preview_camera.f140;
+                ((struct O2 *)panel_slots[i])->f14 = preview_camera.f144;
+                ((struct O2 *)panel_slots[i])->f18 = preview_camera.f148;
                 ((struct O2 *)panel_slots[i])->f40 = 0;
                 ((struct O2 *)panel_slots[i])->f44 = 0;
                 ((struct O2 *)panel_slots[i])->f48 = 0;

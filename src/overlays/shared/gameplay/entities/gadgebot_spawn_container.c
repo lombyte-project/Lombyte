@@ -375,7 +375,7 @@ void FUN_L00_0025c558_c(u8 *a, void *b, int c, int d, int e, float f) __asm__("F
 void FUN_L06_002e94f0_c(struct Moby *moby) __asm__("FUN_L06_002e94f0");
 void FUN_L06_002e9f30_c(struct Moby *moby) __asm__("FUN_L06_002e9f30");
 extern char D_0013F3D0[];
-extern char D_001413D4[];
+extern char camera_secondary_mode[] __asm__("D_001413D4");
 extern void func_L06_002EA920_x(void *) __asm__("FUN_L06_002e94f0");
 extern void func_L06_002EB360_x(void *) __asm__("FUN_L06_002e9f30");
 extern void func_L00_0025D5B0_x(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
@@ -639,7 +639,7 @@ void frog_update(unsigned char *moby) {
         B[2] = 0.0f;
         blend_frog_rotation_to_facing_frame((char *)moby, (float *)(moby + 0xE0), B);
         wait = compute_interpolated_record_value(moby);
-        if (moby[0x52] == moby[0x53] && wait >= 10.0f && wait <= 15.0f && *(int *)(((char *)&D_001413D4)) != 0x51) {
+        if (moby[0x52] == moby[0x53] && wait >= 10.0f && wait <= 15.0f && *(int *)(((char *)&camera_secondary_mode)) != 0x51) {
             fast_vec_normalize(A, moby + 0xC0, (*(float *)(data + 0x1E4) + *(float *)(data + 0x1E4)) * D_0015ED6C_gp);
             FUN_L06_002e9b60_c(moby, A, 1, 0.3f, 0.3f);
             collect_mobies_in_sphere_at_moby_point(moby, 0, 1, 0.333f, 1.0f, 1.0f, 0, 1, 0);
@@ -3163,7 +3163,7 @@ typedef struct {
 } Obj;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -3189,7 +3189,7 @@ void energy_sphere_update(struct Moby *sphere_moby) {
         allocate_voice_for_target_entry(1, 0, (int)sphere_moby);
         voice_slot_index = *(int *)(sphere_vars + 0x60);
         if (voice_slot_index != -1) {
-            char *voice_slot = D_0013E550 + voice_slot_index * 0x70;
+            char *voice_slot = voice_pool + voice_slot_index * 0x70;
             if (*(char **)(voice_slot + 0x88) == sphere_moby && *(unsigned char *)(voice_slot + 0x74) != 0) {
                 release_voice_slot(voice_slot_index);
             }

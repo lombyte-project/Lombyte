@@ -378,12 +378,12 @@ extern LevelLoad173E40 coll_hit __asm__("D_L00_00173E40");
 extern MobyInst *moby_table __asm__("D_L00_0015FFD8") MACRO_ADDR;
 extern MobyInst *D_L00_0015FFDC MACRO_ADDR;
 extern MobyInst *D_L00_0015FFE0 MACRO_ADDR;
-extern ShipSpawn D_0013E030;
+extern ShipSpawn level_render_state __asm__("D_0013E030");
 extern ShrubClass *D_L00_001BC030[];
 extern ShrubInst *D_L00_00160494 MACRO_ADDR;
 extern ShrubInst *D_L00_00160498 MACRO_ADDR;
 extern ShrubMatrix *D_L00_0016049C MACRO_ADDR;
-extern SoundGlobals D_0013E550;
+extern SoundGlobals voice_pool __asm__("D_0013E550");
 extern Spline *D_L00_0015F70C MACRO_ADDR;
 extern TextHeader D_L00_00179410;
 extern TextTable *D_L00_0015F660  MACRO_ADDR;
@@ -453,7 +453,7 @@ extern int first_class_ids[] __asm__("D_L00_00160548");
 extern int shrub_color_buffer_descriptor[] __asm__("D_L00_00160B70");
 extern int D_L00_00160F50 MACRO_ADDR;
 extern int D_L00_00160FCC MACRO_ADDR;
-extern int D_L00_0016C058[];
+extern int g_debug_menu[] __asm__("D_L00_0016C058");
 extern int D_L00_001AB840[];
 extern int D_L00_001BA4D0[];
 extern int fast_decompress(void *, void *) __asm__("FUN_L00_0024d8d0");
@@ -567,9 +567,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
         D_L00_0015F454 = *(float *)(p + 3);
         D_L00_0015F638 = *(float *)(p + 4);
         p += 12;
-        D_0013E030.f30 = ship_spawn_settings[0];
-        D_0013E030.f34 = ship_spawn_settings[1];
-        D_0013E030.f38 = ship_spawn_settings[2];
+        level_render_state.f30 = ship_spawn_settings[0];
+        level_render_state.f34 = ship_spawn_settings[1];
+        level_render_state.f38 = ship_spawn_settings[2];
     }
     update_fog();
     D_L00_00160F80 = 512000.0f;
@@ -903,24 +903,24 @@ char *load_level_gameplay(int skip_gameplay_read) {
         int n = *(int *)p;
 
         p += 0x10;
-        D_0013E550.fD90 = n;
+        voice_pool.fD90 = n;
         if (n != 0) {
             int size = n * 0x90;
             int i;
 
-            D_0013E550.fD94 = (SoundInst *)mem;
+            voice_pool.fD94 = (SoundInst *)mem;
             mem += size;
             mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
-            FillTransferWords(D_0013E550.fD94, 0, size);
-            for (i = 0; i < D_0013E550.fD90; i++) {
-                SoundInst *e = D_0013E550.fD94 + i;
+            FillTransferWords(voice_pool.fD94, 0, size);
+            for (i = 0; i < voice_pool.fD90; i++) {
+                SoundInst *e = voice_pool.fD94 + i;
 
                 copy_memory_aligned(e, p, 0x90);
                 p += 0x90;
                 resolve_lookup_record((short *)e);
             }
         } else {
-            D_0013E550.fD94 = 0;
+            voice_pool.fD94 = 0;
         }
     }
     {
@@ -1119,16 +1119,16 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 mem += size;
             }
         }
-        for (i = 0; i < D_0013E550.fD90; i++) {
-            int k = D_0013E550.fD94[i].f8;
+        for (i = 0; i < voice_pool.fD90; i++) {
+            int k = voice_pool.fD94[i].f8;
 
             if (k < 0) {
-                D_0013E550.fD94[i].f8 = 0;
+                voice_pool.fD94[i].f8 = 0;
             } else {
                 int size = tbl[k].f4;
                 char *src = pv + tbl[k].f0;
 
-                D_0013E550.fD94[i].f8 = (int)mem;
+                voice_pool.fD94[i].f8 = (int)mem;
                 fast_mem_copy(mem, src, size);
                 tbl[k].f0 = (int)mem;
                 mem += size;
@@ -1456,14 +1456,14 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_00160170 = 0;
     D_L00_00160178 = 0;
     clear_blocks_16(D_L00_001B1880, 0x200);
-    D_0013E030.f0 = 0;
+    level_render_state.f0 = 0;
     if (0.0f < ship[0]) {
         MobyInst *m;
 
-        if (D_0015ED84 == 13 && D_0013E030.f26 == 2) {
+        if (D_0015ED84 == 13 && level_render_state.f26 == 2) {
             if (D_L00_00160540 != 0) {
                 for (m = moby_table; m->f20 != 0xFF; m++) {
-                    if (m->fA6 == first_class_ids[D_0013E030.f26]) {
+                    if (m->fA6 == first_class_ids[level_render_state.f26]) {
                         initialize_moby_state_record((char *)m);
                         set_moby_animation(m, 1, 0);
                         break;
@@ -1471,10 +1471,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 }
             }
         }
-        if (D_0013E030.f0 == 0) {
+        if (level_render_state.f0 == 0) {
             float ship_spawn_rotation;
 
-            m = func_0020D348_m(first_class_ids[D_0013E030.f26]);
+            m = func_0020D348_m(first_class_ids[level_render_state.f26]);
             m->f10 = ship[0];
             m->f14 = ship[1];
             m->f18 = ship[2];
@@ -1486,7 +1486,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             m->f34 &= ~2;
             set_moby_animation(m, 1, 0);
             update_entity(m);
-            D_0013E030.f0 = m;
+            level_render_state.f0 = m;
             store_current_level_table_value((int)m, 0);
         }
     }
@@ -1620,7 +1620,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 q += 2;
             }
         }
-        D_L00_0016C058[7] = 2;
+        g_debug_menu[7] = 2;
     } else {
         MobyInst *m;
         TieInst *t;
@@ -1636,7 +1636,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         for (i = 0; i < D_L00_00160F50; i++) {
             D_L00_00160F4C[i].f3A = 0x7F80;
         }
-        D_L00_0016C058[7] = 0;
+        g_debug_menu[7] = 0;
     }
     reset_draw_globals();
     initialize_hero();
@@ -1650,8 +1650,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_001B0830[0] = 0;
     D_L00_0015F5CC = 0;
     D_L00_0015F63C = 0;
-    if (D_0013E030.f0 != 0) {
-        *(long *)&D_0013E030.f0->f38 = *(long *)&D_0013F350.f2080->f38;
+    if (level_render_state.f0 != 0) {
+        *(long *)&level_render_state.f0->f38 = *(long *)&D_0013F350.f2080->f38;
     }
     switch (D_0015ED84) {
     case 2:

@@ -374,7 +374,7 @@ extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
 extern int fast_decompress() __asm__("FUN_L00_0024d8d0");
 extern s32 D_0015ED84;
 extern s32 hud_heap_alloc() __asm__("func_001FF288");
-extern unsigned char D_0013D4C0[];
+extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern unsigned char D_0014161B[];
 extern unsigned char l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
 extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
@@ -419,7 +419,7 @@ void initialize_level_map_archive(void) {
         map_coefficients[i * 4] = map_x0 - scale_x * world_x0;
         map_coefficients[i * 4 + 2] = map_y0 - scale_y * world_y0;
     } }
-    flags = (unsigned char *)D_0013D4C0;
+    flags = (unsigned char *)item_available;
     if (flags[0x21] != 0) {
         D_L00_001841F0.loaded = 1;
         file = (struct DiscFile *)D_00138438 + D_L00_001841F0.archive_index;

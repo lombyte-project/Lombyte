@@ -2441,7 +2441,7 @@ s32 apply_taunter_to_nearby_mobies(Moby *taunter_moby, f32 radius) __asm__("FUN_
 
 extern s32 apply_taunter_to_nearby_mobies(Moby *, f32) __asm__("FUN_L00_002b6bc8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern u32 D_0013CAE0[];
+extern u32 pad_held[] __asm__("D_0013CAE0");
 extern u8 D_0013E550[];
 extern Ring D_00141680;
 extern s32 D_0015EEA4;
@@ -2621,7 +2621,7 @@ void taunter_update(Moby *taunter_moby) {
         }
     } else {
         taunter_vars->retry++;
-        if ((D_0013CAE0[0] & hero.items[0].button_mask) != 0 || FUN_001f96f8_c(0x1E) >= taunter_vars->cnt18) {
+        if ((pad_held[0] & hero.items[0].button_mask) != 0 || FUN_001f96f8_c(0x1E) >= taunter_vars->cnt18) {
             if (hero.item_use_locked == 0)
                 goto L7340;
         }

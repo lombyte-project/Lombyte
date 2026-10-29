@@ -4041,7 +4041,7 @@ extern char hero_pos[] __asm__("D_0013F3D0");
 extern f32 D_0015ED6C;
 extern f32 frame_time_sq __asm__("D_0015ED70");
 extern u8 D_0013D4C2 NOT_SDA;
-extern s32 D_0013CAE0 NOT_SDA;
+extern s32 pad_held_lui __asm__("D_0013CAE0")NOT_SDA;
 
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
@@ -4111,7 +4111,7 @@ void hero_integrate_velocity(void) {
         if (hero.unk428 == 0.0f && hero.unk42C == 0.0f) {
             no_lift = 1;
         }
-        if ((D_0013CAE0 & 0x40) || no_lift || hero.state.current == 0x12) {
+        if ((pad_held_lui & 0x40) || no_lift || hero.state.current == 0x12) {
             if (hero.unk430 < hero.unk48C && !(scale_game_frames(15) < hero.state_timer)) {
                 hero.unk430 += (hero.unk48C - hero.jump_height_start) / hero.unk498;
                 if (hero.unk48C < hero.unk430) {

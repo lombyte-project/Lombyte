@@ -360,7 +360,7 @@ extern void rig_probe_setup(struct Moby *, s32, s32 *, void *, f32 *, f32 *) __a
 extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f19a0");
 extern f32 FUN_001f99c0(f32);
 extern f32 D_0015ED60;
-extern f32 D_0015ED68;
+extern f32 frame_scale_inv __asm__("D_0015ED68");
 extern s32 D_L04_00173FF0[] NOT_SDA;
 
 s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) __asm__("FUN_L04_00295778");
@@ -510,7 +510,7 @@ s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f3
                 } else {
                     anim = *fallback;
                 }
-                moby->anim_speed = D_0015ED68 * FUN_001f99c0(rate / anim->rate);
+                moby->anim_speed = frame_scale_inv * FUN_001f99c0(rate / anim->rate);
                 break;
             }
             entry++;

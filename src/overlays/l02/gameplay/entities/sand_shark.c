@@ -2953,7 +2953,7 @@ void snap_transport_pod_rails_to_offsets(struct Moby *moby) {
 /* State machine for a moby that picks a new animation each time the previous one finishes. */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E05E0), where it is exact; names translated to the US level program. */
 
-extern char D_0013E550[];
+extern char voice_pool[] __asm__("D_0013E550");
 extern int FUN_0022da68(int, int, int);
 void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
@@ -2984,7 +2984,7 @@ void crane_update(struct Moby *moby) {
             }
             voice_slot_index = crane_vars[0];
             if (voice_slot_index != -1) {
-                char *voice_slot = D_0013E550 + voice_slot_index * 0x70;
+                char *voice_slot = voice_pool + voice_slot_index * 0x70;
                 if (*(unsigned char **)(voice_slot + 0x88) == moby && ((unsigned char *)voice_slot)[0x74] != 0) {
                     release_voice_slot(voice_slot_index);
                 }
@@ -3104,7 +3104,7 @@ void rocket_launcher_update(struct Moby *moby) {
         if (fast_difference_between_rotations(moby->rot.z, rocket_launcher_vars->target_yaw) < DEG_TO_RAD && rocket_launcher_vars->yaw_vel == 0.0f) {
             s32 turning_voice_index = rocket_launcher_vars->voice;
             if (turning_voice_index != -1) {
-                TurretVoiceSlot *voice_slot = (TurretVoiceSlot *)(D_0013E550 + turning_voice_index * 0x70);
+                TurretVoiceSlot *voice_slot = (TurretVoiceSlot *)(voice_pool + turning_voice_index * 0x70);
                 if (voice_slot->owner == moby && voice_slot->active)
                     release_voice_slot(turning_voice_index);
             }

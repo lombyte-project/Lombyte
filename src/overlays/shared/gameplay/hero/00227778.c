@@ -8,8 +8,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
-extern unsigned char D_0013D4C0[];
-extern unsigned int D_0013CAE0 NOT_SDA;
+extern unsigned char item_available[] __asm__("D_0013D4C0");
+extern unsigned int pad_held_lui __asm__("D_0013CAE0")NOT_SDA;
 extern void queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void hud_init_particles(void) __asm__("FUN_L00_00236268");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
@@ -29,7 +29,7 @@ int try_transition_hero_water_state(void) {
     int state;
 
     if (hero.state.control_mode == 0x11) {
-        if (D_0013D4C0[6] != 0) {
+        if (item_available[6] != 0) {
             decrement = 0;
         } else {
             decrement = 10000 / (scale_game_frames(0x3C) * 15);
@@ -64,7 +64,7 @@ collision_mode:
     qcopy(&end, &start);
     end.f[2] += 0.3f;
     if (collision_line(&start, &end, 2, hero.moby, 0)) {
-        if (D_0013D4C0[4] != 0 && (D_0013CAE0 & 10) != 0) {
+        if (item_available[4] != 0 && (pad_held_lui & 10) != 0) {
             state = 0x35;
             goto change_state;
         }

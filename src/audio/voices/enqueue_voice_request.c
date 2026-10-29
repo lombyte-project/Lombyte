@@ -11,15 +11,15 @@ struct Table {
     s32 count;
     struct Handler *handlers;
 };
-extern struct Table D_0013E550;
+extern struct Table voice_pool __asm__("D_0013E550");
 
 void enqueue_voice_request(void) __asm__("FUN_0022dc50");
 
 void enqueue_voice_request(void) {
     s32 i;
 
-    for (i = 0; i < D_0013E550.count; i++) {
-        struct Handler *handler = (struct Handler *)(i * 0x90 + (s32)D_0013E550.handlers);
+    for (i = 0; i < voice_pool.count; i++) {
+        struct Handler *handler = (struct Handler *)(i * 0x90 + (s32)voice_pool.handlers);
 
         if (handler->fn != 0) {
             handler->fn(handler);
