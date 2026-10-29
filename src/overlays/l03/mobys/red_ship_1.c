@@ -60,30 +60,30 @@ void add_moby_rotation_based_offsets(struct Moby *moby, float *out) {
 void maintain_emitter_sound_voice(struct Moby *moby) __asm__("FUN_L03_0029c9d0");
 
 void maintain_emitter_sound_voice(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *emitter_pvars = (char *)moby->pvars;
     if (moby->state == 0) {
-        *(int *)(data + 0x150) = -1;
+        *(int *)(emitter_pvars + 0x150) = -1;
         return;
     }
     if ((D_L03_0015F5CC & 7) != (((int)moby >> 8) & 7))
         return;
-    if (*(short *)(data + 0x14A) != 0)
+    if (*(short *)(emitter_pvars + 0x14A) != 0)
         return;
-    if (*(int *)(data + 0x150) >= 0) {
-        if (voice_is_playing(moby, *(int *)(data + 0x150)) != 0)
+    if (*(int *)(emitter_pvars + 0x150) >= 0) {
+        if (voice_is_playing(moby, *(int *)(emitter_pvars + 0x150)) != 0)
             return;
     }
     switch (moby->oclass) {
     case MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER:
     case MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER:
-        *(int *)(data + 0x150) = allocate_voice_for_target_entry(0, 4, (int)moby);
+        *(int *)(emitter_pvars + 0x150) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
     case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
     case MOBY_CLASS_TEN_PARTICLE_BURST_EMITTER:
     case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
     case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
     case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
-        *(int *)(data + 0x150) = allocate_voice_for_target_entry(1, 4, (int)moby);
+        *(int *)(emitter_pvars + 0x150) = allocate_voice_for_target_entry(1, 4, (int)moby);
         break;
     }
 }
