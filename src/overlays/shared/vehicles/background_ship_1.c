@@ -106,14 +106,14 @@ void draw_background_ship_1_joint_billboards(char *self) {
     get_first_moby_in_group((int *)&current_moby, *(unsigned char *)(self + 0x21), 0, 0);
     while (current_moby != 0) {
         if (current_moby->visible != 0) {
-            char *data = ((char *)current_moby->pvars);
+            char *joint_billboard_data = ((char *)current_moby->pvars);
             if (current_moby->oclass == *(short *)(self + 0xA6)) {
-                if ((*(int *)(data + 0xB0) & 0xFF) > 0x80) {
-                    char *joint_position = data + 0x80;
+                if ((*(int *)(joint_billboard_data + 0xB0) & 0xFF) > 0x80) {
+                    char *joint_position = joint_billboard_data + 0x80;
                     int   i;
                     for (i = 2; i >= 0; i--) {
                         draw_offset_textured_effect_quad(
-                            joint_position, *(int *)(data + 0xB0), 0.9f, 0.45f);
+                            joint_position, *(int *)(joint_billboard_data + 0xB0), 0.9f, 0.45f);
                         joint_position += 0x10;
                     }
                 }
