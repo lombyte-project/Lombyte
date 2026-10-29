@@ -249,7 +249,7 @@ extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
 void build_vendor_menu_rows(s32 skip_unflagged) __asm__("FUN_L00_0029a400");
 
 void build_vendor_menu_rows(s32 skip_unflagged) {
-    s32 count, i, j, value, item, k;
+    s32 count, i, j, stocked_item_entry, item, k;
 
     count = 0;
     if (D_0015EDD0_macro[0] != 0xFF) {
@@ -259,11 +259,11 @@ void build_vendor_menu_rows(s32 skip_unflagged) {
     }
     vendor_menu_lui.row_count = 0;
     for (i = 0; i < count; i++) {
-        value = D_0015EDD0_macro[i];
-        if (value == 0xFF)
+        stocked_item_entry = D_0015EDD0_macro[i];
+        if (stocked_item_entry == 0xFF)
             continue;
-        item = value & 0x3F;
-        if (value & 0x40) {
+        item = stocked_item_entry & 0x3F;
+        if (stocked_item_entry & 0x40) {
             s32 sound;
             if (D_L00_001C40B0[item].h8 == 0)
                 continue;
