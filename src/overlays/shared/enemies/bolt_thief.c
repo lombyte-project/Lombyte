@@ -14,23 +14,23 @@
 void initialize_moby_path_state(char *moby) __asm__("FUN_L14_002fe900");
 
 void initialize_moby_path_state(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *moby_path_state = ((char *)MOBY(moby)->pvars);
     char *path;
     int   i;
-    path = ((int *)l14_paths[*(int *)(data + 0xD8)]);
+    path = ((int *)l14_paths[*(int *)(moby_path_state + 0xD8)]);
     for (i = 0; i < *(int *)path - 1; i++) {
         *(float *)(path + 0x1C + i * 0x10) =
             fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
-    *(int *)(data + 0xD0) = 0;
-    *(int *)(data + 0xD4) = 0;
+    *(int *)(moby_path_state + 0xD0) = 0;
+    *(int *)(moby_path_state + 0xD4) = 0;
     qcopy(moby + 0x10, path + 0x10);
     MOBY(moby)->rot.z = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                      *(float *)(path + 0x24) - *(float *)(path + 0x14));
-    *(float *)(data + 0xF0) = *(float *)(data + 0xE4) = *(float *)(data + 0xE8) =
-        *(float *)(data + 0xEC) = 0.0f;
-    if (*(int *)(data + 0xFC) != 1) {
-        path = ((int *)l14_paths[*(int *)(data + 0xDC)]);
+    *(float *)(moby_path_state + 0xF0) = *(float *)(moby_path_state + 0xE4) = *(float *)(moby_path_state + 0xE8) =
+        *(float *)(moby_path_state + 0xEC) = 0.0f;
+    if (*(int *)(moby_path_state + 0xFC) != 1) {
+        path = ((int *)l14_paths[*(int *)(moby_path_state + 0xDC)]);
         for (i = 0; i < *(int *)path - 1; i++) {
             *(float *)(path + 0x1C + i * 0x10) =
                 fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
