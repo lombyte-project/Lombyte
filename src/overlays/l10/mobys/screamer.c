@@ -381,7 +381,7 @@ extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 #include "rnc/data_labels.h"
 
 void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
-    MobyData_2DFC38 *data = (MobyData_2DFC38 *)moby->pvars;
+    MobyData_2DFC38 *screamer_vars = (MobyData_2DFC38 *)moby->pvars;
     Hit_2DFC38      *hit_record;
     float            relative_offset[4];
     float            transformed_offset[4];
@@ -389,91 +389,91 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     int              target_selection_status;
     float            knockback_angle;
 
-    if (data->f38 != 0) {
-        data->f184 = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
-        data->f38 = 0;
+    if (screamer_vars->f38 != 0) {
+        screamer_vars->f184 = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
+        screamer_vars->f38 = 0;
     }
-    fast_dec_timer(&data->f184);
+    fast_dec_timer(&screamer_vars->f184);
     if (moby->state != 11) {
         hit_record = (Hit_2DFC38 *)find_moby_hit(moby, 0x330000, 0);
-        hit_update_2DFC38(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
+        hit_update_2DFC38(moby, hit_record, &screamer_vars->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0) {
-            if (data->f20 <= hit_record->f2C) {
+            if (screamer_vars->f20 <= hit_record->f2C) {
                 if (screamer_death_message_gate != 0 && item_unlocked[0x10] == 0) {
                     item_unlocked[0x10] = 1;
                     allocate_voice_for_bank_entry_2DFC38(1, 0, 0);
                     queue_dialogue_message(0x53d6, -1);
                 }
-                data->f20 = 0.0f;
+                screamer_vars->f20 = 0.0f;
                 moby->flags &= 0xEFFF;
                 if (moby->prev_seq != 5)
                     blend_moby_animation(moby, 5, 0, scale_game_frames(10));
                 moby->state = 11;
-                data->f70 = D_0015ED70 * 26.0f;
-                data->f9D = 3;
-                data->f74 = 0.0005f;
-                data->f84 = 9;
-                data->f78 = D_0015ED6C * 7.0f;
-                data->f7C = D_0015ED6C * 10.0f;
+                screamer_vars->f70 = D_0015ED70 * 26.0f;
+                screamer_vars->f9D = 3;
+                screamer_vars->f74 = 0.0005f;
+                screamer_vars->f84 = 9;
+                screamer_vars->f78 = D_0015ED6C * 7.0f;
+                screamer_vars->f7C = D_0015ED6C * 10.0f;
                 if (hit_record->f30 & 1)
                     knockback_angle = fast_arc_tan(hit_record->f10[0], hit_record->f10[1]);
                 else
                     knockback_angle =
                         fast_arc_tan(moby->pos.x - hit_record->x, moby->pos.y - hit_record->y);
-                trooper_start_knockback(moby, data->f60, knockback_angle, 5, 1, 0);
-                data->f117 = 0x78;
-                trooper_anim_update(moby, data->f110);
+                trooper_start_knockback(moby, screamer_vars->f60, knockback_angle, 5, 1, 0);
+                screamer_vars->f117 = 0x78;
+                trooper_anim_update(moby, screamer_vars->f110);
                 func_L00_00261B00_2E2B80(moby, 1, 3, 0, -1);
             } else {
-                data->f20 = data->f20 - hit_record->f2C;
-                data->f117 = 0xfa;
-                data->f26 = scale_game_frames(60);
-                trooper_anim_update(moby, data->f110);
+                screamer_vars->f20 = screamer_vars->f20 - hit_record->f2C;
+                screamer_vars->f117 = 0xfa;
+                screamer_vars->f26 = scale_game_frames(60);
+                trooper_anim_update(moby, screamer_vars->f110);
             }
             moby->hit_slot = 0xff;
         }
     }
-    trooper_anim_finish(moby, data->f110);
-    if (data->f174 == 2)
-        data->f180 = 42.0f;
-    else if (data->f184 != 0)
-        data->f180 = data->f178 + 6.0f;
+    trooper_anim_finish(moby, screamer_vars->f110);
+    if (screamer_vars->f174 == 2)
+        screamer_vars->f180 = 42.0f;
+    else if (screamer_vars->f184 != 0)
+        screamer_vars->f180 = screamer_vars->f178 + 6.0f;
     else if (moby->state == 1)
-        data->f180 = data->f188;
+        screamer_vars->f180 = screamer_vars->f188;
     else
-        data->f180 = data->f178;
+        screamer_vars->f180 = screamer_vars->f178;
 
-    if (data->f174 == 2) {
-        target_selection_status = ahead_f(data->f180, moby, data->fC0);
+    if (screamer_vars->f174 == 2) {
+        target_selection_status = ahead_f(screamer_vars->f180, moby, screamer_vars->fC0);
         if (target_selection_status != 2) {
-            LevelCuboid *bp = &l10_cuboids[data->f194];
+            LevelCuboid *bp = &l10_cuboids[screamer_vars->f194];
             fast_vec_sub(relative_offset, D_0013F3D0, &bp->pos);
             relative_offset[3] = 0.0f;
             transform_vector_by_basis(transformed_offset, relative_offset, bp->to_local);
             if (transformed_offset[0] <= -1.0f || 0.0f <= transformed_offset[0] ||
                 transformed_offset[1] <= -1.0f || 1.0f <= transformed_offset[1] ||
                 transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2])
-                data->f104 = 2;
+                screamer_vars->f104 = 2;
         }
-    } else if (moby->state == 1 && data->f18C >= 0) {
-        LevelPath *path = l10_paths[data->f18C];
+    } else if (moby->state == 1 && screamer_vars->f18C >= 0) {
+        LevelPath *path = l10_paths[screamer_vars->f18C];
         target_selection_status =
-            activate_effect_l08(data->f180, moby, data->fC0, 0, 0, path->points, path->count);
-    } else if (moby->state != 1 && data->f17C >= 0) {
-        LevelPath *path = l10_paths[data->f17C];
+            activate_effect_l08(screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
+    } else if (moby->state != 1 && screamer_vars->f17C >= 0) {
+        LevelPath *path = l10_paths[screamer_vars->f17C];
         target_selection_status =
-            activate_effect_l08(data->f180, moby, data->fC0, 0, 0, path->points, path->count);
+            activate_effect_l08(screamer_vars->f180, moby, screamer_vars->fC0, 0, 0, path->points, path->count);
     } else {
-        target_selection_status = ahead_f(data->f180, moby, data->fC0);
+        target_selection_status = ahead_f(screamer_vars->f180, moby, screamer_vars->fC0);
     }
     if (target_selection_status != 2) {
-        if (data->f180 < vector_distance_xy(data->f130, data->fC0))
-            data->f104 = 2;
+        if (screamer_vars->f180 < vector_distance_xy(screamer_vars->f130, screamer_vars->fC0))
+            screamer_vars->f104 = 2;
         else if (moby->visible == 0)
-            data->f104 = 2;
+            screamer_vars->f104 = 2;
     }
-    if (data->f100 == 0)
-        data->f100 = D_001413D0[0];
+    if (screamer_vars->f100 == 0)
+        screamer_vars->f100 = D_001413D0[0];
 }
 
 /* Sets every listed entity in state 1 to state 2. */
