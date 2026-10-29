@@ -72,21 +72,21 @@ void update_help_hints(Moby *moby) {
         TUTORIAL_TRIGGER_STATE_INITIALIZE = 0,
         TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS = 1
     };
-    Data *data = *(void **)&moby->pvars;
+    Data *tutorial_trigger_vars = *(void **)&moby->pvars;
 
     switch (moby->state) {
     case TUTORIAL_TRIGGER_STATE_INITIALIZE:
         moby->update_dist = 0xFF;
         moby->state = 1;
-        data->f14 = -1;
+        tutorial_trigger_vars->f14 = -1;
         break;
     case TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS:
-        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f0) != 0 &&
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f0) != 0 &&
             D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1 &&
             visited52[moby->mission + (current_level_index_macro << 4)] != 0xFF) {
-            if (data->f14 == -1) {
+            if (tutorial_trigger_vars->f14 == -1) {
                 struct UsageStat *usage = usage_stats.stat;
-                data->f14 = D_0015EEAC_macro;
+                tutorial_trigger_vars->f14 = D_0015EEAC_macro;
                 if (usage[0x18].count < 0xFFFF) {
                     usage[0x18].count++;
                 }
@@ -116,8 +116,8 @@ void update_help_hints(Moby *moby) {
         {
             Help *help = (Help *)(((char *)&D_00141968));
             if (help[0x42].count < 4) {
-                if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f34) != 0 ||
-                    is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f38) != 0) {
+                if (is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f34) != 0 ||
+                    is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f38) != 0) {
                     Hero *hero = (Hero *)(((char *)&D_0013F3D0 - 0x80));
                     if (hero->state.prev == 0x3B && hero->state_timer == 0) {
                         Moby *other;
@@ -126,8 +126,8 @@ void update_help_hints(Moby *moby) {
                                 fast_vec_dist(((float *)&other->pos), ((char *)&D_0013F3D0)) <
                                     3.0f &&
                                 *(float *)*(void **)&other->pvars != 1.0f) {
-                                data->f20++;
-                                if (data->f20 == 3 || data->f20 == 6) {
+                                tutorial_trigger_vars->f20++;
+                                if (tutorial_trigger_vars->f20 == 3 || tutorial_trigger_vars->f20 == 6) {
                                     help_request(0x3EE, 0x42);
                                 }
                             }
@@ -147,7 +147,7 @@ void update_help_hints(Moby *moby) {
             }
         }
 
-        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f3C) != 0 && D_00141940 == 0 &&
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f3C) != 0 && D_00141940 == 0 &&
             D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
             Help *help = (Help *)(((char *)&D_00141968));
             if (help[0x77].count == 0) {
@@ -155,32 +155,32 @@ void update_help_hints(Moby *moby) {
             }
         }
 
-        if (data->f48 != -1) {
-            if (((struct Moby *)moby_array)[data->f48].oclass == 0x267 &&
-                ((struct Moby *)moby_array)[data->f48].state == 4) {
+        if (tutorial_trigger_vars->f48 != -1) {
+            if (((struct Moby *)moby_array)[tutorial_trigger_vars->f48].oclass == 0x267 &&
+                ((struct Moby *)moby_array)[tutorial_trigger_vars->f48].state == 4) {
                 menu_item_enabled_16 = 1;
             }
         }
-        if (data->f4C != -1) {
-            if (((struct Moby *)moby_array)[data->f4C].oclass == 0x267 &&
-                ((struct Moby *)moby_array)[data->f4C].state == 4) {
+        if (tutorial_trigger_vars->f4C != -1) {
+            if (((struct Moby *)moby_array)[tutorial_trigger_vars->f4C].oclass == 0x267 &&
+                ((struct Moby *)moby_array)[tutorial_trigger_vars->f4C].state == 4) {
                 menu_item_enabled_17 = 1;
             }
         }
-        if (data->f40 != -1) {
-            if (((struct Moby *)moby_array)[data->f40].oclass == 0x118 &&
-                ((struct Moby *)moby_array)[data->f40].state == 5) {
+        if (tutorial_trigger_vars->f40 != -1) {
+            if (((struct Moby *)moby_array)[tutorial_trigger_vars->f40].oclass == 0x118 &&
+                ((struct Moby *)moby_array)[tutorial_trigger_vars->f40].state == 5) {
                 menu_item_enabled_18 = 1;
             }
         }
-        if (data->f44 != -1) {
-            if (((struct Moby *)moby_array)[data->f44].oclass == 0x118 &&
-                ((struct Moby *)moby_array)[data->f44].state == 5) {
+        if (tutorial_trigger_vars->f44 != -1) {
+            if (((struct Moby *)moby_array)[tutorial_trigger_vars->f44].oclass == 0x118 &&
+                ((struct Moby *)moby_array)[tutorial_trigger_vars->f44].state == 5) {
                 menu_item_enabled_19 = 1;
             }
         }
 
-        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f4) != 0 &&
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f4) != 0 &&
             (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 ||
              ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9) &&
             D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
@@ -197,8 +197,8 @@ void update_help_hints(Moby *moby) {
                     }
                 }
             } else {
-                if (data->f48 != -1 && ((struct Moby *)moby_array)[data->f48].oclass == 0x267 &&
-                    ((struct Moby *)moby_array)[data->f48].state == 4) {
+                if (tutorial_trigger_vars->f48 != -1 && ((struct Moby *)moby_array)[tutorial_trigger_vars->f48].oclass == 0x267 &&
+                    ((struct Moby *)moby_array)[tutorial_trigger_vars->f48].state == 4) {
                     struct UsageStat *usage = usage_stats.stat;
                     unsigned int      count = usage[0x11].count;
                     if (count <= 0xFFFE) {
@@ -209,10 +209,10 @@ void update_help_hints(Moby *moby) {
                     }
                     usage[0x11].level_mask =
                         usage[0x11].level_mask | (1 << current_level_index_macro) | 0x80000000;
-                } else if (data->fC == 0) {
+                } else if (tutorial_trigger_vars->fC == 0) {
                     if (D_001418D0 == 0) {
                         Help *help;
-                        data->f8++;
+                        tutorial_trigger_vars->f8++;
                         help = (Help *)(((char *)&D_00141968));
                         if (help[0x20].count != 0) {
                             int elapsed =
@@ -239,13 +239,13 @@ void update_help_hints(Moby *moby) {
                     }
                 }
             }
-        } else if (data->fC != 0) {
-            if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f4) == 0) {
-                data->fC = 0;
+        } else if (tutorial_trigger_vars->fC != 0) {
+            if (is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f4) == 0) {
+                tutorial_trigger_vars->fC = 0;
             }
         }
 
-        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f50) != 0 &&
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f50) != 0 &&
             (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 ||
              ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9) &&
             D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
@@ -265,22 +265,22 @@ void update_help_hints(Moby *moby) {
                 Moby *ground;
                 if (hero->state.current == 0x72 && (ground = hero->ground_moby) != 0 &&
                     ground->oclass == 0x267 &&
-                    is_point_inside_clip_volume((char *)hero + 0x80, data->f4) != 0) {
+                    is_point_inside_clip_volume((char *)hero + 0x80, tutorial_trigger_vars->f4) != 0) {
                     if (help[0x46].count == 0) {
                         help_request(0x7DB, 0x46);
                     } else if (help[0x47].count == 0) {
-                        data->f1C++;
-                        if (scale_game_frames(0x708) < data->f1C) {
+                        tutorial_trigger_vars->f1C++;
+                        if (scale_game_frames(0x708) < tutorial_trigger_vars->f1C) {
                             help_request(0x7DC, 0x47);
                         }
                     }
                 } else {
-                    data->f1C = 0;
+                    tutorial_trigger_vars->f1C = 0;
                 }
             }
         }
 
-        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f30) != 0) {
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f30) != 0) {
             struct UsageStat *usage = usage_stats.stat;
             if (usage[0x19].count == 0 &&
                 (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 ||
@@ -297,23 +297,23 @@ void update_help_hints(Moby *moby) {
             }
         }
 
-        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f2C) != 0 && D_00141910 == 0 &&
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f2C) != 0 && D_00141910 == 0 &&
             ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) >= 2 &&
             ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) != 9 &&
-            data->f28 == 0) {
-            data->f24++;
-            data->f28 = scale_game_frames(0xB4);
-        } else if (data->f28 != 0) {
+            tutorial_trigger_vars->f28 == 0) {
+            tutorial_trigger_vars->f24++;
+            tutorial_trigger_vars->f28 = scale_game_frames(0xB4);
+        } else if (tutorial_trigger_vars->f28 != 0) {
             if (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 ||
                 ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9) {
-                data->f28 = 0;
+                tutorial_trigger_vars->f28 = 0;
             }
         }
 
-        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f2C) != 0 && D_00141910 == 0 &&
+        if (is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f2C) != 0 && D_00141910 == 0 &&
             (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 ||
              ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9) &&
-            data->f24 >= 3 && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
+            tutorial_trigger_vars->f24 >= 3 && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
             Help *help = (Help *)(((char *)&D_00141968));
             if (help[0x49].count == 0) {
                 help_request(0xFA5, 0x49);
