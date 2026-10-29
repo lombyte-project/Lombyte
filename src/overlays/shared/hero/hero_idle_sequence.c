@@ -2340,7 +2340,7 @@ extern void FUN_00254b58_002092c8(s32) __asm__("FUN_L00_00254b58");
    that are not 1.0 and the translations that differ from the bind pose. */
 void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) __asm__("FUN_L00_002092c8");
 
-void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) {
+void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 pose_source_moby) {
     u64 *out;
     s32  rotation_count;
     s32  scale_count;
@@ -2348,12 +2348,12 @@ void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 contex
     s32  i;
     s32  joint;
     s32  rotation_size;
-    u64  value;
+    u64  packed_joint_components;
 
-    if (context == 0)
-        context = (*(s32 *)D_001413D0);
+    if (pose_source_moby == 0)
+        pose_source_moby = (*(s32 *)D_001413D0);
     out = (u64 *)(pose + 1);
-    FUN_00254b58_002092c8(context);
+    FUN_00254b58_002092c8(pose_source_moby);
     pose->root_rotation = PACKED_IDENTITY;
     rotation_count = 1;
     for (i = 1; joints[i] >= 0; i++) {
@@ -2373,9 +2373,9 @@ void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 contex
     i = 1;
     rotation_size = rotation_count << 3;
     for (; joints[i] >= 0; i++) {
-        value = pack_vector_s16(SPR_JOINT_SCALE + (joints[i] << 6), 4096.0f);
-        if ((value & PACKED_XYZ_MASK) != PACKED_UNIT_SCALE) {
-            *out = value & PACKED_XYZ_MASK;
+        packed_joint_components = pack_vector_s16(SPR_JOINT_SCALE + (joints[i] << 6), 4096.0f);
+        if ((packed_joint_components & PACKED_XYZ_MASK) != PACKED_UNIT_SCALE) {
+            *out = packed_joint_components & PACKED_XYZ_MASK;
             scale_count++;
             *(u16 *)((u8 *)out + 6) = i | 0x8000;
             out++;
@@ -2383,10 +2383,10 @@ void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 contex
     }
     translation_count = 0;
     for (joint = 1; joints[joint] >= 0; joint++) {
-        value = pack_vector_s16(SPR_JOINT_TRANSLATION + (joints[joint] << 6), 1.0f);
-        if ((value & PACKED_XYZ_MASK) !=
+        packed_joint_components = pack_vector_s16(SPR_JOINT_TRANSLATION + (joints[joint] << 6), 1.0f);
+        if ((packed_joint_components & PACKED_XYZ_MASK) !=
             (pack_vector_s16(*(s32 *)(model + 0x18) + (joint << 4), 1.0f) & PACKED_XYZ_MASK)) {
-            *out = value & PACKED_XYZ_MASK;
+            *out = packed_joint_components & PACKED_XYZ_MASK;
             translation_count++;
             *(u16 *)((u8 *)out + 6) = joint;
             out++;
