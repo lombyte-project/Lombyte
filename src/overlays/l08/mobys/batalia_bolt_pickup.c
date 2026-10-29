@@ -716,7 +716,7 @@ void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby,
     float planar_offset_direction[4];
     float u[4];
     float v[4];
-    char *data = (char *)moby->pvars;
+    char *bolt_pickup_pose_vars = (char *)moby->pvars;
     float sx, sy, sz;
     float basis_tilt_radians;
     switch (moby->oclass) {
@@ -736,23 +736,23 @@ void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby,
         sz = bolt_pickup_default_surface_planar_offset_per_scale_gp * D_L08_00161CB4;
         break;
     }
-    euler_rotation_matrix(base_rotation_matrix, (float *)(data + 0x10));
-    fast_vec_normalize(u, base_rotation_matrix, -fast_sin(*(float *)(data + 0x60)));
-    fast_vec_normalize(v, base_rotation_matrix + 4, fast_cos(*(float *)(data + 0x60)));
+    euler_rotation_matrix(base_rotation_matrix, (float *)(bolt_pickup_pose_vars + 0x10));
+    fast_vec_normalize(u, base_rotation_matrix, -fast_sin(*(float *)(bolt_pickup_pose_vars + 0x60)));
+    fast_vec_normalize(v, base_rotation_matrix + 4, fast_cos(*(float *)(bolt_pickup_pose_vars + 0x60)));
     fast_vec_add(planar_offset_direction, u, v);
     basis_tilt_radians = sx * DEG_TO_RAD;
     fast_vec_normalize(u, planar_offset_direction, fast_cos(basis_tilt_radians));
     fast_vec_normalize(v, base_rotation_matrix + 8, fast_sin(basis_tilt_radians));
     fast_vec_add(up, u, v);
-    fast_vec_normalize(u, base_rotation_matrix, -fast_cos(*(float *)(data + 0x60)));
-    fast_vec_normalize(v, base_rotation_matrix + 4, -fast_sin(*(float *)(data + 0x60)));
+    fast_vec_normalize(u, base_rotation_matrix, -fast_cos(*(float *)(bolt_pickup_pose_vars + 0x60)));
+    fast_vec_normalize(v, base_rotation_matrix + 4, -fast_sin(*(float *)(bolt_pickup_pose_vars + 0x60)));
     fast_vec_add(fwd, u, v);
     fast_vec_cross(side, up, fwd);
-    fast_vec_normalize(u, side, fast_cos(*(float *)(data + 0x64)));
-    fast_vec_normalize(v, fwd, fast_sin(*(float *)(data + 0x64)));
+    fast_vec_normalize(u, side, fast_cos(*(float *)(bolt_pickup_pose_vars + 0x64)));
+    fast_vec_normalize(v, fwd, fast_sin(*(float *)(bolt_pickup_pose_vars + 0x64)));
     fast_vec_add(output_rotation_matrix, u, v);
-    fast_vec_normalize(u, side, -fast_sin(*(float *)(data + 0x64)));
-    fast_vec_normalize(v, fwd, fast_cos(*(float *)(data + 0x64)));
+    fast_vec_normalize(u, side, -fast_sin(*(float *)(bolt_pickup_pose_vars + 0x64)));
+    fast_vec_normalize(v, fwd, fast_cos(*(float *)(bolt_pickup_pose_vars + 0x64)));
     fast_vec_add(output_rotation_matrix + 4, u, v);
     qcopy(output_rotation_matrix + 8, up);
     output_rotation_matrix[11] = 0.0f;
@@ -761,7 +761,7 @@ void compute_batalia_bolt_pickup_surface_pose(struct Moby *moby,
     matrix_to_euler(output_rotation_matrix, output_euler_angles);
     output_euler_angles[3] = 0.0f;
     fast_vec_normalize(u, base_rotation_matrix + 8, sy);
-    fast_vec_add(out, data, u);
+    fast_vec_add(out, bolt_pickup_pose_vars, u);
     fast_vec_normalize(v, planar_offset_direction, sz);
     fast_vec_add(out, out, v);
 }
