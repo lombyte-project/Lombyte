@@ -102,24 +102,24 @@ int EnableInterrupts(void) __asm__("EnableInterrupts");
 void pack_render_command_fields(u64 *command_words, u64 upper_field, u64 middle_field, u64 low_field,
                              u64 tail_field) __asm__("PackRenderCommandFields");
 
-void fun_001e93f0(void) __asm__("func_001E93F0");
-void fun_001e93f8(void) __asm__("func_001E93F8");
-void fun_001e9400(void) __asm__("func_001E9400");
-void fun_001e9408(void) __asm__("func_001E9408");
-void fun_001e9410(void) __asm__("func_001E9410");
-void fun_001e9418(void) __asm__("func_001E9418");
-void fun_001e9420(void) __asm__("func_001E9420");
-void fun_001e9428(void) __asm__("func_001E9428");
-void fun_001e9430(void) __asm__("func_001E9430");
-void fun_001e9438(void) __asm__("func_001E9438");
-void fun_001e9440(void) __asm__("func_001E9440");
-int fun_001e9448(void) __asm__("func_001E9448");
-void fun_001e9450(void) __asm__("func_001E9450");
-void fun_001e9458(void) __asm__("func_001E9458");
-void fun_001e9460(void) __asm__("func_001E9460");
-int fun_001e9468(void) __asm__("func_001E9468");
-void fun_001e9470(void) __asm__("func_001E9470");
-void fun_001e9478(void) __asm__("func_001E9478");
+void noop_callback_a(void) __asm__("func_001E93F0");
+void noop_callback_b(void) __asm__("func_001E93F8");
+void noop_callback_c(void) __asm__("func_001E9400");
+void noop_callback_d(void) __asm__("func_001E9408");
+void noop_callback_e(void) __asm__("func_001E9410");
+void noop_callback_f(void) __asm__("func_001E9418");
+void noop_callback_g(void) __asm__("func_001E9420");
+void noop_callback_h(void) __asm__("func_001E9428");
+void noop_callback_i(void) __asm__("func_001E9430");
+void noop_callback_j(void) __asm__("func_001E9438");
+void noop_callback_k(void) __asm__("func_001E9440");
+int noop_callback_l(void) __asm__("func_001E9448");
+void noop_callback_m(void) __asm__("func_001E9450");
+void noop_callback_n(void) __asm__("func_001E9458");
+void noop_callback_o(void) __asm__("func_001E9460");
+int noop_callback_p(void) __asm__("func_001E9468");
+void noop_callback_q(void) __asm__("func_001E9470");
+void noop_callback_r(void) __asm__("func_001E9478");
 void noop_callback_s(void) __asm__("func_001E9480");
 
 #endif

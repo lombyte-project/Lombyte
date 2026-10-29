@@ -6,7 +6,7 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/ui/menus/menu_system.h"
 
-extern int fun_001e9468(s32 item) __asm__("func_001E9468");
+extern int noop_callback_p(s32 item) __asm__("func_001E9468");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 update_menu_grid_selection(struct MenuScreen *grid) __asm__("FUN_0021b858");
@@ -156,8 +156,8 @@ s32 update_menu_grid_selection(struct MenuScreen *grid) {
             if (menu_system.equipped[slot] == entry->id && slot != 0 && slot != 3) {
                 menu_system.equipped[slot] = 0;
             } else if (entry->id == 0x18) {
-                if (fun_001e9468(0x18) != 0 && menu_system.state == 3) {
-                    next_columns = fun_001e9468(0x18);
+                if (noop_callback_p(0x18) != 0 && menu_system.state == 3) {
+                    next_columns = noop_callback_p(0x18);
                     hero.unk1FF5 = 1;
                     total = hero.ammo_capacity + next_columns;
                     if (total > 6) {
