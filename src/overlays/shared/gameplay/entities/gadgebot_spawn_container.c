@@ -2637,7 +2637,7 @@ void consider_moby_target_candidate(char *moby, char *current_target, char *cand
 typedef struct {
     char *moby;
     f32 score;
-} Best_2f34d8;
+} Best;
 extern char *D_L06_001AC180_2f34d8[] __asm__("D_L06_001AC180");
 
 extern s32 gadgebot_target_cache_frame_gp __asm__("D_L06_00161CE8") __attribute__((sda));
@@ -2647,7 +2647,7 @@ extern char *cached_gadgebot_target_mobies[] __asm__("D_L06_001DAE60");
  * (current is the target it has now), and stores it in *current. */
 void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) __asm__("FUN_L06_002f34d8");
 void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) {
-    Best_2f34d8 best;
+    Best best;
     char *candidate_moby;
     s32 i;
     if (gadgebot_target_cache_frame_gp != level_frame_count) {
@@ -2836,7 +2836,7 @@ typedef struct {
     int idx;                   /* 0x1C */
     float unk20;                 /* 0x20 */
     Moby *slots[7];     /* 0x24 */
-} Vars_2F6330;
+} Vars;
 
 extern Moby *D_L06_0015FFD8;
 extern char *func_0020D348_m(int);
@@ -2867,7 +2867,7 @@ void update_moby_rotation_group(Moby *moby) {
         RESTORE_ROTATION_THEN_WAIT_FOR_TRIGGER_AND_CHILDREN = 8,
         RESTORE_ROTATION_THEN_UPDATE_POSITION_FROM_BASE = 9
     };
-    Vars_2F6330 *moby_vars = (Vars_2F6330 *)(*(void **)&moby->pvars);
+    Vars *moby_vars = (Vars *)(*(void **)&moby->pvars);
     float position_offset[4];
     int i;
     int j;
@@ -3057,7 +3057,7 @@ typedef struct {
     int t[4];
     float sz[4];
     char *tgt;
-} Beam_2f8a58;
+} Beam;
 
 extern char D_L06_00167540[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -3087,7 +3087,7 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
     float step[4];
     float spark_position[4];
     float spark_velocity[4];
-    Beam_2f8a58 *beam = *(Beam_2f8a58 **)(moby + 0x78);
+    Beam *beam = *(Beam **)(moby + 0x78);
     int i;
     fast_vec_sub(beam_sprite_position, D_L06_00167540, beam->tgt + 0x10);
     fast_vec_normalize(beam_sprite_position, beam_sprite_position, -0.3f);

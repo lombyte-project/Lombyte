@@ -15,7 +15,7 @@ extern void FUN_001f9a10_2c26c8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a28_2c26c8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void get_moby_joint_matrices(void *, int, int *, void *) __asm__("FUN_00210850");
 extern void FUN_L00_0024f7c8_2c26c8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-typedef struct Data_2c26c8 {
+typedef struct Data {
     float vel[4];
     char pad10[0x10];
     float f20;
@@ -36,11 +36,11 @@ typedef struct Data_2c26c8 {
     float f64;
     int f68;
     struct Moby *parts[9];
-} Data_2c26c8;
-typedef struct { char pad0[0x38]; unsigned char b38; unsigned char b39; } Flags_2c26c8;
+} Data;
+typedef struct { char pad0[0x38]; unsigned char b38; unsigned char b39; } Flags;
 typedef struct { int v[2]; } Pair_2c26c8;
 /* one scratch slot of the frame: a joint matrix in state 0, two vectors (rows 0 and 1) elsewhere, and the effect id pair in state 4 */
-typedef union { float m[4][4]; Pair_2c26c8 pair; } Buf_2c26c8;
+typedef union { float m[4][4]; Pair_2c26c8 pair; } Buf;
 
 extern int FUN_001e93b0_2c26c8() __asm__("FUN_001e93b0");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
@@ -105,11 +105,11 @@ void update_airship_part(struct Moby *moby) {
         AIRSHIP_PART_STATE_FALLING_AFTER_DAMPING = 5
     };
     float point_offset_and_effect_scratch[4];
-    Buf_2c26c8 transform_and_effect_scratch;
+    Buf transform_and_effect_scratch;
     float rotm[4][4];
     float nearest_parent_distance;
     int joint;
-    Data_2c26c8 *part_vars = (*(Data_2c26c8 **)&moby->pvars);
+    Data *part_vars = (*(Data **)&moby->pvars);
 
     D_L09_001613C8++;
     switch (moby->state) {
@@ -117,7 +117,7 @@ void update_airship_part(struct Moby *moby) {
         float joint_offset_scale;
 
         FUN_L00_0024f7c8_2c26c8(moby, 0, point_offset_and_effect_scratch);
-        if (part_vars->f68 != -1 && ((Flags_2c26c8 *)(alternate_item_available + part_vars->f68))->b39 != 0) {
+        if (part_vars->f68 != -1 && ((Flags *)(alternate_item_available + part_vars->f68))->b39 != 0) {
             FUN_0020c828_2c26c8(moby);
             return;
         }
@@ -139,7 +139,7 @@ void update_airship_part(struct Moby *moby) {
             p = (struct Moby *)find_nearest_moby_by_class(((f32 *)&moby->pos), 0x4A0, &nearest_parent_distance);
             if (nearest_parent_distance < 20.0f) {
                 part_vars->parent = p;
-                (*(Data_2c26c8 **)&p->pvars)->parts[moby->oclass - 0x49E] = moby;
+                (*(Data **)&p->pvars)->parts[moby->oclass - 0x49E] = moby;
             } else {
                 FUN_001e93b0_2c26c8(airship_part_missing_parent_format, (*(short *)&moby->save_id), moby->oclass, FUN_00120478_2c26c8(nearest_parent_distance));
             }
@@ -192,9 +192,9 @@ void update_airship_part(struct Moby *moby) {
     }
     case AIRSHIP_PART_STATE_BEGIN_BREAKUP: {
         FUN_001f9770_2c26c8(&part_vars->h2A);
-        ((Flags_2c26c8 *)(alternate_item_available))->b38 = 1;
+        ((Flags *)(alternate_item_available))->b38 = 1;
         if (part_vars->f68 != -1) {
-            ((Flags_2c26c8 *)(alternate_item_available + part_vars->f68))->b39 = 1;
+            ((Flags *)(alternate_item_available + part_vars->f68))->b39 = 1;
         }
         FUN_L00_00257470_2c26c8(moby, 0x200, -1);
         FUN_L00_0025f090_2c26c8(moby, ((f32 *)&moby->pos), -1, 4.0f, 13.0f);

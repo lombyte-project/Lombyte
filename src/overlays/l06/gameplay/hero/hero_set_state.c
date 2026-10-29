@@ -21,13 +21,13 @@ typedef struct {
     int b;
     int c;
     char pad[0x20];
-} T2C_235E08;
+} T2C;
 
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V4_235E08;
 
-extern T2C_235E08 D_L06_0017C3A8[];
+extern T2C D_L06_0017C3A8[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float level06_hero_animation_blend_curves[][25] __asm__("D_L06_0017C570");
 extern float FUN_001f9b48(void *, void *);
@@ -1285,7 +1285,7 @@ int hero_set_state(int a, int b) {
         case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
-            T2C_235E08 *e;
+            T2C *e;
             int k;
             if (*(unsigned short *)(h + 0x40) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x40) = *(unsigned short *)(h + 0x40) + 1;
@@ -1339,7 +1339,7 @@ int hero_set_state(int a, int b) {
         }
         case HERO_STATE_VEHICLE_MODE_1_ATTACK: {
             struct Hero *q = &hero;
-            T2C_235E08 *e = &D_L06_0017C3A8[q->attack_record];
+            T2C *e = &D_L06_0017C3A8[q->attack_record];
             int k = 0;
             if ((q->state.prev_control_mode == 6 ||
                  (q->state.prev2_control_mode == 6 &&
@@ -1406,7 +1406,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C_235E08 *e = &D_L06_0017C3A8[p->attack_record];
+            T2C *e = &D_L06_0017C3A8[p->attack_record];
             int k = e->b;
             int n;
             if (e->a == 1)

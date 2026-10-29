@@ -121,20 +121,20 @@ typedef struct {
     s32 on_mobys[11];  /* -1, or a moby passed to FUN_L05_002f4f60 */
     u8 pad7C[2];
     s8 use_alt_target; /* nonzero: test D_L05_001671C0 instead of the hero */
-} TriggerVars_2f5200;
+} TriggerVars;
 
 extern Vec4 D_L05_001671C0_2f5200 __asm__("D_L05_001671C0");
 extern s32 *D_L05_001B0930_2f5200[] __asm__("D_L05_001B0930");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 absolute_float_cf(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern void FUN_L05_002f5190_2f5200(struct Moby *, TriggerVars_2f5200 *, s32, s32) __asm__("FUN_L05_002f5190");
-extern void FUN_L05_002f4f60_2f5200(s32, TriggerVars_2f5200 *, s32) __asm__("FUN_L05_002f4f60");
+extern void FUN_L05_002f5190_2f5200(struct Moby *, TriggerVars *, s32, s32) __asm__("FUN_L05_002f5190");
+extern void FUN_L05_002f4f60_2f5200(s32, TriggerVars *, s32) __asm__("FUN_L05_002f4f60");
 
 void update_moby_spatial_trigger(struct Moby *trigger_moby) __asm__("FUN_L05_002f5200");
 
 void update_moby_spatial_trigger(struct Moby *trigger_moby) {
-    TriggerVars_2f5200 *trigger_vars = (TriggerVars_2f5200 *)trigger_moby->pvars;
+    TriggerVars *trigger_vars = (TriggerVars *)trigger_moby->pvars;
     Vec4 target;
     s32 inside;
     s32 i;
@@ -536,10 +536,10 @@ typedef struct {
     int color[4];
     float texcoord[4][2];
     u64 control[4];
-} Quad_30c220;
+} Quad;
 
 void draw_moby_wobble_quads(struct Moby *moby) {
-    Quad_30c220 quad_a, quad_b;
+    Quad quad_a, quad_b;
     float rotation[4];
     float position[4];
     /* Draw helper reads four consecutive vectors: side, direction, up, position. */
@@ -622,9 +622,9 @@ void draw_moby_wobble_quads(struct Moby *moby) {
 typedef struct {
     u8 pad0[0x454];
     u8 collected[1];
-} SaveFlags_30c5b0;
-extern SaveFlags_30c5b0 D_L05_001BB6B0;
-extern SaveFlags_30c5b0 D_L05_001BAA50_s __asm__("D_L05_001BAA50");
+} SaveFlags;
+extern SaveFlags D_L05_001BB6B0;
+extern SaveFlags D_L05_001BAA50_s __asm__("D_L05_001BAA50");
 extern unsigned char D_L05_0015FC88[] __attribute__((section(".sdata")));
 extern char *D_L05_001B0930[];
 extern u8 D_0014C050[];

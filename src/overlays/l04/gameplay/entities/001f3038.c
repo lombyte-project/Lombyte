@@ -38,7 +38,7 @@ typedef struct Moby Moby;
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_1F3010;
 
-typedef union { Vec_1F3010 v; int n; } PathEl_1F3010;
+typedef union { Vec_1F3010 v; int n; } PathEl;
 
 typedef struct {
     Vec_1F3010 vel;
@@ -58,7 +58,7 @@ typedef struct {
     short classes[8];
     float weight[8];
     float scale[8];
-} Steer_1F3010;
+} Steer;
 
 typedef struct {
     char pad0[0x1C];
@@ -67,7 +67,7 @@ typedef struct {
     float z;
     char pad2C[0x14];
     Vec_1F3010 normal;
-} Coll_1F3010;
+} Coll;
 
 extern s32 D_L04_00173FF0[];
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
@@ -82,8 +82,8 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 int FUN_L04_001f3038_c(char *a, char *b, int n) __asm__("FUN_L04_001f3038");
 int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __asm__("FUN_L04_0024c7d8");
-extern PathEl_1F3010 *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
-extern Coll_1F3010 D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
+extern PathEl *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
+extern Coll D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
 extern s32 D_L04_00173FF0[];
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
 extern void func_001F9BC0_1F3010(void *) __asm__("FUN_001f99f8");
@@ -99,16 +99,16 @@ extern int func_001FA898_1F3010(float) __asm__("FUN_001fa6d0");
 extern int func_L04_001F2F68_1F3010(Moby *, void *, int) __asm__("FUN_L04_001f3038");
 extern int func_L04_0024D790_1F3010(void *, void *, void *, int) __asm__("FUN_L04_0024c7d8");
 
-void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer_1F3010 *steer, float *params) __asm__("FUN_L04_001f30e0");
+void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *params) __asm__("FUN_L04_001f30e0");
 
-void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer_1F3010 *steer, float *params) {
+void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *params) {
     Vec_1F3010 path_hit;
     Vec_1F3010 force;
     Vec_1F3010 uninitialized_point;
     Vec_1F3010 ray_start;
     Vec_1F3010 ray_end;
     Vec_1F3010 surface_normal;
-    PathEl_1F3010 *path;
+    PathEl *path;
     Moby *other;
     int hit;
     Moby *too_close;

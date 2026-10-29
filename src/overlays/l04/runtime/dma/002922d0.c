@@ -134,10 +134,10 @@ int FUN_L04_002927d0(char *moby, char *rig) {
 
 /* Steers a moby from the arg block: height and push terms, returns 2 when the tilt is past pi/4. */
 
-typedef struct { float x, y, z, w; } Vec_2939E8;
+typedef struct { float x, y, z, w; } Vec;
 
 typedef struct {
-    Vec_2939E8 pts[6];      /* 0x00: probe points */
+    Vec pts[6];      /* 0x00: probe points */
     char pad60[0x2C];
     float *f8C;             /* 0x8C */
     char pad90[0x26];
@@ -151,19 +151,19 @@ typedef struct {
     float ground;           /* 0xE4 */
     char padE8[0x6];
     unsigned short flags;   /* 0xEE */
-} Steer_2939E8;
+} Steer;
 
 typedef struct {
     char pad00[0x10];
-    Vec_2939E8 pos;         /* 0x10 */
+    Vec pos;         /* 0x10 */
     char pad20[0x28];
     float rotz;             /* 0x48 */
-} StMoby_2939E8;
+} StMoby;
 
 typedef struct {
     char pad00[0x40];
-    Vec_2939E8 v40;         /* 0x40 */
-} StTab_2939E8;
+    Vec v40;         /* 0x40 */
+} StTab;
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -180,9 +180,9 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
 
-int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_state) __asm__("FUN_L04_00292828");
+int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state) __asm__("FUN_L04_00292828");
 
-int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_state)
+int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
 {
     float push[4];
     float tilt_direction[4];
@@ -214,15 +214,15 @@ int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_stat
         func_001F9BC0_2939E8(push);
         sum = 0.0f;
         for (j = 0; j < 4; j++) {
-            Vec_2939E8 *probe_point = &steer_state->pts[j];
+            Vec *probe_point = &steer_state->pts[j];
             if (steer_state->mask & bit) {
                 ground_height = probe_leg_rig_ground_height((float *)probe_point);
                 sum += ground_height;
                 if (0.0f < ground_height) {
-                    xy_abs_sum_or_tilt = absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.x);
-                    xy_abs_sum_or_tilt = xy_abs_sum_or_tilt + absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.y);
-                    if (xy_abs_sum_or_tilt < absolute_float(((StTab_2939E8 *)D_L04_00174040_2939E8)->v40.z)) {
-                        fast_vec_add(push, push, &((StTab_2939E8 *)D_L04_00174040_2939E8)->v40);
+                    xy_abs_sum_or_tilt = absolute_float(((StTab *)D_L04_00174040_2939E8)->v40.x);
+                    xy_abs_sum_or_tilt = xy_abs_sum_or_tilt + absolute_float(((StTab *)D_L04_00174040_2939E8)->v40.y);
+                    if (xy_abs_sum_or_tilt < absolute_float(((StTab *)D_L04_00174040_2939E8)->v40.z)) {
+                        fast_vec_add(push, push, &((StTab *)D_L04_00174040_2939E8)->v40);
                         height_correction_divisor += 4.0f;
                         dz += ground_height - probe_point->z;
                     }
@@ -279,7 +279,7 @@ int update_leg_rig_height_and_tilt(StMoby_2939E8 *moby, Steer_2939E8 *steer_stat
         dz = steer_state->vel;
     }
     for (j = 0; j < 6; j++) {
-        Vec_2939E8 *point_to_shift = &steer_state->pts[j];
+        Vec *point_to_shift = &steer_state->pts[j];
         point_to_shift->z += dz;
     }
     moby->pos.z = moby->pos.z + dz;

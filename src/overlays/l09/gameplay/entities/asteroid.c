@@ -664,7 +664,7 @@ void update_fading_asteroid_debris(unsigned char *moby) {
 
 typedef struct Moby Moby;
 
-typedef struct { int v[6]; } V6_2EC188;
+typedef struct { int v[6]; } V6;
 
 typedef struct {
     float pos[4];
@@ -677,15 +677,15 @@ typedef struct {
     float f50;
     float f54;
     int f58;
-} Data_2EC188;
+} Data;
 
 typedef struct { char pad0[0x2084]; int f2084; } Hero_2EC188;
 
-typedef struct { char pad0[0x140]; float pos[4]; char pad150[0x10]; float f160; int f164; int f168; } Cam_2EC188;
+typedef struct { char pad0[0x140]; float pos[4]; char pad150[0x10]; float f160; int f164; int f168; } Cam;
 
 char *FUN_L09_002ea528_c(struct Moby *owner, float *vec) __asm__("FUN_L09_002ea528");
-V6_2EC188 D_L09_00208B00 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-V6_2EC188 D_L09_00208B18 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+V6 D_L09_00208B00 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+V6 D_L09_00208B18 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
 extern char *FUN_L09_002efe48_c(void *, void *, void *, float, float) __asm__("FUN_L09_002efe48");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -710,7 +710,7 @@ void update_falling_asteroid(Moby *falling_rock) {
     float collision_probe_offset[4];
     float position_or_movement_step[4];
     float offset_position[4];
-    Data_2EC188 *moby_vars = (*(Data_2EC188 **)&falling_rock->pvars);
+    Data *moby_vars = (*(Data **)&falling_rock->pvars);
     float reference_position_distance;
     float updated_rotation_x;
 
@@ -740,8 +740,8 @@ void update_falling_asteroid(Moby *falling_rock) {
             fast_vec_add(offset_position, position_or_movement_step, collision_probe_offset);
             if (FUN_001efa68(position_or_movement_step, offset_position, 4, (int)falling_rock, 0) != 0 && D_L09_00173FE8 > 26.5f) {
                 float scaled_movement_step[4];
-                V6_2EC188 A;
-                V6_2EC188 B;
+                V6 A;
+                V6 B;
                 float extra;
                 int i;
                 int h;
@@ -781,7 +781,7 @@ void update_falling_asteroid(Moby *falling_rock) {
                 if (((Hero_2EC188 *)(D_0013F350))->f2084 != 0x32) {
                     float dist = fast_vec_dist(moby_vars->pos, D_L09_00166F40);
                     if (dist < 15.0f) {
-                        Cam_2EC188 *c = (Cam_2EC188 *)((char *)D_L09_00166F40 - 0x140);
+                        Cam *c = (Cam *)((char *)D_L09_00166F40 - 0x140);
                         c->f160 = (64.0f - dist) * 0.01f;
                         c->f168 = scale_game_frames(10);
                     }
@@ -806,8 +806,8 @@ void update_falling_asteroid(Moby *falling_rock) {
         }
         if (moby_vars->pos[2] < moby_vars->target[2]) {
             if (moby_vars->target[2] > 26.5f) {
-                V6_2EC188 A;
-                V6_2EC188 B;
+                V6 A;
+                V6 B;
                 float extra;
                 int i;
                 int h;
@@ -851,7 +851,7 @@ void update_falling_asteroid(Moby *falling_rock) {
                 if (((Hero_2EC188 *)(D_0013F350))->f2084 != 0x32) {
                     float dist = fast_vec_dist(moby_vars->pos, D_L09_00166F40);
                     if (dist < 15.0f) {
-                        Cam_2EC188 *c = (Cam_2EC188 *)((char *)D_L09_00166F40 - 0x140);
+                        Cam *c = (Cam *)((char *)D_L09_00166F40 - 0x140);
                         c->f160 = (64.0f - dist) * 0.01f;
                         c->f168 = scale_game_frames(10);
                     }
@@ -874,8 +874,8 @@ void update_falling_asteroid(Moby *falling_rock) {
                 mark_moby_for_removal(falling_rock);
             }
         } else {
-            V6_2EC188 A;
-            V6_2EC188 B;
+            V6 A;
+            V6 B;
             float extra;
             int k;
             extra = 0.0f;
@@ -936,7 +936,7 @@ typedef struct {
     int n;
     int pad[3];
     float pts[1][4];           /* 0x10 */
-} Path_2ECC50;
+} Path;
 
 char *FUN_L09_002ea778_c(void) __asm__("FUN_L09_002ea778");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
@@ -951,7 +951,7 @@ extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 s32 compute_advanced_moby_path_position(struct Moby *m, void *path, void *out, s32 i, s32 dir, f32 dist) __asm__("FUN_L09_00294ae0");
 struct Moby *FUN_L09_002eaa50_c(struct Moby *owner) __asm__("FUN_L09_002eaa50");
-extern Path_2ECC50 *D_L09_001B0930_2ECC50[] __asm__("D_L09_001B0630");
+extern Path *D_L09_001B0930_2ECC50[] __asm__("D_L09_001B0630");
 extern struct Moby *func_L09_002EBD30_2ECC50(void *m) __asm__("FUN_L09_002eaa50");
 extern struct Moby *func_L09_002EBA58_2ECC50(void) __asm__("FUN_L09_002ea778");
 extern int func_L09_00295880_2ECC50(void *, void *, void *, int, int, float) __asm__("FUN_L09_00294ae0");
@@ -959,7 +959,7 @@ extern int func_L09_00295880_2ECC50(void *, void *, void *, int, int, float) __a
 void asteroid_update(struct Moby *m) __asm__("FUN_L09_002eb970");
 void asteroid_update(struct Moby *asteroid_moby) {
     Data_2ECC50 *moby_vars = (*(Data_2ECC50 **)&asteroid_moby->pvars);
-    Path_2ECC50 *path;
+    Path *path;
     float displacement_vector[4];
     float endpoint_offset[4];
     float endpoint_segment_length;
@@ -978,7 +978,7 @@ void asteroid_update(struct Moby *asteroid_moby) {
         moby_vars->speed = D_0015ED6C_c * 10.0f;
         moby_vars->centre[0] = moby_vars->centre[1] = moby_vars->centre[2] = 0.0f;
         if (moby_vars->path >= 0) {
-            Path_2ECC50 *ring = D_L09_001B0930_2ECC50[moby_vars->path];
+            Path *ring = D_L09_001B0930_2ECC50[moby_vars->path];
             for (i = 0; i < ring->n; i++) {
                 fast_vec_add(moby_vars->centre, moby_vars->centre, ring->pts[i]);
             }
@@ -1620,7 +1620,7 @@ typedef struct {
     float f94;              /* 0x94 */
     float f98;              /* 0x98 */
     float f9C;              /* 0x9C */
-} PlatVars_2F9A50;
+} PlatVars;
 
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED6C_c2 __asm__("D_0015ED6C");
@@ -1653,7 +1653,7 @@ extern unsigned char D_0013F3D0[];
 void platform_update(Moby *moby) __asm__("FUN_L09_002f86a0");
 void platform_update(Moby *moby)
 {
-    PlatVars_2F9A50 *data = (*(PlatVars_2F9A50 **)&moby->pvars);
+    PlatVars *data = (*(PlatVars **)&moby->pvars);
     Vec_2F9A50 movement;
     Vec_2F9A50 old_rot;
     Vec_2F9A50 hero_offset;

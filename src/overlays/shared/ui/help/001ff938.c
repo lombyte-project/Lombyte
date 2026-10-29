@@ -420,7 +420,7 @@ void adjust_hero_planar_velocity_from_probes(int force) {
 typedef struct {
     s32 w0;
     u8 pad4[0x70 - 4];
-} Entry70_215e58;
+} Entry70;
 
 extern s32 D_L15_0015F5C4;
 extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") NOT_SDA;
@@ -444,7 +444,7 @@ extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_002
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_215e58(void) __asm__("FUN_L00_00211250");
 
-extern Entry70_215e58 l15_hero_auxiliary_countdown_records[] __asm__("D_L15_00179EF0");
+extern Entry70 l15_hero_auxiliary_countdown_records[] __asm__("D_L15_00179EF0");
 /* Per-frame hero upkeep: tick the hero timers, spawn the respawn marker, track sinking, and set the camera follow target. Clone of FUN_L00_002215c8 without the case-1 camera tuning. */
 void update_hero_timers_and_auxiliary_state(void) __asm__("FUN_L15_00215e58");
 

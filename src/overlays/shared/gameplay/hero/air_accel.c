@@ -1419,7 +1419,7 @@ s32 resolve_hero_position_with_collision_queries(s32 mode) {
 typedef struct {
     s32 w0;
     u8 pad4[0x70 - 4];
-} Entry70_23c710;
+} Entry70;
 
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 item_available[] __asm__("D_0013D4C0");
@@ -1443,7 +1443,7 @@ extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_002
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_23c710(void) __asm__("FUN_L00_00211250");
 
-extern Entry70_23c710 l01_countdown_timer_records[] __asm__("D_L01_00179D70");
+extern Entry70 l01_countdown_timer_records[] __asm__("D_L01_00179D70");
 void update_hero_timers_and_vehicle_transitions(void) __asm__("FUN_L01_0023c710");
 
 void update_hero_timers_and_vehicle_transitions(void) {

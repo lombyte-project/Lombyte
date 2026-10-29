@@ -10,8 +10,8 @@
 typedef struct {
     char pad[0xC];
     unsigned char *p;
-} Grid_270248;
-extern Grid_270248 l07_packed_bit_grid __asm__("D_L07_00184270");
+} Grid;
+extern Grid l07_packed_bit_grid __asm__("D_L07_00184270");
 extern int ensure_menu_cache_entry(int) __asm__("FUN_L00_00249d80");
 
 void clear_bit_grid_rectangle(int x, int y0, int width, int height) __asm__("FUN_L07_00270248");

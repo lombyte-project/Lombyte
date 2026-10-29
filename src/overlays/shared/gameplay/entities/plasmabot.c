@@ -949,7 +949,7 @@ typedef struct {
     u8 pad3C[0x1F8];
     f32 unk234;    /* 0x234 */
     s32 delay;     /* 0x238: frames, counted down */
-} DelayVars_2b2ed8;
+} DelayVars;
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 FUN_001f96b0_2b2ed8(f32) __asm__("FUN_001f96b0");
@@ -960,7 +960,7 @@ extern f32 plasmabot_base_target_range_gp __asm__("D_L14_001614C4") __attribute_
 void update_plasmabot_target_range(struct Moby *moby) __asm__("FUN_L14_002b2ed8");
 
 void update_plasmabot_target_range(struct Moby *moby) {
-    DelayVars_2b2ed8 *delay_state = (DelayVars_2b2ed8 *)moby->pvars;
+    DelayVars *delay_state = (DelayVars *)moby->pvars;
 
     if (delay_state->restart != 0) {
         delay_state->delay = truncate_float_to_s32(
@@ -1203,7 +1203,7 @@ typedef struct {
     u32 col[4];
     float uv[8];
     unsigned long a, b, c, d;
-} Pk_2af4a0;
+} Pk;
 
 extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern float plasmabot_glow_quad_vertex_offsets[4][4] __asm__("D_L14_001D8890");
@@ -1220,7 +1220,7 @@ void draw_plasmabot_glow_quad(char *m) __asm__("FUN_L14_002b3a20");
 
 void draw_plasmabot_glow_quad(char *m) {
     float glow_position[4];
-    Pk_2af4a0 pk;
+    Pk pk;
     float camera_displacement[4];
     float position_offset[4];
     float camera_to_glow_distance;
@@ -1525,8 +1525,8 @@ typedef struct {
     u8 pad0[0x10];
     void *points;
     u8 pad14[0xC];
-} RacePath_dfd10;
-extern RacePath_dfd10 *race_paths_dfd10 __asm__("D_L14_0015F70C");
+} RacePath;
+extern RacePath *race_paths_dfd10 __asm__("D_L14_0015F70C");
 
 typedef struct {
     struct Moby *owner;
@@ -1542,7 +1542,7 @@ typedef struct {
     f32 spin_z;
     u8 pad2C[4];
     f32 velocity[3];
-} Data_dfd10;
+} Data;
 
 extern f32 ballistic_debris_gravity_gp __asm__("D_L14_00161B40") __attribute__((sda));
 extern f32 ballistic_debris_velocity_base_scale_gp __asm__("D_L14_00161B44") __attribute__((sda));
@@ -1551,7 +1551,7 @@ extern f32 ballistic_debris_planar_damping_speed_threshold_gp __asm__("D_L14_001
 void update_path_or_ballistic_debris(struct Moby *moby) __asm__("FUN_L14_002dfd10");
 
 void update_path_or_ballistic_debris(struct Moby *moby) {
-    Data_dfd10 *data = (Data_dfd10 *)moby->pvars;
+    Data *data = (Data *)moby->pvars;
     Vec4 probe;
     f32 position_offset[4];
     f32 *velocity;
@@ -1681,11 +1681,11 @@ typedef union {
     float f[4];
 } Vec4_2E17B8;
 
-typedef struct Vars_2E17B8 {
+typedef struct Vars {
     char pad0[0x18];
     float f18;                    /* 0x18 */
     float f1C;                    /* 0x1C */
-} Vars_2E17B8;
+} Vars;
 
 typedef struct ParticleFade_2E17B8 {
     char pad0[4];
@@ -1759,7 +1759,7 @@ void emit_debris_trail_particles(Moby *moby) {
     Vec4_2E17B8 emission_axis_offset;
     Vec4_2E17B8 particle_initial_velocity;
     Vec4_2E17B8 emission_position_offset;
-    Vars_2E17B8 *debris_motion_state;
+    Vars *debris_motion_state;
     Particle_2E17B8 *particle;
     Particle_2E17B8 *spawned_particle;
     ParticleFade_2E17B8 *fade;
@@ -1769,7 +1769,7 @@ void emit_debris_trail_particles(Moby *moby) {
     int alpha;
     float size;
 
-    debris_motion_state = *(Vars_2E17B8 **)&moby->pvars;
+    debris_motion_state = *(Vars **)&moby->pvars;
     func_L00_001FF4B0_2E17B8(&emission_axis_offset, &*(Vec4_2E17B8 *)&moby->rot_row2, 0.2f);
     func_001F9BD8_2E17B8(&pos, &*(Vec4_2E17B8 *)&moby->pos, &emission_axis_offset);
     func_002141A8_2E17B8(&particle_initial_velocity, 0.005f, 0.03f);
@@ -1904,7 +1904,7 @@ typedef struct {
     float z_speed;
     float phase;
     float spin[3];
-} FloatMineVars_ff640;
+} FloatMineVars;
 
 typedef struct {
     float damage;
@@ -1915,21 +1915,21 @@ typedef struct {
     u8 unk3A;
     u8 unk3B;
     u8 pad3C[4];
-} HitInfo_ff640;
+} HitInfo;
 
 typedef struct {
     u8 pad0[0x20];
     struct Moby *moby;
-} MobyHit_ff640;
+} MobyHit;
 
 extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_floating_mine.h"
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void ease_ff640(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern MobyHit_ff640 *find_moby_hit_ff640(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
+extern MobyHit *find_moby_hit_ff640(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
-extern int trooper_take_damage(struct Moby *, MobyHit_ff640 *, HitInfo_ff640 *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int trooper_take_damage(struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void explode_ff640(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
@@ -1948,14 +1948,14 @@ void update_floating_mine(struct Moby *moby) {
         FLOAT_MINE_ACTIVE = 1,
         FLOAT_MINE_WAIT_OFFSCREEN_RESPAWN = 2
     };
-    FloatMineVars_ff640 *vars = (FloatMineVars_ff640 *)moby->pvars;
+    FloatMineVars *vars = (FloatMineVars *)moby->pvars;
     union {
-        HitInfo_ff640 info;
+        HitInfo info;
         float sphere[4];
     } scratch;
     float explosion_vector[4];
     int count;
-    MobyHit_ff640 *hit;
+    MobyHit *hit;
     float glow_pulse_sine;
     int glow_red_intensity;
     int glow_green_blue_intensity;

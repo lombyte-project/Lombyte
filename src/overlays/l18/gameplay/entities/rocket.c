@@ -658,7 +658,7 @@ typedef struct {
     unsigned int col[4];
     float uv[4][2];
     unsigned long long a, b, c, d;
-} Pk_d5768;
+} Pk;
 float sparkle_quad_corners[4][4] __asm__("D_L18_001D3630") = {
     {1.0f, 1.0f, 0.1f, 0.0f},
     {1.0f, -1.0f, 0.1f, 0.0f},
@@ -675,7 +675,7 @@ extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern int rocket_target_pulse_color_start_gp __asm__("D_L18_00161980") __attribute__((sda));
 extern int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") __attribute__((sda));
 void draw_rocket_target_pulse_quad(struct Moby *m) {
-    Pk_d5768 pk;
+    Pk pk;
     char *d = (char *)m->pvars;
     unsigned int col;
     int i;
@@ -2109,11 +2109,11 @@ void refresh_ring_effect(struct Moby *moby, void *pos, float radius) {
 }
 /* Ported from rac1-decomp nonmatching/l18_veldin2/func_L18_002DD8A8.c (func_L18_002DD8A8) */
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_dc4b8;
-typedef struct { float u, v; } UV_dc4b8;
+typedef struct { float u, v; } UV;
 typedef struct {
     V_dc4b8 corner[4];
     unsigned int color[4];
-    UV_dc4b8 uv[4];
+    UV uv[4];
     long unk70, tex, unk80, unk88;
 } Q_dc4b8;
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");

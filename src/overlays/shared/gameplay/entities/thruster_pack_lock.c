@@ -35,7 +35,7 @@ void synchronize_linked_moby_heights(char *moby) {
 
 typedef struct Hero Hero;
 
-typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } LvState_3102C8;
+typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } LvState;
 
 typedef struct {
     char pad000[0x360];
@@ -44,7 +44,7 @@ typedef struct {
     unsigned int levels;    /* 0x364 */
     char pad368[0x22];
     unsigned short best2;   /* 0x38A */
-} Stats_3102C8;
+} Stats;
 
 typedef struct {
     char pad00[0x10];
@@ -58,7 +58,7 @@ typedef struct {
     unsigned char bB0;      /* 0xB0 */
     char padB1;
     unsigned short uid;     /* 0xB2 */
-} Lock_3102C8;
+} Lock;
 
 extern unsigned char D_00141968_r[] __asm__("D_00141968");
 extern unsigned char D_0014C190_r[] __asm__("D_0014C190");
@@ -74,16 +74,16 @@ extern unsigned char D_0013F350[];
 s32 FUN_L00_00203908(s32 a, s32 b);
 extern u8 D_0013D4C0[];
 extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
-extern LvState_3102C8 D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
-extern LvState_3102C8 D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
+extern LvState D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
+extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 extern void func_0022ED80_3102C8(int, int, void *) __asm__("FUN_0022da68");
 extern int func_L00_00203F20_3102C8(int a, int b) __asm__("FUN_L00_00203908");
 extern float func_001F9D48_3102C8(void *, void *) __asm__("FUN_001f9b80");
 extern int func_001F9850_3102C8(int) __asm__("FUN_001f96f8");
 
-void thruster_pack_lock_update(Lock_3102C8 *moby) __asm__("FUN_L11_0030ee00");
-void thruster_pack_lock_update(Lock_3102C8 *moby)
+void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
+void thruster_pack_lock_update(Lock *moby)
 {
     enum {
         THRUSTER_PACK_LOCK_STATE_INIT = 0,
@@ -94,8 +94,8 @@ void thruster_pack_lock_update(Lock_3102C8 *moby)
     switch (moby->state) {
     case THRUSTER_PACK_LOCK_STATE_INIT: {
         int level = current_level_index;
-        ((Stats_3102C8 *)(D_00141968_r))->count = 0;
-        ((Stats_3102C8 *)(D_00141968_r))->best = 0;
+        ((Stats *)(D_00141968_r))->count = 0;
+        ((Stats *)(D_00141968_r))->best = 0;
         *(unsigned short *)(vars + 0x3E) |= 8;
         if (level == 0xB && moby->bB0 != 0xFF) {
             if (D_L11_001BBF40_3102C8.collected[(short)moby->uid] != 0 ||
@@ -137,41 +137,41 @@ void thruster_pack_lock_update(Lock_3102C8 *moby)
             return;
         }
         if (D_0013D4C0[3] == 0) {
-            int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats_3102C8 *)(D_00141968_r))->best2 * 600;
+            int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats *)(D_00141968_r))->best2 * 600;
             if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < elapsed ||
-                ((Stats_3102C8 *)(D_00141968_r))->best2 * 600 == 0) {
+                ((Stats *)(D_00141968_r))->best2 * 600 == 0) {
                 func_L00_00203F20_3102C8(0x2B02, 0x71);
                 return;
             }
             {
                 int now = func_001F9850_3102C8(D_0015EEA4) / 600;
-                if (((Stats_3102C8 *)(D_00141968_r))->best2 < now) {
-                    ((Stats_3102C8 *)(D_00141968_r))->best2 = func_001F9850_3102C8(D_0015EEA4) / 600;
+                if (((Stats *)(D_00141968_r))->best2 < now) {
+                    ((Stats *)(D_00141968_r))->best2 = func_001F9850_3102C8(D_0015EEA4) / 600;
                 }
             }
-        } else if (((Stats_3102C8 *)(D_00141968_r))->count != 0) {
-            int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats_3102C8 *)(D_00141968_r))->best * 600;
+        } else if (((Stats *)(D_00141968_r))->count != 0) {
+            int elapsed = func_001F9850_3102C8(D_0015EEA4) - ((Stats *)(D_00141968_r))->best * 600;
             if ((int)((float)func_001F9850_3102C8(0x12) * 60.0f) < elapsed ||
-                ((Stats_3102C8 *)(D_00141968_r))->best * 600 == 0) {
+                ((Stats *)(D_00141968_r))->best * 600 == 0) {
                 func_L00_00203F20_3102C8(0x2B01, 0x6C);
                 return;
             }
             {
                 int now = func_001F9850_3102C8(D_0015EEA4) / 600;
-                if (((Stats_3102C8 *)(D_00141968_r))->best < now) {
-                    ((Stats_3102C8 *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
+                if (((Stats *)(D_00141968_r))->best < now) {
+                    ((Stats *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
                 }
             }
         } else {
-            ((Stats_3102C8 *)(D_00141968_r))->count += 1;
+            ((Stats *)(D_00141968_r))->count += 1;
             {
                 int now = func_001F9850_3102C8(D_0015EEA4) / 600;
-                if (((Stats_3102C8 *)(D_00141968_r))->best < now) {
-                    ((Stats_3102C8 *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
+                if (((Stats *)(D_00141968_r))->best < now) {
+                    ((Stats *)(D_00141968_r))->best = func_001F9850_3102C8(D_0015EEA4) / 600;
                 }
             }
-            ((Stats_3102C8 *)(D_00141968_r))->levels =
-                ((Stats_3102C8 *)(D_00141968_r))->levels | (1 << current_level_index) | 0x80000000;
+            ((Stats *)(D_00141968_r))->levels =
+                ((Stats *)(D_00141968_r))->levels | (1 << current_level_index) | 0x80000000;
         }
         break;
     }

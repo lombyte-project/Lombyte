@@ -74,14 +74,14 @@ typedef int Q_2C27B0 __attribute__((mode(TI)));
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_2C27B0;
 
-typedef struct Cls_2C27B0 { char pad0[0x24]; float scale; } Cls_2C27B0;
+typedef struct Cls { char pad0[0x24]; float scale; } Cls;
 
 typedef struct Moby_2C27B0 {
     char pad0[0x10];
     V4_2C27B0 pos;
     unsigned char state;
     char pad21[3];
-    Cls_2C27B0 *cls;
+    Cls *cls;
     char pad28[4];
     float scale;
     char pad30;
@@ -96,7 +96,7 @@ typedef struct Moby_2C27B0 {
     V4_2C27B0 mat;
 } Moby_2C27B0;
 
-typedef struct Rocket_2C27B0 {
+typedef struct Rocket {
     V4_2C27B0 vel;
     V4_2C27B0 tpos;
     Moby_2C27B0 *owner;
@@ -106,7 +106,7 @@ typedef struct Rocket_2C27B0 {
     float yawv;
     float pitchv;
     float maxspeed;
-} Rocket_2C27B0;
+} Rocket;
 
 typedef struct Hit_2C27B0 { char pad0[0x20]; Moby_2C27B0 *owner; } Hit_2C27B0;
 
@@ -114,10 +114,10 @@ typedef struct Veh_2C27B0 { char pad0[0x64]; float f64; char pad68[0x28]; float 
 
 typedef struct Hero_2C27B0 { char pad0[0x15F0]; Moby_2C27B0 *veh; } Hero_2C27B0;
 
-typedef struct Tex_2C27B0 { char pad0[0x5C]; unsigned char *p5C; } Tex_2C27B0;
+typedef struct Tex { char pad0[0x5C]; unsigned char *p5C; } Tex;
 
 extern Moby_2C27B0 *D_L13_00174158 NOT_SDA;
-extern Tex_2C27B0 D_L13_001B2380;
+extern Tex D_L13_001B2380;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern char D_0013F350[];
@@ -147,7 +147,7 @@ void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) __asm__("FUN_L13_00
 
 void update_level_13_homing_rocket(Moby_2C27B0 *m) __asm__("FUN_L13_002c1528");
 void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) {
-    Rocket_2C27B0 *rocket_data = rocket_moby->data;
+    Rocket *rocket_data = rocket_moby->data;
     V4_2C27B0 old;
     V4_2C27B0 hitpos;
     V4_2C27B0 scratch_vector;
@@ -181,7 +181,7 @@ void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) {
         fast_vec_add(&scratch_vector, &scratch_vector, &rocket_moby->pos);
         particle = FUN_L00_002712b8(&scratch_vector, (float *)&particle_initial_velocity, scale_game_frames(0x3C), 0x7F, 0x606060, 3, 80000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (particle != 0) {
-            Tex_2C27B0 *trail_particle_header_source = &D_L13_001B2380;
+            Tex *trail_particle_header_source = &D_L13_001B2380;
             particle[2] = *trail_particle_header_source->p5C;
             particle[3] = 0x44;
         }
@@ -1097,9 +1097,9 @@ typedef float Vec_2C56B0[4] __attribute__((aligned(16)));
 
 typedef struct Cls_2C56B0 { char pad0[0x10]; int f10; } Cls_2C56B0;
 
-typedef struct Veh_2C56B0 { char pad0[0x10]; V4_2C56B0 vel; char pad20[0x44]; float f64; } Veh_2C56B0;
+typedef struct Veh { char pad0[0x10]; V4_2C56B0 vel; char pad20[0x44]; float f64; } Veh;
 
-typedef struct Boss_2C56B0 { char pad0[0x10E]; unsigned char b10E; unsigned char b10F; } Boss_2C56B0;
+typedef struct Boss { char pad0[0x10E]; unsigned char b10E; unsigned char b10F; } Boss;
 
 typedef struct Moby_2C56B0 {
     char pad0[0x10];
@@ -1149,7 +1149,7 @@ typedef struct Data_2C56B0 {
 
 typedef struct Hero_2C56B0 { char pad0[0x15F0]; Moby_2C56B0 *veh; char pad15F4[0xA90]; int f2084; } Hero_2C56B0;
 
-typedef struct Snd_2C56B0 { char pad0[0x74]; unsigned char b74; char pad75[0x13]; void *f88; } Snd_2C56B0;
+typedef struct Snd { char pad0[0x74]; unsigned char b74; char pad75[0x13]; void *f88; } Snd;
 
 extern char *D_L13_0015FFD8;
 extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
@@ -1205,7 +1205,7 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
     };
     Data_2C56B0 *fighter_data;
     Moby_2C56B0 *veh;
-    Veh_2C56B0 *vehd = 0;
+    Veh *vehd = 0;
     int close = 0;
     char *path;
     float hpos[4];
@@ -1266,7 +1266,7 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
     }
     case FIGHTER_FOLLOW_PATH_AND_ATTACK: {
         Moby_2C56B0 *boss;
-        Boss_2C56B0 *bossd;
+        Boss *bossd;
         float fighter_to_vehicle_distance;
 
         FUN_L13_002c37e0_c((unsigned char *)moby, (unsigned char *)fighter_data, &fighter_data->f20);
@@ -1304,8 +1304,8 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
             return;
         }
         {
-            Snd_2C56B0 *e;
-            if (fighter_data->fD4 == -1 || (e = (Snd_2C56B0 *)(((char *)&D_0013E550) + fighter_data->fD4 * 0x70))->f88 != moby || e->b74 == 0) {
+            Snd *e;
+            if (fighter_data->fD4 == -1 || (e = (Snd *)(((char *)&D_0013E550) + fighter_data->fD4 * 0x70))->f88 != moby || e->b74 == 0) {
                 fighter_data->fD4 = -1;
                 fighter_data->fD4 = func_0022ED80_s(1, 4, (int)moby);
             }
@@ -1381,10 +1381,10 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
     }
     case FIGHTER_EMIT_DESTRUCTION_EFFECTS: {
         Moby_2C56B0 *boss;
-        Boss_2C56B0 *bossd;
+        Boss *bossd;
 
         if (fighter_data->fD4 != -1) {
-            Snd_2C56B0 *e = (Snd_2C56B0 *)(((char *)&D_0013E550) + fighter_data->fD4 * 0x70);
+            Snd *e = (Snd *)(((char *)&D_0013E550) + fighter_data->fD4 * 0x70);
             if (e->f88 == moby && e->b74 != 0) {
                 release_voice_slot(fighter_data->fD4);
             }
@@ -1463,7 +1463,7 @@ void update_blarg_space_fighter(Moby_2C56B0 *moby) {
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern void allocate_voice_for_target_entry_7f38(int, int, struct Moby *) __asm__("FUN_0022da68");
 
-typedef struct Data_2C7F38 {
+typedef struct Data {
     float initial_rot[3];
     float progress;
     int linked_index;
@@ -1476,7 +1476,7 @@ typedef struct Data_2C7F38 {
     int end_sound;
     float initial_scale;
     int start_active;
-} Data_2C7F38;
+} Data;
 
 void update_linked_moby_rotation(struct Moby *moby) __asm__("FUN_L13_002c7f38");
 
@@ -1488,7 +1488,7 @@ void update_linked_moby_rotation(struct Moby *moby) {
         HOLD_ROTATION_OFFSET = 3,
         REVERSE_ROTATION = 4
     };
-    Data_2C7F38 *data = (Data_2C7F38 *)moby->pvars;
+    Data *data = (Data *)moby->pvars;
     struct Moby *linked;
     float step;
     float radians;
@@ -3113,11 +3113,11 @@ typedef struct {
     float f0;
     short h4;
     short h6;
-} Sub_2EAE80;
+} Sub;
 
 typedef struct {
     char pad0[0x20];
-    Sub_2EAE80 sub;
+    Sub sub;
     char pad28[0x38];
     char q60[7];
     unsigned char b67;
@@ -3147,7 +3147,7 @@ typedef struct {
     unsigned char b74;
     char pad75[0x13];
     Moby_2EAE80 *f88;
-} Voice_2EAE80;
+} Voice;
 
 typedef struct {
     char pad0[0x15F0];
@@ -3201,7 +3201,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
     float k6;
     float step;
     Hit_2EAE80 *r;
-    Sub_2EAE80 *dd;
+    Sub *dd;
 
     if (moby->state < 6) {
         dd = &moby_data->sub;
@@ -3262,8 +3262,8 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                     }
                     moby->bBC++;
                     if (moby_data->i11C != -1) {
-                        if (((Voice_2EAE80 *)(D_0013E550 + moby_data->i11C * 0x70))->f88 == moby &&
-                            ((Voice_2EAE80 *)(D_0013E550 + moby_data->i11C * 0x70))->b74 != 0) {
+                        if (((Voice *)(D_0013E550 + moby_data->i11C * 0x70))->f88 == moby &&
+                            ((Voice *)(D_0013E550 + moby_data->i11C * 0x70))->b74 != 0) {
                             func_L00_0028EBF0_2EAE80(moby_data->i11C);
                         }
                         moby_data->i11C = -1;
@@ -3353,8 +3353,8 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 }
                 moby->bBC++;
                 if (moby_data->i11C != -1) {
-                    if (((Voice_2EAE80 *)(D_0013E550 + moby_data->i11C * 0x70))->f88 == moby &&
-                        ((Voice_2EAE80 *)(D_0013E550 + moby_data->i11C * 0x70))->b74 != 0) {
+                    if (((Voice *)(D_0013E550 + moby_data->i11C * 0x70))->f88 == moby &&
+                        ((Voice *)(D_0013E550 + moby_data->i11C * 0x70))->b74 != 0) {
                         func_L00_0028EBF0_2EAE80(moby_data->i11C);
                     }
                     moby_data->i11C = -1;

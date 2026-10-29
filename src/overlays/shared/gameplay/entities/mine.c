@@ -1310,7 +1310,7 @@ typedef struct {
     char pad58[8];
     M910 *last_hit;
     int hit_count;
-} LandingVars_2ad410;
+} LandingVars;
 
 extern float D_0015ED70_2ad410 __asm__("D_0015ED70");
 extern U910 D_L00_00173E80_2ad410 __asm__("D_L00_00173E80");
@@ -1320,9 +1320,9 @@ extern int FUN_L00_002603d0_2ad410(M910 *) __asm__("FUN_L00_002603d0");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 
-int predict_throw_landing(LandingVars_2ad410 *v, M910 *thrown_moby, int mode) __asm__("FUN_L00_002ad410");
+int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) __asm__("FUN_L00_002ad410");
 
-int predict_throw_landing(LandingVars_2ad410 *v, M910 *thrown_moby, int mode) {
+int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
     U910 position, velocity, previous, hero_position, offset, start;
     int timer;
     int object_hit;
@@ -1485,8 +1485,8 @@ typedef union {
 } Vec_2adb30 __attribute__((aligned(16)));
 typedef struct {
     int c[6];
-} Colors6_2adb30;
-typedef struct BombMoby_2adb30 BombMoby_2adb30;
+} Colors6;
+typedef struct BombMoby BombMoby;
 typedef struct {
     Vec_2adb30 v;
     char pad10[0x40];
@@ -1496,8 +1496,8 @@ typedef struct {
     char pad58[0x10];
     short h68;
     short h6a;
-} BombData_2adb30;
-struct BombMoby_2adb30 {
+} BombData;
+struct BombMoby {
     char p0[0x10];
     Vec_2adb30 pos;
     unsigned char state;
@@ -1508,7 +1508,7 @@ struct BombMoby_2adb30 {
     float ry;
     char p48[0x2C];
     int f74;
-    BombData_2adb30 *d;
+    BombData *d;
     char p7C[0x14];
     int color;
     char p94[0x12];
@@ -1518,14 +1518,14 @@ struct BombMoby_2adb30 {
 };
 typedef struct {
     Vec_2adb30 dir;
-    BombMoby_2adb30 *moby;
+    BombMoby *moby;
     int flags;
     unsigned char kind;
     unsigned char on;
     short cls;
     float fDC;
     int iE0;
-} BombHit_2adb30;
+} BombHit;
 extern float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int D_L00_0015F5CC_2adb30 __asm__("D_L00_0015F5CC");
@@ -1590,7 +1590,7 @@ extern char *FUN_L00_002af450_2adb30(char *, char *, int, int, int) __asm__("FUN
 extern char *mine_camera_blast(char *a, char *b, int c, char *d) __asm__("FUN_L00_002d3838");
 extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern char *spawn_randomly_rotated_colored_moby(void *, void *, void *, float, int, unsigned char, unsigned char, unsigned char, int) __asm__("FUN_L00_002df808");
-void bomb_update(BombMoby_2adb30 *m) __asm__("FUN_L00_002adb30");
+void bomb_update(BombMoby *m) __asm__("FUN_L00_002adb30");
 extern int D_L00_00160770;
 extern short bomb_spark_vertical_acceleration __asm__("D_L00_001613F0") __attribute__((sda));
 extern short bomb_spark_velocity_scale __asm__("D_L00_001613F4") __attribute__((sda));
@@ -1610,16 +1610,16 @@ extern short bomb_spark_secondary_color_end __asm__("D_L00_00161428") __attribut
 extern short bomb_sparks_per_emission __asm__("D_L00_0016142C") __attribute__((sda));
 extern short bomb_spark_texture_selector __asm__("D_L00_00161430") __attribute__((sda));
 extern B910 l00_bomb_camera_blast_parameters __asm__("D_L00_001E98D0");
-extern Colors6_2adb30 l00_bomb_blast_effect_primary_palette __asm__("D_L00_001E9920");
-extern Colors6_2adb30 l00_bomb_blast_effect_secondary_palette __asm__("D_L00_001E9938");
-void bomb_update(BombMoby_2adb30 *bomb_moby) {
+extern Colors6 l00_bomb_blast_effect_primary_palette __asm__("D_L00_001E9920");
+extern Colors6 l00_bomb_blast_effect_secondary_palette __asm__("D_L00_001E9938");
+void bomb_update(BombMoby *bomb_moby) {
     B910 rec = l00_bomb_camera_blast_parameters;
     Vec_2adb30 delta;
     Vec_2adb30 old;
     Vec_2adb30 blast_velocity;
     Vec_2adb30 b;
     Vec_2adb30 proj;
-    BombData_2adb30 *d;
+    BombData *d;
     b.q = 0;
     b.f[2] = frame_time_macro * 2.0f;
     blast_velocity.q = b.q;
@@ -1692,7 +1692,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
             }
         }
         {
-            BombHit_2adb30 q;
+            BombHit q;
             bomb_moby->rx = FUN_001fa580_2adb30(bomb_moby->rx, frame_time_macro * 2.0943952f);
             bomb_moby->ry = FUN_001fa580_2adb30(bomb_moby->ry, frame_time_macro * 7.8539815f);
             qcopy_nc(&old, &bomb_moby->pos);
@@ -1754,7 +1754,7 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                 } else if (d->h68 != 0 || collision_hit_material() != 0) {
                     if (coll_hit.moby != 0) {
                         if ((coll_hit.moby != D_G910.cam && coll_hit.moby != d->owner) || d->h54 < FUN_001f96f8_2adb30(0x12C) - FUN_001f96f8_2adb30(0xA)) {
-                            if (((BombMoby_2adb30 *)coll_hit.moby)->f74 != D_L00_00160770 || coll_hit.moby->cls == 0x336) {
+                            if (((BombMoby *)coll_hit.moby)->f74 != D_L00_00160770 || coll_hit.moby->cls == 0x336) {
                                 H910 *h = &coll_hit;
                                 bomb_moby->bBC = 1;
                                 qcopy(&bomb_moby->pos, &h->pos);
@@ -1857,8 +1857,8 @@ void bomb_update(BombMoby_2adb30 *bomb_moby) {
                     }
                     for (i = 0; i < blast_effect_count; i++) {
                         float spd = s * FUN_002132a8_2adb30(8.0f, 10.0f) * frame_time_macro - g * frame_time_macro;
-                        Colors6_2adb30 c1 = l00_bomb_blast_effect_primary_palette;
-                        Colors6_2adb30 blast_effect_secondary_palette = l00_bomb_blast_effect_secondary_palette;
+                        Colors6 c1 = l00_bomb_blast_effect_primary_palette;
+                        Colors6 blast_effect_secondary_palette = l00_bomb_blast_effect_secondary_palette;
                         FUN_L00_0026a9f0_2adb30(&bomb_moby->pos, &blast_velocity,
                                           FUN_L00_0025c0e8_2adb30(c1.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
                                           FUN_L00_0025c0e8_2adb30(blast_effect_secondary_palette.c[FUN_00213260_2adb30(6)], (unsigned char)D_E910.p0[0xA]),
@@ -2173,7 +2173,7 @@ typedef struct {
     s16 hE;
     f32 vel[4] __attribute__((aligned(16)));
     f32 f20, f24, f28;
-} PV_2afa48;
+} PV;
 typedef struct {
     u8 pad0[0x10];
     f32 pos[4] __attribute__((aligned(16)));
@@ -2183,7 +2183,7 @@ typedef struct {
     u8 pad30[0x10];
     f32 f40, f44, f48;
     u8 pad4c[0x2C];
-    PV_2afa48 *pv;
+    PV *pv;
 } M_2afa48;
 extern f32 D_L00_00161470_gp __asm__("D_L00_00161470") __attribute__((sda));
 extern s32 D_L00_00161474_gp __asm__("D_L00_00161474") __attribute__((sda));
@@ -2203,7 +2203,7 @@ void nanotech_crate_fragment_update(M_2afa48 *fragment_moby) {
         NANOTECH_CRATE_FRAGMENT_BOUNCING = 0,
         NANOTECH_CRATE_FRAGMENT_FADING = 1
     };
-    PV_2afa48 *pv = fragment_moby->pv;
+    PV *pv = fragment_moby->pv;
     u128 old;
     u128 *hit_normal;
     qcopy(&old, fragment_moby->pos);

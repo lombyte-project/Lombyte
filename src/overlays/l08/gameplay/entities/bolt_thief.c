@@ -255,9 +255,9 @@ void update_commando_parts(struct Moby *parent_moby) {
 
 typedef struct Moby Moby;
 
-typedef struct RData51_2E0258 RData51_2E0258;
+typedef struct RData51 RData51;
 
-struct RData51_2E0258 { char pad0[0x58]; int health, pad5C; Moby *linked[8]; int indices[4]; char pad90[0x10]; int timer; };
+struct RData51 { char pad0[0x58]; int health, pad5C; Moby *linked[8]; int indices[4]; char pad90[0x10]; int timer; };
 
 extern char *D_L08_0015FFD8_lui __asm__("D_L08_0015FFD8") NOT_SDA;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -382,7 +382,7 @@ void draw_batalia_cannon_hud(Moby *moby) {
     long xy[4];
     int color_words[4], uv_words[4];
     float relative[4];
-    RData51_2E0258 *data = (*(RData51_2E0258 **)&moby->pvars);
+    RData51 *data = (*(RData51 **)&moby->pvars);
     long texture;
     int segments;
     int i, j, k, indexed_target_slot, sign, color;
@@ -585,9 +585,9 @@ void draw_batalia_cannon_hud(Moby *moby) {
 /* Updates the mounted Batalia cannon: entry/exit, aiming, alternating barrels, waves, and attached visuals. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E16A0), where it is exact; names translated to the US level program. */
 
-typedef struct CannonData52_2E16A0 CannonData52_2E16A0;
+typedef struct CannonData52 CannonData52;
 
-struct CannonData52_2E16A0 {
+struct CannonData52 {
     char pad0[0x40]; short fire_timer, exit_timer; int pad44; float pitch_step, yaw_step;
     short pad50, camera_timer, barrel, pad56; int health; short wave_timer;
     unsigned char target_index, target_timer; Moby *linked[8]; int indices[4];
@@ -595,12 +595,12 @@ struct CannonData52_2E16A0 {
     Moby *visual; float visual_angle;
 };
 
-typedef struct Hero52_2E16A0 {
+typedef struct Hero52 {
     char pad0[0x80]; float pos[4], rot[4]; char padA0[0x156F]; unsigned char interact;
     char pad1610[0x710]; float input[2]; char pad1D28[0x358]; Moby *moby;
-} Hero52_2E16A0;
+} Hero52;
 
-typedef struct CannonCamera52_2E16A0 { char pad0[0x160]; float mag0; int pad164, timer0, pad16C; float mag1; int pad174, timer1; } CannonCamera52_2E16A0;
+typedef struct CannonCamera52 { char pad0[0x160]; float mag0; int pad164, timer0, pad16C; float mag1; int pad174, timer1; } CannonCamera52;
 
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
 char *create_moby_with_particles(int owner, float *position, float *rotation, int value) __asm__("FUN_L08_002e7eb0");
@@ -661,7 +661,7 @@ void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
 void FUN_L08_002deee0_c(struct Moby *moby) __asm__("FUN_L08_002deee0");
 void FUN_L08_00306b30(u8 *object, s32 mode);
 void FUN_L08_00313ba8(void);
-extern Hero52_2E16A0 hero52 __asm__("D_0013F350");
+extern Hero52 hero52 __asm__("D_0013F350");
 extern char D_0013E633_2E16A0[] __asm__("D_0013CAE0");
 extern char D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
 extern unsigned char visited52[][16] __asm__("D_0014C050");
@@ -670,7 +670,7 @@ extern char *D_L08_0015FFD8;
 extern int D_0015ED84;
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern CannonCamera52_2E16A0 camera_state_bytes __asm__("D_L08_00167480");
+extern CannonCamera52 camera_state_bytes __asm__("D_L08_00167480");
 extern short D_L08_00161A90_gp __asm__("D_L08_00161A90") __attribute__((sda));
 extern short D_L08_00161B10_gp __asm__("D_L08_00161B10") __attribute__((sda));
 extern short D_L08_00161B20_gp __asm__("D_L08_00161B20") __attribute__((sda));
@@ -745,7 +745,7 @@ void update_batalia_cannon(Moby *moby) {
         CANNON_ALL_INDEXED_TARGETS_INACTIVE = 4
     };
     float position[4], offset[4], work[4], direction[4], muzzle[4], scatter[4], random_vec[4];
-    CannonData52_2E16A0 *data = (*(CannonData52_2E16A0 **)&moby->pvars);
+    CannonData52 *data = (*(CannonData52 **)&moby->pvars);
     int i, target, all_done, dead, best, min_life;
     Moby **links;
     float yaw, pitch, magnitude, best_angle;
@@ -1053,7 +1053,7 @@ typedef struct {
     float spin_x;              /* 0x10 */
     float spin_y;              /* 0x14 */
     int life;                  /* 0x18 */
-} Data_2E2A38;
+} Data;
 
 typedef struct {
     char pad0[0x10];
@@ -1062,7 +1062,7 @@ typedef struct {
     char pad21[0x1F];
     float rot[4];              /* 0x40 */
     char pad50[0x28];
-    Data_2E2A38 *data;         /* 0x78 */
+    Data *data;         /* 0x78 */
 } Moby_2E2A38;
 
 typedef struct {
@@ -1102,7 +1102,7 @@ void update_falling_debris(Moby_2E2A38 *debris_moby) {
         FALLING_DEBRIS_BEFORE_BURST = 2,
         FALLING_DEBRIS_AFTER_BURST = 3
     };
-    Data_2E2A38 *debris_data = debris_moby->data;
+    Data *debris_data = debris_moby->data;
     float particle_primary_vector[4];
     Pair_2E2A38 tab;
     float particle_secondary_vector[4];

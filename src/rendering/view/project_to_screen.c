@@ -14,7 +14,7 @@ struct ScreenPoint {
     f32 unk8;
 };
 
-struct Locals_001f2070 {
+struct Locals {
     u8 pad_0[0x30];
     f32 v30;
     f32 v34;
@@ -38,7 +38,7 @@ extern void multiply_matrix(void *a, void *b, void *c) __asm__("FUN_001fa378");
 void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) __asm__("FUN_001f2070");
 
 void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) {
-    struct Locals_001f2070 L;
+    struct Locals L;
     f32 scale;
     f32 y;
     f32 x;

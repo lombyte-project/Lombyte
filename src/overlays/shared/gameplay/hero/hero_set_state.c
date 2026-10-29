@@ -99,7 +99,7 @@ void update_hero_motion_and_collision_probes(void) {
 typedef struct {
     s32 w0;
     u8 pad4[0x70 - 4];
-} Entry70_2215c8;
+} Entry70;
 
 extern struct PadState D_0013C940_2215c8 __asm__("D_0013C940");
 extern s32 D_L00_0015F5C4_2215c8 __asm__("D_L00_0015F5C4");
@@ -124,7 +124,7 @@ extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_002
 extern void FUN_L00_00233660_2215c8(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_2215c8(void) __asm__("FUN_L00_00211250");
 
-extern Entry70_2215c8 l00_hero_countdown_records[] __asm__("D_L00_001798F0");
+extern Entry70 l00_hero_countdown_records[] __asm__("D_L00_001798F0");
 void update_hero_timers_and_reach_state(void) __asm__("FUN_L00_002215c8");
 
 void update_hero_timers_and_reach_state(void) {
@@ -579,17 +579,17 @@ typedef struct {
     int b;
     int c;
     char pad[0x20];
-} T2C_222B80;
+} T2C;
 
 typedef struct {
     char pad[0x194];
     float f194;
-} H194_222B80;
+} H194;
 
 typedef struct {
     char pad[0x694];
     float f694;
-} H694_222B80;
+} H694;
 
 typedef struct {
     float x, y, z, w;
@@ -598,7 +598,7 @@ typedef struct {
 extern char hero_pal_timed_jump_keys[4] __asm__("D_L00_0015F6E8") __attribute__((sda));
 extern char D_L00_0017BF60_e[] __asm__("D_L00_0017BF60");
 extern unsigned char opt_mirror_anim __asm__("D_0015EDB5");
-extern T2C_222B80 attack_records[] __asm__("D_L00_0017BC28");
+extern T2C attack_records[] __asm__("D_L00_0017BC28");
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 #include "rnc/gameplay/state/game_globals.h"
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -2267,7 +2267,7 @@ int hero_set_state(int a, int b) {
         case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
-            T2C_222B80 *e;
+            T2C *e;
             int k;
             if (*(unsigned short *)(h + 0x40) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x40) = *(unsigned short *)(h + 0x40) + 1;
@@ -2321,7 +2321,7 @@ int hero_set_state(int a, int b) {
         }
         case HERO_STATE_VEHICLE_MODE_1_ATTACK: {
             struct Hero *q = &hero;
-            T2C_222B80 *e = &attack_records[q->attack_record];
+            T2C *e = &attack_records[q->attack_record];
             int k = 0;
             if ((q->state.prev_control_mode == 6 ||
                  (q->state.prev2_control_mode == 6 &&
@@ -2415,7 +2415,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C_222B80 *e = &attack_records[p->attack_record];
+            T2C *e = &attack_records[p->attack_record];
             int k = e->b;
             int n;
             if (e->a == 1)
@@ -3213,7 +3213,7 @@ typedef struct {
 typedef struct {
     char p0[0xC];
     int fC;
-} PVar_228770;
+} PVar;
 typedef struct {
     char p0[0x80] __attribute__((aligned(16)));
     char p80[0x118];
@@ -3287,17 +3287,17 @@ typedef struct {
     char p0[0x1A0] __attribute__((aligned(16)));
     int f1A0;
     int f1A4;
-} Pad_228770;
+} Pad;
 typedef struct {
     char p0[0xC];
     int fC;
     int next_move_frame; /* compared with hero.anim_frame before a follow-up move */
     char p14[0x18];
-} Rec2C_228770;
+} Rec2C;
 extern Hero_228770 D_0013F450_h228770 __asm__("D_0013F350");
-extern Pad_228770 D_0013CA40_p228770 __asm__("D_0013C940");
+extern Pad D_0013CA40_p228770 __asm__("D_0013C940");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
-extern Rec2C_228770 D_L00_0017BD28_228770[] __asm__("D_L00_0017BC28");
+extern Rec2C D_L00_0017BD28_228770[] __asm__("D_L00_0017BC28");
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
@@ -3406,7 +3406,7 @@ int process_hero_equipped_item_input(void) {
             }
         }
         if (D_0013F450_h228770.f208C == 6) {
-            Rec2C_228770 *rec = &D_L00_0017BD28_228770[D_0013F450_h228770.fA60];
+            Rec2C *rec = &D_L00_0017BD28_228770[D_0013F450_h228770.fA60];
             int t;
 
             if (D_0013F450_h228770.f2084 == 0x15) {
@@ -3516,12 +3516,12 @@ int process_hero_equipped_item_input(void) {
     case 15:
         if (D_0013F450_h228770.f208C < 2U || D_0013F450_h228770.f208C == 0xC || D_0013F450_h228770.f208C == 2 || D_0013F450_h228770.f208C == 4
             || D_0013F450_h228770.f208C == 5 || D_0013F450_h228770.f208C == 0xF || D_0013F450_h228770.f2084 == 0x1E) {
-            PVar_228770 *equipped_item_vars;
+            PVar *equipped_item_vars;
 
             if (D_0013F450_h228770.f1090 == 0) {
                 break;
             }
-            equipped_item_vars = *(PVar_228770 **)&D_0013F450_h228770.f1090->pvars;
+            equipped_item_vars = *(PVar **)&D_0013F450_h228770.f1090->pvars;
             if (((D_0013CA40_p228770.f1A0 & mask) && D_0013F450_h228770.f10B0 > scale_game_frames(5)) || (D_0013CA40_p228770.f1A4 & mask)) {
                 if (get_ammo(-1)) {
                     if (D_0013F450_h228770.f20A8 == 0) {
@@ -3657,9 +3657,9 @@ typedef struct {
     f32 lower;
     f32 upper;
     u8 pad8[8];
-} SpeedStepThreshold_228c18;
+} SpeedStepThreshold;
 
-extern SpeedStepThreshold_228c18 D_L00_0017BDB8[];
+extern SpeedStepThreshold D_L00_0017BDB8[];
 extern s32 l00_hero_speed_step_animation_frame_offsets __asm__("D_L00_0015F6C8") __attribute__((sda));
 
 void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
@@ -3693,7 +3693,7 @@ void update_hero_animation_for_movement_speed(void) {
                         float scale = frame_time;
                         if (player->ground_speed < D_L00_0017BDB8[previous_step].lower * scale) {
                             struct Hero *stepper;
-                            SpeedStepThreshold_228c18 *thresholds;
+                            SpeedStepThreshold *thresholds;
                             do {
                                 thresholds = D_L00_0017BDB8;
                                 stepper = &hero;

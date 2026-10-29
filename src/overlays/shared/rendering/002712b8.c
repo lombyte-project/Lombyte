@@ -2164,12 +2164,12 @@ typedef struct {
     f32 unk18;
     u8 p1C[4];
     int w20;
-} Part_275eb0;
+} Part;
 int FUN_001f9770_00275eb0(s16 *) __asm__("FUN_001f9770");
 u32 FUN_001fa6e0_00275eb0(u32, u32, f32) __asm__("FUN_001fa6e0");
-void update_mode_controlled_shrinking_color_tween_particle(Part_275eb0 *particle) __asm__("FUN_L00_00275eb0");
+void update_mode_controlled_shrinking_color_tween_particle(Part *particle) __asm__("FUN_L00_00275eb0");
 
-void update_mode_controlled_shrinking_color_tween_particle(Part_275eb0 *particle) {
+void update_mode_controlled_shrinking_color_tween_particle(Part *particle) {
     float remaining_frames_minus_one;
     if (particle->unk10 < 2.0f || 1021.0f < particle->unk10 || particle->unk14 < 2.0f || 1021.0f < particle->unk14 || particle->unk18 < 2.0f ||
         1021.0f < particle->unk18 || FUN_001f9770_00275eb0(&particle->hA)) {
@@ -2188,14 +2188,14 @@ void update_mode_controlled_shrinking_color_tween_particle(Part_275eb0 *particle
 }
 typedef struct {
     s32 a, n;
-} P2_276078;
+} P2;
 typedef struct {
     u8 pad[0xF8];
-    P2_276078 e[20];
-} T1_276078;
+    P2 e[20];
+} T1;
 
 extern s32 D_L00_00173E08 NOT_SDA;
-extern T1_276078 D_00137B80;
+extern T1 D_00137B80;
 extern u8 misc_animation_stash_tag[] __asm__("D_L00_001602D0");
 void load(s32, s32, s32) __asm__("FUN_00216828");
 s32 stash_send_data(s32, s32, s32, void *) __asm__("FUN_00232e40");

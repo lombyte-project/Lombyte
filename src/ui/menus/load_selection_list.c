@@ -4,15 +4,15 @@ typedef struct {
     char pad[0x30];
     int list[8]; /* 0x30 */
     int idx;     /* 0x50 */
-} SelList_0021D9C8;
+} SelList;
 /* Reload the 8-entry list at +0x30 from D_00141EA0 (the reverse of
    func_0021DA60 below), then leave idx at +0x50 on the first empty entry,
    wrapped to 0..7. Indexing sel_list->list directly in both loops (no local
    list pointer) is what gives retail's hoisted base; the scan is a do-while
    guarded by list[0] (a plain while/for rotated differently). */
-int load_selection_list(SelList_0021D9C8 *sel_list) __asm__("FUN_0021c9c8");
+int load_selection_list(SelList *sel_list) __asm__("FUN_0021c9c8");
 
-int load_selection_list(SelList_0021D9C8 *sel_list) {
+int load_selection_list(SelList *sel_list) {
     int i;
     for (i = 0; i < 8; i++) {
         sel_list->list[i] = pause_iop_sprite_lists[i];

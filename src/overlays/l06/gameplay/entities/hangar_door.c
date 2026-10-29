@@ -990,7 +990,7 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec_2F69D0;
 
-typedef struct Data_2F69D0 {
+typedef struct Data {
     char p0[0x60];
     int node_start;
     int node_mid;
@@ -1000,21 +1000,21 @@ typedef struct Data_2F69D0 {
     Moby *b[20];
     Moby *c[10];
     Moby *d[10];
-} Data_2F69D0;
+} Data;
 
 typedef struct {
     char p0[0x30];
     Vec_2F69D0 v30;
     char p40[0x30];
     Vec_2F69D0 v70;
-} Node_2F69D0;
+} Node;
 
 typedef struct {
     char p0[0x74];
     unsigned char b74;
     char p75[0x13];
     struct Moby *p88;
-} Slot_2F69D0;
+} Slot;
 
 extern unsigned char D_001413F4_r[] __asm__("D_001413F4");
 extern char *func_0020D348_m(int);
@@ -1096,7 +1096,7 @@ void update_drawbridge(Moby *moby) {
         DRAWBRIDGE_COMPLETE = 6
     };
     Vec_2F69D0 position, rotation, from_pos, from_rot, to_pos, to_rot;
-    Data_2F69D0 *data = (struct Data_2F69D0 *)moby->pvars;
+    Data *data = (struct Data *)moby->pvars;
     float previous_fade, blend;
     int i, j, slot;
 
@@ -1185,7 +1185,7 @@ void update_drawbridge(Moby *moby) {
         slot = moby->command;
         if (20.0f <= D_L06_00161D78_gp) {
             if (func_L00_0028EB98_2F69D0(data->c[9], slot) != 0) {
-                if (slot != -1 && ((Slot_2F69D0 *)(D_0013E650_2F69D0 + slot * 0x70))->p88 == data->c[9] && ((Slot_2F69D0 *)(D_0013E650_2F69D0 + slot * 0x70))->b74 != 0) {
+                if (slot != -1 && ((Slot *)(D_0013E650_2F69D0 + slot * 0x70))->p88 == data->c[9] && ((Slot *)(D_0013E650_2F69D0 + slot * 0x70))->b74 != 0) {
                     func_L00_0028EBF0_2F69D0(slot);
                 }
                 slot = -1;
@@ -1195,16 +1195,16 @@ void update_drawbridge(Moby *moby) {
         func_L06_002F71A8_2F69D0(moby);
         if (D_L06_00161D78_gp < 20.0f) {
             blend = D_L06_00161D78_gp / 20.0f;
-            qcopy_nc(&from_pos, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_start].v30);
-            qcopy_nc(&to_pos, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_mid].v30);
-            qcopy_nc(&from_rot, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_start].v70);
-            qcopy_nc(&to_rot, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_mid].v70);
+            qcopy_nc(&from_pos, &((Node *)D_L06_0016016C_2F69D0)[data->node_start].v30);
+            qcopy_nc(&to_pos, &((Node *)D_L06_0016016C_2F69D0)[data->node_mid].v30);
+            qcopy_nc(&from_rot, &((Node *)D_L06_0016016C_2F69D0)[data->node_start].v70);
+            qcopy_nc(&to_rot, &((Node *)D_L06_0016016C_2F69D0)[data->node_mid].v70);
         } else {
             blend = D_L06_00161D80_gp / 1000.0f;
-            qcopy_nc(&from_pos, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_mid].v30);
-            qcopy_nc(&to_pos, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_end].v30);
-            qcopy_nc(&from_rot, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_mid].v70);
-            qcopy_nc(&to_rot, &((Node_2F69D0 *)D_L06_0016016C_2F69D0)[data->node_end].v70);
+            qcopy_nc(&from_pos, &((Node *)D_L06_0016016C_2F69D0)[data->node_mid].v30);
+            qcopy_nc(&to_pos, &((Node *)D_L06_0016016C_2F69D0)[data->node_end].v30);
+            qcopy_nc(&from_rot, &((Node *)D_L06_0016016C_2F69D0)[data->node_mid].v70);
+            qcopy_nc(&to_rot, &((Node *)D_L06_0016016C_2F69D0)[data->node_end].v70);
         }
         func_001F9C08_2F69D0(&position, &from_pos, &to_pos, blend);
         rotation.x = func_001FA790_2F69D0(to_rot.x, from_rot.x) * blend;
@@ -2060,7 +2060,7 @@ void alien_snapper_update(Moby *moby)
                 break;
             case 6:
                 moby->state = 5;
-                qcopy(&vars->home, &((Node_2F69D0 *)D_L06_001600EC)[vars->node].v30);
+                qcopy(&vars->home, &((Node *)D_L06_001600EC)[vars->node].v30);
                 vars->return_speed = vector_distance(&moby->pos, &vars->home) / (float)scale_game_frames(60);
                 vars->f8C = func_L00_0025BC48_91A8(&moby->pos, &vars->home, 0, vars->return_speed, -vars->f80);
                 vars->f94 = 5;
@@ -2353,9 +2353,9 @@ typedef struct {
     float z;                /* 0x18 */
     char pad1C[0x4];
     struct Moby *owner; /* 0x20 */
-} Target_2FA618;
+} Target;
 
-typedef struct BlargVars_2FA618 {
+typedef struct BlargVars {
     char pad00[0x20];
     float health;           /* 0x20 */
     char pad24[0x14];
@@ -2385,7 +2385,7 @@ typedef struct BlargVars_2FA618 {
     char pad1B4[0x14];
     float f1C8;             /* 0x1C8 */
     int f1CC;               /* 0x1CC */
-} BlargVars_2FA618;
+} BlargVars;
 
 extern char D_0013F350[];
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -2413,7 +2413,7 @@ extern float func_002140F8_2FA618(float, float) __asm__("FUN_002132a8");
 extern float func_001F9878_2FA618(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2FA618(float) __asm__("FUN_001fa6d0");
 extern int func_001F9908_2FA618(int *) __asm__("FUN_001f9740");
-extern Target_2FA618 *func_L00_0025B478_2FA618(void *, int, int) __asm__("FUN_L00_0025a420");
+extern Target *func_L00_0025B478_2FA618(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int func_L00_0025B4D0_2FA618(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void func_L06_002FAAC8_2FA618(void *) __asm__("FUN_L06_002f9698");
 extern float func_L00_001FF860_2FA618(float, float) __asm__("FUN_001f9e90");
@@ -2455,10 +2455,10 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby)
         SNAPPER_RETURN_HOME = 12,
         SNAPPER_RETREAT_FROM_TARGET = 13
     };
-    BlargVars_2FA618 *data = (struct BlargVars_2FA618 *)moby->pvars;
+    BlargVars *data = (struct BlargVars *)moby->pvars;
     int hit;
     float damage;
-    Target_2FA618 *target;
+    Target *target;
     int reaction;
 
     if (data->f38 != 0) {
@@ -3506,7 +3506,7 @@ typedef struct {
     int f10;
     char pad14[0x10];
     float f24;
-} Cls_2FDA70;
+} Cls;
 
 typedef struct {
     char pad0[0x20];
@@ -3534,7 +3534,7 @@ typedef struct Moby_2FDA70 {
     Vec_2FDA70 pos;
     unsigned char state;
     char pad21[3];
-    Cls_2FDA70 *cls;
+    Cls *cls;
     char pad28[4];
     float f2C;
     char pad30[4];
@@ -3579,7 +3579,7 @@ typedef struct {
 typedef struct {
     char pad0[0x20];
     unsigned char f20;
-} Flags_2FDA70;
+} Flags;
 
 extern char *D_L06_001600EC_macro __asm__("D_L06_001600EC") MACRO_ADDR;
 extern char *D_L06_0015FFD8_macro __asm__("D_L06_0015FFD8") MACRO_ADDR;
@@ -3665,8 +3665,8 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
         break;
     case WAIT_FOR_INITIAL_HERO_ACTIVATION:
         if (is_point_inside_clip_volume(&((Hero_2FDA70 *)(D_0013F350))->pos, moby_data->f70) != 0) {
-            if (((Flags_2FDA70 *)(alternate_item_available))->f20 == 0) {
-                ((Flags_2FDA70 *)(alternate_item_available))->f20 = 1;
+            if (((Flags *)(alternate_item_available))->f20 == 0) {
+                ((Flags *)(alternate_item_available))->f20 = 1;
             }
             moby->state = 3;
             moby_data->f90 = 0;

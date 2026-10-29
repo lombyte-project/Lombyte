@@ -97,7 +97,7 @@ void draw_vendor_inset_quads(char *vertex_batch) {
 #include "rnc/overlay/quad.h"
 typedef struct {
     int a, b, c;
-} I3_29fcd0;
+} I3;
 extern long capture_texture_tex0 __asm__("D_0015EED0");
 void FUN_0020cd48_29fcd0(void *, int, void *, void *) __asm__("FUN_0020cd48");
 void FUN_001f9a28_29fcd0(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -115,7 +115,7 @@ void FUN_0020d330_29fcd0(void *, int) __asm__("FUN_0020d330");
 void FUN_001f5450_29fcd0(int, int, int, int, int, int, int, int, long,
                          long) __asm__("FUN_001f5450");
 
-extern I3_29fcd0 D_L00_00161178 NOT_SDA;
+extern I3 D_L00_00161178 NOT_SDA;
 void draw_vendor_purchase_panel(void *moby) __asm__("FUN_L00_0029fcd0");
 
 void draw_vendor_purchase_panel(void *moby) {
@@ -123,7 +123,7 @@ void draw_vendor_purchase_panel(void *moby) {
     OvlQuad second_edge[1];
     OvlQuad base[1];
     OvlQuad out[3];
-    I3_29fcd0 ids;
+    I3 ids;
     OvlQuad inset_offset[1];
     OvlQuad quad_corners[4];
     OvlQuad pad[5];
@@ -232,7 +232,7 @@ void draw_vendor_hologram_cone(void) {
 #include "qzero.h"
 typedef struct {
     u128 q[3];
-} Q3_2a02b0;
+} Q3;
 
 typedef struct {
     char pad[0x8];

@@ -591,7 +591,7 @@ typedef struct {
 
 typedef int u128_2D8388 __attribute__((mode(TI)));
 
-typedef union { u128_2D8388 q; float f[4]; } Buf_2D8388;
+typedef union { u128_2D8388 q; float f[4]; } Buf;
 
 typedef struct {
     /* 0x000 */ int path;
@@ -681,9 +681,9 @@ void scenery_ship_update(char *moby) {
     int k;
     int lifetime;
     int damaged;
-    Buf_2D8388 left_offset;
-    Buf_2D8388 tail_offset;
-    Buf_2D8388 right_offset;
+    Buf left_offset;
+    Buf tail_offset;
+    Buf right_offset;
     float in_angle;
     float out_angle;
     float turn;
@@ -1546,7 +1546,7 @@ typedef struct Path_3047E8 {
     int pts[1];
 } Path_3047E8;
 
-typedef struct Wing_3047E8 {
+typedef struct Wing {
     char pad0[0x20];
     float hp;
     char pad1[0x14];
@@ -1597,7 +1597,7 @@ typedef struct Wing_3047E8 {
     char pad18[0x4];
     int f2D4;
     float f2D8;
-} Wing_3047E8;
+} Wing;
 
 char *FUN_L05_00303f80_c(char *self, int idx) __asm__("FUN_L05_00303f80");
 extern char *FUN_L00_0025a420(void *, int, int);
@@ -1679,12 +1679,12 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
     float dmg;
     float nonlethal_knockback_heading;
     float death_knockback_heading;
-    Wing_3047E8 *moby_data;
+    Wing *moby_data;
     Hit_3047E8 *hit_record;
     int hit_response;
     int k;
 
-    moby_data = *(struct Wing_3047E8 **)&moby->pvars;
+    moby_data = *(struct Wing **)&moby->pvars;
     func_001F9908_3047E8(&moby_data->f2D4);
     dmg = 0.0f;
     hit_record = func_L00_0025B478_3047E8(moby, 0x330000, 0);
@@ -1932,10 +1932,10 @@ typedef struct {
     char p1[0x13];
     unsigned short flags;
     char p2[0xCA];
-} Ent_03f80;
+} Ent;
 extern float func_001F9D10_03f80(void *, void *) __asm__("FUN_001f9b48");
 extern short *D_L05_001AC040_03f80[] __asm__("D_L05_001ABCC0");
-extern Ent_03f80 *D_L05_00160098_m_03f80 __asm__("D_L05_0015FFD8");
+extern Ent *D_L05_00160098_m_03f80 __asm__("D_L05_0015FFD8");
 extern short D_L05_00160098_03f80 __asm__("D_L05_0015FFD8");
 char *find_nearest_extermibot_group_target(char *self, int group_index) __asm__("FUN_L05_00303f80");
 
@@ -1972,13 +1972,13 @@ typedef union {
     Quad_3054B0 q;
     f32 f[4];
     s32 i[4];
-} PathVec_3054B0;
+} PathVec;
 
 typedef struct {
     s32 count;
     u8 pad[12];
-    PathVec_3054B0 points[1];
-} SegmentPath_3054B0;
+    PathVec points[1];
+} SegmentPath;
 
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -1986,25 +1986,25 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
-extern SegmentPath_3054B0 *segment_paths_3054B0[] __asm__("D_L05_001B0930");
-extern void func_001F9BD8_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9a10");
-extern void func_001F9BF0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9a28");
-extern void func_001F9CA0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, PathVec_3054B0 *) __asm__("FUN_001f9ad8");
-extern f32 func_001F9CB8_3054B0(PathVec_3054B0 *) __asm__("FUN_001f9af0");
-extern void func_L00_001FF4B0_3054B0(PathVec_3054B0 *, PathVec_3054B0 *, f32) __asm__("FUN_001f9bf8");
+extern SegmentPath *segment_paths_3054B0[] __asm__("D_L05_001B0930");
+extern void func_001F9BD8_3054B0(PathVec *, PathVec *, PathVec *) __asm__("FUN_001f9a10");
+extern void func_001F9BF0_3054B0(PathVec *, PathVec *, PathVec *) __asm__("FUN_001f9a28");
+extern void func_001F9CA0_3054B0(PathVec *, PathVec *, PathVec *) __asm__("FUN_001f9ad8");
+extern f32 func_001F9CB8_3054B0(PathVec *) __asm__("FUN_001f9af0");
+extern void func_L00_001FF4B0_3054B0(PathVec *, PathVec *, f32) __asm__("FUN_001f9bf8");
 
 f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance) __asm__("FUN_L05_00304058");
 f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance) {
-    PathVec_3054B0 *point = input;
-    PathVec_3054B0 *out = output;
-    PathVec_3054B0 difference;
-    PathVec_3054B0 scaled_difference;
-    PathVec_3054B0 working;
-    PathVec_3054B0 segment;
-    PathVec_3054B0 scaled_segment;
-    PathVec_3054B0 cross;
-    PathVec_3054B0 scaled_cross;
-    SegmentPath_3054B0 **entry;
+    PathVec *point = input;
+    PathVec *out = output;
+    PathVec difference;
+    PathVec scaled_difference;
+    PathVec working;
+    PathVec segment;
+    PathVec scaled_segment;
+    PathVec cross;
+    PathVec scaled_cross;
+    SegmentPath **entry;
     s32 i;
     s32 found;
     f32 best = 512.0f;
@@ -2759,7 +2759,7 @@ typedef struct {
     int count;
     int pad[3];
     Vec4_308D68 points[1];
-} Path_308D68;
+} Path;
 
 typedef struct {
     char p00[0x64];
@@ -2777,7 +2777,7 @@ typedef struct {
     float cruise_speed;
     float launch_speed;
     float speed;
-    Path_308D68 *path;
+    Path *path;
     float yaw_speed;
     float vertical_speed;
     int racer_index;
@@ -2794,12 +2794,12 @@ typedef struct {
     float bob_phase;
     int f278;
     int jump_point;
-} Data_308D68;
+} Data;
 
 typedef struct {
     char p00[0x50];
     int f50;
-} ChildData_308D68;
+} ChildData;
 
 char *spawn_racer_child(char *owner) __asm__("FUN_L05_002f8718");
 extern char D_L05_001671C0[];
@@ -2843,7 +2843,7 @@ void skid_mcmarx_update(Moby *moby) {
     float step[4];
     float probe[4];
     float push[4];
-    Data_308D68 *data = (Data_308D68 *)*(void **)&moby->pvars;
+    Data *data = (Data *)*(void **)&moby->pvars;
 
     if (moby->visible != 0 && distance_xyz(((float *)&moby->pos), D_L05_001671C0) < 29.0f) {
         FUN_L00_0025a120(moby);
@@ -2851,11 +2851,11 @@ void skid_mcmarx_update(Moby *moby) {
     }
     switch (moby->state) {
     case SKID_MCMARX_INITIALIZE: {
-        Path_308D68 *path;
+        Path *path;
 
         moby->update_dist = 0x18;
         moby->flags |= 0x41;
-        path = (Path_308D68 *)D_L05_001B0930[data->path_id];
+        path = (Path *)D_L05_001B0930[data->path_id];
         data->path = path;
         copy_racer_path_node((char *)moby, 0, path_point);
         qcopy(((float *)&moby->pos), path_point);
@@ -2898,7 +2898,7 @@ void skid_mcmarx_update(Moby *moby) {
 
                 data->child = child;
                 if (child != 0) {
-                    ((ChildData_308D68 *)*(void **)&child->pvars)->f50 = 1;
+                    ((ChildData *)*(void **)&child->pvars)->f50 = 1;
                 }
             }
             if (data->racer_index % 2 == 1) {
@@ -3165,7 +3165,7 @@ typedef struct {
     char pad0C[0x12];
     unsigned short h1E;
     char rest[0x1170];
-} WaterRecord_30ca80;
+} WaterRecord;
 typedef struct {
     float raised_z;
     float lowered_z;
@@ -3177,7 +3177,7 @@ typedef struct {
     int f1C;
     float speed;
     int moving;
-} WaterVars_30ca80;
+} WaterVars;
 typedef struct {
     float f0;
     float f4;
@@ -3196,15 +3196,15 @@ typedef struct {
     float dir_z;
     unsigned char b3C;
     unsigned char b3D;
-} Light_30ca80;
+} Light;
 typedef struct {
     char pad0[0x10];
     float f10;
     float f14;
-} Cam_30ca80;
+} Cam;
 
 extern unsigned char mission_states_30ca80[] __asm__("D_0014C050");
-extern WaterRecord_30ca80 water_records[] __asm__("D_L05_001D6880");
+extern WaterRecord water_records[] __asm__("D_L05_001D6880");
 extern void *D_L05_001612D0_30ca80 __asm__("D_L05_001612D0") __attribute__((section(".sdata")));
 extern void pool_init_tiles(void *, int) __asm__("FUN_L01_002b7a48");
 extern void pool_set_scale(float) __asm__("FUN_L01_002b7ef0");
@@ -3220,8 +3220,8 @@ extern int check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690"
 extern void pool_flush(char *, int) __asm__("FUN_L01_002b7fe0");
 extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
-extern Cam_30ca80 l05_water_light_heading_source __asm__("D_L05_00180340");
-extern Light_30ca80 light __asm__("D_L05_001CAD00");
+extern Cam l05_water_light_heading_source __asm__("D_L05_00180340");
+extern Light light __asm__("D_L05_001CAD00");
 extern int water_grid_fixed_point_bounds[][4] __asm__("D_L05_0020B440");
 extern unsigned short record_draw_values[] __asm__("D_L05_0020B380");
 extern int rise_frames[] __asm__("D_L05_0020B3E0");
@@ -3257,7 +3257,7 @@ void water_update(struct Moby *moby) {
         WATER_RISE_COMPLETE = 7,
         WATER_TIMED_RISE = 8
     };
-    WaterVars_30ca80 *water_vars = *(WaterVars_30ca80 **)&moby->pvars;
+    WaterVars *water_vars = *(WaterVars **)&moby->pvars;
 
     switch (moby->state) {
     case WATER_INITIALIZE:
@@ -3371,7 +3371,7 @@ void water_update(struct Moby *moby) {
         if (random_integer_below(0xC8) == 0) {
             float x = water_records[water_vars->record_index].x + random_float_between(-4.0f, 4.0f);
             float r = random_float_between(-4.0f, 4.0f);
-            WaterRecord_30ca80 *e = &water_records[water_vars->record_index];
+            WaterRecord *e = &water_records[water_vars->record_index];
             pool_splash(e, 1, 1, x, e->y + r, 1.0f, -0.05f);
         }
         break;
@@ -3389,7 +3389,7 @@ void water_update(struct Moby *moby) {
         if (random_integer_below(0xC8) == 0) {
             float x = water_records[water_vars->record_index].x + random_float_between(-4.0f, 4.0f);
             float r = random_float_between(-4.0f, 4.0f);
-            WaterRecord_30ca80 *e = &water_records[water_vars->record_index];
+            WaterRecord *e = &water_records[water_vars->record_index];
             pool_splash(e, 1, 1, x, e->y + r, 1.0f, -0.05f);
         }
         break;
@@ -3418,7 +3418,7 @@ void water_update(struct Moby *moby) {
         if (random_integer_below(0x32) == 0) {
             float x = water_records[water_vars->record_index].x + random_float_between(-4.0f, 4.0f);
             float r = random_float_between(-4.0f, 4.0f);
-            WaterRecord_30ca80 *e = &water_records[water_vars->record_index];
+            WaterRecord *e = &water_records[water_vars->record_index];
             pool_splash(e, 1, 1, x, e->y + r, 1.0f, -0.01f);
         }
         break;
@@ -3472,7 +3472,7 @@ void water_update(struct Moby *moby) {
         break;
     }
     if (water_vars->record_index >= 0) {
-        WaterRecord_30ca80 *e = &water_records[water_vars->record_index];
+        WaterRecord *e = &water_records[water_vars->record_index];
         float restore_record_draw_value;
 
         e->z = moby->pos.z;

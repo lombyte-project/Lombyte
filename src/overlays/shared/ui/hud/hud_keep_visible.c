@@ -329,9 +329,9 @@ extern float star_init_limit2_gp __asm__("D_L00_0015F758") __attribute__((sda));
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 typedef struct {
     float x, y, vx, vy;
-} Star_236458;
+} Star;
 
-extern Star_236458 l00_hud_star_particles[] __asm__("D_L00_0017E660");
+extern Star l00_hud_star_particles[] __asm__("D_L00_0017E660");
 extern int D_L00_0015F75C_gp __asm__("D_L00_0015F75C") __attribute__((sda));
 
 void hud_init_particles(HudElem *elem) __asm__("FUN_L00_00236268");
@@ -373,7 +373,7 @@ void hud_update_counter() __asm__("FUN_L00_00235ea0");
  * depends on the star index. */
 void hud_update_particles(void) __asm__("FUN_L00_00236458");
 void hud_update_particles(void) {
-    Star_236458 *hud_star;
+    Star *hud_star;
     int i;
     float boundary_inset, hx, hy, nhx, nhy;
 

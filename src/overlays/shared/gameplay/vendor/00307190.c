@@ -160,9 +160,9 @@ typedef int u128_3091B0 __attribute__((mode(TI)));
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_3091B0;
 
-typedef struct { char p0[0x148]; float f148; char p14C[8]; float f154; float f158; } Cam_3091B0;
+typedef struct { char p0[0x148]; float f148; char p14C[8]; float f154; float f158; } Cam;
 
-typedef struct { char p0[0x30]; V_3091B0 v30; } Obj_3091B0;
+typedef struct { char p0[0x30]; V_3091B0 v30; } Obj;
 
 extern char D_L08_001675C0[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -214,7 +214,7 @@ void scatter_ground_particles(Moby *moby) {
     int big;
     int pass_attempt_count;
     int remaining_pass_attempts;
-    Obj_3091B0 *moby_data;
+    Obj *moby_data;
     float lo;
     float hi;
     float fall;
@@ -253,7 +253,7 @@ void scatter_ground_particles(Moby *moby) {
         zero = 0.0f;
         if (zero <= k) lo = k;
     }
-    moby_data = (Obj_3091B0 *)moby->pvars;
+    moby_data = (Obj *)moby->pvars;
     switch (moby->state) {
     case GROUND_PARTICLES_STATE_INITIALIZE:
         moby->state = 2;
@@ -266,9 +266,9 @@ void scatter_ground_particles(Moby *moby) {
         D_L08_00160250 = *(u128_3091B0 *)&dv;
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
         pass_attempt_count = ground_particle_scatter_base_attempt_count;
-        func_L00_00263D68_3091B0(&base, &base, 16.0f, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
-            ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
-        base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
+        func_L00_00263D68_3091B0(&base, &base, 16.0f, ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f158,
+            ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f154);
+        base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
         if (pass_attempt_count > 0) {
             V_3091B0 *po = &origin_delta_or_spawn_vector;
             remaining_pass_attempts = pass_attempt_count;
@@ -302,9 +302,9 @@ void scatter_ground_particles(Moby *moby) {
                     par.z = -(h * frame_time);
                     par.w = 0.0f;
                 }
-                D_L08_00160260 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset_gp;
+                D_L08_00160260 = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset_gp;
                 ground_height = func_L00_002644E0_3091B0(&pt);
-                if (ground_height < ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp) {
+                if (ground_height < ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp) {
                     void *distance_selected_spawn_argument;
                     if (ground_height < D_L08_00160260) {
                         w = D_L08_00160260;
@@ -320,7 +320,7 @@ void scatter_ground_particles(Moby *moby) {
         }
         pass_attempt_count = (int)((float)pass_attempt_count * 1.4f);
         *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-        base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
+        base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
         if (pass_attempt_count > 0) {
             float negative_spread = -spread;
             remaining_pass_attempts = pass_attempt_count;
@@ -340,9 +340,9 @@ void scatter_ground_particles(Moby *moby) {
                 w = func_001F9FA8_3091B0(func_002140F8_3091B0(0.0f, 6.2831855f));
                 w = w * func_002140F8_3091B0(0.0f, 8.0f);
                 pt.y += w;
-                D_L08_00160260 = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset_gp;
+                D_L08_00160260 = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 - ground_particle_scatter_ground_height_floor_offset_gp;
                 ground_height = func_L00_002644E0_3091B0(&pt);
-                if (ground_height < ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp) {
+                if (ground_height < ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp) {
                     if (ground_height < D_L08_00160260) {
                         w = D_L08_00160260;
                     } else {
@@ -358,10 +358,10 @@ void scatter_ground_particles(Moby *moby) {
             int h;
             w = 30.0f;
             *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-            func_L00_00263D68_3091B0(&base, &base, w, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
-                ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
+            func_L00_00263D68_3091B0(&base, &base, w, ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f158,
+                ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f154);
             sign = pass_attempt_count >> 31;
-            base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
+            base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
             if (pass_attempt_count > 0) {
                 remaining_pass_attempts = pass_attempt_count;
                 do {
@@ -376,9 +376,9 @@ void scatter_ground_particles(Moby *moby) {
                 } while (--remaining_pass_attempts != 0);
             }
             *(u128_3091B0 *)&base = *(u128_3091B0 *)D_L08_00167640_3091B0;
-            func_L00_00263D68_3091B0(&base, &base, 4.0f, ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f158,
-                ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f154);
-            base.z = ((Cam_3091B0 *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
+            func_L00_00263D68_3091B0(&base, &base, 4.0f, ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f158,
+                ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f154);
+            base.z = ((Cam *)(D_L08_00167640_3091B0 - 0x140))->f148 + ground_particle_scatter_reference_height_offset_gp;
             h = (pass_attempt_count - sign) >> 1;
             if (h > 0) {
                         remaining_pass_attempts = h;
@@ -484,7 +484,7 @@ void update_ground_height_modulated_voice(char *moby) {
     do {
         build_look_at_matrix(point, radius, axis, angle);
         fast_vec_add(point, D_L08_001675C0, point);
-        if (func_L00_002644E0_3091B0(point) < ((Cam_3091B0 *)(D_L08_001675C0 - 0x140))->f148) fraction += 0.05f;
+        if (func_L00_002644E0_3091B0(point) < ((Cam *)(D_L08_001675C0 - 0x140))->f148) fraction += 0.05f;
         angle += 0.31415927f;
     } while (angle < 6.2831855f);
     if (smoothed_below_reference_ground_fraction_gp < fraction) {

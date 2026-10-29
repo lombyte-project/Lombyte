@@ -24,9 +24,9 @@ typedef struct {
     int b;
     int c;
     char pad[0x20];
-} T2C_23D688;
+} T2C;
 
-extern T2C_23D688 D_L01_0017C0A8[];
+extern T2C D_L01_0017C0A8[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float level_01_hero_animation_blend_curves[][25] __asm__("D_L01_0017C270");
@@ -1242,7 +1242,7 @@ int hero_set_state(int a, int b) {
         case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
-            T2C_23D688 *e;
+            T2C *e;
             int k;
             if (*(unsigned short *)(h + 0x40) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x40) = *(unsigned short *)(h + 0x40) + 1;
@@ -1317,7 +1317,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C_23D688 *e = &D_L01_0017C0A8[p->attack_record];
+            T2C *e = &D_L01_0017C0A8[p->attack_record];
             int k = e->b;
             int n;
             if (e->a == 1)
@@ -1630,7 +1630,7 @@ int handle_hero_gadget_button(void) {
     int frames;
     int window;
     struct Moby *moby;
-    T2C_23D688 *row;
+    T2C *row;
     struct HeldGadgetVars *vars;
 
     if (hero.item_use_locked != 0 && (hero.items[0].item_id != 8 || hero.unk308 != 1)) return 0;

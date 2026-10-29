@@ -21,10 +21,10 @@ typedef struct {
     int b;
     int c;
     char pad[0x20];
-} T2C_24D680;
+} T2C;
 
 extern char D_L05_0017C380_e[] __asm__("D_L05_0017C380");
-extern T2C_24D680 D_L05_0017C088[];
+extern T2C D_L05_0017C088[];
 extern char *moby_pool_4f60 __asm__("D_L05_0015FFD8");
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -1616,7 +1616,7 @@ int hero_set_state(int a, int b) {
         case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
-            T2C_24D680 *e;
+            T2C *e;
             int k;
             if (*(unsigned short *)(h + 0x40) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x40) = *(unsigned short *)(h + 0x40) + 1;
@@ -1691,7 +1691,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C_24D680 *e = &D_L05_0017C088[p->attack_record];
+            T2C *e = &D_L05_0017C088[p->attack_record];
             int k = e->b;
             int n;
             if (e->a == 1)

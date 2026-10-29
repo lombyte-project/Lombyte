@@ -22,7 +22,7 @@ typedef struct {
     f32 dist;        /* 0x20: distance from the hero at spawn */
     s32 unk24;       /* 0x24 */
     s32 unk28;       /* 0x28 */
-} ShotVars_307ba8;
+} ShotVars;
 
 extern OvlVec4 D_0013F3D0_307ba8 __asm__("D_0013F3D0");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
@@ -41,7 +41,7 @@ struct Moby *spawn_class_4ea_projectile(void *owner, OvlVec4 *pos, OvlVec4 *vel,
     OvlVec4 *pp = &position_copy;
     OvlVec4 *vp = &velocity_copy;
     struct Moby *spawned_moby;
-    ShotVars_307ba8 *projectile_vars;
+    ShotVars *projectile_vars;
     f32 spin_limit;
     s32 trail;
 
@@ -49,7 +49,7 @@ struct Moby *spawn_class_4ea_projectile(void *owner, OvlVec4 *pos, OvlVec4 *vel,
     velocity_copy.q = vel->q;
     spawned_moby = create_moby(0x4EA);
     if (spawned_moby != 0) {
-        projectile_vars = (ShotVars_307ba8 *)spawned_moby->pvars;
+        projectile_vars = (ShotVars *)spawned_moby->pvars;
         projectile_vars->owner = owner;
         spawned_moby->rot.x = 0.0f;
         spawned_moby->scale *= 4.0f;
@@ -87,7 +87,7 @@ typedef struct {
     s16 oclass;                    /* 0x1A */
     f32 radius;                    /* 0x1C */
     s32 unk20;
-} CollisionProbe_307d68;
+} CollisionProbe;
 
 extern OvlVec4 D_0013F3D0_307d68 __asm__("D_0013F3D0");
 extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
@@ -98,7 +98,7 @@ extern void FUN_001f9c48_307d68(void *, void *, f32) __asm__("FUN_001f9c48");
 extern s32 allocate_voice_307d68(s32, s32, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal_307d68(struct Moby *) __asm__("FUN_0020c828");
 extern s32 tick_countdown_16_307d68(s16 *) __asm__("FUN_001f9770");
-extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe_307d68 *) __asm__("FUN_001efa68");
+extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe *) __asm__("FUN_001efa68");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_L00_001ff660_307d68(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
@@ -120,11 +120,11 @@ void update_class_4ea_projectile(struct Moby *projectile_moby) __asm__("FUN_L09_
 void update_class_4ea_projectile(struct Moby *projectile_moby)
 {
     OvlVec4 old;
-    CollisionProbe_307d68 pr;
+    CollisionProbe pr;
     OvlVec4 push;
     OvlVec4 spark_scatter_vector;
-    ShotVars_307ba8 *projectile_vars = (ShotVars_307ba8 *)projectile_moby->pvars;
-    CollisionProbe_307d68 *probe;
+    ShotVars *projectile_vars = (ShotVars *)projectile_moby->pvars;
+    CollisionProbe *probe;
     f32 distance_to_hero;
     s32 i;
 
@@ -355,7 +355,7 @@ extern void *FUN_L00_00263fd8_30ab80(char *, int, void *, void *, int, int, floa
 typedef struct {
     char pad0[0xB0];
     char *slots[4];
-} SpawnerVars_30ab80;
+} SpawnerVars;
 
 extern char *spawner_target_region_records __asm__("D_L09_001600EC") __attribute__((sda));
 extern float D_L09_0015F580[] MACRO_ADDR;
@@ -494,7 +494,7 @@ void spawner_update(char *moby)
             fast_vec_add(spawn_position, spawn_position, offset);
             launch_velocity[2] = FUN_L00_0025abf0_30ab80(spawn_position, target, 0, speed, -(frame_time_sq_macro * 9.8f));
         }
-        ((SpawnerVars_30ab80 *)spawner_vars)->slots[last] =
+        ((SpawnerVars *)spawner_vars)->slots[last] =
             spawn_spawner_egg((int)moby, spawn_position, launch_velocity, (unsigned char)spawner_vars[0x93], (unsigned char)last);
         *(short *)(spawner_vars + 0x8E) = scale_game_frames(*(short *)(spawner_vars + 0x8C));
         spawner_vars[0x91] = (char)(spawner_vars[0x91] + 1);

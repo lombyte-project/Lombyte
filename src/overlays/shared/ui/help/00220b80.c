@@ -204,7 +204,7 @@ void integrate_hero_movement(void)
 typedef union {
     u128 q;
     f32 f[4];
-} HopVec_223450;
+} HopVec;
 
 extern s32 FUN_001f96f8_223450(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9dc8_223450(float) __asm__("FUN_001f9dc8");
@@ -233,7 +233,7 @@ extern void FUN_L01_00234358_223450(f32) __asm__("FUN_L01_00234358");
 extern f32 hero_low_speed_threshold_basis[] __asm__("D_L02_0017C3D0");
 void hero_update_hop_velocity(void) __asm__("FUN_L02_00223450");
 void hero_update_hop_velocity(void) {
-    HopVec_223450 velocity_addend;
+    HopVec velocity_addend;
     f32 x;
     f32 speed;
     f32 a;

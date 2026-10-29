@@ -1642,7 +1642,7 @@ struct GuideVars {
 typedef struct {
     u8 pad0[0x14C];
     s32 unk14C;
-} GameFlags_db558;
+} GameFlags;
 
 extern u8 D_0013D4C2[];
 extern char *D_001413D0_db558[] __asm__("D_001413D0");
@@ -1667,7 +1667,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
-extern GameFlags_db558 race_gates __asm__("D_0013D5B0");
+extern GameFlags race_gates __asm__("D_0013D5B0");
 /* Kerwan guide: talks when approached (turning round to face the hero first),
    releases its reward moby once the item is owned, can warp the hero, and turns
    its head toward the hero or random points while idle. */

@@ -413,18 +413,18 @@ void spawn_spark_scatter(void *spark_scatter_origin) {
 
 typedef struct Moby Moby;
 
-typedef struct AnklebiterData_2E2EF0 AnklebiterData_2E2EF0;
+typedef struct AnklebiterData AnklebiterData;
 
-typedef struct AnklebiterMoby_2E2EF0 {
+typedef struct AnklebiterMoby {
     char p0[0x10]; float pos[4]; unsigned char state, group; char p22[2]; char *model;
     char p28[9]; unsigned char enabled; unsigned short joints, flags; char p36[0xA];
     float rot[4]; char p50[2]; unsigned char anim_end, anim; float anim_time, anim_rate;
-    char p5C[0x14]; unsigned char anim_flags; char p71[7]; AnklebiterData_2E2EF0 *data;
+    char p5C[0x14]; unsigned char anim_flags; char p71[7]; AnklebiterData *data;
     char p7C[3]; unsigned char active; char p80[0x14]; int collision;
     char p98[0x24]; unsigned char proximity;
-} AnklebiterMoby_2E2EF0;
+} AnklebiterMoby;
 
-struct AnklebiterData_2E2EF0 {
+struct AnklebiterData {
     char p0[0x20]; float health; char p24[5]; unsigned char mode; char p2A[0x2E];
     unsigned char blend; char p59; unsigned char count; char p5B[0x6D]; short stuck; char pCA[6]; void *tuning;
     char pD4[0x4C]; float fall[4], gravity, zero, launch_speed, launch_time; int fall_flags, fall_mode; float damping;
@@ -437,7 +437,7 @@ struct AnklebiterData_2E2EF0 {
     int path, blocked, return_timer, group_enabled; int *group_count; int group_check;
 };
 
-typedef struct TargetReport54_2E2EF0 { float v0[4], v10[4], v20[4], v30[4]; AnklebiterMoby_2E2EF0 *moby; int mode; char pad48[8]; } TargetReport54_2E2EF0;
+typedef struct TargetReport54 { float v0[4], v10[4], v20[4], v30[4]; AnklebiterMoby *moby; int mode; char pad48[8]; } TargetReport54;
 
 typedef struct {
     char pad0[0x248];
@@ -552,9 +552,9 @@ extern void func_0020D678_2E2EF0(void *) __asm__("FUN_0020c828");
 extern void func_L00_00263950_2E2EF0(char *,char *,int,float,float) __asm__("FUN_L00_002628d8");
 extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
 
-void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) __asm__("FUN_L12_002e1be0");
+void update_hoven_anklebiter(AnklebiterMoby *moby) __asm__("FUN_L12_002e1be0");
 
-void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) {
+void update_hoven_anklebiter(AnklebiterMoby *moby) {
     enum {
         ANKLEBITER_INITIALIZE = 0,
         ANKLEBITER_IDLE = 1,
@@ -573,18 +573,18 @@ void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) {
         ANKLEBITER_DEATH_EFFECTS_AND_REMOVE = 15,
         ANKLEBITER_DEATH_FALL = 99
     };
-    TargetReport54_2E2EF0 work;
-    AnklebiterMoby_2E2EF0 *iterator;
+    TargetReport54 work;
+    AnklebiterMoby *iterator;
     float trajectory;
-    AnklebiterData_2E2EF0 *data = moby->data;
-    AnklebiterMoby_2E2EF0 *target;
+    AnklebiterData *data = moby->data;
+    AnklebiterMoby *target;
     float angle;
     int count, first, blocked, hit;
     func_L12_002E4838_2E2EF0(moby);
     func_L00_00264BB0_2E2EF0(data->collision_data,2.2f);
     FUN_L01_00274b78_c((char *)moby,(char *)&work,data->range);
     target=work.moby;
-    if (!target) target=*(AnklebiterMoby_2E2EF0 **)D_0013E633_2E2EF0;
+    if (!target) target=*(AnklebiterMoby **)D_0013E633_2E2EF0;
     if (moby->pos[2]<26.0f) { func_0020D678_2E2EF0(moby); return; }
     switch(moby->state) {
     case ANKLEBITER_INITIALIZE:
@@ -739,7 +739,7 @@ void update_hoven_anklebiter(AnklebiterMoby_2E2EF0 *moby) {
         break;
     }
     case ANKLEBITER_MELEE_ATTACK:
-        (*(AnklebiterMoby_2E2EF0 **)D_0013E633_2E2EF0)->anim_rate=1.3f;
+        (*(AnklebiterMoby **)D_0013E633_2E2EF0)->anim_rate=1.3f;
         angle=func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]);
         func_L00_002592B0_2E2EF0((char *)moby,&data->turn_velocity,angle,0.05f,0.3f,0.2f);
         if(moby->anim_end==moby->anim && func_00215B18_2E2EF0((char *)moby,13.0f) && func_001F9B88_2E2EF0(moby->pos[2]-target->pos[2])<0.5f && func_001F9D48_2E2EF0(moby->pos,target->pos)<2.0f && func_001FA850_2E2EF0(func_L00_001FF860_2E2EF0(target->pos[0]-moby->pos[0],target->pos[1]-moby->pos[1]),moby->rot[2])<0.2617994f) {
@@ -985,12 +985,12 @@ typedef struct {
     u8 pad2C8[0x20];
     s16 call_enabled;    /* 0x2E8 */
     s16 call_timer;      /* 0x2EA */
-} AnklebiterVars_e3528;
+} AnklebiterVars;
 
 typedef struct {
     u8 pad0[0x10];
     Vec4 pos;
-} AnklebiterHit_e3528;
+} AnklebiterHit;
 
 extern f32 D_0015ED6C_e3528 __asm__("D_0015ED6C");
 extern s32 D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
@@ -1000,8 +1000,8 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern void alert_group_e3528(s32, s32) __asm__("FUN_L01_0026e090");
 extern void call_for_help_e3528(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
-extern AnklebiterHit_e3528 *find_hit_e3528(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern void take_damage_e3528(struct Moby *, AnklebiterHit_e3528 *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern AnklebiterHit *find_hit_e3528(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void take_damage_e3528(struct Moby *, AnklebiterHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void start_fall_e3528(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void anim_reset_e3528(struct Moby *, void *) __asm__("FUN_L00_0025d458");
@@ -1014,13 +1014,13 @@ extern void FUN_L12_002e3098(struct Moby *);
 void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) __asm__("FUN_L12_002e3528");
 
 void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
-    AnklebiterVars_e3528 *vars = (AnklebiterVars_e3528 *)moby->pvars;
+    AnklebiterVars *vars = (AnklebiterVars *)moby->pvars;
     Vec4 help_direction_or_hit_position;
     s32 hit;
     f32 dmg;
     f32 angle;
     f32 unused;
-    AnklebiterHit_e3528 *coll;
+    AnklebiterHit *coll;
 
     if (vars->reset_alert != 0) {
         vars->reset_alert = 0;
@@ -1209,13 +1209,13 @@ void compute_platform_target_tilt(struct Moby *moby, float *out, int on) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E51E8), where it is exact; names translated to the US level program. */
 
 
-typedef struct { float x, y, z, w; } Node_2E51E8;
+typedef struct { float x, y, z, w; } Node;
 
 typedef struct {
     int n;
     int pad4[3];
-    Node_2E51E8 nodes[1];
-} Path_2E51E8;
+    Node nodes[1];
+} Path;
 
 typedef struct {
     char pad0[0x10];
@@ -1226,9 +1226,9 @@ typedef struct {
     int idx;
     signed char dir;
     char pad5[0xB];
-    Path_2E51E8 *path;
+    Path *path;
     int pathIdx;
-} Walk_2E51E8;
+} Walk;
 
 typedef struct {
     char pad0[0x3E];
@@ -1236,7 +1236,7 @@ typedef struct {
     float vel[4];
     char pad50[0x10];
     char f60[0x40];
-    Walk_2E51E8 walk;
+    Walk walk;
     char padB8[0x18];
     float fD0;
     float fD4;
@@ -1273,7 +1273,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L12_002e3948_c(struct Moby *moby) __asm__("FUN_L12_002e3948");
 void FUN_L12_002e3c08_c(char *m, float *ang, void *target, int unused, int brake) __asm__("FUN_L12_002e3c08");
 void FUN_L12_002e3e28_c(struct Moby *moby, float *out, int on) __asm__("FUN_L12_002e3e28");
-extern Path_2E51E8 *D_L12_001B0C30_2E51E8[] __asm__("D_L12_001B0930");
+extern Path *D_L12_001B0C30_2E51E8[] __asm__("D_L12_001B0930");
 extern void func_L12_002E4F18_2E51E8(void *, void *, void *, int, int) __asm__("FUN_L12_002e3c08");
 
 void platform_update(Moby *moby) __asm__("FUN_L12_002e3ed8");
@@ -1367,8 +1367,8 @@ void platform_update(Moby *moby) {
         }
         break;
     case PLATFORM_FOLLOW_WAYPOINTS: {
-        Walk_2E51E8 *w = &data->walk;
-        Path_2E51E8 *path;
+        Walk *w = &data->walk;
+        Path *path;
         int next;
         FUN_L12_002e3948_c((char *)moby);
         path = w->path;
@@ -1392,7 +1392,7 @@ void platform_update(Moby *moby) {
         break;
     }
     case PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS: {
-        Path_2E51E8 *path = data->walk.path;
+        Path *path = data->walk.path;
         float swing;
         data->fD4 = 0.0f;
         data->fD8 = fast_add_rotations(data->fD8, D_0015ED6C * 1.2217305f);
@@ -1417,7 +1417,7 @@ void platform_update(Moby *moby) {
         break;
     }
     case PLATFORM_OSCILLATE_BETWEEN_PATH_ENDPOINTS_FIXED_PITCH: {
-        Path_2E51E8 *path = data->walk.path;
+        Path *path = data->walk.path;
         float swing;
         data->fD8 = fast_add_rotations(data->fD8, D_0015ED6C * 1.2217305f);
         swing = fast_sin(data->fD8);
@@ -1828,7 +1828,7 @@ void blarg_trooper_update(struct Moby *moby) {
         BLARG_TROOPER_RETURN_HOME = 8,
         BLARG_TROOPER_DEATH_FALL = 9
     };
-    TargetReport54_2E2EF0 work;
+    TargetReport54 work;
     Vec4 query_position_or_projectile_origin;
     Vec4 delta;
     char *data = (char *)moby->pvars;
@@ -2136,13 +2136,13 @@ typedef struct {
     s32 call_timer;      /* 0x288 */
     f32 alert_speed;     /* 0x28C */
     s32 volume;          /* 0x290: clip volume that hands the trooper to FUN_L12_002e86d0 (-1: none) */
-} BlargTrooperVars_e81e0;
+} BlargTrooperVars;
 
 typedef struct {
     u8 pad0[0x10];
     Vec4 pos;
     struct Moby *moby;   /* 0x20 */
-} BlargTrooperHit_e81e0;
+} BlargTrooperHit;
 
 extern s32 D_001413D0_e81e0 __asm__("D_001413D0") NOT_SDA;
 extern f32 D_0015ED6C_e81e0 __asm__("D_0015ED6C");
@@ -2154,8 +2154,8 @@ extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008")
 extern void alert_group_e81e0(s32, s32) __asm__("FUN_L01_0026e090");
 extern void call_for_help_e81e0(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
-extern BlargTrooperHit_e81e0 *find_hit_e81e0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern void take_damage_e81e0(struct Moby *, BlargTrooperHit_e81e0 *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern BlargTrooperHit *find_hit_e81e0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
+extern void take_damage_e81e0(struct Moby *, BlargTrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void start_fall_e81e0(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void anim_reset_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d458");
@@ -2167,13 +2167,13 @@ extern void remove_blarg_trooper_and_attachment(struct Moby *) __asm__("FUN_L12_
    more members, hands off inside its clip volume, and takes hits from other
    classes (dying, or staggering back). */
 void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
-    BlargTrooperVars_e81e0 *vars = (BlargTrooperVars_e81e0 *)moby->pvars;
+    BlargTrooperVars *vars = (BlargTrooperVars *)moby->pvars;
     Vec4 help_direction_or_hit_position;
     s32 hit;
     f32 dmg;
     f32 angle;
     f32 unused;
-    BlargTrooperHit_e81e0 *coll;
+    BlargTrooperHit *coll;
 
     if (vars->reset_alert != 0) {
         vars->reset_alert = 0;
@@ -2422,8 +2422,8 @@ extern unsigned char D_001413F4 NOT_SDA;
 extern int D_L12_00161F00 MACRO_ADDR;
 extern int D_L12_00161F20 MACRO_ADDR;
 extern int D_L12_001619A0 __attribute__((sda));
-typedef struct { char pad[0x25c]; struct Moby *moby; int count; } Tracking_e9f68;
-extern Tracking_e9f68 D_L12_00167100;
+typedef struct { char pad[0x25c]; struct Moby *moby; int count; } Tracking;
+extern Tracking D_L12_00167100;
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/audio/voice_pool.h"
 extern unsigned char D_0013E550[];

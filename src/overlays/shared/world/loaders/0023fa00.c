@@ -9,25 +9,25 @@
 #include "sda.h"
 
 /* Offsets of the bank's four packed images, from the bank start. */
-typedef struct ImageBank_23fa00 {
+typedef struct ImageBank {
     s32 sky_offset;    /* 0x00 */
     s32 first_offset;  /* 0x04 */
     s32 second_offset; /* 0x08 */
     s32 last_offset;   /* 0x0C */
-} ImageBank_23fa00;
+} ImageBank;
 /* One 16-byte texture record of the level's texture table. */
-typedef struct TexRecord_23fa00 {
+typedef struct TexRecord {
     s16 h[8];
-} TexRecord_23fa00;
-typedef struct TexEntry_23fa00 {
+} TexRecord;
+typedef struct TexEntry {
     s32 w[4];
-} TexEntry_23fa00;
+} TexEntry;
 extern u8 *level_archive_base __asm__("D_0015EE54") MACRO_ADDR;
 extern s32 depth_buffer_address[2] __asm__("D_0015EE88") MACRO_ADDR;
-extern TexEntry_23fa00 texture_table_23fa00[] __asm__("D_L00_001AEBC0");
+extern TexEntry texture_table_23fa00[] __asm__("D_L00_001AEBC0");
 /* $gp scalar aliases: retail takes the records' addresses through $gp. */
-#define first_record_23fa00 ((TexRecord_23fa00 *)&first_record)
-#define second_record_23fa00 ((TexRecord_23fa00 *)&second_record)
+#define first_record_23fa00 ((TexRecord *)&first_record)
+#define second_record_23fa00 ((TexRecord *)&second_record)
 extern u32 texture_addresses_23fa00[] __asm__("D_L00_00199A80");
 extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 extern s32 sceGsSetDefLoadImage_23fa00(void *, s16, s16, s16, s16, s16, s16, s16) __asm__("FUN_00122330");
@@ -38,8 +38,8 @@ extern void register_moby_class(void *, void *, void *, s32) __asm__("FUN_002036
 
 extern s32 first_record __asm__("D_L00_0015FC00") __attribute__((sda));
 extern s32 second_record __asm__("D_L00_0015FC10") __attribute__((sda));
-extern TexRecord_23fa00 first_record_fields __asm__("D_L00_0015FC0A") MACRO_ADDR;
-extern TexRecord_23fa00 second_record_fields __asm__("D_L00_0015FC1A") MACRO_ADDR;
+extern TexRecord first_record_fields __asm__("D_L00_0015FC0A") MACRO_ADDR;
+extern TexRecord second_record_fields __asm__("D_L00_0015FC1A") MACRO_ADDR;
 extern u8 record_index __asm__("D_L00_0015FC20") __attribute__((sda));
 extern s32 second_class_ids[] __asm__("D_L00_00160558");
 extern s32 D_L00_00160568 MACRO_ADDR;
@@ -64,11 +64,11 @@ char *load_level_texture_bank(char *bank, s32 *header) {
     s32 next_index;
     fast_mem_copy(bank, level_archive_base,
                                   disc_table.level_archives[level_render_state.content_variant + 1].size << 11);
-    sky_offset = ((ImageBank_23fa00 *)bank)->sky_offset;
-    first_offset = ((ImageBank_23fa00 *)bank)->first_offset;
+    sky_offset = ((ImageBank *)bank)->sky_offset;
+    first_offset = ((ImageBank *)bank)->first_offset;
     first = bank + first_offset;
-    second_offset = ((ImageBank_23fa00 *)bank)->second_offset;
-    last_offset = ((ImageBank_23fa00 *)bank)->last_offset;
+    second_offset = ((ImageBank *)bank)->second_offset;
+    last_offset = ((ImageBank *)bank)->last_offset;
     do {
         if (i == 0) {
             sceGsSetDefLoadImage_23fa00(image, (depth_buffer_address[1] + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);

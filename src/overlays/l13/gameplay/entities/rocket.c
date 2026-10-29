@@ -766,7 +766,7 @@ typedef struct {
     u8 valid;
     s16 oclass;
     u8 pad1C[0x14];
-} Shot_309330;
+} Shot;
 
 typedef struct {
     s32 unk0;
@@ -776,7 +776,7 @@ typedef struct {
     u8 pad10[0x14];
     f32 unk24;
     u8 pad28[0x18];
-} Ctl_309330;
+} Ctl;
 
 typedef struct {
     u8 pad0[0x20];
@@ -793,7 +793,7 @@ typedef struct {
     u8 pad5B[5];
     Vec4 vel; /* 0x60 */
     u8 pad70[0x50];
-    Ctl_309330 ctl; /* 0xC0 */
+    Ctl ctl; /* 0xC0 */
     u8 pad100[0x60];
     struct Moby *target; /* 0x160 */
     s32 unk164;
@@ -827,7 +827,7 @@ extern s32 rand(void);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, float d, float max);
-extern void FUN_L00_00259d08(void *, void *, void *, void *, struct Moby *, Shot_309330 *, int);
+extern void FUN_L00_00259d08(void *, void *, void *, void *, struct Moby *, Shot *, int);
 extern void FUN_L00_0025a120(void *);
 extern void approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -866,7 +866,7 @@ void blarg_space_commando_update(struct Moby *moby) {
     Vec4 point;
     Vec4 origin;
     Vec4 direction;
-    Shot_309330 shot;
+    Shot shot;
     s32 blocked;
     s32 path_blocked;
     s32 hit;

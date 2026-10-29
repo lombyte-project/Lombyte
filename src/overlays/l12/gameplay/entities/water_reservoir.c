@@ -229,7 +229,7 @@ typedef struct {
     int timer;
     float unk18;
     float yaw;
-} ShotVars_ece00;
+} ShotVars;
 
 typedef struct {
     float dir[4];
@@ -239,10 +239,10 @@ typedef struct {
     short oclass;
     int pad1C;
     int pad20[4];
-} ShotHit_ece00;
+} ShotHit;
 
-typedef struct { char pad0[0x18]; int moby; } ShotColl_ece00;
-extern ShotColl_ece00 D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
+typedef struct { char pad0[0x18]; int moby; } ShotColl;
+extern ShotColl D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
 extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern char *FUN_L00_0025a420_ece00(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
@@ -269,12 +269,12 @@ void rocket_update(struct Moby *moby) {
         ROCKET_STATE_FLYING = 1,
         ROCKET_STATE_DETONATE = 2
     };
-    ShotVars_ece00 *vars = (ShotVars_ece00 *)moby->pvars;
+    ShotVars *vars = (ShotVars *)moby->pvars;
     float old_pos[4];
     float side[4];
     float back[4];
     float trail[4];
-    ShotHit_ece00 hit;
+    ShotHit hit;
     switch (moby->state) {
     case ROCKET_STATE_FLYING: {
         char *touch = FUN_L00_0025a420_ece00(moby, 0x230000, 0);

@@ -11,7 +11,7 @@ typedef struct {
     float b[4];
     int c[4];
     float d[4];
-} L10SpriteData_298940;
+} L10SpriteData;
 extern void func_001F9BF0_298940(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_001FF4B0_298940(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_298940(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -26,7 +26,7 @@ extern int func_001FA898_298940(float) __asm__("FUN_001fa6d0");
 void emit_moby_sprite_particles(char *moby) __asm__("FUN_L10_00298940");
 
 void emit_moby_sprite_particles(char *moby) {
-    L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(moby + 0x78);
+    L10SpriteData *sprite_data = *(L10SpriteData **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
     float particle_position_step[4] __attribute__((aligned(16)));
     int i, col;
@@ -110,14 +110,14 @@ typedef struct {
     int passed;
     int warned;
     float dist;
-} Shot_cc2e8;
+} Shot;
 
 typedef struct {
     char pad00[0x40];
     float rx;
     float ry;
     float rz;
-} Rot_cc2e8;
+} Rot;
 
 extern unsigned char D_0013F350_cc2e8[] __asm__("D_0013F350");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -147,7 +147,7 @@ void rocket_update(char *rocket) {
         ROCKET_STATE_FLYING = 1,
         ROCKET_STATE_BURST = 2
     };
-    Shot_cc2e8 *shot_data = *(Shot_cc2e8 **)(rocket + 0x78);
+    Shot *shot_data = *(Shot **)(rocket + 0x78);
     float previous_rocket_position[4] __attribute__((aligned(16)));
     float spark_zero_vector[4] __attribute__((aligned(16)));
     float target_displacement_or_damage_vector[4] __attribute__((aligned(16)));
@@ -205,14 +205,14 @@ void rocket_update(char *rocket) {
                 yaw = fast_arc_tan(target_displacement_or_damage_vector[0], target_displacement_or_damage_vector[1]);
                 pitch = -fast_arc_tan(vector_length_xy(target_displacement_or_damage_vector), target_displacement_or_damage_vector[2]);
             }
-            ((Rot_cc2e8 *)rocket)->rz = spring_turn(((Rot_cc2e8 *)rocket)->rz, yaw, frame_time_sq * 6.2831855f,
+            ((Rot *)rocket)->rz = spring_turn(((Rot *)rocket)->rz, yaw, frame_time_sq * 6.2831855f,
                                               frame_time_sq * 3.1415927f, frame_time * 6.2831855f,
                                               &shot_data->yawSpeed);
-            ((Rot_cc2e8 *)rocket)->ry = spring_turn(((Rot_cc2e8 *)rocket)->ry, pitch, frame_time_sq * 6.2831855f,
+            ((Rot *)rocket)->ry = spring_turn(((Rot *)rocket)->ry, pitch, frame_time_sq * 6.2831855f,
                                               frame_time_sq * 3.1415927f, frame_time * 6.2831855f,
                                               &shot_data->pitchSpeed);
-            ((Rot_cc2e8 *)rocket)->rx = fast_add_rotations(((Rot_cc2e8 *)rocket)->rx, frame_time * 6.2831855f);
-            build_spherical_offset(speed, ((Rot_cc2e8 *)rocket)->rz, -((Rot_cc2e8 *)rocket)->ry, shot_data);
+            ((Rot *)rocket)->rx = fast_add_rotations(((Rot *)rocket)->rx, frame_time * 6.2831855f);
+            build_spherical_offset(speed, ((Rot *)rocket)->rz, -((Rot *)rocket)->ry, shot_data);
         }
         clear_u64_value(spark_zero_vector);
         spawn_effect(rocket_position, spark_zero_vector, 0x6F00AFFF, 0xFF, scale_game_frames(random_int_between(15, 22)), 0x28,

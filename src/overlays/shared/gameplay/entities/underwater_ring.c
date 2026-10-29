@@ -23,7 +23,7 @@ typedef struct {
     s16 restart_timer;
     s16 pad26;
     s32 enabled;
-} VendorVars_2e5958;
+} VendorVars;
 
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -42,7 +42,7 @@ extern s32 D_L15_001BAAD0[];
 
 void underwater_ring_update(struct Moby *moby) __asm__("FUN_L15_002e5958");
 void underwater_ring_update(struct Moby *moby) {
-    VendorVars_2e5958 *vars = (VendorVars_2e5958 *)moby->pvars;
+    VendorVars *vars = (VendorVars *)moby->pvars;
     u8 delta[16];
     u8 matrix[64];
     struct Moby *child;
@@ -71,7 +71,7 @@ void underwater_ring_update(struct Moby *moby) {
             get_first_moby_in_group(&child, moby->group, 0, 0);
             while (child != 0) {
                 if (child != moby && child->oclass == 0x4b9) {
-                    VendorVars_2e5958 *other = (VendorVars_2e5958 *)child->pvars;
+                    VendorVars *other = (VendorVars *)child->pvars;
                     other->parent = moby;
                     other->initialized = 1;
                     other->distance = vars->distance;
@@ -104,7 +104,7 @@ void underwater_ring_update(struct Moby *moby) {
         }
         if (vars->triggered == 0 && near_parent) {
             struct Moby *parent = vars->parent;
-            VendorVars_2e5958 *parent_vars = (VendorVars_2e5958 *)parent->pvars;
+            VendorVars *parent_vars = (VendorVars *)parent->pvars;
             if (parent->state == 1) {
                 vars->child_count = 0;
                 parent->state = 2;

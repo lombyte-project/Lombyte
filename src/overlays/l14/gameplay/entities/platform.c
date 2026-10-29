@@ -20,7 +20,7 @@ typedef struct {
     float v[4];
     int i;
     float t;
-} PathPos_2D7668;
+} PathPos;
 
 extern int *D_L14_001B0BB0[];
 extern int D_L14_0015F70C;
@@ -33,7 +33,7 @@ void initialize_racer_path_tracking(struct Moby *racer_moby) {
     char *moby_data = (char *)racer_moby->pvars;
     char *path = *(char **)(D_L14_0015F70C + *(int *)(moby_data + 0x60) * 32 + 0x10);
     char *tg;
-    PathPos_2D7668 nearest_path_position;
+    PathPos nearest_path_position;
     int k;
     float z;
     unsigned short second_point_segment;
@@ -438,7 +438,7 @@ typedef struct {
     u32 col[4];
     float uv[8];
     unsigned long a, b, c, d;
-} Pk_2d71f0;
+} Pk;
 
 float D_L14_001DE540[4][4] = {
     {0.0f, -1.0f, 1.0f, 1.0f},
@@ -455,7 +455,7 @@ void draw_racer_glow_quads(struct Moby *m) __asm__("FUN_L14_002d71f0");
 
 void draw_racer_glow_quads(struct Moby *m) {
     char *d = (char *)m->pvars;
-    Pk_2d71f0 pk;
+    Pk pk;
     float glow_quad_transform[4][4];
     int i;
     int j;

@@ -1364,7 +1364,7 @@ typedef struct {
     unsigned char b1D;         /* 0x1D */
     short h1E;                 /* 0x1E */
     char rest[0x1170];
-} Rec_30D8E8;
+} Rec;
 
 typedef struct {
     float f0;                  /* 0x00 */
@@ -1384,13 +1384,13 @@ typedef struct {
     float f38;
     unsigned char b3C;         /* 0x3C */
     unsigned char b3D;
-} Cab_30D8E8;
+} Cab;
 
 typedef struct {
     char pad0[0x10];
     float f10;
     float f14;
-} Dir_30D8E8;
+} Dir;
 
 typedef struct {
     float hi;                  /* 0x00 */
@@ -1401,7 +1401,7 @@ typedef struct {
     int idx;                   /* 0x14 */
     int timer;                 /* 0x18 */
     int f1C;                   /* 0x1C */
-} Data_30D8E8;
+} Data;
 
 typedef struct {
     char pad0[0x10];
@@ -1411,16 +1411,16 @@ typedef struct {
     char pad22[0x12];
     unsigned short flags;      /* 0x34 */
     char pad36[0x42];
-    Data_30D8E8 *data;         /* 0x78 */
+    Data *data;         /* 0x78 */
     char pad7C[0x18];
     int f94;                   /* 0x94 */
     char pad98[0x24];
     unsigned char sub;         /* 0xBC */
 } Moby_30D8E8;
 
-extern Cab_30D8E8 l07_water_grid_parameters __asm__("D_L07_001CA900");
-extern Dir_30D8E8 l07_water_direction_source __asm__("D_L07_0017FF40");
-extern Rec_30D8E8 *D_L07_001612D0;
+extern Cab l07_water_grid_parameters __asm__("D_L07_001CA900");
+extern Dir l07_water_direction_source __asm__("D_L07_0017FF40");
+extern Rec *D_L07_001612D0;
 extern char D_0013D4EC[];
 extern float D_0015ED6C;
 extern char D_0013D4C0[];
@@ -1455,7 +1455,7 @@ void pool_flush(char *p, int n) __asm__("FUN_L01_002b7fe0");
 void pool_ripple(void *a, int b) __asm__("FUN_L01_002b8288");
 void render_level07_water_grids(void) __asm__("FUN_L07_0030cd20");
 void initialize_level07_water_grid_neighbors(int arg) __asm__("FUN_L07_0030cd48");
-extern Rec_30D8E8 D_L07_001DCE40_2cd2b0[] __asm__("D_L07_001DCE40");
+extern Rec D_L07_001DCE40_2cd2b0[] __asm__("D_L07_001DCE40");
 extern void FUN_L01_002b7a48_2cd2b0(void *, int) __asm__("FUN_L01_002b7a48");
 extern void FUN_L01_002b7ef0_2cd2b0(float) __asm__("FUN_L01_002b7ef0");
 extern void FUN_L01_002b7c68_2cd2b0(void *, void *) __asm__("FUN_L01_002b7c68");
@@ -1483,7 +1483,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         WATER_RISE_TO_HEIGHT_54 = 6,
         WATER_REMOVE_ABOVE_HIGH_HEIGHT = 7
     };
-    Data_30D8E8 *water_data = water_moby->data;
+    Data *water_data = water_moby->data;
     int i;
     int j;
     int k;
@@ -1502,8 +1502,8 @@ void water_update(Moby_30D8E8 *water_moby) {
     case WATER_INITIALIZE:
         water_moby->flags |= 0x81;
         if (water_data->idx == 0) {
-            Cab_30D8E8 *cab;
-            Dir_30D8E8 *water_direction_source;
+            Cab *cab;
+            Dir *water_direction_source;
             int (*p)[4];
             FUN_L01_002b7a48_2cd2b0(D_L07_001DCE40_2cd2b0, 0x24);
             FUN_L01_002b7ef0_2cd2b0(1.0f);
@@ -1538,8 +1538,8 @@ void water_update(Moby_30D8E8 *water_moby) {
                 D_L07_001DCE40_2cd2b0[water_data->idx].h1E = l07_water_grid_saved_control_values[water_data->idx];
             }
             for (k = 0; k < 0x24; k++) {
-                Rec_30D8E8 *water_records = D_L07_001DCE40_2cd2b0;
-                Rec_30D8E8 *r = &water_records[k];
+                Rec *water_records = D_L07_001DCE40_2cd2b0;
+                Rec *r = &water_records[k];
                 for (j = 0; j < 2; j++) {
                     float x = r->x + random_float_between(-6.0f, 6.0f);
                     float y = r->y + random_float_between(-6.0f, 6.0f);
@@ -1574,7 +1574,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         if (random_integer_below(200) == 0) {
             float x = D_L07_001DCE40_2cd2b0[water_data->idx].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
-            Rec_30D8E8 *r = &D_L07_001DCE40_2cd2b0[water_data->idx];
+            Rec *r = &D_L07_001DCE40_2cd2b0[water_data->idx];
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
@@ -1590,7 +1590,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         if (random_integer_below(200) == 0) {
             float x = D_L07_001DCE40_2cd2b0[water_data->idx].x + random_float_between(-4.0f, 4.0f);
             float y = random_float_between(-4.0f, 4.0f);
-            Rec_30D8E8 *r = &D_L07_001DCE40_2cd2b0[water_data->idx];
+            Rec *r = &D_L07_001DCE40_2cd2b0[water_data->idx];
             FUN_L00_002a3ec8_2cd2b0(r, 1, 1, x, r->y + y, 1.0f, -0.05f);
         }
         break;
@@ -1630,7 +1630,7 @@ void water_update(Moby_30D8E8 *water_moby) {
         return;
     }
     {
-        Cab_30D8E8 *cab = &l07_water_grid_parameters;
+        Cab *cab = &l07_water_grid_parameters;
         D_L07_001DCE40_2cd2b0[water_data->idx].b1C = cab->b3C;
         D_L07_001DCE40_2cd2b0[water_data->idx].b1D = cab->b3D;
     }
@@ -2698,7 +2698,7 @@ struct WalkerTarget {
     int kind;
 };
 
-extern Rec_30D8E8 * D_L07_001612D0;
+extern Rec * D_L07_001612D0;
 extern char D_0013E533[];
 extern char D_L07_002117F8[];
 extern char sharkigator_unexpected_init_message[] __asm__("D_L07_00211838");
@@ -3623,14 +3623,14 @@ typedef union {
     float f[4];
 } Vec4_30CA88;
 
-typedef struct EffData_313800 {
+typedef struct EffData {
     char pad0[0x140];
     float f140[4];
     float f150[3];
     float f15C;
-} EffData_313800;
+} EffData;
 
-typedef struct Packet_313800 {
+typedef struct Packet {
     float a[4];
     float b[4];
     float c[4];
@@ -3641,7 +3641,7 @@ typedef struct Packet_313800 {
     long x128;
     long x130;
     long x138;
-} Packet_313800;
+} Packet;
 
 extern int D_L07_0015F5CC_lui __asm__("D_L07_0015F5CC");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -3669,9 +3669,9 @@ void draw_collision_clipped_moby_beam(struct Moby *effect_owner_moby)
     float line_endpoint[4], endpoint_work_vector[4], quad_side_offset[4], attachment_position[4], endpoint_to_attachment[4], oscillating_reference_position[4], effect_sample_position[4], effect_sample_step[4], sample_probe_offset[4], ii[4], jj[4];
     float frame_phase_work_value, oscillation_work_value;
     int flag = 1;
-    EffData_313800 *moby_effect_data = ((EffData_313800 *)effect_owner_moby->pvars);
+    EffData *moby_effect_data = ((EffData *)effect_owner_moby->pvars);
     int k;
-    Packet_313800 pkt;
+    Packet pkt;
 
     frame_phase_work_value = FUN_001fa6c0_2cd2b0(D_L07_0015F5CC_lui);
     qcopy(oscillating_reference_position, moby_effect_data->f140);

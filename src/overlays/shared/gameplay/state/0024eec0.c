@@ -129,22 +129,22 @@ Slot *allocate_moby_animation_slot(char *owner, int id) {
 /* FUN_L00_0024f0e8: unlinks *slot from its owner's singly linked list
  * (head at owner+0x60, link at node+0x1C), frees the 0x40-byte node and
  * clears *slot. */
-typedef struct ListNode_24f0e8 ListNode_24f0e8;
-struct ListNode_24f0e8 {
+typedef struct ListNode ListNode;
+struct ListNode {
     u8 pad0[0x1C];
-    ListNode_24f0e8 *next; /* 0x1C */
+    ListNode *next; /* 0x1C */
 };
 typedef struct {
     u8 pad0[0x60];
-    ListNode_24f0e8 *head; /* 0x60 */
-} ListOwner_24f0e8;
+    ListNode *head; /* 0x60 */
+} ListOwner;
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 
-void release_moby_animation_slot(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) __asm__("FUN_L00_0024f0e8");
+void release_moby_animation_slot(ListOwner *owner, ListNode **slot) __asm__("FUN_L00_0024f0e8");
 
-void release_moby_animation_slot(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot) {
-    ListNode_24f0e8 *list_cursor;
+void release_moby_animation_slot(ListOwner *owner, ListNode **slot) {
+    ListNode *list_cursor;
 
     if (*slot == 0)
         return;
@@ -280,7 +280,7 @@ typedef struct {
     short hC;         /* 0x0C */
     short hE;         /* 0x0E */
     u64_24f440 q[1];  /* 0x10 */
-} Packet_24f440;
+} Packet;
 
 extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern void FUN_001f9838_24f440(void *, void *, int) __asm__("FUN_001f9838");
@@ -288,8 +288,8 @@ extern void FUN_00118a80_24f440(int) __asm__("FUN_00118a80");
 
 /* Defined under a local name: this unit already declares FUN_L00_0024f440
  * with a generic prototype for its callers. */
-void FUN_L00_0024f440_c(char *obj, int i, int j, Packet_24f440 *out) __asm__("FUN_L00_0024f440");
-void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet_24f440 *out) {
+void FUN_L00_0024f440_c(char *obj, int i, int j, Packet *out) __asm__("FUN_L00_0024f440");
+void FUN_L00_0024f440_c(char *animation_blend_state, int i, int j, Packet *out) {
     char *frame_table_container = *(char **)(animation_blend_state + 0x18);
     char *output_layout_source = *(char **)(animation_blend_state + 0x14);
     int nb = (unsigned char)frame_table_container[8];

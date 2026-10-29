@@ -26,7 +26,7 @@ typedef struct Moby_2FF358 {
     Vec_2FF358 up; /* 0xE0 */
 } Moby_2FF358;
 
-typedef struct Part_2FF358 {
+typedef struct Part {
     char pad0[3];
     unsigned char b3;
     char pad4[4];
@@ -34,14 +34,14 @@ typedef struct Part_2FF358 {
     char pad9;
     short life; /* 0xA */
     char padC[0x14];
-    struct PartSub_2FF358 {
+    struct PartSub {
         int f0;
         int f4;
         char pad8[2];
         unsigned char bA;
         unsigned char bB;
     } sub; /* 0x20 */
-} Part_2FF358;
+} Part;
 
 extern float D_L14_0015F580;
 #include "rnc/overlay/l14/gameplay/entities/bolt_thief_globals.h"
@@ -54,7 +54,7 @@ int D_L14_00161FA4 = 0x7f204080;
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
-extern Part_2FF358 *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
+extern Part *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern int func_002140B0_2FF358(int) __asm__("FUN_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
@@ -64,7 +64,7 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     Vec_2FF358 A;
     Vec_2FF358 B;
     Vec_2FF358 C;
-    Part_2FF358 *puff;
+    Part *puff;
     int i, j, puff_signed_amount, puff_lifetime_frames, k, col;
     float puff_size;
 
@@ -80,7 +80,7 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
         k = func_002140B0_2FF358(2) == 0 ? puff_signed_amount : -puff_signed_amount;
         puff = spawn_puff(B, 0.2f, 1.0f, 0.9f, k, &D_L14_0015F580, 200000.0f, D_L14_00161FA4);
         if (puff != 0) {
-            struct PartSub_2FF358 *f = &puff->sub;
+            struct PartSub *f = &puff->sub;
 
             puff->life = scale_game_frames(0xC);
             f->f4 = 2;
@@ -96,7 +96,7 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     for (j = 0; j < 3; j++) {
         puff = spawn_puff(B, 0.05f, 1.0f, 1.0f, puff_signed_amount, &D_L14_0015F580, puff_size, 0x7FFFFFFF);
         if (puff != 0) {
-            struct PartSub_2FF358 *f = &puff->sub;
+            struct PartSub *f = &puff->sub;
 
             puff->life = puff_lifetime_frames;
             puff->b8 = func_002140B0_2FF358(0xFF);
@@ -115,13 +115,13 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     k = (col << 8) | 0x7F000000;
     col = col | ((col << 16) | k);
     if (func_002140B0_2FF358(3)) {
-        Part_2FF358 *final_puff;
+        Part *final_puff;
 
         puff_signed_amount = func_002140B0_2FF358(4);
         k = func_002140B0_2FF358(2) == 0 ? puff_signed_amount : -puff_signed_amount;
         final_puff = spawn_puff(B, 0.05f, 1.0f, 1.0f, k, &D_L14_0015F580, puff_size, col);
         if (final_puff != 0) {
-            struct PartSub_2FF358 *f = &final_puff->sub;
+            struct PartSub *f = &final_puff->sub;
 
             final_puff->life = scale_game_frames(0x3C);
             if (func_002140B0_2FF358(2)) {

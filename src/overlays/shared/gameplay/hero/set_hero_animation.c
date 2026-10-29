@@ -527,7 +527,7 @@ typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));
 typedef union {
     V4q_32b90 q;
     f32 f[4];
-} V4_32b90;
+} V4;
 
 extern u8 coll_hit_normal[] __asm__("D_L00_00173E80") NOT_SDA;
 extern f32 collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
@@ -535,7 +535,7 @@ extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9bf8_32b90(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void clip_negative_segment_endpoint_xyz(V4_32b90 *, void *) __asm__("FUN_L00_0025d238");
+extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");
 extern s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
@@ -545,9 +545,9 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
 
 f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_acceleration, f32 target_height) {
     f32 trajectory_endpoint[4];
-    V4_32b90 collision_start_or_gravity_vector;
-    V4_32b90 trajectory_work_vector;
-    V4_32b90 hero_position_copy;
+    V4 collision_start_or_gravity_vector;
+    V4 trajectory_work_vector;
+    V4 hero_position_copy;
     f32 trajectory_solver_outputs[6];
     f32 x, y, z;
 
@@ -936,7 +936,7 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4_00233708;
 typedef struct {
     Vec4_00233708 r[4];
-} Mtx_00233708;
+} Mtx;
 struct G_00233708 {
     char pad[0x2080];
     char *obj;
@@ -945,16 +945,16 @@ struct G_00233708 {
 };
 float FUN_001f9dc8_00233708(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_00233708(float) __asm__("FUN_001f9de0");
-void FUN_001fa050_00233708(Mtx_00233708 *, void *) __asm__("FUN_001fa050");
+void FUN_001fa050_00233708(Mtx *, void *) __asm__("FUN_001fa050");
 void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
-                           Mtx_00233708 *) __asm__("FUN_001f9d20");
+                           Mtx *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Vec4_00233708 *) __asm__("FUN_001f9a10");
 void add_hero_forward_offset(Vec4_00233708 *out, Vec4_00233708 *in, float offset_scale) __asm__("FUN_L00_00233708");
 
 void add_hero_forward_offset(Vec4_00233708 *out, Vec4_00233708 *in, float offset_scale) {
     struct Hero *hero_base = &hero;
-    Mtx_00233708 moby_rotation_matrix;
+    Mtx moby_rotation_matrix;
     Vec4_00233708 offset_vector;
     switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
@@ -1323,11 +1323,11 @@ typedef struct Hero_234800 {
 typedef struct {
     char p0[0x3C];
     int i3C;
-} Plat_234800;
+} Plat;
 extern char hero_233f80[] __asm__("D_0013F350");
 extern int scale_game_frames_233f80(int) __asm__("FUN_001f96f8");
 extern void scale_game_frames_v_233f80(int) __asm__("FUN_001f96f8");
-extern Plat_234800 *f_L00_002603d0(void *) __asm__("FUN_L00_002603d0");
+extern Plat *f_L00_002603d0(void *) __asm__("FUN_L00_002603d0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void probe_ground_height_cf(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern int convert_pose_to_reference_local(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
@@ -1349,7 +1349,7 @@ void update_hero_attachment(void) {
     float sB0, sB4;
     float amt, saved_hero_yaw;
     int mode;
-    Plat_234800 *plat;
+    Plat *plat;
 
     mode = 0;
     amt = 0.0f;

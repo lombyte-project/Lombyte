@@ -21,9 +21,9 @@ typedef struct {
     int b;
     int c;
     char pad[0x20];
-} T2C_2306C8;
+} T2C;
 
-extern T2C_2306C8 D_L14_0017C328[];
+extern T2C D_L14_0017C328[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float level14_hero_animation_blend_curves[][25] __asm__("D_L14_0017C4F0");
 extern float FUN_001f9b48(void *, void *);
@@ -1237,7 +1237,7 @@ int hero_set_state(int a, int b) {
         case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
-            T2C_2306C8 *e;
+            T2C *e;
             int k;
             if (*(unsigned short *)(h + 0x40) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x40) = *(unsigned short *)(h + 0x40) + 1;
@@ -1359,7 +1359,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C_2306C8 *e = &D_L14_0017C328[p->attack_record];
+            T2C *e = &D_L14_0017C328[p->attack_record];
             int k = e->b;
             int n;
             if (e->a == 1)

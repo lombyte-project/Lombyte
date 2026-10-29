@@ -1387,7 +1387,7 @@ typedef struct {
     u8 p3[0x2080 - 0x8BE];
     char *w2080;
     int w2084;
-} S13F350_2078a8;
+} S13F350;
 extern float D_0015ED6C;
 void update_moby_vertical_oscillation(char *, float *, float *, float, float) __asm__("FUN_L00_00262b00");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -2108,16 +2108,16 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4_002090d0;
 typedef struct {
     Vec4_002090d0 r[4];
-} Mtx_002090d0;
-void FUN_001fa050_002090d0(Mtx_002090d0 *, Vec4_002090d0 *) __asm__("FUN_001fa050");
+} Mtx;
+void FUN_001fa050_002090d0(Mtx *, Vec4_002090d0 *) __asm__("FUN_001fa050");
 void FUN_001f9d20_002090d0(Vec4_002090d0 *, Vec4_002090d0 *,
-                           Mtx_002090d0 *) __asm__("FUN_001f9d20");
-void FUN_001fa378_002090d0(Mtx_002090d0 *, Mtx_002090d0 *, Mtx_002090d0 *) __asm__("FUN_001fa378");
+                           Mtx *) __asm__("FUN_001f9d20");
+void FUN_001fa378_002090d0(Mtx *, Mtx *, Mtx *) __asm__("FUN_001fa378");
 void FUN_001f9a28_002090d0(Vec4_002090d0 *, Vec4_002090d0 *,
                            Vec4_002090d0 *) __asm__("FUN_001f9a28");
 void FUN_001f9a10_002090d0(Vec4_002090d0 *, Vec4_002090d0 *,
                            Vec4_002090d0 *) __asm__("FUN_001f9a10");
-void FUN_00214598_002090d0(Mtx_002090d0 *, Vec4_002090d0 *) __asm__("FUN_00214598");
+void FUN_00214598_002090d0(Mtx *, Vec4_002090d0 *) __asm__("FUN_00214598");
 extern Vec4_002090d0 hero_motion_rotation_for_local_pivot __asm__("D_0013F3E0");
 void rotate_hero_about_local_pivot(float *inf, float x, float y, float z) __asm__("FUN_L00_002090d0");
 
@@ -2128,8 +2128,8 @@ void rotate_hero_about_local_pivot(float *inf, float x, float y, float z) {
         Vec4_002090d0 a;
         Vec4_002090d0 b;
         Vec4_002090d0 d;
-        Mtx_002090d0 m;
-        Mtx_002090d0 r;
+        Mtx m;
+        Mtx r;
         Vec4_002090d0 e;
     } L_002090d0;
     Vec4_002090d0 *hero_rotation = &hero_motion_rotation_for_local_pivot;
@@ -2280,18 +2280,18 @@ void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 contex
 }
 typedef struct {
     float x, y, z, w_00209540;
-} V4_00209540;
+} V4;
 typedef struct {
     char pad[0x80];
     float x, y;
     char pad2[0x2f0 - 0x88];
-    V4_00209540 pos;
+    V4 pos;
     char pad3[0x904 - 0x300];
     short cnt;
 } G_00209540;
 extern G_00209540 D_0013F350_00209540 __asm__("D_0013F350");
 float FUN_002132a8_00209540(float, float) __asm__("FUN_002132a8");
-void FUN_L00_002715e8_00209540(float *, V4_00209540 *, int, float,
+void FUN_L00_002715e8_00209540(float *, V4 *, int, float,
                                float) __asm__("FUN_L00_002715e8");
 int FUN_00213260_00209540(int) __asm__("FUN_00213260");
 void emit_hero_periodic_surface_effect(int counter_reset_range, int effect_spawn_counter_threshold) __asm__("FUN_L00_00209540");
@@ -3090,7 +3090,7 @@ typedef union {
 typedef struct {
     u8 pad[0x40];
     f32 x, y;
-} S2_20b5b8;
+} S2;
 
 extern float D_0015ED6C;
 extern V4_20b5b8 coll_hit_normal[] __asm__("D_L00_00173E80");
@@ -3190,9 +3190,9 @@ void probe_hero_airborne_wall_contact(void) {
         return;
     }
     {
-        S2_20b5b8 *collision_result;
+        S2 *collision_result;
         k2->unk460.q = *(u128_20b5b8 *)pz;
-        collision_result = (S2_20b5b8 *)(pz - 0x40);
+        collision_result = (S2 *)(pz - 0x40);
         f = fast_arc_tan(collision_result->x, collision_result->y);
     }
     k2->unk460.f[3] = f;
@@ -3408,7 +3408,7 @@ typedef struct {
     unsigned short h1E;
     char p20[0x1C];
     int i3C;
-} Obj_20C568;
+} Obj;
 
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -3433,8 +3433,8 @@ extern int func_L00_001EFFF0_20C568(void *, void *, int, int, int) __asm__("FUN_
 extern int func_L00_001F3958_20C568(void) __asm__("FUN_001f0b58");
 extern float func_001F9CE8_20C568(void *) __asm__("FUN_001f9b20");
 extern float func_L00_001FF860_20C568(float, float) __asm__("FUN_001f9e90");
-extern Obj_20C568 *func_L00_0025D390_20C568(char *) __asm__("FUN_002141f8");
-extern Obj_20C568 *FUN_L00_002603d0(char *);
+extern Obj *func_L00_0025D390_20C568(char *) __asm__("FUN_002141f8");
+extern Obj *FUN_L00_002603d0(char *);
 extern int func_L00_001F1D20_20C568(float, float, void *, int, int) __asm__("FUN_L00_001f19a0");
 extern float func_001FA748_20C568(float, float) __asm__("FUN_001fa580");
 extern float func_001FA850_20C568(float, float) __asm__("FUN_001fa688");
@@ -3444,8 +3444,8 @@ void check_ledge_grab(void) {
     float down, fwd, up, top, drop, rise, back;
     float speed, ledge_yaw, offset;
     int can_grab, found, edge, i, j, surface, grabbable, frames;
-    Obj_20C568 *moby_info;
-    Obj_20C568 *moby_props;
+    Obj *moby_info;
+    Obj *moby_props;
 
     if (((Hero *)D_0013F450_20C568)->unk308 == 2) return;
     ((Hero *)D_0013F450_20C568)->ledge_found = 0;

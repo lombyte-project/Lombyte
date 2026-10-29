@@ -11,7 +11,7 @@ typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));
 typedef union {
     V4q_32b90 q;
     f32 f[4];
-} V4_32b90;
+} V4;
 
 /* D_0013F350, the shared Level-00 state block. Offsets are taken off the
    listing: 0x80 is a 16-byte value (lq/sq) whose .f[1] is also read as a
@@ -22,7 +22,7 @@ extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9bf8_32b90(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void clip_negative_segment_endpoint_xyz(V4_32b90 *, void *) __asm__("FUN_L00_0025d238");
+extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");
 extern s32 FUN_001efa68_32b90(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
@@ -37,9 +37,9 @@ f32 calculate_hero_motion_prediction_time(f32 prediction_time, f32 acceleration_
         HERO_MOTION_FIXED_POINT_ACCELERATION = 2
     };
     f32 predicted_position[4];
-    V4_32b90 position_or_acceleration_vector;
-    V4_32b90 vector_scratch;
-    V4_32b90 hero_position_copy;
+    V4 position_or_acceleration_vector;
+    V4 vector_scratch;
+    V4 hero_position_copy;
     f32 quadratic_roots[6];
     f32 x, y, z;
 

@@ -397,27 +397,27 @@ typedef struct Moby Moby;
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_2D9EA0;
 
-typedef struct { float x, y, z; } V3_2D9EA0;
+typedef struct { float x, y, z; } V3;
 
-typedef struct Part_2D9EA0 {
+typedef struct Part {
     int f0;
     int f4;
     unsigned char b8;
     char p9[3];
     float fC;
     V_2D9EA0 pos;
-} Part_2D9EA0;
+} Part;
 
-typedef struct Ext_2D9EA0 {
+typedef struct Ext {
     int f0;
     union {
         struct { struct Moby *owner; float scale; float ang; } s;
-        V3_2D9EA0 a;
+        V3 a;
     } u;
-    V3_2D9EA0 b;
+    V3 b;
     short h1C;
     short h1E;
-} Ext_2D9EA0;
+} Ext;
 
 typedef struct D_2D9EA0 {
     float bob_offset;
@@ -427,7 +427,7 @@ typedef struct D_2D9EA0 {
     struct Moby *owner;
     V_2D9EA0 pos;
     V_2D9EA0 v20;
-    Part_2D9EA0 *slots[8];
+    Part *slots[8];
     int f50;
     short h54;
     short h56;
@@ -513,7 +513,7 @@ extern int func_L00_00200290_2D9EA0(void *, float) __asm__("FUN_001fa728");
 extern void func_001F49B0_2D9EA0(void (*)(void), int) __asm__("FUN_001f4600");
 extern float func_001F9D48_2D9EA0(void *, void *) __asm__("FUN_001f9b80");
 extern void func_L00_002D9D00_2D9EA0(void *, void *, int) __asm__("FUN_L00_002d8850");
-extern Part_2D9EA0 *func_L00_002745A8_2D9EA0(void *, int, int) __asm__("FUN_L00_00273708");
+extern Part *func_L00_002745A8_2D9EA0(void *, int, int) __asm__("FUN_L00_00273708");
 extern void func_L00_002D98C8_2D9EA0(void *) __asm__("FUN_L00_002d8418");
 extern int func_L00_002D99C0_2D9EA0(void *) __asm__("FUN_L00_002d8510");
 extern void func_L00_002D9668_2D9EA0(void *) __asm__("FUN_L00_002d81b8");
@@ -608,7 +608,7 @@ void nanotech_ball_update(Moby *moby) {
             func_L00_002D9668_2D9EA0(moby);
             for (i = 0; i < 8; i++) {
                 if (data->slots[i] != 0) {
-                    Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
+                    Ext *ext = (Ext *)(data->slots[i] + 1);
                     ext->u.s.scale = nanotech_ball_slot_scale_pulse_amplitude_gp * func_001F9FA8_2D9EA0(ext->u.s.ang) + D_L00_00161A14_gp;
                     ext->u.s.ang = func_001FA748_2D9EA0(ext->u.s.ang, D_L00_001E17F0_2D9EA0[i]);
                 }
@@ -639,18 +639,18 @@ void nanotech_ball_update(Moby *moby) {
                 func_001F9C30_2D9EA0(&half_displacement_or_spark_position, &v20, 0.5f);
                 for (i = 0; i < 8; i++) {
                     if (data->slots[i] != 0) {
-                        Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
+                        Ext *ext = (Ext *)(data->slots[i] + 1);
                         func_002156E0_2D9EA0(&rotated_slot_offset_or_particle_position, &slot_rotation_basis_or_cull_position_or_start_tangent, (float)i * 0.448549628f, &v20);
                         func_001F9BD8_2D9EA0(&slot_curve_offset, &half_displacement_or_spark_position, &rotated_slot_offset_or_particle_position);
                         {
-                            V3_2D9EA0 *dst = &ext->u.a;
+                            V3 *dst = &ext->u.a;
                             dst->x = slot_curve_offset.x;
                             dst->y = slot_curve_offset.y;
                             dst->z = slot_curve_offset.z;
                         }
                         {
-                            V3_2D9EA0 *dst = &ext->b;
-                            V3_2D9EA0 *src = (V3_2D9EA0 *)&data->slots[i]->pos;
+                            V3 *dst = &ext->b;
+                            V3 *src = (V3 *)&data->slots[i]->pos;
                             dst->x = src->x;
                             dst->y = src->y;
                             dst->z = src->z;
@@ -673,12 +673,12 @@ void nanotech_ball_update(Moby *moby) {
             if (10.0f < func_001F9D48_2D9EA0(&moby->pos, D_L00_00166DC0)) lifetime = func_001F9850_2D9EA0(5);
             else lifetime = func_001F9850_2D9EA0(40);
             for (i = 0; i < 8; i++) {
-                Part_2D9EA0 *part;
-                Part_2D9EA0 *slot;
+                Part *part;
+                Part *slot;
                 func_L00_002D9D00_2D9EA0(moby, &rotated_slot_offset_or_particle_position, i);
                 part = func_L00_002745A8_2D9EA0(&rotated_slot_offset_or_particle_position, lifetime, 2);
                 if (part != 0) {
-                    Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(part + 1);
+                    Ext *ext = (Ext *)(part + 1);
                     ext->b.x = part->pos.x - moby->pos.x;
                     ext->b.y = part->pos.y - moby->pos.y;
                     ext->b.z = part->pos.z - moby->pos.z;
@@ -691,7 +691,7 @@ void nanotech_ball_update(Moby *moby) {
                 if (slot == 0) {
                     data->slots[i] = func_L00_002745A8_2D9EA0(&rotated_slot_offset_or_particle_position, 0, 1);
                     if (data->slots[i] != 0) {
-                        Ext_2D9EA0 *ext = (Ext_2D9EA0 *)(data->slots[i] + 1);
+                        Ext *ext = (Ext *)(data->slots[i] + 1);
                         ext->u.s.scale = D_L00_00161A14_gp;
                         ext->u.s.ang = 0.0f;
                         data->slots[i]->fC = D_L00_001619FC;
@@ -740,10 +740,10 @@ void nanotech_ball_update(Moby *moby) {
             func_001F9C30_2D9EA0(&v20, D_0013F5E0, -nanotech_ball_collection_target_gravity_offset_gp);
             func_001F9BD8_2D9EA0(&v20, D_0013F5E0 - 0x210, &v20);
             for (i = 0; i < 8; i++) {
-                Part_2D9EA0 *part = data->slots[i];
-                Ext_2D9EA0 *ext;
+                Part *part = data->slots[i];
+                Ext *ext;
                 if (part == 0) continue;
-                ext = (Ext_2D9EA0 *)(part + 1);
+                ext = (Ext *)(part + 1);
                 if (func_001F9938_2D9EA0(&ext->h1E)) {
                     if (data->h56 == 0) {
                         Hero *player = &hero;
@@ -766,12 +766,12 @@ void nanotech_ball_update(Moby *moby) {
                 } else {
                     float progress;
                     float remaining;
-                    Part_2D9EA0 *spark;
+                    Part *spark;
                     qcopy(&cross_product_or_particle_midpoint, &part->pos);
                     remaining = func_001FA888_2D9EA0(ext->h1C);
                     remaining = (float)ext->h1E / remaining;
                     {
-                        V3_2D9EA0 *src = &ext->b;
+                        V3 *src = &ext->b;
                         rotated_slot_offset_or_particle_position.x = src->x;
                         rotated_slot_offset_or_particle_position.y = src->y;
                         rotated_slot_offset_or_particle_position.z = src->z;
@@ -1783,22 +1783,22 @@ typedef struct Cb_db890 {
     char pad[0x10];
     Fn_db890 f10;
 } Cb_db890;
-typedef struct Sub_db890 {
+typedef struct Sub {
     char pad[0x2C];
     Cb_db890 *f2C;
-} Sub_db890;
-typedef struct Obj_db890 {
+} Sub;
+typedef struct Obj {
     char pad0[0x20];
     u8 f20;
     char pad1[3];
-    Sub_db890 *f24;
+    Sub *f24;
     char pad2[0x50];
     s32 f78;
-} Obj_db890;
+} Obj;
 /* Calls the class function at +0x10 for a moby not in state 0xFE/0xFD with data; else 0. */
-s32 get_moby_suck_cannon_record(Obj_db890 *moby) __asm__("FUN_L00_002db890");
+s32 get_moby_suck_cannon_record(Obj *moby) __asm__("FUN_L00_002db890");
 
-s32 get_moby_suck_cannon_record(Obj_db890 *moby) {
+s32 get_moby_suck_cannon_record(Obj *moby) {
     Fn_db890 class_callback;
     if (moby == 0 || moby->f20 == 0xFE)
         return 0;
@@ -2049,15 +2049,15 @@ s32 cancel_suck_cannon_suction(u8 *moby) {
 
 typedef int u128_DD3D8 __attribute__((mode(TI)));
 
-typedef struct { u128_DD3D8 v[5]; } B50_DD3D8;
+typedef struct { u128_DD3D8 v[5]; } B50;
 
-typedef struct { int v[6]; } I6_DD3D8;
+typedef struct { int v[6]; } I6;
 
-typedef struct { char p0[0x160]; float f160; int p164; int i168; } Cam_DD3D8;
+typedef struct { char p0[0x160]; float f160; int p164; int i168; } Cam;
 
-extern B50_DD3D8 l00_suck_cannon_explosion_blast_parameters __asm__("D_L00_001EA0B0");
-extern I6_DD3D8 l00_suck_cannon_explosion_first_color_choices __asm__("D_L00_001EA100");
-extern I6_DD3D8 l00_suck_cannon_explosion_second_color_choices __asm__("D_L00_001EA118");
+extern B50 l00_suck_cannon_explosion_blast_parameters __asm__("D_L00_001EA0B0");
+extern I6 l00_suck_cannon_explosion_first_color_choices __asm__("D_L00_001EA100");
+extern I6 l00_suck_cannon_explosion_second_color_choices __asm__("D_L00_001EA118");
 extern char *FUN_L00_002af450(char *, char *, int, int, int);
 extern char *mine_camera_blast(char *, char *, int, char *) __asm__("FUN_L00_002d3838");
 extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
@@ -2086,15 +2086,15 @@ extern int func_L00_001F2BE8_DD3D8(float, void *, int, void *, void *) __asm__("
 void spawn_suck_cannon_projectile_explosion(char *self, char *q) __asm__("FUN_L00_002dbf28");
 
 void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction_record) {
-    B50_DD3D8 blk;
+    B50 blk;
     float to_camera[4];
     float spray_bias_vector[4];
     float spray_axis[4];
     float spray_axis_component[4];
     float spray_vector_or_effect_position[4];
     float random_spray_seed[4];
-    I6_DD3D8 first_color_choices;
-    I6_DD3D8 second_color_choices;
+    I6 first_color_choices;
+    I6 second_color_choices;
     int r0, g0, b0;
     int r1, g1, b1;
     float variant_effect_scale, camera_distance, near_camera_distance_deficit, sc, dt;
@@ -2219,8 +2219,8 @@ void spawn_suck_cannon_projectile_explosion(char *self, char *projectile_suction
         float s = variant_effect_scale * 3.0f;
         func_L00_002E0CB8_DD3D8(s, self, self + 0x10, spray_bias_vector, scale_game_frames_c(29), r1, g1, b1, 0x20);
     }
-    (*(Cam_DD3D8 *)D_L00_00166C80).f160 = (camera_distance < 20.0f) ? 0.4f - camera_distance * 0.0175f : 0.050000012f;
-    (*(Cam_DD3D8 *)D_L00_00166C80).i168 = scale_game_frames_c(25);
+    (*(Cam *)D_L00_00166C80).f160 = (camera_distance < 20.0f) ? 0.4f - camera_distance * 0.0175f : 0.050000012f;
+    (*(Cam *)D_L00_00166C80).i168 = scale_game_frames_c(25);
     mine_camera_blast((char *)&blk, self + 0x10, 0, 0);
     if ((&D_0013E520)->b9) {
         k = func_L00_001F2BE8_DD3D8(3.0f, self + 0x10, 0x10, self, 0);
@@ -2265,9 +2265,9 @@ void finalize_suck_cannon_moby(char *moby, char *suction_record, int flag) {
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2DDEA0;
 
-typedef struct { char pad0[0xC]; void (*fC)(void *); } Cb_2DDEA0;
+typedef struct { char pad0[0xC]; void (*fC)(void *); } Cb;
 
-typedef struct { char pad0[0x10]; int i10; char pad14[0x10]; float f24; char pad28[4]; Cb_2DDEA0 *f2C; char pad30[0x16]; short h46; } Cls_2DDEA0;
+typedef struct { char pad0[0x10]; int i10; char pad14[0x10]; float f24; char pad28[4]; Cb *f2C; char pad30[0x16]; short h46; } Cls;
 
 typedef struct {
     float x, y, f8, timer;
@@ -2291,7 +2291,7 @@ typedef struct {
     short h9C, h9E;
 } R_2DDEA0;
 
-typedef struct { char pad0[0x18]; struct Moby *hit; char pad1C[4]; Vec_2DDEA0 v20; Vec_2DDEA0 v30; Vec_2DDEA0 v40; } Coll_2DDEA0;
+typedef struct { char pad0[0x18]; struct Moby *hit; char pad1C[4]; Vec_2DDEA0 v20; Vec_2DDEA0 v30; Vec_2DDEA0 v40; } Coll;
 
 typedef struct { Vec_2DDEA0 v; char pad10[8]; unsigned char b18; unsigned char b19; short h1A; int pad1C; } Hit_2DDEA0;
 
@@ -2470,7 +2470,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             func_L00_00250800_2DDEA0(record->owner, 0, &work.v[0]);
             half = 0.5f;
             distance = func_001F9D48_2DDEA0(&moby->pos, &work.v[0]);
-            moby->scale = ((Cls_2DDEA0 *)moby->pclass)->f24 * (distance / (record->f64 + record->f64) + half);
+            moby->scale = ((Cls *)moby->pclass)->f24 * (distance / (record->f64 + record->f64) + half);
             record->f98 = record->f98 + frame_scale_sq_macro * 0.11f;
             if (frame_scale * 0.75f < record->f98) record->f98 = frame_scale * 0.75f;
             if (distance < record->f98 * 70.0f) {
@@ -2522,7 +2522,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                     unsigned char anim = record->anims[4];
                     func_00213DE0_2DDEA0(moby, anim, 0, func_001F9850_2DDEA0(3));
                 }
-                moby->scale = ((Cls_2DDEA0 *)moby->pclass)->f24 * 0.3f;
+                moby->scale = ((Cls *)moby->pclass)->f24 * 0.3f;
                 qzero(&moby->rot);
             }
             break;
@@ -2537,8 +2537,8 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 return 0;
             }
             work.q = *(u128 *)&record->vel;
-            moby->scale = moby->scale + ((Cls_2DDEA0 *)moby->pclass)->f24 * (record->f7C * frame_scale);
-            if (((Cls_2DDEA0 *)moby->pclass)->f24 < moby->scale) moby->scale = ((Cls_2DDEA0 *)moby->pclass)->f24;
+            moby->scale = moby->scale + ((Cls *)moby->pclass)->f24 * (record->f7C * frame_scale);
+            if (((Cls *)moby->pclass)->f24 < moby->scale) moby->scale = ((Cls *)moby->pclass)->f24;
             if (record->target != 0 && record->target->state != 0xFE && record->target->state != 0xFD) {
                 int max_life = func_001F9850_2DDEA0(0x12C);
                 if (record->i94 < max_life - func_001F9850_2DDEA0(5)) {
@@ -2588,13 +2588,13 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             hit_wall = func_L00_001F2BE8_2DDEA0(record->f80, &moby->pos, 1, moby, &work.v[1]);
             hit_wall |= func_L00_001F10E0_2DDEA0(record->f80, &moby->pos, 0, moby);
             if (hit_wall != 0) {
-                qcopy_nc(&moby->pos, &((Coll_2DDEA0 *)D_L00_00173E40_lui)->v30);
-                func_001F9BF0_2DDEA0(&record->v50, &((Coll_2DDEA0 *)D_L00_00173E40_lui)->v20, &moby->pos);
+                qcopy_nc(&moby->pos, &((Coll *)D_L00_00173E40_lui)->v30);
+                func_001F9BF0_2DDEA0(&record->v50, &((Coll *)D_L00_00173E40_lui)->v20, &moby->pos);
             }
-            if (((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit != 0 && ((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit->oclass == 0) hit_wall = 0;
+            if (((Coll *)D_L00_00173E40_lui)->hit != 0 && ((Coll *)D_L00_00173E40_lui)->hit->oclass == 0) hit_wall = 0;
             if (record->state == 6) {
                 moby->flags &= 0x7FFF;
-                moby->collision = ((Cls_2DDEA0 *)moby->pclass)->i10;
+                moby->collision = ((Cls *)moby->pclass)->i10;
                 moby->flags |= 4;
                 record->v50.z = one;
                 record->v50.x = 0.0f;
@@ -2616,17 +2616,17 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
             }
             if (hit_wall != 0) {
                 surface = 0;
-                if (((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit != 0 && ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit->pclass) != 0) {
-                    surface = ((Cls_2DDEA0 *)((Coll_2DDEA0 *)D_L00_00173E40_lui)->hit->pclass)->h46;
+                if (((Coll *)D_L00_00173E40_lui)->hit != 0 && ((Cls *)((Coll *)D_L00_00173E40_lui)->hit->pclass) != 0) {
+                    surface = ((Cls *)((Coll *)D_L00_00173E40_lui)->hit->pclass)->h46;
                 }
-                func_L00_001FF4B0_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40, &((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40, 1.0f);
+                func_L00_001FF4B0_2DDEA0(&((Coll *)D_L00_00173E40_lui)->v40, &((Coll *)D_L00_00173E40_lui)->v40, 1.0f);
                 if (moby->prev_seq != record->anims[6]) {
                     unsigned char anim = record->anims[6];
                     func_00213DE0_2DDEA0(moby, anim, 0, func_001F9850_2DDEA0(0x14));
                 }
                 moby->collision_disable = record->i88;
                 record->state = 6;
-                if (0.87266463f < func_L00_001FF860_2DDEA0(((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40.z, func_001F9CE8_2DDEA0(&((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40))) {
+                if (0.87266463f < func_L00_001FF860_2DDEA0(((Coll *)D_L00_00173E40_lui)->v40.z, func_001F9CE8_2DDEA0(&((Coll *)D_L00_00173E40_lui)->v40))) {
                     if (record->h9E >= 0) func_0022ED80_2DDEA0(record->h9E, 0, moby);
                     func_L00_002DDDE8_2DDEA0(moby, record, 1);
                     return 0;
@@ -2636,7 +2636,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                     func_L00_002DDDE8_2DDEA0(moby, record, 1);
                 }
                 qzero(&work.v[1]);
-                work.v[1].z = ((Coll_2DDEA0 *)D_L00_00173E40_lui)->v40.z;
+                work.v[1].z = ((Coll *)D_L00_00173E40_lui)->v40.z;
                 func_L00_001FF610_2DDEA0(&record->vel, &record->vel, &work.v[1]);
             }
             if (func_001F9908_2DDEA0(&record->i94) != 0) {
@@ -2686,7 +2686,7 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
     if (moby->flags & 4) func_0020EEE8_2DDEA0(moby);
     if (record->state < 4) {
         if (record->timer <= 0.0f) {
-            if (((Cls_2DDEA0 *)moby->pclass)->f2C->fC != 0) ((Cls_2DDEA0 *)moby->pclass)->f2C->fC(moby);
+            if (((Cls *)moby->pclass)->f2C->fC != 0) ((Cls *)moby->pclass)->f2C->fC(moby);
         }
         record->timer = record->timer - 1.0f;
     }

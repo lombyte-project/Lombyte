@@ -126,10 +126,10 @@ typedef struct {
     u8 pad[0x140];
     Vec4_2634f8 pos;
     u8 pad2[8];
-} S166C80_2634f8;
+} S166C80;
 extern float D_L00_0015FCA0_002634f8 __asm__("D_L00_0015FCA0");
 extern float D_L00_0015FCA4_002634f8 __asm__("D_L00_0015FCA4");
-extern S166C80_2634f8 D_L00_00166C80_002634f8 __asm__("D_L00_00166C80")
+extern S166C80 D_L00_00166C80_002634f8 __asm__("D_L00_00166C80")
     __attribute__((section(".data")));
 extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
@@ -143,7 +143,7 @@ void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) __asm__("FUN_L00_00263
 void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) {
     Vec4_2634f8 ground_probe_start, u, position_delta;
     float k, f;
-    S166C80_2634f8 *position_owner;
+    S166C80 *position_owner;
     k = (D_L00_0015FCA4_002634f8 - D_L00_0015FCA0_002634f8) * 0.00390625f;
     ground_probe_start.q = v->q;
     f = FUN_L00_00263468_002634f8(&ground_probe_start) + k;
@@ -167,7 +167,7 @@ typedef struct {
     u32 col[4];
     float uv[8];
     u64 a, b, c, d;
-} Pk_00263618;
+} Pk;
 extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
 u64 FUN_001f44b8_00263618(s32) __asm__("FUN_001f44b8");
 void FUN_001f9a28_00263618(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -181,7 +181,7 @@ extern float D_L00_001B0470[4][4] NOT_SDA;
 void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) __asm__("FUN_L00_00263618");
 
 void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) {
-    Pk_00263618 pk;
+    Pk pk;
     float up[4];
     float M[4][4];
     float position_offset[4];
@@ -226,22 +226,22 @@ typedef struct {
     u8 pad28[2];
     u8 b2A;
     u8 b2B;
-} EffectTail_2637f8;
+} EffectTail;
 typedef struct {
     u8 pad[8];
     u8 b8;
     u8 b9;
     s16 hA;
     u8 padC[0x14];
-    EffectTail_2637f8 tail;
-} Effect_2637f8;
+    EffectTail tail;
+} Effect;
 extern void FUN_0020cca8_2637f8(void *, s32, void *) __asm__("FUN_0020cca8");
 extern f32 FUN_001f9af0_2637f8(void *) __asm__("FUN_001f9af0");
 extern void FUN_001f9bf8_2637f8(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a10_2637f8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 FUN_00213260_2637f8(s32) __asm__("FUN_00213260");
 extern s32 FUN_001f96f8_2637f8(s32) __asm__("FUN_001f96f8");
-extern Effect_2637f8 *FUN_L00_0026d000_2637f8(void *, f32, f32, f32, s32, void *, f32, u32)
+extern Effect *FUN_L00_0026d000_2637f8(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
 extern u8 D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
 void cutscene_set_camera_target(u8 *m) __asm__("FUN_L00_002637f8");
@@ -252,7 +252,7 @@ void cutscene_set_camera_target(u8 *moby) {
     f32 fraction, size, lifetime, scale;
     s32 count;
     s32 w24;
-    Effect_2637f8 *effect;
+    Effect *effect;
     if (*(s16 *)(moby + 0xa6) == 0x2ee && moby != 0) {
         FUN_0020cca8_2637f8(moby, 0, vectors);
         fraction = FUN_001f9af0_2637f8(vectors) / 1.026f;
@@ -276,7 +276,7 @@ void cutscene_set_camera_target(u8 *moby) {
                 effect = FUN_L00_0026d000_2637f8(&effect_spawn_position, size, 1.0f, 0.75f, signed_random_value,
                                                    D_L00_0015F580_macro, lifetime, 0x503030ff);
                 if (effect) {
-                    EffectTail_2637f8 *tail = &effect->tail;
+                    EffectTail *tail = &effect->tail;
                     effect->hA = FUN_001f96f8_2637f8(6);
                     tail->w24 = w24;
                     tail->b2A = b2A;
@@ -299,7 +299,7 @@ void cutscene_set_camera_target(u8 *moby) {
                 effect = FUN_L00_0026d000_2637f8(&effect_spawn_position, size, 1.0f, 1.0f, 0x10,
                                                    D_L00_0015F580_macro, lifetime, 0x7fffffff);
                 if (effect) {
-                    EffectTail_2637f8 *tail = &effect->tail;
+                    EffectTail *tail = &effect->tail;
                     effect->hA = FUN_001f96f8_2637f8(2);
                     effect->b8 = FUN_00213260_2637f8(0xff);
                     tail->w24 = w24;

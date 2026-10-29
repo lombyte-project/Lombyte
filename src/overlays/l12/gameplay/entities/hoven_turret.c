@@ -19,12 +19,12 @@
 
 typedef struct Moby Moby;
 
-typedef struct Quad_303CA8 {
+typedef struct Quad {
     float v[16];
     int c[4];
     float uv[8];
     long g[4];
-} Quad_303CA8;
+} Quad;
 
 typedef struct Data_303CA8 {
     float ring[8][70][4];
@@ -65,7 +65,7 @@ extern float D_L12_001FB7D0_303CA8[] __asm__("D_L12_001FB510");
 void draw_oscillating_target_link_strips(Moby *moby) __asm__("FUN_L12_003028c8");
 
 void draw_oscillating_target_link_strips(Moby *moby) {
-    Quad_303CA8 quad[2];
+    Quad quad[2];
     float rotation_matrix[16];
     float matrices[5][16];
     float anchor[4];
@@ -227,11 +227,11 @@ typedef struct Data_304310 {
     int f2330;
 } Data_304310;
 
-typedef struct Row_304310 {
+typedef struct Row {
     u128 v0;
     u128 v10;
     u128 v20;
-} Row_304310;
+} Row;
 
 extern Moby *D_L12_0015FFD8;
 extern char D_L12_00167240[];
@@ -263,7 +263,7 @@ extern int func_00215570_304310(void *, int) __asm__("FUN_00214720");
 extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
 extern void func_L00_0025A8C0_304310(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int func_L00_001EFFF0_304310(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern Row_304310 *D_L12_001B0C30_304310[] __asm__("D_L12_001B0930");
+extern Row *D_L12_001B0C30_304310[] __asm__("D_L12_001B0930");
 extern char D_L12_00167240[];
 extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
@@ -278,7 +278,7 @@ void update_oscillating_target_link(Moby *moby) {
     Vec4 end;
     char hit[0x30];
     Data_304310 *data = *(Data_304310 **)&moby->pvars;
-    Row_304310 *row;
+    Row *row;
     float swing;
     float half;
     int target;
@@ -485,12 +485,12 @@ typedef struct {
     float f170;
     char pad174[4];
     int f178;
-} Cam_304920;
+} Cam;
 
 typedef struct {
     char pad0[0x6C];
     struct Moby *f6C;
-} Snd_304920;
+} Snd;
 
 typedef struct {
     char pad0[0x2C];
@@ -565,7 +565,7 @@ void hoven_turret_update(struct Moby *moby) {
     };
     Data_304920 *data = *(Data_304920 **)&moby->pvars;
 
-    ((Snd_304920 *)(D_0013E533 + 0x1D))->f6C = moby;
+    ((Snd *)(D_0013E533 + 0x1D))->f6C = moby;
     switch (moby->state) {
     case HOVEN_TURRET_STATE_INITIALIZE:
         D_L12_00161F00 = 0;
@@ -584,7 +584,7 @@ void hoven_turret_update(struct Moby *moby) {
             data->fA0 = moby->pos.z;
             data->f98 = -1;
             moby->rot.z = 3.1415927f;
-            ((Snd_304920 *)(D_0013E533 + 0x1D))->f6C = moby;
+            ((Snd *)(D_0013E533 + 0x1D))->f6C = moby;
         }
         break;
     case HOVEN_TURRET_STATE_WAIT_FOR_BOARDING: {
@@ -749,10 +749,10 @@ void hoven_turret_update(struct Moby *moby) {
                 fast_vec_add(muz, muz, firing_offset);
                 create_moby_with_particles(moby, muz, firing_offset, 0);
                 allocate_voice_for_target_entry(0, 0, (int)moby);
-                ((Cam_304920 *)D_L12_00167180_304920)->f160 = 0.03f;
-                ((Cam_304920 *)D_L12_00167180_304920)->f168 = scale_game_frames(0xA);
-                ((Cam_304920 *)D_L12_00167180_304920)->f170 = 0.03f;
-                ((Cam_304920 *)D_L12_00167180_304920)->f178 = scale_game_frames(7);
+                ((Cam *)D_L12_00167180_304920)->f160 = 0.03f;
+                ((Cam *)D_L12_00167180_304920)->f168 = scale_game_frames(0xA);
+                ((Cam *)D_L12_00167180_304920)->f170 = 0.03f;
+                ((Cam *)D_L12_00167180_304920)->f178 = scale_game_frames(7);
                 data->f70 = scale_game_frames(0x14);
                 for (i = 0; i < 5; i++) {
                     Vec_304920 randomized_firing_direction;
@@ -786,9 +786,9 @@ void hoven_turret_update(struct Moby *moby) {
             float t;
 
             randomized_view_offset_distance = random_float_between(hoven_turret_destruction_view_offset_distance_min, hoven_turret_destruction_view_offset_distance_max);
-            randomized_view_yaw = fast_add_rotations(((Cam_304920 *)D_L12_00167180_304920)->f158, randf_sym(0.0f, 0.5235988f));
-            randomized_view_pitch = fast_add_rotations(((Cam_304920 *)D_L12_00167180_304920)->f154, randf_sym(0.0f, 0.5235988f));
-            qcopy(explosion_position, ((Cam_304920 *)D_L12_00167180_304920)->f140);
+            randomized_view_yaw = fast_add_rotations(((Cam *)D_L12_00167180_304920)->f158, randf_sym(0.0f, 0.5235988f));
+            randomized_view_pitch = fast_add_rotations(((Cam *)D_L12_00167180_304920)->f154, randf_sym(0.0f, 0.5235988f));
+            qcopy(explosion_position, ((Cam *)D_L12_00167180_304920)->f140);
             FUN_L00_00262cf0(explosion_position, explosion_position, randomized_view_offset_distance, randomized_view_yaw, randomized_view_pitch);
             t = random_float_between(0.5f, 1.3f);
             spawn_explosion(moby, D_L12_0015F580_macro, explosion_position, 0.0f, 0.0f, 7, 0xF, 0x19, t, t * 0.57f, 10.0f, 3, 0.7f, 0.0f, 0, 0, -1, 0);
@@ -826,7 +826,7 @@ typedef struct {
     char pad78[0x10];
     int f88;
     float f8C;
-} Data_3055F8;
+} Data;
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
@@ -858,7 +858,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     int uv[4];
     long xy[4];
     int colors[4];
-    Data_3055F8 *data = *(Data_3055F8 **)&moby->pvars;
+    Data *data = *(Data **)&moby->pvars;
     long texture;
     int filled;
     int color;
@@ -1055,7 +1055,7 @@ typedef struct {
 typedef struct {
     u8 pad0[0x20];
     struct Moby *moby;
-} HitSource_304e00;
+} HitSource;
 
 extern struct Moby *hit_moby __asm__("D_L12_001742D8") NOT_SDA;
 /* A homing mine: rises, then steers toward the point ahead and blows up near it or on contact. */
@@ -1075,7 +1075,7 @@ void update_homing_mine(struct Moby *moby) {
     Vec4 direction;
     Vec4 probe;
     int hits;
-    HitSource_304e00 *source;
+    HitSource *source;
     float angle;
     float turn;
     float height;

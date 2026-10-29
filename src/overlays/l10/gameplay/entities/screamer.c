@@ -307,9 +307,9 @@ void screamer_update(Moby *moby) {
 typedef struct Hit_2DFC38 { float x, y; char pad8[8]; float f10[4]; struct Moby *moby; char pad24[8]; float f2C; int f30; } Hit_2DFC38;
 typedef struct MobyData_2DFC38 { char pad0[0x20]; float f20; char pad24[2]; short f26; char pad28[0x10]; int f38; char pad3C[0x24]; char f60[0x10]; float f70, f74, f78, f7C; char pad80[4]; int f84; char pad88[0x15]; unsigned char f9D; char pad9E[0x22]; char fC0[0x40]; int f100, f104; char pad108[8]; char f110[7]; unsigned char f117; char pad118[0x18]; char f130[0x44]; int f174; float f178; int f17C; float f180; int f184; float f188; int f18C; char pad190[4]; int f194; } MobyData_2DFC38;
 typedef struct Anim_2DFC38 { char pad0[0x30]; float f30[4], f40[4]; char pad50[0x30]; } Anim_2DFC38;
-typedef struct Path_2DFC38 { int count; char pad4[0xC]; float pts[4]; } Path_2DFC38;
+typedef struct Path { int count; char pad4[0xC]; float pts[4]; } Path;
 extern Anim_2DFC38 *D_L10_001600EC_2DFC38 __asm__("D_L10_001600EC");
-extern Path_2DFC38 *D_L10_001B0C30_2DFC38[] __asm__("D_L10_001B0930");
+extern Path *D_L10_001B0C30_2DFC38[] __asm__("D_L10_001B0930");
 extern char D_0013F3D0[];
 extern int D_001413D0[];
 extern float D_0015ED6C, D_0015ED70;
@@ -324,8 +324,8 @@ extern int ahead_f(float, void *, void *) __asm__("FUN_L01_00274b78");
 extern int activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char D_0013D418 NOT_SDA;
-typedef struct EventRecord_2DFC38 { unsigned char pad[0x10]; unsigned char flag; } EventRecord_2DFC38;
-extern EventRecord_2DFC38 D_0013D408_2DFC38 __asm__("D_0013D408");
+typedef struct EventRecord { unsigned char pad[0x10]; unsigned char flag; } EventRecord;
+extern EventRecord D_0013D408_2DFC38 __asm__("D_0013D408");
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/update_screamer_hit_reactions_and_targeting.h"
 extern float random_float_between_2DFC38(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -403,10 +403,10 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
             if (transformed_offset[0] <= -1.0f || 0.0f <= transformed_offset[0] || transformed_offset[1] <= -1.0f || 1.0f <= transformed_offset[1] || transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2]) data->f104 = 2;
         }
     } else if (moby->state == 1 && data->f18C >= 0) {
-        Path_2DFC38 *path = D_L10_001B0C30_2DFC38[data->f18C];
+        Path *path = D_L10_001B0C30_2DFC38[data->f18C];
         target_selection_status = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, path->pts, path->count);
     } else if (moby->state != 1 && data->f17C >= 0) {
-        Path_2DFC38 *path = D_L10_001B0C30_2DFC38[data->f17C];
+        Path *path = D_L10_001B0C30_2DFC38[data->f17C];
         target_selection_status = activate_effect_l08(data->f180, moby, data->fC0, 0, 0, path->pts, path->count);
     } else {
         target_selection_status = ahead_f(data->f180, moby, data->fC0);
@@ -495,11 +495,11 @@ typedef struct Vars_2e01a8 {
     char a270[4];
 } Vars_2e01a8;
 
-typedef struct Anim_2E1568 {
+typedef struct Anim {
     char pad0[0x38];
     float f38;
     char pad3C[0x44];
-} Anim_2E1568;
+} Anim;
 
 extern OvlQuad_2e01a8 D_L10_00167240_2e01a8 __asm__("D_L10_00167240");
 extern f32 fast_add_rotations_2e01a8(f32, f32) __asm__("func_001FA580");
@@ -545,7 +545,7 @@ extern float D_0015ED70;
 extern float func_001F9CB8_2E0630(void *) __asm__("FUN_001f9af0");
 extern void func_001F9BF0_2E0630(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_001F9BD8_2E0630(void *, void *, void *) __asm__("FUN_001f9a10");
-extern Anim_2E1568 *D_L10_001600EC_2E1568 __asm__("D_L10_001600EC");
+extern Anim *D_L10_001600EC_2E1568 __asm__("D_L10_001600EC");
 extern int func_0022ED80_2E1568(int, int, void *) __asm__("FUN_0022da68");
 extern int func_L00_001EFFF0_2E1568(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
@@ -911,7 +911,7 @@ typedef struct Hit_2E2B80 {
     int f30;
 } Hit_2E2B80;
 
-typedef struct MobyData_2E2B80 {
+typedef struct MobyData {
     char pad0[0x20];
     float f20;
     char pad24[2];
@@ -946,7 +946,7 @@ typedef struct MobyData_2E2B80 {
     int f18C;
     char pad190[4];
     int f194;
-} MobyData_2E2B80;
+} MobyData;
 
 typedef struct Anim_2E2B80 {
     char pad0[0x30];
@@ -1006,7 +1006,7 @@ void update_class_1199_hit_reactions_and_targeting(struct Moby *moby) __asm__("F
 
 void update_class_1199_hit_reactions_and_targeting(struct Moby *moby)
 {
-    MobyData_2E2B80 *data = ((struct MobyData_2E2B80 *)moby->pvars);
+    MobyData *data = ((struct MobyData *)moby->pvars);
     float vector_scratch[4];
     float transformed_offset[4];
     int hit_processing_status;
@@ -2054,7 +2054,7 @@ typedef struct Hit_2E52B0 {
     unsigned short h2A;
 } Hit_2E52B0;
 
-typedef struct { char p0[0x11]; unsigned char b11; } Flags_2E52B0;
+typedef struct { char p0[0x11]; unsigned char b11; } Flags;
 
 extern char *FUN_L00_0025a420(void *,int,int);
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
@@ -2151,8 +2151,8 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     func_001F9938_2E52B0(&moby_data->h26);
     if ((unsigned int)A >= 2 && moby->state != 0xB && moby->state != 0xC) {
         if (current_level_index == 10 && hit_record != 0 && hit_record->f20 != 0 && hit_record->f20->oclass == 0x31A) {
-            if (moby_data->f1AC != 0 && ((Flags_2E52B0 *)D_0013D50F_2E52B0)->b11 == 0) {
-                ((Flags_2E52B0 *)D_0013D50F_2E52B0)->b11 = 1;
+            if (moby_data->f1AC != 0 && ((Flags *)D_0013D50F_2E52B0)->b11 == 0) {
+                ((Flags *)D_0013D50F_2E52B0)->b11 = 1;
                 func_0022EE28_2E52B0(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }
@@ -2943,7 +2943,7 @@ state_one:
 /* Level 10 moby update (class 1344): tracks nearby targets and fires the level's event messages. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E9978), where it is exact; names translated to the US level program. */
 
-typedef struct EvData_2E9978 {
+typedef struct EvData {
     int f0;
     int f4;
     int f8;
@@ -2953,18 +2953,18 @@ typedef struct EvData_2E9978 {
     int f18;
     int f1C;
     int f20;
-} EvData_2E9978;
+} EvData;
 
-typedef struct HeroPos_2E9978 {
+typedef struct HeroPos {
     char pad0[0x200C];
     unsigned int f200C;
-} HeroPos_2E9978;
+} HeroPos;
 
-typedef struct Msg_2E9978 {
+typedef struct Msg {
     int f0;
     char pad4[0x20];
     int f24;
-} Msg_2E9978;
+} Msg;
 
 typedef struct Save_2E9978 {
     char pad0[0x358];
@@ -3019,7 +3019,7 @@ void update_conditional_help_messages(Moby *moby)
         HELP_MESSAGE_STATE_INITIALIZE = 0,
         HELP_MESSAGE_STATE_CHECK_CONDITIONS = 1
     };
-    EvData_2E9978 *data = (EvData_2E9978 *)((int *)moby->pvars);
+    EvData *data = (EvData *)((int *)moby->pvars);
     Moby *other;
     int any_active;
     int elapsed;
@@ -3036,16 +3036,16 @@ void update_conditional_help_messages(Moby *moby)
         break;
     case HELP_MESSAGE_STATE_CHECK_CONDITIONS:
         if (func_00215570_2E9978(D_0013F3D0_r, data->f0) != 0
-            && (((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C == 9)
-            && ((Msg_2E9978 *)D_L10_00179890)->f0 == 0
-            && ((Msg_2E9978 *)D_L10_00179890)->f24 == -1
+            && (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9)
+            && ((Msg *)D_L10_00179890)->f0 == 0
+            && ((Msg *)D_L10_00179890)->f24 == -1
             && *(unsigned short *)(l10_help_message_2710_gate) == 0) {
             func_L00_00203F20_2E9978(0x2710, 0x35);
         }
         if (func_00215570_2E9978(D_0013F3D0_r, data->f4) != 0
-            && (((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C == 9)
-            && ((Msg_2E9978 *)D_L10_00179890)->f0 == 0
-            && ((Msg_2E9978 *)D_L10_00179890)->f24 == -1) {
+            && (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9)
+            && ((Msg *)D_L10_00179890)->f0 == 0
+            && ((Msg *)D_L10_00179890)->f24 == -1) {
             if (((Flags_2E9978 *)(D_0013D388_r))->f4 == 0) {
                 if (*(unsigned short *)(D_00141B20_r) == 0) {
                     func_L00_00203F20_2E9978(0x2712, 0x37);
@@ -3057,16 +3057,16 @@ void update_conditional_help_messages(Moby *moby)
             }
         }
         if (D_L10_0015F5C4_vendor == 0 && D_0013D504_r[0] != 0
-            && ((Msg_2E9978 *)D_L10_00179890)->f0 == 0
-            && ((Msg_2E9978 *)D_L10_00179890)->f24 == -1
+            && ((Msg *)D_L10_00179890)->f0 == 0
+            && ((Msg *)D_L10_00179890)->f24 == -1
             && *(unsigned short *)(l10_help_message_2711_gate) == 0) {
             func_L00_00203F20_2E9978(0x2711, 0x36);
         }
         if (func_00215570_2E9978(D_0013F3D0_r, data->f8) != 0
-            && (((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos_2E9978 *)(D_0013F3D0_r))->f200C == 9)
+            && (((HeroPos *)(D_0013F3D0_r))->f200C < 2 || ((HeroPos *)(D_0013F3D0_r))->f200C == 9)
             && D_0013D4CB[0] == 0
-            && ((Msg_2E9978 *)D_L10_00179890)->f0 == 0
-            && ((Msg_2E9978 *)D_L10_00179890)->f24 == -1
+            && ((Msg *)D_L10_00179890)->f0 == 0
+            && ((Msg *)D_L10_00179890)->f24 == -1
             && *(unsigned short *)(D_00141C48) == 0) {
             func_L00_00203F20_2E9978(0x2715, 0x5C);
         }
@@ -3111,11 +3111,11 @@ typedef struct {
     int targets[3];
     float turn_velocity;
     int wake;
-} Vars_2E8AB0;
+} Vars;
 
 extern struct Moby *D_L10_0015FFD8_8ab0 __asm__("D_L10_0015FFD8") __attribute__((sda));
-typedef struct { unsigned char pad[0x454]; unsigned char collected[1]; } SaveFlags_2E8AB0;
-extern SaveFlags_2E8AB0 D_L10_001BB6B0_8ab0 __asm__("D_L10_001BB6B0");
+typedef struct { unsigned char pad[0x454]; unsigned char collected[1]; } SaveFlags;
+extern SaveFlags D_L10_001BB6B0_8ab0 __asm__("D_L10_001BB6B0");
 extern int D_L10_001BA950[] __asm__("D_L10_001BA950");
 extern int D_0014C190_8ab0[] __asm__("D_0014C190");
 extern float FUN_L00_00258110(float *, float, float, float, float, float);
@@ -3129,7 +3129,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void gun_update(struct Moby *moby) __asm__("FUN_L10_002e8ab0");
 void gun_update(struct Moby *moby) {
-    Vars_2E8AB0 *vars = (Vars_2E8AB0 *)moby->pvars;
+    Vars *vars = (Vars *)moby->pvars;
     int *bits;
     float rotation[4];
     float position[4];
@@ -3288,14 +3288,14 @@ typedef struct {
     int timer;
     int clip_volume;
     int sound;
-} DoorVars_e9648;
+} DoorVars;
 
 typedef struct {
     u8 pad0[0x454];
     u8 collected[1];
-} LevelState_e9648;
+} LevelState;
 
-extern LevelState_e9648 D_L10_001BB6B0_e9648 __asm__("D_L10_001BB6B0");
+extern LevelState D_L10_001BB6B0_e9648 __asm__("D_L10_001BB6B0");
 extern int D_L10_001BA950[] __asm__("D_L10_001BA950");
 extern int D_0014C190_e9648[][64] __asm__("D_0014C190");
 extern unsigned char D_001413F4_e9648[] __asm__("D_001413F4");
@@ -3308,7 +3308,7 @@ extern int tick_countdown_e9648(int *) __asm__("FUN_001f9740");
 /* Level 10 door: swings open once the hero enters its clip volume and sets its save bit; starts open when the bit is already set. */
 void gate_1_update(struct Moby *moby) __asm__("FUN_L10_002e9648");
 void gate_1_update(struct Moby *moby) {
-    DoorVars_e9648 *vars = (DoorVars_e9648 *)moby->pvars;
+    DoorVars *vars = (DoorVars *)moby->pvars;
     unsigned short save_id;
 
     switch (moby->state) {
@@ -3370,19 +3370,19 @@ void gate_1_update(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EAD50), where it is exact; names translated to the US level program. */
 
-typedef OvlQuad Vec_2EAD50;
+typedef OvlQuad Vec;
 
 typedef struct {
-    Vec_2EAD50 home;        /* 0x00 */
+    Vec home;        /* 0x00 */
     int sound;              /* 0x10 */
     int timer;              /* 0x14 */
     char pad18[0x4];
     int door;               /* 0x1C: index of the linked moby */
-} GateVars_2EAD50;
+} GateVars;
 
 typedef struct {
     char pad00[0x10];
-    Vec_2EAD50 pos;         /* 0x10 */
+    Vec pos;         /* 0x10 */
     unsigned char state;    /* 0x20 */
     char pad21[0xF];
     unsigned char f30;      /* 0x30 */
@@ -3391,13 +3391,13 @@ typedef struct {
     char pad36[0x12];
     float rotz;             /* 0x48 */
     char pad4C[0x2C];
-    GateVars_2EAD50 *vars;  /* 0x78 */
+    GateVars *vars;  /* 0x78 */
     char pad7C[0x36];
     unsigned short uid;     /* 0xB2 */
     char padB4[0x4C];
-} GateMoby_2EAD50;
+} GateMoby;
 
-typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State_2EAD50;
+typedef struct { char pad0[0x454]; unsigned char collected[1]; } L10State;
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -3412,7 +3412,7 @@ void activate_descriptor(int i) __asm__("FUN_L10_002f5a50");
 extern unsigned char D_001413F4[];
 extern unsigned char D_0013DE4B_2EAD50[] __asm__("D_0013DD4C");
 extern int D_L10_001BA950[] __asm__("D_L10_001BA950");
-extern L10State_2EAD50 D_L10_001BB9C0_2EAD50 __asm__("D_L10_001BB6B0");
+extern L10State D_L10_001BB9C0_2EAD50 __asm__("D_L10_001BB6B0");
 extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 extern float func_001F9F90_2EAD50(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2EAD50(float) __asm__("FUN_001f9de0");
@@ -3421,12 +3421,12 @@ extern int func_001F9878_2EAD50(float) __asm__("FUN_001fa6d0");
 extern float func_001FA888_2EAD50(int) __asm__("FUN_001fa6c0");
 extern int func_001F9908_2EAD50(int *) __asm__("FUN_001f9740");
 
-void gate_2_update(GateMoby_2EAD50 *m) __asm__("FUN_L10_002e9990");
-void gate_2_update(GateMoby_2EAD50 *moby)
+void gate_2_update(GateMoby *m) __asm__("FUN_L10_002e9990");
+void gate_2_update(GateMoby *moby)
 {
-    GateVars_2EAD50 *vars = moby->vars;
+    GateVars *vars = moby->vars;
     float opening_offset[3];
-    Vec_2EAD50 out;
+    Vec out;
     unsigned char entry_gate_state = moby->state;
 
     switch (entry_gate_state) {
@@ -3444,7 +3444,7 @@ void gate_2_update(GateMoby_2EAD50 *moby)
             moby->pos = out;
         } else {
             if (vars->door > 0) {
-                (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[vars->door].flags |= 2;
+                (*(GateMoby * *)&D_L10_0015FFD8_gp)[vars->door].flags |= 2;
             }
             moby->state = 1;
         }
@@ -3457,11 +3457,11 @@ void gate_2_update(GateMoby_2EAD50 *moby)
             moby->pos = vars->home;
             moby->state = 3;
             if (vars->door > 0) {
-                (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[vars->door].flags &= 0xFFFD;
+                (*(GateMoby * *)&D_L10_0015FFD8_gp)[vars->door].flags &= 0xFFFD;
             }
         } else if (D_0013DE4B_2EAD50[0] != 0) {
             if (vars->door > 0) {
-                (*(GateMoby_2EAD50 * *)&D_L10_0015FFD8_gp)[vars->door].flags &= 0xFFFD;
+                (*(GateMoby * *)&D_L10_0015FFD8_gp)[vars->door].flags &= 0xFFFD;
             }
             *(int *)(bits + ((((short)moby->uid >> 5) * 4) + (current_level_index << 8))) |= entry_gate_state << (moby->uid & 0x1F);
             D_L10_001BA950[(short)moby->uid >> 5] |= entry_gate_state << (moby->uid & 0x1F);

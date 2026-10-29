@@ -2163,9 +2163,9 @@ typedef struct {
     float position[4];
     char pad40[0x30];
     float direction[4];
-} PickupPose_318c78;
+} PickupPose;
 
-extern PickupPose_318c78 *D_L05_001600EC_p __asm__("D_L05_001600EC");
+extern PickupPose *D_L05_001600EC_p __asm__("D_L05_001600EC");
 extern char *find_moby_in_owner_list_by_id(void *, int) __asm__("FUN_L05_00319598");
 extern char D_0013CAE4[];
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
@@ -2208,7 +2208,7 @@ void taxi_update(struct Moby *moby) {
     float z;
     char *destination_stop_moby;
     char *voice_slot;
-    PickupPose_318c78 *tab;
+    PickupPose *tab;
     float *qa;
     int voice_slot_index;
     int s;

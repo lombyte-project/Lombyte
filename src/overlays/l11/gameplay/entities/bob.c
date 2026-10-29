@@ -1447,7 +1447,7 @@ typedef struct {
     unsigned int color[4];
     float uv[4][2];
     unsigned long long tag[4];
-} QuadPacket_2f2d58;
+} QuadPacket;
 
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern unsigned long long get_effect_texture(int) __asm__("FUN_001f44b8");
@@ -1466,7 +1466,7 @@ extern float teleporter_ring_local_z_center_gp __asm__("D_L11_00161938") __attri
 void draw_teleporter_ring(struct Moby *moby) __asm__("FUN_L11_002f2d58");
 
 void draw_teleporter_ring(struct Moby *moby) {
-    QuadPacket_2f2d58 quad;
+    QuadPacket quad;
     float matrix[16];
     char *data = (char *)moby->pvars;
     float width;
@@ -1669,7 +1669,7 @@ unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, 
     }
     return moby;
 }
-struct PokPv_309ac0 {
+struct PokPv {
     char pad00[0x60];
     char ctl60[0x3C];
     int flags;
@@ -1730,7 +1730,7 @@ void pokitaru_boat_update(struct Moby *moby) {
         POKITARU_BOAT_RISE_ABOVE_PATH = 4,
         POKITARU_BOAT_ADJUST_HEIGHT_FOR_HERO = 5
     };
-    struct PokPv_309ac0 *boat_vars = (struct PokPv_309ac0 *)moby->pvars;
+    struct PokPv *boat_vars = (struct PokPv *)moby->pvars;
     float start_pos[4];
     float start_rot[4];
     float delta[4];

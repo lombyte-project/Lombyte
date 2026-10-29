@@ -143,13 +143,13 @@ typedef struct {
     struct Moby *target;
     float *aim;
     float *src;
-} MissileVars_089d0;
+} MissileVars;
 
 typedef struct {
     u8 pad0[0x1A];
     s16 oclass;
     u8 pad1C[0x14];
-} MissileHit_089d0;
+} MissileHit;
 
 extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
 extern char D_L11_00174880[];
@@ -182,10 +182,10 @@ static inline void copy_xyz_089d0(float *dst, float *src) {
 void update_homing_missile(struct Moby *moby) __asm__("FUN_L11_003089d0");
 
 void update_homing_missile(struct Moby *moby) {
-    MissileVars_089d0 *vars = (MissileVars_089d0 *)moby->pvars;
+    MissileVars *vars = (MissileVars *)moby->pvars;
     float old[4];
     float look[4];
-    MissileHit_089d0 hit;
+    MissileHit hit;
     float spark_velocity[4];
     float spark_scatter_vector[4];
     struct Moby *target;
@@ -474,7 +474,7 @@ extern float FUN_001f9b20_30a908(void *) __asm__("FUN_001f9b20");
 extern void FUN_001f9bf8_30a908(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int FUN_001fa6e0_30a908(int, int, float) __asm__("FUN_001fa6e0");
 typedef struct { float u, v; } UV_30a908;
-typedef struct { float x, y, z; } Pos_30a908;
+typedef struct { float x, y, z; } Pos;
 typedef struct {
     Vec4f v[4];
     int col[4];
@@ -483,7 +483,7 @@ typedef struct {
     long z78;
     long q80;
     long q88;
-} Quad_30a908;
+} Quad;
 typedef struct {
     int f0;
     int f4;
@@ -497,9 +497,9 @@ typedef struct {
     float f24;
     float f28;
     float f2C;
-} Data_30a908;
-typedef struct { char pad[0x140]; float x, y, z; } Cam_30a908;
-typedef struct { char pad[0x228]; float f228, f22C; } Fog_30a908;
+} Data;
+typedef struct { char pad[0x140]; float x, y, z; } Cam;
+typedef struct { char pad[0x228]; float f228, f22C; } Fog;
 
 extern void FUN_00233980_30a908(int, long) __asm__("FUN_00233980");
 extern int FUN_001f44b8_30a908(int) __asm__("FUN_001f44b8");
@@ -514,10 +514,10 @@ extern UV_30a908 D_L11_00161E08_macro[] __asm__("D_L11_00161E08") MACRO_ADDR;
 
 extern char render_fog_context[] __asm__("D_L11_0016D440");
 extern char ocean_strip_orientation_basis[] __asm__("D_L11_001679D0");
-extern Pos_30a908 l11_ocean_strip_vertex_positions[] __asm__("D_L11_001D9B08");
+extern Pos l11_ocean_strip_vertex_positions[] __asm__("D_L11_001D9B08");
 extern int ocean_strip_vertex_colors[] __asm__("D_L11_001D9E08");
 extern UV_30a908 l11_ocean_strip_vertex_uvs[] __asm__("D_L11_001DA310");
-extern Pos_30a908 l11_ocean_wave_grid_vertex_positions[] __asm__("D_L11_001D9F08");
+extern Pos l11_ocean_wave_grid_vertex_positions[] __asm__("D_L11_001D9F08");
 extern int D_L11_001DA208[];
 extern UV_30a908 l11_ocean_wave_grid_vertex_uvs[] __asm__("D_L11_001DA510");
 extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
@@ -533,10 +533,10 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     Vec4f strip_corners[4];
     Vec4f first_strip_edge_delta;
     Vec4f second_strip_edge_delta;
-    Quad_30a908 far_quad;
-    Data_30a908 *ocean_vars = (Data_30a908 *)moby->pvars;
-    float saved_fog_228 = ((Fog_30a908 *)render_fog_context)->f228;
-    float s22C = ((Fog_30a908 *)render_fog_context)->f22C;
+    Quad far_quad;
+    Data *ocean_vars = (Data *)moby->pvars;
+    float saved_fog_228 = ((Fog *)render_fog_context)->f228;
+    float s22C = ((Fog *)render_fog_context)->f22C;
     int i;
     int layer;
     int colA;
@@ -547,8 +547,8 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     float y;
 
     if (hero.state.current != 0x1D && D_L11_0016D180 == 0) {
-        ((Fog_30a908 *)render_fog_context)->f228 = 255.0f;
-        ((Fog_30a908 *)render_fog_context)->f22C = 249.9f;
+        ((Fog *)render_fog_context)->f228 = 255.0f;
+        ((Fog *)render_fog_context)->f22C = 249.9f;
     }
     FUN_00233980_30a908(0x42, 0x3200000044L);
     FUN_00233980_30a908(8, 0);
@@ -613,7 +613,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     far_quad.q80 = 0xFF9000000260L;
     far_quad.q88 = 0x8000000044L;
     far_quad.z70 = 0;
-    if (ocean_vars->f14 < ((Cam_30a908 *)D_L11_00167680)->z - ocean_vars->f24 &&
+    if (ocean_vars->f14 < ((Cam *)D_L11_00167680)->z - ocean_vars->f24 &&
         hero.state.current != 0x1D && D_L11_0016D180 == 0) {
         far_quad.uv[0].u = 0.0f;
         far_quad.uv[0].v = 0.0f;
@@ -629,10 +629,10 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         far_quad.col[3] = far_quad.col[1];
         *(u128 *)&far_quad.v[0] = *(u128 *)&strip_corners[1];
         *(u128 *)&far_quad.v[1] = *(u128 *)&strip_corners[1];
-        far_quad.v[1].z = ((Cam_30a908 *)D_L11_00167680)->z - ocean_vars->f24;
+        far_quad.v[1].z = ((Cam *)D_L11_00167680)->z - ocean_vars->f24;
         *(u128 *)&far_quad.v[2] = *(u128 *)&strip_corners[3];
         *(u128 *)&far_quad.v[3] = *(u128 *)&strip_corners[3];
-        far_quad.v[3].z = ((Cam_30a908 *)D_L11_00167680)->z - ocean_vars->f24;
+        far_quad.v[3].z = ((Cam *)D_L11_00167680)->z - ocean_vars->f24;
         FUN_001f7d30_30a908(&far_quad, 0, 0);
     }
     FUN_00233980_30a908(0x42, 0x8000000048L);
@@ -641,7 +641,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     FUN_00233980_30a908(0x47, 0x513F1);
     colA = ocean_vars->fC;
     colB = ocean_vars->f10;
-    color_interpolation_scalar = 1.0f - (((Cam_30a908 *)D_L11_00167680)->z - tide_level_macro) / ocean_vars->f2C;
+    color_interpolation_scalar = 1.0f - (((Cam *)D_L11_00167680)->z - tide_level_macro) / ocean_vars->f2C;
     if (color_interpolation_scalar > 1.0f) {
         color_interpolation_scalar = 1.0f;
     }
@@ -656,31 +656,31 @@ void draw_pokitaru_ocean(struct Moby *moby) {
                 for (x = ocean_vars->f18 * -2.0f; x < ocean_vars->f18 * 2.0f; x += ocean_vars->f18) {
                     l11_ocean_wave_grid_vertex_uvs[vertex_count].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].u;
                     l11_ocean_wave_grid_vertex_uvs[vertex_count].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].v;
-                    l11_ocean_wave_grid_vertex_positions[vertex_count].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    l11_ocean_wave_grid_vertex_positions[vertex_count].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[vertex_count].x = x + ((Cam *)D_L11_00167680)->x + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[vertex_count].y = y + ((Cam *)D_L11_00167680)->y + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[vertex_count].z = tide_level_macro;
                     i = vertex_count + 1;
                     l11_ocean_wave_grid_vertex_uvs[i].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].u;
                     l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].v;
-                    l11_ocean_wave_grid_vertex_positions[i].x = x + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].x = x + ((Cam *)D_L11_00167680)->x + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam *)D_L11_00167680)->y + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     i = vertex_count + 2;
                     l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].u;
                     l11_ocean_wave_grid_vertex_uvs[i].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].v;
-                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    l11_ocean_wave_grid_vertex_positions[i].y = y + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam *)D_L11_00167680)->x + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].y = y + ((Cam *)D_L11_00167680)->y + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     i = vertex_count + 3;
                     l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].u;
                     l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + D_L11_00161E08_macro[layer].v;
-                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->x + 1.0f;
-                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam_30a908 *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam *)D_L11_00167680)->x + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam *)D_L11_00167680)->y + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     for (i = vertex_count; i < vertex_count + 4; i++) {
-                        scratch_vector.x = l11_ocean_wave_grid_vertex_positions[i].x - ((Cam_30a908 *)D_L11_00167680)->x;
-                        scratch_vector.y = l11_ocean_wave_grid_vertex_positions[i].y - ((Cam_30a908 *)D_L11_00167680)->y;
-                        scratch_vector.z = l11_ocean_wave_grid_vertex_positions[i].z - ((Cam_30a908 *)D_L11_00167680)->z;
+                        scratch_vector.x = l11_ocean_wave_grid_vertex_positions[i].x - ((Cam *)D_L11_00167680)->x;
+                        scratch_vector.y = l11_ocean_wave_grid_vertex_positions[i].y - ((Cam *)D_L11_00167680)->y;
+                        scratch_vector.z = l11_ocean_wave_grid_vertex_positions[i].z - ((Cam *)D_L11_00167680)->z;
                         scratch_vector.w = 1.0f;
                         color_interpolation_scalar = FUN_001f9b20_30a908(&scratch_vector) / (ocean_vars->f18 * 2.0f);
                         if (color_interpolation_scalar > 1.0f) {
@@ -697,13 +697,13 @@ void draw_pokitaru_ocean(struct Moby *moby) {
             }
         }
     }
-    ((Fog_30a908 *)render_fog_context)->f228 = saved_fog_228;
-    ((Fog_30a908 *)render_fog_context)->f22C = s22C;
+    ((Fog *)render_fog_context)->f228 = saved_fog_228;
+    ((Fog *)render_fog_context)->f22C = s22C;
     FUN_00233980_30a908(0x47, 0x5360B);
 }
 /* Ocean update: scrolls the two wave layers with the camera and the time, keeps their offsets in -1..1 and sets the level's tide values. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030C728), where it is exact; names translated to the US level program. */
-typedef struct { float u, v; } UV_30b358;
+typedef struct { float u, v; } UV;
 typedef float V4_30b358[4] __attribute__((aligned(16)));
 
 typedef struct {
@@ -712,7 +712,7 @@ typedef struct {
     float scale;            /* 0x18 */
     char pad1C[0x4];
     float limit;            /* 0x20 */
-} OceanVars_30b358;
+} OceanVars;
 
 typedef struct {
     char pad00[0x20];
@@ -720,23 +720,23 @@ typedef struct {
     char pad21[0xF];
     unsigned char f30;      /* 0x30 */
     char pad31[0x47];
-    OceanVars_30b358 *vars; /* 0x78 */
-} OceanMoby_30b358;
+    OceanVars *vars; /* 0x78 */
+} OceanMoby;
 
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L11_0030a908_b358(void) __asm__("FUN_L11_0030a908");
-extern UV_30b358 wave_offset[] __asm__("D_L11_00161E08") MACRO_ADDR;
+extern UV wave_offset[] __asm__("D_L11_00161E08") MACRO_ADDR;
 extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern char last_camera_pos[4] __asm__("D_L11_00162840") __attribute__((sda)); /* a 16-byte vector; declared small so it is reached through $gp */
 extern float ocean_level __asm__("D_L11_00161E1C");
-extern UV_30b358 wave_drift[] __asm__("D_L11_001D9AF0");
+extern UV wave_drift[] __asm__("D_L11_001D9AF0");
 extern float frame_delta_time __asm__("D_0015ED7C");
 
-void ocean_pokitaru_update(OceanMoby_30b358 *moby) __asm__("FUN_L11_0030b358");
-void ocean_pokitaru_update(OceanMoby_30b358 *moby)
+void ocean_pokitaru_update(OceanMoby *moby) __asm__("FUN_L11_0030b358");
+void ocean_pokitaru_update(OceanMoby *moby)
 {
-    OceanVars_30b358 *ocean_vars = moby->vars;
+    OceanVars *ocean_vars = moby->vars;
     float camera_displacement[4];
     float out[4];
     int k;

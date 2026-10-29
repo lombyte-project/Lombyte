@@ -633,11 +633,11 @@ typedef struct {
 } __attribute__((aligned(16))) V_2bb0b0;
 typedef struct {
     float u, v;
-} UV_2bb0b0;
+} UV;
 typedef struct {
     V_2bb0b0 corner[4];
     unsigned int color[4];
-    UV_2bb0b0 uv[4];
+    UV uv[4];
     long unk70, tex, unk80, unk88;
 } Q_2bb0b0;
 extern unsigned int D_L00_001615F8_gp __asm__("D_L00_001615F8") __attribute__((sda));
@@ -656,7 +656,7 @@ extern unsigned int l00_beam_anchor_first_pass_vertex_color __asm__("D_L00_00161
 extern float beam_anchor_first_pass_base_corner_scale_gp __asm__("D_L00_00161648") __attribute__((sda));
 extern float beam_anchor_second_pass_base_corner_scale_gp __asm__("D_L00_0016164C") __attribute__((sda));
 extern V_2bb0b0 D_L00_001DB560[] NOT_SDA;
-extern UV_2bb0b0 D_L00_001DB5A0[] NOT_SDA;
+extern UV D_L00_001DB5A0[] NOT_SDA;
 void draw_beam_anchor_camera_facing_quads(void *mv) {
     Q_2bb0b0 quad;
     V_2bb0b0 camera_facing_transform[4];
@@ -1398,9 +1398,9 @@ typedef struct Moby Moby;
 
 typedef int u128_2BDAF0 __attribute__((mode(TI)));
 
-typedef struct Vq_2BDAF0 { float x, y, z, w; } __attribute__((aligned(16))) Vq_2BDAF0;
+typedef struct Vq { float x, y, z, w; } __attribute__((aligned(16))) Vq;
 
-typedef struct Ray_2BDAF0 {
+typedef struct Ray {
     float pos[4];
     Moby *target;
     float total;
@@ -1413,32 +1413,32 @@ typedef struct Ray_2BDAF0 {
     int delay;
     float yaw;
     float pitch;
-} Ray_2BDAF0;
+} Ray;
 
-typedef struct Stats_2BDAF0 {
+typedef struct Stats {
     char p0[0xA8];
     unsigned short kills;
     unsigned short best;
     int levels;
-} Stats_2BDAF0;
+} Stats;
 
-typedef struct Skill_2BDAF0 {
+typedef struct Skill {
     char p0[8];
     unsigned char f8;
-} Skill_2BDAF0;
+} Skill;
 
-typedef struct Light_2BDAF0 {
+typedef struct Light {
     float col[4];
     float pos[3];
     float radius;
-} Light_2BDAF0;
+} Light;
 
-typedef struct Voice_2BDAF0 {
+typedef struct Voice {
     char p0[0x74];
     unsigned char on;
     char p1[0x88 - 0x75];
     Moby *owner;
-} Voice_2BDAF0;
+} Voice;
 
 char *FUN_L00_002bc3b0_u(char *self, float *position, float *heading, float *pitch) __asm__("FUN_L00_002bc3b0");
 extern unsigned char D_00141680_r[] __asm__("D_00141680");
@@ -1526,10 +1526,10 @@ extern void func_L00_002377E0_2BDAF0(void) __asm__("FUN_L00_00236e50");
 
 void morphoray_update(Moby *moby) __asm__("FUN_L00_002bc7e8");
 void morphoray_update(Moby *moby) {
-    Vq_2BDAF0 direction;
-    Vq_2BDAF0 points[3];
-    Vq_2BDAF0 matrix[4];
-    Ray_2BDAF0 *data;
+    Vq direction;
+    Vq points[3];
+    Vq matrix[4];
+    Ray *data;
     int busy;
     int in_range;
     Moby *hit;
@@ -1539,7 +1539,7 @@ void morphoray_update(Moby *moby) {
     if (((Hero *)((char *)&hero))->items[0].state == 3) {
         busy = 1;
     }
-    data = (struct Ray_2BDAF0 *)moby->pvars;
+    data = (struct Ray *)moby->pvars;
     if (moby->state == 0) {
         moby->state = 1;
         morphoray_point_light_slot = -1;
@@ -1560,14 +1560,14 @@ void morphoray_update(Moby *moby) {
         }
         if (data->seen == 0) {
             data->seen = 1;
-            if (((Stats_2BDAF0 *)(D_00141680_r))->kills <= 0xFFFE) {
-                ((Stats_2BDAF0 *)(D_00141680_r))->kills++;
+            if (((Stats *)(D_00141680_r))->kills <= 0xFFFE) {
+                ((Stats *)(D_00141680_r))->kills++;
             }
             now = func_001F9850_2BDAF0(D_0015EEA4) / 600;
-            if (((Stats_2BDAF0 *)(D_00141680_r))->best < now) {
-                ((Stats_2BDAF0 *)(D_00141680_r))->best = func_001F9850_2BDAF0(D_0015EEA4) / 600;
+            if (((Stats *)(D_00141680_r))->best < now) {
+                ((Stats *)(D_00141680_r))->best = func_001F9850_2BDAF0(D_0015EEA4) / 600;
             }
-            ((Stats_2BDAF0 *)(D_00141680_r))->levels = ((Stats_2BDAF0 *)(D_00141680_r))->levels | (1 << current_level_index) | 0x80000000;
+            ((Stats *)(D_00141680_r))->levels = ((Stats *)(D_00141680_r))->levels | (1 << current_level_index) | 0x80000000;
         }
         if (data->timer == 0) {
             data->timer = func_001F9850_2BDAF0(15);
@@ -1629,8 +1629,8 @@ void morphoray_update(Moby *moby) {
             D_L00_001616EC = 10000 - func_001FA898_2BDAF0(data->left * 10000.0f / data->total);
         }
         if (data->target != 0 && data->left <= 0.0f) {
-            if (current_level_index == 5 && data->target->oclass == 0x271 && ((Skill_2BDAF0 *)item_unlocked)->f8 == 0) {
-                ((Skill_2BDAF0 *)item_unlocked)->f8 = 1;
+            if (current_level_index == 5 && data->target->oclass == 0x271 && ((Skill *)item_unlocked)->f8 == 0) {
+                ((Skill *)item_unlocked)->f8 = 1;
                 func_0022EE28_2BDAF0(1, 0, 0);
                 func_L00_00264DB8_2BDAF0(0x53D6, -1);
             }
@@ -1645,10 +1645,10 @@ void morphoray_update(Moby *moby) {
             morphoray_light_fade_countdown = func_001F9850_2BDAF0(20);
             func_L00_001FF4B0_2BDAF0(&points[0], &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[1], data, &points[0]);
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[1].x;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[1].y;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[1].z;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[1].x;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[1].y;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[1].z;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
         }
         if (func_L00_0028EB98_2BDAF0(moby, D_L00_001617C8) == 0) {
             D_L00_001617C8 = func_0022ED80_2BDAF0(0, 4, moby);
@@ -1666,14 +1666,14 @@ void morphoray_update(Moby *moby) {
             float brightness;
             func_L00_001FF4B0_2BDAF0(&direction, &moby->rot_row1, -0.5f);
             func_001F9BD8_2BDAF0(&points[0], data, &direction);
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[0].x;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[0].y;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[0].z;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[0] = points[0].x;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[1] = points[0].y;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].pos[2] = points[0].z;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
             brightness = func_001FA888_2BDAF0(morphoray_light_fade_countdown) * 0.05f;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[0] = brightness;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[1] = brightness;
-            ((Light_2BDAF0 *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[2] = brightness * 0.25f;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[0] = brightness;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[1] = brightness;
+            ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].col[2] = brightness * 0.25f;
             if (func_001F9908_2BDAF0(&morphoray_light_fade_countdown) != 0) {
                 release_point_light_slot(morphoray_point_light_slot);
                 morphoray_point_light_slot = -1;
@@ -1684,8 +1684,8 @@ void morphoray_update(Moby *moby) {
             morphoray_point_light_slot = -1;
         }
         if (D_L00_001617C8 >= 0) {
-            if (D_L00_001617C8 != -1 && ((Voice_2BDAF0 *)(voice_pool + D_L00_001617C8 * 0x70))->owner == moby
-                && ((Voice_2BDAF0 *)(voice_pool + D_L00_001617C8 * 0x70))->on != 0) {
+            if (D_L00_001617C8 != -1 && ((Voice *)(voice_pool + D_L00_001617C8 * 0x70))->owner == moby
+                && ((Voice *)(voice_pool + D_L00_001617C8 * 0x70))->on != 0) {
                 func_L00_0028EBF0_2BDAF0(D_L00_001617C8);
             }
             D_L00_001617C8 = -1;
@@ -1753,14 +1753,14 @@ typedef struct {
     char pad14[0x34];
     float f48;
     float f4C;
-} Vars_2BE3A8;
+} Vars;
 
 typedef struct {
     char pad0[0x10];
     float height;
-} Info_2BE3A8;
+} Info;
 
-typedef struct { int c[5]; } Tab_2BE3A8;
+typedef struct { int c[5]; } Tab;
 
 typedef struct { float f[4]; } __attribute__((aligned(16))) V_t;
 
@@ -1856,7 +1856,7 @@ extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") MACRO_ADDR;
 extern void func_L00_002BE2A0_2BE3A8(void) __asm__("FUN_L00_002bcf98");
 extern float func_L00_0025F368_2BE3A8(float) __asm__("FUN_L00_0025e310");
 extern void func_00215C00_2BE3A8(void *, float, float, float) __asm__("FUN_00214db0");
-extern Info_2BE3A8 *func_L00_0025D390_2BE3A8(struct Moby *) __asm__("FUN_002141f8");
+extern Info *func_L00_0025D390_2BE3A8(struct Moby *) __asm__("FUN_002141f8");
 extern void func_001F9BD8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_L00_001EFFF0_2BE3A8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float func_001F9D48_2BE3A8(void *, void *) __asm__("FUN_001f9b80");
@@ -1884,7 +1884,7 @@ extern int func_001F9908_2BE3A8(int *) __asm__("FUN_001f9740");
 
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/update_beam_ring_rail_and_pulse_effects.h"
 extern float D_L00_001617D0 MACRO_ADDR;
-extern Tab_2BE3A8 l00_beam_origin_particle_color_palette __asm__("D_L00_001E9AB0");
+extern Tab l00_beam_origin_particle_color_palette __asm__("D_L00_001E9AB0");
 void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) __asm__("FUN_L00_002bd0a0");
 
 void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
@@ -1895,8 +1895,8 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     Vec_2BE3A8 point;
     Vec_2BE3A8 beam_segment_direction;
     Vec_2BE3A8 side;
-    Vars_2BE3A8 *data;
-    Info_2BE3A8 *info;
+    Vars *data;
+    Info *info;
     int ring_index;
     int slot;
     int pulse;
@@ -1909,7 +1909,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     float wave_width;
     float spark_size;
 
-    data = (Vars_2BE3A8 *)moby->pvars;
+    data = (Vars *)moby->pvars;
     wave_offset.w = 1.0f;
     wave_offset.x = 0.0f;
     func_L00_002BE2A0_2BE3A8();
@@ -2010,7 +2010,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         func_L00_001FF4B0_2BE3A8(&side, &moby->rot_row1, D_L00_00161740_gp);
         func_001F9BD8_2BE3A8(&point, &D_L00_001DC260_2BE3A8[0], &side);
         {
-            Tab_2BE3A8 colors;
+            Tab colors;
             Vec_2BE3A8 out;
             Vec_2BE3A8 up;
 
@@ -2563,7 +2563,7 @@ typedef struct {
     char *o18;
     u8 pad2[0xC];
     float f28;
-} S173E40_2bec80;
+} S173E40;
 extern int D_L00_00173E40[] NOT_SDA;
 int FUN_001efa68_002bec80(Vec4_2bec80 *, Vec4_2bec80 *, int, void *, int) __asm__("FUN_001efa68");
 unsigned int FUN_001f0b58_002bec80(void) __asm__("FUN_001f0b58");
@@ -2585,9 +2585,9 @@ float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby)
     lower_probe_point.f[2] = f;
     upper_probe_point.f[2] = f + 6.0f;
     if (FUN_001efa68_002bec80(&upper_probe_point, &lower_probe_point, 6, probing_moby, 0)) {
-        char *hit_moby = (*(S173E40_2bec80 *)D_L00_00173E40).o18;
+        char *hit_moby = (*(S173E40 *)D_L00_00173E40).o18;
         if (hit_moby && *(char **)(hit_moby + 0x24) && *(short *)(*(char **)(hit_moby + 0x24) + 0x46) == 5) {
-            return (*(S173E40_2bec80 *)D_L00_00173E40).f28;
+            return (*(S173E40 *)D_L00_00173E40).f28;
         }
         switch (FUN_001f0b58_002bec80()) {
         case COLLISION_MATERIAL_WATER:
@@ -2599,7 +2599,7 @@ float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby)
         case 13:
             break;
         default:
-            return (*(S173E40_2bec80 *)D_L00_00173E40).f28;
+            return (*(S173E40 *)D_L00_00173E40).f28;
         }
     }
     return 0.0f;
@@ -2948,12 +2948,12 @@ typedef struct Mob_2C0CF8 {
     unsigned char bBC;            /* 0xBC */
 } Mob_2C0CF8;
 
-typedef struct Blk_2C0CF8 {
+typedef struct Blk {
     char pad0[0x38];
     void *p38;                    /* 0x38 */
     char pad3C[0x14];
     float f50;                    /* 0x50 */
-} Blk_2C0CF8;
+} Blk;
 
 typedef struct {
     char pad[0x46];
@@ -2997,9 +2997,9 @@ extern char D_L00_00173F80_2C0CF8[] __asm__("D_L00_00173E80");
 extern void *D_L00_00173F58_2C0CF8[] __asm__("D_L00_00173E58");
 extern char D_0013E633_2C0CF8[] __asm__("D_00141260");
 
-int try_start_moby_hop(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int check_line) __asm__("FUN_L00_002bf9f0");
+int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_line) __asm__("FUN_L00_002bf9f0");
 
-int try_start_moby_hop(Mob_2C0CF8 *moby, Blk_2C0CF8 *block, void *target, int check_line) {
+int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_line) {
     float jump[4];
     float land[4];
     float from[4];

@@ -1751,7 +1751,7 @@ typedef struct {
     float b[4];
     int c[4];
     float d[4];
-} L10SpriteData_298940;
+} L10SpriteData;
 extern void func_001F9BF0_298940(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_001FF4B0_298940(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_298940(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1768,7 +1768,7 @@ extern int D_L04_0015F5C4;
 void update_suck_cannon_particles(char *moby) __asm__("FUN_L04_002e1d00");
 
 void update_suck_cannon_particles(char *moby) {
-    L10SpriteData_298940 *sprite_data = *(L10SpriteData_298940 **)(moby + 0x78);
+    L10SpriteData *sprite_data = *(L10SpriteData **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
     float particle_position_step[4] __attribute__((aligned(16)));
     int i, col;

@@ -13,7 +13,7 @@
 typedef unsigned int Q_2cfcb8 __attribute__((mode(TI)));
 typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) V_2cfcb8;
 
-struct Vars_2cfcb8;
+struct Vars;
 typedef struct M_2cfcb8 {
     u8 p0[0x10];
     V_2cfcb8 pos;
@@ -28,7 +28,7 @@ typedef struct M_2cfcb8 {
     f32 rot_y;
     f32 rot_z;
     u8 p4c[0x78 - 0x4C];
-    struct Vars_2cfcb8 *vars;
+    struct Vars *vars;
     u8 p7c[0xA6 - 0x7C];
     s16 oclass;
     u16 hA8;
@@ -36,7 +36,7 @@ typedef struct M_2cfcb8 {
     u8 mission;
 } M_2cfcb8;
 
-typedef struct Vars_2cfcb8 {
+typedef struct Vars {
     u8 p0[0xA0];
     M_2cfcb8 *next_member;
     M_2cfcb8 *pA4;
@@ -54,7 +54,7 @@ typedef struct Vars_2cfcb8 {
     M_2cfcb8 *standing_on;
     f32 stack_level;
     s32 iF8;
-} Vars_2cfcb8;
+} Vars;
 
 typedef struct { s32 count; s32 pad_4[3]; struct { s32 pad_0[3]; s32 state; } entries[1]; } R_2cfcb8;
 typedef struct { u8 p0[0x18]; M_2cfcb8 *moby; u8 p1c[0x28 - 0x1C]; f32 point_z; } H_2cfcb8;
@@ -84,8 +84,8 @@ void ground_attached_update(M_2cfcb8 *moby) {
     V_2cfcb8 probe_down;
     M_2cfcb8 *member;
     M_2cfcb8 *other;
-    Vars_2cfcb8 *vars;
-    Vars_2cfcb8 *below_vars;
+    Vars *vars;
+    Vars *below_vars;
     V_2cfcb8 *src1, *src2, *src3, *src4;
     R_2cfcb8 *route;
     s32 group, flags_before, i, member_flags;
@@ -1316,19 +1316,19 @@ typedef float Vec_2D3F40[4] __attribute__((aligned(16)));
 
 typedef int U128_2D3F40 __attribute__((mode(TI)));
 
-typedef union Vu_2D3F40 {
+typedef union Vu {
     U128_2D3F40 q;
     Vec_2D3F40 f;
-} Vu_2D3F40;
+} Vu;
 
-typedef struct Quad_2D3F40 {
+typedef struct Quad {
     Vec_2D3F40 v[4];
     int c[4];
     float uv[8];
     long g[4];
-} Quad_2D3F40;
+} Quad;
 
-typedef struct Data_2D3F40 {
+typedef struct Data {
     char pad0[0x10];
     Vec_2D3F40 pos; /* 0x10 */
     char pad20[4];
@@ -1336,11 +1336,11 @@ typedef struct Data_2D3F40 {
     float tmax; /* 0x28 */
     char pad2C[4];
     Vec_2D3F40 dir; /* 0x30 */
-} Data_2D3F40;
+} Data;
 
 typedef struct Moby_2D3F40 {
     char pad0[0x78];
-    Data_2D3F40 *data; /* 0x78 */
+    Data *data; /* 0x78 */
     char pad7C[0x14];
     int rgba; /* 0x90 */
 } Moby_2D3F40;
@@ -1362,9 +1362,9 @@ extern void func_L00_001FD1D8_2D3F40(void *, void *, int) __asm__("FUN_001f7d30"
 void draw_metal_detector_trail(Moby_2D3F40 *moby) __asm__("FUN_L00_002d2a90");
 
 void draw_metal_detector_trail(Moby_2D3F40 *moby) {
-    Quad_2D3F40 q;
-    Vu_2D3F40 tt[6];
-    Data_2D3F40 *trail_data = moby->data;
+    Quad q;
+    Vu tt[6];
+    Data *trail_data = moby->data;
     float t, unwrapped_phase, k;
     int col;
     int trail_quad_texture;
@@ -2699,7 +2699,7 @@ typedef struct {
     float v64;
     float v68;
     float v6C;
-} St_2d5988;
+} St;
 
 typedef struct {
     u8 p0[0x10];
@@ -2711,8 +2711,8 @@ typedef struct {
     float f44;
     float f48;
     u8 p3[0x78 - 0x4C];
-    St_2d5988 *st;
-} Obj_2d5988;
+    St *st;
+} Obj;
 
 typedef struct {
     s32 n;
@@ -2738,10 +2738,10 @@ extern float FUN_001f9e90_2d5988(f32, f32) __asm__("FUN_001f9e90");
 extern float FUN_001fa5c8_2d5988(f32, f32) __asm__("FUN_001fa5c8");
 
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/update_infobot_slot_path_motion.h"
-void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) __asm__("FUN_L00_002d5988");
+void update_infobot_slot_path_motion(Obj *moby, Path_2d5988 *path, s32 arrival_state) __asm__("FUN_L00_002d5988");
 
-void update_infobot_slot_path_motion(Obj_2d5988 *moby, Path_2d5988 *path, s32 arrival_state) {
-    St_2d5988 *st;
+void update_infobot_slot_path_motion(Obj *moby, Path_2d5988 *path, s32 arrival_state) {
+    St *st;
     s32 path_segment_index;
     f32 segment_offset_or_fraction;
     Vec4_2d5988 v;

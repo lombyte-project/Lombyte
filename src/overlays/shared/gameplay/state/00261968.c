@@ -83,7 +83,7 @@ typedef struct {
     s32 count;
     u8 pad[12];
     Vec4_261b48 points[1];
-} SegmentPath_2629E0;
+} SegmentPath;
 
 typedef int OvlQuad_261b48 __attribute__((mode(TI)));
 
@@ -123,15 +123,15 @@ int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
     clear_u64_value(z);
     z[2] = 1.0f;
     best = 1.0f;
-    fast_vec_sub(t, (char *)((SegmentPath_2629E0 * *)D_L00_001B04B0_261968)[idx] + 0x10, a);
+    fast_vec_sub(t, (char *)((SegmentPath * *)D_L00_001B04B0_261968)[idx] + 0x10, a);
     transform_vector_by_basis(t, t, v);
     prev = t;
     cur = u;
-    if (i < ((SegmentPath_2629E0 * *)D_L00_001B04B0_261968)[idx]->count) {
+    if (i < ((SegmentPath * *)D_L00_001B04B0_261968)[idx]->count) {
         offset = 0x20;
         zero = 0.0f;
         do {
-            fast_vec_sub(cur, (char *)((SegmentPath_2629E0 * *)D_L00_001B04B0_261968)[idx] + offset, a);
+            fast_vec_sub(cur, (char *)((SegmentPath * *)D_L00_001B04B0_261968)[idx] + offset, a);
             transform_vector_by_basis(cur, cur, v);
             if (t[3] != zero || u[3] != zero) {
                 if (u[1] * t[1] < 0.0f) {
@@ -148,7 +148,7 @@ int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
         next:
             i++;
             offset += 0x10;
-        } while (i < ((SegmentPath_2629E0 * *)D_L00_001B04B0_261968)[idx]->count);
+        } while (i < ((SegmentPath * *)D_L00_001B04B0_261968)[idx]->count);
     }
     lerp_vector(c, a, b, best);
     return found;

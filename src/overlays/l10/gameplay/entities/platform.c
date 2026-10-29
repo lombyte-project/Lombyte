@@ -328,17 +328,17 @@ typedef struct {
     int spot_alt;
     int switch_a;
     int switch_b;
-} PickupVars_98b68;
+} PickupVars;
 
 typedef struct {
     u8 pad[0x454];
     u8 collected[1];
-} LevelState_98b68;
+} LevelState;
 
 int D_L10_00161388 = 1;
 extern char *D_L10_0015FFD8_98b68 __asm__("D_L10_0015FFD8");
 extern u8 D_0014C050_98b68[] __asm__("D_0014C050");
-extern LevelState_98b68 D_L10_001BB6B0_98b68 __asm__("D_L10_001BB6B0");
+extern LevelState D_L10_001BB6B0_98b68 __asm__("D_L10_001BB6B0");
 extern int level_moby_killed[][64] __asm__("D_0014C190");
 extern int D_L10_001BA950[];
 extern u8 D_001413F4_98b68[] __asm__("D_001413F4");
@@ -356,10 +356,10 @@ extern short D_00141948 __attribute__((section(".data")));
 void update_hero_relocation_trigger(struct Moby *moby) __asm__("FUN_L10_00298b68");
 
 void update_hero_relocation_trigger(struct Moby *moby) {
-    PickupVars_98b68 *vars;
+    PickupVars *vars;
     struct Moby *target;
     moby->update_dist = 0xFF;
-    vars = (PickupVars_98b68 *)moby->pvars;
+    vars = (PickupVars *)moby->pvars;
     if (D_L10_00161388 == 1) {
         D_L10_00161388 = 0;
         D_00141948 = 0;
@@ -1076,7 +1076,7 @@ void update_height_adjusted_projectile(struct Moby *moby) {
 #endif
 #ifndef MACRO_ADDR
 #endif
-struct Swirl_d8058 {
+struct Swirl {
     char pad[0x18];
     float a;
     float b;
@@ -1102,9 +1102,9 @@ int spawn_bombthrower_grass_projectile(int owner, char *initial_position, char *
         qcopy(moby + 0x10, initial_position);
         *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + *(float *)&D_L10_00161BEC_gp;
         qcopy(data, initial_velocity);
-        ((struct Swirl_d8058 *)data)->a =
+        ((struct Swirl *)data)->a =
             func_002140F8_d8058(D_0015EE6C_d8058 * 1.0471976f, D_0015EE6C_d8058 * 3.1415927f);
-        ((struct Swirl_d8058 *)data)->b =
+        ((struct Swirl *)data)->b =
             func_002140F8_d8058(D_0015EE6C_d8058 * 1.0471976f, D_0015EE6C_d8058 * 3.1415927f);
         *(short *)(data + 0x14) = func_001F9850_d8058(0x3C);
         update_entity(moby);
@@ -1234,7 +1234,7 @@ typedef int u128_2D9988 __attribute__((mode(TI)));
 
 typedef struct {
     float x, y, z;
-} Vel_2D9988;
+} Vel;
 
 typedef struct {
     char pad0[0x10];
@@ -1250,7 +1250,7 @@ typedef struct {
     short s3a;
     float f3c;
     int i40;
-} Shot_2D9988;
+} Shot;
 
 extern char *fast_arc_tan(void *, int, int) __asm__("FUN_001f9e90");
 extern char D_L10_00178380[];
@@ -1296,7 +1296,7 @@ void FUN_L10_002d85c8(char *m) {
     int flag21;
     float v0[4];
     float v10[4];
-    Shot_2D9988 sb;
+    Shot sb;
     float s50, s54, s58;
     int i5c, i60, i64;
     float s68, s6c, s70;
@@ -1326,7 +1326,7 @@ void FUN_L10_002d85c8(char *m) {
                 trooper_knockback_arc(v10, &s50, &s54, &s58);
                 *(float *)data = func_001F9F90_2D9988(s50) * s54;
                 *(float *)(data + 0x4) = func_001F9FA8_2D9988(s50) * s54;
-                ((Vel_2D9988 *)data)->z = 0.0f;
+                ((Vel *)data)->z = 0.0f;
                 *(float *)(data + 0x8) = s58;
                 *(short *)(data + 0x14) = func_001F9850_2D9988(0xF);
                 *(unsigned char *)(m + 0x20) = 2;
@@ -1362,7 +1362,7 @@ void FUN_L10_002d85c8(char *m) {
                 trooper_knockback_arc(v10, &s68, &s6c, &s70);
                 *(float *)data = func_001F9F90_2D9988(s68) * s6c;
                 *(float *)(data + 0x4) = func_001F9FA8_2D9988(s68) * s6c;
-                ((Vel_2D9988 *)data)->z = 0.0f;
+                ((Vel *)data)->z = 0.0f;
                 *(float *)(data + 0x8) = s70;
                 *(short *)(data + 0x14) = func_001F9850_2D9988(0xF);
                 *(unsigned char *)(m + 0x20) = 2;

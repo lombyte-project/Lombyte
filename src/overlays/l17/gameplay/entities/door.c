@@ -2777,7 +2777,7 @@ typedef struct {
     char pad1E5[0xB];
     float f1F0;
     float f1F4;
-} Data_2F1558;
+} Data;
 
 typedef struct {
     char pad0[0x10];
@@ -2786,7 +2786,7 @@ typedef struct {
     char pad21[0x27];
     float f48;
     char pad4C[0x2C];
-    Data_2F1558 *data;
+    Data *data;
     char pad7C[0x28];
     unsigned char bA4;
     char padA5;
@@ -2816,7 +2816,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_volume_suppressed) {
     Moby_2F1558 *moby = (Moby_2F1558 *)moby_v;
-    Data_2F1558 *moby_vars;
+    Data *moby_vars;
     Hit_2F1558 *hit_record;
     float position_buffer[4];
     int x;

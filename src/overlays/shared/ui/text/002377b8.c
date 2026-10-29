@@ -669,9 +669,9 @@ typedef struct {
 
 typedef struct { int unk0, unk4, unk8, unkC, unk10, unk14, unk18; } Ent_239918;
 
-typedef struct { int v[4]; } Ids_239918;
+typedef struct { int v[4]; } Ids;
 
-typedef struct { char pad0[0x2C]; int unk2C; } Arena_239918;
+typedef struct { char pad0[0x2C]; int unk2C; } Arena;
 
 typedef struct {
     char pad0[0x50];
@@ -681,7 +681,7 @@ typedef struct {
     char pad5C[0x14];
     unsigned char cnt[4];
     int sel;
-} Elem_239918;
+} Elem;
 
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -710,7 +710,7 @@ extern u32 strlen(const char *);
 extern void FUN_L00_0023b120(char *, int, int, int, int, int);
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 int FUN_L00_00235a70_c(HudElem_238f88 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
-extern Ids_239918 D_L00_0015F8C0_239918 __asm__("D_L00_0015F7E0");
+extern Ids D_L00_0015F8C0_239918 __asm__("D_L00_0015F7E0");
 extern char D_L00_0017E5D8_239918[] __asm__("D_L00_0017E4D8");
 extern float func_001FA888_239918(int) __asm__("FUN_001fa6c0");
 extern float func_001F9FA8_239918(float) __asm__("FUN_001f9de0");
@@ -726,10 +726,10 @@ extern int func_001FA8A8_239918(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_001F6EA8_239918(int, int, int, int, int) __asm__("FUN_001f6af0");
 extern int func_L00_00236400_239918(void *, int *, int *) __asm__("FUN_L00_00235a70");
 
-int draw_hud_radial_selector_panel(Elem_239918 *element) __asm__("FUN_L00_00238f88");
+int draw_hud_radial_selector_panel(Elem *element) __asm__("FUN_L00_00238f88");
 
-int draw_hud_radial_selector_panel(Elem_239918 *element) {
-    Ids_239918 text_ids;
+int draw_hud_radial_selector_panel(Elem *element) {
+    Ids text_ids;
     int x, y;
     int frame_alpha, pulse_alpha, half_width, half_height, i, alpha, selected, text_y, color, shadow, text;
     float open_fade, text_fade;
@@ -790,7 +790,7 @@ int draw_hud_radial_selector_panel(Elem_239918 *element) {
             } else {
                 alpha = frame_alpha;
             }
-            if (((Arena_239918 *)D_L00_0017E5D8_239918)->unk2C != 0) {
+            if (((Arena *)D_L00_0017E5D8_239918)->unk2C != 0) {
                 func_L00_0023BAB8_239918(element, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk4), icon_x, icon_y, 1, alpha);
             } else {
                 func_L00_0023BAB8_239918(element, func_00200198_239918(D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk0, D_L00_0015FAC0_c2[D_L00_0015F72C][i].unk4 + 4), icon_x, icon_y, 1, frame_alpha);

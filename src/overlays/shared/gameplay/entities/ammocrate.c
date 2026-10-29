@@ -355,9 +355,9 @@ typedef int Q_2E8040 __attribute__((mode(TI)));
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_2E8040;
 
-typedef struct Cls_2E8040 { char pad0[0x24]; float scale; } Cls_2E8040;
+typedef struct Cls { char pad0[0x24]; float scale; } Cls;
 
-typedef struct Rocket_2E8040 {
+typedef struct Rocket {
     V4_2E8040 vel;
     V4_2E8040 tpos;
     Moby *owner;
@@ -368,9 +368,9 @@ typedef struct Rocket_2E8040 {
     float pitchv;
     float f38;
     int target_uid;
-} Rocket_2E8040;
+} Rocket;
 
-typedef struct Tex_2E8040 { char pad0[0x5C]; unsigned char *p5C; } Tex_2E8040;
+typedef struct Tex { char pad0[0x5C]; unsigned char *p5C; } Tex;
 
 char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
@@ -409,12 +409,12 @@ extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa6
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void func_0020D678_2E8040(void *) __asm__("FUN_0020c828");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern Tex_2E8040 D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
+extern Tex D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
 extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
 
 void update_ship_rocket(Moby *m) __asm__("FUN_L13_002e6c08");
 void update_ship_rocket(Moby *rocket) {
-    Rocket_2E8040 *rocket_data = *(void **)&rocket->pvars;
+    Rocket *rocket_data = *(void **)&rocket->pvars;
     V4_2E8040 old;
     V4_2E8040 hitpos;
     V4_2E8040 effect_scratch_vector;
@@ -424,7 +424,7 @@ void update_ship_rocket(Moby *rocket) {
     float trail_segment_fraction;
 
     qcopy(&old, &*(V4_2E8040 *)&rocket->pos);
-    rocket->scale += (((Cls_2E8040 *)rocket->pclass)->scale - rocket->scale) * 0.1f;
+    rocket->scale += (((Cls *)rocket->pclass)->scale - rocket->scale) * 0.1f;
     *(Q_2E8040 *)&trail_direction = 0;
     trail_direction.x = func_002140F8_2E8040(-1.0f, 1.0f);
     trail_direction.y = func_002140F8_2E8040(-1.0f, 1.0f);
@@ -442,7 +442,7 @@ void update_ship_rocket(Moby *rocket) {
         func_001F9BD8_2E8040(&effect_scratch_vector, &effect_scratch_vector, &*(V4_2E8040 *)&rocket->pos);
         spawned_effect = spawn_particle(&effect_scratch_vector, (float *)&particle_velocity, func_001F9850_2E8040(0x3C), 0x7F, 0x606060, 3, 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
         if (spawned_effect != 0) {
-            Tex_2E8040 *trail_particle_attribute_source = &D_L13_001B2680_2E8040;
+            Tex *trail_particle_attribute_source = &D_L13_001B2680_2E8040;
             spawned_effect[2] = *trail_particle_attribute_source->p5C;
             spawned_effect[3] = 0x48;
         }

@@ -151,13 +151,13 @@ typedef struct {
     int f48;
     int f4C;
     int f50;
-} Data_2E57F8;
+} Data;
 
 typedef struct {
     unsigned short count;
     unsigned short time;
     unsigned int mask;
-} Help_2E57F8;
+} Help;
 
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern int D_L04_00179590[] NOT_SDA;
@@ -186,7 +186,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
         TUTORIAL_TRIGGER_STATE_INITIALIZE = 0,
         TUTORIAL_TRIGGER_STATE_UPDATE_HINTS_AND_STATS = 1
     };
-    Data_2E57F8 *data = *(void **)&moby->pvars;
+    Data *data = *(void **)&moby->pvars;
 
     switch (moby->state) {
     case TUTORIAL_TRIGGER_STATE_INITIALIZE:
@@ -210,14 +210,14 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
                 usage[0x18].level_mask = usage[0x18].level_mask | (1 << current_level_index_macro) | 0x80000000;
             } else if (D_00141908 >= 3) {
                 if (D_0013D4D4 == 0) {
-                    Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                    Help *help = (Help *)(((char *)&D_00141968));
                     if (help[0x1D].count == 0) {
                         help_request(0xFA1, 0x1D);
                     }
                 } else {
                     int elapsed = scale_game_frames(D_0015EEA4_macro) - D_001417C2 * 600;
                     if (scale_game_frames(0x4650) < elapsed) {
-                        Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                        Help *help = (Help *)(((char *)&D_00141968));
                         if (help[0x1C].count == 0) {
                             help_request(0xFA0, 0x1C);
                         }
@@ -227,7 +227,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
         }
 
         {
-            Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+            Help *help = (Help *)(((char *)&D_00141968));
             if (help[0x42].count < 4) {
                 if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f34) != 0
                     || is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f38) != 0) {
@@ -252,7 +252,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
         {
             unsigned char *item_flags = ((char *)&items_acquired);
             if (item_flags[9] != 0 && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
-                Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                Help *help = (Help *)(((char *)&D_00141968));
                 if (help[0x1E].count == 0) {
                     help_request(0xFA2, 0x1E);
                 }
@@ -261,7 +261,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
 
         if (is_point_inside_clip_volume(((char *)&D_0013F3D0), data->f3C) != 0 && D_00141940 == 0
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
-            Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+            Help *help = (Help *)(((char *)&D_00141968));
             if (help[0x77].count == 0) {
                 help_request(0x4E2D, 0x77);
             }
@@ -292,7 +292,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
             && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
             if (D_0013D4DA == 0) {
-                Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                Help *help = (Help *)(((char *)&D_00141968));
                 int elapsed = scale_game_frames(D_0015EEA4_macro) - help[0x1F].time * 600;
                 if ((int)(scale_game_frames(0x12) * 60.0f) < elapsed || help[0x1F].time * 600 == 0) {
                     help_request(0xFA3, 0x1F);
@@ -315,9 +315,9 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
                     usage[0x11].level_mask = usage[0x11].level_mask | (1 << current_level_index_macro) | 0x80000000;
                 } else if (data->fC == 0) {
                     if (D_001418D0 == 0) {
-                        Help_2E57F8 *help;
+                        Help *help;
                         data->f8++;
-                        help = (Help_2E57F8 *)(((char *)&D_00141968));
+                        help = (Help *)(((char *)&D_00141968));
                         if (help[0x20].count != 0) {
                             int elapsed = scale_game_frames(D_0015EEA4_macro) - help[0x20].time * 600;
                             if ((int)(scale_game_frames(0x12) * 60.0f) < elapsed || help[0x20].time * 600 == 0) {
@@ -351,7 +351,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
             int elapsed = scale_game_frames(D_0015EEA4_macro) - D_00141892 * 600;
             if (scale_game_frames(0x34BC0) < elapsed) {
-                Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+                Help *help = (Help *)(((char *)&D_00141968));
                 if (!(help[0x43].mask & (1 << current_level_index_macro))) {
                     help_request(0x3EF, 0x43);
                 }
@@ -359,7 +359,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
         }
 
         {
-            Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+            Help *help = (Help *)(((char *)&D_00141968));
             if (help[0x46].count == 0 || help[0x47].count == 0) {
                 Hero *hero = (Hero *)(((char *)&D_0013F3D0 - 0x80));
                 Moby *ground;
@@ -408,7 +408,7 @@ void update_eudora_tutorial_hints_and_stats(Moby *moby) {
             && (((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) < 2 || ((unsigned int)((Hero *)(((char *)&D_0013F3D0 - 0x80)))->state.control_mode) == 9)
             && data->f24 >= 3
             && D_L04_00179590[0] == 0 && D_L04_00179590[9] == -1) {
-            Help_2E57F8 *help = (Help_2E57F8 *)(((char *)&D_00141968));
+            Help *help = (Help *)(((char *)&D_00141968));
             if (help[0x49].count == 0) {
                 help_request(0xFA5, 0x49);
             }

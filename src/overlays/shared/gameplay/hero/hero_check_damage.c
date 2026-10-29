@@ -139,14 +139,14 @@ int probe_hero_ledge_edge(Vec4 *ledge_probe_origin, f32 *facing_yaw)
     }
     return 0;
 }
-struct LedgeSpot_20cd08 {
+struct LedgeSpot {
     Vec4 sphere;
     s32 *owner;
     s32 kind;
     u8 pad18[8];
 };
 
-extern struct LedgeSpot_20cd08 *D_L00_0015F70C;
+extern struct LedgeSpot *D_L00_0015F70C;
 extern s32 D_L00_0015F710;
 extern f32 FUN_001f9b48(void *, void *);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");

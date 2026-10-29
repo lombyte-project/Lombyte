@@ -369,7 +369,7 @@ typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec_2D9F08;
 
-typedef struct Data_2D9F08 {
+typedef struct Data {
     char p0[0x10];
     short h10;
     short h12;
@@ -389,17 +389,17 @@ typedef struct Data_2D9F08 {
     char p118[0x4];
     short h11C;
     unsigned short h11E;
-} Data_2D9F08;
+} Data;
 
-typedef struct Cam_2D9F08 {
+typedef struct Cam {
     char p0[0x140];
     Vec_2D9F08 v140;
     Vec_2D9F08 v150;
     char p160[0x20];
     struct Moby *p180;
-} Cam_2D9F08;
+} Cam;
 
-typedef struct Pad_2D9F08 {
+typedef struct Pad {
     char p0[0x1A4];
     int i1A4;
     char p1A8[0x18];
@@ -410,18 +410,18 @@ typedef struct Pad_2D9F08 {
             int hi;
         } w;
     } b1C0;
-} Pad_2D9F08;
+} Pad;
 
 typedef struct {
     int i0;
     char p4[0x20];
     int i24;
-} Idle_2D9F08;
+} Idle;
 
 typedef struct {
     char pad0[0x454];
     unsigned char collected[1];
-} Lvl_2D9F08;
+} Lvl;
 
 extern char D_0013C940[];
 extern char D_0013FDE8[];
@@ -469,17 +469,17 @@ extern void func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
 extern int func_001F9938_2D9F08(void *) __asm__("FUN_001f9770");
 extern void func_L00_002EC0C8_2D9F08(int) __asm__("FUN_L00_002eac18");
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
-extern void func_L00_0025E590_2D9F08(Moby *, Data_2D9F08 *) __asm__("FUN_L00_0025d538");
+extern void func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
 extern float D_L02_001D33B0[4][4];
-extern Lvl_2D9F08 D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
+extern Lvl D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
 extern int D_0015EE84_2D9F08 __asm__("D_0015ED84") __attribute__((section(".sdata")));
 extern char D_0014C290_2D9F08[] __asm__("D_0014C190");
 extern Vec_2D9F08 D_L02_00167440_2D9F08[] __asm__("D_L02_001673C0");
 extern float D_0015EE70_2D9F08 __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern float D_0015EE6C_2D9F08 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
 extern int D_L02_0017EB88_2D9F08 __asm__("D_L02_0017EB08") __attribute__((section(".data")));
-extern Cam_2D9F08 D_L02_00167300_2D9F08 __asm__("D_L02_00167280");
-extern Idle_2D9F08 D_L02_00179A10;
+extern Cam D_L02_00167300_2D9F08 __asm__("D_L02_00167280");
+extern Idle D_L02_00179A10;
 extern int D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
 extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 extern int D_L02_00161AA8_gp __asm__("D_L02_00161AA8") __attribute__((sda));
@@ -499,7 +499,7 @@ void tresspasser_pad_update(Moby *moby) {
         TRESSPASSER_PAD_STATE_COMMIT_COMPLETION = 3
     };
     Vec_2D9F08 camera_pos, camera_rot;
-    Data_2D9F08 *data = (struct Data_2D9F08 *)moby->pvars;
+    Data *data = (struct Data *)moby->pvars;
     int i;
 
     if (data == 0) {
@@ -614,15 +614,15 @@ void tresspasser_pad_update(Moby *moby) {
                 if (func_001F9938_2D9F08(&data->h10)) {
                     moby->state = 3;
                 }
-            } else if (((Pad_2D9F08 *)D_0013C940)->b1C0.l & 0xA00000000000) {
+            } else if (((Pad *)D_0013C940)->b1C0.l & 0xA00000000000) {
                 data->h11E |= 1;
                 func_0022ED80_2D9F08(0, 0, moby);
-                if (((Pad_2D9F08 *)D_0013C940)->b1C0.w.hi & 0x8000) {
+                if (((Pad *)D_0013C940)->b1C0.w.hi & 0x8000) {
                     data->fE4 = -(D_0015EE6C_2D9F08 * 6.2831855f);
                 } else {
                     data->fE4 = D_0015EE6C_2D9F08 * 6.2831855f;
                 }
-            } else if (((Pad_2D9F08 *)D_0013C940)->i1A4 & 0x1000) {
+            } else if (((Pad *)D_0013C940)->i1A4 & 0x1000) {
                 data->h11E |= 2;
                 data->iE0 = data->iE0 - 1;
                 if (data->iE0 == 0) {
@@ -630,7 +630,7 @@ void tresspasser_pad_update(Moby *moby) {
                 } else {
                     func_0022ED80_2D9F08(1, 0, moby);
                 }
-            } else if (((Pad_2D9F08 *)D_0013C940)->i1A4 & 0x4000) {
+            } else if (((Pad *)D_0013C940)->i1A4 & 0x4000) {
                 data->h11E |= 2;
                 data->iE0 = data->iE0 + 1;
                 if (data->iE0 == 4) {
@@ -1418,7 +1418,7 @@ typedef struct {
     float b[4];
     int c[4];
     float d[4];
-} L02SpriteData_ea8b0;
+} L02SpriteData;
 extern void func_001F9BF0_ea8b0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_001F9BD8_ea8b0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9908_ea8b0(int *) __asm__("FUN_001f9740");
@@ -1432,7 +1432,7 @@ extern char D_L02_00167440_ea8b0[] __asm__("D_L02_001673C0");
 void update_collectible_sprite_effect(char *moby) __asm__("FUN_L02_002ea8b0");
 
 void update_collectible_sprite_effect(char *moby) {
-    L02SpriteData_ea8b0 *sprite_data = *(L02SpriteData_ea8b0 **)(moby + 0x78);
+    L02SpriteData *sprite_data = *(L02SpriteData **)(moby + 0x78);
     float d[4] __attribute__((aligned(16)));
     float sprite_position_step[4] __attribute__((aligned(16)));
     int i, col;

@@ -39,7 +39,7 @@ typedef struct {
     short h9A;
     short h9C;
     short h9E;
-} Gun_306890;
+} Gun;
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
@@ -111,7 +111,7 @@ void update_planetbuster_maximus_guns(char *moby) {
         int gun_entry_index;
         char *ent;
         char *gun_moby;
-        Gun_306890 *md;
+        Gun *md;
         float yaw;
         float owner_to_hero_distance_xy;
         float dz;
@@ -123,7 +123,7 @@ void update_planetbuster_maximus_guns(char *moby) {
         gun_entry_index = *(int *)(owner_data - -(i * 4) + 0x5D0);
         ent = owner_data + gun_entry_index * 0x30;
         gun_moby = (char *)(D_L12_0015FFD8_gp + (*(int *)(ent + 0x20) << 8));
-        md = *(Gun_306890 **)(gun_moby + 0x78);
+        md = *(Gun **)(gun_moby + 0x78);
         qcopy(position_buffer, D_L12_00167240);
         gun_position_copy_destination = scratch_vector;
         position_buffer[2] -= 0.7f;

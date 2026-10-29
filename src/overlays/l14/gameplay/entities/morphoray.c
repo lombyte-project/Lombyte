@@ -626,7 +626,7 @@ typedef struct Moby_3071B0 {
     char pad21[0x23];
     float f44;                    /* 0x44 */
     char pad48[0x30];
-    struct Data_3071B0 *data;     /* 0x78 */
+    struct Data *data;     /* 0x78 */
     char pad7C[0x44];
     float rot[4];                 /* 0xC0 */
     char padD0[0x10];
@@ -634,27 +634,27 @@ typedef struct Moby_3071B0 {
     char padF0[0x10];
 } Moby_3071B0;
 
-typedef struct Slots_3071B0 {
+typedef struct Slots {
     Moby_3071B0 *m[6];
-} Slots_3071B0;
+} Slots;
 
-typedef struct Data_3071B0 {
+typedef struct Data {
     Moby_3071B0 *owner;           /* 0x00 */
-    Slots_3071B0 slots;           /* 0x04 */
+    Slots slots;           /* 0x04 */
     int trigger;                  /* 0x1C: index of the moby that starts it */
     short timer;                  /* 0x20 */
     short cur;                    /* 0x22 */
     float rate;                   /* 0x24 */
     int idx[6];                   /* 0x28 */
     int voice;                    /* 0x40 */
-} Data_3071B0;
+} Data;
 
-typedef struct Snd_3071B0 {
+typedef struct Snd {
     char pad0[0x74];
     unsigned char f74;
     char pad75[0x13];
     Moby_3071B0 *f88;
-} Snd_3071B0;
+} Snd;
 
 extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 extern int D_L14_0015FFD8_c __asm__("D_L14_0015FFD8");
@@ -694,7 +694,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         HELPER_SEQUENCE_ANIMATE_SLOTS = 2,
         HELPER_SEQUENCE_ANIMATE_OWNER = 3
     };
-    Data_3071B0 *data = moby->data;
+    Data *data = moby->data;
     float position_offset[4];
 
     switch (moby->state) {
@@ -729,7 +729,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         }
         break;
     case HELPER_SEQUENCE_ANIMATE_SLOTS: {
-        Slots_3071B0 *slots = &data->slots;
+        Slots *slots = &data->slots;
         Moby_3071B0 *current_slot_moby = slots->m[data->cur];
         func_001F9938_3071B0(&data->timer);
         current_slot_moby->f44 = interpolate_angle(1.5707964f, 0.0f, func_001FA888_3071B0(data->timer) * data->rate);
@@ -765,7 +765,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         if (data->timer == 0) {
             int j;
             if (data->voice != -1) {
-                Snd_3071B0 *voice_entry = (Snd_3071B0 *)(D_0013E633_3071B0 + data->voice * 0x70);
+                Snd *voice_entry = (Snd *)(D_0013E633_3071B0 + data->voice * 0x70);
                 if (voice_entry->f88 == moby && voice_entry->f74) {
                     func_L00_0028EBF0_3071B0(data->voice);
                 }

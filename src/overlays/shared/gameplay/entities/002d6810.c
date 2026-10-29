@@ -654,7 +654,7 @@ typedef struct { V_2d8fa0 p[5]; } P_2d8fa0;
 
 typedef struct { V_2d8fa0 hdr; V_2d8fa0 p[4]; } H_2d8fa0;
 
-typedef struct { char pad[0xF0]; V_2d8fa0 a; V_2d8fa0 b; V_2d8fa0 c; } Data_2d8fa0;
+typedef struct { char pad[0xF0]; V_2d8fa0 a; V_2d8fa0 b; V_2d8fa0 c; } Data;
 
 extern H_2d8fa0 l15_electric_water_side_arc_predecessor_points[] __asm__("D_L15_001D3BA0");
 extern V_2d8fa0 D_L15_001D3740[];
@@ -719,7 +719,7 @@ extern float D_L15_00167440_2d8fa0[] __asm__("D_L15_001673C0");
 void update_electric_water_bolt_effect(Moby *moby) {
     V_2d8fa0 vectors[10];
     V_2d8fa0 jitter[5];
-    Data_2d8fa0 *data = (Data_2d8fa0 *)moby->pvars;
+    Data *data = (Data *)moby->pvars;
     unsigned char flag = *(unsigned char *)D_0013E533;
     float scale;
     int i;

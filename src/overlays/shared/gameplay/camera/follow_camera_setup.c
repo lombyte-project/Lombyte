@@ -20,11 +20,11 @@ extern float D_L00_00161CDC_gp __asm__("D_L00_00161CDC") __attribute__((sda));
 extern float D_L00_00161CE0_gp __asm__("D_L00_00161CE0") __attribute__((sda));
 extern float D_L00_00161CE4_gp __asm__("D_L00_00161CE4") __attribute__((sda));
 extern float D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
-typedef struct { char pad0[0x2C]; float unk2C; char pad30[0xC]; short unk3C; short unk3E; int unk40; char pad44[8]; int unk4C; char pad50[8]; float unk58; } CamOrbit_2e5e38;
-typedef struct { char pad0[0xB4]; int unkB4; char padB8[0x1E]; unsigned char unkD6; char padD7[3]; short unkDA; float unkDC; float unkE0; float unkE4; float unkE8; } CamTarget_2e5e38;
+typedef struct { char pad0[0x2C]; float unk2C; char pad30[0xC]; short unk3C; short unk3E; int unk40; char pad44[8]; int unk4C; char pad50[8]; float unk58; } CamOrbit;
+typedef struct { char pad0[0xB4]; int unkB4; char padB8[0x1E]; unsigned char unkD6; char padD7[3]; short unkDA; float unkDC; float unkE0; float unkE4; float unkE8; } CamTarget;
 typedef struct { char pad0[0x10]; short unk10; char pad12[0x10]; short unk22; } Cam_2e5e38;
-typedef struct { char pad0[0x3C]; float unk3C; float unk40; float unk44; int unk48; } CamSpring_2e5e38;
-typedef struct { char pad0[0x6]; short unk6; char pad8[4]; float unkC; } CamEnd_2e5e38;
+typedef struct { char pad0[0x3C]; float unk3C; float unk40; float unk44; int unk48; } CamSpring;
+typedef struct { char pad0[0x6]; short unk6; char pad8[4]; float unkC; } CamEnd;
 float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 
 void follow_camera_approach(unsigned char *moby) __asm__("FUN_L00_002e5e38");
@@ -34,7 +34,7 @@ extern float follow_camera_orbit_height_damping_gp __asm__("D_L00_00161D08") __a
 void follow_camera_approach(unsigned char *moby)
 {
     unsigned char *init, *camera_state, *defaults, *orbit, *target, *default_target, *default_orbit, *reset;
-    CamSpring_2e5e38 *spring_reset;
+    CamSpring *spring_reset;
     init = *(unsigned char **)(moby + 0x70) + 0x1A8;
     *(float *)(init + 0x14) = D_L00_0015EF44_macro;
     *(int *)(init + 0x1C) = 0;
@@ -62,32 +62,32 @@ void follow_camera_approach(unsigned char *moby)
     } else {
         *(float *)(target + 0xB0) = cam_interp_values(target + 0xBC, *(float *)(target + 0xB0), *(float *)(default_target + 0xB0), *(float *)(target + 0xB8), 0.2f, 0.0f);
     }
-    ((CamOrbit_2e5e38 *)orbit)->unk3C = 0;
-    ((CamOrbit_2e5e38 *)orbit)->unk3E = 0;
-    ((CamOrbit_2e5e38 *)orbit)->unk40 = 0;
-    ((CamOrbit_2e5e38 *)orbit)->unk4C = 0;
-    ((CamOrbit_2e5e38 *)orbit)->unk58 = ((CamOrbit_2e5e38 *)default_orbit)->unk2C;
-    ((CamTarget_2e5e38 *)target)->unkDA = 0;
-    ((CamTarget_2e5e38 *)target)->unkB4 = 0;
+    ((CamOrbit *)orbit)->unk3C = 0;
+    ((CamOrbit *)orbit)->unk3E = 0;
+    ((CamOrbit *)orbit)->unk40 = 0;
+    ((CamOrbit *)orbit)->unk4C = 0;
+    ((CamOrbit *)orbit)->unk58 = ((CamOrbit *)default_orbit)->unk2C;
+    ((CamTarget *)target)->unkDA = 0;
+    ((CamTarget *)target)->unkB4 = 0;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk10 = 1;
     (*(Cam_2e5e38 **)(moby + 0x70))->unk22 = 0;
-    ((CamTarget_2e5e38 *)target)->unkDC = D_L00_00161CA0_gp;
-    ((CamTarget_2e5e38 *)target)->unkE4 = D_L00_00161CA0_gp;
-    ((CamTarget_2e5e38 *)target)->unkE0 = 0.2f;
-    ((CamTarget_2e5e38 *)target)->unkE8 = 0.2f;
-    ((CamTarget_2e5e38 *)target)->unkD6 = 0;
-    spring_reset = (CamSpring_2e5e38 *)(*(unsigned char **)(moby + 0x70) + 0x1D0);
+    ((CamTarget *)target)->unkDC = D_L00_00161CA0_gp;
+    ((CamTarget *)target)->unkE4 = D_L00_00161CA0_gp;
+    ((CamTarget *)target)->unkE0 = 0.2f;
+    ((CamTarget *)target)->unkE8 = 0.2f;
+    ((CamTarget *)target)->unkD6 = 0;
+    spring_reset = (CamSpring *)(*(unsigned char **)(moby + 0x70) + 0x1D0);
     spring_reset->unk44 = D_L00_00161CDC_gp;
     spring_reset->unk3C = D_L00_00161CE4_gp;
     spring_reset->unk40 = D_L00_00161CE0_gp;
     spring_reset->unk48 = D_L00_0015EF60_macro;
     reset = *(unsigned char **)(moby + 0x70) + 0x220;
-    ((CamEnd_2e5e38 *)reset)->unkC = D_L00_00161D1C_gp;
-    ((CamEnd_2e5e38 *)reset)->unk6 = 0;
+    ((CamEnd *)reset)->unkC = D_L00_00161D1C_gp;
+    ((CamEnd *)reset)->unk6 = 0;
 }
-typedef struct { u8 pad[0xB0]; f32 fB0; } S40_2e6000;
-typedef struct { u8 pad[0x3C]; f32 f3C; u8 pad2[4]; f32 f44; } S1D0_2e6000;
-typedef struct { s32 i0; u8 pad[0xC]; s32 i10; } S220_2e6000;
+typedef struct { u8 pad[0xB0]; f32 fB0; } S40;
+typedef struct { u8 pad[0x3C]; f32 f3C; u8 pad2[4]; f32 f44; } S1D0;
+typedef struct { s32 i0; u8 pad[0xC]; s32 i10; } S220;
 typedef struct {
     u8 pad0[0x12];
     s16 h12;
@@ -142,9 +142,9 @@ extern void follow_camera_set_lateral_spring(f32, f32) __asm__("FUN_L00_002e8590
 /* Per-frame follow camera adjustments driven by the hero's state: sway, zoom and lookat tweaks, then the shake timers in m->h12/h14/h16. */
 void follow_camera_apply_overrides(O_2e6000 *o) __asm__("FUN_L00_002e6000");
 void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
-    S220_2e6000 *camera_override_state;
-    S40_2e6000 *q;
-    S1D0_2e6000 *camera_spring_state;
+    S220 *camera_override_state;
+    S40 *q;
+    S1D0 *camera_spring_state;
     M_2e6000 *m;
     A_2e6000 *player_camera_state;
     A_2e6000 *x;
@@ -156,7 +156,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     s32 *lp;
     u8 *aim_height_data;
 
-    camera_override_state = (S220_2e6000 *)((u8 *)camera_moby->m + 0x220);
+    camera_override_state = (S220 *)((u8 *)camera_moby->m + 0x220);
     if (hero.unk2284 == 0xD && camera_override_state->i10 != 0x14D) {
         rotation_or_blend_value = fast_add_rotations(hero.ledge_normal_yaw, 3.14159265f);
         direction_or_rotation_deltas[0] = fast_cos(rotation_or_blend_value);
@@ -172,7 +172,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     if (hero.state.control_mode == 5) {
         flag = 1;
         {
-            S40_2e6000 *camera_target = (S40_2e6000 *)((u8 *)camera_moby->m + 0x40);
+            S40 *camera_target = (S40 *)((u8 *)camera_moby->m + 0x40);
             if (hero.vehicle_mode == 1) {
                 camera_target->fB0 = 0.25f;
                 follow_camera_set_height(1.5f, 0.003f);
@@ -185,7 +185,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     if (hero.state.control_mode == 0x10) camera_moby->m->fF0 = 0.25f;
     if (hero.vehicle_mode == 1) {
         if (camera_override_state->i0 == 0) {
-            q = (S40_2e6000 *)((u8 *)camera_moby->m + 0x40);
+            q = (S40 *)((u8 *)camera_moby->m + 0x40);
             follow_camera_set_distance(1, 3.0f, 0.003f);
             if (flag == 0) {
                 q->fB0 = 1.0f;
@@ -201,7 +201,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             follow_camera_set_height(follow_camera_vehicle_orbit_height_gp, 0.003f);
         }
         FUN_L00_002e8620();
-        camera_spring_state = (S1D0_2e6000 *)((u8 *)camera_moby->m + 0x1D0);
+        camera_spring_state = (S1D0 *)((u8 *)camera_moby->m + 0x1D0);
         camera_spring_state->f3C = follow_camera_vehicle_collision_probe_scale_gp;
         camera_spring_state->f44 = follow_camera_vehicle_collision_probe_step_growth_factor_gp;
     }
@@ -466,7 +466,7 @@ void reset_follow_camera_state_from_position(char *camera_moby) {
 
 /* Initialises the type-0 camera: fills its data blocks and seeds the first position. */
 
-typedef struct CamE_2E8210 {
+typedef struct CamE {
     short h0;                     /* 0x00 */
     short h2;                     /* 0x02 */
     float f4;                     /* 0x04 */
@@ -476,9 +476,9 @@ typedef struct CamE_2E8210 {
     int i14;                      /* 0x14 */
     int i18;                      /* 0x18 */
     int pad1C;
-} CamE_2E8210;
+} CamE;
 
-typedef struct CamA_2E8210 {
+typedef struct CamA {
     float pos[4];                 /* 0x00 */
     char pad10[0x40];
     float f50[4];                 /* 0x50 */
@@ -501,9 +501,9 @@ typedef struct CamA_2E8210 {
     float fE4;                    /* 0xE4 */
     float fE8;                    /* 0xE8 */
     char padEC[4];
-} CamA_2E8210;
+} CamA;
 
-typedef struct CamB_2E8210 {
+typedef struct CamB {
     float v0[4];                  /* 0x00 */
     float v10[4];                 /* 0x10 */
     int i20;                      /* 0x20 */
@@ -523,18 +523,18 @@ typedef struct CamB_2E8210 {
     float f54;                    /* 0x54 */
     float f58;                    /* 0x58 */
     char pad5C[4];
-} CamB_2E8210;
+} CamB;
 
-typedef struct Cam190_2E8210 {
+typedef struct Cam190 {
     int i0;                       /* 0x00 */
     int i4;                       /* 0x04 */
     float f8;                     /* 0x08 */
     float fC;                     /* 0x0C */
     float f10;                    /* 0x10 */
     float f14;                    /* 0x14 */
-} Cam190_2E8210;
+} Cam190;
 
-typedef struct Cam1A8_2E8210 {
+typedef struct Cam1A8 {
     int flags;                    /* 0x00 */
     int i4;                       /* 0x04 */
     int i8;                       /* 0x08 */
@@ -545,9 +545,9 @@ typedef struct Cam1A8_2E8210 {
     int i1C;                      /* 0x1C */
     int i20;                      /* 0x20 */
     int i24;                      /* 0x24 */
-} Cam1A8_2E8210;
+} Cam1A8;
 
-typedef struct CamG_2E8210 {
+typedef struct CamG {
     char pad0[0x10];
     float v10[4];                 /* 0x10 */
     float v20[4];                 /* 0x20 */
@@ -561,9 +561,9 @@ typedef struct CamG_2E8210 {
     float f44;                    /* 0x44 */
     int i48;                      /* 0x48 */
     int i4C;                      /* 0x4C */
-} CamG_2E8210;
+} CamG;
 
-typedef struct Cam220_2E8210 {
+typedef struct Cam220 {
     int i0;                       /* 0x00 */
     short h4;                     /* 0x04 */
     short h6;                     /* 0x06 */
@@ -571,32 +571,32 @@ typedef struct Cam220_2E8210 {
     float fC;                     /* 0x0C */
     int i10;                      /* 0x10 */
     char pad14[0xC];
-} Cam220_2E8210;
+} Cam220;
 
-typedef struct Cam240_2E8210 {
+typedef struct Cam240 {
     float v0[4];                  /* 0x00 */
     float v10[4];                 /* 0x10 */
     char pad20[4];
     int i24;                      /* 0x24 */
     short h28;                    /* 0x28 */
-} Cam240_2E8210;
+} Cam240;
 
-typedef struct Cam_2E8210 {
+typedef struct Cam {
     float pos[4];                 /* 0x000 */
     short h10;                    /* 0x010 */
     short h12;                    /* 0x012 */
     short h14;                    /* 0x014 */
     short h16;                    /* 0x016 */
     char pad18[8];
-    CamE_2E8210 e;                /* 0x020 */
-    CamA_2E8210 a;                /* 0x040 */
-    CamB_2E8210 b;                /* 0x130 */
-    Cam190_2E8210 p190;           /* 0x190 */
-    Cam1A8_2E8210 p1A8;           /* 0x1A8 */
-    CamG_2E8210 g;                /* 0x1D0 */
-    Cam220_2E8210 p220;           /* 0x220 */
-    Cam240_2E8210 p240;           /* 0x240 */
-} Cam_2E8210;
+    CamE e;                /* 0x020 */
+    CamA a;                /* 0x040 */
+    CamB b;                /* 0x130 */
+    Cam190 p190;           /* 0x190 */
+    Cam1A8 p1A8;           /* 0x1A8 */
+    CamG g;                /* 0x1D0 */
+    Cam220 p220;           /* 0x220 */
+    Cam240 p240;           /* 0x240 */
+} Cam;
 
 typedef struct Moby_2E8210 {
     float v0[4];                  /* 0x00 */
@@ -604,7 +604,7 @@ typedef struct Moby_2E8210 {
     float v30[4];                 /* 0x30 */
     float v40[4];                 /* 0x40 */
     char pad50[0x20];
-    Cam_2E8210 *cam;              /* 0x70 */
+    Cam *cam;              /* 0x70 */
     char pad74[9];
     unsigned char b7D;            /* 0x7D */
     short h7E;                    /* 0x7E */
@@ -617,10 +617,10 @@ typedef struct Hero_2E8210 {
     int i2080;                    /* 0x2080 */
 } Hero_2E8210;
 
-typedef struct Ctl_2E8210 {
+typedef struct Ctl {
     char pad0[0x86];
     short h86;                    /* 0x86 */
-} Ctl_2E8210;
+} Ctl;
 
 extern int D_L00_00161D90 __attribute__((sda));
 extern float D_L00_0015EF40; /* no foreign declaration */
@@ -640,7 +640,7 @@ void FUN_L00_002e6bf8_c(char *m) __asm__("FUN_L00_002e6bf8");
 extern Hero_2E8210 D_0013F450_2E8210 __asm__("D_0013F350");
 extern char D_0013F4D0_2E8210[] __asm__("D_0013F3D0");
 extern char D_0013F6E0_2E8210[] __asm__("D_0013F5E0");
-extern Ctl_2E8210 *D_L00_00166E04_lui __asm__("D_L00_00166E04") NOT_SDA;
+extern Ctl *D_L00_00166E04_lui __asm__("D_L00_00166E04") NOT_SDA;
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float func_001F9CB8_2E8210(void *) __asm__("FUN_001f9af0");
 extern void func_L00_002E80A8_2E8210(Moby_2E8210 *) __asm__("FUN_L00_002e6bf8");
@@ -649,17 +649,17 @@ extern void rebuild_follow_camera_pose(int) __asm__("FUN_L00_002e66b8");
 
 void follow_camera_setup(Moby_2E8210 *m) __asm__("FUN_L00_002e6d60");
 void follow_camera_setup(Moby_2E8210 *camera_moby) {
-    CamA_2E8210 *a;
-    CamB_2E8210 *b;
-    Cam_2E8210 *camera_state;
-    Cam_2E8210 *e;
-    CamE_2E8210 *camera_height_state;
-    Cam_2E8210 *camera_state_base;
-    CamG_2E8210 *g;
+    CamA *a;
+    CamB *b;
+    Cam *camera_state;
+    Cam *e;
+    CamE *camera_height_state;
+    Cam *camera_state_base;
+    CamG *g;
     char *q1;
     char *camera_approach_state;
     char *camera_override_state;
-    Cam240_2E8210 *p240;
+    Cam240 *p240;
     int r;
     float orbit_distance_shortfall;
     float v0[4];
@@ -717,35 +717,35 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     camera_height_state->i18 = 0;
 
     q1 = (char *)camera_moby->cam;
-    ((Cam_2E8210 *)q1)->p190.i0 = 0;
-    q1 = (char *)&((Cam_2E8210 *)q1)->p190;
-    ((Cam190_2E8210 *)q1)->f8 = 0.005f;
-    ((Cam190_2E8210 *)q1)->fC = 0.2f;
-    ((Cam190_2E8210 *)q1)->f10 = 0.15707964f;
-    ((Cam190_2E8210 *)q1)->i4 = 0;
-    ((Cam190_2E8210 *)q1)->f14 = 14.2857f;
+    ((Cam *)q1)->p190.i0 = 0;
+    q1 = (char *)&((Cam *)q1)->p190;
+    ((Cam190 *)q1)->f8 = 0.005f;
+    ((Cam190 *)q1)->fC = 0.2f;
+    ((Cam190 *)q1)->f10 = 0.15707964f;
+    ((Cam190 *)q1)->i4 = 0;
+    ((Cam190 *)q1)->f14 = 14.2857f;
 
     camera_approach_state = (char *)camera_moby->cam;
-    ((Cam_2E8210 *)camera_approach_state)->p1A8.flags = 0;
-    camera_approach_state = (char *)&((Cam_2E8210 *)camera_approach_state)->p1A8;
-    ((Cam1A8_2E8210 *)camera_approach_state)->f14 = D_L00_0015EF44;
-    ((Cam1A8_2E8210 *)camera_approach_state)->f18 = 0.5235988f;
-    ((Cam1A8_2E8210 *)camera_approach_state)->i8 = 0;
-    ((Cam1A8_2E8210 *)camera_approach_state)->i4 = 0;
-    ((Cam1A8_2E8210 *)camera_approach_state)->iC = 0;
-    ((Cam1A8_2E8210 *)camera_approach_state)->i10 = 0;
-    ((Cam1A8_2E8210 *)camera_approach_state)->i1C = 0;
-    ((Cam1A8_2E8210 *)camera_approach_state)->i20 = 0;
-    ((Cam1A8_2E8210 *)camera_approach_state)->i24 = 0;
+    ((Cam *)camera_approach_state)->p1A8.flags = 0;
+    camera_approach_state = (char *)&((Cam *)camera_approach_state)->p1A8;
+    ((Cam1A8 *)camera_approach_state)->f14 = D_L00_0015EF44;
+    ((Cam1A8 *)camera_approach_state)->f18 = 0.5235988f;
+    ((Cam1A8 *)camera_approach_state)->i8 = 0;
+    ((Cam1A8 *)camera_approach_state)->i4 = 0;
+    ((Cam1A8 *)camera_approach_state)->iC = 0;
+    ((Cam1A8 *)camera_approach_state)->i10 = 0;
+    ((Cam1A8 *)camera_approach_state)->i1C = 0;
+    ((Cam1A8 *)camera_approach_state)->i20 = 0;
+    ((Cam1A8 *)camera_approach_state)->i24 = 0;
 
     camera_override_state = (char *)camera_moby->cam;
-    ((Cam_2E8210 *)camera_override_state)->p220.i0 = 0;
-    camera_override_state = (char *)&((Cam_2E8210 *)camera_override_state)->p220;
-    ((Cam220_2E8210 *)camera_override_state)->i10 = 0;
-    ((Cam220_2E8210 *)camera_override_state)->h4 = 0;
-    ((Cam220_2E8210 *)camera_override_state)->h6 = 0;
-    ((Cam220_2E8210 *)camera_override_state)->f8 = b->f2C;
-    ((Cam220_2E8210 *)camera_override_state)->fC = D_L00_00161D1C_gp;
+    ((Cam *)camera_override_state)->p220.i0 = 0;
+    camera_override_state = (char *)&((Cam *)camera_override_state)->p220;
+    ((Cam220 *)camera_override_state)->i10 = 0;
+    ((Cam220 *)camera_override_state)->h4 = 0;
+    ((Cam220 *)camera_override_state)->h6 = 0;
+    ((Cam220 *)camera_override_state)->f8 = b->f2C;
+    ((Cam220 *)camera_override_state)->fC = D_L00_00161D1C_gp;
 
     camera_state_base = camera_moby->cam;
     r = scale_game_frames(0x7D0);

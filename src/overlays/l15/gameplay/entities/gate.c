@@ -50,7 +50,7 @@ typedef struct {
     s32 sound;
     f32 duration;
     s32 lock;
-} MovingVars_29aff0;
+} MovingVars;
 
 typedef struct {
     char pad00[0x74];
@@ -62,9 +62,9 @@ typedef struct {
 typedef struct {
     char pad0[0x454];
     unsigned char collected[1];
-} CollectedFlags_29aff0;
+} CollectedFlags;
 
-extern CollectedFlags_29aff0 D_L15_001BB830_29aff0 __asm__("D_L15_001BB830");
+extern CollectedFlags D_L15_001BB830_29aff0 __asm__("D_L15_001BB830");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
@@ -85,7 +85,7 @@ void update_sliding_gate(struct Moby *gate_moby)
         GATE_OPEN = 3,
         GATE_CLOSING = 4
     };
-    MovingVars_29aff0 *gate_vars = (MovingVars_29aff0 *)gate_moby->pvars;
+    MovingVars *gate_vars = (MovingVars *)gate_moby->pvars;
     Vec4 offset;
     Vec4 pos;
     s32 slot;
@@ -201,7 +201,7 @@ typedef struct {
     int key;            /* 0x20 */
     int trigger;        /* 0x24 */
     int locked;         /* 0x28 */
-} GateVars_2A48B0;
+} GateVars;
 
 typedef struct {
     char pad00[0x10];
@@ -210,16 +210,16 @@ typedef struct {
     char pad21[0xF];
     unsigned char f30;  /* 0x30 */
     char pad31[0x47];
-    GateVars_2A48B0 *vars; /* 0x78 */
-} GateMoby_2A48B0;
+    GateVars *vars; /* 0x78 */
+} GateMoby;
 
 
 typedef struct {
     char pad00[0x74];
     unsigned char active; /* 0x74 */
     char pad75[0x13];
-    GateMoby_2A48B0 *owner; /* 0x88 */
-} SoundSlot_2A48B0;
+    GateMoby *owner; /* 0x88 */
+} SoundSlot;
 
 extern float D_0015ED6C;
 #include "rnc/overlay/l15/gameplay/entities/gate_globals.h"
@@ -227,7 +227,7 @@ extern float vertical_gate_travel_distance_gp __asm__("D_L15_001614F8") __attrib
 extern int D_L15_00161AC0;
 extern unsigned char D_001413F4[];
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern int func_0022ED80_2A48B0(int, int, GateMoby_2A48B0 *) __asm__("FUN_0022da68");
+extern int func_0022ED80_2A48B0(int, int, GateMoby *) __asm__("FUN_0022da68");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern unsigned char D_0013DD50 NOT_SDA;
 extern unsigned char D_0013F3D0_2A48B0[] __asm__("D_0013F3D0");
@@ -235,9 +235,9 @@ extern char D_0013E550[];
 extern char D_L15_00167440_2A48B0[] __asm__("D_L15_001673C0");
 extern int D_L15_00184AA8_lui __asm__("D_L15_00184AA8") NOT_SDA;
 
-void update_vertical_gate(GateMoby_2A48B0 *gate_moby) __asm__("FUN_L15_002a36d0");
+void update_vertical_gate(GateMoby *gate_moby) __asm__("FUN_L15_002a36d0");
 
-void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
+void update_vertical_gate(GateMoby *gate_moby)
 {
     enum {
         GATE_INITIALIZE = 0,
@@ -247,7 +247,7 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
         GATE_CLOSING = 4,
         GATE_POSITION_OVERRIDE = 5
     };
-    GateVars_2A48B0 *gate_vars = gate_moby->vars;
+    GateVars *gate_vars = gate_moby->vars;
     float step;
 
     switch (gate_moby->state) {
@@ -293,14 +293,14 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
         if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
-        if (((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner != gate_moby ||
-            ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0) {
+        if (((SoundSlot *)(D_0013E550 + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((SoundSlot *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0) {
             gate_vars->sound = func_0022ED80_2A48B0(0, 4, gate_moby);
         }
         if (vertical_gate_travel_distance_gp < (gate_vars->travel = gate_vars->travel + step)) {
             if (gate_vars->sound != -1 &&
-                ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner == gate_moby &&
-                ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active != 0) {
+                ((SoundSlot *)(D_0013E550 + gate_vars->sound * 0x70))->owner == gate_moby &&
+                ((SoundSlot *)(D_0013E550 + gate_vars->sound * 0x70))->active != 0) {
                 release_voice_slot(gate_vars->sound);
             }
             gate_vars->sound = -1;
@@ -339,14 +339,14 @@ void update_vertical_gate(GateMoby_2A48B0 *gate_moby)
         if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
-        if (((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner != gate_moby ||
-            ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0) {
+        if (((SoundSlot *)(D_0013E550 + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((SoundSlot *)(D_0013E550 + gate_vars->sound * 0x70))->active == 0) {
             gate_vars->sound = func_0022ED80_2A48B0(0, 4, gate_moby);
         }
         if ((gate_vars->travel = gate_vars->travel - step) < 0.0f) {
             if (gate_vars->sound != -1 &&
-                ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->owner == gate_moby &&
-                ((SoundSlot_2A48B0 *)(D_0013E550 + gate_vars->sound * 0x70))->active != 0) {
+                ((SoundSlot *)(D_0013E550 + gate_vars->sound * 0x70))->owner == gate_moby &&
+                ((SoundSlot *)(D_0013E550 + gate_vars->sound * 0x70))->active != 0) {
                 release_voice_slot(gate_vars->sound);
             }
             gate_vars->travel = 0;
@@ -514,12 +514,12 @@ void update_swinging_door(struct Moby *moby) {
         break;
     }
 }
-typedef union { u128 q; float f[4]; } Vec_2a7880;
+typedef union { u128 q; float f[4]; } Vec;
 extern char D_L15_00178700[];
 extern char destructible_radial_debris_color_palette[] __asm__("D_L15_00161568");
 extern u64 D_L15_00161570;
-typedef struct { u32 words[3]; } Colors_2a7880;
-extern Colors_2a7880 l15_destructible_secondary_debris_color_palette __asm__("D_L15_00161578");
+typedef struct { u32 words[3]; } Colors;
+extern Colors l15_destructible_secondary_debris_color_palette __asm__("D_L15_00161578");
 extern u32 D_L15_00161580;
 extern u8 D_001413F4[];
 extern u8 D_0013DD50;
@@ -544,16 +544,16 @@ void update_destructible_moby_with_radial_debris(struct Moby *moby) __asm__("FUN
 void update_destructible_moby_with_radial_debris(struct Moby *moby)
 {
     char *slot = 0;
-    Vec_2a7880 velocity, first, second, offset, base;
+    Vec velocity, first, second, offset, base;
     u32 palette[4];
     u32 colors[4];
-    Vec_2a7880 position;
+    Vec position;
     int i, index, slot_index;
     u32 *palette_entry;
     float radius, angle, size;
     int color, color2, duration;
     void *effect;
-    Vec_2a7880 *base_position;
+    Vec *base_position;
 
     if (D_001413F4[0] != 2 && moby->state == 1)
         return;

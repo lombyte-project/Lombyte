@@ -48,7 +48,7 @@ int hero_get_gadget_anim_id(int allow_item_lookup) {
 typedef union {
     u128 q;
     f32 f[4];
-} HopVec_235c08;
+} HopVec;
 
 extern s32 FUN_001f96f8_235c08(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9dc8_235c08(float) __asm__("FUN_001f9dc8");
@@ -78,7 +78,7 @@ extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 extern f32 hop_deceleration_speed_reference[] __asm__("D_L12_0017C250");
 void hero_update_hop_movement(void) __asm__("FUN_L12_00235c08");
 void hero_update_hop_movement(void) {
-    HopVec_235c08 velocity_offset;
+    HopVec velocity_offset;
     f32 x;
     f32 speed;
     f32 velocity_scale_or_yaw_delta;

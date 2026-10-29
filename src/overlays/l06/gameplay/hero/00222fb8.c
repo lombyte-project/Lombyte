@@ -578,7 +578,7 @@ d1:
 typedef union {
     u128 q;
     f32 f[4];
-} HopVec_2b438;
+} HopVec;
 
 extern f32 D_0015ED6C_2b438 __asm__("D_0015ED6C");
 extern s32 FUN_001f96f8_2b438(s32) __asm__("FUN_001f96f8");
@@ -610,7 +610,7 @@ extern f32 hero_airborne_deceleration_speed_reference[] __asm__("D_L06_0017C550"
 void update_hero_airborne_planar_velocity(void) __asm__("FUN_L06_0022b438");
 
 void update_hero_airborne_planar_velocity(void) {
-    HopVec_2b438 velocity_contribution;
+    HopVec velocity_contribution;
     f32 x;
     f32 speed;
     f32 speed_component_or_yaw_delta;

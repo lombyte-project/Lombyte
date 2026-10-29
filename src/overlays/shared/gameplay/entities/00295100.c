@@ -1203,18 +1203,18 @@ typedef struct {
     s32 state;
     s32 unused;
     s32 sound;
-} VendorListEntry_29a400;
+} VendorListEntry;
 typedef struct {
     u8 pad[0xD0];
-    VendorListEntry_29a400 entries[16];
+    VendorListEntry entries[16];
     s32 count;
-} VendorList_29a400;
+} VendorList;
 typedef struct {
     s32 sound;
     s32 pad[4];
-} VendorSound_29a400;
-extern VendorList_29a400 vendor_list __asm__("D_L00_001CA4C0") NOT_SDA;
-extern VendorSound_29a400 vendor_sound[] __asm__("D_L00_001C2108") NOT_SDA;
+} VendorSound;
+extern VendorList vendor_list __asm__("D_L00_001CA4C0") NOT_SDA;
+extern VendorSound vendor_sound[] __asm__("D_L00_001C2108") NOT_SDA;
 /* Stocked item ids (low 6 bits; bit 0x40 = listed as selected), 0xFF-terminated. */
 extern u8 D_0013D4C0[];
 
@@ -1277,7 +1277,7 @@ typedef struct {
     s32 state;
     s32 unused;
     s32 sound;
-} VendorEntry_29a6b0;
+} VendorEntry;
 typedef struct {
     s32 f0;
     s32 f4;
@@ -1301,11 +1301,11 @@ typedef struct {
     Vec4 eye;
     Vec4 look;
     u8 pad80[0x50];
-    VendorEntry_29a6b0 entries[16];
+    VendorEntry entries[16];
     u8 pad210[0x210 - 0xD0 - 16 * 0x14];
     s32 count;
     u8 pad214[0xC];
-} Vendor_29a6b0;
+} Vendor;
 typedef struct {
     u8 pad[0xE];
     u16 text;
@@ -1317,7 +1317,7 @@ typedef struct {
     u8 pad2[0x32];
     f32 offset;
     u8 pad38[8];
-} VendorSlot_29a6b0;
+} VendorSlot;
 typedef struct {
     u8 pad0[0x10];
     Vec4 pos;
@@ -1330,11 +1330,11 @@ typedef struct {
     f32 f58;
 } VendorMoby_29a6b0;
 
-extern Vendor_29a6b0 vendor_29a6b0 __asm__("D_L00_001CA4C0");
+extern Vendor vendor_29a6b0 __asm__("D_L00_001CA4C0");
 extern VendorItem_29a6b0 vendor_items_29a6b0[] __asm__("D_L00_001C40B0");
-extern VendorSlot_29a6b0 vendor_slots_29a6b0[4] __asm__("D_L00_00165E80");
-typedef struct { u8 p[0x140]; f32 x; f32 y; f32 z; } VendorCam_29a6b0;
-extern VendorCam_29a6b0 D_L00_00166C80_29a6b0 __asm__("D_L00_00166C80");
+extern VendorSlot vendor_slots_29a6b0[4] __asm__("D_L00_00165E80");
+typedef struct { u8 p[0x140]; f32 x; f32 y; f32 z; } VendorCam;
+extern VendorCam D_L00_00166C80_29a6b0 __asm__("D_L00_00166C80");
 extern s32 D_L00_00161E18;
 extern s32 D_L00_00161E20;
 extern s32 D_L00_00161E24_29a6b0 __asm__("D_L00_00161E24");
@@ -1396,7 +1396,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     s32 half;
     s32 sel;
     s32 k;
-    VendorSlot_29a6b0 *slot;
+    VendorSlot *slot;
 
     fill_transfer_words(&vendor_29a6b0, 0, 0x220);
     fill_transfer_words(vendor_extra, 0, 0x40);
@@ -1572,7 +1572,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
 extern s32 D_L00_0015F3FC;
 extern s32 vendor_exit_cutscene_ids_by_item[] __asm__("D_L00_001CA020");
 extern s32 D_L00_001CA580[];
-extern Vendor_29a6b0 D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
+extern Vendor D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
 extern s32 vendor_exit_hero_local_offset_gp __asm__("D_L00_00161100") __attribute__((sda));
 extern s32 vendor_exit_cutscene_local_offset_gp __asm__("D_L00_001610F0") __attribute__((sda));
@@ -1602,7 +1602,7 @@ extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
 
 void start_vendor_exit_cutscene(void) {
-    Vendor_29a6b0 *vendor_state;
+    Vendor *vendor_state;
     VendorMoby_29a6b0 *moby;
     s32 index, item, offset;
     f32 *cutscene_world_origin;

@@ -565,7 +565,7 @@ typedef struct {
     int color[4];
     float uv[4][2];
     long unk70, tex, unk80, unk88;
-} Packet_2fd460;
+} Packet;
 
 extern float D_L06_00167540[];
 short D_L06_001EF310[58][4][2] = {
@@ -1024,7 +1024,7 @@ extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 void draw_dual_texture_58_quad_mesh(void) __asm__("FUN_L06_002fd460");
 
 void draw_dual_texture_58_quad_mesh(void) {
-    Packet_2fd460 first, second;
+    Packet first, second;
     float matrix[4][4] __attribute__((aligned(16)));
     float quad_facing_unit_direction[4] __attribute__((aligned(16)));
     float quad_facing_center_or_normal[4] __attribute__((aligned(16)));
@@ -6157,11 +6157,11 @@ typedef struct Obj_301070 {
     char pad00[0x86];
     short f86;
 } Obj_301070;
-typedef struct Busy_301070 {
+typedef struct Busy {
     int f0;
     char pad4[0x20];
     int f24;
-} Busy_301070;
+} Busy;
 
 extern void attach_shared_manipulator_to_matching_class_moby(char *) __asm__("FUN_L03_002db480");
 extern float distance_xyz_301070(void *, void *) __asm__("FUN_001f9b48");
@@ -6354,7 +6354,7 @@ void fred_update(struct Moby *moby) {
         FUN_L00_002ea9d8_301070(pos);
         FUN_L00_002eaa30_301070(rot);
         if (fred_vars->f178 >= 1.0f
-            || (((Busy_301070 *)D_L06_00179B90)->f0 == 0 && ((Busy_301070 *)D_L06_00179B90)->f24 == -1 && fred_vars->f178 > 0.2f)) {
+            || (((Busy *)D_L06_00179B90)->f0 == 0 && ((Busy *)D_L06_00179B90)->f24 == -1 && fred_vars->f178 > 0.2f)) {
             approach_value(&D_L06_0015F3FC_macro, 1.0f, frame_time_macro * 4.0f);
         } else {
             approach_value(&D_L06_0015F3FC_macro, 0.0f, frame_time_macro * 4.0f);
@@ -6711,7 +6711,7 @@ typedef int u128_302578 __attribute__((mode(TI)));
 typedef struct {
     char pad0[0x24];
     float f24;
-} Cls_302578;
+} Cls;
 typedef struct {
     char pad0[0x20];
     char area[0x40];
@@ -6736,7 +6736,7 @@ typedef struct {
     int f10C;
     int go;
     int f114;
-} Data_302578;
+} Data;
 typedef struct {
     char pad0[0x2FC];
     struct Moby *f2FC;
@@ -6746,7 +6746,7 @@ typedef struct {
 typedef struct {
     char pad0[0x21];
     unsigned char f21;
-} Flags_302578;
+} Flags;
 typedef struct {
     int f0;
     char pad4[0x20];
@@ -6827,7 +6827,7 @@ void shuttle_update(struct Moby *moby) {
         WAIT_TO_SAVE_AND_RESUME_SHUTTLE_REQUESTS = 9
     };
 
-    Data_302578 *shuttle_vars = *(Data_302578 **)&moby->pvars;
+    Data *shuttle_vars = *(Data **)&moby->pvars;
     float old_pos[4];
     float old_rot[4];
     float delta[4];
@@ -6939,8 +6939,8 @@ void shuttle_update(struct Moby *moby) {
                 qcopy(((float *)&moby->rot), (char *)(ofs + base + 0x70));
                 shuttle_vars->sel = 1;
                 D_L06_0015FDF8 = 1;
-                if (((Flags_302578 *)(alternate_item_available))->f21 == 0) {
-                    ((Flags_302578 *)(alternate_item_available))->f21 = 1;
+                if (((Flags *)(alternate_item_available))->f21 == 0) {
+                    ((Flags *)(alternate_item_available))->f21 = 1;
                 }
             }
         }
@@ -6981,8 +6981,8 @@ void shuttle_update(struct Moby *moby) {
             moby->scale = moby->pclass->scale;
             if (shuttle_vars->sel == 1) {
                 D_L06_0015FDF8 = 1;
-                if (((Flags_302578 *)(alternate_item_available))->f21 == 0) {
-                    ((Flags_302578 *)(alternate_item_available))->f21 = 1;
+                if (((Flags *)(alternate_item_available))->f21 == 0) {
+                    ((Flags *)(alternate_item_available))->f21 = 1;
                 }
             } else {
                 D_L06_0015FDF8 = 0;
@@ -7142,8 +7142,8 @@ typedef struct {
     int n;
     int pad[3];
     PathPoint_303160 p[1];
-} Path_303160;
-struct PathRide_303160 {
+} Path;
+struct PathRide {
     char pad0[0x60];
     int path_a[5];
     int path_b[5];
@@ -7179,10 +7179,10 @@ extern char *D_L06_001600EC_303160 __asm__("D_L06_001600EC");
 /* Moves the moby along three paths and plays the sound marked on the path points. */
 int update_shuttle_path_ride(char *moby, int path) {
     float rotation[4], position[4];
-    struct PathRide_303160 *ride = *(struct PathRide_303160 **)(moby + 0x78);
-    Path_303160 *first_path = ((Path_303160 **)D_L06_001B0C30_303160)[ride->path_a[path]];
-    Path_303160 *middle_path = ((Path_303160 **)D_L06_001B0C30_303160)[ride->path_b[path]];
-    Path_303160 *third_path = ((Path_303160 **)D_L06_001B0C30_303160)[ride->path_c[path]];
+    struct PathRide *ride = *(struct PathRide **)(moby + 0x78);
+    Path *first_path = ((Path **)D_L06_001B0C30_303160)[ride->path_a[path]];
+    Path *middle_path = ((Path **)D_L06_001B0C30_303160)[ride->path_b[path]];
+    Path *third_path = ((Path **)D_L06_001B0C30_303160)[ride->path_c[path]];
     float time, first_index_f, first_fraction, third_fraction, angle, rate;
     int first_index, middle_index, third_index, marker, prev_marker;
     char *sound;
@@ -7252,9 +7252,9 @@ int update_shuttle_path_ride(char *moby, int path) {
     }
     return ride->progress == 1.0f;
 }
-typedef struct { int v[6]; } Colors_303748;
-Colors_303748 D_L06_00201960 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
-Colors_303748 D_L06_00201948 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+typedef struct { int v[6]; } Colors;
+Colors D_L06_00201960 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+Colors D_L06_00201948 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 extern float D_L06_00162114 __attribute__((sda));
 extern float D_L06_00162118 __attribute__((sda));
 extern float D_L06_0016211C __attribute__((sda));
@@ -7287,7 +7287,7 @@ extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, 
 
 void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count) {
     float position[4], direction[4], velocity[4], acceleration[4];
-    Colors_303748 first_colors, second_colors;
+    Colors first_colors, second_colors;
     int i;
     float strength;
     cart_burst(moby, pos, -1, 2.0f, 13.0f);
@@ -7474,14 +7474,14 @@ typedef struct {
     Vector_304098 a;
     char pad40[0x30];
     Vector_304098 b;
-} Cut_304098;
+} Cut;
 
-extern Cut_304098 *D_L06_001600EC_304098 __asm__("D_L06_001600EC");
+extern Cut *D_L06_001600EC_304098 __asm__("D_L06_001600EC");
 extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
 extern char D_0013F3D0[] NOT_SDA;
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
-typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx_304098;
-extern Fx_304098 D_L06_00167400_lui __asm__("D_L06_00167400") NOT_SDA;
+typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx;
+extern Fx D_L06_00167400_lui __asm__("D_L06_00167400") NOT_SDA;
 
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");

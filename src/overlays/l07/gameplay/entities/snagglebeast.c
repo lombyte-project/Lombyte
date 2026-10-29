@@ -496,7 +496,7 @@ struct ChaserTarget {
     s32 count;           /* 0x1C */
 };
 
-struct HeroView_313af0 {
+struct HeroView {
     u8 pad0[0x80];
     f32 x, y;            /* 0x80 */
 };
@@ -2349,7 +2349,7 @@ typedef struct {
     s32 sound;             /* 0x74: -1 when none */
     s32 timeout;           /* 0x78 */
     s32 bob_timer;         /* 0x7C */
-} Mine_19040;
+} Mine;
 
 extern struct Moby *debris_target __asm__("D_L07_00173ED8") NOT_SDA;
 /* Floating mine: wakes when its target or a seen point comes close, then bobs and chases the seen
@@ -2363,7 +2363,7 @@ void homing_mine_update(struct Moby *moby) {
         HOMING_MINE_START_CHASE = 2,
         HOMING_MINE_CHASE = 3
     };
-    Mine_19040 *vars;
+    Mine *vars;
     f32 *health;
     char sight[0x50];
     char *hit;
@@ -2379,7 +2379,7 @@ void homing_mine_update(struct Moby *moby) {
     s32 timer;
 
     if (moby == NULL) return;
-    vars = (Mine_19040 *)moby->pvars;
+    vars = (Mine *)moby->pvars;
     if (vars == NULL) return;
 
     sight_19040(moby, sight, 8.0f);

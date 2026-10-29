@@ -52,8 +52,8 @@ typedef struct {
     s32 count;
     char pad2[0x2D0 - 0x194];
     f32 v[30];
-} Hist_266e80;
-extern Hist_266e80 D_0013C940;
+} Hist;
+extern Hist D_0013C940;
 /* The value n entries back in the 30-entry history ring (n is capped at the count). */
 f32 read_pad_float_history(s32 history_offset) __asm__("FUN_L00_00266e80");
 

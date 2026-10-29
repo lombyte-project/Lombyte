@@ -233,7 +233,7 @@ typedef struct {
     u32 col[4];
     float uv[8];
     u64 a, b, c, d;
-} Pk_31e468;
+} Pk;
 
 extern float glow_sprite_local_vertices[4][4] __asm__("D_L05_00215C70");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -248,7 +248,7 @@ extern short glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") __attr
 extern char D_L05_001671C0_lui[] __asm__("D_L05_001671C0") NOT_SDA;
 void draw_moby_glow_sprite(char *m) {
     char *d = *(char **)(m + 0x78);
-    Pk_31e468 pk;
+    Pk pk;
     float up[4];
     float M[4][4];
     float sprite_offset[4];
@@ -694,13 +694,13 @@ typedef struct {
     V_32B1F8 axis;
     char pad30[0x1C];
     float dist;
-} Focus_32B1F8;
+} Focus;
 
 typedef struct {
     float dist;
     char pad4[0xC];
     float height;
-} Spring_32B1F8;
+} Spring;
 
 typedef struct {
     V_32B1F8 vel;
@@ -709,18 +709,18 @@ typedef struct {
     char pad30[4];
     float k34, k38, k3C;
     float blend;
-} Track_32B1F8;
+} Track;
 
 typedef struct {
     float vel[4];
     float k10, k14, k18;
     short mode;
     char pad1E[0x62];
-    Focus_32B1F8 focus;
+    Focus focus;
     char padD0[0x10];
-    Spring_32B1F8 spring;
+    Spring spring;
     char padF4[0xC];
-    Track_32B1F8 track;
+    Track track;
     char pad150[0x30];
     float dist;
     float spring_dist;
@@ -747,16 +747,16 @@ typedef struct {
     short preset;
 } Camera_32B1F8;
 
-typedef struct { char pad0[0x48]; float vel; } Preset_32B1F8;
+typedef struct { char pad0[0x48]; float vel; } Preset;
 
-typedef struct { char pad0[0x1C]; Preset_32B1F8 *preset; } Row_32B1F8;
+typedef struct { char pad0[0x1C]; Preset *preset; } Row;
 
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
-extern Row_32B1F8 *D_L05_0015EF50_macro __asm__("D_L05_0015EF50") MACRO_ADDR;
+extern Row *D_L05_0015EF50_macro __asm__("D_L05_0015EF50") MACRO_ADDR;
 extern float D_L05_001621A8_gp __asm__("D_L05_001621A8") __attribute__((sda));
 extern float spring_32B1F8(float, float, float *, float, float, float) __asm__("FUN_001ebd78");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -778,11 +778,11 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     V_32B1F8 step;
     Orbit_32B1F8 *orbit = camera->orbit;
     char *up_axis = D_0013E633_32B1F8;
-    Preset_32B1F8 *preset;
-    Focus_32B1F8 *focus_state;
-    Track_32B1F8 *track;
+    Preset *preset;
+    Focus *focus_state;
+    Track *track;
     float focus_distance;
-    Spring_32B1F8 *spring;
+    Spring *spring;
     float *vel;
     float along;
     V_32B1F8 *pos;

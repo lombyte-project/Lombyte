@@ -884,7 +884,7 @@ typedef struct {
     u8 pad_00[0x14];
     u16 bolts; /* 0x14 */
     u8 pad_16[2];
-} ItemPrice_2e1ac0;
+} ItemPrice;
 
 /* pvars of the moby run by gold_weapon_case_update: a scene trigger
    (update_npc_dialogue) followed by the item it sells. */
@@ -895,18 +895,18 @@ typedef struct {
     f32 radius;   /* 0x0C */
     u8 pad_10[0x30];
     s32 slot;     /* 0x40: -1 none, else index into D_L01_001DEB10 */
-} SaleVars_2e1ac0;
+} SaleVars;
 
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 item_text_variant[] __asm__("D_0013E520");
 extern void FUN_0020c828_2e1ac0(struct Moby *) __asm__("FUN_0020c828");
-extern s32 FUN_L00_002668a0_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FUN_L00_002668a0");
-extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars_2e1ac0 *) __asm__("FUN_L00_00266448");
-extern void initialize_vendor_screen(struct Moby *, s32, ItemPrice_2e1ac0 *) __asm__("FUN_L01_002aea70");
+extern s32 FUN_L00_002668a0_2e1ac0(struct Moby *, SaleVars *) __asm__("FUN_L00_002668a0");
+extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars *) __asm__("FUN_L00_00266448");
+extern void initialize_vendor_screen(struct Moby *, s32, ItemPrice *) __asm__("FUN_L01_002aea70");
 extern s32 FUN_0020b178_2e1ac0(s32, s32) __asm__("FUN_0020b178");
 
 extern s32 gold_weapon_case_item_ids_by_slot[] __asm__("D_L01_001DEB10");
-extern ItemPrice_2e1ac0 l01_gold_weapon_case_item_prices[] __asm__("D_L01_001C4530");
+extern ItemPrice l01_gold_weapon_case_item_prices[] __asm__("D_L01_001C4530");
 extern s32 alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
 void gold_weapon_case_update(struct Moby *m) __asm__("FUN_L01_002e1ac0");
 void gold_weapon_case_update(struct Moby *moby) {
@@ -917,9 +917,9 @@ void gold_weapon_case_update(struct Moby *moby) {
         GOLD_WEAPON_CASE_IDLE = 3,
         GOLD_WEAPON_CASE_WAIT_FOR_CUTSCENE_END = 4
     };
-    SaleVars_2e1ac0 *sale_vars = (SaleVars_2e1ac0 *)moby->pvars;
+    SaleVars *sale_vars = (SaleVars *)moby->pvars;
     s32 item;
-    ItemPrice_2e1ac0 *price;
+    ItemPrice *price;
 
     if (sale_vars != 0 && sale_vars->slot != -1 && ((sale_vars->slot ^ 1) & 1) && alternate_animation_sequence_gp == 0) {
         FUN_0020c828_2e1ac0(moby);
@@ -1296,7 +1296,7 @@ typedef struct {
     char pad54[0xC];
     int t60, count;
     void *tgt;
-} Data_2e3f20;
+} Data;
 typedef struct {
     int unk0;
     float unk4, unk8, unkC, unk10, yaw_speed, unk18, unk1C, unk20, unk24, unk28, unk2C, unk30;
@@ -1304,7 +1304,7 @@ typedef struct {
     float unk3C, unk40, unk44;
     int unk48, unk4C;
     void *owner;
-} Mover_2e3f20;
+} Mover;
 typedef struct {
     char pad0[0x80];
     float pos[4];
@@ -1320,7 +1320,7 @@ typedef struct {
     unsigned char b20A4;
 } Hero_2e3f20;
 #define hero_2e3f20 ((Hero_2e3f20 *)&hero)
-#define mover_2e3f20 (*(Mover_2e3f20 *)&D_L01_001DEB38)
+#define mover_2e3f20 (*(Mover *)&D_L01_001DEB38)
 extern struct Moby *ents_2e3f20 __asm__("D_L01_0015FFD8");
 extern int D_0015ED84;
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/sand_mouse_update.h"
@@ -1365,7 +1365,7 @@ void sand_mouse_update(struct Moby *moby) {
         SAND_MOUSE_DAMP_VELOCITY_BEFORE_RETURN = 19,
         SAND_MOUSE_RETURN_TO_PARENT = 20
     };
-    Data_2e3f20 *sand_mouse_vars;
+    Data *sand_mouse_vars;
     float va[4];
     float vb[4];
     float desired_facing_yaw;
@@ -1373,17 +1373,17 @@ void sand_mouse_update(struct Moby *moby) {
     if (moby == 0) {
         return;
     }
-    sand_mouse_vars = *(Data_2e3f20 **)&moby->pvars;
+    sand_mouse_vars = *(Data **)&moby->pvars;
     if (sand_mouse_vars == 0) {
         return;
     }
     if (sand_mouse_vars->parent != -1) {
         if (moby->state >= 5) {
-            ((Data_2e3f20 *)ents_2e3f20[sand_mouse_vars->parent].pvars)->target[0] =
+            ((Data *)ents_2e3f20[sand_mouse_vars->parent].pvars)->target[0] =
                 fast_arc_tan(moby->pos.x - ents_2e3f20[sand_mouse_vars->parent].pos.x,
                                   moby->pos.y - ents_2e3f20[sand_mouse_vars->parent].pos.y);
         } else {
-            ((Data_2e3f20 *)ents_2e3f20[sand_mouse_vars->parent].pvars)->target[0] =
+            ((Data *)ents_2e3f20[sand_mouse_vars->parent].pvars)->target[0] =
                 fast_arc_tan(hero_2e3f20->pos[0] - ents_2e3f20[sand_mouse_vars->parent].pos.x,
                                   hero_2e3f20->pos[1] - ents_2e3f20[sand_mouse_vars->parent].pos.y);
         }
@@ -2431,7 +2431,7 @@ typedef struct {
     char p36[0x70];
     short type;
     char pA8[0x58];
-} Ent_2ef478;
+} Ent;
 
 extern float dist_2ef478(void *, void *) __asm__("FUN_001f9b48");
 extern char *D_L01_0015FFD8;
@@ -2447,10 +2447,10 @@ char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) 
     }
     while (1) {
         int i = *(unsigned short *)list & 0x7FFF;
-        if ((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].flags & 0x1000) {
-            if ((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].type == 0x26F) {
-                if ((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].state < 0x7F) {
-                    float candidate_distance = dist_2ef478((*(Ent_2ef478 * *)&D_L01_0015FFD8)[i].pos, self + 0x10);
+        if ((*(Ent * *)&D_L01_0015FFD8)[i].flags & 0x1000) {
+            if ((*(Ent * *)&D_L01_0015FFD8)[i].type == 0x26F) {
+                if ((*(Ent * *)&D_L01_0015FFD8)[i].state < 0x7F) {
+                    float candidate_distance = dist_2ef478((*(Ent * *)&D_L01_0015FFD8)[i].pos, self + 0x10);
                     if (candidate_distance < best) {
                         best = candidate_distance;
                         nearest_entity = D_L01_0015FFD8 + (i << 8);
@@ -2784,7 +2784,7 @@ typedef struct {
         s64 both;       /* -1 when neither is set */
     } area;
     s32 count;         /* spawn budget; the moby is deleted when it runs out */
-} AreaVars_2f2eb8;
+} AreaVars;
 
 extern int D_0015ED84;
 extern s32 *D_L01_001B0930_2f2eb8[] __asm__("D_L01_001B0930");
@@ -2797,7 +2797,7 @@ extern s32 D_L01_00161AF0 __attribute__((sda));
 void update_nearest_area_moby_selection(struct Moby *moby) __asm__("FUN_L01_002f2eb8");
 
 void update_nearest_area_moby_selection(struct Moby *moby) {
-    AreaVars_2f2eb8 *area_vars = (AreaVars_2f2eb8 *)moby->pvars;
+    AreaVars *area_vars = (AreaVars *)moby->pvars;
     Vec4 target;
     s32 k;
     s32 *path;

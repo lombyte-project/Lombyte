@@ -629,7 +629,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
 typedef struct {
     s32 w0;
     u8 pad4[0x70 - 4];
-} Entry70_2348d0;
+} Entry70;
 
 extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") NOT_SDA;
 
@@ -652,7 +652,7 @@ extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_002
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00211250_2348d0(void) __asm__("FUN_L00_00211250");
 
-extern Entry70_2348d0 l06_hero_countdown_records[] __asm__("D_L06_0017A070");
+extern Entry70 l06_hero_countdown_records[] __asm__("D_L06_0017A070");
 void update_hero_timers_and_spatial_state(void) __asm__("FUN_L06_002348d0");
 
 void update_hero_timers_and_spatial_state(void) {

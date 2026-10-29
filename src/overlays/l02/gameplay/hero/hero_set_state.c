@@ -25,9 +25,9 @@ typedef struct {
     int b;
     int c;
     char pad[0x20];
-} T2C_22BE40;
+} T2C;
 
-extern T2C_22BE40 D_L02_0017C228[];
+extern T2C D_L02_0017C228[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 /* D_0015ED60 reached through the word below it: retail loads it with lui here, not $gp. */
 extern float D_0015ED5C_lui[2] __asm__("D_0015ED5C");
@@ -1138,7 +1138,7 @@ int hero_set_state(int a, int b) {
         case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
-            T2C_22BE40 *e;
+            T2C *e;
             int k;
             if (*(unsigned short *)(h + 0x40) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x40) = *(unsigned short *)(h + 0x40) + 1;
@@ -1240,7 +1240,7 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C_22BE40 *e = &D_L02_0017C228[p->attack_record];
+            T2C *e = &D_L02_0017C228[p->attack_record];
             int k = e->b;
             int n;
             if (e->a == 1)

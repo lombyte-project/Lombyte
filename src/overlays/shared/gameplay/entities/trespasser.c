@@ -205,8 +205,8 @@ typedef struct {
     u8 pad[0x3A];
     s16 h3A;
     u8 pad2[0x10];
-} S179AC0_2c52a8;
-extern S179AC0_2c52a8 D_L00_00179AC0_002c52a8[] __asm__("D_L00_00179AC0")
+} S179AC0;
+extern S179AC0 D_L00_00179AC0_002c52a8[] __asm__("D_L00_00179AC0")
     __attribute__((section(".data")));
 unsigned char *FUN_0020c4f8_002c52a8(int) __asm__("FUN_0020c4f8");
 int FUN_001f96f8_002c52a8(int) __asm__("FUN_001f96f8");
@@ -216,7 +216,7 @@ unsigned char *spawn_on_path(u128 *a, int b, int c, int d) __asm__("FUN_L00_002c
 unsigned char *spawn_on_path(u128 *spawn_position, int weapon_index, int ammo_amount, int d) {
     unsigned char *spawned_moby = 0;
     {
-        S179AC0_2c52a8 *spawn_config_entry = (S179AC0_2c52a8 *)(weapon_index * 0x4C + (u8 *)D_L00_00179AC0_002c52a8);
+        S179AC0 *spawn_config_entry = (S179AC0 *)(weapon_index * 0x4C + (u8 *)D_L00_00179AC0_002c52a8);
         if (spawn_config_entry->h3A > 0)
             spawned_moby = FUN_0020c4f8_002c52a8(spawn_config_entry->h3A);
     }
@@ -305,13 +305,13 @@ typedef struct {
 } __attribute__((aligned(16))) V_2c5dc8;
 typedef struct {
     float u, v;
-} UV_2c5dc8;
+} UV;
 typedef struct {
     V_2c5dc8 corner[4];
     unsigned int color[4];
-    UV_2c5dc8 uv[4];
+    UV uv[4];
     long x70, tex, x80, x88;
-} Quad_2c5dc8;
+} Quad;
 typedef struct {
     char pad0[0x14];
     char *x14;
@@ -332,7 +332,7 @@ void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 void draw_swingshot_cable(char *moby) __asm__("FUN_L00_002c5dc8");
 
 void draw_swingshot_cable(char *moby) {
-    Quad_2c5dc8 segment_quad;
+    Quad segment_quad;
     V_2c5dc8 previous_segment_center, segment_center, attachment_position, segment_direction, f, unused_span_perpendicular, wobble_vector_scratch, segment_to_reference, k;
     Vars_2c5dc8 *v;
     unsigned int col;
@@ -668,8 +668,8 @@ typedef struct {
     void *w2FC;
     u8 p2[0x2080 - 0x300];
     char *w2080;
-} S13F350_2c82f0;
-extern S13F350_2c82f0 D_0013F350_002c82f0 __asm__("D_0013F350");
+} S13F350;
+extern S13F350 D_0013F350_002c82f0 __asm__("D_0013F350");
 extern float D_0015ED70_002c82f0 __asm__("D_0015ED70");
 extern char collision_hit_point[] __asm__("D_L00_00173E60") NOT_SDA;
 void *FUN_L00_002603d0_002c82f0(void *) __asm__("FUN_L00_002603d0");
@@ -682,7 +682,7 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released
 
 void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released_moby, void *initial_velocity) {
     char *q = *(char **)(released_moby + 0x78);
-    S13F350_2c82f0 *P;
+    S13F350 *P;
     char *released_moby_position, *collision_reference_moby;
     Vec4_2c82f0 collision_start, collision_position_offset;
     qcopy(q, initial_velocity);
@@ -693,7 +693,7 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released
     released_moby_position = released_moby + 0x10;
     qcopy(released_moby_position, release_position);
     {
-        S13F350_2c82f0 *P2 = &D_0013F350_002c82f0;
+        S13F350 *P2 = &D_0013F350_002c82f0;
         collision_reference_moby = P2->w2080;
     }
     collision_start.q = ((Vec4_2c82f0 *)(collision_reference_moby + 0x10))->q;
@@ -1250,7 +1250,7 @@ typedef struct {
     s32 timer54;
     s32 timer58;
     s32 delay;
-} GloveVars_2c1ad0;
+} GloveVars;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
 extern Vec4 D_L00_00166DC0;
 extern char D_L00_00166C80[];
@@ -1279,7 +1279,7 @@ void mine_glove_update(struct Moby *moby) {
         MINE_GLOVE_BEGIN_HELD_MOBY_REMOVAL = 5,
         MINE_GLOVE_REMOVE_HELD_MOBY = 6
     };
-    GloveVars_2c1ad0 *vars;
+    GloveVars *vars;
     Vec4 saved, offset, rotatedOffset;
     Vec4 local[4];
     Vec4 pos, target;
@@ -1292,7 +1292,7 @@ void mine_glove_update(struct Moby *moby) {
 
     if (moby == 0)
         return;
-    vars = (GloveVars_2c1ad0 *)moby->pvars;
+    vars = (GloveVars *)moby->pvars;
     if (vars->delay < 3) {
         ++vars->delay;
         return;
@@ -2443,7 +2443,7 @@ typedef struct {
     int timer;
     float rise_speed;
     float resting_height;
-} AmmoPickup_2c53c0;
+} AmmoPickup;
 
 extern int D_L00_00161838_macro __asm__("D_L00_00161838") MACRO_ADDR;
 /* Update ammunition pickup physics, collection, animation and scale.
@@ -2457,7 +2457,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         AMMO_PICKUP_PULSE_ALPHA = 3,
         AMMO_PICKUP_RESTORE_SCALE = 4
     };
-    AmmoPickup_2c53c0 *pickup_vars;
+    AmmoPickup *pickup_vars;
     unsigned int state;
     FxVec position;
     FxVec predicted;
@@ -2467,7 +2467,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
     float target;
     float step;
     float remaining;
-    pickup_vars = (AmmoPickup_2c53c0 *)pickup_moby->pvars;
+    pickup_vars = (AmmoPickup *)pickup_moby->pvars;
     FUN_001f9740_2c53c0(&pickup_vars->timer);
     state = pickup_moby->state;
     if (state == 1 || state == 4 || state == 3) {
@@ -2683,17 +2683,17 @@ typedef unsigned int Q_2C74B8 __attribute__((mode(TI)));
 
 typedef union { struct { float x, y, z, w; } f; Q_2C74B8 q; } V_2C74B8 __attribute__((aligned(16)));
 
-typedef struct { V_2C74B8 row[3]; } M3_2C74B8;
+typedef struct { V_2C74B8 row[3]; } M3;
 
-typedef struct HookData_2C74B8 { char pad0[4]; float speed; } HookData_2C74B8;
+typedef struct HookData { char pad0[4]; float speed; } HookData;
 
-typedef struct Data_2C74B8 {
+typedef struct Data {
     char pad0[0x14];
     Moby *hook;
     float spin;
     float scale;
     float size;
-} Data_2C74B8;
+} Data;
 
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -2733,8 +2733,8 @@ void swingshot_update(Moby *m) __asm__("FUN_L00_002c6158");
 void swingshot_update(Moby *m) {
     V_2C74B8 v0;
     V_2C74B8 v10;
-    Data_2C74B8 *d;
-    HookData_2C74B8 *hd;
+    Data *d;
+    HookData *hd;
     float speed;
     int n;
 

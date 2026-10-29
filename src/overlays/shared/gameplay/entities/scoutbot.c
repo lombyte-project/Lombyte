@@ -582,7 +582,7 @@ typedef struct {
     u32 col[4];
     float uv[8];
     u64 a, b, c, d;
-} Pk_002d4108;
+} Pk;
 extern u8 D_L08_001675C0_lui[] __asm__("D_L08_001675C0") NOT_SDA;
 u64 FUN_001f44b8_002d4108(s32) __asm__("FUN_001f44b8");
 void FUN_001f9a28_002d4108(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -600,7 +600,7 @@ extern float scoutbot_glow_quad_vertex_scale_gp __asm__("D_L08_0016189C") __attr
 void draw_scoutbot_glow_quad(char *arg) __asm__("FUN_L08_002d4108");
 void draw_scoutbot_glow_quad(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    Pk_002d4108 pk;
+    Pk pk;
     float up[4];
     float M[4][4];
     float position_offset[4];
@@ -656,7 +656,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float FUN_L08_00211a20(float);
 extern void FUN_00218888_002e7eb0(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int D_L08_0015F5CC __asm__("D_L08_0015F5CC");
-typedef union { float float_value; int int_value; } Data_002e7eb0;
+typedef union { float float_value; int int_value; } Data;
 /* Retail inherits GP 0x166c00: these scalar labels preserve its GP-relative loads.
    Keep the existing timer name while binding it to the checked level-08 address. */
 extern int D_L08_00161D08_gp __asm__("D_L08_00161D08") __attribute__((sda));

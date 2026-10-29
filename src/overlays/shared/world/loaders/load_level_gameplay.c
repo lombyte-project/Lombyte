@@ -353,9 +353,9 @@ typedef struct {
     char pad2084[0x28C];
 } HeroSpawn;
 
-typedef struct { s32 a, b; } P2_245610;
+typedef struct { s32 a, b; } P2;
 
-typedef struct { u8 pad[0x12E8]; P2_245610 x[10]; P2_245610 y[1]; } Tab_245610;
+typedef struct { u8 pad[0x12E8]; P2 x[10]; P2 y[1]; } Tab;
 
 extern int D_L00_001600E8  MACRO_ADDR;
 extern int D_L00_001600F0  MACRO_ADDR;

@@ -1651,9 +1651,9 @@ typedef int u128_29E8A0 __attribute__((mode(TI)));
 
 typedef struct { int w[20]; } __attribute__((aligned(16))) Tbl_29E8A0;
 
-typedef struct { int c[6]; } Cols_29E8A0;
+typedef struct { int c[6]; } Cols;
 
-typedef struct { char pad0[2]; unsigned char f2; unsigned char f3; } Part_29E8A0;
+typedef struct { char pad0[2]; unsigned char f2; unsigned char f3; } Part;
 
 typedef struct {
     float v[4];
@@ -1664,7 +1664,7 @@ typedef struct {
     unsigned short id;
     float radius;
     int count;
-} Coll_29E8A0;
+} Coll;
 
 typedef struct {
     float v[4];
@@ -1699,8 +1699,8 @@ typedef struct M_29E8A0 {
     float mtx[16];
 } M_29E8A0;
 
-extern Cols_29E8A0 l15_missile_burst_primary_color_palette __asm__("D_L15_001E2660");
-extern Cols_29E8A0 l15_missile_burst_secondary_color_palette __asm__("D_L15_001E2678");
+extern Cols l15_missile_burst_primary_color_palette __asm__("D_L15_001E2660");
+extern Cols l15_missile_burst_secondary_color_palette __asm__("D_L15_001E2678");
 extern Tbl_29E8A0 l15_missile_camera_blast_parameter_template __asm__("D_L15_001E2610");
 extern int D_L15_00178500[];
 extern char *FUN_L00_002af450(char *, char *, int, int, int);
@@ -1872,7 +1872,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 D_0015ED70 * 6.2831855f, D_0015ED70 * 3.1415927f, D_0015ED6C * 4.712389f);
         }
         {
-            Part_29E8A0 *trail_particle;
+            Part *trail_particle;
             build_spherical_offset(missile_movement_delta, missile_data->speed, missile_moby->rot[2], -missile_moby->rot[1]);
             *(u128_29E8A0 *)dv = 0;
             dv[0] = random_float_between(-1.0f, 1.0f);
@@ -1884,7 +1884,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
             fast_vec_add(delta, delta, trail_offset_or_position);
             fast_vec_normalize(trail_offset_or_position, missile_movement_delta, random_float_between(0.0f, 1.0f) * missile_data->speed);
             fast_vec_add(trail_offset_or_position, trail_offset_or_position, missile_moby->pos);
-            trail_particle = (Part_29E8A0 *)FUN_L00_002712b8(trail_offset_or_position, delta, scale_game_frames(0x3C), 0x7F, 0x606060, 3,
+            trail_particle = (Part *)FUN_L00_002712b8(trail_offset_or_position, delta, scale_game_frames(0x3C), 0x7F, 0x606060, 3,
                 40000.0f, 1000.0f, 1.0f, -0.0002f, 0.0f);
             if (trail_particle != 0) {
                 trail_particle->f2 = *D_L15_001B26DC;
@@ -1907,7 +1907,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
         return;
     }
     {
-        Coll_29E8A0 coll;
+        Coll coll;
         coll.flags = 0x830000;
         coll.radius = 3.0f;
         coll.moby = (char *)missile_moby;
@@ -2032,8 +2032,8 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 i = 0;
                 while (i < burst_effect_pair_count) {
                     float sz = random_float_between(8.0f, 10.0f) * D_0015ED6C - under * D_0015ED6C;
-                    Cols_29E8A0 c1 = l15_missile_burst_primary_color_palette;
-                    Cols_29E8A0 c2 = l15_missile_burst_secondary_color_palette;
+                    Cols c1 = l15_missile_burst_primary_color_palette;
+                    Cols c2 = l15_missile_burst_secondary_color_palette;
                     int *p1 = &c1.c[random_integer_below_c3(6)];
                     int *p2 = &c2.c[random_integer_below_c3(6)];
                     int colored_burst_effect_frame_count = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
@@ -2047,8 +2047,8 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 }
             }
             for (j = 0; j < 10; j++) {
-                Cols_29E8A0 c1 = l15_missile_burst_primary_color_palette;
-                Cols_29E8A0 c2 = l15_missile_burst_secondary_color_palette;
+                Cols c1 = l15_missile_burst_primary_color_palette;
+                Cols c2 = l15_missile_burst_secondary_color_palette;
                 float burst_particle_velocity[4];
                 {
                     float random_burst_direction[4];
@@ -2630,7 +2630,7 @@ void draw_group_moby_effect_quads(unsigned char *moby) {
 
 typedef struct { unsigned char pad[0x454]; unsigned char killed[1]; } KillFlags_2A3DD0;
 
-typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char pad75[0x13]; char *owner; } Voice_2A3DD0;
+typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char pad75[0x13]; char *owner; } Voice;
 
 extern short D_L15_0015FFD8_d __asm__("D_L15_0015FFD8");
 extern char D_0013F420[];
@@ -2696,7 +2696,7 @@ void update_spark_emitter_moby(unsigned char *moby) {
             || D_0014C050_c[(unsigned char)moby[0xB0] + (D_0015ED84 << 4)] == 0xFF) {
             func_L15_002A47B8_2A3DD0(moby);
         } else {
-            Voice_2A3DD0 *e = (Voice_2A3DD0 *)(D_0013E650_2A3DD0 + moby[0xBC] * 0x70);
+            Voice *e = (Voice *)(D_0013E650_2A3DD0 + moby[0xBC] * 0x70);
             float lo, hi, z, one;
             int i;
             if (e->owner != (char *)moby || e->active == 0) {
@@ -2951,7 +2951,7 @@ typedef struct {
     float f1C;
     int i20;
     int pad24[3];
-} Ray_2A8090;
+} Ray;
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
@@ -3075,7 +3075,7 @@ void spiderbot_update(unsigned char *moby) {
     }
     }
     {
-        Ray_2A8090 R;
+        Ray R;
         float T2[4];
         int i;
         *(u128_2A8090 *)B = 0;

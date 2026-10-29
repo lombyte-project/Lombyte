@@ -14,7 +14,7 @@
 typedef union {
     u128 q;
     f32 f[4];
-} HopVec_214658;
+} HopVec;
 
 extern s32 FUN_001f96f8_214658(s32) __asm__("FUN_001f96f8");
 extern float FUN_001f9dc8_214658(float) __asm__("FUN_001f9dc8");
@@ -42,7 +42,7 @@ extern void steer_hero_planar_velocity(f32) __asm__("FUN_L00_00213e68");
 extern f32 hero_deceleration_speed_reference[] __asm__("D_L00_0017BDD0");
 void hero_move_state_velocity(void) __asm__("FUN_L00_00214658");
 void hero_move_state_velocity(void) {
-    HopVec_214658 velocity_addend;
+    HopVec velocity_addend;
     f32 x;
     f32 speed;
     f32 heading_velocity_scale_or_pivot_yaw_delta;
@@ -224,7 +224,7 @@ extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f
 void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
 
 void update_hero_transformed_negative_z_angle_parameters(void) {
-    HopVec_214658 transformed_negative_z_vector;
+    HopVec transformed_negative_z_vector;
     f32 *vector_components = transformed_negative_z_vector.f;
     f32 limit, x, y, pitch, z, lean;
     struct Hero *state = &hero;
@@ -448,7 +448,7 @@ typedef struct {
 } M_216130;
 typedef struct {
     OvlQuad q[4];
-} QM_216130;
+} QM;
 float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 float square_root(float) __asm__("FUN_001f9988");
 float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -469,7 +469,7 @@ void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *
     float d, pitch, yaw, roll;
     smoothed_pitch = 0.0f;
     {
-        QM_216130 *d = (QM_216130 *)working_matrix, *hero_matrix_source = (QM_216130 *)&hero;
+        QM *d = (QM *)working_matrix, *hero_matrix_source = (QM *)&hero;
         d->q[0] = hero_matrix_source->q[0];
         d->q[1] = hero_matrix_source->q[1];
         d->q[2] = hero_matrix_source->q[2];
@@ -1094,7 +1094,7 @@ typedef struct {
     s16 unk76;
     u8 pad78[6];
     s16 unk7E;
-} ThrowPvars_217658;
+} ThrowPvars;
 
 extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
@@ -1126,8 +1126,8 @@ void launch_hero_wrench(void) {
     f32 out_mat[16];
     struct Moby *target;
     struct Moby *item;
-    ThrowPvars_217658 *tpv;
-    ThrowPvars_217658 *launched_item_vars;
+    ThrowPvars *tpv;
+    ThrowPvars *launched_item_vars;
     s32 aimed;
     s32 has_target;
     s32 state;
@@ -1138,7 +1138,7 @@ void launch_hero_wrench(void) {
         target = hero.items[0].moby;
         has_target = 0;
         if (target != NULL && is_wrench_moby(target)) {
-            tpv = (ThrowPvars_217658 *)target->pvars;
+            tpv = (ThrowPvars *)target->pvars;
             if (tpv->unk7E) {
                 has_target = 1;
                 transform_hero_local_offset_to_world(aim_origin_or_euler_angles, 0.5f, 0.0f, 0.5f);
@@ -1161,7 +1161,7 @@ void launch_hero_wrench(void) {
         FUN_L00_00216de8_c(0x1B, 0);
     }
     item->state = 10;
-    launched_item_vars = (ThrowPvars_217658 *)item->pvars;
+    launched_item_vars = (ThrowPvars *)item->pvars;
     if (hero.wall_probe_distance < 1.2f && 0.6632251f < hero.wall_normal_pitch && !hero.wall_probe_moby_in_class_range) {
         launched_item_vars->unk76 = 1;
     }

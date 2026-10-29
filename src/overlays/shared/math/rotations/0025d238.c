@@ -150,11 +150,11 @@ s32 offset_path_index(s32 *tab, s32 i, s32 index_offset, s32 wrap) {
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025E860), where it is exact; names translated to the US level program. */
-typedef struct { float x, y, z, w; } Pt_0025E860;
-typedef struct { int n; int pad[3]; Pt_0025E860 pt[1]; } Spline_0025E860;
+typedef struct { float x, y, z, w; } Pt;
+typedef struct { int n; int pad[3]; Pt pt[1]; } Spline;
 
 // Moves DIST along a spline from segment *IDX at offset *T, updates both, and writes the point reached to OUT; 1 when an end was passed.
-int FUN_L00_0025d808(Spline_0025E860 *path, float *out, int *segment_index, float *segment_offset, int loop, float remaining_traversal_amount) {
+int FUN_L00_0025d808(Spline *path, float *out, int *segment_index, float *segment_offset, int loop, float remaining_traversal_amount) {
     float segment_delta[4];
     int crossed_path_boundary = 0;
     int traversal_direction = 1;
@@ -493,14 +493,14 @@ s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *moby) {
 
 typedef int u128_25e450 __attribute__((mode(TI)));
 typedef struct { float f[4]; } Q_25e450;
-typedef struct { char p0[0x18]; unsigned char b18; unsigned char b19; unsigned short h1A; char p1C[0x14]; } Ev_25e450;
-typedef struct { int v[6]; } S6_25e450;
-typedef struct { char pad[0x160]; float f160; int f164; int f168; } Cam_25e450;
-typedef struct { float f[11]; } Fl_25e450;
+typedef struct { char p0[0x18]; unsigned char b18; unsigned char b19; unsigned short h1A; char p1C[0x14]; } Ev;
+typedef struct { int v[6]; } S6;
+typedef struct { char pad[0x160]; float f160; int f164; int f168; } Cam;
+typedef struct { float f[11]; } Fl;
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 extern char player_camera[] __asm__("D_L00_00166C80");
-extern S6_25e450 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
-extern S6_25e450 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
+extern S6 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
+extern S6 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -554,7 +554,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     }
     {
     if (fA > 0.0f) {
-        Ev_25e450 ev;
+        Ev ev;
         initialize_hit_descriptor(&ev, owner_moby, 0x810001, fB);
         ev.b18 = 2;
         ev.b19 = 1;
@@ -621,8 +621,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     {
     int i;
     for (i = 0; i < distance_limited_particle_pair_count; i++) {
-        S6_25e450 c0;
-        S6_25e450 c1;
+        S6 c0;
+        S6 c1;
         float sp;
         sp = random_float_between(8.0f, 10.0f) * frame_time_macro;
         c0 = D_L00_001E9030_25e450;
@@ -641,8 +641,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     {
     int i;
     for (i = 0; i < k9; i++) {
-        S6_25e450 c0 = D_L00_001E9030_25e450;
-        S6_25e450 c1 = D_L00_001E9048_25e450;
+        S6 c0 = D_L00_001E9030_25e450;
+        S6 c1 = D_L00_001E9048_25e450;
         Q_25e450 randomized_particle_vector;
         Q_25e450 rnd;
         int first_packed_color;
@@ -685,8 +685,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         *(u128_25e450 *)&v = *(u128_25e450 *)explosion_position;
         v.f[3] = 2.0f;
         if (func_L00_00200290_25e450(&v, 10.0f) != -1) {
-            ((Cam_25e450 *)player_camera)->f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
-            ((Cam_25e450 *)player_camera)->f168 = scale_game_frames(0x19);
+            ((Cam *)player_camera)->f160 = (dist < 20.0f) ? 0.4f - dist * 0.0175f : 0.050000012f;
+            ((Cam *)player_camera)->f168 = scale_game_frames(0x19);
         }
     }
     }
@@ -700,13 +700,13 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
             v.f[3] = fG;
             if (func_L00_00200290_25e450(&v, 100.0f) != -1) {
                 if (0.0f < fG) {
-                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[9] = fG;
-                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[10] = fG;
-                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[8] = fG;
+                    ((Fl *)default_explosion_flash_descriptor)->f[9] = fG;
+                    ((Fl *)default_explosion_flash_descriptor)->f[10] = fG;
+                    ((Fl *)default_explosion_flash_descriptor)->f[8] = fG;
                 } else {
-                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[9] = 15.0f;
-                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[10] = 15.0f;
-                    ((Fl_25e450 *)default_explosion_flash_descriptor)->f[8] = 15.0f;
+                    ((Fl *)default_explosion_flash_descriptor)->f[9] = 15.0f;
+                    ((Fl *)default_explosion_flash_descriptor)->f[10] = 15.0f;
+                    ((Fl *)default_explosion_flash_descriptor)->f[8] = 15.0f;
                 }
                 if (flag) {
                     func_L00_002D4CE8_25e450(alternate_explosion_flash_descriptor, explosion_position, 0, 0);

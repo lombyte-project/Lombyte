@@ -294,7 +294,7 @@ typedef struct {
     float v[4][4];
     int col[4];
     float uv[4][2];
-} Quad_2A62D0;
+} Quad;
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -313,7 +313,7 @@ extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 void draw_vendor_effects(char *m) __asm__("FUN_L00_002a5040");
 void draw_vendor_effects(char *m) {
     char *p = *(char **)(m + 0x78);
-    Quad_2A62D0 qd;
+    Quad qd;
     long pk[4];
     float q[4][4];
     float d0[4];
@@ -2137,9 +2137,9 @@ typedef float V[4] __attribute__((aligned(16)));
 
 typedef int Q_2aa998 __attribute__((mode(TI)));
 
-typedef union { Q_2aa998 q; float f[4]; } BoltVector_2AA998;
+typedef union { Q_2aa998 q; float f[4]; } BoltVector;
 
-typedef struct { char pad[0x10]; BoltVector_2AA998 position; } BoltOwner_2AA998;
+typedef struct { char pad[0x10]; BoltVector position; } BoltOwner;
 
 extern V D_L00_00173E60;
 extern char *select_auto_aim_target_moby(void *, void *, void *, float *, float *, float *, float) __asm__("FUN_L00_002630c8");
@@ -2157,8 +2157,8 @@ char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char 
 char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char *tgt, float rz, float ry) {
     char *m;
     char *d;
-    BoltVector_2AA998 t;
-    BoltVector_2AA998 p;
+    BoltVector t;
+    BoltVector p;
     m = (char *)func_0020D348_m(0x100);
     if (m != 0) {
         ((unsigned char *)m)[0x30] = 0xFF;
@@ -2210,7 +2210,7 @@ char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char 
                 *(short *)(d + 0x3C) = r;
             }
         }
-        t.q = ((BoltOwner_2AA998 *)owner)->position.q;
+        t.q = ((BoltOwner *)owner)->position.q;
         t.f[2] = ((float *)pos)[2];
         if (FUN_001efa68(&t, pos, 0, *(int *)(((char *)&D_001413D0)), 0) != 0) {
             m[0xBC] = 1;
@@ -2359,10 +2359,10 @@ typedef struct {
     u8 pad0[0x10];
     V_2a9c50 pos;
     f32 f20, f24, f28;
-} PV_2a9c50;
+} PV;
 typedef struct {
     u8 pad0[0x78];
-    PV_2a9c50 *pv;
+    PV *pv;
 } M_2a9c50;
 extern s32 D_L00_0015F5C4;
 extern s32 D_L00_0015F5CC;
@@ -2387,7 +2387,7 @@ void draw_mine_predicted_impact_marker(M_2a9c50 *moby) {
     V_2a9c50 quad_transform[4];
     V_2a9c50 mz[4];
     V_2a9c50 direction_rotation_angles;
-    PV_2a9c50 *pv = moby->pv;
+    PV *pv = moby->pv;
     s32 i;
     s32 odd;
     f32 direction_inclination, spin_angle_numerator;

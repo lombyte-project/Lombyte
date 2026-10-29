@@ -292,7 +292,7 @@ typedef struct {
     u16 id;
     f32 scale;
     s32 count;
-} DropProbe_30c9a8;
+} DropProbe;
 
 extern f32 spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
@@ -313,7 +313,7 @@ void update_sandmouse_projectile(char *moby) {
     f32 *moby_position;
     OvlVec4 old_pos;
     OvlVec4 offset;
-    DropProbe_30c9a8 probe;
+    DropProbe probe;
     f32 desired_yaw, desired_pitch;
     f32 pitch_k, pitch_d, pitch_max;
     f32 height = *(f32 *)(*(char **)(moby + 0x24) + 0x24);
@@ -409,7 +409,7 @@ void compute_sandmouse_follow_goal(void *unused, float *destination_position) {
 typedef struct {
     u8 pad00[0x46];
     s16 kind;      /* 0x46: 5 for lock-on targets */
-} TargetClass_30d308;
+} TargetClass;
 
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 FUN_001f9988_30d308(f32) __asm__("FUN_001f9988");
@@ -441,7 +441,7 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
         if (candidate_moby->draw_dist == 0) continue;
         hp = FUN_002141f8_30d308(candidate_moby);
         if (candidate_moby == 0 || candidate_moby->pclass == 0) continue;
-        candidate_target_kind = ((TargetClass_30d308 *)candidate_moby->pclass)->kind;
+        candidate_target_kind = ((TargetClass *)candidate_moby->pclass)->kind;
         if (candidate_target_kind != 5 || hp == 0 || !(0.0f < *hp)) continue;
         candidate_distance = fast_vec_dist(from, &candidate_moby->pos);
         if (!(candidate_distance < range)) continue;
@@ -463,7 +463,7 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby, f32 *from, f3
         if (collision_line_30d308(from, tp, 0, moby, 0)) {
             hit = (struct Moby *)collision_hit.moby;
             if (hit == 0 || hit == hero.moby || hit == 0 || hit->pclass == 0
-                || ((TargetClass_30d308 *)hit->pclass)->kind != candidate_target_kind) {
+                || ((TargetClass *)hit->pclass)->kind != candidate_target_kind) {
                 continue;
             }
         }
@@ -773,7 +773,7 @@ typedef struct {
     s32 k5C;
     s32 pad60;
     s32 slot;       /* 0x64 */
-} Pv_30F318;
+} Pv;
 
 extern char voice_pool_lui[] __asm__("D_0013E550") NOT_SDA;
 extern struct Moby *D_L01_001742D8 NOT_SDA;
@@ -843,12 +843,12 @@ void sandmouse_update(Moby *sandmouse_moby) {
         SANDMOUSE_STATE_FADE_OUT = 6,
         SANDMOUSE_STATE_RESET = 7
     };
-    Pv_30F318 *sandmouse_vars;
+    Pv *sandmouse_vars;
     f32 goal_bearing_yaw;
     int dv;
     s16 timer_frames;
     if (sandmouse_moby == 0) return;
-    sandmouse_vars = (Pv_30F318 *)sandmouse_moby->pvars;
+    sandmouse_vars = (Pv *)sandmouse_moby->pvars;
     if (sandmouse_vars == 0) return;
     if (sandmouse_vars->link != -1) {
         if (sandmouse_moby->state >= 5) {
@@ -1404,7 +1404,7 @@ typedef struct {
     int n;
     int pad[3];
     Node_316730 nodes[1];
-} Path_316730;
+} Path;
 
 typedef struct {
     char p00[0x20];
@@ -1412,31 +1412,31 @@ typedef struct {
     char p24[0x10];
     float unk34;
     char p38[0x18];
-} SubA_316730;
+} SubA;
 
 typedef struct {
     float pos[4];
     char p10[0x3C];
     float unk4C;
     char p50[0x80];
-} SubB_316730;
+} SubB;
 
 typedef struct {
     int idx;
     float t;
     int p08[2];
     int unk10;
-} SubC_316730;
+} SubC;
 
 typedef struct {
     float vel[3];
     float unk0C;
     float unk10;
     char p14[0x1C];
-    SubA_316730 a;
-    SubB_316730 b;
-    SubC_316730 c;
-} Data_316730;
+    SubA a;
+    SubB b;
+    SubC c;
+} Data;
 
 typedef struct {
     float unk0;
@@ -1449,18 +1449,18 @@ typedef struct {
     short unk34;
     short unk36;
     float unk38;
-} Parm_316730;
+} Parm;
 
 typedef struct {
     char p00[0x1C];
-    Parm_316730 *unk1C;
-} Ent50_316730;
+    Parm *unk1C;
+} Ent50;
 
 typedef struct {
     char p00[0x10];
-    Path_316730 *unk10;
+    Path *unk10;
     char p14[0xC];
-} Ent7EC_316730;
+} Ent7EC;
 
 typedef struct {
     float unk0[4];
@@ -1469,13 +1469,13 @@ typedef struct {
     float pos[4];
     float unk40[4];
     char p50[0x20];
-    Data_316730 *data;
+    Data *data;
     char p74[0x10];
     short unk84;
-} Cam_316730;
+} Cam;
 
-extern Ent50_316730 *D_L01_0015EF50_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
-extern Ent7EC_316730 *D_L01_0015F70C_macro __asm__("D_L01_0015F70C") MACRO_ADDR;
+extern Ent50 *D_L01_0015EF50_macro __asm__("D_L01_0015EF50") MACRO_ADDR;
+extern Ent7EC *D_L01_0015F70C_macro __asm__("D_L01_0015F70C") MACRO_ADDR;
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float camera_basis_reference_direction[] __asm__("D_L01_001672B0");
@@ -1488,11 +1488,11 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
-extern Path_316730 *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
+extern Path *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
 
-void update_camera_position_and_orientation_from_paths(Cam_316730 *cam) __asm__("FUN_L01_00315358");
+void update_camera_position_and_orientation_from_paths(Cam *cam) __asm__("FUN_L01_00315358");
 
-void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_update) {
+void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
     float camera_goal[4];
     float look_offset[4];
     float look_dir[4];
@@ -1502,11 +1502,11 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
     float rail_point[4];
     int segment;
     float fraction;
-    Data_316730 *data = camera_to_update->data;
-    SubA_316730 *look = &data->a;
-    SubB_316730 *follow = &data->b;
-    SubC_316730 *progress = &data->c;
-    Parm_316730 *params = D_L01_0015EF50_macro[camera_to_update->unk84].unk1C;
+    Data *data = camera_to_update->data;
+    SubA *look = &data->a;
+    SubB *follow = &data->b;
+    SubC *progress = &data->c;
+    Parm *params = D_L01_0015EF50_macro[camera_to_update->unk84].unk1C;
     float rate = 0.01f;
     int mode = params->unk30;
     int path_index = params->unk20;
@@ -1516,7 +1516,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
     float pitch_step;
 
     if (mode == 0) {
-        Path_316730 *path;
+        Path *path;
         float dist;
 
         segment = ((Hero *)(((char *)((char *)&hero))))->rail_segment;
@@ -1526,7 +1526,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
         sample_path(D_L01_001B0C30_316730[path_index], camera_goal, &progress->idx, &progress->t, 1.0f, 0);
         qcopy(follow->pos, camera_goal);
         path = D_L01_001B0C30_316730[path_index];
-        dist = path->nodes[segment].w * (fraction / ((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->rail_spline)->nodes[segment].w);
+        dist = path->nodes[segment].w * (fraction / ((Path *)((Hero *)(((char *)((char *)&hero))))->rail_spline)->nodes[segment].w);
         fast_vec_sub(delta, &path->nodes[segment + 1], &path->nodes[segment]);
         fast_vec_normalize(look_target, delta, dist);
         fast_vec_add(rail_point, &path->nodes[segment], look_target);
@@ -1534,10 +1534,10 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
         camera_to_update->pos[1] = cam_interp_values(camera_to_update->pos[1], rail_point[1], &data->vel[1], rate, 0.175f, 0.0f);
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
     } else if (mode == 2) {
-        Path_316730 *pathA = D_L01_001B0C30_316730[path_index];
-        Path_316730 *pathD = D_L01_0015F70C_macro[params->unk24].unk10;
-        Path_316730 *pathC = D_L01_001B0C30_316730[params->unk28];
-        Path_316730 *pathB = D_L01_001B0C30_316730[params->unk2C];
+        Path *pathA = D_L01_001B0C30_316730[path_index];
+        Path *pathD = D_L01_0015F70C_macro[params->unk24].unk10;
+        Path *pathC = D_L01_001B0C30_316730[params->unk28];
+        Path *pathB = D_L01_001B0C30_316730[params->unk2C];
         int i;
         int previous_path_node_index = 0;
         int range_start = 0;
@@ -1607,7 +1607,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
         camera_to_update->pos[1] = cam_interp_values(camera_to_update->pos[1], look_target[1], &data->vel[1], data->unk10, 0.175f, 0.0f);
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], look_target[2], &data->vel[2], data->unk10, 0.175f, 0.0f);
     } else {
-        Path_316730 *path = D_L01_001B0C30_316730[path_index];
+        Path *path = D_L01_001B0C30_316730[path_index];
 
         if (params->unk24 < 0) {
             float lead_offset;
@@ -1626,7 +1626,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
 
             hero_segment = ((Hero *)(((char *)((char *)&hero))))->rail_segment;
             hero_fraction = ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
-            sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->rail_spline, path_point, &hero_segment, &hero_fraction, params->unk38, 1);
+            sample_path((Path *)((Hero *)(((char *)((char *)&hero))))->rail_spline, path_point, &hero_segment, &hero_fraction, params->unk38, 1);
             FUN_L00_0025df68(path, path_point, camera_goal, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         }
         camera_to_update->pos[0] = cam_interp_values(camera_to_update->pos[0], camera_goal[0], &data->vel[0], rate, 0.175f, 0.0f);
@@ -1634,7 +1634,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], camera_goal[2], &data->vel[2], rate, 0.175f, 0.0f);
     }
     if (params->unk24 < 0) {
-        Path_316730 *path = D_L01_001B0C30_316730[params->unk20];
+        Path *path = D_L01_001B0C30_316730[params->unk20];
 
         FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, look_target, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         if (current_level_index_macro == 0xE && params->unk30 == 0) {
@@ -1650,7 +1650,7 @@ void update_camera_position_and_orientation_from_paths(Cam_316730 *camera_to_upd
 
         hero_segment = ((Hero *)(((char *)((char *)&hero))))->rail_segment;
         hero_fraction = ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
-        sample_path((Path_316730 *)((Hero *)(((char *)((char *)&hero))))->rail_spline, look_target, &hero_segment, &hero_fraction, lead, 1);
+        sample_path((Path *)((Hero *)(((char *)((char *)&hero))))->rail_spline, look_target, &hero_segment, &hero_fraction, lead, 1);
     }
     fast_vec_normalize(look_offset, camera_basis_reference_direction, follow->unk4C);
     fast_vec_add(path_point, look_offset, look_target);
@@ -1740,20 +1740,20 @@ typedef struct {
     s32 target;    /* 0x24: index into D_L01_0015F70C, -1 none */
     u8 pad28[8];
     s32 kind;      /* 0x30 */
-} CamData_316030;
+} CamData;
 
 /* One 32-byte entry of D_L01_0015EF50 */
 typedef struct {
     u8 pad00[0x1C];
-    CamData_316030 *data; /* 0x1C */
-} CamSlot_316030;
+    CamData *data; /* 0x1C */
+} CamSlot;
 
 /* One 32-byte entry of D_L01_0015F70C */
 typedef struct {
     u8 pad00[0x10];
     s32 unk10;     /* 0x10: compared with hero.rail_spline */
     u8 pad14[0xC];
-} CamTarget_316030;
+} CamTarget;
 
 /* The object FUN_L01_00316030 updates */
 typedef struct {
@@ -1762,15 +1762,15 @@ typedef struct {
     u8 pad80[4];
     s16 slot;      /* 0x84: index into D_L01_0015EF50 */
     s16 unk86;     /* 0x86: compared with hero.unk2284 */
-} CamUser_316030;
+} CamUser;
 
-extern CamSlot_316030 *D_L01_0015EF50_316030 __asm__("D_L01_0015EF50");
-extern CamTarget_316030 *D_L01_0015F70C_316030 __asm__("D_L01_0015F70C");
+extern CamSlot *D_L01_0015EF50_316030 __asm__("D_L01_0015EF50");
+extern CamTarget *D_L01_0015F70C_316030 __asm__("D_L01_0015F70C");
 
-void update_camera_mode_from_preset(CamUser_316030 *camera_user) __asm__("FUN_L01_00316030");
+void update_camera_mode_from_preset(CamUser *camera_user) __asm__("FUN_L01_00316030");
 
-void update_camera_mode_from_preset(CamUser_316030 *camera_user) {
-    CamData_316030 *camera_preset = D_L01_0015EF50_316030[camera_user->slot].data;
+void update_camera_mode_from_preset(CamUser *camera_user) {
+    CamData *camera_preset = D_L01_0015EF50_316030[camera_user->slot].data;
 
     if (hero.unk2284 == camera_user->unk86) {
         if (camera_preset->target < 0) {

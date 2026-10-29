@@ -20,9 +20,9 @@ typedef unsigned int Quad_2b2100 __attribute__((mode(TI)));
 
 typedef union { struct { float x, y, z, w; } f; Quad_2b2100 q; } Vec_2b2100 __attribute__((aligned(16)));
 
-typedef struct { Vec_2b2100 row[3]; } Matrix3_2b2100;
+typedef struct { Vec_2b2100 row[3]; } Matrix3;
 
-typedef struct { Vec_2b2100 row[4]; } Matrix4_2b2100;
+typedef struct { Vec_2b2100 row[4]; } Matrix4;
 
 typedef struct Class_2b2100 { char pad0[0x46]; short category; } Class_2b2100;
 
@@ -36,20 +36,20 @@ typedef struct Devastator_2b2100 {
     short glow;
 } Devastator_2b2100;
 
-typedef struct Input_2b2100 { char pad0[0x1A0]; int held; } Input_2b2100;
+typedef struct Input { char pad0[0x1A0]; int held; } Input;
 
-typedef struct ItemVariant_2b2100 { unsigned char pad[0xB]; unsigned char level; } ItemVariant_2b2100;
+typedef struct ItemVariant { unsigned char pad[0xB]; unsigned char level; } ItemVariant;
 
 typedef struct UsageStat_2b2100 { char pad0[0x58]; unsigned short uses; unsigned short longest; int levels; } UsageStat_2b2100;
 
 typedef struct Hit_2b2100 { char pad0[0x18]; struct Moby *moby; char pad1C[4]; Vec_2b2100 pos; } Hit_2b2100;
 
-typedef struct AimInfo_2b2100 { char pad0[0xA]; unsigned char radius; char padB[5]; float height; } AimInfo_2b2100;
+typedef struct AimInfo { char pad0[0xA]; unsigned char radius; char padB[5]; float height; } AimInfo;
 
 typedef struct Light_2b2100 { float x, y, z, b; Vec_2b2100 pos; } Light_2b2100;
 
-extern Input_2b2100 pad_input_2b2100 __asm__("D_0013C940");
-extern ItemVariant_2b2100 item_variant_2b2100 __asm__("D_0013E520");
+extern Input pad_input_2b2100 __asm__("D_0013C940");
+extern ItemVariant item_variant_2b2100 __asm__("D_0013E520");
 extern char usage_stats_2b2100[] __asm__("D_00141680");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern char view_origin_2b2100[] __asm__("D_L00_00166DC0");
@@ -78,7 +78,7 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void FUN_001f99f8_2b2100(void *) __asm__("FUN_001f99f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern AimInfo_2b2100 *get_moby_aim_info_2b2100(void *) __asm__("FUN_002141f8");
+extern AimInfo *get_moby_aim_info_2b2100(void *) __asm__("FUN_002141f8");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
@@ -96,8 +96,8 @@ extern int FUN_001f9770_2b2100(short *) __asm__("FUN_001f9770");
 extern float D_L00_0017ACF4_lui __asm__("D_L00_0017ACF4") NOT_SDA;
 void devastator_update(struct Moby *m) __asm__("FUN_L00_002b2100");
 void devastator_update(struct Moby *devastator_moby) {
-    Matrix3_2b2100 rotation;
-    Matrix4_2b2100 inverse;
+    Matrix3 rotation;
+    Matrix4 inverse;
     Vec_2b2100 velocity;
     Vec_2b2100 launch;
     Vec_2b2100 point;
@@ -105,7 +105,7 @@ void devastator_update(struct Moby *devastator_moby) {
     Devastator_2b2100 *data = (Devastator_2b2100 *)devastator_moby->pvars;
     struct Moby *best;
     struct Moby *candidate_moby;
-    AimInfo_2b2100 *aim_info;
+    AimInfo *aim_info;
     UsageStat_2b2100 *stats;
     Hit_2b2100 *hit;
     float height, limit, yaw, pitch, yaw0, pitch0;
@@ -553,10 +553,10 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4A_2b3628;
 
 typedef int Q_2b3628 __attribute__((mode(TI)));
-typedef struct { float pos[4][4]; unsigned int col[4]; float uv[4][2]; unsigned long tag[4]; } Quad_2b3628;
-typedef struct { int a, b; } Ids_2b3628;
-typedef struct { float x, y, z; } P3_2b3628;
-typedef struct { float u, v; } UV_2b3628;
+typedef struct { float pos[4][4]; unsigned int col[4]; float uv[4][2]; unsigned long tag[4]; } Quad;
+typedef struct { int a, b; } Ids;
+typedef struct { float x, y, z; } P3;
+typedef struct { float u, v; } UV;
 typedef struct Child_2b3628 { char pad0[0xA6]; short cls; } Child_2b3628;
 typedef struct Data_2b3628 { int f0; int f4; Child_2b3628 *child; char padC[0x14]; float f20; char pad24[8]; float f2C; } Data_2b3628;
 
@@ -573,8 +573,8 @@ extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void func_L00_001FDE48_2b3628(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
 
-extern Ids_2b3628 D_L00_00161488 NOT_SDA;
-extern Ids_2b3628 D_L00_00161490 NOT_SDA;
+extern Ids D_L00_00161488 NOT_SDA;
+extern Ids D_L00_00161490 NOT_SDA;
 #define BEAM_QUAD_YZ { \
     {0.0f, -2.0f, 2.0f, 1.0f}, \
     {0.0f, -2.0f, -2.0f, 1.0f}, \
@@ -848,25 +848,25 @@ float D_L18_001CF8A0[4][4] = BEAM_QUAD_XZ;
     {0.172746f, 0.877706f}, \
     {0.262236f, 1.0f} \
 }
-UV_2b3628 D_L00_001DA0B0[196] = RIBBON_UVS;
-UV_2b3628 D_L01_001DA530[196] = RIBBON_UVS;
-UV_2b3628 D_L02_001CEB30[196] = RIBBON_UVS;
-UV_2b3628 D_L03_001CE630[196] = RIBBON_UVS;
-UV_2b3628 D_L04_001CE6B0[196] = RIBBON_UVS;
-UV_2b3628 D_L05_001CE9D0[196] = RIBBON_UVS;
-UV_2b3628 D_L06_001CECB0[196] = RIBBON_UVS;
-UV_2b3628 D_L07_001CE5B0[196] = RIBBON_UVS;
-UV_2b3628 D_L08_001CED30[196] = RIBBON_UVS;
-UV_2b3628 D_L09_001CE6B0[196] = RIBBON_UVS;
-UV_2b3628 D_L10_001CE9B0[196] = RIBBON_UVS;
-UV_2b3628 D_L11_001CEF30[196] = RIBBON_UVS;
-UV_2b3628 D_L12_001E15D0[196] = RIBBON_UVS;
-UV_2b3628 D_L13_001CEE40[196] = RIBBON_UVS;
-UV_2b3628 D_L14_001DB4F0[196] = RIBBON_UVS;
-UV_2b3628 D_L15_001CEFB0[196] = RIBBON_UVS;
-UV_2b3628 D_L16_001CE9B0[196] = RIBBON_UVS;
-UV_2b3628 D_L17_001CF230[196] = RIBBON_UVS;
-UV_2b3628 D_L18_001CEF30[196] = RIBBON_UVS;
+UV D_L00_001DA0B0[196] = RIBBON_UVS;
+UV D_L01_001DA530[196] = RIBBON_UVS;
+UV D_L02_001CEB30[196] = RIBBON_UVS;
+UV D_L03_001CE630[196] = RIBBON_UVS;
+UV D_L04_001CE6B0[196] = RIBBON_UVS;
+UV D_L05_001CE9D0[196] = RIBBON_UVS;
+UV D_L06_001CECB0[196] = RIBBON_UVS;
+UV D_L07_001CE5B0[196] = RIBBON_UVS;
+UV D_L08_001CED30[196] = RIBBON_UVS;
+UV D_L09_001CE6B0[196] = RIBBON_UVS;
+UV D_L10_001CE9B0[196] = RIBBON_UVS;
+UV D_L11_001CEF30[196] = RIBBON_UVS;
+UV D_L12_001E15D0[196] = RIBBON_UVS;
+UV D_L13_001CEE40[196] = RIBBON_UVS;
+UV D_L14_001DB4F0[196] = RIBBON_UVS;
+UV D_L15_001CEFB0[196] = RIBBON_UVS;
+UV D_L16_001CE9B0[196] = RIBBON_UVS;
+UV D_L17_001CF230[196] = RIBBON_UVS;
+UV D_L18_001CEF30[196] = RIBBON_UVS;
 #define RIBBON_POINTS { \
     {-1.389244f, -1.912131f, -0.901867f, 1.0f}, \
     {0.0f, -2.363524f, -0.901867f, 1.0f}, \
@@ -1084,25 +1084,25 @@ float D_L15_001CE370[196][4] = RIBBON_POINTS;
 float D_L16_001CDD70[196][4] = RIBBON_POINTS;
 float D_L17_001CE5F0[196][4] = RIBBON_POINTS;
 float D_L18_001CE2F0[196][4] = RIBBON_POINTS;
-P3_2b3628 D_L00_001DAA80[196] = {0};
-P3_2b3628 D_L01_001DAF00[196] = {0};
-P3_2b3628 D_L02_001CF500[196] = {0};
-P3_2b3628 D_L03_001CF000[196] = {0};
-P3_2b3628 D_L04_001CF080[196] = {0};
-P3_2b3628 D_L05_001CF3A0[196] = {0};
-P3_2b3628 D_L06_001CF680[196] = {0};
-P3_2b3628 D_L07_001CEF80[196] = {0};
-P3_2b3628 D_L08_001CF700[196] = {0};
-P3_2b3628 D_L09_001CF080[196] = {0};
-P3_2b3628 D_L10_001CF380[196] = {0};
-P3_2b3628 D_L11_001CF900[196] = {0};
-P3_2b3628 D_L12_001E1FA0[196] = {0};
-P3_2b3628 D_L13_001CF810[196] = {0};
-P3_2b3628 D_L14_001DBEC0[196] = {0};
-P3_2b3628 D_L15_001CF980[196] = {0};
-P3_2b3628 D_L16_001CF380[196] = {0};
-P3_2b3628 D_L17_001CFC00[196] = {0};
-P3_2b3628 D_L18_001CF900[196] = {0};
+P3 D_L00_001DAA80[196] = {0};
+P3 D_L01_001DAF00[196] = {0};
+P3 D_L02_001CF500[196] = {0};
+P3 D_L03_001CF000[196] = {0};
+P3 D_L04_001CF080[196] = {0};
+P3 D_L05_001CF3A0[196] = {0};
+P3 D_L06_001CF680[196] = {0};
+P3 D_L07_001CEF80[196] = {0};
+P3 D_L08_001CF700[196] = {0};
+P3 D_L09_001CF080[196] = {0};
+P3 D_L10_001CF380[196] = {0};
+P3 D_L11_001CF900[196] = {0};
+P3 D_L12_001E1FA0[196] = {0};
+P3 D_L13_001CF810[196] = {0};
+P3 D_L14_001DBEC0[196] = {0};
+P3 D_L15_001CF980[196] = {0};
+P3 D_L16_001CF380[196] = {0};
+P3 D_L17_001CFC00[196] = {0};
+P3 D_L18_001CF900[196] = {0};
 #define RIBBON_COLORS { \
     0x80808080, 0x80808080, 0x80808080, 0x80808080, 0x80808080, 0x80808080, 0x80808080, 0x80808080, \
     0x80808080, 0x80808080, 0x80808080, 0x80808080, 0x80808080, 0x80808080, 0x80808080, 0x80808080, \
@@ -1153,10 +1153,10 @@ int D_L18_001CF550[196] = RIBBON_COLORS;
 void draw_joint_aligned_beam_effect(struct Moby *beam_moby) __asm__("FUN_L00_002b3628");
 
 void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
-    Quad_2b3628 pk;
+    Quad pk;
     Vec4A_2b3628 mtx[4];
     Vec4A_2b3628 out[2];
-    Ids_2b3628 ids;
+    Ids ids;
     Vec4A_2b3628 up;
     Vec4A_2b3628 beam_quad_transform[4];
     Vec4A_2b3628 idm[4];
@@ -2135,7 +2135,7 @@ extern char D_L00_00173E40_2b6140[] __asm__("D_L00_00173E40");
 
 typedef int u128_2b6140 __attribute__((mode(TI)));
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V_2b6140;
-typedef struct Ev_2b6140 {
+typedef struct Ev {
     V_2b6140 pos;
     struct Moby *moby;
     int flags;
@@ -2144,9 +2144,9 @@ typedef struct Ev_2b6140 {
     unsigned short h1A;
     float f1C;
     int f20;
-} Ev_2b6140;
-typedef struct Part_2b6140 { char p0[0x10]; V_2b6140 pos; } Part_2b6140;
-typedef struct Tgt_2b6140 { char p0[0x46]; short h46; char p48[0x5E]; short hA6; } Tgt_2b6140;
+} Ev;
+typedef struct Part { char p0[0x10]; V_2b6140 pos; } Part;
+typedef struct Tgt { char p0[0x46]; short h46; char p48[0x5E]; short hA6; } Tgt;
 typedef struct D_2b6140 {
     int f0;
     float f4;
@@ -2156,8 +2156,8 @@ typedef struct D_2b6140 {
     float f18;
     float f1C;
     char p20[4];
-    Part_2b6140 *f24;
-    Part_2b6140 *f28;
+    Part *f24;
+    Part *f28;
     int f2C;
     char p30[0x14];
     float f44;
@@ -2173,10 +2173,10 @@ typedef struct Hit_2b6140 {
     V_2b6140 v50;
     V_2b6140 v60;
 } Hit_2b6140;
-typedef struct Hit2_2b6140 { char p0[0x24]; Tgt_2b6140 *f24; } Hit2_2b6140;
-typedef struct Row_2b6140 { char p0[0x74]; unsigned char f74; char p1[0x13]; struct Moby *f88; } Row_2b6140;
+typedef struct Hit2 { char p0[0x24]; Tgt *f24; } Hit2;
+typedef struct Row { char p0[0x74]; unsigned char f74; char p1[0x13]; struct Moby *f88; } Row;
 extern char voice_pool[] __asm__("D_0013E550");
-extern Hit2_2b6140 *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
+extern Hit2 *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 extern char D_L00_00177F00_2b6140[] __asm__("D_L00_00177F00");
 extern float frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 extern void func_L00_00204130_2b6140(void) __asm__("FUN_L00_00203b18");
@@ -2219,7 +2219,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
     V_2b6140 k40;
     V_2b6140 v50;
     V_2b6140 v60;
-    Ev_2b6140 ev;
+    Ev ev;
     V_2b6140 vA0;
     D_2b6140 *missile_vars = (D_2b6140 *)missile_moby->pvars;
     int direct = 0;
@@ -2249,8 +2249,8 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         || hero.state.control_mode == 5
         || hero.state.current == 0x65
         || hero.grounded_frames == 0
-        || (((Tgt_2b6140 *)hero.ground_moby) != 0
-            && (((Tgt_2b6140 *)hero.ground_moby)->hA6 == 0x13E || ((Tgt_2b6140 *)hero.ground_moby)->hA6 == 0x46F))) {
+        || (((Tgt *)hero.ground_moby) != 0
+            && (((Tgt *)hero.ground_moby)->hA6 == 0x13E || ((Tgt *)hero.ground_moby)->hA6 == 0x46F))) {
         func_L00_002B6E10_2b6140(missile_moby, missile_vars);
         return;
     }
@@ -2340,7 +2340,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 normalize_vector_xyz_2b6140(&k30, &k30, frame_time_macro + frame_time_macro);
                 normalize_vector_xyz_2b6140(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
                 if (missile_vars->f2C != -1) {
-                    Row_2b6140 *e = (Row_2b6140 *)(voice_pool + missile_vars->f2C * 0x70);
+                    Row *e = (Row *)(voice_pool + missile_vars->f2C * 0x70);
                     if (e->f88 == missile_moby) {
                         if (e->f74 != 0) release_voice_slot(missile_vars->f2C);
                     }
@@ -2355,7 +2355,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
                 normalize_vector_xyz_2b6140(&k30, &k30, frame_time_macro + frame_time_macro);
                 normalize_vector_xyz_2b6140(&k40, &((Hit_2b6140 *)D_L00_00173E40_2b6140)->v40, 1.0f);
                 if (missile_vars->f2C != -1) {
-                    Row_2b6140 *e = (Row_2b6140 *)(voice_pool + missile_vars->f2C * 0x70);
+                    Row *e = (Row *)(voice_pool + missile_vars->f2C * 0x70);
                     if (e->f88 == missile_moby) {
                         if (e->f74 != 0) release_voice_slot(missile_vars->f2C);
                     }
@@ -2371,7 +2371,7 @@ void visibomb_missile_update(struct Moby *missile_moby) {
         if (controller_state.pressed & 0x20) {
             missile_moby->command = 1;
             if (missile_vars->f2C != -1) {
-                Row_2b6140 *e = (Row_2b6140 *)(voice_pool + missile_vars->f2C * 0x70);
+                Row *e = (Row *)(voice_pool + missile_vars->f2C * 0x70);
                 if (e->f88 == missile_moby) {
                     if (e->f74 != 0) release_voice_slot(missile_vars->f2C);
                 }
@@ -2846,8 +2846,8 @@ typedef struct FlameHit {
     s32 mode;
 } FlameHit;
 
-typedef Vec_2b2100 Vec_2b77f0;
-extern Vec_2b77f0 D_L00_0015F580 __asm__("D_L00_0015F580") MACRO_ADDR;
+typedef Vec_2b2100 Vec;
+extern Vec D_L00_0015F580 __asm__("D_L00_0015F580") MACRO_ADDR;
 extern f32 pyrocitor_light_color_start_x_gp __asm__("D_L00_001614F0") __attribute__((sda));
 extern f32 pyrocitor_light_color_end_x_gp __asm__("D_L00_00161500") __attribute__((sda));
 extern f32 D_L00_00161510 __attribute__((sda));
@@ -3261,7 +3261,7 @@ typedef unsigned int Q_2B9AD8 __attribute__((mode(TI)));
 
 typedef union { struct { float x, y, z, w; } f; Q_2B9AD8 q; } V_2B9AD8 __attribute__((aligned(16)));
 
-typedef struct Data_2B9AD8 {
+typedef struct Data {
     V_2B9AD8 pos;
     V_2B9AD8 tip;
     struct Moby *target;
@@ -3279,17 +3279,17 @@ typedef struct Data_2B9AD8 {
     short f44;
     short f46;
     int sound;
-} Data_2B9AD8;
+} Data;
 
-typedef struct Stats_2B9AD8 { char pad0[0x98]; unsigned short uses; unsigned short longest; int levels; } Stats_2B9AD8;
+typedef struct Stats { char pad0[0x98]; unsigned short uses; unsigned short longest; int levels; } Stats;
 
-typedef struct Stats2_2B9AD8 { char pad0[0xD0]; unsigned short uses; unsigned short longest; int levels; } Stats2_2B9AD8;
+typedef struct Stats2 { char pad0[0xD0]; unsigned short uses; unsigned short longest; int levels; } Stats2;
 
-typedef struct Voice_2B9AD8 { char pad0[4]; unsigned char active; char pad5[0x13]; struct Moby *owner; char pad1C[0x54]; } Voice_2B9AD8;
+typedef struct Voice { char pad0[4]; unsigned char active; char pad5[0x13]; struct Moby *owner; char pad1C[0x54]; } Voice;
 
-typedef struct Aim_2B9AD8 { char pad0[4]; short kind; } Aim_2B9AD8;
+typedef struct Aim { char pad0[4]; short kind; } Aim;
 
-typedef struct Light_2B9AD8 { float x, y, z, b; V_2B9AD8 pos; } Light_2B9AD8;
+typedef struct Light { float x, y, z, b; V_2B9AD8 pos; } Light;
 
 extern char D_0013E533[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
@@ -3325,12 +3325,12 @@ extern int D_0015EEA4;
 extern int D_0015ED84_2b2100 __asm__("D_0015ED84");
 extern char D_0013F350_2b2100[] __asm__("D_0013F350");
 extern float D_0015ED60_2b2100 __asm__("D_0015ED60");
-extern Voice_2B9AD8 D_0013E550_2b2100[] __asm__("D_0013E550");
+extern Voice D_0013E550_2b2100[] __asm__("D_0013E550");
 extern unsigned char D_0013E533_2b2100[] __asm__("D_0013E533");
 extern unsigned short D_00141D70_2b2100[] __asm__("D_00141D70");
 extern unsigned short D_00141918_2b2100[] __asm__("D_00141918");
 extern int D_L00_00161590 __asm__("D_L00_00161590");
-extern Light_2B9AD8 D_L00_001802C0_2b2100[] __asm__("D_L00_001802C0");
+extern Light D_L00_001802C0_2b2100[] __asm__("D_L00_001802C0");
 extern int FUN_L00_00233e98_2b2100a(int) __asm__("FUN_L00_00233e98");
 extern void FUN_L00_00203908_2b2100(int, int) __asm__("FUN_L00_00203908");
 extern int FUN_001f9770_2b2100a(short *) __asm__("FUN_001f9770");
@@ -3341,7 +3341,7 @@ extern int FUN_L00_0023e5e0_2b2100(void *, float, float, int) __asm__("FUN_L00_0
 extern float FUN_001f9e90_2b2100(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa688_2b2100(float, float) __asm__("FUN_001fa688");
 extern float FUN_001f9b48_2b2100(void *, void *) __asm__("FUN_001f9b48");
-extern Aim_2B9AD8 *FUN_002141f8_2b2100(void *) __asm__("FUN_002141f8");
+extern Aim *FUN_002141f8_2b2100(void *) __asm__("FUN_002141f8");
 extern float FUN_001fa6c0_2b2100(int) __asm__("FUN_001fa6c0");
 extern void FUN_001f9cf8_2b2100(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void FUN_001f9a10_2b2100(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3366,7 +3366,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
         TESLA_CLAW_STATE_FINISHED = 4
     };
     V_2B9AD8 transformed_offset;
-    Data_2B9AD8 *tesla_claw_vars = (Data_2B9AD8 *)tesla_claw_moby->pvars;
+    Data *tesla_claw_vars = (Data *)tesla_claw_moby->pvars;
     int active;
     int done = ((struct Hero *)D_0013F350_2b2100)->items[0].state == 3;
     int ready;
@@ -3425,7 +3425,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                 qcopy(&tesla_claw_vars->tip, &tesla_claw_vars->pos);
                 if (tesla_claw_vars->target && tesla_claw_vars->lock) {
                     int lim = 50;
-                    Aim_2B9AD8 *a;
+                    Aim *a;
                     short n;
                     tesla_claw_vars->hold++;
                     a = FUN_002141f8_2b2100(tesla_claw_vars->target);
@@ -3440,7 +3440,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                 }
                 if (tesla_claw_vars->target2 && tesla_claw_vars->lock2) {
                     int lim = 50;
-                    Aim_2B9AD8 *a;
+                    Aim *a;
                     short n;
                     tesla_claw_vars->hold2++;
                     a = FUN_002141f8_2b2100(tesla_claw_vars->target2);
@@ -3501,7 +3501,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
         D_L00_00161590 = 1;
         if (tesla_claw_vars->glow > 0) tesla_claw_vars->glow--;
         if (tesla_claw_vars->sound != -1) {
-            Voice_2B9AD8 *firing_voice_slot_window = &D_0013E550_2b2100[tesla_claw_vars->sound];
+            Voice *firing_voice_slot_window = &D_0013E550_2b2100[tesla_claw_vars->sound];
             if (firing_voice_slot_window[1].owner == tesla_claw_moby && firing_voice_slot_window[1].active) FUN_0022d798_2b2100(tesla_claw_vars->sound);
         }
         tesla_claw_vars->sound = -1;
@@ -3533,7 +3533,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
         }
         if ((controller_state.pressed & (player_hero = (struct Hero *)D_0013F350_2b2100)->items[0].button_mask) && !player_hero->item_use_locked) {
             if (active) {
-                Stats_2B9AD8 *st = (Stats_2B9AD8 *)(D_0014161B + 0x65);
+                Stats *st = (Stats *)(D_0014161B + 0x65);
                 if (st->uses < 65535) st->uses++;
                 if (FUN_001f96f8_2b2100(D_0015EEA4) / 600 > st->longest)
                     st->longest = FUN_001f96f8_2b2100(D_0015EEA4) / 600;
@@ -3558,11 +3558,11 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
             ((struct Hero *)D_0013F350_2b2100)->item_use_locked) {
             player_hero = (struct Hero *)D_0013F350_2b2100;
             if (FUN_001f96f8_2b2100(70) < player_hero->item_anim_frames) {
-                if (((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->uses < 65535) ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->uses++;
+                if (((Stats2 *)(D_0014161B + 0x22D))->uses < 65535) ((Stats2 *)(D_0014161B + 0x22D))->uses++;
             }
-            if (FUN_001f96f8_2b2100(D_0015EEA4) / 600 > ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->longest)
-                ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->longest = FUN_001f96f8_2b2100(D_0015EEA4) / 600;
-            ((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->levels = (((Stats2_2B9AD8 *)(D_0014161B + 0x22D))->levels | (1 << D_0015ED84_2b2100)) | 0x80000000;
+            if (FUN_001f96f8_2b2100(D_0015EEA4) / 600 > ((Stats2 *)(D_0014161B + 0x22D))->longest)
+                ((Stats2 *)(D_0014161B + 0x22D))->longest = FUN_001f96f8_2b2100(D_0015EEA4) / 600;
+            ((Stats2 *)(D_0014161B + 0x22D))->levels = (((Stats2 *)(D_0014161B + 0x22D))->levels | (1 << D_0015ED84_2b2100)) | 0x80000000;
             if (((struct Hero *)D_0013F350_2b2100)->item_anim_frames < FUN_001f96f8_2b2100(30))
                 ((struct Hero *)D_0013F350_2b2100)->wrench_combo_step++;
             else

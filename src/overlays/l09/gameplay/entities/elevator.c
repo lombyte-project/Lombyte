@@ -529,12 +529,12 @@ typedef struct {
     signed char flag;          /* 0x69 */
     short timer;               /* 0x6A */
     int trigger;               /* 0x6C */
-} Data_305710;
+} Data;
 
 typedef struct {
     char pad0[0x39];
     unsigned char b39;
-} Flags_305710;
+} Flags;
 
 char *find_nearby_chain_attachment(char *self, char *pos, int bone) __asm__("FUN_L09_003041d0");
 extern Moby *moby_list __asm__("D_L09_0015FFD8");
@@ -562,7 +562,7 @@ extern Moby *func_L09_00305580_305710(void *, void *, int) __asm__("FUN_L09_0030
 
 void airship_chain_link_update(Moby *m) __asm__("FUN_L09_00304360");
 void airship_chain_link_update(Moby *m) {
-    Data_305710 *d = (*(Data_305710 **)&m->pvars);
+    Data *d = (*(Data **)&m->pvars);
     float v20[4];
     float v30[4];
     float v40[4];
@@ -575,7 +575,7 @@ void airship_chain_link_update(Moby *m) {
 
     switch (m->state) {
     case 0:
-        if (d->flag != -1 && ((Flags_305710 *)(D_0013D388 + d->flag))->b39 != 0) {
+        if (d->flag != -1 && ((Flags *)(D_0013D388 + d->flag))->b39 != 0) {
             mark_moby_for_removal(m);
             return;
         }
@@ -618,12 +618,12 @@ void airship_chain_link_update(Moby *m) {
             if (next == 0 || next->state == 0xFE || next->state == 0xFD) {
                 d->loose = 0;
                 next = 0;
-            } else if ((*(Data_305710 **)&next->pvars)->loose == 0) {
+            } else if ((*(Data **)&next->pvars)->loose == 0) {
                 d->loose = 0;
             }
         }
         if (d->loose == 0 && hull != 0 && next != 0 && next->oclass == 0x49D) {
-            if ((*(Data_305710 **)&next->pvars)->loose != 0) {
+            if ((*(Data **)&next->pvars)->loose != 0) {
                 dist = vector_distance(((f32 *)&m->pos), ((f32 *)&hull->pos));
                 m->rot.y = fast_add_rotations(m->rot.y, fast_subtract_rotations(-fast_arc_tan(dist, hull->pos.z - m->pos.z), m->rot.y) * 0.1f);
                 m->rot.z = fast_add_rotations(m->rot.z, fast_subtract_rotations(fast_arc_tan(hull->pos.x - m->pos.x, hull->pos.y - m->pos.y), m->rot.z) * 0.1f);
@@ -1294,9 +1294,9 @@ char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) {
 }
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00309688), where it is exact; names translated to the US level program. */
 
-typedef struct BarrierData_309688 {
+typedef struct BarrierData {
     int idx;
-} BarrierData_309688;
+} BarrierData;
 
 typedef struct Hit_309688 {
     char pad0[0x10];
@@ -1353,7 +1353,7 @@ extern char alternate_item_available[] __asm__("D_0013D388");
 void barrier_update(Moby *moby) __asm__("FUN_L09_003082d8");
 void barrier_update(Moby *moby)
 {
-    BarrierData_309688 *data = (*(BarrierData_309688 **)&moby->pvars);
+    BarrierData *data = (*(BarrierData **)&moby->pvars);
     float origin[4], center[4], piece_pos[4], piece_velocity[4], push[4];
     Hit_309688 *hit;
     int has_next;

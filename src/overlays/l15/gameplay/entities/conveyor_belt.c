@@ -178,18 +178,18 @@ struct Moby_A4D88 {
 
 #include "rnc/overlay/quad.h"
 
-typedef union Vec_2E9358 {
+typedef union Vec {
     OvlQuad q;
     float f[4];
-} Vec_2E9358;
+} Vec;
 
-typedef struct Data_2E9358 {
+typedef struct Data {
     float f0;
     float f4;
     float f8;
     float fC;
     struct Moby_2E9358 *target; /* 0x10 */
-} Data_2E9358;
+} Data;
 
 typedef struct Moby_2E9358 {
     char pad0[0x10];
@@ -198,7 +198,7 @@ typedef struct Moby_2E9358 {
     char pad21[0x1F];
     OvlQuad v40; /* 0x40 */
     char pad50[0x28];
-    Data_2E9358 *data; /* 0x78 */
+    Data *data; /* 0x78 */
     char pad7C[0x28];
     unsigned char bA4;
     char padA5;
@@ -207,19 +207,19 @@ typedef struct Moby_2E9358 {
     unsigned char bBC;
 } Moby_2E9358;
 
-typedef struct Res_2E9358 {
+typedef struct Res {
     char pad0[0x20];
     Moby_2E9358 *owner; /* 0x20 */
-} Res_2E9358;
+} Res;
 
-typedef struct Tb_2E9358 {
+typedef struct Tb {
     char pad0[0x18];
     int f18;
     int f1C;
     OvlQuad v20;
     OvlQuad v30;
     OvlQuad v40;
-} Tb_2E9358;
+} Tb;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
@@ -242,7 +242,7 @@ extern int D_L15_001744D8_2E9358 __asm__("D_L15_00174458") __attribute__((sectio
 extern int D_001414D0_2E9358 __asm__("D_001413D0") __attribute__((section(".data")));
 extern s32 D_L15_00178500[] __asm__("D_L15_00178500");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern Res_2E9358 *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern Res *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L00_002603d0(int);
 extern void func_L00_001FF240_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -260,14 +260,14 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         POISON_VESSEL_FREE_FLIGHT = 0,
         POISON_VESSEL_FOLLOW_TARGET = 1
     };
-    Vec_2E9358 previous_position;
-    Vec_2E9358 collision_scratch_vector;
-    Vec_2E9358 temporary_vector;
-    Data_2E9358 *data = moby->data;
+    Vec previous_position;
+    Vec collision_scratch_vector;
+    Vec temporary_vector;
+    Data *data = moby->data;
     char *follow_context = 0;
     unsigned char state;
     int blast_candidate_count;
-    Res_2E9358 *hit_result;
+    Res *hit_result;
 
     previous_position.q = moby->pos;
     clear_u64_value(&collision_scratch_vector);
@@ -288,15 +288,15 @@ void poison_vessel_update(Moby_2E9358 *moby) {
         data->f8 = data->f8 - poison_vessel_gravity_gp * frame_time_sq;
         func_L00_001FF240_2E9358(&temporary_vector, &moby->pos, data);
         if (collision_line(&previous_position, &moby->pos, 0x10, moby, 0)) {
-            if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 != 0 && FUN_L00_002603d0(((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18) != 0) {
-                data->target = (Moby_2E9358 *)((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18;
+            if (((Tb *)D_L15_001744C0_2E9358)->f18 != 0 && FUN_L00_002603d0(((Tb *)D_L15_001744C0_2E9358)->f18) != 0) {
+                data->target = (Moby_2E9358 *)((Tb *)D_L15_001744C0_2E9358)->f18;
                 moby->state = 1;
                 data->f8 = 0.0f;
-                moby->pos = ((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20;
-            } else if (((Tb_2E9358 *)D_L15_001744C0_2E9358)->f18 == D_001414D0_2E9358 || data->f8 < D_0015ED6C * -9.8f) {
+                moby->pos = ((Tb *)D_L15_001744C0_2E9358)->v20;
+            } else if (((Tb *)D_L15_001744C0_2E9358)->f18 == D_001414D0_2E9358 || data->f8 < D_0015ED6C * -9.8f) {
                 moby->bBC = 1;
-                qcopy(&moby->pos, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v20);
-                func_L00_001FF610_2E9358(&collision_scratch_vector, data, &((Tb_2E9358 *)D_L15_001744C0_2E9358)->v40);
+                qcopy(&moby->pos, &((Tb *)D_L15_001744C0_2E9358)->v20);
+                func_L00_001FF610_2E9358(&collision_scratch_vector, data, &((Tb *)D_L15_001744C0_2E9358)->v40);
                 func_L00_001FF4B0_2E9358(&collision_scratch_vector, &collision_scratch_vector, D_0015ED6C + D_0015ED6C);
             }
         }
@@ -1460,7 +1460,7 @@ aim_head:
     }
 }
 
-typedef struct Talk_2ed398 {
+typedef struct Talk {
     int zone[4];
     int npc[3];
     int vol1C;
@@ -1473,25 +1473,25 @@ typedef struct Talk_2ed398 {
     int last;
     char pad44[0x54 - 0x44];
     int vol54;
-} Talk_2ed398;
-typedef struct Help_2ed398 {
+} Talk;
+typedef struct Help {
     int busy;
     char p0[0x24 - 4];
     int cur;
-} Help_2ed398;
-typedef struct Stats_2ed398 {
+} Help;
+typedef struct Stats {
     char p0[0x3DA];
     unsigned short t3DA;
     char p1[0x3E0 - 0x3DC];
     unsigned short n3E0;
     unsigned short t3E2;
     int lv3E4;
-} Stats_2ed398;
-typedef struct Items_2ed398 {
+} Stats;
+typedef struct Items {
     char p0[0x6E];
     unsigned char f6E;
     unsigned char f6F;
-} Items_2ed398;
+} Items;
 
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
@@ -1517,7 +1517,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
         HINT_DIALOGUE_INITIALIZE = 0,
         HINT_DIALOGUE_CHECK_TRIGGERS = 1
     };
-    Talk_2ed398 *hint_dialogue_data = (struct Talk_2ed398 *)moby->pvars;
+    Talk *hint_dialogue_data = (struct Talk *)moby->pvars;
     int hint_dialogue_state = moby->state;
     struct Moby *npc_moby;
     int i, j, found, npc, pick;
@@ -1534,44 +1534,44 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
                 && is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->zone[3]) != 0
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
-                && ((Help_2ed398 *)quartu_help_message_state)->busy == 0 && ((Help_2ed398 *)quartu_help_message_state)->cur == -1) {
+                && ((Help *)quartu_help_message_state)->busy == 0 && ((Help *)quartu_help_message_state)->cur == -1) {
                 if (D_0013D4DF_2ed398[0] == 0) {
                     int lim, now;
                     now = scale_game_frames(D_0015EEA4_macro);
-                    lim = now - ((Stats_2ed398 *)D_00141968_2ed398)->t3DA * 600;
-                    if ((int)((float)scale_game_frames(0x12) * 60.0f) < lim || ((Stats_2ed398 *)D_00141968_2ed398)->t3DA * 600 == 0) {
+                    lim = now - ((Stats *)D_00141968_2ed398)->t3DA * 600;
+                    if ((int)((float)scale_game_frames(0x12) * 60.0f) < lim || ((Stats *)D_00141968_2ed398)->t3DA * 600 == 0) {
                         help_request(0x3A98, 0x7B);
                     } else {
                         now = scale_game_frames(D_0015EEA4_macro);
-                        if (now / 600 > ((Stats_2ed398 *)D_00141968_2ed398)->t3DA) {
-                            ((Stats_2ed398 *)D_00141968_2ed398)->t3DA = scale_game_frames(D_0015EEA4_macro) / 600;
+                        if (now / 600 > ((Stats *)D_00141968_2ed398)->t3DA) {
+                            ((Stats *)D_00141968_2ed398)->t3DA = scale_game_frames(D_0015EEA4_macro) / 600;
                         }
                     }
-                } else if (((Stats_2ed398 *)D_00141968_2ed398)->n3E0 != 0) {
+                } else if (((Stats *)D_00141968_2ed398)->n3E0 != 0) {
                     int lim, now;
                     now = scale_game_frames(D_0015EEA4_macro);
-                    lim = now - ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 * 600;
-                    if ((int)((float)scale_game_frames(0x12) * 60.0f) < lim || ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 * 600 == 0) {
+                    lim = now - ((Stats *)D_00141968_2ed398)->t3E2 * 600;
+                    if ((int)((float)scale_game_frames(0x12) * 60.0f) < lim || ((Stats *)D_00141968_2ed398)->t3E2 * 600 == 0) {
                         help_request(0x3A99, 0x7C);
                     } else {
                         now = scale_game_frames(D_0015EEA4_macro);
-                        if (now / 600 > ((Stats_2ed398 *)D_00141968_2ed398)->t3E2) {
-                            ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 = scale_game_frames(D_0015EEA4_macro) / 600;
+                        if (now / 600 > ((Stats *)D_00141968_2ed398)->t3E2) {
+                            ((Stats *)D_00141968_2ed398)->t3E2 = scale_game_frames(D_0015EEA4_macro) / 600;
                         }
                     }
                 } else {
                     int now;
-                    ((Stats_2ed398 *)D_00141968_2ed398)->n3E0++;
+                    ((Stats *)D_00141968_2ed398)->n3E0++;
                     now = scale_game_frames(D_0015EEA4_macro);
-                    if (now / 600 > ((Stats_2ed398 *)D_00141968_2ed398)->t3E2) {
-                        ((Stats_2ed398 *)D_00141968_2ed398)->t3E2 = scale_game_frames(D_0015EEA4_macro) / 600;
+                    if (now / 600 > ((Stats *)D_00141968_2ed398)->t3E2) {
+                        ((Stats *)D_00141968_2ed398)->t3E2 = scale_game_frames(D_0015EEA4_macro) / 600;
                     }
-                    ((Stats_2ed398 *)D_00141968_2ed398)->lv3E4 = ((Stats_2ed398 *)D_00141968_2ed398)->lv3E4 | (1 << current_level_index_macro) | 0x80000000;
+                    ((Stats *)D_00141968_2ed398)->lv3E4 = ((Stats *)D_00141968_2ed398)->lv3E4 | (1 << current_level_index_macro) | 0x80000000;
                 }
             }
         }
-        if (D_L15_0015F5A4 != 0 && ((Help_2ed398 *)quartu_help_message_state)->busy == 0
-            && ((Help_2ed398 *)quartu_help_message_state)->cur == -1 && *(unsigned short *)(item_usage + 0x730) == 0) {
+        if (D_L15_0015F5A4 != 0 && ((Help *)quartu_help_message_state)->busy == 0
+            && ((Help *)quartu_help_message_state)->cur == -1 && *(unsigned short *)(item_usage + 0x730) == 0) {
             help_request(0x3A9F, 0x89);
             D_L15_0015F5A4 = 0;
         }
@@ -1602,7 +1602,7 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             if (npc_moby != 0 && npc_moby->oclass == 0x4E && npc_moby->state != 0xFE && npc_moby->state != 0xFD && npc_moby->state != 3
                 && hint_dialogue_data->hold3C > hint_dialogue_data->wait && pick != -1 && pick != hint_dialogue_data->last
                 && (hero.state.control_mode < 2u || hero.state.control_mode == 9)
-                && ((Help_2ed398 *)quartu_help_message_state)->busy == 0 && ((Help_2ed398 *)quartu_help_message_state)->cur == -1
+                && ((Help *)quartu_help_message_state)->busy == 0 && ((Help *)quartu_help_message_state)->cur == -1
                 && D_0013D4DF_2ed398[0] != 0) {
                 hint_dialogue_data->wait = scale_game_frames(0x708);
                 if (*(int *)(item_usage + 0x6D4) >= 0) {
@@ -1613,15 +1613,15 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             }
         }
         if (hero.moby->seq == 0xC && hero.vehicle_mode == 2) {
-            ((Items_2ed398 *)D_0013D388_2ed398)->f6F = 1;
+            ((Items *)D_0013D388_2ed398)->f6F = 1;
         }
         if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol1C) != 0 && hero.vehicle_mode == 2
-            && ((Items_2ed398 *)D_0013D388_2ed398)->f6F == 0 && ((Help_2ed398 *)quartu_help_message_state)->busy == 0
-            && ((Help_2ed398 *)quartu_help_message_state)->cur == -1 && *(int *)(item_usage + 0x6EC) >= 0) {
+            && ((Items *)D_0013D388_2ed398)->f6F == 0 && ((Help *)quartu_help_message_state)->busy == 0
+            && ((Help *)quartu_help_message_state)->cur == -1 && *(int *)(item_usage + 0x6EC) >= 0) {
             help_request(0x3A9C, 0x80);
         }
-        if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol20[0]) != 0 && ((Help_2ed398 *)quartu_help_message_state)->busy == 0
-            && ((Help_2ed398 *)quartu_help_message_state)->cur == -1 && l15_dwell_zone_hint_enabled[0] == 0
+        if (is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol20[0]) != 0 && ((Help *)quartu_help_message_state)->busy == 0
+            && ((Help *)quartu_help_message_state)->cur == -1 && l15_dwell_zone_hint_enabled[0] == 0
             && !(*(unsigned int *)(item_usage + 0x6FC) & (1 << current_level_index_macro))) {
             help_request(0x3A9D, 0x82);
         }
@@ -1647,14 +1647,14 @@ void update_quartu_hint_triggers(struct Moby *moby) {
             }
         }
         if (scale_game_frames(0xE10) < hint_dialogue_data->hold38 && pick != -1 && FUN_L00_0020d568_2ed398() != 0
-            && ((Help_2ed398 *)quartu_help_message_state)->busy == 0 && ((Help_2ed398 *)quartu_help_message_state)->cur == -1
+            && ((Help *)quartu_help_message_state)->busy == 0 && ((Help *)quartu_help_message_state)->cur == -1
             && l15_dwell_zone_hint_enabled[0] != 0) {
             help_request(0x4E2E, 0x78);
             hint_dialogue_data->last = pick;
             hint_dialogue_data->hold38 = 0;
         }
-        if (((Items_2ed398 *)D_0013D388_2ed398)->f6E == 0 && is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol2C) != 0) {
-            ((Items_2ed398 *)D_0013D388_2ed398)->f6E = 1;
+        if (((Items *)D_0013D388_2ed398)->f6E == 0 && is_point_inside_clip_volume(&hero.motion.pos, hint_dialogue_data->vol2C) != 0) {
+            ((Items *)D_0013D388_2ed398)->f6E = 1;
         }
         break;
     }

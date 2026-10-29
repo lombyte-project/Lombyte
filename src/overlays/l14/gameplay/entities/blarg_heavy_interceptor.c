@@ -988,7 +988,7 @@ typedef struct {
     u32 col[4];
     float uv[8];
     unsigned long a, b, c, d;
-} Pk_2add48;
+} Pk;
 
 extern float blarg_heavy_interceptor_spinning_beam_initial_offset_scale_gp __asm__("D_L14_00161434") __attribute__((sda));
 extern float blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair_gp __asm__("D_L14_00161438") __attribute__((sda));
@@ -1024,7 +1024,7 @@ void draw_blarg_heavy_interceptor_spinning_beam(char *moby) __asm__("FUN_L14_002
 void draw_blarg_heavy_interceptor_spinning_beam(char *moby) {
     char *d = *(char **)(moby + 0x78);
     float beam_placement_scratch[4][4];
-    Pk_2add48 pk;
+    Pk pk;
     float beam_quad_transform[4][4];
     float quad_translation_offset[4];
     float beam_offset_direction[4];
@@ -2082,10 +2082,10 @@ scan:
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B5938), where it is exact; names translated to the US level program. */
 
 
-typedef union PathNode_2B5938 {
+typedef union PathNode {
     float v[4];
     int n;
-} PathNode_2B5938;
+} PathNode;
 
 typedef struct Class_2B5938 {
     char pad00[0x10];
@@ -2111,7 +2111,7 @@ typedef struct Moby_2B5938 {
     char pad54[0x1C];
     unsigned char f70;          /* 0x70 */
     char pad71[7];
-    struct Data_2B5938 *d;      /* 0x78 */
+    struct Data *d;      /* 0x78 */
     char pad7C[3];
     unsigned char f7F;          /* 0x7F */
     char pad80[0x14];
@@ -2120,7 +2120,7 @@ typedef struct Moby_2B5938 {
     short fB2;                  /* 0xB2 */
 } Moby_2B5938;
 
-typedef struct Data_2B5938 {
+typedef struct Data {
     char pad00[0x40];
     float f40[2];               /* 0x40 */
     float f48;                  /* 0x48 */
@@ -2157,7 +2157,7 @@ typedef struct Data_2B5938 {
     float f178;                 /* 0x178 */
     float f17C;                 /* 0x17C */
     float f180[4];              /* 0x180 */
-} Data_2B5938;
+} Data;
 
 char *create_bouncing_spark(int a0, float *pos, float *a2, int a3, float f) __asm__("FUN_L14_003014e0");
 extern char D_0013E550_c[] __asm__("D_0013E550");
@@ -2218,7 +2218,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void set_moby_animation_c(void *, s32, s32) __asm__("func_00212ED8");
 int FUN_L14_002b5730_c(struct Moby *moby, char *a1, int a2, int a3, float *v, float *vel, float f12, float f13, float f14, float f15, float f16, float f17, float f18) __asm__("FUN_L14_002b5730");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
-extern PathNode_2B5938 *D_L14_001B0F30_2B5938[] __asm__("D_L14_001B0BB0");
+extern PathNode *D_L14_001B0F30_2B5938[] __asm__("D_L14_001B0BB0");
 extern char *func_L14_00302968_2B5938(int a0, float *a1, float *a2, float f, int a3) __asm__("FUN_L14_003014e0");
 extern void func_L00_0025F4A8_2B5938(void *, void *, void *, float, float, int, int, int, float, float, float, float,
                                      int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -2236,7 +2236,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         MINIBOMBER_STATE_TRAVERSE_PATH = 7,
         MINIBOMBER_STATE_DESTROY = 9
     };
-    Data_2B5938 *d = moby->d;
+    Data *d = moby->d;
     float v[12];
     float *path_endpoint_target_position;
     char *manipulator_state;
@@ -2269,7 +2269,7 @@ void minibomber_update(Moby_2B5938 *moby) {
     }
     switch (moby->state) {
     case MINIBOMBER_STATE_INITIALIZE: {
-        PathNode_2B5938 *path;
+        PathNode *path;
         if (d->fD0 == -1) {
             debug_print(D_L14_001FBDF0, moby->fB2);
             mark_moby_for_removal(moby);
@@ -2338,7 +2338,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     case MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH: {
-        PathNode_2B5938 *path;
+        PathNode *path;
         if (d->f10C == 0) {
             path = D_L14_001B0F30_2B5938[d->fD0];
         } else {
@@ -2373,7 +2373,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         break;
     }
     case MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH: {
-        PathNode_2B5938 *path;
+        PathNode *path;
         if (d->f10C == 0) {
             path = D_L14_001B0F30_2B5938[d->fD0];
         } else {
@@ -2398,7 +2398,7 @@ void minibomber_update(Moby_2B5938 *moby) {
                 d->fE8 = 0;
                 d->fEC = 0.0f;
             } else {
-                PathNode_2B5938 *q;
+                PathNode *q;
                 d->fE8 = D_L14_001B0F30_2B5938[d->fDC]->n - 2;
                 q = D_L14_001B0F30_2B5938[d->fDC] + d->fE8;
                 d->fEC = q[1].v[3];
@@ -2426,7 +2426,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         if (FUN_L14_002b5730_c((char *)moby, (char *)D_L14_001B0F30_2B5938[d->fDC], (int)&d->fE8, (int)&d->fEC, d->fF0,
                               &d->fE4, spd, minibomber_retrace_and_traversal_position_error_gain_gp, minibomber_position_velocity_damping_gp, minibomber_position_snap_threshold_scale_gp, minibomber_retrace_and_traversal_heading_error_gain_gp,
                               minibomber_heading_velocity_damping_gp, minibomber_heading_velocity_limit_gp) != 0) {
-            PathNode_2B5938 *path;
+            PathNode *path;
             moby->state = 4;
             if (d->f10C == 0) {
                 d->f10C = 1;
@@ -2453,7 +2453,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     case MINIBOMBER_STATE_AIM_AT_BOMB_POINT: {
-        PathNode_2B5938 *q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
+        PathNode *q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
         tg = fast_subtract_rotations(fast_arc_tan(q[1].v[0] - moby->pos[0], q[1].v[1] - moby->pos[1]), moby->rot);
         blended_aim_angle = cosine_interpolate(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(minibomber_bomb_aim_duration_frames)));
         FUN_L00_001fff28(d->f120, 2, blended_aim_angle);
@@ -2469,7 +2469,7 @@ void minibomber_update(Moby_2B5938 *moby) {
     }
     case MINIBOMBER_STATE_RELEASE_BOMB:
         if (is_value_within_interpolated_window(moby, 3.0f) != 0) {
-            PathNode_2B5938 *q;
+            PathNode *q;
             n = (float)scale_game_frames_c(minibomber_bomb_flight_duration_frames);
             FUN_L00_001fff28(d->f120, 2, d->f104);
             moby_point_position(moby, 1, v);

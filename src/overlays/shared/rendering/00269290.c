@@ -975,7 +975,7 @@ typedef struct {
     f32 fC;
     f32 f10;
     u32 w14;
-} Body_26b910;
+} Body;
 typedef struct {
     u8 p0[4];
     u32 w4;
@@ -986,7 +986,7 @@ typedef struct {
     u8 p10[8];
     f32 f18;
     u8 p1C[4];
-    Body_26b910 body;
+    Body body;
 } Part_26b910;
 int FUN_001f9770_0026b910(s16 *) __asm__("FUN_001f9770");
 int FUN_001f96f8_0026b910(int) __asm__("FUN_001f96f8");
@@ -995,7 +995,7 @@ void FUN_L00_00267a08_0026b910(void *) __asm__("FUN_L00_00267a08");
 void update_spinning_fade_in_out_effect_particle(Part_26b910 *particle) __asm__("FUN_L00_0026b910");
 
 void update_spinning_fade_in_out_effect_particle(Part_26b910 *particle) {
-    Body_26b910 *particle_data = &particle->body;
+    Body *particle_data = &particle->body;
     particle->b8 += particle_data->b8;
     particle->f18 += particle_data->f10;
     particle->fC *= particle_data->fC;
@@ -1206,7 +1206,7 @@ typedef struct {
     short timer;
     float fC;
     float pos[4];
-} Part_0026CF28;
+} Part;
 
 typedef struct {
     float vel[4];
@@ -1215,7 +1215,7 @@ typedef struct {
     short life;
     short kind;
     float f1C;
-} Data_0026CF28;
+} Data;
 
 extern float D_0015ED70;
 extern float D_L00_0015F5D0;
@@ -1228,12 +1228,12 @@ extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int FUN_L00_002371e0_c(int, int, float) __asm__("FUN_L00_002371e0");
 extern void FUN_L00_0026bed0_c(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 
-void update_fading_debris_particle_with_landing_spawn(Part_0026CF28 *particle) __asm__("FUN_L00_0026c088");
+void update_fading_debris_particle_with_landing_spawn(Part *particle) __asm__("FUN_L00_0026c088");
 
-void update_fading_debris_particle_with_landing_spawn(Part_0026CF28 *particle) {
+void update_fading_debris_particle_with_landing_spawn(Part *particle) {
     float saved[4];
     float grav[4] = { D_0015ED70 * 4.8f, D_0015ED70 * 24.5f, D_0015ED70 * 9.8f, -(D_0015ED70 * 0.24f) };
-    Data_0026CF28 *particle_data = (Data_0026CF28 *)(particle + 1);
+    Data *particle_data = (Data *)(particle + 1);
     int alpha, spawn_lifetime, k;
     float reference_distance_or_spawn_size;
 
@@ -1424,9 +1424,9 @@ typedef struct {
 } __attribute__((aligned(16))) V_26c860;
 typedef struct {
     OvlQuad q[4];
-} M3_26c860;
+} M3;
 typedef struct {
-    M3_26c860 *p0;
+    M3 *p0;
     f32 f4;
     f32 f8;
     f32 fC;
@@ -1463,7 +1463,7 @@ void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) __asm__("F
 void update_spiraling_fade_in_out_effect_particle(M_26c860 *particle) {
     R_26c860 *r = &particle->r;
     V_26c860 reference_position, position_offset_scratch, transformed_position_offset;
-    M3_26c860 position_offset_matrix;
+    M3 position_offset_matrix;
     if (r->f10 != 0.0f) {
         f32 zero = 0.0f;
         position_offset_matrix.q[0] = r->p0->q[0];
@@ -1758,9 +1758,9 @@ typedef struct {
     s16 hA;
     f32 fC;
     u128 pos;
-} Src_26d470;
+} Src;
 typedef struct {
-    Src_26d470 *e;
+    Src *e;
     f32 f4;
     f32 f8;
     f32 fC;
@@ -1786,7 +1786,7 @@ void FUN_L00_00267a08_0026d470(void *) __asm__("FUN_L00_00267a08");
 void update_source_bound_effect_particle(Part_26d470 *particle) __asm__("FUN_L00_0026d470");
 
 void update_source_bound_effect_particle(Part_26d470 *particle) {
-    Src_26d470 *e;
+    Src *e;
     Body_26d470 *particle_data;
     float updated_alpha_offset;
     u32 packed_rgb;
@@ -3073,9 +3073,9 @@ typedef unsigned int U128 __attribute__((mode(TI)));
 typedef union {
     U128 q_26ff10;
     f32 f[4];
-} VV_26ff10;
+} VV;
 
-typedef struct PV_26ff10 {
+typedef struct PV {
     f32 x, y, z, w_26ff10;
     f32 t;
     s16 f14;
@@ -3083,7 +3083,7 @@ typedef struct PV_26ff10 {
     u8 f18;
     char pad19[3];
     void *f1C;
-} PV_26ff10;
+} PV;
 
 typedef struct Moby_26ff10 {
     u8 b00_26ff10;
@@ -3095,12 +3095,12 @@ typedef struct Moby_26ff10 {
     char pad09;
     s16 h0A;
     f32 f0C;
-    VV_26ff10 posv;
-    PV_26ff10 pv;
+    VV posv;
+    PV pv;
 } Moby_26ff10;
 
 typedef struct {
-    VV_26ff10 v_26ff10;
+    VV v_26ff10;
     void *f10;
     s32 f14;
     s32 f18;
@@ -3132,11 +3132,11 @@ extern s32 FUN_001fa6d0_26ff10(f32) __asm__("FUN_001fa6d0");
 void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff10 *particle) __asm__("FUN_L00_0026ff10");
 
 void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff10 *particle) {
-    VV_26ff10 v0u;
-    VV_26ff10 v1u;
+    VV v0u;
+    VV v1u;
     S_26ff10 collision_parameters;
     f32 collision_offset[4];
-    PV_26ff10 *pv;
+    PV *pv;
     Moby_26ff10 *spawned_particle;
     u8 *tab;
     u8 fl;

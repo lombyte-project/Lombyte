@@ -163,7 +163,7 @@ typedef struct Hero Hero;
 
 typedef struct { float x, y, z, w; } Vec_2F7E08 __attribute__((aligned(16)));
 
-typedef struct { int c[6]; } Cols_2F7E08;
+typedef struct { int c[6]; } Cols;
 
 typedef struct {
     Vec_2F7E08 vel;
@@ -172,13 +172,13 @@ typedef struct {
     int f30;
     int f34;
     float f38;
-} Data_2F7E08;
+} Data;
 
 typedef struct {
     int timer;
     short h4;
     int vol;
-} Tgt_2F7E08;
+} Tgt;
 
 typedef struct {
     Vec_2F7E08 dir;
@@ -189,10 +189,10 @@ typedef struct {
     short id;
     float scale;
     int count;
-} Dmg_2F7E08;
+} Dmg;
 
-extern Cols_2F7E08 l01_explosive_projectile_initial_color_palette __asm__("D_L01_0020B470");
-extern Cols_2F7E08 l01_explosive_projectile_secondary_color_palette __asm__("D_L01_0020B488");
+extern Cols l01_explosive_projectile_initial_color_palette __asm__("D_L01_0020B470");
+extern Cols l01_explosive_projectile_secondary_color_palette __asm__("D_L01_0020B488");
 extern struct Moby *D_L01_001742D8 NOT_SDA;
 extern char *ents __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern char D_0013E533[];
@@ -224,7 +224,7 @@ void update_explosive_projectile(struct Moby *moby) __asm__("FUN_L01_002f6a30");
 void update_explosive_projectile(struct Moby *moby) {
     Vec_2F7E08 old_pos;
     Vec_2F7E08 smoke_pos;
-    Data_2F7E08 *data;
+    Data *data;
     int rate_divisor;
     int i;
     int j;
@@ -287,7 +287,7 @@ void update_explosive_projectile(struct Moby *moby) {
         }
         fast_vec_scale(data, data, -0.55f);
         if (cutscene_active_macro != 0) {
-            Dmg_2F7E08 damage;
+            Dmg damage;
             {
                 damage.owner = moby;
                 damage.flags = 0x810001;
@@ -318,8 +318,8 @@ void update_explosive_projectile(struct Moby *moby) {
         }
         for (j = 0; j < rings; j++) {
             float speed = random_float_between(8.0f, 10.0f) * D_0015ED6C - fade * D_0015ED6C;
-            Cols_2F7E08 start_colors = l01_explosive_projectile_initial_color_palette;
-            Cols_2F7E08 end_colors = l01_explosive_projectile_secondary_color_palette;
+            Cols start_colors = l01_explosive_projectile_initial_color_palette;
+            Cols end_colors = l01_explosive_projectile_secondary_color_palette;
             speed = speed * size_scale;
             spawn_particle(&(*(Vec_2F7E08 *)&moby->pos), data, start_colors.c[random_integer_below(6)], end_colors.c[random_integer_below(6)], size_scale * 400000.0f,
                               FUN_L00_00257b90_c(scale_game_frames(0x1E), scale_game_frames(0x28)) / rate_divisor,
@@ -329,8 +329,8 @@ void update_explosive_projectile(struct Moby *moby) {
                               FUN_L00_00257b90_c(scale_game_frames(0x1E), scale_game_frames(0x28)) / rate_divisor, 0, 8, speed * 0.5f);
         }
         for (flash = 0; flash < 5; flash++) {
-            Cols_2F7E08 start_colors = l01_explosive_projectile_initial_color_palette;
-            Cols_2F7E08 end_colors = l01_explosive_projectile_secondary_color_palette;
+            Cols start_colors = l01_explosive_projectile_initial_color_palette;
+            Cols end_colors = l01_explosive_projectile_secondary_color_palette;
             Vec_2F7E08 flash_emission_vector;
             {
                 Vec_2F7E08 random_dir;
@@ -395,7 +395,7 @@ void update_explosive_projectile(struct Moby *moby) {
         for (link = 0; link < 4; link++) {
             if (cutscene_active_macro == 0 && data->ids[link] != -1) {
                 if (((struct Moby *)ents)[data->ids[link]].oclass == 0x2BC) {
-                    Tgt_2F7E08 *target = (*(void **)&((struct Moby *)ents)[data->ids[link]].pvars);
+                    Tgt *target = (*(void **)&((struct Moby *)ents)[data->ids[link]].pvars);
                     if (target->h4 == 0 && target->timer == 0 && is_point_inside_clip_volume(((char *)&D_0013F3D0), target->vol) != 0
                         && is_point_inside_clip_volume(D_L01_00167240, target->vol) != 0) {
                         target->timer = scale_game_frames(FUN_L00_00257b90_c(0x3C, 0xB4));
@@ -418,7 +418,7 @@ typedef struct {
     s32 unk20;      /* 0x20 */
     f32 gravity;    /* 0x24 */
     s32 unk28;      /* 0x28 */
-} DebrisVars_2f8530;
+} DebrisVars;
 
 extern f32 D_0015ED6C_2f8530 __asm__("D_0015ED6C");
 extern struct Moby *create_moby_local(s32) __asm__("FUN_0020c4f8");
@@ -438,7 +438,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
     u128 *pp = &spawn_position_snapshot;
     u128 *vp = &spawn_velocity_snapshot;
     struct Moby *debris_moby;
-    DebrisVars_2f8530 *debris_vars;
+    DebrisVars *debris_vars;
     f32 random_spin_magnitude;
     f32 initial_spin;
 
@@ -446,7 +446,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
     spawn_velocity_snapshot = *(u128 *)vel;
     debris_moby = create_moby_local(oclass);
     if (debris_moby != 0) {
-        debris_vars = (DebrisVars_2f8530 *)debris_moby->pvars;
+        debris_vars = (DebrisVars *)debris_moby->pvars;
         copy_hero_moby_field_38(debris_moby);
         debris_moby->scale *= scale;
         debris_moby->update_dist = 0xFF;
@@ -492,7 +492,7 @@ extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
    comes to rest (or its unk10 timer runs out), or fades out over unk28 frames when unk20 is set. */
 void rock_update(struct Moby *m) __asm__("FUN_L01_002f8718");
 void rock_update(struct Moby *debris_moby) {
-    DebrisVars_2f8530 *debris_vars = (DebrisVars_2f8530 *)debris_moby->pvars;
+    DebrisVars *debris_vars = (DebrisVars *)debris_moby->pvars;
     Vec4 old;
     Vec4 bounce_or_particle_velocity;
     Vec4 particle_position;
@@ -1188,11 +1188,11 @@ typedef struct {
     f32 zmin;
     f32 zmax;
     s32 volume; /* clip volume is_point_inside_clip_volume tests */
-} Zone_302648;
+} Zone;
 typedef struct {
-    Zone_302648 zones[20];
+    Zone zones[20];
     s32 count;
-} ZoneVars_302648;
+} ZoneVars;
 
 extern s32 camera_secondary_mode[] __asm__("D_001413D4");
 extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
@@ -1209,7 +1209,7 @@ extern s32 visibomb_outside_zone_overlay_enabled_gp __asm__("D_L01_0015F30C") __
 void update_target_outside_zone_timeout(struct Moby *moby) __asm__("FUN_L01_00302648");
 
 void update_target_outside_zone_timeout(struct Moby *moby) {
-    ZoneVars_302648 *zone_vars = (ZoneVars_302648 *)moby->pvars;
+    ZoneVars *zone_vars = (ZoneVars *)moby->pvars;
     struct Moby *target_moby = 0;
     struct Moby *candidate_moby;
     s32 i;
@@ -1265,7 +1265,7 @@ typedef struct {
     f32 unk64;
     f32 unk68;
     s32 timer;                     /* frames until the pickup finishes */
-} Vars_307ca0;
+} Vars;
 
 extern u8 D_0014BEC0[];
 /* MACRO_ADDR aliases: retail loads these with the one-register lui form */
@@ -1305,7 +1305,7 @@ void gold_bolt_update(struct Moby *moby) {
         GOLD_BOLT_WAIT_FOR_PICKUP = 1,
         GOLD_BOLT_PICKUP_CUTSCENE = 2
     };
-    Vars_307ca0 *vars = (Vars_307ca0 *)moby->pvars;
+    Vars *vars = (Vars *)moby->pvars;
     struct Hero *hero_ptr;
     Vec4f at;
     Vec4f look;
@@ -1546,7 +1546,7 @@ void update_gold_bolt_glow_rings(char *moby) {
 }
 typedef struct {
     f32 x, y, z, w;
-} V4_3087e0;
+} V4;
 
 #include "qcopy.h"
 
@@ -1562,10 +1562,10 @@ void update_gold_bolt_pickup_camera(char *moby) __asm__("FUN_L01_003087e0");
 
 void update_gold_bolt_pickup_camera(char *moby) {
     char *data = *(char **)(moby + 0x78);
-    V4_3087e0 output_position;
-    V4_3087e0 output_rotation;
-    V4_3087e0 start_rotation;
-    V4_3087e0 end_rotation;
+    V4 output_position;
+    V4 output_rotation;
+    V4 start_rotation;
+    V4 end_rotation;
     f32 record_value;
     f32 interpolation_factor;
 
@@ -1980,7 +1980,7 @@ typedef struct {
     int c[4];
     float uv[8];
     long g[4];
-} Quad_30a8c8;
+} Quad;
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float moby_radius_ring_quad_uvs[] __asm__("D_L01_00201630");
@@ -1996,7 +1996,7 @@ extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
 void draw_moby_radius_ring(char *moby) {
-    Quad_30a8c8 quad;
+    Quad quad;
     float rotation_matrix[12];
     float moby_position_snapshot[4];
     char *moby_data;

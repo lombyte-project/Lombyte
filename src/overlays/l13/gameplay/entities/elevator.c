@@ -417,14 +417,14 @@ typedef struct Moby Moby;
 
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) V4_2B5368;
 
-typedef struct Cls_2B5368 { char pad0[0x24]; float scale; } Cls_2B5368;
+typedef struct Cls { char pad0[0x24]; float scale; } Cls;
 
 typedef struct Moby_2B5368 {
     char pad0[0x10];
     V4_2B5368 pos;
     signed char state;
     char pad21[3];
-    Cls_2B5368 *cls;
+    Cls *cls;
     char pad28[4];
     float scale;
     char pad30[0x10];
@@ -439,7 +439,7 @@ typedef struct Moby_2B5368 {
     V4_2B5368 mat[3];
 } Moby_2B5368;
 
-typedef struct Data_2B5368 {
+typedef struct Data {
     char pad0[0x40];
     Moby_2B5368 *target;
     char pad44[0xC];
@@ -452,7 +452,7 @@ typedef struct Data_2B5368 {
     float f68;
     float f6C;
     char fx[0x10];
-} Data_2B5368;
+} Data;
 
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -493,7 +493,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         BLARG_TURRET_STATE_DESTROY = 4,
         BLARG_TURRET_STATE_DESTRUCTION_DELAY = 5
     };
-    Data_2B5368 *data = turret_moby->data;
+    Data *data = turret_moby->data;
     Moby_2B5368 *target_moby;
     Moby_2B5368 *gun;
     float target_yaw_scratch;

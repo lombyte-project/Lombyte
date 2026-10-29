@@ -111,14 +111,14 @@ typedef struct {
     int iC;
     float f10;
     float f14;
-} Data_2E0E50;
+} Data;
 
 typedef struct {
     char p0[0x30];
     Vec_2E0E50 v30;
     char p40[0x30];
     Vec_2E0E50 v70;
-} Node_2E0E50;
+} Node;
 
 extern char D_0013F350[] NOT_SDA;
 extern char D_L00_00166DC0[] NOT_SDA;
@@ -193,7 +193,7 @@ void hydrodisplacer_update(Moby *moby) {
         HYDRODISPLACER_CAMERA_RETURN_TO_ACTIVATION = 2
     };
     Vec_2E0E50 camera_pos, camera_rot;
-    Data_2E0E50 *data = (void *)moby->pvars;
+    Data *data = (void *)moby->pvars;
 
     if (((Hero *)D_0013E633_2E0E50)->items[0].state == 3) {
         func_L00_002E17F0_2E0E50(moby);
@@ -342,10 +342,10 @@ void hydrodisplacer_update(Moby *moby) {
                 func_00214D88_2E0E50(&data->f10, &data->f14, 1.0f, frame_time_sq_macro * 0.666f, frame_time_sq_macro * 0.666f, frame_time_macro * 0.5f);
                 func_001F9C08_2E0E50(&camera_pos, D_L00_001600EC_macro + (data->i8 << 7) + 0x30, D_L00_001600EC_macro + (data->iC << 7) + 0x30, data->f10);
                 func_001F9BC0_2E0E50(&camera_rot);
-                camera_rot.y = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001600EC_macro)[data->iC].v70.y, ((Node_2E0E50 *)D_L00_001600EC_macro)[data->i8].v70.y) * data->f10;
-                camera_rot.y = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001600EC_macro)[data->i8].v70.y, camera_rot.y);
-                camera_rot.z = func_001FA790_2E0E50(((Node_2E0E50 *)D_L00_001600EC_macro)[data->iC].v70.z, ((Node_2E0E50 *)D_L00_001600EC_macro)[data->i8].v70.z) * data->f10;
-                camera_rot.z = func_001FA748_2E0E50(((Node_2E0E50 *)D_L00_001600EC_macro)[data->i8].v70.z, camera_rot.z);
+                camera_rot.y = func_001FA790_2E0E50(((Node *)D_L00_001600EC_macro)[data->iC].v70.y, ((Node *)D_L00_001600EC_macro)[data->i8].v70.y) * data->f10;
+                camera_rot.y = func_001FA748_2E0E50(((Node *)D_L00_001600EC_macro)[data->i8].v70.y, camera_rot.y);
+                camera_rot.z = func_001FA790_2E0E50(((Node *)D_L00_001600EC_macro)[data->iC].v70.z, ((Node *)D_L00_001600EC_macro)[data->i8].v70.z) * data->f10;
+                camera_rot.z = func_001FA748_2E0E50(((Node *)D_L00_001600EC_macro)[data->i8].v70.z, camera_rot.z);
                 func_L00_002EBE88_2E0E50(&camera_pos);
                 func_L00_002EBEE0_2E0E50(&camera_rot);
                 return;
@@ -790,11 +790,11 @@ typedef struct { unsigned char b[0x10]; } Q002E3640;
 
 typedef float Vec_2E3700[4] __attribute__((aligned(16)));
 
-typedef struct { float x, y, z, w; } Pt_2E3700;
+typedef struct { float x, y, z, w; } Pt;
 
-typedef struct { char pad0[0x30]; float v30[4]; } Slot_2E3700;
+typedef struct { char pad0[0x30]; float v30[4]; } Slot;
 
-typedef struct { float v[4]; char pad10[0x30]; } End_2E3700;
+typedef struct { float v[4]; char pad10[0x30]; } End;
 
 typedef struct { float v[4]; } Q_2E3700;
 
@@ -804,26 +804,26 @@ typedef struct {
     short f14;
     short f16;
     int f18;
-} PartSub_2E3700;
+} PartSub;
 
 typedef struct {
     char pad0[0xA];
     short fA;
     float fC;
     char pad10[0x10];
-    PartSub_2E3700 sub;
-} Part_2E3700;
+    PartSub sub;
+} Part;
 
-typedef struct { char pad0[0x10]; float v10[3]; float f1C; } Snd_2E3700;
+typedef struct { char pad0[0x10]; float v10[3]; float f1C; } Snd;
 
-typedef struct { char b[0x140]; } Pane_2e3fa0;
+typedef struct { char b[0x140]; } Pane;
 
 typedef struct {
     f32 v[4];
     u8 pad[0x30];
 } T_e3388;
 
-extern Pane_2e3fa0 D_L00_001E6E40[];
+extern Pane D_L00_001E6E40[];
 extern char D_L00_0015F580[] MACRO_ADDR;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
@@ -846,12 +846,12 @@ f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 int allocate_colored_effect_slot(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
 unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(void *a, void *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
-extern Slot_2E3700 D_L00_001E7070_2E3700[] __asm__("D_L00_001E6D20");
-extern End_2E3700 D_L00_001E70A0_2E3700[] __asm__("D_L00_001E6D50");
+extern Slot D_L00_001E7070_2E3700[] __asm__("D_L00_001E6D20");
+extern End D_L00_001E70A0_2E3700[] __asm__("D_L00_001E6D50");
 extern Q_2E3700 D_L00_001E7130_2E3700[] __asm__("D_L00_001E6DE0");
 extern Q_2E3700 D_L00_001E7160_2E3700[] __asm__("D_L00_001E6E10");
-extern Pt_2E3700 D_L00_001E7190_2E3700[][20] __asm__("D_L00_001E6E40");
-extern Snd_2E3700 D_L00_001803C0_2E3700[] __asm__("D_L00_001802C0");
+extern Pt D_L00_001E7190_2E3700[][20] __asm__("D_L00_001E6E40");
+extern Snd D_L00_001803C0_2E3700[] __asm__("D_L00_001802C0");
 extern char D_0013E633_2E3700[] __asm__("D_0013F5E0");
 extern char D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
 extern int D_L00_00161CC8_2E3700[] __asm__("D_L00_00161BF8") MACRO_ADDR;
@@ -878,7 +878,7 @@ extern void func_001F9EE8_2E3700(void *, void *, void *) __asm__("FUN_001f9d20")
 extern void func_001F9EC0_2E3700(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float func_L00_00258C80_2E3700(float, float) __asm__("FUN_L00_00257c48");
 extern float func_002140F8_2E3700(float, float) __asm__("FUN_002132a8");
-extern Part_2E3700 *func_L00_002757E8_2E3700(void *, void *, int, int) __asm__("FUN_L00_00274948");
+extern Part *func_L00_002757E8_2E3700(void *, void *, int, int) __asm__("FUN_L00_00274948");
 extern int func_002140B0_2E3700(int) __asm__("FUN_00213260");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_001F9BD8_2E3700(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -903,7 +903,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
     float step;
     float phase_step;
     float one;
-    Pt_2E3700 *point;
+    Pt *point;
     int i;
     int j;
     int second_strand_point_index;
@@ -913,8 +913,8 @@ void update_slot_panes_and_effects(int unused, int beam) {
     if (D_L00_00161CC8_2E3700[beam] == 2) {
         D_L00_00161CC8_2E3700[beam] = 3;
         for (i = 0; i < 20; i++) {
-            Pt_2E3700 *first = &D_L00_001E7190_2E3700[strand][i];
-            Pt_2E3700 *second = &D_L00_001E7190_2E3700[next_strand][i];
+            Pt *first = &D_L00_001E7190_2E3700[strand][i];
+            Pt *second = &D_L00_001E7190_2E3700[next_strand][i];
 
             first->x = step * (float)i;
             first->y = first->z = 0.0f;
@@ -931,7 +931,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
     for (j = 0; j < 19; j++) {
         float fj = (float)j;
         float amplitude = func_001FA888_2E3700(j) / func_001FA888_2E3700(20) * 0.3f + 0.1f;
-        Pt_2E3700 *point = &D_L00_001E7190_2E3700[strand][j];
+        Pt *point = &D_L00_001E7190_2E3700[strand][j];
 
         amplitude = amplitude * func_001F9FA8_2E3700(func_L00_0025F368_2E3700(D_L00_00161CD8_2E3700[beam] + fj * phase_step));
         point->y = 0.0f;
@@ -984,13 +984,13 @@ void update_slot_panes_and_effects(int unused, int beam) {
         func_001F9EC0_2E3700(&particle_velocity, &particle_velocity, &D_L00_001E7070_2E3700[beam]);
         func_L00_002757E8_2E3700(D_L00_001E7070_2E3700[beam].v30, &particle_velocity, 0x7F, D_L00_00161D58_2E3700[beam]);
         if (func_002140B0_2E3700(3) == 0) {
-            Part_2E3700 *spark;
+            Part *spark;
 
             fast_vec_scale(first_endpoint_effect_position, &D_L00_001E7070_2E3700[beam], 0.3f);
             func_001F9BD8_2E3700(first_endpoint_effect_position, first_endpoint_effect_position, D_L00_001E7070_2E3700[beam].v30);
             spark = func_L00_002757E8_2E3700(first_endpoint_effect_position, D_L00_0015F580_macro, 0x7F, D_L00_00161D58_2E3700[beam]);
             if (spark != 0) {
-                PartSub_2E3700 *sub = &spark->sub;
+                PartSub *sub = &spark->sub;
 
                 spark->fC = 120000.0f;
                 spark->fA = func_001F9850_2E3700(4);
@@ -1003,10 +1003,10 @@ void update_slot_panes_and_effects(int unused, int beam) {
         func_002141A8_2E3700(&particle_velocity, 0.01f, 0.05f);
         func_L00_002757E8_2E3700(tip, &particle_velocity, 0x7F, D_L00_00161D58_2E3700[beam]);
         if (func_002140B0_2E3700(3) == 0) {
-            Part_2E3700 *spark = func_L00_002757E8_2E3700(tip, D_L00_0015F580_macro, 0x7F, D_L00_00161D58_2E3700[beam]);
+            Part *spark = func_L00_002757E8_2E3700(tip, D_L00_0015F580_macro, 0x7F, D_L00_00161D58_2E3700[beam]);
 
             if (spark != 0) {
-                PartSub_2E3700 *sub = &spark->sub;
+                PartSub *sub = &spark->sub;
 
                 spark->fC = 120000.0f;
                 spark->fA = func_001F9850_2E3700(4);
@@ -1024,7 +1024,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
                 D_L00_00161D08_2E3700[beam] = func_L00_0023F0D0_2E3700(first_endpoint_effect_position, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
             }
             if (D_L00_00161D08_2E3700[beam] >= 0) {
-                Snd_2E3700 *light = &D_L00_001803C0_2E3700[D_L00_00161D08_2E3700[beam]];
+                Snd *light = &D_L00_001803C0_2E3700[D_L00_00161D08_2E3700[beam]];
 
                 qcopy(light->v10, first_endpoint_effect_position);
                 light->f1C = D_L00_00161BF0_gp;
@@ -1036,7 +1036,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
                 D_L00_00161D18_2E3700[beam] = func_L00_0023F0D0_2E3700(tip, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
             }
             if (D_L00_00161D18_2E3700[beam] >= 0) {
-                Snd_2E3700 *light = &D_L00_001803C0_2E3700[D_L00_00161D18_2E3700[beam]];
+                Snd *light = &D_L00_001803C0_2E3700[D_L00_00161D18_2E3700[beam]];
 
                 qcopy(light->v10, tip);
                 light->f1C = D_L00_00161BF0_gp;
@@ -1047,7 +1047,7 @@ void update_slot_panes_and_effects(int unused, int beam) {
 /* Scrolls and draws the two panes of each active slot (3 slots). */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E3FA0), where it is exact; names translated to the US level program. */
 
-extern Pane_2e3fa0 D_L00_001E6E40[];
+extern Pane D_L00_001E6E40[];
 extern float D_L00_00161C78_f[] __asm__("D_L00_00161C78") MACRO_ADDR;
 extern int D_L00_00161BF8_c2[] __asm__("D_L00_00161BF8") MACRO_ADDR;
 extern int D_L00_00161C88_c2[] __asm__("D_L00_00161C88") MACRO_ADDR;

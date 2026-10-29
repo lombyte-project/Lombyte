@@ -38,9 +38,9 @@ typedef struct {
     s32 count;
     u8 pad04[0xC];
     OvlVec4 pts[1];
-} Path_276a48;
+} Path;
 
-extern Path_276a48 *D_L01_001B0930_276a48[] __asm__("D_L01_001B0930");
+extern Path *D_L01_001B0930_276a48[] __asm__("D_L01_001B0930");
 extern s32 test_path_segment_strict_crossing(s32, OvlVec4 *, OvlVec4 *) __asm__("FUN_L00_00261968");
 
 /* Bit i set for each point i of the path that none of the n segments in ids
@@ -48,7 +48,7 @@ extern s32 test_path_segment_strict_crossing(s32, OvlVec4 *, OvlVec4 *) __asm__(
 s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *segment_origin) __asm__("FUN_L01_00276a48");
 
 s32 compute_clear_path_point_mask(s32 *ids, s32 id_count, f32 radius, s32 path_index, OvlVec4 *segment_origin) {
-    Path_276a48 *path = D_L01_001B0930_276a48[path_index];
+    Path *path = D_L01_001B0930_276a48[path_index];
     OvlVec4 side;
     OvlVec4 left;
     OvlVec4 right;
@@ -96,7 +96,7 @@ s32 follow_path(s32 *ids, s32 id_count, s32 path_index, f32 radius,
     OvlVec4 side;
     OvlVec4 left;
     OvlVec4 right;
-    Path_276a48 *path;
+    Path *path;
     s32 hit = 0;
     s32 mask;
     s32 best;

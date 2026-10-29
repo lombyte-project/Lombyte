@@ -623,19 +623,19 @@ void apply_cutscene_big_head_cheat(void) {
 /* Agnogg ship update (moby classes 730, 731, 790 on level 01): state machine on moby->state. */
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_002FC140), where it is exact; names translated to the US level program. */
 
-typedef struct { float x, y, z, w; } V4_2FC140;
+typedef struct { float x, y, z, w; } V4;
 typedef struct { int pad0[4]; int f10; } Class_2FC140;
 typedef struct {
     /* 0x00 */ char pad0[0x10];
-    /* 0x10 */ V4_2FC140 v;
+    /* 0x10 */ V4 v;
     /* 0x20 */ int pad20;
     /* 0x24 */ int rec;
     /* 0x28 */ int pad28;
     /* 0x2C */ int timer;
-} Link_2FC140;
+} Link;
 typedef struct {
     /* 0x00 */ char pad0[0x10];
-    /* 0x10 */ V4_2FC140 pos;
+    /* 0x10 */ V4 pos;
     /* 0x20 */ unsigned char state;
     /* 0x21 */ char pad21[3];
     /* 0x24 */ Class_2FC140 *pclass;
@@ -675,19 +675,19 @@ typedef struct {
     /* 0x34 */ int f34;
     /* 0x38 */ int f38;
     /* 0x3C */ int f3C;
-} Data_2FC140;
+} Data;
 typedef struct {
     /* 0x00 */ char pad0[0x30];
-    /* 0x30 */ V4_2FC140 a;
+    /* 0x30 */ V4 a;
     /* 0x40 */ char pad40[0x30];
-    /* 0x70 */ V4_2FC140 b;
-} Rec_2FC140;
-typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } Lv_2FC140;
+    /* 0x70 */ V4 b;
+} Rec;
+typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } Lv;
 extern Moby_2FC140 *ents_macro __asm__("D_L01_0015FFD8") MACRO_ADDR;
-extern Rec_2FC140 *D_L01_001600EC_macro __asm__("D_L01_001600EC") MACRO_ADDR;
+extern Rec *D_L01_001600EC_macro __asm__("D_L01_001600EC") MACRO_ADDR;
 extern int cutscene_mode __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
-extern Lv_2FC140 D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
+extern Lv D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
 extern char D_L01_001BAAA0[] __asm__("D_L01_001BAAA0");
 extern unsigned char D_0014C050_u[] __asm__("D_0014C050");
 extern void apply_cutscene_big_head_cheat(void) __asm__("FUN_L01_002fac80");
@@ -726,8 +726,8 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         AGNOGG_SHIP_WAIT_FOR_SCENE_4_END = 8,
         AGNOGG_SHIP_HOLD_TARGET_HEIGHT = 10
     };
-    Data_2FC140 *data;
-    Link_2FC140 *linked_moby_data;
+    Data *data;
+    Link *linked_moby_data;
     int level_table_byte;
     int inactive_or_absent_link_count;
     int flag;
@@ -885,7 +885,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         queue_planet_unlock_message(3);
         moby->flags = moby->flags & 0xFFBE;
         if (data->link != -1) {
-            ((Lv_2FC140 *)D_L01_001BAD60_2FC140)->collected[ents_macro[data->link].fB2] = ents_macro[data->link].fB0 + 2;
+            ((Lv *)D_L01_001BAD60_2FC140)->collected[ents_macro[data->link].fB2] = ents_macro[data->link].fB0 + 2;
             if (ents_macro[data->link].fB0 == 0xFF
                 || (D_L01_0015FC88[ents_macro[data->link].fB0] != 0xFF
                     && D_0014C050_u[ents_macro[data->link].fB0 + (current_level_index_macro << 4)] == 0xFF)) {

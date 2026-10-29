@@ -188,7 +188,7 @@ f32 D_L04_00166130[8] __attribute__((section(".bss")));
 extern s32 swarm_motion_parameters_initialized_gp __asm__("D_L04_001513C0") __attribute__((sda));
 
 /* Variables of a swarm child (class 0x55). */
-typedef struct SwarmPartVars_29ecf8 {
+typedef struct SwarmPartVars {
     u8 pad0[0x10];
     Vec4f velocity;
     u8 pad20[0x20];
@@ -210,9 +210,9 @@ typedef struct SwarmPartVars_29ecf8 {
     u8 pad78[0x18];
     f32 unk90;
     f32 unk94;
-} SwarmPartVars_29ecf8;
+} SwarmPartVars;
 
-typedef struct PVars_29ecf8 {
+typedef struct PVars {
     Vec4f origin;
     struct Moby *children[32];
     s32 count;
@@ -222,12 +222,12 @@ typedef struct PVars_29ecf8 {
     s32 path_index;
     s32 direction;
     s32 child_count;
-} PVars_29ecf8;
+} PVars;
 
 void update_class_55_swarm_controller(struct Moby *moby) __asm__("FUN_L04_0029ecf8");
 
 void update_class_55_swarm_controller(struct Moby *moby) {
-    PVars_29ecf8 *data = (PVars_29ecf8 *)moby->pvars;
+    PVars *data = (PVars *)moby->pvars;
     struct Moby **children;
     struct Moby *other;
     f32 distance;
@@ -283,7 +283,7 @@ void update_class_55_swarm_controller(struct Moby *moby) {
         data->children[i] = 0;
         child = create_moby(0x55);
         if (child != 0) {
-            SwarmPartVars_29ecf8 *part = (SwarmPartVars_29ecf8 *)child->pvars;
+            SwarmPartVars *part = (SwarmPartVars *)child->pvars;
             data->children[i] = child;
             child->update_dist = 0x7f;
             child->draw_dist = 0x7f;

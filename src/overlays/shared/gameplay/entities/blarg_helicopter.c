@@ -928,47 +928,47 @@ typedef float HVec49_2CDDC8[4] __attribute__((aligned(16)));
 
 typedef unsigned int HQuad49_2CDDC8 __attribute__((mode(TI)));
 
-typedef struct HMob49_2CDDC8 HMob49_2CDDC8;
+typedef struct HMob49 HMob49;
 
-typedef struct HData49_2CDDC8 HData49_2CDDC8;
+typedef struct HData49 HData49;
 
-typedef struct { float xyz[3],length; } HNode49_2CDDC8;
+typedef struct { float xyz[3],length; } HNode49;
 
-typedef struct { int count; char pad4[12]; HNode49_2CDDC8 points[1]; } HPath49_2CDDC8;
+typedef struct { int count; char pad4[12]; HNode49 points[1]; } HPath49;
 
-typedef struct { int index; char pad4[12]; HPath49_2CDDC8 *path; int path_id; char pad18[24]; } HRoute49_2CDDC8;
+typedef struct { int index; char pad4[12]; HPath49 *path; int path_id; char pad18[24]; } HRoute49;
 
-struct HData49_2CDDC8 {
+struct HData49 {
     char pad0[0x20]; float health; short health_word; char pad26[2];
     unsigned char kind,flag29,pad2A[4],enabled,pad2F[9]; int request;
     char pad3C[0x1C]; unsigned char gun_kind,gun_enabled,gun_mode,pad5B[0xC5];
-    HRoute49_2CDDC8 route_a,route_b; float gun_yaw_matrix[16],gun_pitch_matrix[16];
+    HRoute49 route_a,route_b; float gun_yaw_matrix[16],gun_pitch_matrix[16];
     float yaw_velocity; short shot_timer,reaction_timer; int shoot_region,switch_region;
     float bob,speed,pitch_velocity,roll_velocity,gun_yaw,gun_yaw_velocity,gun_pitch,gun_pitch_velocity;
     int exit_path,other_exit_path,child_index,alternate;
-    HMob49_2CDDC8 *projectile; int other_switch_region,activation_region,activation_path,sound,timer;
+    HMob49 *projectile; int other_switch_region,activation_region,activation_path,sound,timer;
 };
 
-struct HMob49_2CDDC8 {
+struct HMob49 {
     char pad0[16]; HVec49_2CDDC8 position; unsigned char state,pad21[15];
     unsigned char alpha,nearby; short brightness; unsigned short flags; char pad36[10];
-    HVec49_2CDDC8 rotation; char pad50[0x28]; HData49_2CDDC8 *data; char pad7C[3]; unsigned char update_distance;
+    HVec49_2CDDC8 rotation; char pad50[0x28]; HData49 *data; char pad7C[3]; unsigned char update_distance;
     char pad80[0x14]; int animation; char pad98[14]; short class_id; char padA8[8];
     unsigned char persistent,padB1; unsigned short pool_index; char padB4[8]; unsigned char previous_state;
     char padBD[3]; float transform[16];
 };
 
-typedef struct { HVec49_2CDDC8 position,rotation,from,to; HMob49_2CDDC8 *moby; int result,pad48,pad4C; } HTarget49_2CDDC8;
+typedef struct { HVec49_2CDDC8 position,rotation,from,to; HMob49 *moby; int result,pad48,pad4C; } HTarget49;
 
 typedef struct {
-    HVec49_2CDDC8 direction; HMob49_2CDDC8 *source; int flags; unsigned char kind,enabled; unsigned short class_id;
+    HVec49_2CDDC8 direction; HMob49 *source; int flags; unsigned char kind,enabled; unsigned short class_id;
     float radius; int allow; char pad24[12];
-} HQuery49_2CDDC8;
+} HQuery49;
 
 typedef struct {
-    HTarget49_2CDDC8 target; HVec49_2CDDC8 movement,projected,offset; HQuery49_2CDDC8 hit;
+    HTarget49 target; HVec49_2CDDC8 movement,projected,offset; HQuery49 hit;
     HVec49_2CDDC8 direction,shot_velocity,shot_origin; int segment_a; float fraction_a; int segment_b; float fraction_b;
-} HWork49_2CDDC8;
+} HWork49;
 
 char *spawn_homing_spark_projectile(char *a, char *pos, int c, int d, float f) __asm__("FUN_L03_002d5208");
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8") __attribute__((sda));
@@ -1027,7 +1027,7 @@ void record_moby_hit(unsigned char *m, void *src) __asm__("FUN_L00_00259a88");
 void manipulator_set_scale(char *p, float x) __asm__("FUN_L00_00263b38");
 void handle_blarg_helicopter_hits(char *m) __asm__("FUN_L03_002ce238");
 extern int D_L03_001BA5D0[] __asm__("D_L03_001BA5D0");
-extern HPath49_2CDDC8 *D_L03_001B08B0_2CDDC8[] __asm__("D_L03_001B05B0");
+extern HPath49 *D_L03_001B08B0_2CDDC8[] __asm__("D_L03_001B05B0");
 extern unsigned char D_0014171B_2CDDC8[] __asm__("D_0014C050");
 extern int FUN_L03_0024e830_c(void*,void*,float) __asm__("FUN_L03_0024e830");
 extern void func_L00_00264BB0_2CDDC8(void*,float) __asm__("FUN_L00_00263b38");
@@ -1081,8 +1081,8 @@ extern char D_L03_00166EC0[];
 extern void func_L00_0025B178_2CDDC8(void *) __asm__("FUN_L00_0025a120");
 extern void func_L00_00251E30_2CDDC8(void *) __asm__("FUN_L00_00250df8");
 
-void blarg_helicopter_update(HMob49_2CDDC8 *moby) __asm__("FUN_L03_002cca00");
-void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
+void blarg_helicopter_update(HMob49 *moby) __asm__("FUN_L03_002cca00");
+void blarg_helicopter_update(HMob49 *moby) {
     enum {
         BLARG_HELICOPTER_INITIALIZE = 0,
         BLARG_HELICOPTER_ACTIVATION_PATH = 1,
@@ -1091,8 +1091,8 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         BLARG_HELICOPTER_TIMED_REACTION = 4,
         BLARG_HELICOPTER_DESTROY = 5
     };
-    HData49_2CDDC8 *data=moby->data;
-    HWork49_2CDDC8 work;
+    HData49 *data=moby->data;
+    HWork49 work;
     float target_range=40.0f;
     float motion_scale,motion_gain;
     int index;
@@ -1100,17 +1100,17 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     FUN_L03_0024e830_c(moby,&work.target,target_range);
     index=(short)moby->pool_index;
     if ((D_L03_001BA5D0[index>>5]>>(moby->pool_index&31))&1) {
-        if (data->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8)));
+        if (data->child_index!=-1) func_0020D678_2CDDC8((HMob49*)(D_L03_0015FFD8_c+(data->child_index<<8)));
         func_0020D678_2CDDC8(moby); return;
     }
     if (data->route_a.path_id==-1 || (moby->state!=0 && data->enabled!=1)) {
-        if (data->child_index!=-1) func_0020D678_2CDDC8((HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8)));
+        if (data->child_index!=-1) func_0020D678_2CDDC8((HMob49*)(D_L03_0015FFD8_c+(data->child_index<<8)));
         func_0020D678_2CDDC8(moby); return;
     }
     if (data->request) { data->request=0; data->timer=func_001F9850_2CDDC8(240); }
     func_001F9908_2CDDC8(&data->timer);
     if (data->child_index!=-1) {
-        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8));
+        HMob49 *child=(HMob49*)(D_L03_0015FFD8_c+(data->child_index<<8));
         if (child->class_id==0x23E && (signed char)child->state>=0) {
             char *gun=(char*)child->data+0x150;
             func_L00_00264BB0_2CDDC8(gun,2.5f);
@@ -1120,7 +1120,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     handle_blarg_helicopter_hits((char*)moby);
     switch (moby->state) {
     case BLARG_HELICOPTER_INITIALIZE: {
-        HPath49_2CDDC8 **paths;
+        HPath49 **paths;
         moby->update_distance=0x20; data->health=3.0f; data->health_word=func_001FA898_2CDDC8(3.0f);
         data->enabled=1; data->kind=2; data->gun_kind=25; data->gun_enabled=1; data->gun_mode=6; data->flag29=0;
         paths=D_L03_001B08B0_2CDDC8;
@@ -1133,11 +1133,11 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         data->gun_pitch=moby->rotation[1]; data->gun_pitch_velocity=0;
         if (moby->brightness<128) moby->brightness=128;
         if (data->child_index!=-1) {
-            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8));
+            HMob49 *child=(HMob49*)(D_L03_0015FFD8_c+(data->child_index<<8));
             func_00213DE0_2CDDC8(child,8,0,0); child->alpha=0; child->animation=0; child->flags&=0xFFBE;
         }
         if (D_0014171B_2CDDC8[moby->persistent+(frame_scale_inv_macro[7]<<4)]!=255 && data->activation_path!=-1 && data->activation_region!=-1) {
-            HPath49_2CDDC8 *path=paths[data->activation_path];
+            HPath49 *path=paths[data->activation_path];
             int i;
             for (i=0; i<path->count-2; i++)
                 path->points[i].length=func_001F9D10_2CDDC8(&path->points[i],&path->points[i+1]);
@@ -1147,7 +1147,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         break;
     }
     case BLARG_HELICOPTER_ACTIVATION_PATH: {
-        HPath49_2CDDC8 *path=D_L03_001B08B0_2CDDC8[data->activation_path];
+        HPath49 *path=D_L03_001B08B0_2CDDC8[data->activation_path];
         float progress,distance,step,limit,angle;
         if (data->activation_region!=-1 && !func_00215570_2CDDC8(D_0013F3D0,data->activation_region)) break;
         data->activation_region=-1;
@@ -1196,10 +1196,10 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         break;
     }
     case BLARG_HELICOPTER_PATROL_AND_ATTACK: {
-        HRoute49_2CDDC8 *route=data->alternate ? &data->route_b : &data->route_a;
+        HRoute49 *route=data->alternate ? &data->route_b : &data->route_a;
         int point=route->index;
         float angle=func_L00_001FF860_2CDDC8(work.target.position[0]-moby->position[0],work.target.position[1]-moby->position[1]);
-        HMob49_2CDDC8 *projectile;
+        HMob49 *projectile;
         float distance,other_distance;
         moby->rotation[2]=func_L00_00259148_2CDDC8(&data->yaw_velocity,moby->rotation[2],angle,0.01f,0.3f,0.1f);
         projectile=data->projectile;
@@ -1246,7 +1246,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     }
         if (func_00215570_2CDDC8(work.target.position,data->alternate ? data->other_switch_region : data->switch_region)) {
             if (data->alternate ? data->other_exit_path!=-1 : data->exit_path!=-1) {
-                HPath49_2CDDC8 *path=D_L03_001B08B0_2CDDC8[data->alternate ? data->other_exit_path : data->exit_path]; int i;
+                HPath49 *path=D_L03_001B08B0_2CDDC8[data->alternate ? data->other_exit_path : data->exit_path]; int i;
                 for (i=0; i<path->count-2; i++)
                     path->points[i].length=func_001F9D10_2CDDC8(&path->points[i],&path->points[i+1]);
             }
@@ -1254,12 +1254,12 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         } else if (func_00215570_2CDDC8(work.target.position,data->shoot_region) && (func_001F9938_2CDDC8(&data->shot_timer) || (!data->projectile && data->timer))) {
             data->shot_timer=func_001F9850_2CDDC8(360); qcopy(work.shot_origin,work.target.position);
             fast_vec_sub(work.shot_velocity,work.shot_origin,work.movement); func_L00_001FF500_2CDDC8(work.shot_velocity,work.shot_velocity,D_0015ED6C*6.0f); work.shot_velocity[2]=0;
-            data->projectile=(HMob49_2CDDC8*)spawn_homing_spark_projectile((char*)work.shot_velocity,(char*)work.movement,(int)moby,func_001F9850_2CDDC8(240),work.target.position[2]);
+            data->projectile=(HMob49*)spawn_homing_spark_projectile((char*)work.shot_velocity,(char*)work.movement,(int)moby,func_001F9850_2CDDC8(240),work.target.position[2]);
         }
         break;
     }
     case BLARG_HELICOPTER_EXIT: {
-        HPath49_2CDDC8 *path;
+        HPath49 *path;
         float progress,distance,step,limit,angle;
         if (data->exit_path==-1) {
             func_00214D28_2CDDC8(&moby->position[2],200.0f,D_0015ED6C*8.0f);
@@ -1277,7 +1277,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         work.fraction_b=(progress-func_001FA888_2CDDC8(work.segment_b)*path->points[0].length)/path->points[0].length;
         if (work.segment_b>=path->count-1) {
             if (data->other_exit_path!=-1 && data->route_b.path_id!=-1 && data->speed<=blarg_helicopter_path_min_speed_gp*D_0015ED6C) {
-                HRoute49_2CDDC8 *route; data->alternate^=1; route=data->alternate ? &data->route_b : &data->route_a;
+                HRoute49 *route; data->alternate^=1; route=data->alternate ? &data->route_b : &data->route_a;
                 qcopy(moby->position,route->path->points); route->index=1;
                 moby->previous_state=2; moby->state=4; data->reaction_timer=func_001F9850_2CDDC8(15); break;
             }
@@ -1332,7 +1332,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         }
         func_L00_00250800_2CDDC8(moby,5,work.offset);
         if (data->child_index!=-1) {
-            HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8));
+            HMob49 *child=(HMob49*)(D_L03_0015FFD8_c+(data->child_index<<8));
             ((unsigned char*)child->data)[0x262]=2; child->alpha=255; child->flags&=0xFFF9;
             work.hit.radius=20.0f; work.hit.flags=0x830000; work.hit.allow=1; work.hit.source=moby;
             fast_vec_sub(work.hit.direction,child->position,moby->position); func_L00_001FF500_2CDDC8(work.hit.direction,work.hit.direction,1.0f);
@@ -1347,7 +1347,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
         func_0020D9D8_2CDDC8(moby,data->gun_yaw_matrix); func_0020D9D8_2CDDC8(moby,data->gun_pitch_matrix);
         if (data->sound!=-1) {
             unsigned char *audio=(unsigned char*)(D_0013E633_2CDDC8+0x1D+data->sound*0x70);
-            if (*(HMob49_2CDDC8**)(audio+0x88)==moby && audio[0x74]) func_L00_0028EBF0_2CDDC8(data->sound);
+            if (*(HMob49**)(audio+0x88)==moby && audio[0x74]) func_L00_0028EBF0_2CDDC8(data->sound);
         }
         data->sound=-1; func_0020D678_2CDDC8(moby); return;
     }
@@ -1358,7 +1358,7 @@ void blarg_helicopter_update(HMob49_2CDDC8 *moby) {
     data->bob=func_001FA748_2CDDC8(data->bob,6.2831855f/func_001F9878_2CDDC8(blarg_helicopter_bob_period*60.0f));
     moby->position[2]+=blarg_helicopter_bob_amplitude*func_001F9F90_2CDDC8(data->bob);
     if (data->child_index!=-1) {
-        HMob49_2CDDC8 *child=(HMob49_2CDDC8*)(D_L03_0015FFD8_c+(data->child_index<<8));
+        HMob49 *child=(HMob49*)(D_L03_0015FFD8_c+(data->child_index<<8));
         *(HQuad49_2CDDC8*)child->position=*(HQuad49_2CDDC8*)moby->position; *(HQuad49_2CDDC8*)child->rotation=*(HQuad49_2CDDC8*)moby->rotation;
         func_L00_002514B8_2CDDC8(child); func_L00_00251E30_2CDDC8(child); child->flags|=6;
     }
@@ -1502,7 +1502,7 @@ typedef struct {
     Moby *target;
     int timer;
     int flip;
-} Data_2D5B88;
+} Data;
 
 typedef struct {
     Vec_2D5B88 dir;
@@ -1521,7 +1521,7 @@ typedef struct {
     Vec_2D5B88 v20;
     Vec_2D5B88 v30;
     void *moby;
-} Tgt_2D5B88;
+} Tgt;
 
 extern Moby *D_L03_00173F58 NOT_SDA;
 extern char *FUN_L00_0026dd20(void *pos, void *vel, int c, int d, float f);
@@ -1555,7 +1555,7 @@ void update_homing_spark_projectile(Moby *moby) {
         SPARK_HOME_AND_EMIT = 1,
         SPARK_CLEANUP_AND_REMOVE = 2
     };
-    Tgt_2D5B88 target_info;
+    Tgt target_info;
     Vec_2D5B88 start_pos;
     Hit_2D5B88 hit;
     Vec_2D5B88 direction;
@@ -1570,7 +1570,7 @@ void update_homing_spark_projectile(Moby *moby) {
     Vec_2D5B88 tracer_offset;
     float heading;
     int *voice_slot = 0;
-    Data_2D5B88 *data = (Data_2D5B88 *)((char *)moby->pvars);
+    Data *data = (Data *)((char *)moby->pvars);
     int state;
     int i;
     int j;

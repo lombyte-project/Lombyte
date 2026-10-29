@@ -22,7 +22,7 @@ void reset_shot_tracking(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E88), where it is exact; names translated to the US level program. */
 
-typedef struct { char *p[7]; short timer; } Slots_265E88;
+typedef struct { char *p[7]; short timer; } Slots;
 
 extern char *spawn_spinning_and_fading_effect_particle(void *, void *, unsigned long, float) __asm__("FUN_L00_0026b230");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -94,8 +94,8 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
         if (i == 2 && save_shot) {
             int j;
             for (j = 0; j < 7; j++) {
-                if (((Slots_265E88 *)slots)->p[j] == 0) {
-                    ((Slots_265E88 *)slots)->p[j] = shot;
+                if (((Slots *)slots)->p[j] == 0) {
+                    ((Slots *)slots)->p[j] = shot;
                     break;
                 }
             }
@@ -104,7 +104,7 @@ void effect_slots_fire(char *slots, float *position, float *direction, float dis
     if (fast_dec_timer_s16(slots + 0x1c)) {
         float sp2 = random_float_between(10.0f, 30.0f);
         sp2 = FUN_L04_001f1978(sp2);
-        ((Slots_265E88 *)slots)->timer = truncate_float_to_s32(sp2);
+        ((Slots *)slots)->timer = truncate_float_to_s32(sp2);
         FUN_L00_00257d78(offset, 0.0f, frame_time_macro + frame_time_macro);
         fast_vec_scale(velocity, adjusted, random_float_between(0.5f, 0.1f));
         fast_vec_add(velocity, velocity, offset);

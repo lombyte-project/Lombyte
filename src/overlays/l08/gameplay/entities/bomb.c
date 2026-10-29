@@ -43,21 +43,21 @@ void initialize_bolt_pickup(struct Moby *moby) {
 
 typedef struct Moby Moby;
 
-typedef struct Target_2B94B0 {
+typedef struct Target {
     char pad0[0xA];
     short fA;
-} Target_2B94B0;
+} Target;
 
-typedef struct MobyData_2B94B0 {
+typedef struct MobyData {
     char pad0[8];
     float f8;
     float fC;
     float vel[4];
     int f20;
-    Target_2B94B0 *target;
+    Target *target;
     int ticks;
     int f2C;
-} MobyData_2B94B0;
+} MobyData;
 
 typedef struct Moby_2B94B0 {
     char pad0[0x10];
@@ -66,7 +66,7 @@ typedef struct Moby_2B94B0 {
     char pad21[0x27];
     float f48;
     char pad4C[0x2C];
-    MobyData_2B94B0 *data;
+    MobyData *data;
 } Moby_2B94B0;
 
 typedef struct Hero_2B94B0 {
@@ -132,7 +132,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
         MOBY_STATE_VERTICAL_BOB_ONLY = 3,
         MOBY_STATE_REMOVE = 4
     };
-    MobyData_2B94B0 *moby_data = moby->data;
+    MobyData *moby_data = moby->data;
     float A[4], F[4], B[4], C[4], P[4], E[4];
     float f20, bob_phase_radians, adjusted_speed_or_bob_sine;
     int hit, ok, bob_period_ticks;
@@ -776,11 +776,11 @@ typedef struct {
     float pitch_speed;
     char pad180[4];
     int part_id;
-} Data_2D5FA8;
+} Data;
 
 typedef struct { char pad0[0x20]; Moby *moby; } Hit_2D5FA8;
 
-typedef struct { int count; char pad4[0xC]; char list[1]; } Path_2D5FA8;
+typedef struct { int count; char pad4[0xC]; char list[1]; } Path;
 
 void *select_candidate_by_max_float_2c(void *a, void *b, void *c, void *d) __asm__("FUN_L05_002899f8");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
@@ -808,7 +808,7 @@ extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0");
 extern int D_L08_0015F5B4_gp __asm__("D_L08_0015F5B4") __attribute__((sda));
 extern int D_L08_0015F5BC_gp __asm__("D_L08_0015F5BC") __attribute__((sda));
-extern Path_2D5FA8 *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
+extern Path *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
 extern s32 D_001413D0[];
 extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D408");
 extern Hit_2D5FA8 *find_2D5FA8(Moby *, int, int) __asm__("FUN_L00_0025a420");
@@ -835,7 +835,7 @@ extern void effects_update_2D5FA8(Moby *, short *) __asm__("FUN_L00_0025d538");
 
 extern int bomber_tank_part_3_destroyed_by_class_661_gp __asm__("D_L08_0015F5B8") __attribute__((sda));
 void update_bomber_tank_damage_and_aim(Moby *moby) {
-    Data_2D5FA8 *data = (Data_2D5FA8 *)moby->pvars;
+    Data *data = (Data *)moby->pvars;
     Hit_2D5FA8 *source;
     Hit_2D5FA8 *part_a_source;
     Hit_2D5FA8 *part_b_source;
@@ -997,9 +997,9 @@ extern void release_voice_slot(int) __asm__("FUN_0022d798");
 typedef struct {
     u8 pad0[0x80];
     int volume;
-} SoundSlot_2d55c8;
+} SoundSlot;
 
-#define SOUND_SLOT_2d55c8(id) ((SoundSlot_2d55c8 *)(D_0013E550 + (id) * 0x70))
+#define SOUND_SLOT_2d55c8(id) ((SoundSlot *)(D_0013E550 + (id) * 0x70))
 
 typedef struct {
     u8 pad0[0x40];
@@ -1012,10 +1012,10 @@ typedef struct {
     float target_speed;
     u8 pad170[0x10];
     float speed;
-} PathMoverVars_2d55c8;
+} PathMoverVars;
 
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
-    PathMoverVars_2d55c8 *vars = (PathMoverVars_2d55c8 *)moby->pvars;
+    PathMoverVars *vars = (PathMoverVars *)moby->pvars;
     int *path = (int *)D_L08_001B0CB0[path_id];
     float point[4];
     float step[3];
@@ -1525,9 +1525,9 @@ char *select_blarg_bombthrower_waypoint(struct Moby *moby) {
 
 typedef struct { char pad0[0x20]; struct Moby *moby; } Hit_2D5FA8_c;
 
-typedef struct { char pad0[0x140]; float x, y; char pad148[0x10]; float f158; } Cam_DBF68;
+typedef struct { char pad0[0x140]; float x, y; char pad148[0x10]; float f158; } Cam;
 
-typedef struct { char pad0[0x40]; struct Moby *target; int result; } Look_DBF68;
+typedef struct { char pad0[0x40]; struct Moby *target; int result; } Look;
 
 typedef struct {
     char pad0[0x20];
@@ -1638,7 +1638,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         BOMBTHROWER_STATE_DYING = 0x63
     };
     Data_DBF68 *vars = (Data_DBF68 *)moby->pvars;
-    Look_DBF68 search;
+    Look search;
     float point[4];
     float velocity[4];
     float aim[4];
@@ -1804,7 +1804,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         func_L00_002592B0_x(fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y),
                             moby, vars->blk12C, 0.02f, 0.3f, 0.2f);
         if (target_distance_xy < 20.0f && 8.0f < target_distance_xy && tick_countdown_32_alt(&vars->i128) != 0) {
-            Cam_DBF68 *cam = (Cam_DBF68 *)camera_state_bytes;
+            Cam *cam = (Cam *)camera_state_bytes;
             if (fast_difference_between_rotations(cam->f158, fast_arc_tan(moby->pos.x - cam->x, moby->pos.y - cam->y)) < 0.55850536f) {
                 goto attack;
             }
@@ -1831,9 +1831,9 @@ void blarg_bombthrower_update(struct Moby *moby) {
             FUN_L00_00259028((char *)moby, vars->blkD0, point, (char *)vars->v40);
         }
         if (moby->anim_flags & 2) {
-            Cam_DBF68 *cam;
+            Cam *cam;
             if (vector_distance(&moby->pos, &target->pos) < 6.0f
-                || (cam = (Cam_DBF68 *)camera_state_bytes,
+                || (cam = (Cam *)camera_state_bytes,
                     0.55850536f < fast_difference_between_rotations(cam->f158, fast_arc_tan(moby->pos.x - cam->x, moby->pos.y - cam->y)))) {
                 old_waypoint = vars->waypoint;
                 if ((vars->waypoint = (struct Moby *)FUN_L08_002daa10_c((char *)moby)) == 0) {
@@ -2106,14 +2106,14 @@ typedef struct {
     int count;
     int pad[3];
     float e[1][4];
-} Route_2dd4f8;
+} Route;
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_L08_001B0CB0[];
 #include "rnc/gameplay/state/game_globals.h"
 extern int D_L08_0015F5CC; /* no foreign declaration */
-extern Route_2dd4f8 *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
+extern Route *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
 void select_shuttle_route_for_hero(struct Moby *moby) {
     enum {
@@ -2124,9 +2124,9 @@ void select_shuttle_route_for_hero(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     char *pl = (char *)&hero.motion.pos;
-    Route_2dd4f8 *route = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
-    Route_2dd4f8 *configured_path = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
-    Route_2dd4f8 *alternate_path = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
+    Route *route = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
+    Route *configured_path = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
+    Route *alternate_path = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
     float best_candidate_distance = distance_xyz(pl, (char *)route + (route->count << 4));
     float configured_path_start_distance = distance_xyz(pl, configured_path->e[0]);
     float alternate_path_start_distance = distance_xyz(pl, alternate_path->e[0]);
@@ -2162,9 +2162,9 @@ void select_shuttle_route_for_hero(struct Moby *moby) {
         configured_path_entry_is_ff = visited_table[*(int *)(data + 0x94) + fr] == 0xFF;
         alternate_path_entry_is_ff = visited_table[*(int *)(data + 0x98) + fr] == 0xFF;
         if (alternate_path_entry_is_ff) {
-            *(Route_2dd4f8 **)(data + 0x120) = alternate_path;
+            *(Route **)(data + 0x120) = alternate_path;
         } else if (configured_path_entry_is_ff) {
-            *(Route_2dd4f8 **)(data + 0x120) = configured_path;
+            *(Route **)(data + 0x120) = configured_path;
         } else if (32.0f < vector_distance(&moby->pos, pl) || D_L08_0015F5CC < 5) {
             moby->visible = 0;
             moby->flags |= 1;
@@ -2176,17 +2176,17 @@ void select_shuttle_route_for_hero(struct Moby *moby) {
     case SHUTTLE_SELECT_CONFIGURED_PATH_START:
         qcopy(data + 0x60, configured_path->e[0]);
         y = fast_arc_tan(configured_path->e[1][0] - *(float *)(data + 0x60), configured_path->e[1][1] - *(float *)(data + 0x64));
-        *(Route_2dd4f8 **)(data + 0x120) = configured_path;
+        *(Route **)(data + 0x120) = configured_path;
         break;
     case SHUTTLE_SELECT_ROUTE_START:
         qcopy(data + 0x60, route->e[0]);
         y = fast_arc_tan(route->e[1][0] - *(float *)(data + 0x60), route->e[1][1] - *(float *)(data + 0x64));
-        *(Route_2dd4f8 **)(data + 0x120) = route;
+        *(Route **)(data + 0x120) = route;
         break;
     case SHUTTLE_SELECT_ALTERNATE_PATH_START:
         qcopy(data + 0x60, alternate_path->e[0]);
         y = fast_arc_tan(alternate_path->e[1][0] - *(float *)(data + 0x60), alternate_path->e[1][1] - *(float *)(data + 0x64));
-        *(Route_2dd4f8 **)(data + 0x120) = alternate_path;
+        *(Route **)(data + 0x120) = alternate_path;
         break;
     default:
         return;
@@ -2295,11 +2295,11 @@ extern float D_0015ED70;
 #include "rnc/overlay/collision.h"
 extern int D_L08_00174658_2DC9A8 __asm__("D_L08_00174658") NOT_SDA;
 
-typedef struct __attribute__((packed)) EffectVectorCopy_2DC9A8 {
+typedef struct __attribute__((packed)) EffectVectorCopy {
     unsigned long long values[2];
-} EffectVectorCopy_2DC9A8;
+} EffectVectorCopy;
 
-typedef struct EffectRecord_2DC9A8 {
+typedef struct EffectRecord {
     float pos[4];
     float velocity[4];
     void *owner;
@@ -2307,7 +2307,7 @@ typedef struct EffectRecord_2DC9A8 {
     int unknown;
     float scale;
     int state;
-} EffectRecord_2DC9A8;
+} EffectRecord;
 
 extern CollisionHit D_L08_00174640;
 void update_ballistic_projectile(struct Moby *moby) __asm__("FUN_L08_002dc9a8");
@@ -2326,7 +2326,7 @@ void update_ballistic_projectile(struct Moby *moby) {
     char *moby_bytes = (char *)moby;
     char *data = *(char **)(moby_bytes + 0x78);
     float original[4];
-    EffectRecord_2DC9A8 record;
+    EffectRecord record;
     float *position;
     float effect[4];
     float velocity[4];
@@ -2369,7 +2369,7 @@ void update_ballistic_projectile(struct Moby *moby) {
         record.pos[1] = D_0015ED6C_lui * 22.0f;
         record.pos[2] = D_0015ED6C_lui * 12.0f;
         record.pos[3] = 0.0f;
-        *(EffectVectorCopy_2DC9A8 *)original = *(EffectVectorCopy_2DC9A8 *)record.pos;
+        *(EffectVectorCopy *)original = *(EffectVectorCopy *)record.pos;
         record.owner = moby_bytes;
         record.flags = 0x810001;
         record.scale = 1.0f;

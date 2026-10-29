@@ -7,13 +7,13 @@
 
 typedef struct {
     s32 a, b;
-} P2_00298c68;
+} P2;
 typedef struct {
     u8 pad[0x19F8];
-    P2_00298c68 x[3];
-    P2_00298c68 y[3];
-} Tab_00298c68;
-extern Tab_00298c68 D_00137B80_00298c68 __asm__("D_00137B80");
+    P2 x[3];
+    P2 y[3];
+} Tab;
+extern Tab D_00137B80_00298c68 __asm__("D_00137B80");
 void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 void hero_respawn() __asm__("FUN_L00_00211250");
 /* Picks a disc table entry pair by D_0015ED80 and passes it with the language to FUN_L00_002995d0. */

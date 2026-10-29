@@ -308,19 +308,19 @@ typedef struct Moby Moby;
 
 typedef int Q_2C73D0 __attribute__((mode(TI)));
 
-typedef struct { char p0[0x24]; float scale; } Cls_2C73D0;
+typedef struct { char p0[0x24]; float scale; } Cls;
 
-typedef struct Data_2C73D0 {
+typedef struct Data {
     char p0[0x20]; float health; char p24[0x14]; int f38; char p3C[0x24];
     char react[7]; unsigned char reactTime; char p68[8]; float f70[4];
     float f80; float f84; float f88; float f8C; int f90; int f94; float f98; char p9C[0x11]; unsigned char bAD; char pAE[0x12];
     float fC0; float fC4; char pC8[0x58]; float target[4]; char p130[0x30];
     Moby *f160; int f164; char p168[0x18]; int path; int timer; float reach; char p18C[4]; int retreat;
-} Data_2C73D0;
+} Data;
 
 typedef struct { char p0[0x10]; Q_2C73D0 pos; Moby *owner; } Hit_2C73D0;
 
-typedef struct { int count; int pad[3]; float pts[1][4]; } Path_2C73D0;
+typedef struct { int count; int pad[3]; float pts[1][4]; } Path;
 
 typedef int OvlQuad __attribute__((mode(TI)));
 
@@ -366,7 +366,7 @@ extern int func_L00_00260D30_2C73D0(void *, void *, float) __asm__("FUN_L04_0025
 extern int func_L00_00260FB0_2C73D0(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float func_001F9D48_2C73D0(void *, void *) __asm__("FUN_001f9b80");
 extern float func_001F9B88_2C73D0(float) __asm__("FUN_001f99c0");
-extern Path_2C73D0 *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
+extern Path *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
 extern char D_0013E633_2C73D0[] __asm__("D_001413D0");
 
 void update_seeker_damage_and_target(Moby *moby) __asm__("FUN_L09_002c6230");
@@ -384,17 +384,17 @@ void update_seeker_damage_and_target(Moby *moby) {
     float damage;
     float knock_angle;
     float knock_angle_fatal;
-    Data_2C73D0 *data;
+    Data *data;
     Hit_2C73D0 *source;
     int response;
     int result;
     int lost_state;
 
-    data = (struct Data_2C73D0 *)moby->pvars;
+    data = (struct Data *)moby->pvars;
     if (moby->state == 0) {
         return;
     }
-    moby->scale = moby->scale + ((((Cls_2C73D0 *)moby->pclass)->scale * D_L09_0016140C) - moby->scale) * 0.1f;
+    moby->scale = moby->scale + ((((Cls *)moby->pclass)->scale * D_L09_0016140C) - moby->scale) * 0.1f;
     if (func_001F9908_2C73D0(&data->timer) == 2) {
         moby->state = 7;
         return;
@@ -485,7 +485,7 @@ void update_seeker_damage_and_target(Moby *moby) {
             result = func_L00_00260D30_2C73D0(moby, goal, 24.0f);
             lost_state = 2;
         } else {
-            Path_2C73D0 *path;
+            Path *path;
             data->reach = 12.0f;
             path = D_L09_001B0930_2C73D0[data->path];
             goal = data->target;

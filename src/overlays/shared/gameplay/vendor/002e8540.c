@@ -13,7 +13,7 @@ void FUN_L00_002e8540(float stored_value) {
         *(float *)(*(char **)(camera_record + 0x70) + 0x1cc) = stored_value;
     }
 }
-typedef struct { char b[0x140]; } Pane_2e3fa0;
+typedef struct { char b[0x140]; } Pane;
 extern char *D_L00_00166E00_002e8590[] __asm__("D_L00_00166E00");
 void follow_camera_set_up_spring(float a, float b) __asm__("FUN_L00_002e85d8");
 void follow_camera_set_up_spring(float up_spring_value, float up_spring_setting) {
