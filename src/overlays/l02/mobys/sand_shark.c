@@ -1341,13 +1341,13 @@ void *handle_sand_shark_suck_cannon_storage(struct Moby *moby) {
 void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) __asm__("FUN_L02_002d6340");
 
 void prepare_sand_shark_for_relaunch_or_remove(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int   result = select_group_class_29c_moby(moby);
-    *(int *)(data + 0x27C) = result;
-    if (result != 0) {
+    char *sand_shark_private_vars = (char *)moby->pvars;
+    int   selected_class_29c_moby = select_group_class_29c_moby(moby);
+    *(int *)(sand_shark_private_vars + 0x27C) = selected_class_29c_moby;
+    if (selected_class_29c_moby != 0) {
         moby->state = 0x1A;
         moby->anim_speed = 0;
-        qcopy(&moby->pos, data + 0x220);
+        qcopy(&moby->pos, sand_shark_private_vars + 0x220);
         moby->collision = 0;
         moby->pos.z -= 10.0f;
     } else {
