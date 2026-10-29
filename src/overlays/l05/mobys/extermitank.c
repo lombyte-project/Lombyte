@@ -462,7 +462,7 @@ extern float extermitank_child_animation_speed_offset_scale_gp __asm__("D_L05_00
 typedef struct Hero Hero;
 
 void handle_extermitank_hits_and_sync_children(char *moby) {
-    char        *data = ((char *)MOBY(moby)->pvars);
+    char        *extermitank_hit_sync_vars = ((char *)MOBY(moby)->pvars);
     char        *first;
     char        *second;
     char        *part0;
@@ -470,7 +470,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     char        *part2;
     char        *hit;
     char        *owner;
-    int          result;
+    int          hit_processing_status;
     float        remaining = 0.0f;
     float        position[4] __attribute__((aligned(16)));
     char         effect_data[16] __attribute__((aligned(16)));
@@ -479,9 +479,9 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
     struct Hero *base;
 
     part0 = find_moby_hit(moby, 0x210000, 0);
-    first = *(char **)(data + 0x184);
+    first = *(char **)(extermitank_hit_sync_vars + 0x184);
     part1 = first ? find_moby_hit(first, 0x210000, 0) : 0;
-    second = *(char **)(data + 0x188);
+    second = *(char **)(extermitank_hit_sync_vars + 0x188);
     part2 = second ? find_moby_hit(second, 0x210000, 0) : 0;
     part0 = select_candidate_by_max_float_2c(part0, part1, part2, 0);
     if (part0 != 0) {
@@ -492,14 +492,14 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
             part0 = 0;
     }
     hit = part0;
-    resolve_moby_hit_response(moby, hit, data + 0x20, 0, &result, &remaining, 0, 4);
-    if (result == 1 || (unsigned char)moby[0x20] == 3)
+    resolve_moby_hit_response(moby, hit, extermitank_hit_sync_vars + 0x20, 0, &hit_processing_status, &remaining, 0, 4);
+    if (hit_processing_status == 1 || (unsigned char)moby[0x20] == 3)
         goto mark_children;
     {
-        *(float *)(data + 0x20) -= remaining;
-        if (*(float *)(data + 0x20) > 0.0f && remaining > 0.0f) {
+        *(float *)(extermitank_hit_sync_vars + 0x20) -= remaining;
+        if (*(float *)(extermitank_hit_sync_vars + 0x20) > 0.0f && remaining > 0.0f) {
             allocate_voice_for_target_entry(2, 0, moby);
-            ((unsigned char *)data)[0x67] = 200;
+            ((unsigned char *)extermitank_hit_sync_vars)[0x67] = 200;
             goto update_motion;
         } else {
             allocate_voice_for_target_entry(3, 0, moby);
@@ -507,7 +507,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
             qcopy(position, moby + 0x10);
             position[2] += 3.0f;
             spawn_explosion(moby,
-                            data + 0x40,
+                            extermitank_hit_sync_vars + 0x40,
                             position,
                             0.0f,
                             0.0f,
@@ -528,7 +528,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
             position[0] += 2.0f * fast_cos(MOBY(moby)->rot.z);
             position[1] += 2.0f * fast_sin(MOBY(moby)->rot.z);
             spawn_explosion(moby,
-                            data + 0x40,
+                            extermitank_hit_sync_vars + 0x40,
                             position,
                             0.0f,
                             0.0f,
@@ -551,7 +551,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
             angle = fast_add_rotations(MOBY(moby)->rot.z, 3.14159274f);
             position[1] += 2.0f * fast_sin(angle);
             spawn_explosion(moby,
-                            data + 0x40,
+                            extermitank_hit_sync_vars + 0x40,
                             position,
                             0.0f,
                             0.0f,
@@ -568,10 +568,10 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
                             1,
                             -1,
                             0);
-            *(short *)(data + 0x19e) = scale_game_frames(D_L05_00161B74);
+            *(short *)(extermitank_hit_sync_vars + 0x19e) = scale_game_frames(D_L05_00161B74);
             moby[0x20] = 3;
             clear_u64_value(effect_data);
-            *(float *)(effect_data + 8) = *(float *)(data + 0x194);
+            *(float *)(effect_data + 8) = *(float *)(extermitank_hit_sync_vars + 0x194);
             spawn_particle_305178(moby,
                                   0x6dd,
                                   moby + 0x10,
@@ -656,51 +656,51 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
         }
     }
 update_motion:
-    update_motion_305178(moby, data + 0x60);
+    update_motion_305178(moby, extermitank_hit_sync_vars + 0x60);
 mark_children:
     ((unsigned char *)moby)[0xa4] = 0xff;
-    if (*(char **)(data + 0x184) != 0)
-        ((unsigned char *)*(char **)(data + 0x184))[0xa4] = 0xff;
-    if (*(char **)(data + 0x188) != 0)
-        ((unsigned char *)*(char **)(data + 0x188))[0xa4] = 0xff;
-    if (*(int *)(data + 0x38) != 0 && *(int *)(data + 0x178) == 0) {
-        *(int *)(data + 0x178) = scale_game_frames(0xf0);
-        *(int *)(data + 0x38) = 0;
+    if (*(char **)(extermitank_hit_sync_vars + 0x184) != 0)
+        ((unsigned char *)*(char **)(extermitank_hit_sync_vars + 0x184))[0xa4] = 0xff;
+    if (*(char **)(extermitank_hit_sync_vars + 0x188) != 0)
+        ((unsigned char *)*(char **)(extermitank_hit_sync_vars + 0x188))[0xa4] = 0xff;
+    if (*(int *)(extermitank_hit_sync_vars + 0x38) != 0 && *(int *)(extermitank_hit_sync_vars + 0x178) == 0) {
+        *(int *)(extermitank_hit_sync_vars + 0x178) = scale_game_frames(0xf0);
+        *(int *)(extermitank_hit_sync_vars + 0x38) = 0;
         base = &hero;
         angle = fast_arc_tan(base->motion.pos.f[0] - MOBY(moby)->pos.x,
                              base->motion.pos.f[1] - MOBY(moby)->pos.y);
         if (fast_difference_between_rotations(MOBY(moby)->rot.z, angle) > 1.5707964f)
-            ((signed char *)data)[0xc4] *= -1;
+            ((signed char *)extermitank_hit_sync_vars)[0xc4] *= -1;
     }
-    if (fast_dec_timer(data + 0x178) != 0)
-        *(float *)(data + 0x174) = 20.0f;
+    if (fast_dec_timer(extermitank_hit_sync_vars + 0x178) != 0)
+        *(float *)(extermitank_hit_sync_vars + 0x174) = 20.0f;
     else
-        *(float *)(data + 0x174) = 14.0f;
-    if (*(char **)(data + 0x184) != 0) {
+        *(float *)(extermitank_hit_sync_vars + 0x174) = 14.0f;
+    if (*(char **)(extermitank_hit_sync_vars + 0x184) != 0) {
         char *first;
         float offset_scale;
-        speed = fast_vec_length(data + 0x40);
+        speed = fast_vec_length(extermitank_hit_sync_vars + 0x40);
         speed /= extermitank_child_animation_speed_divisor_gp * frame_time;
         offset_scale = extermitank_child_animation_speed_offset_scale_gp;
-        *(float *)(*(char **)(data + 0x184) + 0x58) = speed;
-        *(float *)(*(char **)(data + 0x184) + 0x58) += *(float *)(data + 0x84) * offset_scale;
-        first = *(char **)(data + 0x184);
+        *(float *)(*(char **)(extermitank_hit_sync_vars + 0x184) + 0x58) = speed;
+        *(float *)(*(char **)(extermitank_hit_sync_vars + 0x184) + 0x58) += *(float *)(extermitank_hit_sync_vars + 0x84) * offset_scale;
+        first = *(char **)(extermitank_hit_sync_vars + 0x184);
         qcopy(first + 0x40, moby + 0x40);
         qcopy(first + 0x10, moby + 0x10);
     }
-    if (*(char **)(data + 0x188) != 0) {
+    if (*(char **)(extermitank_hit_sync_vars + 0x188) != 0) {
         char *second;
         float offset_scale;
-        speed = fast_vec_length(data + 0x40);
+        speed = fast_vec_length(extermitank_hit_sync_vars + 0x40);
         speed /= extermitank_child_animation_speed_divisor_gp * frame_time;
         offset_scale = extermitank_child_animation_speed_offset_scale_gp;
-        *(float *)(*(char **)(data + 0x188) + 0x58) = speed;
-        *(float *)(*(char **)(data + 0x188) + 0x58) -= *(float *)(data + 0x84) * offset_scale;
-        second = *(char **)(data + 0x188);
+        *(float *)(*(char **)(extermitank_hit_sync_vars + 0x188) + 0x58) = speed;
+        *(float *)(*(char **)(extermitank_hit_sync_vars + 0x188) + 0x58) -= *(float *)(extermitank_hit_sync_vars + 0x84) * offset_scale;
+        second = *(char **)(extermitank_hit_sync_vars + 0x188);
         qcopy(second + 0x40, moby + 0x40);
         qcopy(second + 0x10, moby + 0x10);
     }
-    finish_motion_305178(moby, data + 0x60);
+    finish_motion_305178(moby, extermitank_hit_sync_vars + 0x60);
 }
 /* Drops stale entries from the moby's 8 slots, then pushes each remaining one away from the hero. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00306CF0), where it is exact; names translated to the US level program. */
