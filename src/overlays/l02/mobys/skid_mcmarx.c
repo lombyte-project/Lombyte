@@ -192,7 +192,7 @@ extern void draw_hud_counter(void) __asm__("FUN_L02_0023cda8");
 
 /* Three-state controller (data+0x180): 0 waits for its trigger, 1 runs timed effects until released, then moves the moby to its spawn point, sets the two linked mobys' flags and enters state 2. */
 void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *relocation_vars = (char *)moby->pvars;
     float fx_pos[4] __attribute__((aligned(16)));
     float fx_rot[4] __attribute__((aligned(16)));
     char *entry;
@@ -200,28 +200,28 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
     char *mobys;
     float yaw;
     char *table;
-    if (*(int *)(data + 0x180) == 1) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x148)) == 0) {
-            *(int *)(data + 0x180) = 0;
-            set_animation_parameter(*(int *)(data + 0x160), 0);
-            *(int *)(data + 0x160) = -1;
-            set_animation_parameter(*(int *)(data + 0x164), 0);
-            *(int *)(data + 0x164) = -1;
+    if (*(int *)(relocation_vars + 0x180) == 1) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(relocation_vars + 0x148)) == 0) {
+            *(int *)(relocation_vars + 0x180) = 0;
+            set_animation_parameter(*(int *)(relocation_vars + 0x160), 0);
+            *(int *)(relocation_vars + 0x160) = -1;
+            set_animation_parameter(*(int *)(relocation_vars + 0x164), 0);
+            *(int *)(relocation_vars + 0x164) = -1;
             return;
         }
-        if (*(int *)(data + 0x14C) != 0 || *(int *)(data + 0x150) != 0)
+        if (*(int *)(relocation_vars + 0x14C) != 0 || *(int *)(relocation_vars + 0x150) != 0)
             return;
-        if (fast_dec_timer_s16((int *)(data + 0x168)) == 0)
+        if (fast_dec_timer_s16((int *)(relocation_vars + 0x168)) == 0)
             return;
-        *(int *)(data + 0x180) = 2;
+        *(int *)(relocation_vars + 0x180) = 2;
         fade_to_black(scale_game_frames(0x10));
-        set_animation_parameter(*(int *)(data + 0x160), 0);
-        *(int *)(data + 0x160) = -1;
-        set_animation_parameter(*(int *)(data + 0x164), 0);
+        set_animation_parameter(*(int *)(relocation_vars + 0x160), 0);
+        *(int *)(relocation_vars + 0x160) = -1;
+        set_animation_parameter(*(int *)(relocation_vars + 0x164), 0);
         table = (char *)l02_cuboids;
-        entry_off = *(int *)(data + 0x154) << 7;
+        entry_off = *(int *)(relocation_vars + 0x154) << 7;
         mobys = table;
-        *(int *)(data + 0x164) = -1;
+        *(int *)(relocation_vars + 0x164) = -1;
         qcopy(&moby->pos, (char *)(entry_off + (int)mobys) + 0x30);
         entry = (char *)(entry_off + (int)mobys);
         moby->rot.z = yaw = fast_arc_tan(*(float *)(entry + 0), *(float *)(entry + 4));
@@ -232,33 +232,33 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
         fx_rot[2] = fast_add_rotations(moby->rot.z, 3.1415927f);
         set_race_camera(fx_pos, fx_rot, 0, 1);
         {
-            int i0 = *(int *)(data + 0x158);
-            int i1 = *(int *)(data + 0x15C);
+            int i0 = *(int *)(relocation_vars + 0x158);
+            int i1 = *(int *)(relocation_vars + 0x15C);
             mobys = D_L02_0015FFD8_n;
             *(unsigned char *)(mobys + (i0 << 8) + 0xBC) = 1;
             mobys += i1 << 8;
             mobys[0xBC] = 1;
-            *(short *)(data + 0x36) = 2;
-            data[8] = 1;
+            *(short *)(relocation_vars + 0x36) = 2;
+            relocation_vars[8] = 1;
         }
-    } else if (*(int *)(data + 0x180) == 0) {
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x148)) != 0) {
-            *(int *)(data + 0x180) = 1;
-            *(int *)(data + 0x164) =
+    } else if (*(int *)(relocation_vars + 0x180) == 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(relocation_vars + 0x148)) != 0) {
+            *(int *)(relocation_vars + 0x180) = 1;
+            *(int *)(relocation_vars + 0x164) =
                 queue_animation_update(0x15,
                                        0x7D0,
                                        initialize_numeric_hud_timer_and_base_dimensions,
                                        update_hud_counter_transition,
                                        draw_hud_counter,
-                                       data + 0x14C,
+                                       relocation_vars + 0x14C,
                                        100);
-            *(int *)(data + 0x160) =
+            *(int *)(relocation_vars + 0x160) =
                 queue_animation_update(0x17,
                                        0x7D1,
                                        initialize_numeric_hud_timer_and_base_dimensions,
                                        update_hud_counter_transition,
                                        draw_hud_counter,
-                                       data + 0x150,
+                                       relocation_vars + 0x150,
                                        7);
         }
     }
