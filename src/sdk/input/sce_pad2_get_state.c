@@ -34,7 +34,7 @@ extern Pad2Side *scePad2GetSide(s32 socket);
 s32 scePad2GetState(s32 socket) {
     DbcCommandWord cmd;
     Pad2Side      *side;
-    u8             data[16];
+    u8             pad_state_buffer[16];
 
     if (D_0015B540[socket].linked == 0) {
         if (scePad2LinkDriver(socket) < 0) {
@@ -49,15 +49,15 @@ s32 scePad2GetState(s32 socket) {
                 return 0;
             }
         }
-        data[0] = side->state;
+        pad_state_buffer[0] = side->state;
     } else {
         cmd.bits.size = 12;
         cmd.bits.mode = 2;
         cmd.bits.cmd = 1;
         cmd.bits.ver = 1;
-        if (sceDbcReceiveData(socket, cmd.word, &data[4], data) < 0) {
+        if (sceDbcReceiveData(socket, cmd.word, &pad_state_buffer[4], pad_state_buffer) < 0) {
             return 0;
         }
     }
-    return data[0];
+    return pad_state_buffer[0];
 }
