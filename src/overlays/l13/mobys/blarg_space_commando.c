@@ -820,7 +820,7 @@ typedef struct {
 } TrailVars_94f8;
 
 void update_gemlik_trail(struct Moby *moby) {
-    TrailVars_94f8 *data = *(TrailVars_94f8 **)&moby->pvars;
+    TrailVars_94f8 *gemlik_trail_vars = *(TrailVars_94f8 **)&moby->pvars;
     TrailPoint_94f8 next;
     union {
         struct {
@@ -834,14 +834,14 @@ void update_gemlik_trail(struct Moby *moby) {
     char           *clamp_cursor;
     float           prior_height, dot;
 
-    timer = truncate_float_to_s32(data->anchor.w);
+    timer = truncate_float_to_s32(gemlik_trail_vars->anchor.w);
     fast_dec_timer(&timer);
-    data->anchor.w = (float)timer;
+    gemlik_trail_vars->anchor.w = (float)timer;
     if (!timer)
         return;
 
     if (timer == 20) {
-        for (clamp_cursor = (char *)data, clamp_count = 15; clamp_count >= 0;
+        for (clamp_cursor = (char *)gemlik_trail_vars, clamp_count = 15; clamp_count >= 0;
              clamp_count--, clamp_cursor += 16) {
             if (*(float *)(clamp_cursor + 0x21c) >= 1.0f)
                 *(float *)(clamp_cursor + 0x21c) = 0.98f;
@@ -850,35 +850,35 @@ void update_gemlik_trail(struct Moby *moby) {
 
     i = 15;
     do {
-        fast_vec_sub(&next, &data->point[15 - i], &data->anchor);
+        fast_vec_sub(&next, &gemlik_trail_vars->point[15 - i], &gemlik_trail_vars->anchor);
         next.z = 0.0f;
         fast_vec_normalize(&next, &next, gemlik_trail_point_radial_speed_gp * frame_time);
-        fast_vec_add(&next, &data->point[15 - i], &next);
+        fast_vec_add(&next, &gemlik_trail_vars->point[15 - i], &next);
         fast_vec_sub(&work.vectors.delta, &next, &moby->pos);
-        dot = fast_vec_dot(&work.vectors.delta, &data->direction);
-        fast_vec_normalize(&work.vectors.scaled, &data->direction, -dot + 0.35f);
+        dot = fast_vec_dot(&work.vectors.delta, &gemlik_trail_vars->direction);
+        fast_vec_normalize(&work.vectors.scaled, &gemlik_trail_vars->direction, -dot + 0.35f);
         fast_vec_add(&work.vectors.delta, &work.vectors.delta, &work.vectors.scaled);
         prior_height = work.vectors.scaled.z;
-        qcopy(&upper, &data->point[15 - i]);
+        qcopy(&upper, &gemlik_trail_vars->point[15 - i]);
         upper.z = upper.z + 1.0f;
-        qcopy(&lower, &data->point[15 - i]);
+        qcopy(&lower, &gemlik_trail_vars->point[15 - i]);
         lower.z = lower.z - 3.0f;
         if (collision_line(&upper, &lower, 2, 0, 0) != 0 && prior_height < next.z) {
             approach_value(&next.z, coll_hit_1638.point.f[2] + 0.35f, frame_time * 4.0f);
         }
-        if (1.0f <= data->point[15 - i].w && collision_line(&data->point[15 - i], &next, 2, 0, 0)) {
+        if (1.0f <= gemlik_trail_vars->point[15 - i].w && collision_line(&gemlik_trail_vars->point[15 - i], &next, 2, 0, 0)) {
             next.w = 0.98f;
         } else {
             if (next.w < 1.0f)
                 approach_value(&next.w, 0.0f, frame_time + frame_time);
         }
-        qcopy(&data->point[15 - i], &next);
+        qcopy(&gemlik_trail_vars->point[15 - i], &next);
         i--;
     } while (i >= 0);
 
     j = 0;
     do {
-        if (data->point[j].w >= 0.98f && data->point[j + 1].w >= 0.98f) {
+        if (gemlik_trail_vars->point[j].w >= 0.98f && gemlik_trail_vars->point[j + 1].w >= 0.98f) {
             next.x = fast_cos(moby->rot.z);
             next.y = fast_sin(moby->rot.z);
             next.z = 1.0f;
@@ -887,7 +887,7 @@ void update_gemlik_trail(struct Moby *moby) {
             work.hit.c = (unsigned short)moby->oclass;
             work.hit.a = 0;
             work.hit.b = 1;
-            collision_line(&data->point[j], &data->point[j + 1], 0, moby, &work.hit);
+            collision_line(&gemlik_trail_vars->point[j], &gemlik_trail_vars->point[j + 1], 0, moby, &work.hit);
         }
         j++;
     } while (j < 15);
