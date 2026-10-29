@@ -122,11 +122,11 @@ void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_inde
 void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) __asm__("FUN_L00_00235c80");
 
 void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) {
-    int *value = hud_element->unk0C;
+    int *numeric_value_source = hud_element->unk0C;
     int  digits;
     int  decimal_quotient, flags, width;
-    if (value && !((int)value & 3)) {
-        hud_element->unk78 = *value;
+    if (numeric_value_source && !((int)numeric_value_source & 3)) {
+        hud_element->unk78 = *numeric_value_source;
         if (hud_element->unk08 < hud_element->unk78)
             hud_element->unk78 = hud_element->unk08;
         hud_element->unk74 = hud_element->unk78;
