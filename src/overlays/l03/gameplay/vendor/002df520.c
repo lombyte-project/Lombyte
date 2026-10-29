@@ -9,6 +9,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
@@ -36,9 +37,6 @@ extern struct L03HelpState l03_help_message_playback_state __asm__("D_L03_001795
 extern struct L03HelpRecord help_records[] __asm__("D_00141968");
 extern struct L03ItemEntry D_L03_00179BC0[];
 extern struct Moby *D_L03_0015FFE4;
-extern u8 alternate_item_available[] __asm__("D_0013D388");
-extern u8 item_unlocked[] __asm__("D_0013D408");
-extern u8 item_available[] __asm__("D_0013D4C0");
 
 extern s32 is_point_inside_clip_volume(void *point, s32 volume) __asm__("FUN_00214720");
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");

@@ -8,6 +8,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
 
@@ -1255,7 +1256,6 @@ void request_hero_target_pose(void *source_position, float f, int state_entry_op
         hero_set_state(0x65, 1);
     }
 }
-extern s32 camera_secondary_mode[] __asm__("D_001413D4");
 
 /* Maps camera_secondary_mode[0]: 0x65/0x66 to 1, 0x67 to 2, others to 0. */
 s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");

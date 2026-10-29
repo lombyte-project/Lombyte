@@ -8,6 +8,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/gameplay/state/item_state.h"
 
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
@@ -295,7 +296,6 @@ typedef struct {
     DoorVars *vars;
 } DoorMoby;
 
-extern u8 alternate_item_available[] __asm__("D_0013D388");
 extern s16 D_00141628[];
 extern s32 initialize_npc_dialogue(DoorMoby *, void *) __asm__("FUN_L00_002668a0");
 extern s32 update_npc_dialogue(DoorMoby *, void *) __asm__("FUN_L00_00266448");

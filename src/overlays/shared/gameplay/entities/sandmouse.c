@@ -10,6 +10,7 @@
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/audio/sound_state.h"
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
@@ -1800,7 +1801,6 @@ void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera
 }
 extern char *D_L00_0015F5F4;
 extern char D_0013E550[];
-extern char voice_positions[] __asm__("D_0013E5E0");
 extern char D_L01_00167240[];
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern int calculate_voice_distance_volume(float, float, float, void *) __asm__("FUN_0022c6f8");

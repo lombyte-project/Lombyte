@@ -9,6 +9,7 @@
 #include "rnc/overlay/collision.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/audio/voice_pool.h"
 
 
 
@@ -1515,7 +1516,6 @@ extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN
 extern void select_moby_target_with_hero_fallback(void *, void *, float) __asm__("FUN_L03_0024e830");
 extern void create_type_31_part(void *, void *, void *, void *, int) __asm__("FUN_L03_00260130");
 extern void mark_moby_for_removal_c_c(void *) __asm__("func_0020C828");
-extern char voice_pool[] __asm__("D_0013E550");
 
 void update_homing_spark_projectile(Moby *moby) __asm__("FUN_L03_002d47c0");
 

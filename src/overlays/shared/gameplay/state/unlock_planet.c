@@ -344,7 +344,6 @@ typedef struct {
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0") NOT_SDA;
 extern int D_L00_001B0340[] NOT_SDA;
 extern int D_L00_001C3E98[] NOT_SDA;
-extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern int D_00141408 NOT_SDA;
 extern int D_00141410 NOT_SDA;
 extern int D_00141414 NOT_SDA;

@@ -13,6 +13,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/item_state.h"
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_0021EA88.c: func_L16_0021EA88), where it is exact; names translated to the US level program. */
 
@@ -53,7 +54,6 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 int D_L16_0015F6E8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 extern short D_L16_0015F688 __attribute__((sda));
 struct HeroVelocityKey D_L16_0015F6F8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
-extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern unsigned char level16_hero_run_jump_animation_by_frame[] __asm__("D_L16_0017C238");
 extern void *D_L16_001612D0;
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");

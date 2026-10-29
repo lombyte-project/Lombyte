@@ -10,6 +10,8 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/audio/voice_pool.h"
+#include "rnc/audio/sound_state.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
@@ -458,8 +460,6 @@ extern int play_voice(int sound, int flags, int moby, int volume) __asm__("FUN_L
 extern int vendor_volume(int, int) __asm__("FUN_L01_002a1968");
 extern float smoothed_below_reference_ground_fraction_gp __asm__("D_L08_001625E8") __attribute__((sda));
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 angle) __asm__("FUN_00214890");
-extern char voice_pool[] __asm__("D_0013E550");
-extern char voice_positions[] __asm__("D_0013E5E0");
 
 void update_ground_height_modulated_voice(char *moby) __asm__("FUN_L08_00316fa8");
 

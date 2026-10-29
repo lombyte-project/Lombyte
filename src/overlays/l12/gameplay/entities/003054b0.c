@@ -12,6 +12,7 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
+#include "rnc/gameplay/state/item_state.h"
 
 typedef struct Moby Moby;
 
@@ -1164,7 +1165,6 @@ typedef struct {
     int f90;
 } Obj;
 
-extern char alternate_item_available[] __asm__("D_0013D388");
 extern char scene_trigger_saved_hero_data[] __asm__("D_L12_0016CCF0");
 extern int D_L12_0015F5C4;
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");

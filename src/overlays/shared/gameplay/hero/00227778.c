@@ -8,7 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
-extern unsigned char item_available[] __asm__("D_0013D4C0");
+#include "rnc/gameplay/state/item_state.h"
 extern unsigned int pad_held_lui __asm__("D_0013CAE0")NOT_SDA;
 extern void queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void hud_init_particles(void) __asm__("FUN_L00_00236268");

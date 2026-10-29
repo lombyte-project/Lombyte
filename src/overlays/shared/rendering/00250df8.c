@@ -27,7 +27,6 @@ typedef struct {
 extern int D_0015ED84;
 extern int D_0014C190[][64];
 extern u8 D_0015EDD0_macro[] __asm__("D_0015EDD0") MACRO_ADDR;
-extern u8 item_available[] __asm__("D_0013D4C0");
 extern Item257218 D_L00_001C40B0[] NOT_SDA;
 int FUN_00213260(int);
 int FUN_L00_00257218_u3(Moby257218 *, int *) __asm__("FUN_L00_00257218");

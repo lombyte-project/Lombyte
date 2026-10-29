@@ -14,6 +14,7 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
 #include "sda.h"
+#include "rnc/gameplay/state/item_state.h"
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
@@ -1524,7 +1525,6 @@ char *activate_listed_blarg_ship(int list) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
 
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
-extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");

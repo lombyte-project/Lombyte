@@ -4,6 +4,8 @@
 #include "rnc/overlay/hud.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
+#include "rnc/globals.h"
+#include "rnc/gameplay/state/item_state.h"
 
 
 
@@ -31,8 +33,6 @@ void FUN_L05_002661e8(char *moby) {
     }
 }
 extern int D_0013E500[];
-extern int pal_mode __asm__("D_0015ED80");
-extern u8 alternate_item_available[] __asm__("D_0013D388");
 #include "rnc/overlay/shared/ui/hud/002661a0_globals.h"
 #include "rnc/math/fast_math.h"
 extern int hud_timer_frame_x_gp __asm__("D_L05_0015FA14") __attribute__((sda));
@@ -57,7 +57,6 @@ extern char *get_help_message_text(int) __asm__("FUN_001fdd10");
 extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern int FUN_001f6250(char *, int);
 extern void print_text_with_texture_3(int x, int y, u64 color, char *text, int len) __asm__("FUN_L00_001fb470");
-extern int current_level_index __asm__("D_0015ED84");
 extern char D_L05_0015F860[];
 extern char hud_race_lap_progress_format[] __asm__("D_L05_0015F9E0");
 extern char hud_race_first_place_format[] __asm__("D_L05_0015F9E8");

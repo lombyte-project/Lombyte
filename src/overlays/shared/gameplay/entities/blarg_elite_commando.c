@@ -12,6 +12,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
 #include "sda.h"
+#include "rnc/gameplay/state/item_state.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
 
@@ -538,7 +539,6 @@ typedef struct {
 } L16DamageReward;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int blarg_elite_commando_reward_kill_count_gp __asm__("D_0015EE10") __attribute__((sda));
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");

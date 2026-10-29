@@ -6,6 +6,8 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/camera/follow_cam.h"
+#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/gameplay/state/item_state.h"
 
 
 
@@ -88,7 +90,6 @@ void prepare_background_ship_1_joint_billboards(char *moby) {
 
 extern char *D_L02_001B0AB0[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char camera_secondary_mode[] __asm__("D_001413D4");
 extern char background_ship_1_missing_path_message[] __asm__("D_L02_001FAD60");
 extern char background_ship_1_empty_path_message[] __asm__("D_L02_001FAD80");
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
@@ -106,7 +107,6 @@ extern float background_ship_1_path_travel_speed_gp __asm__("D_L02_00161F64") __
 extern float background_ship_1_color_phase_rate_degrees_gp __asm__("D_L02_00161F70") __attribute__((sda));
 extern short background_ship_1_color_tween_start_gp __asm__("D_L02_00161F74") __attribute__((sda));
 extern short background_ship_1_color_tween_end_gp __asm__("D_L02_00161F78") __attribute__((sda));
-extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void spawn_background_ship_1_joint_sparks(char *m, void *arg1) __asm__("FUN_L02_002eca30");
