@@ -363,8 +363,8 @@ void draw_beam_barrier_segments(char *moby) {
     float        yaw_matrix[16];
     float        segment_matrix[9][16];
     float        offset[4];
-    int          params[9];
-    char        *data = ((char *)MOBY(moby)->pvars);
+    int          beam_segment_draw_params[9];
+    char        *beam_barrier_vars = ((char *)MOBY(moby)->pvars);
     float       *matrix;
     float       *rotation;
     float       *offset_src;
@@ -390,7 +390,7 @@ void draw_beam_barrier_segments(char *moby) {
                             0x8000000000L);
     font_queue_vu_state();
     first_matrix = segment_matrix[0];
-    segment_params = params;
+    segment_params = beam_segment_draw_params;
     rotation = D_L06_001DB060;
     offset_src = D_L06_001DAFD0;
     translation = segment_matrix[0] + 12;
@@ -406,7 +406,7 @@ void draw_beam_barrier_segments(char *moby) {
         matrix += 16;
         translation += 16;
     }
-    color = fast_tween_color(D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(data + 0x18));
+    color = fast_tween_color(D_L06_00161DF0 & 0xFFFFFF, D_L06_00161DF0, *(float *)(beam_barrier_vars + 0x18));
     first = D_L06_00161E50;
     points = (int *)D_L06_001DB0F0;
     second = D_L06_00161E54;
@@ -414,15 +414,15 @@ void draw_beam_barrier_segments(char *moby) {
     seventh = beam_barrier_texture_u_step_gp;
     eighth = D_L06_00161DFC;
     sequence = D_L06_00161E40;
-    params[0] = first;
-    params[2] = (int)sequence;
-    params[1] = second;
-    params[3] = color;
-    params[4] = fourth;
-    *(float *)&params[7] = seventh;
-    *(float *)&params[8] = eighth;
-    params[5] = 0x1E;
-    params[6] = (int)points;
+    beam_segment_draw_params[0] = first;
+    beam_segment_draw_params[2] = (int)sequence;
+    beam_segment_draw_params[1] = second;
+    beam_segment_draw_params[3] = color;
+    beam_segment_draw_params[4] = fourth;
+    *(float *)&beam_segment_draw_params[7] = seventh;
+    *(float *)&beam_segment_draw_params[8] = eighth;
+    beam_segment_draw_params[5] = 0x1E;
+    beam_segment_draw_params[6] = (int)points;
     matrix = first_matrix;
     for (j = 8; j >= 0; j--) {
         FUN_L06_00216b88(segment_params, matrix);
