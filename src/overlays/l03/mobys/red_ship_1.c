@@ -271,7 +271,7 @@ void update_spline_moby_orientation(struct Moby *moby) {
 void update_emitter_intermittent_sound(struct Moby *moby) __asm__("FUN_L03_0029d1b8");
 
 void update_emitter_intermittent_sound(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *intermittent_sound_pvars = (char *)moby->pvars;
     int   unused_local;
     float distance_to_reference;
     switch (moby->oclass) {
@@ -282,13 +282,13 @@ void update_emitter_intermittent_sound(struct Moby *moby) {
     case MOBY_CLASS_TWO_JOINT_PARTICLE_EMITTER:
     case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
     case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
-        if (*(short *)(data + 0x148) == -1) {
-            int lo = *(short *)(data + 0x14C);
-            *(short *)(data + 0x148) =
-                scale_game_frames(random_int_between(lo, lo + *(short *)(data + 0x14E)));
+        if (*(short *)(intermittent_sound_pvars + 0x148) == -1) {
+            int lo = *(short *)(intermittent_sound_pvars + 0x14C);
+            *(short *)(intermittent_sound_pvars + 0x148) =
+                scale_game_frames(random_int_between(lo, lo + *(short *)(intermittent_sound_pvars + 0x14E)));
         } else {
             int x, y;
-            if (!fast_dec_timer_s16(data + 0x148)) {
+            if (!fast_dec_timer_s16(intermittent_sound_pvars + 0x148)) {
                 break;
             }
             distance_to_reference = fast_vec_dist(&moby->pos, D_L03_00166EC0);
@@ -297,7 +297,7 @@ void update_emitter_intermittent_sound(struct Moby *moby) {
             }
             x = scale_game_frames(0x898);
             y = scale_game_frames(0x898);
-            *(short *)(data + 0x148) =
+            *(short *)(intermittent_sound_pvars + 0x148) =
                 scale_game_frames(random_int_between(x, y + scale_game_frames(0x3E8)));
         }
         break;
