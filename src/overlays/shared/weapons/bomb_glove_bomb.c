@@ -849,7 +849,7 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
     float         *vars = ((float *)MOBY(moby)->pvars);
     float          difference[4] __attribute__((aligned(16)));
     float          direction[4] __attribute__((aligned(16)));
-    float          result[4] __attribute__((aligned(16)));
+    float          throw_arc_velocity[4] __attribute__((aligned(16)));
     float          working[4] __attribute__((aligned(16)));
     float          desired[4] __attribute__((aligned(16)));
     unsigned char *mp;
@@ -899,16 +899,16 @@ void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
                 *(OvlQuad *)direction = *(OvlQuad *)desired;
             }
             total = frame_time_sq * 11.0f;
-            rp = result;
+            rp = throw_arc_velocity;
             if (pad_held[0] & 5) {
                 height = convert_integer_to_float(D_0013E520.bA) * 2.5f + 8.5f;
             } else {
                 height = 8.5f;
             }
             aim_throw_arc(pos, direction, rp, total, 0.00001f, height);
-            scale_vector_xyz(result, result, 0.65f);
+            scale_vector_xyz(throw_arc_velocity, throw_arc_velocity, 0.65f);
             scale_vector_xyz(vars, vars, 0.35f);
-            fast_vec_add(working, vars, result);
+            fast_vec_add(working, vars, throw_arc_velocity);
             *(OvlQuad *)vars = *(OvlQuad *)working;
         }
     }
