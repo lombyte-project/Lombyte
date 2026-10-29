@@ -62,16 +62,16 @@ int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
             (unsigned char *)l15_moby_array + ((*(unsigned short *)group_moby_entry & 0x7FFF) << 8);
         unsigned char state = listed_moby[0x20];
         if (state == 1) {
-            char *data;
+            char *activated_moby_data;
             listed_moby[0x20] = 2;
             if (listed_moby[0x53] != 0)
                 blend_moby_animation(listed_moby, 0, 0, 0);
             MOBY(listed_moby)->flags |= 1;
             listed_moby[0x31] = 0;
-            data = ((char *)MOBY(listed_moby)->pvars);
+            activated_moby_data = ((char *)MOBY(listed_moby)->pvars);
             MOBY(listed_moby)->collision = *(int *)(((char *)MOBY(listed_moby)->pclass) + 0x10);
-            *(float *)(data + 0x64) = random_float_between(-15.0f, 15.0f) * DEG_TO_RAD;
-            *(int *)(data + 0x68) = scale_game_frames(0x3C);
+            *(float *)(activated_moby_data + 0x64) = random_float_between(-15.0f, 15.0f) * DEG_TO_RAD;
+            *(int *)(activated_moby_data + 0x68) = scale_game_frames(0x3C);
             qcopy(listed_moby + 0x10, pos);
             MOBY(listed_moby)->pos.z -= 1.0f;
             MOBY(listed_moby)->rot.z =
