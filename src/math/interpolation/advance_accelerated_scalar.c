@@ -15,7 +15,7 @@ f32        advance_accelerated_scalar(f32 *value,
    from velocity squared divided by twice the braking step. Near the stopping
    distance, one path brakes at 1.1 times the usual step. Snap to target when
    the next step reaches it. Return the displacement applied this call. */
-f32 advance_accelerated_scalar(f32 *value,
+f32 advance_accelerated_scalar(f32 *current_value,
                                f32 *velocity,
                                f32  target,
                                f32  acceleration_step,
@@ -27,7 +27,7 @@ f32 advance_accelerated_scalar(f32 *value,
     f32 desired_speed;
     f32 remaining_distance;
 
-    distance = target - *value;
+    distance = target - *current_value;
     if (*velocity * distance >= 0.0f && distance != 0.0f) {
         stopping_distance = *velocity * *velocity / braking_step * 0.5f;
         if (absolute_float(distance) < stopping_distance) {
@@ -49,14 +49,14 @@ f32 advance_accelerated_scalar(f32 *value,
         }
         remaining_distance = absolute_float(distance);
         if (absolute_float(*velocity) < remaining_distance) {
-            *value += *velocity;
+            *current_value += *velocity;
             return *velocity;
         }
-        *value = target;
+        *current_value = target;
         return distance;
     }
     approach_value(0.0f, braking_step, velocity);
-    *value += *velocity;
+    *current_value += *velocity;
     return *velocity;
 }
 
