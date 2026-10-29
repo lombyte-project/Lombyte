@@ -240,7 +240,7 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
     float  spark_travel_direction[4];
     float  clip[4];
-    float  work[4];
+    float  spark_position_delta[4];
     float  ratio;
     float  first;
     int    in_clip;
@@ -281,8 +281,8 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
                     *shade = spark_alpha;
                 }
             }
-            fast_vec_scale(work, spark_travel_direction, spark_vars->f440[i]);
-            fast_vec_add(pos, pos, work);
+            fast_vec_scale(spark_position_delta, spark_travel_direction, spark_vars->f440[i]);
+            fast_vec_add(pos, pos, spark_position_delta);
             if (in_clip != 0 && absolute_float(pos[0] - l14_camera.pos.f[0]) < 8.0f &&
                 absolute_float(pos[1] - l14_camera.pos.f[1]) < 8.0f &&
                 fast_difference_between_rotations(wind_control_moby->rot.z, l14_camera.yaw) >
