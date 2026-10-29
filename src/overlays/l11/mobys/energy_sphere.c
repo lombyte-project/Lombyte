@@ -238,12 +238,12 @@ void         spawn_energy_sphere_particles(struct Moby *moby) __asm__("FUN_L11_0
 void spawn_energy_sphere_particles(struct Moby *moby) {
     float          effect_position[4];
     float          position_step[4];
-    char          *data = (char *)moby->pvars;
+    char          *energy_sphere_vars = (char *)moby->pvars;
     unsigned char *effect_byte_cursor;
     float         *moby_position = &moby->pos.x;
     int            i;
     fast_vec_sub(effect_position, D_L11_001677C0_lui, moby_position);
-    effect_byte_cursor = (unsigned char *)(data + 0x10);
+    effect_byte_cursor = (unsigned char *)(energy_sphere_vars + 0x10);
     fast_vec_normalize(effect_position, effect_position, -0.3f);
     fast_vec_normalize(position_step, effect_position, 0.1f);
     fast_vec_add(effect_position, effect_position, moby_position);
@@ -254,7 +254,7 @@ void spawn_energy_sphere_particles(struct Moby *moby) {
         unsigned char updated_effect_byte;
         effect_byte_cursor[0] += effect_byte_cursor[4];
         updated_effect_byte = truncate_float_to_s32((float)effect_byte_cursor[0]);
-        FUN_L00_00272f68_q(*(float *)(data + 0x1C) *
+        FUN_L00_00272f68_q(*(float *)(energy_sphere_vars + 0x1C) *
                                convert_integer_to_float(effect_byte_cursor[8]) * 0.025f,
                            effect_position,
                            a,
