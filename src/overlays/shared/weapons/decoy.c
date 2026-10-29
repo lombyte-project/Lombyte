@@ -182,10 +182,10 @@ void destroy_decoy_with_particles(unsigned char *moby) {
 
 u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) __asm__("FUN_L00_002c35c0");
 
-u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
+u8 *spawn_decoy(s32 owner_moby, u128 *position, u128 *other_position) {
     u8 *flags = item_text_variant;
     u8 *spawned_moby;
-    u8 *data;
+    u8 *decoy_vars;
     u8 *candidate;
     s32 i;
     s32 best_value;
@@ -197,24 +197,24 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
         spawned_moby[0x30] = 0xff;
         *(u16 *)(spawned_moby + 0x32) = 0xff;
         spawned_moby[0x31] = 1;
-        data = *(u8 **)(spawned_moby + 0x78);
+        decoy_vars = *(u8 **)(spawned_moby + 0x78);
         spawned_moby[0x20] = 0;
         qcopy(spawned_moby + 0x10, position);
-        qcopy(data + 0x10, other_position);
+        qcopy(decoy_vars + 0x10, other_position);
         speed = frame_scale * -0.5f;
-        *(s32 *)(data + 0x40) = value;
-        *(u16 *)(data + 0x44) = 0;
-        *(s32 *)(data + 0x54) = 0;
+        *(s32 *)(decoy_vars + 0x40) = owner_moby;
+        *(u16 *)(decoy_vars + 0x44) = 0;
+        *(s32 *)(decoy_vars + 0x54) = 0;
         *(f32 *)(spawned_moby + 0x2c) =
             *(f32 *)(*(u8 **)(spawned_moby + 0x24) + 0x24) * (speed + 1.0f);
-        *(f32 *)(data + 0x48) = (scale_ticks(flags[0x19]) + 1.0f) * 4.0f;
+        *(f32 *)(decoy_vars + 0x48) = (scale_ticks(flags[0x19]) + 1.0f) * 4.0f;
         if (spawned_moby[0x53] != 0)
             blend_moby_animation(spawned_moby, 0, 0, scale_game_frames(0));
         *(s32 *)(spawned_moby + 0x94) = 0;
         *(s32 *)(spawned_moby + 0x98) = -1;
         *(f32 *)(spawned_moby + 0x48) = random_float_between(-3.14159274f, 3.14159274f);
-        *(s32 *)(data + 0x58) = 0;
-        *(s32 *)(data + 0x5c) = 0;
+        *(s32 *)(decoy_vars + 0x58) = 0;
+        *(s32 *)(decoy_vars + 0x5c) = 0;
         while (D_L00_001B0830_lui[0] >= 6) {
             candidate = 0;
             best_value = 0;
@@ -237,12 +237,12 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
         }
         update_entity(spawned_moby);
         copy_hero_moby_field_38(spawned_moby);
-        *(u16 *)data = 0;
-        data[8] = 0;
-        data[9] = 0;
-        data[7] = 0x80;
-        *(u16 *)(data + 0x0c) = 4;
-        *(u16 *)(data + 0x0e) = 0xf;
+        *(u16 *)decoy_vars = 0;
+        decoy_vars[8] = 0;
+        decoy_vars[9] = 0;
+        decoy_vars[7] = 0x80;
+        *(u16 *)(decoy_vars + 0x0c) = 4;
+        *(u16 *)(decoy_vars + 0x0e) = 0xf;
         append_unique_moby_index(spawned_moby, D_L00_001B0830_lui, 0x1f);
         if (hero.unk20A5 != 0 || hero.unk20AF != 0)
             *(u16 *)(spawned_moby + 0x34) |= 0x41;
