@@ -7,8 +7,8 @@ void music_remaining_time_callback(int remaining_time, long context) __asm__("FU
 /* Stream callback: stores the channel's remaining time; with crossfade
    enabled on the channel and crossfade_state 1, moves crossfade_state to 2
    and copies the time (and a quarter of it) into the crossfade fields. */
-void music_remaining_time_callback(int remaining_time, long context) {
-    struct MusicStreamChannel *channel = (struct MusicStreamChannel *)(int)context;
+void music_remaining_time_callback(int remaining_time, long channel_context) {
+    struct MusicStreamChannel *channel = (struct MusicStreamChannel *)(int)channel_context;
     struct MusicStreamState   *music_state;
     if (channel == 0) {
         return;
