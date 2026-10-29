@@ -21,7 +21,7 @@ extern s32                   strncpy(s8 *, s8 *, s32);
 extern void                  mceStorePwd();
 
 s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
-    s32 result;
+    s32 rpc_dispatch_status;
     s32 ret;
 
     if (mc_rpc_client.serve == 0) {
@@ -39,7 +39,7 @@ s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
         strncpy((s8 *)((u8 *)&D_00159AB0 + 0x14), path, 0x3FF);
         *(u8 *)((u8 *)&D_00159AB0 + 0x413) = 0;
         sceSifWriteBackDCache(D_00159FC0, 0x400);
-        result = sceSifCallRpc(&mc_rpc_client,
+        rpc_dispatch_status = sceSifCallRpc(&mc_rpc_client,
                                MC_FUNC_CHDIR,
                                1,
                                &D_00159AB0,
@@ -48,12 +48,12 @@ s32 sceMcChdir(s32 port, s32 slot, s8 *path, s32 pwd) {
                                4,
                                &mceStorePwd,
                                pwd);
-        if (result == 0) {
+        if (rpc_dispatch_status == 0) {
             mc_current_func = MC_FUNC_CHDIR;
         } else {
             SignalSema(mc_sema);
         }
-        ret = result;
+        ret = rpc_dispatch_status;
         /* Duplicate return node #10. Try simplifying control flow for better match */
         return ret;
     }
