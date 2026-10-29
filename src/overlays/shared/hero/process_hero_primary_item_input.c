@@ -1379,12 +1379,12 @@ void update_hero_hoverboard_trick_score(void) {
     for (i = 0; i < 3; i++) {
         float *spin = &TALLY->spin[i];
         if (absolute_float(*spin) > 3.3161256f) {
-            float value = *spin;
-            if (value > 0.0f) {
-                *spin = value - 6.2831855f;
+            float spin_angle = *spin;
+            if (spin_angle > 0.0f) {
+                *spin = spin_angle - 6.2831855f;
                 TALLY->spin_count[i]++;
             } else {
-                *spin = value + 6.2831855f;
+                *spin = spin_angle + 6.2831855f;
                 TALLY->spin_count[i]++;
             }
         }
