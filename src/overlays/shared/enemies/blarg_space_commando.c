@@ -909,7 +909,7 @@ extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
    moby's point list (data + 0x230), each twice: once with the odd corners
    pulled toward the centre (data + 0x210) and once raised by 0.25. */
 void draw_blarg_space_commando_beam(char *moby) {
-    char           *data = ((char *)MOBY(moby)->pvars);
+    char           *beam_owner_vars = ((char *)MOBY(moby)->pvars);
     QuadPacket_f680 pk[2];
     f32             quad_identity_matrix[4][4];
     f32             corner_inset_vector[4];
@@ -943,19 +943,19 @@ void draw_blarg_space_commando_beam(char *moby) {
             corner_position = pk[0].pos[j];
             source_point_byte_offset = (i + j / 2) * 16;
             /* &data[...] (not data + off + ...) keeps retail's off + data add. */
-            qcopy(corner_position, &data[source_point_byte_offset + 0x230]);
+            qcopy(corner_position, &beam_owner_vars[source_point_byte_offset + 0x230]);
             /* The colour call in both arms: retail merges the two calls and
                leaves the address add in each arm. */
             if (j & 1) {
-                fast_vec_sub(corner_inset_vector, corner_position, data + 0x210);
+                fast_vec_sub(corner_inset_vector, corner_position, beam_owner_vars + 0x210);
                 fast_vec_normalize(corner_inset_vector, corner_inset_vector, 0.5f);
                 fast_vec_sub(corner_position, corner_position, corner_inset_vector);
                 corner_position[2] -= 0.125f;
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C),
+                pk[0].col[j] = fast_tween_color(*(f32 *)(beam_owner_vars + source_point_byte_offset + 0x23C),
                                                 beam_inset_corner_color_at_zero_weight_gp,
                                                 beam_inset_corner_color_at_unit_weight_gp);
             } else {
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x23C),
+                pk[0].col[j] = fast_tween_color(*(f32 *)(beam_owner_vars + source_point_byte_offset + 0x23C),
                                                 beam_outer_corner_color_at_zero_weight_gp,
                                                 beam_outer_corner_color_at_unit_weight_gp);
             }
