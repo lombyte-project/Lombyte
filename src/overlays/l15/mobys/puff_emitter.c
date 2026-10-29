@@ -18,13 +18,13 @@ void update_puff_emitter(struct Moby *moby) __asm__("FUN_L15_002eb928");
 
 void update_puff_emitter(struct Moby *moby) {
     float  vertical_motion_vector[4];
-    float *data = (float *)moby->pvars;
+    float *effect_height_setting = (float *)moby->pvars;
     if (random_integer_below(D_L15_0016219C - 1) == 0) {
         char *pos = &moby->pos;
         clear_u64_value(vertical_motion_vector);
         vertical_motion_vector[2] = random_float_between(0.75f, 1.5f) *
                                     *(float *)&vertical_effect_motion_scale_gp * frame_time;
         FUN_L00_0026f080(
-            random_float_between(0.06f, 0.12f) * 210000.0f, *data, pos, vertical_motion_vector);
+            random_float_between(0.06f, 0.12f) * 210000.0f, *effect_height_setting, pos, vertical_motion_vector);
     }
 }
