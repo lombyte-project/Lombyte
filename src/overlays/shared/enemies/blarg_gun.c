@@ -21,7 +21,7 @@ void blarg_gun_update(char *moby) {
         BLARG_GUN_STATE_INITIALIZE = 0,
         BLARG_GUN_STATE_MOVING = 1
     };
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *launch_motion_vars = ((char *)MOBY(moby)->pvars);
     char  rotation_workspace[0x70];
     char *hs;
     int   joint_index;
@@ -34,56 +34,56 @@ void blarg_gun_update(char *moby) {
         moby[0x20] = 2;
         break;
     case BLARG_GUN_STATE_MOVING:
-        joint_index = *(int *)(data + 4);
+        joint_index = *(int *)(launch_motion_vars + 4);
         if (joint_index > 0) {
             moby_point_position(moby, joint_index, rotation_workspace + 0x40);
-            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(data + 0x20));
-            MOBY(moby)->rot.y = fast_add_rotations(MOBY(moby)->rot.y, *(float *)(data + 0x24));
-            MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, *(float *)(data + 0x28));
+            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(launch_motion_vars + 0x20));
+            MOBY(moby)->rot.y = fast_add_rotations(MOBY(moby)->rot.y, *(float *)(launch_motion_vars + 0x24));
+            MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, *(float *)(launch_motion_vars + 0x28));
             euler_rotation_matrix(rotation_workspace, moby + 0x40);
             copy_matrix3x4(moby + 0xC0, rotation_workspace);
-            moby_point_position(moby, *(int *)(data + 4), rotation_workspace + 0x50);
+            moby_point_position(moby, *(int *)(launch_motion_vars + 4), rotation_workspace + 0x50);
             fast_vec_sub(
                 rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
         } else {
-            transform_vector_by_basis(rotation_workspace + 0x40, data + 0x10, moby + 0xC0);
-            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(data + 0x20));
-            MOBY(moby)->rot.y = fast_add_rotations(MOBY(moby)->rot.y, *(float *)(data + 0x24));
-            MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, *(float *)(data + 0x28));
+            transform_vector_by_basis(rotation_workspace + 0x40, launch_motion_vars + 0x10, moby + 0xC0);
+            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(launch_motion_vars + 0x20));
+            MOBY(moby)->rot.y = fast_add_rotations(MOBY(moby)->rot.y, *(float *)(launch_motion_vars + 0x24));
+            MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, *(float *)(launch_motion_vars + 0x28));
             euler_rotation_matrix(rotation_workspace, moby + 0x40);
             if (MOBY(moby)->flags & 0x8000)
                 fast_vec_scale(rotation_workspace + 0x10, rotation_workspace + 0x10, -1.0f);
             copy_matrix3x4(moby + 0xC0, rotation_workspace);
-            transform_vector_by_basis(rotation_workspace + 0x50, data + 0x10, moby + 0xC0);
+            transform_vector_by_basis(rotation_workspace + 0x50, launch_motion_vars + 0x10, moby + 0xC0);
             fast_vec_sub(
                 rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
             fast_vec_add(rotation_workspace + 0x50, rotation_workspace + 0x50, moby + 0x10);
         }
 
-        if (coll_sphere(convert_integer_to_float(*(int *)(data + 0xC)) * 0.0009765625f,
+        if (coll_sphere(convert_integer_to_float(*(int *)(launch_motion_vars + 0xC)) * 0.0009765625f,
                         rotation_workspace + 0x50,
                         0,
                         moby)) {
             hs = D_L05_00174240;
-            if (*(int *)(hs + 0x18) == 0 || *(int *)(hs + 0x18) != *(int *)(data + 8)) {
-                *(int *)data = 0;
-                if (fast_vec_dot(data + 0x30, hs + 0x40) < 0.0f) {
-                    reflect_vector(data + 0x30, data + 0x30, hs + 0x40);
-                    fast_vec_scale(data + 0x30, data + 0x30, 0.5f);
+            if (*(int *)(hs + 0x18) == 0 || *(int *)(hs + 0x18) != *(int *)(launch_motion_vars + 8)) {
+                *(int *)launch_motion_vars = 0;
+                if (fast_vec_dot(launch_motion_vars + 0x30, hs + 0x40) < 0.0f) {
+                    reflect_vector(launch_motion_vars + 0x30, launch_motion_vars + 0x30, hs + 0x40);
+                    fast_vec_scale(launch_motion_vars + 0x30, launch_motion_vars + 0x30, 0.5f);
                 }
             }
         }
-        if (fast_dec_timer((int *)data)) {
+        if (fast_dec_timer((int *)launch_motion_vars)) {
             fade_decrement = 128.0f / (float)scale_game_frames(20);
-            *(int *)data = 0;
+            *(int *)launch_motion_vars = 0;
             if (fade_decrement <= (float)((unsigned char *)moby)[0x23]) {
                 ((unsigned char *)moby)[0x23] = ((unsigned char *)moby)[0x23] - (int)fade_decrement;
             } else {
                 mark_moby_for_removal(moby);
             }
         }
-        *(float *)(data + 0x38) = *(float *)(data + 0x38) - frame_time_sq * 10.8f;
-        fast_vec_add(moby + 0x10, moby + 0x10, data + 0x30);
+        *(float *)(launch_motion_vars + 0x38) = *(float *)(launch_motion_vars + 0x38) - frame_time_sq * 10.8f;
+        fast_vec_add(moby + 0x10, moby + 0x10, launch_motion_vars + 0x30);
         fast_vec_add(moby + 0x10, moby + 0x10, rotation_workspace + 0x60);
         if (MOBY(moby)->pos.z < 5.0f)
             mark_moby_for_removal(moby);
