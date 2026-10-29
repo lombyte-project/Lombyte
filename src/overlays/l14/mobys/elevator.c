@@ -408,9 +408,9 @@ f32 elevator_local_path_points[11][4] __asm__("D_L14_001E03B0") = {
 };
 
 void rebuild_elevator_world_path(u8 *moby) {
-    u8          *data = ((u8 *)MOBY(moby)->pvars);
+    u8          *elevator_path_vars = ((u8 *)MOBY(moby)->pvars);
     u8          *local_path_point_cursor = (u8 *)elevator_local_path_points;
-    u8          *world_path_point_cursor = ((u8 *)l14_paths[*(s32 *)(data + 0x114)]) + 0x10;
+    u8          *world_path_point_cursor = ((u8 *)l14_paths[*(s32 *)(elevator_path_vars + 0x114)]) + 0x10;
     s32          i = 10;
     f32          one = 1.0f;
     struct Hero *x;
@@ -423,7 +423,7 @@ void rebuild_elevator_world_path(u8 *moby) {
         world_path_point_cursor += 0x10;
     } while (i >= 0);
     x = &hero;
-    x->path_constrain_pending = *(u16 *)(data + 0x114);
+    x->path_constrain_pending = *(u16 *)(elevator_path_vars + 0x114);
 }
 
 extern float fast_sin(float);
