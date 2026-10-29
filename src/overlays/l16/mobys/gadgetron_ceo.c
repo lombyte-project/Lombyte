@@ -412,15 +412,15 @@ void activate_gadgetron_ceo_challenge_environment(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E85E0), where it is exact; names translated to the US level program. */
 
 void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *ceo_environment_data = (char *)moby->pvars;
     int  *group_index_entry;
     int   i;
-    group_index_entry = (int *)(data + 0x60);
+    group_index_entry = (int *)(ceo_environment_data + 0x60);
     for (i = 15; i >= 0; i--) {
         jet_group_state(group_index_entry[0], 0, 0, 0);
         group_index_entry++;
     }
-    group_index_entry = (int *)(data + 0xA0);
+    group_index_entry = (int *)(ceo_environment_data + 0xA0);
     for (i = 7; i >= 0; i--) {
         jet_group_state(group_index_entry[0], 1, 1, 0);
         group_index_entry++;
