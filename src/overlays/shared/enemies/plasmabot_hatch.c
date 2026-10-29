@@ -103,7 +103,7 @@ int refresh_plasmabot_hatch_reset_delay(int i) __asm__("FUN_L14_002d9870");
 
 int refresh_plasmabot_hatch_reset_delay(int i) {
     struct Moby *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
-    int         *data = ((int *)moby->pvars);
+    int         *hatch_vars = ((int *)moby->pvars);
     int          hatch_reset_delay_active = 0;
     if (moby->state == 0) {
         moby->state = 5;
@@ -111,6 +111,6 @@ int refresh_plasmabot_hatch_reset_delay(int i) {
     } else {
         hatch_reset_delay_active = moby->state == 6;
     }
-    data[2] = scale_game_frames(0x3C);
+    hatch_vars[2] = scale_game_frames(0x3C);
     return hatch_reset_delay_active;
 }
