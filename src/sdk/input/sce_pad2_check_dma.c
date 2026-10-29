@@ -18,16 +18,16 @@ __attribute__((section(".data"))) extern DmaState D_00132DD8;
 s32 scePad2CheckDma(s32 socket_index) {
     u32 sides[2];
     u32 dma_buffer_base;
-    s32 value;
+    s32 bank_zero_sequence;
 
     dma_buffer_base = (u32)D_0015B540[socket_index].unkC;
-    value = *(s32 *)(dma_buffer_base + 0x7C);
+    bank_zero_sequence = *(s32 *)(dma_buffer_base + 0x7C);
     sides[0] = dma_buffer_base;
     sides[1] = dma_buffer_base + 0x80;
-    if (value == 0) {
+    if (bank_zero_sequence == 0) {
         return 0;
     }
-    if (D_00132DD8.last0 == value && D_00132DD8.last1 == *(s32 *)(sides[1] + 0x7C)) {
+    if (D_00132DD8.last0 == bank_zero_sequence && D_00132DD8.last1 == *(s32 *)(sides[1] + 0x7C)) {
         return 0;
     }
     D_00132DD8.last0 = *(s32 *)(sides[0] + 0x7C);
