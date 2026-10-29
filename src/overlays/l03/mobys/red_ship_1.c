@@ -39,19 +39,19 @@ void add_moby_rotation_based_offsets(struct Moby *moby, float *out) {
     float second_offset[4];
     float z_shifted_x_axis[4];
     float rotation_matrix[16];
-    char *data;
+    char *rotation_offset_pvars;
     *(OvlQuad *)unit_x_axis = 0;
     unit_x_axis[0] = 1.0f;
-    data = (char *)moby->pvars;
-    if (*(float *)(data + 0x140) != 0.0f || *(float *)(data + 0x144) != 0.0f) {
+    rotation_offset_pvars = (char *)moby->pvars;
+    if (*(float *)(rotation_offset_pvars + 0x140) != 0.0f || *(float *)(rotation_offset_pvars + 0x144) != 0.0f) {
         euler_rotation_matrix(rotation_matrix, (float *)&moby->rot);
         transform_vector(transformed_x_axis, unit_x_axis, rotation_matrix);
         *(OvlQuad *)z_shifted_x_axis = *(OvlQuad *)transformed_x_axis;
         z_shifted_x_axis[2] = z_shifted_x_axis[2] - 1.0f;
         fast_vec_cross(first_offset, transformed_x_axis, z_shifted_x_axis);
         fast_vec_cross(second_offset, transformed_x_axis, first_offset);
-        fast_vec_scale(first_offset, first_offset, *(float *)(data + 0x140));
-        fast_vec_scale(second_offset, second_offset, *(float *)(data + 0x144));
+        fast_vec_scale(first_offset, first_offset, *(float *)(rotation_offset_pvars + 0x140));
+        fast_vec_scale(second_offset, second_offset, *(float *)(rotation_offset_pvars + 0x144));
         fast_vec_add(out, out, first_offset);
         fast_vec_add(out, out, second_offset);
     }
