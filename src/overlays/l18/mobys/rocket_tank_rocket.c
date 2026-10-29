@@ -173,7 +173,7 @@ char *create_class_29_moby(struct Moby *owner,
                            int homing_enabled) {
     char *moby = create_moby(0x29);
     if (moby != 0) {
-        char *data;
+        char *class_29_private_vars;
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
@@ -181,11 +181,11 @@ char *create_class_29_moby(struct Moby *owner,
         MOBY(moby)->spawn_frame = owner->spawn_frame;
         MOBY(moby)->scale = MOBY(moby)->scale * 3.0f;
         qcopy(moby + 0x10, spawn_position);
-        data = ((char *)MOBY(moby)->pvars);
-        qcopy(data, initial_movement_step);
-        *(short *)(data + 0x10) = scale_game_frames(0xF0);
-        *(short *)(data + 0x12) = homing_enabled;
-        *(char **)(data + 0x14) = owner;
+        class_29_private_vars = ((char *)MOBY(moby)->pvars);
+        qcopy(class_29_private_vars, initial_movement_step);
+        *(short *)(class_29_private_vars + 0x10) = scale_game_frames(0xF0);
+        *(short *)(class_29_private_vars + 0x12) = homing_enabled;
+        *(char **)(class_29_private_vars + 0x14) = owner;
         MOBY(moby)->rot.z = fast_arc_tan(initial_movement_step[0], initial_movement_step[1]);
         MOBY(moby)->rot.y =
             -fast_arc_tan(vector_length_xy(initial_movement_step), initial_movement_step[2]);
