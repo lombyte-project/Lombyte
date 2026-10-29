@@ -451,9 +451,9 @@ void rebuild_follow_camera_pose(int snap) {
     char  *cams = (char *)&l00_camera;
     char  *camera_moby = *(char **)(cams + 0x180);
     char  *track = cams + 0x190; /* the followed player: position at 0, up vector at 0x30 */
-    char  *data = *(char **)(camera_moby + 0x70);
-    char  *orbit = data + 0x130; /* distance at 0x2C, height at 0x30 */
-    char  *target = data + 0x40; /* point looked at; eye height at 0xB0, moby at 0xC0 */
+    char  *follow_camera_state = *(char **)(camera_moby + 0x70);
+    char  *orbit = follow_camera_state + 0x130; /* distance at 0x2C, height at 0x30 */
+    char  *target = follow_camera_state + 0x40; /* point looked at; eye height at 0xB0, moby at 0xC0 */
     float  up[4], rise[4], look[4], eye[4];
     int    mask;
     float *from, *to;
