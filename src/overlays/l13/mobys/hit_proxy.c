@@ -18,16 +18,16 @@ char *spawn_hit_proxy(char *owner, void *position, float scale) __asm__("FUN_L13
 char *spawn_hit_proxy(char *owner, void *position, float scale) {
     char *moby = create_moby(0x660);
     if (moby != 0) {
-        char *data = ((char *)MOBY(moby)->pvars);
+        char *spawned_moby_vars = ((char *)MOBY(moby)->pvars);
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(char **)(data + 0x60) = owner;
+        *(char **)(spawned_moby_vars + 0x60) = owner;
         MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * scale;
         qcopy(moby + 0x10, position);
         if (owner != 0) {
-            *(int *)(data + 0x64) = *(short *)(owner + 0xA6);
+            *(int *)(spawned_moby_vars + 0x64) = *(short *)(owner + 0xA6);
         }
         update_entity(moby);
     }
