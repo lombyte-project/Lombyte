@@ -26,7 +26,7 @@ typedef struct {
 typedef struct {
     char v[0xD0000];
 } VoData;
-extern int func_0012BA48(struct sceMpeg *);                      /* sceMpegIsEnd */
+extern s32 sceMpegIsEnd(struct sceMpeg *mpeg) __asm__("func_0012BA48");
 extern int sceMpegGetPicture(struct sceMpeg *, void *, int);     /* sceMpegGetPicture_pal */
 extern void sceMpegReset(struct sceMpeg *);                      /* sceMpegReset_pal */
 extern VoData *vo_buf_get_data(VoBuf *) __asm__("FUN_0023d288"); /* voBufGetData */
@@ -45,7 +45,7 @@ int dec_bs0(struct VideoDec *vd) {
     int status = 1;
     int i;
 
-    while (!func_0012BA48(&vd->mpeg)) {
+    while (!sceMpegIsEnd(&vd->mpeg)) {
         if (func_0023CC80((int *)vd) == VD_STATE_ABORT) {
             status = -1;
             DebugPrint(decode_thread_aborted_message);

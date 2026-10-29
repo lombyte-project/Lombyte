@@ -1,7 +1,8 @@
-/* Return whether object->field40->field4 is zero. */
+#include "types.h"
+#include "rnc/sdk/libmpeg.h"
 
-int is_nested_object_field_zero(int *object) __asm__("func_0012BA58");
+s32 sceMpegIsRefBuffEmpty(struct sceMpeg *mpeg) __asm__("func_0012BA58");
 
-int is_nested_object_field_zero(int *object) {
-    return *(int *)((char *)*(int **)((char *)object + 0x40) + 4) == 0;
+s32 sceMpegIsRefBuffEmpty(struct sceMpeg *mpeg) {
+    return mpeg->sys->decoded_pictures == 0;
 }
