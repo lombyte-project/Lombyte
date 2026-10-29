@@ -34,55 +34,55 @@ void update_fog_zone(struct Moby *moby) {
         FOG_ZONE_WAIT_TO_APPLY_PRESET = 1,
         FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS = 2
     };
-    char *data = ((char *)moby->pvars);
+    char *fog_zone_vars = ((char *)moby->pvars);
     float hero_offset_from_volume_origin[4];
     float hero_position_in_volume_space[4];
     char *hero_position = (char *)&hero.motion.pos;
-    if (is_point_inside_clip_volume(hero_position, *(int *)(data + 0x28))) {
+    if (is_point_inside_clip_volume(hero_position, *(int *)(fog_zone_vars + 0x28))) {
         *(float *)(hero_position + 0x270) = 500.0f;
     }
     switch (((unsigned char *)moby)[0x20]) {
     case FOG_ZONE_INITIALIZE:
-        data[0x20] = D_L05_0015F444;
-        data[0x21] = D_L05_0015F445;
-        data[0x22] = D_L05_0015F446;
+        fog_zone_vars[0x20] = D_L05_0015F444;
+        fog_zone_vars[0x21] = D_L05_0015F445;
+        fog_zone_vars[0x22] = D_L05_0015F446;
         {
             float f0 = D_L05_0015F448;
             float f1 = D_L05_0015F44C;
             float f2 = D_L05_0015F450;
             float f3 = D_L05_0015F454;
-            *(float *)(data + 0) = f0;
-            *(float *)(data + 8) = f1;
-            *(float *)(data + 4) = f2;
-            *(float *)(data + 0xC) = f3;
+            *(float *)(fog_zone_vars + 0) = f0;
+            *(float *)(fog_zone_vars + 8) = f1;
+            *(float *)(fog_zone_vars + 4) = f2;
+            *(float *)(fog_zone_vars + 0xC) = f3;
         }
-        data[0x23] = 0x49;
-        data[0x24] = 0x53;
-        data[0x25] = 0xC;
-        *(float *)(data + 0x18) = 33792.0f;
-        *(float *)(data + 0x14) = 255.0f;
-        *(int *)(data + 0x10) = 0;
-        *(int *)(data + 0x1C) = 0;
+        fog_zone_vars[0x23] = 0x49;
+        fog_zone_vars[0x24] = 0x53;
+        fog_zone_vars[0x25] = 0xC;
+        *(float *)(fog_zone_vars + 0x18) = 33792.0f;
+        *(float *)(fog_zone_vars + 0x14) = 255.0f;
+        *(int *)(fog_zone_vars + 0x10) = 0;
+        *(int *)(fog_zone_vars + 0x1C) = 0;
         {
             int c = l05_volume_blended_color_low_byte +
                     (l05_volume_blended_color_lower_middle_byte << 8) +
                     (l05_volume_blended_color_upper_middle_byte << 16) +
                     (l05_volume_blended_color_high_byte << 24);
-            *(int *)(data + 0x34) = 0x40408070;
-            *(int *)(data + 0x30) = c;
+            *(int *)(fog_zone_vars + 0x34) = 0x40408070;
+            *(int *)(fog_zone_vars + 0x30) = c;
         }
         moby->state = 1;
         break;
     case FOG_ZONE_WAIT_TO_APPLY_PRESET:
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x2C))) {
-            D_L05_0015F444 = data[0x23];
-            D_L05_0015F445 = data[0x24];
-            D_L05_0015F446 = data[0x25];
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(fog_zone_vars + 0x2C))) {
+            D_L05_0015F444 = fog_zone_vars[0x23];
+            D_L05_0015F445 = fog_zone_vars[0x24];
+            D_L05_0015F446 = fog_zone_vars[0x25];
             {
-                float f0 = *(float *)(data + 0x10);
-                float f1 = *(float *)(data + 0x18);
-                float f2 = *(float *)(data + 0x14);
-                float f3 = *(float *)(data + 0x1C);
+                float f0 = *(float *)(fog_zone_vars + 0x10);
+                float f1 = *(float *)(fog_zone_vars + 0x18);
+                float f2 = *(float *)(fog_zone_vars + 0x14);
+                float f3 = *(float *)(fog_zone_vars + 0x1C);
                 D_L05_0015F448 = f0;
                 D_L05_0015F44C = f1;
                 D_L05_0015F450 = f2;
@@ -92,15 +92,15 @@ void update_fog_zone(struct Moby *moby) {
         }
         break;
     case FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS:
-        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x28))) {
-            D_L05_0015F444 = data[0x20];
-            D_L05_0015F445 = data[0x21];
-            D_L05_0015F446 = data[0x22];
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(fog_zone_vars + 0x28))) {
+            D_L05_0015F444 = fog_zone_vars[0x20];
+            D_L05_0015F445 = fog_zone_vars[0x21];
+            D_L05_0015F446 = fog_zone_vars[0x22];
             {
-                float f0 = *(float *)(data + 0);
-                float f1 = *(float *)(data + 8);
-                float f2 = *(float *)(data + 4);
-                float f3 = *(float *)(data + 0xC);
+                float f0 = *(float *)(fog_zone_vars + 0);
+                float f1 = *(float *)(fog_zone_vars + 8);
+                float f2 = *(float *)(fog_zone_vars + 4);
+                float f3 = *(float *)(fog_zone_vars + 0xC);
                 D_L05_0015F448 = f0;
                 D_L05_0015F44C = f1;
                 D_L05_0015F450 = f2;
@@ -111,16 +111,16 @@ void update_fog_zone(struct Moby *moby) {
         break;
     }
     hero_position = (char *)&hero.motion.pos;
-    if (is_point_inside_clip_volume(hero_position, *(int *)(data + 0x38))) {
+    if (is_point_inside_clip_volume(hero_position, *(int *)(fog_zone_vars + 0x38))) {
         int c;
         fast_vec_sub(
-            hero_offset_from_volume_origin, hero_position, &l05_cuboids[*(int *)(data + 0x38)].pos);
+            hero_offset_from_volume_origin, hero_position, &l05_cuboids[*(int *)(fog_zone_vars + 0x38)].pos);
         hero_offset_from_volume_origin[3] = 0.0f;
         transform_vector_by_basis(hero_position_in_volume_space,
                                   hero_offset_from_volume_origin,
-                                  l05_cuboids[*(int *)(data + 0x38)].to_local);
-        c = fast_tween_color(*(int *)(data + 0x30),
-                             *(int *)(data + 0x34),
+                                  l05_cuboids[*(int *)(fog_zone_vars + 0x38)].to_local);
+        c = fast_tween_color(*(int *)(fog_zone_vars + 0x30),
+                             *(int *)(fog_zone_vars + 0x34),
                              (hero_position_in_volume_space[0] + 1.0f) * 0.5f);
         l05_volume_blended_color_lower_middle_byte = c >> 8;
         l05_volume_blended_color_upper_middle_byte = c >> 16;
