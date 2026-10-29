@@ -300,8 +300,8 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     int             count, first, blocked, hit;
     process_hoven_anklebiter_damage_and_alerts((struct Moby *)moby);
     manipulator_set_scale(data->collision_data, 2.2f);
-    FUN_L01_00274b78_c((char *)moby, (char *)&work, data->range);
-    target = work.moby;
+    FUN_L01_00274b78_c((char *)moby, (char *)&target_report_or_vector_scratch, data->range);
+    target = target_report_or_vector_scratch.moby;
     if (!target)
         target = *(AnklebiterMoby **)D_0013E633_2E2EF0;
     if (moby->pos[2] < 26.0f) {
@@ -352,9 +352,9 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
             qcopy(data->idle_pos, moby->pos);
             first = scale_game_frames(120);
             data->idle_timer = random_int_between(first, scale_game_frames(700));
-            qcopy(work.v0, moby->pos);
-            work.v0[2] += 0.8f;
-            moby->pos[2] = probe_ground_height(work.v0, 0, 0.5f);
+            qcopy(target_report_or_vector_scratch.v0, moby->pos);
+            target_report_or_vector_scratch.v0[2] += 0.8f;
+            moby->pos[2] = probe_ground_height(target_report_or_vector_scratch.v0, 0, 0.5f);
             if (rand() & 1)
                 moby->flags |= 0x8000;
             data->tuning = &D_L12_001618E8;
@@ -414,8 +414,8 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
             if (*data->group_count >= 6)
                 break;
         }
-        fast_vec_sub(work.v0, target->pos, moby->pos);
-        if (fast_vec_length(work.v0) < data->range &&
+        fast_vec_sub(target_report_or_vector_scratch.v0, target->pos, moby->pos);
+        if (fast_vec_length(target_report_or_vector_scratch.v0) < data->range &&
             absolute_float(moby->pos[2] - target->pos[2]) < 8.0f && random_integer_below(19) == 0) {
             if (moby->group != 255)
                 func_L01_0026F040_2E2EF0(moby->group, 1);
@@ -426,8 +426,8 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
         if (moby->anim != 7)
             blend_moby_animation(moby, 7, 0, 1);
         moby->flags |= 0x1000;
-        *(u128 *)work.v10 = *(u128 *)moby->pos;
-        spawn_spark_scatter(work.v10);
+        *(u128 *)target_report_or_vector_scratch.v10 = *(u128 *)moby->pos;
+        spawn_spark_scatter(target_report_or_vector_scratch.v10);
         break;
     case ANKLEBITER_ACTIVATE_FROM_DORMANCY: {
         int collision = *(int *)(moby->model + 0x10);
@@ -450,8 +450,8 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
     case ANKLEBITER_WAIT_FOR_LEAP_TRIGGER:
         angle = fast_arc_tan(data->home[0] - moby->pos[0], data->home[1] - moby->pos[1]);
         approach_w((char *)moby, &data->turn_velocity, angle, 0.05f, 0.3f, 0.2f);
-        fast_vec_sub(work.v0, target->pos, data->home);
-        if ((fast_vec_length(work.v0) < data->range &&
+        fast_vec_sub(target_report_or_vector_scratch.v0, target->pos, data->home);
+        if ((fast_vec_length(target_report_or_vector_scratch.v0) < data->range &&
              absolute_float(data->home[2] - target->pos[2]) < 8.0f) ||
             moby->proximity == 2) {
             if (moby->group != 255)
@@ -524,12 +524,12 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
                 data->circle_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
                 data->circle_angle = -data->circle_angle;
             }
-            fast_vec_sub(work.v0, target->pos, data->home);
+            fast_vec_sub(target_report_or_vector_scratch.v0, target->pos, data->home);
             if (vector_distance_xy(moby->pos, target->pos) < 1.5f) {
                 moby->state = 5;
                 if (moby->anim != 4)
                     blend_moby_animation(moby, 4, 0, scale_game_frames(5));
-            } else if (fast_vec_length(work.v0) < data->range + 5.5f &&
+            } else if (fast_vec_length(target_report_or_vector_scratch.v0) < data->range + 5.5f &&
                        absolute_float(moby->pos[2] - target->pos[2]) < 4.4f) {
                 if (moby->group != 255)
                     func_L01_0026F040_2E2EF0(moby->group, 1);
@@ -552,12 +552,12 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
             fast_difference_between_rotations(
                 fast_arc_tan(target->pos[0] - moby->pos[0], target->pos[1] - moby->pos[1]),
                 moby->rot[2]) < 0.2617994f) {
-            work.v0[0] = fast_cos(moby->rot[2]) * 0.2f;
-            work.v0[1] = fast_sin(moby->rot[2]) * 0.2f;
-            work.v0[2] = 0.0f;
-            qcopy(work.v10, target->pos);
-            work.v10[2] += 0.75f;
-            spawn_nearby_effect(target, (int)moby, 1, work.v10, work.v0, 1.0f);
+            target_report_or_vector_scratch.v0[0] = fast_cos(moby->rot[2]) * 0.2f;
+            target_report_or_vector_scratch.v0[1] = fast_sin(moby->rot[2]) * 0.2f;
+            target_report_or_vector_scratch.v0[2] = 0.0f;
+            qcopy(target_report_or_vector_scratch.v10, target->pos);
+            target_report_or_vector_scratch.v10[2] += 0.75f;
+            spawn_nearby_effect(target, (int)moby, 1, target_report_or_vector_scratch.v10, target_report_or_vector_scratch.v0, 1.0f);
         }
         if ((moby->anim_flags & 2) && vector_distance_xy(moby->pos, target->pos) >= 2.0f) {
             moby->state = 4;
