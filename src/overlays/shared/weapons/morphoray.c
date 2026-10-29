@@ -1402,7 +1402,7 @@ select_morphoray_target_and_adjust_aim(char *self, float *position, float *headi
     float        target[4] __attribute__((aligned(16)));
     float        offset[4] __attribute__((aligned(16)));
     char        *candidate;
-    char        *data;
+    char        *candidate_aim_metadata;
     struct Moby *moby;
     int          collision;
     int          a0s[1];
@@ -1433,10 +1433,10 @@ select_morphoray_target_and_adjust_aim(char *self, float *position, float *headi
                 *(short *)(candidate + 0xA6) == 0x452)
                 continue;
             qcopy(target, candidate + 0x10);
-            data = (char *)get_moby_target_info(candidate);
-            if (!data)
+            candidate_aim_metadata = (char *)get_moby_target_info(candidate);
+            if (!candidate_aim_metadata)
                 continue;
-            target[2] += *(float *)(data + 0x10);
+            target[2] += *(float *)(candidate_aim_metadata + 0x10);
             if (!candidate || !*(char **)(candidate + 0x24) ||
                 *(short *)(*(char **)(candidate + 0x24) + 0x46) != 5)
                 continue;
@@ -1478,9 +1478,9 @@ select_morphoray_target_and_adjust_aim(char *self, float *position, float *headi
             apparentAngle = fast_arc_sin(fast_vec_dist(offset, target) / (distance + distance));
             apparentAngle += apparentAngle;
             if (morphoray_target_angle_threshold_degrees_gp * 0.017453292f < apparentAngle) {
-                data = (char *)get_moby_target_info(candidate);
-                if (data) {
-                    radius = convert_integer_to_float(*(unsigned char *)(data + 10)) * 0.125f;
+                candidate_aim_metadata = (char *)get_moby_target_info(candidate);
+                if (candidate_aim_metadata) {
+                    radius = convert_integer_to_float(*(unsigned char *)(candidate_aim_metadata + 10)) * 0.125f;
                     reduction = fast_arc_sin(radius / distance);
                     if (radius < distance) {
                         apparentAngle -= reduction;
