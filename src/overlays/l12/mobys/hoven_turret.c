@@ -57,14 +57,14 @@ typedef struct {
 void update_hoven_turret_target_alignment_timer(void *moby) __asm__("FUN_L12_00303370");
 
 void update_hoven_turret_target_alignment_timer(void *moby) {
-    Data_303370 *data = (Data_303370 *)((struct Moby *)moby)->pvars;
+    Data_303370 *turret_alignment_state = (Data_303370 *)((struct Moby *)moby)->pvars;
     int          found = 0;
     int          i;
     Vec4         position;
 
     for (i = 0; i < 10; i++) {
-        if (data->targets[i] != -1) {
-            Moby *target = &D_L12_0015FFD8[data->targets[i]];
+        if (turret_alignment_state->targets[i] != -1) {
+            Moby *target = &D_L12_0015FFD8[turret_alignment_state->targets[i]];
             float yaw_limit;
             float pitch_limit;
             float yaw;
@@ -90,11 +90,11 @@ void update_hoven_turret_target_alignment_timer(void *moby) {
         }
     }
     if (!found) {
-        fast_dec_timer(&data->timer);
+        fast_dec_timer(&turret_alignment_state->timer);
     } else {
-        data->timer += 2;
-        if (scale_game_frames(30) < data->timer)
-            data->timer = scale_game_frames(30);
+        turret_alignment_state->timer += 2;
+        if (scale_game_frames(30) < turret_alignment_state->timer)
+            turret_alignment_state->timer = scale_game_frames(30);
     }
 }
 
