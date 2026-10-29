@@ -2339,13 +2339,13 @@ int FUN_L00_002dc9f0(struct Moby *moby, char *vars) {
                 if (work.v[2].x < 0.0f) {
                     if (0.0f < work.v[2].y) {
                         {
-                            float t = -work.v[2].x;
-                            float r;
-                            if (t < 2.0f)
-                                r = t;
+                            float negative_local_x_displacement = -work.v[2].x;
+                            float clamped_local_y_offset;
+                            if (negative_local_x_displacement < 2.0f)
+                                clamped_local_y_offset = negative_local_x_displacement;
                             else
-                                r = 2.0f;
-                            work.v[3].y = r;
+                                clamped_local_y_offset = 2.0f;
+                            work.v[3].y = clamped_local_y_offset;
                         }
                     } else {
                         work.v[3].y = (-2.0f < work.v[2].x) ? work.v[2].x : -2.0f;
