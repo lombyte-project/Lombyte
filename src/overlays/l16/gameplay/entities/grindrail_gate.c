@@ -546,11 +546,9 @@ void bolt_thief_update(L16CrateMoby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5408), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_001B0930[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float frame_time, D_0015EE70;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int sample_path() __asm__("FUN_L00_0025d808");
 #include "rnc/overlay/l16/gameplay/entities/grindrail_gate_globals.h"
 extern float bolt_thief_path_speed_gp __asm__("D_L16_00161D90") __attribute__((sda));
@@ -561,7 +559,6 @@ extern int FUN_L00_0025d808_path54(char *, float *, float *, float *, int,
                                     float) __asm__("FUN_L00_0025d808");
 extern void func_L00_002592B0_path54(char *, float, float *, float, float,
                                      float) __asm__("FUN_L00_00258278");
-extern char *D_L16_001B0930[];
 
 int advance_bolt_thief_path(struct Moby *moby) {
     float pos[4];
@@ -818,7 +815,6 @@ void initialize_taxi_stop_state(void *moby_v) {
 /* Pick the path for the current segment and set the travel speeds from its length. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E5EC0), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_001B0930[];
 extern float FUN_001f9b48(void *, void *);
 
 void prepare_taxi_departure_path(struct Moby *moby) __asm__("FUN_L16_002e4a58");
@@ -864,10 +860,6 @@ extern float grindrail_gate_local_trigger_bounds[] __asm__("D_L16_001D9750");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int D_L16_0015F5CC;
 extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int tick_countdown_32_u(void *) __asm__("func_001F9740");
 extern int func_0022ED80_6478(int, int, void *) __asm__("FUN_0022da68");
 
@@ -924,7 +916,6 @@ void update_grindrail_gate(struct Moby *gate_moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E66C0), where it is exact; names translated to the US level program. */
 
 extern float FUN_001f9b48_q(void *, void *) __asm__("FUN_001f9b48");
-extern int D_L16_0015F5CC;
 extern int FUN_001fa6e0_q(float, int, int) __asm__("FUN_001fa6e0");
 extern void FUN_001f9d20_q(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001fa2d8_q(void *, void *) __asm__("FUN_001fa2d8");
@@ -999,15 +990,12 @@ typedef struct {
     unsigned char active;
 } Level16VendorTurnMoby;
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
-extern int FUN_001fa6e0_u(float, int, int) __asm__("FUN_001fa6e0");
 float D_L16_00161DF0[4] __attribute__((section(".sdata"))) = {0.0f, -1.0f, 1.0f, 0.0f};
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L16_002e56e0_c(Level16VendorTurnMoby *moby) __asm__("FUN_L16_002e56e0");
 extern void func_L16_002E6B48_6908(void *) __asm__("FUN_L16_002e56e0");
@@ -2716,7 +2704,6 @@ void update_level16_three_mesh_render_state(struct Moby *moby) {
 /* Sets up the draw state, then draws the one entry of the level's table; same source as env_map_a_draw. */
 
 extern char D_L16_00161F80_t[][16] __asm__("D_L16_00161F80") __attribute__((section(".sdata")));
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void FUN_L16_002e8b98_t(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_2e9270(int, long) __asm__("FUN_00233980");
 
@@ -2914,9 +2901,6 @@ void update_level16_two_mesh_render_state(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EB158), where it is exact; names translated to the US level program. */
 
 extern char level16_reflection_mesh_coordinate_scratch[] __asm__("D_L16_001E28D0");
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
-extern void FUN_L00_001fde98(int, int, int, char *, int);
 void compute_level16_reflection_map_coordinates(int n, Vec3f *p1, Vec3f *p2, int unused, float *out) __asm__("FUN_L16_002e8b98");
 void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 

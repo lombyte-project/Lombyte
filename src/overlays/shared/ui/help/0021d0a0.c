@@ -643,7 +643,6 @@ extern struct Moby *FUN_0020c4f8_2348d0(s32) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_2348d0(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode_and_set_moby(s32, s32, struct Moby *) __asm__("FUN_L01_00231348");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_001f9a28_2348d0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_2348d0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");

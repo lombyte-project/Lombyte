@@ -173,7 +173,6 @@ extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int func_L00_001F2BE8_d6f0(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
 int mine_fall(char *moby, char *st) __asm__("FUN_L00_0025c698");

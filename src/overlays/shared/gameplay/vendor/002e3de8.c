@@ -227,7 +227,6 @@ void activate_descriptor(int i) {
     descriptor_record[0x38] = 1;
     descriptor_record[0x39] = 0;
 }
-extern char *D_L10_0015EF50;
 extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
 extern int FUN_00214720_5a78(void *, int) __asm__("FUN_00214720");
 extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
@@ -395,7 +394,6 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
 #include "qcopy.h"
 #include "rnc/gameplay/camera/update_cam.h"
 
-extern char *D_L10_0015EF50;
 extern char *D_L10_001B0930_5f18[] __asm__("D_L10_001B0930");
 extern char *D_L10_0015FFD8_5f18 __asm__("D_L10_0015FFD8");
 extern f32 D_L10_0015F3FC;
@@ -403,12 +401,10 @@ extern s32 D_L10_0015F404;
 extern char D_L10_00167450[];
 extern float D_L10_00167358 NOT_SDA;
 extern float D_0013F5E0_5f18[] __asm__("D_0013F5E0");
-extern VendorView_5f18 D_L10_0016CEC0;
 extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void update_view_context(void) __asm__("FUN_001f2d98");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -556,7 +552,6 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002F79B8), where it is exact; names translated to the US level program. */
 
-extern char *D_L10_0015EF50;
 extern int FUN_L10_002f5a78_u(char *, char *) __asm__("FUN_L10_002f5a78");
 
 int evaluate_descriptor_eligibility(char *descriptor_owner, char *comparison_object) __asm__("FUN_L10_002f65f8");

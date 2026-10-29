@@ -780,7 +780,6 @@ extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 void blarg_gun_update(char *moby) __asm__("FUN_L05_003186f8");

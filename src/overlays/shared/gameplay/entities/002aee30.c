@@ -269,7 +269,6 @@ void update_class_b8_projectile(struct Moby *moby)
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D48B8), where it is exact; names translated to the US level program. */
 
 
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 void *spawn_moby_attachment(char *source_moby, char *spawn_position) __asm__("FUN_L04_002ce080");

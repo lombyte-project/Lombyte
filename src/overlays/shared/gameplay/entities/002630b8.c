@@ -400,7 +400,6 @@ void queue_dialogue_message(int message_id, int message_duration_frames) {
     FUN_001165b8_00263d40(D_L00_00179118, FUN_001fdd10_00263d40(message_id));
     D_L00_0015F640 = message_duration_frames;
 }
-extern u8 D_L00_00179118[];
 extern s32 D_L00_0015F640;
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 get_help_message_text() __asm__("FUN_001fdd10");

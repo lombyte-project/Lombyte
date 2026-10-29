@@ -804,7 +804,6 @@ typedef union {
 
 extern Vec4_2b2928 D_L14_001D8850_lui[] __asm__("D_L14_001D8850") __attribute__((section(".data")));
 extern char D_0013F5E0[] __attribute__((section(".data")));
-extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern float D_L14_001614AC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614BC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614C0 __attribute__((sda)); /* no foreign declaration */
@@ -991,7 +990,6 @@ extern float plasmabot_stagger_motion_z_scale_gp __asm__("D_L14_001614C8") __att
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern char D_0013E533[];
 extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 
 void process_plasmabot_hit_reaction(char *moby) {
@@ -1205,7 +1203,6 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk;
 
-extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
 extern float plasmabot_glow_quad_vertex_offsets[4][4] __asm__("D_L14_001D8890");
 extern float plasmabot_glow_quad_scale_gp __asm__("D_L14_001614F8") __attribute__((sda));
 extern float plasmabot_glow_camera_pull_distance_limit_gp __asm__("D_L14_001614FC") __attribute__((sda));
@@ -1513,10 +1510,8 @@ extern void emit_debris_trail_particles(struct Moby *) __asm__("FUN_L14_002e03b8
 extern s32 D_001413D0_dfd10 __asm__("D_001413D0") __attribute__((section(".data")));
 extern s32 tick_countdown_dfd10(s32 *) __asm__("FUN_001f9740");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void spawn_explosion_dfd10(struct Moby *, void *, void *, f32, f32, s32, s32, s32,
     f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 extern int sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
@@ -1733,7 +1728,6 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED60;
 extern int D_L14_0015F580_c __asm__("D_L14_0015F580");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 int FUN_L00_00257b90(int lo, int hi);
@@ -1837,7 +1831,6 @@ void emit_debris_trail_particles(Moby *moby) {
     }
 }
 /* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern P_eca8 *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern float D_L14_0015F580_y[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
 
@@ -1925,7 +1918,6 @@ typedef struct {
 extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_floating_mine.h"
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void ease_ff640(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern MobyHit *find_moby_hit_ff640(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");

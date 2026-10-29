@@ -312,9 +312,6 @@ void update_metropolis_train_motion(char *moby) {
 }
 
 extern char *D_L03_0015FFD8_292d10 __asm__("D_L03_0015FFD8");
-extern char D_L03_001E2410[];
-extern void debug_print(void *, int) __asm__("FUN_001e93b0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Drags each linked car to follow the train after it moved, then flags the coupling moby; with no cars it reports and deletes the train. */
 void update_metropolis_train_idle_motion(struct Moby *moby) __asm__("FUN_L03_00292d10");
@@ -439,7 +436,6 @@ extern Slot292e98 *D_L03_001600EC_292e98 __asm__("D_L03_001600EC");
 extern int D_L03_0015FDFC;
 extern char train_missing_master_warning_format[] __asm__("D_L03_001E2448");
 extern char train_end_path_missing_stop_node_warning[] __asm__("D_L03_001E2478");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
@@ -449,11 +445,9 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
-extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
 extern void set_moby_state_14(char *) __asm__("FUN_L03_002c6c90");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void debug_printf_292e98(char *, ...) __asm__("FUN_001e93b0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 void update_metropolis_train_motion(char *moby) __asm__("FUN_L03_00292890");
 
@@ -958,7 +952,6 @@ void metropolis_train_carriage_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029DB88), where it is exact; names translated to the US level program. */
 
 extern int D_L03_0015F5CC; /* no foreign declaration */
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 
 void maintain_emitter_sound_voice(struct Moby *moby) __asm__("FUN_L03_0029c9d0");
 
@@ -1151,7 +1144,6 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void spawn_debris_29d2e0(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
 
 #define SPAWN_DEBRIS(id) \
@@ -1595,7 +1587,6 @@ extern float FUN_L04_001f1978(float);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float compute_interpolated_record_value_c5bb8(void *) __asm__("FUN_0020c9e0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_001160d8(void);
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
@@ -1608,7 +1599,6 @@ extern int can_release_linked_robot_dog(struct Moby *moby) __asm__("FUN_L03_002c
 extern int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void spawn_nearby_effect(void *, void *, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
@@ -1622,7 +1612,6 @@ void update_robot_dog_hit_reaction(struct Moby *moby) __asm__("FUN_L03_002c6a20"
 
 extern void update_robot_dog_hit_reaction(struct Moby *moby) __asm__("FUN_L03_002c6a20");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void spawn_debris_c5bb8(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 
@@ -1958,8 +1947,6 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
 /* scans class instances for either predicate */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C8160), where it is exact; names translated to the US level program. */
 
-extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
-extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int FUN_L03_002c5b78_c(unsigned char *) __asm__("FUN_L03_002c5b78");
 extern int is_moby_class_23e_in_state_9(unsigned char *) __asm__("FUN_L03_002c6d58");
 
@@ -1978,8 +1965,6 @@ absent:
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C81E0), where it is exact; names translated to the US level program. */
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L03_0015FFD8_u __asm__("D_L03_0015FFD8");
 float absolute_float(float input) __asm__("func_001F99C0");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -2196,13 +2181,10 @@ typedef struct Moby2C8398 {
 } Moby2C8398;
 
 extern char *D_L03_001B05B0[];
-extern char D_L03_00166EC0[];
 extern CollisionHit D_L03_00173F40;
 extern char sphere_collision_resolved_position[] __asm__("D_L03_00173F70");
 extern char D_L03_00173F80[];
-extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")MACRO_ADDR;
 extern float FUN_001efa68_cf(void *) __asm__("FUN_001f9af0");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_L00_00258278_cf(void *) __asm__("FUN_0020c9e0");
 extern float FUN_L00_0025a120_cf(int) __asm__("FUN_001fa6c0");
@@ -2230,7 +2212,6 @@ extern int FUN_L00_0024f7c8_cf(char *, float) __asm__("FUN_00214cc8");
 extern int FUN_L00_0025df68_cf(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
 extern int FUN_L00_0025e450_cf(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L03_002c6d98_cf(int) __asm__("FUN_001f96f8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern int is_point_inside_clip_volume_cf(int) __asm__("FUN_L03_002c6d98");
 extern int probe_ground_height_cf(int unused, char *m, char *a, void *b, char *c,
@@ -2261,7 +2242,6 @@ extern void FUN_L01_0026d930_cf(char *, char *, int, float, float) __asm__("FUN_
 extern void FUN_L03_00250ae8_cf(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L03_002c95a8_cf(void *) __asm__("FUN_0020c828");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void compute_interpolated_record_value_cf(void *, void *, void *, int, float, float,
                                                  float) __asm__("FUN_L03_002d4288");
 extern void fast_add_rotations_cf(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -3138,10 +3118,8 @@ extern float D_L03_001618E0 __attribute__((sda));
 extern float square_root(float) __asm__("FUN_001f9988");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void blend_moby_animation_c95(void *, int, int, int) __asm__("FUN_00212f90");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 /* Launch speed for a jump of height h at gravity g (per-frame units). */
 #define JUMP_SPEED(g, h) square_root(2.0f * (g) * (frame_time_sq * (h)))

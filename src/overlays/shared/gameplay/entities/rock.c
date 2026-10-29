@@ -626,7 +626,6 @@ typedef struct {
     unsigned char collected[1];
 } TpLevelState;
 
-extern char D_L01_00167240[];
 extern char cutscene_camera_init_position_error_format[] __asm__("D_L01_0020B550");
 extern int D_0015ED84; /* no foreign declaration */
 extern int cutscene_active __asm__("D_L01_0015F404");
@@ -867,7 +866,6 @@ extern char plumber_fallback_dialogue_data[] __asm__("D_L01_00161D48");
 extern char D_L01_00167240_c[] __asm__("D_L01_00167240");
 extern char D_L01_001BAAA0[];
 extern char *camera_points __asm__("D_L01_001600EC");
-extern int cutscene_mode __asm__("D_L01_0015F5C4");
 extern struct {
     char pad[0x80];
     float f80;
@@ -1062,7 +1060,6 @@ typedef struct {
 extern L01LevelState D_L01_001BB6B0;
 extern L01LevelState D_L01_001BAA50;
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
-extern s32 D_0014C190[][64];
 extern u8 D_0014C050[];
 extern u8 D_001413F4 NOT_SDA;
 extern u32 D_001413DC NOT_SDA;
@@ -1279,8 +1276,6 @@ extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
 extern f32 D_L01_00161F2C_gp __asm__("D_L01_00161F2C") __attribute__((sda));
 extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
-extern f32 FUN_001f99c0(f32);
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void FUN_001f99f8(void *);
 extern void fade_to_black(s32) __asm__("FUN_001f4a58");
 extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
@@ -1440,11 +1435,6 @@ void gold_bolt_update(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309758), where it is exact; names translated to the US level program. */
 
-extern f32 D_L01_00161F10_gp __asm__("D_L01_00161F10") __attribute__((sda));
-extern f32 D_L01_00161F14_gp __asm__("D_L01_00161F14") __attribute__((sda));
-extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
-extern f32 D_L01_00161F2C_gp __asm__("D_L01_00161F2C") __attribute__((sda));
-extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
 void update_gold_bolt_glow_rings(char *m) __asm__("FUN_L01_00308550");
 extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
@@ -1482,10 +1472,8 @@ void update_gold_bolt_visuals(struct Moby *moby) {
 /* Draws the moby's four pulsing glow rings between it and the camera, fading with distance. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309928), where it is exact; names translated to the US level program. */
 
-extern char D_L01_00167240[];
 extern float compute_interpolated_record_value_alt(void) __asm__("FUN_0020c9e0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern int gold_bolt_glow_ring_tween_start_color_gp __asm__("D_L01_00161F3C") __attribute__((sda));
 extern int gold_bolt_glow_ring_tween_end_color_gp __asm__("D_L01_00161F40") __attribute__((sda));
 extern int gold_bolt_glow_ring_particle_use_flags_44_gp __asm__("D_L01_00161F48") __attribute__((sda));
@@ -1495,7 +1483,6 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern float func_0020D830_m(void *) __asm__("FUN_0020c9e0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_gold_bolt_glow_rings(char *moby) {
     char *moby_vars = *(char **)(moby + 0x78);
@@ -1555,7 +1542,6 @@ extern f32 FUN_001fa580_c(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void clear_u64_value(f32 *) __asm__("FUN_001f99f8");
 extern void lerp_vector(f32 *, void *, void *, f32) __asm__("FUN_001f9a40");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern u8 *D_L01_001600EC;
 
 void update_gold_bolt_pickup_camera(char *moby) __asm__("FUN_L01_003087e0");
@@ -1610,7 +1596,6 @@ void update_gold_bolt_pickup_camera(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309DC8), where it is exact; names translated to the US level program. */
 
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 
@@ -1656,7 +1641,6 @@ void spawn_gold_bolt_particles(char *moby) {
 
 extern int D_0015ED84; /* no foreign declaration */
 extern int moby_killed[] __asm__("D_L01_001BA950");
-extern s32 D_0014C190[][64];
 extern void set_moby_list_state(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 
 void activate_teleporter_and_record_state(char *moby) __asm__("FUN_L01_00308b28");
@@ -1681,8 +1665,6 @@ void activate_teleporter_and_record_state(char *moby) {
 typedef struct L01Moby L01Moby;
 
 
-extern L01LevelState D_L01_001BB6B0;
-extern int D_0015ED84_c __asm__("D_0015ED84");
 extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 extern unsigned char D_0014C050[];
 extern int alternate_animation_sequence_gp __asm__("D_0015EE20") __attribute__((sda));
@@ -1698,13 +1680,11 @@ extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0
 extern void try_set_teleporter_help_message(char *) __asm__("FUN_L01_00309430");
 extern void draw_moby_radius_ring(char *) __asm__("FUN_L01_003094f0");
 extern void set_moby_list_state(char *, int) __asm__("FUN_L01_0026e0e0");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void advance_accelerated_scalar(float *, float *, float, float, float,
                                        float) __asm__("FUN_00213f38");
 extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
-extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern int add_draw_callback(void (*)(char *), char *) __asm__("FUN_001f4600");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");

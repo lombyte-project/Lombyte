@@ -1858,8 +1858,6 @@ void update_hero_moby(void) {
 extern void set_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233210");
 extern void clear_hero_moby_flag_bit0(void) __asm__("FUN_L00_00233248");
 extern void FUN_L00_00232fe8_00208a10(void) __asm__("FUN_L00_00232fe8");
-extern void copy_memory_aligned(void *, void *, int) __asm__("FUN_001f9838");
-extern void offset_hero_position_against_gravity(void *, void *, float) __asm__("FUN_L00_002336e8");
 extern void set_moby_local_table_entry(void *, int, void *, float,
                                       float) __asm__("FUN_L00_0024eed8");
 
@@ -2362,7 +2360,6 @@ void fast_sin_cf(int seed, int limit) {
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V_209848;
-extern float D_0015ED6C;
 float FUN_002132a8_209848(float, float) __asm__("FUN_002132a8");
 float FUN_00213308_209848(void) __asm__("FUN_00213308");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -2403,7 +2400,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V_209a40;
-extern float D_0015ED6C;
 extern float FUN_002132a8_209a40(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8_209a40(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
@@ -2451,7 +2447,6 @@ void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
 }
 #include "rnc/math/circle_offset.h"
 
-extern float D_0015ED6C;
 extern f32 random_float_between(f32 a, f32 b) __asm__("FUN_002132a8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 FUN_L00_00257b90(s32, s32);
@@ -2500,7 +2495,6 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
         FUN_L00_0026f548(&start, &effect_vector, color, life);
     }
 }
-extern float D_0015ED6C;
 int fast_dec_timer(void *) __asm__("FUN_001f9770");
 float FUN_001fa580_209ec8(float, float) __asm__("FUN_001fa580");
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
@@ -3424,7 +3418,6 @@ f32 FUN_001f9e90_c2(f32, f32) __asm__("FUN_001f9e90");
 void predict_position_with_vertical_drop(void *a, void *b, void *c, int d, float f) __asm__("FUN_L00_00259508");
 extern char D_0013F450_20C568[] __asm__("D_0013F350");
 extern int D_L00_00173E40[];
-extern float D_0015ED6C;
 extern int func_001F9850_20C568(int) __asm__("FUN_001f96f8");
 extern void predict_position_with_vertical_drop(void *a, void *b, void *c, int d, float f) __asm__("FUN_L00_00259508");
 extern float func_001F9F90_20C568(float) __asm__("FUN_001f9dc8");

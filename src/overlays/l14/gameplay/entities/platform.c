@@ -63,8 +63,6 @@ void initialize_racer_path_tracking(struct Moby *racer_moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D77E0), where it is exact; names translated to the US level program. */
 
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
-extern int *D_L14_001B0BB0[];
-extern int D_L14_0015F70C;
 extern int fast_dec_timer(void *) __asm__("func_001F9740");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern char *D_L14_001B0F30_a[] __asm__("D_L14_001B0BB0");
@@ -87,7 +85,6 @@ extern unsigned short *D_L14_001ABF40_6570[] __asm__("D_L14_001ABF40");
 extern char *D_L14_0015FFD8_6570 __asm__("D_L14_0015FFD8");
 extern char *D_L14_0015F70C_6570 __asm__("D_L14_0015F70C");
 extern char *D_L14_001B0BB0_6570[] __asm__("D_L14_001B0BB0");
-extern float D_L14_00161A38_gp __asm__("D_L14_00161A38") __attribute__((sda));
 typedef struct { char p[0x48]; float f48; } M_6570;
 typedef struct {
     char p0[0x80];
@@ -187,7 +184,6 @@ extern char D_L14_001809C0[];
 extern char D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 extern void track_67e8(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern void spring_67e8(void *, void *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float sub_rot_67e8(float, float) __asm__("FUN_001fa5c8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
@@ -204,7 +200,6 @@ extern int set_beam_origin_transform_and_endpoint(struct Moby *, void *, void *)
 extern int collision_line(void *, void *, int, struct Moby *, void *) __asm__("FUN_001efa68");
 extern char *FUN_L00_00274948_c(void *, void *, int, struct Moby *) __asm__("FUN_L00_00274948");
 extern int FUN_L00_0023e738_c(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void update_racer_path_and_weapon(struct Moby *racer_moby) __asm__("FUN_L14_002d67e8");
 
@@ -420,7 +415,6 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D84A8), where it is exact; names translated to the US level program. */
 
-extern int D_L14_0015F70C;
 extern void sample_path(int a, char *pos, char *b, char *c, int d, float f) __asm__("FUN_L00_0025d808");
 
 extern float D_L14_00161A30 __attribute__((sda));
@@ -512,7 +506,6 @@ void draw_racer_glow_quads(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D87A0), where it is exact; names translated to the US level program. */
 
 extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, void *) __asm__("FUN_L00_00274948");
-extern char D_L14_001809C0[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L14_0015F580[] MACRO_ADDR;
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
@@ -618,7 +611,6 @@ extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int allocate_voice_slot(void *, int, int, int, int) __asm__("FUN_0022d7f0");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 #include "rnc/overlay/l14/gameplay/entities/platform_data/update_platform_tilt_basis.h"
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");

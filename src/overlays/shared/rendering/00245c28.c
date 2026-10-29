@@ -479,9 +479,7 @@ void initialize_level_map_archive(void) {
     }
 }
 
-extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
 extern u8 D_0013D4E1 NOT_SDA;
-extern struct DiscFile D_00138438[];
 
 void noop_main_callback(void) __asm__("FUN_001e93e8");
 void update_map_icons(s32, s32) __asm__("FUN_0020bf90");

@@ -436,7 +436,6 @@ void update_hero_ground_material_effects(void) {
 }
 extern CollisionHit coll_hit __asm__("D_L01_001742C0") __attribute__((section(".data")));
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -597,13 +596,8 @@ probe_next:
         } while (wall_normal_offset < limit);
     }
 }
-extern CollisionHit coll_hit __asm__("D_L01_001742C0") __attribute__((section(".data")));
 /* line query from -> to; fills the collision hit record, nonzero on a hit */
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 
 /*
  * Ledge probe, FUN_L00_0020c758 without its hero.vehicle_mode == 1 variant:
@@ -728,7 +722,6 @@ extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void FUN_L00_00232fe8(void);
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void update_hero_collision_dimensions(void) __asm__("FUN_L01_00231ae0");
-extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, int new_moby) __asm__("FUN_L01_00231348");
 
@@ -816,7 +809,6 @@ f32 FUN_001fa580_8(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
 void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -1434,7 +1426,6 @@ extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void FUN_L01_00231348_23c710(s32, s32, struct Moby *) __asm__("FUN_L01_00231348");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_23c710(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9a68_23c710(void *, void *, f32) __asm__("FUN_001f9a68");

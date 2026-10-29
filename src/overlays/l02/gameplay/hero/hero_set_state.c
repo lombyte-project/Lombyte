@@ -1801,7 +1801,6 @@ extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 extern float predict_hero_trajectory_z(float *pos, float *vel, int *steps, float step) __asm__("FUN_L00_00233c30");
 extern float read_pad_float_history(int) __asm__("FUN_L00_00266e80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
@@ -1810,36 +1809,24 @@ int r1_repeat_timer __asm__("D_L02_0015F678") = 0;
 extern int D_L02_0015F6DC_d __asm__("D_L02_0015F6DC");
 extern int D_L02_0016CD80 NOT_SDA;
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
-extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
-extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
 extern int try_start_hero_jump(int, int) __asm__("FUN_L00_00228b78");
 extern int pick_idle_fidget(int *) __asm__("FUN_L00_00229010");
 extern int hero_handle_jump_press(void) __asm__("FUN_L00_00229660");
 extern int check_hero_forward_collision_height(void) __asm__("FUN_L00_00229910");
-extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int check_pad_press_separation(int, int, int, int) __asm__("FUN_L00_00266e00");
-extern int get_hero_idle_animation_index(int a) __asm__("FUN_L01_00226f10");
 extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
 extern int process_hero_hurt_response(int) __asm__("FUN_L02_0021ff70");
 extern int process_hero_item_action_input(void) __asm__("FUN_L02_0022ee00");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-extern void emit_hero_surface_effect_burst(int, int, int) __asm__("FUN_L00_00209ca8");
-extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
-extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
 extern void update_hero_animation_for_movement_speed(void) __asm__("FUN_L00_00228c18");
 extern void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm__("FUN_L00_00228fa8");
 extern void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
-extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern void hero_set_attack_ticks(int id) __asm__("FUN_L00_00232640");
 extern void configure_hero_point_effect_emission(float a, float b, short c, unsigned char d, unsigned char e,
@@ -1852,13 +1839,9 @@ extern void draw_hud_item_selector_panel(void) __asm__("FUN_L00_002382a0");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
-extern void FUN_L00_0025f730(void *a, float x);
 extern void request_hero_voice_if_enabled(int a0, int a1, int a2) __asm__("FUN_L01_00227e48");
-extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_dec_timer(int *counter) __asm__("func_001F9740");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern HeroTableRow2C D_L02_0017C2A8_rec[] __asm__("D_L02_0017C228");
@@ -3614,7 +3597,6 @@ void update_hero_state_transitions(void) {
     }
 }
 #include "sda.h"
-extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 
 void enter_hero_idle_or_stop(void) __asm__("FUN_L02_00237478");
 

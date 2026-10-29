@@ -262,7 +262,6 @@ void armed_transport_update(char *transport_moby) {
 #include "qcopy.h"
 
 extern char *D_L16_0015FFD8_sda __asm__("D_L16_0015FFD8");
-extern char *D_L16_001B0930[];
 extern u8 D_0013E550[];
 
 typedef struct {
@@ -442,7 +441,6 @@ void update_armed_transport_joint_animation(char *moby) {
 /* Updates a moby effect and advances it when its linked object is ready. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E6B70), where it is exact; names translated to the US level program. */
 
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 int check_grindrail_barrier_release_condition(int moby_list_index) __asm__("FUN_L16_002e5cd0");
 
 int check_grindrail_barrier_release_condition(int idx) __asm__("FUN_L16_002e5cd0");

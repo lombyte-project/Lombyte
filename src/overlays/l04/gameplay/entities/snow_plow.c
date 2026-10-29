@@ -477,7 +477,6 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern int D_L04_0015FFD8; /* no foreign declaration */
 extern short floating_platform_ring_rotation_rate_degrees __asm__("D_L04_0016195C") __attribute__((sda));
-extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
@@ -612,8 +611,6 @@ void initialize_woodcut_bot_movement_data(void *moby) {
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 void emit_woodcut_bot_death_effects(void *moby) __asm__("FUN_L04_002d1608");
 
@@ -734,22 +731,14 @@ typedef struct WBQuery {
 
 WBAngles D_L04_001DC468 = {{0.5235988f, 0.7853982f, 0.2617994f, 1.0471976f, 0.0f}};
 WBJoints D_L04_001DC450 = {{0, 2, 1, 3, 4, 5}};
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char D_L04_00166F40[];
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_L04_0015F580[] MACRO_ADDR;
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float FUN_001f9b48(void *, void *);
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float spring_turn(float, float, void *, float, float, float) __asm__("FUN_L00_00258110");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern int *D_L04_001B0630[];
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
@@ -759,12 +748,8 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void *memset(void *, int, unsigned int);
 extern void coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern void fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
-extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern void FUN_L00_001fff28(void *, int, float);
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern void FUN_L00_0025a120(void *);
@@ -774,13 +759,11 @@ extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8(float, void *, int, void *);
-extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void reset_walker_gait_helpers(void *) __asm__("FUN_L00_002a1538");
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void initialize_woodcut_bot_movement_data(void *) __asm__("FUN_L04_002d1418");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
@@ -1421,7 +1404,6 @@ void woodcut_bot_update(WBMoby *m) {
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_L00_00200260(float, float);
-extern int *D_L04_001B0630[];
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
@@ -1614,8 +1596,6 @@ struct RiserVars {
 extern s32 level_completed_save_id_bits[] __asm__("D_L04_001BA650");
 extern LevelCollected l04_save_id_collection_state __asm__("D_L04_001BB3B0");
 extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
-extern int fast_dec_timer(s32 *) __asm__("FUN_001f9740");
-extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 
 void upper_door_update(struct Moby *m) __asm__("FUN_L04_002e17d8");
 void upper_door_update(struct Moby *moby) {
@@ -1681,7 +1661,6 @@ extern void initialize_moby_particle_effect(struct Moby *) __asm__("FUN_L00_002d
 extern void remove_moby_2e1a10(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L04_002e1d00_m(struct Moby *) __asm__("FUN_L04_002e1d00");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");

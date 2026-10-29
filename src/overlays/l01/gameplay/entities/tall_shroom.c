@@ -243,7 +243,6 @@ extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 FUN_001f99c0(f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32,
@@ -359,7 +358,6 @@ typedef struct {
 extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void update_entity(DebrisMoby *) __asm__("FUN_L00_00250df8");
 extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 DebrisMoby *FUN_L01_0030be70(DebrisMoby *parent_moby, void *debris_vector_source, f32 scale) {
     DebrisMoby *spawned_moby;
@@ -421,8 +419,6 @@ extern CutsceneFx fx_cutscene __asm__("D_L01_0016CCE0");
 extern u128 fx_prev_pos __asm__("D_L01_00162070") MACRO_ADDR;
 extern void cutscene_set_camera_target(struct Moby *) __asm__("FUN_L00_002637f8");
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -433,7 +429,6 @@ extern FxSpark *spawn_spark(void *, f32, f32, f32, s32, void *, f32, s32) __asm_
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32,
                        s32) __asm__("FUN_L00_0025e450");
 extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b70");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 
@@ -589,7 +584,6 @@ typedef struct {
     u8 rot[0x10];
 } TriggerMoby;
 
-extern s32 D_L01_0015F580;
 void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");

@@ -37,7 +37,6 @@ unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, c
 }
 extern int rand(void);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") NOT_SDA;
 extern float debris_far_point[] __asm__("D_L07_00166E40");

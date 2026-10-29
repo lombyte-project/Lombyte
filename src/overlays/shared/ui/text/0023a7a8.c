@@ -266,9 +266,6 @@ void update_weapon_hud_state(void) {
     }
 }
 void reset_hud_animation_channels() __asm__("FUN_L00_00235878");
-extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
-extern int D_L00_0015F970;
-extern int D_L00_0015F96C;
 /* Resets via FUN_L00_00235878, then sets the three state words to 1, -1 and 0. */
 void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 

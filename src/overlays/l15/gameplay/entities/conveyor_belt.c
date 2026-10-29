@@ -244,8 +244,6 @@ extern s32 D_L15_00178500[] __asm__("D_L15_00178500");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern Res *trooper_find_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L00_002603d0(int);
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void func_L00_001FF610_2E9358(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern int probe_ground_height_cf(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
@@ -452,7 +450,6 @@ typedef struct {
 T4 D_L15_00162108 = {{{{1.0f, -0.62831855f}}, {{1.0f, 0.62831855f}}}};
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern float FUN_L00_00200260(float, float);
 extern float fast_add_rotations(float, float);
@@ -556,7 +553,6 @@ typedef struct {
 } RingVars;
 
 Quad4 D_L15_00162170 = {{1.0f, -0.62831855f, 1.0f, 0.62831855f}};
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float ripple_mesh_uv_scroll_rate_gp __asm__("D_L15_0016216C") __attribute__((sda));
 float D_L15_001DDBA0[204] = {3.485078f, 4.343359f, 0.0f, 5.279609f, 3.600078f, 0.0f, 2.980781f, 2.623281f, 0.0f, 4.615703f, 1.997344f, 0.0f, 2.298828f, 0.976816f, 0.0f, 3.933828f, 0.351152f, 0.0f, 1.616797f, -0.669707f, 0.0f, 3.237344f, -1.330234f, 0.0f, 0.850156f, -2.520547f, 0.0f, 2.454375f, -3.220508f, 0.0f, -0.025f, -4.63334f, 0.0f, 1.594062f, -5.297578f, 0.0f, -0.025f, -4.63334f, 0.0f, 0.733984f, -7.373926f, -5e-06f, -0.025f, -4.63334f, 0.0f, -1.060508f, -6.630625f, 0.0f, -1.641797f, -3.963652f, 0.0f, -2.49957f, -6.034551f, 0.0f, -3.258633f, -3.293945f, 0.0f, -3.938672f, -5.438457f, 0.0f, -3.258633f, -3.293945f, 0.0f, -5.733164f, -4.695137f, 0.0f, -3.258633f, -3.293945f, 0.0f, -4.873164f, -2.618789f, 0.0f, -2.383437f, -1.181152f, 0.0f, -4.012774f, -0.541719f, 0.0f, -1.616797f, 0.669688f, 0.0f, -3.229805f, 1.348555f, 0.0f, -0.934805f, 2.316172f, 0.0f, -2.53332f, 3.029922f, 0.0f, -0.252813f, 3.962656f, 0.0f, -1.851445f, 4.676094f, 0.0f, -0.252813f, 3.962656f, 0.0f, -1.187617f, 6.278828f, 0.0f, -0.252813f, 3.962656f, 0.0f, 0.606953f, 5.535547f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.046016f, 4.939453f, 0.0f, 1.363984f, 3.292969f, 0.0f, 3.485078f, 4.343359f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.980781f, 2.623281f, 0.0f, 1.363984f, 3.292969f, 0.0f, 2.298828f, 0.976816f, 0.0f, 1.363984f, 3.292969f, 0.0f, 0.681953f, 1.646484f, 0.0f, -0.252813f, 3.962656f, 0.0f, 0.681953f, 1.646484f, 0.0f, -0.934805f, 2.316172f, 0.0f, 0.681953f, 1.646484f, 0.0f, -1.616797f, 0.669688f, 0.0f, 0.681953f, 1.646484f, 0.0f, 0.0f, 0.0f, 0.0f, 2.298828f, 0.976816f, 0.0f, 0.0f, 0.0f, 0.0f, 1.616797f, -0.669707f, 0.0f, -0.766641f, -1.85084f, 0.0f, 0.850156f, -2.520547f, 0.0f, -0.766641f, -1.85084f, 0.0f, -0.025f, -4.63334f, 0.0f, -0.766641f, -1.85084f, 0.0f, -1.641797f, -3.963652f, 0.0f, -0.766641f, -1.85084f, 0.0f, -3.258633f, -3.293945f, 0.0f, -0.766641f, -1.85084f, 0.0f, -2.383437f, -1.181152f, 0.0f, 0.0f, 0.0f, 0.0f, -1.616797f, 0.669688f, 0.0f};
 float D_L15_001DDED0[68][2] = {
@@ -631,12 +627,6 @@ float D_L15_001DDED0[68][2] = {
 };
 float D_L15_001DE200[204] = {0};
 float D_L15_001DE530[68][2] = {0};
-extern float multiply_global_factor_ed64(float) __asm__("FUN_001f96b0");
-extern float square_root(float) __asm__("FUN_001f9988");
-extern float FUN_L00_00200260(float, float);
-extern float fast_add_rotations(float, float);
-extern float fast_normalize_angle(float) __asm__("func_001FA610");
-extern int D_L15_0015F5CC;
 int D_L15_00162120[2] = {0x44, 0};
 int D_L15_00162140[2] = {(int)D_L15_001DE200, 0};
 int D_L15_00162148[2] = {(int)D_L15_001DE530, 0};
@@ -648,8 +638,6 @@ int D_L15_0016215C = 64;
 extern float ripple_mesh_radial_wavelength_gp __asm__("D_L15_00162160") __attribute__((sda));
 #include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_moby_radial_ripple_mesh.h"
 extern float ripple_mesh_z_amplitude_gp __asm__("D_L15_00162168") __attribute__((sda));
-extern void FUN_L00_001fde98(int, int, int, void *, int);
-extern void get_moby_color(void *, void *, void *, void *) __asm__("FUN_L00_00250320");
 void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void draw_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002eb108");
@@ -717,13 +705,11 @@ void draw_moby_radial_ripple_mesh(struct Moby *moby) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 /* Cutscene trigger moby: waits for the hero in its clip volume, then steps through the scene stages and saves at the end. */
-extern int D_L15_0015F5C4;
 extern int D_L15_00161AC0 __asm__("D_L15_00161AC0");
 extern unsigned char *D_L15_0015FFD8_v __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern unsigned char D_0014C050_v[] __asm__("D_0014C050");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void FUN_L00_002502a0_v(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00232fe8_v(void) __asm__("FUN_L00_00232fe8");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
@@ -952,8 +938,6 @@ void set_moby_list_visibility(int moby_list_index, int show) {
 }
 /* Counts the listed mobys that are missing or dying. */
 
-extern int D_L15_001ABE40[];
-extern int D_L15_0015FFD8;
 
 int count_missing_or_dying_mobys_in_list(int moby_list_index) __asm__("FUN_L15_002ebfb0");
 
@@ -980,7 +964,6 @@ extern unsigned int D_L15_001BAAD0[];
 extern unsigned int l15_banked_moby_save_bits[] __asm__("D_L15_0014C190");
 extern int D_L15_0015ED98;
 extern volatile int D_L15_00184AAC __attribute__((section(".data")));
-extern int D_L15_0015FFD8;
 extern float D_0013F3D0[];
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1883,7 +1866,6 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
     }
 }
 extern float D_0015ED6C_2edfc0 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") __attribute__((section(".sdata")));
 extern int FUN_001f44b8_2edfc0(int) __asm__("FUN_001f44b8");
 extern void FUN_001f76a0_2edfc0(void) __asm__("FUN_001f76a0");
 extern float FUN_001f96b0_2edfc0(float) __asm__("FUN_001f96b0");
@@ -2163,7 +2145,6 @@ int can_spawn_codebot_slot_effect(int slot) {
 /* tests several indexed conditions of a moby's entry in the table */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F99F8), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
 extern int *D_L15_001B0AB0[];
 extern int point_in_path_xy(float *p, float *v, int n) __asm__("FUN_L00_00259740");
 extern int test_point_in_transformed_unit_cylinder(void *p, int i) __asm__("FUN_L00_0025fa38");
@@ -2207,7 +2188,6 @@ extern char *D_L15_001600EC;
 extern char angular_limit_projection_axis_record[] __asm__("D_L15_00167410");
 extern char D_L15_00167280[];
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001f99c0(float);
 
 int check_moby_target_angular_limits(char *moby, float projected_angle_limit_degrees, float b) __asm__("FUN_L15_002f8698");
@@ -2265,7 +2245,6 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
     }
     return 0;
 }
-extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 typedef struct { char pad[0x100]; float x; float y; } G_88e8;
 extern G_88e8 D_0013C940_s __asm__("D_0013C940") __attribute__((section(".data")));
 extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
@@ -2338,7 +2317,6 @@ void update_moby_follow_camera(char *moby) {
 }
 /* Hands a vendor moby to the shop handler when the menu is idle and its slot is live. */
 
-extern char *D_L15_00167400_lui __asm__("D_L15_00167400") __attribute__((section(".data")));
 extern unsigned char D_001413F4 __attribute__((section(".data")));
 void update_moby_follow_camera(char *m) __asm__("FUN_L15_002f88e8");
 

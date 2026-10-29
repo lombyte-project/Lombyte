@@ -231,7 +231,6 @@ void update_linked_pair_effect(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0990), where it is exact; names translated to the US level program. */
 
-extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
 extern int FUN_L16_002cf678_u(char *) __asm__("FUN_L16_002cf678");
 
 void initialize_linked_pair_group(struct Moby *moby) __asm__("FUN_L16_002cf5c8");
@@ -389,7 +388,6 @@ void challenge_set_layout_param(float new_value) {
 }
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E2248), where it is exact; names translated to the US level program. */
 
-extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 void request_target_reposition(struct Moby *moby) __asm__("FUN_L16_002e0de0");
 
@@ -441,7 +439,6 @@ extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float spring_angle(void *, void *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_L16_0015F580_spark __asm__("D_L16_0015F580"); /* no foreign declaration */
 extern int collision_line() __asm__("FUN_001efa68");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -593,7 +590,6 @@ typedef struct {
 } Obj;
 
 extern char *D_L16_001B0930[];
-extern float D_0015ED6C, frame_time;
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float FUN_001f9b80_c2(void *, void *) __asm__("FUN_001f9b80");
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
@@ -685,8 +681,6 @@ void update_path_following_rocket(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C57E8), where it is exact; names translated to the US level program. */
 
 extern float D_0015ED6C, D_0015EE70_q __asm__("D_0015EE70");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_001f0d60_q(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void *spawn_feather_moby(void *, void *, void *) __asm__("FUN_L00_002cbf68");
 extern void FUN_0022da68_q(int, int, void *) __asm__("FUN_0022da68");
@@ -915,8 +909,6 @@ void emit_moby_sprite_effect_particles(struct Moby *moby) {
 /* Updates a linked moby's movement and follows it while its state is active. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CAC40), where it is exact; names translated to the US level program. */
 
-extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern float D_0015ED6C, frame_time;
 extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70_c __asm__("D_0015ED70");
 extern void FUN_L16_002c9a50_u(unsigned char *) __asm__("FUN_L16_002c9a50");
 extern void update_conveyor_group_motion_transforms(int, void *) __asm__("FUN_L16_002c9c38");
@@ -1201,7 +1193,6 @@ extern char *D_L16_001B0930[];
 extern char *func_0020D348_m(int);
 extern char *D_L16_00174258 __attribute__((section(".data")));
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C, frame_time;
 extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -1222,7 +1213,6 @@ extern int move_test_dummy_toward_position_and_heading(char *, void *, float) __
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 void *find_nearest_test_dummy_door(int index, void *position) __asm__("FUN_L16_002d5db0");
 
@@ -1693,9 +1683,6 @@ void update_test_dummy_damage_and_respawn(void *moby) {
 
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
-extern float D_0015ED6C, frame_time;
-extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 
 int move_test_dummy_toward_position_and_heading(char *moby, void *target_position, float angle) {
     float target_position_copy[4] __attribute__((aligned(16)));
@@ -1770,11 +1757,9 @@ float D_L16_001D3130[4][4] = {
     {0.0f, 1.0f, 1.0f, 1.0f},
     {0.0f, 1.0f, -1.0f, 1.0f},
 };
-extern char D_L16_001671C0[];
 extern int test_dummy_glow_pulse_color_start_gp __asm__("D_L16_001619E0") __attribute__((sda));
 extern int test_dummy_glow_pulse_color_end_gp __asm__("D_L16_001619E4") __attribute__((sda));
 extern long get_effect_texture_alt(int) __asm__("FUN_001f44b8");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void draw_geometry_quad_alt(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_test_dummy_group_glows(char *moby) {
@@ -1833,18 +1818,14 @@ void draw_test_dummy_group_glows(char *moby) {
 
 extern char *D_L16_0015FFD8;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern float D_0015ED6C, frame_time;
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *) __asm__("func_001F9740");
 extern int truncate_float_to_s32(float);
 extern unsigned char visited52_lui[] __asm__("D_0014C050") __attribute__((section(".data")));
 extern void set_class_056b_collision_enabled(void *, int) __asm__("FUN_L16_002e3770");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
-extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 void wall_button_update(struct Moby *m) __asm__("FUN_L16_002cf198");
 void wall_button_update(struct Moby *moby) {
@@ -1945,7 +1926,6 @@ int find_linked_pair_partner_by_height(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0B00), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_0015FFD8;
 extern int *D_L16_001ABCC0[];
 
 int is_linked_pair_effect_enabled(void *mv) {
@@ -2748,10 +2728,6 @@ void *set_class_0287_group_activation_and_find_nearest(int index, int secondary)
 /* Activate the linked mobys, clearing their timers, and return the one nearest the challenge target. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D6F90), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_0015FFD8;
-extern char D_L16_001671C0[];
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern int *D_L16_001ABCC0[];
 
 void *activate_class_0287_group_and_find_nearest(int index, int secondary) __asm__("FUN_L16_002d5bc8");
 
@@ -2786,9 +2762,6 @@ void *activate_class_0287_group_and_find_nearest(int index, int secondary) {
 /* The linked moby of class 0x28A nearest a position, within 37 units. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7178), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_0015FFD8;
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern int *D_L16_001ABCC0[];
 
 void *find_nearest_test_dummy_door(int index, void *position) {
     short *group_entry = (short *)D_L16_001ABCC0[index];

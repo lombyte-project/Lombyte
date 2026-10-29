@@ -246,7 +246,6 @@ extern float D_L05_0015F44C;
 extern float D_L05_0015F450;
 extern float D_L05_0015F454;
 extern int D_L05_001600EC; /* no foreign declaration */
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern unsigned char D_L05_0015F444;
 extern unsigned char D_L05_0015F445;
@@ -448,7 +447,6 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void transform_vector(void *, void *, float) __asm__("FUN_001f9c48");
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float square_root(float) __asm__("FUN_001f9988");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
@@ -470,7 +468,6 @@ extern float l05_drain_cover_nearby_effect_distance_limit __asm__("D_L05_00161E0
 extern float D_L05_00161DD4 __asm__("D_L05_00161DD4") __attribute__((sda));
 extern float D_0013F3D0[];
 extern int D_L05_0015F5C4;
-extern int frame_number __asm__("D_L05_0015F5CC");
 
 typedef struct {
     char pad00[0x10];
@@ -681,8 +678,6 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short D_L05_00161DB8_gp __asm__("D_L05_00161DB8") __attribute__((sda));
@@ -983,7 +978,6 @@ struct FloorRow {
 };
 
 extern float square_root(float) __asm__("FUN_001f9988");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void create_particle_with_velocity_and_randomized_parameters(float, float, float, void *, void *, int, int) __asm__("FUN_L05_0029be70");
@@ -1158,7 +1152,6 @@ extern f32 approach_with_speed(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 FUN_001f99c0(f32);
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -1352,7 +1345,6 @@ void elevator_with_button_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003173A8), where it is exact; names translated to the US level program. */
 
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 extern short lift_camera_height_offset_gp __asm__("D_L05_00161EC0") __attribute__((sda));
 extern short lift_camera_pitch_degrees_gp __asm__("D_L05_00161EC4") __attribute__((sda));
@@ -1370,7 +1362,6 @@ void FUN_L05_00315ee0(char *lift_moby, char *camera_position, char *camera_rotat
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
 
 extern char *D_L05_001B0930[];
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void FUN_L05_00315f70(char *moby) {
     int i = 0;
@@ -1715,12 +1706,10 @@ extern float FUN_001f9e90_cf_c(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf_c(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations_c(float, float) __asm__("fast_add_rotations");
 extern float fast_subtract_rotations_c(float, float) __asm__("fast_subtract_rotations");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy_c(void *) __asm__("vector_length_xy");
 extern float vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 extern int FUN_L00_00266448_c(void *, void *) __asm__("FUN_L00_00266448");
 extern int FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames_c(int) __asm__("scale_game_frames");
 extern int tick_countdown_32_c(int *) __asm__("FUN_001f9740");
 extern unsigned char D_0015EDB0_b_c __asm__("D_0015EDB0");
@@ -1923,7 +1912,6 @@ typedef struct {
     unsigned char mission;
 } L16WatchFlags;
 
-extern char D_L05_001671C0[];
 extern unsigned char D_0013D4FF NOT_SDA;
 extern f32 FUN_001f9b48(void *, void *);
 extern void FUN_L00_0025a120(void *);
@@ -1935,7 +1923,6 @@ extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[];
-extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");
 extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
@@ -1946,8 +1933,6 @@ extern float vector_length_xy(void *);
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *) __asm__("func_001F9740");
@@ -1960,7 +1945,6 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(char *) __asm__("FUN_L02_002e0cd8");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 
 void shady_salesman_update(WM *m) __asm__("FUN_L05_003180a0");
@@ -2082,7 +2066,6 @@ extern int D_L05_001612D8_macro[] __asm__("D_L05_001612D8") MACRO_ADDR;
 extern float D_L05_001612E0_gp[4] __asm__("D_L05_001612E0") MACRO_ADDR __attribute__((sda));
 extern float D_L05_001612E8 __asm__("D_L05_001612E8");
 extern int D_L05_0015F5C4_macro[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 /* Two-state marker: arms the moby, then once its target is found copies the
  * target position and sets the bob height from the frame counter. */
@@ -2122,7 +2105,6 @@ void update_hero_clip_volume_outputs(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031A0A8), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int D_L05_0015F5C4;
 
 extern short television_scale_multiplier_gp __asm__("D_L05_00161F08") __attribute__((sda));
 void television_update(struct Moby *moby) __asm__("FUN_L05_00318b98");
@@ -2172,13 +2154,11 @@ extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void FUN_001f9d20(void *, void *, void *);
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void FUN_0022da68_c(int, int, void *) __asm__("FUN_0022da68");
-extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
@@ -2186,7 +2166,6 @@ extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_003
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
 void initialize_taxi_stop_state(void *moby_v) __asm__("FUN_L05_00319208");
 extern void select_taxi_route(char *) __asm__("FUN_L05_003193a8");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__("FUN_00214e58");

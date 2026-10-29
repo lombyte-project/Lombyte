@@ -425,7 +425,6 @@ extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void lift_remove(void *) __asm__("FUN_0020c828");
 extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void lift_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -569,10 +568,8 @@ extern f32 D_L14_00162240;
 char D_L14_001FC980[] = "*Error: Moby 610 (wind-control) with no cuboid index (wind pushing hero area). UID: %d - RAR\n";
 char D_L14_001FC9E0[] = "*Error: Moby 610 (wind-control) with no fxArea cuboid (fx drawing area). UID: %d - RAR\n";
 char D_L14_001FCA38[] = "*Error: Moby 610 (wind-control) with no fxAct cuboid (fx activation area). UID: %d - RAR\n";
-extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void wind_remove(struct Moby *) __asm__("FUN_0020c828");
 extern int wind_inside(void *, int) __asm__("FUN_00214720");
-extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
 extern void wind_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void update_wind_sparks(struct Moby *wind_control_moby) __asm__("FUN_L14_002eb568");
 
@@ -733,7 +730,6 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
     spark_vars->n380[i] = lifetime_frames;
     spark_vars->n3E0[i] = 0;
 }
-extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
 extern int spark_float_to_integer(float) __asm__("FUN_001fa6d0");
 extern int spark_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void spark_add_vector(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -825,7 +821,6 @@ extern char D_L14_001674C0_m[] __asm__("D_L14_001674C0");
 extern unsigned long tex_m(s32) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void sub_m(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 extern int wind_spark_base_color_gp __asm__("D_L14_00161C0C") __attribute__((sda));
@@ -914,12 +909,9 @@ extern char looping_path_moby_empty_path_error_format[] __asm__("D_L14_001FCAD8"
 extern f32 mine_path_step_rate_gp __asm__("D_L14_00161C44") __attribute__((sda));
 extern f32 mine_glow_pulse_phase_step_gp __asm__("D_L14_00161C48") __attribute__((sda));
 extern f32 D_0015ED6C_mine __asm__("D_0015ED6C");
-extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void mine_remove(void *) __asm__("FUN_0020c828");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int mine_rand(int) __asm__("FUN_00213260");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float FUN_L00_00257c48(float, float);
 extern int FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
@@ -928,7 +920,6 @@ extern s32 trooper_take_damage(struct Moby *, void *, f32 *, s32, s32 *, s32, s3
 extern int mine_sound(int, int, void *) __asm__("FUN_0022da68");
 extern void mine_explode(void *, void *, void *, float, float, int, int, int, float, float, float, float,
                          int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int mine_ftoi(float) __asm__("FUN_001fa6d0");
 
 /* Mine update: drifts along its looped path while spinning and pulsing; blows up on a hit. */
@@ -1649,13 +1640,10 @@ void draw_branched_lightning_arc(void) {
 
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float FUN_L00_00257c48(float, float);
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern unsigned char * FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern short lightning_arc_particle_speed_range_start_gp __asm__("D_L14_00161CA0") __attribute__((sda));
 extern short lightning_arc_particle_speed_range_end_gp __asm__("D_L14_00161CA4") __attribute__((sda));
@@ -3149,12 +3137,10 @@ struct L14TramLevel {
     u8 collected[1];
 };
 extern struct L14TramLevel D_L14_001BB930_t __asm__("D_L14_001BB930");
-extern char D_0013E550[];
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int tram_inside(void *, int) __asm__("FUN_00214720");
 extern int tram_sound(int, int, void *) __asm__("FUN_0022da68");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int D_L14_001BABD0[];
 extern unsigned char D_0013D408_t[] __asm__("D_0013D408");
 extern char enemy_fighter_921_missing_flight_path_error_format[] __asm__("D_L14_001FCE98");
 extern char enemy_fighter_921_empty_flight_path_error_format[] __asm__("D_L14_001FCED0");
@@ -3164,12 +3150,8 @@ extern void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");
 extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 extern void *tram_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern void FUN_L00_00263d40(int, int);
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
-extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void tram_remove(void *) __asm__("FUN_0020c828");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int tram_tick(void *) __asm__("FUN_001f9740");
 extern void tram_add(void *, void *, void *) __asm__("FUN_001f9a10");

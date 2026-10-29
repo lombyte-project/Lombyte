@@ -203,7 +203,6 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EABD0), where it is exact; names translated to the US level program. */
 
 extern char D_L00_00166E10[];
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
@@ -374,7 +373,6 @@ void follow_camera_update(u8 *camera_moby) {
 extern unsigned char D_0015EDB3_002e9cc0 __asm__("D_0015EDB3");
 extern void FUN_001f9bf8_002e9cc0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_002e9cc0(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void update_hero_aligned_camera_position(char *camera_object) __asm__("FUN_L00_002e9cc0");
 
@@ -1057,7 +1055,6 @@ void update_camera_pose_with_optional_collision(char *camera_object) {
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
-extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 
 void initialize_orbit_camera_pose(void *camera) __asm__("FUN_L00_002eb278");
 

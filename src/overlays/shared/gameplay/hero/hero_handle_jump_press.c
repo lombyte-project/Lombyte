@@ -160,7 +160,6 @@ extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
 extern int check_pad_press_separation(int, void *, int, int) __asm__("FUN_L00_00266e00");
 extern int pad_pressed_within(int, int, void *) __asm__("FUN_L00_00266d60");
 extern int FUN_L00_0020d498_229660(int) __asm__("FUN_L00_0020d498");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 /* A second C name for hero_set_state: retail keeps the two calls apart. */
 extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 
@@ -256,7 +255,6 @@ typedef struct {
 extern E00229a98 item_defs[] __asm__("D_L00_00179AC0");
 s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");

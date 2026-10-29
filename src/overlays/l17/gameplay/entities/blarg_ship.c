@@ -530,15 +530,12 @@ done:
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F5C18), where it is exact; names translated to the US level program. */
 
 extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
-extern char D_L17_001676C0[];
 extern char blarg_ship_positive_y_launch_offset[] __asm__("D_L17_001DE110");
 extern char blarg_ship_negative_y_launch_offset[] __asm__("D_L17_001DE120");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float FUN_001f9b48(void *, void *);
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float fast_cos(float) __asm__("func_001F9DC8");
@@ -772,7 +769,6 @@ void blarg_ship_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6AF8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern char D_L17_001676C0[];
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
@@ -830,7 +826,6 @@ char *try_activate_blarg_ship_from_list(int list) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6DA0), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int FUN_0022da68(int, int, int);
 extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
@@ -925,7 +920,6 @@ typedef struct {
     float w;
 } V4;
 
-extern char D_L17_001676C0[];
 
 void compute_reflection_sphere_map_uvs(int vertex_count, V3 *input_directions, V3 *vertex_positions, int unused, float *out) __asm__("FUN_L17_002f54d8");
 
@@ -963,7 +957,6 @@ void compute_reflection_sphere_map_uvs(int vertex_count, V3 *input_directions, V
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
 
 extern char reflection_strip_uv_buffer[] __asm__("D_L17_001DE8A0");
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 void compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__("FUN_L17_002f54d8");

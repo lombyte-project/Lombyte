@@ -210,13 +210,10 @@ extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data_d0710(int, int) __asm__("FUN_0020b178");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
-extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C3 NOT_SDA;
 extern int D_L11_0015F5C4;
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -360,9 +357,7 @@ void resort_owner_update(struct Moby *moby) {
     update_resort_owner_state_transitions(moby);
     update_resort_owner_look_tracking(moby);
 }
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int FUN_00214cc8(void *, float);
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float FUN_L00_0025abf0(void *, void *, float, int, float);
 extern void transform_attachment_pose(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern void FUN_00212f90(void *, int, int, int);
@@ -509,7 +504,6 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *out) __asm__("FU
 extern int try_find_resort_owner_jump_target(struct Moby *m, float *out) __asm__("FUN_L11_002d25e8");
 extern void FUN_L11_002d2088_c(struct Moby *moby, int state) __asm__("FUN_L11_002d2088");
 extern float ground_height_14b0(void *) __asm__("FUN_L00_00259710");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void build_symmetric_adjacency_masks(void *, int, int) __asm__("FUN_L05_0028be78");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -528,7 +522,6 @@ struct PokPathPoint {
     Vec4f rot;
 };
 extern struct PokPathPoint *path_points_14b0 __asm__("D_L11_001600EC");
-extern int D_L11_0015FFD8;
 extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern char resort_owner_completion_dialogue_pose[] __asm__("D_L11_0016D270");
 #include "rnc/overlay/l11/gameplay/entities/bob_globals.h"
@@ -783,13 +776,10 @@ void update_resort_owner_state_transitions(void *resort_owner_moby) {
         break;
     }
 }
-extern void FUN_00212f90(void *, int, int, int);
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float resort_owner_follow_hero_speed_gp __asm__("D_L11_001613D0") __attribute__((sda));
 extern float resort_owner_distant_follow_and_path_speed_gp __asm__("D_L11_001613D4") __attribute__((sda));
 float D_L11_00161400 = -3.0f;
-extern int D_L11_0015FFD8;
 
 void set_resort_owner_state(struct Moby *moby, unsigned char state) __asm__("FUN_L11_002d2088");
 
@@ -915,11 +905,9 @@ int try_update_resort_owner_path_target(struct Moby *moby, char *other) {
     }
     return follow_path(path_ids, path_id_count, moby_vars->b[moby_vars->idx], &moby->pos, other, moby_vars->e, 0.2f) != 0;
 }
-extern int D_L11_0015FFD8;
 extern int is_moby_in_bob_target_exclusion_state(char *) __asm__("FUN_L11_00316128");
 extern short *D_L11_001AC240[];
 extern int D_L11_0015FFF4 ;
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 struct TargetSets {
     char pad0[0x90];
@@ -1098,12 +1086,9 @@ struct PokSentryVars {
 };
 
 extern unsigned char D_0013D50B NOT_SDA;
-extern int D_0015ED84;
-extern unsigned char D_0014C050[];
 extern char *D_L11_001600EC;
 extern struct UsageStat help_records[] __asm__("D_00141968") NOT_SDA;
 extern void mark_moby_for_removal_f0e40(void *) __asm__("FUN_0020c828");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 
 void fred_pokitaru_update(struct Moby *moby) __asm__("FUN_L11_002f0e40");
@@ -1245,7 +1230,6 @@ extern unsigned char D_001413F5_lui __asm__("D_001413F5") NOT_SDA;
 extern float D_0015ED6C_2518 __asm__("D_0015ED6C");
 extern float D_0015ED70_2518 __asm__("D_0015ED70");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_L11_002f3040_2518(char *) __asm__("FUN_L11_002f3040");
 extern void FUN_L11_002f2cd0_2518(char *) __asm__("FUN_L11_002f2cd0");
 extern void FUN_L11_002f2d58_2518(char *) __asm__("FUN_L11_002f2d58");
@@ -1700,7 +1684,6 @@ extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -2025,8 +2008,6 @@ void FUN_L11_0030a840(unsigned char *gate_moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC20), where it is exact; names translated to the US level program. */
 
 extern int D_L11_0015FFD8; /* no foreign declaration */
-extern int is_moby_in_bob_target_exclusion_state(char *) __asm__("FUN_L11_00316128");
-extern short *D_L11_001AC240[];
 extern s32 D_L11_0015FFF4;
 
 int is_pokitaru_boat_target_group_clear(struct Moby *moby) {

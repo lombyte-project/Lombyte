@@ -106,9 +106,7 @@ typedef struct {
     u128 pos;
     PartMotion m;
 } Particle;
-extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u8 *pool_bubble_texture_table[] __asm__("D_L01_001B25E0");
 
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");

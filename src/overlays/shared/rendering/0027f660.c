@@ -128,7 +128,6 @@ char *draw_number(float scale, void *particle_spawn_position, int source_moby, i
 #endif
 extern unsigned char *func_00218928_87158(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_87158(float) __asm__("FUN_001fa6d0");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern unsigned char *D_L01_001B25D0 __attribute__((section(".data")));
 unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) __asm__("FUN_L01_00287158");
@@ -239,7 +238,6 @@ typedef struct {
     float e[1][4];
 } List;
 
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 int select_point_index_by_distance(void *arg0, List *arg1, float target) __asm__("FUN_L01_0028b510");

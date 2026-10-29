@@ -567,7 +567,6 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Packet;
 
-extern float D_L06_00167540[];
 short D_L06_001EF310[58][4][2] = {
     {{0, 0}, {1, 1}, {3, 3}, {2, 2}},
     {{1, 4}, {4, 5}, {2, 7}, {5, 6}},
@@ -1011,15 +1010,6 @@ float D_L06_001EFBE0[58][4] = {
     {0.098996f, -0.991671f, 0.082388f, 1.0f},
     {0.289323f, -0.951287f, 0.106513f, 1.0f},
 };
-extern long texture_2fd1a0(int) __asm__("FUN_001f44b8");
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_dual_texture_58_quad_mesh(void) __asm__("FUN_L06_002fd460");
 
@@ -1098,7 +1088,6 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Packet_2fd748;
 
-extern float D_L06_00167540[];
 short D_L06_001DF6F0[864][4][2] = {
     {{0x2ec, 0x2ec}, {1, 1}, {0x36e, 0x36e}, {0x36f, 0x36f}},
     {{0x13d, 0x13d}, {2, 2}, {0x1bf, 0x1bf}, {0x1c0, 0x1c0}},
@@ -5516,15 +5505,6 @@ float D_L06_001E4A30[864][4] = {
     {-0.571557f, 0.193703f, -0.797372f, 1.0f},
     {-0.587948f, 0.137308f, -0.79716f, 1.0f},
 };
-extern long texture_2fd1a0(int) __asm__("FUN_001f44b8");
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_dual_texture_864_quad_mesh(void) __asm__("FUN_L06_002fd748");
 
@@ -5703,7 +5683,6 @@ extern void FUN_L06_00312a78(void *);
 extern void FUN_L06_00312ad0(void *);
 extern void FUN_L06_00312ce8(int);
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 void spawn_moby_breakup_effect(char *source_moby) __asm__("FUN_L06_00300278");
@@ -5878,8 +5857,6 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern unsigned char *spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 
 extern float moby_breakup_z_offset_gp __asm__("D_L06_0016204C") __attribute__((sda));
@@ -5944,9 +5921,6 @@ extern V3003f0 l06_backdrop_mesh_vertex_positions[] __asm__("D_L06_001F2EB0");
 extern I3003f0 l06_backdrop_mesh_quad_corner_index_pairs[] __asm__("D_L06_001F34B0");
 extern UV3003f0 l06_backdrop_mesh_texture_coordinates[] __asm__("D_L06_001F38B0");
 extern long tex_3003f0(int) __asm__("FUN_001f44b8");
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 /* Draws the 64 quads of the backdrop mesh, each corner scaled from the shared vertex table. */
 void draw_backdrop_mesh(void) {
@@ -5993,12 +5967,6 @@ extern FRow_l06 D_L06_001FA2F0[] NOT_SDA;
 extern FRow_l06 D_L06_001F77B0[] NOT_SDA;
 extern float D_L06_001F84B0[][2] NOT_SDA;
 extern short D_L06_001F7EB0[][4][2] NOT_SDA;
-extern float D_L06_00167540[];
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 
 void effect_quad_draw_single(void) {
     FRow_l06 quad_corner_positions[4];
@@ -6050,9 +6018,6 @@ void effect_quad_draw_single(void) {
 
 extern char D_0013E533[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern float moby_bobbing_amplitude_gp __asm__("D_L06_00162090") __attribute__((sda));
@@ -6114,14 +6079,8 @@ void begin_moby_linear_and_angular_motion(char *moby, void *linear_velocity, voi
 }
 #include "rnc/gameplay/entities/moby.h"
 extern char *D_L06_0015FFD8_301070 __asm__("D_L06_0015FFD8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_001f9740_301070(void *) __asm__("FUN_001f9740");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void mark_moby_for_removal_301070(void *) __asm__("FUN_0020c828");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 typedef float Vec_301070[4] __attribute__((aligned(16)));
 typedef int u128q_301070 __attribute__((mode(TI)));
@@ -6178,18 +6137,10 @@ extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern float advance_accelerated_scalar_301070(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -6198,11 +6149,9 @@ extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_002
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
-extern float D_L06_00167540[];
 extern int D_L06_0015F5C4_macro __asm__("D_L06_0015F5C4") MACRO_ADDR;
 extern float D_L06_0015F3FC_macro __asm__("D_L06_0015F3FC") MACRO_ADDR;
 extern s32 D_L06_00179B90[] __asm__("D_L06_00179B90");
-extern unsigned char big_head_cheat_enabled[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern unsigned char big_head_cheat_enabled[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern int D_0013D8AC_lui __asm__("D_0013D8AC") NOT_SDA;
 
@@ -6472,22 +6421,10 @@ extern void clear_moby_list_state_4(int) __asm__("FUN_L06_002f45a0");
 extern void clear_moby_list_state_18(int) __asm__("FUN_L06_002f99b0");
 extern void set_moby_state_3(char *) __asm__("FUN_L06_002fc630");
 extern void activate_listed_class_5e8_mobys(int) __asm__("FUN_L06_00309240");
-extern void FUN_L06_00312a78(void *);
-extern void FUN_L06_00312ad0(void *);
-extern void FUN_L06_00312ce8(int);
-extern void FUN_L06_00312b40(float, float, float, float, float, float);
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L06_002356a0(int, int);
 extern void set_moby_state_5(char *) __asm__("FUN_L06_00304088");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float scale_recovery_time(float) __asm__("FUN_L06_00216fa8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern float FUN_002132a8(float, float);
 extern int jet_game_state(int, int) __asm__("FUN_L01_0027a248");
@@ -6496,9 +6433,6 @@ extern int FUN_L00_00211250(void);
 extern void FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
 extern void draw_pulsing_timer_display(char *) __asm__("FUN_L06_003021d8");
 extern void allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0");
-extern void set_moby_list_state_4(int) __asm__("FUN_L06_002f45f0");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
 void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) __asm__("FUN_L06_00301b90");
@@ -6771,38 +6705,25 @@ void mark_shuttle_linked_mobys_for_removal(char *moby) __asm__("FUN_L06_00304028
 
 extern void mark_shuttle_linked_mobys_for_removal(char *) __asm__("FUN_L06_00304028");
 extern int update_shuttle_path_ride(char *, int) __asm__("FUN_L06_00303160");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("FUN_L06_0030bef8");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern int is_point_inside_clip_volume(void *, int);
 extern void play_sound_302578(int, int) __asm__("FUN_L01_0027a248");
 extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 extern void FUN_L00_002ea9d8_302578(void *) __asm__("FUN_L00_002ea9d8");
 extern void FUN_L00_002eaa30_302578(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L00_00216f90_302578(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void initialize_moby_particle_effect_state(void *) __asm__("FUN_L06_002e6148");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
-extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int memcard_Save_302578(int, long) __asm__("FUN_0020b178");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void allocate_voice_302578(int, int, void *) __asm__("FUN_0022da68");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void delete_moby_302578(void *) __asm__("FUN_0020c828");
 extern int D_L06_0015FDF8;
 #include "rnc/overlay/l06/gameplay/entities/fred_data/shuttle_update_2.h"
@@ -7075,9 +6996,6 @@ void shuttle_update(struct Moby *moby) {
 /* Picks the next selection state from the menu mode, then queues the matching sound. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00304418), where it is exact; names translated to the US level program. */
 
-extern int D_0015EE1C;
-extern int D_0015EE1D;
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 #include "rnc/gameplay/state/game_globals.h"
 extern unsigned short D_00141C00 NOT_SDA;
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
@@ -7159,17 +7077,6 @@ struct PathRide {
     float progress;
 };
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern int allocate_voice_for_group_entry_303160(int, int, void *) __asm__("FUN_0022dba0");
 extern void push_piece_303160(float, struct Moby *, void *, void *, int) __asm__("FUN_L06_00303748");
@@ -7277,9 +7184,6 @@ extern float frame_time __asm__("D_0015ED6C");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern u8 *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -7347,20 +7251,6 @@ extern float shuttle_breakup_particle_max_speed_gp __asm__("D_L06_0016215C") __a
 #include "rnc/overlay/l06/gameplay/entities/fred_data/break_apart_shuttle_linked_mobys_2.h"
 extern int shuttle_breakup_particles_per_piece_gp __asm__("D_L06_00162190") __attribute__((sda));
 #include "rnc/overlay/l06/gameplay/entities/fred_data/break_apart_shuttle_linked_mobys.h"
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void spawn_timed_projected_sprite_effect(void *, int, int, int) __asm__("FUN_L06_0030bef8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern u8 *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 /* Breaks the linked pieces apart: pushes each one out from their middle (smaller pieces faster), spins it and sheds dust. */
 void break_apart_shuttle_linked_mobys(struct Moby *moby) {
@@ -7479,29 +7369,14 @@ typedef struct {
 extern Cut *D_L06_001600EC_304098 __asm__("D_L06_001600EC");
 extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
 extern char D_0013F3D0[] NOT_SDA;
-extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
 typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx;
 extern Fx D_L06_00167400_lui __asm__("D_L06_00167400") NOT_SDA;
 
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void approach_two_stage_304098(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void allocate_voice_for_target_entry_304098(int, int, void *) __asm__("FUN_0022da68");
 extern void event_304098(int, int, void *) __asm__("FUN_0022dba0");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int try_set_help_message_304098(int, int) __asm__("FUN_00215130");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern int tick_countdown_304098(int *) __asm__("FUN_001f9740");
-extern void fade_to_black(int) __asm__("FUN_001f4a58");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
-extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void update_moby_304098(void *) __asm__("FUN_L00_00250df8");
 void emit_red_button_particle_burst(int unused, void *effect_position) __asm__("FUN_L06_00304818");
 
@@ -7690,9 +7565,6 @@ typedef struct { int v[6]; } V6;
 V6 D_L06_002019A0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 extern V6 l06_red_button_particle_second_color_palette __asm__("D_L06_002019B8");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
 extern float D_L06_001621B4 __attribute__((sda));
@@ -7737,7 +7609,6 @@ typedef struct {
 } Data_305E38;
 
 extern char D_0013E550[];
-extern float D_L06_00167540[];
 extern float D_0015ED6C;
 #include "rnc/overlay/l06/gameplay/entities/fred_data/update_moby_vector_streams_and_particle_burst_3.h"
 extern float D_L06_001FE890[];
@@ -7755,8 +7626,6 @@ extern float D_L06_00162208 __attribute__((sda));
 extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void enqueue_callback_list_1(int, char *) __asm__("FUN_001f4600");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -7766,7 +7635,6 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void test_moby_vector_stream_collision_lines(char *m) __asm__("FUN_L06_00305000");
 void draw_moby_vector_streams(char *m) __asm__("FUN_L06_00305170");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void func_L00_00273F80_r(void *, void *, int, float, int, int, int) __asm__("FUN_L00_002730e0");
 
 void update_moby_vector_streams_and_particle_burst(char *moby) __asm__("FUN_L06_003049f8");
@@ -7912,7 +7780,6 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00306440), where it is exact; names translated to the US level program. */
 
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void initialize_hit_descriptor(char *a, int b, int c, float d) __asm__("FUN_L00_00259858");
 
 extern float vector_stream_collision_local_x_offset_gp __asm__("D_L06_001621E8") __attribute__((sda));
@@ -7952,9 +7819,6 @@ void test_moby_vector_stream_collision_lines(char *moby) {
 /* draws four copies of a model transformed by a table, then spawns a part for each */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003065B0), where it is exact; names translated to the US level program. */
 
-extern float D_L06_001FE890[];
-extern int D_L06_00162234;
-extern int D_L06_00162238;
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern int vector_stream_blend_color_b_selector_gp __asm__("D_L06_001621C4") __attribute__((sda));
 extern int vector_stream_blend_alpha_c_selector_gp __asm__("D_L06_001621C8") __attribute__((sda));
@@ -7965,9 +7829,6 @@ extern int vector_stream_cycle_boundary_color_gp __asm__("D_L06_001621E4") __att
 extern float vector_stream_texture_u_step_gp __asm__("D_L06_001621F4") __attribute__((sda));
 extern f32 D_L06_001621F8_gp __asm__("D_L06_001621F8") __attribute__((sda));
 extern f32 D_L06_00162208_gp __asm__("D_L06_00162208") __attribute__((sda));
-extern void set_scale_matrix(float *, float) __asm__("FUN_001f9ff8");
-extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L06_00216b88(int *, float *);
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");

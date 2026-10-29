@@ -207,15 +207,11 @@ extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float FUN_00213f38_c(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
-extern short D_L18_00162214_gp __asm__("D_L18_00162214") __attribute__((sda));
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 
 extern short drek_missile_wander_vertical_velocity_to_pitch_scale_gp __asm__("D_L18_0016222C") __attribute__((sda));
@@ -260,12 +256,8 @@ int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_p
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F16D8), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern short drek_missile_wander_z_offset_range_start_gp __asm__("D_L18_0016221C") __attribute__((sda));
 extern short drek_missile_wander_z_offset_range_end_gp __asm__("D_L18_00162220") __attribute__((sda));
@@ -297,7 +289,6 @@ extern float drek_missile_trail_texture_coordinates[4][2] __asm__("D_L18_001DA2F
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
 
@@ -364,7 +355,6 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
     } while (*group_entry++ >= 0);
 }
 /* Per-frame callback: swings every class 0x54B moby in the group around its base point by its state. */
-extern int D_L18_00162238_gp __asm__("D_L18_00162238") __attribute__((sda));
 extern float D_0015ED6C_c7 __asm__("D_0015ED6C");
 extern short *D_L18_001AC240_c7[] __asm__("D_L18_001AC240");
 extern unsigned char *D_L18_0015FFD8_c7 __asm__("D_L18_0015FFD8");
@@ -424,7 +414,6 @@ void render_drek_fight_missile_group_effects(struct Moby *group_moby) {
 /* Advance a ring of recorded positions, store the moby's position, and register draw callbacks once per frame. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F1C38), where it is exact; names translated to the US level program. */
 
-extern int game_frame __asm__("D_L18_0015F5CC");
 extern void draw_drek_fight_missile_group_trails(struct Moby *moby) __asm__("FUN_L18_002f0390");
 void render_drek_fight_missile_group_effects(struct Moby *m) __asm__("FUN_L18_002f06c0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -519,16 +508,12 @@ extern float advance_accelerated_scalar(float, float, float, float, float *,
 extern float fast_add_rotations(float, float);
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int);
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *) __asm__("func_001F9740");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
-extern short *D_L18_001AC240[];
 extern float D_L18_0015F580_macro[] __asm__("D_L18_0015F580") MACRO_ADDR;
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_linked_moby_group_transform_and_fall.h"
-extern unsigned char *D_L18_0015FFD8;
-extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void spawn_debris_chunk(void *, void *, unsigned int, int, float, float, float, float, int) __asm__("FUN_L01_002f8530");
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void apply_linked_moby_relative_transforms(Level18VendorMoby *, void *, int) __asm__("FUN_L12_0027b370");
@@ -740,7 +725,6 @@ typedef struct {
     Ent *e;
 } Blk;
 
-extern char *D_L18_001600EC;
 extern char *D_L18_001C6200[];
 extern unsigned char l18_block_indices_by_lookup_index[] __asm__("D_L18_001C6500");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -768,7 +752,6 @@ extern char D_0013E550[];
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern int FUN_0022da68(int, int, int);
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern unsigned char *D_L18_0015FFD8;
 void draw_glow_moby_layered_quads(struct Moby *moby) __asm__("FUN_L18_002f1fd8");
 
 extern void draw_glow_moby_layered_quads(struct Moby *) __asm__("FUN_L18_002f1fd8");
@@ -829,10 +812,8 @@ extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern u64 get_effect_texture_1fd8(int) __asm__("FUN_001f44b8");
 extern int truncate_1fd8(float) __asm__("FUN_001fa6d0");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern void draw_quad_1fd8(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_0015ED6C;
-extern float D_L18_001677C0[];
 extern f32 glow_moby_phase_rate_gp __asm__("D_L18_001622E0") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/draw_glow_moby_layered_quads.h"
 extern int glow_moby_phase_blend_start_color_gp __asm__("D_L18_001622C8") __attribute__((sda));
@@ -1035,7 +1016,6 @@ typedef struct {
 
 extern E l18_lift_height_records[] __asm__("D_L18_001DB500");
 extern short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
-extern unsigned char *D_L18_0015FFD8;
 
 void synchronize_lift_group_height(void *source_moby) {
     unsigned char *source_moby_bytes = source_moby;
@@ -1163,10 +1143,6 @@ void draw_lift_38_quad_mesh(struct Moby *moby) {
 extern float D_L18_001DB3A0[][2] NOT_SDA;
 extern FRow_l18 D_L18_001DB030[] NOT_SDA;
 extern short D_L18_001DB240[][4][2] NOT_SDA;
-extern int get_effect_texture_l18(int) __asm__("FUN_001f44b8");
-extern f32 D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_lift_22_quad_mesh(struct Moby *moby) {
     FRow_l18 quad_positions[4];
@@ -1211,7 +1187,6 @@ typedef struct {
 } ML;
 
 extern ML D_L18_0016D260;
-extern int D_L18_0015F5C4;
 extern unsigned char l18_drek_boss_big_head_manipulator[] __asm__("D_L18_0017CE40");
 extern short drek_boss_big_head_manipulator_scale_gp __asm__("D_L18_001623A4") __attribute__((sda));
 extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
@@ -1416,42 +1391,29 @@ typedef struct BossShared {
 } BossShared;
 
 extern MobyList D_L18_0016D260_c __asm__("D_L18_0016D260");
-extern char *D_L18_001600EC;
 extern char *create_rocket_moby(float *pos, float *dir, float *target, float a, float b, int frames,
                               int kind) __asm__("FUN_L18_002d5348");
 extern char *launch_class_238_moby_from_list(int owner, int idx, float *from, float *to, float speed, int frames) __asm__("FUN_L18_002d5cf8");
 extern char *find_nearest_class_247_moby_in_list(void *pos, int idx) __asm__("FUN_L18_002d6c80");
 extern char *create_class_274_ring_effect(void *owner, void *vector, float value) __asm__("FUN_L18_002dc3e0");
 extern char *create_class_3d7_moby(void *owner, void *vector, int value) __asm__("FUN_L18_002ea0f0");
-extern char D_0013E550[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 aas_c(f32, f32, f32, f32, f32 *, f32 *) __asm__("func_00213F38");
-extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern float D_0015ED6C_e[] __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_L18_0015F3FC;
-extern float D_L18_0015F580[] MACRO_ADDR;
-extern float D_L18_001677C0[];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float get_position_and_rotation_transition_progress(void *moby) __asm__("FUN_L18_002dfb90");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int *D_L18_001B0EB0[];
-extern int D_L18_0015F5C4;
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int FUN_L00_0025e450_u() __asm__("FUN_L00_0025e450");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int classify_moby_state_two_or_three(void *moby) __asm__("FUN_L18_002dfba0");
 extern int activate_drek_fight_missiles_in_group(char *moby, int idx, float *pos) __asm__("FUN_L18_002f0030");
 extern int advance_drek_boss_planar_position_toward_target(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
@@ -1461,9 +1423,7 @@ extern int select_drek_boss_next_action(struct Moby *moby) __asm__("FUN_L18_002f
 extern int launch_first_idle_group_class_0772_moby(int idx, float *pos, float *dir, float speed) __asm__("FUN_L18_002fc668");
 extern int count_group_class_0772_mobys_not_in_state_8(int idx) __asm__("FUN_L18_002fc7e0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
 extern short l18_drek_boss_scene_2_started_gp __asm__("D_L18_00162360") __attribute__((sda));
@@ -1472,12 +1432,10 @@ extern short l18_drek_boss_paired_transition_duration_frames_gp __asm__("D_L18_0
 extern short D_L18_00162398 __attribute__((sda));
 extern s32 D_L18_001623A0 __asm__("D_L18_001623A0");
 extern short l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp __asm__("D_L18_0016239C") __attribute__((sda));
-extern unsigned char *D_L18_0015FFD8;
 unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) __asm__("FUN_L18_002f6e10");
 
 extern unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) __asm__("FUN_L18_002f6e10");
 extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
-extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -1524,13 +1482,10 @@ extern void update_drek_boss_state_dependent_scalars(char *moby) __asm__("FUN_L1
 void render_drek_boss_joint_glows(struct Moby *moby) __asm__("FUN_L18_002f7880");
 
 extern void render_drek_boss_joint_glows(struct Moby *moby) __asm__("FUN_L18_002f7880");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -1540,7 +1495,6 @@ void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f
 void attach_drek_boss_big_head_manipulator(char *moby) __asm__("FUN_L18_002f2b18");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
@@ -2646,9 +2600,6 @@ void count_drek_boss_platform_event_once(struct Moby *moby) {
 }
 extern int D_L18_00162384_gp __asm__("D_L18_00162384") __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8_5e80 __asm__("D_L18_0015FFD8");
-extern char *D_L18_001600EC;
-extern int *D_L18_001B0EB0[];
-extern char D_0013E550[];
 
 typedef struct {
     char pad0[0x204];
@@ -2678,7 +2629,6 @@ extern void FUN_L00_0025d538_5e80(void *, void *) __asm__("FUN_L00_0025d538");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void FUN_001fa2b8_5e80(void *, void *) __asm__("FUN_001fa2b8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00250df8_5e80(void *) __asm__("FUN_L00_00250df8");
 extern int FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
 extern int poll_moby_state_and_rearm(char *) __asm__("FUN_L18_002d8050");
@@ -2686,21 +2636,13 @@ extern char *create_class_274_ring_effect(void *, void *, float) __asm__("FUN_L1
 extern void FUN_L18_002f1cc8_5e80(void *) __asm__("FUN_L18_002f1cc8");
 extern void start_position_and_rotation_transition(char *, void *, void *, void *, void *, void *, int, int, int) __asm__("FUN_L18_002dfaa0");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0028d8c0_5e80(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int truncate_float_5e80(float) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00298840_5e80(int) __asm__("FUN_L00_00298840");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern void *find_class_247_moby_with_largest_xy_angle_in_list(float *a, float *b, int idx) __asm__("FUN_L18_002d6b58");
 
 extern short l18_drek_boss_class_scale_multiplier_gp __asm__("D_L18_00162330") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_damage_and_phase_transitions.h"
@@ -2937,11 +2879,8 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
 /* steps a moby's offset vector toward a target, returns whether both settled */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7CD8), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 int advance_drek_boss_planar_position_toward_target(char *moby, float movement_speed_limit, void *x) {
     char *data = *(char **)(moby + 0x78);
@@ -2972,14 +2911,9 @@ int advance_drek_boss_planar_position_toward_target(char *moby, float movement_s
 /* Moves a moby's follow distance toward a target, clamped to a range, then applies it. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F7DC0), where it is exact; names translated to the US level program. */
 
-extern char *D_L18_001600EC;
 extern float freeze_stats_score_ref_b __asm__("D_0015ED6C");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern short D_L18_0016234C_gp __asm__("D_L18_0016234C") __attribute__((sda));
-extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
 extern void FUN_L00_0025f730(void *a, float x);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 int advance_drek_boss_planar_position_toward_target(char *moby, float arg, void *x) __asm__("FUN_L18_002f6878");
 
 extern short drek_boss_hero_follow_mode_0f_radius_gp __asm__("D_L18_0016237C") __attribute__((sda));
@@ -3098,9 +3032,7 @@ void update_drek_boss_arena_circling_movement(struct Moby *moby) {
 }
 /* Finds the nearest moby in the self's list within range and returns it. */
 extern f32 fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int request_floating_platform_sink(void *obj) __asm__("FUN_L18_002d8858");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short *D_L18_001AC240_c2[] __asm__("D_L18_001AC240");
 extern short drek_boss_platform_target_range_gp __asm__("D_L18_00162338") __attribute__((sda));
 extern short drek_boss_platform_tilt_frame_count_gp __asm__("D_L18_0016233C") __attribute__((sda));
@@ -3173,8 +3105,6 @@ void hide_drek_boss_moby_group(int unused, int group_index) {
     }
 }
 
-extern int D_L18_001AC240_u[] __asm__("D_L18_001AC240");
-extern int D_L18_0015FFD8_d __asm__("D_L18_0015FFD8");
 /* 0x002f7028, 140 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
@@ -3196,9 +3126,6 @@ void show_drek_boss_moby_group(int unused, int group_index) {
 /* Picks a new state for the moby at random among the allowed transitions, retrying up to 100 times until one is accepted. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8518), where it is exact; names translated to the US level program. */
 
-extern char *D_L18_001600EC;
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
 extern short drek_boss_action_eligibility_by_phase[] __asm__("D_L18_001DFB40");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
@@ -3271,7 +3198,6 @@ typedef union {
     float f[4];
 } L18Vector;
 
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 void set_drek_boss_relative_aim_yaw(struct Moby *source, char *dest, L18Vector *from, L18Vector *to) {
     L18Vector from_position, to_position;
@@ -3289,7 +3215,6 @@ extern float D_L18_001623DC_gp __asm__("D_L18_001623DC") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_2.h"
 extern void fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
-extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void follow_camera_set_distance(float, float, int) __asm__("FUN_L00_002e8450");
 extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
 extern void FUN_L06_00316330(void *);
@@ -3424,12 +3349,8 @@ typedef union {
 } QVec;
 
 extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
-extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_001fefc8(void *);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int scale_game_frames(int);
-extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
 extern char drek_boss_firing_secondary_effect_initial_color_gp[4] __asm__("D_L18_001623EC") __attribute__((sda));
 extern char drek_boss_firing_secondary_effect_final_color_gp[4] __asm__("D_L18_001623F0") __attribute__((sda));
 extern char drek_boss_firing_particle_count_gp[4] __asm__("D_L18_00162408") __attribute__((sda));
@@ -3449,12 +3370,9 @@ extern char drek_boss_firing_secondary_effect_emission_length_range_end_gp[4] __
 extern char drek_boss_firing_secondary_effect_lifetime_range_start_frames_gp[4] __asm__("D_L18_00162444") __attribute__((sda));
 extern char drek_boss_firing_secondary_effect_lifetime_range_end_frames_gp[4] __asm__("D_L18_00162448") __attribute__((sda));
 extern char drek_boss_firing_secondary_effect_initial_size_gp[4] __asm__("D_L18_0016244C") __attribute__((sda));
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *, void *, void *);
 unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x,
                                 float y, float z, float w, float pw);
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void spawn_drek_boss_firing_effects(char *moby, void *effect_position) {
     QVec emission_direction;
@@ -3509,14 +3427,11 @@ typedef struct {
 } L18Q;
 
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern f32 D_L18_00162450_gp __asm__("D_L18_00162450") __attribute__((sda));
 extern f32 D_L18_00162454_gp __asm__("D_L18_00162454") __attribute__((sda));
 extern s32 D_L18_00162458_gp __asm__("D_L18_00162458") __attribute__((sda));
 extern s32 D_L18_0016245C_gp __asm__("D_L18_0016245C") __attribute__((sda));
 extern s32 D_L18_00162460_gp __asm__("D_L18_00162460") __attribute__((sda));
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 extern short drek_boss_animation_glow_quad_scale_gp __asm__("D_L18_00162464") __attribute__((sda));
 extern short drek_boss_animation_glow_position_offset_scale_gp __asm__("D_L18_00162468") __attribute__((sda));
@@ -3597,12 +3512,7 @@ typedef struct {
     float f40;
 } M;
 
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern int D_L18_0015F5C4;
-extern int game_frame __asm__("D_L18_0015F5CC");
-extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
 extern int D_L18_00162384_macro[] __asm__("D_L18_00162384") MACRO_ADDR;
-extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 
 void update_moby_scene_visibility_and_height_reflection(M *moby) __asm__("FUN_L18_002f7ad8");
 
@@ -3667,11 +3577,7 @@ typedef struct {
 
 extern char *create_class_29_moby(char *owner, float *pos, float *vec, int arg3) __asm__("FUN_L18_002a75f0");
 extern char *func_0020D348_m(int);
-extern float fast_cos(float) __asm__("func_001F9DC8");
-extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int FUN_L18_002f8658_u() __asm__("FUN_L18_002f8658");
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short D_L18_0016247C_gp __asm__("D_L18_0016247C") __attribute__((sda));
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
@@ -3802,29 +3708,19 @@ void rocket_tank_update(M1454 *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F8F38.c: func_L18_002F94B0), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float D_L18_0015F580[];
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern float fast_add_rotations(float, float);
-extern float fast_sin(float);
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float vector_length_xy(void *);
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 extern int select_moby_combat_target(unsigned char *, char *, float) __asm__("FUN_L00_0025fcb8");
 extern void *FUN_L00_00257470_cf(char *src, int cls, float *pos, void *mat, int a8, int a9,
                                  float scale, float *v10, float *v11,
                                  float *v12) __asm__("FUN_L00_00263fd8");
-extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_0025d458_cf(void *) __asm__("FUN_0020c828");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025e450_cf(void *, short *) __asm__("FUN_L00_0025d458");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
@@ -3922,15 +3818,10 @@ void update_rocket_tank_damage_and_aim(void *mv) {
     trooper_anim_finish(moby_bytes, tank_data + 0x60);
 }
 /* Steers the moby along its path toward the next node, slowing on sharp turns. */
-extern float FUN_001f9b48(void *, void *);
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern int *D_L18_001B0EB0[];
 extern float D_0015ED6C_g __asm__("D_0015ED6C");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern short rocket_tank_path_target_speed_gp __asm__("D_L18_00162478") __attribute__((sda));
 extern short rocket_tank_attached_moby_speed_reference_gp __asm__("D_L18_00162480") __attribute__((sda));
 extern void FUN_L00_00258830(int, int, float, float, float, int);
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 void update_rocket_tank_path_movement(struct Moby *moby) __asm__("FUN_L18_002f8658");
 

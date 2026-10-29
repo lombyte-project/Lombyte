@@ -455,16 +455,13 @@ extern struct {
     char pad[0x5A];
     unsigned short x5a;
 } D_001516D0_298b18 __asm__("D_001516D0");
-extern int D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
 extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
-extern float fade_level __asm__("D_L00_0015F3FC");
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void fade_to_black(int) __asm__("FUN_001f4a58");
 void update_view_context(void) __asm__("FUN_001f2d98");
 void f20c828_298b18(M_298b18 *) __asm__("FUN_0020c828");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
@@ -812,7 +809,6 @@ typedef struct {
     P2_002994f8 x[5];
     P2_002994f8 y[5];
 } Tab_002994f8;
-extern Tab D_00137B80;
 void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 /* Passes disc table entry i at 0x1A28 (0x1A50 while D_0015ED80 is set) to FUN_L00_002995d0. */
 void queue_language_zero_movie(s32 i) __asm__("FUN_L00_002994f8");
@@ -1023,7 +1019,6 @@ typedef struct { int a; int b; } LL9;
 
 typedef struct { char pad[0x16A8]; LL9 normal[20]; LL9 alt[20]; } G9;
 
-extern Tab D_00137B80;
 extern float fade_level_gp __asm__("D_L00_0015F3FC") MACRO_ADDR;
 extern int D_L00_0015F5C4 MACRO_ADDR;
 extern int D_L00_0015F5D8_gp __asm__("D_L00_0015F5D8") MACRO_ADDR;
@@ -1031,11 +1026,9 @@ typedef struct { s16 state; s16 slide; s16 timer; s16 frame; s32 *dst; s32 *src;
 extern Slideshow slideshow __asm__("D_L00_0015F620") MACRO_ADDR;
 extern int D_L00_00173E00[];
 extern int D_L00_001611CC MACRO_ADDR;
-extern int update_audio_stream_until_idle(int) __asm__("FUN_002168a8");
 extern int D_0015ED80_gp __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 start_audio_stream_read(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216788");
 extern void FillTransferWords(void *, s32, s32);
-extern void fade_to_black(s32 n) __asm__("FUN_001f4a58");
 
 void start_slideshow(void) __asm__("FUN_L00_00299a68");
 
@@ -1171,7 +1164,6 @@ void update_slideshow(void) {
 extern char *D_L00_00197300_lui[] __asm__("D_L00_00197300") NOT_SDA;
 extern int D_L00_001CA4C0_lui[] __asm__("D_L00_001CA4C0") NOT_SDA;
 extern void fast_decompress(int, int) __asm__("FUN_L00_0024d8d0");
-extern void FlushCache(s32);
 extern void relocate_asset_entry_pointers(char *arg0, int idx) __asm__("FUN_002032e0");
 
 extern unsigned char D_L00_00197BCC NOT_SDA;
@@ -1344,7 +1336,6 @@ extern s32 D_0015ED98_29a6b0 __asm__("D_0015ED98");
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern s32 D_L00_00173E00_29a6b0[] __asm__("D_L00_00173E00");
 extern s32 D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
-extern float fade_level __asm__("D_L00_0015F3FC");
 extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
 extern unsigned char D_0013F350[];
 extern Vec4 D_L00_00180260_29a6b0 __asm__("D_L00_00180260");
@@ -1353,7 +1344,6 @@ extern s32 D_L00_0016118C;
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern VendorMoby_29a6b0 *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void FUN_00216050_29a6b0(s32) __asm__("FUN_00216050");
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
@@ -1368,7 +1358,6 @@ extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_001f4a58_29a6b0(s32) __asm__("FUN_001f4a58");
-extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern s32 FUN_L00_002223f8_29a6b0(s32, s32) __asm__("FUN_L00_002223f8");
 extern void FUN_L00_00232fe8_29a6b0(void) __asm__("FUN_L00_00232fe8");
 extern void set_moby_animation(void *, s32, s32) __asm__("FUN_00212ed8");
@@ -1505,7 +1494,6 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) Vec4_29ab70;
-extern int D_L00_0015F5D8 __asm__("D_L00_0015F5D8");
 extern char D_L00_001CA4C0_29ab70[] __asm__("D_L00_001CA4C0");
 struct S16_29ab70 {
     char pad[0x5A];
@@ -1513,7 +1501,6 @@ struct S16_29ab70 {
 };
 extern struct S16_29ab70 D_001516D0_29ab70 __asm__("D_001516D0");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
 extern void f1f9cf8_29ab70(Vec4_29ab70 *, void *, void *) __asm__("FUN_001f9cf8");
 extern void f1f9a10_29ab70(Vec4_29ab70 *, Vec4_29ab70 *, void *) __asm__("FUN_001f9a10");
@@ -1524,7 +1511,6 @@ extern void update_resource_counter(void) __asm__("FUN_001ff768");
 extern void f20c828_29ab70(void *) __asm__("FUN_0020c828");
 extern void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 extern void music_unpause(void) __asm__("FUN_00216088");
-extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern int vendor_close_hero_local_offset_gp __asm__("D_L00_00161070") __attribute__((sda));
 void close_vendor_menu(int exit_cutscene_completed) __asm__("FUN_L00_0029ab70");
 
@@ -1569,11 +1555,9 @@ void close_vendor_menu(int exit_cutscene_completed) {
     music_unpause();
     snd_flush_sound_commands();
 }
-extern s32 D_L00_0015F3FC;
 extern s32 vendor_exit_cutscene_ids_by_item[] __asm__("D_L00_001CA020");
 extern s32 D_L00_001CA580[];
 extern Vendor D_L00_001CA4C0_29ad08 __asm__("D_L00_001CA4C0");
-extern s32 D_L00_0015F400 __asm__("D_L00_0015F400");
 extern s32 vendor_exit_hero_local_offset_gp __asm__("D_L00_00161100") __attribute__((sda));
 extern s32 vendor_exit_cutscene_local_offset_gp __asm__("D_L00_001610F0") __attribute__((sda));
 struct S16_29ad08 { char pad[0x5A]; s16 mode; };
@@ -1584,10 +1568,7 @@ extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 extern void f1f9cf8_29ad08(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void f1f9a10_29ad08(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float f213508_29ad08(float, void *, s32) __asm__("FUN_00213508");
-extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
@@ -1665,7 +1646,6 @@ struct S16 {
     unsigned short mode;
 };
 extern struct S16 D_001516D0;
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 void FUN_L00_002330d0(void);
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1800,9 +1780,7 @@ extern void FUN_00204a40_29b680(int, int) __asm__("FUN_00204a40");
 extern void FUN_0020c5f0_29b680(void *, int) __asm__("FUN_0020c5f0");
 extern void FUN_001f9a10_29b680(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f9cf8_29b680(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_00212ed8_29b680(void *, int, int) __asm__("FUN_00212ed8");
-extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f0");
 #define P D_L00_001CA4C0_29b680
 

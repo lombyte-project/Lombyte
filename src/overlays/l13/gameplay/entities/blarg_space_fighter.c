@@ -275,7 +275,6 @@ void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C31B0), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
@@ -310,19 +309,15 @@ unsigned char *spawn_class_53_projectile(char *owner, char *spawn_position, char
     return moby;
 }
 extern float D_0015ED60;
-extern float D_0015ED6C;
 extern char D_00140940[];
 extern Moby_2C27B0 *D_L13_00174158;
 extern struct { char pad[0x18]; Moby_2C27B0 *moby; } D_L13_00174140;
-extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern void blend_moby_animation_c13(void *, int, int, int) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_00259888(float, void *, void *, int, void *);
 extern int FUN_L00_001f0d60_2048(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern char *FUN_L00_0025a420(void *, int, int);
-extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void update_level_13_class_53_projectile(Moby_2C27B0 *moby) __asm__("FUN_L13_002c2048");
 
@@ -607,15 +602,12 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern int FUN_L00_00257b90(int, int);
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern char *FUN_L00_0025a420(void *, int, int);
 extern int FUN_L13_002c2d30_collision(struct Moby *, void *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f99c0(float);
-extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern char *D_L13_001B07B0[];
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern float hovering_rocket_attacker_scale_multiplier_gp __asm__("D_L13_00161490") __attribute__((sda));
@@ -750,12 +742,10 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4A68), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_data, float *fp) __asm__("FUN_L13_002c37e0");
 
@@ -849,7 +839,6 @@ void steer_blarg_space_fighter(struct Moby *moby, char *moby_data, float target_
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4D50), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float FUN_001f9b48(void *, void *);
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -880,9 +869,6 @@ int select_blarg_space_fighter_path_point_by_distance(char *pt, int *path_point_
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4F10), where it is exact; names translated to the US level program. */
 
-extern char *D_L13_001B07B0[];
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 void FUN_L13_002c3988_c(char *moby, char *d, float p2, float p3) __asm__("FUN_L13_002c3988");
 
@@ -956,9 +942,6 @@ void predict_hero_vehicle_position(char *out, float scale) {
 }
 extern char *D_L13_0015FFD8;
 extern char D_0013F3D0[];
-extern float D_0015ED60;
-extern float D_0015ED6C;
-extern char D_00140940[];
 extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 
@@ -1151,13 +1134,11 @@ typedef struct Hero_2C56B0 { char pad0[0x15F0]; Moby_2C56B0 *veh; char pad15F4[0
 
 typedef struct Snd { char pad0[0x74]; unsigned char b74; char pad75[0x13]; void *f88; } Snd;
 
-extern char *D_L13_0015FFD8;
 extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
 extern char blarg_space_fighter_missing_path_debug_format[] __asm__("D_L13_001F4700");
 extern float D_L13_001670C0[];
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0015ED60;
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int update_blarg_space_fighter_path_following();
 extern s32 rand(void);
@@ -1169,7 +1150,6 @@ extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L13_002c37e0_c(struct Moby *moby, unsigned char *d, float *fp) __asm__("FUN_L13_002c37e0");
-extern char D_0013F3D0[];
 extern char D_0013E550[];
 extern int func_001E9730_d(void *, ...) __asm__("FUN_001e93b0");
 extern int func_0022ED80_s(int, int, int) __asm__("FUN_0022da68");
@@ -1603,7 +1583,6 @@ typedef struct { unsigned char b[24]; } Blk24;
 Blk24 D_L13_001F4950 = {{0xff, 0x8f, 0, 0x4f, 0xff, 0x8f, 0, 0x4f, 0xff, 0x7f, 0, 0x4f, 0xff, 0x6f, 0, 0x4f, 0xff, 0xff, 0xff, 0x2f, 0xff, 0xff, 0xff, 0x2f}};
 Blk24 D_L13_001F4968 = {{0x7f, 0x5f, 0, 0x2f, 0x7f, 0x4f, 0, 0x2f, 0x7f, 0x3f, 0, 0x2f, 0x4f, 0, 0, 0x2f, 0, 0, 0, 0x2f, 0, 0, 0, 0x3f}};
 extern float D_L13_0015F580;
-extern int FUN_L00_00257b90(int, int);
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(void *pos, int spin, int col, float range, float f1, float f2, float f3, float scale) __asm__("FUN_L00_0026b790");
@@ -1722,7 +1701,6 @@ void emit_forcefield_tower_destruction_effects(unsigned char *source_moby, void 
 #include "rnc/overlay/quad.h"
 extern int fptodp(float) __asm__("FUN_00120478");
 extern int trooper_take_damage(struct Moby *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void emit_effect_l13(void *, void *, void *, float, float, int, int, int, float, float,
                             float, float, int, float, int, int, int,
@@ -1946,7 +1924,6 @@ voice_done:
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2488), where it is exact; names translated to the US level program. */
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 rand();
 
 char *spawn_asteroid_fragment(char *owner, char *spawn_position, char *initial_velocity, int remaining_split_count, float scale) __asm__("FUN_L13_002e1140");
@@ -2012,17 +1989,6 @@ char *spawn_asteroid_fragment(char *owner, char *spawn_position, char *initial_v
 
 char *spawn_asteroid_fragment(char *owner, char *pos, char *vec, int a3, float f) __asm__("FUN_L13_002e1140");
 extern char D_L13_00160680[] MACRO_ADDR;
-extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern int FUN_L00_00257b90(int, int);
-extern int spawn_explosion() __asm__("FUN_L00_0025e450");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern int func_0022ED80_s(int, int, int) __asm__("FUN_0022da68");
-extern int func_001FA898_s(float) __asm__("FUN_001fa6d0");
 extern void func_L00_0025F4A8_s(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void process_asteroid_hit(struct Moby *moby, char *blob_data, float scale_ratio) __asm__("FUN_L13_002e1348");
@@ -2324,14 +2290,12 @@ int process_linked_switch_damage(struct Moby *moby, char *moby_data, float *heal
 extern void get_first_moby_in_group(char **, int, int, int) __asm__("FUN_L00_002591d0");
 extern void get_next_moby_in_group(char **, char *, int, int) __asm__("FUN_L00_002592b8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
 extern int FUN_0022da68(int, int, void *) __asm__("FUN_0022da68");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void debug_print(char *, short, short, int) __asm__("FUN_001e93b0");
 char D_L13_001F4D90[] = "moby:%d(%d) opened at %d\n";
 char D_L13_001F4DB0[] = "moby:%d(%d) failed at %d\n";
 extern char linked_switch_closed_debug_format[] __asm__("D_L13_001F4DD0");
-extern int frame_count __asm__("D_L13_0015F5CC");
 
 typedef struct {
     u8 pad0[0x20];
@@ -2640,7 +2604,6 @@ int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int bas
 extern int D_L13_001D3478[] __asm__("D_L13_001D3478");
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -2682,14 +2645,10 @@ void emit_gated_moby_joint_effects(struct Moby *source_moby, char *emission_gate
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E9F90), where it is exact; names translated to the US level program. */
 
-extern int frame_count __asm__("D_L13_0015F5CC");
 extern int randomized_effect_joint_indices[] __asm__("D_L13_001D3538");
 extern int FUN_L00_00257b90(int, int);
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
-extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
@@ -2956,9 +2915,7 @@ int update_moby_path_following_away_from_hero(struct Moby *moby, char *path_foll
 /* Launches the child moby held in slot idx of p: spins it off with random-ish velocities and clears the slot. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EAAB8), where it is exact; names translated to the US level program. */
 
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 
 void detach_moby_joint_attachment(void *unused, char *parent_data, int child_slot_index) __asm__("FUN_L13_002e9680");
 
@@ -2994,11 +2951,8 @@ void detach_moby_joint_attachment(void *unused, char *parent_data, int child_slo
     }
 }
 extern void FUN_L00_00257470(struct Moby *, int, int);
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
-extern char *D_L13_001B07B0[];
 extern float D_0015ED6C;
 
 extern char *D_L13_001600EC;
@@ -3159,8 +3113,6 @@ extern void begin_starfighter_death_sequence();
 int FUN_L13_002e86f8_c(void *unused, unsigned char *p, int base, int n) __asm__("FUN_L13_002e86f8");
 void FUN_L13_002e9680_c(void *unused, char *p, int idx) __asm__("FUN_L13_002e9680");
 extern char D_0013F450_2EAE80[] __asm__("D_0013F350");
-extern char D_00140940[];
-extern int D_L13_001D3478[] __asm__("D_L13_001D3478");
 extern float func_001FA888_2EAE80(int) __asm__("FUN_001fa6c0");
 extern Hit_2EAE80 *func_L00_0025B478_2EAE80(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int func_L00_0025B4D0_2EAE80(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
@@ -3422,7 +3374,6 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
 /* Steers a moby toward the hero: scales by distance and orients it with the hero's angles. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002EB768), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b48(void *, void *);
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void predict_hero_ship_projectile_lead_position(char *predicted_target_position, char *projectile_origin_position, float projectile_speed) __asm__("FUN_L13_002ea330");
@@ -3520,8 +3471,6 @@ unsigned char *fire_starfighter_homing_rocket(struct Moby *firing_moby, unsigned
 extern unsigned char *spawn_class_53_projectile(char *owner, char *pos,
                                          char *vec) __asm__("FUN_L13_002c1f28");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void predict_hero_ship_projectile_lead_position(char *a, char *b, float f) __asm__("FUN_L13_002ea330");
 
 unsigned char *fire_class_53_projectile(char *firing_moby, char *velocity_source_data) __asm__("FUN_L13_002ea6b8");
 

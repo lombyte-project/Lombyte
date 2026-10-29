@@ -361,13 +361,9 @@ void door_update(u8 *moby)
     }
 }
 extern void fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void scale_vector_xyz_alt_31aee0(f32, void *, void *) __asm__("FUN_001f9bf8");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void play_sound_31aee0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern char *level_mobys __asm__("D_L07_0015FFD8");
 
 void bridge_update(u8 *moby) __asm__("FUN_L07_0031aee0");
 void bridge_update(u8 *moby)

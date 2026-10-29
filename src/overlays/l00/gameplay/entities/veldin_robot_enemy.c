@@ -821,7 +821,6 @@ typedef struct {
 extern FlockGame D_L00_0016C860;
 
 extern void cutscene_set_camera_target(void *) __asm__("FUN_L00_002637f8");
-extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, f32, f32) __asm__("FUN_L00_00263b70");
 extern FlockPart *FUN_L00_0026d000(void *, s32, void *, s32, f32, f32, f32, f32);
 

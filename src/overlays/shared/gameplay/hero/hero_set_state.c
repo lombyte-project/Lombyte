@@ -327,7 +327,6 @@ void update_hero_planar_distance_spring_motion(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00222520), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 
 /* scale_game_frames(12), or 0 when stick_direction_vs_facing returns 2. */
@@ -603,7 +602,6 @@ extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 #include "rnc/gameplay/state/game_globals.h"
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L00_0017BDF0[][25];
-extern float FUN_001f9b48(void *, void *);
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
@@ -3001,7 +2999,6 @@ int hero_set_state(int a, int b) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00227E08), where it is exact; names translated to the US level program. */
 
-extern unsigned char D_0013E533[];
 
 void set_hero_idle_state_for_vehicle_mode(void) {
     switch (D_0013E533[0x2EC1]) {
@@ -3023,9 +3020,6 @@ void set_hero_idle_state_for_vehicle_mode(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00227E90), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern unsigned char D_0013E533[];
-extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 
 int try_start_hero_weapon_fire_state(void) __asm__("FUN_L00_002276c0");
 

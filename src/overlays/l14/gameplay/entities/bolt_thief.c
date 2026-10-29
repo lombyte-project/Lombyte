@@ -430,10 +430,8 @@ void bolt_thief_update(L16CrateMoby *moby) {
 
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int sample_path(char *, float *, float *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float bolt_thief_default_path_sample_rate_gp __asm__("D_L14_00161FB8") __attribute__((sda));
-extern char *D_L14_001B0BB0[];
 extern void FUN_L00_00258278(char *, float, float *, float, float, float);
 
 int update_bolt_thief_path_movement(struct Moby *moby) {
@@ -468,7 +466,6 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
     return path_sample_result;
 }
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 #include "sda.h"
 extern unsigned char D_0015EDB0;
 #include "qcopy.h"
@@ -537,7 +534,6 @@ extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 typedef struct {

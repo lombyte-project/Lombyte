@@ -2,7 +2,6 @@
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void func_001F68E8_c(int, int, long, void *, int) __asm__("func_001F6530");
-extern void func_001F68E8_c(int, int, long, void *, int) __asm__("func_001F6530");
 extern int get_icon_frame(int, int) __asm__("func_001FF960");
 typedef struct {
     char c[2];

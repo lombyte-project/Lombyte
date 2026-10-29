@@ -120,16 +120,12 @@ typedef struct {
 } Rot;
 
 extern unsigned char D_0013F350_cc2e8[] __asm__("D_0013F350");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float lensq_cc2e8(void *) __asm__("FUN_L00_001ff430");
 extern float square_root(float) __asm__("FUN_001f9988");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern float spring_turn(float, float, float, float, float, float *) __asm__("FUN_L00_00258110");
 extern void build_spherical_offset(float, float, float, void *) __asm__("FUN_00214db0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");

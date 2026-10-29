@@ -1043,9 +1043,7 @@ extern float D_L00_0015F454;
 extern int D_0013E520[];
 extern int print_debug_text_centered(int,int,int,char*) __asm__("FUN_001f0c50");
 extern char debug_menu_segment_visited_format[] __asm__("D_L00_0015F0F0");
-extern s32 sprintf(char *, const char *, ...);
 #include "rnc/gameplay/state/game_globals.h"
-extern u8 D_L00_0015F444;
 extern u8 D_L00_0015F445;
 extern u8 D_L00_0015F446;
 extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");

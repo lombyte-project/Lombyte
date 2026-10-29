@@ -142,7 +142,6 @@ extern Entry_L02_0017A140 D_L02_0017A0C0[];
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013D4C0[];
 extern unsigned char D_0014C050[][16];
 extern unsigned char D_0015EDDC[4];
@@ -363,14 +362,11 @@ extern void euler_rotation_basis(void *out, void *rot) __asm__("FUN_001fa030");
 extern s32 fast_bsphere_check(void *sphere, f32 dist) __asm__("FUN_001fa728");
 extern s32 tick_timer32(s32 *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 /* fast_vec_normalize (out = in scaled to length s), with the float declared first (same registers): the scale is then
  * evaluated before the vector addresses, as in retail. */
 extern void fast_vec_normalize(f32 s, void *out, void *in) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void random_vector(void *out, f32 a, f32 b) __asm__("FUN_L00_00257d78");
 extern char *spawn_spark(void *pos, void *vel, void *acc, s32, s32, s32, s32, s32, s32) __asm__("FUN_00218888");

@@ -84,15 +84,12 @@ int FUN_L04_001f3038_c(char *a, char *b, int n) __asm__("FUN_L04_001f3038");
 int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __asm__("FUN_L04_0024c7d8");
 extern PathEl *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
 extern Coll D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
-extern s32 D_L04_00173FF0[];
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float func_001F9D10_1F3010(void *, void *) __asm__("FUN_001f9b48");
 extern int func_L00_001EFFF0_1F3010(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float func_001F9CE8_1F3010(void *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void func_L00_001FF500_1F3010(void *, void *, float) __asm__("FUN_001f9c48");
-extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int func_001F9938_1F3010(void *) __asm__("FUN_001f9770");
 extern float func_002140F8_1F3010(float, float) __asm__("FUN_002132a8");
 extern int func_001FA898_1F3010(float) __asm__("FUN_001fa6d0");
@@ -321,10 +318,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
 /* steps a moby's position out of collision and aims it */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F39B0), where it is exact; names translated to the US level program. */
 
-extern s32 D_L04_00173FF0[];
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 
 void update_moby_movement_with_sphere_collision(char *moby, char *movement_state, char *movement_params, float collision_z_offset) __asm__("FUN_L04_001f3a80");

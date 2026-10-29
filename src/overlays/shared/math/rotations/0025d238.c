@@ -726,16 +726,11 @@ extern S6y10 D_L00_001E9048;
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
 extern int FUN_L00_00257b90(int, int);
-extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
-extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
-extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 
-extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 typedef struct {

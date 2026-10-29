@@ -285,14 +285,12 @@ void codebot_update(struct Moby *moby) {
 }
 extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 extern int D_L15_0015F594 __attribute__((sda));
-extern int D_L15_0015F5C4;
 extern u8 D_0014C050[];
 extern u32 D_0013CAE4 __attribute__((section(".data")));
 extern void mark_moby_for_removal_002ed068(struct Moby *) __asm__("FUN_0020c828");
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
-extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");

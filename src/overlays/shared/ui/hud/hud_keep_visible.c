@@ -276,7 +276,6 @@ void hud_update_counter(e) HudElem *e __asm__("FUN_L00_00235ea0");
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236AB8), where it is exact; names translated to the US level program. */
 
-extern void update_hud_animation_frame(void *) __asm__("FUN_L00_0023aaa8");
 
 void update_numeric_hud_element_direct_value(HudElem *hud_element) __asm__("FUN_L00_00236128");
 
@@ -558,13 +557,7 @@ int draw_hud_stars(HudElem *element) {
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_002377E0), where it is exact; names translated to the US level program. */
 
 
-extern int D_L00_0015F760 __attribute__((sda));
-extern int D_L00_0015F764 __attribute__((sda));
-extern float D_L00_0015F768 __attribute__((sda));
-extern float D_L00_0015F76C __attribute__((sda));
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
-extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
-extern void FUN_L00_001ff348(void *, void *, void *);
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 

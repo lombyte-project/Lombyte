@@ -115,7 +115,6 @@ void update_fire_bolt(char *fire_bolt) {
 extern float ground_particle_scatter_spawn_vector_xy_bias[2] __asm__("D_L08_00162360");
 #include "rnc/overlay/shared/gameplay/vendor/00307190_globals.h"
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 extern short ground_particle_scatter_count_interpolation_start_override_gp __asm__("D_L08_0016234C") __attribute__((sda));
 extern short ground_particle_scatter_count_interpolation_end_override_gp __asm__("D_L08_00162350") __attribute__((sda));
@@ -402,11 +401,8 @@ void scatter_ground_particles(Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00309AB0), where it is exact; names translated to the US level program. */
 
 
-extern char D_L08_001675C0[];
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
-extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
 
 void spawn_moby_radial_particles(char *moby) __asm__("FUN_L08_003085f0");
 

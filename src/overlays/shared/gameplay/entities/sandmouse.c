@@ -296,12 +296,10 @@ typedef struct {
 
 extern f32 spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");
 extern void build_spherical_offset(f32 *, f32, f32, f32) __asm__("FUN_00214db0");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 collision_line_30c9a8(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern f32 D_L01_00167240_30c9a8[] __asm__("D_L01_00167240");
 extern OvlQuad D_0013F3D0_30c9a8 __asm__("D_0013F3D0");
 
@@ -684,7 +682,6 @@ extern char sandmouse_first_particle_config __asm__("D_L01_001620E0") __attribut
 extern char sandmouse_second_particle_config __asm__("D_L01_001620F0") __attribute__((sda));
 extern char sandmouse_third_particle_config __asm__("D_L01_00162100") __attribute__((sda));
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_type_74_particle(void *, void *, void *, void *, int) __asm__("FUN_L01_0028a7a8");
 
 void emit_sandmouse_particles(char *source_moby) __asm__("FUN_L01_0030dda0");
@@ -725,7 +722,6 @@ void draw_sandmouse_billboard_quads(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
 
 void draw_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030de68");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_draw_callback(void (*)(char *), char *) __asm__("FUN_001f4600");
 
 void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
@@ -784,10 +780,8 @@ extern char *D_L01_00167280 NOT_SDA;
 extern char D_0013F350[] NOT_SDA;
 extern char D_L01_0020BA10[] NOT_SDA;
 extern char D_L01_0020BA30[] NOT_SDA;
-extern f32 D_L01_001DEB4C NOT_SDA;
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_vec_dist(void *, void *);
 extern int debug_print() __asm__("FUN_001e93b0");
@@ -798,7 +792,6 @@ extern int is_point_inside_clip_volume(void *point, int volume) __asm__("func_00
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 collision_line(void *, void *, s32, void *, s32);
 extern s32 rand(void);
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short sandmouse_follow_duration_frames_gp __asm__("D_L01_00162098") __attribute__((sda));
 extern short sandmouse_projectile_count_limit_gp __asm__("D_L01_0016209C") __attribute__((sda));
 extern short sandmouse_fade_duration_frames_gp __asm__("D_L01_001620A4") __attribute__((sda));
@@ -1884,9 +1877,7 @@ void update_box_positional_voice(char *moby) {
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void set_requested_state_and_mark_changes(int a, int b, int c, int d, int e) __asm__("FUN_L01_002a1a90");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 float absolute_float(float input) __asm__("func_001F99C0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_requested_state_from_box_position(char *moby) __asm__("FUN_L01_00319f18");
 
@@ -1914,10 +1905,7 @@ void update_requested_state_from_box_position(char *moby) {
         data[3] = 0;
     }
 }
-extern char D_0013E5E0[];
-extern char D_L01_00167240[];
 extern int play_voice(int, int, int, int) __asm__("FUN_L00_0028ddd8");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 void update_listener_following_voice(int sound_owner) __asm__("FUN_L01_0031a078");
 

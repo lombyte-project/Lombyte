@@ -185,7 +185,6 @@ typedef union {
 } HopVec;
 
 extern f32 hero_air_control_speed_reference[] __asm__("D_L01_0017C250");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void speed_step(f32, f32) __asm__("FUN_L00_00212088");
@@ -448,7 +447,6 @@ extern void FUN_L00_00209848_cf_0022b5e0(float, float) __asm__("FUN_L01_0022b5e0
 extern void emit_hero_randomized_motion_effects(int, int) __asm__("FUN_L00_00209a40");
 extern void FUN_L00_0020b5b8_cf(void) __asm__("FUN_L00_00214108");
 extern void stick_target(float, int) __asm__("FUN_L00_002118c8");
-extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_00211e98");
 extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 extern void speed_step(float, float) __asm__("FUN_L00_00212088");
@@ -471,7 +469,6 @@ extern void offset_hero_position_against_gravity(float *, float *, float) __asm_
 extern void FUN_L00_00233810_cf(void *, void *, float) __asm__("FUN_L00_00233708");
 extern void FUN_L00_002338d0(float *, float *);
 extern void FUN_L00_00233b20(float *, float *, float);
-extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void FUN_L00_0025bc98_cf(void *, int, int, float, float, float,
                                 float) __asm__("FUN_L00_002a3ec8");
@@ -489,7 +486,6 @@ extern void air_accel(float) __asm__("FUN_L01_00234358");
 extern void update_hero_airborne_planar_motion(void) __asm__("FUN_L01_00234b40");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern void fast_sin_cf(int, int) __asm__("FUN_L00_00209638");
 extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");

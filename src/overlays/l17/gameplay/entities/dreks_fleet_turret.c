@@ -824,7 +824,6 @@ extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern RingStep D_L17_00161BC8 __attribute__((section(".data")));
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void draw_geometry_quad(void *, void *, int);
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
     RingPrim quad_primitive;
@@ -890,7 +889,6 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
 extern char *D_L17_00174758;
 extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,

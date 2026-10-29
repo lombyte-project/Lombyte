@@ -626,11 +626,6 @@ extern int D_L00_00161D90 __attribute__((sda));
 extern float D_L00_0015EF40; /* no foreign declaration */
 extern float D_L00_0015EF44; /* no foreign declaration */
 extern int D_L00_0015EF60;
-extern float D_L00_00161CA0_gp __asm__("D_L00_00161CA0") __attribute__((sda));
-extern float D_L00_00161CDC_gp __asm__("D_L00_00161CDC") __attribute__((sda));
-extern float D_L00_00161CE0_gp __asm__("D_L00_00161CE0") __attribute__((sda));
-extern float D_L00_00161CE4_gp __asm__("D_L00_00161CE4") __attribute__((sda));
-extern float D_L00_00161D1C_gp __asm__("D_L00_00161D1C") __attribute__((sda));
 extern int D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 extern int D_L00_00161D8C __attribute__((sda));
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -641,7 +636,6 @@ extern Hero_2E8210 D_0013F450_2E8210 __asm__("D_0013F350");
 extern char D_0013F4D0_2E8210[] __asm__("D_0013F3D0");
 extern char D_0013F6E0_2E8210[] __asm__("D_0013F5E0");
 extern Ctl *D_L00_00166E04_lui __asm__("D_L00_00166E04") NOT_SDA;
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float func_001F9CB8_2E8210(void *) __asm__("FUN_001f9af0");
 extern void func_L00_002E80A8_2E8210(Moby_2E8210 *) __asm__("FUN_L00_002e6bf8");
 extern void func_L00_002E58E0_2E8210(Moby_2E8210 *) __asm__("FUN_L00_002e4430");
@@ -966,8 +960,6 @@ void compute_follow_camera_collision_delta(O002e7530 *camera_moby, V002e7530 *po
 extern char *current_follow_cam __asm__("D_L00_00166E00") NOT_SDA;
 extern int D_L00_0015EF5C __asm__("D_L00_0015EF5C");
 extern struct { u8 pad[0x2080]; int value; } D_0013F350_2e7618 __asm__("D_0013F350") NOT_SDA;
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz_2e7618(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float resolve_level_path_segment_point(V002e7530 *, V002e7530 *, V002e7530 *, V002e7530 *, float) __asm__("FUN_L00_0025dcd8");
@@ -1040,8 +1032,6 @@ int adjust_follow_camera_orbit_probe_for_collisions(O002e7530 *camera_moby, V002
    (D_L00_00173F60 - arg2) . (arg0->+0x70 + 0x130) < 0. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E8E78), where it is exact; names translated to the US level program. */
 
-extern V D_L00_00173E60;
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void fast_vec_sub(float *, float *, float *) __asm__("FUN_001f9a28");
 
 /* For arg1 1: true when (D_L00_00173E60 - arg2) points against the object's +0x130 vector. */
@@ -1062,9 +1052,7 @@ int reject_follow_camera_first_step_backward_hit(void *camera_moby, int step_ind
 }
 typedef float V_2e7a30[4] __attribute__((aligned(16)));
 extern float follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
-extern float D_L00_00161CC8_gp __asm__("D_L00_00161CC8") __attribute__((sda));
 extern float D_0013CA40_2e7a30 __asm__("D_0013CA40") NOT_SDA;
-extern int D_L00_0015EF5C __asm__("D_L00_0015EF5C");
 extern struct Hero hero __asm__("D_0013F350") NOT_SDA;
 extern V_2e7a30 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern V_2e7a30 D_L00_00166E40_lui __asm__("D_L00_00166E40") NOT_SDA;
@@ -1195,9 +1183,7 @@ extern s32 FUN_L00_002e7520_2e7d20(void *) __asm__("FUN_L00_002e7520");
 extern s32 FUN_L00_002e7318_2e7d20(void *) __asm__("FUN_L00_002e7318");
 extern s32 FUN_001f96f8_2e7d20(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer(void *) __asm__("FUN_001f9770");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 FUN_L00_002e4290_2e7d20(void *) __asm__("FUN_L00_002e4290");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");

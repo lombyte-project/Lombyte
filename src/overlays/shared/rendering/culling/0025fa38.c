@@ -39,7 +39,6 @@ int test_point_in_transformed_unit_cylinder(void *point, int i) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260B68), where it is exact; names translated to the US level program. */
 
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 /* True when p lies inside the unit box of D_L00_001600F4 entry idx. */
 int test_point_in_transformed_unit_sphere(float *point, int volume_index) __asm__("FUN_L00_0025faf0");

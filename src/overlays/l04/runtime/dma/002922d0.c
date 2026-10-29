@@ -167,7 +167,6 @@ typedef struct {
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
@@ -177,7 +176,6 @@ extern void func_001F9BC0_2939E8(float *) __asm__("FUN_001f99f8");
 extern float func_001F9F90_2939E8(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2939E8(float) __asm__("FUN_001f9de0");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
 
 int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state) __asm__("FUN_L04_00292828");
@@ -286,7 +284,6 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
     return excessive_tilt_flags;
 }
 extern void build_moby_bone_transform(struct Moby *, int, float *) __asm__("FUN_0020cca8");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float rig_turn_2d48(float, float, float *, float, float, float) __asm__("FUN_L00_00258110");
@@ -537,12 +534,7 @@ u8 D_L04_001CA938[13][4] = {
     {0xf, 0, 0, 0},
     {0x14, 0, 0, 0},
 };
-extern void transform_scaled_vertex_batch(struct Moby *m, int count, int *joints, void *out) __asm__("FUN_0020cd48");
-extern void build_moby_bone_transform(struct Moby *m, int joint, float *mtx) __asm__("FUN_0020cca8");
-extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
-extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float FUN_001f99c0(float);
 extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_002927d0");
 

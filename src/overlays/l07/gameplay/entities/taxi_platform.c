@@ -110,7 +110,6 @@ char *spawn_bombomatic_projectile(char *spawn_position, char *initial_velocity, 
     }
     return spawned_moby;
 }
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 
 
@@ -1039,7 +1038,6 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                             float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Views of the crate and follower pvars: a typed field store keeps retail's load order. */
 typedef struct { char pad[0x74]; int group; int child_count; } CrateGroupView;
@@ -1222,7 +1220,6 @@ extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_00
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
 extern int play_moby_sound(int, int, void *) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern Vec4 D_L07_00173EE0;
 extern char projectile_impact_reflection_normal[] __asm__("D_L07_00173F00");
 
@@ -1439,7 +1436,6 @@ extern int water_grid_geometry_descriptors[][4] __asm__("D_L07_00204700");
 extern int pool_splash() __asm__("FUN_L00_002a3ec8");
 extern int pool_init_tiles() __asm__("FUN_L01_002b7a48");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern int fast_dec_timer(int *counter) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern unsigned short l07_water_grid_saved_control_values[] __asm__("D_L07_00204680");
 extern void approach_value(f32 *, f32, f32) __asm__("func_00213ED8");
@@ -1882,24 +1878,16 @@ extern float D_L07_0015F580[] MACRO_ADDR;
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern float fast_vec_dist(void *, void *);
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L07_0015F5CC MACRO_ADDR;
 extern int FUN_L00_00257b90(int, int);
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
-extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *, float *);
 extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025a120(void *);
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void get_target_sight(void *, void *, float) __asm__("FUN_L07_002886d8");
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
@@ -2114,7 +2102,6 @@ eb20:
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030EF90), where it is exact; names translated to the US level program. */
 
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
 unsigned char *spawn_moby_class_1046(int a, void *pos, int b, float f0, float f1, float f2, float f3,
                                 float f4) __asm__("FUN_L07_0030dbb0");
@@ -2254,13 +2241,11 @@ void draw_fading_ring_effect(unsigned char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F838), where it is exact; names translated to the US level program. */
 
-extern int D_L07_0015F5CC;
 extern int D_L07_00173ED8;
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_0025e450();
 extern void spawn_moby_point_offset_particle(char *, int, float, float) __asm__("FUN_L07_0029b8d8");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_L00_001F10E0_f(float, void *, int, int) __asm__("FUN_L00_001f0d60");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
@@ -2393,11 +2378,7 @@ void start_sharkigator_hit_knockback(struct Moby *moby, LaunchParams *knockback_
 /* Hit handler: reacts to the hit type, then takes damage and dies (state 0xE) when health runs out. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FD78), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_00257470(void *, int, int);
-extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void handle_sharkigator_hit(char *moby, char *x, float *hp) __asm__("FUN_L07_0030e998");
@@ -2566,7 +2547,6 @@ extern float FUN_001f99c0(float);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int line_blocked_30eee8(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
-extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
 void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData *data) __asm__("FUN_L07_0030eee8");
 
@@ -2660,8 +2640,6 @@ void handle_sharkigator_contact_attack(char *moby, char *moby_data, int state, i
 /* Finds another moby whose state lies within the inclusive range. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310920), where it is exact; names translated to the US level program. */
 
-extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
-extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 
 int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
 
@@ -2702,20 +2680,14 @@ extern Rec * D_L07_001612D0;
 extern char D_0013E533[];
 extern char D_L07_002117F8[];
 extern char sharkigator_unexpected_init_message[] __asm__("D_L07_00211838");
-extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
-extern int D_L07_0015F5CC;
 extern int D_L07_001612D8;
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00259740(void *, void *, int);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int classify_sharkigator_water_height_gap(char *moby, char *data) __asm__("FUN_L07_0030ebc8");
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern int fast_dec_timer(int *counter) __asm__("FUN_001f9740");
 extern s32 rand(void);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned char l07_sharkigator_water_gap_transition_sequences[1] __asm__("D_L07_00161B50") __attribute__((sda));
@@ -2728,7 +2700,6 @@ extern void FUN_L00_00263ac8(void *, int, void *, float);
 extern void set_sharkigator_idle_state_from_water_height_gap(char *arg) __asm__("FUN_L07_0030ec58");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
 float absolute_float(float input) __asm__("func_001F99C0");
 int initialize_sharkigator(char *moby, char *data) __asm__("FUN_L07_0030ed30");
@@ -3457,8 +3428,6 @@ void update_command_triggered_falling_platform(char *moby) {
 /* Falling leaf: drops off its branch after a random delay, swaying, then falls faster and vanishes near the ground. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00312FA8), where it is exact; names translated to the US level program. */
 
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 s32 allocate_voice_for_target_entry_c(s32 entry_index, s32 flags,
                                       void *target) __asm__("FUN_0022da68");
@@ -3649,7 +3618,6 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 unsigned char *spawn_color_tween_emitter_particle(void *pos, unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, int g, float x, float y) __asm__("FUN_L00_002729c8");
 extern float FUN_001fa6c0_2cd2b0(int) __asm__("FUN_001fa6c0");
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float FUN_001f9dc8_2cd2b0(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2cd2b0(float) __asm__("FUN_001f9de0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");

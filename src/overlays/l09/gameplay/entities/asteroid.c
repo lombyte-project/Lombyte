@@ -175,7 +175,6 @@ extern void set_scale_matrix(float, void *) __asm__("FUN_001f9ff8");
 extern void setup_offset_vector(float, void *, void *) __asm__("FUN_001f9a68");
 extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void restore_view_after_textured_grid(void *) __asm__("FUN_L02_002a46e0");
 #include "rnc/overlay/l09/gameplay/entities/asteroid_globals.h"
@@ -625,7 +624,6 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
 /* ticks a fading drifting moby: decays its velocity, follows it and eases its rotation */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EC010), where it is exact; names translated to the US level program. */
 
-extern float D_L09_00166F40[];
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 
@@ -688,15 +686,12 @@ V6 D_L09_00208B00 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff
 V6 D_L09_00208B18 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
 extern char *FUN_L09_002efe48_c(void *, void *, void *, float, float) __asm__("FUN_L09_002efe48");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern float D_L09_00173FE8 NOT_SDA;
 extern float D_0015ED6C MACRO_ADDR;
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_00257b90(int, int);
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern int vendor_volume(int, int) __asm__("FUN_L01_002a1968");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern unsigned char D_0013F350[];
 extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -941,11 +936,9 @@ typedef struct {
 char *FUN_L09_002ea778_c(void) __asm__("FUN_L09_002ea778");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern int FUN_L09_002eaea8_c() __asm__("FUN_L09_002eaea8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void update_fading_asteroid_debris(unsigned char *m) __asm__("FUN_L09_002ead30");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1077,9 +1070,7 @@ void asteroid_update(struct Moby *asteroid_moby) {
 /* spawns a moby of the given class at a source moby's position */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
 extern s32 rand();
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_class) __asm__("FUN_L09_002edb60");
@@ -1114,10 +1105,7 @@ extern void mark_moby_for_removal_cf(struct Moby *, int, int) __asm__("FUN_L00_0
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void scale_vector_edc30(void *, void *, float) __asm__("FUN_001f9a68");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern struct Moby *spawn_tumbling_debris(struct Moby *, Vec4 *, Vec4 *, s32, f32) __asm__("FUN_L09_002ef868");
 extern void cart_burst(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void spawn_explosion(struct Moby *, void *, void *, float, float, int, int, int, float, float, float,
@@ -1231,10 +1219,8 @@ extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char *spawn_class_11c_moby(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern int FUN_L00_00257b90(int, int);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void handle_moby_damage_and_destruction(struct Moby *moby) __asm__("FUN_L09_002ee110");
 
@@ -1289,7 +1275,6 @@ extern void *create_moby_local() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF6D0), where it is exact; names translated to the US level program. */
 
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_class_11c_moby(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
 
@@ -1321,9 +1306,7 @@ char *spawn_class_11c_moby(char *owner, void *position, float angle) {
 extern char D_L09_00166F40_2ef430[] __asm__("D_L09_00166F40");
 extern float D_0015ED6C_2ef430 __asm__("D_0015ED6C");
 extern float D_0015ED70_2ef430 __asm__("D_0015ED70");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void *spawn_spark_2ef430(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
@@ -1407,7 +1390,6 @@ struct DebrisVars {
     struct Moby *src;   /* 0x18 */
     s32 life;           /* 0x1C */
 };
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 
 /* spawns a debris moby of class 0x140 + kind at pos with velocity vel and a random spin */
@@ -1450,10 +1432,7 @@ struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 k
 extern char D_L09_00166F40_2ef9b0[] __asm__("D_L09_00166F40");
 extern float D_0015ED6C_2ef9b0 __asm__("D_0015ED6C");
 extern float D_0015ED70_2ef9b0 __asm__("D_0015ED70");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void *spawn_spark_2ef9b0(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void mark_moby_for_removal_2ef9b0(void *) __asm__("FUN_0020c828");
 
@@ -1638,7 +1617,6 @@ extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");
 extern int func_001F9850_2F9A50(int) __asm__("FUN_001f96f8");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern float func_001F9C78_2F9A50(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void *a4) __asm__("FUN_L07_00288968");

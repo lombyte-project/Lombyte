@@ -228,8 +228,6 @@ void update_scene_moby_effect_bursts(char *moby) {
  * Matched using lever: g - (-(idx * 4)) + 0x178 fixes addu operand order. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320CD0), where it is exact; names translated to the US level program. */
 
-extern char D_L07_0016C8E0[];
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 
 extern short scene_trail_velocity_length __asm__("D_L07_00161CD8") __attribute__((sda));

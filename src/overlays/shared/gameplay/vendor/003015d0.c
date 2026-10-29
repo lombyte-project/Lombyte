@@ -338,17 +338,14 @@ typedef struct {
     u64 gs_state;
 } VendorBeamStripPacket;
 
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int vendor_beam_effect_texture_index_gp __asm__("D_L14_001620DC") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/vendor/003015d0_data/draw_vendor_beam.h"
 
-extern char D_L14_001674C0[];
 
 extern float vendor_beam_base_uv[4][2] __asm__("D_L14_001E5FD0");
 

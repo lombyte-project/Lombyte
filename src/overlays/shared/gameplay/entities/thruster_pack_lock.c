@@ -79,7 +79,6 @@ extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
 extern void func_0022ED80_3102C8(int, int, void *) __asm__("FUN_0022da68");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int func_001F9850_3102C8(int) __asm__("FUN_001f96f8");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
@@ -431,11 +430,9 @@ extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern int level_frame __asm__("D_L11_0015F5CC");
 extern int D_L11_0015FFD8;
-extern short *D_L11_001AC240[];
 
 typedef struct {
     float positions[4][4];
@@ -542,11 +539,8 @@ int draw_linked_moby_trails(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 
 
-extern int level_frame __asm__("D_L11_0015F5CC");
 extern int draw_linked_moby_trails();
-extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
 extern void f49(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L11_003192c8_c(void) __asm__("FUN_L11_003192c8");
@@ -671,8 +665,6 @@ void update_moby_hit_stats_and_state(char *moby) {
 typedef unsigned int u128_ad0 __attribute__((mode(TI)));
 extern int D_L11_001611C0_lui __asm__("D_L11_001611C0");
 extern int screen_extent[] __asm__("D_0013E500");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 extern u128_ad0 l11_screen_triangle_strip_setup_gif_tag_template __asm__("D_L11_001608E0");
 extern u128_ad0 l11_screen_triangle_strip_vertex_gif_tag_template __asm__("D_L11_001608F0");
@@ -715,17 +707,11 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
     D_L11_001611C0 += ((point_count + 1) / 2) * 16;
 }
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float vector_distance_xyz(void *, void *) __asm__("FUN_001f9b48");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 

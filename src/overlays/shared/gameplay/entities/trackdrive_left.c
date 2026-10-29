@@ -488,7 +488,6 @@ extern int D_L02_00161AA0_gp __asm__("D_L02_00161AA0") __attribute__((sda));
 extern char D_0013E633_2D9F08[] __asm__("D_0013E533");
 extern Hero D_0013F450_2D9F08 __asm__("D_0013F350");
 extern int D_0013CAE4 __attribute__((section(".data")));
-extern char D_0013C940[];
 
 void tresspasser_pad_update(Moby *moby) __asm__("FUN_L02_002d8ad0");
 void tresspasser_pad_update(Moby *moby) {
@@ -1256,7 +1255,6 @@ extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90"
 extern void ea210_approach(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
 extern void ea210_transform(float, void *, void *, void *) __asm__("FUN_001f9a40");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002ea9d8_c(void *) __asm__("FUN_L00_002ea9d8");
 extern void FUN_L00_002eaa30_c(void *) __asm__("FUN_L00_002eaa30");

@@ -353,7 +353,6 @@ typedef struct {
 extern char *D_L14_0015FFD8;
 extern L14LevelState D_L14_001BB930;
 extern int D_L14_001BABD0[];
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void activate_descriptor(int) __asm__("FUN_L10_002f5a50");
 void save_and_lower_unlock_sequence_mobys(struct Moby *moby) __asm__("FUN_L14_00305600");
@@ -416,7 +415,6 @@ void update_unlock_sequence_controller(unsigned char *moby) {
 /* For each entry in a moby-id list, saves the moby's Y and lowers it by 20. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00306A88), where it is exact; names translated to the US level program. */
 
-extern char *D_L14_0015FFD8;
 extern float unlock_sequence_saved_moby_heights[] __asm__("D_L14_001EE5E0");
 extern unsigned short *D_L14_001ABF40[];
 
@@ -678,7 +676,6 @@ extern int func_001F9850_3071B0(int) __asm__("FUN_001f96f8");
 extern float func_001FA888_3071B0(int) __asm__("FUN_001fa6c0");
 extern int func_L00_0028EF68_3071B0(int i, int a1, Moby_3071B0 *v, int k) __asm__("FUN_L00_0028dc90");
 extern int func_001F9938_3071B0(void *) __asm__("FUN_001f9770");
-extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 extern int func_L00_0028EB98_3071B0(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int func_0022ED80_3071B0(int, int, Moby_3071B0 *) __asm__("FUN_0022da68");
 extern float func_L00_0025C700_3071B0(float, float, float) __asm__("FUN_L00_0025b6a8");
@@ -805,7 +802,6 @@ extern char *D_L14_001B0BB0[];
 extern u8 D_0014C050[];
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
 void button_update(struct Moby *moby) __asm__("FUN_L14_00306b78");
@@ -1119,9 +1115,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
 /* Precomputes per-point segment values of a path and snaps the moby to its first point. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00308998), where it is exact; names translated to the US level program. */
 
-extern char *D_L14_001B0BB0[];
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 void initialize_flying_car_path(struct Moby *moby) __asm__("FUN_L14_00307510");
 
@@ -1154,7 +1148,6 @@ extern void cart_burst(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025f090"
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 extern void release_voice_slot(s32 idx) __asm__("FUN_0022d798");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 
@@ -1320,7 +1313,6 @@ typedef struct {
     char *start;
 } VendorSet_4f00;
 extern VendorSet_4f00 D_L14_00167380 __asm__("D_L14_00167380");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001f9b48(void *, void *);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");

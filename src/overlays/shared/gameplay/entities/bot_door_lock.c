@@ -318,7 +318,6 @@ extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void 
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void update_hit_triggered_moby_breakup(char *self) __asm__("FUN_L06_00309860");
 
@@ -396,7 +395,6 @@ void update_timed_sprite_effect(char *moby) {
         break;
     }
 }
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 
 void spawn_timed_projected_sprite_effect(char *world_position, int duration_updates, int start_color, int end_color) __asm__("FUN_L06_0030bef8");
@@ -423,7 +421,6 @@ extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern void project_to_screen(f32 *, void *) __asm__("FUN_001f2070");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
-extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern s32 D_0013E500[];
 extern s32 projected_quad_texture_selector_gp __asm__("D_L06_00162414") __attribute__((sda));

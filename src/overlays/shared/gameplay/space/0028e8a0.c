@@ -173,7 +173,6 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     }
     continue_audio_stream_if_ready();
 }
-extern int D_L00_0015F5D8;
 extern short D_0013E05C NOT_SDA;
 void music_pause(int) __asm__("FUN_00216050");
 void sound_update(void) __asm__("FUN_0022ca50");

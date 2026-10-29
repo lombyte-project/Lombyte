@@ -144,8 +144,6 @@ unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *in
     }
     return particle;
 }
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 extern float FUN_001f99c0(float);
 
 void update_moving_resizing_height_snapped_alpha_fade_particle(unsigned char *particle) __asm__("FUN_L00_00271748");
@@ -256,9 +254,7 @@ unsigned char *spawn_random_alpha_rotated_particle(u128 *position, u128 *initial
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272A88), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void update_expanding_damped_fading_particle(char *particle) __asm__("FUN_L00_00271be8");
 
@@ -282,8 +278,6 @@ void update_expanding_damped_fading_particle(char *particle) {
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_001fa6e0(int, int, float);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void update_color_tween_particle(char *particle) __asm__("FUN_L00_00271c88");
 
@@ -389,9 +383,6 @@ void update_damped_fading_particle(u8 *particle) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272E60), where it is exact; names translated to the US level program. */
 
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int FUN_001fa6e0(int, int, float);
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void update_color_size_tween_particle(char *particle) __asm__("FUN_L00_00271fc0");
 
@@ -453,8 +444,6 @@ unsigned char *FUN_L00_00272060(void *initial_position, int lifetime_frames, int
 
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 static __inline__ void vcopy_273090(float *d, float *s) {
     d[0] = s[0];
@@ -839,7 +828,6 @@ void update_color_tween_emitter_particle(unsigned char *particle) {
         break;
     }
 }
-extern char D_0013F3D0[] NOT_SDA;
 int FUN_001fa6d0_00272f68(float) __asm__("FUN_001fa6d0");
 extern unsigned char *D_L00_001B2080_lui[] __asm__("D_L00_001B2080") NOT_SDA;
 unsigned char *FUN_L00_00272f68(u128 *a, int c, unsigned char b, int idx, int flag, int n, int mode,
@@ -989,11 +977,9 @@ typedef struct {
 } P_273448;
 extern u8 *D_L00_001B2174_lui __asm__("D_L00_001B2174") NOT_SDA;
 extern float g_debug_camera[4] __asm__("D_L00_00166DC0") NOT_SDA;
-extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) __asm__("FUN_L00_00273448");
 
 void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
@@ -1085,7 +1071,6 @@ unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alp
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002746A0), where it is exact; names translated to the US level program. */
 
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void update_mode_controlled_alpha_fade_particle(char *particle) __asm__("FUN_L00_00273800");
 
@@ -1113,7 +1098,6 @@ void update_mode_controlled_alpha_fade_particle(char *particle) {
 /* Spawns a type-64 particle at pos moving with vel, sprite size chosen by distance to the hero. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00274788), where it is exact; names translated to the US level program. */
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern unsigned char *l00_gravity_floor_burst_particle_texture_refs[] __asm__("D_L00_001B2180");
 extern unsigned char D_0013F3D0_c[] __asm__("D_0013F3D0");
 
@@ -1328,8 +1312,6 @@ unsigned char *spawn_random_planar_drift_particle(void *position, int color, flo
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002751A8), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void update_moving_resizing_periodic_alpha_fade_particle(char *particle) __asm__("FUN_L00_00274308");
 
@@ -1641,7 +1623,6 @@ unsigned char *spawn_texture_indexed_rotated_particle(void *position, int partic
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275C80), where it is exact; names translated to the US level program. */
 
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Every second tick lowers the top byte at a+4 by 1; calls 00267a08 once it reaches 0. */
 void update_periodic_alpha_fade_particle(char *particle) __asm__("FUN_L00_00274de0");
@@ -1797,7 +1778,6 @@ unsigned char *spawn_random_size_rotated_particle(void *position, void *initial_
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00276180), where it is exact; names translated to the US level program. */
 
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Adds byte 0x38 to byte 8; calls free_effect_particle once the float at 0xC is <= 0. */
 void update_size_gated_rotating_particle(char *particle) __asm__("FUN_L00_002752e0");
@@ -1883,7 +1863,6 @@ void update_gravity_ground_culled_particle(O_275320 *particle) {
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int mine_blend_color(float, int, int) __asm__("FUN_L00_002371e0");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void transform_vector_by_basis(void *, void *, void *);
 
 void update_damped_moby_relative_color_size_tween_particle(char *particle) __asm__("FUN_L00_00275510");
@@ -2054,12 +2033,9 @@ unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(OvlQuad *init
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00276940), where it is exact; names translated to the US level program. */
 
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short proximity_correction_length_gp __asm__("D_L00_0016024C") __attribute__((sda));
 extern char D_0013F5E0[] __attribute__((section(".data"))  );
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 static __inline__ void vcopy_276940(float *d, float *s) {
     d[0] = s[0];

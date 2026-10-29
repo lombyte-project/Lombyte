@@ -123,7 +123,6 @@ void smooth_transform_orientation_toward_hero(char *transform_state) {
     fast_vec_normalize(transform_state + 0x10, transform_state + 0x10, 1.0f);
     fast_vec_cross(transform_state + 0x20, transform_state + 0x10, transform_state);
 }
-extern int D_L03_0015EF50;
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 
 int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_object) __asm__("FUN_L03_002e8870");
@@ -153,8 +152,6 @@ int evaluate_clip_volume_candidate(char *candidate_object, char *comparison_obje
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002E9D48), where it is exact; names translated to the US level program. */
 
-extern int D_L03_0015EF50;
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 
 void set_transform_state_three_when_outside_clip_volume(char *moby) __asm__("FUN_L03_002e8980");
 

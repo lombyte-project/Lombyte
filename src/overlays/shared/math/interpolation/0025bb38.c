@@ -63,7 +63,6 @@ float FUN_L00_0025bc98(float *current_angle, float *angular_velocity, int rotati
     }
     return angle_error;
 }
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float FUN_001fa580_25be00(float, float) __asm__("FUN_001fa580");
 extern float FUN_001f99c0_25be00(float) __asm__("FUN_001f99c0");
 extern float square_root(float) __asm__("FUN_001f9988");

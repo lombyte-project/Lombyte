@@ -49,8 +49,6 @@ void interpolate_vector_xyz_cosine_eased(void *interpolated_vector_output, void 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259088), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Blends three angles from a toward b with a cosine ease; ang 0 gives a, 1 gives b. */
 void interpolate_wrapped_rotations_cosine_eased(float *out, float *start_rotations, float *target_rotations, float interpolation_fraction) __asm__("FUN_L00_00258050");
@@ -577,9 +575,6 @@ int get_first_moby_in_group(char **out, int moby_group_index, int include_sign_b
 }
 
 extern unsigned short *D_L00_0016010C;
-extern short D_L00_00160110;
-extern char *D_L00_00160114;
-extern int D_L00_0015FFF4;
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern unsigned short *D_L00_001AB840[];
 
@@ -664,7 +659,6 @@ float calculate_triangular_corrected_scalar(float *base_values, float *linear_te
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A540), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 
 void predict_position_with_vertical_drop(void *destination, void *base_position, void *velocity, int frame_count, float vertical_drop_coefficient) __asm__("FUN_L00_00259508");
 

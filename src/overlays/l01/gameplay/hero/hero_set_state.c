@@ -1613,7 +1613,6 @@ extern unsigned int FUN_L00_00266d60(unsigned int, int, int *);
 extern int FUN_L00_0020d498(int);
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
-extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 extern int FUN_L00_00233e98(int);
 extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");

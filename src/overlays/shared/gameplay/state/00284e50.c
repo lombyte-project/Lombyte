@@ -143,8 +143,6 @@ void restore_or_clear_level_state(void) {
     init_camera_system();
     FUN_L00_002852c0();
 }
-extern u8 *moby_table __asm__("D_L00_0015FFD8");
-extern u8 *D_L00_0015FFDC;
 /* Finds the moby (0x100 bytes each) whose short at 0xB2 equals id; 0 when none. */
 u8 *find_moby_by_id(s32 unused_parameter, s32 id) __asm__("FUN_L00_002851c0");
 
@@ -170,7 +168,6 @@ typedef struct {
 } Ent;
 
 extern int FUN_L00_002851c0_u(int, int) __asm__("FUN_L00_002851c0");
-extern void copy_memory_aligned(int, void *, unsigned short) __asm__("FUN_001f9838");
 
 void restore_moby_state_entries(int *entry_block) __asm__("FUN_L00_00285208");
 

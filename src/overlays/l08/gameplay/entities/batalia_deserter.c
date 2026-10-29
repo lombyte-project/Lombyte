@@ -299,9 +299,6 @@ struct G_3063f0 {
     char *objs[1];
 };
 
-extern float D_L08_0015F59C;
-extern float D_L08_0015F5A0;
-extern int level_game_mode __asm__("D_L08_0015F5C4");
 extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__((section(".data")));
 extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
 extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
@@ -339,7 +336,6 @@ void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
         }
     }
 }
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 typedef struct {
     float target[4];
@@ -398,7 +394,6 @@ typedef struct {
 } L14Player;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
@@ -529,7 +524,6 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, watch_data->body, 0);
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, watch_data->head, 1);
 }
-extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 
 /* Set the object state, then apply the requested payload mode. */
 void FUN_L08_00306b30(u8 *object, s32 mode)

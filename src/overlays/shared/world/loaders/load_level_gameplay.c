@@ -419,7 +419,6 @@ extern char level_gameplay_moby_occlusion_outdated_format[] __asm__("D_L00_001E8
 extern char level_gameplay_tfrag_occlusion_outdated_message[] __asm__("D_L00_001E86E0");
 extern char level_gameplay_tie_occlusion_outdated_format[] __asm__("D_L00_001E8708");
 extern char level_gameplay_no_occlusion_message[] __asm__("D_L00_001E8740");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float D_L00_0015F448 MACRO_ADDR;
 extern float D_L00_0015F44C MACRO_ADDR;
@@ -459,7 +458,6 @@ extern int D_L00_001AB840[];
 extern int D_L00_001BA4D0[];
 extern int fast_decompress(void *, void *) __asm__("FUN_L00_0024d8d0");
 extern int find_or_assign_bolt_source_slot(int, int) __asm__("FUN_L00_00284d90");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short gameplay_moby_index_remap[] __asm__("D_L00_001AC780");
 extern short D_L00_001B0770[];
 extern short D_L00_001B07B0[];

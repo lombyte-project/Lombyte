@@ -983,7 +983,6 @@ int begin_sentrybot_turn_toward_heading(unsigned char *moby, char *moby_data, in
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AC48), where it is exact; names translated to the US level program. */
 
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L15_00299880_u(void *, void *, void *, void *, float) __asm__("FUN_L15_00299880");
 
 /* Aims at point (heading from the moby) and passes it on to FUN_L15_00299880. */
@@ -1028,8 +1027,6 @@ int move_sentrybot_toward_point(char *moby, float *point, float target_forward_s
 /* checks that no closer live object blocks the line to the target */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AE80), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b80(float *, float *);
-extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40[];
 
 int can_sentrybot_approach_linked_moby(void *mm) __asm__("FUN_L15_00299ca0");
@@ -1072,9 +1069,6 @@ int can_sentrybot_approach_linked_moby(void *mm) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AFB8), where it is exact; names translated to the US level program. */
 
-extern float FUN_001f9b48(void *, void *);
-extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
-extern int D_L15_001ABE40[];
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 int find_sentrybot_attention_target(char *moby) {
@@ -1126,7 +1120,6 @@ int find_sentrybot_attention_target(char *moby) {
 /* Returns 0 if a live listed moby of class 0x2C has a lower rank than this one, else 1. */
 
 extern int D_L15_0015FFD8;
-extern int D_L15_001ABE40[];
 
 int can_sentrybot_advance_patrol(void *input_moby) {
     unsigned char *moby = input_moby;
@@ -1527,12 +1520,9 @@ extern int D_L15_00174458_y[] __asm__("D_L15_00174458");
 extern float D_0015ED6C;
 extern float dist_y(void *, void *) __asm__("FUN_001f9b48");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int randbelow_y(int) __asm__("FUN_00213260");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void spawn_rocket_trail_spark(char *moby) __asm__("FUN_L15_0029ae18");
 
 void spawn_rocket_trail_spark(char *moby) __asm__("FUN_L15_0029ae18");
@@ -1578,9 +1568,6 @@ void rocket_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BFF8), where it is exact; names translated to the US level program. */
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float D_0015ED6C;
-extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
 extern int rocket_trail_spark_initial_configuration_word_gp __asm__("D_L15_00161418") __attribute__((sda));
 extern float rocket_trail_spark_frame_count_range_start_gp __asm__("D_L15_00161428") __attribute__((sda));
@@ -1597,7 +1584,6 @@ extern float rocket_trail_spark_second_noise_radius_factor_gp __asm__("D_L15_001
 extern float rocket_trail_spark_second_velocity_scale_gp __asm__("D_L15_0016144C") __attribute__((sda));
 extern int rocket_trail_spark_lookup_index_and_flags_gp __asm__("D_L15_00161454") __attribute__((sda));
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void spawn_rocket_trail_spark(char *moby) {
     float noise[4];
@@ -1722,7 +1708,6 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 square_root(f32) __asm__("func_001F9988");
 extern f32 vector_length_xy_c2(void *) __asm__("FUN_001f9b20");
 extern float D_0015ED64;
-extern float D_0015ED6C;
 extern float D_0015ED70;
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_target_leading_missile_2.h"
 extern float FUN_L00_001ff430(void *);
@@ -1730,11 +1715,8 @@ extern float FUN_L00_00258110(float *vel, float cur, float target, float k, floa
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance_xy_alt(float *, float *) __asm__("FUN_001f9b80");
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_target_leading_missile.h"
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90(int, int);
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below_c3(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c4(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L15_001B26DC NOT_SDA;
@@ -2095,10 +2077,8 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
 /* update: scale and fade a moby, spawn an effect, delete it when done */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029FCB0), where it is exact; names translated to the US level program. */
 
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern void play_entity_sound(float, char *, char *, float, float, int, int, int, int) __asm__("FUN_L00_002598b0");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
 void update_scaling_fading_hit_sphere(struct Moby *moby) __asm__("FUN_L15_0029ead0");
 
@@ -2188,10 +2168,6 @@ extern Fade29FF90 D_L15_0015F320 MACRO_ADDR;
 extern Light29FF90 D_L15_001808C0[];
 extern s32 D_L15_00178500[];
 extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, void *) __asm__("FUN_L00_00274948");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C MACRO_ADDR;
 extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") MACRO_ADDR;
 extern int charged_blast_removal_target __asm__("D_L15_00161484"); /* no foreign declaration */
@@ -2201,16 +2177,13 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c3(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L15_001B26AC NOT_SDA;
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void spawn_owner_target_particle(int a0, void *a1, char *a2) __asm__("FUN_L15_0025e2c0");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *a, void *b, int c, int d, float f, int n, int e, int g, int h) __asm__("FUN_L00_0026bb70");
 unsigned char *spawn_source_attached_fading_effect_particle(char *src, int color, int n, int h, float f) __asm__("FUN_L00_0026daa0");
 void FUN_L00_00269b70(void *pos, unsigned char red, unsigned char green, unsigned char blue, int target, float a, float b);
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
-extern char D_001413F4[];
 extern void func_L00_0026AA10_29FF90(void *, unsigned char, unsigned char, unsigned char, float, float, int) __asm__("FUN_L00_00269b70");
 extern int func_L00_001F2BE8_29FF90(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern char *func_L00_0026E940_29FF90(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
@@ -2384,10 +2357,6 @@ void update_charged_blast(Moby29FF90 *moby) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0015ED6C MACRO_ADDR;
-extern int D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") MACRO_ADDR;
 extern int D_L15_00161AB8_lui __asm__("D_L15_00161AB8"); /* no foreign declaration */
 extern s32 random_integer_below_c(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
@@ -2401,8 +2370,6 @@ void draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8
 
 extern void draw_group_moby_effect_quads(unsigned char *) __asm__("FUN_L15_002a29b8");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern char D_0013F420[];
 extern void func_L00_0025A8E8_m(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
 void update_hero_seeking_group_moby(char *moby) __asm__("FUN_L15_002a2488");
@@ -2517,7 +2484,6 @@ tailA:
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3A48), where it is exact; names translated to the US level program. */
 
-extern int D_L15_0015FFD8;
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 int activate_first_inactive_group_moby(int moby_group_index, void *pos) __asm__("FUN_L15_002a2868");
@@ -2642,7 +2608,6 @@ extern int draw_spark_emitter_effect_quads() __asm__("FUN_L15_002a3138");
 unsigned char *create_type_47_particle(void *pos, float *p, float *c, int d, int e, int f, int g, int h, char *owner) __asm__("FUN_L15_002647f0");
 extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BB830");
 extern unsigned char D_0013E650_2A3DD0[] __asm__("D_0013E550");
-extern char D_0013F420[];
 extern float func_002140F8_2A3DD0(float, float) __asm__("FUN_002132a8");
 extern int func_002140B0_2A3DD0(int) __asm__("FUN_00213260");
 extern int func_001F9850_2A3DD0(int) __asm__("FUN_001f96f8");
@@ -3139,7 +3104,6 @@ extern float spiderbot_effect_quad_uvs[] __asm__("D_L15_001E27F0");
 extern int get_effect_texture_alt(int) __asm__("FUN_001f44b8");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 void draw_spiderbot_effect_quad(char *moby) __asm__("FUN_L15_002a7628");
 
@@ -3312,7 +3276,6 @@ void door_update(struct Moby *moby) {
         }
     }
 }
-extern int interpolate_color_2a3138(float, int, int) __asm__("FUN_001fa6e0");
 extern int D_L15_00161AB4 __attribute__((sda));
 extern int D_L15_00161AB8 __attribute__((sda));
 extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
@@ -3473,7 +3436,6 @@ update:
 
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
 extern int D_L15_001ABE40_lui[] __asm__("D_L15_001ABE40") NOT_SDA;
-extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 
 void set_sentrybot_alarm_duration(char *moby, int duration_frames) {
     char *moby_data = *(char **)(moby + 0x78);
@@ -3527,12 +3489,9 @@ void prepare_sentrybot_alarm(unsigned char *moby) {
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int FUN_L15_002cbac0_u() __asm__("FUN_L15_002cbac0");
-extern int D_0015ED84;
 extern s32 D_L15_00161AB8 ;
-extern short D_L15_00161ABC_gp __asm__("D_L15_00161ABC") __attribute__((sda));
 extern s32 D_L15_00161AC0_gp __asm__("D_L15_00161AC0") __attribute__((sda));
 extern void emit_sine_modulated_rgba_draw_packet(void) __asm__("FUN_L15_002cbd88");
-extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 
 extern int sentrybot_alarm_voice_slot_index_gp __asm__("D_L15_00161AC4") __attribute__((sda));
 extern short sentrybot_alarm_voice_owner_gp __asm__("D_L15_00161AC8") __attribute__((sda));

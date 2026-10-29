@@ -493,7 +493,6 @@ typedef union {
     f32 f[4];
     u128 q;
 } __attribute__((aligned(16))) V2d09b8;
-extern s32 D_L00_0015F5CC;
 extern s32 D_L00_001618D4_2d09b8 __asm__("D_L00_001618D4");
 extern s32 D_L00_001618D8_2d09b8 __asm__("D_L00_001618D8");
 extern s32 D_L00_0015FFBC __asm__("D_L00_0015FFBC");
@@ -1034,11 +1033,8 @@ extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 void compute_glove_of_doom_launch_velocity(void *pos, void *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("FUN_L00_002c7320");
 extern char player_camera_2D3608[] __asm__("D_L00_00166C80");
-extern char camera_position[] __asm__("D_L00_00166DC0");
-extern int D_L00_00173E40;
 extern char D_0013F990_2D3608[] __asm__("D_0013F990");
 extern char controller_state_2D3608[] __asm__("D_0013C940");
-extern float D_0015ED70;
 extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void func_001F9EC0_2D3608(void *, void *, void *) __asm__("FUN_001f9cf8");
@@ -1174,11 +1170,9 @@ extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da
 extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 extern void transform_vector() __asm__("FUN_001f9d20");
 void FUN_L00_002d2158_c(int collision_arg, Moby_2D3608 *carrier, float *position) __asm__("FUN_L00_002d2158");
-extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern u8 D_0013E539_lui __asm__("D_0013E539") NOT_SDA;
 extern char D_0013CAE4[];
 #include "rnc/gameplay/state/game_globals.h"
-extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 
 void decoy_glove_update(unsigned char *moby) __asm__("FUN_L00_002d2670");
 void decoy_glove_update(unsigned char *moby) {
@@ -1427,7 +1421,6 @@ void draw_metal_detector_trail(Moby_2D3F40 *moby) {
 /* increments the selected packed nibble, saturating at fifteen */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D42D8), where it is exact; names translated to the US level program. */
 
-extern int D_0015ED84;
 extern unsigned char D_0014BF10[];
 
 void increment_metal_detector_collection_counter(unsigned char *moby) __asm__("FUN_L00_002d2e28");
@@ -1506,13 +1499,11 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void quaternion_nlerp(void *, void *, void *, f32) __asm__("FUN_001fa400");
 extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void engine_voice_set_pitch(s32, s32) __asm__("FUN_L00_0028df38");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
@@ -1754,7 +1745,6 @@ void metal_detector_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D4C80), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 /* Blends the moby to animation 6 when D_0013F350+0x2084 is 8. */
@@ -1839,15 +1829,12 @@ extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int FUN_L00_001fefc8(void *);
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned char D_L00_001802C0[];
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
-extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 int FUN_001fa728(Vec4f *, float);
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
-extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_animated_point_light_moby(unsigned char *moby) __asm__("FUN_L00_002d3a10");
@@ -2204,8 +2191,6 @@ typedef struct {
     s16 unk276;
 } ToadVars;
 
-extern char camera_position[] __asm__("D_L00_00166DC0");
-extern char *moby_table __asm__("D_L00_0015FFD8");
 extern ToadPath *toad_paths[] __asm__("D_L00_001B04B0");
 
 extern void FUN_L00_002d5160_2d4610(void *) __asm__("FUN_L00_002d5160");
@@ -2459,7 +2444,6 @@ void horny_toad_update(Moby *moby) {
 }
 extern s32 D_L00_0015F5C4_2d5160 __asm__("D_L00_0015F5C4");
 extern f32 D_0015ED6C_2d5160 __asm__("D_0015ED6C");
-extern float D_0015ED70;
 extern f32 D_L00_00161970_gp __asm__("D_L00_00161970") __attribute__((sda));
 extern f32 D_L00_00161974_gp __asm__("D_L00_00161974") __attribute__((sda));
 extern f32 D_L00_00161978_gp __asm__("D_L00_00161978") __attribute__((sda));

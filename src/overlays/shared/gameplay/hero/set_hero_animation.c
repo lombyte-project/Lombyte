@@ -93,7 +93,6 @@ int lookup_hero_slot3_animation_key(int key, int *out) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002326D0), where it is exact; names translated to the US level program. */
 
-extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend_frames) __asm__("FUN_L00_00231e78");
@@ -204,7 +203,6 @@ int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_an
    retail's `ori $6, $sp, 4`). */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232980), where it is exact; names translated to the US level program. */
 
-extern int select_hero_slot3_animation_pair(int, int *, int *) __asm__("FUN_L00_00231ff8");
 
 /* Copies &hero.anim_speed to +0x58 of the objects at 0x1180/0x1184 when the lookup succeeds. */
 void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
@@ -284,7 +282,6 @@ void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float b
    the float at +0xA90 to the animation's field 0x58. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232B20), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
 /* Copies &hero.anim_speed to +0x58 of the object at +0x2278 when FUN_L00_002321c0 succeeds. */
 void sync_hero_mapped_moby_animation_speed(void) __asm__("FUN_L00_002322c8");
@@ -1034,7 +1031,6 @@ void gravity_flatten(float *flattened_vector, float *input_vector) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
 
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
@@ -1061,8 +1057,6 @@ float gravity_length_xy(float *input_vector) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002342F8), where it is exact; names translated to the US level program. */
 
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 
 float gravity_z(float *v) __asm__("FUN_L00_00233a78");
 float gravity_z(float *input_vector) {
@@ -1109,7 +1103,6 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) {
    matrices at +0x40 and +0x0. The switch gives retail's case tree. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234420), where it is exact; names translated to the US level program. */
 
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
 void set_gravity_relative_vector_length_xy(float *output_vector, float *input_vector, float z) __asm__("FUN_L00_00233ba0");
@@ -1332,8 +1325,6 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void probe_ground_height_cf(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern int convert_pose_to_reference_local(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void transform_attachment_pose(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");

@@ -45,7 +45,6 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L05_001B25C8 NOT_SDA;
 unsigned char *create_particle_with_velocity_and_randomized_parameters(void *initial_position_source, void *initial_velocity_source, int initial_word_at_04, int byte_table_index, float unscaled_particle_scalar, float b,

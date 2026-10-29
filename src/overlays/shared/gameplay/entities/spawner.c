@@ -99,7 +99,6 @@ extern s32 allocate_voice_307d68(s32, s32, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal_307d68(struct Moby *) __asm__("FUN_0020c828");
 extern s32 tick_countdown_16_307d68(s16 *) __asm__("FUN_001f9770");
 extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe *) __asm__("FUN_001efa68");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void FUN_L00_0026dd20_307d68(void *, void *, u32, s32, f32) __asm__("FUN_L00_0026dd20");
@@ -521,7 +520,6 @@ void spawner_update(char *moby)
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030C658), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_spawner_egg(int owner, void *initial_position, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
@@ -592,12 +590,10 @@ extern s32 collision_line(void *, void *, s32, struct Moby *, s32) __asm__("FUN_
 extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_001fefc8(void *);
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 extern f32 normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern struct Moby *respawn_spawner_child(struct Moby *, Vec4 *) __asm__("FUN_L09_0030a778");

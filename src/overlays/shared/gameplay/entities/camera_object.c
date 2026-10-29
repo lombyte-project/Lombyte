@@ -764,13 +764,11 @@ extern f32 FUN_002132a8(f32, f32);
 extern void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 FUN_001f99c0(f32);
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void quaternion_nlerp(void *, void *, void *, f32) __asm__("FUN_001fa400");
 extern void quaternion_rotation_basis(void *, void *) __asm__("FUN_001fa480");
@@ -1140,12 +1138,8 @@ void collect_bolt(struct Moby *bolt)
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A8088), where it is exact; names translated to the US level program. */
 
 extern char *FUN_L00_002603d0_c(void *) __asm__("FUN_L00_002603d0");
-extern float D_0015ED6C;
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int transform_attachment_pose(int x, char *o, float *p, float *q, float *r, float *s) __asm__("FUN_L00_002604f0");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
-extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void FUN_001f9bf8_u(float *, float *, float) __asm__("FUN_001f9bf8");
 
 void update_bolt_grounded_pose(char *moby, void *out1, void *out2) __asm__("FUN_L00_002a6de8");
@@ -1253,8 +1247,6 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
 extern int D_15F5CC_2a7210 __asm__("D_L00_0015F5CC");
 extern float D_15ED6C_2a7210 __asm__("D_0015ED6C");
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN_00214530");
 
 extern int last_bolt_attraction_sound_frame_gp __asm__("D_L00_001613AC") __attribute__((sda));
@@ -1453,7 +1445,6 @@ typedef struct {
 extern P_2a7780 D_0013F350_2a7780 __asm__("D_0013F350");
 extern int game_frame __asm__("D_L00_0015F5CC");
 extern int FUN_001f44b8_2a7780(int) __asm__("FUN_001f44b8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_001f9a68_2a7780(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f7d30_2a7780(void *, void *, int) __asm__("FUN_001f7d30");
 #define P_2a7780_G D_0013F350_2a7780
@@ -1715,7 +1706,6 @@ typedef struct N_2a82c0 {
 } N_2a82c0;
 extern N_2a82c0 *D_L00_0015FFE4;
 extern float FUN_001f9b48(void *, void *);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int begin_bolt_attraction(void *, void *, float, float) __asm__("FUN_L00_002a7210");
 extern int is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(void *) __asm__("FUN_L00_0025e3f8");
 extern int try_collect_ammo_pickup(void *) __asm__("FUN_L00_002c5be8");
@@ -1826,13 +1816,11 @@ typedef union {
 
 extern WrenchAttack attack_records[] __asm__("D_L00_0017BC28");
 extern WrenchMoby *D_L00_00177F00[];
-extern char *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern char D_0013E533[];
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C;
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_value_alt(float*,float,float) __asm__("FUN_00213ed8");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
@@ -2225,7 +2213,6 @@ char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char 
 /* Creates a moby at a position with a scale, colour and a few data fields. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAC50), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 
 void *spawn_class_593_moby(int unused, void *spawn_position, int initial_paired_value, float scale, float initial_private_scalar, float b) __asm__("FUN_L00_002a99b0");
@@ -2315,8 +2302,6 @@ void set_tracked_class_5f3_moby_position(void *unused_creation_arg, OvlQuad *pos
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAE80), where it is exact; names translated to the US level program. */
 
-extern int D_L00_0015F320;
-extern int D_L00_0015F330;
 extern short D_L00_001613C8_d __asm__("D_L00_001613C8") __attribute__((sda));
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -2371,7 +2356,6 @@ extern s32 D_L00_0015F5CC;
 extern f32 spin_angles_x __asm__("D_L00_001613E0") __attribute__((sda));
 extern f32 spin_angles[] __asm__("D_L00_001613E0") MACRO_ADDR;
 extern f32 square_root(f32) __asm__("FUN_001f9988");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
 float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
@@ -2597,18 +2581,10 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *
 
 extern V D_L00_00166DC0;
 extern char *FUN_L00_002603d0_u(void *) __asm__("FUN_L00_002603d0");
-extern char D_0013F350[];
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float coll_hit_normal[] __asm__("D_L00_00173E80");
 extern int D_L00_0015F5C4_c __asm__("D_L00_0015F5C4");
-extern int D_L00_00173E40_u[] __asm__("D_L00_00173E40");
-extern int FUN_001efa68(void*,void*,int,int,int);
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern int fast_dec_timer(int*) __asm__("FUN_001f9740");
 extern void *D_L00_00173E58_c[] __asm__("D_L00_00173E58");
 extern void FUN_L00_002a9c50_c(void) __asm__("FUN_L00_002a9c50");
-extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 
 int predict_mine_impact(char *trajectory_state, char *moby, int mode) __asm__("FUN_L00_002aa2a8");
 

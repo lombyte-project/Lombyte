@@ -105,7 +105,6 @@ extern int queue_starfighter_voice_line(void *, void *, int, int) __asm__("FUN_L
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern unsigned char *fire_class_53_projectile(char *, char *) __asm__("FUN_L13_002ea6b8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void fire_starfighter_homing_rocket(void *, void *) __asm__("FUN_L13_002ea540");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern char D_0013E550[];
@@ -468,10 +467,8 @@ extern int allocate_colored_effect_slot(float *, float, float, float, float, flo
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int advance_moby_along_selected_path(void *, void *, int, int) __asm__("FUN_L13_002e9160");
 extern int update_moby_path_following_away_from_hero(void *, void *, int, int) __asm__("FUN_L13_002e9408");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short dialogue_playback_phase[] __asm__("D_0015172A");
@@ -1114,7 +1111,6 @@ void update_qwarks_starfighter(Moby388 *moby) {
 
 extern char *create_moby(int);
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
@@ -1146,9 +1142,7 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
 extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void remove_ece00(struct Moby *) __asm__("FUN_0020c828");
-extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern char coll_hit_1638[] __asm__("D_L13_00174140");
 
 struct PieceVars {
@@ -1300,8 +1294,6 @@ extern int D_0015ED84_n __asm__("D_0015ED84");
 extern void stub_printf(char *, int, int) __asm__("FUN_001e93b0");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_forcefield_contact_effects(void *, void *) __asm__("FUN_L13_002ed158");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_0024efb0_c(void *, int, int) __asm__("FUN_L00_0024efb0");
 
@@ -1393,8 +1385,6 @@ void purple_ship_update(Level13VendorMoby *moby) {
 /* Per-frame update: awards a stat/flag when its linked moby is gone, then sets a flag byte from a test. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4C10), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533[];
-extern int D_0015EEA4;
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern int help_request_state[] __asm__("D_L13_00179710");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
@@ -1487,7 +1477,6 @@ typedef struct {
     int f90;
 } Obj_q;
 
-extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern int debug_print_alt_q() __asm__("FUN_001e93b0");
 void mmr_q(struct Obj_q *obj) __asm__("FUN_0020c828");
 
@@ -1579,9 +1568,7 @@ void update_moby_state_relay(char *moby) {
 extern char gate_missing_controller_format[] __asm__("D_L13_001F51E0");
 extern int D_L13_0015FFD8; /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void offset_moby_class_point_pairs(unsigned char *, int, int) __asm__("FUN_L00_0024efb0");
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int func_001FA898_d(float) __asm__("FUN_001fa6d0");
 
 void update_controller_linked_gate(char *moby) __asm__("FUN_L13_002f8a78");

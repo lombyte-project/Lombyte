@@ -826,7 +826,6 @@ typedef struct {
 } G;
 
 extern G D_0013F350;
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 /* Allocates a voice (b, 4, a) for slot idx when it has none; records a in slot idx. */
 void release_voice_slot_cf(int idx, int a, int b) __asm__("FUN_L00_00216e48");

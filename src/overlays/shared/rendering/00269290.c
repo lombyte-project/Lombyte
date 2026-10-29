@@ -87,14 +87,11 @@ extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_L00_0015F5CC;
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_00257b90(int, int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
@@ -269,7 +266,6 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern int D_L00_001B2094 NOT_SDA;
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void *create_part(int) __asm__("FUN_L00_002678b8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void FUN_L00_00269b70(void *spawn_position, unsigned char red, unsigned char green, unsigned char blue, int target, float particle_scalar_change, float initial_particle_scalar) {
     char *particle;
@@ -295,9 +291,7 @@ void FUN_L00_00269b70(void *spawn_position, unsigned char red, unsigned char gre
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026AB10), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void update_scalar_and_fade_effect_particle(char *particle) __asm__("FUN_L00_00269c70");
 
@@ -318,13 +312,9 @@ void update_scalar_and_fade_effect_particle(char *particle) {
 extern int particle_collision_269d20(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void subtract_homogeneous_scaled_vector_xyz(float, void *, void *, void *) __asm__("FUN_L00_0025c2b0");
 extern void particle_matrix_269d20(float, void *, void *) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void clamp_vector_length(float, void *, void *) __asm__("FUN_001f9c90");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern float D_0015ED60_269d20 __asm__("D_0015ED60");
 
 extern f32 D_L00_00173E80_26ff10[] __asm__("D_L00_00173E80");
@@ -658,23 +648,13 @@ void FUN_L00_0026a9f0(void *spawn_position, void *base_velocity, int col, int co
 /* Per-tick update of a particle type 11: moves, drags, fades and kills it. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026BB18), where it is exact; names translated to the US level program. */
 
-extern char D_L00_00166DC0[];
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L00_0015F5D0;
 extern float square_root(float) __asm__("FUN_001f9988");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int FUN_L00_001fefc8(void *);
-extern int FUN_L00_00257b90(int, int);
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_L00_0026a9f0_u(void *, void *, int, int, int, int, int, float, int,
                                float) __asm__("FUN_L00_0026a9f0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 void update_branching_and_fading_effect_particle(char *particle) __asm__("FUN_L00_0026ac78");
 
@@ -885,7 +865,6 @@ extern float spinning_particle_alternate_final_size_gp __asm__("D_L00_001601DC")
 extern float D_L00_001601E8 __attribute__((sda));
 extern float spinning_particle_vertical_step_scale_gp __asm__("D_L00_001601EC") __attribute__((sda));
 extern unsigned char D_0013E05A[];
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize_c(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 void update_spinning_and_fading_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026b500");
@@ -1150,7 +1129,6 @@ void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(unsigned
         FUN_001f9a68_26bca8(particle_data, particle_data, 0.96f);
     }
 }
-extern float D_L00_0015F5D0;
 extern unsigned char *FUN_L00_002678b8_26bed0(int) __asm__("FUN_L00_002678b8");
 extern int FUN_001fa6d0_26bed0(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26bed0(void) __asm__("FUN_001160d8");
@@ -1217,13 +1195,8 @@ typedef struct {
     float f1C;
 } Data;
 
-extern float D_0015ED70;
-extern float D_L00_0015F5D0;
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9770");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int FUN_L00_002371e0_c(int, int, float) __asm__("FUN_L00_002371e0");
 extern void FUN_L00_0026bed0_c(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
@@ -1280,7 +1253,6 @@ void update_fading_debris_particle_with_landing_spawn(Part *particle) {
 #include "qzero.h"
 extern unsigned char *FUN_L00_002678b8_26c3d0(int) __asm__("FUN_L00_002678b8");
 extern float FUN_002132a8_26c3d0(float, float) __asm__("FUN_002132a8");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void FUN_001f9a10_26c3d0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int FUN_001fa6d0_26c3d0(float) __asm__("FUN_001fa6d0");
 extern int FUN_001160d8_26c3d0(void) __asm__("FUN_001160d8");
@@ -1331,7 +1303,6 @@ typedef struct {
     Q_26c558 q;
 } P_26c558;
 extern f32_26c558 D_0015ED60;
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void kill_26c558(void *) __asm__("FUN_L00_00267a08");
 extern int truncate_float_to_s32(f32_26c558) __asm__("FUN_001fa6d0");
 void update_descending_fade_in_out_effect_particle(P_26c558 *particle) __asm__("FUN_L00_0026c558");
@@ -1403,8 +1374,6 @@ void spawn_two_point_effect_particle(void *spawn_position, void *initial_velocit
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026D690), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Moves both points by the vector at 0x30; lowers the top byte at a+4 by 6, 00267a08 below 0. */
 void move_and_fade_two_point_particle(char *particle) __asm__("FUN_L00_0026c7f0");
@@ -2071,9 +2040,6 @@ char *FUN_L00_0026dd20(void *spawn_position, void *initial_velocity, int initial
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026ECA0), where it is exact; names translated to the US level program. */
 
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 void move_and_fade_effect_particle_by_lifetime(char *particle) __asm__("FUN_L00_0026de00");
 
@@ -2256,11 +2222,9 @@ extern u8 *D_L00_001B20F4_lui __asm__("D_L00_001B20F4") NOT_SDA;
 extern f32 g_debug_camera[4] __asm__("D_L00_00166DC0") NOT_SDA;
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void kill_26e3a8(void *) __asm__("FUN_L00_00267a08");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void vscl_26e3a8(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *particle) __asm__("FUN_L00_0026e3a8");
 
 void update_animated_source_attached_fade_in_out_effect_particle(P_26e3a8 *particle) {
@@ -2458,12 +2422,7 @@ void update_linked_effect_particle_with_collision_and_fade(O_26e670_26e670 *part
     }
 }
 extern float D_0015ED60_26eb88 __asm__("D_0015ED60");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void kill_26eb88(void *) __asm__("FUN_L00_00267a08");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float two_point_particle_first_point_target_offset_scale_gp __asm__("D_L00_001601F4") __attribute__((sda));
 extern float two_point_particle_second_point_target_offset_scale_gp __asm__("D_L00_001601F8") __attribute__((sda));
 void update_target_relative_two_point_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026eb88");
@@ -2600,8 +2559,6 @@ void update_moby_bound_fade_in_out_effect_particle(unsigned char *particle) {
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026FEE8), where it is exact; names translated to the US level program. */
 
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Calls free_effect_particle on a once fast_dec_timer_s16(a + 10) returns non-zero. */
 void tick_effect_particle_lifetime(char *particle) __asm__("FUN_L00_0026f048");
@@ -2669,9 +2626,6 @@ extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED60_c __asm__("D_0015ED60");
 extern float D_L00_00166DD8_lui __asm__("D_L00_00166DD8") NOT_SDA;
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
@@ -2877,7 +2831,6 @@ void update_flag_controlled_pulsing_effect_particle(unsigned char *particle) {
     }
 }
 typedef float V4[4] __attribute__((aligned(16)));
-extern char D_L00_00166DC0[];
 int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -3026,9 +2979,7 @@ typedef struct {
 } P_26fd28;
 extern P_26fd28 *alloc_26fd28(s32) __asm__("FUN_L00_002678b8");
 extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 rnd_26fd28(void) __asm__("FUN_001160d8");
 extern u8 *tex __asm__("D_L00_001B20B0") NOT_SDA;
 P_26fd28 *spawn_splitting_effect_particle_with_collision_response_and_fade(u128 *pos, u128 *initial_velocity, u8 initial_flags, s32 collision_context) __asm__("FUN_L00_0026fd28");
@@ -3110,7 +3061,6 @@ typedef struct {
 } S_26ff10;
 
 extern u8 *D_L00_001B20B0_26ff10 __asm__("D_L00_001B20B0") NOT_SDA;
-extern f32 D_L00_00173E80_26ff10[] __asm__("D_L00_00173E80");
 extern f32 D_0015ED60_26ff10 __asm__("D_0015ED60");
 
 extern s32 FUN_001f9770_26ff10(s16 *) __asm__("FUN_001f9770");
@@ -3286,8 +3236,6 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_002715B0), where it is exact; names translated to the US level program. */
 
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 
 /* Calls free_effect_particle on a once fast_dec_timer_s16(a + 0xA) returns non-zero; skips id -1. */
 void tick_finite_effect_particle_lifetime(char *particle) __asm__("FUN_L00_00270710");
@@ -3383,7 +3331,6 @@ typedef struct {
 } C_270948;
 extern u8 *D_L00_001B20B0_c[] __asm__("D_L00_001B20B0");
 extern s32 FUN_001f9770_c(s16 *) __asm__("FUN_001f9770");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a28_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern M_270948 *FUN_L00_00270758_c(void *, void *, s32, s32) __asm__("FUN_L00_00270758");

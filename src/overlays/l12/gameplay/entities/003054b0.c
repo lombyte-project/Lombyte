@@ -84,16 +84,13 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L12_00306350_c2(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float func_001F9B88_304310(float) __asm__("FUN_001f99c0");
-extern char D_L12_00167240[];
 extern int func_001F9908_304920(void *) __asm__("FUN_001f9740");
 extern int func_001FA898_3055F8(float) __asm__("FUN_001fa6d0");
 extern float func_001FA888_3055F8(int) __asm__("FUN_001fa6c0");
-extern float D_0015ED64 MACRO_ADDR;
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
 extern int D_L12_00161F04_gp __asm__("D_L12_00161F04") MACRO_ADDR;
 extern int D_L12_00161F20 __attribute__((sda));
 extern int D_L12_00161F24 __attribute__((sda));
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 void update_planetbuster_maximus_guns(char *moby) __asm__("FUN_L12_003054b0");
 
@@ -361,7 +358,6 @@ void update_planetbuster_maximus_guns(char *moby) {
         moby[0xBC] = 0;
     }
 }
-extern int D_L12_001FB688[];
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
@@ -413,8 +409,6 @@ extern float D_L12_00161F40;
 #include "rnc/overlay/l12/gameplay/entities/003054b0_globals.h"
 extern float D_L12_00161F60;
 extern float D_L12_00161F70;
-extern float spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
-extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
@@ -548,30 +542,17 @@ typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char p
 extern char D_0013E550[];
 extern char *D_L12_001600EC MACRO_ADDR;
 extern char D_0013F3D0[] NOT_SDA;
-extern char D_L12_00167240[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float D_0015ED64 MACRO_ADDR;
-extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_0015ED70 MACRO_ADDR;
 extern float D_L12_00161F40_gp __asm__("D_L12_00161F40") MACRO_ADDR;
 extern float D_L12_00161F60_gp __asm__("D_L12_00161F60") MACRO_ADDR;
 extern float D_L12_00161F70_gp __asm__("D_L12_00161F70") MACRO_ADDR;
 extern float approach_value(float *, float, float);
-extern float fast_add_rotations(float, float) __asm__("func_001FA580");
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L12_001619A0 MACRO_ADDR;
 extern int D_L12_001619B4 MACRO_ADDR;
-extern int D_L12_00161F00;
-extern int D_L12_00161F24 MACRO_ADDR;
-extern int D_L12_00161F34 __attribute__((sda));
 extern int D_L12_001B0930;
 extern int D_L12_0015F404 MACRO_ADDR;
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 
 #include "rnc/overlay/l12/gameplay/entities/003054b0_data/planetbuster_maximus_part_update.h"
 extern float planetbuster_maximus_rotation_oscillation_amplitude_gp __asm__("D_L12_00161F30") __attribute__((sda));
@@ -586,19 +567,13 @@ extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
-extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
 void FUN_L12_00306350_c(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern int current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
 extern char D_0013F3D0[];
-extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern int D_L12_001B0930;
 
 void planetbuster_maximus_part_update(char *moby) __asm__("FUN_L12_003069d0");
 void planetbuster_maximus_part_update(char *moby) {
@@ -836,7 +811,6 @@ void planetbuster_maximus_part_update(char *moby) {
 
 /* Spawns the next linked moby at this one's spot, sets it up and gives it a random spin. */
 extern void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void spawn_jittered_effect_particle_with_optional_basis(char *, int, float) __asm__("FUN_L00_0026de90");
 extern short *suck_get_aim_height(unsigned char *) __asm__("FUN_002141f8");
 
@@ -881,9 +855,6 @@ void spawn_next_linked_moby(struct Moby *spawner) {
 /* Door/switch moby: clears its linked mobys, waits for the hero, opens, fires its list one by one, closes. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308C20), where it is exact; names translated to the US level program. */
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 void spawn_next_linked_moby(struct Moby *m) __asm__("FUN_L12_003076e0");
 void update_homing_mine_spawner_target(struct Moby *spawner) __asm__("FUN_L12_00307ab8");
 
@@ -972,7 +943,6 @@ void homing_mine_spawner_update(struct Moby *spawner) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308E98), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int select_moby_combat_target(char *, char *, float) __asm__("FUN_L00_0025fcb8");
 float absolute_float(float input) __asm__("func_001F99C0");
 
@@ -1197,8 +1167,6 @@ typedef struct {
 extern char D_0013D388[];
 extern char scene_trigger_saved_hero_data[] __asm__("D_L12_0016CCF0");
 extern int D_L12_0015F5C4;
-extern int D_L12_0015F5CC;
-extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 void trigger_scene_once_in_clip_volume(struct Moby *moby) __asm__("FUN_L12_003093c8");
@@ -1290,7 +1258,6 @@ extern int hoven_scrolling_clipped_vertex_counts[] __asm__("D_L12_001FBD10");
 extern int hoven_scrolling_clipped_vertex_position_tables[] __asm__("D_L12_002059E0");
 extern int hoven_scrolling_clipped_base_uv_tables[] __asm__("D_L12_00205A08");
 extern int hoven_scrolling_clipped_vertex_color_tables[] __asm__("D_L12_00205A58");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
@@ -1330,7 +1297,6 @@ extern float frame_delta_time __asm__("D_0015ED7C") MACRO_ADDR;
 extern int *hoven_scrolling_color_tables[] __asm__("D_L12_00208AE0");
 extern int hoven_scrolling_color_table_entry_counts[] __asm__("D_L12_00205A80");
 extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 typedef struct {
     char p[0x20];

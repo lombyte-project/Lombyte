@@ -237,7 +237,6 @@ typedef struct {
 
 extern float glow_sprite_local_vertices[4][4] __asm__("D_L05_00215C70");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
@@ -316,7 +315,6 @@ char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
 
 
 extern float vector_distance(float *, float *) __asm__("FUN_001f9b80");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 
 void update_hero_follow_camera_focus(char *moby) __asm__("FUN_L05_00329358");
 
@@ -759,7 +757,6 @@ extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
 extern Row *D_L05_0015EF50_macro __asm__("D_L05_0015EF50") MACRO_ADDR;
 extern float D_L05_001621A8_gp __asm__("D_L05_001621A8") __attribute__((sda));
 extern float spring_32B1F8(float, float, float *, float, float, float) __asm__("FUN_001ebd78");
-extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L05_003298d8_c(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
 
 extern float D_L05_00174278 NOT_SDA;

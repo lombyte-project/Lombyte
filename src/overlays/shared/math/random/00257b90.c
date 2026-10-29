@@ -20,7 +20,6 @@ int random_int_between(int lo, int hi) {
    sign. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258C80), where it is exact; names translated to the US level program. */
 
-extern s32 rand();
 
 /* Random float of magnitude lo..hi from rand(), negated on odd values. */
 float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");

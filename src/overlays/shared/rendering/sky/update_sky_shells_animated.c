@@ -24,7 +24,6 @@ void update_sky_shells_static(void) {
 /* rotates animated sky shells and draws each layer */
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028A6F8), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_0016051C;
 extern char D_L00_001BD7E0[] NOT_SDA;
 extern int D_L00_0015F5CC;
 extern void FUN_001f9fc8_c(void *) __asm__("FUN_001f9fc8");
@@ -128,7 +127,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } U289bd8;
-extern int D_L00_0015F5CC;
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980(int, long);
@@ -149,9 +147,6 @@ void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) {
     euler_to_matrix_ee(D_L00_001BD7E0, shell_rotation_angles);
     sky_draw_shell(1);
 }
-extern char D_L00_001BD7E0[];
-extern char *D_L00_0016051C;
-extern int D_L00_0015F5CC;
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980(int, long);
@@ -177,7 +172,6 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V0028a2f0;
-extern char D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
 extern u8 *D_L00_0016051C_c2 __asm__("D_L00_0016051C");
 extern s32 D_L00_0015F5CC_c __asm__("D_L00_0015F5CC");
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
@@ -196,7 +190,6 @@ void draw_sky_shells_with_modulo_40000_rotation(void) {
     set_identity_matrix(D_L00_001BD7E0);
     sky_draw_shell(2);
 }
-extern int D_L00_0015F5CC;
 void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void draw_sky_shells_with_modulo_25000_rotation(void) __asm__("FUN_L00_0028a3a8");
@@ -220,7 +213,6 @@ extern int D_L00_0015F5CC_28a480g __asm__("D_L00_0015F5CC");
 extern int D_L00_0015F5CC_28a480d __asm__("D_L00_0015F5CC");
 extern char *D_L00_0016051C_28a480 __asm__("D_L00_0016051C");
 extern char D_L00_001BD7E0_lui[] __asm__("D_L00_001BD7E0") NOT_SDA;
-extern void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");
 
 void draw_sky_shells_with_scaled_phase_rotation(void) __asm__("FUN_L00_0028a480");
@@ -310,8 +302,6 @@ void draw_sky_shells_with_slow_medium_and_fast_rotation(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028BBF8), where it is exact; names translated to the US level program. */
 
-extern char *D_L00_0016051C;
-extern char D_L00_001BD7E0[];
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 extern void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
@@ -345,7 +335,6 @@ void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) {
     euler_to_matrix_ee(D_L00_001BD7E0, sky_shell_rotation_angles);
     sky_draw_shell(2);
 }
-extern char D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
 extern u8 *D_L00_0016051C_0028aa98 __asm__("D_L00_0016051C");
 void FUN_001f9fc8_0028aa98(void *) __asm__("FUN_001f9fc8");
 void sky_sprite_proc(void) __asm__("FUN_0022bba0");

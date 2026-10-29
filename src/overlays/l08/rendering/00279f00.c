@@ -53,11 +53,8 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027C218), where it is exact; names translated to the US level program. */
 
 extern s32 rand(void);
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned char *D_L08_001B292C NOT_SDA;
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *vec, short ticks, unsigned char r,
                                 unsigned char g, unsigned char b, unsigned char a, float size) __asm__("FUN_L08_0027b450");
@@ -88,7 +85,6 @@ unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *initi
     return effect;
 }
 #include "eetypes.h"
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern unsigned char *D_L08_001B29B4 NOT_SDA;

@@ -56,7 +56,6 @@ void vu1_send_chain(void) {
 extern __typeof__(vu1_send_chain) func_002336A0 __attribute__((alias("FUN_002336a0")));
 
 extern void SpinWait(s32);
-extern void DebugPrint(char *, ...);
 extern void reset_graphics(void) __asm__("FUN_001f21c0");
 void vu1_sync_chain(s32 mask) __asm__("FUN_002337b0");
 

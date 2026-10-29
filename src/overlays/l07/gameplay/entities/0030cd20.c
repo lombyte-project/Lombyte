@@ -183,7 +183,6 @@ struct SwingGateVars {
     float vel;      /* 0x18 */
 };
 
-extern struct Moby *D_L07_0015FFD8;
 extern int FUN_0022da68(int, int, struct Moby *);
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");

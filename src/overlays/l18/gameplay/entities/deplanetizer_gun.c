@@ -360,7 +360,6 @@ typedef struct { char pad[0x30]; int state; int n; } ML_9780;
 extern ML_9780 D_L18_0016D260_9780 __asm__("D_L18_0016D260");
 extern unsigned long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void sub_9780(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
@@ -452,7 +451,6 @@ void draw_three_scaled_camera_facing_quads(void) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FAEF8), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float D_L18_00162454;
 extern float D_L18_00162450;
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -504,12 +502,7 @@ typedef struct {
 } ML_9c20;
 extern ML_9c20 D_L18_0016D260_9c20 __asm__("D_L18_0016D260");
 extern char D_L18_001677C0_9c20[] __asm__("D_L18_001677C0");
-extern unsigned long get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void sub_9c20(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int deplanetizer_glow_first_quad_base_tint_gp __asm__("D_L18_00162504") __attribute__((sda));
 extern float deplanetizer_glow_first_quad_scale_gp __asm__("D_L18_00162508") __attribute__((sda));
@@ -673,8 +666,6 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FB6B0), where it is exact; names translated to the US level program. */
 
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,
                                 float size);
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -729,7 +720,6 @@ void spawn_deplanetizer_gun_trail_effects(void *first_position_source, void *sec
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBAA0), where it is exact; names translated to the US level program. */
 
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern int D_L18_0015F5C4;
 extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 
 void update_moby_visibility_and_half_turn(struct Moby *moby) __asm__("FUN_L18_002fa640");
@@ -886,9 +876,6 @@ typedef struct {
 } M2;
 
 extern ML D_L18_0016D260;
-extern int D_L18_0015F5C4;
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
 
 extern short deplanetizer_selected_joint_trail_velocity_scale_gp __asm__("D_L18_00162578") __attribute__((sda));
 extern short deplanetizer_selected_joint_trail_first_spawn_particle_value_gp __asm__("D_L18_0016257C") __attribute__((sda));
@@ -943,7 +930,6 @@ typedef unsigned int QVd058 __attribute__((mode(TI), aligned(16)));
 extern char D_L18_001625F0[4] __attribute__((sda));
 extern char D_L18_00162608 __attribute__((sda));
 extern float vector_distance_xy(float *, float *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
@@ -1123,15 +1109,11 @@ void gadgebot_update(unsigned char *moby) {
 }
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
-extern int game_frame __asm__("D_L18_0015F5CC");
-extern int D_L18_0015F5C4;
 extern int *D_L18_001B0EB0[] __asm__("D_L18_001B0EB0");
 void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
 
 extern void draw_group_class_0772_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern int random_integer_below(int) __asm__("FUN_00213260");
@@ -1279,9 +1261,6 @@ typedef struct {
 } __attribute__((aligned(16))) QVec;
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern float vector_distance_xy(float *, float *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern void FUN_L00_00258830(int, int, float, float, float, int);
 extern void resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
@@ -1315,7 +1294,6 @@ float move_gadgebot_toward_target(char *self, float *target_position_source) {
 }
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
-extern int D_L18_001AC240[];
 extern struct Moby *moby_table __asm__("D_L18_0015FFD8");
 
 /* Pvars fields set when a group moby is launched. */
@@ -1367,8 +1345,6 @@ int launch_first_idle_group_class_0772_moby(int group, void *from, void *to, flo
 }
 /* Counts the listed mobys of class 0x772 that are not in state 8. */
 
-extern int D_L18_001AC240[];
-extern int D_L18_0015FFD8;
 
 short count_group_class_0772_mobys_not_in_state_8(int group_index) __asm__("FUN_L18_002fc7e0");
 
@@ -1397,10 +1373,7 @@ typedef struct {
     unsigned long a, b, c, d;
 } Pk_c860;
 extern char D_L18_001677C0_g[] __asm__("D_L18_001677C0");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void sub_g(void *, void *, void *) __asm__("FUN_001f9a28");
-extern unsigned long get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern int gadgebot_launch_glow_blend_minuend_selector_gp __asm__("D_L18_0016262C") __attribute__((sda));
 extern int gadgebot_launch_glow_blend_subtrahend_selector_gp __asm__("D_L18_00162630") __attribute__((sda));
@@ -1462,10 +1435,8 @@ void draw_gadgebot_launch_glow_quad(struct Moby *m) {
 /* For each listed moby of matching type, spawns effects at five points. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FDF58), where it is exact; names translated to the US level program. */
 
-extern int D_L18_0015FFD8;
 extern short gadgebot_joint_glow_alpha_gp __asm__("D_L18_00162654");
 extern unsigned short *D_L18_001AC240_c[] __asm__("D_L18_001AC240");
-extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_group_class_0772_joint_glows(struct Moby *moby) {
     unsigned short *group_moby_entry = D_L18_001AC240_c[moby->group];

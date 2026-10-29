@@ -472,7 +472,6 @@ extern void FUN_L13_002b48d8_2b0e80(void *) __asm__("FUN_L13_002b48d8");
 extern void *FUN_L13_002b4958_2b0e80(void *) __asm__("FUN_L13_002b4958");
 extern void FUN_L00_00263ac8_2b0e80(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void FUN_00212f90_2b0e80(void *, int, int, int) __asm__("FUN_00212f90");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
@@ -594,7 +593,6 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5950), where it is exact; names translated to the US level program. */
 
 extern char *spawn_gemlik_projectile(float, float *, float *, void *) __asm__("FUN_L13_003061c8");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -707,7 +705,6 @@ struct Moby *spawn_blarg_turret_child(struct Moby *parent) {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
@@ -816,7 +813,6 @@ typedef struct {
 } Obj;
 
 extern float D_L13_001670C0[];
-extern int FUN_L00_00257b90(int, int);
 extern int FUN_L13_002b4a58_c() __asm__("FUN_L13_002b4a58");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
@@ -1116,7 +1112,6 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float approach_value(float *, float, float);
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_L13_0015F5C4;
 extern int D_L13_001613B0[] __attribute__((section(".sdata")));
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -2066,7 +2061,6 @@ typedef struct {
     short y;
 } IconEC5D0;
 extern IconEC5D0 l13_fighter_jet_radar_icon_definitions[] __asm__("D_L13_001CBDB8");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern unsigned char frame_size[] __asm__("D_0013E504");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
@@ -2546,7 +2540,6 @@ void draw_fighter_jet_hud(char *moby) {
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern unsigned char D_0013A4E0[];
-extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 
@@ -2964,7 +2957,6 @@ extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
 extern JetTransition D_001516D0[];
 #include "rnc/gameplay/state/game_globals.h"
 extern unsigned char D_0013E550[];
-extern unsigned char D_0013A4E0[];
 #include "rnc/overlay/l13/gameplay/entities/elevator_data/fighter_jet_update.h"
 extern JetTexture l13_texture_descriptors[] __asm__("D_L13_0016D480");
 extern unsigned int l13_texture_palette_data_base __asm__("D_L13_0015F420");

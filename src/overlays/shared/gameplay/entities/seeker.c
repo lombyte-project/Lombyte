@@ -333,7 +333,6 @@ extern float D_L09_0016140C __attribute__((sda));
 extern int scale_time() __asm__("FUN_001f96b0");
 extern int FUN_001f9b80_c() __asm__("FUN_001f9b80");
 extern int fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
@@ -358,7 +357,6 @@ extern void func_L00_0025BBA0_2C73D0(void *, float *, void *, void *) __asm__("F
 extern void func_L00_0025D5B0_2C73D0(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void func_L01_0026F040_2C73D0(int, int) __asm__("FUN_L01_0026e090");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern float func_002140F8_2C73D0(float, float) __asm__("FUN_002132a8");
 extern float func_001F9878_2C73D0(float) __asm__("FUN_001f96b0");
 extern int func_002140B0_2C73D0(int) __asm__("FUN_00213260");
@@ -595,7 +593,6 @@ extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_L09_001618D8; /* no foreign declaration */

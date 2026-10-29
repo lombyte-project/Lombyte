@@ -139,7 +139,6 @@ extern struct Moby *moby_base __asm__("D_L13_0015FFD8");
 extern int D_L13_00174158_lui __asm__("D_L13_00174158") NOT_SDA;
 
 extern int timer_expired_1cc8(void *) __asm__("FUN_001f9740");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
@@ -404,10 +403,8 @@ extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern void func_00215C00_2E8040(void *, float, float, float) __asm__("FUN_00214db0");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern Tex D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
 extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");

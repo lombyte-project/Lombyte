@@ -345,7 +345,6 @@ typedef struct { int id; char pad[0x14]; int item; } E_238C30;
 typedef struct { char pad[0x46]; short h46, h48; char pad4A[2]; } TI_238C30;
 
 extern unsigned char D_00141EA0[];
-extern E00237ae8 item_defs[] __asm__("D_L00_00179AC0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 #include "rnc/overlay/level_labels.h"
 extern char D_L00_0015F7C8[];
@@ -363,7 +362,6 @@ extern int D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int D_L00_0015F720_gp __asm__("D_L00_0015F720") __attribute__((sda));
 extern int D_L00_0015F724_gp __asm__("D_L00_0015F724") __attribute__((sda));
 extern int D_L00_0015F72C_gp __asm__("D_L00_0015F72C") __attribute__((sda));
-extern int D_L00_0015F780_gp __asm__("D_L00_0015F780") __attribute__((sda));
 extern float D_L00_0015F78C_gp __asm__("D_L00_0015F78C") __attribute__((sda));
 extern int l00_hud_item_selector_title_color_from __asm__("D_L00_0015F790") __attribute__((sda));
 extern int l00_hud_item_selector_title_color_to __asm__("D_L00_0015F794") __attribute__((sda));
@@ -527,10 +525,6 @@ int draw_hud_item_selector_panel(HudElem *rec) {
     }
     return rec->w;
 }
-extern int D_L00_0015FA90;
-extern void *D_L00_0015FAC0;
-extern int D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
-extern int D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int D_L00_0015F72C __attribute__((sda));
 extern int four_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F740") __attribute__((sda));
 int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -683,17 +677,10 @@ typedef struct {
     int sel;
 } Elem;
 
-extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern int D_L00_0015F5CC;
-extern int D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));
-extern int D_L00_0015F71C_gp __asm__("D_L00_0015F71C") __attribute__((sda));
 extern int D_L00_0015F720 __attribute__((sda)); /* no foreign declaration */
 extern int D_L00_0015F724 __attribute__((sda)); /* no foreign declaration */
-extern int D_L00_0015F780_gp __asm__("D_L00_0015F780") __attribute__((sda));
 extern float D_L00_0015F78C __attribute__((sda));
 extern int D_L00_0015F7B0 __attribute__((sda)); /* no foreign declaration */
 extern float D_L00_0015F7C0 __attribute__((sda));
@@ -703,12 +690,6 @@ extern int radial_selector_label_color_to __asm__("D_L00_0015F7D8") __attribute_
 extern int radial_selector_label_y_offset __asm__("D_L00_0015F7DC") __attribute__((sda)); /* no foreign declaration */
 extern Ent_239918 **D_L00_0015FAC0_c2 __asm__("D_L00_0015FAC0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
-extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
-extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern u32 strlen(const char *);
-extern void FUN_L00_0023b120(char *, int, int, int, int, int);
-extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 int FUN_L00_00235a70_c(HudElem_238f88 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 extern Ids D_L00_0015F8C0_239918 __asm__("D_L00_0015F7E0");
 extern char D_L00_0017E5D8_239918[] __asm__("D_L00_0017E4D8");
@@ -942,7 +923,6 @@ extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_
 extern int pal_mode __asm__("D_0015ED80");
 extern s32 hero_max_health __asm__("D_0015EDA0");
 #include "rnc/overlay/shared/ui/text/002377b8_data/draw_health_hud_panel_2.h"
-extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 #include "rnc/overlay/shared/ui/text/002377b8_data/draw_health_hud_panel.h"
 extern s32 health_hud_default_icon_offsets[1] __asm__("D_L00_0015F7F8") __attribute__((sda));
 extern Pt l00_health_hud_eight_capacity_icon_offsets[] __asm__("D_L00_0017E478");
@@ -1121,8 +1101,6 @@ void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
 extern s32 camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 /* read through a volatile one-element array: retail reloads it */
 extern volatile s32 pal_mode_reload[1] __asm__("D_0015ED80");
-extern s32 bolt_panel_open_steps_gp __asm__("D_L00_0015F824") __attribute__((sda));
-extern s32 bolt_text_fade_steps_gp __asm__("D_L00_0015F828") __attribute__((sda));
 extern s32 bolt_text_color_clear __asm__("D_L00_0015F82C") __attribute__((sda));
 extern s32 bolt_text_color_opaque __asm__("D_L00_0015F830") __attribute__((sda));
 /* separator offsets: apostrophe, then dot */
@@ -1131,10 +1109,8 @@ extern s32 digit_width __asm__("D_L00_0015F84C") __attribute__((sda));
 extern char bolt_count_format[] __asm__("D_L00_0015F850") NOT_SDA;
 
 extern f32 convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
-extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 /* int return and no prototype are load-bearing */
 extern int sprintf_alt() __asm__("FUN_00116248");
 extern void font_print_right(int, int, int, char *, int) __asm__("FUN_001f6940");
@@ -1221,7 +1197,6 @@ int draw_bolt_counter_hud_panel(HudElem *hud_element)
 }
 #include "sda.h"
 extern s32 D_00141398 NOT_SDA;
-extern s32 D_L00_0015F7F0_gp __asm__("D_L00_0015F7F0") __attribute__((sda));
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void update_hud_panel_visibility(u8 *hud_element) __asm__("FUN_L00_0023a218");
 
@@ -1354,7 +1329,6 @@ int draw_hud_cropped_gauge_panel(char *rec) {
    of 30 + func_001F9850(120). */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B0F8), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
 /* Sets unk7C to scale_game_frames(0x78) + 0x1E and w/h to 0x20, calls FUN_L00_00235c80. */

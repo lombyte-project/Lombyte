@@ -117,7 +117,6 @@ extern void delete_moby(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void prepare_background_ship_1_joint_billboards(char *moby) __asm__("FUN_L02_002ec3f0");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 
 void background_ship_1_update(char *moby) __asm__("FUN_L02_002ec4b8");
@@ -264,7 +263,6 @@ void background_ship_1_update(char *moby) {
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short background_ship_1_first_spark_position_delta_scale_gp __asm__("D_L02_00161F84") __attribute__((sda));
 extern short background_ship_1_second_spark_position_delta_scale_gp __asm__("D_L02_00161F88") __attribute__((sda));
@@ -625,7 +623,6 @@ void spawn_background_ship_2_level_10_joint_sparks(char *moby, void *previous_po
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F3398), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
@@ -892,7 +889,6 @@ rejected:
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FCBC0), where it is exact; names translated to the US level program. */
 
-extern char *D_L02_0015EF50;
 extern char D_L02_00167410[] __attribute__((section(".data")));
 extern char D_L02_00167280[] __attribute__((section(".data")));
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");

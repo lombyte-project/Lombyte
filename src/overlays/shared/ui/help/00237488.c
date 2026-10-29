@@ -496,7 +496,6 @@ void update_hero_movement_and_collision_probes(void) {
 /* Adapted from the exact FUN_L00_002279b0 (src/overlays/shared/gameplay/hero/hero_set_state.c): L05 has a wider head guard and its own level data. */
 
 extern float D_L05_00174268 NOT_SDA;
-extern int frame_number __asm__("D_L05_0015F5CC");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -618,7 +617,6 @@ typedef struct {
 } Rec2C;
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84; /* no foreign declaration */
 extern int FUN_L00_001fefc8(void *);
@@ -631,7 +629,6 @@ extern int FUN_L00_00233e98(int);
 extern int FUN_L00_00266d60(int, int, int *);
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned short D_00141920[] NOT_SDA;
 extern unsigned short D_00141D80[] NOT_SDA;
@@ -648,7 +645,6 @@ extern int D_00141660_lui __asm__("D_00141660") NOT_SDA;
 extern unsigned char D_0013D5C8_2523C8[] __asm__("D_0013D4DC");
 extern Rec2C D_L05_0017C188_2523C8[] __asm__("D_L05_0017C088");
 extern int D_L05_0015F674_gp __asm__("D_L05_0015F674") __attribute__((sda));
-extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern int func_001F9908_2523C8(int *) __asm__("FUN_001f9740");
 extern Moby *D_L05_0015FFD8_macro __asm__("D_L05_0015FFD8") MACRO_ADDR;
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
@@ -1057,7 +1053,6 @@ extern char D_0013CAE0[];
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
 extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 
@@ -1132,7 +1127,6 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 FUN_001f99c0(f32);
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_001fa6d0(f32);
@@ -1421,7 +1415,6 @@ typedef struct { char pad0[9]; unsigned char f9; } Flags;
 extern unsigned char alternate_item_available_lui[] __asm__("D_0013D388") NOT_SDA;
 extern unsigned char item_unlocked_lui[] __asm__("D_0013D408") NOT_SDA;
 extern unsigned char D_0013D4DF_lui __asm__("D_0013D4DF") NOT_SDA;
-extern char *D_L05_001B0930[];
 extern Ent *D_L05_0015FFD8_254608 __asm__("D_L05_0015FFD8") MACRO_ADDR;
 extern int D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
 extern int D_0015EE3C_macro __asm__("D_0015EE3C") MACRO_ADDR;

@@ -34,7 +34,6 @@ extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void 
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void update_hit_triggered_class_0681_spawner(char *self) __asm__("FUN_L06_00309fa8");
 

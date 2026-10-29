@@ -432,14 +432,12 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_L04_001f1978(float);
 extern float FUN_L00_00257c48(float lo, float hi);
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern int *D_L06_001B0C30[];
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 extern float D_L06_00161FA8 __attribute__((sda));
@@ -619,8 +617,6 @@ void process_blarg_space_commando_hits(char *moby) {
 extern char D_L06_00174600_lui[] __asm__("D_L06_00174600") NOT_SDA;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void add_vector_xyz_cf(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -868,7 +864,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern float beam_spark_first_vector_w_gp __asm__("D_L06_0016200C") __attribute__((sda));
 extern float beam_spark_second_vector_w_gp __asm__("D_L06_00162010") __attribute__((sda));
 extern float beam_spark_frame_count_range_start_gp __asm__("D_L06_00162014") __attribute__((sda));
@@ -964,7 +959,6 @@ extern unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 extern float D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float scale_time(float) __asm__("FUN_001f96b0");
 
 /* Spawns one fragment of the break-apart at pos, flying along vel with a
  * random spin. */
@@ -1014,7 +1008,6 @@ extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
 extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 

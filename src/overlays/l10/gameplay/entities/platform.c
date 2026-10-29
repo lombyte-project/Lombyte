@@ -470,11 +470,9 @@ extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void * spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void * FUN_L00_00272060(void *, int, float, float, int, int, int, void *, float);
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void set_follow_camera_orbit_clamp_mode(int) __asm__("FUN_L00_002e8568");
 extern void FUN_L00_002e8648(void);
 extern void set_follow_camera_blend_output_flags(void) __asm__("FUN_L00_002e8680");
-extern struct Moby * D_L10_0015FFD8;
 
 #define func_001F9850_2BFBB8 ((int (*)(int))scale_game_frames)
 #define func_001F9D48_2BFBB8 ((float (*)(void *, void *))vector_distance_xy_alt)
@@ -1114,8 +1112,6 @@ int spawn_bombthrower_grass_projectile(int owner, char *initial_position, char *
 /* Ported from rac1-decomp src/overlays/l10_orxon/vendor_00296BD8.c (func_L10_002D9530) */
 
 
-extern char D_L10_001742C0[];
-extern char D_L10_00174300[];
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -1124,9 +1120,6 @@ extern float FUN_001f9e90_u(float, float) __asm__("FUN_001f9e90");
 extern float step_rotation_toward_target(float, float, float) __asm__("FUN_L00_00200510");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float square_root(float) __asm__("func_001F9988");
-extern float D_0015ED6C;
-extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 
 int resolve_bouncing_projectile_collision(char *moby, char *motion_data, float *previous_position) __asm__("FUN_L10_002d8170");
 
@@ -1273,7 +1266,6 @@ int resolve_bouncing_projectile_collision(char *m, char *c, float *a2) __asm__("
 extern char D_0013E633_2D9988[] __asm__("D_0013F350");
 extern char *func_L00_0025B478_2D9988(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int resolve_bouncing_projectile_collision(char *, char *, float *) __asm__("FUN_L10_002d8170");
-extern char D_L10_00178380[];
 extern void func_001F9BD8_2D9988(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float angle_atan2(float, float) __asm__("FUN_001f9e90");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -1962,7 +1954,6 @@ extern unsigned char D_001413F4[];
 void render_data_processor_linked_effect(u8 *moby) __asm__("FUN_L10_002da690");
 extern int debug_print() __asm__("FUN_001e93b0");
 extern void delete_moby(void *) __asm__("FUN_0020c828");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int FUN_001fa6d0(float);
 extern float square_root(float) __asm__("FUN_001f9988");
@@ -2211,7 +2202,6 @@ void render_data_processor_linked_effect(u8 *moby) {
         group = next_group;
     } while (group < 4);
 }
-extern unsigned char D_001413F4[];
 extern int D_L10_00161D64;
 extern int D_L10_00161D68;
 extern float D_L10_00161D54 __attribute__((sda));
@@ -2368,10 +2358,8 @@ void update_path_spark_effect(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEA10), where it is exact; names translated to the US level program. */
 
 
-extern L10State D_L10_001BB6B0;
 extern char moby_pair_records[] __asm__("D_L10_00178580");
 extern int D_0015ED84_m __asm__("D_0015ED84");
-extern int D_L10_001BA950[];
 extern unsigned char D_0014C190[] NOT_SDA;
 void mark_moby_for_removal_d650(struct Obj *obj) __asm__("FUN_0020c828");
 

@@ -484,7 +484,6 @@ extern struct Moby *D_0013F58C NOT_SDA;
 
 extern s32 find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern f32 FUN_001f9b80_44c0(void *, void *) __asm__("FUN_001f9b80");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 FUN_001f9e90_44c0(f32, f32) __asm__("FUN_001f9e90");
 extern f32 FUN_001f9b48_44c0(void *, void *) __asm__("FUN_001f9b48");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -597,7 +596,6 @@ void update_path_following_moby_with_fade(struct Moby *moby)
 
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32_u(f32) __asm__("FUN_001fa6d0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 float interpolate_sample_ring(float x, char *sample_ring_data) __asm__("FUN_L08_002f5d98");
 
@@ -1122,7 +1120,6 @@ void update_flickering_mesh_effect(struct Moby *moby) {
     light_vars->flags |= 2;
 }
 
-extern int level_game_mode __asm__("D_L08_0015F5C4");
 
 #include "qcopy.h"
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
@@ -1166,7 +1163,6 @@ typedef struct {
     unsigned char b7F;
 } WM;
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float scale_time(float) __asm__("FUN_001f96b0");

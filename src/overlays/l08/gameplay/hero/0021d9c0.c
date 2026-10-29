@@ -395,7 +395,6 @@ extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
 extern u8 D_L08_0017A2C0[];
 extern struct HeroAnimRow D_L00_00179AC0_t[] __asm__("D_L08_0017A2C0");
 extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FUN_L00_00271b18");
-extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 extern f32 D_L08_0017C5C4[] __asm__("D_L08_0017C5B8+12");
