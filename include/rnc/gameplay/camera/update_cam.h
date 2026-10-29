@@ -57,4 +57,6 @@ extern s32 camera_position_publication_suppressed[1] __asm__("D_0018C32C") NOT_S
 
 extern struct CameraType camera_types[] __asm__("D_001E8C00");
 
+extern struct UpdateCam camera_selection_records[48] __asm__("D_00187410");
+
 #endif /* LOMBYTE_RNC_GAMEPLAY_CAMERA_UPDATE_CAM_H */

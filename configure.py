@@ -517,6 +517,7 @@ DATA_OVERLAYS = {
     "ui/menus/audio/set_pause_sound_volume": (0x13E5A0, 0x3F520, 4),
     "ui/menus/selection/update_menu_item_slots": (0x141848, 0x427C8, 288),
     "textbin/audio/snd_start_sound_system": (0x133280, 0x34200, 8192),
+    "gameplay/camera/update_all_cameras": (0x187410, 0x88390, 7680),
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
