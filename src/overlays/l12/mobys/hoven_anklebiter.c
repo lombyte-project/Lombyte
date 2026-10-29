@@ -65,12 +65,12 @@ extern int cancel_suck_cannon_suction(struct Moby *) __asm__("FUN_L00_002dbe20")
 int cancel_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) __asm__("FUN_L12_002e17f8");
 
 int cancel_hoven_anklebiter_suck_cannon_suction(struct Moby *moby) {
-    int result = cancel_suck_cannon_suction(moby);
+    int was_stored_in_suck_cannon = cancel_suck_cannon_suction(moby);
     if (moby->state == 9 || moby->state == 11) {
         return 0;
     }
     moby->state = 8;
-    return result;
+    return was_stored_in_suck_cannon;
 }
 
 extern char D_L12_00167240[];
