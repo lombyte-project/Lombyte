@@ -166,11 +166,11 @@ void request_thruster_pack_lock_red_wait(struct Moby *moby, int wait_duration_fr
 void end_thruster_pack_lock_red_wait(struct Moby *moby) __asm__("FUN_L18_002d7fd0");
 
 void end_thruster_pack_lock_red_wait(struct Moby *moby) {
-    int *data = (int *)moby->pvars;
+    int *red_lock_private_vars = (int *)moby->pvars;
     if (moby->state == 2) {
         int voice_slot_index;
         moby->state = 3;
-        voice_slot_index = data[0x70 / 4];
+        voice_slot_index = red_lock_private_vars[0x70 / 4];
         if (voice_slot_index != -1) {
             unsigned char *voice_slot_entry =
                 (unsigned char *)((char *)&voice_pool) + voice_slot_index * 0x70;
@@ -178,7 +178,7 @@ void end_thruster_pack_lock_red_wait(struct Moby *moby) {
                 release_voice_slot(voice_slot_index);
             }
         }
-        data[0x70 / 4] = -1;
+        red_lock_private_vars[0x70 / 4] = -1;
     }
 }
 
