@@ -109,7 +109,7 @@ int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_
     float scaled_axis_vector[4];
     float target_axis_residual[4];
     float r[4];
-    char *data;
+    char *moby_camera_control_entry;
     char *shared_axis_data = D_L02_00167410;
     char *g;
     float dot1;
@@ -122,8 +122,8 @@ int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_
     char *moby_record_table = D_L02_0015EF50;
     char *target_moby;
 
-    data = *(char **)(moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1C);
-    target_moby = *(char **)(data + 0x48);
+    moby_camera_control_entry = *(char **)(moby_record_table + *(short *)(moby + 0x84) * 32 + 0x1C);
+    target_moby = *(char **)(moby_camera_control_entry + 0x48);
     if (residual_angle_limit_degrees == 0.0f && b == 0.0f) {
         return 1;
     }
