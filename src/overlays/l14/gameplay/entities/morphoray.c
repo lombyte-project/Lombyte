@@ -21,8 +21,8 @@ extern VendorView_5290 l14_camera_projection_state __asm__("D_L14_0016D140");
  * retail disassembly and reproduce it byte for byte on the game compiler
  * route (cc1, Ps2EeAs). */
 
-extern int D_001413DC __attribute__((section(".data")));
-extern u8 *D_L14_00167500 __attribute__((section(".data")));
+extern int D_001413DC NOT_SDA;
+extern u8 *D_L14_00167500 NOT_SDA;
 
 /* 0x003135B8, 80 bytes.  When the level record's field at 0x86 is 7, seed the
  * sub-record reached through +0x70 with the caller's argument and two float
@@ -102,7 +102,7 @@ typedef struct {
 } Coll_0e00;
 typedef struct { float r, g, b; } Rgb_0e00;
 extern Coll_0e00 D_L14_00174540;
-extern int D_L14_00174558 __attribute__((section(".data")));
+extern int D_L14_00174558 NOT_SDA;
 extern int D_L14_0016208C_gp __asm__("D_L14_0016208C") __attribute__((sda));
 #include "rnc/overlay/l14/gameplay/entities/morphoray_globals.h"
 extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__((sda));
@@ -110,7 +110,7 @@ extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda
 extern float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") __attribute__((sda));
 extern float D_L14_001620A0 __attribute__((sda));
 extern Rgb_0e00 l14_spark_rolling_fade_source_rgb __asm__("D_L14_001620A8");
-extern char D_L14_0015F580[] __attribute__((section(".sdata")));
+extern char D_L14_0015F580[] MACRO_ADDR;
 extern int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 extern int timer_done_0e00(int *) __asm__("FUN_001f9740");
 extern int timer_tick_0e00(short *) __asm__("FUN_001f9770");
@@ -460,7 +460,7 @@ void raise_unlock_sequence_mobys(struct Moby *moby) {
     } while (*moby_id_cursor++ >= 0);
 }
 extern u8 D_0014C050[];
-extern u8 D_0013D4D5 __attribute__((section(".data")));
+extern u8 D_0013D4D5 NOT_SDA;
 extern s32 D_L14_0015F5CC;
 extern s32 D_L14_0015F5C4;
 void update_morphoray_particles(struct Moby *morphoray_moby) __asm__("FUN_L14_00305b18");

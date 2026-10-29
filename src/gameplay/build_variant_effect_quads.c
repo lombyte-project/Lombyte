@@ -5,11 +5,11 @@
 
 typedef struct { float f[4]; } __attribute__((aligned(16))) QuadOffset;
 
-extern f32 quad_uvs[4][2] __asm__("D_001D9890") __attribute__((section(".data")));
-extern QuadOffset quad_positions[8] __asm__("D_001D98B0") __attribute__((section(".data")));
-extern QuadOffset quad_positions_variant1[2] __asm__("D_001D9930") __attribute__((section(".data")));
-extern QuadOffset quad_positions_variant2[2] __asm__("D_001D9950") __attribute__((section(".data")));
-extern QuadOffset quad_corners[10] __asm__("D_001D9970") __attribute__((section(".data")));
+extern f32 quad_uvs[4][2] __asm__("D_001D9890") NOT_SDA;
+extern QuadOffset quad_positions[8] __asm__("D_001D98B0") NOT_SDA;
+extern QuadOffset quad_positions_variant1[2] __asm__("D_001D9930") NOT_SDA;
+extern QuadOffset quad_positions_variant2[2] __asm__("D_001D9950") NOT_SDA;
+extern QuadOffset quad_corners[10] __asm__("D_001D9970") NOT_SDA;
 
 void FUN_001f9a68_28efc8(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10_28efc8(void *, void *, void *) __asm__("FUN_001f9a10");

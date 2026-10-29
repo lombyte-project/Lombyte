@@ -63,7 +63,7 @@ typedef struct D_2E0630 {
     char sound_state[4];
 } D_2E0630;
 
-extern char *D_L10_0015FFD0_g[] __asm__("D_L10_0015FFD0") __attribute__((section(".sdata")));
+extern char *D_L10_0015FFD0_g[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_cos_c(f32) __asm__("func_001F9DC8");
@@ -323,7 +323,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern int ahead_f(float, void *, void *) __asm__("FUN_L01_00274b78");
 extern int activate_effect_l08(float, void *, void *, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern unsigned char D_0013D418 __attribute__((section(".data")));
+extern unsigned char D_0013D418 NOT_SDA;
 typedef struct EventRecord_2DFC38 { unsigned char pad[0x10]; unsigned char flag; } EventRecord_2DFC38;
 extern EventRecord_2DFC38 D_0013D408_2DFC38 __asm__("D_0013D408");
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/update_screamer_hit_reactions_and_targeting.h"

@@ -8,6 +8,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+#include "sda.h"
 typedef struct {
     u8 pad[0x20];
     u8 b20;
@@ -145,8 +146,8 @@ typedef struct {
     char p1C[0x28 - 0x1C];
     float f28;
 } G_2d81b8;
-extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
-extern float D_L00_00173E68_2d81b8 __asm__("D_L00_00173E68") __attribute__((section(".data")));
+extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
+extern float D_L00_00173E68_2d81b8 __asm__("D_L00_00173E68") NOT_SDA;
 extern float frame_time_sq __asm__("D_0015ED70");
 int FUN_001efa68_2d81b8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
@@ -271,8 +272,8 @@ typedef struct {
     u8 p0[0xF8];
     u8 *pF8;
 } T_2d8510;
-extern char g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
-extern T_2d8510 D_L00_001B2080_2d8510 __asm__("D_L00_001B2080") __attribute__((section(".data")));
+extern char g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
+extern T_2d8510 D_L00_001B2080_2d8510 __asm__("D_L00_001B2080") NOT_SDA;
 extern s32 D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
 void FUN_001f9a28_2d8510(void *, void *, void *) __asm__("FUN_001f9a28");
 void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -385,7 +386,7 @@ void update_nanotech_ball_slot_offsets(void) {
     }
 }
 #include "rnc/math/vector.h"
-extern s32 D_001413D0_lui[] __asm__("D_001413D0") __attribute__((section(".data")));
+extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 #include "rnc/gameplay/entities/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002D9EA0), where it is exact; names translated to the US level program. */
@@ -820,7 +821,7 @@ typedef struct {
     float texcoords[8];
     u64 texture[4];
 } __attribute__((aligned(16))) GeometryQuad;
-extern int D_L00_00161B10_macro __asm__("D_L00_00161B10") __attribute__((section(".sdata")));
+extern int D_L00_00161B10_macro __asm__("D_L00_00161B10") MACRO_ADDR;
 extern int l00_nanotech_ball_blend_minuend_color_selector __asm__("D_L00_00161AC0") __attribute__((sda));
 extern int l00_nanotech_ball_blend_subtrahend_color_selector __asm__("D_L00_00161AC4") __attribute__((sda));
 extern int l00_nanotech_ball_blend_alpha_selector __asm__("D_L00_00161AC8") __attribute__((sda));
@@ -833,7 +834,7 @@ extern u32 l00_nanotech_ball_pulse_quad_base_color __asm__("D_L00_00161AE0") __a
 extern int l00_nanotech_ball_state_one_quad_texture_index __asm__("D_L00_00161AE4") __attribute__((sda));
 extern float l00_nanotech_ball_state_one_quad_uv_vector_length __asm__("D_L00_00161AE8") __attribute__((sda));
 extern float D_L00_00161AEC_gp __asm__("D_L00_00161AEC") __attribute__((sda));
-extern char D_L00_00161AF0_macro[] __asm__("D_L00_00161AF0") __attribute__((section(".sdata")));
+extern char D_L00_00161AF0_macro[] __asm__("D_L00_00161AF0") MACRO_ADDR;
 extern char nanotech_ball_mesh_source_vertices[] __asm__("D_L00_001E14C0");
 extern char nanotech_ball_mesh_texcoords[] __asm__("D_L00_001E26E0");
 extern char nanotech_ball_mesh_vertex_colors[] __asm__("D_L00_001E2FF0");

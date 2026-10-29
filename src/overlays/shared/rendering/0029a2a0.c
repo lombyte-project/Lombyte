@@ -39,7 +39,7 @@ extern int rand(void);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") __attribute__((section(".data")));
+extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") NOT_SDA;
 extern float debris_far_point[] __asm__("D_L07_00166E40");
 
 unsigned char *spawn_moby_point_offset_particle(void *moby, short index, float amount, float factor) __asm__("FUN_L07_0029b8d8");

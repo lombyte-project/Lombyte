@@ -1,4 +1,5 @@
-extern int LookupTable_lui[] __asm__("D_00154F80") __attribute__((section(".data")));
+#include "sda.h"
+extern int LookupTable_lui[] __asm__("D_00154F80") NOT_SDA;
 
 int lookup_index(int index) __asm__("func_0011A458");
 

@@ -11,11 +11,12 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 typedef struct Moby Moby;
 
 extern float D_0015ED6C;
-extern char *D_L12_0015FFD8_gp __asm__("D_L12_0015FFD8") __attribute__((section(".sdata")));
+extern char *D_L12_0015FFD8_gp __asm__("D_L12_0015FFD8") MACRO_ADDR;
 
 /* Hoven turret battery update: aims each manned gun at the hero, fires, takes hits and smokes when damaged. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00306890), where it is exact; names translated to the US level program. */
@@ -41,7 +42,7 @@ typedef struct {
 } Gun_306890;
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 extern char D_L12_00167240[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
@@ -50,8 +51,8 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED64 __attribute__((section(".sdata")));
-extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern float D_0015ED64 MACRO_ADDR;
+extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float FUN_L00_00257c48(float, float);
 extern float step_angle_toward_target(float *, float, int, float) __asm__("FUN_L00_0025bc00");
 extern float spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
@@ -60,8 +61,8 @@ extern float fast_difference_between_rotations(float, float) __asm__("func_001FA
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int D_L12_00161F00;
 extern int D_L12_00161F04;
-extern int D_L12_00161F20 __attribute__((section(".sdata")));
-extern int D_L12_00161F24 __attribute__((section(".sdata")));
+extern int D_L12_00161F20 MACRO_ADDR;
+extern int D_L12_00161F24 MACRO_ADDR;
 extern int D_L12_00161F34 __attribute__((sda));
 extern int planetbuster_maximus_gun_part_slots[] __asm__("D_L12_001FB670");
 extern int D_L12_001FB688[];
@@ -87,9 +88,9 @@ extern char D_L12_00167240[];
 extern int func_001F9908_304920(void *) __asm__("FUN_001f9740");
 extern int func_001FA898_3055F8(float) __asm__("FUN_001fa6d0");
 extern float func_001FA888_3055F8(int) __asm__("FUN_001fa6c0");
-extern float D_0015ED64 __attribute__((section(".sdata")));
-extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") __attribute__((section(".sdata")));
-extern int D_L12_00161F04_gp __asm__("D_L12_00161F04") __attribute__((section(".sdata")));
+extern float D_0015ED64 MACRO_ADDR;
+extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
+extern int D_L12_00161F04_gp __asm__("D_L12_00161F04") MACRO_ADDR;
 extern int D_L12_00161F20 __attribute__((sda));
 extern int D_L12_00161F24 __attribute__((sda));
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
@@ -545,29 +546,29 @@ typedef struct { char pad[0x34]; unsigned short flags; } M34_7DB0;
 typedef struct { unsigned char pad0[0x74]; unsigned char active; unsigned char pad75[0x13]; char *owner; } Voice_7DB0;
 
 extern char D_0013E550[];
-extern char *D_L12_001600EC __attribute__((section(".sdata")));
-extern char D_0013F3D0[] __attribute__((section(".data")));
+extern char *D_L12_001600EC MACRO_ADDR;
+extern char D_0013F3D0[] NOT_SDA;
 extern char D_L12_00167240[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float D_0015ED64 __attribute__((section(".sdata")));
-extern float D_0015ED6C_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
-extern float D_L12_00161F40_gp __asm__("D_L12_00161F40") __attribute__((section(".sdata")));
-extern float D_L12_00161F60_gp __asm__("D_L12_00161F60") __attribute__((section(".sdata")));
-extern float D_L12_00161F70_gp __asm__("D_L12_00161F70") __attribute__((section(".sdata")));
+extern float D_0015ED64 MACRO_ADDR;
+extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
+extern float D_0015ED70 MACRO_ADDR;
+extern float D_L12_00161F40_gp __asm__("D_L12_00161F40") MACRO_ADDR;
+extern float D_L12_00161F60_gp __asm__("D_L12_00161F60") MACRO_ADDR;
+extern float D_L12_00161F70_gp __asm__("D_L12_00161F70") MACRO_ADDR;
 extern float approach_value(float *, float, float);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern int D_L12_001619A0 __attribute__((section(".sdata")));
-extern int D_L12_001619B4 __attribute__((section(".sdata")));
+extern int D_L12_001619A0 MACRO_ADDR;
+extern int D_L12_001619B4 MACRO_ADDR;
 extern int D_L12_00161F00;
-extern int D_L12_00161F24 __attribute__((section(".sdata")));
+extern int D_L12_00161F24 MACRO_ADDR;
 extern int D_L12_00161F34 __attribute__((sda));
 extern int D_L12_001B0930;
-extern int D_L12_0015F404 __attribute__((section(".sdata")));
+extern int D_L12_0015F404 MACRO_ADDR;
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
@@ -593,9 +594,9 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
 void FUN_L12_00306350_c(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
-extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
 extern char D_0013F3D0[];
-extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") __attribute__((section(".sdata")));
+extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int D_L12_001B0930;
 

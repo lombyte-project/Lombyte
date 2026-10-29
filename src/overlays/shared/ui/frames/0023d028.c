@@ -6,9 +6,9 @@
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
 
-extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") __attribute__((section(".data")));
-extern char D_L00_001C5B00_23d028[] __asm__("D_L00_001C5B00") __attribute__((section(".data")));
-extern char D_L00_001BC1B0_23d028[] __asm__("D_L00_001BC1B0") __attribute__((section(".data")));
+extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
+extern char D_L00_001C5B00_23d028[] __asm__("D_L00_001C5B00") NOT_SDA;
+extern char D_L00_001BC1B0_23d028[] __asm__("D_L00_001BC1B0") NOT_SDA;
 void FUN_00215420_23d028(void) __asm__("FUN_00215420");
 void FUN_002335a0_23d028(void) __asm__("FUN_002335a0");
 void FUN_002015d8_23d028(void) __asm__("FUN_002015d8");
@@ -20,13 +20,13 @@ void FUN_L00_00268900_23d028(void) __asm__("FUN_L00_00268900");
 void FUN_00233d00_23d028(void) __asm__("FUN_00233d00");
 void init_level_item_inventory(void) __asm__("FUN_L00_0023d198");
 void FUN_L00_002607d0_23d028(int) __asm__("FUN_L00_002607d0");
-extern char D_L00_0019A980[] __attribute__((section(".data")));
-extern char D_L00_0019A280[] __attribute__((section(".data")));
-extern char D_L00_001C7700[] __attribute__((section(".data")));
-extern char D_L00_001C6F00[] __attribute__((section(".data")));
-extern char D_L00_001BD3B0[] __attribute__((section(".data")));
-extern char D_L00_001BCDB0[] __attribute__((section(".data")));
-extern char D_L00_00173EC0[] __attribute__((section(".data")));
+extern char D_L00_0019A980[] NOT_SDA;
+extern char D_L00_0019A280[] NOT_SDA;
+extern char D_L00_001C7700[] NOT_SDA;
+extern char D_L00_001C6F00[] NOT_SDA;
+extern char D_L00_001BD3B0[] NOT_SDA;
+extern char D_L00_001BCDB0[] NOT_SDA;
+extern char D_L00_00173EC0[] NOT_SDA;
 void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
 
 void init_level_runtime_state(void) {

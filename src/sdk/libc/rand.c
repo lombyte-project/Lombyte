@@ -1,11 +1,12 @@
 #include "types.h"
+#include "sda.h"
 
 typedef struct RandomState {
     u8 reserved[0x58];
     u32 seed;
 } RandomState;
 
-extern RandomState *GlobalStateResource __asm__("D_0012F76C") __attribute__((section(".data")));
+extern RandomState *GlobalStateResource __asm__("D_0012F76C") NOT_SDA;
 
 s32 RandomNext(void) __asm__("rand");
 

@@ -12,6 +12,7 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L18_00213b40, without states 0, 4 and 0xE). */
 extern int D_0015ED84_c __asm__("D_0015ED84");
@@ -296,8 +297,8 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_L02_00174440[] __attribute__((section(".data")));
-extern u8 D_L02_00174460[] __attribute__((section(".data")));
+extern u8 D_L02_00174440[] NOT_SDA;
+extern u8 D_L02_00174460[] NOT_SDA;
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
@@ -319,7 +320,7 @@ void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 f32 FUN_001f99c0(f32);
 
-extern CollisionHit HH __asm__("D_L02_00174440") __attribute__((section(".data")));
+extern CollisionHit HH __asm__("D_L02_00174440") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L02_00174440 + (o)))
 #define HF(o) (*(f32 *)(D_L02_00174440 + (o)))
 
@@ -544,7 +545,7 @@ extern void f2334d0_222270(void *, void *, f32) __asm__("FUN_L00_002334d0");
 extern s32 coll1_222270(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_222270(void *, f32) __asm__("FUN_L00_001f3170");
-extern u128_222270 D_L02_00174470[] __attribute__((section(".data")));
+extern u128_222270 D_L02_00174470[] NOT_SDA;
 s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L02_00222270");
 
 s32 resolve_hero_position_collisions(s32 mode) {

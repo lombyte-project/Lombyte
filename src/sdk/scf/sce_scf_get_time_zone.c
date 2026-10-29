@@ -1,6 +1,7 @@
+#include "sda.h"
 extern int IsT10K(void);
 extern void GetOsdConfigParam(int *config);
-extern short D_001330D0[] __attribute__((section(".data")));
+extern short D_001330D0[] NOT_SDA;
 
 int sceScfGetTimeZone(void) {
     int config;

@@ -14,6 +14,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* Rotation-axis selection shared by the asteroid update helpers. */
 enum AsteroidSpinAxis {
@@ -115,7 +116,7 @@ typedef struct Hero_2C27B0 { char pad0[0x15F0]; Moby_2C27B0 *veh; } Hero_2C27B0;
 
 typedef struct Tex_2C27B0 { char pad0[0x5C]; unsigned char *p5C; } Tex_2C27B0;
 
-extern Moby_2C27B0 *D_L13_00174158 __attribute__((section(".data")));
+extern Moby_2C27B0 *D_L13_00174158 NOT_SDA;
 extern Tex_2C27B0 D_L13_001B2380;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");

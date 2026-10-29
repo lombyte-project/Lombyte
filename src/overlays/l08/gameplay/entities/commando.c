@@ -16,6 +16,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "sda.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -381,9 +382,9 @@ void draw_layered_mesh_effect(void) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
 
-extern Pair D_L08_00161E10[] __attribute__((section(".sdata")));
-extern Pair D_L08_00161E14[] __attribute__((section(".sdata")));
-extern Pair D_L08_00161E24[] __attribute__((section(".sdata")));
+extern Pair D_L08_00161E10[] MACRO_ADDR;
+extern Pair D_L08_00161E14[] MACRO_ADDR;
+extern Pair D_L08_00161E24[] MACRO_ADDR;
 extern Pair D_L08_001E8348[];
 extern Pair l08_layered_mesh_effect_sine_phase_pair __asm__("D_L08_00161E28");
 extern char D_L08_001675C0[];
@@ -407,7 +408,7 @@ extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
+extern Pair D_L08_00161E20[] MACRO_ADDR;
 void update_layered_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f1548");
 
 void update_layered_mesh_effect(struct Moby *moby) {
@@ -477,8 +478,8 @@ void update_layered_mesh_effect(struct Moby *moby) {
         break;
     }
 }
-extern f32 D_L08_0015F580[] __attribute__((section(".sdata")));
-extern struct Moby *D_0013F58C __attribute__((section(".data")));
+extern f32 D_L08_0015F580[] MACRO_ADDR;
+extern struct Moby *D_0013F58C NOT_SDA;
 /* Retail loads gp - 0x4C90; GP 0x166C00 places this scalar at 0x161F70. */
 
 extern s32 find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");

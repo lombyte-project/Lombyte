@@ -550,7 +550,7 @@ extern int D_L14_001BABD0[];
 extern char sam_dialogue_name_text[] __asm__("D_L14_00161FE8");
 extern char *D_L14_001600EC;
 extern int D_L14_0015F5C4;
-extern unsigned char D_0013DD4F __attribute__((section(".data")));
+extern unsigned char D_0013DD4F NOT_SDA;
 extern struct {
     char pad[0x10];
     unsigned int q10[4] __attribute__((aligned(16)));

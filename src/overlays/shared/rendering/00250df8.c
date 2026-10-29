@@ -5,6 +5,7 @@
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250df8.s", FUN_L00_00250df8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250e30.s", FUN_L00_00250e30);
@@ -24,10 +25,10 @@ typedef struct {
 } Moby257218;
 extern int D_0015ED84;
 extern int D_0014C190[][64];
-extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") __attribute__((section(".sdata")));
+extern u8 D_0015EDD0_257218[] __asm__("D_0015EDD0") MACRO_ADDR;
 extern u8 D_0013D4C0[];
 extern int weapon_ammo_counts[] __asm__("D_0013D428");
-extern Item257218 D_L00_001C40B0[] __attribute__((section(".data")));
+extern Item257218 D_L00_001C40B0[] NOT_SDA;
 int FUN_00213260(int);
 int FUN_L00_00257218_u3(Moby257218 *, int *) __asm__("FUN_L00_00257218");
 
@@ -74,13 +75,13 @@ extern int current_level_index __asm__("D_0015ED84");
 extern int D_0015ED84_257470b __asm__("D_0015ED84");
 extern unsigned char D_0014C050_257470[][16] __asm__("D_0014C050")
     __attribute__((section(".data")));
-extern short D_0014D590_257470[][64][2] __asm__("D_0014D590") __attribute__((section(".data")));
+extern short D_0014D590_257470[][64][2] __asm__("D_0014D590") NOT_SDA;
 typedef struct {
     unsigned char p[0x454];
     unsigned char a[1];
 } S_257470;
-extern S_257470 D_L00_001BA5D0_257470 __asm__("D_L00_001BA5D0") __attribute__((section(".data")));
-extern S_257470 D_L00_001BB230_257470 __asm__("D_L00_001BB230") __attribute__((section(".data")));
+extern S_257470 D_L00_001BA5D0_257470 __asm__("D_L00_001BA5D0") NOT_SDA;
+extern S_257470 D_L00_001BB230_257470 __asm__("D_L00_001BB230") NOT_SDA;
 extern unsigned char D_L00_0015FC88_257470[] __asm__("D_L00_0015FC88")
     __attribute__((section(".data")));
 extern void FUN_001e93b0_257470(void *, ...) __asm__("FUN_001e93b0");
@@ -88,11 +89,11 @@ extern int FUN_001fa6d0_257470(float) __asm__("FUN_001fa6d0");
 extern float FUN_001f9b48_257470(void *, void *) __asm__("FUN_001f9b48");
 extern void spawn_randomized_bolt_drop(void *, int, int, int, int) __asm__("FUN_L00_00260a88");
 
-extern unsigned char D_L00_001E8F00[] __attribute__((section(".data")));
-extern unsigned char D_L00_001E8F28[] __attribute__((section(".data")));
-extern s32 level_moby_killed[][64] __asm__("D_0014C190") __attribute__((section(".data")));
-extern int D_L00_001BA4D0_lui[] __asm__("D_L00_001BA4D0") __attribute__((section(".data")));
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern unsigned char D_L00_001E8F00[] NOT_SDA;
+extern unsigned char D_L00_001E8F28[] NOT_SDA;
+extern s32 level_moby_killed[][64] __asm__("D_0014C190") NOT_SDA;
+extern int D_L00_001BA4D0_lui[] __asm__("D_L00_001BA4D0") NOT_SDA;
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
 void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_index) {
     float amt;

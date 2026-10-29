@@ -10,6 +10,7 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* Scoutbot update: hovers at its post, flies to its target and back, calls reinforcements, shoots, dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D3DF8), where it is exact; names translated to the US level program. */
@@ -388,7 +389,7 @@ extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void FUN_001f7d30_002d3878(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L08_00161894_002d3878 __asm__("D_L08_00161894") __attribute__((section(".data")));
+extern float D_L08_00161894_002d3878 __asm__("D_L08_00161894") NOT_SDA;
 extern u32 D_00151878_gp __asm__("D_00151878") __attribute__((sda));
 extern u32 D_0015187C_gp __asm__("D_0015187C") __attribute__((sda));
 extern u32 D_00151880_gp __asm__("D_00151880") __attribute__((sda));

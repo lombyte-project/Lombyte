@@ -12,10 +12,10 @@ typedef struct {
     unsigned char h[0x404];
     unsigned char f[0x7FF];
 } B_00284e50;
-extern B_00284e50 D_L00_001BA620 __attribute__((section(".data")));
-extern B_00284e50 D_L00_001BB280 __attribute__((section(".data")));
-extern int D_L00_001BA4D0[] __attribute__((section(".data")));
-extern char D_L00_001BB230[] __attribute__((section(".data")));
+extern B_00284e50 D_L00_001BA620 NOT_SDA;
+extern B_00284e50 D_L00_001BB280 NOT_SDA;
+extern int D_L00_001BA4D0[] NOT_SDA;
+extern char D_L00_001BB230[] NOT_SDA;
 extern unsigned char D_0014C050[][16];
 extern char D_001516D0[];
 extern char D_0013E550[];
@@ -72,10 +72,10 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
         }
     }
 }
-extern char D_L00_001BA5D0[] __attribute__((section(".data")));
+extern char D_L00_001BA5D0[] NOT_SDA;
 extern u8 *moby_table __asm__("D_L00_0015FFD8");
 extern u8 *D_L00_0015FFDC;
-extern unsigned short D_00151708 __attribute__((section(".data")));
+extern unsigned short D_00151708 NOT_SDA;
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void enter_hero_vehicle_mode(s32, s32, void *) __asm__("FUN_L00_00210a08");

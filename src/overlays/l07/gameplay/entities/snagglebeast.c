@@ -11,12 +11,13 @@
 #include "qcopy.h"
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/effect_00313D28.c: func_L07_00313D28). */
 
 extern s32 level_frame_count __asm__("D_L07_0015F5CC");
 /* [4] is depth_buffer_address. */
-extern s32 gs_texture_allocation_start_macro[6] __asm__("D_0015EE78") __attribute__((section(".sdata")));
+extern s32 gs_texture_allocation_start_macro[6] __asm__("D_0015EE78") MACRO_ADDR;
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern u64 get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");

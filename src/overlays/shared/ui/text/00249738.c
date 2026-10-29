@@ -3,7 +3,8 @@
 #include "asm.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
-extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
+#include "sda.h"
+extern s32 frame_size __asm__("D_0013E504") NOT_SDA;
 extern s32 D_L06_0015F8E8 __attribute__((sda));
 extern f32 D_L06_0015F8F0 __attribute__((sda));
 extern f32 D_L06_0015F8F4 __attribute__((sda));

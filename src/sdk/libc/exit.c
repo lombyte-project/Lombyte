@@ -20,6 +20,7 @@
 /* exit x1: newlib exit.c with the game reent and JumpToRfuStatus as _exit. */
 
 #include "types.h"
+#include "sda.h"
 
 struct _atexit {
     struct _atexit *_next;
@@ -35,7 +36,7 @@ typedef struct ExitReent {
     struct _atexit *_atexit;
 } ExitReent;
 
-extern ExitReent *D_0012F76C __attribute__((section(".data")));
+extern ExitReent *D_0012F76C NOT_SDA;
 extern void JumpToRfuStatus(int code);
 
 void exit(int code) {

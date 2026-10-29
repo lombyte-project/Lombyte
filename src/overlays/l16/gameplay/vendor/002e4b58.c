@@ -174,7 +174,7 @@ void transform_moby_table_entry_vectors(struct Moby *moby) {
 }
 /* Sets up the draw state, then draws the three entries of the level's table. */
 
-extern char D_L16_001DF2D0[] __attribute__((section(".data")));
+extern char D_L16_001DF2D0[] NOT_SDA;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float D_L16_001DE720[];

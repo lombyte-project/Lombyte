@@ -2,7 +2,7 @@
 
 #include "rnc/sdk/library/sdk_state.h"
 
-extern int FsResetBuffer __asm__("D_00157FA8") __attribute__((section(".data")));
+extern int FsResetBuffer __asm__("D_00157FA8") NOT_SDA;
 
 extern void *Memset(void *, int, unsigned int) __asm__("memset");
 

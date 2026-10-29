@@ -6,12 +6,13 @@
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
-extern short D_L01_001B0CB0[] __attribute__((section(".data")));
-extern char *D_L01_001DD580[] __attribute__((section(".data")));
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern short D_L01_001B0CB0[] NOT_SDA;
+extern char *D_L01_001DD580[] NOT_SDA;
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 int FUN_L01_00274b78(char *a, char *o, float best);
 int FUN_L01_00274b78(char *source_entity, char *target_out, float best) {
     struct Hero *hero = &hero_lui;

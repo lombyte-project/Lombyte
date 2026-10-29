@@ -107,7 +107,7 @@ typedef struct {
 extern int D_L00_0015F5CC_23aaa8 __asm__("D_L00_0015F5CC");
 int FUN_001f96f8_23aaa8(int) __asm__("FUN_001f96f8");
 int FUN_00213260_23aaa8(int) __asm__("FUN_00213260");
-extern T_23aaa8 *D_L00_0017E4F4 __attribute__((section(".data")));
+extern T_23aaa8 *D_L00_0017E4F4 NOT_SDA;
 int update_hud_animation_frame(O_23aaa8 *hud_frame_state) __asm__("FUN_L00_0023aaa8");
 
 int update_hud_animation_frame(O_23aaa8 *hud_frame_state) {
@@ -176,12 +176,12 @@ typedef struct E_23ac78 {
     int t;
     char pad3[0x90 - 0x80];
 } E_23ac78;
-extern E_23ac78 hud_elements[] __asm__("D_L00_0017DC50") __attribute__((section(".data")));
+extern E_23ac78 hud_elements[] __asm__("D_L00_0017DC50") NOT_SDA;
 typedef struct {
     int a;
     int b;
 } H_23ac78;
-extern H_23ac78 D_L00_0017E4D8 __attribute__((section(".data")));
+extern H_23ac78 D_L00_0017E4D8 NOT_SDA;
 void update_weapon_hud_state(void) __asm__("FUN_L00_0023adb8");
 
 extern void update_weapon_hud_state(void) __asm__("FUN_L00_0023adb8");

@@ -9,6 +9,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 typedef union {
     u128 q;
@@ -284,7 +285,7 @@ typedef struct {
     u8 p3[0x1240 - 0x119C];
     f32 f1240;
 } X_215b68;
-extern X_215b68 D_L00_0017A680_215b68 __asm__("D_L00_0017A680") __attribute__((section(".data")));
+extern X_215b68 D_L00_0017A680_215b68 __asm__("D_L00_0017A680") NOT_SDA;
 extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
 #define X D_L00_0017A680_215b68
 
@@ -369,7 +370,7 @@ typedef struct {
     f32 fD08;
 } LeanState;
 
-extern LeanState hero_eases __asm__("D_L00_0017A680") __attribute__((section(".data")));
+extern LeanState hero_eases __asm__("D_L00_0017A680") NOT_SDA;
 /* D_L00_0017A680 + 0xD0C, written through its own symbol as in retail */
 extern f32 D_L00_0017B38C[];
 extern f32 D_0015EE18;
@@ -419,7 +420,7 @@ void update_hero_lean_and_sway_parameters(void)
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/overlay/quad.h"
-extern char *D_001413D0 __attribute__((section(".data")));
+extern char *D_001413D0 NOT_SDA;
 void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");

@@ -12,6 +12,7 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/audio/voice_pool.h"
+#include "sda.h"
 
 /* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00303CA8), where it is exact; names translated to the US level program. */
@@ -238,7 +239,7 @@ extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED6C;
-extern float D_L12_0015F580[] __attribute__((section(".sdata")));
+extern float D_L12_0015F580[] MACRO_ADDR;
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int D_0013F3D0; /* no foreign declaration */

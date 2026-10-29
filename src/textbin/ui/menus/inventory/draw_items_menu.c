@@ -12,7 +12,7 @@ typedef struct {
     s32 help_tip;
 } ItemsMenu;
 
-extern s32 D_0015ED88[] __attribute__((section(".sdata")));
+extern s32 D_0015ED88[] MACRO_ADDR;
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");

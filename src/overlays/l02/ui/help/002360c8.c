@@ -6,6 +6,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));
 typedef union {
     V4q_32b90 q;
@@ -26,7 +27,7 @@ extern f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
 extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
-extern u8 D_L02_00174480[] __attribute__((section(".data")));
+extern u8 D_L02_00174480[] NOT_SDA;
 f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_acceleration_coefficient, f32 target_z) __asm__("FUN_L02_002360c8");
 
 f32 resolve_hero_trajectory_parameter(f32 trajectory_parameter, f32 trajectory_acceleration_coefficient, f32 target_z) {

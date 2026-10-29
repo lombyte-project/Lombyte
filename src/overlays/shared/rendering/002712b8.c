@@ -9,11 +9,12 @@
 #include "rnc/math/vector.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int FUN_001fa6d0_2712b8(float) __asm__("FUN_001fa6d0");
 extern int FUN_00213260_2712b8(int) __asm__("FUN_00213260");
 
-extern unsigned char *D_L00_001B2130 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2130 NOT_SDA;
 unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
                                 float y, float z, float w, float pw);
 unsigned char *FUN_L00_002712b8(OvlQuad *initial_position, float *initial_velocity, int lifetime_frames, int initial_alpha, int col, int unscaled_increment, float x,
@@ -109,7 +110,7 @@ float random_angle_radians(void) __asm__("FUN_00213308");
 float FUN_002132a8_2715e8(float, float) __asm__("FUN_002132a8");
 float fast_cos(float) __asm__("FUN_001f9dc8");
 float fast_sin(float) __asm__("FUN_001f9de0");
-extern unsigned char *D_L00_001B2134 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2134 NOT_SDA;
 unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *initial_position, int x, int color, float size, float size_increment) __asm__("FUN_L00_002715e8");
 
 unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *initial_position, int x, int color, float size, float size_increment) {
@@ -174,7 +175,7 @@ void update_moving_resizing_height_snapped_alpha_fade_particle(unsigned char *pa
 }
 #include "eetypes.h"
 #include "qcopy.h"
-extern unsigned char *D_L00_001B2138 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2138 NOT_SDA;
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -230,7 +231,7 @@ void update_expanding_rotating_alpha_fade_particle(unsigned char *particle) {
 }
 #include "eetypes.h"
 #include "qcopy.h"
-extern unsigned char *D_L00_001B213C __attribute__((section(".data")));
+extern unsigned char *D_L00_001B213C NOT_SDA;
 unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int FUN_00213260(int);
 int FUN_001fa6d0(float);

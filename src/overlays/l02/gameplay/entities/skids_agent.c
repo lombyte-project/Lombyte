@@ -12,6 +12,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {
@@ -57,9 +58,9 @@ typedef struct {
     Vec4f delta;
 } WatcherLook;
 
-extern u8 D_0013D506 __attribute__((section(".data")));
-extern u8 D_0015EDB0 __attribute__((section(".sdata")));
-extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") __attribute__((section(".sdata")));
+extern u8 D_0013D506 NOT_SDA;
+extern u8 D_0015EDB0 MACRO_ADDR;
+extern s32 level_game_mode_macro __asm__("D_L02_0015F5C4") MACRO_ADDR;
 extern WatcherReward D_L02_0016CE60;
 extern char skid_mcmarx_dialogue_data[] __asm__("D_L02_00161D00");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(struct Moby *) __asm__("FUN_L02_002e0cd8");
@@ -94,13 +95,13 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void update_joint_animation(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
 
-extern WatcherReward talk_camera __asm__("D_L02_0016CE60") __attribute__((section(".data"))); /* dialogue camera spot */
+extern WatcherReward talk_camera __asm__("D_L02_0016CE60") NOT_SDA; /* dialogue camera spot */
 extern char skids_agent_dialogue_data[] __asm__("D_L02_00161CF0");
 extern char *D_L02_001600EC;
 extern f32 D_L02_0015F3FC;
 extern f32 skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
-extern struct UsageStat D_00141968[] __attribute__((section(".data"))); /* usage records 36 on (usage_stats + 0x120) */
-extern u8 item_available[] __asm__("D_0013D4C0") __attribute__((section(".data"))); /* by item id */
+extern struct UsageStat D_00141968[] NOT_SDA; /* usage records 36 on (usage_stats + 0x120) */
+extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA; /* by item id */
 extern s32 level_game_mode __asm__("D_L02_0015F5C4");
 extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void initialize_npc_dialogue(struct Moby *, char *) __asm__("FUN_L00_002668a0");
@@ -353,7 +354,7 @@ void skids_agent_update(struct Moby *moby) {
     }
 }
 
-extern f32 frame_scale_sq_macro __asm__("D_0015ED64") __attribute__((section(".sdata")));
+extern f32 frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
 /* Watcher NPC update (twin of qwarks_bouncer_update): idles with random animations, talks to the hero and drops its reward, and turns its head toward the hero or a random look target. */
 void skid_mcmarx_update(struct Moby *m) __asm__("FUN_L02_002e1950");
 void skid_mcmarx_update(struct Moby *moby) {

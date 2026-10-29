@@ -6,6 +6,7 @@
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 extern void update_falling_effect_particle() __asm__("FUN_L00_00268d48");
 extern void update_timed_effect_particle() __asm__("FUN_L00_00268fe8");
@@ -196,7 +197,7 @@ typedef struct {
 } FallingParticle;
 
 /* .sdata placement is load-bearing */
-extern Vec4 particle_drift __asm__("D_L00_00160250") __attribute__((section(".sdata")));
+extern Vec4 particle_drift __asm__("D_L00_00160250") MACRO_ADDR;
 typedef struct {
     f32 value;
 } ParticleClearance;
@@ -245,7 +246,7 @@ void update_falling_effect_particle(FallingParticle *particle)
     vel->f[2] -= frame_time_sq * 9.8f;
     vel->f[3] = ground + particle_clearance.value;
 }
-extern unsigned char *D_L00_001B2084 __attribute__((section(".data")));
+extern unsigned char *D_L00_001B2084 NOT_SDA;
 unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 int scale_game_frames(int) __asm__("FUN_001f96f8");

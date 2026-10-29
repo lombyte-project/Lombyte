@@ -1,5 +1,6 @@
 #include "types.h"
-extern s32 D_0012FCAC __attribute__((section(".data")));
+#include "sda.h"
+extern s32 D_0012FCAC NOT_SDA;
 extern u8 D_00158040[];
 extern u32 D_00158080[];
 extern u8 D_001580C0[];

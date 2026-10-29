@@ -7,6 +7,7 @@
 #include "rnc/math/vector.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;
@@ -55,11 +56,11 @@ extern int deplanetizer_three_quad_scale_ramp_end_frame_gp __asm__("D_L18_001624
 extern int D_L18_001617F4, D_L18_001617F8;
 extern float D_L18_0015ED60;
 
-extern Vec4 D_L18_00162530 __attribute__((section(".sdata")));
-extern Vec4 D_L18_00162540 __attribute__((section(".sdata")));
+extern Vec4 D_L18_00162530 MACRO_ADDR;
+extern Vec4 D_L18_00162540 MACRO_ADDR;
 typedef struct { float radius[5]; } EffectRadii;
 extern EffectRadii l18_deplanetizer_object_trail_base_radii __asm__("D_L18_001F2C20");
-extern char D_L18_0015F580[] __attribute__((section(".sdata")));
+extern char D_L18_0015F580[] MACRO_ADDR;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");

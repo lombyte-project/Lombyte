@@ -8,6 +8,7 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
@@ -17,7 +18,7 @@ extern char D_0013E52B[];
 extern char D_L17_00167580[];
 extern char fleet_camera_box_configuration_error_format[] __asm__("D_L17_001E6F60");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int D_00141DC4 __attribute__((section(".data")));
+extern int D_00141DC4 NOT_SDA;
 extern int fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
@@ -27,8 +28,8 @@ extern int scale_game_frames(int);
 extern int fast_dec_timer() __asm__("func_001F9740");
 extern unsigned char D_0013D408[];
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
-extern unsigned char D_0013D4DF __attribute__((section(".data")));
-extern int D_0015ED80_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
+extern unsigned char D_0013D4DF NOT_SDA;
+extern int D_0015ED80_e[] __asm__("D_0015ED80") MACRO_ADDR;
 extern void DebugPrint();
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void queue_dialogue_message(int arg0, int arg1) __asm__("FUN_L00_00263d40");
@@ -327,7 +328,7 @@ float D_L17_001623C0[4] __attribute__((section(".sdata"))) = {-0.5f, -1.0f, 1.0f
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 void vu1_add_g_sregister(s32 register_id, s64 value) __asm__("FUN_00233980");
 
-extern float D_L17_0016D3E4 __attribute__((section(".data")));
+extern float D_L17_0016D3E4 NOT_SDA;
 extern float backdrop_quad_side_lengths[] __asm__("D_L17_001DDFF8");
 extern float backdrop_quad_color_blend_factors[] __asm__("D_L17_001DE040");
 extern float D_L17_001DE0A0[];

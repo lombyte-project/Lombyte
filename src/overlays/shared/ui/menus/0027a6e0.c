@@ -3,7 +3,7 @@
 #include "asm.h"
 #include "rnc/gameplay/state/item_state.h"
 
-extern unsigned char D_0013D4C2 __attribute__((section(".data")));
+extern unsigned char D_0013D4C2 NOT_SDA;
 extern char D_L00_001B47D0[];
 extern char menu_items_when_flag_clear[] __asm__("D_L00_001B4808");
 

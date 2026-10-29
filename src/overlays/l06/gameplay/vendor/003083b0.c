@@ -8,6 +8,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 extern struct UsageStat help_records[] __asm__("D_00141968");
 extern char *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
@@ -134,7 +135,7 @@ extern int spark_spray_timer_range_start_gp __asm__("D_L06_00162374") __attribut
 extern int spark_spray_timer_range_end_gp __asm__("D_L06_00162378") __attribute__((sda));
 int D_L06_0016237C = 0x10019;
 
-extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 /* Level 06 moby update: a spark emitter; state 4 bursts on a random timer, state 3 sprays continuously. */
 void update_spark_emitter(struct Moby *emitter) __asm__("FUN_L06_00308c68");
 

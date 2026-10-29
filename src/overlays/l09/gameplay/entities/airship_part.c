@@ -1,3 +1,4 @@
+#include "sda.h"
 int find_nearest_moby_by_class() __asm__("FUN_L09_002c2610");
 
 int spawn_airship_part() __asm__("FUN_L09_002c2500");
@@ -69,7 +70,7 @@ extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern char alternate_item_available[] __asm__("D_0013D388");
 
 extern char airship_part_missing_parent_format[] __asm__("D_L09_002082A0");
-extern Pair_2c26c8 D_L09_001613D0 __attribute__((section(".data")));
+extern Pair_2c26c8 D_L09_001613D0 NOT_SDA;
 #include "rnc/overlay/l09/gameplay/entities/airship_part_globals.h"
 extern int airship_part_low_altitude_effect_count_gp __asm__("D_L09_00161368") __attribute__((sda));
 extern int D_L09_0016136C __attribute__((sda));
@@ -90,7 +91,7 @@ extern float airship_part_initial_tumble_y_speed_limit_degrees_gp __asm__("D_L09
 extern float airship_hull_breakup_wait_x_rotation_speed_degrees_gp __asm__("D_L09_001613BC") __attribute__((sda));
 #include "rnc/overlay/l09/gameplay/entities/airship_part_data/update_airship_part.h"
 #include "rnc/globals.h"
-extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
+extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int D_L09_001613C8 __attribute__((sda));
 /* Update for the airship parts (classes 0x49E-0x4A5): attach to the hull, ride it, then break off, tumble away and fall with smoke and sparks. */
 void update_airship_part(struct Moby *moby) __asm__("FUN_L09_002c26c8");

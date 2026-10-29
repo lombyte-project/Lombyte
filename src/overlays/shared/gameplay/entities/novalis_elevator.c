@@ -146,13 +146,13 @@ typedef struct {
     f32 f22C;
 } L01Camera;
 
-extern s32 D_L01_0015F5E0 __attribute__((section(".sdata")));
+extern s32 D_L01_0015F5E0 MACRO_ADDR;
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_globals.h"
 extern u32 cached_water_texture_id_gp __asm__("D_L01_00161228") __attribute__((sda));
 extern u32 cached_water_second_texture_id_gp __asm__("D_L01_0016122C") __attribute__((sda));
 extern u32 D_L01_00161230 __attribute__((sda));
 extern u32 cached_water_alpha_1_fix_gp __asm__("D_L01_00161234") __attribute__((sda));
-extern union PacketCursor l01_packet __asm__("D_L01_001611C0") __attribute__((section(".sdata")));
+extern union PacketCursor l01_packet __asm__("D_L01_001611C0") MACRO_ADDR;
 extern char D_L01_00167240[];
 extern void set_scale_matrix(f32 (*)[4], f32) __asm__("FUN_001f9ff8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");

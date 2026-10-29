@@ -8,9 +8,10 @@
 
 #include "rnc/overlay/collision.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "sda.h"
 
 extern s32 D_L00_0015F5CC;
-extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 extern void apply_hero_motion_and_resolve_collisions(void) __asm__("FUN_L00_00213880");
 extern s32 probe_hero_forward_collision(f32 *, f32, f32) __asm__("FUN_L00_0020a240");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
@@ -102,7 +103,7 @@ typedef struct {
 
 extern struct PadState D_0013C940_2215c8 __asm__("D_0013C940");
 extern s32 D_L00_0015F5C4_2215c8 __asm__("D_L00_0015F5C4");
-extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") __attribute__((section(".data")));
+extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") NOT_SDA;
 
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_2215c8(s32 *) __asm__("FUN_001f9740");

@@ -6,6 +6,7 @@
 #include "rnc/rendering/level_render_state.h"
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 /* Offsets of the bank's four packed images, from the bank start. */
 typedef struct ImageBank_23fa00 {
@@ -21,8 +22,8 @@ typedef struct TexRecord_23fa00 {
 typedef struct TexEntry_23fa00 {
     s32 w[4];
 } TexEntry_23fa00;
-extern u8 *level_archive_base __asm__("D_0015EE54") __attribute__((section(".sdata")));
-extern s32 depth_buffer_address[2] __asm__("D_0015EE88") __attribute__((section(".sdata")));
+extern u8 *level_archive_base __asm__("D_0015EE54") MACRO_ADDR;
+extern s32 depth_buffer_address[2] __asm__("D_0015EE88") MACRO_ADDR;
 extern TexEntry_23fa00 texture_table_23fa00[] __asm__("D_L00_001AEBC0");
 /* $gp scalar aliases: retail takes the records' addresses through $gp. */
 #define first_record_23fa00 ((TexRecord_23fa00 *)&first_record)
@@ -37,14 +38,14 @@ extern void register_moby_class(void *, void *, void *, s32) __asm__("FUN_002036
 
 extern s32 first_record __asm__("D_L00_0015FC00") __attribute__((sda));
 extern s32 second_record __asm__("D_L00_0015FC10") __attribute__((sda));
-extern TexRecord_23fa00 first_record_fields __asm__("D_L00_0015FC0A") __attribute__((section(".sdata")));
-extern TexRecord_23fa00 second_record_fields __asm__("D_L00_0015FC1A") __attribute__((section(".sdata")));
+extern TexRecord_23fa00 first_record_fields __asm__("D_L00_0015FC0A") MACRO_ADDR;
+extern TexRecord_23fa00 second_record_fields __asm__("D_L00_0015FC1A") MACRO_ADDR;
 extern u8 record_index __asm__("D_L00_0015FC20") __attribute__((sda));
 extern s32 second_class_ids[] __asm__("D_L00_00160558");
-extern s32 D_L00_00160568 __attribute__((section(".sdata")));
-extern s32 D_L00_00160564 __attribute__((section(".sdata")));
-extern s32 D_L00_0016056C __attribute__((section(".sdata")));
-extern s32 texture_count_macro __asm__("D_L00_0015FFC8") __attribute__((section(".sdata")));
+extern s32 D_L00_00160568 MACRO_ADDR;
+extern s32 D_L00_00160564 MACRO_ADDR;
+extern s32 D_L00_0016056C MACRO_ADDR;
+extern s32 texture_count_macro __asm__("D_L00_0015FFC8") MACRO_ADDR;
 /* Loads a level's four packed images through the GS loader, adds two texture records and registers the moby class of each one not loaded yet. */
 char *load_level_texture_bank(char *bank, s32 *header) __asm__("FUN_L00_0023fa00");
 

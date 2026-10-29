@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
+#include "sda.h"
 
 typedef struct {
     char pad[0x24];
@@ -62,8 +63,8 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_L15_00174440[] __attribute__((section(".data")));
-extern u8 D_L15_00174460[] __attribute__((section(".data")));
+extern u8 D_L15_00174440[] NOT_SDA;
+extern u8 D_L15_00174460[] NOT_SDA;
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
@@ -90,11 +91,11 @@ f32 FUN_001f99c0(f32);
 #define GH(o) (*(s16 *)(hero_lui + (o)))
 #define GU(o) (*(u16 *)(hero_lui + (o)))
 #define GB(o) (hero_lui[o])
-extern CollisionHit HH __asm__("D_L15_00174440") __attribute__((section(".data")));
+extern CollisionHit HH __asm__("D_L15_00174440") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L15_00174440 + (o)))
 #define HF(o) (*(f32 *)(D_L15_00174440 + (o)))
 
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 void update_hero_ground_contact(void) __asm__("FUN_L15_0020a7a0");
 
 void update_hero_ground_contact(void) {

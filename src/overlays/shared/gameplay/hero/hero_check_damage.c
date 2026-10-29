@@ -8,8 +8,9 @@
 #include "rnc/overlay/collision.h"
 #include "rnc/math/circle_offset.h"
 #include "rnc/overlay/level_globals.h"
+#include "sda.h"
 
-extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* line query from -> to; fills the collision hit record, nonzero on a hit */
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
@@ -205,7 +206,7 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
 typedef struct {
     f32 x, y, z, w;
 } __attribute__((aligned(16))) V_cf58;
-extern u8 D_0013D4DD_cf58 __asm__("D_0013D4DD") __attribute__((section(".data")));
+extern u8 D_0013D4DD_cf58 __asm__("D_0013D4DD") NOT_SDA;
 f32 FUN_001f9b48_c(void *, V_cf58 *) __asm__("FUN_001f9b48");
 #include "rnc/overlay/path.h"
 void find_grind_rail(void) __asm__("FUN_L00_0020cf58");

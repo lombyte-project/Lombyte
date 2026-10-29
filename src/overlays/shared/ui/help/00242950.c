@@ -6,6 +6,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));
 typedef union {
     V4q_32b90 q;
@@ -16,7 +17,7 @@ typedef union {
    listing: 0x80 is a 16-byte value (lq/sq) whose .f[1] is also read as a
    scalar, 0xE0 likewise with .f[2], 0x270 is a 16-byte value, and 0x20B3 is
    the u8 the switch is on. */
-extern u8 D_L00_00173E80_32b90[] __asm__("D_L06_00174600") __attribute__((section(".data")));
+extern u8 D_L00_00173E80_32b90[] __asm__("D_L06_00174600") NOT_SDA;
 extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");

@@ -14,6 +14,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
 typedef union {
@@ -92,8 +93,8 @@ extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern s32 D_00141660[];
 extern s32 D_0015EE78_gp __attribute__((sda));
 extern void *D_L00_00197300[];
-extern u8 D_L00_0017E4D8[] __attribute__((section(".data")));
-extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern u8 D_L00_0017E4D8[] NOT_SDA;
+extern int D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
 extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 extern void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern void vu1_send_chain_render_buffer(void) __asm__("FUN_L00_002a08c8");
@@ -115,7 +116,7 @@ extern s32 D_L00_0015F5AC;
 extern s32 D_L00_0015F578 __attribute__((sda));
 extern s32 level_timer __asm__("D_L00_0015F5C8") __attribute__((sda));
 extern s32 D_L00_0016000C __attribute__((sda));
-extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") __attribute__((section(".data")));
+extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern u8 level_transition_debug_format[] __asm__("D_L00_001E91B0");
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void snd_continue_all_sounds_in_group(s32) __asm__("FUN_0012e418");
@@ -156,7 +157,7 @@ extern u8 D_L00_0016CA40[];
 extern s32 D_L00_0015F3F8;
 extern int D_L00_00173E00[];
 extern f32 player_camera[] __asm__("D_L00_00166C80");
-extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
+extern s32 frame_size __asm__("D_0013E504") NOT_SDA;
 extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");

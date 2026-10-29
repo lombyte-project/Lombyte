@@ -8,8 +8,9 @@
 #include "rnc/math/vector.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
-extern CollisionHit coll_hit __asm__("D_L15_00174440") __attribute__((section(".data")));
+extern CollisionHit coll_hit __asm__("D_L15_00174440") NOT_SDA;
 extern int coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");

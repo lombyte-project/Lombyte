@@ -201,7 +201,7 @@ typedef struct {
     s16 id;
 } BurstMoby;
 
-extern s32 D_0015ED84_e[] __asm__("D_0015ED80") __attribute__((section(".sdata")));
+extern s32 D_0015ED84_e[] __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
 typedef struct {
     u8 pad0[0x454];
@@ -709,9 +709,9 @@ extern void func_L00_00286128_2FC140(void *, void *) __asm__("FUN_L00_00284e50")
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void func_L01_002A3680_2FC140(void) __asm__("FUN_L01_002a2480");
 
-extern unsigned char D_L01_0015FC88[] __attribute__((section(".sdata")));
-extern f32 frame_time_macro __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern s32 current_level_index_macro __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern unsigned char D_L01_0015FC88[] MACRO_ADDR;
+extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 void agnogg_ship_front_update(Moby_2FC140 *moby) __asm__("FUN_L01_002fad68");
 void agnogg_ship_front_update(Moby_2FC140 *moby) {
     enum {
@@ -1064,17 +1064,17 @@ extern void pool_drip(void *, f32) __asm__("FUN_L01_002ffcd0");
 extern void pool_bubble(void *, void *, f32) __asm__("FUN_L01_00287b00");
 extern void pool_bubbles(void *, void *, f32, f32) __asm__("FUN_L01_00287c80");
 
-extern u8 D_L01_00161200 __attribute__((section(".sdata")));
-extern u8 D_L01_00161201 __attribute__((section(".sdata")));
-extern u8 D_L01_00161202 __attribute__((section(".sdata")));
-extern u8 water_tint __asm__("D_L01_00161203") __attribute__((section(".sdata")));
-extern u8 D_L01_00161204 __attribute__((section(".sdata")));
-extern u8 D_L01_00161205 __attribute__((section(".sdata")));
-extern u8 D_L01_00161206 __attribute__((section(".sdata")));
-extern f32 D_L01_00161208 __attribute__((section(".sdata")));
-extern f32 D_L01_0016120C __attribute__((section(".sdata")));
-extern f32 D_L01_00161210 __attribute__((section(".sdata")));
-extern f32 D_L01_00161214 __attribute__((section(".sdata")));
+extern u8 D_L01_00161200 MACRO_ADDR;
+extern u8 D_L01_00161201 MACRO_ADDR;
+extern u8 D_L01_00161202 MACRO_ADDR;
+extern u8 water_tint __asm__("D_L01_00161203") MACRO_ADDR;
+extern u8 D_L01_00161204 MACRO_ADDR;
+extern u8 D_L01_00161205 MACRO_ADDR;
+extern u8 D_L01_00161206 MACRO_ADDR;
+extern f32 D_L01_00161208 MACRO_ADDR;
+extern f32 D_L01_0016120C MACRO_ADDR;
+extern f32 D_L01_00161210 MACRO_ADDR;
+extern f32 D_L01_00161214 MACRO_ADDR;
 void update_pool_tiles_and_effects(struct Moby *moby) __asm__("FUN_L01_002fd0e8");
 
 void update_pool_tiles_and_effects(struct Moby *moby) {

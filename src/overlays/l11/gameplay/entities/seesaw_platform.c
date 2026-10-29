@@ -22,9 +22,9 @@ typedef struct {
 } CamVars_c788;
 
 extern struct Moby *l11_three_per_side_child_mobys[] __asm__("D_L11_001DA710");
-extern struct Moby *D_L11_00161F10[] __attribute__((section(".sdata")));
-extern struct Moby *D_L11_00161F20[] __attribute__((section(".sdata")));
-extern struct Moby *D_L11_00161F30[] __attribute__((section(".sdata")));
+extern struct Moby *D_L11_00161F10[] MACRO_ADDR;
+extern struct Moby *D_L11_00161F20[] MACRO_ADDR;
+extern struct Moby *D_L11_00161F30[] MACRO_ADDR;
 extern float D_L11_0015F580[] MACRO_ADDR;
 float D_L11_00161EC4 = 0;
 float D_L11_00161EC8 = 0;

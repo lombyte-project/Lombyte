@@ -8,6 +8,7 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
 typedef struct {
@@ -192,16 +193,16 @@ typedef struct {
 
 extern Cols_2F7E08 l01_explosive_projectile_initial_color_palette __asm__("D_L01_0020B470");
 extern Cols_2F7E08 l01_explosive_projectile_secondary_color_palette __asm__("D_L01_0020B488");
-extern struct Moby *D_L01_001742D8 __attribute__((section(".data")));
-extern char *ents __asm__("D_L01_0015FFD8") __attribute__((section(".sdata")));
+extern struct Moby *D_L01_001742D8 NOT_SDA;
+extern char *ents __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern char D_0013E533[];
 extern char D_L01_00167240[];
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C __attribute__((section(".sdata")));
-extern float D_L01_0015F5D0 __attribute__((section(".sdata")));
-extern int cutscene_active_macro __asm__("D_L01_0015F404") __attribute__((section(".sdata")));
+extern float D_0015ED6C MACRO_ADDR;
+extern float D_L01_0015F5D0 MACRO_ADDR;
+extern int cutscene_active_macro __asm__("D_L01_0015F404") MACRO_ADDR;
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90_c(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002ac910(void *, void *, void *, float, int, int, int, int, int);

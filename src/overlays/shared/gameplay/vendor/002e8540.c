@@ -28,7 +28,7 @@ void follow_camera_set_up_spring(float up_spring_value, float up_spring_setting)
 }
 /* Copies a vector into the current object's slot, switching to state 5 first. */
 
-extern char *D_L00_00166E00 __attribute__((section(".data")));
+extern char *D_L00_00166E00 NOT_SDA;
 extern char *find_camera_record_by_id(int) __asm__("FUN_L00_001eb1f8");
 
 void FUN_L00_002eaa30(char *src);

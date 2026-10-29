@@ -9,6 +9,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/data_labels.h"
+#include "sda.h"
 
 /* Per-frame update of the player state flags from the current state; same source as FUN_L11_0023c7a0 with states 2 and 7 and without the water check. */
 extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
@@ -153,8 +154,8 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_L12_001742C0[] __attribute__((section(".data")));
-extern u8 D_L12_001742E0[] __attribute__((section(".data")));
+extern u8 D_L12_001742C0[] NOT_SDA;
+extern u8 D_L12_001742E0[] NOT_SDA;
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
@@ -176,7 +177,7 @@ void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 f32 FUN_001f99c0(f32);
 
-extern CollisionHit HH __asm__("D_L12_001742C0") __attribute__((section(".data")));
+extern CollisionHit HH __asm__("D_L12_001742C0") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L12_001742C0 + (o)))
 #define HF(o) (*(f32 *)(D_L12_001742C0 + (o)))
 

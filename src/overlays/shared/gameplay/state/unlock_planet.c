@@ -7,12 +7,13 @@
 
 #include "qcopy.h"
 #include "qzero.h"
+#include "sda.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
-extern char *D_L00_001DD100_25fcb8[] __asm__("D_L00_001DD100") __attribute__((section(".data")));
+extern char *D_L00_001DD100_25fcb8[] __asm__("D_L00_001DD100") NOT_SDA;
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
-extern short D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")__attribute__((section(".data")));
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
+extern short D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")NOT_SDA;
 int select_moby_combat_target(char *query_moby, char *target_output, float best) __asm__("FUN_L00_0025fcb8");
 
 int select_moby_combat_target(char *query_moby, char *target_output, float best) {

@@ -8,6 +8,7 @@
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 typedef unsigned int Q_2cfcb8 __attribute__((mode(TI)));
 typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) V_2cfcb8;
@@ -58,9 +59,9 @@ typedef struct Vars_2cfcb8 {
 typedef struct { s32 count; s32 pad_4[3]; struct { s32 pad_0[3]; s32 state; } entries[1]; } R_2cfcb8;
 typedef struct { u8 p0[0x18]; M_2cfcb8 *moby; u8 p1c[0x28 - 0x1C]; f32 point_z; } H_2cfcb8;
 
-extern s32 D_0014EE90_lui[] __asm__("D_0014EE90") __attribute__((section(".data")));
-extern int D_L00_00173E40 __attribute__((section(".data")));
-extern R_2cfcb8 *D_L00_001B04B0_2cfcb8[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
+extern s32 D_0014EE90_lui[] __asm__("D_0014EE90") NOT_SDA;
+extern int D_L00_00173E40 NOT_SDA;
+extern R_2cfcb8 *D_L00_001B04B0_2cfcb8[] __asm__("D_L00_001B04B0") NOT_SDA;
 
 extern s32 FUN_00213260_2cfcb8(s32) __asm__("FUN_00213260");
 extern f32 FUN_001fa580_2cfcb8(f32, f32) __asm__("FUN_001fa580");
@@ -275,7 +276,7 @@ extern s32 D_L00_0015F598 __asm__("D_L00_0015F598");
 extern volatile f32 D_0015ED6C_a[1] __asm__("D_0015ED6C");
 #define D_0015ED6C_2d0538 D_0015ED6C_a[0]
 extern float D_0015ED70;
-extern u8 *D_L00_001B04B0_2d0538[] __asm__("D_L00_001B04B0") __attribute__((section(".data")));
+extern u8 *D_L00_001B04B0_2d0538[] __asm__("D_L00_001B04B0") NOT_SDA;
 void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void FUN_L00_00260400_2d0538(u8 *, s32, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -498,8 +499,8 @@ extern s32 D_L00_001618D8_2d09b8 __asm__("D_L00_001618D8");
 extern s32 D_L00_0015FFBC __asm__("D_L00_0015FFBC");
 extern f32 D_0015ED6C_2d09b8 __asm__("D_0015ED6C");
 extern f32 D_L00_0015F5D0 __asm__("D_L00_0015F5D0");
-extern s32 D_001413DC_2d09b8 __asm__("D_001413DC") __attribute__((section(".data")));
-extern int D_001413D0[] __attribute__((section(".data")));
+extern s32 D_001413DC_2d09b8 __asm__("D_001413DC") NOT_SDA;
+extern int D_001413D0[] NOT_SDA;
 extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern char camera_position[] __asm__("D_L00_00166DC0");
 extern V2d09b8 D_L00_001DE6F0_2d09b8[] __asm__("D_L00_001DE6F0");
@@ -1174,7 +1175,7 @@ extern void mark_moby_for_removal() __asm__("FUN_0020c828");
 extern void transform_vector() __asm__("FUN_001f9d20");
 void FUN_L00_002d2158_c(int collision_arg, Moby_2D3608 *carrier, float *position) __asm__("FUN_L00_002d2158");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
-extern u8 D_0013E539_lui __asm__("D_0013E539") __attribute__((section(".data")));
+extern u8 D_0013E539_lui __asm__("D_0013E539") NOT_SDA;
 extern char D_0013CAE4[];
 #include "rnc/gameplay/state/game_globals.h"
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
@@ -1492,9 +1493,9 @@ typedef struct VoiceSlot2d2ee8 {
     struct Moby *owner; /* 0x88 */
 } VoiceSlot2d2ee8;
 
-extern u8 D_0013E550[] __attribute__((section(".data")));
-extern u128 D_L00_001E1160 __attribute__((section(".data")));
-extern u8 D_L00_001E1170[] __attribute__((section(".data")));
+extern u8 D_0013E550[] NOT_SDA;
+extern u128 D_L00_001E1160 NOT_SDA;
+extern u8 D_L00_001E1170[] NOT_SDA;
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship_data/metal_detector_update.h"
 
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
@@ -1521,7 +1522,7 @@ extern void delete_moby(void *) __asm__("FUN_0020c828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void FUN_L00_002d2a90_u(void) __asm__("FUN_L00_002d2a90");
 
-extern struct PadState controller_state_lui __asm__("D_0013C940") __attribute__((section(".data")));
+extern struct PadState controller_state_lui __asm__("D_0013C940") NOT_SDA;
 void metal_detector_update(struct Moby *moby) __asm__("FUN_L00_002d2ee8");
 void metal_detector_update(struct Moby *moby) {
     enum {

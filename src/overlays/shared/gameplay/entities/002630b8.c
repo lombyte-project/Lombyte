@@ -8,6 +8,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 /* Record suck_get_aim_height returns for a moby: collision size and aim height. */
 typedef struct MobyBound {
@@ -167,7 +168,7 @@ typedef struct {
     float uv[8];
     u64 a, b, c, d;
 } Pk_00263618;
-extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
 u64 FUN_001f44b8_00263618(s32) __asm__("FUN_001f44b8");
 void FUN_001f9a28_00263618(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_00263618(void *, void *, float) __asm__("FUN_001f9bf8");
@@ -176,7 +177,7 @@ void FUN_001f9a68_00263618(void *, void *, float) __asm__("FUN_001f9a68");
 void FUN_001f9a10_00263618(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9d20_00263618(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f7d30_00263618(void *, s32, s32) __asm__("FUN_001f7d30");
-extern float D_L00_001B0470[4][4] __attribute__((section(".data")));
+extern float D_L00_001B0470[4][4] NOT_SDA;
 void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) __asm__("FUN_L00_00263618");
 
 void draw_offset_textured_effect_quad(float *quad_base_position, u32 col, float quad_scale, float position_offset_scale) {
@@ -242,7 +243,7 @@ extern s32 FUN_00213260_2637f8(s32) __asm__("FUN_00213260");
 extern s32 FUN_001f96f8_2637f8(s32) __asm__("FUN_001f96f8");
 extern Effect_2637f8 *FUN_L00_0026d000_2637f8(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
-extern u8 D_L00_0015F580_2637f8[] __asm__("D_L00_0015F580") __attribute__((section(".sdata")));
+extern u8 D_L00_0015F580_2637f8[] __asm__("D_L00_0015F580") MACRO_ADDR;
 void cutscene_set_camera_target(u8 *m) __asm__("FUN_L00_002637f8");
 void cutscene_set_camera_target(u8 *moby) {
     Vec4_2634f8 vectors[4];

@@ -368,7 +368,7 @@ extern char render_archive_source_file[] __asm__("D_L00_0015FE00");
 extern char map_archive_stash_tag[] __asm__("D_L00_001E8B00");
 extern float map_points[] __asm__("D_L00_00182810");
 extern float map_coefficients[] __asm__("D_L00_00182A70");
-extern s32 D_L00_00173E08 __attribute__((section(".data")));
+extern s32 D_L00_00173E08 NOT_SDA;
 extern int map_parameter_pair_defaults[] __asm__("D_L00_00183EF0");
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
 extern int fast_decompress() __asm__("FUN_L00_0024d8d0");
@@ -480,7 +480,7 @@ void initialize_level_map_archive(void) {
 }
 
 extern RenderArchiveState D_L00_001841F0 __asm__("D_L00_001841F0");
-extern u8 D_0013D4E1 __attribute__((section(".data")));
+extern u8 D_0013D4E1 NOT_SDA;
 extern struct DiscFile D_00138438[];
 
 void noop_main_callback(void) __asm__("FUN_001e93e8");

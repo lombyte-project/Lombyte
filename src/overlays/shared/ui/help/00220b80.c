@@ -353,7 +353,7 @@ struct HeldGadgetVars {
     s32 voice;                     /* 0xC: allocate_voice_for_target_entry result */
 };
 
-extern int D_00141660 __attribute__((section(".data")));
+extern int D_00141660 NOT_SDA;
 extern HeroTableRow2C D_L02_0017C228[];
 #include "rnc/overlay/shared/ui/help/00220b80_globals.h"
 extern s32 hero_button_8_double_press_countdown_gp __asm__("D_L02_0015F674") __attribute__((sda));

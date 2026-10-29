@@ -245,7 +245,7 @@ extern void draw_geometry_quad(void *, void *, int);
 u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
 extern short glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") __attribute__((sda));
-extern char D_L05_001671C0_lui[] __asm__("D_L05_001671C0") __attribute__((section(".data")));
+extern char D_L05_001671C0_lui[] __asm__("D_L05_001671C0") NOT_SDA;
 void draw_moby_glow_sprite(char *m) {
     char *d = *(char **)(m + 0x78);
     Pk_31e468 pk;
@@ -352,7 +352,7 @@ void update_hero_follow_camera_focus(char *moby) {
     }
     fast_vec_normalize(focus_position + 8, &hero.gravity_dir, -1.0f);
 }
-extern char *D_L05_00167200 __attribute__((section(".data")));
+extern char *D_L05_00167200 NOT_SDA;
 void set_camera_follow_parameters(float spring_distance, float spring_height, float focus_distance, float airborne_spring_distance, float airborne_spring_height, float airborne_focus_distance, float position_spring_response_coefficient, float position_spring_coefficient) __asm__("FUN_L05_003294c0");
 
 void set_camera_follow_parameters(float spring_distance, float spring_height, float focus_distance, float airborne_spring_distance, float airborne_spring_height, float airborne_focus_distance, float position_spring_response_coefficient, float position_spring_coefficient) {
@@ -756,13 +756,13 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
-extern Row_32B1F8 *D_L05_0015F050_32B1F8 __asm__("D_L05_0015EF50") __attribute__((section(".sdata")));
+extern Row_32B1F8 *D_L05_0015F050_32B1F8 __asm__("D_L05_0015EF50") MACRO_ADDR;
 extern float D_L05_001621A8_gp __asm__("D_L05_001621A8") __attribute__((sda));
 extern float spring_32B1F8(float, float, float *, float, float, float) __asm__("FUN_001ebd78");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L05_003298d8_c(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
 
-extern float D_L05_00174278 __attribute__((section(".data")));
+extern float D_L05_00174278 NOT_SDA;
 void update_orbit_camera_position(Camera_32B1F8 *camera) __asm__("FUN_L05_00329ce8");
 
 void update_orbit_camera_position(Camera_32B1F8 *camera) {

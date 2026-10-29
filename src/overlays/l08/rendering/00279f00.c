@@ -17,7 +17,7 @@ extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern short moby_offset_effect_size_gp __asm__("D_L08_00160200") __attribute__((sda));
 extern short moby_offset_effect_color_gp __asm__("D_L08_00160204") __attribute__((sda));
 extern short moby_offset_effect_offset_length_gp __asm__("D_L08_00160208") __attribute__((sda));
-extern unsigned char *D_L08_001B291C __attribute__((section(".data")));
+extern unsigned char *D_L08_001B291C NOT_SDA;
 unsigned char *spawn_moby_offset_effect(char *source_moby) __asm__("FUN_L08_00279f00");
 
 unsigned char *spawn_moby_offset_effect(char *source_moby) {

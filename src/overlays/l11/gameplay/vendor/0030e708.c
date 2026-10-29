@@ -72,7 +72,7 @@ void emit_render_batches_with_pair_offset(int pair_index) {
                          1);
     }
 }
-extern Pair D_L11_00162618[] __attribute__((section(".sdata")));
+extern Pair D_L11_00162618[] MACRO_ADDR;
 extern int oil_tanker_render_batch_pair_sources[] __asm__("D_L11_00207888");
 extern int oil_tanker_render_batch_triplet_sources[] __asm__("D_L11_00207860");
 void emit_oil_tanker_render_batches_with_pair_offset(int pair_index) __asm__("FUN_L11_0031e780");

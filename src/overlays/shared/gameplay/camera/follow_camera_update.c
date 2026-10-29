@@ -4,6 +4,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
+#include "sda.h"
 
 extern u8 camera_view[] __asm__("D_L00_00166E10");
 extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
@@ -148,9 +149,9 @@ typedef struct {
     short h0, h2, h4, h6;
     float f8, fC;
 } S_2e9518;
-extern C_2e9518 D_166E10_2e9518 __asm__("D_L00_00166E10") __attribute__((section(".data")));
-extern char *D_001413D0_2e9518 __asm__("D_001413D0") __attribute__((section(".data")));
-extern unsigned char D_001413F4_2e9518 __asm__("D_001413F4") __attribute__((section(".data")));
+extern C_2e9518 D_166E10_2e9518 __asm__("D_L00_00166E10") NOT_SDA;
+extern char *D_001413D0_2e9518 __asm__("D_001413D0") NOT_SDA;
+extern unsigned char D_001413F4_2e9518 __asm__("D_001413F4") NOT_SDA;
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");

@@ -109,7 +109,7 @@ typedef struct {
 typedef struct { float f[4]; } __attribute__((aligned(16))) V2d8e48;
 
 /* Fakematch: a second name for the hero position in the state 3 reset test keeps that address out of the reload register rotation. */
-extern char D_0013F3D0_lui[] __asm__("D_0013F3D0") __attribute__((section(".data")));
+extern char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 extern struct Moby *moby_array __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
@@ -119,7 +119,7 @@ extern float electric_water_off_duration_seconds_gp __asm__("D_L15_00161BCC") __
 extern unsigned char D_L15_001BB024[];
 extern unsigned char D_L15_001BBC84[];
 extern int D_L15_001BAAD0[];
-extern V2d8e48 D_L15_001673C0 __asm__("D_L15_001673C0") __attribute__((section(".data")));
+extern V2d8e48 D_L15_001673C0 __asm__("D_L15_001673C0") NOT_SDA;
 extern Light29FF90 D_L15_001808C0[];
 extern unsigned char l15_fog_color[4] __asm__("D_L15_0015F444");
 extern float D_L15_0015F448;
@@ -671,7 +671,7 @@ extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float D_0015ED60;
-extern float D_L15_0015F580[] __attribute__((section(".sdata")));
+extern float D_L15_0015F580[] MACRO_ADDR;
 extern float D_L15_001D3B60[];
 extern float D_L15_001D39D0[];
 extern float FUN_L00_00257c48(float lo, float hi);
@@ -697,10 +697,10 @@ extern short electric_water_bolt_height_jitter_lower_bound_gp __asm__("D_L15_001
 extern short electric_water_bolt_height_jitter_upper_bound_gp __asm__("D_L15_00161C50") __attribute__((sda));
 extern short electric_water_bolt_particle_motion_length_scale_gp __asm__("D_L15_00161C90") __attribute__((sda));
 extern short electric_water_bolt_random_step_blend_factor_gp __asm__("D_L15_00161C98") __attribute__((sda));
-extern short D_L15_00161CC0[] __attribute__((section(".sdata")));
-extern short D_L15_00161CC8[] __attribute__((section(".sdata")));
-extern short D_L15_00161CD0[] __attribute__((section(".sdata")));
-extern short D_L15_00161CD8[] __attribute__((section(".sdata")));
+extern short D_L15_00161CC0[] MACRO_ADDR;
+extern short D_L15_00161CC8[] MACRO_ADDR;
+extern short D_L15_00161CD0[] MACRO_ADDR;
+extern short D_L15_00161CD8[] MACRO_ADDR;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
@@ -945,9 +945,9 @@ extern unsigned int l15_electric_water_bolt_start_first_quad_color __asm__("D_L1
 extern unsigned int D_L15_00161C60 __asm__("D_L15_00161C60") __attribute__((sda));
 extern float l15_electric_water_bolt_start_first_quad_base_scale __asm__("D_L15_00161CB4") __attribute__((sda));
 extern float l15_electric_water_bolt_start_second_quad_base_scale __asm__("D_L15_00161CB8") __attribute__((sda));
-extern V2d8e48 D_L15_001673C0 __asm__("D_L15_001673C0") __attribute__((section(".data")));
-extern V2d8e48 D_L15_001D36F0[] __asm__("D_L15_001D36F0") __attribute__((section(".data")));
-extern UV2d8e48 D_L15_001D3730[] __asm__("D_L15_001D3730") __attribute__((section(".data")));
+extern V2d8e48 D_L15_001673C0 __asm__("D_L15_001673C0") NOT_SDA;
+extern V2d8e48 D_L15_001D36F0[] __asm__("D_L15_001D36F0") NOT_SDA;
+extern UV2d8e48 D_L15_001D3730[] __asm__("D_L15_001D3730") NOT_SDA;
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");

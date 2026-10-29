@@ -6,6 +6,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 /* Runs the two per-entry update calls over a 13-entry table. */
 
@@ -25,7 +26,7 @@ void queue_batalia_eight_textured_batches(int pair_index) {
                          1);
     }
 }
-extern Pair D_L08_001623F8[] __attribute__((section(".sdata")));
+extern Pair D_L08_001623F8[] MACRO_ADDR;
 extern int batalia_six_batch_offset_source_streams[] __asm__("D_L08_001F4C18");
 extern int batalia_six_batch_packet_triplet_sources[] __asm__("D_L08_001F4C00");
 void queue_batalia_six_textured_batches(int pair_index) __asm__("FUN_L08_00308e90");

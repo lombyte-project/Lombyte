@@ -1717,7 +1717,7 @@ typedef struct { s16 a; s16 b; s32 *file; } Ldg244110;
 extern Ldg244110 D_0015EE48;
 extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_0014C050[];
-extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
+extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern s32 D_L00_0015F40C;
 extern s32 sound_bank_handle __asm__("D_0015ED5C");
 #include "rnc/overlay/shared/world/loaders/load_level_gameplay_globals.h"

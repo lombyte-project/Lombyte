@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
+#include "sda.h"
 
 void FUN_001f9810_239fc0(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
@@ -117,9 +118,9 @@ typedef union {
     OvlQuad q;
     f32 f[4];
 } V;
-extern u8 D_L05_00174240[] __attribute__((section(".data")));
-extern u8 D_L05_00174260[] __attribute__((section(".data")));
-extern f32 D_L05_00174268 __attribute__((section(".data")));
+extern u8 D_L05_00174240[] NOT_SDA;
+extern u8 D_L05_00174260[] NOT_SDA;
+extern f32 D_L05_00174268 NOT_SDA;
 
 void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
@@ -142,7 +143,7 @@ void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L0
 void FUN_L00_002334d0(void *, void *, f32);
 f32 FUN_001f99c0(f32);
 
-extern CollisionHit HH __asm__("D_L05_00174240") __attribute__((section(".data")));
+extern CollisionHit HH __asm__("D_L05_00174240") NOT_SDA;
 #define HI(o) (*(s32 *)(D_L05_00174240 + (o)))
 #define HF(o) (*(f32 *)(D_L05_00174240 + (o)))
 

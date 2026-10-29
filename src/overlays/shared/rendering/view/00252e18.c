@@ -6,12 +6,13 @@
 #include "qcopy.h"
 #include "qzero.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
-extern short D_L04_001B09B0[] __attribute__((section(".data")));
-extern char *D_L04_001D1700[] __attribute__((section(".data")));
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern short D_L04_001B09B0[] NOT_SDA;
+extern char *D_L04_001D1700[] NOT_SDA;
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 int select_moby_record_by_xy_distance(char *a, char *o, float best) __asm__("FUN_L04_00252e18");
 int select_moby_record_by_xy_distance(char *reference_object, char *output_record, float best) {
     struct Hero *hero = &hero_lui;

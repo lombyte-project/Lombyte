@@ -1,3 +1,4 @@
+#include "sda.h"
 /* FUN_L00_00227778 split out of hero_set_state.c so it builds with the SN
    compiler on its own. */
 #include "types.h"
@@ -8,7 +9,7 @@
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 extern unsigned char D_0013D4C0[];
-extern unsigned int D_0013CAE0 __attribute__((section(".data")));
+extern unsigned int D_0013CAE0 NOT_SDA;
 extern void queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void hud_init_particles(void) __asm__("FUN_L00_00236268");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");

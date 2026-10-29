@@ -54,7 +54,7 @@ extern char usage_stats_2b2100[] __asm__("D_00141680");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern char view_origin_2b2100[] __asm__("D_L00_00166DC0");
 extern char coll_hit[] __asm__("D_L00_00173E40");
-extern float collision_hit_z_2b2100 __asm__("D_L00_00173E68") __attribute__((section(".data")));
+extern float collision_hit_z_2b2100 __asm__("D_L00_00173E68") NOT_SDA;
 extern struct Moby *D_L00_001ABA00_2b2100[] __asm__("D_L00_001ABA00");
 extern Light_2b2100 lights_2b2100[] __asm__("D_L00_001802C0");
 extern int D_L00_0015F5CC_2b2100 __asm__("D_L00_0015F5CC");
@@ -93,7 +93,7 @@ extern int allocate_colored_effect_slot(void *, float, float, float, float, floa
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern int FUN_001f9770_2b2100(short *) __asm__("FUN_001f9770");
 
-extern float D_L00_0017ACF4_lui __asm__("D_L00_0017ACF4") __attribute__((section(".data")));
+extern float D_L00_0017ACF4_lui __asm__("D_L00_0017ACF4") NOT_SDA;
 void devastator_update(struct Moby *m) __asm__("FUN_L00_002b2100");
 void devastator_update(struct Moby *devastator_moby) {
     Matrix3_2b2100 rotation;
@@ -573,8 +573,8 @@ extern void vu1_add_g_sregister(int, long) __asm__("FUN_00233980");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void func_L00_001FDE48_2b3628(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
 
-extern Ids_2b3628 D_L00_00161488 __attribute__((section(".data")));
-extern Ids_2b3628 D_L00_00161490 __attribute__((section(".data")));
+extern Ids_2b3628 D_L00_00161488 NOT_SDA;
+extern Ids_2b3628 D_L00_00161490 NOT_SDA;
 #define BEAM_QUAD_YZ { \
     {0.0f, -2.0f, 2.0f, 1.0f}, \
     {0.0f, -2.0f, -2.0f, 1.0f}, \

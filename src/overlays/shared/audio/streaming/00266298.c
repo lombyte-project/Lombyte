@@ -170,8 +170,8 @@ s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)
     return 0;
 }
 extern s32 D_0015ED84[];
-extern s32 D_L00_001791B8[] __attribute__((section(".data")));
-extern s32 D_L00_001C44B8[] __attribute__((section(".data")));
+extern s32 D_L00_001791B8[] NOT_SDA;
+extern s32 D_L00_001C44B8[] NOT_SDA;
 s32 get_dialogue_entry(void *p) __asm__("FUN_L00_002667d0");
 s32 get_dialogue_entry(void *moby) {
     s32 range_index = D_0015ED84[0];

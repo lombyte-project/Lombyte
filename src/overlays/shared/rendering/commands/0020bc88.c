@@ -4,8 +4,9 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
-extern int *D_L02_001611B8[] __attribute__((section(".sdata")));
+extern int *D_L02_001611B8[] MACRO_ADDR;
 extern char textured_quad_packet_header_template[] __asm__("D_L02_001609A0");
 /* Append a 0x154-tagged packet to the display list: header, qcopy of a static block,
    then four vector triples (a, b, m rows), a value `c` and a flag-dependent word. */

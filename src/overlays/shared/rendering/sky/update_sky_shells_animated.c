@@ -219,7 +219,7 @@ void draw_sky_shells_with_modulo_25000_rotation(void) {
 extern int D_L00_0015F5CC_28a480g __asm__("D_L00_0015F5CC");
 extern int D_L00_0015F5CC_28a480d __asm__("D_L00_0015F5CC");
 extern char *D_L00_0016051C_28a480 __asm__("D_L00_0016051C");
-extern char D_L00_001BD7E0_lui[] __asm__("D_L00_001BD7E0") __attribute__((section(".data")));
+extern char D_L00_001BD7E0_lui[] __asm__("D_L00_001BD7E0") NOT_SDA;
 extern void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 extern void FUN_001f9fc8_28a480(void *) __asm__("FUN_001f9fc8");
 

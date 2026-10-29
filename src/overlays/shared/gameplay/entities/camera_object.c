@@ -238,7 +238,7 @@ typedef struct {
     char p1[0x180 - 0x15C];
     char *c;
 } C_2a4e48;
-extern C_2a4e48 D_166C80_2a4e48 __asm__("D_L00_00166C80") __attribute__((section(".data")));
+extern C_2a4e48 D_166C80_2a4e48 __asm__("D_L00_00166C80") NOT_SDA;
 extern float frame_time __asm__("D_0015ED6C");
 
 void camera_object_update(char *o) __asm__("FUN_L00_002a4e48");
@@ -300,7 +300,7 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L00_001D7360[][4];
 extern float D_L00_001D73F0[][2];
-extern int vendor_sparkle_colors[] __asm__("D_L00_001D7438") __attribute__((section(".data")));
+extern int vendor_sparkle_colors[] __asm__("D_L00_001D7438") NOT_SDA;
 extern int vendor_sparkle_quad_corners[][4] __asm__("D_L00_001D7460");
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern float vendor_sparkle_uv_scroll __asm__("D_L00_00161394") __attribute__((sda));
@@ -532,8 +532,8 @@ typedef struct {
     u8 p2090[0x20A4 - 0x2090];
     u8 b20A4;
 } G_2a57a8;
-extern V_2a57a8 hero_pos __asm__("D_0013F3D0") __attribute__((section(".data")));
-extern s32 D_0013CAE4_2a57a8 __asm__("D_0013CAE4") __attribute__((section(".data")));
+extern V_2a57a8 hero_pos __asm__("D_0013F3D0") NOT_SDA;
+extern s32 D_0013CAE4_2a57a8 __asm__("D_0013CAE4") NOT_SDA;
 extern s32 D_L00_0015F5CC_2a57a8 __asm__("D_L00_0015F5CC");
 f32 fast_sin(f32) __asm__("FUN_001f9de0");
 M_2a57a8 *FUN_0020c4f8_2a57a8(s32) __asm__("FUN_0020c4f8");
@@ -745,16 +745,16 @@ typedef struct {
 } BoltTrailSlot;
 
 extern s32 D_L00_0015F5C4;
-extern CollisionHit D_L00_00173E40 __attribute__((section(".data")));
+extern CollisionHit D_L00_00173E40 NOT_SDA;
 extern Vec4 l00_bolt_glint_local_offsets_by_class[] __asm__("D_L00_001D73D0");
 extern BoltTrailSlot glints[] __asm__("D_L00_0016EA40");
 extern u8 *D_L00_0015FFDC;
 extern s32 D_L00_0015FFBC;
 extern u8 *moby_table __asm__("D_L00_0015FFD8");
-extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") __attribute__((section(".sdata")));
+extern u8 mission_state_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern s32 D_0015ED84;
-extern MobyKillTable D_L00_001BA5D0 __attribute__((section(".data")));
-extern MobyKillTable D_L00_001BB230 __attribute__((section(".data")));
+extern MobyKillTable D_L00_001BA5D0 NOT_SDA;
+extern MobyKillTable D_L00_001BB230 NOT_SDA;
 extern u8 D_0014C050[][16];
 extern f32 D_0015ED6C;
 

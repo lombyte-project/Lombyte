@@ -6,9 +6,10 @@
 
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/globals.h"
+#include "sda.h"
 
-extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890") __attribute__((section(".data")));
-extern s32 D_L00_00179AB0 __attribute__((section(".data")));
+extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890") NOT_SDA;
+extern s32 D_L00_00179AB0 NOT_SDA;
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern s32 FUN_L00_001efc70(void *, void *, s32, void *, s32);
@@ -88,7 +89,7 @@ s32 pick_idle_fidget(s32 *index) {
     return 0;
 }
 extern u8 D_0013F350_002293a8[] __asm__("D_0013F350");
-extern s32 pad_held __asm__("D_0013CAE0") __attribute__((section(".data")));
+extern s32 pad_held __asm__("D_0013CAE0") NOT_SDA;
 extern s32 D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 s32 FUN_001f96f8_002293a8(s32) __asm__("FUN_001f96f8");
@@ -152,8 +153,8 @@ void update_hero_locomotion_state(void) {
         }
     }
 }
-extern s32 D_0013CAE0_229660 __asm__("D_0013CAE0") __attribute__((section(".data")));
-extern u8 D_0013D4C2_229660 __asm__("D_0013D4C2") __attribute__((section(".data")));
+extern s32 D_0013CAE0_229660 __asm__("D_0013CAE0") NOT_SDA;
+extern u8 D_0013D4C2_229660 __asm__("D_0013D4C2") NOT_SDA;
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int FUN_001f96f8_229660(int) __asm__("FUN_001f96f8");
 extern int check_pad_press_separation(int, void *, int, int) __asm__("FUN_L00_00266e00");
@@ -217,7 +218,7 @@ typedef union {
     u128_229910_00229910 q_00229910;
     float f[4];
 } V_229910_00229910;
-extern float D_L00_00173E68_00229910 __asm__("D_L00_00173E68") __attribute__((section(".data")));
+extern float D_L00_00173E68_00229910 __asm__("D_L00_00173E68") NOT_SDA;
 extern int FUN_001f96f8_00229910(int) __asm__("FUN_001f96f8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");

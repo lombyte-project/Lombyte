@@ -5,13 +5,14 @@
 
 #include "qcopy.h"
 #include "qzero.h"
+#include "sda.h"
 
 extern char *moby_base __asm__("D_L13_0015FFD8");
 extern float FUN_001f9b80_25fcb8(void *, void *) __asm__("FUN_001f9b80");
 
-extern short D_L13_001B0B30[] __attribute__((section(".data")));
-extern char *D_L13_001D1E90[] __attribute__((section(".data")));
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern short D_L13_001B0B30[] NOT_SDA;
+extern char *D_L13_001D1E90[] NOT_SDA;
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 int select_robosquawker_target(char *source_object, char *selection_output, float best) __asm__("FUN_L13_0026bd00");
 
 int select_robosquawker_target(char *source_object, char *selection_output, float best) {

@@ -12,6 +12,7 @@
 #include "rnc/overlay/collision.h"
 #include "eetypes.h"
 #include "qcopy.h"
+#include "sda.h"
 
 /* Vars of a thrown moby, as ThrowVars_2c8440 in trespasser.c without its first 0x10 bytes. */
 typedef struct {
@@ -26,12 +27,12 @@ typedef struct {
 } ThrowVars_2c8440;
 
 extern s32 D_L00_0015F5C4_2c8440 __asm__("D_L00_0015F5C4");                          /* nonzero: no throws */
-extern float D_0015ED6C __attribute__((section(".sdata")));   /* frame-rate scale */
-extern float D_0015ED70 __attribute__((section(".sdata")));
-extern CollisionHit coll_hit __asm__("D_L00_00173E40") __attribute__((section(".data")));
+extern float D_0015ED6C MACRO_ADDR;   /* frame-rate scale */
+extern float D_0015ED70 MACRO_ADDR;
+extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* coll_hit_2c8440's normal as a whole quadword (CollisionHit names only x/y/z) */
-extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") __attribute__((section(".data")));
-extern Vec4 D_L00_00166DC0_2c8440 __asm__("D_L00_00166DC0") __attribute__((section(".data")));
+extern Vec4 coll_hit_normal __asm__("D_L00_00173E80") NOT_SDA;
+extern Vec4 D_L00_00166DC0_2c8440 __asm__("D_L00_00166DC0") NOT_SDA;
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 FUN_001f9dc8_2c8440(f32) __asm__("FUN_001f9dc8");                        /* cos */
@@ -160,7 +161,7 @@ ret0:
 }
 #include "rnc/math/fast_math.h"
 
-extern u8 D_0013E534 __attribute__((section(".data")));
+extern u8 D_0013E534 NOT_SDA;
 extern int D_L00_0015FFE4;
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");

@@ -13,7 +13,8 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/fast_math.h"
-extern float D_0015ED6C_n[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
+#include "sda.h"
+extern float D_0015ED6C_n[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
 extern char *path_table[] __asm__("D_L11_001B0EB0");
@@ -253,7 +254,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
         qcopy(&patrol_vars->goal, &hero.motion.pos);
     }
 }
-extern float D_6C_e[] __asm__("D_0015ED68") __attribute__((section(".sdata")));
+extern float D_6C_e[] __asm__("D_0015ED68") MACRO_ADDR;
 extern float D_L11_001622FC_gp __asm__("D_L11_001622FC") __attribute__((sda));
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001fa580_c(float, float) __asm__("FUN_001fa580");

@@ -7,6 +7,7 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "sda.h"
 
 typedef struct {
     unsigned char pad0[0x10];
@@ -17,7 +18,7 @@ typedef struct {
     unsigned char pad20[4];
     float f24;
 } S_2e89b0;
-extern float D_0013CA40_2e89b0[] __asm__("D_0013CA40") __attribute__((section(".data")));
+extern float D_0013CA40_2e89b0[] __asm__("D_0013CA40") NOT_SDA;
 extern int FUN_001f96f8_2e89b0(int) __asm__("FUN_001f96f8");
 
 void follow_camera_read_stick(char *o, float *a, float *b) __asm__("FUN_L00_002e89b0");

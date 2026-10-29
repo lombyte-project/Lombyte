@@ -10,6 +10,7 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 typedef struct {
     char *f0;     /* 0x00 */
@@ -158,7 +159,7 @@ extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
      | ((u64)(cpsm) << 51) | ((u64)(csm) << 55) | ((u64)(csa) << 56) | ((u64)(cld) << 61))
 #define KB(x) (convert_integer_to_float((s32)(x)) * (1.0f / 1024.0f))
 
-extern u8 D_L18_0015FC88[] __attribute__((section(".sdata")));
+extern u8 D_L18_0015FC88[] MACRO_ADDR;
 /* Reads the level's core data. Its index lists the object classes:
  *   0x18  moby classes, 0x20 bytes per entry
  *   0x20  tie classes, 0x20 bytes per entry

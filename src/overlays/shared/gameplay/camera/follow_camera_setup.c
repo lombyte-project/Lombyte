@@ -12,9 +12,9 @@ extern int FUN_L00_001f0d60(float, void *, int, void *);
 
 /* Resets the follow camera to its defaults: springs the orbit and target
    values back toward the defaults table, then clears the pending inputs. */
-extern float D_L00_0015EF44_macro __asm__("D_L00_0015EF44") __attribute__((section(".sdata")));
-extern unsigned char *D_L00_00168FC0_2e5e38 __asm__("D_L00_00168FC0") __attribute__((section(".data")));
-extern int D_L00_0015EF60_macro __asm__("D_L00_0015EF60") __attribute__((section(".sdata")));
+extern float D_L00_0015EF44_macro __asm__("D_L00_0015EF44") MACRO_ADDR;
+extern unsigned char *D_L00_00168FC0_2e5e38 __asm__("D_L00_00168FC0") NOT_SDA;
+extern int D_L00_0015EF60_macro __asm__("D_L00_0015EF60") MACRO_ADDR;
 extern float D_L00_00161CA0_gp __asm__("D_L00_00161CA0") __attribute__((sda));
 extern float D_L00_00161CDC_gp __asm__("D_L00_00161CDC") __attribute__((sda));
 extern float D_L00_00161CE0_gp __asm__("D_L00_00161CE0") __attribute__((sda));
@@ -640,7 +640,7 @@ void FUN_L00_002e6bf8_c(char *m) __asm__("FUN_L00_002e6bf8");
 extern Hero_2E8210 D_0013F450_2E8210 __asm__("D_0013F350");
 extern char D_0013F4D0_2E8210[] __asm__("D_0013F3D0");
 extern char D_0013F6E0_2E8210[] __asm__("D_0013F5E0");
-extern Ctl_2E8210 *D_L00_00166F04_2E8210 __asm__("D_L00_00166E04") __attribute__((section(".data")));
+extern Ctl_2E8210 *D_L00_00166F04_2E8210 __asm__("D_L00_00166E04") NOT_SDA;
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float func_001F9CB8_2E8210(void *) __asm__("FUN_001f9af0");
 extern void func_L00_002E80A8_2E8210(Moby_2E8210 *) __asm__("FUN_L00_002e6bf8");
@@ -801,7 +801,7 @@ typedef struct {
     unsigned char p1[0x20A4 - 0x2090];
     unsigned char b20A4;
 } G_2e7138;
-extern float D_0013CA40_2e7138 __asm__("D_0013CA40") __attribute__((section(".data")));
+extern float D_0013CA40_2e7138 __asm__("D_0013CA40") NOT_SDA;
 extern float D_L00_00161CC8_gp __asm__("D_L00_00161CC8") __attribute__((sda));
 float FUN_001f9af0_2e7138(void *) __asm__("FUN_001f9af0");
 void FUN_L00_001ff500_2e7138(void *, void *, float) __asm__("FUN_L00_001ff500");
@@ -963,9 +963,9 @@ void compute_follow_camera_collision_delta(O002e7530 *camera_moby, V002e7530 *po
     fast_vec_add(&adjusted_position, m, &radial_offset);
     subtract_vector_xyz(position_delta, &adjusted_position, out);
 }
-extern char *current_follow_cam __asm__("D_L00_00166E00") __attribute__((section(".data")));
+extern char *current_follow_cam __asm__("D_L00_00166E00") NOT_SDA;
 extern int D_L00_0015EF5C __asm__("D_L00_0015EF5C");
-extern struct { u8 pad[0x2080]; int value; } D_0013F350_2e7618 __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct { u8 pad[0x2080]; int value; } D_0013F350_2e7618 __asm__("D_0013F350") NOT_SDA;
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz_2e7618(void *, void *, void *) __asm__("FUN_001f9a28");

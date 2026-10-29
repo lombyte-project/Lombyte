@@ -61,13 +61,13 @@ typedef struct {
 
 extern void approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 D_L05_0015FAD4 __attribute__((section(".sdata")));
-extern s32 D_L05_0015FAD8 __attribute__((section(".sdata")));
-extern s32 D_L05_0015FAE0[4] __attribute__((section(".sdata")));
-extern s32 D_L05_0015FAF0 __attribute__((section(".sdata")));
-extern s32 D_L05_0015FAF4 __attribute__((section(".sdata")));
-extern s32 D_L05_0015FAF8 __attribute__((section(".sdata")));
-extern s32 D_L05_0015FAFC_macro __asm__("D_L05_0015FAFC") __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAD4 MACRO_ADDR;
+extern s32 D_L05_0015FAD8 MACRO_ADDR;
+extern s32 D_L05_0015FAE0[4] MACRO_ADDR;
+extern s32 D_L05_0015FAF0 MACRO_ADDR;
+extern s32 D_L05_0015FAF4 MACRO_ADDR;
+extern s32 D_L05_0015FAF8 MACRO_ADDR;
+extern s32 D_L05_0015FAFC_macro __asm__("D_L05_0015FAFC") MACRO_ADDR;
 extern s32 D_L05_0015FB00;
 #include "rnc/overlay/shared/ui/text/00262ae8_globals.h"
 extern u8 trick_combo_hud_delay_reload_gp __asm__("D_L05_0015F87C") __attribute__((sda));
@@ -209,11 +209,11 @@ extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_cropped_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b6c0");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 
-extern s32 D_L05_0015FAE4 __attribute__((section(".sdata")));
-extern s32 D_L05_0015FAE8 __attribute__((section(".sdata")));
-extern s32 D_L05_0015FAEC __attribute__((section(".sdata")));
+extern s32 D_L05_0015FAE4 MACRO_ADDR;
+extern s32 D_L05_0015FAE8 MACRO_ADDR;
+extern s32 D_L05_0015FAEC MACRO_ADDR;
 extern s32 trick_combo_base_reward_points[15] __asm__("D_L05_0017E918");
-extern s32 frame_number __asm__("D_L05_0015F5CC") __attribute__((section(".sdata")));
+extern s32 frame_number __asm__("D_L05_0015F5CC") MACRO_ADDR;
 extern char D_L05_0015F860[];
 extern char trick_combo_pose_count_format[] __asm__("D_L05_0015F8D0");
 extern char trick_combo_trick_name_format[] __asm__("D_L05_0015F8E0");

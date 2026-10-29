@@ -9,11 +9,11 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/item_state.h"
 
-extern union PacketCursor l09_packet __asm__("D_L09_001611C0") __attribute__((section(".sdata")));
-extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") __attribute__((section(".sdata")));
+extern union PacketCursor l09_packet __asm__("D_L09_001611C0") MACRO_ADDR;
+extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") MACRO_ADDR;
 #define PACKET_CURSOR (l09_packet.words)
 #define TEXTURE_CURSOR (gs_texture_allocation.cursor)
-extern char *texture_vertices __asm__("D_L09_0015F420") __attribute__((section(".sdata")));
+extern char *texture_vertices __asm__("D_L09_0015F420") MACRO_ADDR;
 extern char level09_strip_texture_entry_table[] __asm__("D_L09_0016D300");
 extern long level09_strip_texture_transfer_packet[] __asm__("D_L09_00161FC0");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");

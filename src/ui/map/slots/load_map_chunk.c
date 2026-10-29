@@ -1,5 +1,6 @@
 #include "types.h"
-extern s32 D_001A0118 __attribute__((section(".data")));
+#include "sda.h"
+extern s32 D_001A0118 NOT_SDA;
 extern s32 decode_compressed_occlusion_map() __asm__("func_00207C28");
 extern s32 expand_map_coverage() __asm__("func_00207E58");
 extern void noop_memory_callback() __asm__("func_00208810");

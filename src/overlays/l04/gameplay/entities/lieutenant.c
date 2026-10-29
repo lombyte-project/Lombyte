@@ -160,18 +160,18 @@ typedef struct {
 } Help_2E57F8;
 
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
-extern int D_L04_00179590[] __attribute__((section(".data")));
+extern int D_L04_00179590[] NOT_SDA;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern unsigned char D_0013D4D4 __attribute__((section(".data")));
+extern unsigned char D_0013D4D4 NOT_SDA;
 extern unsigned char D_0013D4E3[];
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
-extern unsigned short D_001417C2 __attribute__((section(".data")));
-extern unsigned short D_00141892 __attribute__((section(".data")));
-extern unsigned short D_001418D0 __attribute__((section(".data")));
-extern unsigned short D_00141908 __attribute__((section(".data")));
-extern unsigned short D_00141910 __attribute__((section(".data")));
-extern unsigned short D_00141940 __attribute__((section(".data")));
+extern unsigned short D_001417C2 NOT_SDA;
+extern unsigned short D_00141892 NOT_SDA;
+extern unsigned short D_001418D0 NOT_SDA;
+extern unsigned short D_00141908 NOT_SDA;
+extern unsigned short D_00141910 NOT_SDA;
+extern unsigned short D_00141940 NOT_SDA;
 extern char D_00141968[];
 extern Moby *D_L04_00160064_2E57F8 __asm__("D_L04_0015FFE4");
 extern Moby *D_L04_00160058_2E57F8 __asm__("D_L04_0015FFD8");
@@ -441,7 +441,7 @@ typedef struct {
 } M2e5178;
 extern f32 D_L04_00161D78_gp __asm__("D_L04_00161D78") __attribute__((sda));
 extern f32 D_L04_00161D7C_gp __asm__("D_L04_00161D7C") __attribute__((sda));
-extern u128 tgt_2e5178[] __asm__("D_L04_00174000") __attribute__((section(".data")));
+extern u128 tgt_2e5178[] __asm__("D_L04_00174000") NOT_SDA;
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
