@@ -34,14 +34,14 @@ void        update_hoven_turret_camera(struct Moby *moby) __asm__("FUN_L12_00303
 
 void update_hoven_turret_camera(struct Moby *moby) {
     float position_and_rotation[8];
-    char *data = (char *)moby->pvars;
+    char *turret_state = (char *)moby->pvars;
     snap_scripted_camera_to_pose(moby);
     transform_vector_by_basis(
         position_and_rotation, &hoven_turret_camera_local_offset, &moby->rot_row0);
     fast_vec_add(position_and_rotation, position_and_rotation, &moby->pos);
     set_camera_position(position_and_rotation);
     position_and_rotation[4] = 0;
-    position_and_rotation[5] = -*(float *)(data + 0x74);
+    position_and_rotation[5] = -*(float *)(turret_state + 0x74);
     position_and_rotation[6] = fast_add_rotations(1.5707964f, moby->rot.z);
     set_camera_rotation(position_and_rotation + 4);
 }
