@@ -1752,14 +1752,14 @@ s32 blarg_heavy_interceptor_light_ring_fade_values[82] __asm__("D_L14_001D8210")
 void update_blarg_heavy_interceptor_light_ring_alpha(struct Moby *moby) __asm__("FUN_L14_002aed50");
 
 void update_blarg_heavy_interceptor_light_ring_alpha(struct Moby *moby) {
-    u8 *data = ((u8 *)moby->pvars);
+    u8 *moby_private_vars = ((u8 *)moby->pvars);
     s32 step;
     s32 i;
-    f32 advanced_blink_phase = *(f32 *)(data + 0x164) + 0.5f;
-    *(f32 *)(data + 0x164) = advanced_blink_phase;
+    f32 advanced_blink_phase = *(f32 *)(moby_private_vars + 0x164) + 0.5f;
+    *(f32 *)(moby_private_vars + 0x164) = advanced_blink_phase;
     step = truncate_float_to_s32(advanced_blink_phase);
-    if (1.0f <= *(f32 *)(data + 0x164))
-        *(s32 *)(data + 0x164) = 0;
+    if (1.0f <= *(f32 *)(moby_private_vars + 0x164))
+        *(s32 *)(moby_private_vars + 0x164) = 0;
     for (i = 0; i < blarg_heavy_interceptor_light_ring_vertex_count_gp; i++) {
         s32 light_fade_value = blarg_heavy_interceptor_light_ring_fade_values[i];
         if (light_fade_value != 0) {
