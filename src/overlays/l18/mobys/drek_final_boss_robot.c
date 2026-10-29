@@ -2297,8 +2297,8 @@ extern short  drek_boss_platform_tilt_frame_count_gp __asm__("D_L18_0016233C") _
 extern void   request_floating_platform_tilt(void *, int, int) __asm__("FUN_L18_002d8888");
 
 unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) {
-    char          *data = (char *)self->pvars;
-    short         *group_entry = D_L18_001AC240_c2[*(int *)(data + 0x398)];
+    char          *boss_target_selection_vars = (char *)self->pvars;
+    short         *group_entry = D_L18_001AC240_c2[*(int *)(boss_target_selection_vars + 0x398)];
     unsigned char *best = 0;
     float          bestd = 1024.0f;
     float          candidate_displacement[4];
@@ -2312,7 +2312,7 @@ unsigned char *select_drek_boss_platform_firing_target(struct Moby *self) {
         unsigned char *listed_moby =
             (unsigned char *)((int)group_moby_byte_offset + (int)D_L18_0015FFD8);
         if (MOBY(listed_moby)->oclass == 0x24B) {
-            char          *selection_origin = data + 0x3C0;
+            char          *selection_origin = boss_target_selection_vars + 0x3C0;
             unsigned char *candidate_moby;
             request_floating_platform_sink(listed_moby);
             candidate_moby = D_L18_0015FFD8 + group_moby_byte_offset;
