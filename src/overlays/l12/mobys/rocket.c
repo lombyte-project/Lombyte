@@ -44,24 +44,24 @@ char *spawn_rocket(char *initial_velocity,
                    float f2) {
     struct Moby *moby = (struct Moby *)create_moby(0x199);
     if (moby != 0) {
-        char *data;
+        char *rocket_vars;
         int   scaled_frames;
-        data = (char *)moby->pvars;
+        rocket_vars = (char *)moby->pvars;
         moby->update_dist = 0xFF;
         moby->draw_dist = 0x7E;
         moby->visible = 1;
         moby->state = 1;
         qcopy(&moby->pos, pos);
-        qcopy(data, initial_velocity);
-        moby->rot.z = fast_arc_tan(*(float *)data, *(float *)(data + 4));
-        moby->rot.y = -fast_arc_tan(vector_length_xy(data), *(float *)(data + 8));
+        qcopy(rocket_vars, initial_velocity);
+        moby->rot.z = fast_arc_tan(*(float *)rocket_vars, *(float *)(rocket_vars + 4));
+        moby->rot.y = -fast_arc_tan(vector_length_xy(rocket_vars), *(float *)(rocket_vars + 8));
         scaled_frames = scale_game_frames(seed);
-        *(int *)(data + 0x10) = owner;
-        *(float *)(data + 0x18) = f2;
-        *(float *)(data + 0x1C) = yaw;
-        *(float *)(data + 0x24) = nominal_speed;
-        *(int *)(data + 0x28) = 0;
-        *(int *)(data + 0x14) = scaled_frames;
+        *(int *)(rocket_vars + 0x10) = owner;
+        *(float *)(rocket_vars + 0x18) = f2;
+        *(float *)(rocket_vars + 0x1C) = yaw;
+        *(float *)(rocket_vars + 0x24) = nominal_speed;
+        *(int *)(rocket_vars + 0x28) = 0;
+        *(int *)(rocket_vars + 0x14) = scaled_frames;
         update_entity(moby);
     }
     return (char *)moby;
