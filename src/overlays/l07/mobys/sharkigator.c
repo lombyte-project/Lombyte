@@ -529,38 +529,38 @@ void set_sharkigator_idle_state_from_water_height_gap(char *sharkigator_moby) {
     }
 }
 
-int initialize_sharkigator(char *moby, char *data) {
-    if (*(int *)(data + 0x110) == -1) {
+int initialize_sharkigator(char *moby, char *sharkigator_pvars) {
+    if (*(int *)(sharkigator_pvars + 0x110) == -1) {
         stub_printf(D_L07_00211720, (moby - level_mobys) >> 8);
         return 1;
     }
-    cache_path_segment_lengths(*(char **)(data + 0x128) = D_L07_001B0530[*(int *)(data + 0x110)]);
-    if (*(int *)(data + 0x144) == -1) {
+    cache_path_segment_lengths(*(char **)(sharkigator_pvars + 0x128) = D_L07_001B0530[*(int *)(sharkigator_pvars + 0x110)]);
+    if (*(int *)(sharkigator_pvars + 0x144) == -1) {
         stub_printf(D_L07_00211758, (moby - level_mobys) >> 8);
         return 1;
     }
-    cache_path_segment_lengths(*(char **)(data + 0x148) = D_L07_001B0530[*(int *)(data + 0x144)]);
-    if (*(int *)(data + 0x118) == -1) {
+    cache_path_segment_lengths(*(char **)(sharkigator_pvars + 0x148) = D_L07_001B0530[*(int *)(sharkigator_pvars + 0x144)]);
+    if (*(int *)(sharkigator_pvars + 0x118) == -1) {
         stub_printf(D_L07_00211790, (moby - level_mobys) >> 8);
         return 1;
     }
-    *(char **)(data + 0x12C) = level_mobys + (*(int *)(data + 0x118) << 8) + 0x18;
-    moby[0xBC] = classify_sharkigator_water_height_gap(moby, data);
-    if (*(int *)(data + 0x114) == -1) {
+    *(char **)(sharkigator_pvars + 0x12C) = level_mobys + (*(int *)(sharkigator_pvars + 0x118) << 8) + 0x18;
+    moby[0xBC] = classify_sharkigator_water_height_gap(moby, sharkigator_pvars);
+    if (*(int *)(sharkigator_pvars + 0x114) == -1) {
         stub_printf(D_L07_002117C0, (moby - level_mobys) >> 8);
         return 1;
     }
-    qcopy(data + 0xF0, (char *)l07_cuboids + *(int *)(data + 0x114) * 0x80 + 0x30);
-    qcopy(data + 0xE0, moby + 0x10);
-    ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)(moby, data);
-    *(int *)(data + 0x134) = rand() % 0x78;
+    qcopy(sharkigator_pvars + 0xF0, (char *)l07_cuboids + *(int *)(sharkigator_pvars + 0x114) * 0x80 + 0x30);
+    qcopy(sharkigator_pvars + 0xE0, moby + 0x10);
+    ((void (*)(char *, char *))set_sharkigator_idle_state_from_water_height_gap)(moby, sharkigator_pvars);
+    *(int *)(sharkigator_pvars + 0x134) = rand() % 0x78;
     if (rand() & 1) {
-        *(float *)(data + 0x140) = 0.34906584f;
+        *(float *)(sharkigator_pvars + 0x140) = 0.34906584f;
     } else {
-        *(float *)(data + 0x140) = -0.34906584f;
+        *(float *)(sharkigator_pvars + 0x140) = -0.34906584f;
     }
-    *(int *)(data + 0x14C) = 0;
-    data[0x29] = 1;
+    *(int *)(sharkigator_pvars + 0x14C) = 0;
+    sharkigator_pvars[0x29] = 1;
     return 0;
 }
 
