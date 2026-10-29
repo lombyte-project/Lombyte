@@ -13,15 +13,15 @@ extern void  _clearOnce(void *);
 extern s32   sceMpegReset(void *);
 extern s32   ClearMpegReferenceBuffer(void *);
 
-s32 sceMpegCreate(void *mp, u8 *work, s32 size) {
+s32 sceMpegCreate(void *mp, u8 *mpeg_work_area, s32 size) {
     u8 *decoder;
     u8 *state;
     s32 rest;
     s32 decode_workspace_address;
 
-    memset(work, 0, size);
-    decoder = (u8 *)((((u32)work + 3) >> 2) << 2);
-    rest = size - (decoder - work);
+    memset(mpeg_work_area, 0, size);
+    decoder = (u8 *)((((u32)mpeg_work_area + 3) >> 2) << 2);
+    rest = size - (decoder - mpeg_work_area);
     if ((u32)rest < 0x10C0) {
         _Error(decoder, mpeg_work_area_too_small_message);
         return 0;
