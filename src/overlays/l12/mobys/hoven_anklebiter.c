@@ -96,11 +96,11 @@ extern void ease_hoven_anklebiter_height_to_ground(char *) __asm__("FUN_L12_002e
 
 void ease_hoven_anklebiter_height_to_ground(char *moby) {
     L12Vector position;
-    float     value;
+    float     probed_ground_height;
     qcopy(&position, moby + 0x10);
     position.f[2] += 0.5f;
-    value = probe_ground_height(&position, 0, 0.5f);
-    approach_value(value, frame_time_sq * 27.0f, moby + 0x18);
+    probed_ground_height = probe_ground_height(&position, 0, 0.5f);
+    approach_value(probed_ground_height, frame_time_sq * 27.0f, moby + 0x18);
 }
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2BF8), where it is exact; names translated to the US level program. */
