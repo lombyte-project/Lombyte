@@ -36,35 +36,35 @@ unsigned char *spawn_fighter_jet_rocket(struct Moby *firing_moby,
                                         float scale) {
     unsigned char *moby = create_moby(0x127);
     if (moby != 0) {
-        char *data = ((char *)MOBY(moby)->pvars);
+        char *rocket_private_state = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(char **)(data + 0x20) = firing_moby;
-        *(char **)(data + 0x24) = target;
+        *(char **)(rocket_private_state + 0x20) = firing_moby;
+        *(char **)(rocket_private_state + 0x24) = target;
         qcopy(moby + 0x10, spawn_position);
         qcopy(moby + 0x40, initial_rotation);
         if (target != 0) {
             char *target_flag_data;
-            *(int *)(data + 0x3C) = *(short *)(target + 0xA6);
+            *(int *)(rocket_private_state + 0x3C) = *(short *)(target + 0xA6);
             target_flag_data = get_moby_target_info(target);
             if (target_flag_data != 0) {
                 *(unsigned short *)(target_flag_data + 0x1E) |= 0x80;
             }
         }
-        *(int *)(data + 0x28) = lifetime_frames;
-        *(float *)(data + 0x2C) = scale;
-        *(int *)(data + 0x30) = 0;
-        *(int *)(data + 0x34) = 0;
+        *(int *)(rocket_private_state + 0x28) = lifetime_frames;
+        *(float *)(rocket_private_state + 0x2C) = scale;
+        *(int *)(rocket_private_state + 0x30) = 0;
+        *(int *)(rocket_private_state + 0x34) = 0;
         build_spherical_offset(
-            data, scale, *(float *)(initial_rotation + 8), -*(float *)(initial_rotation + 4));
+            rocket_private_state, scale, *(float *)(initial_rotation + 8), -*(float *)(initial_rotation + 4));
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
-        fast_vec_add(moby + 0x10, moby + 0x10, data);
-        if (*(char **)(data + 0x24) != 0) {
-            qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
+        fast_vec_add(moby + 0x10, moby + 0x10, rocket_private_state);
+        if (*(char **)(rocket_private_state + 0x24) != 0) {
+            qcopy(rocket_private_state + 0x10, *(char **)(rocket_private_state + 0x24) + 0x10);
         }
         MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
                             (firing_moby->scale / *(float *)(((char *)firing_moby->pclass) + 0x24));
