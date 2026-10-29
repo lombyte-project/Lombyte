@@ -457,8 +457,8 @@ extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern char D_L13_001670C0[];
 typedef struct { int v[6]; } L13EffectColors;
-extern L13EffectColors l13_poison_vessel_particle_first_color_palette __asm__("D_L13_001F5560");
-extern L13EffectColors l13_poison_vessel_particle_second_color_palette __asm__("D_L13_001F5578");
+L13EffectColors l13_poison_vessel_particle_first_color_palette __asm__("D_L13_001F5560") = {{0x4f00ff8f, 0x4f00ff8f, 0x4f00ff7f, 0x4f00ff6f, 0x2fffffff, 0x2fffffff}};
+L13EffectColors l13_poison_vessel_particle_second_color_palette __asm__("D_L13_001F5578") = {{0x2f007f5f, 0x2f007f4f, 0x2f007f3f, 0x2f004f00, 0x2f000000, 0x3f000000}};
 char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, int duration_frames, int effect_mode) __asm__("FUN_L13_0030c138");
 
 extern char *spawn_poison_vessel_effect_moby(void *, void *, int, int) __asm__("FUN_L13_0030c138");
@@ -1530,7 +1530,7 @@ extern float D_L13_00161214;
 extern void *D_L13_001612D0;
 extern void *D_L13_001612D4;
 int D_L13_00161EF0 = -1;
-extern unsigned short D_L13_00161EF4 __attribute__((sda));
+unsigned short D_L13_00161EF4 = 0xffff;
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void pool_init_tiles(void *, int) __asm__("FUN_L01_002b7a48");
@@ -2451,10 +2451,10 @@ extern float D_L13_00161F40 __attribute__((sda));
 extern float moby_spark_first_batch_spread_degrees_gp __asm__("D_L13_00161F50") __attribute__((sda));
 extern float moby_spark_second_batch_spread_degrees_gp __asm__("D_L13_00161F54") __attribute__((sda));
 #include "rnc/overlay/l13/gameplay/entities/rocket_data/update_moby_motion_and_emit_sparks.h"
-extern int moby_spark_first_batch_initial_word_gp __asm__("D_L13_00161F08") __attribute__((sda));
-extern int moby_spark_first_batch_second_word_gp __asm__("D_L13_00161F0C") __attribute__((sda));
-extern int moby_spark_second_batch_initial_word_gp __asm__("D_L13_00161F10") __attribute__((sda));
-extern int moby_spark_second_batch_second_word_gp __asm__("D_L13_00161F14") __attribute__((sda));
+int moby_spark_first_batch_initial_word_gp __asm__("D_L13_00161F08") = 0x30108010;
+int moby_spark_first_batch_second_word_gp __asm__("D_L13_00161F0C") = 0x10108010;
+int moby_spark_second_batch_initial_word_gp __asm__("D_L13_00161F10") = 0x8010ff10;
+int moby_spark_second_batch_second_word_gp __asm__("D_L13_00161F14") = 0x8010ff10;
 
 typedef union {
     OvlQuad quad;
@@ -2650,3 +2650,5 @@ s32 D_L13_001CABAC[1] __attribute__((section(".data"))) = {0};
 f32 D_L13_001CABB0[1] __attribute__((section(".data"))) = {0};
 f32 D_L13_001CABB4[1] __attribute__((section(".data"))) = {0};
 f32 D_L13_001CABB8[1] __attribute__((section(".data"))) = {0};
+
+int blarg_space_commando_face_target_wait_frames = 0x5a;

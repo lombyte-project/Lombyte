@@ -142,7 +142,7 @@ typedef struct {
 } TrooperVars;
 
 extern struct RailPath *D_L03_001B05B0[];
-extern s32 mine_layer_fire_interval_frames_gp __asm__("D_L03_00161918") __attribute__((sda));
+s32 mine_layer_fire_interval_frames_gp __asm__("D_L03_00161918") = 0x12c;
 extern f32 mine_layer_patrol_animation_speed_gp __asm__("D_L03_0016191C") __attribute__((sda));
 extern f32 mine_layer_initial_scale_multiplier_gp __asm__("D_L03_00161920") __attribute__((sda));
 extern f32 mine_layer_projectile_lateral_spread_speed_gp __asm__("D_L03_00161910") __attribute__((sda));
@@ -728,7 +728,7 @@ typedef struct {
     u8 collected[1];
 } L03LevelState;
 
-extern s32 taxi_path_point_debug_draw_enabled_gp __asm__("D_L03_00161B04") __attribute__((sda));
+s32 taxi_path_point_debug_draw_enabled_gp __asm__("D_L03_00161B04") = 0;
 extern f32 rail_flyer_max_speed_gp __asm__("D_L03_00161B08") __attribute__((sda));
 extern f32 rail_flyer_pitch_acceleration_degrees_gp __asm__("D_L03_00161B10") __attribute__((sda));
 extern f32 rail_flyer_roll_acceleration_degrees_gp __asm__("D_L03_00161B18") __attribute__((sda));
@@ -2101,3 +2101,5 @@ void update_rail_lift(struct Moby *lift_moby) {
     if (!is_hero_on_moby(lift_moby) && vector_distance(&lift_moby->pos, &hero.motion.pos) > 2.0f && lift_vars->timer == 0)
         lift_vars->ready = 1;
 }
+
+float path_mover_distance_step = 0;

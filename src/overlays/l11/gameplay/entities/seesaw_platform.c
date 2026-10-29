@@ -2607,8 +2607,8 @@ extern char jet_fighter_missing_victory_jet_destination_message[] __asm__("D_L11
 extern char jet_fighter_missing_victory_hero_destination_message[] __asm__("D_L11_0021B648");
 extern int D_L11_0015F608;
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/jet_fighter_update_2.h"
-extern unsigned char l11_jet_fighter_initial_ammo __asm__("D_L11_00162054") __attribute__((sda));
-extern unsigned char l11_jet_fighter_max_ammo __asm__("D_L11_00162058") __attribute__((sda));
+unsigned char l11_jet_fighter_initial_ammo __asm__("D_L11_00162054") = 0xa;
+unsigned char l11_jet_fighter_max_ammo __asm__("D_L11_00162058") = 0x14;
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/jet_fighter_update.h"
 extern float D_L11_00162078 __attribute__((sda));
 int D_L11_00162168 = 180;

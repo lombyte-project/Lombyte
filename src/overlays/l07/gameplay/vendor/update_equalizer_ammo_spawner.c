@@ -24,7 +24,7 @@ extern char equalizer_ammo_spawn_counts_format[] __asm__("D_L07_00211B50");
 extern char D_L07_00211B78[];
 extern char equalizer_ammo_batch_reduced_format[] __asm__("D_L07_00211BA8");
 /* Item id list ended by -1; sized so Ps2EeAs reaches it through $gp like retail. */
-extern int D_L07_00161CA0[2] MACRO_ADDR __attribute__((sda));
+int D_L07_00161CA0[2] = {0xa, 0xf};
 extern char D_0013F3D0[];
 
 typedef struct { float pos[3]; float length; } L07PathNode;

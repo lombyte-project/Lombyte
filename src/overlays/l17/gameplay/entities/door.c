@@ -1159,7 +1159,7 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern s32 allocate_voice_for_target_entry_c4(s32, s32, void *) __asm__("func_0022DA68");
 int D_L17_0016215C = 10;
 float D_L17_001621F0[2] = {512.0f, 512.0f};
-extern unsigned short l17_fighter_jet_collision_death_respawn_delay __asm__("D_L17_0016217C") __attribute__((sda));
+unsigned short l17_fighter_jet_collision_death_respawn_delay __asm__("D_L17_0016217C") = 0x1e;
 extern unsigned char D_0013A4E0_c4[] __asm__("D_0013A4E0");
 extern unsigned char D_0013E533_c4[] __asm__("D_0013E533");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
@@ -1549,8 +1549,8 @@ extern float fighter_jet_starting_hp_gp __asm__("D_L17_00162058") __attribute__(
 /* tan(fov / 2) of the view (set by FUN_L17_002ec360); read as an array element, which keeps
    the load after the stores to the ship vars like retail. */
 extern float D_L17_0016D3F0_a[] __asm__("D_L17_0016D3F0");
-extern unsigned char l17_fighter_jet_starting_ammo_gp __asm__("D_L17_00162064") __attribute__((sda));
-extern unsigned char l17_fighter_jet_ammo_capacity_gp __asm__("D_L17_00162068") __attribute__((sda));
+unsigned char l17_fighter_jet_starting_ammo_gp __asm__("D_L17_00162064") = 0xa;
+unsigned char l17_fighter_jet_ammo_capacity_gp __asm__("D_L17_00162068") = 0x14;
 extern float fighter_jet_max_hp_gp __asm__("D_L17_00162084") __attribute__((sda));
 extern float D_L17_00162088 __attribute__((sda));
 int D_L17_00162178 = 180;

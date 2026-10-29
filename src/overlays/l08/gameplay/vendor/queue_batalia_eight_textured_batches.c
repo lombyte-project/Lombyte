@@ -42,9 +42,9 @@ void queue_batalia_six_textured_batches(int pair_index) {
 /* Draws three rows of HUD elements with their colours. */
 
 #include "rnc/overlay/l08/gameplay/vendor/queue_batalia_eight_textured_batches_globals.h"
-extern int batalia_texture_3a_blend_factor_gp __asm__("D_L08_00162390") __attribute__((sda));
-extern int batalia_texture_3c_pair_zero_blend_factor_gp __asm__("D_L08_001623B0") __attribute__((sda));
-extern int batalia_texture_3d_blend_factor_gp __asm__("D_L08_001623C0") __attribute__((sda));
+int batalia_texture_3a_blend_factor_gp __asm__("D_L08_00162390") = 0x40;
+int batalia_texture_3c_pair_zero_blend_factor_gp __asm__("D_L08_001623B0") = 0x20;
+int batalia_texture_3d_blend_factor_gp __asm__("D_L08_001623C0") = 0x30;
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_001623F0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
@@ -117,3 +117,9 @@ void update_moby_hit_removal_state(struct Moby *moby) {
         break;
     }
 }
+
+int batalia_texture_3b_pair_one_blend_factor_base = 0x20;
+
+int batalia_texture_3b_pair_two_blend_factor_base = 0x40;
+
+int batalia_texture_3c_pair_one_blend_factor = 0x22;

@@ -846,8 +846,8 @@ int move_hoven_anklebiter_toward_heading(struct Moby *moby, float speed) {
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/state/item_state.h"
 
-extern int D_L12_0016183C __attribute__((sda));
-extern int D_L12_00161840 __attribute__((sda));
+int D_L12_0016183C = 0xa;
+int D_L12_00161840 = 8;
 extern float D_L12_00161844 __attribute__((sda));
 extern float D_L12_00161848 __attribute__((sda));
 extern float D_L12_0016184C __attribute__((sda));
@@ -858,12 +858,12 @@ extern float D_L12_0016185C __attribute__((sda));
 extern float D_L12_00161860 __attribute__((sda));
 extern float D_L12_00161864 __attribute__((sda));
 extern float D_L12_00161868 __attribute__((sda));
-extern int D_L12_0016186C __attribute__((sda));
-extern int D_L12_00161870 __attribute__((sda));
-extern int D_L12_00161874 __attribute__((sda));
-extern int D_L12_00161878 __attribute__((sda));
-extern int D_L12_0016187C __attribute__((sda));
-extern int D_L12_00161880 __attribute__((sda));
+int D_L12_0016186C = 0x8000eeee;
+int D_L12_00161870 = 0xffee;
+int D_L12_00161874 = 0x8000ff90;
+int D_L12_00161878 = 0xffee;
+int D_L12_0016187C = 0xa;
+int D_L12_00161880 = 0x1e;
 extern int D_L12_00161884 __attribute__((sda));
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float scale_time(float) __asm__("FUN_001f96b0");

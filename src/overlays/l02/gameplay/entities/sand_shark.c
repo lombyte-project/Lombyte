@@ -89,7 +89,7 @@ void begin_animated_frame_rendering(int fog_red, int fog_green, int fog_blue, in
 #include "rnc/overlay/l02/gameplay/entities/sand_shark_globals.h"
 extern float sand_shark_dust_vertical_velocity_scale_gp __asm__("D_L02_001619D4") __attribute__((sda));
 extern float sand_shark_dust_position_jitter_radius_gp __asm__("D_L02_001619DC") __attribute__((sda));
-extern unsigned short D_L02_001619E0 __attribute__((sda));
+unsigned short D_L02_001619E0 = 0;
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -301,7 +301,7 @@ extern void FUN_L02_002d5c88_e50(void *) __asm__("FUN_L02_002d5c88");
 extern void FUN_L02_002d63c0_e50(void *) __asm__("FUN_L02_002d63c0");
 
 int D_L02_001619A8 = 0;
-extern unsigned char D_L02_00161900 __attribute__((sda));
+unsigned char D_L02_00161900 = 0xa;
 #include "rnc/overlay/l02/gameplay/entities/sand_shark_data/sand_shark_update.h"
 int D_L02_001619B0 = 0xa000000;
 int D_L02_001619E4 = 0x40306058;

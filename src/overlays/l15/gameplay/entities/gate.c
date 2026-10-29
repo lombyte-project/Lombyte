@@ -514,7 +514,7 @@ void update_swinging_door(struct Moby *moby) {
 typedef union { u128 q; float f[4]; } Vec;
 extern char D_L15_00178700[];
 extern char destructible_radial_debris_color_palette[] __asm__("D_L15_00161568");
-extern u64 D_L15_00161570;
+u64 D_L15_00161570 = 0xd2000000ce;
 typedef struct { u32 words[3]; } Colors;
 extern Colors l15_destructible_secondary_debris_color_palette __asm__("D_L15_00161578");
 extern u32 D_L15_00161580;
@@ -832,9 +832,9 @@ typedef struct {
     float target_yaw;
     float direction;
 } UpdateVars_2938;
-extern int D_L15_001619EC __attribute__((sda));
-extern int construction_arm_effect_duration_min_frames_gp __asm__("D_L15_001619F4") __attribute__((sda));
-extern int construction_arm_effect_duration_max_frames_gp __asm__("D_L15_001619F8") __attribute__((sda));
+int D_L15_001619EC = 0x40808080;
+int construction_arm_effect_duration_min_frames_gp __asm__("D_L15_001619F4") = 0x3c;
+int construction_arm_effect_duration_max_frames_gp __asm__("D_L15_001619F8") = 0x78;
 extern float construction_arm_effect_speed_max_gp __asm__("D_L15_001619FC") __attribute__((sda));
 extern float construction_arm_wait_time_min_gp __asm__("D_L15_00161A00") __attribute__((sda));
 extern float construction_arm_wait_time_max_gp __asm__("D_L15_00161A04") __attribute__((sda));

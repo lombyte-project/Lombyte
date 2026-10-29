@@ -2647,7 +2647,7 @@ extern char *D_L13_001600EC_gp __asm__("D_L13_001600EC") __attribute__((section(
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((section(".sdata")));
 extern f32 frame_time_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern u64 fighter_jet_steering_reference_position __asm__("D_L13_00161430") __attribute__((sda));
+u64 fighter_jet_steering_reference_position __asm__("D_L13_00161430") = 0x4400000044000000;
 extern char *D_L13_00167100 __attribute__((section(".data")));
 extern char coll_hit_1638[] __asm__("D_L13_00174140");
 extern char fighter_jet_camera_mode_correction_message[] __asm__("D_L13_001F4450");

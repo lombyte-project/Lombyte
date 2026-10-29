@@ -87,7 +87,7 @@ unsigned char *spawn_colored_effect(int owner, void *spawn_position, void *initi
 #include "eetypes.h"
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern unsigned char *D_L08_001B29B4 NOT_SDA;
+unsigned char *D_L08_001B29B4 NOT_SDA = 0;
 
 void spawn_effect_with_initial_motion(u128 *spawn_position, u128 *initial_motion_vector, int life, float scale) __asm__("FUN_L08_0027fe00");
 

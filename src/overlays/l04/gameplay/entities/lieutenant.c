@@ -42,7 +42,7 @@ struct ShopCamera {
 
 extern char D_L04_00166F40[];
 extern u8 D_0014C050[];
-extern struct ShopCamera l04_lieutenant_shop_camera __asm__("D_L04_0016C9F0");
+struct ShopCamera l04_lieutenant_shop_camera __asm__("D_L04_0016C9F0") = {0};
 extern s32 D_L04_0015F5C4;
 extern float FUN_001f9b48(void *, void *);
 extern void FUN_L00_0025a120(struct Moby *);

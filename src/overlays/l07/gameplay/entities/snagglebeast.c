@@ -671,7 +671,7 @@ typedef struct { char pad[0x1D4]; unsigned char path_points[4]; int linked_mobys
 typedef struct { char pad[0x3C]; short count; char pad2[0xE]; } ChaserSpawnRecord;
 extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern Vec4 D_L07_00166E40;
-extern int D_L07_00161B64 __attribute__((sda));
+int D_L07_00161B64 = 0;
 extern ChaserSpawnRecord l07_ammo_transfer_records[] __asm__("D_L07_00179B40");
 extern int snagglebeast_ammo_drain_entries[][4] __asm__("D_L07_0020C600");
 #include "rnc/gameplay/state/item_state.h"
@@ -1867,7 +1867,7 @@ void draw_rope_strips(void) {
 extern int D_L07_00161B6C_gp __asm__("D_L07_00161B6C") __attribute__((sda));
 extern int D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
 extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
-extern int D_L07_00161B80 __attribute__((sda));
+int D_L07_00161B80 = 0;
 extern int D_L07_00161B84;
 #include "rnc/overlay/l07/gameplay/entities/snagglebeast_globals.h"
 extern char D_L07_00161B90[] MACRO_ADDR;
@@ -1970,7 +1970,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern int D_L07_00161B84_gp __asm__("D_L07_00161B84") __attribute__((sda));
+int D_L07_00161B84_gp __asm__("D_L07_00161B84") = 0;
 
 /* Updates the rope points, its ring mesh and the particles travelling along it. */
 float update_snagglebeast_rope(void *moby, void *anchor) {
@@ -2893,3 +2893,4 @@ void machinegun_turret_update(unsigned char *moby) {
     }
 }
 
+float rope_swing_target_angle = 0;
