@@ -713,7 +713,7 @@ struct Moby *spawn_bolt_by_value(struct Moby *bolt_source,
 
 struct Moby *spawn_bolt_by_value(
 
-    struct Moby *bolt_source, void *pos, void *vel, int flags, int value, int counted) {
+    struct Moby *bolt_source, void *pos, void *vel, int flags, int requested_bolt_value, int counted) {
     enum {
         BOLT_VALUE_ONE = 1,
         BOLT_VALUE_FIVE = 5,
@@ -730,7 +730,7 @@ struct Moby *spawn_bolt_by_value(
     float        spin;
     float        angle;
 
-    switch (value) {
+    switch (requested_bolt_value) {
     default:
     case BOLT_VALUE_ONE:
         spawned_bolt = (struct Moby *)create_moby(0xD);
@@ -794,7 +794,7 @@ struct Moby *spawn_bolt_by_value(
         }
         update_entity((u8 *)spawned_bolt);
     } else {
-        current_bolt_count += value;
+        current_bolt_count += requested_bolt_value;
     }
     return spawned_bolt;
 }
