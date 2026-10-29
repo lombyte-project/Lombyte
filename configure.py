@@ -388,8 +388,8 @@ RODATA_OVERLAYS = {
     # as the splat symbol jtbl_00153AA0, so the compiled .rodata must land at
     # the same VMA/file offset for the relocations to resolve content-equal.
     "_getpic": (0x153AA0, 0x54A20, 20),
-    "sdk/debug/printfloat": (0x152798, 0x53718, 24),  # its three f64 literals (0.1, 0.1, 1e6)
-    "sdk/debug/printf_impl": (0x1527B0, 0x53730, 292),  # _printf's format switch table (jtbl_001527B0)
+    "sdk/deci2/printfloat": (0x152798, 0x53718, 24),  # its three f64 literals (0.1, 0.1, 1e6)
+    "sdk/deci2/printf_impl": (0x1527B0, 0x53730, 292),  # _printf's format switch table (jtbl_001527B0)
     "audio/rpc/snd_send_iop_command_and_wait": (0x153D20, 0x54CA0, 26),  # its RPC-collision message
     "audio/banks/snd_bank_load_by_loc": (0x153DA8, 0x54D28, 77),  # its two error messages
     "audio/rpc/snd_send_iop_command_no_wait": (0x154010, 0x54F90, 96),  # its buffer-full message
