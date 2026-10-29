@@ -60,7 +60,7 @@ extern int D_L18_0015FFD8;
  * program. */
 void set_group_child_carrier_byte_bc(int group_index, int value) __asm__("FUN_L18_002fa888");
 
-void set_group_child_carrier_byte_bc(int group_index, int value) {
+void set_group_child_carrier_byte_bc(int group_index, int moby_byte_bc_value) {
     unsigned short *table = (unsigned short *)D_L18_001AC240[group_index];
 
     if (table != 0) {
@@ -70,7 +70,7 @@ void set_group_child_carrier_byte_bc(int group_index, int value) {
                 (unsigned char *)(((group_moby_entry[0] & 0x7FFF) << 8) + D_L18_0015FFD8);
 
             if (MOBY(moby)->oclass == 0x630) {
-                moby[0xBC] = value;
+                moby[0xBC] = moby_byte_bc_value;
             }
         } while ((short)*group_moby_entry++ >= 0);
     }
