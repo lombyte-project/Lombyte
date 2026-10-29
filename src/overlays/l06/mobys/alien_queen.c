@@ -259,16 +259,16 @@ int check_all_listed_frog_states_fe_fd_or_10(int index) {
 }
 
 void set_moby_and_links_to_states_4_and_5(char *moby) {
-    char  *data = ((char *)MOBY(moby)->pvars);
+    char  *source_moby_vars = ((char *)MOBY(moby)->pvars);
     char **linked_moby_cursor;
     int    i;
     moby[0xBC] = 1;
     if ((unsigned char)moby[0x20] == 2) {
         allocate_voice_for_target_entry(0, 0, (int)moby);
         moby[0x20] = 4;
-        linked_moby_cursor = (char **)(data + 0x24);
-        *(int *)(data + 0x14) = 0;
-        *(int *)(data + 0x18) = 0;
+        linked_moby_cursor = (char **)(source_moby_vars + 0x24);
+        *(int *)(source_moby_vars + 0x14) = 0;
+        *(int *)(source_moby_vars + 0x18) = 0;
         for (i = 6; i >= 0; i--) {
             (*linked_moby_cursor++)[0x20] = 5;
         }
