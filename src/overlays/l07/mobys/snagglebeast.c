@@ -73,8 +73,8 @@ void draw_snagglebeast_sphere_quad_strips(char *moby,
                                           float alpha,
 
                                           float end_alpha) {
-    char               *data = ((char *)MOBY(moby)->pvars);
-    int                 shade = *(unsigned char *)(data + 0x1C6);
+    char               *sphere_moby_vars = ((char *)MOBY(moby)->pvars);
+    int                 shade = *(unsigned char *)(sphere_moby_vars + 0x1C6);
     int                 grey = (shade << 24) | (shade << 16) | (shade << 8) | shade;
     u64                 texture_state = 0xFF9000000260L;
     u64                 primitive = 0xA000000029L;
