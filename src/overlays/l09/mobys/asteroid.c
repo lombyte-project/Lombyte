@@ -703,7 +703,7 @@ char *spawn_radially_scattered_moby(
     char *moby = (char *)create_moby(0x1A1);
     if (moby != 0) {
         float pi = 3.1415927f;
-        char *data = (char *)MOBY(moby)->pvars;
+        char *spawned_velocity = (char *)MOBY(moby)->pvars;
         float angle = random_float_between(-3.1415927f, 3.1415927f);
         float radius = random_float_between(lower_radius, upper_radius);
         float heading = fast_arc_tan(direction[0], direction[1]);
@@ -716,17 +716,17 @@ char *spawn_radially_scattered_moby(
             float speed = frame_time;
             MOBY(moby)->pos.y = sine * radius;
             MOBY(moby)->pos.z = 0.0f;
-            fast_vec_normalize(data, &MOBY(moby)->pos, difference * speed);
+            fast_vec_normalize(spawned_velocity, &MOBY(moby)->pos, difference * speed);
         }
         gap = pi - difference;
         fast_vec_normalize(offset, direction, gap * gap * 0.25f * frame_time);
-        fast_vec_add(data, data, offset);
-        *(int *)(data + 8) = 0;
+        fast_vec_add(spawned_velocity, spawned_velocity, offset);
+        *(int *)(spawned_velocity + 8) = 0;
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, origin);
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
-        fast_vec_scale(data, data, 0.35f);
+        fast_vec_scale(spawned_velocity, spawned_velocity, 0.35f);
         MOBY(moby)->anim_speed *= 0.5f;
-        MOBY(moby)->rot.z = fast_arc_tan(*(float *)data, *(float *)(data + 4));
+        MOBY(moby)->rot.z = fast_arc_tan(*(float *)spawned_velocity, *(float *)(spawned_velocity + 4));
         MOBY(moby)->update_dist = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         MOBY(moby)->visible = 1;
