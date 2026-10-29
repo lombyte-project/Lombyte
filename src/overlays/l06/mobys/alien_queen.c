@@ -922,19 +922,19 @@ void start_alien_queen_intro(char *moby) {
 
 int update_alien_queen_intro_camera(char *moby) {
     float output_position[4], output_rotation[4], moby_offset_position[4], hero_offset_position[4];
-    char *data;
+    char *alien_queen_state;
     char *pos;
     struct Hero *x;
     float        blend_acceleration_step;
-    data = ((char *)MOBY(moby)->pvars);
+    alien_queen_state = ((char *)MOBY(moby)->pvars);
     clear_u64_value(output_rotation);
     if (MOBY(moby)->prev_seq == 8) {
         qcopy(output_position, D_L06_00167540);
         pos = moby + 0x10;
     } else {
         blend_acceleration_step = *(float *)&frame_time_sq * 3.0f;
-        FUN_00213f38((float *)(data + 0x118),
-                     (float *)(data + 0x11C),
+        FUN_00213f38((float *)(alien_queen_state + 0x118),
+                     (float *)(alien_queen_state + 0x11C),
                      1.0f,
                      blend_acceleration_step,
                      blend_acceleration_step,
@@ -948,16 +948,16 @@ int update_alien_queen_intro_camera(char *moby) {
         hero_offset_position[2] += 4.0f;
         pos = moby + 0x10;
         lerp_vector(
-            output_position, moby_offset_position, hero_offset_position, *(float *)(data + 0x118));
+            output_position, moby_offset_position, hero_offset_position, *(float *)(alien_queen_state + 0x118));
     }
     output_rotation[2] = fast_arc_tan(MOBY(moby)->pos.x - output_position[0],
                                       MOBY(moby)->pos.y - output_position[1]);
     output_rotation[1] = -fast_arc_tan(vector_distance_xy(output_position, pos),
                                        MOBY(moby)->pos.z - output_position[2]) -
-                         (1.0f - *(float *)(data + 0x118)) * 30.0f * DEG_TO_RAD;
+                         (1.0f - *(float *)(alien_queen_state + 0x118)) * 30.0f * DEG_TO_RAD;
     set_camera_position(output_position);
     set_camera_rotation(output_rotation);
-    if (*(float *)(data + 0x118) >= 1.0f && MOBY(moby)->prev_seq == 1)
+    if (*(float *)(alien_queen_state + 0x118) >= 1.0f && MOBY(moby)->prev_seq == 1)
         return 1;
     return 0;
 }
