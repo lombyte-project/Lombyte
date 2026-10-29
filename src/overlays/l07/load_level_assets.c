@@ -344,12 +344,12 @@ s32 load_level_assets(s32 full, s32 keep) {
                 base + *(s32 *)class_metadata_entry_cursor;
             D_L07_001AFD00[class_metadata_index] = *(s32 *)(class_metadata_entry_cursor + 8);
             {
-                s32 o = l07_moby_registration_indices_by_class_id[*(
+                s32 moby_texture_slot_map_offset = l07_moby_registration_indices_by_class_id[*(
                             s32 *)(class_metadata_entry_cursor + 4)] *
                             32 +
                         0x10;
                 qcopy(&l07_metadata_moby_texture_slot_maps[class_metadata_index],
-                      (char *)level_header + level_header[7] + o);
+                      (char *)level_header + level_header[7] + moby_texture_slot_map_offset);
             }
         }
         for (i = 0, class_entry_cursor = (char *)level_header + level_header[9];
