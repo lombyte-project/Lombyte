@@ -254,7 +254,7 @@ void activate_listed_spark_emitters(int moby_list_index) __asm__("FUN_L06_003092
 void activate_listed_spark_emitters(int moby_list_index) {
     short *moby_index_entry;
     char  *moby;
-    char  *data;
+    char  *moby_private_data;
     float  position_test_vector[4];
     if (D_L06_001ABFC0[moby_list_index] != 0) {
         moby_index_entry = D_L06_001ABFC0[moby_list_index];
@@ -264,9 +264,9 @@ void activate_listed_spark_emitters(int moby_list_index) {
                 qcopy(position_test_vector, moby + 0x10);
                 position_test_vector[3] = 0.25f;
                 if (fast_bsphere_check((char *)position_test_vector, 64.0f) >= 0) {
-                    data = ((char *)MOBY(moby)->pvars);
+                    moby_private_data = ((char *)MOBY(moby)->pvars);
                     moby[0x20] = 2;
-                    *(int *)(data + 0x28) =
+                    *(int *)(moby_private_data + 0x28) =
                         truncate_float_to_s32(scale_time(random_float_between(30.0f, 60.0f)));
                 }
             }
