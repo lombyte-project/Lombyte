@@ -13,12 +13,12 @@ void compose_bitmap_from_mask(u8 *composed_bitmap, u8 *src_set, u8 *src_clear, u
         u8 *next = mask + 1;
         s32 count = 7;
         do {
-            u8 value;
+            u8 selected_source_byte;
             if (*mask & bit)
-                value = *src_set;
+                selected_source_byte = *src_set;
             else
-                value = *src_clear;
-            *composed_bitmap = value;
+                selected_source_byte = *src_clear;
+            *composed_bitmap = selected_source_byte;
             src_set += 1;
             src_clear += 1;
             composed_bitmap += 1;
