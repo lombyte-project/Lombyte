@@ -1,6 +1,7 @@
 #include "types.h"
 #include "sifrpc.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/libmc.h"
 struct McGetDirRequest {
     s32 unk0;
     s32 unk4;
@@ -11,7 +12,6 @@ struct McGetDirRequest {
     s32 unk413;
 };
 
-extern struct sceSifClientData D_00159A00;
 extern struct McGetDirRequest D_00159AB0;
 extern s32 PollSema();
 extern s32 SignalSema();
@@ -23,13 +23,13 @@ s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
     s32 ret;
     register s32 path_arg = slot;
 
-    if (D_00159A00.serve == 0) {
+    if (mc_rpc_client.serve == 0) {
         return -0x64;
     }
     ret = -0xC8;
-    if (PollSema(D_00132DAC[0]) >= 0) {
+    if (PollSema(mc_sema) >= 0) {
         if ((name == NULL) || (*name == 0)) {
-            SignalSema(D_00132DAC[0]);
+            SignalSema(mc_sema);
             return -0xD2;
         }
         D_00159AB0.unk0 = port;
@@ -42,11 +42,11 @@ s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
         if (maxent >= 0) {
             sceSifWriteBackDCache(table, maxent << 6);
         }
-        result = sceSifCallRpc(&D_00159A00, 0xD, 1, &D_00159AB0, 0x414, D_0015AFC0, 4, 0, 0);
+        result = sceSifCallRpc(&mc_rpc_client, MC_FUNC_GET_DIR, 1, &D_00159AB0, 0x414, mc_rpc_result, 4, 0, 0);
         if (result == 0) {
-            D_00132DA8[0] = 0xD;
+            mc_current_func = MC_FUNC_GET_DIR;
         } else {
-            SignalSema(D_00132DAC[0]);
+            SignalSema(mc_sema);
         }
         ret = result;
         /* Duplicate return node #12. Try simplifying control flow for better match */
