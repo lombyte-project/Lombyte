@@ -258,38 +258,38 @@ void update_oscillating_target_link(Moby *moby) {
     Vec4         start;
     Vec4         end;
     char         hit[0x30];
-    Data_304310 *data = *(Data_304310 **)&moby->pvars;
+    Data_304310 *oscillating_target_link_state = *(Data_304310 **)&moby->pvars;
     Row         *row;
     float        swing;
     float        half;
     int          target;
 
-    if (data->target == -1) {
+    if (oscillating_target_link_state->target == -1) {
         return;
     }
     switch (moby->state) {
     case TARGET_TRACKING_STATE_INITIALIZE:
         oscillating_link_strip_fade_pivot_ticks = 0x16;
         oscillating_link_strip_reset_ticks = 0x2D;
-        data->f231C = -1;
-        data->f2304 = 0xB;
-        data->f2308 = 0x17;
-        data->f230C = 0x22;
-        data->f2300 = 0;
+        oscillating_target_link_state->f231C = -1;
+        oscillating_target_link_state->f2304 = 0xB;
+        oscillating_target_link_state->f2308 = 0x17;
+        oscillating_target_link_state->f230C = 0x22;
+        oscillating_target_link_state->f2300 = 0;
         moby->state = 1;
         break;
     case TARGET_TRACKING_STATE_ACTIVE:
-        moby->rot.z = fast_arc_tan(D_L12_0015FFD8[data->target].pos.x - moby->pos.x,
-                                   D_L12_0015FFD8[data->target].pos.y - moby->pos.y);
-        data->dist = fast_vec_dist(((float *)&moby->pos),
-                                   (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
-        data->angle = fast_add_rotations(data->angle, data->turn * 0.017453292f * D_0015ED6C);
-        row = ((Row *)l12_paths[data->row]);
-        swing = fast_sin(data->angle);
-        if (1.5707964f < data->angle && data->angle < 3.1415927f) {
+        moby->rot.z = fast_arc_tan(D_L12_0015FFD8[oscillating_target_link_state->target].pos.x - moby->pos.x,
+                                   D_L12_0015FFD8[oscillating_target_link_state->target].pos.y - moby->pos.y);
+        oscillating_target_link_state->dist = fast_vec_dist(((float *)&moby->pos),
+                                   (char *)D_L12_0015FFD8 + (oscillating_target_link_state->target << 8) + 0x10);
+        oscillating_target_link_state->angle = fast_add_rotations(oscillating_target_link_state->angle, oscillating_target_link_state->turn * 0.017453292f * D_0015ED6C);
+        row = ((Row *)l12_paths[oscillating_target_link_state->row]);
+        swing = fast_sin(oscillating_target_link_state->angle);
+        if (1.5707964f < oscillating_target_link_state->angle && oscillating_target_link_state->angle < 3.1415927f) {
             swing = 2.0f - swing;
         }
-        if (-3.1415927f < data->angle && data->angle < -1.5707964f) {
+        if (-3.1415927f < oscillating_target_link_state->angle && oscillating_target_link_state->angle < -1.5707964f) {
             swing = 2.0f - swing;
         }
         half = 0.5f;
@@ -305,23 +305,23 @@ void update_oscillating_target_link(Moby *moby) {
         if (vector_distance_xy(((float *)&moby->pos), D_0013F4D0_304310) > 64.0f) {
             return;
         }
-        if (moby->visible == 0 && D_L12_0015FFD8[data->target].visible == 0) {
+        if (moby->visible == 0 && D_L12_0015FFD8[oscillating_target_link_state->target].visible == 0) {
             fast_vec_add(
-                &start, ((float *)&moby->pos), ((float *)&D_L12_0015FFD8[data->target].pos));
+                &start, ((float *)&moby->pos), ((float *)&D_L12_0015FFD8[oscillating_target_link_state->target].pos));
             fast_vec_scale(&start, &start, half);
             start.f[3] = 16.0f;
             if (fast_bsphere_check(&start, 32.0f) == -1) {
                 return;
             }
         }
-        if (data->f2330 != -1 && is_point_inside_clip_volume(D_L12_00167240, data->f2330) != 0) {
+        if (oscillating_target_link_state->f2330 != -1 && is_point_inside_clip_volume(D_L12_00167240, oscillating_target_link_state->f2330) != 0) {
             return;
         }
-        if (data->f2320 == 0) {
+        if (oscillating_target_link_state->f2320 == 0) {
             return;
         }
         func_L12_00304038_304310(moby);
-        target = data->target;
+        target = oscillating_target_link_state->target;
         if (target == -1) {
             return;
         }
