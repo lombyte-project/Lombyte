@@ -215,7 +215,7 @@ void blarg_helicopter_update(HMob49 *moby) {
     int      index;
     if (data->timer)
         target_range = 80.0f;
-    select_moby_target_with_hero_fallback(moby, &work.target, target_range);
+    select_moby_target_with_hero_fallback(moby, &helicopter_update_scratch.target, target_range);
     index = (short)moby->pool_index;
     if ((D_L03_001BA5D0[index >> 5] >> (moby->pool_index & 31)) & 1) {
         if (data->child_index != -1)
@@ -305,15 +305,15 @@ void blarg_helicopter_update(HMob49 *moby) {
         data->activation_region = -1;
         func_L00_0025EFC0_2CDDC8(path,
                                  moby->position,
-                                 work.projected,
-                                 &work.segment_a,
-                                 &work.fraction_a,
+                                 helicopter_update_scratch.projected,
+                                 &helicopter_update_scratch.segment_a,
+                                 &helicopter_update_scratch.fraction_a,
                                  0,
                                  999.0f,
                                  5.0f,
                                  0.0f);
-        progress = convert_integer_to_float(work.segment_a) * path->points[0].length +
-                   work.fraction_a + 2.0f;
+        progress = convert_integer_to_float(helicopter_update_scratch.segment_a) * path->points[0].length +
+                   helicopter_update_scratch.fraction_a + 2.0f;
         distance = fast_vec_dist(moby->position, (char *)path + (path->count << 4));
         step = D_0015ED70 * 10.0f;
         if (distance <= data->speed * data->speed / (step + step)) {
@@ -329,11 +329,11 @@ void blarg_helicopter_update(HMob49 *moby) {
             if (limit < speed)
                 data->speed = limit;
         }
-        work.segment_a = truncate_float_to_s32(progress / path->points[0].length);
-        work.fraction_a =
-            (progress - convert_integer_to_float(work.segment_a) * path->points[0].length) /
+        helicopter_update_scratch.segment_a = truncate_float_to_s32(progress / path->points[0].length);
+        helicopter_update_scratch.fraction_a =
+            (progress - convert_integer_to_float(helicopter_update_scratch.segment_a) * path->points[0].length) /
             path->points[0].length;
-        if (work.segment_a >= path->count - 1) {
+        if (helicopter_update_scratch.segment_a >= path->count - 1) {
             if (data->route_a.path_id != -1 &&
                 data->speed <= blarg_helicopter_path_min_speed_gp * D_0015ED6C) {
                 data->alternate = 0;
@@ -348,35 +348,35 @@ void blarg_helicopter_update(HMob49 *moby) {
                 raise_kernel_trap();
                 return;
             }
-            work.segment_a = path->count - 2;
-            work.fraction_a = 1.0f;
+            helicopter_update_scratch.segment_a = path->count - 2;
+            helicopter_update_scratch.fraction_a = 1.0f;
         }
         fast_vec_sub(
-            work.projected, &path->points[work.segment_a + 1], &path->points[work.segment_a]);
-        fast_vec_scale(work.projected, work.projected, work.fraction_a);
-        fast_vec_add(work.projected, work.projected, path->points + work.segment_a);
-        if (work.segment_a + 1 < path->count - 8) {
-            float *next = (float *)((char *)path + ((work.segment_a + 1) << 4));
+            helicopter_update_scratch.projected, &path->points[helicopter_update_scratch.segment_a + 1], &path->points[helicopter_update_scratch.segment_a]);
+        fast_vec_scale(helicopter_update_scratch.projected, helicopter_update_scratch.projected, helicopter_update_scratch.fraction_a);
+        fast_vec_add(helicopter_update_scratch.projected, helicopter_update_scratch.projected, path->points + helicopter_update_scratch.segment_a);
+        if (helicopter_update_scratch.segment_a + 1 < path->count - 8) {
+            float *next = (float *)((char *)path + ((helicopter_update_scratch.segment_a + 1) << 4));
             angle = fast_arc_tan(next[4] - moby->position[0], next[5] - moby->position[1]);
             moby->rotation[2] =
                 spring_turn(&data->yaw_velocity, moby->rotation[2], angle, 0.01f, 0.3f, 0.1f);
         } else {
-            angle = fast_arc_tan(work.target.position[0] - moby->position[0],
-                                 work.target.position[1] - moby->position[1]);
+            angle = fast_arc_tan(helicopter_update_scratch.target.position[0] - moby->position[0],
+                                 helicopter_update_scratch.target.position[1] - moby->position[1]);
             moby->rotation[2] =
                 spring_turn(&data->yaw_velocity, moby->rotation[2], angle, 0.01f, 0.3f, 0.1f);
         }
-        fast_vec_sub(work.movement, work.projected, moby->position);
-        distance = fast_vec_length(work.movement);
+        fast_vec_sub(helicopter_update_scratch.movement, helicopter_update_scratch.projected, moby->position);
+        distance = fast_vec_length(helicopter_update_scratch.movement);
         if (data->speed < distance)
             distance = data->speed;
-        fast_vec_normalize(work.movement, work.movement, distance);
+        fast_vec_normalize(helicopter_update_scratch.movement, helicopter_update_scratch.movement, distance);
         motion_scale = 20.0f;
         motion_gain = 1.0471976f;
         {
             float delta, roll, pitch;
-            fast_vec_add(moby->position, moby->position, work.movement);
-            delta = fast_subtract_rotations(fast_arc_tan(work.movement[0], work.movement[1]),
+            fast_vec_add(moby->position, moby->position, helicopter_update_scratch.movement);
+            delta = fast_subtract_rotations(fast_arc_tan(helicopter_update_scratch.movement[0], helicopter_update_scratch.movement[1]),
                                             moby->rotation[2]);
             roll = data->speed * 0.34906584f * fast_cos(delta) / (D_0015ED6C * motion_scale);
             pitch = data->speed * -0.34906584f * fast_sin(delta);
@@ -400,8 +400,8 @@ void blarg_helicopter_update(HMob49 *moby) {
     case BLARG_HELICOPTER_PATROL_AND_ATTACK: {
         HRoute49 *route = data->alternate ? &data->route_b : &data->route_a;
         int       point = route->index;
-        float     angle = fast_arc_tan(work.target.position[0] - moby->position[0],
-                                   work.target.position[1] - moby->position[1]);
+        float     angle = fast_arc_tan(helicopter_update_scratch.target.position[0] - moby->position[0],
+                                   helicopter_update_scratch.target.position[1] - moby->position[1]);
         HMob49   *projectile;
         float     distance, other_distance;
         moby->rotation[2] =
@@ -409,19 +409,19 @@ void blarg_helicopter_update(HMob49 *moby) {
         projectile = data->projectile;
         if (!projectile || projectile->class_id != 0x350 || projectile->state == 254 ||
             projectile->state == 253) {
-            moby_point_position(moby, 0, work.movement);
-            fast_vec_sub(work.direction, work.target.position, work.movement);
-            *(HQuad49_2CDDC8 *)work.projected = *(HQuad49_2CDDC8 *)work.direction;
-            transpose_rotation_matrix(work.offset, moby->transform);
-            transform_vector(work.projected, work.projected, work.offset);
-            angle = fast_arc_tan(work.projected[0], work.projected[1]);
+            moby_point_position(moby, 0, helicopter_update_scratch.movement);
+            fast_vec_sub(helicopter_update_scratch.direction, helicopter_update_scratch.target.position, helicopter_update_scratch.movement);
+            *(HQuad49_2CDDC8 *)helicopter_update_scratch.projected = *(HQuad49_2CDDC8 *)helicopter_update_scratch.direction;
+            transpose_rotation_matrix(helicopter_update_scratch.offset, moby->transform);
+            transform_vector(helicopter_update_scratch.projected, helicopter_update_scratch.projected, helicopter_update_scratch.offset);
+            angle = fast_arc_tan(helicopter_update_scratch.projected[0], helicopter_update_scratch.projected[1]);
             data->gun_yaw = spring_turn(&data->gun_yaw_velocity,
                                         data->gun_yaw,
                                         angle,
                                         D_0015ED70 * 6.2831855f,
                                         D_0015ED70 * 12.566371f,
                                         D_0015ED6C * 6.2831855f);
-            angle = -fast_arc_tan(vector_length_xy(work.projected), work.projected[2]);
+            angle = -fast_arc_tan(vector_length_xy(helicopter_update_scratch.projected), helicopter_update_scratch.projected[2]);
             data->gun_pitch = spring_turn(&data->gun_pitch_velocity,
                                           data->gun_pitch,
                                           angle,
@@ -432,19 +432,19 @@ void blarg_helicopter_update(HMob49 *moby) {
             rotation_2D5FA8(data->gun_pitch_matrix + 4, 2, data->gun_pitch);
             data->projectile = 0;
         } else {
-            moby_point_position(moby, 0, work.movement);
-            fast_vec_sub(work.direction, data->projectile->position, work.movement);
-            *(HQuad49_2CDDC8 *)work.projected = *(HQuad49_2CDDC8 *)work.direction;
-            transpose_rotation_matrix(work.offset, moby->transform);
-            transform_vector(work.projected, work.projected, work.offset);
-            angle = fast_arc_tan(work.projected[0], work.projected[1]);
+            moby_point_position(moby, 0, helicopter_update_scratch.movement);
+            fast_vec_sub(helicopter_update_scratch.direction, data->projectile->position, helicopter_update_scratch.movement);
+            *(HQuad49_2CDDC8 *)helicopter_update_scratch.projected = *(HQuad49_2CDDC8 *)helicopter_update_scratch.direction;
+            transpose_rotation_matrix(helicopter_update_scratch.offset, moby->transform);
+            transform_vector(helicopter_update_scratch.projected, helicopter_update_scratch.projected, helicopter_update_scratch.offset);
+            angle = fast_arc_tan(helicopter_update_scratch.projected[0], helicopter_update_scratch.projected[1]);
             data->gun_yaw = spring_turn(&data->gun_yaw_velocity,
                                         data->gun_yaw,
                                         angle,
                                         D_0015ED70 * 6.2831855f,
                                         D_0015ED70 * 12.566371f,
                                         D_0015ED6C * 6.2831855f);
-            angle = -fast_arc_tan(vector_length_xy(work.projected), work.projected[2]);
+            angle = -fast_arc_tan(vector_length_xy(helicopter_update_scratch.projected), helicopter_update_scratch.projected[2]);
             data->gun_pitch = spring_turn(&data->gun_pitch_velocity,
                                           data->gun_pitch,
                                           angle,
@@ -456,19 +456,19 @@ void blarg_helicopter_update(HMob49 *moby) {
         }
         if (point > 0 && point < route->path->count - 1) {
             float node_distance =
-                vector_distance_xy(&route->path->points[point], work.target.position);
+                vector_distance_xy(&route->path->points[point], helicopter_update_scratch.target.position);
             if (node_distance < 20.0f &&
-                absolute_float(work.target.position[2] - moby->position[2]) < 10.0f &&
+                absolute_float(helicopter_update_scratch.target.position[2] - moby->position[2]) < 10.0f &&
                 node_distance <
-                    fast_vec_dist(&route->path->points[point + 1], work.target.position) &&
+                    fast_vec_dist(&route->path->points[point + 1], helicopter_update_scratch.target.position) &&
                 point < route->path->count - 2)
                 route->index++;
         }
-        fast_vec_sub(work.direction, &route->path->points[point], moby->position);
-        distance = fast_vec_length(work.direction);
+        fast_vec_sub(helicopter_update_scratch.direction, &route->path->points[point], moby->position);
+        distance = fast_vec_length(helicopter_update_scratch.direction);
         if (distance < data->speed * data->speed / ((D_0015ED70 * 4.0f) * 2.0f) ||
-            fast_vec_dist(&route->path->points[point], work.target.position) <
-                fast_vec_dist(moby->position, work.target.position)) {
+            fast_vec_dist(&route->path->points[point], helicopter_update_scratch.target.position) <
+                fast_vec_dist(moby->position, helicopter_update_scratch.target.position)) {
             data->speed -= D_0015ED70 * 4.0f;
             if (data->speed < 0)
                 data->speed = 0;
@@ -477,18 +477,18 @@ void blarg_helicopter_update(HMob49 *moby) {
             if (D_0015ED6C * 10.0f < data->speed)
                 data->speed = D_0015ED6C * 10.0f;
         }
-        distance = fast_vec_dist(&route->path->points[point], work.target.position);
-        other_distance = fast_vec_dist(moby->position, work.target.position);
+        distance = fast_vec_dist(&route->path->points[point], helicopter_update_scratch.target.position);
+        other_distance = fast_vec_dist(moby->position, helicopter_update_scratch.target.position);
         if (distance < other_distance)
-            fast_vec_normalize(work.direction, work.direction, -data->speed);
+            fast_vec_normalize(helicopter_update_scratch.direction, helicopter_update_scratch.direction, -data->speed);
         else
-            fast_vec_normalize(work.direction, work.direction, data->speed);
+            fast_vec_normalize(helicopter_update_scratch.direction, helicopter_update_scratch.direction, data->speed);
         motion_scale = 10.0f;
         motion_gain = 1.0471976f;
         {
             float delta, roll, pitch;
-            fast_vec_add(moby->position, moby->position, work.direction);
-            delta = fast_subtract_rotations(fast_arc_tan(work.direction[0], work.direction[1]),
+            fast_vec_add(moby->position, moby->position, helicopter_update_scratch.direction);
+            delta = fast_subtract_rotations(fast_arc_tan(helicopter_update_scratch.direction[0], helicopter_update_scratch.direction[1]),
                                             moby->rotation[2]);
             roll = data->speed * 0.34906584f * fast_cos(delta) / (D_0015ED6C * motion_scale);
             pitch = data->speed * -0.34906584f * fast_sin(delta);
@@ -507,7 +507,7 @@ void blarg_helicopter_update(HMob49 *moby) {
                                             D_0015ED70 * 2.0943952f,
                                             D_0015ED6C * 1.5707964f);
         }
-        if (is_point_inside_clip_volume(work.target.position,
+        if (is_point_inside_clip_volume(helicopter_update_scratch.target.position,
                                         data->alternate ? data->other_switch_region
                                                         : data->switch_region)) {
             if (data->alternate ? data->other_exit_path != -1 : data->exit_path != -1) {
@@ -521,18 +521,18 @@ void blarg_helicopter_update(HMob49 *moby) {
             moby->state = 4;
             data->reaction_timer = scale_game_frames(15);
             break;
-        } else if (is_point_inside_clip_volume(work.target.position, data->shoot_region) &&
+        } else if (is_point_inside_clip_volume(helicopter_update_scratch.target.position, data->shoot_region) &&
                    (fast_dec_timer_s16(&data->shot_timer) || (!data->projectile && data->timer))) {
             data->shot_timer = scale_game_frames(360);
-            qcopy(work.shot_origin, work.target.position);
-            fast_vec_sub(work.shot_velocity, work.shot_origin, work.movement);
-            set_vector_length_xy(work.shot_velocity, work.shot_velocity, D_0015ED6C * 6.0f);
-            work.shot_velocity[2] = 0;
-            data->projectile = (HMob49 *)spawn_homing_spark_projectile((char *)work.shot_velocity,
-                                                                       (char *)work.movement,
+            qcopy(helicopter_update_scratch.shot_origin, helicopter_update_scratch.target.position);
+            fast_vec_sub(helicopter_update_scratch.shot_velocity, helicopter_update_scratch.shot_origin, helicopter_update_scratch.movement);
+            set_vector_length_xy(helicopter_update_scratch.shot_velocity, helicopter_update_scratch.shot_velocity, D_0015ED6C * 6.0f);
+            helicopter_update_scratch.shot_velocity[2] = 0;
+            data->projectile = (HMob49 *)spawn_homing_spark_projectile((char *)helicopter_update_scratch.shot_velocity,
+                                                                       (char *)helicopter_update_scratch.movement,
                                                                        (int)moby,
                                                                        scale_game_frames(240),
-                                                                       work.target.position[2]);
+                                                                       helicopter_update_scratch.target.position[2]);
         }
         break;
     }
@@ -558,15 +558,15 @@ void blarg_helicopter_update(HMob49 *moby) {
         path = ((HPath49 *)l03_paths[data->alternate ? data->other_exit_path : data->exit_path]);
         func_L00_0025EFC0_2CDDC8(path,
                                  moby->position,
-                                 work.projected,
-                                 &work.segment_b,
-                                 &work.fraction_b,
+                                 helicopter_update_scratch.projected,
+                                 &helicopter_update_scratch.segment_b,
+                                 &helicopter_update_scratch.fraction_b,
                                  0,
                                  999.0f,
                                  5.0f,
                                  0.0f);
-        progress = convert_integer_to_float(work.segment_b) * path->points[0].length +
-                   work.fraction_b + 2.0f;
+        progress = convert_integer_to_float(helicopter_update_scratch.segment_b) * path->points[0].length +
+                   helicopter_update_scratch.fraction_b + 2.0f;
         distance = fast_vec_dist(moby->position, (char *)path + (path->count << 4));
         step = D_0015ED70 * 10.0f;
         if (distance <= data->speed * data->speed / (step + step)) {
@@ -582,11 +582,11 @@ void blarg_helicopter_update(HMob49 *moby) {
             if (limit < speed)
                 data->speed = limit;
         }
-        work.segment_b = truncate_float_to_s32(progress / path->points[0].length);
-        work.fraction_b =
-            (progress - convert_integer_to_float(work.segment_b) * path->points[0].length) /
+        helicopter_update_scratch.segment_b = truncate_float_to_s32(progress / path->points[0].length);
+        helicopter_update_scratch.fraction_b =
+            (progress - convert_integer_to_float(helicopter_update_scratch.segment_b) * path->points[0].length) /
             path->points[0].length;
-        if (work.segment_b >= path->count - 1) {
+        if (helicopter_update_scratch.segment_b >= path->count - 1) {
             if (data->other_exit_path != -1 && data->route_b.path_id != -1 &&
                 data->speed <= blarg_helicopter_path_min_speed_gp * D_0015ED6C) {
                 HRoute49 *route;
@@ -603,28 +603,28 @@ void blarg_helicopter_update(HMob49 *moby) {
                 raise_kernel_trap();
                 return;
             }
-            work.segment_b = path->count - 2;
-            work.fraction_b = 1.0f;
+            helicopter_update_scratch.segment_b = path->count - 2;
+            helicopter_update_scratch.fraction_b = 1.0f;
         }
         fast_vec_sub(
-            work.projected, &path->points[work.segment_b + 1], &path->points[work.segment_b]);
-        fast_vec_scale(work.projected, work.projected, work.fraction_b);
-        fast_vec_add(work.projected, work.projected, path->points + work.segment_b);
-        angle = fast_arc_tan(work.target.position[0] - moby->position[0],
-                             work.target.position[1] - moby->position[1]);
+            helicopter_update_scratch.projected, &path->points[helicopter_update_scratch.segment_b + 1], &path->points[helicopter_update_scratch.segment_b]);
+        fast_vec_scale(helicopter_update_scratch.projected, helicopter_update_scratch.projected, helicopter_update_scratch.fraction_b);
+        fast_vec_add(helicopter_update_scratch.projected, helicopter_update_scratch.projected, path->points + helicopter_update_scratch.segment_b);
+        angle = fast_arc_tan(helicopter_update_scratch.target.position[0] - moby->position[0],
+                             helicopter_update_scratch.target.position[1] - moby->position[1]);
         moby->rotation[2] =
             spring_turn(&data->yaw_velocity, moby->rotation[2], angle, 0.01f, 0.3f, 0.1f);
-        fast_vec_sub(work.movement, work.projected, moby->position);
-        distance = fast_vec_length(work.movement);
+        fast_vec_sub(helicopter_update_scratch.movement, helicopter_update_scratch.projected, moby->position);
+        distance = fast_vec_length(helicopter_update_scratch.movement);
         if (data->speed < distance)
             distance = data->speed;
-        fast_vec_normalize(work.movement, work.movement, distance);
+        fast_vec_normalize(helicopter_update_scratch.movement, helicopter_update_scratch.movement, distance);
         motion_scale = 20.0f;
         motion_gain = 1.0471976f;
         {
             float delta, roll, pitch;
-            fast_vec_add(moby->position, moby->position, work.movement);
-            delta = fast_subtract_rotations(fast_arc_tan(work.movement[0], work.movement[1]),
+            fast_vec_add(moby->position, moby->position, helicopter_update_scratch.movement);
+            delta = fast_subtract_rotations(fast_arc_tan(helicopter_update_scratch.movement[0], helicopter_update_scratch.movement[1]),
                                             moby->rotation[2]);
             roll = data->speed * 0.34906584f * fast_cos(delta) / (D_0015ED6C * motion_scale);
             pitch = data->speed * -0.34906584f * fast_sin(delta);
@@ -654,13 +654,13 @@ void blarg_helicopter_update(HMob49 *moby) {
                 data->speed = 0;
             motion_scale = 10.0f;
             motion_gain = 1.0471976f;
-            work.movement[0] = fast_cos(moby->rotation[2]) * -data->speed;
-            work.movement[1] = fast_sin(moby->rotation[2]) * -data->speed;
-            work.movement[2] = 0;
+            helicopter_update_scratch.movement[0] = fast_cos(moby->rotation[2]) * -data->speed;
+            helicopter_update_scratch.movement[1] = fast_sin(moby->rotation[2]) * -data->speed;
+            helicopter_update_scratch.movement[2] = 0;
             {
                 float delta, roll, pitch;
-                fast_vec_add(moby->position, moby->position, work.movement);
-                delta = fast_subtract_rotations(fast_arc_tan(work.movement[0], work.movement[1]),
+                fast_vec_add(moby->position, moby->position, helicopter_update_scratch.movement);
+                delta = fast_subtract_rotations(fast_arc_tan(helicopter_update_scratch.movement[0], helicopter_update_scratch.movement[1]),
                                                 moby->rotation[2]);
                 roll = data->speed * 0.34906584f * fast_cos(delta) / (D_0015ED6C * motion_scale);
                 pitch = data->speed * -0.34906584f * fast_sin(delta);
@@ -684,37 +684,37 @@ void blarg_helicopter_update(HMob49 *moby) {
     case BLARG_HELICOPTER_DESTROY: {
         float angle;
         int   i;
-        *(HQuad49_2CDDC8 *)work.movement = 0;
+        *(HQuad49_2CDDC8 *)helicopter_update_scratch.movement = 0;
         angle = random_angle_radians();
-        moby_point_position(moby, 4, work.projected);
+        moby_point_position(moby, 4, helicopter_update_scratch.projected);
         for (i = 0; i < 4; i++) {
-            work.offset[0] = fast_cos(angle) * 1.5f;
-            work.offset[1] = fast_sin(angle) * 1.5f;
-            work.offset[2] = 0;
+            helicopter_update_scratch.offset[0] = fast_cos(angle) * 1.5f;
+            helicopter_update_scratch.offset[1] = fast_sin(angle) * 1.5f;
+            helicopter_update_scratch.offset[2] = 0;
             angle = fast_add_rotations(angle, 1.5707964f);
-            add_vectors(work.hit.direction, work.offset, work.projected);
+            add_vectors(helicopter_update_scratch.hit.direction, helicopter_update_scratch.offset, helicopter_update_scratch.projected);
         }
-        moby_point_position(moby, 5, work.offset);
+        moby_point_position(moby, 5, helicopter_update_scratch.offset);
         if (data->child_index != -1) {
             HMob49 *child = (HMob49 *)(D_L03_0015FFD8_c + (data->child_index << 8));
             ((unsigned char *)child->data)[0x262] = 2;
             child->alpha = 255;
             child->flags &= 0xFFF9;
-            work.hit.radius = 20.0f;
-            work.hit.flags = 0x830000;
-            work.hit.allow = 1;
-            work.hit.source = moby;
-            fast_vec_sub(work.hit.direction, child->position, moby->position);
-            set_vector_length_xy(work.hit.direction, work.hit.direction, 1.0f);
-            work.hit.direction[2] = 1.0f;
-            work.hit.direction[3] = 5627.925f;
-            work.hit.kind = 3;
-            work.hit.enabled = 3;
-            work.hit.class_id = moby->class_id;
-            record_moby_hit(child, &work.hit);
+            helicopter_update_scratch.hit.radius = 20.0f;
+            helicopter_update_scratch.hit.flags = 0x830000;
+            helicopter_update_scratch.hit.allow = 1;
+            helicopter_update_scratch.hit.source = moby;
+            fast_vec_sub(helicopter_update_scratch.hit.direction, child->position, moby->position);
+            set_vector_length_xy(helicopter_update_scratch.hit.direction, helicopter_update_scratch.hit.direction, 1.0f);
+            helicopter_update_scratch.hit.direction[2] = 1.0f;
+            helicopter_update_scratch.hit.direction[3] = 5627.925f;
+            helicopter_update_scratch.hit.kind = 3;
+            helicopter_update_scratch.hit.enabled = 3;
+            helicopter_update_scratch.hit.class_id = moby->class_id;
+            record_moby_hit(child, &helicopter_update_scratch.hit);
         }
         spawn_explosion(moby,
-                        work.movement,
+                        helicopter_update_scratch.movement,
                         moby->position,
                         0.0f,
                         0.0f,
