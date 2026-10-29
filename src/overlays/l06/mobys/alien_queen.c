@@ -963,9 +963,9 @@ int update_alien_queen_intro_camera(char *moby) {
 }
 
 void finish_alien_queen_intro(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
+    char *queen_vars = ((char *)MOBY(moby)->pvars);
     hero_set_state(HERO_STATE_IDLE, 0);
-    *D_L06_001B0C30[*(int *)(data + 0xEC)] = *(int *)(data + 0x114);
+    *D_L06_001B0C30[*(int *)(queen_vars + 0xEC)] = *(int *)(queen_vars + 0x114);
     jet_end_mount(2);
 }
 
