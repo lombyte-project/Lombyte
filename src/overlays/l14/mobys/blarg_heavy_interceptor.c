@@ -1688,7 +1688,7 @@ void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *
 void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) __asm__("FUN_L14_002aead8");
 
 void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) {
-    u8 *data = ((u8 *)MOBY(moby)->pvars);
+    u8 *interceptor_vars = ((u8 *)MOBY(moby)->pvars);
     u8 *bone_transform;
     f32 bounding_sphere[4];
     if (random_integer_below(5)) {
@@ -1696,12 +1696,12 @@ void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) {
         bounding_sphere[3] = blarg_heavy_interceptor_culling_sphere_radius_gp;
         if (fast_bsphere_check((u8 *)bounding_sphere,
                                convert_integer_to_float(MOBY(moby)->draw_dist)) >= 0) {
-            bone_transform = data + 0xA0;
+            bone_transform = interceptor_vars + 0xA0;
             build_moby_bone_transform(moby, 1, bone_transform);
             fast_vec_normalize(bone_transform, bone_transform, 1.0f);
-            fast_vec_normalize(data + 0xB0, data + 0xB0, 1.0f);
-            fast_vec_normalize(data + 0xC0, data + 0xC0, 1.0f);
-            *(s32 *)(data + 0x20C) = 2;
+            fast_vec_normalize(interceptor_vars + 0xB0, interceptor_vars + 0xB0, 1.0f);
+            fast_vec_normalize(interceptor_vars + 0xC0, interceptor_vars + 0xC0, 1.0f);
+            *(s32 *)(interceptor_vars + 0x20C) = 2;
         }
     }
 }
