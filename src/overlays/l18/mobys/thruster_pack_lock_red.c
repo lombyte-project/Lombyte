@@ -56,14 +56,14 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         STATE_WAIT_FOR_DEPRESSION_TRIGGER = 4,
         STATE_SETTLE_DEPRESSED_HEIGHT = 5
     };
-    char *data = (char *)moby->pvars;
+    char *thruster_pack_lock_red_private_vars = (char *)moby->pvars;
     int   index;
 
     switch (moby->state) {
     case STATE_INITIALIZE:
-        *(float *)(data + 0x64) = moby->pos.z;
-        *(unsigned short *)(data + 0x3E) |= 8;
-        if (*(int *)(data + 0x60) != 0) {
+        *(float *)(thruster_pack_lock_red_private_vars + 0x64) = moby->pos.z;
+        *(unsigned short *)(thruster_pack_lock_red_private_vars + 0x3E) |= 8;
+        if (*(int *)(thruster_pack_lock_red_private_vars + 0x60) != 0) {
             moby->state = 1;
             moby->scale = *(float *)((char *)moby->pclass + 0x24) *
                           l18_thruster_pack_lock_red_scale_multiplier;
@@ -74,8 +74,8 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
     case STATE_APPROACH_CONFIGURED_HEIGHT:
     case STATE_POST_WAIT_APPROACH_CONFIGURED_HEIGHT:
         advance_accelerated_scalar(&moby->pos.z,
-                                   (float *)(data + 0x68),
-                                   *(float *)(data + 0x64) +
+                                   (float *)(thruster_pack_lock_red_private_vars + 0x68),
+                                   *(float *)(thruster_pack_lock_red_private_vars + 0x64) +
                                        l18_thruster_pack_lock_red_approach_height_offset,
                                    frame_time_sq * 20.0f,
                                    frame_time_sq * 40.0f,
@@ -84,8 +84,8 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
     case STATE_WAIT_FOR_GROUNDED_HERO_TRIGGER:
         advance_accelerated_scalar(
             &moby->pos.z,
-            (float *)(data + 0x68),
-            *(float *)(data + 0x64) +
+            (float *)(thruster_pack_lock_red_private_vars + 0x68),
+            *(float *)(thruster_pack_lock_red_private_vars + 0x64) +
                 l18_thruster_pack_lock_red_grounded_trigger_wait_height_offset,
             frame_time_sq * 5.0f,
             frame_time_sq * 10.0f,
@@ -93,16 +93,16 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         if (hero.air_frames.s == 0 && hero.ground_moby == moby && hero.state.current == 0x22) {
             moby->state = 3;
             allocate_voice_for_target_entry(0, 0, (int)moby);
-            index = *(int *)(data + 0x70);
+            index = *(int *)(thruster_pack_lock_red_private_vars + 0x70);
             if (index != -1) {
                 unsigned char *entry = (unsigned char *)((char *)&voice_pool) + index * 0x70;
                 if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
                     release_voice_slot(index);
             }
-            *(int *)(data + 0x70) = -1;
+            *(int *)(thruster_pack_lock_red_private_vars + 0x70) = -1;
         } else if (hero.state.current != 0x72) {
             enqueue_callback_list_1_overlay(draw_pulsing_timer_hud, moby);
-            if (fast_dec_timer((int *)(data + 0x6C)) != 0)
+            if (fast_dec_timer((int *)(thruster_pack_lock_red_private_vars + 0x6C)) != 0)
                 D_L18_00162390 = 1;
         }
         break;
@@ -138,7 +138,7 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
         }
         break;
     case STATE_SETTLE_DEPRESSED_HEIGHT:
-        if (approach_value((float *)&moby->pos.z, *(float *)(data + 0x64) - 1.5f, 0.15f) != 0.0f)
+        if (approach_value((float *)&moby->pos.z, *(float *)(thruster_pack_lock_red_private_vars + 0x64) - 1.5f, 0.15f) != 0.0f)
             return;
         moby->state = 6;
         break;
