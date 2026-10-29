@@ -50,47 +50,47 @@ int test_moby_camera_control_activation(char *moby) __asm__("FUN_L02_002fb648");
 
 int test_moby_camera_control_activation(char *moby) {
     char *special = D_L02_001674DC;
-    char *data = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1c);
-    char *target = *(char **)(data + 0x48);
+    char *camera_control_entry = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1c);
+    char *target = *(char **)(camera_control_entry + 0x48);
     int  *entry;
-    int   result;
+    int   hero_containment_result;
 
     if (special != 0 && special == target) {
         return 1;
     }
-    if (*(short *)(data + 0x3c) == 6) {
+    if (*(short *)(camera_control_entry + 0x3c) == 6) {
         return (char *)hero.ground_moby == target;
     }
-    if (*(unsigned char *)(data + 0x22) == 1) {
-        return fast_vec_dist(&hero.motion.pos, target + 0x10) < *(float *)(data + 0x24);
+    if (*(unsigned char *)(camera_control_entry + 0x22) == 1) {
+        return fast_vec_dist(&hero.motion.pos, target + 0x10) < *(float *)(camera_control_entry + 0x24);
     }
-    if (*(int *)(data + 0xc) >= 0) {
-        result = is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xc));
-        if (result == 0) {
+    if (*(int *)(camera_control_entry + 0xc) >= 0) {
+        hero_containment_result = is_point_inside_clip_volume(&hero.motion.pos, *(int *)(camera_control_entry + 0xc));
+        if (hero_containment_result == 0) {
             goto rejected;
         }
         return 1;
     }
-    if (*(int *)(data + 0x10) >= 0) {
-        result = test_point_in_transformed_unit_cylinder(&hero.motion.pos, *(int *)(data + 0x10));
-        if (result == 0) {
+    if (*(int *)(camera_control_entry + 0x10) >= 0) {
+        hero_containment_result = test_point_in_transformed_unit_cylinder(&hero.motion.pos, *(int *)(camera_control_entry + 0x10));
+        if (hero_containment_result == 0) {
             goto rejected;
         }
         return 1;
     }
-    if (*(int *)(data + 8) >= 0) {
-        result = test_point_in_transformed_unit_sphere(&hero.motion.pos, *(int *)(data + 8));
-        if (result == 0) {
+    if (*(int *)(camera_control_entry + 8) >= 0) {
+        hero_containment_result = test_point_in_transformed_unit_sphere(&hero.motion.pos, *(int *)(camera_control_entry + 8));
+        if (hero_containment_result == 0) {
             goto rejected;
         }
         return 1;
     }
-    if (*(int *)(data + 0x14) < 0) {
+    if (*(int *)(camera_control_entry + 0x14) < 0) {
         goto rejected;
     }
-    entry = (int *)D_L02_001B0AB0[*(int *)(data + 0x14)];
-    result = point_in_path_xy(&hero.motion.pos, entry + 4, *entry);
-    if (result == 0) {
+    entry = (int *)D_L02_001B0AB0[*(int *)(camera_control_entry + 0x14)];
+    hero_containment_result = point_in_path_xy(&hero.motion.pos, entry + 4, *entry);
+    if (hero_containment_result == 0) {
         goto rejected;
     }
     return 1;
