@@ -358,9 +358,7 @@ void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *ou
     fast_vec_add(&tmp, out, &path->points[*seg_out]);
     out->q = tmp.q;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */
 
@@ -382,9 +380,7 @@ void compose_target_euler_rotation(char *rotation_target, float x, float y, floa
     multiply_matrix(target_rotation_matrix, target_rotation_matrix, input_rotation_matrix);
     matrix_to_euler(target_rotation_matrix, rotation_target + 0x40);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263578), where it is exact; names translated to the US level program. */
 
@@ -524,9 +520,7 @@ void update_moby_transform_history(S_262608 *history_state, int dec) {
             FUN_L00_00262840_262608(history_state);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002638B8), where it is exact; names translated to the US level program. */
 
@@ -590,9 +584,7 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
     FUN_001f99f8_2628d8(joint_animation_state + 0x60);
     *(float *)(joint_animation_state + 0x70) = 1.0f;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263B78), where it is exact; names translated to the US level program. */
 

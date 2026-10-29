@@ -25,9 +25,7 @@ void remove_moby_when_near_hero(char *moby) {
         FUN_0020c828_b7(moby);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -78,9 +76,7 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
     }
     return best;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

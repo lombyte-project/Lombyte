@@ -232,9 +232,7 @@ void initialize_level_12_slot_grid_neighbors(int selected_slot_index) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E29C8), where it is exact; names translated to the US level program. */
 
@@ -257,9 +255,7 @@ int update_moby_suck_cannon_suction_state(struct Moby *moby) {
     }
     return active;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Move the vendor moby to state eight unless it is in state nine or eleven. */
 /* Ported from rac1-decomp (src/overlays/l12/vendor_002C0310.c: func_L12_002E2B08), where it is exact; names translated to the US level program. */
@@ -305,9 +301,7 @@ void ease_hoven_anklebiter_height_to_ground(char *moby) {
     func_00214D28_order(value, D_0015ED70_c * 27.0f, moby + 0x18);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2BF8), where it is exact; names translated to the US level program. */
 
@@ -3233,9 +3227,7 @@ void helicopter_update(char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Idle critter: waits a random time, then plays one of its fidget animations (or reacts when the hero comes close). */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002ED550), where it is exact; names translated to the US level program. */

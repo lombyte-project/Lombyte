@@ -297,9 +297,7 @@ void update_hero_airborne_planar_motion(void) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"

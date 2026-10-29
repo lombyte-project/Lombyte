@@ -3,9 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/quad.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_002803B8.c: func_L08_002803B8), where it is exact; names translated to the US level program. */
 

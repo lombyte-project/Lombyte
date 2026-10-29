@@ -9,9 +9,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/state/options.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 
@@ -37,9 +35,7 @@ void clear_jet_camera_mode_latch(void) __asm__("FUN_L00_00203b78");
 void clear_jet_camera_mode_latch(void) {
     *(short *)jet_camera_mode_setup_latch = 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205598), where it is exact; names translated to the US level program. */
 
@@ -64,9 +60,7 @@ void reset_hero_to_idle(void) {
     clear_hero_queued_animation();
     hero_set_state(HERO_STATE_IDLE, 1);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205618), where it is exact; names translated to the US level program. */
 
@@ -265,9 +259,7 @@ void reset_hero_easing_records(void) {
         manipulator_record->scale = 1.0f;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205C18), where it is exact; names translated to the US level program. */
 
@@ -487,9 +479,7 @@ void update_hero_glow_and_extra_manipulators(void) {
 }
 #undef EXTRA_MANIPS
 #undef HERO_EXTRA
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_002064C0), where it is exact; names translated to the US level program. */
 
@@ -1207,9 +1197,7 @@ void coordinate_hero_frame_update(void) {
     update_hero_color_and_item_tint();
     update_hero_moby_probed_height_bounds();
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_002078E0), where it is exact; names translated to the US level program. */
 
@@ -1433,9 +1421,7 @@ void apply_hero_vertical_oscillation(void) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00208000), where it is exact; names translated to the US level program. */
 
@@ -1517,9 +1503,7 @@ void update_hero_scalar_pulse(void) {
             hero_scalar_pulse_active_gp = 0;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00208318), where it is exact; names translated to the US level program. */
 
@@ -2096,9 +2080,7 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame, f32 anim
 
     return 0.0f;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00209690), where it is exact; names translated to the US level program. */
 
@@ -2164,9 +2146,7 @@ void rotate_hero_about_local_pivot(float *inf, float x, float y, float z) {
     FUN_001f9a10_002090d0(hero_rotation - 1, hero_rotation - 1, &L_002090d0.d);
     FUN_00214598_002090d0(&L_002090d0.m, hero_rotation);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Builds a {0,0,0.6,0} param vector and forwards it (plus the caller's
    position) to func_L00_00209748. */
@@ -2892,7 +2872,7 @@ extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern int D_L00_0015F6B0 __asm__("D_L00_0015F5CC");
 extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int suck_get_aim_height(char *) __asm__("FUN_002141f8");
-extern unsigned char hero_pos[] __asm__("D_0013F3D0") NOT_SDA;
+extern unsigned char hero_pos[] __asm__("D_0013F3D0");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 float absolute_float(float input) __asm__("FUN_001f99c0");
 void set_first_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1e0");
@@ -3232,9 +3212,7 @@ void probe_hero_airborne_wall_contact(void) {
         hero_state->wall_jump_window = scale_game_frames(6);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020BFA8), where it is exact; names translated to the US level program. */
 

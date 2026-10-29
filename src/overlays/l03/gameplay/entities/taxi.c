@@ -10,9 +10,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/item_state.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002CDBF0), where it is exact; names translated to the US level program. */
 
@@ -1008,9 +1006,7 @@ void robo_shack_sign_update(struct Moby *sign_moby) {
     update_entity_matrix(sign_vars->coll, &move, &oldRot, &sign_moby->rot);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"

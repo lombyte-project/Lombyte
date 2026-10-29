@@ -118,9 +118,7 @@ char *spawn_projectile_moby(char *source_moby, void *spawn_position, float *proj
     return moby;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

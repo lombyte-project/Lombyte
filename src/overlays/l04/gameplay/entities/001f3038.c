@@ -3,9 +3,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* index of the nearest of n vectors to a + 0x10 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F2F68), where it is exact; names translated to the US level program. */
@@ -316,9 +314,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer_1F3010 *
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

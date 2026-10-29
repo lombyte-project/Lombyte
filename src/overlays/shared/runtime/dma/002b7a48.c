@@ -3,9 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Converts a float vector to fixed-point ints, relative to the grid origin, plus two scale shorts. */
 /* Ported from rac1-decomp (src/overlays/shared/vuchain_002B8C00.c: func_L01_002B8E20), where it is exact; names translated to the US level program. */

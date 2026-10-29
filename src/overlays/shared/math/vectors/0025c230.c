@@ -4,9 +4,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D288), where it is exact; names translated to the US level program. */
 
@@ -24,9 +22,7 @@ float compute_transformed_delta_component(void *subtrahend_vector, void *rotatio
     transform_vector(transformed_delta_ptr, delta, transposed_rotation_matrix);
     return transformed_delta_ptr[component_index];
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D308), where it is exact; names translated to the US level program. */
 
@@ -46,9 +42,7 @@ void subtract_homogeneous_scaled_vector_xyz(void *destination_vector, void *minu
     fast_vec_sub(destination_vector, minuend_vector, &scaled_vector);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Spawns one particle per point found by func_L00_0025BCF8, at a random offset about A1. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D3F0), where it is exact; names translated to the US level program. */

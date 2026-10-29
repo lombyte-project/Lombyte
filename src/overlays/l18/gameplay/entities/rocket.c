@@ -11,9 +11,7 @@
 #include "rnc/math/fast_math.h"
 #define MOBY(p) ((struct Moby *)(p))
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Switch to state four while active, then restore the saved state. */
 /* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002D7580), where it is exact; names translated to the US level program. */
@@ -152,9 +150,7 @@ void update_floating_platform_tilt_and_bob(struct Moby *moby) {
     moby->pos.z = *(float *)(data + 0x64) +
                               floating_platform_bob_amplitude_gp * fast_sin(*(float *)(data + 0x74));
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002D9C48), where it is exact; names translated to the US level program. */
 
@@ -239,9 +235,7 @@ char *create_class_274_ring_effect(void *owner, void *vector, float value) {
     }
     return moby;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Read the vendor moby's current float value. */
 /* Ported from rac1-decomp (src/overlays/l18/vendor_002A8400.c: func_L18_002E0F80), where it is exact; names translated to the US level program. */
@@ -589,9 +583,7 @@ char *create_rocket_moby(float *rocket_spawn_position, float *initial_movement_s
     return moby;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D6878), where it is exact; names translated to the US level program. */
 
@@ -1292,9 +1284,7 @@ void thruster_pack_lock_green_update(char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002D7F48), where it is exact; names translated to the US level program. */
 

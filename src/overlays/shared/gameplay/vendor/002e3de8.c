@@ -4,9 +4,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
@@ -42,9 +40,7 @@ void spawn_type_52_particle_near_moby(char *moby) {
     spawn_type_52_particle(spawn_position, particle_scale, random_particle_value, particle_header_value, particle_data_value, random_divisor);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* UpdateMoby_1378 (names.tsv role). State 0 sets flag bit 0 and goes to state 1. In state 1,
  * when the hero (D_0013E633 + 0xE9D) is within 8.0: takes the vector from the moby to the point

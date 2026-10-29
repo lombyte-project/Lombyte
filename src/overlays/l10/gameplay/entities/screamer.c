@@ -417,9 +417,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     }
     if (data->f100 == 0) data->f100 = D_001413D0[0];
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Sets every listed entity in state 1 to state 2. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002E14F8), where it is exact; names translated to the US level program. */
@@ -1117,9 +1115,7 @@ void set_moby_group_command_frames(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -2306,9 +2302,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     }
     if (moby_data->f160 == 0) moby_data->f160 = ((Hero *)(((char *)&hero)))->moby;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Computes the aim angle of a moby relative to its owner, narrowed by nearby table entries. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002E5C00), where it is exact; names translated to the US level program. */

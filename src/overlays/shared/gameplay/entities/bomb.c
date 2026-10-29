@@ -1017,9 +1017,7 @@ void update_morphoray_chicken(Moby *chicken_moby) {
         chicken_moby->anim_speed = anim_speed;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC210), where it is exact; names translated to the US level program. */
 
@@ -1037,9 +1035,7 @@ int moby_set_state_from_check(char *checked_moby) {
     }
     return suction_result;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC2B0), where it is exact; names translated to the US level program. */
 
@@ -1062,9 +1058,7 @@ int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int launch_v
     }
     return projectile_launch_result;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CC360), where it is exact; names translated to the US level program. */
 
@@ -2402,9 +2396,7 @@ void replenish_hero_drones(void) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C96D0.c: func_L00_002CF328), where it is exact; names translated to the US level program. */
 

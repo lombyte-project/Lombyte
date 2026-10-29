@@ -4,9 +4,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Stores v in D_L00_001791B8 at i plus this level's base from D_L00_001C44B8. */
 void store_current_level_table_value(s32 stored_value, s32 i) __asm__("FUN_L00_0024a798");
@@ -36,7 +34,7 @@ typedef struct {
     MenuCacheEntry entries[8];
 } MenuCache;
 
-extern MenuCache D_L00_001841F0_lui __asm__("D_L00_001841F0") NOT_SDA;
+extern MenuCache D_L00_001841F0_lui __asm__("D_L00_001841F0");
 extern s32 D_L00_0015F3F8;
 extern void FUN_L00_002483c8(u8 *, s32, u8 *, s16 *);
 

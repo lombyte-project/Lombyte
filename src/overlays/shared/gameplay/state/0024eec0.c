@@ -39,9 +39,7 @@ void set_moby_local_table_entry(char *moby, int table_entry_index, void *v, floa
     e->b = b * k;
     e->v.w = unscaled_entry_w * k;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_0024FFE8), where it is exact; names translated to the US level program. */
 
@@ -67,9 +65,7 @@ void offset_moby_class_point_pairs(unsigned char *moby_class, int dx, int dy) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_00250060), where it is exact; names translated to the US level program. */
 
@@ -165,9 +161,7 @@ void release_moby_animation_slot(ListOwner_24f0e8 *owner, ListNode_24f0e8 **slot
     *slot = 0;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* advances an animation blend timer and steps through its frame table */
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002501C8), where it is exact; names translated to the US level program. */

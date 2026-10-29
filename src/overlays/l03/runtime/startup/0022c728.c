@@ -3,9 +3,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* In level 3, while the timer of state 5 is between 900 and 1100 ticks, throws four sparks off the moby. */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/initonce_0022D028.c: func_L03_0022D028), where it is exact; names translated to the US level program. */

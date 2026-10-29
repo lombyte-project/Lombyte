@@ -9,9 +9,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/collision.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C2A20), where it is exact; names translated to the US level program. */
 

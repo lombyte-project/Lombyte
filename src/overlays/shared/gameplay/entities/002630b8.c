@@ -455,9 +455,7 @@ void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_c
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

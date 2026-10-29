@@ -3,9 +3,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Set an attached effect's alpha from distance and the supplied scale. */
 /* Ported from rac1-decomp (src/overlays/l18/mobyutil_00267000.c: func_L18_00267000), where it is exact; names translated to the US level program. */

@@ -1472,9 +1472,7 @@ void door_left_update(HoverMoby *door_moby) {
     door_moby->pos.f[1] = door_vars->home.f[1] + door_translation_offset.f[1];
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_00300C38), where it is exact; names translated to the US level program. */
 

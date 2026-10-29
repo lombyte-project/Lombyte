@@ -349,9 +349,7 @@ void update_oscillating_target_link(Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
 
@@ -1001,9 +999,7 @@ void draw_hoven_turret_hud(Moby *moby) {
     func_L02_0020BF88_3055F8(xy, uv, colors, get_effect_texture(hoven_turret_hud_pitch_indicator_texture_index), 1);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Scale and play the vendor cue while its counter is below the limit. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00306178), where it is exact; names translated to the US level program. */

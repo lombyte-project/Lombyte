@@ -290,9 +290,7 @@ void find_grind_rail(void) {
     hero.rail_spline_loops = rail_kind;
     hero.grind_rail = 1;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* OUT = the camera-space point (0.3, 0, 1.34) in world space
    (func_L00_00233EE0). */
@@ -373,9 +371,7 @@ int hero_slot_item_id(int i) {
     }
     return -1;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Whether func_L00_0020DB30(ARG) is one of 10, 17, 20 or 25. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020DB68), where it is exact; names translated to the US level program. */
@@ -484,9 +480,7 @@ int hero_get_state_aim_pitch(int mode, float *out) {
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* The value BACK entries ago (at most 31, and at most the entry count
    hero.yaw_ring_count) in the 32-float ring hero.yaw_history whose newest entry is
@@ -1006,9 +1000,7 @@ void start_equipped_item_animation(void) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020ED30), where it is exact; names translated to the US level program. */
 
@@ -1354,9 +1346,7 @@ void spawn_hero_item_mobies(void) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_0020F750), where it is exact; names translated to the US level program. */
 
@@ -1772,9 +1762,7 @@ void clear_hero_item_slot(int i, int respawn_threshold) {
         slot_owner->items[0].moby2 = 0;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210418), where it is exact; names translated to the US level program. */
 
@@ -1798,9 +1786,7 @@ void set_hero_condition_animation_timer_for_item(int id) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00210478), where it is exact; names translated to the US level program. */
 
@@ -2367,9 +2353,7 @@ void exit_hero_vehicle_mode(void) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211338), where it is exact; names translated to the US level program. */
 
@@ -2750,9 +2734,7 @@ void hero_update(void)
     update_hero_motion_and_collision_probes();
     update_hero_timers_and_reach_state();
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00211EE8), where it is exact; names translated to the US level program. */
 
@@ -2767,9 +2749,7 @@ float get_capped_hero_stick_magnitude(void) {
     }
     return stick_magnitude;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Whether T lies in the window that ends at D_0013F450 + 0xAA8 and is
    +0xAAC long (T before the end, within that length of it). */
@@ -2905,9 +2885,7 @@ void update_hero_target_speed_from_stick(void) {
             hero.target_speed = minimum_target_speed;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002123B0), where it is exact; names translated to the US level program. */
 
@@ -2948,9 +2926,7 @@ void turn_hero_toward_transformed_move_direction(int rotation_direction, float x
     hero.motion.yaw_error = spring_angle((char *)&out, (char *)&hero.motion.yaw_rate, rotation_direction, transformed_direction_angle, x, y, z);
     apply_hero_rotation_offset(zero, zero, out);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
 
@@ -2968,9 +2944,7 @@ void turn_to(int rotation_direction, float x, float y, float z) {
             spring_angle(&hero_state->motion.rot.f[2], &hero_state->motion.yaw_rate, rotation_direction, hero_state->motion.move_yaw, x, y, z);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00212550), where it is exact; names translated to the US level program. */
 
@@ -3525,9 +3499,7 @@ void correct_hero_ground_penetration(void) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00213970), where it is exact; names translated to the US level program. */
 

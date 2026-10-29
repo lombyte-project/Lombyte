@@ -4,9 +4,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Per-frame driver: validates the cursor, then runs each update pass in order. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00200890.c: func_L03_00200890), where it is exact; names translated to the US level program. */

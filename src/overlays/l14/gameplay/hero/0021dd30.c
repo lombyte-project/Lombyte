@@ -13,9 +13,7 @@
 #include "rnc/input/pad_globals.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Resolve the hero's surface reaction for the frame from the previous state and flags. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/help_0021E3A8.c: func_L14_0021E3A8), where it is exact; names translated to the US level program. */

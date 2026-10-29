@@ -6,9 +6,7 @@
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_002284A8.c: func_L12_002284A8), where it is exact; names translated to the US level program. */
 

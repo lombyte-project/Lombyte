@@ -3,9 +3,7 @@
 #include "types.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025CB90), where it is exact; names translated to the US level program. */
 
@@ -129,9 +127,7 @@ unsigned int FUN_L00_0025bfe0(float r, float g, float b, float high_byte_compone
         return q_ | (w << 24);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025D0E0), where it is exact; names translated to the US level program. */
 

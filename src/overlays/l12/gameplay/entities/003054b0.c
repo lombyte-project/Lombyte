@@ -876,9 +876,7 @@ void spawn_next_linked_moby(struct Moby *spawner) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Door/switch moby: clears its linked mobys, waits for the hero, opens, fires its list one by one, closes. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00308C20), where it is exact; names translated to the US level program. */
@@ -1281,9 +1279,7 @@ void emit_phase_selected_moby_effects(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Draws the moby's 10-piece overlay when its trigger is visible, with its own GS state. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_0030D248), where it is exact; names translated to the US level program. */

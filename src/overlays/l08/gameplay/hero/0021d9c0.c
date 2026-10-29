@@ -10,9 +10,7 @@
 #include "rnc/input/pad_globals.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/help_0021DFB8.c: func_L08_0021DFB8), where it is exact; names translated to the US level program. */
 

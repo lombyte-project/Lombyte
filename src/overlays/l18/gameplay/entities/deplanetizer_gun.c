@@ -667,9 +667,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
     }
     draw_geometry_quad(&pk, 0, 0);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -766,9 +764,7 @@ void update_moby_visibility_and_half_turn(struct Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -845,9 +841,7 @@ void set_group_class_0630_moby_byte_bc(int group_index, int value) {
 
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Remove a vendor moby and any child it owns. */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBD40), where it is exact; names translated to the US level program. */
@@ -938,9 +932,7 @@ void update_selected_moby_joint_trail(M2 *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

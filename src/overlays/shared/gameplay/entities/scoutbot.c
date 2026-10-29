@@ -497,9 +497,7 @@ void draw_target_beam(char *moby) {
     }
     FUN_001f7d30_002d3878(pk.vertices, matrix, 1);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -558,9 +556,7 @@ void update_scoutbot_movement(char *moby) {
         fast_vec_add((float *)(moby + 0x10), (float *)(moby + 0x10), probe_position_or_correction);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D5358), where it is exact; names translated to the US level program. */
 
@@ -871,9 +867,7 @@ collision:
     }
     mark_moby_for_removal(moby);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Runs the two per-entry update calls over a 13-entry table. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2000), where it is exact; names translated to the US level program. */
@@ -913,9 +907,7 @@ void draw_eleven_entry_scrolled_texture_batch(int scroll_pair_index) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Scales every RGBA word of a set of colour tables by four factors, optionally using the flat 255 for colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002F2428), where it is exact; names translated to the US level program. */

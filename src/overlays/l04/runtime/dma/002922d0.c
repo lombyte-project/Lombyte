@@ -4,9 +4,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/leg_rig.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/globals.h"
@@ -32,9 +30,7 @@ float probe_leg_rig_ground_height(float *probe_origin) {
         return D_L04_00173FE8;
     return 0.0f;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293530), where it is exact; names translated to the US level program. */
 

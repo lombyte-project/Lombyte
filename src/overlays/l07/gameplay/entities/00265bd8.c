@@ -5,9 +5,7 @@
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Register the level draw callback for the target moby in state four. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/initonce_002664F0.c: func_L07_002664F0), where it is exact; names translated to the US level program. */

@@ -933,9 +933,7 @@ void spawn_blarg_space_commando_beam_sparks(char *moby) {
                      beam_spark_lookup_index_and_flags_gp);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
 

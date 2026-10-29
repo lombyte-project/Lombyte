@@ -1134,9 +1134,7 @@ void collect_bolt(struct Moby *bolt)
     spin = -spin;
     FUN_L00_00272060(&pos, scale_game_frames(0x19), size * 0.14f, size * k, 0x7F7F7F7F, 1, spin, &sparkle_initial_velocity, 0.0f);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Steers a thrown moby along its path: builds its orientation from the data's angles and, when done, releases the held target. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A8088), where it is exact; names translated to the US level program. */
@@ -1599,9 +1597,7 @@ void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {
         FUN_00212f90_002a7c70(wrench_moby, 1, 0, FUN_001f96f8_002a7c70(0x11));
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A9030), where it is exact; names translated to the US level program. */
 
@@ -1835,7 +1831,7 @@ extern char D_0013E533[];
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED6C;
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_value_alt(float*,float,float) __asm__("FUN_00213ed8");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");

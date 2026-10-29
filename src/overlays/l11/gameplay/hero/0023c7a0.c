@@ -9,9 +9,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/input/pad_globals.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Per-frame update of the player state flags from the current state. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/help_0023CD98.c: func_L11_0023CD98), where it is exact; names translated to the US level program. */

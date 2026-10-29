@@ -791,9 +791,7 @@ void update_hero_planar_movement_velocity(void) {
         hero.motion.pos.f[2] = hero.ground_z.f;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* passes a pointer chosen by a mode byte to func_0022ED80, copying a vector first in mode 3 */
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_00217570), where it is exact; names translated to the US level program. */
@@ -817,9 +815,7 @@ int allocate_hero_voice_for_entry(int entry_index, int voice_allocation_flags) {
     }
     return -1;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00214D60.c: func_L00_002175D0), where it is exact; names translated to the US level program. */
 

@@ -33,9 +33,7 @@ unsigned char *create_particle_with_velocity_and_lifetime(float unscaled_particl
     }
     return allocated_object;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

@@ -1104,9 +1104,7 @@ void update_qwarks_starfighter(Moby388 *moby) {
         moby->state = 9;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -1368,9 +1366,7 @@ void forcefield_update(unsigned char *moby) {
     }
     FUN_L00_0024efb0_c(*(void **)(moby + 0x24), wrap_adjusted_step, 0);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Clear a vendor moby's field and set its flags unless it is the current target. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4BE8), where it is exact; names translated to the US level program. */
@@ -1392,9 +1388,7 @@ void purple_ship_update(Level13VendorMoby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Per-frame update: awards a stat/flag when its linked moby is gone, then sets a flag byte from a test. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_002F4C10), where it is exact; names translated to the US level program. */
@@ -1576,9 +1570,7 @@ void update_moby_state_relay(char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Gate that follows its controller moby: opens when the controller is in one of its six "open" states,
  * closes on one of its six "close" states, fading its light with the opening and spinning its wheel. */

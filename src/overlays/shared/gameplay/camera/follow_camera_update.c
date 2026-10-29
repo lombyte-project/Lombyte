@@ -197,9 +197,7 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
     *x = orbit_distance_default_stiffness_gp;
     *y = orbit_distance_default_damping_gp;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Aims a camera rig at its target: updates yaw/pitch smoothing and clamps roll. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EABD0), where it is exact; names translated to the US level program. */
@@ -324,9 +322,7 @@ void run_type5_grid_record_noop_callbacks(int unused_camera_moby) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EB060), where it is exact; names translated to the US level program. */
 
@@ -708,9 +704,7 @@ tail:
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EBC50), where it is exact; names translated to the US level program. */
 
@@ -918,9 +912,7 @@ void FUN_L00_002eac18(int mode) {
         *(float *)(camera_globals + 0x288) = 0.018f;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC210), where it is exact; names translated to the US level program. */
 
@@ -1040,9 +1032,7 @@ void update_camera_pose_from_targets(void *camera) {
     euler_rotation_matrix(mtx, camera_object + 0x40);
     copy_matrix3x4(camera_object, mtx);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC6C8), where it is exact; names translated to the US level program. */
 
@@ -1060,9 +1050,7 @@ void update_camera_pose_with_optional_collision(char *camera_object) {
         resolve_camera_movement_collisions(camera_object + 0x30, 0.5f);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EC728), where it is exact; names translated to the US level program. */
 
@@ -1666,9 +1654,7 @@ done:
     resolve_camera_movement_collisions(camera_position, 0.5f);
     *(int *)(*(char **)(camera_object + 0x70) + 0x80) = 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EDC60), where it is exact; names translated to the US level program. */
 
@@ -2179,9 +2165,7 @@ run:
         fun_l00_002e8568(0);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002EED60), where it is exact; names translated to the US level program. */
 

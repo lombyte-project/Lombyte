@@ -120,9 +120,7 @@ void draw_snagglebeast_sphere_quad_strips(char *moby, int phase, float speed, fl
     }
     vu1_add_g_sregister(0x4E, (u64)(gs_texture_allocation_start_macro[4] >> 13) | 0x1000000L);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Starts the effect with an angle ramped from the moby's timer, capped at pi. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_003141A8), where it is exact; names translated to the US level program. */
@@ -435,9 +433,7 @@ decay_hit:
 }
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314D00), where it is exact; names translated to the US level program. */
 
@@ -2275,9 +2271,7 @@ float update_snagglebeast_rope(void *moby, void *anchor) {
     return minimum;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Pulls each pending moby toward its target point and smooths its velocity. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_0031A268), where it is exact; names translated to the US level program. */
@@ -2488,9 +2482,7 @@ void homing_mine_update(struct Moby *moby) {
 }
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"

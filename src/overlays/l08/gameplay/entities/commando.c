@@ -590,9 +590,7 @@ void update_path_following_moby_with_fade(struct Moby *moby)
     }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Smooth noise: linearly interpolates between two entries of an 8-float ring at arg+0x90. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F7258), where it is exact; names translated to the US level program. */

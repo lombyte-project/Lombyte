@@ -33,9 +33,7 @@ int allocate_glint_slot(u128 *input_payload, int b, float x) {
     }
     return -1;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/drawquad_001FD1D8.c: func_L00_001FE9C8), where it is exact; names translated to the US level program. */
 

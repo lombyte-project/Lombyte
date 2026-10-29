@@ -3,9 +3,7 @@
 #include "asm.h"
 
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* If the current moby is class 0x13, flag the vendor item at table slot `slot` (32-byte records). */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_003184A0), where it is exact; names translated to the US level program. */

@@ -5,9 +5,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/math/vector.h"

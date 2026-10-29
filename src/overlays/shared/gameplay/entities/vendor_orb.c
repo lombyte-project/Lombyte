@@ -440,9 +440,7 @@ s32 test_hydrodisplacer_activation_flag(void) {
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E17F0), where it is exact; names translated to the US level program. */
 

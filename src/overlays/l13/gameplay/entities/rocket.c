@@ -44,9 +44,7 @@ char *create_attached_rocket(struct Moby *source_moby, short joint_index) {
     }
     return moby;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -245,9 +243,7 @@ extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int
                                   int) __asm__("FUN_L00_0025e450");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307550), where it is exact; names translated to the US level program. */
 
@@ -1373,9 +1369,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030A828), where it is exact; names translated to the US level program. */
 
@@ -1965,9 +1959,7 @@ void compute_lift_mount_transform(struct Moby *moby, float *mount_position, floa
     mount_rotation[2] = fast_arc_tan(*(float *)(base + 0xD0) - mount_position[0], *(float *)(base + 0xD4) - mount_position[1]);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C320), where it is exact; names translated to the US level program. */
 
@@ -2245,9 +2237,7 @@ after_state_4:
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2400,9 +2390,7 @@ void remove_moby_when_tracked_count_below_threshold(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

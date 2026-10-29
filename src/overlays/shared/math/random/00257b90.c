@@ -2,9 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258BC8), where it is exact; names translated to the US level program. */
 
@@ -15,9 +13,7 @@ int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 int random_int_between(int lo, int hi) {
     return ((rand() >> 16) & 0x7FFF) % (hi - lo + 1) + lo;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Random float in [lo, hi], randomly negated: uses a 12-bit fraction
    (bits 16-27 of the RNG word) for the magnitude and bit 16 for the

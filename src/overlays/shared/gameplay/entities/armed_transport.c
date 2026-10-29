@@ -8,9 +8,7 @@
 #include "rnc/math/fast_math.h"
 
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
@@ -359,9 +357,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
         qcopy(transport_data + 0x70, &player->motion.pos);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Advance a path segment and ease the remaining travel distance. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E42F0), where it is exact; names translated to the US level program. */
@@ -428,9 +424,7 @@ void compute_armed_transport_path_headings(void *path_data) {
         heading_destination->pts[0].heading = heading_source->pts[0].heading;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E44B8), where it is exact; names translated to the US level program. */
 

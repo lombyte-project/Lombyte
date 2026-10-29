@@ -784,9 +784,7 @@ void update_linked_moby_scale_and_rotation(unsigned char *moby) {
     FUN_0020e098_2bb400(moby);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -1032,9 +1030,7 @@ void draw_walloper_arc_and_quad_effects(void *moby) {
     draw_walloper_camera_facing_quad(moby);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2453,9 +2449,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     }
     FUN_001f7d30_2be890(&quad, 0, 0);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2493,9 +2487,7 @@ int probe_moby_raised_sphere_collision(char *moby, int b, Vx *position_override)
     }
     return r;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFE98), where it is exact; names translated to the US level program. */
 
@@ -2511,9 +2503,7 @@ void save_state_fields_to_hero(char *source_state) {
     hero_state->unk1F08 = *(int *)(source_state + 0x4C);
     hero_state->unk1EE4 = *(float *)(source_state + 0x5C);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFED0), where it is exact; names translated to the US level program. */
 
@@ -2545,9 +2535,7 @@ void save_state_vector_and_fields_to_hero(char *source_state) {
     hero_state->unk1F40 = *(float *)(source_state + 0x44);
     qcopy(&hero_state->unk1F10, source_state);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BFF50), where it is exact; names translated to the US level program. */
 

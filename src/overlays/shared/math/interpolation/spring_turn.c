@@ -4,9 +4,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/globals.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258F28), where it is exact; names translated to the US level program. */
 
@@ -46,9 +44,7 @@ void interpolate_vector_xyz_cosine_eased(void *interpolated_vector_output, void 
     fast_vec_scale(interpolation_delta, interpolation_delta, ease);
     fast_vec_add(interpolated_vector_output, start_vector, interpolation_delta);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259088), where it is exact; names translated to the US level program. */
 
@@ -258,9 +254,7 @@ int FUN_L00_00258490(void *ign, V_258490 *to, V_258490 *pos, int flags, float h,
     return ok;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -632,9 +626,7 @@ int get_next_moby_in_group(char **out, char *target, int include_sign_bit_set_en
     return -1;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A468), where it is exact; names translated to the US level program. */
 
@@ -649,9 +641,7 @@ int decrement_packed_countdown(int *packed_countdown, int decrement_amount) {
     *packed_countdown = (original_packed_word & 0xFFFFFF) | (remaining_countdown << 24);
     return remaining_countdown == 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A4A0), where it is exact; names translated to the US level program. */
 
@@ -669,9 +659,7 @@ float calculate_triangular_corrected_scalar(float *base_values, float *linear_te
     }
     return corrected_scalar_value;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A540), where it is exact; names translated to the US level program. */
 

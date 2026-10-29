@@ -144,9 +144,7 @@ void emit_burst_spark_particle(void *emission_position, short *timer, short *bur
     *timer = func_001FA898_r(random_float_between((float)burst_spark_timer_reset_min_gp, (float)burst_spark_timer_reset_max_gp));
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -286,9 +284,7 @@ void emit_height_adjusted_burst_spark_particle(void *emission_position, short *t
     spawn_spark(emission_position, spark_first_vector, acc, initial_spark_color, fast_tween_color(D_L10_0016202C, D_L10_00162030, random_float_between(0.0f, 1.0f)), frame_count, second_frame_count, third_frame_count, D_L10_0016204C);
     *timer = func_001FA898_r(random_float_between((float)*(int *)&height_adjusted_spark_timer_reset_min_gp, (float)*(int *)&height_adjusted_spark_timer_reset_max_gp));
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* update: wait for state 1, then act on the level's current mode */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EC098), where it is exact; names translated to the US level program. */

@@ -2,9 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

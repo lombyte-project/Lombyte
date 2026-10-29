@@ -9,9 +9,7 @@ void FUN_L00_00259710(void *a);
 void FUN_L00_00259710(void *position) {
     probe_ground_height(position, 0x20, 0.5f);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A778), where it is exact; names translated to the US level program. */
 
@@ -44,9 +42,7 @@ int test_moby_linked_record_word8(char *moby) {
         return 1;
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A890), where it is exact; names translated to the US level program. */
 
@@ -232,9 +228,7 @@ int sweep_hit_segment(void *first_endpoint_end, void *second_endpoint_end, void 
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025AFA8), where it is exact; names translated to the US level program. */
 
@@ -460,9 +454,7 @@ void trooper_knockback_arc(OvlQuad *input_vector, float *output_xy_angle, float 
     input_vector_copy.f[3] = 0;
     *z_scaled_value *= input_vector_copy.f[2];
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025BC48), where it is exact; names translated to the US level program. */
 
@@ -815,9 +807,7 @@ void FUN_L00_0025b6b8(f32 *interpolated_vector, f32 *start_vector, f32 *end_vect
     out.p[2] = interpolate_scalar_linear(left.f[2], end_vector[2], interpolation_factor);
     out.p[3] = interpolate_scalar_linear(left.f[3], end_vector[3], interpolation_factor);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7A8), where it is exact; names translated to the US level program. */
 
@@ -830,9 +820,7 @@ float interpolate_angle(float start_angle, float target_angle, float blend_fract
     float angle_difference = fast_subtract_rotations(target_angle, start_angle);
     return fast_add_rotations(start_angle, angle_difference * blend_fraction);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7F0), where it is exact; names translated to the US level program. */
 

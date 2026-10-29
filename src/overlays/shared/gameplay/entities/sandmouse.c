@@ -239,9 +239,7 @@ void draw_moby_offset_textured_quad(char *moby) {
     } while (i >= 0);
     draw_geometry_quad(&local.quad, 0, 0);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -384,9 +382,7 @@ void update_sandmouse_projectile(char *moby) {
     }
     mark_moby_for_removal(moby);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* offset a position by two camera-relative vectors, then raise z by 1 */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030E638), where it is exact; names translated to the US level program. */
@@ -707,9 +703,7 @@ void emit_sandmouse_particles(char *source_moby) {
         spawn_type_74_particle(source_moby, particle_spawn_position, particle_velocity, &sandmouse_third_particle_config, 1);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Initialize both consecutive effect entries. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F240), where it is exact; names translated to the US level program. */
@@ -1277,7 +1271,7 @@ typedef struct {
     u8 pad14[0xC];
 } CameraTarget;
 
-extern CameraPresetRow *D_L01_0015EF50 MACRO_ADDR;
+extern CameraPresetRow *D_L01_0015EF50;
 extern CameraTarget *D_L01_0015F70C;
 extern CameraPath *D_L01_001B0930[];
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
@@ -1947,9 +1941,7 @@ void update_listener_following_voice(int sound_owner) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* sound instance update: fade/stop test against a listener distance */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0031AD00.c: func_L01_0031B500), where it is exact; names translated to the US level program. */

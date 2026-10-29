@@ -5,9 +5,7 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* draw a list of effect entries into the scratchpad */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002BD3D0), where it is exact; names translated to the US level program. */
@@ -88,9 +86,7 @@ void apply_npc_big_head_cheat(char *moby) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* calls func_L12_002BD3D0 with two looked-up ids */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BD3D0.c: func_L12_002E8530), where it is exact; names translated to the US level program. */

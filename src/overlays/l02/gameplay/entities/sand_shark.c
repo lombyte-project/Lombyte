@@ -10,9 +10,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/ui/menus/menu_globals.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Mark every moby of class 0x1B1 in the active level. */
 /* Ported from rac1-decomp (src/overlays/l02/initonce_00240A00.c: func_L02_00240A00), where it is exact; names translated to the US level program. */
@@ -896,9 +894,7 @@ void sand_shark_update(struct Moby *moby) {
     *(volatile unsigned int *)0x10000000;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D6A90), where it is exact; names translated to the US level program. */
 
@@ -3196,9 +3192,7 @@ void rocket_launcher_update(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E0B68), where it is exact; names translated to the US level program. */
 

@@ -43,9 +43,7 @@ enum ResortOwnerPathLeg {
 
 #define MOBY(p) ((struct Moby *)(p))
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Per-frame update of a pickup moby: waits for the player to come near, then grants the item. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC828), where it is exact; names translated to the US level program. */
@@ -137,9 +135,7 @@ void update_pokitaru_paired_rotation(struct Moby *moby) {
     }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CCB50), where it is exact; names translated to the US level program. */
 
@@ -1421,9 +1417,7 @@ void teleporter_update(struct Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002F4040), where it is exact; names translated to the US level program. */
 

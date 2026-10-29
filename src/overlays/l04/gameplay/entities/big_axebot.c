@@ -9,9 +9,7 @@
 #include "rnc/audio/voice_pool.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002A6C20), where it is exact; names translated to the US level program. */
 
@@ -39,9 +37,7 @@ void update_moby_random_interval_animation(struct Moby *moby) {
         refresh_moby_spatial_bounds_from_basis(moby);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
 
@@ -347,9 +343,7 @@ void set_big_axebot_and_axe_animation_speed(char *moby, float animation_speed) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -1337,9 +1331,7 @@ float compute_circular_saw_flock_steering(struct Moby *moby, void *out, float sp
     return fast_arc_tan(((float *)out)[0] - moby->pos.x, ((float *)out)[1] - moby->pos.y);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2988,7 +2980,7 @@ typedef struct {
     f32 scale;        /* 0x24 */
 } MobyClassHeader;
 
-extern char *moby_array __asm__("D_L04_0015FFD8") MACRO_ADDR;
+extern char *moby_array __asm__("D_L04_0015FFD8");
 extern u8 level04_moby_class_slot_by_oclass[] __asm__("D_L04_00197D40");                 /* class slot by oclass */
 extern struct MobyClass *D_L04_00197480[];  /* class header by slot */
 extern void delete_moby(struct Moby *) __asm__("FUN_0020c828");

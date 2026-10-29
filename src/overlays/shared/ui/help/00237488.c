@@ -8,9 +8,7 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "asm.h"
 #include "rnc/gameplay/state/usage_stats.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Steps two floats of arg toward a target and clamps them to [-1, 1]. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00237B00), where it is exact; names translated to the US level program. */
@@ -1696,9 +1694,7 @@ int hero_select_anim_id_by_flags(void) {
     }
     { return hero_variant_selector == 0 ? 0x68 : 0x7E; }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));

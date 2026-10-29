@@ -7,9 +7,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
@@ -981,9 +979,7 @@ int begin_sentrybot_turn_toward_heading(unsigned char *moby, char *moby_data, in
     }
     return turn_required;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AC48), where it is exact; names translated to the US level program. */
 
@@ -1027,9 +1023,7 @@ int move_sentrybot_toward_point(char *moby, float *point, float target_forward_s
     return FUN_001f9b80((float *)(moby + 0x10), point) < 0.2f;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* checks that no closer live object blocks the line to the target */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AE80), where it is exact; names translated to the US level program. */
@@ -1509,9 +1503,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
     if (*(int *)(data + 0x110) == 0)
         *(int *)(data + 0x110) = (*(int *)&D_001413D0_lui);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Applies the same effect to three consecutive 16-byte slots of a moby's data, tagged with its colour word. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029BD88), where it is exact; names translated to the US level program. */

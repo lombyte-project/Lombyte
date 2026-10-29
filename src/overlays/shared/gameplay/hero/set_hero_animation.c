@@ -10,9 +10,7 @@
 #include "rnc/gameplay/state/item_state.h"
 extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* With both objects at hero +0x1180 and +0x1184 present and the
    first's byte 0x53 equal to 1, asks func_L00_00232850 for a pair of
@@ -50,9 +48,7 @@ void blend_hero_slot3_animation_pair(void) {
     blend_moby_animation(slot3_secondary_moby, seq, 0, scale_game_frames(7));
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232608), where it is exact; names translated to the US level program. */
 
@@ -198,9 +194,7 @@ int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_an
         return 0;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Unless the flag at hero +0x20A4 is set, and only while state
    +0x11A4 is 2: asks func_L00_00232850 for a pair of values for the
@@ -283,9 +277,7 @@ void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float b
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* With the animation at hero +0x2278 set and enabled (+0x227C),
    and a sequence ready for the current id (func_L00_00232A18), copies
@@ -306,9 +298,7 @@ void sync_hero_mapped_moby_animation_speed(void) {
         *(float *)(((char *)base->unk2278) + 0x58) = base->anim_speed;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Syncs the animation at hero +0x2278 to the one at +0x2080:
    takes the float at +0xA94 into 0x5C, copies the source's 0x54 and its
@@ -517,9 +507,7 @@ void clear_hero_queued_animation(void) {
     hero_base->anim_loop_frame = -1;
     hero_base->queued_frame_request = 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Stores ID at hero +0xAB8, or func_001F9850(5) when ID is -1. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232EC0), where it is exact; names translated to the US level program. */
@@ -634,9 +622,7 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
     }
     return prediction_frames;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Sets bit 0 of the flags (0x34) of every object the hero
    holds: the one at +0xA88, both of each of the seven pairs at +0x1090,
@@ -756,9 +742,7 @@ void FUN_L00_002330d0(void) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Sets bit 0 of the flags (0x34) of the objects at hero +0x2080
    and, when present, +0x1620. */
@@ -776,9 +760,7 @@ void set_hero_moby_flag_bit0(void) {
         *(unsigned short *)(optional_hero_flag_target + 0x34) |= 1;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Clears what func_L00_00233A90 sets: bit 0 of the flags (0x34) of the
    objects at hero +0x2080 and, when present, +0x1620. */
@@ -902,9 +884,7 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* The polar form of func_L00_00233EE0: sets OUT to (R cos ANGLE,
    R sin ANGLE, Z) via func_001F9F90 / func_001F9FA8, then transforms it
@@ -1049,9 +1029,7 @@ void gravity_flatten(float *flattened_vector, float *input_vector) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
 
@@ -1079,9 +1057,7 @@ float gravity_length_xy(float *input_vector) {
     }
     return 0.0f;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002342F8), where it is exact; names translated to the US level program. */
 
@@ -1125,9 +1101,7 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Like func_L00_002343A0, but instead of setting z it scales the point's
    xy to length Z (func_L00_001FF500): in view mode 0 (hero +
@@ -1156,9 +1130,7 @@ void set_gravity_relative_vector_length_xy(float *output_vector, float *input_ve
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002344B0), where it is exact; names translated to the US level program. */
 
@@ -1519,9 +1491,7 @@ void update_hero_attachment(void) {
     fast_vec_add(hero_233f80 + 0xF0, hero_233f80 + 0xF0, &attachment_motion_scratch);
     ((Hero_234800 *)hero_233f80)->fFC = fast_subtract_rotations(((Hero_234800 *)hero_233f80)->v90.z, saved_hero_yaw);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00235040), where it is exact; names translated to the US level program. */
 

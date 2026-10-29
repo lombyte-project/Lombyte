@@ -269,9 +269,7 @@ skip:
         FUN_L00_00211250_2215c8();
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002222F0), where it is exact; names translated to the US level program. */
 
@@ -325,9 +323,7 @@ void update_hero_planar_distance_spring_motion(void) {
         *(int *)(hero_base + 0x244) = 0;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00222520), where it is exact; names translated to the US level program. */
 
@@ -572,9 +568,7 @@ int select_hero_grapple_target(void) {
     return *(int *)(hero_target_result_base + 0x968);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -3003,9 +2997,7 @@ int hero_set_state(int a, int b) {
     }
     return 1;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00227E08), where it is exact; names translated to the US level program. */
 
@@ -3027,9 +3019,7 @@ void set_hero_idle_state_for_vehicle_mode(void) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00227E90), where it is exact; names translated to the US level program. */
 
@@ -3628,9 +3618,7 @@ int process_hero_equipped_item_input(void) {
     }
     return D_0013F450_h228770.f198 < start;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00229348), where it is exact; names translated to the US level program. */
 
@@ -3763,9 +3751,7 @@ void update_hero_animation_for_movement_speed(void) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Deletes and clears any moby cached at D_0013F450+0x1614, then clears
    flag bits 0x41 on the two moby pointers cached at +0x1180 and +0x1184,

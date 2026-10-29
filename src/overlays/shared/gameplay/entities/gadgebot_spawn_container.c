@@ -78,9 +78,7 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
     *(unsigned short *)(moby + 0x34) |= 1;
     moby[0xbc] = (unsigned char)scale_game_frames(15);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/moby_anim.h"
@@ -1160,9 +1158,7 @@ s32 cancel_moby_suction_and_save_state(unsigned char *moby) {
     return helper_result;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -2825,9 +2821,7 @@ void update_gadgebot_glow_effects(char *moby) {
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -3129,9 +3123,7 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Watches the moby's two 32-entry trigger lists against the hero and fires the matching events. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F8D60), where it is exact; names translated to the US level program. */

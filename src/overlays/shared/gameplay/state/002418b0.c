@@ -3,9 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_00242868.c: func_L04_00242868), where it is exact; names translated to the US level program. */
 

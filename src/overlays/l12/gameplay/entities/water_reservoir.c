@@ -114,9 +114,7 @@ update:
     add_draw_callback(draw_water_reservoir, moby);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -185,9 +183,7 @@ void draw_water_reservoir(struct Moby *moby) {
         draw_geometry_quad(&quad, rotation_matrix, 0);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

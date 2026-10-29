@@ -7,9 +7,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* finds the first of eight linked entries whose direction lines up with the moby */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E15A0), where it is exact; names translated to the US level program. */
@@ -41,9 +39,7 @@ int find_batalia_cannon_aim_target(struct Moby *moby) {
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E2A10), where it is exact; names translated to the US level program. */
 

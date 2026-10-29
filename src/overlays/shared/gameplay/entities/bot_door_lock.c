@@ -129,9 +129,7 @@ void draw_bot_door_lock_glow(char *moby) {
     quad.texture_coordinates[3][0] = 1.0f; quad.texture_coordinates[3][1] = 1.0f;
     draw_geometry_quad(&quad, 0, 1);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* state transitions of a moby depending on its id at 0xA6 */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00309088), where it is exact; names translated to the US level program. */

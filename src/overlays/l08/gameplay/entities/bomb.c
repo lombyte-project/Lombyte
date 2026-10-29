@@ -7,9 +7,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002B9438), where it is exact; names translated to the US level program. */
 
@@ -222,9 +220,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
     moby_data->f8 = moby->pos[2];
     moby->pos[2] = moby->pos[2] + bolt_pickup_bob_amplitude_gp * adjusted_speed_or_bob_sine;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2098,9 +2094,7 @@ void update_shuttle_stop_world_points(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -2232,9 +2226,7 @@ int advance_shuttle_path_travel(struct Moby *moby) {
     *(float *)(shuttle_vars + 0x78) = fast_add_rotations(*(float *)(shuttle_vars + 0x78), *(float *)(shuttle_vars + 0x108));
     return *(float *)(shuttle_vars + 0xE4) == *(float *)(shuttle_vars + 0x104);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDB68), where it is exact; names translated to the US level program. */
 

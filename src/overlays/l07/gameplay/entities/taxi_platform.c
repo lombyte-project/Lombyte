@@ -21,9 +21,7 @@ enum TaxiCommand {
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_002FD198), where it is exact; names translated to the US level program. */
 
@@ -114,9 +112,7 @@ char *spawn_bombomatic_projectile(char *spawn_position, char *initial_velocity, 
 }
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030E820), where it is exact; names translated to the US level program. */
 
@@ -231,9 +227,7 @@ char *spawn_moby_class_1049(char *spawn_position, char *initial_velocity, int sp
     }
     return spawned_moby;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FFA8), where it is exact; names translated to the US level program. */
 
@@ -2254,9 +2248,7 @@ void draw_fading_ring_effect(unsigned char *moby) {
     } while (band < 1.0f);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2396,9 +2388,7 @@ void start_sharkigator_hit_knockback(struct Moby *moby, LaunchParams *knockback_
     trooper_start_knockback(knockback_angle, moby, knockback_state, 6, 1, 0);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Hit handler: reacts to the hit type, then takes damage and dies (state 0xE) when health runs out. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030FD78), where it is exact; names translated to the US level program. */

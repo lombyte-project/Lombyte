@@ -169,9 +169,7 @@ void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float i
     }
     FUN_00214890_2e8bb8(turn_pitch_vector, turn_pitch_vector, axis, *(float *)(turn_pitch_vector + 0x38));
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EA3F0), where it is exact; names translated to the US level program. */
 

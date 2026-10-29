@@ -15,9 +15,7 @@ void random_vector(float *out, float lo, float hi) {
     out[1] = fast_sin(azimuth_angle) * fast_sin(polar_angle) * radial_scale;
     out[2] = fast_cos(polar_angle) * radial_scale;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258E58), where it is exact; names translated to the US level program. */
 

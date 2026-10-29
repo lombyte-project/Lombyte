@@ -2,9 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Clears each set bit in a rectangle of a per-row bit grid, notifying for each. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/map_00270BE0.c: func_L07_00270BE0), where it is exact; names translated to the US level program. */

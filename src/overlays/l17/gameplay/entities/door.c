@@ -233,9 +233,7 @@ void door_update(struct Moby *door_moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -400,9 +398,7 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
     }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -441,9 +437,7 @@ char *spawn_class_558_moby_toward_target(struct Moby *source_moby, char *spawn_p
     return spawned_moby;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qzero.h"
 
@@ -998,9 +992,7 @@ void draw_fighter_jet_hud(struct Moby *moby) {
     }
     *(int *)(ship_vars + 0xF4) = hp_bar_fill_threshold;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDAF0), where it is exact; names translated to the US level program. */
@@ -2274,9 +2266,7 @@ void magnet_elevator_update(struct Moby *moby) {
 }
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F04D0), where it is exact; names translated to the US level program. */
 
@@ -2747,9 +2737,7 @@ void robot_dog_update(unsigned char *robot_dog_moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2935,9 +2923,7 @@ int enemy_stun_update(struct Moby *moby) {
     return result;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -2988,9 +2974,7 @@ void update_robot_dog_aim_joint(struct Moby *moby) {
     update_joint_animation(moby, (char *)&moby_vars->part, 0, aim_joint_smoothing_factor * frame_scale_sq, speed * frame_scale_sq);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F1D20), where it is exact; names translated to the US level program. */
 

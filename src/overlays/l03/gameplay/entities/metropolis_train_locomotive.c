@@ -12,9 +12,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029E370), where it is exact; names translated to the US level program. */
 
@@ -58,9 +56,7 @@ void update_emitter_intermittent_sound(struct Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002C6F40), where it is exact; names translated to the US level program. */
 
@@ -99,9 +95,7 @@ int can_release_linked_robot_dog(struct Moby *moby) {
     return 0;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -2030,9 +2024,7 @@ int try_start_kerwan_path_enemy_heading_turn(float desired_heading, struct Moby 
     return 0;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

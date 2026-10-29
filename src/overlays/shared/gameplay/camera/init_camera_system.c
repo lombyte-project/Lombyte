@@ -82,9 +82,7 @@ s32 find_camera_table_index_by_id(s32 id) {
         table_index++;
     return table_index;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -142,9 +140,7 @@ void init_camera_system(void) {
     vector_copy_destination[2] = vector_copy_source[2];
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -271,9 +267,7 @@ void setup_level_cameras(void) {
         q[4] = 0;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED900), where it is exact; names translated to the US level program. */
 
@@ -287,9 +281,7 @@ void compute_position_from_spherical_offset(float *output_position, float *angle
     *(int *)(output_position + 3) = 0;
     fast_vec_add(output_position, output_position, origin_position);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/camera_001EB508.c: func_L00_001ED9B0), where it is exact; names translated to the US level program. */
 

@@ -464,9 +464,7 @@ int select_birdbot_path_node(void *path_follower_entity, int *selected_path_node
     return i;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

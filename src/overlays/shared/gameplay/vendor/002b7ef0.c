@@ -13,9 +13,7 @@ void pool_set_scale(float requested_scale) {
         pool_uv_pairs[i] = pool_uv_pairs[i] * k;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B90E8), where it is exact; names translated to the US level program. */
 

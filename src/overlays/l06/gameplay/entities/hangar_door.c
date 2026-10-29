@@ -107,9 +107,7 @@ void set_moby_list_state_4(int moby_list_index) {
     } while (*moby_index_cursor++ >= 0);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F6790), where it is exact; names translated to the US level program. */
 
@@ -182,9 +180,7 @@ void transition_moby_group_state_1_to_2(char *group_source_moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* angle from a moby to its owner, clamped to the gaps between obstacles in its list */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FAB28), where it is exact; names translated to the US level program. */
@@ -363,9 +359,7 @@ int update_alien_queen_intro_camera(char *moby) {
         return 1;
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002FC8E0), where it is exact; names translated to the US level program. */
 
@@ -578,9 +572,7 @@ void update_moby_position_interpolation(unsigned char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

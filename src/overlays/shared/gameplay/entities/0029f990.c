@@ -6,9 +6,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/level_globals.h"

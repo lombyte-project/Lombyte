@@ -23,9 +23,7 @@ s32 is_hero_on_moby(struct Moby *candidate_moby) {
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -54,9 +52,7 @@ void begin_dialogue_camera_transition(float scale, char *moby) {
     clear_u64_value(D_L01_0016CCE0_q.q);
     D_L01_0016CCE0_q.a = fast_add_rotations(*(float *)(moby + 0x48), 3.14159274101257324f);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279790), where it is exact; names translated to the US level program. */
 

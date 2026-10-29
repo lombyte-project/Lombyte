@@ -17,9 +17,7 @@ enum DrekMissileState {
     DREK_MISSILE_WAIT_TO_EXPLODE = 0x4
 };
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"
@@ -257,9 +255,7 @@ int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_p
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F16D8), where it is exact; names translated to the US level program. */
 
@@ -456,9 +452,7 @@ void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -667,9 +661,7 @@ void update_linked_moby_group_transform_and_fall(struct Moby *moby) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F3038), where it is exact; names translated to the US level program. */
 
@@ -1246,9 +1238,7 @@ void attach_drek_boss_big_head_manipulator(char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -3422,9 +3412,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                      *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * D_0015ED6C_e[1], drek_boss_scalar_maximum_speed_gp * D_0015ED6C_e[0]);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8B00), where it is exact; names translated to the US level program. */
 
@@ -3568,9 +3556,7 @@ void render_drek_boss_joint_glows(struct Moby *moby) {
         draw_offset_textured_effect_quad(joint_world_position, boss_vars->p3B8, 0.7f, 0.5f);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Activate the vendor moby and set its initial flags. */
 /* Ported from rac1-decomp (src/overlays/l18/vendor_002F2AE0.c: func_L18_002F8F10), where it is exact; names translated to the US level program. */
@@ -3809,9 +3795,7 @@ void rocket_tank_update(M1454 *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

@@ -7,9 +7,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Finds the table entry nearest the object's position (within 8 units) and applies its fields to the object and globals. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002510F0), where it is exact; names translated to the US level program. */
@@ -71,9 +69,7 @@ void apply_nearest_environment_sample(char *object) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002512D8), where it is exact; names translated to the US level program. */
 

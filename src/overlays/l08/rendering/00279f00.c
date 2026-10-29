@@ -45,9 +45,7 @@ unsigned char *spawn_moby_offset_effect(char *source_moby) {
     return effect;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

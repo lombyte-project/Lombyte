@@ -8,9 +8,7 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -263,9 +261,7 @@ void update_class_b8_projectile(struct Moby *moby)
     mark_moby_for_removal(moby);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"

@@ -57,9 +57,7 @@ void initialize_racer_path_tracking(struct Moby *racer_moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D77E0), where it is exact; names translated to the US level program. */
 
@@ -505,9 +503,7 @@ void draw_racer_glow_quads(struct Moby *m) {
     draw_geometry_quad(&pk, 0, 0);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

@@ -5,9 +5,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/data_labels.h"

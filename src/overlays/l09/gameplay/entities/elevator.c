@@ -457,9 +457,7 @@ void handle_linked_moby_damage(struct Moby *moby, VendorVars2 *vars, f32 *health
         moby->hit_slot = 0xFF;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00305580), where it is exact; names translated to the US level program. */
 
@@ -511,9 +509,7 @@ char *find_nearby_chain_attachment(char *self, char *search_position, int bone) 
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -1261,9 +1257,7 @@ void update_damage_causer(struct Moby *moby) {
         fast_vec_add(work + 4, work + 4, work);
     } while (i < *(s32 *)(data + 8));
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -1784,9 +1778,7 @@ void shuttle_update(struct Moby *moby) {
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_0030B5E8.c: func_L09_0030B5E8), where it is exact; names translated to the US level program. */
 

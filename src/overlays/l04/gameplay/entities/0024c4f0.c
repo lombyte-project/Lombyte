@@ -23,9 +23,7 @@ int find_first_positive_polygon_edge_cross_xy(float *query_point, float *poly, i
     return 0;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -66,9 +64,7 @@ float find_closest_point_on_segment_xy(float *closest_point, float *segment_star
     fast_vec_add(closest_point, closest_point, segment_start);
     return unclamped_segment_parameter;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

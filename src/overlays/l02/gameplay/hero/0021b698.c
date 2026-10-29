@@ -627,9 +627,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     return 1;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

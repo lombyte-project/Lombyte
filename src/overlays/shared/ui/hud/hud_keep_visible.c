@@ -3,9 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/hud.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
@@ -41,9 +39,7 @@ void reset_hud_animation_channels(void) {
         apply_pending_animation(&hud_elements[i]);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236400), where it is exact; names translated to the US level program. */
 

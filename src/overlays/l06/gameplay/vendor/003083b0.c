@@ -234,9 +234,7 @@ void update_spark_emitter(struct Moby *emitter) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/entities.h"
@@ -276,9 +274,7 @@ void activate_listed_class_5e8_mobys(int moby_list_index) {
         } while (*moby_index_entry++ >= 0);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_0030A788), where it is exact; names translated to the US level program. */
 

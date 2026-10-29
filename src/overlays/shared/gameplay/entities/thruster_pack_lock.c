@@ -6,9 +6,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
@@ -301,9 +299,7 @@ void append_rotated_textured_screen_quad(float x, float y, float width, float he
     /* Fakematch: the store through the address keeps the reload after the last packet store. */
     *(char **)&D_L11_001611C0 += 0x70;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Draws four quads with the angle advanced by a quarter turn each time. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312510), where it is exact; names translated to the US level program. */
@@ -594,9 +590,7 @@ void update_moby_trail_points(char *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Collectable crate: when hit, updates the totals (count, best time, levels mask, a level-11 bonus) and breaks open. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031B630), where it is exact; names translated to the US level program. */

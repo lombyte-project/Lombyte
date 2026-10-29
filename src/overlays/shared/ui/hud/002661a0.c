@@ -5,9 +5,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Sets up a HUD element: timer, 128x128 size, zero offsets. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266B90), where it is exact; names translated to the US level program. */

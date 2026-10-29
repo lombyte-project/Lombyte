@@ -69,9 +69,7 @@ void update_three_phase_effect_particle(char *particle) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -259,9 +257,7 @@ void update_damped_effect_particle(O00269a70 *particle) {
         free_effect_particle(particle);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -294,9 +290,7 @@ void FUN_L00_00269b70(void *spawn_position, unsigned char red, unsigned char gre
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026AB10), where it is exact; names translated to the US level program. */
 
@@ -1404,9 +1398,7 @@ void spawn_two_point_effect_particle(void *spawn_position, void *initial_velocit
     particle->a[3] = 0.09f;
     particle->b[3] = 0.5f;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026D690), where it is exact; names translated to the US level program. */
 
@@ -2074,9 +2066,7 @@ char *FUN_L00_0026dd20(void *spawn_position, void *initial_velocity, int initial
     }
     return particle;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026ECA0), where it is exact; names translated to the US level program. */
 
@@ -2605,9 +2595,7 @@ void update_moby_bound_fade_in_out_effect_particle(unsigned char *particle) {
     *(float *)(particle + 0xC) =
         *(float *)(*(unsigned char **)(particle + 0x20) + 0x2C) * 100000.0f * 30.0f + 50000.0f;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_0026FEE8), where it is exact; names translated to the US level program. */
 
@@ -3293,9 +3281,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         pv->t = pv->t + 1.0f;
     particle->f08 = (s32)(pv->t * 256.0f);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0026A130.c: func_L00_002715B0), where it is exact; names translated to the US level program. */
 

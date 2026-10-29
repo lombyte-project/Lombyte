@@ -252,9 +252,7 @@ unsigned char *spawn_random_alpha_rotated_particle(u128 *position, u128 *initial
     }
     return particle;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272A88), where it is exact; names translated to the US level program. */
 
@@ -277,9 +275,7 @@ void update_expanding_damped_fading_particle(char *particle) {
         free_effect_particle(particle);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272B28), where it is exact; names translated to the US level program. */
 
@@ -389,9 +385,7 @@ void update_damped_fading_particle(u8 *particle) {
         *(f32 *)(particle + 0xC) = current_size + (210000.0f - current_size) * 0.07f;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00272E60), where it is exact; names translated to the US level program. */
 
@@ -1087,9 +1081,7 @@ unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alp
     }
     return particle;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002746A0), where it is exact; names translated to the US level program. */
 
@@ -1332,9 +1324,7 @@ unsigned char *spawn_random_planar_drift_particle(void *position, int color, flo
     }
     return particle;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002751A8), where it is exact; names translated to the US level program. */
 
@@ -1647,9 +1637,7 @@ unsigned char *spawn_texture_indexed_rotated_particle(void *position, int partic
     }
     return particle;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00275C80), where it is exact; names translated to the US level program. */
 
@@ -1805,9 +1793,7 @@ unsigned char *spawn_random_size_rotated_particle(void *position, void *initial_
     }
     return particle;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_00276180), where it is exact; names translated to the US level program. */
 
@@ -1889,9 +1875,7 @@ void update_gravity_ground_culled_particle(O_275320 *particle) {
     vel->f[3] = ground_height_threshold + particle_clearance;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Update a particle following a parent moby with a scaled offset. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002763B0), where it is exact; names translated to the US level program. */

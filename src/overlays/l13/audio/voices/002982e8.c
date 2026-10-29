@@ -5,9 +5,7 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Enable a sound effect and copy its 16-byte parameter vector. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/sound_002994D0.c: func_L13_002994D0), where it is exact; names translated to the US level program. */

@@ -3,9 +3,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028EB98), where it is exact; names translated to the US level program. */
 

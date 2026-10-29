@@ -5,9 +5,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* tests whether a point lies within height, distance and heading limits of a moby */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C8D8), where it is exact; names translated to the US level program. */
@@ -38,9 +36,7 @@ extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 #include "qcopy.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
 

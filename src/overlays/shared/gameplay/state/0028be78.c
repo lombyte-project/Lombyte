@@ -3,9 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Build a symmetric adjacency bitmask over a table's entries from pairwise tests. */
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0028AA68.c: func_L05_0028CEE8), where it is exact; names translated to the US level program. */

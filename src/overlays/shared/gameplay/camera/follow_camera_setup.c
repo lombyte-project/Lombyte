@@ -1034,9 +1034,7 @@ int adjust_follow_camera_orbit_probe_for_collisions(O002e7530 *camera_moby, V002
     fast_vec_add(out, &start, &delta);
     return found;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Only for arg1==1: true when arg2 is past the edge plane
    (D_L00_00173F60 - arg2) . (arg0->+0x70 + 0x130) < 0. */

@@ -1033,9 +1033,7 @@ int is_suck_cannon_suction_blocked_by_hero_state(void) {
     }
     return suction_blocked;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB480), where it is exact; names translated to the US level program. */
 
@@ -1062,9 +1060,7 @@ void compose_moby_rotation_with_euler_offset(char *source_moby, char *destinatio
     refresh_moby_spatial_bounds_from_basis(destination_moby);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB508), where it is exact; names translated to the US level program. */
 
@@ -1122,9 +1118,7 @@ int process_suck_cannon_suction_candidate(u8 *cannon_moby, void *cannon_data, vo
     }
     return suction_callback_result;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002DB690), where it is exact; names translated to the US level program. */
 
@@ -2915,11 +2909,11 @@ typedef struct Particle41 {
 
 extern V41 l00_suck_beam_ring_source_offsets[] __asm__("D_L00_001E4B40");
 extern E04 D_L00_001E4C80_lui[] __asm__("D_L00_001E4C80");
-extern char D_0013E533[] NOT_SDA;
-extern char D_L00_00161B60[] MACRO_ADDR;
+extern char D_0013E533[];
+extern char D_L00_00161B60[];
 extern int D_L00_00161B54 __attribute__((sda));
 extern int D_L00_00161B58_gp __asm__("D_L00_00161B58") __attribute__((sda));
-extern char D_L00_00161B70[] MACRO_ADDR;
+extern char D_L00_00161B70[];
 extern char D_L00_00166FD0[];
 extern char collision_hit_point[] __asm__("D_L00_00173E60");
 extern char D_L00_001E5EE0[];
@@ -2934,9 +2928,9 @@ extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_distance(void *, s32 *) __asm__("FUN_001f9b80");
-extern float D_0015ED60 MACRO_ADDR;
+extern float D_0015ED60;
 extern float D_L00_00161B84;
-extern float D_L00_00161B80 MACRO_ADDR;
+extern float D_L00_00161B80;
 extern float suck_beam_segment_turn_spring_states[] __asm__("D_L00_001E5FE0");
 extern float FUN_L00_001eb328(void *,float,float,float,float,float);
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
@@ -3167,9 +3161,7 @@ void suck_beam_update(void *moby,void *position) {
     }
 }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E0490), where it is exact; names translated to the US level program. */
 
@@ -3190,9 +3182,7 @@ void suck_beam_queue_draw(int draw_callback_context) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* pull each active entry's marker toward its target, then update the rest */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9438.c: func_L00_002E04F8), where it is exact; names translated to the US level program. */

@@ -816,9 +816,7 @@ void populate_water_tile_neighbor_indices(int selected_tile_index) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/input/pad_state.h"
@@ -1025,9 +1023,7 @@ void update_link_triggered_moby_turn(struct Moby *turning_moby) {
 extern void *create_moby() __asm__("FUN_0020c4f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00310A70), where it is exact; names translated to the US level program. */
 
@@ -1904,9 +1900,7 @@ float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
     return 10000.0f;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* counts the listed mobys of the type that are active, and of those the ones with 0x31 set */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003130B0), where it is exact; names translated to the US level program. */

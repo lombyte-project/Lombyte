@@ -32,9 +32,7 @@ s32 help_request(s32 message_id, s32 help_record_index) {
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00203FB8), where it is exact; names translated to the US level program. */
 

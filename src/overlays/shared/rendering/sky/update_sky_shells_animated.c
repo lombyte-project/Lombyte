@@ -306,9 +306,7 @@ void draw_sky_shells_with_slow_medium_and_fast_rotation(void) {
         sky_draw_shell(i);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/shrubproc_0028A198.c: func_L00_0028BBF8), where it is exact; names translated to the US level program. */
 

@@ -333,9 +333,7 @@ d1:
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Adapted from the exact FUN_L00_002133a8 (src/overlays/shared/gameplay/hero/hero_check_damage.c): L16 adds the mode-0x16 v-offset branch, the 0x15/0x16 range test and a 0x5f collision arm, and its own level data. */
 

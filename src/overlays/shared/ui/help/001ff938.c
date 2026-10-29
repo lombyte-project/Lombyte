@@ -151,9 +151,7 @@ void update_hero_and_vehicle_mode_effects(void) {
     hero6 = ((char *)&D_0013F350);
     FUN_L00_00257024(*(void **)(hero6 + 0x2080));
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Show the indexed help prompt when its flag and message are active. */
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_00200D20), where it is exact; names translated to the US level program. */

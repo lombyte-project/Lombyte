@@ -3,9 +3,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00289960.c: func_L07_00289960), where it is exact; names translated to the US level program. */
 

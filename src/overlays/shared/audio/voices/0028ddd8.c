@@ -5,9 +5,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028F0B0), where it is exact; names translated to the US level program. */
 
@@ -67,9 +65,7 @@ s32 engine_voice_set_pitch(s32 i, s32 pitch) {
     voice_entry->w[0x21] = pitch;
     return 1;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/sound_0028EB98.c: func_L00_0028F230), where it is exact; names translated to the US level program. */
 

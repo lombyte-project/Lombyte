@@ -3,9 +3,7 @@
 #include "rnc/globals.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Update each moby while the level event is in phase three or four. */
 /* Ported from rac1-decomp (src/overlays/l15/initonce_0022E478.c: func_L15_0022E478), where it is exact; names translated to the US level program. */

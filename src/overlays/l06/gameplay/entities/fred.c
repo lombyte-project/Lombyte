@@ -5591,9 +5591,7 @@ void draw_dual_texture_864_quad_mesh(void) {
     } while (i < 0x360);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Trigger moby: waits for the hero in its zone, plays its open animation, then launches a listed moby. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_002FEE60), where it is exact; names translated to the US level program. */
@@ -6045,9 +6043,7 @@ void effect_quad_draw_single(void) {
         draw_geometry_quad(quad_corner_positions, backdrop_quad_transform_matrix, 0);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00302248), where it is exact; names translated to the US level program. */
 
@@ -6103,9 +6099,7 @@ void update_moby_bobbing_and_motion(char *moby) {
 }
 #include "qcopy.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003023C8), where it is exact; names translated to the US level program. */
 
@@ -7075,9 +7069,7 @@ void shuttle_update(struct Moby *moby) {
     FUN_L00_00260738_302578(shuttle_vars->area, delta, old_rot, ((float *)&moby->rot));
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Picks the next selection state from the menu mode, then queues the matching sound. */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00304418), where it is exact; names translated to the US level program. */
@@ -7666,9 +7658,7 @@ void red_button_update(struct Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00305BF8), where it is exact; names translated to the US level program. */
 
@@ -7956,9 +7946,7 @@ void test_moby_vector_stream_collision_lines(char *moby) {
     collision_line(P, Q, 0, (int)moby, (int)A);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* draws four copies of a model transformed by a table, then spawns a part for each */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_003065B0), where it is exact; names translated to the US level program. */

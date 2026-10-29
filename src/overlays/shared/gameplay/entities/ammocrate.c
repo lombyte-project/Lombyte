@@ -5,9 +5,7 @@
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002BB2F8), where it is exact; names translated to the US level program. */
 
@@ -343,9 +341,7 @@ unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *
 }
 #include "rnc/gameplay/entities/moby.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

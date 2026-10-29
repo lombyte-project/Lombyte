@@ -2,9 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Serialize save data once and retain its destination buffer. */
 /* Ported from rac1-decomp (src/overlays/l18/pause_00282F48.c: func_L18_00282F48), where it is exact; names translated to the US level program. */

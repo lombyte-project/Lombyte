@@ -103,9 +103,7 @@ void queue_level09_strip_texture_packets(int first_texture_index, int second_tex
 #undef PACKET_CURSOR
 #undef TEXTURE_CURSOR
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Draws a list of scrolling-texture strips (water) into the scratchpad. */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/drawquad_0021E3E8.c: func_L09_0021E770), where it is exact; names translated to the US level program. */
@@ -353,9 +351,7 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
     restore_view_after_textured_grid(data);
 }
 #undef PACKET_CURSOR
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -622,9 +618,7 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
     }
     return spawned_moby;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -1223,9 +1217,7 @@ void display_update(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF460), where it is exact; names translated to the US level program. */
 
@@ -1293,9 +1285,7 @@ typedef unsigned int u128_ee380 __attribute__((mode(TI)));
 #include "qcopy.h"
 extern void *create_moby_local() __asm__("FUN_0020c4f8");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EF6D0), where it is exact; names translated to the US level program. */
 

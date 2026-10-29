@@ -56,9 +56,7 @@ void reset_walker_gait_helpers(u8 *gait_data) {
         *(s32 *)(gait_region_base + 0xFC) = 0;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vuchain_002A21A8.c: func_L00_002A2858), where it is exact; names translated to the US level program. */
 

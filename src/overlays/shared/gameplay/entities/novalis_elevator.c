@@ -428,9 +428,7 @@ void novalis_elevator_update(unsigned char *moby) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* spawns two bursts of particles around a point */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002C84D8), where it is exact; names translated to the US level program. */
@@ -2174,7 +2172,7 @@ extern int D_001413D0[];
 extern char *D_L01_0015FFD8;
 extern const float D_L01_001619A0_gp __asm__("D_L01_001619A0") __attribute__((sda));
 extern const float D_L01_001619A4_gp __asm__("D_L01_001619A4") __attribute__((sda));
-extern const float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern const float frame_time_macro __asm__("D_0015ED6C");
 
 void process_amoeboid_hits_and_update_targeting(char *moby) {
     V_2F0040 scratch_vector;
@@ -2631,9 +2629,7 @@ s32 reserve_expired_frame_slot(s32 *values, s32 count, s32 offset) {
     return index;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* runs the moby update and sets its state byte */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002F30F0), where it is exact; names translated to the US level program. */

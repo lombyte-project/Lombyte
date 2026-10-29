@@ -1750,9 +1750,7 @@ void metal_detector_update(struct Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D1168.c: func_L00_002D4C80), where it is exact; names translated to the US level program. */
 
@@ -2207,7 +2205,7 @@ typedef struct {
 } ToadVars;
 
 extern char camera_position[] __asm__("D_L00_00166DC0");
-extern char *moby_table __asm__("D_L00_0015FFD8") MACRO_ADDR;
+extern char *moby_table __asm__("D_L00_0015FFD8");
 extern ToadPath *toad_paths[] __asm__("D_L00_001B04B0");
 
 extern void FUN_L00_002d5160_2d4610(void *) __asm__("FUN_L00_002d5160");

@@ -764,9 +764,7 @@ void blarg_ship_update(struct Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
@@ -913,9 +911,7 @@ void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Projects each direction pair into 2D texture coordinates (reflection mapping). */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F7018), where it is exact; names translated to the US level program. */

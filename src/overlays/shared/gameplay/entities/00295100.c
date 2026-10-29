@@ -15,9 +15,7 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */
 
@@ -1702,9 +1700,7 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     snd_flush_sound_commands();
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* steps the pickup-spawn state machine for the given mode */
 /* Ported from rac1-decomp (src/overlays/shared/update_0029B6A0.c: func_L00_0029C840), where it is exact; names translated to the US level program. */

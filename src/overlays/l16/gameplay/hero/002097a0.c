@@ -9,9 +9,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Per-frame update of the pickup/hit state flags from the state code. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00209D98.c: func_L16_00209D98), where it is exact; names translated to the US level program. */
@@ -137,9 +135,7 @@ void apply_hero_ground_material_effects(void) {
         }
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
@@ -479,9 +475,7 @@ s32 resolve_hero_position_collisions(s32 mode) {
     return 1;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 

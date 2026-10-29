@@ -1385,9 +1385,7 @@ void emit_beam_trail_particles(X *x) {
     qcopy(&trail_state->v10, &emission_position);
     trail_state->f0C = 1;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B5428), where it is exact; names translated to the US level program. */
 
@@ -1558,10 +1556,10 @@ typedef union BlasterWork {
 
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
 extern G_B4F40_49a8 D_0013F350;
-extern char D_00141680_49a8[] NOT_SDA;
+extern char D_00141680_49a8[];
 extern char D_L00_00166C80[];
 #include "rnc/rendering/debug/debug_menu.h"
-extern f32 D_0015ED6C MACRO_ADDR;
+extern f32 D_0015ED6C;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 distance_xyz(void *, void *) __asm__("func_001F9B48");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
@@ -1573,8 +1571,8 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0013E520_49a8 __asm__("D_0013E520"); /* no foreign declaration */
-extern int D_0015ED84 MACRO_ADDR;
-extern int D_0015EEA4 MACRO_ADDR;
+extern int D_0015ED84;
+extern int D_0015EEA4;
 extern int D_L00_0015F5C4; /* no foreign declaration */
 extern int D_L00_00173E58; /* no foreign declaration */
 extern float D_L00_0017ACF4 __attribute__((section(".data")));
@@ -1607,7 +1605,7 @@ void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void transform_hero_local_offset_to_world(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
 void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern char player_camera[] __asm__("D_L00_00166C80");
-extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") MACRO_ADDR;
+extern s32 D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4");
 extern struct Moby *coll_hit_moby __asm__("D_L00_00173E58") __attribute__((section(".data")));
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -1823,9 +1821,7 @@ void blaster_update(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B69C0), where it is exact; names translated to the US level program. */
 
@@ -2667,9 +2663,7 @@ end:
         update_taunter_effect_slots(taunter_moby);
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* per-frame update of the ten slot table: spawn one, age the rest, then draw */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B8690), where it is exact; names translated to the US level program. */

@@ -138,9 +138,7 @@ state_one:
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_0031FF78), where it is exact; names translated to the US level program. */
 

@@ -23,9 +23,7 @@ enum TaxiStop {
     TAXI_FALLBACK_BRANCH_STOP = 0x4
 };
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* records, for entry arg, which of the 48 entries sit one grid step away */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030EB68), where it is exact; names translated to the US level program. */
@@ -1349,9 +1347,7 @@ void elevator_with_button_update(struct Moby *moby) {
     fast_vec_add(&delta, &delta, &moby->pos);
     FUN_L00_00260738(vars->rider, &delta, &rot, &moby->rot);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003173A8), where it is exact; names translated to the US level program. */
 

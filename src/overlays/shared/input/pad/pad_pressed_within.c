@@ -26,9 +26,7 @@ u32 pad_pressed_within(u32 mask, s32 n, s32 *out) {
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/stream_002670E0.c: func_L00_00267C48), where it is exact; names translated to the US level program. */
 

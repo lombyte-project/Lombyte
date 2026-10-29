@@ -740,9 +740,7 @@ void update_cutscene_trigger(char *moby) {
         break;
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Register this level's vendor data set. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_002FE498), where it is exact; names translated to the US level program. */
@@ -1271,10 +1269,10 @@ typedef struct {
 
 extern u8 D_0014BEC0[];
 /* MACRO_ADDR aliases: retail loads these with the one-register lui form */
-extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
-extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
-extern s32 D_L01_0015F640 MACRO_ADDR;
-extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
+extern f32 frame_time_macro __asm__("D_0015ED6C");
+extern s32 current_level_index_macro __asm__("D_0015ED84");
+extern s32 D_L01_0015F640;
+extern s32 cutscene_active __asm__("D_L01_0015F404");
 extern f32 D_L01_00161F10_gp __asm__("D_L01_00161F10") __attribute__((sda));
 extern f32 D_L01_00161F14_gp __asm__("D_L01_00161F14") __attribute__((sda));
 extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
@@ -1479,9 +1477,7 @@ void update_gold_bolt_visuals(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Draws the moby's four pulsing glow rings between it and the camera, fading with distance. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309928), where it is exact; names translated to the US level program. */

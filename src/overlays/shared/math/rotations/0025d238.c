@@ -458,9 +458,7 @@ f32 normalize_angle(f32 angle_radians) {
     x *= tp;
     return x - pi;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025F3C0), where it is exact; names translated to the US level program. */
 
@@ -842,9 +840,7 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
         mine_camera_blast(explosion_flash_descriptor, effect_position, 0, 0);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607A8), where it is exact; names translated to the US level program. */
 
@@ -856,9 +852,7 @@ void FUN_L00_0025f730(void *vector, float x) {
         fast_vec_normalize(vector, vector, x);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002607F8), where it is exact; names translated to the US level program. */
 

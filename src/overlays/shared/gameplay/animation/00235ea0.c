@@ -4,9 +4,7 @@
 #include "rnc/overlay/hud.h"
 #include "rnc/math/fast_math.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Eases a counter's shown value toward its target and animates its two drifting digits. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236830), where it is exact; names translated to the US level program. */

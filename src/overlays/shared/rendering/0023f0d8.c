@@ -2,9 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/lights_0023FA70.c: func_L00_0023FA70), where it is exact; names translated to the US level program. */
 

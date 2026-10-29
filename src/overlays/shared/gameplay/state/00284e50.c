@@ -156,9 +156,7 @@ u8 *find_moby_by_id(s32 unused_parameter, s32 id) {
     }
     return 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_002864E0), where it is exact; names translated to the US level program. */
 

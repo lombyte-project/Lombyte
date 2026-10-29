@@ -270,9 +270,7 @@ void update_hero_smoothed_parameters(void) {
                                 frame_scale_sq * 0.3f, D_0015ED6C_209450 * 4.0f);
     }
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_00223630.c: func_L06_002291D8), where it is exact; names translated to the US level program. */
 

@@ -836,9 +836,7 @@ void initialize_hud_element_with_counters(char *hud_element) {
     l00_hud_element_counter_state.b = 0;
     l00_hud_element_counter_state.c = 0;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Updates the health HUD element: advances the wobble counters in its HudCounter (+0x80), clamps the target (+0x78) to +0x08, and steps the two digits (+0x70, +0x71) up or down. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00239FC0), where it is exact; names translated to the US level program. */
@@ -1050,9 +1048,7 @@ s32 draw_health_hud_panel(Hud *hud_element) {
 out:
     return hud_element->ret;
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Sets E up with func_L00_0023B0F8, points +0x80 at the shorts of
    D_L00_0015FB70 (declared like D_L00_0015FB68, out of $gp's reach) and

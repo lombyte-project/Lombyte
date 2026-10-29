@@ -6,9 +6,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Falling moby: applies gravity, eases its angles toward the target and fades out until its timer ends. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002DF738), where it is exact; names translated to the US level program. */

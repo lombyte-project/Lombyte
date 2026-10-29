@@ -2,9 +2,7 @@
 #include "types.h"
 #include "asm.h"
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Apply three optional state changes to live mobys of one class. */
 /* Ported from rac1-decomp (src/overlays/l17/mobyutil_00254B40.c: func_L17_00254B40), where it is exact; names translated to the US level program. */

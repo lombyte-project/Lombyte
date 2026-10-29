@@ -13,9 +13,7 @@
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Attach the callback during the six active phases of this level event. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/initonce_00246A90.c: func_L14_00246A90), where it is exact; names translated to the US level program. */
@@ -1599,9 +1597,7 @@ void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Returns the farthest moby in a list that is not in the excluded-id table, by distance from a point. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B0168), where it is exact; names translated to the US level program. */
@@ -2051,9 +2047,7 @@ int try_retract_turret_group(int index) {
     return 1;
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B58C0), where it is exact; names translated to the US level program. */
 
@@ -3071,9 +3065,7 @@ void update_flying_debris(struct Moby *moby) {
     }
 }
 
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"

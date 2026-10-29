@@ -899,9 +899,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     fast_vec_normalize(&camera->up, &camera->up, 1.0f);
     fast_vec_cross(&camera->side, &camera->up, &camera->fwd);
 }
-#define NOT_SDA
 
-#define MACRO_ADDR
 
 #include "qcopy.h"
 
