@@ -75,3 +75,5 @@ s32 update_menu_item_slots(struct MenuScreen *menu) {
 }
 
 extern __typeof__(update_menu_item_slots) func_0021C7A0 __attribute__((alias("FUN_0021c7a0")));
+
+struct UsageStats usage_stats = {0};

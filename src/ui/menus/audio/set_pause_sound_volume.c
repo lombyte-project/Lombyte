@@ -12,3 +12,5 @@ int set_pause_sound_volume(void) {
 }
 
 extern __typeof__(set_pause_sound_volume) func_0021CB00 __attribute__((alias("FUN_0021cb00")));
+
+int pause_sound_volume NOT_SDA = 0;

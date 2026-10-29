@@ -21,3 +21,5 @@ void swap_render_buffer_chain(void) {
 }
 
 extern __typeof__(swap_render_buffer_chain) func_00233630 __attribute__((alias("FUN_00233630")));
+
+s32 previous_render_packet_cursor = 0;

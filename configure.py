@@ -465,6 +465,16 @@ SDATA_OVERLAYS = {
     "gameplay/entities/create_moby": (0x15FEFC, 0x60E7C, 4),
     "rendering/vu1/vu1_chain": (0x160EE0, 0x61E60, 4),
     "runtime/dma/initialize_streaming_state": (0x15EF20, 0x5FEA0, 4),
+    "textbin/gameplay/state/load_level_zero_preserving_progress": (0x15EDA0, 0x5FD20, 4),
+    "gameplay/state/tick_space_transition": (0x15F5EC, 0x6056C, 4),
+    "gameplay/state/initialize_level_render_state": (0x1603D0, 0x61350, 4),
+    "gameplay/entities/resolve_camera_surface_height": (0x1611A0, 0x62120, 4),
+    "rendering/update_fog": (0x1610C4, 0x62044, 3),
+    "rendering/texture/dma_shrub_textures": (0x1603F8, 0x61378, 4),
+    "rendering/texture/dma_tfrag_textures": (0x160EC4, 0x61E44, 4),
+    "rendering/buffers/swap_render_buffer_chain": (0x160F04, 0x61E84, 4),
+    "rendering/texture/dma_tie_textures": (0x160F74, 0x61EF4, 4),
+    "ui/hud/update_hud": (0x15F688, 0x60608, 4),
 }
 
 # The same for a unit's `.data`: data only that unit reads, defined in it.
@@ -504,6 +514,8 @@ DATA_OVERLAYS = {
     "audio/rpc/snd_send_iop_command_no_wait": (0x133100, 0x34080, 16),
     "rendering/state/reset_gs_registers_pr": (0x151788, 0x52708, 24),
     "ui/help/find_help_entry": (0x199710, 0x9A690, 600),
+    "ui/menus/audio/set_pause_sound_volume": (0x13E5A0, 0x3F520, 4),
+    "ui/menus/selection/update_menu_item_slots": (0x141848, 0x427C8, 288),
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the

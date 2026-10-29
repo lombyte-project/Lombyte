@@ -45,3 +45,5 @@ f32 resolve_camera_surface_height(struct CameraProbePosition *position, s32 opti
 
 extern __typeof__(resolve_camera_surface_height) func_002135F0
     __attribute__((alias("FUN_002135f0")));
+
+s32 local_surface_region_center_x = 0;

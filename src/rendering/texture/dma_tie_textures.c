@@ -42,3 +42,5 @@ void dma_tie_textures(void) {
 }
 
 extern __typeof__(dma_tie_textures) func_00235640 __attribute__((alias("FUN_00235640")));
+
+s32 max_tie_texture_dma_size = 0;

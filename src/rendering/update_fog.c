@@ -46,3 +46,9 @@ void update_fog(void) {
 }
 
 extern __typeof__(update_fog) func_001F2588 __attribute__((alias("FUN_001f2588")));
+
+u8 water_fog_color_red = 0x18;
+
+u8 water_fog_color_green = 0x30;
+
+u8 water_fog_color_blue = 0x90;

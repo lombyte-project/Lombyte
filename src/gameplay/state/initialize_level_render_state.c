@@ -477,3 +477,5 @@ u8 *initialize_level_render_state(LevelHeader *header) {
 }
 
 extern __typeof__(initialize_level_render_state) func_001E9B10 __attribute__((alias("FUN_001e9b10")));
+
+s32 shrub_count = 0;

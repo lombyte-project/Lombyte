@@ -18,3 +18,5 @@ void tick_space_transition(void) {
         }
     }
 }
+
+s32 counter_advance_disabled = 0;

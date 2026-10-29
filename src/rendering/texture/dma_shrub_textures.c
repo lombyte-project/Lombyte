@@ -42,3 +42,5 @@ void dma_shrub_textures(void) {
 }
 
 extern __typeof__(dma_shrub_textures) func_002288F0 __attribute__((alias("FUN_002288f0")));
+
+s32 max_shrub_texture_dma_size = 0;

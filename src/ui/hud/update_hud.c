@@ -121,3 +121,5 @@ block_28:
 }
 
 __attribute__((alias("FUN_001ff780"))) extern void func_001FF780(void);
+
+s32 hud_msg_y = 0;

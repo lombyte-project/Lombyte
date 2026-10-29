@@ -44,3 +44,5 @@ void dma_tfrag_textures(void) {
 }
 
 extern __typeof__(dma_tfrag_textures) func_002331C0 __attribute__((alias("FUN_002331c0")));
+
+s32 max_tfrag_texture_dma_size = 0;

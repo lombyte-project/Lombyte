@@ -107,3 +107,5 @@ void load_level_zero_preserving_progress(s32 slot) {
 }
 
 extern __typeof__(load_level_zero_preserving_progress) func_00226B08 __attribute__((alias("FUN_00226b08")));
+
+s32 hero_max_health = 4;
