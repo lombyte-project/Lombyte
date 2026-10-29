@@ -114,10 +114,10 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 char *create_nanotech_ball(void *vector) {
     char *moby = create_moby(0x326);
     if (moby != 0) {
-        char *data = ((char *)MOBY(moby)->pvars);
+        char *class_326_private_vars = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0x40;
         moby[0x20] = 0;
-        *(char **)(data + 0x0C) = moby;
+        *(char **)(class_326_private_vars + 0x0C) = moby;
         MOBY(moby)->collision = 0;
         MOBY(moby)->flags |= 0x41;
         qcopy(moby + 0x10, vector);
