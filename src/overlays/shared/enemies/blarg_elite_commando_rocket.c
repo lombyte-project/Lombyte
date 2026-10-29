@@ -175,7 +175,7 @@ char *spawn_blarg_elite_commando_rocket(char  *owner,
                                         char *spawn_position) {
     char *moby = create_moby(0x31);
     if (moby != 0) {
-        char *data;
+        char *spawned_rocket_data;
         float xy_length;
         float elevation_angle;
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -185,11 +185,11 @@ char *spawn_blarg_elite_commando_rocket(char  *owner,
         MOBY(moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
         MOBY(moby)->scale = MOBY(moby)->scale * 3.0f;
         qcopy(moby + 0x10, spawn_position);
-        data = ((char *)MOBY(moby)->pvars);
-        qcopy(data, initial_movement_vector);
-        *(int *)(data + 0x14) = scale_game_frames(0xF0);
-        *(char **)(data + 0x18) = owner;
-        *(int *)(data + 0x10) = 0;
+        spawned_rocket_data = ((char *)MOBY(moby)->pvars);
+        qcopy(spawned_rocket_data, initial_movement_vector);
+        *(int *)(spawned_rocket_data + 0x14) = scale_game_frames(0xF0);
+        *(char **)(spawned_rocket_data + 0x18) = owner;
+        *(int *)(spawned_rocket_data + 0x10) = 0;
         MOBY(moby)->rot.z = fast_arc_tan(initial_movement_vector[0], initial_movement_vector[1]);
         xy_length = vector_length_xy(initial_movement_vector);
         elevation_angle = fast_arc_tan(xy_length, initial_movement_vector[2]);
