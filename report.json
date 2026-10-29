@@ -9,8 +9,8 @@
     "matched_functions_percent": 100.0,
     "complete_code": "3547932",
     "complete_code_percent": 100.0,
-    "total_units": 519,
-    "complete_units": 519,
+    "total_units": 522,
+    "complete_units": 522,
     "total_data": "12433372",
     "matched_data": "5418333",
     "matched_data_percent": 43.57895,
@@ -3842,16 +3842,16 @@
       }
     },
     {
-      "name": "game/rendering",
+      "name": "game/rendering/state",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "22684",
-        "matched_code": "22684",
+        "total_code": "820",
+        "matched_code": "820",
         "matched_code_percent": 100.0,
-        "total_functions": 36,
-        "matched_functions": 36,
+        "total_functions": 6,
+        "matched_functions": 6,
         "matched_functions_percent": 100.0,
-        "complete_code": "22684",
+        "complete_code": "820",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -3867,12 +3867,12 @@
           }
         },
         {
-          "name": "update_fog",
-          "size": "260",
+          "name": "reset_graphics",
+          "size": "156",
           "fuzzy_match_percent": 100.0,
-          "address": "860208",
+          "address": "859240",
           "metadata": {
-            "virtual_address": "996616"
+            "virtual_address": "995648"
           }
         },
         {
@@ -3885,300 +3885,30 @@
           }
         },
         {
-          "name": "draw_debug_profiler",
-          "size": "2168",
-          "fuzzy_match_percent": 100.0,
-          "address": "865400",
-          "metadata": {
-            "virtual_address": "1001808"
-          }
-        },
-        {
-          "name": "setup_gif_paging",
-          "size": "276",
-          "fuzzy_match_percent": 100.0,
-          "address": "867624",
-          "metadata": {
-            "virtual_address": "1004032"
-          }
-        },
-        {
-          "name": "do_gif_paging",
-          "size": "284",
-          "fuzzy_match_percent": 100.0,
-          "address": "867904",
-          "metadata": {
-            "virtual_address": "1004312"
-          }
-        },
-        {
-          "name": "draw_screen_effect",
-          "size": "384",
-          "fuzzy_match_percent": 100.0,
-          "address": "871008",
-          "metadata": {
-            "virtual_address": "1007416"
-          }
-        },
-        {
-          "name": "emit_textured_rectangle",
-          "size": "680",
-          "fuzzy_match_percent": 100.0,
-          "address": "873136",
-          "metadata": {
-            "virtual_address": "1009544"
-          }
-        },
-        {
-          "name": "append_rotated_sprite_quad",
-          "size": "1116",
-          "fuzzy_match_percent": 100.0,
-          "address": "873816",
-          "metadata": {
-            "virtual_address": "1010224"
-          }
-        },
-        {
-          "name": "draw_outlined_rect",
-          "size": "388",
-          "fuzzy_match_percent": 100.0,
-          "address": "875272",
-          "metadata": {
-            "virtual_address": "1011680"
-          }
-        },
-        {
-          "name": "font_queue_vu_state",
-          "size": "488",
-          "fuzzy_match_percent": 100.0,
-          "address": "880968",
-          "metadata": {
-            "virtual_address": "1017376"
-          }
-        },
-        {
-          "name": "configure_graphics_render_target_and_projection",
+          "name": "reset_gs_registers",
           "size": "236",
           "fuzzy_match_percent": 100.0,
-          "address": "881456",
+          "address": "865040",
           "metadata": {
-            "virtual_address": "1017864"
+            "virtual_address": "1001448"
           }
         },
         {
-          "name": "draw_debug_font",
-          "size": "136",
+          "name": "reset_gs_registers_pr",
+          "size": "120",
           "fuzzy_match_percent": 100.0,
-          "address": "881744",
+          "address": "865280",
           "metadata": {
-            "virtual_address": "1018152"
+            "virtual_address": "1001688"
           }
         },
         {
-          "name": "setup_render_target",
-          "size": "572",
+          "name": "begin_draw_frame",
+          "size": "44",
           "fuzzy_match_percent": 100.0,
-          "address": "896744",
+          "address": "881696",
           "metadata": {
-            "virtual_address": "1033152"
-          }
-        },
-        {
-          "name": "draw_dialog_text",
-          "size": "4564",
-          "fuzzy_match_percent": 100.0,
-          "address": "898808",
-          "metadata": {
-            "virtual_address": "1035216"
-          }
-        },
-        {
-          "name": "append_power_of_two_textured_screen_sprite",
-          "size": "404",
-          "fuzzy_match_percent": 100.0,
-          "address": "917264",
-          "metadata": {
-            "virtual_address": "1053672"
-          }
-        },
-        {
-          "name": "build_indexed_resident_render_packet",
-          "size": "600",
-          "fuzzy_match_percent": 100.0,
-          "address": "927776",
-          "metadata": {
-            "virtual_address": "1064184"
-          }
-        },
-        {
-          "name": "set_up_vis_gif_viewer",
-          "size": "332",
-          "fuzzy_match_percent": 100.0,
-          "address": "928376",
-          "metadata": {
-            "virtual_address": "1064784"
-          }
-        },
-        {
-          "name": "register_object_render_class",
-          "size": "980",
-          "fuzzy_match_percent": 100.0,
-          "address": "930264",
-          "metadata": {
-            "virtual_address": "1066672"
-          }
-        },
-        {
-          "name": "register_shrub_render_class",
-          "size": "1492",
-          "fuzzy_match_percent": 100.0,
-          "address": "931248",
-          "metadata": {
-            "virtual_address": "1067656"
-          }
-        },
-        {
-          "name": "initialize_tfrag_render_data",
-          "size": "720",
-          "fuzzy_match_percent": 100.0,
-          "address": "932744",
-          "metadata": {
-            "virtual_address": "1069152"
-          }
-        },
-        {
-          "name": "reset_active_camera_position_and_basis",
-          "size": "104",
-          "fuzzy_match_percent": 100.0,
-          "address": "1017784",
-          "metadata": {
-            "virtual_address": "1154192"
-          }
-        },
-        {
-          "name": "initialize_menu_preview_scene",
-          "size": "544",
-          "fuzzy_match_percent": 100.0,
-          "address": "1018432",
-          "metadata": {
-            "virtual_address": "1154840"
-          }
-        },
-        {
-          "name": "draw_two_texture_panels",
-          "size": "192",
-          "fuzzy_match_percent": 100.0,
-          "address": "1049144",
-          "metadata": {
-            "virtual_address": "1185552"
-          }
-        },
-        {
-          "name": "append_fullscreen_setup_strips",
-          "size": "424",
-          "fuzzy_match_percent": 100.0,
-          "address": "1076344",
-          "metadata": {
-            "virtual_address": "1212752"
-          }
-        },
-        {
-          "name": "append_fullscreen_clear_strips",
-          "size": "460",
-          "fuzzy_match_percent": 100.0,
-          "address": "1076768",
-          "metadata": {
-            "virtual_address": "1213176"
-          }
-        },
-        {
-          "name": "submit_graphics_setup_command_stream",
-          "size": "500",
-          "fuzzy_match_percent": 100.0,
-          "address": "1077232",
-          "metadata": {
-            "virtual_address": "1213640"
-          }
-        },
-        {
-          "name": "draw_shrubs",
-          "size": "176",
-          "fuzzy_match_percent": 100.0,
-          "address": "1082848",
-          "metadata": {
-            "virtual_address": "1219256"
-          }
-        },
-        {
-          "name": "render_environment_mapped_object",
-          "size": "1344",
-          "fuzzy_match_percent": 100.0,
-          "address": "1122888",
-          "metadata": {
-            "virtual_address": "1259296"
-          }
-        },
-        {
-          "name": "set_tfrag_dists",
-          "size": "344",
-          "fuzzy_match_percent": 100.0,
-          "address": "1125136",
-          "metadata": {
-            "virtual_address": "1261544"
-          }
-        },
-        {
-          "name": "patch_tfrag_gifs",
-          "size": "156",
-          "fuzzy_match_percent": 100.0,
-          "address": "1125808",
-          "metadata": {
-            "virtual_address": "1262216"
-          }
-        },
-        {
-          "name": "draw_tfrag",
-          "size": "296",
-          "fuzzy_match_percent": 100.0,
-          "address": "1125968",
-          "metadata": {
-            "virtual_address": "1262376"
-          }
-        },
-        {
-          "name": "draw_ties_1",
-          "size": "200",
-          "fuzzy_match_percent": 100.0,
-          "address": "1135472",
-          "metadata": {
-            "virtual_address": "1271880"
-          }
-        },
-        {
-          "name": "draw_ties_2",
-          "size": "600",
-          "fuzzy_match_percent": 100.0,
-          "address": "1135672",
-          "metadata": {
-            "virtual_address": "1272080"
-          }
-        },
-        {
-          "name": "project_graphics_bounds",
-          "size": "516",
-          "fuzzy_match_percent": 100.0,
-          "address": "1144096",
-          "metadata": {
-            "virtual_address": "1280504"
-          }
-        },
-        {
-          "name": "project_graphics_bounds_float",
-          "size": "484",
-          "fuzzy_match_percent": 100.0,
-          "address": "1144616",
-          "metadata": {
-            "virtual_address": "1281024"
+            "virtual_address": "1018104"
           }
         }
       ],
@@ -6305,13 +6035,13 @@
       "name": "game/rendering/texture",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "4472",
-        "matched_code": "4472",
+        "total_code": "5032",
+        "matched_code": "5032",
         "matched_code_percent": 100.0,
-        "total_functions": 14,
-        "matched_functions": 14,
+        "total_functions": 16,
+        "matched_functions": 16,
         "matched_functions_percent": 100.0,
-        "complete_code": "4472",
+        "complete_code": "5032",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -6324,6 +6054,24 @@
           "address": "0",
           "metadata": {
             "virtual_address": "958696"
+          }
+        },
+        {
+          "name": "setup_gif_paging",
+          "size": "276",
+          "fuzzy_match_percent": 100.0,
+          "address": "45336",
+          "metadata": {
+            "virtual_address": "1004032"
+          }
+        },
+        {
+          "name": "do_gif_paging",
+          "size": "284",
+          "fuzzy_match_percent": 100.0,
+          "address": "45616",
+          "metadata": {
+            "virtual_address": "1004312"
           }
         },
         {
@@ -6456,13 +6204,13 @@
       "name": "game/ui/fonts",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "164",
-        "matched_code": "164",
+        "total_code": "788",
+        "matched_code": "788",
         "matched_code_percent": 100.0,
-        "total_functions": 2,
-        "matched_functions": 2,
+        "total_functions": 4,
+        "matched_functions": 4,
         "matched_functions_percent": 100.0,
-        "complete_code": "164",
+        "complete_code": "788",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -6484,6 +6232,24 @@
           "address": "58160",
           "metadata": {
             "virtual_address": "1017320"
+          }
+        },
+        {
+          "name": "font_queue_vu_state",
+          "size": "488",
+          "fuzzy_match_percent": 100.0,
+          "address": "58216",
+          "metadata": {
+            "virtual_address": "1017376"
+          }
+        },
+        {
+          "name": "draw_debug_font",
+          "size": "136",
+          "fuzzy_match_percent": 100.0,
+          "address": "58992",
+          "metadata": {
+            "virtual_address": "1018152"
           }
         }
       ],
@@ -7006,13 +6772,13 @@
       "name": "game/rendering/effects",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "5932",
-        "matched_code": "5932",
+        "total_code": "6316",
+        "matched_code": "6316",
         "matched_code_percent": 100.0,
-        "total_functions": 11,
-        "matched_functions": 11,
+        "total_functions": 12,
+        "matched_functions": 12,
         "matched_functions_percent": 100.0,
-        "complete_code": "5932",
+        "complete_code": "6316",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -7061,6 +6827,15 @@
           "address": "29000",
           "metadata": {
             "virtual_address": "1006872"
+          }
+        },
+        {
+          "name": "draw_screen_effect",
+          "size": "384",
+          "fuzzy_match_percent": 100.0,
+          "address": "29544",
+          "metadata": {
+            "virtual_address": "1007416"
           }
         },
         {
@@ -7297,13 +7072,13 @@
       "name": "game/rendering/view",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "3460",
-        "matched_code": "3460",
+        "total_code": "4824",
+        "matched_code": "4824",
         "matched_code_percent": 100.0,
-        "total_functions": 6,
-        "matched_functions": 6,
+        "total_functions": 10,
+        "matched_functions": 10,
         "matched_functions_percent": 100.0,
-        "complete_code": "3460",
+        "complete_code": "4824",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -7325,6 +7100,15 @@
           "address": "496",
           "metadata": {
             "virtual_address": "995808"
+          }
+        },
+        {
+          "name": "update_fog",
+          "size": "260",
+          "fuzzy_match_percent": 100.0,
+          "address": "1304",
+          "metadata": {
+            "virtual_address": "996616"
           }
         },
         {
@@ -7362,66 +7146,32 @@
           "metadata": {
             "virtual_address": "1136656"
           }
-        }
-      ],
-      "metadata": {
-        "complete": true,
-        "progress_categories": [
-          "boot",
-          "game"
-        ]
-      }
-    },
-    {
-      "name": "game/rendering/state",
-      "measures": {
-        "fuzzy_match_percent": 100.0,
-        "total_code": "556",
-        "matched_code": "556",
-        "matched_code_percent": 100.0,
-        "total_functions": 4,
-        "matched_functions": 4,
-        "matched_functions_percent": 100.0,
-        "complete_code": "556",
-        "complete_code_percent": 100.0,
-        "total_units": 1,
-        "complete_units": 1
-      },
-      "functions": [
+        },
         {
-          "name": "reset_graphics",
-          "size": "156",
+          "name": "reset_active_camera_position_and_basis",
+          "size": "104",
           "fuzzy_match_percent": 100.0,
-          "address": "0",
+          "address": "158880",
           "metadata": {
-            "virtual_address": "995648"
+            "virtual_address": "1154192"
           }
         },
         {
-          "name": "reset_gs_registers",
-          "size": "236",
+          "name": "project_graphics_bounds",
+          "size": "516",
           "fuzzy_match_percent": 100.0,
-          "address": "5800",
+          "address": "285192",
           "metadata": {
-            "virtual_address": "1001448"
+            "virtual_address": "1280504"
           }
         },
         {
-          "name": "reset_gs_registers_pr",
-          "size": "120",
+          "name": "project_graphics_bounds_float",
+          "size": "484",
           "fuzzy_match_percent": 100.0,
-          "address": "6040",
+          "address": "285712",
           "metadata": {
-            "virtual_address": "1001688"
-          }
-        },
-        {
-          "name": "begin_draw_frame",
-          "size": "44",
-          "fuzzy_match_percent": 100.0,
-          "address": "22456",
-          "metadata": {
-            "virtual_address": "1018104"
+            "virtual_address": "1281024"
           }
         }
       ],
@@ -7553,6 +7303,76 @@
           "address": "295160",
           "metadata": {
             "virtual_address": "1295712"
+          }
+        }
+      ],
+      "metadata": {
+        "complete": true,
+        "progress_categories": [
+          "boot",
+          "game"
+        ]
+      }
+    },
+    {
+      "name": "game/rendering",
+      "measures": {
+        "fuzzy_match_percent": 100.0,
+        "total_code": "8812",
+        "matched_code": "8812",
+        "matched_code_percent": 100.0,
+        "total_functions": 5,
+        "matched_functions": 5,
+        "matched_functions_percent": 100.0,
+        "complete_code": "8812",
+        "complete_code_percent": 100.0,
+        "total_units": 1,
+        "complete_units": 1
+      },
+      "functions": [
+        {
+          "name": "draw_debug_profiler",
+          "size": "2168",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "1001808"
+          }
+        },
+        {
+          "name": "draw_dialog_text",
+          "size": "4564",
+          "fuzzy_match_percent": 100.0,
+          "address": "33408",
+          "metadata": {
+            "virtual_address": "1035216"
+          }
+        },
+        {
+          "name": "initialize_menu_preview_scene",
+          "size": "544",
+          "fuzzy_match_percent": 100.0,
+          "address": "153032",
+          "metadata": {
+            "virtual_address": "1154840"
+          }
+        },
+        {
+          "name": "draw_two_texture_panels",
+          "size": "192",
+          "fuzzy_match_percent": 100.0,
+          "address": "183744",
+          "metadata": {
+            "virtual_address": "1185552"
+          }
+        },
+        {
+          "name": "render_environment_mapped_object",
+          "size": "1344",
+          "fuzzy_match_percent": 100.0,
+          "address": "257488",
+          "metadata": {
+            "virtual_address": "1259296"
           }
         }
       ],
@@ -7931,13 +7751,13 @@
       "name": "game/rendering/packets",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "704",
-        "matched_code": "704",
+        "total_code": "5220",
+        "matched_code": "5220",
         "matched_code_percent": 100.0,
-        "total_functions": 6,
-        "matched_functions": 6,
+        "total_functions": 14,
+        "matched_functions": 14,
         "matched_functions_percent": 100.0,
-        "complete_code": "704",
+        "complete_code": "5220",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -7950,6 +7770,24 @@
           "address": "0",
           "metadata": {
             "virtual_address": "1008016"
+          }
+        },
+        {
+          "name": "emit_textured_rectangle",
+          "size": "680",
+          "fuzzy_match_percent": 100.0,
+          "address": "1528",
+          "metadata": {
+            "virtual_address": "1009544"
+          }
+        },
+        {
+          "name": "append_rotated_sprite_quad",
+          "size": "1116",
+          "fuzzy_match_percent": 100.0,
+          "address": "2208",
+          "metadata": {
+            "virtual_address": "1010224"
           }
         },
         {
@@ -7989,6 +7827,60 @@
           }
         },
         {
+          "name": "append_power_of_two_textured_screen_sprite",
+          "size": "404",
+          "fuzzy_match_percent": 100.0,
+          "address": "45656",
+          "metadata": {
+            "virtual_address": "1053672"
+          }
+        },
+        {
+          "name": "build_indexed_resident_render_packet",
+          "size": "600",
+          "fuzzy_match_percent": 100.0,
+          "address": "56168",
+          "metadata": {
+            "virtual_address": "1064184"
+          }
+        },
+        {
+          "name": "set_up_vis_gif_viewer",
+          "size": "332",
+          "fuzzy_match_percent": 100.0,
+          "address": "56768",
+          "metadata": {
+            "virtual_address": "1064784"
+          }
+        },
+        {
+          "name": "append_fullscreen_setup_strips",
+          "size": "424",
+          "fuzzy_match_percent": 100.0,
+          "address": "204736",
+          "metadata": {
+            "virtual_address": "1212752"
+          }
+        },
+        {
+          "name": "append_fullscreen_clear_strips",
+          "size": "460",
+          "fuzzy_match_percent": 100.0,
+          "address": "205160",
+          "metadata": {
+            "virtual_address": "1213176"
+          }
+        },
+        {
+          "name": "submit_graphics_setup_command_stream",
+          "size": "500",
+          "fuzzy_match_percent": 100.0,
+          "address": "205624",
+          "metadata": {
+            "virtual_address": "1213640"
+          }
+        },
+        {
           "name": "write_vif_unpack_packet",
           "size": "164",
           "fuzzy_match_percent": 100.0,
@@ -8010,13 +7902,13 @@
       "name": "game/ui/frames",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "708",
-        "matched_code": "708",
+        "total_code": "1096",
+        "matched_code": "1096",
         "matched_code_percent": 100.0,
-        "total_functions": 3,
-        "matched_functions": 3,
+        "total_functions": 4,
+        "matched_functions": 4,
         "matched_functions_percent": 100.0,
-        "complete_code": "708",
+        "complete_code": "1096",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -8029,6 +7921,15 @@
           "address": "0",
           "metadata": {
             "virtual_address": "1011352"
+          }
+        },
+        {
+          "name": "draw_outlined_rect",
+          "size": "388",
+          "fuzzy_match_percent": 100.0,
+          "address": "328",
+          "metadata": {
+            "virtual_address": "1011680"
           }
         },
         {
@@ -8234,6 +8135,49 @@
           "address": "130136",
           "metadata": {
             "virtual_address": "1143312"
+          }
+        }
+      ],
+      "metadata": {
+        "complete": true,
+        "progress_categories": [
+          "boot",
+          "game"
+        ]
+      }
+    },
+    {
+      "name": "game/rendering/targets",
+      "measures": {
+        "fuzzy_match_percent": 100.0,
+        "total_code": "808",
+        "matched_code": "808",
+        "matched_code_percent": 100.0,
+        "total_functions": 2,
+        "matched_functions": 2,
+        "matched_functions_percent": 100.0,
+        "complete_code": "808",
+        "complete_code_percent": 100.0,
+        "total_units": 1,
+        "complete_units": 1
+      },
+      "functions": [
+        {
+          "name": "configure_graphics_render_target_and_projection",
+          "size": "236",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "1017864"
+          }
+        },
+        {
+          "name": "setup_render_target",
+          "size": "572",
+          "fuzzy_match_percent": 100.0,
+          "address": "15288",
+          "metadata": {
+            "virtual_address": "1033152"
           }
         }
       ],
@@ -9805,6 +9749,171 @@
           "address": "0",
           "metadata": {
             "virtual_address": "1065568"
+          }
+        }
+      ],
+      "metadata": {
+        "complete": true,
+        "progress_categories": [
+          "boot",
+          "game"
+        ]
+      }
+    },
+    {
+      "name": "game/rendering/ties",
+      "measures": {
+        "fuzzy_match_percent": 100.0,
+        "total_code": "1780",
+        "matched_code": "1780",
+        "matched_code_percent": 100.0,
+        "total_functions": 3,
+        "matched_functions": 3,
+        "matched_functions_percent": 100.0,
+        "complete_code": "1780",
+        "complete_code_percent": 100.0,
+        "total_units": 1,
+        "complete_units": 1
+      },
+      "functions": [
+        {
+          "name": "register_object_render_class",
+          "size": "980",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "1066672"
+          }
+        },
+        {
+          "name": "draw_ties_1",
+          "size": "200",
+          "fuzzy_match_percent": 100.0,
+          "address": "205208",
+          "metadata": {
+            "virtual_address": "1271880"
+          }
+        },
+        {
+          "name": "draw_ties_2",
+          "size": "600",
+          "fuzzy_match_percent": 100.0,
+          "address": "205408",
+          "metadata": {
+            "virtual_address": "1272080"
+          }
+        }
+      ],
+      "metadata": {
+        "complete": true,
+        "progress_categories": [
+          "boot",
+          "game"
+        ]
+      }
+    },
+    {
+      "name": "game/rendering/shrubs",
+      "measures": {
+        "fuzzy_match_percent": 100.0,
+        "total_code": "1928",
+        "matched_code": "1928",
+        "matched_code_percent": 100.0,
+        "total_functions": 3,
+        "matched_functions": 3,
+        "matched_functions_percent": 100.0,
+        "complete_code": "1928",
+        "complete_code_percent": 100.0,
+        "total_units": 1,
+        "complete_units": 1
+      },
+      "functions": [
+        {
+          "name": "register_shrub_render_class",
+          "size": "1492",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "1067656"
+          }
+        },
+        {
+          "name": "patch_shrub_gifs",
+          "size": "260",
+          "fuzzy_match_percent": 100.0,
+          "address": "151336",
+          "metadata": {
+            "virtual_address": "1218992"
+          }
+        },
+        {
+          "name": "draw_shrubs",
+          "size": "176",
+          "fuzzy_match_percent": 100.0,
+          "address": "151600",
+          "metadata": {
+            "virtual_address": "1219256"
+          }
+        }
+      ],
+      "metadata": {
+        "complete": true,
+        "progress_categories": [
+          "boot",
+          "game"
+        ]
+      }
+    },
+    {
+      "name": "game/rendering/tfrags",
+      "measures": {
+        "fuzzy_match_percent": 100.0,
+        "total_code": "1516",
+        "matched_code": "1516",
+        "matched_code_percent": 100.0,
+        "total_functions": 4,
+        "matched_functions": 4,
+        "matched_functions_percent": 100.0,
+        "complete_code": "1516",
+        "complete_code_percent": 100.0,
+        "total_units": 1,
+        "complete_units": 1
+      },
+      "functions": [
+        {
+          "name": "initialize_tfrag_render_data",
+          "size": "720",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "1069152"
+          }
+        },
+        {
+          "name": "set_tfrag_dists",
+          "size": "344",
+          "fuzzy_match_percent": 100.0,
+          "address": "192392",
+          "metadata": {
+            "virtual_address": "1261544"
+          }
+        },
+        {
+          "name": "patch_tfrag_gifs",
+          "size": "156",
+          "fuzzy_match_percent": 100.0,
+          "address": "193064",
+          "metadata": {
+            "virtual_address": "1262216"
+          }
+        },
+        {
+          "name": "draw_tfrag",
+          "size": "296",
+          "fuzzy_match_percent": 100.0,
+          "address": "193224",
+          "metadata": {
+            "virtual_address": "1262376"
           }
         }
       ],
@@ -12640,40 +12749,6 @@
           "address": "864",
           "metadata": {
             "virtual_address": "1207712"
-          }
-        }
-      ],
-      "metadata": {
-        "complete": true,
-        "progress_categories": [
-          "boot",
-          "game"
-        ]
-      }
-    },
-    {
-      "name": "game/rendering/shrubs",
-      "measures": {
-        "fuzzy_match_percent": 100.0,
-        "total_code": "260",
-        "matched_code": "260",
-        "matched_code_percent": 100.0,
-        "total_functions": 1,
-        "matched_functions": 1,
-        "matched_functions_percent": 100.0,
-        "complete_code": "260",
-        "complete_code_percent": 100.0,
-        "total_units": 1,
-        "complete_units": 1
-      },
-      "functions": [
-        {
-          "name": "patch_shrub_gifs",
-          "size": "260",
-          "fuzzy_match_percent": 100.0,
-          "address": "0",
-          "metadata": {
-            "virtual_address": "1218992"
           }
         }
       ],
@@ -51393,8 +51468,8 @@
         "matched_functions_percent": 100.0,
         "complete_code": "354504",
         "complete_code_percent": 100.0,
-        "total_units": 124,
-        "complete_units": 124,
+        "total_units": 127,
+        "complete_units": 127,
         "total_data": "699136",
         "matched_data": "16238",
         "matched_data_percent": 2.322581,
@@ -51415,8 +51490,8 @@
         "matched_functions_percent": 100.0,
         "complete_code": "273476",
         "complete_code_percent": 100.0,
-        "total_units": 111,
-        "complete_units": 111
+        "total_units": 114,
+        "complete_units": 114
       }
     },
     {
