@@ -30,13 +30,13 @@ unsigned char *spawn_ship_rocket(struct Moby *spawning_moby,
                                  float scale) {
     unsigned char *moby = create_moby(0x40A);
     if (moby != 0) {
-        char *data = ((char *)MOBY(moby)->pvars);
+        char *projectile_vars = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(char **)(data + 0x20) = spawning_moby;
-        *(char **)(data + 0x24) = target;
+        *(char **)(projectile_vars + 0x20) = spawning_moby;
+        *(char **)(projectile_vars + 0x24) = target;
         qcopy(moby + 0x10, spawn_position);
         qcopy(moby + 0x40, spawn_rotation);
         if (target != 0) {
@@ -46,18 +46,18 @@ unsigned char *spawn_ship_rocket(struct Moby *spawning_moby,
                 *(unsigned short *)(target_aux_data + 0x1E) |= 0x80;
             }
         }
-        *(int *)(data + 0x28) = duration_frames;
-        *(float *)(data + 0x2C) = scale;
-        *(int *)(data + 0x30) = 0;
-        *(int *)(data + 0x34) = 0;
+        *(int *)(projectile_vars + 0x28) = duration_frames;
+        *(float *)(projectile_vars + 0x2C) = scale;
+        *(int *)(projectile_vars + 0x30) = 0;
+        *(int *)(projectile_vars + 0x34) = 0;
         build_spherical_offset(
-            data, scale, *(float *)(spawn_rotation + 8), -*(float *)(spawn_rotation + 4));
+            projectile_vars, scale, *(float *)(spawn_rotation + 8), -*(float *)(spawn_rotation + 4));
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
-        fast_vec_add(moby + 0x10, moby + 0x10, data);
-        if (*(char **)(data + 0x24) != 0) {
-            qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
+        fast_vec_add(moby + 0x10, moby + 0x10, projectile_vars);
+        if (*(char **)(projectile_vars + 0x24) != 0) {
+            qcopy(projectile_vars + 0x10, *(char **)(projectile_vars + 0x24) + 0x10);
         }
         MOBY(moby)->scale =
             *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
