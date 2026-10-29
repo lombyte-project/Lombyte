@@ -18,12 +18,12 @@ s32         snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) __asm__("
 
 extern s32 snd_batches_held __asm__("D_0015ECC4") __attribute__((sda));
 
-s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
+s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *command_payload) {
     s32 i;
-    s32 result;
+    s32 iop_command_result;
 
     for (i = 0; i < size; i++) {
-        snd_sync_send_buffer[i] = data[i];
+        snd_sync_send_buffer[i] = command_payload[i];
     }
     goto check;
     do {
@@ -45,11 +45,11 @@ s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
     }
     while (snd_got_returns() == 0) {
     }
-    result = snd_sync_buffer[1];
+    iop_command_result = snd_sync_buffer[1];
     if (*snd_batch_command_buffers[snd_batch_index] != 0 && snd_batches_held == 0) {
         snd_send_current_batch();
     }
-    return result;
+    return iop_command_result;
 }
 
 extern __typeof__(snd_send_iop_command_and_wait) func_0012E548
