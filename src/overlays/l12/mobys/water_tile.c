@@ -67,23 +67,23 @@ void update_level_12_water_tile(struct Moby *moby) {
         SLOT_UPDATE_HEIGHT_AND_MOTION = 2
     };
     int   state = moby->state;
-    int  *data = (int *)moby->pvars;
+    int  *water_tile_vars = (int *)moby->pvars;
     int   slot;
     float value;
     float other;
     int   i;
     switch (state) {
     case SLOT_INITIALIZE:
-        i = (data[3] = next_water_tile_index_gp) + 1;
+        i = (water_tile_vars[3] = next_water_tile_index_gp) + 1;
         next_water_tile_index_gp = i;
         if (i > 0x7f) {
             debug_print((int)water_tile_limit_message);
         }
         moby->scale = moby->pclass->scale * 2.0f;
-        data[0] = 3;
+        water_tile_vars[0] = 3;
         moby->update_dist = 0xff;
         moby->flags |= 1;
-        if (data[3] == 0) {
+        if (water_tile_vars[3] == 0) {
             {
                 int i = 16;
                 do {
@@ -104,8 +104,8 @@ void update_level_12_water_tile(struct Moby *moby) {
             *(float *)(D_L12_001CAD00_c + 0x30) = fast_cos(value) * 0.57735f;
             *(float *)(D_L12_001CAD00_c + 0x34) = fast_sin(value) * 0.57735f;
             *(float *)(D_L12_001CAD00_c + 0x38) = -0.57735f;
-            *(int *)(D_L12_001CAD00_c + 0x28) = data[0] + 0x28;
-            *(int *)(D_L12_001CAD00_c + 0x2c) = data[1] + 0x28;
+            *(int *)(D_L12_001CAD00_c + 0x28) = water_tile_vars[0] + 0x28;
+            *(int *)(D_L12_001CAD00_c + 0x2c) = water_tile_vars[1] + 0x28;
             *(u8 *)(D_L12_001CAD00_c + 0x3c) = 0x1c;
             *(u8 *)(D_L12_001CAD00_c + 0x3d) = 0x40;
             D_L12_001612D0 = (int)D_L12_001CBF40_c;
@@ -116,35 +116,35 @@ void update_level_12_water_tile(struct Moby *moby) {
             D_L12_00161214 = 48.0f;
             D_L12_00161208 = 0;
         }
-        *(float *)(D_L12_001CBF40_c + data[3] * 0x1190) = moby->pos.x;
-        *(float *)(D_L12_001CBF40_c + data[3] * 0x1190 + 4) = moby->pos.y;
-        *(float *)(D_L12_001CBF40_c + data[3] * 0x1190 + 8) = moby->pos.z;
-        *(int *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x14) = data[0] + 0x28;
-        *(int *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x18) = data[1] + 0x28;
-        *(u8 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1c) = 0x1c;
-        *(u8 *)(D_L12_001CBF40_c + data[3] * 0x1190 + 0x1d) = 0x44;
-        ((L12Slot *)D_L12_001CBF40_c)[data[3]].visibility = 0xffff;
-        pool_bind_tile(D_L12_001CBF40_c + data[3] * 0x1190, D_L12_001CBE00_c + data[3] * 16);
+        *(float *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190) = moby->pos.x;
+        *(float *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 4) = moby->pos.y;
+        *(float *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 8) = moby->pos.z;
+        *(int *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 0x14) = water_tile_vars[0] + 0x28;
+        *(int *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 0x18) = water_tile_vars[1] + 0x28;
+        *(u8 *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 0x1c) = 0x1c;
+        *(u8 *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190 + 0x1d) = 0x44;
+        ((L12Slot *)D_L12_001CBF40_c)[water_tile_vars[3]].visibility = 0xffff;
+        pool_bind_tile(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190, D_L12_001CBE00_c + water_tile_vars[3] * 16);
         moby->state = 1;
         break;
     case SLOT_INITIALIZE_NEIGHBORS_AND_HEIGHT:
         next_water_tile_index_gp = 0;
-        initialize_level_12_slot_grid_neighbors(data[3]);
+        initialize_level_12_slot_grid_neighbors(water_tile_vars[3]);
         moby->state = 2;
-        *(float *)(data + 4) = moby->pos.z;
+        *(float *)(water_tile_vars + 4) = moby->pos.z;
         break;
     case SLOT_UPDATE_HEIGHT_AND_MOTION:
         if ((moby->command & 4) == 0) {
             moby->command = 1;
         } else {
-            data[5] = 1;
-            *(float *)(data + 4) += 5.0f;
+            water_tile_vars[5] = 1;
+            *(float *)(water_tile_vars + 4) += 5.0f;
             moby->command = 1;
         }
-        if (data[5] != 0) {
+        if (water_tile_vars[5] != 0) {
             advance_accelerated_scalar(&moby->pos.z,
-                                       (float *)(data + 2),
-                                       *(float *)(data + 4),
+                                       (float *)(water_tile_vars + 2),
+                                       *(float *)(water_tile_vars + 4),
                                        frame_time_sq * 4.0f,
                                        frame_time_sq * 4.0f,
                                        frame_time * 4.0f);
@@ -157,29 +157,29 @@ void update_level_12_water_tile(struct Moby *moby) {
         if (random_integer_below(200) == 0) {
             char *slot_record;
             other = random_float_between(-4.0f, 4.0f);
-            value = *(float *)(D_L12_001CBF40_c + data[3] * 0x1190);
+            value = *(float *)(D_L12_001CBF40_c + water_tile_vars[3] * 0x1190);
             value += other;
             other = random_float_between(-4.0f, 4.0f);
-            slot_record = D_L12_001CBF40_c + data[3] * 0x1190;
+            slot_record = D_L12_001CBF40_c + water_tile_vars[3] * 0x1190;
             pool_splash(
                 value, *(float *)(slot_record + 4) + other, 1.0f, -0.05f, slot_record, 1, 1);
         }
         break;
     }
 update_slot:
-    slot = data[3];
+    slot = water_tile_vars[3];
     if (slot >= 0) {
         float visible = 0.0f;
         if (FUN_L01_00275690_c(64.0f, moby) != -1)
             visible = 1.0f;
-        if (data[6] != -1 && is_point_inside_clip_volume(D_L12_00167240, data[6]) == 0)
+        if (water_tile_vars[6] != -1 && is_point_inside_clip_volume(D_L12_00167240, water_tile_vars[6]) == 0)
             visible = 0.0f;
         if (visible == 0.0f) {
-            ((L12Slot *)D_L12_001CBF40_c)[data[3]].visibility = 0;
+            ((L12Slot *)D_L12_001CBF40_c)[water_tile_vars[3]].visibility = 0;
         } else {
-            ((L12Slot *)D_L12_001CBF40_c)[data[3]].visibility = 0xffff;
+            ((L12Slot *)D_L12_001CBF40_c)[water_tile_vars[3]].visibility = 0xffff;
         }
-        if (data[3] == 0) {
+        if (water_tile_vars[3] == 0) {
             pool_flush(D_L12_001CBF40_c, 17);
             register_callback_c(render_level_12_water_grids, moby);
         }
