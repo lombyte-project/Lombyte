@@ -967,7 +967,7 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
     float        small_offset[4];
     float        direction[4];
     float        original_pos[4];
-    float        value;
+    float        effect_rotation_angle;
     float        puff_size;
     float        step;
     L14Puff     *part;
@@ -980,9 +980,9 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
     int          low_color;
     int          high_color;
 
-    value = fast_add_rotations(angle, moby->rot.z);
-    offset[0] = fast_cos(value) * 0.8f;
-    offset[1] = fast_sin(value) * 0.8f;
+    effect_rotation_angle = fast_add_rotations(angle, moby->rot.z);
+    offset[0] = fast_cos(effect_rotation_angle) * 0.8f;
+    offset[1] = fast_sin(effect_rotation_angle) * 0.8f;
     offset[2] = 0.0f;
     fast_vec_add(effect_spawn_position, point, offset);
     for (i = 5; i >= 0; i--) {
@@ -1016,8 +1016,8 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
     qcopy(original_pos, effect_spawn_position);
     step = 0.6283f;
     for (j = 0; j < 16; j++) {
-        value = randf_sym(0.0f, 0.5f);
-        build_look_at_matrix(direction, offset, small_offset, (float)j * step + value);
+        effect_rotation_angle = randf_sym(0.0f, 0.5f);
+        build_look_at_matrix(direction, offset, small_offset, (float)j * step + effect_rotation_angle);
         effect_spawn_position[0] = original_pos[0] + randf_sym(0.0f, 0.2f);
         effect_spawn_position[1] = original_pos[1] + randf_sym(0.0f, 0.2f);
         effect_spawn_position[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
