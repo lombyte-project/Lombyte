@@ -116,8 +116,8 @@ void process_heavy_gunship_part_hits(struct Moby *moby) __asm__("FUN_L08_002e975
 
 void process_heavy_gunship_part_hits(struct Moby *moby) {
     int        selected = 0;
-    char      *data = (char *)moby->pvars;
-    SwarmPart *slots = (SwarmPart *)(data + 0x60);
+    char      *linked_part_hit_vars = (char *)moby->pvars;
+    SwarmPart *slots = (SwarmPart *)(linked_part_hit_vars + 0x60);
     SwarmPart *slot = slots;
     int        i = 0;
     int        hits = 0;
@@ -153,14 +153,14 @@ void process_heavy_gunship_part_hits(struct Moby *moby) {
         i++;
         slot++;
     } while (i < 17);
-    total = *(u16 *)(data + 0x17c) + hits;
-    *(s16 *)(data + 0x17c) = total;
+    total = *(u16 *)(linked_part_hit_vars + 0x17c) + hits;
+    *(s16 *)(linked_part_hit_vars + 0x17c) = total;
     if ((s16)total >= 12) {
-        *(s16 *)(data + 0x17c) = (s16)total % 12;
+        *(s16 *)(linked_part_hit_vars + 0x17c) = (s16)total % 12;
         if (selected != 0) {
             SwarmPart *chosen = &slots[selected];
             u8        *vector;
-            char      *position = data;
+            char      *position = linked_part_hit_vars;
             vector = chosen->moby->pvars;
             cart_burst(moby, &chosen->moby->pos, -1, 2.0f, 13.0f);
             position += selected * 16;
@@ -181,7 +181,7 @@ void process_heavy_gunship_part_hits(struct Moby *moby) {
                 candidate = slots;
                 if (candidate->moby != 0) {
                     u8   *vector = candidate->moby->pvars;
-                    char *position = data;
+                    char *position = linked_part_hit_vars;
                     cart_burst(moby, &candidate->moby->pos, -1, 2.0f, 13.0f);
                     position += index * 16;
                     fast_vec_sub(
