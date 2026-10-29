@@ -48,7 +48,7 @@ extern FpNumber D_001596F0;
 #define IMPLICIT_1 0x1000000000000000ULL
 #define IMPLICIT_2 0x2000000000000000ULL
 
-FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *right_operand, FpNumber *result) {
+FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *right_operand, FpNumber *result_storage) {
     s64 tfraction;
     s32 a_normal_exp;
     s32 b_normal_exp;
@@ -72,9 +72,9 @@ FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *right_operand, FpNumber
     }
     if ((right_operand->class ^ 2) == 0) {
         if ((left_operand->class ^ 2) == 0) {
-            *result = *left_operand;
-            result->sign = left_operand->sign & right_operand->sign;
-            return result;
+            *result_storage = *left_operand;
+            result_storage->sign = left_operand->sign & right_operand->sign;
+            return result_storage;
         }
         return left_operand;
     }
@@ -121,27 +121,27 @@ FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *right_operand, FpNumber
             tfraction = a_fraction - b_fraction;
         }
         if (tfraction >= 0) {
-            result->sign = 0;
-            result->normal_exp = a_normal_exp;
-            result->fraction = tfraction;
+            result_storage->sign = 0;
+            result_storage->normal_exp = a_normal_exp;
+            result_storage->fraction = tfraction;
         } else {
-            result->sign = 1;
-            result->normal_exp = a_normal_exp;
-            result->fraction = -tfraction;
+            result_storage->sign = 1;
+            result_storage->normal_exp = a_normal_exp;
+            result_storage->fraction = -tfraction;
         }
-        while (result->fraction < IMPLICIT_1 && result->fraction) {
-            result->fraction <<= 1;
-            result->normal_exp--;
+        while (result_storage->fraction < IMPLICIT_1 && result_storage->fraction) {
+            result_storage->fraction <<= 1;
+            result_storage->normal_exp--;
         }
     } else {
-        result->sign = left_operand->sign;
-        result->normal_exp = a_normal_exp;
-        result->fraction = a_fraction + b_fraction;
+        result_storage->sign = left_operand->sign;
+        result_storage->normal_exp = a_normal_exp;
+        result_storage->fraction = a_fraction + b_fraction;
     }
-    result->class = 3;
-    if (result->fraction >= IMPLICIT_2) {
-        LSHIFT(result->fraction);
-        result->normal_exp++;
+    result_storage->class = 3;
+    if (result_storage->fraction >= IMPLICIT_2) {
+        LSHIFT(result_storage->fraction);
+        result_storage->normal_exp++;
     }
-    return result;
+    return result_storage;
 }
