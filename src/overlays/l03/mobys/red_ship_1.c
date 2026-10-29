@@ -109,7 +109,7 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
     float *vp;
     float  joint_world_position[4];
     float  particle_velocity[4];
-    char  *data;
+    char  *emitter_effect_pvars;
     int    i;
     int    j;
     int    k;
@@ -118,7 +118,7 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
     int    color;
     int    color2;
 
-    data = ((char *)MOBY(moby)->pvars);
+    emitter_effect_pvars = ((char *)MOBY(moby)->pvars);
     vp = emitter_motion_delta;
     *(OvlQuad *)vp = *(OvlQuad *)vel_in;
     if (MOBY(moby)->flags & 1) {
@@ -148,7 +148,7 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
     case MOBY_CLASS_JOINT_ZERO_TEN_PARTICLE_EMITTER:
     case MOBY_CLASS_GRAY_JOINT_ZERO_TEN_PARTICLE_EMITTER:
     case MOBY_CLASS_TEN_GRAY_PARTICLE_BURST_EMITTER:
-        if (quiet == 0 && FUN_L00_001fefc8(data + 0x12E)) {
+        if (quiet == 0 && FUN_L00_001fefc8(emitter_effect_pvars + 0x12E)) {
             if (fast_vec_length(vp) < frame_time * 40.0f &&
                 fast_vec_dist(moby + 0x10, D_L03_00166EC0) < 75.0f) {
                 fast_vec_scale(vp, vp, 0.7f);
@@ -167,11 +167,11 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
                                                              105000.0f);
                 }
             }
-            data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
+            emitter_effect_pvars[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
         }
         break;
     case MOBY_CLASS_FIFTEEN_PARTICLE_BURST_EMITTER:
-        if (quiet == 0 && FUN_L00_001fefc8(data + 0x12E)) {
+        if (quiet == 0 && FUN_L00_001fefc8(emitter_effect_pvars + 0x12E)) {
             if (fast_vec_length(vp) < frame_time * 40.0f &&
                 fast_vec_dist(moby + 0x10, D_L03_00166EC0) < 90.0f) {
                 fast_vec_scale(vp, vp, 0.5f);
@@ -190,20 +190,20 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
                                                              168000.0f);
                 }
             }
-            data[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
+            emitter_effect_pvars[0x12E] = random_int_between(scale_game_frames(7), scale_game_frames(20));
         }
         break;
     case MOBY_CLASS_ALTERNATE_COLOR_CHILD_EFFECT_EMITTER:
     case MOBY_CLASS_DEFAULT_COLOR_CHILD_EFFECT_EMITTER:
-        FUN_L00_001fefc8(data + 0x12F);
-        if (quiet != 0 && ((unsigned char *)data)[0x12F] == 0) {
+        FUN_L00_001fefc8(emitter_effect_pvars + 0x12F);
+        if (quiet != 0 && ((unsigned char *)emitter_effect_pvars)[0x12F] == 0) {
             break;
         }
-        FUN_L00_001fefc8(data + 0x12E);
-        if (((unsigned char *)data)[0x12E] == 0 || ((unsigned char *)data)[0x12F] != 0) {
-            moby_point_position(moby, 0, data + 0xF0);
+        FUN_L00_001fefc8(emitter_effect_pvars + 0x12E);
+        if (((unsigned char *)emitter_effect_pvars)[0x12E] == 0 || ((unsigned char *)emitter_effect_pvars)[0x12F] != 0) {
+            moby_point_position(moby, 0, emitter_effect_pvars + 0xF0);
         }
-        if (((unsigned char *)data)[0x12E] != 0) {
+        if (((unsigned char *)emitter_effect_pvars)[0x12E] != 0) {
             break;
         }
         if (fast_vec_length(vp) < frame_time * 40.0f &&
@@ -215,15 +215,15 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
                 color2 = 0x90A0;
             }
             spawn_emitter_child_effect((struct Moby *)moby,
-                                       (int)(data + 0xF0),
+                                       (int)(emitter_effect_pvars + 0xF0),
                                        color,
                                        color2,
                                        scale_game_frames(50),
                                        frame_time * 2.5f,
                                        0.15f);
-            ((unsigned char *)data)[0x12F] = scale_game_frames(50);
+            ((unsigned char *)emitter_effect_pvars)[0x12F] = scale_game_frames(50);
         }
-        data[0x12E] = scale_game_frames(13);
+        emitter_effect_pvars[0x12E] = scale_game_frames(13);
         break;
     }
 }
