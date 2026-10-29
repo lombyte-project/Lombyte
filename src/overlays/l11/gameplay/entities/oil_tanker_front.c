@@ -2085,5 +2085,3 @@ int D_L11_001625B0[2] = {0};
 unsigned char l11_layered_effect_texture_29_distance_fade_alpha __asm__("D_L11_00162590") = 0;
 
 int D_L11_00162630[2] = {0};
-
-short moby_radial_spark_initial_word_gp __asm__("D_L11_0016238C") = -24321;

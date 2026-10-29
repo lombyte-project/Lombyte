@@ -1999,7 +1999,6 @@ int D_L18_00161D1C = 0x60408080;
 float D_L18_00161D20 = 1.25f;
 float D_L18_00161D24 = 1.0f;
 
-struct QuadTextureState quad_texture_state __asm__("D_L02_001612F0") = {0};
 
 float D_L02_001D33B0[4][4] = {0};
 

@@ -1134,5 +1134,3 @@ short D_L18_00162064 = 0x20;
 short D_L18_00162068 = -13107;
 short D_L18_0016206C = -26214;
 short D_L18_00162094 = -13107;
-
-short electric_water_countdown_text_y __asm__("D_L15_00161BD8") = 0x15e;

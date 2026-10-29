@@ -3880,5 +3880,3 @@ float drek_missile_trail_texture_coordinates[4][2] __asm__("D_L18_001DA2F0") = {
 };
 
 short l18_drek_boss_aimed_class_3d7_spawn_frame_count_gp __asm__("D_L18_0016239C") = 0x55;
-
-int drek_missile_trail_draw_disabled_gp __asm__("D_L18_0016223C") = 0;

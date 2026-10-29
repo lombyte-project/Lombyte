@@ -2370,7 +2370,3 @@ s32 D_L18_0015F908 = 6;
 s32 D_L18_0015F90C = 0xff;
 s32 D_L18_0015F910 = 0x800000ff;
 s32 D_L18_0015F914 = 0x2d;
-
-int D_L00_0015FA90 = 0;
-
-s32 eight_slot_hud_selector_table_pointer_gp __asm__("D_L00_0015F738") = 0x17dac0;

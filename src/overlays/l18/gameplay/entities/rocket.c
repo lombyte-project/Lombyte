@@ -3224,5 +3224,3 @@ short electric_bolt_third_side_arc_timer_distance_reference __asm__("D_L18_00162
 short electric_bolt_fourth_side_arc_timer_distance_reference __asm__("D_L18_001620D6") = 0;
 
 int D_L18_001620DC = 0;
-
-int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") = 0x8000f0f0;
