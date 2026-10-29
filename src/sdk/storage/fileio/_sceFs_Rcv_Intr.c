@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/sdk/library/sif_file_slot.h"
 
 typedef struct {
     s32 v;
@@ -38,7 +39,6 @@ typedef struct {
 } __attribute__((packed)) FsStat;
 
 /* Semaphore slot table: read plainly, released through a volatile store (below). */
-extern s32 D_0012FC10[];
 extern u32 sif_file_completion_bank_index[] __asm__("D_0012FC90");
 extern s32 D_0012FC98[];
 extern u8 D_00157500[];
@@ -127,9 +127,9 @@ void _sceFs_Rcv_Intr(s32 *command_packet) {
         ret = (s32)semaphore;
         completion_header.ret.v = (s32)semaphore;
         for (i = 0; i < 32; i++) {
-            if (D_0012FC10[i] == ret) {
+            if (fio_async_semas[i] == ret) {
                 /* volatile keeps the store ahead of the branch, out of its delay slot */
-                ((volatile s32 *)D_0012FC10)[i] = -1;
+                ((volatile s32 *)fio_async_semas)[i] = -1;
                 break;
             }
         }

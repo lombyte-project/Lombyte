@@ -18,8 +18,6 @@ struct FsOpenRequest {
 
 
 extern struct FsOpenRequest D_00156880;
-extern struct SifFileSlot D_00157D80[];
-extern u8 D_00157F80[];
 extern s32 CreateSema(struct SemaParam *);
 extern s32 DeleteSema(s32);
 extern s32 ReadQueueStatus(void);
@@ -69,7 +67,7 @@ s32 sceOpen(const u8 *path, s32 flags, ...) {
     if (path_index == 0x400) {
         request->path[0x3FF] = 0;
     }
-    slot_index = file_slot - D_00157D80;
+    slot_index = file_slot - fio_iob;
     request->flags = (s32)(flags & 0x6FFFFFFF);
     request->mode = mode;
     semaphore_parameters.maxCount = 1;
@@ -80,12 +78,12 @@ s32 sceOpen(const u8 *path, s32 flags, ...) {
     request->result = &result;
     request->completion_semaphore = completion_semaphore;
     request->result_size = 4;
-    if (sceSifCallRpc(D_00157F80, 0, 0, &D_00156880, 0x418, D_001574C0, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&fio_rpc_client, 0, 0, &D_00156880, 0x418, fio_rpc_result, 4, 0, 0) < 0) {
         DeleteSema(completion_semaphore);
         ReadQueueStatus();
         return -0xB;
     }
-    return_value = *(u32 *)((u32)D_001574C0 | 0x20000000);
+    return_value = *(u32 *)((u32)fio_rpc_result | 0x20000000);
     ReadQueueStatus();
     if (return_value == 0) {
         DeleteSema(completion_semaphore);
@@ -94,14 +92,14 @@ s32 sceOpen(const u8 *path, s32 flags, ...) {
     WaitSema(completion_semaphore);
     DeleteSema(completion_semaphore);
     if (result < 0) {
-        WaitSema(D_0012FCA0[0]);
+        WaitSema(fio_iob_sema);
         file_slot->flags = 0;
-        SignalSema(D_0012FCA0[0]);
+        SignalSema(fio_iob_sema);
         return result;
     }
     return_value = slot_index;
-    WaitSema(D_0012FCA0[0]);
-    slot_mutex = D_0012FCA0[0];
+    WaitSema(fio_iob_sema);
+    slot_mutex = fio_iob_sema;
     file_slot->fd = result;
     file_slot->flags = (s32)(file_slot->flags | flags);
     SignalSema(slot_mutex);

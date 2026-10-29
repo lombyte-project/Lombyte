@@ -2,6 +2,7 @@
 #include "kernel.h"
 #include "rnc/sdk/library/sdk_state.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/library/sif_file_slot.h"
 struct SifFileState {
     s32 unk0;
     s32 unk4;
@@ -9,14 +10,8 @@ struct SifFileState {
     s32 unkC;
     s32 unk10;
 };
-struct SifFileEntry {
-    s32 unk0;
-    s32 unk4;
-};
 extern struct SifFileState D_00156880;
-extern u8 D_00157D80[];
-extern u8 D_00157F80[];
-extern struct SifFileEntry *get_iob(s32);
+extern struct SifFileSlot *get_iob(s32);
 extern s32 _sceFsWaitS(s32 arg0);
 extern s32 ReadQueueStatus(void);
 extern s32 CreateSema(void *param);
@@ -29,7 +24,7 @@ s32 sceClose(s32 fd) {
     s32 result;
     s32 ok;
     s32 sid;
-    struct SifFileEntry *io;
+    struct SifFileSlot *io;
     struct SifFileState *state = &D_00156880;
 
     io = get_iob(fd);
@@ -38,26 +33,26 @@ s32 sceClose(s32 fd) {
         ReadQueueStatus();
         return -1;
     }
-    if (io == NULL || io->unk4 == 0) {
+    if (io == NULL || io->flags == 0) {
         ReadQueueStatus();
         return -9;
     }
-    state->unkC = io->unk0;
+    state->unkC = io->fd;
     sema.maxCount = 1;
-    state->unk10 = ((u8 *)io - (u8 *)D_00157D80) >> 4;
+    state->unk10 = io - fio_iob;
     sema.initCount = 0;
     sema.option = 0;
     sid = CreateSema(&sema);
     state->unk0 = sid;
     state->unk4 = (s32)&result;
     state->unk8 = 4;
-    if (sceSifCallRpc(D_00157F80, 1, 0, state, 0x14, D_001574C0, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&fio_rpc_client, 1, 0, state, 0x14, fio_rpc_result, 4, 0, 0) < 0) {
         DeleteSema(sid);
         ReadQueueStatus();
         return -0xB;
     }
-    io->unk4 = 0;
-    ok = *(u32 *)((u32)D_001574C0 | 0x20000000);
+    io->flags = 0;
+    ok = *(u32 *)((u32)fio_rpc_result | 0x20000000);
     ReadQueueStatus();
     if (ok == 0) {
         DeleteSema(sid);

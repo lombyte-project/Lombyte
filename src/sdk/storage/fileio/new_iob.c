@@ -21,26 +21,26 @@
 
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/library/sif_file_slot.h"
 
 extern s32 _sceFsIobSemaMK();
 extern s32 WaitSema();
 extern s32 SignalSema();
-extern u8 D_00157D80[];
 
 void *new_iob(void) {
-    u8 *iob;
+    struct SifFileSlot *iob;
 
     _sceFsIobSemaMK();
-    WaitSema(D_0012FCA0[0]);
+    WaitSema(fio_iob_sema);
 
-    for (iob = D_00157D80; iob < D_00157D80 + 0x200; iob += 0x10) {
-        if (*(u32 *)(iob + 4) == 0) {
-            *(u32 *)(iob + 4) = 0x10000000;
-            SignalSema(D_0012FCA0[0]);
+    for (iob = fio_iob; iob < fio_iob + SIF_FILE_SLOT_COUNT; iob++) {
+        if (iob->flags == 0) {
+            iob->flags = SIF_FILE_SLOT_TAKEN;
+            SignalSema(fio_iob_sema);
             return iob;
         }
     }
 
-    SignalSema(D_0012FCA0[0]);
+    SignalSema(fio_iob_sema);
     return 0;
 }

@@ -20,8 +20,6 @@ struct FsWriteRequest {
 
 extern struct FsWriteRequest D_00156880;
 /* Also accessed by the asynchronous completion interrupt handler. */
-extern struct SifFileSlot D_00157D80[];
-extern struct sceSifClientData D_00157F80;
 extern struct SifFileSlot *get_iob(s32 fd);
 extern s32 _sceFsWaitS(s32);
 extern s32 ReadQueueStatus(void);
@@ -59,7 +57,7 @@ s32 sceWrite(s32 fd, u8 *buffer, s32 length) {
     }
     request->fd = file_slot->fd;
     semaphore_parameters.maxCount = 1;
-    request->slot = file_slot - D_00157D80;
+    request->slot = file_slot - fio_iob;
     request->length = length;
     request->buffer = buffer;
     semaphore_parameters.initCount = 0;
@@ -69,9 +67,9 @@ s32 sceWrite(s32 fd, u8 *buffer, s32 length) {
     request->result_size = 4;
     D_00156880.completion_semaphore = completion_semaphore;
     if ((s16)flags & 0x8000) {
-        WaitSema(D_0012FCA4[0]);
+        WaitSema(fio_async_table_sema);
         for (async_index = 0; async_index < 32; async_index++) {
-            volatile s32 *async_semaphores = D_0012FC10;
+            volatile s32 *async_semaphores = fio_async_semas;
 
             async_slot = async_semaphores + async_index;
             if (*async_slot == -1) {
@@ -80,7 +78,7 @@ s32 sceWrite(s32 fd, u8 *buffer, s32 length) {
                 break;
             }
         }
-        SignalSema(D_0012FCA4[0]);
+        SignalSema(fio_async_table_sema);
     }
     if (((u32)buffer & 0xF) == 0) {
         prefix_length = 0;
@@ -99,12 +97,12 @@ s32 sceWrite(s32 fd, u8 *buffer, s32 length) {
     for (prefix_index = 0; prefix_index < prefix_length; prefix_index++) {
         request->prefix[prefix_index] = buffer[prefix_index];
     }
-    if (sceSifCallRpc(&D_00157F80, 3, 0, &D_00156880, 0x30, D_001574C0, 4, 0, 0) < 0) {
+    if (sceSifCallRpc(&fio_rpc_client, 3, 0, &D_00156880, 0x30, fio_rpc_result, 4, 0, 0) < 0) {
         DeleteSema(completion_semaphore);
         ReadQueueStatus();
         return -11;
     }
-    rpc_result = *(s32 *)((u32)D_001574C0 | 0x20000000);
+    rpc_result = *(s32 *)((u32)fio_rpc_result | 0x20000000);
     ReadQueueStatus();
     if (rpc_result == 0) {
         DeleteSema(completion_semaphore);

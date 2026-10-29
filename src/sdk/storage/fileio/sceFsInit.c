@@ -18,10 +18,8 @@ struct UnalignedWord {
 
 extern SifFileCommandCallbackRecord D_00158000 NOT_SDA;
 extern char fs_receive_interrupt_handler_data[] __asm__("D_00157FC0");
-extern struct sceSifClientData D_00157F80;
 extern char *fs_init_completion_buffer_addresses[] __asm__("D_00156840");
 extern u8 FsResetBuffer[] __asm__("D_00157FA8");
-extern struct SifFileSlot D_00157D80[];
 extern u8 D_00157500[];
 extern s32 D_0012FC98[];
 extern void _sceFs_Rcv_Intr();
@@ -53,31 +51,31 @@ s32 sceFsInit(void) {
         EnableInterrupts();
     }
     for (;;) {
-        result = sceSifBindRpc(&D_00157F80, 0x80000001, 0);
+        result = sceSifBindRpc(&fio_rpc_client, 0x80000001, 0);
         if (result < 0) {
             return -1;
         }
-        if (D_00157F80.serve != 0) {
+        if (fio_rpc_client.serve != 0) {
             break;
         }
         for (delay = 0x100000; delay != -1; delay--) {
         }
     }
     _sceFsIobSemaMK();
-    WaitSema(D_0012FCA0[0]);
-    for (slot = D_00157D80; slot < D_00157D80 + 32; slot++) {
+    WaitSema(fio_iob_sema);
+    for (slot = fio_iob; slot < fio_iob + SIF_FILE_SLOT_COUNT; slot++) {
         slot->flags = 0;
     }
-    SignalSema(D_0012FCA0[0]);
+    SignalSema(fio_iob_sema);
     fs_init_completion_buffer_addresses[0] = D_00157500;
     fs_init_completion_buffer_addresses[1] = D_00157500 + 0x440;
-    result = sceSifCallRpc(&D_00157F80, 0xFF, 0, fs_init_completion_buffer_addresses, 8, D_001574C0, 8, 0, 0);
+    result = sceSifCallRpc(&fio_rpc_client, 0xFF, 0, fs_init_completion_buffer_addresses, 8, fio_rpc_result, 8, 0, 0);
     if (result < 0) {
         return (s32)0xFFFEFFFF;
     }
     *(struct UnalignedWord *)FsResetBuffer =
-        *(struct UnalignedWord *)((u32)D_001574C0 | 0x20000000);
-    reply_word = *(struct UnalignedWord *)((u32)(D_001574C0 + 4) | 0x20000000);
+        *(struct UnalignedWord *)((u32)fio_rpc_result | 0x20000000);
+    reply_word = *(struct UnalignedWord *)((u32)(fio_rpc_result + 4) | 0x20000000);
     D_0012FC98[0] = (*(s32 *)&reply_word == 2);
     FsResetState = 1;
     return 0;
