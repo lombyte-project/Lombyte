@@ -720,8 +720,8 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 void select_blarg_elite_commando_movement_animation(char *moby) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    char *target = D_L16_001B0930[*(int *)(data + 0x120)] + (*(short *)(data + 0x300) << 4);
+    char *commando_path_state = ((char *)MOBY(moby)->pvars);
+    char *target = D_L16_001B0930[*(int *)(commando_path_state + 0x120)] + (*(short *)(commando_path_state + 0x300) << 4);
     float angle = fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x,
                                *(float *)(target + 0x14) - MOBY(moby)->pos.y);
     float delta = fast_subtract_rotations(angle, MOBY(moby)->rot.z);
