@@ -408,7 +408,7 @@ extern int bomber_tank_part_3_destroyed_by_class_661_gp __asm__("D_L08_0015F5B8"
     __attribute__((sda));
 
 void update_bomber_tank_damage_and_aim(Moby *moby) {
-    Data       *data = (Data *)moby->pvars;
+    Data       *bomber_tank_damage_and_aim_vars = (Data *)moby->pvars;
     Hit_2D5FA8 *source;
     Hit_2D5FA8 *part_a_source;
     Hit_2D5FA8 *part_b_source;
@@ -418,13 +418,13 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
     int         one;
 
     source = find_moby_hit(moby, 0x330000, 0);
-    if (data->partA != 0) {
-        part_a_source = find_moby_hit(data->partA, 0x210000, 0);
+    if (bomber_tank_damage_and_aim_vars->partA != 0) {
+        part_a_source = find_moby_hit(bomber_tank_damage_and_aim_vars->partA, 0x210000, 0);
     } else {
         part_a_source = 0;
     }
-    if (data->partB != 0) {
-        part_b_source = find_moby_hit(data->partB, 0x210000, 0);
+    if (bomber_tank_damage_and_aim_vars->partB != 0) {
+        part_b_source = find_moby_hit(bomber_tank_damage_and_aim_vars->partB, 0x210000, 0);
     } else {
         part_b_source = 0;
     }
@@ -434,26 +434,26 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
         if (source_class == 0x1A9 || source_class == 0x47)
             source = 0;
     }
-    resolve_moby_hit_response(moby, source, &data->health, 0, &hit, &damage, 0, 4);
+    resolve_moby_hit_response(moby, source, &bomber_tank_damage_and_aim_vars->health, 0, &hit, &damage, 0, 4);
     one = 1;
     if (hit != one && moby->state != 0) {
-        data->health -= damage;
+        bomber_tank_damage_and_aim_vars->health -= damage;
         if (damage != 0.0f)
             allocate_voice_for_target_entry(4, 0, moby);
-        if (data->health > 0.0f) {
+        if (bomber_tank_damage_and_aim_vars->health > 0.0f) {
             if (damage < 4.0f) {
-                data->tint = 0x78;
+                bomber_tank_damage_and_aim_vars->tint = 0x78;
                 if ((unsigned short)(source->moby->oclass - 0xB0) < 2) {
-                    data->timer = scale_game_frames(0x3C);
+                    bomber_tank_damage_and_aim_vars->timer = scale_game_frames(0x3C);
                 } else {
-                    data->timer = scale_game_frames(0x1E);
+                    bomber_tank_damage_and_aim_vars->timer = scale_game_frames(0x1E);
                 }
             } else if (damage < 6.0f) {
-                data->tint = 0xC8;
-                data->timer = scale_game_frames(0x1E);
+                bomber_tank_damage_and_aim_vars->tint = 0xC8;
+                bomber_tank_damage_and_aim_vars->timer = scale_game_frames(0x1E);
             } else {
-                data->tint = 0xE6;
-                data->timer = scale_game_frames(0x1E);
+                bomber_tank_damage_and_aim_vars->tint = 0xE6;
+                bomber_tank_damage_and_aim_vars->timer = scale_game_frames(0x1E);
             }
             if (moby->state == 0xC && moby->prev_seq != 1) {
                 blend_moby_animation(moby, 1, 0, 0);
@@ -463,10 +463,10 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
             if (moby->state != dead) {
                 qcopy(burst_position_or_aim_scratch, &moby->pos);
                 burst_position_or_aim_scratch[2] += 3.0f;
-                data->tint = 0xFA;
-                clear_u64_value(data->f120);
+                bomber_tank_damage_and_aim_vars->tint = 0xFA;
+                clear_u64_value(bomber_tank_damage_and_aim_vars->f120);
                 spawn_explosion(moby,
-                                data->f40,
+                                bomber_tank_damage_and_aim_vars->f40,
                                 burst_position_or_aim_scratch,
                                 0.0f,
                                 0.0f,
@@ -536,11 +536,11 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                 if (moby->prev_seq != one)
                     blend_moby_animation(moby, 1, 0, 3);
                 moby->state = dead;
-                data->health = 6.0f;
-                data->flags &= 0xFFFD;
+                bomber_tank_damage_and_aim_vars->health = 6.0f;
+                bomber_tank_damage_and_aim_vars->flags &= 0xFFFD;
             } else {
                 if (D_0015ED84 == 8) {
-                    int part = data->part_id;
+                    int part = bomber_tank_damage_and_aim_vars->part_id;
                     if (part != 0 && source != 0 && source->moby != 0 &&
                         source->moby->oclass == 0x661) {
                         if (part == one)
@@ -566,7 +566,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                 mark_moby_for_removal_cf(moby, 0, -1);
                 allocate_voice_for_target_entry(2, 0, moby);
                 spawn_explosion(moby,
-                                data->f40,
+                                bomber_tank_damage_and_aim_vars->f40,
                                 burst_position_or_aim_scratch,
                                 0.0f,
                                 0.0f,
@@ -633,35 +633,35 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                              D_L08_0015F580_macro,
                              D_L08_0015F580_macro,
                              D_L08_0015F580_macro);
-                if (data->partA != 0)
-                    mark_moby_for_removal(data->partA);
-                if (data->partB != 0)
-                    mark_moby_for_removal(data->partB);
+                if (bomber_tank_damage_and_aim_vars->partA != 0)
+                    mark_moby_for_removal(bomber_tank_damage_and_aim_vars->partA);
+                if (bomber_tank_damage_and_aim_vars->partB != 0)
+                    mark_moby_for_removal(bomber_tank_damage_and_aim_vars->partB);
                 mark_moby_for_removal(moby);
                 return;
             }
         }
-        trooper_anim_update(moby, &data->anim0);
+        trooper_anim_update(moby, &bomber_tank_damage_and_aim_vars->anim0);
     }
 
     moby->hit_slot = 0xFF;
-    if (data->partA != 0)
-        data->partA->hit_slot = 0xFF;
-    if (data->partB != 0)
-        data->partB->hit_slot = 0xFF;
+    if (bomber_tank_damage_and_aim_vars->partA != 0)
+        bomber_tank_damage_and_aim_vars->partA->hit_slot = 0xFF;
+    if (bomber_tank_damage_and_aim_vars->partB != 0)
+        bomber_tank_damage_and_aim_vars->partB->hit_slot = 0xFF;
 
     activate_effect_l08(100.0f,
                         moby,
-                        data->target,
+                        bomber_tank_damage_and_aim_vars->target,
                         0,
                         0,
-                        ((Path *)l08_paths[data->path])->list,
-                        ((Path *)l08_paths[data->path])->count);
-    if (data->fF0 == 0)
-        data->fF0 = *(int *)D_001413D0;
-    if (data->mode != 2) {
+                        ((Path *)l08_paths[bomber_tank_damage_and_aim_vars->path])->list,
+                        ((Path *)l08_paths[bomber_tank_damage_and_aim_vars->path])->count);
+    if (bomber_tank_damage_and_aim_vars->fF0 == 0)
+        bomber_tank_damage_and_aim_vars->fF0 = *(int *)D_001413D0;
+    if (bomber_tank_damage_and_aim_vars->mode != 2) {
         float yaw, distance, pitch;
-        fast_vec_sub(burst_position_or_aim_scratch, data->target, (float *)&moby->pos);
+        fast_vec_sub(burst_position_or_aim_scratch, bomber_tank_damage_and_aim_vars->target, (float *)&moby->pos);
         burst_position_or_aim_scratch[2] -= 3.0f;
         yaw = fast_arc_tan(burst_position_or_aim_scratch[0], burst_position_or_aim_scratch[1]);
         distance = vector_length_xy(burst_position_or_aim_scratch);
@@ -672,48 +672,48 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
             pitch = -0.7853982f;
         }
         yaw = fast_subtract_rotations(yaw, moby->rot.z);
-        approach_2D5FA8(&data->yaw,
+        approach_2D5FA8(&bomber_tank_damage_and_aim_vars->yaw,
                         yaw,
-                        &data->yaw_speed,
+                        &bomber_tank_damage_and_aim_vars->yaw_speed,
                         D_0015ED70 * 12.566371f,
                         D_0015ED70 * 12.566371f,
                         D_0015ED6C_lui * 9.424778f);
-        approach_2D5FA8(&data->pitch,
+        approach_2D5FA8(&bomber_tank_damage_and_aim_vars->pitch,
                         pitch,
-                        &data->pitch_speed,
+                        &bomber_tank_damage_and_aim_vars->pitch_speed,
                         D_0015ED70 * 12.566371f,
                         D_0015ED70 * 12.566371f,
                         D_0015ED6C_lui * 9.424778f);
     } else {
-        approach_2D5FA8(&data->yaw,
+        approach_2D5FA8(&bomber_tank_damage_and_aim_vars->yaw,
                         0.0f,
-                        &data->yaw_speed,
+                        &bomber_tank_damage_and_aim_vars->yaw_speed,
                         D_0015ED70 * 12.566371f,
                         D_0015ED70 * 12.566371f,
                         D_0015ED6C_lui * 9.424778f);
-        approach_2D5FA8(&data->pitch,
+        approach_2D5FA8(&bomber_tank_damage_and_aim_vars->pitch,
                         0.0f,
-                        &data->pitch_speed,
+                        &bomber_tank_damage_and_aim_vars->pitch_speed,
                         D_0015ED70 * 12.566371f,
                         D_0015ED70 * 12.566371f,
                         D_0015ED6C_lui * 9.424778f);
     }
-    rotation_2D5FA8(burst_position_or_aim_scratch, 1, data->pitch);
-    rotation_2D5FA8(data->f110, 2, data->yaw);
-    multiply_quaternions(data->f110, burst_position_or_aim_scratch, data->f110);
+    rotation_2D5FA8(burst_position_or_aim_scratch, 1, bomber_tank_damage_and_aim_vars->pitch);
+    rotation_2D5FA8(bomber_tank_damage_and_aim_vars->f110, 2, bomber_tank_damage_and_aim_vars->yaw);
+    multiply_quaternions(bomber_tank_damage_and_aim_vars->f110, burst_position_or_aim_scratch, bomber_tank_damage_and_aim_vars->f110);
     {
-        short saved_anim0 = data->anim0;
-        short saved_anim2 = data->anim2;
-        trooper_anim_finish(moby, &data->anim0);
-        if (data->partA != 0) {
-            data->anim0 = saved_anim0;
-            data->anim2 = saved_anim2;
-            trooper_anim_finish(data->partA, &data->anim0);
+        short saved_anim0 = bomber_tank_damage_and_aim_vars->anim0;
+        short saved_anim2 = bomber_tank_damage_and_aim_vars->anim2;
+        trooper_anim_finish(moby, &bomber_tank_damage_and_aim_vars->anim0);
+        if (bomber_tank_damage_and_aim_vars->partA != 0) {
+            bomber_tank_damage_and_aim_vars->anim0 = saved_anim0;
+            bomber_tank_damage_and_aim_vars->anim2 = saved_anim2;
+            trooper_anim_finish(bomber_tank_damage_and_aim_vars->partA, &bomber_tank_damage_and_aim_vars->anim0);
         }
-        if (data->partB != 0) {
-            data->anim0 = saved_anim0;
-            data->anim2 = saved_anim2;
-            trooper_anim_finish(data->partB, &data->anim0);
+        if (bomber_tank_damage_and_aim_vars->partB != 0) {
+            bomber_tank_damage_and_aim_vars->anim0 = saved_anim0;
+            bomber_tank_damage_and_aim_vars->anim2 = saved_anim2;
+            trooper_anim_finish(bomber_tank_damage_and_aim_vars->partB, &bomber_tank_damage_and_aim_vars->anim0);
         }
     }
 }
