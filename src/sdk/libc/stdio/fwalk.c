@@ -32,11 +32,11 @@ struct ReentStreamBlock {
 
 s32 _fwalk(u8 *reent, s32 (*callback)(void *)) {
     s32                      stream_index;
-    s32                      result;
+    s32                      combined_callback_result;
     struct ReentStream      *stream;
     struct ReentStreamBlock *block;
 
-    result = 0;
+    combined_callback_result = 0;
     block = (struct ReentStreamBlock *)(reent + 0x1D8);
     if (block != NULL) {
         do {
@@ -46,7 +46,7 @@ s32 _fwalk(u8 *reent, s32 (*callback)(void *)) {
             if (stream_index >= 0) {
                 do {
                     if (stream->flags != 0) {
-                        result |= callback(stream);
+                        combined_callback_result |= callback(stream);
                     }
                     stream_index -= 1;
                     stream = (struct ReentStream *)((u8 *)stream + 0x58);
@@ -55,5 +55,5 @@ s32 _fwalk(u8 *reent, s32 (*callback)(void *)) {
             block = block->next;
         } while (block != NULL);
     }
-    return result;
+    return combined_callback_result;
 }
