@@ -872,31 +872,31 @@ void ease_minibomber_position_and_heading(char  *moby,
                                           float  heading_velocity_damping,
 
                                           float heading_velocity_limit) {
-    int data;
+    int minibomber_private_vars_base;
     int moby_state = moby[0x20] & 0xFF;
     if ((moby_state >= 4 && moby_state <= 6) || moby_state == 8) {
-        data = *(int *)(moby + 0x78);
+        minibomber_private_vars_base = *(int *)(moby + 0x78);
         vendor_spring((float *)&MOBY(moby)->pos,
-                      (float *)(data + 0xF0),
+                      (float *)(minibomber_private_vars_base + 0xF0),
                       target[0],
                       position_error_gain,
                       position_velocity_damping,
                       position_snap_threshold_scale);
         vendor_spring((float *)&MOBY(moby)->pos.y,
-                      (float *)(data + 0xF4),
+                      (float *)(minibomber_private_vars_base + 0xF4),
                       target[1],
                       position_error_gain,
                       position_velocity_damping,
                       position_snap_threshold_scale);
         vendor_spring((float *)&MOBY(moby)->pos.z,
-                      (float *)(data + 0xF8),
+                      (float *)(minibomber_private_vars_base + 0xF8),
                       target[2],
                       position_error_gain,
                       position_velocity_damping,
                       position_snap_threshold_scale);
         approach_w(moby,
                    target_heading,
-                   (float *)(data + 0xE4),
+                   (float *)(minibomber_private_vars_base + 0xE4),
                    heading_error_gain,
                    heading_velocity_damping,
                    heading_velocity_limit);
