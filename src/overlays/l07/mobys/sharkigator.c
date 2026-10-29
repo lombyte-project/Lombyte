@@ -416,13 +416,13 @@ void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
         SHARKIGATOR_ALTERNATE_HIT_ANIMATION_RESPONSE = 10,
         HIT_REACTION_NO_ANIMATION_RESPONSE = 11
     };
-    char *info;
+    char *hit_record;
     int   hit;
     int   hit_reaction_result;
     if (((unsigned char *)moby)[0x20] == 0xE)
         return;
-    info = find_moby_hit(moby, 0x330000, 0);
-    hit_reaction_result = hit_reaction(moby, info, hp, 0, &hit, 0, 0, 4);
+    hit_record = find_moby_hit(moby, 0x330000, 0);
+    hit_reaction_result = hit_reaction(moby, hit_record, hp, 0, &hit, 0, 0, 4);
     if (((unsigned char *)moby)[0xBC] != 0) {
         switch (hit_reaction_result) {
         case HIT_REACTION_NONE:
@@ -437,7 +437,7 @@ void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
         case SHARKIGATOR_START_HIT_KNOCKBACK_RECOVERY:
         case SHARKIGATOR_LAUNCH_HIT_KNOCKBACK_RECOVERY:
         case SHARKIGATOR_ENTER_HIT_KNOCKBACK_RECOVERY:
-            start_sharkigator_hit_knockback(moby, x + 0x70, info + 0x10);
+            start_sharkigator_hit_knockback(moby, x + 0x70, hit_record + 0x10);
             moby->state = 0xC;
             break;
         case SHARKIGATOR_HIT_ANIMATION_RESPONSE:
@@ -451,16 +451,16 @@ void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
             break;
         }
         if (hit >= 2) {
-            if (*hp <= *(float *)(info + 0x2C)) {
+            if (*hp <= *(float *)(hit_record + 0x2C)) {
                 *hp = 0.0f;
                 moby->flags &= 0xEFFF;
-                start_sharkigator_death_knockback(moby, x + 0x70, info + 0x10);
+                start_sharkigator_death_knockback(moby, x + 0x70, hit_record + 0x10);
                 FUN_L00_00257470(moby, 0, -1);
                 x[0x67] = 0x78;
                 trooper_anim_update(moby, (short *)(x + 0x60));
                 moby->state = 0xE;
             } else {
-                *hp -= *(float *)(info + 0x2C);
+                *hp -= *(float *)(hit_record + 0x2C);
                 ((unsigned char *)x)[0x67] = 0xFA;
                 *(short *)(x + 0x26) = scale_game_frames(0x3C);
                 trooper_anim_update(moby, (short *)(x + 0x60));
