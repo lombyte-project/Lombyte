@@ -141,7 +141,7 @@ M_2cc360 *select_ryno_target(
     M_2cc360 *best = 0;
     float     bestScore = 1.0e9f;
     M_2cc360 *candidate_moby;
-    float    *info;
+    float    *candidate_aim_data;
     V_2cc360  aim_point;
     V_2cc360 *pp;
     float     candidate_distance, ys, ps, score;
@@ -163,10 +163,10 @@ M_2cc360 *select_ryno_target(
         } else if (!candidate_moby->b31) {
             continue;
         }
-        info = get_moby_target_info(candidate_moby);
-        if (!info)
+        candidate_aim_data = get_moby_target_info(candidate_moby);
+        if (!candidate_aim_data)
             continue;
-        if (info[0] < 0.0f)
+        if (candidate_aim_data[0] < 0.0f)
             continue;
         if (!(candidate_moby->h34 & 0x1000))
             continue;
@@ -181,7 +181,7 @@ M_2cc360 *select_ryno_target(
         if (!(candidate_distance < maxDist))
             continue;
         qcopy(&aim_point, pp);
-        aim_point.f[2] += info[4] + 0.1f;
+        aim_point.f[2] += candidate_aim_data[4] + 0.1f;
         ys = fast_difference_between_rotations(
             aim_rotation[2], fast_arc_tan(aim_point.f[0] - pos[0], aim_point.f[1] - pos[1]));
         ys = ys * ys;
