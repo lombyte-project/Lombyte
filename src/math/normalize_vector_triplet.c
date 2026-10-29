@@ -14,7 +14,7 @@ void normalize_vector_triplet(f32 *matrix) {
     f32              *base;
     f32              *component_read_cursor;
     f32              *component_write_cursor;
-    f32               value;
+    f32               vector_component;
     s32               offset;
     s32               i;
     s32               next;
@@ -30,10 +30,10 @@ void normalize_vector_triplet(f32 *matrix) {
         component_read_cursor = (f32 *)((u8 *)base + offset);
         count = 2;
         do {
-            value = *component_read_cursor;
+            vector_component = *component_read_cursor;
             count--;
             component_read_cursor += 4;
-            *component_write_cursor = value;
+            *component_write_cursor = vector_component;
             component_write_cursor++;
         } while (count >= 0);
         fast_vec_normalize(scratch.values, scratch.values, 1.0f);
@@ -41,10 +41,10 @@ void normalize_vector_triplet(f32 *matrix) {
         component_read_cursor = scratch.values;
         count = 2;
         do {
-            value = *component_read_cursor;
+            vector_component = *component_read_cursor;
             count--;
             component_read_cursor++;
-            *component_write_cursor = value;
+            *component_write_cursor = vector_component;
             component_write_cursor += 4;
         } while (count >= 0);
         i = next;
