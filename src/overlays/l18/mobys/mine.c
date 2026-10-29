@@ -199,7 +199,7 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
     char  *found = 0;
     short *moby_list_entry = (short *)D_L18_001AC240_lui[moby_list_index];
     char  *moby;
-    char  *data;
+    char  *class_238_private_vars;
     char  *d2;
     if (moby_list_entry == 0) {
         return 0;
@@ -243,22 +243,22 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
                              vector_length_xy(adjusted_target_position) -
                                  *(float *)&mine_launch_pitch_and_setback_gp);
         fast_vec_add(adjusted_target_position, adjusted_target_position, launch_position);
-        data = ((char *)MOBY(moby)->pvars);
-        qcopy(data + 0x170, adjusted_target_position);
-        fast_vec_sub(data + 0x180, adjusted_target_position, launch_position);
-        *(int *)(data + 0x188) = 0;
-        fast_vec_normalize(data + 0x180, data + 0x180, horizontal_speed);
+        class_238_private_vars = ((char *)MOBY(moby)->pvars);
+        qcopy(class_238_private_vars + 0x170, adjusted_target_position);
+        fast_vec_sub(class_238_private_vars + 0x180, adjusted_target_position, launch_position);
+        *(int *)(class_238_private_vars + 0x188) = 0;
+        fast_vec_normalize(class_238_private_vars + 0x180, class_238_private_vars + 0x180, horizontal_speed);
         ballistic_gravity_magnitude = frame_time_sq * 10.0f;
-        *(short *)(data + 0xC8) = 0;
-        *(float *)(data + 0x188) = FUN_L00_0025abf0_q(launch_position,
+        *(short *)(class_238_private_vars + 0xC8) = 0;
+        *(float *)(class_238_private_vars + 0x188) = FUN_L00_0025abf0_q(launch_position,
                                                       adjusted_target_position,
                                                       0,
                                                       horizontal_speed,
                                                       -ballistic_gravity_magnitude);
-        MOBY(moby)->rot.z = fast_arc_tan(*(float *)(data + 0x180), *(float *)(data + 0x184));
-        *(int *)(data + 0x194) = detonation_countdown;
-        *(int *)(data + 0x198) = launching_moby;
-        *(int *)(data + 0x19C) = 0;
+        MOBY(moby)->rot.z = fast_arc_tan(*(float *)(class_238_private_vars + 0x180), *(float *)(class_238_private_vars + 0x184));
+        *(int *)(class_238_private_vars + 0x194) = detonation_countdown;
+        *(int *)(class_238_private_vars + 0x198) = launching_moby;
+        *(int *)(class_238_private_vars + 0x19C) = 0;
         allocate_voice_for_target_entry(0, 0, (int)moby);
     }
     return moby;
