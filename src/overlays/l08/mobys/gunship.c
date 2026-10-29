@@ -234,8 +234,8 @@ void update_linked_moby_parts(struct Moby *moby) {
 }
 
 void process_gunship_part_hits(struct Moby *moby) {
-    char *data = *(char **)((char *)moby + 0x78);
-    char *entries = data + 0x60;
+    char *gunship_instance_vars = *(char **)((char *)moby + 0x78);
+    char *entries = gunship_instance_vars + 0x60;
     char *part_entry_cursor = entries;
     int   i;
     int   score = 0;
@@ -265,10 +265,10 @@ void process_gunship_part_hits(struct Moby *moby) {
             (*(unsigned char **)part_entry_cursor)[0xA4] = 0xFF;
         }
     }
-    *(short *)(data + 0x28C) += score;
-    if (*(short *)(data + 0x28C) >= 8) {
+    *(short *)(gunship_instance_vars + 0x28C) += score;
+    if (*(short *)(gunship_instance_vars + 0x28C) >= 8) {
         state = 0;
-        *(short *)(data + 0x28C) = *(short *)(data + 0x28C) % 8;
+        *(short *)(gunship_instance_vars + 0x28C) = *(short *)(gunship_instance_vars + 0x28C) % 8;
         if (chosen != 0) {
             int   off = chosen * 16;
             char *entry;
@@ -277,7 +277,7 @@ void process_gunship_part_hits(struct Moby *moby) {
             entry = base + off;
             v = *(char **)(*(char **)entry + 0x78);
             cart_burst(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
-            fast_vec_sub(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
+            fast_vec_sub(v, *(char **)entry + 0x10, *(char **)(gunship_instance_vars + off + 0x64) + 0x10);
             fast_vec_normalize(v, v, D_0015ED6C * 10.0f);
             (*(char **)entry)[0x20] = 1;
             *(char **)entry = 0;
@@ -293,7 +293,7 @@ void process_gunship_part_hits(struct Moby *moby) {
                 if (*(char **)entry != 0) {
                     v = *(char **)(*(char **)entry + 0x78);
                     cart_burst(moby, *(char **)entry + 0x10, -1, 2.0f, 13.0f);
-                    fast_vec_sub(v, *(char **)entry + 0x10, *(char **)(data + off + 0x64) + 0x10);
+                    fast_vec_sub(v, *(char **)entry + 0x10, *(char **)(gunship_instance_vars + off + 0x64) + 0x10);
                     fast_vec_normalize(v, v, D_0015ED6C * 10.0f);
                     (*(char **)entry)[0x20] = 1;
                     *(char **)entry = 0;
