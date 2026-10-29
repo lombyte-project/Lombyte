@@ -483,36 +483,36 @@ static __inline__ void vcopy_273090(float *d, float *s) {
 void update_moving_size_alpha_tween_particle(char *part) __asm__("FUN_L00_002721f0");
 
 void update_moving_size_alpha_tween_particle(char *part) {
-    char *data = part + 0x20;
+    char *particle_tween_motion_data = part + 0x20;
     float interpolation_factor;
     float velocity[4] __attribute__((aligned(16)));
     int   alpha;
-    part[8] += data[0xA];
-    if (*(short *)(data + 8) - *(short *)(part + 0xA) < 6) {
+    part[8] += particle_tween_motion_data[0xA];
+    if (*(short *)(particle_tween_motion_data + 8) - *(short *)(part + 0xA) < 6) {
         int start;
         int end;
-        interpolation_factor = (float)(*(short *)(data + 8) - *(short *)(part + 0xA)) / 5.0f;
+        interpolation_factor = (float)(*(short *)(particle_tween_motion_data + 8) - *(short *)(part + 0xA)) / 5.0f;
         *(float *)(part + 0xC) =
-            *(float *)(data + 4) +
-            ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(data + 4)) *
+            *(float *)(particle_tween_motion_data + 4) +
+            ((*(float *)(part + 0x20) + *(float *)(particle_tween_motion_data + 4)) * 0.5f - *(float *)(particle_tween_motion_data + 4)) *
                 interpolation_factor;
-        end = (unsigned char)data[0xB] >> 1;
-        start = (unsigned char)data[0xB];
+        end = (unsigned char)particle_tween_motion_data[0xB] >> 1;
+        start = (unsigned char)particle_tween_motion_data[0xB];
         alpha = truncate_float_to_s32((float)start + (float)(end - start) * interpolation_factor);
     } else {
         interpolation_factor =
-            (float)*(short *)(part + 0xA) / convert_integer_to_float(*(short *)(data + 8) - 6);
+            (float)*(short *)(part + 0xA) / convert_integer_to_float(*(short *)(particle_tween_motion_data + 8) - 6);
         *(float *)(part + 0xC) =
             *(float *)(part + 0x20) +
-            ((*(float *)(part + 0x20) + *(float *)(data + 4)) * 0.5f - *(float *)(part + 0x20)) *
+            ((*(float *)(part + 0x20) + *(float *)(particle_tween_motion_data + 4)) * 0.5f - *(float *)(part + 0x20)) *
                 interpolation_factor;
         alpha = truncate_float_to_s32(
-            (float)((unsigned char)data[0xB] >> 1) * interpolation_factor + 0.0f);
+            (float)((unsigned char)particle_tween_motion_data[0xB] >> 1) * interpolation_factor + 0.0f);
     }
     *(int *)(part + 4) = (alpha << 24) | (*(int *)(part + 4) & 0xFFFFFF);
-    vcopy_273090(velocity, (float *)(data + 0xC));
+    vcopy_273090(velocity, (float *)(particle_tween_motion_data + 0xC));
     fast_vec_add(part + 0x10, part + 0x10, velocity);
-    *(float *)(data + 0x14) -= *(float *)(data + 0x18);
+    *(float *)(particle_tween_motion_data + 0x14) -= *(float *)(particle_tween_motion_data + 0x18);
     if (*(float *)(part + 0x10) < 2.0f || *(float *)(part + 0x10) > 1021.0f ||
         *(float *)(part + 0x14) < 2.0f || *(float *)(part + 0x14) > 1021.0f ||
         *(float *)(part + 0x18) < 2.0f || *(float *)(part + 0x18) > 1021.0f) {
