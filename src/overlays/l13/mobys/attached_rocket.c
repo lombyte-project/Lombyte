@@ -101,7 +101,7 @@ void spawn_attached_rocket_non_damaging_explosion(struct Moby *moby) __asm__("FU
 void spawn_attached_rocket_explosion(struct Moby *moby) __asm__("FUN_L13_003060b8");
 
 void update_attached_rocket(struct Moby *moby) {
-    char        *data = (char *)moby->pvars;
+    char        *attached_rocket_vars = (char *)moby->pvars;
     struct Moby *source;
     struct Moby *target;
     struct {
@@ -119,17 +119,17 @@ void update_attached_rocket(struct Moby *moby) {
 
     qcopy(&work.old_pos, &moby->pos);
     if (moby->state == 1) {
-        source = *(struct Moby **)(data + 0x20);
+        source = *(struct Moby **)(attached_rocket_vars + 0x20);
         if (source == 0 || source->oclass != 0x65 || source->state == 0xfe || source->state == 0xfd)
             goto remove;
         qcopy(&moby->rot, &source->rot);
         *(OvlQuad *)&moby->rot_row0 = *(OvlQuad *)&source->rot_row0;
         *(OvlQuad *)&moby->rot_row1 = *(OvlQuad *)&source->rot_row1;
         *(OvlQuad *)&moby->rot_row2 = *(OvlQuad *)&source->rot_row2;
-        moby_point_position(*(struct Moby **)(data + 0x20), *(short *)(data + 0x26), &moby->pos);
-        qcopy(data + 0x10, &moby->pos);
+        moby_point_position(*(struct Moby **)(attached_rocket_vars + 0x20), *(short *)(attached_rocket_vars + 0x26), &moby->pos);
+        qcopy(attached_rocket_vars + 0x10, &moby->pos);
         {
-            struct Moby *source = *(struct Moby **)(data + 0x20);
+            struct Moby *source = *(struct Moby **)(attached_rocket_vars + 0x20);
             if (source != 0 && source->state != 0xfe && source->state != 0xfd &&
                 (source->flags & 1))
                 moby->flags |= 1;
@@ -145,9 +145,9 @@ void update_attached_rocket(struct Moby *moby) {
             (*(struct Moby **)(target + 0x20))->oclass == 0x1df)
             goto special;
     }
-    fast_vec_add(&moby->pos, &moby->pos, data);
+    fast_vec_add(&moby->pos, &moby->pos, attached_rocket_vars);
     for (i = 0; i < 4; i++) {
-        fast_vec_scale(&work.direction, data, -convert_integer_to_float(i) * 0.25f);
+        fast_vec_scale(&work.direction, attached_rocket_vars, -convert_integer_to_float(i) * 0.25f);
         fast_vec_add(&work.velocity, &moby->pos, &work.direction);
         length = FUN_002132a8(25000.0f, 35000.0f);
         target = (struct Moby *)FUN_L00_002712b8(&work.velocity,
@@ -164,15 +164,15 @@ void update_attached_rocket(struct Moby *moby) {
         if (target != 0)
             *((char *)target + 9) = truncate_float_to_s32(4.0f) - 0x80;
     }
-    qcopy(&work.velocity, data);
+    qcopy(&work.velocity, attached_rocket_vars);
     work.velocity.z = 0.0f;
     set_vector_length_xy(&work.velocity, &work.velocity, 1.0f);
     work.velocity.z = 1.0f;
     make_hit_descriptor(work.hit, moby, 0x10001, 1.0f, &work.velocity);
-    stationary = *(short *)(data + 0x24) == 0;
-    distance = vector_distance_xy(&moby->pos, data + 0x10);
-    other_distance = vector_distance_xy(*(char **)(data + 0x2c) + 0x10, data + 0x10);
-    if (*(float *)(data + 0x28) < distance || other_distance < distance) {
+    stationary = *(short *)(attached_rocket_vars + 0x24) == 0;
+    distance = vector_distance_xy(&moby->pos, attached_rocket_vars + 0x10);
+    other_distance = vector_distance_xy(*(char **)(attached_rocket_vars + 0x2c) + 0x10, attached_rocket_vars + 0x10);
+    if (*(float *)(attached_rocket_vars + 0x28) < distance || other_distance < distance) {
         if (moby->visible != 0) {
             int i;
             for (i = 0; i < 3; i++) {
@@ -197,7 +197,7 @@ void update_attached_rocket(struct Moby *moby) {
         goto bounds;
     {
         struct Moby *target = (struct Moby *)coll_hit_1638.moby;
-        if (target != 0 && target == *(struct Moby **)(data + 0x20))
+        if (target != 0 && target == *(struct Moby **)(attached_rocket_vars + 0x20))
             goto bounds;
     }
     qcopy(&moby->pos, &coll_hit_1638.point);
@@ -209,7 +209,7 @@ void update_attached_rocket(struct Moby *moby) {
             work.direction.y = FUN_002132a8(-1.0f, 1.0f);
             work.direction.z = FUN_002132a8(-1.0f, 1.0f);
             *(OvlQuad *)&work.random_direction = *(OvlQuad *)&work.direction;
-            reflect_vector(&work.direction, data, &coll_hit_1638.normal_x);
+            reflect_vector(&work.direction, attached_rocket_vars, &coll_hit_1638.normal_x);
             length = fast_vec_length(&work.direction);
             fast_vec_normalize(&work.random_direction, &work.random_direction, length * 0.5f);
             fast_vec_add(&work.random_direction, &work.direction, &work.random_direction);
