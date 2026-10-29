@@ -37,14 +37,14 @@ void test_dummy_door_update(struct Moby *moby) {
         TEST_DUMMY_DOOR_STATE_INITIALIZE = 0,
         TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT = 1
     };
-    char *data = (char *)moby->pvars;
+    char *test_dummy_door_motion_data = (char *)moby->pvars;
     switch (moby->state) {
     case TEST_DUMMY_DOOR_STATE_INITIALIZE:
         moby->state = 1;
-        *(float *)data = moby->pos.z;
+        *(float *)test_dummy_door_motion_data = moby->pos.z;
         break;
     case TEST_DUMMY_DOOR_STATE_UPDATE_HEIGHT: {
-        int   timer_result = fast_dec_timer((int *)(data + 8));
+        int   timer_result = fast_dec_timer((int *)(test_dummy_door_motion_data + 8));
         float target_height;
         if (timer_result != 0) {
             if (timer_result == 2) {
@@ -54,16 +54,16 @@ void test_dummy_door_update(struct Moby *moby) {
                     allocate_voice_for_target_entry(1, 0, moby);
                 }
             }
-            target_height = *(float *)data;
+            target_height = *(float *)test_dummy_door_motion_data;
         } else {
-            target_height = *(float *)data + test_dummy_door_height_offset_gp;
+            target_height = *(float *)test_dummy_door_motion_data + test_dummy_door_height_offset_gp;
         }
         advance_accelerated_scalar(target_height,
                                    frame_time_sq * 10.0f,
                                    frame_time_sq * 10.0f,
                                    D_0015ED6C * 10.0f,
                                    &moby->pos.z,
-                                   (float *)(data + 4));
+                                   (float *)(test_dummy_door_motion_data + 4));
         break;
     }
     }
