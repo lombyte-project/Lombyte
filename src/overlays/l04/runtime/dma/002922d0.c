@@ -10,6 +10,7 @@
 
 #include "qcopy.h"
 #include "rnc/globals.h"
+#include "rnc/math/fast_math.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
@@ -171,7 +172,6 @@ extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -355,20 +355,15 @@ void FUN_L04_00292d48(struct Moby *moby, LegRig *rig, int flags) {
 typedef struct { f32 x, y, z, w; } __attribute__((aligned(16))) RigVec;
 
 extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 rig_pick_mode(struct Moby *, LegRig *, f32) __asm__("FUN_L04_002927d0");
 extern f32 spring_turn(f32 cur, f32 target, f32 k, f32 d, f32 max, f32 *vel) __asm__("FUN_L00_00258110");
 extern void rig_animate(struct Moby *, LegRig *, s32, f32) __asm__("FUN_L04_00292d48");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void divide_vector_xyz(void *, void *, f32) __asm__("FUN_L00_001ff378");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_L04_00292828_c(struct Moby *, LegRig *) __asm__("FUN_L04_00292828");
 extern void rig_step(struct Moby *, LegRig *, f32, f32, f32, s32) __asm__("FUN_L00_002a1670");
 extern void rig_probe_setup(struct Moby *, s32, s32 *, void *, f32 *, f32 *) __asm__("FUN_L01_00263a28");
 extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f19a0");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_001f99c0(f32);
 extern f32 D_0015ED60;
 extern f32 D_0015ED68;
@@ -550,7 +545,6 @@ extern void build_moby_bone_transform(struct Moby *m, int joint, float *mtx) __a
 extern void attach_manipulator(struct Moby *m, int slot, LegRigManip *manip) __asm__("FUN_0020cb10");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
 extern float FUN_001f99c0(float);
 extern int rig_pick_mode(struct Moby *m, LegRig *rig, float t) __asm__("FUN_L04_002927d0");

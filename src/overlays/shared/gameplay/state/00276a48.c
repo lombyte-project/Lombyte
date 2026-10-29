@@ -31,6 +31,7 @@ int expand_path_mask_to_intersection(int path_index, int from_mask, int mask) {
 
 #include "rnc/overlay/quad.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 /* A path in D_L01_001B0930: point count, then the points. */
 typedef struct {
@@ -40,10 +41,6 @@ typedef struct {
 } Path_276a48;
 
 extern Path_276a48 *D_L01_001B0930_276a48[] __asm__("D_L01_001B0930");
-extern void fast_vec_sub(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
-extern void fast_vec_cross(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ad8");
-extern void fast_vec_normalize(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
 extern s32 test_path_segment_strict_crossing(s32, OvlVec4 *, OvlVec4 *) __asm__("FUN_L00_00261968");
 
 /* Bit i set for each point i of the path that none of the n segments in ids

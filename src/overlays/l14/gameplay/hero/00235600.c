@@ -44,7 +44,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_001f9b48(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
@@ -59,7 +58,6 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int D_00141660 __attribute__((section(".data")));
 int r1_repeat_timer __asm__("D_L14_0015F678") = 0;
 extern int D_L14_0015F6DC_d __asm__("D_L14_0015F6DC");
@@ -69,6 +67,7 @@ extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68")
 extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 #include "rnc/overlay/path.h"
+#include "rnc/math/fast_math.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
@@ -90,7 +89,6 @@ extern int hero_get_gadget_anim_id(int a) __asm__("FUN_L12_00227f10");
 extern int process_hero_hit_reaction(int) __asm__("FUN_L14_00222aa8");
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void emit_hero_animation_voice_and_ground_particle(int a0, int a1, int a2) __asm__("FUN_L00_00205f60");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
@@ -123,7 +121,6 @@ extern void update_hero_stick_target_magnitude(void) __asm__("FUN_L02_00220b80")
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_dec_timer(int *arg0) __asm__("func_001F9740");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");

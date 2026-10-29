@@ -730,6 +730,7 @@ void update_hero_airborne_planar_velocity(void) {
     }
 }
 #include "rnc/math/vector.h"
+#include "rnc/math/fast_math.h"
 
 struct MobyView {
     u8 pad0[0xC];
@@ -861,7 +862,6 @@ extern void FUN_L00_002118c8_c(f32, s32) __asm__("FUN_L00_002118c8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void turn_to(s32, f32, f32, f32) __asm__("FUN_L00_00211e30");
 extern s32 fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_00211e98");
 extern f32 FUN_001f99c0_c(f32) __asm__("FUN_001f99c0");
@@ -903,8 +903,6 @@ extern void pool_splash(s32, s32, s32, f32, f32, f32, f32) __asm__("FUN_L00_002a
 extern f32 spring_angle(f32 *, f32, f32 *, s32, f32, f32, f32) __asm__("FUN_L00_0025bc98");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u8 *FUN_L00_0026f080(void *, void *, f32, f32);
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
@@ -913,9 +911,7 @@ extern void FUN_L00_00262cf0(void *, void *, f32, f32, f32);
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern f32 FUN_L00_00209018(void *, s32);
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void FUN_L06_00221850(f32, f32);
 extern void FUN_L06_00221880(f32, f32);
@@ -930,7 +926,6 @@ extern void fast_sin_cf(s32, s32) __asm__("FUN_L00_00209638");
         len = vector_length_xy(&hero.motion.velocity);                                                            \
         FUN_L00_001ff600(frame_scale * -0.07999998f * len + len, &hero.motion.velocity, &hero.motion.velocity);           \
     }
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void FUN_001f9a28_c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_L00_0025f730(void *, f32);
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
@@ -938,8 +933,6 @@ extern f32 FUN_001f9b48_c(void *, void *) __asm__("FUN_001f9b48");
 extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 extern void step_angle_toward_target(f32 *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -964,7 +957,6 @@ extern s32 spawn_homing_bolt(struct MobyView *, void *, f32, f32, s32, f32, f32,
 extern void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 extern f32 hero_alt_ledge_shimmy_speed_by_anim_frame[] __asm__("D_L06_001C4470");
 extern s32 play_entity_sound(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32) __asm__("FUN_L00_002598b0");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 struct PlayerSpeedTuning {
     u8 pad0[8];
     f32 x08;

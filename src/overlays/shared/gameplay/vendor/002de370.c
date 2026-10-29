@@ -89,6 +89,7 @@ void initialize_transform_state_from_level_table(char *transform_state) {
 #include "sda.h"
 
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 /* smooths a direction and rebuilds its orthogonal matrix axes */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002E9AF8), where it is exact; names translated to the US level program. */
@@ -99,8 +100,6 @@ extern float transform_basis_reference_vector[] __asm__("D_L03_00166F30");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern void rotate_vector_by_scaled_angle_between_vectors(float, float *, float *, float *, int) __asm__("FUN_L03_0024e6f8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void smooth_transform_orientation_toward_hero(char *transform_state) __asm__("FUN_L03_002e8730");
 

@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     s16 timer;
@@ -24,13 +25,10 @@ typedef struct {
     s32 enabled;
 } VendorVars_2e5958;
 
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern f32 FUN_001f9b48(void *, void *);
 extern s16 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_0024f7c8(struct Moby *, int, void *);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int get_first_moby_in_group(struct Moby **, int, int, int) __asm__("FUN_L00_002591d0");
@@ -38,7 +36,6 @@ extern int get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern u8 D_0013F3D0[];
-extern s32 current_level_index __asm__("D_0015ED84");
 extern u8 D_L15_001BB830[];
 extern u32 D_0014C190[];
 extern s32 D_L15_001BAAD0[];

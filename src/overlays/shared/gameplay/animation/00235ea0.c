@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/hud.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -10,9 +11,7 @@
 /* Eases a counter's shown value toward its target and animates its two drifting digits. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236830), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern float square_root(float) __asm__("FUN_001f9988");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int update_hud_animation_frame(char *) __asm__("FUN_L00_0023aaa8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 

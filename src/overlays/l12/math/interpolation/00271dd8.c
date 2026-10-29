@@ -5,9 +5,8 @@
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 FUN_L00_00258b50(void *, void *, void *, void *, f32);
 
 /* steers the moby toward a point 100 units ahead along its heading */

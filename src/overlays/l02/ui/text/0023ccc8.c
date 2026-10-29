@@ -9,7 +9,6 @@
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/hud_0023D600.c: func_L02_0023D600), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void update_hud_counter_transition(char *transition_state) __asm__("FUN_L02_0023ccc8");
 
@@ -36,7 +35,6 @@ void update_hud_counter_transition(char *transition_state) {
 #include "rnc/overlay/hud.h"
 
 extern int hud_screen_position(HudElem *, int *, int *) __asm__("FUN_L00_00235a70");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern int sprintf(char *str, const char *fmt, ...) __asm__("FUN_00116248");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
@@ -48,6 +46,7 @@ extern void font_print_right(s32, s32, s32, char *, s32) __asm__("FUN_001f6940")
 extern s32 frame_size[] __asm__("D_0013E504");
 extern char hud_counter_decimal_format[] __asm__("D_L02_0015F850");
 #include "rnc/overlay/l02/ui/text/0023ccc8_globals.h"
+#include "rnc/math/fast_math.h"
 extern s32 hud_counter_bar_growth_divisor_gp __asm__("D_L02_0015F91C") __attribute__((sda));
 extern s32 hud_counter_text_shade_divisor_gp __asm__("D_L02_0015F920") __attribute__((sda));
 s32 D_L02_0015F944 = 0x18;

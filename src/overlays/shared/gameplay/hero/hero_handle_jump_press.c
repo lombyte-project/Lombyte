@@ -12,7 +12,6 @@ extern s32 D_L00_00179AB0 __attribute__((section(".data")));
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern s32 FUN_L00_001efc70(void *, void *, s32, void *, s32);
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 
 /* Idle fidget picker: lists the eligible entries of idle_fidgets, then
@@ -213,6 +212,7 @@ int hero_handle_jump_press(void) {
 }
 typedef unsigned int u128_229910_00229910 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 typedef union {
     u128_229910_00229910 q_00229910;
     float f[4];
@@ -220,9 +220,6 @@ typedef union {
 extern float D_L00_00173E68_00229910 __asm__("D_L00_00173E68") __attribute__((section(".data")));
 extern int FUN_001f96f8_00229910(int) __asm__("FUN_001f96f8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 
 int check_hero_forward_collision_height(void) __asm__("FUN_L00_00229910");

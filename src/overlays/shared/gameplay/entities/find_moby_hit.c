@@ -180,7 +180,6 @@ typedef struct {
 } G_259bc8;
 extern G_259bc8 D_L00_00173E40 __attribute__((section(".data")));
 extern T_259bc8 moby_hits[] __asm__("D_L00_00178100") __attribute__((section(".data")));
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 
 void spawn_nearby_effect(unsigned char *m, int x, int y, u128 *p, u128 *q, float f) __asm__("FUN_L00_00259bc8");
 void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *hit_vector_source, u128 *direction_vector, float f) {
@@ -391,14 +390,8 @@ extern f32 D_L00_001B01C8[][8];
 extern u8 D_L00_001B0180[][4];
 extern Q_25a478 *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern s32 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 FUN_001f9af0_c(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 /* hit_reaction is the executable function of the same bytes (src/gameplay). */
@@ -478,7 +471,6 @@ typedef struct {
 } Vc0 __attribute__((aligned(16)));
 
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 float FUN_L00_0025abf0(float *start_position, float *target_position, float *out, float speed, float vertical_acceleration) {

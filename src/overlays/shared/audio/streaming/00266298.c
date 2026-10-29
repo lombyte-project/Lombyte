@@ -7,6 +7,8 @@
 
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/fast_math.h"
 
 /*
  * Scene trigger attached to a moby: when the hero comes close enough (and,
@@ -58,13 +60,11 @@ extern s32 game_frame __asm__("D_L00_0015F5CC");
 extern s32 D_0013CAE4[];                                    /* bit 0x10 lifts the facing check */
 extern s32 bolt_hud_item __asm__("D_L00_00160130") __attribute__((sda));
 extern struct MobyRecord race_gates[] __asm__("D_0013D5B0");
-extern u8 alternate_item_available[] __asm__("D_0013D388");
 
 extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");                    /* distance */
 extern void fun_00216c48(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32 FUN_L00_002667d0_c2(struct Moby *) __asm__("FUN_L00_002667d0");
 extern void queue_scene_movie_with_game_language(s32) __asm__("FUN_L00_00299460");
 extern void remove_hud_item(s32) __asm__("FUN_001ff480");
@@ -77,7 +77,6 @@ extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
 extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
 extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) __asm__("FUN_L00_00266448");
 s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)

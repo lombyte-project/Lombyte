@@ -12,7 +12,6 @@
 /* Ported from rac1-decomp (src/overlays/l07_umbris/partupd_0029D2B8.c: func_L07_0029D2B8), where it is exact; names translated to the US level program. */
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
@@ -42,15 +41,10 @@ void spawn_white_particle_with_payload(void *particle_position_source, void *par
     }
 }
 #include "rnc/math/vector.h"
+#include "rnc/math/fast_math.h"
 
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32 square_root(f32) __asm__("FUN_001f9988");
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 
 /* Finds the point of segment a-b nearest to the surface of the sphere (center, radius), preferring
    the one closer to ref when both hits are equally good. Writes it to out and returns its distance

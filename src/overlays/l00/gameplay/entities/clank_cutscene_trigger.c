@@ -160,7 +160,6 @@ typedef union {
 } VeldinVec;
 
 void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
@@ -241,6 +240,7 @@ void apply_level_specific_cutscene_moby_effects(void) {
     }
 }
 #include "qzero.h"
+#include "rnc/math/fast_math.h"
 
 typedef union {
     u128 q;

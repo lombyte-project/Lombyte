@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 /* GS quad packet for draw_quad_packet: four corners, their colours and
    texture coordinates, then the giftag and register words. */
@@ -36,8 +37,6 @@ extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void draw_quad_packet(void *, void *, s32) __asm__("FUN_001f7d30");
 
@@ -138,7 +137,6 @@ extern short point_spark_z_range_end __asm__("D_L13_00161EE4") __attribute__((sd
 extern short point_spark_spawn_random_threshold __asm__("D_L13_00161EE8") __attribute__((sda));
 int D_L13_00161EEC = 24;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void spawn_point_table_sparks(struct Moby *moby) __asm__("FUN_L13_00309bc8");

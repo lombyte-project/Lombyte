@@ -5,7 +5,6 @@
 #include "sda.h"
 /* Fills a moby data block: four random values, fixed constants, four frame-scaled counts. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void initialize_energy_sphere_holder_vars(char *moby) __asm__("FUN_L06_002f7548");
@@ -33,6 +32,7 @@ void initialize_energy_sphere_holder_vars(char *moby) {
 }
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
 
 /* Sets the moby state byte to 2. */
 void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");

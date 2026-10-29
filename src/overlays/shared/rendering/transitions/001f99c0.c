@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/rendering/render_globals.h"
 
 #define NOT_SDA
 
@@ -10,7 +11,6 @@
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001F9D40), where it is exact; names translated to the US level program. */
 
 extern int D_0013E05A[];
-extern int draw_buffer_address __asm__("D_0015EE84");
 extern s32 sceGsSyncV(s32);
 extern void vu1_sync_chain(int) __asm__("FUN_L00_002a09d8");
 extern void transfer_draw_buffer_chunks(void *, int, int) __asm__("FUN_L00_002a0f18");

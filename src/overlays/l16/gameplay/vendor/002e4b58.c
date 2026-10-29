@@ -85,6 +85,7 @@ int advance_moby_path(struct Moby *moby) {
 }
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
 /* Plays the sound that goes with the moby's current variant. */
 
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
@@ -115,7 +116,6 @@ void request_moby_help_message(struct Moby *moby) {
 }
 /* Wobbles a moby's position and rotation from its sine-driven state. */
 
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 void apply_moby_wobble(struct Moby *moby) __asm__("FUN_L16_002e4d88");
@@ -151,7 +151,6 @@ void apply_moby_wobble(struct Moby *moby) {
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
 
 extern char table_entry_source_vectors[] __asm__("D_L16_001D96E0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 void transform_moby_table_entry_vectors(struct Moby *moby) __asm__("FUN_L16_002e4f30");

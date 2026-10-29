@@ -3,6 +3,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/math/fast_math.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
 /* Ported from rac1-decomp (src/overlays/shared/partproc_00273A80.c: func_L08_00273A80), where it is exact; names translated to the US level program. */
@@ -11,8 +12,6 @@ INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L08_001B2880 __attribute__((section(".data")));

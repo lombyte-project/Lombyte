@@ -13,7 +13,6 @@
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
@@ -158,6 +157,7 @@ unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_
 }
 #include "qzero.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/math/fast_math.h"
 
 /* spawns a type-74 particle with transformed offset and velocity */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028B570), where it is exact; names translated to the US level program. */
@@ -166,7 +166,6 @@ extern int D_L01_001B2628; /* no foreign declaration */
 extern s32 rand(void);
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
 
@@ -358,13 +357,8 @@ int advance_path_node_index(char *path_descriptor) {
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C690), where it is exact; names translated to the US level program. */
 
 
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern void *get_path_node(void *, int) __asm__("FUN_L01_0028b7b0");
 extern void *memset(void *, int, unsigned int);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void *func_001153FC_c(void *, int, unsigned int) __asm__("FUN_001153fc");
 
 void compute_path_node_tangent(void *out, int *path_descriptor, int node_index_offset, float tangent_tension, float tangent_bias) __asm__("FUN_L01_0028b8c8");
@@ -405,8 +399,6 @@ void compute_path_node_tangent(void *out, int *path_descriptor, int node_index_o
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 void evaluate_cubic_hermite_segment(float segment_parameter, void *out, void *start_point, void *end_point, void *start_tangent, void *end_tangent) __asm__("FUN_L01_0028ba80");
 

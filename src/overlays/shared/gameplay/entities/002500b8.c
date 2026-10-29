@@ -5,6 +5,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -14,9 +15,7 @@
 /* Ported from rac1-decomp (src/overlays/shared/mobyfunc_0024FD50.c: func_L00_002510F0), where it is exact; names translated to the US level program. */
 
 extern char no_environment_sample_message[] __asm__("D_L00_001E8ED8");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void debug_print() __asm__("FUN_001e93b0");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
 void apply_nearest_environment_sample(char *object) __asm__("FUN_L00_002500b8");

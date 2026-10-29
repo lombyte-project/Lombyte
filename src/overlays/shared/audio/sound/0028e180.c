@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/fast_math.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
 extern char D_L00_00166DC0[];
@@ -22,7 +23,6 @@ extern unsigned char l00_moby_followup_scene_gate[] __asm__("D_0013DD4B");
 extern void render_environment_mapped_object(void) __asm__("FUN_002327a0");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void draw_light_flare() __asm__("func_0022DF40");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");

@@ -6,18 +6,16 @@
 
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer(int *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 
 /* Same routine as FUN_L05_00307010, with this level's data offsets. */
 void accumulate_moby_frames_in_group_bounds(struct Moby *moby) __asm__("FUN_L16_002cfc00");

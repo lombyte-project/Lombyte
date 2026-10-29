@@ -46,10 +46,10 @@ extern S17BF38 D_L03_0017BEB8;
 extern char D_0013E550[];
 extern float absolute_float(float) __asm__("func_001F99C0");
 #include "rnc/overlay/l03/gameplay/hero/0021c668_globals.h"
+#include "rnc/math/fast_math.h"
 extern float D_L03_00166ED8 __attribute__((section(".data")));
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
 extern float predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern float gravity_z(float *v) __asm__("FUN_L00_00233a78");
@@ -61,7 +61,6 @@ extern float fast_cos(float);
 extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern float fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern int D_00141660 __attribute__((section(".data")));
 extern int D_L03_0015F6DC_d __asm__("D_L03_0015F6DC");
 extern int D_L03_0015F594 __attribute__((sda));
@@ -90,7 +89,6 @@ extern int test_hero_ledge_ahead(float *, float *) __asm__("FUN_L01_0022d838");
 extern int process_hero_hit_response(int) __asm__("FUN_L01_00231580");
 extern int hero_set_state(int, int) __asm__("FUN_L03_00216648");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern unsigned char D_0013D4C0[];
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
@@ -124,7 +122,6 @@ extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_0024
 extern void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_dec_timer(int *counter) __asm__("func_001F9740");
 void show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");

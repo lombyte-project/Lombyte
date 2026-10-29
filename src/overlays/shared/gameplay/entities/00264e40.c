@@ -19,6 +19,7 @@ void reset_shot_tracking(char *moby) {
     *(short *)(moby + 0x1C) = 0;
 }
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E88), where it is exact; names translated to the US level program. */
 
@@ -42,9 +43,7 @@ extern float D_L02_001600DC __attribute__((sda));
 extern float D_L02_001600E0 __attribute__((sda));
 extern void FUN_L00_00257d78(float *, float, float);
 extern void spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 
 void effect_slots_fire(char *slots, float *position, float *direction, float distance) __asm__("FUN_L02_00264e70");

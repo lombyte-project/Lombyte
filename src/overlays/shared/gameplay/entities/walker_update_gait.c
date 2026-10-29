@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 int walker_gait_mask(float *a, float v) __asm__("FUN_L00_002a13f0");
 int walker_gait_mask(float *gait_record, float interval_value) {
@@ -159,7 +160,6 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
@@ -168,7 +168,6 @@ extern int find_nearest_animation_sequence_entry(char *a, float time) __asm__("F
 extern int FUN_L00_002a13f0_c(WalkAnim *a, float t) __asm__("FUN_L00_002a13f0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void debug_print() __asm__("FUN_001e93b0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 float compute_walker_time_to_landing(char *a, char *b) __asm__("FUN_L00_002a15c8");

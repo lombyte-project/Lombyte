@@ -10,11 +10,8 @@
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 #include "rnc/overlay/shared/rendering/0025e2c0_globals.h"
+#include "rnc/math/fast_math.h"
 extern int owner_target_particle_frame_count_gp __asm__("D_L15_001601FC") __attribute__((sda));
 
 /* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */

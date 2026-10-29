@@ -158,7 +158,6 @@ void initialize_numeric_hud_values_and_dimensions(HudElem *hud_element) {
    offsets 0x48 / 0x4A cleared, then func_L00_00236610. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236710), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void initialize_numeric_hud_values_and_dimensions(HudElem *) __asm__("FUN_L00_00235c80");
 
 /* Sets unk7C to scale_game_frames(0xB4) + 0x1E, clears 0x48/0x4A, calls FUN_L00_00235c80. */
@@ -210,7 +209,6 @@ s32 hud_keep_visible(s32 key, s32 val) {
     }
     return 1;
 }
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int FUN_001fa6d0(float);
 extern float square_root(float) __asm__("FUN_001f9988");
 extern void update_hud_animation_frame(void *) __asm__("FUN_L00_0023aaa8");
@@ -431,8 +429,6 @@ extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void FUN_L00_001ff348(void *, void *, void *);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("FUN_00200080");
 
@@ -573,8 +569,6 @@ extern float D_L00_0015F76C __attribute__((sda));
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void FUN_L00_001ff348(void *, void *, void *);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 
@@ -642,16 +636,15 @@ void mine_blend_color(void) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/globals.h"
 extern s32 l00_hud_text_panel_base_y __asm__("D_L00_0015F770") __attribute__((sda));
 extern s32 D_L00_0015F648_macro __asm__("D_L00_0015F648") MACRO_ADDR;
 extern u8 D_L00_0017E530[] NOT_SDA;
 extern char D_0013F3D0[];
-extern s32 freeze_stats_time_ref[] __asm__("D_0015EE58") __attribute__((section(".sdata")));
-extern s32 freeze_stats_score_ref_a[] __asm__("D_0015EE68") __attribute__((section(".sdata")));
 extern char freeze_stats_time_format[] __asm__("D_L00_001E84C0") NOT_SDA;
 extern char freeze_stats_score_format[] __asm__("D_L00_0015F778") NOT_SDA;
-extern s32 pal_mode __asm__("D_0015ED80");
-extern s32 current_level_index __asm__("D_0015ED84");
 extern s32 measure_text_width_regular(u8 *, s32) __asm__("FUN_001f6250");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");

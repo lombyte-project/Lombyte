@@ -59,7 +59,7 @@ extern char *D_L18_00174840_26b768[] __asm__("D_L07_00173EC0");
 typedef struct { s16 a; s16 b; s32 *file; } Ldg26b768;
 extern Ldg26b768 D_0015EE48;
 #include "rnc/overlay/l07/world/loaders/0026b768_globals.h"
-extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
+#include "rnc/math/fast_math.h"
 extern u64 D_L07_00182840[3];
 extern u64 l07_64x64_texture_state[3] __asm__("D_L07_00182858");
 extern u64 D_L07_00182870[3];
@@ -151,7 +151,6 @@ extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern char *load_level_texture_bank(char *, s32 *) __asm__("FUN_L00_0023fa00");
 extern char *FUN_L00_00241940_26b768(s32) __asm__("FUN_L00_00241940");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
 extern void clear_scene_state_buffers(void) __asm__("FUN_00226f50");
 extern void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");

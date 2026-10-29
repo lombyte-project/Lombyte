@@ -12,7 +12,6 @@
 /* Sets up a HUD element: timer, 128x128 size, zero offsets. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266B90), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 void initialize_hud_element_defaults(HudElem *hud_element) __asm__("FUN_L05_002661a0");
 
@@ -37,6 +36,7 @@ extern int D_0013E500[];
 extern int D_0015ED80;
 extern u8 D_0013D388[];
 #include "rnc/overlay/shared/ui/hud/002661a0_globals.h"
+#include "rnc/math/fast_math.h"
 extern int hud_timer_frame_x_gp __asm__("D_L05_0015FA14") __attribute__((sda));
 extern int hud_timer_frame_bottom_offset_gp __asm__("D_L05_0015FA18") __attribute__((sda));
 extern int hud_timer_frame_width_gp __asm__("D_L05_0015FA1C") __attribute__((sda));

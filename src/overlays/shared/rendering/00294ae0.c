@@ -3,6 +3,7 @@
 #include "types.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     s32 count;
@@ -10,11 +11,6 @@ typedef struct {
     Vec4 point[1];
 } PathPoints;
 
-extern void fast_vec_sub(Vec4 *out, void *a, void *b) __asm__("FUN_001f9a28");
-extern f32 fast_vec_length(Vec4 *v) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(Vec4 *out, Vec4 *v, f32 len) __asm__("FUN_001f9bf8");
-extern f32 fast_vec_dot(Vec4 *a, Vec4 *b) __asm__("FUN_001f9ab0");
-extern void fast_vec_add(Vec4 *out, Vec4 *a, Vec4 *b) __asm__("FUN_001f9a10");
 
 static inline s32 path_next(PathPoints *path, s32 i, s32 dir) {
     if (i == path->count - 1) {

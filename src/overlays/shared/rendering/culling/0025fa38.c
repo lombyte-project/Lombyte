@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -14,7 +15,6 @@ typedef struct {
 } Vp __attribute__((aligned(16)));
 
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 int test_point_in_transformed_unit_cylinder(void *point, int i) __asm__("FUN_L00_0025fa38");
@@ -43,8 +43,6 @@ int test_point_in_transformed_unit_cylinder(void *point, int i) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00260B68), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 /* True when p lies inside the unit box of D_L00_001600F4 entry idx. */

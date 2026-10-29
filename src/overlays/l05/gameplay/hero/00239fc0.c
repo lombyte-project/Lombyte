@@ -340,6 +340,7 @@ d1:
 
 typedef unsigned int u128_2133a8 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 typedef union {
     u128_2133a8 q;
     f32 f[4];
@@ -349,13 +350,9 @@ extern void FUN_L00_002347c0(void);
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00233810(void *, void *, f32);
 extern void FUN_L00_002334d0(void *, void *, f32);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 FUN_L00_001f3170(void *, f32);
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern u128_2133a8 D_L05_00174270[] __attribute__((section(".data")));
 s32 resolve_hero_position_collisions(s32 mode) __asm__("FUN_L05_00240ed0");
 
@@ -492,7 +489,6 @@ typedef struct {
 extern char *collision_hit_moby[] __asm__("D_L05_00174258");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
@@ -503,11 +499,7 @@ extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f80");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void update_hero_ground_contact(void) __asm__("FUN_L05_002402a8");
 
 /* Same routine as FUN_L16_00211098, without the mode 15 and 21 cases. */

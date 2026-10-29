@@ -7,17 +7,11 @@
 #define MACRO_ADDR
 
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00249488.c: func_L03_0024F6D8), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void rotate_vector_by_quaternion(void *arg0, void *arg1, void *arg2) __asm__("FUN_00214800");
 
 void rotate_vector_by_scaled_angle_between_vectors(float rotation_scale, float *output_vector, float *source_vector, float *reference_vector, int flag) __asm__("FUN_L03_0024e6f8");

@@ -34,7 +34,6 @@ typedef struct {
 
 extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
 extern u8 *spark_texture_table[] __asm__("D_L01_001B2500");
 
@@ -87,6 +86,7 @@ void create_spark_particle(s32 id, u128 *pos, s32 life, u8 kind, u8 texture_tabl
 }
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
 typedef struct {
     u128 pos;
     f32 size;

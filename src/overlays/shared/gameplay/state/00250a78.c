@@ -19,15 +19,14 @@ void trooper_set_knockback(float *knockback_state, float horizontal_knockback_sc
     knockback_state[5] = (horizontal_knockback_scale + horizontal_knockback_scale) / (x * x);
 }
 #include "eetypes.h"
+#include "rnc/math/fast_math.h"
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void build_look_at_matrix(void *, void *, void *, f32) __asm__("FUN_00214890");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
 extern void *spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");

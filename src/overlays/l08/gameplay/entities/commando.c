@@ -46,10 +46,6 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
 extern f32 FUN_001f9b48(void *, void *);
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern void cart_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
@@ -278,12 +274,10 @@ typedef struct {
 } VoiceView;
 extern char D_0013E550[];
 extern u8 D_0013D388[];
-extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void vendor_volume(s32, s32) __asm__("FUN_L01_002a1968");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 /* Swings the gate to its driver's progress, fading a creak in while it
  * moves and out when it stops, and latches its flag once fully open. */
@@ -398,7 +392,6 @@ extern s32 D_L08_001E2828[];
 extern s32 D_L08_001E2858[];
 extern s32 D_L08_001E8310[];
 extern char layered_mesh_effect_sine_output_pair[] __asm__("D_L08_001E8350");
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_L08_00161E08;
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int truncate_float_to_s32() __asm__("FUN_001fa6d0");
@@ -412,7 +405,6 @@ extern void advance_wrapped_sine_pair(void *, float, float, float, void *) __asm
 extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
 extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern Pair D_L08_00161E20[] __attribute__((section(".sdata")));
@@ -495,10 +487,6 @@ extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 FUN_001f9e90_44c0(f32, f32) __asm__("FUN_001f9e90");
 extern f32 FUN_001f9b48_44c0(void *, void *) __asm__("FUN_001f9b48");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern f32 approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void mark_moby_for_removal_44c0(struct Moby *) __asm__("FUN_0020c828");
 extern void allocate_voice_for_target_entry_44c0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
@@ -1139,7 +1127,6 @@ extern int level_game_mode __asm__("D_L08_0015F5C4");
 
 #include "qcopy.h"
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 #include "sda.h"
 typedef struct {
     char pad00[4];
@@ -1183,7 +1170,6 @@ extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001f9e90_cf(float, float) __asm__("FUN_001fa688");

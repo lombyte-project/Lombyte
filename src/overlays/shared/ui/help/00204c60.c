@@ -8,6 +8,7 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/fast_math.h"
 
 extern Vec4 D_0013E090[2] NOT_SDA; /* camera start: position, rotation */
 extern s32 D_00141660 NOT_SDA;
@@ -20,7 +21,6 @@ extern f32 probe_ground_height(Vec4f *, s32, f32) __asm__("FUN_00213508");
 extern void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 
 /* Clears the hero, binds it to the first moby of class 0 (snapped to the

@@ -4,10 +4,10 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -233,8 +233,6 @@ void update_scene_moby_effect_bursts(char *moby) {
 extern char D_L07_0016C8E0[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 
 extern short scene_trail_velocity_length __asm__("D_L07_00161CD8") __attribute__((sda));
 extern short scene_trail_first_spawn_particle_value __asm__("D_L07_00161CDC") __attribute__((sda));

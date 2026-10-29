@@ -28,7 +28,6 @@ typedef struct {
     u8 pad2[0x7C - 0x4C];
     s32 unk7C;
 } HudElemX;
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void initialize_numeric_hud_values_and_dimensions(void *) __asm__("FUN_L00_00235c80");
 extern s32 D_L05_0015FAFC;
 
@@ -201,9 +200,7 @@ void update_trick_combo_hud(HudCounter *element) {
     }
 }
 extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern void font_print_center_large(s32, s32, u64, char *, s32) __asm__("FUN_001f6c20");
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
@@ -227,6 +224,7 @@ extern s32 trick_combo_result_text_color_gp __asm__("D_L05_0015F8A0") __attribut
 extern s32 trick_combo_pulsing_label_x_gp __asm__("D_L05_0015F8A4") __attribute__((sda));
 extern s32 trick_combo_pulsing_label_y_gp __asm__("D_L05_0015F8A8") __attribute__((sda));
 #include "rnc/overlay/shared/ui/text/00262ae8_data/draw_trick_combo_hud.h"
+#include "rnc/math/fast_math.h"
 extern s32 trick_combo_rotation_text_center_x_gp __asm__("D_L05_0015F8B4") __attribute__((sda));
 extern s32 trick_combo_rotation_text_y_gp __asm__("D_L05_0015F8B8") __attribute__((sda));
 extern s32 trick_combo_pose_count_center_x_gp __asm__("D_L05_0015F8BC") __attribute__((sda));

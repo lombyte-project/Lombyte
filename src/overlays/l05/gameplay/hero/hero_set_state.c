@@ -14,6 +14,7 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/math/fast_math.h"
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/help_0024D680.c: func_L05_0024D680), where it is exact; names translated to the US level program. */
 
@@ -32,11 +33,9 @@ extern float absolute_float(float) __asm__("func_001F99C0");
 extern float level05_hero_animation_blend_curves[][25] __asm__("D_L05_0017C250");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float vector_length_xy(void *);
 extern int D_L05_001612D8;
@@ -52,7 +51,6 @@ extern int get_hero_idle_animation_index(int a) __asm__("FUN_L01_00226f10");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern s32 D_L05_0015F688 __attribute__((sda));
 int D_L05_0015F6E8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
@@ -95,7 +93,6 @@ extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void draw_hud_timer(void) __asm__("FUN_L05_00266710");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");

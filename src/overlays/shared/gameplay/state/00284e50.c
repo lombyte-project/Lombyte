@@ -7,6 +7,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/gameplay/state/item_state.h"
 typedef struct {
     unsigned char h[0x404];
     unsigned char f[0x7FF];
@@ -20,7 +21,6 @@ extern char D_001516D0[];
 extern char D_0013E550[];
 extern void copy_memory_aligned(int, void *, unsigned short) __asm__("FUN_001f9838");
 
-extern s32 D_0014C190_257218[][64] __asm__("D_0014C190");
 void jet_reset_camera(OvlQuad *a, OvlQuad *b) __asm__("FUN_L00_00284e50");
 void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
     unsigned char *save_candidate_cursor;

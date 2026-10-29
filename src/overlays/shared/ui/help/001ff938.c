@@ -183,7 +183,6 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 
 void update_hero_bobbing_and_target_position(void) __asm__("FUN_L15_002007d8");
 
@@ -417,6 +416,7 @@ void adjust_hero_planar_velocity_from_probes(int force) {
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/input/pad_state.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     s32 w0;

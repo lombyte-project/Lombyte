@@ -5,6 +5,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/globals.h"
 
 typedef struct {
     char pad[0x1C4];
@@ -13,7 +14,6 @@ typedef struct {
 extern G_7c410 D_0013C940_7c410 __asm__("D_0013C940");
 
 extern s32 D_L00_00184414 __attribute__((section(".data")));
-extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 s32 pause_menu_entry_input(s32 object_address) __asm__("FUN_L00_0027c410");
 s32 pause_menu_entry_input(s32 object_address) {
     s32 flags_snapshot = D_0013C940_7c410.f1C4;

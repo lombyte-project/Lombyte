@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
 
 typedef union {
     OvlQuad q;
@@ -11,7 +12,6 @@ typedef union {
     s32 i[4];
 } V;
 
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void debug_print(char *) __asm__("FUN_001e93b0");

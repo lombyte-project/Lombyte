@@ -171,7 +171,6 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char *FUN_L00_00272060(float *, int, float, float, float, int, int, int,
                                   void *);
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");

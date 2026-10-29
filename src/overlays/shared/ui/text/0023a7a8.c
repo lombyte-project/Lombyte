@@ -4,6 +4,7 @@
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
 #include "rnc/globals.h"
+#include "rnc/gameplay/state/item_state.h"
 
 /* Draws the weapon HUD tile: three-part frame, weapon icon and ammo text with shadow, faded by the slide-in timers. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_0023B140), where it is exact; names translated to the US level program. */
@@ -223,7 +224,6 @@ int update_hud_elements(int call) {
 extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
 extern int D_L00_0015F96C;
 extern int D_L00_0015F970;
-extern int weapon_ammo_counts[] __asm__("D_0013D428");
 extern int FUN_001ff308_23adb8(int, int, void *, void *, void *, void *,
                                int) __asm__("FUN_001ff308");
 extern void FUN_001ff570_23adb8(int, int) __asm__("FUN_001ff570");

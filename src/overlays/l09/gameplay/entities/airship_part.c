@@ -89,7 +89,7 @@ extern float airship_part_initial_tumble_y_speed_limit_degrees_gp __asm__("D_L09
 #include "rnc/overlay/l09/gameplay/entities/airship_part_data/update_airship_part_2.h"
 extern float airship_hull_breakup_wait_x_rotation_speed_degrees_gp __asm__("D_L09_001613BC") __attribute__((sda));
 #include "rnc/overlay/l09/gameplay/entities/airship_part_data/update_airship_part.h"
-extern f32 frame_time __asm__("D_0015ED6C") __attribute__((section(".sdata")));
+#include "rnc/globals.h"
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") __attribute__((section(".sdata")));
 extern int D_L09_001613C8 __attribute__((sda));
 /* Update for the airship parts (classes 0x49E-0x4A5): attach to the hull, ride it, then break off, tumble away and fall with smoke and sparks. */

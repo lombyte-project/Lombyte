@@ -5,6 +5,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
+#include "rnc/math/fast_math.h"
 
 extern void update_falling_effect_particle() __asm__("FUN_L00_00268d48");
 extern void update_timed_effect_particle() __asm__("FUN_L00_00268fe8");
@@ -202,7 +203,6 @@ typedef struct {
 /* read through a one-field struct: a plain f32 changes the addressing */
 extern ParticleClearance particle_clearance __asm__("D_L00_00160258");
 extern f32 particle_min_ground __asm__("D_L00_00160260");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 ground_height_at(Vec4 *) __asm__("FUN_L00_00263468");
 extern void free_effect_particle(FallingParticle *) __asm__("FUN_L00_00267a08");
 

@@ -2,11 +2,11 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
+#include "rnc/math/fast_math.h"
 extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
 extern s32 D_L06_0015F8E8 __attribute__((sda));
 extern f32 D_L06_0015F8F0 __attribute__((sda));
 extern f32 D_L06_0015F8F4 __attribute__((sda));
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");

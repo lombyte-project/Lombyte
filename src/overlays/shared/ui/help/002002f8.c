@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/data_labels.h"
+#include "rnc/math/fast_math.h"
 
 #define NOT_SDA
 
@@ -10,7 +11,6 @@
 /* Per-frame driver: validates the cursor, then runs each update pass in order. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00200890.c: func_L03_00200890), where it is exact; names translated to the US level program. */
 
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 extern void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
 extern void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
