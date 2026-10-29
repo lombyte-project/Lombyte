@@ -1960,12 +1960,12 @@ void fighter_jet_update(Jet *jet_moby) {
             jet_data->angle_f = 0;
             ((JetPlayer *)(&hero))->craft = jet_moby;
             {
-                unsigned short cls = jet_moby->class_id;
+                unsigned short mounted_craft_class_id = jet_moby->class_id;
                 ((JetPlayer *)(&hero))->health = 255.0f;
                 ((JetPlayer *)(&hero))->ammo = 10;
                 ((JetPlayer *)(&hero))->pad160E = 1;
                 ((JetPlayer *)(&hero))->ammo2 = 20;
-                ((JetPlayer *)(&hero))->class_id = cls;
+                ((JetPlayer *)(&hero))->class_id = mounted_craft_class_id;
                 ((JetPlayer *)(&hero))->ammo3 = 20;
                 jet_data->hud_previous = 255;
                 jet_data->hud_health = 0;
