@@ -1,5 +1,3 @@
-#include "rnc1_functions.h"
-
 /* Sign of the 2D cross product (a - c) x (t - c): 1 when negative.
    The product is a block of its own (a do/while (0), as a macro would
    expand), which keeps the two leading differences ahead of it, as in
