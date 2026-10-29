@@ -88,13 +88,13 @@ void update_blarg_ship_shot(char *moby) {
     float pad[4][2];
     float spark_velocity[4];
     float spark_scatter_vector[4];
-    char *data;
+    char *projectile_vars;
     char *moby_position;
     int   trail_color;
     if (moby == 0)
         return;
-    data = ((char *)MOBY(moby)->pvars);
-    if (data == 0)
+    projectile_vars = ((char *)MOBY(moby)->pvars);
+    if (projectile_vars == 0)
         return;
     moby_position = moby + 0x10;
     qcopy(old, moby_position);
@@ -103,15 +103,15 @@ void update_blarg_ship_shot(char *moby) {
                                    random_float_between(0.0f, 1.0f));
     random_vector(trail_position, 0.0f, 0.1f);
     fast_vec_add(trail_position, trail_position, moby_position);
-    fast_vec_scale(trail_velocity, data, projectile_trail_velocity_scale_gp);
+    fast_vec_scale(trail_velocity, projectile_vars, projectile_trail_velocity_scale_gp);
     FUN_L00_0026dd20((char *)trail_position,
                      (char *)trail_velocity,
                      trail_color,
                      scale_game_frames(projectile_trail_frame_count_gp),
                      (float)D_L11_00161DCC);
-    fast_vec_add(moby_position, moby_position, data);
-    make_hit_descriptor(hit, moby, 0x10000, *(float *)(data + 0x20), data);
-    if (collision_line(old, moby_position, 0, *(void **)(data + 0x1C), hit)) {
+    fast_vec_add(moby_position, moby_position, projectile_vars);
+    make_hit_descriptor(hit, moby, 0x10000, *(float *)(projectile_vars + 0x20), projectile_vars);
+    if (collision_line(old, moby_position, 0, *(void **)(projectile_vars + 0x1C), hit)) {
         int i;
         for (i = 0; i < 5; i++) {
             *(OvlQuad *)spark_scatter_vector = 0;
@@ -119,7 +119,7 @@ void update_blarg_ship_shot(char *moby) {
             spark_scatter_vector[1] = random_float_between(-1.0f, 1.0f);
             spark_scatter_vector[2] = random_float_between(-1.0f, 1.0f);
             *(OvlQuad *)spark_velocity = *(OvlQuad *)spark_scatter_vector;
-            reflect_vector(spark_scatter_vector, data, D_L11_00174880);
+            reflect_vector(spark_scatter_vector, projectile_vars, D_L11_00174880);
             fast_vec_normalize(
                 spark_velocity, spark_velocity, fast_vec_length(spark_scatter_vector) * 0.5f);
             fast_vec_add(spark_velocity, spark_scatter_vector, spark_velocity);
@@ -135,9 +135,9 @@ void update_blarg_ship_shot(char *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (fast_dec_timer((int *)(data + 0x18))) {
-        *(float *)(data + 0x10) *= 0.74f;
-        if (*(float *)(data + 0x10) < 0.02f) {
+    if (fast_dec_timer((int *)(projectile_vars + 0x18))) {
+        *(float *)(projectile_vars + 0x10) *= 0.74f;
+        if (*(float *)(projectile_vars + 0x10) < 0.02f) {
             mark_moby_for_removal(moby);
         }
     }
