@@ -111,16 +111,16 @@ char *
 spawn_growing_ballistic_moby(char *spawn_position, char *initial_velocity, int spawning_moby) {
     char *spawned_moby = create_moby(0x419);
     if (spawned_moby != 0) {
-        char *data;
+        char *spawned_moby_vars;
         MOBY(spawned_moby)->draw_dist = MOBY(spawned_moby)->update_dist = 0xFF;
         spawned_moby[0x31] = 1;
-        data = ((char *)MOBY(spawned_moby)->pvars);
+        spawned_moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         MOBY(spawned_moby)->rot.x = random_angle_radians();
         MOBY(spawned_moby)->rot.y = random_angle_radians();
         MOBY(spawned_moby)->rot.z = random_angle_radians();
         qcopy(spawned_moby + 0x10, spawn_position);
-        qcopy(data, initial_velocity);
-        *(int *)(data + 0x10) = spawning_moby;
+        qcopy(spawned_moby_vars, initial_velocity);
+        *(int *)(spawned_moby_vars + 0x10) = spawning_moby;
         spawned_moby[0x23] = 0x30;
         MOBY(spawned_moby)->flags |= 0x200;
         update_entity(spawned_moby);
