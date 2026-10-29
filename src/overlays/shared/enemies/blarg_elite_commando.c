@@ -634,10 +634,10 @@ void set_blarg_elite_commando_parent_transform(char *moby,
                                                void *position,
 
                                                char *vector) {
-    char *data = ((char *)MOBY(moby)->pvars);
-    *(void **)(data + 0x2D0) = owner;
-    qcopy(data + 0x2C0, position);
-    *(float *)(data + 0x2CC) = *(float *)(vector + 8);
+    char *commando_data = ((char *)MOBY(moby)->pvars);
+    *(void **)(commando_data + 0x2D0) = owner;
+    qcopy(commando_data + 0x2C0, position);
+    *(float *)(commando_data + 0x2CC) = *(float *)(vector + 8);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
