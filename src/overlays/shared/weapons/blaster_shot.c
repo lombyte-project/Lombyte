@@ -132,7 +132,7 @@ char *spawn_homing_shot(
     char          *vars;
     char          *trail;
     unsigned char *variant;
-    int            result;
+    int            collision_hit_lifetime_min_and_alpha_scratch;
     int            timer;
     int            lifetime;
     int            i;
@@ -181,8 +181,8 @@ char *spawn_homing_shot(
         *(short *)(vars + 0x26) = timer;
         *(w128 *)probe = *(w128 *)(owner + 0x10);
         probe[2] = start[2];
-        result = collision_line(probe, start, 0, (int)owner, 0);
-        if (result != 0) {
+        collision_hit_lifetime_min_and_alpha_scratch = collision_line(probe, start, 0, (int)owner, 0);
+        if (collision_hit_lifetime_min_and_alpha_scratch != 0) {
             build_spherical_offset(
                 direction, D_0015ED6C * 40.0f, *(float *)(moby + 0x48), -*(float *)(moby + 0x44));
             qcopy(moby + 0x10, collision_hit_point);
@@ -201,9 +201,9 @@ char *spawn_homing_shot(
                 add_vector_xyz(spark, spark, start);
                 fast_vec_normalize(
                     spark, spark, random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.0f));
-                result = scale_game_frames(10);
+                collision_hit_lifetime_min_and_alpha_scratch = scale_game_frames(10);
                 timer = scale_game_frames(15);
-                lifetime = random_int_between(result, timer);
+                lifetime = random_int_between(collision_hit_lifetime_min_and_alpha_scratch, timer);
                 FUN_L00_0026dd20(moby + 0x10, (char *)spark, 0x7F2F4F6F, lifetime, 30000.0f);
             } while (sparks >= 0);
             variant = item_text_variant;
@@ -238,8 +238,8 @@ char *spawn_homing_shot(
                     *(float *)(trail + 0xC) =
                         *(float *)(trail + 0xC) +
                         (homing_shot_trail_size_blend_target - *(float *)(trail + 0xC)) * blend;
-                    result = truncate_float_to_s32(blend * -64.0f + 128.0f);
-                    *(int *)(trail + 4) = (result << 24) | 0xFFFFFF;
+                    collision_hit_lifetime_min_and_alpha_scratch = truncate_float_to_s32(blend * -64.0f + 128.0f);
+                    *(int *)(trail + 4) = (collision_hit_lifetime_min_and_alpha_scratch << 24) | 0xFFFFFF;
                     ((int *)(vars + 0x2C))[i] = (int)trail;
                 } else {
                     ((int *)(vars + 0x2C))[i] = 0;
