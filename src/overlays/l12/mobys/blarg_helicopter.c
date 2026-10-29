@@ -479,19 +479,19 @@ update_state:
 }
 
 void update_blarg_helicopter_motion_tilt(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *blarg_helicopter_motion_vars = (char *)moby->pvars;
     float ang = fast_subtract_rotations(
-        fast_arc_tan(*(float *)(data + 0x70), *(float *)(data + 0x74)), moby->rot.z);
+        fast_arc_tan(*(float *)(blarg_helicopter_motion_vars + 0x70), *(float *)(blarg_helicopter_motion_vars + 0x74)), moby->rot.z);
     float target_rotation_y =
-        *(float *)(data + 0x94) * 0.2268928f * fast_cos(ang) / (frame_time * 10.0f);
+        *(float *)(blarg_helicopter_motion_vars + 0x94) * 0.2268928f * fast_cos(ang) / (frame_time * 10.0f);
     float target_rotation_x =
-        *(float *)(data + 0x94) * -0.2268928f * fast_sin(ang) / (frame_time * 10.0f);
+        *(float *)(blarg_helicopter_motion_vars + 0x94) * -0.2268928f * fast_sin(ang) / (frame_time * 10.0f);
     float updated_rotation_y, k0, rotation_y_damping, rotation_y_step_limit, k1, rotation_x_damping,
         rotation_x_step_limit;
     k0 = frame_time_sq * 0.5235988f;
     rotation_y_damping = frame_time_sq * 1.0471976f;
     rotation_y_step_limit = frame_time * 0.7853982f;
-    updated_rotation_y = spring_turn((float *)(data + 0x9C),
+    updated_rotation_y = spring_turn((float *)(blarg_helicopter_motion_vars + 0x9C),
                                      moby->rot.y,
                                      target_rotation_y,
                                      k0,
@@ -501,7 +501,7 @@ void update_blarg_helicopter_motion_tilt(struct Moby *moby) {
     rotation_x_damping = frame_time_sq * 2.0943952f;
     rotation_x_step_limit = frame_time * 1.2217305f;
     moby->rot.y = updated_rotation_y;
-    moby->rot.x = spring_turn((float *)(data + 0x98),
+    moby->rot.x = spring_turn((float *)(blarg_helicopter_motion_vars + 0x98),
                               moby->rot.x,
                               target_rotation_x,
                               k1,
