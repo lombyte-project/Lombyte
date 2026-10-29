@@ -1214,8 +1214,8 @@ typedef struct {
     s32 sound;
     s32 pad[4];
 } VendorSound_29a400;
-extern VendorList_29a400 vendor_list_29a400 __asm__("D_L00_001CA4C0") NOT_SDA;
-extern VendorSound_29a400 vendor_sound_29a400[] __asm__("D_L00_001C2108") NOT_SDA;
+extern VendorList_29a400 vendor_list __asm__("D_L00_001CA4C0") NOT_SDA;
+extern VendorSound_29a400 vendor_sound[] __asm__("D_L00_001C2108") NOT_SDA;
 /* Stocked item ids (low 6 bits; bit 0x40 = listed as selected), 0xFF-terminated. */
 extern u8 D_0013D4C0[];
 
@@ -1230,7 +1230,7 @@ void build_vendor_menu_rows(s32 skip_unflagged) {
     if (D_0015EDD0_257218[0] != 0xFF) {
         do count++; while (count < 12 && D_0015EDD0_257218[count] != 0xFF);
     }
-    vendor_list_29a400.count = 0;
+    vendor_list.count = 0;
     for (i = 0; i < count; i++) {
         value = D_0015EDD0_257218[i];
         if (value == 0xFF) continue;
@@ -1238,37 +1238,37 @@ void build_vendor_menu_rows(s32 skip_unflagged) {
         if (value & 0x40) {
             s32 sound;
             if (D_L00_001C40B0[item].h8 == 0) continue;
-            sound = vendor_sound_29a400[item].sound;
-            vendor_list_29a400.entries[vendor_list_29a400.count].item = item;
-            vendor_list_29a400.entries[vendor_list_29a400.count].selected = 1;
-            vendor_list_29a400.entries[vendor_list_29a400.count].state = 0;
-            vendor_list_29a400.entries[vendor_list_29a400.count].sound = sound;
-            vendor_list_29a400.count++;
+            sound = vendor_sound[item].sound;
+            vendor_list.entries[vendor_list.count].item = item;
+            vendor_list.entries[vendor_list.count].selected = 1;
+            vendor_list.entries[vendor_list.count].state = 0;
+            vendor_list.entries[vendor_list.count].sound = sound;
+            vendor_list.count++;
         } else {
             s32 sound;
             if (skip_unflagged) continue;
-            sound = vendor_sound_29a400[item].sound;
-            vendor_list_29a400.entries[vendor_list_29a400.count].item = item;
-            vendor_list_29a400.entries[vendor_list_29a400.count].selected = 0;
-            vendor_list_29a400.entries[vendor_list_29a400.count].state = 0;
-            vendor_list_29a400.entries[vendor_list_29a400.count].sound = sound;
-            vendor_list_29a400.count++;
+            sound = vendor_sound[item].sound;
+            vendor_list.entries[vendor_list.count].item = item;
+            vendor_list.entries[vendor_list.count].selected = 0;
+            vendor_list.entries[vendor_list.count].state = 0;
+            vendor_list.entries[vendor_list.count].sound = sound;
+            vendor_list.count++;
         }
     }
     for (k = 0; k < 37; k++) {
         s32 sound;
         if (!D_0013D4C0[k]) continue;
         if (!D_L00_001C40B0[k].h8) continue;
-        for (j = 0; j < vendor_list_29a400.count; j++) {
-            if (vendor_list_29a400.entries[j].item == k) break;
+        for (j = 0; j < vendor_list.count; j++) {
+            if (vendor_list.entries[j].item == k) break;
         }
-        if (j < vendor_list_29a400.count) continue;
-        sound = vendor_sound_29a400[k].sound;
-        vendor_list_29a400.entries[vendor_list_29a400.count].item = k;
-        vendor_list_29a400.entries[vendor_list_29a400.count].selected = 1;
-        vendor_list_29a400.entries[vendor_list_29a400.count].state = 0;
-        vendor_list_29a400.entries[vendor_list_29a400.count].sound = sound;
-        vendor_list_29a400.count++;
+        if (j < vendor_list.count) continue;
+        sound = vendor_sound[k].sound;
+        vendor_list.entries[vendor_list.count].item = k;
+        vendor_list.entries[vendor_list.count].selected = 1;
+        vendor_list.entries[vendor_list.count].state = 0;
+        vendor_list.entries[vendor_list.count].sound = sound;
+        vendor_list.count++;
     }
 }
 #include "qzero.h"

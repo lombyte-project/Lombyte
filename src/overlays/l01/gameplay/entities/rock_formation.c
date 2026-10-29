@@ -683,8 +683,8 @@ typedef struct {
     /* 0x70 */ V4_2FC140 b;
 } Rec_2FC140;
 typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } Lv_2FC140;
-extern Moby_2FC140 *D_L01_00160058_2FC140 __asm__("D_L01_0015FFD8") MACRO_ADDR;
-extern Rec_2FC140 *D_L01_0016016C_2FC140 __asm__("D_L01_001600EC") MACRO_ADDR;
+extern Moby_2FC140 *ents_macro __asm__("D_L01_0015FFD8") MACRO_ADDR;
+extern Rec_2FC140 *D_L01_001600EC_macro __asm__("D_L01_001600EC") MACRO_ADDR;
 extern int cutscene_mode __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
 extern Lv_2FC140 D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
@@ -774,17 +774,17 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                 moby->flags = moby->flags & 0xFFBE;
                 moby->f94 = moby->pclass->f10;
                 if (data->link != -1) {
-                    linked_moby_data = D_L01_00160058_2FC140[data->link].data;
+                    linked_moby_data = ents_macro[data->link].data;
                     linked_moby_data->timer = scale_game_frames(0x1A4);
-                    D_L01_00160058_2FC140[data->link].fBC = 1;
-                    clear_u64_value(&D_L01_0016016C_2FC140[linked_moby_data->rec].b);
+                    ents_macro[data->link].fBC = 1;
+                    clear_u64_value(&D_L01_001600EC_macro[linked_moby_data->rec].b);
                     clear_u64_value(&linked_moby_data->v);
-                    D_L01_0016016C_2FC140[linked_moby_data->rec].b.y = -fast_arc_tan(
-                        vector_distance(&D_L01_0016016C_2FC140[linked_moby_data->rec].a, &moby->pos),
-                        moby->pos.z - D_L01_0016016C_2FC140[linked_moby_data->rec].a.z);
-                    D_L01_0016016C_2FC140[linked_moby_data->rec].b.z = fast_arc_tan(
-                        moby->pos.x - D_L01_0016016C_2FC140[linked_moby_data->rec].a.x,
-                        moby->pos.y - D_L01_0016016C_2FC140[linked_moby_data->rec].a.y);
+                    D_L01_001600EC_macro[linked_moby_data->rec].b.y = -fast_arc_tan(
+                        vector_distance(&D_L01_001600EC_macro[linked_moby_data->rec].a, &moby->pos),
+                        moby->pos.z - D_L01_001600EC_macro[linked_moby_data->rec].a.z);
+                    D_L01_001600EC_macro[linked_moby_data->rec].b.z = fast_arc_tan(
+                        moby->pos.x - D_L01_001600EC_macro[linked_moby_data->rec].a.x,
+                        moby->pos.y - D_L01_001600EC_macro[linked_moby_data->rec].a.y);
                 }
                 moby->state = 2;
             }
@@ -793,13 +793,13 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
     case AGNOGG_SHIP_DESCEND_TO_TARGET_HEIGHT:
         moby->pos.z = moby->pos.z - frame_time_macro * 5.0f;
         if (data->link != -1) {
-            linked_moby_data = D_L01_00160058_2FC140[data->link].data;
+            linked_moby_data = ents_macro[data->link].data;
             linked_moby_data->v.y = -fast_arc_tan(
-                vector_distance(&D_L01_0016016C_2FC140[linked_moby_data->rec].a, &moby->pos),
-                moby->pos.z - D_L01_0016016C_2FC140[linked_moby_data->rec].a.z);
+                vector_distance(&D_L01_001600EC_macro[linked_moby_data->rec].a, &moby->pos),
+                moby->pos.z - D_L01_001600EC_macro[linked_moby_data->rec].a.z);
             linked_moby_data->v.z = fast_arc_tan(
-                moby->pos.x - D_L01_0016016C_2FC140[linked_moby_data->rec].a.x,
-                moby->pos.y - D_L01_0016016C_2FC140[linked_moby_data->rec].a.y);
+                moby->pos.x - D_L01_001600EC_macro[linked_moby_data->rec].a.x,
+                moby->pos.y - D_L01_001600EC_macro[linked_moby_data->rec].a.y);
         }
         if (moby->f53 == 0) {
             if (moby->pos.z - data->fC <= 0.0f) {
@@ -832,9 +832,9 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         inactive_or_absent_link_count = 0;
         i = 0;
         do {
-            if (data->list[i] != -1 && (char *)D_L01_00160058_2FC140 + (data->list[i] << 8) != 0
-                && ((Moby_2FC140 *)((char *)D_L01_00160058_2FC140 + (data->list[i] << 8)))->state != 0xFE
-                && ((Moby_2FC140 *)((char *)D_L01_00160058_2FC140 + (data->list[i] << 8)))->state != 0xFD) {
+            if (data->list[i] != -1 && (char *)ents_macro + (data->list[i] << 8) != 0
+                && ((Moby_2FC140 *)((char *)ents_macro + (data->list[i] << 8)))->state != 0xFE
+                && ((Moby_2FC140 *)((char *)ents_macro + (data->list[i] << 8)))->state != 0xFD) {
                 flag = 0;
                 break;
             }
@@ -885,27 +885,27 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         queue_planet_unlock_message(3);
         moby->flags = moby->flags & 0xFFBE;
         if (data->link != -1) {
-            ((Lv_2FC140 *)D_L01_001BAD60_2FC140)->collected[D_L01_00160058_2FC140[data->link].fB2] = D_L01_00160058_2FC140[data->link].fB0 + 2;
-            if (D_L01_00160058_2FC140[data->link].fB0 == 0xFF
-                || (D_L01_0015FC88[D_L01_00160058_2FC140[data->link].fB0] != 0xFF
-                    && D_0014C050_u[D_L01_00160058_2FC140[data->link].fB0 + (current_level_index_macro << 4)] == 0xFF)) {
-                D_L01_001BB9C0_2FC140.collected[D_L01_00160058_2FC140[data->link].fB2] = D_L01_00160058_2FC140[data->link].fB0 + 2;
+            ((Lv_2FC140 *)D_L01_001BAD60_2FC140)->collected[ents_macro[data->link].fB2] = ents_macro[data->link].fB0 + 2;
+            if (ents_macro[data->link].fB0 == 0xFF
+                || (D_L01_0015FC88[ents_macro[data->link].fB0] != 0xFF
+                    && D_0014C050_u[ents_macro[data->link].fB0 + (current_level_index_macro << 4)] == 0xFF)) {
+                D_L01_001BB9C0_2FC140.collected[ents_macro[data->link].fB2] = ents_macro[data->link].fB0 + 2;
             }
         }
         if (data->f3C != -1) {
-            linked_moby_data = D_L01_00160058_2FC140[data->f3C].data;
+            linked_moby_data = ents_macro[data->f3C].data;
             linked_moby_data->timer = scale_game_frames(0xB4);
-            D_L01_00160058_2FC140[data->f3C].fBC = 1;
+            ents_macro[data->f3C].fBC = 1;
             if (data->f34 != -1 && data->f38 != -1) {
-                D_L01_00160058_2FC140[data->f34].fBC = 2;
-                D_L01_00160058_2FC140[data->f38].fBC = 2;
-                record_moby_context_bytes(&D_L01_00160058_2FC140[data->f34].fBC, 1, &D_L01_00160058_2FC140[data->f34], 1, D_L01_001BAAA0);
-                record_moby_context_bytes(&D_L01_00160058_2FC140[data->f38].fBC, 1, &D_L01_00160058_2FC140[data->f38], 1, D_L01_001BAAA0);
+                ents_macro[data->f34].fBC = 2;
+                ents_macro[data->f38].fBC = 2;
+                record_moby_context_bytes(&ents_macro[data->f34].fBC, 1, &ents_macro[data->f34], 1, D_L01_001BAAA0);
+                record_moby_context_bytes(&ents_macro[data->f38].fBC, 1, &ents_macro[data->f38], 1, D_L01_001BAAA0);
             }
         }
         func_L00_002512D8_2FC140(moby->fB0);
         if (data->rec != -1) {
-            func_L00_00286128_2FC140(&D_L01_0016016C_2FC140[data->rec].a, &D_L01_0016016C_2FC140[data->rec].b);
+            func_L00_00286128_2FC140(&D_L01_001600EC_macro[data->rec].a, &D_L01_001600EC_macro[data->rec].b);
         }
         memcard_save_data(0, -1);
         func_L01_002A3680_2FC140();

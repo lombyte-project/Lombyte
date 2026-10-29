@@ -482,9 +482,9 @@ extern Cam_2D9F08 D_L02_00167300_2D9F08 __asm__("D_L02_00167280");
 extern Idle_2D9F08 D_L02_00179A10;
 extern int D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
 extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
-extern int D_L02_00161B38_2D9F08 __asm__("D_L02_00161AA8") __attribute__((sda));
-extern int D_L02_00161B34_2D9F08 __asm__("D_L02_00161AA4") __attribute__((sda));
-extern int D_L02_00161B30_2D9F08 __asm__("D_L02_00161AA0") __attribute__((sda));
+extern int D_L02_00161AA8_gp __asm__("D_L02_00161AA8") __attribute__((sda));
+extern int D_L02_00161AA4_gp __asm__("D_L02_00161AA4") __attribute__((sda));
+extern int D_L02_00161AA0_gp __asm__("D_L02_00161AA0") __attribute__((sda));
 extern char D_0013E633_2D9F08[] __asm__("D_0013E533");
 extern Hero D_0013F450_2D9F08 __asm__("D_0013F350");
 extern int D_0013CAE4 __attribute__((section(".data")));
@@ -534,10 +534,10 @@ void tresspasser_pad_update(Moby *moby) {
                 func_0022ED80_2D9F08(3, 0, moby);
             }
             if (((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby != 0 && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id == 0x1A) {
-                moby->glow_color = D_L02_00161B30_2D9F08;
+                moby->glow_color = D_L02_00161AA0_gp;
                 holding_tool = 1;
             } else {
-                moby->glow_color = D_L02_00161B34_2D9F08;
+                moby->glow_color = D_L02_00161AA4_gp;
                 holding_tool = 0;
             }
             if (holding_tool && ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].moby->command != 0) {
@@ -555,7 +555,7 @@ void tresspasser_pad_update(Moby *moby) {
             }
         } else {
             data->h12 = 0;
-            moby->glow_color = D_L02_00161B38_2D9F08;
+            moby->glow_color = D_L02_00161AA8_gp;
         }
         break;
     case TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE:

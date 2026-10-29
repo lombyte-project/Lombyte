@@ -46,7 +46,7 @@ void step_pool_wave_simulation(char *base, int record_count) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002B9198), where it is exact; names translated to the US level program. */
 
 extern int FUN_L01_002b7f30_c() __asm__("FUN_L01_002b7f30");
-extern short D_L01_00161220_d __asm__("D_L01_00161220") __attribute__((sda));
+extern short D_L01_00161220_gp __asm__("D_L01_00161220") __attribute__((sda));
 extern void FUN_L01_00261d78(char *, char *, char *, float);
 extern void func_L01_002B90E8_2B9198(void) __asm__("FUN_L01_002b7f30");
 
@@ -56,15 +56,15 @@ void pool_flush(char *records_base, int record_count) {
     if (1.0f - pool_light[8] <= *(float *)&pool_wave_step_accumulator) {
         *(float *)&pool_wave_step_accumulator = pool_light[8];
         func_L01_002B90E8_2B9198();
-        *(int *)&D_L01_00161220_d = *(int *)&pool_wave_next_source_slot_index;
+        *(int *)&D_L01_00161220_gp = *(int *)&pool_wave_next_source_slot_index;
     } else {
-        *(int *)&D_L01_00161220_d = 2;
+        *(int *)&D_L01_00161220_gp = 2;
         if (record_count > 0) {
             char *current_record = records_base;
             int k = record_count;
             do {
                 if (*(unsigned short *)(current_record + 0x1E) != 0) {
-                    FUN_L01_00261d78(current_record + (*(int *)&D_L01_00161220_d * 0x5C0 + 0x50),
+                    FUN_L01_00261d78(current_record + (*(int *)&D_L01_00161220_gp * 0x5C0 + 0x50),
                                      current_record + (*(int *)&pool_wave_next_source_slot_index * 0x5C0 + 0x50),
                                      current_record + (*(int *)&pool_wave_source_slot_index * 0x5C0 + 0x50),
                                      *(float *)&pool_wave_step_accumulator);

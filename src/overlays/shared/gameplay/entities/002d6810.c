@@ -578,9 +578,9 @@ void draw_electric_water_countdown(char *moby) {
     font_print_center_large_001f6c20(W(electric_water_countdown_text_x), W(electric_water_countdown_text_y), col, (int)countdown_text, 8);
 }
 /* Starts the moby's trail when requested: resets the trail points and the counters. */
-extern int D_L15_00161C14_r __asm__("D_L15_00161C14") __attribute__((sda));
-extern int D_L15_00161C1C_r __asm__("D_L15_00161C1C") __attribute__((sda));
-extern int D_L15_00161C30_r __asm__("D_L15_00161C30") __attribute__((sda));
+extern int D_L15_00161C14_gp __asm__("D_L15_00161C14") __attribute__((sda));
+extern int D_L15_00161C1C_gp __asm__("D_L15_00161C1C") __attribute__((sda));
+extern int D_L15_00161C30_gp __asm__("D_L15_00161C30") __attribute__((sda));
 extern int D_L15_00161C60_r __asm__("D_L15_00161C60");
 extern short D_L15_00161CD0_r __asm__("D_L15_00161CD0");
 extern short D_L15_00161CD8_r __asm__("D_L15_00161CD8");
@@ -636,9 +636,9 @@ void initialize_electric_water_bolt_effect(char *moby) {
         third_side_arc_reset_frame_count = 8;
         fourth_side_arc_reset_frame_count = 4;
         fourth_side_arc_fade_peak_timer_value = 2;
-        D_L15_00161C14_r = 0;
-        D_L15_00161C1C_r = 0;
-        D_L15_00161C30_r = 0;
+        D_L15_00161C14_gp = 0;
+        D_L15_00161C1C_gp = 0;
+        D_L15_00161C30_gp = 0;
     }
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -712,7 +712,7 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z);
 extern void spawn_2d8fa0(void *, int, float, float, int, int, int, void *, float) __asm__("FUN_L00_00272060");
 extern char D_0013F6E0_2d8fa0[] __asm__("D_0013F5E0");
-extern s32 D_L15_00161CE0_2d8fa0 __asm__("D_L15_00161C60") __attribute__((sda));
+extern s32 D_L15_00161C60_gp __asm__("D_L15_00161C60") __attribute__((sda));
 extern P_2d8fa0 D_L15_001D3E80_2d8fa0[] __asm__("D_L15_001D3BB0");
 extern float D_L15_00167440_2d8fa0[] __asm__("D_L15_001673C0");
 
@@ -732,9 +732,9 @@ void update_electric_water_bolt_effect(Moby *moby) {
     *(float *)&D_L15_00161C30 = fast_add_rotations(*(float *)&D_L15_00161C30, *(float *)&electric_water_bolt_paired_height_frame_phase_step_gp);
     scale = fast_vec_dist(&data->a, &data->c) * 0.05f;
     if (flag) {
-        *(int *)&D_L15_00161CE0_2d8fa0 = 0x7F2040;
+        *(int *)&D_L15_00161C60_gp = 0x7F2040;
     } else {
-        *(int *)&D_L15_00161CE0_2d8fa0 = 0x7F2020;
+        *(int *)&D_L15_00161C60_gp = 0x7F2020;
     }
     fast_vec_sub(&vectors[0], &data->b, &data->a);
     fast_vec_normalize(&vectors[0], &vectors[0], 1.0f);
@@ -879,57 +879,57 @@ void update_electric_water_bolt_effect(Moby *moby) {
     spin = random_int_between(1, 8);
     if (random_integer_below(2)) spin = -spin;
     angle = random_float_between(0.2f, 0.6f);
-    spawn_2d8fa0(&data->a, scale_game_frames(15), angle * 0.3f, angle, *(int *)&D_L15_00161CE0_2d8fa0 | 0x7F000000, 0, spin, &vectors[5], 0.0f);
+    spawn_2d8fa0(&data->a, scale_game_frames(15), angle * 0.3f, angle, *(int *)&D_L15_00161C60_gp | 0x7F000000, 0, spin, &vectors[5], 0.0f);
     spin = -spin;
     spawn_2d8fa0(&data->a, scale_game_frames(15), angle * 0.15f, angle * 0.5f, 0x307F7F7F, 0, spin, &vectors[5], 0.0f);
     spin = random_int_between(1, 8);
     if (random_integer_below(2)) spin = -spin;
     angle = random_float_between(0.15f, 3.0f);
-    spawn_2d8fa0(&data->c, scale_game_frames(12), angle * 0.1f, angle, *(int *)&D_L15_00161CE0_2d8fa0 | 0x7F000000, 0, spin, D_L15_0015F580, 0.0f);
+    spawn_2d8fa0(&data->c, scale_game_frames(12), angle * 0.1f, angle, *(int *)&D_L15_00161C60_gp | 0x7F000000, 0, spin, D_L15_0015F580, 0.0f);
 }
 extern float frame_scale __asm__("D_0015ED60");
 extern char D_L15_001D3750_8710[] __asm__("D_L15_001D3750");
 extern char D_L15_001D3BB0_8710[] __asm__("D_L15_001D3BB0");
 extern int D_L15_00161CC8_8710 __asm__("D_L15_00161CC8");
-extern short D_L15_00161C58_8710 __asm__("D_L15_00161C58") __attribute__((sda));
-extern short D_L15_00161C54_8710 __asm__("D_L15_00161C54") __attribute__((sda));
-extern short D_L15_00161C3C_8710 __asm__("D_L15_00161C3C") __attribute__((sda));
-extern short D_L15_00161C44_8710 __asm__("D_L15_00161C44") __attribute__((sda));
-extern short D_L15_00161C64_8710 __asm__("D_L15_00161C64") __attribute__((sda));
-extern short D_L15_00161C68_8710 __asm__("D_L15_00161C68") __attribute__((sda));
-extern short D_L15_00161C9C_8710 __asm__("D_L15_00161C9C") __attribute__((sda));
-extern short D_L15_00161C6C_8710 __asm__("D_L15_00161C6C") __attribute__((sda));
-extern short D_L15_00161C70_8710 __asm__("D_L15_00161C70") __attribute__((sda));
-extern short D_L15_00161C74_8710 __asm__("D_L15_00161C74") __attribute__((sda));
-extern short D_L15_00161C78_8710 __asm__("D_L15_00161C78") __attribute__((sda));
-extern short D_L15_00161CA0_8710 __asm__("D_L15_00161CA0") __attribute__((sda));
+extern short D_L15_00161C58_gp __asm__("D_L15_00161C58") __attribute__((sda));
+extern short D_L15_00161C54_gp __asm__("D_L15_00161C54") __attribute__((sda));
+extern short D_L15_00161C3C_gp __asm__("D_L15_00161C3C") __attribute__((sda));
+extern short D_L15_00161C44_gp __asm__("D_L15_00161C44") __attribute__((sda));
+extern short D_L15_00161C64_gp __asm__("D_L15_00161C64") __attribute__((sda));
+extern short D_L15_00161C68_gp __asm__("D_L15_00161C68") __attribute__((sda));
+extern short D_L15_00161C9C_gp __asm__("D_L15_00161C9C") __attribute__((sda));
+extern short D_L15_00161C6C_gp __asm__("D_L15_00161C6C") __attribute__((sda));
+extern short D_L15_00161C70_gp __asm__("D_L15_00161C70") __attribute__((sda));
+extern short D_L15_00161C74_gp __asm__("D_L15_00161C74") __attribute__((sda));
+extern short D_L15_00161C78_gp __asm__("D_L15_00161C78") __attribute__((sda));
+extern short D_L15_00161CA0_gp __asm__("D_L15_00161CA0") __attribute__((sda));
 extern void draw_beam_and_arc_two_pass_quads(char *, int, int, int, float, float,
                                   float) __asm__("FUN_L00_002baae0");
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
 void draw_electric_water_bolt_effect(char *moby) {
-    float decremented_accumulator = F(D_L15_00161C54_8710) - F(D_L15_00161C58_8710) * frame_scale;
-    F(D_L15_00161C54_8710) = decremented_accumulator;
+    float decremented_accumulator = F(D_L15_00161C54_gp) - F(D_L15_00161C58_gp) * frame_scale;
+    F(D_L15_00161C54_gp) = decremented_accumulator;
     if (decremented_accumulator <= -8.0f) {
-        F(D_L15_00161C54_8710) = decremented_accumulator + 8.0f;
+        F(D_L15_00161C54_gp) = decremented_accumulator + 8.0f;
     }
-    draw_beam_and_arc_two_pass_quads(D_L15_001D3750_8710, W(D_L15_00161C3C_8710), W(D_L15_00161C44_8710), 0x14,
-                          F(D_L15_00161C64_8710), F(D_L15_00161C68_8710), F(D_L15_00161C9C_8710));
-    draw_beam_and_arc_two_pass_quads(D_L15_001D3750_8710 + 0x140, W(D_L15_00161C6C_8710),
-                          W(D_L15_00161C70_8710), 0x14, F(D_L15_00161C74_8710),
-                          F(D_L15_00161C78_8710), F(D_L15_00161CA0_8710));
+    draw_beam_and_arc_two_pass_quads(D_L15_001D3750_8710, W(D_L15_00161C3C_gp), W(D_L15_00161C44_gp), 0x14,
+                          F(D_L15_00161C64_gp), F(D_L15_00161C68_gp), F(D_L15_00161C9C_gp));
+    draw_beam_and_arc_two_pass_quads(D_L15_001D3750_8710 + 0x140, W(D_L15_00161C6C_gp),
+                          W(D_L15_00161C70_gp), 0x14, F(D_L15_00161C74_gp),
+                          F(D_L15_00161C78_gp), F(D_L15_00161CA0_gp));
     draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710, *(short *)&D_L15_00161CC8_8710,
-                          *(short *)&D_L15_00161CC8_8710, 5, F(D_L15_00161C74_8710),
-                          F(D_L15_00161C78_8710), 0.2f);
+                          *(short *)&D_L15_00161CC8_8710, 5, F(D_L15_00161C74_gp),
+                          F(D_L15_00161C78_gp), 0.2f);
     draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0x50, *(short *)&second_side_arc_fade_level,
-                          *(short *)&second_side_arc_fade_level, 5, F(D_L15_00161C74_8710),
-                          F(D_L15_00161C78_8710), 0.2f);
+                          *(short *)&second_side_arc_fade_level, 5, F(D_L15_00161C74_gp),
+                          F(D_L15_00161C78_gp), 0.2f);
     draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xA0, *(short *)&third_side_arc_fade_level,
-                          *(short *)&third_side_arc_fade_level, 5, F(D_L15_00161C74_8710),
-                          F(D_L15_00161C78_8710), 0.2f);
+                          *(short *)&third_side_arc_fade_level, 5, F(D_L15_00161C74_gp),
+                          F(D_L15_00161C78_gp), 0.2f);
     draw_beam_and_arc_two_pass_quads(D_L15_001D3BB0_8710 + 0xF0, *(short *)&fourth_side_arc_fade_level,
-                          *(short *)&fourth_side_arc_fade_level, 5, F(D_L15_00161C74_8710),
-                          F(D_L15_00161C78_8710), 0.2f);
+                          *(short *)&fourth_side_arc_fade_level, 5, F(D_L15_00161C74_gp),
+                          F(D_L15_00161C78_gp), 0.2f);
     FUN_L15_002d8e48_8710(moby);
 }
 typedef struct {

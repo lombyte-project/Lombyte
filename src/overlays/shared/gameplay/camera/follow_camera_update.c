@@ -1466,7 +1466,7 @@ extern unsigned short *D_L00_001AB840_2ebe70[] __asm__("D_L00_001AB840");
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern OvlQuad D_L00_00173E60_2ebe70 __asm__("D_L00_00173E60");
 extern float D_L00_00173E70_2ebe70[] __asm__("D_L00_00173E70");
-extern float D_L00_00161DD8_2ebe70 __asm__("D_L00_00161DD8") __attribute__((sda));
+extern float D_L00_00161DD8_gp __asm__("D_L00_00161DD8") __attribute__((sda));
 
 void update_target_tracking_camera_position(char *camera_object) __asm__("FUN_L00_002ebe70");
 
@@ -1548,9 +1548,9 @@ void update_target_tracking_camera_position(char *camera_object) {
         }
     } else if (hero.state.current == 0x25) {
         if (*(int *)(follow + 0x40) == 1)
-            *angle = rope_spring_turn(angle + 1, *angle, *(float *)(*(char **)(follow + 0x44) + 0x48), D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
+            *angle = rope_spring_turn(angle + 1, *angle, *(float *)(*(char **)(follow + 0x44) + 0x48), D_L00_00161DD8_gp, 0.175f, 0.0f);
         else
-            *angle = rope_spring_turn(angle + 1, *angle, hero.motion.rot.f[2], D_L00_00161DD8_2ebe70, 0.175f, 0.0f);
+            *angle = rope_spring_turn(angle + 1, *angle, hero.motion.rot.f[2], D_L00_00161DD8_gp, 0.175f, 0.0f);
     }
     *(float *)(follow + 0x30) = fast_cos(*angle);
     *(float *)(follow + 0x34) = fast_sin(*angle);

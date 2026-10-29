@@ -649,7 +649,7 @@ extern PadState D_0013CA40_p2523C8 __asm__("D_0013C940");
 extern int D_00141760_2523C8 __asm__("D_00141660") __attribute__((section(".data")));
 extern unsigned char D_0013D5C8_2523C8[] __asm__("D_0013D4DC");
 extern Rec2C_2523C8 D_L05_0017C188_2523C8[] __asm__("D_L05_0017C088");
-extern int D_L05_0015F674_g __asm__("D_L05_0015F674") __attribute__((sda));
+extern int D_L05_0015F674_gp __asm__("D_L05_0015F674") __attribute__((sda));
 extern int func_L05_0024D680_2523C8(int, int) __asm__("FUN_L05_0024cee8");
 extern int func_001F9908_2523C8(int *) __asm__("FUN_001f9740");
 extern Moby *D_L05_00160098_2523C8 __asm__("D_L05_0015FFD8") __attribute__((section(".sdata")));
@@ -1026,8 +1026,8 @@ int process_hero_primary_item_input(void) {
     if ((*(Hero *)((char *)&hero)).state_timer == start_timer) {
         if (FUN_L00_0020d498(3) == 3 && (*(Hero *)((char *)&hero)).state.current != 0x81 && ((*(Hero *)((char *)&hero)).unk308 == 0 || D_0013D5C8_2523C8[0] == 0)
             && (*(Hero *)((char *)&hero)).pack_disabled == 0) {
-            func_001F9908_2523C8(&D_L05_0015F674_g);
-            if (D_L05_0015F674_g != 0) {
+            func_001F9908_2523C8(&D_L05_0015F674_gp);
+            if (D_L05_0015F674_gp != 0) {
                 if ((*(Hero *)((char *)&hero)).state.control_mode < 2U || (*(Hero *)((char *)&hero)).state.control_mode == 0xC
                     || (((*(Hero *)((char *)&hero)).state.control_mode == 2 || (*(Hero *)((char *)&hero)).state.control_mode == 4) && (*(Hero *)((char *)&hero)).grounded_frames != 0)) {
                     if ((D_0013CA40_p2523C8.held & 8) && (D_0013CA40_p2523C8.pressed & 8)) {
@@ -1036,7 +1036,7 @@ int process_hero_primary_item_input(void) {
                 }
             }
             if ((D_0013CA40_p2523C8.pressed & 8) && (*(Hero *)((char *)&hero)).state.current != 0x81) {
-                D_L05_0015F674_g = scale_game_frames(0x1E);
+                D_L05_0015F674_gp = scale_game_frames(0x1E);
             }
         } else if ((*(Hero *)((char *)&hero)).state.current != 0x13 && (*(Hero *)((char *)&hero)).state.current != 0x81 && (*(Hero *)((char *)&hero)).state.current != 0x15 && (*(Hero *)((char *)&hero)).state.current != 0x16) {
             (*(Hero *)((char *)&hero)).unk22CA = 0;

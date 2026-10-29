@@ -439,8 +439,8 @@ typedef struct {
     u8 pad4c[0x2C];
     PV2e5178 *pv;
 } M2e5178;
-extern f32 g48_2e5178 __asm__("D_L04_00161D78") __attribute__((sda));
-extern f32 g4c_2e5178 __asm__("D_L04_00161D7C") __attribute__((sda));
+extern f32 D_L04_00161D78_gp __asm__("D_L04_00161D78") __attribute__((sda));
+extern f32 D_L04_00161D7C_gp __asm__("D_L04_00161D7C") __attribute__((sda));
 extern u128 tgt_2e5178[] __asm__("D_L04_00174000") __attribute__((section(".data")));
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern s32 fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
@@ -476,8 +476,8 @@ void update_entity_bounce_and_decay(M2e5178 *entity) {
                 reflect_vector(pv->vel, pv->vel, collision_normal);
                 fast_vec_scale(pv->vel, pv->vel, 0.75f);
                 pv->f20 = 0.0f;
-                pv->f24 = randf_sym(g48_2e5178, g4c_2e5178) * DEG_TO_RAD * frame_time;
-                pv->f28 = randf_sym(g48_2e5178, g4c_2e5178) * DEG_TO_RAD * frame_time;
+                pv->f24 = randf_sym(D_L04_00161D78_gp, D_L04_00161D7C_gp) * DEG_TO_RAD * frame_time;
+                pv->f28 = randf_sym(D_L04_00161D78_gp, D_L04_00161D7C_gp) * DEG_TO_RAD * frame_time;
             }
         }
         break;

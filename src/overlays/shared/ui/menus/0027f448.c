@@ -9,7 +9,7 @@ extern char D_L00_001B9CF8[];
 typedef struct { unsigned short a; unsigned short b; int c; unsigned short d; } E_27f448;
 typedef struct { unsigned short a; unsigned short pad; unsigned short b; unsigned short pad2[3]; } T_27f448;
 typedef struct { char pad[0x224]; int x224; } S_27f448;
-extern S_27f448 D_L00_001841F0_27f448 __asm__("D_L00_001841F0") NOT_SDA;
+extern S_27f448 D_L00_001841F0_lui __asm__("D_L00_001841F0") NOT_SDA;
 typedef struct { char pad0[0x30]; int x30; char pad34[0xC]; int x40; } P_27f448;
 extern E_27f448 D_L00_001BA3B8[] NOT_SDA;
 extern T_27f448 D_L00_001C1E40[] NOT_SDA;
@@ -27,7 +27,7 @@ int FUN_L00_0027f448(P_27f448 *selection_state) {
     selection_state->x40 = 0;
     selection_state->x30 |= 0x8000;
     for (i = 0; selection_values[i]; i++) {
-        if (D_L00_001841F0_27f448.x224 == selection_values[i]) {
+        if (D_L00_001841F0_lui.x224 == selection_values[i]) {
             selection_state->x40 = i;
             break;
         }

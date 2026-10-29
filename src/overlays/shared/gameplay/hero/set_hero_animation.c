@@ -160,7 +160,7 @@ extern E_231ff8 D_L00_0017BBF0_00231ff8[] __asm__("D_L00_0017BBF0")
     __attribute__((section(".data")));
 extern E_231ff8 D_L00_0017BBD0_00231ff8[] __asm__("D_L00_0017BBD0")
     __attribute__((section(".data")));
-extern E_231ff8 D_L00_0015F6B8_00231ff8[1] __asm__("D_L00_0015F6B8") __attribute__((sda));
+extern E_231ff8 D_L00_0015F6B8_gp[1] __asm__("D_L00_0015F6B8") __attribute__((sda));
 int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 int FUN_L00_0020d498_00231ff8(int) __asm__("FUN_L00_0020d498");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -174,7 +174,7 @@ int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_an
     else if (FUN_L00_0020d498_00231ff8(3) == 3)
         animation_table = D_L00_0017BBD0_00231ff8;
     else {
-        animation_table = D_L00_0015F6B8_00231ff8;
+        animation_table = D_L00_0015F6B8_gp;
         if (FUN_L00_0020d498_00231ff8(3) != 4)
             animation_table = 0;
     }

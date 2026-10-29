@@ -2124,8 +2124,8 @@ float FUN_002132a8_2af8b0(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2af8b0(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, void *rot, int type,
                                 int n, float lo, float hi) __asm__("FUN_L00_002af8b0");
-extern float g48_2afa48 __asm__("D_L00_00161448") __attribute__((sda));
-extern float g4c_2afa48 __asm__("D_L00_0016144C") __attribute__((sda));
+extern float D_L00_00161448_gp __asm__("D_L00_00161448") __attribute__((sda));
+extern float D_L00_0016144C_gp __asm__("D_L00_0016144C") __attribute__((sda));
 unsigned char *spawn_crate_debris(unsigned char *owner, void *initial_velocity, void *spawn_position, void *initial_rotation, int type,
                                 int initial_bounce_count, float lo, float hi) {
     unsigned char *debris_moby = FUN_0020c4f8_2af8b0(type);
@@ -2150,9 +2150,9 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *initial_velocity, 
             debris_data->i20 = 0;
             debris_data->he = t;
         }
-        debris_data->f24 = FUN_L00_00257c48_2af8b0(g48_2afa48, g4c_2afa48) *
+        debris_data->f24 = FUN_L00_00257c48_2af8b0(D_L00_00161448_gp, D_L00_0016144C_gp) *
                  DEG_TO_RAD * D_0015ED6C_2af8b0;
-        debris_data->f28 = FUN_L00_00257c48_2af8b0(g48_2afa48, g4c_2afa48) *
+        debris_data->f28 = FUN_L00_00257c48_2af8b0(D_L00_00161448_gp, D_L00_0016144C_gp) *
                  DEG_TO_RAD * D_0015ED6C_2af8b0;
         scale_multiplier = FUN_002132a8_2af8b0(lo, hi);
         *(float *)(debris_moby + 0x2C) *= scale_multiplier;
@@ -2184,8 +2184,8 @@ typedef struct {
     u8 pad4c[0x2C];
     PV_2afa48 *pv;
 } M_2afa48;
-extern f32 g70_2afa48 __asm__("D_L00_00161470") __attribute__((sda));
-extern s32 g74_2afa48 __asm__("D_L00_00161474") __attribute__((sda));
+extern f32 D_L00_00161470_gp __asm__("D_L00_00161470") __attribute__((sda));
+extern s32 D_L00_00161474_gp __asm__("D_L00_00161474") __attribute__((sda));
 extern u128 coll_hit_normal[] __asm__("D_L00_00173E80") __attribute__((section(".data")));
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
@@ -2223,17 +2223,17 @@ void nanotech_crate_fragment_update(M_2afa48 *fragment_moby) {
                 reflect_vector(pv->vel, pv->vel, hit_normal);
                 vscl_2afa48(pv->vel, pv->vel, 0.75f);
                 pv->f20 = 0.0f;
-                pv->f24 = randf_sym(g48_2afa48, g4c_2afa48) * DEG_TO_RAD * frame_time;
-                pv->f28 = randf_sym(g48_2afa48, g4c_2afa48) * DEG_TO_RAD * frame_time;
+                pv->f24 = randf_sym(D_L00_00161448_gp, D_L00_0016144C_gp) * DEG_TO_RAD * frame_time;
+                pv->f28 = randf_sym(D_L00_00161448_gp, D_L00_0016144C_gp) * DEG_TO_RAD * frame_time;
             }
         }
         break;
     case NANOTECH_CRATE_FRAGMENT_FADING:
-        fragment_moby->f2c *= g70_2afa48;
-        if (fragment_moby->b23 < g74_2afa48) {
+        fragment_moby->f2c *= D_L00_00161470_gp;
+        if (fragment_moby->b23 < D_L00_00161474_gp) {
             mark_moby_for_removal(fragment_moby);
         } else {
-            fragment_moby->b23 -= g74_2afa48;
+            fragment_moby->b23 -= D_L00_00161474_gp;
         }
         break;
     }

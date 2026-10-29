@@ -26,7 +26,7 @@ extern short D_L00_0016C8B0 NOT_SDA;
 extern int D_0015EEA4;
 extern long frm_clock_time __asm__("D_0015ED40");
 /* lower alias of D_L00_0015F5AC: retail stores the float view with lui, the int view through $gp */
-extern float D_L00_0015F5A8_e[] __asm__("D_L00_0015F5A8") MACRO_ADDR;
+extern float D_L00_0015F5A8_macro[] __asm__("D_L00_0015F5A8") MACRO_ADDR;
 
 extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern int debug_print(void *) __asm__("FUN_001e93b0");
@@ -286,7 +286,7 @@ void run_level_main_loop(void) {
                 sce_gs_sync_v(0);
                 D_L00_0015F3F8 = D_L00_0015F3F8 + 1;
                 tick_space_transition();
-                D_L00_0015F5A8_e[1] = 0.0f;
+                D_L00_0015F5A8_macro[1] = 0.0f;
             }
         }
         reset_gs_registers_pr();

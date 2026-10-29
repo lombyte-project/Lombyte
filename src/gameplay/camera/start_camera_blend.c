@@ -10,7 +10,7 @@ extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, vo
 extern void capture_camera_orientation(void) __asm__("func_001EC710");
 extern void save_camera_vectors(void) __asm__("func_001EC7F0");
 extern void restore_camera_vectors(void) __asm__("func_001EC868");
-extern short D_001871B0_h __asm__("D_001871B0") NOT_SDA;
+extern short cam_trans_state_lui __asm__("D_001871B0") NOT_SDA;
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 /* Camera mode update from arg (its +0x30 vector is copied). In mode 1
@@ -62,7 +62,7 @@ void start_camera_blend(void *source_camera_transform) {
             restore_camera_vectors();
         }
     }
-    D_001871B0_h = 3;
+    cam_trans_state_lui = 3;
     *(unsigned char *)(r + 2) = r[3];
     if (*(unsigned char *)(r + 2) == 0) {
         char *primary_transition_state = r + 0x10;

@@ -499,7 +499,7 @@ typedef struct {
     char _pad7F[0x100 - 0x7F];
 } Moby;
 
-extern float D_0015ED6C_s[] __asm__("D_0015ED6C") __attribute__((sda));
+extern float frame_time_gp[] __asm__("D_0015ED6C") __attribute__((sda));
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -554,7 +554,7 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *fragment_sp
             qcopy(fragment_pvars, initial_velocity);
         }
         if (fast_vec_length(random_vector_override) == 0.0f) {
-            float random_vector_magnitude_scale = D_0015ED6C_s[0];
+            float random_vector_magnitude_scale = frame_time_gp[0];
             random_vector(vector_scratch, random_vector_magnitude_scale * 3.1415927f, random_vector_magnitude_scale * 6.2831855f);
             qcopy(fragment_pvars + 0x10, vector_scratch);
         } else {

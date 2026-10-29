@@ -2765,7 +2765,7 @@ extern E_2b7568 D_L00_001DB440_2b7568[] __asm__("D_L00_001DB440") __attribute__(
 extern V_2b7568 D_L00_001614E0_2b7568[] __asm__("D_L00_001614E0")
     __attribute__((section(".sdata")));
 extern f32 D_L00_001614DC;
-extern s32 D_L00_001614BC_2b7568 __asm__("D_L00_001614BC") __attribute__((sda));
+extern s32 D_L00_001614BC_gp __asm__("D_L00_001614BC") __attribute__((sda));
 extern V_2b7568 D_0013F5E0_2b7568 __asm__("D_0013F5E0");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void setlen_2b7568(void *, void *, f32) __asm__("FUN_001f9bf8");
@@ -2819,7 +2819,7 @@ void draw_taunter_effect_quads(u8 *source_moby) {
             fade_factor = 1.0f;
         sz = taunter_effect_quad_final_scale_gp + (taunter_effect_quad_initial_scale_gp - taunter_effect_quad_final_scale_gp) * fade_factor;
         col = (taunter_effect_quad_rgb_gp & 0xFFFFFF) |
-              (truncate_float_to_s32((convert_integer_to_float(D_L00_001614BC_2b7568) - 0.0f) * fade_factor + 0.0f) << 24);
+              (truncate_float_to_s32((convert_integer_to_float(D_L00_001614BC_gp) - 0.0f) * fade_factor + 0.0f) << 24);
         quad.color[3] = col;
         quad.color[2] = col;
         quad.color[1] = col;

@@ -368,7 +368,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
 
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern f32 D_0015ED70_u __asm__("D_0015ED70");
-extern short D_L16_00161E44, D_L16_00161D80_q __asm__("D_L16_00161D80") __attribute__((sda));
+extern short D_L16_00161E44, D_L16_00161D80_gp __asm__("D_L16_00161D80") __attribute__((sda));
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 extern void func_00215CA8_path42_q(float, void *, int, void *, void *, int) __asm__("FUN_00214e58");
 extern float func_001F9D10_path42_q(void *, void *) __asm__("FUN_001f9b48");
@@ -394,7 +394,7 @@ int advance_armed_transport_along_path(char *transport_moby, char *path) {
         speed = 0.0f;
         distance = func_001F9D10_path42_q(position, path + (*(int *)path << 4));
         rate = armed_transport_path_acceleration_coefficient_gp * *(float *)&D_0015ED70_u;
-        func_00214D88_path42_q(distance, rate, rate, *(float *)&D_L16_00161D80_q * frame_time,
+        func_00214D88_path42_q(distance, rate, rate, *(float *)&D_L16_00161D80_gp * frame_time,
                                &speed, (float *)(transport_data + 0x170));
         return 0;
     }

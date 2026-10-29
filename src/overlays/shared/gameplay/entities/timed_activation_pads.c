@@ -53,7 +53,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 void FUN_L01_0026e090(int i, int v);
 void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
-extern char D_0013E633_30D370[] __asm__("D_0013F350") NOT_SDA;
+extern char D_0013F350_lui[] __asm__("D_0013F350") NOT_SDA;
 extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern void func_L01_0026F040_30D370(int, int) __asm__("FUN_L01_0026e090");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
@@ -107,7 +107,7 @@ void timed_activation_pads_update(unsigned char *moby)
     }
 
     if (*(int *)(pad_data + 0x8) == 0) {
-        activation_reference_data = (char *)D_0013E633_30D370;
+        activation_reference_data = (char *)D_0013F350_lui;
         if (*(short *)(activation_reference_data + 0x30E) == 0)
             flag = *(unsigned char **)(activation_reference_data + 0x2FC) == moby;
         if (0.7853982f < absolute_float(*(float *)(moby + 0x44))) {

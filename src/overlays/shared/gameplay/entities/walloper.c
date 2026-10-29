@@ -639,7 +639,7 @@ typedef struct {
     UV_2bb0b0 uv[4];
     long unk70, tex, unk80, unk88;
 } Q_2bb0b0;
-extern unsigned int D_L00_001615F8_2bb0b0 __asm__("D_L00_001615F8") __attribute__((sda));
+extern unsigned int D_L00_001615F8_gp __asm__("D_L00_001615F8") __attribute__((sda));
 extern float g_debug_camera[] __asm__("D_L00_00166DC0") __attribute__((section(".data")));
 extern char D_0013F5E0[];
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -689,7 +689,7 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
         quad.uv[i].v = D_L00_001DB5A0[i].v;
     }
     draw_geometry_quad(&quad, 0, 0);
-    quad_color = D_L00_001615F8_2bb0b0;
+    quad_color = D_L00_001615F8_gp;
     quad.color[3] = quad_color;
     quad.color[2] = quad_color;
     quad.color[1] = quad_color;
@@ -1702,9 +1702,9 @@ void morphoray_update(Moby *moby) {
 }
 extern f32 D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
 extern f32 D_L00_001617CC_macro __asm__("D_L00_001617CC") __attribute__((section(".sdata")));
-extern s32 D_L00_00161718_i __asm__("D_L00_00161718") __attribute__((sda));
-extern s32 D_L00_00161720_i __asm__("D_L00_00161720") __attribute__((sda));
-extern s32 D_L00_00161724_i __asm__("D_L00_00161724") __attribute__((sda));
+extern s32 D_L00_00161718_gp __asm__("D_L00_00161718") __attribute__((sda));
+extern s32 D_L00_00161720_gp __asm__("D_L00_00161720") __attribute__((sda));
+extern s32 D_L00_00161724_gp __asm__("D_L00_00161724") __attribute__((sda));
 extern float D_L00_001617D0 __attribute__((section(".sdata")));
 extern s32 D_L00_00161824;
 extern s32 D_L00_00161818;
@@ -1732,9 +1732,9 @@ void reset_beam_chain_and_pulse_state(u8 *moby) {
         for (i = 1; i < 12; i++) {
             fast_vec_add(&D_L00_001DBF60_2bcf98 + i, (u128 *)&D_L00_001DBF50 + i, &step);
         }
-        D_L00_00161718_i = 0;
-        D_L00_00161720_i = 0;
-        D_L00_00161724_i = 0;
+        D_L00_00161718_gp = 0;
+        D_L00_00161720_gp = 0;
+        D_L00_00161724_gp = 0;
         D_L00_001617D0 = 0.0f;
         D_L00_00161824 = 0;
         for (j = 0; j < 3; j++) {
@@ -1800,24 +1800,24 @@ unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(void *pos, in
 void reset_beam_chain_and_pulse_state(u8 *moby) __asm__("FUN_L00_002bcf98");
 void draw_beam_ring_and_rail_effects(void *o) __asm__("FUN_L00_002bdc50");
 extern float D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
-extern float D_L00_001617C0_2BE3A8 __asm__("D_L00_001616F0") __attribute__((sda));
-extern int D_L00_001617C4_2BE3A8 __asm__("D_L00_001616F4") __attribute__((sda));
-extern float D_L00_001617C8_2BE3A8 __asm__("D_L00_001616F8") __attribute__((sda));
-extern float D_L00_001617CC_2BE3A8 __asm__("D_L00_001616FC") __attribute__((sda));
-extern float D_L00_001617D4_2BE3A8 __asm__("D_L00_00161704") __attribute__((sda));
-extern float D_L00_001617D8_2BE3A8 __asm__("D_L00_00161708") __attribute__((sda));
-extern float D_L00_001617DC_2BE3A8 __asm__("D_L00_0016170C") __attribute__((sda));
-extern float D_L00_001617FC_2BE3A8 __asm__("D_L00_0016172C") __attribute__((sda));
-extern float D_L00_00161800_2BE3A8 __asm__("D_L00_00161730") __attribute__((sda));
-extern float D_L00_00161804_2BE3A8 __asm__("D_L00_00161734") __attribute__((sda));
-extern float D_L00_0016180C_2BE3A8 __asm__("D_L00_0016173C") __attribute__((sda));
-extern float D_L00_00161810_2BE3A8 __asm__("D_L00_00161740") __attribute__((sda));
-extern float D_L00_00161818_2BE3A8 __asm__("D_L00_00161748") __attribute__((sda));
-extern int D_L00_0016181C_2BE3A8 __asm__("D_L00_0016174C") __attribute__((sda));
-extern int D_L00_00161820_2BE3A8 __asm__("D_L00_00161750") __attribute__((sda));
-extern float D_L00_00161828_2BE3A8 __asm__("D_L00_00161758") __attribute__((sda));
-extern float D_L00_0016182C_2BE3A8 __asm__("D_L00_0016175C") __attribute__((sda));
-extern float D_L00_00161838_2BE3A8 __asm__("D_L00_00161768") __attribute__((sda));
+extern float D_L00_001616F0_gp __asm__("D_L00_001616F0") __attribute__((sda));
+extern int D_L00_001616F4_gp __asm__("D_L00_001616F4") __attribute__((sda));
+extern float D_L00_001616F8_gp __asm__("D_L00_001616F8") __attribute__((sda));
+extern float D_L00_001616FC_gp __asm__("D_L00_001616FC") __attribute__((sda));
+extern float D_L00_00161704_gp __asm__("D_L00_00161704") __attribute__((sda));
+extern float D_L00_00161708_gp __asm__("D_L00_00161708") __attribute__((sda));
+extern float D_L00_0016170C_gp __asm__("D_L00_0016170C") __attribute__((sda));
+extern float D_L00_0016172C_gp __asm__("D_L00_0016172C") __attribute__((sda));
+extern float D_L00_00161730_gp __asm__("D_L00_00161730") __attribute__((sda));
+extern float D_L00_00161734_gp __asm__("D_L00_00161734") __attribute__((sda));
+extern float D_L00_0016173C_gp __asm__("D_L00_0016173C") __attribute__((sda));
+extern float D_L00_00161740_gp __asm__("D_L00_00161740") __attribute__((sda));
+extern float D_L00_00161748_gp __asm__("D_L00_00161748") __attribute__((sda));
+extern int D_L00_0016174C_gp __asm__("D_L00_0016174C") __attribute__((sda));
+extern int D_L00_00161750_gp __asm__("D_L00_00161750") __attribute__((sda));
+extern float D_L00_00161758_gp __asm__("D_L00_00161758") __attribute__((sda));
+extern float D_L00_0016175C_gp __asm__("D_L00_0016175C") __attribute__((sda));
+extern float D_L00_00161768_gp __asm__("D_L00_00161768") __attribute__((sda));
 extern signed char D_L00_00161833_2BE3A8[] __asm__("D_L00_00161763") __attribute__((section(".sdata")));
 extern float D_L00_001617CC_macro __asm__("D_L00_001617CC") __attribute__((section(".sdata")));
 extern int D_L00_00161824_macro __asm__("D_L00_00161824") __attribute__((section(".sdata")));
@@ -1916,7 +1916,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     wave_offset.w = 1.0f;
     wave_offset.x = 0.0f;
     func_L00_002BE2A0_2BE3A8();
-    D_L00_001617D0 = func_L00_0025F368_2BE3A8(D_L00_001617D0 + D_L00_001617C8_2BE3A8);
+    D_L00_001617D0 = func_L00_0025F368_2BE3A8(D_L00_001617D0 + D_L00_001616F8_gp);
     func_00215C00_2BE3A8(&aim, D_L00_001617CC_macro, data->f48, data->f4C);
     if (data->target != 0 && (info = func_L00_0025D390_2BE3A8(data->target)) != 0) {
         qcopy(&beam_end, &data->target->pos);
@@ -1936,7 +1936,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     {
         int i;
 
-        D_L00_001617CC_macro = beam_length * D_L00_001617C0_2BE3A8;
+        D_L00_001617CC_macro = beam_length * D_L00_001616F0_gp;
         qcopy(&D_L00_001DC260_2BE3A8[0], data);
         qcopy(&D_L00_001DC320_2BE3A8[0], data);
         qcopy(&D_L00_001DC3E0_2BE3A8[0], data);
@@ -1944,9 +1944,9 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             float seg_length;
 
             func_001F9BF0_2BE3A8(&segment, &D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
-            progress = func_001FA888_2BE3A8(i) * D_L00_001617C0_2BE3A8;
+            progress = func_001FA888_2BE3A8(i) * D_L00_001616F0_gp;
             factor = progress * -0.49999997f + 0.9f;
-            if (D_L00_001617C4_2BE3A8 < i && data->target != 0) {
+            if (D_L00_001616F4_gp < i && data->target != 0) {
                 func_001F9BF0_2BE3A8(&point, &data->target->pos, &D_L00_001DC260_2BE3A8[i]);
                 func_L00_001FF4B0_2BE3A8(&point, &point, D_L00_001617CC_macro);
                 func_001F9C08_2BE3A8(&aim, &aim, &point, 0.2f);
@@ -1961,7 +1961,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             }
             func_001F9BF0_2BE3A8(&beam_segment_direction, &D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
             func_001F9CA0_2BE3A8(&side, &beam_segment_direction, D_0013F5E0_r);
-            func_L00_001FF4B0_2BE3A8(&side, &side, D_L00_001617D8_2BE3A8 + (D_L00_001617DC_2BE3A8 - D_L00_001617D8_2BE3A8) * progress);
+            func_L00_001FF4B0_2BE3A8(&side, &side, D_L00_00161708_gp + (D_L00_0016170C_gp - D_L00_00161708_gp) * progress);
             {
                 Vec_2BE3A8 ring;
                 Vec_2BE3A8 fwd;
@@ -1970,16 +1970,16 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                 Vec_2BE3A8 node;
 
                 for (ring_index = 0; ring_index < 20; ring_index++) {
-                    func_002156E0_2BE3A8(&ring, &side, &beam_segment_direction, (float)ring_index * D_L00_001617D4_2BE3A8);
+                    func_002156E0_2BE3A8(&ring, &side, &beam_segment_direction, (float)ring_index * D_L00_00161704_gp);
                     func_001F9BD8_2BE3A8(&D_L00_001DC1A0_2BE3A8[i][ring_index], &ring, &D_L00_001DC260_2BE3A8[i]);
                 }
                 qcopy(&node, &D_L00_001DC260_2BE3A8[i]);
                 func_L00_001FF4B0_2BE3A8(&fwd, &beam_segment_direction, 1.0f);
                 func_L00_001FF4B0_2BE3A8(&out, &side, 1.0f);
                 func_001F9CA0_2BE3A8(&up, &out, &fwd);
-                wave_width = D_L00_001617FC_2BE3A8;
-                wave_width = wave_width + (D_L00_00161800_2BE3A8 - wave_width) * progress;
-                factor = func_L00_0025F368_2BE3A8(D_L00_001617D0 + D_L00_001617CC_2BE3A8 * func_001FA888_2BE3A8(i));
+                wave_width = D_L00_0016172C_gp;
+                wave_width = wave_width + (D_L00_00161730_gp - wave_width) * progress;
+                factor = func_L00_0025F368_2BE3A8(D_L00_001617D0 + D_L00_001616FC_gp * func_001FA888_2BE3A8(i));
                 wave_offset.y = wave_width * func_001F9FA8_2BE3A8(factor);
                 wave_width = wave_width * func_001F9F90_2BE3A8(factor);
                 wave_offset.z = wave_width;
@@ -2008,9 +2008,9 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, D_L00_0015F660_2BE3A8, spark_size * 0.07f, spark_size * 0.7f, 0.003f);
     }
     func_001F9BF0_2BE3A8(&beam_segment_direction, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
-    func_L00_001FF4B0_2BE3A8(&beam_segment_direction, &beam_segment_direction, D_L00_00161804_2BE3A8 * frame_scale);
+    func_L00_001FF4B0_2BE3A8(&beam_segment_direction, &beam_segment_direction, D_L00_00161734_gp * frame_scale);
     if (func_002140B0_2BE3A8(2) == 0) {
-        func_L00_001FF4B0_2BE3A8(&side, &moby->rot_row1, D_L00_00161810_2BE3A8);
+        func_L00_001FF4B0_2BE3A8(&side, &moby->rot_row1, D_L00_00161740_gp);
         func_001F9BD8_2BE3A8(&point, &D_L00_001DC260_2BE3A8[0], &side);
         {
             Tab_2BE3A8 colors;
@@ -2019,11 +2019,11 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
 
             colors = l00_beam_origin_particle_color_palette;
             color = colors.c[func_002140B0_2BE3A8(5)];
-            wave_width = func_L00_00258C80_2BE3A8(0.0f, D_L00_0016180C_2BE3A8);
-            func_002156E0_2BE3A8(&out, &beam_segment_direction, D_0013F5E0_r, func_L00_00258C80_2BE3A8(0.0f, D_L00_0016180C_2BE3A8));
+            wave_width = func_L00_00258C80_2BE3A8(0.0f, D_L00_0016173C_gp);
+            func_002156E0_2BE3A8(&out, &beam_segment_direction, D_0013F5E0_r, func_L00_00258C80_2BE3A8(0.0f, D_L00_0016173C_gp));
             func_001F9CA0_2BE3A8(&up, &beam_segment_direction, D_0013F5E0_r);
             func_002156E0_2BE3A8(&out, &out, &up, wave_width);
-            node_index = func_001FA898_2BE3A8(beam_length * 1.2f / (D_L00_00161804_2BE3A8 * frame_scale));
+            node_index = func_001FA898_2BE3A8(beam_length * 1.2f / (D_L00_00161734_gp * frame_scale));
             if (data->target != 0) {
                 node_index = node_index * 3;
             }
@@ -2036,9 +2036,9 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         for (slot = 0; slot < 3; slot++) {
             if (D_L00_001618E8_2BE3A8[slot] == 0) {
                 D_L00_001618E8_2BE3A8[slot] = 1;
-                D_L00_001618A8_2BE3A8[slot] = func_001F9850_2BE3A8(D_L00_0016181C_2BE3A8);
+                D_L00_001618A8_2BE3A8[slot] = func_001F9850_2BE3A8(D_L00_0016174C_gp);
                 D_L00_001618C8_2BE3A8[slot] = 0.0f;
-                D_L00_001618D8_2BE3A8[slot] = D_L00_0016182C_2BE3A8;
+                D_L00_001618D8_2BE3A8[slot] = D_L00_0016175C_gp;
                 D_L00_001618B8_2BE3A8[slot] = func_001FA888_2BE3A8(D_L00_00161833_2BE3A8[0]);
                 qcopy(&D_L00_001DD3A0_2BE3A8[slot], data);
                 func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
@@ -2063,10 +2063,10 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             D_L00_001618E8_2BE3A8[pulse] = 0;
             continue;
         }
-        if (D_L00_001618A8_2BE3A8[pulse] < D_L00_00161820_2BE3A8) {
-            D_L00_001618B8_2BE3A8[pulse] = D_L00_001618B8_2BE3A8[pulse] - D_L00_00161838_2BE3A8;
+        if (D_L00_001618A8_2BE3A8[pulse] < D_L00_00161750_gp) {
+            D_L00_001618B8_2BE3A8[pulse] = D_L00_001618B8_2BE3A8[pulse] - D_L00_00161768_gp;
         }
-        dt = D_L00_00161818_2BE3A8 * D_0015ED6C_gp;
+        dt = D_L00_00161748_gp * D_0015ED6C_gp;
         travelled = D_L00_001618C8_2BE3A8[pulse] + dt;
         max_length = D_L00_001616DC_gp;
         ratio = travelled / max_length;
@@ -2074,7 +2074,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         if (1.0f < ratio) {
             ratio = 1.0f;
         }
-        D_L00_001618D8_2BE3A8[pulse] = D_L00_0016182C_2BE3A8 + (D_L00_00161828_2BE3A8 - D_L00_0016182C_2BE3A8) * ratio;
+        D_L00_001618D8_2BE3A8[pulse] = D_L00_0016175C_gp + (D_L00_00161758_gp - D_L00_0016175C_gp) * ratio;
         if (max_length <= travelled) {
             func_001F9C30_2BE3A8(&side, &D_L00_001DD3D0_2BE3A8[pulse], dt);
             func_001F9BD8_2BE3A8(&D_L00_001DD3A0_2BE3A8[pulse], &D_L00_001DD3A0_2BE3A8[pulse], &side);
@@ -2717,7 +2717,7 @@ typedef struct {
     Hit *unk18;
 } XD;
 
-extern Hit *D_L00_00173E58_bf __asm__("D_L00_00173E58") NOT_SDA;
+extern Hit *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 extern int D_L00_00173E40[];
 extern VU D_L00_00173E60;
 
@@ -2784,8 +2784,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
             *out = horizontal_probe_distance;
         }
     } else {
-        if (D_L00_00173E58_bf == x->p38 || (D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 &&
-                                            D_L00_00173E58_bf->p24->h46 == 5)) {
+        if (D_L00_00173E58_lui == x->p38 || (D_L00_00173E58_lui != 0 && D_L00_00173E58_lui->p24 != 0 &&
+                                            D_L00_00173E58_lui->p24->h46 == 5)) {
             *out = 100.0f;
             return preferred_heading;
         }
@@ -2858,9 +2858,9 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
     probe_end.f[0] += fast_cos(best) * horizontal_probe_distance;
     probe_end.f[2] += 0.12f;
     if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) != 0) {
-        if (D_L00_00173E58_bf != x->p38 &&
-            !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 &&
-              D_L00_00173E58_bf->p24->h46 == 5)) {
+        if (D_L00_00173E58_lui != x->p38 &&
+            !(D_L00_00173E58_lui != 0 && D_L00_00173E58_lui->p24 != 0 &&
+              D_L00_00173E58_lui->p24->h46 == 5)) {
             hit_distance = fast_vec_dist(&probe_start, &D_L00_00173E60);
             best = fast_add_rotations(best, (horizontal_probe_distance - hit_distance) * 3.1415927f / (horizontal_probe_distance * 3.0f));
         }
@@ -2875,9 +2875,9 @@ f32 select_moby_heading_by_collision_probes(Mob *moby, VU *probe_origin, f32 *ta
     probe_end.f[0] += fast_cos(best) * horizontal_probe_distance;
     probe_end.f[2] += 0.12f;
     if (FUN_001efa68_c(&probe_start, &probe_end, 4, moby, 0) != 0) {
-        if (D_L00_00173E58_bf != x->p38 &&
-            !(D_L00_00173E58_bf != 0 && D_L00_00173E58_bf->p24 != 0 &&
-              D_L00_00173E58_bf->p24->h46 == 5)) {
+        if (D_L00_00173E58_lui != x->p38 &&
+            !(D_L00_00173E58_lui != 0 && D_L00_00173E58_lui->p24 != 0 &&
+              D_L00_00173E58_lui->p24->h46 == 5)) {
             hit_distance = fast_vec_dist(&probe_start, &D_L00_00173E60);
             best = fast_subtract_rotations(best, (horizontal_probe_distance - hit_distance) * 3.1415927f / (horizontal_probe_distance * 3.0f));
         }

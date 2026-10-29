@@ -630,7 +630,7 @@ extern float D_0015EE70_2E39E0 __asm__("D_0015ED70");
 extern float D_L09_00166FC0_2E39E0[] __asm__("D_L09_00166F40");
 extern char *D_L09_001B0930_2E39E0[] __asm__("D_L09_001B0630");
 extern Moby *D_L09_00160064_2E39E0 __asm__("D_L09_0015FFE4");
-extern float impulse_2E39E0 __asm__("D_L09_001618C8") __attribute__((sda));
+extern float impulse __asm__("D_L09_001618C8") __attribute__((sda));
 extern float lift_2E39E0 __asm__("D_L09_001618CC") __attribute__((sda));
 extern unsigned char settings_2E39E0 __asm__("D_L09_001618D8") __attribute__((sda));
 extern Hit_2E39E0 *find_moby_hit(Moby *, int, int) __asm__("FUN_L00_0025a420");
@@ -714,7 +714,7 @@ void update_ground_melee_enemy(Moby *moby) {
             if (hit->damage != 0.0f) {
                 float health = data->health - hit->damage;
                 float lift = lift_2E39E0 * D_0015EE6C_2E39E0;
-                float back = impulse_2E39E0 * D_0015EE6C_2E39E0;
+                float back = impulse * D_0015EE6C_2E39E0;
                 data->f144 = 9;
                 data->f130 = 0.008f;
                 data->f134 = 0.0005f;

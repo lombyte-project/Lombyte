@@ -7,7 +7,7 @@ extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
 extern void draw_moby_list(int, int) __asm__("func_0020D330");
 extern void *func_001FE540_id(int) __asm__("func_001FDD10");
-extern const float D_001602A4_f __asm__("D_001602A4") __attribute__((sda));
+extern const float D_001602A4_gp __asm__("D_001602A4") __attribute__((sda));
 extern char setup_menu_text_format[] __asm__("D_001602A8");
 extern int menu_display_value_by_level[] __asm__("D_001E0888");
 #include "rnc/rendering/screen.h"
@@ -22,7 +22,7 @@ int setup_menu_display_text(char *menu) {
     int count;
 
     *(float *)(menu_moby_list + 0x10) = *(float *)(preview_camera_state + 0x140) + 8.0f;
-    *(float *)(menu_moby_list + 0x14) = *(float *)(preview_camera_state + 0x144) + D_001602A4_f;
+    *(float *)(menu_moby_list + 0x14) = *(float *)(preview_camera_state + 0x144) + D_001602A4_gp;
     *(float *)(menu_moby_list + 0x18) = *(float *)(preview_camera_state + 0x148) - 0.1f;
     if (*(int *)(menu + 0x44) != 0) {
         draw_moby_list(*(int *)(menu + 0x44), 1);

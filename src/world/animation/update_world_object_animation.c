@@ -74,7 +74,7 @@ struct TransferState {
     struct Moby *slots[1]; /* 0x178 */
 };
 
-extern struct TransferState D_0018CB20_t __asm__("D_0018CB20") NOT_SDA;
+extern struct TransferState D_0018CB20_lui __asm__("D_0018CB20") NOT_SDA;
 extern int cutscene_moby_ids_by_content_variant[] __asm__("D_00160488");
 extern int func_0020C468_2(int, int) __asm__("FUN_0020b618");
 extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
@@ -95,24 +95,24 @@ void update_world_object_animation(void *unused_arg) {
     int pc;
 
     FlushCache(0);
-    func_0020C468_2(D_0018CB20_t.unk5C, (int)D_0018CB20_t.rec);
+    func_0020C468_2(D_0018CB20_lui.unk5C, (int)D_0018CB20_lui.rec);
     FlushCache(0);
 
-    rec = D_0018CB20_t.rec;
-    D_0018CB20_t.unk38 = 0;
+    rec = D_0018CB20_lui.rec;
+    D_0018CB20_lui.unk38 = 0;
     cp = rec->part_off;
-    D_0018CB20_t.unk40 = rec->flags;
+    D_0018CB20_lui.unk40 = rec->flags;
     pc = rec->part_count;
-    D_0018CB20_t.unk48 = rec->pad08;
-    D_0018CB20_t.num_parts = rec->num_parts;
-    D_0018CB20_t.unk54 = (int)rec + rec->end_off;
+    D_0018CB20_lui.unk48 = rec->pad08;
+    D_0018CB20_lui.num_parts = rec->num_parts;
+    D_0018CB20_lui.unk54 = (int)rec + rec->end_off;
     if (pc < 0x400) {
-        D_0018CB20_t.unk4C = 0;
+        D_0018CB20_lui.unk4C = 0;
     } else {
-        D_0018CB20_t.unk4C = (int)rec + pc;
+        D_0018CB20_lui.unk4C = (int)rec + pc;
     }
 
-    for (i = 0; i < D_0018CB20_t.num_parts; i++) {
+    for (i = 0; i < D_0018CB20_lui.num_parts; i++) {
         part_record_offset = *cp++;
         sp = (int *)((unsigned char *)rec + part_record_offset);
         id = sp[0];
@@ -122,7 +122,7 @@ void update_world_object_animation(void *unused_arg) {
         if (game_mode_macro == 6 && i == 0 && id == 0x215) {
             id = cutscene_moby_ids_by_content_variant[level_render_state.content_variant];
         }
-        mob = D_0018CB20_t.slots[i];
+        mob = D_0018CB20_lui.slots[i];
         if (mob == 0) {
             mob = func_0020D348_m(id);
             idx = mob->parts->used;
@@ -141,7 +141,7 @@ void update_world_object_animation(void *unused_arg) {
             if (mob->parts->flag) {
                 mob->flag73 = 0x18;
             }
-            D_0018CB20_t.slots[i] = mob;
+            D_0018CB20_lui.slots[i] = mob;
         }
         mob->model = endp;
         mob->parts->entries[mob->idx] = sp;

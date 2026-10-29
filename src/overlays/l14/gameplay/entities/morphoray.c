@@ -103,7 +103,7 @@ typedef struct {
 typedef struct { float r, g, b; } Rgb_0e00;
 extern Coll_0e00 D_L14_00174540;
 extern int D_L14_00174558 __attribute__((section(".data")));
-extern int D_L14_0016208C_0e00 __asm__("D_L14_0016208C") __attribute__((sda));
+extern int D_L14_0016208C_gp __asm__("D_L14_0016208C") __attribute__((sda));
 #include "rnc/overlay/l14/gameplay/entities/morphoray_globals.h"
 extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__((sda));
 extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda));
@@ -181,7 +181,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
           {
             spin = -spin;
           }
-          trail_particle = spawn_puff(&position_scratch, 0.025f, one, one, spin, D_L14_0015F580, ((((float) spark_data->trail) / convert_integer_to_float(scale_game_frames(D_L14_0016208C_0e00))) * 45000.0f) + 5000.0f, 0x80808080);
+          trail_particle = spawn_puff(&position_scratch, 0.025f, one, one, spin, D_L14_0015F580, ((((float) spark_data->trail) / convert_integer_to_float(scale_game_frames(D_L14_0016208C_gp))) * 45000.0f) + 5000.0f, 0x80808080);
           if (trail_particle != 0)
           {
             char *trail_particle_subrecord = trail_particle + 0x20;

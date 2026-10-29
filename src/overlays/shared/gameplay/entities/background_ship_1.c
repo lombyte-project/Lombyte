@@ -1207,13 +1207,13 @@ void apply_moby_camera_control(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
 
 extern char *D_L02_0015EF50;
-extern char *D_L02_00167400_c298 __asm__("D_L02_00167400") NOT_SDA;
+extern char *D_L02_00167400_lui __asm__("D_L02_00167400") NOT_SDA;
 
 int update_moby_camera_control(char *moby) __asm__("FUN_L02_002fc298");
 
 int update_moby_camera_control(char *moby) {
     char *moby_camera_control_data = *(char **)(D_L02_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
-    if (*(short *)(D_L02_00167400_c298 + 0x86) == 0 && *(short *)(moby_camera_control_data + 0x20) >= 0)
+    if (*(short *)(D_L02_00167400_lui + 0x86) == 0 && *(short *)(moby_camera_control_data + 0x20) >= 0)
         apply_moby_camera_control(moby);
     *(int *)(moby_camera_control_data + 0x50) = 0;
     return 0;

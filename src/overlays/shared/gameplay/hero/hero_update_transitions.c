@@ -75,7 +75,7 @@ extern float fast_sin(float);
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int D_00141660 __attribute__((section(".data")));
-extern int D_L00_0015F678_t __asm__("D_L00_0015F678") __attribute__((sda));
+extern int D_L00_0015F678_gp __asm__("D_L00_0015F678") __attribute__((sda));
 extern int D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int D_L00_0015F594 __attribute__((sda));
 extern int D_L00_0016C780 __attribute__((section(".data")));
@@ -1872,15 +1872,15 @@ void hero_update_transitions(void) {
                     {
                         int both = 0;
 
-                        func_001F9908_r(&D_L00_0015F678_t);
-                        if (D_L00_0015F678_t != 0) {
+                        func_001F9908_r(&D_L00_0015F678_gp);
+                        if (D_L00_0015F678_gp != 0) {
                             both = 1;
                             if (!((controller_state.held & 8) && (controller_state.pressed & 8))) {
                                 both = 0;
                             }
                         }
                         if (controller_state.pressed & 8) {
-                            D_L00_0015F678_t = scale_game_frames(0x1E);
+                            D_L00_0015F678_gp = scale_game_frames(0x1E);
                         }
                         if (!(hero.state_timer > scale_game_frames(0x14))) {
                             break;

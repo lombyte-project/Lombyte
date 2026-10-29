@@ -3,7 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 
-extern volatile int D_L00_001611A0_002a08c8 __asm__("D_L00_001611A0") __attribute__((sda));
+extern volatile int D_L00_001611A0_gp __asm__("D_L00_001611A0") __attribute__((sda));
 extern int D_L00_001611C0_002a08c8 __asm__("D_L00_001611C0");
 void FUN_001e93b0_002a08c8(char *) __asm__("FUN_001e93b0");
 u32 *FUN_00122fe0_002a08c8(int) __asm__("FUN_00122fe0");
@@ -19,7 +19,7 @@ void vu1_send_chain_render_buffer(void) {
     int buffer_used_bytes;
     u32 *flag_word;
     buffer_used_bytes = D_L00_001611C0_002a08c8 - D_L00_001611B8[selected_render_buffer_index];
-    D_L00_001611A0_002a08c8 |= 0x1F;
+    D_L00_001611A0_gp |= 0x1F;
     buffer_limit_exceeded = 0;
     if (render_buffer_high_water_bytes < buffer_used_bytes) {
         render_buffer_high_water_bytes = buffer_used_bytes;
@@ -41,7 +41,7 @@ void vu1_send_chain_render_buffer(void) {
         FUN_00118a80_002a08c8(0);
         FUN_001232c8_002a08c8(flag_word, D_L00_001611B8[selected_render_buffer_index]);
     } else {
-        D_L00_001611A0_002a08c8 = 0;
+        D_L00_001611A0_gp = 0;
     }
 }
 extern int D_L00_001611A0 __attribute__((sda));

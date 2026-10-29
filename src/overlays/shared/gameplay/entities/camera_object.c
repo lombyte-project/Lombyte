@@ -2264,7 +2264,7 @@ extern int D_L00_0015F320;
 extern int D_L00_0015F330;
 extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity,
                               int color) __asm__("FUN_L00_0023e5e0");
-extern short D_L00_001613C8_q __asm__("D_L00_001613C8") __attribute__((sda));
+extern short D_L00_001613C8_gp __asm__("D_L00_001613C8") __attribute__((sda));
 
 extern int D_L00_0015F324;
 extern int D_L00_0015F334;
@@ -2274,7 +2274,7 @@ void *spawn_tracked_class_5f3_moby(int unused, float *spawn_position) __asm__("F
 
 void *spawn_tracked_class_5f3_moby(int unused, float *spawn_position) {
     char *spawned_moby = func_0020D348_m_q(0x5F3);
-    if (spawned_moby != 0 && *(int *)&D_L00_001613C8_q == 0) {
+    if (spawned_moby != 0 && *(int *)&D_L00_001613C8_gp == 0) {
         char *moby_vars;
         spawned_moby[0x20] = 0;
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
@@ -2285,7 +2285,7 @@ void *spawn_tracked_class_5f3_moby(int unused, float *spawn_position) {
         D_L00_0015F324 = 0xFF;
         D_L00_0015F334 = 0xFFFFFF;
         D_L00_0015F338 = 0x1F00000042L;
-        *(int *)&D_L00_001613C8_q = (int)spawned_moby;
+        *(int *)&D_L00_001613C8_gp = (int)spawned_moby;
         D_L00_0015F328 = 0;
         D_L00_0015F320 = 0;
         D_L00_0015F330 = 0;

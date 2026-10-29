@@ -872,7 +872,7 @@ typedef struct {
     int flags;
 } E_2779c8;
 
-extern E_2779c8 D_0013C940_2779c8 __asm__("D_0013C940") NOT_SDA;
+extern E_2779c8 D_0013C940_lui __asm__("D_0013C940") NOT_SDA;
 
 int process_active_menu_object_actions(int x) __asm__("FUN_L00_002779c8");
 
@@ -882,10 +882,10 @@ int process_active_menu_object_actions(int x) {
     if ((s32)D_L00_001B9CF0.owner->unk40 != x) {
         return 0;
     }
-    if ((D_0013C940_2779c8.flags & 0xD00) && D_L00_001B9CF0.unk124 == 0) {
+    if ((D_0013C940_lui.flags & 0xD00) && D_L00_001B9CF0.unk124 == 0) {
         return 1;
     }
-    if (D_0013C940_2779c8.flags & 0x10) {
+    if (D_0013C940_lui.flags & 0x10) {
         transition_owner = (s32)D_L00_001B9CF0.owner->unk38;
         if (transition_owner != 0) {
             D_L00_001B9CF0.unk8 = (struct Own *)transition_owner;

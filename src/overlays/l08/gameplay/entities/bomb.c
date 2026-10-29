@@ -809,8 +809,8 @@ extern int D_0015ED84;
 extern float D_0015ED70;
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0");
-extern int D_L08_0015F698_2D5FA8 __asm__("D_L08_0015F5B4") __attribute__((sda));
-extern int D_L08_0015F6A0_2D5FA8 __asm__("D_L08_0015F5BC") __attribute__((sda));
+extern int D_L08_0015F5B4_gp __asm__("D_L08_0015F5B4") __attribute__((sda));
+extern int D_L08_0015F5BC_gp __asm__("D_L08_0015F5BC") __attribute__((sda));
 extern Path_2D5FA8 *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
 extern s32 D_001413D0[];
 extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D408");
@@ -908,10 +908,10 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                     int part = data->part_id;
                     if (part != 0 && source != 0 && source->moby != 0 && source->moby->oclass == 0x661) {
                         if (part == one) D_L08_0015F694_2D5FA8 = one;
-                        if (part == 2) D_L08_0015F698_2D5FA8 = one;
+                        if (part == 2) D_L08_0015F5B4_gp = one;
                         if (part == 3) bomber_tank_part_3_destroyed_by_class_661_gp = one;
-                        if (part == 4) D_L08_0015F6A0_2D5FA8 = one;
-                        if (D_L08_0015F694_2D5FA8 != 0 && D_L08_0015F698_2D5FA8 != 0) {
+                        if (part == 4) D_L08_0015F5BC_gp = one;
+                        if (D_L08_0015F694_2D5FA8 != 0 && D_L08_0015F5B4_gp != 0) {
                             unsigned char *flags = D_0013D50F_2D5FA8;
                             if (flags[0xD] == 0) {
                                 flags[0xD] = one;

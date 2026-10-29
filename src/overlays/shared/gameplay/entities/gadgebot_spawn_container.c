@@ -2722,7 +2722,7 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
 
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern unsigned char D_0015EEB0[] __asm__("D_0015EDB0") MACRO_ADDR;
+extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
 void draw_gadgebot_group_glow_effects(char *owner) __asm__("FUN_L06_002f37d0");
@@ -2733,7 +2733,7 @@ void draw_gadgebot_group_glow_effects(char *owner) {
     int i;
     char *moby_vars;
     char *effect_position;
-    if (D_0015EEB0[3] != 0)
+    if (big_head_cheat_enabled_macro[3] != 0)
         effect_scale = 0.114f;
     get_first_moby_in_group(&list, ((unsigned char *)owner)[0x21], 0, 0);
     while (list != 0) {

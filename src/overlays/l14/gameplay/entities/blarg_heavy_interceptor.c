@@ -440,8 +440,8 @@ extern char *D_001413D0_c618 __asm__("D_001413D0") __attribute__((section(".data
 extern char D_L14_0015F580[] __attribute__((section(".sdata")));
 extern f32 D_0015ED60_c618 __asm__("D_0015ED60");
 #include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_blarg_heavy_interceptor.h"
-extern f32 D_L14_001613A0_c618 __asm__("D_L14_001613A0") __attribute__((sda));
-extern f32 D_L14_001613A4_c618 __asm__("D_L14_001613A4") __attribute__((sda));
+extern f32 D_L14_001613A0_gp __asm__("D_L14_001613A0") __attribute__((sda));
+extern f32 D_L14_001613A4_gp __asm__("D_L14_001613A4") __attribute__((sda));
 
 extern Vec4 D_L14_00174560;
 void update_blarg_heavy_interceptor(struct Moby *m) __asm__("FUN_L14_002ac618");
@@ -707,17 +707,17 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         path_seg = 0;
         path_t = 0.0f;
         FUN_L00_0025d808_c618(tab, vector_scratch, &path_seg, &path_t, rejoin_path_loop_enabled, t);
-        ease_c618(&moby->pos.x, vector_scratch[0], (f32 *)(moby_vars + 0x194), 0.005f, D_L14_001613A4_c618, 0.0f);
-        ease_c618(&moby->pos.y, vector_scratch[1], (f32 *)(moby_vars + 0x198), 0.005f, D_L14_001613A4_c618, 0.0f);
-        ease_c618(&moby->pos.z, vector_scratch[2], (f32 *)(moby_vars + 0x19C), 0.005f, D_L14_001613A4_c618, 0.0f);
+        ease_c618(&moby->pos.x, vector_scratch[0], (f32 *)(moby_vars + 0x194), 0.005f, D_L14_001613A4_gp, 0.0f);
+        ease_c618(&moby->pos.y, vector_scratch[1], (f32 *)(moby_vars + 0x198), 0.005f, D_L14_001613A4_gp, 0.0f);
+        ease_c618(&moby->pos.z, vector_scratch[2], (f32 *)(moby_vars + 0x19C), 0.005f, D_L14_001613A4_gp, 0.0f);
         update_blarg_heavy_interceptor_aim_transforms(moby, 0);
         if (FUN_001f9b48(&moby->pos, vector_scratch) < 0.5f) {
             moby->state = 1;
         }
         FUN_L00_0025d808_c618(D_L14_001B0BB0[*(int *)(moby_vars + 0x78)], vector_scratch, moby_vars + 0x84, moby_vars + 0x1CC, *(s16 *)(moby_vars + 0x8A), 0.0f);
-        ease_c618((f32 *)(moby_vars + 0x170), vector_scratch[0], (f32 *)(moby_vars + 0x180), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
-        ease_c618((f32 *)(moby_vars + 0x174), vector_scratch[1], (f32 *)(moby_vars + 0x184), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
-        ease_c618((f32 *)(moby_vars + 0x178), vector_scratch[2], (f32 *)(moby_vars + 0x188), D_L14_001613A0_c618, D_L14_001613A4_c618, 0.0f);
+        ease_c618((f32 *)(moby_vars + 0x170), vector_scratch[0], (f32 *)(moby_vars + 0x180), D_L14_001613A0_gp, D_L14_001613A4_gp, 0.0f);
+        ease_c618((f32 *)(moby_vars + 0x174), vector_scratch[1], (f32 *)(moby_vars + 0x184), D_L14_001613A0_gp, D_L14_001613A4_gp, 0.0f);
+        ease_c618((f32 *)(moby_vars + 0x178), vector_scratch[2], (f32 *)(moby_vars + 0x188), D_L14_001613A0_gp, D_L14_001613A4_gp, 0.0f);
         break;
     }
     case INTERCEPTOR_STATE_INITIALIZE_DEATH_FALL: {
@@ -1999,8 +1999,8 @@ void process_machinegun_turret_hit_reactions(struct Moby *moby) {
 extern short *D_L14_001ABF40_b45[] __asm__("D_L14_001ABF40");
 extern unsigned char *D_L14_0015FFD8_b45 __asm__("D_L14_0015FFD8");
 extern unsigned char *D_L14_0015FFD0_m45[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
-extern int D_L14_0016150C_b45 __asm__("D_L14_0016150C") __attribute__((sda));
-extern float D_L14_00161510_b45 __asm__("D_L14_00161510") __attribute__((sda));
+extern int D_L14_0016150C_gp __asm__("D_L14_0016150C") __attribute__((sda));
+extern float D_L14_00161510_gp __asm__("D_L14_00161510") __attribute__((sda));
 extern void FUN_00212ed8_b45(unsigned char *, int, int) __asm__("FUN_00212ed8");
 extern int FUN_001f96f8_b45(int) __asm__("FUN_001f96f8");
 extern float FUN_001fa6c0_b45(short) __asm__("FUN_001fa6c0");
@@ -2037,10 +2037,10 @@ int try_retract_turret_group(int index) {
             turret_vars = *(unsigned char **)(retracting_moby + 0x78);
             FUN_00212ed8_b45(retracting_moby, 4, 0);
             retracting_moby[0x20] = 5;
-            moby_index_or_retract_frames = FUN_001f96f8_b45(D_L14_0016150C_b45);
+            moby_index_or_retract_frames = FUN_001f96f8_b45(D_L14_0016150C_gp);
             *(short *)(turret_vars + 0x74) = moby_index_or_retract_frames;
             inverse_retract_frames = 1.0f / FUN_001fa6c0_b45(moby_index_or_retract_frames);
-            retract_animation_speed = 1.0f / (*(short *)(turret_vars + 0x74) * D_L14_00161510_b45);
+            retract_animation_speed = 1.0f / (*(short *)(turret_vars + 0x74) * D_L14_00161510_gp);
             *(float *)(turret_vars + 0x78) = inverse_retract_frames;
             *(float *)(retracting_moby + 0x58) = retract_animation_speed;
             *(float *)(turret_vars + 0x8C) = *(float *)(retracting_moby + 0x48);
@@ -2603,7 +2603,7 @@ void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) {
 
 extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2,
                                 float eps) __asm__("FUN_L00_0025b8c0");
-extern f32 D_L14_00161540_d __asm__("D_L14_00161540") __attribute__((sda));
+extern f32 D_L14_00161540_gp __asm__("D_L14_00161540") __attribute__((sda));
 extern void FUN_L00_00262b00_c(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void FUN_L00_00262b80_c(void *, char *, char *, float, float,
                                float) __asm__("FUN_L00_00262b80");
@@ -2621,7 +2621,7 @@ void update_minibomber_oscillation(struct Moby *moby) {
     float spring_target;
     if (state == 0 || state == 9 || state == 1)
         return;
-    spring_target = *(float *)&D_L14_00161540_d;
+    spring_target = *(float *)&D_L14_00161540_gp;
     if ((raw >= 2 && raw <= 3) || state == 7) {
         spring_target = spring_target * 1.5f;
     } else {

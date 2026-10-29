@@ -1270,8 +1270,8 @@ typedef struct {
 
 extern u8 D_0014BEC0[];
 /* MACRO_ADDR aliases: retail loads these with the one-register lui form */
-extern f32 D_0015ED6C_f __asm__("D_0015ED6C") MACRO_ADDR;
-extern s32 D_0015ED84_n __asm__("D_0015ED84") MACRO_ADDR;
+extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern s32 D_L01_0015F640 MACRO_ADDR;
 extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
 extern f32 D_L01_00161F10_gp __asm__("D_L01_00161F10") __attribute__((sda));
@@ -1325,19 +1325,19 @@ void gold_bolt_update(struct Moby *moby) {
         moby->rot.y = random_angle_radians();
         moby->rot.z = random_angle_radians();
         moby->rot.w = random_angle_radians();
-        vars->unk68 = gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * D_0015ED6C_f;
-        vars->unk64 = gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * D_0015ED6C_f;
-        vars->unk60 = gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * D_0015ED6C_f;
+        vars->unk68 = gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro;
+        vars->unk64 = gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * frame_time_macro;
+        vars->unk60 = gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro;
         moby->state = 1;
         initialize_gold_bolt_data(moby);
         return;
     case GOLD_BOLT_WAIT_FOR_PICKUP:
         moby->scale = moby->pclass->scale * D_L01_00161F10_gp;
         moby->pos.z = vars->home.z + D_L01_00161F14_gp + D_L01_00161F18_gp * fast_sin(moby->rot.w);
-        moby->rot.x = FUN_001fa580_c(moby->rot.x, gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * D_0015ED6C_f);
-        moby->rot.y = FUN_001fa580_c(moby->rot.y, gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * D_0015ED6C_f);
-        moby->rot.z = FUN_001fa580_c(moby->rot.z, gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * D_0015ED6C_f);
-        moby->rot.w = FUN_001fa580_c(moby->rot.w, D_L01_00161F2C_gp * 0.017453292f * D_0015ED6C_f);
+        moby->rot.x = FUN_001fa580_c(moby->rot.x, gold_bolt_spin_x_degrees_per_second_gp * 0.017453292f * frame_time_macro);
+        moby->rot.y = FUN_001fa580_c(moby->rot.y, gold_bolt_spin_y_degrees_per_second_gp * 0.017453292f * frame_time_macro);
+        moby->rot.z = FUN_001fa580_c(moby->rot.z, gold_bolt_spin_z_degrees_per_second_gp * 0.017453292f * frame_time_macro);
+        moby->rot.w = FUN_001fa580_c(moby->rot.w, D_L01_00161F2C_gp * 0.017453292f * frame_time_macro);
         FUN_L01_00308550_f(moby);
         if (!random_integer_below(D_L01_00161F50_gp)) {
             FUN_L01_003089f0_f(moby);
@@ -1357,7 +1357,7 @@ void gold_bolt_update(struct Moby *moby) {
         if (vars->unkC != 0) {
             D_L01_0015F640 = scale_game_frames(180);
             queue_dialogue_message(0x53B3, -1);
-            D_0014BEC0[vars->id + D_0015ED84_n * 4] = 1;
+            D_0014BEC0[vars->id + current_level_index_macro * 4] = 1;
             memcard_save_data(0, -1);
         remove:
             mark_moby_for_removal(moby);
@@ -1430,7 +1430,7 @@ void gold_bolt_update(struct Moby *moby) {
         }
         D_L01_0015F640 = scale_game_frames(180);
         queue_dialogue_message(0x53B3, -1);
-        D_0014BEC0[vars->id + D_0015ED84_n * 4] = 1;
+        D_0014BEC0[vars->id + current_level_index_macro * 4] = 1;
         cutscene_active = 0;
         set_race_camera(&hero_ptr->motion.pos, &hero_ptr->motion.rot, 0, 0);
         jet_end_mount(0);

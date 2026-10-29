@@ -1058,17 +1058,17 @@ extern float D_L06_0015F3FC;
 extern float D_L06_00161D78_gp __asm__("D_L06_00161D78") __attribute__((sda));
 extern float D_L06_00161D7C_gp __asm__("D_L06_00161D7C") __attribute__((sda));
 extern float D_L06_00161D80_gp __asm__("D_L06_00161D80") __attribute__((sda));
-extern float D_L06_00161E14_2F69D0 __asm__("D_L06_00161D84") __attribute__((sda));
-extern float D_L06_00161E18_2F69D0 __asm__("D_L06_00161D88") __attribute__((sda));
-extern float D_L06_00161E1C_2F69D0 __asm__("D_L06_00161D8C") __attribute__((sda));
-extern float D_L06_00161E20_2F69D0 __asm__("D_L06_00161D90") __attribute__((sda));
-extern float D_L06_00161E24_2F69D0 __asm__("D_L06_00161D94") __attribute__((sda));
-extern float D_L06_00161E28_2F69D0 __asm__("D_L06_00161D98") __attribute__((sda));
+extern float D_L06_00161D84_gp __asm__("D_L06_00161D84") __attribute__((sda));
+extern float D_L06_00161D88_gp __asm__("D_L06_00161D88") __attribute__((sda));
+extern float D_L06_00161D8C_gp __asm__("D_L06_00161D8C") __attribute__((sda));
+extern float D_L06_00161D90_gp __asm__("D_L06_00161D90") __attribute__((sda));
+extern float D_L06_00161D94_gp __asm__("D_L06_00161D94") __attribute__((sda));
+extern float D_L06_00161D98_gp __asm__("D_L06_00161D98") __attribute__((sda));
 float D_L06_00161D9C = 0;
-extern float D_L06_00161E30_2F69D0 __asm__("D_L06_00161DA0") __attribute__((sda));
-extern float D_L06_00161E34_2F69D0 __asm__("D_L06_00161DA4") __attribute__((sda));
-extern float D_L06_00161E3C_2F69D0 __asm__("D_L06_00161DAC") __attribute__((sda));
-extern float D_L06_00161E40_2F69D0 __asm__("D_L06_00161DB0") __attribute__((sda));
+extern float D_L06_00161DA0_gp __asm__("D_L06_00161DA0") __attribute__((sda));
+extern float D_L06_00161DA4_gp __asm__("D_L06_00161DA4") __attribute__((sda));
+extern float D_L06_00161DAC_gp __asm__("D_L06_00161DAC") __attribute__((sda));
+extern float D_L06_00161DB0_gp __asm__("D_L06_00161DB0") __attribute__((sda));
 extern Moby *func_0020D348_2F69D0(int) __asm__("FUN_0020c4f8");
 extern void func_L06_002F71A8_2F69D0(Moby *) __asm__("FUN_L06_002f5d78");
 extern int func_001F9850_2F69D0(int) __asm__("FUN_001f96f8");
@@ -1178,13 +1178,13 @@ void update_drawbridge(Moby *moby) {
     case ANIMATE_DRAWBRIDGE_AND_CAMERA:
         func_L00_002512D8_2F69D0(moby->mission);
         if (D_L06_00161D78_gp < 20.0f) {
-            func_00214D88_2F69D0(&D_L06_00161D78_gp, &D_L06_00161D9C, 20.0f, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E20_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E14_2F69D0 * D_0015EE6C_2F69D0);
+            func_00214D88_2F69D0(&D_L06_00161D78_gp, &D_L06_00161D9C, 20.0f, D_L06_00161D90_gp * D_0015EE70_2F69D0, D_L06_00161D90_gp * D_0015EE70_2F69D0, D_L06_00161D84_gp * D_0015EE6C_2F69D0);
         }
-        if (D_L06_00161D78_gp > D_L06_00161E3C_2F69D0 && D_L06_00161D7C_gp < 1000.0f) {
-            func_00214D88_2F69D0(&D_L06_00161D7C_gp, &D_L06_00161E30_2F69D0, 1000.0f, D_L06_00161E24_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E24_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E18_2F69D0 * D_0015EE6C_2F69D0);
+        if (D_L06_00161D78_gp > D_L06_00161DAC_gp && D_L06_00161D7C_gp < 1000.0f) {
+            func_00214D88_2F69D0(&D_L06_00161D7C_gp, &D_L06_00161DA0_gp, 1000.0f, D_L06_00161D94_gp * D_0015EE70_2F69D0, D_L06_00161D94_gp * D_0015EE70_2F69D0, D_L06_00161D88_gp * D_0015EE6C_2F69D0);
         }
-        if (D_L06_00161D7C_gp > D_L06_00161E40_2F69D0 && D_L06_00161D80_gp < 1000.0f) {
-            func_00214D88_2F69D0(&D_L06_00161D80_gp, &D_L06_00161E34_2F69D0, 1000.0f, D_L06_00161E28_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E28_2F69D0 * D_0015EE70_2F69D0, D_L06_00161E1C_2F69D0 * D_0015EE6C_2F69D0);
+        if (D_L06_00161D7C_gp > D_L06_00161DB0_gp && D_L06_00161D80_gp < 1000.0f) {
+            func_00214D88_2F69D0(&D_L06_00161D80_gp, &D_L06_00161DA4_gp, 1000.0f, D_L06_00161D98_gp * D_0015EE70_2F69D0, D_L06_00161D98_gp * D_0015EE70_2F69D0, D_L06_00161D8C_gp * D_0015EE6C_2F69D0);
         }
         if (1000.0f <= D_L06_00161D80_gp) {
             moby->state = 5;
@@ -1315,7 +1315,7 @@ void update_drawbridge_segment_transforms(Moby *moby)
         qcopy(&data->d[j]->pos, &result);
 
         left = D_L06_00161D7C * 0.017453292f - (float)(j * 2) * 0.7853982f;
-        limit = left - D_L06_00161E30_2F69D0 * 0.017453292f;
+        limit = left - D_L06_00161DA0_gp * 0.017453292f;
         if (left > 1.5707964f) left = 1.5707964f;
         else if (left < 0.0f) left = 0.0f;
         if (limit > 1.5707964f) limit = 1.5707964f;
@@ -1323,7 +1323,7 @@ void update_drawbridge_segment_transforms(Moby *moby)
         if (left != 0.0f && limit == 0.0f) allocate_voice_for_target_entry(1, 0, (int)data->c[j]);
 
         right = D_L06_00161D7C * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
-        limit = right - D_L06_00161E30_2F69D0 * 0.017453292f;
+        limit = right - D_L06_00161DA0_gp * 0.017453292f;
         if (right > 1.5707964f) right = 1.5707964f;
         else if (right < 0.0f) right = 0.0f;
         if (limit > 1.5707964f) limit = 1.5707964f;
@@ -1334,7 +1334,7 @@ void update_drawbridge_segment_transforms(Moby *moby)
         data->d[j]->rot.x = right;
 
         left = D_L06_00161D80 * 0.017453292f - (float)(j * 2) * 0.7853982f;
-        limit = left - D_L06_00161E34_2F69D0 * 0.017453292f;
+        limit = left - D_L06_00161DA4_gp * 0.017453292f;
         if (left > 1.5707964f) left = 1.5707964f;
         else if (left < 0.0f) left = 0.0f;
         if (limit > 1.5707964f) limit = 1.5707964f;
@@ -1342,7 +1342,7 @@ void update_drawbridge_segment_transforms(Moby *moby)
         if (left != 0.0f && limit == 0.0f) allocate_voice_for_target_entry(2, 0, (int)data->c[j]);
 
         right = D_L06_00161D80 * 0.017453292f - (float)(j * 2) * 0.7853982f - 0.7853982f;
-        limit = left - D_L06_00161E34_2F69D0 * 0.017453292f;
+        limit = left - D_L06_00161DA4_gp * 0.017453292f;
         if (right > 1.5707964f) right = 1.5707964f;
         else if (right < 0.0f) right = 0.0f;
         if (limit > 1.5707964f) limit = 1.5707964f;

@@ -686,7 +686,7 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern short D_L05_00161DB8_d __asm__("D_L05_00161DB8") __attribute__((sda));
+extern short D_L05_00161DB8_gp __asm__("D_L05_00161DB8") __attribute__((sda));
 extern void create_particle_with_velocity_and_lifetime(float, void *, void *, int, int, int) __asm__("FUN_L05_0029bbe0");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
@@ -705,7 +705,7 @@ void emit_drain_cover_particles(char *particle_source_moby, float lower_height_b
     int i, j, k, particle_size, particle_color;
     clear_u64_value(v);
     v[2] = *(float *)&drain_cover_particle_vertical_speed_gp * frame_time;
-    ground = v[2] * 0.75f * convert_integer_to_float(*(int *)&D_L05_00161DB8_d);
+    ground = v[2] * 0.75f * convert_integer_to_float(*(int *)&D_L05_00161DB8_gp);
     j = 0;
     for (i = j; (float)i < (upper_height_bound - lower_height_bound) / *(float *)&drain_cover_particle_height_span_per_particle_gp; i++) {
         float fi = (float)j;
@@ -720,7 +720,7 @@ void emit_drain_cover_particles(char *particle_source_moby, float lower_height_b
         if (spawn_height_candidate < particle_position[2])
             particle_position[2] = spawn_height_candidate;
         u = random_float_between(*(float *)&drain_cover_particle_scalar_lower_bound_gp, *(float *)&drain_cover_particle_scalar_upper_bound_gp);
-        k = scale_game_frames(*(int *)&D_L05_00161DB8_d);
+        k = scale_game_frames(*(int *)&D_L05_00161DB8_gp);
         particle_size = func_001FA898_r(FUN_L00_00257c48(fi, (float)*(int *)&drain_cover_particle_size_sampling_bound_gp));
         particle_color = *(int *)&drain_cover_particle_color_gp;
         create_particle_with_velocity_and_lifetime(u, particle_position, v, k, particle_size, particle_color);
@@ -2081,10 +2081,10 @@ void shady_salesman_update(WM *moby) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, moby, npc_data->head, 1);
 }
 
-extern int D_L05_001612D8_318a68[] __asm__("D_L05_001612D8") MACRO_ADDR;
+extern int D_L05_001612D8_macro[] __asm__("D_L05_001612D8") MACRO_ADDR;
 extern float D_L05_001612E0_gp[4] __asm__("D_L05_001612E0") MACRO_ADDR __attribute__((sda));
 extern float D_L05_001612E8 __asm__("D_L05_001612E8");
-extern int D_L05_0015F5C4_318a68[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
+extern int D_L05_0015F5C4_macro[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 
 /* Two-state marker: arms the moby, then once its target is found copies the
@@ -2110,11 +2110,11 @@ void update_hero_clip_volume_outputs(char *moby) {
     case MOBY_CHECK_HERO_VOLUME:
         hero_position = (char *)&hero.motion.pos;
         if (is_point_inside_clip_volume(hero_position, *clip_volume_index_ptr) != 0) {
-            D_L05_001612D8_318a68[1] = state;
+            D_L05_001612D8_macro[1] = state;
             qcopy(D_L05_001612E0_gp, hero_position);
             *(short *)(hero_position + 0x15E) = 5;
             hero_clip_volume_output_w = 48.0f;
-            *(volatile float *)&D_L05_001612E8 = fast_sin((float)(D_L05_0015F5C4_318a68[2] % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
+            *(volatile float *)&D_L05_001612E8 = fast_sin((float)(D_L05_0015F5C4_macro[2] % 360) * 0.017444444f - 3.14f) * 0.25f + 59.5f;
         } else {
             hero_inside_clip_volume = 0;
         }

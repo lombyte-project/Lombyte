@@ -2653,7 +2653,7 @@ void count_drek_boss_platform_event_once(struct Moby *moby) {
         }
     }
 }
-extern int D_L18_00162384_5e80 __asm__("D_L18_00162384") __attribute__((sda));
+extern int D_L18_00162384_gp __asm__("D_L18_00162384") __attribute__((sda));
 extern unsigned char *D_L18_0015FFD8_5e80 __asm__("D_L18_0015FFD8");
 extern char *D_L18_001600EC;
 extern int *D_L18_001B0EB0[];
@@ -2920,7 +2920,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                     V80[2] = fast_arc_tan(current_path[4] - V60[0], current_path[5] - V60[1]);
                 }
                 V80[1] = 0.34906584f;
-                start_position_and_rotation_transition(*(char **)(boss_data + 0x334), V50, V60, V70, V80, V90, D_L18_00162384_5e80, drek_boss_arena_transition_frame_count_gp, 0);
+                start_position_and_rotation_transition(*(char **)(boss_data + 0x334), V50, V60, V70, V80, V90, D_L18_00162384_gp, drek_boss_arena_transition_frame_count_gp, 0);
             } else {
                 moby[0x20] = 0x15;
                 if (FUN_L00_0028d8c0_5e80(moby, *(int *)(boss_data + 0x3B0)) != 0) {
@@ -2984,7 +2984,7 @@ int advance_drek_boss_planar_position_toward_target(char *moby, float movement_s
 extern char *D_L18_001600EC;
 extern float freeze_stats_score_ref_b __asm__("D_0015ED6C");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern short D_L18_001623DC __asm__("D_L18_0016234C") __attribute__((sda));
+extern short D_L18_0016234C_gp __asm__("D_L18_0016234C") __attribute__((sda));
 extern short D_L18_00162378_gp __asm__("D_L18_00162378") __attribute__((sda));
 extern void FUN_L00_0025f730(void *a, float x);
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -3007,7 +3007,7 @@ void update_drek_boss_hero_follow_movement(struct Moby *moby) {
     }
     fast_vec_add(follow_target_position, follow_target_position, D_L18_001600EC + (*(int *)(moby_vars + 0x344) << 7) + 0x30);
     follow_speed_limit = hero.motion.speed_xy;
-    follow_speed_limit += (vector_distance(&moby->pos, follow_target_position) - *(float *)&D_L18_001623DC) / *(float *)&D_L18_001623DC *
+    follow_speed_limit += (vector_distance(&moby->pos, follow_target_position) - *(float *)&D_L18_0016234C_gp) / *(float *)&D_L18_0016234C_gp *
          (freeze_stats_score_ref_b * 4.75f);
     hi = freeze_stats_score_ref_b * 20.0f;
     lo = freeze_stats_score_ref_b * 4.75f;
@@ -3294,7 +3294,7 @@ extern int D_L18_001623A0_gp __asm__("D_L18_001623A0") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_4.h"
 extern short l18_drek_boss_scalar_acceleration_and_braking_gp __asm__("D_L18_001623B4") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_3.h"
-extern float D_L18_001623DC_target __asm__("D_L18_001623DC") __attribute__((sda));
+extern float D_L18_001623DC_gp __asm__("D_L18_001623DC") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/drek_fight_missile_data/update_drek_boss_state_dependent_scalars_2.h"
 extern void fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
@@ -3356,7 +3356,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
             if (vector_distance(hero.motion.pos.f,
                              D_L18_001600EC + (*(int *)(boss_data + 0x344) << 7) + 0x30) < 28.0f) {
                 x = drek_boss_first_scalar_near_node_follow_target_gp;
-                y = D_L18_001623DC_target;
+                y = D_L18_001623DC_gp;
             }
         }
     } else if (boss_state == 9 || boss_state == 6) {

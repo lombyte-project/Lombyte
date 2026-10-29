@@ -32,7 +32,7 @@ typedef struct {
     char pad21[0xDF];
 } O_26e008;
 
-extern unsigned short *D_L01_001ABCC0_26e008[] __asm__("D_L01_001ABCC0") NOT_SDA;
+extern unsigned short *D_L01_001ABCC0_lui[] __asm__("D_L01_001ABCC0") NOT_SDA;
 extern O_26e008 *D_L01_0015FFD8_26e008 __asm__("D_L01_0015FFD8");
 
 int count_active_moby_group_members(int i, int st) __asm__("FUN_L01_0026e008");
@@ -41,10 +41,10 @@ int count_active_moby_group_members(int i, int excluded_moby_state) {
     int qualifying_moby_count = 0;
     O_26e008 *moby;
 
-    if (D_L01_001ABCC0_26e008[i] == 0) {
+    if (D_L01_001ABCC0_lui[i] == 0) {
         return 0;
     }
-    moby_index_entry = D_L01_001ABCC0_26e008[i];
+    moby_index_entry = D_L01_001ABCC0_lui[i];
     do {
         moby = (O_26e008 *)(((*moby_index_entry & 0x7FFF) << 8) + (int)D_L01_0015FFD8_26e008);
         if (moby->state >= 0 && (excluded_moby_state == -1 || (unsigned char)moby->state != excluded_moby_state)) {

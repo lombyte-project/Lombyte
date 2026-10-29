@@ -139,7 +139,7 @@ typedef struct {
     s32 unk94;
 } SpawnTarget;
 
-extern struct Moby *D_L03_0015FFD8_mb __asm__("D_L03_0015FFD8") __attribute__((sda));
+extern struct Moby *D_L03_0015FFD8_gp __asm__("D_L03_0015FFD8") __attribute__((sda));
 extern struct Moby *D_L03_0015FFE4;
 extern s32 D_L03_0015F5CC;
 extern char spawner_spawn_failure_format[] __asm__("D_L03_001E2FA0");
@@ -181,7 +181,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         if (pooled_child_moby_index == -1) {
             continue;
         }
-        current_moby = &D_L03_0015FFD8_mb[pooled_child_moby_index];
+        current_moby = &D_L03_0015FFD8_gp[pooled_child_moby_index];
         if (current_moby != NULL && current_moby->state != 0xFE && current_moby->state != 0xFD) {
             spawner_data->live++;
             continue;

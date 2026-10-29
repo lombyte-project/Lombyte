@@ -495,7 +495,7 @@ extern float sandmouse_projectile_target_yaw_limit_degrees_gp __asm__("D_L01_001
 extern float sandmouse_projectile_target_pitch_limit_degrees_gp __asm__("D_L01_0016208C") __attribute__((sda));
 extern float sandmouse_projectile_spawn_offset_distance_gp __asm__("D_L01_00162090") __attribute__((sda));
 extern float sandmouse_projectile_fallback_aim_height_gp __asm__("D_L01_00162094") __attribute__((sda));
-extern int D_L01_00162080_i __asm__("D_L01_00162080") __attribute__((sda));
+extern int D_L01_00162080_gp __asm__("D_L01_00162080") __attribute__((sda));
 
 typedef union {
     OvlQuad q;
@@ -544,7 +544,7 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
                     initial_pitch = -fast_arc_tan(spawn_to_target_distance, target_aim_position.f[2] - spawn_position.f[2]);
                     FUN_L01_0030c898_c(moby, &spawn_position, target_yaw, target_pitch, initial_yaw, initial_pitch);
                     allocate_voice_for_target_entry(0, 0, (struct VoiceTarget *)moby);
-                    *(short *)(state + 0x54) = scale_game_frames(D_L01_00162080_i);
+                    *(short *)(state + 0x54) = scale_game_frames(D_L01_00162080_gp);
                     *(int *)(state + 0x5C) = *(int *)(state + 0x5C) + 1;
                 }
             }

@@ -36,7 +36,7 @@ typedef struct {
     MenuCacheEntry entries[8];
 } MenuCache;
 
-extern MenuCache D_L00_001841F0_49d80 __asm__("D_L00_001841F0") NOT_SDA;
+extern MenuCache D_L00_001841F0_lui __asm__("D_L00_001841F0") NOT_SDA;
 extern s32 D_L00_0015F3F8;
 extern void FUN_L00_002483c8(u8 *, s32, u8 *, s16 *);
 
@@ -52,15 +52,15 @@ s32 ensure_menu_cache_entry(s32 key) {
     MenuCacheQuad *other;
     MenuCacheQuad selected_entry_copy;
 
-    if (!D_L00_001841F0_49d80.enabled) {
+    if (!D_L00_001841F0_lui.enabled) {
         return 0;
     }
     miss = 0;
     victim = 0;
     i = 0;
-    if (D_L00_001841F0_49d80.entries[0].key != key) {
-        times = &D_L00_001841F0_49d80.entries[0].last_used;
-        entry = &D_L00_001841F0_49d80.entries[0].key;
+    if (D_L00_001841F0_lui.entries[0].key != key) {
+        times = &D_L00_001841F0_lui.entries[0].last_used;
+        entry = &D_L00_001841F0_lui.entries[0].key;
         /* Fakematch: the outer do-while (0) and the miss++/miss-- below give
          * retail's registers. */
         do {
@@ -74,14 +74,14 @@ s32 ensure_menu_cache_entry(s32 key) {
         } while (0);
     }
     if (i == 8) {
-        FUN_L00_002483c8(D_L00_001841F0_49d80.entries[victim].pixels, key,
-                          D_L00_001841F0_49d80.source, D_L00_001841F0_49d80.offsets);
-        D_L00_001841F0_49d80.entries[victim].key = key;
+        FUN_L00_002483c8(D_L00_001841F0_lui.entries[victim].pixels, key,
+                          D_L00_001841F0_lui.source, D_L00_001841F0_lui.offsets);
+        D_L00_001841F0_lui.entries[victim].key = key;
         i = victim;
         miss = 1;
     }
     if (i != 0) {
-        base = (MenuCacheQuad *)&D_L00_001841F0_49d80.entries[0];
+        base = (MenuCacheQuad *)&D_L00_001841F0_lui.entries[0];
         other = base + i;
         selected_entry_copy = *other;
         /* Fakematch: see the loop above. */
@@ -90,6 +90,6 @@ s32 ensure_menu_cache_entry(s32 key) {
         *other = *base;
         *base = selected_entry_copy;
     }
-    D_L00_001841F0_49d80.entries[0].last_used = D_L00_0015F3F8;
+    D_L00_001841F0_lui.entries[0].last_used = D_L00_0015F3F8;
     return miss;
 }

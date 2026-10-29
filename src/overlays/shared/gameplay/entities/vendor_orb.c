@@ -864,7 +864,7 @@ extern int D_L00_00161D18_2E3700[] __asm__("D_L00_00161C48") __attribute__((sect
 extern int D_L00_00161D28_2E3700[] __asm__("D_L00_00161C58") __attribute__((section(".sdata")));
 extern int D_L00_00161D38_2E3700[] __asm__("D_L00_00161C68") __attribute__((section(".sdata")));
 extern int D_L00_00161D58_2E3700[] __asm__("D_L00_00161C88") __attribute__((section(".sdata")));
-extern float D_L00_00161CC0_2E3700 __asm__("D_L00_00161BF0") __attribute__((sda));
+extern float D_L00_00161BF0_gp __asm__("D_L00_00161BF0") __attribute__((sda));
 extern void func_001F9BF0_2E3700(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float func_001FA748_2E3700(float, float) __asm__("FUN_001fa580");
@@ -1022,25 +1022,25 @@ void update_slot_panes_and_effects(int unused, int beam) {
             qcopy(first_endpoint_effect_position, &D_L00_001E70A0_2E3700[beam]);
             first_endpoint_effect_position[2] -= 0.25f;
             if (D_L00_00161D08_2E3700[beam] == -1) {
-                D_L00_00161D08_2E3700[beam] = func_L00_0023F0D0_2E3700(first_endpoint_effect_position, D_L00_00161CC0_2E3700, 0.0f, 1.0f, 1.0f, 2.0f);
+                D_L00_00161D08_2E3700[beam] = func_L00_0023F0D0_2E3700(first_endpoint_effect_position, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
             }
             if (D_L00_00161D08_2E3700[beam] >= 0) {
                 Snd_2E3700 *light = &D_L00_001803C0_2E3700[D_L00_00161D08_2E3700[beam]];
 
                 qcopy(light->v10, first_endpoint_effect_position);
-                light->f1C = D_L00_00161CC0_2E3700;
+                light->f1C = D_L00_00161BF0_gp;
             }
         }
         if (D_L00_00161D28_2E3700[beam] & 2) {
             tip[2] += 0.5f;
             if (D_L00_00161D18_2E3700[beam] == -1) {
-                D_L00_00161D18_2E3700[beam] = func_L00_0023F0D0_2E3700(tip, D_L00_00161CC0_2E3700, 0.0f, 1.0f, 1.0f, 2.0f);
+                D_L00_00161D18_2E3700[beam] = func_L00_0023F0D0_2E3700(tip, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
             }
             if (D_L00_00161D18_2E3700[beam] >= 0) {
                 Snd_2E3700 *light = &D_L00_001803C0_2E3700[D_L00_00161D18_2E3700[beam]];
 
                 qcopy(light->v10, tip);
-                light->f1C = D_L00_00161CC0_2E3700;
+                light->f1C = D_L00_00161BF0_gp;
             }
         }
     }

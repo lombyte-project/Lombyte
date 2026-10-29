@@ -52,11 +52,11 @@ void apply_vendor_beam_damage(char *self) __asm__("FUN_L14_00302538");
 
 extern void apply_vendor_beam_damage(char *) __asm__("FUN_L14_00302538");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern int D_L14_0016219C_s __asm__("D_L14_001620CC") __attribute__((sda));
-extern int D_L14_00162188_s __asm__("D_L14_001620B8") __attribute__((sda));
-extern int D_L14_001621A0_s __asm__("D_L14_001620D0") __attribute__((sda));
+extern int D_L14_001620CC_gp __asm__("D_L14_001620CC") __attribute__((sda));
+extern int D_L14_001620B8_gp __asm__("D_L14_001620B8") __attribute__((sda));
+extern int D_L14_001620D0_gp __asm__("D_L14_001620D0") __attribute__((sda));
 extern s32 D_L14_001620C8_gp __asm__("D_L14_001620C8") __attribute__((sda));
-extern int D_L14_001621A4_s __asm__("D_L14_001620D4") __attribute__((sda));
+extern int D_L14_001620D4_gp __asm__("D_L14_001620D4") __attribute__((sda));
 
 #include "rnc/overlay/shared/gameplay/vendor/003015d0_globals.h"
 extern int vendor_beam_damage_disabled_gp __asm__("D_L14_001620D8") __attribute__((sda));
@@ -80,7 +80,7 @@ void update_vendor_beam(unsigned char *moby) {
             return;
         }
     }
-    if (D_L14_0016219C_s != 0) {
+    if (D_L14_001620CC_gp != 0) {
         return;
     }
     beam_state = moby[0x20];
@@ -94,9 +94,9 @@ void update_vendor_beam(unsigned char *moby) {
         beam_vars->sA = 1;
         break;
     case BEAM_STATE_COUNTER_TRIGGERED_PULSES:
-        if (D_L14_00162188_s != 0) {
+        if (D_L14_001620B8_gp != 0) {
             if (beam_vars->s12 == 0) {
-                D_L14_00162188_s = D_L14_00162188_s - 1;
+                D_L14_001620B8_gp = D_L14_001620B8_gp - 1;
                 start_vendor_beam_pulse((char *)moby);
             }
         }
@@ -128,11 +128,11 @@ void update_vendor_beam(unsigned char *moby) {
         }
     }
     if (beam_vars->s12 != 0) {
-        if (D_L14_001621A0_s == 0) {
+        if (D_L14_001620D0_gp == 0) {
             update_vendor_beam_animation((char *)moby);
         }
         if (*(int *)&D_L14_001620C8_gp < beam_vars->s12) {
-            if (D_L14_001621A4_s != 0) {
+            if (D_L14_001620D4_gp != 0) {
                 return;
             }
             add_draw_callback(draw_vendor_beam, moby);

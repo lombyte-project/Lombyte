@@ -674,13 +674,13 @@ extern int D_0015ED84;
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern CannonCamera52_2E16A0 camera_state_bytes __asm__("D_L08_00167480");
-extern short D_L08_00161B20_2E16A0 __asm__("D_L08_00161A90") __attribute__((sda));
-extern short D_L08_00161BA0_2E16A0 __asm__("D_L08_00161B10") __attribute__((sda));
-extern short D_L08_00161BB0_2E16A0 __asm__("D_L08_00161B20") __attribute__((sda));
-extern short D_L08_00161BC0_2E16A0 __asm__("D_L08_00161B30") __attribute__((sda));
-extern short D_L08_00161BD0_2E16A0 __asm__("D_L08_00161B40") __attribute__((sda));
-extern short D_L08_00161BE0_2E16A0 __asm__("D_L08_00161B50") __attribute__((sda));
-extern short D_L08_00161C80_2E16A0 __asm__("D_L08_00161BF0") __attribute__((sda));
+extern short D_L08_00161A90_gp __asm__("D_L08_00161A90") __attribute__((sda));
+extern short D_L08_00161B10_gp __asm__("D_L08_00161B10") __attribute__((sda));
+extern short D_L08_00161B20_gp __asm__("D_L08_00161B20") __attribute__((sda));
+extern short D_L08_00161B30_gp __asm__("D_L08_00161B30") __attribute__((sda));
+extern short D_L08_00161B40_gp __asm__("D_L08_00161B40") __attribute__((sda));
+extern short D_L08_00161B50_gp __asm__("D_L08_00161B50") __attribute__((sda));
+extern short D_L08_00161BF0_gp __asm__("D_L08_00161BF0") __attribute__((sda));
 extern float D_L08_00161AE8_gp __asm__("D_L08_00161AE8") __attribute__((sda));
 extern float D_L08_00161AEC_gp __asm__("D_L08_00161AEC") __attribute__((sda));
 extern float D_L08_00161AF0_gp __asm__("D_L08_00161AF0") __attribute__((sda));
@@ -782,7 +782,7 @@ void update_batalia_cannon(Moby *moby) {
             moby->command = 2; (*(float (*)[4])&moby->rot)[1] = 0.0f;
             func_001FA1F8_2E16A0((*(float (*)[16])&moby->rot_row0), (*(float (*)[4])&moby->rot));
             func_001F9BC0_2E16A0(direction); direction[2] = (*(float (*)[4])&moby->rot)[2];
-            func_001F9EC0_2E16A0(work, &D_L08_00161B20_2E16A0, (*(float (*)[16])&moby->rot_row0));
+            func_001F9EC0_2E16A0(work, &D_L08_00161A90_gp, (*(float (*)[16])&moby->rot_row0));
             fast_vec_add(work, work, (*(float (*)[4])&moby->pos));
             func_L00_00217718_2E16A0(work, direction, 0, 1);
             func_L00_002EC0C8_2E16A0(0);
@@ -863,7 +863,7 @@ void update_batalia_cannon(Moby *moby) {
                 int count;
                 func_00215C00_2E16A0(direction, D_L08_00161B00_gp * D_0015ED6C, (*(float (*)[4])&moby->rot)[2], -(*(float (*)[4])&moby->rot)[1]);
                 func_00213DE0_2E16A0(data->guns[0], 1, 0, 0);
-                func_001F9EC0_2E16A0(muzzle, &D_L08_00161BC0_2E16A0, (*(float (*)[16])&moby->rot_row0));
+                func_001F9EC0_2E16A0(muzzle, &D_L08_00161B30_gp, (*(float (*)[16])&moby->rot_row0));
                 fast_vec_add(muzzle, (*(float (*)[4])&moby->pos), muzzle);
                 func_L08_002E9288_2E16A0(moby, muzzle, direction, target);
                 sound52(0,0,moby);
@@ -892,7 +892,7 @@ void update_batalia_cannon(Moby *moby) {
                 int count;
                 func_00215C00_2E16A0(direction, D_L08_00161B00_gp * D_0015ED6C, (*(float (*)[4])&moby->rot)[2], -(*(float (*)[4])&moby->rot)[1]);
                 func_00213DE0_2E16A0(data->guns[1], 1, 0, 0);
-                func_001F9EC0_2E16A0(muzzle, &D_L08_00161BD0_2E16A0, (*(float (*)[16])&moby->rot_row0));
+                func_001F9EC0_2E16A0(muzzle, &D_L08_00161B40_gp, (*(float (*)[16])&moby->rot_row0));
                 fast_vec_add(muzzle, (*(float (*)[4])&moby->pos), muzzle);
                 func_L08_002E9288_2E16A0(moby, muzzle, direction, func_L08_002E15A0_2E16A0((char *)moby));
                 sound52(0,0,moby);
@@ -921,7 +921,7 @@ void update_batalia_cannon(Moby *moby) {
         }
         if (fast_dec_timer_s16(&data->camera_timer)) {
             func_L08_00315068_2E16A0();
-            func_001F9EC0_2E16A0(direction, &D_L08_00161BE0_2E16A0, (*(float (*)[16])&moby->rot_row0));
+            func_001F9EC0_2E16A0(direction, &D_L08_00161B50_gp, (*(float (*)[16])&moby->rot_row0));
             fast_vec_add(direction, direction, (*(float (*)[4])&moby->pos));
             func_L00_002EBE88_2E16A0(direction); func_L00_002EBEE0_2E16A0((*(float (*)[4])&moby->rot));
         }
@@ -993,7 +993,7 @@ void update_batalia_cannon(Moby *moby) {
         if (node) {
             node->update_dist = 0xFF; data->guns[0]->draw_dist = 0x7E; data->guns[0]->visible = 1;
             (*(long *)&data->guns[0]->spawn_frame) = (*(long *)&moby->spawn_frame);
-            func_001F9EC0_2E16A0(work, &D_L08_00161BA0_2E16A0, (*(float (*)[16])&moby->rot_row0));
+            func_001F9EC0_2E16A0(work, &D_L08_00161B10_gp, (*(float (*)[16])&moby->rot_row0));
             fast_vec_add(work, (*(float (*)[4])&moby->pos), work);
             {
             Moby *gun = data->guns[0];
@@ -1002,7 +1002,7 @@ void update_batalia_cannon(Moby *moby) {
         }
         }
     } else {
-        func_001F9EC0_2E16A0(work, &D_L08_00161BA0_2E16A0, (*(float (*)[16])&moby->rot_row0));
+        func_001F9EC0_2E16A0(work, &D_L08_00161B10_gp, (*(float (*)[16])&moby->rot_row0));
         fast_vec_add(work, (*(float (*)[4])&moby->pos), work);
         {
             Moby *gun = data->guns[0];
@@ -1017,7 +1017,7 @@ void update_batalia_cannon(Moby *moby) {
         if (node) {
             node->update_dist = 0xFF; data->guns[1]->draw_dist = 0x7E; data->guns[1]->visible = 1;
             (*(long *)&data->guns[1]->spawn_frame) = (*(long *)&moby->spawn_frame);
-            func_001F9EC0_2E16A0(work, &D_L08_00161BB0_2E16A0, (*(float (*)[16])&moby->rot_row0));
+            func_001F9EC0_2E16A0(work, &D_L08_00161B20_gp, (*(float (*)[16])&moby->rot_row0));
             fast_vec_add(work, (*(float (*)[4])&moby->pos), work);
             {
             Moby *gun = data->guns[1];
@@ -1026,7 +1026,7 @@ void update_batalia_cannon(Moby *moby) {
         }
         }
     } else {
-        func_001F9EC0_2E16A0(work, &D_L08_00161BB0_2E16A0, (*(float (*)[16])&moby->rot_row0));
+        func_001F9EC0_2E16A0(work, &D_L08_00161B20_gp, (*(float (*)[16])&moby->rot_row0));
         fast_vec_add(work, (*(float (*)[4])&moby->pos), work);
         {
             Moby *gun = data->guns[1];
@@ -1036,7 +1036,7 @@ void update_batalia_cannon(Moby *moby) {
     }
 
     if (data->visual) {
-        func_001F9EC0_2E16A0(work, &D_L08_00161C80_2E16A0, (*(float (*)[16])&moby->rot_row0));
+        func_001F9EC0_2E16A0(work, &D_L08_00161BF0_gp, (*(float (*)[16])&moby->rot_row0));
         fast_vec_add((*(float (*)[4])&data->visual->pos), work, (*(float (*)[4])&moby->pos));
         {
             Moby *visual = data->visual;

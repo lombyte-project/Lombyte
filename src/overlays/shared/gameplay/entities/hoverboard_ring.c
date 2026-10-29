@@ -757,7 +757,7 @@ f32 cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E633_32B1F8[] __asm__("D_0013F5E0");
 extern Row_32B1F8 *D_L05_0015F050_32B1F8 __asm__("D_L05_0015EF50") __attribute__((section(".sdata")));
-extern float D_L05_00162268_32B1F8 __asm__("D_L05_001621A8") __attribute__((sda));
+extern float D_L05_001621A8_gp __asm__("D_L05_001621A8") __attribute__((sda));
 extern float spring_32B1F8(float, float, float *, float, float, float) __asm__("FUN_001ebd78");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L05_003298d8_c(Camera_32B1F8 *) __asm__("FUN_L05_003298d8");
@@ -887,7 +887,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
         fast_vec_normalize(&step, &camera->side, tilt);
         fast_vec_sub(&probe, &probe, &step);
         tilt = fast_vec_dot(&probe, &camera->up);
-        track->blend = spring_32B1F8(track->blend, tilt * D_L05_00162268_32B1F8, track->state, track->k34, track->k38, track->k3C);
+        track->blend = spring_32B1F8(track->blend, tilt * D_L05_001621A8_gp, track->state, track->k34, track->k38, track->k3C);
     }
     if (0.00001f < absolute_float(track->blend)) {
         fast_vec_normalize(&probe, &camera->up, track->blend);

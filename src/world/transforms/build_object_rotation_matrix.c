@@ -7,7 +7,7 @@ extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern char D_00187080[];
 extern char render_sequence[] __asm__("D_0018CB20");
 extern float view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
-extern unsigned char D_0015EDB4_m[4] __asm__("D_0015EDB4") MACRO_ADDR;
+extern unsigned char D_0015EDB4_macro[4] __asm__("D_0015EDB4") MACRO_ADDR;
 extern void sceVu0UnitMatrix(float *);
 extern void SceVu0RotMatrixX(float *, float *, float);
 extern void SceVu0RotMatrixY(float *, float *, float);
@@ -42,7 +42,7 @@ unsigned char build_object_rotation_matrix(void) {
     *(float *)(camera_state + 0x358) = -rotation_matrix[10];
     *(float *)(camera_state + 0x368) = -rotation_matrix[2];
     *(float *)(camera_state + 0x378) = rotation_matrix[6];
-    if (D_0015EDB4_m[0] != 0) {
+    if (D_0015EDB4_macro[0] != 0) {
         fast_vec_cross(camera_position + 0x220, camera_position + 0x230, camera_position + 0x210);
     }
     return flag;

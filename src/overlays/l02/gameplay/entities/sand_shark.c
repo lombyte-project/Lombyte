@@ -374,8 +374,8 @@ void sand_shark_update(struct Moby *moby) {
             return;
         }
         if (vars->unk288 >= 0) {
-            extern struct Moby *D_L02_0015FFD8_e50s __asm__("D_L02_0015FFD8") __attribute__((sda));
-            (*(int *)(D_L02_0015FFD8_e50s[vars->unk288].pvars + 0x14C))++;
+            extern struct Moby *D_L02_0015FFD8_gp __asm__("D_L02_0015FFD8") __attribute__((sda));
+            (*(int *)(D_L02_0015FFD8_gp[vars->unk288].pvars + 0x14C))++;
         }
         qcopy(&vars->home, &moby->pos);
         qcopy(&vars->unk230, &moby->pos);
@@ -2864,8 +2864,8 @@ void transport_pod_update(unsigned char *moby) {
             }
             help_request_threshold_ticks = scale_game_frames(3600) * 60.0f;
             if (help_request_threshold_ticks < adjusted_help_ticks) {
-                extern int D_0015ED84_dc88 __asm__("D_0015ED84") __attribute__((sda));
-                if (!(D_00141BAC & (1 << D_0015ED84_dc88))) {
+                extern int current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
+                if (!(D_00141BAC & (1 << current_level_index_gp))) {
                     help_request(0x7DD, 0x48);
                 }
             }
