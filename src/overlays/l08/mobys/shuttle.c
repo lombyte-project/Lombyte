@@ -339,12 +339,12 @@ int advance_shuttle_path_travel(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDB68), where it is exact; names translated to the US level program. */
 void try_set_shuttle_departure_help_message(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    if (*(float *)(data + 0x104) > 0.9f) {
+    char *shuttle_departure_vars = (char *)moby->pvars;
+    if (*(float *)(shuttle_departure_vars + 0x104) > 0.9f) {
         try_set_help_message(0xA, 0x1F4D);
-    } else if (*(int *)(data + 0x120) == ((int)l08_paths[*(int *)(data + 0x80)])) {
+    } else if (*(int *)(shuttle_departure_vars + 0x120) == ((int)l08_paths[*(int *)(shuttle_departure_vars + 0x80)])) {
         try_set_help_message(0xA, 0x1F50);
-    } else if (*(int *)(data + 0x120) == ((int)l08_paths[*(int *)(data + 0x88)])) {
+    } else if (*(int *)(shuttle_departure_vars + 0x120) == ((int)l08_paths[*(int *)(shuttle_departure_vars + 0x88)])) {
         try_set_help_message(0xA, 0x1F4F);
     } else {
         try_set_help_message(0xA, 0x1F4E);
