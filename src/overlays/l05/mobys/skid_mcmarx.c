@@ -183,20 +183,20 @@ void blend_racer_and_child_animations(char *moby,
                                       int   frame_index,
 
                                       int blend_frames) {
-    char *data;
+    char *racer_vars;
     char *child;
     float ratio;
     float child_frame_index;
     float max;
     int   child_animation_index;
     blend_moby_animation(moby, animation_index, frame_index, blend_frames);
-    data = ((char *)MOBY(moby)->pvars);
-    child = *(char **)(data + 0x268);
+    racer_vars = ((char *)MOBY(moby)->pvars);
+    child = *(char **)(racer_vars + 0x268);
     if (child != 0) {
         ratio = *(float *)(child + 0x5C) / *(float *)(moby + 0x5C);
         child_animation_index = map_racer_animation_to_child_index(animation_index);
         child_frame_index = (float)frame_index * ratio;
-        max = (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(data + 0x268) + 0x24) -
+        max = (float)*(unsigned char *)(*(char **)(*(char **)(*(char **)(racer_vars + 0x268) + 0x24) -
                                                    (-(child_animation_index * 4)) + 0x48) +
                                         0x10);
         if (max < child_frame_index)
@@ -204,7 +204,7 @@ void blend_racer_and_child_animations(char *moby,
         else if (child_frame_index < 0.0f)
             child_frame_index = 0.0f;
         blend_moby_animation(
-            *(char **)(data + 0x268), child_animation_index, (int)child_frame_index, blend_frames);
+            *(char **)(racer_vars + 0x268), child_animation_index, (int)child_frame_index, blend_frames);
     }
 }
 
