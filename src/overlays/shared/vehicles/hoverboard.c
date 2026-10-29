@@ -32,7 +32,7 @@ void hoverboard_update(unsigned char *moby) {
         HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH = 0,
         HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT = 1
     };
-    char        *data = ((char *)MOBY(moby)->pvars);
+    char        *hoverboard_vars = ((char *)MOBY(moby)->pvars);
     float        delta[4], position[4], effect_position[4], offset[4], second_position[4];
     float        angle, distance_scale, delta_length;
     int          state = (u8)moby[0x20];
@@ -47,8 +47,8 @@ void hoverboard_update(unsigned char *moby) {
             player->state.control_mode != 0x16) {
             player->hoverboard_moby = moby;
             hero_set_state(0x6b, 1);
-            if (*(int *)(data + 0x50) == 0) {
-                qcopy(data + 0x10, moby + 0x10);
+            if (*(int *)(hoverboard_vars + 0x50) == 0) {
+                qcopy(hoverboard_vars + 0x10, moby + 0x10);
             }
             moby[0x20] = 1;
             MOBY(moby)->update_dist = 0xff;
@@ -56,7 +56,7 @@ void hoverboard_update(unsigned char *moby) {
         break;
     }
     case HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT:
-        if (*(int *)(data + 0x50) == 0 && alternate_item_available[0] != 0 && D_00141938 == 0 &&
+        if (*(int *)(hoverboard_vars + 0x50) == 0 && alternate_item_available[0] != 0 && D_00141938 == 0 &&
             D_L05_0015F6A8 != 0 &&
             (player_hero = &hero, scale_game_frames(0x4b0) < player_hero->control_mode_timer) &&
             D_00141C60 == 0) {
@@ -64,22 +64,22 @@ void hoverboard_update(unsigned char *moby) {
         }
         if (hero.state.control_mode != 0x16) {
             moby[0x30] = 0x10;
-            if (*(int *)(data + 0x50) == 0) {
-                qcopy(moby + 0x10, data + 0x10);
+            if (*(int *)(hoverboard_vars + 0x50) == 0) {
+                qcopy(moby + 0x10, hoverboard_vars + 0x10);
             }
             moby[0x20] = 0;
         }
         break;
     case 2:
         /* Fakematch: a dead test in state 2 gives retail's block layout. */
-        if (*(int *)(data + 0x50) != 0)
+        if (*(int *)(hoverboard_vars + 0x50) != 0)
             break;
         break;
     }
     {
         unsigned char *position_ptr = moby + 0x10;
-        fast_vec_sub(delta, position_ptr, data);
-        qcopy(data, position_ptr);
+        fast_vec_sub(delta, position_ptr, hoverboard_vars);
+        qcopy(hoverboard_vars, position_ptr);
     }
     delta_length = fast_vec_length(delta);
     if ((unsigned char)moby[0xbc] != 2 && delta_length < 2.0f) {
