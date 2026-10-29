@@ -36,7 +36,7 @@ extern s32  sceSifBindRpc();
 extern s32  sceSifCallRpc();
 
 s32 sceFsInit(void) {
-    s32                  result, delay;
+    s32                  initialization_call_status, delay;
     struct SifFileSlot  *slot;
     struct UnalignedWord reply_word;
 
@@ -44,15 +44,15 @@ s32 sceFsInit(void) {
     sceSifInitRpc(0);
     D_00158000.callback = 0;
     callback_record->argument = 0;
-    result = DIntr();
+    initialization_call_status = DIntr();
     sceSifAddCmdHandler(0x80000011, (u32)_sceFs_Rcv_Intr, (u32)fs_receive_interrupt_handler_data);
     sceSifAddCmdHandler(0x80000013, (u32)invoke_sif_file_command_callback, (u32)callback_record);
-    if (result != 0) {
+    if (initialization_call_status != 0) {
         EnableInterrupts();
     }
     for (;;) {
-        result = sceSifBindRpc(&fio_rpc_client, 0x80000001, 0);
-        if (result < 0) {
+        initialization_call_status = sceSifBindRpc(&fio_rpc_client, 0x80000001, 0);
+        if (initialization_call_status < 0) {
             return -1;
         }
         if (fio_rpc_client.serve != 0) {
@@ -69,9 +69,9 @@ s32 sceFsInit(void) {
     SignalSema(fio_iob_sema);
     fs_init_completion_buffer_addresses[0] = D_00157500;
     fs_init_completion_buffer_addresses[1] = D_00157500 + 0x440;
-    result = sceSifCallRpc(
+    initialization_call_status = sceSifCallRpc(
         &fio_rpc_client, 0xFF, 0, fs_init_completion_buffer_addresses, 8, fio_rpc_result, 8, 0, 0);
-    if (result < 0) {
+    if (initialization_call_status < 0) {
         return (s32)0xFFFEFFFF;
     }
     *(struct UnalignedWord *)FsResetBuffer =
