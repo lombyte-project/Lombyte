@@ -44,13 +44,13 @@ void update_clip_volume_dialogue_trigger(struct Moby *moby) {
         CLIP_TRIGGER_WAIT_FOR_ARMING = 0,
         CLIP_TRIGGER_CHECK_LATCH = 1
     };
-    char *data = ((char *)moby->pvars);
-    switch (*(int *)(data + 8)) {
+    char *trigger_data = ((char *)moby->pvars);
+    switch (*(int *)(trigger_data + 8)) {
     case CLIP_TRIGGER_WAIT_FOR_ARMING: {
         char *hero_position = (char *)&hero.motion.pos;
-        if (is_point_inside_clip_volume(hero_position, *(int *)data) != 0) {
+        if (is_point_inside_clip_volume(hero_position, *(int *)trigger_data) != 0) {
             if (*(int *)(hero_position + 0x200C) == 0xF) {
-                *(int *)(data + 8) = 1;
+                *(int *)(trigger_data + 8) = 1;
             }
         }
         break;
@@ -58,8 +58,8 @@ void update_clip_volume_dialogue_trigger(struct Moby *moby) {
     case CLIP_TRIGGER_CHECK_LATCH: {
         struct Hero *player = &hero;
         if (player->state.current == 0x42) {
-            *(int *)(data + 8) = 0;
-        } else if (is_point_inside_clip_volume(&player->motion.pos, *(int *)(data + 4)) != 0) {
+            *(int *)(trigger_data + 8) = 0;
+        } else if (is_point_inside_clip_volume(&player->motion.pos, *(int *)(trigger_data + 4)) != 0) {
             unsigned char *flags = (unsigned char *)item_unlocked;
             if (flags[0x19] == 0) {
                 flags[0x19] = 1;
