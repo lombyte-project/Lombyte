@@ -478,10 +478,10 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_00313D28.c: func_L07_00314D00), where it is exact; names translated to the US level program. */
 void add_random_xy_offset(float *out, float value) __asm__("FUN_L07_00313920");
 
-void add_random_xy_offset(float *out, float value) {
-    float neg = -value;
-    out[0] += random_float_between(neg, value);
-    out[1] += random_float_between(neg, value);
+void add_random_xy_offset(float *out, float offset_magnitude) {
+    float neg = -offset_magnitude;
+    out[0] += random_float_between(neg, offset_magnitude);
+    out[1] += random_float_between(neg, offset_magnitude);
 }
 
 /* Finds where a path leaves the object's current segment and copies the point out. */
