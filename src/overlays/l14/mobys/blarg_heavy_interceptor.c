@@ -1571,39 +1571,39 @@ void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby,
                                                          float        path_traversal_speed,
 
                                                          float path_direction_multiplier) {
-    char *data = (char *)moby->pvars;
-    int  *list = ((int *)l14_paths[*(int *)(data + 0x204)]);
+    char *return_path_moby_vars = (char *)moby->pvars;
+    int  *list = ((int *)l14_paths[*(int *)(return_path_moby_vars + 0x204)]);
     float target_position[4];
-    if (*(short *)(data + 0x208) != 0) {
+    if (*(short *)(return_path_moby_vars + 0x208) != 0) {
         qcopy(target_position, (char *)list + list[0] * 16);
     } else {
         if (FUN_L00_0025d808_2afb40(list,
                                     target_position,
-                                    data + 0x80,
-                                    data + 0x8C,
+                                    return_path_moby_vars + 0x80,
+                                    return_path_moby_vars + 0x8C,
                                     0,
                                     path_traversal_speed * frame_time *
                                         path_direction_multiplier) != 0) {
-            *(short *)(data + 0x208) = 1;
+            *(short *)(return_path_moby_vars + 0x208) = 1;
         }
     }
     FUN_L00_0025b8c0_c(
         &moby->pos.x,
-        (float *)(data + 0x194),
+        (float *)(return_path_moby_vars + 0x194),
         target_position[0],
         position_easing_factor,
         *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp,
         0.0f);
     FUN_L00_0025b8c0_c(
         &moby->pos.y,
-        (float *)(data + 0x198),
+        (float *)(return_path_moby_vars + 0x198),
         target_position[1],
         position_easing_factor,
         *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp,
         0.0f);
     FUN_L00_0025b8c0_c(
         &moby->pos.z,
-        (float *)(data + 0x19C),
+        (float *)(return_path_moby_vars + 0x19C),
         target_position[2],
         position_easing_factor,
         *(float *)&blarg_heavy_interceptor_return_path_position_damping_coefficient_gp,
