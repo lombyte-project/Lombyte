@@ -1372,3 +1372,12 @@ float D_L12_00161F60_gp __asm__("D_L12_00161F60") = 0;
 float D_L12_00161F70_gp __asm__("D_L12_00161F70") = 0;
 
 float D_L12_00162108[2] = {0};
+
+float D_L12_00161F40_gp __asm__("D_L12_00161F40") = 0;
+
+float hoven_jittered_quad_base_uvs[4][2] __asm__("D_L12_001FB6D0") = {
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+    {1.0f, 0.0f},
+    {1.0f, 1.0f},
+};

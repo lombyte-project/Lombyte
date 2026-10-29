@@ -3554,3 +3554,13 @@ s32 shuttle_exit_riding_transition_frames_gp __asm__("D_L14_00161B90") = 0x5a;
 s32 D_L14_00162238 = 0;
 
 s32 wind_push_decay_frames_gp __asm__("D_L14_00161C04") = 0x1e;
+
+int wind_spark_peak_alpha_gp __asm__("D_L14_00161C10") = 0x32;
+
+short lightning_arc_interval_frames_gp __asm__("D_L14_00161C54") = 0xb4;
+
+s32 lightning_arc_lifetime_range_start_gp __asm__("D_L14_00161C98") = 0x38;
+
+u8 D_L14_00161CE0_d530 __asm__("D_L14_00161CE0") = 0;
+
+char *lightning_arc_owner_moby __asm__("D_L14_00161CE8") = 0;

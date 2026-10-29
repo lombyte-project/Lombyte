@@ -1998,3 +1998,15 @@ float D_L18_00161D18 = 3e+01f;
 int D_L18_00161D1C = 0x60408080;
 float D_L18_00161D20 = 1.25f;
 float D_L18_00161D24 = 1.0f;
+
+struct QuadTextureState quad_texture_state __asm__("D_L02_001612F0") = {0};
+
+float D_L02_001D33B0[4][4] = {0};
+
+int tresspasser_arrow_newly_reached_fourth_vertex_uv_gp __asm__("D_L02_00161AC8") = 0x2000000;
+
+int tresspasser_arrow_occupied_fourth_vertex_uv_gp __asm__("D_L02_00161AD8") = 0x2000200;
+
+int tresspasser_arrow_lit_first_vertex_uv_gp __asm__("D_L02_00161ADC") = 0x2000400;
+
+int escalator_direction_timer_frames_gp __asm__("D_L02_00161C18") = 0xb4;

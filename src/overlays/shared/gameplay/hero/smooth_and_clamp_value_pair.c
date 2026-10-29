@@ -1839,3 +1839,5 @@ void hero_update_linked_target(void) {
 int D_L16_0015F674 = 0;
 struct ScoreTable D_L16_001E65B8 = {{1.0f, 1.0f, 1.5f, 2.25f, 4.0f}};
 int D_L16_0015F698 = 0x19;
+
+struct ScoreTable l05_hoverboard_score_multipliers_by_trick_count __asm__("D_L05_002169F8") = {{1.0f, 1.0f, 1.5f, 2.25f, 4.0f}};

@@ -2428,3 +2428,5 @@ float D_L05_0020B740[4][2] = {
     {0.5f, 0.0f},
     {0.5f, 1.0f},
 };
+
+int l05_electric_gate_beam_effect_texture_index __asm__("D_L05_00161D98") = 0x13;

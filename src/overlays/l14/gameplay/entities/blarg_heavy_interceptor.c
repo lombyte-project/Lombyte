@@ -3233,3 +3233,5 @@ int minibomber_bomb_flight_duration_frames __asm__("D_L14_00161564") = 0x2d;
 s32 blarg_heavy_interceptor_patrol_heading_change_interval_frames_gp __asm__("D_L14_001613BC") = 0x104;
 
 int D_L14_0016150C_gp __asm__("D_L14_0016150C") = 0x3c;
+
+int blarg_heavy_interceptor_spinning_beam_initial_alpha_gp __asm__("D_L14_00161450") = 0x5a;

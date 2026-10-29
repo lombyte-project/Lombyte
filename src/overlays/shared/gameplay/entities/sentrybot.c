@@ -3594,3 +3594,13 @@ Cols D_L18_001F1F30 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffff
 Cols D_L18_001F1F48 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
 Tbl_29E8A0 D_L18_001F1EE0 = {{0, 0, 0x3f800000, 0, 0xff0000, 0xff000980, 0xc8000, 0xd800064, 0x41a00000, 0x41a00000, 0x41a00000, 0x3c23d70a, 0x3c23d70a, 0x46, 0x80000, 0xff, 0, 0, 0x300, 0}};
 unsigned char *D_L18_001B2AAC NOT_SDA = 0;
+
+unsigned char l15_rocket_detonation_glow_alpha __asm__("D_L15_00161460") = 0x60;
+
+Cols l15_missile_burst_primary_color_palette __asm__("D_L15_001E2660") = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+
+Cols l15_missile_burst_secondary_color_palette __asm__("D_L15_001E2678") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+Tbl_29E8A0 l15_missile_camera_blast_parameter_template __asm__("D_L15_001E2610") = {{0, 0, 0x3f800000, 0, 0xff0000, 0xff000980, 0xc8000, 0xd800064, 0x41a00000, 0x41a00000, 0x41a00000, 0x3c23d70a, 0x3c23d70a, 0x46, 0x80000, 0xff, 0, 0, 0x300, 0}};
+
+int group_moby_particle_lifetime_frames_gp __asm__("D_L15_001614C0") = 0x14;

@@ -3777,3 +3777,5 @@ float D_L06_00161D80_gp __asm__("D_L06_00161D80") = 0;
 int D_L06_00161E40[4] = {0};
 int D_L06_00161E50 = 0;
 int D_L06_00161E54 = 0;
+
+int beam_barrier_burst_color_from_gp __asm__("D_L06_00161E1C") = 0x80802020;

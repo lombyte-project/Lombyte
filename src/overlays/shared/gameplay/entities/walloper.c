@@ -4977,3 +4977,60 @@ float D_L18_00161824 = -0.5f;
 float D_L18_0016181C = 0.4f;
 float D_L18_00161820 = 0.1f;
 int D_L18_00161828 = 0x7f207f7f;
+
+Vec4 D_L00_001DBA10[4][5] = {0};
+
+float D_L00_0017AEBC NOT_SDA = 1.0f;
+
+int D_L00_001616CC = 0;
+
+int walloper_quad_texture_index_gp __asm__("D_L00_001616C8") = 8;
+
+unsigned int l00_walloper_quad_common_base_vertex_color __asm__("D_L00_001616C0") = 0x307f4040;
+
+int D_L00_001617BC = 0;
+
+int D_L00_001617C8 = 0;
+
+float D_L00_001617CC_macro __asm__("D_L00_001617CC") = 0;
+
+s32 D_L00_00161718_gp __asm__("D_L00_00161718") = 0;
+
+s32 D_L00_00161720_gp __asm__("D_L00_00161720") = 0;
+
+s32 D_L00_00161724_gp __asm__("D_L00_00161724") = 0;
+
+float D_L00_001617D0 = 0;
+
+int D_L00_001DBF70 NOT_SDA = 0;
+
+int D_L00_00161824_macro __asm__("D_L00_00161824") = 0;
+
+int D_L00_001617D8_macro[3] __asm__("D_L00_001617D8") = {0};
+
+float D_L00_001617F8_macro[3] __asm__("D_L00_001617F8") = {0};
+
+Vec_2BE3A8 D_L00_001DC250_2BE3A8[12] __asm__("D_L00_001DBF50") = {
+    {0.0f, 1.0f, -1.0f, 1.0f},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+};
+
+Vec_2BE3A8 D_L00_001DC320_2BE3A8[12] __asm__("D_L00_001DC020") = {0};
+
+Vec_2BE3A8 D_L00_001DC3E0_2BE3A8[12] __asm__("D_L00_001DC0E0") = {0};
+
+Vec_2BE3A8 D_L00_001DD3A0_2BE3A8[3] __asm__("D_L00_001DD0A0") = {0};
+
+Vec_2BE3A8 D_L00_001DD3D0_2BE3A8[3] __asm__("D_L00_001DD0D0") = {0};
+
+Tab l00_beam_origin_particle_color_palette __asm__("D_L00_001E9AB0") = {{0x7f207f7f, 0x7f7f2020, 0x7f20207f, 0x7f7f207f, 0x7f7f7f20}};

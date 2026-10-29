@@ -2289,3 +2289,7 @@ f32 D_L15_00161A8C = -0.258f;
 f32 D_L15_00161A94 = 0.448f;
 CameraTarget *D_L16_0015F71C = 0;
 CameraTarget *D_L17_0015F70C = 0;
+
+int D_L01_00162080_gp __asm__("D_L01_00162080") = 8;
+
+short sandmouse_follow_duration_frames_gp __asm__("D_L01_00162098") = 0x1518;

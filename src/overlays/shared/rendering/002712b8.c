@@ -2520,3 +2520,31 @@ int D_L18_00160240 = 0x13;
 unsigned char *D_L18_001B2BB8 NOT_SDA = 0;
 short D_L18_0016024C = -13107;
 s32 D_L18_00174808 NOT_SDA = 0;
+
+unsigned char *D_L00_001B2130 NOT_SDA = 0;
+
+unsigned char *D_L00_001B2134 NOT_SDA = 0;
+
+unsigned char *D_L00_001B2138 NOT_SDA = 0;
+
+unsigned char *D_L00_001B213C NOT_SDA = 0;
+
+unsigned char *D_L00_001B2154 NOT_SDA = 0;
+
+u8 *D_L00_001B215C NOT_SDA = 0;
+
+unsigned char *D_L00_001B2168 NOT_SDA = 0;
+
+u8 *D_L00_001B2174_lui __asm__("D_L00_001B2174") NOT_SDA = 0;
+
+unsigned char *D_L00_001B2188 NOT_SDA = 0;
+
+unsigned char *D_L00_001B218C NOT_SDA = 0;
+
+unsigned char *D_L00_001B2194 NOT_SDA = 0;
+
+unsigned char *D_L00_001B2198 NOT_SDA = 0;
+
+unsigned char *D_L00_001B21A0 NOT_SDA = 0;
+
+unsigned char *D_L00_001B21B8 NOT_SDA = 0;

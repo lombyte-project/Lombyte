@@ -2949,3 +2949,9 @@ int D_L08_0015F5B4_gp __asm__("D_L08_0015F5B4") = 0;
 int D_L08_0015F5BC_gp __asm__("D_L08_0015F5BC") = 0;
 
 int bomber_tank_part_3_destroyed_by_class_661_gp __asm__("D_L08_0015F5B8") = 0;
+
+float water_entry_plane_data[4] __asm__("D_L08_001D7060") = {-2.6e+02f, -2.2e+02f, 15.0f, 1.6e+05f};
+
+int moby_motion_spark_initial_color_end_gp __asm__("D_L08_00161A78") = 0x6020a0c0;
+
+int moby_motion_spark_second_color_end_gp __asm__("D_L08_00161A80") = 0x20601020;

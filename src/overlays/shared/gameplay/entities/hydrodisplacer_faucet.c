@@ -1033,3 +1033,9 @@ short D_L18_00161914 = -32640;
 short D_L18_00161918 = -16288;
 short D_L18_0016191C = -32640;
 short D_L18_00161920 = 0x60c0;
+
+short faucet_base_color_gp __asm__("D_L05_001618C0") = -32640;
+
+int wobble_quad_end_color_gp __asm__("D_L05_00161D08") = 0x804040;
+
+int wobble_quad_texture_index_gp __asm__("D_L05_00161D0C") = 0x13;

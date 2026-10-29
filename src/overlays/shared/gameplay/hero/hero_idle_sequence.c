@@ -3786,3 +3786,7 @@ int D_L18_0015F684 = 0;
 float D_L18_0015F67C = 0.1f;
 V_208b60 D_L18_001AF590 = {0};
 T00209240 D_L18_001F0340 = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};
+
+V_208b60 l00_hero_height_probe_direction __asm__("D_L00_001AEB90") = {0};
+
+T00209240 l00_hero_world_matrix_selection_indices __asm__("D_L00_001E7C10") = {{0, 1, 2, 3, 4, 5, 6, 0x1d, 0x1e}};

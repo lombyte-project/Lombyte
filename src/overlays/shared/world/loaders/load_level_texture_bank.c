@@ -270,3 +270,7 @@ u8 D_L18_0015FC20 = 0xff;
 s32 D_L18_00160568 = 1;
 s32 D_L18_00160564 = 1;
 s32 D_L18_0016056C = 0;
+
+TexRecord first_record_fields __asm__("D_L00_0015FC0A") = {{0, 0, 0, 0, 0, 0x80, 0x80, 1}};
+
+TexRecord second_record_fields __asm__("D_L00_0015FC1A") = {{0, 0, 0, -1, -1, -1, -1, -1}};

@@ -2997,3 +2997,13 @@ int D_L18_0015F324 = 0;
 int D_L18_0015F334 = 0;
 
 f32 D_L18_00161450 = 0;
+
+int configured_unscaled_frame_count_gp __asm__("D_L00_00161368") = 0x3c;
+
+int last_frame __asm__("D_L00_001613C0") = 0;
+
+int D_L00_0015F324 = 0;
+
+int D_L00_0015F334 = 0;
+
+short D_L00_001613C8_d __asm__("D_L00_001613C8") = 0;

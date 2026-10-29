@@ -1739,3 +1739,12 @@ float D_L14_001DE580[4][4] = {
 
 float D_L14_00161A88 = 0.2f;
 float D_L14_00161A8C = 0.175f;
+
+float D_L08_001D1D80[4][4] = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+s32 spark_emitter_default_timer_reset_gp __asm__("D_L08_00161F98") = 0x3c;

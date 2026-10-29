@@ -812,3 +812,9 @@ int D_L17_00161DB4 = 0x80808020;
 int D_L17_00161DB8 = 0xa;
 int D_L17_00161DBC = 0x5208;
 float D_L17_00161DC0 = 0.5f;
+
+int projectile_trail_color_start_gp __asm__("D_L11_00161DC0") = 0x80802000;
+
+int projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") = 0xa;
+
+float ocean_level __asm__("D_L11_00161E1C") = 0;

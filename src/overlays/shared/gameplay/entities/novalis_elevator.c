@@ -3587,3 +3587,5 @@ s32 D_L17_0016154C = 8;
 f32 D_L17_00161554 = 0.25f;
 s32 D_L17_00161A50 = 0;
 s32 D_L18_00161AB8 = 0;
+
+int sand_mouse_projectile_spawn_interval_frames_gp __asm__("D_L01_00161900") = 6;

@@ -4975,3 +4975,7 @@ short D_L18_001616E2 = 0;
 short D_L18_001616E4 = 0;
 short D_L18_001616E6 = 0;
 V2b9310 D_L18_001D0440 = {0};
+
+float D_L00_0017ACF4_lui __asm__("D_L00_0017ACF4") NOT_SDA = 0;
+
+int linked_moby_selection_delay_gp __asm__("D_L00_00161478") = 0;

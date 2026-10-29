@@ -377,3 +377,29 @@ s32 D_L16_0015F8BC = 0x15e;
 s32 D_L16_0015F8C0 = 0x2f;
 s32 D_L16_0015F8C4 = 0xfa;
 s32 D_L16_0015F8C8 = 0x7d;
+
+s32 D_L05_0015FAD4 = 0;
+
+s32 D_L05_0015FAD8 = 0;
+
+s32 D_L05_0015FAE0[4] = {0};
+
+s32 D_L05_0015FAF0 = 0;
+
+s32 D_L05_0015FAF4 = 0;
+
+s32 D_L05_0015FAF8 = 0;
+
+s32 D_L05_0015FAFC_macro __asm__("D_L05_0015FAFC") = 0;
+
+s32 D_L05_0015FB00 = 0;
+
+s32 D_L05_0015FAE4 = 0;
+
+s32 D_L05_0015FAE8 = 0;
+
+s32 D_L05_0015FAEC = 0;
+
+s32 trick_combo_base_reward_points[15] __asm__("D_L05_0017E918") = {0xc8, 0xd7, 0xe1, 0xeb, 0x12c, 0x145, 0x15e, 0x177, 0x190, 0x1f4, 0x20d, 0x226, 0x23f, 0x258, 0x28a};
+
+s32 trick_combo_result_text_color_gp __asm__("D_L05_0015F8A0") = 0xff;

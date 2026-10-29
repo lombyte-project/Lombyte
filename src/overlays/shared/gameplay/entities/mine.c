@@ -3593,3 +3593,17 @@ f32 D_L18_001614E0 = 0.9f;
 s32 D_L18_001614E4 = 4;
 Colors1688 D_L18_001F2120 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 Colors1688 D_L18_001F2138 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+int D_L00_00160770 = -1;
+
+short bomb_spark_primary_color_end __asm__("D_L00_00161420") = -1;
+
+short bomb_spark_secondary_color_end __asm__("D_L00_00161428") = 0x2080;
+
+Colors6 l00_bomb_blast_effect_primary_palette __asm__("D_L00_001E9920") = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+
+Colors6 l00_bomb_blast_effect_secondary_palette __asm__("D_L00_001E9938") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+Colors1688 l00_devastator_missile_impact_color_palette __asm__("D_L00_001E99F0") = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+
+Colors1688 l00_devastator_missile_impact_fade_palette __asm__("D_L00_001E9A08") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};

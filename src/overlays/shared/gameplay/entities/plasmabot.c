@@ -2058,3 +2058,12 @@ float D_L16_00161DA8 = 0.6f;
 float D_L16_00161DAC = -0.4f;
 float D_L16_00161DB0 = 0.7f;
 int D_L16_00161DBC = 0x7f204080;
+
+float plasmabot_glow_quad_vertex_offsets[4][4] __asm__("D_L14_001D8890") = {
+    {-1.0f, 1.0f, 0.0f, 1.0f},
+    {-1.0f, -1.0f, 0.0f, 1.0f},
+    {1.0f, 1.0f, 0.0f, 1.0f},
+    {1.0f, -1.0f, 0.0f, 1.0f},
+};
+
+int particle_pair_color_gp __asm__("D_L14_00161FE4") = 0x7f204080;

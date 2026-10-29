@@ -2580,3 +2580,11 @@ int D_L18_001621C4 = 1;
 int D_L18_001621C8 = 0x13;
 int D_L18_001621CC = 0x60408080;
 float D_L18_001621D0 = 1.0f;
+
+Cols l01_explosive_projectile_initial_color_palette __asm__("D_L01_0020B470") = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+
+Cols l01_explosive_projectile_secondary_color_palette __asm__("D_L01_0020B488") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+
+s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") = 0x28;
+
+int gold_bolt_glow_ring_tween_end_color_gp __asm__("D_L01_00161F40") = 0x1040ffff;

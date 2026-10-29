@@ -1482,3 +1482,9 @@ float gadgebot_launch_glow_quad_uvs[4][2] __asm__("D_L18_001EFCD0") = {
 };
 
 short gadgebot_joint_glow_alpha_gp __asm__("D_L18_00162654") = 0x20;
+
+int deplanetizer_camera_quad_end_frame_gp __asm__("D_L18_001624A0") = 0x17c;
+
+int gadgebot_launch_glow_tint_end_gp __asm__("D_L18_00162640") = 0x8000ffff;
+
+int gadgebot_launch_glow_texture_index_gp __asm__("D_L18_00162644") = 6;

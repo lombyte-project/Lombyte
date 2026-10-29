@@ -3033,3 +3033,9 @@ mark_hit:
 }
 
 Pair_2E2A38 D_L08_00161C30 = {{0x2f000000, 0x3f000000}};
+
+int D_L08_00161AD4 = 0x600000ff;
+
+int D_L08_00161AD8 = 0x600080ff;
+
+int D_L08_00161ADC = 0x60ffffff;

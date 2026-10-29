@@ -593,3 +593,5 @@ int D_L17_00161FB8[2] = {0, 1};
 int D_L17_00161FC0[2] = {2, 0};
 int D_L17_00161FC8[2] = {2, 2};
 int D_L17_00161FD0[2] = {1, 2};
+
+short type_52_particle_divisor_upper_bound __asm__("D_L10_00161E6C") = 0xb4;

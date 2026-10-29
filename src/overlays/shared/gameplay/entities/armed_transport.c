@@ -707,3 +707,33 @@ float D_L18_001EFC90[4][4] = {
     {0.0f, 1.0f, 1.0f, 1.0f},
     {0.0f, 1.0f, -1.0f, 1.0f},
 };
+
+float armed_transport_passenger_attachment_offset[4] __asm__("D_L16_001D9680") = {1.0f, 0.0f, -3.0f, 0.0f};
+
+float grindrail_barrier_ring_uvs[4][2] __asm__("D_L16_001D9780") = {
+    {0.5f, 0.5f},
+    {0.5f, 1.0f},
+    {0.5f, 0.5f},
+    {0.5f, 1.0f},
+};
+
+float grindrail_barrier_ring_vertex_positions[4][4] __asm__("D_L16_001D97C0") = {
+    {0.0f, -4.0f, 0.9f, 1.0f},
+    {0.0f, -4.0f, 0.4f, 1.0f},
+    {0.0f, 4.0f, 0.9f, 1.0f},
+    {0.0f, 4.0f, 0.4f, 1.0f},
+};
+
+float grindrail_barrier_accent_uvs[4][2] __asm__("D_L16_001D97A0") = {
+    {1.0f, 0.0f},
+    {1.0f, 1.0f},
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+};
+
+float grindrail_barrier_accent_vertex_positions[4][4] __asm__("D_L16_001D9800") = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};

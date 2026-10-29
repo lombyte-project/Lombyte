@@ -4285,3 +4285,45 @@ s32 D_L18_00160204 = 0x20ffff20;
 f32 D_L18_00160208 = 0;
 u8 D_L18_0016020C = 1;
 u8 *D_L18_001B2B1C NOT_SDA = 0;
+
+unsigned char *D_L00_001B2090 NOT_SDA = 0;
+
+int D_L00_001B2094 NOT_SDA = 0;
+
+int spinning_particle_default_initial_color_blend_target_gp __asm__("D_L00_001601AC") = 0x20208080;
+
+int spinning_particle_default_final_color_blend_target_gp __asm__("D_L00_001601B4") = 0x182080c0;
+
+int spinning_particle_alternate_initial_color_blend_target_gp __asm__("D_L00_001601CC") = 0x8004040;
+
+int spinning_particle_alternate_final_color_blend_target_gp __asm__("D_L00_001601D4") = 0x10002040;
+
+unsigned char *D_L00_001B20E0 NOT_SDA = 0;
+
+unsigned char *D_L00_001B20B4 NOT_SDA = 0;
+
+unsigned char *D_L00_001B20BC NOT_SDA = 0;
+
+unsigned char *D_L00_001B20C0 NOT_SDA = 0;
+
+unsigned char *D_L00_001B20C8 NOT_SDA = 0;
+
+u8 *D_L00_001B20CC NOT_SDA = 0;
+
+unsigned char *D_L00_001B20D4 NOT_SDA = 0;
+
+unsigned char *D_L00_001B20D8 NOT_SDA = 0;
+
+unsigned char *D_L00_001B20E4 NOT_SDA = 0;
+
+unsigned char *D_L00_001B20E8 NOT_SDA = 0;
+
+u8 *D_L00_001B20F0 NOT_SDA = 0;
+
+u8 *D_L00_001B20F4_lui __asm__("D_L00_001B20F4") NOT_SDA = 0;
+
+unsigned char *D_L00_001B2108 NOT_SDA = 0;
+
+unsigned char *D_L00_001B210C NOT_SDA = 0;
+
+u8 *D_L00_001B211C NOT_SDA = 0;

@@ -3184,3 +3184,26 @@ f32 D_L18_001626E4 = 0.2f;
 f32 D_L18_001626E8 = 0.06f;
 f32 D_L18_001626EC = 0.4f;
 s32 D_L18_001626D8 = 0x5a;
+
+f32 beam_endpoint_quad_local_vertices[4][4] __asm__("D_L00_001E6CE0") = {
+    {0.0f, -1.0f, 1.0f, 1.0f},
+    {0.0f, -1.0f, -1.0f, 1.0f},
+    {0.0f, 1.0f, 1.0f, 1.0f},
+    {0.0f, 1.0f, -1.0f, 1.0f},
+};
+
+float D_L00_00166EEC NOT_SDA = 0;
+
+short follow_camera_ground_aware_focus_transition_frames_gp __asm__("D_L00_00161D38") = 0x1e;
+
+short D_L00_00161D40_gp __asm__("D_L00_00161D40") = 0x23;
+
+short follow_camera_project_hero_focus_blend_base_frames_gp __asm__("D_L00_00161D4C") = 0x55;
+
+short follow_camera_hold_focus_blend_base_frames_gp __asm__("D_L00_00161D5C") = 0x2d;
+
+short D_L00_00161D6C_gp __asm__("D_L00_00161D6C") = 0x1e;
+
+short follow_camera_continue_projected_focus_transition_frames_gp __asm__("D_L00_00161D78") = 0x1e;
+
+s32 follow_cam_blend_frames __asm__("D_L00_00161D20") = 0x5a;

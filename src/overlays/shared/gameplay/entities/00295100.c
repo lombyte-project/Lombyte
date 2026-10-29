@@ -4044,3 +4044,21 @@ Vec4 D_L18_00166980[3] __attribute__((section(".bss")));
 s32 D_L18_0016280C __attribute__((section(".bss")));
 
 s32 D_L18_00162810 __attribute__((section(".bss")));
+
+float D_L00_0015F59C = 1.0f;
+
+float D_L00_0015F5A0_298de8 __asm__("D_L00_0015F5A0") = 0;
+
+int D_L00_00161048_macro __asm__("D_L00_00161048") = 0;
+
+int D_L00_0016104C_macro __asm__("D_L00_0016104C") = 0;
+
+s32 D_L00_00161050_macro __asm__("D_L00_00161050") = 0;
+
+s32 D_L00_00161054_macro __asm__("D_L00_00161054") = 0;
+
+s32 D_L00_00161058_macro __asm__("D_L00_00161058") = 0;
+
+Slideshow slideshow __asm__("D_L00_0015F620") = {0};
+
+unsigned char D_L00_00197BCC NOT_SDA = 0;

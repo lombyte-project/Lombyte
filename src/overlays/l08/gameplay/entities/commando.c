@@ -1367,3 +1367,5 @@ void commando_update(WM *moby) {
 }
 
 Pair l08_layered_mesh_effect_sine_phase_pair __asm__("D_L08_00161E28") = {0};
+
+unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08") = 0;

@@ -2906,3 +2906,5 @@ int get_target_reposition_status(char *moby_or_private_data) {
     }
     return 0;
 }
+
+int conveyor_belt_scrolling_vertex_color_gp __asm__("D_L16_001619B0") = 0x50808070;
