@@ -5389,11 +5389,11 @@ void        add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) __asm__("FUN_L06_002fd088");
 
 void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) {
-    int *data = ((int *)MOBY(moby)->pvars);
+    int *draw_clip_volume_vars = ((int *)MOBY(moby)->pvars);
     int *clip_volume_index_cursor;
     int  i;
     add_draw_callback((void *)draw_dual_texture_58_quad_mesh, moby);
-    clip_volume_index_cursor = data;
+    clip_volume_index_cursor = draw_clip_volume_vars;
     for (i = 0; i < 4; clip_volume_index_cursor++, i++) {
         if (*clip_volume_index_cursor < 0)
             continue;
@@ -5402,7 +5402,7 @@ void enqueue_moby_draw_callbacks_by_clip_volume(char *moby) {
             break;
         }
     }
-    clip_volume_index_cursor = data + 0x10;
+    clip_volume_index_cursor = draw_clip_volume_vars + 0x10;
     for (i = 0; i < 4; clip_volume_index_cursor++, i++) {
         char *hero_data = (char *)D_0013E533 + 0xE1D;
         if (*(int *)(hero_data + 0x208C) == 15 ||
