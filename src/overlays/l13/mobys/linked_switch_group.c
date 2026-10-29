@@ -128,20 +128,20 @@ void update_linked_switch_group(char *moby) {
         RESET_HIT_STATE = 3,
         UPDATE_OPENED_STATE = 4
     };
-    SwitchVars *data = ((SwitchVars *)MOBY(moby)->pvars);
+    SwitchVars *switch_vars = ((SwitchVars *)MOBY(moby)->pvars);
     int         hit = 0;
 
-    if (data->unk74 == 0 && (unsigned char)(moby[0x20] - 1) < 2) {
-        hit = process_linked_switch_damage((struct Moby *)moby, data, &data->unk20);
+    if (switch_vars->unk74 == 0 && (unsigned char)(moby[0x20] - 1) < 2) {
+        hit = process_linked_switch_damage((struct Moby *)moby, switch_vars, &switch_vars->unk20);
     }
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_LINKED_GROUP:
-        if (data->unk79 == 0) {
+        if (switch_vars->unk79 == 0) {
             char *iter[4];
             char *linked;
 
-            data->unk7B = 0;
-            data->unk80 = moby;
+            switch_vars->unk7B = 0;
+            switch_vars->unk80 = moby;
             get_first_moby_in_group(iter, (unsigned char)moby[0x21], 0, 0);
             while ((linked = *iter) != 0) {
                 linked = iter[0];
@@ -151,51 +151,51 @@ void update_linked_switch_group(char *moby) {
                     other_data->unk80 = moby;
                     other_data->unk79 = 1;
                 }
-                data->unk7B++;
+                switch_vars->unk7B++;
                 get_next_moby_in_group(iter, iter[0], 0, 0);
             }
         }
-        data->unk70 = 0;
-        data->unk72 = 0;
-        data->unk7A = 0;
-        data->unk74 = 0;
-        data->unk76 = 0;
+        switch_vars->unk70 = 0;
+        switch_vars->unk72 = 0;
+        switch_vars->unk7A = 0;
+        switch_vars->unk74 = 0;
+        switch_vars->unk76 = 0;
 
         set_moby_color(moby, 0x80, 0x80, 0x80);
         moby[0x20] = 1;
         break;
     case MONITOR_LINKED_GROUP_HITS:
     case WAIT_FOR_LINKED_GROUP_COMPLETION:
-        if (data->unk74 == 0 && hit != 0) {
+        if (switch_vars->unk74 == 0 && hit != 0) {
             char       *linked;
             SwitchVars *linked_data;
-            linked = data->unk80;
+            linked = switch_vars->unk80;
             linked_data = *(SwitchVars **)(linked + 0x78);
             if ((unsigned char)linked[0x20] == 1) {
-                data->unk7A = 0;
+                switch_vars->unk7A = 0;
                 linked[0x20] = 2;
                 if (linked_data->unk7C > 0) {
-                    linked_data->unk70 = scale_game_frames(data->unk7C);
+                    linked_data->unk70 = scale_game_frames(switch_vars->unk7C);
                 }
             }
             linked_data->unk7A++;
             allocate_voice_for_target_entry(3, 0, moby);
             set_moby_color(moby, 0, 0xFF, 0);
-            data->unk74 = 1;
+            switch_vars->unk74 = 1;
         }
         if ((unsigned char)moby[0x20] == 2) {
-            if (data->unk7A >= data->unk7B) {
+            if (switch_vars->unk7A >= switch_vars->unk7B) {
                 set_moby_list_state((unsigned char)moby[0x21], 4);
                 allocate_voice_for_target_entry(1, 0, moby);
-                data->unk70 = data->unk84;
+                switch_vars->unk70 = switch_vars->unk84;
                 debug_print(
                     D_L13_001F4D90, ((short)MOBY(moby)->save_id), MOBY(moby)->oclass, frame_count);
                 moby[0x20] = 4;
             } else {
-                if (data->unk7C >= 0) {
-                    if (fast_dec_timer_s16(&data->unk70) != 0) {
-                        data->unk7A = 0;
-                        data->unk74 = 0;
+                if (switch_vars->unk7C >= 0) {
+                    if (fast_dec_timer_s16(&switch_vars->unk70) != 0) {
+                        switch_vars->unk7A = 0;
+                        switch_vars->unk74 = 0;
 
                         allocate_voice_for_target_entry(2, 0, moby);
                         set_moby_list_state((unsigned char)moby[0x21], 3);
@@ -204,11 +204,11 @@ void update_linked_switch_group(char *moby) {
                                     MOBY(moby)->oclass,
                                     frame_count);
                         moby[0x20] = 3;
-                    } else if (fast_dec_timer_s16(&data->unk72) != 0) {
+                    } else if (fast_dec_timer_s16(&switch_vars->unk72) != 0) {
                         allocate_voice_for_target_entry(0, 0, moby);
-                        data->unk72 =
+                        switch_vars->unk72 =
                             MIN(scale_game_frames(0x2D),
-                                scale_game_frames(5) + data->unk70 / scale_game_frames(0x28));
+                                scale_game_frames(5) + switch_vars->unk70 / scale_game_frames(0x28));
                     }
                 }
             }
@@ -217,17 +217,17 @@ void update_linked_switch_group(char *moby) {
     case RESET_HIT_STATE:
         set_moby_color(moby, 0x80, 0x80, 0x80);
 
-        data->unk7A = 0;
-        data->unk74 = 0;
-        data->unk20 = (float)data->unk24;
+        switch_vars->unk7A = 0;
+        switch_vars->unk74 = 0;
+        switch_vars->unk20 = (float)switch_vars->unk24;
         moby[0x20] = 1;
 
         break;
     case UPDATE_OPENED_STATE:
-        if (data->unk79 == 0 && data->unk70 != -1) {
-            if (fast_dec_timer_s16(&data->unk70) != 0) {
-                data->unk7A = 0;
-                data->unk74 = 0;
+        if (switch_vars->unk79 == 0 && switch_vars->unk70 != -1) {
+            if (fast_dec_timer_s16(&switch_vars->unk70) != 0) {
+                switch_vars->unk7A = 0;
+                switch_vars->unk74 = 0;
 
                 allocate_voice_for_target_entry(2, 0, moby);
                 set_moby_list_state((unsigned char)moby[0x21], 3);
@@ -236,20 +236,20 @@ void update_linked_switch_group(char *moby) {
                             MOBY(moby)->oclass,
                             frame_count);
                 moby[0x20] = 3;
-            } else if (fast_dec_timer_s16(&data->unk72) != 0) {
+            } else if (fast_dec_timer_s16(&switch_vars->unk72) != 0) {
                 allocate_voice_for_target_entry(0, 0, moby);
-                data->unk72 = MIN(scale_game_frames(0x2D),
-                                  scale_game_frames(5) + data->unk70 / scale_game_frames(0x28));
+                switch_vars->unk72 = MIN(scale_game_frames(0x2D),
+                                  scale_game_frames(5) + switch_vars->unk70 / scale_game_frames(0x28));
             }
         }
-        if (fast_dec_timer_s16(&data->unk76) != 0) {
-            data->unk76 = scale_game_frames(0x14);
-            if (data->unk78 != 0) {
+        if (fast_dec_timer_s16(&switch_vars->unk76) != 0) {
+            switch_vars->unk76 = scale_game_frames(0x14);
+            if (switch_vars->unk78 != 0) {
                 set_moby_color(moby, 0, 0xFF, 0);
-                data->unk78 = 0;
+                switch_vars->unk78 = 0;
             } else {
                 set_moby_color(moby, 0, 0, 0xFF);
-                data->unk78 = 1;
+                switch_vars->unk78 = 1;
             }
         }
         break;
