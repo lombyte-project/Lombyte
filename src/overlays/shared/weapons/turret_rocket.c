@@ -86,7 +86,7 @@ char *spawn_turret_rocket(int    owner,
                           float *rotation,
                           int    value) __asm__("FUN_L08_002e7eb0");
 
-char *spawn_turret_rocket(int owner, float *position, float *rotation, int value) {
+char *spawn_turret_rocket(int owner, float *position, float *rotation, int target_moby) {
     float position_copy[4] __attribute__((aligned(16)));
     float rotation_copy[4] __attribute__((aligned(16)));
     float matrix[4][4] __attribute__((aligned(16)));
@@ -95,7 +95,7 @@ char *spawn_turret_rocket(int owner, float *position, float *rotation, int value
     float angle, magnitude;
     int   i, particle_frame_count, particle_second_frame_count, particle_third_frame_count;
     char *moby;
-    char *data;
+    char *created_moby_private_state;
     float *volatile particle_position_ptr;
     float *velocity_ptr, *offset_ptr, *matrix_row_ptr;
 
@@ -105,9 +105,9 @@ char *spawn_turret_rocket(int owner, float *position, float *rotation, int value
     rotation = rotation_copy;
     moby = create_moby(0x1ca);
     if (moby != 0) {
-        data = ((char *)MOBY(moby)->pvars);
-        *(int *)(data + 0x14) = owner;
-        *(int *)(data + 0x10) = value;
+        created_moby_private_state = ((char *)MOBY(moby)->pvars);
+        *(int *)(created_moby_private_state + 0x14) = owner;
+        *(int *)(created_moby_private_state + 0x10) = target_moby;
         set_moby_color(moby, 0xa0, 0xa0, 0xa0);
         *(volatile int *)(moby + 0x40) = 0;
         MOBY(moby)->update_dist = 0xff;
@@ -116,11 +116,11 @@ char *spawn_turret_rocket(int owner, float *position, float *rotation, int value
         MOBY(moby)->rot.y = -fast_arc_tan(vector_length_xy(rotation_copy), rotation[2]);
         MOBY(moby)->rot.z = fast_arc_tan(rotation[0], rotation[1]);
         qcopy(moby + 0x10, position_copy);
-        qcopy(data, rotation_copy);
+        qcopy(created_moby_private_state, rotation_copy);
         if (D_L08_0015F5CC & 1)
-            *(volatile int *)(data + 0x1c) = 1;
+            *(volatile int *)(created_moby_private_state + 0x1c) = 1;
         else
-            *(volatile int *)(data + 0x1c) = -1;
+            *(volatile int *)(created_moby_private_state + 0x1c) = -1;
         euler_rotation_matrix(matrix, moby + 0x40);
         i = 0;
         if ((float)i < moby_creation_particle_count_limit_gp) {
@@ -170,9 +170,9 @@ char *spawn_turret_rocket(int owner, float *position, float *rotation, int value
             } while ((float)i < moby_creation_particle_count_limit_gp);
         }
         if (current_level_index == 12)
-            *(int *)(data + 0x18) = scale_game_frames(120);
+            *(int *)(created_moby_private_state + 0x18) = scale_game_frames(120);
         else
-            *(int *)(data + 0x18) =
+            *(int *)(created_moby_private_state + 0x18) =
                 truncate_float_to_s32(FUN_L08_00211a20(moby_creation_default_timer_frames_gp));
         update_entity(moby);
     }
