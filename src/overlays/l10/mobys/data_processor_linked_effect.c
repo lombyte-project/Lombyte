@@ -47,7 +47,7 @@ void update_data_processor_linked_effect(struct Moby *moby) {
         MOBY_STATE_ACTIVE_WITH_SOUND = 1,
         MOBY_STATE_ACTIVE_WITHOUT_SOUND = 2
     };
-    char *data = (char *)moby->pvars;
+    char *linked_effect_vars = (char *)moby->pvars;
     union {
         unsigned char order[10];
         float         position2[4];
@@ -55,7 +55,7 @@ void update_data_processor_linked_effect(struct Moby *moby) {
     float position1[4];
     int   pass, i, copy_index;
 
-    if (*(int *)(data + 0xC) == -1) {
+    if (*(int *)(linked_effect_vars + 0xC) == -1) {
         debug_print(l10_data_processor_linked_effect_missing_processor_link_message);
         debug_print(l10_data_processor_linked_effect_deleted_instance_message,
                     *(short *)&moby->save_id);
@@ -76,12 +76,12 @@ void update_data_processor_linked_effect(struct Moby *moby) {
             }
         }
         copy_index = 0;
-        if (*(int *)(data + 4) > 0) {
-            char *dest = data + 0x10;
+        if (*(int *)(linked_effect_vars + 4) > 0) {
+            char *dest = linked_effect_vars + 0x10;
             do {
                 dest[copy_index] = scratch.order[copy_index];
                 copy_index++;
-            } while (copy_index < *(int *)(data + 4));
+            } while (copy_index < *(int *)(linked_effect_vars + 4));
         }
         {
             float timer;
@@ -90,16 +90,16 @@ void update_data_processor_linked_effect(struct Moby *moby) {
             moby->state = 1;
             timer = data_processor_linked_effect_fade_duration_seconds_gp * 60.0f;
             moby->rot.z = new_rotation;
-            *(int *)(data + 0x30) = -1;
-            *(int *)(data + 0x34) = scale_game_frames(truncate_float_to_s32(timer));
+            *(int *)(linked_effect_vars + 0x30) = -1;
+            *(int *)(linked_effect_vars + 0x34) = scale_game_frames(truncate_float_to_s32(timer));
         }
 
         moby->flags |= 0x41;
         break;
     case MOBY_STATE_ACTIVE_WITH_SOUND: {
         float half_height, half_width, radius_squared;
-        half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
-        half_width = *(float *)data * 0.5f;
+        half_height = (float)*(int *)(linked_effect_vars + 4) * *(float *)(linked_effect_vars + 8) * 0.5f;
+        half_width = *(float *)linked_effect_vars * 0.5f;
         *(OvlQuad *)position1 = *(OvlQuad *)&moby->pos;
         radius_squared = half_height * half_height;
         position1[2] += half_height;
@@ -107,23 +107,23 @@ void update_data_processor_linked_effect(struct Moby *moby) {
         if (fast_vec_dist(&moby->pos, &D_L10_00167240) < 80.0f &&
             0.0f <= (float)fast_bsphere_check(position1, 80.0f))
             add_draw_callback((void *)render_data_processor_linked_effect, moby);
-        if (voice_is_playing(moby, *(int *)(data + 0x30)) == 0)
-            *(int *)(data + 0x30) = allocate_voice_for_target_entry(0, 4, (int)moby);
+        if (voice_is_playing(moby, *(int *)(linked_effect_vars + 0x30)) == 0)
+            *(int *)(linked_effect_vars + 0x30) = allocate_voice_for_target_entry(0, 4, (int)moby);
         break;
     }
     case MOBY_STATE_ACTIVE_WITHOUT_SOUND: {
         int   voice;
         float half_height, half_width, radius_squared;
-        fast_dec_timer(data + 0x34);
-        voice = *(int *)(data + 0x30);
+        fast_dec_timer(linked_effect_vars + 0x34);
+        voice = *(int *)(linked_effect_vars + 0x30);
         if (voice != -1) {
             unsigned char *entry = (unsigned char *)&voice_pool + voice * 0x70;
             if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
                 release_voice_slot(voice);
         }
-        *(int *)(data + 0x30) = -1;
-        half_height = (float)*(int *)(data + 4) * *(float *)(data + 8) * 0.5f;
-        half_width = *(float *)data * 0.5f;
+        *(int *)(linked_effect_vars + 0x30) = -1;
+        half_height = (float)*(int *)(linked_effect_vars + 4) * *(float *)(linked_effect_vars + 8) * 0.5f;
+        half_width = *(float *)linked_effect_vars * 0.5f;
         *(OvlQuad *)scratch.position2 = *(OvlQuad *)&moby->pos;
         radius_squared = half_height * half_height;
         scratch.position2[2] += half_height;
