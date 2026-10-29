@@ -93,7 +93,7 @@ void render_level_effects_and_screen_sprites(void) {
     /* One local serves as the projected width in the projection loop and
        as the panel flags in the draw loop; retail allocates both through
        the same register, which separate locals do not reproduce. */
-    s32 value;
+    s32 projected_width_or_panel_flags;
     s32 frame_width;
     s32 slot_count;
     s32 frame_height;
@@ -146,9 +146,9 @@ void render_level_effects_and_screen_sprites(void) {
                                 &screen_y);
         screen_x++;
         screen_y++;
-        value = projected_width;
+        projected_width_or_panel_flags = projected_width;
         if (panels != 0 && panels[projection_slot_index] != 0) {
-            panels[projection_slot_index]->projected_width = value;
+            panels[projection_slot_index]->projected_width = projected_width_or_panel_flags;
             panels[projection_slot_index]->projected_height = projected_height;
             panels[projection_slot_index]->screen_x = screen_x;
             panels[projection_slot_index]->screen_y = screen_y;
@@ -175,8 +175,8 @@ void render_level_effects_and_screen_sprites(void) {
             if (panel == 0) {
                 continue;
             }
-            value = panel->flags;
-            if (value & 4) {
+            projected_width_or_panel_flags = panel->flags;
+            if (projected_width_or_panel_flags & 4) {
                 continue;
             }
             if (panel_slot_enabled[draw_slot_index] == 0 || panel->draw == 0) {
@@ -185,13 +185,13 @@ void render_level_effects_and_screen_sprites(void) {
             if (draw_slot_index == 6 && menu_system.unkD8 == 0) {
                 continue;
             }
-            if (pass == 0 && !(value & 2)) {
+            if (pass == 0 && !(projected_width_or_panel_flags & 2)) {
                 continue;
             }
-            if (pass == 1 && (value & 2)) {
+            if (pass == 1 && (projected_width_or_panel_flags & 2)) {
                 continue;
             }
-            if (value & 1) {
+            if (projected_width_or_panel_flags & 1) {
                 panel->draw(panel);
                 continue;
             }
