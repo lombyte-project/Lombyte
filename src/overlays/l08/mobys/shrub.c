@@ -180,9 +180,9 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
 }
 
 void update_shrub_parts(struct Moby *parent_moby) {
-    char *data = (char *)parent_moby->pvars;
+    char *shrub_vars = (char *)parent_moby->pvars;
     float part_joint_position[4], anchor_joint_position[4], joint_alignment_offset[4];
-    char *base = data + 0x60;
+    char *base = shrub_vars + 0x60;
     int   i;
     for (i = 0; i < 12; i++) {
         int  *anchor_joint_cursor = (int *)(base + 0x1C + i * 16);
@@ -196,9 +196,9 @@ void update_shrub_parts(struct Moby *parent_moby) {
             fast_vec_add(m + 0x10, m + 0x10, joint_alignment_offset);
         }
     }
-    if (*(int *)(data + 0x90) != 0) {
-        char *spinning_part_moby = *(char **)(data + 0x90);
-        *(float *)(*(char **)(data + 0x90) + 0x40) =
+    if (*(int *)(shrub_vars + 0x90) != 0) {
+        char *spinning_part_moby = *(char **)(shrub_vars + 0x90);
+        *(float *)(*(char **)(shrub_vars + 0x90) + 0x40) =
             fast_add_rotations(MOBY(spinning_part_moby)->rot.x,
                                shrub_part_spin_speed_degrees_gp * DEG_TO_RAD * D_0015ED6C);
     }
