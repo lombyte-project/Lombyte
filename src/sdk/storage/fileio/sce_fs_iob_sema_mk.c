@@ -6,13 +6,13 @@
 extern s32 CreateSema();
 
 void _sceFsIobSemaMK(void) {
-    struct SemaParam args;
+    struct SemaParam semaphore_creation_settings;
 
     if (fio_iob_sema == -1) {
-        args.option = 0;
-        args.initCount = 1;
-        args.maxCount = 1;
-        fio_iob_sema = CreateSema(&args);
-        fio_async_table_sema = CreateSema(&args);
+        semaphore_creation_settings.option = 0;
+        semaphore_creation_settings.initCount = 1;
+        semaphore_creation_settings.maxCount = 1;
+        fio_iob_sema = CreateSema(&semaphore_creation_settings);
+        fio_async_table_sema = CreateSema(&semaphore_creation_settings);
     }
 }
