@@ -933,7 +933,7 @@ void spawn_amoeboid_movement_particles(unsigned char *moby) {
 }
 
 void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
-    char *data = (char *)MOBY(moby)->pvars;
+    char *burst_amoeboid_vars = (char *)MOBY(moby)->pvars;
     f32   spawn_position[4], origin[4], velocity[4];
     u128 *dest;
     f32  *origin_copy;
@@ -949,7 +949,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
         do {
             qcopy_nc(dest, source);
             add_random_offset_to_vector_xyz(
-                dest, amoeboid_burst_group_position_jitter_bound_gp * *(f32 *)(data + 0x250));
+                dest, amoeboid_burst_group_position_jitter_bound_gp * *(f32 *)(burst_amoeboid_vars + 0x250));
             spawn_position[2] += 1.0f;
             angle = random_angle_radians();
             radius = random_float_between(amoeboid_burst_radial_speed_min_gp,
