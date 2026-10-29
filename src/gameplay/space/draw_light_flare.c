@@ -3,10 +3,9 @@
 #include "rnc/rendering/level_render_state.h"
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/math/fast_math.h"
 extern void fast_mem_copy(void *, void *, int) __asm__("FUN_001f98d0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 typedef struct {
     float positions[4][4];          /* 0x00 */
@@ -15,7 +14,6 @@ typedef struct {
     long gs_state[4];               /* 0x70 */
 } FlareQuad;
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 extern int FUN_001fa820(void *, int *, float);
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");

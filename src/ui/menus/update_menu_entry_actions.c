@@ -6,10 +6,10 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/math/fast_math.h"
 
 /* gp-relative here, so not the plain rnc/globals.h spellings. */
 
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void mode_freeze_init(s32, s32) __asm__("func_001FBAB8");
 extern s32 allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 

@@ -3,6 +3,7 @@
 #include "rnc/ui/hud/hud_state.h"
 
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/math/fast_math.h"
 
 struct Vec4 {
     f32 x;
@@ -11,8 +12,6 @@ struct Vec4 {
     f32 w;
 };
 
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 

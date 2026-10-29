@@ -4,6 +4,8 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "types.h"
+#include "rnc/rendering/render_globals.h"
+#include "rnc/globals.h"
 extern void fast_mem_copy(void *, void *, int) __asm__("FUN_001f98d0");
 extern void FlushCache(int);
 extern char *D_001E1700[];
@@ -11,7 +13,6 @@ extern s32 D_001E3000[];
 extern u8 D_001E4200[];
 extern u8 D_001E2A00[];
 extern u8 D_001E3E00[];
-extern u8 tie_light_data[] __asm__("D_001E3200");
 extern u8 tie_light_data2[] __asm__("D_001E4400");
 extern int D_00160F68 MACRO_ADDR;
 extern u8 D_00160F30[];
@@ -30,8 +31,6 @@ extern int registered_object_render_class_count_macro __asm__("D_00160F4C") MACR
    `&= ~8` stays an int AND with -9, not andi 0xFFF7). */
 void draw_ties_2(void) __asm__("FUN_00235990");
 
-extern s32 gs_texture_allocation_start __asm__("D_0015EE78") MACRO_ADDR;
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 void draw_ties_2(void) {
     {
         int i;

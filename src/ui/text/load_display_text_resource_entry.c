@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/math/fast_math.h"
 
 typedef int TI __attribute__((mode(TI)));
 
@@ -16,8 +17,6 @@ struct Loc {
 };
 
 extern void fast_vector_from_packed_chars(void *dst, s32 src) __asm__("FUN_001f9d50");
-extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *dst, void *a, f32 scale) __asm__("FUN_001f9a68");
 
 void load_display_text_resource_entry(void *arg0, s32 *arg1) __asm__("FUN_00214bc0");
 

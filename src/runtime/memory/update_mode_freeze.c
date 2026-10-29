@@ -3,6 +3,8 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/input/pad_state.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/ui/menus/menu_globals.h"
 
 struct FreezeModeState {
     s32 unk0;
@@ -22,9 +24,7 @@ extern u16 D_0013E05A[];
 extern u8 saved_camera_vectors[] __asm__("D_00141050");
 extern s32 D_0015EE38;
 extern s32 D_0015EE3C;
-extern s32 boot_level_active __asm__("D_0015F5E8");
 extern s32 D_0015F648;
-extern u8 requested_video_mode __asm__("D_0016034C");
 extern struct FreezeModeState freeze __asm__("D_00193300");
 extern s32 pause_current_action_list[] __asm__("D_001D5BF8");
 extern char sound_update() __asm__("func_0022CA50");

@@ -1,11 +1,11 @@
 /* Ported from rac1-decomp (src/game/lights.c, func_00202260). */
 
 #include "qcopy.h"
+#include "rnc/rendering/render_globals.h"
 
 extern char camera_lighting_reference_angle[] __asm__("D_00187098");
 extern char dir_lights[] __asm__("D_0019BDC0");
 extern char point_lights[] __asm__("D_0019C1C0");
-extern char point_light_data[] __asm__("D_0019C3C0");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");

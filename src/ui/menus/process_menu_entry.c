@@ -37,7 +37,6 @@ typedef struct {
 
 #include "rnc/ui/menus/process_menu_entry_globals.h"
 extern s32 menu_help_hud_item_gp __asm__("D_00160070") __attribute__((sda));
-extern s32 world_update_time __asm__("D_0015F60C");
 extern s32 world_update_time_macro __asm__("D_0015F60C") MACRO_ADDR;
 extern s32 D_001993C0[];
 extern Suffixes menu_bolt_threshold_thousands_separators __asm__("D_001E8680");
@@ -45,6 +44,7 @@ extern char help_text_integer_placeholder[] __asm__("D_00160088");
 extern char bolt_threshold_number_format[] __asm__("D_00160090");
 extern Weapon D_001DFFB0[];
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/gameplay/state/game_globals.h"
 extern void noop_callback_n(s32) __asm__("func_001E9458");
 extern s32 remove_hud_item(s32) __asm__("FUN_001ff480");
 extern void noop_callback_o(s32) __asm__("func_001E9460");

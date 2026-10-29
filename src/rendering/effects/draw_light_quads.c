@@ -3,8 +3,9 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "types.h"
+#include "rnc/rendering/render_globals.h"
+#include "rnc/math/fast_math.h"
 
-extern int effect_quad_count __asm__("D_0015F474") MACRO_ADDR;
 
 typedef float FVec4[4] __attribute__((aligned(16)));
 
@@ -19,7 +20,6 @@ typedef struct {
 
 extern FRow light_quad_vertex_template[4] __asm__("D_0018CAA0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
 /* Builds a 4-row matrix per light in D_0018E340 (count D_0015F474):

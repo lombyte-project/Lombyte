@@ -1,8 +1,7 @@
 #include "types.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/fast_math.h"
 
-extern void fast_vec_add(s32, s32, s32) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(s32, s32, f32) __asm__("FUN_001f9a68");
 extern void copy_matrix_rotation(void *, void *) __asm__("func_001FA298");
 extern void multiply_matrix(s32, void *, s32) __asm__("FUN_001fa378");
 extern void get_moby_joint_matrices(struct Moby *, s32, s32 *, s32) __asm__("FUN_00210850");

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct Pad {
     u8 pad0[0x100];
@@ -35,7 +36,6 @@ typedef struct Pad {
 } Pad;
 
 extern volatile u8 D_0015EDB4;
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern float vector_length_xy(float *) __asm__("FUN_001f9b20");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");

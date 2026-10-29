@@ -14,6 +14,7 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct FRow {
     f32 v[3];
@@ -132,9 +133,7 @@ extern void enable_global_flag(void) __asm__("func_001F61E8");
 extern void clear_blocks_16(void *, s32) __asm__("FUN_001f9810");
 extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern f32 max_float(f32, f32) __asm__("FUN_001f99c8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");

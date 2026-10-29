@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/ui/hud/hud_state.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 #define ALIGN64(x) (((x) + 0x3F) & ~0x3FU)
 
@@ -18,7 +19,6 @@ struct Vram {
     s32 base;
 };
 
-extern struct HudFile *level_root __asm__("D_0015EE4C");
 extern char hud_allocation_source_file[] __asm__("D_0015FBB0");
 extern char hud_bank_0_stash_label[] __asm__("D_0015FBC0");
 extern char hud_bank_2_stash_label[] __asm__("D_0015FBD0");

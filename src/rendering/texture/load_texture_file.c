@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/rendering/texture_upload.h"
 #include "types.h"
+#include "rnc/globals.h"
 
 extern int log2dim(int) __asm__("FUN_001f97a0");
 typedef struct {
@@ -22,7 +23,6 @@ typedef struct {
    TEX0 value returned. */
 long load_texture_file(char *p) __asm__("FUN_00204cf0");
 
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 extern s32 pending_texture_upload_count_macro __asm__("D_0015F458") MACRO_ADDR;
 long load_texture_file(char *texture_file_data) {
     TexDesc texture_desc;

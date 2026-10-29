@@ -9,10 +9,10 @@
 
 #include "types.h"
 #include "rnc/sdk/library/stdio.h"
+#include "rnc/runtime/core_state.h"
 
 typedef char *va_list;
 
-extern RncReent *GlobalStateResource __asm__("D_0012F76C") __attribute__((section(".data")));
 extern s32 Vfprintf(RncFile *file, const s8 *format, va_list arguments) __asm__("func_00116DA8");
 
 #define __SWR   0x0008

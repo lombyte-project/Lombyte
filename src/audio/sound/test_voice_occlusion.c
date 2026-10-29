@@ -1,9 +1,7 @@
+#include "rnc/math/fast_math.h"
 /* Ported from rac1-decomp (src/game/sound.c, func_0022D970). */
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern char D_00187080[];
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void clamp_vector_length(void *, void *, float) __asm__("FUN_001f9c90");
 /* Aim the vector from the frame at D_00187080 toward arg0+0x20, scaled to
    3/4 and 64, and return the line test from arg1 to its end. The int

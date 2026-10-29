@@ -2,6 +2,9 @@
 #include "rnc/globals.h"
 #include "rnc/storage/disc_table.h"
 #include "sda.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     s32 off;
@@ -29,17 +32,11 @@ typedef struct {
 
 extern s32 D_0015ED80 MACRO_ADDR;
 extern s32 D_0015ED88 __attribute__((sda));
-extern WadHeader *level_root __asm__("D_0015EE4C");
 extern volatile s32 D_0015EE8C;
-extern s32 intro_overlay_alpha __asm__("D_0015EF50");
-extern s32 language_intro_overlay_alpha __asm__("D_0015EF54");
 extern s32 intro_overlay_timer_macro __asm__("D_0015EF58") MACRO_ADDR;
 extern f32 sequence_macro __asm__("D_0015F43C") MACRO_ADDR;
 extern s32 game_frame_counter_macro __asm__("D_0015F438") MACRO_ADDR;
-extern s32 space_load_pending __asm__("D_0015F5B0") MACRO_ADDR;
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
-extern s32 space_load_in_progress __asm__("D_0015F618");
-extern u8 requested_video_mode __asm__("D_0016034C") MACRO_ADDR;
 extern SoundCue D_001862B0[];
 extern TransferState render_sequence __asm__("D_0018CB20");
 extern WadHeader *volatile D_001940C8[];
@@ -60,7 +57,6 @@ extern void transition_default_draw() __asm__("FUN_001eb410");
 extern s32 is_active_state_entry(s32 arg0, s32 arg1) __asm__("FUN_001eb740");
 extern s32 set_pal_mode() __asm__("func_001F34E8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern s32 scale_game_frames() __asm__("FUN_001f96f8");
 extern void put_draw_buffer_large(void) __asm__("FUN_001fb2d0");
 extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern void append_palette_transfer_packet() __asm__("func_001FB6E0");

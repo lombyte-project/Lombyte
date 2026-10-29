@@ -5,13 +5,9 @@
 #include "rnc/rendering/image_clear_buffer.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/rendering/draw_environment.h"
+#include "rnc/rendering/render_globals.h"
 
-extern s32 pal_mode __asm__("D_0015ED80");
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74");
-extern s32 gs_texture_allocation_start __asm__("D_0015EE78");
 extern s32 display_buffer_address __asm__("D_0015EE80");
-extern s32 draw_buffer_address __asm__("D_0015EE84");
-extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern void fill_transfer_words(u8 *, s32, s32) __asm__("FUN_001f97e8");
 extern void FlushCache(s32);
 /* Retail returns zero after the graphics pipeline becomes idle. */

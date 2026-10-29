@@ -1,6 +1,6 @@
 #include "sda.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
-extern int mode_freeze_state __asm__("D_0015EEB0") __attribute__((sda));
+#include "rnc/globals.h"
 
 void save_card_state_format_pending(void) __asm__("FUN_00208af8");
 

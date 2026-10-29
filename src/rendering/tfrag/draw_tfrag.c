@@ -4,6 +4,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/math/fast_math.h"
 
 struct Locals {
     u8 pad0[0x30];
@@ -18,7 +19,6 @@ extern void FlushCache(s32);
 extern void WriteDmaChannel(u32, u32, u32);
 extern void noop_core_callback(void *, s32) __asm__("func_001F21B0");
 extern void noop_core_callback_secondary(void *, s32) __asm__("func_001F21B8");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void dma_tfrag_textures(void) __asm__("func_002331C0");

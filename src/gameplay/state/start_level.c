@@ -5,11 +5,12 @@
 extern int decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
 extern char D_0013E550[];
 #include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/globals.h"
 extern char D_001940C0[];
 extern void FlushCache(int);
 extern void sound_stop_all_sounds(void) __asm__("func_0022DCD0");
 extern void music_stop(void) __asm__("func_00215EE8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void fade_to_black(int) __asm__("func_001F4A58");
 extern void snd_stream_safe_cd_sync(int) __asm__("func_0012EE08");
 extern void memcard_update_state(void) __asm__("func_002093D8");
@@ -26,9 +27,7 @@ extern void hud_send_texture(int, int, int, int, int, int) __asm__("func_00200B1
    (play_mpeg_movie) and reset the display state. */
 void start_level(int level) __asm__("FUN_001e9488");
 
-extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
-extern s32 depth_buffer_address __asm__("D_0015EE88") MACRO_ADDR;
 void start_level(int level) {
     int movie_size_bytes;
     int movie_start_sector;

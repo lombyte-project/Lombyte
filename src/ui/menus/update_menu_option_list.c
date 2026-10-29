@@ -6,10 +6,10 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/fast_math.h"
 extern void allocate_voice_for_target_entry(s32, s32, s32) __asm__("func_0022DA68");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 s32 update_menu_option_list(struct MenuScreen *m) __asm__("FUN_00220e28");
 

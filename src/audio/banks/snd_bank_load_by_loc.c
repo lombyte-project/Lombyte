@@ -1,11 +1,11 @@
 #include "types.h"
+#include "rnc/audio/sound_state.h"
 
 extern s32 snd_cd_bank_load_request[] __asm__("D_00137B40");
 extern char snd_non_idle_error_string[] __asm__("D_00153D20");
 extern u8 snd_bank_load_by_loc_rpc_error_string[] __asm__("D_00153DF8");
 extern u8 sound_stream_client[] __asm__("D_0015EBE8");
 extern s32 snd_cd_load_error __asm__("D_0015EC88") __attribute__((sda));
-extern s32 snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));
 extern u32 snd_cd_callback_arg __asm__("D_0015ED00");
 extern s32 printf(const char *, ...);
 extern s32 snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");

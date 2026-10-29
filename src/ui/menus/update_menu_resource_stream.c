@@ -6,6 +6,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/globals.h"
+#include "rnc/gameplay/state/item_state.h"
 
 typedef struct {
     s32 values[6];
@@ -13,7 +14,6 @@ typedef struct {
 
 extern LanguageResourceOffsets menu_language_resource_offsets __asm__("D_001E87D0");
 
-extern u8 item_unlocked[] __asm__("D_0013D408");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 decompress_wad() __asm__("func_0020B618");
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");

@@ -1,3 +1,4 @@
+#include "rnc/runtime/core_state.h"
 typedef char *va_list;
 
 typedef struct PrintFile {
@@ -10,7 +11,6 @@ typedef struct PrintReent {
     PrintFile *stdout_file;
 } PrintReent;
 
-extern PrintReent *GlobalStateResource __asm__("D_0012F76C") __attribute__((section(".data")));
 extern int Vfprintf(PrintFile *file, const char *format,
                     va_list arguments) __asm__("func_00116DA8");
 

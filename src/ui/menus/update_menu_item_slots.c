@@ -7,7 +7,7 @@
 
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/data_labels.h"
-extern s32 scale_game_frames() __asm__("FUN_001f96f8");
+#include "rnc/math/fast_math.h"
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 update_menu_item_slots(struct MenuScreen *menu) __asm__("FUN_0021c7a0");

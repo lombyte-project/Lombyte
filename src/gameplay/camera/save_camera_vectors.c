@@ -2,7 +2,7 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/camera/camera_globals.h"
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+#include "rnc/math/fast_math.h"
 /* When the flag at +2 is clear, copies the 16-byte vector at +0x50 to
    +0xC0 with retail's qcopy, optionally runs fast_vec_add on +0x60,
    then copies +0x60 to +0xD0. Sibling of func_001ECC10 just above it. */
@@ -18,6 +18,5 @@ void save_camera_vectors(void) {
         qcopy(base + 0xD0, base + 0x60);
     }
 }
-extern void fast_vec_add(void *dst, void *a, void *b) __asm__("FUN_001f9a10");
 
 extern __typeof__(save_camera_vectors) func_001EC7F0 __attribute__((alias("FUN_001ec7f0")));

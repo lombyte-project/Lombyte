@@ -5,20 +5,19 @@
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/globals.h"
 
 
 extern u128 spark_spawn_points_by_variant[][6] __asm__("D_001D9B60");
 
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 spawn_spark(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
 
 void emit_six_spark_effects(u8 *m, f32 z) __asm__("FUN_0022f5b0");
 
-extern f32 frame_time __asm__("D_0015ED6C") MACRO_ADDR;
 void emit_six_spark_effects(u8 *source_object, f32 z) {
     Vec4 randomized_spark_vector;
     Vec4 scalar_adjusted_spark_vector;

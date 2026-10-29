@@ -3,8 +3,8 @@
 #include "rnc/ui/map/map_state.h"
 #include "rnc/ui/map/level_map.h"
 #include "rnc/gameplay/state/level_state.h"
-extern s32 pal_mode __asm__("D_0015ED80");
-extern s32 game_frame_counter __asm__("D_0015F438");
+#include "rnc/globals.h"
+#include "rnc/gameplay/state/game_globals.h"
 extern s32 large_font_height __asm__("D_0015F690") __attribute__((sda));
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");

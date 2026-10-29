@@ -1,5 +1,6 @@
 /* Ported from rac1-decomp (src/game/vendor.c, func_0023B018). */
 #include "sda.h"
+#include "rnc/rendering/render_globals.h"
 typedef struct {
     int x;
     int y;
@@ -7,9 +8,7 @@ typedef struct {
     unsigned short w;
     unsigned short h;
 } ZoneBox;
-extern ZoneBox *occl_cell_table __asm__("D_00161194") MACRO_ADDR;
 extern char *D_00161190 MACRO_ADDR;
-extern int occl_cell_count __asm__("D_00161198") MACRO_ADDR;
 extern float D_001E66E0[];
 extern int truncate_float_to_s32(float) __asm__("func_001FA6D0");
 /* Index of the zone whose box (in 1/1024 units, 0x800 deep) holds the

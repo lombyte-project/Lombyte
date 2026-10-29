@@ -9,10 +9,9 @@ typedef struct __attribute__((packed)) {
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/gameplay/state/options.h"
 extern volatile u16 D_0013E05A[];
-extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern s32 D_0015EE24;
-extern s32 selected_save_slot __asm__("D_0015EE34");
 extern Unaligned64 D_0015EE98[1];
 extern s32 D_001D2640[];
 extern struct MenuPage D_001D4E38[];

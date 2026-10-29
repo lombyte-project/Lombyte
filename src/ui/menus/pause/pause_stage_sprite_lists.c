@@ -1,6 +1,6 @@
 #include "types.h"
+#include "rnc/gameplay/state/item_state.h"
 
-extern s32 pause_iop_sprite_lists[] __asm__("D_00141EA0");
 
 int pause_stage_sprite_lists(u32 *mode) __asm__("FUN_0021ca60");
 

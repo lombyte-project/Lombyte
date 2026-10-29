@@ -381,7 +381,6 @@ s32 map_filter_l07_7(s32 px, s32 py, f32 unused_input, f32 unused_parameter, f32
 }
 
 /* Ported from rac1-decomp (src/game/menu.c, func_00207CB0). */
-extern unsigned char menu_item_enabled_41 __asm__("D_0013D3BD") NOT_SDA;
 int map_filter_l08_0(int arg0, int arg1) __asm__("func_00207480");
 
 int map_filter_l08_0(int unused_input, int reveal_test_selector) {

@@ -1,13 +1,11 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c, func_00214550). */
 #include "sda.h"
 #include "qcopy.h"
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+#include "rnc/math/fast_math.h"
 extern float D_001CAA80[] NOT_SDA;
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern char coll_output[] __asm__("D_00194100");
 extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float min_float(float, float) __asm__("FUN_001f99d0");
 extern float max_float(float, float) __asm__("FUN_001f99c8");
 /* Shadow range probe: cast a ray down (8 units) from the moby position

@@ -1,5 +1,5 @@
+#include "rnc/gameplay/state/item_state.h"
 /* Ported from rac1-decomp (src/game/pause.c, func_0021D9C8). */
-extern int pause_iop_sprite_lists[] __asm__("D_00141EA0");
 typedef struct {
     char pad[0x30];
     int list[8]; /* 0x30 */

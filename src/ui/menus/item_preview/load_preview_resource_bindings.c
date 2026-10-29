@@ -3,9 +3,9 @@
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/storage/stash.h"
 
 extern u8 preview_resource_ids[] __asm__("D_001D5D38");
-extern s32 stash_get_reserved_qwords() __asm__("LookupResourceEntry");
 extern void relocate_asset_entry_pointers() __asm__("FUN_002032e0");
 extern s32 decompress_wad() __asm__("func_0020B618");
 extern s32 get_menu_stream_buffer_size() __asm__("func_00225D88");

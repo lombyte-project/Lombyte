@@ -1,11 +1,11 @@
 #include "types.h"
+#include "rnc/rendering/render_globals.h"
 struct RingBufferConfig {
     u8 pad_0[0x4];
     s32 unk4;
     s32 unk8;
 };
 
-extern s32 current_vu_chain __asm__("D_00160F0C");
 extern struct RingBufferConfig D_001940C0;
 s32 calculate_ring_buffer_bounds(u32 size, s32 *out_start, s32 *out_end) __asm__("FUN_001fd6e0");
 

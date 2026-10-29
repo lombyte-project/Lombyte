@@ -9,10 +9,9 @@
 
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/item_state.h"
-extern int pal_mode __asm__("D_0015ED80") __attribute__((sda));
-extern int current_level_index __asm__("D_0015ED84") __attribute__((sda));
+#include "rnc/globals.h"
+#include "rnc/ui/menus/menu_globals.h"
 extern int panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
-extern int menu_fade_duration __asm__("D_001601B4") __attribute__((sda));
 extern int text_shadow_x_gp __asm__("D_001601B8") __attribute__((sda));
 extern int text_shadow_y_gp __asm__("D_001601BC") __attribute__((sda));
 extern int text_vertical_inset __asm__("D_00160258") __attribute__((sda));
@@ -21,7 +20,6 @@ extern char empty_label_text[] __asm__("D_00160270");
 extern char unavailable_label_text[] __asm__("D_00160278");
 extern char label_format[] __asm__("D_00160280");
 extern char fallback_label_text[] __asm__("D_00160288");
-extern int selected_level_index[] __asm__("D_001A0314");
 
 extern void setup_gif_paging(int) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");

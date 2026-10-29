@@ -28,6 +28,7 @@ extern u8 map_cross_destination_page[] __asm__("D_001CF678");
 extern u8 map_circle_destination_page[] __asm__("D_001CF418");
 extern u8 D_0013D4E1[];
 #include "rnc/gameplay/state/level_state.h"
+#include "rnc/ui/menus/menu_globals.h"
 extern char D_00141EC0[];
 extern struct MapEntry D_001383A0[];
 extern struct MapEntry D_00138438[];
@@ -55,7 +56,6 @@ extern void allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 draw_map_screen(struct MenuScreen *screen) __asm__("FUN_0021be60");
 
-extern s32 *menu_level_indices __asm__("D_001601E0") __attribute__((sda));
 s32 draw_map_screen(struct MenuScreen *screen) {
     s32 previous_selected_level_id;
     s32 selected_level_table_index;

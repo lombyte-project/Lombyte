@@ -3,6 +3,7 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/math/fast_math.h"
 extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8"); /* dst = normalize(src) * len */
 extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
                                   void *axis) __asm__("func_001EC530");
@@ -31,6 +32,5 @@ void capture_camera_orientation(void) {
 
     qcopy(camera_transition_state + 0xB0, camera_transition_state + 0xD0);
 }
-extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8");
 
 extern __typeof__(capture_camera_orientation) func_001EC710 __attribute__((alias("FUN_001ec710")));

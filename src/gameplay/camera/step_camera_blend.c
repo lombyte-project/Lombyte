@@ -4,7 +4,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/camera/camera_globals.h"
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
+#include "rnc/math/fast_math.h"
+#include "rnc/globals.h"
 extern char D_00187080[];
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
@@ -20,7 +21,6 @@ extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
    Returns 1 once both are complete. */
 int step_camera_blend(void *to_blend, void *cam_blend) __asm__("FUN_001ecaf8");
 
-extern f32 frame_scale __asm__("D_0015ED60") MACRO_ADDR;
 int step_camera_blend(void *to_blend, void *cam_blend) {
     float *to = to_blend;
     float *camera_blend_state = cam_blend;
@@ -60,6 +60,5 @@ int step_camera_blend(void *to_blend, void *cam_blend) {
     }
     return 0;
 }
-extern void fast_vec_add(void *dst, void *a, void *b) __asm__("FUN_001f9a10");
 
 extern __typeof__(step_camera_blend) func_001ECAF8 __attribute__((alias("FUN_001ecaf8")));

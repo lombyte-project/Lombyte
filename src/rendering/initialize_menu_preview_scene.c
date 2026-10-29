@@ -39,9 +39,9 @@ extern u8 D_0019C160[];
 extern void quad_moby_update() __asm__("FUN_0023a2c0");
 extern struct S D_00186F40;
 #include "rnc/rendering/initialize_menu_preview_scene_globals.h"
+#include "rnc/math/fast_math.h"
 extern u8 menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
 extern u8 menu_preview_lighting_copy_source_gp __asm__("D_001601D0") __attribute__((sda));
-extern s32 fast_vec_scale(s32, s32, f32) __asm__("FUN_001f9a68");
 extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern s32 sceGsSyncV(s32);
 extern s32 initialize_menu_stream_buffers() __asm__("FUN_00225ac0");

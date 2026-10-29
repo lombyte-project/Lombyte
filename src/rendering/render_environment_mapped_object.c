@@ -29,9 +29,10 @@ typedef struct {
     float position_y;
 } EnvironmentCameraState;
 
-extern s32 ship_substate[] __asm__("D_0013E050");
 #include "rnc/rendering/render_environment_mapped_object_globals.h"
 #include "rnc/rendering/render_environment_mapped_object_globals.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 extern s32 environment_mapping_was_active_gp __asm__("D_001604A8") __attribute__((sda));
 extern s32 D_001604AC __attribute__((sda));
 extern s32 environment_mesh_colors[2] __asm__("D_00160520") __attribute__((sda));
@@ -41,7 +42,6 @@ extern Vec4 *environment_mesh_normals[2] __asm__("D_00160550") __attribute__((sd
 extern Vec4 *environment_mesh_positions[2] __asm__("D_00160560") __attribute__((sda));
 extern IndexedQuad *environment_mesh_quads[2] __asm__("D_00160570") __attribute__((sda));
 extern EnvironmentCameraState D_00186F40;
-extern FloatVector4 camera_position __asm__("D_00187080");
 extern Vec4 environment_mapping_transformed_vertex_positions[] __asm__("D_001DC4E0");
 extern float environment_mapping_vertex_uvs[][2] __asm__("D_001DCB40");
 extern float environment_mapping_saved_vertex_uvs[][2] __asm__("D_001DCE70");

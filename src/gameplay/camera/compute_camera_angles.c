@@ -1,9 +1,7 @@
 #include "types.h"
+#include "rnc/math/fast_math.h"
 
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern f32 fast_vec_dot(void *a, void *b) __asm__("func_001F9AB0");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 

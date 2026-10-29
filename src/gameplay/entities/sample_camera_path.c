@@ -3,6 +3,7 @@
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
+#include "rnc/math/fast_math.h"
 
 struct CameraPath {
     s32 count;
@@ -10,7 +11,6 @@ struct CameraPath {
     u128 points[1];
 };
 
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");

@@ -2,8 +2,6 @@
 #include "sda.h"
 #include "types.h"
 extern char D_0013D290[];
-extern int mc_gamedata[] __asm__("D_001A04C0");
-extern int mc_leveldata[] __asm__("D_001A07C0");
 extern int memcard_prepare_data(void *dst, int i, int *table) __asm__("func_0020AD78");
 extern void sceCdReadClock(void *);
 extern void sceScfGetLocalTimefromRTC(void *);
@@ -12,9 +10,10 @@ extern void save_map_coverage(void *) __asm__("func_00207B08");
 extern char D_0015EE98[] MACRO_ADDR;
 extern char D_00141EC0[];
 #include "rnc/gameplay/state/level_state.h"
+#include "rnc/storage/memory_card/mc_data.h"
+#include "rnc/globals.h"
 extern int D_0015EE24 MACRO_ADDR;
 extern int alternate_animation_sequence_macro __asm__("D_0015EE20") MACRO_ADDR;
-extern int mode_freeze_flags __asm__("D_0015EEB4") MACRO_ADDR;
 extern u8 D_0014EED0[];
 extern u8 D_001506D0[];
 /* memcard_save_data(slot, flags): starts the save (sceCdReadClock/sceScfGetLocalTimefromRTC
@@ -32,7 +31,6 @@ extern u8 D_001506D0[];
    D_0013D290 through its own `char *` local (retail keeps only the %hi). */
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 
-extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 extern s32 current_bolt_count_macro __asm__("D_0015ED98") MACRO_ADDR;
 int memcard_save_data(int slot, int flags) {
     unsigned char saved;

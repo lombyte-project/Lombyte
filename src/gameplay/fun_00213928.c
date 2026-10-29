@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/gameplay/hero.h"
+#include "rnc/math/fast_math.h"
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
 typedef union { u128_25a478 q; f32 f[4]; } V_25a478;
 typedef struct { u8 pad0[0xA6]; s16 hA6; } T_25a478;
@@ -36,10 +37,6 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) __asm__("FUN_00213928");

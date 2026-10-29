@@ -1,6 +1,6 @@
 #include "sda.h"
 #include "types.h"
-extern int pause_action_list_mode __asm__("D_0015EE90") MACRO_ADDR;
+#include "rnc/ui/menus/menu_globals.h"
 
 int set_pause_action_list(int *p) __asm__("FUN_0021a1b0");
 

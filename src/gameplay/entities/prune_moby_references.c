@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/state/game_globals.h"
 struct MobyRecord {
     u8 pad_0[0x20];
     u8 unk20;
@@ -6,7 +7,6 @@ struct MobyRecord {
     u8 unk52;
 };
 
-extern s32 moby_render_slots[] __asm__("D_001B2BC0");
 void prune_moby_references(void) __asm__("FUN_0020cc60");
 
 void prune_moby_references(void) {

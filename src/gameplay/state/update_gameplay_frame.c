@@ -4,6 +4,7 @@
 
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 typedef struct {
     f32 x, y, z, w;
@@ -43,9 +44,6 @@ typedef struct {
 } RenderSequenceState;
 
 extern RenderSequenceState render_sequence __asm__("D_0018CB20");
-extern f32 sequence __asm__("D_0015F43C");
-extern s32 intro_overlay_alpha __asm__("D_0015EF50");
-extern s32 language_intro_overlay_alpha __asm__("D_0015EF54");
 extern s32 intro_overlay_timer __asm__("D_0015EF58");
 extern void InitializeTransferCommand(void);
 extern void noop_callback_e(RenderSequenceActor *) __asm__("func_001E9410");

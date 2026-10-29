@@ -3,6 +3,7 @@
 #include "rnc/sdk/libgraph.h"
 #include "eetypes.h"
 #include "sda.h"
+#include "rnc/globals.h"
 
 typedef struct {
     u8 pad0[8];
@@ -27,7 +28,6 @@ typedef struct {
     s32 height_log2;
 } MipTextureUpload;
 
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 extern void fill_transfer_words(void *dst, s32 value, s32 size) __asm__("FUN_001f97e8");
 extern void FlushCache(s32);
 extern s32 sceGsSetDefLoadImage(sceGsLoadImage *, s16, s16, s16, s16, s16, s16, s16);

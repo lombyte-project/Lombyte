@@ -13,13 +13,13 @@ struct Menu {
 };
 #include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
+#include "rnc/math/fast_math.h"
 extern s32 D_001D2AF4[];
 extern u8 timed_menu_first_progress_string_ids[] __asm__("D_001D5098");
 extern u8 timed_menu_second_progress_string_ids[] __asm__("D_001D5148");
 extern u8 timed_menu_third_progress_string_ids[] __asm__("D_001D5208");
 u8 D_001D5298[] NOT_SDA = "9Q";
 extern u8 timed_menu_fifth_progress_string_ids[] __asm__("D_001D52B0");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 s32 update_timed_menu_sequence(struct Menu *menu) __asm__("FUN_002223f0");
 
 s32 update_timed_menu_sequence(struct Menu *menu) {

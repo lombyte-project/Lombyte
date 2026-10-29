@@ -3,6 +3,9 @@
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/state/options.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     u8 pad_0[0x20];
@@ -35,13 +38,10 @@ typedef struct {
     StreamedAnimationMoby *moby;
 } MobyAnimationStream;
 
-extern s16 cd_read_active[] __asm__("D_001516D8");
 extern s32 queued_dialogue_id[] __asm__("D_001516EC");
 extern s16 dialogue_playback_phase[] __asm__("D_0015172A");
-extern s32 alternate_animation_sequence __asm__("D_0015EE20");
 extern u8 animation_asset_read_active[] __asm__("D_001D5CBB");
 
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void relocate_asset_entry_pointers(StreamedClassResource *, s32) __asm__("FUN_002032e0");
 extern void decompress_wad(u8 *, u8 *) __asm__("FUN_0020b618");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");

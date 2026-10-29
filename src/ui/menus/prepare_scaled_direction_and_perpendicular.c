@@ -1,12 +1,11 @@
 #include "types.h"
 #include "sda.h"
 #include "eetypes.h"
+#include "rnc/math/fast_math.h"
 
 extern f32 D_00160370[] MACRO_ADDR;
 extern f32 D_00160380[] MACRO_ADDR;
 extern f32 D_00160390[] MACRO_ADDR;
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("FUN_001f9bf8");
 
 typedef union {
     u128 q;

@@ -14,6 +14,7 @@ typedef struct {
 } SubState;
 extern SubState render_sequence __asm__("D_0018CB20");
 #include "rnc/rendering/screen.h"
+#include "rnc/globals.h"
 extern void font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
                                 int a8);
 extern void font_print_window_regular(void *, long, char *, int) __asm__("func_001F7580");
@@ -30,7 +31,6 @@ extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
    bottom-first, which gives retail's registers. */
 void draw_subtitles(void) __asm__("FUN_001f4be0");
 
-extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
 void draw_subtitles(void) {
     Subtitle *subtitle;
     int lang;

@@ -4,6 +4,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/panel_slots.h"
+#include "rnc/gameplay/state/game_globals.h"
 
 /* Retail 0x002196b8..0x00219d77: draws the level-effect moby lists, then
    projects each enabled menu panel slot to the screen, renders panel
@@ -39,7 +40,6 @@ struct RenderPanel {
 };
 
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
-extern void *resident_object_pool __asm__("D_0015FF18");
 extern s32 panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");

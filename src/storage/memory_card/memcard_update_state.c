@@ -11,6 +11,9 @@ typedef struct {
 } McChunk;
 
 #include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/storage/memory_card/mc_data.h"
 extern char D_0013D1D0[];
 extern char D_0013D1E8[];
 extern char D_0013D200[];
@@ -19,12 +22,8 @@ extern char D_0013D240[];
 extern char D_0013D270[];
 extern u8 D_0014EED0[];
 extern u8 D_001506D0[];
-extern s16 cd_read_active[] __asm__("D_001516D8");
-extern s32 pause_action_list_mode __asm__("D_0015EE90");
 extern char memcard_delete_entry_path_format[] __asm__("D_0015FE98");
 extern char memcard_deleting_entry_message[] __asm__("D_0015FEA0");
-extern u32 mc_gamedata[] __asm__("D_001A04C0");
-extern u32 mc_leveldata[] __asm__("D_001A07C0");
 extern u8 D_001A0880[];
 extern char D_001A08A0[];
 extern char memcard_deleting_directory_message[] __asm__("D_001E81E8");

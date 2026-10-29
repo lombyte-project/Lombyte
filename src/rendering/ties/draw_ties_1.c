@@ -1,13 +1,13 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/rendering/render_globals.h"
 
 extern u8 D_00160F30[];
 extern u8 D_00160F40[];
 extern s32 D_00160F68;
 extern s32 D_0018A2C8[];
 extern u8 D_001DF030[];
-extern u8 tie_light_data[] __asm__("D_001E3200");
 extern s32 FlushCache();
 extern s32 WriteDmaChannel();
 extern s32 noop_core_callback() __asm__("func_001F21B0");

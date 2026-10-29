@@ -28,12 +28,12 @@ typedef struct {
 } TextEntry;
 
 #include "rnc/ui/help/help_record.h"
+#include "rnc/math/fast_math.h"
 
 
 extern TextEntry *help_msgs __asm__("D_0015F6A0");
 extern HelpState D_001996D0;
 
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 fast_dec_timer(void *) __asm__("func_001F9740");
 extern s32 find_help_message_index(s32 arg0) __asm__("FUN_001fdca0");
 extern void link_localized_display_text(void) __asm__("FUN_001fdd58");

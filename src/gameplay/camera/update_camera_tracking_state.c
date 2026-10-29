@@ -6,6 +6,7 @@
 #include "rnc/math/vector.h"
 
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/fast_math.h"
 
 struct CamColl {
     Vec4 pos;
@@ -34,11 +35,6 @@ extern struct CamColl cam_coll_state __asm__("D_001870D0");
 extern f32 cam_interp_values(f32 *vel, f32 from, f32 to, f32 stiffness, f32 damping,
                              f32 max) __asm__("FUN_001ebd78");
 extern float absolute_float(float input) __asm__("func_001F99C0");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern f32 fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 
 void update_camera_tracking_state(void) __asm__("FUN_001ed470");
 

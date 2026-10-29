@@ -3,6 +3,7 @@
 #include "rnc/ui/menus/menu_system.h"
 
 #include "rnc/gameplay/camera/update_cam.h"
+#include "rnc/globals.h"
 extern s32 D_0015F674 MACRO_ADDR;
 extern s32 D_00141660[];
 extern u8 D_0014161B NOT_SDA;
@@ -22,7 +23,6 @@ extern void update_skill_point_and_gold_weapon_menu_entries() __asm__("func_0022
 
 void pause_all_sounds(s32 mode) __asm__("FUN_00218d78");
 
-extern s32 current_level_index __asm__("D_0015ED84") MACRO_ADDR;
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
 void pause_all_sounds(s32 mode) {
     struct MenuSystem *g;

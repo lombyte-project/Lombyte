@@ -3,6 +3,7 @@
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/globals.h"
 
 typedef struct {
     u8 pad_0[0x20];
@@ -29,7 +30,6 @@ extern s32 sprintf(char *, const char *, ...);
 
 s32 draw_save_slot_list(SaveMenu *menu) __asm__("FUN_002239e0");
 
-extern s32 pal_mode __asm__("D_0015ED80") MACRO_ADDR;
 s32 draw_save_slot_list(SaveMenu *menu) {
     char text[0x50];
     struct MemoryCardSaveEntry *slot;

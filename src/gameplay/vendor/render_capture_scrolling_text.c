@@ -1,8 +1,8 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/ui/vendor/vendor_capture.h"
+#include "rnc/gameplay/state/game_globals.h"
 
-extern s32 game_frame_counter __asm__("D_0015F438") MACRO_ADDR;
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");

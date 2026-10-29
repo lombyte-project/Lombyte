@@ -10,10 +10,10 @@ struct Glyph {
     s8 advance;
 };
 
-extern s32 font_window_active __asm__("D_0015F4A0");
-extern s32 GlobalStateFlag __asm__("D_0015F49C");
 #include "rnc/ui/text/font_palette.h"
 #include "rnc/rendering/screen.h"
+#include "rnc/ui/text/font_state.h"
+#include "rnc/gameplay/state/game_globals.h"
 extern void vu1_set_scissor(s32, s32, s32, s32) __asm__("func_00233A40");
 extern s32 measure_text_width(u8 *, s32, struct Glyph *) __asm__("func_001F6200");
 extern void font_print(s32, s32, u64, u8 *, s32, s64, struct Glyph *) __asm__("FUN_001f62b0");

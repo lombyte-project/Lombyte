@@ -7,6 +7,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "qzero.h"
+#include "rnc/math/fast_math.h"
 
 typedef union {
     u128 q;
@@ -88,12 +89,6 @@ extern void snd_set_sound_params_cb() __asm__("FUN_0012e4c0");
 extern void snd_reset_state_and_flush_commands() __asm__("FUN_0012eb00");
 extern void snd_set_reverb_ex(s32, s32, s32, s32, s32) __asm__("FUN_0012ef68");
 extern void snd_auto_reverb(s32, s32, s32, s32) __asm__("FUN_0012efe0");
-extern void fast_vec_add(void *out, void *a, void *b) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *out, void *a, f32 scale) __asm__("FUN_001f9a68");
-extern f32 fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
-extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
-extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
 extern void transform_vector_by_basis(void *out, void *a, void *b) __asm__("FUN_001f9cf8");
 extern void transpose_rotation_matrix(void *out, void *a) __asm__("FUN_001fa2d8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");

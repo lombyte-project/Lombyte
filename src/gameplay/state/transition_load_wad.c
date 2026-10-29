@@ -97,18 +97,15 @@ typedef struct
   u8 padE[0x1A];
   void *x28;
 } MobyClass;
-extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern s64 D_0015EF48;
 extern s32 intro_overlay_timer __asm__("D_0015EF58");
 extern s32 help_msg_data __asm__("D_0015EF60");
 extern s32 help_offset_table __asm__("D_0015EF64");
-extern s32 level_texture_payload_address __asm__("D_0015F460");
 extern TextEntry *help_msgs __asm__("D_0015F6A0");
 extern s32 D_0015FF00;
 extern s32 D_0015FF08;
 extern s32 registered_shrub_render_class_count __asm__("D_001603CC");
 #include "rnc/gameplay/state/transition_load_wad_globals.h"
-extern s32 current_vu_chain __asm__("D_00160F0C");
 extern s32 registered_object_render_class_count __asm__("D_00160F4C");
 extern u8 boot_sound_defs_b[] __asm__("D_001861E0");
 extern u8 D_00186310[];
@@ -120,6 +117,7 @@ extern HelpState D_001996D0;
 extern s32 D_001B5980[];
 extern s32 D_001B6180[];
 #include "rnc/rendering/resident_class.h"
+#include "rnc/rendering/render_globals.h"
 extern s32 shrub_render_texture_lookup_table[] __asm__("D_001D84B0");
 extern s32 tfrag_texture_size_table[] __asm__("D_001E0900");
 extern s32 object_render_texture_lookup_table[] __asm__("D_001E2600");

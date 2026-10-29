@@ -1,7 +1,7 @@
 #include "types.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
-extern s32 world_update_time __asm__("D_0015F60C");
+#include "rnc/gameplay/state/game_globals.h"
 extern s32 num_spawnable_mobys __asm__("D_0015FEFC") MACRO_ADDR;
 extern struct Moby *moby_instance_end __asm__("D_0015FF1C");
 extern struct Moby *moby_instance_perm_end __asm__("D_0015FF20");

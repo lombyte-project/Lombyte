@@ -3,9 +3,9 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "types.h"
+#include "rnc/rendering/render_globals.h"
+#include "rnc/globals.h"
 extern int *gif_page_marker __asm__("D_0015F450") MACRO_ADDR;
-extern int effect_tex_cnt __asm__("D_0015F45C") MACRO_ADDR;
-extern s32 pending_texture_upload_count __asm__("D_0015F458");
 typedef struct {
     long unk0;
     long unk8;
@@ -29,8 +29,6 @@ static inline char *PagingArena(void) {
 void setup_gif_paging(int arg0) __asm__("FUN_001f4280");
 
 extern PageSlot effect_texture_definitions[] __asm__("D_0018D440");
-extern s32 gs_texture_allocation_start __asm__("D_0015EE78") MACRO_ADDR;
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 extern s32 gs_texture_allocation_base_macro __asm__("D_0015EE8C") MACRO_ADDR;
 void setup_gif_paging(int skip_paging_entry_reset) {
     int *packet_cursor = render_packet_cursor.words;

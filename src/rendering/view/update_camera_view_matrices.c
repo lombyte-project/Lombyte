@@ -8,8 +8,9 @@ struct G {
     f32 f[0x50];
 };
 extern struct G D_00186F40;
-extern char camera_rows[] __asm__("D_00187290");
 #include "rnc/gameplay/camera/update_cam.h"
+#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/math/fast_math.h"
 extern u8 D_0018CD00[];
 extern u8 sky_view_mtx[] __asm__("D_0018CF80");
 
@@ -19,7 +20,6 @@ extern void SceVu0RotMatrixY(void *, void *, f32);
 extern void sceVu0RotMatrixZ(void *, void *, f32);
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 
 void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 

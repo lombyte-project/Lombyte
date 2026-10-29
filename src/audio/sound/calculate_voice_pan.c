@@ -1,6 +1,6 @@
 #include "types.h"
+#include "rnc/math/fast_math.h"
 extern f32 D_00187080[4];
-extern void fast_vec_sub(f32 *, f32 *, f32 *) __asm__("FUN_001f9a28");
 extern void transform_vector(f32 *, f32 *, void *) __asm__("FUN_001f9d20");
 extern f32 vector_length_xy(f32 *) __asm__("FUN_001f9b20");
 extern f32 clamp_float(f32, f32, f32) __asm__("FUN_001f99e8");

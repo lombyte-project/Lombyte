@@ -2,16 +2,16 @@
 #include "sda.h"
 #include "rnc/gameplay/hero.h"
 #include "qcopy.h"
+#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/math/fast_math.h"
 extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8"); /* dst = normalize(src) * len */
 extern void compute_camera_angles(float *out, void *p0, void *p1, void *dir0, void *dir1,
                                   void *axis) __asm__("func_001EC530");
-extern char cam_trans_state[] __asm__("D_001871B0");
 extern void capture_camera_orientation(void) __asm__("func_001EC710");
 extern void save_camera_vectors(void) __asm__("func_001EC7F0");
 extern void restore_camera_vectors(void) __asm__("func_001EC868");
 extern short D_001871B0_h __asm__("D_001871B0") NOT_SDA;
 extern void extract_matrix_rotation_quaternion(void *, void *) __asm__("func_002144D8");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 /* Camera mode update from arg (its +0x30 vector is copied). In mode 1
    the sub-mode at +3 picks what is captured from it: 0 the +0x50/+0x60
@@ -82,6 +82,5 @@ void start_camera_blend(void *source_camera_transform) {
     }
 }
 extern float convert_integer_to_float(int arg0) __asm__("func_001FA6C0");
-extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8");
 
 extern __typeof__(start_camera_blend) func_001EC8A0 __attribute__((alias("FUN_001ec8a0")));

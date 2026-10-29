@@ -1,6 +1,6 @@
 #include "types.h"
+#include "rnc/audio/sound_state.h"
 extern s32 snd_cd_load_error __asm__("D_0015EC88") __attribute__((sda));
-extern s32 snd_cd_callback_pending __asm__("D_0015ECC8") __attribute__((sda));
 extern s32 snd_cd_callback_fn __asm__("D_0015ECD0") __attribute__((sda));
 extern s64 snd_cd_callback_data __asm__("D_0015ECD8");
 extern u32 snd_cd_callback_arg __asm__("D_0015ED00");
