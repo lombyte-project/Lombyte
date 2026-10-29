@@ -2742,9 +2742,9 @@ void suck_beam_update(void *moby, void *position) {
     } else if (((Hero41 *)&hero)->special == 1) {
         fast_vec_scale(&orient[0], &((M41 *)moby)->basis[1], -1.0f);
         {
-            M41 *m = moby;
-            qcopy_nc(&orient[1], &m->basis[0]);
-            qcopy_nc(&orient[2], &m->basis[2]);
+            M41 *orientation_source_moby = moby;
+            qcopy_nc(&orient[1], &orientation_source_moby->basis[0]);
+            qcopy_nc(&orient[2], &orientation_source_moby->basis[2]);
         }
         orientation = &orient[0];
     } else {
@@ -2839,9 +2839,9 @@ void suck_beam_update(void *moby, void *position) {
             fast_vec_normalize(&tmp_d, &motion, D_L00_00161B84);
             lerp_vector(&motion, &motion, &tmp_d, 1.0f);
             {
-                float len = fast_vec_length(&motion);
-                if (len > 2.0f)
-                    fast_vec_scale(&motion, &motion, 2.0f / len);
+                float beam_motion_length = fast_vec_length(&motion);
+                if (beam_motion_length > 2.0f)
+                    fast_vec_scale(&motion, &motion, 2.0f / beam_motion_length);
             }
             if (i >= 6)
                 lerp_vector(
