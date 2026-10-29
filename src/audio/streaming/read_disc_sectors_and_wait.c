@@ -12,9 +12,9 @@ extern s32 sceGsSyncV();
 s32 read_disc_sectors_and_wait(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
 
 s32 read_disc_sectors_and_wait(s32 cd_read_destination, s32 sector, s32 sector_count) {
-    s32 result = start_audio_stream_read(cd_read_destination, sector, sector_count);
+    s32 read_byte_count = start_audio_stream_read(cd_read_destination, sector, sector_count);
 
-    if (result != 0 && music_stream_state.read_state != 0) {
+    if (read_byte_count != 0 && music_stream_state.read_state != 0) {
         do {
             sceGsSyncV(0);
             music_update();
@@ -23,7 +23,7 @@ s32 read_disc_sectors_and_wait(s32 cd_read_destination, s32 sector, s32 sector_c
             snd_hold_command_batches();
         } while (music_stream_state.read_state != 0);
     }
-    return result;
+    return read_byte_count;
 }
 
 extern s32 func_00216828(s32 dst, s32 sector, s32 sector_count)
