@@ -671,7 +671,7 @@ void set_follow_camera_control_word(int value) {
 /* Update the active object's coordinates without replacing zero fields. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002F79D0), where it is exact; names translated to the US level program. */
 
-extern char *D_L02_00167400_d __asm__("D_L02_00167400") __attribute__((section(".data")));
+extern char *D_L02_00167400_d __asm__("D_L02_00167400") NOT_SDA;
 
 void set_nonzero_follow_camera_parameters(float x, float y, float z) __asm__("FUN_L02_002f6598");
 
@@ -734,7 +734,7 @@ void initialize_camera_offset_effect_state(void) {
 /* Start the timed effect while its duration is nonzero. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
 
-extern float D_L02_0016760C __attribute__((section(".data")));
+extern float D_L02_0016760C NOT_SDA;
 extern void register_camera_update_callback(void (*)(void)) __asm__("FUN_L02_001fc008");
 void update_camera_offset_effect_state(void) __asm__("FUN_L02_002fa770");
 
@@ -826,7 +826,7 @@ void try_select_camera_offset_effect_moby(char *candidate_moby) {
     }
 }
 extern char *D_L02_0015EF50;
-extern char *D_L02_001674DC __attribute__((section(".data")));
+extern char *D_L02_001674DC NOT_SDA;
 extern float FUN_001f9b48(void *, void *);
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
@@ -887,8 +887,8 @@ rejected:
 /* Checks whether the target's direction is within a and b degrees of the reference axis. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FCBC0), where it is exact; names translated to the US level program. */
 
-extern char D_L02_00167410[] __attribute__((section(".data")));
-extern char D_L02_00167280[] __attribute__((section(".data")));
+extern char D_L02_00167410[] NOT_SDA;
+extern char D_L02_00167280[] NOT_SDA;
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_001f99c0(float);
@@ -953,7 +953,7 @@ int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_
 
 extern int D_L02_0015FFD8;
 extern int D_L02_001ABE40[];
-extern struct Hero hero_lui __asm__("D_0013F350") __attribute__((section(".data")));
+extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 extern void clear_follow_camera_volume_if_current(char *) __asm__("FUN_L00_002e8388");
 extern int try_select_follow_camera_volume(char *) __asm__("FUN_L00_002e83c0");
 extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
@@ -1198,7 +1198,6 @@ void apply_moby_camera_control(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FD6D0), where it is exact; names translated to the US level program. */
 
-extern char *D_L02_0015EF50;
 extern char *D_L02_00167400_lui __asm__("D_L02_00167400") NOT_SDA;
 
 int update_moby_camera_control(char *moby) __asm__("FUN_L02_002fc298");

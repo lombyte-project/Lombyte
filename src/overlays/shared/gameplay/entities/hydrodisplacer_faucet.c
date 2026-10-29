@@ -279,8 +279,8 @@ extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("
 extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 extern int frame_number_gp __asm__("D_L05_0015F5CC") __attribute__((sda));
-extern unsigned short D_00141938 __attribute__((section(".data")));
-extern unsigned short D_00141C60 __attribute__((section(".data")));
+extern unsigned short D_00141938 NOT_SDA;
+extern unsigned short D_00141C60 NOT_SDA;
 extern int D_L05_0015F6A8;
 #include "rnc/overlay/shared/gameplay/entities/hydrodisplacer_faucet_data/hoverboard_update.h"
 extern int D_L05_0016190C __attribute__((sda));
@@ -385,7 +385,6 @@ extern int fast_dec_timer(int *) __asm__("func_001F9740");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 
@@ -458,7 +457,6 @@ void add_moby_frames_for_group_proximity(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0030D500), where it is exact; names translated to the US level program. */
 
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 void draw_moby_wobble_quads(struct Moby *moby) __asm__("FUN_L05_0030c220");
@@ -621,7 +619,7 @@ typedef struct {
 } SaveFlags;
 extern SaveFlags D_L05_001BB6B0;
 extern SaveFlags D_L05_001BAA50_s __asm__("D_L05_001BAA50");
-extern unsigned char D_L05_0015FC88[] __attribute__((section(".sdata")));
+extern unsigned char D_L05_0015FC88[] MACRO_ADDR;
 extern char *D_L05_001B0930[];
 extern u8 D_0014C050[];
 extern f32 random_angle_radians(void) __asm__("FUN_00213308");
@@ -773,7 +771,6 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
@@ -986,7 +983,6 @@ void apply_moby_position_and_rotation_wobble(char *moby) {
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
 
-extern char *D_L05_001B0930[];
 extern char moby_vector_table_local_vectors[] __asm__("D_L05_00215C00");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 

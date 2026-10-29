@@ -2702,7 +2702,7 @@ extern void build_look_at_matrix(void *, void *, void *, float);
 extern void spawn_two_point_effect_particle(void *, void *) __asm__("FUN_L00_0026c6e8");
 extern void mine_camera_blast(int, void *, int, int) __asm__("FUN_L00_002d3838");
 extern char l14_minibomber_bomb_release_blast_template[] __asm__("D_L14_001D88D0");
-extern float D_L14_0015F580_x[] __asm__("D_L14_0015F580") MACRO_ADDR;
+extern float D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 extern PuffParticle *spawn_puff(void *, float, float, float, int, void *, float,
                                 int) __asm__("FUN_L00_0026d000");
 
@@ -2740,7 +2740,7 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
         low_color = (color << 8) | 0x7f000000;
         high_color = color << 16;
         packed_color = color | (high_color | low_color);
-        part = spawn_puff(effect_spawn_position, 0.2f, 1.0f, 1.01f, signed_puff_random_value, D_L14_0015F580_x, puff_size, packed_color);
+        part = spawn_puff(effect_spawn_position, 0.2f, 1.0f, 1.01f, signed_puff_random_value, D_L14_0015F580_macro, puff_size, packed_color);
         if (part) {
             tail = &part->tail;
             part->life = scale_game_frames(120);
@@ -2870,7 +2870,7 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
         PuffParticle *part;
         PuffParticleTail *tail;
         signed_puff_value = random_integer_below(0x10);
-        part = spawn_puff(pos, 0.2f, 1.0f, 0.75f, random_integer_below(2) == 0 ? signed_puff_value : -signed_puff_value, D_L14_0015F580_x,
+        part = spawn_puff(pos, 0.2f, 1.0f, 0.75f, random_integer_below(2) == 0 ? signed_puff_value : -signed_puff_value, D_L14_0015F580_macro,
                           160000.0f, 0x7F3030FF);
         if (part) {
             tail = &part->tail;
@@ -2888,7 +2888,7 @@ void emit_minibomber_exhaust_puffs(struct Moby *moby) {
     for (j = 0; j < 3; j++) {
         PuffParticle *part;
         PuffParticleTail *tail;
-        part = spawn_puff(pos, 0.05f, 1.0f, 1.0f, signed_puff_value, D_L14_0015F580_x, size, 0x7FFFFFFF);
+        part = spawn_puff(pos, 0.05f, 1.0f, 1.0f, signed_puff_value, D_L14_0015F580_macro, size, 0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
             part->life = life;

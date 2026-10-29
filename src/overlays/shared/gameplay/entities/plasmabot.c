@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 
 
@@ -124,7 +125,7 @@ void update_plasmabot_aim_joint_rotation(char *moby, float x) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4AE0), where it is exact; names translated to the US level program. */
 
-extern char *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") __attribute__((section(".sdata")));
+extern char *D_L14_ffd0_e_macro[] __asm__("D_L14_0015FFD0") MACRO_ADDR;
 extern short *D_L14_001ABF40[];
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/fun_l14_002b3890.h"
 
@@ -715,8 +716,8 @@ typedef struct {
     ParticleFade fade; /* 0x20 */
 } Particle;
 
-extern Vec4 D_L14_001674C0 __attribute__((section(".data")));
-extern u8 D_L14_0015F580[] __attribute__((section(".sdata")));
+extern Vec4 D_L14_001674C0 NOT_SDA;
+extern u8 D_L14_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_plasmabot_visual_effects.h"
 
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
@@ -800,8 +801,8 @@ typedef union {
     s32 i[4];
 } Vec4_2b2928;
 
-extern Vec4_2b2928 D_L14_001D8850_lui[] __asm__("D_L14_001D8850") __attribute__((section(".data")));
-extern char D_0013F5E0[] __attribute__((section(".data")));
+extern Vec4_2b2928 D_L14_001D8850_lui[] __asm__("D_L14_001D8850") NOT_SDA;
+extern char D_0013F5E0[] NOT_SDA;
 extern float D_L14_001614AC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614BC __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_001614C0 __attribute__((sda)); /* no foreign declaration */
@@ -1371,7 +1372,7 @@ extern float D_0015ED60;
 #define DE670_THRESHOLD D_L14_00161B20
 #define DE670_DAMPING D_L14_00161B1C
 #define DE670_GRAVITY D_L14_00161B18
-extern void *D_001413D0_de670 __asm__("D_001413D0") __attribute__((section(".data")));
+extern void *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern void FUN_L14_002dec40(struct Moby *);
 extern void add_draw_callback(void (*)(struct Moby *), struct Moby *) __asm__("FUN_001f4600");
 extern f32 fast_add_rotations(f32, f32);
@@ -1431,7 +1432,7 @@ void update_spinning_moby_with_particle_trail(struct Moby *moby) {
     if (fast_dec_timer(velocity + 8) != 0 || coll_sphere(0.5f, &moby->pos, 0, *(void **)(velocity + 9)) != 0) {
         spawn_explosion(moby, velocity, &moby->pos, 0.0f, 0.0f, 5, 2, 4,
                             1.0f, 0.5f, 9.0f, 1.0f, 0, 15.0f, 1, 5, -1, 0);
-        coll_sphere(1.0f, &moby->pos, 0, D_001413D0_de670);
+        coll_sphere(1.0f, &moby->pos, 0, D_001413D0_lui);
         mark_moby_for_removal(moby);
         return;
     }
@@ -1504,7 +1505,7 @@ unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
     return spawned_moby;
 }
 extern void emit_debris_trail_particles(struct Moby *) __asm__("FUN_L14_002e03b8");
-extern s32 D_001413D0_dfd10 __asm__("D_001413D0") __attribute__((section(".data")));
+extern s32 D_001413D0_dfd10 __asm__("D_001413D0") NOT_SDA;
 extern s32 tick_countdown_dfd10(s32 *) __asm__("FUN_001f9740");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void spawn_explosion_dfd10(struct Moby *, void *, void *, f32, f32, s32, s32, s32,
@@ -1829,7 +1830,7 @@ void emit_debris_trail_particles(Moby *moby) {
 }
 /* Exhaust puffs from the moby's nozzle: two coloured sparks and three white puffs of shrinking size. */
 extern P_eca8 *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
-extern float D_L14_0015F580_y[] __asm__("D_L14_0015F580") __attribute__((section(".sdata")));
+extern float D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 
 
 extern float particle_pair_moby_c0_offset_scale_gp __asm__("D_L14_00161FCC") __attribute__((sda));
@@ -1855,7 +1856,7 @@ void emit_moby_offset_particles(unsigned char *moby) {
         P_eca8 *part;
         T_eca8 *tail;
         signed_particle_variation = random_integer_below(0x10);
-        part = spawn_puff(particle_spawn_position, 0.2f, 1.0f, 0.9f, random_integer_below(2) == 0 ? signed_particle_variation : -signed_particle_variation, D_L14_0015F580_y, 100000.0f, particle_pair_color_gp);
+        part = spawn_puff(particle_spawn_position, 0.2f, 1.0f, 0.9f, random_integer_below(2) == 0 ? signed_particle_variation : -signed_particle_variation, D_L14_0015F580_macro, 100000.0f, particle_pair_color_gp);
         if (part) {
             tail = &part->tail;
             part->hA = scale_game_frames(0xC);
@@ -1874,7 +1875,7 @@ void emit_moby_offset_particles(unsigned char *moby) {
     for (j = 0; j < 3; j++) {
         P_eca8 *part;
         T_eca8 *tail;
-        part = spawn_puff(particle_spawn_position, 0.05f, 1.0f, 1.0f, signed_particle_variation, D_L14_0015F580_y, size, 0x7FFFFFFF);
+        part = spawn_puff(particle_spawn_position, 0.05f, 1.0f, 1.0f, signed_particle_variation, D_L14_0015F580_macro, size, 0x7FFFFFFF);
         if (part) {
             tail = &part->tail;
             part->hA = life;

@@ -427,7 +427,6 @@ extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void lift_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int lift_sound(int, int, void *) __asm__("FUN_0022da68");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern int fast_dec_timer_s16(short *) __asm__("FUN_001f9770");
@@ -674,7 +673,6 @@ void update_wind_control(struct Moby *wind_control_moby) {
 #include "qcopy.h"
 extern struct { char pad[0x30]; float v[4]; char rest[0x40]; } *D_L14_001600EC_k __asm__("D_L14_001600EC");
 extern float D_0015ED6C_k __asm__("D_0015ED6C");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void add_k(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int ftoi_k(float) __asm__("FUN_001fa6d0");
@@ -1162,9 +1160,8 @@ void update_flying_bolt(struct Moby *projectile_moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EE6E0), where it is exact; names translated to the US level program. */
 
 extern char D_0013D24D[];
-extern float D_L14_00161CC0[] __attribute__((section(".sdata")));
+extern float D_L14_00161CC0[] MACRO_ADDR;
 extern float D_L14_00161CD0[];
-extern float FUN_L00_00257c48(float, float);
 extern int D_L14_0015F5C4;
 extern int fast_bsphere_check(void *, float) __asm__("FUN_001fa728");
 extern int tick_countdown_32_alt(void *) __asm__("FUN_001f9740");
@@ -1256,7 +1253,7 @@ extern s32 lightning_arc_lifetime_range_start_gp __asm__("D_L14_00161C98") __att
 extern s32 lightning_arc_lifetime_range_end_gp __asm__("D_L14_00161C9C") __attribute__((sda));
 extern u8 D_L14_00161CE0_d530 __asm__("D_L14_00161CE0");
 extern char *lightning_arc_owner_moby __asm__("D_L14_00161CE8");
-extern s32 D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") __attribute__((section(".sdata")));
+extern s32 D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") MACRO_ADDR;
 f32 lightning_main_arc_points[40][4] __asm__("D_L14_001DFD80") = {0};
 extern s16 D_L14_001E0000[40];
 f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050") = {0};
@@ -1264,9 +1261,7 @@ u16 D_L14_001E0350_d530[3][16] __asm__("D_L14_001E0350") = {0};
 extern int arc_ftoi(float) __asm__("FUN_001fa6d0");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern int FUN_L00_00257b90_d530(int, int) __asm__("FUN_L00_00257b90");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int arc_tick(void *) __asm__("FUN_001f9740");
 extern void allocate_voice_for_group_entry(int, int, void *) __asm__("FUN_0022dba0");
 extern void arc_enqueue(void (*)(char *), char *) __asm__("FUN_001f4600");
@@ -1274,7 +1269,7 @@ void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spaw
 
 void spawn_lightning_arc_particle_pairs(float *pos, int n) __asm__("FUN_L14_002ee6b0");
 void draw_branched_lightning_arc() __asm__("FUN_L14_002edc18");
-extern float D_L14_00161CD0_d530[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
+extern float D_L14_00161CD0_macro[] __asm__("D_L14_00161CD0") MACRO_ADDR;
 
 extern float lightning_main_arc_penultimate_point[] __asm__("D_L14_001DFFE0");
 /* Lightning arc between the two camera points: builds the bolt and its three branches once, then ages and fades them. */
@@ -1299,7 +1294,7 @@ void update_branched_lightning_arc(char *moby) {
         i = 0;
         starts = D_L14_00161CF8_macro;
         *(int *)&lightning_arc_alpha_pulse_sweep_gp = 0;
-        fast_vec_sub(&delta, D_L14_00161CD0_d530, D_L14_00161CC0);
+        fast_vec_sub(&delta, D_L14_00161CD0_macro, D_L14_00161CC0);
         arc_endpoint_distance = fast_vec_length(&delta);
         lightning_main_arc_point_spacing_gp = arc_endpoint_distance / convert_integer_to_float(40);
         D_L14_00161CE0_d530 = 0;
@@ -1428,23 +1423,16 @@ typedef struct {
 
 extern V_2EF078 D_L14_001DFD80[];
 extern V_2EF078 D_L14_001E0050[];
-extern char D_L14_001674C0[];
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float D_L14_00161CD0_c[] __asm__("D_L14_00161CD0") __attribute__((section(".sdata")));
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
+extern float D_L14_00161CD0_c[] __asm__("D_L14_00161CD0") MACRO_ADDR;
 extern int D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
 #include "rnc/overlay/l14/gameplay/entities/jet_data/draw_branched_lightning_arc.h"
 extern float D_L14_00161C88 __attribute__((sda));
-extern int D_L14_00161CF8_macro[]  __asm__("D_L14_00161CF8")__attribute__((section(".sdata")));
+extern int D_L14_00161CF8_macro[]  __asm__("D_L14_00161CF8")MACRO_ADDR;
 extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern s16 D_L14_001E0000[];
 extern short D_L14_001E0350[];
-extern unsigned char D_L14_00161CE0[] __attribute__((section(".sdata")));
+extern unsigned char D_L14_00161CE0[] MACRO_ADDR;
 extern void fast_mem_copy(void *dst, void *src, s32 size) __asm__("func_001F98D0");
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
-extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void draw_branched_lightning_arc(void) {
@@ -1690,7 +1678,6 @@ extern int vendor_inside(void *, int) __asm__("FUN_00214720");
 extern int vendor_sound(int, int, void *) __asm__("FUN_0022da68");
 extern void vendor_volume(s32 voice, s32 volume) __asm__("FUN_L01_002a1968");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int vendor_ftoi(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern float vendor_spring(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
@@ -1943,7 +1930,6 @@ void initialize_elevator_path_state(struct Moby *moby) {
 extern char *D_L14_001B0BB0_c3[] __asm__("D_L14_001B0BB0");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
-extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern int sample_path() __asm__("FUN_L00_0025d808");
 extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");
@@ -2113,12 +2099,9 @@ void rebuild_elevator_world_path(u8 *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002F0B78), where it is exact; names translated to the US level program. */
 
 extern float absolute_float(float) __asm__("func_001F99C0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_sin(float);
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int truncate_float_to_s32();
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_elevator_idle_glow(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -2173,23 +2156,17 @@ extern struct L14TaxiStop *D_L14_001600EC_taxi __asm__("D_L14_001600EC");
 extern s32 D_L14_0015F5CC;
 extern s32 D_L14_0015F594;
 extern char D_0013CAE4[];
-extern char D_0013E550[];
 extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
-extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void update_entity_matrix(void *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void taxi_sample(float, s32 *, int, void *, void *, int) __asm__("FUN_00214e58");
 extern int taxi_inside(void *, int) __asm__("FUN_00214720");
 extern int taxi_sound(int, int, void *) __asm__("FUN_0022da68");
@@ -2443,7 +2420,6 @@ void taxi_update(struct Moby *moby) {
     fast_vec_sub(position_delta, &moby->pos, previous_position);
     update_entity_matrix(taxi_vars->spring, position_delta, previous_rotation, &moby->rot);
 }
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 struct L14PathPoint {
     char pad0[0x30];
     float pos[4];
@@ -2481,7 +2457,6 @@ void initialize_taxi_stop_from_position(struct Moby *moby) {
 /* Picks the path for the current point and sets the travel speeds; same source as FUN_L16_002e4a58 with five points. */
 extern char *D_L14_001B0BB0_c2[] __asm__("D_L14_001B0BB0");
 extern float D_0015ED6C_u __asm__("D_0015ED6C");
-extern float FUN_001f9b48(void *, void *);
 
 void prepare_taxi_route(struct Moby *moby) {
     char *taxi_vars = (char *)moby->pvars;
@@ -2576,7 +2551,6 @@ void request_taxi_stop_prompt(struct Moby *moby) {
         break;
     }
 }
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 #include "sda.h"
 extern unsigned char D_0015EDB0;
@@ -2639,14 +2613,10 @@ typedef struct {
 } L14Player;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
 extern int FUN_00214720_c(void *, int) __asm__("FUN_00214720");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_0025a120(void *);
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
@@ -2655,13 +2625,9 @@ typedef struct {
     u8 collected[1];
 } L14LevelState;
 extern L14LevelState D_L14_001BB930;
-extern int D_0015ED84_m __asm__("D_0015ED84");
-extern int D_L14_001BABD0[];
 extern char captain_qwark_name[] __asm__("D_L14_00161F20");
-extern char D_L14_001674C0[];
 extern char *D_L14_001600EC;
 extern unsigned char *D_L14_0015FFD8;
-extern int D_L14_0015F5C4;
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
@@ -2827,15 +2793,12 @@ void advance_enemy_fighter_along_flight_path(struct Moby *moby) __asm__("FUN_L14
 
 extern void advance_enemy_fighter_along_flight_path(struct Moby *) __asm__("FUN_L14_002fc9a0");
 extern void spawn_enemy_fighter_exhaust(struct Moby *) __asm__("FUN_L14_002fc3e8");
-extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void cart_remove(struct Moby *) __asm__("FUN_0020c828");
 extern int cart_tick(void *) __asm__("FUN_001f9740");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int cart_voice_alive(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
 extern int cart_sound(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern struct { char pad[0x18]; unsigned char flag; } D_0013D408;
 extern s32 enemy_fighter_respawn_delay_frames_gp __asm__("D_L14_00161F5C") __attribute__((sda));
-extern char D_0013E550[];
 char D_L14_001FCE10[] = "Enemy Fighter (moby908) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FCE48[] = "Enemy Fighter (moby908) with a flyPath that has no points. UID: %d - RAR\n";
 extern char *D_L14_001B0BB0_cart[] __asm__("D_L14_001B0BB0");
@@ -2958,9 +2921,8 @@ typedef struct {
 } L14Puff;
 
 #include "rnc/overlay/l14/gameplay/entities/jet_data/spawn_enemy_fighter_exhaust.h"
-extern char D_L14_0015F580[] __attribute__((section(".sdata")));
+extern char D_L14_0015F580[] MACRO_ADDR;
 extern void exhaust_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int exhaust_ftoi(float) __asm__("FUN_001fa6d0");
 extern L14Puff *spawn_puff(void *, f32, f32, f32, int, void *, f32, int) __asm__("FUN_L00_0026d000");
 
@@ -3056,7 +3018,6 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002FDD18), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_001B0BB0_c[] __asm__("D_L14_001B0BB0");
-extern float FUN_001f9b48(void *, void *);
 
 void initialize_flight_path_state(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -3127,10 +3088,8 @@ struct L14TramLevel {
     u8 collected[1];
 };
 extern struct L14TramLevel D_L14_001BB930_t __asm__("D_L14_001BB930");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int tram_inside(void *, int) __asm__("FUN_00214720");
 extern int tram_sound(int, int, void *) __asm__("FUN_0022da68");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern unsigned char D_0013D408_t[] __asm__("D_0013D408");
 extern char enemy_fighter_921_missing_flight_path_error_format[] __asm__("D_L14_001FCE98");
 extern char enemy_fighter_921_empty_flight_path_error_format[] __asm__("D_L14_001FCED0");
@@ -3142,7 +3101,6 @@ extern void *tram_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void tram_remove(void *) __asm__("FUN_0020c828");
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int tram_tick(void *) __asm__("FUN_001f9740");
 extern void tram_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
@@ -3333,7 +3291,6 @@ extern f32 moby_exhaust_base_row2_offset_gp __asm__("D_L14_00161F68") __attribut
 extern f32 moby_exhaust_ring_row0_offset_gp __asm__("D_L14_00161F6C") __attribute__((sda));
 extern f32 moby_exhaust_grey_puff_row0_offset_gp __asm__("D_L14_00161F70") __attribute__((sda));
 #include "rnc/overlay/l14/gameplay/entities/jet_data/spawn_moby_exhaust_puffs.h"
-extern int FUN_L00_00257b90(int, int);
 
 /* Exhaust of the second engine moby: puffs and rings on both sides plus a grey puff in the middle. */
 void spawn_moby_exhaust_puffs(struct Moby *moby) {
@@ -3444,22 +3401,15 @@ void spawn_moby_exhaust_puffs(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002FEDA0), where it is exact; names translated to the US level program. */
 
-extern u8 *D_L14_00167500 __attribute__((section(".data")));
-extern char D_0013E550[];
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
+extern u8 *D_L14_00167500 NOT_SDA;
 extern float D_0015ED6C_f2 __asm__("D_0015ED6C");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 extern float vector_length_xy(void *);
-extern int sample_path() __asm__("FUN_L00_0025d808");
 extern float flight_path_spring_strength_gp __asm__("D_L14_00161F7C") __attribute__((sda));
 extern float flight_path_spring_damping_gp __asm__("D_L14_00161F80") __attribute__((sda));
 extern float D_L14_00161F84 __attribute__((sda));
 extern float flight_path_bank_yaw_error_scale_gp __asm__("D_L14_00161F88") __attribute__((sda));
 extern float flight_path_step_rate_gp __asm__("D_L14_00161F78") __attribute__((sda));
-extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 float absolute_float(float input) __asm__("func_001F99C0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
@@ -3528,7 +3478,6 @@ extern f32 rocket_travel_speed_gp __asm__("D_L14_00161FA8") __attribute__((sda))
 extern f32 rocket_steering_blend_fraction_gp __asm__("D_L14_00161FAC") __attribute__((sda));
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void spawn_moby_offset_puffs(struct Moby *) __asm__("FUN_L14_002fded0");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 

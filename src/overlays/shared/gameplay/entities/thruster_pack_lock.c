@@ -426,7 +426,7 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
 }
 extern unsigned char linked_moby_trail_long_span_enabled __asm__("D_0015EDB2");
 extern float trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
-extern short D_L11_001623F0_d __asm__("D_L11_001623F0") __attribute__((sda));
+extern short D_L11_001623F0_gp __asm__("D_L11_001623F0") __attribute__((sda));
 extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
@@ -459,9 +459,9 @@ int draw_linked_moby_trails(char *moby) {
         return;
     }
     if (linked_moby_trail_long_span_enabled != 0) {
-        *(float *)&D_L11_001623F0_d = 16.0f;
+        *(float *)&D_L11_001623F0_gp = 16.0f;
     } else {
-        *(float *)&D_L11_001623F0_d = 5.0f;
+        *(float *)&D_L11_001623F0_gp = 5.0f;
     }
 
     for (i = 0; i < 16; i++) {
@@ -471,12 +471,12 @@ int draw_linked_moby_trails(char *moby) {
         quad->packet[2] = 0xFF9000000260L;
         quad->packet[0] = 0;
         quad->packet[3] = 0x8000000048L;
-        base = convert_integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_d * 4.0f);
+        base = convert_integer_to_float((level_frame + 3) & 3) / (*(float *)&D_L11_001623F0_gp * 4.0f);
         for (j = 0; j < 4; j++) {
             half = (j >> 1) - 1;
             quads[i].texture_coordinates[j][0] = ((float (*)[2])trail_quad_texture_coordinates)[j][0];
             quads[i].texture_coordinates[j][1] = ((float (*)[2])trail_quad_texture_coordinates)[j][1];
-            blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_d + base;
+            blend = convert_integer_to_float(i - half) / *(float *)&D_L11_001623F0_gp + base;
             if (1.0f < blend) {
                 blend = 1.0f;
             } else if (blend < 0.0f) {
@@ -554,7 +554,7 @@ void update_moby_trail_points(char *moby) {
     int current_frame;
     if ((level_frame & 3) == 0) {
         int trail_segment_count;
-        float trail_segment_limit = *(float *)&D_L11_001623F0_d;
+        float trail_segment_limit = *(float *)&D_L11_001623F0_gp;
         trail_segment_count = *(int *)(trail_data + 0x2C0);
         *(int *)(trail_data + 0x2C4) = (*(int *)(trail_data + 0x2C4) + 1) % 16;
         if ((float)trail_segment_count < trail_segment_limit) {

@@ -608,7 +608,7 @@ extern float D_0015EE6C_u,
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
 extern s32 D_L16_0015F594;
-extern unsigned char D_0013D4E1 __attribute__((section(".data")));
+extern unsigned char D_0013D4E1 NOT_SDA;
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
@@ -915,11 +915,11 @@ extern void FUN_0022da68_q(int, int, void *) __asm__("FUN_0022da68");
 extern int tick_countdown_32_q(void *) __asm__("FUN_001f9740");
 extern int func_0022ED80_66C0_q(int, int, void *) __asm__("FUN_0022da68");
 
-extern float D_L16_001D9768[] __attribute__((section(".data")));
+extern float D_L16_001D9768[] NOT_SDA;
 int D_L16_00161DE4 = 600;
 int D_L16_00161DE8 = 0x80202020;
 int D_L16_00161DEC = 0x80808080;
-extern char D_0013F3D0[] __attribute__((section(".data")));
+extern char D_0013F3D0[] NOT_SDA;
 void update_local_bounds_command_trigger(struct Moby *trigger_moby) __asm__("FUN_L16_002e5258");
 
 void update_local_bounds_command_trigger(struct Moby *trigger_moby) {
@@ -982,7 +982,6 @@ typedef struct {
     unsigned char active;
 } Level16VendorTurnMoby;
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int tick_countdown_32(int *) __asm__("FUN_001f9740");
@@ -1080,18 +1079,14 @@ typedef struct {
 } Obj;
 
 extern char D_L16_001671C0[];
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float move_chomper_toward_position(void *, void *) __asm__("FUN_L16_002e6428");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern s32 rand();
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern void FUN_L00_00257470(void *, int, int);
 extern void collect_mobies_in_sphere_at_moby_point(void *, int, int, float, float, float, int, int, int) __asm__("FUN_L00_002599e8");
 extern void FUN_L00_0025a120(void *);
-extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 void update_chomper_hit_reaction_and_target(void *chomper_instance) __asm__("FUN_L16_002e6208");
 
@@ -1249,8 +1244,6 @@ typedef struct {
     unsigned char bA4;
 } L16PursuitMoby;
 
-extern char *D_L16_001B0930[];
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float chomper_knockback_horizontal_speed_approach_rate_gp __asm__("D_L16_00161E58") __attribute__((sda));
 extern float D_0015EE70;
 extern float vector_distance(void*,void*) __asm__("FUN_001f9b80");
@@ -1259,9 +1252,7 @@ extern float chomper_knockback_vertical_speed_gp __asm__("D_L16_00161E5C") __att
 extern float chomper_knockback_horizontal_speed_gp __asm__("D_L16_00161E60") __attribute__((sda));
 extern int FUN_L00_0025ff38(void *, void *, float, int, int, void *, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void update_chomper_hit_reaction_and_target(void *chomper_instance) {
@@ -1319,8 +1310,6 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E7890), where it is exact; names translated to the US level program. */
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern float frame_time, D_0015EE70;
 extern float D_0015EE6C_u, D_0015ED70_c __asm__("D_0015ED70");
 extern float FUN_001f9e90_c(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025be00_c(float *, float *, float, float, float,
@@ -1429,33 +1418,16 @@ typedef struct {
 
 extern char D_0013D50F[], D_0014161B[];
 extern char gadgetron_ceo_challenge_start_pose[] __asm__("D_L16_001D9840");
-extern char D_L16_001671C0[];
 extern char gadgetron_ceo_challenge_return_pose[] __asm__("D_L16_001D9860");
-extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float FUN_001f9b48(void *, void *);
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_add_rotations(float, float);
-extern float fast_subtract_rotations(float, float);
-extern float vector_length_xy(void *);
-extern int freeze_stats_score_ref_b[] __asm__("D_0015EE6C") __attribute__((section(".sdata")));
+extern int freeze_stats_score_ref_b[] __asm__("D_0015EE6C") MACRO_ADDR;
 extern volatile int D_0015EE6C_p __asm__("D_0015EE6C");
-extern int D_L16_0015F5CC;
 extern float D_L16_0015F638;
 extern int D_0015EEA4;
-extern int help_request(int, int) __asm__("FUN_L00_00203908");
-extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
-extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern int scale_game_frames(int);
 extern int tick_countdown_32_c(void *) __asm__("FUN_001f9740");
-extern unsigned char D_0013D4DE __attribute__((section(".data")));
-extern unsigned char D_0013D507 __attribute__((section(".data")));
+extern unsigned char D_0013D4DE NOT_SDA;
+extern unsigned char D_0013D507 NOT_SDA;
 extern unsigned char D_0013D408[];
-extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void FUN_L00_0025a120(void *);
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00263d40(int, int);
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L16_002923d0(int);
@@ -1467,8 +1439,6 @@ extern void activate_gadgetron_ceo_challenge_environment(struct Moby *) __asm__(
 void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) __asm__("FUN_L16_002e7168");
 
 extern void restore_gadgetron_ceo_non_challenge_environment(struct Moby *) __asm__("FUN_L16_002e7168");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern char D_00141968[];
 extern L16ChallengePlayer D_0013E633_challenge __asm__("D_0013E533");
 
@@ -1734,7 +1704,6 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
 #ifndef
 #endif
 extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
-extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern char item_unlocked[] __asm__("D_0013D408");
 void update_two_region_trigger_latch(char *moby) __asm__("FUN_L16_002e7208");
@@ -1791,7 +1760,6 @@ typedef struct {
     short sound;
 } L16WalkerData_c;
 
-extern char *D_L16_001B0930[];
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float path_walker_gap_range_start_gp __asm__("D_L16_00161E68") __attribute__((sda));
@@ -1804,7 +1772,6 @@ extern float path_walker_height_range_end_gp __asm__("D_L16_00161E80") __attribu
 extern float path_walker_reposition_advance_rate_gp __asm__("D_L16_00161E8C") __attribute__((sda));
 extern int path_walker_draw_distance_gp __asm__("D_L16_00161E90") __attribute__((sda));
 extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 void emit_path_walker_particle(unsigned char *source_moby, void *previous_position) __asm__("FUN_L16_002e7a30");
 
@@ -1812,7 +1779,6 @@ extern void emit_path_walker_particle(unsigned char *, void *) __asm__("FUN_L16_
 void initialize_path_walker_group(struct Moby *moby) __asm__("FUN_L16_002e7ba0");
 
 extern void initialize_path_walker_group(struct Moby *) __asm__("FUN_L16_002e7ba0");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, f32, s32, void *, void *, s32) __asm__("func_00214E58");
 
 void update_path_walker(unsigned char *walker_moby) __asm__("FUN_L16_002e76b8");
@@ -1917,8 +1883,6 @@ void update_path_walker(unsigned char *walker_moby) {
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E8EA8), where it is exact; names translated to the US level program. */
 
 
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int D_L16_0015F5CC;
 void spawn_effect_particle_with_target_scalar(OvlQuad *p, OvlQuad *q, int c, int d, int n, float s) __asm__("FUN_L00_0026ced0");
 void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern void func_L00_0026DD70_emit(void *, void *, int, int, float,
@@ -1976,9 +1940,6 @@ typedef struct {
 } L16WalkerData;
 
 extern char *D_L16_0015FFD8;
-extern char *D_L16_001B0930[];
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float path_walker_initial_scale_multiplier __asm__("D_L16_00161E94") __attribute__((sda)); /* no foreign declaration */
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern short *D_L16_001ABCC0[];
@@ -2135,12 +2096,8 @@ typedef struct {
 } L16PlatformHero;
 
 extern char *elevator_reference_transform_table __asm__("D_L16_001600FC");
-extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float elevator_height_offset __asm__("D_L16_00161EAC") __attribute__((sda)); /* no foreign declaration */
 extern float elevator_height_acceleration __asm__("D_L16_00161EBC") __attribute__((sda)); /* no foreign declaration */
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern f32 D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 void draw_elevator_rotating_rings(struct Moby *elevator_moby) __asm__("FUN_L16_002e84e8");
@@ -2148,7 +2105,6 @@ void draw_elevator_rotating_rings(struct Moby *elevator_moby) __asm__("FUN_L16_0
 extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L16_002e84e8");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -2278,12 +2234,10 @@ typedef struct {
     L16RingVector position;
 } L16RingMatrix;
 
-extern float absolute_float(float) __asm__("func_001F99C0");
 extern float elevator_ring_quad_uvs[][2] __asm__("D_L16_001D9880");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern float fast_normalize_angle(float) __asm__("func_001FA610");
-extern int D_L16_0015F5CC;
 extern float D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
 extern float elevator_ring_outer_radius_gp __asm__("D_L16_00161EC4") __attribute__((sda));
 extern float elevator_ring_half_height_gp __asm__("D_L16_00161EC8") __attribute__((sda));
@@ -2411,7 +2365,6 @@ void gadgetron_sign_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9DE8), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_0015FFD8;
 char *find_group_class_010e_moby_in_state_6(int moby_group_index) __asm__("FUN_L16_002e8b08");
 
 char *find_group_class_010e_moby_in_state_6(int idx) __asm__("FUN_L16_002e8b08");
@@ -2486,9 +2439,7 @@ void update_target_reposition_cycle(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002E9F80), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_0015FFD8;
 extern int is_moby_in_state_6(void *) __asm__("FUN_L16_002c4710");
-extern short *D_L16_001ABCC0[];
 
 char *find_group_class_010e_moby_in_state_6(int moby_group_index) {
     short *moby_index_entry = D_L16_001ABCC0[moby_group_index];
@@ -2510,7 +2461,6 @@ typedef struct {
     float x, y, z;
 } Vec3f;
 
-extern char D_L16_001671C0[];
 
 void compute_level16_reflection_map_coordinates(int point_count, Vec3f *direction_vectors, Vec3f *point_positions, int unused, float *out) __asm__("FUN_L16_002e8b98");
 
@@ -2550,10 +2500,8 @@ void compute_level16_reflection_map_coordinates(int point_count, Vec3f *directio
 /* Sets up the draw state, then draws the three entries of the level's table. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA1B8), where it is exact; names translated to the US level program. */
 
-extern char D_L16_001DC600[][16] __attribute__((section(".data")));
-extern char D_L16_001DC630[] __attribute__((section(".data")));
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
+extern char D_L16_001DC600[][16] NOT_SDA;
+extern char D_L16_001DC630[] NOT_SDA;
 int D_L16_00161EF0_gp[4] __asm__("D_L16_00161EF0") __attribute__((section(".sdata"))) = {148, 148, 25, 0};
 extern float D_L16_001D98D0[];
 extern float D_L16_001D9FC0[];
@@ -2679,11 +2627,11 @@ void update_level16_three_mesh_render_state(struct Moby *moby) {
 }
 /* Sets up the draw state, then draws the one entry of the level's table; same source as env_map_a_draw. */
 
-extern char D_L16_00161F80_t[][16] __asm__("D_L16_00161F80") __attribute__((section(".sdata")));
+extern char D_L16_00161F80_macro[][16] __asm__("D_L16_00161F80") MACRO_ADDR;
 extern void FUN_L16_002e8b98_t(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_2e9270(int, long) __asm__("FUN_00233980");
 
-extern char D_L16_001DDC80[] __attribute__((section(".data")));
+extern char D_L16_001DDC80[] NOT_SDA;
 int D_L16_00161F40[2] = {125, 0};
 extern float D_L16_001DCAE0[];
 float *D_L16_00161F60[2] = {D_L16_001DCAE0, 0};
@@ -2709,7 +2657,7 @@ void draw_level16_visible_single_reflection_mesh(void) {
     vu1_add_g_sregister_2e9270(0x14, 0xFF9000000260);
     font_queue_vu_state();
     for (i = 0; i < 1; i++) {
-        if (fast_bsphere_check(D_L16_00161F80_t[i], 512.0f) != -1) {
+        if (fast_bsphere_check(D_L16_00161F80_macro[i], 512.0f) != -1) {
             FUN_L16_002e8b98_t(point_counts[i], direction_vectors[i], point_positions[i], unused_reflection_arguments[i], D_L16_001DDC80);
             FUN_L00_001fde98(point_counts[i], point_positions[i], point_word_streams[i], D_L16_001DDC80, 1);
         }
@@ -2926,7 +2874,7 @@ extern float D_L16_001E2DB0[];
 extern float D_L16_001E34A0[];
 extern float D_L16_001E3828[];
 float *D_L16_00162018[4] __attribute__((section(".sdata"))) = {D_L16_001E2DB0, D_L16_001E34A0, D_L16_001E3828, 0};
-extern L16SingleSphere_2ea128 D_L16_001E5390[] __attribute__((section(".data")));
+extern L16SingleSphere_2ea128 D_L16_001E5390[] NOT_SDA;
 void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) __asm__("FUN_L16_002ea128");
 
 void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) {

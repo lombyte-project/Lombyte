@@ -427,7 +427,7 @@ typedef struct {
     float position[4];
 } L16SparkHit;
 
-extern char *D_L16_001B255C __attribute__((section(".data")));
+extern char *D_L16_001B255C NOT_SDA;
 extern char *spawn_particle(void *, void *, int, int, int, int, float, float, float, float,
                               float) __asm__("FUN_L00_002712b8");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
@@ -775,7 +775,7 @@ typedef struct {
 
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
-extern char D_L16_0015F580n[] __asm__("D_L16_0015F580") __attribute__((section(".sdata")));
+extern char D_L16_0015F580_macro[] __asm__("D_L16_0015F580") MACRO_ADDR;
 
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
@@ -846,7 +846,7 @@ void update_thrown_bomb(L16FallingMoby *moby) {
         break;
     case BOMB_STATE_EXPLODE:
         func_0022ED80_n(0, 0, moby);
-        spawn_explosion(moby, (int)D_L16_0015F580n, 0, 1.5f, 1.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, -1,
+        spawn_explosion(moby, (int)D_L16_0015F580_macro, 0, 1.5f, 1.0f, 7, 10, 20, 3.0f, 1.7f, 4.0f, -1,
                          1.0f, 7.0f, 0, 7, -1, 0);
         mark_moby_for_removal(moby);
         return;
@@ -973,7 +973,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_0022ED80_cae18_c9a50(int, int, void *) __asm__("FUN_0022da68");
 extern int *D_L16_001ABFC0_c9a50[] __asm__("D_L16_001ABCC0");
 extern char *D_L16_00160098_c9a50 __asm__("D_L16_0015FFD8");
-extern char D_L16_001671C0[];
 extern char voice_pool[] __asm__("D_0013E550");
 void update_conveyor_group_voice(struct Moby *moby) __asm__("FUN_L16_002c9a50");
 
@@ -1038,7 +1037,6 @@ extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L16_001D2FF0[][2], D_L16_001D32E0[][2], D_L16_001D3300[][4];
 extern float D_L16_001D32C0[][2], D_L16_001D3010[][2], D_L16_001D3300[][4];
 extern float D_L16_001D32C0[][2], D_L16_001D32E0[][2], D_L16_001D3030[][4];
-extern int D_L16_0015F5CC;
 extern int conveyor_belt_pulse_texture_id_gp __asm__("D_L16_00161990") __attribute__((sda));
 extern int conveyor_belt_scrolling_texture_id_gp __asm__("D_L16_00161994") __attribute__((sda));
 #include "rnc/overlay/l16/gameplay/entities/rocket_data/draw_conveyor_belt_strips.h"
@@ -1046,13 +1044,9 @@ extern int conveyor_belt_pulse_color_start_gp __asm__("D_L16_001619A8") __attrib
 extern int conveyor_belt_pulse_color_end_gp __asm__("D_L16_001619AC") __attribute__((sda));
 extern int conveyor_belt_scrolling_vertex_color_gp __asm__("D_L16_001619B0") __attribute__((sda));
 extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
-extern int FUN_001fa6e0(float, int, int);
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad_u(void *, void *, int) __asm__("draw_geometry_quad");
-extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 void draw_conveyor_belt_strips(char *moby) {
     L16RibbonPacket_u packets[2];
@@ -1185,18 +1179,13 @@ typedef struct {
     char block140[1];
 } L16DummyData;
 
-extern char *D_L16_001B0930[];
-extern char *func_0020D348_m(int);
-extern char *D_L16_00174258 __attribute__((section(".data")));
+extern char *D_L16_00174258 NOT_SDA;
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern float D_0015ED6C, frame_time;
 extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float probe_ground_height(void *, int, float);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int D_L16_0015F580_c __asm__("D_L16_0015F580");
 extern char *D_L16_001600EC_c __asm__("D_L16_001600EC");
 extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda));
@@ -1207,14 +1196,12 @@ int move_test_dummy_toward_position_and_heading(char *moby, void *target_positio
 
 extern int move_test_dummy_toward_position_and_heading(char *, void *, float) __asm__("FUN_L16_002ced20");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
-extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 void *find_nearest_test_dummy_door(int index, void *position) __asm__("FUN_L16_002d5db0");
 
 void *find_nearest_test_dummy_door(int index, void *position) __asm__("FUN_L16_002d5db0");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void FUN_L00_00257470(void *, int, int);
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
@@ -1228,12 +1215,9 @@ void refresh_test_dummy_door_timer(struct Moby *moby) __asm__("FUN_L16_002d5e80"
 
 extern void refresh_test_dummy_door_timer(struct Moby *) __asm__("FUN_L16_002d5e80");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void allocate_voice_for_target_entry_alt(int, int, void *) __asm__("FUN_0022da68");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 unsigned char *spawn_thrown_bomb(int a, void *pos, float *dir, int c, float f) __asm__("FUN_L16_002c6268");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern int func_0022ED80_i(int, int, void *) __asm__("FUN_0022da68");
-extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 extern unsigned char *func_L16_002C75D0_2cf180(int, void *, float *, float,
                                                int) __asm__("FUN_L16_002c6268");
 extern int func_L00_0025A8E8_2cf180(void *, float, void *, int, float, float, int, int,
@@ -1812,16 +1796,13 @@ void draw_test_dummy_group_glows(char *moby) {
 /* Pulse a linked control object and toggle its child when hit or its timer expires. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D0560), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_0015FFD8;
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern int scale_game_frames(int);
 extern int tick_countdown_32(int *) __asm__("func_001F9740");
 extern int truncate_float_to_s32(float);
-extern unsigned char visited52_lui[] __asm__("D_0014C050") __attribute__((section(".data")));
+extern unsigned char visited52_lui[] __asm__("D_0014C050") NOT_SDA;
 extern void set_class_056b_collision_enabled(void *, int) __asm__("FUN_L16_002e3770");
-extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 
 void wall_button_update(struct Moby *m) __asm__("FUN_L16_002cf198");
 void wall_button_update(struct Moby *moby) {
@@ -1993,7 +1974,6 @@ extern float linked_pair_ribbon_origin_z_offset __asm__("D_L16_001619F8") __attr
 extern float linked_pair_ribbon_pass_z_step __asm__("D_L16_001619FC") __attribute__((sda)); /* no foreign declaration */
 extern int linked_pair_ribbon_texture_id __asm__("D_L16_00161A00") __attribute__((sda)); /* no foreign declaration */
 extern int linked_pair_ribbon_vertex_color __asm__("D_L16_00161A04") __attribute__((sda)); /* no foreign declaration */
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
@@ -2073,16 +2053,11 @@ typedef struct {
     L16PatrolData *data;        /* 0x78 */
 } L16PatrolMoby;
 
-extern char *D_L16_001B0930[];
 extern float vector_distance(void*,void*) __asm__("FUN_001f9b80");
 extern float fast_arc_tan(float,float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby, int index, void *out) __asm__("FUN_L16_002cf9d0");
-extern int func_001FA898_caa18(float) __asm__("FUN_001fa6d0");
 
 /* Patrol step: advances the moby's path node until the next node is ahead and far enough, switching between the base path and its branches. */
 void advance_hoverboard_dummy_path_node(char *patrol_moby) __asm__("FUN_L16_002cf9f8");
@@ -2167,10 +2142,8 @@ typedef struct {
 } L16LeapMoby_u;
 
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float spring_angle(void *, void *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 f32 compute_interpolated_record_value_u(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
@@ -2308,46 +2281,24 @@ typedef struct {
     float yaw;
 } L16RacePlayer;
 
-extern L16RacePlayer D_L16_0015F580 __attribute__((section(".sdata")));
-extern int D_L16_0015F5CC;
+extern L16RacePlayer D_L16_0015F580 MACRO_ADDR;
 extern L16RacePlayer D_L16_00167080;
 extern int *D_L16_00178300[];
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char D_0013E533[];
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0015ED6C, frame_time;
-extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float spring_angle(void *, void *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern float approach_value(float *p, float target, float maxstep);
-extern float fast_add_rotations(float, float);
-extern float probe_ground_height(void *, int, float);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int D_00159F4C; /* no foreign declaration */
 extern int D_L16_00161A0C __attribute__((sda));
 extern int D_0015EE3C_gp __asm__("D_0015EE3C") __attribute__((sda));
-extern char *D_L16_001B0930[];
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern int add_moby_frames_for_group_proximity() __asm__("FUN_L05_00307010");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern unsigned char D_0013D4DF __attribute__((section(".data")));
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern unsigned char D_0013D4DF NOT_SDA;
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
-extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 void advance_hoverboard_dummy_path_node(char *m) __asm__("FUN_L16_002cf9f8");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L16_002cf9d0_c(Level16VendorVectorMoby *moby, int index,
                         void *out) __asm__("FUN_L16_002cf9d0");
@@ -2635,11 +2586,8 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
 /* Move the moby toward a target along a slerped path until the parameter reaches its goal. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D6DA8), where it is exact; names translated to the US level program. */
 
-extern float D_0015ED6C, frame_time;
-extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
 extern float advance_accelerated_scalar(float, float, float, float, float *,
                                         float *) __asm__("FUN_00213f38");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 
 void door_update(unsigned char *moby) __asm__("FUN_L16_002d59e0");
 void door_update(unsigned char *moby) {
@@ -2675,10 +2623,6 @@ void door_update(unsigned char *moby) {
 /* Activate the linked mobys and return the one nearest the challenge target. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D6E98), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_0015FFD8;
-extern char D_L16_001671C0[];
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern int *D_L16_001ABCC0[];
 extern float class_0287_group_activation_value_gp __asm__("D_L16_00161A80") __attribute__((sda));
 
 void *set_class_0287_group_activation_and_find_nearest(int index, int secondary) __asm__("FUN_L16_002d5ad0");
@@ -2772,7 +2716,6 @@ void *find_nearest_test_dummy_door(int index, void *position) {
             return nearest;
     }
 }
-extern int D_L16_0015F5CC;
 extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
 extern s32 FUN_001f96f8_5e80(s32) __asm__("FUN_001f96f8");
 extern void FUN_0022da68_5e80(int, int, void *) __asm__("FUN_0022da68");
@@ -2800,13 +2743,11 @@ typedef struct {
 } L16SceneData_q;
 
 extern char D_0013E633_q[], D_0014171B[], D_0013D388[], D_L16_00167240[] __asm__("D_0013E633");
-extern char D_0014162A_q[] __asm__("D_0014162A") __attribute__((section(".data")));
-extern char D_L16_001671C0_lui[] __asm__("D_L16_001671C0") __attribute__((section(".data")));
-extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
+extern char D_0014162A_lui[] __asm__("D_0014162A") NOT_SDA;
+extern char D_L16_001671C0_lui[] __asm__("D_L16_001671C0") NOT_SDA;
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void *set_class_0287_group_activation_and_find_nearest(int, int) __asm__("FUN_L16_002d5ad0");
 extern void *activate_class_0287_group_and_find_nearest(int, int) __asm__("FUN_L16_002d5bc8");
-extern void FUN_0022da68_q(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00216f90_q(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
                                int) __asm__("FUN_L00_002598b0");
@@ -2820,7 +2761,7 @@ extern int tick_countdown_32_q(void *) __asm__("FUN_001f9740");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void mmr_q(struct Obj *obj) __asm__("FUN_0020c828");
 
-extern char D_0013F3D0[] __attribute__((section(".data")));
+extern char D_0013F3D0[] NOT_SDA;
 void update_triggered_group_objective(struct Moby *moby) __asm__("FUN_L16_002d5ef8");
 
 void update_triggered_group_objective(struct Moby *moby) {
@@ -2866,7 +2807,7 @@ void update_triggered_group_objective(struct Moby *moby) {
     }
     case SCENE_STATE_WAIT_TO_HIDE:
         if (scene_data->camera >= 0)
-            *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&scene_data->camera;
+            *(unsigned short *)(D_0014162A_lui) = *(unsigned short *)&scene_data->camera;
         if (tick_countdown_32_q(&scene_data->timer_q)) {
             moby->state = 3;
             scene_data->timer_q = scale_game_frames(60);
@@ -2880,7 +2821,7 @@ void update_triggered_group_objective(struct Moby *moby) {
         FUN_L00_002ea9d8_q(position);
         set_camera_rotation(rotation);
         if (scene_data->camera >= 0)
-            *(unsigned short *)(D_0014162A_q) = *(unsigned short *)&scene_data->camera;
+            *(unsigned short *)(D_0014162A_lui) = *(unsigned short *)&scene_data->camera;
         if (count_active_moby_group_members(scene_data->path, -1))
             break;
         if (!tick_countdown_32_q(&scene_data->timer_q))
@@ -2926,11 +2867,9 @@ void update_triggered_group_objective(struct Moby *moby) {
 /* Computes a moby's direction vectors from its table entry. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7628), where it is exact; names translated to the US level program. */
 
-extern char *D_L16_001B0930[];
 extern int D_L16_001600EC; /* no foreign declaration */
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 
 extern float triggered_scene_rotation_y_gp __asm__("D_L16_00161A8C") __attribute__((sda));
 void compute_triggered_scene_path_pose(struct Moby *moby, void *out1, float *out2) __asm__("FUN_L16_002d6260");

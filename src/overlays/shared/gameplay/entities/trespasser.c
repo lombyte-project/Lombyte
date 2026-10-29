@@ -1209,7 +1209,7 @@ extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern s32 D_0015EEA4;
 extern u32 D_0013CAE4 NOT_SDA;
 extern OvlVec4 D_L00_00166DC0_2c1ad0 __asm__("D_L00_00166DC0") NOT_SDA;
-extern OvlVec4 D_L00_00166C80_2c1ad0[3] __asm__("D_L00_00166C80") NOT_SDA;
+extern OvlVec4 D_L00_00166C80_lui[3] __asm__("D_L00_00166C80") NOT_SDA;
 extern s16 D_L00_001B07B0_lui[]  __asm__("D_L00_001B07B0")NOT_SDA;
 extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("FUN_L00_002aa008");
 extern struct Moby *spawn_mine(void *, void *, void *) __asm__("FUN_L00_002a9ed0");
@@ -1548,7 +1548,7 @@ void bomb_glove_update(struct Moby *moby) {
     offset.q = 0;
     offset.f[1] = -0.09f;
     offset.f[2] = -0.02f;
-    copy_matrix3x4(basis, D_L00_00166C80_2c1ad0);
+    copy_matrix3x4(basis, D_L00_00166C80_lui);
     transpose_rotation_matrix(matrix, basis);
     if (vars == 0)
         return;

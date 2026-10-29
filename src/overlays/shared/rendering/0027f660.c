@@ -6,6 +6,7 @@
 
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
+#include "sda.h"
 
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
@@ -16,7 +17,7 @@ extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
-extern unsigned char *D_L01_001B250C __attribute__((section(".data")));
+extern unsigned char *D_L01_001B250C NOT_SDA;
 void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocity) __asm__("FUN_L01_0027f660");
 
 void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocity) {
@@ -49,7 +50,7 @@ extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern int func_001FA898_r_80970(float) __asm__("FUN_001fa6d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
-extern unsigned char *D_L01_001B2538 __attribute__((section(".data")));
+extern unsigned char *D_L01_001B2538 NOT_SDA;
 char *spawn_type_14_particle(int particle_value, char *position_source) __asm__("FUN_L01_00280970");
 
 char *spawn_type_14_particle(int particle_value, char *position_source) {
@@ -126,7 +127,7 @@ char *draw_number(float scale, void *particle_spawn_position, int source_moby, i
 extern unsigned char *func_00218928_87158(int) __asm__("FUN_L00_002678b8");
 extern int func_001FA898_87158(float) __asm__("FUN_001fa6d0");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern unsigned char *D_L01_001B25D0 __attribute__((section(".data")));
+extern unsigned char *D_L01_001B25D0 NOT_SDA;
 unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) __asm__("FUN_L01_00287158");
 
 unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) {

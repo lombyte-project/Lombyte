@@ -147,7 +147,7 @@ typedef struct {
     int moving_timer;
     int target_timer;
 } WD8;
-extern unsigned char D_0013DD49 __attribute__((section(".data")));
+extern unsigned char D_0013DD49 NOT_SDA;
 extern char batalia_deserter_name_text[] __asm__("D_L08_001622E8");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L08_00305138_c(void *) __asm__("FUN_L08_00305138");
@@ -298,38 +298,38 @@ struct G_3063f0 {
     char *objs[1];
 };
 
-extern struct G_3063f0 D_L08_0016D060_d __asm__("D_L08_0016D060") __attribute__((section(".data")));
-extern unsigned char D_0015EDB0_c[] __asm__("D_0015EDB0") __attribute__((section(".sdata")));
-extern unsigned char D_L08_0017CC40_d[] __asm__("D_L08_0017CC40") __attribute__((section(".data")));
+extern struct G_3063f0 D_L08_0016D060_lui __asm__("D_L08_0016D060") NOT_SDA;
+extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") MACRO_ADDR;
+extern unsigned char D_L08_0017CC40_lui[] __asm__("D_L08_0017CC40") NOT_SDA;
 
 extern short batalia_plumber_manipulator_replicated_value __asm__("D_L08_00162300") __attribute__((sda));
 void attach_batalia_plumber_class_manipulator(struct Moby *moby) __asm__("FUN_L08_003063f0");
 
 void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
     int i;
-    if (level_game_mode == 2 && D_0015EDB0_c[0]) {
-        if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x26C && D_L08_0016D060_d.b < 0x2CC) {
+    if (level_game_mode == 2 && big_head_cheat_enabled_macro[0]) {
+        if (D_L08_0016D060_lui.a == 6 && D_L08_0016D060_lui.b >= 0x26C && D_L08_0016D060_lui.b < 0x2CC) {
             D_L08_0015F59C = 1.0f;
             D_L08_0015F5A0 = -0.2f;
         }
-        if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x47E && D_L08_0016D060_d.b < 0x5F1) {
+        if (D_L08_0016D060_lui.a == 6 && D_L08_0016D060_lui.b >= 0x47E && D_L08_0016D060_lui.b < 0x5F1) {
             D_L08_0015F59C = 1.0f;
             D_L08_0015F5A0 = 0.5f;
         }
-        if (D_L08_0016D060_d.a == 6 && D_L08_0016D060_d.b >= 0x5FA && D_L08_0016D060_d.b < 0x6AE) {
+        if (D_L08_0016D060_lui.a == 6 && D_L08_0016D060_lui.b >= 0x5FA && D_L08_0016D060_lui.b < 0x6AE) {
             D_L08_0015F59C = 1.0f;
             D_L08_0015F5A0 = -0.1f;
         }
-        for (i = 0; i < D_L08_0016D060_d.n; i++) {
-            char *candidate_moby = D_L08_0016D060_d.objs[i];
+        for (i = 0; i < D_L08_0016D060_lui.n; i++) {
+            char *candidate_moby = D_L08_0016D060_lui.objs[i];
             if (*(short *)(candidate_moby + 0xA6) == moby->oclass || *(short *)(candidate_moby + 0xA6) == 0x306) {
-                if (D_L08_0017CC40_d[1] == 0) {
+                if (D_L08_0017CC40_lui[1] == 0) {
                     float replicated_value;
-                    attach_manipulator(candidate_moby, 0, D_L08_0017CC40_d);
+                    attach_manipulator(candidate_moby, 0, D_L08_0017CC40_lui);
                     replicated_value = *(float *)&batalia_plumber_manipulator_replicated_value;
-                    *(float *)(D_L08_0017CC40_d + 0x20) = replicated_value;
-                    *(float *)(D_L08_0017CC40_d + 0x24) = replicated_value;
-                    *(float *)(D_L08_0017CC40_d + 0x28) = replicated_value;
+                    *(float *)(D_L08_0017CC40_lui + 0x20) = replicated_value;
+                    *(float *)(D_L08_0017CC40_lui + 0x24) = replicated_value;
+                    *(float *)(D_L08_0017CC40_lui + 0x28) = replicated_value;
                 }
             }
         }
@@ -720,7 +720,6 @@ void update_batalia_selected_moby_effects(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
 
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void spawn_effect_with_initial_motion(float *, float *, int, float) __asm__("FUN_L08_0027fe00");
@@ -755,7 +754,7 @@ void spawn_batalia_moby_effects_with_random_motion(struct Moby *moby) {
 /* Runs the two-entry setup loop for slot `x`: one call fills from the tables, the second applies them. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A428), where it is exact; names translated to the US level program. */
 
-extern Pair D_L08_00162408[] __attribute__((section(".sdata")));
+extern Pair D_L08_00162408[] MACRO_ADDR;
 extern char D_L08_001F8560[];
 extern float D_L08_001EF7D0[];
 extern float D_L08_001EF978[];
@@ -786,7 +785,7 @@ void queue_batalia_offset_textured_batches(int x) {
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030AC70), where it is exact; names translated to the US level program. */
 
-extern int D_L08_001623F0_e[] __asm__("D_L08_001623F0") __attribute__((section(".sdata")));
+extern int D_L08_001623F0_macro[] __asm__("D_L08_001623F0") MACRO_ADDR;
 extern Pair D_L08_001623F8[];
 extern Pair D_L08_001F8548[];
 extern char D_L08_001675C0[];
@@ -836,16 +835,16 @@ void update_batalia_textured_effect(struct Moby *moby) {
         for (i = 0; i < 3; i++) {
             D_L08_001F8548[i].a = 0;
             D_L08_001F8548[i].b = 0;
-            D_L08_001623F0_e[8] = 0;
-            D_L08_001623F0_e[9] = 0;
+            D_L08_001623F0_macro[8] = 0;
+            D_L08_001623F0_macro[9] = 0;
         }
         for (i = 0; i < 2; i++) {
-            D_L08_001623F0_e[2 + i * 2] = 0;
-            *(float *)&D_L08_001623F0_e[3 + i * 2] = i * 0.4f;
+            D_L08_001623F0_macro[2 + i * 2] = 0;
+            *(float *)&D_L08_001623F0_macro[3 + i * 2] = i * 0.4f;
         }
         for (i = 0; i < 1; i++) {
-            D_L08_001623F0_e[6 + i * 2] = 0;
-            *(float *)&D_L08_001623F0_e[7 + i * 2] = i * 0.4f;
+            D_L08_001623F0_macro[6 + i * 2] = 0;
+            *(float *)&D_L08_001623F0_macro[7 + i * 2] = i * 0.4f;
         }
         break;
     case MOBY_ACTIVE:
@@ -862,7 +861,7 @@ void update_batalia_textured_effect(struct Moby *moby) {
             distance = fast_vec_length(position_delta);
             if (distance <= 84.0f) {
                 advance_scroll_offsets(0);
-                advance_wrapped_sine_pair(batalia_effect_sine_offsets, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_e[8]);
+                advance_wrapped_sine_pair(batalia_effect_sine_offsets, 0.52f, 0.62f, 0.06f, &D_L08_001623F0_macro[8]);
                 advance_scroll_offsets(2);
                 if (distance < 20.0f) {
                     *(unsigned char *)&D_L08_001623F0 = 0xFF;

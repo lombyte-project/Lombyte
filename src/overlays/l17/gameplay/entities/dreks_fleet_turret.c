@@ -9,6 +9,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
+#include "sda.h"
 
 
 
@@ -95,7 +96,7 @@ void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L
 extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
 
-extern char *D_L17_0015FFD0[] __attribute__((section(".sdata")));
+extern char *D_L17_0015FFD0[] MACRO_ADDR;
 void update_fleet_beam(struct Moby *beam_moby) __asm__("FUN_L17_002a8da0");
 
 void update_fleet_beam(struct Moby *beam_moby) {
@@ -362,7 +363,6 @@ extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -378,7 +378,6 @@ extern void process_dreks_fleet_turret_hits(char *m) __asm__("FUN_L17_002cbc10")
 void distribute_class_733_group_mobys_along_path(char *turret_moby) __asm__("FUN_L17_002cbd38");
 
 extern void distribute_class_733_group_mobys_along_path(char *m) __asm__("FUN_L17_002cbd38");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -554,7 +553,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
     }
 }
 /* Second, %hi/%lo read of the moby array (retail reloads it for the placement pass). */
-extern char *D_L17_0015FFD8_m __asm__("D_L17_0015FFD8") __attribute__((section(".sdata")));
+extern char *D_L17_0015FFD8_macro __asm__("D_L17_0015FFD8") MACRO_ADDR;
 
 /* Spreads the class-0x733 mobies of this moby's group evenly along its path. */
 void distribute_class_733_group_mobys_along_path(char *turret_moby) {
@@ -585,7 +584,7 @@ void distribute_class_733_group_mobys_along_path(char *turret_moby) {
     path = ((char **)D_L17_001B0DB0)[*(int *)(turret_vars + 0x84)];
     step = *(int *)path / class_733_moby_count;
     group_entry = D_L17_001AC140[i];
-    mobys = D_L17_0015FFD8_m;
+    mobys = D_L17_0015FFD8_macro;
     do {
         i = (*group_entry & 0x7FFF) << 8;
         if (*(short *)(i + 0xA6 + mobys) == 0x733) {
@@ -623,12 +622,7 @@ struct Blk {
 
 extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float fast_normalize_angle(float) __asm__("func_001FA610");
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int fast_bsphere_check(char *, float) __asm__("FUN_001fa728");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int rand(void);
 extern int random_integer_below(int);
@@ -648,13 +642,9 @@ extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
-extern void transform_vector_by_basis(void *, void *, void *);
 extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_fleet_rotating_radial_effect(char *moby) __asm__("FUN_L17_002d77f0");
 
@@ -814,9 +804,9 @@ extern float fast_normalize_angle(float) __asm__("FUN_001fa610");
 extern int fleet_radial_alpha_base_value_gp __asm__("D_L17_00161B98") __attribute__((sda));
 #include "rnc/overlay/l17/gameplay/entities/dreks_fleet_turret_data/draw_fleet_scrolling_radial_quads.h"
 extern int fleet_radial_quad_rgba_gp __asm__("D_L17_00161BB8") __attribute__((sda));
-extern RingStep D_L17_00161BC0 __attribute__((section(".data")));
+extern RingStep D_L17_00161BC0 NOT_SDA;
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern RingStep D_L17_00161BC8 __attribute__((section(".data")));
+extern RingStep D_L17_00161BC8 NOT_SDA;
 extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void draw_geometry_quad(void *, void *, int);
 

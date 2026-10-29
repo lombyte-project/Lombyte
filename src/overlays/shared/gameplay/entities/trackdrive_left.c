@@ -91,12 +91,12 @@ extern QuadFrame l02_interpolated_frame_source_index_table[] __asm__("D_L02_0016
 extern char *interpolated_frame_source_data __asm__("D_L02_0015F420");
 #include "rnc/rendering/dma_tag.h"
 
-extern union PacketCursor l02_packet __asm__("D_L02_001611C0") __attribute__((section(".sdata")));
-extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") __attribute__((section(".sdata")));
+extern union PacketCursor l02_packet __asm__("D_L02_001611C0") MACRO_ADDR;
+extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") MACRO_ADDR;
 #define PACKET_CURSOR (l02_packet.words)
 #define TEXTURE_CURSOR (gs_texture_allocation.cursor)
 /* Fakematch: the frame counter is read as a one-element array, so its load stays below the packet stores like retail. */
-extern int frame_counter_ref[] __asm__("D_L02_0015F5CC") __attribute__((section(".sdata")));
+extern int frame_counter_ref[] __asm__("D_L02_0015F5CC") MACRO_ADDR;
 #define FRAME_COUNTER (frame_counter_ref[0])
 /* The quad's GS texture register and the camera values it saves (D_L02_001612F8..00161304). */
 struct QuadTextureState {
@@ -106,7 +106,7 @@ struct QuadTextureState {
     float camera_228;
     float camera_22C;
 };
-extern struct QuadTextureState quad_texture_state __asm__("D_L02_001612F0") __attribute__((section(".sdata")));
+extern struct QuadTextureState quad_texture_state __asm__("D_L02_001612F0") MACRO_ADDR;
 #define TEXTURE_REGISTER (quad_texture_state.tex0)
 
 void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) __asm__("FUN_L02_002a40f0");
@@ -313,7 +313,7 @@ typedef struct {
     float x;
     float y;
 } H2d8910;
-extern H2d8910 D_L02_00167280_2d8910 __asm__("D_L02_00167280") __attribute__((section(".data")));
+extern H2d8910 D_L02_00167280_lui __asm__("D_L02_00167280") NOT_SDA;
 extern char *D_L02_001600EC_2d8910 __asm__("D_L02_001600EC");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
@@ -335,8 +335,8 @@ void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation
     if (camera_transform_index == -1) {
         left = fast_add_rotations(*(float *)(moby + 0x48), 1.57079637f);
         right = fast_add_rotations(*(float *)(moby + 0x48), -1.57079637f);
-        to = fast_arc_tan(D_L02_00167280_2d8910.x - *(float *)(moby + 0x10),
-                          D_L02_00167280_2d8910.y - *(float *)(moby + 0x14));
+        to = fast_arc_tan(D_L02_00167280_lui.x - *(float *)(moby + 0x10),
+                          D_L02_00167280_lui.y - *(float *)(moby + 0x14));
         dl = fast_difference_between_rotations(to, left);
         pick = dl < fast_difference_between_rotations(to, right) ? left : right;
         fast_vec_add(midpoint_position, &hero.motion.pos, moby + 0x10);
@@ -426,8 +426,8 @@ extern char D_0013FDE8[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
-extern float D_0015ED6C __attribute__((section(".sdata")));
-extern float D_0015ED70 __attribute__((section(".sdata")));
+extern float D_0015ED6C MACRO_ADDR;
+extern float D_0015ED70 MACRO_ADDR;
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84; /* no foreign declaration */
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
@@ -470,12 +470,12 @@ extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_0024
 extern void func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
 extern float D_L02_001D33B0[4][4];
 extern Lvl D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
-extern int D_0015EE84_2D9F08 __asm__("D_0015ED84") __attribute__((section(".sdata")));
+extern int current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern char D_0014C290_2D9F08[] __asm__("D_0014C190");
 extern Vec_2D9F08 D_L02_00167440_2D9F08[] __asm__("D_L02_001673C0");
-extern float D_0015EE70_2D9F08 __asm__("D_0015ED70") __attribute__((section(".sdata")));
-extern float D_0015EE6C_2D9F08 __asm__("D_0015ED6C") __attribute__((section(".sdata")));
-extern int D_L02_0017EB88_2D9F08 __asm__("D_L02_0017EB08") __attribute__((section(".data")));
+extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
+extern float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
+extern int D_L02_0017EB08_lui __asm__("D_L02_0017EB08") NOT_SDA;
 extern Cam D_L02_00167300_2D9F08 __asm__("D_L02_00167280");
 extern Idle D_L02_00179A10;
 extern int D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
@@ -485,7 +485,7 @@ extern int D_L02_00161AA4_gp __asm__("D_L02_00161AA4") __attribute__((sda));
 extern int D_L02_00161AA0_gp __asm__("D_L02_00161AA0") __attribute__((sda));
 extern char D_0013E633_2D9F08[] __asm__("D_0013E533");
 extern Hero D_0013F450_2D9F08 __asm__("D_0013F350");
-extern int D_0013CAE4 __attribute__((section(".data")));
+extern int D_0013CAE4 NOT_SDA;
 
 void tresspasser_pad_update(Moby *moby) __asm__("FUN_L02_002d8ad0");
 void tresspasser_pad_update(Moby *moby) {
@@ -517,7 +517,7 @@ void tresspasser_pad_update(Moby *moby) {
         D_L02_00161B1C_gp = data->iEC;
         if (moby->mission != 0xFF) {
             if (D_L02_001BBB40_2D9F08.collected[(short)moby->save_id] != 0
-                || (((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] >> (moby->save_id & 0x1F)) & 1) {
+                || (((int *)(D_0014C290_2D9F08 + (current_level_index_macro << 8)))[(short)moby->save_id >> 5] >> (moby->save_id & 0x1F)) & 1) {
                 moby->state = 4;
             }
         }
@@ -558,13 +558,13 @@ void tresspasser_pad_update(Moby *moby) {
     case TRESSPASSER_PAD_STATE_ACTIVE_PUZZLE:
         func_L02_002DA728_2D9F08(moby);
         func_L02_002D9D48_2D9F08(&camera_pos, &camera_rot, moby);
-        func_00214D88_2D9F08(&data->f110, &data->f114, 1.0f, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE70_2D9F08 + D_0015EE70_2D9F08, D_0015EE6C_2D9F08 + D_0015EE6C_2D9F08);
+        func_00214D88_2D9F08(&data->f110, &data->f114, 1.0f, frame_time_sq_macro + frame_time_sq_macro, frame_time_sq_macro + frame_time_sq_macro, frame_time_macro + frame_time_macro);
         func_001F9C08_2D9F08(&camera_pos, &data->vF0, &camera_pos, data->f110);
         camera_rot.z = func_001FA748_2D9F08(func_001FA790_2D9F08(camera_rot.z, data->v100.z) * data->f110, data->v100.z);
         camera_rot.y = func_001FA748_2D9F08(func_001FA790_2D9F08(camera_rot.y, data->v100.y) * data->f110, data->v100.y);
         func_L00_002EBE88_2D9F08(&camera_pos);
         func_L00_002EBEE0_2D9F08(&camera_rot);
-        D_L02_0017EB88_2D9F08 = 1;
+        D_L02_0017EB08_lui = 1;
         func_00216028_2D9F08(6, 0);
         if (D_L02_00167300_2D9F08.p180 != 0 && D_L02_00167300_2D9F08.p180->unk86 != 5) {
             func_L00_002EBF50_2D9F08(&D_L02_00167300_2D9F08.v140, &D_L02_00167300_2D9F08.v150, 1, 0, 0);
@@ -578,7 +578,7 @@ void tresspasser_pad_update(Moby *moby) {
                 }
             }
             if (0.0f < data->fE4) {
-                data->fE4 = func_001FA748_2D9F08(data->fE4, D_0015EE6C_2D9F08 * 6.2831855f);
+                data->fE4 = func_001FA748_2D9F08(data->fE4, frame_time_macro * 6.2831855f);
                 if (0.5235988f < data->fE4) {
                     data->fE4 = 0.0f;
                     if (data->iE0 == 1) {
@@ -593,7 +593,7 @@ void tresspasser_pad_update(Moby *moby) {
                     }
                 }
             } else if (data->fE4 < 0.0f) {
-                data->fE4 = func_001FA748_2D9F08(data->fE4, -(D_0015EE6C_2D9F08 * 6.2831855f));
+                data->fE4 = func_001FA748_2D9F08(data->fE4, -(frame_time_macro * 6.2831855f));
                 if (data->fE4 < -0.5235988f) {
                     data->fE4 = 0.0f;
                     if (data->iE0 == 1) {
@@ -615,9 +615,9 @@ void tresspasser_pad_update(Moby *moby) {
                 data->h11E |= 1;
                 func_0022ED80_2D9F08(0, 0, moby);
                 if (((Pad *)D_0013C940)->b1C0.w.hi & 0x8000) {
-                    data->fE4 = -(D_0015EE6C_2D9F08 * 6.2831855f);
+                    data->fE4 = -(frame_time_macro * 6.2831855f);
                 } else {
-                    data->fE4 = D_0015EE6C_2D9F08 * 6.2831855f;
+                    data->fE4 = frame_time_macro * 6.2831855f;
                 }
             } else if (((Pad *)D_0013C940)->i1A4 & 0x1000) {
                 data->h11E |= 2;
@@ -652,7 +652,7 @@ void tresspasser_pad_update(Moby *moby) {
     case TRESSPASSER_PAD_STATE_COMMIT_COMPLETION:
         if (D_0013F450_2D9F08.anim_flags & 2) {
             if (moby->mission != 0xFF) {
-                ((int *)(D_0014C290_2D9F08 + (D_0015EE84_2D9F08 << 8)))[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
+                ((int *)(D_0014C290_2D9F08 + (current_level_index_macro << 8)))[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                 D_L02_001BADE0_2D9F08[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
             }
             func_L00_002EC0C8_2D9F08(1);
@@ -705,7 +705,6 @@ void align_hero_to_tresspasser_pad(char *moby) {
 
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern int tresspasser_ring_arc_first_vertex_uv_gp __asm__("D_L02_00161B0C") __attribute__((sda));
@@ -755,10 +754,6 @@ void draw_tresspasser_puzzle_ring_arc(int texture, u32 color, float start_angle,
 /* Draws the rotating radar arrow sprite (style sel) at angle a and scale s, twice. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002DBAF8), where it is exact; names translated to the US level program. */
 
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_L02_001D33B0[4][4];
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern int tresspasser_arrow_newly_reached_first_vertex_uv_gp __asm__("D_L02_00161ABC") __attribute__((sda));
 extern int tresspasser_arrow_newly_reached_second_vertex_uv_gp __asm__("D_L02_00161AC0") __attribute__((sda));
@@ -772,13 +767,10 @@ extern int tresspasser_arrow_lit_first_vertex_uv_gp __asm__("D_L02_00161ADC") __
 extern int tresspasser_arrow_lit_second_vertex_uv_gp __asm__("D_L02_00161AE0") __attribute__((sda));
 extern int tresspasser_arrow_lit_third_vertex_uv_gp __asm__("D_L02_00161AE4") __attribute__((sda));
 extern int tresspasser_arrow_lit_fourth_vertex_uv_gp __asm__("D_L02_00161AE8") __attribute__((sda));
-extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 extern int tresspasser_arrow_vertex_color_gp __asm__("D_L02_00161B9C") __attribute__((sda));
 extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void draw_tresspasser_puzzle_arrow(int unused_texture, int unused_parameter, int sel, float angle, float radial_distance) __asm__("FUN_L02_002da6c0");
 
@@ -1255,11 +1247,11 @@ extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
-extern unsigned char D_001413F4 __attribute__((section(".data")));
+extern unsigned char D_001413F4 NOT_SDA;
 extern int D_L02_0015F640 __attribute__((sda));
 extern char D_0013F3D0[];
-extern float D_L02_00174468 __attribute__((section(".data")));
-extern int D_L02_00167400 __attribute__((section(".data")));
+extern float D_L02_00174468 NOT_SDA;
+extern int D_L02_00167400 NOT_SDA;
 extern float D_0015ED70;
 extern float D_0015ED6C;
 extern float D_L02_0015F3FC;
@@ -1411,7 +1403,6 @@ typedef struct {
 } L02SpriteData;
 extern void func_001F9BF0_ea8b0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void func_001F9BD8_ea8b0(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int fast_dec_timer(int *) __asm__("FUN_001f9740");
 extern int func_001F9850_ea8b0(int) __asm__("FUN_001f96f8");
 extern int func_001FA8A8_2ebce8_ea8b0(int, int, float) __asm__("FUN_001fa6e0");
 extern float func_001F9B88_ea8b0(float) __asm__("FUN_001f99c0");

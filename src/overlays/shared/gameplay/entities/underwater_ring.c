@@ -177,7 +177,6 @@ void underwater_ring_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002EC490), where it is exact; names translated to the US level program. */
 
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void draw_moby_radial_ripple_mesh_buffers(void) __asm__("FUN_L15_002eac90");
 void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
@@ -283,7 +282,7 @@ void codebot_update(struct Moby *moby) {
 extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 extern int D_L15_0015F594 __attribute__((sda));
 extern u8 D_0014C050[];
-extern u32 D_0013CAE4 __attribute__((section(".data")));
+extern u32 D_0013CAE4 NOT_SDA;
 extern void mark_moby_for_removal_002ed068(struct Moby *) __asm__("FUN_0020c828");
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
