@@ -511,3 +511,10 @@ s32 D_L18_001625DC = 0;
 s32 D_L18_001625E0 = 0x4000000;
 s32 D_L18_001625E4 = 0x400;
 s32 D_L18_001625E8 = 0x4000400;
+
+s32 projected_quad_texture_selector_gp __asm__("D_L06_00162414") = 0xb;
+s32 projected_quad_base_radius_gp __asm__("D_L06_00162418") = 0x320;
+s32 projected_quad_top_right_uv_gp __asm__("D_L06_0016241C") = 0;
+s32 projected_quad_top_left_uv_gp __asm__("D_L06_00162420") = 0x4000000;
+s32 projected_quad_bottom_right_uv_gp __asm__("D_L06_00162424") = 0x400;
+s32 projected_quad_bottom_left_uv_gp __asm__("D_L06_00162428") = 0x4000400;

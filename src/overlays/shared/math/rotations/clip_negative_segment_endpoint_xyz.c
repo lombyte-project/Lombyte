@@ -982,3 +982,6 @@ S6 D_L17_001E5A08 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000
 S6 D_L18_001F1760 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 S6 D_L18_001F1778 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
 u8 *D_L18_0015FFE0 = 0;
+
+S6 D_L00_001E9030_25e450 __asm__("D_L00_001E9030") = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 D_L00_001E9048_25e450 __asm__("D_L00_001E9048") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};

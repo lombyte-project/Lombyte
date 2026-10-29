@@ -1349,3 +1349,5 @@ Vec4 D_L18_00160250 = {0};
 ParticleClearance D_L18_00160258 = {0};
 f32 D_L18_00160260 = 0;
 unsigned char *D_L18_001B2A84 NOT_SDA = 0;
+
+unsigned char *D_L00_001B2084 NOT_SDA = 0;

@@ -1013,3 +1013,5 @@ void emit_blarg_elite_commando_joint_sparks(char *commando_moby) {
 float D_L18_001613E0 = 3e+01f;
 float D_L18_001613E4 = 2e+01f;
 L16ParticleChoices D_L18_001F2710 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+
+L16ParticleChoices D_L16_001E8300 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};

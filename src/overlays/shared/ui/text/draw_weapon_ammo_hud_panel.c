@@ -507,3 +507,14 @@ T_23aaa8 *D_L18_0017EEF4 NOT_SDA = 0;
 int D_L18_0015F968 = 0;
 int D_L18_0015F96C = 0;
 int D_L18_0015F970 = -1;
+
+short ammo_hud_frame_width_below_100 __asm__("D_L00_0015F924") = 0x46;
+short ammo_hud_frame_width_at_least_100 __asm__("D_L00_0015F928") = 0x5f;
+short ammo_hud_nonzero_text_color_blend_start __asm__("D_L00_0015F92C") = -32672;
+short ammo_hud_nonzero_text_color_blend_end __asm__("D_L00_0015F930") = -32672;
+short ammo_hud_zero_text_color_blend_start __asm__("D_L00_0015F934") = 0x2080;
+short ammo_hud_zero_text_color_blend_end __asm__("D_L00_0015F938") = 0x2080;
+short ammo_hud_text_right_x_offset __asm__("D_L00_0015F93C") = 0x19;
+short ammo_hud_text_y_offset __asm__("D_L00_0015F940") = 8;
+int D_L00_0015F96C = 0;
+int D_L00_0015F970 = -1;

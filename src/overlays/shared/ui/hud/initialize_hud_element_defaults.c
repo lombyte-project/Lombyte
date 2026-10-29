@@ -212,3 +212,14 @@ int D_L16_0015FA30 = 0x100;
 int D_L16_0015FA34 = 0x26;
 int D_L16_0015FA44 = 0xc;
 char D_L16_0015F860 = 0x25;
+
+int hud_timer_frame_x_gp __asm__("D_L05_0015FA14") = 0x8c;
+int hud_timer_frame_bottom_offset_gp __asm__("D_L05_0015FA18") = 0x2e;
+int hud_timer_frame_width_gp __asm__("D_L05_0015FA1C") = 0xeb;
+int hud_timer_frame_height_gp __asm__("D_L05_0015FA20") = 0x20;
+int hud_timer_frame_alpha_gp __asm__("D_L05_0015FA24") = 0x60;
+int hud_timer_label_color_gp __asm__("D_L05_0015FA28") = 0x80e08060;
+int hud_timer_value_color_gp __asm__("D_L05_0015FA2C") = 0x80ffb080;
+int hud_timer_text_center_x_gp __asm__("D_L05_0015FA30") = 0x100;
+int hud_timer_optional_row_bottom_offset_gp __asm__("D_L05_0015FA34") = 0x26;
+int hud_timer_time_row_bottom_offset_gp __asm__("D_L05_0015FA44") = 0xc;

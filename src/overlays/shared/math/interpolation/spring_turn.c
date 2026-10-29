@@ -752,3 +752,7 @@ int D_L18_0015FFF4 = 0;
 char *D_L18_00160114 = 0;
 unsigned short *D_L18_0016010C = 0;
 short D_L18_00160110 = 0;
+
+char *D_L00_00160114 = 0;
+unsigned short *D_L00_0016010C_2591d0 __asm__("D_L00_0016010C") = 0;
+short D_L00_00160110 = 0;

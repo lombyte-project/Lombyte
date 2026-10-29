@@ -1079,3 +1079,26 @@ float D_L10_00161D48 = 0.125f;
 float D_L10_00161D4C = 0.25f;
 f32 D_L10_00161D6C = 0.1f;
 f32 D_L13_00161D34 = 0.1f;
+
+s32 ranged_attack_cooldown_frames_gp __asm__("D_L06_00161FC0") = 0x5a;
+int beam_duration_frames_gp __asm__("D_L06_00161FD8") = 0x96;
+s32 beam_effect_texture_index_gp __asm__("D_L06_00161FF0") = 0xb;
+s32 beam_outer_corner_color_at_zero_weight_gp __asm__("D_L06_00161FF4") = 0;
+s32 beam_outer_corner_color_at_unit_weight_gp __asm__("D_L06_00161FF8") = 0x600040ff;
+s32 beam_inset_corner_color_at_zero_weight_gp __asm__("D_L06_00161FFC") = 0;
+s32 beam_inset_corner_color_at_unit_weight_gp __asm__("D_L06_00162000") = 0x6000cccc;
+f32 beam_quad_corner_uvs[4][2] __asm__("D_L06_001F2E90") = {
+    {0.5f, 0.5f},
+    {0.5f, 0.0f},
+    {0.5f, 0.5f},
+    {0.5f, 0.0f},
+};
+short timer_text_center_x_gp __asm__("D_L06_001620C8") = 0xfa;
+short timer_text_y_gp __asm__("D_L06_001620CC") = 0x177;
+short timer_text_color_at_zero_blend_gp __asm__("D_L06_001620D0") = -16192;
+short timer_text_color_at_unit_blend_gp __asm__("D_L06_001620D4") = 0x40ff;
+short timer_frame_x_addend_gp __asm__("D_L06_001620D8") = -5;
+short timer_frame_y_addend_gp __asm__("D_L06_001620DC") = 0x14;
+short timer_frame_left_x_addend_gp __asm__("D_L06_001620E0") = -50;
+short timer_frame_right_x_addend_gp __asm__("D_L06_001620E4") = 0x34;
+short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") = 0x60;

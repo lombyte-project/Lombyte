@@ -64,3 +64,6 @@ signed char D_L17_001619A3 = 0x20;
 short D_L17_001619A0 = 0xff;
 short D_L17_001619A4 = -13107;
 short D_L17_001619A8 = 0x28;
+
+short sine_draw_packet_rgb_control __asm__("D_L15_00161ACC") = 0xff;
+short sine_alpha_period_frames __asm__("D_L15_00161AD4") = 0x28;

@@ -127,3 +127,5 @@ char D_L17_001B50D0 NOT_SDA = 0xd;
 short D_L17_001603F8 = 0;
 char D_L18_001B51D0 NOT_SDA = 0xd;
 short D_L18_001603F8 = 0;
+
+short unlock_code_input_count __asm__("D_L00_001603F8") = 0;

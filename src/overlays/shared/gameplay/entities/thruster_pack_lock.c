@@ -761,3 +761,10 @@ short D_L17_001621B8 = 0x7f4f;
 short D_L17_001621C8 = -32513;
 short D_L17_001621D8 = 0x7f00;
 short D_L17_001623EC = 0;
+
+short first_position_particle_config __asm__("D_L11_001621C8") = 0xff;
+short second_position_particle_config __asm__("D_L11_001621D8") = -1;
+short third_position_particle_config __asm__("D_L11_001621E8") = 0x7f4f;
+short extra_scattered_joint_particle_config __asm__("D_L11_001621F8") = -32513;
+short extra_joint_position_particle_config __asm__("D_L11_00162208") = 0x7f00;
+short D_L11_001623F0_gp __asm__("D_L11_001623F0") = 0;

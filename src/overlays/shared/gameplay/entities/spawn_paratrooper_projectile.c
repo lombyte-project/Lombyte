@@ -525,3 +525,7 @@ float D_L14_00162224 = -1.0f;
 int D_L14_00162228 = 1;
 float D_L14_0016222C = 5.0f;
 float D_L14_001624D0 = 0;
+
+float ground_particle_scatter_spawn_vector_xy_bias[2] __asm__("D_L08_00162360") = {0};
+int ground_particle_scatter_distant_spawn_argument_gp __asm__("D_L08_00162358") = 1;
+float smoothed_below_reference_ground_fraction_gp __asm__("D_L08_001625E8") = 0;

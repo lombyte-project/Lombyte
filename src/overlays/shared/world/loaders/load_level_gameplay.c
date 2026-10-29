@@ -3155,3 +3155,14 @@ int D_L18_00160F50 = 0;
 int D_L18_00160FCC = 0;
 unsigned char *D_L18_001604A0 = 0;
 unsigned char D_L18_001BCBB0 NOT_SDA = 0;
+
+int D_L00_001600E8 = 0;
+int D_L00_001600F0 = 0;
+int D_L00_001600F8 = 0;
+int D_L00_00160100 = 0;
+int D_L00_0015FB50 = 0;
+char *D_L00_00160108_macro __asm__("D_L00_00160108") = 0;
+char *D_L00_0015F318 = 0;
+int D_L00_00160104 = 0;
+int D_L00_00160490 = 0;
+int D_L00_00160FCC = 0;

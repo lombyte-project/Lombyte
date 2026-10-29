@@ -711,3 +711,5 @@ short D_L17_0016D1B0 NOT_SDA = 0;
 RenderArchiveState D_L17_00184AF0 = {0};
 short D_L18_0016D2B0 NOT_SDA = 0;
 RenderArchiveState D_L18_00184BF0 = {0};
+
+short D_L00_0016C8B0 NOT_SDA = 0;

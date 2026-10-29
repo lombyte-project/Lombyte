@@ -153,3 +153,6 @@ short D_L13_00161218 = 0;
 short D_L13_0016121C = 1;
 short D_L13_00161220 = 2;
 short D_L13_00161224 = -13107;
+
+short pool_wave_next_source_slot_index __asm__("D_L01_0016121C") = 1;
+short pool_wave_step_accumulator __asm__("D_L01_00161224") = -13107;

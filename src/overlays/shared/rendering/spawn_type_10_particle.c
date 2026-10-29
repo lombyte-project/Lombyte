@@ -496,3 +496,7 @@ int D_L12_001B2628 NOT_SDA = 0;
 int D_L13_001B24A8 NOT_SDA = 0;
 int D_L14_001B28A8 NOT_SDA = 0;
 int D_L17_001B2AA8 NOT_SDA = 0;
+
+unsigned char *D_L01_001B250C NOT_SDA = 0;
+unsigned char *D_L01_001B2538 NOT_SDA = 0;
+unsigned char *D_L01_001B25D0 NOT_SDA = 0;

@@ -55,3 +55,5 @@ void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_ov
 
 s32 D_L12_001B2624[1] __attribute__((section(".data"))) = {0};
 s32 D_L14_001B28A4[1] __attribute__((section(".data"))) = {0};
+
+unsigned char *D_L08_001B29A4 NOT_SDA = 0;

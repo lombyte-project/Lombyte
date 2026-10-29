@@ -651,3 +651,5 @@ s32 D_L12_0015F674 = 0;
 s32 D_L14_0015F674 = 0;
 s32 D_L15_0015F674 = 0;
 s32 D_L18_0015F674 = 0;
+
+s32 hero_button_8_double_press_countdown_gp __asm__("D_L02_0015F674") = 0;

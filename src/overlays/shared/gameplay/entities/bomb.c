@@ -3606,3 +3606,6 @@ int D_L18_00161928 = 0xf0;
 float D_L18_00161924 = 9.0f;
 float D_L18_0016192C = 0.97f;
 Vec4 D_L18_001677D0 = {0};
+
+s32 D_L00_00161854_gp __asm__("D_L00_00161854") = 0;
+int chicken_manipulator_joint __asm__("D_L00_00161850") = 0;

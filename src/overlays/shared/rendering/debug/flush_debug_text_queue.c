@@ -1484,3 +1484,7 @@ float D_L18_0015F450 = 0;
 float D_L18_0015F454 = 0;
 u8 D_L18_0015F445 = 0;
 u8 D_L18_0015F446 = 0;
+
+DebugRowCounts l00_debug_menu_column_row_counts __asm__("D_L00_001E7920") = {{5, 0xb, 9, 0xe, 7, 5}};
+u8 debug_menu_item_ids[8] __asm__("D_L00_0015EFD0") = {9, 0x15, 0x19, 0x17, 0x18, 0xa, 0xb, 0xd};
+s32 occlusion_sample_count __asm__("D_L00_0015F614") = 0;
