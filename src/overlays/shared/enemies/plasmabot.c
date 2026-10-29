@@ -1006,7 +1006,7 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
     int   hit_kind;
     float damage;
     char *hit_info;
-    int   result;
+    int   reaction_outcome;
     if (((unsigned char *)moby)[0x20] == 0 || ((unsigned char *)moby)[0x20] == 0xB) {
         if (((unsigned char *)moby)[0x20] == 0xB) {
             ((unsigned char *)moby)[0xA4] = 0xFF;
@@ -1021,12 +1021,12 @@ void process_plasmabot_hit_reaction(struct Moby *moby) {
          *(short *)(*(char **)(hit_info + 0x20) + 0xA6) == 0x370)) {
         hit_info = 0;
     }
-    result = hit_reaction(moby, hit_info, state + 0x20, 0, &hit_kind, &damage, 0, 4);
+    reaction_outcome = hit_reaction(moby, hit_info, state + 0x20, 0, &hit_kind, &damage, 0, 4);
     if (hit_kind != 1 && ((unsigned char *)moby)[0x20] != 0xB) {
         *(float *)(state + 0x20) -= damage;
         if (*(float *)(state + 0x20) <= 0.0f)
-            result = 1;
-        switch (result) {
+            reaction_outcome = 1;
+        switch (reaction_outcome) {
         case HIT_REACTION_STAGGER:
         case 4:
         case 5:
