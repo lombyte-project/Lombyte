@@ -1,18 +1,13 @@
 #include "types.h"
-struct VoBuf {
-    s32 unk0;
-    u8 pad_4[0x4];
-    s32 unk8;
-};
+#include "rnc/video/decoder/vo_buf.h"
 
-extern s32 vo_buf_is_full() __asm__("FUN_0023d1f8");
-s32 vo_buf_get_data(struct VoBuf *vo_buffer) __asm__("FUN_0023d288");
+struct VoData *vo_buf_get_data(struct VoBuf *buf) __asm__("FUN_0023d288");
 
-s32 vo_buf_get_data(struct VoBuf *vo_buffer) {
-    if (vo_buf_is_full() != 0) {
+struct VoData *vo_buf_get_data(struct VoBuf *buf) {
+    if (vo_buf_is_full(buf) != 0) {
         return 0;
     }
-    return vo_buffer->unk0 + (vo_buffer->unk8 * 0xD0000);
+    return buf->data + buf->write;
 }
 
 /* Recovered original symbol name. */

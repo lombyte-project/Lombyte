@@ -1,9 +1,10 @@
-/* Decrement the state field at byte offset 0x0C when it is positive. */
+#include "types.h"
+#include "rnc/video/decoder/vo_buf.h"
 
-void vo_buf_dec_count(volatile int *state_fields) __asm__("func_0023D340");
+void vo_buf_dec_count(struct VoBuf *buf) __asm__("func_0023D340");
 
-void vo_buf_dec_count(volatile int *state_fields) {
-    if (state_fields[3] > 0) {
-        state_fields[3] = state_fields[3] - 1;
+void vo_buf_dec_count(struct VoBuf *buf) {
+    if (buf->count > 0) {
+        buf->count--;
     }
 }

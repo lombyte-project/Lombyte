@@ -1,9 +1,10 @@
-/* Placeholder callback intentionally performs no state update. */
+#include "types.h"
+#include "rnc/video/decoder/vo_buf.h"
 
-void no_op_state_update(void) __asm__("func_0023D1E0");
+void vo_buf_delete(struct VoBuf *buf) __asm__("func_0023D1E0");
 
-void no_op_state_update(void) {
+void vo_buf_delete(struct VoBuf *buf) {
 }
 
 /* Recovered original symbol name. */
-extern __typeof__(no_op_state_update) voBufDelete__FP5VoBuf __attribute__((alias("func_0023D1E0")));
+extern __typeof__(vo_buf_delete) voBufDelete__FP5VoBuf __attribute__((alias("func_0023D1E0")));

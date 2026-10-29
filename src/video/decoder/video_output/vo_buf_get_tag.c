@@ -1,25 +1,12 @@
 #include "types.h"
-struct VoBuf {
-    u8 pad_0[0x4];
-    s32 unk4;
-    s32 unk8;
-    s32 unkC;
-    s32 unk10;
-};
+#include "rnc/video/decoder/vo_buf.h"
 
-extern s32 vo_buf_is_empty() __asm__("func_0023D2C8");
-s32 vo_buf_get_tag(struct VoBuf *vo_buf) __asm__("FUN_0023d2d8");
+struct VoTag *vo_buf_get_tag(struct VoBuf *buf) __asm__("FUN_0023d2d8");
 
-s32 vo_buf_get_tag(struct VoBuf *vo_buf) {
-    s32 ring_size;
-    s32 unk8;
-    s32 unkC;
-
-    if (vo_buf_is_empty() != 0) {
+/* The oldest picture not yet shown. */
+struct VoTag *vo_buf_get_tag(struct VoBuf *buf) {
+    if (vo_buf_is_empty(buf) != 0) {
         return 0;
     }
-    unk8 = *((volatile s32 *)(&vo_buf->unk8));
-    unkC = *((volatile s32 *)(&vo_buf->unkC));
-    ring_size = vo_buf->unk10;
-    return vo_buf->unk4 + (((s32)((unk8 - unkC) + ring_size) % ring_size) * 0x138C0);
+    return buf->tag + (buf->write - buf->count + buf->size) % buf->size;
 }
