@@ -33,14 +33,14 @@ void launch_sand_shark(struct Moby *moby,
                        float       *direction) __asm__("FUN_L02_002d6118");
 
 void launch_sand_shark(struct Moby *moby, void *position, float *direction) {
-    char *data = (char *)moby->pvars;
+    char *sand_shark_vars = (char *)moby->pvars;
     moby->state = 0x1B;
     moby->flags &= 0xFFBE;
     if (moby->prev_seq != 0xB) {
         blend_moby_animation(moby, 0xB, 0, 1);
     }
     qcopy(&moby->pos, position);
-    qcopy(data + 0x40, direction);
+    qcopy(sand_shark_vars + 0x40, direction);
     moby->rot.z = fast_arc_tan(direction[0], direction[1]);
     update_entity(moby);
 }
