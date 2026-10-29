@@ -1364,14 +1364,14 @@ extern int   point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 void begin_sand_shark_return_home_if_outside_path(struct Moby *moby) __asm__("FUN_L02_002d63c0");
 
 void begin_sand_shark_return_home_if_outside_path(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    char *entry = D_L02_001B0AB0[*(int *)(data + 0x290)];
+    char *sand_shark_instance_vars = (char *)moby->pvars;
+    char *entry = D_L02_001B0AB0[*(int *)(sand_shark_instance_vars + 0x290)];
     if (point_in_path_xy(&moby->pos, entry + 0x10, *(int *)entry) == 0) {
         moby->state = 0x12;
         if (moby->prev_seq) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(20));
         }
-        *(int *)(data + 0x298) = 1;
+        *(int *)(sand_shark_instance_vars + 0x298) = 1;
     }
 }
 
