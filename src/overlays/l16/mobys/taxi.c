@@ -480,8 +480,8 @@ extern char table_entry_source_vectors[] __asm__("D_L16_001D96E0");
 void transform_moby_table_entry_vectors(struct Moby *moby) __asm__("FUN_L16_002e4f30");
 
 void transform_moby_table_entry_vectors(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
-    int   table_entry_index = *(int *)(data + 0xa0);
+    char *moby_pvars = (char *)moby->pvars;
+    int   table_entry_index = *(int *)(moby_pvars + 0xa0);
     if (table_entry_index != -1) {
         char *table_entry = D_L16_001B0930[table_entry_index];
         if (*(int *)table_entry == 7) {
@@ -495,7 +495,7 @@ void transform_moby_table_entry_vectors(struct Moby *moby) {
             }
             hero_state = &hero;
             *(unsigned short *)&hero_state->path_constrain_pending =
-                *(unsigned short *)(data + 0xa0);
+                *(unsigned short *)(moby_pvars + 0xa0);
         }
     }
 }
