@@ -270,24 +270,24 @@ void draw_and_probe_snagglebeast_rope_attack(char *moby) {
     RopeQuad rope_offset;
     char     blk[0x30];
     RopeVec  rope_direction;
-    char    *data;
+    char    *rope_attack_moby_vars;
     float    one;
 
-    data = ((char *)MOBY(moby)->pvars);
+    rope_attack_moby_vars = ((char *)MOBY(moby)->pvars);
     qzero(&rope_offset);
     one = 1.0f;
-    fast_vec_normalize(&rope_offset, data + 0x130, *(float *)(data + 0x16C) * 0.8f);
-    fast_vec_add(data + 0x140, &rope_offset, data + 0x110);
-    fast_vec_normalize(&rope_offset, &rope_offset, *(float *)(data + 0x16C));
-    fast_vec_add(data + 0x120, &rope_offset, data + 0x110);
+    fast_vec_normalize(&rope_offset, rope_attack_moby_vars + 0x130, *(float *)(rope_attack_moby_vars + 0x16C) * 0.8f);
+    fast_vec_add(rope_attack_moby_vars + 0x140, &rope_offset, rope_attack_moby_vars + 0x110);
+    fast_vec_normalize(&rope_offset, &rope_offset, *(float *)(rope_attack_moby_vars + 0x16C));
+    fast_vec_add(rope_attack_moby_vars + 0x120, &rope_offset, rope_attack_moby_vars + 0x110);
     draw_snagglebeast_rope_attack_layer(moby, one, 0, one, 0x20000080);
     draw_snagglebeast_rope_attack_layer(moby, 0.7f, 10, 2.0f, 0x28008080);
     draw_snagglebeast_rope_attack_layer(moby, 0.4f, 20, 3.0f, 0x30B0FFFF);
-    fast_vec_sub(rope_direction, data + 0x120, data + 0x110);
+    fast_vec_sub(rope_direction, rope_attack_moby_vars + 0x120, rope_attack_moby_vars + 0x110);
     fast_vec_normalize(rope_direction, rope_direction, one);
     make_hit_descriptor(blk, moby, 0x30000, 1.00012302f, rope_direction);
-    if (collision_line(data + 0x110, data + 0x120, 0, moby, blk) == 0) {
-        collect_mobies_in_sphere(0.5f, data + 0x120, 0, moby, blk);
+    if (collision_line(rope_attack_moby_vars + 0x110, rope_attack_moby_vars + 0x120, 0, moby, blk) == 0) {
+        collect_mobies_in_sphere(0.5f, rope_attack_moby_vars + 0x120, 0, moby, blk);
     }
 }
 
