@@ -465,34 +465,34 @@ extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a
 
 void update_robot_dog_hit_reaction(struct Moby *moby) {
     float vector[4];
-    int   result;
+    int   hit_reaction_code;
     float damage;
     float angle;
-    char *data = (char *)moby->pvars;
+    char *robot_dog_pvars = (char *)moby->pvars;
     char *hit;
-    if (*(int *)(data + 0x38) != 0 ||
-        (*(int *)(data + 0x248) != -1 &&
+    if (*(int *)(robot_dog_pvars + 0x38) != 0 ||
+        (*(int *)(robot_dog_pvars + 0x248) != -1 &&
          can_release_linked_robot_dog(
-             (unsigned char *)(D_L03_0015FFD8_c + (*(int *)(data + 0x248) << 8)))))
-        *(int *)(data + 0x240) = scale_game_frames(240);
-    if (fast_dec_timer((int *)(data + 0x240)))
-        *(float *)(data + 0x230) = *(float *)(data + 0x22C);
+             (unsigned char *)(D_L03_0015FFD8_c + (*(int *)(robot_dog_pvars + 0x248) << 8)))))
+        *(int *)(robot_dog_pvars + 0x240) = scale_game_frames(240);
+    if (fast_dec_timer((int *)(robot_dog_pvars + 0x240)))
+        *(float *)(robot_dog_pvars + 0x230) = *(float *)(robot_dog_pvars + 0x22C);
     else
-        *(float *)(data + 0x230) = *(float *)(data + 0x22C) * 2.0f;
+        *(float *)(robot_dog_pvars + 0x230) = *(float *)(robot_dog_pvars + 0x22C) * 2.0f;
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
-    hit_reaction(moby, hit, data + 0x20, 0, &result, &damage, 0, 4);
-    if (result != 1 && moby->state != 21) {
+    hit_reaction(moby, hit, robot_dog_pvars + 0x20, 0, &hit_reaction_code, &damage, 0, 4);
+    if (hit_reaction_code != 1 && moby->state != 21) {
         char *other;
         if (moby->group != 255)
             FUN_L01_0026e090(moby->group, 1);
         {
-            float health = *(float *)(data + 0x20) - damage;
+            float health = *(float *)(robot_dog_pvars + 0x20) - damage;
             float speed = frame_time_sq * 50.0f;
-            *(int *)(data + 0x144) = 9;
-            data[0x15D] = 0;
-            *(float *)(data + 0x130) = speed;
-            *(float *)(data + 0x20) = health;
+            *(int *)(robot_dog_pvars + 0x144) = 9;
+            robot_dog_pvars[0x15D] = 0;
+            *(float *)(robot_dog_pvars + 0x130) = speed;
+            *(float *)(robot_dog_pvars + 0x20) = health;
         }
         other = *(char **)(hit + 0x20);
         angle = fast_arc_tan(moby->pos.x - *(float *)(other + 0x10),
@@ -500,17 +500,17 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
         {
             float rotationSpeed = frame_time * 10.0f;
             moby->flags &= 0xEFFF;
-            *(float *)(data + 0x13C) = rotationSpeed;
+            *(float *)(robot_dog_pvars + 0x13C) = rotationSpeed;
         }
-        trooper_set_knockback((float *)(data + 0x120), 4.5f, 2.0f);
-        *(float *)(data + 0x170) = 5.0f;
-        *(float *)(data + 0x174) = 12.0f;
+        trooper_set_knockback((float *)(robot_dog_pvars + 0x120), 4.5f, 2.0f);
+        *(float *)(robot_dog_pvars + 0x170) = 5.0f;
+        *(float *)(robot_dog_pvars + 0x174) = 12.0f;
         *(OvlQuad *)vector = *(OvlQuad *)(hit + 0x10);
-        trooper_knockback_arc(vector, &angle, data + 0x138, data + 0x13C);
-        trooper_start_knockback(angle, moby, data + 0x120, 4, 1, 0);
+        trooper_knockback_arc(vector, &angle, robot_dog_pvars + 0x138, robot_dog_pvars + 0x13C);
+        trooper_start_knockback(angle, moby, robot_dog_pvars + 0x120, 4, 1, 0);
         moby->state = 21;
-        *(unsigned char *)(data + 0x117) = 240;
-        trooper_anim_update(moby, (short *)(data + 0x110));
+        *(unsigned char *)(robot_dog_pvars + 0x117) = 240;
+        trooper_anim_update(moby, (short *)(robot_dog_pvars + 0x110));
     }
     moby->hit_slot = 255;
 }
