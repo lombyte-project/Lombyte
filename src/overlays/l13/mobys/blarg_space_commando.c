@@ -934,7 +934,7 @@ extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 void draw_point_table_quads(struct Moby *moby) __asm__("FUN_L13_003098d0");
 
 void draw_point_table_quads(struct Moby *moby) {
-    char      *data = (char *)moby->pvars;
+    char      *point_table_pvars = (char *)moby->pvars;
     QuadPacket pk[2];
     f32        identity_matrix[4][4];
     f32        corner_inset_offset[4];
@@ -968,19 +968,19 @@ void draw_point_table_quads(struct Moby *moby) {
             corner_position = pk[0].pos[j];
             source_point_byte_offset = (i + j / 2) * 16;
             /* &data[...] (not data + off + ...) keeps retail's off + data add. */
-            qcopy(corner_position, &data[source_point_byte_offset + 0x210]);
+            qcopy(corner_position, &point_table_pvars[source_point_byte_offset + 0x210]);
             /* The colour call in both arms: retail merges the two calls and
                leaves the address add in each arm. */
             if (j & 1) {
-                fast_vec_sub(corner_inset_offset, corner_position, data + 0x1F0);
+                fast_vec_sub(corner_inset_offset, corner_position, point_table_pvars + 0x1F0);
                 fast_vec_normalize(corner_inset_offset, corner_inset_offset, 0.5f);
                 fast_vec_sub(corner_position, corner_position, corner_inset_offset);
                 corner_position[2] -= 0.125f;
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x21C),
+                pk[0].col[j] = fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
                                                 D_L13_00161EA8,
                                                 D_L13_00161EAC);
             } else {
-                pk[0].col[j] = fast_tween_color(*(f32 *)(data + source_point_byte_offset + 0x21C),
+                pk[0].col[j] = fast_tween_color(*(f32 *)(point_table_pvars + source_point_byte_offset + 0x21C),
                                                 D_L13_00161EA0,
                                                 D_L13_00161EA4);
             }
