@@ -614,18 +614,18 @@ void gold_bolt_update(struct Moby *moby) {
 void update_gold_bolt_visuals(struct Moby *moby) __asm__("FUN_L01_00308380");
 
 void update_gold_bolt_visuals(struct Moby *moby) {
-    char *data = (char *)moby->pvars;
+    char *gold_bolt_visual_vars = (char *)moby->pvars;
     float updated_rotation_z;
     float bobbing_sine;
     float k;
     moby->scale = moby->pclass->scale * *(float *)&D_L01_00161F10_gp;
     if (moby->state == 1) {
         bobbing_sine = fast_sin(moby->rot.w);
-        moby->pos.z = *(float *)(data + 0x18) + *(float *)&D_L01_00161F14_gp +
+        moby->pos.z = *(float *)(gold_bolt_visual_vars + 0x18) + *(float *)&D_L01_00161F14_gp +
                       *(float *)&D_L01_00161F18_gp * bobbing_sine;
-        moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(data + 0x68));
-        moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(data + 0x64));
-        updated_rotation_z = fast_add_rotations(moby->rot.z, *(float *)(data + 0x60));
+        moby->rot.x = fast_add_rotations(moby->rot.x, *(float *)(gold_bolt_visual_vars + 0x68));
+        moby->rot.y = fast_add_rotations(moby->rot.y, *(float *)(gold_bolt_visual_vars + 0x64));
+        updated_rotation_z = fast_add_rotations(moby->rot.z, *(float *)(gold_bolt_visual_vars + 0x60));
         k = *(float *)&D_L01_00161F2C_gp * DEG_TO_RAD * frame_time;
         moby->rot.z = updated_rotation_z;
         moby->rot.w = fast_add_rotations(moby->rot.w, k);
