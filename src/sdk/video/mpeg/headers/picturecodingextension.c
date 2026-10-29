@@ -14,8 +14,8 @@ void _pictureCodingExtension(struct MpegDecoder *mpeg) {
     *(s32 *)0x10002010 = (*(s32 *)0x10002010 & 0xFFFCFFFF) | (_nextBit(mpeg, 2) << 0x10);
     structure = _nextBit(mpeg, 2);
     mpeg->picture_structure = structure;
-    if (mpeg->unkD4 == 0) {
-        mpeg->unkD4 = structure;
+    if (mpeg->first_field_structure == 0) {
+        mpeg->first_field_structure = structure;
     }
     mpeg->top_field_first = _nextBit(mpeg, 1);
     mpeg->frame_pred_frame_dct = _nextBit(mpeg, 1);

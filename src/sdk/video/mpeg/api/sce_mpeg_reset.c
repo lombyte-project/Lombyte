@@ -11,7 +11,7 @@ void sceMpegReset(struct sceMpeg *mpeg) {
     MpegDecoder *decoder = mpeg->sys;
 
     decoder->is_end = 0;
-    decoder->unk4 = 0;
+    decoder->decoded_pictures = 0;
     decoder->started = 0;
     mpeg->frameCount = 0;
     decoder->frame_base = 0;

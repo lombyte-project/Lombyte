@@ -39,7 +39,7 @@ s32 _getpic(struct sceMpeg *mpeg) {
             if (start_code == 0) {
                 break;
             }
-            if (decoder->picture_structure == decoder->unkD4) {
+            if (decoder->picture_structure == decoder->first_field_structure) {
                 break;
             }
         } while (decoder->mpeg2 != 0);

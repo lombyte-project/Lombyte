@@ -16,7 +16,7 @@ void _sequenceHeader(struct MpegDecoder *decoder) {
     u32 bits;
     s32 vertical_size;
 
-    decoder->unkD4 = 0;
+    decoder->first_field_structure = 0;
     bits = _nextBit(decoder, 32);
     vertical_size = (bits >> 8) & 0xFFF;
     decoder->horizontal_size = bits >> 20;

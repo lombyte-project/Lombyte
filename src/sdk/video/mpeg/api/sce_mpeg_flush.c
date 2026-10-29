@@ -10,11 +10,11 @@ s32 _sceMpegFlush(struct sceMpeg *mpeg) {
     MpegDecoder *decoder = mpeg->sys;
     s32 result = 0;
 
-    if (decoder->unk4 != 0) {
+    if (decoder->decoded_pictures != 0) {
         if (decoder->started != 0) {
             FinishMpegFrame(decoder);
             mpeg->frameCount = decoder->frame_count - decoder->frame_base;
-            decoder->unk4 = 0;
+            decoder->decoded_pictures = 0;
             result = 1;
         }
     }

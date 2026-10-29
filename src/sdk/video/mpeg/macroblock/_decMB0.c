@@ -50,7 +50,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
     *mb_type = type_code;
     if (type_code == 0) {
         _Error(decoder, invalid_macroblock_type_error_message);
-        decoder->unk11C = 1;
+        decoder->slice_error = 1;
         return 0;
     }
     if (type_code & 0xC) {
@@ -96,7 +96,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
         }
     }
     result = 0;
-    if (decoder->unk11C == 0) {
+    if (decoder->slice_error == 0) {
         if ((*mb_type) & 4) {
             if (decoder->mpeg2 != 0) {
                 _motionVectors(decoder, motion_vector_state, differential_motion_vector, motion_field_select_output, 1, motion_vector_count, frame_motion, decoder->f_code_backward_h - 1,
@@ -108,7 +108,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
             }
         }
         result = 0;
-        if (decoder->unk11C == 0) {
+        if (decoder->slice_error == 0) {
             type = *mb_type;
             coded = type & 3;
             if (type & 1) {
@@ -127,7 +127,7 @@ int _decMB0(struct MpegDecoder *decoder, int *mb_type, int *motion_type, int *dc
                 decoder->mb_buf[decoder->mb_buf_index].unk13C = 1;
             }
             decoder->dc_reset = 0;
-            if (decoder->unk11C != 0) {
+            if (decoder->slice_error != 0) {
                 if (decoder->picture_structure) {
                     return 0;
                 }

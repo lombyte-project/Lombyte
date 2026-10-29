@@ -2,7 +2,7 @@
 
 typedef struct MbCtx {
     u8 pad_0[0x11C];
-    s32 unk11C;
+    s32 slice_error;
     u8 pad_120[0x728];
     s32 mpeg2;
 } MbCtx;
@@ -42,7 +42,7 @@ s32 _mbAddressIncrement(MbCtx *ctx) {
                 break;
             }
             _Error1(ctx, D_001537A8, code);
-            ctx->unk11C = 1;
+            ctx->slice_error = 1;
             return 1;
         default:
             total += code;

@@ -26,7 +26,7 @@ s32 _slice0(struct MpegDecoder *mp, s32 nmb) {
     if (slice_setup_status != 0) {
         return slice_setup_status;
     }
-    mp->unk11C = 0;
+    mp->slice_error = 0;
     for (;;) {
         if (mbx >= nmb) {
             return 0;
@@ -36,13 +36,13 @@ s32 _slice0(struct MpegDecoder *mp, s32 nmb) {
             return 2;
         }
         if (inc == 0) {
-            if (_peepBit(mp, 0x17) == 0 || mp->unk11C != 0) {
-                mp->unk11C = 0;
+            if (_peepBit(mp, 0x17) == 0 || mp->slice_error != 0) {
+                mp->slice_error = 0;
                 return 3;
             }
             inc = _mbAddressIncrement(mp);
-            if (mp->unk11C != 0) {
-                mp->unk11C = 0;
+            if (mp->slice_error != 0) {
+                mp->slice_error = 0;
                 return 1;
             }
         }
@@ -52,17 +52,17 @@ s32 _slice0(struct MpegDecoder *mp, s32 nmb) {
         }
         if (inc == 1) {
             if (_decMB0(mp, &mbtype, &cbp, &qs, blk, blk + 8, blk + 12) == 0) {
-                mp->unk11C = 0;
+                mp->slice_error = 0;
                 return 1;
             }
         } else {
             if (_skipMB0(mp, blk, &cbp, blk + 8, &mbtype) == 0) {
-                mp->unk11C = 0;
+                mp->slice_error = 0;
                 return 2;
             }
         }
         if (_motionComp0(mp, mbx, inc, mbtype, cbp, blk, blk + 8, blk + 12) == 0) {
-            mp->unk11C = 0;
+            mp->slice_error = 0;
             return 2;
         }
         if (mbx != 0) {

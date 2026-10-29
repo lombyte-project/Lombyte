@@ -28,14 +28,14 @@ s32 _decodeOrSkipFrame(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
         decode_or_skip_result = _updateRefImage(mpeg_decoder, 0);
         _dispatchMpegCbNodata(decoder);
     }
-    _outputFrame(mpeg_decoder, mpeg_decoder->frame_count, mpeg_decoder->unk4);
+    _outputFrame(mpeg_decoder, mpeg_decoder->frame_count, mpeg_decoder->decoded_pictures);
     if ((mpeg_decoder->picture_structure != 3) && (flag == 0)) {
         mpeg_decoder->second_field = (s32)(mpeg_decoder->second_field == 0);
     }
     decoder->frameCount = (s32)(mpeg_decoder->frame_count - mpeg_decoder->frame_base);
     if (mpeg_decoder->second_field == 0) {
         mpeg_decoder->frame_count = (s32)(mpeg_decoder->frame_count + 1);
-        mpeg_decoder->unk4 = (s32)(mpeg_decoder->unk4 + 1);
+        mpeg_decoder->decoded_pictures = (s32)(mpeg_decoder->decoded_pictures + 1);
     }
     return decode_or_skip_result;
 }

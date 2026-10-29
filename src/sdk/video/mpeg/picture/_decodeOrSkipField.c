@@ -39,7 +39,7 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
         return 0;
     }
     expected_second_field_structure = 2;
-    if (mpeg_decoder->unkD4 != 1) {
+    if (mpeg_decoder->first_field_structure != 1) {
         expected_second_field_structure = 1;
     }
     if (mpeg_decoder->picture_structure != expected_second_field_structure) {
@@ -62,12 +62,12 @@ s32 _decodeOrSkipField(struct sceMpeg *decoder, s32 skip_comparison_value, s32 s
         }
     };
 out:
-    _outputFrame(mpeg_decoder, mpeg_decoder->frame_count, mpeg_decoder->unk4);
+    _outputFrame(mpeg_decoder, mpeg_decoder->frame_count, mpeg_decoder->decoded_pictures);
 
     mpeg_decoder->second_field = 0;
     decoder->frameCount = mpeg_decoder->frame_count - mpeg_decoder->frame_base;
     mpeg_decoder->frame_count = mpeg_decoder->frame_count + 1;
-    mpeg_decoder->unk4 = (unsigned long long)(mpeg_decoder->unk4 + 1);
+    mpeg_decoder->decoded_pictures = (unsigned long long)(mpeg_decoder->decoded_pictures + 1);
     if (should_decode == 0) {
         _dispatchMpegCbNodata(decoder);
     }

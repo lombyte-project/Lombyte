@@ -83,7 +83,7 @@ struct MpegMbBuffer {
 
 struct MpegDecoder {
     s32 is_end;                         /* set at the sequence end code; sceMpegIsEnd */
-    s32 unk4;                           /* non-zero: _outputFrame displays a frame */
+    s32 decoded_pictures;               /* pictures decoded since the reset; 0: _outputFrame has nothing to show yet */
     s32 started;                        /* set by the first decoded picture, which zeroes frameCount */
     u8 pad_C[0x40];
     u8 ipu_dma_state;                   /* &ipu_dma_state passed to suspend_mpeg_decoder_ipu_dma */
@@ -108,7 +108,7 @@ struct MpegDecoder {
     s32 unkC8;
     s32 unkCC;
     s32 unkD0;
-    s32 unkD4;                          /* 0 in _sequenceHeader, set by _pictureCodingExtension */
+    s32 first_field_structure;          /* picture_structure of a frame's first picture; 0 in _sequenceHeader */
     s32 unkD8;                          /* output address (_cpr8 masks it to physical) */
 
     /* Output size limits, checked by _isOutSizeOK against the picture. */
@@ -121,7 +121,7 @@ struct MpegDecoder {
     s32 frame_buffers[3];               /* reserved in _sequenceHeader, passed to _initRefImages */
     u8 pad_108[0x10];
     s32 frame_count;                    /* +1 per decoded frame (_decodeOrSkipFrame) */
-    s32 unk11C;
+    s32 slice_error;                    /* a macroblock failed to decode; _slice0 resyncs */
     s32 second_field;                   /* toggled per field picture (_decodeOrSkipFrame); set at
                                            _lastFrame: "the second field is missing" */
 
