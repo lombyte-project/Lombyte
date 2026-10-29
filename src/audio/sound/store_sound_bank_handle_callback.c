@@ -2,8 +2,8 @@
 /* 8 bytes of post-endlabel nop padding in retail -- see func_001F6668. */
 void store_sound_bank_handle_callback(int handle, long context) __asm__("FUN_0022dd78");
 
-void store_sound_bank_handle_callback(int handle, long context) {
-    int *handle_output = (int *)(int)context;
+void store_sound_bank_handle_callback(int handle, long handle_output_address) {
+    int *handle_output = (int *)(int)handle_output_address;
     if (handle_output != 0) {
         *handle_output = handle;
     }
