@@ -307,11 +307,10 @@ typedef struct {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *create_moby(int);
-extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
-void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void update_hit_triggered_moby_breakup(char *self) __asm__("FUN_L06_00309860");
@@ -338,7 +337,7 @@ void update_hit_triggered_moby_breakup(char *self) {
         break;
     case MOBY_STATE_SPAWN_AND_REMOVE: {
         char *spawned_moby;
-        FUN_0022da68_c(0, 0, (int)self);
+        allocate_voice_for_target_entry(0, 0, (int)self);
         spawn_proximity_gated_bolts(self);
         FUN_L00_00263fd8(self, 0x679, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L06_0015F580,
                          D_L06_0015F580, D_L06_0015F580);
@@ -355,7 +354,7 @@ void update_hit_triggered_moby_breakup(char *self) {
             *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
             update_entity(spawned_moby);
         }
-        mark_moby_for_removal_c(self);
+        mark_moby_for_removal(self);
         break;
     }
     }
@@ -366,7 +365,6 @@ void update_hit_triggered_moby_breakup(char *self) {
 void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
 
 void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_timed_sprite_effect(char *moby) __asm__("FUN_L06_0030be60");
 

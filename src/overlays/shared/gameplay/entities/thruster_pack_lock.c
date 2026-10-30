@@ -75,7 +75,6 @@ extern unsigned char D_0014171B_3102C8[] __asm__("D_0013F350");
 extern LvState D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30");
 extern LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0");
 extern unsigned char D_L11_0015FD08_3102C8[] __asm__("D_L11_0015FC88");
-extern void func_0022ED80_3102C8(int, int, void *) __asm__("FUN_0022da68");
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 
 void thruster_pack_lock_update(Lock *moby) __asm__("FUN_L11_0030ee00");
@@ -98,7 +97,7 @@ void thruster_pack_lock_update(Lock *moby)
                 ((*(int *)(D_0014C190_r + (((short)moby->uid >> 5) * 4 + (level << 8))) >> (moby->uid & 0x1F)) & 1)) {
                 moby->state = 2;
                 moby->z = moby->z - 1.5f;
-                func_0022ED80_3102C8(0, 0, moby);
+                allocate_voice_for_target_entry(0, 0, moby);
                 return;
             }
         }
@@ -121,7 +120,7 @@ void thruster_pack_lock_update(Lock *moby)
             }
             moby->state = 2;
             moby->z = moby->z - 1.5f;
-            func_0022ED80_3102C8(0, 0, moby);
+            allocate_voice_for_target_entry(0, 0, moby);
         }
         if (moby->bB0 == 0xFF) {
             return;
@@ -414,7 +413,6 @@ void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission
 extern unsigned char linked_moby_trail_long_span_enabled __asm__("D_0015EDB2");
 extern float trail_quad_texture_coordinates[] __asm__("D_L11_001F1490");
 extern short D_L11_001623F0_gp __asm__("D_L11_001623F0") __attribute__((sda));
-extern long long trail_effect_texture(int) __asm__("FUN_001f44b8");
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
 extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern int level_frame __asm__("D_L11_0015F5CC");
@@ -451,7 +449,7 @@ int draw_linked_moby_trails(char *moby) {
     }
 
     for (i = 0; i < 16; i++) {
-        long texture = trail_effect_texture(0x13);
+        long texture = get_effect_texture(0x13);
         TrailQuad *quad = &quads[i];
         quad->packet[1] = texture;
         quad->packet[2] = 0xFF9000000260L;
@@ -524,10 +522,8 @@ int draw_linked_moby_trails(char *moby) {
 /* Advances a trail ring buffer and records two offset points each fourth frame. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0031AAE0), where it is exact; names translated to the US level program. */
 
-extern int draw_linked_moby_trails();
 void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
-extern void f49(void *, void *) __asm__("FUN_001f4600");
-extern void FUN_L11_003192c8_c(void) __asm__("FUN_L11_003192c8");
+extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
 
 void update_moby_trail_points(char *moby) __asm__("FUN_L11_00319670");
 
@@ -564,7 +560,7 @@ void update_moby_trail_points(char *moby) {
         int *last_callback_frame = *(int **)(trail_data + 0x2C8);
         if (current_frame != *last_callback_frame) {
             *last_callback_frame = current_frame;
-            f49(FUN_L11_003192c8_c, moby);
+            enqueue_callback_list_1(draw_linked_moby_trails, moby);
         }
     }
 }

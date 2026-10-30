@@ -445,9 +445,7 @@ void draw_fleet_backdrop_quads(struct Moby *moby) {
 #include "rnc/overlay/l17/gameplay/entities/blarg_ship_globals.h"
 extern float backdrop_shared_radius_numerator_gp __asm__("D_L17_001623D0") __attribute__((sda));
 extern float backdrop_offset_radius_divisor_gp __asm__("D_L17_001623D8") __attribute__((sda));
-extern void FUN_L17_002f32f0_c(char *) __asm__("FUN_L17_002f32f0");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-s32 is_point_inside_clip_volume_u(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 extern float backdrop_quad_uv_rotation_rate_factors[] __asm__("D_L17_001DDFE0");
@@ -466,7 +464,7 @@ void update_fleet_backdrop_animation(struct Moby *moby) {
         struct Hero *hero_data = &hero;
         if (hero_data->state.current != 0x32 || ((char *)hero_data->ship_moby) == 0 ||
             *(short *)(((char *)hero_data->ship_moby) + 0xA6) != 0x563) {
-            if (is_point_inside_clip_volume_u(&hero.motion.pos, *(int *)(moby_pvars + 0x4C))) {
+            if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(moby_pvars + 0x4C))) {
                 D_L17_0015F638 = 150.0f;
                 goto done;
             }
@@ -516,7 +514,7 @@ done:
                 D_L17_001DE0A0[i] += 1.0f;
             }
         }
-        add_draw_callback(FUN_L17_002f32f0_c, moby);
+        add_draw_callback(draw_fleet_backdrop_quads, moby);
     }
 }
 #include "sda.h"
@@ -855,7 +853,6 @@ void update_hit_triggered_fragment_spawner(struct Moby *moby) {
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                               float *v11, float scale, float *v12);
-void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;
 void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) __asm__("FUN_L17_002f5390");
@@ -888,7 +885,7 @@ void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) {
                          D_L17_0015F580_macro, 0.0f, D_L17_0015F580_macro);
         spawn_moby_break_fragments(moby, 0x756, 1, 0x756, 1, 1, 2);
         spawn_moby_from_placement(moby, 0x755);
-        mark_moby_for_removal_c(moby);
+        mark_moby_for_removal(moby);
         break;
     }
 }

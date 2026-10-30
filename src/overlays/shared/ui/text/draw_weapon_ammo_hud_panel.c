@@ -227,7 +227,6 @@ extern int queue_animation_update(int, int, void *, void *, void *, void *,
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void hud_weapon_update(void) __asm__("FUN_L00_0023cdb8");
-extern void FUN_L00_0023a7a8_23adb8(void) __asm__("FUN_L00_0023a7a8");
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_hud_cropped_gauge_panel(void) __asm__("FUN_L00_0023a640");
@@ -247,7 +246,7 @@ void update_weapon_hud_state(void) {
         D_L00_0015F96C = weapon_item_id;
         *(volatile int *)&D_L00_0015F970 = queue_animation_update(
             0x10, weapon_item_id + 60000, initialize_numeric_hud_timer_and_base_dimensions, hud_weapon_update,
-            FUN_L00_0023a7a8_23adb8, &weapon_ammo_counts[weapon_item_id], D_L00_001C40B0[weapon_item_id].hE);
+            draw_weapon_ammo_hud_panel, &weapon_ammo_counts[weapon_item_id], D_L00_001C40B0[weapon_item_id].hE);
     } else if (k = -1, mode == 2) {
         if (D_L00_0015F970 != k) {
             set_animation_parameter(D_L00_0015F970, 0);

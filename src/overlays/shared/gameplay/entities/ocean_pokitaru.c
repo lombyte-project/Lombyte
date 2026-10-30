@@ -687,7 +687,6 @@ typedef struct {
 } OceanMoby;
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-extern void FUN_L11_0030a908_b358(void) __asm__("FUN_L11_0030a908");
 extern UV wave_offset[] __asm__("D_L11_00161E08") MACRO_ADDR;
 extern float camera_pos_b358[] __asm__("D_L11_001677C0");
 extern char last_camera_pos[4] __asm__("D_L11_00162840") __attribute__((sda)); /* a 16-byte vector; declared small so it is reached through $gp */
@@ -761,7 +760,7 @@ void ocean_pokitaru_update(OceanMoby *moby)
             wave_offset[k].v = wave_offset[k].v + 1.0f;
         }
     }
-    add_draw_callback((void *)FUN_L11_0030a908_b358, moby);
+    add_draw_callback((void *)draw_pokitaru_ocean, moby);
 }
 
 f32 D_L16_001D8A28[1] __attribute__((section(".data"))) = {0};

@@ -49,7 +49,6 @@ void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char D_0013F350_lui[] __asm__("D_0013F350") NOT_SDA;
 extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern void func_L01_0026F040_30D370(int, int) __asm__("FUN_L01_0026e090");
-extern void func_0022ED80_30D370(int, int, int) __asm__("FUN_0022da68");
 extern int func_001F9850_30D370(int) __asm__("FUN_001f96f8");
 extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -122,10 +121,10 @@ void timed_activation_pads_update(unsigned char *moby)
     if ((unsigned int)(pad_state - 2) < 4) {
         if (moby[0xBC] == 1) {
             if (fast_dec_timer((int *)pad_data)) {
-                func_0022ED80_30D370(2, 0, (int)moby);
+                allocate_voice_for_target_entry(2, 0, (int)moby);
                 set_moby_list_state(moby[0x21], 8);
             } else if (fast_dec_timer((int *)(pad_data + 4))) {
-                func_0022ED80_30D370(0, 0, (int)moby);
+                allocate_voice_for_target_entry(0, 0, (int)moby);
                 *(int *)(pad_data + 4) = func_001F9850_30D370(0x2D) < func_001F9850_30D370(5) + *(int *)pad_data / func_001F9850_30D370(0x28)
                     ? func_001F9850_30D370(0x2D) : func_001F9850_30D370(5) + *(int *)pad_data / func_001F9850_30D370(0x28);
             }
@@ -151,7 +150,7 @@ void timed_activation_pads_update(unsigned char *moby)
             *(int *)(pad_data + 0x8) = on;
             func_L01_0026F040_30D370(moby[0x21], 0);
             moby[0xBC] = on;
-            func_0022ED80_30D370(3, 0, (int)moby);
+            allocate_voice_for_target_entry(3, 0, (int)moby);
             set_moby_list_state(moby[0x21], 2);
         }
         break;
@@ -162,7 +161,7 @@ void timed_activation_pads_update(unsigned char *moby)
         if (flag) {
             *(int *)(pad_data + 0x8) = 1;
             glow_n(moby, 0, 0xFF, 0);
-            func_0022ED80_30D370(3, 0, (int)moby);
+            allocate_voice_for_target_entry(3, 0, (int)moby);
             set_moby_list_state(moby[0x21], 4);
         }
         break;
@@ -174,7 +173,7 @@ void timed_activation_pads_update(unsigned char *moby)
             *(int *)(pad_data + 0x8) = 1;
             glow_n(moby, 0, 0xFF, 0);
             set_moby_list_state(moby[0x21], 6);
-            func_0022ED80_30D370(1, 0, (int)moby);
+            allocate_voice_for_target_entry(1, 0, (int)moby);
         }
         break;
     case PAD_INITIALIZE_FLASHING:
@@ -218,7 +217,6 @@ extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void play_sound_310df0(s32, s32, void *) __asm__("FUN_0022da68");
 
 void door_update(u8 *moby) __asm__("FUN_L07_00310df0");
 void door_update(u8 *moby)
@@ -266,7 +264,7 @@ void door_update(u8 *moby)
         *(quadword *)vectors = *(quadword *)(vectors + 4);
         *(f32 *)(data + 0x0c) = fast_vec_length(vectors);
         if (*(s32 *)(data + 0x30) != -1)
-            play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+            allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
         moby[0x20] = 2;
         return;
     case DOOR_MOVE_TO_OFFSET_POSITION:
@@ -277,7 +275,7 @@ void door_update(u8 *moby)
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
                 other[0x20] == *(u32 *)(data + 0x18)) {
                 if (*(s32 *)(data + 0x30) != -1)
-                    play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+                    allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
                 moby[0x20] = 4;
                 return;
             }
@@ -297,7 +295,7 @@ void door_update(u8 *moby)
         *(f32 *)(data + 0x0c) = 0.0f;
         moby[0x20] = 3;
         if (*(s32 *)(data + 0x34) != -1)
-            play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+            allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
         return;
     case DOOR_WAIT_TO_RETURN_TO_INITIAL_POSITION:
         if (*(s32 *)(data + 0x38) != -1)
@@ -310,7 +308,7 @@ void door_update(u8 *moby)
             return;
         *(s32 *)(data + 0x0c) = 0;
         if (*(s32 *)(data + 0x30) != -1)
-            play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+            allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
         moby[0x20] = 4;
         return;
     case DOOR_RETURN_TO_INITIAL_POSITION:
@@ -321,7 +319,7 @@ void door_update(u8 *moby)
             other[0x20] == 0xfe || other[0x20] == 0xfd ||
             other[0x20] == *(u32 *)(data + 0x14)) {
             if (*(s32 *)(data + 0x30) != -1)
-                play_sound_310df0(*(s32 *)(data + 0x30), 0, moby);
+                allocate_voice_for_target_entry(*(s32 *)(data + 0x30), 0, moby);
             moby[0x20] = 2;
         } else {
             *(quadword *)(vectors + 4) = 0;
@@ -338,7 +336,7 @@ void door_update(u8 *moby)
                 return;
             qcopy(moby + 0x10, data);
             if (*(s32 *)(data + 0x30) != -1)
-                play_sound_310df0(*(s32 *)(data + 0x34), 0, moby);
+                allocate_voice_for_target_entry(*(s32 *)(data + 0x34), 0, moby);
             if (*(s32 *)(data + 0x38) != -1)
                 D_L07_00184528[*(s32 *)(data + 0x38)] = 0;
             moby[0x20] = 1;
@@ -351,7 +349,6 @@ void door_update(u8 *moby)
 }
 extern void fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
 extern void scale_vector_xyz_alt_31aee0(f32, void *, void *) __asm__("FUN_001f9bf8");
-extern void play_sound_31aee0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void bridge_update(u8 *moby) __asm__("FUN_L07_0031aee0");
@@ -403,7 +400,7 @@ void bridge_update(u8 *moby)
         *(quadword *)vectors = *(quadword *)(vectors + 4);
         *(f32 *)(data + 0xac) = fast_vec_length(vectors);
         if (*(s32 *)(data + 0xd0) != -1)
-            play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+            allocate_voice_for_target_entry(*(s32 *)(data + 0xd0), 0, moby);
         moby[0x20] = 2;
         break;
     case BRIDGE_MOVE_TO_OFFSET_POSITION:
@@ -412,7 +409,7 @@ void bridge_update(u8 *moby)
             if (other != 0 && other[0x20] != 0xfe && other[0x20] != 0xfd &&
                 other[0x20] == *(u32 *)(data + 0xb8)) {
                 if (*(s32 *)(data + 0xd0) != -1)
-                    play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+                    allocate_voice_for_target_entry(*(s32 *)(data + 0xd0), 0, moby);
                 moby[0x20] = 4;
                 break;
             }
@@ -433,7 +430,7 @@ void bridge_update(u8 *moby)
                 D_L07_00184528[*(s32 *)(data + 0xd8)] = 1;
             moby[0x20] = 3;
             if (*(s32 *)(data + 0xd4) != -1)
-                play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+                allocate_voice_for_target_entry(*(s32 *)(data + 0xd0), 0, moby);
         }
         break;
     case BRIDGE_WAIT_TO_RETURN_TO_INITIAL_POSITION:
@@ -443,7 +440,7 @@ void bridge_update(u8 *moby)
                 other[0x20] == *(u32 *)(data + 0xb8)) {
                 *(s32 *)(data + 0xac) = 0;
                 if (*(s32 *)(data + 0xd0) != -1)
-                    play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+                    allocate_voice_for_target_entry(*(s32 *)(data + 0xd0), 0, moby);
                 moby[0x20] = 4;
             }
         }
@@ -454,7 +451,7 @@ void bridge_update(u8 *moby)
             other[0x20] == 0xfe || other[0x20] == 0xfd ||
             other[0x20] == *(u32 *)(data + 0xb4)) {
             if (*(s32 *)(data + 0xd0) != -1)
-                play_sound_31aee0(*(s32 *)(data + 0xd0), 0, moby);
+                allocate_voice_for_target_entry(*(s32 *)(data + 0xd0), 0, moby);
             moby[0x20] = 2;
         } else {
             *(quadword *)(vectors + 4) = 0;
@@ -470,7 +467,7 @@ void bridge_update(u8 *moby)
             if (distance < *(f32 *)(data + 0xac)) {
                 qcopy(moby + 0x10, data + 0xa0);
                 if (*(s32 *)(data + 0xd0) != -1)
-                    play_sound_31aee0(*(s32 *)(data + 0xd4), 0, moby);
+                    allocate_voice_for_target_entry(*(s32 *)(data + 0xd4), 0, moby);
                 if (*(s32 *)(data + 0xd8) != -1)
                     D_L07_00184528[*(s32 *)(data + 0xd8)] = 0;
                 moby[0x20] = 1;

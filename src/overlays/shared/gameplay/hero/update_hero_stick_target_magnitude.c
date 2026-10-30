@@ -211,7 +211,6 @@ extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern f32 spring_angle(float *, float *, int, float, float, float,
                                    float) __asm__("FUN_L00_0025bc98");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
-extern void FUN_L00_00233ba0_223450(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void air_accel(f32) __asm__("FUN_L01_00234358");
 
@@ -245,7 +244,7 @@ void hero_update_hop_velocity(void) {
             hero.target_speed = ED6C * 3.5f;
         }
         speed_step(ED70 * 44.0f, ED70 * 45.0f);
-        FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+        set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
         add_hero_forward_offset(&hero.motion.velocity, &hero.motion.velocity, hero.ground_speed);
     } else if (state == 0x1C) {
         if (scale_game_frames(0x28) < hero.state_timer) {
@@ -294,7 +293,7 @@ void hero_update_hop_velocity(void) {
                 hero.motion.velocity.f[0] = fast_cos(hero.motion.move_yaw) * (ED6C * 4.9f);
                 hero.motion.velocity.f[1] = fast_sin(hero.motion.move_yaw) * (ED6C * 4.9f);
             } else {
-                FUN_L00_00233ba0_223450(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
+                set_gravity_relative_vector_length_xy(&hero.motion.velocity, &hero.motion.velocity, 0.0f);
                 fast_vec_normalize(&velocity_addend, &hero.motion.move_dir, ED6C * 4.9f);
                 fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &velocity_addend);
             }

@@ -275,7 +275,6 @@ extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 extern int D_L15_0015F594 __attribute__((sda));
 extern u8 D_0014C050[];
 extern u32 D_0013CAE4 NOT_SDA;
-extern void mark_moby_for_removal_002ed068(struct Moby *) __asm__("FUN_0020c828");
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
@@ -301,7 +300,7 @@ void giant_clank_pad_update(struct Moby *moby) {
     case GIANT_CLANK_PAD_INITIALIZE: {
         s32 level;
         if (*(int *)((u8 *)linked + 0x60) == -1) {
-            mark_moby_for_removal_002ed068(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         entry = (struct Moby *)((char *)l15_moby_array + (*(int *)((u8 *)linked + 0x60) << 8));

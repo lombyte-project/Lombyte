@@ -55,10 +55,10 @@ typedef struct {
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern int D_L00_0015F760 __attribute__((sda));
 extern int D_L00_0015F764 __attribute__((sda));
-extern void FUN_L00_00235ad8_c(HudElem_237840 *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
+extern void apply_hud_slide_offset(HudElem_237840 *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
 extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
-int FUN_L00_00235a70_c2(HudElem_237840 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
+int hud_screen_position(HudElem_237840 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
 int hud_draw_gauge_frame(HudElem_237840 *e) __asm__("FUN_L00_00237840");
 int hud_draw_gauge_frame(HudElem_237840 *e) {
@@ -75,8 +75,8 @@ int hud_draw_gauge_frame(HudElem_237840 *e) {
             __builtin_memcpy(dst, src, 4);
         }
     }
-    FUN_L00_00235a70_c2(e, &pos[0], &pos[1]);
-    FUN_L00_00235ad8_c(e, &pos[0], &pos[1], e->unk6C, 0);
+    hud_screen_position(e, &pos[0], &pos[1]);
+    apply_hud_slide_offset(e, &pos[0], &pos[1], e->unk6C, 0);
     w = D_L00_0015F760 * 0xD0;
     h = D_L00_0015F764 * 0xA0;
     bh = D_L00_0015F760 * 0x260;
@@ -361,7 +361,6 @@ extern u32 strlen(const char *);
 extern unsigned char item_text_variant[] __asm__("D_0013E520");
 extern void FUN_L00_0023b120(char *, int, int, int, int, int);
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
-int FUN_L00_00235a70_c3(HudElem *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 
 int draw_hud_item_selector_panel(HudElem *rec) __asm__("FUN_L00_002382a0");
 
@@ -396,7 +395,7 @@ int draw_hud_item_selector_panel(HudElem *rec) {
     }
     x = rec->unk50;
     y = rec->unk54;
-    FUN_L00_00235a70_c3(rec, &x, &y);
+    hud_screen_position(rec, &x, &y);
     half_w = D_L00_0015F718_gp / 2;
     half_h = D_L00_0015F71C_gp / 2;
     draw_hud_sprite(get_icon_frame(0xe934, 0), x, y, half_w, half_h, alpha);
@@ -671,17 +670,13 @@ extern int radial_selector_label_color_to __asm__("D_L00_0015F7D8") __attribute_
 extern int radial_selector_label_y_offset __asm__("D_L00_0015F7DC") __attribute__((sda)); /* no foreign declaration */
 extern Ent_239918 **D_L00_0015FAC0_c2 __asm__("D_L00_0015FAC0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
-int FUN_L00_00235a70_c(HudElem_238f88 *rec, int *x, int *y) __asm__("FUN_L00_00235a70");
 extern Ids D_L00_0015F8C0_239918 __asm__("D_L00_0015F7E0");
 extern char D_L00_0017E5D8_239918[] __asm__("D_L00_0017E4D8");
 extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
 extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
-extern int get_text(int) __asm__("FUN_001fdd10");
 extern int strlen_alt(int) __asm__("FUN_001166cc");
 extern int func_001FA8A8_239918(int, int, float) __asm__("FUN_001fa6e0");
-extern int func_001F6EA8_239918(int, int, int, int, int) __asm__("FUN_001f6af0");
-extern int func_L00_00236400_239918(void *, int *, int *) __asm__("FUN_L00_00235a70");
 
 int draw_hud_radial_selector_panel(Elem *element) __asm__("FUN_L00_00238f88");
 
@@ -726,7 +721,7 @@ int draw_hud_radial_selector_panel(Elem *element) {
     }
     x = element->x;
     y = element->y;
-    func_L00_00236400_239918(element, &x, &y);
+    hud_screen_position(element, &x, &y);
     half_width = D_L00_0015F718_gp / 2;
     half_height = D_L00_0015F71C_gp / 2;
     draw_hud_sprite(get_icon_frame(0xE934, 1), x, y, half_width, half_height, frame_alpha);
@@ -758,14 +753,14 @@ int draw_hud_radial_selector_panel(Elem *element) {
     if (selected >= 0 && D_L00_0015FAC0_c2[D_L00_0015F72C][selected].unk0 != 0) {
         text_ids = D_L00_0015F8C0_239918;
         if (D_L00_0015FAC0_c2[D_L00_0015F72C][selected].unk0 != 0) {
-            text = get_text(text_ids.v[selected]);
+            text = get_help_message_text(text_ids.v[selected]);
             if (text != 0 && strlen_alt(text) != 0) {
                 float fade = text_fade * open_fade;
                 color = func_001FA8A8_239918(radial_selector_label_color_from, radial_selector_label_color_to, fade);
                 shadow = func_001FA8A8_239918(0, 0x80000000, fade);
                 text_y = y + radial_selector_label_y_offset + D_L00_0015F724;
-                func_001F6EA8_239918(x + D_L00_0015F720 - 1, text_y - 1, shadow, text, -1);
-                func_001F6EA8_239918(x + D_L00_0015F720, text_y, color, text, -1);
+                font_print_center(x + D_L00_0015F720 - 1, text_y - 1, shadow, text, -1);
+                font_print_center(x + D_L00_0015F720, text_y, color, text, -1);
             }
         }
     }
@@ -891,7 +886,6 @@ typedef struct {
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
-extern void FUN_L00_0023b120_c(Hud *, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b120");
 extern int pal_mode __asm__("D_0015ED80");
 extern s32 hero_max_health __asm__("D_0015EDA0");
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility_data/draw_health_hud_panel_2.h"
@@ -985,10 +979,10 @@ s32 draw_health_hud_panel(Hud *hud_element) {
     }
     for (i = 0; i < mode; i++) {
         health_icon_frame_index = get_icon_frame(0x7536, sel);
-        FUN_L00_0023b120_c(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
+        hud_frame(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
         if (sel != 0x1E) {
             health_icon_frame_index = get_icon_frame(0x7536, 0x1E);
-            FUN_L00_0023b120_c(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
+            hud_frame(hud_element, health_icon_frame_index, x + tab[i].x, y + tab[i].y, 1, alpha);
             health_icon_frame_index = get_icon_frame(0x7536, 0x1F);
             draw_hud_sprite(health_icon_frame_index, x + tab[i].x + 0xE, y + tab[i].y - 0x11, 0x22, 0x22,
                            truncate_float_to_s32((f32)(p[1] >> 4) * ratio_y));
@@ -1266,8 +1260,6 @@ out:
     return hud_element->ret;
 }
 extern short D_00140986 NOT_SDA;
-int hud_screen_position(char *, int *, int *) __asm__("FUN_L00_00235a70");
-void apply_hud_slide_offset(char *, int *, int *, int, int) __asm__("FUN_L00_00235ad8");
 int get_icon_frame(int, int) __asm__("FUN_001ff960");
 void draw_cropped_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023b6c0");
 void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");

@@ -165,7 +165,6 @@ typedef struct {
     short b;
 } Ent;
 
-extern int FUN_L00_002851c0_u(int, int) __asm__("FUN_L00_002851c0");
 
 void restore_moby_state_entries(int *entry_block) __asm__("FUN_L00_00285208");
 
@@ -173,7 +172,7 @@ void restore_moby_state_entries(int *entry_block) {
     int i;
 
     for (i = 0; i < *entry_block; i++) {
-        int moby_address = FUN_L00_002851c0_u(((Ent *)(entry_block + 1))[i].b, ((Ent *)(entry_block + 1))[i].a);
+        int moby_address = find_moby_by_id(((Ent *)(entry_block + 1))[i].b, ((Ent *)(entry_block + 1))[i].a);
         if (moby_address != 0) {
             int entry_copy_destination;
             if (((Ent *)(entry_block + 1))[i].kind == 1) {

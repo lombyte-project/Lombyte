@@ -30,7 +30,6 @@ u32 pad_pressed_within(u32 mask, s32 n, s32 *out) {
 
 /* Ported from rac1-decomp (src/overlays/shared/stream_002670E0.c: func_L00_00267C48), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_00266d60_u(int, int, int *) __asm__("FUN_L00_00266d60");
 extern s32 SubtractIntegerWithClamp(s32);
 
 /* True when both lookups succeed and the clamped difference of their values is below d. */
@@ -39,8 +38,8 @@ int check_pad_press_separation(int first_button_mask, int second_button_mask, in
 int check_pad_press_separation(int first_button_mask, int second_button_mask, int lookback_frames, int press_difference_limit) {
     int press_ages_frames[2];
     int presses_within_limit = 0;
-    if (FUN_L00_00266d60_u(first_button_mask, lookback_frames, &press_ages_frames[0])) {
-        if (FUN_L00_00266d60_u(second_button_mask, lookback_frames, &press_ages_frames[1])) {
+    if (pad_pressed_within(first_button_mask, lookback_frames, &press_ages_frames[0])) {
+        if (pad_pressed_within(second_button_mask, lookback_frames, &press_ages_frames[1])) {
             presses_within_limit = SubtractIntegerWithClamp(press_ages_frames[0] - press_ages_frames[1]) < press_difference_limit;
         }
     }

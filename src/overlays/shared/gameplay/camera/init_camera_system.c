@@ -99,7 +99,6 @@ typedef struct {
 } S_u;
 
 extern S_u D_L00_00166C80_c __asm__("D_L00_00166C80");
-extern char *FUN_L00_001eb1f8_u(int) __asm__("FUN_L00_001eb1f8");
 extern char active_camera_saved_state_storage[] __asm__("D_L00_00169110");
 extern void update_camera_tracking_state(void) __asm__("FUN_001ed470");
 void backup_current_cam(void) __asm__("FUN_001ebc90");
@@ -115,7 +114,7 @@ void init_camera_system(void) {
         *(*(char **)(camera_system_state + 0x180) + 0x7D) = 0;
         *(short *)(*(char **)(camera_system_state + 0x180) + 0x7E) = 0;
     }
-    *(char **)(camera_system_state + 0x180) = FUN_L00_001eb1f8_u(0);
+    *(char **)(camera_system_state + 0x180) = find_camera_record_by_id(0);
     *(short *)(*(char **)(camera_system_state + 0x180) + 0x8E) = 1;
     *(char **)(*(char **)(camera_system_state + 0x180) + 0x70) = active_camera_saved_state_storage;
     *(short *)(camera_system_state + 0x270) = 0;

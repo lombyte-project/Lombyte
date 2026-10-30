@@ -294,8 +294,8 @@ void *collect_snagglebeast_navigation_ids(void *unused, void *dp, void *op) {
     }
     return (void *)output_count;
 }
-extern char *hit_lookup_13420(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int trooper_take_damage(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -333,8 +333,8 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
     float original_health;
 
     if ((u8)moby[0x20] != 10) {
-        hit = hit_lookup_13420(moby, 0x330000, 0);
-        trooper_take_damage(moby, hit, health, 0, &scratch.contact, 0, 0, 4);
+        hit = find_moby_hit(moby, 0x330000, 0);
+        fun_00213928(moby, hit, health, 0, &scratch.contact, 0, 0, 4);
         if (hit != 0) {
             char *owner;
             if (0.0f < *(float *)(hit + 0x2c)) {
@@ -2289,9 +2289,6 @@ void detach_snagglebeast_rope_particles(int target_entry) {
 }
 extern Vec4 l07_sphere_collision_resolved_center __asm__("D_L07_00173EF0");
 extern f32 D_0015ED6C;
-extern s32 sight_19040(struct Moby *, void *, f32) __asm__("FUN_L07_002886d8");
-extern char *hit_lookup_19040(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern s32 hit_test_19040(struct Moby *, char *, void *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
@@ -2343,14 +2340,14 @@ void homing_mine_update(struct Moby *moby) {
     vars = (Mine *)moby->pvars;
     if (vars == NULL) return;
 
-    sight_19040(moby, sight, 8.0f);
+    get_target_sight(moby, sight, 8.0f);
     if (moby->visible && fast_vec_dist(&moby->pos, &D_L07_00166E40) < 27.0f) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x15;
     }
     health = &vars->health;
-    hit = hit_lookup_19040(moby, 0x230000, 0);
-    hit_test_19040(moby, hit, health, 0, &touching, 0, 0, 4);
+    hit = find_moby_hit(moby, 0x230000, 0);
+    fun_00213928(moby, hit, health, 0, &touching, 0, 0, 4);
     if (touching >= 2 && hit != NULL && (*(struct Moby **)(hit + 0x20))->oclass != 0x456 &&
         (*(struct Moby **)(hit + 0x20))->oclass != 0x365 && (*(struct Moby **)(hit + 0x20))->oclass != 0x367) {
         clear_u64_value(chase_step.f);
@@ -2508,8 +2505,6 @@ void mark_swooper_for_removal(struct Moby *moby, SwooperSpawnerVars *spawner_var
 
 
 extern s32 FUN_L07_002886d8(struct Moby *, SwooperSight *, f32);
-extern MobyHit *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern s32 fun_00213928(struct Moby *, MobyHit *, void *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern f32 spring_turn(f32 *, f32, f32, f32, f32, f32) __asm__("FUN_L00_00258110");

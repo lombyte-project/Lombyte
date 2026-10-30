@@ -614,7 +614,7 @@ extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern unsigned short D_00141920[] NOT_SDA;
 extern unsigned short D_00141D80[] NOT_SDA;
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
@@ -855,7 +855,7 @@ int process_hero_primary_item_input(void) {
             if (D_0013CA40_p2523C8.held & mask) {
                 if (!get_ammo(-1)) {
                     if (!voice_is_playing((Moby *)(*(Hero *)((char *)&hero)).items[0].moby, pv->fC)) {
-                        pv->fC = allocate_voice_for_target_entry_alt(0, 0, (int)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby));
+                        pv->fC = allocate_voice_for_target_entry(0, 0, (int)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby));
                     }
                 }
             }
@@ -889,7 +889,7 @@ int process_hero_primary_item_input(void) {
                     break;
                 }
                 if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
-                    allocate_voice_for_target_entry_alt(0, 0, (int)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby));
+                    allocate_voice_for_target_entry(0, 0, (int)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby));
                 }
             }
         }
@@ -904,7 +904,7 @@ int process_hero_primary_item_input(void) {
                     if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
                         hero_set_state(0x20, 1);
                         if (((Moby *)(*(Hero *)((char *)&hero)).items[0].moby) != 0) {
-                            allocate_voice_for_target_entry_alt(0, 0, (int)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby));
+                            allocate_voice_for_target_entry(0, 0, (int)((Moby *)(*(Hero *)((char *)&hero)).items[0].moby));
                         }
                     }
                 }
@@ -994,7 +994,7 @@ int process_hero_primary_item_input(void) {
                 stats->stat[27].unk2 = scale_game_frames(D_0015EEA4_macro) / 600;
             }
             stats->stat[27].level_mask = stats->stat[27].level_mask | (1 << D_0015ED84_gp) | 0x80000000;
-            allocate_voice_for_target_entry_alt(0, 0, (int)item);
+            allocate_voice_for_target_entry(0, 0, (int)item);
             moby_point_position(item, 0, joint_pos);
             create_class_5c3_moby(item, joint_pos, best, (*(Hero *)((char *)&hero)).motion.rot.f[2], (*(Hero *)((char *)&hero)).motion.rot.f[1]);
         }
@@ -1109,7 +1109,6 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32 get_first_moby_in_group(void **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern s32 get_next_moby_in_group(void **, void *, s32, s32) __asm__("FUN_L00_002592b8");
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
 extern s32 weapon_ammo_counts[37] __asm__("D_0013D428");
@@ -1393,7 +1392,6 @@ extern int D_0015EE3C_macro __asm__("D_0015EE3C") MACRO_ADDR;
 extern int freeze_stats_time_ref_macro[2] __asm__("D_0015EE58") MACRO_ADDR;
 extern int freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") MACRO_ADDR;
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
-extern void func_L05_00254B38_254608(void *, void *) __asm__("FUN_L05_00254358");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
@@ -1502,7 +1500,7 @@ void update_hero_hoverboard_race_progress(void) {
             hero.off_course_reset_pending = 1;
             if (race_respawn_gate_state == 1) {
                 hero.off_course_reset_pending = 0;
-                func_L05_00254B38_254608(world_position_scratch, course_point_or_respawn_rotation);
+                compute_hero_hoverboard_respawn_transform(world_position_scratch, course_point_or_respawn_rotation);
                 hero.off_course_frames = 0;
                 hero.board_air_yaw = course_point_or_respawn_rotation[2];
                 set_race_camera(world_position_scratch, course_point_or_respawn_rotation, 0x6B, 1);

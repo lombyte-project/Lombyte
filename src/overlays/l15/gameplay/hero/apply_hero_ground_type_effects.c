@@ -171,7 +171,7 @@ void FUN_001f9a28_210ce8(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9dc8_210ce8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_210ce8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_210ce8(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_L00_00216de8_210ce8(s32, s32) __asm__("FUN_L00_00216de8");
+void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -274,7 +274,7 @@ s32 process_hero_incoming_hit(s32 apply_hit_reaction) {
                 mob = ((u8 *)hero.damage_source_moby);
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
-                    FUN_L00_00216de8_210ce8(0x1C, 0);
+                    allocate_hero_voice_for_entry(0x1C, 0);
                 }
             }
             hero_set_state(0x76, 1);
@@ -547,7 +547,6 @@ struct PlayerSpeedTuning {
     f32 x18;
 };
 extern struct PlayerSpeedTuning D_L15_0017C3B8;
-extern s32 allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 collision_line(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");

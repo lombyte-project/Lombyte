@@ -270,7 +270,7 @@ typedef struct {
     long q80;
     long q88;
 } S_a95b8;
-extern int func_001F4868_a95b8(int) __asm__("FUN_001f44b8");
+extern int get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void func_L00_001FD1D8_a95b8(void *, void *, int) __asm__("FUN_001f7d30");
 extern struct {
     float a, b;
@@ -290,7 +290,7 @@ void draw_fleet_beam_quad(struct Moby *moby) {
     fast_vec_normalize(beam_start_vertex_offset, beam_start_vertex_offset, *(float *)(moby_vars + 0x4C));
     fast_vec_cross(beam_end_vertex_offset, beam_end_vertex_offset, beam_end_to_start_vector);
     fast_vec_normalize(beam_end_vertex_offset, beam_end_vertex_offset, *(float *)(moby_vars + 0x4C));
-    quad_primitive.z78 = func_001F4868_a95b8(0xE);
+    quad_primitive.z78 = get_effect_texture(0xE);
     quad_primitive.q80 = 0xFF9000000260L;
     quad_primitive.q88 = 0x8000000048L;
     quad_primitive.z70 = 0;
@@ -787,7 +787,6 @@ extern int fleet_radial_alpha_base_value_gp __asm__("D_L17_00161B98") __attribut
 #include "rnc/overlay/l17/gameplay/entities/dreks_fleet_turret_data/draw_fleet_scrolling_radial_quads.h"
 extern int fleet_radial_quad_rgba_gp __asm__("D_L17_00161BB8") __attribute__((sda));
 extern RingStep D_L17_00161BC0 NOT_SDA;
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern RingStep D_L17_00161BC8 NOT_SDA;
 extern void draw_geometry_quad(void *, void *, int);
 
@@ -864,7 +863,6 @@ extern short fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") __attrib
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 f32 resolve_camera_surface_height(struct CameraProbePosition *position,
                                   s32 optional_output) __asm__("FUN_002135f0");
-void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 extern void make_hit_descriptor(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -894,7 +892,7 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
     if (out >= 2 && hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x343) {
         spawn_explosion(moby, zero_vector, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
                               -1, 0);
-        mark_moby_for_removal_u(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     switch (moby->state) {
@@ -931,7 +929,7 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
                     FUN_L00_0026f080(&moby->pos, scaled_particle_vector, random_float_between(0.05f, 0.1f) * 210000.0f,
                                      yy);
                 } while (--i >= 0);
-                mark_moby_for_removal_u(moby);
+                mark_moby_for_removal(moby);
             }
         }
         break;

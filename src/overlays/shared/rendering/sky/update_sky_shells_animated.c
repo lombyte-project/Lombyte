@@ -315,7 +315,6 @@ void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) {
     sky_draw_shell(2);
 }
 extern u8 *D_L00_0016051C_0028aa98 __asm__("D_L00_0016051C");
-void FUN_00233980_0028aa98(s32, u64) __asm__("FUN_00233980");
 void draw_two_sky_shells_with_particles(void) __asm__("FUN_L00_0028aa98");
 
 void draw_two_sky_shells_with_particles(void) {
@@ -325,7 +324,7 @@ void draw_two_sky_shells_with_particles(void) {
         sky_particles_init(0x78, 8);
     sky_particles_update();
     sky_sprite_proc();
-    FUN_00233980_0028aa98(0x42, 0x8000000044ULL);
+    vu1_add_g_sregister(0x42, 0x8000000044ULL);
     sky_draw_shell(1);
 }
 /* Hand-written from the US listing (closest relative FUN_L00_002895a0). */

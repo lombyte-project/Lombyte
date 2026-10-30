@@ -222,7 +222,7 @@ extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 compute_interpolated_record_value(ElectroidMoby *) __asm__("FUN_0020c9e0");
 extern s32 collision_line(void *, void *, s32, ElectroidMoby *, ElectroidProbe *) __asm__("FUN_001efa68");
-extern s32 FUN_L00_002e2040_c(ElectroidMoby *) __asm__("FUN_L00_002e2040");
+extern s32 release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
 extern s32 set_beam_origin_transform_and_endpoint(ElectroidMoby *, void *, void *) __asm__("FUN_L00_002e2190");
 extern s32 mine_fall(ElectroidMoby *, void *) __asm__("FUN_L00_0025c698");
 extern void cart_burst(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_0025f090");
@@ -395,14 +395,14 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         probe.f[2] += 0.5f;
         if (collision_line(&mtx[3], &probe, 0, moby, &query) != 0 && hit != 0 &&
             coll_hit.moby == (*(s32 *)&D_001413D0_lui)) {
-            FUN_L00_002e2040_c(moby);
+            release_beam_slot_by_id(moby);
             moby->state = 6;
             ELECTROID_ANIM(moby, 7, scale_game_frames_s32(10));
         }
         if (collision_line(&mtx[3], &dir, 0, moby, &query) != 0) {
             qcopy(&dir, &coll_hit.point);
             if (hit != 0 && coll_hit.moby == (*(s32 *)&D_001413D0_lui)) {
-                FUN_L00_002e2040_c(moby);
+                release_beam_slot_by_id(moby);
                 moby->state = 6;
                 ELECTROID_ANIM(moby, 7, scale_game_frames_s32(10));
             }
@@ -410,7 +410,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         set_beam_origin_transform_and_endpoint(moby, mtx, &dir);
         if (moby->unk70 & 2) {
             if (vars->timer++ == D_L00_00161BE8) {
-                FUN_L00_002e2040_c(moby);
+                release_beam_slot_by_id(moby);
                 moby->state = 6;
                 ELECTROID_ANIM(moby, 12, scale_game_frames_s32(10));
             }
@@ -469,7 +469,6 @@ extern void trooper_anim_update(ElectroidMoby *, void *) __asm__("FUN_L00_0025d4
 extern void trooper_anim_finish(ElectroidMoby *, void *) __asm__("FUN_L00_0025d538");
 extern s32 select_moby_combat_target(ElectroidMoby *, f32, void *) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_0025ff38(ElectroidMoby *, void *, s32, s32, void *, s32, f32);
-extern void release_beam_slot_by_id(ElectroidMoby *) __asm__("FUN_L00_002e2040");
 extern f32 veldin_robot_default_target_range_gp __asm__("D_L00_00161BD0") __attribute__((sda));
 extern f32 veldin_robot_knockback_xy_scale_gp __asm__("D_L00_00161BDC") __attribute__((sda));
 extern f32 veldin_robot_knockback_z_scale_gp __asm__("D_L00_00161BE0") __attribute__((sda));

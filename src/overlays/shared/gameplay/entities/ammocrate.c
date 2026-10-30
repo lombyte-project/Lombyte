@@ -284,7 +284,7 @@ frame_tail:
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern void *suck_get_aim_height(char *) __asm__("FUN_002141f8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
-void build_spherical_offset_u(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
+void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *target, char *initial_rotation, int lifetime_frames,
                                 float scale) __asm__("FUN_L13_002e6a58");
@@ -314,7 +314,7 @@ unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *
         *(float *)(data + 0x2C) = scale;
         *(int *)(data + 0x30) = 0;
         *(int *)(data + 0x34) = 0;
-        build_spherical_offset_u(data, scale, *(float *)(initial_rotation + 8), -*(float *)(initial_rotation + 4));
+        build_spherical_offset(data, scale, *(float *)(initial_rotation + 8), -*(float *)(initial_rotation + 4));
         if (moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, 10);
         }
@@ -367,7 +367,6 @@ extern float D_0015ED6C;
 extern int collision_line() __asm__("FUN_001efa68");
 extern int FUN_L00_0024f7c8();
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv);
 unsigned char *spawn_particle(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw) __asm__("FUN_L00_002712b8");
@@ -378,7 +377,6 @@ extern float func_00214158_2E8040(void) __asm__("FUN_00213308");
 extern void func_002156E0_2E8040(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 extern unsigned char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern float approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
-extern void func_00215C00_2E8040(void *, float, float, float) __asm__("FUN_00214db0");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern Tex D_L13_001B2680_2E8040 __asm__("D_L13_001B2380");
@@ -440,7 +438,7 @@ void update_ship_rocket(Moby *rocket) {
         approach_angle(&rocket->rot.y, rocket->rot.y, &rocket_data->pitchv, frame_time_sq * 251.32741f, frame_time_sq * 251.32741f, D_0015ED6C * 2513.2742f);
         rocket_data->target = 0;
     }
-    func_00215C00_2E8040(rocket_data, rocket_data->speed, rocket->rot.z, -rocket->rot.y);
+    build_spherical_offset(rocket_data, rocket_data->speed, rocket->rot.z, -rocket->rot.y);
     fast_vec_add(&*(V4_2E8040 *)&rocket->pos, &*(V4_2E8040 *)&rocket->pos, rocket_data);
     if (rocket->pos.x < 2.0f || rocket->pos.x > 1021.0f || rocket->pos.y < 2.0f || rocket->pos.y > 1021.0f || rocket->pos.z < 2.0f || rocket->pos.z > 1021.0f) {
         mark_moby_for_removal(rocket);

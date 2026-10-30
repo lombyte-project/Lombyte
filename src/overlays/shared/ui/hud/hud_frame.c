@@ -109,7 +109,6 @@ typedef struct {
 extern char *D_L00_001611C0_23bac0 __asm__("D_L00_001611C0");
 extern int D_0013E500_23bac0[] __asm__("D_0013E500");
 extern G_23bac0 D_L00_0017E4D8_23bac0 __asm__("D_L00_0017E4D8") NOT_SDA;
-extern u64_23bac0 FUN_001ffa10_23bac0(int) __asm__("FUN_001ffa10");
 void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_height, int alpha) __asm__("FUN_L00_0023bac0");
 
 void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_height, int alpha) {
@@ -127,7 +126,7 @@ void draw_rotated_hud_sprite(int id, int x, int y, int draw_width, int draw_heig
     packet_words = (u64_23bac0 *)D_L00_001611C0_23bac0;
     packet_words[0] = 0xB400000000008001UL;
     packet_words[1] = 0x53535353106UL;
-    packet_words[2] = FUN_001ffa10_23bac0(id);
+    packet_words[2] = get_frame_texture(id);
     packet_words[3] = 0x154;
     packet_words[4] = ((u64_23bac0)alpha << 24) | 0x7F7F7F;
     packet_words[5] = ww << 4;

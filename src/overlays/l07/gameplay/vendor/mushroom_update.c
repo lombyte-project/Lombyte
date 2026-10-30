@@ -33,7 +33,7 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
-void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
+void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void mushroom_update(char *self) __asm__("FUN_L07_0031f3d8");
@@ -76,14 +76,13 @@ void mushroom_update(char *self) {
             *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
             update_entity(spawned_moby);
         }
-        mark_moby_for_removal_c(self);
+        mark_moby_for_removal(self);
         break;
     }
     }
 }
 /* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
 
-void mark_moby_for_removal_c_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 void robot_head_update(char *self) __asm__("FUN_L07_0031f5b0");
 void robot_head_update(char *self) {
@@ -125,14 +124,13 @@ void robot_head_update(char *self) {
             *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
             update_entity(spawned_moby);
         }
-        mark_moby_for_removal_c_c(self);
+        mark_moby_for_removal(self);
         break;
     }
     }
 }
 
 
-void mark_moby_for_removal_c_c2(struct Obj *obj) __asm__("FUN_0020c828");
 
 void seashell_update(unsigned char *m) __asm__("FUN_L07_0031f780");
 void seashell_update(unsigned char *seashell_moby) {
@@ -167,7 +165,7 @@ void seashell_update(unsigned char *seashell_moby) {
         FUN_L00_00263fd8(seashell_moby, 0x698, fragment_spawn_position, source_rotation, 0, 0, z, zero_vector, zero_vector, zero_vector);
         FUN_L00_00263fd8(seashell_moby, 0x699, fragment_spawn_position, source_rotation, 0, 0, z, zero_vector, zero_vector, zero_vector);
         FUN_L00_00263fd8(seashell_moby, 0x69a, fragment_spawn_position, source_rotation, 0, 0, z, zero_vector, zero_vector, zero_vector);
-        mark_moby_for_removal_c_c2(seashell_moby);
+        mark_moby_for_removal(seashell_moby);
         break;
     }
 }

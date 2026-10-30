@@ -147,7 +147,6 @@ typedef struct {
 extern unsigned char D_0013DD49 NOT_SDA;
 extern char batalia_deserter_name_text[] __asm__("D_L08_001622E8");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
-extern void FUN_L08_00305138_c(void *) __asm__("FUN_L08_00305138");
 extern void FUN_L00_0025a120(void *);
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
@@ -173,7 +172,7 @@ void batalia_deserter_update(WM *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L08_00305138_c(moby);
+    attach_batalia_deserter_class_manipulator(moby);
     if (moby->opacity) {
         if (fast_vec_dist(moby->position, D_L08_001675C0_c) < 30.0f) {
             FUN_L00_0025a120(moby);
@@ -392,12 +391,10 @@ extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
-extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern char batalia_plumber_name_text[] __asm__("D_L08_00162308");
 extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;
-extern void FUN_L08_003063f0_c(void *) __asm__("FUN_L08_003063f0");
 extern void request_batalia_cannon_mount(void *) __asm__("FUN_L08_002e1698");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L08_002a1880(int);
@@ -418,7 +415,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
     float rate;
     float head_rate;
     int tracking;
-    FUN_L08_003063f0_c(moby);
+    attach_batalia_plumber_class_manipulator(moby);
     switch (moby->state) {
     case PLUMBER_INITIALIZE:
         moby->opacity = 0xFF;
@@ -428,7 +425,7 @@ void the_plumber_batalia_update(L14WatchMoby *moby) {
         }
         watch_data->p20 = (void *)batalia_plumber_name_text;
         moby->state = 1;
-        FUN_L00_002668a0_c(moby, watch_data);
+        initialize_npc_dialogue(moby, watch_data);
         break;
     case PLUMBER_UPDATE_DIALOGUE:
         if (update_npc_dialogue(moby, watch_data))

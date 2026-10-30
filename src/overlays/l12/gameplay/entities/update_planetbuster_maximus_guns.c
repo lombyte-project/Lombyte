@@ -552,7 +552,6 @@ extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
 extern int current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
 extern char D_0013F3D0[];
 
@@ -696,7 +695,7 @@ void planetbuster_maximus_part_update(char *moby) {
             *(short *)(moby_data + 0x5F8) = (*(short *)(moby_data + 0x5F8) + 1) % *(int *)path;
         }
         apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
-        FUN_L12_003054b0_u(moby);
+        update_planetbuster_maximus_guns(moby);
         break;
     }
     case PLANETBUSTER_POST_PATH_GUN_UPDATE:
@@ -707,7 +706,7 @@ void planetbuster_maximus_part_update(char *moby) {
                           planetbuster_maximus_rotation_oscillation_common_factor_phase_rate_degrees * 0.017453292f * D_0015ED6C_gp,
                           planetbuster_maximus_rotation_oscillation_component_mix_phase_rate_degrees * 0.017453292f * D_0015ED6C_gp);
         apply_linked_moby_relative_transforms(moby, moby_data, 0x11);
-        FUN_L12_003054b0_u(moby);
+        update_planetbuster_maximus_guns(moby);
         break;
     case PLANETBUSTER_DROP_PARTS_AND_TRANSITION:
         if (*(int *)(moby_data + 0x608) != -1 && *(int *)(moby_data + 0x60C) != -1) {

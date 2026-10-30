@@ -125,7 +125,6 @@ extern S166C80 D_L00_00166C80_002634f8 __asm__("D_L00_00166C80")
     __attribute__((section(".data")));
 extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
-float FUN_L00_00263468_002634f8(Vec4_2634f8 *) __asm__("FUN_L00_00263468");
 int FUN_001efa68_002634f8(Vec4_2634f8 *, Vec4_2634f8 *, int, void *, int) __asm__("FUN_001efa68");
 void spawn_timed_effect_particle(Vec4_2634f8 *, int) __asm__("FUN_L00_00268f10");
 void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) __asm__("FUN_L00_002634f8");
@@ -136,7 +135,7 @@ void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) {
     S166C80 *position_owner;
     k = (D_L00_0015FCA4_002634f8 - D_L00_0015FCA0_002634f8) * 0.00390625f;
     ground_probe_start.q = v->q;
-    f = FUN_L00_00263468_002634f8(&ground_probe_start) + k;
+    f = ground_height_at(&ground_probe_start) + k;
     position_owner = &D_L00_00166C80_002634f8;
     ground_probe_start.f[2] = f;
     if (f < position_owner->pos.f[2] + 5.0f) {

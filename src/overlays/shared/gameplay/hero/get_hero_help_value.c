@@ -616,7 +616,6 @@ extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") NOT_SDA;
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern void restore_hero_from_vehicle_mode(void) __asm__("FUN_L06_00227cf8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
-extern struct Moby *FUN_0020c4f8_2348d0(s32) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_2348d0(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode_and_set_moby(s32, s32, struct Moby *) __asm__("FUN_L01_00231348");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
@@ -691,7 +690,7 @@ void update_hero_timers_and_spatial_state(void) {
                 hero.force_slot0_item8 = 1;
             }
         } else {
-            spawned_moby = FUN_0020c4f8_2348d0(0x27A);
+            spawned_moby = create_moby(0x27A);
             hero.vehicle_mode3_moby = spawned_moby;
             if (spawned_moby != 0) {
                 qcopy(&spawned_moby->pos, &hero.motion.pos);

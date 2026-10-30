@@ -1777,7 +1777,6 @@ extern s32 FUN_L00_0024d8d0_244110(void *, char *) __asm__("FUN_L00_0024d8d0");
 extern s32 log2dim(s32) __asm__("FUN_001f97a0");
 extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
 extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
-extern void FUN_L00_00241728_244110(char *) __asm__("FUN_L00_00241728");
 extern void register_moby_class(char *, void *, void *, s32) __asm__("FUN_00203640");
 extern void relocate_asset_entry_pointers(Class244110 *, s32) __asm__("FUN_002032e0");
 extern void register_object_render_class(char *, void *, void *, s32) __asm__("FUN_00203730");
@@ -1898,7 +1897,7 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
             relocate_sky_definition(base + core_header[4]);
         else
             D_L00_0016051C = 0;
-        FUN_L00_00241728_244110(base + core_header[5]);
+        resolve_level_asset_block_pointers(base + core_header[5]);
         for (i = 0, class_entry_cursor = (char *)core_header + core_header[7]; i < core_header[6]; i++, class_entry_cursor += 0x20)
             register_moby_class(*(s32 *)class_entry_cursor ? base + *(s32 *)class_entry_cursor : 0, (char *)core_header + core_header[0xF], class_entry_cursor + 0x10, *(s32 *)(class_entry_cursor + 4));
         print_moby_class_sizes((int *)((char *)core_header + core_header[7]), core_header[7]);

@@ -157,7 +157,6 @@ extern char walker_jump_distance_debug_format[] __asm__("D_L00_001611E0");
 extern float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 extern int walker_gait_animation_index_by_state[] __asm__("D_L00_001CA760");
 extern int find_nearest_animation_sequence_entry(char *a, float time) __asm__("FUN_L00_0024ed18");
-extern int FUN_L00_002a13f0_c(WalkAnim *a, float t) __asm__("FUN_L00_002a13f0");
 extern void debug_print() __asm__("FUN_001e93b0");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
@@ -203,7 +202,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
                 reset_walker_gait_helpers((char *)gait_data);
             }
             gait_data->bB7 = 0xD;
-            gait_data->bB6 = FUN_L00_002a13f0_c(gait_data->anim[7], (float)gait_data->anim[7]->i14);
+            gait_data->bB6 = walker_gait_mask(gait_data->anim[7], (float)gait_data->anim[7]->i14);
             gait_data->sEC = 0;
         } else if (speed > frame_time * 0.21f ||
                    fast_difference_between_rotations(walker_moby->f48, movement_heading) > 0.10471976f) {
@@ -216,7 +215,7 @@ void walker_update_gait(WalkMoby *walker_moby, WalkData *gait_data, int flags, f
                     reset_walker_gait_helpers((char *)gait_data);
                 }
                 gait_data->bB7 = 1;
-                gait_data->bB6 = FUN_L00_002a13f0_c(gait_data->anim[0], (float)gait_data->anim[0]->i14);
+                gait_data->bB6 = walker_gait_mask(gait_data->anim[0], (float)gait_data->anim[0]->i14);
                 gait_data->sEC = 0;
             }
         }
