@@ -4017,9 +4017,9 @@ void steer_hero_planar_velocity(f32 step) {
         impulse.q = HERO_OF(velocity)->move_impulse.q;
         ratio = forward_component(&impulse);
         {
-            struct Hero *owner = HERO_OF(velocity);
+            struct Hero *hero_ground_speed_update_state = HERO_OF(velocity);
 
-            owner->ground_speed = owner->motion.forward_speed - ratio;
+            hero_ground_speed_update_state->ground_speed = hero_ground_speed_update_state->motion.forward_speed - ratio;
         }
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
