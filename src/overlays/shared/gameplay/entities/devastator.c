@@ -1360,13 +1360,13 @@ void emit_beam_trail_particles(X *x) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B5428), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 
 /* Creates a class 0xA7 moby carrying a in its data; sets bytes 0x30/0x31, 0x32 and state 0. */
 char *spawn_indexed_class_a7_moby(int instance_index) __asm__("FUN_L00_002b4138");
 
 char *spawn_indexed_class_a7_moby(int instance_index) {
-    char *spawned_moby = func_0020D348_m(0xA7);
+    char *spawned_moby = create_moby(0xA7);
     if (spawned_moby != 0) {
         int *moby_vars = *(int **)(spawned_moby + 0x78);
         moby_vars[1] = instance_index;
@@ -1843,7 +1843,6 @@ typedef union {
 } V_2b58d8;
 extern float D_0015ED6C_2b58d8 __asm__("D_0015ED6C");
 extern OvlQuad D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
-unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 int FUN_L00_002603d0_2b58d8(void *) __asm__("FUN_L00_002603d0");
 void FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
 void FUN_L00_00250df8_2b58d8(void *) __asm__("FUN_L00_00250df8");

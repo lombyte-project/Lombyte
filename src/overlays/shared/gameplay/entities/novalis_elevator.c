@@ -463,7 +463,7 @@ void spawn_collision_particle_bursts(void) {
                          random_int_between(scale_game_frames(10), scale_game_frames(20)), 1, 20000.0f);
     }
 }
-extern int ratchet_update(void *) __asm__("FUN_001e9448");
+extern int noop_callback_l(void *) __asm__("FUN_001e9448");
 extern int collect_mobies_in_sphere(float, void *, int, int, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00259bc8_2c7530(float, void *, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
@@ -499,7 +499,7 @@ void update_moby_motion_collision_and_lifetime(char *moby) {
         fast_vec_normalize(normal, data + 8, 1.0f);
         make_hit_descriptor(hit, moby, 0, 0.0f, normal);
         if (collect_mobies_in_sphere(moby_motion_collision_radius_gp, moby + 0x10, 0x10, data[6], hit) &&
-            !ratchet_update(moby)) {
+            !noop_callback_l(moby)) {
             CollisionHit *contact = (CollisionHit *)D_L01_001742C0;
             if (contact->moby != 0)
                 FUN_L00_00259bc8_2c7530(1.0f, contact->moby, moby, 0x10001, &contact->point, normal);
@@ -2595,7 +2595,7 @@ int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int launch_dat
     }
     return projectile_launch_result;
 }
-extern float FUN_L00_00258110_w7(float *vel, float cur, float target, float k, float d,
+extern float spring_turn(float *vel, float cur, float target, float k, float d,
                                  float max) __asm__("FUN_L00_00258110");
 extern void blend_moby_animation(void *m, int a, int b, int c) __asm__("FUN_00212f90");
 extern float D_0015ED70_lui __asm__("D_0015ED70");
@@ -2622,7 +2622,7 @@ void sandmouse_house_update(unsigned char *moby) {
                 if (hero.items[2].item_id == 5) {
                     float yaw_response_scale = D_0015ED70_lui;
                     *(float *)(moby + 0x48) =
-                        FUN_L00_00258110_w7((float *)(house_vars + 4), *(float *)(moby + 0x48), *(float *)house_vars,
+                        spring_turn((float *)(house_vars + 4), *(float *)(moby + 0x48), *(float *)house_vars,
                                             yaw_response_scale * 6.2831855f, yaw_response_scale * 5.7595863f, 0.0f);
                 }
             }
@@ -2729,7 +2729,7 @@ extern int D_0015ED84;
 extern s32 *D_L01_001B0930_2f2eb8[] __asm__("D_L01_001B0930");
 extern void FUN_0020c828_2f2eb8(struct Moby *) __asm__("FUN_0020c828");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
-extern s32 FUN_00214720_2f2eb8(void *, s32) __asm__("FUN_00214720");
+extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 
 extern s32 D_L01_00161AF0 __attribute__((sda));
 void update_nearest_area_moby_selection(struct Moby *moby) __asm__("FUN_L01_002f2eb8");
@@ -2781,7 +2781,7 @@ void update_nearest_area_moby_selection(struct Moby *moby) {
             goto in_range;
         }
     }
-    if (area_vars->area.s.volume != -1 && FUN_00214720_2f2eb8(&target, area_vars->area.s.volume)) {
+    if (area_vars->area.s.volume != -1 && is_point_inside_clip_volume(&target, area_vars->area.s.volume)) {
         goto in_range;
     }
     if (area_vars->area.both != -1) {

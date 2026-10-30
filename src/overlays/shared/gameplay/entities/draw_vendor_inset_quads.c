@@ -105,7 +105,7 @@ void FUN_00233980_29fcd0(int, long) __asm__("FUN_00233980");
 void draw_vendor_purchase_text(void *, int, int) __asm__("FUN_L00_0029ead8");
 void render_vendor_capture_texture_overlays_pass(int, float, float) __asm__("FUN_00239328");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
-void FUN_0020d330_29fcd0(void *, int) __asm__("FUN_0020d330");
+void draw_moby_list(void *, int) __asm__("FUN_0020d330");
 void draw_textured_quad(int, int, int, int, int, int, int, int, long,
                          long) __asm__("FUN_001f5450");
 
@@ -152,7 +152,7 @@ void draw_vendor_purchase_panel(void *moby) {
     begin_draw_frame();
     draw_centered_capture_background(0x200, 0x200);
     FUN_00233980_29fcd0(0x42, 0x8000000064L);
-    FUN_0020d330_29fcd0(moby, 1);
+    draw_moby_list(moby, 1);
     draw_textured_quad(panel_screen_x, panel_screen_y, x, y, 0, 0, x, y, 0x80808080L, capture_texture_tex0);
 }
 /* Draws the four quads of the hologram cone, scrolling the texture coordinates. */

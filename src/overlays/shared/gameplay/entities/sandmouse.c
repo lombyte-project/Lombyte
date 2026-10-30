@@ -243,7 +243,7 @@ void draw_moby_offset_textured_quad(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030DC70), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 
 char *spawn_sandmouse_projectile(char *owner, char *spawn_position, float target_yaw, float target_pitch, float initial_yaw, float initial_pitch) __asm__("FUN_L01_0030c898");
 
@@ -252,7 +252,7 @@ char *spawn_sandmouse_projectile(char *owner, char *spawn_position, float target
     char *cp = (char *)&spawn_position_copy;
     char *spawned_moby;
     spawn_position_copy = *(OvlQuad *)spawn_position;
-    spawned_moby = func_0020D348_m(0x661);
+    spawned_moby = create_moby(0x661);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
         int lifetime_frames;

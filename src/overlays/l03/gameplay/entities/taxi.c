@@ -991,11 +991,10 @@ void robo_shack_sign_update(struct Moby *sign_moby) {
 extern CollisionHit coll_hit __asm__("D_L03_00173F60");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
 
 char *FUN_L03_002d4288(char *a, char *pos, struct Moby *parent, int n, float f0, float f1, float f2);
 char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int timer_frames, float initial_heading, float initial_speed, float f2) {
-    char *spawned_moby = (char *)func_0020D348_m(0x341);
+    char *spawned_moby = (char *)create_moby(0x341);
     char *moby_vars;
     if (spawned_moby != 0) {
         float collision_start_pos[4];
@@ -1486,7 +1485,7 @@ extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 struct Moby *spawn_path_mover(struct RailPath *path, float initial_path_distance) __asm__("FUN_L03_002db198");
 
 struct Moby *spawn_path_mover(struct RailPath *path, float initial_path_distance) {
-    struct Moby *spawned_moby = func_0020D348_m(0x382);
+    struct Moby *spawned_moby = create_moby(0x382);
     u8 *moby_vars;
     u8 *move;
     Vec4 *end;

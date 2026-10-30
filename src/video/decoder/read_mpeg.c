@@ -24,7 +24,7 @@ extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void switch_thread(void) __asm__("func_0023A770");
 extern s32 is_audio_ok(void) __asm__("func_0023A790");
 extern s32 proceed_audio(void) __asm__("func_0023ABA0");
-extern void audioDecStart(struct AudioDec *) __asm__("func_0023ACB8");
+extern void audio_dec_start(struct AudioDec *) __asm__("func_0023ACB8");
 extern void audio_dec_reset(struct AudioDec *) __asm__("FUN_0023ad10");
 extern void start_display(s32) __asm__("func_0023B590");
 extern void end_display(void) __asm__("ClearStageStateFlag");
@@ -112,7 +112,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
         if (!started && vo_buf_is_full(&movie_player->vo_buf) && is_audio_ok()) {
             started = 1;
             start_display(1);
-            audioDecStart(&movie_player->audio_dec);
+            audio_dec_start(&movie_player->audio_dec);
         }
     }
     while (!video_dec_flush(video_dec)) {

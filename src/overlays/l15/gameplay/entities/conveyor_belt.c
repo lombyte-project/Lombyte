@@ -694,13 +694,13 @@ extern unsigned char *D_L15_0015FFD8_v __asm__("D_L15_0015FFD8");
 extern char *D_L15_001600EC;
 extern unsigned char D_0014C050_v[] __asm__("D_0014C050");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void FUN_L00_002502a0_v(int) __asm__("FUN_L00_002502a0");
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void FUN_L00_00232fe8_v(void) __asm__("FUN_L00_00232fe8");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L00_002330d0_v(void) __asm__("FUN_L00_002330d0");
-extern void FUN_L00_00216f90_v(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void FUN_L00_002607d0_v(int) __asm__("FUN_L00_002607d0");
-extern void FUN_L00_00284e50_v(void *, void *) __asm__("FUN_L00_00284e50");
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
+extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
@@ -731,7 +731,7 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
             break;
         start_scene(3);
         moby->state = 2;
-        FUN_L00_002502a0_v(moby->mission);
+        jet_clear_persistent(moby->mission);
         FUN_L00_00232fe8_v();
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_FIRST_SCENE:
@@ -747,16 +747,16 @@ void update_quartu_cutscene_trigger(struct Moby *moby) {
             FUN_L00_002330d0_v();
             if (*(int *)(trigger_data + 4) != -1) {
                 char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
-                FUN_L00_00216f90_v(o + 0x30, o + 0x70, 0, 1);
+                set_race_camera(o + 0x30, o + 0x70, 0, 1);
             }
         }
         break;
     case CUTSCENE_TRIGGER_FINALIZE_AND_SAVE:
         if (D_L15_0015F5C4 != 2) {
-            FUN_L00_002607d0_v(0x11);
+            unlock_planet(0x11);
             if (*(int *)(trigger_data + 4) != -1) {
                 char *o = D_L15_001600EC + (*(int *)(trigger_data + 4) << 7);
-                FUN_L00_00284e50_v(o + 0x30, o + 0x70);
+                jet_reset_camera(o + 0x30, o + 0x70);
             }
             queue_planet_unlock_message(0x11);
             memcard_save_data(0, -1);
@@ -865,7 +865,6 @@ void emit_randomized_vertical_effect(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002ECDD0), where it is exact; names translated to the US level program. */
 
 
-extern char *func_0020D348_m(int);
 extern int copy_hero_moby_field_38() __asm__("FUN_L00_0025d1b8");
 extern char *func_0020D348_c(int) __asm__("FUN_0020c4f8");
 extern void func_L00_0025E210_u(void *) __asm__("FUN_L00_0025d1b8");
@@ -1831,7 +1830,7 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
 }
 extern float D_0015ED6C_2edfc0 __asm__("D_0015ED6C") MACRO_ADDR;
 extern int FUN_001f44b8_2edfc0(int) __asm__("FUN_001f44b8");
-extern void FUN_001f76a0_2edfc0(void) __asm__("FUN_001f76a0");
+extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern float FUN_001f96b0_2edfc0(float) __asm__("FUN_001f96b0");
 extern void FUN_00233980_2edfc0(int, long) __asm__("FUN_00233980");
 extern void FUN_L00_001fde98_2edfc0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");
@@ -2081,7 +2080,7 @@ void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) {
             D_L15_001DFD60[uv_vertex_index][0] = D_L15_001DF520[uv_vertex_index][0] + FUN_L00_00200260_2edfc0(scale * uv_scroll_factors.f[j][0], 1.0f);
             D_L15_001DFD60[uv_vertex_index][1] = D_L15_001DF520[uv_vertex_index][1] + FUN_L00_00200260_2edfc0(scale * uv_scroll_factors.f[j][1], 1.0f);
         }
-        FUN_001f76a0_2edfc0();
+        font_queue_vu_state();
         for (k = 0; k < 1; k++) {
             FUN_L00_001fde98_2edfc0(D_L15_00162220[k], D_L15_00162240[k], D_L15_00162250[k], (void *)D_L15_00162248[k], 1);
         }

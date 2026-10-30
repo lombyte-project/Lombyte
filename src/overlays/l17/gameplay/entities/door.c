@@ -399,12 +399,12 @@ void update_drone_flight_and_sparks(struct Moby *moby) {
 /* spawns the class-0x558 object from src at pos, sets its state block and aims it along the vector v */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EAFC8), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 
 char *spawn_class_558_moby_toward_target(struct Moby *source_moby, char *spawn_position, float *target_position, float movement_speed) __asm__("FUN_L17_002e94d8");
 
 char *spawn_class_558_moby_toward_target(struct Moby *source_moby, char *spawn_position, float *target_position, float movement_speed) {
-    char *spawned_moby = func_0020D348_m(0x558);
+    char *spawned_moby = create_moby(0x558);
     if (spawned_moby != 0) {
         char *spawned_vars;
         char *spawned_position = spawned_moby + 0x10;
@@ -1144,7 +1144,7 @@ void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *horizontal
 
 void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *a, float *b) __asm__("FUN_L17_002edf10");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
-void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 extern char D_0013C940[];
 extern char D_0013E550[];
 extern char pad_held[] __asm__("D_0013CAE0");
@@ -1411,7 +1411,7 @@ void update_fighter_jet_flight(Moby *ship_moby, Obj *ship_vars) {
             }
         }
     }
-    enqueue_callback_list_1(draw_fighter_jet_hud, ship_moby);
+    add_draw_callback(draw_fighter_jet_hud, ship_moby);
     try_fire_fighter_jet_rocket((char *)ship_moby, (char *)ship_vars);
     update_fighter_jet_aim_and_fire_projectile((char *)ship_moby, (char *)ship_vars, fast_add_rotations(ship_vars->f28, -ship_vars->f6C / 7.0f),
                      -fast_add_rotations(ship_vars->f24, -(ship_vars->f70 / 7.0f) - 0.1f));

@@ -15,12 +15,12 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 
 char *spawn_blarg_elite_commando_rocket(char *owner, float *initial_movement_vector, char *spawn_position) __asm__("FUN_L16_002a09a0");
 
 char *spawn_blarg_elite_commando_rocket(char *owner, float *initial_movement_vector, char *spawn_position) {
-    char *moby = func_0020D348_m(0x31);
+    char *moby = create_moby(0x31);
     if (moby != 0) {
         char *data;
         float xy_length;
@@ -117,7 +117,7 @@ extern float class_32_zero_based_angle_bound_degrees_gp __asm__("D_L16_001613E4"
 char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *pos, void *vel, int blend_duration_ticks, float unused) __asm__("FUN_L16_002a0dc0");
 
 char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *spawn_position, void *target_position, int blend_duration_ticks, float unused) {
-    char *spawned_moby = (char *)func_0020D348_m(0x32);
+    char *spawned_moby = (char *)create_moby(0x32);
     char *moby_data;
     float initial_movement_length, x, random_angle_radians, y;
     if (spawned_moby) {

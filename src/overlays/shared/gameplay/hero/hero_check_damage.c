@@ -588,7 +588,7 @@ s32 select_hero_condition_animation_id(s32 animation_selector) {
 }
 extern unsigned char D_0013D4C6_lui __asm__("D_0013D4C6") NOT_SDA;
 unsigned char *FUN_002141f8_20da68(int) __asm__("FUN_002141f8");
-int FUN_L00_0020da10_20da68(int) __asm__("FUN_L00_0020da10");
+int select_hero_condition_animation_id(int) __asm__("FUN_L00_0020da10");
 int FUN_L00_0020d498_20da68(int) __asm__("FUN_L00_0020d498");
 char *FUN_L00_0024f028_20da68(char *, int) __asm__("FUN_L00_0024f028");
 float FUN_00213ed8_20da68(void *, float, float) __asm__("FUN_00213ed8");
@@ -611,14 +611,14 @@ void update_hero_condition_animation(void) {
         animation_selector_data = FUN_002141f8_20da68(hero.unk2274);
         anim = 0x79;
         if (animation_selector_data && animation_selector_data[0x3C]) {
-            anim = FUN_L00_0020da10_20da68(animation_selector_data[0x3C]);
+            anim = select_hero_condition_animation_id(animation_selector_data[0x3C]);
             if (hero.state.control_mode == 1)
                 spd = 0.7f;
         }
     }
     if (hero.unk1DC) {
         on = 1;
-        anim = FUN_L00_0020da10_20da68(hero.unk22CE);
+        anim = select_hero_condition_animation_id(hero.unk22CE);
     }
     if (hero.health.hp == 1) {
         on = 1;
@@ -934,7 +934,7 @@ typedef struct {
 extern ID_20e4c8 D_L00_00179AC0_c[] __asm__("D_L00_00179AC0");
 extern s32 FUN_L00_0020d498_c(s32) __asm__("FUN_L00_0020d498");
 extern void initialize_moby_animation_blend(u8 *, u8 *, s32, s32, s32, s32) __asm__("FUN_L00_0024f3e0");
-extern void FUN_L00_002323b8_c(s32, s32, f32) __asm__("FUN_L00_002323b8");
+extern void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 void start_equipped_item_animation(void) {
@@ -960,7 +960,7 @@ void start_equipped_item_animation(void) {
         animation_step_divisor = scale_game_frames(11);
     if (P->state.control_mode == 0 && P->unk22C8 == 0) {
         P->item_hold_anim = hero_animation_id;
-        FUN_L00_002323b8_c(hero_animation_id, 0, (f32)animation_step_divisor);
+        set_hero_animation(hero_animation_id, 0, (f32)animation_step_divisor);
         return;
     }
     if (slot_animation_id == -1)
@@ -1799,7 +1799,7 @@ extern int D_0015ED8C;
 extern int D_0015ED90;
 extern int D_0015ED94;
 extern ItemDef item_defs[] __asm__("D_L00_00179AC0");
-extern int FUN_L00_0020d568_c() __asm__("FUN_L00_0020d568");
+extern int hero_is_in_special_state() __asm__("FUN_L00_0020d568");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
@@ -1883,7 +1883,7 @@ void hero_switch_item(int i) {
     }
     if (i == 1) {
         struct Hero *g;
-        if (FUN_L00_0020d568_c() || hero.state.current == 0x12) {
+        if (hero_is_in_special_state() || hero.state.current == 0x12) {
             int v;
             g = &hero;
             v = g->items[1].item_id;
@@ -1949,7 +1949,7 @@ void hero_switch_item(int i) {
     flag4 = 0;
     if (i == 3) {
         struct Hero *g;
-        if (FUN_L00_0020d568_c() || hero.state.current == 0x12) {
+        if (hero_is_in_special_state() || hero.state.current == 0x12) {
             if (*(int *)(D_00141660 + 0xC) != 4) {
                 int v;
                 g = &hero;
@@ -2172,7 +2172,7 @@ void hero_update_items(void) {
         }
     }
 }
-s32 FUN_L00_0020d568_u() __asm__("FUN_L00_0020d568");
+s32 hero_is_in_special_state() __asm__("FUN_L00_0020d568");
 void spawn_hero_item_mobies() __asm__("FUN_L00_0020ea80");
 void update_hero_item_mobys() __asm__("FUN_L00_0020f580");
 void animate_hero_slot4_and_slot5_visuals() __asm__("FUN_L00_00234808");
@@ -2181,11 +2181,11 @@ void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 
 void update_hero_equipped_items(void) {
     if (hero.unk308 == 1 || (u32)(hero.state.control_mode - 0x15) < 2 ||
-        FUN_L00_0020d568_u()) {
+        hero_is_in_special_state()) {
         hero.item_select_blocked = 1;
         hero.item_use_locked = 1;
     }
-    if (FUN_L00_0020d568_u() || hero.state.control_mode == 0x15 ||
+    if (hero_is_in_special_state() || hero.state.control_mode == 0x15 ||
         hero.state.control_mode == 0x16 || hero.state.control_mode == 3 ||
         hero.state.current == 0x12) {
         hero.unk20AE = 1;
@@ -2344,7 +2344,7 @@ extern s32 D_0013DF88[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 extern f32 D_0015ED6C_210ce8 __asm__("D_0015ED6C");
 
-void FUN_L00_00206c08_210ce8(void) __asm__("FUN_L00_00206c08");
+void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void FUN_L00_00216de8_210ce8(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
@@ -2407,7 +2407,7 @@ s32 hero_check_damage(s32 apply_damage_response) {
     if (apply_damage_response == 0) {
         return 1;
     }
-    FUN_L00_00206c08_210ce8();
+    release_and_clear_hero_voice_slots();
     flag = 0;
     if (hero_hit_entry->i30 & 1) {
         qcopy(&knockback_vector, &hero_hit_entry->v10);
@@ -2889,7 +2889,7 @@ void turn_hero_toward_move_direction_for_item(void) {
 }
 extern float D_0015ED6C_211f38 __asm__("D_0015ED6C");
 extern int FUN_L00_0020d498_211f38(int) __asm__("FUN_L00_0020d498");
-extern void FUN_L00_00211e30_211f38(int, float, float, float) __asm__("FUN_L00_00211e30");
+extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 
 void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 
@@ -2915,7 +2915,7 @@ void turn_hero_toward_move_direction_with_stick_scale(void) {
         }
         break;
     }
-    FUN_L00_00211e30_211f38(0, frame_scaled_turn_coefficient, frame_scaled_secondary_turn_coefficient, scaled_turn_amount);
+    turn_to(0, frame_scaled_turn_coefficient, frame_scaled_secondary_turn_coefficient, scaled_turn_amount);
 }
 void FUN_00213ed8_00212088(f32 *, f32, f32) __asm__("FUN_00213ed8");
 /* Approaches field b toward a, at rate x while below it and y otherwise. */
@@ -3531,7 +3531,7 @@ typedef struct {
     int x, y, z, w;
 } Quad;
 
-extern int FUN_L00_002133a8_002137a8(int index) __asm__("FUN_L00_002133a8");
+extern int resolve_hero_current_position_collisions(int index) __asm__("FUN_L00_002133a8");
 
 void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 
@@ -3543,7 +3543,7 @@ void resolve_hero_collisions_with_history(void) {
     for (i = 0; i < 16; i++) {
         struct Hero *base;
 
-        if (FUN_L00_002133a8_002137a8(i) == 1)
+        if (resolve_hero_current_position_collisions(i) == 1)
             return;
 
         base = &hero;

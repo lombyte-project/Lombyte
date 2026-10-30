@@ -224,13 +224,13 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
 /* Spawns a moby of class 0xF8 at a position and facing derived from a vector. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D35E8), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_bomb_with_velocity(int source_moby, char *spawn_position, char *initial_velocity) __asm__("FUN_L08_002d22e0");
 
 char *spawn_bomb_with_velocity(int source_moby, char *spawn_position, char *initial_velocity) {
-    char *spawned_moby = func_0020D348_m(0xF8);
+    char *spawned_moby = create_moby(0xF8);
     if (spawned_moby != 0) {
         char *bomb_vars = *(char **)(spawned_moby + 0x78);
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
@@ -471,7 +471,6 @@ extern int D_L08_001B0CB0[];
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D3B6 NOT_SDA;
 extern unsigned char D_0013D4CB NOT_SDA;
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) __asm__("FUN_L08_002d5950");
 
@@ -1176,7 +1175,7 @@ void scatter_bomber_tank_linked_debris(char *moby) {
     other = (char *)((Blk_7010 *)D_L08_0015FFD8 + index);
     for (i = 0; i < 40 && available_moby_slot_count >= 50; i++) {
         char *spawned_debris_moby;
-        if (random_integer_below(0xFF) & 1) spawned_debris_moby = func_0020D348_m(0x310); else spawned_debris_moby = func_0020D348_m(0x311);
+        if (random_integer_below(0xFF) & 1) spawned_debris_moby = create_moby(0x310); else spawned_debris_moby = create_moby(0x311);
         if (spawned_debris_moby != 0) {
             float ang;
             *(short *)(spawned_debris_moby + 0x32) = 0x40;
@@ -2195,7 +2194,7 @@ void try_set_shuttle_departure_help_message(struct Moby *moby) {
 char *spawn_bomber_tank_projectile(char *source_moby, char *spawn_position, char *initial_velocity) __asm__("FUN_L08_002dc8a0");
 
 char *spawn_bomber_tank_projectile(char *source_moby, char *spawn_position, char *initial_velocity) {
-    char *moby = func_0020D348_m(0x1A9);
+    char *moby = create_moby(0x1A9);
     char *data;
     if (moby) {
         data = *(char **)(moby + 0x78);
@@ -2653,7 +2652,6 @@ void update_rocket(M46 *moby) {
     default: break;
     }
 }
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int class_1b3_projectile_color_red_gp __asm__("D_L08_00161A34") __attribute__((sda));
 extern int class_1b3_projectile_color_green_gp __asm__("D_L08_00161A38") __attribute__((sda));
@@ -2718,9 +2716,9 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
         {
             char *spawned_moby;
             if (flag) {
-                if (random_integer_below(0xFF) & 1) spawned_moby = func_0020D348_m(0x30E); else spawned_moby = func_0020D348_m(0x30F);
+                if (random_integer_below(0xFF) & 1) spawned_moby = create_moby(0x30E); else spawned_moby = create_moby(0x30F);
             } else {
-                if (random_integer_below(0xFF) & 1) spawned_moby = func_0020D348_m(0x310); else spawned_moby = func_0020D348_m(0x311);
+                if (random_integer_below(0xFF) & 1) spawned_moby = create_moby(0x310); else spawned_moby = create_moby(0x311);
             }
             *(short *)(spawned_moby + 0x32) = 0x40;
             spawned_moby[0x31] = 1;

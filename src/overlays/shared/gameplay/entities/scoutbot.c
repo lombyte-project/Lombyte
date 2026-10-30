@@ -80,7 +80,7 @@ void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void update_scoutbot_health_and_target(char *m) __asm__("FUN_L08_002d36e0");
 void draw_target_beam(char *m) __asm__("FUN_L08_002d3878");
 void update_scoutbot_movement(char *m) __asm__("FUN_L08_002d3d78");
-void FUN_L08_002d4108_c(char *arg) __asm__("FUN_L08_002d4108");
+void draw_scoutbot_glow_quad(char *arg) __asm__("FUN_L08_002d4108");
 extern void sound_3DF8(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void wake_3DF8(void *) __asm__("FUN_L00_0025a120");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -559,7 +559,7 @@ typedef struct {
     u64 a, b, c, d;
 } Pk;
 extern u8 D_L08_001675C0_lui[] __asm__("D_L08_001675C0") NOT_SDA;
-u64 FUN_001f44b8_002d4108(s32) __asm__("FUN_001f44b8");
+u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 void FUN_001f7d30_002d4108(void *, s32, s32) __asm__("FUN_001f7d30");
 
 extern float D_L08_001D1D80[4][4] NOT_SDA;
@@ -580,7 +580,7 @@ void draw_scoutbot_glow_quad(char *moby) {
     *(OvlQuad *)up = z;
     up[2] = 1.0f;
     up[3] = 1.0f;
-    pk.b = FUN_001f44b8_002d4108(0xB);
+    pk.b = get_effect_texture(0xB);
     pk.d = 0x8000000048ULL;
     pk.c = 0x0000FF9000000260ULL;
     pk.a = 5;

@@ -52,7 +52,7 @@ extern void func_L01_0026F040_30D370(int, int) __asm__("FUN_L01_0026e090");
 extern void func_0022ED80_30D370(int, int, int) __asm__("FUN_0022da68");
 extern int func_001F9850_30D370(int) __asm__("FUN_001f96f8");
 extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void func_L00_002512D8_30D370(int) __asm__("FUN_L00_002502a0");
+extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 
 void timed_activation_pads_update(unsigned char *moby) __asm__("FUN_L07_0030bf90");
 void timed_activation_pads_update(unsigned char *moby)
@@ -186,7 +186,7 @@ void timed_activation_pads_update(unsigned char *moby)
     case PAD_UPDATE_FLASHING:
         if (moby[0xB0] != 0xFF) {
             if (visited52[moby[0xB0] + (current_level_index << 4)] != 0xFF)
-                func_L00_002512D8_30D370(moby[0xB0]);
+                jet_clear_persistent(moby[0xB0]);
         }
         if (fast_dec_timer_s16(pad_data + 0xC)) {
             *(short *)(pad_data + 0xC) = func_001F9850_30D370(0x14);

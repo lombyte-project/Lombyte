@@ -477,7 +477,7 @@ extern f32 approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void mark_moby_for_removal_44c0(struct Moby *) __asm__("FUN_0020c828");
 extern void allocate_voice_for_target_entry_44c0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
-extern void FUN_L00_0025e450_44c0(char *, void *, char *, f32, f32, s32, s32, s32,
+extern void spawn_explosion(char *, void *, char *, f32, f32, s32, s32, s32,
                          f32, f32, f32, f32, s32, f32, s32, s32, s32, u8) __asm__("FUN_L00_0025e450");
 
 extern f32 path_follower_y_rotation_rate_degrees_gp __asm__("D_L08_00161F70") __attribute__((sda));
@@ -511,14 +511,14 @@ void update_path_following_moby_with_fade(struct Moby *moby)
         distance = vector_distance_xy(&moby->pos, D_0013F3D0);
         if ((distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) || *(struct Moby **)(D_0013F3D0 + 0x1bc) == moby) {
             allocate_voice_for_target_entry_44c0(0, 0, moby);
-            FUN_L00_0025e450_44c0(moby, D_L08_0015F580, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
+            spawn_explosion(moby, D_L08_0015F580, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_44c0(moby);
             return;
         }
         if (active != 0) {
             allocate_voice_for_target_entry_44c0(0, 0, moby);
-            FUN_L00_0025e450_44c0(moby, D_L08_0015F580, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
+            spawn_explosion(moby, D_L08_0015F580, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                           1.0f, 3.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_44c0(moby);
         }
@@ -534,7 +534,7 @@ void update_path_following_moby_with_fade(struct Moby *moby)
         distance = vector_distance_xy(&moby->pos, D_0013F3D0);
         if (distance < 2.0f && *(s32 *)(D_0013F3D0 + 0x2004) == 0x42) {
             clear_u64_value(&velocity);
-            FUN_L00_0025e450_44c0(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
+            spawn_explosion(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             mark_moby_for_removal_44c0(moby);
             return;
@@ -552,7 +552,7 @@ void update_path_following_moby_with_fade(struct Moby *moby)
             distance = vector_distance_xy(&moby->pos, D_0013F3D0);
             if (distance < 24.0f) {
                 clear_u64_value(&velocity);
-                FUN_L00_0025e450_44c0(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
+                spawn_explosion(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                               3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
                 allocate_voice_for_target_entry_44c0(0, 0, moby);
                 mark_moby_for_removal_44c0(moby);
@@ -1146,7 +1146,7 @@ extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
@@ -1295,11 +1295,11 @@ void commando_update(WM *moby) {
         if (fast_dec_timer(&commando_vars->target_timer)) {
             float heading;
             commando_vars->target_timer =
-                truncate_float_to_s32(scale_time(truncate_float_to_s32_cf(180.0f, 300.0f)));
+                truncate_float_to_s32(scale_time(random_float_between(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(moby->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
+                fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(commando_vars->target, 6.0f, heading,
-                                   truncate_float_to_s32_cf(0.0f, 30.0f) * DEG_TO_RAD);
+                                   random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
             fast_vec_add(commando_vars->target, commando_vars->target, moby->position);
         }
         if (commando_vars->moving_timer) {

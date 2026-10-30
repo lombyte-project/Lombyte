@@ -5674,7 +5674,7 @@ extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 void spawn_moby_breakup_effect(char *source_moby) __asm__("FUN_L06_00300278");
 
 extern void spawn_moby_breakup_effect(char *) __asm__("FUN_L06_00300278");
-extern void enqueue_callback_list_1(int, char *) __asm__("FUN_L06_00210fc8");
+extern void add_draw_callback(int, char *) __asm__("FUN_L06_00210fc8");
 extern void allocate_voice_for_target_entry_ffcb0(int, int, char *) __asm__("FUN_0022da68");
 
 extern void FUN_L06_00300958(void);
@@ -5828,11 +5828,11 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
         break;
     }
     if (data[1] != 0) {
-        if (data[0] != 0) enqueue_callback_list_1((int)effect_quad_draw_single, moby);
-        else enqueue_callback_list_1((int)FUN_L06_00300958, moby);
+        if (data[0] != 0) add_draw_callback((int)effect_quad_draw_single, moby);
+        else add_draw_callback((int)FUN_L06_00300958, moby);
     } else {
-        if (data[0] != 0) enqueue_callback_list_1((int)draw_backdrop_mesh, moby);
-        else enqueue_callback_list_1((int)FUN_L06_00300588, moby);
+        if (data[0] != 0) add_draw_callback((int)draw_backdrop_mesh, moby);
+        else add_draw_callback((int)FUN_L06_00300588, moby);
     }
 }
 
@@ -6682,9 +6682,9 @@ extern int is_point_inside_clip_volume(void *, int);
 extern void play_sound_302578(int, int) __asm__("FUN_L01_0027a248");
 extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern void fade_to_black(int) __asm__("FUN_001f4a58");
-extern void FUN_L00_002ea9d8_302578(void *) __asm__("FUN_L00_002ea9d8");
-extern void FUN_L00_002eaa30_302578(void *) __asm__("FUN_L00_002eaa30");
-extern void FUN_L00_00216f90_302578(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void initialize_moby_particle_effect_state(void *) __asm__("FUN_L06_002e6148");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
@@ -6853,9 +6853,9 @@ void shuttle_update(struct Moby *moby) {
             rot[1] = -fast_arc_tan(vector_distance_xy(a, b), b[2] - a[2]);
             jet_mount(a, rot, 2, scale_game_frames(300), 0);
             set_selected_object_float_triplets(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
-            FUN_L00_002ea9d8_302578(a);
-            FUN_L00_002eaa30_302578(rot);
-            FUN_L00_00216f90_302578(D_L06_001600EC_302578 + (shuttle_vars->cut << 7) + 0x30, D_L06_001600EC_302578 + (shuttle_vars->cut << 7) + 0x70, 0x72, 0);
+            set_camera_position(a);
+            set_camera_rotation(rot);
+            set_race_camera(D_L06_001600EC_302578 + (shuttle_vars->cut << 7) + 0x30, D_L06_001600EC_302578 + (shuttle_vars->cut << 7) + 0x70, 0x72, 0);
             allocate_voice_302578(2, 0, moby);
         }
         break;
@@ -6885,7 +6885,7 @@ void shuttle_update(struct Moby *moby) {
             fast_vec_add(b, b, a);
             clear_u64_value(rot);
             rot[2] = fast_add_rotations(moby->rot.z, 3.1415927f);
-            FUN_L00_00216f90_302578(b, rot, 0, 0);
+            set_race_camera(b, rot, 0, 0);
             if (shuttle_vars->f114 != 0) {
                 D_0013D3A7_lui[5] = 1;
                 initialize_moby_particle_effect_state(D_L06_0015FFD8_302578 + (shuttle_vars->f10C << 8));
@@ -6904,7 +6904,7 @@ void shuttle_update(struct Moby *moby) {
             qcopy(b, linked_moby + 0x10);
             qcopy(rot, linked_moby + 0x40);
             rot[2] = fast_add_rotations(rot[2], 3.14159f);
-            FUN_L00_00216f90_302578(b, rot, 0x72, 1);
+            set_race_camera(b, rot, 0x72, 1);
             play_sound_302578(0, 10);
             start_scene(12);
             delete_moby_302578(linked_moby);
@@ -7593,7 +7593,7 @@ extern float D_L06_00162208 __attribute__((sda));
 #include "rnc/overlay/l06/gameplay/entities/fred_data/update_moby_vector_streams_and_particle_burst.h"
 extern void FUN_L00_00257d78(void *, float, float);
 extern void FUN_L06_00217300(void *);
-extern void enqueue_callback_list_1(int, char *) __asm__("FUN_001f4600");
+extern void add_draw_callback(int, char *) __asm__("FUN_001f4600");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos, void *vel, int color, u8 life, u8 b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void test_moby_vector_stream_collision_lines(char *m) __asm__("FUN_L06_00305000");
@@ -7689,7 +7689,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
             }
         }
         if (fast_vec_dist(moby + 0x10, ((char *)D_L06_00167540)) < 48.0f) {
-            enqueue_callback_list_1((int)draw_moby_vector_streams, moby);
+            add_draw_callback((int)draw_moby_vector_streams, moby);
         }
         if (vector_stream_vars->f14 >= 0 && *(unsigned char *)(D_L06_0015FFD8_301070 + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
             int voice_slot_index;

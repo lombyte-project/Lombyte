@@ -56,7 +56,7 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
 extern Part *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
-extern int func_002140B0_2FF358(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) __asm__("FUN_L14_002fded0");
@@ -77,8 +77,8 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     fast_vec_scale(A, source_moby->fwd, bolt_thief_puff_forward_offset_gp);
     fast_vec_add(B, B, A);
     for (i = 1; i >= 0; i--) {
-        puff_signed_amount = func_002140B0_2FF358(0x10);
-        k = func_002140B0_2FF358(2) == 0 ? puff_signed_amount : -puff_signed_amount;
+        puff_signed_amount = random_integer_below(0x10);
+        k = random_integer_below(2) == 0 ? puff_signed_amount : -puff_signed_amount;
         puff = spawn_puff(B, 0.2f, 1.0f, 0.9f, k, &D_L14_0015F580, 200000.0f, D_L14_00161FA4);
         if (puff != 0) {
             struct PartSub *f = &puff->sub;
@@ -100,7 +100,7 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
             struct PartSub *f = &puff->sub;
 
             puff->life = puff_lifetime_frames;
-            puff->b8 = func_002140B0_2FF358(0xFF);
+            puff->b8 = random_integer_below(0xFF);
             f->f4 = 2;
             f->bA = 0x7F;
             f->bB = puff->life;
@@ -115,17 +115,17 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
     col = random_int_between(0x40, 0x80);
     k = (col << 8) | 0x7F000000;
     col = col | ((col << 16) | k);
-    if (func_002140B0_2FF358(3)) {
+    if (random_integer_below(3)) {
         Part *final_puff;
 
-        puff_signed_amount = func_002140B0_2FF358(4);
-        k = func_002140B0_2FF358(2) == 0 ? puff_signed_amount : -puff_signed_amount;
+        puff_signed_amount = random_integer_below(4);
+        k = random_integer_below(2) == 0 ? puff_signed_amount : -puff_signed_amount;
         final_puff = spawn_puff(B, 0.05f, 1.0f, 1.0f, k, &D_L14_0015F580, puff_size, col);
         if (final_puff != 0) {
             struct PartSub *f = &final_puff->sub;
 
             final_puff->life = scale_game_frames(0x3C);
-            if (func_002140B0_2FF358(2)) {
+            if (random_integer_below(2)) {
                 final_puff->b3 = 0x44;
             }
             f->bA = 0x40;

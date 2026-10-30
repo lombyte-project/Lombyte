@@ -271,7 +271,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F49B8), where it is exact; names translated to the US level program. */
-extern void FUN_L00_002637f8_p() __asm__("FUN_L00_002637f8");
+extern void cutscene_set_camera_target() __asm__("FUN_L00_002637f8");
 
 extern struct {
     int pad0[12];
@@ -300,7 +300,7 @@ void update_fleet_guarded_moby_effects(struct Moby *moby) {
             i = 0;
             if (v == 0 || v == D_L17_0015F5C4)
                 i = 2;
-            FUN_L00_002637f8_p(D_L17_0016D160.tbl[i]);
+            cutscene_set_camera_target(D_L17_0016D160.tbl[i]);
         }
         break;
     }

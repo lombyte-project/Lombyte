@@ -69,7 +69,7 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_
 
 extern void update_skid_mcmarx_relocation_sequence(struct Moby *) __asm__("FUN_L02_002e1fb8");
 extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
-extern void delete_moby(struct Moby *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void watcher_init(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
 extern s32 watcher_talk(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
@@ -247,10 +247,10 @@ void skids_agent_update(struct Moby *moby) {
         D_L02_0015F3FC = fade;
         if (fade == 0.0f) {
             if (*(struct Moby **)(data + 0x178) != 0) {
-                delete_moby(*(struct Moby **)(data + 0x178));
+                mark_moby_for_removal(*(struct Moby **)(data + 0x178));
             }
         kill:
-            delete_moby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         break;
@@ -363,7 +363,7 @@ void skid_mcmarx_update(struct Moby *moby) {
     switch (moby->state) {
     case SKID_MCMARX_INITIALIZE:
         if (D_0013D506) {
-            delete_moby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         watcher_vars->unk180 = 0;
@@ -388,7 +388,7 @@ void skid_mcmarx_update(struct Moby *moby) {
             jet_clear_persistent(*((u8 *)moby + 0xB0));
             jet_reset_camera(&hero.motion.pos, &hero.motion.rot);
             memcard_save_data(0, -1);
-            delete_moby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         if (moby->prev_seq == 0 && fast_dec_timer_s16(&watcher_vars->idle_timer)) {
@@ -475,11 +475,11 @@ void skid_mcmarx_update(struct Moby *moby) {
 #include "qcopy.h"
 extern char *D_L02_001600EC_n __asm__("D_L02_001600EC");
 extern char *D_L02_0015FFD8_n __asm__("D_L02_0015FFD8");
-extern int FUN_00214720_n(void *, int) __asm__("FUN_00214720");
-extern void FUN_001ff570_n(int, int) __asm__("FUN_001ff570");
-extern void FUN_001f4a58_n(int) __asm__("FUN_001f4a58");
-extern void FUN_L00_00216f90_n(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern int FUN_001ff308_n(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
+extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
+extern void fade_to_black(int) __asm__("FUN_001f4a58");
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void update_hud_counter_transition(void) __asm__("FUN_L02_0023ccc8");
 extern void draw_hud_counter(void) __asm__("FUN_L02_0023cda8");
@@ -495,11 +495,11 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
     float yaw;
     char *table;
     if (*(int *)(data + 0x180) == 1) {
-        if (FUN_00214720_n(&hero.motion.pos, *(int *)(data + 0x148)) == 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x148)) == 0) {
             *(int *)(data + 0x180) = 0;
-            FUN_001ff570_n(*(int *)(data + 0x160), 0);
+            set_animation_parameter(*(int *)(data + 0x160), 0);
             *(int *)(data + 0x160) = -1;
-            FUN_001ff570_n(*(int *)(data + 0x164), 0);
+            set_animation_parameter(*(int *)(data + 0x164), 0);
             *(int *)(data + 0x164) = -1;
             return;
         }
@@ -508,10 +508,10 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
         if (fast_dec_timer_s16((int *)(data + 0x168)) == 0)
             return;
         *(int *)(data + 0x180) = 2;
-        FUN_001f4a58_n(scale_game_frames(0x10));
-        FUN_001ff570_n(*(int *)(data + 0x160), 0);
+        fade_to_black(scale_game_frames(0x10));
+        set_animation_parameter(*(int *)(data + 0x160), 0);
         *(int *)(data + 0x160) = -1;
-        FUN_001ff570_n(*(int *)(data + 0x164), 0);
+        set_animation_parameter(*(int *)(data + 0x164), 0);
         table = D_L02_001600EC_n;
         entry_off = *(int *)(data + 0x154) << 7;
         mobys = table;
@@ -524,7 +524,7 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
         fx_pos[1] += fast_sin(moby->rot.z) * 1.5f;
         clear_u64_value(fx_rot);
         fx_rot[2] = fast_add_rotations(moby->rot.z, 3.1415927f);
-        FUN_L00_00216f90_n(fx_pos, fx_rot, 0, 1);
+        set_race_camera(fx_pos, fx_rot, 0, 1);
         {
             int i0 = *(int *)(data + 0x158);
             int i1 = *(int *)(data + 0x15C);
@@ -536,10 +536,10 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
             data[8] = 1;
         }
     } else if (*(int *)(data + 0x180) == 0) {
-        if (FUN_00214720_n(&hero.motion.pos, *(int *)(data + 0x148)) != 0) {
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x148)) != 0) {
             *(int *)(data + 0x180) = 1;
-            *(int *)(data + 0x164) = FUN_001ff308_n(0x15, 0x7D0, initialize_numeric_hud_timer_and_base_dimensions, update_hud_counter_transition, draw_hud_counter, data + 0x14C, 100);
-            *(int *)(data + 0x160) = FUN_001ff308_n(0x17, 0x7D1, initialize_numeric_hud_timer_and_base_dimensions, update_hud_counter_transition, draw_hud_counter, data + 0x150, 7);
+            *(int *)(data + 0x164) = queue_animation_update(0x15, 0x7D0, initialize_numeric_hud_timer_and_base_dimensions, update_hud_counter_transition, draw_hud_counter, data + 0x14C, 100);
+            *(int *)(data + 0x160) = queue_animation_update(0x17, 0x7D1, initialize_numeric_hud_timer_and_base_dimensions, update_hud_counter_transition, draw_hud_counter, data + 0x150, 7);
         }
     }
 }

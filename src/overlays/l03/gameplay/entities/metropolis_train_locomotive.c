@@ -2161,8 +2161,8 @@ extern CollisionHit D_L03_00173F40;
 extern char sphere_collision_resolved_position[] __asm__("D_L03_00173F70");
 extern char D_L03_00173F80[];
 extern float FUN_L00_00258278_cf(void *) __asm__("FUN_0020c9e0");
-extern float FUN_L00_002603d0_cf(void *, int, float) __asm__("FUN_00213508");
-extern float add_vector_xyz_cf(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
+extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern float truncate_float_to_s32_cf(float) __asm__("FUN_001f96b0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -2173,14 +2173,14 @@ extern Moby2C8398 *D_L03_0015FFD8_m __asm__("D_L03_0015FFD8");
 int D_L03_001618F4_i __asm__("D_L03_001618F4") = 0;
 extern int FUN_001f9770_cf(float, unsigned char *, char *) __asm__("FUN_L03_002c6e18");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int FUN_L00_0024f7c8_cf(char *, float) __asm__("FUN_00214cc8");
+extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int FUN_L00_0025df68_cf(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
-extern int FUN_L00_0025e450_cf(void *, void *) __asm__("FUN_L00_0025c698");
+extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern int is_point_inside_clip_volume_cf(int) __asm__("FUN_L03_002c6d98");
 extern int probe_ground_height_cf(int unused, char *m, char *a, void *b, char *c,
                                   void *d) __asm__("FUN_L00_00260400");
-extern int vector_length_xy_cf(int, int, int) __asm__("FUN_0022da68");
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern short D_L03_001618F4 __attribute__((sda));
 extern unsigned char *FUN_L03_0024fba8_cf(int) __asm__("FUN_L00_002603d0");
 extern void *FUN_L00_00257470_cf(char *, int, float *, void *, int, int, float, float *, float *,
@@ -2196,12 +2196,12 @@ extern void FUN_L00_0025c698_cf(void *, void *, void *, int *, float *, int, flo
 extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00260400_cf(void *) __asm__("FUN_L00_0025a120");
 extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
-extern void FUN_L00_00263fd8_cf(void *, void *, void *, float, float, int, int, int, float, float,
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                 float, int, float, float, int, int, int,
                                 int) __asm__("FUN_L00_0025e450");
-extern void FUN_L01_0026d930_cf(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
+extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L03_00250ae8_cf(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern void FUN_L03_002c95a8_cf(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void compute_interpolated_record_value_cf(void *, void *, void *, int, float, float,
                                                  float) __asm__("FUN_L03_002d4288");
@@ -2254,7 +2254,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
     }
     if (m->pos[0] < 2.0f || 1021.0f < m->pos[0] || m->pos[1] < 2.0f || 1021.0f < m->pos[1] ||
         m->pos[2] < 2.0f || 1021.0f < m->pos[2] || (moby_data->pf.id == -1 && m->state != 0xD)) {
-        FUN_L03_002c95a8_cf(m);
+        mark_moby_for_removal(m);
         return;
     }
     FUN_L00_001fefc8_cf(m);
@@ -2277,8 +2277,8 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         } else if (moby_data->look1.f68 < -0.7853982f) {
             moby_data->look1.f68 = -0.7853982f;
         }
-        FUN_L01_0026d930_cf((char *)m, (char *)&moby_data->look0, 2, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
-        FUN_L01_0026d930_cf((char *)m, (char *)&moby_data->look1, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+        update_joint_animation((char *)m, (char *)&moby_data->look0, 2, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
+        update_joint_animation((char *)m, (char *)&moby_data->look1, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
     }
     switch (m->state) {
     case ENEMY_INITIALIZE:
@@ -2442,7 +2442,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         }
         break;
     case ENEMY_PROJECTILE_ATTACK: {
-        if (FUN_L00_0024f7c8_cf((char *)m, 8.0f)) {
+        if (is_value_within_interpolated_window((char *)m, 8.0f)) {
             float a[4];
             float b[4];
             float scaled_launch_vector[4];
@@ -2711,7 +2711,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         int fl;
         float g;
         if (moby_data->q.s3E != 2) {
-            fl = FUN_L00_0025e450_cf(m, &moby_data->q);
+            fl = mine_fall(m, &moby_data->q);
         } else {
             m->f58 = 1.0f;
             fl = (m->b70 << 5) & 0x40;
@@ -2747,7 +2747,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 float v[4];
                 qcopy(v, m->pos);
                 v[2] += 1.0f;
-                FUN_L00_00263fd8_cf(m, moby_data->v40, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6, 1.0f,
+                spawn_explosion(m, moby_data->v40, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6, 1.0f,
                                     15.0f, 1, 1, -1, 0);
                 FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
                                     D_L03_0015F580_macro, D_L03_0015F580_macro);
@@ -2757,7 +2757,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                                     D_L03_0015F580_macro, D_L03_0015F580_macro);
                 FUN_L00_00259710_cf(m, 0, -1);
                 if (moby_data->i264 == -1) {
-                    FUN_L03_002c95a8_cf(m);
+                    mark_moby_for_removal(m);
                     return;
                 }
                 *(OvlQuad *)m->pos = *(OvlQuad *)(moby_data->pf.path + 0x10);
@@ -2773,7 +2773,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         g = allocate_voice_for_target_entry_cf(m->pos);
         m->pos[2] = m->pos[2] - 2.0f;
         if (g + 5.0f < m->pos[2]) {
-            vector_length_xy_cf(0xA, 0x21, (int)m);
+            allocate_voice_for_target_entry(0xA, 0x21, (int)m);
             blend_moby_animation(m, 0xB, 0, scale_game_frames(10));
             m->state = 0xB;
         }
@@ -2792,7 +2792,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             if (q->s3E != 2) {
                 want = q->f4C;
             }
-            add_vector_xyz_cf(&speed, want, q->f14);
+            approach_value(&speed, want, q->f14);
             set_vector_length_xy(q, q, speed);
             qcopy(a, m->pos);
             a[2] += q->f28;
@@ -2812,7 +2812,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                     float v[4];
                     qcopy(v, m->pos);
                     v[2] += 1.0f;
-                    FUN_L00_00263fd8_cf(m, moby_data->v40, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6,
+                    spawn_explosion(m, moby_data->v40, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6,
                                         1.0f, 15.0f, 1, 1, -1, 0);
                     FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f,
                                         D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
@@ -2822,7 +2822,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                                         D_L03_0015F580_macro, D_L03_0015F580_macro, D_L03_0015F580_macro);
                     FUN_L00_00259710_cf(m, 0x200, -1);
                     if (moby_data->i264 == -1) {
-                        FUN_L03_002c95a8_cf(m);
+                        mark_moby_for_removal(m);
                         return;
                     }
                     *(OvlQuad *)m->pos = *(OvlQuad *)(moby_data->pf.path + 0x10);
@@ -2884,12 +2884,12 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         }
         break;
     case ENEMY_DEATH_KNOCKBACK: {
-        int fl = FUN_L00_0025e450_cf(m, &moby_data->q);
+        int fl = mine_fall(m, &moby_data->q);
         float g;
         moby_data->b255++;
         g = allocate_voice_for_target_entry_cf(m->pos);
         if ((fl & 0x60) && g + 5.0f < m->pos[2] && m->bBC != 0xB) {
-            vector_length_xy_cf(0xA, 0, (int)m);
+            allocate_voice_for_target_entry(0xA, 0, (int)m);
             m->bBC = 0xB;
         }
         m->flags &= 0xEFFF;
@@ -2901,7 +2901,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 float v[4];
                 qcopy(v, m->pos);
                 v[2] += 1.0f;
-                FUN_L00_00263fd8_cf(m, moby_data->v40, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6, 1.0f,
+                spawn_explosion(m, moby_data->v40, v, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6, 1.0f,
                                     15.0f, 1, 1, -1, 0);
                 FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
                                     D_L03_0015F580_macro, D_L03_0015F580_macro);
@@ -2911,7 +2911,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                                     D_L03_0015F580_macro, D_L03_0015F580_macro);
                 FUN_L00_00259710_cf(m, 0, -1);
                 if (moby_data->i264 == -1) {
-                    FUN_L03_002c95a8_cf(m);
+                    mark_moby_for_removal(m);
                     return;
                 }
                 *(OvlQuad *)m->pos = *(OvlQuad *)(moby_data->pf.path + 0x10);
@@ -2926,7 +2926,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         if (m->pos[2] < 5.0f) {
             FUN_L00_00259710_cf(m, 0, -1);
             if (moby_data->i264 == -1) {
-                FUN_L03_002c95a8_cf(m);
+                mark_moby_for_removal(m);
                 return;
             }
             *(OvlQuad *)m->pos = *(OvlQuad *)(moby_data->pf.path + 0x10);
@@ -2952,7 +2952,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
     }
     case ENEMY_RESPAWN_AT_PATH_START:
         if ((visited52)[m->bB0 + (current_level_index << 4)] == 0xFF) {
-            FUN_L03_002c95a8_cf(m);
+            mark_moby_for_removal(m);
             return;
         }
         m->i94 = *(int *)(m->p24 + 0x10);
@@ -3007,7 +3007,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             moby_data->mv.f18 = moby_data->mv.f18 + frame_time_sq * 9.8f;
         }
         m->pos[2] = m->pos[2] - (moby_data->mv.f18 - 2.0f);
-        g = FUN_L00_002603d0_cf(m->pos, 0, 0.5f);
+        g = probe_ground_height(m->pos, 0, 0.5f);
         m->pos[2] = m->pos[2] - 2.0f;
         if (m->pos[2] < g) {
             CollisionHit *hit = &D_L03_00173F40;
@@ -3047,7 +3047,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                 float burst_position[4];
                 qcopy(burst_position, m->pos);
                 burst_position[2] += 1.0f;
-                FUN_L00_00263fd8_cf(m, moby_data->v40, burst_position, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6, 1.0f,
+                spawn_explosion(m, moby_data->v40, burst_position, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 6, 1.0f,
                                     15.0f, 1, 1, -1, 0);
                 FUN_L00_00257470_cf((char *)m, 0x6D0, m->pos, m->rot, 0, 0, 0.0f, D_L03_0015F580_macro,
                                     D_L03_0015F580_macro, D_L03_0015F580_macro);
@@ -3057,7 +3057,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
                                     D_L03_0015F580_macro, D_L03_0015F580_macro);
                 FUN_L00_00259710_cf(m, 0x200, -1);
                 if (moby_data->i264 == -1) {
-                    FUN_L03_002c95a8_cf(m);
+                    mark_moby_for_removal(m);
                     return;
                 }
                 *(OvlQuad *)m->pos = *(OvlQuad *)(pf->path + 0x10);

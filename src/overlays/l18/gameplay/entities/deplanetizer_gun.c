@@ -748,10 +748,10 @@ void update_moby_visibility_and_half_turn(struct Moby *moby) {
 /* updates a moby that drags a child moby along with it */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBB88), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
-extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void update_moby_transform_and_child(char *moby) __asm__("FUN_L18_002fa728");
 
@@ -774,7 +774,7 @@ void update_moby_transform_and_child(char *moby) {
     }
     if (*(unsigned char *)(moby + 0xBC) != 0 && *(int *)(data + 0x80) != 0 &&
         *(int *)(data + 0x84) == 0) {
-        char *new_child = func_0020D348_m(0x764);
+        char *new_child = create_moby(0x764);
         *(char **)(data + 0x84) = new_child;
         if (new_child != 0) {
             *(unsigned short *)(new_child + 0x32) = *(unsigned short *)(moby + 0x32);

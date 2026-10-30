@@ -895,7 +895,7 @@ extern f32 mine_path_step_rate_gp __asm__("D_L14_00161C44") __attribute__((sda))
 extern f32 mine_glow_pulse_phase_step_gp __asm__("D_L14_00161C48") __attribute__((sda));
 extern f32 D_0015ED6C_mine __asm__("D_0015ED6C");
 extern void mine_remove(void *) __asm__("FUN_0020c828");
-extern int mine_rand(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float FUN_L00_00257c48(float, float);
 extern int FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
@@ -945,7 +945,7 @@ void update_looping_path_moby(struct Moby *moby) {
         }
         mine_vars->segment = 0;
         mine_vars->along = 0;
-        mine_vars->dir = mine_rand(2) != 0 ? 1.0f : -1.0f;
+        mine_vars->dir = random_integer_below(2) != 0 ? 1.0f : -1.0f;
         qcopy(&moby->pos, path->points[0].pos);
         moby->state = 1;
         mine_vars->spin[0] = random_float_between(0.05235988f, 0.10471976f);
@@ -988,15 +988,15 @@ void update_looping_path_moby(struct Moby *moby) {
 /* Spawn a projectile moby at a, aimed along b, with two parameters. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EE150), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
-extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *spawn_flying_bolt(void *spawn_position, float *launch_vector, int collision_ignore_moby, int collision_mode) __asm__("FUN_L14_002eccf0");
 
 char *spawn_flying_bolt(void *spawn_position, float *launch_vector, int collision_ignore_moby, int collision_mode) {
-    char *projectile_moby = func_0020D348_m(0x2A9);
+    char *projectile_moby = create_moby(0x2A9);
     if (projectile_moby) {
         char *data;
         *(int *)(projectile_moby + 0x40) = 0;
@@ -1240,7 +1240,7 @@ extern s16 D_L14_001E0000[40];
 f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050") = {0};
 u16 D_L14_001E0350_d530[3][16] __asm__("D_L14_001E0350") = {0};
 extern int arc_ftoi(float) __asm__("FUN_001fa6d0");
-extern int FUN_L00_00257b90_d530(int, int) __asm__("FUN_L00_00257b90");
+extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void allocate_voice_for_group_entry(int, int, void *) __asm__("FUN_0022dba0");
 extern void arc_enqueue(void (*)(char *), char *) __asm__("FUN_001f4600");
@@ -1296,13 +1296,13 @@ void update_branched_lightning_arc(char *moby) {
         }
         lerp_vector(lightning_main_arc_penultimate_point, lightning_main_arc_penultimate_point - 4, lightning_main_arc_penultimate_point + 4, 0.5f);
         sign = -1.0f;
-        lightning_arc_remaining_frames = lightning_arc_initial_lifetime_frames = scale_game_frames(FUN_L00_00257b90_d530(lightning_arc_lifetime_range_start_gp, lightning_arc_lifetime_range_end_gp));
+        lightning_arc_remaining_frames = lightning_arc_initial_lifetime_frames = scale_game_frames(random_int_between(lightning_arc_lifetime_range_start_gp, lightning_arc_lifetime_range_end_gp));
         lightning_arc_inverse_fade_duration = 1.0f / convert_integer_to_float(lightning_arc_remaining_frames - scale_game_frames(D_L14_00161C70_gp));
         if (random_integer_below(2) != 0) {
             sign = 1.0f;
         }
         for (j = 0; j < 3; j++) {
-            int k = FUN_L00_00257b90_d530(5, 22);
+            int k = random_int_between(5, 22);
             int branch_point_index;
             float (*row)[4] = D_L14_001E0050_d530[j];
             u16 *sq = D_L14_001E0350_d530[j];
@@ -2494,7 +2494,7 @@ found:
 #endif
 #ifndef
 #endif
-extern void func_00215F80_f13f8(int, int) __asm__("FUN_00215130");
+extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 void request_taxi_stop_prompt(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int taxi_stop_index = *(short *)(data + 0xB4);
@@ -2503,22 +2503,22 @@ void request_taxi_stop_prompt(struct Moby *moby) {
     }
     switch (taxi_stop_index) {
     case TAXI_STOP_RETURN_HUB:
-        func_00215F80_f13f8(4, 0x53ED);
+        try_set_help_message(4, 0x53ED);
         break;
     case TAXI_STOP_HUB_OUTBOUND_DESTINATION:
-        func_00215F80_f13f8(4, 0x53EE);
+        try_set_help_message(4, 0x53EE);
         break;
     case TAXI_STOP_RETURN_FEEDER_ORIGIN:
-        func_00215F80_f13f8(4, 0x53EE);
+        try_set_help_message(4, 0x53EE);
         break;
     case TAXI_STOP_RETURN_FEEDER_DESTINATION:
-        func_00215F80_f13f8(4, 0x53EE);
+        try_set_help_message(4, 0x53EE);
         break;
     case 4:
-        func_00215F80_f13f8(4, 0x1399);
+        try_set_help_message(4, 0x1399);
         break;
     default:
-        func_00215F80_f13f8(4, 0x139B);
+        try_set_help_message(4, 0x139B);
         break;
     }
 }

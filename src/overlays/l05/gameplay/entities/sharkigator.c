@@ -1953,7 +1953,6 @@ f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance
 /* Extermitank update: spawns its two parts, follows its path, turns its turret toward the hero and sprays particles while firing. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00305778), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern int frame_number_gp __asm__("D_L05_0015F5CC") MACRO_ADDR;
@@ -2023,7 +2022,7 @@ void extermitank_update(unsigned char *moby) {
         char *child_moby;
         char *g;
         if (*(char **)(data + 0x184) == 0) {
-            *(char **)(data + 0x184) = func_0020D348_m(0x368);
+            *(char **)(data + 0x184) = create_moby(0x368);
             (*(char **)(data + 0x184))[0x30] = 0x40;
             *(short *)(*(char **)(data + 0x184) + 0x32) = 0x40;
             (*(char **)(data + 0x184))[0x31] = 1;
@@ -2038,7 +2037,7 @@ void extermitank_update(unsigned char *moby) {
             update_entity(*(char **)(data + 0x184));
         }
         if (*(char **)(data + 0x188) == 0) {
-            *(char **)(data + 0x188) = func_0020D348_m(0x369);
+            *(char **)(data + 0x188) = create_moby(0x369);
             (*(char **)(data + 0x188))[0x30] = 0x40;
             *(short *)(*(char **)(data + 0x188) + 0x32) = 0x40;
             (*(char **)(data + 0x188))[0x31] = 1;

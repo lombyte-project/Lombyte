@@ -158,7 +158,7 @@ typedef struct {
 } SegmentPath_261d78;
 
 extern SegmentPath_261d78 *D_L00_001B04B0_261d78[] __asm__("D_L00_001B04B0");
-extern f32 FUN_001ff218_261d78(f32) __asm__("FUN_001f99c0");
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern void FUN_001ff278_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
 extern void FUN_001ff2a8_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
 extern f32 FUN_001ff398_261d78(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ab0");
@@ -192,7 +192,7 @@ s32 resolve_point_path_segment_xy_clearance(f32 distance, s32 path_index, OvlVec
         segment.i[2] = 0;
         FUN_001ff500_261d78(&scaled_segment, &segment, 1.0f);
         FUN_001ff3c0_261d78(&cross, &difference, &scaled_segment);
-        if (distance < FUN_001ff218_261d78(cross.f[2]))
+        if (distance < absolute_float(cross.f[2]))
             continue;
         {
             f32 segment_length = FUN_001ff3d8_261d78(&segment);
@@ -229,7 +229,7 @@ typedef struct {
 
 extern SegmentPath_262030 *D_L00_001B04B0_262030[] __asm__("D_L00_001B04B0");
 extern char D_0013F5E0[];
-extern f32 FUN_001ff218_262030(f32) __asm__("FUN_001f99c0");
+extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern void FUN_001ff278_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
 extern void FUN_001ff2a8_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
 extern f32 FUN_001ff398_262030(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ab0");
@@ -283,7 +283,7 @@ s32 resolve_point_path_segment_clearance(f32 distance, s32 path_index, OvlVec4 *
                 FUN_001ff2a8_262030(&segment, &segment, &scaled_cross);
                 FUN_001ff500_262030(1.0f, &scaled_segment, &segment);
                 FUN_001ff3c0_262030(&cross, &difference, &scaled_segment);
-                segment_length = FUN_001ff218_262030(FUN_001ff398_262030(&cross, height_axis));
+                segment_length = absolute_float(FUN_001ff398_262030(&cross, height_axis));
                 if (distance < segment_length)
                     goto next_segment_262030;
                 segment_length = FUN_001ff3d8_262030(&segment);
@@ -455,7 +455,7 @@ typedef struct {
     int active;
 } S_262608;
 void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
-void FUN_0020c880_262608(void *) __asm__("FUN_0020c880");
+void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 void FUN_L00_00250df8_262608(void *) __asm__("FUN_L00_00250df8");
 
 void update_moby_transform_history(S_262608 *history_state, int dec) __asm__("FUN_L00_00262608");
@@ -488,7 +488,7 @@ void update_moby_transform_history(S_262608 *history_state, int dec) {
             destination[0x50] = history_state->src[0x50];
             destination[0x51] = history_state->src[0x51];
             *(float *)(destination + 0x54) = *(float *)(history_state->src + 0x54);
-            FUN_0020c880_262608(destination);
+            update_moby_animation_state(destination);
             qcopy(destination + 0x10, &history_state->a[k]);
             qcopy(destination + 0x40, &history_state->b[k]);
             FUN_L00_00250df8_262608(destination);
@@ -535,10 +535,10 @@ void clear_moby_transform_history(char *history_state) {
         *(int *)(history_state + 0x13C) = 0;
     }
 }
-void FUN_0020cb88_2628d8(void *, void *) __asm__("FUN_0020cb88");
-void FUN_0020cb10_2628d8(void *, int, void *) __asm__("FUN_0020cb10");
-float FUN_001f99c0_2628d8(float) __asm__("FUN_001f99c0");
-float FUN_L00_0025bc98_2628d8(void *, void *, float, float, float, float,
+void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
+void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
+float absolute_float(float) __asm__("FUN_001f99c0");
+float spring_angle(void *, void *, float, float, float, float,
                               int) __asm__("FUN_L00_0025bc98");
 void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 
@@ -550,24 +550,24 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
         *(void **)(joint_animation_state + 0x78) = moby;
     } else if (previous_moby != moby) {
         if (joint_animation_state[1] && previous_moby[0x20] < 0x7F)
-            FUN_0020cb88_2628d8(previous_moby, joint_animation_state);
+            detach_manipulator(previous_moby, joint_animation_state);
         joint_animation_state[1] = 0;
         *(void **)(joint_animation_state + 0x78) = moby;
     }
     if (*(float *)(joint_animation_state + 0x60) == 0.0f && *(float *)(joint_animation_state + 0x64) == 0.0f &&
         *(float *)(joint_animation_state + 0x68) == 0.0f && *(float *)(joint_animation_state + 0x70) == 1.0f &&
-        FUN_001f99c0_2628d8(*(float *)(joint_animation_state + 0x40)) < 0.005f &&
-        FUN_001f99c0_2628d8(*(float *)(joint_animation_state + 0x44)) < 0.005f &&
-        FUN_001f99c0_2628d8(*(float *)(joint_animation_state + 0x48)) < 0.005f) {
+        absolute_float(*(float *)(joint_animation_state + 0x40)) < 0.005f &&
+        absolute_float(*(float *)(joint_animation_state + 0x44)) < 0.005f &&
+        absolute_float(*(float *)(joint_animation_state + 0x48)) < 0.005f) {
         if (joint_animation_state[1])
-            FUN_0020cb88_2628d8(moby, joint_animation_state);
+            detach_manipulator(moby, joint_animation_state);
         return;
     }
-    FUN_L00_0025bc98_2628d8(joint_animation_state + 0x40, joint_animation_state + 0x50, *(float *)(joint_animation_state + 0x60), fa, fb, 0.0f, 0);
-    FUN_L00_0025bc98_2628d8(joint_animation_state + 0x44, joint_animation_state + 0x54, *(float *)(joint_animation_state + 0x64), fa, fb, 0.0f, 0);
-    FUN_L00_0025bc98_2628d8(joint_animation_state + 0x48, joint_animation_state + 0x58, *(float *)(joint_animation_state + 0x68), fa, fb, 0.0f, 0);
+    spring_angle(joint_animation_state + 0x40, joint_animation_state + 0x50, *(float *)(joint_animation_state + 0x60), fa, fb, 0.0f, 0);
+    spring_angle(joint_animation_state + 0x44, joint_animation_state + 0x54, *(float *)(joint_animation_state + 0x64), fa, fb, 0.0f, 0);
+    spring_angle(joint_animation_state + 0x48, joint_animation_state + 0x58, *(float *)(joint_animation_state + 0x68), fa, fb, 0.0f, 0);
     if (!joint_animation_state[1])
-        FUN_0020cb10_2628d8(moby, joint_index, joint_animation_state);
+        attach_manipulator(moby, joint_index, joint_animation_state);
     build_quaternion_from_axis_rotations(joint_animation_state + 0x10, joint_animation_state + 0x40);
     uniform_scale = *(float *)(joint_animation_state + 0x70);
     *(float *)(joint_animation_state + 0x20) = uniform_scale;

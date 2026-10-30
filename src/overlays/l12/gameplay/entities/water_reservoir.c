@@ -184,13 +184,13 @@ void draw_water_reservoir(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE068), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) __asm__("FUN_L12_002ecce8");
 
 char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float nominal_speed, float f2) {
-    struct Moby *moby = (struct Moby *)func_0020D348_m(0x199);
+    struct Moby *moby = (struct Moby *)create_moby(0x199);
     if (moby != 0) {
         char *data;
         int scaled_frames;

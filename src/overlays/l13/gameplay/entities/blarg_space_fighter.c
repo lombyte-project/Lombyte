@@ -268,14 +268,14 @@ void update_level_13_homing_rocket(Moby_2C27B0 *rocket_moby) {
 /* Spawns a moby of class 0x53 at a position, with its data block filled in. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C31B0), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 unsigned char *spawn_class_53_projectile(char *owner, char *spawn_position, char *initial_velocity) __asm__("FUN_L13_002c1f28");
 
 unsigned char *spawn_class_53_projectile(char *owner, char *spawn_position, char *initial_velocity) {
-    unsigned char *moby = (unsigned char *)func_0020D348_m(0x53);
+    unsigned char *moby = (unsigned char *)create_moby(0x53);
     if (moby != 0) {
         char *data;
         moby[0x30] = 0xFF;
@@ -1912,7 +1912,7 @@ extern s32 rand();
 char *spawn_asteroid_fragment(char *owner, char *spawn_position, char *initial_velocity, int remaining_split_count, float scale) __asm__("FUN_L13_002e1140");
 
 char *spawn_asteroid_fragment(char *owner, char *spawn_position, char *initial_velocity, int remaining_split_count, float scale) {
-    char *moby = func_0020D348_m(0x584);
+    char *moby = create_moby(0x584);
     if (moby != 0) {
         char *moby_data;
         float spin_increment;
@@ -2423,7 +2423,6 @@ void update_linked_switch_group(char *moby) {
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-extern void *create_moby() __asm__("FUN_0020c4f8");
 
 
 

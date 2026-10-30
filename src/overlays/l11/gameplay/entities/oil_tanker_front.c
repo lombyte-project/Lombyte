@@ -1022,14 +1022,14 @@ void energy_sphere_update(unsigned char *moby) {
 /* Spawns a spark effect moby from a source moby, initialises its particle bytes and warms it up. */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A180), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern int FUN_L11_00318ed8_u() __asm__("FUN_L11_00318ed8");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) __asm__("FUN_L11_00318d10");
 
 char *spawn_class_511_moby_with_sparks(char *source_moby, void *spawn_position, int ticks) {
-    char *mob = func_0020D348_m(0x511);
+    char *mob = create_moby(0x511);
     if (mob != 0) {
         char *moby_vars;
         unsigned char *initialization_byte_cursor;
@@ -1599,7 +1599,6 @@ void update_bubble_motion_and_scale(struct Moby *bubble_moby) {
     approach_value(&horizontal_speed, 0.0f, *(float *)&bubble_horizontal_deceleration_gp * frame_time_sq);
     set_vector_length_xy(bubble_vars, bubble_vars, horizontal_speed);
 }
-extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031C210), where it is exact; names translated to the US level program. */
 

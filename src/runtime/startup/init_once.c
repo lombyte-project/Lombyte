@@ -30,7 +30,7 @@ extern s32 initialize_alpha_lookup_table() __asm__("func_001F7A30");
 extern s32 load_irx_module() __asm__("func_00201520");
 extern s32 init_mem_slots() __asm__("func_002015D8");
 extern s32 memcard_get_name() __asm__("func_00209030");
-extern s32 memcard_Init() __asm__("func_0020AC58");
+extern s32 memcard_initialize() __asm__("func_0020AC58");
 extern s32 init_dma() __asm__("func_0020B418");
 extern s32 decompress_wad() __asm__("FUN_0020b618");
 extern s32 init_pads() __asm__("func_00217048");
@@ -123,7 +123,7 @@ void init_once(void) {
     current_vu_chain = 0x160000;
     init_mem_slots();
     sceCdDiskReady(0);
-    memcard_Init();
+    memcard_initialize();
     init_view_context();
     update_view_context();
     vu1_init_chain();

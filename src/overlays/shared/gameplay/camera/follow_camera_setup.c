@@ -1145,7 +1145,7 @@ extern s32 FUN_L00_002e7520_2e7d20(void *) __asm__("FUN_L00_002e7520");
 extern s32 FUN_L00_002e7318_2e7d20(void *) __asm__("FUN_L00_002e7318");
 f32 cosine_interpolate(f32, f32, f32) __asm__("FUN_002133d0");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
-extern s32 FUN_L00_002e4290_2e7d20(void *) __asm__("FUN_L00_002e4290");
+extern s32 test_follow_camera_point_in_collision_volume(void *) __asm__("FUN_L00_002e4290");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 void make_hit_descriptor(void *, void *, s32, void *, f32) __asm__("FUN_L00_00259888");
 void record_moby_hit(s32, void *) __asm__("FUN_L00_00259a88");
@@ -1287,7 +1287,7 @@ move:
     if (!collision_line((x + 0x90), &moby_offset_or_camera_endpoint, camera_collision_mask, D_0013F350_lui.p2080, 0)) {
         goto clear;
     }
-    if (FUN_L00_002e4290_2e7d20((*(E40_2e7d20_t *)&D_L00_00173E40_lui).v20)) {
+    if (test_follow_camera_point_in_collision_volume((*(E40_2e7d20_t *)&D_L00_00173E40_lui).v20)) {
         goto clear;
     }
     if ((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18 != 0 && is_moby_in_class_range_500_to_540((*(E40_2e7d20_t *)&D_L00_00173E40_lui).p18)) {

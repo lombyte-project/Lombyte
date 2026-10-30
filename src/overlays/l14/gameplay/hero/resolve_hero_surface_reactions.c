@@ -116,7 +116,7 @@ f32 FUN_001f9de0_8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
-void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
+void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 #define G hero
 
@@ -205,14 +205,14 @@ s32 process_hero_hit_reaction(s32 apply_hit_reaction) {
             horizontal_knockback_scale = 0.0f;
             vertical_knockback_scale = knockback_scale * 1.7f;
         }
-        FUN_L00_00210c80_8(&knockback_impulse, flag, horizontal_knockback_scale, vertical_knockback_scale);
+        hero_knockback(&knockback_impulse, flag, horizontal_knockback_scale, vertical_knockback_scale);
         if (flag != 0 && hero_hit_entry->unk28 == 4) {
             knockback_impulse.f[2] += knockback_impulse.f[2];
         }
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_8(&knockback_impulse, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
+        hero_knockback(&knockback_impulse, flag, D_0015ED6C_8 * 5.0f, D_0015ED6C_8 * 2.4f);
         break;
     }
     FUN_001f9a10_8(&hero.motion.velocity, &hero.motion.velocity, &knockback_impulse);

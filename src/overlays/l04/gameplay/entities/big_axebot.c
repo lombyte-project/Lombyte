@@ -487,19 +487,19 @@ extern float D_L04_0015F580[] MACRO_ADDR;
 extern float D_L04_00166F40[4];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float fast_cos_cf(float cur, float target, float *vel, float k, float d,
+extern float spring_turn(float cur, float target, float *vel, float k, float d,
                          float max) __asm__("FUN_L00_00258110");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern int absolute_float_cf(void *, void *, int) __asm__("FUN_L00_00259740");
+extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int D_L04_0015F5C4;
 extern int FUN_L00_001fefc8(void *);
-extern int FUN_L00_00258110_cf(void *arg0, int arg1) __asm__("FUN_00214720");
+extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L04_00295de8_cf(void *, void *, void *, int, float, float, float,
                                float) __asm__("FUN_L00_00258490");
-extern int FUN_L04_002ba470_cf(void *, void *) __asm__("FUN_L00_0025c698");
+extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int allocate_voice_for_target_entry(int, int, char *);
-extern int is_point_inside_clip_volume_cf(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int mark_moby_for_removal_cf() __asm__("FUN_L04_002ba470");
 extern struct Path5BD0 *D_L04_001B0630[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
@@ -511,11 +511,11 @@ extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_00259740_cf(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
+extern void leg_walker_update(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
 extern void FUN_L00_0025a120(void *);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void FUN_L00_0025c698_cf(void *, float, float, float) __asm__("FUN_00214db0");
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
@@ -524,7 +524,7 @@ extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295d
 extern void FUN_L04_002ba448_c(void *, float) __asm__("FUN_L04_002ba448");
 extern void advance_moby_animation(void *);
 extern void build_moby_bone_transform(char *, int, char *);
-extern void build_spherical_offset_cf(char *m, float t, int a, int b, void *pos,
+extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos,
                                       void *vel) __asm__("FUN_L00_00259bc8");
 extern void copy_matrix3x4(void *, void *);
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
@@ -781,7 +781,7 @@ void big_axebot_update(M_B7B0 *moby) {
 
             random_integer_below_cf(arr, 0, 0x18);
             arr[5] = 1;
-            blend_big_axebot_and_axe_animation((char *)moby, (void *)arr[is_point_inside_clip_volume_cf(6)], 0,
+            blend_big_axebot_and_axe_animation((char *)moby, (void *)arr[random_integer_below(6)], 0,
                              (void *)scale_game_frames(0x18));
         } else if (moby->f53 != 0xD && (moby->f53 != 6 || (moby->f70 & 2))) {
             if (flag ? target_distance < data->f43C * 2.0f : target_distance < data->f43C) {
@@ -789,7 +789,7 @@ void big_axebot_update(M_B7B0 *moby) {
             }
         }
         if (data->f430 != -1 && data->f434 != -1 && data->f43A == 0 &&
-            (flag || FUN_L00_00258110_cf(&hero.motion.pos, data->f430) != 0)) {
+            (flag || is_point_inside_clip_volume(&hero.motion.pos, data->f430) != 0)) {
             moby->state = 4;
             moby->fBC |= 1;
             data->f43A = 1;
@@ -869,7 +869,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         a = fast_arc_tan(path->pts[data->f438][0] - moby->pos[0],
                          path->pts[data->f438][1] - moby->pos[1]);
-        moby->rot[2] = fast_cos_cf(moby->rot[2], a, &data->f410, frame_time_sq * 12.566371f,
+        moby->rot[2] = spring_turn(moby->rot[2], a, &data->f410, frame_time_sq * 12.566371f,
                                    frame_time_sq * 6.2831855f, frame_time * 3.1415927f);
         vector_quaternion_scratch[0] = fast_cos(moby->rot[2]) * (frame_time * 6.0f);
         vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * (frame_time * 6.0f);
@@ -883,9 +883,9 @@ void big_axebot_update(M_B7B0 *moby) {
             moby->fBC &= ~8;
             reset_leg_rig_from_animation(moby, data->f1A0);
         }
-        data->f414 = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 6.2831855f,
+        data->f414 = spring_turn(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 6.2831855f,
                                  frame_time_sq * 125.663704f, frame_time * 12.566371f);
-        FUN_L00_00259740_cf(moby, data->f1A0, frame_time * 4.0f, data->f414, frame_time_sq * 20.0f);
+        leg_walker_update(moby, data->f1A0, frame_time * 4.0f, data->f414, frame_time_sq * 20.0f);
         if (target_distance < 4.5f) {
             blend_big_axebot_and_axe_animation((char *)moby, (void *)4, (void *)4, (void *)scale_game_frames(0xC));
             moby->state = 7;
@@ -894,13 +894,13 @@ void big_axebot_update(M_B7B0 *moby) {
             vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * 2.0f;
             vector_quaternion_scratch[2] = 0.0f;
             fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
-            if (absolute_float_cf(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
+            if (point_in_path_xy(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
                                  D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                 data->f410 = 0.0f;
                 blend_big_axebot_and_axe_animation((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                 moby->state = 9;
             }
-            if (absolute_float_cf(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
+            if (point_in_path_xy(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
                                  D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                 moby->state = 6;
             }
@@ -918,9 +918,9 @@ void big_axebot_update(M_B7B0 *moby) {
                 reset_leg_rig_from_animation(moby, data->f1A0);
             }
             a = fast_arc_tan(data->home[0] - moby->pos[0], data->home[1] - moby->pos[1]);
-            data->f414 = fast_cos_cf(moby->rot[2], a, &data->f410, frame_time_sq * 6.2831855f,
+            data->f414 = spring_turn(moby->rot[2], a, &data->f410, frame_time_sq * 6.2831855f,
                                      frame_time_sq * 125.663704f, frame_time * 12.566371f);
-            FUN_L00_00259740_cf(moby, data->f1A0, frame_time * 4.0f, data->f414,
+            leg_walker_update(moby, data->f1A0, frame_time * 4.0f, data->f414,
                                 frame_time_sq * 20.0f);
             if (vector_distance_xy(moby->pos, data->home) < 2.0f) {
                 moby->state = 1;
@@ -930,14 +930,14 @@ void big_axebot_update(M_B7B0 *moby) {
                 vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * 2.0f;
                 vector_quaternion_scratch[2] = 0.0f;
                 fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
-                if (absolute_float_cf(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
+                if (point_in_path_xy(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
                                      D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
                     data->f410 = 0.0f;
                     blend_big_axebot_and_axe_animation((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                     moby->state = 9;
                     moby->fBC |= 0x10;
                 }
-                if (absolute_float_cf(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
+                if (point_in_path_xy(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
                                      D_L04_001B0930_B7B0[data->f41C]->count) != 0) {
                     moby->state = 1;
                 }
@@ -957,7 +957,7 @@ void big_axebot_update(M_B7B0 *moby) {
             qcopy(p, tg.pos);
             p[2] += 0.75f;
             if (target_moby != 0) {
-                build_spherical_offset_cf(target_moby, 1.0f, (int)moby, 1, p, vector_quaternion_scratch);
+                spawn_nearby_effect(target_moby, 1.0f, (int)moby, 1, p, vector_quaternion_scratch);
             }
         }
         if (hd > 20.0f) {
@@ -994,15 +994,15 @@ void big_axebot_update(M_B7B0 *moby) {
                 } else {
                     data->f418 = hit_recovery_displacement_limit;
                 }
-                FUN_L00_0025c698_cf(vector_quaternion_scratch, data->f418, data->f414, moby->rot[1]);
+                build_spherical_offset(vector_quaternion_scratch, data->f418, data->f414, moby->rot[1]);
                 fast_vec_add(moby->pos, moby->pos, vector_quaternion_scratch);
-                moby->rot[2] = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
+                moby->rot[2] = spring_turn(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
                                            frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
             } else if (data->f418 > 0.0f) {
                 data->f418 -= frame_time_sq * 200.0f;
-                FUN_L00_0025c698_cf(vector_quaternion_scratch, data->f418, data->f414, moby->rot[1]);
+                build_spherical_offset(vector_quaternion_scratch, data->f418, data->f414, moby->rot[1]);
                 fast_vec_add(moby->pos, moby->pos, vector_quaternion_scratch);
-                moby->rot[2] = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
+                moby->rot[2] = spring_turn(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
                                            frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
             } else {
                 moby->state = 1;
@@ -1018,15 +1018,15 @@ void big_axebot_update(M_B7B0 *moby) {
         } else if (moby->fBC & 0x10) {
             float a = fast_arc_tan(data->home[0] - moby->pos[0], data->home[1] - moby->pos[1]);
 
-            moby->rot[2] = fast_cos_cf(moby->rot[2], a, &data->f410, frame_time_sq * 3.1415927f,
+            moby->rot[2] = spring_turn(moby->rot[2], a, &data->f410, frame_time_sq * 3.1415927f,
                                        frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
         } else {
-            moby->rot[2] = fast_cos_cf(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
+            moby->rot[2] = spring_turn(moby->rot[2], target_yaw, &data->f410, frame_time_sq * 3.1415927f,
                                        frame_time_sq * 6.2831855f, frame_time * 4.1887903f);
         }
         break;
     case BIG_AXEBOT_STATE_DYING:
-        if ((FUN_L04_002ba470_cf(moby, data->fC0) & 0x40) || moby->pos[2] < 1.0f) {
+        if ((mine_fall(moby, data->fC0) & 0x40) || moby->pos[2] < 1.0f) {
             mark_moby_for_removal_cf((char *)moby);
             if (data->f424 != 0) {
                 mark_moby_for_removal(data->f424);

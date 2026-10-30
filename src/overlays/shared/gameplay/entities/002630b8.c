@@ -329,7 +329,7 @@ typedef struct {
     unsigned char padC[0x14];
     T_263b70 tail;
 } P_263b70;
-int FUN_00213260_263b70(int) __asm__("FUN_00213260");
+int random_integer_below(int) __asm__("FUN_00213260");
 P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float,
                                   int) __asm__("FUN_L00_0026d000");
 void draw_trail(void *first_spawn_position, void *second_spawn_position, void *particle_velocity, float first_spawn_particle_value, float second_spawn_particle_value) __asm__("FUN_L00_00263b70");
@@ -338,8 +338,8 @@ void draw_trail(void *first_spawn_position, void *second_spawn_position, void *p
     T_263b70 *tail;
     int i, j, alternating_spawn_value;
     for (i = 0; i < 2; i++) {
-        int random_magnitude = FUN_00213260_263b70(0x10);
-        part = FUN_L00_0026d000_263b70(first_spawn_position, FUN_00213260_263b70(2) == 0 ? random_magnitude : -random_magnitude, particle_velocity, 0.1f, 1.0f,
+        int random_magnitude = random_integer_below(0x10);
+        part = FUN_L00_0026d000_263b70(first_spawn_position, random_integer_below(2) == 0 ? random_magnitude : -random_magnitude, particle_velocity, 0.1f, 1.0f,
                                        0.9f, first_spawn_particle_value, 0x7F204080);
         if (part) {
             tail = &part->tail;
@@ -358,7 +358,7 @@ void draw_trail(void *first_spawn_position, void *second_spawn_position, void *p
             tail = &part->tail;
             part->b9 = truncate_float_to_s32(4.0f) + 0x40;
             part->hA = scale_game_frames(6);
-            part->b8 = FUN_00213260_263b70(0xFF);
+            part->b8 = random_integer_below(0xFF);
             tail->w4 = 2;
             tail->bA = 0x7F;
             tail->bB = part->hA;
@@ -367,14 +367,14 @@ void draw_trail(void *first_spawn_position, void *second_spawn_position, void *p
 }
 extern int D_L00_0015F640;
 extern u8 D_L00_00179118[];
-int FUN_001fdd10_00263d40(int) __asm__("FUN_001fdd10");
+int get_help_message_text(int) __asm__("FUN_001fdd10");
 void FUN_001165b8_00263d40(char *, int) __asm__("FUN_001165b8");
 /* Calls strcpy with D_L00_00179118 and get_help_message_text(a); stores b (default 0xB4 frames). */
 void queue_dialogue_message(int a, int b) __asm__("FUN_L00_00263d40");
 void queue_dialogue_message(int message_id, int message_duration_frames) {
     if (message_duration_frames == -1)
         message_duration_frames = scale_game_frames(0xB4);
-    FUN_001165b8_00263d40(D_L00_00179118, FUN_001fdd10_00263d40(message_id));
+    FUN_001165b8_00263d40(D_L00_00179118, get_help_message_text(message_id));
     D_L00_0015F640 = message_duration_frames;
 }
 extern s32 D_L00_0015F640;
@@ -395,7 +395,7 @@ void FUN_L00_00263fd8_263e30(void *, int, void *, void *, int, int, void *, void
                              void *) __asm__("FUN_L00_00263fd8");
 int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
 float random_angle_radians(void) __asm__("FUN_00213308");
-int FUN_00213260_263e30(int) __asm__("FUN_00213260");
+int random_integer_below(int) __asm__("FUN_00213260");
 void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) __asm__("FUN_L00_00263e30");
 
 void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) {
@@ -422,7 +422,7 @@ void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_c
                 random_fragment_euler_rotation[0] = random_angle_radians();
                 random_fragment_euler_rotation[1] = random_angle_radians();
                 random_fragment_euler_rotation[2] = random_angle_radians();
-                FUN_L00_00263fd8_263e30(source_moby, base + FUN_00213260_263e30(range), &fragment_spawn_positions[i], random_fragment_euler_rotation, 0, mode,
+                FUN_L00_00263fd8_263e30(source_moby, base + random_integer_below(range), &fragment_spawn_positions[i], random_fragment_euler_rotation, 0, mode,
                                         D_L00_0015F580_263e30, D_L00_0015F580_263e30, 0.0f,
                                         D_L00_0015F580_263e30);
             }
@@ -477,13 +477,13 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern struct Moby *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
 void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *fragment_spawn_position, void *fragment_euler_rotation, int random_default_override, int fragment_mode, float *initial_velocity,
                        float *random_vector_override, float scale, float *class_vector_override) {
-    char *fragment_moby = (char *)func_0020D348_m(fragment_class);
+    char *fragment_moby = (char *)create_moby(fragment_class);
     char *fragment_pvars;
     float vector_scratch[4];
     float source_class_ratio, horizontal_velocity_angle, k, k2;

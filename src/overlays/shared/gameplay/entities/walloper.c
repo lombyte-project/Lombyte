@@ -726,7 +726,7 @@ typedef struct {
 } G_2bb400;
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
-extern float FUN_002132a8_2bb400(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float FUN_001fa580_2bb400(float, float) __asm__("FUN_001fa580");
 extern void FUN_0020e098_2bb400(void *) __asm__("FUN_0020e098");
 
@@ -767,7 +767,7 @@ void update_linked_moby_scale_and_rotation(unsigned char *moby) {
     }
     offset_moby_class_point_pairs(*(void **)(moby + 0x24), 0, angle_delta);
     *(float *)(moby + 0x2C) =
-        *(float *)(*(char **)(moby + 0x24) + 0x24) * moby_vars->fC * FUN_002132a8_2bb400(0.5f, 1.0f);
+        *(float *)(*(char **)(moby + 0x24) + 0x24) * moby_vars->fC * random_float_between(0.5f, 1.0f);
     *(float *)(moby + 0x44) =
         FUN_001fa580_2bb400(*(float *)(moby + 0x44), normalize_angle(moby_vars->fC));
     FUN_0020e098_2bb400(moby);
@@ -1174,7 +1174,7 @@ void FUN_001f9bf8_2bc1a0(void *, void *, float) __asm__("FUN_001f9bf8");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 long FUN_001f44b8_2bc1a0(int) __asm__("FUN_001f44b8");
-int FUN_00213260_2bc1a0(int) __asm__("FUN_00213260");
+int random_integer_below(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_2bc1a0(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6d0_2bc1a0(float) __asm__("FUN_001fa6d0");
 void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
@@ -1207,7 +1207,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
     quad.unk64 = 0;
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
-    if (!FUN_00213260_2bc1a0(4))
+    if (!random_integer_below(4))
         uniform_vertex_color = l00_walloper_quad_rare_base_vertex_color;
     else
         uniform_vertex_color = l00_walloper_quad_common_base_vertex_color;
@@ -1452,7 +1452,7 @@ extern unsigned char D_0013E633_2BDAF0[] __asm__("D_0013E533");
 extern char voice_pool[] __asm__("D_0013E550");
 extern char D_L00_001803C0_2BDAF0[] __asm__("D_L00_001802C0");
 extern char D_L00_00166C80[];
-extern float func_0020D830_2BDAF0(void *) __asm__("FUN_0020c9e0");
+extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern int func_001F9938_2BDAF0(void *) __asm__("FUN_001f9770");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int func_001F9850_2BDAF0(int) __asm__("FUN_001f96f8");
@@ -1468,9 +1468,9 @@ extern Moby *func_L00_002BD6B8_2BDAF0(void *, void *, void *, void *) __asm__("F
 extern int func_001F9908_2BDAF0(void *) __asm__("FUN_001f9740");
 extern float *func_L00_0025D390_2BDAF0(Moby *) __asm__("FUN_002141f8");
 extern float func_001FA888_2BDAF0(int) __asm__("FUN_001fa6c0");
-extern int func_001FFB38_2BDAF0(int, int, void *, void *, void *, int *, int) __asm__("FUN_001ff308");
+extern int queue_animation_update(int, int, void *, void *, void *, int *, int) __asm__("FUN_001ff308");
 extern int func_001FA898_2BDAF0(float) __asm__("FUN_001fa6d0");
-extern int func_0022EE28_2BDAF0(int, int, int) __asm__("FUN_0022db10");
+extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void func_L00_002CA728_2BDAF0(void *) __asm__("FUN_L00_002c9348");
 extern void func_L00_002BE3A8_2BDAF0(void *) __asm__("FUN_L00_002bd0a0");
@@ -1478,10 +1478,10 @@ extern int func_L00_0023EF78_2BDAF0(float *pos, float radius, float intensity, i
 extern void func_L00_001FF4B0_2BDAF0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_L00_0028EB98_2BDAF0(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int func_0022ED80_2BDAF0(int, int, void *) __asm__("FUN_0022da68");
-extern int func_001FFCB0_2BDAF0(int) __asm__("FUN_001ff480");
+extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
+extern int remove_hud_item(int) __asm__("FUN_001ff480");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-extern void func_L00_0028EBF0_2BDAF0(int) __asm__("FUN_0022d798");
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void func_L00_00236BF8_2BDAF0(void) __asm__("FUN_L00_00236268");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
@@ -1510,7 +1510,7 @@ void morphoray_update(Moby *moby) {
         morphoray_light_fade_countdown = 0;
     }
     in_range = 1;
-    if (moby->prev_seq == 0 && func_0020D830_2BDAF0(moby) < 6.0f) {
+    if (moby->prev_seq == 0 && compute_interpolated_record_value(moby) < 6.0f) {
         in_range = 0;
     }
     func_001F9938_2BDAF0(&data->timer);
@@ -1577,7 +1577,7 @@ void morphoray_update(Moby *moby) {
                 if (data->total <= 1.0f) {
                     data->left = 0.0f;
                 }
-                data->snd = func_001FFB38_2BDAF0(4, 0x7533, func_L00_00236BF8_2BDAF0, hud_update_particles,
+                data->snd = queue_animation_update(4, 0x7533, func_L00_00236BF8_2BDAF0, hud_update_particles,
                                               func_L00_002377E0_2BDAF0, &D_L00_001616EC, 10000);
             }
         }
@@ -1594,7 +1594,7 @@ void morphoray_update(Moby *moby) {
         if (data->target != 0 && data->left <= 0.0f) {
             if (current_level_index == 5 && data->target->oclass == 0x271 && ((Skill *)item_unlocked)->f8 == 0) {
                 ((Skill *)item_unlocked)->f8 = 1;
-                func_0022EE28_2BDAF0(1, 0, 0);
+                allocate_voice_for_bank_entry(1, 0, 0);
                 queue_dialogue_message(0x53D6, -1);
             }
             func_L00_002CA728_2BDAF0(data->target);
@@ -1614,14 +1614,14 @@ void morphoray_update(Moby *moby) {
             ((Light *)D_L00_001803C0_2BDAF0)[morphoray_point_light_slot].radius = 7.5f;
         }
         if (func_L00_0028EB98_2BDAF0(moby, D_L00_001617C8) == 0) {
-            D_L00_001617C8 = func_0022ED80_2BDAF0(0, 4, moby);
+            D_L00_001617C8 = allocate_voice_for_target_entry(0, 4, moby);
         }
     } else {
         data->target = 0;
         data->seen = 0;
         data->delay = 0;
         if (data->snd != -1) {
-            func_001FFCB0_2BDAF0(data->snd);
+            remove_hud_item(data->snd);
             data->snd = -1;
         }
         D_L00_001617BC = 1;
@@ -1649,7 +1649,7 @@ void morphoray_update(Moby *moby) {
         if (D_L00_001617C8 >= 0) {
             if (D_L00_001617C8 != -1 && ((Voice *)(voice_pool + D_L00_001617C8 * 0x70))->owner == moby
                 && ((Voice *)(voice_pool + D_L00_001617C8 * 0x70))->on != 0) {
-                func_L00_0028EBF0_2BDAF0(D_L00_001617C8);
+                release_voice_slot(D_L00_001617C8);
             }
             D_L00_001617C8 = -1;
         }
@@ -1808,8 +1808,8 @@ extern Vec_2BE3A8 D_L00_00173F60_2BE3A8 __asm__("D_L00_00173E60");
 extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") MACRO_ADDR;
 #include "rnc/data_labels.h"
 extern void func_L00_002BE2A0_2BE3A8(void) __asm__("FUN_L00_002bcf98");
-extern float func_L00_0025F368_2BE3A8(float) __asm__("FUN_L00_0025e310");
-extern void func_00215C00_2BE3A8(void *, float, float, float) __asm__("FUN_00214db0");
+extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
+extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern Info *func_L00_0025D390_2BE3A8(struct Moby *) __asm__("FUN_002141f8");
 extern void func_001F9BD8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_L00_001EFFF0_2BE3A8(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -1819,14 +1819,14 @@ extern void func_L00_001FF4B0_2BE3A8(void *, void *, float) __asm__("FUN_001f9bf
 extern void func_001F9C08_2BE3A8(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void func_001F9C30_2BE3A8(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_001F9CA0_2BE3A8(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void func_002156E0_2BE3A8(void *, void *, void *, float) __asm__("FUN_00214890");
+extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern float func_001F9FA8_2BE3A8(float) __asm__("FUN_001f9de0");
 extern float func_001F9F90_2BE3A8(float) __asm__("FUN_001f9dc8");
 extern void func_001F9EE8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void func_001F49B0_2BE3A8(void *, struct Moby *) __asm__("FUN_001f4600");
 extern void draw_beam_ring_and_rail_effects(void *) __asm__("FUN_L00_002bdc50");
-extern float func_002140F8_2BE3A8(float, float) __asm__("FUN_002132a8");
-extern int func_002140B0_2BE3A8(int) __asm__("FUN_00213260");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001F9850_2BE3A8(int) __asm__("FUN_001f96f8");
 extern void func_L00_00272F00_2BE3A8(void *, int, int, int, int, void *, float, float, float) __asm__("FUN_L00_00272060");
 extern int func_001FA898_2BE3A8(float) __asm__("FUN_001fa6d0");
@@ -1863,13 +1863,13 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     wave_offset.w = 1.0f;
     wave_offset.x = 0.0f;
     func_L00_002BE2A0_2BE3A8();
-    D_L00_001617D0 = func_L00_0025F368_2BE3A8(D_L00_001617D0 + D_L00_001616F8_gp);
-    func_00215C00_2BE3A8(&aim, D_L00_001617CC_macro, data->f48, data->f4C);
+    D_L00_001617D0 = normalize_angle(D_L00_001617D0 + D_L00_001616F8_gp);
+    build_spherical_offset(&aim, D_L00_001617CC_macro, data->f48, data->f4C);
     if (data->target != 0 && (info = func_L00_0025D390_2BE3A8(data->target)) != 0) {
         qcopy(&beam_end, &data->target->pos);
         beam_end.z = beam_end.z + info->height;
     } else {
-        func_00215C00_2BE3A8(&beam_end, D_L00_001616DC_gp, data->f48, data->f4C);
+        build_spherical_offset(&beam_end, D_L00_001616DC_gp, data->f48, data->f4C);
         func_001F9BD8_2BE3A8(&beam_end, &beam_end, data);
     }
     beam_length = D_L00_001616DC_gp;
@@ -1917,7 +1917,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                 Vec_2BE3A8 node;
 
                 for (ring_index = 0; ring_index < 20; ring_index++) {
-                    func_002156E0_2BE3A8(&ring, &side, &beam_segment_direction, (float)ring_index * D_L00_00161704_gp);
+                    build_look_at_matrix(&ring, &side, &beam_segment_direction, (float)ring_index * D_L00_00161704_gp);
                     func_001F9BD8_2BE3A8(&D_L00_001DC1A0_2BE3A8[i][ring_index], &ring, &D_L00_001DC260_2BE3A8[i]);
                 }
                 qcopy(&node, &D_L00_001DC260_2BE3A8[i]);
@@ -1926,7 +1926,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                 func_001F9CA0_2BE3A8(&up, &out, &fwd);
                 wave_width = D_L00_0016172C_gp;
                 wave_width = wave_width + (D_L00_00161730_gp - wave_width) * progress;
-                factor = func_L00_0025F368_2BE3A8(D_L00_001617D0 + D_L00_001616FC_gp * func_001FA888_2BE3A8(i));
+                factor = normalize_angle(D_L00_001617D0 + D_L00_001616FC_gp * func_001FA888_2BE3A8(i));
                 wave_offset.y = wave_width * func_001F9FA8_2BE3A8(factor);
                 wave_width = wave_width * func_001F9F90_2BE3A8(factor);
                 wave_offset.z = wave_width;
@@ -1937,18 +1937,18 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         }
     }
     func_001F49B0_2BE3A8(draw_beam_ring_and_rail_effects, moby);
-    spark_size = func_002140F8_2BE3A8(0.1f, 2.0f);
-    sign = func_002140B0_2BE3A8(2);
+    spark_size = random_float_between(0.1f, 2.0f);
+    sign = random_integer_below(2);
     if (sign == 0) {
         sign = sign - 1;
     }
-    if (func_002140B0_2BE3A8(2) == 0) {
+    if (random_integer_below(2) == 0) {
         qcopy(&point, &D_L00_001DC320_2BE3A8[11]);
         func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F2020, 0, sign, D_L00_0015F660_2BE3A8, spark_size * 0.1f, spark_size, 0.003f);
         sign = -sign;
         func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, D_L00_0015F660_2BE3A8, spark_size * 0.07f, spark_size * 0.7f, 0.003f);
     }
-    if (func_002140B0_2BE3A8(2) == 0) {
+    if (random_integer_below(2) == 0) {
         qcopy(&point, &D_L00_001DC3E0_2BE3A8[11]);
         func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F20207F, 0, sign, D_L00_0015F660_2BE3A8, spark_size * 0.1f, spark_size, 0.003f);
         sign = -sign;
@@ -1956,7 +1956,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     }
     func_001F9BF0_2BE3A8(&beam_segment_direction, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
     func_L00_001FF4B0_2BE3A8(&beam_segment_direction, &beam_segment_direction, D_L00_00161734_gp * frame_scale);
-    if (func_002140B0_2BE3A8(2) == 0) {
+    if (random_integer_below(2) == 0) {
         func_L00_001FF4B0_2BE3A8(&side, &moby->rot_row1, D_L00_00161740_gp);
         func_001F9BD8_2BE3A8(&point, &D_L00_001DC260_2BE3A8[0], &side);
         {
@@ -1965,11 +1965,11 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
             Vec_2BE3A8 up;
 
             colors = l00_beam_origin_particle_color_palette;
-            color = colors.c[func_002140B0_2BE3A8(5)];
+            color = colors.c[random_integer_below(5)];
             wave_width = randf_sym(0.0f, D_L00_0016173C_gp);
-            func_002156E0_2BE3A8(&out, &beam_segment_direction, D_0013F5E0_r, randf_sym(0.0f, D_L00_0016173C_gp));
+            build_look_at_matrix(&out, &beam_segment_direction, D_0013F5E0_r, randf_sym(0.0f, D_L00_0016173C_gp));
             func_001F9CA0_2BE3A8(&up, &beam_segment_direction, D_0013F5E0_r);
-            func_002156E0_2BE3A8(&out, &out, &up, wave_width);
+            build_look_at_matrix(&out, &out, &up, wave_width);
             node_index = func_001FA898_2BE3A8(beam_length * 1.2f / (D_L00_00161734_gp * frame_scale));
             if (data->target != 0) {
                 node_index = node_index * 3;
@@ -2910,7 +2910,7 @@ extern void func_001F9C30_2C0CF8(void *, void *, float) __asm__("FUN_001f9a68");
 extern float func_001F9CE8_2C0CF8(void *) __asm__("FUN_001f9b20");
 extern float func_L00_002BFF88_2C0CF8(void *, void *) __asm__("FUN_L00_002bec80");
 extern void func_L00_001FF4B0_2C0CF8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float func_001F9B88_2C0CF8(float) __asm__("FUN_001f99c0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern int func_L00_002BFDB8_2C0CF8(void *, int, void *) __asm__("FUN_L00_002beab0");
 extern void func_L00_002BFF08_2C0CF8(void *a) __asm__("FUN_L00_002bec00");
 extern void func_L00_002BFF50_2C0CF8(void *a) __asm__("FUN_L00_002bec48");
@@ -2962,9 +2962,9 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
     }
     qcopy(mid, D_L00_00173F80_2C0CF8);
     func_L00_001FF4B0_2C0CF8(mid, mid, 1.0f);
-    sum = func_001F9B88_2C0CF8(mid[0]);
-    sum = sum + func_001F9B88_2C0CF8(mid[1]);
-    if (func_001F9B88_2C0CF8(mid[2]) < sum) {
+    sum = absolute_float(mid[0]);
+    sum = sum + absolute_float(mid[1]);
+    if (absolute_float(mid[2]) < sum) {
         if (can_halve) {
             return try_start_moby_hop(moby, block, half, 1);
         }

@@ -230,7 +230,7 @@ typedef struct {
     f32 scale;
 } Ent;
 extern Ent D_L00_0017A680_c[] __asm__("D_L00_0017A680");
-s32 FUN_L00_00205110_c(s32) __asm__("FUN_L00_00205110");
+s32 get_hero_easing_moby_by_kind(s32) __asm__("FUN_L00_00205110");
 
 void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 
@@ -242,7 +242,7 @@ void reset_hero_easing_records(void) {
     for (i = 0; i < 31; i++) {
         Ent *manipulator_record = &D_L00_0017A680_c[i];
         if (manipulator_record->active != 0) {
-            s32 manipulator_moby = FUN_L00_00205110_c(manipulator_record->type);
+            s32 manipulator_moby = get_hero_easing_moby_by_kind(manipulator_record->type);
             if (manipulator_moby != 0)
                 detach_manipulator(manipulator_moby, manipulator_record);
         }
@@ -954,7 +954,7 @@ typedef struct {
 extern G00206cf8 help_records __asm__("D_00141968");
 extern s32 D_L00_0015F5CC_00206cf8 __asm__("D_L00_0015F5CC");
 extern E00206cf8 D_L00_00179AC0_00206cf8[] __asm__("D_L00_00179AC0");
-s32 FUN_L00_0020d568_00206cf8(void) __asm__("FUN_L00_0020d568");
+s32 hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 s32 help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern u16 D_001418F0 NOT_SDA;
 void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
@@ -962,7 +962,7 @@ void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
 void check_hero_item_reward_conditions(void) {
     s32 i, qualifying_item_count;
     if (help_records.x3c0 == 0 && item_available[4] != 0 &&
-        FUN_L00_0020d568_00206cf8() != 0) {
+        hero_is_in_special_state() != 0) {
         help_request(0x4E2E, 0x78);
     }
     if (D_L00_0015F5CC_00206cf8 <= 0)
@@ -2238,10 +2238,10 @@ typedef struct {
     short cnt;
 } G_00209540;
 extern G_00209540 D_0013F350_00209540 __asm__("D_0013F350");
-float FUN_002132a8_00209540(float, float) __asm__("FUN_002132a8");
+float random_float_between(float, float) __asm__("FUN_002132a8");
 void FUN_L00_002715e8_00209540(float *, V4 *, int, float,
                                float) __asm__("FUN_L00_002715e8");
-int FUN_00213260_00209540(int) __asm__("FUN_00213260");
+int random_integer_below(int) __asm__("FUN_00213260");
 void emit_hero_periodic_surface_effect(int counter_reset_range, int effect_spawn_counter_threshold) __asm__("FUN_L00_00209540");
 
 void emit_hero_periodic_surface_effect(int counter_reset_range, int effect_spawn_counter_threshold) {
@@ -2250,19 +2250,19 @@ void emit_hero_periodic_surface_effect(int counter_reset_range, int effect_spawn
         float spawn_position[4];
         float lo = -0.05f;
         float hi = 0.05f;
-        spawn_position[0] = hero_state->x + FUN_002132a8_00209540(lo, hi);
-        spawn_position[1] = hero_state->y + FUN_002132a8_00209540(lo, hi);
+        spawn_position[0] = hero_state->x + random_float_between(lo, hi);
+        spawn_position[1] = hero_state->y + random_float_between(lo, hi);
         spawn_position[2] = hero_state->pos.x;
         {
-            float random_effect_scale = FUN_002132a8_00209540(0.4f, 0.6f);
+            float random_effect_scale = random_float_between(0.4f, 0.6f);
             FUN_L00_002715e8_00209540(spawn_position, &hero_state->pos, -1, random_effect_scale, 5250.0f);
         }
-        hero_state->cnt = FUN_00213260_00209540(counter_reset_range);
+        hero_state->cnt = random_integer_below(counter_reset_range);
     }
 }
 extern float D_0015ED6C;
-extern float FUN_002132a8_209638(float, float) __asm__("FUN_002132a8");
-extern int FUN_00213260_209638(int) __asm__("FUN_00213260");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_splash(void *, void *, void *, float,
                                     float) __asm__("FUN_L00_002718d0");
 
@@ -2291,14 +2291,14 @@ void fast_sin_cf(int seed, int limit) {
             planar_effect_vector[0] -= fast_cos(hero_state->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
             planar_effect_vector[1] -= fast_sin(hero_state->motion.rot.f[2]) * (D_0015ED6C * 1.5f);
             {
-                float random_effect_scale = FUN_002132a8_209638(0.4f, 0.5f);
+                float random_effect_scale = random_float_between(0.4f, 0.5f);
                 float effect_side_value = -2.0f;
                 if (i == 0)
                     effect_side_value = 2.0f;
                 spawn_splash(pos, planar_effect_vector, &hero_state->water_surface_z, random_effect_scale, effect_side_value);
             }
             if (seed) {
-                hero_state->unk908 = FUN_00213260_209638(seed);
+                hero_state->unk908 = random_integer_below(seed);
             } else {
                 hero_state->unk908 = 0;
             }
@@ -2308,11 +2308,11 @@ void fast_sin_cf(int seed, int limit) {
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V_209848;
-float FUN_002132a8_209848(float, float) __asm__("FUN_002132a8");
-float FUN_00213308_209848(void) __asm__("FUN_00213308");
+float random_float_between(float, float) __asm__("FUN_002132a8");
+float random_angle_radians(void) __asm__("FUN_00213308");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void spawn_debris_chunk(V_209848 *, V_209848 *, int, int) __asm__("FUN_L00_0026f548");
-int FUN_00213260_209848(int) __asm__("FUN_00213260");
+int random_integer_below(int) __asm__("FUN_00213260");
 void emit_hero_periodic_surface_particles(int counter_reset_range, int effect_spawn_counter_threshold) __asm__("FUN_L00_00209848");
 
 void emit_hero_periodic_surface_particles(int counter_reset_range, int effect_spawn_counter_threshold) {
@@ -2321,24 +2321,24 @@ void emit_hero_periodic_surface_particles(int counter_reset_range, int effect_sp
         V_209848 spawn_position, outgoing_motion;
         float planar_angle, planar_motion_scale;
         int k;
-        spawn_position.x = P->motion.pos.f[0] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.displacement.f[0] * 8.0f;
+        spawn_position.x = P->motion.pos.f[0] + random_float_between(-0.15f, 0.15f) + P->motion.displacement.f[0] * 8.0f;
         {
-            float y = P->motion.pos.f[1] + FUN_002132a8_209848(-0.15f, 0.15f) + P->motion.displacement.f[1] * 8.0f;
+            float y = P->motion.pos.f[1] + random_float_between(-0.15f, 0.15f) + P->motion.displacement.f[1] * 8.0f;
             spawn_position.z = P->water_surface_z + 0.1f;
             spawn_position.y = y;
         }
-        planar_angle = FUN_00213308_209848();
-        planar_motion_scale = FUN_002132a8_209848(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
+        planar_angle = random_angle_radians();
+        planar_motion_scale = random_float_between(D_0015ED6C * 0.0f, D_0015ED6C * 3.0f);
         outgoing_motion.x = fast_cos(planar_angle) * planar_motion_scale + P->motion.displacement.f[0] * 0.75f;
         outgoing_motion.y = fast_sin(planar_angle) * planar_motion_scale + P->motion.displacement.f[1] * 0.75f;
-        outgoing_motion.z = FUN_002132a8_209848(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
+        outgoing_motion.z = random_float_between(D_0015ED6C * 3.0f, D_0015ED6C * 6.5f);
         k = random_int_between(0x5A, 0x78);
         if (P->water_depth < 0.25f)
             spawn_debris_chunk(&spawn_position, &outgoing_motion, 3, k);
         else
             spawn_debris_chunk(&spawn_position, &outgoing_motion, 1, k);
         {
-            short h = FUN_00213260_209848(counter_reset_range);
+            short h = random_integer_below(counter_reset_range);
             struct Hero *Q = &hero;
             Q->unk906 = h;
         }
@@ -2348,7 +2348,7 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V_209a40;
-extern float FUN_002132a8_209a40(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8_209a40(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 
@@ -2365,9 +2365,9 @@ void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
         hero_state = &hero;
         hero_displacement_source = (V_209a40 *)&hero_state->motion.displacement;
         if (mode == 0) {
-            pos[0] = hero_state->motion.pos.f[0] + FUN_002132a8_209a40(-0.1f, 0.1f);
-            pos[1] = hero_state->motion.pos.f[1] + FUN_002132a8_209a40(-0.1f, 0.1f);
-            pos[2] = hero_state->motion.pos.f[2] + FUN_002132a8_209a40(-0.5f, 0.1f);
+            pos[0] = hero_state->motion.pos.f[0] + random_float_between(-0.1f, 0.1f);
+            pos[1] = hero_state->motion.pos.f[1] + random_float_between(-0.1f, 0.1f);
+            pos[2] = hero_state->motion.pos.f[2] + random_float_between(-0.5f, 0.1f);
         } else if (mode == 1) {
             if (!(i & 1)) {
                 FUN_L00_0024f7c8_209a40(hero_state->moby, 0, pos);
@@ -2387,10 +2387,10 @@ void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
         } else {
             fast_vec_scale(&randomized_displacement, &randomized_displacement, 0.7f);
         }
-        randomized_displacement.f[0] += FUN_002132a8_209a40(D_0015ED6C * -0.4f, D_0015ED6C * 0.4f);
-        randomized_displacement.f[1] += FUN_002132a8_209a40(D_0015ED6C * -0.4f, D_0015ED6C * 0.4f);
-        randomized_displacement.f[2] += FUN_002132a8_209a40(-D_0015ED6C, D_0015ED6C * 0.0f);
-        random_integer_below_cf(pos, &randomized_displacement, FUN_002132a8_209a40(4200.0f, 7350.0f), -1.0f);
+        randomized_displacement.f[0] += random_float_between(D_0015ED6C * -0.4f, D_0015ED6C * 0.4f);
+        randomized_displacement.f[1] += random_float_between(D_0015ED6C * -0.4f, D_0015ED6C * 0.4f);
+        randomized_displacement.f[2] += random_float_between(-D_0015ED6C, D_0015ED6C * 0.0f);
+        random_integer_below_cf(pos, &randomized_displacement, random_float_between(4200.0f, 7350.0f), -1.0f);
     }
 }
 #include "rnc/math/circle_offset.h"
@@ -2445,8 +2445,8 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
 }
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 void spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
-float FUN_002132a8_209ec8(float, float) __asm__("FUN_002132a8");
-float FUN_00213308_209ec8(void) __asm__("FUN_00213308");
+float random_float_between(float, float) __asm__("FUN_002132a8");
+float random_angle_radians(void) __asm__("FUN_00213308");
 void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 void FUN_L00_00269958(void *, void *, int, int, int, int, int,
                              int);
@@ -2489,12 +2489,12 @@ void emit_hero_timed_effects(void) {
     life = scale_game_frames(0x28);
     pt = effect_vector;
     for (k = 0x38; k >= 0; k--) {
-        small_effect_sample = truncate_float_to_s32(FUN_002132a8_209ec8(4200.0f, 7350.0f) / 1000.0f);
-        large_effect_sample = truncate_float_to_s32(FUN_002132a8_209ec8(21000.0f, 31500.001953125f) / 1000.0f);
-        spherical_offset_scale = FUN_002132a8_209ec8(D_0015ED6C * 0.15f, D_0015ED6C * 0.57f);
+        small_effect_sample = truncate_float_to_s32(random_float_between(4200.0f, 7350.0f) / 1000.0f);
+        large_effect_sample = truncate_float_to_s32(random_float_between(21000.0f, 31500.001953125f) / 1000.0f);
+        spherical_offset_scale = random_float_between(D_0015ED6C * 0.15f, D_0015ED6C * 0.57f);
         qcopy(hero_position_copy, hero_effect_timer_anchor - 0x41E);
-        theta = FUN_00213308_209ec8();
-        phi = FUN_00213308_209ec8();
+        theta = random_angle_radians();
+        phi = random_angle_radians();
         build_spherical_offset(pt, spherical_offset_scale, theta, phi);
         FUN_L00_00269958(hero_position_copy, pt, col, 0x70F0, life, small_effect_sample, large_effect_sample, 1);
     }
@@ -2663,11 +2663,11 @@ extern f32 D_0015EE14 __asm__("D_0015EE14");
 extern f32 D_0015EE18 __asm__("D_0015EE18");
 
 extern void FUN_00213ed8_a540(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern void FUN_L00_0020a1e0_a540(f32, f32) __asm__("FUN_L00_0020a1e0");
+extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
-extern void FUN_L00_0020a1e0_a540_0020a228(f32, f32) __asm__("FUN_L00_0020a228");
-extern s32 FUN_L00_00257b90_a540(s32, s32) __asm__("FUN_L00_00257b90");
-extern f32 FUN_L00_00257c48_a540(f32, f32) __asm__("FUN_L00_00257c48");
+extern void set_fourth_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a228");
+extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
+extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern f32 interpolate_scalar_linear(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
 
 extern u8 D_0015EDB3 __asm__("D_0015EDB3");
@@ -2693,7 +2693,7 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
     }
     if (G.i260 != 0 && 1.4f < G.f258 && 1.0f < G.f248) {
 
-        FUN_L00_0020a1e0_a540_0020a228(frame_scale_sq * 0.015f, frame_scale_sq * 0.3f);
+        set_fourth_hero_easing_parameters(frame_scale_sq * 0.015f, frame_scale_sq * 0.3f);
         pitch_target_radians = G.f258 * 1.5f * DEG_TO_RAD + 0.19198622f;
         if (0.47123888f < pitch_target_radians)
             pitch_target_radians = 0.47123888f;
@@ -2713,16 +2713,16 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
         return;
     if ((u32)(hero_animation_sequence_index - 1) < 2) {
         min_delay_frames = scale_game_frames(40);
-        G.i1010 = FUN_L00_00257b90_a540(min_delay_frames, scale_game_frames(70));
+        G.i1010 = random_int_between(min_delay_frames, scale_game_frames(70));
     }
     if (fast_dec_timer(&G.i1010) != 0) {
         G.f1004 = -random_float_between(-0.15707964f, 0.43633232f);
-        G.f1008 = FUN_L00_00257c48_a540(0.34906584f, 0.99483764f);
+        G.f1008 = randf_sym(0.34906584f, 0.99483764f);
         random_blend_factor = random_float_between(0.0f, 1.0f);
         G.f1014 = interpolate_scalar_linear(0.015f, 0.007f, random_blend_factor);
         G.f1018 = interpolate_scalar_linear(0.29f, 0.3f, random_blend_factor);
         min_delay_frames = scale_game_frames(90);
-        G.i1010 = FUN_L00_00257b90_a540(min_delay_frames, scale_game_frames(200));
+        G.i1010 = random_int_between(min_delay_frames, scale_game_frames(200));
         G.i1010 += truncate_float_to_s32((f32)scale_game_frames(80) * random_blend_factor);
     }
     if ((u32) * (u8 *)((char *)G.p2080 + 0x53) - 1 < 2) {
@@ -2735,7 +2735,7 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
         if (G.f1004 < 0.0f)
             G.f1004 = 0.0f;
     }
-    FUN_L00_0020a1e0_a540_0020a228(G.f1014, G.f1018);
+    set_fourth_hero_easing_parameters(G.f1014, G.f1018);
     P.f278 = G.f1008;
     P.f274 = G.f1004;
     set_second_hero_easing_parameters(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);

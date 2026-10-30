@@ -58,7 +58,7 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -290,7 +290,7 @@ hit:
             delta.f[2] = 0.75f;
             clear_u64_value(&sphere_pos);
             fast_vec_add(&delta, &delta, &moby->pos);
-            func_L00_0025F4A8_alt(moby, &sphere_pos, &delta, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f,
+            spawn_explosion(moby, &sphere_pos, &delta, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f,
                 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
             if (moby->oclass == 0x1f2 || moby->oclass == 0x22b) allocate_voice_for_target_entry(0, 0, moby);
             else if (moby->oclass != 0x1e6) allocate_voice_for_target_entry(1, 0, moby);
@@ -308,7 +308,7 @@ hit:
             fast_vec_add(&delta, &delta, &sphere_pos);
             cart_burst(moby, &delta, -1, 1.0f, 13.0f);
             fast_vec_add(&delta, &sphere_pos, &moby->pos);
-            func_L00_0025F4A8_alt(moby, &sphere, &delta, 0.0f, 0.0f, 20, 5, 4, 2.0f, 1.0f,
+            spawn_explosion(moby, &sphere, &delta, 0.0f, 0.0f, 20, 5, 4, 2.0f, 1.0f,
                 100000.0f, 3.0f, -1, 15.0f, 1, 1, -1, 0);
             allocate_voice_for_target_entry(1, 0, moby);
             sphere2.flags = 0x810000;
@@ -596,7 +596,7 @@ void initialize_woodcut_bot_movement_data(void *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D29E8), where it is exact; names translated to the US level program. */
 
-extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 
@@ -607,7 +607,7 @@ void emit_woodcut_bot_death_effects(void *moby) {
     char zero_vector[16];
     clear_u64_value(zero_vector);
     moby_point_position(moby, 12, joint_world_position);
-    func_L00_0025F4A8_alt(moby, zero_vector, joint_world_position, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1, 15.0f,
+    spawn_explosion(moby, zero_vector, joint_world_position, 0.0f, 0.0f, 10, 3, 4, 2.0f, 1.0f, 100000.0f, 1.0f, -1, 15.0f,
                           1, 1, -1, 0);
 }
 

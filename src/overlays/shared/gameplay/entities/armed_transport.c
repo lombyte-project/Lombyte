@@ -429,7 +429,7 @@ int check_grindrail_barrier_release_condition(int moby_list_index) __asm__("FUN_
 
 int check_grindrail_barrier_release_condition(int idx) __asm__("FUN_L16_002e5cd0");
 extern void FUN_L16_002e58d8_u(void) __asm__("FUN_L16_002e58d8");
-extern void FUN_L16_002e5d30_c(int) __asm__("FUN_L16_002e5d30");
+extern void group_trigger_nearest(int) __asm__("FUN_L16_002e5d30");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern int func_0022ED80_6B70(int, int, void *) __asm__("FUN_0022da68");
 
@@ -472,7 +472,7 @@ void grindrail_barrier_update(struct Moby *barrier_moby) {
         if (*(int *)(barrier_data + 0x20) != -1 && check_grindrail_barrier_release_condition(*(int *)(barrier_data + 0x20))) {
             barrier_moby->collision = 0;
             barrier_moby->state = 2;
-            FUN_L16_002e5d30_c(*(int *)(barrier_data + 0x20));
+            group_trigger_nearest(*(int *)(barrier_data + 0x20));
         }
         break;
     case GRINDRAIL_BARRIER_STATE_COLLISION_DISABLED:
@@ -635,7 +635,7 @@ void group_trigger_nearest(int moby_list_index) {
     }
 }
 extern void draw_level16_reflection_mesh_batch(void) __asm__("FUN_L16_002e9ce0");
-void enqueue_callback_list_1(int arg0, int arg1) __asm__("FUN_001f4600");
+void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 
 void moby_update_draw_only(unsigned char *moby) __asm__("FUN_L16_002e9df0");
 void moby_update_draw_only(unsigned char *moby) {
@@ -648,7 +648,7 @@ void moby_update_draw_only(unsigned char *moby) {
         moby[0x20] = 1;
         break;
     case MOBY_DRAW_ONLY_STATE_ENQUEUE_DRAW_CALLBACK:
-        enqueue_callback_list_1((int)draw_level16_reflection_mesh_batch, (int)moby);
+        add_draw_callback((int)draw_level16_reflection_mesh_batch, (int)moby);
         break;
     }
 }

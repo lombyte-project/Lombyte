@@ -15,7 +15,7 @@ extern char snd_non_idle_error_string[] __asm__("D_00153D20");
 extern char snd_no_wait_continuing_string[] __asm__("D_00154070");
 extern s32 printf(const char *, ...);
 extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
-extern void snd_PostMessage(void) __asm__("func_0012E9A0");
+extern void snd_post_message(void) __asm__("func_0012E9A0");
 extern s32 FlushCache(s32);
 extern s32 StoreObjectIndex(void *, s32);
 extern s32 SceSifCheckStatRpc(void *);
@@ -75,7 +75,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
     snd_batch_free_bytes[snd_batch_index] -= need;
     snd_stream_buffers[snd_batch_index][*snd_batch_command_buffers[snd_batch_index]].func = cb;
     snd_stream_buffers[snd_batch_index][*snd_batch_command_buffers[snd_batch_index]].data = cb_data;
-    snd_PostMessage();
+    snd_post_message();
 }
 
 extern __typeof__(snd_send_iop_command_no_wait) func_0012E6E0

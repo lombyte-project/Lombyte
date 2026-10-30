@@ -12,14 +12,14 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 #include "qcopy.h"
-extern int func_002140B0_6fb60(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
 unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) __asm__("FUN_L17_0026fb60");
 unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) {
-    int header_value_input_base = func_002140B0_6fb60(5);
+    int header_value_input_base = random_integer_below(5);
     unsigned char unscaled_header_value = scale_game_frames(header_value_input_base + 2);
-    unsigned char header_byte_value = func_002140B0_6fb60(0xFF);
+    unsigned char header_byte_value = random_integer_below(0xFF);
     unsigned char *record = create_part(0x4F);
     if (record != 0) {
         char *record_data = (char *)record + 0x20;

@@ -90,7 +90,7 @@ void update_pokitaru_pickup(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC9D0), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern float approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
 void update_pokitaru_paired_rotation(struct Moby *moby) __asm__("FUN_L11_002cb810");
@@ -108,7 +108,7 @@ void update_pokitaru_paired_rotation(struct Moby *moby) {
         MOBY(moby)->state = 1;
         *(float *)(data + 4) = moby->rot.z;
         if ((moby->flags & 0x8000) == 0) {
-            char *partner_moby = func_0020D348_m(0x41);
+            char *partner_moby = create_moby(0x41);
             *(short *)(partner_moby + 0x32) = moby->draw_dist;
             partner_moby[0x30] = moby->update_dist;
             *(unsigned short *)(partner_moby + 0x34) = moby->flags | 0x8000;
@@ -1602,7 +1602,7 @@ unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, 
 
 unsigned char *spawn_ship_projectile(char *spawning_moby, char *spawn_position, char *target, char *spawn_rotation, int duration_frames,
                                 float scale) {
-    unsigned char *moby = func_0020D348_m(0x40A);
+    unsigned char *moby = create_moby(0x40A);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
         moby[0x30] = 0xFF;

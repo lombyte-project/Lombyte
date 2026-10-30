@@ -136,7 +136,7 @@ extern void reset_draw_globals(void) __asm__("FUN_001f37e8");
 extern s32 rand(void);
 extern void parse_space_scene_chunk(s32 index) __asm__("FUN_002049f0");
 extern void snd_bank_load_from_ee_cb(s32 cmd, void *arg, s64 data) __asm__("FUN_0012e088");
-extern void store_async_sound_bank_handle() __asm__("func_0022DD78");
+extern void store_sound_bank_handle_callback() __asm__("func_0022DD78");
 extern s32 sceGsSyncV(s32);
 extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void snd_resolve_bank_xrefs(void) __asm__("FUN_0012e1a8");
@@ -290,7 +290,7 @@ void initialize_level_runtime(void) {
     }
     parse_space_scene_chunk(0);
     sound_bank_handle = 0xFFFFFFFF;
-    snd_bank_load_from_ee_cb(data_base + header->sound, store_async_sound_bank_handle,
+    snd_bank_load_from_ee_cb(data_base + header->sound, store_sound_bank_handle_callback,
                              (u32)&sound_bank_handle);
     do {
         FlushCache(0);

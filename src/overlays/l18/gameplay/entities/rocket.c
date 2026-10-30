@@ -420,12 +420,11 @@ void update_projectile_motion_collision_and_trail(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002A87D0), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
 
 char *create_class_29_moby(struct Moby *owner, float *spawn_position, float *initial_movement_step, int homing_enabled) __asm__("FUN_L18_002a75f0");
 
 char *create_class_29_moby(struct Moby *owner, float *spawn_position, float *initial_movement_step, int homing_enabled) {
-    char *moby = func_0020D348_m(0x29);
+    char *moby = create_moby(0x29);
     if (moby != 0) {
         char *data;
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -1836,7 +1835,7 @@ extern float D_L18_00161BF8 __attribute__((sda));
 void spawn_class_270_moby(char *pos, float *initial_movement_step, int collision_filter_moby, float fa, float fb) __asm__("FUN_L18_002db938");
 
 void spawn_class_270_moby(char *pos, float *initial_movement_step, int collision_filter_moby, float fa, float fb) {
-    Obj *spawned_moby = (Obj *)func_0020D348_m(0x270);
+    Obj *spawned_moby = (Obj *)create_moby(0x270);
     if (spawned_moby != 0) {
         Child *moby_vars;
         int initial_glow_color;

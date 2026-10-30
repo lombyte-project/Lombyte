@@ -608,7 +608,7 @@ extern int D_0015ED84; /* no foreign declaration */
 extern int FUN_L00_001fefc8(void *);
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern int FUN_L00_0020d498(int);
-extern int FUN_L00_0020fe30_c(void) __asm__("FUN_L00_0020fe30");
+extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
@@ -809,7 +809,7 @@ int process_hero_primary_item_input(void) {
         if ((*(Hero *)((char *)&hero)).vehicle_mode != 0) {
             break;
         }
-        if (!FUN_L00_0020fe30_c()) {
+        if (!can_select_hero_item_31()) {
             break;
         }
         if (!pad_pressed_within(mask, scale_game_frames(7), 0)) {

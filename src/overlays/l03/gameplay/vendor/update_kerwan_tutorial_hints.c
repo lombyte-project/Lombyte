@@ -379,7 +379,7 @@ void initialize_hero_relative_camera(void *camera_instance) {
     D_L03_00167074 = 0x78;
 }
 #include "sda.h"
-extern float func_001EC120_ebb00(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
+extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 void update_smoothed_hero_relative_camera_position(void *camera_instance) __asm__("FUN_L03_002ebb00");
 
 void update_smoothed_hero_relative_camera_position(void *camera_instance) {
@@ -399,13 +399,13 @@ void update_smoothed_hero_relative_camera_position(void *camera_instance) {
     fast_vec_normalize(camera_back_offset, camera_back_direction_data, -*(float *)camera_offset_params);
     hero_ptr = &hero;
     *(float *)camera_data =
-        func_001EC120_ebb00(camera_data + 0x10, *(float *)camera_data, hero_ptr->motion.pos.f[0], *(float *)(camera_data + 0x20),
+        cam_interp_values(camera_data + 0x10, *(float *)camera_data, hero_ptr->motion.pos.f[0], *(float *)(camera_data + 0x20),
                             *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
     *(float *)(camera_data + 4) =
-        func_001EC120_ebb00(camera_data + 0x14, *(float *)(camera_data + 4), hero_ptr->motion.pos.f[1], *(float *)(camera_data + 0x20),
+        cam_interp_values(camera_data + 0x14, *(float *)(camera_data + 4), hero_ptr->motion.pos.f[1], *(float *)(camera_data + 0x20),
                             *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
     *(float *)(camera_data + 8) =
-        func_001EC120_ebb00(camera_data + 0x18, *(float *)(camera_data + 8), *(float *)(camera_back_direction_data + 0x34), *(float *)(camera_data + 0x20),
+        cam_interp_values(camera_data + 0x18, *(float *)(camera_data + 8), *(float *)(camera_back_direction_data + 0x34), *(float *)(camera_data + 0x20),
                             *(float *)(camera_data + 0x24), *(float *)(camera_data + 0x28));
     fast_vec_add(camera_position, camera_data, gravity_offset);
     fast_vec_add(camera_position, camera_position, camera_back_offset);

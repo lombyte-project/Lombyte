@@ -2578,9 +2578,9 @@ typedef struct {
 extern void set_moby_attached_effect_alpha_from_distance(void *, float) __asm__("FUN_L18_00265ff8");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
-extern void FUN_L00_0025d458_5e80(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
-extern void FUN_L00_0025d538_5e80(void *, void *) __asm__("FUN_L00_0025d538");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 extern void FUN_L00_00250df8_5e80(void *) __asm__("FUN_L00_00250df8");
@@ -2590,9 +2590,9 @@ extern char *create_class_274_ring_effect(void *, void *, float) __asm__("FUN_L1
 extern void FUN_L18_002f1cc8_5e80(void *) __asm__("FUN_L18_002f1cc8");
 extern void start_position_and_rotation_transition(char *, void *, void *, void *, void *, void *, int, int, int) __asm__("FUN_L18_002dfaa0");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern int FUN_L00_0028d8c0_5e80(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void FUN_L00_00298840_5e80(int) __asm__("FUN_L00_00298840");
+extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 
 extern short l18_drek_boss_class_scale_multiplier_gp __asm__("D_L18_00162330") __attribute__((sda));
@@ -2664,7 +2664,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                     *(float *)(boss_data + 0x38C) = health_floor_or_transition_offset;
                 }
                 *(unsigned char *)(boss_data + 0x67) = 0xF0;
-                FUN_L00_0025d458_5e80(moby, (short *)(boss_data + 0x60));
+                trooper_anim_update(moby, (short *)(boss_data + 0x60));
                 if (*(float *)(boss_data + 0x38C) == 0.0f) {
                     if (*(int *)(boss_data + 0x368) != -1) {
                         set_animation_parameter(*(int *)(boss_data + 0x368), 0);
@@ -2674,7 +2674,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                     if (*(unsigned char *)(moby + 0x53) != 0) {
                         blend_moby_animation(moby, 0, 0, scale_game_frames(0x14));
                     }
-                    if (FUN_L00_0028d8c0_5e80(moby, *(int *)(boss_data + 0x3B0)) != 0) {
+                    if (voice_is_playing(moby, *(int *)(boss_data + 0x3B0)) != 0) {
                         int i = *(int *)(boss_data + 0x3B0);
                         if (i != -1) {
                             char *e = voice_pool + i * 0x70;
@@ -2692,7 +2692,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     }
     *(unsigned char *)(moby + 0xA4) = 0xFF;
     *(int *)(boss_data + 0x36C) = truncate_float_to_s32(*(float *)(boss_data + 0x38C));
-    FUN_L00_0025d538_5e80(moby, boss_data + 0x60);
+    trooper_anim_finish(moby, boss_data + 0x60);
     if (*(int *)(boss_data + 0x3A0) == 0) {
         spawned_child_moby = (unsigned char *)create_moby(0x58F);
         *(unsigned char **)(boss_data + 0x3A0) = spawned_child_moby;
@@ -2742,7 +2742,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
             } else if (linked_moby_state_transition_status == -1) {
                 *(unsigned short *)(moby + 0x34) |= 0x41;
                 moby[0x20] = 7;
-                FUN_L00_00298840_5e80(7);
+                start_scene(7);
                 *(int *)(boss_data + 0x39C) = 0x19;
             }
         }
@@ -2807,7 +2807,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
                 start_position_and_rotation_transition(*(char **)(boss_data + 0x334), V50, V60, V70, V80, V90, D_L18_00162384_gp, drek_boss_arena_transition_frame_count_gp, 0);
             } else {
                 moby[0x20] = 0x15;
-                if (FUN_L00_0028d8c0_5e80(moby, *(int *)(boss_data + 0x3B0)) != 0) {
+                if (voice_is_playing(moby, *(int *)(boss_data + 0x3B0)) != 0) {
                     int i = *(int *)(boss_data + 0x3B0);
                     if (i != -1) {
                         char *e = voice_pool + i * 0x70;
@@ -3520,7 +3520,7 @@ typedef struct {
 } M1454;
 
 extern char *create_class_29_moby(char *owner, float *pos, float *vec, int arg3) __asm__("FUN_L18_002a75f0");
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern int FUN_L18_002f8658_u() __asm__("FUN_L18_002f8658");
 extern short D_L18_0016247C_gp __asm__("D_L18_0016247C") __attribute__((sda));
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
@@ -3529,7 +3529,7 @@ f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern short D_L18_0016247C __asm__("D_L18_0016247C");
-extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 
 void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
@@ -3552,7 +3552,7 @@ void rocket_tank_update(M1454 *moby) {
         tank_data->w124 = scale_game_frames(240);
         tank_data->w120 = 0;
         if (tank_data->c138 == 0) {
-            char *c = func_0020D348_m(0x14B);
+            char *c = create_moby(0x14B);
             tank_data->c138 = c;
             c[0x30] = 0x40;
             *(short *)(tank_data->c138 + 0x32) = 0x40;
@@ -3572,7 +3572,7 @@ void rocket_tank_update(M1454 *moby) {
             update_entity(tank_data->c138);
         }
         if (tank_data->c13c == 0) {
-            char *c = func_0020D348_m(0x14B);
+            char *c = create_moby(0x14B);
             tank_data->c13c = c;
             c[0x30] = 0x40;
             *(short *)(tank_data->c13c + 0x32) = 0x40;
@@ -3660,9 +3660,9 @@ extern void *FUN_L00_00257470_cf(char *src, int cls, float *pos, void *mat, int 
                                  float scale, float *v10, float *v11,
                                  float *v12) __asm__("FUN_L00_00263fd8");
 extern void FUN_L00_001fff28(void *, int, float);
-extern void FUN_L00_0025d458_cf(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_L00_0025e450_cf(void *, short *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
@@ -3700,16 +3700,16 @@ void update_rocket_tank_damage_and_aim(void *mv) {
             FUN_L00_00257470_cf(moby_bytes, 0x6FF, pa, moby_bytes + 0x40, 0, 0, 0.0f, dv, dv, dv);
             FUN_L00_00257470_cf(moby_bytes, 0x6FF, pa, moby_bytes + 0x40, 0, 0, 0.0f, dv, dv, dv);
             mark_moby_for_removal_cf(moby_bytes, 0, -1);
-            FUN_L00_0025d458_cf(moby_bytes);
+            mark_moby_for_removal(moby_bytes);
             if (*(char **)(tank_data + 0x138)) {
-                FUN_L00_0025d458_cf(*(char **)(tank_data + 0x138));
+                mark_moby_for_removal(*(char **)(tank_data + 0x138));
             }
             if (*(char **)(tank_data + 0x13C)) {
-                FUN_L00_0025d458_cf(*(char **)(tank_data + 0x13C));
+                mark_moby_for_removal(*(char **)(tank_data + 0x13C));
             }
             return;
         }
-        FUN_L00_0025e450_cf(moby_bytes, (short *)(tank_data + 0x60));
+        trooper_anim_update(moby_bytes, (short *)(tank_data + 0x60));
     }
     moby_bytes[0xA4] = 0xFF;
     if (select_moby_combat_target(moby_bytes, tank_data + 0x70, 30.0f) != 2) {

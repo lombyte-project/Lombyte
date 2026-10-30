@@ -194,7 +194,7 @@ extern void update_hero_target_tracking(void) __asm__("FUN_L00_0020ac98");
 extern void update_hero_easing_targets_and_point_effects(void) __asm__("FUN_L00_0020b1d8");
 extern void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 extern void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
-extern void FUN_L01_00228000_u(void) __asm__("FUN_L01_00228000");
+extern void hero_frame_update(void) __asm__("FUN_L01_00228000");
 void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
 
 extern void update_hero_blink_and_gold_weapon_tint(void) __asm__("FUN_L01_00228e38");
@@ -218,7 +218,7 @@ void update_hero_frame(void) {
     *(short *)(hero_state_base + 0x1EB2) = 0;
     *(short *)(hero_state_base + 0x1EB0) = 0;
     if (*(unsigned char *)(hero_state_base + 0x20A4) != 0) {
-        FUN_L01_00228000_u();
+        hero_frame_update();
         return;
     }
     advance_hero_animation();
@@ -777,8 +777,8 @@ extern s32 D_0013DF88[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
-void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
+void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
+void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 #define G hero
 
@@ -872,7 +872,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
                 mob = (u8 *)G.damage_source_moby;
                 if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
                                  *(s16 *)(mob + 0xA6) == 0x29D)) {
-                    FUN_L00_00216de8_8(0x1C, 0);
+                    allocate_hero_voice_for_entry(0x1C, 0);
                 }
             }
             hero_set_state(0x76, 1);
@@ -895,14 +895,14 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
             horizontal_scale = 0.0f;
             vertical_amount = cached_frame_time * 1.7f;
         }
-        FUN_L00_00210c80_8(&motion_delta, flag, horizontal_scale, vertical_amount);
+        hero_knockback(&motion_delta, flag, horizontal_scale, vertical_amount);
         if (flag != 0 && hero_moby_entry->unk28 == 4) {
             motion_delta.f[2] += motion_delta.f[2];
         }
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_8(&motion_delta, flag, frame_time * 5.0f, frame_time * 2.4f);
+        hero_knockback(&motion_delta, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
     fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &motion_delta);
@@ -1531,7 +1531,7 @@ void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 void stick_target(s32, f32) __asm__("FUN_L00_002118c8");
 void hero_queue_sequence(s32, s32) __asm__("FUN_L00_002325e0");
 void FUN_L00_0025f730_242198(void *, f32) __asm__("FUN_L00_0025f730");
-s32 FUN_L01_00226f10_242198(s32) __asm__("FUN_L01_00226f10");
+s32 get_hero_idle_animation_index(s32) __asm__("FUN_L01_00226f10");
 void select_hero_locomotion_state(void) __asm__("FUN_L01_00242198");
 
 void select_hero_locomotion_state(void) {
@@ -1574,11 +1574,11 @@ void select_hero_locomotion_state(void) {
     }
     if (scale_game_frames(12) < stop_idle_hero->rail_land_frames || (stop_idle_hero->anim_flags & 2)) {
         if (hero_set_state(HERO_STATE_IDLE, 0)) {
-            if (FUN_L01_00226f10_242198(0) == 0x54) {
-                run_frames_or_idle_selector = FUN_L01_00226f10_242198(0);
+            if (get_hero_idle_animation_index(0) == 0x54) {
+                run_frames_or_idle_selector = get_hero_idle_animation_index(0);
                 set_hero_animation(run_frames_or_idle_selector, 0, (f32)scale_game_frames(15));
             } else if (stop_idle_hero->anim_flags & 2) {
-                set_hero_animation(FUN_L01_00226f10_242198(0), 0, -2.0f);
+                set_hero_animation(get_hero_idle_animation_index(0), 0, -2.0f);
             }
         }
     }

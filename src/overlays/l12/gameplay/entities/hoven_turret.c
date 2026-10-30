@@ -130,7 +130,7 @@ extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern float oscillating_link_strip_scroll_rate_gp __asm__("D_L12_00161DFC") __attribute__((sda));
 extern float oscillating_link_strip_random_delta_magnitude_rate_gp __asm__("D_L12_00161E00") __attribute__((sda));
-extern void FUN_L12_003028c8_u(struct Moby *) __asm__("FUN_L12_003028c8");
+extern void draw_oscillating_target_link_strips(struct Moby *) __asm__("FUN_L12_003028c8");
 
 void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
 
@@ -191,7 +191,7 @@ void update_oscillating_target_link_strips(struct Moby *moby) {
         }
     }
     if (fast_vec_dist(&moby->pos, D_L12_00167240) < 48.0f)
-        add_draw_callback(FUN_L12_003028c8_u, moby);
+        add_draw_callback(draw_oscillating_target_link_strips, moby);
 }
 #include "rnc/math/vector.h"
 
@@ -235,7 +235,7 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214
 void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) __asm__("FUN_L00_0025b6b8");
 void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
 extern void func_L00_0025C710_304310(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
-extern int func_00215570_304310(void *, int) __asm__("FUN_00214720");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int func_L00_001EFFF0_304310(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
@@ -306,7 +306,7 @@ void update_oscillating_target_link(Moby *moby) {
                 return;
             }
         }
-        if (data->f2330 != -1 && func_00215570_304310(D_L12_00167240, data->f2330) != 0) {
+        if (data->f2330 != -1 && is_point_inside_clip_volume(D_L12_00167240, data->f2330) != 0) {
             return;
         }
         if (data->f2320 == 0) {
@@ -496,8 +496,8 @@ extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460"
 extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void create_moby_with_particles(void *, void *, void *, int) __asm__("FUN_L08_002e7eb0");
 extern void update_hoven_turret_target_alignment_timer(void *) __asm__("FUN_L12_00303370");
-extern void FUN_L12_00304218_c() __asm__("FUN_L12_00304218");
-extern void FUN_L12_00304d98_c() __asm__("FUN_L12_00304d98");
+extern void draw_hoven_turret_hud() __asm__("FUN_L12_00304218");
+extern void draw_hoven_turret_destruction_fade() __asm__("FUN_L12_00304d98");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void attach_manipulator(void *, int, void *);
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -505,7 +505,7 @@ extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0
 extern void detach_manipulator(void *, void *);
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
-void FUN_L12_003032e8_c(struct Moby *moby) __asm__("FUN_L12_003032e8");
+void update_hoven_turret_camera(struct Moby *moby) __asm__("FUN_L12_003032e8");
 extern char D_0013E533[];
 extern unsigned char D_0014171B_304920[] __asm__("D_0014C050");
 extern int invert52_macro[] __asm__("D_0015EDDC") MACRO_ADDR;
@@ -578,7 +578,7 @@ void hoven_turret_update(struct Moby *moby) {
                     set_moby_animation(moby, 5, 0);
                 }
                 hero_set_state(0x32, 1);
-                FUN_L12_003032e8_c((char *)moby);
+                update_hoven_turret_camera((char *)moby);
                 data->f8C = 200.0f;
                 moby->hit_slot = 0xFF;
                 D_L12_00161F20++;
@@ -593,7 +593,7 @@ void hoven_turret_update(struct Moby *moby) {
         ((Hero *)(D_0013E533 + 0xE1D))->collision_off_frames = scale_game_frames(0x78);
         ((Hero *)(D_0013E533 + 0xE1D))->invulnerable_frames = scale_game_frames(0x78);
         if (D_L12_0015F5C4_macro != 2 && D_L12_001619A0 == 0) {
-            add_draw_callback(FUN_L12_00304218_c, moby);
+            add_draw_callback(draw_hoven_turret_hud, moby);
         }
         update_hoven_turret_target_alignment_timer(moby);
         if (fast_dec_timer(&data->f90)) {
@@ -735,12 +735,12 @@ void hoven_turret_update(struct Moby *moby) {
                 FUN_L00_0026dd20(muz, firing_offset, 0x2F4F7F7F, random_int_between(scale_game_frames(4), scale_game_frames(7)), 500000.0f);
             }
             if (D_L12_001619A0 == 0) {
-                FUN_L12_003032e8_c((char *)moby);
+                update_hoven_turret_camera((char *)moby);
             }
         }
         break;
     case HOVEN_TURRET_STATE_DESTRUCTION_EFFECTS:
-        add_draw_callback(FUN_L12_00304d98_c, moby);
+        add_draw_callback(draw_hoven_turret_destruction_fade, moby);
         if (fast_dec_timer_s16(&data->fAE)) {
             Vec_304920 explosion_position;
             float randomized_view_offset_distance;

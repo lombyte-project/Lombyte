@@ -55,7 +55,7 @@ void request_batalia_cannon_mount(struct Moby *command_target_moby) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E3010), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern char D_0013E533[];
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
@@ -63,7 +63,7 @@ extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, int pjoint) __asm__("FUN_L08_002e1c98");
 
 void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, int pjoint) {
-    unsigned char *child_moby = func_0020D348_m(oClass);
+    unsigned char *child_moby = create_moby(oClass);
     float child_joint_position[4], parent_joint_position[4];
     if (child_moby != 0) {
         child_moby[0x30] = 0xFF;
@@ -644,7 +644,6 @@ extern float func_00214D28_2E16A0(float *,float,float) __asm__("FUN_00213ed8");
 extern int func_L08_002E15A0_2E16A0(char *) __asm__("FUN_L08_002e0228");
 extern int random_int_between(int,int) __asm__("FUN_L00_00257b90");
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
-extern void *create_moby(int) __asm__("FUN_0020c4f8");
 extern void func_00215C00_2E16A0(void *,float,float,float) __asm__("FUN_00214db0");
 extern void func_00213DE0_2E16A0(void *,int,int,int) __asm__("FUN_00212f90");
 extern void func_L08_002E9288_2E16A0(void *,void *,void *,int) __asm__("FUN_L08_002e7eb0");

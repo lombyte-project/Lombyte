@@ -283,11 +283,11 @@ void draw_moby_glow_sprite(char *m) {
     }
     draw_geometry_quad(&pk, 0, 0);
 }
-extern char *FUN_0020c4f8_d160(int) __asm__("FUN_0020c4f8");
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_d160(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
-    unsigned char *destination_moby = (unsigned char *)FUN_0020c4f8_d160(0x5EA);
+    unsigned char *destination_moby = (unsigned char *)create_moby(0x5EA);
     if (destination_moby != 0) {
         destination_moby[0x30] = source_moby[0x30];
         *(unsigned short *)(destination_moby + 0x32) = *(unsigned short *)(source_moby + 0x32);

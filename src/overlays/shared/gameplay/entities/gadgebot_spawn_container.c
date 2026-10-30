@@ -92,7 +92,7 @@ extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 char *spawn_gadgebot_spawn_container(char *owner) __asm__("FUN_L06_002d8510");
 
 char *spawn_gadgebot_spawn_container(char *owner) {
-    char *moby = func_0020D348_m(0x12E);
+    char *moby = create_moby(0x12E);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0x60;
         *(short *)(moby + 0x32) = 0x60;
@@ -272,13 +272,13 @@ void draw_gadgebot_spawn_container(char *moby) {
 /* Spawns a moby of type 0x12F at the owner's position and links it to the owner. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D9F68), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
-extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern char *create_moby(int);
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *spawn_gadgebot_pad(char *owner) __asm__("FUN_L06_002d8b98");
 
 char *spawn_gadgebot_pad(char *owner) {
-    char *moby = func_0020D348_m(0x12F);
+    char *moby = create_moby(0x12F);
     if (moby != 0) {
         *(short *)(moby + 0x32) = 0x60;
         moby[0x31] = 1;
@@ -430,7 +430,7 @@ void frog_update(unsigned char *moby) {
         if (*(short *)(data + 0x200) != 0) {
             char *child;
             moby[0x20] = 1;
-            child = func_0020D348_m(0x1F4);
+            child = create_moby(0x1F4);
             *(char **)(data + 0x20C) = child;
             if (child == 0) {
                 mark_moby_for_removal_c(moby);
@@ -2755,14 +2755,13 @@ typedef struct {
     Moby *slots[7];     /* 0x24 */
 } Vars;
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern char D_0013F3D0[];
 extern float D_0015ED6C;
 #include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/update_moby_rotation_group_2.h"
 extern float approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 #include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/update_moby_rotation_group.h"
 extern float rotation_group_position_offset_distance_gp __asm__("D_L06_00161D48") __attribute__((sda));
-extern Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_0022ED80_2F6330(int, int, void *) __asm__("FUN_0022da68");
 
 void update_moby_rotation_group(Moby *moby) __asm__("FUN_L06_002f4f00");
@@ -2918,7 +2917,7 @@ void energy_sphere_holder_update(char *holder_moby) {
             holder_moby[0xBC] = 1;
             break;
         }
-        spawned_moby = func_0020D348_m(0x410);
+        spawned_moby = create_moby(0x410);
         spawned_moby[0x30] = 0x40;
         spawned_moby[0x31] = 1;
         *(short *)(spawned_moby + 0x32) = 0x40;

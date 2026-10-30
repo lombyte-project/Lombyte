@@ -11,7 +11,7 @@ typedef struct PrintReent {
     PrintFile *stdout_file;
 } PrintReent;
 
-extern int Vfprintf(PrintFile *file, const char *format,
+extern int vfprintf(PrintFile *file, const char *format,
                     va_list arguments) __asm__("func_00116DA8");
 
 int Printf(const char *format, ...) __asm__("printf");
@@ -22,5 +22,5 @@ int Printf(const char *format, ...) {
 
     reent->stdout_file->data = reent;
     arguments = __builtin_next_arg(format) - 0x38;
-    return Vfprintf(reent->stdout_file, format, arguments);
+    return vfprintf(reent->stdout_file, format, arguments);
 }

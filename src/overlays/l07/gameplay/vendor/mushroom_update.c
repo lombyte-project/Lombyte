@@ -28,8 +28,8 @@ typedef struct {
 } Obj;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char *func_0020D348_m(int);
-extern int FUN_0022da68_c(int, int, int) __asm__("FUN_0022da68");
+extern char *create_moby(int);
+extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
@@ -59,7 +59,7 @@ void mushroom_update(char *self) {
         break;
     case MUSHROOM_SPAWN_AND_REMOVE: {
         char *spawned_moby;
-        FUN_0022da68_c(0, 0, (int)self);
+        allocate_voice_for_target_entry(0, 0, (int)self);
         spawn_proximity_gated_bolts(self);
         FUN_L00_00263fd8(self, 0x674, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L07_0015F580,
                          D_L07_0015F580, D_L07_0015F580);
@@ -108,7 +108,7 @@ void robot_head_update(char *self) {
         break;
     case ROBOT_HEAD_SPAWN_AND_REMOVE: {
         char *spawned_moby;
-        FUN_0022da68_c(0, 0, (int)self);
+        allocate_voice_for_target_entry(0, 0, (int)self);
         spawn_proximity_gated_bolts(self);
         FUN_L00_00263fd8(self, 0x68e, self + 0x10, self + 0x40, 0, 0, 0.0f, D_L07_0015F580,
                          D_L07_0015F580, D_L07_0015F580);

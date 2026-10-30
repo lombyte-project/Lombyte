@@ -77,14 +77,14 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
 /* spawns a moby of class 0x3F1 aimed along a direction */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309C18), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float *spawn_position, float travel_distance, float step_length) __asm__("FUN_L11_00308848");
 
 unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float *spawn_position, float travel_distance, float step_length) {
-    unsigned char *spawned_moby = func_0020D348_m(0x3F1);
+    unsigned char *spawned_moby = create_moby(0x3F1);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
         float direction_length_xy;
@@ -247,7 +247,7 @@ void update_homing_missile(struct Moby *moby) {
 char *spawn_class_3f9_moby(int owner, float *launch_direction, float *spawn_position, float size, float step_length, float z) __asm__("FUN_L11_00308f48");
 
 char *spawn_class_3f9_moby(int owner, float *launch_direction, float *spawn_position, float size, float step_length, float z) {
-    char *spawned_moby = func_0020D348_m(0x3F9);
+    char *spawned_moby = create_moby(0x3F9);
     if (spawned_moby != 0) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
         int size_length_ratio;

@@ -221,8 +221,8 @@ typedef struct {
 extern C_0028ed58 D_L00_0016C860_0028ed58 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-void FUN_L00_0028e9c8_0028ed58(s32) __asm__("FUN_L00_0028e9c8");
-void FUN_002049f0_0028ed58(s32) __asm__("FUN_002049f0");
+void initialize_level_transition_with_audio(s32) __asm__("FUN_L00_0028e9c8");
+void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 s32 memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern s32 transition_sequence_positions[1] __asm__("D_L00_00160570") __attribute__((sda));
 void prepare_target_level_transition(s32 target_level_index) __asm__("FUN_L00_0028ed58");
@@ -245,11 +245,11 @@ void prepare_target_level_transition(s32 target_level_index) {
     D_L00_001611CC = shared_table_offset;
     if (current_level_index == target_level_index) {
         s32 divisor;
-        FUN_L00_0028e9c8_0028ed58(8);
+        initialize_level_transition_with_audio(8);
         divisor = pal_mode ? 0x50 : 0x60;
         shared_result_record->i34 = scale_game_frames(transition_sequence_positions[shared_state_record->h26]);
         shared_result_record->i3C = shared_result_record->i34 / divisor;
-        FUN_002049f0_0028ed58(shared_result_record->i3C);
+        parse_space_scene_chunk(shared_result_record->i3C);
         shared_result_record->i38 = shared_result_record->i34 % divisor;
     } else {
         memcard_save_data(0, target_level_index);
@@ -276,7 +276,7 @@ extern struct {
     int x58, x5c;
 } D_L00_0016C860_eed0 __asm__("D_L00_0016C860") __attribute__((section(".data")));
 void FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
-void FUN_L00_0028e9c8_eed0(s32) __asm__("FUN_L00_0028e9c8");
+void initialize_level_transition_with_audio(s32) __asm__("FUN_L00_0028e9c8");
 extern u8 D_0013DD43 NOT_SDA;
 extern u8 level_14_entry_transition_gate[] __asm__("D_0013D3F0");
 void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
@@ -312,7 +312,7 @@ in:
     D_L00_0016C860_eed0.x58 = D_L00_00173E00_eed0.x4 + shared_table_offset;
     D_L00_0016C860_eed0.x5c = D_L00_00173E00_eed0.x8_c + shared_table_offset;
     D_L00_001611CC = shared_table_offset;
-    FUN_L00_0028e9c8_eed0(8);
+    initialize_level_transition_with_audio(8);
 }
 typedef struct {
     float f[4];

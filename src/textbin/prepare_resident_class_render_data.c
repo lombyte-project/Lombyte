@@ -62,7 +62,7 @@ typedef struct {
 
 extern void build_indexed_resident_render_packet(ResidentRenderPacket *, void *, s32, s32, s32, s32,
                                                  s32) __asm__("func_00202D78");
-extern void build_template_resident_render_packet(ResidentRenderPacket *packet, s32 draw_high,
+extern void set_up_vis_gif_viewer(ResidentRenderPacket *packet, s32 draw_high,
                                                   s32 draw_shift, s32 material_base,
                                                   s32 material_shift,
                                                   s32 material_index) __asm__("FUN_00202fd0");
@@ -180,7 +180,7 @@ void prepare_resident_class_render_data(ResidentClassRenderHeader *header, u8 *t
                     packet, textures + material_index * 16, packet->draw_high, packet->draw_shift,
                     packet->material_base, packet->material_shift, material_index);
             } else {
-                build_template_resident_render_packet(packet, packet->draw_high, packet->draw_shift,
+                set_up_vis_gif_viewer(packet, packet->draw_high, packet->draw_shift,
                                                       packet->material_base, packet->material_shift,
                                                       material_index);
             }

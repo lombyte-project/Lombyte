@@ -73,7 +73,7 @@ float D_L16_001D96C0[8] = {300.73f, 206.04f, 123.22f, 0.0f, 0.0f, 0.11f, 0.0f, 0
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
-extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
@@ -171,11 +171,11 @@ void help_desk_lady_update(L16WatchMoby *moby) {
         if (fast_dec_timer(&watch_data->target_timer)) {
             float heading;
             watch_data->target_timer =
-                truncate_float_to_s32(scale_time(truncate_float_to_s32_cf(180.0f, 300.0f)));
+                truncate_float_to_s32(scale_time(random_float_between(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(moby->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
+                fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(watch_data->target, 6.0f, heading,
-                                   truncate_float_to_s32_cf(0.0f, 30.0f) * DEG_TO_RAD);
+                                   random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
             fast_vec_add(watch_data->target, watch_data->target, moby->position);
         }
         if (watch_data->moving_timer) {
@@ -1280,7 +1280,7 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float D_0015EE6C_u, D_0015ED70_c __asm__("D_0015ED70");
-extern float FUN_L00_0025be00_c(float *, float *, float, float, float,
+extern float approach_angle(float *, float *, float, float, float,
                                 float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_00258830(void *, void *, float, float, float, int);
 extern void resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
@@ -1300,7 +1300,7 @@ float move_chomper_toward_position(void *m_v, void *t_v) {
     oldz = *(float *)(moby + 0x18);
     interpolated_travel_distance = 0.0f;
     distance_to_target = fast_vec_dist(moby + 0x10, target_position);
-    FUN_L00_0025be00_c((float *)(moby + 0x48), (float *)(moby_data + 0x1F4), target_yaw, D_0015ED70_c * 12.566371f,
+    approach_angle((float *)(moby + 0x48), (float *)(moby_data + 0x1F4), target_yaw, D_0015ED70_c * 12.566371f,
                        D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
     func_00214D88_7890(&interpolated_travel_distance, distance_to_target, D_0015ED70_c * 8.0f, D_0015ED70_c * 12.0f, frame_time * 4.0f,
                        (float *)(moby_data + 0x204));
@@ -1583,11 +1583,11 @@ void gadgetron_ceo_update(L16ChallengeMoby *ceo_moby) {
         if (fast_dec_timer(&ceo_data->target_timer)) {
             float heading;
             ceo_data->target_timer =
-                truncate_float_to_s32(scale_time(truncate_float_to_s32_cf(180.0f, 300.0f)));
+                truncate_float_to_s32(scale_time(random_float_between(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(ceo_moby->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
+                fast_add_rotations(ceo_moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(ceo_data->target, 6.0f, heading,
-                                   truncate_float_to_s32_cf(0.0f, 30.0f) * DEG_TO_RAD);
+                                   random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
             fast_vec_add(ceo_data->target, ceo_data->target, ceo_moby->position);
         }
         if (ceo_data->moving_timer) {
@@ -2068,7 +2068,7 @@ extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L0
 void draw_elevator_rotating_rings(struct Moby *elevator_moby) __asm__("FUN_L16_002e84e8");
 
 extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L16_002e84e8");
-extern void enqueue_callback_list_1(void *, void *) __asm__("FUN_001f4600");
+extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 void elevator_update(L16PlatformMoby *moby) __asm__("FUN_L16_002e7f80");
 void elevator_update(L16PlatformMoby *moby) {
@@ -2164,7 +2164,7 @@ void elevator_update(L16PlatformMoby *moby) {
                 break;
             }
             if (elevator_data->speed != 0.0f) {
-                enqueue_callback_list_1(draw_elevator_rotating_rings, moby);
+                add_draw_callback(draw_elevator_rotating_rings, moby);
             }
             break;
         }
@@ -2508,7 +2508,6 @@ typedef struct {
     float x, y, z, radius;
 } L16SingleSphere_2e8e80;
 
-void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 extern int D_L16_00161EF0_gp[] __asm__("D_L16_00161EF0") __attribute__((sda));
 extern float *D_L16_00161F00_gp[] __asm__("D_L16_00161F00") __attribute__((sda));
 extern L16SingleSphere_2e8e80 D_L16_00161F60_bounds_2e8e80[] __asm__("D_L16_001DC600")
@@ -2705,7 +2704,6 @@ typedef struct {
     float x, y, z, radius;
 } L16SingleSphere_2e98e0;
 
-void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 extern short D_L16_00161F90_gp __asm__("D_L16_00161F90") __attribute__((sda));
 extern short D_L16_00161F98_gp __asm__("D_L16_00161F98") __attribute__((sda));
 extern L16SingleSphere_2e98e0 D_L16_00161F60_bounds_2e98e0[] __asm__("D_L16_001DF2B0")

@@ -17,7 +17,7 @@
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern int hero_set_state(int, int) __asm__("FUN_L08_00230b38");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
-void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
+void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 #define G hero
 
@@ -138,14 +138,14 @@ s32 handle_hero_hit(s32 apply_response) {
             xy_response_scale = 0.0f;
             z_response_amount = frame_time_scale * 1.7f;
         }
-        FUN_L00_00210c80_8(&response_vector, flag, xy_response_scale, z_response_amount);
+        hero_knockback(&response_vector, flag, xy_response_scale, z_response_amount);
         if (flag != 0 && hero_moby_entry->unk28 == 4) {
             response_vector.f[2] += response_vector.f[2];
         }
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_8(&response_vector, flag, frame_time * 5.0f, frame_time * 2.4f);
+        hero_knockback(&response_vector, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
     fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &response_vector);

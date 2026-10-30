@@ -397,7 +397,7 @@ typedef struct M_221ee0 {
 extern G_221ee0 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern M_221ee0 *D_L00_0015FFE4_221ee0 __asm__("D_L00_0015FFE4");
 f32 FUN_L00_0020d6b0_221ee0(M_221ee0 *, s32 *, f32, f32, f32, f32) __asm__("FUN_L00_0020d6b0");
-s32 FUN_00214720_221ee0(void *, s32) __asm__("FUN_00214720");
+s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 s32 FUN_001efa68_221ee0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 #define G D_0013F350_lui
 void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
@@ -450,7 +450,7 @@ void select_hero_grapple_swing_target(void) {
             continue;
         if (candidate_moby->b31 == 0)
             target_score += 10.0f;
-        if (q->i1C >= 0 && FUN_00214720_221ee0(&G.q80, q->i1C) != 0)
+        if (q->i1C >= 0 && is_point_inside_clip_volume(&G.q80, q->i1C) != 0)
             continue;
         if (target_score < bestd) {
             bestd = target_score;
@@ -3139,7 +3139,7 @@ typedef struct {
 } G_227d40;
 extern G_227d40 D_0013F350_227d40 __asm__("D_0013F350") NOT_SDA;
 s32 FUN_001f96f8_227d40(s32) __asm__("FUN_001f96f8");
-f32 FUN_001f99c0_227d40(f32) __asm__("FUN_001f99c0");
+f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void FUN_L00_0025b8c0_227d40(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 #define G D_0013F350_227d40
@@ -3153,7 +3153,7 @@ void update_hero_water_height_and_bobbing(void) {
             G.f694 = 0.0f;
         } else {
             G.f694 -= frame_scale_sq * 0.005f * G.f690 + frame_scale * 0.045f * G.f694;
-            if (FUN_001f99c0_227d40(G.f690) < 0.001f && G.f694 < 0.0001f)
+            if (absolute_float(G.f690) < 0.001f && G.f694 < 0.0001f)
                 G.f694 = 0.0f;
         }
     }

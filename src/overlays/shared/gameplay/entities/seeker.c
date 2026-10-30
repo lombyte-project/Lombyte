@@ -76,7 +76,7 @@ extern void cart_burst(struct Moby *, void *, s32, f32, f32) __asm__("FUN_L00_00
 extern void FUN_L00_00263ac8(struct Moby *, s32, void *, f32);
 extern void FUN_L01_0026d930(void *);
 extern void FUN_L01_0026e090(s32, s32);
-extern void FUN_L09_002c6230_u(struct Moby *) __asm__("FUN_L09_002c6230");
+extern void update_seeker_damage_and_target(struct Moby *) __asm__("FUN_L09_002c6230");
 
 void seeker_update(struct Moby *moby) __asm__("FUN_L09_002c5990");
 void seeker_update(struct Moby *moby) {
@@ -102,7 +102,7 @@ void seeker_update(struct Moby *moby) {
     f32 vertical_follow_adjustment;
     VoiceSlot *slot;
 
-    FUN_L09_002c6230_u(moby);
+    update_seeker_damage_and_target(moby);
     target = vars->target;
     FUN_L00_00263ac8(moby, 0, vars->unk280, 2.7f);
     if (moby->visible != 0 && fast_vec_dist(&moby->pos, &D_L09_00166F40) < 29.0f) {
@@ -344,9 +344,9 @@ extern void func_L00_0025BBA0_2C73D0(void *, float *, void *, void *) __asm__("F
 extern void func_L00_0025D5B0_2C73D0(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void func_L01_0026F040_2C73D0(int, int) __asm__("FUN_L01_0026e090");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
-extern float func_002140F8_2C73D0(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float func_001F9878_2C73D0(float) __asm__("FUN_001f96b0");
-extern int func_002140B0_2C73D0(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_L00_00260D30_2C73D0(void *, void *, float) __asm__("FUN_L04_00252e18");
 extern int activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern Path *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
@@ -455,12 +455,12 @@ void update_seeker_damage_and_target(Moby *moby) {
     moby->hit_slot = 0xFF;
     trooper_anim_finish(moby, data->react);
     if (data->f38 != 0 || moby->command == 1) {
-        data->retreat = truncate_float_to_s32(func_001F9878_2C73D0(func_002140F8_2C73D0(180.0f, 240.0f)));
+        data->retreat = truncate_float_to_s32(func_001F9878_2C73D0(random_float_between(180.0f, 240.0f)));
         data->f38 = 0;
         moby->command = 0;
     }
     fast_dec_timer(&data->retreat);
-    if (func_002140B0_2C73D0(4) == 0) {
+    if (random_integer_below(4) == 0) {
         float *goal;
         if (data->retreat != 0) {
             data->reach = 24.0f;
@@ -581,7 +581,7 @@ extern void FUN_L00_00257470_c2(void *, int, int) __asm__("FUN_L00_00257470");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
-int FUN_L00_00257b90_c(int lo, int hi) __asm__("FUN_L00_00257b90");
+int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 int FUN_L00_0025c698_c(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_0025fcb8");
 int select_list_point_toward_target(char *a0, void *list, char *pt, char *out) __asm__("FUN_L01_0028b5e0");

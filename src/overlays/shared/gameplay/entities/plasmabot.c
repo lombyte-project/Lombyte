@@ -193,14 +193,14 @@ void update_linked_moby_position(char *moby) {
 /* Spawns moby class 0x3A5 at the given position, owned by owner, with three randomised angle values. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00300F80), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) __asm__("FUN_L14_002ffaf8");
 
 unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) {
-    unsigned char *spawned_moby = func_0020D348_m(0x3A5);
+    unsigned char *spawned_moby = create_moby(0x3A5);
     if (spawned_moby != 0) {
         char *spawned_vars = *(char **)(spawned_moby + 0x78);
         *(unsigned char **)spawned_vars = owner;
@@ -1435,7 +1435,7 @@ extern float plasmabot_debris_launch_magnitude_range_end_gp __asm__("D_L14_00161
 extern float plasmabot_debris_z_velocity_range_start_gp __asm__("D_L14_00161B10") __attribute__((sda));
 extern float plasmabot_debris_z_velocity_range_end_gp __asm__("D_L14_00161B14") __attribute__((sda));
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
-    unsigned char *spawned_moby = func_0020D348_m(0x145);
+    unsigned char *spawned_moby = create_moby(0x145);
     char *spawned_vars;
     char *hero_launch_reference;
     float launch_vector_scratch[8];
@@ -1563,7 +1563,6 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     if (random_integer_below(2) != 0)
         emit_debris_trail_particles(moby);
 }
-extern unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void build_look_at_2e0170(void *, void *, void *, float) __asm__("FUN_00214890");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");

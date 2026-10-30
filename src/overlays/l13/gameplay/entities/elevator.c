@@ -452,7 +452,7 @@ extern float D_0015ED70_c __asm__("D_0015ED70");
 extern int FUN_L00_00257b90(int, int);
 extern unsigned char D_0013F420[];
 extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 float FUN_L00_0025be00(float *cur, float *vel, float target, float lim, float accel, float maxv);
@@ -2555,7 +2555,7 @@ void fire_fighter_jet_rocket(struct Moby *moby, char *flight_data) {
 #include "eetypes.h"
 extern float D_L13_0016CDF0 __attribute__((section(".data")));
 extern void reflect_vector(void *,void *,void *) __asm__("FUN_L00_001ff660");
-extern void jet_explosion(void *, void *, void *, float, float, int, int, int,
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                           float, float, float, int, float, float, int, int, int, int)
     __asm__("FUN_L00_0025e450");
 /* Flies the player's fighter: throttle and stick input, steering toward the path, camera, and collision response. */
@@ -2851,7 +2851,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                         reflect_vector(impulse, velocity, hit + 0x40);
                         fast_vec_normalize(impulse, impulse, frame_time_gp + frame_time_gp);
                         fast_vec_normalize(vertical, hit + 0x40, 1.0f);
-                        jet_explosion(moby, impulse, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f, 6, 1.0f, 50.0f, 1, 1, -1, 0);
+                        spawn_explosion(moby, impulse, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f, 6, 1.0f, 50.0f, 1, 1, -1, 0);
                         data->death_timer = scale_game_frames(240);
                         moby->state = 6;
                     }
@@ -2859,7 +2859,7 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
                 }
             } else {
                 *(float *)(D_0013E533 + 0x2419) = 0.0f;
-                jet_explosion(moby, impulse, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f, 6, 1.0f, 50.0f, 1, 1, -1, 0);
+                spawn_explosion(moby, impulse, 0, 8.0f, 100.0f, 0x1E, 0xA, 0x18, 16.0f, 8.0f, 9.0f, 6, 1.0f, 50.0f, 1, 1, -1, 0);
                 moby->flags |= 0x41;
                 data->death_timer = scale_game_frames(240);
                 moby->state = 6;
@@ -2992,7 +2992,7 @@ void fighter_jet_update(Jet *jet_moby) {
                 if (hit->source && (unsigned int)(hit->source->class_id-0x52)<2) jet_data->hit_class=(short)hit->source->class_id+10000;
                 jet_camera47.flash=0.2f; jet_camera47.ticks=scale_game_frames(5);
                 ((JetPlayer*)(&jet_player47))->health=0.0f; jet_moby->flags|=0x41;
-                jet_explosion(jet_moby,impulse,0,0.0f,0.0f,10,3,16,4.0f,2.0f,9.0f,6,1.0f,15.0f,1,1,-1,0);
+                spawn_explosion(jet_moby,impulse,0,0.0f,0.0f,10,3,16,4.0f,2.0f,9.0f,6,1.0f,15.0f,1,1,-1,0);
                 jet_moby->animation=0; jet_data->death_timer=scale_game_frames(240); jet_moby->state=6;
             }
         }

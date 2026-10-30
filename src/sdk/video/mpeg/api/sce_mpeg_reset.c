@@ -3,7 +3,7 @@
 
 typedef struct MpegDecoder MpegDecoder;
 extern void ClearDecoderState(MpegDecoder *decoder) __asm__("_clearEach");
-extern void SetImageBufferFlag(MpegDecoder *decoder) __asm__("SetImageBufferFlag");
+extern void set_mpeg1_mode(MpegDecoder *decoder) __asm__("SetImageBufferFlag");
 
 void sceMpegReset(struct sceMpeg *mpeg) __asm__("sceMpegReset");
 
@@ -18,5 +18,5 @@ void sceMpegReset(struct sceMpeg *mpeg) {
     decoder->unk80 = -1;
     ClearDecoderState(decoder);
     decoder->frame_count = 0;
-    SetImageBufferFlag(decoder);
+    set_mpeg1_mode(decoder);
 }

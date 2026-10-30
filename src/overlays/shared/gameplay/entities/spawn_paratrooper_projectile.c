@@ -14,12 +14,12 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) __asm__("FUN_L08_00307190");
 char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
-    char *spawned_moby = func_0020D348_m(0x50C);
+    char *spawned_moby = create_moby(0x50C);
     if (spawned_moby != 0) {
         char *moby_data;
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;

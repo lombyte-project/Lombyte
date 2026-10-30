@@ -27,7 +27,7 @@ void reset_electric_water_switch(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002E5970), where it is exact; names translated to the US level program. */
 
 extern char *spawn_source_attached_fading_effect_particle(char *src, int col, int w, int v, float x) __asm__("FUN_L00_0026daa0");
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a68(void *, void *, float);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
@@ -35,7 +35,7 @@ extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *pos) __asm__("FUN_L15_002e4580");
 
 char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *spawn_position) {
-    char *spawned_moby = func_0020D348_m(0x3A6);
+    char *spawned_moby = create_moby(0x3A6);
     if (spawned_moby != 0) {
         char *moby_vars;
         *(unsigned char *)(spawned_moby + 0x30) = 0xFF;

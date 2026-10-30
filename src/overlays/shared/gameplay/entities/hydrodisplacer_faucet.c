@@ -123,7 +123,7 @@ typedef struct {
 
 extern Vec4 D_L05_001671C0_2f5200 __asm__("D_L05_001671C0");
 extern s32 *D_L05_001B0930_2f5200[] __asm__("D_L05_001B0930");
-extern s32 absolute_float_cf(void *, void *, s32) __asm__("FUN_L00_00259740");
+extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern void FUN_L05_002f5190_2f5200(struct Moby *, TriggerVars *, s32, s32) __asm__("FUN_L05_002f5190");
 extern void FUN_L05_002f4f60_2f5200(s32, TriggerVars *, s32) __asm__("FUN_L05_002f4f60");
@@ -149,7 +149,7 @@ void update_moby_spatial_trigger(struct Moby *trigger_moby) {
     }
     if (!inside && trigger_vars->path != -1) {
         path = D_L05_001B0930_2f5200[trigger_vars->path];
-        inside = absolute_float_cf(&target, path + 4, path[0]) != 0;
+        inside = point_in_path_xy(&target, path + 4, path[0]) != 0;
     }
     if (!inside) {
         for (i = 0; i < 6; i++) {

@@ -70,7 +70,7 @@ extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, f
 extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
-void FUN_L12_00306350_c2(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
+void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
 extern int D_L12_00161F04_gp __asm__("D_L12_00161F04") MACRO_ADDR;
@@ -260,14 +260,14 @@ void update_planetbuster_maximus_guns(char *moby) {
                         } else {
                             D_L12_001FB688[0x11] = 1;
                         }
-                        FUN_L12_00306350_c2((struct Moby *)moby, k);
+                        initialize_planetbuster_maximus_detached_part_motion((struct Moby *)moby, k);
                         if (i == 4) {
                             for (j = 0; j < 0x11; j++) {
                                 int id = *(int *)(owner_data + j * 0x30 + 0x20);
                                 if (id != -1 && *(short *)((id << 8) + (int)D_L12_0015FFD8_gp + 0xA6) == 0x4FD) {
                                     D_L12_001FB688[j] = id;
                                     *(int *)(owner_data + j * 0x30 + 0x20) = -1;
-                                    FUN_L12_00306350_c2((struct Moby *)moby, j);
+                                    initialize_planetbuster_maximus_detached_part_motion((struct Moby *)moby, j);
                                 }
                             }
                         }
@@ -554,7 +554,7 @@ extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__
 extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
-void FUN_L12_00306350_c(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
+void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern int current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
 extern char D_0013F3D0[];
 
@@ -772,7 +772,7 @@ void planetbuster_maximus_part_update(char *moby) {
                 *(int *)(moby_data + i * 0x30 + 0x20) = -1;
             }
             D_L12_001FB688[17] = 1;
-            for (i = 0; i < 18; i++) FUN_L12_00306350_c((struct Moby *)moby, i);
+            for (i = 0; i < 18; i++) initialize_planetbuster_maximus_detached_part_motion((struct Moby *)moby, i);
         }
         *(short *)(moby_data + 0x5FA) = *(short *)(moby_data + 0x5FA) + 1;
         update_planetbuster_maximus_detached_parts(moby);

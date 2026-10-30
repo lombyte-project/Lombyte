@@ -356,14 +356,14 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C3690), where it is exact; names translated to the US level program. */
 
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_reference_position, int spawned_moby_class) __asm__("FUN_L09_002c2500");
 
 char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_reference_position, int spawned_moby_class) {
-    char *spawned_moby = func_0020D348_m(spawned_moby_class);
+    char *spawned_moby = create_moby(spawned_moby_class);
     if (spawned_moby) {
         OvlQuad point_position;
         OvlQuad position_offset;
@@ -424,7 +424,7 @@ extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) __asm__("FUN_L09_002ea528");
 
 char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) {
-    char *moby = func_0020D348_m(random_integer_below(4) + 0x107);
+    char *moby = create_moby(random_integer_below(4) + 0x107);
     if (moby != 0) {
         char *spawned_moby_vars = *(char **)(moby + 0x78);
         char *owner_vars = (char *)owner->pvars;
@@ -476,7 +476,7 @@ char *spawn_falling_asteroid(void) __asm__("FUN_L09_002ea778");
 
 char *spawn_falling_asteroid(void) {
     float target_position[4];
-    char *moby = func_0020D348_m(random_integer_below(4) + 0x107);
+    char *moby = create_moby(random_integer_below(4) + 0x107);
     if (moby != 0) {
         char *spawned_moby_position = moby + 0x10;
         char *moby_vars = *(char **)(moby + 0x78);
@@ -553,7 +553,6 @@ extern char D_L09_00166F40_2eaa50[] __asm__("D_L09_00166F40");
 extern f32 D_0015ED6C_2eaa50 __asm__("D_0015ED6C");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void set_moby_color(struct Moby *, s32, s32, s32) __asm__("FUN_L00_002502f0");
 extern void upd_a(struct Moby *) __asm__("FUN_L00_00250df8");
 
@@ -1068,7 +1067,7 @@ extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_class) __asm__("FUN_L09_002edb60");
 
 char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_class) {
-    char *moby = func_0020D348_m(spawned_moby_class);
+    char *moby = create_moby(spawned_moby_class);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;

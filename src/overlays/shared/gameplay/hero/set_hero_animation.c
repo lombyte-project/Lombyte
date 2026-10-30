@@ -10,7 +10,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/asm_helpers.h"
-extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
+extern int lookup_s16_pair_value(int, int *) __asm__("FUN_L00_002321c0");
 
 /* With both objects at hero +0x1180 and +0x1184 present and the
    first's byte 0x53 equal to 1, asks func_L00_00232850 for a pair of
@@ -262,7 +262,7 @@ void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float b
 
     if (((void *)base->unk2278) != 0) {
         if (base->unk227C != 0) {
-            ok = FUN_L00_002321c0_u(animation_id, mapped_animation_id);
+            ok = lookup_s16_pair_value(animation_id, mapped_animation_id);
             if (ok != 0) {
                 blend_moby_animation(((void *)base->unk2278), mapped_animation_id[0], frame_index, (int)blend_frames);
             } else if (*(unsigned char *)(((char *)base->unk2278) + 0x53) != 0) {
@@ -285,7 +285,7 @@ void sync_hero_mapped_moby_animation_speed(void) {
     int mapped_animation_id[4];
 
     if (((void *)base->unk2278) != 0 && base->unk227C != 0 &&
-        FUN_L00_002321c0_u(*(unsigned char *)(((char *)base->moby) + 0x53), mapped_animation_id) != 0) {
+        lookup_s16_pair_value(*(unsigned char *)(((char *)base->moby) + 0x53), mapped_animation_id) != 0) {
         *(float *)(((char *)base->unk2278) + 0x58) = base->anim_speed;
     }
 }

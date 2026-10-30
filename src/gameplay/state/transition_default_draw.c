@@ -44,7 +44,7 @@ extern s32 draw_tfrag() __asm__("func_002333A8");
 extern s32 vu0_load_micro_program() __asm__("func_002334D8");
 extern s32 vu1_sync_chain() __asm__("func_002337B0");
 extern s32 vu1_add_g_sregister() __asm__("func_00233980");
-extern void VU1_gsRegsAlt__Fv() __asm__("func_00233C28");
+extern void vu1_gs_regs_alt() __asm__("func_00233C28");
 extern s32 light_tfrags() __asm__("func_00234F98");
 extern s32 patch_tie_texture_fields() __asm__("func_00235780");
 extern s32 draw_ties_1() __asm__("func_002358C8");
@@ -79,14 +79,14 @@ void transition_default_draw(s32 *unused_parameter) {
     }
     AppendDmaTag(0x02080000);
     setup_gif_paging(0);
-    VU1_gsRegsAlt__Fv();
+    vu1_gs_regs_alt();
     if (draw_callback_count != 0) {
         dispatch_callback_list_1();
     }
-    VU1_gsRegsAlt__Fv();
+    vu1_gs_regs_alt();
     if (D_0018A2E8[0] != 0) {
         vu1_add_g_sregister(8, 5);
-        VU1_gsRegsAlt__Fv();
+        vu1_gs_regs_alt();
         FlushCache(0);
         part_proc();
         font_state = 8;

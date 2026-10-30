@@ -13,7 +13,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int FUN_00213260_2712b8(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B2130 NOT_SDA;
 unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
@@ -33,7 +33,7 @@ unsigned char *FUN_L00_002712b8(OvlQuad *initial_position, float *initial_veloci
         *(float *)(particle + 0xC) = x;
         particle[1] = 0;
         particle[3] = 0x48;
-        particle[8] = FUN_00213260_2712b8(0xFF);
+        particle[8] = random_integer_below(0xFF);
         particle[2] = *D_L00_001B2130;
         *(short *)(particle + 0xA) = lifetime_frames;
         frame_scaled_increment = (float)unscaled_increment * frame_scale;
@@ -99,10 +99,10 @@ void update_moving_rotating_resizing_alpha_fade_particle(unsigned char *particle
     }
 }
 #include "qcopy.h"
-int FUN_00213260_2715e8(int) __asm__("FUN_00213260");
+int random_integer_below(int) __asm__("FUN_00213260");
 int rand(void) __asm__("FUN_001160d8");
 float random_angle_radians(void) __asm__("FUN_00213308");
-float FUN_002132a8_2715e8(float, float) __asm__("FUN_002132a8");
+float random_float_between(float, float) __asm__("FUN_002132a8");
 extern unsigned char *D_L00_001B2134 NOT_SDA;
 unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *initial_position, int x, int color, float size, float size_increment) __asm__("FUN_L00_002715e8");
 
@@ -114,7 +114,7 @@ unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *in
         int resolved_color;
         qcopy(particle + 0x10, initial_position);
         if (color == -1) {
-            resolved_color = ((FUN_00213260_2715e8(6) + 0x14) << 24) | 0x808080;
+            resolved_color = ((random_integer_below(6) + 0x14) << 24) | 0x808080;
         } else {
             resolved_color = color;
         }
@@ -128,7 +128,7 @@ unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *in
         *(short *)(particle + 0xA) = 4;
         *(float *)(particle + 0xC) = size * 210000.0f;
         drift_angle_radians = random_angle_radians();
-        horizontal_drift_speed = FUN_002132a8_2715e8(0.0015f, 0.0025f);
+        horizontal_drift_speed = random_float_between(0.0015f, 0.0025f);
         *(float *)(particle_data + 0) = fast_cos(drift_angle_radians) * horizontal_drift_speed;
         *(float *)(particle_data + 4) = fast_sin(drift_angle_radians) * horizontal_drift_speed;
         *(int *)(particle_data + 0x14) = x;
@@ -375,7 +375,7 @@ void update_color_size_tween_particle(char *particle) {
             ((*(float *)(particle + 0x20) - *(float *)(particle_data + 4)) * interpolation_factor + *(float *)(particle_data + 4)) * 210000.0f;
     }
 }
-int FUN_00213260_272060(int) __asm__("FUN_00213260");
+int random_integer_below(int) __asm__("FUN_00213260");
 extern unsigned char *D_L00_001B2154 NOT_SDA;
 unsigned char *FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x,
                                 float y, float z);
@@ -398,7 +398,7 @@ unsigned char *FUN_L00_00272060(void *initial_position, int lifetime_frames, int
         } else if (mode == 1) {
             particle[8] = 0x20;
         } else {
-            particle[8] = FUN_00213260_272060(0xFF);
+            particle[8] = random_integer_below(0xFF);
         }
         *(float *)(particle_data + 0) = *(float *)(particle + 0xC);
         *(float *)(particle_data + 4) = y * 210000.0f;
@@ -626,7 +626,7 @@ void update_expanding_alpha_pulse_particle(unsigned char *particle) {
     else
         *(int *)(particle + 4) = (*(short *)(particle + 0xa) << 24) | 0x808080;
 }
-float FUN_002132a8_2729c8(float, float) __asm__("FUN_002132a8");
+float random_float_between(float, float) __asm__("FUN_002132a8");
 void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned char *D_L00_001B2168 NOT_SDA;
 unsigned char *spawn_color_tween_emitter_particle(void *initial_position, unsigned char particle_mode, unsigned char b, unsigned char emission_duration_frames,
@@ -669,9 +669,9 @@ unsigned char *spawn_color_tween_emitter_particle(void *initial_position, unsign
             particle_data[0x14] = 0;
             break;
         case PARTICLE_MODE_EMITTED_PARTICLE:
-            r = FUN_002132a8_2729c8(3.0f, 9.0f) * y * frame_time;
+            r = random_float_between(3.0f, 9.0f) * y * frame_time;
             azimuth_angle = random_angle_radians();
-            elevation_angle = FUN_002132a8_2729c8(1.3439035f, 1.7976891f);
+            elevation_angle = random_float_between(1.3439035f, 1.7976891f);
             build_spherical_offset(particle_data, r, azimuth_angle, elevation_angle);
             *(float *)(particle + 0xC) = 42000.0f;
             k = (rand() & 0x1F) + 0x10;
@@ -1215,8 +1215,8 @@ void update_line_collision_rgb_fading_particle(unsigned char *particle) {
     *(int *)(particle + 4) = FUN_L00_0025bfe0_273ee0(particle_data[4], particle_data[5], particle_data[6], particle_data[7]);
     particle[8]--;
 }
-extern int FUN_00213260_2741a0(int) __asm__("FUN_00213260");
-extern float FUN_002132a8_2741a0(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 extern unsigned char *D_L00_001B2188 NOT_SDA;
 unsigned char *spawn_random_planar_drift_particle(void *position, int color, float size_scale, float z) __asm__("FUN_L00_002741a0");
@@ -1227,11 +1227,11 @@ unsigned char *spawn_random_planar_drift_particle(void *position, int color, flo
         float *particle_data;
         float drift_angle_radians, horizontal_drift_speed;
         qcopy(particle + 0x10, position);
-        *(int *)(particle + 4) = color == -1 ? ((FUN_00213260_2741a0(6) + 0x14) << 24) | 0x808080 : color;
+        *(int *)(particle + 4) = color == -1 ? ((random_integer_below(6) + 0x14) << 24) | 0x808080 : color;
         particle[9] = truncate_float_to_s32(2.0f) + 0x20;
         particle[3] = 0x48;
         particle[1] = 1;
-        if (FUN_00213260_2741a0(0x100) & 1) {
+        if (random_integer_below(0x100) & 1) {
             particle[2] = D_L00_001B2188[0];
         } else {
             particle[2] = D_L00_001B2188[1];
@@ -1241,7 +1241,7 @@ unsigned char *spawn_random_planar_drift_particle(void *position, int color, flo
         *(s16 *)(particle + 0xA) = 4;
         *(float *)(particle + 0xC) = size_scale * 210000.0f;
         drift_angle_radians = random_angle_radians();
-        horizontal_drift_speed = FUN_002132a8_2741a0(0.0015f, 0.0025f);
+        horizontal_drift_speed = random_float_between(0.0015f, 0.0025f);
         particle_data[0] = fast_cos(drift_angle_radians) * horizontal_drift_speed;
         particle_data[1] = fast_sin(drift_angle_radians) * horizontal_drift_speed;
         particle_data[4] = z;
@@ -1410,7 +1410,7 @@ typedef struct {
     float unk8;
     float unkC;
 } S_274818;
-extern float FUN_002132a8_274818(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8_274818(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
 
@@ -1429,19 +1429,19 @@ void update_randomized_moby_point_attached_particle(char *particle) {
     }
     attachment_position = particle + 0x10;
     one = 1.0f;
-    randomized_primary_position_w = attachment_data->unk8 * FUN_002132a8_274818(0.05f, one);
+    randomized_primary_position_w = attachment_data->unk8 * random_float_between(0.05f, one);
     save = *(float *)(particle + 0x2C);
     FUN_L00_0024f7c8_274818(attachment_data->o, attachment_data->b4, attachment_position);
     build_moby_bone_transform(attachment_data->o, attachment_data->b4, attachment_vector_scratch);
     x = convert_integer_to_float(attachment_data->b5);
-    x = FUN_002132a8_274818(-x, x);
+    x = random_float_between(-x, x);
     fast_vec_normalize(&attachment_offset, attachment_vector_scratch, (x / 100.0f - one) * attachment_data->unkC);
     fast_vec_add(particle + 0x20, attachment_position, &attachment_offset);
     *(float *)(particle + 0x1C) = randomized_primary_position_w;
     *(float *)(particle + 0x2C) = save;
 }
-extern float FUN_002132a8_274948(float, float) __asm__("FUN_002132a8");
-extern int FUN_00213260_274948(int) __asm__("FUN_00213260");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 extern unsigned char *D_L00_001B2194 NOT_SDA;
@@ -1457,8 +1457,8 @@ unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(u128 *position
         particle[9] = truncate_float_to_s32(4.0f) + 0x70;
         particle[1] = 0;
         particle[3] = 0x48;
-        *(float *)(particle + 0xC) = FUN_002132a8_274948(8000.0f, 50000.0f);
-        particle[8] = FUN_00213260_274948(0x100);
+        *(float *)(particle + 0xC) = random_float_between(8000.0f, 50000.0f);
+        particle[8] = random_integer_below(0x100);
         particle[2] = *D_L00_001B2194;
         lifetime_frames = scale_game_frames(random_int_between(10, 0x1E));
         *(s16 *)(particle + 0xA) = lifetime_frames;
@@ -1636,8 +1636,8 @@ void update_three_phase_motion_alpha_fade_particle(M_274e48 *particle) {
             free_effect_particle(particle);
     }
 }
-extern float FUN_002132a8_275158(float, float) __asm__("FUN_002132a8");
-extern int FUN_00213260_275158(int) __asm__("FUN_00213260");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 
 typedef struct {
     u128 v;
@@ -1660,24 +1660,24 @@ unsigned char *spawn_random_size_rotated_particle(void *position, void *initial_
         particle[3] = 0x48;
         particle[1] = 0;
         if (n >= 0) {
-            *(float *)(particle + 0xC) = FUN_002132a8_275158(20000.0f, 40000.0f);
+            *(float *)(particle + 0xC) = random_float_between(20000.0f, 40000.0f);
         } else {
-            *(float *)(particle + 0xC) = FUN_002132a8_275158(40000.0f, 80000.0f);
+            *(float *)(particle + 0xC) = random_float_between(40000.0f, 80000.0f);
         }
         particle_data = (Q_275158 *)(particle + 0x20);
-        particle[8] = FUN_00213260_275158(8) + 0x1C;
+        particle[8] = random_integer_below(8) + 0x1C;
         particle[2] = *D_L00_001B21A0;
         particle_data->n = n;
         qcopy(particle_data, initial_particle_vector);
         particle_data->i14 = 0;
-        particle_data->i18 = FUN_00213260_275158(0xC) - 6;
+        particle_data->i18 = random_integer_below(0xC) - 6;
         ((float *)particle_data)[3] = particle_vector_w;
         particle_data->unk1C = *(float *)(particle + 0xC) * 0.1f;
         if (n >= 0) {
             particle_data->unk1C = *(float *)(particle + 0xC) * 0.05f;
-            if (FUN_00213260_275158(0x1E) == 0) {
+            if (random_integer_below(0x1E) == 0) {
                 particle_data->i14 = -0x28;
-            } else if (FUN_00213260_275158(0x1E) == 0) {
+            } else if (random_integer_below(0x1E) == 0) {
                 particle_data->i14 = -1;
             }
         }
@@ -1878,7 +1878,7 @@ void update_moving_lifetime_scaled_alpha_particle(O00275860 *particle) {
     if (fast_dec_timer_s16(&particle->h))
         free_effect_particle(particle);
 }
-extern int FUN_00213260_275910(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern unsigned char *suck_get_aim_height(int) __asm__("FUN_002141f8");
 
 extern unsigned char *D_L00_001B21B8 NOT_SDA;
@@ -1904,7 +1904,7 @@ unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(OvlQuad *init
         } else if (mode == 1) {
             particle[8] = 0x20;
         } else {
-            particle[8] = FUN_00213260_275910(0xFF);
+            particle[8] = random_integer_below(0xFF);
         }
         *(float *)(particle_data + 0) = *(float *)(particle + 0xC);
         *(float *)(particle_data + 4) = y * 210000.0f;

@@ -806,7 +806,7 @@ typedef struct {
     char f57;
 } Rec57;
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern float fast_add_rotations(float, float);
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int advance_accelerated_scalar() __asm__("FUN_00213f38");
@@ -987,7 +987,6 @@ void update_link_triggered_moby_turn(struct Moby *turning_moby) {
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "sda.h"
-extern void *create_moby() __asm__("FUN_0020c4f8");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 
@@ -1219,7 +1218,7 @@ void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("F
 char *spawn_ship_pickup_child(struct Moby *owner) __asm__("FUN_L11_0030fd98");
 
 char *spawn_ship_pickup_child(struct Moby *owner) {
-    char *moby = func_0020D348_m(0x4C3);
+    char *moby = create_moby(0x4C3);
     if (moby != 0) {
         char *data;
         data = *(char **)(moby + 0x78);

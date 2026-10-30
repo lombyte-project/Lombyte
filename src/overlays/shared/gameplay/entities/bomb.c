@@ -1069,7 +1069,6 @@ s32 FUN_L00_002caf40(s32 moby_address) {
 typedef int w128 __attribute__((mode(TI)));
 
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
-extern char *func_0020D348_m(int);
 extern char collision_hit_point[] __asm__("D_L00_00173E60");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
@@ -1117,7 +1116,7 @@ char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, fl
 
     start = start_position;
     *(w128 *)start_position = *(w128 *)spawn_pos;
-    moby = func_0020D348_m(0x131);
+    moby = create_moby(0x131);
     if (moby != 0) {
         vars = *(char **)(moby + 0x78);
         *(char **)(vars + 0x20) = owner;

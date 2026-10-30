@@ -219,10 +219,10 @@ void activate_descriptor(int i) {
     descriptor_record[0x39] = 0;
 }
 extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
-extern int FUN_00214720_5a78(void *, int) __asm__("FUN_00214720");
+extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int test_point_in_transformed_unit_cylinder(void *, int) __asm__("FUN_L00_0025fa38");
 extern int test_point_in_transformed_unit_sphere(float *, int) __asm__("FUN_L00_0025faf0");
-extern int FUN_L00_00259740_5a78(float *, float *, int) __asm__("FUN_L00_00259740");
+extern int point_in_path_xy(float *, float *, int) __asm__("FUN_L00_00259740");
 
 int check_descriptor_hero_trigger(char *moby) __asm__("FUN_L10_002f5a78");
 
@@ -231,7 +231,7 @@ int check_descriptor_hero_trigger(char *moby) {
         *(unsigned char **)(D_L10_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);
 
     if (*(int *)(e + 0x0C) >= 0) {
-        if (FUN_00214720_5a78(&hero.motion.pos, *(int *)(e + 0x0C)))
+        if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(e + 0x0C)))
             return 1;
     } else if (*(int *)(e + 0x10) >= 0) {
         if (test_point_in_transformed_unit_cylinder(&hero.motion.pos, *(int *)(e + 0x10)))
@@ -241,7 +241,7 @@ int check_descriptor_hero_trigger(char *moby) {
             return 1;
     } else if (*(int *)(e + 0x14) >= 0) {
         int i = *(int *)(e + 0x14);
-        if (FUN_L00_00259740_5a78((float *)(&hero.motion.pos),
+        if (point_in_path_xy((float *)(&hero.motion.pos),
                                   (float *)(D_L10_001B0930_5a78[i] + 0x10),
                                   *(int *)D_L10_001B0930_5a78[i]))
             return 1;

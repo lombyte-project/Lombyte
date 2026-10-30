@@ -1,4 +1,4 @@
-void supplement_crt0(void) __asm__("supplement_crt0");
+void SupplementCrt0(void) __asm__("supplement_crt0");
 void InitSystemCallTableAddress(void) __asm__("InitSystemCallTableAddress");
 void InitAlarm(void) __asm__("InitAlarm");
 void InitThread(void) __asm__("InitThread");
@@ -8,7 +8,7 @@ void InitTLBFunctions(void) __asm__("InitTLBFunctions");
 void _InitSys(void) __asm__("_InitSys");
 
 void _InitSys(void) {
-    supplement_crt0();
+    SupplementCrt0();
     InitSystemCallTableAddress();
     InitAlarm();
     InitThread();

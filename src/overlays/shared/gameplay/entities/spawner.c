@@ -510,11 +510,10 @@ void spawner_update(char *moby)
 /* Spawns a moby of class 0x75E and initialises its data. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C6B30.c: func_L09_0030C658), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_spawner_egg(int owner, void *initial_position, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
-    char *spawned_moby = (char *)func_0020D348_m(0x75E);
+    char *spawned_moby = (char *)create_moby(0x75E);
     if (spawned_moby) {
         char *moby_vars = *(char **)(spawned_moby + 0x78);
         *(int *)(moby_vars + 0x10) = owner;

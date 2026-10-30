@@ -90,7 +90,7 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void transform_vector_by_basis(void *, void *, void *);
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
-extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
+extern void make_hit_descriptor(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
 
 extern char *D_L17_0015FFD0[] MACRO_ADDR;
@@ -224,7 +224,7 @@ void update_fleet_beam(struct Moby *beam_moby) {
             fast_vec_sub(hero_offset, &hero.motion.pos, &beam_moby->pos);
             fast_vec_normalize(axis_aligned_hero_offset, &beam_moby->rot_row0, fast_vec_dot(&beam_moby->rot_row0, hero_offset));
             fast_vec_sub(hero_offset, hero_offset, axis_aligned_hero_offset);
-            func_L00_0025A8C0_alt((char *)hit_descriptor_and_vector_scratch, (int)beam_moby, 0x10001, 1.0f, hero_offset);
+            make_hit_descriptor((char *)hit_descriptor_and_vector_scratch, (int)beam_moby, 0x10001, 1.0f, hero_offset);
             collision_line(&beam_moby->pos, beam_vars + 0x20, 9, beam_moby, hit_descriptor_and_vector_scratch);
             signed_beam_length = fast_vec_length(beam_vars + 0x30);
             *(OvlQuad *)beam_endpoint_position_scratch = *(OvlQuad *)(beam_vars + 0x10);
@@ -857,7 +857,7 @@ extern char *D_L17_00174758;
 extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
-extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 extern short D_L17_00161D2C __attribute__((sda));
@@ -867,7 +867,7 @@ f32 resolve_camera_surface_height(struct CameraProbePosition *position,
                                   s32 optional_output) __asm__("FUN_002135f0");
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
-extern void func_L00_0025A8C0_alt(char *arg, int a, int b, float scale,
+extern void make_hit_descriptor(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
@@ -894,7 +894,7 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
     hit_record = find_moby_hit(moby, 0x230000, 0);
     hit_reaction(moby, hit_record, data + 0x20, 0, &out, 0, 0, 4);
     if (out >= 2 && hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) != 0x343) {
-        func_L00_0025F4A8_alt(moby, zero_vector, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
+        spawn_explosion(moby, zero_vector, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f, 0, 1,
                               -1, 0);
         mark_moby_for_removal_u(moby);
         return;
@@ -909,14 +909,14 @@ void update_fleet_bobbing_moby(struct Moby *moby) {
         update_moby_vertical_oscillation(*(float *)&D_L17_00161D2C,
                          *(float *)&fleet_bobbing_phase_rate_degrees * DEG_TO_RAD * frame_time, moby,
                          (float *)(data + 0x60), (float *)(data + 0x64));
-        func_L00_0025A8C0_alt(hit_descriptor, (int)moby, 0x10001, 1.0f, zero_vector);
+        make_hit_descriptor(hit_descriptor, (int)moby, 0x10001, 1.0f, zero_vector);
         qcopy(pos, &moby->pos);
         pos[2] = pos[2] + 0.75f;
         hero_contact_context = &hero;
         if (((char *)hero_contact_context->coll_hit_moby) == moby || ((char *)hero_contact_context->unk240) == moby ||
             func_L00_001F2BE8_alt(1.0f, pos, 0x10, moby, hit_descriptor)) {
             if (D_L17_00174758 != 0 && *(short *)(D_L17_00174758 + 0xA6) != 0x343) {
-                func_L00_0025F4A8_alt(moby, zero_vector, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
+                spawn_explosion(moby, zero_vector, 0, 0.0f, 0.0f, 3, 3, 5, 2.0f, 1.0f, 4.0f, 1.0f, 1, 7.0f,
                                       0, 1, -1, 0);
                 moby->pos.z = moby->pos.z + 1.0f;
                 yy = resolve_camera_surface_height(&moby->pos.x, surface_query_scratch);

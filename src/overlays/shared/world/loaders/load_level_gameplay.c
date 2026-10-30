@@ -402,7 +402,7 @@ extern char *D_L00_00160108_macro __asm__("D_L00_00160108") MACRO_ADDR;
 extern char *D_L00_0016016C_macro __asm__("D_L00_0016016C") MACRO_ADDR;
 extern char *D_L00_0015F318  MACRO_ADDR;
 extern char *toad_paths[] __asm__("D_L00_001B04B0");
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern char D_L00_0016C780[];
 extern char D_L00_0016C7B0[];
@@ -1467,7 +1467,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         if (level_render_state.f0 == 0) {
             float ship_spawn_rotation;
 
-            m = func_0020D348_m(first_class_ids[level_render_state.f26]);
+            m = create_moby(first_class_ids[level_render_state.f26]);
             m->f10 = ship[0];
             m->f14 = ship[1];
             m->f18 = ship[2];

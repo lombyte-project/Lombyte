@@ -654,8 +654,8 @@ extern Moby_3071B0 *func_L14_003075E0_3071B0(Moby_3071B0 *owner) __asm__("FUN_L1
 extern int func_L00_0028EF68_3071B0(int i, int a1, Moby_3071B0 *v, int k) __asm__("FUN_L00_0028dc90");
 extern int func_L00_0028EB98_3071B0(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int func_0022ED80_3071B0(int, int, Moby_3071B0 *) __asm__("FUN_0022da68");
-extern float func_L00_0025C700_3071B0(float, float, float) __asm__("FUN_L00_0025b6a8");
-extern void func_L00_0028EBF0_3071B0(int) __asm__("FUN_0022d798");
+extern float interpolate_scalar_linear(float, float, float) __asm__("FUN_L00_0025b6a8");
+extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern char D_0013E633_3071B0[] __asm__("D_0013E550");
 
 void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) __asm__("FUN_L14_00305d28");
@@ -730,7 +730,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
         fast_dec_timer_s16(&data->timer);
         slots = data->slots.m;
         remaining_timer_fraction = convert_integer_to_float(data->timer) * data->rate;
-        owner->f44 = func_L00_0025C700_3071B0(helper_sequence_owner_final_angle_degrees * 0.017453292f, 0.0f, remaining_timer_fraction);
+        owner->f44 = interpolate_scalar_linear(helper_sequence_owner_final_angle_degrees * 0.017453292f, 0.0f, remaining_timer_fraction);
         for (i = 0; i < 6; i++) {
             fast_vec_scale(position_offset, owner->fE0, helper_sequence_slot_spacing * (float)i + helper_sequence_first_slot_offset);
             fast_vec_add(slots[i]->pos, owner->pos, position_offset);
@@ -740,7 +740,7 @@ void update_triggered_helper_moby_sequence(Moby_3071B0 *moby) {
             if (data->voice != -1) {
                 Snd *voice_entry = (Snd *)(D_0013E633_3071B0 + data->voice * 0x70);
                 if (voice_entry->f88 == moby && voice_entry->f74) {
-                    func_L00_0028EBF0_3071B0(data->voice);
+                    release_voice_slot(data->voice);
                 }
             }
             data->voice = -1;
@@ -900,15 +900,15 @@ typedef struct { char pad0[0x20]; float f20; float f24; float f28; float f2C; } 
 typedef struct { char pad0[0x74]; unsigned char b74; char pad75[0x13]; struct Moby *f88; } Snd_6ee0;
 typedef struct { char pad0[0x10]; Vec4f a; Vec4f b; } Path_6ee0;
 
-extern char *FUN_L00_0025a420_6ee0(void *, int, int) __asm__("FUN_L00_0025a420");
-extern void FUN_L00_0025f090_6ee0(void *, void *, float, float, int) __asm__("FUN_L00_0025f090");
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern void cart_burst(void *, void *, float, float, int) __asm__("FUN_L00_0025f090");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int FUN_001e93b0_6ee0() __asm__("FUN_001e93b0");
-extern void FUN_0020c828_6ee0(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L14_00307510_6ee0(void *) __asm__("FUN_L14_00307510");
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
-extern void FUN_0020cb10_6ee0(void *, int, void *) __asm__("FUN_0020cb10");
-extern void FUN_L00_0025d458_6ee0(void *, void *) __asm__("FUN_L00_0025d458");
+extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
+extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern int FUN_L14_00307620_6ee0(void *) __asm__("FUN_L14_00307620");
@@ -937,11 +937,11 @@ void update_flying_car(struct Moby *flying_car_moby) {
     Vec4f attached_part_offset_component __attribute__((aligned(16)));
     char *hit;
 
-    hit = FUN_L00_0025a420_6ee0(flying_car_moby, 0x800000, 0);
+    hit = find_moby_hit(flying_car_moby, 0x800000, 0);
     flying_car_moby->hit_slot = 0xFF;
     if (hit && flying_car_moby->state != 3) {
         flying_car_moby->state = 3;
-        FUN_L00_0025f090_6ee0(flying_car_moby, &flying_car_moby->pos, 5.0f, 13.0f, -1);
+        cart_burst(flying_car_moby, &flying_car_moby->pos, 5.0f, 13.0f, -1);
         flying_car_moby->flags |= 0x41;
         flying_car_moby->collision = 0;
         if (flying_car_data->part >= 0) {
@@ -961,12 +961,12 @@ void update_flying_car(struct Moby *flying_car_moby) {
     case FLYING_CAR_INITIALIZE:
         if (flying_car_data->path == -1) {
             FUN_001e93b0_6ee0(D_L14_001FD118, (s16)flying_car_moby->save_id);
-            FUN_0020c828_6ee0(flying_car_moby);
+            mark_moby_for_removal(flying_car_moby);
             return;
         }
         if (*(int *)D_L14_001B0BB0_6ee0[flying_car_data->path] == 0) {
             FUN_001e93b0_6ee0(D_L14_001FD150, (s16)flying_car_moby->save_id);
-            FUN_0020c828_6ee0(flying_car_moby);
+            mark_moby_for_removal(flying_car_moby);
             return;
         }
         FUN_L14_00307510_6ee0(flying_car_moby);
@@ -986,8 +986,8 @@ void update_flying_car(struct Moby *flying_car_moby) {
             o->update_dist = flying_car_moby->update_dist;
         }
         fill_transfer_words(&flying_car_data->fx, 0, 0x40);
-        FUN_0020cb10_6ee0(flying_car_moby, 0, &flying_car_data->fx);
-        FUN_L00_0025d458_6ee0(flying_car_moby, flying_car_data->effect);
+        attach_manipulator(flying_car_moby, 0, &flying_car_data->fx);
+        trooper_anim_update(flying_car_moby, flying_car_data->effect);
         if (flying_car_data->trigger >= 0) {
             flying_car_moby->flags |= 0x41;
             flying_car_moby->collision = 0;

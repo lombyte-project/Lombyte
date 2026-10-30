@@ -40,7 +40,7 @@ extern volatile s32 D_L00_0015F628;
 #include "rnc/overlay/shared/rendering/debug/draw_dialog_background_and_text_globals.h"
 extern u8 timed_text_entries[] __asm__("D_L00_00173080");
 void queue_framebuffer_upload(s32) __asm__("FUN_L00_001fc558");
-void FUN_001f5210_c(s32, s32, s32, s32) __asm__("FUN_001f5210");
+void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("FUN_001f5210");
 void reset_gs_registers(void) __asm__("FUN_001f3868");
 void setup_gif_paging(s32) __asm__("FUN_001f4280");
 void draw_timed_text(void *, s32) __asm__("FUN_L00_001fcca0");
@@ -56,7 +56,7 @@ void draw_framebuffer_with_timed_text(void) {
     if (0.0f < fade_level) {
         if (1.0f < fade_level)
             fade_level = 1.0f;
-        FUN_001f5210_c(0, 0, 0, truncate_float_to_s32(fade_level * 128.0f));
+        emit_rgba_draw_packet(0, 0, 0, truncate_float_to_s32(fade_level * 128.0f));
     }
     reset_gs_registers();
     setup_gif_paging(0);

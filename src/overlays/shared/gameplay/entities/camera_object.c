@@ -526,7 +526,7 @@ M_2a57a8 *FUN_0020c4f8_2a57a8(s32) __asm__("FUN_0020c4f8");
 void attach_manipulator(M_2a57a8 *, s32, void *) __asm__("FUN_0020cb10");
 void blend_moby_animation_u(P_2a57a8 *, s32, s32, s32) __asm__("FUN_00212f90");
 void FUN_L00_002a5040_2a57a8(void) __asm__("FUN_L00_002a5040");
-void enqueue_callback_list_1(void *, P_2a57a8 *) __asm__("FUN_001f4600");
+void add_draw_callback(void *, P_2a57a8 *) __asm__("FUN_001f4600");
 void FUN_L00_001fff28_2a57a8(void *, s32, f32) __asm__("FUN_L00_001fff28");
 void upd_a(M_2a57a8 *) __asm__("FUN_L00_00250df8");
 s32 try_set_help_message(s32, s32) __asm__("FUN_00215130");
@@ -582,7 +582,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
                 blend_moby_animation_u(vendor_moby, 1, 0, 10);
             q->mC->h34 &= 0xFFFE;
         }
-        enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, vendor_moby);
+        add_draw_callback(FUN_L00_002a5040_2a57a8, vendor_moby);
         FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
         FUN_L00_001fff28_2a57a8((u8 *)q + 0x60, 2, vendor_manipulator_counter_rotation_phase);
         vendor_manipulator_rotation_phase = fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
@@ -601,7 +601,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
                 blend_moby_animation_u(vendor_moby, 0, 0, 10);
             break;
         }
-        enqueue_callback_list_1(FUN_L00_002a5040_2a57a8, vendor_moby);
+        add_draw_callback(FUN_L00_002a5040_2a57a8, vendor_moby);
         interaction_allowed = 1;
         help_message_allowed = 1;
         FUN_L00_001fff28_2a57a8((u8 *)q + 0x20, 2, vendor_manipulator_rotation_phase);
@@ -2085,7 +2085,6 @@ typedef struct { char pad[0x10]; BoltVector position; } BoltOwner;
 
 extern V D_L00_00173E60;
 extern char *select_auto_aim_target_moby(void *, void *, void *, float *, float *, float *, float) __asm__("FUN_L00_002630c8");
-extern char *func_0020D348_m(int);
 extern char D_0013F490[];
 extern void *D_001413D0;
 extern float D_L00_001613C4 __attribute__((sda));
@@ -2099,7 +2098,7 @@ char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char 
     char *d;
     BoltVector t;
     BoltVector p;
-    m = (char *)func_0020D348_m(0x100);
+    m = (char *)create_moby(0x100);
     if (m != 0) {
         ((unsigned char *)m)[0x30] = 0xFF;
         m[0x31] = 1;
@@ -2170,7 +2169,7 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 void *spawn_class_593_moby(int unused, void *spawn_position, int initial_paired_value, float scale, float initial_private_scalar, float b) __asm__("FUN_L00_002a99b0");
 
 void *spawn_class_593_moby(int unused, void *spawn_position, int initial_paired_value, float scale, float initial_private_scalar, float initial_private_value) {
-    char *spawned_moby = func_0020D348_m(0x593);
+    char *spawned_moby = create_moby(0x593);
     if (spawned_moby != 0) {
         char *moby_vars;
         float doubled_scale;
@@ -2194,7 +2193,6 @@ void *spawn_class_593_moby(int unused, void *spawn_position, int initial_paired_
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAD40), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m_q(int) __asm__("func_0020D348_m");
 extern int D_L00_0015F320;
 extern int D_L00_0015F330;
 extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity,
@@ -2208,7 +2206,7 @@ extern long D_L00_0015F338;
 void *spawn_tracked_class_5f3_moby(int unused, float *spawn_position) __asm__("FUN_L00_002a9aa0");
 
 void *spawn_tracked_class_5f3_moby(int unused, float *spawn_position) {
-    char *spawned_moby = func_0020D348_m_q(0x5F3);
+    char *spawned_moby = create_moby(0x5F3);
     if (spawned_moby != 0 && *(int *)&D_L00_001613C8_gp == 0) {
         char *moby_vars;
         spawned_moby[0x20] = 0;

@@ -1018,7 +1018,7 @@ segments:
           - [0xf5318, c, rendering/do_gif_paging]
           - [0xf5434, textbin, text_gap_001f44b4_before_fun_001f44b8]
           - [0xf5438, c, rendering/effects/get_effect_texture]
-          - [0xf5580, c, gameplay/callbacks/enqueue_callback_list_1]
+          - [0xf5580, c, gameplay/callbacks/add_draw_callback]
           - [0xf55d0, c, gameplay/callbacks/dispatch_callback_list_1]
           - [0xf5648, c, gameplay/callbacks/dispatch_callback_list_2]
           - [0xf56c0, c, gameplay/callbacks/dispatch_callback_list_3]

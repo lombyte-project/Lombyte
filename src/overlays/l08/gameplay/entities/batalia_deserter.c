@@ -107,7 +107,7 @@ extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float truncate_float_to_s32_cf(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
@@ -241,11 +241,11 @@ void batalia_deserter_update(WM *moby) {
         if (tick_countdown_32(&deserter_data->target_timer)) {
             float heading;
             deserter_data->target_timer =
-                random_float_between_cf(scale_time(truncate_float_to_s32_cf(180.0f, 300.0f)));
+                random_float_between_cf(scale_time(random_float_between(180.0f, 300.0f)));
             heading =
-                fast_add_rotations(moby->yaw, truncate_float_to_s32_cf(-90.0f, 90.0f) * DEG_TO_RAD);
+                fast_add_rotations(moby->yaw, random_float_between(-90.0f, 90.0f) * DEG_TO_RAD);
             build_spherical_offset(deserter_data->target, 6.0f, heading,
-                                   truncate_float_to_s32_cf(0.0f, 30.0f) * DEG_TO_RAD);
+                                   random_float_between(0.0f, 30.0f) * DEG_TO_RAD);
             fast_vec_add(deserter_data->target, deserter_data->target, moby->position);
         }
         if (deserter_data->moving_timer) {

@@ -432,7 +432,7 @@ unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hoo
 }
 int FUN_001f96f8_2c7070(int) __asm__("FUN_001f96f8");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-void FUN_0020c828_2c7070(void *) __asm__("FUN_0020c828");
+void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern unsigned char D_001413FF NOT_SDA;
 void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
@@ -489,7 +489,7 @@ void swingshot_hook_update(unsigned char *hook_moby) {
     case HOOK_REMOVAL_ANIMATION:
         if (hook_moby[0x70] & 2) {
         kill:
-            FUN_0020c828_2c7070(hook_moby);
+            mark_moby_for_removal(hook_moby);
             return;
         }
         break;
@@ -1143,7 +1143,7 @@ float FUN_001f9b80_2c1778(void *, void *) __asm__("FUN_001f9b80");
 float FUN_001f99c0_2c1778(float) __asm__("FUN_001f99c0");
 void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 float approach_value(void *, float, float) __asm__("FUN_00213ed8");
-void FUN_0020c828_2c1778(void *) __asm__("FUN_0020c828");
+void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern const float l00_trespasser_pickup_initial_height_offset __asm__("D_L00_00161828") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/trespasser_globals.h"
@@ -1183,7 +1183,7 @@ void update_trespasser_pickup(void *mv) {
     case TRESPASSER_SHRINK_FOR_REMOVAL:
         approach_value(trespasser_moby + 0x2C, 0.0f, *(float *)(*(char **)(trespasser_moby + 0x24) + 0x24) * 0.02f);
         if (*(float *)(trespasser_moby + 0x2C) == 0.0f)
-            FUN_0020c828_2c1778(trespasser_moby);
+            mark_moby_for_removal(trespasser_moby);
         break;
     }
 }
@@ -1225,7 +1225,7 @@ extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9
 extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
-extern int hero_set_state_2c1ad0(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int use_ammo(int, int) __asm__("FUN_L00_00233db8");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
@@ -1298,7 +1298,7 @@ void mine_glove_update(struct Moby *moby) {
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD)
         vars->held = 0;
     if (hero.state.current == 1)
-        hero_set_state_2c1ad0(0x1E, 1);
+        hero_set_state(0x1E, 1);
     if (fast_dec_timer(&vars->timer58) && !hero.item_use_locked) {
         if ((hero.item_anim_active && hero.item_anim_frames == scale_game_frames(0x11)) ||
             ((D_0013CAE4 & hero.items[0].button_mask) &&
@@ -1563,7 +1563,7 @@ void bomb_glove_update(struct Moby *moby) {
     if (vars->held == 0 || vars->held->state == 0xFE || vars->held->state == 0xFD)
         vars->held = 0;
     if (hero.state.current == 1)
-        hero_set_state_2c1ad0(0x1E, 1);
+        hero_set_state(0x1E, 1);
     if (fast_dec_timer(&vars->timer) && !hero.item_use_locked) {
         if ((hero.item_anim_active && hero.item_anim_frames == scale_game_frames(0x11)) ||
             ((D_0013CAE4 & hero.items[0].button_mask) &&
@@ -1712,7 +1712,7 @@ void bomb_glove_update(struct Moby *moby) {
 extern u8 D_0013E539;
 extern s32 moby_table __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")NOT_SDA;
-extern f32 FUN_002132a8_2c35c0(f32, f32) __asm__("FUN_002132a8");
+extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 extern void append_unique_moby_index(void *, void *, s32) __asm__("FUN_L00_0025f780");
@@ -1748,7 +1748,7 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
             blend_moby_animation(spawned_moby, 0, 0, scale_game_frames(0));
         *(s32 *)(spawned_moby + 0x94) = 0;
         *(s32 *)(spawned_moby + 0x98) = -1;
-        *(f32 *)(spawned_moby + 0x48) = FUN_002132a8_2c35c0(-3.14159274f, 3.14159274f);
+        *(f32 *)(spawned_moby + 0x48) = random_float_between(-3.14159274f, 3.14159274f);
         *(s32 *)(data + 0x58) = 0;
         *(s32 *)(data + 0x5c) = 0;
         while (D_L00_001B0830_lui[0] >= 6) {
@@ -1994,9 +1994,9 @@ extern void spawn_explosion(float, void *, void *, int, float, float, int, int, 
                               float, float, float, float, int, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void initialize_hit_descriptor(float, void *, void *, int) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void FUN_L00_0024eb68_2c4380(void *) __asm__("FUN_0020c828");
-extern void FUN_00257880_2c4380(void *, int, int, int) __asm__("FUN_00212f90");
-extern float FUN_00257be8_2c4380(float, float) __asm__("FUN_002132a8");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_0028dbe8_2c4380(int, int, void *) __asm__("FUN_0022da68");
 extern int FUN_001fef20_2c4380(int) __asm__("FUN_001f96f8");
 extern int FUN_001fef68_2c4380(void *) __asm__("FUN_001f9740");
@@ -2044,18 +2044,18 @@ void decoy_update(char *moby) {
         *(float *)(moby + 0x14) < 2.0f || 1021.0f < *(float *)(moby + 0x14) ||
         *(float *)(moby + 0x18) < 2.0f || 1021.0f < *(float *)(moby + 0x18)) {
         mine_spawn_drops(moby, D_L00_001B0830_lui);
-        FUN_L00_0024eb68_2c4380(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     if ((hero.items[0].moby == 0 || *(short *)((char *)hero.items[0].moby + 0xa6) != 0x232) &&
         (u8)moby[0x20] == 1) {
         mine_spawn_drops(moby, D_L00_001B0830_lui);
-        FUN_L00_0024eb68_2c4380(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     if (hero.vehicle_mode != 0 && (u8)moby[0x20] == 1) {
         mine_spawn_drops(moby, D_L00_001B0830_lui);
-        FUN_L00_0024eb68_2c4380(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     ++*(int *)(vars + 0x54);
@@ -2086,7 +2086,7 @@ void decoy_update(char *moby) {
             *(short *)((char *)hero.items[0].moby + 0xa6) == 0x232)
             return;
         mine_spawn_drops(moby, D_L00_001B0830_lui);
-        FUN_L00_0024eb68_2c4380(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     case DECOY_THROWN_MOVEMENT:
@@ -2146,7 +2146,7 @@ void decoy_update(char *moby) {
                             coll_hit.unk1C > 0 ||
                             *(short *)(vars + 0x44) > FUN_001fef20_2c4380(240)) {
                             if (((u8 *)moby)[0x53] != 1)
-                                FUN_00257880_2c4380(moby, 1, 0, FUN_001fef20_2c4380(10));
+                                blend_moby_animation(moby, 1, 0, FUN_001fef20_2c4380(10));
                             *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
                             *(int *)(moby + 0x98) = 0;
                             qzero(vars + 0x10);
@@ -2237,7 +2237,7 @@ void decoy_update(char *moby) {
                             collect_mobies_in_sphere(moby + 0x10, effect * 3.0f, 0x10, moby, scratch.w);
                         }
                         mine_spawn_drops(moby, D_L00_001B0830_lui);
-                        FUN_L00_0024eb68_2c4380(moby);
+                        mark_moby_for_removal(moby);
                         return;
                     }
                 }
@@ -2247,8 +2247,8 @@ void decoy_update(char *moby) {
         trooper_anim_finish(moby, vars);
         if (moby[0x70] & 2) {
             if (((u8 *)moby)[0x53] != 2)
-                FUN_00257880_2c4380(moby, 2, 0, FUN_001fef20_2c4380(10));
-            *(float *)(moby + 0x58) = FUN_00257be8_2c4380(0.7f, 1.05f);
+                blend_moby_animation(moby, 2, 0, FUN_001fef20_2c4380(10));
+            *(float *)(moby + 0x58) = random_float_between(0.7f, 1.05f);
         }
         if ((u8)moby[0x20] != 4) {
             len = FUN_L00_00259698_2c4380(moby + 0x10, 0, 0.5f);
@@ -2284,7 +2284,7 @@ void decoy_update(char *moby) {
                 *(float *)(moby + 0x2c) += D_0015ED60_2c4380 * 0.02f;
             if (fast_dec_timer_s16(vars + 0x44)) {
                 if (((u8 *)moby)[0x53])
-                    FUN_00257880_2c4380(moby, 0, 0, FUN_001fef20_2c4380(60));
+                    blend_moby_animation(moby, 0, 0, FUN_001fef20_2c4380(60));
                 mine_spawn_drops(moby, D_L00_001B0830_lui);
                 moby[0x20] = 5;
             }
@@ -2312,7 +2312,7 @@ void decoy_update(char *moby) {
         if (!(*(float *)(moby + 0x2c) <
             *(float *)(*(char **)(moby + 0x24) + 0x24) * 0.1f))
             return;
-        FUN_L00_0024eb68_2c4380(moby);
+        mark_moby_for_removal(moby);
         break;
     }
     case DECOY_RESET_TO_INITIALIZE:
@@ -2356,7 +2356,7 @@ extern int FUN_001fa6d0_2c53c0(float) __asm__("FUN_001fa6d0");
 extern int FUN_001f99a8_2c53c0(int) __asm__("FUN_001f99a8");
 extern int FUN_L00_0028dc90_2c53c0(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
-extern void FUN_0020c828_2c53c0(void *) __asm__("FUN_0020c828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 typedef struct {
     int amount;
     char pad4[2];
@@ -2516,7 +2516,7 @@ void devestator_ammo_update(struct Moby *pickup_moby) {
         approach_value(&limit, D_0015ED6C_2c53c0 * 64.0f, frame_time_sq_macro * 24.0f);
         FUN_001f9a28_2c53c0(&pickup_vars->velocity, &hero.motion.body_center, &pickup_moby->pos);
         if (pickup_moby->scale == 0.0f || FUN_001f9af0_2c53c0(&pickup_vars->velocity) < limit) {
-            FUN_0020c828_2c53c0(pickup_moby);
+            mark_moby_for_removal(pickup_moby);
             return;
         }
         FUN_001f9bf8_2c53c0(&pickup_vars->velocity, &pickup_vars->velocity, limit);
@@ -2625,11 +2625,11 @@ extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 unsigned char *spawn_swingshot_hook(unsigned char *src, float f) __asm__("FUN_L00_002c6f88");
 void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
-extern int FUN_L00_002223f8_2bffa8(int, int) __asm__("FUN_L00_002223f8");
+extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern Moby *FUN_L00_002c6f88_2bffa8(void *, float) __asm__("FUN_L00_002c6f88");
 extern void FUN_L00_001edf60_2bffa8(int, int, float, void *, int, float, int, float, int) __asm__("FUN_L00_001edf60");
 extern int FUN_001f96f8_2bffa8(int) __asm__("FUN_001f96f8");
-extern void FUN_00212f90_2bffa8(void *, int, int, int) __asm__("FUN_00212f90");
+extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void FUN_L00_0024f7c8_2bffa8(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int FUN_0022da68_2bffa8(int, int, void *) __asm__("FUN_0022da68");
 extern float FUN_001f9b48_2bffa8(void *, void *) __asm__("FUN_001f9b48");
@@ -2653,7 +2653,7 @@ void swingshot_update(Moby *m) {
     int n;
 
     if (m == 0) return;
-    if (hero.state.current == 1) FUN_L00_002223f8_2bffa8(30, 1);
+    if (hero.state.current == 1) hero_set_state(30, 1);
     d = (void *)m->pvars;
     if (d == 0) return;
     hd = 0;
@@ -2671,7 +2671,7 @@ void swingshot_update(Moby *m) {
     case 0:
     case 1:
         if (m->anim_flags & 2) {
-            if (m->prev_seq != 1) FUN_00212f90_2bffa8(m, 1, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 1) blend_moby_animation(m, 1, 0, FUN_001f96f8_2bffa8(10));
             m->state = 1;
         }
         if (d->hook) {
@@ -2690,7 +2690,7 @@ void swingshot_update(Moby *m) {
                 d->scale = 1.0f;
                 d->spin = 0.0f;
                 hd->speed = frame_time * 24.0f;
-                if (m->prev_seq != 3) FUN_00212f90_2bffa8(m, 3, 0, FUN_001f96f8_2bffa8(10));
+                if (m->prev_seq != 3) blend_moby_animation(m, 3, 0, FUN_001f96f8_2bffa8(10));
                 FUN_0022da68_2bffa8(0, 0, m);
                 m->state = 2;
             }
@@ -2703,7 +2703,7 @@ void swingshot_update(Moby *m) {
             d->size = 0.280000001f;
             d->scale = 1.0f;
             d->spin = 0.0f;
-            if (m->prev_seq != 3) FUN_00212f90_2bffa8(m, 3, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 3) blend_moby_animation(m, 3, 0, FUN_001f96f8_2bffa8(10));
             FUN_0022da68_2bffa8(0, 0, m);
             m->state = 9;
         }
@@ -2711,7 +2711,7 @@ void swingshot_update(Moby *m) {
     case 2:
         FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         if (m->anim_flags & 2) {
-            if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
         FUN_001f9a28_2bffa8(&v0, &hero.grapple_target->pos, &d->hook->pos);
         speed = hd->speed;
@@ -2724,9 +2724,9 @@ void swingshot_update(Moby *m) {
         v10.f.z += 0.5f;
         if (FUN_001efa68_2bffa8(&v10, &hero.grapple_target->pos, 2, 0, 0)) {
             if (0.5f < hero.ground_distance) {
-                FUN_L00_002223f8_2bffa8(6, 1);
+                hero_set_state(6, 1);
             } else {
-                FUN_L00_002223f8_2bffa8(0, 0);
+                hero_set_state(0, 0);
                 set_hero_animation(hero_idle_sequence(0), 0, (float)FUN_001f96f8_2bffa8(14));
             }
             m->state = 6;
@@ -2749,13 +2749,13 @@ void swingshot_update(Moby *m) {
         qcopy(&v0, &hero.motion.pos);
         v0.f.z += 0.5f;
         if (FUN_001efa68_2bffa8(&v0, &hero.grapple_target->pos, 2, 0, 0)) {
-            if (hero.air_frames.s) FUN_L00_002223f8_2bffa8(6, 1);
-            else FUN_L00_002223f8_2bffa8(0, 1);
+            if (hero.air_frames.s) hero_set_state(6, 1);
+            else hero_set_state(0, 1);
             m->state = 6;
             break;
         }
         if (m->anim_flags & 2) {
-            if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
         FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         d->spin = d->spin + 0.69813168f;
@@ -2765,17 +2765,17 @@ void swingshot_update(Moby *m) {
             if (d->hook && 3.5f < FUN_001f9b48_2bffa8(&d->hook->pos, &hero.motion.pos)) {
                 if (!(controller_state.held & hero.items[0].button_mask)) {
                     hero.unk988 = 1;
-                    FUN_L00_002223f8_2bffa8(0, 0);
+                    hero_set_state(0, 0);
                     set_hero_animation(hero_idle_sequence(0), 0, (float)FUN_001f96f8_2bffa8(14));
                     m->state = 6;
                 } else {
                     FUN_0022da68_2bffa8(2, 0, m);
-                    if (hero.unk978) FUN_L00_002223f8_2bffa8(0x26, 1);
-                    else FUN_L00_002223f8_2bffa8(0x25, 1);
+                    if (hero.unk978) hero_set_state(0x26, 1);
+                    else hero_set_state(0x25, 1);
                     m->state = 5;
                 }
             } else {
-                FUN_L00_002223f8_2bffa8(0, 1);
+                hero_set_state(0, 1);
                 m->state = 6;
             }
         }
@@ -2783,7 +2783,7 @@ void swingshot_update(Moby *m) {
     case 5:
         qcopy(&d->hook->pos, &hero.grapple_target->pos);
         if (m->anim_flags & 2) {
-            if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
         d->size = d->size * (frame_scale * -0.100000024f + 1.0f);
         d->spin = d->spin + 0.69813168f;
@@ -2804,7 +2804,7 @@ void swingshot_update(Moby *m) {
             FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         } else {
             qcopy(&d->hook->pos, &v10);
-            if (m->prev_seq != 1) FUN_00212f90_2bffa8(m, 1, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 1) blend_moby_animation(m, 1, 0, FUN_001f96f8_2bffa8(10));
             m->state = 1;
         }
         break;
@@ -2813,7 +2813,7 @@ void swingshot_update(Moby *m) {
     case 9:
         FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         if (m->anim_flags & 2) {
-            if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
         FUN_001f9a28_2bffa8(&v0, &hero.swing_target_moby->pos, &d->hook->pos);
         if (hd->speed < FUN_001f9af0_2bffa8(&v0)) {
@@ -2831,7 +2831,7 @@ void swingshot_update(Moby *m) {
         break;
     case 11:
         if (m->anim_flags & 2) {
-            if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
         FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         d->spin = d->spin + 0.69813168f;
@@ -2845,7 +2845,7 @@ void swingshot_update(Moby *m) {
         if (hero.swing_target_moby)
             qcopy(&d->hook->pos, &hero.swing_target_moby->pos);
         if (m->anim_flags & 2) {
-            if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
         d->size = d->size * (frame_scale * -0.600000024f + 1.0f);
         d->spin = d->spin + 0.69813168f;
@@ -2854,7 +2854,7 @@ void swingshot_update(Moby *m) {
         break;
     case 13:
         if (m->anim_flags & 2) {
-            if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
         FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         hd->speed = frame_time * 80.0f;
@@ -2862,7 +2862,7 @@ void swingshot_update(Moby *m) {
         break;
     case 14:
         if (m->anim_flags & 2) {
-            if (m->prev_seq != 4) FUN_00212f90_2bffa8(m, 4, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 4) blend_moby_animation(m, 4, 0, FUN_001f96f8_2bffa8(10));
         }
         FUN_L00_0024f7c8_2bffa8(m, 0, &v10);
         FUN_001f9a28_2bffa8(&v0, &v10, &d->hook->pos);
@@ -2872,7 +2872,7 @@ void swingshot_update(Moby *m) {
             FUN_001f4600_2bffa8(draw_swingshot_cable, m);
         } else {
             qcopy(&d->hook->pos, &v10);
-            if (m->prev_seq != 1) FUN_00212f90_2bffa8(m, 1, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 1) blend_moby_animation(m, 1, 0, FUN_001f96f8_2bffa8(10));
             m->state = 1;
         }
         if (hero.state.current == 0x2C && hd) {
@@ -2880,7 +2880,7 @@ void swingshot_update(Moby *m) {
             d->scale = 1.0f;
             d->size = 0.0f;
             d->spin = 0.0f;
-            if (m->prev_seq != 3) FUN_00212f90_2bffa8(m, 3, 0, FUN_001f96f8_2bffa8(10));
+            if (m->prev_seq != 3) blend_moby_animation(m, 3, 0, FUN_001f96f8_2bffa8(10));
             m->state = 9;
         }
         break;
@@ -2905,10 +2905,10 @@ extern float D_0015ED6C_2c6158 __asm__("D_0015ED6C");
 extern float D_0015ED60_2c6158 __asm__("D_0015ED60");
 extern float D_0013F8C4_2c6158 __asm__("D_0013F8C4");
 extern float D_0013F62C_2c6158 __asm__("D_0013F62C");
-extern void FUN_002223f8_2c6158(s32, s32) __asm__("FUN_L00_002223f8");
+extern void hero_set_state(s32, s32) __asm__("FUN_L00_002223f8");
 extern void FUN_001edf60_2c6158(void *, float, u32, void *, s32, float, s32, float, s32) __asm__("FUN_L00_001edf60");
 extern s32 FUN_001fef20_2c6158(s32) __asm__("FUN_001f96f8");
-extern void FUN_00257880_2c6158(void *, s32, s32, s32) __asm__("FUN_00212f90");
+extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void FUN_0028dbe8_2c6158(s32, s32, void *) __asm__("FUN_0022da68");
 extern void FUN_001f93e0_2c6158(void *, void *) __asm__("FUN_L00_001f93e0");
 extern float FUN_001ff450_2c6158(void *, void *) __asm__("FUN_001f9b48");
@@ -2917,8 +2917,8 @@ extern s32 FUN_001efc70_2c6158(void *, void *, s32, void *, s32) __asm__("FUN_00
 extern void FUN_001ff500_2c6158(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void FUN_001ff278_2c6158(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float FUN_001ff3d8_2c6158(void *) __asm__("FUN_001f9af0");
-extern void *FUN_00205000_2c6158(s32) __asm__("FUN_L00_00205000");
-extern void FUN_002323b8_2c6158(float, void *, s32) __asm__("FUN_L00_002323b8");
+extern void *hero_idle_sequence(s32) __asm__("FUN_L00_00205000");
+extern void set_hero_animation(float, void *, s32) __asm__("FUN_L00_002323b8");
 
 void swingshot_update(u8 *m) __asm__("FUN_L00_002c6158");
 void swingshot_update(u8 *m) {
@@ -2931,7 +2931,7 @@ void swingshot_update(u8 *m) {
     void *effect;
 
     if (m == 0) return;
-    if (hero.state.current == 1) FUN_002223f8_2c6158(30, 1);
+    if (hero.state.current == 1) hero_set_state(30, 1);
     vars = *(u8 **)(m + 0x78);
     if (vars == 0) return;
     motion = 0;
@@ -2999,12 +2999,12 @@ child_ready:;
         qcopy(&b, &hero.motion.pos);
         b.f[2] += 0.5f;
         if (FUN_001efc70_2c6158(&b, ((u8 *)hero.grapple_target) + 0x10, 2, 0, 0)) {
-            if (hero.ground_distance > 0.5f) FUN_002223f8_2c6158(6, 1);
+            if (hero.ground_distance > 0.5f) hero_set_state(6, 1);
             else {
-                FUN_002223f8_2c6158(0, 0);
-                effect = FUN_00205000_2c6158(0);
+                hero_set_state(0, 0);
+                effect = hero_idle_sequence(0);
                 frames = scale_game_frames(14);
-                FUN_002323b8_2c6158((float)frames, effect, 0);
+                set_hero_animation((float)frames, effect, 0);
             }
             m[0x20] = 6;
             return;
@@ -3031,8 +3031,8 @@ child_ready:;
             qcopy(&a, &hero.motion.pos);
             a.f[2] += 0.5f;
             if (FUN_001efc70_2c6158(&a, ((u8 *)hero.grapple_target) + 0x10, 2, 0, 0) != 0) {
-                if (hero.air_frames.s != 0) FUN_002223f8_2c6158(6, 1);
-                else FUN_002223f8_2c6158(0, 1);
+                if (hero.air_frames.s != 0) hero_set_state(6, 1);
+                else hero_set_state(0, 1);
                 m[0x20] = 6;
                 return;
             }
@@ -3046,19 +3046,19 @@ child_ready:;
             if ((*(u8 **)(vars + 0x14)) != 0 && 3.5f < FUN_001ff450_2c6158((*(u8 **)(vars + 0x14)) + 0x10, &hero.motion.pos)) {
                 if ((D_0013CAE0_2c6158 & hero.items[0].button_mask) == 0) {
                     hero.unk988 = 1;
-                    FUN_002223f8_2c6158(0, 0);
-                    effect = FUN_00205000_2c6158(0);
+                    hero_set_state(0, 0);
+                    effect = hero_idle_sequence(0);
                     frames = scale_game_frames(14);
-                    FUN_002323b8_2c6158((float)frames, effect, 0);
+                    set_hero_animation((float)frames, effect, 0);
                     m[0x20] = 6;
                 } else {
                     FUN_0028dbe8_2c6158(2, 0, m);
-                    if (hero.unk978 != 0) FUN_002223f8_2c6158(38, 1);
-                    else FUN_002223f8_2c6158(37, 1);
+                    if (hero.unk978 != 0) hero_set_state(38, 1);
+                    else hero_set_state(37, 1);
                     m[0x20] = 5;
                 }
             } else {
-                FUN_002223f8_2c6158(0, 1);
+                hero_set_state(0, 1);
                 m[0x20] = 6;
                 return;
             }

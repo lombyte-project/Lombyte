@@ -7,13 +7,13 @@
 #include "rnc/math/asm_helpers.h"
 
 
-extern char *FUN_0020c4f8_8670(int) __asm__("FUN_0020c4f8");
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
 
 char *create_class_55b_moby_from_source(char *source_object) __asm__("FUN_L12_00308670");
 
 char *create_class_55b_moby_from_source(char *source_object) {
-    unsigned char *allocated_object = (unsigned char *)FUN_0020c4f8_8670(0x55B);
+    unsigned char *allocated_object = (unsigned char *)create_moby(0x55B);
     if (allocated_object != 0) {
         char *object_data = *(char **)(allocated_object + 0x78);
         allocated_object[0x30] = 0xFF;
@@ -109,7 +109,7 @@ typedef struct {
 } MO;
 
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
+extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
@@ -133,7 +133,7 @@ void blarg_commander_update(char *moby) {
         if (motion_result_flags & 0x61) {
             qcopy(raised_position, moby + 0x10);
             ((float *)raised_position)[2] += 1.0f;
-            func_L00_0025F4A8_alt(moby, motion_state, raised_position, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
+            spawn_explosion(moby, motion_state, raised_position, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
                                   moby_state, -1, 0);
             mark_moby_for_removal(moby);
         } else if (*(float *)(moby + 0x18) < 5.0f) {

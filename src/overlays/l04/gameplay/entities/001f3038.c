@@ -79,7 +79,7 @@ extern PathEl *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
 extern Coll D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
 extern int func_L00_001EFFF0_1F3010(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern float func_002140F8_1F3010(float, float) __asm__("FUN_002132a8");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int func_L04_001F2F68_1F3010(Moby *, void *, int) __asm__("FUN_L04_001f3038");
 extern int func_L04_0024D790_1F3010(void *, void *, void *, int) __asm__("FUN_L04_0024c7d8");
 
@@ -278,11 +278,11 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
         steer->vel.z = steer->vel.z / steer->f48;
     }
     if (fast_dec_timer_s16(&steer->timer) != 0) {
-        steer->timer = truncate_float_to_s32(func_002140F8_1F3010(45.0f, 90.0f));
-        steer->drift.x = func_002140F8_1F3010(0.0f, steer->range) - steer->range * 0.5f;
-        steer->drift.y = func_002140F8_1F3010(0.0f, steer->range) - steer->range * 0.5f;
+        steer->timer = truncate_float_to_s32(random_float_between(45.0f, 90.0f));
+        steer->drift.x = random_float_between(0.0f, steer->range) - steer->range * 0.5f;
+        steer->drift.y = random_float_between(0.0f, steer->range) - steer->range * 0.5f;
         if (steer->f48 != 0.0f) {
-            steer->drift.z = func_002140F8_1F3010(0.0f, steer->range) - steer->range * 0.5f;
+            steer->drift.z = random_float_between(0.0f, steer->range) - steer->range * 0.5f;
         } else {
             steer->drift.z = 0.0f;
         }

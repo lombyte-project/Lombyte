@@ -257,7 +257,7 @@ extern int D_L00_0015F434 __asm__("D_L00_0015F434");
 extern u128 D_L00_00173E80_lui __asm__("D_L00_00173E80") NOT_SDA;
 extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern float FUN_001f99c0_00259fe8(float) __asm__("FUN_001f99c0");
+extern float absolute_float(float) __asm__("FUN_001f99c0");
 
 extern E_259fe8_00259fe8 D_L00_0016E080[] NOT_SDA;
 void jet_animate(unsigned char *m, float r) __asm__("FUN_L00_00259fe8");
@@ -273,7 +273,7 @@ void jet_animate(unsigned char *moby, float output_scale) {
         return;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = ground_height + 0.025f;
     qcopy(&D_L00_0016E080[D_L00_0015F434].b, &D_L00_00173E80_lui);
-    y = (8.0f - FUN_001f99c0_00259fe8(*(float *)(moby + 0x18) - ground_height)) * 0.125f;
+    y = (8.0f - absolute_float(*(float *)(moby + 0x18) - ground_height)) * 0.125f;
     if (y < 0.25f)
         y = 0.25f;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[3] = output_scale * y;

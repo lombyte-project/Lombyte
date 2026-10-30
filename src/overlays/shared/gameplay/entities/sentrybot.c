@@ -1496,7 +1496,7 @@ extern char D_L15_001673C0_y[] __asm__("D_L15_001673C0");
 extern int D_L15_00174458_y[] __asm__("D_L15_00174458");
 extern float D_0015ED6C;
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
-extern int randbelow_y(int) __asm__("FUN_00213260");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 void spawn_rocket_trail_spark(char *moby) __asm__("FUN_L15_0029ae18");
 
@@ -1525,7 +1525,7 @@ void rocket_update(unsigned char *moby) {
     fast_vec_add(next, moby + 0x10, rocket_data);
     fast_vec_scale(back, rocket_data, -2.0f);
     fast_vec_add(back, back, moby + 0x10);
-    if (hero.vehicle_mode == 2 && randbelow_y(5) != 0)
+    if (hero.vehicle_mode == 2 && random_integer_below(5) != 0)
         collision_setup_value = 0.0f;
     make_hit_descriptor(col, moby, 0x10003, collision_setup_value, rocket_data);
     *(short *)(col + 0x1A) = *(short *)(moby + 0xA6);
@@ -1683,7 +1683,7 @@ extern float fast_vec_dist(void *, void *);
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_target_leading_missile.h"
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90(int, int);
-extern s32 random_integer_below_c3(s32) __asm__("func_00213260");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern unsigned char *D_L15_001B26DC NOT_SDA;
 extern unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
 extern void *FUN_L00_0026bb70_c(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
@@ -1973,8 +1973,8 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                     float sz = random_float_between(8.0f, 10.0f) * D_0015ED6C - under * D_0015ED6C;
                     Cols c1 = l15_missile_burst_primary_color_palette;
                     Cols c2 = l15_missile_burst_secondary_color_palette;
-                    int *p1 = &c1.c[random_integer_below_c3(6)];
-                    int *p2 = &c2.c[random_integer_below_c3(6)];
+                    int *p1 = &c1.c[random_integer_below(6)];
+                    int *p2 = &c2.c[random_integer_below(6)];
                     int colored_burst_effect_frame_count = FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14));
                     int colored_burst_effect_secondary_frame_count = FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E));
                     int white_burst_effect_frame_count, white_burst_effect_secondary_frame_count;
@@ -1999,8 +1999,8 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
                 }
                 fast_vec_normalize(burst_particle_velocity, burst_particle_velocity, random_float_between(0.0f, 3.0f) * D_0015ED6C);
                 {
-                    int *p1 = &c1.c[random_integer_below_c3(6)];
-                    int *p2 = &c2.c[random_integer_below_c3(6)];
+                    int *p1 = &c1.c[random_integer_below(6)];
+                    int *p2 = &c2.c[random_integer_below(6)];
                     FUN_L00_0026a4c8(missile_moby->pos, burst_particle_velocity, *p1, *p2, FUN_L00_00257b90(scale_game_frames(0x14), scale_game_frames(0x23)), 200000.0f);
                 }
             }
@@ -2130,7 +2130,7 @@ extern int charged_blast_removal_target __asm__("D_L15_00161484"); /* no foreign
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern s32 random_integer_below_c2(s32) __asm__("func_00213260");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern unsigned char *D_L15_001B26AC NOT_SDA;
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
@@ -2289,7 +2289,7 @@ void update_charged_blast(Moby29FF90 *moby) {
                 if (p != 0) {
                     PartSub29FF90 *particle_subrecord = &p->sub;
 
-                    if (i == 2 && random_integer_below_c2(8) == 0) {
+                    if (i == 2 && random_integer_below(8) == 0) {
                         p->fC = 180000.0f;
                     } else {
                         p->fC = random_float_between(80000.0f, 120000.0f);
@@ -2312,7 +2312,7 @@ void update_charged_blast(Moby29FF90 *moby) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int D_L15_00161AB8_lui __asm__("D_L15_00161AB8"); /* no foreign declaration */
-extern s32 random_integer_below_c(s32) __asm__("func_00213260");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern float group_moby_seeking_speed_gp __asm__("D_L15_001614B4") __attribute__((sda));
 extern int group_moby_particle_color_gp __asm__("D_L15_001614B8") __attribute__((sda));
 extern float group_moby_particle_scale_gp __asm__("D_L15_001614BC") __attribute__((sda));
@@ -2364,7 +2364,7 @@ void update_hero_seeking_group_moby(char *moby) {
         particle_lifetime_frames = scale_game_frames(group_moby_particle_lifetime_frames_gp);
         converted_particle_lifetime_frames = truncate_float_to_s32((float)particle_lifetime_frames);
         life = (unsigned char)converted_particle_lifetime_frames;
-        particle_initial_rotation = random_integer_below_c(0xFF);
+        particle_initial_rotation = random_integer_below(0xFF);
         spawn_moving_hero_relative_alpha_fade_particle(pb, (char *)va, group_moby_particle_color_gp, life, (unsigned char)particle_initial_rotation, 0, *(float *)&group_moby_particle_scale_gp);
         callback_frame_stamp = *(char **)(data + 0x6C);
         if (callback_frame_stamp == 0 || *(int *)callback_frame_stamp != D_L15_0015F5CC_macro) {
@@ -2556,8 +2556,8 @@ extern int draw_spark_emitter_effect_quads() __asm__("FUN_L15_002a3138");
 unsigned char *create_type_47_particle(void *pos, float *p, float *c, int d, int e, int f, int g, int h, char *owner) __asm__("FUN_L15_002647f0");
 extern KillFlags_2A3DD0 D_L15_001BBB40_2A3DD0 __asm__("D_L15_001BB830");
 extern unsigned char D_0013E650_2A3DD0[] __asm__("D_0013E550");
-extern float func_002140F8_2A3DD0(float, float) __asm__("FUN_002132a8");
-extern int func_002140B0_2A3DD0(int) __asm__("FUN_00213260");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
+extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void func_L15_002A47B8_2A3DD0(void *) __asm__("FUN_L15_002a35d8");
 extern int func_0022ED80_2A3DD0(int, int, void *) __asm__("FUN_0022da68");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
@@ -2618,15 +2618,15 @@ void update_spark_emitter_moby(unsigned char *moby) {
                 hi = 5.0f;
                 one = 1.0f;
                 i--;
-                A[0] = func_002140F8_2A3DD0(-0.25f, 0.25f);
-                A[1] = func_002140F8_2A3DD0(lo, hi);
-                A[2] = func_002140F8_2A3DD0(z, hi);
+                A[0] = random_float_between(-0.25f, 0.25f);
+                A[1] = random_float_between(lo, hi);
+                A[2] = random_float_between(z, hi);
                 B[0] = z;
-                B[1] = func_002140F8_2A3DD0(lo, hi);
-                B[2] = func_002140F8_2A3DD0(lo, hi);
+                B[1] = random_float_between(lo, hi);
+                B[2] = random_float_between(lo, hi);
                 C[0] = z;
-                C[1] = func_002140F8_2A3DD0(lo, hi);
-                C[2] = func_002140F8_2A3DD0(lo, hi);
+                C[1] = random_float_between(lo, hi);
+                C[2] = random_float_between(lo, hi);
                 transform_vector_by_basis(A, A, moby + 0xC0);
                 transform_vector_by_basis(B, B, moby + 0xC0);
                 transform_vector_by_basis(C, C, moby + 0xC0);
@@ -2635,9 +2635,9 @@ void update_spark_emitter_moby(unsigned char *moby) {
                 fast_vec_normalize(C, C, one / (float)scale_game_frames(30));
                 B[3] = 0.125f;
                 {
-                    int ra = func_002140B0_2A3DD0(0x10);
-                    int rb = func_002140B0_2A3DD0(0x20);
-                    int rc = func_002140B0_2A3DD0(0x20);
+                    int ra = random_integer_below(0x10);
+                    int rb = random_integer_below(0x20);
+                    int rc = random_integer_below(0x20);
                     int partial_spark_color = ((rb + 0x60) << 8) | 0x60000000;
                     col = ((ra + 0x20) << 16) | partial_spark_color;
                     col |= rc + 0x60;
@@ -2858,12 +2858,12 @@ typedef struct {
 extern float D_0015ED6C;
 extern float FUN_L04_001f1978(float);
 extern s32 rand(void);
-extern s32 random_integer_below_c4(s32) __asm__("func_00213260");
+extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern int spiderbot_effect_spawn_count_gp __asm__("D_L15_00161558") __attribute__((sda));
 extern float spiderbot_effect_scale_gp __asm__("D_L15_0016155C") __attribute__((sda));
 extern float spiderbot_effect_lifetime_range_end_gp __asm__("D_L15_00161560") __attribute__((sda));
 extern u8 D_L15_00174460[];
-extern void FUN_L15_002a7628_c() __asm__("FUN_L15_002a7628");
+extern void draw_spiderbot_effect_quad() __asm__("FUN_L15_002a7628");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
@@ -3012,10 +3012,10 @@ void spiderbot_update(unsigned char *moby) {
             fast_vec_scale(B, B, random_float_between(0.0f, 0.9f));
             add_vectors(T2, A, B);
             fast_vec_normalize(B, B, random_float_between(D_0015ED6C * 10.0f, effect_segment_length / convert_integer_to_float(k * 4)));
-            func_L00_00273F80_r(A, (char *)B, 0x604040FF, life, random_integer_below_c4(0xFF), 0, spiderbot_effect_scale_gp);
+            func_L00_00273F80_r(A, (char *)B, 0x604040FF, life, random_integer_below(0xFF), 0, spiderbot_effect_scale_gp);
         }
     }
-    add_draw_callback(FUN_L15_002a7628_c, moby);
+    add_draw_callback(draw_spiderbot_effect_quad, moby);
 }
 /* Builds a screen-space quad from the moby's offset and draws it. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A8850), where it is exact; names translated to the US level program. */

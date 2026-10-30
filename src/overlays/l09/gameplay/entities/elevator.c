@@ -1234,13 +1234,13 @@ void update_damage_causer(struct Moby *moby) {
 /* spawn a moby copying position, rotation and data word from owner */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_003095D0), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) __asm__("FUN_L09_00308220");
 
 char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) {
-    char *moby = func_0020D348_m(spawned_moby_class);
+    char *moby = create_moby(spawned_moby_class);
     if (moby != 0) {
         unsigned char state;
         ((unsigned char *)moby)[0x30] = 0xFF;

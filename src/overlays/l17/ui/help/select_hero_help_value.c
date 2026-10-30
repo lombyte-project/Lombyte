@@ -71,7 +71,7 @@ int select_hero_help_value(int allow_slot_item_help) {
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
-void FUN_L00_00210c80_8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
+void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 #define G hero
 
@@ -192,18 +192,18 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
             xy_scale = 0.0f;
             z_response = frame_duration * 1.7f;
         }
-        FUN_L00_00210c80_8(&motion_delta, flag, xy_scale, z_response);
+        hero_knockback(&motion_delta, flag, xy_scale, z_response);
         if (flag != 0 && hero_moby_entry->unk28 == 4) {
             motion_delta.f[2] += motion_delta.f[2];
         }
         break;
     case HERO_VEHICLE_MODE_CLANK:
         hero_set_state(0x46, 1);
-        FUN_L00_00210c80_8(&motion_delta, flag, frame_time * 5.0f, frame_time * 3.0f);
+        hero_knockback(&motion_delta, flag, frame_time * 5.0f, frame_time * 3.0f);
         break;
     case 3:
         hero_set_state(0x56, 1);
-        FUN_L00_00210c80_8(&motion_delta, flag, frame_time * 5.0f, frame_time * 2.4f);
+        hero_knockback(&motion_delta, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
     fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &motion_delta);

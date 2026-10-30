@@ -157,7 +157,7 @@ extern u8 D_0013D4C2_lui __asm__("D_0013D4C2") NOT_SDA;
 extern int get_hero_high_jump_input_window_frames(void) __asm__("FUN_L00_00221d98");
 extern int check_pad_press_separation(int, void *, int, int) __asm__("FUN_L00_00266e00");
 extern int pad_pressed_within(int, int, void *) __asm__("FUN_L00_00266d60");
-extern int FUN_L00_0020d498_229660(int) __asm__("FUN_L00_0020d498");
+extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 /* A second C name for hero_set_state: retail keeps the two calls apart. */
 extern void hero_set_state_2(int, int) __asm__("FUN_L00_002223f8");
 
@@ -181,25 +181,25 @@ int hero_handle_jump_press(void) {
     if (scale_game_frames(6) < hero.state_timer) {
         if (!pad_pressed_within(0x40, jump_press_history_limit, 0))
             return 0;
-        if (FUN_L00_0020d498_229660(3) == 2 && D_0013D4C2_lui != 0 && hero.pack_disabled == 0) {
+        if (hero_slot_item_id(3) == 2 && D_0013D4C2_lui != 0 && hero.pack_disabled == 0) {
             if ((2.5f < hero.wall_probe_distance || hero.wall_normal_pitch < 0.7853982f) && 0.7f < hero.stick_magnitude &&
                 frame_time * 0.9f < hero.motion.forward_speed) {
                 next_state = 0xA;
                 goto found;
             }
         }
-        if (FUN_L00_0020d498_229660(3) == 3 && hero.pack_disabled == 0 && 0.7f < hero.stick_magnitude &&
+        if (hero_slot_item_id(3) == 3 && hero.pack_disabled == 0 && 0.7f < hero.stick_magnitude &&
             (2.5f < hero.wall_probe_distance || hero.wall_probe_moby_in_class_range) && frame_time * 0.9f < hero.motion.forward_speed) {
             if (hero.long_jump_lockout)
                 return 1;
             next_state = 0x10;
             goto found;
         }
-        if (FUN_L00_0020d498_229660(3) == 3 && hero.pack_disabled == 0) {
+        if (hero_slot_item_id(3) == 3 && hero.pack_disabled == 0) {
             next_state = 0xD;
             goto found;
         }
-        if (FUN_L00_0020d498_229660(3) == 2 && hero.pack_disabled == 0 && D_0013D4C2_lui) {
+        if (hero_slot_item_id(3) == 2 && hero.pack_disabled == 0 && D_0013D4C2_lui) {
             next_state = 0xF;
             goto found;
         }

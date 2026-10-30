@@ -442,16 +442,16 @@ void draw_tresspasser_puzzle(char *moby) __asm__("FUN_L02_002d93e8");
 extern int func_0022ED80_2D9F08(long, int, Moby *) __asm__("FUN_0022da68");
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern void set_hero_animation(int, int, float) __asm__("FUN_L00_002323b8");
-extern void func_L00_002EBF50_2D9F08(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
+extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void func_L02_002DA728_2D9F08(Moby *) __asm__("FUN_L02_002d92f0");
 extern void func_L02_002D9D48_2D9F08(void *, void *, Moby *) __asm__("FUN_L02_002d8910");
 extern float func_00214D88_2D9F08(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void func_L00_002EBE88_2D9F08(void *) __asm__("FUN_L00_002ea9d8");
 extern void func_L00_002EBEE0_2D9F08(void *) __asm__("FUN_L00_002eaa30");
-extern int func_00216028_2D9F08(int, int) __asm__("FUN_002151d8");
+extern int force_help_message(int, int) __asm__("FUN_002151d8");
 extern void func_001F49B0_2D9F08(void (*)(void), Moby *) __asm__("FUN_001f4600");
 extern void func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
-extern void func_L00_002EC0C8_2D9F08(int) __asm__("FUN_L00_002eac18");
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
 extern float D_L02_001D33B0[4][4];
@@ -529,7 +529,7 @@ void tresspasser_pad_update(Moby *moby) {
                 data->h11E = 0;
                 hero_set_state(0x72, 0);
                 set_hero_animation(0x57, 0, scale_game_frames(6));
-                func_L00_002EBF50_2D9F08(&D_L02_00167440_2D9F08[0], &D_L02_00167440_2D9F08[1], 1, 0, 0);
+                jet_mount(&D_L02_00167440_2D9F08[0], &D_L02_00167440_2D9F08[1], 1, 0, 0);
                 moby->state = 2;
                 data->h10 = scale_game_frames(0x3C);
                 data->f110 = 0.0f;
@@ -551,9 +551,9 @@ void tresspasser_pad_update(Moby *moby) {
         func_L00_002EBE88_2D9F08(&camera_pos);
         func_L00_002EBEE0_2D9F08(&camera_rot);
         D_L02_0017EB08_lui = 1;
-        func_00216028_2D9F08(6, 0);
+        force_help_message(6, 0);
         if (D_L02_00167300_2D9F08.p180 != 0 && D_L02_00167300_2D9F08.p180->unk86 != 5) {
-            func_L00_002EBF50_2D9F08(&D_L02_00167300_2D9F08.v140, &D_L02_00167300_2D9F08.v150, 1, 0, 0);
+            jet_mount(&D_L02_00167300_2D9F08.v140, &D_L02_00167300_2D9F08.v150, 1, 0, 0);
         }
         i = 0;
         if (0.99f <= data->f110 && fast_difference_between_rotations(D_L02_00167300_2D9F08.v150.z, camera_rot.z) < 0.017453292f) {
@@ -629,7 +629,7 @@ void tresspasser_pad_update(Moby *moby) {
             if (((D_0013CAE4 & 0x10) && D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1)
                 || ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->state.current != 0x72 || ((Hero *)(D_0013E633_2D9F08 + 0xE1D))->items[0].item_id != 0x1A) {
                 moby->state = 1;
-                func_L00_002EC0C8_2D9F08(1);
+                jet_end_mount(1);
                 request_hero_idle_state_for_vehicle_mode();
                 data->h10 = scale_game_frames(0x3C);
             }
@@ -641,7 +641,7 @@ void tresspasser_pad_update(Moby *moby) {
                 ((int *)(D_0014C290_2D9F08 + (current_level_index_macro << 8)))[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
                 D_L02_001BADE0_2D9F08[(short)moby->save_id >> 5] |= 1 << (moby->save_id & 0x1F);
             }
-            func_L00_002EC0C8_2D9F08(1);
+            jet_end_mount(1);
             hero_set_state(0, 1);
             moby->command = 1;
             moby->state = 4;
@@ -654,7 +654,7 @@ void tresspasser_pad_update(Moby *moby) {
 #endif
 #ifndef
 #endif
-extern void func_L00_00250800_d92f0(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
 extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C");
 void align_hero_to_tresspasser_pad(char *moby) __asm__("FUN_L02_002d92f0");
@@ -665,7 +665,7 @@ void align_hero_to_tresspasser_pad(char *moby) {
     float f;
     float max_yaw_step;
     struct Hero *hero_ptr;
-    func_L00_00250800_d92f0(moby, 0, position_delta);
+    moby_point_position(moby, 0, position_delta);
     hero_position = (char *)&hero.motion.pos;
     fast_vec_sub(position_delta, position_delta, hero_position);
     func_L00_002607A8_d92f0(position_delta, D_0015EE6C_d92f0 * 4.0f);

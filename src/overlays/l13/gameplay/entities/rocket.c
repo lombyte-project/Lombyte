@@ -2306,12 +2306,12 @@ void remove_moby_when_tracked_count_below_threshold(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D468), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 
 char *spawn_scaled_owned_moby(char *owner, void *position, float scale) __asm__("FUN_L13_0030bfb0");
 
 char *spawn_scaled_owned_moby(char *owner, void *position, float scale) {
-    char *moby = func_0020D348_m(0x660);
+    char *moby = create_moby(0x660);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
         ((unsigned char *)moby)[0x30] = 0xFF;
@@ -2367,7 +2367,7 @@ void forward_moby_hits_to_owner(struct Moby *moby) {
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 
 char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, int duration_frames, int effect_mode) {
-    unsigned char *moby = (unsigned char *)func_0020D348_m(0x662);
+    unsigned char *moby = (unsigned char *)create_moby(0x662);
     if (moby != 0) {
         char *data;
         float rotation_x_increment, dd;

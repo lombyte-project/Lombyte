@@ -28,15 +28,15 @@ int is_moby_in_state_6(Level16VendorMoby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002C75D0), where it is exact; names translated to the US level program. */
 
-extern char *func_0020D348_m(int);
+extern char *create_moby(int);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern char *func_0020D348_m(int) __asm__("FUN_0020c4f8");
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 unsigned char *spawn_thrown_bomb(int owner, void *spawn_position, float *initial_velocity, int fuse_frames, float gravity) __asm__("FUN_L16_002c6268");
 
 unsigned char *spawn_thrown_bomb(int owner, void *spawn_position, float *initial_velocity, int fuse_frames, float gravity) {
-    unsigned char *moby = (unsigned char *)func_0020D348_m(0x119);
+    unsigned char *moby = (unsigned char *)create_moby(0x119);
     if (moby != 0) {
         char *data = *(char **)(moby + 0x78);
         moby[0x30] = 0xFF;
@@ -1247,13 +1247,13 @@ void test_dummy_update(unsigned char *moby) {
         qcopy(dummy_data->spawn, moby + 0x10);
         switch (dummy_data->kind) {
         case TEST_DUMMY_KIND_THROWER:
-            dummy_data->child = func_0020D348_m(0x35F);
+            dummy_data->child = create_moby(0x35F);
             break;
         case TEST_DUMMY_KIND_PATH_MOVER:
-            dummy_data->child = func_0020D348_m(0x374);
+            dummy_data->child = create_moby(0x374);
             break;
         case TEST_DUMMY_KIND_SPRAYER:
-            dummy_data->child = func_0020D348_m(0x36C);
+            dummy_data->child = create_moby(0x36C);
             reset_shot_tracking(dummy_data->slots);
             break;
         }
@@ -2707,13 +2707,13 @@ extern char D_L16_001671C0_lui[] __asm__("D_L16_001671C0") NOT_SDA;
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void *set_class_0287_group_activation_and_find_nearest(int, int) __asm__("FUN_L16_002d5ad0");
 extern void *activate_class_0287_group_and_find_nearest(int, int) __asm__("FUN_L16_002d5bc8");
-extern void FUN_L00_00216f90_q(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
                                int) __asm__("FUN_L00_002598b0");
-extern void FUN_L00_002ea9d8_q(void *) __asm__("FUN_L00_002ea9d8");
+extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void FUN_L00_002eaaa0_q(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void FUN_L00_002eac18_q(int) __asm__("FUN_L00_002eac18");
+extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
+extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void activate_test_dummy_group(int) __asm__("FUN_L16_002ceca8");
 extern void FUN_L16_002d6260_q(char *, void *, float *) __asm__("FUN_L16_002d6260");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
@@ -2759,7 +2759,7 @@ void update_triggered_group_objective(struct Moby *moby) {
         moby->state = 2;
         if (scene_data->camera >= 0)
             *(unsigned short *)(player + 0x225A) = *(unsigned short *)&scene_data->camera;
-        FUN_L00_002eaaa0_q(D_L16_001671C0_lui, D_L16_001671C0_lui + 0x10, 1, 0, 0);
+        jet_mount(D_L16_001671C0_lui, D_L16_001671C0_lui + 0x10, 1, 0, 0);
         helper = activate_class_0287_group_and_find_nearest(scene_data->helper, 0);
         goto notify;
     }
@@ -2776,7 +2776,7 @@ void update_triggered_group_objective(struct Moby *moby) {
         break;
     case SCENE_STATE_WAIT_FOR_LINKED_MOBYS_AND_TIMER:
         FUN_L16_002d6260_q(moby, position, rotation);
-        FUN_L00_002ea9d8_q(position);
+        set_camera_position(position);
         set_camera_rotation(rotation);
         if (scene_data->camera >= 0)
             *(unsigned short *)(D_0014162A_lui) = *(unsigned short *)&scene_data->camera;
@@ -2787,8 +2787,8 @@ void update_triggered_group_objective(struct Moby *moby) {
         moby->visible = 1;
         moby->state = 4;
         moby->flags &= 0xFFFE;
-        FUN_L00_002eac18_q(3);
-        FUN_L00_00216f90_q(D_L16_001600EC_m + (scene_data->pose << 7) + 0x30,
+        jet_end_mount(3);
+        set_race_camera(D_L16_001600EC_m + (scene_data->pose << 7) + 0x30,
                            D_L16_001600EC_m + (scene_data->pose << 7) + 0x70, 0, 1);
         FUN_L00_002598b0_q((int)moby, 5.0f, D_L16_001600EC_m + (scene_data->pose << 7) + 0x30, 0x10000, 50.0f,
                            1.0f, 0, 1, 0);

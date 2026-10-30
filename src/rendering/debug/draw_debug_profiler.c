@@ -72,7 +72,7 @@ extern void draw_letterbox_bars(void) __asm__("func_001F4D98");
 extern void draw_screen_effect(void) __asm__("func_001F4FB8");
 extern void draw_fogged_fullscreen_sprite(void *) __asm__("func_001F5138");
 extern void emit_rgba_draw_packet(s32, s32, s32, s32) __asm__("func_001F5210");
-extern void drawDebugFont(void) __asm__("func_001F79A8");
+extern void draw_debug_font(void) __asm__("func_001F79A8");
 extern void append_billboard_batch(void) __asm__("FUN_001f92b0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
@@ -94,7 +94,7 @@ extern void vu1_sync_chain(s32) __asm__("func_002337B0");
 extern void vu1_add_data_ref(void *, s32) __asm__("func_00233830");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void vu1_gs_regs_normal(void) __asm__("func_00233BC8");
-extern void VU1_gsRegsAlt__Fv(void) __asm__("func_00233C28");
+extern void vu1_gs_regs_alt(void) __asm__("func_00233C28");
 extern void light_tfrags(void *) __asm__("FUN_00234f98");
 extern void patch_tie_texture_fields(void) __asm__("FUN_00235780");
 extern void copy_render_buffer_pair(void) __asm__("FUN_00235840");
@@ -144,7 +144,7 @@ void draw_debug_profiler(void) {
     }
     AppendDmaTag(0x02020000);
     if (draw_config.unk34 != 0 && draw_callback3_count != 0) {
-        VU1_gsRegsAlt__Fv();
+        vu1_gs_regs_alt();
         setup_gif_paging(1);
         dispatch_callback_list_2();
         do_gif_paging();
@@ -161,11 +161,11 @@ void draw_debug_profiler(void) {
     }
     if (draw_enable_mask & 0x20) {
         setup_gif_paging(1);
-        drawDebugFont();
+        draw_debug_font();
         do_gif_paging();
     }
     if (draw_config.unk34 != 0 && draw_callback4_count != 0) {
-        VU1_gsRegsAlt__Fv();
+        vu1_gs_regs_alt();
         setup_gif_paging(1);
         dispatch_callback_list_3();
         do_gif_paging();
@@ -183,21 +183,21 @@ void draw_debug_profiler(void) {
     noop_core_callback_secondary(vu_effects_label, 4);
     noop_core_callback(vu_effects_label, 4);
     if (draw_enable_mask & 0x20) {
-        VU1_gsRegsAlt__Fv();
+        vu1_gs_regs_alt();
         if (draw_config.unk34 != 0) {
             if (draw_callback_count != 0) {
                 dispatch_callback_list_1();
             }
             vu1_add_g_sregister(0x42, 0x8000000048);
             draw_lens_flare();
-            VU1_gsRegsAlt__Fv();
+            vu1_gs_regs_alt();
             draw_light_quads();
         }
         noop_core_callback(moby_effects_label, 6);
         noop_core_callback_secondary(moby_effects_label, 6);
         if (draw_config.unk38 != 0) {
             vu1_add_g_sregister(8, 5);
-            VU1_gsRegsAlt__Fv();
+            vu1_gs_regs_alt();
             FlushCache(0);
             part_proc();
             font_state = 8;
@@ -206,7 +206,7 @@ void draw_debug_profiler(void) {
         noop_core_callback_secondary(part_draw_label, 8);
         if (draw_config.unk3C != 0) {
             if (draw_callback2_count != 0) {
-                VU1_gsRegsAlt__Fv();
+                vu1_gs_regs_alt();
                 dispatch_callback_list_4();
             }
             if (game_mode_macro == 0) {
@@ -222,7 +222,7 @@ void draw_debug_profiler(void) {
         aa_blur_pass();
     }
     noop_core_callback_secondary(aa_blur_label, 0xF);
-    VU1_gsRegsAlt__Fv();
+    vu1_gs_regs_alt();
     if (draw_enable_mask & 0x10000) {
         no_op_graphics_callback();
     }

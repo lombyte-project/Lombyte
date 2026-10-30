@@ -435,7 +435,7 @@ int D_L18_00161A3C = 96;
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
+extern void font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
 extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
 

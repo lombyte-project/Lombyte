@@ -272,13 +272,13 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 extern int sound_e50(int, int, void *) __asm__("FUN_0022da68");
 extern void FUN_L00_00257470_e50(void *, int, int) __asm__("FUN_L00_00257470");
-extern void FUN_L00_00257d78_e50(void *, float, float) __asm__("FUN_L00_00257d78");
+extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void FUN_L00_00258278_c(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern void FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern void FUN_L00_002598b0_e50(void *, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern void play_entity_sound(void *, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_0025a120_e50(void *) __asm__("FUN_L00_0025a120");
 extern void turn_angle_e50(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
-extern int FUN_L00_0025c698_e50(void *, void *) __asm__("FUN_L00_0025c698");
+extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void FUN_L00_00263ac8_e50(void *, int, void *, float) __asm__("FUN_L00_00263ac8");
 extern void FUN_L00_00269958_e50(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
@@ -650,7 +650,7 @@ void sand_shark_update(struct Moby *moby) {
             fast_vec_normalize(&position_or_offset_scratch, &moby->rot_row0, 0.75f);
             fast_vec_add(&position_or_offset_scratch, &position_or_offset_scratch, &moby->pos);
             position_or_offset_scratch.f[2] += 0.5f;
-            FUN_L00_002598b0_e50(moby, &position_or_offset_scratch, 0.5f, 1, 1.0f, 1.0f, 0, 1, 0);
+            play_entity_sound(moby, &position_or_offset_scratch, 0.5f, 1, 1.0f, 1.0f, 0, 1, 0);
         }
         if ((moby->anim_flags & 2) && vector_distance_xy(&moby->pos, &vars->target) > 1.5f) {
             moby->state = 5;
@@ -744,7 +744,7 @@ void sand_shark_update(struct Moby *moby) {
         }
         break;
     case SAND_SHARK_KNOCKBACK_UNTIL_LANDING:
-        if (FUN_L00_0025c698_e50(moby, vars->unk120) & 1) {
+        if (mine_fall(moby, vars->unk120) & 1) {
             moby->state = 0xB;
             if (moby->prev_seq != 4) {
                 blend_e50(moby, 4, 8, scale_game_frames(3));
@@ -794,7 +794,7 @@ void sand_shark_update(struct Moby *moby) {
     case SAND_SHARK_BALLISTIC_FLIGHT_WITH_PARTICLES: {
         int life;
 
-        FUN_L00_00257d78_e50(&target_or_particle_vector, 0.0f, 0.2f);
+        random_vector(&target_or_particle_vector, 0.0f, 0.2f);
         fast_vec_add(&position_or_offset_scratch, &target_or_particle_vector, &moby->pos);
         fast_vec_scale(&target_or_particle_vector, &target_or_particle_vector, D_0015ED6C * 5.0f);
         life = scale_game_frames(random_int_between(0x14, 0x28));
@@ -824,7 +824,7 @@ void sand_shark_update(struct Moby *moby) {
         break;
     }
     case SAND_SHARK_DEATH_KNOCKBACK: {
-        int knockback_status_flags = FUN_L00_0025c698_e50(moby, vars->unk120);
+        int knockback_status_flags = mine_fall(moby, vars->unk120);
         if ((knockback_status_flags & 1) && vars->unk29C == 0) {
             vars->unk29C = 1;
             position_or_offset_scratch.q = *(OvlQuad *)&moby->pos;
