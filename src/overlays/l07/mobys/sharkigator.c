@@ -659,7 +659,7 @@ void handle_sharkigator_contact_attack(struct Moby *moby,
                                        int          anim,
                                        int          seq,
                                        int          frame,
-                                       int          next,
+                                       int          state_after_target_hit,
                                        int          id,
                                        float        lo,
                                        float        hi,
@@ -703,7 +703,7 @@ void handle_sharkigator_contact_attack(struct Moby *moby,
     if (((unsigned char *)moby)[0x53] != seq) {
         blend_moby_animation(moby, seq, frame, 5);
     }
-    moby->state = next;
+    moby->state = state_after_target_hit;
 }
 
 int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) {
