@@ -15,7 +15,7 @@ extern s32  collect_mission_ids(void *, s32, void *, s32) __asm__("func_0020BC00
 s32 update_menu_mission_list(struct MenuScreen *m) __asm__("FUN_0021c4c0");
 
 s32 update_menu_mission_list(struct MenuScreen *menu_screen) {
-    s32  old;
+    s32  previous_selected_level;
     s32  i;
     s32  previous_mission_choice_index;
     u32  pad;
@@ -23,11 +23,11 @@ s32 update_menu_mission_list(struct MenuScreen *menu_screen) {
     s32 *ch;
 
     {
-        struct MenuScreen *owner = menu_system.current->focus;
-        old = level_map_selection.level;
-        if (owner != menu_screen) {
-            if (old < 20) {
-                menu_screen->data.missions.choice[old] = -1;
+        struct MenuScreen *focused_menu_screen = menu_system.current->focus;
+        previous_selected_level = level_map_selection.level;
+        if (focused_menu_screen != menu_screen) {
+            if (previous_selected_level < 20) {
+                menu_screen->data.missions.choice[previous_selected_level] = -1;
             }
             return 0;
         }
@@ -52,7 +52,7 @@ s32 update_menu_mission_list(struct MenuScreen *menu_screen) {
             }
         }
     }
-    if (level_map_selection.level != old) {
+    if (level_map_selection.level != previous_selected_level) {
         allocate_voice_for_target_entry(1, 0x11, menu_screen->moby);
         update_mission_list();
     }
@@ -75,7 +75,7 @@ s32 update_menu_mission_list(struct MenuScreen *menu_screen) {
             previous_mission_choice_index) {
             allocate_voice_for_target_entry(1, 0x11, menu_screen->moby);
         }
-        if ((pad & 0x5000) || level_map_selection.level != old) {
+        if ((pad & 0x5000) || level_map_selection.level != previous_selected_level) {
             menu_screen->data.missions.count =
                 collect_mission_ids((void *)0x70000000, 0, (void *)0x70000100, 1);
             mission_choice_ptr = &ch[level_map_selection.level];
