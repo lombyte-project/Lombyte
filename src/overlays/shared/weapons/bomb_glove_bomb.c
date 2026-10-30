@@ -217,7 +217,6 @@ extern float          frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern int            D_L00_0015F5CC_2adb30 __asm__("D_L00_0015F5CC");
 extern int           *D_L00_00177F00_2adb30[] __asm__("D_L00_00177F00");
 extern unsigned char *D_L00_001B2080_2adb30[] __asm__("D_L00_001B2080");
-extern G910           D_G910 __asm__("D_0013F350");
 extern int            D_L00_00160770;
 extern short   bomb_spark_vertical_acceleration __asm__("D_L00_001613F0") __attribute__((sda));
 extern short   bomb_spark_velocity_scale __asm__("D_L00_001613F4") __attribute__((sda));
@@ -1104,21 +1103,22 @@ void bomb_update(BombMoby *bomb_moby) {
     b.q = 0;
     b.f[2] = 1.0f;
     d = bomb_moby->d;
-    if ((D_G910.hero == 0 || D_G910.hero->cls != 0xC0) && bomb_moby->state == 0) {
+    if ((((G910 *)&hero)->hero == 0 || ((G910 *)&hero)->hero->cls != 0xC0) &&
+        bomb_moby->state == 0) {
         mark_moby_for_removal(bomb_moby);
         return;
     }
-    if (D_G910.b20A4 != 0 && bomb_moby->state == 0) {
+    if (((G910 *)&hero)->b20A4 != 0 && bomb_moby->state == 0) {
         mark_moby_for_removal(bomb_moby);
         return;
     }
-    if ((D_G910.b20A5 != 0 || D_G910.b20AF != 0) && bomb_moby->state == 0) {
+    if ((((G910 *)&hero)->b20A5 != 0 || ((G910 *)&hero)->b20AF != 0) && bomb_moby->state == 0) {
         bomb_moby->flags |= 0x41;
     } else {
         bomb_moby->flags &= ~0x41;
     }
     if (d->owner->cls == 0xC0 && d->h56 == 0 && FUN_001f9af0_2adb30(d) > 0.0f) {
-        if (D_G910.p2FC == 0 || FUN_L00_002603d0_2adb30(D_G910.p2FC) == 0) {
+        if (((G910 *)&hero)->p2FC == 0 || FUN_L00_002603d0_2adb30(((G910 *)&hero)->p2FC) == 0) {
             FUN_L00_002ad410_2adb30(d, bomb_moby, 1);
         } else if (FUN_L00_002ad410_2adb30(d, bomb_moby, 0) == 0) {
             FUN_L00_002ad410_2adb30(d, bomb_moby, 2);
@@ -1270,7 +1270,7 @@ void bomb_update(BombMoby *bomb_moby) {
                     }
                 } else if (d->h68 != 0 || collision_hit_material() != 0) {
                     if (coll_hit.moby != 0) {
-                        if ((coll_hit.moby != D_G910.cam && coll_hit.moby != d->owner) ||
+                        if ((coll_hit.moby != ((G910 *)&hero)->cam && coll_hit.moby != d->owner) ||
                             d->h54 < FUN_001f96f8_2adb30(0x12C) - FUN_001f96f8_2adb30(0xA)) {
                             if (((BombMoby *)coll_hit.moby)->f74 != D_L00_00160770 ||
                                 coll_hit.moby->cls == 0x336) {
@@ -1616,7 +1616,7 @@ void bomb_update(BombMoby *bomb_moby) {
                 l00_camera.shake_amount = camera_distance < 20.0f ? 0.4f - camera_distance * 0.0175f
                                                                   : 0.4f - 20.0f * 0.0175f;
                 l00_camera.shake_frames = FUN_001f96f8_2adb30(0x19);
-                fast_vec_dist(&bomb_moby->pos, D_G910.pos);
+                fast_vec_dist(&bomb_moby->pos, ((G910 *)&hero)->pos);
                 mine_camera_blast((char *)&rec, (char *)&bomb_moby->pos, 0, 0);
                 if (bomb_moby->state != 2) {
                     mark_moby_for_removal(bomb_moby);

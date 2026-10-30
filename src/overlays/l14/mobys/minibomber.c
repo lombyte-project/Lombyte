@@ -1,5 +1,6 @@
 /* Level 14 minibomber moby class: path following, bombing and exhaust effects. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/globals.h"
 #include "qcopy.h"
@@ -115,8 +116,6 @@ typedef struct Data {
     float        f17C;       /* 0x17C */
     float        f180[4];    /* 0x180 */
 } Data;
-
-extern char D_0013E550_c[] __asm__("D_0013E550");
 
 char D_L14_001FBDF0[] = "Hovertank with no introPath. UID: %d\n";
 
@@ -605,7 +604,7 @@ void minibomber_update(Moby_2B5938 *moby) {
                                  0);
         i = d->f108;
         if (i != -1) {
-            char *voice_slot = D_0013E550_c + i * 0x70;
+            char *voice_slot = (char *)&voice_pool + i * 0x70;
             if (*(Moby_2B5938 **)(voice_slot + 0x88) == moby &&
                 *(unsigned char *)(voice_slot + 0x74) != 0) {
                 release_voice_slot(i);
@@ -1018,8 +1017,6 @@ void initialize_minibomber_path_retrace(struct Moby *moby) {
     clear_u64_value(mover_vars->off);
 }
 
-extern u8 D_0013E550[];
-
 void hide_minibomber_and_release_voice(struct Moby *moby) __asm__("FUN_L14_002b5c98");
 
 void hide_minibomber_and_release_voice(struct Moby *moby) {
@@ -1029,7 +1026,7 @@ void hide_minibomber_and_release_voice(struct Moby *moby) {
     moby->collision = 0;
     voice_slot_index = *(s32 *)(data + 0x108);
     if (voice_slot_index != -1) {
-        u8 *voice_slot = D_0013E550 + voice_slot_index * 0x70;
+        u8 *voice_slot = (u8 *)&voice_pool + voice_slot_index * 0x70;
         if (*(u8 **)(voice_slot + 0x88) == moby && *(u8 *)(voice_slot + 0x74) != 0) {
             release_voice_slot(voice_slot_index);
         }

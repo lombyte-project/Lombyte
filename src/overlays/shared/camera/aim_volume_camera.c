@@ -1,6 +1,7 @@
 /* Camera type 23: a volume camera that aims at the hero while it is inside the volume. */
 
 #include "types.h"
+#include "rnc/input/pad_globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/math/fast_math.h"
@@ -43,9 +44,7 @@ extern void set_follow_camera_orbit_clamp_mode(s32) __asm__("FUN_L00_002e8568");
 extern void fun_l00_002e8620(void) __asm__("FUN_L00_002e8620");
 
 extern CameraDescriptor *camera_descriptors __asm__("D_L00_0015EF50");
-/* controller_state.held (the label sits inside struct PadState). */
-extern s32 pad_held __asm__("D_0013CAE0") NOT_SDA;
-extern u8  D_001413F4 __asm__("D_001413F4") NOT_SDA;
+extern u8                D_001413F4 __asm__("D_001413F4") NOT_SDA;
 
 /* Nonzero while the hero is in one of the aim camera's volumes; sets `done` otherwise. */
 s32 volume_camera_aim_active(struct UpdateCam *cam) __asm__("FUN_L00_002ed348");
@@ -112,7 +111,7 @@ void volume_camera_aim(struct UpdateCam *aim_camera_record) {
             params->timer = 0;
             return;
         }
-        if (!(pad_held & (PAD_L2 | PAD_L1))) {
+        if (!(pad_held[0] & (PAD_L2 | PAD_L1))) {
             goto run;
         }
     }

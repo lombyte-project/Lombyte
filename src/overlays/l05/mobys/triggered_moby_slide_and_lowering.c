@@ -8,7 +8,7 @@
 #include "rnc/overlay/cuboid.h"
 
 extern int   allocate_voice_for_target_entry() __asm__("FUN_0022da68");
-extern short moby_array __asm__("D_L05_0015FFD8");
+extern short D_L05_0015FFD8;
 
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
@@ -51,7 +51,7 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         break;
     }
     case MOBY_WAIT_FOR_TRIGGER:
-        if ((*(unsigned char **)&moby_array)[*(int *)(data + 0x14) * 256 + 0xBC] != 0) {
+        if ((*(unsigned char **)&D_L05_0015FFD8)[*(int *)(data + 0x14) * 256 + 0xBC] != 0) {
             allocate_voice_for_target_entry(0, 0, moby);
             MOBY(moby)->state = 2;
             clear_u64_value(data);

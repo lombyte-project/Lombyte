@@ -1,5 +1,7 @@
 /* Level 08 moby class 0x1b8: batalia cannon. */
 #include "types.h"
+#include "rnc/input/pad_globals.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_camera.h"
@@ -248,32 +250,30 @@ struct CannonData52 {
     float         visual_angle;
 };
 
-char                *spawn_turret_rocket(int    owner,
-                                         float *position,
-                                         float *rotation,
-                                         int    value) __asm__("FUN_L08_002e7eb0");
-extern char          D_0013CAE0[];
-extern float         D_0015ED70;
-extern float         D_L08_00161AE8_gp __asm__("D_L08_00161AE8") __attribute__((sda));
-extern float         D_L08_00161AEC_gp __asm__("D_L08_00161AEC") __attribute__((sda));
-extern float         D_L08_00161AF0_gp __asm__("D_L08_00161AF0") __attribute__((sda));
-extern float         D_L08_00161AF4_gp __asm__("D_L08_00161AF4") __attribute__((sda));
-extern float         D_L08_00161AF8_gp __asm__("D_L08_00161AF8") __attribute__((sda));
-extern float         D_L08_00161AFC_gp __asm__("D_L08_00161AFC") __attribute__((sda));
-extern float         D_L08_00161B00_gp __asm__("D_L08_00161B00") __attribute__((sda));
-extern s32           D_0015ED84;
-extern char          D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
-extern unsigned char visited52[][16] __asm__("D_0014C050");
-extern int           D_0015ED84;
-extern short         D_L08_00161A90_gp __asm__("D_L08_00161A90") __attribute__((sda));
-extern short         D_L08_00161B10_gp __asm__("D_L08_00161B10") __attribute__((sda));
-extern short         D_L08_00161B20_gp __asm__("D_L08_00161B20") __attribute__((sda));
-extern short         D_L08_00161B30_gp __asm__("D_L08_00161B30") __attribute__((sda));
-extern short         D_L08_00161B40_gp __asm__("D_L08_00161B40") __attribute__((sda));
-extern short         D_L08_00161B50_gp __asm__("D_L08_00161B50") __attribute__((sda));
-extern short         D_L08_00161BF0_gp __asm__("D_L08_00161BF0") __attribute__((sda));
-extern void          func_L00_001FF328_2E16A0(void *, void *, float) __asm__("FUN_L00_001ff378");
-extern void          func_L00_00217718_2E16A0(void *, void *, int, int) __asm__("FUN_L00_00216f90");
+char        *spawn_turret_rocket(int    owner,
+                                 float *position,
+                                 float *rotation,
+                                 int    value) __asm__("FUN_L08_002e7eb0");
+extern float D_0015ED70;
+extern float D_L08_00161AE8_gp __asm__("D_L08_00161AE8") __attribute__((sda));
+extern float D_L08_00161AEC_gp __asm__("D_L08_00161AEC") __attribute__((sda));
+extern float D_L08_00161AF0_gp __asm__("D_L08_00161AF0") __attribute__((sda));
+extern float D_L08_00161AF4_gp __asm__("D_L08_00161AF4") __attribute__((sda));
+extern float D_L08_00161AF8_gp __asm__("D_L08_00161AF8") __attribute__((sda));
+extern float D_L08_00161AFC_gp __asm__("D_L08_00161AFC") __attribute__((sda));
+extern float D_L08_00161B00_gp __asm__("D_L08_00161B00") __attribute__((sda));
+extern s32   D_0015ED84;
+extern char  D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
+extern int   D_0015ED84;
+extern short D_L08_00161A90_gp __asm__("D_L08_00161A90") __attribute__((sda));
+extern short D_L08_00161B10_gp __asm__("D_L08_00161B10") __attribute__((sda));
+extern short D_L08_00161B20_gp __asm__("D_L08_00161B20") __attribute__((sda));
+extern short D_L08_00161B30_gp __asm__("D_L08_00161B30") __attribute__((sda));
+extern short D_L08_00161B40_gp __asm__("D_L08_00161B40") __attribute__((sda));
+extern short D_L08_00161B50_gp __asm__("D_L08_00161B50") __attribute__((sda));
+extern short D_L08_00161BF0_gp __asm__("D_L08_00161BF0") __attribute__((sda));
+extern void  func_L00_001FF328_2E16A0(void *, void *, float) __asm__("FUN_L00_001ff378");
+extern void  func_L00_00217718_2E16A0(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void         set_batalia_cannon_platform_mode(u8 *platform, s32 mode) __asm__("FUN_L08_00306b30");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern char *func_L00_0026EBC0_2E16A0(char *, char *, int, int, float) __asm__("FUN_L00_0026dd20");
@@ -672,11 +672,11 @@ void update_batalia_cannon(Moby *moby) {
             set_batalia_cannon_platform_mode((char *)node, 0);
             return;
         }
-        if (visited52[D_0015ED84][moby->mission] != 0xFF && (hero.ship_flags & 1))
+        if (visited52[moby->mission + D_0015ED84 * 16] != 0xFF && (hero.ship_flags & 1))
             hero_respawn();
         if (((*(int *)D_0013A5E0_2E16A0 & 0x10) ||
              (*(unsigned char *)(l08_cannon_hero_interaction_flags) & 1)) &&
-            visited52[D_0015ED84][moby->mission] == 0xFF) {
+            visited52[moby->mission + D_0015ED84 * 16] == 0xFF) {
             hero.ship_flags = 0;
             hero_set_state(0, 1);
             moby->command = 2;
@@ -713,7 +713,7 @@ void update_batalia_cannon(Moby *moby) {
             moby->command = 0;
             data->exit_timer = scale_game_frames(60);
         }
-    } else if (visited52[D_0015ED84][moby->mission] == 0xFF) {
+    } else if (visited52[moby->mission + D_0015ED84 * 16] == 0xFF) {
         if (vector_distance_xy(position, (*(float(*)[4]) & hero.moby->pos)) < 1.0f &&
             hero.motion.pos.f[2] - (*(float(*)[4]) & moby->pos)[2] < 7.0f &&
             data->exit_timer == 0 && data->health > 0) {
@@ -751,7 +751,7 @@ void update_batalia_cannon(Moby *moby) {
         data->wave_timer = scale_game_frames(180);
         data->target_timer = 0;
         data->target_index = 0;
-        if (visited52[D_0015ED84][moby->mission] != 0xFF)
+        if (visited52[moby->mission + D_0015ED84 * 16] != 0xFF)
             data->visual_angle = 0.0f;
         else
             data->visual_angle = 1.5707964f;
@@ -792,7 +792,7 @@ void update_batalia_cannon(Moby *moby) {
         } else if (data->lock_timer)
             data->lock_timer--;
         fast_dec_timer_s16(&data->fire_timer);
-        if ((*(int *)D_0013CAE0 & 0x20) && data->fire_timer == 0) {
+        if ((pad_held[0] & 0x20) && data->fire_timer == 0) {
             if (data->barrel == 1) {
                 int count;
                 build_spherical_offset(direction,
@@ -940,7 +940,7 @@ void update_batalia_cannon(Moby *moby) {
                     data->wave_timer = scale_game_frames(150);
                     break;
                 case CANNON_ALL_INDEXED_TARGETS_INACTIVE:
-                    if (visited52[D_0015ED84][moby->mission] != 0xFF) {
+                    if (visited52[moby->mission + D_0015ED84 * 16] != 0xFF) {
                         Moby *node;
                         (*(float(*)[4]) & moby->rot)[1] = 0.0f;
                         moby->command = 2;

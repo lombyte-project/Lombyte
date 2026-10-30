@@ -1,5 +1,6 @@
 /* Level 10 moby class linked_moby_hitbox: a box that hits the mobys it sweeps through. */
 #include "types.h"
+#include "rnc/game/item_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "asm.h"
@@ -104,10 +105,9 @@ void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
     }
 }
 
-extern int           FUN_001fa6d0_2c9c70(float) __asm__("truncate_float_to_s32");
-extern int           FUN_001f9740_2c9c70(int *) __asm__("FUN_001f9740");
-extern int           D_0015ED84;
-extern unsigned char D_0014C190_2c9c70[] __asm__("D_0014C190");
+extern int FUN_001fa6d0_2c9c70(float) __asm__("truncate_float_to_s32");
+extern int FUN_001f9740_2c9c70(int *) __asm__("FUN_001f9740");
+extern int D_0015ED84;
 
 extern char linked_moby_warning[] __asm__("D_L10_001DCDA0");
 extern char linked_moby_present_message[] __asm__("D_L10_001DCDD0");
@@ -142,7 +142,7 @@ void update_linked_moby_hitbox(struct Moby *moby) {
                 if (other != 0 && other->oclass == *(short *)(entry + 1) && other->state != 0xfe &&
                     other->state != 0xfd) {
                     unsigned short id = other->save_id;
-                    if ((((*(int *)(D_0014C190_2c9c70 + (((short)id >> 5) * 4) +
+                    if ((((*(int *)((unsigned char *)D_0014C190_257218 + (((short)id >> 5) * 4) +
                                     (D_0015ED84 << 8)) >>
                            (id & 31)) ^
                           1) &

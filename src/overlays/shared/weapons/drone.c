@@ -1,5 +1,6 @@
 /* Shared moby class drone: the drone device's drones that circle the hero and attack. */
 #include "types.h"
+#include "rnc/game/game_globals.h"
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby.h"
@@ -113,15 +114,14 @@ void         copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 extern int   get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int   rand_2cc608(void) __asm__("FUN_001160d8");
 
-extern S_2cdcc0 D_00141680_2cdcc0 __asm__("D_00141680");
-extern int      D_0015EEA4;
-int             get_ammo(int) __asm__("FUN_L00_00233e98");
-void            FUN_L00_00233db8_2cdcc0(int, int) __asm__("FUN_L00_00233db8");
-float           FUN_001f9dc8_2cdcc0(float) __asm__("FUN_001f9dc8");
-float           FUN_001f9de0_2cdcc0(float) __asm__("FUN_001f9de0");
-int             FUN_001f96f8_2cdcc0(int) __asm__("FUN_001f96f8");
-void            FUN_001f9a10_2cdcc0(void *, void *, void *) __asm__("FUN_001f9a10");
-unsigned char  *FUN_L00_002ce1f0_2cdcc0(unsigned char *, void *) __asm__("FUN_L00_002ce1f0");
+extern int     D_0015EEA4;
+int            get_ammo(int) __asm__("FUN_L00_00233e98");
+void           FUN_L00_00233db8_2cdcc0(int, int) __asm__("FUN_L00_00233db8");
+float          FUN_001f9dc8_2cdcc0(float) __asm__("FUN_001f9dc8");
+float          FUN_001f9de0_2cdcc0(float) __asm__("FUN_001f9de0");
+int            FUN_001f96f8_2cdcc0(int) __asm__("FUN_001f96f8");
+void           FUN_001f9a10_2cdcc0(void *, void *, void *) __asm__("FUN_001f9a10");
+unsigned char *FUN_L00_002ce1f0_2cdcc0(unsigned char *, void *) __asm__("FUN_L00_002ce1f0");
 
 extern int spawn_moby_point_attached_particle(
     void *, int, float, float, unsigned, unsigned) __asm__("FUN_L00_002725d8");
@@ -172,7 +172,7 @@ void replenish_hero_drones(void) {
         initial_drone_velocity[2] = 0.25f;
         if (hero_state->b1FF6 < 6) {
             FUN_L00_00233db8_2cdcc0(0x18, 1);
-            usage_stats = &D_00141680_2cdcc0;
+            usage_stats = (S_2cdcc0 *)item_usage;
             if (usage_stats->hC0 < 0xFFFF) {
                 usage_stats->hC0++;
             }

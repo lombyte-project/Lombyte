@@ -21,16 +21,13 @@
 extern char D_00141968_h[] __asm__("D_00141968");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-/* Fakematch: a second name for item_unlocked (D_0013D408) stops the compiler from sharing one
- * address load; with one name the function is 8 bytes longer. */
-extern unsigned char D_0013D50F_e[] __asm__("D_0013D408");
 
 void update_help_hints(struct Moby *moby) __asm__("FUN_L12_002ed280");
 
 void update_help_hints(struct Moby *moby) {
     int *moby_vars = (int *)moby->pvars;
     if (count_active_moby_group_members(moby_vars[3], -1) == 0) {
-        unsigned char *dialogue_trigger_state = D_0013D50F_e;
+        unsigned char *dialogue_trigger_state = item_unlocked;
         if (dialogue_trigger_state[0x14] == 0) {
             dialogue_trigger_state[0x14] = 1;
             allocate_voice_for_bank_entry(1, 0, 0);
@@ -97,7 +94,9 @@ void update_help_hints(struct Moby *moby) {
             }
         }
     }
-    if (item_unlocked[0xBC] != 0) {
+    /* Fakematch: the pointer-plus form (not item_unlocked[0xBC]) keeps a second address load;
+     * the indexed form makes the function 8 bytes longer. */
+    if (*(item_unlocked + 0xBC) != 0) {
         char *k = D_00141968_h;
         if (*(unsigned short *)(k + 0x1F0) == 0) {
             help_request(0x2EE0, 0x3E);

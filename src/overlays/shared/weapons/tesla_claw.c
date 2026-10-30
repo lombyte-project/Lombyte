@@ -88,7 +88,6 @@ extern int  FUN_L00_0028d8c0_2b2100(void *, int) __asm__("FUN_L00_0028d8c0");
 
 extern int            D_0015EEA4;
 extern s32            D_0015EEA4;
-extern char           D_0013F350_2b2100[] __asm__("D_0013F350");
 extern unsigned char  D_0013E533_2b2100[] __asm__("D_0013E533");
 extern unsigned short D_00141D70_2b2100[] __asm__("D_00141D70");
 extern unsigned short D_00141918_2b2100[] __asm__("D_00141918");
@@ -504,27 +503,22 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
     V_2B9AD8     transformed_offset;
     Data        *tesla_claw_vars = (Data *)tesla_claw_moby->pvars;
     int          active;
-    int          done = ((struct Hero *)D_0013F350_2b2100)->items[0].state == 3;
+    int          done = hero.items[0].state == 3;
     int          ready;
     struct Hero *player_hero;
 
-    if ((controller_state.pressed & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) &&
-        !((struct Hero *)D_0013F350_2b2100)->item_use_locked) {
+    if ((controller_state.pressed & hero.items[0].button_mask) && !hero.item_use_locked) {
         tesla_claw_vars->reach = 0.8f;
     }
     D_L00_0017AEBC = 0.9f;
     active = 0;
     ready = get_ammo(-1);
-    if (D_00141D70_2b2100[0] == 0 && D_00141918_2b2100[0] == 0 &&
-        ((struct Hero *)D_0013F350_2b2100)->wrench_combo_step >= 3) {
-        if ((unsigned int)((struct Hero *)D_0013F350_2b2100)->state.control_mode < 2 ||
-            ((struct Hero *)D_0013F350_2b2100)->state.control_mode == 9)
+    if (D_00141D70_2b2100[0] == 0 && D_00141918_2b2100[0] == 0 && hero.wrench_combo_step >= 3) {
+        if ((unsigned int)hero.state.control_mode < 2 || hero.state.control_mode == 9)
             help_request(0x4E30, 0x81);
     }
-    if ((controller_state.held & ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) &&
-        tesla_claw_moby->state != 4 && tesla_claw_moby->state != 0 &&
-        !((struct Hero *)D_0013F350_2b2100)->item_use_locked &&
-        ((struct Hero *)D_0013F350_2b2100)->state.current != 0x72) {
+    if ((controller_state.held & hero.items[0].button_mask) && tesla_claw_moby->state != 4 &&
+        tesla_claw_moby->state != 0 && !hero.item_use_locked && hero.state.current != 0x72) {
         if (tesla_claw_vars->timer == 0) {
             if (ready > 0) {
                 if (fast_dec_timer_s16(&tesla_claw_vars->tick)) {
@@ -541,17 +535,13 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                 }
                 active = 1;
                 if (tesla_claw_vars->target) {
-                    if (2.0943f <
-                            fast_difference_between_rotations(
-                                ((struct Hero *)D_0013F350_2b2100)->motion.rot.f[2],
-                                fast_arc_tan(
-                                    tesla_claw_vars->target->pos.x -
-                                        ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0],
-                                    tesla_claw_vars->target->pos.y -
-                                        ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1])) ||
+                    if (2.0943f < fast_difference_between_rotations(
+                                      hero.motion.rot.f[2],
+                                      fast_arc_tan(
+                                          tesla_claw_vars->target->pos.x - hero.motion.pos.f[0],
+                                          tesla_claw_vars->target->pos.y - hero.motion.pos.f[1])) ||
                         !tesla_claw_vars->target->visible ||
-                        20.0f < fast_vec_dist(&tesla_claw_vars->target->pos,
-                                              &((struct Hero *)D_0013F350_2b2100)->motion.pos)) {
+                        20.0f < fast_vec_dist(&tesla_claw_vars->target->pos, &hero.motion.pos)) {
                         tesla_claw_vars->target = 0;
                         tesla_claw_vars->lock = 0;
                     }
@@ -559,15 +549,12 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                 if (tesla_claw_vars->target2) {
                     if (2.0943f <
                             fast_difference_between_rotations(
-                                ((struct Hero *)D_0013F350_2b2100)->motion.rot.f[2],
-                                fast_arc_tan(
-                                    tesla_claw_vars->target2->pos.x -
-                                        ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0],
-                                    tesla_claw_vars->target2->pos.y -
-                                        ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1])) ||
+                                hero.motion.rot.f[2],
+                                fast_arc_tan(tesla_claw_vars->target2->pos.x - hero.motion.pos.f[0],
+                                             tesla_claw_vars->target2->pos.y -
+                                                 hero.motion.pos.f[1])) ||
                         !tesla_claw_vars->target2->visible ||
-                        20.0f < fast_vec_dist(&tesla_claw_vars->target2->pos,
-                                              &((struct Hero *)D_0013F350_2b2100)->motion.pos)) {
+                        20.0f < fast_vec_dist(&tesla_claw_vars->target2->pos, &hero.motion.pos)) {
                         tesla_claw_vars->target2 = 0;
                         tesla_claw_vars->lock2 = 0;
                     }
@@ -610,24 +597,22 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                 tesla_claw_vars->reach += (convert_integer_to_float(D_0013E533_2b2100[0]) * 6.0f +
                                            12.0f - tesla_claw_vars->reach) *
                                           (frame_scale * 0.07f);
-                if (((struct Hero *)D_0013F350_2b2100)->state.current == 1) {
+                if (hero.state.current == 1) {
                     transformed_offset.f.x = 1.2f;
                     transformed_offset.f.y = 0.0f;
                     transformed_offset.f.z = 0.0f;
                     transform_vector_by_basis(
                         &transformed_offset, &transformed_offset, D_L00_00166FD0);
                     tesla_claw_vars->pos.f.z = transformed_offset.f.z + tesla_claw_moby->pos.z;
-                    tesla_claw_vars->pos.f.x = transformed_offset.f.x +
-                                               ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0];
-                    tesla_claw_vars->pos.f.y = transformed_offset.f.y +
-                                               ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1];
+                    tesla_claw_vars->pos.f.x = transformed_offset.f.x + hero.motion.pos.f[0];
+                    tesla_claw_vars->pos.f.y = transformed_offset.f.y + hero.motion.pos.f[1];
                     transformed_offset.f.x = tesla_claw_vars->reach;
                     transformed_offset.f.y = 0.0f;
                     transformed_offset.f.z = 0.0f;
                     transform_vector_by_basis(
                         &transformed_offset, &transformed_offset, D_L00_00166FD0);
                     fast_vec_add(&tesla_claw_vars->tip, &tesla_claw_vars->pos, &transformed_offset);
-                } else if (((struct Hero *)D_0013F350_2b2100)->unk22C8 == 1) {
+                } else if (hero.unk22C8 == 1) {
                     moby_point_position(tesla_claw_moby, 0, &tesla_claw_vars->pos);
                     transformed_offset.f.x = 0.0f;
                     transformed_offset.f.y = -tesla_claw_vars->reach;
@@ -638,7 +623,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                 } else {
                     moby_point_position(tesla_claw_moby, 0, &tesla_claw_vars->pos);
                     fast_vec_normalize(
-                        &tesla_claw_vars->tip, D_0013F350_2b2100 + 0x640, tesla_claw_vars->reach);
+                        &tesla_claw_vars->tip, (char *)&hero + 0x640, tesla_claw_vars->reach);
                     fast_vec_add(
                         &tesla_claw_vars->tip, &tesla_claw_vars->pos, &tesla_claw_vars->tip);
                 }
@@ -701,8 +686,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
             start_equipped_item_animation();
             tesla_claw_moby->state = 3;
         }
-        if ((controller_state.pressed &
-             (player_hero = (struct Hero *)D_0013F350_2b2100)->items[0].button_mask) &&
+        if ((controller_state.pressed & (player_hero = &hero)->items[0].button_mask) &&
             !player_hero->item_use_locked) {
             if (active) {
                 Stats *st = (Stats *)(D_0014161B + 0x65);
@@ -727,10 +711,9 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
     case 2:
         break;
     case TESLA_CLAW_STATE_FIRING:
-        if ((controller_state.released &
-             ((struct Hero *)D_0013F350_2b2100)->items[0].button_mask) ||
-            !active || ((struct Hero *)D_0013F350_2b2100)->item_use_locked) {
-            player_hero = (struct Hero *)D_0013F350_2b2100;
+        if ((controller_state.released & hero.items[0].button_mask) || !active ||
+            hero.item_use_locked) {
+            player_hero = &hero;
             if (scale_game_frames(70) < player_hero->item_anim_frames) {
                 if (((Stats2 *)(D_0014161B + 0x22D))->uses < 65535)
                     ((Stats2 *)(D_0014161B + 0x22D))->uses++;
@@ -740,10 +723,10 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
             ((Stats2 *)(D_0014161B + 0x22D))->levels =
                 (((Stats2 *)(D_0014161B + 0x22D))->levels | (1 << current_level_index)) |
                 0x80000000;
-            if (((struct Hero *)D_0013F350_2b2100)->item_anim_frames < scale_game_frames(30))
-                ((struct Hero *)D_0013F350_2b2100)->wrench_combo_step++;
+            if (hero.item_anim_frames < scale_game_frames(30))
+                hero.wrench_combo_step++;
             else
-                ((struct Hero *)D_0013F350_2b2100)->wrench_combo_step = 0;
+                hero.wrench_combo_step = 0;
             tesla_claw_vars->target = 0;
             tesla_claw_vars->target2 = 0;
             tesla_claw_vars->lock = 0;
@@ -763,14 +746,13 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
         qzero(&transformed_offset);
         transformed_offset.f.x = 2.0f;
         transformed_offset.f.z = 2.0f;
-        transform_vector_by_basis(
-            &transformed_offset, &transformed_offset, D_0013F350_2b2100 + 0x640);
+        transform_vector_by_basis(&transformed_offset, &transformed_offset, (char *)&hero + 0x640);
         point_lights[tesla_claw_vars->light].position.f[0] =
-            ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[0] + transformed_offset.f.x;
+            hero.motion.pos.f[0] + transformed_offset.f.x;
         point_lights[tesla_claw_vars->light].position.f[1] =
-            ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[1] + transformed_offset.f.y;
+            hero.motion.pos.f[1] + transformed_offset.f.y;
         point_lights[tesla_claw_vars->light].position.f[2] =
-            ((struct Hero *)D_0013F350_2b2100)->motion.pos.f[2] + transformed_offset.f.z;
+            hero.motion.pos.f[2] + transformed_offset.f.z;
         point_lights[tesla_claw_vars->light].position.f[3] = 7.5f;
         k = convert_integer_to_float(tesla_claw_vars->glow) / (float)scale_game_frames(10);
         point_lights[tesla_claw_vars->light].color[2] = k;
