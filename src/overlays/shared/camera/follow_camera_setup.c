@@ -1102,7 +1102,7 @@ void compute_follow_camera_collision_delta(O002e7530 *camera_moby,
                                            V002e7530 *position_delta,
                                            V002e7530 *path_segment_point,
                                            V002e7530 *separation_reference_position,
-                                           V002e7530 *out,
+                                           V002e7530 *starting_probe_position,
                                            f32        k1,
 
                                            f32 k2) {
@@ -1115,7 +1115,7 @@ void compute_follow_camera_collision_delta(O002e7530 *camera_moby,
     fast_vec_sub(&radial_offset, path_segment_point, m);
     fast_vec_normalize(&radial_offset, &radial_offset, k2);
     fast_vec_add(&adjusted_position, m, &radial_offset);
-    fast_vec_sub(position_delta, &adjusted_position, out);
+    fast_vec_sub(position_delta, &adjusted_position, starting_probe_position);
 }
 
 extern char *current_follow_cam __asm__("D_L00_00166E00") NOT_SDA;
