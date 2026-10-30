@@ -3729,17 +3729,17 @@ void resolve_hero_collisions_with_history(void) {
     int   i;
 
     for (i = 0; i < 16; i++) {
-        struct Hero *base;
+        struct Hero *hero_position_history_state;
 
         if (resolve_hero_current_position_collisions(i) == 1)
             return;
 
-        base = &hero;
-        if (base->pos_history_count >= 2) {
-            base->pos_history_count--;
-            base->pos_history_index = (base->pos_history_index + 31) % 32;
+        hero_position_history_state = &hero;
+        if (hero_position_history_state->pos_history_count >= 2) {
+            hero_position_history_state->pos_history_count--;
+            hero_position_history_state->pos_history_index = (hero_position_history_state->pos_history_index + 31) % 32;
         }
-        qcopy(hero_position, &table[base->pos_history_index]);
+        qcopy(hero_position, &table[hero_position_history_state->pos_history_index]);
     }
 }
 
