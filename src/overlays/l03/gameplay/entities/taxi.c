@@ -716,16 +716,11 @@ struct RailTaxiVars {
     s32 unkE4;         /* 0xE4: set to -1 on arrival */
 };
 
-typedef struct {
-    u8 pad0[0x454];
-    u8 collected[1];
-} L03LevelState;
-
 s32 taxi_path_point_debug_draw_enabled_gp __asm__("D_L03_00161B04") = 0;
 extern f32 rail_flyer_max_speed_gp __asm__("D_L03_00161B08") __attribute__((sda));
 extern f32 rail_flyer_pitch_acceleration_degrees_gp __asm__("D_L03_00161B10") __attribute__((sda));
 extern f32 rail_flyer_roll_acceleration_degrees_gp __asm__("D_L03_00161B18") __attribute__((sda));
-extern L03LevelState D_L03_001BB330;
+#include "rnc/overlay/level_save_state.h"
 extern s32 D_L03_0015F594 __attribute__((sda));
 extern void draw_number(void *, struct Moby *, s32, u32, s32, s32, s32, f32) __asm__("FUN_L01_00285768");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -788,7 +783,7 @@ void update_rail_taxi(struct Moby *taxi_moby) {
         taxi_vars->route = -1;
         taxi_moby->state = 1;
         taxi_moby->collision = 0;
-        if (D_L03_001BB330.collected[(s16)taxi_moby->save_id] != 0 ||
+        if (l03_save_state.cleared[(s16)taxi_moby->save_id] != 0 ||
             (D_0014C190_257218[current_level_index][(s16)taxi_moby->save_id >> 5] >> (taxi_moby->save_id & 0x1F)) & 1) {
             mark_moby_for_removal(taxi_moby);
             return;
@@ -1218,7 +1213,7 @@ extern s32 helga_helper_flag_context_records[] __asm__("D_L03_001BA720");
 extern char helga_dialogue_script[] __asm__("D_L03_00161BB8");
 #include "rnc/gameplay/state/game_globals.h"
 extern u8 mission_collection_recording_filter[] __asm__("D_L03_0015FC88");
-extern L03LevelState l03_moby_collection_state __asm__("D_L03_001BA6D0");
+extern LevelSaveState l03_moby_collection_state __asm__("D_L03_001BA6D0");
 #include "rnc/overlay/cuboid.h"
 extern void initialize_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_00266448");
@@ -1325,7 +1320,7 @@ void helga_update(struct Moby *helga_moby) {
                 grant_inventory_item(0xC, 1);
                 queue_dialogue_message(0xBC8, -1);
                 if (helga_vars->reward != -1) {
-                    l03_moby_collection_state.collected[(s16)((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                    l03_moby_collection_state.cleared[(s16)((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                         ((struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                     reward_moby = (struct Moby *)((helga_vars->reward << 8) + D_L03_0015FFD8_i);
                     /* Fakematch: same record as the || test in the level's other reward
@@ -1341,7 +1336,7 @@ void helga_update(struct Moby *helga_moby) {
                         /* Fakematch: see above. */
                         do {
                         record:
-                            D_L03_001BB330.collected[(s16)reward_moby->save_id] = reward_moby->mission + 2;
+                            l03_save_state.cleared[(s16)reward_moby->save_id] = reward_moby->mission + 2;
                         } while (0);
                     }
                     mark_moby_for_removal(&D_L03_0015FFD8[helga_vars->reward]);
@@ -1646,14 +1641,14 @@ void big_al_update(struct Moby *guide_moby) {
             referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (referenced_moby->oclass == 0x3E5 && referenced_moby->state == 0) {
                 referenced_moby->state = 1;
-                l03_moby_collection_state.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                l03_moby_collection_state.cleared[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 {
                     s32 k = reward_moby->mission;
                     u32 u = k & 0xFF;
                     if (k == 0xFF || (mission_collection_recording_filter[u] != 0xFF && visited52[u + current_level_index * 16] == 0xFF)) {
-                        D_L03_001BB330.collected[(s16)reward_moby->save_id] = k + 2;
+                        l03_save_state.cleared[(s16)reward_moby->save_id] = k + 2;
                     }
                 }
             }
@@ -1698,7 +1693,7 @@ void big_al_update(struct Moby *guide_moby) {
             referenced_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
             if (referenced_moby->oclass == 0x3E5 && referenced_moby->state == 0) {
                 referenced_moby->state = 1;
-                l03_moby_collection_state.collected[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
+                l03_moby_collection_state.cleared[(s16)((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->save_id] =
                     ((struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i))->mission + 2;
                 reward_moby = (struct Moby *)((v->reward << 8) + D_L03_0015FFD8_i);
                 /* Fakematch: same record test as above; the goto and the do/while (0)
@@ -1710,7 +1705,7 @@ void big_al_update(struct Moby *guide_moby) {
                 } while (0);
                 if (mission_collection_recording_filter[group] != 0xFF && visited52[group + current_level_index * 16] == 0xFF) {
                 rec2:
-                    D_L03_001BB330.collected[(s16)reward_moby->save_id] = reward_moby->mission + 2;
+                    l03_save_state.cleared[(s16)reward_moby->save_id] = reward_moby->mission + 2;
                 }
             }
         }
@@ -1828,7 +1823,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         FUN_L00_0025a120(robot_qwark_moby);
         robot_qwark_moby->shadow_range = 0x15;
     }
-    if (D_L03_001BB330.collected[(s16)robot_qwark_moby->save_id] != 0 ||
+    if (l03_save_state.cleared[(s16)robot_qwark_moby->save_id] != 0 ||
         (D_0014C190_257218[current_level_index][(s16)robot_qwark_moby->save_id >> 5] >> (robot_qwark_moby->save_id & 0x1F)) & 1) {
         if (robot_qwark_moby->state != 3) {
             robot_qwark_moby->state = 3;
@@ -1837,7 +1832,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
     }
     hit = talker_find_hit(robot_qwark_moby, -1, 0);
     if (hit != 0 && hit->source != 0 && (type = hit->type) == 3 &&
-        D_L03_001BB330.collected[(s16)robot_qwark_moby->save_id] == 0 &&
+        l03_save_state.cleared[(s16)robot_qwark_moby->save_id] == 0 &&
         (((D_0014C190_257218[current_level_index][(s16)robot_qwark_moby->save_id >> 5] >> (robot_qwark_moby->save_id & 0x1F)) ^ 1) & 1)) {
         if (item_unlocked[5] == 0) {
             item_unlocked[5] = 1;

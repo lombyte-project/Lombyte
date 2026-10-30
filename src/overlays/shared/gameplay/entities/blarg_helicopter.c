@@ -1869,13 +1869,7 @@ void update_moby_draw_callback(struct Moby *moby) {
     }
 }
 
-/* Level state record; byte i at 0x454 is set once moby unkB2 == i is collected. */
-typedef struct {
-    u8 pad[0x454];
-    u8 collected[1];
-} LevelCollected;
-
-extern LevelCollected D_L03_001BB330;
+#include "rnc/overlay/level_save_state.h"
 
 extern s32 current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
 /*
@@ -1901,7 +1895,7 @@ void garage_door_update(struct Moby *door_moby)
         target->q = ((Vec4 *)&door_moby->pos)->q;
         id = door_moby->save_id;
         save_id_index = id;
-        if (D_L03_001BB330.collected[save_id_index] == 0) {
+        if (l03_save_state.cleared[save_id_index] == 0) {
             if (!((D_0014C190_257218[current_level_index_gp][save_id_index >> 5] >> (id & 0x1F)) & 1))
                 return;
         }
