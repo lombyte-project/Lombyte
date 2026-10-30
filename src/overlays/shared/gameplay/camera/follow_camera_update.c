@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/overlay/camera.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -395,7 +396,7 @@ void update_hero_aligned_camera_position(char *camera_object) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern u128 D_0013F3D0_2e9dd0 __asm__("D_0013F3D0");
-extern void *D_L00_00166E04_lui __asm__("D_L00_00166E04") NOT_SDA;
+extern FollowCamSideRef *D_L00_00166E04 __asm__("D_L00_00166E04") NOT_SDA;
 extern void FUN_001f9bf8_2e9dd0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_2e9dd0(void *, void *, float) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_2e9dd0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -417,7 +418,7 @@ void initialize_hero_aligned_camera_pose(char *camera_object) {
     }
     FUN_001f9a10_2e9dd0(camera_object + 0x30, &D_0013F3D0_2e9dd0, &scaled_hero_up_axis);
     {
-        void *side_axis_reference = D_L00_00166E04_lui;
+        void *side_axis_reference = D_L00_00166E04;
         qcopy(camera_object + 0x20, &hero_up_axis);
         FUN_001f9ad8_2e9dd0(camera_object + 0x10, side_axis_reference, &hero_up_axis);
     }

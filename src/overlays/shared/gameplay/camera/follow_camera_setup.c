@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/overlay/camera.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
@@ -602,10 +603,6 @@ typedef struct Hero_2E8210 {
     int i2080;                    /* 0x2080 */
 } Hero_2E8210;
 
-typedef struct Ctl {
-    char pad0[0x86];
-    short h86;                    /* 0x86 */
-} Ctl;
 
 extern int D_L00_00161D90 __attribute__((sda));
 extern float D_L00_0015EF40; /* no foreign declaration */
@@ -617,7 +614,7 @@ void follow_camera_reset(char *o) __asm__("FUN_L00_002e4430");
 extern Hero_2E8210 D_0013F450_2E8210 __asm__("D_0013F350");
 extern char D_0013F4D0_2E8210[] __asm__("D_0013F3D0");
 extern char D_0013F6E0_2E8210[] __asm__("D_0013F5E0");
-extern Ctl *D_L00_00166E04_lui __asm__("D_L00_00166E04") NOT_SDA;
+extern FollowCamSideRef *D_L00_00166E04 __asm__("D_L00_00166E04") NOT_SDA;
 extern void rebuild_follow_camera_pose(int) __asm__("FUN_L00_002e66b8");
 
 void follow_camera_setup(Moby_2E8210 *m) __asm__("FUN_L00_002e6d60");
@@ -744,7 +741,7 @@ void follow_camera_setup(Moby_2E8210 *camera_moby) {
     if (camera_moby->b7D == 2) {
         reset_follow_camera_state_from_position(camera_moby);
         qcopy(camera_moby->v40, camera_moby->v0);
-        if (D_L00_00166E04_lui->h86 == 7 && D_0013F450_2E8210.h30C == 0) {
+        if (D_L00_00166E04->unk86 == 7 && D_0013F450_2E8210.h30C == 0) {
             e->e.h0 = 0;
         } else {
             camera_height_state->h0 = scale_game_frames(D_L00_00161D24_gp);
@@ -1356,7 +1353,7 @@ f32 D_L02_00162278 = 0.2f;
 int D_L02_00162340 = 0;
 int D_L02_001622D4 = 0x5a;
 int D_L02_0016233C = 0;
-Ctl *D_L02_00167404 NOT_SDA = 0;
+FollowCamSideRef *D_L02_00167404 NOT_SDA = 0;
 float D_L02_00162268 = 0.075f;
 f32 D_L02_00162288 = 0.25f;
 int D_L02_0015EF5C = 0;
@@ -1382,7 +1379,7 @@ f32 D_L03_00161D40 = 0.2f;
 int D_L03_00161E08 = 0;
 int D_L03_00161D9C = 0x5a;
 int D_L03_00161E04 = 0;
-Ctl *D_L03_00166F04 NOT_SDA = 0;
+FollowCamSideRef *D_L03_00166F04 NOT_SDA = 0;
 float D_L03_00161D30 = 0.075f;
 f32 D_L03_00161D50 = 0.25f;
 char *D_L03_00166F00 NOT_SDA = 0;
@@ -1411,7 +1408,7 @@ f32 D_L04_00161E38 = 0.2f;
 int D_L04_00161F00 = 0;
 int D_L04_00161E94 = 0x5a;
 int D_L04_00161EFC = 0;
-Ctl *D_L04_00166F84 NOT_SDA = 0;
+FollowCamSideRef *D_L04_00166F84 NOT_SDA = 0;
 float D_L04_00161E28 = 0.075f;
 f32 D_L04_00161E48 = 0.25f;
 char *D_L04_00166F80 NOT_SDA = 0;
@@ -1465,7 +1462,7 @@ f32 D_L06_00162458 = 0.2f;
 int D_L06_00162520 = 0;
 int D_L06_001624B4 = 0x5a;
 int D_L06_0016251C = 0;
-Ctl *D_L06_00167584 NOT_SDA = 0;
+FollowCamSideRef *D_L06_00167584 NOT_SDA = 0;
 float D_L06_00162448 = 0.075f;
 f32 D_L06_00162468 = 0.25f;
 int D_L06_0015EF5C = 0;
@@ -1494,7 +1491,7 @@ f32 D_L07_00161D10 = 0.2f;
 int D_L07_00161DD8 = 0;
 int D_L07_00161D6C = 0x5a;
 int D_L07_00161DD4 = 0;
-Ctl *D_L07_00166E84 NOT_SDA = 0;
+FollowCamSideRef *D_L07_00166E84 NOT_SDA = 0;
 float D_L07_00161D00 = 0.075f;
 f32 D_L07_00161D20 = 0.25f;
 char *D_L07_00166E80 NOT_SDA = 0;
@@ -1521,7 +1518,7 @@ f32 D_L08_001624D0 = 0.2f;
 int D_L08_00162598 = 0;
 int D_L08_0016252C = 0x5a;
 int D_L08_00162594 = 0;
-Ctl *D_L08_00167604 NOT_SDA = 0;
+FollowCamSideRef *D_L08_00167604 NOT_SDA = 0;
 float D_L08_001624C0 = 0.075f;
 f32 D_L08_001624E0 = 0.25f;
 int D_L08_0015EF5C = 0;
@@ -1548,7 +1545,7 @@ f32 D_L09_00161E28 = 0.2f;
 int D_L09_00161EF0 = 0;
 int D_L09_00161E84 = 0x5a;
 int D_L09_00161EEC = 0;
-Ctl *D_L09_00166F84 NOT_SDA = 0;
+FollowCamSideRef *D_L09_00166F84 NOT_SDA = 0;
 float D_L09_00161E18 = 0.075f;
 f32 D_L09_00161E38 = 0.25f;
 V002e7318 D_L09_00173FF0 = {0};
@@ -1576,7 +1573,7 @@ f32 D_L10_001620F8 = 0.2f;
 int D_L10_001621C0 = 0;
 int D_L10_00162154 = 0x5a;
 int D_L10_001621BC = 0;
-Ctl *D_L10_00167284 NOT_SDA = 0;
+FollowCamSideRef *D_L10_00167284 NOT_SDA = 0;
 float D_L10_001620E8 = 0.075f;
 f32 D_L10_00162108 = 0.25f;
 V002e7318 D_L10_001742F0 = {0};
@@ -1605,7 +1602,7 @@ f32 D_L11_00162660 = 0.2f;
 int D_L11_00162728 = 0;
 int D_L11_001626BC = 0x5a;
 int D_L11_00162724 = 0;
-Ctl *D_L11_00167804 NOT_SDA = 0;
+FollowCamSideRef *D_L11_00167804 NOT_SDA = 0;
 float D_L11_00162650 = 0.075f;
 f32 D_L11_00162670 = 0.25f;
 V002e7318 D_L11_00174870 = {0};
@@ -1634,7 +1631,7 @@ f32 D_L12_00162138 = 0.2f;
 int D_L12_00162200 = 0;
 int D_L12_00162194 = 0x5a;
 int D_L12_001621FC = 0;
-Ctl *D_L12_00167284 NOT_SDA = 0;
+FollowCamSideRef *D_L12_00167284 NOT_SDA = 0;
 float D_L12_00162128 = 0.075f;
 f32 D_L12_00162148 = 0.25f;
 V002e7318 D_L12_001742F0 = {0};
@@ -1663,7 +1660,7 @@ f32 D_L13_00161FB0 = 0.2f;
 int D_L13_00162078 = 0;
 int D_L13_0016200C = 0x5a;
 int D_L13_00162074 = 0;
-Ctl *D_L13_00167104 NOT_SDA = 0;
+FollowCamSideRef *D_L13_00167104 NOT_SDA = 0;
 float D_L13_00161FA0 = 0.075f;
 f32 D_L13_00161FC0 = 0.25f;
 V002e7318 D_L13_00174170 = {0};
@@ -1691,7 +1688,7 @@ f32 D_L14_00162368 = 0.2f;
 int D_L14_00162430 = 0;
 int D_L14_001623C4 = 0x5a;
 int D_L14_0016242C = 0;
-Ctl *D_L14_00167504 NOT_SDA = 0;
+FollowCamSideRef *D_L14_00167504 NOT_SDA = 0;
 float D_L14_00162358 = 0.075f;
 f32 D_L14_00162378 = 0.25f;
 V002e7318 D_L14_00174570 = {0};
@@ -1717,7 +1714,7 @@ f32 D_L15_001622B8 = 0.2f;
 int D_L15_00162380 = 0;
 int D_L15_00162314 = 0x5a;
 int D_L15_0016237C = 0;
-Ctl *D_L15_00167404 NOT_SDA = 0;
+FollowCamSideRef *D_L15_00167404 NOT_SDA = 0;
 float D_L15_001622A8 = 0.075f;
 f32 D_L15_001622C8 = 0.25f;
 V002e7318 D_L15_00174470 = {0};
@@ -1744,7 +1741,7 @@ f32 D_L16_00162080 = 0.2f;
 int D_L16_00162148 = 0;
 int D_L16_001620DC = 0x5a;
 int D_L16_00162144 = 0;
-Ctl *D_L16_00167204 NOT_SDA = 0;
+FollowCamSideRef *D_L16_00167204 NOT_SDA = 0;
 float D_L16_00162070 = 0.075f;
 f32 D_L16_00162090 = 0.25f;
 char *D_L16_00167200 NOT_SDA = 0;
@@ -1772,7 +1769,7 @@ f32 D_L17_00162568 = 0.2f;
 int D_L17_00162630 = 0;
 int D_L17_001625C4 = 0x5a;
 int D_L17_0016262C = 0;
-Ctl *D_L17_00167704 NOT_SDA = 0;
+FollowCamSideRef *D_L17_00167704 NOT_SDA = 0;
 float D_L17_00162558 = 0.075f;
 f32 D_L17_00162578 = 0.25f;
 V002e7318 D_L17_00174770 = {0};
@@ -1801,7 +1798,7 @@ f32 D_L18_00162680 = 0.2f;
 int D_L18_00162748 = 0;
 int D_L18_001626DC = 0x5a;
 int D_L18_00162744 = 0;
-Ctl *D_L18_00167804 NOT_SDA = 0;
+FollowCamSideRef *D_L18_00167804 NOT_SDA = 0;
 float D_L18_00162670 = 0.075f;
 f32 D_L18_00162690 = 0.25f;
 V002e7318 D_L18_00174870 = {0};
