@@ -242,7 +242,7 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
     float  clip[4];
     float  spark_position_delta[4];
     float  ratio;
-    float  first;
+    float  spark_fade_fraction;
     int    in_clip;
     int    i;
     int    opacity;
@@ -265,15 +265,15 @@ void update_wind_sparks(struct Moby *wind_control_moby) {
         } else {
             opacity = wind_spark_peak_alpha_gp;
             if (spark_vars->n380[i] - wind_spark_fade_in_frames_gp < spark_vars->n320[i]) {
-                first = convert_integer_to_float(spark_vars->n380[i] - spark_vars->n320[i]);
-                first = first / convert_integer_to_float(wind_spark_fade_in_frames_gp);
+                spark_fade_fraction = convert_integer_to_float(spark_vars->n380[i] - spark_vars->n320[i]);
+                spark_fade_fraction = spark_fade_fraction / convert_integer_to_float(wind_spark_fade_in_frames_gp);
             } else {
-                first = convert_integer_to_float(spark_vars->n320[i]);
-                first = first / convert_integer_to_float(spark_vars->n380[i] -
+                spark_fade_fraction = convert_integer_to_float(spark_vars->n320[i]);
+                spark_fade_fraction = spark_fade_fraction / convert_integer_to_float(spark_vars->n380[i] -
                                                          wind_spark_fade_in_frames_gp);
             }
             {
-                int spark_alpha = spark_float_to_integer(((float)opacity - 0.0f) * first + 0.0f);
+                int spark_alpha = spark_float_to_integer(((float)opacity - 0.0f) * spark_fade_fraction + 0.0f);
                 *shade = spark_alpha;
                 /* Fakematch: storing the shade again is a no-op that reload's cse drops; the
                  * extra uses rank `shade` above `m` for register allocation as in retail. */
