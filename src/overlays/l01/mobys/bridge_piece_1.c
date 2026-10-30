@@ -48,7 +48,7 @@ extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
 void bridge_piece_1_update(BurstMoby *self) __asm__("FUN_L01_002f9d80");
 
-void bridge_piece_1_update(BurstMoby *self) {
+void bridge_piece_1_update(BurstMoby *bridge_piece_moby) {
     BurstTarget *hit_result;
     BurstColors  colors;
     Vec4         debris_velocity;
@@ -57,10 +57,10 @@ void bridge_piece_1_update(BurstMoby *self) {
     f32          spawn_angle_radians;
     s32          i;
 
-    hit_result = find_moby_hit(self, 0x830000, 0);
-    if (l01_save_state.cleared[self->id] != 0 ||
-        (D_0014C190_257218[current_level_index][self->id >> 5] >> (self->id & 0x1F)) & 1) {
-        mark_moby_for_removal(self);
+    hit_result = find_moby_hit(bridge_piece_moby, 0x830000, 0);
+    if (l01_save_state.cleared[bridge_piece_moby->id] != 0 ||
+        (D_0014C190_257218[current_level_index][bridge_piece_moby->id >> 5] >> (bridge_piece_moby->id & 0x1F)) & 1) {
+        mark_moby_for_removal(bridge_piece_moby);
     }
     if (hit_result != NULL && hit_result->moby->oclass == 0x2AE) {
         for (i = 0; i < 20; i++) {
@@ -78,7 +78,7 @@ void bridge_piece_1_update(BurstMoby *self) {
             fast_vec_normalize(&debris_velocity,
                                &debris_velocity,
                                random_float_between(frame_time * 5.0f, frame_time * 20.0f));
-            fast_vec_add(&pos, &pos, &self->pos);
+            fast_vec_add(&pos, &pos, &bridge_piece_moby->pos);
             FUN_L01_002f8530(&pos,
                              &debris_velocity,
                              colors.c[random_integer_below(3)],
@@ -89,11 +89,11 @@ void bridge_piece_1_update(BurstMoby *self) {
                              0.75f,
                              0);
         }
-        D_0014C190_257218[pal_mode_macro[1]][self->id >> 5] |= 1 << (self->id & 0x1F);
-        moby_killed[self->id >> 5] |= 1 << (self->id & 0x1F);
-        mark_moby_for_removal(self);
+        D_0014C190_257218[pal_mode_macro[1]][bridge_piece_moby->id >> 5] |= 1 << (bridge_piece_moby->id & 0x1F);
+        moby_killed[bridge_piece_moby->id >> 5] |= 1 << (bridge_piece_moby->id & 0x1F);
+        mark_moby_for_removal(bridge_piece_moby);
     } else {
-        self->bA4 = 0xFF;
+        bridge_piece_moby->bA4 = 0xFF;
     }
 }
 
