@@ -1445,14 +1445,6 @@ typedef struct {
 } S_35F0;
 
 typedef struct {
-    char pad00[0x30];
-    V4_35F0 f30;
-    char pad40[0x38];
-    float f78;
-    char pad7C[4];
-} E_35F0;
-
-typedef struct {
     char pad00[0x20];
     M_35F0 *att;
     char pad24[8];
@@ -1469,7 +1461,7 @@ typedef struct {
     int v[4];
 } I4_35F0;
 
-extern E_35F0 *D_L04_001600EC;
+#include "rnc/overlay/cuboid.h"
 #include "rnc/overlay/collision.h"
 extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
 I4_35F0 D_L04_001618A0 = {{1, 4, 2, 3}};
@@ -1870,16 +1862,16 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         }
         switch (data->f15A) {
         case CIRCULAR_SAW_POINT_ATTACK_APPROACH_AND_ALIGN: {
-            E_35F0 *e = D_L04_001600EC;
+            LevelCuboid *e = l04_cuboids;
             int n = data->f158;
-            qcopy(dest, e[n].f30);
-            func_L00_002592B0_b((char *)moby, e[n].f78, &data->f130, frame_time_sq * 1.0471976f,
+            qcopy(dest, &e[n].pos);
+            func_L00_002592B0_b((char *)moby, e[n].rot.z, &data->f130, frame_time_sq * 1.0471976f,
                                 frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
             if (moby->f53 != 1) {
                 blend_moby_animation(moby, (void *)1, 0, (void *)scale_game_frames(10));
             }
             if (vector_distance_xy(moby->pos, dest) < 1.0f) {
-                if (fast_difference_between_rotations(moby->rot, D_L04_001600EC[data->f158].f78) <
+                if (fast_difference_between_rotations(moby->rot, l04_cuboids[data->f158].rot.z) <
                     0.17453292f) {
                     data->f15A = 1;
                 }
@@ -1887,7 +1879,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             break;
         }
         case CIRCULAR_SAW_POINT_ATTACK_ATTACK:
-            qcopy(dest, D_L04_001600EC[data->f158].f30);
+            qcopy(dest, &l04_cuboids[data->f158].pos);
             if (moby->f53 != 7) {
                 blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
             } else if (moby->f70 & 2) {
@@ -1897,7 +1889,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
             break;
         case CIRCULAR_SAW_POINT_ATTACK_TURN_TO_PATH: {
-            qcopy(dest, D_L04_001600EC[data->f158].f30);
+            qcopy(dest, &l04_cuboids[data->f158].pos);
             ta = fast_arc_tan(path->pts[data->f154][0] - moby->pos[0],
                               path->pts[data->f154][1] - moby->pos[1]);
             func_L00_002592B0_b((char *)moby, ta, &data->f130, frame_time_sq * 1.0471976f,

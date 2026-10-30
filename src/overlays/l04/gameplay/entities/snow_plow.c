@@ -54,7 +54,7 @@ void update_moby_translation_delta_matrix(char *moby) {
     }
 }
 extern int D_L04_0015FFD8;
-extern char *D_L04_001600EC;
+#include "rnc/overlay/cuboid.h"
 extern char snow_plow_missing_path_warning_format[] __asm__("D_L04_001DBE10");
 extern char D_L04_00166E00[];
 extern float D_L04_0015F580[] MACRO_ADDR;
@@ -174,14 +174,14 @@ void snow_plow_update(struct Moby *moby) {
             break;
         }
         case SNOW_PLOW_MOVE_TO_CLIP_VOLUME:
-            FUN_L00_00258278(moby, *(float *)(D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x78),
+            FUN_L00_00258278(moby, l04_cuboids[*(unsigned char *)(data + 0x148)].rot.z,
                 data + 0x7c, frame_time_sq * 1.0471976f, frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
-            if (vector_distance_xy(&moby->pos, D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x30) < 1.0f &&
-                fast_difference_between_rotations(moby->rot.z, *(float *)(D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x78)) < 0.17453292f) {
+            if (vector_distance_xy(&moby->pos, &l04_cuboids[*(unsigned char *)(data + 0x148)].pos) < 1.0f &&
+                fast_difference_between_rotations(moby->rot.z, l04_cuboids[*(unsigned char *)(data + 0x148)].rot.z) < 0.17453292f) {
                 *(unsigned char *)(data + 0x149) = 2;
                 *(short *)(data + 0x14a) = scale_game_frames(300);
             }
-            fast_vec_sub(&delta, D_L04_001600EC + *(unsigned char *)(data + 0x148) * 0x80 + 0x30, &moby->pos);
+            fast_vec_sub(&delta, &l04_cuboids[*(unsigned char *)(data + 0x148)].pos, &moby->pos);
             fast_vec_normalize(&delta, &delta, frame_time * 3.0f);
             fast_vec_add(&moby->pos, &moby->pos, &delta);
             break;
