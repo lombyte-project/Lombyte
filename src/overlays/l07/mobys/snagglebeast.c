@@ -179,7 +179,7 @@ void draw_snagglebeast_rope_attack_layer(
 void draw_snagglebeast_rope_attack_layer(
 
     char *moby, float radius, int phase, float speed, int color) {
-    char               *vars = ((char *)MOBY(moby)->pvars);
+    char               *rope_layer_moby_vars = ((char *)MOBY(moby)->pvars);
     struct GeometryQuad quad;
     struct GeometryQuad inner;
     float               offset[4];
@@ -190,16 +190,16 @@ void draw_snagglebeast_rope_attack_layer(
     u64                 texture;
 
     spin = convert_integer_to_float(level_frame_count + phase) * speed;
-    if (*(int *)(vars + 0x164) == 4) {
+    if (*(int *)(rope_layer_moby_vars + 0x164) == 4) {
         float alpha = convert_integer_to_float(color >> 24);
-        float fade = convert_integer_to_float(*(int *)(vars + 0x160));
+        float fade = convert_integer_to_float(*(int *)(rope_layer_moby_vars + 0x160));
         fade = fade / scale_game_frames(20);
         alpha = alpha * fade;
         if (alpha < 0.0f)
             alpha = 0.0f;
         color &= 0xFFFFFF;
         color |= truncate_float_to_s32(alpha) << 24;
-    } else if (*(int *)(vars + 0x164) > 4) {
+    } else if (*(int *)(rope_layer_moby_vars + 0x164) > 4) {
         return;
     }
     step = 0.5235988f;
@@ -226,11 +226,11 @@ void draw_snagglebeast_rope_attack_layer(
         quad.texture_coordinates[2][1] = half;
         quad.texture_coordinates[3][1] = half;
     }
-    qcopy(&quad.positions[1], vars + 0x110);
-    qcopy(&quad.positions[3], vars + 0x140);
+    qcopy(&quad.positions[1], rope_layer_moby_vars + 0x110);
+    qcopy(&quad.positions[3], rope_layer_moby_vars + 0x140);
     inner = quad;
-    qcopy(&inner.positions[0], vars + 0x120);
-    qcopy(&inner.positions[1], vars + 0x120);
+    qcopy(&inner.positions[0], rope_layer_moby_vars + 0x120);
+    qcopy(&inner.positions[1], rope_layer_moby_vars + 0x120);
     for (angle = -3.1415927f; angle < step + 3.1415927f; angle += step) {
         qcopy(&quad.positions[0], &quad.positions[1]);
         qcopy(&quad.positions[2], &quad.positions[3]);
@@ -239,7 +239,7 @@ void draw_snagglebeast_rope_attack_layer(
         offset[2] = radius * fast_sin(wrapped);
         offset[0] = 0.0f;
         transform_vector_by_basis(offset, offset, moby + 0xC0);
-        fast_vec_add(&quad.positions[3], vars + 0x140, offset);
+        fast_vec_add(&quad.positions[3], rope_layer_moby_vars + 0x140, offset);
         if (angle != -3.1415927f) {
             draw_geometry_quad(&quad, 0, 1);
             qcopy(&inner.positions[2], &quad.positions[2]);
