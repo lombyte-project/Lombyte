@@ -312,8 +312,8 @@ void toxic_crab_update(Moby2E30F8 *m) {
         FUN_L00_00258278(
             (char *)m, &crab_data->f190, crab_data->v170[3], 0.02f, 0.3f, frame_time * 6.2831855f);
         if (crab_data->i1BC != -1) {
-            char       *base = D_L10_0015FFD8;
-            Moby2E30F8 *p = (Moby2E30F8 *)(base + (crab_data->i1BC << 8));
+            char       *moby_instance_array_base = D_L10_0015FFD8;
+            Moby2E30F8 *p = (Moby2E30F8 *)(moby_instance_array_base + (crab_data->i1BC << 8));
             if (p == 0 || p->state == 0xFE || p->state == 0xFD ||
                 ((*(int *)(((char *)&D_0014C190) +
                            (((short)p->id >> 5) * 4 + (current_level_index << 8))) >>
@@ -398,7 +398,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         {
             float dir[4];
             float out[4];
-            float old[4];
+            float pre_movement_position[4];
             float v[4];
             float target_distance;
             float ang;
@@ -412,7 +412,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 approach_value(
                     &crab_data->fF4, crab_data->f1A4 * frame_time * 0.3f, frame_time_sq * 20.0f);
             }
-            *(OvlQuad *)old = *(OvlQuad *)m->pos;
+            *(OvlQuad *)pre_movement_position = *(OvlQuad *)m->pos;
             if (see &&
                 absolute_float(target_distance -
                                (MOBY(target_moby)->oclass == 0x359 ? 2.0f : 3.57f)) < 0.35f) {
@@ -471,7 +471,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 r = FUN_L00_00258b50(m, &crab_data->iD0, dir, out, 1.0f);
                 m->f48 = rot;
                 if (r & 3) {
-                    if (vector_distance_xy(m->pos, old) < crab_data->fF4 * 0.25f) {
+                    if (vector_distance_xy(m->pos, pre_movement_position) < crab_data->fF4 * 0.25f) {
                         crab_data->i1D8 = 1;
                     } else {
                         crab_data->i1D8 = 0;
