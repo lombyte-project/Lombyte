@@ -1146,25 +1146,25 @@ void scatter_bomber_tank_linked_debris(struct Moby *moby) {
 void remove_bomber_tank_linked_debris(struct Moby *moby) {
     short *list =
         D_L08_001AC040[(((struct Moby *)D_L08_0015FFD8) + *(s32 *)(moby->pvars + 0x144))->group];
-    struct Moby *other;
+    struct Moby *linked_group_moby;
     u16          index;
 
     if (list != 0) {
         index = *list & 0x7fff;
-        other = (struct Moby *)D_L08_0015FFD8 + index;
+        linked_group_moby = (struct Moby *)D_L08_0015FFD8 + index;
         while (1) {
-            if (other->state < 0x7f && other != moby) {
-                u16 class_id = other->oclass;
+            if (linked_group_moby->state < 0x7f && linked_group_moby != moby) {
+                u16 class_id = linked_group_moby->oclass;
                 if ((u32)(class_id - 0x24c) < 0xb) {
-                    mark_moby_for_removal(other);
+                    mark_moby_for_removal(linked_group_moby);
                 } else if ((s16)class_id == 0x1d8) {
-                    mark_moby_for_removal(other);
+                    mark_moby_for_removal(linked_group_moby);
                 }
             }
             if (*list++ < -1)
                 break;
             index = *list & 0x7fff;
-            other = (struct Moby *)D_L08_0015FFD8 + index;
+            linked_group_moby = (struct Moby *)D_L08_0015FFD8 + index;
         }
     }
 }
