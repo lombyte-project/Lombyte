@@ -16,7 +16,7 @@ extern s32 level_frame_count __asm__("D_L06_0015F5CC");
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D9F68), where it is exact; names translated to the US level program. */
 char *spawn_gadgebot_pad(char *owner) __asm__("FUN_L06_002d8b98");
 
-char *spawn_gadgebot_pad(char *owner) {
+char *spawn_gadgebot_pad(char *gadgebot) {
     char *moby = create_moby(0x12F);
     if (moby != 0) {
         MOBY(moby)->draw_dist = 0x60;
@@ -24,10 +24,10 @@ char *spawn_gadgebot_pad(char *owner) {
         ((unsigned char *)moby)[0x30] = 0;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        MOBY(moby)->rot.z = *(float *)(owner + 0x48);
-        MOBY(moby)->spawn_frame = *(long *)(owner + 0x38);
-        MOBY(moby)->parent = owner;
-        qcopy(moby + 0x10, owner + 0x10);
+        MOBY(moby)->rot.z = *(float *)(gadgebot + 0x48);
+        MOBY(moby)->spawn_frame = *(long *)(gadgebot + 0x38);
+        MOBY(moby)->parent = gadgebot;
+        qcopy(moby + 0x10, gadgebot + 0x10);
         update_entity(moby);
     }
     return moby;
