@@ -248,12 +248,12 @@ update:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CCFC0), where it is exact; names translated to the US level program. */
 
 void update_sentrybot_alarm_effect(void *moby) {
-    struct Hero *base = &hero;
-    if (base->state.current == 0x65) {
+    struct Hero *alarm_gating_hero = &hero;
+    if (alarm_gating_hero->state.current == 0x65) {
         approach_value(&D_L15_00161ABC_gp, 0.0f, frame_time * 2);
         FUN_L15_002cbac0_u(moby, 0);
     } else if (*(int *)&D_L15_00161AB8 != 0 &&
-               (D_0015ED84 != 0xF || 240.0f < base->motion.pos.f[1])) {
+               (D_0015ED84 != 0xF || 240.0f < alarm_gating_hero->motion.pos.f[1])) {
         approach_value(&D_L15_00161ABC_gp, 1.0f, frame_time * 2);
     } else {
         approach_value(&D_L15_00161ABC_gp, 0.0f, frame_time * 2);
