@@ -33,12 +33,12 @@ extern CamPrioHook D_001E8C00[];
    g < 0 exit so its `$v0 = 1` is not hoisted above the load. */
 int camera_activation_check_priority(void *cur, void *other) __asm__("FUN_001ec210");
 
-int camera_activation_check_priority(void *candidate_camera, void *other) {
+int camera_activation_check_priority(void *candidate_camera, void *current_camera) {
     enum {
         CAMERA_COMPARE_ACCEPT = 1
     };
     char          *candidate_camera_bytes = (char *)candidate_camera;
-    char          *current_camera_bytes = (char *)other;
+    char          *current_camera_bytes = (char *)current_camera;
     unsigned char *state = (unsigned char *)(candidate_camera_bytes + 0x74);
 
     if (*(unsigned char *)(candidate_camera_bytes + 0x7C) == 0) {
@@ -47,7 +47,7 @@ int camera_activation_check_priority(void *candidate_camera, void *other) {
     {
         int (*fn)(void *, void *) = D_001E8C00[*(short *)(candidate_camera_bytes + 0x8C)].fn_04;
         if (fn != 0) {
-            switch (fn(candidate_camera, other)) {
+            switch (fn(candidate_camera, current_camera)) {
             case -1:
                 return 0;
             case CAMERA_COMPARE_ACCEPT:
@@ -87,10 +87,10 @@ int camera_activation_check_priority(void *candidate_camera, void *other) {
         break;
     }
     case CAMERA_ACTIVATION_MATCH_LISTENER_GROUP: {
-        struct Hero *base = &hero;
+        struct Hero *hero_state = &hero;
         short        e = *(short *)(candidate_camera_bytes + 0x86);
 
-        if (e != base->unk2284) {
+        if (e != hero_state->unk2284) {
             return 0;
         }
         if (*(short *)(current_camera_bytes + 0x7E) == 0 &&
@@ -105,8 +105,8 @@ int camera_activation_check_priority(void *candidate_camera, void *other) {
             int       secondary_descriptor_index = *(int *)((char *)rec->unk1C + 0x24);
 
             if (secondary_descriptor_index < 0 ||
-                (base->rail_spline == D_0015EF40[secondary_descriptor_index].unk10 &&
-                 base->rail_off_frames == 0)) {
+                (hero_state->rail_spline == D_0015EF40[secondary_descriptor_index].unk10 &&
+                 hero_state->rail_off_frames == 0)) {
                 return 1;
             }
         }
