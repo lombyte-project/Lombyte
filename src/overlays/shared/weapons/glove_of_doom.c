@@ -122,7 +122,7 @@ void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position,
 
 void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position,
                                            V2c7320 *target_position,
-                                           f32     *out,
+                                           f32     *launch_velocity,
                                            f32      speed,
                                            f32      unused,
 
@@ -155,18 +155,18 @@ void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position,
         effective_target_position.f[1] = u.f[1];
     }
     horizontal_speed = frame_time * 8.5f;
-    out[0] = fast_cos(launch_heading) * horizontal_speed;
-    out[1] = fast_sin(launch_heading) * horizontal_speed;
-    *(s32 *)&out[2] = 0;
-    out[2] = fn_2c7320(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
+    launch_velocity[0] = fast_cos(launch_heading) * horizontal_speed;
+    launch_velocity[1] = fast_sin(launch_heading) * horizontal_speed;
+    *(s32 *)&launch_velocity[2] = 0;
+    launch_velocity[2] = fn_2c7320(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
     if (pad_held[0] & 5) {
         k = 3.5f / horizontal_speed;
     } else {
         k = 2.5f / horizontal_speed;
     }
     v = speed * k * 0.5f;
-    if (v < out[2]) {
-        out[2] = v;
+    if (v < launch_velocity[2]) {
+        launch_velocity[2] = v;
     }
 }
 
