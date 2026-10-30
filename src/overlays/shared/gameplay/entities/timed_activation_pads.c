@@ -6,6 +6,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
@@ -37,16 +38,10 @@ void update_moby_draw_registration(unsigned char *moby) {
 /* Ported from rac1-decomp src/overlays/shared/vendor_002F9438.c (func_L07_0030D370) */
 #include "sda.h"
 
-extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
-extern int vector_distance_xy() __asm__("FUN_001f9b80");
-extern int set_identity_matrix() __asm__("FUN_001f9fc8");
-extern int transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int set_moby_color() __asm__("FUN_L00_002502f0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_dec_timer(s32 *) __asm__("func_001F9740");
-extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 float absolute_float(float input) __asm__("func_001F99C0");
 void jet_clear_persistent(int idx) __asm__("FUN_L00_002502a0");
 void FUN_L01_0026e090(int i, int v);
@@ -54,15 +49,10 @@ void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char D_0013F350_lui[] __asm__("D_0013F350") NOT_SDA;
 extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern void func_L01_0026F040_30D370(int, int) __asm__("FUN_L01_0026e090");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern void func_001FA190_30D370(void *) __asm__("FUN_001f9fc8");
-extern void func_001FA4A0_30D370(void *, void *) __asm__("FUN_001fa2d8");
-extern int func_001F9908_30D370(int *arg0) __asm__("FUN_001f9740");
 extern void func_0022ED80_30D370(int, int, int) __asm__("FUN_0022da68");
 extern int func_001F9850_30D370(int) __asm__("FUN_001f96f8");
 extern void glow_n(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void func_L00_002512D8_30D370(int) __asm__("FUN_L00_002502a0");
-extern int func_001F9938_30D370(void *) __asm__("FUN_001f9770");
 
 void timed_activation_pads_update(unsigned char *moby) __asm__("FUN_L07_0030bf90");
 void timed_activation_pads_update(unsigned char *moby)
@@ -109,12 +99,12 @@ void timed_activation_pads_update(unsigned char *moby)
         if (*(short *)(activation_reference_data + 0x30E) == 0)
             flag = *(unsigned char **)(activation_reference_data + 0x2FC) == moby;
         if (0.7853982f < absolute_float(*(float *)(moby + 0x44))) {
-            if (vector_distance(moby + 0x10, activation_reference_data + 0x80) < 2.0f) {
+            if (vector_distance_xy(moby + 0x10, activation_reference_data + 0x80) < 2.0f) {
                 if (*(int *)(activation_reference_data + 0x2084) == 0x11) {
                     if (*(float *)(activation_reference_data + 0xAA8) < 7.0f) {
                         fast_vec_sub(activation_offset, moby + 0x10, activation_reference_data + 0x80);
-                        func_001FA190_30D370(transposed_pad_rotation);
-                        func_001FA4A0_30D370(transposed_pad_rotation, moby + 0xC0);
+                        set_identity_matrix(transposed_pad_rotation);
+                        transpose_rotation_matrix(transposed_pad_rotation, moby + 0xC0);
                         transform_vector(activation_offset, activation_offset, transposed_pad_rotation);
                         if (absolute_float(activation_offset[0]) < 0.6f) {
                             if (absolute_float(activation_offset[1]) < 0.6f) {
@@ -131,10 +121,10 @@ void timed_activation_pads_update(unsigned char *moby)
     pad_state = moby[0x20];
     if ((unsigned int)(pad_state - 2) < 4) {
         if (moby[0xBC] == 1) {
-            if (func_001F9908_30D370((int *)pad_data)) {
+            if (fast_dec_timer((int *)pad_data)) {
                 func_0022ED80_30D370(2, 0, (int)moby);
                 set_moby_list_state(moby[0x21], 8);
-            } else if (func_001F9908_30D370((int *)(pad_data + 4))) {
+            } else if (fast_dec_timer((int *)(pad_data + 4))) {
                 func_0022ED80_30D370(0, 0, (int)moby);
                 *(int *)(pad_data + 4) = func_001F9850_30D370(0x2D) < func_001F9850_30D370(5) + *(int *)pad_data / func_001F9850_30D370(0x28)
                     ? func_001F9850_30D370(0x2D) : func_001F9850_30D370(5) + *(int *)pad_data / func_001F9850_30D370(0x28);
@@ -198,7 +188,7 @@ void timed_activation_pads_update(unsigned char *moby)
             if (visited52[moby[0xB0] + (current_level_index << 4)] != 0xFF)
                 func_L00_002512D8_30D370(moby[0xB0]);
         }
-        if (func_001F9938_30D370(pad_data + 0xC)) {
+        if (fast_dec_timer_s16(pad_data + 0xC)) {
             *(short *)(pad_data + 0xC) = func_001F9850_30D370(0x14);
             switch (*(short *)(pad_data + 0xE)) {
             case PAD_FLASH_APPLY_GREEN:
@@ -228,7 +218,6 @@ extern char *level_mobys __asm__("D_L07_0015FFD8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void play_sound_310df0(s32, s32, void *) __asm__("FUN_0022da68");
 
 void door_update(u8 *moby) __asm__("FUN_L07_00310df0");

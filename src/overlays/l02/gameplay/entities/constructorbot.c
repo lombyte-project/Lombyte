@@ -8,6 +8,7 @@
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 typedef struct {
     Vec4f vel;
     s32 timer;
@@ -25,12 +26,8 @@ extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void count_down(s32 *) __asm__("FUN_001f9740");
 extern u8 *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 
@@ -80,7 +77,7 @@ void update_shard_debris(struct Moby *moby) {
     if (particle)
         particle[9] = truncate_float_to_s32(4.0f) - 0x80;
     if (moby->visible == 0)
-        count_down(&shard_vars->timer);
+        fast_dec_timer(&shard_vars->timer);
     else
         shard_vars->timer = scale_game_frames(60);
     if (shard_vars->timer == 0)
@@ -89,8 +86,6 @@ void update_shard_debris(struct Moby *moby) {
 #include "qcopy.h"
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_002502f0_c(char *, int, int, int) __asm__("FUN_L00_002502f0");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 int D_L02_00161F4C = 0xd0;
 int D_L02_00161F50 = 0x60;
@@ -358,16 +353,12 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
     }
     qcopy(data + 8, &hero.motion.pos);
 }
-extern void euler_rotation_basis(void *out, void *rot) __asm__("FUN_001fa030");
-extern s32 fast_bsphere_check(void *sphere, f32 dist) __asm__("FUN_001fa728");
-extern s32 tick_timer32(s32 *) __asm__("FUN_001f9740");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 /* fast_vec_normalize (out = in scaled to length s), with the float declared first (same registers): the scale is then
  * evaluated before the vector addresses, as in retail. */
 extern void fast_vec_normalize(f32 s, void *out, void *in) __asm__("FUN_001f9bf8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void random_vector(void *out, f32 a, f32 b) __asm__("FUN_L00_00257d78");
 extern char *spawn_spark(void *pos, void *vel, void *acc, s32, s32, s32, s32, s32, s32) __asm__("FUN_00218888");
 #include "rnc/overlay/l02/gameplay/entities/constructorbot_data/update_smoke_vent_8.h"
@@ -476,7 +467,7 @@ void update_smoke_vent(struct Moby *moby) {
         if (fast_bsphere_check(&view_sphere, 120.0f) == -1) {
             break;
         }
-        if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
+        if (fast_dec_timer((s32 *)(data + 0xC0)) != 0) {
             *(s32 *)(data + 0xC0) = truncate_float_to_s32(scale_time(random_float_between((f32)view_gated_smoke_burst_interval_min_gp, (f32)view_gated_smoke_burst_interval_max_gp)));
             count1 = random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
             for (k1 = 0; k1 < count1; k1++) {
@@ -515,7 +506,7 @@ void update_smoke_vent(struct Moby *moby) {
                        truncate_float_to_s32(scale_time((f32)view_gated_smoke_puff_third_timing_base_gp * (random_float_between(-view_gated_smoke_puff_timing_variation_fraction_gp, view_gated_smoke_puff_timing_variation_fraction_gp) + 1.0f))), -1);
         break;
     case SMOKE_VENT_STATE_ALTERNATING_PUFF_TIMING:
-        if (tick_timer32((s32 *)(data + 0xC4)) != 0) {
+        if (fast_dec_timer((s32 *)(data + 0xC4)) != 0) {
             if (*(s32 *)(data + 0xC8) < 21) {
                 *(s32 *)(data + 0xC8) = 30;
             } else {
@@ -528,7 +519,7 @@ void update_smoke_vent(struct Moby *moby) {
         if (fast_bsphere_check(&view_sphere, 120.0f) == -1 && random_integer_below(4) != 0) {
             break;
         }
-        if (tick_timer32((s32 *)(data + 0xC0)) != 0) {
+        if (fast_dec_timer((s32 *)(data + 0xC0)) != 0) {
             *(s32 *)(data + 0xC0) = truncate_float_to_s32(scale_time(random_float_between((f32)alternating_smoke_burst_interval_min_gp, (f32)alternating_smoke_burst_interval_max_gp)));
             count2 = random_integer_below(7) != 0 ? 1 : random_integer_below(5) + 5;
             for (k2 = 0; k2 < count2; k2++) {

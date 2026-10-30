@@ -5,15 +5,14 @@
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L01_001B250C NOT_SDA;
 void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocity) __asm__("FUN_L01_0027f660");
@@ -24,7 +23,7 @@ void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocit
         char *particle_data = (char *)particle + 0x20;
         qcopy(particle + 0x10, spawn_position);
         *(int *)(particle + 4) = FUN_L00_0025bfe0(0.425f, 0.425f, 0.225f, 1.0f);
-        particle[9] = func_001FA898_r(8.0f) - 0x60;
+        particle[9] = truncate_float_to_s32(8.0f) - 0x60;
         particle[1] = 0;
         particle[3] = 0x48;
         *(float *)(particle + 0xC) = random_float_between(60900.0f, 90300.0f);
@@ -45,7 +44,6 @@ void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocit
 #endif
 extern unsigned char *func_00218928_80970(int) __asm__("FUN_L00_002678b8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern int func_001FA898_r_80970(float) __asm__("FUN_001fa6d0");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L01_001B2538 NOT_SDA;
@@ -61,7 +59,7 @@ char *spawn_type_14_particle(int particle_value, char *position_source) {
         *(float *)(particle + 0x14) += randf_sym(0.0f, 0.03f);
         *(float *)(particle + 0x18) += randf_sym(0.0f, 0.03f);
         *(int *)(particle + 4) = -1;
-        particle_frame_offset = func_001FA898_r_80970(4.0f);
+        particle_frame_offset = truncate_float_to_s32(4.0f);
         particle[9] = particle_frame_offset - 0x60;
         particle[1] = 0;
         particle[3] = 0x48;
@@ -85,7 +83,6 @@ char *spawn_type_14_particle(int particle_value, char *position_source) {
 
 extern char *number_particle_lookup_tables[] __asm__("D_L01_001B25A4");
 extern char *alloc_285768(int) __asm__("FUN_L00_002678b8");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 /* Allocates a type 0x29 particle and fills it from the arguments; kind 0xFF
  * derives the frame from flags and picks one of two blend modes. */
@@ -123,8 +120,6 @@ char *draw_number(float scale, void *particle_spawn_position, int source_moby, i
 #ifndef MACRO_ADDR
 #endif
 extern unsigned char *func_00218928_87158(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_87158(float) __asm__("FUN_001fa6d0");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern unsigned char *D_L01_001B25D0 NOT_SDA;
 unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) __asm__("FUN_L01_00287158");
 
@@ -136,7 +131,7 @@ unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_
         *(float *)(r + 0x18) += 0.05f;
         *(int *)(r + 4) = b;
         r[3] = 0x44;
-        r[9] = func_001FA898_87158(4.0f) + 0x20;
+        r[9] = truncate_float_to_s32(4.0f) + 0x20;
         r[1] = 1;
         r[2] = *D_L01_001B25D0;
         *(short *)(r + 0xA) = particle_lifetime;
@@ -159,9 +154,6 @@ unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_
 
 extern int D_L01_001B2628; /* no foreign declaration */
 extern s32 rand(void);
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern void transform_vector(void *, void *, void *) __asm__("func_001F9D20");
 extern unsigned char D_L01_001B2928_b[] __asm__("D_L01_001B2628");
 
 unsigned char *spawn_type_74_particle(char *source_moby, char *particle_spawn_position, float *initial_particle_velocity, char *cfg, int flag) __asm__("FUN_L01_0028a7a8");
@@ -172,7 +164,7 @@ unsigned char *spawn_type_74_particle(char *source_moby, char *particle_spawn_po
     unsigned char *particle = create_part(74);
     if (particle) {
         char *particle_data;
-        particle[9] = func_001FA898_r(4.0f) - 0x60;
+        particle[9] = truncate_float_to_s32(4.0f) - 0x60;
         if (flag)
             particle[3] = 0x48;
         else
@@ -205,7 +197,6 @@ unsigned char *spawn_type_74_particle(char *source_moby, char *particle_spawn_po
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C1D8), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 void initialize_path_descriptor(char *path_descriptor) __asm__("FUN_L01_0028b410");
 

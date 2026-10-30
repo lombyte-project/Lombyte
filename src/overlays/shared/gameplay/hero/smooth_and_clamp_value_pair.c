@@ -7,6 +7,7 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Steps two floats of arg toward a target and clamps them to [-1, 1]. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00237B00), where it is exact; names translated to the US level program. */
@@ -79,7 +80,6 @@ extern int D_0015ED90;
 extern int D_0015ED94;
 extern ItemDef D_L05_00179F20[];
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int hero_is_in_special_state() __asm__("FUN_L00_0020d568");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -413,20 +413,11 @@ extern CollisionHit D_L05_00174240 NOT_SDA;
 extern u8 D_L05_00174260[] NOT_SDA;
 extern u8 D_L05_0017AB20[] NOT_SDA;
 extern int probe_hero_forward_collision(float, float, float *) __asm__("FUN_L00_0020a240");
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int coll_sphere(float, void *, int, int) __asm__("FUN_L00_001f0d60");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-extern void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 
 void update_hero_movement_and_collision_probes(void) __asm__("FUN_L05_0024bdc0");
 
@@ -612,7 +603,6 @@ typedef struct {
     char p14[0x18];
 } Rec2C;
 
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int D_0015ED84; /* no foreign declaration */
 extern int FUN_L00_001fefc8(void *);
@@ -625,7 +615,6 @@ extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern unsigned short D_00141920[] NOT_SDA;
 extern unsigned short D_00141D80[] NOT_SDA;
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
@@ -635,13 +624,11 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 extern void FUN_L05_0024cee8(int, int);
 extern void create_class_5c3_moby(void *, void *, void *, float, float) __asm__("FUN_L05_002d4168");
-extern void fast_dec_timer(s32 *) __asm__("func_001F9740");
 extern PadState D_0013CA40_p2523C8 __asm__("D_0013C940");
 extern int D_00141660_lui __asm__("D_00141660") NOT_SDA;
 extern unsigned char D_0013D5C8_2523C8[] __asm__("D_0013D4DC");
 extern Rec2C D_L05_0017C188_2523C8[] __asm__("D_L05_0017C088");
 extern int D_L05_0015F674_gp __asm__("D_L05_0015F674") __attribute__((sda));
-extern int func_001F9908_2523C8(int *) __asm__("FUN_001f9740");
 extern Moby *D_L05_0015FFD8_macro __asm__("D_L05_0015FFD8") MACRO_ADDR;
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern int D_0015ED84_gp __asm__("D_0015ED84") MACRO_ADDR;
@@ -980,9 +967,9 @@ int process_hero_primary_item_input(void) {
                     candidate = (Moby *)((char *)D_L05_0015FFD8_macro + (id << 8));
                     yaw_error = fast_difference_between_rotations((*(Hero *)((char *)&hero)).motion.rot.f[2], fast_arc_tan(candidate->pos.x - (*(Hero *)((char *)&hero)).motion.pos.f[0], candidate->pos.y - (*(Hero *)((char *)&hero)).motion.pos.f[1]));
                     if (!(yaw_error > 0.7853982f)) {
-                        pitch_error = fast_difference_between_rotations(fast_arc_tan(vector_distance((*(Hero *)((char *)&hero)).motion.pos.f, &candidate->pos), candidate->pos.z - (*(Hero *)((char *)&hero)).motion.pos.f[2]), 0.0f);
+                        pitch_error = fast_difference_between_rotations(fast_arc_tan(vector_distance_xy((*(Hero *)((char *)&hero)).motion.pos.f, &candidate->pos), candidate->pos.z - (*(Hero *)((char *)&hero)).motion.pos.f[2]), 0.0f);
                         if (!(pitch_error > 0.7853982f)) {
-                            distance = vector_distance(&candidate->pos, (*(Hero *)((char *)&hero)).motion.pos.f);
+                            distance = vector_distance_xy(&candidate->pos, (*(Hero *)((char *)&hero)).motion.pos.f);
                             score = distance;
                             score += distance * yaw_error * 2.0f;
                             score += distance * pitch_error * 2.0f;
@@ -1016,7 +1003,7 @@ int process_hero_primary_item_input(void) {
     if ((*(Hero *)((char *)&hero)).state_timer == start_timer) {
         if (FUN_L00_0020d498(3) == 3 && (*(Hero *)((char *)&hero)).state.current != 0x81 && ((*(Hero *)((char *)&hero)).unk308 == 0 || D_0013D5C8_2523C8[0] == 0)
             && (*(Hero *)((char *)&hero)).pack_disabled == 0) {
-            func_001F9908_2523C8(&D_L05_0015F674_gp);
+            fast_dec_timer(&D_L05_0015F674_gp);
             if (D_L05_0015F674_gp != 0) {
                 if ((*(Hero *)((char *)&hero)).state.control_mode < 2U || (*(Hero *)((char *)&hero)).state.control_mode == 0xC
                     || (((*(Hero *)((char *)&hero)).state.control_mode == 2 || (*(Hero *)((char *)&hero)).state.control_mode == 4) && (*(Hero *)((char *)&hero)).grounded_frames != 0)) {
@@ -1119,12 +1106,7 @@ void update_hero_hoverboard_trick_animations(void) {
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_001fefc8_c(u8 *) __asm__("FUN_L00_001fefc8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void set_identity_matrix(void *) __asm__("FUN_001f9fc8");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern s32 FUN_001fa6d0(f32);
-extern f32 FUN_001f9b48(void *, void *);
 extern s32 get_first_moby_in_group(void **, s32, s32, s32) __asm__("FUN_L00_002591d0");
 extern s32 get_next_moby_in_group(void **, void *, s32, s32) __asm__("FUN_L00_002592b8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
@@ -1174,9 +1156,9 @@ void process_hero_race_object_interactions(void) {
     ratio = (f32)(D_L00_0015F5CC % count) / period;
     ratio += ratio;
     wave = fast_sin(ratio * 3.1415927f + -3.1415927f);
-    red = FUN_001fa6d0(wave * 48.0f) + 0x68;
-    green = FUN_001fa6d0(wave * 64.0f) + 0xD0;
-    blue = FUN_001fa6d0(wave * 24.0f) + 0x3C;
+    red = truncate_float_to_s32(wave * 48.0f) + 0x68;
+    green = truncate_float_to_s32(wave * 64.0f) + 0xD0;
+    blue = truncate_float_to_s32(wave * 24.0f) + 0x3C;
     if (green > 0xFF)
         green = 0xFF;
     if (*(s32 *)(state + 0x48) != -1) {
@@ -1210,7 +1192,7 @@ void process_hero_race_object_interactions(void) {
         get_first_moby_in_group((void **)&third, *(s32 *)(state + 0x4C), 0, 0);
         while (third != 0) {
 
-            if (*(s16 *)(third + 0xA6) == 0x1D6 && FUN_L00_001fefc8_c(third + 0xBC) != 0 && FUN_001f9b48(&hero.motion.body_center, third + 0x10) < 1.5f) {
+            if (*(s16 *)(third + 0xA6) == 0x1D6 && FUN_L00_001fefc8_c(third + 0xBC) != 0 && fast_vec_dist(&hero.motion.body_center, third + 0x10) < 1.5f) {
                 struct Hero *hero_ptr = &hero;
                 third[0xBC] = scale_game_frames(300);
                 if (*(s32 *)((u8 *)hero_ptr + 0x10B8) != 0x24) {
@@ -1311,11 +1293,8 @@ void update_hero_hoverboard_trick_score(void) {
 /* Finds the nearest path node ahead of the hero (behind the facing test) and returns its position and heading. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254B38), where it is exact; names translated to the US level program. */
 
-extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern char *D_L05_001B0930[]; /* no foreign declaration */
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F3D0[];
 extern int D_0015ED84;
@@ -1363,7 +1342,7 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
                             goto next_point;
                     }
                 }
-                candidate_distance_xy = vector_distance(((char *)&D_0013F3D0), path + i * 16 + 0x10);
+                candidate_distance_xy = vector_distance_xy(((char *)&D_0013F3D0), path + i * 16 + 0x10);
                 if (candidate_distance_xy < distance) {
                     distance = candidate_distance_xy;
                     best = i;
@@ -1414,8 +1393,6 @@ extern int D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
 extern int D_0015EE3C_macro __asm__("D_0015EE3C") MACRO_ADDR;
 extern int freeze_stats_time_ref_macro[2] __asm__("D_0015EE58") MACRO_ADDR;
 extern int freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") MACRO_ADDR;
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern void func_L05_00254B38_254608(void *, void *) __asm__("FUN_L05_00254358");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -1684,7 +1661,6 @@ int hero_select_anim_id_by_flags(void) {
 extern s32 current_level_index __asm__("D_0015ED84") __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C") MACRO_ADDR;
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int offset_path_index(void *, int, int, int) __asm__("FUN_L00_0025d7a0");
 extern int D_L05_0015F698 __attribute__((sda));
 
@@ -1758,7 +1734,7 @@ int hero_pick_help_mode(void) {
                 float minimum;
                 if (height < other) minimum = height;
                 else minimum = other;
-                distance = vector_distance(&(&hero)->motion.pos, &path->p[index]);
+                distance = vector_distance_xy(&(&hero)->motion.pos, &path->p[index]);
                 if (0.5f < minimum - (&hero)->motion.pos.f[2] && 4.0f < distance) {
                     state = 0x6D;
                     goto change_state;

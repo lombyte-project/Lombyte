@@ -34,12 +34,10 @@ s32 find_camera_record_by_id(s32 id) {
         return camera_record_address;
     }
 }
-float FUN_001fa5c8_001eb328(float, float) __asm__("FUN_001fa5c8");
 float absolute_float(float) __asm__("FUN_001f99c0");
-float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_001eb328");
 float rope_spring_turn(float *spring_state, float current_angle, float target_angle, float response_gain, float damping_factor, float spring_state_limit) {
-    float angle_difference = FUN_001fa5c8_001eb328(target_angle, current_angle);
+    float angle_difference = fast_subtract_rotations(target_angle, current_angle);
     *spring_state = *spring_state + (response_gain * angle_difference - damping_factor * *spring_state);
     if (spring_state_limit != 0.0f) {
         if (*spring_state > spring_state_limit)
@@ -175,7 +173,6 @@ extern Elem D_L00_00167150[];
 extern S D_L00_00166C80;
 extern int D_L00_0015EF4C;
 extern int level_camera_present_flags[] __asm__("D_L00_00169890");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
@@ -283,7 +280,6 @@ void compute_position_from_spherical_offset(float *output_position, float *angle
 
 typedef float W[4] __attribute__((aligned(16)));
 
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void subtract_vector_xyz(float *) __asm__("FUN_001f9a28");
 
 /* Fills a from a subtract_vector_xyz result: two fast_arc_tan angles and its length. */
@@ -313,7 +309,6 @@ extern OvlQuad D_L00_00173E70_lui __asm__("D_L00_00173E70") NOT_SDA;
 extern OvlQuad g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 extern int g_debug_menu_lui[] __asm__("D_L00_0016C058") NOT_SDA;
 extern float f9af0_1ed6a8(void *) __asm__("FUN_001f9af0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern int coll_sphere(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 

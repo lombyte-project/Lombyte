@@ -45,7 +45,6 @@ int test_moby_linked_record_word8(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025A890), where it is exact; names translated to the US level program. */
 
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 /* Fills a record with b, c, d and flag 0, and clears the 64-bit value at its start. */
 void initialize_hit_descriptor(char *a, int b, int c, float d) __asm__("FUN_L00_00259858");
@@ -128,7 +127,6 @@ typedef struct {
 } G_259a88;
 extern G_259a88 D_L00_00173E40_lui __asm__("D_L00_00173E40") NOT_SDA;
 extern T_259a88 D_L00_00178100_lui[] __asm__("D_L00_00178100") NOT_SDA;
-void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void record_moby_hit(unsigned char *m, L_259a88 *src) __asm__("FUN_L00_00259a88");
 void record_moby_hit(unsigned char *owner_moby, L_259a88 *hit_descriptor) {
     L_259a88 hit_descriptor_copy;
@@ -203,7 +201,6 @@ void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *hit_vect
     D_L00_00173E40.idx = (i + 1) & 0x3F;
 }
 typedef float V4_259d08[4] __attribute__((aligned(16)));
-float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 void FUN_001f9a68_00259d08(void *, void *, float) __asm__("FUN_001f9a68");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a28_00259d08(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -235,7 +232,6 @@ typedef struct {
     int a[4];
 } Vk __attribute__((aligned(16)));
 
-extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
 extern void FUN_L00_001fff28(void *, int, float);
 
 void build_quaternion_from_axis_rotations(void *output_quaternion, float *axis_rotation_angles) __asm__("FUN_L00_00259f50");
@@ -382,9 +378,7 @@ extern f32 D_L00_00160080[2] __attribute__((sda));
 extern f32 D_L00_001B01C8[][8];
 extern u8 D_L00_001B0180[][4];
 extern Q_25a478 *suck_get_aim_height(void *) __asm__("FUN_002141f8");
-extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern f32 FUN_001f9af0_c(void *) __asm__("FUN_001f9af0");
-extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 /* hit_reaction is the executable function of the same bytes (src/gameplay). */
 
@@ -398,7 +392,6 @@ typedef struct {
     f32 f2C;
     s32 i30;
 } __attribute__((aligned(16))) M_0025a9f8;
-f32 FUN_001f9e90_0025a9f8(f32, f32) __asm__("FUN_001f9e90");
 f32 FUN_001f9dc8_0025a9f8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_0025a9f8(f32) __asm__("FUN_001f9de0");
 void FUN_L00_00259a88_0025a9f8(u8 *, M_0025a9f8 *) __asm__("FUN_L00_00259a88");
@@ -425,7 +418,7 @@ void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, 
         l.m.i30 = k;
         l.m.b28 = c0;
         l.m.b29 = c1;
-        a = FUN_001f9e90_0025a9f8(*(f32 *)(e + 0x10) - pp[0], *(f32 *)(e + 0x14) - pp[1]);
+        a = fast_arc_tan(*(f32 *)(e + 0x10) - pp[0], *(f32 *)(e + 0x14) - pp[1]);
         l.m.x = FUN_001f9dc8_0025a9f8(a) * spd;
         l.m.y = FUN_001f9de0_0025a9f8(a) * spd;
         l.m.z = z;
@@ -437,8 +430,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } U25ab48;
-float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-float vector_length_xy(void *) __asm__("FUN_001f9b20");
 void trooper_knockback_arc(OvlQuad *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void trooper_knockback_arc(OvlQuad *input_vector, float *output_xy_angle, float *xy_scaled_value, float *z_scaled_value) {
     U25ab48 input_vector_copy;
@@ -459,7 +450,6 @@ typedef struct {
     float x, y, z, w;
 } Vc0 __attribute__((aligned(16)));
 
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 float FUN_L00_0025abf0(float *start_position, float *target_position, float *out, float speed, float vertical_acceleration) {
@@ -486,8 +476,6 @@ extern void FUN_001f9a68_25aca0(float, void *, void *) __asm__("FUN_001f9a68");
 extern void scale_vector(float, void *, void *) __asm__("FUN_001f9a80");
 extern void FUN_001251e8_25aca0(float, void *, void *) __asm__("FUN_001251e8");
 extern float FUN_001f9af0_25aca0(void *) __asm__("FUN_001f9af0");
-extern float square_root(float) __asm__("FUN_001f9988");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void divide_vector_xyz(float, void *, void *) __asm__("FUN_L00_001ff378");
 extern float FUN_001f9dc8_25aca0(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_25aca0(float) __asm__("FUN_001f9de0");
@@ -808,8 +796,6 @@ void interpolate_vector(f32 *interpolated_vector, f32 *start_vector, f32 *end_ve
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7A8), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 /* Turns from angle a toward angle b by fraction c of the difference. */
 float interpolate_angle(float a, float b, float c) __asm__("FUN_L00_0025b750");

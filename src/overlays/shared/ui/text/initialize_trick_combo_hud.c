@@ -3,6 +3,7 @@
 #include "asm.h"
 
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00264C88), where it is exact; names translated to the US level program. */
 
@@ -60,7 +61,6 @@ typedef struct {
 } HudCounter;
 
 extern void approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 D_L05_0015FAD4 MACRO_ADDR;
 extern s32 D_L05_0015FAD8 MACRO_ADDR;
 extern s32 D_L05_0015FAE0[4] MACRO_ADDR;

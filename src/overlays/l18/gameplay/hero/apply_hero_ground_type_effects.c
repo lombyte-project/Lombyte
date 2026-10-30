@@ -6,12 +6,12 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L15_002044c8). */
 extern int D_0015ED84_d __asm__("D_0015ED84");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");
 float absolute_float(float input) __asm__("func_001F99C0");
@@ -23,7 +23,7 @@ void apply_hero_ground_type_effects(void) {
     int keep = hero_state->ground_sound_class;
     int saved_ground_type = hero_state->ground_type;
     int collision_check_selector;
-    clear_blocks_16(&hero_state->ground_type, 0x10);
+    fast_mem_zero16(&hero_state->ground_type, 0x10);
     hero_state->ground_sound_class = keep;
     hero_state->ground_type = -1;
     hero_state->wading = 0;
@@ -166,12 +166,9 @@ typedef union {
 
 extern s32 D_0015ED84_210ce8 __asm__("D_0015ED84");
 
-s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
-void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
 extern T_210ce8 l18_moby_hurt_response_records[] __asm__("D_L18_00178B00");

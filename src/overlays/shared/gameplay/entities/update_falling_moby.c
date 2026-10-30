@@ -5,19 +5,15 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 
 
 /* Falling moby: applies gravity, eases its angles toward the target and fades out until its timer ends. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002DF738), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern int fast_dec_timer(int *arg0) __asm__("FUN_001f9740");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void update_falling_moby(char *moby) __asm__("FUN_L03_002de370");
 
@@ -32,7 +28,7 @@ void update_falling_moby(char *moby) {
     {
         float remaining_timer_value = convert_integer_to_float(*(int *)(moby_data + 0x24));
         float timer_scale_denominator = convert_integer_to_float(*(int *)(moby_data + 0x20));
-        moby[0x23] = func_001FA898_r(remaining_timer_value * 255.0f / timer_scale_denominator);
+        moby[0x23] = truncate_float_to_s32(remaining_timer_value * 255.0f / timer_scale_denominator);
     }
     if (fast_dec_timer((int *)(moby_data + 0x24)) != 0) {
         mark_moby_for_removal(moby);
@@ -48,7 +44,6 @@ typedef struct { char pad0[4]; float f4; float f8; int fC; CamSub sub; char pad1
 
 extern int D_L03_0015EF50;
 extern void RaiseKernelTrap();
-extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 
 void initialize_transform_state_from_level_table(char *transform_state) __asm__("FUN_L03_002e8628");
 
@@ -92,7 +87,6 @@ void initialize_transform_state_from_level_table(char *transform_state) {
 /* smooths a direction and rebuilds its orthogonal matrix axes */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002E9AF8), where it is exact; names translated to the US level program. */
 
-extern f32 fast_arc_sin(f32) __asm__("func_001F9DF8");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float transform_basis_reference_vector[] __asm__("D_L03_00166F30");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");

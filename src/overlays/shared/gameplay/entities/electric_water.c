@@ -7,6 +7,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002DA990), where it is exact; names translated to the US level program. */
 
@@ -27,8 +28,6 @@ void reset_electric_water_switch(char *moby) {
 
 extern char *spawn_source_attached_fading_effect_particle(char *src, int col, int w, int v, float x) __asm__("FUN_L00_0026daa0");
 extern char *func_0020D348_m(int);
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a68(void *, void *, float);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
@@ -130,13 +129,10 @@ extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int hero_is_near_ground(void) __asm__("FUN_L15_002d6770");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 void initialize_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d79e8");
 
@@ -156,9 +152,7 @@ extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void record_moby_hit(struct Moby *moby, void *hit) __asm__("FUN_L00_00259a88");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
@@ -393,15 +387,15 @@ void electric_water_update(struct Moby *moby) {
                 continue;
             }
             if (nearest != 0) {
-                distance = vector_distance(&nearest->pos, &D_L15_001673C0);
-                if (!(vector_distance(&moby_array[vars->lamps[near_lamp]].pos, &D_L15_001673C0) < distance)) {
+                distance = vector_distance_xy(&nearest->pos, &D_L15_001673C0);
+                if (!(vector_distance_xy(&moby_array[vars->lamps[near_lamp]].pos, &D_L15_001673C0) < distance)) {
                     continue;
                 }
             }
             nearest = &moby_array[vars->lamps[near_lamp]];
         }
-        if (vars->owner == 0 || (distance = vector_distance(&vars->owner->pos, &D_L15_001673C0),
-                               vector_distance(&nearest->pos, &D_L15_001673C0) < distance)) {
+        if (vars->owner == 0 || (distance = vector_distance_xy(&vars->owner->pos, &D_L15_001673C0),
+                               vector_distance_xy(&nearest->pos, &D_L15_001673C0) < distance)) {
             if (vars->owner != 0) {
                 if (vars->voice0 != -1) {
                     VoicePoolWindow *voice = (VoicePoolWindow *)((unsigned char *)&voice_pool + vars->voice0 * 0x70);
@@ -540,9 +534,7 @@ extern short electric_water_countdown_frame_left_x_offset __asm__("D_L15_00161BE
 extern short electric_water_countdown_frame_right_x_offset __asm__("D_L15_00161BF0") __attribute__((sda));
 extern short electric_water_countdown_frame_color __asm__("D_L15_00161BF4") __attribute__((sda));
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
-extern float func_001FA888(int) __asm__("FUN_001fa6c0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
 extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 
@@ -557,7 +549,7 @@ void draw_electric_water_countdown(char *moby) {
     draw_ui_frame(W(electric_water_countdown_frame_x_offset) + W(electric_water_countdown_text_y), W(electric_water_countdown_frame_y_offset) + W(electric_water_countdown_text_y),
                 W(electric_water_countdown_frame_left_x_offset) + W(electric_water_countdown_text_x), W(electric_water_countdown_frame_right_x_offset) + W(electric_water_countdown_text_x),
                 W(electric_water_countdown_frame_color));
-    color_blend_factor = fast_sin(func_001FA888(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
+    color_blend_factor = fast_sin(convert_integer_to_float(D_L15_0015F5CC % 60) / 60.0f * 6.28318f) * 3.0f + 0.5f;
     if (color_blend_factor > 1.0f) {
         color_blend_factor = 1.0f;
     } else if (color_blend_factor < 0.0f) {
@@ -571,7 +563,7 @@ void draw_electric_water_countdown(char *moby) {
     countdown_text[4] = *(short *)(data + 0x12) % scale_game_frames(0x258) / scale_game_frames(0x3C) + 0x30;
     countdown_text[5] = 0x3A;
     countdown_text[6] = *(short *)(data + 0x12) % scale_game_frames(0x3C) / scale_game_frames(6) + 0x30;
-    countdown_text[7] = func_001FA898_r((float)random_integer_below(10)) + 0x30;
+    countdown_text[7] = truncate_float_to_s32((float)random_integer_below(10)) + 0x30;
     font_print_center_large_001f6c20(W(electric_water_countdown_text_x), W(electric_water_countdown_text_y), col, (int)countdown_text, 8);
 }
 /* Starts the moby's trail when requested: resets the trail points and the counters. */
@@ -591,7 +583,6 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 
 extern int electric_water_bolt_init_requested_gp __asm__("D_L15_00161BF8") __attribute__((sda));
 extern float electric_water_bolt_initial_length_scale_gp __asm__("D_L15_00161BFC") __attribute__((sda));
@@ -659,11 +650,7 @@ extern V_2d8fa0 D_L15_001D3750[2][20];
 extern V_2d8fa0 D_L15_001D3A20[];
 extern char D_0013E533[];
 extern char D_L15_001D3BC0[];
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -673,9 +660,7 @@ extern float D_L15_001D3B60[];
 extern float D_L15_001D39D0[];
 extern float FUN_L00_00257c48(float lo, float hi);
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern short electric_water_bolt_height_wave_point_phase_step_gp __asm__("D_L15_00161C08") __attribute__((sda));
 extern short electric_water_bolt_height_wave_start_amplitude_gp __asm__("D_L15_00161C0C") __attribute__((sda));
 extern short electric_water_bolt_height_wave_end_amplitude_gp __asm__("D_L15_00161C10") __attribute__((sda));
@@ -697,7 +682,6 @@ extern short D_L15_00161CC0[] MACRO_ADDR;
 extern short D_L15_00161CC8[] MACRO_ADDR;
 extern short D_L15_00161CD0[] MACRO_ADDR;
 extern short D_L15_00161CD8[] MACRO_ADDR;
-extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
@@ -861,7 +845,7 @@ void update_electric_water_bolt_effect(Moby *moby) {
                 }
                 fade = convert_integer_to_float(elapsed);
                 fade = fade / convert_integer_to_float(scale_game_frames(15));
-                D_L15_00161CC8[k] = func_001FA898_r((1.0f - fade) * 32.0f);
+                D_L15_00161CC8[k] = truncate_float_to_s32((1.0f - fade) * 32.0f);
             }
         }
     }
@@ -947,7 +931,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern long get_effect_texture(int) __asm__("FUN_001f44b8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
@@ -1007,11 +990,9 @@ void draw_electric_water_bolt_start_quads(void *mv) {
 #include "qcopy.h"
 extern int D_L15_00174458_s[] __asm__("D_L15_00174458");
 extern int D_L15_0015F5CC_s __asm__("D_L15_0015F5CC");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
-extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void play_entity_sound(void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void cart_burst(void *, void *, float, float, int) __asm__("FUN_L00_0025f090");
 extern void FUN_0022da68_s(int, int, void *) __asm__("FUN_0022da68");

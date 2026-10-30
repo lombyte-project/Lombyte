@@ -173,7 +173,6 @@ extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern void setup_offset_vector(float, void *, void *) __asm__("FUN_001f9a68");
 extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void restore_view_after_textured_grid(void *) __asm__("FUN_L02_002a46e0");
 #include "rnc/overlay/l09/gameplay/entities/asteroid_globals.h"
@@ -358,7 +357,6 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
 
 
 extern char *func_0020D348_m(int);
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
@@ -394,7 +392,6 @@ char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_referenc
 }
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C37A0), where it is exact; names translated to the US level program. */
 
-extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 
 char *find_nearest_moby_by_class(void *search_position, int type, float *nearest_distance_out) __asm__("FUN_L09_002c2610");
 
@@ -623,7 +620,6 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
 /* ticks a fading drifting moby: decays its velocity, follows it and eases its rotation */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EC010), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_fading_asteroid_debris(unsigned char *moby) __asm__("FUN_L09_002ead30");
@@ -684,7 +680,6 @@ char *FUN_L09_002ea528_c(struct Moby *owner, float *vec) __asm__("FUN_L09_002ea5
 V6 D_L09_00208B00 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 V6 D_L09_00208B18 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
 extern char *FUN_L09_002efe48_c(void *, void *, void *, float, float) __asm__("FUN_L09_002efe48");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern float D_L09_00173FE8 NOT_SDA;
 extern float D_0015ED6C MACRO_ADDR;
 extern int FUN_001efa68(void *, void *, int, int, int);
@@ -934,7 +929,6 @@ typedef struct {
 
 char *FUN_L09_002ea778_c(void) __asm__("FUN_L09_002ea778");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern int FUN_L09_002eaea8_c() __asm__("FUN_L09_002eaea8");
 extern void update_fading_asteroid_debris(unsigned char *m) __asm__("FUN_L09_002ead30");
@@ -1303,12 +1297,10 @@ char *spawn_class_11c_moby(char *owner, void *position, float angle) {
 extern char D_L09_00166F40_2ef430[] __asm__("D_L09_00166F40");
 extern float D_0015ED6C_2ef430 __asm__("D_0015ED6C");
 extern float D_0015ED70_2ef430 __asm__("D_0015ED70");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void *spawn_spark_2ef430(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void mark_moby_for_removal_2ef430(void *) __asm__("FUN_0020c828");
 
 /* Per-frame update of a tumbling debris moby: moves and spins it under gravity, bounces it off what it hits, and
@@ -1326,7 +1318,7 @@ void update_tumbling_debris(struct Moby *moby) {
     qcopy(old, pos);
     fast_vec_add(pos, pos, debris_vars);
     if (moby->pos.x < 0.0f || moby->pos.y < 0.0f || moby->pos.z < 0.0f ||
-        vector_distance(pos, D_L09_00166F40_2ef430) > 64.0f) {
+        vector_distance_xy(pos, D_L09_00166F40_2ef430) > 64.0f) {
         mark_moby_for_removal_2ef430(moby);
         return;
     }
@@ -1449,7 +1441,7 @@ void update_shrinking_tumbling_debris(struct Moby *moby) {
     fast_vec_add(pos, pos, debris_vars);
     if (moby->pos.x < 2.0f || moby->pos.x > 1021.0f || moby->pos.y < 2.0f || moby->pos.y > 1021.0f ||
         moby->pos.z < 2.0f || moby->pos.z > 1021.0f ||
-        vector_distance(pos, D_L09_00166F40_2ef9b0) > 64.0f) {
+        vector_distance_xy(pos, D_L09_00166F40_2ef9b0) > 64.0f) {
         mark_moby_for_removal_2ef9b0(moby);
         return;
     }
@@ -1518,7 +1510,6 @@ char *spawn_class_144_moby(struct Moby *owner, void *position, float angle) {
     return moby;
 }
 #define MOBY(p) ((struct Moby *)(p))
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 char *spawn_radially_scattered_moby(void *unused, float lower_radius, float upper_radius, void *origin, float *direction) __asm__("FUN_L09_002efe48");
 
@@ -1598,7 +1589,6 @@ typedef struct {
     float f9C;              /* 0x9C */
 } PlatVars;
 
-extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern float D_0015ED6C_c2 __asm__("D_0015ED6C");
 extern float D_0015ED70;
 extern float platform_hero_offset_tilt_gain_gp __asm__("D_L09_001619F4") __attribute__((sda));
@@ -1618,7 +1608,6 @@ extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, 
 extern void reorient_position_about_pivot(void *input_position, void *output_position, void *pivot_position, void *inverse_rotation_angles, void *forward_rotation_angles) __asm__("FUN_L07_00288968");
 extern void func_L00_00263B78_2F9A50(float, float, void *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void func_L00_00263BF8_2F9A50(void *, float *, float *, float, float, float) __asm__("FUN_L00_00262b80");
-extern float func_001FA748_2F9A50(float, float) __asm__("FUN_001fa580");
 extern void func_L00_002617B0_2F9A50(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern int func_0022ED80_2F9A50(int, int, void *) __asm__("FUN_0022da68");
 extern unsigned char D_0013E633_2F9A50[] __asm__("D_0013F350");
@@ -1707,8 +1696,8 @@ void platform_update(Moby *moby)
     func_L00_00263B78_2F9A50(0.14f, D_0015ED6C_c2 * 0.5235987901687622f, moby, &data->f98, &data->f9C);
     func_L00_00263BF8_2F9A50(moby, &data->f90, &data->f94, 0.0872664600610733f,
         D_0015ED6C_c2 * 0.3141592741012573f, D_0015ED6C_c2 * 0.48869219422340393f);
-    (*(Vec_2F9A50 *)&moby->rot).x = func_001FA748_2F9A50(data->ang.x, (*(Vec_2F9A50 *)&moby->rot).x);
-    (*(Vec_2F9A50 *)&moby->rot).y = func_001FA748_2F9A50(data->ang.y, (*(Vec_2F9A50 *)&moby->rot).y);
+    (*(Vec_2F9A50 *)&moby->rot).x = fast_add_rotations(data->ang.x, (*(Vec_2F9A50 *)&moby->rot).x);
+    (*(Vec_2F9A50 *)&moby->rot).y = fast_add_rotations(data->ang.y, (*(Vec_2F9A50 *)&moby->rot).y);
     fast_vec_add(&movement, &movement, &(*(Vec_2F9A50 *)&moby->pos));
     func_L00_002617B0_2F9A50(data->f20, &movement, &old_rot, &(*(Vec_2F9A50 *)&moby->rot));
 }

@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/hud.h"
+#include "rnc/math/asm_helpers.h"
 
 /* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
@@ -69,10 +70,8 @@ int hud_screen_position(HudElem *rec, int *x, int *y) {
    8 (right), rounded (func_001FA888 / func_001FA898 convert). */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236468), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern float hud_slide_timer_active_scales[] __asm__("D_L00_0017E3A0");
 extern float hud_slide_timer_inactive_scales[] __asm__("D_L00_0017E400");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void apply_hud_slide_offset(HudElem *hud_element, int *x, int *y, int slide_index, int slide_step) __asm__("FUN_L00_00235ad8");
 
@@ -202,8 +201,6 @@ s32 hud_keep_visible(s32 key, s32 val) {
     }
     return 1;
 }
-extern int FUN_001fa6d0(float);
-extern float square_root(float) __asm__("FUN_001f9988");
 extern void update_hud_animation_frame(void *) __asm__("FUN_L00_0023aaa8");
 
 void hud_update_counter(e) HudElem *e __asm__("FUN_L00_00235ea0");
@@ -231,7 +228,7 @@ void hud_update_counter(e) HudElem *e __asm__("FUN_L00_00235ea0");
             int t = e->unk74 - e->unk78;
             d = t < 0 ? -t : t;
             if (d != 0) {
-                s = FUN_001fa6d0(square_root(convert_integer_to_float(d) / 25.0f) * 5.0f);
+                s = truncate_float_to_s32(square_root(convert_integer_to_float(d) / 25.0f) * 5.0f);
                 s = s < d * scale_game_frames(2) / scale_game_frames(10)
                         ? d * scale_game_frames(2) / scale_game_frames(10)
                         : s;
@@ -419,7 +416,6 @@ extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
 extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void FUN_L00_001ff348(void *, void *, void *);
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("FUN_00200080");
 
 int draw_hud_stars(HudElem *element) __asm__("FUN_L00_002365a8");
@@ -552,7 +548,6 @@ int draw_hud_stars(HudElem *element) {
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_002377E0), where it is exact; names translated to the US level program. */
 
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
 
 int draw_uniform_size_hud_stars(HudElem *hud_element) __asm__("FUN_L00_00236e50");
@@ -632,7 +627,6 @@ extern s32 measure_text_width_regular(u8 *, s32) __asm__("FUN_001f6250");
 extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
 extern s32 font_print_center(s32, s32, s32, s32, s32) __asm__("FUN_001f6af0");
-extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");

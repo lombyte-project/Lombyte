@@ -7,16 +7,15 @@
 
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_001FFED0), where it is exact; names translated to the US level program. */
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_L15_0017C0EC, D_L15_0017C14C;
 extern int D_L15_0015F5B0;
 extern int D_L15_0015F5CC;
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern f32 D_0015EE18;
 extern unsigned char D_0013D4DC[];
 extern unsigned char D_0013F350[];
@@ -177,9 +176,6 @@ void update_enabled_item_tint_from_hero(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_00200D70), where it is exact; names translated to the US level program. */
 
 extern float D_L15_0017ACC0_lui __asm__("D_L15_0017ACC0") NOT_SDA;
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void euler_rotation_matrix(float *, float *) __asm__("FUN_001fa050");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 
 void update_hero_bobbing_and_target_position(void) __asm__("FUN_L15_002007d8");
@@ -259,7 +255,6 @@ void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
     }
 }
 extern f32 D_0013F570[] __asm__("D_0013F570");
-f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 f32 approach_value(f32, f32, f32 *) __asm__("FUN_00213ed8");
 void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 void update_hero_smoothing_parameters(void) __asm__("FUN_L15_00209450");
@@ -296,7 +291,7 @@ void update_hero_smoothing_parameters(void) {
         hero.capsule_radius_target = 0.8f;
     }
     if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 || hero.base_condition ||
-        vector_distance(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
+        vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) > hero.capsule_radius * 0.5f) {
         f32 *smoothing_state = D_0013F570;
         struct Hero *hero_base = (struct Hero *)((u8 *)smoothing_state - 0x220);
         approach_value(hero_base->capsule_top_target, frame_scale * 0.02f, smoothing_state);
@@ -334,14 +329,12 @@ typedef struct {
 extern P_20a328 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern X_20a328 D_L15_00174440_lui __asm__("D_L15_00174440") NOT_SDA;
 extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_20a328(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 #define P D_0013F350_lui
 #define X D_L15_00174440_lui
@@ -425,8 +418,6 @@ extern s32 D_L15_0015F5C4;
 extern u8 D_0013D4E2_lui __asm__("D_0013D4E2") NOT_SDA;
 
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
-extern s32 fast_dec_timer(s32 *) __asm__("FUN_001f9740");
-extern s16 fast_dec_timer_s16(s16 *) __asm__("FUN_001f9770");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
@@ -434,7 +425,6 @@ extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_215e58(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");

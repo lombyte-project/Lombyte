@@ -16,8 +16,6 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
 
 extern char *func_0020D348_m(int);
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 
 char *spawn_blarg_elite_commando_rocket(char *owner, float *initial_movement_vector, char *spawn_position) __asm__("FUN_L16_002a09a0");
 
@@ -53,20 +51,14 @@ char *spawn_blarg_elite_commando_rocket(char *owner, float *initial_movement_vec
 
 extern char D_L16_001671C0[];
 extern char D_0013E633[];
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32 fast_add_rotations(f32 a, f32 b) __asm__("FUN_001fa580");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
-extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
-extern void lerp_vector(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void spawn_rocket_trail_spark(char *) __asm__("FUN_L15_0029ae18");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern float func_001F9D10_2E7198(void *, void *) __asm__("FUN_001f9b48");
 
 void rocket_update(char *m) __asm__("FUN_L16_002a0a98");
 void rocket_update(char *rocket_moby) {
@@ -74,7 +66,7 @@ void rocket_update(char *rocket_moby) {
     char *rocket_data = *(char **)(rocket_moby + 0x78);
     void *remaining;
     float yaw, pitch;
-    if (*(int *)(rocket_data + 0x34) == 0 && func_001F9D10_2E7198(rocket_moby + 0x10, D_L16_001671C0) < 15.0f) {
+    if (*(int *)(rocket_data + 0x34) == 0 && fast_vec_dist(rocket_moby + 0x10, D_L16_001671C0) < 15.0f) {
         *(int *)(rocket_data + 0x34) = 1;
         trooper_play_sound(5, 0, (int)rocket_moby, 0x54C);
     }
@@ -91,7 +83,7 @@ void rocket_update(char *rocket_moby) {
     else if (pitch < -1.2217305f)
         pitch = -1.2217305f;
     build_spherical_offset(desired, *(float *)(rocket_data + 0x24), yaw, pitch);
-    if (tick_countdown_32_alt((int *)(rocket_data + 0x20)) == 0) {
+    if (fast_dec_timer((int *)(rocket_data + 0x20)) == 0) {
         float blend_ticks_remaining = convert_integer_to_float(*(int *)(rocket_data + 0x20));
         float blend_duration_ticks = convert_integer_to_float(*(int *)(rocket_data + 0x30));
         lerp_vector(blend, desired, rocket_data, blend_ticks_remaining / blend_duration_ticks);
@@ -177,7 +169,6 @@ extern float random_angle_radians(void) __asm__("FUN_00213308");
 #include "rnc/overlay/shared/gameplay/entities/blarg_elite_commando_data/blarg_elite_commando_update.h"
 extern int D_L16_0015F5C4;
 extern int D_L16_0016CC90 NOT_SDA;
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
@@ -206,7 +197,6 @@ void emit_blarg_elite_commando_joint_sparks(char *commando_moby) __asm__("FUN_L1
 void emit_blarg_elite_commando_joint_sparks(char *m) __asm__("FUN_L16_002d4908");
 extern float func_L16_002D5280_update(char *, void *, int) __asm__("FUN_L16_002d3eb8");
 extern int func_0022ED80_update(int, int, void *) __asm__("FUN_0022da68");
-extern float func_001F9D10_update(void *, void *) __asm__("FUN_001f9b48");
 
 void blarg_elite_commando_update(char *m) __asm__("FUN_L16_002d2cf0");
 void blarg_elite_commando_update(char *commando_moby) {
@@ -461,7 +451,7 @@ void blarg_elite_commando_update(char *commando_moby) {
             *(float *)(commando_moby + 0x18) =
                 *(float *)(commando_data + 0x2C8) + *(float *)(commando_data + 0x2EC) * fast_sin(*(float *)(commando_data + 0x2E8));
         }
-        if (func_001F9D10_update(commando_moby + 0x10, D_L16_001671C0) < 32.0f &&
+        if (fast_vec_dist(commando_moby + 0x10, D_L16_001671C0) < 32.0f &&
             !voice_is_playing(commando_moby, *(int *)(commando_data + 0x304)))
             *(int *)(commando_data + 0x304) = func_0022ED80_update(7, 4, commando_moby);
     }
@@ -536,12 +526,10 @@ typedef struct {
 } L16DamageReward;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int blarg_elite_commando_reward_kill_count_gp __asm__("D_0015EE10") __attribute__((sda));
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int select_moby_combat_target(float, char *, void *) __asm__("FUN_L00_0025fcb8");
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
@@ -549,7 +537,6 @@ extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void randomize_blarg_elite_commando_group_pursuit_timers(void *, int, int) __asm__("FUN_L16_002d3f78");
-extern s32 tick_countdown_32(void *) __asm__("func_001F9740");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
 
 void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) {
@@ -680,7 +667,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
     }
     commando_moby->hit_slot = 0xFF;
     trooper_anim_finish(commando_moby, commando_data->damage);
-    tick_countdown_32(&commando_data->pursuit_timer);
+    fast_dec_timer(&commando_data->pursuit_timer);
     if (commando_data->reset_timer) {
         commando_data->pursuit_timer =
             truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
@@ -697,7 +684,7 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
     } else {
         select_moby_combat_target(24.0f, commando_moby, commando_data->target);
     }
-    if (range < vector_distance(&commando_moby->pos, commando_data->target))
+    if (range < vector_distance_xy(&commando_moby->pos, commando_data->target))
         commando_data->pursuit_mode = 2;
     if (commando_data->owner == 0)
         commando_data->owner = ((L16DamageResident *)((char *)&hero))->owner;
@@ -774,7 +761,6 @@ typedef struct {
 extern char *D_L16_0015FFD8;
 extern short *D_L16_001ABCC0[];
 extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
-extern int func_001FA898_timer(float) __asm__("FUN_001fa6d0");
 
 void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby, int lower, int upper) {
     L16GroupMoby *source_moby = group_source_moby;
@@ -782,7 +768,7 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
     short *group_entry;
     if (source_moby->group == 255) {
         timer_data = source_moby->data;
-        timer_data->timer = func_001FA898_timer(
+        timer_data->timer = truncate_float_to_s32(
             func_001F9878_timer(random_float_between((float)lower, (float)upper)));
     } else {
         L16GroupMoby *other;
@@ -791,7 +777,7 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
         other = (L16GroupMoby *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) + (int)D_L16_0015FFD8);
         if (other->state >= 0) {
             timer_data = other->data;
-            timer_data->timer = func_001FA898_timer(
+            timer_data->timer = truncate_float_to_s32(
                 func_001F9878_timer(random_float_between((float)lower, (float)upper)));
         }
         if (*group_entry++ >= 0)
@@ -800,7 +786,6 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void select_blarg_elite_commando_movement_animation(char *moby) {
@@ -840,7 +825,6 @@ extern L16ParticleChoices D_L16_001E8300, D_L16_001E8618;
 extern L16ParticleChoices D_L16_001E8600, D_L16_001E8318;
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 
@@ -903,8 +887,6 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */
 
 extern char D_L16_00167240[], D_0013F420[];
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 
 void update_blarg_elite_commando_joint_aim(char *commando_moby) {

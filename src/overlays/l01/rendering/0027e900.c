@@ -4,6 +4,7 @@
 
 #include "eetypes.h"
 #include "qcopy.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct {
     f32 x;
@@ -33,7 +34,6 @@ typedef struct {
 } Spark;
 
 extern void *create_part(s32) __asm__("FUN_L00_002678b8");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
 extern u8 *spark_texture_table[] __asm__("D_L01_001B2500");
 
@@ -134,7 +134,6 @@ Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
 extern u8 *pool_bubbles_texture_table[] __asm__("D_L01_001B25E4");
 void *create_part(s32) __asm__("FUN_L00_002678b8");
 s32 random_integer_below(s32) __asm__("FUN_00213260");
-s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_L01_00287c80");

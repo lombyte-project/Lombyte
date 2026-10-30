@@ -5,6 +5,7 @@
 #include "rnc/overlay/quad.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct {
     s32 count;
@@ -16,8 +17,6 @@ extern SegmentPath_261968 *D_L00_001B04B0_261968[] __asm__("D_L00_001B04B0");
 extern void FUN_001ff2a8_261968(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
 extern f32 FUN_001ff3d8_261968(OvlVec4 *) __asm__("FUN_001f9af0");
 extern void FUN_001ff500_261968(OvlVec4 *, OvlVec4 *, f32) __asm__("FUN_001f9bf8");
-extern void FUN_001ff260_261968(OvlVec4 *) __asm__("FUN_001f99f8");
-extern void FUN_001ff6d0_261968(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9cf8");
 
 s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *end) __asm__("FUN_L00_00261968");
 
@@ -39,14 +38,14 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
     FUN_001ff2a8_261968(&direction, end, start);
     direction.i[2] = 0;
     FUN_001ff500_261968(&direction, &direction, 1.0f / FUN_001ff3d8_261968(&direction));
-    FUN_001ff260_261968(&axis);
+    clear_u64_value(&axis);
     axis.f[0] = direction.f[1];
     axis.f[1] = -direction.f[0];
-    FUN_001ff260_261968(&origin);
+    clear_u64_value(&origin);
     entry = &D_L00_001B04B0_261968[path_index];
     origin.f[2] = 1.0f;
     FUN_001ff2a8_261968(&first, &(*entry)->points[0], start);
-    FUN_001ff6d0_261968(&first, &first, &direction);
+    transform_vector_by_basis(&first, &first, &direction);
     previous = &first;
     current = &next;
     if (i < (*entry)->count) {
@@ -54,7 +53,7 @@ s32 test_path_segment_strict_crossing(s32 path_index, OvlVec4 *start, OvlVec4 *e
         zero = 0.0f;
         do {
             FUN_001ff2a8_261968(current, (OvlVec4 *)((u8 *)*entry + offset), start);
-            FUN_001ff6d0_261968(current, current, &direction);
+            transform_vector_by_basis(current, current, &direction);
             if (first.f[3] != zero || next.f[3] != zero) {
                 if (next.f[1] * first.f[1] < 0.0f) {
                     crossing = (first.f[0] - next.f[0]) / (first.f[1] - next.f[1]) * -next.f[1] + next.f[0];
@@ -100,9 +99,6 @@ typedef struct {
 } SegmentPath_261d78_261b48;
 
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
-extern void lerp_vector(void *, void *, void *, f32) __asm__("func_001F9A40");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
@@ -328,7 +324,6 @@ typedef struct {
     Vec4 points[1];     /* 0x10 */
 } PointPath;
 
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 /* Samples path at distance dist (points spacing apart): stores the segment, the distance into it and the point. */
@@ -362,8 +357,6 @@ void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *ou
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */
 
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 /* Multiplies the 001fa050 matrices of (x, y, z) and of a+0x40, stored back by matrix_to_euler. */
@@ -548,7 +541,6 @@ float FUN_001f99c0_2628d8(float) __asm__("FUN_001f99c0");
 float FUN_L00_0025bc98_2628d8(void *, void *, float, float, float, float,
                               int) __asm__("FUN_L00_0025bc98");
 void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
-void FUN_001f99f8_2628d8(void *) __asm__("FUN_001f99f8");
 
 void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) __asm__("FUN_L00_002628d8");
 void update_joint_animation(void *moby, unsigned char *joint_animation_state, int joint_index, float fa, float fb) {
@@ -581,14 +573,13 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
     *(float *)(joint_animation_state + 0x20) = uniform_scale;
     *(float *)(joint_animation_state + 0x24) = uniform_scale;
     *(float *)(joint_animation_state + 0x28) = uniform_scale;
-    FUN_001f99f8_2628d8(joint_animation_state + 0x60);
+    clear_u64_value(joint_animation_state + 0x60);
     *(float *)(joint_animation_state + 0x70) = 1.0f;
 }
 
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263B78), where it is exact; names translated to the US level program. */
 
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 
 /* Advances angle *p by y and swaps the old x*sin offset in a+0x18 for the new one. */
 void update_moby_vertical_oscillation(float x, float y, char *moby, float *phase_angle, float *previous_sine_offset) __asm__("FUN_L00_00262b00");

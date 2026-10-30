@@ -9,6 +9,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/math/asm_helpers.h"
 extern int FUN_L00_002321c0_u(int, int *) __asm__("FUN_L00_002321c0");
 
 /* With both objects at hero +0x1180 and +0x1184 present and the
@@ -381,7 +382,6 @@ typedef struct {
 extern char D_L00_00196D00[] NOT_SDA;
 extern unsigned char D_0015EDB4_macro[4] __asm__("D_0015EDB4") MACRO_ADDR;
 extern int FUN_L00_0024f698(void *);
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern short hero_blend_curve_frame_counts __asm__("D_L00_0015F6E0") __attribute__((sda));
 extern void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 extern void clear_hero_mapped_moby_animation_state(void) __asm__("FUN_L00_002321a8");
@@ -788,10 +788,6 @@ typedef union {
 } Vec4_2332d0;
 float FUN_001f9dc8_002332d0(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_002332d0(float) __asm__("FUN_001f9de0");
-void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-void clear_u64_value(void *) __asm__("FUN_001f99f8");
-float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 float compute_hero_ground_aligned_heading(void) __asm__("FUN_L00_002332d0");
 
 float compute_hero_ground_aligned_heading(void) {
@@ -874,7 +870,6 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
    by the matrix at hero and adds the vector at hero +0x80. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233E48), where it is exact; names translated to the US level program. */
 
-extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 
 void transform_hero_polar_offset_to_world(float *out, float radius, float angle, float z) __asm__("FUN_L00_002335c8");
 
@@ -893,7 +888,6 @@ void transform_hero_polar_offset_to_world(float *out, float radius, float angle,
    hero +0x80. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00233EE0), where it is exact; names translated to the US level program. */
 
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 /* Builds (x, y, z), transforms it by the hero matrix at 0 and adds the hero position. */
 void transform_hero_local_offset_to_world(float *out, float x, float y, float z) __asm__("FUN_L00_00233660");
 void transform_hero_local_offset_to_world(float *out, float x, float y, float z) {
@@ -928,7 +922,6 @@ struct G_00233708 {
 };
 float FUN_001f9dc8_00233708(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_00233708(float) __asm__("FUN_001f9de0");
-void FUN_001fa050_00233708(Mtx *, void *) __asm__("FUN_001fa050");
 void FUN_001f9d20_00233708(Vec4_00233708 *, Vec4_00233708 *,
                            Mtx *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233708(Vec4_00233708 *, Vec4_00233708 *,
@@ -950,7 +943,7 @@ void add_hero_forward_offset(Vec4_00233708 *out, Vec4_00233708 *in, float offset
         offset_vector.x = FUN_001f9dc8_00233708(0.0f) * offset_scale;
         offset_vector.y = FUN_001f9de0_00233708(0.0f) * offset_scale;
         offset_vector.z = 0.0f;
-        FUN_001fa050_00233708(&moby_rotation_matrix, ((char *)hero_base->moby) + 0x40);
+        euler_rotation_matrix(&moby_rotation_matrix, ((char *)hero_base->moby) + 0x40);
         FUN_001f9d20_00233708(&offset_vector, &offset_vector, &moby_rotation_matrix);
         FUN_001f9a10_00233708(out, in, &offset_vector);
         break;
@@ -963,9 +956,6 @@ typedef struct {
 typedef struct {
     f32 v[4];
 } V00233810 __attribute__((aligned(16)));
-void FUN_001f99f8_00233810(void *) __asm__("FUN_001f99f8");
-void FUN_001fa050_00233810(void *, void *) __asm__("FUN_001fa050");
-void FUN_001f9d20_00233810(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_00233810(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
@@ -979,10 +969,10 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        FUN_001f99f8_00233810(&offset_vector);
+        clear_u64_value(&offset_vector);
         offset_vector.v[2] = z;
-        FUN_001fa050_00233810(&moby_rotation_matrix, ((u8 *)hero_base->moby) + 0x40);
-        FUN_001f9d20_00233810(&offset_vector, &offset_vector, &moby_rotation_matrix);
+        euler_rotation_matrix(&moby_rotation_matrix, ((u8 *)hero_base->moby) + 0x40);
+        transform_vector(&offset_vector, &offset_vector, &moby_rotation_matrix);
         FUN_001f9a10_00233810(out, in, &offset_vector);
         break;
     }
@@ -1014,9 +1004,6 @@ void gravity_flatten(float *flattened_vector, float *input_vector) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234250), where it is exact; names translated to the US level program. */
 
-extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
-extern void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 
 float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 float gravity_length_xy(float *input_vector) {
@@ -1059,7 +1046,6 @@ float gravity_z(float *input_vector) {
     }
     return 0.0f;
 }
-void FUN_001f9d20_00233b20(void *, void *, void *) __asm__("FUN_001f9d20");
 /* Copies in to out with z, transformed by the two hero matrices in modes 1 and 2. */
 void gravity_set_z(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233b20");
 void gravity_set_z(f32 *out, f32 *in, f32 z) {
@@ -1071,9 +1057,9 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) {
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        FUN_001f9d20_00233b20(out, in, hero_base->inv_rot_matrix);
+        transform_vector(out, in, hero_base->inv_rot_matrix);
         out[2] = z;
-        FUN_001f9d20_00233b20(out, out, hero_base->rot_matrix);
+        transform_vector(out, out, hero_base->rot_matrix);
         break;
     }
 }
@@ -1084,7 +1070,6 @@ void gravity_set_z(f32 *out, f32 *in, f32 z) {
    matrices at +0x40 and +0x0. The switch gives retail's case tree. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00234420), where it is exact; names translated to the US level program. */
 
-extern void set_vector_length_xy(float *, float *, float) __asm__("FUN_001f9c48");
 
 void set_gravity_relative_vector_length_xy(float *output_vector, float *input_vector, float z) __asm__("FUN_L00_00233ba0");
 
@@ -1107,7 +1092,6 @@ void set_gravity_relative_vector_length_xy(float *output_vector, float *input_ve
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002344B0), where it is exact; names translated to the US level program. */
 
 extern float FUN_L00_00233a78_c(void *) __asm__("FUN_L00_00233a78");
-extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 
 float predict_hero_trajectory_z(float *initial_position, float *initial_velocity, int *steps, float step) __asm__("FUN_L00_00233c30");
 
@@ -1141,9 +1125,6 @@ typedef union {
     u128 q;
     f32 f[4];
 } V00233d30;
-void FUN_001f9d20_00233d30(void *, void *, void *) __asm__("FUN_001f9d20");
-f32 FUN_001f9b20_00233d30(void *) __asm__("FUN_001f9b20");
-f32 FUN_001f9e90_00233d30(f32, f32) __asm__("FUN_001f9e90");
 /* Returns 001f9e90 of v (or v in the 0x40 hero frame), chosen by hero byte 0x20B3. */
 f32 compute_gravity_relative_vector_inclination(f32 *input_vector) __asm__("FUN_L00_00233d30");
 
@@ -1153,17 +1134,17 @@ f32 compute_gravity_relative_vector_inclination(f32 *input_vector) {
     f32 xy_length, z;
     switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
-        xy_length = FUN_001f9b20_00233d30(input_vector);
+        xy_length = vector_length_xy(input_vector);
         z = input_vector[2];
         goto call;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         qcopy(&gravity_frame_vector, input_vector);
-        FUN_001f9d20_00233d30(&gravity_frame_vector, &gravity_frame_vector, &hero_base->inv_rot_matrix);
-        xy_length = FUN_001f9b20_00233d30(&gravity_frame_vector);
+        transform_vector(&gravity_frame_vector, &gravity_frame_vector, &hero_base->inv_rot_matrix);
+        xy_length = vector_length_xy(&gravity_frame_vector);
         z = gravity_frame_vector.f[2];
     call:
-        return FUN_001f9e90_00233d30(z, xy_length);
+        return fast_arc_tan(z, xy_length);
     }
     return 0.0f;
 }
@@ -1299,14 +1280,10 @@ extern char hero_233f80[] __asm__("D_0013F350");
 extern int scale_game_frames_233f80(int) __asm__("FUN_001f96f8");
 extern void scale_game_frames_v_233f80(int) __asm__("FUN_001f96f8");
 extern Plat *f_L00_002603d0(void *) __asm__("FUN_L00_002603d0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern void probe_ground_height_cf(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern int convert_pose_to_reference_local(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void transform_attachment_pose(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
-extern void trooper_scale(void *, void *, float) __asm__("FUN_001f9c48");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 /* The hero on a moving platform: finds the platform the hero stands on or hangs from, tracks the platform's motion
@@ -1400,7 +1377,7 @@ void update_hero_attachment(void) {
         if (!(plat->i3C & 2)) {
             approach_value(&sB0, 0.0f, frame_time_sq_macro * 25.0f * amt);
             approach_value(&sB4, 0.0f, (frame_time_sq_macro + frame_time_sq_macro) * amt);
-            trooper_scale(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v350, sB4);
+            set_vector_length_xy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v350, sB4);
             attachment_motion_scratch.z = sB0;
         } else {
             qcopy(&attachment_motion_scratch, &((Hero_234800 *)hero_233f80)->v350);
@@ -1476,7 +1453,6 @@ void FUN_L00_002347c0(void) {
     }
 }
 extern s32 D_L00_0015F5C4_234808 __asm__("D_L00_0015F5C4");
-f32 FUN_001fa580_234808(f32, f32) __asm__("FUN_001fa580");
 f32 FUN_001f9de0_234808(f32) __asm__("FUN_001f9de0");
 s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
@@ -1493,9 +1469,9 @@ void animate_hero_slot4_and_slot5_visuals(void) {
     slot4_moby = (char *)hero.items[4].moby;
     if (slot4_moby) {
         if (X == 2)
-            hero.unk22E8 = FUN_001fa580_234808(hero.unk22E8, DD * 1.2217305f);
+            hero.unk22E8 = fast_add_rotations(hero.unk22E8, DD * 1.2217305f);
         else
-            hero.unk22E8 = FUN_001fa580_234808(hero.unk22E8, DD * 2.0943952f);
+            hero.unk22E8 = fast_add_rotations(hero.unk22E8, DD * 2.0943952f);
         *(s32 *)(slot4_moby + 0x90) =
             fast_tween_color(0xD2D2D2, 0x285050, FUN_001f9de0_234808(hero.unk22E8) * 0.5f + 0.5f);
     }
@@ -1503,14 +1479,14 @@ void animate_hero_slot4_and_slot5_visuals(void) {
     if (slot4_secondary_moby) {
         if (X != 2) {
             f32 v;
-            hero.unk22EC = v = FUN_001fa580_234808(hero.unk22EC, DD * 2.9670596f);
+            hero.unk22EC = v = fast_add_rotations(hero.unk22EC, DD * 2.9670596f);
             slot4_secondary_target_color = 0x1EE628;
             if (0.0f < v && v < 1.9198622f)
                 slot4_secondary_target_color = 0x1E1ED2;
             *(s32 *)(slot4_secondary_moby + 0x90) = fast_tween_color(*(s32 *)(slot4_secondary_moby + 0x90), slot4_secondary_target_color, 0.07f);
         } else {
             f32 v;
-            hero.unk22EC = v = FUN_001fa580_234808(hero.unk22EC, DD * 1.5707964f);
+            hero.unk22EC = v = fast_add_rotations(hero.unk22EC, DD * 1.5707964f);
             *(s32 *)(slot4_secondary_moby + 0x90) =
                 fast_tween_color(0x1E1ED2, 0x1E1E50, FUN_001f9de0_234808(v) * 0.5f + 0.5f);
         }
@@ -1518,9 +1494,9 @@ void animate_hero_slot4_and_slot5_visuals(void) {
     slot5_moby = (char *)hero.items[5].moby;
     if (slot5_moby) {
         if (X == 2)
-            hero.unk22F0 = FUN_001fa580_234808(hero.unk22EC, DD * 1.3962634f);
+            hero.unk22F0 = fast_add_rotations(hero.unk22EC, DD * 1.3962634f);
         else
-            hero.unk22F0 = FUN_001fa580_234808(hero.unk22EC, DD * 1.9198622f);
+            hero.unk22F0 = fast_add_rotations(hero.unk22EC, DD * 1.9198622f);
         *(s32 *)(slot5_moby + 0x90) =
             fast_tween_color(0xAAC8AA, 0x965050, FUN_001f9de0_234808(hero.unk22F0) * 0.5f + 0.5f);
         if (slot5_moby) {
@@ -1630,7 +1606,6 @@ extern u8 D_L00_0017A608[];
 extern u8 D_L00_0017C680[];
 extern u8 D_L00_0015F6A8[];
 void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
-void copy_matrix3x4(void *, void *) __asm__("FUN_001fa2b8");
 void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 void FUN_L00_002092c8(void *, void *, void *, int, void *);
 void configure_moby_from_source_bone4(void *source_moby, char *destination_moby) __asm__("FUN_L00_00234c78");

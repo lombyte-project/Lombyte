@@ -7,8 +7,8 @@
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
-void clear_blocks_16(void *, int) __asm__("FUN_001f9810");
 int FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 int FUN_001f0b58_239fc0(void) __asm__("FUN_001f0b58");
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
@@ -21,7 +21,7 @@ void apply_hero_ground_material_effects(void) {
     s16 saved_ground_type = hero.ground_type;
     f32 water_depth;
     int s;
-    clear_blocks_16(&hero.ground_type, 0x10);
+    fast_mem_zero16(&hero.ground_type, 0x10);
     hero.ground_sound_class = save;
     hero.ground_type = -1;
     hero.wading = 0;
@@ -122,7 +122,6 @@ extern u8 D_L05_00174240[] NOT_SDA;
 extern u8 D_L05_00174260[] NOT_SDA;
 extern f32 D_L05_00174268 NOT_SDA;
 
-void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
@@ -130,10 +129,8 @@ s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
-f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
-f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9ab0_c(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_c(void *, void *, f32) __asm__("FUN_001f9a68");
@@ -166,7 +163,7 @@ void update_hero_ground_contact(void) {
     hero.ground_normal.i[1] = 0;
     hero.ground_slope.i = 0;
     hero.ground_z.i = 0;
-    FUN_001f99f8_c((u8 *)&hero.ground_point);
+    clear_u64_value((u8 *)&hero.ground_point);
     hero.on_flagged_ground_moby = 0;
     hero.ground_distance = 32.0f;
     hero.ground_moby = 0;
@@ -244,7 +241,7 @@ void update_hero_ground_contact(void) {
         hero.ground_moby = (struct Moby *)HH.moby;
         sceVu0Normalize((u8 *)&hero.ground_normal, (u8 *)&HH.normal_x);
         hero.ground_slope.f = compute_gravity_relative_vector_inclination((u8 *)&HH.normal_x);
-        hero.downhill_yaw = FUN_001f9e90_c(HH.normal_x, HH.normal_y);
+        hero.downhill_yaw = fast_arc_tan(HH.normal_x, HH.normal_y);
         fast_vec_sub(&ground_vector_scratch, (u8 *)&hero.ground_point, (u8 *)&hero.motion.pos);
         if (0.0f < FUN_001f9ab0_c(&ground_vector_scratch, (u8 *)&hero.ground_normal)) {
             hero.ground_distance = -hero.ground_distance;
@@ -268,7 +265,7 @@ tail:
         hero.in_water_frames = 0;
     }
 d1:
-    FUN_001f99f8_c((u8 *)&hero.gravity_dir);
+    clear_u64_value((u8 *)&hero.gravity_dir);
     switch (hero.gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         hero.gravity_dir.f[2] = -1.0f;
@@ -343,7 +340,6 @@ typedef union {
     u128_2133a8 q;
     f32 f[4];
 } V_2133a8;
-extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void FUN_L00_002347c0(void);
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern void FUN_L00_00233810(void *, void *, f32);
@@ -486,18 +482,15 @@ typedef struct {
 
 extern char *collision_hit_moby[] __asm__("D_L05_00174258");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float gravity_z(float *) __asm__("FUN_L00_00233a78");
-extern void set_vector_length_xy(void *, void *, float) __asm__("FUN_001f9c48");
 extern void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
 extern void resolve_hero_collisions_with_history(void) __asm__("FUN_L00_002137a8");
 extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f80");
-extern void clear_u64_value(void *) __asm__("func_001F99F8");
 void update_hero_ground_contact(void) __asm__("FUN_L05_002402a8");
 
 /* Same routine as FUN_L16_00211098, without the mode 15 and 21 cases. */

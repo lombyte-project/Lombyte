@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/state/usage_stats.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -205,14 +206,10 @@ extern void update_veldin_robot_damage_and_targeting() __asm__("FUN_L00_002e1678
 extern void manipulator_set_scale(void *, f32) __asm__("FUN_L00_00263b38");
 extern void update_joint_animation(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_0025a120(ElectroidMoby *);
-extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void blend_moby_animation(ElectroidMoby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(ElectroidMoby *) __asm__("FUN_0020c828");
 extern s32 scale_game_frames_s32(s32) __asm__("FUN_001f96f8");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern void approach_angle(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_0025be00");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -220,8 +217,6 @@ extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern f32 advance_accelerated_scalar(f32, f32, f32, f32, f32 *, f32 *) __asm__("FUN_00213f38");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern s32 register_beam_slot(ElectroidMoby *, s32, s32) __asm__("FUN_L00_002e1f28");
-extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
-extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern void build_moby_bone_transform(ElectroidMoby *, s32, void *) __asm__("FUN_0020cca8");
 extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
@@ -344,7 +339,7 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
             moby, vars,
             fast_arc_tan(target->pos.f[0] - moby->pos.f[0], target->pos.f[1] - moby->pos.f[1]),
             12.566371f);
-        if (vector_distance(&moby->pos, &hero.motion.pos) < 20.0f) {
+        if (vector_distance_xy(&moby->pos, &hero.motion.pos) < 20.0f) {
             ELECTROID_ANIM(moby, 4, scale_game_frames_s32(20));
         } else if (moby->unk70 & 2) {
             ELECTROID_ANIM(moby, random_integer_below(2) + 1, scale_game_frames_s32(20));
@@ -464,9 +459,6 @@ typedef struct {
 } ElectroidHit;
 
 extern s16 scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern int fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
-extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern void FUN_L00_00257470(ElectroidMoby *, s32, s32);
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern ElectroidHit *find_moby_hit(ElectroidMoby *, s32, s32) __asm__("FUN_L00_0025a420");
@@ -558,7 +550,7 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
             range = 37.0f;
         }
         if (select_moby_combat_target(moby, range, &vars->targetPos) != 2 &&
-            range < vector_distance(&moby->pos, &vars->targetPos)) {
+            range < vector_distance_xy(&moby->pos, &vars->targetPos)) {
             vars->unk114 = 2;
         }
     }
@@ -572,8 +564,8 @@ void update_veldin_robot_damage_and_targeting(ElectroidMoby *moby) {
         if (candidate_target == 0 || candidate_target->state == 0xFE || candidate_target->state == 0xFD) {
             vars->unk1BC = -1;
         } else {
-            range = vector_distance(&moby->pos, &candidate_target->pos);
-            if (range < vector_distance(&moby->pos, &vars->target->pos)) {
+            range = vector_distance_xy(&moby->pos, &candidate_target->pos);
+            if (range < vector_distance_xy(&moby->pos, &vars->target->pos)) {
                 vars->target = candidate_target;
                 qcopy(&vars->targetPos, &candidate_target->pos);
                 vars->unk114 = 1;
@@ -611,7 +603,6 @@ extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8")
 extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern SparkPart *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, s32, void *) __asm__("FUN_L00_00274948");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern void draw_veldin_robot_effect_quad() __asm__("FUN_L00_002e1c78");
 void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 

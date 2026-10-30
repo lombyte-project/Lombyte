@@ -6,15 +6,14 @@
 
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/math/asm_helpers.h"
 
 /* Spawn a particle moby at pos with a colour, lifetime and size. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/partupd_0029D2B8.c: func_L07_0029D2B8), where it is exact; names translated to the US level program. */
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 extern unsigned char *D_L07_001B2164 NOT_SDA;
 void spawn_white_particle_with_payload(void *particle_position_source, void *particle_payload_source) __asm__("FUN_L07_0029c4e8");
@@ -25,7 +24,7 @@ void spawn_white_particle_with_payload(void *particle_position_source, void *par
         float *particle_payload = (float *)(particle + 0x20);
         qcopy(particle + 0x10, particle_position_source);
         *(int *)(particle + 4) = FUN_L00_0025bfe0(1.0f, 1.0f, 1.0f, 0.6f);
-        particle[9] = func_001FA898_r(4.0f) + 0x40;
+        particle[9] = truncate_float_to_s32(4.0f) + 0x40;
         particle[1] = 0;
         particle[3] = 0x48;
         *(float *)(particle + 0xC) = random_float_between(20000.0f, 120000.0f);
@@ -42,8 +41,6 @@ void spawn_white_particle_with_payload(void *particle_position_source, void *par
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"
 
-extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern f32 square_root(f32) __asm__("FUN_001f9988");
 
 /* Finds the point of segment a-b nearest to the surface of the sphere (center, radius), preferring
    the one closer to ref when both hits are equally good. Writes it to out and returns its distance

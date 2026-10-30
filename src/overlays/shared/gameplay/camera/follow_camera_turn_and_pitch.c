@@ -75,9 +75,6 @@ extern unsigned char D_L00_00166E10_2e8bb8[] __asm__("D_L00_00166E10")
     __attribute__((section(".data")));
 extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 
 void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) __asm__("FUN_L00_002e8bb8");
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_turn_and_pitch_globals.h"
