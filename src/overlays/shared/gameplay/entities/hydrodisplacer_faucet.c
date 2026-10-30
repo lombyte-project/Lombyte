@@ -814,10 +814,6 @@ void blarg_gun_update(char *moby)
         break;
     }
 }
-#ifndef
-#endif
-#ifndef
-#endif
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L05_00319598");
 extern void initialize_taxi_stop_state(void *) __asm__("FUN_L05_00319208");
 extern char *D_L16_001601AC_m_19510 __asm__("D_L05_001600EC");

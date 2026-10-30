@@ -101,10 +101,6 @@ char *spawn_fixed_height_destruction_moby(struct Moby *owner) {
     return moby;
 }
 
-#ifndef
-#endif
-#ifndef
-#endif
 extern int debug_print() __asm__("FUN_001e93b0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -2277,7 +2273,6 @@ void update_path_spark_effect(char *moby) {
   send_blast_hits(*(void **)(effect_data+0x10),blast_hit_position,D_L10_00178380_u,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
  }
 }
-#include "sda.h"
 
 /* Collectible trigger: deletes itself once taken, else watches for its toucher. */
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DEA10), where it is exact; names translated to the US level program. */

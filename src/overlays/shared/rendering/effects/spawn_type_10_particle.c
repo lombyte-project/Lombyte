@@ -38,11 +38,6 @@ void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocit
         qcopy(particle_data, initial_particle_velocity);
     }
 }
-#ifndef
-#include "sda.h"
-#endif
-#ifndef
-#endif
 extern unsigned char *D_L01_001B2538 NOT_SDA;
 char *spawn_type_14_particle(int particle_value, char *position_source) __asm__("FUN_L01_00280970");
 

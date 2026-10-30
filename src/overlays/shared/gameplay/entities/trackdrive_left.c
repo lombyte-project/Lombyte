@@ -650,10 +650,6 @@ void tresspasser_pad_update(Moby *moby) {
     }
     func_L00_0025E590_2D9F08(moby, data);
 }
-#ifndef
-#endif
-#ifndef
-#endif
 extern void func_L00_002607A8_d92f0(void *a, float x) __asm__("FUN_L00_0025f730");
 extern float D_0015EE6C_d92f0 __asm__("D_0015ED6C");
 void align_hero_to_tresspasser_pad(struct Moby *moby) __asm__("FUN_L02_002d92f0");
@@ -1339,7 +1335,6 @@ void initialize_collectible_sprite_state(char *moby) {
     moby_data[15] = 2.5f;
     moby_data[14] = 3.0f;
 }
-#include "sda.h"
 typedef struct {
     float a[4];
     float b[4];

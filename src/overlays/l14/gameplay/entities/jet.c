@@ -2459,10 +2459,6 @@ struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) {
 found:
     return &D_L14_0015FFD8_12f0[group_moby_index];
 }
-#ifndef
-#endif
-#ifndef
-#endif
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 void request_taxi_stop_prompt(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -2491,7 +2487,6 @@ void request_taxi_stop_prompt(struct Moby *moby) {
         break;
     }
 }
-#include "sda.h"
 extern unsigned char D_0015EDB0;
 typedef struct {
     float target[4];

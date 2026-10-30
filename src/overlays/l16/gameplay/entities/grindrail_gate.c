@@ -755,7 +755,6 @@ void taxi_update(struct Moby *moby) {
     fast_vec_sub(position_delta, &moby->pos, previous_position);
     update_entity_matrix(taxi_data + 0x20, position_delta, previous_rotation, &moby->rot);
 }
-#include "sda.h"
 #include "qcopy.h"
 extern char *D_L16_001601AC_slots_e4900 __asm__("D_L16_001600EC");
 extern unsigned char D_0013D5C8_b_e4900[] __asm__("D_0013D4C0");
@@ -1664,10 +1663,6 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
     challenge_set_layout_param(100.0f);
     jet_game_state(0, 8);
 }
-#ifndef
-#endif
-#ifndef
-#endif
 extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
 void update_two_region_trigger_latch(struct Moby *moby) __asm__("FUN_L16_002e7208");
 

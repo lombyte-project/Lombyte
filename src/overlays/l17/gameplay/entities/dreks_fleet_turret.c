@@ -257,11 +257,6 @@ void update_fleet_beam(struct Moby *beam_moby) {
         add_draw_callback(draw_fleet_beam_quad, beam_moby);
     }
 }
-#ifndef
-#include "sda.h"
-#endif
-#ifndef
-#endif
 typedef struct {
     char pad[0x40];
     unsigned int w[4];
@@ -835,7 +830,6 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
         }
     }
 }
-#include "sda.h"
 
 #include "qcopy.h"
 

@@ -306,10 +306,6 @@ void update_hero_blink_and_gold_weapon_tint(void)
         && hero.items[0].moby != 0)
         update_item_tint_from_hero(hero.items[0].moby, hero.moby);
 }
-#ifndef
-#endif
-#ifndef
-#endif
 extern int func_L00_001F10E0_2cd48(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");

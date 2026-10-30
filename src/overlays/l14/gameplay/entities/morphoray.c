@@ -1518,10 +1518,6 @@ void update_path_camera(struct UpdateCam *path_camera) {
     fast_vec_normalize(&path_camera->m1, &path_camera->m1, 1.0f);
     fast_vec_cross(&path_camera->m2, &path_camera->m1, &path_camera->m0);
 }
-#ifndef
-#endif
-#ifndef
-#endif
 extern int check_descriptor_hero_trigger(void *) __asm__("FUN_L10_002f5a78");
 extern char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50");
 int check_camera_hero_requirements(char *camera, char *control_mode_gate_object) __asm__("FUN_L14_00315920");

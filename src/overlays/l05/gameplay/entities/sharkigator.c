@@ -1819,11 +1819,6 @@ int test_extermibot_offset_path_clearance(char *moby, float *goal, float probe_o
     FUN_001f9a10_c(offset_probe_position, offset_probe_position, (float *)&MOBY(moby)->pos);
     return test_path_segment_strict_crossing(*(int *)(moby_data + 0x2C0), probe_position, offset_probe_position) == 0;
 }
-#ifndef
-#include "sda.h"
-#endif
-#ifndef
-#endif
 typedef struct {
     char p0[0x10];
     char pos[0x10];
@@ -2605,7 +2600,6 @@ void update_racer_jump_animations(struct Moby *moby) {
     if (leap_data->rider != 0)
         leap_data->rider->anim_speed = moby->anim_speed;
 }
-#include "sda.h"
 
 /* Update function of moby class 717 (skid_mcmarx): a hoverboard racer that follows its path, jumps, and steers. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_00308D68), where it is exact; names translated to the US level program. */
