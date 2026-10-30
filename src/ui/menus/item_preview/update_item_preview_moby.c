@@ -17,14 +17,14 @@ int update_item_preview_moby(struct MenuScreen *menu) __asm__("FUN_0021df98");
 
 int update_item_preview_moby(struct MenuScreen *menu) {
     struct MenuScreen *grid = menu_system.current->focus;
-    int                item = grid->data.grid.cells[grid->data.grid.selected_cell].id;
+    int                selected_item_id = grid->data.grid.cells[grid->data.grid.selected_cell].id;
     short              current_preview_class;
     MenuItemInfo      *rec;
     short              want;
 
     current_preview_class =
         menu->data.preview.moby != 0 ? *(short *)(menu->data.preview.moby + 0xA6) : -1;
-    rec = &menu_item_info[item];
+    rec = &menu_item_info[selected_item_id];
     want = rec->preview_class;
     if (want != -1 && current_preview_class == -1) {
         char *spawned_moby = create_menu_preview_moby(want);
@@ -47,13 +47,13 @@ int update_item_preview_moby(struct MenuScreen *menu) {
         char *replacement_moby = create_menu_preview_moby(want);
 
         if (replacement_moby != 0) {
-            char *old;
+            char *old_preview_moby;
 
             *(short *)(replacement_moby + 0x34) = 0;
-            old = menu->data.preview.moby;
-            qcopy(replacement_moby + 0x10, old + 0x10);
-            qcopy(replacement_moby + 0x40, old + 0x40);
-            *(int *)(replacement_moby + 0x74) = *(int *)(old + 0x74);
+            old_preview_moby = menu->data.preview.moby;
+            qcopy(replacement_moby + 0x10, old_preview_moby + 0x10);
+            qcopy(replacement_moby + 0x40, old_preview_moby + 0x40);
+            *(int *)(replacement_moby + 0x74) = *(int *)(old_preview_moby + 0x74);
             **(void ***)(replacement_moby + 0x78) = menu;
         }
         delete_moby(menu->data.preview.moby);
