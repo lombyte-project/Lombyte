@@ -393,7 +393,7 @@ extern char *D_L00_0016016C_macro __asm__("D_L00_0016016C") MACRO_ADDR;
 extern char *D_L00_0015F318  MACRO_ADDR;
 extern char *toad_paths[] __asm__("D_L00_001B04B0");
 extern char *create_moby(int);
-extern char player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern char D_L00_0016C780[];
 extern char D_L00_0016C7B0[];
 extern char D_L00_00173EC0[];
@@ -505,7 +505,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     fast_decompress(level_root[1], hdr);
     FlushCache(0);
     FillTransferWords(&D_0013F350, 0, 0x2310);
-    FillTransferWords(player_camera, 0, 0x3A0);
+    FillTransferWords(&l00_camera, 0, 0x3A0);
     FillTransferWords(D_L00_0018EB40, 0, 0x180);
     srand(0x4D2);
     if (pal_mode != 0) {

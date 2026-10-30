@@ -1697,7 +1697,7 @@ typedef struct {
 } Ryno_2cc608;
 typedef struct { float radius; char pad4[0xC]; float height; } Bounds;
 
-extern char player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern Vec4 camera_rot_2cc608 __asm__("D_L00_00166DD0");
 extern float g_debug_camera[] __asm__("D_L00_00166DC0");
 extern int D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
@@ -1738,7 +1738,7 @@ void ryno_update(struct Moby *ryno_moby) {
     float yaw, pitch;
     int i;
 
-    copy_matrix3x4(&launch_direction_basis, player_camera);
+    copy_matrix3x4(&launch_direction_basis, l00_camera.unk0);
     transpose_rotation_matrix(&view, &launch_direction_basis);
     if ((unsigned int)(ryno_moby->state - 2) < 2) {
         if (fast_dec_timer(&ryno_vars->lock_timer) || ryno_vars->target == 0 || ryno_vars->target->state == 0xFE || ryno_vars->target->state == 0xFD) {

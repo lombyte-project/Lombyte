@@ -1056,7 +1056,7 @@ typedef struct {
     s16 unk7E;
 } ThrowPvars;
 
-extern f32 player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
@@ -1103,8 +1103,8 @@ void launch_hero_wrench(void) {
             }
         }
         if (!has_target) {
-            hero.aim_yaw = player_camera[0x158 / 4];
-            hero.aim_pitch = fast_add_rotations(-player_camera[0x154 / 4], 0.12217305f);
+            hero.aim_yaw = l00_camera.yaw;
+            hero.aim_pitch = fast_add_rotations(-l00_camera.pitch, 0.12217305f);
         }
     }
     item = hero.items[0].moby;
@@ -1129,9 +1129,9 @@ void launch_hero_wrench(void) {
     clear_u64_value(aim_origin_or_euler_angles);
     euler_rotation_basis(item_rotation_matrix, aim_origin_or_euler_angles);
     if (aimed) {
-        aim_origin_or_euler_angles[0] = player_camera[0x150 / 4];
-        aim_origin_or_euler_angles[1] = player_camera[0x154 / 4];
-        aim_origin_or_euler_angles[2] = player_camera[0x158 / 4];
+        aim_origin_or_euler_angles[0] = l00_camera.unk150;
+        aim_origin_or_euler_angles[1] = l00_camera.pitch;
+        aim_origin_or_euler_angles[2] = l00_camera.yaw;
         euler_rotation_basis(cam_mat, aim_origin_or_euler_angles);
         multiply_matrix3x3(item_rotation_matrix, cam_mat, item_rotation_matrix);
     } else {

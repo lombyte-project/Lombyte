@@ -252,7 +252,7 @@ extern u128 D_L00_00165F80[];
 extern u128 camera_lateral_axis[] __asm__("D_L00_00166FE0");
 extern u128 D_L00_00166FF0[];
 extern u128 D_L00_00166FD0[];
-extern f32 player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern A02b0_tab D_L00_001C8FF0[];
 
 extern void append_gif_transfer_packet(void) __asm__("FUN_001fb368");
@@ -327,10 +327,10 @@ void draw_vendor_screen(void) {
             }
             qzero(camera_lateral_axis);
             qzero(D_L00_00166FF0);
-            player_camera[0x350 / 4] = 1.0f;
-            player_camera[0x364 / 4] = 1.0f;
-            player_camera[0x378 / 4] = 1.0f;
-            player_camera[0x37C / 4] = 1.0f;
+            l00_camera.unk350[0] = 1.0f;
+            l00_camera.unk350[5] = 1.0f;
+            l00_camera.unk350[10] = 1.0f;
+            l00_camera.unk350[11] = 1.0f;
             update_camera_view_matrices();
         } else {
             D_L00_00165F80[0] = D_L00_00166FD0[0];

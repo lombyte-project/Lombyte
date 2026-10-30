@@ -512,7 +512,7 @@ typedef struct {
     float f154;
     float f158;
 } C_20d6b0;
-extern C_20d6b0 player_camera __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 
 float score_hero_target_candidate(char *target_moby, float yaw, float range, float ylim, float plim, int *out) __asm__("FUN_L00_0020d6b0");
 
@@ -535,13 +535,13 @@ float score_hero_target_candidate(char *target_moby, float yaw, float range, flo
     angular_limit_error = hero_yaw_error;
     elevation_angle_error = fast_difference_between_rotations(fast_arc_tan(vector_distance_xy(target_scoring_origin, target_moby + 0x10), MOBY(target_moby)->pos.z - target_scoring_origin[2]), 0.0f);
     if (hero_state->state.current == 1 || hero_state->state.current == 0x1E) {
-        C_20d6b0 *camera = &player_camera;
+        LevelCamera *camera = &l00_camera;
         float b = fast_difference_between_rotations(
-            fast_arc_tan(MOBY(target_moby)->pos.x - camera->v140[0], MOBY(target_moby)->pos.y - camera->v140[1]),
-            camera->f158);
+            fast_arc_tan(MOBY(target_moby)->pos.x - camera->pos.f[0], MOBY(target_moby)->pos.y - camera->pos.f[1]),
+            camera->yaw);
         elevation_angle_error = fast_difference_between_rotations(
-            fast_arc_tan(vector_distance_xy(camera->v140, target_moby + 0x10), MOBY(target_moby)->pos.z - camera->v140[2]),
-            -camera->f154);
+            fast_arc_tan(vector_distance_xy(camera->pos.f, target_moby + 0x10), MOBY(target_moby)->pos.z - camera->pos.f[2]),
+            -camera->pitch);
         angular_limit_error = elevation_angle_error;
         angular_penalty = b + elevation_angle_error;
         if (elevation_angle_error < b)

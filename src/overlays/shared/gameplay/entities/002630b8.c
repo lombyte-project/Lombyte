@@ -128,8 +128,8 @@ typedef struct {
 } S166C80;
 extern float D_L00_0015FCA0_002634f8 __asm__("D_L00_0015FCA0");
 extern float D_L00_0015FCA4_002634f8 __asm__("D_L00_0015FCA4");
-extern S166C80 D_L00_00166C80_002634f8 __asm__("D_L00_00166C80")
-    __attribute__((section(".data")));
+#include "rnc/overlay/level_camera.h"
+extern LevelCamera l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern Vec4_2634f8 D_L00_00173E60_002634f8 __asm__("D_L00_00173E60")
     __attribute__((section(".data")));
 int FUN_001efa68_002634f8(Vec4_2634f8 *, Vec4_2634f8 *, int, void *, int) __asm__("FUN_001efa68");
@@ -139,11 +139,11 @@ void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) __asm__("FUN_L00_00263
 void spawn_ground_contact_effect_particle(Vec4_2634f8 *v) {
     Vec4_2634f8 ground_probe_start, u, position_delta;
     float k, f;
-    S166C80 *position_owner;
+    LevelCamera *position_owner;
     k = (D_L00_0015FCA4_002634f8 - D_L00_0015FCA0_002634f8) * 0.00390625f;
     ground_probe_start.q = v->q;
     f = ground_height_at(&ground_probe_start) + k;
-    position_owner = &D_L00_00166C80_002634f8;
+    position_owner = &l00_camera_lui;
     ground_probe_start.f[2] = f;
     if (f < position_owner->pos.f[2] + 5.0f) {
         u.q = ground_probe_start.q;

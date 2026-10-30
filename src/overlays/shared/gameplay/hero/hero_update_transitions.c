@@ -39,7 +39,7 @@ typedef struct {
 extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 extern HeroAnimRow item_defs[] __asm__("D_L00_00179AC0");
 extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890");
-extern S166D80 player_camera __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 extern float D_L00_0015F638;
 extern float D_L00_00166DD8 NOT_SDA;
@@ -2788,8 +2788,8 @@ void hero_update_transitions(void) {
                         int fr;
 
                         hero.rail_land_frames = scale_game_frames(1);
-                        player_camera.f160 = 0.15f;
-                        player_camera.f168 = scale_game_frames(0x1E);
+                        l00_camera.shake_amount = 0.15f;
+                        l00_camera.shake_frames = scale_game_frames(0x1E);
                         fr = truncate_float_to_s32(hero.jump_land_anim_frame) + 3;
                         if (hero.anim_frame < hero.target_anim_frame) {
                             set_hero_animation(moby[0x53], fr, scale_game_frames(6));

@@ -167,7 +167,7 @@ extern Vec4 D_L00_00180260;
 extern u8 D_L00_0016CA40[];
 extern s32 D_L00_0015F3F8;
 extern int D_L00_00173E00[];
-extern f32 player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern s32 frame_size __asm__("D_0013E504") NOT_SDA;
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
 extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");
@@ -343,13 +343,13 @@ void initialize_pause_menu(void) {
             Ent *moby = create_menu_preview_moby(0x472);
             l00_pause_menu_page_mobys[i] = moby;
             if (moby != 0) {
-                f32 *camera;
+                LevelCamera *camera;
                 moby->flags &= 0xFFFD;
                 l00_pause_menu_page_mobys[i]->update = FUN_L00_002df638;
-                camera = player_camera;
-                l00_pause_menu_page_mobys[i]->pos[0] = camera[80];
-                l00_pause_menu_page_mobys[i]->pos[1] = camera[81];
-                l00_pause_menu_page_mobys[i]->pos[2] = camera[82];
+                camera = &l00_camera;
+                l00_pause_menu_page_mobys[i]->pos[0] = camera->pos.f[0];
+                l00_pause_menu_page_mobys[i]->pos[1] = camera->pos.f[1];
+                l00_pause_menu_page_mobys[i]->pos[2] = camera->pos.f[2];
                 l00_pause_menu_page_mobys[i]->rot[0] = 0.0f;
                 l00_pause_menu_page_mobys[i]->rot[1] = 0.0f;
                 l00_pause_menu_page_mobys[i]->rot[2] = 0.0f;
