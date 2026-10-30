@@ -204,7 +204,7 @@ typedef struct {
 
 extern s32 pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
-#include "rnc/overlay/collection_state.h"
+#include "rnc/overlay/level_save_state.h"
 extern BurstColors l01_bridge_piece_debris_oclass_choices __asm__("D_L01_00161C60");
 extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
@@ -219,7 +219,7 @@ void bridge_piece_1_update(BurstMoby *self) {
     s32 i;
 
     hit_result = find_moby_hit(self, 0x830000, 0);
-    if (l01_save_id_collection_state.collected[self->id] != 0 ||
+    if (l01_save_state.cleared[self->id] != 0 ||
         (D_0014C190_257218[current_level_index][self->id >> 5] >> (self->id & 0x1F)) & 1) {
         mark_moby_for_removal(self);
     }
@@ -495,7 +495,7 @@ void destroyable_cave_wall_update(struct Moby *cave_wall_moby) {
     s32 j;
     f32 offset_component_or_smoke_scale;
 
-    if (l01_save_id_collection_state.collected[(s16)cave_wall_moby->save_id] != 0 ||
+    if (l01_save_state.cleared[(s16)cave_wall_moby->save_id] != 0 ||
         (D_0014C190_257218[current_level_index][(s16)cave_wall_moby->save_id >> 5] >> (cave_wall_moby->save_id & 0x1F)) & 1) {
         mark_moby_for_removal(cave_wall_moby);
         return;
@@ -864,7 +864,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
             if (ents_macro[data->link].fB0 == 0xFF
                 || (D_L01_0015FC88[ents_macro[data->link].fB0] != 0xFF
                     && D_0014C050_u[ents_macro[data->link].fB0 + (current_level_index_macro << 4)] == 0xFF)) {
-                l01_save_id_collection_state.collected[ents_macro[data->link].fB2] = ents_macro[data->link].fB0 + 2;
+                l01_save_state.cleared[ents_macro[data->link].fB2] = ents_macro[data->link].fB0 + 2;
             }
         }
         if (data->f3C != -1) {

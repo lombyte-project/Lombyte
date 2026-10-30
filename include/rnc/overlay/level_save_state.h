@@ -11,6 +11,7 @@ typedef struct {
     u8 cleared[1];                  /* 0x454 */
 } LevelSaveState;
 
+extern LevelSaveState l01_save_state __asm__("D_L01_001BB6B0");
 extern LevelSaveState l10_save_state __asm__("D_L10_001BB6B0");
 extern LevelSaveState l15_save_state __asm__("D_L15_001BB830");
 

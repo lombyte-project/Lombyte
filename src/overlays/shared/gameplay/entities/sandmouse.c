@@ -732,7 +732,7 @@ typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
 
 typedef struct Moby Moby;
 
-#include "rnc/overlay/collection_state.h"
+#include "rnc/overlay/level_save_state.h"
 
 typedef struct {
     Vec4 goal;      /* 0x00 */
@@ -754,7 +754,7 @@ typedef struct {
 
 extern char voice_pool_lui[] __asm__("D_0013E550") NOT_SDA;
 extern struct Moby *D_L01_001742D8 NOT_SDA;
-extern LevelCollectionState l01_save_id_collection_state_lui __asm__("D_L01_001BB6B0") NOT_SDA;
+extern LevelSaveState l01_save_state_lui __asm__("D_L01_001BB6B0") NOT_SDA;
 extern struct HoverTuning D_L01_001DEB38_lui __asm__("D_L01_001DEB38") NOT_SDA;
 extern char *D_L01_0015FFD8;
 extern char *D_L01_00167280 NOT_SDA;
@@ -853,7 +853,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
         if (sandmouse_vars->link != -1) {
             qcopy(&sandmouse_moby->pos, &LNK(sandmouse_vars->link)->pos);
             sandmouse_moby->pos.z += 0.02f;
-            if (l01_save_id_collection_state_lui.collected[(short)sandmouse_moby->save_id] != 0
+            if (l01_save_state_lui.cleared[(short)sandmouse_moby->save_id] != 0
                 || (*(int *)(D_0014C190 + (((short)sandmouse_moby->save_id >> 5) * 4 + (current_level_index << 8))) >> (sandmouse_moby->save_id & 0x1F)) & 1) {
                 debug_print(D_L01_0020BA10);
                 mark_moby_for_removal(sandmouse_moby);
