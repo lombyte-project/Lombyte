@@ -19,7 +19,7 @@
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/overlay/l06/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l06/hero/hero_set_state.h"
 #include "rnc/overlay/shared/ui/help/advance_hero_animation.h"
 #include "rnc/overlay/shared/ui/map/reveal_map_around_position.h"
 #include "rnc/sdk/library/sceVu0Normalize.h"

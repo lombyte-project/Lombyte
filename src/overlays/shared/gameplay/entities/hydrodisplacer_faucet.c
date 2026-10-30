@@ -20,7 +20,7 @@
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/l05/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l05/hero/hero_set_state.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/gameplay/entities/attach_manipulator.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"

@@ -7,7 +7,7 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
 #include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
-#include "rnc/overlay/l01/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l01/hero/hero_set_state.h"
 #include "rnc/runtime/dma/calculate_dma_transfer_address.h"
 #include "rnc/textbin/world/data/select_world_object_resource_tables.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"

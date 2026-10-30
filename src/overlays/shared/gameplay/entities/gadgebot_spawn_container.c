@@ -20,7 +20,7 @@
 #include "rnc/gameplay/state/interpolated_record.h"
 #include "rnc/gameplay/entities/detach_manipulator.h"
 #include "rnc/math/rotations/extract_matrix_rotation_quaternion.h"
-#include "rnc/overlay/l06/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l06/hero/hero_set_state.h"
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
 #include "rnc/overlay/shared/gameplay/state/build_symmetric_adjacency_masks.h"
 #include "rnc/overlay/shared/gameplay/state/trooper_set_knockback.h"

@@ -37,7 +37,7 @@
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/rendering/effects/spawn_spark.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
-#include "rnc/overlay/l01/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l01/hero/hero_set_state.h"
 #include "rnc/overlay/shared/gameplay/state/record_moby_context_bytes.h"
 #include "rnc/rendering/vu1/vu1_add_data_ref.h"
 

@@ -27,7 +27,7 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/overlay/l05/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l05/hero/hero_set_state.h"
 #include "rnc/overlay/shared/gameplay/entities/open_vendor_menu.h"
 #include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
 #include "rnc/textbin/runtime/memory/mode_freeze_init.h"

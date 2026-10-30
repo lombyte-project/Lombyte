@@ -9,7 +9,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/interpolation.h"
 #include "rnc/overlay/shared/input/pad/pad_pressed_within.h"
-#include "rnc/overlay/l02/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l02/hero/hero_set_state.h"
 
 extern float D_L02_0017C3B8[];
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");

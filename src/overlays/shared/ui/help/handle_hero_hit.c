@@ -14,7 +14,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
-#include "rnc/overlay/l08/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l08/hero/hero_set_state.h"
 
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");

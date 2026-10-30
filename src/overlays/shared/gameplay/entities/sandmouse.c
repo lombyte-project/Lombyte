@@ -22,7 +22,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/gameplay/entities/detach_manipulator.h"
-#include "rnc/overlay/l01/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l01/hero/hero_set_state.h"
 #include "rnc/overlay/shared/audio/voices/play_voice.h"
 #include "rnc/overlay/shared/audio/voices/vendor_volume.h"
 #include "rnc/overlay/shared/gameplay/camera/init_camera_system.h"

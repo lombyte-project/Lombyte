@@ -25,7 +25,7 @@
 #include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/rendering/view/update_view_context.h"
-#include "rnc/overlay/l02/gameplay/hero/hero_set_state.h"
+#include "rnc/overlay/l02/hero/hero_set_state.h"
 #include "rnc/rendering/view/update_camera_view_matrices.h"
 #include "rnc/rendering/vu1/vu1_add_data_ref.h"
 #include "rnc/rendering/vu1/vu1_tex_flush.h"

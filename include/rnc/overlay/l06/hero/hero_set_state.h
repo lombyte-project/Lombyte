@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_L06_HERO_HERO_SET_STATE_H
+#define LOMBYTE_RNC_OVERLAY_L06_HERO_HERO_SET_STATE_H
+
+#include "types.h"
+
+s32 hero_set_state(s32, s32) __asm__("FUN_L06_002356a0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_L06_HERO_HERO_SET_STATE_H */
