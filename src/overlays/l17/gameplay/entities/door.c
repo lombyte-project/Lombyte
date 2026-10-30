@@ -1,5 +1,6 @@
 /* Level 17 moby classes: door, fighter_jet, magnet_elevator, robot_dog, shuttle. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/gameplay/entities/moby_class_id.h"
 
@@ -1519,12 +1520,6 @@ int D_L17_00162178 = 180;
 char *hp_bar_clut __asm__("D_L17_00162180") = 0;
 int hp_bar_saved __asm__("D_L17_00162184") = 0;
 typedef struct {
-    char pad[0x160];
-    float f160;
-    int pad164;
-    int i168;
-} ShipShake;
-typedef struct {
     char pad[0x98];
     int unk98;
 } ShipCamera;
@@ -1556,7 +1551,6 @@ extern void update_moby_class_flags_and_link(int, int, int, int) __asm__("FUN_L1
 extern int D_L17_0015F608;
 extern char *fighter_jet_hp_bar_clut_lookup_base __asm__("D_L17_0015F420");
 extern ShipLevelEntry l17_fighter_jet_hp_bar_clut_entries[] __asm__("D_L17_0016DA80");
-extern ShipShake D_L17_00167580;
 void fighter_jet_update(ShipMoby *moby) __asm__("FUN_L17_002ed018");
 void fighter_jet_update(ShipMoby *moby) {
     enum {
@@ -1588,9 +1582,9 @@ void fighter_jet_update(ShipMoby *moby) {
                 if (hit->damage < g->ship_hp) {
                     g->ship_hp -= hit->damage;
                     if (hit->flags & 1) {
-                        ShipShake *s = &D_L17_00167580;
-                        s->f160 = 1.0f;
-                        s->i168 = scale_game_frames(4);
+                        LevelCamera *s = &l17_camera;
+                        s->shake_amount = 1.0f;
+                        s->shake_frames = scale_game_frames(4);
                         k = hit->damage * D_L17_00162088;
                         build_spherical_offset(dir, ship_vars->speed, ship_vars->rot[2], -ship_vars->rot[1]);
                         clamp_vector_length((char *)hit + 0x10, (char *)hit + 0x10, frame_time * 3.0f);
@@ -1607,9 +1601,9 @@ void fighter_jet_update(ShipMoby *moby) {
                 } else {
                     build_spherical_offset(dir, ship_vars->speed, ship_vars->rot[2], -ship_vars->rot[1]);
                     {
-                        ShipShake *s = &D_L17_00167580;
-                        s->f160 = 0.2f;
-                        s->i168 = scale_game_frames(5);
+                        LevelCamera *s = &l17_camera;
+                        s->shake_amount = 0.2f;
+                        s->shake_frames = scale_game_frames(5);
                     }
                     g->ship_hp = 0.0f;
                     moby->state = 7;
