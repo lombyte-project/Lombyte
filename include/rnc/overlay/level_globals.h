@@ -5,7 +5,6 @@
 
 /* Shared overlay globals whose complete owning layouts are not recovered yet. */
 
-extern f32 D_L06_00167400[];
 extern u32 D_0013CAE4 __attribute__((section(".data")));
 extern s32 D_L10_0015F5C4_vendor __asm__("D_L10_0015F5C4");
 extern char D_L12_00167240[];

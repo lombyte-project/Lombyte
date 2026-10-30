@@ -839,14 +839,6 @@ struct PlayerJointTable {
     f32 f1494;
     f32 f1498;
 };
-struct LevelTable_QS {
-    u8 pad0[0x158];
-    f32 f158;
-    u8 pad15C[0x4];
-    f32 f160;
-    u8 pad164[0x4];
-    s32 i168;
-};
 
 extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
 extern f32 D_0015ED6C_a __asm__("D_0015ED6C");
@@ -918,8 +910,7 @@ extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
 extern f32 forward_component(void *) __asm__("FUN_L00_00213350");
 extern struct HeroTableRow2C D_L06_0017C3A8[];
-extern struct LevelTable_QS D_L06_00167400;
-#define Q D_L06_00167400
+#include "rnc/overlay/level_camera.h"
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void offset_hero_position_against_gravity(void *, void *, f32) __asm__("FUN_L00_002336e8");
 extern void make_hit_descriptor(void *, struct MobyView *, s32, f32, void *) __asm__("FUN_L00_00259888");
@@ -1443,8 +1434,8 @@ void update_hero_motion_for_current_state(void) {
         }
         if (hero.past_apex != 0.0f && hero.air_frames.s == 0) {
             if (hero.rise_fall_land_frames == 0) {
-                Q.f160 = 0.2f;
-                Q.i168 = scale_game_frames(40);
+                l06_camera.shake = 0.2f;
+                l06_camera.shake_time = scale_game_frames(40);
             }
             hero.rise_fall_land_frames++;
         }
@@ -2065,11 +2056,11 @@ void update_hero_motion_for_current_state(void) {
             if (hero.stick_magnitude > 0.5f && !flag) {
                 f32 a;
                 FUN_L00_002118c8_c(1.0f, 0);
-                a = fast_difference_between_rotations(hero.motion.move_yaw, Q.f158);
+                a = fast_difference_between_rotations(hero.motion.move_yaw, l06_camera.rot.z);
                 if (fast_difference_between_rotations(a, 1.5707964f) < 1.2217305f ||
                     fast_difference_between_rotations(a, -1.5707964f) < 1.2217305f) {
                     hero.grind_pose = fast_difference_between_rotations(
-                                 fast_subtract_rotations(hero.motion.move_yaw, Q.f158), 1.5707964f) < 0.7853982f
+                                 fast_subtract_rotations(hero.motion.move_yaw, l06_camera.rot.z), 1.5707964f) < 0.7853982f
                                  ? 2
                                  : 3;
                 }

@@ -175,8 +175,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
 
 typedef struct { float corner[4][4]; int color[4]; float uv[4][2]; long unk70; long tex; long unk80; long unk88; } L06BackdropQuad;
 
-typedef struct { char pad[0x140]; float position[4]; } L06ReferencePosition;
-extern L06ReferencePosition referencePosition __asm__("D_L06_00167400");
+#include "rnc/overlay/level_camera.h"
 extern char D_L06_00167540[];
 extern float gadgebot_container_local_vertices[][4] __asm__("D_L06_001D3290");
 extern float gadgebot_container_static_uvs[][2] __asm__("D_L06_001D38C0");
@@ -220,8 +219,8 @@ void draw_gadgebot_spawn_container(char *moby) {
     container_position_snapshot[2] = MOBY(moby)->pos.z;
     container_position_snapshot[3] = 1.0f;
     near = 0;
-    if (absolute_float(referencePosition.position[0] - container_position_snapshot[0]) < 16.0f &&
-        absolute_float(referencePosition.position[1] - MOBY(moby)->pos.y) < 16.0f) {
+    if (absolute_float(l06_camera.pos.x - container_position_snapshot[0]) < 16.0f &&
+        absolute_float(l06_camera.pos.y - MOBY(moby)->pos.y) < 16.0f) {
         near = 1;
     }
     if (near) {
@@ -2058,15 +2057,13 @@ void gadgebot_update(GbMoby *moby) {
 /* scores a target moby by distance, heading differences and flags */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F3578), where it is exact; names translated to the US level program. */
 
-extern char D_L06_00167400[];
 
 float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) __asm__("FUN_L06_002f2148");
 
 float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) {
     float r = vector_distance_xy(moby + 0x10, b + 0x10);
-    float *g = (float *)D_L06_00167400;
     float t = fast_difference_between_rotations(
-        g[0x56], fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
+        l06_camera.rot.z, fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
                               *(float *)(b + 0x14) - MOBY(moby)->pos.y));
     float u = fast_difference_between_rotations(
         MOBY(moby)->rot.z, fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,

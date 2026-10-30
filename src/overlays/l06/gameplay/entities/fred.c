@@ -4,6 +4,7 @@
 #include "rnc/gameplay/entities/moby.h"
 
 #include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -509,8 +510,8 @@ void draw_dual_texture_50_quad_mesh(void) {
     float matrix[4][4] __attribute__((aligned(16)));
     float reference_to_quad_unit_direction[4] __attribute__((aligned(16)));
     float transformed_quad_center_or_normal[4] __attribute__((aligned(16)));
-    float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * D_L06_00167400[86];
-    float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * D_L06_00167400[85];
+    float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * l06_camera.rot.z;
+    float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * l06_camera.rot.y;
     void *matrix_ptr;
     long flags;
     int i, j;
@@ -1023,8 +1024,8 @@ void draw_dual_texture_58_quad_mesh(void) {
     float quad_facing_unit_direction[4] __attribute__((aligned(16)));
     float quad_facing_center_or_normal[4] __attribute__((aligned(16)));
     void *matrix_ptr;
-    float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * D_L06_00167400[86];
-    float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * D_L06_00167400[85];
+    float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * l06_camera.rot.z;
+    float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * l06_camera.rot.y;
     long flags;
     int i, j;
     float facing;
@@ -5518,8 +5519,8 @@ void draw_dual_texture_864_quad_mesh(void) {
     float reference_to_quad_direction[4] __attribute__((aligned(16)));
     float transformed_quad_position_or_normal[4] __attribute__((aligned(16)));
     void *matrix_ptr;
-    float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * D_L06_00167400[86];
-    float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * D_L06_00167400[85];
+    float y_offset = dual_texture_mesh_first_pass_u_offset_multiplier_gp * l06_camera.rot.z;
+    float x_offset = dual_texture_mesh_first_pass_v_offset_multiplier_gp * l06_camera.rot.y;
     long flags;
     int i, j;
     float facing;
@@ -6524,8 +6525,8 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         if (fast_dec_timer(moby_vars + 0xC0) != 0) {
             allocate_voice_for_group_entry(0, 0, (int)hero.moby);
             *(int *)(moby_vars + 0xC0) = truncate_float_to_s32(scale_recovery_time(FUN_002132a8(480.0f, 600.0f)));
-            D_L06_00167400[88] = 0.4f;
-            ((int *)D_L06_00167400)[90] = scale_game_frames(60);
+            l06_camera.shake = 0.4f;
+            l06_camera.shake_time = scale_game_frames(60);
         }
         if (D_L06_0015F5C4 == 0) FUN_001f4600((int)draw_pulsing_timer_display, (char *)moby);
         if (hero.state.current == 0x72) { moby[0x20] = 6; return; }
@@ -7321,8 +7322,7 @@ typedef struct Data_304098 {
 
 extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
 extern char D_0013F3D0[] NOT_SDA;
-typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx;
-extern Fx D_L06_00167400_lui __asm__("D_L06_00167400") NOT_SDA;
+extern LevelCamera l06_camera_lui __asm__("D_L06_00167400") NOT_SDA;
 
 extern void approach_two_stage_304098(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void allocate_voice_for_target_entry_304098(int, int, void *) __asm__("FUN_0022da68");
@@ -7460,8 +7460,8 @@ void red_button_update(struct Moby *moby) {
             camera_rotation.y = -0.2617993878f;
             camera_rotation.z = *(float *)(D_0013E633 + 0xDB5);
             jet_mount(&next_position, &camera_rotation, 2, scale_game_frames(0x12C), 0);
-            D_L06_00167400_lui.f160 = 0.3f;
-            D_L06_00167400_lui.f168 = scale_game_frames(0x2D);
+            l06_camera_lui.shake = 0.3f;
+            l06_camera_lui.shake_time = scale_game_frames(0x2D);
             event_304098(0, 0, moby);
         }
         break;

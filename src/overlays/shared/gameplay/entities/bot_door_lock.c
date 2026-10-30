@@ -20,7 +20,7 @@
 #include "rnc/rendering/view/project_to_screen.h"
 #include "rnc/gameplay/entities/moby.h"
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
-extern float D_L06_00167400[];
+#include "rnc/overlay/level_camera.h"
 extern OvlVec4 D_L06_001fe8d0[];
 extern float D_L06_001fe960[][2];
 extern u32 D_L06_001fe9a8[];
@@ -37,7 +37,7 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     OvlVec4 *pos0, *pos1, *pos2, *pos3;
     OvlVec4 *result0, *result1, *result2, *result3;
     float *data = ((float *)moby->pvars);
-    rotation[0] = 0.0f; rotation[1] = 0.0f; rotation[2] = D_L06_00167400[86];
+    rotation[0] = 0.0f; rotation[1] = 0.0f; rotation[2] = l06_camera.rot.z;
     euler_rotation_basis(matrix, rotation);
     data[7] += 0.01f;
     if (1.0f < data[7]) data[7] -= 1.0f;
@@ -112,7 +112,7 @@ void draw_bot_door_lock_glow(struct Moby *moby) {
     pos[3].q = corners[3].q;
     pos[1].q = corners[1].q;
     pos[2].q = corners[2].q;
-    rotation[2] = D_L06_00167400[86]; rotation[0] = 0.0f; rotation[1] = 0.0f;
+    rotation[2] = l06_camera.rot.z; rotation[0] = 0.0f; rotation[1] = 0.0f;
     euler_rotation_basis(matrix, rotation);
     transform_vector_by_basis(result0, pos0, matrix);
     transform_vector_by_basis(result1, pos1, matrix);
