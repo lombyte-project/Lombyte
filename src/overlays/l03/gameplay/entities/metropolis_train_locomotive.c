@@ -656,9 +656,9 @@ void metropolis_train_locomotive_update(char *moby) {
         tdb->f18 = fast_arc_tan(*(float *)(path + 0x10) - l03_camera.pos.f[0],
                                              *(float *)(path + 0x14) - l03_camera.pos.f[1]);
         tdb->f14 =
-        l03_cuboids[tdb->i28].pos.x =
             -fast_arc_tan(vector_distance_xy(l03_camera.pos.f, ((char *)l03_paths[data->iAC]) + 0x10),
                           *(float *)(((char *)l03_paths[data->iAC]) + 0x18) - l03_camera.pos.f[2]);
+        l03_cuboids[tdb->i28].pos.x =
             fast_cos(PATH_HEADING(((char *)l03_paths[data->iAC]))) * -(data->fDC + 4.0f);
         l03_cuboids[tdb->i28].pos.y =
             fast_sin(PATH_HEADING(((char *)l03_paths[data->iAC]))) * -(data->fDC + 4.0f);
