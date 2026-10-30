@@ -107,7 +107,7 @@ void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, 
 
 void aim_throw_arc(V2c2488 *origin_position,
                    V2c2488 *target_position,
-                   f32     *out,
+                   f32     *throw_velocity,
                    f32      speed,
                    f32      unused,
 
@@ -140,10 +140,10 @@ void aim_throw_arc(V2c2488 *origin_position,
         effective_target_position.f[1] = u.f[1];
     }
     horizontal_speed = frame_time * 8.5f;
-    out[0] = fast_cos(launch_heading) * horizontal_speed;
-    out[1] = fast_sin(launch_heading) * horizontal_speed;
-    *(s32 *)&out[2] = 0;
-    out[2] =
+    throw_velocity[0] = fast_cos(launch_heading) * horizontal_speed;
+    throw_velocity[1] = fast_sin(launch_heading) * horizontal_speed;
+    *(s32 *)&throw_velocity[2] = 0;
+    throw_velocity[2] =
         FUN_L00_0025abf0(origin_position, &effective_target_position, horizontal_speed, -speed, 0);
     if (pad_held_lui[0] & 5) {
         k = scale_ticks(bomb_glove_aimed_range_modifier[0]) * 2.5f + 8.5f;
@@ -152,8 +152,8 @@ void aim_throw_arc(V2c2488 *origin_position,
         k = 8.5f / horizontal_speed;
     }
     v = speed * k * 0.5f;
-    if (v < out[2]) {
-        out[2] = v;
+    if (v < throw_velocity[2]) {
+        throw_velocity[2] = v;
     }
 }
 
