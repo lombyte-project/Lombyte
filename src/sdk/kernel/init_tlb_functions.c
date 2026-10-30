@@ -9,19 +9,19 @@ extern s32  Rfu091Early(s32 arg);
 extern void Rfu116SetSyscallEarly(s32 a, s32 b);
 
 void InitTLBFunctions(void) {
-    s32 *base;
+    s32 *syscall_registration_pairs;
     s32 *cursor;
     u32  i;
 
-    base = tlb_syscall_registration_pairs;
+    syscall_registration_pairs = tlb_syscall_registration_pairs;
     i = 3;
-    Rfu116SetSyscallEarly(base[0], base[1]);
+    Rfu116SetSyscallEarly(syscall_registration_pairs[0], syscall_registration_pairs[1]);
     InvokeKernelSyscall005A_Rfu(0x80075000, tlb_init_syscall_payload, 0x330);
     FlushCache(0);
     FlushCache(2);
-    Rfu116SetSyscallEarly(base[2], base[3]);
-    Rfu116SetSyscallEarly(base[4], base[5]);
-    cursor = base + 6;
+    Rfu116SetSyscallEarly(syscall_registration_pairs[2], syscall_registration_pairs[3]);
+    Rfu116SetSyscallEarly(syscall_registration_pairs[4], syscall_registration_pairs[5]);
+    cursor = syscall_registration_pairs + 6;
     do {
         Rfu116SetSyscallEarly(cursor[0], Rfu091Early(cursor[0]));
         cursor += 2;
