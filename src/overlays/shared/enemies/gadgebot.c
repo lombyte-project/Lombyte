@@ -330,7 +330,7 @@ void gadgebot_update(GbMoby *moby) {
         GADGEBOT_INTERACTION_SEARCH_TARGET = 0,
         GADGEBOT_INTERACTION_APPROACH_TARGET = 1
     };
-    float   out[4];
+    float   movement_displacement_output[4];
     float   raised_position_snapshot[4];
     float   save0[4];
     float   save1[4];
@@ -614,7 +614,7 @@ void gadgebot_update(GbMoby *moby) {
                 }
                 if (hero_distance > 0.8f) {
                     flags =
-                        FUN_L00_00258b50(moby, &gadgebot_vars->ctl, hero.motion.pos.f, out, 1.0f);
+                        FUN_L00_00258b50(moby, &gadgebot_vars->ctl, hero.motion.pos.f, movement_displacement_output, 1.0f);
                 }
                 {
                     int ph = ((int)moby >> 8) % 8;
@@ -779,7 +779,7 @@ void gadgebot_update(GbMoby *moby) {
                                  frame_time * 5.2359877f);
                 gadgebot_vars->ctl.unk24 = frame_time * 4.5f;
                 if (FUN_L00_00258b50(
-                        moby, &gadgebot_vars->ctl, gadgebot_vars->target->pos, out, 1.0f) &
+                        moby, &gadgebot_vars->ctl, gadgebot_vars->target->pos, movement_displacement_output, 1.0f) &
                     0x20) {
                     moby->state = 4;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
@@ -888,7 +888,7 @@ void gadgebot_update(GbMoby *moby) {
                                  frame_scale_sq * 0.07f,
                                  frame_scale_sq * 0.3f,
                                  frame_time * 5.2359877f);
-                if (FUN_L00_00258b50(moby, &gadgebot_vars->ctl, vector_and_hit_scratch, out, 1.0f) &
+                if (FUN_L00_00258b50(moby, &gadgebot_vars->ctl, vector_and_hit_scratch, movement_displacement_output, 1.0f) &
                     0x20) {
                     moby->state = 4;
                     *(OvlQuad *)moby->pos = *(OvlQuad *)save0;
@@ -1004,7 +1004,7 @@ void gadgebot_update(GbMoby *moby) {
         saved_control_f24 = gadgebot_vars->ctl.unk24;
         gadgebot_vars->ctl.unk10 = 0.0f;
         gadgebot_vars->ctl.unk24 = 0.0f;
-        FUN_L00_00258b50(moby, &gadgebot_vars->ctl, moby->pos, out, 1.0f);
+        FUN_L00_00258b50(moby, &gadgebot_vars->ctl, moby->pos, movement_displacement_output, 1.0f);
         gadgebot_vars->ctl.unk10 = saved_control_f10;
         gadgebot_vars->ctl.unk24 = saved_control_f24;
         moby->pos[2] = vector_and_hit_scratch[2];
