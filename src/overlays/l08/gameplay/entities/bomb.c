@@ -1,5 +1,6 @@
 /* Level 08 moby classes: bomb, bomber_tank, blarg_bombthrower, shuttle, rocket. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -25,7 +26,7 @@
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"
-#include "rnc/gameplay/trooper_take_damage.h"
+#include "rnc/gameplay/fun_00213928.h"
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
@@ -819,7 +820,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
         short source_class = source->moby->oclass;
         if (source_class == 0x1A9 || source_class == 0x47) source = 0;
     }
-    trooper_take_damage(moby, source, &data->health, 0, &hit, &damage, 0, 4);
+    fun_00213928(moby, source, &data->health, 0, &hit, &damage, 0, 4);
     one = 1;
     if (hit != one && moby->state != 0) {
         data->health -= damage;
@@ -940,7 +941,6 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
         }
     }
 }
-extern char voice_pool[] __asm__("D_0013E550");
 extern float bomber_tank_part_reference_speed_gp __asm__("D_L08_001618A0") __attribute__((sda));
 extern void approach_value_l08(float *, float, float) __asm__("FUN_00213ed8");
 extern void vendor_volume(int, int) __asm__("FUN_L01_002a1968");
@@ -950,7 +950,7 @@ typedef struct {
     int volume;
 } SoundSlot;
 
-#define SOUND_SLOT_2d55c8(id) ((SoundSlot *)(voice_pool + (id) * 0x70))
+#define SOUND_SLOT_2d55c8(id) ((SoundSlot *)(((char *)&voice_pool) + (id) * 0x70))
 
 typedef struct {
     u8 pad0[0x40];
@@ -1569,7 +1569,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         spawn_moby_table_puff_pattern(moby);
         return;
     }
-    trooper_take_damage(moby, find_moby_hit(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
+    fun_00213928(moby, find_moby_hit(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 0x63) {
         moby->flags |= 0x1000;
         vars->health -= damage;

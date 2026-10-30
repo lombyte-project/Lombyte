@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/data_labels.h"
 struct StateEntry {
     u8 pad_0[0x74];
@@ -7,7 +8,6 @@ struct StateEntry {
     s16 unk7E;
 };
 
-extern u8 voice_pool[] __asm__("D_0013E550");
 
 s32 is_active_state_entry(s32 entry_index, s32 id) __asm__("FUN_001eb740");
 
@@ -15,7 +15,7 @@ s32 is_active_state_entry(s32 entry_index, s32 id) {
     struct StateEntry *state_entry;
 
     if (entry_index >= 0) {
-        state_entry = (struct StateEntry *)(entry_index * 0x70 + voice_pool);
+        state_entry = (struct StateEntry *)(entry_index * 0x70 + ((u8 *)&voice_pool));
         if (state_entry->unk7E == id + D_0015F5B4) {
             if ((u32)(state_entry->unk74 - 1) < 2) {
                 return 1;

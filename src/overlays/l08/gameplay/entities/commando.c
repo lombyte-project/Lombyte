@@ -1,5 +1,6 @@
 /* Level 08 moby classes: commando. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -283,7 +284,6 @@ typedef struct {
     u8 pad0[0x80];
     s32 volume;          /* 0x80 */
 } VoiceView;
-extern char voice_pool[] __asm__("D_0013E550");
 extern u8 D_0013D388[];
 extern void vendor_volume(s32, s32) __asm__("FUN_L01_002a1968");
 
@@ -322,17 +322,17 @@ void update_swing_gate_from_driver(struct Moby *moby) {
             if (!voice_is_playing(moby, vars->voice)) {
                 vars->voice = allocate_voice_for_target_entry(0, 4, moby);
                 vendor_volume(vars->voice, 1);
-            } else if (((VoiceView *)(voice_pool + vars->voice * 0x70))->volume < 0x400) {
-                vendor_volume(vars->voice, ((VoiceView *)(voice_pool + vars->voice * 0x70))->volume +
+            } else if (((VoiceView *)(((char *)&voice_pool) + vars->voice * 0x70))->volume < 0x400) {
+                vendor_volume(vars->voice, ((VoiceView *)(((char *)&voice_pool) + vars->voice * 0x70))->volume +
                                                   0x400 / scale_game_frames(60));
             }
         }
     } else if (moby->oclass == 0x1D4 && voice_is_playing(moby, vars->voice)) {
-        if (((VoiceView *)(voice_pool + vars->voice * 0x70))->volume < 0x100) {
+        if (((VoiceView *)(((char *)&voice_pool) + vars->voice * 0x70))->volume < 0x100) {
             release_voice_slot(vars->voice);
             vars->voice = -1;
         } else {
-            vendor_volume(vars->voice, ((VoiceView *)(voice_pool + vars->voice * 0x70))->volume -
+            vendor_volume(vars->voice, ((VoiceView *)(((char *)&voice_pool) + vars->voice * 0x70))->volume -
                                               0x400 / scale_game_frames(60));
         }
     }

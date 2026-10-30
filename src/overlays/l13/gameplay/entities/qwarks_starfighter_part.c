@@ -1,5 +1,7 @@
 /* Level 13 moby classes: qwarks_starfighter_part, forcefield, purple_ship. */
 #include "types.h"
+#include "rnc/rendering/level_render_state.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -115,7 +117,6 @@ extern int FUN_L00_001fefc8(void *);
 extern int queue_starfighter_voice_line(void *, void *, int, int) __asm__("FUN_L13_002e86f8");
 extern unsigned char *fire_class_53_projectile(char *, char *) __asm__("FUN_L13_002ea6b8");
 extern void fire_starfighter_homing_rocket(void *, void *) __asm__("FUN_L13_002ea540");
-extern char voice_pool[] __asm__("D_0013E550");
 extern char D_0013F3D0[];
 extern char D_00140940[];
 
@@ -1346,11 +1347,10 @@ typedef struct {
     int field94;
 } Level13VendorMoby;
 
-extern char level_render_state[] __asm__("D_0013E030");
 
 void purple_ship_update(Level13VendorMoby *moby) __asm__("FUN_L13_002f3750");
 void purple_ship_update(Level13VendorMoby *moby) {
-    if (*(void **)(level_render_state) != moby) {
+    if (*(void **)(((char *)&level_render_state)) != moby) {
         moby->field94 = 0;
         moby->flags |= 3;
     }

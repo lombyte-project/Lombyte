@@ -1,5 +1,6 @@
 /* Level 15 moby classes: gate, construction_arm, helicopter, ultramech_unlimited. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math_consts.h"
@@ -84,7 +85,6 @@ typedef struct {
 extern CollectedFlags D_L15_001BB830_29aff0 __asm__("D_L15_001BB830");
 extern u8 D_0013F3D0[];
 extern char D_L15_001673C0[];
-extern char voice_pool[] __asm__("D_0013E550");
 extern char D_0014C190[];
 extern int D_L15_001BAAD0[];
 
@@ -141,14 +141,14 @@ check_lock:
         }
         return;
     case GATE_OPENING:
-        if (((VoiceSlot_29aff0 *)(voice_pool + gate_vars->sound * 0x70))->owner != gate_moby ||
-            ((VoiceSlot_29aff0 *)(voice_pool + gate_vars->sound * 0x70))->active == 0)
+        if (((VoiceSlot_29aff0 *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((VoiceSlot_29aff0 *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->active == 0)
             gate_vars->sound = allocate_voice_for_target_entry(0, 4, (int)gate_moby);
         if (gate_vars->duration < (gate_vars->travel = gate_vars->travel + (gate_vars->duration / 0.6f) * frame_time)) {
             slot = gate_vars->sound;
             if (slot != -1) {
-                if (((VoiceSlot_29aff0 *)(voice_pool + slot * 0x70))->owner == gate_moby &&
-                    ((VoiceSlot_29aff0 *)(voice_pool + slot * 0x70))->active != 0)
+                if (((VoiceSlot_29aff0 *)(((char *)&voice_pool) + slot * 0x70))->owner == gate_moby &&
+                    ((VoiceSlot_29aff0 *)(((char *)&voice_pool) + slot * 0x70))->active != 0)
                     release_voice_slot(slot);
             }
             gate_vars->travel = gate_vars->duration;
@@ -176,13 +176,13 @@ check_lock:
         gate_moby->state = 4;
         return;
     case GATE_CLOSING:
-        if (((VoiceSlot_29aff0 *)(voice_pool + gate_vars->sound * 0x70))->owner != gate_moby ||
-            ((VoiceSlot_29aff0 *)(voice_pool + gate_vars->sound * 0x70))->active == 0)
+        if (((VoiceSlot_29aff0 *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((VoiceSlot_29aff0 *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->active == 0)
             gate_vars->sound = allocate_voice_for_target_entry(0, 4, (int)gate_moby);
         if ((gate_vars->travel = gate_vars->travel - (gate_vars->duration / 0.6f) * frame_time) < 0.0f) {
             slot = gate_vars->sound;
-            if (slot != -1 && ((VoiceSlot_29aff0 *)(voice_pool + slot * 0x70))->owner == gate_moby &&
-                ((VoiceSlot_29aff0 *)(voice_pool + slot * 0x70))->active != 0)
+            if (slot != -1 && ((VoiceSlot_29aff0 *)(((char *)&voice_pool) + slot * 0x70))->owner == gate_moby &&
+                ((VoiceSlot_29aff0 *)(((char *)&voice_pool) + slot * 0x70))->active != 0)
                 release_voice_slot(slot);
             gate_vars->travel = 0;
             gate_vars->sound = -1;
@@ -303,14 +303,14 @@ void update_vertical_gate(GateMoby *gate_moby)
         if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
-        if (((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->owner != gate_moby ||
-            ((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->active == 0) {
+        if (((SoundSlot *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((SoundSlot *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->active == 0) {
             gate_vars->sound = allocate_voice_for_target_entry(0, 4, gate_moby);
         }
         if (vertical_gate_travel_distance_gp < (gate_vars->travel = gate_vars->travel + step)) {
             if (gate_vars->sound != -1 &&
-                ((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->owner == gate_moby &&
-                ((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->active != 0) {
+                ((SoundSlot *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->owner == gate_moby &&
+                ((SoundSlot *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->active != 0) {
                 release_voice_slot(gate_vars->sound);
             }
             gate_vars->sound = -1;
@@ -349,14 +349,14 @@ void update_vertical_gate(GateMoby *gate_moby)
         if (gate_vars->key != -1) {
             step = step * 5.0f;
         }
-        if (((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->owner != gate_moby ||
-            ((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->active == 0) {
+        if (((SoundSlot *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->owner != gate_moby ||
+            ((SoundSlot *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->active == 0) {
             gate_vars->sound = allocate_voice_for_target_entry(0, 4, gate_moby);
         }
         if ((gate_vars->travel = gate_vars->travel - step) < 0.0f) {
             if (gate_vars->sound != -1 &&
-                ((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->owner == gate_moby &&
-                ((SoundSlot *)(voice_pool + gate_vars->sound * 0x70))->active != 0) {
+                ((SoundSlot *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->owner == gate_moby &&
+                ((SoundSlot *)(((char *)&voice_pool) + gate_vars->sound * 0x70))->active != 0) {
                 release_voice_slot(gate_vars->sound);
             }
             gate_vars->travel = 0;

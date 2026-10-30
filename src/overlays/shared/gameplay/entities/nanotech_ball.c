@@ -1,5 +1,6 @@
 /* Shared moby classes: nanotech_ball, suckcannon, red_orb. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/hero.h"
@@ -1392,7 +1393,6 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("func_0020E098");
 float absolute_float(float input) __asm__("func_001F99C0");
 #include "rnc/gameplay/state/game_globals.h"
-extern char voice_pool[] __asm__("D_0013E550");
 extern SuckHero suck_hero __asm__("D_0013F350");
 extern SuckItemVariant suck_item_variant __asm__("D_0013E520");
 extern SuckInput controller_state __asm__("D_0013C940");

@@ -2310,7 +2310,7 @@ extern int D_001413D0[];
 #include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_alien_snapper_hit_response_and_targeting.h"
 int D_L06_00161EE8 = 0x80808080;
 int D_L06_00161EEC = 0x80604040;
-extern int trooper_take_damage() __asm__("FUN_00213928");
+extern int fun_00213928() __asm__("FUN_00213928");
 extern int play_entity_sound() __asm__("FUN_L00_002598b0");
 extern int FUN_L00_0025a420_c() __asm__("FUN_L00_0025a420");
 int FUN_L00_0025ff38_c(float best, char *a, char *o, int *excluded, int excluded_count, void *region, int region_count) __asm__("FUN_L00_0025ff38");
@@ -2320,7 +2320,7 @@ void FUN_L00_0025d538_c(s32 id, void *s) __asm__("FUN_L00_0025d538");
 void FUN_L06_002f9698_c(char *arg) __asm__("FUN_L06_002f9698");
 extern float func_001F9878_2FA618(float) __asm__("FUN_001f96b0");
 extern Target *func_L00_0025B478_2FA618(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void func_L06_002FAAC8_2FA618(void *) __asm__("FUN_L06_002f9698");
 extern void func_L00_0025D5B0_2FA618(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
@@ -2372,7 +2372,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby)
         target->owner->oclass == 0x418) {
         target = 0;
     }
-    reaction = trooper_take_damage(moby, target, &data->health, 0, &hit, &damage, 0, 4);
+    reaction = fun_00213928(moby, target, &data->health, 0, &hit, &damage, 0, 4);
 
     if (hit != 1 && moby->state != 0x11 && moby->state != 3) {
         data->health = data->health - damage;
@@ -2948,7 +2948,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     *(int *)(data + 0x110) = truncate_float_to_s32(*(float *)(data + 0x20) * 16.0f);
     dmg = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
-    kind = trooper_take_damage(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
+    kind = fun_00213928(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
     if (out != 1 && (unsigned char)moby[0x20] != 14 &&
         (unsigned char)moby[0x20] != 3 && (unsigned char)moby[0x20] != 5) {
         if (*(char **)(hit + 0x20) != 0) {

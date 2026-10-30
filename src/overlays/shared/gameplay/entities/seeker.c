@@ -19,7 +19,7 @@
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/gameplay/trooper_take_damage.h"
+#include "rnc/gameplay/fun_00213928.h"
 
 /* Per-instance variables of the oClass 52 moby (moby->pvars). */
 typedef struct {
@@ -386,7 +386,7 @@ void update_seeker_damage_and_target(Moby *moby) {
     }
     damage = 0.0f;
     source = find_moby_hit(moby, 0x330000, 0);
-    response = trooper_take_damage(moby, source, &data->health, 0, &hit, &damage, 0, 4);
+    response = fun_00213928(moby, source, &data->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 6) {
         data->health = data->health - damage;
         if (data->health <= 0.0f) {
@@ -638,7 +638,7 @@ void update_ground_melee_enemy(Moby *moby) {
         Hit_2E39E0 *hit;
         damage = 0.0f;
         hit = find_moby_hit(moby, 0x330000, 0);
-        trooper_take_damage(moby, hit, &data->health, 0, &hit_index, &damage, 0, 4);
+        fun_00213928(moby, hit, &data->health, 0, &hit_index, &damage, 0, 4);
         fast_dec_timer_s16(&data->cooldown);
         if (data->cooldown < scale_game_frames(45) && hit != 0) {
             if ((unsigned short)(hit->moby->oclass - 0xB0) < 2) {

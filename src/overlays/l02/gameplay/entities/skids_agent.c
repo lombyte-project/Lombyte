@@ -1,5 +1,6 @@
 /* Level 02 moby classes: skids_agent, skid_mcmarx, liftcar_platform, ocean_aridia. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
 #include "rnc/globals.h"
@@ -543,7 +544,6 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
 }
 extern struct Moby *D_L02_0015FFD8;
 extern unsigned char D_0014C050[][16];
-extern char voice_pool[] __asm__("D_0013E550");
 
 /* Lift platform carried by an animated driver moby: follows the driver's joint 0, waits at an end (3/5) for the
  * hero to step on, then plays the driver's up or down animation (2/4) with its loop sound until it ends. */
@@ -617,7 +617,7 @@ void liftcar_platform_update(struct Moby *moby) {
             driver->anim_speed = 0.0f;
             voice = *(int *)(data + 0xA4);
             if (voice != -1) {
-                char *e = voice_pool + voice * 0x70;
+                char *e = ((char *)&voice_pool) + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(voice);
                 }
@@ -636,7 +636,7 @@ void liftcar_platform_update(struct Moby *moby) {
         if (driver->anim_flags & 2) {
             voice = *(int *)(data + 0xA4);
             if (voice != -1) {
-                char *e = voice_pool + voice * 0x70;
+                char *e = ((char *)&voice_pool) + voice * 0x70;
                 if (*(struct Moby **)(e + 0x88) == driver && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(voice);
                 }

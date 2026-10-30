@@ -1,5 +1,6 @@
 /* Shared moby classes: mine, nanotech_crate_fragment, gold_devastator_missile. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -219,7 +220,6 @@ extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
 f32 resolve_camera_surface_height(void *position, s32 optional_output) __asm__("FUN_002135f0");
 float absolute_float(float input) __asm__("func_001F99C0");
-extern char voice_pool[] __asm__("D_0013E550");
 extern E910 D_E910 __asm__("D_0013E520");
 extern H910 coll_hit __asm__("D_L00_00173E40");
 

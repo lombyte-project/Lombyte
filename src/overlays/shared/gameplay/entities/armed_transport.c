@@ -1,5 +1,6 @@
 /* Shared moby classes: armed_transport, grindrail_barrier. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -255,7 +256,6 @@ void armed_transport_update(char *transport_moby) {
 #include "qcopy.h"
 
 extern char *D_L16_0015FFD8_sda __asm__("D_L16_0015FFD8");
-extern u8 voice_pool[] __asm__("D_0013E550");
 
 typedef struct {
     char pad[0x74];
@@ -292,7 +292,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
     } else if (voice_is_playing(transport_moby, *(int *)(transport_data + 0x190))) {
         int slot = *(int *)(transport_data + 0x190);
         if (slot != -1) {
-            L16Slot_e *voice_slot = (L16Slot_e *)(voice_pool + slot * 0x70);
+            L16Slot_e *voice_slot = (L16Slot_e *)(((u8 *)&voice_pool) + slot * 0x70);
             if (voice_slot->owner == transport_moby && voice_slot->active != 0)
                 release_voice_slot(slot);
         }

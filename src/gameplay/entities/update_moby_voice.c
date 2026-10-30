@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/audio/voice_alloc.h"
 struct MobyVoiceFlags {
     u8 pad_0[0x7C];
@@ -12,7 +13,6 @@ struct MobyVoiceEntry {
     s32 unk88;
 };
 
-extern u8 voice_pool[] __asm__("D_0013E550");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 void update_moby_voice(struct MobyVoiceFlags *moby) __asm__("FUN_0020c940");
@@ -23,7 +23,7 @@ void update_moby_voice(struct MobyVoiceFlags *moby) {
 
     if (moby->unk7D != 0xFF) {
         voice_slot_index = moby->unk7D;
-        voice_slot = (struct MobyVoiceEntry *)(voice_slot_index * 0x70 + voice_pool);
+        voice_slot = (struct MobyVoiceEntry *)(voice_slot_index * 0x70 + ((u8 *)&voice_pool));
         if (voice_slot->unk88 != (s32)moby) {
             moby->unk7D = 0xFF;
         } else if (voice_slot->unk7E != moby->unk7C) {

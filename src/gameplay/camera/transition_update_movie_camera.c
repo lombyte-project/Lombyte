@@ -1,12 +1,12 @@
 /* Ported from rac1-decomp (src/game/transition.c, func_001EB338). */
 
 #include "sda.h"
+#include "rnc/gameplay/camera/camera_globals.h"
 #include "qcopy.h"
 #include "rnc/rendering/view/update_view_context.h"
 
 extern char render_sequence[] __asm__("D_0018CB20");
 extern float view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
-extern char camera_position[] __asm__("D_00187080");
 extern void sceVu0UnitMatrix(float *);
 extern void SceVu0RotMatrixX(float *, float *, float);
 extern void SceVu0RotMatrixY(float *, float *, float);
@@ -24,7 +24,7 @@ unsigned char transition_update_movie_camera(void) {
 
     view_tan_half_fov = 0.63f;
     update_view_context();
-    active_camera_position = camera_position;
+    active_camera_position = ((char *)camera_position);
     qcopy(active_camera_position, key);
     sceVu0UnitMatrix(camera_rotation_matrix);
     SceVu0RotMatrixX(camera_rotation_matrix, camera_rotation_matrix, *(float *)(key + 0x10));

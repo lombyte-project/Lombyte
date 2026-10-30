@@ -1,5 +1,6 @@
 /* Level 11 moby classes: seesaw_platform, ammocrate, psytcopus, jet_fighter, puffoid. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -2547,7 +2548,6 @@ extern ShipLevelEntry_3290 D_L11_0016DA80[];
 extern char *ship_hp_bar_palette_address_base __asm__("D_L11_0015F420");
 extern char *D_L11_001600EC;
 extern unsigned char D_0014C050[][16];
-extern char voice_pool[] __asm__("D_0013E550");
 extern char jet_fighter_missing_victory_jet_destination_message[] __asm__("D_L11_0021B610");
 extern char jet_fighter_missing_victory_hero_destination_message[] __asm__("D_L11_0021B648");
 extern int D_L11_0015F608;
@@ -2781,7 +2781,7 @@ void jet_fighter_update(struct Moby *moby) {
             set_race_camera(p + 0x30, p + 0x70, 0, 1);
             idx = ship_vars->voice;
             if (idx != -1) {
-                voice_entry = voice_pool + idx * 0x70;
+                voice_entry = ((char *)&voice_pool) + idx * 0x70;
                 if (*(struct Moby **)(voice_entry + 0x88) == moby && *(unsigned char *)(voice_entry + 0x74) != 0) {
                     release_voice_slot(idx);
                 }
@@ -2789,7 +2789,7 @@ void jet_fighter_update(struct Moby *moby) {
             ship_vars->voice = -1;
             idx = ship_vars->voice2;
             if (idx != -1) {
-                voice_entry = voice_pool + idx * 0x70;
+                voice_entry = ((char *)&voice_pool) + idx * 0x70;
                 if (*(struct Moby **)(voice_entry + 0x88) == moby && *(unsigned char *)(voice_entry + 0x74) != 0) {
                     release_voice_slot(idx);
                 }
@@ -2884,7 +2884,7 @@ void jet_fighter_update(struct Moby *moby) {
         } else {
             idx = ship_vars->voice;
             if (idx != -1) {
-                voice_entry = voice_pool + idx * 0x70;
+                voice_entry = ((char *)&voice_pool) + idx * 0x70;
                 if (*(struct Moby **)(voice_entry + 0x88) == moby && *(unsigned char *)(voice_entry + 0x74) != 0) {
                     release_voice_slot(idx);
                 }

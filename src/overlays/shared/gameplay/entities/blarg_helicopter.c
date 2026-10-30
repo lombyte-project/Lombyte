@@ -319,7 +319,7 @@ typedef struct {
 } Hit_2C0330;
 extern void FUN_L00_0025a120_2bef68(void *) __asm__("FUN_L00_0025a120");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -448,7 +448,7 @@ void spawner_update(struct Moby *moby) {
         room = 0;
     }
     r = (Hit_2C0330 *)find_moby_hit(moby, 0xC30000, 0);
-    trooper_take_damage(moby, r, &spawner_data->hp, 0, &damage_query_status, 0, 0, 4);
+    fun_00213928(moby, r, &spawner_data->hp, 0, &damage_query_status, 0, 0, 4);
     if (damage_query_status >= 2) {
         float remaining_health = spawner_data->hp - r->f2C;
         spawner_data->hp = remaining_health;

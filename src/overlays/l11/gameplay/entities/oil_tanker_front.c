@@ -34,7 +34,7 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/ui/fonts/font_queue_vu_state.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/gameplay/trooper_take_damage.h"
+#include "rnc/gameplay/fun_00213928.h"
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
@@ -156,7 +156,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     dmg = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
     {
-        s32 kind = trooper_take_damage(moby, hit, &patrol_vars->hp, 0, &out, &dmg, 0, 4);
+        s32 kind = fun_00213928(moby, hit, &patrol_vars->hp, 0, &out, &dmg, 0, 4);
         if (out != 1 && moby->state != 0xB) {
             patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {

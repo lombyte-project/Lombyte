@@ -1,5 +1,6 @@
 /* Level 01 moby classes: rock_formation, fan, bridge_piece_1, destroyable_cave_wall, agnogg_ship_front, bridge_half, green_mushroom, door_left, pipe, beehive, mushroom_underside. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -928,7 +929,6 @@ typedef struct {
 } PendulumMoby;
 
 extern u8 D_0014C050[];
-extern u8 voice_pool[] __asm__("D_0013E550");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 void bridge_half_update(PendulumMoby *self) __asm__("FUN_L01_002fb8a8");
@@ -966,7 +966,7 @@ void bridge_half_update(PendulumMoby *self) {
         if (pendulum_vars->swing == 0.0f) {
             voice_slot_index = pendulum_vars->sound;
             if (voice_slot_index != -1) {
-                voice = voice_pool + voice_slot_index * 0x70;
+                voice = ((u8 *)&voice_pool) + voice_slot_index * 0x70;
                 if (*(void **)(voice + 0x88) == self && voice[0x74] != 0) {
                     release_voice_slot(voice_slot_index);
                 }

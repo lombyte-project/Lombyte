@@ -1,5 +1,6 @@
 /* Level 14 moby classes: shuttle, mine, elevator, taxi, qwark_oltanis, jet, rocket. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -898,7 +899,7 @@ extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float FUN_L00_00257c48(float, float);
 extern int FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
-extern s32 trooper_take_damage(struct Moby *, void *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
+extern s32 fun_00213928(struct Moby *, void *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern void mine_explode(void *, void *, void *, float, float, int, int, int, float, float, float, float,
                          int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int mine_ftoi(float) __asm__("FUN_001fa6d0");
@@ -958,7 +959,7 @@ void update_looping_path_moby(struct Moby *moby) {
         FUN_L00_0025b8c0(&moby->pos.y, &mine_vars->vel[1], path_target_position[1], 0.02f, 0.2f, 0.0f);
         FUN_L00_0025b8c0(&moby->pos.z, &mine_vars->vel[2], path_target_position[2], 0.02f, 0.2f, 0.0f);
         hit = find_moby_hit(moby, 0x230000, 0);
-        trooper_take_damage(moby, hit, mine_vars->health, 0, &count, 0, 0, 4);
+        fun_00213928(moby, hit, mine_vars->health, 0, &count, 0, 0, 4);
         if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || hero.coll_hit_moby == (u8 *)moby) {
             clear_u64_value(&vel);
             allocate_voice_for_target_entry(0, 0, moby);
@@ -1634,7 +1635,6 @@ struct L14VendorLevel {
 };
 extern struct L14VendorLevel D_L14_001BB930_v __asm__("D_L14_001BB930");
 extern char *D_L14_001B0BB0_v[] __asm__("D_L14_001B0BB0");
-extern char voice_pool[] __asm__("D_0013E550");
 extern void vendor_volume(s32 voice, s32 volume) __asm__("FUN_L01_002a1968");
 extern int vendor_ftoi(float) __asm__("FUN_001fa6d0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -1758,7 +1758,7 @@ void elevator_update(struct Moby *elevator_moby) {
             int voice = allocate_voice_for_target_entry(1, 0, elevator_moby);
             if (voice >= 0) {
                 if (elevator_vars->hum_volume < 0)
-                    elevator_vars->hum_volume = *(int *)(voice_pool + 0xF0);
+                    elevator_vars->hum_volume = *(int *)(((char *)&voice_pool) + 0xF0);
                 vendor_volume(voice, elevator_vars->hum_volume);
             }
             if (elevator_vars->dir == -1.0f) {
@@ -1777,7 +1777,7 @@ void elevator_update(struct Moby *elevator_moby) {
             elevator_vars->motor = allocate_voice_for_target_entry(0, 4, elevator_moby);
             if (elevator_vars->motor != 0) {
                 if (elevator_vars->motor_volume < 0)
-                    elevator_vars->motor_volume = *(int *)(voice_pool + 0x80);
+                    elevator_vars->motor_volume = *(int *)(((char *)&voice_pool) + 0x80);
                 vendor_volume(elevator_vars->motor, elevator_vars->motor_volume);
             }
         }
@@ -1804,7 +1804,7 @@ void elevator_update(struct Moby *elevator_moby) {
             int voice;
             update_elevator_idle_glow(elevator_moby);
             if (elevator_vars->motor != -1) {
-                char *e = voice_pool + elevator_vars->motor * 0x70;
+                char *e = ((char *)&voice_pool) + elevator_vars->motor * 0x70;
                 if (*(struct Moby **)(e + 0x88) == elevator_moby && ((u8 *)e)[0x74] != 0)
                     release_voice_slot(elevator_vars->motor);
             }
@@ -2350,7 +2350,7 @@ void taxi_update(struct Moby *moby) {
     } else if (voice_is_playing(moby, taxi_vars->sound) != 0) {
         int voice_slot = taxi_vars->sound;
         if (voice_slot != -1) {
-            char *voice_entry = voice_pool + voice_slot * 0x70;
+            char *voice_entry = ((char *)&voice_pool) + voice_slot * 0x70;
             if (*(struct Moby **)(voice_entry + 0x88) == moby && *(unsigned char *)(voice_entry + 0x74) != 0) {
                 release_voice_slot(voice_slot);
             }
@@ -2771,7 +2771,7 @@ void update_enemy_fighter(struct Moby *moby) {
         moby->flags |= 0x41;
         index = data->sound;
         if (index != -1) {
-            char *entry = voice_pool + index * 0x70;
+            char *entry = ((char *)&voice_pool) + index * 0x70;
             if (*(struct Moby **)(entry + 0x88) == moby && *(unsigned char *)(entry + 0x74) != 0)
                 release_voice_slot(index);
         }
@@ -3080,7 +3080,7 @@ void update_enemy_fighter_921(struct Moby *moby) {
             moby->collision = 0;
             moby->flags |= 0x41;
             if (moby_vars->sound != -1) {
-                char *voice_entry = voice_pool + moby_vars->sound * 0x70;
+                char *voice_entry = ((char *)&voice_pool) + moby_vars->sound * 0x70;
                 if (*(struct Moby **)(voice_entry + 0x88) == moby && ((u8 *)voice_entry)[0x74] != 0)
                     release_voice_slot(moby_vars->sound);
             }
@@ -3338,7 +3338,7 @@ int advance_moby_along_flight_path(struct Moby *moby) {
     if (*(int *)(moby_vars + 0x8C) != 0 && (path_boundary_reached != 0 || *(short *)(D_L14_00167500 + 0x86) != 0x13)) {
         flag_vendor_item(*(int *)(moby_vars + 0x90));
         if (*(int *)(moby_vars + 0x6C) != -1) {
-            char *voice_entry = voice_pool + *(int *)(moby_vars + 0x6C) * 0x70;
+            char *voice_entry = ((char *)&voice_pool) + *(int *)(moby_vars + 0x6C) * 0x70;
             if (*(char **)(voice_entry + 0x88) == moby && ((unsigned char *)voice_entry)[0x74] != 0) {
                 release_voice_slot(*(int *)(moby_vars + 0x6C));
             }
@@ -3425,7 +3425,7 @@ void rocket_update(struct Moby *moby) {
         speed = rocket_travel_speed_gp * frame_time;
         if (distance_to_destination < speed || distance_to_destination <= 0.0f) {
             if (vars->sound != -1) {
-                slot = voice_pool + vars->sound * 0x70;
+                slot = ((char *)&voice_pool) + vars->sound * 0x70;
                 if (*(struct Moby **)(slot + 0x88) == moby && ((u8 *)slot)[0x74] != 0) {
                     release_voice_slot(vars->sound);
                 }

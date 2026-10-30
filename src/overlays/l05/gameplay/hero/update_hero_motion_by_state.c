@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "eetypes.h"
@@ -184,7 +185,6 @@ struct VoiceSlot {
     u8 pad75[0x13];
     struct MobyView *pm88;
 };
-extern u8 voice_pool[] __asm__("D_0013E550");
 extern s32 D_L05_001612D0;
 extern s32 D_L05_001612D8;
 extern s32 frame_number __asm__("D_L05_0015F5CC");
@@ -474,7 +474,7 @@ void update_hero_motion_by_state(void) {
         } else {
             s32 idx = hero.pack_swim_voice;
             if (idx != -1) {
-                struct VoiceSlot *e = (struct VoiceSlot *)(voice_pool + idx * 0x70);
+                struct VoiceSlot *e = (struct VoiceSlot *)(((u8 *)&voice_pool) + idx * 0x70);
                 if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
                     release_voice_slot(idx);
                 }
@@ -863,7 +863,7 @@ void update_hero_motion_by_state(void) {
                 release_voice_slot_cf(7, (struct MobyView *)hero.hoverboard_moby, 2);
             } else {
                 if (hero.board_boost_voice != -1) {
-                    struct VoiceSlot *e = (struct VoiceSlot *)(voice_pool + hero.board_boost_voice * 0x70);
+                    struct VoiceSlot *e = (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.board_boost_voice * 0x70);
                     if (e->pm88 == (struct MobyView *)hero.hoverboard_moby && e->b74 != 0) {
                         release_voice_slot(hero.board_boost_voice);
                     }
@@ -874,7 +874,7 @@ void update_hero_motion_by_state(void) {
                 release_voice_slot_cf(6, (struct MobyView *)hero.hoverboard_moby, 0);
             } else {
                 if (hero.voice_slot6 != -1) {
-                    struct VoiceSlot *e = (struct VoiceSlot *)(voice_pool + hero.voice_slot6 * 0x70);
+                    struct VoiceSlot *e = (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.voice_slot6 * 0x70);
                     if (e->pm88 == (struct MobyView *)hero.hoverboard_moby && e->b74 != 0) {
                         release_voice_slot(hero.voice_slot6);
                     }
@@ -1921,7 +1921,7 @@ void update_hero_motion_by_state(void) {
                 release_voice_slot_cf(0, (struct MobyView *)hero.moby, 0);
             } else {
                 if (hero.grind_voice != -1) {
-                    struct VoiceSlot *e = (struct VoiceSlot *)(voice_pool + hero.grind_voice * 0x70);
+                    struct VoiceSlot *e = (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.grind_voice * 0x70);
                     if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
                         release_voice_slot(hero.grind_voice);
                     }
@@ -2309,7 +2309,7 @@ void update_hero_motion_by_state(void) {
         f32 sp;
         if (hero_slot_item_id(3) == 2) {
             if (hero.voice_slot4 != -1) {
-                struct VoiceSlot *e = (struct VoiceSlot *)(voice_pool + hero.voice_slot4 * 0x70);
+                struct VoiceSlot *e = (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.voice_slot4 * 0x70);
                 if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
                     release_voice_slot(hero.voice_slot4);
                 }
@@ -2318,7 +2318,7 @@ void update_hero_motion_by_state(void) {
             release_voice_slot_cf(3, (struct MobyView *)hero.moby, 2);
         } else {
             if (hero.unk2224 != -1) {
-                struct VoiceSlot *e = (struct VoiceSlot *)(voice_pool + hero.unk2224 * 0x70);
+                struct VoiceSlot *e = (struct VoiceSlot *)(((u8 *)&voice_pool) + hero.unk2224 * 0x70);
                 if (e->pm88 == (struct MobyView *)hero.moby && e->b74 != 0) {
                     release_voice_slot(hero.unk2224);
                 }

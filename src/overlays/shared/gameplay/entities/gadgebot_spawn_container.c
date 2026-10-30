@@ -1,5 +1,7 @@
 /* Shared moby classes: gadgebot_spawn_container, gadgebot_spawn_pad, frog, gadgebot, energy_sphere_holder, energy_sphere. */
 #include "types.h"
+#include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/entities/moby_class_id.h"
 #include "rnc/gameplay/hero.h"
@@ -367,7 +369,6 @@ void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm
 void update_frog_health_respawn_and_target(struct Moby *moby) __asm__("FUN_L06_002e94f0");
 void destroy_frog_child_moby(struct Moby *moby) __asm__("FUN_L06_002e9f30");
 extern char D_0013F3D0[];
-extern char camera_secondary_mode[] __asm__("D_001413D4");
 
 void frog_update(unsigned char *moby) __asm__("FUN_L06_002e8678");
 void frog_update(unsigned char *moby) {
@@ -710,7 +711,7 @@ extern f32 D_L06_0015F580[] MACRO_ADDR;
 #include "rnc/overlay/shared/gameplay/entities/gadgebot_spawn_container_data/update_frog_health_respawn_and_target.h"
 extern struct Moby *D_L06_0015FFD8_e94f0 __asm__("D_L06_0015FFD8");
 extern u8 D_001413F4_e94f0[] __asm__("D_001413F4");
-extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 void spawn_moby_directional_spark_bursts(struct Moby *moby, Vec4 *spark_push_direction) __asm__("FUN_L06_002ea198");
 
@@ -750,7 +751,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
     }
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
-    code = trooper_take_damage(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
+    code = fun_00213928(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
     if (kind != 1 && moby->state != 0xE) {
         vars->health = vars->health - damage;
         if (vars->health <= 0.0f) {
@@ -3069,7 +3070,6 @@ typedef struct {
     int unk90;
 } Obj;
 
-extern char voice_pool[] __asm__("D_0013E550");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern float energy_sphere_rotation_rate_x_degrees_gp __asm__("D_L06_00161E74") __attribute__((sda));
 extern float energy_sphere_rotation_rate_y_degrees_gp __asm__("D_L06_00161E78") __attribute__((sda));
@@ -3091,7 +3091,7 @@ void energy_sphere_update(struct Moby *sphere_moby) {
         allocate_voice_for_target_entry(1, 0, (int)sphere_moby);
         voice_slot_index = *(int *)(sphere_vars + 0x60);
         if (voice_slot_index != -1) {
-            char *voice_slot = voice_pool + voice_slot_index * 0x70;
+            char *voice_slot = ((char *)&voice_pool) + voice_slot_index * 0x70;
             if (*(char **)(voice_slot + 0x88) == sphere_moby && *(unsigned char *)(voice_slot + 0x74) != 0) {
                 release_voice_slot(voice_slot_index);
             }

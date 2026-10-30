@@ -1,5 +1,6 @@
 /* Level 06 moby classes: fred, shuttle, red_button. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/entities/moby.h"
 
 #include "rnc/overlay/level_globals.h"
@@ -7567,7 +7568,6 @@ typedef struct {
     int f18;
 } Data_305E38;
 
-extern char voice_pool[] __asm__("D_0013E550");
 extern float D_0015ED6C;
 #include "rnc/overlay/l06/gameplay/entities/fred_data/update_moby_vector_streams_and_particle_burst_3.h"
 extern float D_L06_001FE890[];
@@ -7687,7 +7687,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
             moby[0x20] = 3;
             voice_slot_index = vector_stream_vars->f18;
             if (voice_slot_index != -1) {
-                char *e = voice_pool + voice_slot_index * 0x70;
+                char *e = ((char *)&voice_pool) + voice_slot_index * 0x70;
                 if (*(char **)(e + 0x88) == moby && *(unsigned char *)(e + 0x74) != 0) {
                     release_voice_slot(voice_slot_index);
                 }

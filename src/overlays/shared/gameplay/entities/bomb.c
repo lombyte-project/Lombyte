@@ -28,7 +28,7 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/gameplay/animation/update_moby_animation_state.h"
-#include "rnc/gameplay/trooper_take_damage.h"
+#include "rnc/gameplay/fun_00213928.h"
 #include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
 
 /* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
@@ -2838,7 +2838,6 @@ typedef struct {
 
 /* D_L00_001C40B0 rows (0x18 bytes); unkE is compared with weapon_ammo_counts. */
 
-extern u8 item_available[] __asm__("D_0013D4C0");
 extern s32 weapon_ammo_counts[] __asm__("D_0013D428");
 extern u8 D_L00_00197BC0[];
 extern struct MobyClass *D_L00_00197300[];
@@ -2909,7 +2908,7 @@ void crate_update(struct Moby *moby) {
         touched = 1;
     }
     if (moby->oclass >= 0x1FB && moby->oclass <= 0x1FD) {
-        trooper_take_damage(moby, other, coll, 0, &hitKind, &hitB, &hitAngle, 4);
+        fun_00213928(moby, other, coll, 0, &hitKind, &hitB, &hitAngle, 4);
     }
 
     switch (moby->state) {

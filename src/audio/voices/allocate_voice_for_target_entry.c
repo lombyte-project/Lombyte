@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 
 /* Partial moby/class views: Moby.pclass is at 0x24 and
  * MobyClass.sound_defs at 0x28. The byte at 0x0D bounds the entry index.
@@ -24,7 +25,6 @@ struct VoiceMobyEntryWindow {
     s32 owner;
 };
 
-extern u8 voice_pool[] __asm__("D_0013E550");
 extern s32 allocate_voice_slot() __asm__("func_0022D7F0");
 s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags,
                                     struct MobyAudioView *moby) __asm__("FUN_0022da68");
@@ -54,7 +54,7 @@ s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags, struct MobyAudio
     }
     slot_index = allocate_voice_slot(sound_defs + (entry_index << 5), flags, moby, 0, 0x400);
     if (slot_index >= 0) {
-        slot = (struct VoiceMobyEntryWindow *)((slot_index * 0x70) + (s32)voice_pool);
+        slot = (struct VoiceMobyEntryWindow *)((slot_index * 0x70) + (s32)((u8 *)&voice_pool));
         slot->owner = moby;
         slot->entry_index = entry_index;
     }

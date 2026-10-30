@@ -1,5 +1,6 @@
 /* Level 16 moby classes: help_desk_lady, bolt_thief, taxi, grindrail_gate, grindrail_button, chomper, gadgetron_ceo, elevator, gadgetron_sign. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -598,7 +599,6 @@ typedef struct {
 extern L16PickupPose *D_L16_001600EC;
 extern char *find_moby_in_owner_list_by_id(void *, int) __asm__("FUN_L05_00319598");
 extern char D_0013CAE4[];
-extern char voice_pool[] __asm__("D_0013E550");
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
 extern float frame_time,
@@ -745,7 +745,7 @@ void taxi_update(struct Moby *moby) {
     } else if (voice_is_playing(moby, *(short *)(taxi_data + 0xAA)) != 0) {
         voice_slot_index = *(short *)(taxi_data + 0xAA);
         if (voice_slot_index != -1) {
-            voice_slot_base = voice_pool + voice_slot_index * 0x70;
+            voice_slot_base = ((char *)&voice_pool) + voice_slot_index * 0x70;
             if (*(char **)(voice_slot_base + 0x88) == moby && *(unsigned char *)(voice_slot_base + 0x74) != 0) {
                 release_voice_slot(voice_slot_index);
             }

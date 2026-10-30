@@ -1842,7 +1842,7 @@ typedef struct {
 extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 #include "rnc/overlay/shared/gameplay/entities/plasmabot_data/update_floating_mine.h"
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
-extern int trooper_take_damage(struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void explode_ff640(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float,
                           int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
@@ -1895,7 +1895,7 @@ void update_floating_mine(struct Moby *moby) {
         scratch.info.unk10 = 0.5f;
         scratch.info.unk3A = 7;
         scratch.info.unk3B = 0xFF;
-        trooper_take_damage(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
+        fun_00213928(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
         if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) || hero.coll_hit_moby == (u8 *)moby) {
             clear_u64_value(explosion_vector);
             allocate_voice_for_target_entry(0, 0, moby);

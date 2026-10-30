@@ -32,7 +32,7 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/gameplay/trooper_take_damage.h"
+#include "rnc/gameplay/fun_00213928.h"
 
 /* Scoutbot update: hovers at its post, flies to its target and back, calls reinforcements, shoots, dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D3DF8), where it is exact; names translated to the US level program. */
@@ -1491,7 +1491,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
 
     damage = 0.0f;
     target = find_moby_hit(moby, 0x330000, 0);
-    reaction = trooper_take_damage(moby, target, data + 0x20, 0, &hit_state, &damage, 0, 4);
+    reaction = fun_00213928(moby, target, data + 0x20, 0, &hit_state, &damage, 0, 4);
     if (hit_state != 1 && MOBY(moby)->state != 11) {
         {
             float health = *(float *)(data + 0x20) - damage;

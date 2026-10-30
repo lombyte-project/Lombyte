@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_globals.h"
 #include "rnc/globals.h"
 
 struct ObjectVector {
@@ -10,7 +11,6 @@ struct ObjectVector {
 };
 
 extern u8 D_0013D5B0[];
-extern u8 menu_action_messages[] __asm__("D_00199478");
 extern u32 level_object_index_boundaries[] __asm__("D_001E03B8");
 
 void copy_level_object_positions(void) __asm__("FUN_00208770");
@@ -35,7 +35,7 @@ void copy_level_object_positions(void) {
     if (start >= end) {
         return;
     }
-    source_base = menu_action_messages;
+    source_base = ((u8 *)menu_action_messages);
     destination = D_0013D5B0 + start * 0x10;
     source = (u8 **)(source_base + start * 4);
     start = end - start;

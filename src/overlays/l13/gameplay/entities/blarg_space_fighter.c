@@ -1680,7 +1680,7 @@ void emit_forcefield_tower_destruction_effects(unsigned char *source_moby, void 
 }
 #include "rnc/overlay/quad.h"
 extern int fptodp(float) __asm__("FUN_00120478");
-extern int trooper_take_damage(struct Moby *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(struct Moby *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void emit_effect_l13(void *, void *, void *, float, float, int, int, int, float, float,
                             float, float, int, float, int, int, int,
@@ -1720,7 +1720,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
             DebugPrint(D_L13_001f49a8, *(int *)(hit_record + 0x38), fptodp(*(float *)(hit_record + 0)),
                        fptodp(*(float *)(hit_record + 4)), fptodp(*(float *)(hit_record + 8)));
         }
-        switch (trooper_take_damage(moby, hit_record, health, 0, &hit, 0, 0, 4)) {
+        switch (fun_00213928(moby, hit_record, health, 0, &hit, 0, 0, 4)) {
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             *health = 0.0f;

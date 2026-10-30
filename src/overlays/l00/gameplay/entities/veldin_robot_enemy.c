@@ -1,5 +1,6 @@
 /* Level 00 moby classes: veldin_robot_enemy. */
 #include "types.h"
+#include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -45,7 +46,6 @@ typedef struct {
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern u16 D_00141850[];
 extern u16 D_00141968[];
-extern u8 *moby_table __asm__("D_L00_0015FFD8") __attribute__((sda));
 
 void update_level_help_controller(HelpMoby *moby) __asm__("FUN_L00_002e0988");
 

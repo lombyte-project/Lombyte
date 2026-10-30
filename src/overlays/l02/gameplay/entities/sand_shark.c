@@ -1,5 +1,6 @@
 /* Level 02 moby classes: sand_shark, constructorbot, elevator, bulldozer, sand_shark_nest, grab_crane, platform, transport_pod, crane, rocket_launcher, rocket_door1, tresspasser_door1, tresspasser_door2, sandshark_egg, rocks. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
@@ -1116,7 +1117,7 @@ extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int select_group_class_29c_moby(void *argp) __asm__("FUN_L02_002d5658");
 extern void extend_group_sand_shark_timers(char *arg) __asm__("FUN_L02_002d5728");
-extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
@@ -1167,7 +1168,7 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
     }
     dmg = 0.0f;
     hit_record = find_moby_hit(moby, 0x330000, 0);
-    trooper_take_damage(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
+    fun_00213928(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby[0x20] != 0x18) {
         extend_group_sand_shark_timers((char *)moby);
         moby_vars->i29C = 0;
@@ -1743,7 +1744,7 @@ void handle_level02_bot_damage_and_retargeting(void *owner_moby) {
     if (hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x264) {
         hit_record = 0;
     }
-    trooper_take_damage(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
+    fun_00213928(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x11) {
         moby_vars->hp -= dmg;
         moby_vars->i90 = truncate_float_to_s32(614.4f);
@@ -2905,7 +2906,6 @@ void snap_transport_pod_rails_to_offsets(struct Moby *moby) {
 /* State machine for a moby that picks a new animation each time the previous one finishes. */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002E05E0), where it is exact; names translated to the US level program. */
 
-extern char voice_pool[] __asm__("D_0013E550");
 extern int FUN_0022da68(int, int, int);
 
 extern short crane_animation_speed_gp __asm__("D_L02_00161C68") __attribute__((sda));
@@ -2935,7 +2935,7 @@ void crane_update(struct Moby *moby) {
             }
             voice_slot_index = crane_vars[0];
             if (voice_slot_index != -1) {
-                char *voice_slot = voice_pool + voice_slot_index * 0x70;
+                char *voice_slot = ((char *)&voice_pool) + voice_slot_index * 0x70;
                 if (*(unsigned char **)(voice_slot + 0x88) == moby && ((unsigned char *)voice_slot)[0x74] != 0) {
                     release_voice_slot(voice_slot_index);
                 }
@@ -3048,7 +3048,7 @@ void rocket_launcher_update(struct Moby *moby) {
         if (fast_difference_between_rotations(moby->rot.z, rocket_launcher_vars->target_yaw) < DEG_TO_RAD && rocket_launcher_vars->yaw_vel == 0.0f) {
             s32 turning_voice_index = rocket_launcher_vars->voice;
             if (turning_voice_index != -1) {
-                TurretVoiceSlot *voice_slot = (TurretVoiceSlot *)(voice_pool + turning_voice_index * 0x70);
+                TurretVoiceSlot *voice_slot = (TurretVoiceSlot *)(((char *)&voice_pool) + turning_voice_index * 0x70);
                 if (voice_slot->owner == moby && voice_slot->active)
                     release_voice_slot(turning_voice_index);
             }

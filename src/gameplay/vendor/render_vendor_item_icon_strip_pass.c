@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/ui/menus/menu_globals.h"
 struct HudMenuState {
     u8 pad_0[0x4];
     s32 unk4;
@@ -15,7 +16,6 @@ struct HudItemEntry {
     u16 unk38;
 };
 
-extern u8 menu_item_info[] __asm__("D_001863D0");
 extern struct HudMenuState D_001E63C0;
 extern s32 SubtractIntegerWithClamp();
 extern void draw_framebuffer_rect() __asm__("func_001FB8F0");
@@ -53,7 +53,7 @@ void render_vendor_item_icon_strip_pass(void) {
             do {
                 item = (s32 *)(void *)((u8 *)&D_001E63C0 + 0xD4 + item_index * 0x14);
                 item_icon =
-                    ((struct HudItemEntry *)(void *)((u8 *)menu_item_info + item[-1] * 0x4C))
+                    ((struct HudItemEntry *)(void *)((u8 *)((u8 *)menu_item_info) + item[-1] * 0x4C))
                         ->unk38;
                 if (item[0] == 1) {
                     frame_index = get_icon_frame(item_icon, 2);
@@ -86,7 +86,7 @@ void render_vendor_item_icon_strip_pass(void) {
                 ((s32)((D_001E63C0.unk210 * 2) + slot + first_slot) % (s32)D_001E63C0.unk210) *
                 0x14;
             icon =
-                ((struct HudItemEntry *)(void *)((u8 *)menu_item_info +
+                ((struct HudItemEntry *)(void *)((u8 *)((u8 *)menu_item_info) +
                                                    *(s32 *)(void *)(entry_offset +
                                                                     ((u8 *)&D_001E63C0 + 0xD0)) *
                                                        0x4C))

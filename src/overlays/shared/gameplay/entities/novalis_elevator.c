@@ -1,5 +1,6 @@
 /* Shared moby classes: novalis_elevator, bolt_crank, gold_weapon_case, sand_mouse, large_amoeboid, sandmouse_house. */
 #include "types.h"
+#include "rnc/audio/voice_pool.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero_state.h"
 
@@ -253,7 +254,6 @@ extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 float absolute_float(float input) __asm__("func_001F99C0");
-extern char voice_pool[] __asm__("D_0013E550");
 
 #define F(p, o) (*(float *)((p) + (o)))
 
@@ -3075,7 +3075,7 @@ void gunship_follow_path(struct Moby *moby) {
             return;
         moby->state = 0;
         if (v->unk11E != -1) {
-            u8 *e = (u8 *)voice_pool + v->unk11E * 0x70;
+            u8 *e = (u8 *)((char *)&voice_pool) + v->unk11E * 0x70;
             if (*(struct Moby **)(e + 0x88) == moby && e[0x74] != 0)
                 FUN_0022d798(v->unk11E);
         }
@@ -3230,7 +3230,7 @@ void gunship_follow_path(struct Moby *moby) {
     moby->collision = 0;
     moby->flags |= 0x41;
     if (v->unk11E != -1) {
-        u8 *e = (u8 *)voice_pool + v->unk11E * 0x70;
+        u8 *e = (u8 *)((char *)&voice_pool) + v->unk11E * 0x70;
         if (*(struct Moby **)(e + 0x88) == moby && e[0x74] != 0)
             FUN_0022d798(v->unk11E);
     }

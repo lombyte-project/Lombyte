@@ -1,5 +1,6 @@
 /* Level 05 moby classes: sharkigator, scenery_ship, amoeboid, extermibot, extermitank, skid_mcmarx, floating_platform, box, water. */
 #include "types.h"
+#include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -1532,7 +1533,7 @@ int D_L05_00161A78 = 0x80008000;
 extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 #include "rnc/overlay/l05/gameplay/entities/sharkigator_data/handle_extermibot_hits_and_update_targeting.h"
 extern int collision_line() __asm__("FUN_001efa68");
-extern int trooper_take_damage() __asm__("FUN_00213928");
+extern int fun_00213928() __asm__("FUN_00213928");
 extern void FUN_L00_002628d8(char *, char *, int, float, float);
 int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded, int excluded_count, void *region, int region_count);
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
@@ -2671,7 +2672,6 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
 extern int D_L05_00178300[];
 extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
-extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern void copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
 extern void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 void advance_racer_path_node(char *obj) __asm__("FUN_L05_00306e10");
@@ -2712,7 +2712,7 @@ void skid_mcmarx_update(Moby *moby) {
         moby->rot.z = fast_arc_tan(path->points[1].x - path->points[0].x, path->points[1].y - path->points[0].y);
         data->cruise_speed = D_0015ED6C_gp * 17.0f + (float)data->racer_index * (D_0015ED6C_gp * 1.55f);
         data->launch_speed = D_0015ED6C_gp * 24.0f + (float)data->racer_index * (D_0015ED6C_gp * 1.55f);
-        if (alternate_item_available[0] == 0) {
+        if (((unsigned char *)alternate_item_available)[0] == 0) {
             float handicap = (float)(D_0015EE38_macro - 4);
 
             if (handicap < 0.0f) {

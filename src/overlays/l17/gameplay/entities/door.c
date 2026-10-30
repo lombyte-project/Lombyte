@@ -1,5 +1,6 @@
 /* Level 17 moby classes: door, fighter_jet, magnet_elevator, robot_dog, shuttle. */
 #include "types.h"
+#include "rnc/input/pad_globals.h"
 #include "rnc/gameplay/entities/moby_class_id.h"
 
 #include "rnc/gameplay/hero.h"
@@ -1145,7 +1146,6 @@ void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *horizontal
 void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *a, float *b) __asm__("FUN_L17_002edf10");
 extern char D_0013C940[];
 extern char D_0013E550[];
-extern char pad_held[] __asm__("D_0013CAE0");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
