@@ -726,7 +726,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     };
     char *alien_queen_hit_recovery_vars;
     char *hit;
-    int   out;
+    int   hit_status;
     float dmg;
     int   kind;
     int   timer;
@@ -741,8 +741,8 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     *(int *)(alien_queen_hit_recovery_vars + 0x110) = truncate_float_to_s32(*(float *)(alien_queen_hit_recovery_vars + 0x20) * 16.0f);
     dmg = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
-    kind = resolve_moby_hit_response(moby, hit, alien_queen_hit_recovery_vars + 0x20, 0, &out, &dmg, 0, 4);
-    if (out != 1 && (unsigned char)moby[0x20] != 14 && (unsigned char)moby[0x20] != 3 &&
+    kind = resolve_moby_hit_response(moby, hit, alien_queen_hit_recovery_vars + 0x20, 0, &hit_status, &dmg, 0, 4);
+    if (hit_status != 1 && (unsigned char)moby[0x20] != 14 && (unsigned char)moby[0x20] != 3 &&
         (unsigned char)moby[0x20] != 5) {
         if (*(char **)(hit + 0x20) != 0) {
             int oclass = *(short *)(*(char **)(hit + 0x20) + 0xA6);
