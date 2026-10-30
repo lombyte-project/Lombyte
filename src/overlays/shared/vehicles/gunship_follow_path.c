@@ -163,7 +163,7 @@ extern void spawn_explosion(struct Moby *,
 
 void apply_gunship_path_position_offsets(char *moby, float *out) __asm__("FUN_L01_002f5040");
 
-void apply_gunship_path_position_offsets(char *moby, float *out) {
+void apply_gunship_path_position_offsets(char *moby, float *path_position) {
     float unit_x_axis[4];
     float rotated_x_axis[4];
     float horizontal_offset[4];
@@ -183,8 +183,8 @@ void apply_gunship_path_position_offsets(char *moby, float *out) {
         fast_vec_cross(vertical_plane_offset, rotated_x_axis, horizontal_offset);
         fast_vec_scale(horizontal_offset, horizontal_offset, *(float *)(gunship_path_vars + 0x130));
         fast_vec_scale(vertical_plane_offset, vertical_plane_offset, *(float *)(gunship_path_vars + 0x134));
-        fast_vec_add(out, out, horizontal_offset);
-        fast_vec_add(out, out, vertical_plane_offset);
+        fast_vec_add(path_position, path_position, horizontal_offset);
+        fast_vec_add(path_position, path_position, vertical_plane_offset);
     }
 }
 
