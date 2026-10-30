@@ -72,7 +72,7 @@ void veldin_ship_draw(struct Moby *moby) __asm__("FUN_L00_002d19b0");
 void veldin_ship_draw(struct Moby *moby) {
     Quad_2d19b0 quad;
     Vec_2d19b0  normal, reflection, view;
-    u8         *vars = ((u8 *)moby->pvars);
+    u8         *ship_render_state = ((u8 *)moby->pvars);
     s32         i, j, index, active = 0;
     f32         blend, reflection_projection_factor, x, y;
 
@@ -87,14 +87,14 @@ void veldin_ship_draw(struct Moby *moby) {
         active = 1;
     if (active || moby->state == 1) {
         moby->command = 1;
-        fast_dec_timer((s32 *)(vars + 0x40));
-        blend = convert_integer_to_float(*(s32 *)(vars + 0x40));
+        fast_dec_timer((s32 *)(ship_render_state + 0x40));
+        blend = convert_integer_to_float(*(s32 *)(ship_render_state + 0x40));
         blend /= convert_integer_to_float(scale_game_frames(0x3c));
         for (i = 0; i < 0x66; i++) {
-            XFORM(&ship_world_vertices[i], &ship_vertices[i], vars);
+            XFORM(&ship_world_vertices[i], &ship_vertices[i], ship_render_state);
             fast_vec_sub(&view, &ship_world_vertices[i], g_debug_camera.position);
             fast_vec_normalize(&view, &view, 1.0f);
-            XFORM(&normal, &ship_normals[i], vars);
+            XFORM(&normal, &ship_normals[i], ship_render_state);
             fast_vec_normalize(&normal, &normal, 0.1f);
             reflection_projection_factor = fast_vec_dot(&normal, &view);
             fast_vec_scale(
@@ -104,7 +104,7 @@ void veldin_ship_draw(struct Moby *moby) {
             reflection.z += 1.0f;
             reflection_projection_factor = square_root(reflection.z + reflection.z);
             reflection_projection_factor += reflection_projection_factor;
-            if (moby->state == 1 || *(s32 *)(vars + 0x40) == 0) {
+            if (moby->state == 1 || *(s32 *)(ship_render_state + 0x40) == 0) {
                 ship_reflection_uvs[i][0] = reflection.x / reflection_projection_factor + 0.5f;
                 ship_reflection_uvs[i][1] = reflection.y / reflection_projection_factor + 0.5f;
             } else {
@@ -123,13 +123,13 @@ void veldin_ship_draw(struct Moby *moby) {
             for (i = 0; i < 0x66; i++) {
                 ship_previous_uvs[i][0] = ship_reflection_uvs[i][0];
                 ship_previous_uvs[i][1] = ship_reflection_uvs[i][1];
-                XFORM(&ship_world_vertices[i], &ship_vertices[i], vars);
+                XFORM(&ship_world_vertices[i], &ship_vertices[i], ship_render_state);
             }
         } else {
             for (i = 0; i < 0x66; i++)
-                XFORM(&ship_world_vertices[i], &ship_vertices[i], vars);
+                XFORM(&ship_world_vertices[i], &ship_vertices[i], ship_render_state);
         }
-        *(s32 *)(vars + 0x40) = scale_game_frames(0x3c);
+        *(s32 *)(ship_render_state + 0x40) = scale_game_frames(0x3c);
     }
     for (i = 0; i < 0x4a; i++) {
         for (j = 0; j < 4; j++) {
