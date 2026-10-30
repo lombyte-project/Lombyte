@@ -564,7 +564,7 @@ void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
 void start_vendor_exit_cutscene(void) {
     VendorMenu              *vendor_state;
     VendorMoby_29a6b0       *moby;
-    s32                      index, item, offset;
+    s32                      index, exit_cutscene_id, offset;
     f32                     *cutscene_world_origin;
     struct MusicStreamState *state;
     s32                     *selected;
@@ -600,7 +600,7 @@ void start_vendor_exit_cutscene(void) {
     index = vendor_menu.purchased_item;
     D_L00_0016C860_lui.x58 = D_L00_00173E00[1] + offset;
     D_L00_0016C860_lui.x5c = D_L00_00173E00[2] + offset;
-    item = vendor_exit_cutscene_ids_by_item[index];
+    exit_cutscene_id = vendor_exit_cutscene_ids_by_item[index];
     D_L00_0015F3FC = 0;
     D_L00_0015F400 = 0;
     if (hero.items[0].item_id != 0 && index != hero.items[0].item_id)
@@ -609,7 +609,7 @@ void start_vendor_exit_cutscene(void) {
     if (hero.pending_item[0] == 0x18)
         hero.pending_item[0] = 0;
     select_world_object_resource_tables(item_defs[vendor_menu.purchased_item].cls, -1);
-    load_scene_chunks_with_fade(item);
+    load_scene_chunks_with_fade(exit_cutscene_id);
     state = &music_stream_state;
     state->queued_secondary_track = 0x2734;
     FUN_L00_002455c0(0);
