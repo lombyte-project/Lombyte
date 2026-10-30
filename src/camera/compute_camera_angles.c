@@ -12,7 +12,7 @@ void compute_camera_angles(f32  *out,
                            void *orbit_yaw_side_direction,
                            void *axis) __asm__("FUN_001ec530");
 
-void compute_camera_angles(f32  *out,
+void compute_camera_angles(f32  *yaw_pitch_distance,
                            void *position,
                            void *focus,
                            void *orbit_reference_direction,
@@ -47,7 +47,7 @@ void compute_camera_angles(f32  *out,
     if (yaw_side_dot < 0.0f) {
         yaw = -yaw;
     }
-    out[0] = yaw;
+    yaw_pitch_distance[0] = yaw;
 
     build_look_at_matrix(rotated, orbit_reference_direction, axis, yaw);
     rotated_reference_dot = fast_vec_dot(rotated, orbit_offset);
@@ -63,9 +63,9 @@ void compute_camera_angles(f32  *out,
     if (pitch_axis_dot < 0.0f) {
         pitch = 1.57079637f - angle2;
     }
-    out[1] = pitch;
+    yaw_pitch_distance[1] = pitch;
 
-    out[2] = fast_vec_length(orbit_offset);
+    yaw_pitch_distance[2] = fast_vec_length(orbit_offset);
 }
 
 extern __typeof__(compute_camera_angles) func_001EC530 __attribute__((alias("FUN_001ec530")));
