@@ -257,7 +257,7 @@ extern float D_L11_001677D0[];
 
 void update_ship_lock_on_target(void *self, char *moby) __asm__("FUN_L11_00311c80");
 
-void update_ship_lock_on_target(void *self, char *moby) {
+void update_ship_lock_on_target(void *lock_on_ship_moby, char *moby) {
     float          reference_rotation_copy[4] __attribute__((aligned(16)));
     float         *reference_rotation_source;
     unsigned char *current_target;
@@ -274,7 +274,7 @@ void update_ship_lock_on_target(void *self, char *moby) {
         }
         reference_rotation_source = D_L11_001677D0;
         qcopy(reference_rotation_copy, reference_rotation_source);
-        selected_target = select_ship_lock_on_target(self,
+        selected_target = select_ship_lock_on_target(lock_on_ship_moby,
                                                      moby,
                                                      reference_rotation_source - 4,
                                                      reference_rotation_copy,
