@@ -3318,7 +3318,7 @@ extern s32 D_00141660 NOT_SDA;
 int                   process_hero_equipped_item_input(void) __asm__("FUN_L00_00227fa0");
 
 int process_hero_equipped_item_input(void) {
-    int out[3];
+    int item_press_age_frames[3];
     int start;
     int mask;
 
@@ -3346,7 +3346,7 @@ int process_hero_equipped_item_input(void) {
             if (D_0013F450_h228770.f12EA != 0) {
                 break;
             }
-            if (!pad_pressed_within(mask, scale_game_frames(7), &out[0])) {
+            if (!pad_pressed_within(mask, scale_game_frames(7), &item_press_age_frames[0])) {
                 break;
             }
             equipped_item_moby = D_0013F450_h228770.f1090;
@@ -3572,7 +3572,7 @@ int process_hero_equipped_item_input(void) {
             }
             t = scale_game_frames(7);
             n = D_0013F450_h228770.f10B0;
-            if (pad_pressed_within(mask, t <= n ? t : n, &out[1]) ||
+            if (pad_pressed_within(mask, t <= n ? t : n, &item_press_age_frames[1]) ||
                 ((controller_state.held & 0x20) && n > scale_game_frames(8) &&
                  n < scale_game_frames(0x11))) {
                 if (get_ammo(-1)) {
@@ -3598,7 +3598,7 @@ int process_hero_equipped_item_input(void) {
                 int t = scale_game_frames(0xA);
                 int n = D_0013F450_h228770.f10B0;
 
-                if (pad_pressed_within(mask, t <= n ? t : n, &out[2])) {
+                if (pad_pressed_within(mask, t <= n ? t : n, &item_press_age_frames[2])) {
                     if (D_0013F450_h228770.f1090 != 0) {
                         hero_set_state(0x20, 1);
                         if (D_0013F450_h228770.f1090 != 0) {
