@@ -3,11 +3,11 @@ typedef unsigned short u16;
 
 extern s32 Deci2Call(s32 command, void *request);
 
-s32 SceDeci2ExRecv(s32 socket, void *buffer, u16 byte_count) {
+s32 SceDeci2ExRecv(s32 socket, void *destination, u16 byte_count) {
     s32 request[3];
 
     request[0] = socket;
-    request[1] = (s32)buffer;
+    request[1] = (s32)destination;
     request[2] = byte_count;
 
     return Deci2Call(-5, request);
