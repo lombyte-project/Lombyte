@@ -1,10 +1,10 @@
 /* Ported from rac1-decomp (src/game/bmain.c, func_001E9808). */
 #include "sda.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "types.h"
 #include "rnc/runtime/callbacks/count_vsync.h"
 extern int decode_mode_macro __asm__("D_0015EED8") MACRO_ADDR;
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/globals.h"
 #include "rnc/audio/voice_pool.h"

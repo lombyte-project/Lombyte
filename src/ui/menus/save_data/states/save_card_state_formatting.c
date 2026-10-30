@@ -1,6 +1,6 @@
 /* Ported from rac1-decomp (src/game/menu.c, func_00209448). */
 #include "sda.h"
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/globals.h"
 void save_card_state_formatting(void) __asm__("FUN_00208b28");
 

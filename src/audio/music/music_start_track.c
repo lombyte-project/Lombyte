@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 
 extern void music_primary_start_callback() __asm__("FUN_00216b28");
 extern void snd_play_vag_stream_by_loc_ex_cb(s32, s32, s32, s32, s16, s32, s32, s32, s32,

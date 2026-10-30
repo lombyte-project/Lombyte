@@ -3,7 +3,7 @@
 #include "rnc/input/pad_state.h"
 #include "sda.h"
 #include "rnc/globals.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"

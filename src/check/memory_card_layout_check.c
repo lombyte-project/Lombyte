@@ -6,7 +6,7 @@
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 
 SIZE_CHECK(entry, struct MemoryCardSaveEntry, 0x1C);
 OFFSET_CHECK(card_save_index, struct MemoryCard, save_index, 0x14);

@@ -6,7 +6,7 @@
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "rnc/video/player/movie_player.h"
+#include "rnc/movies/player/movie_player.h"
 
 SIZE_CHECK(read_buf, struct ReadBuf, 0x5000C);
 SIZE_CHECK(vo_tag, struct VoTag, 0x138C0);

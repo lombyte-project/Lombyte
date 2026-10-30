@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/mobys/moby_class_tables.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/game/options.h"
 #include "rnc/math/fast_math.h"

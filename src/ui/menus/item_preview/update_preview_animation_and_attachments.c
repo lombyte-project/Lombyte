@@ -8,7 +8,7 @@
 #include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"

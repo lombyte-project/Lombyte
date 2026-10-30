@@ -1,6 +1,6 @@
 #include "rnc/mobys/moby_class_tables.h"
 #include "types.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/view/update_view_context.h"
 #include "rnc/rendering/view/init_view_context.h"

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_MOVIES_DECODER_DMA_SET_D3_CHCR_H
+#define LOMBYTE_RNC_MOVIES_DECODER_DMA_SET_D3_CHCR_H
+
+#include "types.h"
+
+void set_d3_chcr(s32) __asm__("FUN_0023bb40");
+
+#endif /* LOMBYTE_RNC_MOVIES_DECODER_DMA_SET_D3_CHCR_H */

@@ -1,5 +1,5 @@
 /* Ported from rac1-decomp (src/game/music.c, set_sound_handle_id). */
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/audio/music/music_stream_state.h"
 extern void snd_play_vag_stream_by_loc_ex_cb(int, int, int, int, short, int, int, int, int,
                                              void (*)(int, long), long) __asm__("func_0012EC08");

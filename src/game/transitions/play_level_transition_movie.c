@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/audio/voice_pool.h"
 extern s32 D_001940D4[];
 extern void count_vsync() __asm__("FUN_0012f1c8");

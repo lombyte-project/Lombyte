@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_VIDEO_DECODER_DMA_SET_D4_CHCR_H
-#define LOMBYTE_RNC_VIDEO_DECODER_DMA_SET_D4_CHCR_H
-
-#include "types.h"
-
-s32 set_d4_chcr(s32) __asm__("FUN_0023bbb0");
-
-#endif /* LOMBYTE_RNC_VIDEO_DECODER_DMA_SET_D4_CHCR_H */

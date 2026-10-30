@@ -19,7 +19,7 @@ struct AudioStreamTableB {
     s32 unk2F8;
     s32 unk2FC;
 };
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/audio/music/music_stream_state.h"
 
 extern s32 start_audio_stream_read() __asm__("FUN_00216788");

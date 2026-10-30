@@ -24,7 +24,7 @@
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
-#include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/save/memcard_save_data.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/camera/follow_camera_update.h"
 #include "rnc/overlay/shared/mobys/is_hero_on_moby.h"

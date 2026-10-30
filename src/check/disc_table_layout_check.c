@@ -6,7 +6,7 @@
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 
 OFFSET_CHECK(level_chunk, struct DiscTable, level_chunk, 0x4F8);
 OFFSET_CHECK(music_50000, struct DiscTable, music_50000, 0xF00);

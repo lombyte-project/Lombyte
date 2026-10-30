@@ -5,7 +5,7 @@
 #include "rnc/globals.h"
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/rendering/render_globals.h"
 
 struct CommonArchiveMemory {

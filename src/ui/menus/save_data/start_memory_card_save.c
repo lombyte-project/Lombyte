@@ -1,7 +1,7 @@
 #include "types.h"
 #include "sda.h"
 
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 extern u8 D_0015EE98[] MACRO_ADDR;
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
 extern s32 memcard_make_whole_save() __asm__("func_0020ABB0");

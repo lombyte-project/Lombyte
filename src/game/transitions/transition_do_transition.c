@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "sda.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
@@ -11,7 +11,7 @@
 #include "rnc/ui/hud/banks/load_hud_banks.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/runtime/rpc/initialize_sif_rpc.h"
-#include "rnc/storage/stash/init_stash.h"
+#include "rnc/streaming/stash/init_stash.h"
 #include "rnc/ui/hud/banks/hud_heap_reset.h"
 #include "rnc/ui/hud/init_hud.h"
 

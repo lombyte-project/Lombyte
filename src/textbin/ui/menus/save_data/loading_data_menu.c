@@ -30,7 +30,7 @@ struct LoadMenuDescriptor {
     s32 selected_save_slot;
 };
 extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 extern s16 D_0013E05A[];
 extern struct LoadMenuMixerState voice_pool __asm__("D_0013E550");
 extern void InitializeGlobalStateEntry(s32);

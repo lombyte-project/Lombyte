@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_VIDEO_DECODER_BUFFERS_GET_FIFO_INDEX_H
-#define LOMBYTE_RNC_VIDEO_DECODER_BUFFERS_GET_FIFO_INDEX_H
-
-#include "types.h"
-
-u32 get_fifo_index(void *, s32) __asm__("FUN_0023baf8");
-
-#endif /* LOMBYTE_RNC_VIDEO_DECODER_BUFFERS_GET_FIFO_INDEX_H */

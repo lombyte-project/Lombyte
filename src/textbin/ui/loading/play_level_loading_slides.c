@@ -4,7 +4,7 @@
 
 
 #include "rnc/rendering/fs_aa_packets.h"
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/math/fast_math.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"

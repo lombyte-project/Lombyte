@@ -14,7 +14,7 @@ struct LevelProjectionState {
     u8 pad_0[0xB0];
     f32 projection_scale;
 };
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/game/level_state.h"
 #include "rnc/rendering/screen.h"
 extern s32 D_0018CB54[];

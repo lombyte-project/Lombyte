@@ -149,7 +149,7 @@ ROUTE_EXCEPTIONS = {
     "ui/menus/choice_list/draw_menu_choice_list": "cc_sn_padless",
     # fun_00232d00: bind the stash RPC server, read its IOP buffer and reset the
     # stash slots
-    "storage/stash/init_stash": "cc_sn_padless",
+    "streaming/stash/init_stash": "cc_sn_padless",
 }
 
 # Per-unit assembler policies applied by the generated padless-asm.py helper.
@@ -484,7 +484,7 @@ DATA_OVERLAYS = {
     "sdk/graph/sce_gs_get_gparam": (0x132D40, 0x33CC0, 16),
     "sdk/video/ipu/send_ipu_command": (0x132E70, 0x33DF0, 64),
     "sdk/scf/sce_scf_get_language": (0x1330D4, 0x34054, 1),
-    "video/display/set_pal_mode": (0x13D100, 0x3E080, 8),
+    "movies/display/set_pal_mode": (0x13D100, 0x3E080, 8),
     "rendering/texture/append_palette_transfer_packet": (0x151B60, 0x52AE0, 656),
     "textbin/render_queued_rotated_sprites": (0x189300, 0x8A280, 196),
     "camera/backup_current_cam": (0x1893D0, 0x8A350, 1920),

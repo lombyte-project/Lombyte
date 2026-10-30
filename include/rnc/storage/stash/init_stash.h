@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_STORAGE_STASH_INIT_STASH_H
-#define LOMBYTE_RNC_STORAGE_STASH_INIT_STASH_H
-
-#include "types.h"
-
-void init_stash(void) __asm__("FUN_00232d00");
-
-#endif /* LOMBYTE_RNC_STORAGE_STASH_INIT_STASH_H */

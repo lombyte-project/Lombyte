@@ -23,7 +23,7 @@
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/save/memcard_save_data.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"

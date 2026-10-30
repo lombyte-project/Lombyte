@@ -2,7 +2,7 @@
 #include "types.h"
 #include "rnc/overlay/vendor_menu.h"
 #include "asm.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/game_globals.h"

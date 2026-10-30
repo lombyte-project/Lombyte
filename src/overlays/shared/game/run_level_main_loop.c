@@ -8,7 +8,7 @@
 #include "rnc/game/usage_stats.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/hero/hero.h"
 #include "rnc/game/level_state.h"
 #include "rnc/overlay/level_globals.h"
@@ -31,11 +31,11 @@
 #include "rnc/rendering/packets/put_draw_buffer_small.h"
 #include "rnc/rendering/texture/append_palette_transfer_packet.h"
 #include "rnc/rendering/vu1/vu1_init_chain.h"
-#include "rnc/storage/memory_card/memcard_update_state.h"
+#include "rnc/save/memcard_update_state.h"
 #include "rnc/ui/menus/save_data/run_state_handler.h"
 #include "rnc/game/transitions/do_space_transition.h"
 #include "rnc/game/transitions/tick_space_transition.h"
-#include "rnc/storage/stash/init_stash.h"
+#include "rnc/streaming/stash/init_stash.h"
 #include "rnc/ui/hud/init_hud.h"
 
 /* Level main loop (shared by every level): clears the level's work area, sets up the level and counts the visit
@@ -312,7 +312,7 @@ void run_level_main_loop(void) {
     }
     do_space_transition();
 }
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 
 typedef struct {
     s32 unk0;

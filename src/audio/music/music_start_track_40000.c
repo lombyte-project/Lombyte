@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/data_labels.h"
 
 // D_002169C0 is a code address retail passes as a pointer, not a data symbol;

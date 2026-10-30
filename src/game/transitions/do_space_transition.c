@@ -25,7 +25,7 @@ struct Globals_00194100 {
 #include "sda.h"
 #include "rnc/rendering/view.h"
 
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/game/level_state.h"
 extern s32 sound_bank_handle __asm__("D_0015ED5C") MACRO_ADDR;
 extern s16 D_0015EE48 MACRO_ADDR;

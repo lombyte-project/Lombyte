@@ -2,7 +2,7 @@
 
 #include "types.h"
 #include "sda.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/audio/streaming/submit_audio_stream_io_request.h"
 #include "rnc/audio/banks/snd_unload_bank.h"
 

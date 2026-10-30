@@ -19,7 +19,7 @@ void initialize_level_runtime(void) __asm__("FUN_00230f60");
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 
 typedef struct {
     s32 tex;         /* 0x00 */

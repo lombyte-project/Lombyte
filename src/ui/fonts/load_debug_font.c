@@ -1,6 +1,6 @@
 #include "types.h"
 #include "sda.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
 

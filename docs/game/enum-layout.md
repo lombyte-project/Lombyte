@@ -18,7 +18,7 @@ These shared definitions live under `include/`:
 | `rnc/mobys/moby_class_id.h` | Moby class IDs |
 | `rnc/camera/camera_modes.h` | Camera activation and attachment modes |
 | `rnc/rendering/pixel_format.h` | GS pixel storage formats |
-| `rnc/storage/memory_card/memory_card_state.h` | Card operations and their separate substeps |
+| `rnc/save/memory_card_state.h` | Card operations and their separate substeps |
 | `rnc/ui/text/text_region.h` | Text layout flags |
 
 `hero.h` includes `hero_state.h`.

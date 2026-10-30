@@ -33,7 +33,7 @@
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"
-#include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/save/memcard_save_data.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/ui/help/try_set_help_message.h"

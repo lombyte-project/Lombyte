@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
-#include "rnc/video/decoder/decoder_globals.h"
-#include "rnc/video/player/movie_player.h"
+#include "rnc/movies/decoder/decoder_globals.h"
+#include "rnc/movies/player/movie_player.h"
 
 extern s32 is_state_field_large() __asm__("func_0023AEE0");
 

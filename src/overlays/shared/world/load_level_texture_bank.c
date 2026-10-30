@@ -3,7 +3,7 @@
 #include "rnc/overlay/texture_ref.h"
 #include "asm.h"
 
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/rendering/level_render_state.h"
 #include "qcopy.h"
 #include "rnc/overlay/level_labels.h"

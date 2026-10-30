@@ -1,7 +1,7 @@
 #include "types.h"
 #include "asm.h"
-#include "rnc/video/decoder/decoder_globals.h"
-#include "rnc/video/player/movie_player.h"
+#include "rnc/movies/decoder/decoder_globals.h"
+#include "rnc/movies/player/movie_player.h"
 
 extern u8 movie_open_error_text[18] __asm__("D_001E8AF0");
 

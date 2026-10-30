@@ -31,7 +31,7 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/save/memcard_save_data.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"

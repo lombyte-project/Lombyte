@@ -4,7 +4,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/globals.h"
 #include "rnc/ui/map/copy_level_object_positions.h"
 extern void memcard_make_whole_save(char *out) __asm__("func_0020ABB0");

@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/stream_buffers.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/ui/menus/menu_system.h"
 
 #include "rnc/audio/music/music_stream_state.h"

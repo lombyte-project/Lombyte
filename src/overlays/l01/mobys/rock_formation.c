@@ -19,7 +19,7 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/save/memcard_save_data.h"
 
 typedef union {
     u128 q;

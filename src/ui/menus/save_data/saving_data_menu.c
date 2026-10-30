@@ -6,7 +6,7 @@ typedef struct __attribute__((packed)) {
     s64 v;
 } Unaligned64;
 extern Unaligned64 D_0015EE98[1];
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 extern u8 D_001D2578[];
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/input/pad_state.h"

@@ -15,7 +15,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
-#include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/save/memcard_save_data.h"
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"

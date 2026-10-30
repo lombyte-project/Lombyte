@@ -1,5 +1,5 @@
 #include "types.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
 extern u8 D_1FF7FF0[];

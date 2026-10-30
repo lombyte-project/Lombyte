@@ -5,8 +5,8 @@ struct CbDataStr {
     u8 *data;
     s32 len;
 };
-#include "rnc/video/decoder/decoder_globals.h"
-#include "rnc/video/player/movie_player.h"
+#include "rnc/movies/decoder/decoder_globals.h"
+#include "rnc/movies/player/movie_player.h"
 extern void audio_dec_begin_put(struct AudioDec *, void **, s32 *, void **, s32 *) __asm__("func_0023AD58");
 extern s32 cpy2area(void *, s32, void *, s32, u8 *, s32, struct ReadBuf *,
                                     s32) __asm__("func_0023B810");

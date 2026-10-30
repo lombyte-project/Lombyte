@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/data_labels.h"
 
 extern s32 snd_play_vag_stream_by_loc_ex_cb() __asm__("func_0012EC08");

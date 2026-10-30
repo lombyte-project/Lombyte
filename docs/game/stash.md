@@ -1,7 +1,7 @@
 # IOP stash transfers
 
 `src/storage/stash/` manages a 64-slot allocation table over an IOP buffer.
-The shared EE state and entries are defined in `include/rnc/storage/stash.h`.
+The shared EE state and entries are defined in `include/rnc/streaming/stash/stash.h`.
 
 ## Functions
 

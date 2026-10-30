@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/globals.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/math/asm_helpers.h"

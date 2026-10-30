@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 struct Chunk {
     u8 pad0[0x10];
     s32 offset;

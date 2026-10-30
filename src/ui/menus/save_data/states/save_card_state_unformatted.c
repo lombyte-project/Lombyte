@@ -1,7 +1,7 @@
 #include "sda.h"
 #include "rnc/globals.h"
 #include "types.h"
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 void save_card_state_unformatted(void) __asm__("FUN_00208a38");
 
 extern s32 mode_freeze_flags_gp __asm__("D_0015EEB4") __attribute__((sda));

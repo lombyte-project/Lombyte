@@ -11,7 +11,7 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 #include "asm.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/math/vector.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
@@ -49,7 +49,7 @@
 #include "rnc/overlay/shared/ui/hud/hud_update_counter.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/runtime/relocation/relocate_asset_entry_pointers.h"
-#include "rnc/storage/memory_card/memcard_update_state.h"
+#include "rnc/save/memcard_update_state.h"
 #include "rnc/textbin/world/data/select_world_object_resource_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */

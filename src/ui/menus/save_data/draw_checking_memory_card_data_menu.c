@@ -11,7 +11,7 @@ struct ScreenDimensions {
     s16 height;
 };
 
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/game/item_state.h"
 extern struct ScreenDimensions fs_aa_buffer __asm__("D_00151780");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");

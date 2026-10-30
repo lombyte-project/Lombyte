@@ -6,7 +6,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/rendering/render_globals.h"
-#include "rnc/video/decoder/decoder_globals.h"
+#include "rnc/movies/decoder/decoder_globals.h"
 #include "rnc/overlay/level_globals.h"
 #include "eetypes.h"
 #include "qcopy.h"

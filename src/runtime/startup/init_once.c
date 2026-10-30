@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/rendering/image_clear_buffer.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"

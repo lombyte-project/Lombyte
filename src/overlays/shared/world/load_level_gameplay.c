@@ -1,6 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/overlay/point_light.h"
 #include "rnc/overlay/texture_ref.h"
 #include "rnc/overlay/level_spline.h"

@@ -16,7 +16,7 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/save/memcard_save_data.h"
 #include "rnc/overlay/shared/camera/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/mobys/initialize_moby_grounding.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"

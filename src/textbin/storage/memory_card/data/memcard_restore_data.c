@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "sda.h"
-#include "rnc/storage/memory_card/memcard_get_data_size.h"
+#include "rnc/save/memcard_get_data_size.h"
 
 struct RestoreEntry {
     u8 *data;

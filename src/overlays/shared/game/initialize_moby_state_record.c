@@ -8,7 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
-#include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/save/memcard_save_data.h"
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"

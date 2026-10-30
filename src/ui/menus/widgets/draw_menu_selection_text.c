@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
