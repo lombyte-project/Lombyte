@@ -415,7 +415,7 @@ int find_closest_polygon_edge_point(float *out,
                                     float *poly,
                                     int    vertex_count) __asm__("FUN_L04_0024c7d8");
 
-int find_closest_polygon_edge_point(float *out, float *query_point, float *poly, int vertex_count) {
+int find_closest_polygon_edge_point(float *closest_polygon_edge_point, float *query_point, float *poly, int vertex_count) {
     float edge_closest_point[4];
     float edge_to_query_offset[4];
     float best;
@@ -431,7 +431,7 @@ int find_closest_polygon_edge_point(float *out, float *query_point, float *poly,
         distance_to_edge = fast_vec_length(edge_to_query_offset);
         if (i == 0 || distance_to_edge < best) {
             best = distance_to_edge;
-            qcopy(out, edge_closest_point);
+            qcopy(closest_polygon_edge_point, edge_closest_point);
         }
     }
     return has_positive_edge_cross;
