@@ -701,19 +701,19 @@ extern int D_L00_0015F5C4;
 void FUN_L00_00232fe8(void);
 
 void FUN_L00_00232fe8(void) {
-    struct Hero *base = &hero;
+    struct Hero *hero_item_flag_state = &hero;
     struct Hero *tail;
     struct Hero *last;
     char        *hero_flag_target;
     int          i;
 
-    *(unsigned short *)(((char *)base->unkA88) + 0x34) |= 1;
+    *(unsigned short *)(((char *)hero_item_flag_state->unkA88) + 0x34) |= 1;
     for (i = 0; i < 7; i++) {
-        if (*(char **)&base->items[i].moby != 0) {
-            *(unsigned short *)(*(char **)&base->items[i].moby + 0x34) |= 1;
+        if (*(char **)&hero_item_flag_state->items[i].moby != 0) {
+            *(unsigned short *)(*(char **)&hero_item_flag_state->items[i].moby + 0x34) |= 1;
         }
-        if (*(char **)&base->items[i].moby2 != 0) {
-            *(unsigned short *)(*(char **)&base->items[i].moby2 + 0x34) |= 1;
+        if (*(char **)&hero_item_flag_state->items[i].moby2 != 0) {
+            *(unsigned short *)(*(char **)&hero_item_flag_state->items[i].moby2 + 0x34) |= 1;
         }
     }
     tail = &hero;
