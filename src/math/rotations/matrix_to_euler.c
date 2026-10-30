@@ -21,7 +21,7 @@ extern void  multiply_matrix(Mtx44 *, float *, Mtx44 *) __asm__("FUN_001fa378");
    interleaved lq/sq (a whole-struct copy becomes ld/sd here). */
 void matrix_to_euler(Mtx44 *src, float *out) __asm__("FUN_00214598");
 
-void matrix_to_euler(Mtx44 *input_matrix, float *out) {
+void matrix_to_euler(Mtx44 *input_matrix, float *euler_angles) {
     float cancellation_matrix[16];
     Mtx44 m;
     float cancellation_angles[4];
@@ -51,9 +51,9 @@ void matrix_to_euler(Mtx44 *input_matrix, float *out) {
     cancellation_angles[1] = 0.0f;
     cancellation_angles[0] = -x;
     cancellation_angles[2] = 0.0f;
-    out[2] = z;
-    out[1] = y;
-    out[0] = x;
+    euler_angles[2] = z;
+    euler_angles[1] = y;
+    euler_angles[0] = x;
 }
 
 extern __typeof__(matrix_to_euler) func_00214598 __attribute__((alias("FUN_00214598")));
