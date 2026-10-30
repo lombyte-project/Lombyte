@@ -80,14 +80,14 @@ void initialize_linked_pair_group(struct Moby *moby) {
     short *group_entry = D_L16_001ABCC0_c[moby->group];
     if (group_entry != 0) {
         do {
-            char *other = D_L16_0015FFD8 + (((unsigned short)*group_entry & 0x7FFF) << 8);
-            if (*(short *)(other + 0xA6) == 0x228) {
+            char *linked_pair_group_member_moby = D_L16_0015FFD8 + (((unsigned short)*group_entry & 0x7FFF) << 8);
+            if (*(short *)(linked_pair_group_member_moby + 0xA6) == 0x228) {
                 int *linked_partner_slot;
-                if (moby != other) {
-                    *(unsigned short *)(other + 0x34) |= 2;
+                if (moby != linked_pair_group_member_moby) {
+                    *(unsigned short *)(linked_pair_group_member_moby + 0x34) |= 2;
                 }
-                linked_partner_slot = *(int **)(other + 0x78);
-                *linked_partner_slot = FUN_L16_002cf678_u(other);
+                linked_partner_slot = *(int **)(linked_pair_group_member_moby + 0x78);
+                *linked_partner_slot = FUN_L16_002cf678_u(linked_pair_group_member_moby);
             }
         } while (*group_entry++ >= 0);
     }
