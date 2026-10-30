@@ -100,7 +100,7 @@ void advance_hoverboard_dummy_path_node(char *patrol_moby) {
     heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     for (;;) {
         L16PatrolPath *path;
-        L16PatrolPath *base;
+        L16PatrolPath *base_patrol_path;
 
         copy_hoverboard_dummy_path_node(
             (Level16VendorVectorMoby_c *)moby, patrol_data->node, target);
@@ -112,13 +112,13 @@ void advance_hoverboard_dummy_path_node(char *patrol_moby) {
         }
         path = patrol_data->path;
         patrol_data->node = (patrol_data->node + 1) % path->count;
-        base = (L16PatrolPath *)D_L16_001B0930[patrol_data->base_path];
-        if (path != base) {
+        base_patrol_path = (L16PatrolPath *)D_L16_001B0930[patrol_data->base_path];
+        if (path != base_patrol_path) {
             /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
             if (patrol_data->node == path->count - 1) {
-                patrol_data->path = base;
+                patrol_data->path = base_patrol_path;
                 patrol_data->node =
-                    select_point_index_by_distance(patrol_data->position, base, 0.0f);
+                    select_point_index_by_distance(patrol_data->position, base_patrol_path, 0.0f);
                 patrol_data->node =
                     offset_path_index((char *)patrol_data->path, patrol_data->node, 5, 1);
             }
