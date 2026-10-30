@@ -217,7 +217,7 @@ void shrub_update(struct Moby *moby) {
         SHRUB_BEGIN_PRIMARY_PATH = 3,
         SHRUB_BREAK_APART_AND_REMOVE = 0x63
     };
-    SwarmVars         *vars = (SwarmVars *)moby->pvars;
+    SwarmVars         *shrub_control_vars = (SwarmVars *)moby->pvars;
     SwarmPathFollower *follower;
     struct Moby       *target;
     struct Moby       *shot;
@@ -228,7 +228,7 @@ void shrub_update(struct Moby *moby) {
     Vec4               muzzle;
     Vec4               velocity;
     s32                waypoint;
-    s32                next;
+    s32                secondary_waypoint_index;
     s32                after;
     s32                i;
     s32                slot;
@@ -242,8 +242,8 @@ void shrub_update(struct Moby *moby) {
     if (shrub_updates_disabled_gp != 0) {
         return;
     }
-    if (!voice_is_playing(moby, vars->sound)) {
-        vars->sound = allocate_voice_for_target_entry(3, 4, moby);
+    if (!voice_is_playing(moby, shrub_control_vars->sound)) {
+        shrub_control_vars->sound = allocate_voice_for_target_entry(3, 4, moby);
     }
     switch (moby->state) {
     case SHRUB_INITIALIZE:
@@ -251,33 +251,33 @@ void shrub_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        vars->follow[0].path = l08_paths[vars->follow[0].path_id];
-        vars->follow[1].path = l08_paths[vars->follow[1].path_id];
-        vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
+        shrub_control_vars->follow[0].path = l08_paths[shrub_control_vars->follow[0].path_id];
+        shrub_control_vars->follow[1].path = l08_paths[shrub_control_vars->follow[1].path_id];
+        shrub_control_vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
         moby->flags |= 0x4000;
-        qcopy(&moby->pos, &vars->follow[1].path->points[0]);
+        qcopy(&moby->pos, &shrub_control_vars->follow[1].path->points[0]);
         spawn_shrub_parts((char *)moby);
         moby->state = 2;
-        moby->rot.z = fast_arc_tan(vars->follow[1].path->points[1].f[0] - moby->pos.x,
-                                   vars->follow[1].path->points[1].f[1] - moby->pos.y);
+        moby->rot.z = fast_arc_tan(shrub_control_vars->follow[1].path->points[1].f[0] - moby->pos.x,
+                                   shrub_control_vars->follow[1].path->points[1].f[1] - moby->pos.y);
         break;
     case SHRUB_FOLLOW_PRIMARY_PATH_AND_FIRE_AT_TARGET:
         waypoint =
-            (vars->follow[0].point + vars->follow[0].path->count + vars->follow[0].direction) %
-            vars->follow[0].path->count;
-        target = &D_L08_0015FFD8[vars->target_index];
+            (shrub_control_vars->follow[0].point + shrub_control_vars->follow[0].path->count + shrub_control_vars->follow[0].direction) %
+            shrub_control_vars->follow[0].path->count;
+        target = &D_L08_0015FFD8[shrub_control_vars->target_index];
         FUN_L00_00258278(moby,
-                         fast_arc_tan(vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
-                                      vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
-                         &vars->turn_speed,
+                         fast_arc_tan(shrub_control_vars->follow[0].path->points[waypoint].f[0] - moby->pos.x,
+                                      shrub_control_vars->follow[0].path->points[waypoint].f[1] - moby->pos.y),
+                         &shrub_control_vars->turn_speed,
                          0.004f,
                          0.3f,
                          0.02f);
         process_shrub_part_hits(moby);
         update_shrub_parts((char *)moby);
-        qcopy(&point, &vars->follow[0].path->points[waypoint]);
+        qcopy(&point, &shrub_control_vars->follow[0].path->points[waypoint]);
         if (fast_vec_dist(&moby->pos, &point) < 0.5f) {
-            vars->follow[0].point = waypoint;
+            shrub_control_vars->follow[0].point = waypoint;
         }
         fast_vec_sub(&step, &point, &moby->pos);
         if (fast_vec_length(&step) > shrub_path_speed_gp * frame_time) {
@@ -288,7 +288,7 @@ void shrub_update(struct Moby *moby) {
             break;
         }
         moby->command = 0;
-        moby_point_position(vars->parts[3].moby, 1, &muzzle);
+        moby_point_position(shrub_control_vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(0.17453292f, 0.5235988f);
         yaw = fast_add_rotations(
             fast_arc_tan(target->pos.x - moby->pos.x, target->pos.y - moby->pos.y), 3.1415927f);
@@ -311,29 +311,29 @@ void shrub_update(struct Moby *moby) {
         }
         break;
     case SHRUB_FOLLOW_SECONDARY_PATH_AND_FIRE_RANDOMLY:
-        follower = &vars->follow[1];
-        if (level_game_mode == 2 && vars->can_skip != 0 && D_L08_0016D090 == 0x200000000) {
+        follower = &shrub_control_vars->follow[1];
+        if (level_game_mode == 2 && shrub_control_vars->can_skip != 0 && D_L08_0016D090 == 0x200000000) {
             qcopy(&moby->pos, &follower->path->points[15]);
             follower->point = 15;
             moby->rot.z = fast_arc_tan(follower->path->points[11].f[0] - moby->pos.x,
                                        follower->path->points[11].f[1] - moby->pos.y);
         }
-        next = (follower->point + 1) % follower->path->count;
+        secondary_waypoint_index = (follower->point + 1) % follower->path->count;
         after = (follower->point + 2) % follower->path->count;
         heading = fast_arc_tan(
-            follower->path->points[next].f[0] - follower->path->points[follower->point].f[0],
-            follower->path->points[next].f[1] - follower->path->points[follower->point].f[1]);
+            follower->path->points[secondary_waypoint_index].f[0] - follower->path->points[follower->point].f[0],
+            follower->path->points[secondary_waypoint_index].f[1] - follower->path->points[follower->point].f[1]);
         next_heading =
-            fast_arc_tan(follower->path->points[after].f[0] - follower->path->points[next].f[0],
-                         follower->path->points[after].f[1] - follower->path->points[next].f[1]);
+            fast_arc_tan(follower->path->points[after].f[0] - follower->path->points[secondary_waypoint_index].f[0],
+                         follower->path->points[after].f[1] - follower->path->points[secondary_waypoint_index].f[1]);
         turn = fast_subtract_rotations(heading, next_heading);
-        distance = fast_vec_dist(&moby->pos, &follower->path->points[next]);
+        distance = fast_vec_dist(&moby->pos, &follower->path->points[secondary_waypoint_index]);
         distance /=
-            fast_vec_dist(&follower->path->points[follower->point], &follower->path->points[next]);
+            fast_vec_dist(&follower->path->points[follower->point], &follower->path->points[secondary_waypoint_index]);
         moby->rot.z = fast_add_rotations(turn * distance, next_heading);
-        qcopy(&point, &follower->path->points[next]);
+        qcopy(&point, &follower->path->points[secondary_waypoint_index]);
         if (fast_vec_dist(&moby->pos, &point) < 0.5f) {
-            follower->point = next;
+            follower->point = secondary_waypoint_index;
         }
         fast_vec_sub(&step, &point, &moby->pos);
         if (fast_vec_length(&step) > shrub_path_speed_gp * frame_time) {
@@ -341,18 +341,18 @@ void shrub_update(struct Moby *moby) {
         }
         fast_vec_add(&moby->pos, &moby->pos, &step);
         update_shrub_parts((char *)moby);
-        if (!fast_dec_timer_s16(&vars->fire_timer)) {
+        if (!fast_dec_timer_s16(&shrub_control_vars->fire_timer)) {
             break;
         }
-        vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
-        moby_point_position(vars->parts[3].moby, 1, &muzzle);
+        shrub_control_vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
+        moby_point_position(shrub_control_vars->parts[3].moby, 1, &muzzle);
         pitch = random_float_between(-0.5235988f, -0.2617994f);
         yaw = random_angle_radians();
         fast_vec_normalize(
             &velocity, &step, (shrub_path_speed_gp + shrub_path_speed_gp) * frame_time);
         bolt = spawn_rocket(&muzzle, NULL, &velocity, pitch, yaw);
         if (bolt != NULL) {
-            bolt->rot.z = vars->parts[3].moby->rot.z;
+            bolt->rot.z = shrub_control_vars->parts[3].moby->rot.z;
             bolt->state = 5;
             bolt->rot.y = 0.0f;
         }
@@ -361,7 +361,7 @@ void shrub_update(struct Moby *moby) {
         LevelPath *path;
 
         moby->state = 1;
-        path = vars->follow[0].path;
+        path = shrub_control_vars->follow[0].path;
         qcopy(&moby->pos, &path->points[0]);
         moby->rot.z =
             fast_arc_tan(path->points[1].f[0] - moby->pos.x, path->points[1].f[1] - moby->pos.y);
@@ -370,14 +370,14 @@ void shrub_update(struct Moby *moby) {
     }
     case SHRUB_BREAK_APART_AND_REMOVE:
         for (i = 0; i < 12; i++) {
-            struct Moby *part = vars->parts[i].moby;
+            struct Moby *part = shrub_control_vars->parts[i].moby;
             if (part != NULL) {
                 Vec4 *drift = (Vec4 *)part->pvars;
                 cart_burst(moby, &part->pos, -1, 3.0f, 13.0f);
                 fast_vec_sub(drift, &part->pos, &moby->pos);
                 fast_vec_normalize(drift, drift, frame_time * 5.0f);
                 part->state = 1;
-                vars->parts[i].moby = NULL;
+                shrub_control_vars->parts[i].moby = NULL;
             }
         }
         cart_burst(moby, &moby->pos, -1, 5.0f, 13.0f);
