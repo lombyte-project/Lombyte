@@ -447,7 +447,7 @@ void compute_vertex_to_reference_sphere_map_uvs(int    vertex_count,
 
 void compute_vertex_to_reference_sphere_map_uvs(
 
-    int vertex_count, char *nrm, char *vertex_positions, int unused, float *out) {
+    int vertex_count, char *nrm, char *vertex_positions, int unused, float *vertex_sphere_map_uvs) {
     float normalized_position_delta[4];
     float vertex_position[4];
     float reflection_mapping_vector[4];
@@ -477,8 +477,8 @@ void compute_vertex_to_reference_sphere_map_uvs(
         fast_vec_normalize(reflection_mapping_vector, reflection_mapping_vector, 1.0f);
         reflection_mapping_vector[2] += 1.0f;
         sphere_map_denominator = fast_vec_length(reflection_mapping_vector) * 2.0f;
-        out[i * 2] = (reflection_mapping_vector[0] / sphere_map_denominator + 0.5f) * 4.0f;
-        out[i * 2 + 1] = (reflection_mapping_vector[1] / sphere_map_denominator + 0.5f) * 4.0f;
+        vertex_sphere_map_uvs[i * 2] = (reflection_mapping_vector[0] / sphere_map_denominator + 0.5f) * 4.0f;
+        vertex_sphere_map_uvs[i * 2 + 1] = (reflection_mapping_vector[1] / sphere_map_denominator + 0.5f) * 4.0f;
     }
 }
 
