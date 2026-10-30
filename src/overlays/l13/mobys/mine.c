@@ -41,7 +41,7 @@ unsigned char *spawn_level_13_mine(char *owner,
 
 unsigned char *
 
-spawn_level_13_mine(char *owner, char *spawn_position, char *initial_velocity) {
+spawn_level_13_mine(char *firing_moby, char *spawn_position, char *initial_velocity) {
     unsigned char *moby = (unsigned char *)create_moby(0x53);
     if (moby != 0) {
         char *projectile_data;
@@ -54,7 +54,7 @@ spawn_level_13_mine(char *owner, char *spawn_position, char *initial_velocity) {
         projectile_data = *(char **)((char *)moby + 0x78);
         qcopy((char *)moby + 0x10, spawn_position);
         qcopy(projectile_data + 0x60, initial_velocity);
-        *(char **)(projectile_data + 0x74) = owner;
+        *(char **)(projectile_data + 0x74) = firing_moby;
         projectile_data[0x28] = 0;
         *(float *)(projectile_data + 0x20) = 20.0f;
         *(short *)(projectile_data + 0x24) = 0x14;
