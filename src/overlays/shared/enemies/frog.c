@@ -945,7 +945,7 @@ void consider_moby_target_candidate(char  *moby,
 
 void consider_moby_target_candidate(
 
-    char *moby, char *current_target, char *candidate_moby, int *out, float *best, float thresh) {
+    char *moby, char *current_target, char *candidate_moby, int *best_target_out, float *best, float thresh) {
     float candidate_distance = vector_distance_xy(moby + 0x10, candidate_moby + 0x10);
     if (!(thresh < candidate_distance)) {
         float ang = fast_arc_tan(MOBY(candidate_moby)->pos.x - MOBY(moby)->pos.x,
@@ -956,7 +956,7 @@ void consider_moby_target_candidate(
             candidate_score -= 2.0f;
         }
         if (candidate_score < *best) {
-            *out = (int)candidate_moby;
+            *best_target_out = (int)candidate_moby;
             *best = candidate_score;
         }
     }
