@@ -1187,7 +1187,7 @@ struct TalkState {
     s16 unk36;
     u8 pad38[0x10];
     s32 unk48;
-    s32 warp;          /* 0x4C: index into D_L03_001600EC, -1 for none */
+    s32 warp;          /* 0x4C: index into l03_cuboids, -1 for none */
 };
 
 /* Pvars of the Kerwan quest giver helga_update drives. */
@@ -1219,7 +1219,7 @@ extern char helga_dialogue_script[] __asm__("D_L03_00161BB8");
 #include "rnc/gameplay/state/game_globals.h"
 extern u8 mission_collection_recording_filter[] __asm__("D_L03_0015FC88");
 extern L03LevelState l03_moby_collection_state __asm__("D_L03_001BA6D0");
-extern char *D_L03_001600EC;
+#include "rnc/overlay/cuboid.h"
 extern void initialize_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_002668a0");
 extern int update_npc_dialogue(struct Moby *, struct TalkState *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
@@ -1316,8 +1316,8 @@ void helga_update(struct Moby *helga_moby) {
                     }
                 }
                 if (helga_vars->talk.warp != -1) {
-                    jet_reset_camera(D_L03_001600EC + helga_vars->talk.warp * 128 + 0x30,
-                                     D_L03_001600EC + helga_vars->talk.warp * 128 + 0x70);
+                    jet_reset_camera(&l03_cuboids[helga_vars->talk.warp].pos,
+                                     &l03_cuboids[helga_vars->talk.warp].rot);
                 }
             }
             helga_moby->state = 1;
@@ -1578,7 +1578,7 @@ struct GuideVars {
     s32 turned;        /* 0x140: set once it has turned around to face the hero */
     s32 reward;        /* 0x144: moby index of the class 0x3E5 reward it releases, -1 for none */
     s32 link;          /* 0x148: moby index of its class 0x3F4 helper, -1 for none */
-    s32 warp;          /* 0x14C: index into D_L03_001600EC, -1 for none */
+    s32 warp;          /* 0x14C: index into l03_cuboids, -1 for none */
     Vec4 target;       /* 0x150: point it looks at while idle */
     u8 pad160[4];
     s32 watch_timer;   /* 0x164 */
@@ -1685,7 +1685,7 @@ void big_al_update(struct Moby *guide_moby) {
                 }
             }
             if (v->warp != -1) {
-                jet_reset_camera(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70);
+                jet_reset_camera(&l03_cuboids[v->warp].pos, &l03_cuboids[v->warp].rot);
             }
         }
         guide_moby->state = 1;
@@ -1715,10 +1715,10 @@ void big_al_update(struct Moby *guide_moby) {
             }
         }
         if (v->warp != -1) {
-            jet_reset_camera(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70);
+            jet_reset_camera(&l03_cuboids[v->warp].pos, &l03_cuboids[v->warp].rot);
         }
         guide_save(0, -1);
-        set_race_camera(D_L03_001600EC + v->warp * 128 + 0x30, D_L03_001600EC + v->warp * 128 + 0x70, 0, 1);
+        set_race_camera(&l03_cuboids[v->warp].pos, &l03_cuboids[v->warp].rot, 0, 1);
         break;
     }
     rate = 0.02f;
@@ -1785,7 +1785,7 @@ struct TalkerVars {
     u8 pad6[0x30];
     s16 unk36;
     u8 pad38[0x14];
-    s32 warp;         /* 0x4C: index into D_L03_001600EC, -1 for none */
+    s32 warp;         /* 0x4C: index into l03_cuboids, -1 for none */
 };
 
 typedef struct {
@@ -1880,7 +1880,7 @@ void robot_qwark_update(struct Moby *robot_qwark_moby) {
         }
         robot_qwark_moby->state = 1;
         if (dialogue_state->mode == 2 && dialogue_state->warp != -1) {
-            warp_record = D_L03_001600EC + dialogue_state->warp * 128;
+            warp_record = (char *)l03_cuboids + dialogue_state->warp * 128;
             jet_reset_camera(warp_record + 0x30, warp_record + 0x70);
         }
         break;

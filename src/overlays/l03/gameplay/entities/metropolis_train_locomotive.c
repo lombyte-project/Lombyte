@@ -429,14 +429,7 @@ typedef struct {
 extern Cam292e98 D_L03_00166D80_292e98 __asm__("D_L03_00166D80");
 extern char *D_L03_0015FFD8_292e98 __asm__("D_L03_0015FFD8");
 extern struct Moby *D_L03_0015FFD8_m292 __asm__("D_L03_0015FFD8");
-typedef struct {
-    char p0[0x30];
-    float pos[4];
-    char p40[0x30];
-    float v70[4];
-} Slot292e98;
-
-extern Slot292e98 *D_L03_001600EC_292e98 __asm__("D_L03_001600EC");
+#include "rnc/overlay/cuboid.h"
 extern int D_L03_0015FDFC;
 extern char train_missing_master_warning_format[] __asm__("D_L03_001E2448");
 extern char train_end_path_missing_stop_node_warning[] __asm__("D_L03_001E2478");
@@ -669,16 +662,16 @@ void metropolis_train_locomotive_update(char *moby) {
         tdb->f14 =
             -fast_arc_tan(vector_distance_xy(D_L03_00166D80_292e98.pos, ((char *)l03_paths[data->iAC]) + 0x10),
                           *(float *)(((char *)l03_paths[data->iAC]) + 0x18) - D_L03_00166D80_292e98.pos[2]);
-        D_L03_001600EC_292e98[tdb->i28].pos[0] =
+        l03_cuboids[tdb->i28].pos.x =
             fast_cos(PATH_HEADING(((char *)l03_paths[data->iAC]))) * -(data->fDC + 4.0f);
-        D_L03_001600EC_292e98[tdb->i28].pos[1] =
+        l03_cuboids[tdb->i28].pos.y =
             fast_sin(PATH_HEADING(((char *)l03_paths[data->iAC]))) * -(data->fDC + 4.0f);
-        D_L03_001600EC_292e98[tdb->i28].pos[2] = 0.0f;
-        fast_vec_add(D_L03_001600EC_292e98[tdb->i28].pos, D_L03_001600EC_292e98[tdb->i28].pos,
+        l03_cuboids[tdb->i28].pos.z = 0.0f;
+        fast_vec_add(&l03_cuboids[tdb->i28].pos, &l03_cuboids[tdb->i28].pos,
                        ((char *)l03_paths[data->iAC]) + 0x10);
-        D_L03_001600EC_292e98[tdb->i28].pos[2] += 2.7f;
-        clear_u64_value(D_L03_001600EC_292e98[tdb->i28].v70);
-        D_L03_001600EC_292e98[tdb->i28].v70[2] = PATH_HEADING(((char *)l03_paths[data->iAC]));
+        l03_cuboids[tdb->i28].pos.z += 2.7f;
+        clear_u64_value(&l03_cuboids[tdb->i28].rot);
+        l03_cuboids[tdb->i28].rot.z = PATH_HEADING(((char *)l03_paths[data->iAC]));
         tdb->i2C = scale_game_frames(10000);
         *(OvlQuad *)start = *(OvlQuad *)(((char *)l03_paths[data->iAC]) + 0x10);
         place_metropolis_train(moby, start, PATH_HEADING(((char *)l03_paths[data->iAC])));

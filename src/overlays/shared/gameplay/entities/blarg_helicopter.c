@@ -99,7 +99,7 @@ void update_parent_following_effect(char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002BFF68), where it is exact; names translated to the US level program. */
 
-extern char *D_L03_001600EC;
+#include "rnc/overlay/cuboid.h"
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 int sample_random_transformed_point(int transform_index, float *out) __asm__("FUN_L03_002beba0");
@@ -107,7 +107,7 @@ int sample_random_transformed_point(int transform_index, float *out) __asm__("FU
 int sample_random_transformed_point(int transform_index, float *out) {
     char *selected_transform;
     if (transform_index != -1) {
-        selected_transform = D_L03_001600EC + transform_index * 128;
+        selected_transform = (char *)l03_cuboids + transform_index * 128;
         out[0] = random_float_between(-1.0f, 1.0f);
         out[1] = random_float_between(-1.0f, 1.0f);
         out[2] = random_float_between(-1.0f, 1.0f);
