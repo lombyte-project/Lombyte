@@ -1567,7 +1567,7 @@ int process_gadgebot_interactions(char *moby, int flag) {
     char    *state;
     int      list_id;
     int     *cursor;
-    int      entry;
+    int      interaction_candidate_moby;
 
     state = ((char *)MOBY(moby)->pvars);
     iter.out = 0;
@@ -1581,13 +1581,13 @@ int process_gadgebot_interactions(char *moby, int flag) {
         }
     } else {
         cursor = D_L06_001AC180;
-        entry = *cursor;
-        while (entry != 0) {
+        interaction_candidate_moby = *cursor;
+        while (interaction_candidate_moby != 0) {
             moby_ref = &moby;
-            if (process_gadgebot_interaction_candidate(*moby_ref, state, entry, flag, &iter.out))
+            if (process_gadgebot_interaction_candidate(*moby_ref, state, interaction_candidate_moby, flag, &iter.out))
                 return iter.out;
             cursor++;
-            entry = *cursor;
+            interaction_candidate_moby = *cursor;
         }
     }
     return iter.out;
