@@ -137,11 +137,11 @@ extern unsigned char D_0013D4C5 NOT_SDA;
 
 void compute_sand_mouse_approach_target(int unused, void *out) __asm__("FUN_L01_002e30b8");
 
-void compute_sand_mouse_approach_target(int unused, void *out) {
-    char  scratch[16];
-    char *base = D_0013E533 + 0xE1D;
-    fast_vec_normalize(scratch, *(char **)(base + 0x2080) + 0xD0, 1.0f);
-    fast_vec_add(out, scratch, base + 0x80);
+void compute_sand_mouse_approach_target(int unused, void *approach_target) {
+    char  unit_approach_offset[16];
+    char *hero_state_bytes = D_0013E533 + 0xE1D;
+    fast_vec_normalize(unit_approach_offset, *(char **)(hero_state_bytes + 0x2080) + 0xD0, 1.0f);
+    fast_vec_add(approach_target, unit_approach_offset, hero_state_bytes + 0x80);
 }
 
 /* Builds a camera-relative transform for a moby and steps its height. */
