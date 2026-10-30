@@ -182,6 +182,7 @@ extern float D_L00_00161384_gp __asm__("D_L00_00161384") __attribute__((sda));
 extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 #include "rnc/globals.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/overlay/hero_tables.h"
 void update_frame_timing_and_wrapped_value(unsigned char *state_object) __asm__("FUN_L00_002a4cd8");
 
 void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
@@ -1752,7 +1753,6 @@ typedef struct {
 
 typedef struct { char pad0[0x140]; WrenchVec position; float pad150,pitch,yaw; } PlayerCamera;
 
-typedef struct { int pad0,side; char pad8[0x14]; int first_frame,last_frame; char pad24[8]; } WrenchAttack;
 
 typedef struct { char pad0[0x18]; WrenchMoby *moby; int surface; WrenchVec position; } WrenchHit;
 
@@ -1767,7 +1767,7 @@ typedef union {
     struct { WrenchVec pad0; HitQuery query; } shifted;
 } WrenchScratch;
 
-extern WrenchAttack attack_records[] __asm__("D_L00_0017BC28");
+extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 extern WrenchMoby *D_L00_00177F00[];
 extern char D_0013E533[];
 extern float approach_value_alt(float*,float,float) __asm__("FUN_00213ed8");
@@ -1827,7 +1827,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         int player_state;
         int anim;
         WrenchMoby *player_moby;
-        WrenchAttack *attack;
+        HeroTableRow2C *attack;
         int active;
         int reaction;
         float difference,yaw;
@@ -1876,7 +1876,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         attack=&attack_records[wrench_hero()->attack_index];
         if (wrench_hero()->move_mode!=6 && wrench_hero()->state!=43) break;
         active=1; reaction=0;
-        if (wrench_hero()->blocked || wrench_hero()->animation_frame<(float)attack->first_frame || (float)attack->last_frame<wrench_hero()->animation_frame) active=0;
+        if (wrench_hero()->blocked || wrench_hero()->animation_frame<(float)attack->f1C || (float)attack->f20<wrench_hero()->animation_frame) active=0;
         {
             int reset=0;
             if (wrench_vars->previous_count!=wrench_vars->animation_count) {
@@ -1898,7 +1898,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
         moby_point_position(wrench_hero()->moby,0,wrench_hero()->sweep_start);
         if (wrench_hero()->state==19 || wrench_hero()->state==112 || wrench_hero()->state==43) {
             yaw=fast_arc_tan(wrench_hero()->sweep_end[0]-wrench_hero()->position[0],wrench_hero()->sweep_end[1]-wrench_hero()->position[1]);
-            if (attack_records[wrench_hero()->attack_index].side==1)
+            if (attack_records[wrench_hero()->attack_index].kind==1)
                 yaw=fast_add_rotations(yaw,-1.5707964f);
             else yaw=fast_add_rotations(yaw,1.5707964f);
         }

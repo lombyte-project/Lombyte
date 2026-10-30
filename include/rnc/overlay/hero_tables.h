@@ -55,14 +55,14 @@ typedef struct HeroAnimRow {
  * f18 and f1C..f20 are compared with it).
  */
 typedef struct HeroTableRow2C {
-    u8 pad_0[0x4];
+    s32 unk0;
     s32 kind;            /* HeroComboKind; 1 also adds a turn-direction test */
-    u8 pad_8[0x4];
+    s32 unk8;
     s32 fC;
-    s32 f10;
+    s32 f10;             /* frame from which a follow-up move may start */
     s32 f14;
     s32 f18;
-    s32 f1C;
+    s32 f1C;             /* f1C..f20: frames in which the wrench hits */
     s32 f20;
     u8 pad_24[0x8];
 } HeroTableRow2C;

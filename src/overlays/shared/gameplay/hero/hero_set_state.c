@@ -101,6 +101,7 @@ void update_hero_motion_and_collision_probes(void) {
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/input/pad_state.h"
+#include "rnc/overlay/hero_tables.h"
 
 typedef struct {
     s32 w0;
@@ -555,13 +556,6 @@ int select_hero_grapple_target(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00222B80), where it is exact; names translated to the US level program. */
 
 typedef struct {
-    int a;
-    int b;
-    int c;
-    char pad[0x20];
-} T2C;
-
-typedef struct {
     char pad[0x194];
     float f194;
 } H194;
@@ -577,7 +571,7 @@ typedef struct {
 
 extern char hero_pal_timed_jump_keys[4] __asm__("D_L00_0015F6E8") __attribute__((sda));
 extern char D_L00_0017BF60_e[] __asm__("D_L00_0017BF60");
-extern T2C attack_records[] __asm__("D_L00_0017BC28");
+extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 #include "rnc/gameplay/state/game_globals.h"
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -2230,7 +2224,7 @@ int hero_set_state(int a, int b) {
         case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
-            T2C *e;
+            HeroTableRow2C *e;
             int k;
             if (*(unsigned short *)(h + 0x40) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x40) = *(unsigned short *)(h + 0x40) + 1;
@@ -2244,8 +2238,8 @@ int hero_set_state(int a, int b) {
             e = &attack_records[q->attack_record];
             q->saved_item[0] = 0;
             k = 0;
-            if (q->state.prev_control_mode == 6 && e->a == 0 && q->anim_frame < (float)e->c) {
-                k = (e->b + 1) % 3;
+            if (q->state.prev_control_mode == 6 && e->unk0 == 0 && q->anim_frame < (float)e->unk8) {
+                k = (e->kind + 1) % 3;
             }
             {
                 struct Hero *r = &hero;
@@ -2284,13 +2278,13 @@ int hero_set_state(int a, int b) {
         }
         case HERO_STATE_VEHICLE_MODE_1_ATTACK: {
             struct Hero *q = &hero;
-            T2C *e = &attack_records[q->attack_record];
+            HeroTableRow2C *e = &attack_records[q->attack_record];
             int k = 0;
             if ((q->state.prev_control_mode == 6 ||
                  (q->state.prev2_control_mode == 6 &&
                   (unsigned int)(*(unsigned char *)(((char *)q->moby) + 0x53) - 0xF) < 2)) &&
-                e->a == 0 && q->anim_frame < (float)e->c) {
-                k = (e->b + 1) % 2;
+                e->unk0 == 0 && q->anim_frame < (float)e->unk8) {
+                k = (e->kind + 1) % 2;
             }
             {
                 struct Hero *r = &hero;
@@ -2330,7 +2324,7 @@ int hero_set_state(int a, int b) {
         p->unkA64 = 0;
         if (p->state.prev == 0x70) {
             int v = 5;
-            if (attack_records[p->attack_record].b == 0)
+            if (attack_records[p->attack_record].kind == 0)
                 v = 6;
             p->attack_record = v;
         } else {
@@ -2338,7 +2332,7 @@ int hero_set_state(int a, int b) {
         }
         {
             struct Hero *q = &hero;
-            int e = attack_records[q->attack_record].b;
+            int e = attack_records[q->attack_record].kind;
             if (b) {
                 char *m;
                 int z = e == 0;
@@ -2378,10 +2372,10 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C *e = &attack_records[p->attack_record];
-            int k = e->b;
+            HeroTableRow2C *e = &attack_records[p->attack_record];
+            int k = e->kind;
             int n;
-            if (e->a == 1)
+            if (e->unk0 == 1)
                 k = 2;
             n = scale_game_frames(5);
             set_hero_animation(k + 0x27, 5, (float)n);
@@ -3240,16 +3234,9 @@ typedef struct {
     int f1A0;
     int f1A4;
 } Pad;
-typedef struct {
-    char p0[0xC];
-    int fC;
-    int next_move_frame; /* compared with hero.anim_frame before a follow-up move */
-    char p14[0x18];
-} Rec2C;
 extern Hero_228770 D_0013F450_h228770 __asm__("D_0013F350");
 extern Pad D_0013CA40_p228770 __asm__("D_0013C940");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
-extern Rec2C D_L00_0017BD28_228770[] __asm__("D_L00_0017BC28");
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
@@ -3350,7 +3337,7 @@ int process_hero_equipped_item_input(void) {
             }
         }
         if (D_0013F450_h228770.f208C == 6) {
-            Rec2C *rec = &D_L00_0017BD28_228770[D_0013F450_h228770.fA60];
+            HeroTableRow2C *rec = &attack_records[D_0013F450_h228770.fA60];
             int t;
 
             if (D_0013F450_h228770.f2084 == 0x15) {
@@ -3358,7 +3345,7 @@ int process_hero_equipped_item_input(void) {
                     if (D_0013F450_h228770.fA9C != 0) {
                         break;
                     }
-                    if (D_0013F450_h228770.fAA8 >= (float)rec->next_move_frame && (D_0013CA40_p228770.f1A0 & 0xA) && pad_pressed_within(mask, scale_game_frames(0xF), 0)) {
+                    if (D_0013F450_h228770.fAA8 >= (float)rec->f10 && (D_0013CA40_p228770.f1A0 & 0xA) && pad_pressed_within(mask, scale_game_frames(0xF), 0)) {
                         hero_set_state(0x15, 1);
                         break;
                     }
@@ -3367,7 +3354,7 @@ int process_hero_equipped_item_input(void) {
             if (D_0013F450_h228770.fA9C != 0) {
                 break;
             }
-            if (!(D_0013F450_h228770.fAA8 >= (float)rec->next_move_frame)) {
+            if (!(D_0013F450_h228770.fAA8 >= (float)rec->f10)) {
                 break;
             }
             t = (truncate_float_to_s32(D_0013F450_h228770.fAA8) - rec->fC) * 2;

@@ -29,17 +29,11 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/overlay/hero_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    int a;
-    int b;
-    int c;
-    char pad[0x20];
-} T2C;
-
-extern T2C D_L02_0017C228[];
+extern HeroTableRow2C D_L02_0017C228[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 /* D_0015ED60 reached through the word below it: retail loads it with lui here, not $gp. */
 extern float D_0015ED5C_lui[2] __asm__("D_0015ED5C");
@@ -1133,7 +1127,7 @@ int hero_set_state(int a, int b) {
         case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
-            T2C *e;
+            HeroTableRow2C *e;
             int k;
             if (*(unsigned short *)(h + 0x40) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x40) = *(unsigned short *)(h + 0x40) + 1;
@@ -1147,8 +1141,8 @@ int hero_set_state(int a, int b) {
             e = &D_L02_0017C228[q->attack_record];
             q->saved_item[0] = 0;
             k = 0;
-            if (q->state.prev_control_mode == 6 && e->a == 0 && q->anim_frame < (float)e->c) {
-                k = (e->b + 1) % 3;
+            if (q->state.prev_control_mode == 6 && e->unk0 == 0 && q->anim_frame < (float)e->unk8) {
+                k = (e->kind + 1) % 3;
             }
             {
                 struct Hero *r = &hero;
@@ -1207,7 +1201,7 @@ int hero_set_state(int a, int b) {
         p->unkA64 = 0;
         if (p->state.prev == 0x70) {
             int v = 5;
-            if (D_L02_0017C228[p->attack_record].b == 0)
+            if (D_L02_0017C228[p->attack_record].kind == 0)
                 v = 6;
             p->attack_record = v;
         } else {
@@ -1215,7 +1209,7 @@ int hero_set_state(int a, int b) {
         }
         {
             struct Hero *q = &hero;
-            int e = D_L02_0017C228[q->attack_record].b;
+            int e = D_L02_0017C228[q->attack_record].kind;
             if (b) {
                 char *m;
                 int z = e == 0;
@@ -1235,10 +1229,10 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C *e = &D_L02_0017C228[p->attack_record];
-            int k = e->b;
+            HeroTableRow2C *e = &D_L02_0017C228[p->attack_record];
+            int k = e->kind;
             int n;
-            if (e->a == 1)
+            if (e->unk0 == 1)
                 k = 2;
             n = scale_game_frames(5);
             set_hero_animation(k + 0x27, 5, (float)n);

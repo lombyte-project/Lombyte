@@ -26,17 +26,11 @@
 #include "rnc/overlay/shared/gameplay/hero/air_accel.h"
 #include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/overlay/hero_tables.h"
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/help_0024E240.c: func_L11_0024E240), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    int a;
-    int b;
-    int c;
-    char pad[0x20];
-} T2C;
-
-extern T2C D_L11_0017C628[];
+extern HeroTableRow2C D_L11_0017C628[];
 extern char *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 extern float level_11_hero_animation_blend_curves[][25] __asm__("D_L11_0017C7F0");
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
@@ -1366,7 +1360,7 @@ int hero_set_state(int a, int b) {
         case HERO_STATE_WRENCH_COMBO: {
             char *h = ((char *)&item_usage);
             struct Hero *q;
-            T2C *e;
+            HeroTableRow2C *e;
             int k;
             if (*(unsigned short *)(h + 0x40) <= 0xFFFE) {
                 *(unsigned short *)(h + 0x40) = *(unsigned short *)(h + 0x40) + 1;
@@ -1380,8 +1374,8 @@ int hero_set_state(int a, int b) {
             e = &D_L11_0017C628[q->attack_record];
             q->saved_item[0] = 0;
             k = 0;
-            if (q->state.prev_control_mode == 6 && e->a == 0 && q->anim_frame < (float)e->c) {
-                k = (e->b + 1) % 3;
+            if (q->state.prev_control_mode == 6 && e->unk0 == 0 && q->anim_frame < (float)e->unk8) {
+                k = (e->kind + 1) % 3;
             }
             {
                 struct Hero *r = &hero;
@@ -1441,10 +1435,10 @@ int hero_set_state(int a, int b) {
         p->ground_speed = frame_time * 9.0f;
         if (b) {
             char *m;
-            T2C *e = &D_L11_0017C628[p->attack_record];
-            int k = e->b;
+            HeroTableRow2C *e = &D_L11_0017C628[p->attack_record];
+            int k = e->kind;
             int n;
-            if (e->a == 1)
+            if (e->unk0 == 1)
                 k = 2;
             n = scale_game_frames(5);
             set_hero_animation(k + 0x27, 5, (float)n);
