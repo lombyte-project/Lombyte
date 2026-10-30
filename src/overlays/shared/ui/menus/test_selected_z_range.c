@@ -38,7 +38,7 @@ extern int  sprintf(char *, const char *, ...) __asm__("FUN_00116248");
  * or other % escape. */
 void format_menu_item_label(s32 menu_item_index, u8 *out) __asm__("FUN_L00_0024a618");
 
-void format_menu_item_label(s32 menu_item_index, u8 *out) {
+void format_menu_item_label(s32 menu_item_index, u8 *formatted_label_cursor) {
     u8  substitution_text[16];
     u8 *label_cursor;
     u8 *substitution_cursor;
@@ -49,10 +49,10 @@ void format_menu_item_label(s32 menu_item_index, u8 *out) {
         return;
     }
     while (*label_cursor != 0 && *label_cursor != '%') {
-        *out++ = *label_cursor++;
+        *formatted_label_cursor++ = *label_cursor++;
     }
     if (*label_cursor == 0) {
-        *out = *label_cursor;
+        *formatted_label_cursor = *label_cursor;
         return;
     }
     label_cursor++;
@@ -65,10 +65,10 @@ void format_menu_item_label(s32 menu_item_index, u8 *out) {
     }
     label_cursor++;
     while (*substitution_cursor != 0) {
-        *out++ = *substitution_cursor++;
+        *formatted_label_cursor++ = *substitution_cursor++;
     }
     while (*label_cursor != 0) {
-        *out++ = *label_cursor++;
+        *formatted_label_cursor++ = *label_cursor++;
     }
-    *out = 0;
+    *formatted_label_cursor = 0;
 }
