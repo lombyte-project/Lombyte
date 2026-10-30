@@ -384,7 +384,7 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
     int                 j;
     int                 k;
     int                 trail_segment_index;
-    int                 base;
+    int                 trail_segment_start_slot;
 
     if (D_L18_00162238_gp != 0) {
         return;
@@ -426,11 +426,11 @@ void draw_drek_fight_missile_group_trails(struct Moby *moby) {
         missile_trail_private_vars = (char *)missile_moby->pvars;
         for (trail_segment_index = 0; trail_segment_index < *(short *)(missile_trail_private_vars + 0x164);
              trail_segment_index++) {
-            base = (*(short *)(missile_trail_private_vars + 0x166) - trail_segment_index + 15) & 15;
+            trail_segment_start_slot = (*(short *)(missile_trail_private_vars + 0x166) - trail_segment_index + 15) & 15;
             if (drek_missile_trail_draw_disabled_gp == 0) {
                 for (k = 0; k < 4; k++) {
                     fast_vec_add(&quads[trail_segment_index].positions[k],
-                                 missile_trail_private_vars + 0x10 + (((base + (k >> 1)) & 15) << 4),
+                                 missile_trail_private_vars + 0x10 + (((trail_segment_start_slot + (k >> 1)) & 15) << 4),
                                  extra + ((k & 1) << 2));
                 }
                 draw_geometry_quad(&quads[trail_segment_index], 0, 0);
