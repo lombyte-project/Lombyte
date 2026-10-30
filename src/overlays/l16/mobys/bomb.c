@@ -180,7 +180,7 @@ unsigned char *spawn_thrown_bomb(int    owner,
 
 unsigned char *spawn_thrown_bomb(
 
-    int owner, void *spawn_position, float *initial_velocity, int fuse_frames, float gravity) {
+    int thrower_moby, void *spawn_position, float *initial_velocity, int fuse_frames, float gravity) {
     unsigned char *moby = (unsigned char *)create_moby(0x119);
     if (moby != 0) {
         char *thrown_bomb_data = ((char *)MOBY(moby)->pvars);
@@ -188,7 +188,7 @@ unsigned char *spawn_thrown_bomb(
         moby[0x31] = 1;
         moby[0x20] = 1;
         MOBY(moby)->draw_dist = 0xFF;
-        *(int *)(thrown_bomb_data + 0x20) = owner;
+        *(int *)(thrown_bomb_data + 0x20) = thrower_moby;
         *(float *)(thrown_bomb_data + 0x24) = gravity;
         *(int *)(thrown_bomb_data + 0x28) = fuse_frames;
         *(short *)(thrown_bomb_data + 0xC) = scale_game_frames(5);
