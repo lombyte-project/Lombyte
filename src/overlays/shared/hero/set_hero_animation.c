@@ -43,9 +43,9 @@ extern int select_hero_slot3_animation_pair(int, int *, int *) __asm__("FUN_L00_
 void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 
 void blend_hero_slot3_animation_pair(void) {
-    struct Hero *base = &hero;
-    char        *slot3_moby = ((char *)base->items[3].moby);
-    char        *slot3_secondary_moby = ((char *)base->items[3].moby2);
+    struct Hero *hero_slot3_animation_pair_state = &hero;
+    char        *slot3_moby = ((char *)hero_slot3_animation_pair_state->items[3].moby);
+    char        *slot3_secondary_moby = ((char *)hero_slot3_animation_pair_state->items[3].moby2);
     int          mapped_animation_ids[2];
     int          seq;
 
