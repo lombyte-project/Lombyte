@@ -58,10 +58,10 @@ char *load_level_texture_bank(char *bank, s32 *header) {
     s32   first_offset;
     s32   second_offset;
     s32   last_offset;
-    char *first;
+    char *first_image_start;
     char *bulk_copy_destination;
     char *upload_pixels;
-    char *base;
+    char *bank_start;
     s32   index;
     s32   next_index;
     fast_mem_copy(bank,
@@ -69,7 +69,7 @@ char *load_level_texture_bank(char *bank, s32 *header) {
                   disc_table.level_archives[level_render_state.content_variant + 1].size << 11);
     sky_offset = ((ImageBank *)bank)->sky_offset;
     first_offset = ((ImageBank *)bank)->first_offset;
-    first = bank + first_offset;
+    first_image_start = bank + first_offset;
     second_offset = ((ImageBank *)bank)->second_offset;
     last_offset = ((ImageBank *)bank)->last_offset;
     do {
@@ -77,16 +77,16 @@ char *load_level_texture_bank(char *bank, s32 *header) {
             sceGsSetDefLoadImage_23fa00(
                 image, (texture_area_base + header[0x2B]) >> 8, 1, 0x13, 0, 0, 0x40, 0x40);
             bulk_copy_destination = bank + first_offset;
-            upload_pixels = first + 0x14430;
+            upload_pixels = first_image_start + 0x14430;
         } else if (i == 1) {
             sceGsSetDefLoadImage_23fa00(
                 image, (texture_area_base + header[0x2C]) >> 8, 1, 0x13, 0, 0, 0x20, 0x20);
             bulk_copy_destination = bank + first_offset;
-            upload_pixels = first + 0x15430;
+            upload_pixels = first_image_start + 0x15430;
         } else if (i == 2) {
             sceGsSetDefLoadImage_23fa00(
                 image, (texture_area_base + header[0x2D]) >> 8, 1, 0, 0, 0, 0x10, 0x10);
-            upload_pixels = first + 0x30;
+            upload_pixels = first_image_start + 0x30;
             bulk_copy_destination = bank + first_offset;
         } else {
             sceGsSetDefLoadImage_23fa00(
@@ -99,7 +99,7 @@ char *load_level_texture_bank(char *bank, s32 *header) {
         sceGsExecLoadImage_23fa00(image, upload_pixels);
         sceGsSyncPath(0, 0);
     } while (i < 4);
-    base = bank;
+    bank_start = bank;
     bank = bulk_copy_destination;
     first_record_fields.h[0] = header[0x2D] >> 8;
     index = texture_count_macro;
@@ -107,11 +107,11 @@ char *load_level_texture_bank(char *bank, s32 *header) {
     first_record_fields.h[2] = header[0x2C] >> 8;
     qcopy(&moby_texture_table[index], &first_record_23fa00[0]);
     texture_addresses_23fa00[index] = (u32)bank - 0x80000000U;
-    fast_mem_copy(bank, base + first_offset + 0x430, 0x14000);
+    fast_mem_copy(bank, bank_start + first_offset + 0x430, 0x14000);
     bank += 0x14000;
     record_index = texture_count_macro;
     if (class_slot[first_class_ids[level_render_state.content_variant]] == 0xFF) {
-        register_moby_class(base + sky_offset,
+        register_moby_class(bank_start + sky_offset,
                             first_record_23fa00 - texture_count_macro,
                             &record_index,
                             first_class_ids[level_render_state.content_variant]);
@@ -121,11 +121,11 @@ char *load_level_texture_bank(char *bank, s32 *header) {
     texture_count_macro = next_index;
     qcopy(&moby_texture_table[next_index], second_record_23fa00);
     texture_addresses_23fa00[next_index] = (u32)bank + 0x70000000U;
-    fast_mem_copy(bank, base + last_offset + 0x430, 0x4000);
+    fast_mem_copy(bank, bank_start + last_offset + 0x430, 0x4000);
     bank += 0x4000;
     record_index = texture_count_macro;
     if (class_slot[second_class_ids[level_render_state.content_variant]] == 0xFF) {
-        register_moby_class(base + second_offset,
+        register_moby_class(bank_start + second_offset,
                             second_record_23fa00 - texture_count_macro,
                             &record_index,
                             second_class_ids[level_render_state.content_variant]);
