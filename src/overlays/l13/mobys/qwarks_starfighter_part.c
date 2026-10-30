@@ -51,29 +51,29 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
         PART_STATE_MOVE_AND_SPIN = 3,
         PART_STATE_BURST_AND_REMOVE = 4
     };
-    struct PieceVars *vars = (struct PieceVars *)moby->pvars;
-    struct Moby      *parent = vars->parent;
+    struct PieceVars *starfighter_part_vars = (struct PieceVars *)moby->pvars;
+    struct Moby      *parent = starfighter_part_vars->parent;
     struct Moby      *hit;
     char             *coll;
     if (parent == 0 || parent->oclass != 0x184 || parent->state == 0xFE || parent->state == 0xFD) {
         goto remove;
     }
     moby->flags = (moby->flags & 0xFFFC);
-    moby->flags = moby->flags | (vars->parent->flags & 3);
+    moby->flags = moby->flags | (starfighter_part_vars->parent->flags & 3);
     switch (moby->state) {
     case PART_STATE_INITIALIZE:
         moby->state = 1;
-        qzero(&vars->unk20);
+        qzero(&starfighter_part_vars->unk20);
         break;
     case PART_STATE_SYNC_PARENT_SCALE:
-        moby->scale = moby->pclass->scale * vars->parent->scale / vars->parent->pclass->scale;
-        moby->spawn_frame = vars->parent->spawn_frame;
+        moby->scale = moby->pclass->scale * starfighter_part_vars->parent->scale / starfighter_part_vars->parent->pclass->scale;
+        moby->spawn_frame = starfighter_part_vars->parent->spawn_frame;
         break;
     case PART_STATE_IDLE:
         break;
     case PART_STATE_MOVE_AND_SPIN:
-        fast_vec_add(&moby->pos, &moby->pos, &vars->vel);
-        fast_vec_scale(&vars->vel, &vars->vel, 0.995f);
+        fast_vec_add(&moby->pos, &moby->pos, &starfighter_part_vars->vel);
+        fast_vec_scale(&starfighter_part_vars->vel, &starfighter_part_vars->vel, 0.995f);
         if (coll_sphere(&moby->pos, 2.0f, 0, moby) != 0) {
             coll = coll_hit_1638;
             hit = *(struct Moby **)(coll + 0x18);
@@ -82,21 +82,21 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
                  hit->oclass != 0x186 && hit->oclass != 0x187 && hit->oclass != 0x188 &&
                  hit->oclass != 0x189 && hit->oclass != 0x18A && hit->oclass != 0x18B &&
                  hit->oclass != 0x18C && hit->oclass != 0x18F && hit->oclass != 0x190)) {
-                reflect_vector(&vars->vel, &vars->vel, coll + 0x40);
+                reflect_vector(&starfighter_part_vars->vel, &starfighter_part_vars->vel, coll + 0x40);
                 moby->state = 4;
             }
         }
-        moby->rot.x = fast_add_rotations(moby->rot.x, vars->spin[0]);
-        moby->rot.y = fast_add_rotations(moby->rot.y, vars->spin[1]);
-        moby->rot.z = fast_add_rotations(moby->rot.z, vars->spin[2]);
-        vars->spin[0] *= 0.999f;
-        vars->spin[1] *= 0.999f;
-        vars->spin[2] *= 0.999f;
+        moby->rot.x = fast_add_rotations(moby->rot.x, starfighter_part_vars->spin[0]);
+        moby->rot.y = fast_add_rotations(moby->rot.y, starfighter_part_vars->spin[1]);
+        moby->rot.z = fast_add_rotations(moby->rot.z, starfighter_part_vars->spin[2]);
+        starfighter_part_vars->spin[0] *= 0.999f;
+        starfighter_part_vars->spin[1] *= 0.999f;
+        starfighter_part_vars->spin[2] *= 0.999f;
         if (moby->pos.x < 10.0f || 1013.0f < moby->pos.x || moby->pos.y < 10.0f ||
             1013.0f < moby->pos.y || moby->pos.z < 10.0f || 1013.0f < moby->pos.z) {
             goto remove;
         }
-        if (fast_dec_timer(&vars->timer) == 0 || moby->visible != 0) {
+        if (fast_dec_timer(&starfighter_part_vars->timer) == 0 || moby->visible != 0) {
             break;
         }
     remove:
@@ -104,7 +104,7 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
         break;
     case PART_STATE_BURST_AND_REMOVE:
         spawn_explosion(moby,
-                        &vars->vel,
+                        &starfighter_part_vars->vel,
                         0,
                         2.0f,
                         4.0f,
