@@ -1664,13 +1664,13 @@ resolve_point_path_segment_clearance(int, void *, void *, float) __asm__("FUN_L0
 void FUN_L00_002347c0(void);
 
 void FUN_L00_002347c0(void) {
-    struct Hero *base = &hero;
+    struct Hero *hero_path_clearance_state = &hero;
 
-    if (resolve_point_path_segment_clearance(base->path_constrain_pending,
-                                             &base->motion.pos,
-                                             &base->motion.pos,
-                                             base->capsule_radius) != 0) {
-        base->unk1F6 = 4;
+    if (resolve_point_path_segment_clearance(hero_path_clearance_state->path_constrain_pending,
+                                             &hero_path_clearance_state->motion.pos,
+                                             &hero_path_clearance_state->motion.pos,
+                                             hero_path_clearance_state->capsule_radius) != 0) {
+        hero_path_clearance_state->unk1F6 = 4;
     }
 }
 
