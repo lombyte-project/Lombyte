@@ -602,6 +602,9 @@ def c_initializer(members: list, size: int, raw: bytes, symbols: dict[int, str],
             elem, count = array.group(1), int(array.group(2))
             step = len(field) // count if count else 0
             inner = records(re.sub(r"^(struct|union)\s+", "", elem.strip()))
+            if not any(field):
+                parts.append("{0}")
+                continue
             parts.append("{" + ", ".join(
                 c_initializer(inner, step, field[i * step:(i + 1) * step], symbols, records) if inner
                 else c_value(elem, field[i * step:(i + 1) * step], symbols)
