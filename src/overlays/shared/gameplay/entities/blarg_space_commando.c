@@ -479,8 +479,8 @@ void process_blarg_space_commando_hits(char *moby) {
     float remaining_health;
     float lo, hi, spd, minimum_fragment_speed, pull;
 
-    vars = *(char **)(moby + 0x78);
-    *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * D_L06_00161FA8;
+    vars = ((char *)MOBY(moby)->pvars);
+    MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * D_L06_00161FA8;
     update_blarg_space_commando_beam(moby);
     if (*(int *)(vars + 0x38) != 0) {
         *(int *)(vars + 0x188) = truncate_float_to_s32(FUN_L04_001f1978(random_float_between(180.0f, 240.0f)));
@@ -538,7 +538,7 @@ void process_blarg_space_commando_hits(char *moby) {
             q = vars + 0x60;
             a = fatal_knockback_horizontal_speed_gp * D_0015ED6C;
             b = fatal_knockback_vertical_speed_gp * D_0015ED6C;
-            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+            MOBY(moby)->flags &= 0xEFFF;
             *(float *)(vars + 0x78) = a;
             *(float *)(vars + 0x7C) = b;
             *(float *)(vars + 0xB0) = 9.0f;
@@ -584,7 +584,7 @@ void process_blarg_space_commando_hits(char *moby) {
         }
         trooper_anim_update(moby, (short *)(vars + 0x110));
     }
-    *(unsigned char *)(moby + 0xA4) = 0xFF;
+    MOBY(moby)->hit_slot = 0xFF;
     trooper_anim_finish(moby, vars + 0x110);
     if (*(int *)(vars + 0x188) != 0) {
         *(float *)(vars + 0x198) = base_home_distance_limit_gp + 6.0f;
@@ -597,7 +597,7 @@ void process_blarg_space_commando_hits(char *moby) {
     if (FUN_L00_0025ff38(*(float *)(vars + 0x198), moby, q, 0, 0, route_record + 4, *route_record) != 2) {
         if (*(float *)(vars + 0x198) < vector_distance_xy(vars + 0x170, vars + 0x120)) {
             *(int *)(vars + 0x164) = 2;
-        } else if (3.0f < absolute_float(*(float *)(moby + 0x18) - *(float *)(vars + 0x128))) {
+        } else if (3.0f < absolute_float(MOBY(moby)->pos.z - *(float *)(vars + 0x128))) {
             *(int *)(vars + 0x164) = 2;
         }
     }
@@ -615,18 +615,18 @@ extern int beam_duration_frames_gp __asm__("D_L06_00161FD8") __attribute__((sda)
 void initialize_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff100");
 
 void initialize_blarg_space_commando_beam(char *moby) {
-    char *vars = *(char **)(moby + 0x78);
+    char *vars = ((char *)MOBY(moby)->pvars);
     float point_offset[4];
     int i;
     probe_ground_height(moby + 0x10, 0, 0.5f);
     fast_vec_normalize(vars + 0x220, D_L06_00174600_lui, 1.0f);
     moby_point_position(moby, 0, vars + 0x210);
-    *(float *)(vars + 0x218) = *(float *)(moby + 0x18);
+    *(float *)(vars + 0x218) = MOBY(moby)->pos.z;
     for (i = 0; i < 16; i++) {
         float angle_offset = convert_integer_to_float(i) * 0.0625f - 0.5f;
         angle_offset = angle_offset * (beam_spread_degrees_gp * 0.017453292f);
-        point_offset[0] = fast_cos(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
-        point_offset[1] = fast_sin(fast_add_rotations(angle_offset, *(float *)(moby + 0x48))) * 0.2f;
+        point_offset[0] = fast_cos(fast_add_rotations(angle_offset, MOBY(moby)->rot.z)) * 0.2f;
+        point_offset[1] = fast_sin(fast_add_rotations(angle_offset, MOBY(moby)->rot.z)) * 0.2f;
         point_offset[2] = 0.15f;
         fast_vec_add((float *)(vars + 0x230 + i * 16), (float *)(vars + 0x210), point_offset);
         if (i == 0 || i == 15) {
@@ -665,7 +665,7 @@ extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 void update_blarg_space_commando_beam(void *owner_moby) {
     char *moby = owner_moby;
-    FanData *data = *(FanData **)(moby + 0x78);
+    FanData *data = ((FanData *)MOBY(moby)->pvars);
     int frames;
     float point[4];
     float relative[4];
@@ -726,8 +726,8 @@ void update_blarg_space_commando_beam(void *owner_moby) {
         if (0.6f <= *(float *)(entry + 0x23C)) {
             next_entry = (char *)data + next * 16;
             if (0.6f <= *(float *)(next_entry + 0x23C)) {
-                point[0] = fast_cos(*(float *)(moby + 0x48));
-                point[1] = fast_sin(*(float *)(moby + 0x48));
+                point[0] = fast_cos(MOBY(moby)->rot.z);
+                point[1] = fast_sin(MOBY(moby)->rot.z);
                 point[2] = 1.0f;
                 point[3] = 5627.925f;
                 hit_type = 0x10000;
@@ -735,7 +735,7 @@ void update_blarg_space_commando_beam(void *owner_moby) {
                     hit_type = 0x10001;
                 }
                 make_hit_descriptor(&shot, (struct Moby *)moby, hit_type, point, 1.0f);
-                shot.oclass = *(s16 *)(moby + 0xA6);
+                shot.oclass = MOBY(moby)->oclass;
                 shot.unk18 = 0;
                 shot.unk19 = 1;
                 collision_line(&data->pts[j], &data->pts[j + 1], 0, moby, &shot);
@@ -772,7 +772,7 @@ extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
    moby's point list (data + 0x230), each twice: once with the odd corners
    pulled toward the centre (data + 0x210) and once raised by 0.25. */
 void draw_blarg_space_commando_beam(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     QuadPacket_f680 pk[2];
     f32 quad_identity_matrix[4][4];
     f32 corner_inset_vector[4];
@@ -858,7 +858,7 @@ extern float beam_spark_vector_z_range_end_gp __asm__("D_L06_00162038") __attrib
 extern float beam_spark_spawn_probability_gp __asm__("D_L06_0016203C") __attribute__((sda));
 
 void spawn_blarg_space_commando_beam_sparks(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     int i, next_point_index;
     for (i = 0; i < 15; i = next_point_index) {
         float first_vector_angle, second_vector_angle;
@@ -948,10 +948,10 @@ unsigned char *spawn_spinning_moby_fragment(char *unused_source_moby, float *fra
     fragment_moby = create_moby(truncate_float_to_s32(random_float_between(1085.0f, 1089.0f)));
 
     if (fragment_moby != 0) {
-        fragment_vars = *(char **)(fragment_moby + 0x78);
-        *(float *)(fragment_moby + 0x2C) = *(float *)(*(char **)(fragment_moby + 0x24) + 0x24) * D_L06_00162080_gp;
+        fragment_vars = ((char *)MOBY(fragment_moby)->pvars);
+        MOBY(fragment_moby)->scale = *(float *)(((char *)MOBY(fragment_moby)->pclass) + 0x24) * D_L06_00162080_gp;
         fragment_moby[0x30] = 0xFF;
-        *(short *)(fragment_moby + 0x32) = 0x7E;
+        MOBY(fragment_moby)->draw_dist = 0x7E;
         fragment_moby[0x31] = 1;
         qcopy(fragment_moby + 0x10, pp);
         qcopy(fragment_vars, saved_velocity);
@@ -987,7 +987,7 @@ void draw_pulsing_timer_display(char *moby) __asm__("FUN_L06_003021d8");
 
 void draw_pulsing_timer_display(char *moby) {
     char timer_text[8];
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     float color_blend_factor;
     int col;
 

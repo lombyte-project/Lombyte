@@ -21,6 +21,7 @@
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 
@@ -51,7 +52,7 @@ void apply_hero_ground_type_effects(void) {
             hero_ptr->on_magnet_ground = 1;
             if (hero_ptr->vehicle_mode == 0) {
                 char *item_moby = ((char *)hero_ptr->items[1].moby);
-                if (item_moby != 0 && *(short *)(item_moby + 0xA6) == 0xAD)
+                if (item_moby != 0 && MOBY(item_moby)->oclass == 0xAD)
                     hero_ptr->unk308 = 1;
             }
         }

@@ -16,6 +16,7 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/entities/suck_aim.h"
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Mine (moby class 74) update: falls and bounces, sticks to what it hits, homes on a nearby target and explodes. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002AB910), where it is exact; names translated to the US level program. */
@@ -957,7 +958,7 @@ unsigned char *spawn_glow_particle(void *owner, void *spawn_position, void *init
     moby = create_moby(0x70);
     if (moby) {
         Q_2ac910 rot_copy, random_initial_rotation;
-        V_2ac910 *data = *(V_2ac910 **)(moby + 0x78);
+        V_2ac910 *data = ((V_2ac910 *)MOBY(moby)->pvars);
         float elapsed;
         random_initial_rotation.q = 0;
         random_initial_rotation.f[0] = random_float_between(-3.1415927f, 3.1415927f);
@@ -967,10 +968,10 @@ unsigned char *spawn_glow_particle(void *owner, void *spawn_position, void *init
         moby[0x20] = 0;
         moby[0x23] = alpha;
         moby[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         set_moby_color(moby, red, green, blue);
-        data->f18 = *(float *)(moby + 0x2C) * scale;
+        data->f18 = MOBY(moby)->scale * scale;
         *(int *)(moby + 0x2C) = 0;
         data->o = owner;
         qcopy(moby + 0x10, spawn_position);
@@ -979,7 +980,7 @@ unsigned char *spawn_glow_particle(void *owner, void *spawn_position, void *init
         data->n = lifetime;
         data->h1c = *(unsigned short *)&data->n - FUN_001f96f8_2ac910(4);
         elapsed = convert_integer_to_float(data->n - data->h1c);
-        *(float *)(moby + 0x2C) = elapsed * data->f18 / convert_integer_to_float(data->n);
+        MOBY(moby)->scale = elapsed * data->f18 / convert_integer_to_float(data->n);
         data->h1e = alpha;
         update_entity(moby);
     }
@@ -1141,7 +1142,7 @@ unsigned char *spawn_bomb(int owner, void *spawn_position) {
     unsigned char *bomb_moby = create_moby(0x79);
     if (bomb_moby) {
         V_2ace70 u, random_rotation;
-        unsigned char *v = *(unsigned char **)(bomb_moby + 0x78);
+        unsigned char *v = ((unsigned char *)MOBY(bomb_moby)->pvars);
         struct Hero *hero_context;
         float frame_scaled_random_angle;
         random_rotation.q = 0;
@@ -1150,7 +1151,7 @@ unsigned char *spawn_bomb(int owner, void *spawn_position) {
         random_rotation.f[2] = random_float_between(-3.1415927f, 3.1415927f);
         u.q = random_rotation.q;
         bomb_moby[0x30] = 0xFF;
-        *(short *)(bomb_moby + 0x32) = 0xFF;
+        MOBY(bomb_moby)->draw_dist = 0xFF;
         bomb_moby[0x31] = 1;
         bomb_moby[0x20] = 0;
         *(int *)(v + 0x50) = owner;
@@ -1180,7 +1181,7 @@ extern void aim_throw_arc(void *, void *, void *, f32, f32, f32) __asm__("FUN_L0
 void launch_bomb(float *pos, unsigned char *moby, float *velocity) __asm__("FUN_L00_002acfd8");
 
 void launch_bomb(float *pos, unsigned char *moby, float *velocity) {
-    float *vars = *(float **)(moby + 0x78);
+    float *vars = ((float *)MOBY(moby)->pvars);
     float difference[4] __attribute__((aligned(16)));
     float direction[4] __attribute__((aligned(16)));
     float result[4] __attribute__((aligned(16)));
@@ -1946,9 +1947,9 @@ unsigned char *spawn_debris(void *spawn_position, void *initial_velocity, int li
     if (debris_moby) {
         unsigned char *debris_data;
         float rotation_x_increment, frame_time;
-        debris_data = *(unsigned char **)(debris_moby + 0x78);
+        debris_data = ((unsigned char *)MOBY(debris_moby)->pvars);
         debris_moby[0x30] = 0xFF;
-        *(short *)(debris_moby + 0x32) = 0xFF;
+        MOBY(debris_moby)->draw_dist = 0xFF;
         debris_moby[0x31] = 1;
         debris_moby[0x23] = 0x80;
         set_moby_color(debris_moby, 0x7F, 0x7F, 0x7F);
@@ -1961,9 +1962,9 @@ unsigned char *spawn_debris(void *spawn_position, void *initial_velocity, int li
         *(short *)(debris_data + 0x18) = lifetime_frames;
         *(short *)(debris_data + 0x1A) = lifetime_frames;
         if (flag == 0) {
-            *(float *)(debris_moby + 0x2C) *= random_float_between(0.5f, 0.75f);
+            MOBY(debris_moby)->scale *= random_float_between(0.5f, 0.75f);
         }
-        *(float *)(debris_data + 0x1C) = *(float *)(debris_moby + 0x2C);
+        *(float *)(debris_data + 0x1C) = MOBY(debris_moby)->scale;
         debris_moby[0xBC] = flag | (trail_color_mask << 1);
         FUN_L00_00250df8_2af450(debris_moby);
     }
@@ -1991,7 +1992,7 @@ void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void debris_update(unsigned char *m) __asm__("FUN_L00_002af5b8");
 extern C_2af5b8 D_L00_00161438 NOT_SDA;
 void debris_update(unsigned char *debris_moby) {
-    W_2af5b8 *debris_data = *(W_2af5b8 **)(debris_moby + 0x78);
+    W_2af5b8 *debris_data = ((W_2af5b8 *)MOBY(debris_moby)->pvars);
     C_2af5b8 c;
     V_2af5b8 emission_direction;
     V_2af5b8 random_direction;
@@ -2016,17 +2017,17 @@ void debris_update(unsigned char *debris_moby) {
             }
         }
     }
-    *(float *)(debris_moby + 0x40) = fast_add_rotations(*(float *)(debris_moby + 0x40), debris_data->x10);
-    *(float *)(debris_moby + 0x44) = fast_add_rotations(*(float *)(debris_moby + 0x44), debris_data->x14);
+    MOBY(debris_moby)->rot.x = fast_add_rotations(MOBY(debris_moby)->rot.x, debris_data->x10);
+    MOBY(debris_moby)->rot.y = fast_add_rotations(MOBY(debris_moby)->rot.y, debris_data->x14);
     fast_vec_add(debris_moby + 0x10, debris_moby + 0x10, debris_data);
     debris_data->x8 -= D_0015ED70_2af5b8 * 14.6f;
-    if (*(float *)(debris_moby + 0x10) < 0.0f || *(float *)(debris_moby + 0x14) < 0.0f || *(float *)(debris_moby + 0x18) < 0.0f) {
+    if (MOBY(debris_moby)->pos.x < 0.0f || MOBY(debris_moby)->pos.y < 0.0f || MOBY(debris_moby)->pos.z < 0.0f) {
         mark_moby_for_removal(debris_moby);
         return;
     }
     if (debris_data->x18 < debris_data->x1a / 4) {
         f = convert_integer_to_float(debris_data->x18);
-        *(float *)(debris_moby + 0x2C) = debris_data->x1c * f / convert_integer_to_float(debris_data->x1a / 4);
+        MOBY(debris_moby)->scale = debris_data->x1c * f / convert_integer_to_float(debris_data->x1a / 4);
     }
     if (fast_dec_timer_s16(&debris_data->x18))
         mark_moby_for_removal(debris_moby);
@@ -2051,21 +2052,21 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *initial_velocity, 
                                 int initial_bounce_count, float lo, float hi) {
     unsigned char *debris_moby = create_moby(type);
     if (debris_moby) {
-        V_2af8b0 *debris_data = *(V_2af8b0 **)(debris_moby + 0x78);
+        V_2af8b0 *debris_data = ((V_2af8b0 *)MOBY(debris_moby)->pvars);
         float scale_multiplier;
         debris_data->o = owner;
         debris_moby[0x30] = 0xFF;
-        *(short *)(debris_moby + 0x32) = 0x7E;
+        MOBY(debris_moby)->draw_dist = 0x7E;
         debris_moby[0x31] = 1;
         *(long *)(debris_moby + 0x38) = *(long *)(owner + 0x38);
         debris_moby[0x20] = 0;
-        *(float *)(debris_moby + 0x40) = random_angle_radians();
-        *(float *)(debris_moby + 0x44) = random_angle_radians();
-        *(float *)(debris_moby + 0x48) = random_angle_radians();
+        MOBY(debris_moby)->rot.x = random_angle_radians();
+        MOBY(debris_moby)->rot.y = random_angle_radians();
+        MOBY(debris_moby)->rot.z = random_angle_radians();
         qcopy(debris_moby + 0x10, spawn_position);
         qcopy(debris_moby + 0x40, initial_rotation);
         qcopy(debris_data->p10, initial_velocity);
-        debris_data->f4 = *(float *)(debris_moby + 0x18);
+        debris_data->f4 = MOBY(debris_moby)->pos.z;
         {
             short t = FUN_001f96f8_2af8b0(0x14);
             debris_data->i20 = 0;
@@ -2076,7 +2077,7 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *initial_velocity, 
         debris_data->f28 = randf_sym(D_L00_00161448_gp, D_L00_0016144C_gp) *
                  DEG_TO_RAD * D_0015ED6C_2af8b0;
         scale_multiplier = random_float_between(lo, hi);
-        *(float *)(debris_moby + 0x2C) *= scale_multiplier;
+        MOBY(debris_moby)->scale *= scale_multiplier;
         debris_data->hc = initial_bounce_count;
         debris_data->f8 = scale_multiplier * 0.25f;
         FUN_L00_00250df8_2af8b0(debris_moby);
@@ -2186,12 +2187,12 @@ unsigned char *spawn_devastator_missile(unsigned char *owner, V_2afc70 *spawn_po
 
     missile_moby = create_moby(0x99);
     if (missile_moby != 0) {
-        missile_data = *(unsigned char **)(missile_moby + 0x78);
+        missile_data = ((unsigned char *)MOBY(missile_moby)->pvars);
         missile_moby[0x30] = 0xFF;
-        *(short *)(missile_moby + 0x32) = 0xFF;
+        MOBY(missile_moby)->draw_dist = 0xFF;
         missile_moby[0x31] = 1;
-        *(float *)(missile_moby + 0x48) = initial_yaw;
-        *(float *)(missile_moby + 0x44) = initial_pitch;
+        MOBY(missile_moby)->rot.z = initial_yaw;
+        MOBY(missile_moby)->rot.y = initial_pitch;
         missile_moby[0x20] = 0;
         *(unsigned char **)(missile_data + 0x10) = owner;
         qcopy(missile_moby + 0x10, spawn_position);
@@ -2243,7 +2244,7 @@ unsigned char *spawn_devastator_missile(unsigned char *owner, V_2afc70 *spawn_po
         }
         FUN_L00_00250df8_2afc70(missile_moby);
         append_unique_moby_index(missile_moby, D_L00_001B0770_lui, 0x1F);
-        *(float *)(missile_moby + 0x2C) += *(float *)(missile_moby + 0x2C);
+        MOBY(missile_moby)->scale += MOBY(missile_moby)->scale;
     }
     return missile_moby;
 }
@@ -2319,7 +2320,7 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
         return;
     hero_context = &hero;
     while (candidate_moby != 0) {
-        if (*(s8 *)(candidate_moby + 0x20) < 0)
+        if (((s8)MOBY(candidate_moby)->state) < 0)
             goto next;
         if (candidate_moby == skip)
             goto next;
@@ -2347,9 +2348,9 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
         candidate_aim_position.f[2] = z;
         if (candidate_moby == 0)
             goto next;
-        if (*(char **)(candidate_moby + 0x24) == 0)
+        if (((char *)MOBY(candidate_moby)->pclass) == 0)
             goto next;
-        if (*(s16 *)(*(char **)(candidate_moby + 0x24) + 0x46) != 5)
+        if (*(s16 *)(((char *)MOBY(candidate_moby)->pclass) + 0x46) != 5)
             goto next;
         angh = fast_arc_tan(candidate_aim_position.f[0] - *(f32 *)(self + 0x10), candidate_aim_position.f[1] - *(f32 *)(self + 0x14));
         angv = fast_arc_tan(vector_distance_xy(spos, &candidate_aim_position), candidate_aim_position.f[2] - *(f32 *)(self + 0x18));
@@ -2357,8 +2358,8 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
         if (candidate_aim_distance < 2.5f) {
             char *hero_moby = *(char **)&hero_context->moby;
             if (fast_difference_between_rotations(
-                    *(f32 *)(hero_moby + 0x48), fast_arc_tan(*(f32 *)(candidate_moby + 0x10) - hero_context->motion.pos.f[0],
-                                                       *(f32 *)(candidate_moby + 0x14) - hero_context->motion.pos.f[1])) < 1.0471976f) {
+                    MOBY(hero_moby)->rot.z, fast_arc_tan(MOBY(candidate_moby)->pos.x - hero_context->motion.pos.f[0],
+                                                       MOBY(candidate_moby)->pos.y - hero_context->motion.pos.f[1])) < 1.0471976f) {
                 if (FUN_001f99c0(angv) < 0.7853982f)
                     return;
             }

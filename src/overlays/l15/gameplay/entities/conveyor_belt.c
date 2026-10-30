@@ -74,18 +74,18 @@ char *spawn_poison_vessel(void *unused, void *vector) __asm__("FUN_L15_002e7ed8"
 char *spawn_poison_vessel(void *unused, void *vector) {
     char *moby = create_moby(0x4E9);
     if (moby != 0) {
-        char *data = *(char **)(moby + 0x78);
+        char *data = ((char *)MOBY(moby)->pvars);
         char *field;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0x7F;
+        MOBY(moby)->draw_dist = 0x7F;
         moby[0x31] = 1;
         moby[0x20] = 0;
         moby[0xBC] = 0;
         *(int *)(data + 0x10) = 0;
         clear_u64_value(data);
         qcopy(moby + 0x10, vector);
-        field = *(char **)(moby + 0x24);
-        *(int *)(moby + 0x94) = *(int *)(field + 0x10);
+        field = ((char *)MOBY(moby)->pclass);
+        MOBY(moby)->collision = *(int *)(field + 0x10);
         update_entity(moby, field);
     }
     return moby;
@@ -882,8 +882,8 @@ char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) {
     spawned_moby = func_0020D348_c(0x594);
     if (spawned_moby != 0) {
         func_L00_0025E210_u(spawned_moby);
-        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
+        MOBY(spawned_moby)->update_dist = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         qcopy(spawned_moby + 0x10, saved_position);
         *(OvlQuad *)(spawned_moby + 0x40) = *(OvlQuad *)(saved_spawn_position_and_rotation + 0x10);
@@ -905,13 +905,13 @@ void set_moby_list_visibility(int moby_list_index, int show) {
     while (1) {
         unsigned char *moby = (unsigned char *)(D_L15_0015FFD8 + ((*moby_index_entry & 0x7FFF) << 8));
         if (show) {
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
             moby[0x31] = 1;
-            *(unsigned short *)(moby + 0x34) &= 0xFFFC;
+            MOBY(moby)->flags &= 0xFFFC;
         } else {
-            *(int *)(moby + 0x94) = 0;
+            MOBY(moby)->collision = 0;
             moby[0x31] = 0;
-            *(unsigned short *)(moby + 0x34) |= 3;
+            MOBY(moby)->flags |= 3;
         }
         if (*moby_index_entry++ < 0)
             return;

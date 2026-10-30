@@ -34,6 +34,7 @@ float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_
 
 void follow_camera_approach(unsigned char *moby) __asm__("FUN_L00_002e5e38");
 #include "rnc/overlay/shared/gameplay/camera/follow_camera_setup_globals.h"
+#include "rnc/gameplay/entities/moby.h"
 extern float follow_camera_orbit_distance_damping_gp __asm__("D_L00_00161D04") __attribute__((sda));
 extern float follow_camera_orbit_height_damping_gp __asm__("D_L00_00161D08") __attribute__((sda));
 void follow_camera_approach(unsigned char *moby)
@@ -379,7 +380,7 @@ void rebuild_follow_camera_pose(int snap) {
             }
         }
         /* straight above or below the target: nudge the camera sideways */
-        fast_vec_sub(offset, (float *)(camera_moby + 0x30), (float *)target);
+        fast_vec_sub(offset, (float *)&MOBY(camera_moby)->update_dist, (float *)target);
         length = fast_vec_dot(offset, track + 0x30);
         fast_vec_scale(part, track + 0x30, length);
         fast_vec_sub(offset, offset, part);
@@ -391,15 +392,15 @@ void rebuild_follow_camera_pose(int snap) {
             *(float *)(camera_moby + 0x38) += 0.5f;
         }
     }
-    from = (float *)(camera_moby + 0x30);
-    to = (float *)(camera_moby + 0x64);
+    from = (float *)&MOBY(camera_moby)->update_dist;
+    to = (float *)&MOBY(camera_moby)->manips;
     to[0] = from[0];
     to[1] = from[1];
     to[2] = from[2];
     qcopy(up, D_L00_00166E40);
     fast_vec_normalize(rise, up, *(float *)(target + 0xB0));
     fast_vec_add(eye, rise, target);
-    fast_vec_sub(look, eye, (float *)(camera_moby + 0x30));
+    fast_vec_sub(look, eye, (float *)&MOBY(camera_moby)->update_dist);
     fast_vec_normalize(camera_moby, look, 1.0f);
     qcopy(camera_moby + 0x20, up);
     fast_vec_cross(camera_moby + 0x10, camera_moby, camera_moby + 0x20);
@@ -420,7 +421,7 @@ void reset_follow_camera_state_from_position(char *camera_moby) {
     char *orbit_state;
     char *target_position;
 
-    if (*(short *)(camera_moby + 0x86) == 0) {
+    if (MOBY(camera_moby)->unk86 == 0) {
         camera_target_state = *(char **)(camera_moby + 0x70);
         camera_state = camera_target_state;
         orbit_state = camera_target_state + 0x130;
@@ -1189,17 +1190,17 @@ void follow_camera_avoid_mobies(u8 *camera_moby) {
         j = 0;
         do {
             nearby_moby = D_L00_00177F00_lui[j];
-            if (*(s32 *)(nearby_moby + 0x94) == 0) {
+            if (((s32)MOBY(nearby_moby)->collision) == 0) {
                 goto next;
             }
             if (test_moby_linked_record_word8(nearby_moby) && !any) {
                 goto next;
             }
-            nearby_moby_type_id = *(s16 *)(nearby_moby + 0xA6);
+            nearby_moby_type_id = MOBY(nearby_moby)->oclass;
             if (nearby_moby_type_id != 0x72 && nearby_moby_type_id != 0xB && nearby_moby_type_id != 0x2C && nearby_moby_type_id != 0x9A && nearby_moby_type_id != 0xFF && nearby_moby_type_id != 0x392 && nearby_moby_type_id != 0x452 && nearby_moby_type_id != 0x353) {
                 D_L00_001E75C0[moby_restore_count] = nearby_moby;
                 moby_restore_count++;
-                *(s32 *)(nearby_moby + 0x94) = 0;
+                MOBY(nearby_moby)->collision = 0;
                 goto next;
             }
             fast_vec_sub(&moby_offset_or_camera_endpoint, nearby_moby + 0x10, (x + 0x90));
@@ -1306,7 +1307,7 @@ fin:
         s32 k = moby_restore_count;
         do {
             restored_moby = *op++;
-            *(s32 *)(restored_moby + 0x94) = *(s32 *)(*(u8 **)(restored_moby + 0x24) + 0x10);
+            MOBY(restored_moby)->collision = *(s32 *)(((u8 *)MOBY(restored_moby)->pclass) + 0x10);
         } while (--k != 0);
     }
 }

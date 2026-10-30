@@ -1,5 +1,6 @@
 /* Shared moby classes: rocket. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -28,18 +29,18 @@ extern unsigned char *func_L00_00273E08_298940(void *, int, unsigned char, int, 
 void emit_moby_sprite_particles(char *moby) __asm__("FUN_L10_00298940");
 
 void emit_moby_sprite_particles(char *moby) {
-    L10SpriteData *sprite_data = *(L10SpriteData **)(moby + 0x78);
+    L10SpriteData *sprite_data = ((L10SpriteData *)MOBY(moby)->pvars);
     float d[4] __attribute__((aligned(16)));
     float particle_position_step[4] __attribute__((aligned(16)));
     int i, col;
     float color_blend_offset;
 
-    *(float *)(moby + 0x18) += 0.5f;
+    MOBY(moby)->pos.z += 0.5f;
     fast_vec_sub(d, D_L10_00167240, moby + 0x10);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(particle_position_step, d, 0.1f);
     fast_vec_add(d, d, moby + 0x10);
-    *(float *)(moby + 0x18) -= 0.5f;
+    MOBY(moby)->pos.z -= 0.5f;
     for (i = 0; i < 4; i++) {
         float phase_sum = sprite_data->a[i] + sprite_data->b[i];
         sprite_data->a[i] = phase_sum;
@@ -93,6 +94,7 @@ char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, i
 
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/gameplay/entities/moby.h"
 
 typedef int Q_cc2e8 __attribute__((mode(TI), aligned(16)));
 

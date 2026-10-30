@@ -176,13 +176,13 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
             checked_moby = D_L17_0015FFD8 + (checked_moby_index << 8);
             if (checked_moby == 0)
                 goto skip1;
-            if (*(short *)(checked_moby + 0xA6) != 0x4E)
+            if (MOBY(checked_moby)->oclass != 0x4E)
                 goto skip1;
-            if (*(unsigned char *)(checked_moby + 0x20) == 0xFE)
+            if (MOBY(checked_moby)->state == 0xFE)
                 goto skip1;
-            if (*(unsigned char *)(checked_moby + 0x20) == 0xFD)
+            if (MOBY(checked_moby)->state == 0xFD)
                 goto skip1;
-            if (*(unsigned char *)(checked_moby + 0x20) == 3)
+            if (MOBY(checked_moby)->state == 3)
                 goto skip1;
         }
         if (*(int *)(pvars + 0xC) > *(int *)(pvars + 0x38) && pending_help_clip_volume_index != -1 &&
@@ -724,8 +724,8 @@ void blarg_ship_update(struct Moby *moby) {
                 firing_moby = spawn_class_3f9_moby((int)moby, firing_direction, sA0, 128.0f, -1.0f, 10.0f);
                 if (firing_moby) {
                     fast_vec_sub(firing_direction, firing_direction, hero_position_delta);
-                    *(float *)(firing_moby + 0x44) = -fast_arc_tan(vector_length_xy(firing_direction), firing_direction[2]);
-                    *(float *)(firing_moby + 0x48) = fast_arc_tan(firing_direction[0], firing_direction[1]);
+                    MOBY(firing_moby)->rot.y = -fast_arc_tan(vector_length_xy(firing_direction), firing_direction[2]);
+                    MOBY(firing_moby)->rot.z = fast_arc_tan(firing_direction[0], firing_direction[1]);
                 }
             }
             if (moby->visible == 0) {
@@ -778,7 +778,7 @@ char *try_activate_blarg_ship_from_list(int list) {
         if (random_integer_below(10))
             continue;
         selected_moby = D_L17_0015FFD8 + moby_byte_offset;
-        moby_pvars = *(char **)(selected_moby + 0x78);
+        moby_pvars = ((char *)MOBY(selected_moby)->pvars);
         qcopy(C, D_L17_001676D0);
         C[0] = 0;
         if (C[1] > 0.17453292f)
@@ -801,10 +801,10 @@ char *try_activate_blarg_ship_from_list(int list) {
         selected_moby[0xBC] = 1;
         *(float *)(moby_pvars + 0x6C) = frame_time * 20.0f;
         *(float *)(moby_pvars + 0x94) = 5.0f;
-        if (*(unsigned char *)(selected_moby + 0x53))
+        if (MOBY(selected_moby)->prev_seq)
             blend_moby_animation(selected_moby, 0, 0, scale_game_frames(10));
-        *(unsigned short *)(selected_moby + 0x34) &= 0xFFFE;
-        *(int *)(selected_moby + 0x94) = *(int *)(*(char **)(selected_moby + 0x24) + 0x10);
+        MOBY(selected_moby)->flags &= 0xFFFE;
+        MOBY(selected_moby)->collision = *(int *)(((char *)MOBY(selected_moby)->pclass) + 0x10);
         return selected_moby;
     } while (*moby_index_ptr++ >= 0);
     return 0;

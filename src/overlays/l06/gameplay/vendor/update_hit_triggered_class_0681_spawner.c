@@ -9,6 +9,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Same source as the exact FUN_L06_00309860, with two 0x67E effects and spawned class 0x67D. */
 typedef struct {
@@ -50,7 +51,7 @@ void update_hit_triggered_class_0681_spawner(char *self) {
         self[0x20] = 1;
         break;
     case WAIT_FOR_HIT:
-        if (hit_moby != 0 && *(float *)(hit_moby + 0x2C) > 0.0f) {
+        if (hit_moby != 0 && MOBY(hit_moby)->scale > 0.0f) {
             flag = 1;
         }
         if (flag) {
@@ -68,7 +69,7 @@ void update_hit_triggered_class_0681_spawner(char *self) {
         spawned_moby = create_moby(0x681);
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;
-            *(short *)(spawned_moby + 0x32) = 0xFF;
+            MOBY(spawned_moby)->draw_dist = 0xFF;
             qcopy(spawned_moby + 0x10, self + 0x10);
             qcopy(spawned_moby + 0x40, self + 0x40);
             *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);

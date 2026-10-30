@@ -14,6 +14,7 @@
 #include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 
@@ -43,7 +44,7 @@ void apply_hero_ground_material_effects(void) {
             hero_data->on_magnet_ground = 1;
             if (hero_data->vehicle_mode == 0) {
                 char *item_moby = (char *)hero_data->items[1].moby;
-                if (item_moby != 0 && *(short *)(item_moby + 0xA6) == 0xAD)
+                if (item_moby != 0 && MOBY(item_moby)->oclass == 0xAD)
                     hero_data->unk308 = 1;
             }
         }

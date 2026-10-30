@@ -241,13 +241,13 @@ void update_moby_height_from_driver(char *moby)
         POSITION_FOLLOW_DRIVER = 1,
         POSITION_APPROACH_TARGET = 2
     };
-    char *position_vars = *(char **)(moby + 0x78);
+    char *position_vars = ((char *)MOBY(moby)->pvars);
     struct Moby *driver_moby;
     int i;
-    switch (*(u8 *)(moby + 0x20)) {
+    switch (MOBY(moby)->state) {
     case POSITION_BASELINE_INITIALIZE:
-        *(float *)(position_vars + 4) = *(float *)(moby + 0x18);
-        *(u8 *)(moby + 0x20) = 1;
+        *(float *)(position_vars + 4) = MOBY(moby)->pos.z;
+        MOBY(moby)->state = 1;
         break;
     case POSITION_FOLLOW_DRIVER:
         i = *(int *)(position_vars + 8);
@@ -257,7 +257,7 @@ void update_moby_height_from_driver(char *moby)
             if (driver_moby->state != 4) break;
             menu_item_enabled_41 = 1;
             allocate_voice_for_target_entry(0, 0, moby);
-            *(u8 *)(moby + 0x20) = 2;
+            MOBY(moby)->state = 2;
         } else {
             FUN_00213ed8_c(moby + 0x18, (*(float *)position_vars - *(float *)(position_vars + 4)) * *((float *)driver_moby->pvars) + *(float *)(position_vars + 4), frame_time * 10.0f);
         }

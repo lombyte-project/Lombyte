@@ -1082,7 +1082,7 @@ extern float platform_tilt_approach_divisor_gp __asm__("D_L12_00161918") __attri
 void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) __asm__("FUN_L12_002e3c08");
 
 void steer_platform_toward_target(char *moby, float *target_angles, void *target, int unused, int brake) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float target_offset[4];
     float target_distance;
     float speed;
@@ -1106,9 +1106,9 @@ void steer_platform_toward_target(char *moby, float *target_angles, void *target
             speed -= *(float *)(moby_vars + 0xD4) * D_0015ED70_k;
     }
     fast_vec_normalize(moby_vars + 0x40, target_offset, speed);
-    appr_k(moby + 0x40, target_angles[0], fast_difference_between_rotations(target_angles[0], *(float *)(moby + 0x40)) / platform_tilt_approach_divisor_gp);
-    appr_k(moby + 0x44, target_angles[1], fast_difference_between_rotations(target_angles[1], *(float *)(moby + 0x44)) / platform_tilt_approach_divisor_gp);
-    spring_angle((float *)(moby + 0x48), target_angles[2], (float *)(moby_vars + 0xF8), 0, D_0015ED64_k * 0.005f, D_0015ED64_k * 0.3f,
+    appr_k(moby + 0x40, target_angles[0], fast_difference_between_rotations(target_angles[0], MOBY(moby)->rot.x) / platform_tilt_approach_divisor_gp);
+    appr_k(moby + 0x44, target_angles[1], fast_difference_between_rotations(target_angles[1], MOBY(moby)->rot.y) / platform_tilt_approach_divisor_gp);
+    spring_angle((float *)&MOBY(moby)->rot.z, target_angles[2], (float *)(moby_vars + 0xF8), 0, D_0015ED64_k * 0.005f, D_0015ED64_k * 0.3f,
            D_0015ED6C_k * yaw_angular_velocity_limit);
     fast_vec_add(moby + 0x10, moby + 0x10, moby_vars + 0x40);
 }
@@ -1622,7 +1622,7 @@ void miner_update(L16WatchMoby *moby) {
         char *created_moby = create_moby(0x11F);
         *(char **)((char *)moby_data + 0x180) = created_moby;
         if (created_moby) {
-            *(unsigned short *)(created_moby + 0x32) = *(unsigned short *)((char *)moby + 0x32);
+            MOBY(created_moby)->draw_dist = *(unsigned short *)((char *)moby + 0x32);
             (*(unsigned char **)((char *)moby_data + 0x180))[0x31] = 1;
             {
                 char *p = *(char **)((char *)moby_data + 0x180);
@@ -3012,13 +3012,13 @@ void helicopter_update(char *moby) {
         HELICOPTER_INITIALIZE_PATH = 0,
         HELICOPTER_FOLLOW_PATH = 1
     };
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float A[4];
     float B[4];
     float C[4];
     float E[4];
     if (moby_vars != 0) {
-        int moby_query_result = func_L01_00276680_i(moby, convert_integer_to_float(*(short *)(moby + 0x32)));
+        int moby_query_result = func_L01_00276680_i(moby, convert_integer_to_float(MOBY(moby)->draw_dist));
         FUN_L12_002ebca8_c(moby, moby_query_result == -1);
         switch ((unsigned char)moby[0x20]) {
         case HELICOPTER_INITIALIZE_PATH:
@@ -3040,8 +3040,8 @@ void helicopter_update(char *moby) {
                 moby_vars[0x2B] = 1;
                 *(int *)(moby_vars + 0x60) = initial_node_index;
                 moby[0x20] = 1;
-                *(short *)(moby + 0x32) = 0xAA;
-                *(unsigned short *)(moby + 0x34) |= 0x1000;
+                MOBY(moby)->draw_dist = 0xAA;
+                MOBY(moby)->flags |= 0x1000;
             }
             break;
         case HELICOPTER_FOLLOW_PATH: {
@@ -3062,8 +3062,8 @@ void helicopter_update(char *moby) {
             segment_heading_delta = fast_arc_tan(A[0], A[1]);
             segment_heading_delta = fast_subtract_rotations(segment_heading_delta, fast_arc_tan(B[0], B[1]));
             segment_heading_delta_per_distance = segment_heading_delta / fast_vec_length(A);
-            *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40),
-                fast_subtract_rotations(segment_heading_delta_per_distance * D_L12_001619AC, *(float *)(moby + 0x40)) / helicopter_rotation_smoothing_divisor_gp);
+            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x,
+                fast_subtract_rotations(segment_heading_delta_per_distance * D_L12_001619AC, MOBY(moby)->rot.x) / helicopter_rotation_smoothing_divisor_gp);
             if (fast_vec_dist(moby + 0x10, C) < helicopter_path_speed_gp * D_0015ED6C) {
                 char *path;
                 *(int *)(moby_vars + 0x60) = next;
@@ -3075,9 +3075,9 @@ void helicopter_update(char *moby) {
             fast_vec_sub(E, C, moby + 0x10);
             fast_vec_normalize(E, E, helicopter_path_speed_gp * D_0015ED6C);
             fast_vec_add(moby + 0x10, moby + 0x10, E);
-            *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48),
-                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), *(float *)(moby + 0x48)) / helicopter_rotation_smoothing_divisor_gp);
-            *(float *)(moby + 0x44) = 0.52359879f;
+            MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z,
+                fast_subtract_rotations(fast_arc_tan(E[0], E[1]), MOBY(moby)->rot.z) / helicopter_rotation_smoothing_divisor_gp);
+            MOBY(moby)->rot.y = 0.52359879f;
             break;
         }
         }

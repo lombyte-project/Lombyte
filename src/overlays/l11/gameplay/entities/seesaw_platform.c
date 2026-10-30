@@ -997,17 +997,17 @@ char *spawn_moby_with_random_yaw(void *position, void *vector, int id) {
         char *data;
         float angle;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         moby[0xBC] = 0;
-        data = *(char **)(moby + 0x78);
+        data = ((char *)MOBY(moby)->pvars);
         qcopy(moby + 0x10, position);
         qcopy(data + 0x10, vector);
         angle = random_angle_radians();
         *(int *)(moby + 0x40) = 0;
-        *(float *)(moby + 0x48) = angle;
-        *(float *)(moby + 0x44) = 0.7853982f;
+        MOBY(moby)->rot.z = angle;
+        MOBY(moby)->rot.y = 0.7853982f;
         update_entity(moby);
         copy_hero_moby_field_38(moby);
     }
@@ -1213,9 +1213,9 @@ char *spawn_ship_pickup_child(struct Moby *owner) {
     char *moby = create_moby(0x4C3);
     if (moby != 0) {
         char *data;
-        data = *(char **)(moby + 0x78);
+        data = ((char *)MOBY(moby)->pvars);
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         moby[0xBC] = 0;
@@ -1805,7 +1805,7 @@ float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
     struct Moby *moby = moby_v;
     char *target_moby = o_v;
     char *data = ((char *)moby->pvars);
-    if (*(unsigned char *)(target_moby + 0x31) != 0) {
+    if (MOBY(target_moby)->visible != 0) {
         char target_projection_point[16];
         int ax, ay, cx, cy;
         int dx, dy, reticle_axis_limit;
@@ -1817,7 +1817,7 @@ float compute_ship_target_reticle_distance_squared(void *moby_v, void *o_v) {
         if (dy < 0)
             dy = -dy;
         qcopy(target_projection_point, ship_target_projection_offset_reference);
-        fast_vec_scale(target_projection_point, ship_target_projection_offset_reference, *(float *)(target_moby + 0xC) / 1280.0f);
+        fast_vec_scale(target_projection_point, ship_target_projection_offset_reference, MOBY(target_moby)->bsphere.w / 1280.0f);
         fast_vec_add(target_projection_point, target_projection_point, target_moby + 0x10);
         project_world_point_to_screen_pixels(target_projection_point, &cx, &cy, 0);
         cx = cx - ax;

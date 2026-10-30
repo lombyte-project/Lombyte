@@ -3,6 +3,7 @@
 #include "asm.h"
 
 #include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* clears two moby flags and refreshes its linked value */
 /* Ported from rac1-decomp (src/overlays/shared/space_002A3680.c: func_L01_002A3680), where it is exact; names translated to the US level program. */
@@ -16,6 +17,6 @@ void show_tracked_moby(void) {
         char *moby;
         *(unsigned short *)(first + 0x34) &= 0xfffc;
         moby = *(char **)level_render_state;
-        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
     }
 }

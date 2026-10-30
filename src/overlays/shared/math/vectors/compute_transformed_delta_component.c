@@ -14,6 +14,7 @@
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 
@@ -130,7 +131,7 @@ void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_
     moby_vars_record = suck_get_aim_height(moby);
     if (moby_vars_record && *moby_vars_record == 0.0f) {
         knockback_state->w24 |= 0x20;
-        *(int *)(moby + 0x94) = 0;
+        MOBY(moby)->collision = 0;
     }
     if (knockback_state->w24 & 2)
         blend_moby_animation_ex(moby, animation_index, animation_frame_index, animation_timing_divisor, 1);
@@ -226,9 +227,9 @@ int mine_fall(char *moby, char *motion_state) {
             *(float *)(motion_state + 0x10) = *(float *)(motion_state + 0x10) * 0.75f;
         }
     }
-    if (*(float *)(moby + 0x10) < 2.0f || 1021.0f < *(float *)(moby + 0x10)
-        || *(float *)(moby + 0x14) < 2.0f || 1021.0f < *(float *)(moby + 0x14)
-        || *(float *)(moby + 0x18) < 2.0f || 1021.0f < *(float *)(moby + 0x18)) {
+    if (MOBY(moby)->pos.x < 2.0f || 1021.0f < MOBY(moby)->pos.x
+        || MOBY(moby)->pos.y < 2.0f || 1021.0f < MOBY(moby)->pos.y
+        || MOBY(moby)->pos.z < 2.0f || 1021.0f < MOBY(moby)->pos.z) {
         flags = 0x100;
     }
 
@@ -241,7 +242,7 @@ int mine_fall(char *moby, char *motion_state) {
                 motion_or_record_value = compute_interpolated_record_value(moby);
                 rr = (*(float *)(motion_state + 0x50) - motion_or_record_value) / ratio;
                 if (0.0f < rr) {
-                    approach_value((float *)(moby + 0x58), rr, frame_scale * 0.1f);
+                    approach_value((float *)&MOBY(moby)->anim_speed, rr, frame_scale * 0.1f);
                 }
             }
             break;
@@ -253,7 +254,7 @@ int mine_fall(char *moby, char *motion_state) {
             } else {
                 float negative_half_gravity_step = *(float *)(motion_state + 0x10) * -0.5f;
                 landing_prediction_divisor = 60.0f;
-                result_count = solve_quadratic_equation(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, *(float *)(moby + 0x18) - ground_reference_height);
+                result_count = solve_quadratic_equation(&larger_quadratic_root, &smaller_quadratic_root, negative_half_gravity_step, *(float *)(motion_state + 0x8) - negative_half_gravity_step, MOBY(moby)->pos.z - ground_reference_height);
                 if (result_count > 0 && 0.0f < larger_quadratic_root && larger_quadratic_root < landing_prediction_divisor) {
                     landing_prediction_divisor = larger_quadratic_root;
                 }
@@ -267,16 +268,16 @@ int mine_fall(char *moby, char *motion_state) {
                 } else if (rr < 0.0f) {
                     rr = 0.0f;
                 }
-                approach_value((float *)(moby + 0x58), rr, frame_scale * 0.1f);
+                approach_value((float *)&MOBY(moby)->anim_speed, rr, frame_scale * 0.1f);
             }
             break;
         case MOTION_GROUNDED:
-            *(float *)(moby + 0x58) = 1.0f;
+            MOBY(moby)->anim_speed = 1.0f;
             break;
         }
     }
 
-    if (*(unsigned char *)(moby + 0x70) & 2) {
+    if (MOBY(moby)->anim_flags & 2) {
         flags |= 0x40;
     }
     if (!(*(int *)(motion_state + 0x24) & 4)) {
@@ -319,7 +320,7 @@ int mine_fall(char *moby, char *motion_state) {
         collision_result_position = &D_L00_00173E70;
         qcopy((moby + 0x10), collision_result_position);
         one = 1.0f;
-        *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - *(float *)(motion_state + 0x28);
+        MOBY(moby)->pos.z = MOBY(moby)->pos.z - *(float *)(motion_state + 0x28);
         fast_vec_normalize(surface_normal, (char *)collision_result_position + 0x10, one);
         if (0.7070000171661377f <= surface_normal[2]) {
             float motion_normal_dot = fast_vec_dot(motion_state, surface_normal);

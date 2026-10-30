@@ -91,4 +91,7 @@ struct Moby {
     u8 padF0[0x10];
 };
 
+/* A moby pointer held as bytes or as an int, read as a struct Moby. */
+#define MOBY(p) ((struct Moby *)(p))
+
 #endif /* LOMBYTE_RNC_GAMEPLAY_ENTITIES_MOBY_H */

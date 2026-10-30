@@ -29,6 +29,7 @@ extern char vendor_screen_state_storage[] __asm__("D_L01_001CA940");
 extern float D_L01_0015F3FC;
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
 #include "rnc/overlay/shared/gameplay/vendor/initialize_vendor_screen_globals.h"
+#include "rnc/gameplay/entities/moby.h"
 extern int vendor_relocation_offsets[] __asm__("D_L01_00174280");
 extern int level_table_pair_indices[] __asm__("D_L01_001CA4A0");
 extern int sceGsSyncV_alt(int) __asm__("FUN_00122298");
@@ -79,7 +80,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     fast_vec_add(sc, sc, vendor_moby + 0x10);
     *(float *)(vendor_screen_state + 0xC8) = probe_ground_height(sc, 0, 0.5f);
     clear_u64_value(vendor_screen_state + 0xB0);
-    *(float *)(vendor_screen_state + 0xB8) = fast_add_rotations(*(float *)(vendor_moby + 0x48), -1.5707964f);
+    *(float *)(vendor_screen_state + 0xB8) = fast_add_rotations(MOBY(vendor_moby)->rot.z, -1.5707964f);
     euler_rotation_basis(vendor_screen_state + 0x80, vendor_screen_state + 0xB0);
     fill_transfer_words(relocated_address_block, 0, 0x1C0);
     fill_transfer_words(D_L01_0017C7C0, 0, 0x40);

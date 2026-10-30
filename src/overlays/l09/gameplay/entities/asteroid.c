@@ -387,8 +387,8 @@ char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_referenc
         char *spawned_position = spawned_moby + 0x10;
         char *spawned_vars;
         ((unsigned char *)spawned_moby)[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
-        spawned_vars = *(char **)(spawned_moby + 0x78);
+        MOBY(spawned_moby)->draw_dist = 0xFF;
+        spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 1;
         qcopy(spawned_position, spawn_reference_position);
@@ -416,8 +416,8 @@ char *find_nearest_moby_by_class(void *search_position, int type, float *nearest
     char *best = 0;
     float bestd = 100000.0f;
     char *candidate_moby;
-    for (candidate_moby = D_L09_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
-        if (*(short *)(candidate_moby + 0xA6) == type) {
+    for (candidate_moby = D_L09_0015FFE4; candidate_moby != 0; candidate_moby = ((char *)MOBY(candidate_moby)->next)) {
+        if (MOBY(candidate_moby)->oclass == type) {
             float candidate_distance = fast_vec_dist(search_position, candidate_moby + 0x10);
             if (candidate_distance < bestd) {
                 bestd = candidate_distance;
@@ -441,7 +441,7 @@ char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity
 char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) {
     char *moby = create_moby(random_integer_below(4) + 0x107);
     if (moby != 0) {
-        char *spawned_moby_vars = *(char **)(moby + 0x78);
+        char *spawned_moby_vars = ((char *)MOBY(moby)->pvars);
         char *owner_vars = (char *)owner->pvars;
         char *dv;
         float reference_position_distance;
@@ -454,13 +454,13 @@ char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity
         fast_vec_add(spawned_moby_vars, spawned_moby_vars, inherited_velocity);
         fast_vec_scale(spawned_moby_vars, spawned_moby_vars, frame_scale * -0.7f + 1.0f);
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         *(int *)(spawned_moby_vars + 0x4C) = 2;
         moby[0x23] = 0x7F;
         {
             float spawned_scale = owner->scale * random_float_between(0.125f, 0.25f);
-            *(float *)(moby + 0x2C) = spawned_scale;
+            MOBY(moby)->scale = spawned_scale;
             *(float *)(spawned_moby_vars + 0x50) = spawned_scale;
         }
         *(float *)(spawned_moby_vars + 0x40) = random_float_between(-0.05235988f, 0.05235988f);
@@ -470,10 +470,10 @@ char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity
         if (100.0f < reference_position_distance) {
             fast_vec_normalize(moby + 0x10, moby + 0x10, 100.0f);
             fast_vec_add(moby + 0x10, moby + 0x10, D_L09_00166F40);
-            *(float *)(moby + 0x2C) = *(float *)(spawned_moby_vars + 0x50) * (100.0f / reference_position_distance);
+            MOBY(moby)->scale = *(float *)(spawned_moby_vars + 0x50) * (100.0f / reference_position_distance);
         } else {
             qcopy(moby + 0x10, dv);
-            *(float *)(moby + 0x2C) = *(float *)(spawned_moby_vars + 0x50);
+            MOBY(moby)->scale = *(float *)(spawned_moby_vars + 0x50);
         }
     }
     return moby;
@@ -491,7 +491,7 @@ char *spawn_falling_asteroid(void) {
     char *moby = create_moby(random_integer_below(4) + 0x107);
     if (moby != 0) {
         char *spawned_moby_position = moby + 0x10;
-        char *moby_vars = *(char **)(moby + 0x78);
+        char *moby_vars = ((char *)MOBY(moby)->pvars);
         float radius = random_float_between(0.0f, 250.0f);
         float angle_radians = random_float_between(-3.1415927f, 3.1415927f);
         float reference_position_distance;
@@ -500,23 +500,23 @@ char *spawn_falling_asteroid(void) {
         target_position[0] += 256.0f;
         target_position[1] += 256.0f;
         target_position[2] = 100.0f;
-        *(float *)(moby + 0x10) = 1000.0f;
-        *(float *)(moby + 0x14) = 500.0f;
-        *(float *)(moby + 0x18) = random_float_between(200.0f, 250.0f);
+        MOBY(moby)->pos.x = 1000.0f;
+        MOBY(moby)->pos.y = 500.0f;
+        MOBY(moby)->pos.z = random_float_between(200.0f, 250.0f);
         fast_vec_add(spawned_moby_position, spawned_moby_position, target_position);
         qcopy(moby_vars, spawned_moby_position);
-        *(float *)(moby + 0x2C) *= random_float_between(0.5f, 1.0f);
+        MOBY(moby)->scale *= random_float_between(0.5f, 1.0f);
         *(float *)(moby_vars + 0x40) = random_float_between(-0.015707964f, 0.015707964f);
         *(float *)(moby_vars + 0x44) = random_float_between(-0.015707964f, 0.015707964f);
         target_position[2] = probe_ground_height(target_position, 0, 0.5f);
         if (target_position[2] < 25.0f) target_position[2] = 25.0f;
         qcopy(moby_vars + 0x20, target_position);
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         *(int *)(moby_vars + 0x4C) = 1;
         *(float *)(moby_vars + 0x54) = random_float_between(110.0f, 130.0f) * frame_time;
-        *(float *)(moby_vars + 0x50) = *(float *)(moby + 0x2C);
+        *(float *)(moby_vars + 0x50) = MOBY(moby)->scale;
         *(float *)moby_vars += random_float_between(-100.0f, 100.0f);
         *(float *)(moby_vars + 4) += random_float_between(-100.0f, 100.0f);
         fast_vec_sub(spawned_moby_position, moby_vars, D_L09_00166F40);
@@ -524,10 +524,10 @@ char *spawn_falling_asteroid(void) {
         if (100.0f < reference_position_distance) {
             fast_vec_normalize(spawned_moby_position, spawned_moby_position, 100.0f);
             fast_vec_add(spawned_moby_position, spawned_moby_position, D_L09_00166F40);
-            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50) * (100.0f / reference_position_distance);
+            MOBY(moby)->scale = *(float *)(moby_vars + 0x50) * (100.0f / reference_position_distance);
         } else {
             qcopy(spawned_moby_position, moby_vars);
-            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50);
+            MOBY(moby)->scale = *(float *)(moby_vars + 0x50);
         }
         *(int *)(moby_vars + 0x58) = -1;
         update_entity(moby);
@@ -639,7 +639,7 @@ void update_fading_asteroid_debris(unsigned char *moby) {
         char *moby_vars;
         float reference_position_distance, updated_rotation_x;
         moby[0x23] -= 2;
-        moby_vars = *(char **)(moby + 0x78);
+        moby_vars = ((char *)MOBY(moby)->pvars);
         fast_vec_scale(moby_vars, moby_vars, frame_scale * -0.0199999809f + 1.0f);
         *(float *)(moby_vars + 8) -= frame_time_sq * 20.0f;
         fast_vec_add(moby_vars + 0x20, moby_vars + 0x20, moby_vars);
@@ -648,14 +648,14 @@ void update_fading_asteroid_debris(unsigned char *moby) {
         if (reference_position_distance > 100.0f) {
             fast_vec_normalize(moby + 0x10, moby + 0x10, 100.0f);
             fast_vec_add(moby + 0x10, moby + 0x10, D_L09_00166F40);
-            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50) * (100.0f / reference_position_distance);
+            MOBY(moby)->scale = *(float *)(moby_vars + 0x50) * (100.0f / reference_position_distance);
         } else {
             qcopy(moby + 0x10, moby_vars + 0x20);
-            *(float *)(moby + 0x2C) = *(float *)(moby_vars + 0x50);
+            MOBY(moby)->scale = *(float *)(moby_vars + 0x50);
         }
-        updated_rotation_x = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(moby_vars + 0x40));
-        *(float *)(moby + 0x40) = updated_rotation_x;
-        *(float *)(moby + 0x44) = fast_add_rotations(updated_rotation_x, *(float *)(moby_vars + 0x44));
+        updated_rotation_x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(moby_vars + 0x40));
+        MOBY(moby)->rot.x = updated_rotation_x;
+        MOBY(moby)->rot.y = fast_add_rotations(updated_rotation_x, *(float *)(moby_vars + 0x44));
     }
 }
 #include "sda.h"
@@ -1068,7 +1068,7 @@ char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_clas
     char *moby = create_moby(spawned_moby_class);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         qcopy(moby + 0x10, source_moby + 0x10);
@@ -1076,10 +1076,10 @@ char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_clas
         moby[0xBC] = scale_game_frames(10);
         update_entity(moby);
         copy_hero_moby_field_38(moby);
-        *(unsigned short *)(moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
+        MOBY(moby)->flags = MOBY(source_moby)->flags;
         if (spawned_moby_class == 0x514) {
             if (rand() & 1) {
-                *(unsigned short *)(moby + 0x34) |= 0x8000;
+                MOBY(moby)->flags |= 0x8000;
             }
         }
     }
@@ -1270,10 +1270,10 @@ char *spawn_class_11c_moby(char *owner, void *position, float angle) {
         ((unsigned char *)moby)[0x30] = ((unsigned char *)owner)[0x30];
         state = ((unsigned char *)owner)[0x30];
         moby[0x31] = 1;
-        *(short *)(moby + 0x32) = state;
+        MOBY(moby)->draw_dist = state;
         qcopy(moby + 0x10, copy);
         qcopy(moby + 0x40, owner + 0x40);
-        *(float *)(moby + 0x48) = angle;
+        MOBY(moby)->rot.z = angle;
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
         update_entity(moby);
     }
@@ -1483,7 +1483,7 @@ char *spawn_class_144_moby(struct Moby *owner, void *position, float angle) {
         ((unsigned char *)moby)[0x30] = owner->update_dist;
         state = owner->update_dist;
         moby[0x31] = 1;
-        *(short *)(moby + 0x32) = state;
+        MOBY(moby)->draw_dist = state;
         qcopy(moby + 0x10, copy);
         qcopy(moby + 0x40, &owner->rot);
         *(long *)(moby + 0x38) = owner->spawn_frame;
@@ -1491,7 +1491,6 @@ char *spawn_class_144_moby(struct Moby *owner, void *position, float angle) {
     }
     return moby;
 }
-#define MOBY(p) ((struct Moby *)(p))
 
 char *spawn_radially_scattered_moby(void *unused, float lower_radius, float upper_radius, void *origin, float *direction) __asm__("FUN_L09_002efe48");
 

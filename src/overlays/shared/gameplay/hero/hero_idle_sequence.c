@@ -612,12 +612,12 @@ void update_hero_bone_attachment(void) {
         qcopy(destination_moby + 0x10, &bone_transform[12]);
         copy_matrix3x4(destination_moby + 0xC0, bone_transform);
         matrix_to_euler(bone_transform, destination_moby + 0x40);
-        *(unsigned short *)(destination_moby + 0x34) &= 0xFFBE;
+        MOBY(destination_moby)->flags &= 0xFFBE;
         blend_moby_animation(destination_moby, 0x81, 0, scale_game_frames(10));
         advance_moby_animation(destination_moby);
         update_entity(destination_moby);
     } else {
-        *(unsigned short *)(destination_moby + 0x34) |= 0x41;
+        MOBY(destination_moby)->flags |= 0x41;
     }
 }
 #include "rnc/overlay/quad.h"
@@ -708,12 +708,12 @@ void update_hero_in_vehicle_mode(void) {
             *(char **)(g + 0x1624) = create_moby(0x4b4);
             if (*(char **)(g + 0x1624)) {
                 char *moby = *(char **)(g + 0x1624);
-                *(u32 *)(moby + 0x90) = 0x801432d7;
+                MOBY(moby)->glow_color = 0x801432d7;
                 *(u32 *)(g + 0x2300) = 0x301432d7;
                 moby = *(char **)(g + 0x1624);
                 qcopy(moby + 0x10, g + 0x80);
                 qcopy(moby + 0x40, g + 0x90);
-                *(u16 *)(moby + 0x32) = 0x40;
+                MOBY(moby)->draw_dist = 0x40;
                 (*(char **)(g + 0x1624))[0x31] = 1;
                 (*(char **)(g + 0x1624))[0x30] = 0;
                 *(u16 *)(*(char **)(g + 0x1624) + 0x34) = 0;
@@ -775,7 +775,7 @@ void update_hero_in_vehicle_mode(void) {
                         char *moby = *(char **)(g + 0x1620);
                         qcopy(moby + 0x10, g + 0x80);
                         qcopy(moby + 0x40, g + 0x90);
-                        *(u16 *)(moby + 0x32) = 0x40;
+                        MOBY(moby)->draw_dist = 0x40;
                         (*(char **)(g + 0x1620))[0x31] = 1;
                         (*(char **)(g + 0x1620))[0x30] = 0;
                         *(u16 *)(*(char **)(g + 0x1620) + 0x34) = 0;
@@ -2788,14 +2788,14 @@ void update_hero_target_tracking(void) {
                     continue;
                 candidate_reference_hero_state = (char *)hero_pos - 0x80;
                 candidate_yaw_difference = fast_difference_between_rotations(
-                    fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)(candidate_reference_hero_state + 0x80),
-                                   *(float *)(candidate_moby + 0x14) - *(float *)(candidate_reference_hero_state + 0x84)),
+                    fast_arc_tan(MOBY(candidate_moby)->pos.x - *(float *)(candidate_reference_hero_state + 0x80),
+                                   MOBY(candidate_moby)->pos.y - *(float *)(candidate_reference_hero_state + 0x84)),
                     *(float *)(candidate_reference_hero_state + 0x98));
                 if (1.91986215f < candidate_yaw_difference)
                     continue;
                 if (1.04719758f <
                     absolute_float(fast_arc_tan(vector_distance_xy(candidate_moby + 0x10, hero_pos + 0x0),
-                                                 *(float *)(candidate_reference_hero_state + 0x88) - *(float *)(candidate_moby + 0x18))))
+                                                 *(float *)(candidate_reference_hero_state + 0x88) - MOBY(candidate_moby)->pos.z)))
                     continue;
                 sc = candidate_yaw_difference * candidate_distance + candidate_distance;
                 if ((int)candidate_moby == *(int *)(candidate_reference_hero_state + 0x2274)) {

@@ -318,11 +318,11 @@ void update_moby_movement_with_sphere_collision(char *moby, char *movement_state
         collision_probe_position[2] = collision_probe_position[2] + collision_z_offset;
         if (coll_sphere(*(float *)(movement_params + 0x10) * 0.25f, collision_probe_position, 4, moby)) {
             qcopy(moby + 0x10, D_L04_00173FF0);
-            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - collision_z_offset;
+            MOBY(moby)->pos.z = MOBY(moby)->pos.z - collision_z_offset;
         } else {
             break;
         }
     }
-    *(float *)(moby + 0x48) =
+    MOBY(moby)->rot.z =
         fast_add_rotations(fast_arc_tan(*(float *)(movement_state + 0x10), *(float *)(movement_state + 0x14)), 3.14159265f);
 }

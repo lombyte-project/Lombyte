@@ -29,7 +29,7 @@ void reset_electric_water_switch(char *moby) __asm__("FUN_L15_002d95a0");
 void reset_electric_water_switch(char *moby) {
     if (is_moby_class_23e_in_state_14(moby)) {
         moby[0x20] = 1;
-        *(float *)(moby + 0x18) += 1.5f;
+        MOBY(moby)->pos.z += 1.5f;
     }
 }
 #include "qcopy.h"
@@ -47,21 +47,21 @@ char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *spa
     char *spawned_moby = create_moby(0x3A6);
     if (spawned_moby != 0) {
         char *moby_vars;
-        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
+        MOBY(spawned_moby)->update_dist = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 0;
         *(long *)(spawned_moby + 0x38) = *(long *)(source_moby + 0x38);
-        *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 20.0f;
+        MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 20.0f;
         qcopy(spawned_moby + 0x10, spawn_position);
-        moby_vars = *(char **)(spawned_moby + 0x78);
+        moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         FUN_001f9a68(moby_vars, direction_vector, 5.0f);
         *(int *)(moby_vars + 0x38) = scale_game_frames(0xF0);
         *(char **)(moby_vars + 0x3C) = source_moby;
         spawned_moby[0x23] = 0x30;
-        *(unsigned short *)(spawned_moby + 0x34) |= 0x200;
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(direction_vector[0], direction_vector[1]);
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(direction_vector), direction_vector[2]);
+        MOBY(spawned_moby)->flags |= 0x200;
+        MOBY(spawned_moby)->rot.z = fast_arc_tan(direction_vector[0], direction_vector[1]);
+        MOBY(spawned_moby)->rot.y = -fast_arc_tan(vector_length_xy(direction_vector), direction_vector[2]);
         update_entity(spawned_moby);
         spawn_source_attached_fading_effect_particle(spawned_moby, 0x600040FF, 0x80, -1, 170000.0f);
     }
@@ -541,7 +541,7 @@ extern void font_print_center_large_001f6c20(int a, int b, int c, int d, int e) 
 
 void draw_electric_water_countdown(char *moby) {
     char countdown_text[8];
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     float color_blend_factor;
     int col;
 
@@ -593,7 +593,7 @@ extern short third_side_arc_fade_peak_timer_value __asm__("D_L15_00161CDC");
 extern short fourth_side_arc_fade_peak_timer_value __asm__("D_L15_00161CDE");
 extern int D_L15_00161CE4;
 void initialize_electric_water_bolt_effect(char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float bolt_displacement[4];
     float step[4];
     int i;
@@ -991,7 +991,7 @@ extern void spawn_moby_point_offset_particle(void *, float, int, float) __asm__(
 void update_spinning_projectile(unsigned char *moby) __asm__("FUN_L15_002e4380");
 
 void update_spinning_projectile(unsigned char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float next[4];
     char col[0x30];
     char *hit;
@@ -1001,10 +1001,10 @@ void update_spinning_projectile(unsigned char *moby) {
     }
     if (moby[0x20] != 0)
         return;
-    *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), frame_time * 6.2831855f);
+    MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, frame_time * 6.2831855f);
     fast_vec_add(next, moby + 0x10, moby_vars);
     make_hit_descriptor(col, moby, 1, 2.0f, moby_vars);
-    *(short *)(col + 0x1A) = *(short *)(moby + 0xA6);
+    *(short *)(col + 0x1A) = MOBY(moby)->oclass;
     if (collision_line(moby + 0x10, next, 0, moby, col) != 0 || coll_sphere(moby + 0x10, 0, moby, 0.3f) != 0 || fast_dec_timer(moby_vars + 0x38) != 0) {
         hit = (char *)D_L15_00174458_s[0];
         if (hit != 0 && (int)hit != *(int *)(moby_vars + 0x3C)) {

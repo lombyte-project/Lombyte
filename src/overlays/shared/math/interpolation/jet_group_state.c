@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 
@@ -18,24 +19,24 @@ void jet_group_state(int group_index, int clear_flag_bit_1, int clear_flag_bit_0
             if (moby[0x20] >= 0) {
                 if (clear_flag_bit_1 != -1) {
                     if (clear_flag_bit_1)
-                        *(unsigned short *)(moby + 0x34) &= 0xFFFD;
+                        MOBY(moby)->flags &= 0xFFFD;
                     else
-                        *(unsigned short *)(moby + 0x34) |= 2;
+                        MOBY(moby)->flags |= 2;
                 }
                 if (clear_flag_bit_0 != -1) {
                     if (clear_flag_bit_0) {
                         moby[0x31] = 1;
-                        *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+                        MOBY(moby)->flags &= 0xFFFE;
                     } else {
                         moby[0x31] = 0;
-                        *(unsigned short *)(moby + 0x34) |= 1;
+                        MOBY(moby)->flags |= 1;
                     }
                 }
                 if (copy_or_clear_field_94 != -1) {
                     if (copy_or_clear_field_94)
-                        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+                        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
                     else
-                        *(int *)(moby + 0x94) = 0;
+                        MOBY(moby)->collision = 0;
                 }
             }
         } while (*group_member_entry++ >= 0);

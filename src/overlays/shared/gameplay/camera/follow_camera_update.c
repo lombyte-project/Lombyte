@@ -9,6 +9,7 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/random.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/gameplay/entities/moby.h"
 
 extern u8 camera_view[] __asm__("D_L00_00166E10");
 extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
@@ -1182,7 +1183,7 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
     target_orbit_origin_offset[0] = 0;
     ((float *)target_orbit_origin_offset)[2] = 0.12f;
     ((float *)target_orbit_origin_offset)[0] = D_L00_00161DD4;
-    target_private_data = *(char **)(target_moby + 0x78);
+    target_private_data = ((char *)MOBY(target_moby)->pvars);
     transform_vector_by_basis(target_orbit_origin_offset, target_orbit_origin_offset, target_moby + 0xC0);
     FUN_001f9a10_2eb648(target_orbit_origin, target_moby + 0x10, target_orbit_origin_offset);
     pw = target_orbit_origin;
@@ -1224,8 +1225,8 @@ int update_orbit_camera_from_target_moby(char *camera_object, char *target_moby)
     qcopy(camera_state + 0x80, pw);
     return 0;
 pos:
-    *(float *)(camera_state + 0xAC) = *(float *)(target_moby + 0x40) * 0.5f;
-    *(float *)(camera_state + 0x20) += (*(float *)(target_moby + 0x44) - *(float *)(camera_state + 0x20)) * 0.05f;
+    *(float *)(camera_state + 0xAC) = MOBY(target_moby)->rot.x * 0.5f;
+    *(float *)(camera_state + 0x20) += (MOBY(target_moby)->rot.y - *(float *)(camera_state + 0x20)) * 0.05f;
     qcopy(camera_state + 0x80, target_orbit_origin);
     qcopy(camera_state + 0xC0, target_moby + 0x40);
 one:
@@ -1261,8 +1262,8 @@ void select_camera_mode_by_hero_alignment_and_distance(char *camera_object) {
     struct Hero *hero_data = &hero;
     char *camera_globals = D_00166C80_c;
     char *hero_moby = ((char *)hero_data->moby);
-    float a = fast_arc_tan(*(float *)(hero_moby + 0x10) - *(float *)(camera_globals + 0x140),
-                           *(float *)(hero_moby + 0x14) - *(float *)(camera_globals + 0x144));
+    float a = fast_arc_tan(MOBY(hero_moby)->pos.x - *(float *)(camera_globals + 0x140),
+                           MOBY(hero_moby)->pos.y - *(float *)(camera_globals + 0x144));
     if (fast_difference_between_rotations(*(float *)(camera_globals + 0x158), a) < 0.5585053563117981f &&
         fast_vec_dist(&hero_data->motion.pos, camera_globals + 0x140) < 8.0f) {
         *(char *)(camera_globals + 0x273) = 0;

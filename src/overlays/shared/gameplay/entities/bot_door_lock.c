@@ -148,7 +148,7 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *target_moby) __asm__("FUN_L06_00307c48");
 
 void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *target_moby) {
-    switch (*(short *)(target_moby + 0xA6)) {
+    switch (MOBY(target_moby)->oclass) {
     case 0x3F7:
     case 0x502:
         if (target_moby[0x20] == 2) {
@@ -191,7 +191,7 @@ void bot_door_lock_update(char *moby) {
         BOT_DOOR_LOCK_STATE_ACTIVE = 1,
         BOT_DOOR_LOCK_STATE_SHRINK_EFFECT = 2
     };
-    float *data = *(float **)(moby + 0x78);
+    float *data = ((float *)MOBY(moby)->pvars);
     int *idata = (int *)data;
     float number_anchor_position[4];
     float offset[3];
@@ -204,7 +204,7 @@ void bot_door_lock_update(char *moby) {
 
     if (*(int *)data == -1) return;
     data[10] = fast_add_rotations(data[10], (360.0f / bot_door_lock_color_pulse_period_gp) * 0.017453292f * frame_time);
-    *(unsigned int *)(moby + 0x90) = fast_tween_color((fast_cos(data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
+    MOBY(moby)->glow_color = fast_tween_color((fast_cos(data[10]) + 1.0f) * 0.5f, 0x80464646, 0x80828282);
     switch ((unsigned char)moby[0x20]) {
     case BOT_DOOR_LOCK_STATE_INITIALIZE:
         idata[5] = idata[4];
@@ -235,31 +235,31 @@ void bot_door_lock_update(char *moby) {
                     draw_number(number_anchor_position, moby, idata[5] + 2, color, 0x7f, 4, 0xff, 0.5f);
                 } else {
                     if (D_0015EDB4) {
-                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[0] = fast_cos(angle) * 0.15f;
-                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[1] = fast_sin(angle) * 0.15f;
                         offset[2] = 0.0f;
                         add_vectors(result, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
-                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[0] = fast_cos(angle) * -0.4f;
-                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[1] = fast_sin(angle) * -0.4f;
                         offset[2] = 0.0f;
                         add_vectors(result, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] % 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
                     } else {
-                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[0] = fast_cos(angle) * -0.4f;
-                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[1] = fast_sin(angle) * -0.4f;
                         offset[2] = 0.0f;
                         add_vectors(result, offset, number_anchor_position);
                         draw_number(offset, moby, idata[5] / 10 + 2, color, 0x7f, 4, 0xff, 0.5f);
-                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[0] = fast_cos(angle) * 0.15f;
-                        angle = fast_add_rotations(*(float *)(moby + 0x48), 1.5707964f);
+                        angle = fast_add_rotations(MOBY(moby)->rot.z, 1.5707964f);
                         offset[1] = fast_sin(angle) * 0.15f;
                         offset[2] = 0.0f;
                         add_vectors(result, offset, number_anchor_position);
@@ -351,7 +351,7 @@ void update_hit_triggered_moby_breakup(char *self) {
         spawned_moby = create_moby(0x678);
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;
-            *(short *)(spawned_moby + 0x32) = 0xFF;
+            MOBY(spawned_moby)->draw_dist = 0xFF;
             qcopy(spawned_moby + 0x10, self + 0x10);
             qcopy(spawned_moby + 0x40, self + 0x40);
             *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
@@ -399,7 +399,7 @@ void spawn_timed_projected_sprite_effect(char *world_position, int duration_upda
     position_copy = *(OvlQuad *)world_position;
     effect_moby = (unsigned char *)create_moby(0x76A);
     if (effect_moby) {
-        char *effect_data = *(char **)(effect_moby + 0x78);
+        char *effect_data = ((char *)MOBY(effect_moby)->pvars);
         float duration_as_float;
         qcopy(effect_moby + 0x10, vp);
         duration_as_float = convert_integer_to_float(duration_updates);
@@ -422,7 +422,7 @@ extern s32 projected_quad_bottom_left_uv_gp __asm__("D_L06_00162428") __attribut
 
 /* Draws a screen-space sprite at the moby, grown and faded in by the first data float. */
 void draw_projected_fading_quad(char *moby) {
-    float *effect_data = *(float **)(moby + 0x78);
+    float *effect_data = ((float *)MOBY(moby)->pvars);
     OvlVec4 world_position;
     s64 corners[4];
     u32 colors[4];
@@ -482,7 +482,7 @@ void draw_projected_fading_quad(char *moby) {
 extern char *target_reference_table __asm__("D_L06_0015EF50");
 
 void FUN_L06_00316330(char *moby) {
-    if (*(short *)(moby + 0x86) == 0x12) {
+    if (MOBY(moby)->unk86 == 0x12) {
         *(int *)(*(char **)(target_reference_table + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) = 1;
     }
 }

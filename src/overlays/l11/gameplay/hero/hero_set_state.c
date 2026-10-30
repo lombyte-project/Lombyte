@@ -25,6 +25,7 @@
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/gameplay/hero/air_accel.h"
 #include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/help_0024E240.c: func_L11_0024E240), where it is exact; names translated to the US level program. */
 
@@ -101,7 +102,7 @@ int hero_set_state(int a, int b) {
         p->unk20A5 = 0;
         p->item_use_locked = 0;
         if (p->vehicle_mode == 0) {
-            *(int *)(moby + 0x98) = 0;
+            MOBY(moby)->collision_disable = 0;
             p->tilt_disabled = 0;
             p->item_select_blocked = 0;
             p->unk20B2 = 0;
@@ -602,7 +603,7 @@ int hero_set_state(int a, int b) {
             struct Hero *q = &hero;
             float d = q->anim_frame;
             int id = 6;
-            if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+            if (return_hero_animation_id_unchanged(MOBY(moby)->seq) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
             set_hero_animation(id, 4, (float)scale_game_frames(9));
         }
@@ -618,7 +619,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             int id = 6;
             float d = p->anim_frame;
-            if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+            if (return_hero_animation_id_unchanged(MOBY(moby)->seq) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
             set_hero_animation(id, 4, (float)scale_game_frames(9));
         }
@@ -1221,7 +1222,7 @@ int hero_set_state(int a, int b) {
                 } else if (s == 9) {
                     int id = 8;
                     int n = truncate_float_to_s32(q->anim_frame);
-                    if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4)
+                    if (return_hero_animation_id_unchanged(MOBY(moby)->seq) == 4)
                         id = level_11_run_jump_animation_by_frame[n];
                     set_hero_animation(id, 0, (float)scale_game_frames(5));
                 } else if (s == 0xA) {

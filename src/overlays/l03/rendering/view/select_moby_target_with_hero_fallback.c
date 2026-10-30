@@ -8,6 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 extern short D_L03_001B0930[] NOT_SDA;
@@ -33,13 +34,13 @@ int select_moby_target_with_hero_fallback(char *source_moby, char *target_output
         candidate_moby = D_L03_0015FFD8 + (D_L03_001B0930[i] << 8);
         if (candidate_moby == 0)
             continue;
-        if (*(short *)(candidate_moby + 0xA6) != 0xCB && *(short *)(candidate_moby + 0xA6) != 0x76C)
+        if (MOBY(candidate_moby)->oclass != 0xCB && MOBY(candidate_moby)->oclass != 0x76C)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFE)
+        if (MOBY(candidate_moby)->state == 0xFE)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFD)
+        if (MOBY(candidate_moby)->state == 0xFD)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) != 3)
+        if (MOBY(candidate_moby)->state != 3)
             continue;
         candidate_comparison_value = vector_distance_xy(source_moby + 0x10, candidate_moby + 0x10);
         if (candidate_comparison_value < best) {
@@ -52,13 +53,13 @@ int select_moby_target_with_hero_fallback(char *source_moby, char *target_output
         candidate_moby = D_L03_001D1680[j];
         if (candidate_moby == 0)
             continue;
-        if (*(short *)(candidate_moby + 0xA6) != 0x10E)
+        if (MOBY(candidate_moby)->oclass != 0x10E)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFE)
+        if (MOBY(candidate_moby)->state == 0xFE)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFD)
+        if (MOBY(candidate_moby)->state == 0xFD)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
+        if (MOBY(candidate_moby)->command == 0)
             continue;
         candidate_comparison_value = vector_distance_xy(source_moby + 0x10, candidate_moby + 0x10);
         if (candidate_comparison_value < best) {

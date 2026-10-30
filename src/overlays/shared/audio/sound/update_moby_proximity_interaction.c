@@ -10,6 +10,7 @@
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/overlay/shared/ui/help/remove_help_message_for_selector.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
@@ -27,7 +28,7 @@ extern void draw_light_flare() __asm__("func_0022DF40");
 void update_moby_proximity_interaction(unsigned char *moby) __asm__("FUN_L00_0028e180");
 
 void update_moby_proximity_interaction(unsigned char *moby) {
-    char *proximity_state_data = *(char **)(moby + 0x78);
+    char *proximity_state_data = ((char *)MOBY(moby)->pvars);
     float *moby_position;
     float proximity_test_position[4];
     int color_pulse_intensity;
@@ -41,17 +42,17 @@ void update_moby_proximity_interaction(unsigned char *moby) {
                                0.024543693f) *
                       50.0f) +
                 0x96;
-            if (*(short *)(moby + 0xA6) == 0x215) {
-                *(int *)(moby + 0x90) = (color_pulse_intensity >> 1) | (color_pulse_intensity << 8) | (color_pulse_intensity << 16);
+            if (MOBY(moby)->oclass == 0x215) {
+                MOBY(moby)->glow_color = (color_pulse_intensity >> 1) | (color_pulse_intensity << 8) | (color_pulse_intensity << 16);
             } else {
-                *(int *)(moby + 0x90) = color_pulse_intensity | (color_pulse_intensity << 8) | (color_pulse_intensity << 16);
+                MOBY(moby)->glow_color = color_pulse_intensity | (color_pulse_intensity << 8) | (color_pulse_intensity << 16);
             }
             add_draw_callback(render_environment_mapped_object, moby);
             if (vector_distance_xy(moby + 0x10, g_debug_camera) < 32.0f) {
                 add_draw_callback(draw_light_flare, moby);
             }
         }
-        moby_position = (float *)(moby + 0x10);
+        moby_position = (float *)&MOBY(moby)->pos;
         if (*(short *)(proximity_state_data + 0xC) != 0) {
             transform_vector_by_basis(proximity_test_position, ship_proximity_local_offsets + ship_index[0] * 16, moby + 0xC0);
             fast_vec_add(proximity_test_position, proximity_test_position, moby_position);
@@ -68,7 +69,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
                 }
             }
         }
-        if (*(unsigned short *)(moby + 0x34) & 1) {
+        if (MOBY(moby)->flags & 1) {
             *(short *)(proximity_state_data + 0xC) = 0;
         }
         if (*(short *)(proximity_state_data + 0xC) != 0) {
@@ -76,7 +77,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
             if ((*(int *)(((char *)&D_0013CAE4)) & 0x10) && help_message_accepted) {
                 if (current_level_index == 10 && hero.vehicle_mode == 1) {
                     moby[0x20] = 0x2A;
-                    *(unsigned short *)(moby + 0x34) |= 0x41;
+                    MOBY(moby)->flags |= 0x41;
                     start_scene(9);
                 } else {
                     remove_help_message_for_selector(2);
@@ -102,7 +103,7 @@ void update_moby_proximity_interaction(unsigned char *moby) {
                 hero_position_or_scene_flags[0x4B] = 1;
             } else {
                 moby[0x20] = 0;
-                *(unsigned short *)(moby + 0x34) &= 0xFFBE;
+                MOBY(moby)->flags &= 0xFFBE;
                 one = 1;
                 ship_index[1] = one;
                 D_L00_0015F630 = one;

@@ -121,21 +121,21 @@ void blarg_commander_update(char *moby) {
     int motion_result_flags;
     MO *mo = (MO *)moby;
     char raised_position[16];
-    moby_state = *(unsigned char *)(moby + 0x53);
-    moby_pvars = *(char **)(moby + 0x78);
+    moby_state = MOBY(moby)->prev_seq;
+    moby_pvars = ((char *)MOBY(moby)->pvars);
     if (moby_state == 1) {
         motion_state = moby_pvars + 0x20;
         motion_result_flags = mine_fall(moby, motion_state);
         mo->vx = fast_add_rotations(mo->vx, frame_time * 4.3633232f);
         mo->vy = fast_add_rotations(mo->vy, frame_time * 4.3633232f);
-        *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+        MOBY(moby)->flags &= 0xEFFF;
         if (motion_result_flags & 0x61) {
             qcopy(raised_position, moby + 0x10);
             ((float *)raised_position)[2] += 1.0f;
             spawn_explosion(moby, motion_state, raised_position, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, 0, 15.0f, 1,
                                   moby_state, -1, 0);
             mark_moby_for_removal(moby);
-        } else if (*(float *)(moby + 0x18) < 5.0f) {
+        } else if (MOBY(moby)->pos.z < 5.0f) {
             mark_moby_for_removal(moby);
         }
     }

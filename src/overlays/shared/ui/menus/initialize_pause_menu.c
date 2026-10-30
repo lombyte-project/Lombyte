@@ -784,7 +784,7 @@ void draw_pause_menu_pages(int transfer_only) {
                 (*(int (**)(char *))(page_objects[j] + 4))(page_objects[j]);
                 continue;
             }
-            vars = *(char **)(moby + 0x78);
+            vars = ((char *)MOBY(moby)->pvars);
             x = *(int *)(vars + 0x50);
             y = *(int *)(vars + 0x54);
             width = *(int *)(vars + 0x58);

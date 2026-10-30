@@ -60,7 +60,7 @@ void attach_batalia_deserter_class_manipulator(struct Moby *moby) {
         }
         for (i = 0; i < D_L08_0016D060.n; i++) {
             char *candidate_moby = D_L08_0016D060.objs[i];
-            if (*(short *)(candidate_moby + 0xA6) == moby->oclass && D_L08_0017CC40[1] == 0) {
+            if (MOBY(candidate_moby)->oclass == moby->oclass && D_L08_0017CC40[1] == 0) {
                 attach_manipulator(candidate_moby, 0, D_L08_0017CC40);
                 *(float *)(D_L08_0017CC40 + 0x20) = 2.75f;
                 *(float *)(D_L08_0017CC40 + 0x24) = 2.75f;
@@ -320,7 +320,7 @@ void attach_batalia_plumber_class_manipulator(struct Moby *moby) {
         }
         for (i = 0; i < D_L08_0016D060_lui.n; i++) {
             char *candidate_moby = D_L08_0016D060_lui.objs[i];
-            if (*(short *)(candidate_moby + 0xA6) == moby->oclass || *(short *)(candidate_moby + 0xA6) == 0x306) {
+            if (MOBY(candidate_moby)->oclass == moby->oclass || MOBY(candidate_moby)->oclass == 0x306) {
                 if (D_L08_0017CC40_lui[1] == 0) {
                     float replicated_value;
                     attach_manipulator(candidate_moby, 0, D_L08_0017CC40_lui);

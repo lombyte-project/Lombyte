@@ -112,6 +112,7 @@ void draw_moby_oscillating_textured_quads(M_2acbf0_002acbf0 *moby) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
@@ -122,7 +123,7 @@ int process_suck_cannon_suction_and_update_moby_state(char *a) __asm__("FUN_L00_
 int process_suck_cannon_suction_and_update_moby_state(char *moby) {
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result == 0) {
-        if (*(unsigned char *)(moby + 0x20) == 0x9)
+        if (MOBY(moby)->state == 0x9)
             moby[0x20] = 0x5;
     } else {
         moby[0x20] = 0x9;
@@ -147,7 +148,7 @@ int cancel_suck_cannon_suction_and_set_moby_state_9(char *moby) {
 int invoke_optional_moby_callback_or_return_one(char *moby) __asm__("FUN_L00_002da218");
 
 int invoke_optional_moby_callback_or_return_one(char *moby) {
-    int (*fn)(char *) = *(int (**)(char *))(*(char **)(*(char **)(moby + 0x24) + 0x2C) + 0x4);
+    int (*fn)(char *) = *(int (**)(char *))(*(char **)(((char *)MOBY(moby)->pclass) + 0x2C) + 0x4);
     if (fn != 0) {
         return fn(moby);
     }

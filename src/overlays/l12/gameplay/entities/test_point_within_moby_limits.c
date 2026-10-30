@@ -19,7 +19,7 @@
 int test_point_within_moby_limits(char *moby, float *point_position, float x, float y, float z) __asm__("FUN_L12_0027b8e0");
 
 int test_point_within_moby_limits(char *moby, float *point_position, float x, float y, float z) {
-    float absolute_height_difference = absolute_float(point_position[2] - *(float *)(moby + 0x18));
+    float absolute_height_difference = absolute_float(point_position[2] - MOBY(moby)->pos.z);
     if (absolute_height_difference > y)
         return 0;
     if (fast_vec_dist(point_position, moby + 0x10) > x)
@@ -27,8 +27,8 @@ int test_point_within_moby_limits(char *moby, float *point_position, float x, fl
     if (!(0.0f < z))
         return 1;
     {
-        float heading_test_angle = fast_arc_tan(point_position[0] - *(float *)(moby + 0x10), point_position[1] - *(float *)(moby + 0x14));
-        heading_test_angle = fast_difference_between_rotations(*(float *)(moby + 0x48), heading_test_angle);
+        float heading_test_angle = fast_arc_tan(point_position[0] - MOBY(moby)->pos.x, point_position[1] - MOBY(moby)->pos.y);
+        heading_test_angle = fast_difference_between_rotations(MOBY(moby)->rot.z, heading_test_angle);
         if (heading_test_angle > z)
             return 0;
     }

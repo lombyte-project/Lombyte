@@ -59,7 +59,7 @@ void update_moby_random_interval_animation(struct Moby *moby) {
 void blend_big_axebot_and_axe_animation(char *moby, void *new_seq, void *frame_index, void *blend_frames) __asm__("FUN_L04_002ba3e0");
 
 void blend_big_axebot_and_axe_animation(char *moby, void *new_seq, void *frame_index, void *blend_frames) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     void *other;
     blend_moby_animation(moby, new_seq, frame_index, blend_frames);
     other = *(void **)(data + 0x424);
@@ -108,9 +108,9 @@ int check_circular_saw_melee_attack_spacing(struct Moby *moby) {
     }
     select_moby_combat_target(moby, target_selection_output, target_selection_distance_limit);
     target_distance = vector_distance_xy((float *)&moby->pos, target_selection_output);
-    for (other_moby = D_L04_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
-        if (other_moby != moby && *(short *)(other_moby + 0xA6) == 0x154) {
-            float *other_position = (float *)(other_moby + 0x10);
+    for (other_moby = D_L04_0015FFE4; other_moby != 0; other_moby = ((char *)MOBY(other_moby)->next)) {
+        if (other_moby != moby && MOBY(other_moby)->oclass == 0x154) {
+            float *other_position = (float *)&MOBY(other_moby)->pos;
             if (vector_distance_xy((float *)&moby->pos, other_position) < 3.0f || vector_distance_xy(other_position, target_selection_output) < target_distance) {
                 return 0;
             }
@@ -2822,9 +2822,9 @@ void blarg_trooper_update(struct Moby *moby) {
         {
             char *attached_gun_moby = *(char **)(data + 0xF8);
             if (moby->flags & 1) {
-                *(unsigned short *)(attached_gun_moby + 0x34) |= 0x41;
+                MOBY(attached_gun_moby)->flags |= 0x41;
             } else {
-                *(unsigned short *)(attached_gun_moby + 0x34) &= 0xFFBE;
+                MOBY(attached_gun_moby)->flags &= 0xFFBE;
             }
         }
         refresh_moby_spatial_bounds_from_basis(*(char **)(data + 0xF8));

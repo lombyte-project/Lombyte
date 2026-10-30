@@ -8,6 +8,7 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/gameplay/entities/attach_manipulator.h"
 #include "rnc/ui/fonts/font_queue_vu_state.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 
@@ -73,7 +74,7 @@ void apply_npc_big_head_cheat(char *moby) {
         for (i = 0; i < D_L12_0016CCE0.count; i++) {
             char *candidate_moby = D_L12_0016CCE0.mobys[i];
 
-            if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
+            if (MOBY(candidate_moby)->oclass == MOBY(moby)->oclass) {
                 unsigned char *manipulator = l12_npc_big_head_manipulator;
 
                 if (manipulator[1] == 0) {

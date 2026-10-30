@@ -718,11 +718,11 @@ u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) __asm__("FUN_L00_002bb36
 u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) {
     u8 *spawned_moby = create_moby(0xB3);
     if (spawned_moby) {
-        u8 *spawned_moby_vars = *(u8 **)(spawned_moby + 0x78);
+        u8 *spawned_moby_vars = ((u8 *)MOBY(spawned_moby)->pvars);
         spawned_moby[0x30] = 0xFF;
-        *(s16 *)(spawned_moby + 0x32) = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
-        *(s16 *)(spawned_moby + 0x34) = 0x204;
+        MOBY(spawned_moby)->flags = 0x204;
         spawned_moby[0x23] = 0x50;
         spawned_moby[0x20] = 0;
         *(u8 **)(spawned_moby_vars + 8) = basis_source_moby;
@@ -898,7 +898,7 @@ void walloper_update(char *walloper_moby) {
     if (*(unsigned char *)(((char *)walloper_hero_state->moby) + 0x53) != 0x82) {
         D_L00_0017AEBC = 0.1f;
     }
-    switch (*(unsigned char *)(walloper_moby + 0x20)) {
+    switch (MOBY(walloper_moby)->state) {
     case WALLOPER_STATE_INITIALIZE:
         walloper_moby[0x20] = 2;
         for (arc_init_index = 0; arc_init_index < 10; arc_init_index++) {
@@ -2480,7 +2480,7 @@ float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby)
     upper_probe_point.f[2] = f + 6.0f;
     if (FUN_001efa68_002bec80(&upper_probe_point, &lower_probe_point, 6, probing_moby, 0)) {
         char *hit_moby = (*(S173E40 *)D_L00_00173E40).o18;
-        if (hit_moby && *(char **)(hit_moby + 0x24) && *(short *)(*(char **)(hit_moby + 0x24) + 0x46) == 5) {
+        if (hit_moby && ((char *)MOBY(hit_moby)->pclass) && *(short *)(((char *)MOBY(hit_moby)->pclass) + 0x46) == 5) {
             return (*(S173E40 *)D_L00_00173E40).f28;
         }
         switch (collision_hit_material()) {
@@ -2966,9 +2966,9 @@ unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initi
     if (spawned_moby) {
         char *moby_vars;
         spawned_moby[0x30] = 0xff;
-        *(short *)(spawned_moby + 0x32) = 0xff;
+        MOBY(spawned_moby)->draw_dist = 0xff;
         spawned_moby[0x31] = 1;
-        moby_vars = *(char **)(spawned_moby + 0x78);
+        moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         spawned_moby[0x20] = 0;
         spawned_moby[0xbc] = 0;
         qcopy(spawned_moby + 0x10, spawn_position);
@@ -2976,7 +2976,7 @@ unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initi
         *(int *)(moby_vars + 0x60) = linked_moby;
         update_entity(spawned_moby);
         copy_hero_moby_field_38(spawned_moby);
-        *(float *)(spawned_moby + 0x2c) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.1f;
+        MOBY(spawned_moby)->scale = *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) * 0.1f;
     }
     return spawned_moby;
 }
@@ -2997,7 +2997,7 @@ int compute_moby_state_from_vertical_probe(unsigned char *moby) {
     upper_probe_point.f[2] += 1.0f;
     if (FUN_001efa68(&upper_probe_point, &lower_probe_point, 6, moby, 0)) {
         char *hit_moby = D_L00_00173E58;
-        if (hit_moby && *(char **)(hit_moby + 0x24) && *(short *)(*(char **)(hit_moby + 0x24) + 0x46) == 5) {
+        if (hit_moby && ((char *)MOBY(hit_moby)->pclass) && *(short *)(((char *)MOBY(hit_moby)->pclass) + 0x46) == 5) {
             resulting_moby_state = 11;
         } else {
             switch (collision_hit_material()) {

@@ -655,14 +655,14 @@ void update_cutscene_trigger(char *moby) {
         CUTSCENE_TRIGGER_ACTIVE = 2,
         CUTSCENE_TRIGGER_WAIT_FOR_REARM = 3
     };
-    char *trigger_vars = *(char **)(moby + 0x78);
+    char *trigger_vars = ((char *)MOBY(moby)->pvars);
     float saved_camera_position[4];
     float saved_camera_rotation[4];
     func_L01_002FC890_m(moby);
     switch (((unsigned char *)moby)[0x20]) {
     case CUTSCENE_TRIGGER_INITIALIZE:
         if (*(int *)(trigger_vars + 0x24) == -1) {
-            debug_print(cutscene_camera_init_position_error_format, *(short *)(moby + 0xA6), *(unsigned short *)(moby + 0xA8));
+            debug_print(cutscene_camera_init_position_error_format, MOBY(moby)->oclass, *(unsigned short *)(moby + 0xA8));
             mark_moby_for_removal(moby);
             return;
         }
@@ -670,19 +670,19 @@ void update_cutscene_trigger(char *moby) {
         moby[0x20] = 1;
         {
             int ff = 0xFF;
-            *(short *)(moby + 0x32) = ff;
+            MOBY(moby)->draw_dist = ff;
             ((unsigned char *)moby)[0x30] = ff;
         }
         break;
     case CUTSCENE_TRIGGER_WAIT_FOR_TRIGGER: {
         char *hero_position;
-        if (D_L01_001BB9C0_s.collected[(short)*(unsigned short *)(moby + 0xB2)] != 0) {
+        if (D_L01_001BB9C0_s.collected[(short)MOBY(moby)->save_id] != 0) {
             moby[0x20] = 1;
             break;
         }
-        if ((*(int *)((((short)*(unsigned short *)(moby + 0xB2) >> 5) << 2) + (D_0015ED84 << 8) +
+        if ((*(int *)((((short)MOBY(moby)->save_id >> 5) << 2) + (D_0015ED84 << 8) +
                       D_0014171B_c) >>
-             (*(unsigned short *)(moby + 0xB2) & 0x1F)) &
+             (MOBY(moby)->save_id & 0x1F)) &
             1) {
             moby[0x20] = 1;
             break;
@@ -773,7 +773,7 @@ void attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) {
         int i;
         for (i = 0; i < D_L01_0016CCE0_q.n; i++) {
             char *moby = D_L01_0016CCE0_q.m[i];
-            short c = *(short *)(moby + 0xA6);
+            short c = MOBY(moby)->oclass;
             if (c == class_reference_moby->oclass || c == 0x32B) {
                 unsigned char *manipulator_record = D_L01_0017C8C0_lui;
                 if (manipulator_record[1] == 0) {
@@ -1699,7 +1699,7 @@ void teleporter_update(struct Moby *moby) {
             qcopy(child_moby + 0x10, &moby->pos);
             qcopy(child_moby + 0x40, &moby->rot);
             *(float *)(slots[i] + 0x48) =
-                fast_add_rotations(*(float *)(child_moby + 0x48), (float)i * 2.0943952f);
+                fast_add_rotations(MOBY(child_moby)->rot.z, (float)i * 2.0943952f);
         }
         if (*(int *)(data + 0x38) != 0 || active) {
             moby->state = 6;
@@ -1787,7 +1787,7 @@ void teleporter_update(struct Moby *moby) {
             approach_value((float *)(data + 0x34), 0.0f, frame_time * 4.0f);
         } else {
             char *destination_moby = D_L01_0015FFD8 + (*(int *)data << 8);
-            char *td = *(char **)(destination_moby + 0x78);
+            char *td = ((char *)MOBY(destination_moby)->pvars);
             float destination_position[4];
             qcopy(destination_position, destination_moby + 0x10);
             destination_position[2] += 0.2f;
@@ -1796,7 +1796,7 @@ void teleporter_update(struct Moby *moby) {
             if (*(int *)(data + 0x40) != -1 && *(int *)(data + 0x44) != -1) {
                 jet_game_state(*(int *)(data + 0x40), *(int *)(data + 0x44));
             }
-            *(unsigned char *)(destination_moby + 0x20) = 4;
+            MOBY(destination_moby)->state = 4;
             *(float *)(td + 0x34) = 0.0f;
             *(float *)(td + 0x28) = 0.0f;
             *(float *)(td + 0x2C) = 0.0f;
@@ -1843,7 +1843,7 @@ void teleporter_update(struct Moby *moby) {
 extern float teleporter_child_position_z_offset_gp __asm__("D_L01_00161F78") __attribute__((sda));
 extern float teleporter_child_displacement_angle_degrees_gp __asm__("D_L01_00161F80") __attribute__((sda));
 void update_teleporter_child_transforms(char *parent_moby) {
-    char *parent_data = *(char **)(parent_moby + 0x78);
+    char *parent_data = ((char *)MOBY(parent_moby)->pvars);
     char **child_slot = (char **)(parent_data + 0x14);
     float v[4];
     int i;
@@ -1853,7 +1853,7 @@ void update_teleporter_child_transforms(char *parent_moby) {
         char *child_moby = *child_slot;
         qcopy(child_moby + 0x10, parent_moby + 0x10);
         u = teleporter_child_displacement_angle_degrees_gp * DEG_TO_RAD;
-        *(float *)(child_moby + 0x18) += teleporter_child_position_z_offset_gp;
+        MOBY(child_moby)->pos.z += teleporter_child_position_z_offset_gp;
         *(float *)(*child_slot + 0x44) = u;
         child_offset_length = *(float *)(parent_data + 0x20) * 2.4f - 1.2f;
         euler_rotation_basis(*child_slot + 0xC0, *child_slot + 0x40);
@@ -1928,7 +1928,7 @@ void draw_moby_radius_ring(char *moby) {
     char *moby_data;
     float ring_half_height;
     int i, j, nj;
-    moby_data = *(char **)(moby + 0x78);
+    moby_data = ((char *)MOBY(moby)->pvars);
     copy_matrix_rotation(rotation_matrix, moby + 0xC0);
     qcopy(moby_position_snapshot, moby + 0x10);
     quad.g[1] = get_effect_texture(moby_radius_ring_texture_index_gp);

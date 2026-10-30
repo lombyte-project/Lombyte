@@ -485,7 +485,7 @@ void update_linked_moby_states(unsigned char *source_moby) {
         STATE_INITIALIZE = 0,
         STATE_ACTIVE = 1
     };
-    V_2b3458 *moby_vars = *(V_2b3458 **)(source_moby + 0x78);
+    V_2b3458 *moby_vars = ((V_2b3458 *)MOBY(source_moby)->pvars);
     int matching_owned_record, i;
     switch (source_moby[0x20]) {
     case STATE_INITIALIZE:
@@ -1372,15 +1372,15 @@ char *spawn_indexed_class_a7_moby(int instance_index) __asm__("FUN_L00_002b4138"
 char *spawn_indexed_class_a7_moby(int instance_index) {
     char *spawned_moby = create_moby(0xA7);
     if (spawned_moby != 0) {
-        int *moby_vars = *(int **)(spawned_moby + 0x78);
+        int *moby_vars = ((int *)MOBY(spawned_moby)->pvars);
         moby_vars[1] = instance_index;
         moby_vars[0] = 0;
         moby_vars[2] = 0;
         moby_vars[3] = 0;
-        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0x7E;
-        *(unsigned char *)(spawned_moby + 0x31) = 0;
-        *(unsigned char *)(spawned_moby + 0x20) = 0;
+        MOBY(spawned_moby)->update_dist = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0x7E;
+        MOBY(spawned_moby)->visible = 0;
+        MOBY(spawned_moby)->state = 0;
     }
     return spawned_moby;
 }
@@ -1415,7 +1415,7 @@ unsigned char *select_blaster_auto_aim_target(int ign, V_2b46a8 *from, float *ya
     aim_origin_position.q = from->q;
     from = &aim_origin_position;
     bestd = 20.0f;
-    for (candidate_moby = D_L00_0015FFE4_2b46a8; candidate_moby != 0; candidate_moby = *(unsigned char **)(candidate_moby + 0x28)) {
+    for (candidate_moby = D_L00_0015FFE4_2b46a8; candidate_moby != 0; candidate_moby = ((unsigned char *)MOBY(candidate_moby)->next)) {
         if ((signed char)candidate_moby[0x20] < 0) {
             continue;
         }
@@ -1426,7 +1426,7 @@ unsigned char *select_blaster_auto_aim_target(int ign, V_2b46a8 *from, float *ya
         } else {
             tp.f[2] += 0.5f;
         }
-        if (!(*(unsigned short *)(candidate_moby + 0x34) & 0x1000)) {
+        if (!(MOBY(candidate_moby)->flags & 0x1000)) {
             continue;
         }
         candidate_yaw = fast_arc_tan(tp.f[0] - from->f[0], tp.f[1] - from->f[1]);
@@ -1765,7 +1765,7 @@ void moby_save_globals_state(void *m_) {
     char *render_state_backup_vars;
     float f0, f1, f2, f3;
 
-    render_state_backup_vars = *(char **)(render_state_owner_moby + 0x78);
+    render_state_backup_vars = ((char *)MOBY(render_state_owner_moby)->pvars);
     f0 = D_L00_0015F448;
     f1 = D_L00_0015F44C;
     f2 = D_L00_0015F450;
@@ -1855,17 +1855,17 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *pos,
 unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *launch_position, float fa, float fb) {
     unsigned char *spawned_moby = create_moby(0xAC);
     if (spawned_moby) {
-        unsigned char *spawned_moby_vars = *(unsigned char **)(spawned_moby + 0x78);
+        unsigned char *spawned_moby_vars = ((unsigned char *)MOBY(spawned_moby)->pvars);
         struct Hero *G = &hero;
         V_2b58d8 collision_start;
         G->unk1FE0 = spawned_moby;
         D_L00_0017E508 = 1;
         spawned_moby[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 1;
-        *(float *)(spawned_moby + 0x48) = fa;
-        *(float *)(spawned_moby + 0x44) = fb;
+        MOBY(spawned_moby)->rot.z = fa;
+        MOBY(spawned_moby)->rot.y = fb;
         *(unsigned char **)(spawned_moby_vars + 0x24) = G->unk1F60;
         *(unsigned char **)(spawned_moby_vars + 0x28) = G->unk1FA0;
         *(unsigned char **)(spawned_moby_vars + 0x0) = source_moby;
@@ -3021,7 +3021,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
     char qv[16];
     float spark_random_vector[4];
     float spark_position[4];
-    char *slots_base = *(char **)(moby + 0x78) + 4;
+    char *slots_base = ((char *)MOBY(moby)->pvars) + 4;
     unsigned char *item_variant_bytes = (unsigned char *)D_0013E520;
     int i;
 
@@ -3040,7 +3040,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
             make_hit_descriptor(hit_descriptor, (int)moby, 0x10000, hit_direction_vector, convert_integer_to_float(item_variant_bytes[0x10]) + 1.0f);
             *(unsigned char *)(hit_descriptor + 0x18) = 5;
             *(unsigned char *)(hit_descriptor + 0x19) = 1;
-            *(unsigned short *)(hit_descriptor + 0x1A) = *(unsigned short *)(moby + 0xA6);
+            *(unsigned short *)(hit_descriptor + 0x1A) = ((unsigned short)MOBY(moby)->oclass);
             collect_mobies_in_sphere((entry + 0x10), hit_sphere_radius, 0, moby, hit_descriptor);
             sub_type = *(short *)(entry + 0xA);
             if (sub_type == 10) {

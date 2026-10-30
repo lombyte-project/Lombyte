@@ -60,6 +60,7 @@ extern char voice_pool[] __asm__("D_0013E550");
 #include "rnc/overlay/l15/gameplay/hero/update_hero_state_machine_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby.h"
 extern float D_L15_001673D8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
@@ -734,7 +735,7 @@ void update_hero_state_machine(void) {
                 case HERO_STATE_SHALLOW_WATER_RUN:
                 case 126:
                     if (hero.run_start_blending != 0 &&
-                        (*(float *)(moby + 0x54) > 0.9f || moby[0x52] != 0xFF)) {
+                        (MOBY(moby)->anim_time > 0.9f || moby[0x52] != 0xFF)) {
                         hero.run_start_blending = 0;
                     }
                     if (hero.on_slip_ground != 0 && hero.frames_off_ground.s == 0) {

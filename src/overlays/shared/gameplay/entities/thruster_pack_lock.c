@@ -1,5 +1,6 @@
 /* Shared moby classes: thruster_pack_lock. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -27,15 +28,15 @@ extern short *D_L11_001AC240[];
 void synchronize_linked_moby_heights(char *moby) __asm__("FUN_L11_0030e690");
 
 void synchronize_linked_moby_heights(char *moby) {
-    short *moby_index_cursor = D_L11_001AC240[*(unsigned char *)(moby + 0x21)];
+    short *moby_index_cursor = D_L11_001AC240[MOBY(moby)->group];
     int base = D_L11_0015FFD8;
     do {
         int i = (*moby_index_cursor & 0x7FFF) * 256;
         char *linked_moby = (char *)(i + base);
         char *destination_record;
-        *(float *)(linked_moby + 0x18) = *(float *)(moby + 0x18);
-        destination_record = D_L11_001DA880 + *(int *)(*(char **)(linked_moby + 0x78) + 4) * 0x1190;
-        *(float *)(destination_record + 8) = *(float *)(moby + 0x18);
+        MOBY(linked_moby)->pos.z = MOBY(moby)->pos.z;
+        destination_record = D_L11_001DA880 + *(int *)(((char *)MOBY(linked_moby)->pvars) + 4) * 0x1190;
+        *(float *)(destination_record + 8) = MOBY(moby)->pos.z;
     } while (*moby_index_cursor++ >= 0);
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -530,7 +531,7 @@ int draw_linked_moby_trails(struct Moby *moby) {
 void update_moby_trail_points(char *moby) __asm__("FUN_L11_00319670");
 
 void update_moby_trail_points(char *moby) {
-    char *trail_data = *(char **)(moby + 0x78);
+    char *trail_data = ((char *)MOBY(moby)->pvars);
     float first_trail_offset[4];
     float second_trail_offset[4];
     int current_frame;
@@ -578,15 +579,15 @@ extern unsigned char D_00141968[];
 void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");
 
 void update_moby_hit_stats_and_state(char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     char *info = find_moby_hit(moby, 0x330000, 0);
     struct Hero *player_hero;
     ((unsigned char *)moby)[0xA4] = 0xFF;
     player_hero = &hero;
     if (player_hero->state.current != 0x32) {
-        *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+        MOBY(moby)->flags &= 0xEFFF;
     } else {
-        *(unsigned short *)(moby + 0x34) |= 0x1000;
+        MOBY(moby)->flags |= 0x1000;
     }
     if (info != 0) {
         char *collection_stats_base = (char *)D_00141968;
@@ -624,8 +625,8 @@ void update_moby_hit_stats_and_state(char *moby) {
         struct Hero *hero_for_state_check = &hero;
         if (hero_for_state_check->state.current != 0x32) {
             moby[0x20] = 4;
-            *(int *)(moby + 0x94) = 0;
-            *(unsigned short *)(moby + 0x34) |= 1;
+            MOBY(moby)->collision = 0;
+            MOBY(moby)->flags |= 1;
         }
         if (coll_sphere(1.0f, moby + 0x10, 0, moby)) {
             moby[0x20] = 6;
@@ -684,7 +685,6 @@ void append_scaled_screen_triangle_strip(short *pts, int point_count, float x0, 
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 
 #include "rnc/gameplay/entities/moby.h"
-#define MOBY(p) ((struct Moby *)(p))
 
 void update_moby_path_transform(char *moby) __asm__("FUN_L11_0031a438");
 

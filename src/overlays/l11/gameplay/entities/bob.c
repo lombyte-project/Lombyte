@@ -62,7 +62,6 @@ enum ResortOwnerPathLeg {
     RESORT_OWNER_FINAL_PATH_LEG = 0x3
 };
 
-#define MOBY(p) ((struct Moby *)(p))
 
 
 
@@ -127,13 +126,13 @@ void update_pokitaru_paired_rotation(struct Moby *moby) {
         *(float *)(data + 4) = moby->rot.z;
         if ((moby->flags & 0x8000) == 0) {
             char *partner_moby = create_moby(0x41);
-            *(short *)(partner_moby + 0x32) = moby->draw_dist;
+            MOBY(partner_moby)->draw_dist = moby->draw_dist;
             partner_moby[0x30] = moby->update_dist;
-            *(unsigned short *)(partner_moby + 0x34) = moby->flags | 0x8000;
+            MOBY(partner_moby)->flags = moby->flags | 0x8000;
             qcopy(partner_moby + 0x10, &moby->pos);
             qcopy(partner_moby + 0x40, &moby->rot);
             *(char **)(data + 8) = partner_moby;
-            *(float *)(*(char **)(partner_moby + 0x78) + 4) = moby->rot.z;
+            *(float *)(((char *)MOBY(partner_moby)->pvars) + 4) = moby->rot.z;
         }
         break;
     case ROTATION_WAIT_FOR_TRIGGER:
@@ -472,7 +471,7 @@ extern void resolve_point_path_segment_xy_clearance(float, void *, void *, void 
 
 void apply_resort_owner_movement(void *mp) {
     unsigned char *moby = mp;
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float A[4];
     float B[4];
     qcopy(A, moby + 0x10);
@@ -1271,7 +1270,7 @@ void teleporter_update(struct Moby *moby) {
             qcopy(child_moby + 0x10, &moby->pos);
             qcopy(child_moby + 0x40, &moby->rot);
             *(float *)(slots[i] + 0x48) =
-                fast_add_rotations(*(float *)(child_moby + 0x48), (float)i * 2.0943952f);
+                fast_add_rotations(MOBY(child_moby)->rot.z, (float)i * 2.0943952f);
         }
         if (*(int *)(data + 8) >= 0 && D_0014C050_2518[*(int *)(data + 8) + current_level_index * 16] != 0xFF) {
             moby->visible = 0;
@@ -1345,7 +1344,7 @@ void teleporter_update(struct Moby *moby) {
             if (*(int *)(data + 4) != -1 &&
                 D_0014C050_2518[*(int *)(data + 0xC) + current_level_index * 16] == 0xFF)
                 destination_moby = D_L11_0015FFD8_2518 + (*(int *)(data + 4) << 8);
-            td = *(char **)(destination_moby + 0x78);
+            td = ((char *)MOBY(destination_moby)->pvars);
             qcopy(destination_position, destination_moby + 0x10);
             destination_position[2] += 0.2f;
             FUN_L00_00216f90_2518(destination_position, destination_moby + 0x40, 0, 1);
@@ -1354,7 +1353,7 @@ void teleporter_update(struct Moby *moby) {
                 FUN_L01_0027a248_2518(*(int *)(data + 0x30), *(int *)(data + 0x34));
             }
             FUN_L11_002f3040_2518(destination_moby);
-            *(unsigned char *)(destination_moby + 0x20) = 4;
+            MOBY(destination_moby)->state = 4;
             *(float *)(td + 0x3C) = 0.0f;
             *(float *)(td + 0x28) = 0.0f;
             *(float *)(td + 0x2C) = 0.0f;
@@ -1606,9 +1605,9 @@ unsigned char *spawn_ship_projectile(struct Moby *spawning_moby, char *spawn_pos
                                 float scale) {
     unsigned char *moby = create_moby(0x40A);
     if (moby != 0) {
-        char *data = *(char **)(moby + 0x78);
+        char *data = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         *(char **)(data + 0x20) = spawning_moby;
@@ -1634,8 +1633,8 @@ unsigned char *spawn_ship_projectile(struct Moby *spawning_moby, char *spawn_pos
         if (*(char **)(data + 0x24) != 0) {
             qcopy(data + 0x10, *(char **)(data + 0x24) + 0x10);
         }
-        *(float *)(moby + 0x2C) =
-            *(float *)(*(char **)(moby + 0x24) + 0x24) *
+        MOBY(moby)->scale =
+            *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
             (spawning_moby->scale / *(float *)(((char *)spawning_moby->pclass) + 0x24));
         FUN_L00_00250df8(moby);
     }
@@ -1998,7 +1997,7 @@ int is_pokitaru_boat_target_group_clear(struct Moby *moby) {
         return 1;
     do {
         char *group_moby = (char *)(((*group_entry & 0x7FFF) << 8) + D_L11_0015FFD8);
-        if (group_moby[0x20] >= 0 && *(short *)(group_moby + 0xA6) == 0x4DE) {
+        if (group_moby[0x20] >= 0 && MOBY(group_moby)->oclass == 0x4DE) {
             if (is_moby_in_bob_target_exclusion_state(group_moby) == 0)
                 return 0;
         }

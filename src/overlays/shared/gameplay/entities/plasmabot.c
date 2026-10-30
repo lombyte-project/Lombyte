@@ -1,5 +1,6 @@
 /* Shared moby classes: plasmabot, plasmabot_hatch, mine. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -38,7 +39,7 @@ extern int FUN_L00_0025ff38(char *, char *, float, int, int, int *, int);
 void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
 
 void update_plasmabot_target(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     int *target_filter_record = D_L14_001B0BB0[*(int *)(data + 0x244)];
     if (FUN_L00_0025ff38(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, target_filter_record + 4, *target_filter_record) != 2) {
         if (*(float *)(data + 0x234) < vector_distance_xy(moby + 0x10, data + 0xD0)) {
@@ -56,9 +57,9 @@ void update_plasmabot_target(char *moby) {
 void deactivate_plasmabot(char *moby) __asm__("FUN_L14_002b3318");
 
 void deactivate_plasmabot(char *moby) {
-    unsigned short *field = (unsigned short *)(moby + 0x34);
+    unsigned short *field = (unsigned short *)&MOBY(moby)->flags;
     *field = (*field | 0x41) & 0xEFFF;
-    *(int *)(moby + 0x94) = 0;
+    MOBY(moby)->collision = 0;
 }
 
 /* 0x002b3330, 36 bytes.
@@ -68,12 +69,12 @@ void deactivate_plasmabot(char *moby) {
 void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
 
 void activate_plasmabot(char *moby) {
-    unsigned short *field = (unsigned short *)(moby + 0x34);
+    unsigned short *field = (unsigned short *)&MOBY(moby)->flags;
     int linked_record_value;
     *field &= 0xFFBE;
-    linked_record_value = *(int *)(*(char **)(moby + 0x24) + 0x10);
+    linked_record_value = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
     *field |= 0x1000;
-    *(int *)(moby + 0x94) = linked_record_value;
+    MOBY(moby)->collision = linked_record_value;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B45A8), where it is exact; names translated to the US level program. */
@@ -82,7 +83,7 @@ void activate_plasmabot(char *moby) {
 void initialize_plasmabot_path_state(char *moby) __asm__("FUN_L14_002b3358");
 
 void initialize_plasmabot_path_state(char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     char *path;
     int i;
     *(int *)(moby_vars + 0x250) = 0;
@@ -107,11 +108,11 @@ void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b
 
 void scale_and_apply_plasmabot_planar_velocity(char *moby) {
     float planar_velocity_scale = (plasmabot_planar_velocity_base_scale_gp - 1.0f) * frame_scale + 1.0f;
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     *(float *)(moby_vars + 0x254) = *(float *)(moby_vars + 0x254) * planar_velocity_scale;
     *(float *)(moby_vars + 0x258) = *(float *)(moby_vars + 0x258) * planar_velocity_scale;
-    *(float *)(moby + 0x10) = *(float *)(moby + 0x10) + *(float *)(moby_vars + 0x254);
-    *(float *)(moby + 0x14) = *(float *)(moby + 0x14) + *(float *)(moby_vars + 0x258);
+    MOBY(moby)->pos.x = MOBY(moby)->pos.x + *(float *)(moby_vars + 0x254);
+    MOBY(moby)->pos.y = MOBY(moby)->pos.y + *(float *)(moby_vars + 0x258);
 }
 /* steers the pitch angle of a moby toward a target and updates the joint */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4A00), where it is exact; names translated to the US level program. */
@@ -121,9 +122,9 @@ extern void FUN_L00_001fff28(void *, int, float);
 void update_plasmabot_aim_joint_rotation(char *moby, float x) __asm__("FUN_L14_002b37b0");
 
 void update_plasmabot_aim_joint_rotation(char *moby, float x) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float target_joint_angle = -*(float *)(moby_vars + 0x268);
-    float heading_angle_delta = fast_subtract_rotations(x, *(float *)(moby + 0x48));
+    float heading_angle_delta = fast_subtract_rotations(x, MOBY(moby)->rot.z);
     target_joint_angle = fast_add_rotations(target_joint_angle, -heading_angle_delta);
     if (target_joint_angle > 1.2217304706573486f)
         target_joint_angle = 1.2217304706573486f;
@@ -151,8 +152,8 @@ void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) {
         if (listed_moby_entry_cursor != 0) {
             do {
                 char *moby = D_L14_ffd0_e_macro[2] + ((*(unsigned short *)listed_moby_entry_cursor & 0x7FFF) << 8);
-                char *data = *(char **)(moby + 0x78);
-                if (*(short *)(moby + 0xA6) == 0x1C) {
+                char *data = ((char *)MOBY(moby)->pvars);
+                if (MOBY(moby)->oclass == 0x1C) {
                     *(short *)(data + 0x260) = scale_game_frames(plasmabot_beam_cooldown_frames);
                 }
             } while (*listed_moby_entry_cursor++ >= 0);
@@ -168,7 +169,7 @@ void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) {
 void initialize_moby_path_state(char *moby) __asm__("FUN_L14_002fe900");
 
 void initialize_moby_path_state(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     char *path;
     int i;
     path = D_L14_001B0BB0[*(int *)(data + 0xD8)];
@@ -178,7 +179,7 @@ void initialize_moby_path_state(char *moby) {
     *(int *)(data + 0xD0) = 0;
     *(int *)(data + 0xD4) = 0;
     qcopy(moby + 0x10, path + 0x10);
-    *(float *)(moby + 0x48) = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
+    MOBY(moby)->rot.z = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                            *(float *)(path + 0x24) - *(float *)(path + 0x14));
     *(float *)(data + 0xF0) = *(float *)(data + 0xE4) = *(float *)(data + 0xE8) =
         *(float *)(data + 0xEC) = 0.0f;
@@ -198,7 +199,7 @@ extern float linked_moby_additional_offset_length_gp __asm__("D_L14_00161FC8") _
 void update_linked_moby_position(char *moby) __asm__("FUN_L14_002fec28");
 
 void update_linked_moby_position(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     float position_offset[4];
     if (*(char **)(data + 0xF4) != 0) {
         char *linked_position;
@@ -220,7 +221,7 @@ unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) _
 unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) {
     unsigned char *spawned_moby = create_moby(0x3A5);
     if (spawned_moby != 0) {
-        char *spawned_vars = *(char **)(spawned_moby + 0x78);
+        char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         *(unsigned char **)spawned_vars = owner;
         *(int *)(spawned_vars + 8) = 0;
         *(int *)(spawned_vars + 0xC) = 0;
@@ -229,10 +230,10 @@ unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) {
         *(float *)(spawned_vars + 0x14) = random_float_between(0.00698131695f, 0.0139626339f);
         *(float *)(spawned_vars + 0x18) = random_float_between(0.00349065848f, 0.00698131695f);
         qcopy(spawned_moby + 0x10, spawn_position);
-        *(float *)(spawned_moby + 0x48) = *(float *)(owner + 0x48);
+        MOBY(spawned_moby)->rot.z = *(float *)(owner + 0x48);
         spawned_moby[0x20] = 0;
         spawned_moby[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         update_entity(spawned_moby);
     }
@@ -328,28 +329,28 @@ void update_plasmabot(char *moby) {
     LineInfo info;
     int status;
 
-    data = *(char **)(moby + 0x78);
+    data = ((char *)MOBY(moby)->pvars);
     owner = 0;
     FUN_L00_00263ac8(2.5f, moby, 2, data + 0x120);
     if (*(int *)(data + 0x288) != 0) {
         if (((unsigned char *)D_001413F4)[0] != 2) {
-            *(unsigned short *)(moby + 0x34) |= 0x41;
-            *(int *)(moby + 0x94) = 0;
+            MOBY(moby)->flags |= 0x41;
+            MOBY(moby)->collision = 0;
             if (((unsigned char *)moby)[0x53] == 5) {
                 release_beam_slot_by_id(moby);
                 FUN_L00_00257470(moby, 0, -1);
                 { call_D678(moby); return; }
             }
             ((unsigned char *)moby)[0x30] = 0xFF;
-            *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+            MOBY(moby)->flags &= 0xEFFF;
             return;
         }
-        *(unsigned short *)(moby + 0x34) &= 0xFFBE;
+        MOBY(moby)->flags &= 0xFFBE;
         if (((unsigned char *)moby)[0x20] != 0xB) {
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
         }
         ((unsigned char *)moby)[0x30] = 0x40;
-        *(unsigned short *)(moby + 0x34) |= 0x1000;
+        MOBY(moby)->flags |= 0x1000;
     }
     if (((unsigned char *)moby)[0x20] != 0) {
         process_plasmabot_hit_reaction(moby);
@@ -359,37 +360,37 @@ void update_plasmabot(char *moby) {
     }
     if (D_L14_0015F5C4 == 2) {
         ((unsigned char *)moby)[0x31] = 0;
-        *(unsigned short *)(moby + 0x34) |= 1;
+        MOBY(moby)->flags |= 1;
     } else if (((unsigned char *)moby)[0x20] != 1) {
         ((unsigned char *)moby)[0x31] = 1;
-        *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+        MOBY(moby)->flags &= 0xFFFE;
     }
     switch (((unsigned char *)moby)[0x20]) {
     case PLASMABOT_INITIALIZE: {
         if (((unsigned char *)data)[0x24A] != 0) {
             if (*(int *)(data + 0x240) == -1) {
-                DebugPrint(plasmabot_missing_intro_path_format, *(short *)(moby + 0xB2));
+                DebugPrint(plasmabot_missing_intro_path_format, ((short)MOBY(moby)->save_id));
                 { call_D678(moby); return; }
             }
             if (*D_L14_001B0BB0[*(int *)(data + 0x240)] == 0) {
-                DebugPrint(plasmabot_empty_intro_path_format, *(short *)(moby + 0xB2));
+                DebugPrint(plasmabot_empty_intro_path_format, ((short)MOBY(moby)->save_id));
                 { call_D678(moby); return; }
             }
         }
         if (*(int *)(data + 0x244) == -1) {
-            DebugPrint(plasmabot_missing_bound_path_format, *(short *)(moby + 0xB2));
+            DebugPrint(plasmabot_missing_bound_path_format, ((short)MOBY(moby)->save_id));
             { call_D678(moby); return; }
         }
         if (*D_L14_001B0BB0[*(int *)(data + 0x244)] == 0) {
-            DebugPrint(plasmabot_empty_bound_path_format, *(short *)(moby + 0xB2));
+            DebugPrint(plasmabot_empty_bound_path_format, ((short)MOBY(moby)->save_id));
             { call_D678(moby); return; }
         }
         if (((unsigned char *)data)[0x24A] != 0 && *(int *)(data + 0x264) < 0) {
-            DebugPrint(plasmabot_missing_hatch_index_format, *(short *)(moby + 0xB2));
+            DebugPrint(plasmabot_missing_hatch_index_format, ((short)MOBY(moby)->save_id));
             { call_D678(moby); return; }
         }
         if (random_integer_below(2) != 0) {
-            *(unsigned short *)(moby + 0x34) |= 0x8000;
+            MOBY(moby)->flags |= 0x8000;
         }
         initialize_plasmabot_path_state(moby);
         if (*(int *)(data + 0x240) != -1) {
@@ -423,7 +424,7 @@ void update_plasmabot(char *moby) {
             ((unsigned char *)moby)[0x20] = 1;
             return;
         }
-        *(float *)(moby + 0x18) = probe_ground_height(0.5f, moby + 0x10, 0);
+        MOBY(moby)->pos.z = probe_ground_height(0.5f, moby + 0x10, 0);
         if (*(int *)(data + 0x240) == -1) {
             ((unsigned char *)moby)[0x20] = 4;
         } else {
@@ -442,7 +443,7 @@ void update_plasmabot(char *moby) {
         ((unsigned char *)moby)[0x20] = 2;
         set_moby_animation(moby, 1, 0);
         path = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
-        *(float *)(moby + 0x48) = fast_arc_tan(path[8] - path[4], path[9] - path[5]);
+        MOBY(moby)->rot.z = fast_arc_tan(path[8] - path[4], path[9] - path[5]);
         *(int *)(data + 0x268) = 0;
         *(float *)(data + 0x27C) = 1.0f;
         *(int *)(data + 0x26C) = 0;
@@ -462,17 +463,17 @@ void update_plasmabot(char *moby) {
         if ((moby[0x70] & 2) && ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
             ((unsigned char *)moby)[0x20] = 3;
             blend_moby_animation(moby, 3, 0, scale_game_frames(10));
-            *(float *)(moby + 0x58) = 1.0f;
+            MOBY(moby)->anim_speed = 1.0f;
         }
         break;
     case PLASMABOT_RETURN_TO_PATH_START: {
         float *path = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
-        vendor_spring((float *)(moby + 0x10), (float *)(data + 0x254), path[4], 0.01f, 0.2f, 0.0f);
-        vendor_spring((float *)(moby + 0x14), (float *)(data + 0x258), path[5], 0.01f, 0.2f, 0.0f);
+        vendor_spring((float *)&MOBY(moby)->pos, (float *)(data + 0x254), path[4], 0.01f, 0.2f, 0.0f);
+        vendor_spring((float *)&MOBY(moby)->pos.y, (float *)(data + 0x258), path[5], 0.01f, 0.2f, 0.0f);
         if ((moby[0x70] & 2) && ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
             ((unsigned char *)moby)[0x20] = 1;
-            *(float *)(moby + 0x58) = 1.0f;
+            MOBY(moby)->anim_speed = 1.0f;
             deactivate_plasmabot(moby);
             return;
         }
@@ -481,15 +482,15 @@ void update_plasmabot(char *moby) {
     case PLASMABOT_FACE_TARGET_AND_WAIT: {
         float ang;
         float k;
-        ang = fast_arc_tan(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
-                                *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
+        ang = fast_arc_tan(*(float *)(owner + 0x10) - MOBY(moby)->pos.x,
+                                *(float *)(owner + 0x14) - MOBY(moby)->pos.y);
         k = frame_time_sq * 12.566371f;
-        call_CE58((float *)(moby + 0x48), ang, (float *)(data + 0x23C), k, k, frame_time * 6.2831855f);
+        call_CE58((float *)&MOBY(moby)->rot.z, ang, (float *)(data + 0x23C), k, k, frame_time * 6.2831855f);
         if (*(int *)(data + 0x114) == 2) break;
         if (fast_dec_timer_s16(data + 0x248) == 0) break;
         ((unsigned char *)moby)[0x20] = 3;
         blend_moby_animation(moby, 3, 0, scale_game_frames(10));
-        *(float *)(moby + 0x58) = 1.0f;
+        MOBY(moby)->anim_speed = 1.0f;
         *(int *)(data + 0x250) = 0;
         *(float *)(data + 0x27C) = 1.0f;
         *(int *)(data + 0x24C) = 0;
@@ -523,11 +524,11 @@ void update_plasmabot(char *moby) {
         float k;
         float aim;
         scale_and_apply_plasmabot_planar_velocity(moby);
-        ang = fast_arc_tan(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
-                                *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
+        ang = fast_arc_tan(*(float *)(owner + 0x10) - MOBY(moby)->pos.x,
+                                *(float *)(owner + 0x14) - MOBY(moby)->pos.y);
         k = frame_time_sq * 12.566371f;
-        call_CE58((float *)(moby + 0x48), ang, (float *)(data + 0x23C), k, k, frame_time * 6.2831855f);
-        aim = update_plasmabot_aim_quaternion(moby, 0, *(float *)(moby + 0x48));
+        call_CE58((float *)&MOBY(moby)->rot.z, ang, (float *)(data + 0x23C), k, k, frame_time * 6.2831855f);
+        aim = update_plasmabot_aim_quaternion(moby, 0, MOBY(moby)->rot.z);
         update_plasmabot_aim_joint_rotation(moby, ang);
         if (*(int *)(data + 0x114) == 2) {
             if (*(int *)(data + 0x240) == -1) break;
@@ -551,7 +552,7 @@ void update_plasmabot(char *moby) {
         if (count_listed_plasmabots_preparing_or_sweeping_beam(((unsigned char *)moby)[0x21]) >= 2) break;
         if (register_beam_slot(moby, 1, 0) == 0) break;
         if (random_integer_below(4) != 0) break;
-        if (!(fast_difference_between_rotations(*(float *)(moby + 0x48), ang) < 0.017453292f)) break;
+        if (!(fast_difference_between_rotations(MOBY(moby)->rot.z, ang) < 0.017453292f)) break;
         if (!(aim < 0.017453292f)) break;
         if (test_path_segment_strict_crossing(*(int *)(data + 0x244), moby + 0x10, owner + 0x10) != 0) break;
         reset_listed_plasmabot_beam_cooldowns(((unsigned char *)moby)[0x21]);
@@ -563,8 +564,8 @@ void update_plasmabot(char *moby) {
     }
     case PLASMABOT_WAIT_ANIMATION_BEFORE_AIM_SWEEP: {
         float ang;
-        ang = fast_arc_tan(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
-                                *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
+        ang = fast_arc_tan(*(float *)(owner + 0x10) - MOBY(moby)->pos.x,
+                                *(float *)(owner + 0x14) - MOBY(moby)->pos.y);
         update_plasmabot_aim_quaternion(moby, 0, fast_subtract_rotations(ang, l14_plasmabot_aim_sweep_half_angle));
         update_plasmabot_aim_joint_rotation(moby, ang);
         if ((moby[0x70] & 2) && ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
@@ -580,14 +581,14 @@ void update_plasmabot(char *moby) {
         float sweep;
         float angle;
         flag = 0;
-        ang = fast_arc_tan(*(float *)(owner + 0x10) - *(float *)(moby + 0x10),
-                                *(float *)(owner + 0x14) - *(float *)(moby + 0x14));
+        ang = fast_arc_tan(*(float *)(owner + 0x10) - MOBY(moby)->pos.x,
+                                *(float *)(owner + 0x14) - MOBY(moby)->pos.y);
         progress = convert_integer_to_float(*(short *)(data + 0x262));
         progress = progress / convert_integer_to_float(scale_game_frames(l14_plasmabot_aim_sweep_duration_frames));
         sweep = l14_plasmabot_aim_sweep_half_angle;
         angle = fast_subtract_rotations(*(float *)(data + 0x278), -sweep + (sweep + sweep) * progress);
         if (((unsigned char *)data)[0x24B] != 0) {
-            if (*(float *)(owner + 0x18) + 0.1f - *(float *)(moby + 0x18) < 0.0f) {
+            if (*(float *)(owner + 0x18) + 0.1f - MOBY(moby)->pos.z < 0.0f) {
                 flag = 1;
             }
         }
@@ -606,12 +607,12 @@ void update_plasmabot(char *moby) {
         info.flags = 0x10001;
         info.count = 1;
         info.strength = 1.0f;
-        info.x = fast_cos(*(float *)(moby + 0x48));
-        info.y = fast_sin(*(float *)(moby + 0x48));
+        info.x = fast_cos(MOBY(moby)->rot.z);
+        info.y = fast_sin(MOBY(moby)->rot.z);
         info.scale = 1.0f;
         info.distance = 5627.9248f;
         info.enabled = 1;
-        info.oclass = *(unsigned short *)(moby + 0xA6);
+        info.oclass = ((unsigned short)MOBY(moby)->oclass);
         info.mode = 0;
         if (collision_line(bone_transform_scratch[3], end, 0, moby, &info) != 0) {
             qcopy(end, D_L14_00174560);
@@ -669,8 +670,8 @@ void update_plasmabot(char *moby) {
     }
     state = ((unsigned char *)moby)[0x20];
     if (!(state >= 4 && state <= 7) && state != 1) {
-        update_plasmabot_aim_quaternion(moby, 0, *(float *)(moby + 0x48));
-        update_plasmabot_aim_joint_rotation(moby, *(float *)(moby + 0x48));
+        update_plasmabot_aim_quaternion(moby, 0, MOBY(moby)->rot.z);
+        update_plasmabot_aim_joint_rotation(moby, MOBY(moby)->rot.z);
     }
     FUN_L14_002b2600_c((struct Moby *)moby);
 }
@@ -1058,20 +1059,20 @@ int follow_plasmabot_path(char *moby) {
     float path_target_position[4];
     float pre_spring_position[4];
     float target_offset[4];
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     int reached = sample_path(D_L14_001B0BB0[*(int *)(data + 0x240)], path_target_position, data + 0x24C, data + 0x250, 0,
                               plasmabot_path_traversal_speed_gp * frame_time * *(float *)(data + 0x27C));
     float path_target_heading;
     float k;
     float turn_step_limit;
     qcopy(pre_spring_position, moby + 0x10);
-    vendor_spring((float *)(moby + 0x10), (float *)(data + 0x254), path_target_position[0], 0.01f, 0.2f, 0.0f);
-    vendor_spring((float *)(moby + 0x14), (float *)(data + 0x258), path_target_position[1], 0.01f, 0.2f, 0.0f);
+    vendor_spring((float *)&MOBY(moby)->pos, (float *)(data + 0x254), path_target_position[0], 0.01f, 0.2f, 0.0f);
+    vendor_spring((float *)&MOBY(moby)->pos.y, (float *)(data + 0x258), path_target_position[1], 0.01f, 0.2f, 0.0f);
     fast_vec_sub(target_offset, path_target_position, pre_spring_position);
     path_target_heading = fast_arc_tan(target_offset[0], target_offset[1]);
     k = frame_time_sq * 12.566371f;
     turn_step_limit = frame_time * 6.2831855f;
-    func_L00_0025CE58_2B4668((float *)(moby + 0x48), path_target_heading, (float *)(data + 0x23C), k, k, turn_step_limit);
+    func_L00_0025CE58_2B4668((float *)&MOBY(moby)->rot.z, path_target_heading, (float *)(data + 0x23C), k, k, turn_step_limit);
     return reached != 0;
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4828), where it is exact; names translated to the US level program. */
@@ -1081,9 +1082,9 @@ extern float func_L00_0025CE58_2B4828(float *, float, float *, float, float, flo
 /* Eases the moby's yaw offset toward target_angle (clamped to about 70 degrees); with `flag` also eases the pitch toward its owner.
    Returns the remaining difference between the target and the current yaw offset. */
 float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) {
-    char *state = *(char **)(moby + 0x78);
+    char *state = ((char *)MOBY(moby)->pvars);
     char *owner = *(char **)(state + 0x110);
-    float turn = fast_subtract_rotations(target_angle, *(float *)(moby + 0x48));
+    float turn = fast_subtract_rotations(target_angle, MOBY(moby)->rot.z);
     if (turn > 1.2217304706573486f) turn = 1.2217304706573486f;
     else if (turn < -1.2217304706573486f) turn = -1.2217304706573486f;
     {
@@ -1147,7 +1148,7 @@ int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_mo
         return 1;
     do {
         char *moby = D_L14_0015FFD8 + ((*moby_list_entry & 0x7FFF) << 8);
-        if (*(short *)(moby + 0xA6) == 0x1C && *(unsigned char *)(moby + 0x20) == 2)
+        if (MOBY(moby)->oclass == 0x1C && MOBY(moby)->state == 2)
             return 0;
     } while ((short)*moby_list_entry++ >= 0);
     return 1;
@@ -1428,13 +1429,13 @@ unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
     char *hero_launch_reference;
     float launch_vector_scratch[8];
     if (spawned_moby != 0) {
-        spawned_vars = *(char **)(spawned_moby + 0x78);
+        spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         *(char **)(spawned_vars + 0x24) = owner;
         qcopy(spawned_moby + 0x10, pos);
-        *(float *)(spawned_moby + 0x48) = *(float *)(owner + 0x48);
+        MOBY(spawned_moby)->rot.z = *(float *)(owner + 0x48);
         spawned_moby[0x20] = 0;
         spawned_moby[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         hero_launch_reference = (char *)&hero.motion.pos;
         fast_vec_sub(launch_vector_scratch, spawned_moby + 0x10, hero_launch_reference);
@@ -1560,14 +1561,14 @@ unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mod
     unsigned char *spawned_moby = create_moby(0x193);
     unsigned char *pos;
     if (spawned_moby != 0) {
-        char *spawned_vars = *(char **)(spawned_moby + 0x78);
+        char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         float launch_vector_scratch[8];
         pos = spawned_moby + 0x10;
         qcopy(pos, owner + 0x10);
-        *(float *)(spawned_moby + 0x48) = *(float *)(owner + 0x48);
+        MOBY(spawned_moby)->rot.z = *(float *)(owner + 0x48);
         spawned_moby[0x20] = mode;
         spawned_moby[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         *(char **)spawned_vars = owner;
         if (spawned_moby[0x20] == 0) {

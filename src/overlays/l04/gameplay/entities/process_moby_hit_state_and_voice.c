@@ -60,12 +60,12 @@ void *spawn_class_23a_moby(char *source_moby, char *spawn_position) {
     *(OvlQuad *)saved_position = *(OvlQuad *)spawn_position;
     created_moby = (char *)create_moby(0x23a);
     if (created_moby != 0) {
-        *(unsigned char *)(created_moby + 0x30) = 0xFF;
-        *(unsigned short *)(created_moby + 0x32) = *(unsigned short *)(source_moby + 0x32);
+        MOBY(created_moby)->update_dist = 0xFF;
+        MOBY(created_moby)->draw_dist = ((unsigned short)MOBY(source_moby)->draw_dist);
         created_moby[0x31] = 1;
         *(int *)(created_moby + 0x40) = 0;
         *(int *)(created_moby + 0x44) = 0;
-        *(float *)(created_moby + 0x48) = *(float *)(source_moby + 0x48);
+        MOBY(created_moby)->rot.z = MOBY(source_moby)->rot.z;
         *(unsigned long *)(created_moby + 0x38) = *(unsigned long *)(source_moby + 0x38);
         qcopy(created_moby + 0x10, saved_position_ptr);
         update_entity(created_moby);

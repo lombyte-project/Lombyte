@@ -64,6 +64,7 @@ extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 #include "rnc/overlay/path.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
@@ -603,7 +604,7 @@ void process_hero_state_transitions(void) {
                 case HERO_STATE_SHALLOW_WATER_RUN:
                 case 126:
                     if (hero.run_start_blending != 0 &&
-                        (*(float *)(moby + 0x54) > 0.9f || moby[0x52] != 0xFF)) {
+                        (MOBY(moby)->anim_time > 0.9f || moby[0x52] != 0xFF)) {
                         hero.run_start_blending = 0;
                     }
                     if (hero.on_slip_ground != 0 && hero.frames_off_ground.s == 0) {

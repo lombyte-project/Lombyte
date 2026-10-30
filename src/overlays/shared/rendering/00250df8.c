@@ -9,6 +9,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250df8.s", FUN_L00_00250df8);
 INCLUDE_ASM("config/us/overlays/asm/FUN_L00_00250e30.s", FUN_L00_00250e30);
@@ -104,25 +105,25 @@ void FUN_L00_00257470(unsigned char *moby, int flags, int trajectory_target_inde
     int cnt;
     unsigned char *g;
 
-    amt = *(short *)(moby + 0xB4);
-    debug_print(D_L00_001E8F00, *(short *)(moby + 0xA6), *(short *)(moby + 0xB2),
-                        *(short *)(moby + 0xB4), *(short *)(moby + 0xB6));
+    amt = MOBY(moby)->unkB4;
+    debug_print(D_L00_001E8F00, MOBY(moby)->oclass, ((short)MOBY(moby)->save_id),
+                        MOBY(moby)->unkB4, *(short *)(moby + 0xB6));
     if (moby[0xB1] == 0xFE) {
         return;
     }
-    if (*(short *)(moby + 0xB2) < 0) {
+    if (((short)MOBY(moby)->save_id) < 0) {
         return;
     }
     lvl = current_level_index;
-    level_moby_killed[lvl][*(short *)(moby + 0xB2) >> 5] |= 1
-                                                         << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-    D_L00_001BA4D0_lui[*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-    D_L00_001BA5D0_lui.a[*(short *)(moby + 0xB2)] = moby[0xB0] + 2;
+    level_moby_killed[lvl][((short)MOBY(moby)->save_id) >> 5] |= 1
+                                                         << (MOBY(moby)->save_id & 0x1F);
+    D_L00_001BA4D0_lui[((short)MOBY(moby)->save_id) >> 5] |= 1 << (MOBY(moby)->save_id & 0x1F);
+    D_L00_001BA5D0_lui.a[((short)MOBY(moby)->save_id)] = moby[0xB0] + 2;
     k = moby[0xB0];
     {
         unsigned int moby_lookup_index = k & 0xFF;
         if (k == 0xFF || (D_L00_0015FC88_257470[moby_lookup_index] != 0xFF && D_0014C050_257470[lvl][moby_lookup_index] == 0xFF)) {
-            D_L00_001BB230_lui.a[*(short *)(moby + 0xB2)] = k + 2;
+            D_L00_001BB230_lui.a[((short)MOBY(moby)->save_id)] = k + 2;
         }
     }
     if ((signed char)moby[0xB1] >= 0) {

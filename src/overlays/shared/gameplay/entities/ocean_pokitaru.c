@@ -1,5 +1,6 @@
 /* Shared moby classes: rocket, ocean_pokitaru. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -55,8 +56,8 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
     char *candidate_moby = target_search_moby_list_head;
     float bestd = 10.0f;
     while (candidate_moby != 0) {
-        if ((*(unsigned short *)(candidate_moby + 0x34) & 0x1000) && candidate_moby != 0 && *(char **)(candidate_moby + 0x24) != 0 &&
-            *(short *)(*(char **)(candidate_moby + 0x24) + 0x46) == 5) {
+        if ((MOBY(candidate_moby)->flags & 0x1000) && candidate_moby != 0 && ((char *)MOBY(candidate_moby)->pclass) != 0 &&
+            *(short *)(((char *)MOBY(candidate_moby)->pclass) + 0x46) == 5) {
             float distance_xy;
             candidate_position = candidate_moby + 0x10;
             distance_xy = vector_distance_xy(targeting_origin, candidate_position);
@@ -82,7 +83,7 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
                 }
             }
         }
-        candidate_moby = *(char **)(candidate_moby + 0x28);
+        candidate_moby = ((char *)MOBY(candidate_moby)->next);
     }
     return best;
 }
@@ -99,16 +100,16 @@ unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float 
 unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float *spawn_position, float travel_distance, float step_length) {
     unsigned char *spawned_moby = create_moby(0x3F1);
     if (spawned_moby) {
-        char *moby_vars = *(char **)(spawned_moby + 0x78);
+        char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         float direction_length_xy;
         *(char **)(moby_vars + 0x1C) = owner;
         spawned_moby[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = truncate_float_to_s32(travel_distance);
+        MOBY(spawned_moby)->draw_dist = truncate_float_to_s32(travel_distance);
         *(int *)(spawned_moby + 0x40) = 0;
         spawned_moby[0x31] = 1;
         direction_length_xy = vector_length_xy(launch_direction);
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(direction_length_xy, launch_direction[2]);
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(launch_direction[0], launch_direction[1]);
+        MOBY(spawned_moby)->rot.y = -fast_arc_tan(direction_length_xy, launch_direction[2]);
+        MOBY(spawned_moby)->rot.z = fast_arc_tan(launch_direction[0], launch_direction[1]);
         *(float *)(moby_vars + 0x10) = 1.0f;
         if (step_length > 0.0f) {
             fast_vec_normalize(moby_vars, launch_direction, step_length);
@@ -118,9 +119,9 @@ unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float 
         }
         qcopy(spawned_moby + 0x10, spawn_position);
         *(int *)(moby_vars + 0x18) = *(int *)(moby_vars + 0x14) = truncate_float_to_s32(travel_distance / step_length);
-        *(short *)(spawned_moby + 0x34) = 0x200;
-        *(float *)(spawned_moby + 0x2C) =
-            *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) *
+        MOBY(spawned_moby)->flags = 0x200;
+        MOBY(spawned_moby)->scale =
+            *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) *
             (*(float *)(owner + 0x2C) / *(float *)(*(char **)(owner + 0x24) + 0x24));
         spawned_moby[0x23] = truncate_float_to_s32(*(float *)(moby_vars + 0x10) * 24.0f);
         set_moby_color(spawned_moby, 0xFF, 0xFF, 0xFF);
@@ -257,16 +258,16 @@ char *spawn_class_3f9_moby(int owner, float *launch_direction, float *spawn_posi
 char *spawn_class_3f9_moby(int owner, float *launch_direction, float *spawn_position, float size, float step_length, float z) {
     char *spawned_moby = create_moby(0x3F9);
     if (spawned_moby != 0) {
-        char *moby_vars = *(char **)(spawned_moby + 0x78);
+        char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         int size_length_ratio;
-        *(int *)(spawned_moby + 0x94) = 0;
+        MOBY(spawned_moby)->collision = 0;
         *(int *)(moby_vars + 0x1C) = owner;
-        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
-        *(short *)(spawned_moby + 0x32) = truncate_float_to_s32(size);
+        MOBY(spawned_moby)->update_dist = 0xFF;
+        MOBY(spawned_moby)->draw_dist = truncate_float_to_s32(size);
         *(int *)(spawned_moby + 0x40) = 0;
         spawned_moby[0x31] = 1;
-        *(float *)(spawned_moby + 0x44) = -fast_arc_tan(vector_length_xy(launch_direction), launch_direction[2]);
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(launch_direction[0], launch_direction[1]);
+        MOBY(spawned_moby)->rot.y = -fast_arc_tan(vector_length_xy(launch_direction), launch_direction[2]);
+        MOBY(spawned_moby)->rot.z = fast_arc_tan(launch_direction[0], launch_direction[1]);
         *(float *)(moby_vars + 0x10) = 1.0f;
         if (step_length > 0.0f) {
             fast_vec_normalize(moby_vars, launch_direction, step_length);
@@ -279,7 +280,7 @@ char *spawn_class_3f9_moby(int owner, float *launch_direction, float *spawn_posi
         *(int *)(moby_vars + 0x14) = size_length_ratio;
         *(float *)(moby_vars + 0x20) = z;
         *(int *)(moby_vars + 0x18) = size_length_ratio - 13;
-        *(short *)(spawned_moby + 0x34) = 0x200;
+        MOBY(spawned_moby)->flags = 0x200;
         update_entity(spawned_moby);
     }
     return spawned_moby;
@@ -312,7 +313,7 @@ void update_projectile_with_trail(char *moby) {
     char *moby_position;
     int trail_color;
     if (moby == 0) return;
-    data = *(char **)(moby + 0x78);
+    data = ((char *)MOBY(moby)->pvars);
     if (data == 0) return;
     moby_position = moby + 0x10;
     qcopy(old, moby_position);

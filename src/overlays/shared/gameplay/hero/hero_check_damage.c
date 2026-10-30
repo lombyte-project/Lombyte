@@ -1,5 +1,6 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/hero_state.h"
 #include "rnc/gameplay/hero.h"
@@ -535,17 +536,17 @@ float score_hero_target_candidate(char *target_moby, float yaw, float range, flo
     target_distance = fast_vec_dist(target_scoring_origin, target_moby + 0x10);
     if (range < target_distance)
         *out = 1;
-    hero_yaw_error = fast_difference_between_rotations(fast_arc_tan(*(float *)(target_moby + 0x10) - target_scoring_origin[0], *(float *)(target_moby + 0x14) - target_scoring_origin[1]), yaw);
+    hero_yaw_error = fast_difference_between_rotations(fast_arc_tan(MOBY(target_moby)->pos.x - target_scoring_origin[0], MOBY(target_moby)->pos.y - target_scoring_origin[1]), yaw);
     angular_penalty = hero_yaw_error;
     angular_limit_error = hero_yaw_error;
-    elevation_angle_error = fast_difference_between_rotations(fast_arc_tan(vector_distance_xy(target_scoring_origin, target_moby + 0x10), *(float *)(target_moby + 0x18) - target_scoring_origin[2]), 0.0f);
+    elevation_angle_error = fast_difference_between_rotations(fast_arc_tan(vector_distance_xy(target_scoring_origin, target_moby + 0x10), MOBY(target_moby)->pos.z - target_scoring_origin[2]), 0.0f);
     if (hero_state->state.current == 1 || hero_state->state.current == 0x1E) {
         C_20d6b0 *camera = &player_camera;
         float b = fast_difference_between_rotations(
-            fast_arc_tan(*(float *)(target_moby + 0x10) - camera->v140[0], *(float *)(target_moby + 0x14) - camera->v140[1]),
+            fast_arc_tan(MOBY(target_moby)->pos.x - camera->v140[0], MOBY(target_moby)->pos.y - camera->v140[1]),
             camera->f158);
         elevation_angle_error = fast_difference_between_rotations(
-            fast_arc_tan(vector_distance_xy(camera->v140, target_moby + 0x10), *(float *)(target_moby + 0x18) - camera->v140[2]),
+            fast_arc_tan(vector_distance_xy(camera->v140, target_moby + 0x10), MOBY(target_moby)->pos.z - camera->v140[2]),
             -camera->f154);
         angular_limit_error = elevation_angle_error;
         angular_penalty = b + elevation_angle_error;
@@ -573,7 +574,7 @@ char *find_best_hero_heading_target(float range_limit, float reference_yaw, floa
     char *candidate_moby;
     while ((candidate_moby = active_mobies[i]) != 0) {
         float *candidate_eligibility_value = suck_get_aim_height(candidate_moby);
-        if (candidate_eligibility_value != 0 && *candidate_eligibility_value != 0.0f && (*(unsigned short *)(candidate_moby + 0x34) & 0x1000)) {
+        if (candidate_eligibility_value != 0 && *candidate_eligibility_value != 0.0f && (MOBY(candidate_moby)->flags & 0x1000)) {
             int out;
             float candidate_score = score_hero_target_candidate(candidate_moby, reference_yaw, range_limit, angular_error_limit, elevation_angle_limit, &out);
             if (out == 0 && candidate_score < bd) {
@@ -1534,7 +1535,7 @@ void update_hero_item_mobys(void)
                 moby = *((u8 **) (slot + 0x1094));
             if (moby != 0)
             {
-                *((u64 *) (moby + 0x38)) = *((u64 *) (((u8 *) hero.moby) + 0x38));
+                *((u64 *)&MOBY(moby)->spawn_frame) = *((u64 *) (((u8 *) hero.moby) + 0x38));
                 item_id = *((s32 *) (slot + 0x10b8));
                 joint = D_L00_00179AC0_c[item_id].joint;
                 if ((i == 1) && (j == 1))
@@ -1547,7 +1548,7 @@ void update_hero_item_mobys(void)
                     matrix_to_euler(hero_joint_world_matrices + (joint * 0x40), slot_vec);
                     advance_moby_animation(moby);
                     update_entity(moby);
-                    *((u16 *) (moby + 0x34)) &= 0xfffb;
+                    *((u16 *)&MOBY(moby)->flags) &= 0xfffb;
                 }
                 else
                 {
@@ -1567,28 +1568,28 @@ void update_hero_item_mobys(void)
                         scratch.direction[1] = 0.0f;
                         scratch.direction[2] = 0.0f;
                         transform_vector_by_basis(scratch.direction, scratch.direction, moby + 0xc0);
-                        *((f32 *) (moby + 0x44)) = -fast_arc_tan(vector_length_xy(scratch.direction), scratch.direction[2]);
-                        *((f32 *) (moby + 0x48)) = fast_arc_tan(scratch.direction[0], scratch.direction[1]);
+                        *((f32 *)&MOBY(moby)->rot.y) = -fast_arc_tan(vector_length_xy(scratch.direction), scratch.direction[2]);
+                        *((f32 *)&MOBY(moby)->rot.z) = fast_arc_tan(scratch.direction[0], scratch.direction[1]);
                         refresh_moby_spatial_bounds_from_basis(moby);
-                        *((u16 *) (moby + 0x34)) |= 6;
+                        *((u16 *)&MOBY(moby)->flags) |= 6;
                         if (first != 0)
                         {
-                            pack_pose(l00_hero_item_10_17_20_25_joint_selection, l00_hero_item_10_17_20_25_packed_pose, *((s32 *) (moby + 0x24)), 0, 0);
-                            *((s32 *) (moby + 0x54)) = 0;
-                            *((s32 *) (moby + 0x50)) = 0;
-                            *((void **) (moby + 0x68)) = l00_hero_item_10_17_20_25_packed_pose;
-                            *((void **) (moby + 0x6c)) = l00_hero_item_10_17_20_25_packed_pose;
+                            pack_pose(l00_hero_item_10_17_20_25_joint_selection, l00_hero_item_10_17_20_25_packed_pose, *((s32 *)&MOBY(moby)->pclass), 0, 0);
+                            *((s32 *)&MOBY(moby)->anim_time) = 0;
+                            *((s32 *)&MOBY(moby)->frame) = 0;
+                            *((void * *)&MOBY(moby)->cur_frame_data) = l00_hero_item_10_17_20_25_packed_pose;
+                            *((void * *)&MOBY(moby)->prev_frame_data) = l00_hero_item_10_17_20_25_packed_pose;
                         }
                         else if (second != 0)
                         {
-                            if ((*((s16 *) (moby + 0xa6))) == 0x1b1)
-                                pack_pose(D_L00_0017A608, D_L00_0017C680, *((s32 *) (moby + 0x24)), 6, 0);
+                            if ((*((s16 *)&MOBY(moby)->oclass)) == 0x1b1)
+                                pack_pose(D_L00_0017A608, D_L00_0017C680, *((s32 *)&MOBY(moby)->pclass), 6, 0);
                             else
-                                pack_pose(D_L00_0015F6A8, D_L00_0017C680, *((s32 *) (moby + 0x24)), 0, 0);
-                            *((s32 *) (moby + 0x54)) = 0;
-                            *((void **) (moby + 0x68)) = D_L00_0017C680;
-                            *((void **) (moby + 0x6c)) = D_L00_0017C680;
-                            *((s32 *) (moby + 0x50)) = 0;
+                                pack_pose(D_L00_0015F6A8, D_L00_0017C680, *((s32 *)&MOBY(moby)->pclass), 0, 0);
+                            *((s32 *)&MOBY(moby)->anim_time) = 0;
+                            *((void * *)&MOBY(moby)->cur_frame_data) = D_L00_0017C680;
+                            *((void * *)&MOBY(moby)->prev_frame_data) = D_L00_0017C680;
+                            *((s32 *)&MOBY(moby)->frame) = 0;
                         }
                         else if (third != 0)
                         {
@@ -1602,18 +1603,18 @@ void update_hero_item_mobys(void)
                             hero_eases[5].scale3.f[2] = 1.0f;
                             if (j == 0)
                             {
-                                pack_pose(l00_hero_item_28_29_primary_joint_selection, l00_hero_item_28_29_primary_packed_pose, *((s32 *) (moby + 0x24)), 0, 0);
-                                *((void **) (moby + 0x68)) = l00_hero_item_28_29_primary_packed_pose;
-                                *((void **) (moby + 0x6c)) = l00_hero_item_28_29_primary_packed_pose;
+                                pack_pose(l00_hero_item_28_29_primary_joint_selection, l00_hero_item_28_29_primary_packed_pose, *((s32 *)&MOBY(moby)->pclass), 0, 0);
+                                *((void * *)&MOBY(moby)->cur_frame_data) = l00_hero_item_28_29_primary_packed_pose;
+                                *((void * *)&MOBY(moby)->prev_frame_data) = l00_hero_item_28_29_primary_packed_pose;
                             }
                             else
                             {
-                                pack_pose(l00_hero_item_28_29_secondary_joint_selection, l00_hero_item_28_29_secondary_packed_pose, *((s32 *) (moby + 0x24)), 0, 0);
-                                *((void **) (moby + 0x68)) = l00_hero_item_28_29_secondary_packed_pose;
-                                *((void **) (moby + 0x6c)) = l00_hero_item_28_29_secondary_packed_pose;
+                                pack_pose(l00_hero_item_28_29_secondary_joint_selection, l00_hero_item_28_29_secondary_packed_pose, *((s32 *)&MOBY(moby)->pclass), 0, 0);
+                                *((void * *)&MOBY(moby)->cur_frame_data) = l00_hero_item_28_29_secondary_packed_pose;
+                                *((void * *)&MOBY(moby)->prev_frame_data) = l00_hero_item_28_29_secondary_packed_pose;
                             }
-                            *((s32 *) (moby + 0x54)) = 0;
-                            *((s32 *) (moby + 0x50)) = 0;
+                            *((s32 *)&MOBY(moby)->anim_time) = 0;
+                            *((s32 *)&MOBY(moby)->frame) = 0;
                             *((u128 *) l00_hero_item_pair_scale_state) = scratch.saved[0];
                             *((u128 *) (l00_hero_item_pair_scale_state + 0xb0)) = scratch.saved[1];
                         }
@@ -1629,7 +1630,7 @@ void update_hero_item_mobys(void)
                         if (opt_mirror_anim)
                             fast_vec_cross(moby + 0xe0, moby + 0xc0, moby + 0xd0);
                         refresh_moby_spatial_bounds_from_basis(moby);
-                        *((u16 *) (moby + 0x34)) |= 6;
+                        *((u16 *)&MOBY(moby)->flags) |= 6;
                     }
                 }
             }
@@ -2264,7 +2265,7 @@ void exit_hero_vehicle_mode(void) {
         vehicle_exit_owner->vehicle_mode = 0;
         vehicle_moby = vehicle_exit_owner->unkA84;
         if (vehicle_moby) {
-            *(u16 *)(vehicle_moby + 0x34) &= ~6;
+            MOBY(vehicle_moby)->flags &= ~6;
         }
         vehicle_exit_owner->unkA84 = 0;
         if (vehicle_exit_owner->vehicle_mode3_moby) {
@@ -2276,7 +2277,7 @@ void exit_hero_vehicle_mode(void) {
             unsigned char *restored_hero_moby = vehicle_exit_owner->unkA88;
             vehicle_exit_owner->moby = (struct Moby *)restored_hero_moby;
             qcopy(restored_hero_moby + 0x10, &vehicle_exit_owner->motion.pos);
-            *(int *)(restored_hero_moby + 0x98) = 0;
+            MOBY(restored_hero_moby)->collision_disable = 0;
         }
         vehicle_exit_owner->anim_frame_rate = 1.0f;
         clear_hero_queued_animation();
@@ -2502,9 +2503,9 @@ void hero_respawn(void) {
     }
     clear_help_record_high_bits();
     damage_source_moby = ((char *)hero.damage_source_moby);
-    if (damage_source_moby != 0 && *(u8 *)(damage_source_moby + 0xB0) != 0xFF) {
-        hero_respawn_counts_by_level_and_source_category[current_level_index][*(u8 *)(damage_source_moby + 0xB0)]++;
-        D_0014EE90[*(u8 *)(damage_source_moby + 0xB0)]++;
+    if (damage_source_moby != 0 && MOBY(damage_source_moby)->mission != 0xFF) {
+        hero_respawn_counts_by_level_and_source_category[current_level_index][MOBY(damage_source_moby)->mission]++;
+        D_0014EE90[MOBY(damage_source_moby)->mission]++;
     }
     fade_to_black(scale_game_frames(0x10));
     hero.fall_fade_pending = 1;

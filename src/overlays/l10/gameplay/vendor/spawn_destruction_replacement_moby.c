@@ -16,14 +16,14 @@ char *spawn_destruction_replacement_moby(struct Moby *owner) {
     char *moby = create_moby(0x781);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        *(float *)(moby + 0x48) = owner->rot.z;
+        MOBY(moby)->rot.z = owner->rot.z;
         *(long *)(moby + 0x38) = owner->spawn_frame;
         qcopy(moby + 0x10, &owner->pos);
-        *(float *)(moby + 0x18) = 59.0f;
+        MOBY(moby)->pos.z = 59.0f;
         update_entity(moby);
     }
     return moby;

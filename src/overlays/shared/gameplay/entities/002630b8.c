@@ -236,7 +236,7 @@ void cutscene_set_camera_target(u8 *moby) {
     s32 count;
     s32 w24;
     Effect *effect;
-    if (*(s16 *)(moby + 0xa6) == 0x2ee && moby != 0) {
+    if (MOBY(moby)->oclass == 0x2ee && moby != 0) {
         build_moby_bone_transform(moby, 0, vectors);
         fraction = fast_vec_length(vectors) / 1.026f;
         if (1.0f < fraction)
@@ -484,18 +484,18 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *fragment_sp
     float source_class_ratio, horizontal_velocity_angle, k, k2;
 
     if (fragment_moby != 0) {
-        source_class_ratio = *(float *)(source_moby + 0x2C) / *(float *)(*(char **)(source_moby + 0x24) + 0x24);
-        *(float *)(fragment_moby + 0x2C) = *(float *)(*(char **)(fragment_moby + 0x24) + 0x24) * source_class_ratio;
+        source_class_ratio = MOBY(source_moby)->scale / *(float *)(((char *)MOBY(source_moby)->pclass) + 0x24);
+        MOBY(fragment_moby)->scale = *(float *)(((char *)MOBY(fragment_moby)->pclass) + 0x24) * source_class_ratio;
         fragment_moby[0x31] = 1;
-        *(unsigned short *)(fragment_moby + 0x34) |= 0x100;
-        fragment_pvars = *(char **)(fragment_moby + 0x78);
+        MOBY(fragment_moby)->flags |= 0x100;
+        fragment_pvars = ((char *)MOBY(fragment_moby)->pvars);
         *(long *)(fragment_moby + 0x38) = *(long *)(source_moby + 0x38);
         fragment_moby[0x20] = 1;
         qcopy(fragment_moby + 0x10, fragment_spawn_position);
         euler_rotation_basis(fragment_moby + 0xC0, fragment_euler_rotation);
-        *(unsigned char *)(fragment_moby + 0x30) = 0xFF;
-        *(short *)(fragment_moby + 0x32) = 0x80;
-        *(int *)(fragment_moby + 0x94) = 0;
+        MOBY(fragment_moby)->update_dist = 0xFF;
+        MOBY(fragment_moby)->draw_dist = 0x80;
+        MOBY(fragment_moby)->collision = 0;
         if (random_default_override == 0)
             *(int *)(fragment_pvars + 0x30) =
                 truncate_float_to_s32(scale_time(random_float_between(60.0f, 120.0f)));
@@ -525,8 +525,8 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *fragment_sp
             qcopy(fragment_pvars + 0x10, random_vector_override);
         }
         if (fast_vec_length(class_vector_override) == 0.0f && class_vector_override[3] == 0.0f) {
-            qcopy(vector_scratch, *(char **)(fragment_moby + 0x24) + 0x30);
-            k2 = *(float *)(fragment_moby + 0x2C);
+            qcopy(vector_scratch, ((char *)MOBY(fragment_moby)->pclass) + 0x30);
+            k2 = MOBY(fragment_moby)->scale;
             k2 = k2 * 0.0009765625f;
             fast_vec_scale(vector_scratch, vector_scratch, k2);
             vector_scratch[3] = vector_scratch[3] * k2;

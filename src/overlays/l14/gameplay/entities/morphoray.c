@@ -83,7 +83,7 @@ u8 *create_helper_sequence_owner_moby(u8 *self) {
         qcopy(created_moby + 0x40, self + 0x40);
         created_moby[0x30] = 0x40;
         created_moby[0x20] = 0;
-        *(s16 *)(created_moby + 0x32) = 0x40;
+        MOBY(created_moby)->draw_dist = 0x40;
         created_moby[0x31] = 1;
         update_entity(created_moby);
     }
@@ -319,9 +319,9 @@ char *create_bouncing_spark(int owner, float *spawn_position, float *initial_vel
     float initial_yaw, scaled_moby_value;
     unsigned short initial_trail_timer;
     if (moby != 0) {
-        char *spark_data = *(char **)(moby + 0x78);
+        char *spark_data = ((char *)MOBY(moby)->pvars);
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         *(int *)(spark_data + 0x24) = owner;
@@ -335,9 +335,9 @@ char *create_bouncing_spark(int owner, float *spawn_position, float *initial_vel
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         initial_yaw = fast_arc_tan(initial_velocity[0], initial_velocity[1]);
-        scaled_moby_value = *(float *)(moby + 0x2C) * spark_initial_moby_value_multiplier_gp;
-        *(float *)(moby + 0x48) = initial_yaw;
-        *(float *)(moby + 0x2C) = scaled_moby_value;
+        scaled_moby_value = MOBY(moby)->scale * spark_initial_moby_value_multiplier_gp;
+        MOBY(moby)->rot.z = initial_yaw;
+        MOBY(moby)->scale = scaled_moby_value;
         update_entity(moby);
     }
     return moby;
@@ -450,8 +450,8 @@ void raise_unlock_sequence_mobys(struct Moby *moby) {
         char *target_moby = base + ((*(unsigned short *)moby_id_cursor & 0x7FFF) << 8);
         float saved_height = *saved_height_cursor++;
         float lo = saved_height - 20.0f;
-        *(unsigned short *)(target_moby + 0x34) &= 0xFFBE;
-        *(float *)(target_moby + 0x18) = lo + (saved_height - lo) * height_blend_factor;
+        MOBY(target_moby)->flags &= 0xFFBE;
+        MOBY(target_moby)->pos.z = lo + (saved_height - lo) * height_blend_factor;
     } while (*moby_id_cursor++ >= 0);
 }
 extern u8 D_0014C050[];

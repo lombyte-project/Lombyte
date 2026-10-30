@@ -19,6 +19,7 @@
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks. */
 extern int D_0015ED84_d __asm__("D_0015ED84");
@@ -46,7 +47,7 @@ void apply_hero_ground_type_effects(void) {
             hero_state->on_magnet_ground = 1;
             if (hero_state->vehicle_mode == 0) {
                 char *item_slot_one_moby = ((char *)hero_state->items[1].moby);
-                if (item_slot_one_moby != 0 && *(short *)(item_slot_one_moby + 0xA6) == 0xAD)
+                if (item_slot_one_moby != 0 && MOBY(item_slot_one_moby)->oclass == 0xAD)
                     hero_state->unk308 = 1;
             }
         }

@@ -1,5 +1,6 @@
 /* Shared moby classes: vendor_orb, hydrodisplacer, pilots_helmet, pterodactyl, red_plant, robot_arm. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/camera/camera_modes.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -40,7 +41,7 @@ void vendor_orb_update(unsigned char *moby) {
         VENDOR_ORB_INITIALIZE = 0,
         VENDOR_ORB_ROTATE = 1
     };
-    char *manipulator = *(char **)(moby + 0x78);
+    char *manipulator = ((char *)MOBY(moby)->pvars);
     float rotation_step_radians;
     switch (moby[0x20]) {
     case VENDOR_ORB_INITIALIZE:
@@ -51,7 +52,7 @@ void vendor_orb_update(unsigned char *moby) {
         break;
     case VENDOR_ORB_ROTATE:
         rotation_step_radians = vendor_orb_rotation_rate_degrees_gp * DEG_TO_RAD * frame_time;
-        *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), rotation_step_radians);
+        MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, rotation_step_radians);
         *(float *)(manipulator + 0x40) = fast_add_rotations(*(float *)(manipulator + 0x40), rotation_step_radians * -2.0f);
         FUN_L00_001fff28(manipulator + 0x10, 2, *(float *)(manipulator + 0x40));
         break;
@@ -82,7 +83,7 @@ unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position
     R_2df808 rotation_copy;
     R_2df808 rotation;
     if (moby != 0) {
-        data = *(unsigned char **)(moby + 0x78);
+        data = ((unsigned char *)MOBY(moby)->pvars);
         rotation.q = 0;
         rotation.f[0] = FUN_L00_00257be8_2df808(-3.1415927f, 3.1415927f);
         rotation.f[1] = FUN_L00_00257be8_2df808(-3.1415927f, 3.1415927f);
@@ -91,10 +92,10 @@ unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position
         moby[0x20] = 0;
         moby[0x23] = alpha;
         moby[0x30] = 0xff;
-        *(unsigned short *)(moby + 0x32) = 0xff;
+        MOBY(moby)->draw_dist = 0xff;
         moby[0x31] = 1;
         set_moby_color(moby, red, green, blue);
-        *(float *)(data + 0x18) = *(float *)(moby + 0x2c) * scale;
+        *(float *)(data + 0x18) = MOBY(moby)->scale * scale;
         *(int *)(moby + 0x2c) = 0;
         *(int *)(data + 0x10) = owner;
         qcopy(moby + 0x10, position);
@@ -397,7 +398,7 @@ int FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
 
 void emit_hydrodisplacer_effect(char *moby) {
     V_2e01b0 effect_position, effect_motion_vector;
-    char *moby_data = *(char **)(moby + 0x78);
+    char *moby_data = ((char *)MOBY(moby)->pvars);
     struct Hero *player;
     int countdown_lower_bound;
     float normalization_scale;
@@ -449,7 +450,7 @@ extern short D_L00_0015F3FC;
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
 
 void end_hydrodisplacer_interaction(char *moby) {
-    if (*(unsigned char *)(moby + 0x20) == 4) {
+    if (MOBY(moby)->state == 4) {
         D_L00_0015F404 = 0;
         *(int *)&D_L00_0015F3FC = 0;
         jet_end_mount(3);
@@ -612,7 +613,7 @@ void emit_moby_color_cycling_particles(unsigned char *moby) __asm__("FUN_L00_002
 
 void emit_moby_color_cycling_particles(unsigned char *moby) {
     OvlQuad sprite_position_and_step[2];
-    M_2e0788 *moby_data = *(M_2e0788 **)(moby + 0x78);
+    M_2e0788 *moby_data = ((M_2e0788 *)MOBY(moby)->pvars);
     float *a;
     int *t;
     int i, j, c;
@@ -1029,7 +1030,7 @@ extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 void draw_active_beam_slots(char *moby) __asm__("FUN_L00_002e2af0");
 
 void draw_active_beam_slots(char *moby) {
-    int *moby_data = *(int **)(moby + 0x78);
+    int *moby_data = ((int *)MOBY(moby)->pvars);
     int i;
     vu1_add_g_sregister(0x47, 0x51001);
     for (i = 0; i < 3; i++) {
@@ -1334,7 +1335,7 @@ void pterodactyl_update(unsigned char *moby) {
         PTERODACTYL_INITIALIZE = 0,
         PTERODACTYL_FOLLOW_PATH = 1
     };
-    D_2e3a88 *moby_data = *(D_2e3a88 **)(moby + 0x78);
+    D_2e3a88 *moby_data = ((D_2e3a88 *)MOBY(moby)->pvars);
     int *path = toad_paths[moby_data->path];
     float y;
     switch (moby[0x20]) {
@@ -1351,18 +1352,18 @@ void pterodactyl_update(unsigned char *moby) {
         }
         moby_data->f6C = moby_data->f68 * (float)*path;
         moby[0x20] = 1;
-        *(float *)(moby + 0x2C) *= pterodactyl_scale_multiplier_gp;
+        MOBY(moby)->scale *= pterodactyl_scale_multiplier_gp;
         moby[0x30] = 0xFF;
     case PTERODACTYL_FOLLOW_PATH:
-        y = *(float *)(moby + 0x18);
+        y = MOBY(moby)->pos.z;
         sample_camera_path(path, moby_data->f6C, moby_data->i70, moby + 0x10, moby + 0x40, 0);
-        *(float *)(moby + 0x44) *= 0.5f;
-        *(float *)(moby + 0x18) += moby_data->f64;
+        MOBY(moby)->rot.y *= 0.5f;
+        MOBY(moby)->pos.z += moby_data->f64;
         moby_data->f6C += moby_data->f74;
         if ((float)*path < moby_data->f6C)
             moby_data->f6C -= (float)*path;
         if (moby[0x70] & 2) {
-            if (y < *(float *)(moby + 0x18) || random_integer_below(3) != 0) {
+            if (y < MOBY(moby)->pos.z || random_integer_below(3) != 0) {
                 if (moby[0x53])
                     blend_moby_animation(moby, 0, 0, 10);
             } else {
@@ -1414,7 +1415,7 @@ void robot_arm_update(char *moby) {
         ROBOT_ARM_SPAWN_EFFECT_AND_REMOVE = 2,
         ROBOT_ARM_FADE_AND_REMOVE = 3
     };
-    char *moby_data = *(char **)(moby + 0x78);
+    char *moby_data = ((char *)MOBY(moby)->pvars);
     float effect_offset_or_world_position[4];
     float rotation_step_basis[12];
     float offset_after_rotation[4];
@@ -1427,7 +1428,7 @@ void robot_arm_update(char *moby) {
     float collision_radius;
     float *collision_normal;
 
-    switch (*(unsigned char *)(moby + 0x20)) {
+    switch (MOBY(moby)->state) {
     case ROBOT_ARM_REMOVE:
         mark_moby_for_removal(moby);
         return;
@@ -1463,7 +1464,7 @@ void robot_arm_update(char *moby) {
     multiply_matrix3x3(moby + 0xC0, rotation_step_basis, moby + 0xC0);
     transform_vector_by_basis(offset_after_rotation, moby_data + 0x20, moby + 0xC0);
     fast_vec_sub(rotation_offset_delta, offset_after_rotation, effect_offset_or_world_position);
-    fast_vec_sub((float *)(moby + 0x10), (float *)(moby + 0x10), rotation_offset_delta);
+    fast_vec_sub((float *)&MOBY(moby)->pos, (float *)&MOBY(moby)->pos, rotation_offset_delta);
     fast_vec_add(moby + 0x10, moby + 0x10, moby_data);
     collision_radius = *(float *)(moby_data + 0x2C);
     *(float *)(moby_data + 8) = *(float *)(moby_data + 8) - *(float *)(moby_data + 0x38);
@@ -1691,7 +1692,7 @@ void apply_follow_camera_translation(char *camera) {
     if (*(short *)(ground_check_hero + 0x308) == 0) {
         char *ground_moby = *(char **)(ground_check_hero + 0x2FC);
         char *camera_system_state;
-        if (ground_moby == 0 || *(short *)(ground_moby + 0xA6) != 0x22D ||
+        if (ground_moby == 0 || MOBY(ground_moby)->oclass != 0x22D ||
             ((camera_system_state = camera_view - 0x190), FUN_001f96f8_c(0x1E)) < *(int *)(camera_system_state + 0x398)) {
             char *translation_source_hero = D_0013E533 + 0xE1D;
             *(float *)(*(char **)(camera + 0x70) + 0x1C8) = *(float *)(translation_source_hero + 0x14C);

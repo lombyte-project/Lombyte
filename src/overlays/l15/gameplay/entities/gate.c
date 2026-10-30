@@ -1128,10 +1128,10 @@ float compute_helicopter_flocking_steering_point(struct Moby *moby, float *out, 
     clear = 1;
     clear_u64_value(out);
     wsum = 0.0f;
-    for (other_moby = D_L15_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
+    for (other_moby = D_L15_0015FFE4; other_moby != 0; other_moby = ((char *)MOBY(other_moby)->next)) {
         if (other_moby == moby)
             continue;
-        if (*(short *)(other_moby + 0xA6) != moby->oclass)
+        if (MOBY(other_moby)->oclass != moby->oclass)
             continue;
         if ((u8)other_moby[0x20] == 1 || (u8)other_moby[0x20] == 0x40)
             continue;
@@ -1731,10 +1731,10 @@ float compute_ultramech_flocking_steering_point(void *m_, void *out, float targe
     select_moby_combat_target(moby, target_position, target_search_range);
     target_distance = vector_distance_xy(moby + 0x10, target_position);
     clear_u64_value(out);
-    for (other_moby = D_L15_0015FFE4; other_moby != 0; other_moby = *(char **)(other_moby + 0x28)) {
+    for (other_moby = D_L15_0015FFE4; other_moby != 0; other_moby = ((char *)MOBY(other_moby)->next)) {
         if (other_moby == moby)
             continue;
-        if (*(short *)(other_moby + 0xA6) != *(short *)(moby + 0xA6))
+        if (MOBY(other_moby)->oclass != MOBY(moby)->oclass)
             continue;
         if (vector_distance_xy(other_moby + 0x10, moby + 0x10) < 3.0f) {
             wsum += 6.0f;
@@ -1764,10 +1764,10 @@ float compute_ultramech_flocking_steering_point(void *m_, void *out, float targe
     }
     if (vector_distance_xy(moby + 0x10, out) < 1.0f) {
         qcopy(out, moby + 0x10);
-        return fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
+        return fast_arc_tan(target_position[0] - MOBY(moby)->pos.x, target_position[1] - MOBY(moby)->pos.y);
     }
-    return fast_arc_tan(((float *)out)[0] - *(float *)(moby + 0x10),
-                        ((float *)out)[1] - *(float *)(moby + 0x14));
+    return fast_arc_tan(((float *)out)[0] - MOBY(moby)->pos.x,
+                        ((float *)out)[1] - MOBY(moby)->pos.y);
 }
 
 

@@ -274,7 +274,7 @@ void jet_animate(unsigned char *moby, float output_scale) {
         return;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[2] = ground_height + 0.025f;
     qcopy(&D_L00_0016E080[D_L00_0015F434].b, &D_L00_00173E80_lui);
-    y = (8.0f - absolute_float(*(float *)(moby + 0x18) - ground_height)) * 0.125f;
+    y = (8.0f - absolute_float(MOBY(moby)->pos.z - ground_height)) * 0.125f;
     if (y < 0.25f)
         y = 0.25f;
     D_L00_0016E080[D_L00_0015F434].u_00259fe8.f[3] = output_scale * y;

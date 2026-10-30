@@ -39,6 +39,7 @@ void update_moby_draw_registration(unsigned char *moby) {
 }
 /* Ported from rac1-decomp src/overlays/shared/vendor_002F9438.c (func_L07_0030D370) */
 #include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
 
 extern int set_moby_color() __asm__("FUN_L00_002502f0");
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
@@ -81,7 +82,7 @@ void timed_activation_pads_update(unsigned char *moby)
 
     if (moby == 0)
         return;
-    pad_data = *(char **)(moby + 0x78);
+    pad_data = ((char *)MOBY(moby)->pvars);
     if (pad_data == 0)
         return;
 
@@ -97,7 +98,7 @@ void timed_activation_pads_update(unsigned char *moby)
         activation_reference_data = (char *)D_0013F350_lui;
         if (*(short *)(activation_reference_data + 0x30E) == 0)
             flag = *(unsigned char **)(activation_reference_data + 0x2FC) == moby;
-        if (0.7853982f < absolute_float(*(float *)(moby + 0x44))) {
+        if (0.7853982f < absolute_float(MOBY(moby)->rot.y)) {
             if (vector_distance_xy(moby + 0x10, activation_reference_data + 0x80) < 2.0f) {
                 if (*(int *)(activation_reference_data + 0x2084) == 0x11) {
                     if (*(float *)(activation_reference_data + 0xAA8) < 7.0f) {
@@ -227,7 +228,7 @@ void door_update(u8 *moby)
         DOOR_WAIT_TO_RETURN_TO_INITIAL_POSITION = 3,
         DOOR_RETURN_TO_INITIAL_POSITION = 4
     };
-    u8 *data = *(u8 **)(moby + 0x78);
+    u8 *data = ((u8 *)MOBY(moby)->pvars);
     u8 *other;
     f32 vectors[8];
     f32 distance;
@@ -359,7 +360,7 @@ void bridge_update(u8 *moby)
         BRIDGE_WAIT_TO_RETURN_TO_INITIAL_POSITION = 3,
         BRIDGE_RETURN_TO_INITIAL_POSITION = 4
     };
-    u8 *data = *(u8 **)(moby + 0x78);
+    u8 *data = ((u8 *)MOBY(moby)->pvars);
     u8 *other;
     f32 delta[4];
     f32 old_rotation[4];

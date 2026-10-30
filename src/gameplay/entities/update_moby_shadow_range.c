@@ -4,6 +4,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/gameplay/entities/moby.h"
 extern float D_001CAA80[] NOT_SDA;
 extern char coll_output[] __asm__("D_00194100");
 /* Shadow range probe: cast a ray down (8 units) from the moby position
@@ -26,17 +27,17 @@ void update_moby_shadow_range(char *moby) {
     set_vector_length_xy(shadow_probe_direction, shadow_probe_direction, 1.0f);
     fast_vec_scale(scaled_position, moby, 0.0009765625f);
     qcopy(segment_start, scaled_position);
-    segment_start[0] -= shadow_probe_direction[0] * *(float *)(moby + 0xC) * 0.000732421875f;
-    segment_start[1] -= shadow_probe_direction[1] * *(float *)(moby + 0xC) * 0.000732421875f;
+    segment_start[0] -= shadow_probe_direction[0] * MOBY(moby)->bsphere.w * 0.000732421875f;
+    segment_start[1] -= shadow_probe_direction[1] * MOBY(moby)->bsphere.w * 0.000732421875f;
     qcopy(segment_end, segment_start);
     segment_end[2] -= 8.0f;
     if (collision_line(segment_start, segment_end, 0x22, 0, 0) != 0) {
         qcopy(segment_start, scaled_position);
         hit = coll_output;
         first_hit_height = *(float *)(hit + 0x28);
-        segment_start[2] = segment_start[2] + *(float *)(moby + 0xC) * 0.00048828125f;
-        segment_start[0] = segment_start[0] + shadow_probe_direction[0] * *(float *)(moby + 0xC) * 0.000732421875f;
-        segment_start[1] = segment_start[1] + shadow_probe_direction[1] * *(float *)(moby + 0xC) * 0.000732421875f;
+        segment_start[2] = segment_start[2] + MOBY(moby)->bsphere.w * 0.00048828125f;
+        segment_start[0] = segment_start[0] + shadow_probe_direction[0] * MOBY(moby)->bsphere.w * 0.000732421875f;
+        segment_start[1] = segment_start[1] + shadow_probe_direction[1] * MOBY(moby)->bsphere.w * 0.000732421875f;
         fast_vec_normalize(shadow_probe_direction, shadow_probe_direction, (segment_start[2] - first_hit_height) / -shadow_probe_direction[2]);
         fast_vec_add(segment_end, segment_start, shadow_probe_direction);
         second_hit_height = first_hit_height;

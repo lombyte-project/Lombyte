@@ -487,10 +487,10 @@ int FUN_L00_00259028(unsigned char *moby, char *movement_control, float *target_
     clear_u64_value(out);
     if (fast_vec_dist(moby + 0x10, target_position) < *(float *)(movement_control + 0x2C))
         navigation_result_flags = 4;
-    target_heading = fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
+    target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x, target_position[1] - MOBY(moby)->pos.y);
     approach_w(moby, (float *)(movement_control + 0x14), target_heading, *(float *)(movement_control + 0x3C), *(float *)(movement_control + 0x40),
                             *(float *)(movement_control + 0x44));
-    heading_error = fast_difference_between_rotations(target_heading, *(float *)(moby + 0x48));
+    heading_error = fast_difference_between_rotations(target_heading, MOBY(moby)->rot.z);
     if (*(float *)(movement_control + 0x28) <= heading_error)
         navigation_result_flags |= 0x10;
     fast_dec_timer(movement_control + 0x48);

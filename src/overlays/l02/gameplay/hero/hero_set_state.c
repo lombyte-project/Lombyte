@@ -28,6 +28,7 @@
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */
 
@@ -104,7 +105,7 @@ int hero_set_state(int a, int b) {
         p->unk20A5 = 0;
         p->item_use_locked = 0;
         if (p->vehicle_mode == 0) {
-            *(int *)(moby + 0x98) = 0;
+            MOBY(moby)->collision_disable = 0;
             p->tilt_disabled = 0;
             p->item_select_blocked = 0;
             p->unk20B2 = 0;
@@ -376,7 +377,7 @@ int hero_set_state(int a, int b) {
             struct Hero *q = &hero;
             float d = q->anim_frame;
             int id = 6;
-            if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+            if (return_hero_animation_id_unchanged(MOBY(moby)->seq) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
             set_hero_animation(id, 4, (float)scale_game_frames(9));
         }
@@ -392,7 +393,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             int id = 6;
             float d = p->anim_frame;
-            if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+            if (return_hero_animation_id_unchanged(MOBY(moby)->seq) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
             set_hero_animation(id, 4, (float)scale_game_frames(9));
         }
@@ -988,7 +989,7 @@ int hero_set_state(int a, int b) {
                 } else if (s == 9) {
                     int id = 8;
                     int n = truncate_float_to_s32(q->anim_frame);
-                    if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4)
+                    if (return_hero_animation_id_unchanged(MOBY(moby)->seq) == 4)
                         id = l02_run_jump_animation_ids_by_frame[n];
                     set_hero_animation(id, 0, (float)scale_game_frames(5));
                 } else if (s == 0xA) {
@@ -2305,7 +2306,7 @@ void update_hero_state_transitions(void) {
                 case HERO_STATE_SHALLOW_WATER_RUN:
                 case 126:
                     if (hero.run_start_blending != 0 &&
-                        (*(float *)(moby + 0x54) > 0.9f || moby[0x52] != 0xFF)) {
+                        (MOBY(moby)->anim_time > 0.9f || moby[0x52] != 0xFF)) {
                         hero.run_start_blending = 0;
                     }
                     if (hero.on_slip_ground != 0 && hero.frames_off_ground.s == 0) {

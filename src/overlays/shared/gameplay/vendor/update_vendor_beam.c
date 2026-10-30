@@ -69,7 +69,7 @@ void update_vendor_beam(unsigned char *moby) {
         BEAM_STATE_WAIT_FOR_TIMED_PULSE = 2,
         BEAM_STATE_REPEAT_PULSES = 3
     };
-    D1224 *beam_vars = *(D1224 **)(moby + 0x78);
+    D1224 *beam_vars = ((D1224 *)MOBY(moby)->pvars);
     float beam_culling_sphere[4] __attribute__((aligned(16)));
     int beam_state;
     int phase_duration_frames;
@@ -167,7 +167,7 @@ typedef struct {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302C80). */
 void start_vendor_beam_pulse(char *moby) {
-    VendorBeamVars *beam = *(VendorBeamVars **)(moby + 0x78);
+    VendorBeamVars *beam = ((VendorBeamVars *)MOBY(moby)->pvars);
     Vec4 path[32];
     Vec4 path_steps[32];
     Vec4 work, delta;
@@ -274,7 +274,7 @@ extern int vendor_beam_transition_color_gp __asm__("D_L14_001620F4") __attribute
 extern int vendor_beam_final_color_gp __asm__("D_L14_001620F8") __attribute__((sda));
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 void update_vendor_beam_animation(char *moby) {
-    char *vars = *(char **)(moby + 0x78);
+    char *vars = ((char *)MOBY(moby)->pvars);
     char *beam_point, *src;
     u8 *indices;
     int i, j, k, copy_i, next_i;
@@ -343,7 +343,7 @@ extern float vendor_beam_base_uv[4][2] __asm__("D_L14_001E5FD0");
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00303430.c: func_L14_00303430). */
 void draw_vendor_beam(char *moby) {
-    VendorBeamVars *beam = *(VendorBeamVars **)(moby + 0x78);
+    VendorBeamVars *beam = ((VendorBeamVars *)MOBY(moby)->pvars);
     VendorBeamStripPacket packet[3];
     float world[16] __attribute__((aligned(16)));
     float inverse[16] __attribute__((aligned(16)));

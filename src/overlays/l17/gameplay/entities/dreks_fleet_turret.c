@@ -405,7 +405,7 @@ void dreks_fleet_turret_update(struct Moby *turret_moby) {
             }
         } else if (g->state.current == 0x32) {
             char *hero_ship_moby = ((char *)g->ship_moby);
-            if (hero_ship_moby != 0 && *(short *)(hero_ship_moby + 0xA6) == 0x563) {
+            if (hero_ship_moby != 0 && MOBY(hero_ship_moby)->oclass == 0x563) {
                 if (vector_distance_xy(&turret_moby->pos, &g->motion.pos) < 254.0f) {
                     turret_moby->state = 3;
                 }
@@ -573,7 +573,7 @@ void distribute_class_733_group_mobys_along_path(struct Moby *turret_moby) {
         i = (*group_entry & 0x7FFF) << 8;
         if (*(short *)(i + 0xA6 + mobys) == 0x733) {
             matched_moby = i + mobys;
-            od = *(char **)(matched_moby + 0x78);
+            od = ((char *)MOBY(matched_moby)->pvars);
             qcopy(matched_moby + 0x10, path + 0x10 + k * 0x10);
             *(int *)(od + 0x60) = *(int *)(turret_vars + 0x84);
             *(int *)(od + 0x64) = k;
@@ -649,16 +649,16 @@ void update_fleet_rotating_radial_effect(char *moby) {
     int particle_lifetime;
     char *particle_vector_scratch_destination;
 
-    ring_vars = *(float **)(moby + 0x78);
+    ring_vars = ((float *)MOBY(moby)->pvars);
     if (hero_is_in_special_state() != 0) {
-        switch (*(unsigned char *)(moby + 0x20)) {
+        switch (MOBY(moby)->state) {
         case RING_INITIALIZE:
-            *(unsigned char *)(moby + 0x30) = 0xFF;
-            *(unsigned char *)(moby + 0x20) = 1;
+            MOBY(moby)->update_dist = 0xFF;
+            MOBY(moby)->state = 1;
             ring_vars[1] = ring_vars[0] * *(float *)&fleet_radial_rotation_rate_degrees_factor * DEG_TO_RAD * frame_time;
             break;
         case RING_ROTATE_AND_DRAW:
-            *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), ring_vars[1]);
+            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, ring_vars[1]);
             add_draw_callback(draw_fleet_scrolling_radial_quads, moby);
             break;
         }
@@ -678,7 +678,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
             blk.f8 = 1.0f;
             blk.fC = 5627.9248046875f;
             blk.c19 = 1;
-            blk.h1A = *(unsigned short *)(moby + 0xA6);
+            blk.h1A = ((unsigned short)MOBY(moby)->oclass);
             euler_rotation_basis(normalized_moby_rotation_basis, moby + 0x40);
             normalize_vector_triplet(normalized_moby_rotation_basis);
             copy_matrix_rotation(moby_rotation_matrix, normalized_moby_rotation_basis);

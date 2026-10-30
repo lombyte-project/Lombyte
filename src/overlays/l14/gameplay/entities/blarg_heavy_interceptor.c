@@ -76,7 +76,7 @@ void activate_waiting_turrets_in_group(s32 index) {
     do {
         listed_moby = base + ((*list_entry & 0x7FFF) << 8);
         if (listed_moby[0x20] == 1) {
-            *(s16 *)(*(u8 **)(listed_moby + 0x78) + 0x88) = 1;
+            *(s16 *)(((u8 *)MOBY(listed_moby)->pvars) + 0x88) = 1;
         }
     } while (*(s16 *)list_entry++ >= 0);
 }
@@ -903,7 +903,7 @@ extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 void draw_blarg_heavy_interceptor_light_ring(char *moby) __asm__("FUN_L14_002ada18");
 
 void draw_blarg_heavy_interceptor_light_ring(char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     struct {
         float mat[4][4];    /* camera-facing frame */
         float verts[82][3]; /* ring vertices transformed by mat */
@@ -1433,13 +1433,13 @@ void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *
 void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) __asm__("FUN_L14_002aead8");
 
 void prepare_blarg_heavy_interceptor_light_ring_transform(u8 *moby) {
-    u8 *data = *(u8 **)(moby + 0x78);
+    u8 *data = ((u8 *)MOBY(moby)->pvars);
     u8 *bone_transform;
     f32 bounding_sphere[4];
     if (random_integer_below(5)) {
         qcopy(bounding_sphere, moby + 0x10);
         bounding_sphere[3] = blarg_heavy_interceptor_culling_sphere_radius_gp;
-        if (fast_bsphere_check((u8 *)bounding_sphere, convert_integer_to_float(*(s16 *)(moby + 0x32))) >= 0) {
+        if (fast_bsphere_check((u8 *)bounding_sphere, convert_integer_to_float(MOBY(moby)->draw_dist)) >= 0) {
             bone_transform = data + 0xA0;
             build_moby_bone_transform(moby, 1, bone_transform);
             fast_vec_normalize(bone_transform, bone_transform, 1.0f);
@@ -1539,8 +1539,8 @@ void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
         do {
             char *selected_moby = select_farthest_unselected_group_moby(moby->group, ids);
             char *md;
-            *out++ = *(short *)(selected_moby + 0xB2);
-            md = *(char **)(selected_moby + 0x78);
+            *out++ = ((short)MOBY(selected_moby)->save_id);
+            md = ((char *)MOBY(selected_moby)->pvars);
             if (*(int *)(md + 0x20C) & 8)
                 draw_blarg_heavy_interceptor_spinning_beam(selected_moby);
             if (*(int *)(md + 0x20C) & 2)
@@ -1570,7 +1570,7 @@ char *select_farthest_unselected_group_moby(int index, int *ids) {
         int found = 0;
         int i;
         for (i = 0; i < 20; i++) {
-            if (*(short *)(moby + 0xB2) == D_L14_001D8680[i]) {
+            if (((short)MOBY(moby)->save_id) == D_L14_001D8680[i]) {
                 found = 1;
                 break;
             }
@@ -1669,21 +1669,21 @@ void machinegun_turret_update(char *moby) {
     char *aiming_offset_vector;
     char *aiming_base_point;
 
-    data = *(char **)(moby + 0x78);
+    data = ((char *)MOBY(moby)->pvars);
     func_L14_002B5590_2B4E40((unsigned char *)moby);
-    switch (*(unsigned char *)(moby + 0x20)) {
+    switch (MOBY(moby)->state) {
     case TURRET_STATE_INITIALIZE:
-        *(float *)(data + 0x70) = *(float *)(moby + 0x18);
-        *(float *)(data + 0x84) = *(float *)(moby + 0x48);
+        *(float *)(data + 0x70) = MOBY(moby)->pos.z;
+        *(float *)(data + 0x84) = MOBY(moby)->rot.z;
         *(int *)(data + 0x8C) = 0;
         *(short *)(data + 0x74) = 0;
         if (*(int *)(data + 0x80) == -1) {
-            debug_print(D_L14_001FBD50, *(short *)(moby + 0xB2));
+            debug_print(D_L14_001FBD50, ((short)MOBY(moby)->save_id));
             mark_moby_for_removal(moby);
             return;
         }
         if (*(int *)(data + 0x90) == -1) {
-            debug_print(D_L14_001FBD78, *(short *)(moby + 0xB2));
+            debug_print(D_L14_001FBD78, ((short)MOBY(moby)->save_id));
             mark_moby_for_removal(moby);
             return;
         }
@@ -1691,14 +1691,14 @@ void machinegun_turret_update(char *moby) {
         *(short *)(data + 0x76) = scaled_wait_frames_or_target_query_status;
         *(unsigned char *)(data + 0x8B) = 0;
         if (*(short *)(data + 0x88) != 0) {
-            *(unsigned char *)(moby + 0x20) = 3;
+            MOBY(moby)->state = 3;
             *(unsigned char *)(data + 0x8A) = 1;
         } else {
-            *(unsigned char *)(moby + 0x20) = 1;
-            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - machinegun_turret_retraction_depth_gp;
-            *(int *)(moby + 0x94) = 0;
+            MOBY(moby)->state = 1;
+            MOBY(moby)->pos.z = MOBY(moby)->pos.z - machinegun_turret_retraction_depth_gp;
+            MOBY(moby)->collision = 0;
             *(unsigned char *)(data + 0x8A) = 0;
-            *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xEFFF;
+            MOBY(moby)->flags = MOBY(moby)->flags & 0xEFFF;
         }
         *(int *)(data + 0x98) = func_001F9850_2B4E40(*(int *)(data + 0x94));
         return;
@@ -1709,41 +1709,41 @@ void machinegun_turret_update(char *moby) {
         if (fast_dec_timer(data + 0x98) == 0) {
             return;
         }
-        *(unsigned char *)(moby + 0x20) = 2;
+        MOBY(moby)->state = 2;
         *(short *)(data + 0x74) = func_001F9850_2B4E40(D_L14_0016150C);
         *(float *)(data + 0x78) = 1.0f / func_001FA888_2B4E40(*(short *)(data + 0x74));
         func_00213D28_2B4E40(moby, 1, 0);
-        *(float *)(moby + 0x58) = 1.0f / (func_001FA888_2B4E40(*(short *)(data + 0x74)) * D_L14_00161510);
+        MOBY(moby)->anim_speed = 1.0f / (func_001FA888_2B4E40(*(short *)(data + 0x74)) * D_L14_00161510);
         return;
     case TURRET_STATE_DEPLOY:
         {
             float t = (float)*(short *)(data + 0x74) * *(float *)(data + 0x78);
-            *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (0.0f + (machinegun_turret_retraction_depth_gp - 0.0f) * t);
+            MOBY(moby)->pos.z = *(float *)(data + 0x70) - (0.0f + (machinegun_turret_retraction_depth_gp - 0.0f) * t);
         }
-        if (*(unsigned char *)(moby + 0x70) & 2) {
-            if (*(unsigned char *)(moby + 0x52) == 1) {
+        if (MOBY(moby)->anim_flags & 2) {
+            if (MOBY(moby)->seq == 1) {
                 func_00213D28_2B4E40(moby, 2, 0);
-                *(float *)(moby + 0x58) = 1.0f;
+                MOBY(moby)->anim_speed = 1.0f;
             }
         }
         if (*(short *)(data + 0x74) < func_001F9850_2B4E40(D_L14_0016150C >> 1)) {
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
-            *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) | 0x1000;
+            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
+            MOBY(moby)->flags = MOBY(moby)->flags | 0x1000;
         }
         if (fast_dec_timer_s16(data + 0x74) == 0) {
             return;
         }
         *(short *)(data + 0x76) = func_001F9850_2B4E40(machinegun_turret_target_wait_timeout_frames_gp);
-        *(unsigned char *)(moby + 0x20) = 3;
+        MOBY(moby)->state = 3;
         *(short *)(data + 0x74) = func_001F9850_2B4E40(60);
-        *(float *)(moby + 0x18) = *(float *)(data + 0x70);
+        MOBY(moby)->pos.z = *(float *)(data + 0x70);
         *(int *)(data + 0x8C) = 0;
         return;
     case TURRET_STATE_WAIT_FOR_TARGET:
         scaled_wait_frames_or_target_query_status = func_L00_00260D30_2B4E40(moby, target_point_scratch, 34.0f);
         if (scaled_wait_frames_or_target_query_status != 2) {
             if (is_point_inside_clip_volume(target_point_scratch, *(int *)(data + 0x90)) != 0) {
-                *(unsigned char *)(moby + 0x20) = 4;
+                MOBY(moby)->state = 4;
                 func_00213D28_2B4E40(moby, 3, 0);
                 *(short *)(data + 0x74) = func_001F9850_2B4E40(120);
                 *(short *)(data + 0x9C) = func_001F9850_2B4E40(20);
@@ -1774,8 +1774,8 @@ void machinegun_turret_update(char *moby) {
         aiming_cuboid_index = *(int *)(data + 0x80);
         aiming_base_point = D_L14_001600EC + (aiming_cuboid_index << 7) + 0x30;
         fast_vec_add(target_point_scratch, target_point_scratch, aiming_base_point);
-        target_heading = fast_arc_tan(target_point_scratch[0] - *(float *)(moby + 0x10), target_point_scratch[1] - *(float *)(moby + 0x14));
-        *(float *)(moby + 0x48) = target_heading;
+        target_heading = fast_arc_tan(target_point_scratch[0] - MOBY(moby)->pos.x, target_point_scratch[1] - MOBY(moby)->pos.y);
+        MOBY(moby)->rot.z = target_heading;
         fast_dec_timer_s16(data + 0x9C);
         rem = D_L14_0015F5CC % machinegun_turret_firing_cadence_divisor_gp;
         if (rem == 0) {
@@ -1811,43 +1811,43 @@ void machinegun_turret_update(char *moby) {
         if (fast_dec_timer_s16(data + 0x74) == 0) {
             return;
         }
-        if ((*(unsigned char *)(moby + 0x70) & 2) == 0) {
+        if ((MOBY(moby)->anim_flags & 2) == 0) {
             return;
         }
-        animation_sequence = *(unsigned char *)(moby + 0x52);
+        animation_sequence = MOBY(moby)->seq;
         if (animation_sequence != 3) {
             return;
         }
         *(short *)(data + 0x76) = func_001F9850_2B4E40(machinegun_turret_target_wait_timeout_frames_gp);
-        *(unsigned char *)(moby + 0x20) = animation_sequence;
+        MOBY(moby)->state = animation_sequence;
         func_00213D28_2B4E40(moby, 2, 0);
-        *(float *)(moby + 0x58) = 1.0f;
+        MOBY(moby)->anim_speed = 1.0f;
         return;
     case TURRET_STATE_RETRACT:
         {
             float t = (float)*(short *)(data + 0x74) * *(float *)(data + 0x78);
-            *(float *)(moby + 0x18) = *(float *)(data + 0x70) - (machinegun_turret_retraction_depth_gp + (0.0f - machinegun_turret_retraction_depth_gp) * t);
-            *(float *)(moby + 0x48) = *(float *)(data + 0x84) + (*(float *)(data + 0x8C) - *(float *)(data + 0x84)) * t;
+            MOBY(moby)->pos.z = *(float *)(data + 0x70) - (machinegun_turret_retraction_depth_gp + (0.0f - machinegun_turret_retraction_depth_gp) * t);
+            MOBY(moby)->rot.z = *(float *)(data + 0x84) + (*(float *)(data + 0x8C) - *(float *)(data + 0x84)) * t;
         }
-        if (*(unsigned char *)(moby + 0x70) & 2) {
-            if (*(unsigned char *)(moby + 0x52) == 4) {
+        if (MOBY(moby)->anim_flags & 2) {
+            if (MOBY(moby)->seq == 4) {
                 func_00213D28_2B4E40(moby, 0, 0);
-                *(float *)(moby + 0x58) = 1.0f;
+                MOBY(moby)->anim_speed = 1.0f;
             }
         }
         if (*(short *)(data + 0x74) < func_001F9850_2B4E40(D_L14_0016150C >> 1)) {
-            *(int *)(moby + 0x94) = 0;
+            MOBY(moby)->collision = 0;
         }
         if (fast_dec_timer_s16(data + 0x74) == 0) {
             return;
         }
-        *(float *)(moby + 0x48) = *(float *)(data + 0x84);
-        *(unsigned char *)(moby + 0x20) = 1;
+        MOBY(moby)->rot.z = *(float *)(data + 0x84);
+        MOBY(moby)->state = 1;
         *(short *)(data + 0x74) = func_001F9850_2B4E40(60);
         *(short *)(data + 0x88) = 0;
         *(int *)(data + 0x98) = func_001F9850_2B4E40(*(int *)(data + 0x94));
-        *(float *)(moby + 0x18) = *(float *)(data + 0x70) - machinegun_turret_retraction_depth_gp;
-        *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xEFFF;
+        MOBY(moby)->pos.z = *(float *)(data + 0x70) - machinegun_turret_retraction_depth_gp;
+        MOBY(moby)->flags = MOBY(moby)->flags & 0xEFFF;
         return;
     case TURRET_STATE_DESTROY:
         spawn_explosion(moby, data + 0x40, moby + 0x10, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 0, 1.0f, 15.0f, 1, 1, -1, 0);
@@ -1952,7 +1952,7 @@ int try_retract_turret_group(int index) {
     do {
         moby_index_or_state = *(unsigned short *)list_entry & 0x7FFF;
         checked_moby = base + (moby_index_or_state << 8);
-        if ((*(unsigned char **)(checked_moby + 0x78))[0x8B] == 0) {
+        if ((((unsigned char *)MOBY(checked_moby)->pvars))[0x8B] == 0) {
             moby_index_or_state = checked_moby[0x20];
             if (moby_index_or_state != 5 && moby_index_or_state != 1) {
                 return 0;
@@ -1964,7 +1964,7 @@ int try_retract_turret_group(int index) {
         moby_index_or_retract_frames = *(unsigned short *)list_entry & 0x7FFF;
         retracting_moby = D_L14_0015FFD0_macro[2] + (moby_index_or_retract_frames << 8);
         if (retracting_moby[0x20] == 3) {
-            turret_vars = *(unsigned char **)(retracting_moby + 0x78);
+            turret_vars = ((unsigned char *)MOBY(retracting_moby)->pvars);
             FUN_00212ed8_b45(retracting_moby, 4, 0);
             retracting_moby[0x20] = 5;
             moby_index_or_retract_frames = FUN_001f96f8_b45(D_L14_0016150C_gp);
@@ -1972,8 +1972,8 @@ int try_retract_turret_group(int index) {
             inverse_retract_frames = 1.0f / FUN_001fa6c0_b45(moby_index_or_retract_frames);
             retract_animation_speed = 1.0f / (*(short *)(turret_vars + 0x74) * D_L14_00161510_gp);
             *(float *)(turret_vars + 0x78) = inverse_retract_frames;
-            *(float *)(retracting_moby + 0x58) = retract_animation_speed;
-            *(float *)(turret_vars + 0x8C) = *(float *)(retracting_moby + 0x48);
+            MOBY(retracting_moby)->anim_speed = retract_animation_speed;
+            *(float *)(turret_vars + 0x8C) = MOBY(retracting_moby)->rot.z;
             *(short *)(turret_vars + 0x88) = 0;
             turret_vars[0x8B] = 0;
         }
@@ -2000,8 +2000,8 @@ scan:
     do {
         unsigned short id = *list;
         char *moby = base + ((id & 0x7FFF) << 8);
-        int state = *(signed char *)(moby + 0x20);
-        char *data = *(char **)(moby + 0x78);
+        int state = ((signed char)MOBY(moby)->state);
+        char *data = ((char *)MOBY(moby)->pvars);
         if (state >= 0)
             count++;
         if (state >= 0 && *(short *)(data + 0x88))
@@ -2627,9 +2627,9 @@ void ease_minibomber_position_and_heading(char *moby, float *target, float targe
     int moby_state = moby[0x20] & 0xFF;
     if ((moby_state >= 4 && moby_state <= 6) || moby_state == 8) {
         data = *(int *)(moby + 0x78);
-        vendor_spring((float *)(moby + 0x10), (float *)(data + 0xF0), target[0], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
-        vendor_spring((float *)(moby + 0x14), (float *)(data + 0xF4), target[1], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
-        vendor_spring((float *)(moby + 0x18), (float *)(data + 0xF8), target[2], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
+        vendor_spring((float *)&MOBY(moby)->pos, (float *)(data + 0xF0), target[0], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
+        vendor_spring((float *)&MOBY(moby)->pos.y, (float *)(data + 0xF4), target[1], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
+        vendor_spring((float *)&MOBY(moby)->pos.z, (float *)(data + 0xF8), target[2], position_error_gain, position_velocity_damping, position_snap_threshold_scale);
         approach_w(moby, target_heading, (float *)(data + 0xE4), heading_error_gain, heading_velocity_damping, heading_velocity_limit);
     }
 }
@@ -2989,13 +2989,13 @@ unsigned char *spawn_flying_debris(struct Moby *owner, float angle, char *posp) 
     *(OvlQuad *)spawn_position = *(OvlQuad *)posp;
     spawned_moby = (unsigned char *)create_moby(0x51);
     if (spawned_moby != 0) {
-        spawned_vars = *(char **)(spawned_moby + 0x78);
+        spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         qcopy(spawned_moby + 0x10, spawn_position);
         launch_vector = spawn_vector_scratch + 4;
-        *(float *)(spawned_moby + 0x48) = angle;
+        MOBY(spawned_moby)->rot.z = angle;
         spawned_moby[0x20] = 0;
         spawned_moby[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         fast_vec_sub(launch_vector, spawn_position, &owner->pos);
         spawn_vector_scratch[6] = 0.0f;

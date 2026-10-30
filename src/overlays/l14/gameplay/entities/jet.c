@@ -46,7 +46,6 @@ enum TaxiStop {
     TAXI_STOP_RETURN_FEEDER_DESTINATION = 0x3
 };
 
-#define MOBY(p) ((struct Moby *)(p))
 
 /* 0x002DF080, 180 bytes.  Initialises two tables of spaced vectors in the
  * moby's data block and clears four fields.
@@ -996,17 +995,17 @@ char *spawn_flying_bolt(void *spawn_position, float *launch_vector, int collisio
     if (projectile_moby) {
         char *data;
         *(int *)(projectile_moby + 0x40) = 0;
-        *(unsigned char *)(projectile_moby + 0x30) = 0xFF;
-        *(short *)(projectile_moby + 0x32) = 0x7F;
+        MOBY(projectile_moby)->update_dist = 0xFF;
+        MOBY(projectile_moby)->draw_dist = 0x7F;
         projectile_moby[0x31] = 1;
-        data = *(char **)(projectile_moby + 0x78);
-        *(float *)(projectile_moby + 0x44) = -fast_arc_tan(vector_length_xy(launch_vector), launch_vector[2]);
-        *(float *)(projectile_moby + 0x48) = fast_arc_tan(launch_vector[0], launch_vector[1]);
+        data = ((char *)MOBY(projectile_moby)->pvars);
+        MOBY(projectile_moby)->rot.y = -fast_arc_tan(vector_length_xy(launch_vector), launch_vector[2]);
+        MOBY(projectile_moby)->rot.z = fast_arc_tan(launch_vector[0], launch_vector[1]);
         qcopy(projectile_moby + 0x10, spawn_position);
         qcopy(data + 0x10, spawn_position);
         qcopy(data, launch_vector);
         blend_moby_animation(projectile_moby, 1, 0, scale_game_frames(5));
-        *(short *)(projectile_moby + 0x34) = 0x208;
+        MOBY(projectile_moby)->flags = 0x208;
         *(int *)(data + 0x20) = collision_ignore_moby;
         *(int *)(data + 0x24) = collision_mode;
         projectile_moby[0x23] = 0x10;
@@ -2029,7 +2028,7 @@ extern u8 *D_L14_001B0BB0_u[] __asm__("D_L14_001B0BB0");
  * func_L14_002F0AB8), where it is exact; names translated to the US level
  * program. */
 void rebuild_elevator_world_path(u8 *moby) {
-    u8 *data = *(u8 **)(moby + 0x78);
+    u8 *data = ((u8 *)MOBY(moby)->pvars);
     u8 *local_path_point_cursor = elevator_local_path_points;
     u8 *world_path_point_cursor = D_L14_001B0BB0_u[*(s32 *)(data + 0x114)] + 0x10;
     s32 i = 10;

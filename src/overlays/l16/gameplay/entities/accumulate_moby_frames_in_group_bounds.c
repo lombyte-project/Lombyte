@@ -38,7 +38,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
     if (*(int *)(od + 0x44) != -1) {
         get_first_moby_in_group((int *)&enumerated_moby, *(int *)(od + 0x44), 0, 0);
         while (enumerated_moby) {
-            if (*(short *)(enumerated_moby + 0xA6) == 0x473) {
+            if (MOBY(enumerated_moby)->oclass == 0x473) {
                 float adjusted_position[4];
                 float m[16];
                 char *candidate_moby = enumerated_moby;
@@ -62,7 +62,7 @@ void accumulate_moby_frames_in_group_bounds(struct Moby *moby) {
     if (*(int *)(od + 0x48) != -1) {
         get_first_moby_in_group((int *)&group_candidate_moby, *(int *)(od + 0x48), 0, 0);
         while (group_candidate_moby) {
-            if (*(short *)(group_candidate_moby + 0xA6) == 0x474) {
+            if (MOBY(group_candidate_moby)->oclass == 0x474) {
                 float m[16];
                 fast_vec_sub(displacement_vector, group_candidate_moby + 0x10, data + 0x260);
                 if (!(8.0f < fast_vec_length(displacement_vector))) {

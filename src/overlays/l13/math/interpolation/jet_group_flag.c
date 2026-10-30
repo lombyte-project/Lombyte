@@ -4,6 +4,7 @@
 
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* updates matching objects in the selected object range */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/mobyutil_00266128.c: func_L13_00266128), where it is exact; names translated to the US level program. */
@@ -16,7 +17,7 @@ void jet_group_flag(int id, int state) {
     char *moby = D_L13_0015FFD8;
     if ((unsigned long)D_L13_0015FFE0 >= (unsigned long)moby) {
         do {
-            if (*(short *)(moby + 0xA6) == id) {
+            if (MOBY(moby)->oclass == id) {
                 if (moby[0x20] >= 0)
                     moby[0x20] = state;
             }
@@ -35,18 +36,18 @@ void jet_group_switch(short *ids, int clear_flag_bit_1, int clear_flag_bit_0, in
     for (moby = moby_base; moby <= D_L13_0015FFE0_d; moby += 0x100) {
         int id_index;
         for (id_index = 0; ids[id_index] != 0 && ids[id_index] < 0x800 && id_index < 0xE0; id_index++) {
-            if (*(short *)(moby + 0xA6) == ids[id_index] && moby[0x20] >= 0) {
+            if (MOBY(moby)->oclass == ids[id_index] && moby[0x20] >= 0) {
                 unsigned short object_flags;
                 if (clear_flag_bit_1 != -1) {
-                    object_flags = *(unsigned short *)(moby + 0x34);
+                    object_flags = MOBY(moby)->flags;
                     if (clear_flag_bit_1 != 0)
                         object_flags &= 0xFFFD;
                     else
                         object_flags |= 2;
-                    *(unsigned short *)(moby + 0x34) = object_flags;
+                    MOBY(moby)->flags = object_flags;
                 }
                 if (clear_flag_bit_0 != -1) {
-                    object_flags = *(unsigned short *)(moby + 0x34);
+                    object_flags = MOBY(moby)->flags;
                     if (clear_flag_bit_0 != 0) {
                         moby[0x31] = 1;
                         object_flags &= 0xFFFE;
@@ -54,13 +55,13 @@ void jet_group_switch(short *ids, int clear_flag_bit_1, int clear_flag_bit_0, in
                         moby[0x31] = 0;
                         object_flags |= 1;
                     }
-                    *(unsigned short *)(moby + 0x34) = object_flags;
+                    MOBY(moby)->flags = object_flags;
                 }
                 if (copy_data_pointer != -1) {
                     if (copy_data_pointer != 0)
-                        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+                        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
                     else
-                        *(int *)(moby + 0x94) = 0;
+                        MOBY(moby)->collision = 0;
                 }
             }
         }

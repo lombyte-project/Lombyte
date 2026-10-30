@@ -1,5 +1,6 @@
 /* Shared moby classes: trackdrive_left, tresspasser_pad, escalator, swingshot_versatarget, tresspasser. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -314,7 +315,7 @@ void trackdrive_left_update(char *moby) __asm__("FUN_L02_002cb978");
 void trackdrive_left_update(char *moby) {
     if ((unsigned int)moby < l02_trackdrive_left_moby_address_cutoff) {
         *(int *)(moby + 0x58) = 0;
-        *(unsigned short *)(moby + 0x34) |= 0x40;
+        MOBY(moby)->flags |= 0x40;
     }
 }
 
@@ -342,12 +343,12 @@ void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation
     int camera_transform_index;
     char *base;
 
-    camera_transform_index = *(int *)(*(char **)(moby + 0x78) + 0xE8);
+    camera_transform_index = *(int *)(((char *)MOBY(moby)->pvars) + 0xE8);
     if (camera_transform_index == -1) {
-        left = fast_add_rotations(*(float *)(moby + 0x48), 1.57079637f);
-        right = fast_add_rotations(*(float *)(moby + 0x48), -1.57079637f);
-        to = fast_arc_tan(D_L02_00167280_lui.x - *(float *)(moby + 0x10),
-                          D_L02_00167280_lui.y - *(float *)(moby + 0x14));
+        left = fast_add_rotations(MOBY(moby)->rot.z, 1.57079637f);
+        right = fast_add_rotations(MOBY(moby)->rot.z, -1.57079637f);
+        to = fast_arc_tan(D_L02_00167280_lui.x - MOBY(moby)->pos.x,
+                          D_L02_00167280_lui.y - MOBY(moby)->pos.y);
         dl = fast_difference_between_rotations(to, left);
         pick = dl < fast_difference_between_rotations(to, right) ? left : right;
         fast_vec_add(midpoint_position, &hero.motion.pos, moby + 0x10);
@@ -978,13 +979,13 @@ extern float D_0015ED70_2dc6b0 __asm__("D_0015ED70");
 
 void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
 void escalator_update(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     float limit;
     float y;
     int state;
 
     if (data == 0) return;
-    state = *(u8 *)(moby + 0x20);
+    state = MOBY(moby)->state;
     if (state == 1) goto state1;
     if (state < 2) {
         if (state == 0) goto state0;
@@ -997,21 +998,21 @@ state0:
         clear_u64_value(data + 0x40);
         *(int *)(data + 0xa0) = scale_game_frames(escalator_direction_timer_frames_gp);
         *(u32 *)(data + 0x9c) |= 4;
-        if (*(int *)(data + 0xa4) != 0) *(u8 *)(moby + 0x20) = 3;
-        else *(u8 *)(moby + 0x20) = 1;
+        if (*(int *)(data + 0xa4) != 0) MOBY(moby)->state = 3;
+        else MOBY(moby)->state = 1;
         goto move;
 state1: {
         float speed;
 
-        *(float *)(moby + 0x58) = 1.0f;
+        MOBY(moby)->anim_speed = 1.0f;
         if (fast_dec_timer((int *)(data + 0xa0))) {
             speed = fast_vec_length(data + 0x40) - escalator_acceleration_gp * D_0015ED70_2dc6b0;
             if (speed <= 0.0f) {
                 *(int *)(data + 0xa0) = scale_game_frames(escalator_direction_timer_frames_gp);
-                *(u8 *)(moby + 0x20) = 2;
+                MOBY(moby)->state = 2;
             } else {
-                *(float *)(data + 0x40) = fast_cos(*(float *)(moby + 0x48)) * -speed;
-                y = fast_sin(*(float *)(moby + 0x48)) * -speed;
+                *(float *)(data + 0x40) = fast_cos(MOBY(moby)->rot.z) * -speed;
+                y = fast_sin(MOBY(moby)->rot.z) * -speed;
                 *(float *)(data + 0x48) = 0.0f;
                 *(float *)(data + 0x44) = y;
             }
@@ -1020,41 +1021,41 @@ state1: {
             limit = absolute_float(escalator_target_speed_gp * frame_time);
             /* Retail loads frame_time_sq through its absolute EE address here. */
             if (speed < limit) speed += escalator_acceleration_gp * (*(float *)0x0015ED70);
-            *(float *)(data + 0x40) = fast_cos(*(float *)(moby + 0x48)) * -speed;
-            *(float *)(data + 0x44) = fast_sin(*(float *)(moby + 0x48)) * -speed;
+            *(float *)(data + 0x40) = fast_cos(MOBY(moby)->rot.z) * -speed;
+            *(float *)(data + 0x44) = fast_sin(MOBY(moby)->rot.z) * -speed;
             *(int *)(data + 0x48) = 0;
         }
-        *(float *)(moby + 0x58) = speed / (escalator_target_speed_gp * frame_time);
+        MOBY(moby)->anim_speed = speed / (escalator_target_speed_gp * frame_time);
         goto move;
 }
 state2: {
         float speed;
 
-        *(float *)(moby + 0x58) = -1.0f;
+        MOBY(moby)->anim_speed = -1.0f;
         if (fast_dec_timer((int *)(data + 0xa0))) {
             speed = fast_vec_length(data + 0x40) - escalator_acceleration_gp * D_0015ED70_2dc6b0;
             if (speed <= 0.0f) {
                 *(int *)(data + 0xa0) = scale_game_frames(escalator_direction_timer_frames_gp);
-                *(u8 *)(moby + 0x20) = 1;
+                MOBY(moby)->state = 1;
             } else {
-                *(float *)(data + 0x40) = fast_cos(*(float *)(moby + 0x48)) * speed;
-                *(float *)(data + 0x44) = fast_sin(*(float *)(moby + 0x48)) * speed;
+                *(float *)(data + 0x40) = fast_cos(MOBY(moby)->rot.z) * speed;
+                *(float *)(data + 0x44) = fast_sin(MOBY(moby)->rot.z) * speed;
                 *(float *)(data + 0x48) = 0.0f;
             }
         } else {
             speed = fast_vec_length(data + 0x40);
             limit = absolute_float(escalator_target_speed_gp * frame_time);
             if (speed < limit) speed += escalator_acceleration_gp * (*(float *)0x0015ED70);
-            *(float *)(data + 0x40) = fast_cos(*(float *)(moby + 0x48)) * speed;
-            *(float *)(data + 0x44) = fast_sin(*(float *)(moby + 0x48)) * speed;
+            *(float *)(data + 0x40) = fast_cos(MOBY(moby)->rot.z) * speed;
+            *(float *)(data + 0x44) = fast_sin(MOBY(moby)->rot.z) * speed;
             *(int *)(data + 0x48) = 0;
         }
-        *(float *)(moby + 0x58) = speed / -(escalator_target_speed_gp * frame_time);
+        MOBY(moby)->anim_speed = speed / -(escalator_target_speed_gp * frame_time);
         goto move;
 }
 state3:
-        *(float *)(data + 0x40) = fast_cos(*(float *)(moby + 0x48)) * -(escalator_target_speed_gp * frame_time);
-        *(float *)(data + 0x44) = fast_sin(*(float *)(moby + 0x48)) * -(escalator_target_speed_gp * frame_time);
+        *(float *)(data + 0x40) = fast_cos(MOBY(moby)->rot.z) * -(escalator_target_speed_gp * frame_time);
+        *(float *)(data + 0x44) = fast_sin(MOBY(moby)->rot.z) * -(escalator_target_speed_gp * frame_time);
         *(int *)(data + 0x48) = 0;
 move:
     update_entity_matrix(data + 0x60, data + 0x40, moby + 0x40, moby + 0x40);
@@ -1088,7 +1089,7 @@ void swingshot_versatarget_update(char *moby) {
         VERSATARGET_STATE_ACTIVE = 1,
         VERSATARGET_STATE_INACTIVE = 2
     };
-    char *moby_data = *(char **)(moby + 0x78);
+    char *moby_data = ((char *)MOBY(moby)->pvars);
     float particle_position[4];
     float particle_velocity[4];
     char *linked_moby;
@@ -1100,7 +1101,7 @@ void swingshot_versatarget_update(char *moby) {
              ((unsigned char *)linked_moby)[0x20] != 0xFE && ((unsigned char *)linked_moby)[0x20] != 0xFD)) {
             ((unsigned char *)moby)[0x30] = 0xFF;
             moby[0x20] = 2;
-            *(unsigned short *)(moby + 0x34) |= 0x41;
+            MOBY(moby)->flags |= 0x41;
         } else {
             set_moby_color(moby, 0xC0, 0xC0, 0xC0);
             func_L02_002FBB10_c(moby);
@@ -1108,11 +1109,11 @@ void swingshot_versatarget_update(char *moby) {
         }
         break;
     case VERSATARGET_STATE_ACTIVE:
-        if (*(short *)(moby + 0xA6) == 0x323) {
+        if (MOBY(moby)->oclass == 0x323) {
             struct Hero *hero_ptr = &hero;
-            float *rz = (float *)(moby + 0x48);
-            float yaw = fast_arc_tan(hero_ptr->motion.pos.f[0] - *(float *)(moby + 0x10),
-                                     hero_ptr->motion.pos.f[1] - *(float *)(moby + 0x14));
+            float *rz = (float *)&MOBY(moby)->rot.z;
+            float yaw = fast_arc_tan(hero_ptr->motion.pos.f[0] - MOBY(moby)->pos.x,
+                                     hero_ptr->motion.pos.f[1] - MOBY(moby)->pos.y);
             func_L00_0025CE58_f(rz, yaw, (float *)(moby_data + 0x38), frame_time_sq * 6.2831855f,
                                 frame_time_sq * 6.2831855f, frame_time * 12.566371f);
             if (D_L02_0015F5CC & 1) {
@@ -1142,7 +1143,7 @@ void swingshot_versatarget_update(char *moby) {
             (*(int *)(moby_data + 0x3C) != -1 &&
              ((linked_moby = (char *)(D_L02_0015FFD8 + (*(int *)(moby_data + 0x3C) << 8))) == 0 ||
               ((unsigned char *)linked_moby)[0x20] == 0xFE || ((unsigned char *)linked_moby)[0x20] == 0xFD))) {
-            *(unsigned short *)(moby + 0x34) &= 0xFFBE;
+            MOBY(moby)->flags &= 0xFFBE;
             *(int *)(moby_data + 0x30) = -1;
             moby[0x20] = 0;
         }
@@ -1171,7 +1172,7 @@ void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) {
     if (level_game_mode == 2 && big_head_cheat_enabled != 0) {
         for (i = 0; i < talk_camera.count; i++) {
             char *candidate_moby = talk_camera.mobys[i];
-            if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
+            if (MOBY(candidate_moby)->oclass == MOBY(moby)->oclass) {
                 unsigned char *manipulator = l02_big_head_cheat_manipulator;
                 if (manipulator[1] == 0) {
                     attach_manipulator(candidate_moby, 0, manipulator);
@@ -1318,7 +1319,7 @@ void tresspasser_update(struct Moby *moby) {
 void initialize_collectible_sprite_state(char *moby) __asm__("FUN_L02_002ea7d0");
 
 void initialize_collectible_sprite_state(char *moby) {
-    float *moby_data = *(float **)(moby + 0x78);
+    float *moby_data = ((float *)MOBY(moby)->pvars);
     int *sprite_timers;
     int i;
 
@@ -1352,18 +1353,18 @@ extern char D_L02_00167440_ea8b0[] __asm__("D_L02_001673C0");
 void update_collectible_sprite_effect(char *moby) __asm__("FUN_L02_002ea8b0");
 
 void update_collectible_sprite_effect(char *moby) {
-    L02SpriteData *sprite_data = *(L02SpriteData **)(moby + 0x78);
+    L02SpriteData *sprite_data = ((L02SpriteData *)MOBY(moby)->pvars);
     float d[4] __attribute__((aligned(16)));
     float sprite_position_step[4] __attribute__((aligned(16)));
     int i, col;
     float timer_elapsed_fraction;
 
-    *(float *)(moby + 0x18) += 0.5f;
+    MOBY(moby)->pos.z += 0.5f;
     fast_vec_sub(d, D_L02_00167440_ea8b0, moby + 0x10);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(sprite_position_step, d, 0.1f);
     fast_vec_add(d, d, moby + 0x10);
-    *(float *)(moby + 0x18) -= 0.5f;
+    MOBY(moby)->pos.z -= 0.5f;
     for (i = 0; i < 4; i++) {
         float unwrapped_sprite_value = sprite_data->a[i] + sprite_data->b[i];
         sprite_data->a[i] = unwrapped_sprite_value;
@@ -1452,7 +1453,7 @@ void draw_tresspasser_puzzle(char *moby) {
     /* Fakematch: the texture sits at retail's stack offset inside this frame. */
     struct { char pad0[0x78]; u64 texture; char pad80[0x10]; } ctx;
     int first_step, second_step;
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     Ring12 *markers = (Ring12 *)(data + 0xb0);
     Ring12 *first, *second, *third;
 

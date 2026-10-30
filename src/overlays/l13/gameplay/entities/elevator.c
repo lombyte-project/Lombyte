@@ -1,5 +1,6 @@
 /* Level 13 moby classes: elevator, blarg_turret, blarg_gunner, robosquawker, fighter_jet. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -41,9 +42,9 @@ extern char moby_volume_trigger_missing_volume_format[] __asm__("D_L13_001F41F8"
 void update_moby_volume_trigger(char *moby) __asm__("FUN_L13_002b0e80");
 
 void update_moby_volume_trigger(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     if (*(int *)data == -1) {
-        debug_print(moby_volume_trigger_missing_volume_format, *(short *)(moby + 0xB2));
+        debug_print(moby_volume_trigger_missing_volume_format, ((short)MOBY(moby)->save_id));
         mark_moby_for_removal(moby);
         return;
     }
@@ -723,8 +724,8 @@ void process_blarg_gunner_hits(struct Moby *moby, char *moby_vars) {
                     k = 1;
                 } else {
                     float f = fast_difference_between_rotations(
-                        fast_arc_tan(*(float *)(hit_source_moby + 0x10) - moby->pos.x,
-                                     *(float *)(hit_source_moby + 0x14) - moby->pos.y),
+                        fast_arc_tan(MOBY(hit_source_moby)->pos.x - moby->pos.x,
+                                     MOBY(hit_source_moby)->pos.y - moby->pos.y),
                         *(float *)(*(char **)(*(char **)(moby_vars + 0x70) + 0x78) + 0x54));
                     if (f < 1.65806282f) {
                         *(int *)(hit_record + 0x2C) = 0;
@@ -2114,15 +2115,15 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
     while (candidate_moby != 0) {
         tab = fighter_jet_target_marker_vertices;
         scr = (int *)(D_0013E500);
-        if ((((Moby_2B9E50 *)candidate_moby)->f34 & 0x1000) && !(((Moby_2B9E50 *)candidate_moby)->f34 & 3) && *(unsigned char *)(candidate_moby + 0x31) != 0 &&
-            candidate_moby != 0 && *(char **)(candidate_moby + 0x24) != 0 && *(short *)(*(char **)(candidate_moby + 0x24) + 0x46) == 5) {
+        if ((((Moby_2B9E50 *)candidate_moby)->f34 & 0x1000) && !(((Moby_2B9E50 *)candidate_moby)->f34 & 3) && MOBY(candidate_moby)->visible != 0 &&
+            candidate_moby != 0 && ((char *)MOBY(candidate_moby)->pclass) != 0 && *(short *)(((char *)MOBY(candidate_moby)->pclass) + 0x46) == 5) {
             project_world_point_to_screen_pixels(candidate_moby + 0x10, &sx, &sy, 0);
             dx = sx - *(int *)(moby_vars + 0xE0);
             dy = sy - *(int *)(moby_vars + 0xE4);
             if (dx < 0) dx = -dx;
             if (dy < 0) dy = -dy;
             qcopy(v, fighter_jet_target_selection_offset_vector);
-            fast_vec_scale(v, fighter_jet_target_selection_offset_vector, *(float *)(candidate_moby + 0xC) / 1280.0f);
+            fast_vec_scale(v, fighter_jet_target_selection_offset_vector, MOBY(candidate_moby)->bsphere.w / 1280.0f);
             fast_vec_add(v, v, candidate_moby + 0x10);
             project_world_point_to_screen_pixels(v, &tx, &ty, 0);
             tx -= sx;
@@ -2143,7 +2144,7 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
                 }
             }
         }
-        switch (*(short *)(candidate_moby + 0xA6)) {
+        switch (MOBY(candidate_moby)->oclass) {
         case 0xE0:
         case 0x4C2:
             draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 2, 0x75808080, *(int *)(moby_vars + 0x104));
@@ -2163,8 +2164,8 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
         case 0x3EB:
         case 0x504:
             project_to_screen(v, candidate_moby + 0x10);
-            if (*(short *)(candidate_moby + 0xA6) != 0x184) {
-                if (*(unsigned char *)(candidate_moby + 0x31) != 0) {
+            if (MOBY(candidate_moby)->oclass != 0x184) {
+                if (MOBY(candidate_moby)->visible != 0) {
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
@@ -2179,8 +2180,8 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
                     }
                 }
             }
-            if (*(short *)(candidate_moby + 0xA6) != 0x191) {
-                if (*(unsigned char *)(candidate_moby + 0x31) == 0) {
+            if (MOBY(candidate_moby)->oclass != 0x191) {
+                if (MOBY(candidate_moby)->visible == 0) {
                     char *np = candidate_moby + 0x10;
                     int arrow_alpha;
                     transpose_rotation_matrix(offscreen_arrow_rotation_matrix, fighter_jet_offscreen_arrow_reference_rotation_matrix);
@@ -2194,11 +2195,11 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
                     u[0] += 256.0f;
                     u[1] += 208.0f;
                     source_to_candidate_distance = fast_vec_dist((char *)source_moby + 0x10, np);
-                    yaw_error = absolute_float(fast_subtract_rotations(fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)((char *)source_moby + 0x10),
-                                                                      *(float *)(candidate_moby + 0x14) - *(float *)((char *)source_moby + 0x14)),
+                    yaw_error = absolute_float(fast_subtract_rotations(fast_arc_tan(MOBY(candidate_moby)->pos.x - *(float *)((char *)source_moby + 0x10),
+                                                                      MOBY(candidate_moby)->pos.y - *(float *)((char *)source_moby + 0x14)),
                                                     *(float *)(moby_vars + 0x38)));
                     k = absolute_float(fast_subtract_rotations(-fast_arc_tan(vector_distance_xy((char *)source_moby + 0x10, np),
-                                                                       *(float *)(candidate_moby + 0x18) - *(float *)((char *)source_moby + 0x18)),
+                                                                       MOBY(candidate_moby)->pos.z - *(float *)((char *)source_moby + 0x18)),
                                                     *(float *)(moby_vars + 0x34)));
                     angular_error_magnitude = square_root(yaw_error * yaw_error + k * k);
                     arrow_pulse_phase = fast_add_rotations(*(float *)(moby_vars + 0x114), 0.1f / (angular_error_magnitude / 3.1415927f));
@@ -2222,16 +2223,16 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
                     }
                 }
                 draw_fighter_jet_radar_icon(radar_rotation, radar_origin_position, candidate_moby, 0, 0x75808080, *(int *)(moby_vars + 0x104));
-                if (*(short *)(candidate_moby + 0xA6) != 0x191) {
+                if (MOBY(candidate_moby)->oclass != 0x191) {
                     *(int *)(moby_vars + 0xE8) = *(int *)(moby_vars + 0xE8) + 1;
                 }
             }
             break;
         case 0x6F:
         case 0x4BE:
-            if (!(*(unsigned short *)(candidate_moby + 0x34) & 1)) {
+            if (!(MOBY(candidate_moby)->flags & 1)) {
                 project_to_screen(v, candidate_moby + 0x10);
-                if (*(unsigned char *)(candidate_moby + 0x31) != 0) {
+                if (MOBY(candidate_moby)->visible != 0) {
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
@@ -2243,9 +2244,9 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
             }
             break;
         case 0x4BF:
-            if (!(*(unsigned short *)(candidate_moby + 0x34) & 1) && *(unsigned char *)(candidate_moby + 0x20) >= 2) {
+            if (!(MOBY(candidate_moby)->flags & 1) && MOBY(candidate_moby)->state >= 2) {
                 project_to_screen(v, candidate_moby + 0x10);
-                if (*(unsigned char *)(candidate_moby + 0x31) != 0) {
+                if (MOBY(candidate_moby)->visible != 0) {
                     {
                         float x = (v[0] - scr[4]) * 0.0625f;
                         float y = (v[1] - scr[5]) * 0.0625f;
@@ -2263,7 +2264,7 @@ int select_fighter_jet_target_and_draw_indicators(int source_moby, char *moby_va
         case 0x538: case 0x539: case 0x53A:
             break;
         }
-        candidate_moby = *(char **)(candidate_moby + 0x28);
+        candidate_moby = ((char *)MOBY(candidate_moby)->next);
     }
     return (int)selected_target_moby;
 }

@@ -1,5 +1,6 @@
 /* Level 06 moby classes: fred, shuttle, red_button. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/hero.h"
@@ -5593,7 +5594,7 @@ void update_clip_volume_moby_activation_trigger(char *moby) {
         WAIT_FOR_ANIMATION_SIGNAL = 1,
         ACTIVATE_LISTED_MOBYS_AT_INTERVAL = 2
     };
-    int *moby_vars = *(int **)(moby + 0x78);
+    int *moby_vars = ((int *)MOBY(moby)->pvars);
     switch (((unsigned char *)moby)[0x20]) {
     case WAIT_FOR_HERO_IN_CLIP_VOLUME:
         if (moby_vars[1] >= 0 && is_point_inside_clip_volume(&hero.motion.pos, moby_vars[1])) {
@@ -5652,12 +5653,12 @@ void set_moby_list_state_17(int moby_list_index) {
         do {
             char *moby = D_L06_0015FFD8_d + ((*moby_list_entry & 0x7FFF) << 8);
             if ((unsigned char)moby[0x20] < 0x7F) {
-                unsigned short flags = *(unsigned short *)(moby + 0x34);
+                unsigned short flags = MOBY(moby)->flags;
                 moby[0x20] = 0x11;
                 flags |= 1;
-                *(int *)(moby + 0x94) = 0;
+                MOBY(moby)->collision = 0;
                 flags &= 0xEFFF;
-                *(unsigned short *)(moby + 0x34) = flags;
+                MOBY(moby)->flags = flags;
             }
         } while (*moby_list_entry++ >= 0);
     }
@@ -5702,11 +5703,11 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
         BLEND_CAMERA_TO_HERO = 3,
         WAIT_FOR_NEARBY_HERO = 4
     };
-    int *data = *(int **)(moby + 0x78);
+    int *data = ((int *)MOBY(moby)->pvars);
     float camera_position[4], camera_setup_rotation_or_position_target[4], from[4], target[4], offset[4];
     int base;
     int state;
-    *(float *)(moby + 0x2c) = *(float *)(*(char **)(moby + 0x24) + 0x24) * camera_sequence_moby_scale_multiplier_gp;
+    MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * camera_sequence_moby_scale_multiplier_gp;
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_DRAW_SELECTION:
         data[1] = 1;
@@ -5752,7 +5753,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                     base = data[4];
                     base <<= 7;
                     base += (int)D_L06_001600EC_ffcb0;
-                    facing = fast_arc_tan(*(float *)(moby + 0x10) - *(float *)(base + 0x30), *(float *)(moby + 0x14) - *(float *)(base + 0x34));
+                    facing = fast_arc_tan(MOBY(moby)->pos.x - *(float *)(base + 0x30), MOBY(moby)->pos.y - *(float *)(base + 0x34));
                 }
                 {
                     int state;
@@ -5857,17 +5858,17 @@ void spawn_moby_breakup_effect(char *source_moby) {
     float fragment_angle;
     int i;
 
-    *(int *)(*(char **)(source_moby + 0x78) + 4) = 0;
+    *(int *)(((char *)MOBY(source_moby)->pvars) + 4) = 0;
     spawned_moby = create_moby(0x43C);
-    *(short *)(spawned_moby + 0x32) = 0x40;
+    MOBY(spawned_moby)->draw_dist = 0x40;
     spawned_moby[0x31] = 1;
     *(long long *)(spawned_moby + 0x38) = *(long long *)(source_moby + 0x38);
-    *(unsigned short *)(spawned_moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
+    MOBY(spawned_moby)->flags = MOBY(source_moby)->flags;
     qcopy(spawned_moby + 0x10, source_moby + 0x10);
     qcopy(spawned_moby + 0x40, source_moby + 0x40);
-    *(float *)(spawned_moby + 0x2C) = *(float *)(source_moby + 0x2C);
+    MOBY(spawned_moby)->scale = MOBY(source_moby)->scale;
     update_entity(spawned_moby);
-    *(unsigned short *)(source_moby + 0x34) |= 1;
+    MOBY(source_moby)->flags |= 1;
     for (i = 0; i < 50; i++) {
         fragment_step_length = random_float_between(1.0f, 6.0f) * frame_time;
         fragment_angle = random_angle_radians();
@@ -6015,7 +6016,7 @@ void update_moby_bobbing_and_motion(char *moby) {
         UPDATE_BOBBING_HEIGHT = 1,
         UPDATE_LINEAR_AND_ANGULAR_MOTION = 2
     };
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     int state;
     if (data == 0) {
         mark_moby_for_removal(moby);
@@ -6024,18 +6025,18 @@ void update_moby_bobbing_and_motion(char *moby) {
     state = (unsigned char)moby[0x20];
     switch (state) {
     case INITIALIZE_BOBBING_HEIGHT:
-        *(short *)(moby + 0x32) = 0x200;
+        MOBY(moby)->draw_dist = 0x200;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(float *)(data + 0xC) = *(float *)(moby + 0x18);
+        *(float *)(data + 0xC) = MOBY(moby)->pos.z;
         moby[0x20] = 1;
         break;
     case UPDATE_BOBBING_HEIGHT:
         if (*(int *)(D_0013E533 + 0x2EA1) == 0x72) {
-            *(float *)(moby + 0x18) = *(float *)(data + 0xC);
+            MOBY(moby)->pos.z = *(float *)(data + 0xC);
         } else {
             float bobbing_cycle_fraction = convert_integer_to_float(GB_FRAME_gp % 600) / 600.0f;
             float bobbing_sine_factor = fast_sin(bobbing_cycle_fraction * 6.28318f);
-            *(float *)(moby + 0x18) = *(float *)(data + 0xC) + moby_bobbing_amplitude_gp * bobbing_sine_factor;
+            MOBY(moby)->pos.z = *(float *)(data + 0xC) + moby_bobbing_amplitude_gp * bobbing_sine_factor;
         }
         break;
     case UPDATE_LINEAR_AND_ANGULAR_MOTION:
@@ -6057,7 +6058,7 @@ void update_moby_bobbing_and_motion(char *moby) {
 void begin_moby_linear_and_angular_motion(char *moby, void *linear_velocity, void *angular_velocity) __asm__("FUN_L06_00300f70");
 
 void begin_moby_linear_and_angular_motion(char *moby, void *linear_velocity, void *angular_velocity) {
-    char *motion_vars = *(char **)(moby + 0x78);
+    char *motion_vars = ((char *)MOBY(moby)->pvars);
     moby[0x20] = 2;
     qcopy(motion_vars, linear_velocity);
     qcopy(motion_vars + 0x10, angular_velocity);
@@ -6416,7 +6417,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         UPDATE_POST_PATH_TIMED_EVENTS = 4,
         RAMP_SHARED_VALUE_AFTER_DELAY = 5
     };
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float va[4] __attribute__((aligned(16)));
     float vc[4] __attribute__((aligned(16)));
     float vb[4] __attribute__((aligned(16)));
@@ -6970,7 +6971,7 @@ void update_shuttle_route_selection_and_prompt(char *shuttle_moby) {
         SHUTTLE_AT_THIRD_STOP = 2
     };
 
-    char *shuttle_vars = *(char **)(shuttle_moby + 0x78);
+    char *shuttle_vars = ((char *)MOBY(shuttle_moby)->pvars);
     switch (*(int *)(shuttle_vars + 0xBC)) {
     case SHUTTLE_AT_INITIAL_STOP: {
         int level_visit_byte_offset = current_level_index << 4;
@@ -7049,7 +7050,7 @@ extern char *D_L06_001600EC_303160 __asm__("D_L06_001600EC");
 /* Moves the moby along three paths and plays the sound marked on the path points. */
 int update_shuttle_path_ride(char *moby, int path) {
     float rotation[4], position[4];
-    struct PathRide *ride = *(struct PathRide **)(moby + 0x78);
+    struct PathRide *ride = ((struct PathRide *)MOBY(moby)->pvars);
     Path *first_path = ((Path **)D_L06_001B0C30_303160)[ride->path_a[path]];
     Path *middle_path = ((Path **)D_L06_001B0C30_303160)[ride->path_b[path]];
     Path *third_path = ((Path **)D_L06_001B0C30_303160)[ride->path_c[path]];
@@ -7071,20 +7072,20 @@ int update_shuttle_path_ride(char *moby, int path) {
     set_camera_position(position);
     if (third_index > 0) {
         angle = fast_arc_tan(third_path->p[third_index].x - third_path->p[third_index - 1].x, third_path->p[third_index].y - third_path->p[third_index - 1].y);
-        *(float *)(moby + 0x48) = fast_add_rotations(
+        MOBY(moby)->rot.z = fast_add_rotations(
             fast_subtract_rotations(fast_arc_tan(third_path->p[third_index + 1].x - third_path->p[third_index].x, third_path->p[third_index + 1].y - third_path->p[third_index].y), angle) * third_fraction,
             angle);
         angle = -fast_arc_tan(vector_distance_xy(&third_path->p[third_index - 1], &third_path->p[third_index]), third_path->p[third_index].z - third_path->p[third_index - 1].z);
-        *(float *)(moby + 0x44) = fast_add_rotations(
+        MOBY(moby)->rot.y = fast_add_rotations(
             fast_subtract_rotations(-fast_arc_tan(vector_distance_xy(&third_path->p[third_index], &third_path->p[third_index + 1]), third_path->p[third_index + 1].z - third_path->p[third_index].z),
                            angle) * third_fraction,
             angle);
-        *(float *)(moby + 0x44) = *(float *)(moby + 0x44) * fast_cos(ride->sway);
-        *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), ride->sway);
+        MOBY(moby)->rot.y = MOBY(moby)->rot.y * fast_cos(ride->sway);
+        MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, ride->sway);
     } else {
-        *(float *)(moby + 0x44) =
+        MOBY(moby)->rot.y =
             -fast_arc_tan(vector_distance_xy(&third_path->p[0], &third_path->p[1]), third_path->p[1].z - third_path->p[0].z);
-        *(float *)(moby + 0x48) = fast_arc_tan(third_path->p[1].x - third_path->p[0].x, third_path->p[1].y - third_path->p[0].y);
+        MOBY(moby)->rot.z = fast_arc_tan(third_path->p[1].x - third_path->p[0].x, third_path->p[1].y - third_path->p[0].y);
     }
     if (first_index > 0 && middle_index > 0) {
         clear_u64_value(rotation);
@@ -7097,8 +7098,8 @@ int update_shuttle_path_ride(char *moby, int path) {
             angle);
         set_camera_rotation(rotation);
     }
-    *(float *)(moby + 0x2C) =
-        *(float *)(*(char **)(moby + 0x24) + 0x24) * (ride->scale_start - (ride->scale_start - ride->scale_end) * ride->progress);
+    MOBY(moby)->scale =
+        *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * (ride->scale_start - (ride->scale_start - ride->scale_end) * ride->progress);
     if (ride->progress > 0.8f) {
         rate = frame_time_sq * 12.566371f;
         approach_angle(&ride->sway, &ride->sway_speed, 3.1415927f, rate, rate, frame_time * 6.2831855f);
@@ -7295,7 +7296,7 @@ extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
 
 /* Marks every moby in the moby's list for removal; the list ends after its first negative entry. */
 void mark_shuttle_linked_mobys_for_removal(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     short *moby_list_entry = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
     do {
         mark_moby_for_removal(D_L06_0015FFD8_u + ((*moby_list_entry & 0x7FFF) << 8));
@@ -7599,7 +7600,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
         UPDATE_VECTOR_STREAMS = 2,
         EMIT_PARTICLE_BURST = 3
     };
-    Data_305E38 *vector_stream_vars = *(Data_305E38 **)(moby + 0x78);
+    Data_305E38 *vector_stream_vars = ((Data_305E38 *)MOBY(moby)->pvars);
     union {
         float tmp[30][4];
         struct {
@@ -7612,7 +7613,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
 
     switch ((unsigned char)moby[0x20]) {
     case INITIALIZE_VECTOR_STREAMS:
-        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * vector_stream_moby_scale_multiplier_gp;
+        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * vector_stream_moby_scale_multiplier_gp;
         D_L06_00162238 = 0x16;
         D_L06_00162234 = 0x2D;
         vector_stream_vars->timer[1] = 0xB;
@@ -7622,7 +7623,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
         vector_stream_vars->f18 = -1;
         if (vector_stream_vars->f10 != -1) {
             moby[0x20] = 1;
-            *(int *)(moby + 0x94) = 0;
+            MOBY(moby)->collision = 0;
         } else {
             moby[0x20] = 2;
         }
@@ -7633,7 +7634,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
             return;
         }
         moby[0x20] = 2;
-        *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+        MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
         break;
     }
     case UPDATE_VECTOR_STREAMS: {
@@ -7682,7 +7683,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
         }
         if (vector_stream_vars->f14 >= 0 && *(unsigned char *)(D_L06_0015FFD8_301070 + 0xBC + (vector_stream_vars->f14 << 8)) != 0) {
             int voice_slot_index;
-            *(int *)(moby + 0x94) = 0;
+            MOBY(moby)->collision = 0;
             moby[0x20] = 3;
             voice_slot_index = vector_stream_vars->f18;
             if (voice_slot_index != -1) {
@@ -7700,7 +7701,7 @@ void update_moby_vector_streams_and_particle_burst(char *moby)
         int i;
         int j;
 
-        euler_rotation_matrix(u.m.a, (float *)(moby + 0x40));
+        euler_rotation_matrix(u.m.a, (float *)&MOBY(moby)->rot);
         set_scale_matrix(u.m.b, D_L06_00162208);
         multiply_matrix(u.m.a, u.m.a, u.m.b);
         for (i = 0; i < 4; i++) {
@@ -7798,8 +7799,8 @@ void draw_moby_vector_streams(char *moby) {
     float *mp;
     int i;
     int j;
-    data = *(char **)(moby + 0x78);
-    euler_rotation_matrix(rotation_scale_matrix, (float *)(moby + 0x40));
+    data = ((char *)MOBY(moby)->pvars);
+    euler_rotation_matrix(rotation_scale_matrix, (float *)&MOBY(moby)->rot);
     set_scale_matrix(scale_matrix, *(float *)&D_L06_00162208_gp);
     multiply_matrix(rotation_scale_matrix, rotation_scale_matrix, scale_matrix);
     vu1_add_g_sregister(6, get_effect_texture(0xE));

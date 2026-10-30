@@ -29,7 +29,7 @@ void handle_mine_hit(unsigned char *mine_moby) {
     char *item = find_moby_hit(mine_moby, 0x130000, 0);
     if (item != 0) {
         char *other = *(char **)(item + 0x20);
-        if (other != 0 && *(short *)(other + 0xA6) != *(short *)(mine_moby + 0xA6)) {
+        if (other != 0 && *(short *)(other + 0xA6) != MOBY(mine_moby)->oclass) {
             mine_moby[0x20] = 4;
         }
     }
@@ -655,12 +655,12 @@ char *spawn_mine_layer_projectile(char *parent_moby, void *spawn_position, float
     if (spawned_moby == 0) {
         return 0;
     }
-    *(unsigned short *)(spawned_moby + 0x32) = *(unsigned short *)(parent_moby + 0x32);
+    MOBY(spawned_moby)->draw_dist = ((unsigned short)MOBY(parent_moby)->draw_dist);
     spawned_moby[0x30] = parent_moby[0x32];
     spawned_moby[0x31] = 1;
     *(long long *)(spawned_moby + 0x38) = *(long long *)(parent_moby + 0x38);
     qcopy(spawned_moby + 0x10, spawn_position);
-    spawned_moby_vars = *(char **)(spawned_moby + 0x78);
+    spawned_moby_vars = ((char *)MOBY(spawned_moby)->pvars);
     frame_scale_squared = frame_scale_sq;
     *(float *)(spawned_moby_vars + 0x10) = frame_scale_squared * 0.008f;
     *(float *)(spawned_moby_vars + 0x14) = frame_scale_squared * 0.0005f;
@@ -995,14 +995,14 @@ char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int
     char *moby_vars;
     if (spawned_moby != 0) {
         float collision_start_pos[4];
-        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0x7E;
-        moby_vars = *(char **)(spawned_moby + 0x78);
+        MOBY(spawned_moby)->update_dist = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0x7E;
+        moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 1;
         qcopy(spawned_moby + 0x10, pos);
         qcopy(moby_vars, heading_vector);
-        *(float *)(spawned_moby + 0x48) = fast_arc_tan(*(float *)moby_vars, *(float *)(moby_vars + 4));
+        MOBY(spawned_moby)->rot.z = fast_arc_tan(*(float *)moby_vars, *(float *)(moby_vars + 4));
         *(int *)(moby_vars + 0x14) = scale_game_frames(timer_frames);
         *(float *)(moby_vars + 0x18) = f2;
         *(float *)(moby_vars + 0x1C) = initial_heading;

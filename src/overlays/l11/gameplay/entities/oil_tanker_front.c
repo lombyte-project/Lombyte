@@ -275,17 +275,17 @@ void update_moby_target_heading_and_conditional_movement(char *moby, float *targ
 
 void update_moby_target_heading_and_conditional_movement(char *moby, float *target_position)
 {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float planar_heading_vector[4];
     float helper_scratch_buffer[4];
     float target_heading_or_record_value;
-    target_heading_or_record_value = fast_add_rotations(fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14)), *(float *)(moby_vars + 0x24C));
+    target_heading_or_record_value = fast_add_rotations(fast_arc_tan(target_position[0] - MOBY(moby)->pos.x, target_position[1] - MOBY(moby)->pos.y), *(float *)(moby_vars + 0x24C));
     approach_angle(moby + 0x48, moby_vars + 0x250, target_heading_or_record_value, frame_time_sq * 8.726646f, frame_time_sq * 8.726646f, D_6C_e[1] * 12.566371f);
     target_heading_or_record_value = compute_interpolated_record_value(moby);
-    if (*(u8 *)(moby + 0x52) == *(u8 *)(moby + 0x53) && 8.0f < target_heading_or_record_value && target_heading_or_record_value < 22.0f) {
+    if (MOBY(moby)->seq == MOBY(moby)->prev_seq && 8.0f < target_heading_or_record_value && target_heading_or_record_value < 22.0f) {
         *(float *)(moby_vars + 0x1A4) = D_L11_001622FC_gp * frame_time;
-        planar_heading_vector[0] = fast_cos(*(float *)(moby + 0x48)) * 2.0f;
-        planar_heading_vector[1] = fast_sin(*(float *)(moby + 0x48)) * 2.0f;
+        planar_heading_vector[0] = fast_cos(MOBY(moby)->rot.z) * 2.0f;
+        planar_heading_vector[1] = fast_sin(MOBY(moby)->rot.z) * 2.0f;
         *(int *)&planar_heading_vector[2] = 0;
         FUN_L00_00258b50_c(moby, moby_vars + 0x180, planar_heading_vector, helper_scratch_buffer, 1.0f);
     }
@@ -983,19 +983,19 @@ void energy_sphere_update(unsigned char *moby) {
         ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE = 1,
         ENERGY_SPHERE_MOVE_AND_DETONATE = 2
     };
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     float previous_position[4];
     float *vp;
     FUN_L11_00319028_c((char *)moby);
     switch (moby[0x20]) {
     case ENERGY_SPHERE_APPROACH_SCALE_AND_REMOVE:
         if (fast_dec_timer(data + 0x20)) {
-            float *scale_approach_pointer = *(float **)(moby + 0x24);
+            float *scale_approach_pointer = ((float *)MOBY(moby)->pclass);
             float scale_approach_frames = (float)scale_game_frames(0x14);
             float target_scale = scale_approach_pointer[9];
-            float scale_approach_step = (*(float **)(moby + 0x24))[9] / scale_approach_frames;
+            float scale_approach_step = (((float *)MOBY(moby)->pclass))[9] / scale_approach_frames;
             scale_approach_pointer = (float *)(data + 0x1C);
-            approach_value((float *)(moby + 0x2C), target_scale, scale_approach_step);
+            approach_value((float *)&MOBY(moby)->scale, target_scale, scale_approach_step);
             approach_value(scale_approach_pointer, *(float *)&energy_sphere_particle_scale_target_gp,
                            *(float *)&energy_sphere_particle_scale_target_gp / (float)scale_game_frames(0x14));
         }
@@ -1428,7 +1428,7 @@ short count_listed_blarg_ships_in_state_5(int moby_list_index) {
     char *base = D_L11_0015FFD8;
     do {
         unsigned char *moby = (unsigned char *)(((moby_list_entry[0] & 0x7FFF) << 8) + (int)base);
-        if (*(short *)(moby + 0xA6) == 0x527 && moby[0x20] == 5) {
+        if (MOBY(moby)->oclass == 0x527 && moby[0x20] == 5) {
             found = ++n;
         }
     } while (*moby_list_entry++ >= 0);
@@ -1455,7 +1455,7 @@ char *activate_listed_blarg_ship(int list) {
         if (random_integer_below(10))
             continue;
         selected_moby = D_L11_0015FFD8 + moby_byte_offset;
-        moby_vars = *(char **)(selected_moby + 0x78);
+        moby_vars = ((char *)MOBY(selected_moby)->pvars);
         qcopy(C, D_L11_001677D0);
         C[0] = 0;
         if (C[1] > 0.17453292f)
@@ -1479,10 +1479,10 @@ char *activate_listed_blarg_ship(int list) {
         *(float *)(moby_vars + 0x6C) = frame_scale_inv_macro[1] * 20.0f;
         *(float *)(moby_vars + 0x94) = 5.0f;
         *(int *)(moby_vars + 0x98) = 0;
-        if (*(unsigned char *)(selected_moby + 0x53))
+        if (MOBY(selected_moby)->prev_seq)
             blend_moby_animation(selected_moby, 0, 0, scale_game_frames(10));
-        *(unsigned short *)(selected_moby + 0x34) &= 0xFFFE;
-        *(int *)(selected_moby + 0x94) = *(int *)(*(char **)(selected_moby + 0x24) + 0x10);
+        MOBY(selected_moby)->flags &= 0xFFFE;
+        MOBY(selected_moby)->collision = *(int *)(((char *)MOBY(selected_moby)->pclass) + 0x10);
         return selected_moby;
     } while (*moby_list_entry++ >= 0);
     return 0;
@@ -1593,15 +1593,15 @@ void update_bubble_motion_and_scale(struct Moby *bubble_moby) {
 char *spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, void *owner, float scale) {
     char *moby = create_moby(0x5F4);
     if (moby != 0) {
-        char *data = *(char **)(moby + 0x78);
+        char *data = ((char *)MOBY(moby)->pvars);
         moby[0x20] = 1;
         qcopy(moby + 0x10, position);
-        *(float *)(moby + 0x40) = random_angle_radians();
-        *(float *)(moby + 0x48) = random_angle_radians();
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->rot.x = random_angle_radians();
+        MOBY(moby)->rot.z = random_angle_radians();
+        MOBY(moby)->draw_dist = 0xFF;
         ((unsigned char *)moby)[0x30] = 0xFF;
         moby[0x31] = 1;
-        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * scale;
+        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * scale;
         *(void **)(data + 0x24) = owner;
         qcopy(data, vector);
     }

@@ -50,10 +50,10 @@ char *create_attached_rocket(struct Moby *source_moby, short joint_index) {
     char *moby_vars;
     char *spawned_moby_position;
     if (moby != 0) {
-        moby_vars = *(char **)(moby + 0x78);
+        moby_vars = ((char *)MOBY(moby)->pvars);
         moby[0x31] = 1;
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0x7F;
+        MOBY(moby)->draw_dist = 0x7F;
         moby[0x20] = 1;
         *(char **)(moby_vars + 0x20) = source_moby;
         *(short *)(moby_vars + 0x26) = joint_index;
@@ -65,7 +65,7 @@ char *create_attached_rocket(struct Moby *source_moby, short joint_index) {
         *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)&source_moby->rot_row1;
         *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)&source_moby->rot_row2;
         qcopy(moby_vars + 0x10, spawned_moby_position);
-        *(int *)(moby + 0x94) = 0;
+        MOBY(moby)->collision = 0;
         update_entity(moby);
     }
     return moby;
@@ -287,18 +287,18 @@ char *spawn_gemlik_projectile(float speed, float *spawn_position, float *launch_
     moby = create_moby(0x4D6);
     if (moby != 0) {
         *(int *)(moby + 0x40) = 0;
-        *(unsigned char *)(moby + 0x30) = 0xFF;
-        *(short *)(moby + 0x32) = 0x7F;
+        MOBY(moby)->update_dist = 0xFF;
+        MOBY(moby)->draw_dist = 0x7F;
         moby[0x31] = 1;
-        moby_vars = *(char **)(moby + 0x78);
+        moby_vars = ((char *)MOBY(moby)->pvars);
         direction_length_xy = vector_length_xy(launch_displacement);
-        *(float *)(moby + 0x44) = -fast_arc_tan(direction_length_xy, launch_displacement[2]);
-        *(float *)(moby + 0x48) = fast_arc_tan(launch_displacement[0], launch_displacement[1]);
+        MOBY(moby)->rot.y = -fast_arc_tan(direction_length_xy, launch_displacement[2]);
+        MOBY(moby)->rot.z = fast_arc_tan(launch_displacement[0], launch_displacement[1]);
         qcopy(moby + 0x10, spawn_position);
         qcopy(moby_vars + 0x10, spawn_position);
         qcopy(moby_vars, launch_displacement);
         blend_moby_animation(moby, 1, 0, scale_game_frames(5));
-        *(short *)(moby + 0x34) = 0x208;
+        MOBY(moby)->flags = 0x208;
         *(int *)(moby_vars + 0x24) = 1;
         *(void **)(moby_vars + 0x20) = source_moby;
         *(float *)(moby_vars + 0x28) = speed;
@@ -2299,13 +2299,13 @@ char *spawn_scaled_owned_moby(char *owner, void *position, float scale) __asm__(
 char *spawn_scaled_owned_moby(char *owner, void *position, float scale) {
     char *moby = create_moby(0x660);
     if (moby != 0) {
-        char *data = *(char **)(moby + 0x78);
+        char *data = ((char *)MOBY(moby)->pvars);
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
         *(char **)(data + 0x60) = owner;
-        *(float *)(moby + 0x2C) = *(float *)(*(char **)(moby + 0x24) + 0x24) * scale;
+        MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * scale;
         qcopy(moby + 0x10, position);
         if (owner != 0) {
             *(int *)(data + 0x64) = *(short *)(owner + 0xA6);
@@ -2354,9 +2354,9 @@ char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, in
     if (moby != 0) {
         char *data;
         float rotation_x_increment, dd;
-        data = *(char **)(moby + 0x78);
+        data = ((char *)MOBY(moby)->pvars);
         moby[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x23] = random_int_between(0x40, 0x80);
         set_moby_color(moby, 0x20, 0x60, 0x10);
@@ -2369,10 +2369,10 @@ char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, in
         *(short *)(data + 0x18) = duration_frames;
         *(short *)(data + 0x1A) = duration_frames;
         if (effect_mode == 0) {
-            *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * random_float_between(0.5f, 0.75f);
+            MOBY(moby)->scale = MOBY(moby)->scale * random_float_between(0.5f, 0.75f);
         }
-        *(float *)(data + 0x1C) = *(float *)(moby + 0x2C);
-        *(float *)(moby + 0x2C) = *(float *)(moby + 0x2C) * random_float_between(2.0f, 5.0f);
+        *(float *)(data + 0x1C) = MOBY(moby)->scale;
+        MOBY(moby)->scale = MOBY(moby)->scale * random_float_between(2.0f, 5.0f);
         moby[0xBC] = effect_mode;
         update_entity(moby);
     }

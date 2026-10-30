@@ -37,7 +37,7 @@ void update_configurable_particle_emitter(char *moby) {
         EFFECT_MODE_CACHE_GROUND_HEIGHT = 1,
         EFFECT_MODE_TIMED_PARTICLES = 2
     };
- char *effect_pvars=*(char **)(moby+0x78);
+ char *effect_pvars=((char *)MOBY(moby)->pvars);
  switch((unsigned char)moby[0x20]) {
  case EFFECT_STATE_INITIALIZE:
   switch(*(int *)effect_pvars) {

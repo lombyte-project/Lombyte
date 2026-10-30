@@ -72,16 +72,16 @@ void armed_transport_update(char *transport_moby) {
         ARMED_TRANSPORT_STATE_DYING = 8
     };
     L16TransportVector vector, rotation;
-    char *transport_data = *(char **)(transport_moby + 0x78);
+    char *transport_data = ((char *)MOBY(transport_moby)->pvars);
 
     update_armed_transport_damage_and_targeting(transport_moby);
-    switch (*(unsigned char *)(transport_moby + 0x20)) {
+    switch (MOBY(transport_moby)->state) {
     case ARMED_TRANSPORT_STATE_INITIALIZE: {
         char *path;
         float speed;
 
-        *(unsigned short *)(transport_moby + 0x32) = 255;
-        *(unsigned char *)(transport_moby + 0x30) = 255;
+        MOBY(transport_moby)->draw_dist = 255;
+        MOBY(transport_moby)->update_dist = 255;
         *(float *)(transport_data + 0x20) = 12.0f;
         *(short *)(transport_data + 0x24) = 12;
         transport_data[0x28] = 3;
@@ -91,7 +91,7 @@ void armed_transport_update(char *transport_moby) {
         *(int *)(transport_data + 0x16C) = 0;
         *(int *)(transport_data + 0x168) = 0;
         *(float *)(transport_data + 0x170) = speed;
-        *(float *)(transport_data + 0x194) = *(float *)(transport_moby + 0x18);
+        *(float *)(transport_data + 0x194) = MOBY(transport_moby)->pos.z;
         if (*(int *)(transport_data + 0xD8) == -1) {
             transport_moby[0x20] = 6;
             break;
@@ -101,8 +101,8 @@ void armed_transport_update(char *transport_moby) {
         qcopy(transport_moby + 0x10, path + 0x10);
         transport_moby[0x20] = 1;
         transport_moby[0x31] = 0;
-        *(int *)(transport_moby + 0x94) = 0;
-        *(unsigned short *)(transport_moby + 0x34) = (*(unsigned short *)(transport_moby + 0x34) | 1) & 0xEFFF;
+        MOBY(transport_moby)->collision = 0;
+        MOBY(transport_moby)->flags = (MOBY(transport_moby)->flags | 1) & 0xEFFF;
         break;
     }
     case ARMED_TRANSPORT_STATE_WAIT_FOR_ACTIVATION: {
@@ -113,10 +113,10 @@ void armed_transport_update(char *transport_moby) {
                 || point_in_path_xy(hero.motion.pos.f, D_L16_001B0930[*(int *)(transport_data + 0xD4)] + 0x10,
                                      *(int *)D_L16_001B0930[*(int *)(transport_data + 0xD4)]))) {
             transport_moby[0x20] = 2;
-            *(unsigned short *)(transport_moby + 0x34) &= 0xFFFE;
+            MOBY(transport_moby)->flags &= 0xFFFE;
             transport_moby[0x31] = 1;
-            *(int *)(transport_moby + 0x94) = *(int *)(*(char **)(transport_moby + 0x24) + 0x10);
-            *(unsigned short *)(transport_moby + 0x34) |= 0x1000;
+            MOBY(transport_moby)->collision = *(int *)(((char *)MOBY(transport_moby)->pclass) + 0x10);
+            MOBY(transport_moby)->flags |= 0x1000;
             vector.q = 0;
             vector.f[2] = 3.14159f;
             for (i = 0; i < 4; i++) {
@@ -161,7 +161,7 @@ void armed_transport_update(char *transport_moby) {
                 char *passenger = D_L16_0015FFD8 + (((int *)(transport_data + 0xC0))[i] << 8);
 
                 clear_u64_value(rotation.f);
-                rotation.f[2] = fast_add_rotations(*(float *)(transport_moby + 0x48), 3.14159f);
+                rotation.f[2] = fast_add_rotations(MOBY(transport_moby)->rot.z, 3.14159f);
                 transform_vector_by_basis(vector.f, armed_transport_passenger_attachment_offset, transport_moby + 0xC0);
                 fast_vec_add(vector.f, vector.f, transport_moby + 0x10);
                 start_blarg_elite_commando_return_to_initial_position(passenger, scale_game_frames(90));
@@ -182,9 +182,9 @@ void armed_transport_update(char *transport_moby) {
     case ARMED_TRANSPORT_STATE_ALIGN_SECOND_PATH: {
         float heading = *(float *)(D_L16_001B0930[*(int *)(transport_data + 0xDC)] + 0x1C);
 
-        advance_accelerated_scalar((float *)(transport_moby + 0x48), (float *)(transport_data + 0x178), heading, frame_time_sq * 6.2831855f,
+        advance_accelerated_scalar((float *)&MOBY(transport_moby)->rot.z, (float *)(transport_data + 0x178), heading, frame_time_sq * 6.2831855f,
                       frame_time_sq * 6.2831855f, frame_time * 6.2831855f);
-        if (fast_difference_between_rotations(*(float *)(transport_moby + 0x48), heading) < 0.01f) {
+        if (fast_difference_between_rotations(MOBY(transport_moby)->rot.z, heading) < 0.01f) {
             transport_moby[0x20] = 5;
             *(int *)(transport_data + 0x168) = 0;
             *(int *)(transport_data + 0x16C) = 0;
@@ -203,16 +203,16 @@ void armed_transport_update(char *transport_moby) {
         }
         break;
     case ARMED_TRANSPORT_STATE_TRACK_TARGET: {
-        float *yaw = (float *)(transport_moby + 0x48);
+        float *yaw = (float *)&MOBY(transport_moby)->rot.z;
         float bearing;
 
         advance_accelerated_scalar((float *)(transport_data + 0x17C), (float *)(transport_data + 0x180), 0.0f, frame_time_sq * 12.566371f,
                       frame_time_sq * 12.566371f, frame_time * 6.2831855f);
-        bearing = fast_arc_tan(*(float *)(transport_data + 0x70) - *(float *)(transport_moby + 0x10),
-                                    *(float *)(transport_data + 0x74) - *(float *)(transport_moby + 0x14));
+        bearing = fast_arc_tan(*(float *)(transport_data + 0x70) - MOBY(transport_moby)->pos.x,
+                                    *(float *)(transport_data + 0x74) - MOBY(transport_moby)->pos.y);
         advance_accelerated_scalar(yaw, (float *)(transport_data + 0x178), bearing, frame_time_sq * 3.1415927f, frame_time_sq * 3.1415927f,
                       frame_time * 6.2831855f);
-        advance_accelerated_scalar((float *)(transport_moby + 0x40), (float *)(transport_data + 0x188), 0.0f, frame_time_sq * 1.5707964f,
+        advance_accelerated_scalar((float *)&MOBY(transport_moby)->rot, (float *)(transport_data + 0x188), 0.0f, frame_time_sq * 1.5707964f,
                       frame_time_sq * 1.5707964f, frame_time * 6.2831855f);
         if (fast_dec_timer((int *)(transport_data + 0x164)) && *(int *)(transport_data + 0xB4) != 2) transport_moby[0x20] = 7;
         break;
@@ -230,15 +230,15 @@ void armed_transport_update(char *transport_moby) {
         float dt = frame_time;
 
         *(float *)(transport_data + 0x194) -= dt + dt;
-        *(float *)(transport_moby + 0x40) += dt * 0.2617994f;
+        MOBY(transport_moby)->rot.x += dt * 0.2617994f;
         if (fast_dec_timer((int *)(transport_data + 0x160)) || hero.vehicle_mode == 2) {
             spawn_explosion(transport_moby, D_L16_0015F580, transport_moby + 0x10, 0.0f, 0.0f, 20, 12, 8, 4.0f, 2.5f, 9.0f, -1, 2.0f, 0.0f,
                               0, 0, -1, 0);
-            FUN_L00_00263fd8(transport_moby, 0x634, (float *)(transport_moby + 0x10), transport_moby + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
+            FUN_L00_00263fd8(transport_moby, 0x634, (float *)&MOBY(transport_moby)->pos, transport_moby + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
                               D_L16_0015F580);
-            FUN_L00_00263fd8(transport_moby, 0x635, (float *)(transport_moby + 0x10), transport_moby + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
+            FUN_L00_00263fd8(transport_moby, 0x635, (float *)&MOBY(transport_moby)->pos, transport_moby + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
                               D_L16_0015F580);
-            FUN_L00_00263fd8(transport_moby, 0x636, (float *)(transport_moby + 0x10), transport_moby + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
+            FUN_L00_00263fd8(transport_moby, 0x636, (float *)&MOBY(transport_moby)->pos, transport_moby + 0x40, 0, 0, 0.0f, D_L16_0015F580, D_L16_0015F580,
                               D_L16_0015F580);
             FUN_L00_00257470(transport_moby, 0, -1);
             mark_moby_for_removal(transport_moby);
@@ -249,7 +249,7 @@ void armed_transport_update(char *transport_moby) {
     }
     *(float *)(transport_data + 0x18C) = fast_add_rotations(*(float *)(transport_data + 0x18C),
                                           *(float *)&armed_transport_bob_phase_speed_degrees * DEG_TO_RAD * frame_time);
-    *(float *)(transport_moby + 0x18) = *(float *)(transport_data + 0x194) + *(float *)&armed_transport_bob_amplitude * fast_sin(*(float *)(transport_data + 0x18C));
+    MOBY(transport_moby)->pos.z = *(float *)(transport_data + 0x194) + *(float *)&armed_transport_bob_amplitude * fast_sin(*(float *)(transport_data + 0x18C));
     update_armed_transport_joint_animation(transport_moby);
 }
 #include "qcopy.h"
@@ -359,7 +359,7 @@ extern float func_00214D88_path42_q(float, float, float, float, float *,
 #include "rnc/overlay/shared/gameplay/entities/armed_transport_globals.h"
 extern float armed_transport_path_acceleration_coefficient_gp __asm__("D_L16_00161D84") __attribute__((sda));
 int advance_armed_transport_along_path(char *transport_moby, char *path) {
-    char *transport_data = *(char **)(transport_moby + 0x78);
+    char *transport_data = ((char *)MOBY(transport_moby)->pvars);
     float progress = (float)*(int *)(transport_data + 0x168) + *(float *)(transport_data + 0x16C) +
                      *(float *)(transport_data + 0x170) / *(float *)(transport_data + 0x174);
     int index = truncate_float_to_s32(progress);
@@ -371,7 +371,7 @@ int advance_armed_transport_along_path(char *transport_moby, char *path) {
     if (index < *(int *)path - 1) {
         position = transport_moby + 0x10;
         func_00215CA8_path42_q(progress, path, 0, position, transport_moby + 0x40, 0);
-        *(float *)(transport_data + 0x194) = *(float *)(transport_moby + 0x18);
+        *(float *)(transport_data + 0x194) = MOBY(transport_moby)->pos.z;
         speed = 0.0f;
         distance = fast_vec_dist(position, path + (*(int *)path << 4));
         rate = armed_transport_path_acceleration_coefficient_gp * *(float *)&frame_time_sq;
@@ -417,7 +417,7 @@ void update_armed_transport_joint_animation(char *moby) {
     float ticks = frame_scale_sq;
     float joint_animation_smoothing_factor = ticks * 0.03f;
     float joint_animation_secondary_control = ticks * 0.3f;
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     *(float *)(data + 0x144) = *(float *)(data + 0x17C);
     update_joint_animation(moby, data + 0xE0, 2, joint_animation_smoothing_factor, joint_animation_secondary_control);
 }
@@ -511,8 +511,8 @@ void draw_grindrail_barrier_effect(char *barrier_moby) __asm__("FUN_L16_002e58d8
 void draw_grindrail_barrier_effect(char *barrier_moby) {
     RingQuad quad;
     float transform[4][4], rotation[4];
-    RingData *data = *(RingData **)(barrier_moby + 0x78);
-    float scale = *(float *)(barrier_moby + 0x2C) / *(float *)(*(char **)(barrier_moby + 0x24) + 0x24);
+    RingData *data = ((RingData *)MOBY(barrier_moby)->pvars);
+    float scale = MOBY(barrier_moby)->scale / *(float *)(((char *)MOBY(barrier_moby)->pclass) + 0x24);
     float *u, *v;
     float *angles;
     int *color_base;
@@ -619,7 +619,7 @@ void group_trigger_nearest(int moby_list_index) {
     if (moby_list_entry != 0) {
         do {
             char *candidate_moby = D_L16_0015FFD8 + ((*(unsigned short *)moby_list_entry & 0x7FFF) << 8);
-            if (*(short *)(candidate_moby + 0xA6) != 0x5A3) {
+            if (MOBY(candidate_moby)->oclass != 0x5A3) {
                 float candidate_distance = fast_vec_dist(D_0013E533 + 0xE9D, candidate_moby + 0x10);
                 if (candidate_distance < bestd) {
                     bestd = candidate_distance;

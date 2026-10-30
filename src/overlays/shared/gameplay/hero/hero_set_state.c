@@ -490,12 +490,12 @@ int select_hero_grapple_target(void) {
     best = 0;
     bestd = 1e8f;
     *(int *)(hero_target_check_base + 0x968) = 0;
-    for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = *(char **)(candidate_moby + 0x28)) {
-        if (*(short *)(candidate_moby + 0xA6) != 0x2F6)
+    for (candidate_moby = D_L00_0015FFE4; candidate_moby != 0; candidate_moby = ((char *)MOBY(candidate_moby)->next)) {
+        if (MOBY(candidate_moby)->oclass != 0x2F6)
             continue;
-        if (*(unsigned short *)(candidate_moby + 0x34) & 1)
+        if (MOBY(candidate_moby)->flags & 1)
             continue;
-        candidate_data = *(char **)(candidate_moby + 0x78);
+        candidate_data = ((char *)MOBY(candidate_moby)->pvars);
         if (*(int *)candidate_data != 0)
             continue;
         if (*(float *)(candidate_data + 0x20) != 0.0f &&
@@ -522,7 +522,7 @@ int select_hero_grapple_target(void) {
         gb += 0x80;
         if (vector_distance_xy(gb, candidate_moby + 0x10) < 4.0f)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x31) == 0)
+        if (MOBY(candidate_moby)->visible == 0)
             target_score += 10.0f;
         if (*(int *)(candidate_data + 0x1C) >= 0 && is_point_inside_clip_volume(gb, *(int *)(candidate_data + 0x1C)) != 0)
             continue;
@@ -672,7 +672,7 @@ int hero_set_state(int a, int b) {
         p->unk20A5 = 0;
         p->item_use_locked = 0;
         if (p->vehicle_mode == 0) {
-            *(int *)(moby + 0x98) = 0;
+            MOBY(moby)->collision_disable = 0;
             p->tilt_disabled = 0;
             p->item_select_blocked = 0;
             p->unk20B2 = 0;
@@ -1221,7 +1221,7 @@ int hero_set_state(int a, int b) {
             struct Hero *q = &hero;
             float d = q->anim_frame;
             int id = 6;
-            if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+            if (return_hero_animation_id_unchanged(MOBY(moby)->seq) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
             set_hero_animation(id, 4, (float)scale_game_frames(9));
         }
@@ -1237,7 +1237,7 @@ int hero_set_state(int a, int b) {
         if (b) {
             int id = 6;
             float d = p->anim_frame;
-            if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4 && 3.0f < d && d < 16.0f)
+            if (return_hero_animation_id_unchanged(MOBY(moby)->seq) == 4 && 3.0f < d && d < 16.0f)
                 id = 5;
             set_hero_animation(id, 4, (float)scale_game_frames(9));
         }
@@ -2080,7 +2080,7 @@ int hero_set_state(int a, int b) {
                 } else if (s == 9) {
                     int id = 8;
                     int n = truncate_float_to_s32(q->anim_frame);
-                    if (return_hero_animation_id_unchanged(*(unsigned char *)(moby + 0x52)) == 4)
+                    if (return_hero_animation_id_unchanged(MOBY(moby)->seq) == 4)
                         id = l00_hero_run_jump_animation_by_run_frame[n];
                     set_hero_animation(id, 0, (float)scale_game_frames(5));
                 } else if (s == 0x5E) {

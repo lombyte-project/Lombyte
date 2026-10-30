@@ -1,5 +1,6 @@
 /* Shared moby classes: hoverboard_ring, lamp. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -39,7 +40,7 @@ void hoverboard_ring_update(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case HOVERBOARD_RING_STATE_INIT:
         ((unsigned char *)moby)[0x30] = 0x80;
-        *(unsigned short *)(moby + 0x34) |= 0x41;
+        MOBY(moby)->flags |= 0x41;
         moby[0x20] = 1;
         break;
     case HOVERBOARD_RING_STATE_ACTIVE: {
@@ -286,11 +287,11 @@ char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
     unsigned char *destination_moby = (unsigned char *)create_moby(0x5EA);
     if (destination_moby != 0) {
         destination_moby[0x30] = source_moby[0x30];
-        *(unsigned short *)(destination_moby + 0x32) = *(unsigned short *)(source_moby + 0x32);
+        MOBY(destination_moby)->draw_dist = ((unsigned short)MOBY(source_moby)->draw_dist);
         destination_moby[0x31] = 1;
-        *(float *)(destination_moby + 0x40) = *(float *)(source_moby + 0x40);
-        *(float *)(destination_moby + 0x44) = *(float *)(source_moby + 0x44);
-        *(float *)(destination_moby + 0x48) = *(float *)(source_moby + 0x48);
+        MOBY(destination_moby)->rot.x = MOBY(source_moby)->rot.x;
+        MOBY(destination_moby)->rot.y = MOBY(source_moby)->rot.y;
+        MOBY(destination_moby)->rot.z = MOBY(source_moby)->rot.z;
         *(long *)(destination_moby + 0x38) = *(long *)(source_moby + 0x38);
         qcopy(destination_moby + 0x10, source_moby + 0x10);
         update_entity(destination_moby);

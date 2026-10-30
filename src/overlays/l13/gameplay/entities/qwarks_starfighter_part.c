@@ -1104,14 +1104,14 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
     char *moby = create_moby(id);
     if (moby != 0) {
         char *data;
-        float f = *(float *)(*(char **)(moby + 0x24) + 0x24) * *(float *)(parent_moby + 0x2C) /
-                  *(float *)(*(char **)(parent_moby + 0x24) + 0x24);
-        data = *(char **)(moby + 0x78);
-        *(unsigned char *)(moby + 0x30) = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        float f = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * MOBY(parent_moby)->scale /
+                  *(float *)(((char *)MOBY(parent_moby)->pclass) + 0x24);
+        data = ((char *)MOBY(moby)->pvars);
+        MOBY(moby)->update_dist = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(float *)(moby + 0x2C) = f;
+        MOBY(moby)->scale = f;
         *(int *)(data + 0x44) = attachment_joint_index;
         moby_point_position(parent_moby, attachment_joint_index, moby + 0x10);
         *(char **)(data + 0x3C) = parent_moby;
@@ -1297,7 +1297,7 @@ void forcefield_update(struct Moby *moby) {
         if (*(int *)forcefield_data != -1) {
             unsigned char *linked_moby = (unsigned char *)(moby_base + (*(int *)forcefield_data << 8));
             if (linked_moby == 0 || linked_moby[0x20] == 0xFE || linked_moby[0x20] == 0xFD ||
-                (D_0014C190_257218[D_0015ED84_n][*(short *)(linked_moby + 0xB2) >> 5] >> (*(unsigned short *)(linked_moby + 0xB2) & 0x1F)) & 1) {
+                (D_0014C190_257218[D_0015ED84_n][((short)MOBY(linked_moby)->save_id) >> 5] >> (MOBY(linked_moby)->save_id & 0x1F)) & 1) {
                 *(float *)(forcefield_data + 4) = 1.0f;
                 moby->state = 2;
             }
@@ -1381,7 +1381,7 @@ void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) {
             char *linked_moby;
             if (linked_moby_index != -1) {
                 linked_moby = moby_base + (linked_moby_index << 8);
-                if (linked_moby != 0 && *(short *)(linked_moby + 0xA6) == 0xAA) {
+                if (linked_moby != 0 && MOBY(linked_moby)->oclass == 0xAA) {
                     int linked_moby_state = (unsigned char)linked_moby[0x20];
                     if (linked_moby_state == 0xFE)
                         goto join;

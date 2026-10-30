@@ -315,7 +315,7 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
     spawner_vars[0x91] = count_active_moby_group_members(*(int *)(spawner_vars + 0x94), -1);
     for (i = 0, slot = (char **)(spawner_vars + 0xB0); i < 20; i++, slot++) {
         char *slot_moby = *slot;
-        if (slot_moby != 0 && *(short *)(slot_moby + 0xA6) == 0x75E && (unsigned char)slot_moby[0x20] != 0xFE &&
+        if (slot_moby != 0 && MOBY(slot_moby)->oclass == 0x75E && (unsigned char)slot_moby[0x20] != 0xFE &&
             (unsigned char)slot_moby[0x20] != 0xFD) {
             spawner_vars[0x91]++;
         } else {
@@ -355,7 +355,7 @@ void spawner_update(char *moby)
         SPAWNER_STATE_SPAWN = 1,
         SPAWNER_STATE_EXPLODE = 2
     };
-    char *spawner_vars = *(char **)(moby + 0x78);
+    char *spawner_vars = ((char *)MOBY(moby)->pvars);
     float target[4];
     float launch_velocity[4];
     float spawn_position[4];
@@ -507,19 +507,19 @@ void spawner_update(char *moby)
 char *spawn_spawner_egg(int owner, void *initial_position, void *initial_velocity, unsigned char grow_held_moby, unsigned char owner_slot_index) {
     char *spawned_moby = (char *)create_moby(0x75E);
     if (spawned_moby) {
-        char *moby_vars = *(char **)(spawned_moby + 0x78);
+        char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         *(int *)(moby_vars + 0x10) = owner;
         qcopy(spawned_moby + 0x10, initial_position);
         qcopy(moby_vars, initial_velocity);
-        *(float *)(spawned_moby + 0x40) = random_float_between(-3.1415927f, 3.1415927f);
-        *(float *)(spawned_moby + 0x44) = random_float_between(-3.1415927f, 3.1415927f);
+        MOBY(spawned_moby)->rot.x = random_float_between(-3.1415927f, 3.1415927f);
+        MOBY(spawned_moby)->rot.y = random_float_between(-3.1415927f, 3.1415927f);
         *(int *)(moby_vars + 0x14) = 0;
         *(short *)(moby_vars + 0x18) = scale_game_frames(500);
-        *(unsigned char *)(spawned_moby + 0x30) = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0x40;
+        MOBY(spawned_moby)->update_dist = 0xFF;
+        MOBY(spawned_moby)->draw_dist = 0x40;
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 0;
-        *(float *)(spawned_moby + 0x2C) = *(float *)(*(char **)(spawned_moby + 0x24) + 0x24) * 0.3f;
+        MOBY(spawned_moby)->scale = *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) * 0.3f;
         moby_vars[0x1C] = owner_slot_index;
         moby_vars[0x1A] = grow_held_moby;
         moby_vars[0x1B] = 0;

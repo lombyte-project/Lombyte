@@ -1251,7 +1251,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
           1021.0f < to[2])) {
         see = collision_line(from, to, 2, m, 0) == 0;
     }
-    if (!see || (!(absolute_float(*(float *)(target_moby + 0x18) - m->pos[2]) < 1.0f) &&
+    if (!see || (!(absolute_float(MOBY(target_moby)->pos.z - m->pos[2]) < 1.0f) &&
                  is_moby_in_class_range_500_to_540(((int)hero.ground_moby)) == 0)) {
         see = 0;
     }
@@ -1401,19 +1401,19 @@ void toxic_crab_update(Moby2E30F8 *m) {
             float aim;
 
             target_distance = fast_vec_dist(m->pos, target_moby + 0x10);
-            if (target_distance > (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f)) {
+            if (target_distance > (MOBY(target_moby)->oclass == 0x359 ? 2.0f : 3.57f)) {
                 approach_value(&crab_data->fF4, crab_data->f1A4 * frame_time, frame_time_sq * 8.0f);
             } else {
                 approach_value(&crab_data->fF4, crab_data->f1A4 * frame_time * 0.3f, frame_time_sq * 20.0f);
             }
             *(OvlQuad *)old = *(OvlQuad *)m->pos;
             if (see &&
-                absolute_float(target_distance - (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f)) < 0.35f) {
+                absolute_float(target_distance - (MOBY(target_moby)->oclass == 0x359 ? 2.0f : 3.57f)) < 0.35f) {
                 approach_value(&crab_data->fF4, 0.0f, frame_time_sq * 30.0f);
             } else if (crab_data->i1D8 != 0) {
                 approach_value(&crab_data->fF4, 0.0f, frame_time_sq * 10.0f);
             }
-            ang = fast_arc_tan(*(float *)(target_moby + 0x10) - m->pos[0], *(float *)(target_moby + 0x14) - m->pos[1]);
+            ang = fast_arc_tan(MOBY(target_moby)->pos.x - m->pos[0], MOBY(target_moby)->pos.y - m->pos[1]);
             diff = fast_difference_between_rotations(ang, m->f48);
             if (0.87266463f < diff) {
                 float lim = crab_data->f1A4 * frame_time * 0.25f;
@@ -1425,8 +1425,8 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 FUN_L00_00258278((char *)m, &crab_data->f190, ang, 0.02f, 0.3f, frame_time * 6.2831855f);
             }
             aim = compute_toxic_crab_group_approach_angle((struct Moby *)m);
-            v[0] = fast_cos(aim) * (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f);
-            v[1] = fast_sin(aim) * (*(short *)(target_moby + 0xA6) == 0x359 ? 2.0f : 3.57f);
+            v[0] = fast_cos(aim) * (MOBY(target_moby)->oclass == 0x359 ? 2.0f : 3.57f);
+            v[1] = fast_sin(aim) * (MOBY(target_moby)->oclass == 0x359 ? 2.0f : 3.57f);
             v[2] = 0.0f;
             fast_vec_add(v, v, target_moby + 0x10);
             if (hero.vehicle_mode != 1) {
@@ -1504,7 +1504,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                     m->state = 8;
                     blend_moby_animation(m, 4, 0, scale_game_frames(0xC));
                 } else if (vector_distance_xy(m->pos, target_moby + 0x10) <
-                           (*(short *)(target_moby + 0xA6) == 0x359 ? 2.45f : 4.02f)) {
+                           (MOBY(target_moby)->oclass == 0x359 ? 2.45f : 4.02f)) {
                     if (hero.invulnerable_frames < scale_game_frames(10) &&
                         diff < 0.34906584f && see) {
                         int anim = 7;
@@ -1523,7 +1523,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         float diff;
 
         diff = fast_difference_between_rotations(
-            fast_arc_tan(*(float *)(target_moby + 0x10) - m->pos[0], *(float *)(target_moby + 0x14) - m->pos[1]),
+            fast_arc_tan(MOBY(target_moby)->pos.x - m->pos[0], MOBY(target_moby)->pos.y - m->pos[1]),
             m->f48);
         if (0.87266463f < diff) {
             float lim = crab_data->f1A4 * frame_time * 0.25f;
@@ -1562,7 +1562,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                 m->state = 8;
                 blend_moby_animation(m, 4, 0, scale_game_frames(0xC));
             } else if (vector_distance_xy(m->pos, target_moby + 0x10) <
-                       (*(short *)(target_moby + 0xA6) == 0x359 ? 2.45f : 4.02f)) {
+                       (MOBY(target_moby)->oclass == 0x359 ? 2.45f : 4.02f)) {
                 if (hero.invulnerable_frames < scale_game_frames(10) &&
                     diff < toxic_crab_pursuit_heading_threshold_degrees_gp * DEG_TO_RAD && see) {
                     int anim = 7;
@@ -1580,7 +1580,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
         float ang;
 
         fr = compute_interpolated_record_value(m);
-        ang = fast_arc_tan(*(float *)(target_moby + 0x10) - m->pos[0], *(float *)(target_moby + 0x14) - m->pos[1]);
+        ang = fast_arc_tan(MOBY(target_moby)->pos.x - m->pos[0], MOBY(target_moby)->pos.y - m->pos[1]);
         FUN_L00_00258278((char *)m, &crab_data->f190, ang, 0.03f, 0.3f, frame_time * 6.2831855f);
         if (m->anim >= 6 && m->anim <= 7 && 4.0f <= fr && fr <= 7.0f) {
             Hit2E30F8 hit;
@@ -1637,11 +1637,11 @@ void toxic_crab_update(Moby2E30F8 *m) {
             float ang;
 
             approach_value(&crab_data->fF4, crab_data->f1A4 * 3.0f * frame_time, frame_time_sq * 20.0f);
-            ang = fast_arc_tan(*(float *)(target_moby + 0x10) - m->pos[0], *(float *)(target_moby + 0x14) - m->pos[1]);
+            ang = fast_arc_tan(MOBY(target_moby)->pos.x - m->pos[0], MOBY(target_moby)->pos.y - m->pos[1]);
             FUN_L00_00258278((char *)m, &crab_data->f190, ang, 0.02f, 0.3f, frame_time * 6.2831855f);
             rot = m->f48;
             m->f48 = fast_add_rotations(
-                fast_arc_tan(*(float *)(target_moby + 0x10) - m->pos[0], *(float *)(target_moby + 0x14) - m->pos[1]),
+                fast_arc_tan(MOBY(target_moby)->pos.x - m->pos[0], MOBY(target_moby)->pos.y - m->pos[1]),
                 3.14159f);
             dir[0] = fast_cos(m->f48) * 2.0f;
             dir[1] = fast_sin(m->f48) * 2.0f;

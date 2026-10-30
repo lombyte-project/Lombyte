@@ -1434,7 +1434,7 @@ void open_vendor_menu(VendorMoby_29a6b0 *vendor_moby) {
     if (vendor_29a6b0.mode == 0) {
         transform_vector_by_basis(&vendor_29a6b0.eye, &vendor_camera_eye_local_offset_x_gp, vendor_29a6b0.moby + 0xC0);
         fast_vec_add(&vendor_29a6b0.eye, &vendor_29a6b0.eye, vendor_29a6b0.moby + 0x10);
-        vendor_29a6b0.look.f[2] = fast_add_rotations(*(f32 *)(vendor_29a6b0.moby + 0x48), 3.1415927f);
+        vendor_29a6b0.look.f[2] = fast_add_rotations(MOBY(vendor_29a6b0.moby)->rot.z, 3.1415927f);
         jet_mount(&vendor_29a6b0.eye, &vendor_29a6b0.look, 1, 0, 0);
         set_camera_position(&vendor_29a6b0.eye);
         set_camera_rotation(&vendor_29a6b0.look);

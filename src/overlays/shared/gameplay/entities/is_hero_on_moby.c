@@ -48,10 +48,10 @@ void begin_dialogue_camera_transition(float scale, char *moby) __asm__("FUN_L01_
 void begin_dialogue_camera_transition(float scale, char *moby) {
     D_L01_0016CCE0_lui.f = 1;
     qcopy(D_L01_0016CCE0_lui.p, moby + 0x10);
-    D_L01_0016CCE0_lui.p[0] += fast_cos(*(float *)(moby + 0x48)) * scale;
-    D_L01_0016CCE0_lui.p[1] += fast_sin(*(float *)(moby + 0x48)) * scale;
+    D_L01_0016CCE0_lui.p[0] += fast_cos(MOBY(moby)->rot.z) * scale;
+    D_L01_0016CCE0_lui.p[1] += fast_sin(MOBY(moby)->rot.z) * scale;
     clear_u64_value(D_L01_0016CCE0_lui.q);
-    D_L01_0016CCE0_lui.a = fast_add_rotations(*(float *)(moby + 0x48), 3.14159274101257324f);
+    D_L01_0016CCE0_lui.a = fast_add_rotations(MOBY(moby)->rot.z, 3.14159274101257324f);
 }
 
 
@@ -80,15 +80,15 @@ void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) _
 void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) {
     char *destination_moby = create_moby(oClass);
     if (destination_moby != 0) {
-        *(short *)(destination_moby + 0x32) = 0xFF;
+        MOBY(destination_moby)->draw_dist = 0xFF;
         destination_moby[0x31] = 1;
-        *(float *)(destination_moby + 0x2C) = *(float *)(destination_moby + 0x2C) *
+        MOBY(destination_moby)->scale = MOBY(destination_moby)->scale *
                                (placement_source_moby->scale / placement_source_moby->pclass->scale);
         qcopy(destination_moby + 0x10, &placement_source_moby->pos);
         qcopy(destination_moby + 0x40, &placement_source_moby->rot);
         *(long *)(destination_moby + 0x38) = placement_source_moby->spawn_frame;
         destination_moby[0x30] = 0;
-        *(short *)(destination_moby + 0x34) = 0;
+        MOBY(destination_moby)->flags = 0;
         update_entity(destination_moby);
     }
 }

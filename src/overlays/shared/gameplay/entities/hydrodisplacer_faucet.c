@@ -1,5 +1,6 @@
 /* Shared moby classes: hydrodisplacer_faucet, hoverboard, lamp, floor_button, blarg_gun. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -32,12 +33,12 @@ char *create_class_5c3_moby(int owner, char *initial_position, int arg, float in
 char *create_class_5c3_moby(int owner, char *initial_position, int arg, float initial_rotation_z, float initial_rotation_y) {
     char *moby = (char *)create_moby(0x5C3);
     if (moby != 0) {
-        char *moby_vars = *(char **)(moby + 0x78);
+        char *moby_vars = ((char *)MOBY(moby)->pvars);
         ((unsigned char *)moby)[0x30] = 0xFF;
-        *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
-        *(float *)(moby + 0x48) = initial_rotation_z;
-        *(float *)(moby + 0x44) = initial_rotation_y;
+        MOBY(moby)->rot.z = initial_rotation_z;
+        MOBY(moby)->rot.y = initial_rotation_y;
         moby[0x20] = 0;
         *(int *)moby_vars = owner;
         qcopy(moby + 0x10, initial_position);
@@ -46,7 +47,7 @@ char *create_class_5c3_moby(int owner, char *initial_position, int arg, float in
         *(int *)(moby_vars + 0x14) = 0;
         *(int *)(moby_vars + 0x18) = 0;
         *(short *)(moby_vars + 6) = 0;
-        *(float *)(moby + 0x2C) *= 2.3f;
+        MOBY(moby)->scale *= 2.3f;
         *(short *)(moby_vars + 4) = scale_game_frames(0x12C);
     }
     return moby;
@@ -66,41 +67,41 @@ void apply_spatial_trigger_to_moby(int index, int trigger_arg, int inside) {
     }
     if (inside) {
         if (trigger[0x7c] > 0) {
-            *(unsigned short *)(moby + 0x34) &= 0xfffd;
+            MOBY(moby)->flags &= 0xfffd;
         } else if (trigger[0x7c] < 0) {
-            *(unsigned short *)(moby + 0x34) |= 2;
+            MOBY(moby)->flags |= 2;
         }
-        if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
-            *(char *)(moby + 0x31) = 1;
-            *(unsigned short *)(moby + 0x34) &= 0xfffe;
-        } else if (trigger[0x7d] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
-            *(char *)(moby + 0x31) = 0;
-            flags = *(unsigned short *)(moby + 0x34) | 1;
-            *(unsigned short *)(moby + 0x34) = flags;
+        if (trigger[0x7d] > 0 && (kind = MOBY(moby)->oclass) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            MOBY(moby)->visible = 1;
+            MOBY(moby)->flags &= 0xfffe;
+        } else if (trigger[0x7d] < 0 && (kind = MOBY(moby)->oclass) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            MOBY(moby)->visible = 0;
+            flags = MOBY(moby)->flags | 1;
+            MOBY(moby)->flags = flags;
         }
         if (trigger[0x7f] > 0 && *(int *)(moby + 0x24) != 0) {
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
         } else if (trigger[0x7f] < 0 && *(int *)(moby + 0x24) != 0) {
-            *(int *)(moby + 0x94) = 0;
+            MOBY(moby)->collision = 0;
         }
     } else {
-        if (trigger[0x7c] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef) {
-            *(unsigned short *)(moby + 0x34) |= 2;
-        } else if (trigger[0x7c] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef) {
-            *(unsigned short *)(moby + 0x34) &= 0xfffd;
+        if (trigger[0x7c] > 0 && (kind = MOBY(moby)->oclass) != 0x386 && kind != 0x3ae && kind != 0x4ef) {
+            MOBY(moby)->flags |= 2;
+        } else if (trigger[0x7c] < 0 && (kind = MOBY(moby)->oclass) != 0x386 && kind != 0x3ae && kind != 0x4ef) {
+            MOBY(moby)->flags &= 0xfffd;
         }
-        if (trigger[0x7d] > 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
-            *(char *)(moby + 0x31) = 0;
-            flags = *(unsigned short *)(moby + 0x34) | 1;
-            *(unsigned short *)(moby + 0x34) = flags;
-        } else if (trigger[0x7d] < 0 && (kind = *(short *)(moby + 0xa6)) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
-            *(char *)(moby + 0x31) = 1;
-            *(unsigned short *)(moby + 0x34) &= 0xfffe;
+        if (trigger[0x7d] > 0 && (kind = MOBY(moby)->oclass) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            MOBY(moby)->visible = 0;
+            flags = MOBY(moby)->flags | 1;
+            MOBY(moby)->flags = flags;
+        } else if (trigger[0x7d] < 0 && (kind = MOBY(moby)->oclass) != 0x386 && kind != 0x3ae && kind != 0x4ef && kind != 0x571) {
+            MOBY(moby)->visible = 1;
+            MOBY(moby)->flags &= 0xfffe;
         }
         if (trigger[0x7f] > 0) {
-            *(int *)(moby + 0x94) = 0;
+            MOBY(moby)->collision = 0;
         } else if (trigger[0x7f] < 0) {
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
         }
     }
 }
@@ -204,7 +205,7 @@ void hydrodisplacer_faucet_update(char *faucet_moby) {
     };
     struct Hero *player_hero = &hero;
     int hero_on_faucet_in_mode_13 = 0;
-    int *faucet_vars = *(int **)(faucet_moby + 0x78);
+    int *faucet_vars = ((int *)MOBY(faucet_moby)->pvars);
     if (((char *)player_hero->ground_moby) == faucet_moby) {
         hero_on_faucet_in_mode_13 = player_hero->state.control_mode == 0x13;
     }
@@ -292,7 +293,7 @@ void hoverboard_update(unsigned char *moby) {
         HOVERBOARD_STATE_WAIT_FOR_PLAYER_APPROACH = 0,
         HOVERBOARD_STATE_WAIT_FOR_CONTROL_MODE_EXIT = 1
     };
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     float delta[4], position[4], effect_position[4], offset[4], second_position[4];
     float angle, distance_scale, delta_length;
     int state = (u8)moby[0x20];
@@ -311,7 +312,7 @@ void hoverboard_update(unsigned char *moby) {
                 qcopy(data + 0x10, moby + 0x10);
             }
             moby[0x20] = 1;
-            *(unsigned char *)(moby + 0x30) = 0xff;
+            MOBY(moby)->update_dist = 0xff;
         }
         break;
     }
@@ -379,7 +380,7 @@ void hoverboard_update(unsigned char *moby) {
 void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
 
 void add_moby_frames_for_group_proximity(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     struct Hero *player_hero = &hero;
     float position_delta[4];
     char *group_member_moby;
@@ -401,7 +402,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
     if (*(int *)(od + 0x44) != -1) {
         get_first_moby_in_group((int *)&group_member_moby, *(int *)(od + 0x44), 0, 0);
         while (group_member_moby) {
-            if (*(short *)(group_member_moby + 0xA6) == 0x473) {
+            if (MOBY(group_member_moby)->oclass == 0x473) {
                 float offset_test_position[4];
                 float m[16];
                 char *candidate_moby = group_member_moby;
@@ -425,7 +426,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
     if (*(int *)(od + 0x48) != -1) {
         get_first_moby_in_group((int *)&proximity_candidate_moby, *(int *)(od + 0x48), 0, 0);
         while (proximity_candidate_moby) {
-            if (*(short *)(proximity_candidate_moby + 0xA6) == 0x474) {
+            if (MOBY(proximity_candidate_moby)->oclass == 0x474) {
                 float m[16];
                 fast_vec_sub(position_delta, proximity_candidate_moby + 0x10, data + 0x200);
                 if (!(8.0f < fast_vec_length(position_delta))) {
@@ -459,11 +460,11 @@ void update_moby_wobble(unsigned char *moby) {
         MOBY_WOBBLE_STATE_INITIALIZE = 0,
         MOBY_WOBBLE_STATE_ANIMATE = 1
     };
-    char *wobble_vars = *(char **)(moby + 0x78);
+    char *wobble_vars = ((char *)MOBY(moby)->pvars);
     float random_angular_sample, lo, hi;
     switch (moby[0x20]) {
     case MOBY_WOBBLE_STATE_INITIALIZE:
-        *(float *)(wobble_vars + 0x40) = *(float *)(moby + 0x48);
+        *(float *)(wobble_vars + 0x40) = MOBY(moby)->rot.z;
         *(float *)(wobble_vars + 0x48) = random_angle_radians();
         random_angular_sample = random_angle_radians();
         lo = frame_time * 0.47123888f;
@@ -484,7 +485,7 @@ void update_moby_wobble(unsigned char *moby) {
         add_draw_callback((void *)draw_moby_wobble_quads, moby);
         wobble_phase = fast_add_rotations(*(float *)(wobble_vars + 0x44), *(float *)(wobble_vars + 0x4C));
         *(float *)(wobble_vars + 0x44) = wobble_phase;
-        *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(wobble_vars + 0x40), fast_sin(wobble_phase) * k);
+        MOBY(moby)->rot.z = fast_add_rotations(*(float *)(wobble_vars + 0x40), fast_sin(wobble_phase) * k);
         wobble_phase = fast_add_rotations(*(float *)(wobble_vars + 0x48), *(float *)(wobble_vars + 0x50));
         *(float *)(wobble_vars + 0x48) = wobble_phase;
         FUN_L00_001fff28(wobble_vars + 0x10, 1, fast_sin(wobble_phase) * k + k);
@@ -701,7 +702,7 @@ void attach_big_head_cheat_manipulator(char *moby) {
         for (i = 0; i < D_L05_0016CC60.count; i++) {
             char *candidate_moby = D_L05_0016CC60.mobys[i];
 
-            if (*(short *)(candidate_moby + 0xA6) == *(short *)(moby + 0xA6)) {
+            if (MOBY(candidate_moby)->oclass == MOBY(moby)->oclass) {
                 unsigned char *manipulator = D_L05_0017C8A0;
 
                 if (manipulator[1] == 0) {
@@ -728,7 +729,7 @@ typedef struct {
 void initialize_moby_launch_motion(char *moby, int unused_source_moby, void *initial_motion_step, void *local_rotation_offset, int lifetime_frames) __asm__("FUN_L05_00318648");
 
 void initialize_moby_launch_motion(char *moby, int unused_source_moby, void *initial_motion_step, void *local_rotation_offset, int lifetime_frames) {
-    Dat *moby_vars = *(Dat **)(moby + 0x78);
+    Dat *moby_vars = ((Dat *)MOBY(moby)->pvars);
     moby[0x20] = 1;
     qcopy((char *)moby_vars + 0x30, initial_motion_step);
     qcopy((char *)moby_vars + 0x10, local_rotation_offset);
@@ -749,7 +750,7 @@ void blarg_gun_update(char *moby)
         BLARG_GUN_STATE_INITIALIZE = 0,
         BLARG_GUN_STATE_MOVING = 1
     };
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     char rotation_workspace[0x70];
     char *hs;
     int joint_index;
@@ -757,28 +758,28 @@ void blarg_gun_update(char *moby)
 
     switch ((unsigned char)moby[0x20]) {
     case BLARG_GUN_STATE_INITIALIZE:
-        if (*(unsigned short *)(moby + 0x32) & 1)
-            *(unsigned short *)(moby + 0x34) |= 0x8000;
+        if (((unsigned short)MOBY(moby)->draw_dist) & 1)
+            MOBY(moby)->flags |= 0x8000;
         moby[0x20] = 2;
         break;
     case BLARG_GUN_STATE_MOVING:
         joint_index = *(int *)(data + 4);
         if (joint_index > 0) {
             moby_point_position(moby, joint_index, rotation_workspace + 0x40);
-            *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(data + 0x20));
-            *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(moby + 0x44), *(float *)(data + 0x24));
-            *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(data + 0x28));
+            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(data + 0x20));
+            MOBY(moby)->rot.y = fast_add_rotations(MOBY(moby)->rot.y, *(float *)(data + 0x24));
+            MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, *(float *)(data + 0x28));
             euler_rotation_matrix(rotation_workspace, moby + 0x40);
             copy_matrix3x4(moby + 0xC0, rotation_workspace);
             moby_point_position(moby, *(int *)(data + 4), rotation_workspace + 0x50);
             fast_vec_sub(rotation_workspace + 0x60, rotation_workspace + 0x40, rotation_workspace + 0x50);
         } else {
             transform_vector_by_basis(rotation_workspace + 0x40, data + 0x10, moby + 0xC0);
-            *(float *)(moby + 0x40) = fast_add_rotations(*(float *)(moby + 0x40), *(float *)(data + 0x20));
-            *(float *)(moby + 0x44) = fast_add_rotations(*(float *)(moby + 0x44), *(float *)(data + 0x24));
-            *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *(float *)(data + 0x28));
+            MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, *(float *)(data + 0x20));
+            MOBY(moby)->rot.y = fast_add_rotations(MOBY(moby)->rot.y, *(float *)(data + 0x24));
+            MOBY(moby)->rot.z = fast_add_rotations(MOBY(moby)->rot.z, *(float *)(data + 0x28));
             euler_rotation_matrix(rotation_workspace, moby + 0x40);
-            if (*(unsigned short *)(moby + 0x34) & 0x8000)
+            if (MOBY(moby)->flags & 0x8000)
                 fast_vec_scale(rotation_workspace + 0x10, rotation_workspace + 0x10, -1.0f);
             copy_matrix3x4(moby + 0xC0, rotation_workspace);
             transform_vector_by_basis(rotation_workspace + 0x50, data + 0x10, moby + 0xC0);
@@ -808,7 +809,7 @@ void blarg_gun_update(char *moby)
         *(float *)(data + 0x38) = *(float *)(data + 0x38) - frame_time_sq * 10.8f;
         fast_vec_add(moby + 0x10, moby + 0x10, data + 0x30);
         fast_vec_add(moby + 0x10, moby + 0x10, rotation_workspace + 0x60);
-        if (*(float *)(moby + 0x18) < 5.0f)
+        if (MOBY(moby)->pos.z < 5.0f)
             mark_moby_for_removal(moby);
         break;
     }
@@ -872,7 +873,7 @@ extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__(
 int advance_moby_path(char *moby) __asm__("FUN_L05_003195f8");
 
 int advance_moby_path(char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     int *path;
     advance_accelerated_scalar(1.0f, *(float *)(moby_vars + 0xD8), *(float *)(moby_vars + 0xD8),
                                *(float *)(moby_vars + 0xD4), (float *)(moby_vars + 0xC0), (float *)(moby_vars + 0xC4));
@@ -888,7 +889,7 @@ int advance_moby_path(char *moby) {
 void request_moby_variant_help_message(char *moby) __asm__("FUN_L05_00319690");
 
 void request_moby_variant_help_message(char *moby) {
-    switch (*(short *)(*(char **)(moby + 0x78) + 0xB6)) {
+    switch (*(short *)(((char *)MOBY(moby)->pvars) + 0xB6)) {
     case 0:
         try_set_help_message(8, 0x13A5);
         break;
@@ -917,7 +918,7 @@ void request_moby_variant_help_message(char *moby) {
 void apply_moby_position_and_rotation_wobble(char *moby) __asm__("FUN_L05_00319740");
 
 void apply_moby_position_and_rotation_wobble(char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     float wobble_phase, wobble_result, wobble_phase_step;
     qcopy(moby + 0x10, moby_vars + 0x60);
     qcopy(moby + 0x40, moby_vars + 0x70);
@@ -925,24 +926,24 @@ void apply_moby_position_and_rotation_wobble(char *moby) {
     *(float *)(moby_vars + 0xC8) = wobble_phase;
     wobble_result = fast_sin(wobble_phase);
     wobble_phase_step = frame_time * 1.6929693f;
-    *(float *)(moby + 0x18) += wobble_result * 0.25f;
+    MOBY(moby)->pos.z += wobble_result * 0.25f;
     wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xCC), wobble_phase_step);
     *(float *)(moby_vars + 0xCC) = wobble_phase;
-    wobble_result = fast_add_rotations(*(float *)(moby + 0x44), fast_sin(wobble_phase) * 0.08726646f);
+    wobble_result = fast_add_rotations(MOBY(moby)->rot.y, fast_sin(wobble_phase) * 0.08726646f);
     wobble_phase_step = frame_time * 0.9250245f;
-    *(float *)(moby + 0x44) = wobble_result;
+    MOBY(moby)->rot.y = wobble_result;
     wobble_phase = fast_add_rotations(*(float *)(moby_vars + 0xD0), wobble_phase_step);
     *(float *)(moby_vars + 0xD0) = wobble_phase;
-    *(float *)(moby + 0x40) =
-        fast_add_rotations(*(float *)(moby + 0x40), fast_sin(wobble_phase) * 0.08726646f);
-    if (*(float *)(moby + 0x40) > 0.17453292f)
-        *(float *)(moby + 0x40) = 0.17453292f;
-    else if (*(float *)(moby + 0x40) < -0.17453292f)
-        *(float *)(moby + 0x40) = -0.17453292f;
-    if (*(float *)(moby + 0x44) > 0.17453292f)
-        *(float *)(moby + 0x44) = 0.17453292f;
-    else if (*(float *)(moby + 0x44) < -0.17453292f)
-        *(float *)(moby + 0x44) = -0.17453292f;
+    MOBY(moby)->rot.x =
+        fast_add_rotations(MOBY(moby)->rot.x, fast_sin(wobble_phase) * 0.08726646f);
+    if (MOBY(moby)->rot.x > 0.17453292f)
+        MOBY(moby)->rot.x = 0.17453292f;
+    else if (MOBY(moby)->rot.x < -0.17453292f)
+        MOBY(moby)->rot.x = -0.17453292f;
+    if (MOBY(moby)->rot.y > 0.17453292f)
+        MOBY(moby)->rot.y = 0.17453292f;
+    else if (MOBY(moby)->rot.y < -0.17453292f)
+        MOBY(moby)->rot.y = -0.17453292f;
 }
 /* Transforms the 7 vectors of a level table entry into the moby's space and records its index. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031ADF8), where it is exact; names translated to the US level program. */
@@ -952,7 +953,7 @@ extern char moby_vector_table_local_vectors[] __asm__("D_L05_00215C00");
 void transform_moby_vector_table_to_world_space(char *moby) __asm__("FUN_L05_003198e8");
 
 void transform_moby_vector_table_to_world_space(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     int vector_table_index = *(int *)(data + 0xDC);
     if (vector_table_index != -1) {
         char *vector_table_entry = D_L05_001B0930[vector_table_index];

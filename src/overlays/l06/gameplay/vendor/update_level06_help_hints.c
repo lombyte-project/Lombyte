@@ -256,11 +256,11 @@ void activate_listed_class_5e8_mobys(int moby_list_index) {
         moby_index_entry = D_L06_001ABFC0[moby_list_index];
         do {
             moby = D_L06_0015FFD8 + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
-            if (*(short *)(moby + 0xA6) == 0x5E8 && (unsigned char)moby[0x20] == 1) {
+            if (MOBY(moby)->oclass == 0x5E8 && (unsigned char)moby[0x20] == 1) {
                 qcopy(position_test_vector, moby + 0x10);
                 position_test_vector[3] = 0.25f;
                 if (fast_bsphere_check((char *)position_test_vector, 64.0f) >= 0) {
-                    data = *(char **)(moby + 0x78);
+                    data = ((char *)MOBY(moby)->pvars);
                     moby[0x20] = 2;
                     *(int *)(data + 0x28) =
                         truncate_float_to_s32(scale_time(random_float_between(30.0f, 60.0f)));
@@ -361,7 +361,7 @@ void update_hit_triggered_moby_replacement(char *self) {
         spawned_moby = create_moby(0x67D);
         if (spawned_moby != 0) {
             spawned_moby[0x31] = 1;
-            *(short *)(spawned_moby + 0x32) = 0xFF;
+            MOBY(spawned_moby)->draw_dist = 0xFF;
             qcopy(spawned_moby + 0x10, self + 0x10);
             qcopy(spawned_moby + 0x40, self + 0x40);
             *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);

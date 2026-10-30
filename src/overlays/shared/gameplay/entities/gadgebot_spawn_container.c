@@ -1,5 +1,6 @@
 /* Shared moby classes: gadgebot_spawn_container, gadgebot_spawn_pad, frog, gadgebot, energy_sphere_holder, energy_sphere. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/entities/moby_class_id.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -74,8 +75,8 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
             fragment_velocity[0] += fast_cos(direction_angle) * speed;
             fragment_velocity[1] += fast_sin(fast_arc_tan(*(float *)(target + 0x10), *(float *)(target + 0x14))) * speed;
         } else {
-            direction_angle = fast_arc_tan(*(float *)(moby + 0x10) - hero.motion.pos.f[0],
-                                  *(float *)(moby + 0x14) - hero.motion.pos.f[1]);
+            direction_angle = fast_arc_tan(MOBY(moby)->pos.x - hero.motion.pos.f[0],
+                                  MOBY(moby)->pos.y - hero.motion.pos.f[1]);
             fragment_velocity[0] += fast_cos(direction_angle) * speed;
             fragment_velocity[1] += fast_sin(direction_angle) * speed;
         }
@@ -85,9 +86,9 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
             *(float *)(fragment + 0x2c) *= 0.3f;
         }
     }
-    *(int *)(moby + 0x94) = 0;
+    MOBY(moby)->collision = 0;
     moby[0x20] = 2;
-    *(unsigned short *)(moby + 0x34) |= 1;
+    MOBY(moby)->flags |= 1;
     moby[0xbc] = (unsigned char)scale_game_frames(15);
 }
 
@@ -106,13 +107,13 @@ char *spawn_gadgebot_spawn_container(char *owner) {
     char *moby = create_moby(0x12E);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0x60;
-        *(short *)(moby + 0x32) = 0x60;
+        MOBY(moby)->draw_dist = 0x60;
         moby[0x31] = 1;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        *(float *)(moby + 0x48) = *(float *)(owner + 0x48);
+        MOBY(moby)->rot.z = *(float *)(owner + 0x48);
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
-        *(unsigned short *)(moby + 0x34) |= 0x1000;
+        MOBY(moby)->flags |= 0x1000;
         qcopy(moby + 0x10, owner + 0x10);
         update_entity(moby);
     }
@@ -151,7 +152,7 @@ void gadgebot_spawn_container_update(unsigned char *moby) {
             color_pulse_value -= 6.28318548f;
         }
         color_pulse_value = (fast_sin(color_pulse_value) + 1.0f) * 0.5f;
-        *(int *)(moby + 0x90) = fast_tween_color(0x80464646, 0x80828282, color_pulse_value);
+        MOBY(moby)->glow_color = fast_tween_color(0x80464646, 0x80828282, color_pulse_value);
         if (hit_record != 0) {
             destroy_gadgebot_spawn_container(moby, hit_record);
         }
@@ -212,13 +213,13 @@ void draw_gadgebot_spawn_container(char *moby) {
     qcopy(matrix[0], moby + 0xc0);
     qcopy(matrix[1], moby + 0xd0);
     qcopy(matrix[2], moby + 0xe0);
-    container_position_snapshot[0] = *(float *)(moby + 0x10);
-    container_position_snapshot[1] = *(float *)(moby + 0x14);
-    container_position_snapshot[2] = *(float *)(moby + 0x18);
+    container_position_snapshot[0] = MOBY(moby)->pos.x;
+    container_position_snapshot[1] = MOBY(moby)->pos.y;
+    container_position_snapshot[2] = MOBY(moby)->pos.z;
     container_position_snapshot[3] = 1.0f;
     near = 0;
     if (absolute_float(referencePosition.position[0] - container_position_snapshot[0]) < 16.0f &&
-        absolute_float(referencePosition.position[1] - *(float *)(moby + 0x14)) < 16.0f) {
+        absolute_float(referencePosition.position[1] - MOBY(moby)->pos.y) < 16.0f) {
         near = 1;
     }
     if (near) {
@@ -290,14 +291,14 @@ char *spawn_gadgebot_pad(char *owner) __asm__("FUN_L06_002d8b98");
 char *spawn_gadgebot_pad(char *owner) {
     char *moby = create_moby(0x12F);
     if (moby != 0) {
-        *(short *)(moby + 0x32) = 0x60;
+        MOBY(moby)->draw_dist = 0x60;
         moby[0x31] = 1;
         ((unsigned char *)moby)[0x30] = 0;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        *(float *)(moby + 0x48) = *(float *)(owner + 0x48);
+        MOBY(moby)->rot.z = *(float *)(owner + 0x48);
         *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
-        *(char **)(moby + 0xB8) = owner;
+        MOBY(moby)->parent = owner;
         qcopy(moby + 0x10, owner + 0x10);
         update_entity(moby);
     }
@@ -310,16 +311,16 @@ extern s32 level_frame_count __asm__("D_L06_0015F5CC");
 
 void gadgebot_spawn_pad_update(char *moby) __asm__("FUN_L06_002d8c20");
 void gadgebot_spawn_pad_update(char *moby) {
-    char *owner_moby = *(char **)(moby + 0xB8);
+    char *owner_moby = ((char *)MOBY(moby)->parent);
     if (owner_moby != 0 && (unsigned char)owner_moby[0x20] < 2) {
         int frame_count_snapshot = *(int *)&level_frame_count;
         float color_pulse_value = (float)(frame_count_snapshot % 150) / 150.0f * 2.0f * 3.14159274f;
         if (color_pulse_value > 3.14159274f)
             color_pulse_value -= 6.28318548f;
         color_pulse_value = (fast_sin(color_pulse_value) + 1.0f) * 0.5f;
-        *(int *)(moby + 0x90) = fast_tween_color(0x80464646, 0x80828282, color_pulse_value);
+        MOBY(moby)->glow_color = fast_tween_color(0x80464646, 0x80828282, color_pulse_value);
     } else {
-        *(int *)(moby + 0x90) = fast_tween_color(*(int *)(moby + 0x90), 0x80464646, 0.1f);
+        MOBY(moby)->glow_color = fast_tween_color(MOBY(moby)->glow_color, 0x80464646, 0.1f);
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002E7578), where it is exact; names translated to the US level program. */
@@ -329,7 +330,7 @@ void initialize_moby_particle_effect_state(char *moby) __asm__("FUN_L06_002e6148
 
 void initialize_moby_particle_effect_state(char *moby) {
     moby[0x20] = 2;
-    *(unsigned short *)(moby + 0x34) &= 0xFFBE;
+    MOBY(moby)->flags &= 0xFFBE;
     initialize_moby_particle_effect(moby);
 }
 /* Frog (class 827) update: hops along a path, wanders near home, and chases or flees its target. */
@@ -378,17 +379,17 @@ void frog_update(unsigned char *moby) {
     unsigned char *target;
     int mode;
 
-    data = *(char **)(moby + 0x78);
+    data = ((char *)MOBY(moby)->pvars);
     if (D_L06_00161C10 != 0) {
         return;
     }
     mode = D_L06_0015F5C4;
-    if (mode == 2 && ((*(unsigned short *)(moby + 0x34) ^ 1) & 1)) {
+    if (mode == 2 && ((MOBY(moby)->flags ^ 1) & 1)) {
         *(short *)(data + 0x1EA) = 1;
-        *(unsigned short *)(moby + 0x34) |= 0x41;
+        MOBY(moby)->flags |= 0x41;
     } else if (mode == 0 && *(short *)(data + 0x1EA) != 0) {
         *(short *)(data + 0x1EA) = 0;
-        *(unsigned short *)(moby + 0x34) &= 0xFFBE;
+        MOBY(moby)->flags &= 0xFFBE;
     }
     if (moby[0x20] != 0x10) {
         if (*(int *)&D_L06_0015FDF8 != 0) {
@@ -412,9 +413,9 @@ void frog_update(unsigned char *moby) {
         *(short *)(data + 0x20A) = spawn_count % 8;
         D_L06_00161C14 = spawn_count + 1;
         if (divisor != 0) {
-            *(short *)(moby + 0xB4) = *(short *)(moby + 0xB4) / divisor;
+            MOBY(moby)->unkB4 = MOBY(moby)->unkB4 / divisor;
         }
-        *(unsigned short *)(moby + 0x34) |= 0x100;
+        MOBY(moby)->flags |= 0x100;
         data[0x58] = truncate_float_to_s32(8.0f);
         data[0x5A] = truncate_float_to_s32(3.2f);
         qcopy(data + 0x210, moby + 0x10);
@@ -449,23 +450,23 @@ void frog_update(unsigned char *moby) {
             }
             (*(char **)(data + 0x20C))[0x31] = 1;
             update_entity(*(char **)(data + 0x20C));
-            *(unsigned short *)(moby + 0x34) |= 0x41;
+            MOBY(moby)->flags |= 0x41;
         } else if (*(short *)(data + 0x202) != 0) {
             moby[0x20] = 0xF;
-            *(int *)(moby + 0x94) = 0;
-            *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) | 0x41) & 0xEFFF;
+            MOBY(moby)->collision = 0;
+            MOBY(moby)->flags = (MOBY(moby)->flags | 0x41) & 0xEFFF;
         } else if (*(int *)(data + 0x1F8) >= 0) {
             moby[0x20] = 3;
             if (moby[0x53] != 0) blend_moby_animation(moby, 0, 0, 0);
         } else {
             moby[0x20] = 8;
-            if (moby[0x53] != 4) blend_moby_animation(moby, 4, random_integer_below(*(unsigned char *)(*(char **)(*(char **)(moby + 0x24) + 0x58) + 0x10)), 0);
+            if (moby[0x53] != 4) blend_moby_animation(moby, 4, random_integer_below(*(unsigned char *)(*(char **)(((char *)MOBY(moby)->pclass) + 0x58) + 0x10)), 0);
         }
         break;
     }
     case 1:
         if (vector_distance_xy(moby + 0x10, target + 0x10) < 4.0f) {
-            *(unsigned short *)(moby + 0x34) &= 0xFFBE;
+            MOBY(moby)->flags &= 0xFFBE;
             destroy_frog_child_moby(moby);
             moby[0x20] = 8;
             if (moby[0x53] != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(5));
@@ -508,7 +509,7 @@ void frog_update(unsigned char *moby) {
             data[0x15D] = 3;
             *(int *)(data + 0x144) = 5;
             trooper_start_knockback(moby, data + 0x120, 2, 1, 0,
-                fast_arc_tan(*(float *)(data + 0x210) - *(float *)(moby + 0x10), *(float *)(data + 0x214) - *(float *)(moby + 0x14)));
+                fast_arc_tan(*(float *)(data + 0x210) - MOBY(moby)->pos.x, *(float *)(data + 0x214) - MOBY(moby)->pos.y));
             moby[0x20] = 5;
         }
         break;
@@ -519,8 +520,8 @@ void frog_update(unsigned char *moby) {
         if (mine_fall(moby, data + 0x120) & 1) {
             moby[0x20] = 7;
             if (moby[0x53] != 3) blend_moby_animation(moby, 3, 0, 1);
-            *(float *)(moby + 0x54) = 1.0f;
-            *(float *)(moby + 0x18) = probe_ground_height(moby + 0x10, 0, 0.5f);
+            MOBY(moby)->anim_time = 1.0f;
+            MOBY(moby)->pos.z = probe_ground_height(moby + 0x10, 0, 0.5f);
         }
         break;
     case 6: {
@@ -528,8 +529,8 @@ void frog_update(unsigned char *moby) {
         if (hit & 1) {
             moby[0x20] = 7;
             if (moby[0x53] != 3) blend_moby_animation(moby, 3, 0, 1);
-            *(float *)(moby + 0x54) = 1.0f;
-            *(float *)(moby + 0x18) = probe_ground_height(moby + 0x10, 0, 0.5f);
+            MOBY(moby)->anim_time = 1.0f;
+            MOBY(moby)->pos.z = probe_ground_height(moby + 0x10, 0, 0.5f);
         } else if (hit & 0x120) {
             FUN_L00_00257470(moby, 0, -1);
             mark_moby_for_removal(moby);
@@ -571,7 +572,7 @@ void frog_update(unsigned char *moby) {
         }
         break;
     case 9: {
-        float angle = fast_add_rotations(fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14)), *(float *)(data + 0x1D4));
+        float angle = fast_add_rotations(fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x, *(float *)(target + 0x14) - MOBY(moby)->pos.y), *(float *)(data + 0x1D4));
         B[0] = fast_cos(angle);
         B[1] = fast_sin(angle);
         B[2] = 0.0f;
@@ -589,7 +590,7 @@ void frog_update(unsigned char *moby) {
     }
     case 10: {
         int near;
-        float angle = fast_add_rotations(fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14)), *(float *)(data + 0x1D4));
+        float angle = fast_add_rotations(fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x, *(float *)(target + 0x14) - MOBY(moby)->pos.y), *(float *)(data + 0x1D4));
         qcopy(C, moby + 0x10);
         B[0] = fast_cos(angle);
         B[1] = fast_sin(angle);
@@ -622,10 +623,10 @@ void frog_update(unsigned char *moby) {
         break;
     case 12: {
         float wait;
-        B[0] = fast_cos(fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14)));
-        B[1] = fast_sin(fast_arc_tan(*(float *)(target + 0x10) - *(float *)(moby + 0x10), *(float *)(target + 0x14) - *(float *)(moby + 0x14)));
+        B[0] = fast_cos(fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x, *(float *)(target + 0x14) - MOBY(moby)->pos.y));
+        B[1] = fast_sin(fast_arc_tan(*(float *)(target + 0x10) - MOBY(moby)->pos.x, *(float *)(target + 0x14) - MOBY(moby)->pos.y));
         B[2] = 0.0f;
-        blend_frog_rotation_to_facing_frame((char *)moby, (float *)(moby + 0xE0), B);
+        blend_frog_rotation_to_facing_frame((char *)moby, (float *)&MOBY(moby)->rot_row2, B);
         wait = compute_interpolated_record_value(moby);
         if (moby[0x52] == moby[0x53] && wait >= 10.0f && wait <= 15.0f && *(int *)(((char *)&camera_secondary_mode)) != 0x51) {
             fast_vec_normalize(A, moby + 0xC0, (*(float *)(data + 0x1E4) + *(float *)(data + 0x1E4)) * D_0015ED6C_gp);
@@ -910,7 +911,7 @@ void move_frog_with_collision_resolution(float scale, float threshold, char *mob
         }
     }
     if (follow_path != 0) {
-        resolve_point_path_segment_xy_clearance(0.5f, *(int *)(*(char **)(moby + 0x78) + 0x1EC), moby + 0x10, moby + 0x10);
+        resolve_point_path_segment_xy_clearance(0.5f, *(int *)(((char *)MOBY(moby)->pvars) + 0x1EC), moby + 0x10, moby + 0x10);
     }
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -2063,11 +2064,11 @@ float score_gadgebot_target_candidate(char *moby, char *b, int target_kind) {
     float r = vector_distance_xy(moby + 0x10, b + 0x10);
     float *g = (float *)D_L06_00167400;
     float t = fast_difference_between_rotations(
-        g[0x56], fast_arc_tan(*(float *)(b + 0x10) - *(float *)(moby + 0x10),
-                              *(float *)(b + 0x14) - *(float *)(moby + 0x14)));
+        g[0x56], fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
+                              *(float *)(b + 0x14) - MOBY(moby)->pos.y));
     float u = fast_difference_between_rotations(
-        *(float *)(moby + 0x48), fast_arc_tan(*(float *)(b + 0x10) - *(float *)(moby + 0x10),
-                                           *(float *)(b + 0x14) - *(float *)(moby + 0x14)));
+        MOBY(moby)->rot.z, fast_arc_tan(*(float *)(b + 0x10) - MOBY(moby)->pos.x,
+                                           *(float *)(b + 0x14) - MOBY(moby)->pos.y));
     r = r + u * 10.0f;
     r = r + t * 3.0f;
     if (((unsigned char *)b)[0x31] == 0) {
@@ -2367,28 +2368,28 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
     char *destination_moby;
     float f20;
 
-    if (*(short *)(moby + 0xA6) != 0x515 && *(short *)(moby + 0xA6) != 0x15F) {
+    if (MOBY(moby)->oclass != 0x515 && MOBY(moby)->oclass != 0x15F) {
         fast_vec_add(candidate_position, moby + 0x10, moby + 0xC0);
     } else {
         *(u128_F4058 *)candidate_position = *(u128_F4058 *)(moby + 0x10);
     }
 
-    switch (*(short *)(moby + 0xA6)) {
+    switch (MOBY(moby)->oclass) {
     case MOBY_CLASS_RELOCATION_TRIGGER:
     case MOBY_CLASS_OFFSET_RELOCATION_TRIGGER:
     case MOBY_CLASS_RELOCATION_TRIGGER_WITH_SOUND:
         if (!(vector_distance_xy(ctx + 0x10, candidate_position) < 1.0f)) return 0;
-        relocation_trigger_vars = *(char **)(moby + 0x78);
+        relocation_trigger_vars = ((char *)MOBY(moby)->pvars);
         if (*(int *)relocation_trigger_vars < 0) return 0;
         placement_index = 0;
-        if (*(short *)(moby + 0xA6) == 0x3B1) {
+        if (MOBY(moby)->oclass == 0x3B1) {
             placement_index = *(int *)(relocation_trigger_vars + 4);
             *(int *)(relocation_trigger_vars + 4) = placement_index + 1;
-        } else if (*(short *)(moby + 0xA6) == 0x515 || *(short *)(moby + 0xA6) == 0x15F) {
+        } else if (MOBY(moby)->oclass == 0x515 || MOBY(moby)->oclass == 0x15F) {
             placement_index = *(int *)(relocation_trigger_vars + 4);
             *(int *)(relocation_trigger_vars + 4) = placement_index + 1;
         }
-        if (*(short *)(moby + 0xA6) == 0x515) {
+        if (MOBY(moby)->oclass == 0x515) {
             trooper_play_sound(0, 0, (int)moby, 0x515);
         }
 
@@ -2419,8 +2420,8 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
 
         destination_moby = (*(char * *)&D_L06_0015FFD8) + (*(int *)relocation_trigger_vars << 8);
         f20 = fast_normalize_angle(convert_integer_to_float(placement_index) * 60.0f * 0.017453292f);
-        vB[0] = fast_cos(fast_add_rotations(*(float *)(destination_moby + 0x48), f20));
-        vB[1] = fast_sin(fast_add_rotations(*(float *)(destination_moby + 0x48), f20));
+        vB[0] = fast_cos(fast_add_rotations(MOBY(destination_moby)->rot.z, f20));
+        vB[1] = fast_sin(fast_add_rotations(MOBY(destination_moby)->rot.z, f20));
         vB[2] = 0.0f;
         fast_vec_add(ctx + 0x10, vB, destination_moby + 0x10);
         *(u128_F4058 *)(ow + 0x2F0) = *(u128_F4058 *)(ow + 0x2E0) = *(u128_F4058 *)(ctx + 0x10);
@@ -2468,7 +2469,7 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
     case MOBY_CLASS_GADGEBOT_ABSORPTION_TRIGGER:
     case MOBY_CLASS_GADGEBOT_ABSORPTION_TARGET:
         if (flag != 0) return 0;
-        if (*(unsigned char *)(moby + 0x20) == 2) return 0;
+        if (MOBY(moby)->state == 2) return 0;
         if (!(vector_distance_xy(ctx + 0x10, candidate_position) < 1.0f)) return 0;
         *(char *)(ctx + 0x20) = 8;
         *(int *)(ow + 0x304) = (int)moby;
@@ -2496,7 +2497,7 @@ int process_gadgebot_interactions(char *moby, int flag)
     int *cursor;
     int entry;
 
-    state = *(char **)(moby + 0x78);
+    state = ((char *)MOBY(moby)->pvars);
     iter.out = 0;
     list_id = *(int *)(state + 0x30C);
     if (list_id != -1) {
@@ -2525,9 +2526,9 @@ void consider_moby_target_candidate(char *moby, char *current_target, char *cand
 void consider_moby_target_candidate(char *moby, char *current_target, char *candidate_moby, int *out, float *best, float thresh) {
     float candidate_distance = vector_distance_xy(moby + 0x10, candidate_moby + 0x10);
     if (!(thresh < candidate_distance)) {
-        float ang = fast_arc_tan(*(float *)(candidate_moby + 0x10) - *(float *)(moby + 0x10),
-                                 *(float *)(candidate_moby + 0x14) - *(float *)(moby + 0x14));
-        float candidate_score = candidate_distance + fast_difference_between_rotations(*(float *)(moby + 0x48), ang) * 5.0f;
+        float ang = fast_arc_tan(MOBY(candidate_moby)->pos.x - MOBY(moby)->pos.x,
+                                 MOBY(candidate_moby)->pos.y - MOBY(moby)->pos.y);
+        float candidate_score = candidate_distance + fast_difference_between_rotations(MOBY(moby)->rot.z, ang) * 5.0f;
         if (candidate_moby == current_target) {
             candidate_score -= 2.0f;
         }
@@ -2556,7 +2557,7 @@ void select_hero_or_gadgebot_target(char *moby, char **current, f32 range) {
         gadgebot_target_cache_frame_gp = level_frame_count;
         cached_gadgebot_target_count_gp = 0;
         for (i = 0; (candidate_moby = D_L06_001AC180_2f34d8[i]) != 0; i++) {
-            if (*(s16 *)(candidate_moby + 0xA6) == 0x359 && (u8)candidate_moby[0x20] >= 2 && (u8)candidate_moby[0x20] != 9) {
+            if (MOBY(candidate_moby)->oclass == 0x359 && (u8)candidate_moby[0x20] >= 2 && (u8)candidate_moby[0x20] != 9) {
                 s32 candidate_slot_index = cached_gadgebot_target_count_gp;
                 cached_gadgebot_target_count_gp = candidate_slot_index + 1;
                 cached_gadgebot_target_mobies[candidate_slot_index] = candidate_moby;
@@ -2579,7 +2580,7 @@ extern void FUN_0022da68(int, int, void *);
 void handle_gadgebot_hit_knockback(unsigned char *moby) __asm__("FUN_L06_002f3640");
 
 void handle_gadgebot_hit_knockback(unsigned char *moby) {
-    char *state = *(char **)(moby + 0x78);
+    char *state = ((char *)MOBY(moby)->pvars);
     if (moby[0x20] != 9 && moby[0x52] != 2 && moby[0x53] != 2) {
         char *target = find_moby_hit(moby, 0x330001, 0);
         if (target != 0) {
@@ -2588,7 +2589,7 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
             char *owner = *(char **)(target + 0x20);
             float knockback_angle;
             knockback_angle = base_angle;
-            if (owner != D_001413D0 && *(short *)(owner + 0xA6) != *(short *)(moby + 0xA6)) {
+            if (owner != D_001413D0 && *(short *)(owner + 0xA6) != MOBY(moby)->oclass) {
                 int frames_sq = scale_game_frames(0x50);
                 frames_sq *= scale_game_frames(0x50);
                 state[0xBD] = 0;
@@ -2655,16 +2656,16 @@ void update_gadgebot_glow_effects(char *moby) {
     f32 color_pulse_multiplier;
     int r, g, b, a;
 
-    if (*(unsigned char *)(moby + 0x21) == 0xFF) {
+    if (MOBY(moby)->group == 0xFF) {
         return;
     }
-    moby_vars = *(char **)(moby + 0x78);
+    moby_vars = ((char *)MOBY(moby)->pvars);
     tint = 0x3228AAAA;
-    if (*(unsigned char *)(moby + 0x20) == 3 || *(unsigned char *)(moby + 0x20) == 6) {
+    if (MOBY(moby)->state == 3 || MOBY(moby)->state == 6) {
         tint = 0x3228AA28;
-    } else if (*(unsigned char *)(moby + 0x20) == 5 || *(unsigned char *)(moby + 0x20) == 9) {
+    } else if (MOBY(moby)->state == 5 || MOBY(moby)->state == 9) {
         tint = 0x322828AA;
-    } else if (*(unsigned char *)(moby + 0x20) == 7) {
+    } else if (MOBY(moby)->state == 7) {
         tint = 0x32AA2828;
     }
 
@@ -2691,7 +2692,7 @@ void update_gadgebot_glow_effects(char *moby) {
         packed |= b << 16;
         packed |= g << 8;
         packed |= r;
-        *(int *)(moby + 0x90) = FUN_001fa6e0_c(*(int *)(moby + 0x90), packed, 0.1f);
+        MOBY(moby)->glow_color = FUN_001fa6e0_c(MOBY(moby)->glow_color, packed, 0.1f);
     }
 
     for (i = 0; i < 3; i++) {
@@ -2699,7 +2700,7 @@ void update_gadgebot_glow_effects(char *moby) {
     }
     {
         int dv = level_frame_count;
-        *(int *)(moby_vars + 0x290) = *(int *)(moby + 0x90);
+        *(int *)(moby_vars + 0x290) = MOBY(moby)->glow_color;
         if (dv != 0) {
             int *last_effect_frame_ptr = *(int **)(moby_vars + 0x294);
             if (dv != *last_effect_frame_ptr) {
@@ -2869,14 +2870,14 @@ void energy_sphere_holder_update(char *holder_moby) {
         ENERGY_SPHERE_HOLDER_INITIALIZE = 0,
         ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM = 1
     };
-    char *holder_vars = *(char **)(holder_moby + 0x78);
+    char *holder_vars = ((char *)MOBY(holder_moby)->pvars);
     char *spawned_moby;
     unsigned char *visited_table;
     switch (((unsigned char *)holder_moby)[0x20]) {
     case ENERGY_SPHERE_HOLDER_INITIALIZE:
-        if ((*(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
+        if ((*(int *)(current_level_index * 256 + ((short)MOBY(holder_moby)->save_id >> 5) * 4 +
                       D_0014171B_86b8) >>
-                 (*(unsigned short *)(holder_moby + 0xB2) & 0x1F) &
+                 (MOBY(holder_moby)->save_id & 0x1F) &
              1) &&
             (current_level_index != 10 || (visited_table = (unsigned char *)((char *)visited52),
                                     (visited_table + ((unsigned char *)holder_moby)[0xB0]))[0xA0] == 0xFF)) {
@@ -2887,21 +2888,21 @@ void energy_sphere_holder_update(char *holder_moby) {
         spawned_moby = create_moby(0x410);
         spawned_moby[0x30] = 0x40;
         spawned_moby[0x31] = 1;
-        *(short *)(spawned_moby + 0x32) = 0x40;
+        MOBY(spawned_moby)->draw_dist = 0x40;
         *(long *)(spawned_moby + 0x38) = *(long *)(holder_moby + 0x38);
-        *(unsigned short *)(spawned_moby + 0x34) = *(unsigned short *)(holder_moby + 0x34) | 0x5000;
+        MOBY(spawned_moby)->flags = MOBY(holder_moby)->flags | 0x5000;
         qcopy(spawned_moby + 0x10, holder_moby + 0x10);
-        *(float *)(spawned_moby + 0x40) = random_angle_radians();
-        *(float *)(spawned_moby + 0x44) = random_angle_radians();
-        *(float *)(spawned_moby + 0x48) = random_angle_radians();
-        *(float *)(spawned_moby + 0x18) += 0.85f;
+        MOBY(spawned_moby)->rot.x = random_angle_radians();
+        MOBY(spawned_moby)->rot.y = random_angle_radians();
+        MOBY(spawned_moby)->rot.z = random_angle_radians();
+        MOBY(spawned_moby)->pos.z += 0.85f;
         *(char **)(holder_vars + 0x40) = spawned_moby;
         holder_moby[0x20] = 1;
         initialize_energy_sphere_holder_vars(holder_moby);
-        *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
-                 D_0014171B_86b8) &= ~(1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F));
-        energy_sphere_holder_completion_bits[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] &=
-            ~(1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F));
+        *(int *)(current_level_index * 256 + ((short)MOBY(holder_moby)->save_id >> 5) * 4 +
+                 D_0014171B_86b8) &= ~(1 << (MOBY(holder_moby)->save_id & 0x1F));
+        energy_sphere_holder_completion_bits[(short)MOBY(holder_moby)->save_id >> 5] &=
+            ~(1 << (MOBY(holder_moby)->save_id & 0x1F));
         break;
     case ENERGY_SPHERE_HOLDER_HANDLE_HITS_AND_UPDATE_BEAM: {
         char *hit = find_moby_hit(holder_moby, 0x330000, 0);
@@ -2912,10 +2913,10 @@ void energy_sphere_holder_update(char *holder_moby) {
         if ((*(char **)(holder_vars + 0x40))[0x20] < 0) {
             holder_moby[0xBC] = 1;
             holder_moby[0x20] = 2;
-            *(int *)(current_level_index * 256 + ((short)*(unsigned short *)(holder_moby + 0xB2) >> 5) * 4 +
-                     D_0014171B_86b8) |= 1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F);
-            energy_sphere_holder_completion_bits[(short)*(unsigned short *)(holder_moby + 0xB2) >> 5] |=
-                1 << (*(unsigned short *)(holder_moby + 0xB2) & 0x1F);
+            *(int *)(current_level_index * 256 + ((short)MOBY(holder_moby)->save_id >> 5) * 4 +
+                     D_0014171B_86b8) |= 1 << (MOBY(holder_moby)->save_id & 0x1F);
+            energy_sphere_holder_completion_bits[(short)MOBY(holder_moby)->save_id >> 5] |=
+                1 << (MOBY(holder_moby)->save_id & 0x1F);
         } else {
             update_energy_sphere_holder_beam_effects(holder_moby);
         }
@@ -2953,7 +2954,7 @@ void update_energy_sphere_holder_beam_effects(char *moby) {
     float step[4];
     float spark_position[4];
     float spark_velocity[4];
-    Beam *beam = *(Beam **)(moby + 0x78);
+    Beam *beam = ((Beam *)MOBY(moby)->pvars);
     int i;
     fast_vec_sub(beam_sprite_position, D_L06_00167540, beam->tgt + 0x10);
     fast_vec_normalize(beam_sprite_position, beam_sprite_position, -0.3f);
@@ -3003,7 +3004,7 @@ void update_hero_trigger_volume_monitor(char *moby) {
         INITIALIZE_TRIGGER_MONITOR = 0,
         CHECK_HERO_TRIGGER_VOLUMES = 1
     };
-    char *trigger_vars = *(char **)(moby + 0x78);
+    char *trigger_vars = ((char *)MOBY(moby)->pvars);
     struct Hero *hero_data;
     int *list;
     int *list2;

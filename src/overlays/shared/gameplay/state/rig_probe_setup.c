@@ -5,6 +5,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
 extern void scale_vector(float scale, void *out, void *joint) __asm__("FUN_001f9a80");
 extern void compute_moby_joint_matrices(void *moby, short joint, int flags) __asm__("FUN_0020fa90");
 
@@ -29,7 +30,7 @@ int rig_probe_setup(char *moby, int index, unsigned int *type, float *result,
     }
     entry += index * 0x20 + 0x10;
     *type = *(unsigned char *)entry;
-    scale = *(float *)(moby + 0x2c) * 0.0009765625f;
+    scale = MOBY(moby)->scale * 0.0009765625f;
     euler_rotation_matrix(matrix, moby + 0x40);
 
     if (*type < 2 || *type == 3) {

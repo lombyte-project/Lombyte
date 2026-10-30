@@ -4,6 +4,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/animation/get_moby_joint_matrices.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 
@@ -17,7 +18,7 @@ void moby_point_position(char *moby, int joint_index, void *world_position_out) 
     int joint_index_copy;
     float point_scale;
 
-    point_scale = *(float *)(moby + 0x2C) * 0.0009765625f;
+    point_scale = MOBY(moby)->scale * 0.0009765625f;
     joint_index_copy = joint_index;
     get_moby_joint_matrices(moby, 1, &joint_index_copy, joint_point_data);
     fast_vec_scale(world_position_out, joint_point_data + 0x30, point_scale);

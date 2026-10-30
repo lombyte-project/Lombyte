@@ -8,6 +8,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Allocates and fills a particle-process record attached to a moby. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/partupd_002811B0.c: func_L13_002811B0), where it is exact; names translated to the US level program. */
@@ -29,7 +30,7 @@ unsigned char *create_moby_joint_particle(char *moby, unsigned char joint_index,
         *(int *)(particle + 0xC) = c;
         world_position = (char *)particle + 0x10;
         particle_bias = truncate_float_to_s32(0.4f);
-        particle[9] = (((short)*(unsigned short *)(moby + 0x32) >> 5) << 4) + particle_bias;
+        particle[9] = (((short)((unsigned short)MOBY(moby)->draw_dist) >> 5) << 4) + particle_bias;
         particle[3] = 0x48;
         particle[1] = 3;
         particle[2] = *D_L13_001B2490;
@@ -39,7 +40,7 @@ unsigned char *create_moby_joint_particle(char *moby, unsigned char joint_index,
         *(float *)(particle + 0x1C) = x;
         *(char **)(particle + 0x30) = moby;
         attachment_data = particle + 0x30;
-        moby_a6_value = *(unsigned short *)(moby + 0xA6);
+        moby_a6_value = ((unsigned short)MOBY(moby)->oclass);
         *(short *)(attachment_data + 6) = moby_a6_value;
         attachment_data[4] = joint_index;
         *(float *)(attachment_data + 8) = x;

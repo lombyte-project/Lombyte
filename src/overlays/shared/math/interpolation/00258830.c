@@ -8,6 +8,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259868), where it is exact; names translated to the US level program. */
 
@@ -42,7 +43,7 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
         if (collision_line(&ray_start, &ray_end, coll_flags, moby, 0)) {
             fast_vec_sub(pos, (char *)&collision_hit_point, &reach);
             result = 1;
-            *(float *)(moby + 0x18) -= step_height;
+            MOBY(moby)->pos.z -= step_height;
         }
     }
     for (i = 0, position = moby + 0x10; i < 6; i++) {
@@ -51,12 +52,12 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
         if (func_L00_001F10E0_l(&ray_start, radius, coll_flags | 4, moby)) {
             qcopy(position, &D_L00_00173E70);
             result |= 1;
-            *(float *)(moby + 0x18) -= step_height;
+            MOBY(moby)->pos.z -= step_height;
         } else {
             break;
         }
     }
-    radius = *(float *)(moby + 0x18) - height;
+    radius = MOBY(moby)->pos.z - height;
     qcopy(&ray_start, position);
     qcopy(&ray_end, position);
     ray_start.a[2] += step_height;
@@ -71,7 +72,7 @@ int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, f
             }
             surface = *(float *)((char *)D_L00_00173E40 + 0x28);
             if (radius < surface) {
-                *(float *)(moby + 0x18) += (surface - radius) * 0.3f;
+                MOBY(moby)->pos.z += (surface - radius) * 0.3f;
             }
         }
     }

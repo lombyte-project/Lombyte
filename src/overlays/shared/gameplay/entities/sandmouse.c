@@ -1,5 +1,6 @@
 /* Shared moby classes: sandmouse. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/state/options.h"
@@ -41,7 +42,7 @@ void update_moby_interpolated_point_light(u8 *moby) {
         EFFECT_STATE_UPDATE = 1
     };
     s32 state = moby[0x20];
-    char *effect_vars = *(char **)(moby + 0x78);
+    char *effect_vars = ((char *)MOBY(moby)->pvars);
     s32 i;
     s32 current;
     s32 next;
@@ -265,15 +266,15 @@ char *spawn_sandmouse_projectile(char *owner, char *spawn_position, float target
     spawn_position_copy = *(OvlQuad *)spawn_position;
     spawned_moby = create_moby(0x661);
     if (spawned_moby) {
-        char *moby_vars = *(char **)(spawned_moby + 0x78);
+        char *moby_vars = ((char *)MOBY(spawned_moby)->pvars);
         int lifetime_frames;
         *(char **)(moby_vars + 0x10) = owner;
         ((unsigned char *)spawned_moby)[0x30] = 0xFF;
-        *(short *)(spawned_moby + 0x32) = 0x7F;
+        MOBY(spawned_moby)->draw_dist = 0x7F;
         spawned_moby[0x31] = 1;
         *(long *)(spawned_moby + 0x38) = *(long *)(owner + 0x38);
-        *(float *)(spawned_moby + 0x44) = initial_pitch;
-        *(float *)(spawned_moby + 0x48) = initial_yaw;
+        MOBY(spawned_moby)->rot.y = initial_pitch;
+        MOBY(spawned_moby)->rot.z = initial_yaw;
         *(int *)(spawned_moby + 0x40) = 0;
         qcopy(spawned_moby + 0x10, cp);
         *(float *)(moby_vars + 8) = target_yaw;
@@ -284,8 +285,8 @@ char *spawn_sandmouse_projectile(char *owner, char *spawn_position, float target
         *(short *)(moby_vars + 0x14) = lifetime_frames;
         *(short *)(moby_vars + 0x16) = lifetime_frames;
         spawned_moby[0x23] = 0x40;
-        *(unsigned short *)(spawned_moby + 0x34) |= 0xA00;
-        *(float *)(spawned_moby + 0x2C) = *(float *)(spawned_moby + 0x2C) * 0.5f;
+        MOBY(spawned_moby)->flags |= 0xA00;
+        MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 0.5f;
     }
     return spawned_moby;
 }
@@ -310,48 +311,48 @@ extern OvlQuad D_L01_001742E0;
 void update_sandmouse_projectile(char *moby) __asm__("FUN_L01_0030c9a8");
 
 void update_sandmouse_projectile(char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+    char *moby_vars = ((char *)MOBY(moby)->pvars);
     f32 *moby_position;
     OvlVec4 old_pos;
     OvlVec4 offset;
     DropProbe probe;
     f32 desired_yaw, desired_pitch;
     f32 pitch_k, pitch_d, pitch_max;
-    f32 height = *(f32 *)(*(char **)(moby + 0x24) + 0x24);
+    f32 height = *(f32 *)(((char *)MOBY(moby)->pclass) + 0x24);
 
-    if (*(f32 *)(moby + 0x2c) < height)
-        *(f32 *)(moby + 0x2c) += frame_scale * 0.21f * height;
+    if (MOBY(moby)->scale < height)
+        MOBY(moby)->scale += frame_scale * 0.21f * height;
 
     if (*(s16 *)(moby_vars + 0x14) < scale_game_frames(0x23) - scale_game_frames(1)) {
         desired_yaw = *(f32 *)(moby_vars + 8);
         desired_pitch = *(f32 *)(moby_vars + 0xc);
     } else {
-        desired_yaw = *(f32 *)(moby + 0x48);
-        desired_pitch = *(f32 *)(moby + 0x44);
+        desired_yaw = MOBY(moby)->rot.z;
+        desired_pitch = MOBY(moby)->rot.y;
     }
-    moby_position = (f32 *)(moby + 0x10);
-    desired_yaw = spring_turn((f32 *)moby_vars, *(f32 *)(moby + 0x48), desired_yaw,
+    moby_position = (f32 *)&MOBY(moby)->pos;
+    desired_yaw = spring_turn((f32 *)moby_vars, MOBY(moby)->rot.z, desired_yaw,
                                             frame_time_sq * 4.712389f,
                                             frame_time_sq * 3.1415927f,
                                             frame_time * 3.1415927f);
     pitch_d = frame_time_sq * 3.1415927f;
     pitch_k = frame_time_sq * 4.712389f;
     pitch_max = frame_time * 3.1415927f;
-    *(f32 *)(moby + 0x48) = desired_yaw;
+    MOBY(moby)->rot.z = desired_yaw;
     {
-        f32 pitch_result = spring_turn((f32 *)(moby_vars + 4), *(f32 *)(moby + 0x44), desired_pitch,
+        f32 pitch_result = spring_turn((f32 *)(moby_vars + 4), MOBY(moby)->rot.y, desired_pitch,
                                                 pitch_k, pitch_d, pitch_max);
         pitch_max = frame_time * 40.0f;
-        *(f32 *)(moby + 0x44) = pitch_result;
+        MOBY(moby)->rot.y = pitch_result;
         build_spherical_offset(offset.f, pitch_max,
-                                       *(f32 *)(moby + 0x48), -pitch_result);
+                                       MOBY(moby)->rot.z, -pitch_result);
     }
     qcopy(&old_pos, moby_position);
     fast_vec_add(moby_position, moby_position, &offset);
-    if (*(f32 *)(moby + 0x10) < 2.0f || *(f32 *)(moby + 0x10) > 1021.0f ||
-        *(f32 *)(moby + 0x14) < 2.0f || *(f32 *)(moby + 0x14) > 1021.0f ||
-        *(f32 *)(moby + 0x18) < 2.0f || *(f32 *)(moby + 0x18) > 1021.0f ||
-        *(f32 *)(moby + 0x10) < 0.0f || *(f32 *)(moby + 0x14) < 0.0f || *(f32 *)(moby + 0x18) < 0.0f ||
+    if (MOBY(moby)->pos.x < 2.0f || MOBY(moby)->pos.x > 1021.0f ||
+        MOBY(moby)->pos.y < 2.0f || MOBY(moby)->pos.y > 1021.0f ||
+        MOBY(moby)->pos.z < 2.0f || MOBY(moby)->pos.z > 1021.0f ||
+        MOBY(moby)->pos.x < 0.0f || MOBY(moby)->pos.y < 0.0f || MOBY(moby)->pos.z < 0.0f ||
         vector_distance_xy(moby_position, D_L01_00167240_30c9a8) > 64.0f) {
         mark_moby_for_removal(moby);
         return;
@@ -366,7 +367,7 @@ void update_sandmouse_projectile(char *moby) {
     ((f32 *)&probe.dir)[3] = 5627.9248f;
     probe.b28 = 1;
     probe.b29 = 1;
-    probe.id = *(u16 *)(moby + 0xa6);
+    probe.id = ((u16)MOBY(moby)->oclass);
     if (fast_dec_timer_s16(moby_vars + 0x14)) {
         mark_moby_for_removal(moby);
         return;
@@ -506,10 +507,10 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
                          3.1415927f);
     if (target_moby != 0) {
         *(char **)(state + 0x60) = target_moby;
-        if (hero.motion.pos.f[2] + 1.1f < *(float *)(moby + 0x18)) {
-            target_bearing_yaw = fast_arc_tan(*(float *)(target_moby + 0x10) - *(float *)(moby + 0x10),
-                             *(float *)(target_moby + 0x14) - *(float *)(moby + 0x14));
-            if (fast_difference_between_rotations(*(float *)(moby + 0x48), target_bearing_yaw) < 0.5235988f) {
+        if (hero.motion.pos.f[2] + 1.1f < MOBY(moby)->pos.z) {
+            target_bearing_yaw = fast_arc_tan(MOBY(target_moby)->pos.x - MOBY(moby)->pos.x,
+                             MOBY(target_moby)->pos.y - MOBY(moby)->pos.y);
+            if (fast_difference_between_rotations(MOBY(moby)->rot.z, target_bearing_yaw) < 0.5235988f) {
                 if (cutscene_mode_gp != 2) {
                     char *target_aim_height_data;
                     qcopy(&target_aim_position, target_moby + 0x10);
@@ -1772,7 +1773,7 @@ void update_box_positional_voice(char *moby) {
     int flags;
     float box_length, listener_length;
 
-    radius.f[2] = radius.f[1] = radius.f[0] = *(float *)(moby + 0xc);
+    radius.f[2] = radius.f[1] = radius.f[0] = MOBY(moby)->bsphere.w;
     fast_vec_sub(&delta, D_L01_00167240, moby + 0x40);
     delta.f[3] = 0.0f;
     transform_vector_by_basis(&box_size, &delta, moby + 0x50);

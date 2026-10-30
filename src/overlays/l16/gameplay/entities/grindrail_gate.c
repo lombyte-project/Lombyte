@@ -664,9 +664,9 @@ void taxi_update(struct Moby *moby) {
                     matched_moby = find_moby_in_owner_list_by_id(moby, *(short *)(taxi_data + 0xAE));
                     if (matched_moby != 0) {
                         matched_moby[0x20] = 2;
-                        *(unsigned short *)(matched_moby + 0x34) |= 1;
+                        MOBY(matched_moby)->flags |= 1;
                         matched_moby[0x31] = 0;
-                        *(int *)(matched_moby + 0x94) = 0;
+                        MOBY(matched_moby)->collision = 0;
                     }
                 }
             }
@@ -761,7 +761,7 @@ extern char *D_L16_001601AC_slots_e4900 __asm__("D_L16_001600EC");
 extern unsigned char D_0013D5C8_b_e4900[] __asm__("D_0013D4C0");
 void initialize_taxi_stop_state(void *moby_v) {
     char *moby = moby_v;
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     int *list = (int *)(data + 0x80);
     int i;
     int selected_pose_byte_offset;
@@ -775,16 +775,16 @@ void initialize_taxi_stop_state(void *moby_v) {
     }
     {
         if (D_0013D5C8_b_e4900[0x21] != 0 || *(short *)(data + 0xAC) == 2) {
-            int model_collision = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            int model_collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
             moby[0x31] = 1;
-            *(int *)(moby + 0x94) = model_collision;
-            *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) & 0xFFFE;
+            MOBY(moby)->collision = model_collision;
+            MOBY(moby)->flags = MOBY(moby)->flags & 0xFFFE;
             moby[0x20] = 1;
         } else {
             moby[0x20] = 6;
             moby[0x31] = 0;
-            *(unsigned short *)(moby + 0x34) = *(unsigned short *)(moby + 0x34) | 1;
-            *(int *)(moby + 0x94) = 0;
+            MOBY(moby)->flags = MOBY(moby)->flags | 1;
+            MOBY(moby)->collision = 0;
         }
     }
     {
@@ -1290,17 +1290,17 @@ extern float func_00214D88_7890(float *, float, float, float, float,
 float move_chomper_toward_position(void *m_v, void *t_v) {
     char *moby = m_v;
     float *target_position = t_v;
-    char *moby_data = *(char **)(moby + 0x78);
+    char *moby_data = ((char *)MOBY(moby)->pvars);
     float interpolated_travel_distance;
     float movement_delta[4];
     float distance_to_target;
     float oldz;
-    float target_yaw = fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
+    float target_yaw = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x, target_position[1] - MOBY(moby)->pos.y);
     target_yaw = fast_add_rotations(target_yaw, *(float *)(moby_data + 0x1F8));
-    oldz = *(float *)(moby + 0x18);
+    oldz = MOBY(moby)->pos.z;
     interpolated_travel_distance = 0.0f;
     distance_to_target = fast_vec_dist(moby + 0x10, target_position);
-    approach_angle((float *)(moby + 0x48), (float *)(moby_data + 0x1F4), target_yaw, D_0015ED70_c * 12.566371f,
+    approach_angle((float *)&MOBY(moby)->rot.z, (float *)(moby_data + 0x1F4), target_yaw, D_0015ED70_c * 12.566371f,
                        D_0015ED70_c * 12.566371f, frame_time * 12.566371f);
     func_00214D88_7890(&interpolated_travel_distance, distance_to_target, D_0015ED70_c * 8.0f, D_0015ED70_c * 12.0f, frame_time * 4.0f,
                        (float *)(moby_data + 0x204));
@@ -1308,7 +1308,7 @@ float move_chomper_toward_position(void *m_v, void *t_v) {
     movement_delta[2] = *(float *)(moby_data + 0x208) - D_0015ED70_c * 10.0f;
     FUN_L00_00258830(moby, movement_delta, 0.5f, 0.5f, 0.0f, 0x10);
     resolve_point_path_segment_xy_clearance(0.333f, *(void **)(moby_data + 0x1F0), moby + 0x10, moby + 0x10);
-    *(float *)(moby_data + 0x208) = oldz - *(float *)(moby + 0x18);
+    *(float *)(moby_data + 0x208) = oldz - MOBY(moby)->pos.z;
     return distance_to_target;
 }
 
@@ -1754,9 +1754,9 @@ void update_path_walker(unsigned char *walker_moby) {
     L16WalkerData_c *walker_data;
     int playing = 0;
 
-    walker_data = *(L16WalkerData_c **)(walker_moby + 0x78);
+    walker_data = ((L16WalkerData_c *)MOBY(walker_moby)->pvars);
     path = D_L16_001B0930[walker_data->path_index];
-    if (((*(unsigned short *)(walker_moby + 0xA6) ^ 1) & 1) != 0) {
+    if (((((unsigned short)MOBY(walker_moby)->oclass) ^ 1) & 1) != 0) {
         if (voice_is_playing(walker_moby, walker_data->sound) == 0) {
             walker_data->sound = allocate_voice_for_target_entry_alt(0, 4, (int)walker_moby);
         } else {
@@ -1783,9 +1783,9 @@ void update_path_walker(unsigned char *walker_moby) {
            instruction. A same-width copy (int) is folded away and does not do it. */
         char blocked = playing;
 
-        sample_camera_path(path, walker_data->parameter, 0, walker_moby + 0x10, (float *)(walker_moby + 0x40), 0);
+        sample_camera_path(path, walker_data->parameter, 0, walker_moby + 0x10, (float *)&MOBY(walker_moby)->rot, 0);
         acceleration = path_walker_speed_approach_acceleration_gp * frame_time_sq;
-        *(float *)(walker_moby + 0x18) += walker_data->height_step;
+        MOBY(walker_moby)->pos.z += walker_data->height_step;
         walker_data->parameter += walker_data->speed;
         approach_value(&walker_data->speed, walker_data->target_speed, acceleration);
         gap = other->parameter - walker_data->parameter;
@@ -1836,7 +1836,7 @@ void update_path_walker(unsigned char *walker_moby) {
         break;
     }
     }
-    if (*(unsigned short *)(walker_moby + 0xA6) & 1) {
+    if (((unsigned short)MOBY(walker_moby)->oclass) & 1) {
         emit_path_walker_particle(walker_moby, old);
     }
 }
@@ -2396,7 +2396,7 @@ char *find_group_class_010e_moby_in_state_6(int moby_group_index) {
         return 0;
     for (;;) {
         moby = D_L16_0015FFD8 + ((*(unsigned short *)moby_index_entry & 0x7FFF) << 8);
-        if (*(short *)(moby + 0xA6) == 0x10E && is_moby_in_state_6(moby))
+        if (MOBY(moby)->oclass == 0x10E && is_moby_in_state_6(moby))
             return moby;
         if (*moby_index_entry++ < 0)
             return 0;

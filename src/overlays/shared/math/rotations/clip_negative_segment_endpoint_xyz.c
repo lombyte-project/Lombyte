@@ -532,7 +532,7 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         initialize_hit_descriptor(&ev, owner_moby, 0x810001, fB);
         ev.b18 = 2;
         ev.b19 = 1;
-        ev.h1A = *(unsigned short *)(owner_moby + 0xA6);
+        ev.h1A = ((unsigned short)MOBY(owner_moby)->oclass);
         collect_mobies_in_sphere(fA, explosion_position, 0x10, owner_moby, &ev);
     }
     }
@@ -895,7 +895,7 @@ s32 is_moby_in_class_range_500_to_540(u8 *moby) {
     if (moby > D_L00_0015FFE0) {
         goto bad;
     }
-    moby_class_id = *(u16 *)(moby + 0xA6);
+    moby_class_id = ((u16)MOBY(moby)->oclass);
     return (moby_class_id - 0x1F4) < 0x29;
 }
 

@@ -766,10 +766,10 @@ void update_moby_transform_and_child(char *moby) {
         INITIALIZE_TRANSFORM_HISTORY = 0,
         UPDATE_TRANSFORM_FROM_HISTORY = 1
     };
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     char position_delta[16];
     char *child;
-    switch (*(unsigned char *)(moby + 0x20)) {
+    switch (MOBY(moby)->state) {
     case INITIALIZE_TRANSFORM_HISTORY:
         moby[0x20] = 1;
         break;
@@ -778,16 +778,16 @@ void update_moby_transform_and_child(char *moby) {
         update_entity_matrix(data + 0x20, position_delta, data + 0x70, moby + 0x40);
         break;
     }
-    if (*(unsigned char *)(moby + 0xBC) != 0 && *(int *)(data + 0x80) != 0 &&
+    if (MOBY(moby)->command != 0 && *(int *)(data + 0x80) != 0 &&
         *(int *)(data + 0x84) == 0) {
         char *new_child = create_moby(0x764);
         *(char **)(data + 0x84) = new_child;
         if (new_child != 0) {
-            *(unsigned short *)(new_child + 0x32) = *(unsigned short *)(moby + 0x32);
+            *(unsigned short *)(new_child + 0x32) = ((unsigned short)MOBY(moby)->draw_dist);
             (*(char **)(data + 0x84))[0x31] = 1;
             *(long *)(*(char **)(data + 0x84) + 0x38) = *(long *)(moby + 0x38);
             *(float *)(*(char **)(data + 0x84) + 0x2C) *=
-                *(float *)(moby + 0x2C) / *(float *)(*(char **)(moby + 0x24) + 0x24);
+                MOBY(moby)->scale / *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
         }
     }
     qcopy(data + 0x60, moby + 0x10);
@@ -815,7 +815,7 @@ void set_group_class_0630_moby_byte_bc(int group_index, int value) {
         do {
             unsigned char *moby = (unsigned char *)(((group_moby_entry[0] & 0x7FFF) << 8) + D_L18_0015FFD8);
 
-            if (*(short *)(moby + 0xA6) == 0x630) {
+            if (MOBY(moby)->oclass == 0x630) {
                 moby[0xBC] = value;
             }
         } while ((short)*group_moby_entry++ >= 0);
@@ -951,7 +951,7 @@ void gadgebot_update(unsigned char *moby) {
         GADGEBOT_EXPLODE = 6
     };
     char position_scratch[16];
-    unsigned char *moby_vars = *(unsigned char **)(moby + 0x78);
+    unsigned char *moby_vars = ((unsigned char *)MOBY(moby)->pvars);
     unsigned char *moby_transform_ptr;
     update_gadgebot_damage_target_and_glow((struct Moby *)moby);
     switch (moby[0x20]) {
@@ -959,10 +959,10 @@ void gadgebot_update(unsigned char *moby) {
         unsigned short moby_flags;
         moby[0x20] = 8;
         if (random_integer_below(2))
-            *(unsigned short *)(moby + 0x34) |= 0x8000;
+            MOBY(moby)->flags |= 0x8000;
         else
-            *(unsigned short *)(moby + 0x34) &= 0x7FFF;
-        *(unsigned short *)(moby + 0x34) |= 0x100;
+            MOBY(moby)->flags &= 0x7FFF;
+        MOBY(moby)->flags |= 0x100;
         moby[0x73] = D_L18_00162608;
         *(void **)(moby_vars + 0x140) = &D_L18_001625F0;
         *(float *)(moby_vars + 0x20) = 1.0f;
@@ -972,13 +972,13 @@ void gadgebot_update(unsigned char *moby) {
         *(float *)(moby_vars + 0x30) = 0.5f;
         *(float *)(moby_vars + 0x1F8) = random_angle_radians();
         moby[0x30] = 0xFF;
-        moby_flags = *(unsigned short *)(moby + 0x34);
-        *(short *)(moby + 0x32) = 0xFF;
+        moby_flags = MOBY(moby)->flags;
+        MOBY(moby)->draw_dist = 0xFF;
         moby_flags |= 1;
         moby[0x31] = 0;
         moby_flags &= 0xEFFF;
-        *(int *)(moby + 0x94) = 0;
-        *(unsigned short *)(moby + 0x34) = moby_flags;
+        MOBY(moby)->collision = 0;
+        MOBY(moby)->flags = moby_flags;
         break;
     }
     case GADGEBOT_LAUNCH_FLIGHT: {
@@ -990,12 +990,12 @@ void gadgebot_update(unsigned char *moby) {
         qcopy(position_scratch, moby_transform_ptr);
         ((float *)position_scratch)[2] += 1.0f;
         r = probe_ground_height(position_scratch, 0, 0.5f);
-        if (*(float *)(moby + 0x18) < r) {
-            *(float *)(moby + 0x18) = r;
+        if (MOBY(moby)->pos.z < r) {
+            MOBY(moby)->pos.z = r;
             moby[0x20] = 2;
             if (moby[0x53])
                 blend_moby_animation(moby, 0, 0, scale_game_frames(10));
-        } else if (*(float *)(moby + 0x18) < launch_gravity_and_minimum_z) {
+        } else if (MOBY(moby)->pos.z < launch_gravity_and_minimum_z) {
             moby[0x20] = 6;
         }
         break;
@@ -1037,8 +1037,8 @@ void gadgebot_update(unsigned char *moby) {
     case GADGEBOT_FACE_TARGET: {
         float r, k, b, max_turn_step;
         moby_transform_ptr = moby + 0x48;
-        r = fast_arc_tan(*(float *)(moby_vars + 0x180) - *(float *)(moby + 0x10),
-                         *(float *)(moby_vars + 0x184) - *(float *)(moby + 0x14));
+        r = fast_arc_tan(*(float *)(moby_vars + 0x180) - MOBY(moby)->pos.x,
+                         *(float *)(moby_vars + 0x184) - MOBY(moby)->pos.y);
         k = 6.2831855f;
         b = frame_time_sq * k;
         max_turn_step = frame_time * k;
@@ -1072,8 +1072,8 @@ void gadgebot_update(unsigned char *moby) {
         moby[0x20] = 8;
         if (moby[0x53])
             blend_moby_animation(moby, 0, 0, scale_game_frames(10));
-        *(int *)(moby + 0x94) = 0;
-        *(unsigned short *)(moby + 0x34) = (*(unsigned short *)(moby + 0x34) | 0x41) & 0xEFFF;
+        MOBY(moby)->collision = 0;
+        MOBY(moby)->flags = (MOBY(moby)->flags | 0x41) & 0xEFFF;
         break;
     }
     moby_transform_ptr = moby + 0xC0;
@@ -1335,7 +1335,7 @@ short count_group_class_0772_mobys_not_in_state_8(int group_index) {
     base = D_L18_0015FFD8;
     while (1) {
         unsigned char *moby = (unsigned char *)(base + ((group_moby_entry[0] & 0x7FFF) << 8));
-        if (*(short *)(moby + 0xA6) == 0x772 && moby[0x20] != 8)
+        if (MOBY(moby)->oclass == 0x772 && moby[0x20] != 8)
             n++;
         if ((short)*group_moby_entry++ < 0)
             return n;
@@ -1421,9 +1421,9 @@ void draw_group_class_0772_joint_glows(struct Moby *moby) {
         while (1) {
             unsigned char *group_moby = D_L18_0015FFD8 + ((group_moby_entry[0] & 0x7FFF) << 8);
             unsigned short *next = group_moby_entry + 1;
-            if (*(short *)(group_moby + 0xA6) == 0x772 && group_moby[0x20] != 0 && group_moby[0x20] < 6) {
+            if (MOBY(group_moby)->oclass == 0x772 && group_moby[0x20] != 0 && group_moby[0x20] < 6) {
                 int i;
-                int col = (*(int *)(group_moby + 0x90) & 0xFFFFFF) + (*(int *)&gadgebot_joint_glow_alpha_gp << 24);
+                int col = (MOBY(group_moby)->glow_color & 0xFFFFFF) + (*(int *)&gadgebot_joint_glow_alpha_gp << 24);
                 float joint_world_position[4];
                 for (i = 2; i < 5; i++) {
                     moby_point_position(group_moby, i, joint_world_position);

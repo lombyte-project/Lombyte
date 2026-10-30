@@ -597,7 +597,7 @@ extern char D_0013F3D0[];
 void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) __asm__("FUN_L14_002de2b8");
 
 void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     char *hero_state = (char *)((char *)((char *)&hero));
     float target_up_vector[4];
     float up[4];
@@ -615,9 +615,9 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
     if ((*(char **)(hero_state + 0x2FC) == moby && *(short *)(hero_state + 0x30E) == 0) ||
         (*(char **)(hero_state + 0x4F8) == moby && *(int *)(hero_state + 0x208C) == 3)) {
         char *hero_data = (char *)((char *)((char *)&hero));
-        *(char *)(moby + 0xBC) = 1;
-        if (absolute_float(*(float *)(hero_data + 0x80) - *(float *)(moby + 0x10)) < 0.1f &&
-            absolute_float(*(float *)(hero_data + 0x84) - *(float *)(moby + 0x14)) < 0.1f) {
+        MOBY(moby)->command = 1;
+        if (absolute_float(*(float *)(hero_data + 0x80) - MOBY(moby)->pos.x) < 0.1f &&
+            absolute_float(*(float *)(hero_data + 0x84) - MOBY(moby)->pos.y) < 0.1f) {
             qcopy(target_up_vector, up);
         } else {
             fast_vec_sub(direction_scratch, (char *)((char *)&D_0013F3D0), moby + 0x10);
@@ -639,23 +639,23 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
         }
     } else {
         qcopy(target_up_vector, up);
-        *(char *)(moby + 0xBC) = 0;
+        MOBY(moby)->command = 0;
     }
 
     if (fast_dec_timer(data + 0x70)) {
-        if (0.1f < absolute_float(*(float *)(moby + 0xE0) - target_up_vector[0]) ||
-            0.1f < absolute_float(*(float *)(moby + 0xE4) - target_up_vector[1]) ||
-            0.1f < absolute_float(*(float *)(moby + 0xE8) - target_up_vector[2])) {
+        if (0.1f < absolute_float(MOBY(moby)->rot_row2.x - target_up_vector[0]) ||
+            0.1f < absolute_float(MOBY(moby)->rot_row2.y - target_up_vector[1]) ||
+            0.1f < absolute_float(MOBY(moby)->rot_row2.z - target_up_vector[2])) {
             *(int *)(data + 0x70) = scale_game_frames(60);
-            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) + 2.0f;
-            allocate_voice_slot(*(void **)(*(char **)(moby + 0x24) + 0x28), 8, (int)moby, (int)(moby + 0x10), 0x400);
-            *(float *)(moby + 0x18) = *(float *)(moby + 0x18) - 2.0f;
+            MOBY(moby)->pos.z = MOBY(moby)->pos.z + 2.0f;
+            allocate_voice_slot(*(void **)(((char *)MOBY(moby)->pclass) + 0x28), 8, (int)moby, (int)(moby + 0x10), 0x400);
+            MOBY(moby)->pos.z = MOBY(moby)->pos.z - 2.0f;
         }
     }
 
-    vendor_spring((float *)(moby + 0xE0), (float *)(data + 0x60), target_up_vector[0], 0.005f, 0.2f, 0.0f);
-    vendor_spring((float *)(moby + 0xE4), (float *)(data + 0x64), target_up_vector[1], 0.005f, 0.2f, 0.0f);
-    vendor_spring((float *)(moby + 0xE8), (float *)(data + 0x68), target_up_vector[2], 0.005f, 0.2f, 0.0f);
+    vendor_spring((float *)&MOBY(moby)->rot_row2, (float *)(data + 0x60), target_up_vector[0], 0.005f, 0.2f, 0.0f);
+    vendor_spring((float *)&MOBY(moby)->rot_row2.y, (float *)(data + 0x64), target_up_vector[1], 0.005f, 0.2f, 0.0f);
+    vendor_spring((float *)&MOBY(moby)->rot_row2.z, (float *)(data + 0x68), target_up_vector[2], 0.005f, 0.2f, 0.0f);
 
     fast_vec_normalize(moby + 0xE0, moby + 0xE0, 1.0f);
     *(u128_s07 *)direction_scratch = 0;
@@ -664,9 +664,9 @@ void update_platform_tilt_basis(char *moby, f32 unused_arg1, f32 unused_arg2) {
     fast_vec_cross(moby + 0xD0, direction_scratch, moby + 0xE0);
     fast_vec_normalize(moby + 0xD0, moby + 0xD0, 1.0f);
     fast_vec_cross(moby + 0xC0, moby + 0xE0, moby + 0xD0);
-    *(float *)(moby + 0xCC) = 0.0f;
-    *(float *)(moby + 0xDC) = 0.0f;
-    *(float *)(moby + 0xEC) = 0.0f;
+    MOBY(moby)->rot_row0.w = 0.0f;
+    MOBY(moby)->rot_row1.w = 0.0f;
+    MOBY(moby)->rot_row2.w = 0.0f;
 }
 #include "sda.h"
 

@@ -9,6 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
 #include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L15_002044c8). */
 extern int D_0015ED84_d __asm__("D_0015ED84");
@@ -36,7 +37,7 @@ void apply_hero_ground_type_effects(void) {
             hero_state->on_magnet_ground = 1;
             if (hero_state->vehicle_mode == 0) {
                 char *item_moby = ((char *)hero_state->items[1].moby);
-                if (item_moby != 0 && *(short *)(item_moby + 0xA6) == 0xAD)
+                if (item_moby != 0 && MOBY(item_moby)->oclass == 0xAD)
                     hero_state->unk308 = 1;
             }
         }

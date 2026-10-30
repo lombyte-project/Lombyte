@@ -104,14 +104,14 @@ char *spawn_projectile_moby(struct Moby *source_moby, void *spawn_position, floa
     moby = create_moby(0x4B8);
     if (moby != 0) {
         moby[0x31] = 1;
-        *(unsigned char *)(moby + 0x30) = *(short *)(moby + 0x32) = 0xFF;
+        MOBY(moby)->update_dist = MOBY(moby)->draw_dist = 0xFF;
         set_moby_color(moby, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
-        *(short *)(moby + 0x34) = source_moby->flags;
+        MOBY(moby)->flags = source_moby->flags;
         qcopy(moby + 0x10, spawn_position);
-        *(float *)(moby + 0x48) = fast_arc_tan(projectile_direction[0], projectile_direction[1]);
-        *(float *)(moby + 0x44) = fast_arc_tan(vector_length_xy(projectile_direction), projectile_direction[2]);
+        MOBY(moby)->rot.z = fast_arc_tan(projectile_direction[0], projectile_direction[1]);
+        MOBY(moby)->rot.y = fast_arc_tan(vector_length_xy(projectile_direction), projectile_direction[2]);
         moby[0x20] = 1;
-        data = *(char **)(moby + 0x78);
+        data = ((char *)MOBY(moby)->pvars);
         qcopy(data, projectile_direction);
         *(int *)(data + 0x10) = scale_game_frames(0x3C);
     }
@@ -329,7 +329,7 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
             struct Hero *h = &hero;
             if (h->state.current == 0x72) {
                 char *ground_moby = ((char *)h->ground_moby);
-                if (ground_moby != 0 && *(short *)(ground_moby + 0xA6) == 0x267) {
+                if (ground_moby != 0 && MOBY(ground_moby)->oclass == 0x267) {
                     if (v == 0) {
                         help_request(0x7DB, 0x46);
                     } else if (*(unsigned short *)(b + 0x238) == 0) {

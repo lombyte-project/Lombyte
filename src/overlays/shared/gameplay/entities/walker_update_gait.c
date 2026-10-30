@@ -7,6 +7,7 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/state/interpolated_record.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/moby.h"
 
 int walker_gait_mask(float *a, float v) __asm__("FUN_L00_002a13f0");
 int walker_gait_mask(float *gait_record, float interval_value) {
@@ -69,7 +70,7 @@ float compute_walker_time_to_landing(char *walker_moby, char *gait_data) __asm__
 
 float compute_walker_time_to_landing(char *walker_moby, char *gait_data) {
     float root_denominator = *(float *)(gait_data + 0xDC);
-    float gap = *(float *)(walker_moby + 0x18) - *(float *)(gait_data + 0x68);
+    float gap = MOBY(walker_moby)->pos.z - *(float *)(gait_data + 0x68);
     float root_numerator_base = *(float *)(gait_data + 0xD8) + root_denominator * 0.5f;
     float discriminant_or_root = root_numerator_base * root_numerator_base + (root_denominator + root_denominator) * gap;
     float time_to_landing;

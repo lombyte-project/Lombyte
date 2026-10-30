@@ -85,9 +85,9 @@ void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, 
     float child_joint_position[4], parent_joint_position[4];
     if (child_moby != 0) {
         child_moby[0x30] = 0xFF;
-        *(short *)(child_moby + 0x32) = 0xFF;
+        MOBY(child_moby)->draw_dist = 0xFF;
         child_moby[0x31] = 1;
-        *(unsigned short *)(child_moby + 0x34) |= 0x4000;
+        MOBY(child_moby)->flags |= 0x4000;
         *(long *)(child_moby + 0x38) = *(long *)(*(char **)(D_0013E533 + 0x2E9D) + 0x38);
         qcopy(child_moby + 0x40, &parent->rot);
         moby_point_position(child_moby, joint, child_joint_position);
@@ -132,7 +132,7 @@ extern int FUN_L08_002e1c98_c() __asm__("FUN_L08_002e1c98");
 void spawn_shrub_parts(char *moby) __asm__("FUN_L08_002e8788");
 
 void spawn_shrub_parts(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)MOBY(moby)->pvars);
     char *anchor_joint_cursor = data + 0xBC;
     int i = 0;
     struct Moby *child_moby;
@@ -200,7 +200,7 @@ void update_shrub_parts(struct Moby *parent_moby) {
     if (*(int *)(data + 0x90) != 0) {
         char *spinning_part_moby = *(char **)(data + 0x90);
         *(float *)(*(char **)(data + 0x90) + 0x40) = fast_add_rotations(
-            *(float *)(spinning_part_moby + 0x40),
+            MOBY(spinning_part_moby)->rot.x,
             shrub_part_spin_speed_degrees_gp * DEG_TO_RAD * D_0015ED6C);
     }
     for (i = 0; i < 12; i++) {
@@ -2553,7 +2553,7 @@ void process_shrub_part_hits(struct Moby *parent_moby) {
             char **selected_part_entry = (char **)(base + selected_part_byte_offset);
             char *selected_part_moby = *selected_part_entry;
             char *d2;
-            d2 = *(char **)(selected_part_moby + 0x78);
+            d2 = ((char *)MOBY(selected_part_moby)->pvars);
             cart_burst(parent_moby, selected_part_moby + 0x10, -1, 2.0f, 13.0f);
             fast_vec_sub(d2, *selected_part_entry + 0x10, *(char **)(selected_part_byte_offset + data + 0x64) + 0x10);
             fast_vec_normalize(d2, d2, D_0015ED6C * 10.0f);

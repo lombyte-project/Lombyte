@@ -1,5 +1,6 @@
 /* Shared moby classes: veldin_ship, decoy_glove, metal_detector, helipack, horny_toad, infobot, particle_spawner_smoke__fire. */
 #include "types.h"
+#include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -315,8 +316,8 @@ void crate_drop_bolts(u8 *crate_moby) {
     s16 crate_class;
     f32 launch_angle, horizontal_launch_speed, trajectory_time;
 
-    crate_vars = *(u8 **)(crate_moby + 0x78);
-    crate_class = *(s16 *)(crate_moby + 0xA6);
+    crate_vars = ((u8 *)MOBY(crate_moby)->pvars);
+    crate_class = MOBY(crate_moby)->oclass;
     unused_global_copy = l00_crate_drop_unused_stack_copy_source;
     drop_type_or_skip_spawn = *(s16 *)(crate_vars + 0xC6) == 0;
     if (crate_class == 0x1F5)
@@ -325,12 +326,12 @@ void crate_drop_bolts(u8 *crate_moby) {
         clear_u64_value(&trajectory_vector);
         if (*(s32 *)(crate_vars + 0xF0)) {
             if (crate_moby)
-                *(s16 *)(crate_moby + 0x36) = 0x7F80;
+                MOBY(crate_moby)->occlusion = 0x7F80;
             probe_ground_height_cf(crate_moby, *(s32 *)(crate_vars + 0xF0), crate_moby + 0x10, crate_moby + 0x40, &adjusted_position, &scratch_vector);
             fast_vec_sub(&trajectory_vector, &adjusted_position, crate_moby + 0x10);
         }
-        if (D_0015ED84 == 0xF && absolute_float(*(f32 *)(crate_moby + 0x10) - 166.0f) < 6.0f &&
-            absolute_float(*(f32 *)(crate_moby + 0x14) - 193.0f) < 6.0f) {
+        if (D_0015ED84 == 0xF && absolute_float(MOBY(crate_moby)->pos.x - 166.0f) < 6.0f &&
+            absolute_float(MOBY(crate_moby)->pos.y - 193.0f) < 6.0f) {
             s32 save = D_L00_0015F598;
             D_L00_0015F598 = 0;
             mark_moby_for_removal_cf(crate_moby, 0x100, -1);
@@ -385,7 +386,7 @@ void crate_drop_bolts(u8 *crate_moby) {
             spawned_moby = spawn_on_path(crate_moby + 0x10, drop_type_or_skip_spawn, -1, 0);
             if (!spawned_moby)
                 break;
-            spawned_vars = *(u8 **)(spawned_moby + 0x78);
+            spawned_vars = ((u8 *)MOBY(spawned_moby)->pvars);
             *(s16 *)(spawned_vars + 4) = *(s16 *)(crate_vars + 0xC4);
             launch_angle = random_angle_radians();
             horizontal_launch_speed = random_float_between(0.0f, crate_drop_horizontal_launch_speed_max_gp) * D_0015ED6C_2d0538;
@@ -403,7 +404,7 @@ void crate_drop_bolts(u8 *crate_moby) {
                 s32 k = solve_quadratic_equation(
                     &larger_trajectory_time_root, &smaller_trajectory_time_root, D_0015ED70 * 10.8f * -0.5f,
                     *(f32 *)(spawned_vars + 0x18) - D_0015ED70 * 10.8f * -0.5f,
-                    *(f32 *)(spawned_moby + 0x18) -
+                    MOBY(spawned_moby)->pos.z -
                         *(f32 *)(D_L00_001B04B0_2d0538[*(s32 *)(crate_vars + 0xC0)] + 0x18));
                 trajectory_time = 120.0f;
                 if ((f32)k >= 1.0f && larger_trajectory_time_root > 0.0f && larger_trajectory_time_root < 120.0f)
@@ -421,8 +422,8 @@ void crate_drop_bolts(u8 *crate_moby) {
             }
         }
     }
-    if (*(s16 *)(crate_moby + 0xB4))
-        *(s16 *)(crate_moby + 0xB4) = 0;
+    if (MOBY(crate_moby)->unkB4)
+        MOBY(crate_moby)->unkB4 = 0;
     mark_moby_for_removal_cf(crate_moby, 0x100, -1);
 }
 #include "qcopy.h"
@@ -1145,7 +1146,7 @@ void decoy_glove_update(unsigned char *moby) {
     u128_D3B20 loc;
 
     if (moby == 0) return;
-    glove_vars = *(char **)(moby + 0x78);
+    glove_vars = ((char *)MOBY(moby)->pvars);
     if (glove_vars == 0) return;
     *(u128_D3B20 *)va = 0;
     va[1] = -0.19f;
@@ -1157,7 +1158,7 @@ void decoy_glove_update(unsigned char *moby) {
 
     tracked_target_moby = *(char **)(glove_vars + 0x50);
     if (tracked_target_moby) {
-        *(int *)(tracked_target_moby + 0x98) = 1;
+        MOBY(tracked_target_moby)->collision_disable = 1;
         if (D_0013E539_lui && *(short *)(*(char **)(glove_vars + 0x50) + 0xA6) != 0x76C) {
             qzero(&loc);
             mine_spawn_drops(*(char **)(glove_vars + 0x50), D_L00_001B0830);
@@ -1679,7 +1680,7 @@ void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__(
 void helipack_update(char *a) __asm__("FUN_L00_002d37d0");
 void helipack_update(char *moby) {
     if (*(int *)(D_0013E533 + 0x2EA1) == 8) {
-        if (*(unsigned char *)(moby + 0x53) != 6) {
+        if (MOBY(moby)->prev_seq != 6) {
             blend_moby_animation(moby, 6, 0, scale_game_frames(10));
         }
     }
@@ -1696,9 +1697,9 @@ unsigned char *mine_camera_blast(unsigned char *blast_settings, void *spawn_posi
     if (spawned_moby) {
         unsigned char *blast_vars;
         spawned_moby[0x30] = 0xFF;
-        *(unsigned short *)(spawned_moby + 0x34) |= 1;
+        MOBY(spawned_moby)->flags |= 1;
         spawned_moby[0x31] = 1;
-        blast_vars = *(unsigned char **)(spawned_moby + 0x78);
+        blast_vars = ((unsigned char *)MOBY(spawned_moby)->pvars);
         spawned_moby[0x20] = 0;
         spawned_moby[0xBC] = 0;
         qcopy(spawned_moby + 0x10, spawn_position);
@@ -1707,7 +1708,7 @@ unsigned char *mine_camera_blast(unsigned char *blast_settings, void *spawn_posi
         else
             qcopy(blast_vars, blast_settings);
         *(int *)(blast_vars + 0x20) = position_reference_moby;
-        *(unsigned short *)(spawned_moby + 0x32) = blast_settings[0x3C];
+        MOBY(spawned_moby)->draw_dist = blast_settings[0x3C];
         blast_vars[0x24] = blast_settings[0x10];
         blast_vars[0x25] = blast_settings[0x11];
         blast_vars[0x26] = blast_settings[0x12];
@@ -1775,7 +1776,7 @@ void update_animated_point_light_moby(unsigned char *moby) {
     int sphere_check_result_or_light_slot_index;
 
     if (moby == 0) return;
-    vars = *(unsigned char **)(moby + 0x78);
+    vars = ((unsigned char *)MOBY(moby)->pvars);
     radius_reset_this_update = 0;
     if (vars == 0) return;
     if (moby[0x20] == 0) {
@@ -2482,9 +2483,9 @@ float move_horny_toad_toward_position(unsigned char *moby, float *target_positio
     float requested_movement_displacement[4] __attribute__((aligned(16)));
     unsigned char *moby_vars;
     float desired_yaw, target_distance, z, movement_yaw, maximum_vertical_displacement, vertical_displacement;
-    moby_vars = *(unsigned char **)(moby + 0x78);
-    desired_yaw = fast_arc_tan(target_position[0] - *(float *)(moby + 0x10), target_position[1] - *(float *)(moby + 0x14));
-    z = *(float *)(moby + 0x18);
+    moby_vars = ((unsigned char *)MOBY(moby)->pvars);
+    desired_yaw = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x, target_position[1] - MOBY(moby)->pos.y);
+    z = MOBY(moby)->pos.z;
     target_distance = fast_vec_dist(moby + 0x10, target_position);
     if (2.0f < target_distance)
         desired_yaw = fast_add_rotations(desired_yaw, *(float *)(moby_vars + 0x1FC));
@@ -2496,14 +2497,14 @@ float move_horny_toad_toward_position(unsigned char *moby, float *target_positio
                         D_0015ED6C_2d54c8 * 4.0f, (float *)(moby_vars + 0x1F8));
     if (*(float *)(moby_vars + 0x1F8) < 0.0f)
         *(float *)(moby_vars + 0x1F8) = 0.0f;
-    movement_yaw = *(float *)(moby + 0x48);
+    movement_yaw = MOBY(moby)->rot.z;
     *(float *)(moby_vars + 0x278) = movement_yaw;
     requested_movement_displacement[0] = FUN_001f9dc8_2d54c8(movement_yaw) * *(float *)(moby_vars + 0x1F8);
     requested_movement_displacement[1] = FUN_001f9de0_2d54c8(*(float *)(moby_vars + 0x278)) * *(float *)(moby_vars + 0x1F8);
     requested_movement_displacement[2] = 0.0f;
     requested_movement_displacement[2] = *(float *)(moby_vars + 0x270) - D_0015ED70_2d54c8 * 10.0f;
     FUN_L00_00258830_2d54c8(moby, requested_movement_displacement, 0x10, 0.5f, 0.5f, 0.0f);
-    vertical_displacement = *(float *)(moby + 0x18) - z;
+    vertical_displacement = MOBY(moby)->pos.z - z;
     maximum_vertical_displacement = D_0015ED6C_2d54c8 * 4.0f;
     *(float *)(moby_vars + 0x270) = vertical_displacement;
     if (maximum_vertical_displacement < vertical_displacement)
@@ -3125,7 +3126,7 @@ extern void FUN_L00_00272f68(void *, int, int, int, int, int, int, float);
 void update_infobot_particle_effect(char *moby) __asm__("FUN_L00_002d6cd0");
 
 void update_infobot_particle_effect(char *moby) {
-    P_2d6cd0 *vars = *(P_2d6cd0 **)(moby + 0x78);
+    P_2d6cd0 *vars = ((P_2d6cd0 *)MOBY(moby)->pvars);
     union {
         OvlQuad q;
         float f[4];
@@ -3135,7 +3136,7 @@ void update_infobot_particle_effect(char *moby) {
     int i, col;
     float f;
 
-    if (*(unsigned short *)(moby + 0x34) & 1) {
+    if (MOBY(moby)->flags & 1) {
         return;
     }
     v.q = *(OvlQuad *)(moby + 0x10);
@@ -3587,10 +3588,10 @@ unsigned char *spawn_burst_moby(u128 *spawn_position, float scale_multiplier) {
         copy_hero_moby_field_38(spawned_moby);
         set_moby_color(spawned_moby, 0x28, 0x28, 0x46);
         spawned_moby[0x30] = 0xff;
-        *(short *)(spawned_moby + 0x32) = 0x40;
-        *(float *)(spawned_moby + 0x2c) *= scale_multiplier;
+        MOBY(spawned_moby)->draw_dist = 0x40;
+        MOBY(spawned_moby)->scale *= scale_multiplier;
         qcopy(spawned_moby + 0x10, spawn_position);
-        *(float *)(spawned_moby + 0x48) = random_angle_radians();
+        MOBY(spawned_moby)->rot.z = random_angle_radians();
         update_entity(spawned_moby);
     }
     return spawned_moby;
@@ -3599,7 +3600,7 @@ void mark_moby_for_removal() __asm__("FUN_0020c828");
 /* Grows the float at 0x2C by 2.5% and lowers byte 0x23 by 3; removes the moby below 4. */
 void grow_and_fade_out_update(u8 *moby) __asm__("FUN_L00_002d7f38");
 void grow_and_fade_out_update(u8 *moby) {
-    *(f32 *)(moby + 0x2C) *= 1.025f;
+    MOBY(moby)->scale *= 1.025f;
     if ((u8)(moby[0x23] -= 3) < 4)
         mark_moby_for_removal();
 }

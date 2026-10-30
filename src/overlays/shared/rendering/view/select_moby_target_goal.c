@@ -7,6 +7,7 @@
 #include "qzero.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby.h"
 
 extern char *D_L00_0015FFD8_25fcb8 __asm__("D_L02_0015FFD8");
 
@@ -34,13 +35,13 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
         candidate_moby = D_L00_0015FFD8_25fcb8 + (D_L02_001B0E30[i] << 8);
         if (candidate_moby == 0)
             continue;
-        if (*(short *)(candidate_moby + 0xA6) != 0xCB && *(short *)(candidate_moby + 0xA6) != 0x76C)
+        if (MOBY(candidate_moby)->oclass != 0xCB && MOBY(candidate_moby)->oclass != 0x76C)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFE)
+        if (MOBY(candidate_moby)->state == 0xFE)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFD)
+        if (MOBY(candidate_moby)->state == 0xFD)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) != 3)
+        if (MOBY(candidate_moby)->state != 3)
             continue;
         candidate_metric = vector_distance_xy(comparison_source + 0x10, candidate_moby + 0x10);
         if (candidate_metric < best) {
@@ -53,13 +54,13 @@ int select_moby_target_goal(char *comparison_source, char *output_data, float be
         candidate_moby = D_L02_001D1B80[j];
         if (candidate_moby == 0)
             continue;
-        if (*(short *)(candidate_moby + 0xA6) != 0x10E)
+        if (MOBY(candidate_moby)->oclass != 0x10E)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFE)
+        if (MOBY(candidate_moby)->state == 0xFE)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0x20) == 0xFD)
+        if (MOBY(candidate_moby)->state == 0xFD)
             continue;
-        if (*(unsigned char *)(candidate_moby + 0xBC) == 0)
+        if (MOBY(candidate_moby)->command == 0)
             continue;
         candidate_metric = vector_distance_xy(comparison_source + 0x10, candidate_moby + 0x10);
         if (candidate_metric < best) {

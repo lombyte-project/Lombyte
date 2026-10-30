@@ -331,7 +331,7 @@ void update_hero_ground_material_effects(void) {
             hero_ptr->on_magnet_ground = 1;
             if (hero_ptr->vehicle_mode == 0) {
                 char *item_slot_1_moby = (char *)hero_ptr->items[1].moby;
-                if (item_slot_1_moby != 0 && *(short *)(item_slot_1_moby + 0xA6) == 0xAD)
+                if (item_slot_1_moby != 0 && MOBY(item_slot_1_moby)->oclass == 0xAD)
                     hero_ptr->unk308 = 1;
             }
         }
@@ -751,7 +751,7 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
     previous_active_moby = *(char **)(hero_state_base + 0xA84);
     hero_state_base[0x20A4] = 0;
     if (previous_active_moby != 0) {
-        *(unsigned short *)(previous_active_moby + 0x34) &= 0xFFF9;
+        MOBY(previous_active_moby)->flags &= 0xFFF9;
     }
     *(int *)(hero_state_base + 0xA84) = 0;
     moby_to_remove = *(char **)(hero_state_base + 0xA8C);
@@ -763,7 +763,7 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
     restored_moby = *(char **)(hero_state_base + 0xA88);
     *(char **)(hero_state_base + 0x2080) = restored_moby;
     qcopy(restored_moby + 0x10, hero_state_base + 0x80);
-    *(int *)(restored_moby + 0x98) = 0;
+    MOBY(restored_moby)->collision_disable = 0;
     *(float *)(hero_state_base + 0xA94) = 1.0f;
     clear_hero_queued_animation();
     if (*(int *)(hero_state_base + 0x2084) == 0x64) {
