@@ -487,9 +487,9 @@ void activate_waiting_moby_group_members(struct Moby *moby) {
         group_entry = moby_group_member_lists[moby->group];
         if (group_entry != 0) {
             do {
-                struct Moby *base = D_L10_0015FFD0_macro[2];
+                struct Moby *moby_array_base = D_L10_0015FFD0_macro[2];
                 struct Moby *listed_entity =
-                    (struct Moby *)((*(unsigned short *)group_entry & 0x7FFF) * 256 + (int)base);
+                    (struct Moby *)((*(unsigned short *)group_entry & 0x7FFF) * 256 + (int)moby_array_base);
                 if (listed_entity->state == 1)
                     listed_entity->state = 2;
             } while (*group_entry++ >= 0);
