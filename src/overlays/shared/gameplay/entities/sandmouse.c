@@ -695,10 +695,10 @@ void emit_sandmouse_particles(char *source_moby) {
 
 extern void draw_offset_textured_effect_quad(void *, int, float, float) __asm__("FUN_L00_00263618");
 
-void draw_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030de68");
+void draw_sandmouse_billboard_quads(struct Moby *moby) __asm__("FUN_L01_0030de68");
 
-void draw_sandmouse_billboard_quads(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void draw_sandmouse_billboard_quads(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     char *entry = data + 0x70;
     int i;
     for (i = 1; i >= 0; i--) {
@@ -710,10 +710,10 @@ void draw_sandmouse_billboard_quads(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
 
 
-void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
+void update_sandmouse_billboard_quads(struct Moby *moby) __asm__("FUN_L01_0030ded0");
 
-void update_sandmouse_billboard_quads(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void update_sandmouse_billboard_quads(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     char *entry = data + 0x70;
     int i;
     for (i = 0; i < 2; i++) {

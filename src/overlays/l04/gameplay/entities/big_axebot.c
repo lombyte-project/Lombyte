@@ -123,10 +123,10 @@ int check_circular_saw_melee_attack_spacing(struct Moby *moby) {
 
 extern void spawn_moby_table_puff_pattern(void *) __asm__("FUN_L04_002c46d0");
 
-void destroy_blarg_trooper(char *moby) __asm__("FUN_L04_002c4808");
+void destroy_blarg_trooper(struct Moby *moby) __asm__("FUN_L04_002c4808");
 
-void destroy_blarg_trooper(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void destroy_blarg_trooper(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     void *other = *(void **)(data + 0xF8);
     if (other != 0) {
         mark_moby_for_removal(other);
@@ -336,11 +336,11 @@ void update_class_55_swarm_controller(struct Moby *moby) {
 /* Sets the float at 0x58 on the moby and on the linked moby at data+0x424, if any. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB6D8), where it is exact; names translated to the US level program. */
 
-void set_big_axebot_and_axe_animation_speed(char *moby, float animation_speed) __asm__("FUN_L04_002ba448");
+void set_big_axebot_and_axe_animation_speed(struct Moby *moby, float animation_speed) __asm__("FUN_L04_002ba448");
 
-void set_big_axebot_and_axe_animation_speed(char *moby, float animation_speed) {
-    char *data = *(char **)(moby + 0x78);
-    *(float *)(moby + 0x58) = animation_speed;
+void set_big_axebot_and_axe_animation_speed(struct Moby *moby, float animation_speed) {
+    char *data = ((char *)moby->pvars);
+    moby->anim_speed = animation_speed;
     if (*(char **)(data + 0x424) != 0) {
         *(float *)(*(char **)(data + 0x424) + 0x58) = animation_speed;
     }
@@ -2218,7 +2218,7 @@ extern int rand(void);
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
-void destroy_blarg_trooper(char *arg) __asm__("FUN_L04_002c4808");
+void destroy_blarg_trooper(struct Moby *arg) __asm__("FUN_L04_002c4808");
 extern int func_L00_002594C8_o(void *, void *, void *, float, float, float, float,
                                int) __asm__("FUN_L00_00258490");
 

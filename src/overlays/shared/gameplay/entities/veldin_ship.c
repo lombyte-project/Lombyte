@@ -843,11 +843,11 @@ float absolute_float(float input) __asm__("func_001F99C0");
 
 #include "rnc/rendering/debug/debug_menu.h"
 
-void veldin_ship_draw(u8 *moby) __asm__("FUN_L00_002d19b0");
-void veldin_ship_draw(u8 *moby) {
+void veldin_ship_draw(struct Moby *moby) __asm__("FUN_L00_002d19b0");
+void veldin_ship_draw(struct Moby *moby) {
     Quad_2d19b0 quad;
     Vec_2d19b0 normal, reflection, view;
-    u8 *vars = *(u8 **)(moby + 0x78);
+    u8 *vars = ((u8 *)moby->pvars);
     s32 i, j, index, active = 0;
     f32 blend, reflection_projection_factor, x, y;
 
@@ -858,11 +858,11 @@ void veldin_ship_draw(u8 *moby) {
                       ((u64)(s64)G_EC << 32);
     quad.texture[0] = 0;
     quad.colors[0] = quad.colors[1] = quad.colors[2] = quad.colors[3] = G_F4;
-    if (absolute_float(player_camera[80] - *(f32 *)(moby + 0x10)) < 16.0f &&
-        absolute_float(player_camera[81] - *(f32 *)(moby + 0x14)) < 16.0f)
+    if (absolute_float(player_camera[80] - moby->pos.x) < 16.0f &&
+        absolute_float(player_camera[81] - moby->pos.y) < 16.0f)
         active = 1;
-    if (active || moby[0x20] == 1) {
-        moby[0xbc] = 1;
+    if (active || moby->state == 1) {
+        moby->command = 1;
         fast_dec_timer((s32 *)(vars + 0x40));
         blend = convert_integer_to_float(*(s32 *)(vars + 0x40));
         blend /= convert_integer_to_float(scale_game_frames(0x3c));
@@ -879,7 +879,7 @@ void veldin_ship_draw(u8 *moby) {
             reflection.z += 1.0f;
             reflection_projection_factor = square_root(reflection.z + reflection.z);
             reflection_projection_factor += reflection_projection_factor;
-            if (moby[0x20] == 1 || *(s32 *)(vars + 0x40) == 0) {
+            if (moby->state == 1 || *(s32 *)(vars + 0x40) == 0) {
                 ship_reflection_uvs[i][0] = reflection.x / reflection_projection_factor + 0.5f;
                 ship_reflection_uvs[i][1] = reflection.y / reflection_projection_factor + 0.5f;
             } else {
@@ -890,11 +890,11 @@ void veldin_ship_draw(u8 *moby) {
                 ship_reflection_uvs[i][1] = x + (ship_previous_uvs[i][1] - x) * blend;
             }
         }
-        if (moby[0x20] == 1)
-            moby[0x20] = 2;
+        if (moby->state == 1)
+            moby->state = 2;
     } else {
-        if (moby[0xbc] == 1) {
-            moby[0xbc] = 0;
+        if (moby->command == 1) {
+            moby->command = 0;
             for (i = 0; i < 0x66; i++) {
                 ship_previous_uvs[i][0] = ship_reflection_uvs[i][0];
                 ship_previous_uvs[i][1] = ship_reflection_uvs[i][1];

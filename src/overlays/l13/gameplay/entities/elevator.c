@@ -2367,10 +2367,10 @@ extern void func_L13_002B9590_f(float, float, float, float, unsigned char, unsig
 extern void *func_001FE540_id(int) __asm__("FUN_001fdd10");
 extern int font_print_center_small(int, int, long, void *, int) __asm__("FUN_001f6b88");
 
-void draw_fighter_jet_hud(char *moby) __asm__("FUN_L13_002b97f8");
+void draw_fighter_jet_hud(struct Moby *moby) __asm__("FUN_L13_002b97f8");
 
-void draw_fighter_jet_hud(char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+void draw_fighter_jet_hud(struct Moby *moby) {
+    char *moby_vars = ((char *)moby->pvars);
     char *screen_dimensions;
     unsigned char *base;
     unsigned char *player_ammo_state;

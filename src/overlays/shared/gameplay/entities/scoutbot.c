@@ -92,7 +92,7 @@ void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void update_scoutbot_health_and_target(char *m) __asm__("FUN_L08_002d36e0");
 void draw_target_beam(char *m) __asm__("FUN_L08_002d3878");
 void update_scoutbot_movement(char *m) __asm__("FUN_L08_002d3d78");
-void draw_scoutbot_glow_quad(char *arg) __asm__("FUN_L08_002d4108");
+void draw_scoutbot_glow_quad(struct Moby *arg) __asm__("FUN_L08_002d4108");
 extern void sound_3DF8(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void wake_3DF8(void *) __asm__("FUN_L00_0025a120");
 extern void turn_3DF8(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
@@ -101,7 +101,7 @@ extern int FUN_L00_002dc9f0(void *, void *);
 extern void explode_3DF8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern int colorlerp_3DF8(int, int, float) __asm__("FUN_001fa6e0");
 extern void draw_target_beam() __asm__("FUN_L08_002d3878");
-extern void draw_scoutbot_glow_quad() __asm__("FUN_L08_002d4108");
+extern void draw_scoutbot_glow_quad(struct Moby *) __asm__("FUN_L08_002d4108");
 extern char hero_pos_3DF8[] __asm__("D_L08_001675C0");
 
 void scoutbot_update(Moby *moby) __asm__("FUN_L08_002d2af0");
@@ -537,15 +537,15 @@ void update_scoutbot_movement(char *moby) {
 
 extern void *cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
-void *enter_scoutbot_return_home_state(char *moby) __asm__("FUN_L08_002d4050");
+void *enter_scoutbot_return_home_state(struct Moby *moby) __asm__("FUN_L08_002d4050");
 
-void *enter_scoutbot_return_home_state(char *moby) {
+void *enter_scoutbot_return_home_state(struct Moby *moby) {
     void *result = cancel_suck_cannon_suction(moby);
-    char *scoutbot_data = *(char **)(moby + 0x78);
-    moby[0x20] = 3;
+    char *scoutbot_data = ((char *)moby->pvars);
+    moby->state = 3;
     *(float *)(scoutbot_data + 0x200) = 4.0f;
     *(float *)(scoutbot_data + 0x208) = 0.5f;
-    if ((unsigned char)moby[0x53] != 2) {
+    if ((unsigned char)((char)moby->prev_seq) != 2) {
         blend_moby_animation(moby, 2, 0, 3);
     }
     *(short *)(scoutbot_data + 0xC8) = 0;
@@ -564,8 +564,8 @@ extern float D_L08_001D1D80[4][4] NOT_SDA;
 #include "rnc/overlay/shared/gameplay/entities/scoutbot_globals.h"
 extern float scoutbot_glow_position_offset_scale_gp __asm__("D_L08_00161898") __attribute__((sda));
 extern float scoutbot_glow_quad_vertex_scale_gp __asm__("D_L08_0016189C") __attribute__((sda));
-void draw_scoutbot_glow_quad(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void draw_scoutbot_glow_quad(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     Pk pk;
     float up[4];
     float M[4][4];
@@ -597,7 +597,7 @@ void draw_scoutbot_glow_quad(char *moby) {
     fast_vec_cross(M[2], M[1], M[0]);
     fast_vec_scale(position_offset, M[0], scoutbot_glow_position_offset_scale_gp);
     fast_vec_add(M[3], M[3], position_offset);
-    col = (*(u32 *)(moby + 0x90) & 0xFFFFFF) | 0x40000000;
+    col = (((u32)moby->glow_color) & 0xFFFFFF) | 0x40000000;
     pk.col[3] = col;
     pk.col[2] = col;
     pk.col[1] = col;

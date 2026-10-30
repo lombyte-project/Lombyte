@@ -1491,10 +1491,10 @@ extern s32 blarg_heavy_interceptor_light_ring_fade_values[] __asm__("D_L14_001D8
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFF90), where it is exact; names translated to the US level
  * program. */
-void update_blarg_heavy_interceptor_light_ring_alpha(u8 *moby) __asm__("FUN_L14_002aed50");
+void update_blarg_heavy_interceptor_light_ring_alpha(struct Moby *moby) __asm__("FUN_L14_002aed50");
 
-void update_blarg_heavy_interceptor_light_ring_alpha(u8 *moby) {
-    u8 *data = *(u8 **)(moby + 0x78);
+void update_blarg_heavy_interceptor_light_ring_alpha(struct Moby *moby) {
+    u8 *data = ((u8 *)moby->pvars);
     s32 step;
     s32 i;
     f32 advanced_blink_phase = *(f32 *)(data + 0x164) + 0.5f;
@@ -2757,13 +2757,13 @@ extern u8 D_0013E550[];
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002B6EE8), where it is exact; names translated to the US level
  * program. */
-void hide_minibomber_and_release_voice(u8 *moby) __asm__("FUN_L14_002b5c98");
+void hide_minibomber_and_release_voice(struct Moby *moby) __asm__("FUN_L14_002b5c98");
 
-void hide_minibomber_and_release_voice(u8 *moby) {
-    u8 *data = *(u8 **)(moby + 0x78);
+void hide_minibomber_and_release_voice(struct Moby *moby) {
+    u8 *data = ((u8 *)moby->pvars);
     s32 voice_slot_index;
-    *(u16 *)(moby + 0x34) |= 0x41;
-    *(s32 *)(moby + 0x94) = 0;
+    moby->flags |= 0x41;
+    moby->collision = 0;
     voice_slot_index = *(s32 *)(data + 0x108);
     if (voice_slot_index != -1) {
         u8 *voice_slot = D_0013E550 + voice_slot_index * 0x70;

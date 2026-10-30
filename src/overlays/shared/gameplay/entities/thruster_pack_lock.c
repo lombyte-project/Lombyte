@@ -431,9 +431,9 @@ typedef struct {
 
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
-int draw_linked_moby_trails(char *moby) __asm__("FUN_L11_003192c8");
+int draw_linked_moby_trails(struct Moby *moby) __asm__("FUN_L11_003192c8");
 
-int draw_linked_moby_trails(char *moby) {
+int draw_linked_moby_trails(struct Moby *moby) {
     TrailQuad quads[16];
     float offset[2][4];
     short *list, *next_list;
@@ -443,7 +443,7 @@ int draw_linked_moby_trails(char *moby) {
     char *other, *trail;
     int never = 0;
 
-    if (*(unsigned char *)(moby + 0x21) == 0xFF) {
+    if (moby->group == 0xFF) {
         return;
     }
     if (linked_moby_trail_long_span_enabled != 0) {
@@ -478,7 +478,7 @@ int draw_linked_moby_trails(char *moby) {
     offset[0][2] = 0.25f;
     offset[1][2] = -0.25f;
 
-    list = D_L11_001AC240[*(unsigned char *)(moby + 0x21)];
+    list = D_L11_001AC240[moby->group];
     do {
         next_list = list + 1;
         /* Fakematch: the never-taken call keeps more insns through gcse; its bigger expression
@@ -489,7 +489,7 @@ int draw_linked_moby_trails(char *moby) {
         skip = 1;
         other = (char *)(((*list & 0x7FFF) << 8) + D_L11_0015FFD8);
         other_class = *(short *)(other + 0xA6);
-        own_class = *(short *)(moby + 0xA6);
+        own_class = moby->oclass;
         visible = *(unsigned char *)(other + 0x31);
         if ((other_class ^ own_class) == 0) {
             skip = 0;

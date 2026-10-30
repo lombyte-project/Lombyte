@@ -33,10 +33,11 @@ void initialize_energy_sphere_holder_vars(char *moby) {
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Sets the moby state byte to 2. */
-void set_moby_state_two(unsigned char *moby) __asm__("FUN_L06_00303150");
+void set_moby_state_two(struct Moby *moby) __asm__("FUN_L06_00303150");
 
-void set_moby_state_two(unsigned char *moby) {
-    moby[0x20] = 0x2;
+void set_moby_state_two(struct Moby *moby) {
+    moby->state = 0x2;
 }

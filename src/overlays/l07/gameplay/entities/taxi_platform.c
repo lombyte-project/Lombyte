@@ -163,7 +163,7 @@ void register_fading_ring_hit(char *affected_moby, char *effect_moby, char *effe
 
 extern char *ring_hit_candidate_list_head __asm__("D_L07_0015FFE4");
 extern int FUN_L07_0030e0e0_c() __asm__("FUN_L07_0030e0e0");
-extern void draw_fading_ring_effect(unsigned char *) __asm__("FUN_L07_0030dcf0");
+extern void draw_fading_ring_effect(struct Moby *) __asm__("FUN_L07_0030dcf0");
 void delete_moby(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_fading_ring_effect(unsigned char *moby) __asm__("FUN_L07_0030e1f8");
@@ -396,7 +396,7 @@ extern void configure_timed_point_light(float, void *, void *, short, void *, sh
 int update_alternating_joint_emission_burst(void *mp, char *emitter_state, float *target_position) __asm__("FUN_L07_003122b0");
 
 int update_alternating_joint_emission_burst(void *mp, char *emitter_state, float *target_position) {
-    unsigned char *moby = mp;
+    struct Moby *moby = mp;
     float A[4];
     float B[4];
     if (fast_dec_timer((int *)(emitter_state + 0x160))) {
@@ -417,7 +417,7 @@ int update_alternating_joint_emission_burst(void *mp, char *emitter_state, float
             return 1;
         }
     }
-    return moby[0x20];
+    return moby->state;
 }
 
 #define F(p, o) (*(float *)((p) + (o)))
@@ -2105,15 +2105,15 @@ extern int D_L07_0015F5CC;
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
-void draw_fading_ring_effect(unsigned char *moby) {
+void draw_fading_ring_effect(struct Moby *moby) {
     char packet[0x90] __attribute__((aligned(16)));
     char second[0x90] __attribute__((aligned(16)));
     char phase_work[0x10] __attribute__((aligned(16)));
-    unsigned int alpha = (unsigned int)moby[0x23] / 5u;
+    unsigned int alpha = (unsigned int)moby->alpha / 5u;
     int index = 0;
     unsigned int green = 0x80;
     float band = 0.0f;
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)moby->pvars);
     unsigned int green_step = (green / 11) & 0xFF;
     float radius_threshold = 0.9f;
     float inner_scale = 0.96f;
@@ -2142,24 +2142,24 @@ void draw_fading_ring_effect(unsigned char *moby) {
         *(float *)(packet + 0x50) = phase;
         *(float *)(packet + 0x60) = phase;
         width = convert_integer_to_float((index + 1) < 6 ? index + 1 : 5);
-        center = *(float *)(moby + 0x10);
+        center = moby->pos.x;
         *(float *)(packet + 0x58) = *(float *)(packet + 0x50) + width;
         {int iz = 0; zero = *(float *)&iz;}
         *(float *)(packet + 0x54) = zero;
         *(float *)(packet + 0x64) = 1.0f;
-        *(float *)(packet + 0x14) = *(float *)(moby + 0x14);
-        *(float *)(packet + 0x18) = side + *(float *)(moby + 0x18);
-        *(float *)(packet + 0x38) = *(float *)(moby + 0x18);
+        *(float *)(packet + 0x14) = moby->pos.y;
+        *(float *)(packet + 0x18) = side + moby->pos.z;
+        *(float *)(packet + 0x38) = moby->pos.z;
         *(float *)(packet + 0x10) = center - radius * (inner_scale - band * 0.03f);
         *(float *)(packet + 0x6C) = 1.0f;
         *(float *)(packet + 0x34) = *(float *)(packet + 0x14);
         *(float *)(packet + 0x30) = center - radius;
         *(float *)(packet + 0x68) = *(float *)(packet + 0x58);
         *(float *)(packet + 0x5C) = zero;
-        *(float *)(packet + 0x08) = side + *(float *)(moby + 0x18);
-        *(float *)(packet + 0x28) = *(float *)(moby + 0x18);
+        *(float *)(packet + 0x08) = side + moby->pos.z;
+        *(float *)(packet + 0x28) = moby->pos.z;
         *(Pkt_0F0D0 *)second = *(Pkt_0F0D0 *)packet;
-        *(float *)(second + 0x18) = *(float *)(moby + 0x18) - 5.0f;
+        *(float *)(second + 0x18) = moby->pos.z - 5.0f;
         *(float *)(second + 8) = *(float *)(second + 0x18);
         angle = -2.8274336f;
         do {
@@ -2169,14 +2169,14 @@ void draw_fading_ring_effect(unsigned char *moby) {
             x = fast_cos(angle);
             rr = band * 0.03f;
             inner_radius = radius * (inner_scale - rr);
-            *(float *)(packet + 0x10) = *(float *)(moby + 0x10) + inner_radius * x;
+            *(float *)(packet + 0x10) = moby->pos.x + inner_radius * x;
             x = fast_cos(angle);
-            *(float *)(packet + 0x30) = *(float *)(moby + 0x10) + radius * x;
+            *(float *)(packet + 0x30) = moby->pos.x + radius * x;
             y = fast_sin(angle);
-            *(float *)(packet + 0x14) = *(float *)(moby + 0x14) + inner_radius * y;
+            *(float *)(packet + 0x14) = moby->pos.y + inner_radius * y;
             y = fast_sin(angle);
             angle = angle + 0.31415927f;
-            *(float *)(packet + 0x34) = *(float *)(moby + 0x14) + radius * y;
+            *(float *)(packet + 0x34) = moby->pos.y + radius * y;
             draw_geometry_quad(packet, 0, 1);
             *(u128_0F0D0 *)(second + 0) = *(u128_0F0D0 *)(second + 0x10);
             *(u128_0F0D0 *)(second + 0x20) = *(u128_0F0D0 *)(second + 0x30);
@@ -2337,9 +2337,9 @@ void start_sharkigator_hit_knockback(struct Moby *moby, LaunchParams *knockback_
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
-void handle_sharkigator_hit(char *moby, char *x, float *hp) __asm__("FUN_L07_0030e998");
+void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) __asm__("FUN_L07_0030e998");
 
-void handle_sharkigator_hit(char *moby, char *x, float *hp) {
+void handle_sharkigator_hit(struct Moby *moby, char *x, float *hp) {
     enum {
         HIT_REACTION_NONE = 0,
         SHARKIGATOR_CLEAR_HEALTH_RESPONSE = 1,
@@ -2376,14 +2376,14 @@ void handle_sharkigator_hit(char *moby, char *x, float *hp) {
         case SHARKIGATOR_LAUNCH_HIT_KNOCKBACK_RECOVERY:
         case SHARKIGATOR_ENTER_HIT_KNOCKBACK_RECOVERY:
             start_sharkigator_hit_knockback(moby, x + 0x70, info + 0x10);
-            moby[0x20] = 0xC;
+            moby->state = 0xC;
             break;
         case SHARKIGATOR_HIT_ANIMATION_RESPONSE:
         case SHARKIGATOR_ALTERNATE_HIT_ANIMATION_RESPONSE:
             if (((unsigned char *)moby)[0x53] != 4) {
                 blend_moby_animation(moby, 4, 4, 4);
             }
-            moby[0x20] = 0xD;
+            moby->state = 0xD;
             break;
         case HIT_REACTION_NO_ANIMATION_RESPONSE:
             break;
@@ -2391,12 +2391,12 @@ void handle_sharkigator_hit(char *moby, char *x, float *hp) {
         if (hit >= 2) {
             if (*hp <= *(float *)(info + 0x2C)) {
                 *hp = 0.0f;
-                *(unsigned short *)(moby + 0x34) &= 0xEFFF;
+                moby->flags &= 0xEFFF;
                 start_sharkigator_death_knockback(moby, x + 0x70, info + 0x10);
                 FUN_L00_00257470(moby, 0, -1);
                 x[0x67] = 0x78;
                 trooper_anim_update(moby, (short *)(x + 0x60));
-                moby[0x20] = 0xE;
+                moby->state = 0xE;
             } else {
                 *hp -= *(float *)(info + 0x2C);
                 ((unsigned char *)x)[0x67] = 0xFA;
@@ -2652,7 +2652,7 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
 int update_sharkigator_horizontal_velocity_by_heading(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
 void FUN_L00_002a3ec8_c(void *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
-void handle_sharkigator_hit(char *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
+void handle_sharkigator_hit(struct Moby *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
 void advance_sharkigator_swim_movement(char *a, char *b, float f12, float f13, float f14) __asm__("FUN_L07_0030f0f8");
 void handle_sharkigator_contact_attack(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id, float lo, float hi, float len, float scale, float radius) __asm__("FUN_L07_0030f308");
 extern char D_0013F65C[];

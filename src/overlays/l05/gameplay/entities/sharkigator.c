@@ -606,7 +606,7 @@ float absolute_float(float input) __asm__("func_001F99C0");
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void update_moby_glow_and_queue_draw(char *m) __asm__("FUN_L05_002d7020");
-void draw_group_scenery_ship_trails(char *moby) __asm__("FUN_L05_002d7920");
+void draw_group_scenery_ship_trails(struct Moby *moby) __asm__("FUN_L05_002d7920");
 extern float func_00214158_2D8388(void) __asm__("FUN_00213308");
 extern float func_001F9B88_2D8388(float input) __asm__("FUN_001f99c0");
 extern float func_001F9FA8_2D8388(float) __asm__("FUN_001f9de0");
@@ -802,7 +802,7 @@ extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 extern void memset(void *, int, int) __asm__("FUN_001153fc");
 
 /* Builds 16 fading glow quads, then draws three ribbons of quads for each linked moby of class 0x4F in view. */
-void draw_group_scenery_ship_trails(char *moby) {
+void draw_group_scenery_ship_trails(struct Moby *moby) {
     L05GlowPacket packet[16];
     float matrix[8];
     float center[4];
@@ -846,7 +846,7 @@ void draw_group_scenery_ship_trails(char *moby) {
     memset(matrix, 0, 0x20);
     matrix[2] = 0.15f;
     matrix[6] = -0.15f;
-    list = D_L05_001ABCC0_7920[(unsigned char)moby[0x21]];
+    list = D_L05_001ABCC0_7920[(unsigned char)((char)moby->group)];
     do {
         member = (struct Moby *)(((*list & 0x7fff) << 8) + (int)D_L05_0015FFD8_7920);
         if (member->oclass == 0x4f && member->state == 1) {

@@ -634,15 +634,15 @@ void group_trigger_nearest(int moby_list_index) {
 }
 extern void draw_level16_reflection_mesh_batch(void) __asm__("FUN_L16_002e9ce0");
 
-void moby_update_draw_only(unsigned char *moby) __asm__("FUN_L16_002e9df0");
-void moby_update_draw_only(unsigned char *moby) {
+void moby_update_draw_only(struct Moby *moby) __asm__("FUN_L16_002e9df0");
+void moby_update_draw_only(struct Moby *moby) {
     enum {
         MOBY_DRAW_ONLY_STATE_INITIALIZE = 0,
         MOBY_DRAW_ONLY_STATE_ENQUEUE_DRAW_CALLBACK = 1
     };
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case MOBY_DRAW_ONLY_STATE_INITIALIZE:
-        moby[0x20] = 1;
+        moby->state = 1;
         break;
     case MOBY_DRAW_ONLY_STATE_ENQUEUE_DRAW_CALLBACK:
         add_draw_callback((int)draw_level16_reflection_mesh_batch, (int)moby);

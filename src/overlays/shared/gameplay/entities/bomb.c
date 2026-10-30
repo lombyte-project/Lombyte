@@ -1048,11 +1048,11 @@ int launch_suck_cannon_projectile_and_update_moby_state(char *moby, int launch_v
 extern int cancel_suck_cannon_suction(void *) __asm__("FUN_L00_002dbe20");
 
 /* Runs FUN_L00_002dbe20 on the moby and sets its state to 5. */
-int cancel_suck_cannon_suction_and_set_moby_state_5(char *moby) __asm__("FUN_L00_002caf10");
+int cancel_suck_cannon_suction_and_set_moby_state_5(struct Moby *moby) __asm__("FUN_L00_002caf10");
 
-int cancel_suck_cannon_suction_and_set_moby_state_5(char *moby) {
+int cancel_suck_cannon_suction_and_set_moby_state_5(struct Moby *moby) {
     int helper_result = cancel_suck_cannon_suction(moby);
-    moby[0x20] = 5;
+    moby->state = 5;
     return helper_result;
 }
 /* Returns the word at +0x14 of the moby data, or 0 when either pointer is null. */

@@ -67,9 +67,9 @@ extern short D_L18_00162214_gp __asm__("D_L18_00162214") __attribute__((sda));
 extern short l18_drek_missile_dive_speed_gp __asm__("D_L18_00162218") __attribute__((sda));
 extern short l18_drek_missile_wander_to_dive_random_bound_gp __asm__("D_L18_00162234") __attribute__((sda));
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-void select_drek_fight_missile_wander_target(char *moby, void *out) __asm__("FUN_L18_002f02e8");
+void select_drek_fight_missile_wander_target(struct Moby *moby, void *out) __asm__("FUN_L18_002f02e8");
 
-extern void select_drek_fight_missile_wander_target(char *moby, void *out) __asm__("FUN_L18_002f02e8");
+extern void select_drek_fight_missile_wander_target(struct Moby *moby, void *out) __asm__("FUN_L18_002f02e8");
 void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) __asm__("FUN_L18_002f0848");
 
 extern void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) __asm__("FUN_L18_002f0848");
@@ -265,8 +265,8 @@ extern short drek_missile_wander_z_offset_range_start_gp __asm__("D_L18_0016221C
 extern short drek_missile_wander_z_offset_range_end_gp __asm__("D_L18_00162220") __attribute__((sda));
 extern short drek_missile_wander_radius_range_start_gp __asm__("D_L18_00162224") __attribute__((sda));
 extern short drek_missile_wander_radius_range_end_gp __asm__("D_L18_00162228") __attribute__((sda));
-void select_drek_fight_missile_wander_target(char *moby, void *out) {
-    char *data = *(char **)(moby + 0x78);
+void select_drek_fight_missile_wander_target(struct Moby *moby, void *out) {
+    char *data = ((char *)moby->pvars);
     float wander_target_offset[3];
     float wander_radius = random_float_between(*(float *)&drek_missile_wander_radius_range_start_gp, *(float *)&drek_missile_wander_radius_range_end_gp);
     float wander_target_angle = random_angle_radians();

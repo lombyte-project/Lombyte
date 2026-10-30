@@ -3153,7 +3153,7 @@ extern void draw_beam_and_arc_effects(char *) __asm__("FUN_L00_002ba970");
 int allocate_packed_color_point_light_slot(u128 *v, float a, float b, int col) __asm__("FUN_L00_0023e5e0");
 void FUN_L00_00203908(int, int);
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
-void initialize_tesla_claw_beam(char *moby) __asm__("FUN_L00_002b9310");
+void initialize_tesla_claw_beam(struct Moby *moby) __asm__("FUN_L00_002b9310");
 extern int D_0015ED84_2b2100 __asm__("D_0015ED84");
 extern char D_0013F350_2b2100[] __asm__("D_0013F350");
 extern float D_0015ED60_2b2100 __asm__("D_0015ED60");
@@ -3439,14 +3439,14 @@ extern short D_L00_00161676;
 extern V2b9310 l00_tesla_beam_previous_point_window[] __asm__("D_L00_001DB5B0");
 extern V2b9310 D_L00_001DB5C0[];
 /* Starts the beam when one is pending: lays 19 points from the moby toward its target and resets the segment state. */
-void initialize_tesla_claw_beam(char *moby) {
+void initialize_tesla_claw_beam(struct Moby *moby) {
     V2b9310 beam_endpoint_delta;
     V2b9310 step;
     char *data;
     int i;
     int j;
 
-    data = *(char **)(moby + 0x78);
+    data = ((char *)moby->pvars);
     if (D_L00_00161590_gp == 0) {
         return;
     }
