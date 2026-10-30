@@ -112,7 +112,7 @@ void homing_mine_update(struct Moby *moby) {
         HOMING_MINE_START_CHASE = 2,
         HOMING_MINE_CHASE = 3
     };
-    Mine *vars;
+    Mine *homing_mine_vars;
     f32  *health;
     char  sight[0x50];
     char *hit;
@@ -129,8 +129,8 @@ void homing_mine_update(struct Moby *moby) {
 
     if (moby == NULL)
         return;
-    vars = (Mine *)moby->pvars;
-    if (vars == NULL)
+    homing_mine_vars = (Mine *)moby->pvars;
+    if (homing_mine_vars == NULL)
         return;
 
     get_target_sight(moby, sight, 8.0f);
@@ -138,7 +138,7 @@ void homing_mine_update(struct Moby *moby) {
         FUN_L00_0025a120(moby);
         moby->shadow_range = 0x15;
     }
-    health = &vars->health;
+    health = &homing_mine_vars->health;
     hit = find_moby_hit(moby, 0x230000, 0);
     resolve_moby_hit_response(moby, hit, health, 0, &touching, 0, 0, 4);
     if (touching >= 2 && hit != NULL && (*(struct Moby **)(hit + 0x20))->oclass != 0x456 &&
@@ -171,25 +171,25 @@ void homing_mine_update(struct Moby *moby) {
     switch (moby->state) {
     case HOMING_MINE_INITIALIZE:
         moby->flags |= 0x1000;
-        qcopy(&vars->home, &moby->pos);
+        qcopy(&homing_mine_vars->home, &moby->pos);
         moby->collision = moby->pclass->collision;
         moby->state = 1;
         break;
     case HOMING_MINE_WAIT_FOR_PROXIMITY:
         timer = scale_game_frames(600);
         turn = D_0015ED6C * 6.2831855f;
-        vars->timeout = timer;
+        homing_mine_vars->timeout = timer;
         moby->rot.z = fast_add_rotations(moby->rot.z, turn);
-        if ((vars->target != NULL && vector_distance_xy(&moby->pos, &(vars->target)->pos) < 20.0f &&
-             absolute_float(moby->pos.z - (vars->target)->pos.z) < 3.0f) ||
+        if ((homing_mine_vars->target != NULL && vector_distance_xy(&moby->pos, &(homing_mine_vars->target)->pos) < 20.0f &&
+             absolute_float(moby->pos.z - (homing_mine_vars->target)->pos.z) < 3.0f) ||
             (*(s32 *)(sight + 0x40) != 0 && fast_vec_dist(&moby->pos, sight) < 8.0f)) {
-            vars->speed = 0.0f;
-            vars->timeout = scale_game_frames(600);
+            homing_mine_vars->speed = 0.0f;
+            homing_mine_vars->timeout = scale_game_frames(600);
             moby->command = 1;
-            vars->bob_timer = scale_game_frames(7);
+            homing_mine_vars->bob_timer = scale_game_frames(7);
             moby->state = 3;
-            if (vars->sound != -1)
-                set_moby_list_state(vars->sound, 2);
+            if (homing_mine_vars->sound != -1)
+                set_moby_list_state(homing_mine_vars->sound, 2);
             moby->state = 2;
         }
         break;
@@ -202,26 +202,26 @@ void homing_mine_update(struct Moby *moby) {
             FUN_00212f90(moby, 2, 0, 10);
         }
         speed = frame_time_sq;
-        new_speed = vars->speed + speed * 30.0f;
+        new_speed = homing_mine_vars->speed + speed * 30.0f;
         max_speed = D_0015ED6C * 6.0f;
-        vars->speed = new_speed;
+        homing_mine_vars->speed = new_speed;
         if (max_speed < new_speed)
-            vars->speed = max_speed;
+            homing_mine_vars->speed = max_speed;
         if (moby->command == 1) {
             moby->pos.z += frame_scale * 0.1f;
-            if (fast_dec_timer(&vars->bob_timer)) {
-                vars->bob_timer = scale_game_frames(7);
+            if (fast_dec_timer(&homing_mine_vars->bob_timer)) {
+                homing_mine_vars->bob_timer = scale_game_frames(7);
                 moby->command = 2;
             }
         } else if (moby->command == 2) {
             moby->pos.z -= frame_scale * 0.1f;
-            if (fast_dec_timer(&vars->bob_timer))
+            if (fast_dec_timer(&homing_mine_vars->bob_timer))
                 moby->command = 0;
         }
         fast_vec_sub(&chase_step, sight, &moby->pos);
-        fast_vec_normalize(&chase_step, &chase_step, vars->speed);
+        fast_vec_normalize(&chase_step, &chase_step, homing_mine_vars->speed);
         fast_vec_add(&moby->pos, &moby->pos, &chase_step);
-        if (fast_vec_dist(&moby->pos, &vars->home) > 64.0f) {
+        if (fast_vec_dist(&moby->pos, &homing_mine_vars->home) > 64.0f) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -259,7 +259,7 @@ void homing_mine_update(struct Moby *moby) {
             fast_vec_sub(&push, &l07_sphere_collision_resolved_center, &probe);
             fast_vec_add(&moby->pos, &moby->pos, &push);
         }
-        if (!fast_dec_timer(&vars->timeout))
+        if (!fast_dec_timer(&homing_mine_vars->timeout))
             break;
         spawn_explosion(moby,
                         &chase_step,
