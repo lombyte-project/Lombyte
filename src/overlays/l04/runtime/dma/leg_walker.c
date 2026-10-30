@@ -162,13 +162,9 @@ typedef struct {
     float rotz;             /* 0x48 */
 } StMoby;
 
-typedef struct {
-    char pad00[0x40];
-    Vec v40;         /* 0x40 */
-} StTab;
-
 float probe_leg_rig_ground_height(float *pos) __asm__("FUN_L04_002922d0");
-extern char D_L04_00174040_2939E8[] __asm__("D_L04_00173FC0");
+#include "rnc/overlay/collision.h"
+extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
 
 int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state) __asm__("FUN_L04_00292828");
 
@@ -209,10 +205,10 @@ int update_leg_rig_height_and_tilt(StMoby *moby, Steer *steer_state)
                 ground_height = probe_leg_rig_ground_height((float *)probe_point);
                 sum += ground_height;
                 if (0.0f < ground_height) {
-                    xy_abs_sum_or_tilt = absolute_float(((StTab *)D_L04_00174040_2939E8)->v40.x);
-                    xy_abs_sum_or_tilt = xy_abs_sum_or_tilt + absolute_float(((StTab *)D_L04_00174040_2939E8)->v40.y);
-                    if (xy_abs_sum_or_tilt < absolute_float(((StTab *)D_L04_00174040_2939E8)->v40.z)) {
-                        fast_vec_add(push, push, &((StTab *)D_L04_00174040_2939E8)->v40);
+                    xy_abs_sum_or_tilt = absolute_float(coll_hit.normal_x);
+                    xy_abs_sum_or_tilt = xy_abs_sum_or_tilt + absolute_float(coll_hit.normal_y);
+                    if (xy_abs_sum_or_tilt < absolute_float(coll_hit.normal_z)) {
+                        fast_vec_add(push, push, &coll_hit.normal_x);
                         height_correction_divisor += 4.0f;
                         dz += ground_height - probe_point->z;
                     }

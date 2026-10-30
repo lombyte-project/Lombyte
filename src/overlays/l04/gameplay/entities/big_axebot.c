@@ -1469,13 +1469,9 @@ typedef struct {
     int v[4];
 } I4_35F0;
 
-typedef struct {
-    char pad00[0x18];
-    int f18;
-} G_35F0;
-
 extern E_35F0 *D_L04_001600EC;
-extern G_35F0 D_L04_00173FC0;
+#include "rnc/overlay/collision.h"
+extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
 I4_35F0 D_L04_001618A0 = {{1, 4, 2, 3}};
 I4_35F0 D_L04_00161890 = {{1, 2, 3, 4}};
 extern float fast_cos(float);
@@ -1658,7 +1654,7 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 fast_vec_normalize(melee_hit_parameters.v, melee_hit_parameters.v, frame_time * 10.0f);
                 melee_hit_parameters.f20 = 1;
                 collect_mobies_in_sphere(jp, 0x10, moby, &melee_hit_parameters, 0.5f);
-                if (D_L04_00173FC0.f18 == target_moby) {
+                if (coll_hit.moby == target_moby) {
                     data->f146 =
                         data->f146 < scale_game_frames(0x3C) ? data->f146 : scale_game_frames(0x3C);
                 }

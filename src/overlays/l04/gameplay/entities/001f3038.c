@@ -63,20 +63,12 @@ typedef struct {
     float scale[8];
 } Steer;
 
-typedef struct {
-    char pad0[0x1C];
-    int hit;
-    char pad20[8];
-    float z;
-    char pad2C[0x14];
-    Vec_1F3010 normal;
-} Coll;
-
 extern s32 D_L04_00173FF0[];
 extern int collision_line() __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __asm__("FUN_L04_0024c7d8");
-extern Coll D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
+#include "rnc/overlay/collision.h"
+extern CollisionHit coll_hit __asm__("D_L04_00173FC0");
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
 
 void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *params) __asm__("FUN_L04_001f30e0");
@@ -242,9 +234,9 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
         ray_start.z = ray_start.z + 1.5f;
         ray_end.z = 0.01f;
         if (collision_line(&ray_start, &ray_end, 2, moby, 0) != 0) {
-            if (D_L04_00174040_1F3010.hit > 0 && D_L04_00174040_1F3010.z > moby->pos.z) {
-                qcopy(&surface_normal, &D_L04_00174040_1F3010.normal);
-                length = fast_arc_tan(D_L04_00174040_1F3010.normal.z, vector_length_xy(&D_L04_00174040_1F3010.normal));
+            if (coll_hit.unk1C > 0 && coll_hit.point.f[2] > moby->pos.z) {
+                qcopy(&surface_normal, &coll_hit.normal_x);
+                length = fast_arc_tan(coll_hit.normal_z, vector_length_xy(&coll_hit.normal_x));
                 set_vector_length_xy(&surface_normal, &surface_normal, 1.0f);
                 fast_vec_scale(&surface_normal, &surface_normal, params[3]);
                 fast_vec_add(steer, steer, &surface_normal);
@@ -252,7 +244,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
                     fast_vec_scale(&surface_normal, &surface_normal, params[3] * (length * 10000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }
-                if (0.2f < moby->pos.z - D_L04_00174040_1F3010.z) {
+                if (0.2f < moby->pos.z - coll_hit.point.f[2]) {
                     set_vector_length_xy(&surface_normal, &steer->pos, -(params[3] * 1000.0f));
                     fast_vec_add(steer, steer, &surface_normal);
                 }

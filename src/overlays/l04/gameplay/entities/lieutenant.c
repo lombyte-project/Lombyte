@@ -440,7 +440,7 @@ typedef struct {
 } M2e5178;
 extern f32 D_L04_00161D78_gp __asm__("D_L04_00161D78") __attribute__((sda));
 extern f32 D_L04_00161D7C_gp __asm__("D_L04_00161D7C") __attribute__((sda));
-extern u128 tgt[] __asm__("D_L04_00174000") NOT_SDA;
+extern u128 coll_hit_normal_lui[] __asm__("D_L04_00174000") NOT_SDA;
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 void update_entity_bounce_and_decay(M2e5178 *entity) __asm__("FUN_L04_002e5178");
 
@@ -463,7 +463,7 @@ void update_entity_bounce_and_decay(M2e5178 *entity) {
         if (entity->pos[2] < pv->f4 - 3.0f) {
             entity->b20 = 1;
         } else if (fast_dec_timer_s16(&pv->hE) && pv->hC != 0 && coll_sphere(entity->pos, 2, 0, pv->f8)) {
-            collision_normal = tgt;
+            collision_normal = coll_hit_normal_lui;
             if (fast_vec_dot(pv->vel, collision_normal) < 0.0f) {
                 qcopy(entity->pos, collision_normal - 1);
                 pv->hC--;

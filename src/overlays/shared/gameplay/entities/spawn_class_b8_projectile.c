@@ -161,7 +161,7 @@ typedef struct {
 
 extern f32 D_L04_00166F40[];                             /* arena centre */
 extern u128 D_L04_00173FE0;                              /* hit position of the last collision_line */
-extern u8 D_L04_00174000[];
+extern u128 coll_hit_normal[] __asm__("D_L04_00174000");  /* normal of the last collision_line hit */
 extern void FUN_L00_0026dd20(void *, void *, u32, s32, f32);
 
 /*
@@ -242,7 +242,7 @@ void update_class_b8_projectile(struct Moby *moby)
             random_vector.f[1] = random_float_between(-1.0f, 1.0f);
             random_vector.f[2] = random_float_between(-1.0f, 1.0f);
             push.q = random_vector.q;
-            reflect_vector(&random_vector, v, D_L04_00174000);
+            reflect_vector(&random_vector, v, coll_hit_normal);
             fast_vec_normalize(&push, &push, fast_vec_length(&random_vector) * 0.5f);
             fast_vec_add(&push, &random_vector, &push);
             fast_vec_normalize(&push, &push, random_float_between(frame_time_macro * 3.0f, frame_time_macro * 6.0f));
