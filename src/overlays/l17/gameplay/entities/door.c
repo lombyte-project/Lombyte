@@ -3557,8 +3557,6 @@ struct Dat_3CC0_f2180 {
     float fA4;
 };
 extern float func_00214D28_f2180(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float approach_angle(float *p, float *v, float a, float b, float c,
-                                     float d) __asm__("FUN_L00_0025be00");
 int update_shuttle_travel_and_camera(char *moby, int route_index) {
     float camera_rotation[4], camera_position[4];
     struct Dat_3CC0_f2180 *shuttle_vars = *(struct Dat_3CC0_f2180 **)(moby + 0x78);

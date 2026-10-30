@@ -95,8 +95,6 @@ void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 
 extern void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 extern void transform_vector_by_basis(void *, void *, void *);
-extern void make_hit_descriptor(char *arg, int a, int b, float scale,
-                                  void *src) __asm__("FUN_L00_00259888");
 
 extern char *D_L17_0015FFD0[] MACRO_ADDR;
 void update_fleet_beam(struct Moby *beam_moby) __asm__("FUN_L17_002a8da0");
@@ -856,8 +854,6 @@ extern short fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") __attrib
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 f32 resolve_camera_surface_height(struct CameraProbePosition *position,
                                   s32 optional_output) __asm__("FUN_002135f0");
-extern void make_hit_descriptor(char *arg, int a, int b, float scale,
-                                  void *src) __asm__("FUN_L00_00259888");
 extern int func_L00_001F2BE8_alt(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 
 void update_fleet_bobbing_moby(struct Moby *moby) __asm__("FUN_L17_002dc3f8");

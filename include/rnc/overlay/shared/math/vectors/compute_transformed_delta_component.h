@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-int mine_fall(char *moby, char *st) __asm__("FUN_L00_0025c698");
+int mine_fall(void *moby, void *st) __asm__("FUN_L00_0025c698");
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_MATH_VECTORS_COMPUTE_TRANSFORMED_DELTA_COMPONENT_H */

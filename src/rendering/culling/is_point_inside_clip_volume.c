@@ -3,11 +3,11 @@
 struct Vec4 {
     f32 x, y, z, w;
 };
-extern void fast_vec_sub(void *, s32, void *) __asm__("func_001F9A28");
+extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
-s32 is_point_inside_clip_volume(s32 point, s32 volume_index) __asm__("FUN_00214720");
+s32 is_point_inside_clip_volume(void *point, s32 volume_index) __asm__("FUN_00214720");
 
-s32 is_point_inside_clip_volume(s32 point, s32 volume_index) {
+s32 is_point_inside_clip_volume(void *point, s32 volume_index) {
     struct Vec4 in;
     struct Vec4 out;
     u8 *entry;

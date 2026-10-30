@@ -1282,8 +1282,6 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) {
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float D_0015EE6C_u, D_0015ED70_c __asm__("D_0015ED70");
-extern float approach_angle(float *, float *, float, float, float,
-                                float) __asm__("FUN_L00_0025be00");
 extern void FUN_L00_00258830(void *, void *, float, float, float, int);
 extern void resolve_point_path_segment_xy_clearance(float, void *, void *, void *) __asm__("FUN_L00_00261d78");
 extern float func_00214D88_7890(float *, float, float, float, float,

@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-void disable_global_flag(void) __asm__("FUN_001f61f8");
+void disable_global_flag(void) __asm__("func_001F61F8");
 
 #endif /* LOMBYTE_RNC_RUNTIME_STATE_DISABLE_GLOBAL_FLAG_H */

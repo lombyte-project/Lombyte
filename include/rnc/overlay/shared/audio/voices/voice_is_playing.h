@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
+int voice_is_playing(void *target, int i) __asm__("FUN_L00_0028d8c0");
 
 #endif /* LOMBYTE_RNC_OVERLAY_SHARED_AUDIO_VOICES_VOICE_IS_PLAYING_H */

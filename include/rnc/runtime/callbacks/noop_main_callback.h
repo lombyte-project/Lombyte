@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
+void noop_main_callback(void *, void *) __asm__("func_001E93E8");
 
 #endif /* LOMBYTE_RNC_RUNTIME_CALLBACKS_NOOP_MAIN_CALLBACK_H */
