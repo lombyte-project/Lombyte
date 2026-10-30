@@ -51,7 +51,7 @@ void compute_level16_reflection_map_coordinates(int    point_count,
 
 void compute_level16_reflection_map_coordinates(
 
-    int point_count, Vec3 *direction_vectors, Vec3 *point_positions, int unused, float *out) {
+    int point_count, Vec3 *direction_vectors, Vec3 *point_positions, int unused, float *reflection_map_coordinates) {
     int   i;
     float relative_direction[4];
     float point_position[4];
@@ -83,8 +83,8 @@ void compute_level16_reflection_map_coordinates(
         reflection_projection_scratch[2] = reflection_projection_scratch[2] + 1.0f;
         projection_denominator = fast_vec_length(reflection_projection_scratch);
         projection_denominator = projection_denominator + projection_denominator;
-        out[i * 2] = (reflection_projection_scratch[0] / projection_denominator + 0.5f) * 2.0f;
-        out[i * 2 + 1] = (reflection_projection_scratch[1] / projection_denominator + 0.5f) * 2.0f;
+        reflection_map_coordinates[i * 2] = (reflection_projection_scratch[0] / projection_denominator + 0.5f) * 2.0f;
+        reflection_map_coordinates[i * 2 + 1] = (reflection_projection_scratch[1] / projection_denominator + 0.5f) * 2.0f;
     }
 }
 
