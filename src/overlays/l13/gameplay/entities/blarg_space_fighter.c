@@ -412,7 +412,7 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) __asm__("FUN_L1
 extern void update_hovering_rocket_attacker_common(unsigned char *) __asm__("FUN_L13_002c2d30");
 extern unsigned char *create_attached_rocket(void *, int) __asm__("FUN_L13_003058a8");
 extern void launch_attached_rocket(void *, void *, void *, float) __asm__("FUN_L13_00305988");
-extern char *D_L13_001600EC;
+#include "rnc/overlay/cuboid.h"
 #include "rnc/overlay/l13/gameplay/entities/blarg_space_fighter_globals.h"
 extern float hovering_rocket_attacker_launch_vector_speed_gp __asm__("D_L13_0016149C") __attribute__((sda));
 extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
@@ -480,8 +480,8 @@ void update_hovering_rocket_attacker(unsigned char *moby) {
         index = *(int *)(moby_data + 0xD4) * 128;
         moby_position = (float *)&MOBY(moby)->pos;
         z[0] = 0.0f;
-        distance_or_target_yaw = fast_vec_dist(moby_position, D_L13_001600EC + index + 0x30);
-        fast_vec_sub(scratch_vector, D_L13_001600EC + *(int *)(moby_data + 0xD4) * 128 + 0x30, moby_position);
+        distance_or_target_yaw = fast_vec_dist(moby_position, (char *)l13_cuboids + index + 0x30);
+        fast_vec_sub(scratch_vector, (char *)l13_cuboids + *(int *)(moby_data + 0xD4) * 128 + 0x30, moby_position);
         advance_accelerated_scalar(distance_or_target_yaw, frame_time_sq * 10.0f, frame_time_sq * 10.0f, frame_time * 20.0f, z, (float *)(moby_data + 0xF0));
         fast_vec_normalize(scratch_vector, scratch_vector, *(float *)(moby_data + 0xF0));
         fast_vec_add(moby_position, moby_position, scratch_vector);
@@ -2924,7 +2924,7 @@ void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *result
     trooper_anim_update(moby, (short *)(vars + 0x60));
     vars[0x13B] = 4;
     scale = D_0015ED6C * 10.0f;
-    velocity = D_L13_001600EC + (*(int *)(vars + 0x130) << 7);
+    velocity = (char *)l13_cuboids + (*(int *)(vars + 0x130) << 7);
     *(short *)(vars + 0x9C) = 0;
     fast_vec_normalize(vars + 0x70, velocity, scale);
     {

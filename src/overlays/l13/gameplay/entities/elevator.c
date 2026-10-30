@@ -2577,7 +2577,8 @@ typedef struct {
     int boost_sound;
     int target_path;
 } FlightData;
-extern char *D_L13_001600EC_gp __asm__("D_L13_001600EC") __attribute__((section(".sdata")));
+#include "rnc/overlay/cuboid.h"
+extern LevelCuboid *l13_cuboids_gp __asm__("D_L13_001600EC") __attribute__((section(".sdata")));
 extern f32 frame_scale_gp __asm__("D_0015ED60") __attribute__((section(".sdata")));
 extern f32 frame_scale_sq_gp __asm__("D_0015ED64") __attribute__((section(".sdata")));
 extern f32 frame_time_gp __asm__("D_0015ED6C") __attribute__((section(".sdata")));
@@ -2711,10 +2712,10 @@ void update_fighter_jet_flight(void *moby_arg, void *data_arg) {
     yaw_limit = 500.0f;
     if (data->target_path != -1) {
         int path_offset = data->target_path << 7;
-        char *paths = D_L13_001600EC_gp;
+        char *paths = (char *)l13_cuboids_gp;
         qcopy(target, ((char (*)[128])paths)[data->target_path] + 0x30);
         pitch_limit = fast_vec_length(paths + path_offset + 0x20);
-        fast_vec_add(offset, (data->target_path << 7) + D_L13_001600EC_gp, (data->target_path << 7) + D_L13_001600EC_gp + 0x10);
+        fast_vec_add(offset, (data->target_path << 7) + (char *)l13_cuboids_gp, (data->target_path << 7) + (char *)l13_cuboids_gp + 0x10);
         yaw_limit = fast_vec_length(offset);
     } else {
         qcopy(target, &fighter_jet_steering_reference_position);
@@ -2879,7 +2880,6 @@ typedef struct {
 } JetPlayer;
 typedef struct { char pad0[0x160]; float flash; int pad164,ticks; } JetCamera;
 typedef struct { char pad0[0xA]; unsigned short palette; char padC[4]; } JetTexture;
-typedef struct { char pad0[0x30]; JetVec position; char pad40[0x30]; JetVec rotation; } JetPath;
 typedef struct { char pad0[0x10]; JetVec velocity; Jet *source; int pad24,pad28; float damage; int flags; } JetHit;
 extern JetPlayer jet_player47 __asm__("D_0013F350");
 extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
@@ -2892,7 +2892,6 @@ extern char fighter_jet_hidden_moby_classes[] __asm__("D_L13_001CBDE8");
 short D_L13_00161440 = 0x7f;
 extern float D_L13_0015F3FC;
 extern int D_L13_0015F608;
-extern JetPath *D_L13_001600EC;
 extern char D_L13_001F4470[], D_L13_001F44A8[];
 extern void jet_group_state(int,int,int,int) __asm__("FUN_L13_002650a8");
 extern void jet_group_switch(void *,int,int,int) __asm__("FUN_L13_002651c8");
@@ -3015,12 +3014,12 @@ void fighter_jet_update(Jet *jet_moby) {
         approach_value(&jet_data->blend,1.0f,frame_time*4.0f); D_L13_0015F3FC=jet_data->blend;
         if (jet_data->blend==1.0f) {
             if (jet_data->entry_path!=-1) {
-                JetPath *path=&D_L13_001600EC[jet_data->entry_path];
-                set_race_camera(path->position,path->rotation,50,1);
+                LevelCuboid *path=&l13_cuboids[jet_data->entry_path];
+                set_race_camera(&path->pos,&path->rot,50,1);
                 {
                     int index=jet_data->entry_path;
-                    JetPath *paths=D_L13_001600EC;
-                    qcopy(jet_moby->position,paths[index].position); qcopy(jet_moby->rotation,paths[index].rotation);
+                    LevelCuboid *paths=l13_cuboids;
+                    qcopy(jet_moby->position,&paths[index].pos); qcopy(jet_moby->rotation,&paths[index].rot);
                 }
             }
             jet_set_hero_state(0x32,1);
@@ -3057,8 +3056,8 @@ void fighter_jet_update(Jet *jet_moby) {
         if (jet_data->group_a>0) jet_group_state(jet_data->group_a,0,0,0);
         if (jet_data->group_b>0) jet_group_state(jet_data->group_b,0,0,0);
         jet_group_switch(fighter_jet_hidden_moby_classes,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
-        if (jet_data->exit_path!=-1) { JetPath *path=&D_L13_001600EC[jet_data->exit_path]; set_race_camera(path->position,path->rotation,0,1); }
-        else set_race_camera(jet_data->spawn_position,D_L13_001600EC[jet_data->destination_path].rotation,0,1);
+        if (jet_data->exit_path!=-1) { LevelCuboid *path=&l13_cuboids[jet_data->exit_path]; set_race_camera(&path->pos,&path->rot,0,1); }
+        else set_race_camera(jet_data->spawn_position,&l13_cuboids[jet_data->destination_path].rot,0,1);
         {
             int id=jet_data->engine_sound;
             unsigned char *audio;
@@ -3110,15 +3109,15 @@ void fighter_jet_update(Jet *jet_moby) {
     case FIGHTER_JET_STATE_FORCED_EXIT:
         ((JetPlayer*)(&jet_player47))->in_craft=0; *(int*)((char*)((JetPlayer*)(&jet_player47))->moby+0x98)=0; jet_set_hero_state(0,1); jet_end_mount(0);
         if (jet_data->escape_path==-1) { debug_print(D_L13_001F4470); qcopy(jet_moby->position,jet_data->spawn_position); qcopy(jet_moby->rotation,jet_data->spawn_rotation); }
-        else { int index=jet_data->escape_path; JetPath *paths=D_L13_001600EC; qcopy(jet_moby->position,paths[index].position); qcopy(jet_moby->rotation,paths[index].rotation); jet_moby->position[2]+=0.57318f; }
+        else { int index=jet_data->escape_path; LevelCuboid *paths=l13_cuboids; qcopy(jet_moby->position,&paths[index].pos); qcopy(jet_moby->rotation,&paths[index].rot); jet_moby->position[2]+=0.57318f; }
         jet_moby->scale=jet_moby->model->scale; refresh_moby_spatial_bounds_from_basis(jet_moby);
         if (jet_data->destination_path==-1) debug_print(D_L13_001F44A8);
         else {
-            JetPath *path;
+            LevelCuboid *path;
             if (jet_data->group_a>0) jet_group_state(jet_data->group_a,0,0,0);
             if (jet_data->group_b>0) jet_group_state(jet_data->group_b,0,0,0);
             jet_group_switch(fighter_jet_hidden_moby_classes,1,1,-1); jet_group_switch(&D_L13_00161440,1,-1,-1); jet_group_flag(0x102,0);
-            path=&D_L13_001600EC[jet_data->destination_path]; set_race_camera(path->position,path->rotation,0,1);
+            path=&l13_cuboids[jet_data->destination_path]; set_race_camera(&path->pos,&path->rot,0,1);
         }
         if (jet_moby->persistent!=0xFF) jet_clear_persistent(jet_moby->persistent);
         {

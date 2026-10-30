@@ -1928,7 +1928,7 @@ void apply_configured_moby_state_and_command(struct Moby *moby) {
     moby->command = moby_vars[0x24];
 }
 extern int D_L13_0015F5C4;
-extern char *D_L13_001600EC;
+#include "rnc/overlay/cuboid.h"
 extern u8 alternate_item_available[128] __asm__("D_0013D388");
 extern unsigned char D_001413F5 NOT_SDA;
 extern float D_L13_0015F3FC;
@@ -2025,7 +2025,7 @@ after_state_4:
             index = data[2];
             if (index != -1 && data[4] != -1) {
                 entity = (char *)(D_L13_0015FFD8_m + data[4] * 0x100);
-                object = D_L13_001600EC;
+                object = (char *)l13_cuboids;
                 index *= 0x80;
                 qcopy(entity + 0x10, &object[index + 0x30]);
                 object += index;
@@ -2057,7 +2057,7 @@ after_state_4:
                 struct Moby *other = (struct Moby *)(D_L13_0015FFD8_m + data[4] * 0x100);
                 other->flags |= 2;
             }
-            object = D_L13_001600EC + data[2] * 0x80;
+            object = (char *)l13_cuboids + data[2] * 0x80;
             set_race_camera(object + 0x30, object + 0x70, 0x72, 1);
             alternate_item_available[0x66] = 1;
             if (data[8] != -1) {
