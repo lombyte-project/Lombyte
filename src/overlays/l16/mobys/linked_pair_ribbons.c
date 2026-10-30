@@ -125,9 +125,9 @@ int is_linked_pair_ribbon_enabled(void *mv) {
     if (group_entry == 0)
         return 1;
     for (;;) {
-        unsigned char *other = D_L16_0015FFD8 + ((*group_entry & 0x7FFF) << 8);
-        if (*(short *)(other + 0xA6) == 0x222) {
-            if (other[0xBC] != 0)
+        unsigned char *group_member_moby = D_L16_0015FFD8 + ((*group_entry & 0x7FFF) << 8);
+        if (*(short *)(group_member_moby + 0xA6) == 0x222) {
+            if (group_member_moby[0xBC] != 0)
                 return 0;
         }
         if ((short)*group_entry++ < 0)
