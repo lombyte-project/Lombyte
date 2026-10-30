@@ -6,6 +6,7 @@
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
+#include "rnc/math/fast_math.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/hud_0023D600.c: func_L02_0023D600), where it is exact; names translated to the US level program. */
 
@@ -42,7 +43,6 @@ extern s32  frame_size[] __asm__("D_0013E504");
 extern char hud_counter_decimal_format[] __asm__("D_L02_0015F850");
 
 #include "rnc/overlay/l02/update_hud_counter_transition_globals.h"
-#include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 
 extern s32 hud_counter_bar_growth_divisor_gp __asm__("D_L02_0015F91C") __attribute__((sda));

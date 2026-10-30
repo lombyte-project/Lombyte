@@ -19,6 +19,7 @@
 #include "rnc/overlay/shared/mobys/initialize_moby_grounding.h"
 #include "rnc/overlay/shared/mobys/record_moby_context_bytes.h"
 #include "rnc/overlay/shared/enemies/trooper_set_knockback.h"
+#include "rnc/ui/help/try_set_help_message.h"
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_002CB280.c: func_L03_002CDBF0), where it is exact; names translated to the US level program. */
 
@@ -2307,7 +2308,6 @@ extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void FUN_L00_002371e0(void);
 extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
 s32         queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
-s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) __asm__("FUN_L03_002dcbc8");
 

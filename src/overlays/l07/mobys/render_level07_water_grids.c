@@ -13,6 +13,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/props/novalis_elevator.h"
+#include "rnc/audio/voice_alloc.h"
 
 /* Register this level's vendor data set. */
 
@@ -93,7 +94,7 @@ void update_moby_offset_motion(struct Moby *moby) {
         next.q = start.q;
         vars->home.w = fast_vec_length(&next);
         if (vars->startSound != -1)
-            FUN_0022da68(vars->startSound, 0, moby);
+            allocate_voice_for_target_entry(vars->startSound, 0, moby);
         moby->state = 2;
         break;
     case MOVING_MOBY_MOVE_TO_OFFSET:
@@ -101,7 +102,7 @@ void update_moby_offset_motion(struct Moby *moby) {
             (!force_end && vars->target != -1 && (target = &D_L07_0015FFD8[vars->target]) != 0 &&
              target->state != 0xfe && target->state != 0xfd && target->state == vars->shutState)) {
             if (vars->startSound != -1)
-                FUN_0022da68(vars->startSound, 0, moby);
+                allocate_voice_for_target_entry(vars->startSound, 0, moby);
             moby->state = 4;
             break;
         }
@@ -123,7 +124,7 @@ void update_moby_offset_motion(struct Moby *moby) {
             D_L07_00184528[vars->indicator] = 1;
         moby->state = 3;
         if (vars->endSound != -1)
-            FUN_0022da68(vars->startSound, 0, moby);
+            allocate_voice_for_target_entry(vars->startSound, 0, moby);
         return;
     case MOVING_MOBY_WAIT_AT_OFFSET:
         if (!force_start &&
@@ -132,7 +133,7 @@ void update_moby_offset_motion(struct Moby *moby) {
             return;
         vars->home.w = 0;
         if (vars->startSound != -1)
-            FUN_0022da68(vars->startSound, 0, moby);
+            allocate_voice_for_target_entry(vars->startSound, 0, moby);
         moby->state = 4;
         break;
     case MOVING_MOBY_RETURN_HOME:
@@ -140,7 +141,7 @@ void update_moby_offset_motion(struct Moby *moby) {
             (force_end || vars->target == -1 || (target = &D_L07_0015FFD8[vars->target]) == 0 ||
              target->state == 0xfe || target->state == 0xfd || target->state == vars->openState)) {
             if (vars->startSound != -1)
-                FUN_0022da68(vars->startSound, 0, moby);
+                allocate_voice_for_target_entry(vars->startSound, 0, moby);
             moby->state = 2;
             break;
         }
@@ -159,7 +160,7 @@ void update_moby_offset_motion(struct Moby *moby) {
             return;
         qcopy(&moby->pos, &vars->home);
         if (vars->startSound != -1)
-            FUN_0022da68(vars->endSound, 0, moby);
+            allocate_voice_for_target_entry(vars->endSound, 0, moby);
         if (vars->indicator != -1)
             D_L07_00184528[vars->indicator] = 0;
         moby->state = 1;
@@ -178,8 +179,6 @@ struct SwingGateVars {
     float rate;      /* 0x14 */
     float vel;       /* 0x18 */
 };
-
-extern int FUN_0022da68(int, int, struct Moby *);
 
 void update_swing_gate(struct Moby *moby) __asm__("FUN_L07_0031b3f0");
 
@@ -209,7 +208,7 @@ void update_swing_gate(struct Moby *moby) {
             return;
         vars->vel = vars->speed * frame_time;
         moby->rot.y = vars->vel;
-        FUN_0022da68(0, 0, moby);
+        allocate_voice_for_target_entry(0, 0, moby);
         moby->state = 3;
         break;
     case SWING_GATE_HOLD_ROTATION:
@@ -229,7 +228,7 @@ void update_swing_gate(struct Moby *moby) {
     case SWING_GATE_RETURN_TO_ZERO:
         if (vars->target == -1 || (target = &D_L07_0015FFD8[vars->target]) == 0 ||
             target->state == 0xFE || target->state == 0xFD || target->state == vars->openState) {
-            FUN_0022da68(0, 0, moby);
+            allocate_voice_for_target_entry(0, 0, moby);
             moby->state = 2;
             break;
         }

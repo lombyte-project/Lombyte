@@ -33,6 +33,8 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/l08/hero/hero_set_state.h"
 #include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
+#include "rnc/math/random.h"
+#include "rnc/mobys/moby_spawn.h"
 
 /* finds the first of eight linked entries whose direction lines up with the moby */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E15A0), where it is exact; names translated to the US level program. */
@@ -74,8 +76,7 @@ void request_batalia_cannon_mount(struct Moby *command_target_moby) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E3010), where it is exact; names translated to the US level program. */
 
-extern char *create_moby(int);
-extern char  D_0013E533[];
+extern char D_0013E533[];
 
 void *spawn_joint_aligned_moby_part(struct Moby *parent,
                                     int          oClass,
@@ -766,7 +767,6 @@ char                 *create_moby_with_particles(int    owner,
                                                  float *rotation,
                                                  int    value) __asm__("FUN_L08_002e7eb0");
 extern char           D_0013CAE0[];
-extern f32            random_float_between(f32, f32) __asm__("func_002132A8");
 extern float          D_0015ED70;
 extern int D_0013CAE4 NOT_SDA; /* no foreign declaration */
 extern int            D_0013F350;
@@ -792,7 +792,6 @@ extern int            FUN_L00_00257b90(int, int);
 extern s32            D_0015ED84;
 extern u8             D_0014C050[];
 extern void           FUN_L08_00230b38(int, int);
-extern void           mark_moby_for_removal(void *) __asm__("func_0020C828");
 void        set_race_camera(void *pos, void *rot, int mode, int flag) __asm__("FUN_L00_00216f90");
 void        FUN_L08_00306b30(u8 *object, s32 mode);
 void        FUN_L08_00313ba8(void);
@@ -814,7 +813,6 @@ extern float         func_002140F8_2E16A0(float, float) __asm__("FUN_002132a8");
 extern float         func_00214D28_2E16A0(float *, float, float) __asm__("FUN_00213ed8");
 extern char *func_L00_0026EBC0_2E16A0(char *, char *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void  func_L08_00315068_2E16A0(void) __asm__("FUN_L08_00313ba8");
-extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern unsigned char l08_cannon_hero_interaction_flags[] __asm__("D_0014095F");
 void                 update_batalia_cannon(Moby *moby) __asm__("FUN_L08_002e0328");
@@ -1293,7 +1291,6 @@ typedef struct {
 } Pair_2E2A38;
 
 extern Pair_2E2A38 D_L08_00161C30 NOT_SDA;
-extern f32                        random_angle_radians(void) __asm__("func_00213308");
 extern float                      D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_0015ED70           MACRO_ADDR;
 extern float                      FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
@@ -1306,7 +1303,6 @@ extern int D_L08_00161C08 __attribute__((sda));
 #include "rnc/overlay/l08/mobys/bolt_thief_data/update_falling_debris.h"
 
 extern int  spawn_spark() __asm__("FUN_00218888");
-extern s32  random_integer_below(s32) __asm__("func_00213260");
 void        spawn_particle(void *pos,
                            void *dir,
                            int   col,
@@ -1698,9 +1694,6 @@ extern f32 gunship_turn_acceleration_degrees_gp __asm__("D_L08_00161C44") __attr
 extern f32 gunship_max_turn_speed_degrees_gp __asm__("D_L08_00161C48") __attribute__((sda));
 extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");
 
-extern f32  random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern f32  random_angle_radians(void) __asm__("FUN_00213308");
-extern int  random_integer_below(int) __asm__("FUN_00213260");
 extern f32  scale_time(f32) __asm__("FUN_001f96b0");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern struct Moby *
@@ -2105,7 +2098,7 @@ void bolt_thief_update(struct Moby *moby) {
             struct Moby *other = data->list[i];
 
             if (other != 0 && (signed char)other->state >= 0) {
-                FUN_L00_0024f7c8(moby, 0, &step);
+                moby_point_position(moby, 0, &step);
                 active_count++;
                 fast_vec_sub(&point, &step, &other->pos);
                 FUN_L00_0025f730(&point, D_0015ED6C * 4.0f);

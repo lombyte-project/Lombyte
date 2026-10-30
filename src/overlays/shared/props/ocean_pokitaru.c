@@ -24,6 +24,8 @@
 #include "rnc/ui/text/font/font_queue_vu_state.h"
 #include "rnc/runtime/callbacks/noop_main_callback.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/math/random.h"
+#include "rnc/mobys/moby_spawn.h"
 
 extern int  FUN_00116248_b7(void *, void *) __asm__("FUN_00116248");
 extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
@@ -109,8 +111,6 @@ char *select_homing_missile_target(
 /* spawns a moby of class 0x3F1 aimed along a direction */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309C18), where it is exact; names translated to the US level program. */
 
-extern char *create_moby(int);
-
 unsigned char *spawn_class_3f1_moby(char  *owner,
                                     float *launch_direction,
                                     float *spawn_position,
@@ -185,9 +185,7 @@ extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
 extern char  D_L11_00174880[];
 extern void
 initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
-extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 char *select_homing_missile_target(float *pos, float *aim, float r1, float r2, float maxd) __asm__("FUN_L11_00308670");
 
 static inline void copy_xyz_089d0(float *dst, float *src) {
@@ -344,14 +342,12 @@ char *spawn_class_3f9_moby(int    owner,
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030A468), where it is exact; names translated to the US level program. */
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
-extern f32   random_float_between(f32, f32) __asm__("func_002132A8");
 extern int   projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
 extern int   projectile_trail_color_end_gp __asm__("D_L11_00161DC4") __attribute__((sda));
 extern int   projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute__((sda));
 extern int   D_L11_00161DCC __attribute__((sda));
 extern float projectile_trail_velocity_scale_gp __asm__("D_L11_00161DD0") __attribute__((sda));
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void  mark_moby_for_removal(void *) __asm__("func_0020C828");
 /* Per-frame update of a projectile moby: moves it by its velocity and leaves a trail particle; on impact it bursts into
    five sparks and removes itself, otherwise it shrinks when its timer runs out and is removed once tiny. */
 void update_projectile_with_trail(char *moby) __asm__("FUN_L11_00309098");
@@ -429,7 +425,6 @@ typedef struct {
     f32          turn_speed; /* 0x30 */
 } Missile_94f8;
 
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void
 FUN_L00_0026cbb0_94f8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern unsigned char *FUN_L00_002712b8_94f8(void *,

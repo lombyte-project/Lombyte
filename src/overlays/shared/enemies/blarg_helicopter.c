@@ -253,7 +253,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         }
         current_moby->collision = ((SpawnClass *)current_moby->pclass)->unk10;
         copy_hero_moby_field_38(current_moby);
-        FUN_L00_00250df8(current_moby);
+        update_entity(current_moby);
         spawned = current_moby;
         sound = suck_get_aim_height(spawned);
         if (sound != NULL) {
@@ -791,7 +791,6 @@ void spawner_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002C59A0), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
-extern void  FUN_L00_00250df8(void *);
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *spawn_class_221_moby(
@@ -818,7 +817,7 @@ char *spawn_class_221_moby(
             *(float *)(((char *)MOBY(spawned_moby)->pclass) + 0x24) * 0.001f;
         *(int *)(moby_pvars + 0x1C) = spawn_options;
         *(int *)(moby_pvars + 0x20) = 0;
-        FUN_L00_00250df8(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -1119,7 +1118,7 @@ typedef struct {
 
 char *spawn_homing_spark_projectile(char *a, char *pos, int c, int d, float f) __asm__("FUN_L03_002d5208");
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8") __attribute__((sda));
-extern f32   random_angle_radians(void) __asm__("func_00213308");
+extern f32   random_angle_radians(void) __asm__("FUN_00213308");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -1967,7 +1966,6 @@ extern char                *FUN_L00_0026dd20(void *pos, void *vel, int c, int d,
 extern char                 D_0013E533[];
 extern CollisionHit         coll_hit __asm__("D_L03_00173F60");
 extern char                 D_L03_00173F80[];
-extern f32                  random_float_between(f32, f32) __asm__("func_002132A8");
 extern float                frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern float homing_spark_turn_rate_degrees_gp __asm__("D_L03_00161B30") __attribute__((sda));
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");

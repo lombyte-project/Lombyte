@@ -14,7 +14,7 @@
 #include "rnc/world/collision/collision_hit_material.h"
 
 int        FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
-f32        absolute_float(f32) __asm__("FUN_001f99c0");
+f32        absolute_float(f32) __asm__("func_001F99C0");
 void       exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
 void       apply_hero_ground_material_effects(void) __asm__("FUN_L05_00239fc0");
@@ -511,7 +511,6 @@ typedef struct {
 } L16MovementPlayer;
 
 extern char *collision_hit_moby[] __asm__("D_L05_00174258");
-extern f32   fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float forward_component(void *) __asm__("FUN_L00_00213350");
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern void  correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");

@@ -869,7 +869,7 @@ extern int   sample_path(void *, void *, int *, float *, float, int) __asm__("FU
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern char *spawn_on_path(void *, int, int, int) __asm__("FUN_L00_002c52a8");
 extern void  initialize_moby_particle_effect_state(char *) __asm__("FUN_L06_002e6148");
-extern void  mark_moby_for_removal(void *);
+extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void  jet_animate(struct Moby *, float) __asm__("FUN_L00_00259fe8");
 extern void  update_timed_point_light_color(char *) __asm__("FUN_L07_00312150");
 void         snagglebeast_update(unsigned char *moby) __asm__("FUN_L07_00314150");
@@ -2736,7 +2736,6 @@ extern void spawn_explosion(void *,
                             int) __asm__("FUN_L00_0025e450");
 extern void jet_animate(struct Moby *, f32) __asm__("FUN_L00_00259fe8");
 extern s32  coll_sphere(f32, void *, s32, struct Moby *) __asm__("FUN_L00_001f0d60");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void set_moby_list_state(s32, s32) __asm__("FUN_L01_0026e0e0");
 
 typedef struct {
@@ -3334,7 +3333,7 @@ void machinegun_turret_update(unsigned char *moby) {
         return;
     collision = data + 0x20;
     animation = data + 0x60;
-    hit = FUN_L00_0025a420((void *)moby, 0x230000, 0);
+    hit = find_moby_hit(moby, 0x230000, 0);
     fun_00213928((void *)moby, (MobyHit *)hit, collision, 0, contact, 0, 0, 4);
     if ((u8)moby[0x20] < 2 && contact[0] > 1) {
         FUN_0022da68(1, 0, moby);

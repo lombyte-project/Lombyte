@@ -11,15 +11,16 @@
 #include "rnc/math/random.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/interpolation/cosine_interpolate.h"
 
 extern u8  camera_view[] __asm__("D_L00_00166E10");
 extern u8  D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
 extern s32 D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 f32  FUN_001f9ab0_2e9010(void *, void *) __asm__("FUN_001f9ab0");
 void FUN_001f9a68_2e9010(void *, void *, f32) __asm__("FUN_001f9a68");
-void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void FUN_001f9bf8_2e9010(void *, void *, f32) __asm__("FUN_001f9bf8");
 f32  FUN_001f9af0_2e9010(void *) __asm__("FUN_001f9af0");
 f32  cam_interp_values(void *, f32, f32, f32, f32, f32) __asm__("FUN_001ebd78");
@@ -180,9 +181,6 @@ typedef struct {
 extern C_2e9518      D_L00_00166E10_lui __asm__("D_L00_00166E10") NOT_SDA;
 extern char         *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern unsigned char D_001413F4_lui __asm__("D_001413F4") NOT_SDA;
-extern float         fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern float         absolute_float(float) __asm__("FUN_001f99c0");
-extern int           scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void          follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
 
 void follow_camera_pull_back(char *o, float *x, float *y) __asm__("FUN_L00_002e9518");
@@ -237,20 +235,14 @@ void follow_camera_pull_back(char *camera_object, float *x, float *y) {
 /* Aims a camera rig at its target: updates yaw/pitch smoothing and clamps roll. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002EABD0), where it is exact; names translated to the US level program. */
 
-extern char  D_L00_00166E10[];
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
+extern char D_L00_00166E10[];
 extern float
             rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void subtract_vector_xyz(float *, float *, float *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void follow_camera_pull_back(char *, float *, float *) __asm__("FUN_L00_002e9518");
 extern void
-build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
-extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
+    build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__("FUN_001ebd78");
-float absolute_float(float input) __asm__("func_001F99C0");
 
 void         follow_camera_orbit(int arg) __asm__("FUN_L00_002e9720");
 extern short orbit_yaw_spring_stiffness_gp __asm__("D_L00_00161CF4") __attribute__((sda));
@@ -343,7 +335,7 @@ void follow_camera_orbit(int camera_moby) {
 extern int  *D_L00_0015EF80_9aa0 __asm__("D_L00_0015EF80");
 extern char *D_L00_001600F4_9aa0 __asm__("D_L00_001600F4");
 extern float FUN_001f9af0_9aa0(void *) __asm__("FUN_001f9af0");
-extern void  noop_main_callback(void *, float) __asm__("FUN_001e93e8");
+extern void  noop_main_callback() __asm__("FUN_001e93e8");
 
 typedef struct {
     int pad[4];
@@ -365,8 +357,8 @@ void run_type5_grid_record_noop_callbacks(int unused_camera_moby) {
                     if (((E_9aa0 *)(grid_cell_block + 16))[k].type == 5) {
                         char *referenced_record =
                             D_L00_001600F4_9aa0 + ((E_9aa0 *)(grid_cell_block + 16))[k].idx * 128;
-                        noop_main_callback(referenced_record + 0x30,
-                                           FUN_001f9af0_9aa0(referenced_record));
+                        ((void (*)(void *, float))noop_main_callback)(
+                            referenced_record + 0x30, FUN_001f9af0_9aa0(referenced_record));
                     }
                 }
             }
@@ -403,7 +395,6 @@ extern s32 opt_cam_yaw_rate __asm__("D_0015EDE4");
 extern f32 follow_camera_yaw_rate_table[2] __asm__("D_L00_00161DB0") __attribute__((sda));
 void       apply_follow_camera_translation() __asm__("FUN_L00_002e46b8");
 void       follow_camera_apply_overrides() __asm__("FUN_L00_002e6000");
-void       noop_main_callback() __asm__("FUN_001e93e8");
 void       follow_camera_springs() __asm__("FUN_L00_002e5830");
 void       update_follow_camera_pose();
 void       follow_camera_approach() __asm__("FUN_L00_002e5e38");
@@ -694,8 +685,6 @@ extern char     *D_L00_00166E00_lui __asm__("D_L00_00166E00") NOT_SDA;
 extern char      D_L00_00166E10_2ea488[] __asm__("D_L00_00166E10") NOT_SDA;
 extern char     *find_camera_collision_volume_for_point(void *, f32) __asm__("FUN_L00_001ee1b0");
 extern int       FUN_001f96f8_2ea488(int) __asm__("FUN_001f96f8");
-extern f32       fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32       fast_sin(f32) __asm__("FUN_001f9de0");
 extern void
 set_follow_camera_angle_blend_from_direction(void *, f32, f32) __asm__("FUN_L00_002e8918");
 extern f32  FUN_001f9ab0_2ea488(void *, void *) __asm__("FUN_001f9ab0");
@@ -817,7 +806,6 @@ typedef struct {
     float f1;
 } S;
 
-extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_002e9ef0_v(void) __asm__("FUN_L00_002e9ef0");
 
 /* Sets s to 1 (2 if set), resets l00_camera, calls 002e9ef0, allocates a voice for its p. */
@@ -1051,7 +1039,6 @@ extern float D_L00_00166DD8 NOT_SDA;
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern float
 interpolate_wrapped_angle_cosine_eased(float, float, float) __asm__("FUN_L00_00257ef0");
-extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void
 compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 extern void
@@ -1378,7 +1365,6 @@ void update_orbit_camera_pose(char *camera_object) {
 #undef F
 extern struct Hero          hero_data __asm__("D_0013F350") NOT_SDA;
 void                        FUN_001f9a10_2eb648(void *, void *, void *) __asm__("FUN_001f9a10");
-float                       fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float D_L00_00161DD4 NOT_SDA;
 int                         update_orbit_camera_from_target_moby(char *camera_object,
                                                                  char *target_moby) __asm__("FUN_L00_002eb648");
@@ -1536,11 +1522,7 @@ void initialize_orbit_camera_from_hero(O002ebb00 *camera_object) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002EB0D8.c: func_L00_002ED088), where it is exact; names translated to the US level program. */
 
 extern char D_0013F350[] NOT_SDA;
-extern f32  fast_cos(f32) __asm__("func_001F9DC8");
-extern f32  fast_sin(f32) __asm__("func_001F9DE0");
 extern int  current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
-extern s32  scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void subtract_vector_xyz_c(void *, void *, void *) __asm__("FUN_001f9a28");
 
 void initialize_target_tracking_camera(void *camera) __asm__("FUN_L00_002ebbd8");
@@ -1579,7 +1561,7 @@ void initialize_target_tracking_camera(void *camera) {
     *(int *)(camera_reset_state + 0x18) = 0;
     *(float *)(camera_reset_state + 0x10) = 0.01f;
     *(float *)(camera_reset_state + 0x14) = 0.3f;
-    *(short *)(camera_reset_state + 0x1E) = scale_game_frames_c(0x78);
+    *(short *)(camera_reset_state + 0x1E) = scale_game_frames(0x78);
     *(short *)(camera_reset_state + 0x1C) = 0;
     clear_u64_value(camera_reset_state);
     camera_state = *(char **)(camera_object + 0x70);
@@ -1619,11 +1601,10 @@ void initialize_target_tracking_camera(void *camera) {
     gg = (char *)&l00_camera;
     *(char *)(gg + 0x273) = 2;
     *(short *)(gg + 0x270) = 1;
-    *(int *)(gg + 0x2F4) = scale_game_frames_c(0x3C);
+    *(int *)(gg + 0x2F4) = scale_game_frames(0x3C);
 }
 
 extern void            FUN_L00_0025b868(float, float, float *);
-extern void            fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void            FUN_001ff500_2ebe70(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void            FUN_001ff300_2ebe70(float, void *, void *) __asm__("FUN_001f9a68");
 extern int             collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
@@ -1884,7 +1865,6 @@ void conditionally_set_camera_state_three(char *camera_object) {
  */
 #include "rnc/camera/follow_cam.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/math/fast_math.h"
 
 typedef float CameraVec[4] __attribute__((aligned(16)));
 
@@ -1948,7 +1928,6 @@ typedef struct {
 extern CameraDescriptor *camera_descriptors __asm__("D_L00_0015EF50");
 /* controller_state.held (the label sits inside struct PadState). */
 extern s32 pad_held __asm__("D_0013CAE0") NOT_SDA;
-extern f32 D_L00_00166DD8 __asm__("D_L00_00166DD8") NOT_SDA;
 extern f32 D_L00_00166EB4 __asm__("D_L00_00166EB4") NOT_SDA;
 extern u8  D_001413F4 __asm__("D_001413F4") NOT_SDA;
 extern s32 D_001413DC __asm__("D_001413DC") NOT_SDA;
@@ -2455,7 +2434,6 @@ extern E_2ed950  voice_pool_lui[] __asm__("D_0013E550") NOT_SDA;
 extern T_2ed950 *D_L00_0015F5F4_2ed950 __asm__("D_L00_0015F5F4");
 s32              play_voice(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
 s32              FUN_001f96f8_2ed950(s32) __asm__("FUN_001f96f8");
-void             release_voice_slot(s32) __asm__("FUN_0022d798");
 void update_sound_emitter_playback_by_distance(u8 *sound_emitter) __asm__("FUN_L00_002ed950");
 
 void update_sound_emitter_playback_by_distance(u8 *sound_emitter) {
@@ -2508,9 +2486,7 @@ typedef struct {
 extern u8   g_debug_camera_lui[] __asm__("D_L00_00166DC0") NOT_SDA;
 extern u8   voice_pool[] __asm__("D_0013E550");
 extern void sub_2edad8(void *, void *, void *) __asm__("FUN_001f9a28");
-extern f32  absolute_float(f32) __asm__("FUN_001f99c0");
 extern s32  play_voice(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
-extern s32  scale_game_frames(s32) __asm__("FUN_001f96f8");
 void        update_sound_emitter_playback_at_random_position(u8 *sound_emitter) __asm__("FUN_L00_002edad8");
 
 void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) {

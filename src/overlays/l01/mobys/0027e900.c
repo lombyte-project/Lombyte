@@ -5,6 +5,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 
@@ -115,7 +116,6 @@ void create_spark_particle(s32   id,
 
 #include "eetypes.h"
 #include "qcopy.h"
-#include "rnc/math/fast_math.h"
 
 typedef struct {
     u128 pos;

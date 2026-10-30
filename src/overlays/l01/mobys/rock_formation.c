@@ -771,7 +771,6 @@ extern char          D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
 extern char          D_L01_001BAAA0[] __asm__("D_L01_001BAAA0");
 extern unsigned char D_0014C050_u[] __asm__("D_0014C050");
 extern void          apply_cutscene_big_head_cheat(void) __asm__("FUN_L01_002fac80");
-extern int           fast_dec_timer(void *) __asm__("FUN_001f9770");
 extern void          blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void          start_scene(int) __asm__("FUN_L00_00298840");
 extern void          deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
@@ -816,7 +815,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
 
     data = moby->data;
     apply_cutscene_big_head_cheat();
-    fast_dec_timer(&data->timer);
+    fast_dec_timer_s16(&data->timer);
     switch (moby->state) {
     case AGNOGG_SHIP_INITIALIZE:
         fz = moby->pos.z - 0.75f;

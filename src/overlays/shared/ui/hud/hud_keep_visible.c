@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/hud.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/ui/hud/get_icon_frame.h"
@@ -551,8 +552,6 @@ int draw_hud_stars(HudElem *element) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_002377E0), where it is exact; names translated to the US level program. */
 
-extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
-
 int draw_uniform_size_hud_stars(HudElem *hud_element) __asm__("FUN_L00_00236e50");
 
 int draw_uniform_size_hud_stars(HudElem *hud_element) {
@@ -626,7 +625,6 @@ void mine_blend_color(void) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/vector.h"
-#include "rnc/math/fast_math.h"
 #include "rnc/game/game_globals.h"
 #include "rnc/globals.h"
 

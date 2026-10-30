@@ -458,7 +458,7 @@ extern char *
 spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, frame_time;
-extern float freeze_stats_score_ref_b __asm__("D_0015ED6C"), frame_time_sq;
+extern float frame_time_sq;
 extern float
 spring_angle(void *, void *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -1018,7 +1018,7 @@ void emit_moby_sprite_effect_particles(struct Moby *moby) {
 /* Updates a linked moby's movement and follows it while its state is active. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002CAC40), where it is exact; names translated to the US level program. */
 
-extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70_c __asm__("D_0015ED70");
+extern float D_0015ED70_c __asm__("D_0015ED70");
 extern void  FUN_L16_002c9a50_u(unsigned char *) __asm__("FUN_L16_002c9a50");
 extern void  update_conveyor_group_motion_transforms(int, void *) __asm__("FUN_L16_002c9c38");
 void         draw_conveyor_belt_strips(struct Moby *m) __asm__("FUN_L16_002c9cd0");
@@ -1302,7 +1302,7 @@ typedef struct {
 } L16DummyData;
 
 extern char *D_L16_00174258 NOT_SDA;
-extern float                freeze_stats_score_ref_b __asm__("D_0015EE6C"), frame_time_sq;
+extern float                frame_time_sq;
 extern float                FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float
 approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
@@ -1324,7 +1324,6 @@ int        move_test_dummy_toward_position_and_heading(char *moby,
 extern int
 move_test_dummy_toward_position_and_heading(char *, void *, float) __asm__("FUN_L16_002ced20");
 extern int   is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
-extern s32   random_integer_below(s32) __asm__("func_00213260");
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 void        *find_nearest_test_dummy_door(int index, void *position) __asm__("FUN_L16_002d5db0");
 
@@ -2065,9 +2064,8 @@ void wall_button_update(struct Moby *moby) {
                         D_L16_0015FFD8 + ((*(int *)((char *)(wall_button_data) + (0x60))) << 8), 1);
                 }
             } else if ((*(int *)((char *)(wall_button_data) + (0x6C))) < scale_game_frames(90))
-                (*(float *)((char *)(wall_button_data) + (0x68))) =
-                    fast_add_rotations((*(float *)((char *)(wall_button_data) + (0x68))),
-                                       freeze_stats_score_ref_b * 25.132742f);
+                (*(float *)((char *)(wall_button_data) + (0x68))) = fast_add_rotations(
+                    (*(float *)((char *)(wall_button_data) + (0x68))), D_0015ED6C * 25.132742f);
         }
         break;
     }

@@ -622,7 +622,6 @@ extern char          *hero_slot_moby(int) __asm__("FUN_L00_0020d460");
 
 #include "rnc/game/game_globals.h"
 
-extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L00_0017BDF0[][25];
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float get_hero_yaw_history(int back) __asm__("FUN_L00_0020d658");
@@ -3063,7 +3062,6 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int allocate_hero_voice_for_entry(int a, int b) __asm__("FUN_L00_00216de8");
 extern void
 hero_get_collision_ray_endpoints(void *, void *, int, float, float) __asm__("FUN_L00_002126b8");
-float absolute_float(float input) __asm__("FUN_001f99c0");
 
 int try_enter_hero_water_state(void) __asm__("FUN_L00_002279b0");
 

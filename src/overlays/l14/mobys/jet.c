@@ -39,6 +39,7 @@
 #include "rnc/overlay/shared/props/novalis_elevator.h"
 #include "rnc/overlay/shared/mobys/spawn_type_52_particle_near_moby.h"
 #include "rnc/overlay/shared/props/trackdrive_left.h"
+#include "rnc/math/random.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -217,7 +218,7 @@ typedef struct {
 extern char  D_L14_001674C0[];
 extern s64   get_effect_texture(s32) __asm__("func_001F44B8");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-extern void  draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
+extern void  draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 void draw_ribbon_effect_path(
 
@@ -724,7 +725,6 @@ void update_wind_control(struct Moby *wind_control_moby) {
 #include "qcopy.h"
 
 extern float D_0015ED6C_k __asm__("D_0015ED6C");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int   ftoi_k(float) __asm__("FUN_001fa6d0");
 
 typedef struct {
@@ -871,7 +871,6 @@ typedef struct {
 } Pk_m;
 
 extern char D_L14_001674C0_m[] __asm__("D_L14_001674C0");
-extern void draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
 
 extern int wind_spark_base_color_gp __asm__("D_L14_00161C0C") __attribute__((sda));
 
@@ -961,7 +960,6 @@ extern char  looping_path_moby_missing_path_error_format[] __asm__("D_L14_001FCA
 extern char  looping_path_moby_empty_path_error_format[] __asm__("D_L14_001FCAD8");
 extern f32   mine_path_step_rate_gp __asm__("D_L14_00161C44") __attribute__((sda));
 extern f32   mine_glow_pulse_phase_step_gp __asm__("D_L14_00161C48") __attribute__((sda));
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern float FUN_L00_00257c48(float, float);
 extern int
 FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_L00_0025d808");
@@ -1168,7 +1166,6 @@ typedef struct {
     u8 pad1A[0x16];
 } L14BoltSweep;
 
-extern f32   random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int   FUN_L00_00257b90(int, int);
 extern void  FUN_L00_00259888(void *, struct Moby *, s32, void *, f32);
 extern void  spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
@@ -1289,7 +1286,6 @@ extern char  D_0013D24D[];
 extern float D_L14_00161CC0[] MACRO_ADDR;
 extern float D_L14_00161CD0[];
 extern int   D_L14_0015F5C4;
-extern s32   random_integer_below(s32) __asm__("func_00213260");
 extern short lightning_arc_interval_remaining_frames_gp __asm__("D_L14_00161C50")
     __attribute__((sda));
 extern short lightning_arc_interval_frames_gp __asm__("D_L14_00161C54") __attribute__((sda));
@@ -1820,8 +1816,6 @@ void draw_branched_lightning_arc(void) {
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EFB10), where it is exact; names translated to the US level program. */
 
-extern f32            random_angle_radians(void) __asm__("func_00213308");
-extern f32            random_float_between(f32, f32) __asm__("func_002132A8");
 extern unsigned char *FUN_L00_00272060(
     float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
 
@@ -2337,7 +2331,6 @@ void rebuild_elevator_world_path(u8 *moby) {
 
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float fast_sin(float);
-extern int   truncate_float_to_s32();
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
 
 void update_elevator_idle_glow(struct Moby *moby) {

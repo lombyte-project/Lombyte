@@ -91,7 +91,9 @@ extern void  fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 extern void  fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void  clear_u64_value() __asm__("FUN_001f99f8");
 extern void  blend_vector_2b94d0(float, void *, void *, void *) __asm__("FUN_001f9a40");
-extern float fast_cos(float), fast_sin(float), fast_arc_tan(float, float);
+extern float fast_cos(float) __asm__("FUN_001f9dc8");
+extern float fast_sin(float) __asm__("FUN_001f9de0");
+extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int   truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -1077,8 +1079,6 @@ SparkleArc D_L17_001D0D20[10] = {0};
 
 SparkleArc D_L18_001D0A20[10] = {0};
 
-extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
-
 #include "rnc/overlay/shared/weapons/walloper_data/walloper_update_2.h"
 
 extern float                D_L00_00166DC0[];
@@ -1174,7 +1174,6 @@ short D_L18_001D0D40[10] = {0};
 extern short D_L00_001DBEF0[];
 extern short D_L00_001DBF08[];
 extern void  FUN_L00_002bbb00_c(int) __asm__("FUN_L00_002bbb00");
-extern void  fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void
 build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1363,7 +1362,6 @@ extern char walloper_arc_first_pass_texture_index_gp[4] __asm__("D_L00_001616B0"
     __attribute__((sda));
 extern char walloper_arc_second_pass_texture_index_gp[4] __asm__("D_L00_001616B4")
     __attribute__((sda));
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, void *, int);
 
 void draw_walloper_arc_two_pass_quads(void *mv,
@@ -1609,10 +1607,7 @@ void draw_walloper_camera_facing_quad(void *mv) {
 typedef u32 VecQuad __attribute__((mode(TI), aligned(16)));
 
 extern Vec4  collision_hit_point __asm__("D_L00_00173E60");
-extern f32   convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32   fast_arc_sin(f32) __asm__("func_001F9DF8");
-extern f32   fast_arc_tan_c(f32, f32) __asm__("func_001F9E90");
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern float fast_vec_dist(void *, void *);
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern int   D_L00_00173E40[];
@@ -1620,7 +1615,7 @@ extern float D_L00_001616DC __attribute__((sda));
 
 #include "rnc/overlay/shared/weapons/walloper_data/select_morphoray_target_and_adjust_aim.h"
 
-float absolute_float(float input) __asm__("func_001F99C0");
+float absolute_float(float input) __asm__("FUN_001f99c0");
 
 char *select_morphoray_target_and_adjust_aim(char  *self,
                                              float *position,
@@ -1673,16 +1668,16 @@ select_morphoray_target_and_adjust_aim(char *self, float *position, float *headi
             if (!candidate || !*(char **)(candidate + 0x24) ||
                 *(short *)(*(char **)(candidate + 0x24) + 0x46) != 5)
                 continue;
-            angle = fast_arc_tan_c(target[0] - position[0], target[1] - position[1]);
+            angle = fast_arc_tan(target[0] - position[0], target[1] - position[1]);
             distance = vector_distance(position, target);
-            elevation = fast_arc_tan_c(distance, target[2] - position[2]);
+            elevation = fast_arc_tan(distance, target[2] - position[2]);
             headingError = fast_difference_between_rotations(*heading, angle);
             distance = fast_vec_dist(position, target);
             if (distance < 2.5f) {
                 float toward;
                 char *close_range_hero_base = ((char *)&hero);
                 moby = *(char **)(close_range_hero_base + 0x2080);
-                toward = fast_arc_tan_c(
+                toward = fast_arc_tan(
                     *(float *)(candidate + 0x10) - *(float *)(close_range_hero_base + 0x80),
                     *(float *)(candidate + 0x14) - *(float *)(close_range_hero_base + 0x84));
                 if (fast_difference_between_rotations(moby->rot.z, toward) < 1.0471976f &&
@@ -1789,7 +1784,6 @@ typedef struct Voice {
 extern unsigned char D_00141680_r[] __asm__("D_00141680");
 extern f32           vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern float         D_0015ED6C;
-extern float         fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern int           D_00141680;
 extern int           D_0015EEA4;
 extern float         morphoray_base_drain_rate_gp __asm__("D_L00_001616E0") __attribute__((sda));
@@ -1800,15 +1794,10 @@ extern int           transpose_rotation_matrix() __asm__("FUN_001fa2d8");
 extern int           FUN_L00_002223f8();
 extern int           draw_uniform_size_hud_stars() __asm__("FUN_L00_00236e50");
 extern int           FUN_L00_0024f7c8();
-extern s32           allocate_voice_for_target_entry() __asm__("func_0022DA68");
-extern s32           queue_animation_update() __asm__("func_001FF308");
-extern s32           truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern void          copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 extern void          fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void          scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 extern void          tick_countdown_32_c(s32 *) __asm__("func_001F9740");
 extern void          transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void          transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 int                  allocate_packed_color_point_light_slot(void *v,
                                                             float a,
                                                             float b,
@@ -2103,8 +2092,6 @@ typedef struct {
 } __attribute__((aligned(16))) V_t;
 
 extern unsigned char D_0013F5E0_r[] __asm__("D_0013F5E0");
-extern f32           fast_cos(f32) __asm__("func_001F9DC8");
-extern f32           fast_sin(f32) __asm__("func_001F9DE0");
 extern f32           vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 extern float         D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
 extern signed char   D_L00_00161763;
@@ -3220,8 +3207,6 @@ extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
-extern f32 fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern s32 FUN_001efa68_c(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 
@@ -3503,7 +3488,6 @@ extern void  func_001F9BD8_2C0CF8(void *, void *, void *) __asm__("FUN_001f9a10"
 extern void  func_001F9C30_2C0CF8(void *, void *, float) __asm__("FUN_001f9a68");
 extern float func_001F9CE8_2C0CF8(void *) __asm__("FUN_001f9b20");
 extern void  func_L00_001FF4B0_2C0CF8(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 extern void  func_L00_002C0B18_2C0CF8(
      void *a, void *b, int n, int c, int d, int e, float g, int f) __asm__("FUN_L00_002bf810");
 extern int  func_L00_001EFFF0_2C0CF8(void *, void *, int, void *, int) __asm__("FUN_001efa68");

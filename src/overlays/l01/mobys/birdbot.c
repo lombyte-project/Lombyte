@@ -10,6 +10,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
@@ -165,7 +166,6 @@ typedef struct {
     Emitter *vars;
 } EmitterMoby;
 
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void create_spark_particle(void *,
                                   void *,
                                   f32,
@@ -719,8 +719,6 @@ extern float D_L01_0015F580[] MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float compute_interpolated_record_value(void *);
-extern float fast_cos(float);
-extern float fast_sin(float);
 extern float probe_ground_height(void *, int, float);
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int   cutscene_active __asm__("D_L01_0015F404");
@@ -730,7 +728,6 @@ extern int   collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int   FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int   select_birdbot_path_node(void *, int *) __asm__("FUN_L01_002e6790");
 extern int   scale_game_frames(int);
-extern int   fast_dec_timer(void *) __asm__("func_001F9740");
 extern short birdbot_projectile_speed_gp __asm__("D_L01_00161950") __attribute__((sda));
 extern short birdbot_path_speed_scale_gp __asm__("D_L01_00161954") __attribute__((sda));
 extern short birdbot_path_entry_animation_speed_gp __asm__("D_L01_0016195C") __attribute__((sda));
@@ -775,7 +772,6 @@ extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0")
 extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void FUN_L01_0026d930_u(char *p) __asm__("FUN_L01_0026d930");
 extern void set_range_centered_on_value(char *arg, float value) __asm__("FUN_L01_0026eff8");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
@@ -1066,7 +1062,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         }
         if (birdbot_vars->w1C8 == 0 && birdbot_vars->w1C4 != -1) {
             jet_end_mount(0);
-            hero_set_state(HERO_STATE_IDLE, 1);
+            l01_hero_set_state(HERO_STATE_IDLE, 1);
             cutscene_active = 0;
             birdbot_vars->w1C4 = -1;
         }
@@ -1079,7 +1075,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             if (birdbot_vars->w1C4 != -1) {
                 LevelCuboid *p;
 
-                hero_set_state(0x1F, 0);
+                l01_hero_set_state(0x1F, 0);
                 p = &l01_cuboids[birdbot_vars->w1C4];
                 jet_mount(&p->pos, &p->rot, 0, 0, 0);
                 cutscene_active = 1;
@@ -1758,10 +1754,7 @@ extern u8        D_L01_00161A80[] MACRO_ADDR;
 
 extern s32  rand() __asm__("FUN_001160d8");
 extern f32  FUN_L04_001f1978(f32);
-extern int  fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern f32  fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern f32  fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32  fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32  fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32  FUN_0020c9e0(void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -3493,7 +3486,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                 }
                 bomber_jet_moby->flags &= 0xFFBE;
                 if (gunship_vars->cutscene_camera != -1) {
-                    hero_set_state(0x72, 0);
+                    l01_hero_set_state(0x72, 0);
                     jet_mount(&l01_cuboids_macro[gunship_vars->cutscene_camera].pos,
                               &l01_cuboids_macro[gunship_vars->cutscene_camera].rot,
                               0,
@@ -3507,7 +3500,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
             } else if (gunship_vars->cutscene_timer != -1) {
                 if (fast_dec_timer_s16(&gunship_vars->cutscene_timer)) {
                     jet_end_mount(0);
-                    hero_set_state(0, 1);
+                    l01_hero_set_state(0, 1);
                     cutscene_active = 0;
                     level_moby_killed[current_level_index_macro]
                                      [(short)bomber_jet_moby->uid >> 5] |=
@@ -3693,19 +3686,16 @@ typedef struct {
 } HoverMoby;
 
 #include "rnc/overlay/l01/mobys/birdbot_globals.h"
-#include "rnc/math/fast_math.h"
 
 extern f32 water_lily_spring_velocity_adjustment_scale_gp __asm__("D_L01_00161BF0")
     __attribute__((sda));
-extern f32   water_lily_spring_damping_gp __asm__("D_L01_00161BF4") __attribute__((sda));
-extern f32   water_lily_hero_separation_radius_gp __asm__("D_L01_00161BF8") __attribute__((sda));
-extern f32   water_lily_max_horizontal_speed_gp __asm__("D_L01_00161BFC") __attribute__((sda));
-extern f32   water_lily_collision_radius_gp __asm__("D_L01_00161C00") __attribute__((sda));
-extern f32   spring_axis_to(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L01_002f81c8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern void  FUN_L00_00258490(void *, void *, void *, s32, f32, f32, f32, f32);
-extern f32   resolve_camera_surface_height(void *, s32) __asm__("FUN_002135f0");
+extern f32  water_lily_spring_damping_gp __asm__("D_L01_00161BF4") __attribute__((sda));
+extern f32  water_lily_hero_separation_radius_gp __asm__("D_L01_00161BF8") __attribute__((sda));
+extern f32  water_lily_max_horizontal_speed_gp __asm__("D_L01_00161BFC") __attribute__((sda));
+extern f32  water_lily_collision_radius_gp __asm__("D_L01_00161C00") __attribute__((sda));
+extern f32  spring_axis_to(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L01_002f81c8");
+extern void FUN_L00_00258490(void *, void *, void *, s32, f32, f32, f32, f32);
+extern f32  resolve_camera_surface_height(void *, s32) __asm__("FUN_002135f0");
 
 void water_lily_update(HoverMoby *m) __asm__("FUN_L01_002f8268");
 
@@ -3826,7 +3816,6 @@ SteamColors D_L01_00161C08 = {
 };
 
 extern SteamColors l01_rising_particle_variant_indices __asm__("D_L01_00161C18");
-extern s32         fast_dec_timer(void *) __asm__("FUN_001f9740");
 extern void
 spawn_debris_chunk(void *, void *, u32, s32, f32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L00_0026bed0");
@@ -4121,7 +4110,7 @@ void falling_rock_update(CapMoby *falling_rock) {
     case FALLING_ROCK_STATE_FALLEN:
         if (falling_rock_vars->wait == 0 && falling_rock_vars->music != -1) {
             jet_end_mount(0);
-            hero_set_state(HERO_STATE_IDLE, 1);
+            l01_hero_set_state(HERO_STATE_IDLE, 1);
             cutscene_active = 0;
             falling_rock_vars->music = -1;
         }

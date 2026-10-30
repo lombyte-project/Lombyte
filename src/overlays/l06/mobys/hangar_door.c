@@ -559,7 +559,7 @@ void hangar_door_update(char *door_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002DB0E0), where it is exact; names translated to the US level program. */
 
-extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
+extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 
 void update_moby_position_interpolation(unsigned char *moby) __asm__("FUN_L06_002d9d10");
 
@@ -1091,10 +1091,8 @@ extern void          update_drawbridge_segment_transforms(Moby *) __asm__("FUN_L
 extern float         func_00214D28_2F69D0(float *, float, float) __asm__("FUN_00213ed8");
 extern int           func_0022ED80_2F69D0(int, int, Moby *) __asm__("FUN_0022da68");
 extern void          jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern int  func_L00_0028EB98_2F69D0(Moby *, int) __asm__("FUN_L00_0028d8c0");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
+extern int           func_L00_0028EB98_2F69D0(Moby *, int) __asm__("FUN_L00_0028d8c0");
+extern void          release_voice_slot(int) __asm__("FUN_0022d798");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern int  help_request(int, int) __asm__("FUN_L00_00203908");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -1438,7 +1436,7 @@ extern int   current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern int   D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern float approach_value(float *, float, float);
+extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_vec_dist(void *, void *);
 extern int   collision_line(void *, void *, int, void *, void *);
 extern unsigned int   fast_tween_color(unsigned int, unsigned int, float) __asm__("FUN_001fa6e0");
@@ -1925,9 +1923,6 @@ typedef struct {
     f32   push[4]; /* 0x30 */
 } SnapperBite_91A8;
 
-extern f32   approach_value(f32 *, f32, f32);
-extern f32   random_angle_radians(void) __asm__("func_00213308");
-extern f32   random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_c2 __asm__("D_0015ED6C");
 extern float D_0015ED70;
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -1942,7 +1937,6 @@ extern int   D_L06_00161EE0 __attribute__((sda));
 extern int   collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int   FUN_L00_0024f7c8();
 extern int   FUN_L00_00259740();
-extern int   is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern void
       resolve_point_path_segment_xy_clearance(f32, s32, void *, void *) __asm__("FUN_L00_00261d78");
 f32   compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
@@ -2695,7 +2689,6 @@ extern int   D_0013D505; /* no foreign declaration */
 extern int   D_L06_0015FFD8_c2 __asm__("D_L06_0015FFD8");
 extern int   D_L06_0016A010[];
 extern int   FUN_L00_00263d40_c() __asm__("FUN_L00_00263d40");
-extern s32   queue_animation_update() __asm__("func_001FF308");
 extern short D_L06_00161EF0 __attribute__((sda));
 extern short D_L06_00161EF4 __attribute__((sda));
 extern f32   alien_queen_movement_acceleration_gp __asm__("D_L06_00161EFC") __attribute__((sda));
@@ -3377,7 +3370,6 @@ typedef struct {
 extern f32 alien_queen_orbit_speed_gp __asm__("D_L06_00161EF8") __attribute__((sda));
 extern f32
 approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
-extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 /* Circles its centre point on the side away from the hero (at most 45 degrees per step), faces its focus moby, moves while the hero is within 16 units and snaps to the ground. */
 void update_alien_queen_orbit_movement(struct Moby *moby) __asm__("FUN_L06_002fbc88");

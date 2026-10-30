@@ -947,7 +947,7 @@ extern unsigned short *l15_moby_group_member_lists[] __asm__("D_L15_001ABE40");
 extern float           D_L15_0015F580[] MACRO_ADDR;
 extern char           *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void  update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
-extern float scale_time(float) __asm__("FUN_L15_001f8648");
+extern float FUN_L15_001f8648(float);
 extern int   FUN_L00_00257b90(int, int);
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 extern void  moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
@@ -991,8 +991,8 @@ void construction_arm_update(struct Moby *moby) {
     switch (moby->state) {
     case CONSTRUCTION_ARM_INITIALIZE:
         arm_vars->timer = truncate_float_to_s32(
-            random_float_between(scale_time(construction_arm_wait_time_min_gp * 60.0f),
-                                 scale_time(construction_arm_wait_time_max_gp * 60.0f)));
+            random_float_between(FUN_L15_001f8648(construction_arm_wait_time_min_gp * 60.0f),
+                                 FUN_L15_001f8648(construction_arm_wait_time_max_gp * 60.0f)));
         *(int *)&arm_vars->yaw_velocity = arm_vars->side = *(int *)&arm_vars->yaw = 0;
         moby->update_dist = 0xff;
         moby->state = 1;
@@ -1081,8 +1081,8 @@ void construction_arm_update(struct Moby *moby) {
         break;
     case CONSTRUCTION_ARM_WAIT_FOR_EXIT_ANIMATION:
         if (moby->prev_seq == arm_vars->side * 2 + 3 && (moby->anim_flags & 2)) {
-            minimum = scale_time(construction_arm_wait_time_min_gp * 60.0f);
-            maximum = scale_time(construction_arm_wait_time_max_gp * 60.0f);
+            minimum = FUN_L15_001f8648(construction_arm_wait_time_min_gp * 60.0f);
+            maximum = FUN_L15_001f8648(construction_arm_wait_time_max_gp * 60.0f);
             arm_vars->timer = truncate_float_to_s32(random_float_between(minimum, maximum));
             duration = scale_game_frames(6);
             blend_moby_animation(moby, 0, 0, duration);
@@ -1890,13 +1890,10 @@ void helicopter_update(struct Moby *moby) {
 /* Steps a moby's countdown from a helper's output, then aims it at its target. */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_0029C1D0.c: func_L15_002C7C20), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("func_001F9DC8");
-extern float fast_sin(float) __asm__("func_001F9DE0");
 extern int
 hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-float       absolute_float(float input) __asm__("func_001F99C0");
 
 void process_helicopter_hits(struct Moby *moby) {
     int   hit_reaction_status;
@@ -2105,15 +2102,12 @@ extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g)
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float
 compute_ultramech_flocking_steering_point(void *, void *, float) __asm__("FUN_L15_002cf110");
-extern float fast_cos(float);
-extern float fast_sin(float);
-extern int   FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
-extern int   sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__("FUN_L00_00259d08");
+extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
+extern int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__("FUN_L00_00259d08");
 extern int   mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int   is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int   rand(void);
-extern int   scale_game_frames(int);
 extern short ultramech_path_horizontal_speed_gp __asm__("D_L15_00161B14") __attribute__((sda));
 extern short ultramech_path_gravity_gp __asm__("D_L15_00161B18") __attribute__((sda));
 extern short ultramech_projectile_speed_gp __asm__("D_L15_00161B20") __attribute__((sda));
@@ -2134,7 +2128,6 @@ extern void  FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void  emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void  process_ultramech_hits_and_update_target(void *) __asm__("FUN_L15_002d0fa8");
 extern void  noop_main_callback(void *, void *) __asm__("func_001E93E8");
-extern void  transform_vector_by_basis(void *, void *, void *);
 extern char *func_L10_002CD578_v(void *vel, float scale, void *pos, int a, int b, int c) __asm__("FUN_L10_002cc1b8");
 
 void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");

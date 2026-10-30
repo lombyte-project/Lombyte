@@ -327,7 +327,7 @@ void update_hero_blink_and_gold_weapon_tint(void) {
 }
 
 extern int  func_L00_001F10E0_2cd48(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int  hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
+extern int  l01_hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 
 void update_hero_ground_material_effects(void) {
@@ -374,7 +374,7 @@ void update_hero_ground_material_effects(void) {
         if (q->state.current != 0x7B) {
             if (func_L00_001F10E0_2cd48(q->capsule_radius + 0.03f, &q->motion.body_center, 2, 0)) {
                 if (collision_hit_material() == 0xB) {
-                    hero_set_state(0x7B, 1);
+                    l01_hero_set_state(0x7B, 1);
                     return;
                 }
             }
@@ -409,7 +409,7 @@ void update_hero_ground_material_effects(void) {
         if (q->selector_4 != 0 && q->grounded_frames != 0) {
             x = q->state.control_mode;
             if (x != 0x10 && x != 0x14 && x != 7) {
-                hero_set_state(0x31, 1);
+                l01_hero_set_state(0x31, 1);
                 return;
             }
         }
@@ -424,7 +424,7 @@ void update_hero_ground_material_effects(void) {
                         0.0f) {
                         if (sink_check_hero->motion.displacement.f[2] < 0.0f) {
                             exit_hero_vehicle_mode_if_mode_three();
-                            hero_set_state(HERO_STATE_SINK, 1);
+                            l01_hero_set_state(HERO_STATE_SINK, 1);
                         }
                     }
                 }
@@ -761,7 +761,7 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
             *(unsigned short *)(hero_state_base + 0x22A8);
         *(int *)(hero_state_base + 0x22A8) = *(int *)(hero_state_base + 0x22AC);
     }
-    hero_set_state(initial_state, 1);
+    l01_hero_set_state(initial_state, 1);
 }
 
 #include "qcopy.h"
@@ -804,7 +804,7 @@ void exit_hero_vehicle_mode_and_restore_moby(void) {
         if (cutscene_mode == 6)
             return;
     }
-    hero_set_state(HERO_STATE_IDLE, 1);
+    l01_hero_set_state(HERO_STATE_IDLE, 1);
 }
 
 extern s32 D_0013DF88[] __asm__("D_0013DF88");
@@ -881,11 +881,11 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
         if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
             id = 0x80;
         call_ret:
-            hero_set_state(id, 1);
+            l01_hero_set_state(id, 1);
             return 1;
         }
         if (G.state.control_mode == 0x16) {
-            hero_set_state(0x6D, 1);
+            l01_hero_set_state(0x6D, 1);
             G.motion.resolved_velocity_z.f[2] = frame_time * 7.0f;
             return 1;
         }
@@ -895,7 +895,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
                 id = 0x82;
                 goto call_ret;
             }
-            hero_set_state(0x75, 1);
+            l01_hero_set_state(0x75, 1);
         } else if (G.state.control_mode == 0x11) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
@@ -909,7 +909,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
                     allocate_hero_voice_for_entry(0x1C, 0);
                 }
             }
-            hero_set_state(0x76, 1);
+            l01_hero_set_state(0x76, 1);
         } else if (G.state.control_mode == 3) {
             mob = (u8 *)G.damage_source_moby;
             if (mob != 0) {
@@ -918,9 +918,9 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
                     goto call_ret;
                 }
             }
-            hero_set_state(HERO_STATE_HURT, 1);
+            l01_hero_set_state(HERO_STATE_HURT, 1);
         } else {
-            hero_set_state(HERO_STATE_HURT, 1);
+            l01_hero_set_state(HERO_STATE_HURT, 1);
         }
         cached_frame_time = frame_time;
         horizontal_scale = cached_frame_time * 5.7f;
@@ -935,7 +935,7 @@ s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
         }
         break;
     case 3:
-        hero_set_state(0x56, 1);
+        l01_hero_set_state(0x56, 1);
         hero_knockback(&motion_delta, flag, frame_time * 5.0f, frame_time * 2.4f);
         break;
     }
@@ -1579,10 +1579,10 @@ void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 void request_hero_idle_state_for_vehicle_mode(void) {
     switch ((unsigned char)D_0013E533[0x2EC1]) {
     case HERO_VEHICLE_MODE_ON_FOOT:
-        hero_set_state(HERO_STATE_IDLE, 1);
+        l01_hero_set_state(HERO_STATE_IDLE, 1);
         break;
     case 3:
-        hero_set_state(0x53, 1);
+        l01_hero_set_state(0x53, 1);
         break;
     }
 }
@@ -1602,7 +1602,7 @@ void select_hero_locomotion_state(void) {
     hero_ptr->unk2284 = 0;
     stick_target(0, 1.0f);
     if (pad_held & 0xA) {
-        hero_set_state(HERO_STATE_CROUCH, 0);
+        l01_hero_set_state(HERO_STATE_CROUCH, 0);
         set_hero_animation(0xD, 2, -2.0f);
         hero_queue_sequence(3, 0x12);
         return;
@@ -1610,10 +1610,10 @@ void select_hero_locomotion_state(void) {
     run_hero = &hero;
     if (0.3f < run_hero->stick_magnitude && run_hero->move_lock_timer == 0) {
         if (run_hero->on_ice_ground != 0 || run_hero->wading != 0) {
-            hero_set_state(HERO_STATE_RUN, 1);
+            l01_hero_set_state(HERO_STATE_RUN, 1);
             return;
         }
-        if (hero_set_state(HERO_STATE_RUN, 0)) {
+        if (l01_hero_set_state(HERO_STATE_RUN, 0)) {
             run_hero->state.step = 1;
             run_frames_or_idle_selector = scale_game_frames(8);
             if (scale_game_frames(5) < run_hero->rail_land_frames)
@@ -1627,7 +1627,7 @@ void select_hero_locomotion_state(void) {
     if ((frame_time * 3.0f < stop_idle_hero->motion.forward_speed &&
          scale_game_frames(3) < stop_idle_hero->rail_land_frames) ||
         stop_idle_hero->state.current == 0x10) {
-        if (hero_set_state(HERO_STATE_STOP, 0)) {
+        if (l01_hero_set_state(HERO_STATE_STOP, 0)) {
             set_hero_animation(5, 0, -1.0f);
             FUN_L00_0025f730_242198(&hero.motion.momentum, frame_time * 5.0f);
         }
@@ -1635,7 +1635,7 @@ void select_hero_locomotion_state(void) {
     }
     if (scale_game_frames(12) < stop_idle_hero->rail_land_frames ||
         (stop_idle_hero->anim_flags & 2)) {
-        if (hero_set_state(HERO_STATE_IDLE, 0)) {
+        if (l01_hero_set_state(HERO_STATE_IDLE, 0)) {
             if (get_hero_idle_animation_index(0) == 0x54) {
                 run_frames_or_idle_selector = get_hero_idle_animation_index(0);
                 set_hero_animation(run_frames_or_idle_selector, 0, (f32)scale_game_frames(15));

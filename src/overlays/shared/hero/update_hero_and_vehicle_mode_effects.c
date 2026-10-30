@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/interpolation.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
@@ -24,11 +25,9 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_001FFED0), where it is exact; names translated to the US level program. */
 
-extern f32           fast_sin(f32) __asm__("func_001F9DE0");
 extern float         D_L15_0017C0EC, D_L15_0017C14C;
 extern int           D_L15_0015F5B0;
 extern int           D_L15_0015F5CC;
-extern s32           scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32           D_0015EE18;
 extern unsigned char D_0013D4DC[];
 extern unsigned char D_0013F350[];
@@ -364,8 +363,6 @@ typedef struct {
 extern P_20a328 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern X_20a328 D_L15_00174440_lui __asm__("D_L15_00174440") NOT_SDA;
 extern f32      gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
-extern f32      fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32      fast_sin(f32) __asm__("FUN_001f9de0");
 extern void     fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void     FUN_001f9a10_20a328(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int      collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
@@ -443,7 +440,6 @@ void adjust_hero_planar_velocity_from_probes(int force) {
 #include "qcopy.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/math/fast_math.h"
 
 typedef struct {
     s32 w0;
@@ -455,7 +451,6 @@ extern u8  D_0013D4E2_lui __asm__("D_0013D4E2") NOT_SDA;
 
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
-extern s32  scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32  pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
 extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");

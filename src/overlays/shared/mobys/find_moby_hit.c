@@ -1,6 +1,8 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "rnc/overlay/moby_hit.h"
+#include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 
 #include "asm.h"
 #include "sda.h"
@@ -87,8 +89,6 @@ void make_hit_descriptor(char *hit_descriptor,
 }
 
 #include "eetypes.h"
-#include "rnc/math/fast_math.h"
-#include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby.h"
 
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -324,7 +324,6 @@ extern int D_L00_0015F434 __asm__("D_L00_0015F434");
 #include "rnc/overlay/collision.h"
 
 extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
 
 extern E_259fe8_00259fe8 D_L00_0016E080[] NOT_SDA;
 void                     jet_animate(unsigned char *m, float r) __asm__("FUN_L00_00259fe8");
@@ -952,8 +951,6 @@ float interpolate_angle(float start_angle, float target_angle, float blend_fract
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_0025C7F0), where it is exact; names translated to the US level program. */
-
-float absolute_float(float input) __asm__("func_001F99C0");
 
 void advance_damped_scalar_velocity(float *velocity,
                                     float  rate,

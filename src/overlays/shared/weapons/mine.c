@@ -18,6 +18,7 @@
 #include "rnc/weapons/suck_aim.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
 #include "rnc/mobys/moby.h"
+#include "rnc/math/fast_math.h"
 
 /* Mine (moby class 74) update: falls and bounces, sticks to what it hits, homes on a nearby target and explodes. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002AB910.c: func_L00_002AB910), where it is exact; names translated to the US level program. */
@@ -169,8 +170,6 @@ extern E D_0013E520;
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
 extern char *mine_debris(char *, char *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 extern s16   D_L00_001B07B0[];
-extern f32   fast_cos(f32) __asm__("func_001F9DC8");
-extern f32   fast_sin(f32) __asm__("func_001F9DE0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float step_rotation_toward_target(float, float, float) __asm__("FUN_L00_00200510");
 extern float FUN_L00_00259710(void *);
@@ -191,7 +190,6 @@ extern int predict_mine_impact(W910 *, M910 *, int) __asm__("FUN_L00_002aa2a8");
 extern s32 D_L00_00166DC0[];
 extern s32 D_L00_00173E40[0x1C];
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32 D_L00_001612D0_gp __asm__("D_L00_001612D0") __attribute__((sda));
 extern s32 D_L00_001612D8_gp __asm__("D_L00_001612D8") __attribute__((sda));
 extern short          mine_force_burst __asm__("D_L00_001613D0") __attribute__((sda));
@@ -233,7 +231,6 @@ extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f5
 extern void spawn_gravity_floor_burst_particle(
     void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002738e8");
 extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void copy_matrix3x4(void *, void *);
@@ -1435,7 +1432,6 @@ extern float D_0015ED70_2ad410 __asm__("D_0015ED70");
 extern int   ray_hits(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int   FUN_L00_002603d0_2ad410(M910 *) __asm__("FUN_L00_002603d0");
 extern void  add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-extern void  fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 
 int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) __asm__("FUN_L00_002ad410");
 
@@ -1515,7 +1511,7 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
     }
     if (*(unsigned char *)((char *)&D_E910 + 0xa) && hero.state.current == 1) {
         float z = velocity.f[2];
-        fast_vec_scale(1.5f, &velocity, &velocity);
+        fast_vec_scale(&velocity, &velocity, 1.5f);
         velocity.f[2] = z / 1.5f;
     }
     hero_position.q = position.q;
@@ -1589,7 +1585,7 @@ int predict_throw_landing(LandingVars *v, M910 *thrown_moby, int mode) {
 keep_hit:
     v->normal.q = coll_hit_normal.q;
     fast_vec_sub(&previous, &v->landing, D_L00_00166DC0);
-    fast_vec_scale(0.95f, &previous, &previous);
+    fast_vec_scale(&previous, &previous, 0.95f);
     fast_vec_add(&v->landing, &previous, D_L00_00166DC0);
     return 1;
 return_zero:
@@ -1660,7 +1656,6 @@ extern unsigned char *D_L00_001B2080_2adb30[] __asm__("D_L00_001B2080");
 extern G910           D_G910 __asm__("D_0013F350");
 extern int            FUN_001f96f8_2adb30(int) __asm__("FUN_001f96f8");
 extern float          FUN_001f96b0_2adb30(float) __asm__("FUN_001f96b0");
-extern void           fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void           FUN_001f9a28_2adb30(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void           FUN_001f9a68_2adb30(void *, void *, float) __asm__("FUN_001f9a68");
 extern float          FUN_001f9ab0_2adb30(void *, void *) __asm__("FUN_001f9ab0");
@@ -2335,9 +2330,7 @@ extern float D_0015ED6C_2af5b8 __asm__("D_0015ED6C");
 extern float D_0015ED70_2af5b8 __asm__("D_0015ED70");
 void         fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 int          FUN_L00_0025c0e8_c(int, int) __asm__("FUN_L00_0025c0e8");
-int          scale_game_frames(int) __asm__("FUN_001f96f8");
 void         spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-void         fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void         debris_update(unsigned char *m) __asm__("FUN_L00_002af5b8");
 extern C_2af5b8 D_L00_00161438 NOT_SDA;
 
@@ -2909,7 +2902,6 @@ unsigned char                       *spawn_glow_particle_u8(void         *owner,
                                                             unsigned char green,
                                                             unsigned char blue,
                                                             unsigned char alpha) __asm__("FUN_L00_002ac910");
-extern int                           scale_game_frames(int) __asm__("FUN_001f96f8");
 extern short                         D_L00_001B0770[];
 extern unsigned char *D_L00_001B20DC NOT_SDA;
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);

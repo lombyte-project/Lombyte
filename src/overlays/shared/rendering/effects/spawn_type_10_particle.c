@@ -6,6 +6,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
@@ -166,7 +167,6 @@ unsigned char *spawn_type_52_particle(void *spawn_position,
 
 #include "qzero.h"
 #include "rnc/overlay/quad.h"
-#include "rnc/math/fast_math.h"
 #include "rnc/overlay/level_path.h"
 
 /* spawns a type-74 particle with transformed offset and velocity */

@@ -821,7 +821,6 @@ void draw_rocket_target_pulse_quad(struct Moby *m) {
 
 /* Moby update: hovers, drifts toward the player and plays its animations by state. */
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern float fast_cos(float) __asm__("func_001F9DC8");
 extern int   D_001413D0[];
 extern float D_0015EE70 __asm__("D_0015ED70");
 extern int   select_moby_combat_target(char *, char *, float) __asm__("FUN_L00_0025fcb8");
@@ -2972,7 +2971,6 @@ void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EB260), where it is exact; names translated to the US level program. */
 
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void  draw_electric_water_bolt_effect(char *) __asm__("FUN_L15_002d8710");
 extern void  FUN_L18_002ea1f8_u(struct Moby *) __asm__("FUN_L18_002ea1f8");
 void         spawn_explosion_burst(void *arg) __asm__("FUN_L18_002ea800");
@@ -3502,8 +3500,6 @@ extern V_ec290 D_L18_001D9CF0[];
 extern V_ec290 D_L18_001D9D00[2][20];
 extern V_ec290 D_L18_001D9FD0[];
 extern char    D_0013F5E0[];
-extern f32     random_angle_radians(void) __asm__("func_00213308");
-extern f32     random_float_between(f32, f32) __asm__("func_002132A8");
 extern float   D_L18_001677C0_c[] __asm__("D_L18_001677C0");
 extern float   D_L18_001D9F80[];
 extern float   D_L18_001DA110[];
@@ -3538,7 +3534,6 @@ extern short electric_bolt_side_arc_reset_frames_macro[] __asm__("D_L18_001620C8
 extern short
     electric_bolt_side_arc_timer_distance_references_macro[] __asm__("D_L18_001620D0") MACRO_ADDR;
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 unsigned char *
 FUN_L00_00272060(void *pos, int s, int color, int mode, int b, float *v, float x, float y, float z);

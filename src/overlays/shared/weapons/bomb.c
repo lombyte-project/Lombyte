@@ -30,6 +30,7 @@
 #include "rnc/mobys/animation/update_moby_animation_state.h"
 #include "rnc/game/fun_00213928.h"
 #include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
+#include "rnc/math/fast_math.h"
 
 /* Vars of a thrown moby, as ThrowVars in trespasser.c without its first 0x10 bytes. */
 typedef struct {
@@ -49,12 +50,8 @@ extern float D_0015ED70 MACRO_ADDR;
 extern CollisionHit     coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* coll_hit_2c8440's normal as a whole quadword (CollisionHit names only x/y/z) */
 extern Vec4 g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
-extern f32  fast_cos(f32) __asm__("FUN_001f9dc8"); /* cos */
-extern f32  fast_sin(f32) __asm__("FUN_001f9de0"); /* sin */
 extern void add_vector_xyz_2c8440(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
-extern s32  scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32  collision_line_2c8440(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern void FUN_00213508_2c8440(void *, s32, f32) __asm__("FUN_00213508");
 extern void FUN_L00_002c7df8_2c8440(void) __asm__("FUN_L00_002c7df8");
@@ -185,8 +182,6 @@ ret0:
     /* a second return 0 block, as in retail */
     return 0;
 }
-
-#include "rnc/math/fast_math.h"
 
 extern u8 D_0013E534 NOT_SDA;
 extern int           D_L00_0015FFE4;
@@ -529,8 +524,6 @@ extern s32          D_L00_00161854 __attribute__((sda));
 extern s32          D_L00_00161854_gp __asm__("D_L00_00161854") __attribute__((sda));
 extern u32          D_L00_00161840[1] __attribute__((sda));
 
-extern f32  fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32  fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32  FUN_L00_00257b90(s32, s32);
 extern void FUN_L00_00257470(void *, int, int);
 extern void set_moby_color(void *, u8, u8, u8) __asm__("FUN_L00_002502f0");
@@ -1273,13 +1266,11 @@ typedef int w128 __attribute__((mode(TI)));
 
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern char  collision_hit_point[] __asm__("D_L00_00173E60");
-extern f32   fast_vec_length(void *) __asm__("func_001F9AF0");
 extern float D_0015ED6C;
 extern Vec4  zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 extern float D_L00_00161890_gp __asm__("D_L00_00161890") __attribute__((sda));
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern int   collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern s32   scale_game_frames(s32) __asm__("func_001F96F8");
 
 #include "rnc/overlay/shared/weapons/bomb_data/spawn_homing_shot.h"
 
@@ -1476,7 +1467,6 @@ extern void  fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void  play_sound_2cb418(s32, s32, Moby *) __asm__("FUN_0022da68");
 extern s32   collide_line_2cb418(void *, void *, s32, s32, void *) __asm__("FUN_001efa68");
 extern s32   FUN_001f0b58_2cb418(void) __asm__("FUN_001f0b58");
-extern f32   fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void  add_vector_xyz_2cb418(void *, void *, void *) __asm__("FUN_001f9a10");
 
 extern f32 homing_shot_pitch_bias[2] __asm__("D_L00_00161894");
@@ -1765,7 +1755,6 @@ void clear_homing_shot_trail_and_spawn_end_effects(u8 *shot_moby, s32 enabled) {
 
 extern unsigned char D_0013E535_lui __asm__("D_0013E535") NOT_SDA;
 int                  FUN_001160d8_2cbf68(void) __asm__("FUN_001160d8");
-int                  scale_game_frames(int) __asm__("FUN_001f96f8");
 void                 update_entity(void *) __asm__("FUN_L00_00250df8");
 void                 copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
@@ -1830,7 +1819,6 @@ unsigned char *spawn_feather_moby(int unused, void *spawn_position, float *initi
 }
 
 void         FUN_001f9a10_2cc210(void *, void *, void *) __asm__("FUN_001f9a10");
-float        absolute_float(float) __asm__("FUN_001f99c0");
 int          FUN_001f96f8_2cc210(int) __asm__("FUN_001f96f8");
 extern float falling_moby_horizontal_velocity_scale_gp __asm__("D_L00_001618A8")
     __attribute__((sda));
@@ -2008,12 +1996,10 @@ extern int D_0015ED84    MACRO_ADDR;
 extern struct UsageStats item_usage __asm__("D_00141680");
 extern struct Moby      *FUN_L00_002cc360_c(
          float *, float *, struct Moby **, float, float, float) __asm__("FUN_L00_002cc360");
-extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
-extern int   get_ammo(int) __asm__("FUN_L00_00233e98");
-extern int   use_ammo(int, int) __asm__("FUN_L00_00233db8");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
-extern void  suck_draw_reticle(
-     struct Moby *, int, float, float, float *, int, int, float, int) __asm__("FUN_L00_001edf60");
+extern int  get_ammo(int) __asm__("FUN_L00_00233e98");
+extern int  use_ammo(int, int) __asm__("FUN_L00_00233db8");
+extern void suck_draw_reticle(
+    struct Moby *, int, float, float, float *, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern void           hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void           start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern void           add_2cc608(float *, void *, void *) __asm__("FUN_001f9a10");
@@ -2415,15 +2401,12 @@ typedef struct {
     int            i;
 } RocketHit;
 
-extern f32   fast_cos(f32) __asm__("func_001F9DC8");
-extern f32   fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED70;
 extern float FUN_L00_001ff430(void *);
 extern float FUN_L00_00258110(float *vel, float cur, float target, float k, float d, float max);
 extern s32   rand(void);
 extern s32   scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void  fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void  func_L00_0025F4A8_alt(void *,
                                    void *,
                                    void *,

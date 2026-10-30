@@ -49,13 +49,13 @@ enum DrekMissileState {
 /* State machine for the class 1355 moby: dispatches on moby state (0 init, 2 wander, 3 dive, 4 land). */
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002F0F78), where it is exact; names translated to the US level program. */
 
-extern f32   random_angle_radians(void) __asm__("func_00213308");
+extern f32   random_angle_radians(void) __asm__("FUN_00213308");
 extern float frame_time_macro[] __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_L18_001677C0[];
 extern float
 step_angle_toward_target(float *p, int n, float x, float y) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
+extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float D_L18_0015F580[] MACRO_ADDR;
 extern int   D_L18_0015F5C4;
 extern int   D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
@@ -63,7 +63,7 @@ int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_p
 
 extern int   update_drek_fight_missile_wander_movement(char  *moby,
                                                        float *vec) __asm__("FUN_L18_002f0120");
-extern s32   random_integer_below(s32) __asm__("func_00213260");
+extern s32   random_integer_below(s32) __asm__("FUN_00213260");
 extern short l18_drek_missile_roll_rate_degrees_gp __asm__("D_L18_00162210") __attribute__((sda));
 extern short D_L18_00162214_gp __asm__("D_L18_00162214") __attribute__((sda));
 extern short l18_drek_missile_dive_speed_gp __asm__("D_L18_00162218") __attribute__((sda));
@@ -97,7 +97,7 @@ void        update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby)
 extern void
 update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) __asm__("FUN_L18_002f0848");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int  func_0022ED80_2F0F78(int, int, int) __asm__("FUN_0022da68");
 
 void drek_fight_missile_update(struct Moby *moby) __asm__("FUN_L18_002efb88");

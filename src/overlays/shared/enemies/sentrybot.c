@@ -2457,7 +2457,6 @@ extern char                     *spawn_mode_controlled_rotating_alpha_fade_parti
 extern float D_0015ED6C          MACRO_ADDR;
 extern int                       D_L15_0015F5CC_macro __asm__("D_L15_0015F5CC") MACRO_ADDR;
 extern int charged_blast_removal_target __asm__("D_L15_00161484"); /* no foreign declaration */
-extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int allocate_packed_color_point_light_slot(float *pos,
                                                   float  radius,
                                                   float  intensity,

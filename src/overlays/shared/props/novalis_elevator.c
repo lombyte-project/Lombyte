@@ -29,7 +29,6 @@
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
-#include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
@@ -696,7 +695,7 @@ void bolt_crank_update(struct Moby *moby) {
                                 if (area_clear == 0) {
                                     goto done;
                                 }
-                                hero_set_state(HERO_STATE_CRANK, 1);
+                                l01_hero_set_state(HERO_STATE_CRANK, 1);
                                 jet_mount(D_L01_00167240,
                                           D_L01_00167240 + 0x10,
                                           3,
@@ -761,7 +760,7 @@ void bolt_crank_update(struct Moby *moby) {
         if ((pad_pressed_within(0x80, scale_game_frames(7), 0) != 0 &&
              scale_game_frames(0x3C) < hero.state_timer) ||
             crank->progress == 1.0f) {
-            hero_set_state(0, 1);
+            l01_hero_set_state(0, 1);
             if (crank->reusable != 0) {
                 moby->state = BOLT_CRANK_IDLE;
             } else if (crank->progress == 1.0f) {
@@ -1075,10 +1074,9 @@ s32 update_sand_mouse_fall_motion(void *ctx, struct Moby *movement_state) {
  * with a clear line of sight (or the blocker is the same kind of enemy). */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002E4620), where it is exact; names translated to the US level program. */
 
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int   collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern char  D_L01_00174340_h[] __asm__("D_L01_001742C0");
-extern int   func_L00_001EFFF0_t(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
+extern int  collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
+extern char D_L01_00174340_h[] __asm__("D_L01_001742C0");
+extern int  func_L00_001EFFF0_t(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 void *select_sand_mouse_spawn_target(void *moby,
                                      void *from,
@@ -1454,7 +1452,6 @@ extern void
 rig_probe_setup(void *, int, int *, float *, float *, int *) __asm__("FUN_L01_00263a28");
 extern void
 approach_w(struct Moby *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
-extern int  FUN_L01_0023cf98(int, int);
 extern int  step_mover_2e3f20(void *, void *, float *, float *) __asm__("FUN_L00_00259028");
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern void spawn_particle_2e3f20(
@@ -1600,7 +1597,7 @@ void sand_mouse_update(struct Moby *moby) {
                             hero_2e3f20->helper->state = 1;
                         }
                         *(void **)((char *)&mover_2e3f20 + 0x50) = moby;
-                        FUN_L01_0023cf98(0x1F, 0);
+                        l01_hero_set_state(0x1F, 0);
                         set_hero_animation(0, 0, (float)scale_game_frames(6));
                         if (sand_mouse_vars->parent != -1) {
                             ents_2e3f20[sand_mouse_vars->parent].command = 5;
@@ -1653,7 +1650,7 @@ void sand_mouse_update(struct Moby *moby) {
         }
         break;
     case SAND_MOUSE_BEGIN_FOLLOW_HERO:
-        FUN_L01_0023cf98(0, 1);
+        l01_hero_set_state(0, 1);
         moby->flags &= 0xFFBE;
         if (sand_mouse_vars->parent != -1) {
             ents_2e3f20[sand_mouse_vars->parent].flags &= 0xFFBE;
@@ -2338,7 +2335,7 @@ extern char *D_L01_0015FFD8;
 extern float D_L01_001619A0;
 extern float D_L01_001619A4;
 extern int   FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
-extern int   fast_tween_color(float, int, int);
+extern int   fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern int   fun_00213928(void *, void *, void *, int, int *, float *, int, int);
 extern short amoeboid_color_cycle_start_gp __asm__("D_L01_00161998") __attribute__((sda));
 extern short amoeboid_color_cycle_end_gp __asm__("D_L01_0016199C") __attribute__((sda));
@@ -2776,7 +2773,6 @@ extern f32 amoeboid_burst_input_motion_scale_max_gp __asm__("D_L01_00161A38") __
 
 extern f32  D_0015ED70;
 extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
-extern int  fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern f32  FUN_00220e20(f32) __asm__("FUN_001f96b0");
 
 void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {

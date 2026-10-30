@@ -31,12 +31,13 @@
 #include "rnc/overlay/shared/props/trackdrive_left.h"
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
+#include "rnc/math/random.h"
+#include "rnc/ui/help/try_set_help_message.h"
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002B9438), where it is exact; names translated to the US level program. */
 
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int   spawn_moby_offset_effect(char *) __asm__("FUN_L08_00279f00");
-extern void  copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
+extern int  spawn_moby_offset_effect(char *) __asm__("FUN_L08_00279f00");
+extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 #include "rnc/overlay/l08/mobys/bomb_globals.h"
 
@@ -349,12 +350,10 @@ extern CollisionHit     D_L08_00174640;
 extern blk16            l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868");
 extern float D_0015ED6C MACRO_ADDR;
 extern float            D_0015ED70_gp __asm__("D_0015ED70") MACRO_ADDR;
-extern f32              random_float_between(f32, f32) __asm__("func_002132A8");
 extern float            D_L08_00174660[];
 extern int              collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int              coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern float bomb_downward_acceleration_gp __asm__("D_L08_00161860") __attribute__((sda));
 extern void  FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void  jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
@@ -1350,7 +1349,6 @@ void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D6C58), where it is exact; names translated to the US level program. */
 
-extern f32   random_angle_radians(void) __asm__("func_00213308");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
 #include "rnc/overlay/l08/mobys/bomb_data/spawn_bomber_tank_joint_particles_2.h"
@@ -1475,7 +1473,6 @@ typedef struct {
 } Blk_7010;
 
 extern char  *D_L08_001600EC;
-extern float  fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern short *D_L08_001AC040[];
 extern void
 initialize_moby_launch_motion(void *, int, void *, void *, int) __asm__("FUN_L05_00318648");
@@ -1718,9 +1715,7 @@ extern int   water_entry_plane_initialized_gp __asm__("D_L08_00161970") __attrib
 extern float water_entry_plane_data[4] __asm__("D_L08_001D7060");
 extern f32   D_L08_0015F580[] MACRO_ADDR;
 extern void  FUN_L08_002da0d0(void *);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int   FUN_L00_00257b90(int, int);
-extern int   random_integer_below(int) __asm__("FUN_00213260");
 extern void  spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
 extern unsigned char *
 spawn_splash(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");

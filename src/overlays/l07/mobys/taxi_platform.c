@@ -40,7 +40,7 @@ void purple_ship_update(char *purple_ship_moby) {
 /* spawns a moby of class 0x370 at a position moving along a direction */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030C918), where it is exact; names translated to the US level program. */
 
-extern char *create_moby(int);
+extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void
 make_hit_descriptor(char *arg, int a, int b, void *src, float scale) __asm__("FUN_L00_00259888");
@@ -95,7 +95,6 @@ unsigned char *spawn_machinegun_turret_projectile(void  *spawn_position,
 
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *spawn_bombomatic_projectile(char *spawn_position,
                                   char *initial_velocity,
@@ -501,7 +500,7 @@ extern char *D_L07_001B0530[];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int   is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
-extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
+extern int   allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern int   hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void  set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void  update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -1625,12 +1624,10 @@ extern int water_shared_byte_clear_enabled __asm__("D_L07_00161B38")
 extern int            water_grid_geometry_descriptors[][4] __asm__("D_L07_00204700");
 extern int            pool_splash() __asm__("FUN_L00_002a3ec8");
 extern int            pool_init_tiles() __asm__("FUN_L01_002b7a48");
-extern int            is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32            random_integer_below(s32) __asm__("func_00213260");
 extern unsigned short l07_water_grid_saved_control_values[] __asm__("D_L07_00204680");
 extern void           approach_value(f32 *, f32, f32) __asm__("func_00213ED8");
 extern void           enqueue_callback_list_1_c(void *, void *) __asm__("FUN_001f4600");
-extern void           mark_moby_for_removal(void *) __asm__("func_0020C828");
 int                   matches_first_moby_in_group(int id) __asm__("FUN_L07_00281ef8");
 void                  FUN_L01_0026e090(int i, int v);
 void                  set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
@@ -2055,8 +2052,6 @@ void update_linked_state_sliding_platform(struct Moby *moby) {
 
 char *spawn_bombomatic_projectile(char *pos, char *vec, int c, short d) __asm__("FUN_L07_0030ba90");
 extern char              *FUN_L00_0025a420(void *, int, int);
-extern f32                random_angle_radians(void) __asm__("func_00213308");
-extern f32                random_float_between(f32, f32) __asm__("func_002132A8");
 extern float              D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_0015ED70   MACRO_ADDR;
 extern float              D_L07_0015F580[] MACRO_ADDR;

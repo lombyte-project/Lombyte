@@ -450,7 +450,6 @@ extern char D_0013FDE8[];
 extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float D_0015ED6C MACRO_ADDR;
 extern float D_0015ED70 MACRO_ADDR;
-extern float            fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int              D_0015ED84; /* no foreign declaration */
 extern int              FUN_L00_002323b8();
 extern int              FUN_L02_0022b728();

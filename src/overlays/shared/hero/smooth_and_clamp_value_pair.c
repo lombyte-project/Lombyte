@@ -9,6 +9,7 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "asm.h"
 #include "rnc/game/usage_stats.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
@@ -118,7 +119,6 @@ extern int     D_0015ED8C;
 extern int     D_0015ED90;
 extern int     D_0015ED94;
 extern ItemDef D_L05_00179F20[];
-extern int     scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int     hero_is_in_special_state() __asm__("FUN_L00_0020d568");
 extern void    clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void    replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
@@ -532,7 +532,6 @@ extern float D_L05_00174268 NOT_SDA;
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void
 hero_get_collision_ray_endpoints(void *, void *, int, float, float) __asm__("FUN_L00_002126b8");
-float absolute_float(float input) __asm__("FUN_001f99c0");
 
 int try_apply_hero_water_and_ground_transitions(void) __asm__("FUN_L05_002515d0");
 
@@ -645,7 +644,6 @@ typedef struct {
     int  f2C[5];
 } PVar;
 
-extern float          fast_difference_between_rotations(float, float) __asm__("func_001FA688");
 extern int            D_0015ED84; /* no foreign declaration */
 extern int            FUN_L00_001fefc8(void *);
 extern int            FUN_L00_0020d498(int);
@@ -1156,7 +1154,6 @@ extern SndPair l05_hoverboard_trick_animation_frame_bounds[] __asm__("D_L05_0017
 extern float
 predict_hero_trajectory_intercept_time(float a, float b, float c) __asm__("FUN_L00_00232b90");
 extern int  select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
-extern s32  scale_game_frames(s32) __asm__("func_001F96F8");
 extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 
 void update_hero_hoverboard_trick_animations(void) __asm__("FUN_L05_00253850");
@@ -1228,7 +1225,6 @@ void update_hero_hoverboard_trick_animations(void) {
     }
 }
 
-extern s32  scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32  fast_sin(f32) __asm__("FUN_001f9de0");
 extern s32  D_L00_0015F5CC __asm__("D_L00_0015F5CC");
@@ -1424,7 +1420,6 @@ void update_hero_hoverboard_trick_score(void) {
 /* Finds the nearest path node ahead of the hero (behind the facing test) and returns its position and heading. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254B38), where it is exact; names translated to the US level program. */
 
-float       absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F3D0[];
 
 void compute_hero_hoverboard_respawn_transform(float *out,
@@ -1533,7 +1528,6 @@ extern int           D_0015EE38_macro __asm__("D_0015EE38") MACRO_ADDR;
 extern int           D_0015EE3C_macro __asm__("D_0015EE3C") MACRO_ADDR;
 extern int           freeze_stats_time_ref_macro[2] __asm__("D_0015EE58") MACRO_ADDR;
 extern int           freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") MACRO_ADDR;
-extern float         fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern void          set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void          update_resource_counter(void) __asm__("FUN_001ff768");
 
@@ -1985,7 +1979,6 @@ continue_fall:
 extern char hero_hoverboard_animation_link_table[] __asm__("D_L05_0017C068");
 
 #include "rnc/data_labels.h"
-#include "rnc/math/fast_math.h"
 
 void hero_update_linked_target(void) __asm__("FUN_L05_0025b538");
 

@@ -8,6 +8,7 @@
 #include "rnc/globals.h"
 #include "sda.h"
 #include "rnc/math/random.h"
+#include "rnc/math/fast_math.h"
 
 extern HeroTableEntry70   idle_fidgets[] __asm__("D_L00_00179890") NOT_SDA;
 extern s32 D_L00_00179AB0 NOT_SDA;
@@ -236,7 +237,6 @@ int hero_handle_jump_press(void) {
 typedef unsigned int u128_229910_00229910 __attribute__((mode(TI), aligned(16)));
 
 #include "qcopy.h"
-#include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 
 typedef union {

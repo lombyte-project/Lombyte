@@ -4,6 +4,7 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "asm.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
 #include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
@@ -74,7 +75,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     sc = vendor_screen_state + 0xC0;
     reset_hud_and_suspend_weapon_updates();
     clear_active_help_record();
-    hero_set_state(100, 1);
+    l01_hero_set_state(100, 1);
     *(char *)&hero_state->item_use_locked = 1;
     *(char *)&hero_state->unk20A5 = 1;
     FUN_L00_00232fe8();

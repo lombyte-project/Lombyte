@@ -10,6 +10,7 @@
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/ui/frames/draw_stretchable_ui_frame.h"
+#include "rnc/math/fast_math.h"
 
 /* Sets up a HUD element: timer, 128x128 size, zero offsets. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266B90), where it is exact; names translated to the US level program. */
@@ -37,7 +38,6 @@ void FUN_L05_002661e8(char *moby) {
 extern int D_0013E500[];
 
 #include "rnc/overlay/shared/ui/hud/initialize_hud_element_defaults_globals.h"
-#include "rnc/math/fast_math.h"
 
 extern int  hud_timer_frame_x_gp __asm__("D_L05_0015FA14") __attribute__((sda));
 extern int  hud_timer_frame_bottom_offset_gp __asm__("D_L05_0015FA18") __attribute__((sda));

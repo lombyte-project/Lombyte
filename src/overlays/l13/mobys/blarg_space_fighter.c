@@ -161,15 +161,14 @@ extern char                       *find_moby_hit(void *, int, int) __asm__("FUN_
 extern char *
 spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern char  D_0013F350[];
-extern f32   random_angle_radians(void) __asm__("func_00213308");
-extern f32   random_float_between(f32, f32) __asm__("func_002132A8");
+extern f32   random_angle_radians(void) __asm__("FUN_00213308");
+extern f32   random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern float D_0015ED6C;
 extern float
-approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
-extern float          fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern int            collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern int            coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int            spawn_explosion() __asm__("FUN_L00_0025e450");
+           approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
+extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
+extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int spawn_explosion() __asm__("FUN_L00_0025e450");
 extern unsigned char *FUN_L00_002712b8(void  *pos,
                                        float *vec,
                                        int    s,
@@ -184,7 +183,7 @@ extern unsigned char *FUN_L00_002712b8(void  *pos,
 extern void           moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("func_00214DB0");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
+extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void func_L00_0025F4A8_alt(void *,
                                   void *,
                                   void *,
@@ -2068,7 +2067,7 @@ Blk24 D_L13_001F4968 = {
 
 extern float D_L13_0015F580;
 extern int   spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
+extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern unsigned char             *
 spawn_spinning_fade_in_out_effect_particle(void *pos,
                                                        int   spin,
