@@ -1781,7 +1781,6 @@ extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern f32 fast_vec_length(void *a) __asm__("FUN_001f9af0");
 typedef struct { char pad[0x28]; float height; char pad2[0x14]; float vector[4]; } S173E40;
 extern S173E40 D_L00_00173E40;
-extern int FUN_001efa68(void *,void *,int,int,int);
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned char *FUN_L00_002603d0(int);
 extern void fast_vec_normalize(void *out, void *a, f32 len) __asm__("FUN_001f9bf8");
@@ -1805,7 +1804,7 @@ void release_moby_with_collision_check(float *release_position,char *moby,void *
  fast_vec_sub(release_position,release_position,collision_start);
  fast_vec_normalize(release_position,release_position,fast_vec_length(release_position)+0.2f);
  fast_vec_add(release_position,release_position,collision_start);
- if(FUN_001efa68(collision_start,release_position,0,((int)camera->moby),0)) {
+ if(collision_line(collision_start,release_position,0,((int)camera->moby),0)) {
   float smoothing;
   qcopy(moby+0x10,D_00173F60_alias); qzero(state+0x10);
   moby[0x20]=4;

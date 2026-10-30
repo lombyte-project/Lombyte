@@ -850,7 +850,6 @@ typedef struct {
 } L16SpriteData;
 
 extern char D_L16_001671C0[];
-extern int FUN_001fa6e0(float, int, int);
 extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 

@@ -2772,7 +2772,6 @@ extern float suck_beam_segment_turn_spring_states[] __asm__("D_L00_001E5FE0");
 extern float rope_spring_turn(void *,float,float,float,float,float) __asm__("FUN_L00_001eb328");
 extern int collision_line_ddf60(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void interpolate_vector(void *,void *,void *,float) __asm__("FUN_L00_0025b6b8");
-extern void FUN_L00_00267a08(void *);
 extern void suck_beam_draw_mesh(void) __asm__("FUN_L00_002dd8e8");
 extern Particle41 *spawn_puff(void *,float,float,float,int,void *,float,int) __asm__("FUN_L00_0026d000");
 
@@ -2939,7 +2938,7 @@ void suck_beam_update(void *moby,void *position) {
             ((Particle41 *)D_L00_001E4C80_lui[i].p)->life=200;
             if(length<D_L00_001E4C80_lui[i].f) {
                 D_L00_001E4C80_lui[i].idx=(u16)D_L00_001E4C80_lui[i].idx-1;
-                if(D_L00_001E4C80_lui[i].idx<=0) { FUN_L00_00267a08(D_L00_001E4C80_lui[i].p); D_L00_001E4C80_lui[i].p=0; }
+                if(D_L00_001E4C80_lui[i].idx<=0) { free_effect_particle(D_L00_001E4C80_lui[i].p); D_L00_001E4C80_lui[i].p=0; }
                 else {
                     D_L00_001E4C80_lui[i].f-=length;
                     fast_vec_sub(&tmp_a,D_L00_001E5F30+D_L00_001E4C80_lui[i].idx*16,D_L00_001E5F40+D_L00_001E4C80_lui[i].idx*16);

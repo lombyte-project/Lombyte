@@ -169,7 +169,7 @@ int get_hero_easing_moby_by_kind(int ease_kind) {
 extern u8 D_001413F4 NOT_SDA;
 void detach_manipulator(s32, void *) __asm__("FUN_0020cb88");
 void attach_manipulator(s32, s32, void *) __asm__("FUN_0020cb10");
-/* FUN_L00_0025bc98 (eases an angle toward a target) with its int argument last. EABI
+/* spring_angle (eases an angle toward a target) with its int argument last. EABI
    passes ints and floats in separate registers, so the call is the same; this order
    gives retail's register allocation. */
 f32 spring_angle(f32 *, f32, f32 *, f32, f32, f32, s32) __asm__("FUN_L00_0025bc98");
@@ -1200,7 +1200,6 @@ typedef struct {
 } Vx __attribute__((aligned(16)));
 
 extern char D_L00_001801D0[] NOT_SDA;
-extern void FUN_0020d510(void *, void *);
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void FUN_L00_002503c0(void *, void *);
 
@@ -1213,7 +1212,7 @@ void update_item_tint_from_hero(void *item_moby, char *hero_moby) {
     unsigned char *hero_color_block = hero_moby + 0x38;
     int color_channel_sum = hero_color_block[4] + hero_color_block[5] + hero_color_block[6];
     pack_render_command_fields(item_moby, color_channel_sum * 4 / 10 + ((color_channel_sum * 3 / 10) << 8), 12, 12, 0);
-    FUN_0020d510(hero_moby, D_L00_001801D0);
+    get_moby_light_direction(hero_moby, D_L00_001801D0);
     FUN_L00_002503c0(hero_moby, &hero_vector_sample);
     global_float_base = (float *)(D_L00_001801D0 - 0x310);
     vector_component_sum = hero_vector_sample.x + hero_vector_sample.y + hero_vector_sample.z;
@@ -2489,7 +2488,6 @@ typedef struct G0020a240 {
 } G0020a240;
 extern u8 D_L00_00173E60[];
 extern void transform_hero_polar_offset_to_world(V0020a240 *, f32, f32, f32) __asm__("FUN_L00_002335c8");
-extern s32 FUN_001efa68(V0020a240 *, V0020a240 *, s32, s32, s32);
 s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_radius) __asm__("FUN_L00_0020a240");
 
 s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_radius) {
@@ -2499,7 +2497,7 @@ s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_rad
 
     transform_hero_polar_offset_to_world(&probe_start, hero_state->f234 - 0.02f, 0.0f, probe_z_offset);
     transform_hero_polar_offset_to_world(&probe_end, probe_end_radius, 0.0f, probe_z_offset);
-    if (FUN_001efa68(&probe_start, &probe_end, 2, 0, 0)) {
+    if (collision_line(&probe_start, &probe_end, 2, 0, 0)) {
         if (out != 0)
             *out = vector_distance_xy(hero_state->v80, D_L00_00173E60);
         return 1;

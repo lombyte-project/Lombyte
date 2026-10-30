@@ -1221,7 +1221,6 @@ typedef struct {
 extern char D_L10_00178380[];
 extern float FUN_L00_0025ab48(float, float);
 extern float D_L10_00161BEC_gp __asm__("D_L10_00161BEC") __attribute__((sda));
-extern int FUN_L00_001f2868();
 extern int set_moby_color() __asm__("FUN_L00_002502f0");
 extern int get_moby_color() __asm__("FUN_L00_00250320");
 extern int FUN_L00_0025a9f8(float, void *, int, void *, void *);

@@ -148,7 +148,6 @@ extern Vec4 D_L00_00173E70;
 extern float approach_value(float *p, float target, float maxstep);
 extern int *D_L00_00177F00[];
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60"); /* no foreign declaration */
-extern int FUN_001efa68(void *, void *, int, int, int);
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");

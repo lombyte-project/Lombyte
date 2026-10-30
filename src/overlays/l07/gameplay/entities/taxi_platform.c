@@ -2200,7 +2200,6 @@ void draw_fading_ring_effect(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F838), where it is exact; names translated to the US level program. */
 
 extern int D_L07_00173ED8;
-extern int FUN_001efa68(void *, void *, int, int, int);
 extern int FUN_L00_0025e450();
 extern void spawn_moby_point_offset_particle(char *, int, float, float) __asm__("FUN_L07_0029b8d8");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -2229,7 +2228,7 @@ void update_growing_ballistic_moby(struct Moby *moby) {
     if (D_L07_0015F5CC % 3 == 0) {
         spawn_moby_point_offset_particle(moby, 0, 400000.0f, 5.0f);
     }
-    if (FUN_001efa68(previous_position, &moby->pos, 0, *(int *)(moby_data + 0x10), 0) != 0 ||
+    if (collision_line(previous_position, &moby->pos, 0, *(int *)(moby_data + 0x10), 0) != 0 ||
         func_L00_001F10E0_f(0.1f, &moby->pos, 0, *(int *)(moby_data + 0x10)) != 0) {
         char *class_filter_moby = D_L07_00173ED0[2];
         if (class_filter_moby == 0 || (*(short *)(class_filter_moby + 0xA6) != 0x415 && *(short *)(class_filter_moby + 0xA6) != 0x419 &&

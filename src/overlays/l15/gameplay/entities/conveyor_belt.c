@@ -234,7 +234,6 @@ extern float D_0015ED6C;
 #include "rnc/overlay/l15/gameplay/entities/conveyor_belt_globals.h"
 extern float poison_vessel_gravity_gp __asm__("D_L15_00161FBC") __attribute__((sda));
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int FUN_L00_001f0d60();
 extern int reflect_vector() __asm__("FUN_L00_001ff660");
 extern int spawn_explosion() __asm__("FUN_L00_0025e450");
 extern void *suck_get_aim_height(struct Moby_A4D88 *) __asm__("FUN_002141f8");

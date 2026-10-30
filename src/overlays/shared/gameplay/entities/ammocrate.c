@@ -361,7 +361,6 @@ typedef struct Rocket {
 
 typedef struct Tex { char pad0[0x5C]; unsigned char *p5C; } Tex;
 
-char *FUN_L00_0026cbb0(void *pos, void *dir, int c, int d, int n, int k, float f);
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;

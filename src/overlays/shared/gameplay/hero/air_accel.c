@@ -984,7 +984,6 @@ void hero_speed_from_table(void) {
 
 extern char D_L01_001742C0_lui[] __asm__("D_L01_001742C0") NOT_SDA;
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
-extern int FUN_001efa68(void *, void *, int, int, int);
 extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 
 extern int D_L01_001742DC NOT_SDA;
@@ -1037,14 +1036,14 @@ void clip_hero_horizontal_velocity(int flag) {
     k = -1;
     fast_vec_add(material_probe_end, material_probe_end, material_probe_start);
     material_probe_hero = &hero;
-    if (FUN_001efa68(material_probe_start, material_probe_end, 4, (int)material_probe_hero->moby, 0) != 0) {
+    if (collision_line(material_probe_start, material_probe_end, 4, (int)material_probe_hero->moby, 0) != 0) {
         if (D_L01_001742DC > 0) {
             k = collision_hit_material();
         }
     }
     hit_normal_elevation = 0.0f;
     slope_probe_hero = &hero;
-    if (FUN_001efa68(slope_probe_start, slope_probe_end, 4, (int)slope_probe_hero->moby, 0) != 0) {
+    if (collision_line(slope_probe_start, slope_probe_end, 4, (int)slope_probe_hero->moby, 0) != 0) {
         slope_hit = D_L01_001742C0_lui;
         if (*(int *)(slope_hit + 0x1C) > 0) {
             hit_normal_elevation = fast_arc_tan(*(float *)(slope_hit + 0x48), vector_length_xy(slope_hit + 0x40));

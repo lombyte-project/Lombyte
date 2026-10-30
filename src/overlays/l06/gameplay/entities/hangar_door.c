@@ -2309,7 +2309,6 @@ extern int D_001413D0[];
 #include "rnc/overlay/l06/gameplay/entities/hangar_door_data/update_alien_snapper_hit_response_and_targeting.h"
 int D_L06_00161EE8 = 0x80808080;
 int D_L06_00161EEC = 0x80604040;
-extern int FUN_001fa6e0(int, int, float);
 extern int trooper_take_damage() __asm__("FUN_00213928");
 extern int play_entity_sound() __asm__("FUN_L00_002598b0");
 extern int FUN_L00_0025a420_c() __asm__("FUN_L00_0025a420");
@@ -3065,7 +3064,7 @@ hit_response_done:
     }
     *(float *)(data + 0x128) = fast_add_rotations(*(float *)(data + 0x128),
         alien_queen_glow_phase_speed_degrees_gp * 0.017453292f * frame_time);
-    *(int *)(moby + 0x90) = FUN_001fa6e0(D_L06_00161F10, D_L06_00161F14,
+    *(int *)(moby + 0x90) = fast_tween_color(D_L06_00161F10, D_L06_00161F14,
         (fast_sin(*(float *)(data + 0x128)) + 1.0f) * 0.5f);
     path = D_L06_001B0C30[*(int *)(data + 0xEC)];
     FUN_L00_0025ff38(moby, data + 0x70, 0, 0, path + 4, *path, 255.0f);
@@ -3673,7 +3672,7 @@ void update_hero_triggered_moby_height_cycle(Moby_2FDA70 *moby) {
         } else if (color_blend < 0.0f) {
             color_blend = 0.0f;
         }
-        moby->f90 = FUN_001fa6e0(D_L06_00161F6C, D_L06_00161F70, color_blend);
+        moby->f90 = fast_tween_color(D_L06_00161F6C, D_L06_00161F70, color_blend);
     }
     fast_vec_add(&position_delta, &position_delta, &moby->pos);
     update_entity_matrix(moby_data->f20, &position_delta, &initial_rotation, &moby->rot);

@@ -1635,7 +1635,6 @@ extern char D_L00_00166E10[];
 extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern void FUN_001f9a10_c2(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001f9a28(float *, float *, float *);
 extern void FUN_001f9a68_c3(void *, void *, float) __asm__("FUN_001f9a68");
 
 float compute_follow_camera_signed_target_angle(char *camera, float target_offset_scale) __asm__("FUN_L00_002e4580");
@@ -1647,10 +1646,10 @@ float compute_follow_camera_signed_target_angle(char *camera, float target_offse
     follow_camera_hero_target(camera, hero_position);
     FUN_001f9a68_c3(offset_target_position, camera_view + 0x20, target_offset_scale);
     FUN_001f9a10_c2(offset_target_position, offset_target_position, hero_position);
-    FUN_001f9a28(angle_direction, offset_target_position, (float *)(camera + 0x30));
+    fast_vec_sub(angle_direction, offset_target_position, (float *)(camera + 0x30));
     axis_dot_or_direction_length = fast_vec_dot(angle_direction, camera + 0x10);
     FUN_001f9a68_c3(axis_projection, camera + 0x10, axis_dot_or_direction_length);
-    FUN_001f9a28(angle_direction, angle_direction, axis_projection);
+    fast_vec_sub(angle_direction, angle_direction, axis_projection);
     reference_dot_or_signed_angle = fast_vec_dot(angle_direction, camera);
     axis_dot_or_direction_length = fast_vec_length(angle_direction);
     if (axis_dot_or_direction_length == 0.0f) {
@@ -1707,8 +1706,8 @@ void apply_follow_camera_translation(char *camera) {
         FUN_001f9a68_c(&camera_translation_adjustment, camera_view + 0x80, *(float *)(camera_view + 0xA4));
         translation_up_component = fast_vec_dot(camera_up_axis, &translation_delta);
         FUN_001f9a68_c(&lateral_displacement, camera_up_axis, translation_up_component);
-        FUN_001f9a28((float *)&lateral_displacement, (float *)&translation_delta, (float *)&lateral_displacement);
-        FUN_001f9a28((float *)&camera_translation_adjustment, (float *)&camera_translation_adjustment, (float *)&lateral_displacement);
+        fast_vec_sub((float *)&lateral_displacement, (float *)&translation_delta, (float *)&lateral_displacement);
+        fast_vec_sub((float *)&camera_translation_adjustment, (float *)&camera_translation_adjustment, (float *)&lateral_displacement);
         FUN_001f9a10_c(camera + 0x30, &camera_translation_adjustment, camera + 0x30);
         FUN_001f9a10_c(attach_state + 0x60, &camera_translation_adjustment, attach_state + 0x60);
         FUN_001f9a10_c(attach_state, &camera_translation_adjustment, attach_state);
@@ -2037,7 +2036,7 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
     if (pad->state.current == 0x77) {
         x = fast_vec_dot(attach_state, camera_view + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
-        FUN_001f9a28(attach_state, attach_state, out_focus_velocity);
+        fast_vec_sub(attach_state, attach_state, out_focus_velocity);
         y = fast_vec_dot(camera_view + 0x30, camera_state + 0xA0);
         FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, y);
         qcopy(camera_state + 0x50, out_focus_velocity);
@@ -2082,18 +2081,18 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
                 absolute_float(*(float *)(camera_view + 0x38) - *(float *)(camera_view + 0x48)) > 0.001f) {
                 x = fast_vec_dot(hero_position, camera_view + 0x30);
                 FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
-                FUN_001f9a28(attach_state, hero_position, out_focus_velocity);
+                fast_vec_sub(attach_state, hero_position, out_focus_velocity);
             } else {
                 qcopy(out_focus_velocity, attach_state + 0x10);
                 x = fast_vec_dot(hero_position, camera_view + 0x30);
                 FUN_001f9a68_c2(target_position_or_up_offset, camera_view + 0x30, x);
-                FUN_001f9a28(attach_state, hero_position, target_position_or_up_offset);
+                fast_vec_sub(attach_state, hero_position, target_position_or_up_offset);
             }
         } else {
             compute_follow_camera_ground_aware_target_position(target_position_or_up_offset, 1);
             x = fast_vec_dot(target_position_or_up_offset, camera_view + 0x30);
             FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
-            FUN_001f9a28(attach_state, target_position_or_up_offset, out_focus_velocity);
+            fast_vec_sub(attach_state, target_position_or_up_offset, out_focus_velocity);
         }
         break;
     case CAM_ATTACH_BLEND_TO_PROJECT_HERO_FOCUS_VELOCITY:
@@ -2111,14 +2110,14 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
         qcopy(out_focus_velocity, attach_state + 0x10);
         x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(target_position_or_up_offset, camera_view + 0x30, x);
-        FUN_001f9a28(attach_state, hero_position, target_position_or_up_offset);
+        fast_vec_sub(attach_state, hero_position, target_position_or_up_offset);
         if (FUN_001f9770_c(attach_state + 0xD4)) {
             if (*(unsigned char *)(attach_state + 0xC4) == 9) {
                 *(unsigned char *)(attach_state + 0xC4) = 0xA;
                 *(short *)(attach_state + 0xD4) = FUN_001f96f8_c2(*(int *)&D_L00_00161D6C_gp);
                 qcopy(attach_state + 0x20, attach_state + 0x10);
                 FUN_001f9a68_c2(target_position_or_up_offset, camera_view + 0x30, *(float *)(attach_state + 0xD0));
-                FUN_001f9a28(attach_state + 0x30, attach_state + 0x20, target_position_or_up_offset);
+                fast_vec_sub(attach_state + 0x30, attach_state + 0x20, target_position_or_up_offset);
             } else if (*(unsigned char *)(attach_state + 0xC4) == 6) {
                 *(unsigned char *)(attach_state + 0xC4) = 7;
                 *(short *)(attach_state + 0xD4) = FUN_001f96f8_c2(*(int *)&D_L00_00161D40_gp);
@@ -2137,20 +2136,20 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
         qcopy(out_focus_velocity, attach_state + 0x10);
         x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(target_position_or_up_offset, camera_view + 0x30, x);
-        FUN_001f9a28(attach_state, hero_position, target_position_or_up_offset);
+        fast_vec_sub(attach_state, hero_position, target_position_or_up_offset);
         break;
     case CAM_ATTACH_BLEND_PROJECTED_HERO_FOCUS_VELOCITY:
     case CAM_ATTACH_CONTINUE_BLEND_PROJECTED_HERO_FOCUS_VELOCITY:
         x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
-        FUN_001f9a28(attach_state, hero_position, out_focus_velocity);
+        fast_vec_sub(attach_state, hero_position, out_focus_velocity);
         lerp_vector(*(float *)&follow_camera_projected_focus_blend_fraction_gp, out_focus_velocity, out_focus_velocity, attach_state + 0x20);
         break;
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
     default:
         x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
-        FUN_001f9a28(attach_state, hero_position, out_focus_velocity);
+        fast_vec_sub(attach_state, hero_position, out_focus_velocity);
         break;
     }
 }
@@ -2572,9 +2571,9 @@ float update_follow_camera_angle_blend_from_direction(char *camera, float *input
     float angle_blend_fraction;
 
     FUN_001f9a68_c4(axis_projection, axis, fast_vec_dot(input_direction, axis));
-    FUN_001f9a28(planar_input_direction, input_direction, axis_projection);
+    fast_vec_sub(planar_input_direction, input_direction, axis_projection);
     FUN_001f9a68_c4(axis_projection, axis, fast_vec_dot(reference_direction, axis));
-    FUN_001f9a28(planar_reference_direction, (float *)reference_direction, axis_projection);
+    fast_vec_sub(planar_reference_direction, (float *)reference_direction, axis_projection);
     dot = fast_vec_dot(planar_input_direction, planar_reference_direction);
     planar_input_length_or_length_product = fast_vec_length(planar_input_direction);
     if (planar_input_length_or_length_product == angle_delta) {

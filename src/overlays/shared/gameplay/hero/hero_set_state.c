@@ -469,7 +469,6 @@ void select_hero_grapple_swing_target(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_002228E0), where it is exact; names translated to the US level program. */
 
 extern char *D_L00_0015FFE4;
-extern int FUN_001efa68(void *, void *, int, int, int);
 
 int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 
@@ -543,7 +542,7 @@ int select_hero_grapple_target(void) {
         *(int *)(hero_target_output_base + 0x978) = *(int *)(bd + 8);
         *(float *)(hero_target_output_base + 0x980) = *(float *)(bd + 4);
         *(float *)(hero_target_output_base + 0x984) = bestd;
-        if (FUN_001efa68(collision_start, collision_end, 2, 0, 0) == 0) {
+        if (collision_line(collision_start, collision_end, 2, 0, 0) == 0) {
             *(int *)(hero_target_output_base + 0x968) = 1;
         }
     }
