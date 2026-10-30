@@ -74,7 +74,7 @@ void reposition_moby_with_collision_check(struct Moby *moby, void *new_position)
     float origin[4];
     float pos[4];
     float effect_velocity[4];
-    float out[4];
+    float effect_spawn_position[4];
     float effect_position_angle, random_effect_angle, radius, speed;
     int   i;
     char *moby_data;
@@ -86,7 +86,7 @@ void reposition_moby_with_collision_check(struct Moby *moby, void *new_position)
     }
     origin[2] += 0.3f;
     if (FUN_L00_001f0d60_q(0.2f, pos, 0, moby)) {
-        float *effectPosition = out;
+        float *effectPosition = effect_spawn_position;
         float *effectVelocity = effect_velocity;
         i = 3;
         do {
@@ -96,7 +96,7 @@ void reposition_moby_with_collision_check(struct Moby *moby, void *new_position)
             random_effect_angle = random_angle_radians();
             build_spherical_offset(
                 radius, effect_position_angle, random_effect_angle, effectPosition);
-            out[2] += reposition_effect_spawn_z_offset_gp;
+            effect_spawn_position[2] += reposition_effect_spawn_z_offset_gp;
             fast_vec_add(effectPosition, effectPosition, &moby->pos);
             speed =
                 random_float_between(reposition_effect_velocity_scale_range_start_gp * D_0015ED6C,
