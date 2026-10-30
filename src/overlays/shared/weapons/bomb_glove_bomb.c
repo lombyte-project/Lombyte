@@ -804,7 +804,7 @@ void draw_bomb_landing_marker(M_2acbf0_002acbf0 *moby) {
 
 unsigned char *spawn_bomb(int owner, void *pos) __asm__("FUN_L00_002ace70");
 
-unsigned char *spawn_bomb(int owner, void *spawn_position) {
+unsigned char *spawn_bomb(int bomb_holder_moby, void *spawn_position) {
     unsigned char *bomb_moby = create_moby(0x79);
     if (bomb_moby) {
         V_2ace70       u, random_rotation;
@@ -820,7 +820,7 @@ unsigned char *spawn_bomb(int owner, void *spawn_position) {
         MOBY(bomb_moby)->draw_dist = 0xFF;
         bomb_moby[0x31] = 1;
         bomb_moby[0x20] = 0;
-        *(int *)(v + 0x50) = owner;
+        *(int *)(v + 0x50) = bomb_holder_moby;
         *(short *)(v + 0x56) = 0;
         *(short *)(v + 0x6A) = 0;
         *(int *)(v + 0x60) = 0;
