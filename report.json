@@ -9,8 +9,8 @@
     "matched_functions_percent": 100.0,
     "complete_code": "3547932",
     "complete_code_percent": 100.0,
-    "total_units": 1087,
-    "complete_units": 1087,
+    "total_units": 1082,
+    "complete_units": 1082,
     "total_data": "12433372",
     "matched_data": "5231278",
     "matched_data_percent": 42.074491,
@@ -761,23 +761,23 @@
       }
     },
     {
-      "name": "game/runtime/state",
+      "name": "sdk/kernel",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "144",
-        "matched_code": "144",
+        "total_code": "2980",
+        "matched_code": "2980",
         "matched_code_percent": 100.0,
-        "total_functions": 7,
-        "matched_functions": 7,
+        "total_functions": 22,
+        "matched_functions": 22,
         "matched_functions_percent": 100.0,
-        "complete_code": "144",
+        "complete_code": "2980",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
       },
       "functions": [
         {
-          "name": "clear_core_global",
+          "name": "clear_tty_initialized",
           "size": "12",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -786,89 +786,10 @@
           }
         },
         {
-          "name": "enable_global_flag",
-          "size": "12",
-          "fuzzy_match_percent": 100.0,
-          "address": "906792",
-          "metadata": {
-            "virtual_address": "1012072"
-          }
-        },
-        {
-          "name": "disable_global_flag",
-          "size": "8",
-          "fuzzy_match_percent": 100.0,
-          "address": "906808",
-          "metadata": {
-            "virtual_address": "1012088"
-          }
-        },
-        {
-          "name": "ReadStateField",
-          "size": "48",
-          "fuzzy_match_percent": 100.0,
-          "address": "1029736",
-          "metadata": {
-            "virtual_address": "1135016"
-          }
-        },
-        {
-          "name": "reset_global_state_fields",
-          "size": "20",
-          "fuzzy_match_percent": 100.0,
-          "address": "1041504",
-          "metadata": {
-            "virtual_address": "1146784"
-          }
-        },
-        {
-          "name": "InitializeGlobalStateEntry",
-          "size": "28",
-          "fuzzy_match_percent": 100.0,
-          "address": "1136072",
-          "metadata": {
-            "virtual_address": "1241352"
-          }
-        },
-        {
-          "name": "is_state_field_large",
-          "size": "16",
-          "fuzzy_match_percent": 100.0,
-          "address": "1188640",
-          "metadata": {
-            "virtual_address": "1293920"
-          }
-        }
-      ],
-      "metadata": {
-        "complete": true,
-        "progress_categories": [
-          "boot",
-          "game"
-        ]
-      }
-    },
-    {
-      "name": "sdk/kernel",
-      "measures": {
-        "fuzzy_match_percent": 100.0,
-        "total_code": "2968",
-        "matched_code": "2968",
-        "matched_code_percent": 100.0,
-        "total_functions": 21,
-        "matched_functions": 21,
-        "matched_functions_percent": 100.0,
-        "complete_code": "2968",
-        "complete_code_percent": 100.0,
-        "total_units": 1,
-        "complete_units": 1
-      },
-      "functions": [
-        {
           "name": "VSync",
           "size": "144",
           "fuzzy_match_percent": 100.0,
-          "address": "0",
+          "address": "16",
           "metadata": {
             "virtual_address": "105296"
           }
@@ -877,7 +798,7 @@
           "name": "VSync2",
           "size": "164",
           "fuzzy_match_percent": 100.0,
-          "address": "144",
+          "address": "160",
           "metadata": {
             "virtual_address": "105440"
           }
@@ -886,7 +807,7 @@
           "name": "write",
           "size": "124",
           "fuzzy_match_percent": 100.0,
-          "address": "312",
+          "address": "328",
           "metadata": {
             "virtual_address": "105608"
           }
@@ -895,7 +816,7 @@
           "name": "read",
           "size": "116",
           "fuzzy_match_percent": 100.0,
-          "address": "440",
+          "address": "456",
           "metadata": {
             "virtual_address": "105736"
           }
@@ -904,7 +825,7 @@
           "name": "sbrk",
           "size": "172",
           "fuzzy_match_percent": 100.0,
-          "address": "576",
+          "address": "592",
           "metadata": {
             "virtual_address": "105872"
           }
@@ -913,7 +834,7 @@
           "name": "SyncDCache",
           "size": "124",
           "fuzzy_match_percent": 100.0,
-          "address": "952",
+          "address": "968",
           "metadata": {
             "virtual_address": "106248"
           }
@@ -922,7 +843,7 @@
           "name": "disable_intc",
           "size": "104",
           "fuzzy_match_percent": 100.0,
-          "address": "1112",
+          "address": "1128",
           "metadata": {
             "virtual_address": "106408"
           }
@@ -931,7 +852,7 @@
           "name": "enable_intc",
           "size": "104",
           "fuzzy_match_percent": 100.0,
-          "address": "1216",
+          "address": "1232",
           "metadata": {
             "virtual_address": "106512"
           }
@@ -940,7 +861,7 @@
           "name": "disable_dmac",
           "size": "104",
           "fuzzy_match_percent": 100.0,
-          "address": "1320",
+          "address": "1336",
           "metadata": {
             "virtual_address": "106616"
           }
@@ -949,7 +870,7 @@
           "name": "enable_dmac",
           "size": "104",
           "fuzzy_match_percent": 100.0,
-          "address": "1424",
+          "address": "1440",
           "metadata": {
             "virtual_address": "106720"
           }
@@ -958,7 +879,7 @@
           "name": "topThread",
           "size": "216",
           "fuzzy_match_percent": 100.0,
-          "address": "1528",
+          "address": "1544",
           "metadata": {
             "virtual_address": "106824"
           }
@@ -967,7 +888,7 @@
           "name": "InitThread",
           "size": "212",
           "fuzzy_match_percent": 100.0,
-          "address": "1744",
+          "address": "1760",
           "metadata": {
             "virtual_address": "107040"
           }
@@ -976,7 +897,7 @@
           "name": "iWakeupThread",
           "size": "148",
           "fuzzy_match_percent": 100.0,
-          "address": "1960",
+          "address": "1976",
           "metadata": {
             "virtual_address": "107256"
           }
@@ -985,7 +906,7 @@
           "name": "InitTLBFunctions",
           "size": "196",
           "fuzzy_match_percent": 100.0,
-          "address": "17656",
+          "address": "17672",
           "metadata": {
             "virtual_address": "122952"
           }
@@ -994,7 +915,7 @@
           "name": "InitTLB",
           "size": "64",
           "fuzzy_match_percent": 100.0,
-          "address": "17872",
+          "address": "17888",
           "metadata": {
             "virtual_address": "123168"
           }
@@ -1003,7 +924,7 @@
           "name": "SupplementCrt0",
           "size": "72",
           "fuzzy_match_percent": 100.0,
-          "address": "19184",
+          "address": "19200",
           "metadata": {
             "virtual_address": "124480"
           }
@@ -1012,7 +933,7 @@
           "name": "InitSystemCallTableAddress",
           "size": "252",
           "fuzzy_match_percent": 100.0,
-          "address": "19400",
+          "address": "19416",
           "metadata": {
             "virtual_address": "124696"
           }
@@ -1021,7 +942,7 @@
           "name": "_InitSys",
           "size": "60",
           "fuzzy_match_percent": 100.0,
-          "address": "19672",
+          "address": "19688",
           "metadata": {
             "virtual_address": "124968"
           }
@@ -1030,7 +951,7 @@
           "name": "PatchIsNeeded",
           "size": "104",
           "fuzzy_match_percent": 100.0,
-          "address": "19840",
+          "address": "19856",
           "metadata": {
             "virtual_address": "125136"
           }
@@ -1039,7 +960,7 @@
           "name": "InitExecPS2",
           "size": "172",
           "fuzzy_match_percent": 100.0,
-          "address": "19944",
+          "address": "19960",
           "metadata": {
             "virtual_address": "125240"
           }
@@ -1048,7 +969,7 @@
           "name": "InitAlarm",
           "size": "212",
           "fuzzy_match_percent": 100.0,
-          "address": "20328",
+          "address": "20344",
           "metadata": {
             "virtual_address": "125624"
           }
@@ -1266,7 +1187,7 @@
       },
       "functions": [
         {
-          "name": "init_block_fn",
+          "name": "init_ring_buffer",
           "size": "36",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -1828,13 +1749,13 @@
       "name": "sdk/storage/fileio",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "4828",
-        "matched_code": "4828",
+        "total_code": "4840",
+        "matched_code": "4840",
         "matched_code_percent": 100.0,
-        "total_functions": 13,
-        "matched_functions": 13,
+        "total_functions": 14,
+        "matched_functions": 14,
         "matched_functions_percent": 100.0,
-        "complete_code": "4828",
+        "complete_code": "4840",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -1892,6 +1813,15 @@
           "address": "1328",
           "metadata": {
             "virtual_address": "116928"
+          }
+        },
+        {
+          "name": "_sceFsSigSema",
+          "size": "12",
+          "fuzzy_match_percent": 100.0,
+          "address": "1376",
+          "metadata": {
+            "virtual_address": "116976"
           }
         },
         {
@@ -1963,76 +1893,6 @@
         "progress_categories": [
           "boot",
           "sdk"
-        ]
-      }
-    },
-    {
-      "name": "game/runtime",
-      "measures": {
-        "fuzzy_match_percent": 100.0,
-        "total_code": "364",
-        "matched_code": "364",
-        "matched_code_percent": 100.0,
-        "total_functions": 5,
-        "matched_functions": 5,
-        "matched_functions_percent": 100.0,
-        "complete_code": "364",
-        "complete_code_percent": 100.0,
-        "total_units": 1,
-        "complete_units": 1
-      },
-      "functions": [
-        {
-          "name": "ReadQueueStatus",
-          "size": "12",
-          "fuzzy_match_percent": 100.0,
-          "address": "0",
-          "metadata": {
-            "virtual_address": "116976"
-          }
-        },
-        {
-          "name": "read_global_table_entry",
-          "size": "12",
-          "fuzzy_match_percent": 100.0,
-          "address": "78208",
-          "metadata": {
-            "virtual_address": "195184"
-          }
-        },
-        {
-          "name": "decrement_resource_counter",
-          "size": "24",
-          "fuzzy_match_percent": 100.0,
-          "address": "933368",
-          "metadata": {
-            "virtual_address": "1050344"
-          }
-        },
-        {
-          "name": "set_video_timing",
-          "size": "288",
-          "fuzzy_match_percent": 100.0,
-          "address": "1019904",
-          "metadata": {
-            "virtual_address": "1136880"
-          }
-        },
-        {
-          "name": "switch_thread",
-          "size": "28",
-          "fuzzy_match_percent": 100.0,
-          "address": "1175040",
-          "metadata": {
-            "virtual_address": "1292016"
-          }
-        }
-      ],
-      "metadata": {
-        "complete": true,
-        "progress_categories": [
-          "boot",
-          "game"
         ]
       }
     },
@@ -4620,13 +4480,13 @@
       "name": "game/game",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "26984",
-        "matched_code": "26984",
+        "total_code": "25112",
+        "matched_code": "25112",
         "matched_code_percent": 100.0,
-        "total_functions": 44,
-        "matched_functions": 44,
+        "total_functions": 40,
+        "matched_functions": 40,
         "matched_functions_percent": 100.0,
-        "complete_code": "26984",
+        "complete_code": "25112",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -4702,15 +4562,6 @@
           "address": "776984",
           "metadata": {
             "virtual_address": "967568"
-          }
-        },
-        {
-          "name": "is_active_state_entry",
-          "size": "88",
-          "fuzzy_match_percent": 100.0,
-          "address": "777800",
-          "metadata": {
-            "virtual_address": "968384"
           }
         },
         {
@@ -4903,48 +4754,12 @@
           }
         },
         {
-          "name": "compute_interpolated_record_value",
-          "size": "244",
-          "fuzzy_match_percent": 100.0,
-          "address": "913640",
-          "metadata": {
-            "virtual_address": "1104224"
-          }
-        },
-        {
-          "name": "fun_00213928",
-          "size": "1408",
-          "fuzzy_match_percent": 100.0,
-          "address": "942128",
-          "metadata": {
-            "virtual_address": "1132712"
-          }
-        },
-        {
-          "name": "is_value_within_interpolated_window",
-          "size": "140",
-          "fuzzy_match_percent": 100.0,
-          "address": "947152",
-          "metadata": {
-            "virtual_address": "1137736"
-          }
-        },
-        {
           "name": "process_global_state_flags",
           "size": "324",
           "fuzzy_match_percent": 100.0,
           "address": "1001880",
           "metadata": {
             "virtual_address": "1192464"
-          }
-        },
-        {
-          "name": "enter_timed_menu_sequence",
-          "size": "20",
-          "fuzzy_match_percent": 100.0,
-          "address": "1002208",
-          "metadata": {
-            "virtual_address": "1192792"
           }
         },
         {
@@ -4972,6 +4787,15 @@
           "address": "1021528",
           "metadata": {
             "virtual_address": "1212112"
+          }
+        },
+        {
+          "name": "request_space_load",
+          "size": "28",
+          "fuzzy_match_percent": 100.0,
+          "address": "1050768",
+          "metadata": {
+            "virtual_address": "1241352"
           }
         },
         {
@@ -5041,13 +4865,13 @@
       "name": "game/audio",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "724",
-        "matched_code": "724",
+        "total_code": "600",
+        "matched_code": "600",
         "matched_code_percent": 100.0,
-        "total_functions": 2,
-        "matched_functions": 2,
+        "total_functions": 1,
+        "matched_functions": 1,
         "matched_functions_percent": 100.0,
-        "complete_code": "724",
+        "complete_code": "600",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -5060,15 +4884,6 @@
           "address": "0",
           "metadata": {
             "virtual_address": "190888"
-          }
-        },
-        {
-          "name": "load",
-          "size": "124",
-          "fuzzy_match_percent": 100.0,
-          "address": "953856",
-          "metadata": {
-            "virtual_address": "1144744"
           }
         }
       ],
@@ -5084,13 +4899,13 @@
       "name": "game/audio/rpc",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "2116",
-        "matched_code": "2116",
+        "total_code": "2128",
+        "matched_code": "2128",
         "matched_code_percent": 100.0,
-        "total_functions": 7,
-        "matched_functions": 7,
+        "total_functions": 8,
+        "matched_functions": 8,
         "matched_functions_percent": 100.0,
-        "complete_code": "2116",
+        "complete_code": "2128",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -5148,6 +4963,15 @@
           "address": "3416",
           "metadata": {
             "virtual_address": "194904"
+          }
+        },
+        {
+          "name": "snd_hold_command_batches",
+          "size": "12",
+          "fuzzy_match_percent": 100.0,
+          "address": "3696",
+          "metadata": {
+            "virtual_address": "195184"
           }
         },
         {
@@ -5303,13 +5127,13 @@
       "name": "game/audio/voices",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "5640",
-        "matched_code": "5640",
+        "total_code": "5728",
+        "matched_code": "5728",
         "matched_code_percent": 100.0,
-        "total_functions": 17,
-        "matched_functions": 17,
+        "total_functions": 18,
+        "matched_functions": 18,
         "matched_functions_percent": 100.0,
-        "complete_code": "5640",
+        "complete_code": "5728",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -5376,6 +5200,15 @@
           "address": "440",
           "metadata": {
             "virtual_address": "193600"
+          }
+        },
+        {
+          "name": "is_voice_active",
+          "size": "88",
+          "fuzzy_match_percent": 100.0,
+          "address": "775224",
+          "metadata": {
+            "virtual_address": "968384"
           }
         },
         {
@@ -5560,13 +5393,13 @@
       "name": "game/audio/streaming",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "1040",
-        "matched_code": "1040",
+        "total_code": "1164",
+        "matched_code": "1164",
         "matched_code_percent": 100.0,
-        "total_functions": 9,
-        "matched_functions": 9,
+        "total_functions": 10,
+        "matched_functions": 10,
         "matched_functions_percent": 100.0,
-        "complete_code": "1040",
+        "complete_code": "1164",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -5624,6 +5457,15 @@
           "address": "949176",
           "metadata": {
             "virtual_address": "1144584"
+          }
+        },
+        {
+          "name": "read_disc_sectors_and_wait",
+          "size": "124",
+          "fuzzy_match_percent": 100.0,
+          "address": "949336",
+          "metadata": {
+            "virtual_address": "1144744"
           }
         },
         {
@@ -6115,13 +5957,13 @@
       "name": "game/streaming",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "1660",
-        "matched_code": "1660",
+        "total_code": "1636",
+        "matched_code": "1636",
         "matched_code_percent": 100.0,
-        "total_functions": 10,
-        "matched_functions": 10,
+        "total_functions": 9,
+        "matched_functions": 9,
         "matched_functions_percent": 100.0,
-        "complete_code": "1660",
+        "complete_code": "1636",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -6152,15 +5994,6 @@
           "address": "352",
           "metadata": {
             "virtual_address": "197352"
-          }
-        },
-        {
-          "name": "InitializeStreamingState",
-          "size": "24",
-          "fuzzy_match_percent": 100.0,
-          "address": "761632",
-          "metadata": {
-            "virtual_address": "958632"
           }
         },
         {
@@ -6230,13 +6063,13 @@
       "name": "game/input",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "3572",
-        "matched_code": "3572",
+        "total_code": "3592",
+        "matched_code": "3592",
         "matched_code_percent": 100.0,
-        "total_functions": 6,
-        "matched_functions": 6,
+        "total_functions": 7,
+        "matched_functions": 7,
         "matched_functions_percent": 100.0,
-        "complete_code": "3572",
+        "complete_code": "3592",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -6249,6 +6082,15 @@
           "address": "0",
           "metadata": {
             "virtual_address": "957576"
+          }
+        },
+        {
+          "name": "reset_pad_history",
+          "size": "20",
+          "fuzzy_match_percent": 100.0,
+          "address": "189208",
+          "metadata": {
+            "virtual_address": "1146784"
           }
         },
         {
@@ -6309,23 +6151,32 @@
       "name": "game/rendering/texture",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "5640",
-        "matched_code": "5640",
+        "total_code": "5664",
+        "matched_code": "5664",
         "matched_code_percent": 100.0,
-        "total_functions": 18,
-        "matched_functions": 18,
+        "total_functions": 19,
+        "matched_functions": 19,
         "matched_functions_percent": 100.0,
-        "complete_code": "5640",
+        "complete_code": "5664",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
       },
       "functions": [
         {
+          "name": "reset_gs_texture_allocation",
+          "size": "24",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "958632"
+          }
+        },
+        {
           "name": "load_pif_as_psmt8_h",
           "size": "464",
           "fuzzy_match_percent": 100.0,
-          "address": "0",
+          "address": "64",
           "metadata": {
             "virtual_address": "958696"
           }
@@ -6334,7 +6185,7 @@
           "name": "setup_gif_paging",
           "size": "276",
           "fuzzy_match_percent": 100.0,
-          "address": "45336",
+          "address": "45400",
           "metadata": {
             "virtual_address": "1004032"
           }
@@ -6343,7 +6194,7 @@
           "name": "do_gif_paging",
           "size": "284",
           "fuzzy_match_percent": 100.0,
-          "address": "45616",
+          "address": "45680",
           "metadata": {
             "virtual_address": "1004312"
           }
@@ -6352,7 +6203,7 @@
           "name": "draw_textured_quad",
           "size": "388",
           "fuzzy_match_percent": 100.0,
-          "address": "49896",
+          "address": "49960",
           "metadata": {
             "virtual_address": "1008592"
           }
@@ -6361,7 +6212,7 @@
           "name": "initialize_alpha_lookup_table",
           "size": "84",
           "fuzzy_match_percent": 100.0,
-          "address": "59592",
+          "address": "59656",
           "metadata": {
             "virtual_address": "1018288"
           }
@@ -6370,7 +6221,7 @@
           "name": "append_palette_transfer_packet",
           "size": "92",
           "fuzzy_match_percent": 100.0,
-          "address": "75128",
+          "address": "75192",
           "metadata": {
             "virtual_address": "1033824"
           }
@@ -6379,7 +6230,7 @@
           "name": "get_frame_texture",
           "size": "544",
           "fuzzy_match_percent": 100.0,
-          "address": "92328",
+          "address": "92392",
           "metadata": {
             "virtual_address": "1051024"
           }
@@ -6388,7 +6239,7 @@
           "name": "upload_mip_texture",
           "size": "1104",
           "fuzzy_match_percent": 100.0,
-          "address": "102664",
+          "address": "102728",
           "metadata": {
             "virtual_address": "1061360"
           }
@@ -6397,7 +6248,7 @@
           "name": "parse_particle_textures",
           "size": "312",
           "fuzzy_match_percent": 100.0,
-          "address": "103776",
+          "address": "103840",
           "metadata": {
             "virtual_address": "1062472"
           }
@@ -6406,7 +6257,7 @@
           "name": "load_texture_file",
           "size": "320",
           "fuzzy_match_percent": 100.0,
-          "address": "113544",
+          "address": "113608",
           "metadata": {
             "virtual_address": "1072240"
           }
@@ -6415,7 +6266,7 @@
           "name": "register_8bit_texture",
           "size": "196",
           "fuzzy_match_percent": 100.0,
-          "address": "113864",
+          "address": "113928",
           "metadata": {
             "virtual_address": "1072560"
           }
@@ -6424,7 +6275,7 @@
           "name": "compose_bitmap_from_mask",
           "size": "100",
           "fuzzy_match_percent": 100.0,
-          "address": "115312",
+          "address": "115376",
           "metadata": {
             "virtual_address": "1074008"
           }
@@ -6433,16 +6284,16 @@
           "name": "dma_moby_textures",
           "size": "264",
           "fuzzy_match_percent": 100.0,
-          "address": "146568",
+          "address": "146632",
           "metadata": {
             "virtual_address": "1105264"
           }
         },
         {
-          "name": "PackImageDescriptor",
+          "name": "pack_image_descriptor",
           "size": "64",
           "fuzzy_match_percent": 100.0,
-          "address": "251408",
+          "address": "251472",
           "metadata": {
             "virtual_address": "1210104"
           }
@@ -6451,7 +6302,7 @@
           "name": "dma_shrub_textures",
           "size": "316",
           "fuzzy_match_percent": 100.0,
-          "address": "259976",
+          "address": "260040",
           "metadata": {
             "virtual_address": "1218672"
           }
@@ -6460,7 +6311,7 @@
           "name": "dma_tfrag_textures",
           "size": "324",
           "fuzzy_match_percent": 100.0,
-          "address": "303192",
+          "address": "303256",
           "metadata": {
             "virtual_address": "1261888"
           }
@@ -6469,7 +6320,7 @@
           "name": "dma_tie_textures",
           "size": "316",
           "fuzzy_match_percent": 100.0,
-          "address": "312536",
+          "address": "312600",
           "metadata": {
             "virtual_address": "1271232"
           }
@@ -6478,7 +6329,7 @@
           "name": "patch_tie_texture_fields",
           "size": "192",
           "fuzzy_match_percent": 100.0,
-          "address": "312856",
+          "address": "312920",
           "metadata": {
             "virtual_address": "1271552"
           }
@@ -6496,13 +6347,13 @@
       "name": "game/ui/text/font",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "5148",
-        "matched_code": "5148",
+        "total_code": "5168",
+        "matched_code": "5168",
         "matched_code_percent": 100.0,
-        "total_functions": 22,
-        "matched_functions": 22,
+        "total_functions": 24,
+        "matched_functions": 24,
         "matched_functions_percent": 100.0,
-        "complete_code": "5148",
+        "complete_code": "5168",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -6515,6 +6366,24 @@
           "address": "0",
           "metadata": {
             "virtual_address": "959160"
+          }
+        },
+        {
+          "name": "enable_font_color_codes",
+          "size": "12",
+          "fuzzy_match_percent": 100.0,
+          "address": "52912",
+          "metadata": {
+            "virtual_address": "1012072"
+          }
+        },
+        {
+          "name": "disable_font_color_codes",
+          "size": "8",
+          "fuzzy_match_percent": 100.0,
+          "address": "52928",
+          "metadata": {
+            "virtual_address": "1012088"
           }
         },
         {
@@ -6937,7 +6806,7 @@
           }
         },
         {
-          "name": "no_op_graphics_callback",
+          "name": "noop_graphics_callback",
           "size": "8",
           "fuzzy_match_percent": 100.0,
           "address": "321152",
@@ -6958,13 +6827,13 @@
       "name": "game/rendering/frame",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "8968",
-        "matched_code": "8968",
+        "total_code": "9028",
+        "matched_code": "9028",
         "matched_code_percent": 100.0,
-        "total_functions": 15,
-        "matched_functions": 15,
+        "total_functions": 16,
+        "matched_functions": 16,
         "matched_functions_percent": 100.0,
-        "complete_code": "8968",
+        "complete_code": "9028",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -6977,6 +6846,15 @@
           "address": "0",
           "metadata": {
             "virtual_address": "961168"
+          }
+        },
+        {
+          "name": "reset_draw_config",
+          "size": "60",
+          "fuzzy_match_percent": 100.0,
+          "address": "28792",
+          "metadata": {
+            "virtual_address": "989960"
           }
         },
         {
@@ -7043,7 +6921,7 @@
           }
         },
         {
-          "name": "PackDmaTag",
+          "name": "set_background_color",
           "size": "40",
           "fuzzy_match_percent": 100.0,
           "address": "71536",
@@ -7115,23 +6993,23 @@
       }
     },
     {
-      "name": "game/runtime/dma",
+      "name": "game/ui/help",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "256",
-        "matched_code": "256",
+        "total_code": "4624",
+        "matched_code": "4624",
         "matched_code_percent": 100.0,
-        "total_functions": 5,
-        "matched_functions": 5,
+        "total_functions": 11,
+        "matched_functions": 11,
         "matched_functions_percent": 100.0,
-        "complete_code": "256",
+        "complete_code": "4624",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
       },
       "functions": [
         {
-          "name": "QueueDmaTransfer",
+          "name": "load_help_message_group",
           "size": "56",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -7140,39 +7018,93 @@
           }
         },
         {
-          "name": "ClearDmaQueueEntry",
-          "size": "60",
+          "name": "dismiss_help",
+          "size": "136",
           "fuzzy_match_percent": 100.0,
-          "address": "23608",
+          "address": "76984",
           "metadata": {
-            "virtual_address": "989960"
+            "virtual_address": "1043336"
           }
         },
         {
-          "name": "InitializeTransferCommand",
-          "size": "44",
+          "name": "find_help_message_index",
+          "size": "108",
           "fuzzy_match_percent": 100.0,
-          "address": "188440",
+          "address": "77136",
           "metadata": {
-            "virtual_address": "1154792"
+            "virtual_address": "1043488"
           }
         },
         {
-          "name": "calculate_dma_transfer_address",
-          "size": "44",
+          "name": "get_help_message_text",
+          "size": "64",
           "fuzzy_match_percent": 100.0,
-          "address": "296528",
+          "address": "77248",
           "metadata": {
-            "virtual_address": "1262880"
+            "virtual_address": "1043600"
           }
         },
         {
-          "name": "AppendDmaTag",
-          "size": "52",
+          "name": "update_help_state",
+          "size": "2564",
           "fuzzy_match_percent": 100.0,
-          "address": "299048",
+          "address": "77632",
           "metadata": {
-            "virtual_address": "1265400"
+            "virtual_address": "1043984"
+          }
+        },
+        {
+          "name": "help_draw_prompt",
+          "size": "228",
+          "fuzzy_match_percent": 100.0,
+          "address": "80200",
+          "metadata": {
+            "virtual_address": "1046552"
+          }
+        },
+        {
+          "name": "draw_help",
+          "size": "836",
+          "fuzzy_match_percent": 100.0,
+          "address": "80432",
+          "metadata": {
+            "virtual_address": "1046784"
+          }
+        },
+        {
+          "name": "find_help_entry",
+          "size": "100",
+          "fuzzy_match_percent": 100.0,
+          "address": "81272",
+          "metadata": {
+            "virtual_address": "1047624"
+          }
+        },
+        {
+          "name": "push_help_history",
+          "size": "256",
+          "fuzzy_match_percent": 100.0,
+          "address": "81376",
+          "metadata": {
+            "virtual_address": "1047728"
+          }
+        },
+        {
+          "name": "try_set_help_message",
+          "size": "164",
+          "fuzzy_match_percent": 100.0,
+          "address": "172512",
+          "metadata": {
+            "virtual_address": "1138864"
+          }
+        },
+        {
+          "name": "force_help_message",
+          "size": "112",
+          "fuzzy_match_percent": 100.0,
+          "address": "172680",
+          "metadata": {
+            "virtual_address": "1139032"
           }
         }
       ],
@@ -8695,13 +8627,13 @@
       "name": "game/rendering/packets",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "5972",
-        "matched_code": "5972",
+        "total_code": "6024",
+        "matched_code": "6024",
         "matched_code_percent": 100.0,
-        "total_functions": 17,
-        "matched_functions": 17,
+        "total_functions": 18,
+        "matched_functions": 18,
         "matched_functions_percent": 100.0,
-        "complete_code": "5972",
+        "complete_code": "6024",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -8858,6 +8790,15 @@
           "address": "255608",
           "metadata": {
             "virtual_address": "1263624"
+          }
+        },
+        {
+          "name": "append_dma_tag",
+          "size": "52",
+          "fuzzy_match_percent": 100.0,
+          "address": "257384",
+          "metadata": {
+            "virtual_address": "1265400"
           }
         }
       ],
@@ -9121,13 +9062,13 @@
       "name": "game/math",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "464",
-        "matched_code": "464",
+        "total_code": "652",
+        "matched_code": "652",
         "matched_code_percent": 100.0,
-        "total_functions": 4,
-        "matched_functions": 4,
+        "total_functions": 5,
+        "matched_functions": 5,
         "matched_functions_percent": 100.0,
-        "complete_code": "464",
+        "complete_code": "652",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -9149,6 +9090,15 @@
           "address": "61016",
           "metadata": {
             "virtual_address": "1087384"
+          }
+        },
+        {
+          "name": "normalize_vector_triplet",
+          "size": "188",
+          "fuzzy_match_percent": 100.0,
+          "address": "108392",
+          "metadata": {
+            "virtual_address": "1134760"
           }
         },
         {
@@ -9346,121 +9296,6 @@
       }
     },
     {
-      "name": "game/ui/help",
-      "measures": {
-        "fuzzy_match_percent": 100.0,
-        "total_code": "4568",
-        "matched_code": "4568",
-        "matched_code_percent": 100.0,
-        "total_functions": 10,
-        "matched_functions": 10,
-        "matched_functions_percent": 100.0,
-        "complete_code": "4568",
-        "complete_code_percent": 100.0,
-        "total_units": 1,
-        "complete_units": 1
-      },
-      "functions": [
-        {
-          "name": "dismiss_help",
-          "size": "136",
-          "fuzzy_match_percent": 100.0,
-          "address": "0",
-          "metadata": {
-            "virtual_address": "1043336"
-          }
-        },
-        {
-          "name": "find_help_message_index",
-          "size": "108",
-          "fuzzy_match_percent": 100.0,
-          "address": "152",
-          "metadata": {
-            "virtual_address": "1043488"
-          }
-        },
-        {
-          "name": "get_help_message_text",
-          "size": "64",
-          "fuzzy_match_percent": 100.0,
-          "address": "264",
-          "metadata": {
-            "virtual_address": "1043600"
-          }
-        },
-        {
-          "name": "update_help_state",
-          "size": "2564",
-          "fuzzy_match_percent": 100.0,
-          "address": "648",
-          "metadata": {
-            "virtual_address": "1043984"
-          }
-        },
-        {
-          "name": "help_draw_prompt",
-          "size": "228",
-          "fuzzy_match_percent": 100.0,
-          "address": "3216",
-          "metadata": {
-            "virtual_address": "1046552"
-          }
-        },
-        {
-          "name": "draw_help",
-          "size": "836",
-          "fuzzy_match_percent": 100.0,
-          "address": "3448",
-          "metadata": {
-            "virtual_address": "1046784"
-          }
-        },
-        {
-          "name": "find_help_entry",
-          "size": "100",
-          "fuzzy_match_percent": 100.0,
-          "address": "4288",
-          "metadata": {
-            "virtual_address": "1047624"
-          }
-        },
-        {
-          "name": "push_help_history",
-          "size": "256",
-          "fuzzy_match_percent": 100.0,
-          "address": "4392",
-          "metadata": {
-            "virtual_address": "1047728"
-          }
-        },
-        {
-          "name": "try_set_help_message",
-          "size": "164",
-          "fuzzy_match_percent": 100.0,
-          "address": "95528",
-          "metadata": {
-            "virtual_address": "1138864"
-          }
-        },
-        {
-          "name": "force_help_message",
-          "size": "112",
-          "fuzzy_match_percent": 100.0,
-          "address": "95696",
-          "metadata": {
-            "virtual_address": "1139032"
-          }
-        }
-      ],
-      "metadata": {
-        "complete": true,
-        "progress_categories": [
-          "boot",
-          "game"
-        ]
-      }
-    },
-    {
       "name": "game/ui/hud",
       "measures": {
         "fuzzy_match_percent": 100.0,
@@ -9574,7 +9409,7 @@
           }
         },
         {
-          "name": "initialize_resource_entry",
+          "name": "hud_heap_reset",
           "size": "40",
           "fuzzy_match_percent": 100.0,
           "address": "672",
@@ -9631,13 +9466,13 @@
       "name": "game/mobys",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "5848",
-        "matched_code": "5848",
+        "total_code": "7736",
+        "matched_code": "7736",
         "matched_code_percent": 100.0,
-        "total_functions": 31,
-        "matched_functions": 31,
+        "total_functions": 36,
+        "matched_functions": 36,
         "matched_functions_percent": 100.0,
-        "complete_code": "5848",
+        "complete_code": "7736",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -9725,6 +9560,15 @@
           }
         },
         {
+          "name": "compute_interpolated_record_value",
+          "size": "244",
+          "fuzzy_match_percent": 100.0,
+          "address": "55000",
+          "metadata": {
+            "virtual_address": "1104224"
+          }
+        },
+        {
           "name": "attach_manipulator",
           "size": "120",
           "fuzzy_match_percent": 100.0,
@@ -9743,7 +9587,7 @@
           }
         },
         {
-          "name": "find_or_allocate_id_slot",
+          "name": "find_or_allocate_moby_render_slot",
           "size": "68",
           "fuzzy_match_percent": 100.0,
           "address": "55568",
@@ -9824,7 +9668,7 @@
           }
         },
         {
-          "name": "update_visible_resident_objects",
+          "name": "update_visible_mobys",
           "size": "148",
           "fuzzy_match_percent": 100.0,
           "address": "80672",
@@ -9866,6 +9710,42 @@
           "address": "82936",
           "metadata": {
             "virtual_address": "1132160"
+          }
+        },
+        {
+          "name": "resolve_moby_hit_response",
+          "size": "1408",
+          "fuzzy_match_percent": 100.0,
+          "address": "83488",
+          "metadata": {
+            "virtual_address": "1132712"
+          }
+        },
+        {
+          "name": "get_moby_target_info",
+          "size": "48",
+          "fuzzy_match_percent": 100.0,
+          "address": "85744",
+          "metadata": {
+            "virtual_address": "1134968"
+          }
+        },
+        {
+          "name": "get_moby_hit_state",
+          "size": "48",
+          "fuzzy_match_percent": 100.0,
+          "address": "85792",
+          "metadata": {
+            "virtual_address": "1135016"
+          }
+        },
+        {
+          "name": "is_value_within_interpolated_window",
+          "size": "140",
+          "fuzzy_match_percent": 100.0,
+          "address": "88512",
+          "metadata": {
+            "virtual_address": "1137736"
           }
         },
         {
@@ -9920,6 +9800,58 @@
           "address": "241680",
           "metadata": {
             "virtual_address": "1290904"
+          }
+        }
+      ],
+      "metadata": {
+        "complete": true,
+        "progress_categories": [
+          "boot",
+          "game"
+        ]
+      }
+    },
+    {
+      "name": "game/runtime",
+      "measures": {
+        "fuzzy_match_percent": 100.0,
+        "total_code": "340",
+        "matched_code": "340",
+        "matched_code_percent": 100.0,
+        "total_functions": 3,
+        "matched_functions": 3,
+        "matched_functions_percent": 100.0,
+        "complete_code": "340",
+        "complete_code_percent": 100.0,
+        "total_units": 1,
+        "complete_units": 1
+      },
+      "functions": [
+        {
+          "name": "decrement_resource_counter",
+          "size": "24",
+          "fuzzy_match_percent": 100.0,
+          "address": "0",
+          "metadata": {
+            "virtual_address": "1050344"
+          }
+        },
+        {
+          "name": "set_video_timing",
+          "size": "288",
+          "fuzzy_match_percent": 100.0,
+          "address": "86536",
+          "metadata": {
+            "virtual_address": "1136880"
+          }
+        },
+        {
+          "name": "switch_thread",
+          "size": "28",
+          "fuzzy_match_percent": 100.0,
+          "address": "241672",
+          "metadata": {
+            "virtual_address": "1292016"
           }
         }
       ],
@@ -12067,7 +11999,7 @@
           }
         },
         {
-          "name": "get_dma_packet_span_bytes",
+          "name": "memcard_get_data_size",
           "size": "56",
           "fuzzy_match_percent": 100.0,
           "address": "7256",
@@ -12286,92 +12218,6 @@
       }
     },
     {
-      "name": "game/math/vectors",
-      "measures": {
-        "fuzzy_match_percent": 100.0,
-        "total_code": "188",
-        "matched_code": "188",
-        "matched_code_percent": 100.0,
-        "total_functions": 1,
-        "matched_functions": 1,
-        "matched_functions_percent": 100.0,
-        "complete_code": "188",
-        "complete_code_percent": 100.0,
-        "total_units": 1,
-        "complete_units": 1
-      },
-      "functions": [
-        {
-          "name": "normalize_vector_triplet",
-          "size": "188",
-          "fuzzy_match_percent": 100.0,
-          "address": "0",
-          "metadata": {
-            "virtual_address": "1134760"
-          }
-        }
-      ],
-      "metadata": {
-        "complete": true,
-        "progress_categories": [
-          "boot",
-          "game"
-        ]
-      }
-    },
-    {
-      "name": "game/weapons",
-      "measures": {
-        "fuzzy_match_percent": 100.0,
-        "total_code": "2096",
-        "matched_code": "2096",
-        "matched_code_percent": 100.0,
-        "total_functions": 3,
-        "matched_functions": 3,
-        "matched_functions_percent": 100.0,
-        "complete_code": "2096",
-        "complete_code_percent": 100.0,
-        "total_units": 1,
-        "complete_units": 1
-      },
-      "functions": [
-        {
-          "name": "suck_get_aim_height",
-          "size": "48",
-          "fuzzy_match_percent": 100.0,
-          "address": "0",
-          "metadata": {
-            "virtual_address": "1134968"
-          }
-        },
-        {
-          "name": "load_hand_gadget",
-          "size": "2040",
-          "fuzzy_match_percent": 100.0,
-          "address": "65904",
-          "metadata": {
-            "virtual_address": "1200872"
-          }
-        },
-        {
-          "name": "gadget_moby_update_noop",
-          "size": "8",
-          "fuzzy_match_percent": 100.0,
-          "address": "67944",
-          "metadata": {
-            "virtual_address": "1202912"
-          }
-        }
-      ],
-      "metadata": {
-        "complete": true,
-        "progress_categories": [
-          "boot",
-          "game"
-        ]
-      }
-    },
-    {
       "name": "game/math/rotations",
       "measures": {
         "fuzzy_match_percent": 100.0,
@@ -12458,7 +12304,7 @@
       },
       "functions": [
         {
-          "name": "compute_clamped_count_difference",
+          "name": "count_unspent_gold_bolts",
           "size": "72",
           "fuzzy_match_percent": 100.0,
           "address": "0",
@@ -12467,7 +12313,7 @@
           }
         },
         {
-          "name": "count_nonzero_entries_up_to_40",
+          "name": "count_gold_bolts",
           "size": "112",
           "fuzzy_match_percent": 100.0,
           "address": "72",
@@ -12476,7 +12322,7 @@
           }
         },
         {
-          "name": "count_nonzero_entries_up_to_10",
+          "name": "count_gold_weapons",
           "size": "72",
           "fuzzy_match_percent": 100.0,
           "address": "184",
@@ -12485,7 +12331,7 @@
           }
         },
         {
-          "name": "count_nonzero_entries_up_to_30",
+          "name": "count_skill_points",
           "size": "72",
           "fuzzy_match_percent": 100.0,
           "address": "256",
@@ -12630,13 +12476,13 @@
       "name": "game/ui/menus/system",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "7040",
-        "matched_code": "7040",
+        "total_code": "7104",
+        "matched_code": "7104",
         "matched_code_percent": 100.0,
-        "total_functions": 15,
-        "matched_functions": 15,
+        "total_functions": 17,
+        "matched_functions": 17,
         "matched_functions_percent": 100.0,
-        "complete_code": "7040",
+        "complete_code": "7104",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -12649,6 +12495,15 @@
           "address": "0",
           "metadata": {
             "virtual_address": "1145800"
+          }
+        },
+        {
+          "name": "enter_main_menu",
+          "size": "44",
+          "fuzzy_match_percent": 100.0,
+          "address": "8992",
+          "metadata": {
+            "virtual_address": "1154792"
           }
         },
         {
@@ -12760,6 +12615,15 @@
           }
         },
         {
+          "name": "enter_timed_menu_sequence",
+          "size": "20",
+          "fuzzy_match_percent": 100.0,
+          "address": "46992",
+          "metadata": {
+            "virtual_address": "1192792"
+          }
+        },
+        {
           "name": "update_timed_menu_sequence",
           "size": "888",
           "fuzzy_match_percent": 100.0,
@@ -12790,13 +12654,13 @@
       "name": "game/ui/menus",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "588",
-        "matched_code": "588",
+        "total_code": "544",
+        "matched_code": "544",
         "matched_code_percent": 100.0,
-        "total_functions": 2,
-        "matched_functions": 2,
+        "total_functions": 1,
+        "matched_functions": 1,
         "matched_functions_percent": 100.0,
-        "complete_code": "588",
+        "complete_code": "544",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -12809,15 +12673,6 @@
           "address": "0",
           "metadata": {
             "virtual_address": "1154840"
-          }
-        },
-        {
-          "name": "FUN_0021ca98",
-          "size": "44",
-          "fuzzy_match_percent": 100.0,
-          "address": "15104",
-          "metadata": {
-            "virtual_address": "1169944"
           }
         }
       ],
@@ -12939,13 +12794,13 @@
       "name": "game/ui/menus/pause",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "1792",
-        "matched_code": "1792",
+        "total_code": "1836",
+        "matched_code": "1836",
         "matched_code_percent": 100.0,
-        "total_functions": 9,
-        "matched_functions": 9,
+        "total_functions": 10,
+        "matched_functions": 10,
         "matched_functions_percent": 100.0,
-        "complete_code": "1792",
+        "complete_code": "1836",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -12976,6 +12831,15 @@
           "address": "10416",
           "metadata": {
             "virtual_address": "1169888"
+          }
+        },
+        {
+          "name": "assign_heli_pack_label_text_table",
+          "size": "44",
+          "fuzzy_match_percent": 100.0,
+          "address": "10472",
+          "metadata": {
+            "virtual_address": "1169944"
           }
         },
         {
@@ -13444,13 +13308,13 @@
       "name": "game/ui/menus/stream_image",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "952",
-        "matched_code": "952",
+        "total_code": "1144",
+        "matched_code": "1144",
         "matched_code_percent": 100.0,
-        "total_functions": 3,
-        "matched_functions": 3,
+        "total_functions": 4,
+        "matched_functions": 4,
         "matched_functions_percent": 100.0,
-        "complete_code": "952",
+        "complete_code": "1144",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -13482,6 +13346,15 @@
           "metadata": {
             "virtual_address": "1182968"
           }
+        },
+        {
+          "name": "draw_menu_stream_image",
+          "size": "192",
+          "fuzzy_match_percent": 100.0,
+          "address": "3584",
+          "metadata": {
+            "virtual_address": "1185552"
+          }
         }
       ],
       "metadata": {
@@ -13493,28 +13366,37 @@
       }
     },
     {
-      "name": "game/rendering",
+      "name": "game/weapons",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "192",
-        "matched_code": "192",
+        "total_code": "2048",
+        "matched_code": "2048",
         "matched_code_percent": 100.0,
-        "total_functions": 1,
-        "matched_functions": 1,
+        "total_functions": 2,
+        "matched_functions": 2,
         "matched_functions_percent": 100.0,
-        "complete_code": "192",
+        "complete_code": "2048",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
       },
       "functions": [
         {
-          "name": "draw_two_texture_panels",
-          "size": "192",
+          "name": "load_hand_gadget",
+          "size": "2040",
           "fuzzy_match_percent": 100.0,
           "address": "0",
           "metadata": {
-            "virtual_address": "1185552"
+            "virtual_address": "1200872"
+          }
+        },
+        {
+          "name": "gadget_moby_update_noop",
+          "size": "8",
+          "fuzzy_match_percent": 100.0,
+          "address": "2040",
+          "metadata": {
+            "virtual_address": "1202912"
           }
         }
       ],
@@ -13758,13 +13640,13 @@
       "name": "game/rendering/vu1",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "2180",
-        "matched_code": "2180",
+        "total_code": "2224",
+        "matched_code": "2224",
         "matched_code_percent": 100.0,
-        "total_functions": 15,
-        "matched_functions": 15,
+        "total_functions": 16,
+        "matched_functions": 16,
         "matched_functions_percent": 100.0,
-        "complete_code": "2180",
+        "complete_code": "2224",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -13777,6 +13659,15 @@
           "address": "0",
           "metadata": {
             "virtual_address": "1262680"
+          }
+        },
+        {
+          "name": "select_level_vu_chain",
+          "size": "44",
+          "fuzzy_match_percent": 100.0,
+          "address": "200",
+          "metadata": {
+            "virtual_address": "1262880"
           }
         },
         {
@@ -13918,13 +13809,13 @@
       "name": "game/audio/decoder",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "1600",
-        "matched_code": "1600",
+        "total_code": "1844",
+        "matched_code": "1844",
         "matched_code_percent": 100.0,
-        "total_functions": 10,
-        "matched_functions": 10,
+        "total_functions": 12,
+        "matched_functions": 12,
         "matched_functions_percent": 100.0,
-        "complete_code": "1600",
+        "complete_code": "1844",
         "complete_code_percent": 100.0,
         "total_units": 1,
         "complete_units": 1
@@ -13994,6 +13885,15 @@
           }
         },
         {
+          "name": "audio_dec_is_preset",
+          "size": "16",
+          "fuzzy_match_percent": 100.0,
+          "address": "1872",
+          "metadata": {
+            "virtual_address": "1293920"
+          }
+        },
+        {
           "name": "audio_dec_send",
           "size": "36",
           "fuzzy_match_percent": 100.0,
@@ -14019,37 +13919,12 @@
           "metadata": {
             "virtual_address": "1294144"
           }
-        }
-      ],
-      "metadata": {
-        "complete": true,
-        "progress_categories": [
-          "boot",
-          "game"
-        ]
-      }
-    },
-    {
-      "name": "game/audio/decoder/callbacks",
-      "measures": {
-        "fuzzy_match_percent": 100.0,
-        "total_code": "228",
-        "matched_code": "228",
-        "matched_code_percent": 100.0,
-        "total_functions": 1,
-        "matched_functions": 1,
-        "matched_functions_percent": 100.0,
-        "complete_code": "228",
-        "complete_code_percent": 100.0,
-        "total_units": 1,
-        "complete_units": 1
-      },
-      "functions": [
+        },
         {
           "name": "pcm_callback",
           "size": "228",
           "fuzzy_match_percent": 100.0,
-          "address": "0",
+          "address": "3992",
           "metadata": {
             "virtual_address": "1296040"
           }
@@ -65995,8 +65870,8 @@
         "matched_functions_percent": 100.0,
         "complete_code": "354504",
         "complete_code_percent": 100.0,
-        "total_units": 119,
-        "complete_units": 119,
+        "total_units": 114,
+        "complete_units": 114,
         "total_data": "699136",
         "matched_data": "33597",
         "matched_data_percent": 4.805503,
@@ -66009,16 +65884,16 @@
       "name": "Game",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "264896",
-        "matched_code": "264896",
+        "total_code": "264872",
+        "matched_code": "264872",
         "matched_code_percent": 100.0,
-        "total_functions": 852,
-        "matched_functions": 852,
+        "total_functions": 850,
+        "matched_functions": 850,
         "matched_functions_percent": 100.0,
-        "complete_code": "264896",
+        "complete_code": "264872",
         "complete_code_percent": 100.0,
-        "total_units": 82,
-        "complete_units": 82
+        "total_units": 77,
+        "complete_units": 77
       }
     },
     {
@@ -66026,13 +65901,13 @@
       "name": "SDK",
       "measures": {
         "fuzzy_match_percent": 100.0,
-        "total_code": "89608",
-        "matched_code": "89608",
+        "total_code": "89632",
+        "matched_code": "89632",
         "matched_code_percent": 100.0,
-        "total_functions": 378,
-        "matched_functions": 378,
+        "total_functions": 380,
+        "matched_functions": 380,
         "matched_functions_percent": 100.0,
-        "complete_code": "89608",
+        "complete_code": "89632",
         "complete_code_percent": 100.0,
         "total_units": 37,
         "complete_units": 37
