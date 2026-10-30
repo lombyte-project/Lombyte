@@ -350,16 +350,16 @@ typedef struct {
 void sync_hero_mapped_moby_animation_frames(void) __asm__("FUN_L00_00232320");
 
 void sync_hero_mapped_moby_animation_frames(void) {
-    struct Hero *base = &hero;
-    AnimState   *animation_sync_target = ((AnimState *)base->unk2278);
+    struct Hero *hero_animation_sync_state = &hero;
+    AnimState   *animation_sync_target = ((AnimState *)hero_animation_sync_state->unk2278);
 
     if (animation_sync_target == 0) {
         return;
     }
-    animation_sync_target->f5C = base->anim_frame_rate;
-    animation_sync_target->f54 = *(float *)(((char *)base->moby) + 0x54);
-    animation_sync_target->seq[0] = *(unsigned char *)(((char *)base->moby) + 0x51);
-    animation_sync_target->seq[1] = *(unsigned char *)(((char *)base->moby) + 0x51);
+    animation_sync_target->f5C = hero_animation_sync_state->anim_frame_rate;
+    animation_sync_target->f54 = *(float *)(((char *)hero_animation_sync_state->moby) + 0x54);
+    animation_sync_target->seq[0] = *(unsigned char *)(((char *)hero_animation_sync_state->moby) + 0x51);
+    animation_sync_target->seq[1] = *(unsigned char *)(((char *)hero_animation_sync_state->moby) + 0x51);
     animation_sync_target->id[0] =
         animation_sync_target->model->banks[animation_sync_target->bank[0]]
             ->ids[animation_sync_target->seq[0]];
