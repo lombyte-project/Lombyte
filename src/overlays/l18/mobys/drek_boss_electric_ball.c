@@ -115,14 +115,14 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 char *
 spawn_drek_boss_electric_ball(void *owner, void *vector, int value) __asm__("FUN_L18_002ea0f0");
 
-char *spawn_drek_boss_electric_ball(void *owner, void *vector, int value) {
+char *spawn_drek_boss_electric_ball(void *spawning_moby, void *vector, int value) {
     char *moby = create_moby(0x3D7);
     if (moby != 0) {
         char *class_3d7_private_vars;
         ((unsigned char *)moby)[0x30] = 0xFF;
         qcopy(moby + 0x10, vector);
         class_3d7_private_vars = ((char *)MOBY(moby)->pvars);
-        *(void **)(class_3d7_private_vars + 0x20) = owner;
+        *(void **)(class_3d7_private_vars + 0x20) = spawning_moby;
         *(int *)(class_3d7_private_vars + 0x28) = 5;
         *(int *)(class_3d7_private_vars + 0x34) = value;
         *(int *)(class_3d7_private_vars + 0x24) = 0;
