@@ -2,7 +2,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 
 typedef unsigned int u128_25a478 __attribute__((mode(TI), aligned(16)));
 
@@ -53,30 +53,30 @@ extern u8        D_0013E533[];
 extern f32       hit_damage_override_table[2] __asm__("D_0015FFC8") __attribute__((sda));
 extern f32       hit_vector_scale_table[][8] __asm__("D_001CC0C8");
 extern u8        hit_response_code_table[][4] __asm__("D_001CC080");
-extern Q_25a478 *ReadStateField(void *);
+extern Q_25a478 *read_state_field(void *);
 extern s32       scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32       fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32       fast_cos(f32) __asm__("func_001F9DC8");
 extern f32       fast_sin(f32) __asm__("func_001F9DE0");
 
-s32 fun_00213928(O_25a478 *obj,
-                 P_25a478 *p,
-                 Q_25a478 *q,
-                 u32       flags,
-                 s32      *out,
-                 f32      *fp,
-                 s32      *kp,
-                 s32       idx) __asm__("FUN_00213928");
+s32 resolve_moby_hit_response(O_25a478 *obj,
+                              P_25a478 *p,
+                              Q_25a478 *q,
+                              u32       flags,
+                              s32      *out,
+                              f32      *fp,
+                              s32      *kp,
+                              s32       idx) __asm__("FUN_00213928");
 
-s32 fun_00213928(O_25a478 *hit_recipient_moby,
-                 P_25a478 *hit_record,
-                 Q_25a478 *q,
-                 u32       flags,
-                 s32      *out,
-                 f32      *fp,
-                 s32      *kp,
+s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
+                              P_25a478 *hit_record,
+                              Q_25a478 *q,
+                              u32       flags,
+                              s32      *out,
+                              f32      *fp,
+                              s32      *kp,
 
-                 s32 hit_vector_scale_row) {
+                              s32 hit_vector_scale_row) {
     enum {
         KIND_GATED_HIT_RESPONSE = 0x0,
         DEFAULT_HIT_RESPONSE = 0x1,
@@ -117,7 +117,7 @@ s32 fun_00213928(O_25a478 *hit_recipient_moby,
         return 0;
     }
     if (!q) {
-        q = suck_get_aim_height(hit_recipient_moby);
+        q = get_moby_target_info(hit_recipient_moby);
         if (!q) {
             *out = 0;
             return 0;
@@ -307,15 +307,15 @@ s32 fun_00213928(O_25a478 *hit_recipient_moby,
     if (fp)
         *fp = hit_record->f2C;
     if (hit_response_index == 4) {
-        object_state = ReadStateField(hit_recipient_moby);
+        object_state = read_state_field(hit_recipient_moby);
         if (object_state)
             object_state->b2E = 1;
     } else {
-        Q_25a478 *object_state_for_flag_clear = ReadStateField(hit_recipient_moby);
+        Q_25a478 *object_state_for_flag_clear = read_state_field(hit_recipient_moby);
         if (object_state_for_flag_clear)
             object_state_for_flag_clear->b2E = 0;
     }
     return hit_response_code;
 }
 
-extern __typeof__(fun_00213928) func_00213928 __attribute__((alias("FUN_00213928")));
+extern __typeof__(resolve_moby_hit_response) func_00213928 __attribute__((alias("FUN_00213928")));

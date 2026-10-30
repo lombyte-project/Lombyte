@@ -4,7 +4,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/mobys/moby.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
@@ -492,7 +492,7 @@ void handle_extermitank_hits_and_sync_children(char *moby) {
             part0 = 0;
     }
     hit = part0;
-    fun_00213928(moby, hit, data + 0x20, 0, &result, &remaining, 0, 4);
+    resolve_moby_hit_response(moby, hit, data + 0x20, 0, &result, &remaining, 0, 4);
     if (result == 1 || (unsigned char)moby[0x20] == 3)
         goto mark_children;
     {

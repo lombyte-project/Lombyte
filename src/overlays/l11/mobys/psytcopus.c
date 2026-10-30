@@ -14,7 +14,7 @@
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int fun_00213928(void *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int   resolve_moby_hit_response(void *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
 
 /* pvars of the moby run by psytcopus_update (FUN_L11_00310698 does its hit handling) */
 struct PokiPathVars {
@@ -301,7 +301,8 @@ void handle_psytcopus_hits(struct Moby *psytcopus) {
     }
     damage = 0.0f;
     info = find_moby_hit(psytcopus, 0x330000, 0);
-    hit_reaction = fun_00213928(psytcopus, info, &psytcopus_vars->health, 0, &hits, &damage, 0, 4);
+    hit_reaction = resolve_moby_hit_response(
+        psytcopus, info, &psytcopus_vars->health, 0, &hits, &damage, 0, 4);
     if (hits != 1 && psytcopus->state != 8) {
         psytcopus_vars->health -= damage;
         if (psytcopus_vars->health <= 0.0f) {

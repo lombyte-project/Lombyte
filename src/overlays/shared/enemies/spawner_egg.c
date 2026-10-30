@@ -11,7 +11,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/world/collision/ground_probe.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/weapons/suckcannon.h"
@@ -137,7 +137,7 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
         copy_hero_moby_field_38(spawned_moby);
         update_entity(spawned_moby);
         result = spawned_moby;
-        data = suck_get_aim_height(result);
+        data = get_moby_target_info(result);
         if (data != 0) {
             *(f32 *)((u8 *)data + 0x34) = 0.0f;
             *(f32 *)((u8 *)data + 0x30) = 0.0f;

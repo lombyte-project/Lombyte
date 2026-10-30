@@ -6,7 +6,7 @@
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
@@ -41,7 +41,7 @@ unsigned char *spawn_ship_rocket(struct Moby *spawning_moby,
         qcopy(moby + 0x40, spawn_rotation);
         if (target != 0) {
             char *target_aux_data;
-            target_aux_data = suck_get_aim_height(target);
+            target_aux_data = get_moby_target_info(target);
             if (target_aux_data != 0) {
                 *(unsigned short *)(target_aux_data + 0x1E) |= 0x80;
             }

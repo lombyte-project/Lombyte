@@ -54,7 +54,7 @@ void process_bgm_display_text_event(u64           color,
     text_cursor = str;
     do {
         if ((u8)(*text_cursor - 8) < 8) {
-            if (GlobalStateFlag != 0) {
+            if (font_color_codes_enabled != 0) {
                 color &= 0xFF000000;
                 color |= font_palette_colors[*text_cursor - 8] & 0xFFFFFF;
             }

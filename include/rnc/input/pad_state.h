@@ -38,7 +38,7 @@ struct PadState {
     u8  pad_180[0x9];
     u8  unk189; /* 0x189: copied by metal_detector_update on spawn */
     u8  pad_18A[0x4];
-    s16 hist_idx;          /* 0x18E: cleared with unk190 by reset_global_state_fields */
+    s16 hist_idx;          /* 0x18E: cleared with unk190 by reset_pad_history */
     s32 hist_count;        /* 0x190 */
     s32 socket;            /* 0x194: scePad2CreateSocket(&param, &D_0013C940) result, init_pads */
     s32 profile_state;     /* 0x198: 0 query profile, 1 read pad, 2 profile too long */

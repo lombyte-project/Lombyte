@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
-#include "rnc/runtime/state/disable_global_flag.h"
-#include "rnc/runtime/state/enable_global_flag.h"
+#include "rnc/ui/text/font/disable_font_color_codes.h"
+#include "rnc/ui/text/font/enable_font_color_codes.h"
 
 struct Menu {
     u8  pad0[0x20];
@@ -56,7 +56,7 @@ s32 draw_missions_menu(struct Menu *menu) {
         x = 2;
     }
     step = menu->h / (current_level_index != 0 ? 7 : 6);
-    disable_global_flag();
+    disable_font_color_codes();
     y = step - 6;
     font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EEE), -1);
     if (current_level_index != 0) {
@@ -71,7 +71,7 @@ s32 draw_missions_menu(struct Menu *menu) {
     font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EFC), -1);
     y += step;
     font_print_small(x, y, 0x80FFA888, get_help_message_text(0x4EE0), -1);
-    enable_global_flag();
+    enable_font_color_codes();
     do_gif_paging();
     return 2;
 }

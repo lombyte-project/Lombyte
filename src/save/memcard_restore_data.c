@@ -99,7 +99,7 @@ s32 memcard_restore_data(u8 *save_packet, s32 slot, struct RestoreEntry *restore
         save_packet += ((((struct RestoreBlock *)save_packet)->size + 3) & ~3) + 8;
     }
     total += 8;
-    if (total != get_dma_packet_span_bytes(restore_entries)) {
+    if (total != memcard_get_data_size(restore_entries)) {
         errors++;
     }
     save_packet += 8;

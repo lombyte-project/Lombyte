@@ -658,8 +658,7 @@ extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 
 extern Hit_3047E8 *func_L00_0025B478_3047E8(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int         collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, float *, float *, float *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
@@ -729,8 +728,8 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
             hit_record = 0;
         }
     }
-    hit_response =
-        fun_00213928(moby, hit_record, &moby_data->hp, 0, &collision_hit_status, &dmg, 0, 4);
+    hit_response = resolve_moby_hit_response(
+        moby, hit_record, &moby_data->hp, 0, &collision_hit_status, &dmg, 0, 4);
     if (collision_hit_status != 1 && moby->state != 14) {
         moby_data->hp = moby_data->hp - dmg;
         if (moby_data->hp <= 0.0f) {

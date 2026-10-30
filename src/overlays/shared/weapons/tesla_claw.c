@@ -9,7 +9,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/audio/voice_pool.h"
 #include "rnc/input/pad_state.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
@@ -567,7 +567,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                     Aim  *a;
                     short n;
                     tesla_claw_vars->hold++;
-                    a = suck_get_aim_height(tesla_claw_vars->target);
+                    a = get_moby_target_info(tesla_claw_vars->target);
                     if (a && a->kind == 1)
                         lim = 5;
                     n = tesla_claw_vars->hold;
@@ -583,7 +583,7 @@ void tesla_claw_update(struct Moby *tesla_claw_moby) {
                     Aim  *a;
                     short n;
                     tesla_claw_vars->hold2++;
-                    a = suck_get_aim_height(tesla_claw_vars->target2);
+                    a = get_moby_target_info(tesla_claw_vars->target2);
                     if (a && a->kind == 1)
                         lim = 5;
                     n = tesla_claw_vars->hold2;

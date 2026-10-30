@@ -6,7 +6,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/world/collision/ground_probe.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/weapons/suckcannon.h"
@@ -161,7 +161,7 @@ struct Moby *revive_spawner_pooled_child(struct Moby *spawner_moby, Vec4 *at, s3
         copy_hero_moby_field_38(current_moby);
         update_entity(current_moby);
         spawned = current_moby;
-        sound = suck_get_aim_height(spawned);
+        sound = get_moby_target_info(spawned);
         if (sound != NULL) {
             sound->unk34 = 0;
             sound->unk30 = 0;

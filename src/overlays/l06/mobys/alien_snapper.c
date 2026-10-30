@@ -221,12 +221,11 @@ int D_L06_00161EE8 = 0x80808080;
 
 int D_L06_00161EEC = 0x80604040;
 
-extern int     fun_00213928() __asm__("FUN_00213928");
+extern int     resolve_moby_hit_response() __asm__("FUN_00213928");
 void           trooper_anim_update(void *a, void *s) __asm__("FUN_L00_0025d458");
 extern float   func_001F9878_2FA618(float) __asm__("FUN_001f96b0");
 extern Target *func_L00_0025B478_2FA618(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void func_L06_002FAAC8_2FA618(void *) __asm__("FUN_L06_002f9698");
 extern void
 func_L00_0025D5B0_2FA618(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
@@ -743,7 +742,7 @@ void update_alien_snapper_hit_response_and_targeting(Moby *moby) {
     if (target != 0 && target->owner != 0 && target->owner->oclass == 0x418) {
         target = 0;
     }
-    reaction = fun_00213928(moby, target, &data->health, 0, &hit, &damage, 0, 4);
+    reaction = resolve_moby_hit_response(moby, target, &data->health, 0, &hit, &damage, 0, 4);
 
     if (hit != 1 && moby->state != 0x11 && moby->state != 3) {
         data->health = data->health - damage;

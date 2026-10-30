@@ -3,8 +3,8 @@
 #include "asm.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/help/get_help_message_text.h"
-#include "rnc/runtime/state/disable_global_flag.h"
-#include "rnc/runtime/state/enable_global_flag.h"
+#include "rnc/ui/text/font/disable_font_color_codes.h"
+#include "rnc/ui/text/font/enable_font_color_codes.h"
 #include "rnc/ui/text/font/measure_text_width_regular.h"
 #include "rnc/ui/frames/draw_stretchable_ui_frame.h"
 
@@ -37,12 +37,12 @@ void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char
     }
     draw_stretchable_ui_frame(
         left - 0x20, y - 0xE, right - left + 0x40, 0x1C, truncate_float_to_s32(scale * 112.0f));
-    disable_global_flag();
+    disable_font_color_codes();
     shadow = (int)(alpha * 128.0f) << 24;
     color = shadow + 0xE0E0E0;
     font_print_large(left + 1, y - 7, shadow, text, -1);
     font_print_large(left, y - 8, color, text, -1);
-    enable_global_flag();
+    enable_font_color_codes();
 }
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001FCC50), where it is exact; names translated to the US level program. */
 

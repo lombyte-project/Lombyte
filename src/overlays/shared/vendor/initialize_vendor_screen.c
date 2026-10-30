@@ -9,7 +9,7 @@
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
 #include "rnc/audio/voices/snd_pause_all_sounds_in_group.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
-#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
+#include "rnc/rendering/vu1/select_level_vu_chain.h"
 #include "rnc/world/select_world_object_resource_tables.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/overlay/shared/ui/hud/draw_weapon_ammo_hud_panel.h"
@@ -88,7 +88,7 @@ void initialize_vendor_screen(char *vendor_moby, int lvl) {
     euler_rotation_basis(vendor_screen_state + 0x80, vendor_screen_state + 0xB0);
     fill_transfer_words(relocated_address_block, 0, 0x1C0);
     fill_transfer_words(D_L01_0017C7C0, 0, 0x40);
-    calculate_dma_transfer_address();
+    select_level_vu_chain();
     adjusted_address_base = relocated_address_base + (int)0xFFFC0000;
     *(int *)(relocated_address_block + 0x58) = vendor_relocation_offsets[1] + adjusted_address_base;
     level_table_pair_index = level_table_pair_indices[lvl];

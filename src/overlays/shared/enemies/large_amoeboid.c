@@ -83,7 +83,7 @@ extern float fast_vec_dist(void *, void *);
 extern char *D_L01_0015FFD8;
 extern int   FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
 extern int   fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
-extern int   fun_00213928(void *, void *, void *, int, int *, float *, int, int);
+extern int   resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int);
 extern short amoeboid_color_cycle_start_gp __asm__("D_L01_00161998") __attribute__((sda));
 extern short amoeboid_color_cycle_end_gp __asm__("D_L01_0016199C") __attribute__((sda));
 extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
@@ -647,7 +647,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
             }
         }
     }
-    fun_00213928(moby, hit_record, moby_vars + 0x20, 0, &flag, &amount, 0, 4);
+    resolve_moby_hit_response(moby, hit_record, moby_vars + 0x20, 0, &flag, &amount, 0, 4);
     if (flag != 1 && amount != 0.0f && MOBY(moby)->state != 0xB && MOBY(moby)->state != 0xA &&
         MOBY(moby)->state != 8) {
         size_multiplier = 0.8f;

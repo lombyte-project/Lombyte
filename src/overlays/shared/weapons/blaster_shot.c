@@ -7,7 +7,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/math/fast_math.h"
@@ -160,7 +160,7 @@ char *spawn_homing_shot(
         if (target != 0) {
             int bounds;
             qcopy(vars, target + 0x10);
-            bounds = (int)suck_get_aim_height(target);
+            bounds = (int)get_moby_target_info(target);
             if (bounds != 0) {
                 *(float *)(vars + 0x8) = *(float *)(vars + 0x8) + *(float *)(bounds + 0x10);
             } else {

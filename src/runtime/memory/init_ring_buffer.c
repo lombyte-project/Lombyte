@@ -7,9 +7,9 @@ struct InitBlock {
 
 extern struct InitBlock InitBlockData __asm__("D_00154940");
 
-int init_block_fn(int value) __asm__("func_00119568");
+int init_ring_buffer(int value) __asm__("func_00119568");
 
-int init_block_fn(int value) {
+int init_ring_buffer(int value) {
     struct InitBlock *base;
     int              *ring_storage_start;
     base = &InitBlockData;

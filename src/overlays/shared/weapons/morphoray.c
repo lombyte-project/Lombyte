@@ -138,7 +138,7 @@ extern void  fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int   truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern int   suck_get_aim_height() __asm__("FUN_002141f8");
+extern int   get_moby_target_info() __asm__("FUN_002141f8");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int   collision_line(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern long  get_effect_texture(int) __asm__("FUN_001f44b8");
@@ -1433,7 +1433,7 @@ select_morphoray_target_and_adjust_aim(char *self, float *position, float *headi
                 *(short *)(candidate + 0xA6) == 0x452)
                 continue;
             qcopy(target, candidate + 0x10);
-            data = (char *)suck_get_aim_height(candidate);
+            data = (char *)get_moby_target_info(candidate);
             if (!data)
                 continue;
             target[2] += *(float *)(data + 0x10);
@@ -1478,7 +1478,7 @@ select_morphoray_target_and_adjust_aim(char *self, float *position, float *headi
             apparentAngle = fast_arc_sin(fast_vec_dist(offset, target) / (distance + distance));
             apparentAngle += apparentAngle;
             if (morphoray_target_angle_threshold_degrees_gp * 0.017453292f < apparentAngle) {
-                data = (char *)suck_get_aim_height(candidate);
+                data = (char *)get_moby_target_info(candidate);
                 if (data) {
                     radius = convert_integer_to_float(*(unsigned char *)(data + 10)) * 0.125f;
                     reduction = fast_arc_sin(radius / distance);
@@ -1595,7 +1595,7 @@ void morphoray_update(Moby *moby) {
         }
         if (hit != 0 || data->delay != 0) {
             if (hit != 0) {
-                float *target_health = suck_get_aim_height(hit);
+                float *target_health = get_moby_target_info(hit);
                 if (hit != data->target && data->delay == 0) {
                     data->target = hit;
                     data->total = func_001FA888_2BDAF0(((short *)target_health)[2]);
@@ -1761,7 +1761,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     func_L00_002BE2A0_2BE3A8();
     D_L00_001617D0 = normalize_angle(D_L00_001617D0 + D_L00_001616F8_gp);
     build_spherical_offset(&aim, D_L00_001617CC_macro, data->f48, data->f4C);
-    if (data->target != 0 && (info = suck_get_aim_height(data->target)) != 0) {
+    if (data->target != 0 && (info = get_moby_target_info(data->target)) != 0) {
         qcopy(&beam_end, &data->target->pos);
         beam_end.z = beam_end.z + info->height;
     } else {

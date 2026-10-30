@@ -32,7 +32,8 @@ char D_L09_00208F90[] = "Moby class %d Damage Received: %f\n";
 
 extern s32  fptodp(f32) __asm__("FUN_00120478");
 extern void debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
-extern s32 fun_00213928(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
+extern s32  resolve_moby_hit_response(
+     struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(struct Moby *, s32, s32);
 extern void trooper_anim_update(struct Moby *, u8 *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(struct Moby *, u8 *) __asm__("FUN_L00_0025d538");
@@ -100,7 +101,7 @@ void handle_refueling_station_damage(struct Moby *moby, VendorVars *vars, f32 *h
         if (damage_hit_record != 0) {
             debug_print(D_L09_00208F90, moby->oclass, fptodp(damage_hit_record->damage));
         }
-        switch (fun_00213928(moby, damage_hit_record, health, 0, &hit, 0, 0, 4)) {
+        switch (resolve_moby_hit_response(moby, damage_hit_record, health, 0, &hit, 0, 0, 4)) {
         case 1:
         case 2:
             *health = 0.0f;

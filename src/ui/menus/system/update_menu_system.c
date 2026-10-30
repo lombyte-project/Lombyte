@@ -9,7 +9,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/rendering/effects/update_fog.h"
-#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
+#include "rnc/rendering/vu1/select_level_vu_chain.h"
 
 struct Ent3 {
     u8 pad0[0x10];
@@ -58,7 +58,7 @@ void update_menu_system(void) {
             return;
         }
         D_0015F5B8 = 0x1E000;
-        calculate_dma_transfer_address();
+        select_level_vu_chain();
         update_fog();
         space_load_in_progress = 1;
         menu_system.help_text_buffer = 0;

@@ -106,7 +106,7 @@ extern unsigned char D_001413F5_lui __asm__("D_001413F5") NOT_SDA;
 extern O_28e9c8     *D_L00_0015FFDC_28e9c8 __asm__("D_L00_0015FFDC");
 extern unsigned char D_0013D4C6_lui __asm__("D_0013D4C6") NOT_SDA;
 void                 fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
-void                 calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
+void                 select_level_vu_chain(void) __asm__("FUN_002335a0");
 void                 f232fe8_28e9c8(void) __asm__("FUN_L00_00232fe8");
 void                 load_chunks_with_optional_fade(int, int) __asm__("FUN_L00_00245610");
 void                 sound_update(void) __asm__("FUN_0022ca50");
@@ -124,7 +124,7 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
     fill_transfer_words(&D_L00_0016C860_lui, 0, 0x1C0);
     fill_transfer_words(D_L00_0017C340, 0, 0x40);
     fill_transfer_words(D_L00_0017C380, 0, 0x40);
-    calculate_dma_transfer_address();
+    select_level_vu_chain();
     shared_table_offset = D_L00_001611CC - 0x60000;
     D_L00_0016C860_lui.x58 = D_L00_00173E00_28e9c8.x4 + shared_table_offset;
     D_L00_0016C860_lui.x5c = D_L00_00173E00_28e9c8.x8 + shared_table_offset;
@@ -252,7 +252,7 @@ void prepare_target_level_transition(s32 target_level_index) {
     D_L00_0015F400 = 0;
     shared_state_record->i20 = 0;
     shared_state_record->h24 = -1;
-    calculate_dma_transfer_address();
+    select_level_vu_chain();
     shared_table_offset = D_L00_001611CC - 0x60000;
     shared_result_record = &D_L00_0016C860_0028ed58;
     shared_result_record->i58 = D_L00_00173E00_0028ed58.i4 + shared_table_offset;

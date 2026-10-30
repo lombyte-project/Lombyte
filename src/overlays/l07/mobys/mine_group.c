@@ -38,7 +38,7 @@ struct AnimTimer {
 
 extern void              update_moby_grids(struct Moby *, u32) __asm__("FUN_0020dc20");
 extern void              copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
-extern struct AnimTimer *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
+extern struct AnimTimer *get_moby_target_info(struct Moby *) __asm__("FUN_002141f8");
 
 /* resets a spawned moby from its class defaults and restarts its animation */
 void reset_moby_from_class_defaults(struct Moby *moby) __asm__("FUN_L07_0030af40");
@@ -58,7 +58,7 @@ extern int   sample_path(void  *path,
                          float  step,
                          int    loop) __asm__("FUN_L00_0025d808");
 extern int   select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern int   fun_00213928(void *, void *, void *, int, int *, float *, int, int);
+extern int   resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int);
 extern void  jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 extern void  trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -177,7 +177,7 @@ void reset_moby_from_class_defaults(struct Moby *moby) {
     moby->collision = ((struct SpawnClassView *)moby->pclass)->unk10;
     copy_hero_moby_field_38(moby);
     update_entity(moby);
-    animation_timer = suck_get_aim_height(moby);
+    animation_timer = get_moby_target_info(moby);
     if (animation_timer != 0)
         animation_timer->frames = animation_timer->length;
 }
@@ -223,7 +223,7 @@ void update_mine_group(struct Moby *moby) {
     remaining = (float *)(data + 0x20);
     if (*(unsigned char *)(data + 0x94)) {
         limit = find_moby_hit(moby, 0x230000, 0);
-        result = fun_00213928(moby, limit, remaining, 0, &count, 0, 0, 4);
+        result = resolve_moby_hit_response(moby, limit, remaining, 0, &count, 0, 0, 4);
         switch ((unsigned)result) {
         case HIT_REACTION_NONE:
         case HIT_REACTION_START_KNOCKBACK:

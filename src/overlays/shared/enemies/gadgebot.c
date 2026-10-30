@@ -263,7 +263,7 @@ void        select_nearest_gadgebot_interaction_target(void *moby_arg) __asm__("
 extern void FUN_L06_002f3640_u(void *) __asm__("FUN_L06_002f3640");
 void        update_gadgebot_glow_effects(char *moby) __asm__("FUN_L06_002f38c8");
 extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
-extern unsigned char *suck_get_aim_height(int);
+extern unsigned char *get_moby_target_info(int);
 extern int            get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int            get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int            FUN_L00_00257b90(int, int);
@@ -1297,7 +1297,7 @@ void assign_gadgebot_attack_targets(void) {
         target = targets[index];
         count = 0;
         wanted = 1;
-        target_capacity_record = (char *)suck_get_aim_height(target);
+        target_capacity_record = (char *)get_moby_target_info(target);
         if (target_capacity_record != 0)
             wanted = S16(target_capacity_record, 4);
         while (count < wanted) {

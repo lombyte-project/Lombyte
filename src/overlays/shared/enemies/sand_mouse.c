@@ -13,7 +13,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
@@ -225,7 +225,7 @@ void *select_sand_mouse_spawn_target(void *moby,
         float        candidate_distance, score, pitch_error_squared;
         if (MOBY(candidate_moby)->draw_dist == 0)
             continue;
-        hp = suck_get_aim_height(candidate_moby);
+        hp = get_moby_target_info(candidate_moby);
         if (!(MOBY(candidate_moby)->flags & 0x1000) || candidate_moby == 0 ||
             ((char *)MOBY(candidate_moby)->pclass) == 0)
             continue;
@@ -303,7 +303,7 @@ void update_sand_mouse_targeted_spawning(char *moby, char *state) {
                 if (cutscene_mode != 2) {
                     char *target_aim_data;
                     qcopy(&target_aim_position, target_moby + 0x10);
-                    target_aim_data = suck_get_aim_height(target_moby);
+                    target_aim_data = get_moby_target_info(target_moby);
                     if (target_aim_data != 0)
                         target_aim_position.f[2] =
                             target_aim_position.f[2] + *(float *)(target_aim_data + 0x10);

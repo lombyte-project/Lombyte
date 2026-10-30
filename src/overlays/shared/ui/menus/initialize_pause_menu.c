@@ -151,7 +151,7 @@ extern void   debug_print(void *, s32) __asm__("FUN_001e93b0");
 extern s32    fade_to_black(s32) __asm__("FUN_001f4a58");
 extern void   music_unpause(void) __asm__("FUN_00216088");
 extern void   allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
-extern void   calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
+extern void   select_level_vu_chain(void) __asm__("FUN_002335a0");
 extern void   select_moby_context(s32) __asm__("FUN_L00_00235668");
 extern void   initialize_pause_menu(void) __asm__("FUN_L00_00276368");
 void          close_pause_menu(void) __asm__("FUN_L00_00276908");
@@ -511,7 +511,7 @@ void update_pause_menu(void) {
             return;
         }
         D_L00_0015F578 = 0x1E000;
-        calculate_dma_transfer_address();
+        select_level_vu_chain();
         qcopy(&g_debug_camera.position, &D_L00_001B9CF0.v40);
         qcopy(&g_debug_camera.angles, &D_L00_001B9CF0.v50);
         D_L00_0016CAF0_lui = D_L00_001B9CF0.unkE8;

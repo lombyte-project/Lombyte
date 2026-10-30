@@ -5,9 +5,9 @@
 
 extern s32 vu_chain_table[] __asm__("D_001DDFB8");
 
-void calculate_dma_transfer_address(void) __asm__("CalculateDmaTransferAddress");
+void select_level_vu_chain(void) __asm__("CalculateDmaTransferAddress");
 
-void calculate_dma_transfer_address(void) {
+void select_level_vu_chain(void) {
     s32 i;
 
     i = current_level_index;

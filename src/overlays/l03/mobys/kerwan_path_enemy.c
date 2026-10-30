@@ -1452,8 +1452,7 @@ extern float D_L03_001618E0 __attribute__((sda));
 
 #include "rnc/overlay/l03/mobys/kerwan_path_enemy_data/update_kerwan_path_enemy_hit_reaction.h"
 
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 
 /* Launch speed for a jump of height h at gravity g (per-frame units). */
@@ -1497,7 +1496,7 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
         moby_data->f270 = moby_data->f26C + 5.0f;
     }
     hit = find_moby_hit(moby, 0x330000, 0);
-    result = fun_00213928(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
+    result = resolve_moby_hit_response(moby, hit, &moby_data->f20, 0, &kind, &damage, 0, 4);
     if (hit != 0 && kind != 1 && moby->state != 0xD) {
         other = *(char **)(hit + 0x20);
         if (other != 0) {

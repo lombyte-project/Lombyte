@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-s32 get_dma_packet_span_bytes(void *) __asm__("GetDmaPacketSpanBytes");
+s32 memcard_get_data_size(void *) __asm__("GetDmaPacketSpanBytes");
 
 #endif /* LOMBYTE_RNC_SAVE_MEMCARD_GET_DATA_SIZE_H */

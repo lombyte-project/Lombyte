@@ -21,7 +21,7 @@
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/overlay/level_path.h"
 
 typedef struct Moby Moby;
@@ -590,7 +590,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
 
     damage = 0.0f;
     target = find_moby_hit(moby, 0x330000, 0);
-    reaction = fun_00213928(moby, target, data + 0x20, 0, &hit_state, &damage, 0, 4);
+    reaction = resolve_moby_hit_response(moby, target, data + 0x20, 0, &hit_state, &damage, 0, 4);
     if (hit_state != 1 && MOBY(moby)->state != 11) {
         {
             float health = *(float *)(data + 0x20) - damage;

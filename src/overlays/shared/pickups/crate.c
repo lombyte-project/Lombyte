@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/mobys/animation/update_moby_animation_state.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/game/item_state.h"
 #include "rnc/globals.h"
@@ -297,7 +297,7 @@ void crate_update(struct Moby *moby) {
         touched = 1;
     }
     if (moby->oclass >= 0x1FB && moby->oclass <= 0x1FD) {
-        fun_00213928(moby, other, coll, 0, &hitKind, &hitB, &hitAngle, 4);
+        resolve_moby_hit_response(moby, other, coll, 0, &hitKind, &hitB, &hitAngle, 4);
     }
 
     switch (moby->state) {

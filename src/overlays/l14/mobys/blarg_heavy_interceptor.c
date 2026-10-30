@@ -91,7 +91,7 @@ extern int is_turret_group_activated_or_empty(int) __asm__("FUN_L14_002b4670");
 
 extern void blend_moby_animation_c618(struct Moby *, int, int, int) __asm__("FUN_00212f90");
 
-extern u8 *suck_get_aim_height(struct Moby *) __asm__("FUN_002141f8");
+extern u8 *get_moby_target_info(struct Moby *) __asm__("FUN_002141f8");
 
 extern void FUN_L00_0025a120(void *);
 
@@ -230,7 +230,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
     }
     switch (moby->state) {
     case INTERCEPTOR_STATE_INITIALIZE:
-        suck_get_aim_height(moby)[0xE] = 1;
+        get_moby_target_info(moby)[0xE] = 1;
         if (*(s16 *)(moby_vars + 0x1B6) == 1) {
             moby->flags = (moby->flags | 0x41) & 0xEFFF;
             moby->collision = 0;

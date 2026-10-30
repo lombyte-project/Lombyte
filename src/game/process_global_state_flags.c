@@ -10,7 +10,7 @@
 
 extern u8   preserved_gold_bolt_flags[] __asm__("D_0014BF08");
 extern u8   circle_target_menu_page[] __asm__("D_001D4EC0");
-extern void InitializeGlobalStateEntry(s32);
+extern void request_space_load(s32);
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern s32  scale_game_frames(s32) __asm__("func_001F96F8");
 extern void memcard_restore_game(s32) __asm__("func_00209298");
@@ -31,7 +31,7 @@ s32 process_global_state_flags(void) {
             menu_system.next = (struct MenuPage *)circle_target_menu_page;
         } else {
             load_level_zero_preserving_progress(-1);
-            InitializeGlobalStateEntry(0);
+            request_space_load(0);
             *(u16 *)D_0013E05A = 1;
         }
     } else if ((controller_state.pressed & PAD_CROSS) != 0) {

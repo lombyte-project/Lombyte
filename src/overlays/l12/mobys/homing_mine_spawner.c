@@ -12,7 +12,7 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 
@@ -59,7 +59,7 @@ void spawn_next_linked_moby(struct Moby *spawner) {
         spawn_jittered_effect_particle_with_optional_basis(
             &spawner->pos, 0, random_float_between(frame_time * 3.0f, frame_time * 5.0f));
     }
-    aim_height_data = suck_get_aim_height(spawned_moby);
+    aim_height_data = get_moby_target_info(spawned_moby);
     if (aim_height_data != 0) {
         *(float *)aim_height_data = aim_height_data[2];
     }

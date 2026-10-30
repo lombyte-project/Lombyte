@@ -2,7 +2,7 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/globals.h"
 
-void InitializeTransferCommand(void) {
+void enter_main_menu(void) {
     menu_system.close_request = 0;
     menu_system.unk10 = 0;
     game_mode = 3;

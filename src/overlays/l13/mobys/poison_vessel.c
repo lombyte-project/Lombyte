@@ -248,8 +248,7 @@ extern int fptodp(float) __asm__("FUN_00120478");
 
 extern void debug_print() __asm__("FUN_001e93b0");
 
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 
 extern void stop_moby_sound_7b10(void *, int, int) __asm__("FUN_L00_00257470");
 
@@ -310,7 +309,7 @@ void poison_vessel_update(struct Moby *moby) {
         if (hit != 0) {
             debug_print(D_L13_001F5590, moby->oclass, (s16)moby->save_id, fptodp(hit->damage));
         }
-        switch (fun_00213928(moby, hit, health, 0, &kind, 0, 0, 4)) {
+        switch (resolve_moby_hit_response(moby, hit, health, 0, &kind, 0, 0, 4)) {
         case HIT_RESULT_DEATH:
         case HIT_RESULT_DYING_KNOCKBACK:
             *health = 0;

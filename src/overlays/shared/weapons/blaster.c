@@ -6,7 +6,7 @@
 #include "rnc/hero/hero.h"
 #include "rnc/input/pad_state.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/moby.h"
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
@@ -150,7 +150,7 @@ unsigned char *select_blaster_auto_aim_target(int ign, V_2b46a8 *from, float *ya
             continue;
         }
         qcopy(&tp, candidate_moby + 0x10);
-        r = suck_get_aim_height(candidate_moby);
+        r = get_moby_target_info(candidate_moby);
         if (r != 0) {
             tp.f[2] += *(float *)(r + 0x10);
         } else {
@@ -174,7 +174,7 @@ unsigned char *select_blaster_auto_aim_target(int ign, V_2b46a8 *from, float *ya
                                        (candidate_distance + candidate_distance));
         aim_angle_error = aim_angle_error + aim_angle_error;
         if (0.15707964f < aim_angle_error) {
-            r = suck_get_aim_height(candidate_moby);
+            r = get_moby_target_info(candidate_moby);
             if (r != 0) {
                 target_radius = convert_integer_to_float(r[0xA]) * 0.125f;
                 target_angular_radius = fast_arc_sin(target_radius / candidate_distance);
@@ -291,7 +291,7 @@ void blaster_update(struct Moby *moby) {
     }
     if (target && data->lock == 0) {
         if (get_ammo(-1)) {
-            AimTarget *aim = (AimTarget *)suck_get_aim_height(target);
+            AimTarget *aim = (AimTarget *)get_moby_target_info(target);
             float      distance = fast_vec_dist(g_debug_camera.position, &target->pos) / 50.0f;
             float      height;
             qcopy(&work.point, &target->pos);
@@ -319,7 +319,7 @@ void blaster_update(struct Moby *moby) {
                     float      speed = frame_time * 40.0f;
                     AimTarget *aim;
                     qcopy(&aim_point, &target->pos);
-                    aim = (AimTarget *)suck_get_aim_height(target);
+                    aim = (AimTarget *)get_moby_target_info(target);
                     if (aim)
                         aim_point.f.z += aim->height;
                     else

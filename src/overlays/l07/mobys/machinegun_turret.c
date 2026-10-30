@@ -11,12 +11,12 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern int  fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern void FUN_L00_00257470(void *, int, int);
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void FUN_00212f90(void *, int, int, int);
-extern int  FUN_0022da68(int, int, void *);
+extern int   resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern void  FUN_L00_00257470(void *, int, int);
+extern void  trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
+extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void  FUN_00212f90(void *, int, int, int);
+extern int   FUN_0022da68(int, int, void *);
 extern float D_0015ED6C;
 
 #include "rnc/game/item_state.h"
@@ -63,7 +63,7 @@ void machinegun_turret_update(unsigned char *moby) {
     collision = data + 0x20;
     animation = data + 0x60;
     hit = find_moby_hit(moby, 0x230000, 0);
-    fun_00213928((void *)moby, (MobyHit *)hit, collision, 0, contact, 0, 0, 4);
+    resolve_moby_hit_response((void *)moby, (MobyHit *)hit, collision, 0, contact, 0, 0, 4);
     if ((u8)moby[0x20] < 2 && contact[0] > 1) {
         FUN_0022da68(1, 0, moby);
         FUN_L00_00257470(moby, 0, -1);

@@ -7,7 +7,7 @@
 #include "rnc/overlay/hero.h"
 #include "rnc/overlay/collision.h"
 #include "sda.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/world/collision/collision_hit_material.h"
@@ -167,7 +167,7 @@ void update_hero_ground_contact(void) {
         if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.on_flagged_ground_moby = 1;
         }
-        aim_height_data = suck_get_aim_height(HH.moby);
+        aim_height_data = get_moby_target_info(HH.moby);
         if (aim_height_data != 0 && (*(u16 *)(aim_height_data + 0x1E) & 8)) {
             hero.on_flagged_ground_moby = 1;
         }

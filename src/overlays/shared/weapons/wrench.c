@@ -226,7 +226,7 @@ extern E_2a7780 effects[] __asm__("D_L00_001D92E8");
 extern int      last_frame __asm__("D_L00_001613C0");
 extern f32      uv_scale __asm__("D_L00_001613BC") __attribute__((sda));
 
-extern char *suck_get_aim_height(void *) __asm__("FUN_002141f8");
+extern char *get_moby_target_info(void *) __asm__("FUN_002141f8");
 
 char *FUN_L00_0025c338(int);
 
@@ -423,7 +423,7 @@ void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A9030), where it is exact; names translated to the US level program. */
 
-/* True when the record for coll_hit_moby (suck_get_aim_height) has byte 9 equal to 1. */
+/* True when the record for coll_hit_moby (get_moby_target_info) has byte 9 equal to 1. */
 
 int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
 
@@ -431,7 +431,7 @@ int get_wrench_hit_sound_variant(void) {
     int   record_byte_9_is_one = 0;
     char *x = 0;
     if (coll_hit_moby != 0)
-        x = suck_get_aim_height(coll_hit_moby);
+        x = get_moby_target_info(coll_hit_moby);
     if (x != 0)
         record_byte_9_is_one = *(unsigned char *)(x + 9) == 1;
     return record_byte_9_is_one;
@@ -981,7 +981,7 @@ void wrench_update(WrenchMoby *wrench_moby) {
              collide_sphere(work.v[5], 0.4f, 0, wrench_hero()->moby, work.v[1]))) {
             if (!wrench_hero()->attack_cooldown && collision_hit.moby &&
                 (!collision_hit.moby->model || collision_hit.moby->model->kind != 20)) {
-                MobyHitState *hit = (MobyHitState *)suck_get_aim_height(collision_hit.moby);
+                MobyHitState *hit = (MobyHitState *)get_moby_target_info(collision_hit.moby);
                 if (!hit || hit->hit_count < 2 || hit->hit_index != work.shifted.query.class_id) {
                     work.q[7] = *(WrenchQuad *)collision_hit.moby->position;
                     interpolate_vector(work.v[6], work.v[5], work.v[7], 0.5f);

@@ -12,7 +12,7 @@
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/math/random.h"
 
 /* Ported from rac1-decomp src/overlays/l08_batalia/vendor_002B9438.c (func_L08_002B94B0) */
@@ -237,7 +237,8 @@ void blarg_bombthrower_update(struct Moby *moby) {
         spawn_moby_table_puff_pattern(moby);
         return;
     }
-    fun_00213928(moby, find_moby_hit(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
+    resolve_moby_hit_response(
+        moby, find_moby_hit(moby, 0x330000, 0), &vars->health, 0, &hit, &damage, 0, 4);
     if (hit != 1 && moby->state != 0x63) {
         moby->flags |= 0x1000;
         vars->health -= damage;

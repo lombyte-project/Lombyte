@@ -9,8 +9,8 @@ extern void memcard_restore_data(u8 *, s32, void *) __asm__("func_0020AF20");
 void        memcard_restore_game(u8 *p) __asm__("FUN_00209298");
 
 void memcard_restore_game(u8 *save_buffer) {
-    s32 size0 = get_dma_packet_span_bytes(mc_gamedata);
-    s32 size1 = get_dma_packet_span_bytes(mc_leveldata);
+    s32 size0 = memcard_get_data_size(mc_gamedata);
+    s32 size1 = memcard_get_data_size(mc_leveldata);
     s32 saved_game_span_bytes = ((s32 *)save_buffer)[0];
     s32 i;
 

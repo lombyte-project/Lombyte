@@ -328,7 +328,7 @@ void *collect_snagglebeast_navigation_ids(void *unused, void *dp, void *op) {
     return (void *)output_count;
 }
 
-extern int  fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -366,7 +366,7 @@ void process_snagglebeast_damage(char *moby, char *data, float *health) {
 
     if ((u8)moby[0x20] != 10) {
         hit = find_moby_hit(moby, 0x330000, 0);
-        fun_00213928(moby, hit, health, 0, &scratch.contact, 0, 0, 4);
+        resolve_moby_hit_response(moby, hit, health, 0, &scratch.contact, 0, 0, 4);
         if (hit != 0) {
             char *owner;
             if (0.0f < *(float *)(hit + 0x2c)) {

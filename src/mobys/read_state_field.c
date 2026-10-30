@@ -12,7 +12,7 @@ struct MobyObjectData {
     s32 unk10;
 };
 
-s32 ReadStateField(struct MobyObject *moby) {
+s32 read_state_field(struct MobyObject *moby) {
     if (moby == NULL) {
         goto block_2;
     }

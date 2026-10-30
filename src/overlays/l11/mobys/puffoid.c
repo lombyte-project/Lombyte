@@ -17,7 +17,7 @@
 #include "rnc/overlay/level_camera.h"
 #include "rnc/game/interpolated_record.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/overlay/l11/mobys/resort_owner.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 
@@ -784,7 +784,7 @@ void update_puffoid_damage_and_path_goal(struct Moby *moby) {
     dmg = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
     {
-        s32 kind = fun_00213928(moby, hit, &patrol_vars->hp, 0, &out, &dmg, 0, 4);
+        s32 kind = resolve_moby_hit_response(moby, hit, &patrol_vars->hp, 0, &out, &dmg, 0, 4);
         if (out != 1 && moby->state != 0xB) {
             patrol_vars->hp -= dmg;
             if (hit->moby->oclass == 0x47) {

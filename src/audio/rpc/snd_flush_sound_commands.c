@@ -35,7 +35,7 @@ extern void FlushCache(s32);
 s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 
 extern SndCallback snd_return_callback __asm__("D_0015ECE0") __attribute__((sda));
-extern s32         GlobalTableStatus __asm__("D_0015ECC4") __attribute__((sda));
+extern s32         snd_batches_held __asm__("D_0015ECC4") __attribute__((sda));
 
 /* Once the pending RPC completes, run the callbacks queued with the other
    command buffer (or the abort callback); finish a CD read (FlushCache,
@@ -81,7 +81,7 @@ s32 snd_flush_sound_commands(void) {
         }
     }
     if (snd_current_buffer == 0) {
-        if (*snd_batch_command_buffers[snd_batch_index] != 0 && GlobalTableStatus == 0) {
+        if (*snd_batch_command_buffers[snd_batch_index] != 0 && snd_batches_held == 0) {
             snd_send_current_batch();
         }
     }

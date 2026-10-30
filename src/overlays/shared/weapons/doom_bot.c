@@ -14,7 +14,7 @@
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/world/collision/ground_probe.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
@@ -332,7 +332,7 @@ void doom_bot_update(struct Moby *moby) {
         target = data->target_moby;
         if (target && target->state != 0xFE && target->state != 0xFD) {
             height = target->pos.z;
-            aim = (AimInfo *)suck_get_aim_height((char *)data->target_moby);
+            aim = (AimInfo *)get_moby_target_info((char *)data->target_moby);
             reach = speed;
             if (aim) {
                 reach = speed + convert_integer_to_float(aim->radius) * 0.125f;

@@ -108,7 +108,7 @@ void       fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void       clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 
 extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
-void         calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
+void         select_level_vu_chain(void) __asm__("FUN_002335a0");
 void         set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 
 extern void sce_vu0_unit_matrix(void *) __asm__("FUN_00125218");
@@ -593,7 +593,7 @@ void start_vendor_exit_cutscene(void) {
     fill_transfer_words(&D_L00_0016C860_lui, 0, 0x1C0);
     fill_transfer_words(D_L00_0017C340_lui, 0, 0x40);
     vu1_sync_chain(1);
-    calculate_dma_transfer_address();
+    select_level_vu_chain();
     selected = (s32 *)((char *)vendor_state + 0x48);
     offset = D_L00_001611CC - 0x40000;
     D_L00_001611CC = offset;
@@ -1466,7 +1466,7 @@ void update_vendor_menu(void) {
         if (D_L00_00161E18 == 1) {
             if (--vendor_close_delay_frames_remaining == 0) {
                 D_L00_0015F5D8 = 1;
-                calculate_dma_transfer_address();
+                select_level_vu_chain();
                 FUN_00212f90(vendor_menu.vendor_moby, 4, 9, 8);
                 vendor_menu.vendor_moby->f58 = frame_scale * -0.5f;
                 if (vendor_menu.mode != 0) {
@@ -1513,7 +1513,7 @@ void update_vendor_menu(void) {
         cs = &D_L00_0016C860;
         if (cs->f34 >= cs->h40) {
             fade_level = 0.0f;
-            calculate_dma_transfer_address();
+            select_level_vu_chain();
             D_L00_0016CAF0_lui = 0.63f;
             update_view_context();
             for (j = 0; j < D_L00_0016C860.h44; j++) {

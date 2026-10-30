@@ -1202,8 +1202,7 @@ extern void  trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN
 extern int   FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
 extern int   select_group_class_29c_moby(void *argp) __asm__("FUN_L02_002d5658");
 extern void  extend_group_sand_shark_timers(char *arg) __asm__("FUN_L02_002d5728");
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
@@ -1255,7 +1254,7 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
     }
     dmg = 0.0f;
     hit_record = find_moby_hit(moby, 0x330000, 0);
-    fun_00213928(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
+    resolve_moby_hit_response(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby[0x20] != 0x18) {
         extend_group_sand_shark_timers((char *)moby);
         moby_vars->i29C = 0;

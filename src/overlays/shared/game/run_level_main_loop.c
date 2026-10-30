@@ -82,7 +82,7 @@ extern void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 extern void update_slideshow(void) __asm__("FUN_L00_00299c48");
 extern void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
 extern void frame_roll_counter(void) __asm__("FUN_L00_001f6d70");
-extern void read_global_table_entry(void) __asm__("FUN_0012eaf0");
+extern void snd_hold_command_batches(void) __asm__("FUN_0012eaf0");
 extern long get_frame_texture(int) __asm__("FUN_001ffa10");
 extern void
 draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
@@ -163,7 +163,7 @@ void run_level_main_loop(void) {
     }
     item_usage[current_level_index].level_mask =
         item_usage[current_level_index].level_mask | (1 << current_level_index) | 0x80000000;
-    read_global_table_entry();
+    snd_hold_command_batches();
 
     while (D_L00_0015F570 == 0) {
         quit = 0;

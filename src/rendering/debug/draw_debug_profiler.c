@@ -54,7 +54,7 @@ extern u8             tie_light_data[] __asm__("D_001E3200");
 extern u8             tfrag_patch_light_label[] __asm__("D_001E78A0");
 extern u8             shrub_patch_light_label[] __asm__("D_001E78B8");
 
-extern void AppendDmaTag(u32);
+extern void append_dma_tag(u32);
 extern void FlushCache(s32);
 extern void transition_draw_sky(void) __asm__("func_001E9AB8");
 extern void draw_lens_flare(void) __asm__("func_001EDC50");
@@ -102,7 +102,7 @@ extern void copy_render_buffer_pair(void) __asm__("FUN_00235840");
 extern void register_entity_render_resources(void) __asm__("FUN_00235898");
 extern void draw_ties_1(void) __asm__("func_002358C8");
 extern void draw_ties_2(void) __asm__("func_00235990");
-extern void no_op_graphics_callback(void) __asm__("func_00237A70");
+extern void noop_graphics_callback(void) __asm__("func_00237A70");
 
 void draw_debug_profiler(void) __asm__("FUN_001f39d0");
 
@@ -135,7 +135,7 @@ void draw_debug_profiler(void) {
     if (draw_enable_mask & 2) {
         draw_tfrag();
     }
-    AppendDmaTag(0x02010000);
+    append_dma_tag(0x02010000);
     if (draw_enable_mask & 4) {
         if (pal_mode != 0) {
             draw_ties_2();
@@ -143,7 +143,7 @@ void draw_debug_profiler(void) {
             draw_ties_1();
         }
     }
-    AppendDmaTag(0x02020000);
+    append_dma_tag(0x02020000);
     if (draw_config.unk34 != 0 && draw_callback3_count != 0) {
         vu1_gs_regs_alt();
         setup_gif_paging(1);
@@ -156,7 +156,7 @@ void draw_debug_profiler(void) {
     if (draw_enable_mask & 8) {
         draw_shrubs();
     }
-    AppendDmaTag(0x02040000);
+    append_dma_tag(0x02040000);
     if (draw_config.unk44 != 0 && occl_debug_overlay_enabled[0] != 0) {
         draw_fogged_fullscreen_sprite(occl_debug_overlay_enabled);
     }
@@ -175,7 +175,7 @@ void draw_debug_profiler(void) {
     if (draw_enable_mask & 0x10) {
         draw_mobys();
     }
-    AppendDmaTag(0x02080000);
+    append_dma_tag(0x02080000);
     setup_gif_paging(0);
     if ((draw_enable_mask & 0x20) && draw_config.unk30 != 0 && font_state != 6) {
         vu1_add_data_ref(D_0010FAA0, D_0010FA90[0]);
@@ -225,7 +225,7 @@ void draw_debug_profiler(void) {
     noop_core_callback_secondary(aa_blur_label, 0xF);
     vu1_gs_regs_alt();
     if (draw_enable_mask & 0x10000) {
-        no_op_graphics_callback();
+        noop_graphics_callback();
     }
     if ((draw_enable_mask & 0x80) && draw_config.unk40 != 0) {
         update_hud();

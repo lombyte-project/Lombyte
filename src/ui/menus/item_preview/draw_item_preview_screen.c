@@ -11,7 +11,7 @@ struct Descriptor {
 
 #include "rnc/game/item_state.h"
 
-extern void PackImageDescriptor(struct Descriptor *, struct MenuScreen *);
+extern void pack_image_descriptor(struct Descriptor *, struct MenuScreen *);
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(struct Descriptor *, u64, u8 *, s32) __asm__("func_001F7580");
@@ -35,7 +35,7 @@ s32 draw_item_preview_screen(struct MenuScreen *item) {
         return 8;
     }
     setup_gif_paging(0);
-    PackImageDescriptor(&desc, item);
+    pack_image_descriptor(&desc, item);
     desc.w = 0x10;
     desc.h = 3;
     font_print_window_regular(

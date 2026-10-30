@@ -1,8 +1,8 @@
 #include "types.h"
 #include "rnc/ui/text/font_metrics.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/runtime/state/disable_global_flag.h"
-#include "rnc/runtime/state/enable_global_flag.h"
+#include "rnc/ui/text/font/disable_font_color_codes.h"
+#include "rnc/ui/text/font/enable_font_color_codes.h"
 
 struct ThreeOptionMenu {
     u8  pad0[0x20];
@@ -59,7 +59,7 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
         font_texture_index = 2;
         glyphs = small_font_metrics;
     }
-    disable_global_flag();
+    disable_font_color_codes();
     font_print_center(menu->menu_width >> 1, draw_y, 0x80FFA888, get_help_message_text(0x522E), -1);
     draw_y += line_spacing;
     draw_menu_selection_marker(0xB, draw_y + 9, count_nonzero_entries_up_to_40() == 0x28);
@@ -76,7 +76,7 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
     sprintf(text_buffer, get_help_message_text(0x5231), count_nonzero_entries_up_to_30(), 0x1E);
     font_print(
         0x14, draw_y, 0x80FFA888, text_buffer, -1, get_effect_texture(font_texture_index), glyphs);
-    enable_global_flag();
+    enable_font_color_codes();
     do_gif_paging();
     return 2;
 }

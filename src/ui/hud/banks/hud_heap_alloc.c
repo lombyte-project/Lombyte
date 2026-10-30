@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/ui/hud/hud_state.h"
 
-extern s32 initialize_resource_entry() __asm__("InitializeResourceEntry");
+extern s32 hud_heap_reset() __asm__("InitializeResourceEntry");
 s32        hud_heap_alloc(s32 size) __asm__("FUN_001ff288");
 
 s32 hud_heap_alloc(s32 size) {
@@ -9,7 +9,7 @@ s32 hud_heap_alloc(s32 size) {
     s32              allocation_address;
 
     if (hud_state_ptr->heap_cur == 0) {
-        initialize_resource_entry();
+        hud_heap_reset();
     }
     if (hud_state_ptr->heap_end - hud_state_ptr->heap_cur < size) {
         return 0;

@@ -16,7 +16,7 @@ struct Globals_0016045C {
 
 extern struct Globals_0016045C *level_sky_effect_data __asm__("D_0016045C");
 extern s32                      D_0018A2E8[];
-extern s32                      AppendDmaTag();
+extern s32                      append_dma_tag();
 extern s32                      fill_transfer_words() __asm__("func_001F97E8");
 extern s32                      FlushCache();
 extern s32                      transition_draw_sky() __asm__("func_001E9AB8");
@@ -69,17 +69,17 @@ void transition_default_draw(s32 *unused_parameter) {
         transition_draw_sky();
     }
     draw_tfrag();
-    AppendDmaTag(0x02010000);
+    append_dma_tag(0x02010000);
     draw_ties_1();
-    AppendDmaTag(0x02020000);
+    append_dma_tag(0x02020000);
     draw_shrubs();
-    AppendDmaTag(0x02040000);
+    append_dma_tag(0x02040000);
     if (game_mode == 3) {
         render_level_effects_and_screen_sprites();
     } else {
         draw_mobys();
     }
-    AppendDmaTag(0x02080000);
+    append_dma_tag(0x02080000);
     setup_gif_paging(0);
     vu1_gs_regs_alt();
     if (draw_callback_count != 0) {

@@ -7,7 +7,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/overlay/cuboid.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/l13/mobys/attached_rocket.h"
@@ -452,8 +452,8 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
                         hovering_rocket_attacker_scale_multiplier_gp;
     damage_amount = 0.0f;
     hit_record = FUN_L00_0025a420(moby, 0x330000, 0);
-    hit_reaction_code =
-        fun_00213928(moby, hit_record, moby_data + 0x20, 0, &flag, &damage_amount, 0, 4);
+    hit_reaction_code = resolve_moby_hit_response(
+        moby, hit_record, moby_data + 0x20, 0, &flag, &damage_amount, 0, 4);
     if (hit_record != 0) {
         char *hit_moby = *(char **)(hit_record + 0x20);
         if (hit_moby != 0 && MOBY(hit_moby)->oclass == 0x4D1) {

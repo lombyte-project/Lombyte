@@ -94,10 +94,9 @@ resolve_point_path_segment_xy_clearance(f32, s32, void *, void *) __asm__("FUN_L
 extern float
 approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 
-extern int fun_00213928() __asm__("FUN_00213928");
+extern int resolve_moby_hit_response() __asm__("FUN_00213928");
 void       trooper_anim_update(void *a, void *s) __asm__("FUN_L00_0025d458");
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
@@ -742,7 +741,7 @@ void update_alien_queen_hit_response_and_recovery(char *moby) {
     *(int *)(data + 0x110) = truncate_float_to_s32(*(float *)(data + 0x20) * 16.0f);
     dmg = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
-    kind = fun_00213928(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
+    kind = resolve_moby_hit_response(moby, hit, data + 0x20, 0, &out, &dmg, 0, 4);
     if (out != 1 && (unsigned char)moby[0x20] != 14 && (unsigned char)moby[0x20] != 3 &&
         (unsigned char)moby[0x20] != 5) {
         if (*(char **)(hit + 0x20) != 0) {

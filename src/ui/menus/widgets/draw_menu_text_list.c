@@ -4,8 +4,8 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/runtime/state/disable_global_flag.h"
-#include "rnc/runtime/state/enable_global_flag.h"
+#include "rnc/ui/text/font/disable_font_color_codes.h"
+#include "rnc/ui/text/font/enable_font_color_codes.h"
 
 /* Draws a vertical text menu: picks the font size from the flags, sizes
    the rows, then prints each item (and its optional subtitle) with the
@@ -108,11 +108,11 @@ s32 draw_menu_text_list(struct MenuScreen *menu) {
                 box.anchor_x = menu->width >> 1;
             }
             if (selected) {
-                disable_global_flag();
+                disable_font_color_codes();
             }
             font_print_window(&box, color, text, -1, glyph_texture, font);
             if (selected) {
-                enable_global_flag();
+                enable_font_color_codes();
             }
             if (menu->data.list.flags & 0x200) {
                 draw_menu_selection_marker(0xF, box.anchor_y + 9, item_unlocked[i] != 0);

@@ -9,7 +9,7 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/game/interpolated_record.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/world/collision/collision_hit_material.h"
@@ -168,7 +168,7 @@ void trooper_start_knockback(u8       *moby,
     knockback_state->h2C = scale_game_frames(300);
     knockback_state->h3E = 0;
     knockback_state->b3C = 1;
-    moby_vars_record = suck_get_aim_height(moby);
+    moby_vars_record = get_moby_target_info(moby);
     if (moby_vars_record && *moby_vars_record == 0.0f) {
         knockback_state->w24 |= 0x20;
         MOBY(moby)->collision = 0;

@@ -15,8 +15,8 @@
 
 extern s32  collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_L00_00258278(struct Moby *, f32, void *, f32, f32, f32);
-extern int  fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern void FUN_L00_00257470(void *, int, int);
+extern int  resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern void  FUN_L00_00257470(void *, int, int);
 extern float D_0015ED6C;
 extern Vec4  D_L07_00166E40;
 
@@ -80,7 +80,7 @@ typedef struct {
 /* pvars of a mine. */
 typedef struct {
     u8           pad0[0x20];
-    u8           collision[9]; /* 0x20: contact state for fun_00213928 */
+    u8           collision[9]; /* 0x20: contact state for resolve_moby_hit_response */
     u8           unk29;        /* 0x29 */
     u8           pad2A[0xE];
     struct Moby *perch; /* 0x38 */
@@ -184,7 +184,7 @@ void update_mine(struct Moby *moby) {
         moby->shadow_range = 0x15;
     }
     hit = find_moby_hit(moby, 0x230000, 0);
-    fun_00213928(moby, hit, collision, 0, &touching, 0, 0, 4);
+    resolve_moby_hit_response(moby, hit, collision, 0, &touching, 0, 0, 4);
     if (touching >= 2 && hit != NULL && hit->moby->oclass != 0x363 && hit->moby->oclass != 0x458 &&
         hit->moby->oclass != 0x367) {
         spawn_explosion(moby,

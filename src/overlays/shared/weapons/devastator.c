@@ -8,7 +8,7 @@
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/overlay/level_camera.h"
@@ -417,7 +417,7 @@ void devastator_update(struct Moby *devastator_moby) {
                 while (candidate_moby) {
                     if ((*(signed char *)&candidate_moby->state) >= 0) {
                         qcopy(&point, &candidate_moby->pos);
-                        aim_info = suck_get_aim_height(candidate_moby);
+                        aim_info = get_moby_target_info(candidate_moby);
                         if (aim_info)
                             point.f.z += aim_info->height;
                         else
@@ -503,13 +503,13 @@ void devastator_update(struct Moby *devastator_moby) {
             if (hero.unk22C8 == 1 && hero.state.current != 30) {
                 pitch = D_L00_0017ACF4_lui;
                 yaw = devastator_moby->rot.z;
-                aim_info = suck_get_aim_height(data->target);
+                aim_info = get_moby_target_info(data->target);
                 if (aim_info)
                     height = aim_info->height;
                 spawn_devastator_missile(
                     devastator_moby, &launch, data->target, yaw, pitch, height, yaw, pitch);
             } else if (limit < 2.0f) {
-                aim_info = suck_get_aim_height(data->target);
+                aim_info = get_moby_target_info(data->target);
                 if (aim_info)
                     height = aim_info->height;
                 spawn_devastator_missile(
@@ -519,7 +519,7 @@ void devastator_update(struct Moby *devastator_moby) {
                     if (best) {
                         limit = calculate_eased_step_sum(6);
                         qcopy(&point, &best->pos);
-                        aim_info = suck_get_aim_height(best);
+                        aim_info = get_moby_target_info(best);
                         if (aim_info)
                             point.f.z += aim_info->height;
                         else

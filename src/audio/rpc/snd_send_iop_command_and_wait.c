@@ -16,7 +16,7 @@ extern s32  SceSifCheckStatRpc(void *);
 extern s32  sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 s32         snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) __asm__("FUN_0012e548");
 
-extern s32 GlobalTableStatus __asm__("D_0015ECC4") __attribute__((sda));
+extern s32 snd_batches_held __asm__("D_0015ECC4") __attribute__((sda));
 
 s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
     s32 i;
@@ -46,7 +46,7 @@ s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
     while (snd_got_returns() == 0) {
     }
     result = snd_sync_buffer[1];
-    if (*snd_batch_command_buffers[snd_batch_index] != 0 && GlobalTableStatus == 0) {
+    if (*snd_batch_command_buffers[snd_batch_index] != 0 && snd_batches_held == 0) {
         snd_send_current_batch();
     }
     return result;

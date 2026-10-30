@@ -13,7 +13,7 @@
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int   fptodp(float) __asm__("FUN_00120478");
 extern void  print_fe50(char *, int, int) __asm__("FUN_001e93b0");
-extern int fun_00213928(void *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int   resolve_moby_hit_response(void *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void sound_fe50(void *, void *) __asm__("FUN_L00_0025d458");
 extern void update_fe50(void *, void *) __asm__("FUN_L00_0025d538");
 char        D_L11_0021B530[] = "Moby class %d Damage Received: %f\n";
@@ -43,7 +43,7 @@ void handle_owner_linked_moby_hits(struct Moby *moby, unsigned char *private_dat
         if (info != 0) {
             print_fe50(D_L11_0021B530, moby->oclass, fptodp(*(float *)(info + 0x2C)));
         }
-        switch (fun_00213928(moby, info, health, 0, &out, 0, 0, 4)) {
+        switch (resolve_moby_hit_response(moby, info, health, 0, &out, 0, 0, 4)) {
         case HIT_REACTION_DEATH:
         case HIT_REACTION_DEATH_KNOCKBACK:
             *health = 0.0f;

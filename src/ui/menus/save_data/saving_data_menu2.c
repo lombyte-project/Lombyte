@@ -17,7 +17,7 @@ extern Unaligned64     D_0015EE98[1];
 extern s32             D_001D2640[];
 extern struct MenuPage D_001D4E38[];
 extern struct MenuPage D_001D4F98[];
-extern void            InitializeGlobalStateEntry(s32 value);
+extern void            request_space_load(s32 value);
 extern void            mode_freeze_init() __asm__("func_001FBAB8");
 extern s32             load_and_initialize_level_chunk() __asm__("func_00209370");
 extern void            start_memory_card_save(s32 save_data, s32 slot) __asm__("FUN_00226a70");
@@ -77,7 +77,7 @@ s32 saving_data_menu2(struct MenuScreen *w) {
                          0x30) = D_0015EE98[0];
         *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x28) =
             alternate_animation_sequence;
-        InitializeGlobalStateEntry(0);
+        request_space_load(0);
         D_0013E05A[0] = 1;
     }
 
@@ -132,7 +132,7 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         fl = mode_freeze_flags & ~2;
         mode_freeze_flags = fl & ~4;
         load_and_initialize_level_chunk();
-        InitializeGlobalStateEntry(0);
+        request_space_load(0);
         D_0013E05A[0] = 1;
     }
     if (w->data.save.slot != old) {

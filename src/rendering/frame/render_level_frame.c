@@ -22,7 +22,7 @@ struct LevelProjectionState {
 extern s32                         D_0018CB54[];
 extern s32                         D_0018CC98[];
 extern struct LevelProjectionState view_context __asm__("D_0018CD00");
-extern void                        AppendDmaTag(u32);
+extern void                        append_dma_tag(u32);
 extern void                        update_camera_view_matrices() __asm__("func_001F2260");
 extern void                        update_view_context() __asm__("func_001F2D98");
 extern void                        reset_gs_registers() __asm__("func_001F3868");
@@ -75,7 +75,7 @@ void render_level_frame(void) {
         do_gif_paging();
     }
     draw_mobys();
-    AppendDmaTag(0x02080000);
+    append_dma_tag(0x02080000);
     setup_gif_paging(1);
     if ((current_level_index != 0) && ((current_level_index != 1) || (level_available[3] != 0))) {
         build_resident_indexed_texture_warp_meshes(D_0018CC98[0]);

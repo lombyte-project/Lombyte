@@ -12,8 +12,8 @@
 #include "rnc/globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/runtime/state/disable_global_flag.h"
-#include "rnc/runtime/state/enable_global_flag.h"
+#include "rnc/ui/text/font/disable_font_color_codes.h"
+#include "rnc/ui/text/font/enable_font_color_codes.h"
 
 extern int  panel_clear_color_gp __asm__("D_001601B0") __attribute__((sda));
 extern int  text_shadow_x_gp __asm__("D_001601B8") __attribute__((sda));
@@ -256,9 +256,9 @@ int render_configured_text_label(struct MenuScreen *label) {
             c.anchor_x += dx;
             c.anchor_y += dy;
         }
-        disable_global_flag();
+        disable_font_color_codes();
         font_print_window(&c, 0x80000000L, text, -1, texture_tex0, font);
-        enable_global_flag();
+        enable_font_color_codes();
         c.top -= text_shadow_y_gp;
         c.bottom -= text_shadow_y_gp;
         c.left -= text_shadow_x_gp;
@@ -274,9 +274,9 @@ int render_configured_text_label(struct MenuScreen *label) {
             c.right += text_shadow_x_gp;
             c.anchor_x += text_shadow_x_gp;
             c.anchor_y += text_shadow_y_gp;
-            disable_global_flag();
+            disable_font_color_codes();
             font_print_window(&c, 0x80000000L, text, -1, texture_tex0, font);
-            enable_global_flag();
+            enable_font_color_codes();
             c.top -= text_shadow_y_gp;
             c.bottom -= text_shadow_y_gp;
             c.left -= text_shadow_x_gp;

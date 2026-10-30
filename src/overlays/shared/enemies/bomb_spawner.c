@@ -70,8 +70,7 @@ extern char *D_L03_0015FFD8_macro __asm__("D_L03_0015FFD8") MACRO_ADDR;
 
 extern void  FUN_L00_0025a120_2bef68(void *) __asm__("FUN_L00_0025a120");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void  mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void  spawn_explosion(void *,
@@ -254,7 +253,7 @@ void bomb_spawner_update(struct Moby *moby) {
         room = 0;
     }
     r = (Hit_2C0330 *)find_moby_hit(moby, 0xC30000, 0);
-    fun_00213928(moby, r, &spawner_data->hp, 0, &damage_query_status, 0, 0, 4);
+    resolve_moby_hit_response(moby, r, &spawner_data->hp, 0, &damage_query_status, 0, 0, 4);
     if (damage_query_status >= 2) {
         float remaining_health = spawner_data->hp - r->f2C;
         spawner_data->hp = remaining_health;

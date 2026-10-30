@@ -861,7 +861,7 @@ typedef struct {
 } AnklebiterHit;
 
 extern AnklebiterHit *find_hit_e3528(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern void           fun_00213928(
+extern void           resolve_moby_hit_response(
               struct Moby *, AnklebiterHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void start_fall_e3528(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
@@ -910,7 +910,7 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
     }
     coll = find_hit_e3528(moby, 0x330000, 0);
     dmg = 0.0f;
-    fun_00213928(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
+    resolve_moby_hit_response(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
     if (coll != 0 && moby->state != 0x63 && moby->state != 8) {
         if (moby->group != 0xFF) {
             alert_group_e3528(moby->group, 7);

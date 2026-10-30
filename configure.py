@@ -974,7 +974,7 @@ RODATA_OVERLAYS = {
     "memcard_update_state": (0x1E8200, 0xE9180, 348),  # switch table
     "init_once": (0x1E7B30, 0xE8AB0, 20),  # switch table
     "actuator_calc_power": (0x1E7640, 0xE85C0, 24),  # switch table
-    "fun_00213928": (0x1E84E0, 0xE9460, 128),  # switch table
+    "resolve_moby_hit_response": (0x1E84E0, 0xE9460, 128),  # switch table
     "service_level_archive_load": (0x1E7CE0, 0xE8C60, 32),  # switch table
     "mode_freeze_init": (0x1E78D0, 0xE8850, 28),  # switch table
     "update_menu_entry_actions": (0x1E8770, 0xE96F0, 48),  # menu action switch table
@@ -1010,7 +1010,7 @@ RODATA_OVERLAYS = {
 SDATA_OVERLAYS = {
     "audio/rpc/snd_returns": (0x15EC80, 0x5FC00, 8),
     "rendering/debug/print_debug_text": (0x15F000, 0x5FF80, 8),
-    "runtime/update_resource_counter": (0x15F8F8, 0x60878, 4),
+    "runtime/decrement_resource_counter": (0x15F8F8, 0x60878, 4),
     "runtime/callbacks/count_vsync": (0x15ED40, 0x5FCC0, 24),
     "runtime/set_video_timing": (0x15ED60, 0x5FCE0, 32),
     "ui/text/font/load_debug_font": (0x15EEC8, 0x5FE48, 8),
@@ -1022,7 +1022,7 @@ SDATA_OVERLAYS = {
     "audio/voices/pause_all_sounds": (0x15F674, 0x605F4, 4),
     "mobys/create_moby": (0x15FEFC, 0x60E7C, 4),
     "rendering/vu1/vu1_chain": (0x160EE0, 0x61E60, 4),
-    "streaming/initialize_streaming_state": (0x15EF20, 0x5FEA0, 4),
+    "rendering/texture/reset_gs_texture_allocation": (0x15EF20, 0x5FEA0, 4),
     "game/load_level_zero_preserving_progress": (0x15EDA0, 0x5FD20, 4),
     "game/transitions/tick_space_transition": (0x15F5EC, 0x6056C, 4),
     "rendering/frame/initialize_level_render_state": (0x1603D0, 0x61350, 4),

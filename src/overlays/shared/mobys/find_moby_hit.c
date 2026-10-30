@@ -449,7 +449,7 @@ typedef struct {
 extern f32       D_L00_00160080[2] __attribute__((sda));
 extern f32       D_L00_001B01C8[][8];
 extern u8        D_L00_001B0180[][4];
-extern Q_25a478 *suck_get_aim_height(void *) __asm__("FUN_002141f8");
+extern Q_25a478 *get_moby_target_info(void *) __asm__("FUN_002141f8");
 
 /* hit_reaction is the executable function of the same bytes (src/gameplay). */
 

@@ -15,7 +15,7 @@
 #include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "qcopy.h"
 #include "rnc/overlay/level_path.h"
 
@@ -228,7 +228,7 @@ void update_ground_melee_enemy(Moby *moby) {
         Hit_2E39E0 *hit;
         damage = 0.0f;
         hit = find_moby_hit(moby, 0x330000, 0);
-        fun_00213928(moby, hit, &data->health, 0, &hit_index, &damage, 0, 4);
+        resolve_moby_hit_response(moby, hit, &data->health, 0, &hit_index, &damage, 0, 4);
         fast_dec_timer_s16(&data->cooldown);
         if (data->cooldown < scale_game_frames(45) && hit != 0) {
             if ((unsigned short)(hit->moby->oclass - 0xB0) < 2) {

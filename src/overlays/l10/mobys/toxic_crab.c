@@ -28,7 +28,7 @@
 #include "rnc/overlay/level_path.h"
 #include "rnc/overlay/l10/mobys/screamer.h"
 #include "rnc/overlay/l10/mobys/aligned_vector.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 
 typedef struct Moby Moby;
@@ -1041,7 +1041,8 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     A = 1;
     B = 0.0f;
     hit_record = find_moby_hit(moby, 0xB30000, 0);
-    hit_response_code = fun_00213928(moby, hit_record, &moby_data->f20, 0, &A, &B, 0, 4);
+    hit_response_code =
+        resolve_moby_hit_response(moby, hit_record, &moby_data->f20, 0, &A, &B, 0, 4);
     fast_dec_timer_s16(&moby_data->h26);
     if ((unsigned int)A >= 2 && moby->state != 0xB && moby->state != 0xC) {
         if (current_level_index == 10 && hit_record != 0 && hit_record->f20 != 0 &&

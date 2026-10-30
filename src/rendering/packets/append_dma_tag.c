@@ -2,7 +2,7 @@
 
 extern u32 D_00160F00;
 
-void AppendDmaTag(u32 addr) {
+void append_dma_tag(u32 addr) {
     u32 *tag;
     u32 *cursor;
     u32  value;

@@ -57,8 +57,8 @@ FUN_L00_0025d808_mine(void *, float *, int *, float *, int, float) __asm__("FUN_
 
 extern float FUN_L00_0025b8c0(float *p, float *v, float t, float u1, float u2, float eps);
 
-extern s32
-fun_00213928(struct Moby *, void *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
+extern s32 resolve_moby_hit_response(
+    struct Moby *, void *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 
 extern void mine_explode(void *,
                          void *,
@@ -143,7 +143,7 @@ void update_looping_path_mine(struct Moby *moby) {
         FUN_L00_0025b8c0(
             &moby->pos.z, &mine_vars->vel[2], path_target_position[2], 0.02f, 0.2f, 0.0f);
         hit = find_moby_hit(moby, 0x230000, 0);
-        fun_00213928(moby, hit, mine_vars->health, 0, &count, 0, 0, 4);
+        resolve_moby_hit_response(moby, hit, mine_vars->health, 0, &count, 0, 0, 4);
         if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) ||
             hero.coll_hit_moby == (u8 *)moby) {
             clear_u64_value(&vel);

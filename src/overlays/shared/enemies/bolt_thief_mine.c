@@ -42,7 +42,8 @@ extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 #include "rnc/overlay/shared/enemies/bolt_thief_mine_data/update_bolt_thief_mine.h"
 
 extern float probe_ground_height(float, void *, int) __asm__("FUN_00213508");
-extern int   fun_00213928(struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int   resolve_moby_hit_response(
+      struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void explode_ff640(struct Moby *,
                           void *,
                           void *,
@@ -116,7 +117,7 @@ void update_bolt_thief_mine(struct Moby *moby) {
         scratch.info.unk10 = 0.5f;
         scratch.info.unk3A = 7;
         scratch.info.unk3B = 0xFF;
-        fun_00213928(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
+        resolve_moby_hit_response(moby, hit, &scratch.info, 0, &count, 0, 0, 4);
         if ((count >= 2 && hit != 0 && hit->moby->oclass != 0x283) ||
             hero.coll_hit_moby == (u8 *)moby) {
             clear_u64_value(explosion_vector);

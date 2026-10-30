@@ -19,7 +19,7 @@ struct FsOpenRequest {
 extern struct FsOpenRequest D_00156880;
 extern s32                  CreateSema(struct SemaParam *);
 extern s32                  DeleteSema(s32);
-extern s32                  ReadQueueStatus(void);
+extern s32                  _sceFsSigSema(void);
 extern s32                  SignalSema(s32);
 extern s32                  WaitSema(s32);
 extern s32                  _sceFsWaitS(s32);
@@ -49,12 +49,12 @@ s32 sceOpen(const u8 *path, s32 flags, ...) {
         sceFsInit();
     }
     if (sif_file_server_changed() != 0) {
-        ReadQueueStatus();
+        _sceFsSigSema();
         return -0x10004;
     }
     file_slot = new_iob();
     if (file_slot == NULL) {
-        ReadQueueStatus();
+        _sceFsSigSema();
         return -0x13;
     }
     mode = *(s32 *)arguments;
@@ -79,11 +79,11 @@ s32 sceOpen(const u8 *path, s32 flags, ...) {
     request->result_size = 4;
     if (sceSifCallRpc(&fio_rpc_client, 0, 0, &D_00156880, 0x418, fio_rpc_result, 4, 0, 0) < 0) {
         DeleteSema(completion_semaphore);
-        ReadQueueStatus();
+        _sceFsSigSema();
         return -0xB;
     }
     return_value = *(u32 *)((u32)fio_rpc_result | 0x20000000);
-    ReadQueueStatus();
+    _sceFsSigSema();
     if (return_value == 0) {
         DeleteSema(completion_semaphore);
         return -0xB;

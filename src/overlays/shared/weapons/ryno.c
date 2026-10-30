@@ -8,7 +8,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/math/fast_math.h"
@@ -163,7 +163,7 @@ M_2cc360 *select_ryno_target(
         } else if (!candidate_moby->b31) {
             continue;
         }
-        info = suck_get_aim_height(candidate_moby);
+        info = get_moby_target_info(candidate_moby);
         if (!info)
             continue;
         if (info[0] < 0.0f)
@@ -252,7 +252,7 @@ void ryno_update(struct Moby *ryno_moby) {
             ryno_vars->target = acquired_target;
             ryno_vars->lock_timer = scale_game_frames(20);
             ryno_vars->life = 1.0f;
-            target_bounds = suck_get_aim_height(ryno_vars->target);
+            target_bounds = get_moby_target_info(ryno_vars->target);
             if (target_bounds != 0) {
                 ryno_vars->height = target_bounds->height;
                 ryno_vars->life = target_bounds->radius;
@@ -422,7 +422,7 @@ void ryno_update(struct Moby *ryno_moby) {
             ryno_vars->height = 0;
             ryno_vars->lock_timer = scale_game_frames(20);
             ryno_vars->life = 1.0f;
-            target_bounds = suck_get_aim_height(ryno_vars->target);
+            target_bounds = get_moby_target_info(ryno_vars->target);
             if (target_bounds != 0) {
                 ryno_vars->height = target_bounds->height;
                 ryno_vars->life = target_bounds->radius;
@@ -488,7 +488,7 @@ unsigned char *spawn_ryno_rocket(int            owner_moby,
             *(float *)(*(unsigned char **)(spawned_moby + 0x24) + 0x24) * 0.25f;
         if (target_moby != 0) {
             *(int *)(rocket_vars + 0x58) = *(short *)(target_moby + 0xA6);
-            target_aim_data = suck_get_aim_height(target_moby);
+            target_aim_data = get_moby_target_info(target_moby);
             if (target_aim_data != 0) {
                 *(unsigned short *)(target_aim_data + 0x1E) |= 0x80;
             }

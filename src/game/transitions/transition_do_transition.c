@@ -7,7 +7,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/packets/put_draw_buffer_large.h"
-#include "rnc/runtime/read_global_table_entry.h"
+#include "rnc/audio/rpc/snd_hold_command_batches.h"
 #include "rnc/ui/hud/banks/load_hud_banks.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/runtime/iop/initialize_sif_rpc.h"
@@ -52,7 +52,7 @@ extern SoundCue      D_001862B0[];
 extern TransferState render_sequence __asm__("D_0018CB20");
 extern WadHeader *volatile D_001940C8[];
 
-extern void QueueDmaTransfer(s32 index);
+extern void load_help_message_group(s32 index);
 extern s32  rand(void);
 extern void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff);
 extern s32  sceGsSyncV(s32 mode);
@@ -136,7 +136,7 @@ void transition_do_transition(void) {
                               chunk_source_table->wad_chunks[0].sector,
                               chunk_source_table->wad_chunks[0].size);
     hdr->chunk[0].off = chunk_destination - (u8 *)hdr;
-    initialize_resource_entry();
+    hud_heap_reset();
     initialize_sif_rpc();
     init_stash();
     init_hud();
@@ -151,7 +151,7 @@ void transition_do_transition(void) {
     }
     wait = 0;
     level = rand() % 4;
-    read_global_table_entry();
+    snd_hold_command_batches();
     while (space_load_pending == 0) {
         vu1_send_chain();
         swap_render_buffer_chain();
@@ -161,7 +161,7 @@ void transition_do_transition(void) {
         memcard_update_state();
         run_state_handler();
         update_primary_pad_state();
-        QueueDmaTransfer(D_0015ED88);
+        load_help_message_group(D_0015ED88);
         space_load_in_progress = 0;
         for (i = 0; D_001862B0[i].start != -1; i++) {
             if (D_001862B0[i].end == -1) {

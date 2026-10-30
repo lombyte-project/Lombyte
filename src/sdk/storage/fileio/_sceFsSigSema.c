@@ -4,6 +4,6 @@
 
 extern void SignalSema(s32 semaphore_id);
 
-void ReadQueueStatus(void) {
+void _sceFsSigSema(void) {
     SignalSema(fio_wait_sema);
 }

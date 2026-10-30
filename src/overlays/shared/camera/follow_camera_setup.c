@@ -11,7 +11,7 @@
 #include "rnc/globals.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/math/random.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 
@@ -356,7 +356,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     if (nearby_moby_count > 0) {
         lp = D_L00_00177F00;
         for (i = 0; i < nearby_moby_count; lp++, i++) {
-            aim_height_data = suck_get_aim_height(*lp);
+            aim_height_data = get_moby_target_info(*lp);
             if (aim_height_data != 0 && (f32)aim_height_data[0xD] != 0.0f) {
                 camera_override_state->i10 = 1;
                 break;
