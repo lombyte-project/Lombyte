@@ -142,10 +142,10 @@ void                    update_mine(struct Moby *moby) __asm__("FUN_L07_003196e0
 extern float D_0015ED6C MACRO_ADDR;
 
 void mark_mine_for_removal(struct Moby *moby, MineSpawnerVars *spawner_vars) {
-    MineVars *vars = (MineVars *)moby->pvars;
+    MineVars *swooper_vars = (MineVars *)moby->pvars;
 
     if (spawner_vars != NULL) {
-        vars->life_timer = scale_game_frames(spawner_vars->linger_time);
+        swooper_vars->life_timer = scale_game_frames(spawner_vars->linger_time);
     }
     mark_moby_for_removal(moby);
 }
