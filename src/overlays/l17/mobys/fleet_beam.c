@@ -31,29 +31,29 @@ spawn_fleet_beam_particle(struct Moby *parent, void *pos, float *record_vector_s
     int            header_value_input_base = random_integer_below(5);
     unsigned char  unscaled_header_value = scale_game_frames(header_value_input_base + 2);
     unsigned char  header_byte_value = random_integer_below(0xFF);
-    unsigned char *record = create_part(0x4F);
-    if (record != 0) {
-        char *record_data = (char *)record + 0x20;
-        qcopy(record + 0x10, pos);
+    unsigned char *trail_particle = create_part(0x4F);
+    if (trail_particle != 0) {
+        char *record_data = (char *)trail_particle + 0x20;
+        qcopy(trail_particle + 0x10, pos);
         *(float *)(record_data + 0x10) = record_vector_source[0];
         *(float *)(record_data + 0x14) = record_vector_source[1];
         *(float *)(record_data + 0x18) = record_vector_source[2];
         if (parent != 0) {
-            fast_vec_sub(record_data, record + 0x10, &parent->pos);
-            *(short *)(record + 0xA) = unscaled_header_value;
+            fast_vec_sub(record_data, trail_particle + 0x10, &parent->pos);
+            *(short *)(trail_particle + 0xA) = unscaled_header_value;
         } else {
-            *(short *)(record + 0xA) = unscaled_header_value << 2;
+            *(short *)(trail_particle + 0xA) = unscaled_header_value << 2;
         }
         *(char **)(record_data + 0x1C) = parent;
-        *(int *)(record + 4) = 0x604040FF;
-        record[9] = truncate_float_to_s32(1.0f) + 0x20;
-        record[3] = 0x48;
-        *(float *)(record + 0xC) = 42000.0f;
-        record[8] = header_byte_value;
-        record[1] = 0;
-        record[2] = *D_L17_001B2A54;
+        *(int *)(trail_particle + 4) = 0x604040FF;
+        trail_particle[9] = truncate_float_to_s32(1.0f) + 0x20;
+        trail_particle[3] = 0x48;
+        *(float *)(trail_particle + 0xC) = 42000.0f;
+        trail_particle[8] = header_byte_value;
+        trail_particle[1] = 0;
+        trail_particle[2] = *D_L17_001B2A54;
     }
-    return record;
+    return trail_particle;
 }
 
 /* Updates moby 99: a beam swinging between two waypoints that sprays particles while the hero is in its zone. */
