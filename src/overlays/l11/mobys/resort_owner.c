@@ -728,10 +728,10 @@ int classify_resort_owner_target_proximity(struct Moby *moby) {
             continue;
         do {
             int          offset = (*group_moby_entry & 0x7fff) << 8;
-            struct Moby *other = (struct Moby *)(offset + D_L11_0015FFD8);
-            if ((signed char)other->state >= 0) {
-                if (other->oclass != 0x4de ||
-                    is_moby_in_bob_target_exclusion_state((const u8 *)other) == 0) {
+            struct Moby *target_group_moby = (struct Moby *)(offset + D_L11_0015FFD8);
+            if ((signed char)target_group_moby->state >= 0) {
+                if (target_group_moby->oclass != 0x4de ||
+                    is_moby_in_bob_target_exclusion_state((const u8 *)target_group_moby) == 0) {
                     found = 1;
                     if (fast_vec_dist(&moby->pos,
                                       &((struct Moby *)(D_L11_0015FFD8 + offset))->pos) < 10.0f)
