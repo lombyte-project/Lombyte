@@ -3256,11 +3256,11 @@ void hero_get_collision_ray_endpoints(
     Vec4_002126b8 ray_scratch_vectors[2];
     if (mode) {
         char *up = (char *)&hero.gravity_dir;
-        char *base = up - 0x210;
+        char *hero_position = up - 0x210;
         fast_vec_normalize(&ray_scratch_vectors[0], up, -fb);
-        fast_vec_add(ray_end, base, &ray_scratch_vectors[0]);
+        fast_vec_add(ray_end, hero_position, &ray_scratch_vectors[0]);
         fast_vec_normalize(&ray_scratch_vectors[0], up, -fa);
-        fast_vec_add(ray_start, base, &ray_scratch_vectors[0]);
+        fast_vec_add(ray_start, hero_position, &ray_scratch_vectors[0]);
         *(u128_002126b8 *)&ray_scratch_vectors[1] = *(u128_002126b8 *)ray_start;
         clip_negative_segment_endpoint_xyz(&ray_scratch_vectors[1], ray_end);
     } else {
