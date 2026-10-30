@@ -18,15 +18,15 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
-#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
-#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/hero/hero_check_damage.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/gameplay/entities/attach_manipulator.h"
 #include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
 #include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
-#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
-#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/game/jet_reset_camera.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 
 
 /* triggers objects matching the moby's class */

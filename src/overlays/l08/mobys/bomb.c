@@ -17,9 +17,9 @@
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
-#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
-#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
@@ -28,8 +28,8 @@
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"
 #include "rnc/gameplay/fun_00213928.h"
-#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
-#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/overlay/shared/props/trackdrive_left.h"
+#include "rnc/overlay/shared/vehicles/veldin_ship.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
 
 

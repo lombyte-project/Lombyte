@@ -16,8 +16,8 @@
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/l05/hero/hero_set_state.h"
-#include "rnc/overlay/shared/gameplay/hero/smooth_and_clamp_value_pair.h"
-#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
+#include "rnc/overlay/shared/hero/smooth_and_clamp_value_pair.h"
+#include "rnc/overlay/shared/hero/try_transition_hero_water_state.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 05 build). */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/help_00256148.c: func_L05_00256148), where it is exact; names translated to the US level program. */

@@ -20,15 +20,15 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/state/interpolated_record.h"
-#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
-#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
-#include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
+#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
-#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
-#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/overlay/shared/props/novalis_elevator.h"
+#include "rnc/overlay/shared/vehicles/veldin_ship.h"
 
 /* UpdateMoby_584 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */

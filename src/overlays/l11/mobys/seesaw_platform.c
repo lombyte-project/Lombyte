@@ -24,16 +24,16 @@
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/gameplay/animation/set_animation_parameter.h"
 #include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
-#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
-#include "rnc/overlay/shared/gameplay/entities/copy_hero_moby_field_38.h"
-#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
-#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/vendor/set_camera_rotation.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/view/update_view_context.h"
 #include "rnc/ui/help/try_set_help_message.h"
-#include "rnc/overlay/shared/gameplay/entities/pool_set_scale.h"
-#include "rnc/overlay/shared/runtime/dma/pool_init_tiles.h"
+#include "rnc/overlay/shared/props/pool_set_scale.h"
+#include "rnc/overlay/shared/props/pool_init_tiles.h"
 
 typedef struct {
     int link;

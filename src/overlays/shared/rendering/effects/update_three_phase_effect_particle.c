@@ -9,7 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/ui/text/load_display_text_resource_entry.h"
 

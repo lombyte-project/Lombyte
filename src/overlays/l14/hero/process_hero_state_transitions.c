@@ -15,8 +15,8 @@
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/shared/gameplay/hero/hero_get_gadget_anim_id.h"
-#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
+#include "rnc/overlay/shared/hero/hero_get_gadget_anim_id.h"
+#include "rnc/overlay/shared/hero/update_hero_stick_target_magnitude.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 14 build). */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/help_00235DC8.c: func_L14_00235DC8), where it is exact; names translated to the US level program. */

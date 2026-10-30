@@ -15,8 +15,8 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/shared/gameplay/entities/camera_object.h"
-#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
+#include "rnc/overlay/shared/mobys/camera_object.h"
+#include "rnc/overlay/shared/hero/try_transition_hero_water_state.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 03 build). */
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/help_0021CDA8.c: func_L03_0021CDA8), where it is exact; names translated to the US level program. */

@@ -3,8 +3,8 @@
 #include "asm.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
-#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
-#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 
 extern unsigned char D_0013D4C2 NOT_SDA;
 extern char D_L00_001B47D0[];

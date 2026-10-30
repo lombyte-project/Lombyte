@@ -18,12 +18,12 @@
 #include "sda.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/gameplay/animation/set_animation_parameter.h"
-#include "rnc/overlay/shared/gameplay/entities/copy_hero_moby_field_38.h"
+#include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/overlay/shared/gameplay/entities/spawn_type_52_particle_near_moby.h"
+#include "rnc/overlay/shared/mobys/spawn_type_52_particle_near_moby.h"
 
 /* Rotation-axis selection shared by the asteroid update helpers. */
 enum AsteroidSpinAxis {

@@ -17,8 +17,8 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/l06/hero/hero_set_state.h"
-#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
-#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
+#include "rnc/overlay/shared/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/hero/update_hero_stick_target_magnitude.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 06 build). */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_0023BBE8.c: func_L06_0023BBE8), where it is exact; names translated to the US level program. */

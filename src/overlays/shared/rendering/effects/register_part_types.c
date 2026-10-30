@@ -9,7 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
-#include "rnc/overlay/shared/gameplay/entities/ground_height_at.h"
+#include "rnc/overlay/shared/mobys/ground_height_at.h"
 
 extern void update_falling_effect_particle() __asm__("FUN_L00_00268d48");
 extern void update_timed_effect_particle() __asm__("FUN_L00_00268fe8");

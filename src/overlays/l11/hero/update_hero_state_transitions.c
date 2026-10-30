@@ -15,8 +15,8 @@
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
-#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
+#include "rnc/overlay/shared/hero/try_transition_hero_water_state.h"
+#include "rnc/overlay/shared/hero/update_hero_stick_target_magnitude.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 11 build). */
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/help_00254158.c: func_L11_00254158), where it is exact; names translated to the US level program. */

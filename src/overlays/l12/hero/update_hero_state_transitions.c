@@ -15,9 +15,9 @@
 #include "rnc/data_labels.h"
 #include "sda.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/shared/gameplay/hero/hero_get_gadget_anim_id.h"
-#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
-#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
+#include "rnc/overlay/shared/hero/hero_get_gadget_anim_id.h"
+#include "rnc/overlay/shared/hero/try_transition_hero_water_state.h"
+#include "rnc/overlay/shared/hero/update_hero_stick_target_magnitude.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 12 build). */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/help_00246938.c: func_L12_00246938), where it is exact; names translated to the US level program. */

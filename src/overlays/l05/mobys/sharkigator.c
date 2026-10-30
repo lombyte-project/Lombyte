@@ -12,11 +12,11 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/game_globals.h"
-#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
-#include "rnc/overlay/shared/gameplay/entities/pool_set_scale.h"
-#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
-#include "rnc/overlay/shared/gameplay/state/build_symmetric_adjacency_masks.h"
-#include "rnc/overlay/shared/runtime/dma/pool_init_tiles.h"
+#include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
+#include "rnc/overlay/shared/props/pool_set_scale.h"
+#include "rnc/overlay/shared/vehicles/veldin_ship.h"
+#include "rnc/overlay/shared/mobys/build_symmetric_adjacency_masks.h"
+#include "rnc/overlay/shared/props/pool_init_tiles.h"
 
 
 

@@ -9,7 +9,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0029B070.c: func_L07_0029B070), where it is exact; names translated to the US level program. */

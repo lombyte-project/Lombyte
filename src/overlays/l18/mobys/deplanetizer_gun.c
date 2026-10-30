@@ -13,16 +13,16 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
+#include "rnc/overlay/shared/mobys/draw_trail.h"
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;

@@ -18,9 +18,9 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/overlay/l06/mobys/hangar_door.h"
 #include "rnc/overlay/l06/hero/hero_set_state.h"
-#include "rnc/overlay/shared/audio/music/jet_game_state.h"
-#include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
-#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/mobys/jet_game_state.h"
+#include "rnc/overlay/shared/camera/queue_planet_unlock_message.h"
+#include "rnc/overlay/shared/hero/get_hero_help_value.h"
 
 /* Shuttle route selection; independent of Moby.state. */
 enum ShuttleRoute {

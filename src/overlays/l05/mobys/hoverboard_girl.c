@@ -11,10 +11,10 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/audio/streaming/get_dialogue_entry.h"
-#include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
+#include "rnc/overlay/shared/mobys/initialize_moby_grounding.h"
 
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.

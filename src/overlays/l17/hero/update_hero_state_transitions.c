@@ -17,9 +17,9 @@
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/l17/hero/hero_set_state.h"
-#include "rnc/overlay/shared/gameplay/entities/camera_object.h"
-#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
-#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
+#include "rnc/overlay/shared/mobys/camera_object.h"
+#include "rnc/overlay/shared/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/hero/try_transition_hero_water_state.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 17's build of the shared func_L00_0022A340, without states 90-97). */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/help_002260F0.c: func_L17_002260F0), where it is exact; names translated to the US level program. */

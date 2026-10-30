@@ -14,7 +14,7 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
-#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/mobys/002630b8.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"

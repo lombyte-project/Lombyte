@@ -7,7 +7,7 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/entities/attach_manipulator.h"
-#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"

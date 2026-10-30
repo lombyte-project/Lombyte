@@ -23,9 +23,9 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
-#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
-#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
+#include "rnc/overlay/shared/vendor/set_camera_rotation.h"
 #include "rnc/world/collision/collision_line.h"
 
 /* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */

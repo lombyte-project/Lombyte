@@ -11,11 +11,11 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/entities/ground_probe.h"
-#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/rendering/effects/spawn_spark.h"
-#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
-#include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
+#include "rnc/overlay/shared/mobys/spawn_moby_break_fragments.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EB5B0), where it is exact; names translated to the US level program. */
 

@@ -16,13 +16,13 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
-#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
-#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/overlay/shared/props/trackdrive_left.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */

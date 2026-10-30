@@ -10,7 +10,7 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/rendering/effects/spawn_spark.h"
-#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
+#include "rnc/overlay/shared/props/novalis_elevator.h"
 
 /* GS quad packet for draw_geometry_quad: four corners, their colours and
    texture coordinates, then the giftag and register words. */

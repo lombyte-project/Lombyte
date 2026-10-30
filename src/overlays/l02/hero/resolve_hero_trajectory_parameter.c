@@ -8,7 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
-#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/world/collision/collision_line.h"
 typedef int V4q_32b90 __attribute__((mode(TI), aligned(16)));

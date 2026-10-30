@@ -16,8 +16,8 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/shared/gameplay/hero/smooth_and_clamp_value_pair.h"
-#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
+#include "rnc/overlay/shared/hero/smooth_and_clamp_value_pair.h"
+#include "rnc/overlay/shared/hero/try_transition_hero_water_state.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 16 build). */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_00227818.c: func_L16_00227818), where it is exact; names translated to the US level program. */

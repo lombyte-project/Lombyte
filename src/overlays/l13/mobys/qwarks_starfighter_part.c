@@ -18,7 +18,7 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"

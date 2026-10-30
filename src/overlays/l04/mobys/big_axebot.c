@@ -21,9 +21,9 @@
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/gameplay/animation/update_moby_animation_state.h"
 #include "rnc/math/vectors/normalize_vector_triplet.h"
-#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
-#include "rnc/overlay/shared/gameplay/state/trooper_set_knockback.h"
-#include "rnc/overlay/shared/ui/text/update_object_wander_movement.h"
+#include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
+#include "rnc/overlay/shared/enemies/trooper_set_knockback.h"
+#include "rnc/overlay/shared/mobys/update_object_wander_movement.h"
 
 
 

@@ -18,9 +18,9 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/entities/suck_aim.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
-#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
-#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
@@ -28,11 +28,11 @@
 #include "rnc/gameplay/entities/attach_manipulator.h"
 #include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
 #include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
-#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
-#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/game/jet_reset_camera.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
-#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
-#include "rnc/overlay/shared/gameplay/state/build_symmetric_adjacency_masks.h"
+#include "rnc/overlay/shared/props/trackdrive_left.h"
+#include "rnc/overlay/shared/mobys/build_symmetric_adjacency_masks.h"
 
 /* Moby.state for the resort-owner callbacks; path progression is separate. */
 enum ResortOwnerState {

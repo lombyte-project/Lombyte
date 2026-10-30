@@ -20,7 +20,7 @@
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
-#include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
+#include "rnc/overlay/shared/hero/adjust_hero_pose_targets_from_motion.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
 /* Per-frame update of the player state flags from the current state; same source as FUN_L11_0023c7a0 with states 2 and 7 and without the water check. */

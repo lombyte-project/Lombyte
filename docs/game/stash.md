@@ -19,7 +19,7 @@ The names describe what the code does, not Insomniac's original names.
 
 One quadword is 16 bytes. Send's `transfer_qwords` controls DMA size;
 `reserve_qwords` controls reserved space and the stored length. They can differ:
-`src/overlays/shared/rendering/run_level_main_loop.c` reserves 0x4800 quadwords while
+`src/overlays/shared/game/run_level_main_loop.c` reserves 0x4800 quadwords while
 passing a separate transfer length. Send uses direct SIF DMA, not RPC command 0.
 It ignores the DMA result and records the slot regardless, so a returned slot
 does not guarantee transfer success or completion.

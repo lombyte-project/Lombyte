@@ -16,8 +16,8 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
-#include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
-#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
 

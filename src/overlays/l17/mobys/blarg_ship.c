@@ -19,18 +19,18 @@
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
-#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
-#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
-#include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
+#include "rnc/overlay/shared/mobys/spawn_moby_break_fragments.h"
 #include "rnc/ui/fonts/font_queue_vu_state.h"
 #include "rnc/overlay/l17/hero/hero_set_state.h"
-#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/hero/get_hero_help_value.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */

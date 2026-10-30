@@ -9,9 +9,9 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
+#include "rnc/overlay/shared/mobys/draw_trail.h"
 #include "rnc/gameplay/entities/moby.h"
 
 

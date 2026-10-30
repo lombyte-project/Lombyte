@@ -18,10 +18,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/overlay/shared/gameplay/hero/air_accel.h"
+#include "rnc/overlay/shared/hero/air_accel.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
+#include "rnc/overlay/shared/hero/adjust_hero_pose_targets_from_motion.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L18_00213b40, without states 0, 4 and 0xE). */

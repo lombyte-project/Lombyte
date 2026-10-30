@@ -21,12 +21,12 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/overlay/shared/gameplay/hero/air_accel.h"
+#include "rnc/overlay/shared/hero/air_accel.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
-#include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
+#include "rnc/overlay/shared/hero/adjust_hero_pose_targets_from_motion.h"
 
 struct MobyView {
     u8 pad0[0xC];

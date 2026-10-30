@@ -1,0 +1,9 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_ANIMATION_START_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_ANIMATION_START_H
+
+#include "types.h"
+
+f32 animation_end(s32, u32) __asm__("FUN_L04_00241910");
+f32 animation_start(s32, u32) __asm__("FUN_L04_002418b0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_ANIMATION_START_H */

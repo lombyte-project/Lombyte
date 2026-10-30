@@ -4,7 +4,7 @@
 #include "asm.h"
 
 #include "qcopy.h"
-#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
+#include "rnc/overlay/shared/props/novalis_elevator.h"
 
 
 extern char D_L12_001CBF40[];

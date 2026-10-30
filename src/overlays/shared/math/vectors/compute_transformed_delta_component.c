@@ -13,7 +13,7 @@
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/overlay/shared/vehicles/veldin_ship.h"
 #include "rnc/gameplay/entities/moby.h"
 
 

@@ -8,7 +8,7 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/audio/streaming/register_audio_stream_callback.h"
-#include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/overlay/shared/props/trackdrive_left.h"
 #include "rnc/overlay/shared/rendering/effects/draw_textured_effect_list.h"
 extern unsigned char l14_scaled_table_setup_target[] __asm__("D_L14_001E9C60");
 

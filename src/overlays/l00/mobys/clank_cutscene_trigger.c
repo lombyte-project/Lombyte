@@ -14,7 +14,7 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
 #include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"

@@ -7,7 +7,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/gameplay/entities/moby.h"
 

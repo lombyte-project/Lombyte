@@ -9,7 +9,7 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/suck_aim.h"
-#include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
+#include "rnc/overlay/shared/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/world/collision/collision_hit_material.h"
 
@@ -331,7 +331,7 @@ d1:
 }
 
 
-/* Adapted from the exact FUN_L00_002133a8 (src/overlays/shared/gameplay/hero/hero_check_damage.c): L16 adds the mode-0x16 v-offset branch, the 0x15/0x16 range test and a 0x5f collision arm, and its own level data. */
+/* Adapted from the exact FUN_L00_002133a8 (src/overlays/shared/hero/hero_check_damage.c): L16 adds the mode-0x16 v-offset branch, the 0x15/0x16 range test and a 0x5f collision arm, and its own level data. */
 
 typedef unsigned int u128_2133a8 __attribute__((mode(TI), aligned(16)));
 #include "qcopy.h"

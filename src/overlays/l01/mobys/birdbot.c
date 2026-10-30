@@ -18,15 +18,15 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
-#include "rnc/overlay/shared/gameplay/entities/002630b8.h"
-#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/overlay/l01/hero/hero_set_state.h"
-#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
+#include "rnc/overlay/shared/props/novalis_elevator.h"
 
 /* One scrolling two-texture overlay layer (0x60 bytes). */
 typedef struct {

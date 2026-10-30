@@ -7,7 +7,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
+#include "rnc/overlay/shared/hero/hero_idle_sequence.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/gameplay/entities/moby.h"
 

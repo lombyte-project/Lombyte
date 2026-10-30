@@ -8,7 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/overlay/shared/gameplay/entities/cutscene_set_camera_target.h"
+#include "rnc/overlay/shared/mobys/cutscene_set_camera_target.h"
 #include "rnc/gameplay/entities/moby.h"
 extern char D_0013F3D0[];
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA, D_001413DC NOT_SDA, D_0013D464 NOT_SDA;

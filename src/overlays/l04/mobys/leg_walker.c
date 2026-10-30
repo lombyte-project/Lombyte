@@ -17,7 +17,7 @@
 #include "rnc/gameplay/entities/attach_manipulator.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
 #include "rnc/rendering/geometry/transform_scaled_vertex_batch.h"
-#include "rnc/overlay/shared/gameplay/state/animation_start.h"
+#include "rnc/overlay/shared/mobys/animation_start.h"
 #include "rnc/world/collision/collision_line.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */

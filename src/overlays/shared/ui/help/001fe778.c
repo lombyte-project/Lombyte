@@ -8,10 +8,10 @@
 #include "rnc/overlay/collision.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/suck_aim.h"
-#include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/world/collision/collision_hit_material.h"
-#include "rnc/overlay/shared/world/collision/find_camera_collision_volume_for_point.h"
+#include "rnc/overlay/shared/camera/find_camera_collision_volume_for_point.h"
 #include "rnc/sdk/library/sceVu0Normalize.h"
 #include "rnc/world/collision/collision_line.h"
 

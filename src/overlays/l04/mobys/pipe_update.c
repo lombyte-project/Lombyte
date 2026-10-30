@@ -4,8 +4,8 @@
 
 #include "sda.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
-#include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
+#include "rnc/overlay/shared/mobys/spawn_moby_break_fragments.h"
 #include "rnc/gameplay/entities/moby.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 

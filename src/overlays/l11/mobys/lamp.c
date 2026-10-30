@@ -8,10 +8,10 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
-#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
-#include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
-#include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
+#include "rnc/overlay/shared/mobys/spawn_moby_break_fragments.h"
+#include "rnc/overlay/shared/props/novalis_elevator.h"
 
 /* Register this level's vendor data set. */
 

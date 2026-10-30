@@ -13,12 +13,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
-#include "rnc/overlay/shared/gameplay/entities/manipulator_set_scale.h"
-#include "rnc/overlay/shared/gameplay/entities/pool_set_scale.h"
-#include "rnc/overlay/shared/gameplay/entities/spawn_type_52_particle_near_moby.h"
-#include "rnc/overlay/shared/runtime/dma/pool_init_tiles.h"
-#include "rnc/overlay/shared/ui/text/update_object_wander_movement.h"
+#include "rnc/overlay/shared/mobys/initialize_moby_grounding.h"
+#include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
+#include "rnc/overlay/shared/props/pool_set_scale.h"
+#include "rnc/overlay/shared/mobys/spawn_type_52_particle_near_moby.h"
+#include "rnc/overlay/shared/props/pool_init_tiles.h"
+#include "rnc/overlay/shared/mobys/update_object_wander_movement.h"
 
 typedef struct {
     float position[3];

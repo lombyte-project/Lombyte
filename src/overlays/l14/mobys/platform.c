@@ -22,9 +22,9 @@
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/gameplay/entities/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
-#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
 #include "rnc/world/collision/collision_line.h"
 

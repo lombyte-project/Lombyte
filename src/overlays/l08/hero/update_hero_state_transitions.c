@@ -17,8 +17,8 @@
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/overlay/l08/hero/hero_set_state.h"
-#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
-#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
+#include "rnc/overlay/shared/hero/try_transition_hero_water_state.h"
+#include "rnc/overlay/shared/hero/update_hero_stick_target_magnitude.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 08 build). */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/help_00237818.c: func_L08_00237818), where it is exact; names translated to the US level program. */

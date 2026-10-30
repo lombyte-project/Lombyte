@@ -19,9 +19,9 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/interpolation.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/overlay/shared/gameplay/hero/air_accel.h"
+#include "rnc/overlay/shared/hero/air_accel.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
+#include "rnc/overlay/shared/hero/adjust_hero_pose_targets_from_motion.h"
 #include "rnc/overlay/shared/rendering/spawn_random_alpha_rotated_particle.h"
 
 /*

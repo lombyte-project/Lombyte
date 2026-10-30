@@ -12,12 +12,12 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
-#include "rnc/overlay/shared/gameplay/entities/cutscene_set_camera_target.h"
+#include "rnc/overlay/shared/mobys/cutscene_set_camera_target.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/ui/fonts/font_queue_vu_state.h"
-#include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
-#include "rnc/overlay/shared/gameplay/entities/veldin_ship.h"
+#include "rnc/overlay/shared/mobys/draw_trail.h"
+#include "rnc/overlay/shared/vehicles/veldin_ship.h"
 
 typedef struct {
     u8 pad0[0x5C];

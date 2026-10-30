@@ -8,7 +8,7 @@
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
-#include "rnc/overlay/shared/gameplay/entities/nanotech_ball.h"
+#include "rnc/overlay/shared/pickups/nanotech_ball.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 
 

@@ -16,10 +16,10 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/overlay/shared/gameplay/hero/get_hero_help_value.h"
-#include "rnc/overlay/shared/gameplay/hero/try_transition_hero_water_state.h"
-#include "rnc/overlay/shared/gameplay/hero/update_hero_and_vehicle_mode_effects.h"
-#include "rnc/overlay/shared/gameplay/hero/update_hero_stick_target_magnitude.h"
+#include "rnc/overlay/shared/hero/get_hero_help_value.h"
+#include "rnc/overlay/shared/hero/try_transition_hero_water_state.h"
+#include "rnc/overlay/shared/hero/update_hero_and_vehicle_mode_effects.h"
+#include "rnc/overlay/shared/hero/update_hero_stick_target_magnitude.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 15 build). */
 /* Ported from rac1-decomp (src/overlays/l15_quartu/help_0021D7A8.c: func_L15_0021D7A8), where it is exact; names translated to the US level program. */

@@ -13,11 +13,11 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
-#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
 #include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 

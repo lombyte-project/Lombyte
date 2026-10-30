@@ -16,9 +16,9 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
-#include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
-#include "rnc/overlay/shared/gameplay/state/record_moby_context_bytes.h"
-#include "rnc/overlay/shared/gameplay/state/trooper_set_knockback.h"
+#include "rnc/overlay/shared/mobys/initialize_moby_grounding.h"
+#include "rnc/overlay/shared/mobys/record_moby_context_bytes.h"
+#include "rnc/overlay/shared/enemies/trooper_set_knockback.h"
 
 
 

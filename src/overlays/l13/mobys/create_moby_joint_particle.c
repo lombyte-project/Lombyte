@@ -6,7 +6,7 @@
 
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 #include "rnc/gameplay/entities/moby.h"
 

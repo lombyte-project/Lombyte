@@ -12,7 +12,7 @@
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/gameplay/animation/set_animation_parameter.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
-#include "rnc/overlay/shared/gameplay/animation/hud_update_counter.h"
+#include "rnc/overlay/shared/ui/hud/hud_update_counter.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 #include "rnc/gameplay/animation/apply_pending_animation.h"
 #include "rnc/overlay/shared/ui/hud/hud_frame.h"
