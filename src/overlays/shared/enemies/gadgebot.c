@@ -1603,10 +1603,10 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
         if (target != 0) {
             Q     hit_vector_copy;
             float base_angle = fast_arc_tan(*(float *)(target + 0x10), *(float *)(target + 0x14));
-            char *owner = *(char **)(target + 0x20);
+            char *hit_source_moby = *(char **)(target + 0x20);
             float knockback_angle;
             knockback_angle = base_angle;
-            if (owner != D_001413D0 && *(short *)(owner + 0xA6) != MOBY(moby)->oclass) {
+            if (hit_source_moby != D_001413D0 && *(short *)(hit_source_moby + 0xA6) != MOBY(moby)->oclass) {
                 int frames_sq = scale_game_frames(0x50);
                 frames_sq *= scale_game_frames(0x50);
                 state[0xBD] = 0;
