@@ -518,7 +518,7 @@ int select_hero_grapple_target(void) {
     float bestd, target_score, max_target_distance, target_angle_limit,
         target_elevation_angle_limit, x;
     int   k;
-    int   out;
+    int   grapple_candidate_rejected;
     float collision_start[4];
     float collision_end[4];
 
@@ -558,12 +558,12 @@ int select_hero_grapple_target(void) {
         if (*(float *)(candidate_data + 0x20) != 0.0f)
             max_target_distance = *(float *)(candidate_data + 0x20);
         target_score = score_hero_target_candidate(candidate_moby,
-                                                   &out,
+                                                   &grapple_candidate_rejected,
                                                    x,
                                                    max_target_distance,
                                                    target_angle_limit,
                                                    target_elevation_angle_limit);
-        if (out != 0)
+        if (grapple_candidate_rejected != 0)
             continue;
         gb += 0x80;
         if (vector_distance_xy(gb, candidate_moby + 0x10) < 4.0f)
