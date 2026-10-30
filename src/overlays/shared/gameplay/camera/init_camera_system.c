@@ -63,13 +63,13 @@ typedef struct {
     char pad[0x180];
     T001eb448 *p;
 } S001eb448;
-extern S001eb448 D_L00_00166C80_u __asm__("D_L00_00166C80");
-/* Sets h and clears b in the block D_L00_00166C80 points to. */
+#include "rnc/overlay/level_camera.h"
+/* Sets h and clears b in the block l00_camera.unk180 points to. */
 void initialize_camera_record_handoff_defaults(void) __asm__("FUN_L00_001eb448");
 
 void initialize_camera_record_handoff_defaults(void) {
-    D_L00_00166C80_u.p->h = 1;
-    D_L00_00166C80_u.p->b = 0;
+    ((T001eb448 *)l00_camera.unk180)->h = 1;
+    ((T001eb448 *)l00_camera.unk180)->b = 0;
 }
 extern struct CameraType level_camera_types[] __asm__("D_L00_001EA880");
 /* Index of id in the table that ends with -1 (the end index when it is missing). */
@@ -100,12 +100,11 @@ typedef struct {
     float f1;
 } S_u;
 
-extern S_u D_L00_00166C80_c __asm__("D_L00_00166C80");
 extern char active_camera_saved_state_storage[] __asm__("D_L00_00169110");
 
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void init_camera_system(void) {
-    char *camera_system_state = (char *)&D_L00_00166C80_c;
+    char *camera_system_state = (char *)&l00_camera;
     float *camera_vector_snapshot, *camera_record_vector_destination, *vector_copy_source, *vector_copy_destination;
     char *current_camera_record;
     if (*(char **)(camera_system_state + 0x180) != 0) {
@@ -165,14 +164,13 @@ typedef struct {
 } Elem;
 
 extern Elem D_L00_00167150[];
-extern S D_L00_00166C80;
 extern int D_L00_0015EF4C;
 extern int level_camera_present_flags[] __asm__("D_L00_00169890");
 
 void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern f32 D_L00_0015EF40_gp __asm__("D_L00_0015EF40") __attribute__((sda));
 void setup_level_cameras(void) {
-    char *camera_system_state = (char *)&D_L00_00166C80;
+    char *camera_system_state = (char *)&l00_camera;
     char *camera_system_state_alias;
     char *q;
     char *normalized_hero_vector;
@@ -188,7 +186,7 @@ void setup_level_cameras(void) {
         D_L00_00167150[k].s8E = 0;
         level_camera_present_flags[k] = 0;
     }
-    camera_system_state_alias = (char *)&D_L00_00166C80;
+    camera_system_state_alias = (char *)&l00_camera;
     base = &hero;
     q = camera_system_state_alias + 0x190;
     normalized_hero_vector = camera_system_state_alias + 0x1B0;
@@ -297,8 +295,8 @@ typedef struct {
     char pad2[0x30];
     char *o;
 } C_1ed6a8;
-extern C_1ed6a8 D_L00_00166C80_lui __asm__("D_L00_00166C80") NOT_SDA;
 #include "rnc/overlay/collision.h"
+extern LevelCamera l00_camera_lui __asm__("D_L00_00166C80") NOT_SDA;
 extern OvlQuad g_debug_camera_lui __asm__("D_L00_00166DC0") NOT_SDA;
 extern int g_debug_menu_lui[] __asm__("D_L00_0016C058") NOT_SDA;
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
@@ -311,7 +309,7 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
 void resolve_camera_movement_collisions(OvlQuad *camera_position, float collision_radius) {
     OvlQuad step_delta[1];
     float camera_movement_origin_snapshot[4] __attribute__((aligned(16)));
-    char *o = D_L00_00166C80_lui.o;
+    char *o = (char *)l00_camera_lui.unk180;
     float *camera_movement_origin = (float *)(o + 0x64);
     int step_count, i, j;
 
@@ -321,7 +319,7 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
     ((int *)camera_movement_origin_snapshot)[3] = 0;
     if (*(short *)(o + 0x8A) != 0) {
         if (D_L00_0016C06C == 0) {
-            qcopy(&D_L00_00166C80_lui.q, camera_position);
+            qcopy(&l00_camera_lui.pos, camera_position);
         }
         *(short *)(o + 0x8A) = 0;
         return;
@@ -335,7 +333,7 @@ void resolve_camera_movement_collisions(OvlQuad *camera_position, float collisio
         for (j = 0; j < 6 && coll_sphere(camera_position, D_L00_0015EF5C_gp, ((int)hero.moby), collision_radius); j++) {
             qcopy(camera_position, &coll_hit_position);
             {
-                char *current_camera_record = D_L00_00166C80_lui.o;
+                char *current_camera_record = (char *)l00_camera_lui.unk180;
                 if (*(unsigned char *)(current_camera_record + 0x89) == 0) {
                     *(unsigned char *)(current_camera_record + 0x89) = 1;
                 }

@@ -114,7 +114,7 @@ typedef struct {
 } A_2e6000;
 typedef struct { u8 pad[0x100]; f32 f100; f32 f104; } C_2e6000;
 typedef struct { u8 pad[0x2000]; s32 i2000; } L_2e6000;
-extern A_2e6000 player_camera[] __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern C_2e6000 D_0013C940_2e6000 __asm__("D_0013C940");
 extern L_2e6000 D_0013F3D0_2e6000 __asm__("D_0013F3D0");
 extern s32 D_L00_00177F00[];
@@ -209,9 +209,9 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
         follow_camera_start_slide();
         follow_camera_set_lateral_spring(0.04f, 0.2f);
     }
-    x = &player_camera[1];
+    x = (A_2e6000 *)&l00_camera + 1;
     if (x->fn != 0) x->fn();
-    player_camera_state = &player_camera[0];
+    player_camera_state = (A_2e6000 *)&l00_camera;
     if (player_camera_state->p25C != 0 && camera_override_state->i10 < 2) {
         if ((s8)player_camera_state->p25C[0x20] < 0) {
             player_camera_state->p25C = 0;
@@ -219,7 +219,7 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
             if (0.3f <= absolute_float(D_0013C940_2e6000.f100) || 0.3f <= absolute_float(D_0013C940_2e6000.f104)) {
                 player_camera_state->i260 = 0;
             }
-            x = &player_camera[0];
+            x = (A_2e6000 *)&l00_camera;
             x->i260++;
             if (scale_game_frames(400) < x->i260) x->i260 = scale_game_frames(400);
             rotation_or_blend_value = convert_integer_to_float(x->i260) / convert_integer_to_float(scale_game_frames(400));
@@ -295,7 +295,6 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
 typedef float V[4] __attribute__((aligned(16)));
 
 extern V D_L00_00173E60;
-extern char D_L00_00166C80[];
 #include "rnc/overlay/collision.h"
 extern float D_L00_00166E40[];
 extern int FUN_001efa68(void *, void *, int, int, int);
@@ -307,7 +306,7 @@ extern char collision_hit_point[] __asm__("D_L00_00173E60");
 void rebuild_follow_camera_pose(int snap) __asm__("FUN_L00_002e66b8");
 
 void rebuild_follow_camera_pose(int snap) {
-    char *cams = D_L00_00166C80;
+    char *cams = (char *)&l00_camera;
     char *camera_moby = *(char **)(cams + 0x180);
     char *track = cams + 0x190; /* the followed player: position at 0, up vector at 0x30 */
     char *data = *(char **)(camera_moby + 0x70);
