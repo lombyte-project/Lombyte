@@ -125,7 +125,7 @@ char *spawn_armed_transport_rocket(char *owner,
                                    int   blend_duration_ticks,
                                    float unused) __asm__("FUN_L16_002a0dc0");
 
-char *spawn_armed_transport_rocket(char *owner,
+char *spawn_armed_transport_rocket(char *spawning_moby,
                                    char *initial_movement_vector,
                                    void *spawn_position,
                                    void *target_position,
@@ -140,7 +140,7 @@ char *spawn_armed_transport_rocket(char *owner,
         MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 0;
-        MOBY(spawned_moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
+        MOBY(spawned_moby)->spawn_frame = *(unsigned long *)(spawning_moby + 0x38);
         MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 3.0f;
         qcopy(spawned_moby + 0x10, spawn_position);
         moby_data = ((char *)MOBY(spawned_moby)->pvars);
