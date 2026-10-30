@@ -931,7 +931,7 @@ typedef struct {
    spot is in view, the owner's sound unless it is dying, and a light flash of intensity `flash` (13 if negative). */
 void cart_burst(u8 *owner, u128 *pos, int sound, float scale, float flash) __asm__("FUN_L00_0025f090");
 
-void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float flash) {
+void cart_burst(u8 *burst_owner_moby, u128 *burst_position, int sound, float scale, float flash) {
     Vy10  particle_velocity;
     int   i;
     float sp, big;
@@ -954,8 +954,8 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
                        0,
                        sp * scale);
     }
-    if (owner != 0) {
-        spawn_glow_particle(owner,
+    if (burst_owner_moby != 0) {
+        spawn_glow_particle(burst_owner_moby,
                             burst_position,
                             &particle_velocity,
                             scale * 4.0f,
@@ -964,7 +964,7 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
                             0x40,
                             0,
                             0x30);
-        spawn_glow_particle(owner,
+        spawn_glow_particle(burst_owner_moby,
                             burst_position,
                             &particle_velocity,
                             scale * 3.0f,
@@ -983,8 +983,8 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
             l00_camera.shake_frames = scale_game_frames(0x14);
         }
     }
-    if (owner != 0 && owner[0x20] != 0xFE && owner[0x20] != 0xFD && sound != -1) {
-        allocate_voice_for_target_entry(sound, 0, owner);
+    if (burst_owner_moby != 0 && burst_owner_moby[0x20] != 0xFE && burst_owner_moby[0x20] != 0xFD && sound != -1) {
+        allocate_voice_for_target_entry(sound, 0, burst_owner_moby);
     }
     if (flash != 0.0f) {
         if (flash > 0.0f) {
