@@ -113,7 +113,7 @@ void magnet_elevator_update(struct Moby *moby) {
         B(moby, 0x20) = 6;
         break;
     case MAGNET_ELEVATOR_STATE_BLEND_CAMERA: {
-        float old = (*(float *)((char *)(state) + (0x70)));
+        float previous_camera_blend_progress = (*(float *)((char *)(state) + (0x70)));
         advance_accelerated_scalar((float *)(state + 0x70),
                                    (float *)(state + 0x74),
                                    1.0f,
@@ -121,20 +121,20 @@ void magnet_elevator_update(struct Moby *moby) {
                                    frame_time_sq * 4.0f,
                                    frame_time * 4.0f);
         if ((*(float *)((char *)(state) + (0x70))) < 1.0f) {
-            float t = (1.0f - (*(float *)((char *)(state) + (0x70)))) / (1.0f - old);
-            char *base;
+            float t = (1.0f - (*(float *)((char *)(state) + (0x70)))) / (1.0f - previous_camera_blend_progress);
+            char *camera_pose_base;
             FUN_L17_002ee9c0_c(moby, (char *)camera_position, (char *)camera_rotation);
             fast_vec_sub(camera_position_offset, D_L17_001676C0, camera_position);
-            base = D_L17_001676C0 - 0x140;
+            camera_pose_base = D_L17_001676C0 - 0x140;
             fast_vec_scale(camera_position_offset, camera_position_offset, t);
             fast_vec_add(camera_position, camera_position, camera_position_offset);
             camera_rotation[1] =
-                fast_add_rotations(fast_subtract_rotations((*(float *)((char *)(base) + (0x154))),
+                fast_add_rotations(fast_subtract_rotations((*(float *)((char *)(camera_pose_base) + (0x154))),
                                                            camera_rotation[1]) *
                                        t,
                                    camera_rotation[1]);
             camera_rotation[2] =
-                fast_add_rotations(fast_subtract_rotations((*(float *)((char *)(base) + (0x158))),
+                fast_add_rotations(fast_subtract_rotations((*(float *)((char *)(camera_pose_base) + (0x158))),
                                                            camera_rotation[2]) *
                                        t,
                                    camera_rotation[2]);
