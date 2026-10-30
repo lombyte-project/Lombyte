@@ -541,7 +541,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         flag = 1;
     }
     FUN_L00_00263ac8_u(2.5f, (int)birdbot_moby, 2, birdbot_vars->x200);
-    qcopy(&old, &birdbot_moby->pos);
+    qcopy(&birdbot_position_before_update, &birdbot_moby->pos);
     if (birdbot_vars->w1C8 > 0) {
         birdbot_vars->w1C8--;
     }
@@ -802,17 +802,17 @@ void birdbot_update(PeMoby *birdbot_moby) {
         if (birdbot_vars->side.path != 0) {
             PeCursor  *side_path_cursor;
             LevelPath *path;
-            int        next;
+            int        side_path_next_node_index;
             float      a;
 
             side_path_cursor = &birdbot_vars->side;
-            next = (side_path_cursor->idx + side_path_cursor->path->count + side_path_cursor->dir) %
+            side_path_next_node_index = (side_path_cursor->idx + side_path_cursor->path->count + side_path_cursor->dir) %
                    side_path_cursor->path->count;
-            a = fast_arc_tan(side_path_cursor->path->points[next].f[0] - birdbot_moby->pos.f[0],
-                             side_path_cursor->path->points[next].f[1] - birdbot_moby->pos.f[1]);
+            a = fast_arc_tan(side_path_cursor->path->points[side_path_next_node_index].f[0] - birdbot_moby->pos.f[0],
+                             side_path_cursor->path->points[side_path_next_node_index].f[1] - birdbot_moby->pos.f[1]);
             FUN_L00_00258278_cf((char *)birdbot_moby, &birdbot_vars->f194, a, 0.01f, 0.3f, 0.1f);
             path = side_path_cursor->path;
-            qcopy(&vb, &path->points[next]);
+            qcopy(&vb, &path->points[side_path_next_node_index]);
             if (side_path_cursor->idx == path->count - 1) {
                 if (birdbot_moby->b53 != 0) {
                     blend_moby_animation(birdbot_moby, 0, 0, scale_game_frames(5));
@@ -823,7 +823,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 fast_vec_normalize(&va, &va, frame_time * 5.0f);
                 fast_vec_add(&birdbot_moby->pos, &birdbot_moby->pos, &va);
                 if (fast_vec_dist(&vb, &birdbot_moby->pos) < 0.5f) {
-                    side_path_cursor->idx = next;
+                    side_path_cursor->idx = side_path_next_node_index;
                 }
             }
         } else if (birdbot_vars->w1E4 != -1) {
@@ -874,7 +874,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 birdbot_moby->state = 1;
             }
         }
-        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&old);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&birdbot_position_before_update);
         break;
     case BIRDBOT_STATE_FIRE_BURST:
         if (birdbot_vars->f1CC < 14.0f && frame >= 14.0f) {
@@ -998,7 +998,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         birdbot_vars->f1B8 = 0.0f;
         birdbot_vars->f1BC = 0.0f;
         birdbot_moby->state = 0xA;
-        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&old);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&birdbot_position_before_update);
         break;
     case BIRDBOT_STATE_MOVE_TO_PATH_NODE: {
         PeCursor *c;
@@ -1063,7 +1063,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
         if (fast_vec_dist(&birdbot_moby->pos, &va) < 0.25f) {
             birdbot_moby->state = 0xB;
         }
-        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&old);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&birdbot_position_before_update);
         break;
     }
     case BIRDBOT_STATE_BRAKE_AND_FACE_TARGET:
@@ -1113,7 +1113,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
             }
             birdbot_moby->state = 1;
         }
-        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&old);
+        spawn_birdbot_movement_particles((SplashMoby *)birdbot_moby, (u128 *)&birdbot_position_before_update);
         break;
     case BIRDBOT_STATE_NONFATAL_KNOCKBACK:
         if (step_moby_motion(birdbot_moby, birdbot_vars->x70) & 0x40) {
