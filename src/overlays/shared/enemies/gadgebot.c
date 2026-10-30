@@ -1408,7 +1408,7 @@ void select_nearest_gadgebot_interaction_target(void *moby_arg) {
 int process_gadgebot_interaction_candidate(
     char *ctx, char *ow, char *moby, int flag, int *out) __asm__("FUN_L06_002f2c28");
 
-int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int flag, int *out) {
+int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int flag, int *interaction_status_out) {
     float candidate_position[4];
     float vB[4];
     float vA[4];
@@ -1523,7 +1523,7 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
         }
 
         *(char *)(ctx + 0x20) = 4;
-        *out = 1;
+        *interaction_status_out = 1;
         if (*(int *)(ow + 0x310) >= 2) {
             int  path_slot_index;
             int *ids = (int *)(ow + 0x1E0);
@@ -1551,7 +1551,7 @@ int process_gadgebot_interaction_candidate(char *ctx, char *ow, char *moby, int 
             return 0;
         *(char *)(ctx + 0x20) = 8;
         *(int *)(ow + 0x304) = (int)moby;
-        *out = 2;
+        *interaction_status_out = 2;
         return 0;
     }
     return 0;
