@@ -115,74 +115,74 @@ void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, 
 }
 
 void spawn_gunship_parts(struct Moby *moby) {
-    TargetBoardVars *vars = (TargetBoardVars *)moby->pvars;
+    TargetBoardVars *gunship_part_link_vars = (TargetBoardVars *)moby->pvars;
     struct Moby     *child_moby;
     s32              i;
     s32              pjoint;
 
-    vars->slots[0].moby = moby;
-    vars->slots[0].anchor = 0;
-    vars->slots[0].joint = 0;
-    vars->slots[0].pjoint = 0;
-    vars->slots[3].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C1, 0, 2);
-    vars->slots[3].anchor = moby;
-    vars->slots[3].joint = 0;
-    vars->slots[3].pjoint = 2;
+    gunship_part_link_vars->slots[0].moby = moby;
+    gunship_part_link_vars->slots[0].anchor = 0;
+    gunship_part_link_vars->slots[0].joint = 0;
+    gunship_part_link_vars->slots[0].pjoint = 0;
+    gunship_part_link_vars->slots[3].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C1, 0, 2);
+    gunship_part_link_vars->slots[3].anchor = moby;
+    gunship_part_link_vars->slots[3].joint = 0;
+    gunship_part_link_vars->slots[3].pjoint = 2;
     pjoint = 3;
-    vars->slots[1].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C2, 0, pjoint);
-    vars->slots[1].anchor = moby;
-    vars->slots[1].joint = 0;
-    vars->slots[1].pjoint = pjoint;
+    gunship_part_link_vars->slots[1].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C2, 0, pjoint);
+    gunship_part_link_vars->slots[1].anchor = moby;
+    gunship_part_link_vars->slots[1].joint = 0;
+    gunship_part_link_vars->slots[1].pjoint = pjoint;
     child_moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C2, 0, 4);
-    vars->slots[2].moby = child_moby;
+    gunship_part_link_vars->slots[2].moby = child_moby;
     child_moby->flags |= 0x8000;
-    vars->slots[2].anchor = moby;
-    vars->slots[2].joint = 0;
-    vars->slots[2].pjoint = 4;
-    vars->slots[7].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 0, 0);
-    vars->slots[7].anchor = moby;
-    vars->slots[7].joint = 0;
-    vars->slots[7].pjoint = 0;
-    vars->slots[8].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 1, 1);
-    vars->slots[8].anchor = moby;
-    vars->slots[8].joint = 1;
-    vars->slots[8].pjoint = 1;
-    vars->slots[9].moby = spawn_joint_aligned_moby_part((char *)vars->slots[8].moby, 0x1C0, 1, 0);
-    vars->slots[9].anchor = vars->slots[8].moby;
-    vars->slots[9].joint = 1;
-    vars->slots[9].pjoint = 0;
-    vars->slots[5].moby = spawn_joint_aligned_moby_part((char *)vars->slots[9].moby, 0x1BD, 0, 0);
-    vars->slots[5].anchor = vars->slots[9].moby;
-    vars->slots[5].joint = 0;
-    vars->slots[5].pjoint = 0;
-    vars->slots[6].moby = spawn_joint_aligned_moby_part((char *)vars->slots[7].moby, 0x1BA, 1, 1);
-    vars->slots[6].anchor = vars->slots[7].moby;
-    vars->slots[6].joint = 1;
-    vars->slots[6].pjoint = 1;
-    vars->slots[4].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1B9, 0, 0);
-    vars->slots[4].anchor = vars->slots[6].moby;
-    vars->slots[4].joint = 0;
-    vars->slots[4].pjoint = 0;
+    gunship_part_link_vars->slots[2].anchor = moby;
+    gunship_part_link_vars->slots[2].joint = 0;
+    gunship_part_link_vars->slots[2].pjoint = 4;
+    gunship_part_link_vars->slots[7].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 0, 0);
+    gunship_part_link_vars->slots[7].anchor = moby;
+    gunship_part_link_vars->slots[7].joint = 0;
+    gunship_part_link_vars->slots[7].pjoint = 0;
+    gunship_part_link_vars->slots[8].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1C0, 1, 1);
+    gunship_part_link_vars->slots[8].anchor = moby;
+    gunship_part_link_vars->slots[8].joint = 1;
+    gunship_part_link_vars->slots[8].pjoint = 1;
+    gunship_part_link_vars->slots[9].moby = spawn_joint_aligned_moby_part((char *)gunship_part_link_vars->slots[8].moby, 0x1C0, 1, 0);
+    gunship_part_link_vars->slots[9].anchor = gunship_part_link_vars->slots[8].moby;
+    gunship_part_link_vars->slots[9].joint = 1;
+    gunship_part_link_vars->slots[9].pjoint = 0;
+    gunship_part_link_vars->slots[5].moby = spawn_joint_aligned_moby_part((char *)gunship_part_link_vars->slots[9].moby, 0x1BD, 0, 0);
+    gunship_part_link_vars->slots[5].anchor = gunship_part_link_vars->slots[9].moby;
+    gunship_part_link_vars->slots[5].joint = 0;
+    gunship_part_link_vars->slots[5].pjoint = 0;
+    gunship_part_link_vars->slots[6].moby = spawn_joint_aligned_moby_part((char *)gunship_part_link_vars->slots[7].moby, 0x1BA, 1, 1);
+    gunship_part_link_vars->slots[6].anchor = gunship_part_link_vars->slots[7].moby;
+    gunship_part_link_vars->slots[6].joint = 1;
+    gunship_part_link_vars->slots[6].pjoint = 1;
+    gunship_part_link_vars->slots[4].moby = spawn_joint_aligned_moby_part((char *)moby, 0x1B9, 0, 0);
+    gunship_part_link_vars->slots[4].anchor = gunship_part_link_vars->slots[6].moby;
+    gunship_part_link_vars->slots[4].joint = 0;
+    gunship_part_link_vars->slots[4].pjoint = 0;
     for (i = 0; i < 8; i++) {
-        vars->slots[10 + i].moby =
-            spawn_joint_aligned_moby_part((char *)vars->slots[7].moby, 0x1BB, 0, i + 2);
-        vars->slots[10 + i].anchor = vars->slots[7].moby;
-        vars->slots[10 + i].joint = 0;
-        vars->slots[10 + i].pjoint = i + 2;
+        gunship_part_link_vars->slots[10 + i].moby =
+            spawn_joint_aligned_moby_part((char *)gunship_part_link_vars->slots[7].moby, 0x1BB, 0, i + 2);
+        gunship_part_link_vars->slots[10 + i].anchor = gunship_part_link_vars->slots[7].moby;
+        gunship_part_link_vars->slots[10 + i].joint = 0;
+        gunship_part_link_vars->slots[10 + i].pjoint = i + 2;
     }
     for (i = 0; i < 8; i++) {
-        vars->slots[18 + i].moby =
-            spawn_joint_aligned_moby_part((char *)vars->slots[8].moby, 0x1BB, 0, i + 2);
-        vars->slots[18 + i].anchor = vars->slots[8].moby;
-        vars->slots[18 + i].joint = 0;
-        vars->slots[18 + i].pjoint = i + 2;
+        gunship_part_link_vars->slots[18 + i].moby =
+            spawn_joint_aligned_moby_part((char *)gunship_part_link_vars->slots[8].moby, 0x1BB, 0, i + 2);
+        gunship_part_link_vars->slots[18 + i].anchor = gunship_part_link_vars->slots[8].moby;
+        gunship_part_link_vars->slots[18 + i].joint = 0;
+        gunship_part_link_vars->slots[18 + i].pjoint = i + 2;
     }
     for (i = 0; i < 8; i++) {
-        vars->slots[26 + i].moby =
-            spawn_joint_aligned_moby_part((char *)vars->slots[9].moby, 0x1BB, 0, i + 2);
-        vars->slots[26 + i].anchor = vars->slots[9].moby;
-        vars->slots[26 + i].joint = 0;
-        vars->slots[26 + i].pjoint = i + 2;
+        gunship_part_link_vars->slots[26 + i].moby =
+            spawn_joint_aligned_moby_part((char *)gunship_part_link_vars->slots[9].moby, 0x1BB, 0, i + 2);
+        gunship_part_link_vars->slots[26 + i].anchor = gunship_part_link_vars->slots[9].moby;
+        gunship_part_link_vars->slots[26 + i].joint = 0;
+        gunship_part_link_vars->slots[26 + i].pjoint = i + 2;
     }
 }
 
