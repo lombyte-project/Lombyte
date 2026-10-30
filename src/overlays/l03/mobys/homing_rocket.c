@@ -108,7 +108,7 @@ void update_homing_rocket(struct Moby *rocket_moby) {
         ROCKET_FLY = 1,
         ROCKET_BURST_AND_REMOVE = 2
     };
-    Vec4                old;
+    Vec4                previous_position;
     Vec4                side;
     Vec4                back;
     Vec4                trail_vector_offset;
@@ -127,7 +127,7 @@ void update_homing_rocket(struct Moby *rocket_moby) {
         pos = &rocket_moby->pos;
         range = convert_integer_to_float(rocket_vars->timer * 2) * rocket_vars->speed;
         select_moby_target_with_hero_fallback(rocket_moby, &target, range);
-        qcopy(&old, pos);
+        qcopy(&previous_position, pos);
         fast_vec_add(pos, pos, rocket_vars);
         trail_vector_offset.q = D_0013F490_v.q;
         trail_vector_offset.f[2] *= rocket_trail_offset_z_scale_gp;
@@ -170,7 +170,7 @@ void update_homing_rocket(struct Moby *rocket_moby) {
                                              frame_time * 0.5235988f);
             rocket_moby->pos.z += fast_sin(-rocket_moby->rot.y) * rocket_vars->speed;
         }
-        if (collision_line(pos, &old, 0, rocket_vars->ignore, 0) != 0 ||
+        if (collision_line(pos, &previous_position, 0, rocket_vars->ignore, 0) != 0 ||
             coll_sphere(0.2f, pos, 0, rocket_vars->ignore) != 0) {
             level = (void **)&D_L03_00173F40;
             if (level[6] != NULL) {
