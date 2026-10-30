@@ -53,16 +53,16 @@ int sceCdInit(int init_mode) {
     int reply_status;
     int first_version;
     int second_version;
-    int owner;
+    int initializing_thread_id;
     u8 *receive_buffer;
 
     if (sceCdSyncS(1) != 0) {
         return 0;
     }
     sceSifInitRpc(0);
-    owner = GetThreadId();
+    initializing_thread_id = GetThreadId();
     *(volatile s32 *)D_001312E4 = 1;
-    *(volatile s32 *)D_00159750 = owner;
+    *(volatile s32 *)D_00159750 = initializing_thread_id;
     {
         s32 *p0 = D_00131300, *p1 = D_001312F8, *p2 = D_00131308, *p3 = D_00131304,
             *init_rpc_bind_state_ptr = cd_init_rpc_bind_state, *power_event_handler_state_ptr = D_001312FC, *p5 = D_001312F4;
