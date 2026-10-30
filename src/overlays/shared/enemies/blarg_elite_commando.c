@@ -479,14 +479,14 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         HIT_RESPONSE_DAMAGE_ANIMATION_ONLY = 10,
         HIT_RESPONSE_NO_REACTION = 11
     };
-    L16DamageScratch scratch;
+    L16DamageScratch damage_reaction;
     L16DamageData   *commando_data = (L16DamageData *)commando_moby->pvars;
     char            *hit;
     unsigned int     response;
     float            range;
     float            time_scale;
     commando_moby->scale = commando_moby->pclass->scale;
-    scratch.amount = 0.0f;
+    damage_reaction.amount = 0.0f;
     hit = find_moby_hit(commando_moby, 0x330000, 0);
     if (hit) {
         if (*(char **)(hit + 0x20)) {
@@ -495,13 +495,13 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
         }
     }
     response = hit_reaction(
-        commando_moby, hit, &commando_data->health, 0, &scratch.status, &scratch.amount, 0, 4);
-    if (scratch.status != 1 && commando_moby->state != 9) {
+        commando_moby, hit, &commando_data->health, 0, &damage_reaction.status, &damage_reaction.amount, 0, 4);
+    if (damage_reaction.status != 1 && commando_moby->state != 9) {
         randomize_blarg_elite_commando_group_pursuit_timers(commando_moby, 0x12C, 0x168);
         if (hit && *(char **)(hit + 0x20) && *(short *)(*(char **)(hit + 0x20) + 0xA6) != 0x47) {
             commando_data->reward_hits = 0;
         }
-        commando_data->health -= scratch.amount;
+        commando_data->health -= damage_reaction.amount;
         if (commando_data->health <= 0.0f)
             response = 1;
         commando_data->sound_timer = truncate_float_to_s32(512.0f);
@@ -531,15 +531,15 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             {
                 float heading = fast_arc_tan(commando_moby->pos.x - *(float *)(source + 0x10),
                                              commando_moby->pos.y - *(float *)(source + 0x14));
-                scratch.vector = *(OvlQuad *)(hit + 0x10);
-                scratch.angle = heading;
+                damage_reaction.vector = *(OvlQuad *)(hit + 0x10);
+                damage_reaction.angle = heading;
             }
-            trooper_knockback_arc(&scratch.vector,
-                                  &scratch.angle,
+            trooper_knockback_arc(&damage_reaction.vector,
+                                  &damage_reaction.angle,
                                   &commando_data->forward_impulse,
                                   &commando_data->lateral_impulse);
             trooper_start_knockback(
-                scratch.angle, commando_moby, commando_data->knockback, 6, 1, 0);
+                damage_reaction.angle, commando_moby, commando_data->knockback, 6, 1, 0);
             commando_moby->state = 8;
             commando_data->animation = 0x78;
             break;
@@ -576,15 +576,15 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
             {
                 float heading = fast_arc_tan(commando_moby->pos.x - *(float *)(source + 0x10),
                                              commando_moby->pos.y - *(float *)(source + 0x14));
-                scratch.vector = *(OvlQuad *)(hit + 0x10);
-                scratch.fatal_angle = heading;
+                damage_reaction.vector = *(OvlQuad *)(hit + 0x10);
+                damage_reaction.fatal_angle = heading;
             }
-            trooper_knockback_arc(&scratch.vector,
-                                  &scratch.fatal_angle,
+            trooper_knockback_arc(&damage_reaction.vector,
+                                  &damage_reaction.fatal_angle,
                                   &commando_data->forward_impulse,
                                   &commando_data->lateral_impulse);
             trooper_start_knockback(
-                scratch.fatal_angle, commando_moby, commando_data->knockback, 7, 1, 0);
+                damage_reaction.fatal_angle, commando_moby, commando_data->knockback, 7, 1, 0);
             commando_moby->state = 9;
             commando_data->animation = 0xF0;
             FUN_L00_00257470(commando_moby, 0, -1);
