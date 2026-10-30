@@ -27,7 +27,7 @@ extern void
 
 void draw_menu_flashing_panel(struct MenuPanelOwner *owner) __asm__("FUN_00223e28");
 
-void draw_menu_flashing_panel(struct MenuPanelOwner *owner) {
+void draw_menu_flashing_panel(struct MenuPanelOwner *panel_moby) {
     struct MenuFlashingPanel *panel;
     s32                       x;
     s32                       y;
@@ -39,10 +39,10 @@ void draw_menu_flashing_panel(struct MenuPanelOwner *owner) {
     s32                       width_adjustment;
     s32                       height_adjustment;
 
-    if (owner == 0) {
+    if (panel_moby == 0) {
         return;
     }
-    panel = owner->flash;
+    panel = panel_moby->flash;
     if (panel == 0) {
         return;
     }
