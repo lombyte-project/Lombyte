@@ -471,14 +471,19 @@ void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int fl
 }
 #undef SPAWN_DEBRIS
 extern char *D_L03_0015FFD8_29dba8 __asm__("D_L03_0015FFD8");
-extern char  spline_moby_missing_path_warning_format[] __asm__("D_L03_001E2A28");
-extern int   get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
-extern int   get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern int   check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
-extern int   select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
-extern int   resolve_path_node_index(void *, int) __asm__("FUN_L01_0028b828");
-extern int   advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
-extern void  initialize_path_descriptor(char *) __asm__("FUN_L01_0028b410");
+
+char spline_moby_missing_path_warning_format[48] __asm__("D_L03_001E2A28") = {
+    0x57, 0x41, 0x52, 0x4e, 0x49, 0x4e, 0x47, 0x20, 0x6d, 0x6f, 0x62, 0x79, 0x20, 0x63, 0x6c, 0x61,
+    0x73, 0x73, 0x20, 0x25, 0x64, 0x20, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x20, 0x25,
+    0x64, 0x20, 0x68, 0x61, 0x73, 0x20, 0x6e, 0x6f, 0x20, 0x70, 0x61, 0x74, 0x68, 0x21, 0xa,  0};
+
+extern int  get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
+extern int  get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
+extern int  check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
+extern int  select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
+extern int  resolve_path_node_index(void *, int) __asm__("FUN_L01_0028b828");
+extern int  advance_path_node_index(char *) __asm__("FUN_L01_0028b878");
+extern void initialize_path_descriptor(char *) __asm__("FUN_L01_0028b410");
 extern void
 compute_path_node_tangent(void *out, int *l, int idx, float a, float b) __asm__("FUN_L01_0028b8c8");
 extern void evaluate_cubic_hermite_segment(

@@ -1,5 +1,6 @@
 /* Level 17 magnet_elevator. */
 #include "types.h"
+#include "rnc/math/vector.h"
 #include "rnc/overlay/level_camera.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/mobys/moby_class_id.h"
@@ -292,7 +293,9 @@ void build_magnet_elevator_camera_pose(struct Moby *moby, char *camera_position,
 extern void transform_vector_by_basis(void *, void *, void *);
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002F0580), where it is exact; names translated to the US level program. */
 
-extern char magnet_elevator_local_path_points[] __asm__("D_L17_001D9F70");
+/* The 11 path points (loop i = 10..0, 16-byte stride) in the elevator's
+   frame; transform_vector_by_basis loads each one as a quadword (lqc2). */
+extern Vec4 magnet_elevator_local_path_points[11] __asm__("D_L17_001D9F70");
 
 void rebuild_magnet_elevator_world_path(struct Moby *moby) __asm__("FUN_L17_002eea70");
 
@@ -304,7 +307,7 @@ void rebuild_magnet_elevator_world_path(struct Moby *moby) {
         int   i;
         for (i = 10; i >= 0; i--) {
             transform_vector_by_basis(
-                world_path_point, magnet_elevator_local_path_points + (10 - i) * 0x10, point);
+                world_path_point, &magnet_elevator_local_path_points[10 - i], point);
             fast_vec_add(world_path_point, world_path_point, &moby->pos);
             *(float *)(world_path_point + 0xC) = 1.0f;
             world_path_point += 0x10;

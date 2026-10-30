@@ -151,7 +151,8 @@ extern s32 D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") MACRO_ADDR;
 
 f32 lightning_main_arc_points[40][4] __asm__("D_L14_001DFD80") = {0};
 
-extern s16 D_L14_001E0000[40];
+/* Age in frames of each of the 40 main arc points (the init and update loops run i < 40). */
+s16 lightning_main_arc_point_ages[40] __asm__("D_L14_001E0000") = {0};
 
 f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050") = {0};
 
@@ -198,7 +199,7 @@ void update_branched_lightning_arc(char *moby) {
         lightning_main_arc_point_spacing_gp = arc_endpoint_distance / convert_integer_to_float(40);
         lightning_arc_alpha_fade = 0;
         for (; i < 40; i++) {
-            main_arc_age = &D_L14_001E0000[i];
+            main_arc_age = &lightning_main_arc_point_ages[i];
             main_arc_point = lightning_main_arc_points[i];
             main_arc_point[1] = main_arc_point[2] = 0.0f;
             main_arc_point[3] = 1.0f;
@@ -237,7 +238,7 @@ void update_branched_lightning_arc(char *moby) {
             float(*row)[4] = D_L14_001E0050_d530[j];
             u16 *sq = D_L14_001E0350_d530[j];
             starts[j] = k;
-            sq[0] = D_L14_001E0000[k];
+            sq[0] = lightning_main_arc_point_ages[k];
             row[0][0] = 0.0f;
             row[0][2] = 0.0f;
             r = random_float_between(1.0f, 10.0f);
@@ -259,7 +260,7 @@ void update_branched_lightning_arc(char *moby) {
                 D_L14_001E0050_d530[j][branch_point_index][0] = r * fast_cos(branch_segment_angle);
                 D_L14_001E0050_d530[j][branch_point_index][2] = r * fast_sin(branch_segment_angle);
                 D_L14_001E0350_d530[j][branch_point_index] =
-                    D_L14_001E0000[starts[j] + branch_point_index];
+                    lightning_main_arc_point_ages[starts[j] + branch_point_index];
             }
             sign = -sign;
         }
@@ -267,9 +268,9 @@ void update_branched_lightning_arc(char *moby) {
     if (moby == lightning_arc_owner_moby) {
         fast_dec_timer(&lightning_arc_remaining_frames);
         for (i = 0; i < 40; i++) {
-            s16 v = ++D_L14_001E0000[i];
+            s16 v = ++lightning_main_arc_point_ages[i];
             if (scale_game_frames(D_L14_00161C70_gp) < v) {
-                D_L14_001E0000[i] = scale_game_frames(D_L14_00161C70_gp);
+                lightning_main_arc_point_ages[i] = scale_game_frames(D_L14_00161C70_gp);
             }
             if (i != 0) {
                 if (i >= 35) {
@@ -353,8 +354,6 @@ extern float D_L14_00161C88 __attribute__((sda));
 
 extern int D_L14_00161CF8_macro[] __asm__("D_L14_00161CF8") MACRO_ADDR;
 
-extern s16 D_L14_001E0000[];
-
 extern short D_L14_001E0350[];
 
 extern unsigned char D_L14_00161CE0[] MACRO_ADDR;
@@ -381,7 +380,7 @@ void draw_branched_lightning_arc(void) {
     layer_quads[0].r80 = 0xFF9000000260L;
     layer_quads[0].r70 = 0;
     outer_vertex_alpha =
-        func_001FA898_r(convert_integer_to_float(D_L14_001E0000[0]) /
+        func_001FA898_r(convert_integer_to_float(lightning_main_arc_point_ages[0]) /
                         convert_integer_to_float(scale_game_frames(D_L14_00161C70_gp)) * 255.0f) -
         D_L14_00161CE0[0];
     if (outer_vertex_alpha < 0)
@@ -463,7 +462,7 @@ void draw_branched_lightning_arc(void) {
             main_arc_end_vertex_alpha = 0;
         } else {
             main_arc_end_vertex_alpha =
-                func_001FA898_r(convert_integer_to_float(D_L14_001E0000[i]) /
+                func_001FA898_r(convert_integer_to_float(lightning_main_arc_point_ages[i]) /
                                 convert_integer_to_float(scale_game_frames(D_L14_00161C70_gp)) *
                                 255.0f) -
                 D_L14_00161CE0[0];

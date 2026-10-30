@@ -25,11 +25,19 @@ extern struct Moby *D_L10_0015FFD8;
 extern void        *memcpy(void *, const void *, u32);
 extern OvlQuad      D_L10_00167240;
 
-extern char
-    l10_data_processor_linked_effect_missing_processor_link_message[] __asm__("D_L10_001DD1D0");
-extern char l10_data_processor_linked_effect_deleted_instance_message[] __asm__("D_L10_001DD210");
+char l10_data_processor_linked_effect_missing_processor_link_message[63] __asm__("D_L10_001DD1D0") =
+
+    {0x6d, 0x6f, 0x62, 0x79, 0x20, 0x63, 0x6c, 0x61, 0x73, 0x73, 0x20, 0x31, 0x30, 0x36, 0x37, 0x20,
+     0x52, 0x45, 0x51, 0x55, 0x49, 0x52, 0x45, 0x53, 0x20, 0x61, 0x20, 0x6c, 0x69, 0x6e, 0x6b, 0x20,
+     0x74, 0x6f, 0x20, 0x64, 0x61, 0x74, 0x61, 0x50, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x6f, 0x72,
+     0x20, 0x63, 0x6c, 0x61, 0x73, 0x73, 0x20, 0x31, 0x30, 0x37, 0x33, 0x21, 0x21, 0xa,  0};
+
+char l10_data_processor_linked_effect_deleted_instance_message[30] __asm__("D_L10_001DD210") = {
+    9,    0x4d, 0x6f, 0x62, 0x79, 0x20, 0x4d, 0x61, 0x79, 0x61, 0x20, 0x49, 0x6e, 0x64, 0x65,
+    0x78, 0x20, 0x25, 0x64, 0x20, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0x2e, 0xa,  0};
+
 extern unsigned char
-    l10_data_processor_linked_effect_initial_strip_order[] __asm__("D_L10_00161CA8");
+    l10_data_processor_linked_effect_initial_strip_order[10] __asm__("D_L10_00161CA8");
 extern unsigned char D_001413F4[];
 void                 render_data_processor_linked_effect(u8 *moby) __asm__("FUN_L10_002da690");
 
@@ -135,8 +143,18 @@ void update_data_processor_linked_effect(struct Moby *moby) {
 
 typedef int u128_c __attribute__((mode(TI)));
 
-extern f32 data_processor_linked_effect_base_uvs[] __asm__("D_L10_001D9FF0");
-extern f32 data_processor_linked_effect_quad_vertex_offsets[] __asm__("D_L10_001DA010");
+/* Four (u, v) pairs: the render loop reads [k * 2] and [k * 2 + 1] for k < 4. */
+f32 data_processor_linked_effect_base_uvs[8] __asm__("D_L10_001D9FF0") = {
+    0.0f, 0.0f, 0.0f, 1.0f, 0.25f, 0.0f, 0.25f, 1.0f};
+
+/* One 16-byte vector per quad vertex (vertex < 4, stride 0x10, added by fast_vec_add). */
+f32 data_processor_linked_effect_quad_vertex_offsets[4][4] __asm__("D_L10_001DA010") = {
+    {0.0f, 0.0f, -0.05f, 1.0f},
+    {0.0f, 0.0f,  0.05f, 1.0f},
+    {0.0f, 0.0f, -0.05f, 1.0f},
+    {0.0f, 0.0f,  0.05f, 1.0f},
+};
+
 extern s32 D_L10_00161D64;
 extern s32 D_L10_00161D68;
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
@@ -297,3 +315,6 @@ void render_data_processor_linked_effect(u8 *moby) {
 
 int D_L10_00161D64 = 0;
 int D_L10_00161D68 = 0;
+
+unsigned char l10_data_processor_linked_effect_initial_strip_order[10] __asm__("D_L10_00161CA8") = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9};

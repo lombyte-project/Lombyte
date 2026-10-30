@@ -101,8 +101,12 @@ extern char        *D_L18_0015F604;
 extern Slot2463f8  *D_L18_0015F5F4;
 extern s16          level_moby_class_numbers[] __asm__("D_L18_00198400");
 extern u16          level_moby_class_reference_sound_ids[][16] __asm__("D_L18_001B0860");
-extern char         D_L18_001F0EB0[], D_L18_001F0F00[], D_L18_001F0FC0[], D_L18_001F1148[],
-    D_L18_001F1178[];
+extern char         D_L18_001F0EB0[], D_L18_001F0F00[], D_L18_001F0FC0[], D_L18_001F1148[];
+
+/* "estimated mem:  %.1fM\n" */
+char D_L18_001F1178[23] = {0x65, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x64, 0x20, 0x6d, 0x65,
+                           0x6d, 0x3a, 0x20, 0x20, 0x25, 0x2e, 0x31, 0x66, 0x4d, 0xa,  0};
+
 extern char  level_memory_report_newline[] __asm__("D_L18_0015FC80");
 extern char  level_core_code_memory_end[] __asm__("D_L18_0030A0C0");
 char         D_L18_001F0ED0[] = "internal moby sound mismatch on moby %d\n";

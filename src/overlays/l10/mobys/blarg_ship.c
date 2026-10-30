@@ -123,8 +123,15 @@ typedef struct ShipD_5E48 {
 extern Ship_5E48 *D_L10_001742D8 NOT_SDA;
 extern char                     *spawn_blarg_ship_rocket(
                         void *vel, void *pos, int a, int b, int c, float scale) __asm__("FUN_L10_002cc1b8");
-extern char  D_L10_00179890[];
-extern char  blarg_ship_missing_path_error_format[] __asm__("D_L10_001DD390");
+extern char D_L10_00179890[];
+
+char blarg_ship_missing_path_error_format[65] __asm__("D_L10_001DD390") = {
+    0x45, 0x52, 0x52, 0x4f, 0x52, 0x21, 0x21, 0x20, 0x4d, 0x6f, 0x62, 0x79, 0x20,
+    0x63, 0x6c, 0x61, 0x73, 0x73, 0x20, 0x25, 0x64, 0x20, 0x6d, 0x61, 0x79, 0x61,
+    0x20, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x20, 0x25, 0x64, 0x20,
+    0x68, 0x61, 0x73, 0x20, 0x6e, 0x6f, 0x20, 0x70, 0x61, 0x74, 0x68, 0x20, 0x73,
+    0x65, 0x74, 0x3b, 0x20, 0x64, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0xa,  0};
+
 extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float fast_vec_dist(void *, void *);
 extern s32   D_0015ED84;
@@ -132,8 +139,8 @@ extern int   D_L10_00161EE4 __attribute__((sda));
 
 #include "rnc/overlay/l10/mobys/blarg_ship_globals.h"
 
-float blarg_ship_rocket_speed_gp __asm__("D_L10_00161EE8") = 32.0f;
-float blarg_ship_firing_animation_speed_gp __asm__("D_L10_00161EEC") = 2.0f;
+float                blarg_ship_rocket_speed_gp __asm__("D_L10_00161EE8") = 32.0f;
+float                blarg_ship_firing_animation_speed_gp __asm__("D_L10_00161EEC") = 2.0f;
 extern unsigned char D_0013D4CB[];
 extern unsigned char D_001413F4[];
 extern unsigned char D_00141C48[];

@@ -48,8 +48,9 @@ extern float D_0013F3D0[4];
 
 #include "rnc/game/game_globals.h"
 
-extern unsigned char D_L18_001F29A0_9768[] __asm__("D_L18_001F29A0");
-extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");
+/* The two six-colour particle palettes of the burst: copied whole (24 bytes) and indexed with random_integer_below(6). */
+extern u32 destructible_burst_first_colors[6] __asm__("D_L18_001F29A0");
+extern u32 destructible_burst_second_colors[6] __asm__("D_L18_001F29B8");
 
 void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) __asm__("FUN_L18_002e9768");
 
@@ -96,8 +97,8 @@ void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) {
                 do {
                     pos = &moby->pos.x;
                     magnitude = random_float_between(8.0f, 10.0f) * frame_time;
-                    __builtin_memcpy(colors, D_L18_001F29A0_9768, 24);
-                    __builtin_memcpy(colors2, D_L18_001F29B8_9768, 24);
+                    __builtin_memcpy(colors, destructible_burst_first_colors, 24);
+                    __builtin_memcpy(colors2, destructible_burst_second_colors, 24);
                     qcopy(position, pos);
                     ++i;
                     position[2] += random_float_between(0.0f, 6.0f);
@@ -150,8 +151,8 @@ void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) {
                     qcopy(position, pos);
                     ++i;
                     position[2] += random_float_between(zero, 6.0f);
-                    __builtin_memcpy(colors, D_L18_001F29A0_9768, 24);
-                    __builtin_memcpy(colors2, D_L18_001F29B8_9768, 24);
+                    __builtin_memcpy(colors, destructible_burst_first_colors, 24);
+                    __builtin_memcpy(colors2, destructible_burst_second_colors, 24);
                     *(OvlQuad *)direction = 0;
                     direction[0] = random_float_between(-1.0f, 1.0f);
                     direction[1] = random_float_between(-1.0f, 1.0f);
@@ -214,3 +215,9 @@ void set_moby_group_state_two(int group) __asm__("FUN_L18_002e9e50");
 void set_moby_group_state_two(int group) {
     set_moby_list_state((void *)group, 0x2);
 }
+
+u32 destructible_burst_first_colors[6] __asm__("D_L18_001F29A0") = {
+    0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff};
+
+u32 destructible_burst_second_colors[6] __asm__("D_L18_001F29B8") = {
+    0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000};

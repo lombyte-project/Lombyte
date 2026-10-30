@@ -131,7 +131,12 @@ char D_L14_001FBEE8[] = "Hovertank with a bomb path that has no points. UID: %d\
 
 char D_L14_001FBF20[] = "Hovertank with no exit Path. UID: %d\n";
 
-extern char minibomber_empty_exit_path_diagnostic[] __asm__("D_L14_001FBF48");
+/* "Hovertank with a exit path that has no points. UID: %d\n" */
+char minibomber_empty_exit_path_diagnostic[56] __asm__("D_L14_001FBF48") = {
+    0x48, 0x6f, 0x76, 0x65, 0x72, 0x74, 0x61, 0x6e, 0x6b, 0x20, 0x77, 0x69, 0x74, 0x68,
+    0x20, 0x61, 0x20, 0x65, 0x78, 0x69, 0x74, 0x20, 0x70, 0x61, 0x74, 0x68, 0x20, 0x74,
+    0x68, 0x61, 0x74, 0x20, 0x68, 0x61, 0x73, 0x20, 0x6e, 0x6f, 0x20, 0x70, 0x6f, 0x69,
+    0x6e, 0x74, 0x73, 0x2e, 0x20, 0x55, 0x49, 0x44, 0x3a, 0x20, 0x25, 0x64, 0xa,  0};
 
 extern float D_0015ED60;
 
@@ -913,7 +918,45 @@ extern void spawn_two_point_effect_particle(void *, void *) __asm__("FUN_L00_002
 
 extern void mine_camera_blast(int, void *, int, int) __asm__("FUN_L00_002d3838");
 
-extern char l14_minibomber_bomb_release_blast_template[] __asm__("D_L14_001D88D0");
+/* Settings mine_camera_blast (FUN_L00_002d3838) copies into its blast moby. It reads bytes up to 0x49 and
+ * qcopies the first quad, so the object is quad aligned: 0x50 bytes (the l03 mine copies its template as 0x50). */
+typedef struct MinibomberBlastSettings {
+    f32 position_offset[4]; /* 0x00: qcopied when no override is passed */
+    u8  colors[0x10];       /* 0x10: three colour groups (0x10-0x15, 0x16-0x1A, 0x1B-0x1F) */
+    f32 values[5];          /* 0x20 */
+    s32 word34;             /* 0x34 */
+    s32 word38;             /* 0x38 */
+    u8  draw_dist;          /* 0x3C */
+    u8  byte3D;
+    u8  byte3E;
+    u8  byte3F;
+    u16 half40;
+    u16 half42;
+    u16 half44;
+    u16 half46;
+    u8  byte48;
+    u8  byte49;
+    u8  pad4A[6];
+} MinibomberBlastSettings;
+
+MinibomberBlastSettings l14_minibomber_bomb_release_blast_template __asm__("D_L14_001D88D0") = {
+    {0},
+    {0, 0, 0xff, 0, 0x19, 0x19, 0, 0xff, 0, 0x19, 0x19, 0, 0x64, 0, 0x19, 0x19},
+    {2.0f, 2.0f, 2.0f, 0.01f, 0.01f},
+    0x14,
+    0x80000,
+    0xff,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    {0}
+};
 
 extern float D_L14_0015F580_macro[] __asm__("D_L14_0015F580") MACRO_ADDR;
 
@@ -983,7 +1026,7 @@ void emit_minibomber_bomb_release_effects(struct Moby *moby, float *point, float
         effect_spawn_position[2] = original_pos[2] + randf_sym(0.0f, 0.2f);
         spawn_two_point_effect_particle(effect_spawn_position, direction);
     }
-    mine_camera_blast((int)l14_minibomber_bomb_release_blast_template, original_pos, 0, 0);
+    mine_camera_blast((int)&l14_minibomber_bomb_release_blast_template, original_pos, 0, 0);
 }
 
 typedef struct {

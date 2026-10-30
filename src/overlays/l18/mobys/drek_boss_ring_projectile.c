@@ -284,7 +284,9 @@ extern int   tween_color_dba20(int, int, float) __asm__("FUN_001fa6e0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void  draw_quad_dba20(void *, void *, int) __asm__("FUN_001f7d30");
 
-extern float expanding_projectile_ring_quad_uvs[] __asm__("D_L18_001D4310");
+/* One (u, v) pair for each of the 4 quad corners. */
+float expanding_projectile_ring_quad_uvs[8] __asm__("D_L18_001D4310") = {
+    0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
 
 #include "rnc/overlay/l18/mobys/drek_boss_ring_projectile_data/draw_expanding_projectile_ring_2.h"
 

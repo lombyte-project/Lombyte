@@ -737,7 +737,11 @@ skip:
 
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char  fighter_jet_ammo_icon_strip_data[] __asm__("D_L17_001D99E0");
-extern int   D_L17_001D9B68[];
+/* Saved copy of the hp bar CLUT: 256 colour words, filled by one 0x400-byte
+   block copy in the fighter jet's init and read back entry by entry (CSM1
+   swizzled index of j < 0xFE) when the bar is redrawn. */
+int fighter_jet_saved_hp_bar_clut[256] __asm__("D_L17_001D9B68") = {0};
+
 int          lock_hold_frames __asm__("D_L17_00162170") = 500;
 int          lock_fade_frames __asm__("D_L17_00162174") = 100;
 extern short D_L17_00162180 __attribute__((sda));
@@ -940,7 +944,8 @@ void draw_fighter_jet_hud(struct Moby *moby) {
     for (j = lo; j <= hi; j++) {
         hp_bar_clut_index = (j & 0xE7) | ((j & 0x10) >> 1) | ((j & 8) << 1);
         if (j < hp_bar_fill_threshold) {
-            (*(int **)&D_L17_00162180)[hp_bar_clut_index] = D_L17_001D9B68[hp_bar_clut_index];
+            (*(int **)&D_L17_00162180)[hp_bar_clut_index] =
+                fighter_jet_saved_hp_bar_clut[hp_bar_clut_index];
         } else {
             (*(int **)&D_L17_00162180)[hp_bar_clut_index] = 0x80000000;
         }
@@ -1678,9 +1683,14 @@ typedef struct {
     char           padC[4];
 } ShipLevelEntry;
 
-extern char D_L17_001D9B68_ed[] __asm__("D_L17_001D9B68");
-extern char fighter_jet_missing_victory_placement_message[] __asm__("D_L17_001E6E00");
-char        D_L17_001E6E38[] = "no final place for hero during victory, so just fall\n";
+/* "no final place for jet during victory, so use init pos\n" and its NUL. */
+char fighter_jet_missing_victory_placement_message[56] __asm__("D_L17_001E6E00") = {
+    0x6e, 0x6f, 0x20, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x20, 0x70, 0x6c, 0x61, 0x63, 0x65,
+    0x20, 0x66, 0x6f, 0x72, 0x20, 0x6a, 0x65, 0x74, 0x20, 0x64, 0x75, 0x72, 0x69, 0x6e,
+    0x67, 0x20, 0x76, 0x69, 0x63, 0x74, 0x6f, 0x72, 0x79, 0x2c, 0x20, 0x73, 0x6f, 0x20,
+    0x75, 0x73, 0x65, 0x20, 0x69, 0x6e, 0x69, 0x74, 0x20, 0x70, 0x6f, 0x73, 0xa,  0};
+
+char D_L17_001E6E38[] = "no final place for hero during victory, so just fall\n";
 
 #include "rnc/overlay/l17/mobys/fighter_jet_globals.h"
 
@@ -1851,7 +1861,7 @@ void fighter_jet_update(ShipMoby *moby) {
                     (l17_fighter_jet_hp_bar_clut_entries + hp_bar_level_entry_index)->idx * 16;
             }
             if (hp_bar_saved == 0) {
-                *(ShipBlock400 *)D_L17_001D9B68_ed = *(ShipBlock400 *)hp_bar_clut;
+                *(ShipBlock400 *)fighter_jet_saved_hp_bar_clut = *(ShipBlock400 *)hp_bar_clut;
             }
             hp_bar_saved = 1;
             ship_vars->timerF8 = 1;

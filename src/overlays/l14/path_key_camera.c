@@ -24,7 +24,8 @@ extern char *D_L14_0015EF50 __asm__("D_L14_0015EF50");
 
 extern char *D_L14_0015EF50_59d8 __asm__("D_L14_0015EF50");
 
-extern float D_L14_001F6C80[][1000];
+/* Running length along each of the three rail splines (side 0..2), one entry per segment; [999] is read as the total. */
+float D_L14_001F6C80[3][1000] = {0};
 
 extern float D_L14_001F6488_59d8[] __asm__("D_L14_001F6488");
 
@@ -223,7 +224,8 @@ extern float path_key_camera_angle_override_progress_thresholds[][3] __asm__("D_
 
 extern float path_key_camera_linked_moby_event_progress_thresholds[][3] __asm__("D_L14_001F6C08");
 
-extern CamKey5d48 D_L14_001F6488[];
+/* 40 camera keys: initialize_path_key_camera fixes the duration of keys 1..39 (j = 38 down to 0, from key 1). */
+extern CamKey5d48 D_L14_001F6488[40];
 
 extern char D_L14_0017AD80[];
 

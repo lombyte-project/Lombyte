@@ -32,9 +32,10 @@ typedef struct {
     float f18;
 } S17C5B8;
 
-extern HeroTableRow2C   D_L14_0017C328[];
-extern HeroAnimRow      D_L14_0017A1C0[];
-extern HeroTableEntry70 l14_idle_fidget_entries[] __asm__("D_L14_00179F90");
+extern HeroTableRow2C D_L14_0017C328[];
+extern HeroAnimRow    D_L14_0017A1C0[];
+/* pick_idle_fidget (FUN_L00_00229010) walks 5 entries of 0x70 bytes. */
+extern HeroTableEntry70 l14_idle_fidget_entries[5] __asm__("D_L14_00179F90");
 extern S17AE80          D_L14_0017AD80;
 extern S17C5B8          D_L14_0017C4B8;
 

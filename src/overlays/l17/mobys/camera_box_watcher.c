@@ -20,14 +20,21 @@
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
 
-extern char          *fleet_moby_array_end __asm__("D_L17_0015FFDC");
-extern char           D_0013E52B[];
-extern char           fleet_camera_box_configuration_error_format[] __asm__("D_L17_001E6F60");
-extern int D_00141DC4 NOT_SDA;
-extern int            fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
-extern int            hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
-extern int            scale_game_frames(int);
-extern unsigned char  D_0013D408[];
+extern char *fleet_moby_array_end __asm__("D_L17_0015FFDC");
+extern char  D_0013E52B[];
+
+/* "magnacut cuboid error: detect:%d hero:%d init:%d end:%d \n" and its NUL. */
+char fleet_camera_box_configuration_error_format[58] __asm__("D_L17_001E6F60") = {
+    0x6d, 0x61, 0x67, 0x6e, 0x61, 0x63, 0x75, 0x74, 0x20, 0x63, 0x75, 0x62, 0x6f, 0x69, 0x64,
+    0x20, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x3a, 0x20, 0x64, 0x65, 0x74, 0x65, 0x63, 0x74, 0x3a,
+    0x25, 0x64, 0x20, 0x68, 0x65, 0x72, 0x6f, 0x3a, 0x25, 0x64, 0x20, 0x69, 0x6e, 0x69, 0x74,
+    0x3a, 0x25, 0x64, 0x20, 0x65, 0x6e, 0x64, 0x3a, 0x25, 0x64, 0x20, 0xa,  0};
+
+extern int D_00141DC4           NOT_SDA;
+extern int                      fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
+extern int                      hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
+extern int                      scale_game_frames(int);
+extern unsigned char            D_0013D408[];
 extern unsigned char D_0013D4DF NOT_SDA;
 extern int                      pal_mode_macro[] __asm__("D_0015ED80") MACRO_ADDR;
 extern void                     DebugPrint();

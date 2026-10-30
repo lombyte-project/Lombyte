@@ -167,17 +167,43 @@ typedef struct {
 } Pkt;
 
 extern LevelCamera l18_camera_lui __asm__("D_L18_00167680") NOT_SDA;
-extern float       D_L18_001D9B50[][2];
-extern float       D_L18_001D9B70[][4][4];
-extern s32         fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
-extern s64         get_effect_texture_c(s32) __asm__("func_001F44B8");
-extern int         D_L18_00161EE4 __attribute__((sda));
-extern int         D_L18_00161EE8 __attribute__((sda));
-extern int         D_L18_00161EEC __attribute__((sda));
-extern int         D_L18_00161EF0 __attribute__((sda));
-extern int         D_L18_00161EF8 __attribute__((sda));
-extern int         D_L18_00161F08 __attribute__((sda));
-extern void        fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
+
+/* The four homing spark quads share one set of corner uvs; each quad has its own four corners. */
+float homing_spark_quad_uvs[4][2] __asm__("D_L18_001D9B50") = {
+    {1.0f, 0.0f},
+    {1.0f, 1.0f},
+    {0.0f, 0.0f},
+    {0.0f, 1.0f},
+};
+
+float homing_spark_quad_vertices[4][4][4] __asm__("D_L18_001D9B70") = {
+    {{0.0f, 2.0f, -2.0f, 1.0f},
+     {0.0f, -2.0f, -2.0f, 1.0f},
+     {0.0f, 2.0f, 2.0f, 1.0f},
+     {0.0f, -2.0f, 2.0f, 1.0f}},
+    {{0.0f, 1.0f, -1.0f, 1.0f},
+     {0.0f, -1.0f, -1.0f, 1.0f},
+     {0.0f, 1.0f, 1.0f, 1.0f},
+     {0.0f, -1.0f, 1.0f, 1.0f}},
+    {{0.0f, 3.0f, -3.0f, 1.0f},
+     {0.0f, -3.0f, -3.0f, 1.0f},
+     {0.0f, 3.0f, 3.0f, 1.0f},
+     {0.0f, -3.0f, 3.0f, 1.0f}},
+    {{0.0f, 3.0f, -3.0f, 1.0f},
+     {0.0f, -3.0f, -3.0f, 1.0f},
+     {0.0f, 3.0f, 3.0f, 1.0f},
+     {0.0f, -3.0f, 3.0f, 1.0f}},
+};
+
+extern s32  fast_tween_color_c(s32, s32, f32) __asm__("func_001FA6E0");
+extern s64  get_effect_texture_c(s32) __asm__("func_001F44B8");
+extern int  D_L18_00161EE4 __attribute__((sda));
+extern int  D_L18_00161EE8 __attribute__((sda));
+extern int  D_L18_00161EEC __attribute__((sda));
+extern int  D_L18_00161EF0 __attribute__((sda));
+extern int  D_L18_00161EF8 __attribute__((sda));
+extern int  D_L18_00161F08 __attribute__((sda));
+extern void fast_draw_quad_real(void *, void *, int) __asm__("FUN_001f7d30");
 
 void homing_spark_draw(char *moby) __asm__("FUN_L18_002ea1f8");
 
@@ -224,15 +250,15 @@ void homing_spark_draw(char *moby) {
                    (long)(D_L18_00161EF0) << 6 | 0x8000L << 24;
             p->a = 0;
             for (j = 0; j < 4; j++) {
-                pkt[i].uv[j][0] = D_L18_001D9B50[j][0];
-                pkt[i].uv[j][1] = D_L18_001D9B50[j][1];
+                pkt[i].uv[j][0] = homing_spark_quad_uvs[j][0];
+                pkt[i].uv[j][1] = homing_spark_quad_uvs[j][1];
                 if (i == 0) {
                     pkt[0].color[j] = fast_tween_color_c(
                         D_L18_00161EF8 & 0xFFFFFF, D_L18_00161EF8, *(float *)(data + 0x24));
                 } else {
                     pkt[i].color[j] = ((int *)&(*(short *)&D_L18_00161EF8))[i];
                 }
-                qcopy(pkt[i].vtx[j], D_L18_001D9B70[i][j]);
+                qcopy(pkt[i].vtx[j], homing_spark_quad_vertices[i][j]);
             }
         }
     }
@@ -408,8 +434,14 @@ extern float explosion_burst_particle_xy_offset_limit_gp __asm__("D_L18_00161FBC
 
 extern float explosion_burst_camera_shake_amplitude_gp __asm__("D_L18_00161FE4")
     __attribute__((sda));
-extern int           explosion_burst_particle_first_color_choices[] __asm__("D_L18_001D9C70");
-extern int           explosion_burst_particle_second_color_choices[] __asm__("D_L18_001D9C88");
+
+/* Picked with random_integer_below(6). */
+int explosion_burst_particle_first_color_choices[6] __asm__("D_L18_001D9C70") = {
+    0x4fff8f00, 0x4fff8f00, 0x4fff7f00, 0x4fff6f00, 0x2fffffff, 0x2fffffff};
+
+int explosion_burst_particle_second_color_choices[6] __asm__("D_L18_001D9C88") = {
+    0x2f7f5f00, 0x2f7f4f00, 0x2f7f3f00, 0x2f4f4f4f, 0x2fc0c0c0, 0x3fc0c0c0};
+
 extern unsigned char l18_explosion_burst_first_glow_color_channel __asm__("D_L18_00161FC8")
     __attribute__((sda));
 extern unsigned char l18_explosion_burst_second_glow_color_channel __asm__("D_L18_00161FD4")
@@ -623,14 +655,17 @@ typedef struct {
 } H_ec290;
 
 extern H_ec290 l18_electric_bolt_side_arc_predecessor_view[] __asm__("D_L18_001DA150");
-extern P_ec290 l18_electric_bolt_side_arc_points[] __asm__("D_L18_001DA160");
+/* Four side arcs (k < 4) of five points. */
+P_ec290 l18_electric_bolt_side_arc_points[4] __asm__("D_L18_001DA160") = {0};
+
 extern V_ec290 D_L18_001D9CF0[];
+/* The 20-point bolt (row 0) and its mirror (row 1); the per-point tables below have one entry per point. */
 extern V_ec290 D_L18_001D9D00[2][20];
-extern V_ec290 D_L18_001D9FD0[];
+extern V_ec290 D_L18_001D9FD0[20];
 extern char    D_0013F5E0[];
 extern float   D_L18_001677C0_c[] __asm__("D_L18_001677C0");
-extern float   D_L18_001D9F80[];
-extern float   D_L18_001DA110[];
+extern float   D_L18_001D9F80[20];
+extern float   D_L18_001DA110[20];
 extern float   FUN_L00_00257c48(float lo, float hi);
 extern float   normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int     D_L18_0015F580; /* no foreign declaration */

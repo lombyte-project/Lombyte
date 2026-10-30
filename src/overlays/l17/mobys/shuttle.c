@@ -448,13 +448,3 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
     }
     return shuttle_vars->fA4 == 1.0f;
 }
-
-f32 D_L17_001DD100[1] __attribute__((section(".data"))) = {0};
-
-f32 D_L17_001DD104[1] __attribute__((section(".data"))) = {0};
-
-f32 D_L17_001DD320[1] __attribute__((section(".data"))) = {0};
-
-f32 D_L17_001DD328[1] __attribute__((section(".data"))) = {0};
-
-s32 D_L17_001DD6A8[1] __attribute__((section(".data"))) = {0};

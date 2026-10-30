@@ -23,8 +23,14 @@ extern int D_L10_0015F5CC;
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002DA0F0), where it is exact; names translated to the US level program. */
 
 extern char point_light_parameter_entries[] __asm__("D_L10_00180740");
-extern char path_spark_missing_path_message[] __asm__("D_L10_001DD120");
-extern int  allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
+
+char path_spark_missing_path_message[62] __asm__("D_L10_001DD120") = {
+    0x4d, 0x6f, 0x62, 0x79, 0x39, 0x34, 0x37, 0x20, 0x6d, 0x61, 0x79, 0x61, 0x20, 0x69, 0x6e, 0x73,
+    0x74, 0x61, 0x6e, 0x63, 0x65, 0x20, 0x25, 0x64, 0x20, 0x48, 0x41, 0x53, 0x20, 0x4e, 0x4f, 0x20,
+    0x50, 0x41, 0x54, 0x48, 0x21, 0x21, 0x21, 0xa,  0xa,  0xa,  0x4d, 0x6f, 0x72, 0x6f, 0x6e, 0x2e,
+    0xa,  0x4d, 0x6f, 0x62, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x64, 0xa,  0};
+
+extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void    release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 unsigned char *spawn_path_spark_effect(int   source_moby,
                                        void *initial_position,
