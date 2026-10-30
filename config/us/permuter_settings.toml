@@ -1,8 +1,0 @@
-compiler_command = "../../tools/compilers/sdk-compiler/bin/ee-gcc -c -I../../src -I../../include -Iinclude -Wa,-I../../include -Wa,-I../.. -DBUILD_US_VERSION -DMATCHING_DECOMP -O2 -D__GNUC__"
-assembler_command = "mips-ps2-decompals-as -march=r5900 -mabi=eabi -Iinclude"
-compiler_type = "gcc"
-
-[preserve_macros]
-
-[decompme.compilers]
-"tools/compilers/sdk-compiler/bin/ee-gcc" = "ee-gcc2.9-991111-01"

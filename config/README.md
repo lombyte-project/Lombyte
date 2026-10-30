@@ -9,8 +9,10 @@
   C goal; `us/checksum.sha1` is the retail ELF's SHA-1.
 - `us/symbol_addrs.txt`, `us/undefined_syms.txt`, and
   `us/undefined_funcs_auto.txt` are active symbol inputs.
-- `ghidra/` contains function, call-graph, and data-reference exports used by
-  the build tooling.
+- `ghidra/ghidra_functions.csv` is the Ghidra function list the oracle tooling
+  reads.
 
-The ignored `us/SCUS_971.99` file is a local copy of the extracted ELF. It is
-never committed.
+Ignored, never committed: `us/SCUS_971.99` (your extracted ELF), `us/asm/`,
+`us/overlays/` (level records from `scripts/overlay-extract.py`) and the files
+`configure.py` writes (`build.ninja`, the `.ld` scripts, `objdiff.json`,
+`permuter_settings.toml`, `padless-asm.py`).

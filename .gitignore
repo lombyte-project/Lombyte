@@ -17,6 +17,10 @@ config/output/
 config/us/.splache
 config/us/build.ninja
 config/us/SCUS_971.99.ld
+config/us/SCUS_971.99.fast.ld
+config/us/objdiff.json
+config/us/permuter_settings.toml
+config/us/padless-asm.py
 config/us/asm/
 config/us/expected/
 config/us/undefined_syms_auto.txt
