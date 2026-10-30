@@ -96,7 +96,7 @@ void shuttle_update(struct Moby *moby) {
         SHUTTLE_STATE_WAIT_FOR_DEPARTURE = 2,
         SHUTTLE_STATE_TRAVEL = 3
     };
-    LiftVars *vars = (LiftVars *)moby->pvars;
+    LiftVars *shuttle_vars = (LiftVars *)moby->pvars;
     Vec4      old_pos;
     Vec4      old_rot;
     Vec4      delta;
@@ -104,28 +104,28 @@ void shuttle_update(struct Moby *moby) {
 
     qcopy(&old_pos, &moby->pos);
     qcopy(&old_rot, &moby->rot);
-    if (level_game_mode != 2 && vars->ridable != 0) {
+    if (level_game_mode != 2 && shuttle_vars->ridable != 0) {
         moby->visible = 1;
         moby->flags &= ~1;
     } else {
         moby->visible = 0;
         moby->flags |= 1;
     }
-    if (vars->manip_set == 0)
-        attach_manipulator(moby, 0, &vars->manip);
-    vars->spin.f[0] = fast_add_rotations(vars->spin.f[0], frame_time * 1.5707964f);
-    build_quaternion_from_axis_rotations(vars->spin_state, &vars->spin);
+    if (shuttle_vars->manip_set == 0)
+        attach_manipulator(moby, 0, &shuttle_vars->manip);
+    shuttle_vars->spin.f[0] = fast_add_rotations(shuttle_vars->spin.f[0], frame_time * 1.5707964f);
+    build_quaternion_from_axis_rotations(shuttle_vars->spin_state, &shuttle_vars->spin);
     switch (moby->state) {
     case SHUTTLE_STATE_INITIALIZE:
-        clear_u64_value(&vars->spin);
-        if (vars->path == -1) {
-            qcopy(&vars->home_pos, &moby->pos);
-            qcopy(&vars->home_rot, &moby->rot);
+        clear_u64_value(&shuttle_vars->spin);
+        if (shuttle_vars->path == -1) {
+            qcopy(&shuttle_vars->home_pos, &moby->pos);
+            qcopy(&shuttle_vars->home_rot, &moby->rot);
             moby->state = 4;
-            vars->ridable = 1;
+            shuttle_vars->ridable = 1;
         } else {
-            vars->unk100 = -1;
-            vars->unkE0 = -1;
+            shuttle_vars->unk100 = -1;
+            shuttle_vars->unkE0 = -1;
             select_shuttle_route_for_hero((char *)moby);
             moby->state = 2;
             moby->update_dist = 0xFF;
@@ -136,7 +136,7 @@ void shuttle_update(struct Moby *moby) {
             if (l08_shuttle_departure_lock.busy == 0 && l08_shuttle_departure_lock.owner == -1) {
                 qcopy(&hero_position_probe, &hero.motion.pos);
                 resolve_point_path_segment_xy_clearance(
-                    vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
+                    shuttle_vars->stop, 0.5f, &hero_position_probe, &hero_position_probe);
                 if (fast_vec_dist(&hero.motion.pos, &hero_position_probe) < 0.001f) {
                     try_set_shuttle_departure_help_message((char *)moby);
                     if ((D_0013CAE4[0] & 0x10) && hero.air_frames.s == 0 && D_L08_0015F594 == 10)
@@ -150,7 +150,7 @@ void shuttle_update(struct Moby *moby) {
     case SHUTTLE_STATE_TRAVEL:
         hero.jump_lock_timer = 5;
         hero.unk1F4 = 5;
-        hero.path_constrain_pending = vars->stop;
+        hero.path_constrain_pending = shuttle_vars->stop;
         if (advance_shuttle_path_travel((char *)moby)) {
             select_shuttle_route_for_hero((char *)moby);
             moby->state = 2;
@@ -158,10 +158,10 @@ void shuttle_update(struct Moby *moby) {
         break;
     }
     update_shuttle_wobble(moby);
-    if (vars->stop != -1)
+    if (shuttle_vars->stop != -1)
         update_shuttle_stop_world_points((char *)moby);
     fast_vec_sub(&delta, &moby->pos, &old_pos);
-    update_entity_matrix(vars->motion, &delta, &old_rot, &moby->rot);
+    update_entity_matrix(shuttle_vars->motion, &delta, &old_rot, &moby->rot);
 }
 
 void update_shuttle_stop_world_points(struct Moby *moby) {
