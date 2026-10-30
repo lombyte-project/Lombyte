@@ -809,7 +809,7 @@ void update_blarg_space_commando_beam(void *owner_moby) {
     ShotInfo shot;
     float    step;
     float    alignment;
-    int      i, j, next, hit_type;
+    int      i, j, next_beam_point_index, hit_type;
     int      remaining;
 
     frames = truncate_float_to_s32(beam_state->base.w);
@@ -859,9 +859,9 @@ void update_blarg_space_commando_beam(void *owner_moby) {
     do {
         char *entry = (char *)beam_state + j * 16;
         char *next_entry;
-        next = j + 1;
+        next_beam_point_index = j + 1;
         if (0.6f <= *(float *)(entry + 0x23C)) {
-            next_entry = (char *)beam_state + next * 16;
+            next_entry = (char *)beam_state + next_beam_point_index * 16;
             if (0.6f <= *(float *)(next_entry + 0x23C)) {
                 point[0] = fast_cos(MOBY(moby)->rot.z);
                 point[1] = fast_sin(MOBY(moby)->rot.z);
@@ -878,7 +878,7 @@ void update_blarg_space_commando_beam(void *owner_moby) {
                 collision_line(&beam_state->pts[j], &beam_state->pts[j + 1], 0, moby, &shot);
             }
         }
-        j = next;
+        j = next_beam_point_index;
     } while (j < 15);
 
     add_draw_callback((void *)draw_blarg_space_commando_beam, moby);
