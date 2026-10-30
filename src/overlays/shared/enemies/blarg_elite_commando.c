@@ -703,13 +703,13 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
         timer_data->timer = truncate_float_to_s32(
             func_001F9878_timer(random_float_between((float)lower, (float)upper)));
     } else {
-        L16GroupMoby *other;
+        L16GroupMoby *group_member_moby;
         group_entry = D_L16_001ABCC0[source_moby->group];
     next:
-        other = (L16GroupMoby *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) +
+        group_member_moby = (L16GroupMoby *)(((*(unsigned short *)group_entry & 0x7FFF) << 8) +
                                  (int)D_L16_0015FFD8);
-        if (other->state >= 0) {
-            timer_data = other->data;
+        if (group_member_moby->state >= 0) {
+            timer_data = group_member_moby->data;
             timer_data->timer = truncate_float_to_s32(
                 func_001F9878_timer(random_float_between((float)lower, (float)upper)));
         }
