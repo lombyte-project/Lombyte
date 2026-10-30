@@ -11,6 +11,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/gameplay/camera/camera_globals.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
 typedef struct {
@@ -195,7 +197,6 @@ extern struct Moby *D_L01_001742D8 NOT_SDA;
 extern char *ents __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern char D_0013E533[];
 extern char D_L01_00167240[];
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C MACRO_ADDR;
 extern float D_L01_0015F5D0 MACRO_ADDR;
 extern int cutscene_active_macro __asm__("D_L01_0015F404") MACRO_ADDR;
@@ -204,12 +205,10 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
 extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern char D_0013F3D0[];
 
 void update_explosive_projectile(struct Moby *moby) __asm__("FUN_L01_002f6a30");
@@ -414,9 +413,7 @@ typedef struct {
 } DebrisVars;
 
 extern f32 D_0015ED6C_2f8530 __asm__("D_0015ED6C");
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 rand(void) __asm__("FUN_001160d8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern void upd_a(struct Moby *) __asm__("FUN_L00_00250df8");
@@ -469,13 +466,11 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
 #include "rnc/overlay/collision.h"
 
 extern CollisionHit collision_hit __asm__("D_L01_001742C0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, f32, s32) __asm__("FUN_L00_0026ced0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Debris update: falls and spins, bounces off what it hits with a random kick, bursts into 40 sparks once it
    comes to rest (or its unk10 timer runs out), or fades out over unk28 frames when unk20 is set. */
@@ -1113,7 +1108,6 @@ void spawn_point_update(struct Moby *moby) {
 }
 #include "rnc/rendering/screen.h"
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, u64,
                                u64) __asm__("FUN_001f5450");
 
@@ -1254,7 +1248,6 @@ extern f32 D_L01_00161F14_gp __asm__("D_L01_00161F14") __attribute__((sda));
 extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
 extern f32 D_L01_00161F2C_gp __asm__("D_L01_00161F2C") __attribute__((sda));
 extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern void fade_to_black(s32) __asm__("FUN_001f4a58");
 extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -1414,7 +1407,6 @@ void gold_bolt_update(struct Moby *moby) {
 
 void update_gold_bolt_glow_rings(char *m) __asm__("FUN_L01_00308550");
 extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void update_gold_bolt_visuals(struct Moby *moby) __asm__("FUN_L01_00308380");
 
@@ -1564,7 +1556,6 @@ void update_gold_bolt_pickup_camera(char *moby) {
 /* builds three jittered offsets and fires the same effect at each accumulated point */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309DC8), where it is exact; names translated to the US level program. */
 
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 

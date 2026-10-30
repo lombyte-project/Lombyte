@@ -10,6 +10,7 @@
 #include "rnc/math/circle_offset.h"
 #include "rnc/overlay/level_globals.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* line query from -> to; fills the collision hit record, nonzero on a hit */
@@ -1130,7 +1131,6 @@ extern s32 D_0015ED90;
 extern s32 D_0015ED94;
 extern s32 D_00141660_lui[4] __asm__("D_00141660") NOT_SDA;
 extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA;
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -1682,7 +1682,6 @@ typedef struct {
     char pad2[0x74 - 0x21];
     void (*fn)(void);
 } O;
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void clear_hero_item_slot(int i, int respawn_threshold) __asm__("FUN_L00_0020fca8");
 
 void clear_hero_item_slot(int i, int respawn_threshold) {
@@ -2232,7 +2231,6 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
     }
     hero_set_state(requested_state, 1);
 }
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");

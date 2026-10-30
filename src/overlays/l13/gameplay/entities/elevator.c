@@ -8,6 +8,8 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -16,7 +18,6 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 extern int debug_print() __asm__("FUN_001e93b0");
-extern void delete_moby(void *) __asm__("FUN_0020c828");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern void set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
 extern char *moby_base __asm__("D_L13_0015FFD8");
@@ -27,7 +28,7 @@ void update_moby_volume_trigger(char *moby) {
     char *data = *(char **)(moby + 0x78);
     if (*(int *)data == -1) {
         debug_print(moby_volume_trigger_missing_volume_format, *(short *)(moby + 0xB2));
-        delete_moby(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)data) != 0) {
@@ -204,7 +205,6 @@ typedef struct {
 extern char D_L13_001670C0_2b39e0[] __asm__("D_L13_001670C0");
 extern float D_0015ED70_2b39e0 __asm__("D_0015ED70");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 allocate_voice_2b39e0(s32, s32, void *) __asm__("FUN_0022da68");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
@@ -557,7 +557,7 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
         random_vector(&destruction_effect_vector.x, 0.5f, 1.0f);
         mark_moby_for_removal_cf(turret_moby, 0, -1);
         spawn_explosion(turret_moby, &destruction_effect_vector, &turret_moby->pos, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, -1, 1.0f, 15.0f, 1, 1, -1, 0);
-        delete_moby(turret_moby);
+        mark_moby_for_removal(turret_moby);
         return;
     }
     case BLARG_TURRET_STATE_DESTRUCTION_DELAY:
@@ -581,7 +581,6 @@ void blarg_turret_update(Moby_2B5368 *turret_moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B5950), where it is exact; names translated to the US level program. */
 
 extern char *spawn_gemlik_projectile(float, float *, float *, void *) __asm__("FUN_L13_003061c8");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int frame_count __asm__("D_L13_0015F5CC");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
@@ -652,7 +651,6 @@ typedef struct {
     struct Moby *parent;
 } Vars;
 
-extern struct Moby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void update_entity(struct Moby *moby) __asm__("FUN_L00_00250df8");
 extern void copy_hero_moby_field_38(struct Moby *moby) __asm__("FUN_L00_0025d1b8");
 
@@ -801,10 +799,8 @@ typedef struct {
 
 extern float D_L13_001670C0[];
 extern int FUN_L13_002b4a58_c() __asm__("FUN_L13_002b4a58");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void blarg_gunner_update(struct Moby *moby) __asm__("FUN_L13_002b4c80");
 void blarg_gunner_update(struct Moby *moby) {
@@ -1075,8 +1071,6 @@ typedef struct {
 extern char *walker_paths[] __asm__("D_L13_001B07B0");
 extern char *level13_moby_list_head __asm__("D_L13_0015FFE4");
 extern char *FUN_L00_0025a420(void *, int, int);
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_L13_0015F62C;
 extern float D_L13_0015F630;
 extern float robosquawker_damage_knockback_vertical_speed_gp __asm__("D_L13_00161390") __attribute__((sda));
@@ -1101,7 +1095,6 @@ extern int reserve_expired_frame_slot(int *, int, int) __asm__("FUN_L01_002efbf8
 extern int select_robosquawker_target(void *, void *, float) __asm__("FUN_L13_0026bd00");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 rand(void);
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 short D_L13_001613A0 = 0x505;
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
@@ -1112,7 +1105,6 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void FUN_L00_0025f730(void *, float);
 extern void FUN_L01_0026d930(char *p);
 extern void FUN_L01_0026e090(int, int);
-extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void update_robosquawker_ground_height(struct Moby *m, char *d) __asm__("FUN_L13_002b4ff0");
 
@@ -1585,7 +1577,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             return;
         } else if (robosquawker_moby->pos.f[2] < 5.0f) {
             FUN_L00_00257470(robosquawker_moby, 0, -1);
-            mark_moby_for_removal_c(robosquawker_moby);
+            mark_moby_for_removal(robosquawker_moby);
             return;
         }
         break;
@@ -1782,7 +1774,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             return;
         } else if (robosquawker_moby->pos.f[2] < 5.0f) {
             FUN_L00_00257470(robosquawker_moby, 0, -1);
-            mark_moby_for_removal_c(robosquawker_moby);
+            mark_moby_for_removal(robosquawker_moby);
             return;
         }
         break;
@@ -1806,10 +1798,10 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
             if (reserve_expired_frame_slot(D_L13_001613B0, 3, slot_reuse_delay_frames) >= 0) {
                 cart_burst(robosquawker_moby, &robosquawker_moby->pos, 4, 0.5f, 13.0f);
             }
-            mark_moby_for_removal_c(robosquawker_moby);
+            mark_moby_for_removal(robosquawker_moby);
             return;
         } else if (robosquawker_moby->pos.f[2] < 0.0f) {
-            mark_moby_for_removal_c(robosquawker_moby);
+            mark_moby_for_removal(robosquawker_moby);
             return;
         }
         break;
@@ -1927,7 +1919,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     if (robosquawker_moby->pos.f[0] < 2.0f || robosquawker_moby->pos.f[0] > 1021.0f
         || robosquawker_moby->pos.f[1] < 2.0f || robosquawker_moby->pos.f[1] > 1021.0f
         || robosquawker_moby->pos.f[2] < 2.0f || robosquawker_moby->pos.f[2] > 1021.0f) {
-        mark_moby_for_removal_c(robosquawker_moby);
+        mark_moby_for_removal(robosquawker_moby);
         return;
     }
 }
@@ -2927,7 +2919,6 @@ extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *,void *) __asm__("FUN_L00_00284e50");
 extern void force_help_message(int,int) __asm__("FUN_002151d8");
 extern int try_set_help_message(int,int) __asm__("FUN_00215130");
-extern void jet_delete_moby(void *) __asm__("FUN_0020c828");
 extern int jet_allocate_voice(int,int,int) __asm__("FUN_0022da68");
 extern int is_point_inside_clip_volume(void *,int) __asm__("FUN_00214720");
 
@@ -3151,7 +3142,7 @@ void fighter_jet_update(Jet *jet_moby) {
         }
         jet_reset_camera((char *)&jet_player47+0x80,(char *)&jet_player47+0x90); jet_moby->state=9;
         break;
-    case FIGHTER_JET_STATE_DELETE: jet_delete_moby(jet_moby); return;
+    case FIGHTER_JET_STATE_DELETE: mark_moby_for_removal(jet_moby); return;
     case 10: break;
     default: break;
     }

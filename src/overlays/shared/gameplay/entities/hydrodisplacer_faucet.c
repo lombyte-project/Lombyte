@@ -11,7 +11,8 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 extern float D_0015EE6C_d4168 __asm__("D_0015ED6C");
 char *create_class_5c3_moby(int owner, char *initial_position, int arg, float initial_rotation_z, float initial_rotation_y) __asm__("FUN_L05_002d4168");
 
@@ -266,7 +267,6 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
@@ -602,7 +602,6 @@ extern SaveFlags D_L05_001BAA50_s __asm__("D_L05_001BAA50");
 extern unsigned char D_L05_0015FC88[] MACRO_ADDR;
 extern char *D_L05_001B0930[];
 extern u8 D_0014C050[];
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 
 void floor_button_update(struct Moby *moby) __asm__("FUN_L05_0030c5b0");
@@ -725,7 +724,6 @@ typedef struct {
     float s[3];
 } Dat;
 
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 void initialize_moby_launch_motion(char *moby, int unused_source_moby, void *initial_motion_step, void *local_rotation_offset, int lifetime_frames) __asm__("FUN_L05_00318648");
 
@@ -744,7 +742,6 @@ void initialize_moby_launch_motion(char *moby, int unused_source_moby, void *ini
 extern char D_L05_00174240[];
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
 void blarg_gun_update(char *moby) __asm__("FUN_L05_003186f8");
 void blarg_gun_update(char *moby)

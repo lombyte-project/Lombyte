@@ -5,6 +5,7 @@
 #include "rnc/globals.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/rendering/level_render_state.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef union {
     u128 quadword;
@@ -175,8 +176,6 @@ extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void update_all_point_lights(void) __asm__("func_00201A28");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
-extern ResidentRenderObject *create_moby(s32) __asm__("func_0020C4F8");
-extern void mark_moby_for_removal(ResidentRenderObject *) __asm__("func_0020C828");
 extern void update_moby_animation_state(ResidentRenderObject *) __asm__("func_0020C880");
 extern void update_resident_packed_direction(void) __asm__("func_0020CFD0");
 extern void refresh_moby_spatial_bounds(ResidentRenderObject *) __asm__("func_0020DEF8");

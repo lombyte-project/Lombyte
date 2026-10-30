@@ -10,6 +10,8 @@
 #include "rnc/overlay/quad.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 typedef struct {
     u8 pad[0x20];
     u8 b20;
@@ -40,7 +42,6 @@ typedef struct {
     D_002d7f88 *p78;
 } S_002d7f88;
 extern f32 D_L00_001616DC;
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void update_linked_moby_transform_and_lifetime(S_002d7f88 *self) __asm__("FUN_L00_002d7f88");
 
@@ -98,7 +99,6 @@ typedef struct {
     char pad5[0x18];
     int f94;
 } O2d8138;
-O2d8138 *create_moby(int) __asm__("FUN_0020c4f8");
 #include "qcopy.h"
 /* Creates a class 0x326 moby linked to p at p's position; 0 when p's state is negative. */
 O2d8138 *create_linked_class_0326_moby(P2d8138 *p) __asm__("FUN_L00_002d8138");
@@ -219,12 +219,9 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4_002d8418;
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-float random_float_between(float, float) __asm__("FUN_002132a8");
 void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
-float random_angle_radians(void) __asm__("FUN_00213308");
 void FUN_00214890_002d8418(Vec4_002d8418 *, Vec4_002d8418 *, Vec4_002d8418 *,
                            float) __asm__("FUN_00214890");
-int random_integer_below(int) __asm__("FUN_00213260");
 void spawn_moving_hero_relative_alpha_fade_particle(void *, Vec4_002d8418 *, int, int, int, int,
                                float) __asm__("FUN_L00_002730e0");
 #include "rnc/overlay/shared/gameplay/entities/nanotech_ball_globals.h"
@@ -430,7 +427,6 @@ typedef struct D_2D9EA0 {
 extern Moby *D_L00_0015F63C;
 extern char D_L00_00166DC0[];
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int hero_max_health __asm__("D_0015EDA0");
 extern unsigned char D_L00_001619F4 __attribute__((sda));
 extern float D_L00_001619F8 __attribute__((sda));
@@ -447,7 +443,6 @@ extern int nanotech_ball_slot_collection_max_frames_gp __asm__("D_L00_00161A48")
 extern int D_L00_00161A58_gp __asm__("D_L00_00161A58") __attribute__((sda));
 extern float nanotech_ball_slot_scale_pulse_amplitude_gp __asm__("D_L00_00161A5C") __attribute__((sda));
 extern int free_effect_particle() __asm__("FUN_L00_00267a08");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern unsigned char D_0013F5E0[];
 extern volatile unsigned char nanotech_ball_invulnerability_pickup_enabled __asm__("D_0015EDB6");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -455,7 +450,6 @@ extern void build_look_at_matrix_c(void *out, void *dir, void *axis, f32 ang) __
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void enqueue_callback_list_1_alt(void (*)(void), int) __asm__("FUN_001f4600");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -473,8 +467,6 @@ void FUN_L00_002d8850_c(unsigned char *p, float *out, int i) __asm__("FUN_L00_00
 void draw_nanotech_ball(Moby *moby) __asm__("FUN_L00_002d9810");
 extern V_2D9EA0 D_L00_001E4070_2D9EA0[] __asm__("D_L00_001E3D20");
 extern float D_L00_001E17F0_2D9EA0[] __asm__("D_L00_001E14A0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001F9850_2D9EA0(int) __asm__("FUN_001f96f8");
 extern void func_L00_001FF4B0_2D9EA0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_2D9EA0(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -495,7 +487,6 @@ extern void func_L00_002D98C8_2D9EA0(void *) __asm__("FUN_L00_002d8418");
 extern int func_L00_002D99C0_2D9EA0(void *) __asm__("FUN_L00_002d8510");
 extern void func_L00_002D9668_2D9EA0(void *) __asm__("FUN_L00_002d81b8");
 extern void func_L00_002688A8_2D9EA0(void *) __asm__("FUN_L00_00267a08");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int func_L00_0028EF68_2D9EA0(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 
@@ -2161,7 +2152,6 @@ typedef struct {
 } __attribute__((aligned(16))) Mtx_002dc938;
 void spawn_suck_cannon_projectile_explosion(char *, char *) __asm__("FUN_L00_002dbf28");
 void FUN_0020e098_002dc938(char *) __asm__("FUN_0020e098");
-void FUN_0020c828_002dc938(char *) __asm__("FUN_0020c828");
 void finalize_suck_cannon_moby(char *moby, char *suction_record, int flag) __asm__("FUN_L00_002dc938");
 
 void finalize_suck_cannon_moby(char *moby, char *suction_record, int flag) {
@@ -2182,7 +2172,7 @@ void finalize_suck_cannon_moby(char *moby, char *suction_record, int flag) {
     if (fn)
         fn(moby);
     else
-        FUN_0020c828_002dc938(moby);
+        mark_moby_for_removal(moby);
 }
 #include "sda.h"
 
@@ -2686,7 +2676,6 @@ extern char D_L00_00161B70[] MACRO_ADDR;
 extern char D_L00_00166FD0[];
 extern char D_L00_001E5F30[];
 extern char D_L00_001E5F40[];
-extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float D_L00_00161B80 MACRO_ADDR;
 extern float D_L00_00161B84 MACRO_ADDR;
 extern int D_L00_00161B40 __attribute__((sda));
@@ -3090,7 +3079,6 @@ typedef struct {
     T_2df1e0 *p24;
 } O_2df1e0;
 extern u8 D_L00_001E5F40_lui[][16] __asm__("D_L00_001E5F40") NOT_SDA;
-s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 is_moby_class_e2_cc_de_3ee_d6_e1_d5_or_df(O_2df1e0 *) __asm__("FUN_L00_0025e3f8");
 void begin_bolt_attraction(O_2df1e0 *, void *, f32, f32) __asm__("FUN_L00_002a7210");
 void try_collect_ammo_pickup(O_2df1e0 *) __asm__("FUN_L00_002c5be8");

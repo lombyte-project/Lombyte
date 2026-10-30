@@ -6,6 +6,8 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EB5B0), where it is exact; names translated to the US level program. */
 
@@ -78,9 +80,7 @@ void update_configurable_particle_emitter(char *moby) {
 }
 #include "qcopy.h"
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 #include "rnc/overlay/l10/gameplay/vendor/update_configurable_particle_emitter_data/emit_burst_spark_particle.h"
 #include "rnc/overlay/l10/gameplay/vendor/update_configurable_particle_emitter_globals.h"
 extern int burst_spark_base_frame_count_gp __asm__("D_L10_00161F84") __attribute__((sda));
@@ -204,7 +204,6 @@ void emit_timed_spark_particle(void *emission_position, short *timer) {
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_002E30F8.c: func_L10_002EBDC8), where it is exact; names translated to the US level program. */
 
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern short height_adjusted_spark_vector_z_adjustment_scale_gp __asm__("D_L10_00162000") __attribute__((sda));
 extern short height_adjusted_spark_random_vector_radius_scale_gp __asm__("D_L10_00162004") __attribute__((sda));
 extern short height_adjusted_spark_first_vector_fourth_component_min_gp __asm__("D_L10_00162008") __attribute__((sda));
@@ -315,7 +314,6 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
-void mark_moby_for_removal(struct Moby *moby) __asm__("FUN_0020c828");
 
 void update_hit_triggered_fragment_spawner(struct Moby *moby) __asm__("FUN_L10_002eb6f0");
 

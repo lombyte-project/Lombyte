@@ -8,6 +8,8 @@
 #include "rnc/rendering/dma_tag.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* One scrolling two-texture overlay layer (0x60 bytes). */
 typedef struct {
@@ -144,7 +146,6 @@ typedef struct {
     Emitter *vars;
 } EmitterMoby;
 
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void create_spark_particle(void *, void *, f32, f32, f32, f32, f32, f32, f32, f32, f32, s32, u8,
                              u8, u8) __asm__("FUN_L01_0027e900");
@@ -248,7 +249,6 @@ typedef struct {
 
 SplashColors D_L01_0020AF50 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 SplashColors D_L01_0020AF68 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
@@ -673,7 +673,6 @@ extern void set_range_centered_on_value(char *arg, float value) __asm__("FUN_L01
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void birdbot_update(PeMoby *m) __asm__("FUN_L01_002e6bf0");
@@ -1488,7 +1487,6 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32 fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32 FUN_0020c9e0(void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 FUN_00213508(void *, s32, f32);
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern s32 coll_sphere(void *, s32, void *, f32) __asm__("FUN_L00_001f0d60");
@@ -2284,7 +2282,6 @@ extern void FUN_L00_00263d40(int, int);
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
 extern void FUN_L01_0030be70(char *, void *, float);
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
 /* Per-frame update of a breakable moby: scales its speed by distance, and on a hit spawns the break effect, frees its child mobys and removes itself; otherwise fades its alpha by height. */
 void fighter_jet_update(char *moby) __asm__("FUN_L01_002f4428");
@@ -2783,7 +2780,6 @@ typedef struct {
     BeamVars *vars;
 } BeamMoby;
 
-extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void update_entity() __asm__("FUN_L00_00250df8");
 extern void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__("FUN_L00_0026daa0");
 

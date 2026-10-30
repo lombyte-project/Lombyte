@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 
 
 
@@ -70,7 +71,6 @@ typedef struct {
 } Coll;
 
 extern s32 D_L04_00173FF0[];
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int collision_line() __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __asm__("FUN_L04_0024c7d8");
@@ -78,7 +78,6 @@ extern PathEl *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
 extern Coll D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
 extern int func_L00_001EFFF0_1F3010(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, float *params) __asm__("FUN_L04_001f30e0");
 

@@ -11,6 +11,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
@@ -234,7 +235,6 @@ extern struct L03Cutscene D_L03_0016C960;
 extern void cutscene_set_camera_target(void *) __asm__("FUN_L00_002637f8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 /* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */

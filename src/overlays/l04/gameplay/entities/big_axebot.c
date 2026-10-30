@@ -10,6 +10,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 
 
@@ -106,7 +108,6 @@ int check_circular_saw_melee_attack_spacing(struct Moby *moby) {
     }
     return 1;
 }
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002C5B88), where it is exact; names translated to the US level program. */
 
@@ -171,9 +172,6 @@ s32 advance_moby_along_path(struct Moby *moby, PathPoints_eb20 *path, s32 i, s32
     return i;
 }
 extern void *memset(void *, int, int) __asm__("FUN_001153fc");
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern void update_spawned_moby_29ecf8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void steer_child_moby(void *, s32, struct Moby *, void *, void *) __asm__("FUN_L04_001f30e0");
 extern void update_moby_movement_with_sphere_collision(f32, struct Moby *, void *, void *) __asm__("FUN_L04_001f3a80");
@@ -498,7 +496,6 @@ extern int FUN_L04_00295de8_cf(void *, void *, void *, int, float, float, float,
                                float) __asm__("FUN_L00_00258490");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int allocate_voice_for_target_entry(int, int, char *);
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int mark_moby_for_removal_cf() __asm__("FUN_L04_002ba470");
 extern struct Path5BD0 *D_L04_001B0630[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
@@ -1480,7 +1477,6 @@ I4_35F0 D_L04_001618A0 = {{1, 4, 2, 3}};
 I4_35F0 D_L04_00161890 = {{1, 2, 3, 4}};
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);

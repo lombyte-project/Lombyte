@@ -15,6 +15,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 struct MobyView {
     u8 pad0[0xC];
@@ -160,7 +162,6 @@ extern void FUN_L00_002334d0(void *, void *, f32);
 extern void clip_hero_horizontal_velocity(s32) __asm__("FUN_L01_00232978");
 extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");
 extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
-extern struct MobyView *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void update_entity(struct MobyView *) __asm__("FUN_L00_00250df8");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern s32 FUN_L00_001ff600(f32, void *, void *);
@@ -197,9 +198,7 @@ extern void pool_splash(s32, s32, s32, f32, f32, f32, f32) __asm__("FUN_L00_002a
 extern f32 spring_angle(f32 *, f32, f32 *, s32, f32, f32, f32) __asm__("FUN_L00_0025bc98");
 extern void moby_point_position(struct MobyView *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern u8 *FUN_L00_0026f080(void *, void *, f32, f32);
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_L00_00262cf0(void *, void *, f32, f32, f32);
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern f32 FUN_L00_00209018(void *, s32);

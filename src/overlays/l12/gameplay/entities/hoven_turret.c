@@ -16,6 +16,8 @@
 #include "sda.h"
 #include "rnc/input/pad_globals.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00303CA8), where it is exact; names translated to the US level program. */
@@ -469,7 +471,6 @@ typedef struct {
 
 extern char *FUN_L00_0025a420(void *, int, int);
 extern char *FUN_L00_0026dd20(void *, void *, int, int, float);
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/hoven_turret_update.h"
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
@@ -987,7 +988,6 @@ extern void vendor_spring(float *, float *, float, float, float, float) __asm__(
 extern void spawn_explosion_304e00(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00257470(struct Moby *, int, int);
 extern void jet_animate(float, struct Moby *) __asm__("FUN_L00_00259fe8");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 
 typedef struct {
     u8 pad0[0x20];

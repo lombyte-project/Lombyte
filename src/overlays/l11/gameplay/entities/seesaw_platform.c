@@ -14,6 +14,8 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef struct {
     int link;
@@ -44,7 +46,6 @@ float D_L11_00161EF8 = 0;
 extern float D_L11_0015F3FC;
 extern int D_L11_0015FFD8_c788 __asm__("D_L11_0015FFD8");
 extern int D_L11_001600EC_c788 __asm__("D_L11_001600EC");
-extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -605,8 +606,6 @@ extern void pool_set_scale(float) __asm__("FUN_L01_002b7ef0");
 extern void pool_bind_tile(void *, void *) __asm__("FUN_L01_002b7c68");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void synchronize_linked_moby_heights(struct Moby *) __asm__("FUN_L11_0030e690");
-extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
 extern int check_scaled_vector_bsphere(float, void *) __asm__("FUN_L01_00275690");
 extern void pool_flush(void *, int) __asm__("FUN_L01_002b7fe0");
@@ -979,7 +978,6 @@ void update_link_triggered_moby_turn(struct Moby *turning_moby) {
 #include "rnc/input/pad_state.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "sda.h"
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 
 
@@ -1050,7 +1048,6 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void FUN_L00_0025e450_f728(void *, void *, void *, float, float, int, int, int, float, float, float, float,
                                   int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_0022da68_f728(int, int, void *) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 
 extern struct Moby *D_L11_00174858 NOT_SDA;

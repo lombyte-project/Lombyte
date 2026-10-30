@@ -5,6 +5,7 @@
 
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 extern void prepare_scaled_float_table_with_target_byte(void *, int, float) __asm__("FUN_L02_002a4058");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char l14_scaled_table_setup_target[] __asm__("D_L14_001E9C60");
@@ -41,7 +42,6 @@ typedef struct {
     u8 p0[0x78];
     M_FUN_L14_00305a38 *m;
 } O_FUN_L14_00305a38;
-s32 random_integer_below(s32) __asm__("FUN_00213260");
 void initialize_morphoray_private_state(O_FUN_L14_00305a38 *moby) __asm__("FUN_L14_00305a38");
 
 void initialize_morphoray_private_state(O_FUN_L14_00305a38 *moby) {

@@ -8,6 +8,7 @@
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0029B070.c: func_L07_0029B070), where it is exact; names translated to the US level program. */
 
@@ -35,7 +36,6 @@ unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, c
     return particle;
 }
 extern int rand(void);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern unsigned char *D_L07_001B21F4 __asm__("D_L07_001B21F4") NOT_SDA;
 extern float debris_far_point[] __asm__("D_L07_00166E40");

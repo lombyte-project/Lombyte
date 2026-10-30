@@ -2,6 +2,7 @@
 #include "rnc/rendering/level_render_state.h"
 #include "sda.h"
 #include "types.h"
+#include "rnc/math/random.h"
 
 typedef struct { float f[4]; } __attribute__((aligned(16))) QuadOffset;
 
@@ -15,7 +16,6 @@ void fast_vec_scale(float, void *, void *) __asm__("FUN_001f9a68");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 long get_effect_texture(int) __asm__("FUN_001f44b8");
-int random_integer_below(int) __asm__("FUN_00213260");
 float convert_integer_to_float(int) __asm__("func_001FA6C0");
 void draw_geometry_quad(void *, void *, int) __asm__("func_001F7D30");
 extern int variant_effect_quad_counts[1] __asm__("D_001604C0") __attribute__((sda));

@@ -14,6 +14,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Looks up the value of the current help record, or 0/0x54 in the special cases. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
@@ -735,7 +736,6 @@ void enter_hero_vehicle_mode_and_set_moby(int vehicle_mode, int initial_state, i
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_00231A68), where it is exact; names translated to the US level program. */
 
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
 
@@ -1371,7 +1371,6 @@ extern u8 item_available[] __asm__("D_0013D4C0");
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");

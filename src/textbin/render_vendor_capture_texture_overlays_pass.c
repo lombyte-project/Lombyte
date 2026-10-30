@@ -4,8 +4,8 @@
 #include "types.h"
 
 #include "rnc/ui/vendor/vendor_capture.h"
+#include "rnc/math/random.h"
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 SubtractIntegerWithClamp(s32);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");

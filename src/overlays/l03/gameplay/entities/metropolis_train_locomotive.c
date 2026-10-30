@@ -13,6 +13,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 
 
@@ -180,7 +182,6 @@ extern float spring_turn(float *vel, float cur, float target, float k, float d, 
 extern void debug_print(void *, int) __asm__("FUN_001e93b0");
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 typedef struct {
     char p00[0x60];
@@ -968,7 +969,6 @@ void maintain_emitter_sound_voice(struct Moby *moby) {
         break;
     }
 }
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_001fefc8(void *);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, int, float) __asm__("FUN_L00_0026ced0");
 struct Moby;
@@ -1233,7 +1233,6 @@ extern char *D_L03_0015FFD8_29dba8 __asm__("D_L03_0015FFD8");
 extern char *D_L03_001B05B0_29dba8[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_29dba8[] __asm__("D_0013E550");
 extern char spline_moby_missing_path_warning_format[] __asm__("D_L03_001E2A28");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
 extern int check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
@@ -1452,8 +1451,6 @@ void red_ship_1_update(char *moby) {
     }
 }
 
-char *create_moby(int) __asm__("FUN_0020c4f8");
-float random_angle_radians(void) __asm__("FUN_00213308");
 void set_moby_color(char *, int, int, int) __asm__("FUN_L00_002502f0");
 void f250df8_2bad40(char *) __asm__("FUN_L00_00250df8");
 /* Spawns a child effect (moby 0xEB) on the parent: copies its position and rotation, then sets the colour, timers and scale. */
@@ -1560,7 +1557,6 @@ extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__("FUN_L03_0024e830");
 extern int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void spawn_nearby_effect(void *, void *, int, void *, void *, float) __asm__("FUN_L00_00259bc8");

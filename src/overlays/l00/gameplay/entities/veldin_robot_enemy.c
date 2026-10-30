@@ -6,6 +6,8 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -206,9 +208,7 @@ extern void update_veldin_robot_damage_and_targeting() __asm__("FUN_L00_002e1678
 extern void manipulator_set_scale(void *, f32) __asm__("FUN_L00_00263b38");
 extern void update_joint_animation(ElectroidMoby *, void *, s32, f32, f32) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_0025a120(ElectroidMoby *);
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void blend_moby_animation(ElectroidMoby *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void mark_moby_for_removal(ElectroidMoby *) __asm__("FUN_0020c828");
 extern s32 scale_game_frames_s32(s32) __asm__("FUN_001f96f8");
 extern void approach_angle(void *, f32, void *, f32, f32, f32) __asm__("FUN_L00_0025be00");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -601,7 +601,6 @@ typedef struct {
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 extern SparkPart *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, s32, void *) __asm__("FUN_L00_00274948");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void draw_veldin_robot_effect_quad() __asm__("FUN_L00_002e1c78");
 void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 

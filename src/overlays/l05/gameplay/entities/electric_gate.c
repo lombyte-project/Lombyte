@@ -16,6 +16,8 @@
 #include "rnc/audio/voice_pool.h"
 #include "sda.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -432,16 +434,13 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) __
 void update_drain_cover_tilt(char *, float, float) __asm__("FUN_L05_0030f408");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void approach_position(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void *create_moby(int) __asm__("FUN_0020c4f8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern float l05_drain_cover_gravity __asm__("D_L05_00161DAC") __attribute__((sda));
 extern float l05_drain_cover_hover_acceleration __asm__("D_L05_00161DB0") __attribute__((sda));
@@ -754,8 +753,6 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
                    drain_cover_tilt_max_speed_gp * 0.017453292f * frame_time);
 }
 extern void *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void initialize_moby_launch_motion(struct Moby *, struct Moby *, void *, void *, int) __asm__("FUN_L05_00318648");
 extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
@@ -946,7 +943,6 @@ struct FloorRow {
     u8 padC[0x1190 - 0xC];
 };
 
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern void create_particle_with_velocity_and_randomized_parameters(float, float, float, void *, void *, int, int) __asm__("FUN_L05_0029be70");
 extern void spawn_splash(float, float, void *, void *, void *) __asm__("FUN_L00_002718d0");
@@ -1114,7 +1110,6 @@ typedef struct {
 extern u16 D_0014162A NOT_SDA;
 extern LiftPose *D_L05_001600EC_l __asm__("D_L05_001600EC");
 
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 approach_with_speed(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");

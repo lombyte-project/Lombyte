@@ -8,6 +8,8 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Per-instance variables of the oClass 52 moby (moby->pvars). */
 typedef struct {
@@ -57,10 +59,8 @@ extern Vec4f D_L09_00166F40;
 extern u8 seeker_invalid_bound_path_format[] __asm__("D_L09_00208320");
 
 extern void debug_print(void *, s16) __asm__("FUN_001e93b0");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 FUN_00213260(s32);
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
@@ -320,14 +320,12 @@ typedef struct { int count; int pad[3]; float pts[1][4]; } Path;
 typedef int OvlQuad __attribute__((mode(TI)));
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 #include "rnc/overlay/shared/gameplay/entities/seeker_data/update_seeker_damage_and_target.h"
 extern float D_L09_0016140C __attribute__((sda));
 extern int scale_time() __asm__("FUN_001f96b0");
 extern int fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -344,9 +342,7 @@ extern void func_L00_0025BBA0_2C73D0(void *, float *, void *, void *) __asm__("F
 extern void func_L00_0025D5B0_2C73D0(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void func_L01_0026F040_2C73D0(int, int) __asm__("FUN_L01_0026e090");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float func_001F9878_2C73D0(float) __asm__("FUN_001f96b0");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_L00_00260D30_2C73D0(void *, void *, float) __asm__("FUN_L04_00252e18");
 extern int activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern Path *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
@@ -579,7 +575,6 @@ extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 extern s32 rand(void);
 extern void FUN_L00_00257470_c2(void *, int, int) __asm__("FUN_L00_00257470");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void mark_moby_for_removal_c(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 int random_int_between(int lo, int hi) __asm__("FUN_L00_00257b90");
 int FUN_L00_0025c698_c(void *moby, void *motion) __asm__("FUN_L00_0025c698");
@@ -626,7 +621,6 @@ extern int knock_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025c698");
 extern int recover_2E39E0(Moby *, void *) __asm__("FUN_L00_002dc9f0");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void cart_burst(Moby *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void delete_2E39E0(Moby *) __asm__("FUN_0020c828");
 extern void effects_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d538");
 
 void update_ground_melee_enemy(Moby *moby) __asm__("FUN_L09_002e27d8");
@@ -896,7 +890,7 @@ void update_ground_melee_enemy(Moby *moby) {
             return;
         }
         if (moby->pos.z < 0.0f) {
-            delete_2E39E0(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         break;
@@ -918,11 +912,11 @@ void update_ground_melee_enemy(Moby *moby) {
         if (knock_update_2E39E0(moby, data->motion) & 0x40) {
             clear_u64_value(&step);
             cart_burst(moby, &moby->pos, 6, 0.5f, 13.0f);
-            delete_2E39E0(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         if (moby->pos.z < 0.0f) {
-            delete_2E39E0(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         break;
@@ -1000,7 +994,7 @@ void update_ground_melee_enemy(Moby *moby) {
     if (ground == -1.0f) ground = probe_ground_height(&moby->pos, 0, 0.5f);
     if (ground != 0.0f && moby->pos.z - ground < 0.1f && collision_hit_material() == 1) {
         cart_burst(moby, &moby->pos, 6, 0.5f, 13.0f);
-        delete_2E39E0(moby);
+        mark_moby_for_removal(moby);
         return;
     }
     effects_update_2E39E0(moby, data->effects);

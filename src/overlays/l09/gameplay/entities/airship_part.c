@@ -2,6 +2,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 int find_nearest_moby_by_class() __asm__("FUN_L09_002c2610");
 
 int spawn_airship_part() __asm__("FUN_L09_002c2500");
@@ -51,11 +53,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
 extern char airship_part_missing_parent_format[] __asm__("D_L09_002082A0");

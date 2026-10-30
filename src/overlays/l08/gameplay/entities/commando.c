@@ -18,6 +18,8 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -38,9 +40,6 @@ extern struct Moby *D_L08_0015FFD8;
 
 extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
@@ -474,7 +473,6 @@ extern struct Moby *D_0013F58C NOT_SDA;
 
 extern s32 find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern f32 approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
-extern void mark_moby_for_removal_44c0(struct Moby *) __asm__("FUN_0020c828");
 extern void allocate_voice_for_target_entry_44c0(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern void FUN_L00_00258278_44c0(struct Moby *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_00258278");
 extern void spawn_explosion(char *, void *, char *, f32, f32, s32, s32, s32,
@@ -513,21 +511,21 @@ void update_path_following_moby_with_fade(struct Moby *moby)
             allocate_voice_for_target_entry_44c0(0, 0, moby);
             spawn_explosion(moby, D_L08_0015F580, &moby->pos, 3.0f, 1.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-            mark_moby_for_removal_44c0(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         if (active != 0) {
             allocate_voice_for_target_entry_44c0(0, 0, moby);
             spawn_explosion(moby, D_L08_0015F580, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                           1.0f, 3.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-            mark_moby_for_removal_44c0(moby);
+            mark_moby_for_removal(moby);
         }
         return;
     }
     case PATH_FOLLOWER_FOLLOW_PATH: {
         moby->pos.z -= 0.4f;
         if (follower->path_id == -1 || follower->path->count == 0) {
-            mark_moby_for_removal_44c0(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         moby->rot.y = fast_add_rotations(moby->rot.y, path_follower_y_rotation_rate_degrees_gp * 0.017453292f * frame_time);
@@ -536,7 +534,7 @@ void update_path_following_moby_with_fade(struct Moby *moby)
             clear_u64_value(&velocity);
             spawn_explosion(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                           3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
-            mark_moby_for_removal_44c0(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         waypoint = (follower->point + follower->path->count + follower->direction) % follower->path->count;
@@ -555,7 +553,7 @@ void update_path_following_moby_with_fade(struct Moby *moby)
                 spawn_explosion(moby, &velocity, &moby->pos, 0.0f, 0.0f, 10, 20, 60,
                               3.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
                 allocate_voice_for_target_entry_44c0(0, 0, moby);
-                mark_moby_for_removal_44c0(moby);
+                mark_moby_for_removal(moby);
                 return;
             }
             moby->state = 3;
@@ -571,7 +569,7 @@ void update_path_following_moby_with_fade(struct Moby *moby)
         timer.f[0] = (f32)moby->alpha;
         approach_value(&timer, 0.0f, 128.0f / (f32)scale_game_frames(30));
         moby->alpha = (u8)(s32)timer.f[0];
-        if (moby->alpha == 0) mark_moby_for_removal_44c0(moby);
+        if (moby->alpha == 0) mark_moby_for_removal(moby);
     }
     }
 }
@@ -1145,7 +1143,6 @@ extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
@@ -1188,7 +1185,6 @@ extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("
 extern void FUN_L00_0025a120(void *);
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 
 /* Watcher update, same routine as batalia_deserter_update with two more states and the joint pose copy. */

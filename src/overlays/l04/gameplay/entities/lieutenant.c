@@ -14,6 +14,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Vendor update: opens when the hero is close, sets up the shop camera in front of it once
  * its phase reaches 2, and closes when the slot is already used. */
@@ -441,7 +442,6 @@ extern u128 tgt[] __asm__("D_L04_00174000") NOT_SDA;
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void update_entity_bounce_and_decay(M2e5178 *entity) __asm__("FUN_L04_002e5178");
 
 void update_entity_bounce_and_decay(M2e5178 *entity) {

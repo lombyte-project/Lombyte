@@ -17,6 +17,8 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */
 
@@ -458,7 +460,6 @@ extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void update_view_context(void) __asm__("FUN_001f2d98");
-void mark_moby_for_removal(M_298b18 *) __asm__("FUN_0020c828");
 float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
 void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -1326,7 +1327,6 @@ extern Vec4 D_L00_00180260_29a6b0 __asm__("D_L00_00180260");
 extern s32 D_L00_00161188;
 extern s32 D_L00_0016118C;
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern VendorMoby_29a6b0 *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void snd_pause_all_sounds_in_group(s32) __asm__("FUN_0012e3e8");
 extern void FUN_00216050_29a6b0(s32) __asm__("FUN_00216050");
 extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
@@ -1651,7 +1651,6 @@ extern int D_L00_0015F3F8;
 extern int D_L00_00161188;
 extern int D_L00_00161194;
 extern int D_L00_001CA4C0[];
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern unsigned char queued_dialogue_id[] __asm__("D_001516EC");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 

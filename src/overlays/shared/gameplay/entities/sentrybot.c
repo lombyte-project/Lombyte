@@ -12,6 +12,8 @@
 #include "rnc/overlay/moby_anim.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Sentrybot update: runs the patrol, alert and attack state machine, then sets the alert level and the eye colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_00298BB8), where it is exact; names translated to the US level program. */
@@ -84,7 +86,6 @@ void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
 extern void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
 
@@ -1174,7 +1175,6 @@ void alert_visible_group_sentrybots(void *mp) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029B428), where it is exact; names translated to the US level program. */
 
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void set_sentrybot_attention_target(char *source_moby, char *recipient_moby) {
     char *recipient_moby_data;
@@ -1262,7 +1262,6 @@ extern short sentrybot_target_visibility_height_check_gate[] __asm__("D_0013F658
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern char D_0013F420[];
 extern char *FUN_L00_0025a420(void *, int, int);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int update_float_countdown(void *) __asm__("FUN_L08_00211b08");
 extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -1496,7 +1495,6 @@ extern char D_L15_001673C0_y[] __asm__("D_L15_001673C0");
 extern int D_L15_00174458_y[] __asm__("D_L15_00174458");
 extern float D_0015ED6C;
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 void spawn_rocket_trail_spark(char *moby) __asm__("FUN_L15_0029ae18");
 
@@ -1670,8 +1668,6 @@ typedef struct {
 extern LevelView D_L15_00167280;
 extern char D_L15_00174440[];
 extern char missile_drop_spawn_parameters[] __asm__("D_L15_001B0D70");
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED64;
 extern float D_0015ED70;
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_target_leading_missile_2.h"
@@ -1681,7 +1677,6 @@ extern float fast_vec_dist(void *, void *);
 #include "rnc/overlay/shared/gameplay/entities/sentrybot_data/update_target_leading_missile.h"
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L00_00257b90(int, int);
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern unsigned char *D_L15_001B26DC NOT_SDA;
 extern unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
 extern void *FUN_L00_0026bb70_c(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
@@ -1700,7 +1695,6 @@ extern void FUN_L00_002ac910(char *, char *, int, int, float, int, int, int, int
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern char D_0013F490[];
 extern char D_0013F350[];
 

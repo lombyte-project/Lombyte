@@ -4,6 +4,7 @@
 #include "rnc/rendering/level_render_state.h"
 #include "rnc/gameplay/hero.h"
 #include "types.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 extern void FlushCache(int);
 
@@ -77,7 +78,6 @@ struct TransferState {
 extern struct TransferState D_0018CB20_lui __asm__("D_0018CB20") NOT_SDA;
 extern int cutscene_moby_ids_by_content_variant[] __asm__("D_00160488");
 extern int decompress_wad(int, int) __asm__("FUN_0020b618");
-extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 void update_world_object_animation(void *unused_arg) __asm__("FUN_00204790");
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;

@@ -9,6 +9,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 typedef struct {
     Vec4f vel;
     s32 timer;
@@ -22,11 +24,9 @@ extern f32 shard_vertical_velocity_approach_scale_gp __asm__("D_L02_00161F58") _
 s32 D_L02_00161F5C = 0x30704020;
 s32 D_L02_00161F60 = 0x50e0e0e0;
 extern LevelFx l02_shard_trail_particle_tint_source __asm__("D_L02_001B2680");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern u8 *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
@@ -84,7 +84,6 @@ void update_shard_debris(struct Moby *moby) {
         mark_moby_for_removal(moby);
 }
 #include "qcopy.h"
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_002502f0_c(char *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 int D_L02_00161F4C = 0xd0;
@@ -353,7 +352,6 @@ void update_tutorial_hint_triggers(struct Moby *moby) {
     }
     qcopy(data + 8, &hero.motion.pos);
 }
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 /* fast_vec_normalize (out = in scaled to length s), with the float declared first (same registers): the scale is then

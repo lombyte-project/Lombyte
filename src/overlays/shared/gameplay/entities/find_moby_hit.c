@@ -3,6 +3,7 @@
 
 #include "asm.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 /* Calls probe_ground_height(a, 0x20, 0.5f). */
@@ -473,8 +474,6 @@ extern float FUN_001f9af0_25aca0(void *) __asm__("FUN_001f9af0");
 extern void divide_vector_xyz(float, void *, void *) __asm__("FUN_L00_001ff378");
 extern float FUN_001f9dc8_25aca0(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_25aca0(float) __asm__("FUN_001f9de0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 int generate_random_points_from_shape_entries(float density, unsigned char *entity, int maximum, Vec4_25aca0 *out, int mask) __asm__("FUN_L00_0025aca0");
 

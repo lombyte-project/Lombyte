@@ -14,6 +14,8 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Gate states shared by the paired gate update callbacks. */
 enum GateState {
@@ -66,14 +68,11 @@ typedef struct D_2E0630 {
 
 extern char *D_L10_0015FFD0_macro[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between_c(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
 int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 void FUN_L00_00257470_c(unsigned char *m, int flags, int arg) __asm__("FUN_L00_00257470");
@@ -89,7 +88,6 @@ void FUN_L10_002e0138_c2(struct Moby *m) __asm__("FUN_L10_002e0138");
 extern void func_L10_002E0FF8_2E0630(void *) __asm__("FUN_L10_002dfc38");
 extern void func_L00_00264B40_2E0630(float, void *, int, void *) __asm__("FUN_L00_00263ac8");
 extern void func_L00_0025B178_2E0630(void *) __asm__("FUN_L00_0025a120");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float func_00214D88_2E0630(float *, float, float *, float, float, float) __asm__("FUN_00213f38");
 extern float func_L00_0025CE58_2E0630(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern void func_L00_002607A8_2E0630(void *, float) __asm__("FUN_L00_0025f730");
@@ -99,8 +97,6 @@ extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void func_L10_002E14F8_2E0630(void *) __asm__("FUN_L10_002e0138");
 extern float func_L00_0025CC58_2E0630(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern void approach_w(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int func_L00_001F10E0_2E0630(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
@@ -306,7 +302,6 @@ extern unsigned char D_0013D418 NOT_SDA;
 typedef struct EventRecord { unsigned char pad[0x10]; unsigned char flag; } EventRecord;
 extern EventRecord D_0013D408_2DFC38 __asm__("D_0013D408");
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/update_screamer_hit_reactions_and_targeting.h"
-extern float random_float_between_2DFC38(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int hit_search_2DFC38(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hit_update_2DFC38(void *, void *, void *, int, void *, int, int, int) __asm__("FUN_00213928");
@@ -325,7 +320,7 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     float knockback_angle;
 
     if (data->f38 != 0) {
-        data->f184 = truncate_float_to_s32(scale_time(random_float_between_2DFC38(180.0f, 240.0f)));
+        data->f184 = truncate_float_to_s32(scale_time(random_float_between(180.0f, 240.0f)));
         data->f38 = 0;
     }
     fast_dec_timer(&data->f184);
@@ -479,7 +474,6 @@ typedef struct Anim {
 } Anim;
 
 extern OvlQuad_2e01a8 D_L10_00167240_2e01a8 __asm__("D_L10_00167240");
-extern f32 random_float_between_2e01a8(f32, f32) __asm__("func_002132A8");
 extern float D_L10_00161DFC __attribute__((sda));
 extern float D_L10_00161E04 __attribute__((sda));
 extern float D_L10_00161E08 __attribute__((sda));
@@ -494,7 +488,6 @@ extern int coll_sphere_mobys(float, void *, int, void *, void *) __asm__("FUN_L0
 extern int FUN_001efa68_2e01a8(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001fefc8(void *);
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void blend_moby_animation_2e01a8(void *, s32, s32, s32) __asm__("FUN_00212f90");
@@ -1195,7 +1188,6 @@ extern char *D_L10_0015FFD0_w[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern float l10_toxic_crab_size_scale __asm__("D_L10_00161E24") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update_2.h"
@@ -1843,7 +1835,6 @@ extern int D_L10_00161EB4 __attribute__((sda));
 extern int D_L10_00161EB8 __attribute__((sda));
 extern int D_L10_00161EBC __attribute__((sda));
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
-extern float random_float_between_3a90(float, float) __asm__("FUN_002132a8");
 extern int fast_tween_color_3a90(int, int, float) __asm__("FUN_001fa6e0");
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
@@ -1878,8 +1869,8 @@ void emit_moby_particles(struct Moby *moby) {
         add_random_offset_to_vector_xyz(pos_ptr, D_L10_00161E7C);
         pos[2] += 0.55f;
         angle = random_angle_radians();
-        speed = random_float_between_3a90(D_L10_00161E88, D_L10_00161E8C);
-        rise = random_float_between_3a90(D_L10_00161E90, D_L10_00161E94);
+        speed = random_float_between(D_L10_00161E88, D_L10_00161E8C);
+        rise = random_float_between(D_L10_00161E90, D_L10_00161E94);
         if (*((u8 *)moby + 0x20) == 11) {
             speed *= 0.55f;
             rise *= 0.55f;
@@ -1894,18 +1885,18 @@ void emit_moby_particles(struct Moby *moby) {
         qcopy(accel, vel);
         accel[2] -= D_L10_00161E98 * D_0015ED70 * (float)scale_game_frames(D_L10_00161EB8);
         for (j = 0; j < D_L10_00161E78; j++) {
-            size = random_float_between_3a90(0.5f, 1.5f);
+            size = random_float_between(0.5f, 1.5f);
             vel[3] = size * D_L10_00161E9C;
             accel[3] = size * D_L10_00161EA0;
             add_random_offset_to_vector_xyz(pos, D_L10_00161E80);
             add_random_offset_to_vector_xyz(accel, D_L10_00161E84 * D_0015ED6C);
-            start_color = fast_tween_color_3a90(D_L10_00161EA4, D_L10_00161EAC, random_float_between_3a90(0.0f, 1.0f));
-            end_color = fast_tween_color_3a90(D_L10_00161EA8, D_L10_00161EB0, random_float_between_3a90(0.0f, 1.0f));
+            start_color = fast_tween_color_3a90(D_L10_00161EA4, D_L10_00161EAC, random_float_between(0.0f, 1.0f));
+            end_color = fast_tween_color_3a90(D_L10_00161EA8, D_L10_00161EB0, random_float_between(0.0f, 1.0f));
             life = scale_game_frames(D_L10_00161EB4);
             fade = scale_game_frames(D_L10_00161EB8);
             time_base = (float)D_L10_00161EBC;
             spawn_spark(pos, vel, accel, start_color, end_color, life, fade,
-                truncate_float_to_s32(scale_time(random_float_between_3a90(time_base * 0.5f, time_base * 2.5f))), -1);
+                truncate_float_to_s32(scale_time(random_float_between(time_base * 0.5f, time_base * 2.5f))), -1);
         }
     }
 }
@@ -1988,7 +1979,6 @@ s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__
 void FUN_L00_0025ab48_c(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void FUN_L00_00263d40(int a, int b);
 extern void func_L10_002E14F8_2E52B0(void *) __asm__("FUN_L10_002e0138");
-extern float func_002140F8_2E52B0(float, float) __asm__("FUN_002132a8");
 extern float func_001F9878_2E52B0(float) __asm__("FUN_001f96b0");
 extern Hit_2E52B0 *func_L00_0025B478_2E52B0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int update_collision_l08(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -2038,7 +2028,7 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
     }
     if (moby_data->f38 != 0) {
         func_L10_002E14F8_2E52B0(moby);
-        moby_data->f1AC = truncate_float_to_s32(func_001F9878_2E52B0(func_002140F8_2E52B0(180.0f, 240.0f)));
+        moby_data->f1AC = truncate_float_to_s32(func_001F9878_2E52B0(random_float_between(180.0f, 240.0f)));
         moby_data->f38 = 0;
     }
     fast_dec_timer(&moby_data->f1AC);

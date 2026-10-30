@@ -9,6 +9,8 @@
 #include "rnc/math/vector.h"
 #include "rnc/overlay/beam_vector.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 extern float D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
 extern float D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
 extern float D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
@@ -62,7 +64,6 @@ extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int fast_dec_timer_s16() __asm__("FUN_001f9770");
 extern int suck_get_aim_height() __asm__("FUN_002141f8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 /* The arc points one slot before each arc row. */
 extern Vec4 D_L00_001DBA10[4][5];
 extern Vec4 arc_points[4][5] __asm__("D_L00_001DBA20");
@@ -693,7 +694,6 @@ void draw_beam_anchor_camera_facing_quads(void *mv) {
     }
     draw_geometry_quad(&quad, 0, 0);
 }
-u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 void clear_u64_value() __asm__("FUN_001f99f8");
 void refresh_moby_spatial_bounds_from_basis() __asm__("FUN_0020e098");
 void update_entity() __asm__("FUN_L00_00250df8");
@@ -723,7 +723,6 @@ typedef struct {
     char pad[0x10B0];
     int i10B0;
 } G_2bb400;
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
 extern float FUN_001fa580_2bb400(float, float) __asm__("FUN_001fa580");
 extern void FUN_0020e098_2bb400(void *) __asm__("FUN_0020e098");
@@ -1166,7 +1165,6 @@ typedef struct {
 } Q_2bc1a0;
 void FUN_001f9a68_2bc1a0(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9bf8_2bc1a0(void *, void *, float) __asm__("FUN_001f9bf8");
-int random_integer_below(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_2bc1a0(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6d0_2bc1a0(float) __asm__("FUN_001fa6d0");
 extern float walloper_quad_basis_offset_scale_gp __asm__("D_L00_001616BC") __attribute__((sda));
@@ -1710,7 +1708,6 @@ typedef struct { float f[4]; } __attribute__((aligned(16))) V_t;
 extern unsigned char D_0013F5E0_r[] __asm__("D_0013F5E0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 extern float D_L00_001616DC_gp __asm__("D_L00_001616DC") __attribute__((sda));
 extern signed char D_L00_00161763;
@@ -1725,7 +1722,6 @@ extern int D_L00_001DD0A0;
 extern int D_L00_001DD0D0;
 extern int FUN_001efa68_c_c(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern int lerp_vector() __asm__("FUN_001f9a40");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 unsigned char *FUN_L00_00272060(void *pos, int s, float x, float y, int color, int mode, int b, float *v, float z);
@@ -1801,7 +1797,6 @@ extern float func_001F9FA8_2BE3A8(float) __asm__("FUN_001f9de0");
 extern float func_001F9F90_2BE3A8(float) __asm__("FUN_001f9dc8");
 extern void func_001F9EE8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void draw_beam_ring_and_rail_effects(void *) __asm__("FUN_L00_002bdc50");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001F9850_2BE3A8(int) __asm__("FUN_001f96f8");
 extern void func_L00_00272F00_2BE3A8(void *, int, int, int, int, void *, float, float, float) __asm__("FUN_L00_00272060");
 extern int func_001FA898_2BE3A8(float) __asm__("FUN_001fa6d0");
@@ -2972,7 +2967,6 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
 }
 #include "eetypes.h"
 #include "qcopy.h"
-unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 void copy_hero_moby_field_38(unsigned char *) __asm__("FUN_L00_0025d1b8");
 unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) __asm__("FUN_L00_002bfe08");

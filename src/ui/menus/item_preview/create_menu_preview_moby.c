@@ -1,5 +1,6 @@
 #include "rnc/gameplay/entities/moby_class_tables.h"
 #include "types.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 struct PreviewMobyResource {
     u8 pad0[6];
     u8 class_flags;
@@ -16,7 +17,6 @@ struct PreviewMoby {
     u8 pad34[0x3F];
     u8 state_73;
 };
-extern struct PreviewMoby *create_moby(s32) __asm__("func_0020C4F8");
 extern void refresh_moby_spatial_bounds(struct PreviewMoby *) __asm__("func_0020DEF8");
 extern void pack_render_command_fields(struct PreviewMoby *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 

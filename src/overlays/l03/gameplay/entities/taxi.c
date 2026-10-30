@@ -10,6 +10,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 
 
@@ -162,12 +164,10 @@ extern void blend_moby_animation(struct Moby *, int, int, int) __asm__("FUN_0021
 extern void FUN_L00_00258278(f32, f32, f32, f32, struct Moby *, void *);
 extern void FUN_L00_00259028(struct Moby *, void *, void *, void *);
 extern void trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int mine_fall(struct Moby *, void *) __asm__("FUN_L00_0025c698");
 extern void spawn_explosion(struct Moby *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32,
                              f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00257470(struct Moby *, int, int);
-extern void trooper_kill(struct Moby *) __asm__("FUN_0020c828");
 extern f32 probe_ground_height(void *, int, f32) __asm__("FUN_00213508");
 extern void FUN_L00_0025a120(struct Moby *);
 
@@ -308,7 +308,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
             muzzle[2] += 0.5f;
             spawn_explosion(mine_layer_moby, mine_layer_vars->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             FUN_L00_00257470(mine_layer_moby, 0, -1);
-            trooper_kill(mine_layer_moby);
+            mark_moby_for_removal(mine_layer_moby);
             return;
         }
         break;
@@ -318,7 +318,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
             muzzle[2] += 0.5f;
             spawn_explosion(mine_layer_moby, mine_layer_vars->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             FUN_L00_00257470(mine_layer_moby, 0, -1);
-            trooper_kill(mine_layer_moby);
+            mark_moby_for_removal(mine_layer_moby);
             return;
         }
         break;
@@ -336,7 +336,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
             muzzle[2] += 0.5f;
             spawn_explosion(mine_layer_moby, mine_layer_vars->effect, muzzle, 0.0f, 0.0f, 5, 2, 4, 2.0f, 1.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
             FUN_L00_00257470(mine_layer_moby, 0, -1);
-            trooper_kill(mine_layer_moby);
+            mark_moby_for_removal(mine_layer_moby);
             return;
         }
     }
@@ -474,12 +474,9 @@ extern MineBlast l03_mine_camera_blast_template __asm__("D_L03_001E32B0");
 extern struct Moby *D_L03_00178000[];
 extern MineCamera D_L03_00166D80_cbea8 __asm__("D_L03_00166D80");
 extern char mine_moby_index_list[] __asm__("D_L03_001B08B0");
-extern void mine_kill(struct Moby *) __asm__("FUN_0020c828");
 extern void allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern int collect_mobies_in_sphere(void *, int, struct Moby *, void *, f32) __asm__("FUN_L00_001f2868");
 extern void send_blast_hits(struct Moby *, void *, void *, int, int, int, int, int, f32, f32, f32) __asm__("FUN_L00_0025a9f8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern int mine_blend_color(int, int, f32) __asm__("FUN_L00_002371e0");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
@@ -529,14 +526,14 @@ void update_mine(struct Moby *mine_moby) {
             }
             mine_vars->timer = scale_game_frames(60);
         } else if (mine_moby->pos.z < 5.0f) {
-            mine_kill(mine_moby);
+            mark_moby_for_removal(mine_moby);
             return;
         }
         break;
     case MINE_HOME_ON_TARGET:
         fast_vec_sub(vector_scratch, &mine_vars->target->pos, &mine_moby->pos);
         if (fast_vec_length(vector_scratch) < 0.25f) {
-            mine_kill(mine_moby);
+            mark_moby_for_removal(mine_moby);
             return;
         }
         fast_vec_normalize(vector_scratch, vector_scratch, frame_time * 14.0f);
@@ -629,21 +626,20 @@ void update_mine(struct Moby *mine_moby) {
         D_L03_00166D80_cbea8.shake_frames = scale_game_frames(0x19);
         mine_camera_blast(&blast, &mine_moby->pos, 0, 0);
         mine_spawn_drops(mine_moby, mine_moby_index_list);
-        mine_kill(mine_moby);
+        mark_moby_for_removal(mine_moby);
         return;
     }
     case MINE_SHRINK_AND_REMOVE:
         mine_moby->scale *= frame_scale * -0.074f + 1.0f;
         if (mine_moby->scale < mine_moby->pclass->scale * 0.01f) {
             mine_spawn_drops(mine_moby, mine_moby_index_list);
-            mine_kill(mine_moby);
+            mark_moby_for_removal(mine_moby);
         }
         break;
     }
 }
 
 #include "qcopy.h"
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void set_path_2cc888(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 
 /* Spawns a projectile moby (class 0x273) at pos, heading along dir,
@@ -733,7 +729,6 @@ extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void request_hero_target_pose(void *, float, int) __asm__("FUN_L00_00233ee8");
 extern s32 get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void taxi_kill(struct Moby *) __asm__("FUN_0020c828");
 extern f32 approach_angle(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025be00");
 s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) __asm__("FUN_L03_002d3918");
 
@@ -791,7 +786,7 @@ void update_rail_taxi(struct Moby *taxi_moby) {
         taxi_moby->collision = 0;
         if (D_L03_001BB330.collected[(s16)taxi_moby->save_id] != 0 ||
             (D_0014C190_257218[current_level_index][(s16)taxi_moby->save_id >> 5] >> (taxi_moby->save_id & 0x1F)) & 1) {
-            taxi_kill(taxi_moby);
+            mark_moby_for_removal(taxi_moby);
             return;
         }
         break;
@@ -1055,7 +1050,6 @@ extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern float rocket_trail_offset_z_scale_gp __asm__("D_L03_00161B28") __attribute__((sda));
 extern CollisionHit D_L03_00173F40;
 
@@ -1242,7 +1236,6 @@ extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 
@@ -1285,7 +1278,7 @@ void helga_update(struct Moby *helga_moby) {
                     record_moby_context_bytes(flag, 4, helga_moby, 2, helga_helper_flag_context_records);
                 }
             }
-            taxi_kill(helga_moby);
+            mark_moby_for_removal(helga_moby);
             return;
         }
         if (visited52[helga_moby->mission + current_level_index * 16] == 0xFF && helga_vars->link != -1) {
@@ -1358,7 +1351,7 @@ void helga_update(struct Moby *helga_moby) {
                             D_L03_001BB330.collected[(s16)reward_moby->save_id] = reward_moby->mission + 2;
                         } while (0);
                     }
-                    taxi_kill(&D_L03_0015FFD8[helga_vars->reward]);
+                    mark_moby_for_removal(&D_L03_0015FFD8[helga_vars->reward]);
                 }
                 if (helga_vars->link != -1) {
                     helper_moby = (struct Moby *)((helga_vars->link << 8) + D_L03_0015FFD8_i);
@@ -1370,7 +1363,7 @@ void helga_update(struct Moby *helga_moby) {
                     }
                 }
                 memcard_save_data(0, -1);
-                taxi_kill(helga_moby);
+                mark_moby_for_removal(helga_moby);
                 return;
             }
         } else if (helga_vars->talk.unk36 == 2 && helga_vars->link != -1) {
@@ -1441,7 +1434,6 @@ void helga_update(struct Moby *helga_moby) {
     update_joint_animation(rate * frame_scale_sq, head_rate * frame_scale_sq, helga_moby, helga_vars->head, 1);
 }
 
-extern void kill_2db020(char *) __asm__("FUN_0020c828");
 
 /* Moves the moby along its path: advances the distance, places it on the
  * current segment, and dies at the end of the path. */
@@ -1468,7 +1460,7 @@ void update_path_mover(struct Moby *path_moby) {
     path = *(char **)(path_moby_vars + 0x60);
     segment_fraction = (*(float *)(path_moby_vars + 0x64) - segment_fraction * *(float *)(path + 0x1C)) / *(float *)(path + 0x1C);
     if (i >= *(int *)path - 2) {
-        kill_2db020(path_moby);
+        mark_moby_for_removal(path_moby);
         return;
     }
     fast_vec_sub(segment_offset, ((float (*)[4])path)[i + 2], ((float (*)[4])path)[i + 1]);
@@ -1544,7 +1536,7 @@ void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
     if (moby->state == 0) {
         if (vars->path == -1) {
             debug_print(path_mover_spawner_bad_path_format, moby->uid);
-            kill_2db020((char *)moby);
+            mark_moby_for_removal((char *)moby);
             return;
         }
         path = D_L03_001B05B0[vars->path];

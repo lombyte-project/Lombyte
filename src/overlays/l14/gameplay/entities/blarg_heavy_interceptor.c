@@ -11,6 +11,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
@@ -406,7 +408,6 @@ extern int FUN_L00_0025d808_c618(void *, void *, void *, void *, int, float) __a
 extern void FUN_L00_0025e450_c618(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void normalize_vector_c618(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -414,7 +415,6 @@ extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float
 extern unsigned char *FUN_L00_0026d000_c618(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
 extern void spawn_particles_at_shape_points(void *, void *, int) __asm__("FUN_L00_0025c398");
 extern s32 allocate_voice_c618(s32, s32, void *) __asm__("FUN_0022da68");
-extern s32 random_integer_below(s32 n) __asm__("FUN_00213260");
 typedef struct {
     u8 pad0[0x18];
     struct Moby *target; /* 0x18 */
@@ -1623,16 +1623,13 @@ extern int machinegun_turret_target_wait_timeout_frames_gp __asm__("D_L14_001615
 extern int debug_print() __asm__("FUN_001e93b0");
 extern int set_moby_color() __asm__("FUN_L00_002502f0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void set_moby_animation_c2(void *, s32, s32) __asm__("func_00212ED8");
 int select_moby_by_xy_distance(char *a, char *o, float best) __asm__("FUN_L14_00268038");
 void FUN_L14_002b4340_c(struct Moby *m) __asm__("FUN_L14_002b4340");
 extern char D_L14_001FBD50[];
 extern char D_L14_001FBD78[];
 extern void func_L14_002B5590_2B4E40(unsigned char *m) __asm__("FUN_L14_002b4340");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void func_00213D28_2B4E40(void *, int, int) __asm__("FUN_00212ed8");
 extern float func_001F9FA8_2B4E40(float) __asm__("FUN_001f9de0");
 extern int func_L00_00260D30_2B4E40(void *, void *, float) __asm__("FUN_L14_00268038");
@@ -1642,7 +1639,6 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern int func_001F9850_2B4E40(int) __asm__("FUN_001f96f8");
 extern float func_001FA888_2B4E40(int) __asm__("FUN_001fa6c0");
 extern void func_001F9C30_2B4E40(void *, void *, float) __asm__("FUN_001f9a68");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void func_L00_001FF4B0_2B4E40(void *, void *, float) __asm__("FUN_001f9bf8");
 
 void machinegun_turret_update(char *moby) __asm__("FUN_L14_002b3bf0");
@@ -2869,7 +2865,6 @@ extern f32 flying_debris_velocity_retention_factor_gp __asm__("D_L14_001615D4") 
 extern f32 flying_debris_horizontal_drag_speed_threshold_gp __asm__("D_L14_001615D8") __attribute__((sda));
 extern char D_L14_001809C0[];
 extern void normalize_d(void *, void *, float) __asm__("FUN_001f9bf8");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern void e450_b78(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -2986,7 +2981,6 @@ extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
-extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 
 unsigned char *spawn_flying_debris(struct Moby *owner, float angle, char *posp) __asm__("FUN_L14_002bb310");
 

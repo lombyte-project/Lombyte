@@ -10,6 +10,8 @@
 #include "rnc/math/asm_helpers.h"
 
 #include "qcopy.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Builds two direction vectors from a table and relative to a moby, then hands them to the L04 effect spawner. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B0068.c: func_L04_002C5938), where it is exact; names translated to the US level program. */
@@ -83,8 +85,6 @@ typedef struct {
     s32 unk28;
 } ShotVars;
 
-extern struct Moby *create_moby(int oclass) __asm__("FUN_0020c4f8");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void spawn_source_attached_fading_effect_particle(struct Moby *, int color, int life, int, float size) __asm__("FUN_L00_0026daa0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
@@ -159,7 +159,6 @@ extern f32 D_L04_00166F40[];                             /* arena centre */
 extern u128 D_L04_00173FE0;                              /* hit position of the last collision_line */
 extern u8 D_L04_00174000[];
 extern s32 allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line(void *, void *, s32, struct Moby *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
@@ -259,7 +258,6 @@ void update_class_b8_projectile(struct Moby *moby)
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D48B8), where it is exact; names translated to the US level program. */
 
-extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 
 void *spawn_moby_attachment(char *source_moby, char *spawn_position) __asm__("FUN_L04_002ce080");
 

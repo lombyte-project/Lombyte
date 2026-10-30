@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0025D750.c: func_L02_00265E58), where it is exact; names translated to the US level program. */
 
@@ -24,7 +25,6 @@ void reset_shot_tracking(char *moby) {
 typedef struct { char *p[7]; short timer; } Slots;
 
 extern char *spawn_spinning_and_fading_effect_particle(void *, void *, unsigned long, float) __asm__("FUN_L00_0026b230");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern f32 frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern float D_L02_00174460[];

@@ -9,6 +9,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/random.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
@@ -333,7 +334,6 @@ void project_world_point_to_screen_pixels(void *pt, int *outx, int *outy, int yo
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00312780), where it is exact; names translated to the US level program. */
 
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern f32 D_L11_00161FF4_gp __asm__("D_L11_00161FF4") __attribute__((sda));
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");

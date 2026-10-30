@@ -12,6 +12,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef union {
     u128 q;
@@ -30,13 +32,10 @@ typedef struct {
 extern DebrisColors l01_rock_formation_debris_oclass_choices __asm__("D_L01_00161C50");
 extern void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern s32 FUN_0022da68(s32, s32, void *);
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern int FUN_L00_00257b90(int lo, int hi);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern struct Moby *spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void FUN_L00_00257470(void *, s32, s32);
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Once hit hard enough: bursts into 200 smoke puffs and 40 debris chunks, then removes itself. */
 void rock_formation_update(struct Moby *m) __asm__("FUN_L01_002f9810");
@@ -206,7 +205,6 @@ typedef struct {
 } BurstLevelState;
 extern BurstLevelState D_L01_001BB6B0;
 extern BurstColors l01_bridge_piece_debris_oclass_choices __asm__("D_L01_00161C60");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern void FUN_L01_002f8530(void *, void *, u32, s32, f32, f32, f32, f32, s32);
 
 void bridge_piece_1_update(BurstMoby *self) __asm__("FUN_L01_002f9d80");
@@ -271,7 +269,6 @@ typedef struct {
     BeamVars *pvars;
 } BeamMoby;
 
-extern void *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 void set_moby_color(void *, s32, s32, s32) __asm__("FUN_L00_002502f0");
 void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__("FUN_L00_0026daa0");
 extern void update_entity() __asm__("FUN_L00_00250df8");
@@ -427,7 +424,6 @@ typedef struct {
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern u8 D_L01_00167240[];
 extern u128 D_L01_001742E0;
 
@@ -1642,8 +1638,6 @@ OrbMoby *FUN_L01_002ffcd0(u128 *pos, f32 scale) {
 /* Ported from rac1-decomp (src/overlays/l01_novalis/vendor_002FABE8.c: func_L01_00301198), where it is exact; names translated to the US level program. */
 
 extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int pool_draw_count __asm__("D_L01_001612D8"); /* no foreign declaration */
 extern int D_L01_001612D0; /* no foreign declaration */
 extern float D_L01_001742E8 NOT_SDA; /* no foreign declaration */
@@ -1651,10 +1645,8 @@ extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001e
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern int tick_countdown_32_alt(int *) __asm__("FUN_001f9740");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void FUN_L00_0026f548(void *, void *, int, int);
 extern void FUN_L00_002a3ec8(int, int, int, float, float, float, float);
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
 /* Per-frame update of a falling debris moby: moves it, bursts into particles when it hits the ground, and removes it when its timer runs out. */
 void update_falling_splash_moby(struct Moby *moby) __asm__("FUN_L01_002ffdc0");

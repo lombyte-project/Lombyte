@@ -14,6 +14,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/data_labels.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 17's build of the shared func_L00_0022A340, without states 90-97). */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/help_002260F0.c: func_L17_002260F0), where it is exact; names translated to the US level program. */
@@ -58,7 +59,6 @@ extern float read_pad_float_history(int) __asm__("FUN_L00_00266e80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int D_00141660 NOT_SDA;
 int r1_repeat_timer __asm__("D_L17_0015F678") = 0;

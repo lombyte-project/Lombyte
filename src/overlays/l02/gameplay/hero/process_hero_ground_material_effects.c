@@ -14,6 +14,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L18_00213b40, without states 0, 4 and 0xE). */
 extern int D_0015ED84_c __asm__("D_0015ED84");
@@ -709,7 +710,6 @@ extern int get_hero_idle_animation_index(int) __asm__("FUN_L01_00226f10");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern short D_L02_0015F688 __attribute__((sda));
 s32 D_L02_0015F68C = 0;
-extern unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void FUN_001efa68_cf(float *dst, float *src, float dz) __asm__("FUN_L00_00233810");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");

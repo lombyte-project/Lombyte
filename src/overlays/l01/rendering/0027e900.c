@@ -5,6 +5,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 
 typedef struct {
     f32 x;
@@ -106,7 +107,6 @@ typedef struct {
     u128 pos;
     PartMotion m;
 } Particle;
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern u8 *pool_bubble_texture_table[] __asm__("D_L01_001B25E0");
 
 Particle *pool_bubble(u128 *pos, u128 *vel, f32 f) __asm__("FUN_L01_00287b00");
@@ -133,8 +133,6 @@ Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
 }
 extern u8 *pool_bubbles_texture_table[] __asm__("D_L01_001B25E4");
 void *create_part(s32) __asm__("FUN_L00_002678b8");
-s32 random_integer_below(s32) __asm__("FUN_00213260");
-f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_L01_00287c80");
 Particle *pool_bubbles(u128 *pos, u128 *motion_position_source, f32 scale, f32 speed) {

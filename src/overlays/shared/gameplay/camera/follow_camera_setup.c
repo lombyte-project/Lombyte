@@ -9,6 +9,7 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/globals.h"
 #include "rnc/input/pad_globals.h"
+#include "rnc/math/random.h"
 extern int FUN_L00_001f0d60(float, void *, int, void *);
 
 /* Resets the follow camera to its defaults: springs the orbit and target
@@ -294,7 +295,6 @@ extern char D_L00_00166C80[];
 extern char D_L00_00173E70_c[] __asm__("D_L00_00173E70");
 extern float D_L00_00166E40[];
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern f32 D_L00_00161CC8;
 extern char collision_hit_point[] __asm__("D_L00_00173E60");
 

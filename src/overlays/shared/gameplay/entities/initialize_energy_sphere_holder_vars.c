@@ -3,9 +3,9 @@
 #include "asm.h"
 
 #include "sda.h"
+#include "rnc/math/random.h"
 /* Fills a moby data block: four random values, fixed constants, four frame-scaled counts. */
 
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void initialize_energy_sphere_holder_vars(char *moby) __asm__("FUN_L06_002f7548");
 

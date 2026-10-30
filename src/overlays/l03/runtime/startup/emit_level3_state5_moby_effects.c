@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 
 
 
@@ -11,8 +12,6 @@
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/initonce_0022D028.c: func_L03_0022D028), where it is exact; names translated to the US level program. */
 
 extern char D_L03_0016C960[];
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");

@@ -11,6 +11,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /*
  * Hero movement step: clamps the velocity, moves the hero by it (plus the
@@ -391,7 +393,6 @@ extern float FUN_L00_00233a78(float *);
 extern float vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
 extern float compute_directed_angle_delta(int, float, float) __asm__("FUN_L00_0025bb38");
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float fast_cos_cf(float *, float, float) __asm__("FUN_00213ed8");
 extern float spring_angle(void *, float, void *, int, float, float,
                                         float) __asm__("FUN_L00_0025bc98");
@@ -406,7 +407,6 @@ extern int FUN_L00_00227d40_cf(float, void *, void *) __asm__("FUN_L00_001ff600"
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int FUN_L00_00233660_cf(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern int get_hero_idle_animation_index(int) __asm__("FUN_L01_00226f10");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -416,7 +416,6 @@ extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68"
 extern s32 D_L01_0015F688 __attribute__((sda));
 extern s32 D_L01_0015F68C __attribute__((sda));
 extern unsigned char *pool_draw_tiles __asm__("D_L01_001612D0");
-extern unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 extern unsigned char *spawn_random_alpha_rotated_particle(void *, void *, float) __asm__("FUN_L00_00271b18");
 extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern void FUN_001efa68_cf(float *, float *, float) __asm__("FUN_L00_00233810");

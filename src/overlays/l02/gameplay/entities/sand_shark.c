@@ -13,6 +13,8 @@
 #include "sda.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 
 
@@ -95,8 +97,6 @@ extern float sand_shark_dust_position_jitter_radius_gp __asm__("D_L02_001619DC")
 unsigned short D_L02_001619E0 = 0;
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 /* Dust puff emitter, declared in the argument order the other levels use (pos, three floats, n, vel, size, colour). */
 extern unsigned char *spawn_puff(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
 
@@ -266,7 +266,6 @@ extern char sand_shark_missing_path_message_format[] __asm__("D_L02_001FA8A0");
 extern char sand_shark_empty_path_message_format[] __asm__("D_L02_001FA8C0");
 extern void FUN_001e93b0_e50(char *, short) __asm__("FUN_001e93b0");
 extern int rand_e50(void) __asm__("FUN_001160d8");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
@@ -940,7 +939,6 @@ void extend_group_sand_shark_timers(char *moby) {
 
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 #include "rnc/overlay/l02/gameplay/entities/sand_shark_data/emit_sand_shark_radial_particles.h"
 extern float sand_shark_vertical_motion_z_range_start_gp __asm__("D_L02_00161920") __attribute__((sda));
 extern float sand_shark_vertical_motion_z_range_end_gp __asm__("D_L02_00161924") __attribute__((sda));
@@ -1348,8 +1346,6 @@ typedef struct {
 
 extern char *D_L02_001600EC;
 extern char D_L02_001673C0[];
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_L02_0015F580[] MACRO_ADDR;
 extern int D_L02_0015F5CC_i __asm__("D_L02_0015F5CC");
 #include "rnc/overlay/l02/gameplay/entities/sand_shark_data/update_level02_bot.h"
@@ -1362,7 +1358,6 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int FUN_L00_00259028(char *m, char *p, float *pos, char *v);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 rand(void);
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float scale, float *v10, float *v11, float *v12);
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00257470(void *, int, int);
@@ -1380,7 +1375,6 @@ extern void collect_mobies_around_tracked_objects(char **slots, int a, int b) __
 void handle_level02_bot_damage_and_retargeting(void *owner_moby) __asm__("FUN_L02_002d85b8");
 
 extern void handle_level02_bot_damage_and_retargeting(void *) __asm__("FUN_L02_002d85b8");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
 void update_level02_bot(struct Moby *moby) __asm__("FUN_L02_002d7748");
 void update_level02_bot(struct Moby *moby) {
@@ -2281,7 +2275,6 @@ void sand_shark_nest_update(unsigned char *moby) {
 
 
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void handle_sand_shark_nest_damage(struct Moby *moby) {
     char *nest_vars = (char *)moby->pvars;
@@ -2491,7 +2484,6 @@ extern int *D_L02_001B0AB0_dc88[] __asm__("D_L02_001B0AB0");
 extern unsigned int D_00141BAC NOT_SDA;
 extern float FUN_00213f38(float *, float *, float, float, float, float);
 extern void sample_camera_path(void *, int, void *, void *, int, float) __asm__("FUN_00214e58");
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void request_hero_target_pose(void *, int, float) __asm__("FUN_L00_00233ee8");
@@ -3019,7 +3011,6 @@ void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L0
 
 extern void play_rocket_launcher_delayed_shot_sounds(struct Moby *moby) __asm__("FUN_L02_002df730");
 extern char *spawn_projectile_moby(char *src, void *pos, float *dir) __asm__("FUN_L02_002ec228");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern f32 turret_approach_angle(f32 *angle, f32 target, f32 *vel, f32, f32, f32) __asm__("FUN_L00_0025be00");
 extern void turret_spawn_debris(struct Moby *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32,

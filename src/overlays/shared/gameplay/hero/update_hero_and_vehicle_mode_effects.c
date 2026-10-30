@@ -8,6 +8,7 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_001FFED0), where it is exact; names translated to the US level program. */
 
@@ -212,7 +213,6 @@ extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
 void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
@@ -421,7 +421,6 @@ extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");

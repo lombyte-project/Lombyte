@@ -9,6 +9,8 @@
 #include "rnc/gameplay/camera/follow_cam.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
@@ -90,7 +92,6 @@ extern char *D_L02_001B0AB0[];
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char background_ship_1_missing_path_message[] __asm__("D_L02_001FAD60");
 extern char background_ship_1_empty_path_message[] __asm__("D_L02_001FAD80");
-extern f32 random_angle_radians(void) __asm__("func_00213308");
 #include "rnc/overlay/shared/gameplay/entities/background_ship_1_globals.h"
 #include "rnc/overlay/shared/gameplay/entities/background_ship_1_globals.h"
 extern int debug_print() __asm__("FUN_001e93b0");
@@ -106,7 +107,6 @@ extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, flo
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void spawn_background_ship_1_joint_sparks(char *moby, void *previous_position) __asm__("FUN_L02_002eca30");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void delete_moby(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
@@ -140,12 +140,12 @@ void background_ship_1_update(char *moby) {
         invalid_index = -1;
         if (*(int *)(moby_data + 0x60) == invalid_index) {
             debug_print(background_ship_1_missing_path_message, *(short *)(moby + 0xB2));
-            delete_moby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         if (*(int *)D_L02_001B0AB0[*(int *)(moby_data + 0x60)] == 0) {
             debug_print(background_ship_1_empty_path_message, *(short *)(moby + 0xB2));
-            delete_moby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         first_path_segment_length = fast_vec_dist(D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x20);
@@ -226,7 +226,7 @@ void background_ship_1_update(char *moby) {
         FUN_L00_00263fd8(moby, 0x5F5, (float *)(moby + 0x10), (void *)(moby + 0x40), second_effect_frame_count, 0, frame_time_sq * 12.0f, tv, &D_L02_0015F580, &D_L02_0015F580);
         third_effect_frame_count = scale_game_frames(90);
         FUN_L00_00263fd8(moby, 0x790, (float *)(moby + 0x10), (void *)(moby + 0x40), third_effect_frame_count, 0, frame_time_sq * 12.0f, tv, &D_L02_0015F580, &D_L02_0015F580);
-        delete_moby(moby);
+        mark_moby_for_removal(moby);
         break;
     default:
         break;
@@ -254,7 +254,6 @@ void background_ship_1_update(char *moby) {
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern short background_ship_1_first_spark_position_delta_scale_gp __asm__("D_L02_00161F84") __attribute__((sda));
 extern short background_ship_1_second_spark_position_delta_scale_gp __asm__("D_L02_00161F88") __attribute__((sda));
 extern short background_ship_1_spark_random_offset_radius_scale_gp __asm__("D_L02_00161F8C") __attribute__((sda));
@@ -389,12 +388,12 @@ void background_ship_2_update(char *moby) {
         invalid_index = -1;
         if (*(int *)(moby_data + 0x60) == invalid_index) {
             debug_print(background_ship_2_missing_path_message, *(short *)(moby + 0xB2));
-            delete_moby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         if (*(int *)D_L02_001B0AB0[*(int *)(moby_data + 0x60)] == 0) {
             debug_print(background_ship_2_empty_path_message, *(short *)(moby + 0xB2));
-            delete_moby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         first_path_segment_length = fast_vec_dist(D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x10, D_L02_001B0AB0[*(int *)(moby_data + 0x60)] + 0x20);
@@ -411,7 +410,7 @@ void background_ship_2_update(char *moby) {
     }
     case BACKGROUND_SHIP_2_FOLLOW_PATH:
         if (*(unsigned char *)D_001413F4 == 1 && current_level_index == 10) {
-            delete_moby(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         qcopy(tv, moby + 0x10);
@@ -486,7 +485,7 @@ void background_ship_2_update(char *moby) {
         FUN_L00_00263fd8(moby, 0x5F8, (float *)(moby + 0x10), (void *)(moby + 0x40), second_effect_frame_count, 0, frame_time_sq * 12.0f, tv, &D_L02_0015F580, &D_L02_0015F580);
         third_effect_frame_count = scale_game_frames(90);
         FUN_L00_00263fd8(moby, 0x5F9, (float *)(moby + 0x10), (void *)(moby + 0x40), third_effect_frame_count, 0, frame_time_sq * 12.0f, tv, &D_L02_0015F580, &D_L02_0015F580);
-        delete_moby(moby);
+        mark_moby_for_removal(moby);
         return;
     default:
         break;
@@ -613,7 +612,6 @@ void spawn_background_ship_2_level_10_joint_sparks(char *moby, void *previous_po
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void white_flower_update(char *m) __asm__("FUN_L02_002f1f60");
 void white_flower_update(char *moby) {

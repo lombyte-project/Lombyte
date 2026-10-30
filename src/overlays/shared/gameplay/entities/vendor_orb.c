@@ -9,8 +9,9 @@
 
 #include "rnc/overlay/shared/gameplay/entities/vendor_orb_globals.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
-float random_angle_radians(void) __asm__("FUN_00213308");
 void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_001fff28(char *, int, float);
@@ -384,7 +385,6 @@ typedef struct {
 extern float D_0015ED6C_2e01b0 __asm__("D_0015ED6C");
 int FUN_001f9740_2e01b0(void *) __asm__("FUN_001f9740");
 void moby_point_position(char *, int, void *) __asm__("FUN_L00_0024f7c8");
-float random_float_between(float, float) __asm__("FUN_002132a8");
 void fast_vec_normalize(V_2e01b0 *, void *, float) __asm__("FUN_001f9bf8");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void spawn_debris_chunk(V_2e01b0 *, V_2e01b0 *, int, int) __asm__("FUN_L00_0026f548");
@@ -495,7 +495,6 @@ extern u8 item_available[] __asm__("D_0013D4C0");
 extern f32 FUN_001fa580_2e03a0(f32, f32) __asm__("FUN_001fa580");
 extern void initialize_moby_particle_effect(void *) __asm__("FUN_L00_002d6bf0");
 extern void debug_print() __asm__("FUN_001e93b0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
@@ -816,9 +815,7 @@ extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
@@ -860,8 +857,6 @@ extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_001F9BD8_2E3700(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9850_2E3700(int) __asm__("FUN_001f96f8");
@@ -1232,7 +1227,6 @@ void FUN_001f9a28_e3388(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_e3388(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9ad8_e3388(void *, void *, void *) __asm__("FUN_001f9ad8");
 s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 void FUN_001f9a68_e3388(void *, void *, f32) __asm__("FUN_001f9a68");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
@@ -1334,11 +1328,9 @@ typedef struct {
 } D_2e3a88;
 extern int *toad_paths[] __asm__("D_L00_001B04B0") NOT_SDA;
 extern float D_0015ED6C_2e3a88 __asm__("D_0015ED6C");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
-int random_integer_below(int) __asm__("FUN_00213260");
 void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float pterodactyl_path_speed_gp __asm__("D_L00_00161C98") __attribute__((sda));
 extern float pterodactyl_scale_multiplier_gp __asm__("D_L00_00161C9C") __attribute__((sda));
@@ -1415,7 +1407,6 @@ extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void spawn_explosion(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("func_001FA328");
 extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 extern int func_001F9908_r(int *) __asm__("FUN_001f9740");

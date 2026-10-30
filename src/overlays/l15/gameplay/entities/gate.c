@@ -8,6 +8,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 
 
@@ -522,12 +524,8 @@ extern u8 D_0013DD50;
 extern void normalize_vector_xyz_7880(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_7880(float, void *, void *) __asm__("FUN_001f9a68");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002371e0_7880(float, int, int) __asm__("FUN_L15_00249ce8");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void FUN_L00_00257470_7880(void *, int, long long) __asm__("FUN_L00_00257470");
 extern void FUN_L00_0025e450_7880(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void *spawn_debris_chunk(void *, void *, int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
@@ -1267,7 +1265,6 @@ extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 extern void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
 /* Helicopter (moby class 233): waits, flies its path, hovers near and fires at its target, tilts and bobs,

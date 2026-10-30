@@ -7,6 +7,8 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef struct {
     u8 pad0[0x5C];
@@ -238,7 +240,6 @@ extern f32 explosive_moby_horizontal_damping_threshold_gp __asm__("D_L01_0016206
 extern BlobHitInfo collision_hit __asm__("D_L01_001742C0");
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32,
@@ -246,8 +247,6 @@ extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f3
 extern void spawn_burst(void *, void *, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026cbb0");
 extern int FUN_L00_00257b90(int lo, int hi);
 extern u8 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void update_explosive_moby(struct Moby *moby) __asm__("FUN_L01_0030ba18");
 
@@ -351,7 +350,6 @@ typedef struct {
     DebrisVars *vars;
 } DebrisMoby;
 
-extern DebrisMoby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 extern void update_entity(DebrisMoby *) __asm__("FUN_L00_00250df8");
 extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 
@@ -417,7 +415,6 @@ extern CutsceneFx fx_cutscene __asm__("D_L01_0016CCE0");
 extern u128 fx_prev_pos __asm__("D_L01_00162070") MACRO_ADDR;
 extern void cutscene_set_camera_target(struct Moby *) __asm__("FUN_L00_002637f8");
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern char *spawn_splash(f32, f32, void *, void *, void *) __asm__("FUN_L00_002718d0");
 extern char *spawn_burst_moby(void *, f32) __asm__("FUN_L00_002d7e90");

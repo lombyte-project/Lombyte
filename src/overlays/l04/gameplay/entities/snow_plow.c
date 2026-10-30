@@ -13,6 +13,8 @@
 
 
 #include "qcopy.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* UpdateMoby_584 */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002D4960), where it is exact; names translated to the US level program. */
@@ -461,12 +463,9 @@ hit:
  * its three rings. */
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_002CB800.c: func_L04_002CF180), where it is exact; names translated to the US level program. */
 
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int D_L04_0015FFD8; /* no foreign declaration */
 extern short floating_platform_ring_rotation_rate_degrees __asm__("D_L04_0016195C") __attribute__((sda));
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 
 void floating_platform_update(char *moby) __asm__("FUN_L04_002cdda0");
@@ -723,14 +722,11 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float spring_turn(float, float, void *, float, float, float) __asm__("FUN_L00_00258110");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int leg_walker_update(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void *memset(void *, int, unsigned int);
 extern void coll_line_fix(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");

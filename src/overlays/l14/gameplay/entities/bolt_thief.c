@@ -12,6 +12,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Spawns the effect pieces for a moby: two sparks, the ring of three and a final coloured one. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF358), where it is exact; names translated to the US level program. */
@@ -52,11 +54,9 @@ extern float bolt_thief_puff_up_offset_gp __asm__("D_L14_00161F98") __attribute_
 extern float bolt_thief_puff_middle_right_offset_delta_gp __asm__("D_L14_00161F9C") __attribute__((sda));
 extern float bolt_thief_puff_final_right_offset_gp __asm__("D_L14_00161FA0") __attribute__((sda));
 int D_L14_00161FA4 = 0x7f204080;
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
 extern Part *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 
 void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) __asm__("FUN_L14_002fded0");
@@ -140,7 +140,6 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF6C0), where it is exact; names translated to the US level program. */
 
 extern char *D_L14_0015FFD8;
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void mark_moby_and_linked_moby_for_removal(char *moby) __asm__("FUN_L14_002fe238");
 
@@ -525,7 +524,6 @@ typedef struct {
 } L14Player;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 typedef struct {

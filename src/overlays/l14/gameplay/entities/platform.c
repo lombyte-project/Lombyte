@@ -13,6 +13,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Finds the path segments nearest to the two target points and sums the segment lengths between them. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
@@ -492,8 +494,6 @@ void draw_racer_glow_quads(struct Moby *m) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D87A0), where it is exact; names translated to the US level program. */
 
 extern float D_L14_0015F580[] MACRO_ADDR;
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 #include "rnc/overlay/l14/gameplay/entities/platform_globals.h"
 extern float joint_light_position_w_gp __asm__("D_L14_00161A60") __attribute__((sda));
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
@@ -697,7 +697,6 @@ extern void initialize_ribbon_effect_state(char *) __asm__("FUN_L14_002df080");
 extern void animate_ribbon_effect_paths(char *) __asm__("FUN_L14_002df138");
 extern void register_hero_hit_in_clip_volume(char *) __asm__("FUN_L14_002dfc58");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_ribbon_effect_moby(struct Moby *moby) __asm__("FUN_L14_002dee28");
 

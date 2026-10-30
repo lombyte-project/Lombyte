@@ -9,6 +9,7 @@
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
 
 void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 void do_sky_gif_paging(void) __asm__("FUN_0022b558");
@@ -161,8 +162,6 @@ typedef union {
 } VeldinVec;
 
 void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 extern void glow_quads_draw() __asm__("FUN_L00_0023db30");
 extern void FUN_L00_002935b8();

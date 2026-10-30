@@ -9,6 +9,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef struct {
     float position[3];
@@ -43,8 +45,6 @@ extern float D_L12_0016120C;
 extern float D_L12_00161210;
 extern float D_L12_00161214;
 extern int D_L12_00161208;
-extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void pool_splash(float, float, float, float, void *, int, int) __asm__("FUN_L00_002a3ec8");
 extern int FUN_L01_00275690_c(float, void *) __asm__("FUN_L01_00275690");
@@ -335,7 +335,6 @@ void select_hoven_anklebiter_pursuit_animation(struct Moby *moby) {
 
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 extern float spark_scatter_vertical_z_range_start_gp __asm__("D_L12_00161888") __attribute__((sda));
 extern float spark_scatter_vertical_z_range_end_gp __asm__("D_L12_0016188C") __attribute__((sda));
@@ -444,7 +443,6 @@ typedef struct {
 extern unsigned char D_0013F3D0_r[] __asm__("D_0013F3D0");
 extern char *D_L12_001B0930[];
 int D_L12_001618E8 = 0xa030303;
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_0015ED64;
 extern float D_0015ED6C;
 extern float D_0015ED70;
@@ -453,7 +451,6 @@ extern float hoven_anklebiter_leap_gravity_gp __asm__("D_L12_001618DC") __attrib
 extern int FUN_L00_00259740(void *, void *, int);
 extern int FUN_L00_002dc9f0();
 extern s32 rand(void);
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void FUN_L00_00257470_c(Level12VendorMoby *, int, int) __asm__("FUN_L00_00257470");
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
@@ -463,7 +460,6 @@ extern void FUN_L00_002628d8_c(char *, char *, int, float, float) __asm__("FUN_L
 extern void FUN_L12_002e3098_u(struct Moby *) __asm__("FUN_L12_002e3098");
 extern void approach_value_alt(void *, float, float) __asm__("FUN_00213ed8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 int FUN_L00_00257b90(int lo, int hi);
@@ -490,7 +486,6 @@ extern void func_L01_0026E8E0_2E2EF0(char *) __asm__("FUN_L01_0026d930");
 extern int random_int_between(int,int) __asm__("FUN_L00_00257b90");
 extern int func_001160D8_2E2EF0(void) __asm__("FUN_001160d8");
 extern float func_00214358_2E2EF0(void *,int,float) __asm__("FUN_00213508");
-extern float random_float_between(float,float) __asm__("FUN_002132a8");
 extern float smooth54(float *,float,float) __asm__("FUN_00213ed8");
 extern void func_L00_002626A8_2E2EF0(char *,char *,float,float) __asm__("FUN_L00_00261630");
 extern int func_L00_0025A208_2E2EF0(int *,int,int,int) __asm__("FUN_L00_002591d0");
@@ -511,7 +506,6 @@ extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern void mark_moby_for_removal_cf(void *,int,int) __asm__("FUN_L00_00257470");
 extern void spawn_type_52_particle_near_moby(char *) __asm__("FUN_L10_002e3de8");
 extern void func_L12_002E43A8_2E2EF0(void *) __asm__("FUN_L12_002e3098");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void func_L00_00263950_2E2EF0(char *,char *,int,float,float) __asm__("FUN_L00_002628d8");
 extern void func_L00_0025B178_2E2EF0(void *) __asm__("FUN_L00_0025a120");
 
@@ -951,7 +945,6 @@ typedef struct {
 } AnklebiterHit;
 
 extern s32 D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern void alert_group_e3528(s32, s32) __asm__("FUN_L01_0026e090");
 extern void call_for_help_e3528(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
@@ -1197,7 +1190,6 @@ typedef struct {
     int fFC;
 } Data_2E51E8;
 
-extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int FUN_L08_002025d0(void *, int, int, void *, int);
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
@@ -1506,7 +1498,6 @@ extern float vector_length_xy(void *);
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_x(void *) __asm__("FUN_L00_00250df8");
 extern void update_moby_bone_attachment(void *, void *, int) __asm__("FUN_L12_0027b9c0");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
@@ -1705,7 +1696,6 @@ extern void steer_blarg_trooper_toward_point(struct Moby *, float *, float, floa
 extern s32 D_001413D0_e81e0 __asm__("D_001413D0") NOT_SDA;
 extern void call_for_help_e81e0(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern int random_integer_below(s32) __asm__("FUN_00213260");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_00257470(struct Moby *, int, int);

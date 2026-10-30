@@ -7,6 +7,7 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/math/random.h"
 
 extern u8 camera_view[] __asm__("D_L00_00166E10");
 extern u8 D_0013F3D0_2e9010[] __asm__("D_0013F3D0");
@@ -2140,7 +2141,6 @@ extern u8 g_debug_camera[] __asm__("D_L00_00166DC0") NOT_SDA;
 extern E_2ed950 voice_pool_lui[] __asm__("D_0013E550") NOT_SDA;
 extern T_2ed950 *D_L00_0015F5F4_2ed950 __asm__("D_L00_0015F5F4");
 s32 play_voice(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
-s32 random_integer_below(s32) __asm__("FUN_00213260");
 s32 FUN_001f96f8_2ed950(s32) __asm__("FUN_001f96f8");
 void release_voice_slot(s32) __asm__("FUN_0022d798");
 void update_sound_emitter_playback_by_distance(u8 *sound_emitter) __asm__("FUN_L00_002ed950");
@@ -2191,8 +2191,6 @@ extern u8 voice_pool[] __asm__("D_0013E550");
 extern void sub_2edad8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern s32 play_voice(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) __asm__("FUN_L00_002edad8");
 

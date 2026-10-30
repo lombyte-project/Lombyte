@@ -1,6 +1,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 int initialize_morphoray_private_state() __asm__("FUN_L14_00305a38");
 
 /* Level 14 moby classes: morphoray, button, blarg_heavy_interceptor. */
@@ -56,7 +58,6 @@ void exit_camera_set_state(u8 *target_object) {
     }
 }
 
-extern u8 *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void update_entity(u8 *) __asm__("FUN_L00_00250df8");
 
 /* Allocate 0x574 bytes, copy the two 16-byte records out of the caller, stamp
@@ -114,13 +115,11 @@ extern Rgb_0e00 l14_spark_rolling_fade_source_rgb __asm__("D_L14_001620A8");
 extern char D_L14_0015F580[] MACRO_ADDR;
 extern int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern char *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void update_bouncing_spark(struct Moby *spark_moby) __asm__("FUN_L14_00300e00");
 
@@ -768,7 +767,6 @@ void FUN_L14_003061d8(void *updated_moby) {
     }
 }
 extern char *D_L14_001B0BB0[];
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 
 void button_update(struct Moby *moby) __asm__("FUN_L14_00306b78");
 void button_update(struct Moby *moby) {

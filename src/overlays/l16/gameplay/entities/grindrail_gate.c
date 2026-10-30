@@ -15,6 +15,8 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/watch.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Activate the watcher and steer its body and head toward the player. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
@@ -73,7 +75,6 @@ float D_L16_001D96C0[8] = {300.73f, 206.04f, 123.22f, 0.0f, 0.0f, 0.11f, 0.0f, 0
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
@@ -349,7 +350,6 @@ extern void initialize_moby_path_state(void *) __asm__("FUN_L14_002fe900");
 extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
 extern void emit_moby_offset_particles(void *) __asm__("FUN_L14_002feca8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 extern void func_L00_002592B0_path54(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
@@ -958,7 +958,6 @@ typedef struct {
     unsigned char active;
 } Level16VendorTurnMoby;
 
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 float D_L16_00161DF0[4] __attribute__((section(".sdata"))) = {0.0f, -1.0f, 1.0f, 0.0f};
 void FUN_L16_002e56e0_c(Level16VendorTurnMoby *moby) __asm__("FUN_L16_002e56e0");
 extern void func_L16_002E6B48_6908(void *) __asm__("FUN_L16_002e56e0");
@@ -1064,7 +1063,6 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) __asm__("FUN
 void update_chomper_hit_reaction_and_target(void *arg) __asm__("FUN_L16_002e6208");
 s32 is_value_within_interpolated_window(struct InterpolatedStateEntry *arg0, f32 fparg0) __asm__("FUN_00214cc8");
 void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
-void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 short D_L16_00161E48 = 0;
 void chomper_update(struct Moby *m) __asm__("FUN_L16_002e5e08");
@@ -1087,7 +1085,7 @@ void chomper_update(struct Moby *chomper_moby) {
     switch (chomper_moby->state) {
     case CHOMPER_INITIALIZE:
         if (*(int *)(chomper_data + 0x1F0) == -1) {
-            mark_moby_for_removal_u(chomper_moby);
+            mark_moby_for_removal(chomper_moby);
             return;
         }
         *(unsigned short *)(chomper_data + 0x24) = 1;
@@ -1154,7 +1152,7 @@ void chomper_update(struct Moby *chomper_moby) {
         if (mine_fall(chomper_moby, chomper_data + 0x120) & 0x140) {
             cart_burst(chomper_moby, &chomper_moby->pos, 6, 0.5f, 13.0f);
             FUN_L00_00257470(chomper_moby, 0, -1);
-            mark_moby_for_removal_u(chomper_moby);
+            mark_moby_for_removal(chomper_moby);
         }
         break;
     }
@@ -1725,7 +1723,6 @@ typedef struct {
     short sound;
 } L16WalkerData_c;
 
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float path_walker_gap_range_start_gp __asm__("D_L16_00161E68") __attribute__((sda));
 extern float path_walker_gap_range_end_gp __asm__("D_L16_00161E6C") __attribute__((sda));
@@ -1905,7 +1902,6 @@ typedef struct {
 
 extern char *D_L16_0015FFD8;
 extern float path_walker_initial_scale_multiplier __asm__("D_L16_00161E94") __attribute__((sda)); /* no foreign declaration */
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern short *D_L16_001ABCC0[];
 
 void initialize_path_walker_group(struct Moby *moby) {

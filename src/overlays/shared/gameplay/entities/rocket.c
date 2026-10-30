@@ -5,6 +5,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef struct {
     float pad0[4];
@@ -55,7 +56,6 @@ void emit_moby_sprite_particles(char *moby) {
 }
 #include "sda.h"
 #include "qcopy.h"
-extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 extern int func_001F9850_cc1b8(int) __asm__("FUN_001f96f8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) __asm__("FUN_L10_002cc1b8");
@@ -124,7 +124,6 @@ extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68")
 extern void spawn_nearby_effect(float, int, void *, int, void *, void *) __asm__("FUN_L00_00259bc8");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void rocket_update(char *m) __asm__("FUN_L10_002cc2e8");
 void rocket_update(char *rocket) {

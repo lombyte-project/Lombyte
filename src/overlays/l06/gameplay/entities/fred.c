@@ -11,6 +11,8 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Shuttle route selection; independent of Moby.state. */
 enum ShuttleRoute {
@@ -5837,10 +5839,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
 }
 
 #include "qcopy.h"
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void update_entity(char *) __asm__("FUN_L00_00250df8");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern unsigned char *spawn_spinning_moby_fragment(char *, float *, float *) __asm__("FUN_L06_00300c60");
 
 extern float moby_breakup_z_offset_gp __asm__("D_L06_0016204C") __attribute__((sda));
@@ -6001,7 +6000,6 @@ void effect_quad_draw_single(void) {
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00302248), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern float moby_bobbing_amplitude_gp __asm__("D_L06_00162090") __attribute__((sda));
 extern int GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
@@ -6062,7 +6060,6 @@ void begin_moby_linear_and_angular_motion(char *moby, void *linear_velocity, voi
 }
 #include "rnc/gameplay/entities/moby.h"
 extern char *D_L06_0015FFD8_301070 __asm__("D_L06_0015FFD8");
-extern void mark_moby_for_removal_301070(void *) __asm__("FUN_0020c828");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 typedef float Vec_301070[4] __attribute__((aligned(16)));
 typedef int u128q_301070 __attribute__((mode(TI)));
@@ -6300,7 +6297,7 @@ void fred_update(struct Moby *moby) {
         if (hero.state.control_mode == 15) {
             set_moby_and_links_to_states_4_and_5(D_L06_0015FFD8_301070 + (fred_vars->f164 << 8));
         del:
-            mark_moby_for_removal_301070(moby);
+            mark_moby_for_removal(moby);
             return;
         }
         break;
@@ -6692,7 +6689,6 @@ extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L0
 extern int memcard_Save_302578(int, long) __asm__("FUN_0020b178");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void allocate_voice_302578(int, int, void *) __asm__("FUN_0022da68");
-extern void delete_moby_302578(void *) __asm__("FUN_0020c828");
 extern int D_L06_0015FDF8;
 #include "rnc/overlay/l06/gameplay/entities/fred_data/shuttle_update_2.h"
 extern float D_L06_001620F8 __attribute__((sda));
@@ -6904,7 +6900,7 @@ void shuttle_update(struct Moby *moby) {
             set_race_camera(b, rot, 0x72, 1);
             play_sound_302578(0, 10);
             start_scene(12);
-            delete_moby_302578(linked_moby);
+            mark_moby_for_removal(linked_moby);
             unlock_planet(5);
             moby->state = 8;
             jet_clear_persistent(shuttle_vars->fF8);
@@ -7149,7 +7145,6 @@ extern int D_L06_00162150 __attribute__((sda));
 extern int D_L06_00162154 __attribute__((sda));
 extern int D_L06_00162158 __attribute__((sda));
 extern float frame_time __asm__("D_0015ED6C");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -7298,14 +7293,13 @@ void break_apart_shuttle_linked_mobys(struct Moby *moby) {
 
 extern char *D_L06_0015FFD8_u __asm__("D_L06_0015FFD8");
 extern short *D_L06_001ABFC0_c[] __asm__("D_L06_001ABFC0");
-void mark_moby_for_removal_c(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* Marks every moby in the moby's list for removal; the list ends after its first negative entry. */
 void mark_shuttle_linked_mobys_for_removal(char *moby) {
     char *data = *(char **)(moby + 0x78);
     short *moby_list_entry = D_L06_001ABFC0_c[*(int *)(data + 0xCC)];
     do {
-        mark_moby_for_removal_c(D_L06_0015FFD8_u + ((*moby_list_entry & 0x7FFF) << 8));
+        mark_moby_for_removal(D_L06_0015FFD8_u + ((*moby_list_entry & 0x7FFF) << 8));
     } while (*moby_list_entry++ >= 0);
 }
 #include "rnc/gameplay/entities/moby.h"
@@ -7531,7 +7525,6 @@ typedef struct { int v[6]; } V6;
 
 V6 D_L06_002019A0 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
 extern V6 l06_red_button_particle_second_color_palette __asm__("D_L06_002019B8");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 
 extern float D_L06_001621B4 __attribute__((sda));
 extern int red_button_particle_emission_count_gp __asm__("D_L06_001621B8") __attribute__((sda));

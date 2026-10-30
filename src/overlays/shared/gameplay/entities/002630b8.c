@@ -10,6 +10,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Record suck_get_aim_height returns for a moby: collision size and aim height. */
 typedef struct MobyBound {
@@ -219,7 +221,6 @@ typedef struct {
     EffectTail tail;
 } Effect;
 extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern Effect *spawn_puff(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
 extern u8 D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
@@ -328,7 +329,6 @@ typedef struct {
     unsigned char padC[0x14];
     T_263b70 tail;
 } P_263b70;
-int random_integer_below(int) __asm__("FUN_00213260");
 P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float,
                                   int) __asm__("FUN_L00_0026d000");
 void draw_trail(void *first_spawn_position, void *second_spawn_position, void *particle_velocity, float first_spawn_particle_value, float second_spawn_particle_value) __asm__("FUN_L00_00263b70");
@@ -393,7 +393,6 @@ extern unsigned char D_L00_0015F580_263e30[] __asm__("D_L00_0015F580")
 void FUN_L00_00263fd8_263e30(void *, int, void *, void *, int, int, void *, void *, float,
                              void *) __asm__("FUN_L00_00263fd8");
 int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
-float random_angle_radians(void) __asm__("FUN_00213308");
 void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) __asm__("FUN_L00_00263e30");
 
 void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) {
@@ -471,11 +470,8 @@ typedef struct {
 
 extern float frame_time_gp[] __asm__("D_0015ED6C") __attribute__((sda));
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-extern struct Moby *create_moby(int) __asm__("FUN_0020c4f8");
 
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);

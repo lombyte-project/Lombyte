@@ -7,6 +7,7 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Runs the two per-entry update calls over a 13-entry table. */
 
@@ -86,7 +87,6 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_moby_hit_removal_state(struct Moby *moby) __asm__("FUN_L08_0030bc00");
 

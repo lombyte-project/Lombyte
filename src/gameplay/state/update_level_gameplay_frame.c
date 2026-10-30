@@ -3,6 +3,7 @@
 #include "eetypes.h"
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef union {
     u128 quadword;
@@ -149,7 +150,6 @@ extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void scale_vector(void *, void *, f32) __asm__("func_001F9A68");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
-extern void mark_moby_for_removal(LevelRenderObject *) __asm__("func_0020C828");
 extern void update_moby_animation_state(LevelRenderObject *) __asm__("func_0020C880");
 extern void build_moby_bone_transform(LevelRenderObject *, s32, void *) __asm__("func_0020CCA8");
 extern void refresh_moby_spatial_bounds(LevelRenderObject *) __asm__("func_0020DEF8");

@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/math/random.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -42,7 +43,6 @@ extern Cam D_001E65E0;
 extern void attach_manipulator(Moby *, s32, Cam *) __asm__("FUN_0020cb10");
 extern void detach_manipulator(Moby *, Cam *) __asm__("FUN_0020cb88");
 extern void blend_moby_animation(Moby *, s32, s32, s32) __asm__("FUN_00212f90");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 is_value_within_interpolated_window(Moby *, f32) __asm__("FUN_00214cc8");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 

@@ -15,6 +15,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {
@@ -70,7 +72,6 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_
 
 extern void update_skid_mcmarx_relocation_sequence(struct Moby *) __asm__("FUN_L02_002e1fb8");
 extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern void initialize_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
 extern s32 update_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
@@ -80,9 +81,7 @@ extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern f32 probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
@@ -95,7 +94,6 @@ extern f32 D_L02_0015F3FC;
 extern f32 skids_agent_prop_local_offset[2] __asm__("D_L02_00161CE0") __attribute__((sda)); /* prop offset vector; declared small so it is reached through $gp as in retail */
 extern struct UsageStat D_00141968[] NOT_SDA; /* usage records 36 on (usage_stats + 0x120) */
 extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA; /* by item id */
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void start_indexed_disc_stream(int) __asm__("FUN_L02_00298c68");
 extern void advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");

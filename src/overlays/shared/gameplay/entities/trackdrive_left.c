@@ -8,6 +8,8 @@
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 extern u8 scaled_table_output[] __asm__("D_L02_001CB9C0");
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
@@ -1070,7 +1072,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int D_L02_0015F5CC; /* no foreign declaration */
 extern int D_L02_0015FFD8; /* no foreign declaration */
 extern int approach_angle() __asm__("FUN_L00_0025be00");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern float versatarget_particle_base_lifetime_gp __asm__("D_L02_00161CB0") __attribute__((sda));
 extern int versatarget_particle_color_gp __asm__("D_L02_00161CB4") __attribute__((sda));
 extern float versatarget_particle_scale_gp __asm__("D_L02_00161CB8") __attribute__((sda));
@@ -1202,7 +1203,6 @@ extern void FUN_L00_002ea9d8_c(void *) __asm__("FUN_L00_002ea9d8");
 extern void FUN_L00_002eaa30_c(void *) __asm__("FUN_L00_002eaa30");
 extern float approach_value(float, float, void *) __asm__("FUN_00213ed8");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;
 extern unsigned char D_001413F4 NOT_SDA;
 extern int D_L02_0015F640 __attribute__((sda));
@@ -1326,7 +1326,6 @@ void tresspasser_update(struct Moby *moby) {
 /* Initialises a moby's data block: four random floats, fixed constants, four random ints. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002EBC08), where it is exact; names translated to the US level program. */
 
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void initialize_collectible_sprite_state(char *moby) __asm__("FUN_L02_002ea7d0");
 

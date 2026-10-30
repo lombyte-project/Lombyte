@@ -6,12 +6,12 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int sample_path(int *, float *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
 extern void spawn_on_path(float *, int, int, int) __asm__("FUN_L00_002c52a8");
 extern int fptodp(float) __asm__("FUN_00120478");
@@ -146,9 +146,7 @@ typedef struct {
 } L07SparkState;
 
 extern char D_L07_0016C8E0[];
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi,

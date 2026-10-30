@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/math/random.h"
 
 struct MenuFlashingPanel {
     u8 pad0[0x48];
@@ -19,7 +20,6 @@ struct MenuPanelOwner {
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("func_00200080");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 SubtractIntegerWithClamp(s32);
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,

@@ -12,10 +12,11 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern unsigned char *spawn_mode_controlled_orbiting_trail_particle(float f0, float f1, int a0, void *pos, int timer, int flag,
                                        int col, float *vel) __asm__("FUN_L00_002743a8");
 
@@ -89,15 +90,11 @@ extern char *find_moby_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern struct Moby *spawn_debris_c8e0(f32, struct Moby *, s32, void *, void *, s32, s32, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void spawn_proximity_gated_bolts(struct Moby *) __asm__("FUN_L01_002787a0");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void spawn_trail_c8e0(void *, s32, f32, f32, s32, s32, s32, void *, f32) __asm__("FUN_L00_00272060");
 extern struct Spark_c8e0 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) __asm__("FUN_L05_0031d160");
 
 extern char *spawn_moby_class_5ea_from_source(unsigned char *) __asm__("FUN_L05_0031d160");
@@ -229,7 +226,6 @@ typedef struct {
 } Pk;
 
 extern float glow_sprite_local_vertices[4][4] __asm__("D_L05_00215C70");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void draw_geometry_quad(void *, void *, int);
 u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 
@@ -282,7 +278,6 @@ void draw_moby_glow_sprite(char *m) {
     }
     draw_geometry_quad(&pk, 0, 0);
 }
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_d160(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {

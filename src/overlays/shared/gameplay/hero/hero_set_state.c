@@ -12,6 +12,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 extern s32 D_L00_0015F5CC;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
@@ -108,7 +109,6 @@ extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern s32 FUN_001f9740_2215c8(s32 *) __asm__("FUN_001f9740");
 extern void exit_hero_vehicle_mode(void) __asm__("FUN_L00_00210b30");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
@@ -3701,7 +3701,6 @@ void update_hero_animation_for_movement_speed(void) {
    when set. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00229778), where it is exact; names translated to the US level program. */
 
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* Removes the moby at &hero.unk1614 and clears flags 0x41 on those at 0x1180/0x1184. */
 void remove_hero_cached_moby_and_clear_slot_three_moby_flags(void) __asm__("FUN_L00_00228fa8");

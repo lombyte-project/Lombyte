@@ -18,6 +18,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/help_0022BE40.c: func_L02_0022BE40), where it is exact; names translated to the US level program. */
 
@@ -1797,7 +1798,6 @@ extern float read_pad_float_history(int) __asm__("FUN_L00_00266e80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern int D_00141660 NOT_SDA;
 int r1_repeat_timer __asm__("D_L02_0015F678") = 0;
 extern int D_L02_0015F6DC_d __asm__("D_L02_0015F6DC");

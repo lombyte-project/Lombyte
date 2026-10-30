@@ -9,6 +9,7 @@
 #include "qcopy.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/math/random.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302A58), where it is exact; names translated to the US level program. */
 
@@ -134,8 +135,6 @@ void update_vendor_beam(unsigned char *moby) {
     }
 }
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern int spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int vendor_beam_min_pulse_duration_frames_gp __asm__("D_L14_001620BC") __attribute__((sda));

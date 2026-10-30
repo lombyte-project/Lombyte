@@ -9,6 +9,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/debug/debug_menu.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* per-frame level ambience (wind/sway) state machine: picks a random target, then eases toward it */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A5B20), where it is exact; names translated to the US level program. */
@@ -28,7 +30,6 @@ struct Amb {
 
 extern float D_0015ED6C;
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern struct Amb D_L00_001CB7C0;
 
 void update_ambience_target_cycle(void) __asm__("FUN_L00_002a4890");
@@ -199,7 +200,6 @@ int fetch_and_add_global_accumulator(int addend) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 /* Creates a class 0x3EF moby at v and runs update_entity on it. */
 unsigned char *create_camera_collision_moby(u128 *spawn_position) __asm__("FUN_L00_002a4de0");
@@ -522,7 +522,6 @@ typedef struct {
 extern V_2a57a8 hero_pos __asm__("D_0013F3D0") NOT_SDA;
 extern s32 D_0013CAE4_lui __asm__("D_0013CAE4") NOT_SDA;
 extern s32 D_L00_0015F5CC_2a57a8 __asm__("D_L00_0015F5CC");
-M_2a57a8 *FUN_0020c4f8_2a57a8(s32) __asm__("FUN_0020c4f8");
 void attach_manipulator(M_2a57a8 *, s32, void *) __asm__("FUN_0020cb10");
 void blend_moby_animation_u(P_2a57a8 *, s32, s32, s32) __asm__("FUN_00212f90");
 void FUN_L00_002a5040_2a57a8(void) __asm__("FUN_L00_002a5040");
@@ -556,7 +555,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         vendor_moby->b20 = 1;
         q->i0 = 0;
         q->i4 = 0;
-        q->mC = FUN_0020c4f8_2a57a8(0x477);
+        q->mC = create_moby(0x477);
         q->mC->h34 |= 2;
         q->mC->h32 = 0x40;
         q->mC->f10 = vendor_moby->f10;
@@ -1039,8 +1038,6 @@ extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_
 extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");          /* draw */
 extern void queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 /* spawns a sparkle particle */
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
                             void *vel, f32 f2);
@@ -1281,7 +1278,6 @@ typedef struct {
 } BoltVars_u;
 
 extern void *D_001413D0 NOT_SDA;
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");       /* sets the moby colour */
 extern void FUN_L00_001ff500(void *, void *, float);
@@ -1583,8 +1579,6 @@ int should_trigger_wrench_hit_reaction(void) {
         return 1;
     return 0;
 }
-extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void emit_2a7e20(float *, int, int, int, int, void *, float, float,
@@ -2249,7 +2243,6 @@ void set_tracked_class_5f3_moby_position(void *unused_creation_arg, OvlQuad *pos
 
 extern short D_L00_001613C8_d __asm__("D_L00_001613C8") __attribute__((sda));
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 
@@ -2376,7 +2369,6 @@ void draw_mine_predicted_impact_marker(M_2a9c50 *moby) {
 }
 extern float D_0015ED6C_2a9ed0 __asm__("D_0015ED6C");
 extern int D_L00_0015F5CC_2a9ed0 __asm__("D_L00_0015F5CC");
-float FUN_002132a8_2a9ed0(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2a9ed0(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
@@ -2395,13 +2387,13 @@ unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
         clear_u64_value(mine_vars);
         {
             float a =
-                FUN_002132a8_2a9ed0(D_0015ED6C_2a9ed0 * 1.0471976f, D_0015ED6C_2a9ed0 * 3.1415927f);
+                random_float_between(D_0015ED6C_2a9ed0 * 1.0471976f, D_0015ED6C_2a9ed0 * 3.1415927f);
             float frame_rate_scale = D_0015ED6C_2a9ed0;
             float frame_scaled_random_sample;
             int x;
             float z;
             *(float *)(mine_vars + 0x38) = a;
-            frame_scaled_random_sample = FUN_002132a8_2a9ed0(frame_rate_scale * 1.0471976f, frame_rate_scale * 3.1415927f);
+            frame_scaled_random_sample = random_float_between(frame_rate_scale * 1.0471976f, frame_rate_scale * 3.1415927f);
             x = D_L00_0015F5CC_2a9ed0;
             z = 0.0f;
             *(float *)(mine_vars + 0x3C) = frame_scaled_random_sample;
@@ -2449,7 +2441,6 @@ typedef struct {
 extern f32 D_0015ED6C_2aa008 __asm__("D_0015ED6C");
 extern N_2aa008 *D_L00_0015FFE4_2aa008 __asm__("D_L00_0015FFE4");
 extern V_2aa008 D_L00_00173E60_2aa008[] __asm__("D_L00_00173E60") NOT_SDA;
-f32 FUN_002132a8_2aa008(f32, f32) __asm__("FUN_002132a8");
 s32 FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
@@ -2468,14 +2459,14 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *
     V_2aa008 *k;
     vector_scratch.q = 0;
     moby_vars = self->p78;
-    vector_scratch.f[0] = FUN_002132a8_2aa008(-1.0f, 1.0f);
-    vector_scratch.f[1] = FUN_002132a8_2aa008(-1.0f, 1.0f);
-    vector_scratch.f[2] = FUN_002132a8_2aa008(-1.0f, 1.0f);
+    vector_scratch.f[0] = random_float_between(-1.0f, 1.0f);
+    vector_scratch.f[1] = random_float_between(-1.0f, 1.0f);
+    vector_scratch.f[2] = random_float_between(-1.0f, 1.0f);
     self->b20 = 1;
     self->f2C = self->f2C / 0.65f;
     random_offset.q = vector_scratch.q;
     fast_vec_normalize(&random_offset, &random_offset,
-                        FUN_002132a8_2aa008(D_0015ED6C_2aa008 * 0.01f, D_0015ED6C_2aa008 * 0.1f));
+                        random_float_between(D_0015ED6C_2aa008 * 0.01f, D_0015ED6C_2aa008 * 0.1f));
     fast_vec_add(moby_vars, &random_offset, base_motion_vector);
     P = &hero;
     if (P->ground_moby && FUN_L00_002603d0_2aa008(P->ground_moby)) {

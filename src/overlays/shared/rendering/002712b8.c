@@ -12,8 +12,8 @@
 #include "sda.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B2130 NOT_SDA;
 unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
@@ -99,10 +99,7 @@ void update_moving_rotating_resizing_alpha_fade_particle(unsigned char *particle
     }
 }
 #include "qcopy.h"
-int random_integer_below(int) __asm__("FUN_00213260");
 int rand(void) __asm__("FUN_001160d8");
-float random_angle_radians(void) __asm__("FUN_00213308");
-float random_float_between(float, float) __asm__("FUN_002132a8");
 extern unsigned char *D_L00_001B2134 NOT_SDA;
 unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *initial_position, int x, int color, float size, float size_increment) __asm__("FUN_L00_002715e8");
 
@@ -166,7 +163,6 @@ void update_moving_resizing_height_snapped_alpha_fade_particle(unsigned char *pa
 #include "eetypes.h"
 #include "qcopy.h"
 extern unsigned char *D_L00_001B2138 NOT_SDA;
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 unsigned char *spawn_splash(u128 *pos, u128 *dir, int w, float scale, float speed) __asm__("FUN_L00_002718d0");
 unsigned char *spawn_splash(u128 *initial_position, u128 *initial_velocity, int surface_height_reference, float scale, float speed) {
     unsigned char *particle;
@@ -560,7 +556,6 @@ typedef struct {
     f32 unk2C;
     Q_2726d8 q;
 } P_2726d8;
-f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 void update_moby_point_attached_particle(P_2726d8 *particle) __asm__("FUN_L00_002726d8");
 
 void update_moby_point_attached_particle(P_2726d8 *particle) {
@@ -980,7 +975,6 @@ void update_moby_point_attached_alpha_pulse_particle(P_273448 *particle) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00272158.c: func_L00_002745A8), where it is exact; names translated to the US level program. */
 
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 extern unsigned char *D_L00_001B2178 NOT_SDA;
 unsigned char *spawn_mode_controlled_alpha_fade_particle(void *position, int alpha_fade_divisor, int particle_mode) __asm__("FUN_L00_00273708");

@@ -6,12 +6,12 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 
 INCLUDE_ASM("config/us/overlays/asm/FUN_L08_00258090.s", FUN_L08_00258090);
 /* Ported from rac1-decomp (src/overlays/shared/partproc_00273A80.c: func_L08_00273A80), where it is exact; names translated to the US level program. */
 
 
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L08_001B2880 NOT_SDA;

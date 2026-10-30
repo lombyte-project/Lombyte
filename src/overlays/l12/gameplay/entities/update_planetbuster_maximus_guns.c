@@ -14,6 +14,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef struct Moby Moby;
 
@@ -46,8 +48,6 @@ typedef struct {
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 extern char D_L12_00167240[];
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float frame_scale_sq_macro __asm__("D_0015ED64")MACRO_ADDR;
 extern float D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float FUN_L00_00257c48(float, float);
@@ -71,7 +71,6 @@ extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
 extern int D_L12_00161F04_gp __asm__("D_L12_00161F04") MACRO_ADDR;
 extern int D_L12_00161F20 __attribute__((sda));
@@ -343,7 +342,6 @@ void update_planetbuster_maximus_guns(char *moby) {
         moby[0xBC] = 0;
     }
 }
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
 
@@ -394,7 +392,6 @@ extern float D_L12_00161F40;
 extern float D_L12_00161F60;
 extern float D_L12_00161F70;
 extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 
 void update_planetbuster_maximus_detached_parts(char *moby) {
     int i;
@@ -840,7 +837,6 @@ void update_homing_mine_spawner_target(struct Moby *spawner) __asm__("FUN_L12_00
 
 extern void update_homing_mine_spawner_target(struct Moby *m) __asm__("FUN_L12_00307ab8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void homing_mine_spawner_update(struct Moby *m) __asm__("FUN_L12_00307840");
 void homing_mine_spawner_update(struct Moby *spawner) {

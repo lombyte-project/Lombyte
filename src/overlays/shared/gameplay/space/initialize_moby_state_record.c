@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/random.h"
 
 /* Start the moby's camera-follow state: stash it in the global record, point its update at func_L00_0028F458. */
 /* Ported from rac1-decomp (src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */
@@ -328,7 +329,6 @@ typedef struct {
     short h26;
 } G_28efc8;
 long get_effect_texture(int) __asm__("FUN_001f44b8");
-int random_integer_below(int) __asm__("FUN_00213260");
 void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* FUN_L00_0028efc8 is the executable function of the same bytes (src/gameplay). */
 

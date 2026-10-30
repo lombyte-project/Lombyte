@@ -8,6 +8,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef struct {
     s16 timer;
@@ -217,7 +218,6 @@ extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void initialize_collectible_sprite_state(char *) __asm__("FUN_L02_002ea7d0");
 extern void update_collectible_sprite_effect(char *) __asm__("FUN_L02_002ea8b0");
 int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 extern float D_L15_001621A0 __attribute__((sda));
 void codebot_update(struct Moby *moby) __asm__("FUN_L15_002ebd78");

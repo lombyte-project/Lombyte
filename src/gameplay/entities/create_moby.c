@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/state/game_globals.h"
@@ -10,6 +11,7 @@ extern char s_tried_to_create_moby[] __asm__("D_001E83C0");
 extern void DebugPrint(char *, ...);
 extern void fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void init_moby_instance(struct Moby *, s32) __asm__("func_0020C5F0");
+
 struct Moby *create_moby(s32 oclass) __asm__("FUN_0020c4f8");
 
 struct Moby *create_moby(s32 oclass) {

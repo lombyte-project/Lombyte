@@ -11,6 +11,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
 
@@ -405,9 +406,6 @@ extern int D_0015EE28_macro __asm__("D_0015EE28") MACRO_ADDR;
 extern s32 D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
 extern int D_L00_0015F598;
 extern unsigned char D_L00_0015FC88_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void *suck_get_aim_height(void *) __asm__("FUN_002141f8");
 extern void debug_print() __asm__("FUN_001e93b0");
 extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");

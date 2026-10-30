@@ -3,6 +3,7 @@
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
+#include "rnc/math/random.h"
 
 struct Sub {
     s32 a;
@@ -34,7 +35,6 @@ extern u8 *D_001CDF80[];
 extern u8 *default_spark_lookup[] __asm__("D_001CDFDC");
 extern struct Obj *create_part(s32) __asm__("FUN_00217a30");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern void pack_vector_xyz_with_shared_scale(void *, void *) __asm__("func_00214A98");
 extern void load_display_text_resource_entry(void *, void *) __asm__("func_00214BC0");
 

@@ -6,11 +6,11 @@
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
 
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_L00_0025bfe0(float, float, float, float);
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 
@@ -44,7 +44,6 @@ void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocit
 #endif
 extern unsigned char *func_00218928_80970(int) __asm__("FUN_L00_002678b8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L01_001B2538 NOT_SDA;
 char *spawn_type_14_particle(int particle_value, char *position_source) __asm__("FUN_L01_00280970");

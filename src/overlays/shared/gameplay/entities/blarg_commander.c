@@ -5,9 +5,10 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
 
 char *create_class_55b_moby_from_source(char *source_object) __asm__("FUN_L12_00308670");
@@ -29,7 +30,6 @@ char *create_class_55b_moby_from_source(char *source_object) {
     }
     return (char *)allocated_object;
 }
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
@@ -112,7 +112,6 @@ extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
                                   int) __asm__("FUN_L00_0025e450");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void blarg_commander_update(char *m) __asm__("FUN_L12_00308918");
 void blarg_commander_update(char *moby) {

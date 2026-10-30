@@ -15,6 +15,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 
 /* Hero state machine: per-frame transition logic for the current hero state (level 06 build). */
 /* Ported from rac1-decomp (src/overlays/l06_blarg/help_0023BBE8.c: func_L06_0023BBE8), where it is exact; names translated to the US level program. */
@@ -50,7 +51,6 @@ extern float read_pad_float_history(int) __asm__("FUN_L00_00266e80");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern int D_00141660 NOT_SDA;
 extern int D_L06_0016CF00 NOT_SDA;

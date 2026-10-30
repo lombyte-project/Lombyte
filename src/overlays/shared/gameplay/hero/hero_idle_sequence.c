@@ -10,6 +10,8 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00204130), where it is exact; names translated to the US level program. */
 
@@ -259,7 +261,6 @@ void reset_hero_easing_records(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205C18), where it is exact; names translated to the US level program. */
 
 extern int D_L00_0015F5CC;
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void update_hero_random_timer(void) __asm__("FUN_L00_00205600");
 
@@ -636,7 +637,6 @@ extern void FUN_L00_00257024(int);
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_0024f7c8(void *, s32, void *);
 extern void build_moby_bone_transform(void *, s32, void *) __asm__("FUN_0020cca8");
-extern void *create_moby(s32) __asm__("FUN_0020c4f8");
 extern void blend_moby_animation_2062b0(void *, s32, s32, s32) __asm__("FUN_L00_00257880");
 extern int FUN_L00_0028dbe8(void *, s32, void *);
 extern void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
@@ -2216,10 +2216,8 @@ typedef struct {
     short cnt;
 } G_00209540;
 extern G_00209540 D_0013F350_00209540 __asm__("D_0013F350");
-float random_float_between(float, float) __asm__("FUN_002132a8");
 void FUN_L00_002715e8_00209540(float *, V4 *, int, float,
                                float) __asm__("FUN_L00_002715e8");
-int random_integer_below(int) __asm__("FUN_00213260");
 void emit_hero_periodic_surface_effect(int counter_reset_range, int effect_spawn_counter_threshold) __asm__("FUN_L00_00209540");
 
 void emit_hero_periodic_surface_effect(int counter_reset_range, int effect_spawn_counter_threshold) {
@@ -2238,8 +2236,6 @@ void emit_hero_periodic_surface_effect(int counter_reset_range, int effect_spawn
         hero_state->cnt = random_integer_below(counter_reset_range);
     }
 }
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_splash(void *, void *, void *, float,
                                     float) __asm__("FUN_L00_002718d0");
 
@@ -2285,7 +2281,6 @@ void fast_sin_cf(int seed, int limit) {
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V_209848;
-float random_angle_radians(void) __asm__("FUN_00213308");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void spawn_debris_chunk(V_209848 *, V_209848 *, int, int) __asm__("FUN_L00_0026f548");
 void emit_hero_periodic_surface_particles(int counter_reset_range, int effect_spawn_counter_threshold) __asm__("FUN_L00_00209848");
@@ -2368,8 +2363,6 @@ void emit_hero_randomized_motion_effects(int iteration_count, int mode) {
 }
 #include "rnc/math/circle_offset.h"
 
-extern f32 random_float_between(f32 a, f32 b) __asm__("FUN_002132a8");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern s32 FUN_L00_00257b90(s32, s32);
 extern void spawn_burst_moby(Vec4 *, f32) __asm__("FUN_L00_002d7e90");
 extern void spawn_moving_resizing_height_snapped_alpha_fade_particle(Vec4 *, f32 *, s32, f32, f32) __asm__("FUN_L00_002715e8");
@@ -2712,7 +2705,6 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
 /* Re-rolls four random motion parameters and copies each pair into its 0xB0-byte record. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B060), where it is exact; names translated to the US level program. */
 
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float FUN_L00_00257c48(float lo, float hi);
 extern char hero_idle_rotation_timers[] __asm__("D_001403B0");
 

@@ -16,6 +16,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
@@ -82,14 +84,12 @@ extern struct L11HitInfo *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a
 extern s32 trooper_take_damage(void *, void *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void spawn_color_swapped_explosion_burst(void *, void *, s32, f32, f32) __asm__("FUN_L00_0025f3e8");
 extern s32 is_moby_in_state_five(void *) __asm__("FUN_L11_0030a830");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, s32, s32, s32, float) __asm__("FUN_L00_0025c558");
 extern void FUN_L00_00257470(void *, s32, s32);
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_00212f90(void *, s32, s32, s32);
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern s32 FUN_L00_0025ff38(void *, void *, s32, s32, void *, s32, float);
 
@@ -364,7 +364,6 @@ void *moby_park_state_on_find(struct Moby *suction_moby) {
 extern float gate_door_z_offset_gp __asm__("D_L11_00162308") __attribute__((sda));
 extern float gate_door_x_rotation_degrees_gp __asm__("D_L11_0016230C") __attribute__((sda));
 extern float gate_door_y_rotation_degrees_gp __asm__("D_L11_00162310") __attribute__((sda));
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
 extern s32 FUN_00214720(void *, s32);
 extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
@@ -884,7 +883,6 @@ void distribute_group_class_527_mobys_along_path(struct Moby *moby, int table_in
 
 char *spawn_class_5f4_moby_with_random_rotation(void *position, void *vector, void *owner, float scale) __asm__("FUN_L11_0031ada0");
 extern char tide_level_macro[] __asm__("D_L11_00161E18")MACRO_ADDR;
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern char D_L11_0015FFBC[4] __attribute__((sda));
 extern char oil_tanker_link_effect_spawn_random_limit_gp[4] __asm__("D_L11_00162340") __attribute__((sda));
 extern char oil_tanker_link_effect_local_spawn_offset_gp[4] __asm__("D_L11_00162350") __attribute__((sda));
@@ -951,7 +949,6 @@ void update_oil_tanker_link_effects_and_destruction(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_003198F8), where it is exact; names translated to the US level program. */
 
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 
 void start_oil_tanker_link_destruction(struct Moby *link_moby) {
     char *link_vars = (char *)link_moby->pvars;
@@ -1019,7 +1016,6 @@ void energy_sphere_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A180), where it is exact; names translated to the US level program. */
 
 extern int FUN_L11_00318ed8_u() __asm__("FUN_L11_00318ed8");
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 char *spawn_class_511_moby_with_sparks(char *source_moby, void *pos, int ticks) __asm__("FUN_L11_00318d10");
 
@@ -1085,7 +1081,6 @@ void set_moby_state_two_data_and_timer(struct Moby *moby, void *movement_step) {
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031A348), where it is exact; names translated to the US level program. */
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 
 extern short moby_radial_spark_initial_word_gp __asm__("D_L11_0016238C") __attribute__((sda));
 extern short moby_radial_spark_second_word_gp __asm__("D_L11_00162390") __attribute__((sda));
@@ -1201,7 +1196,6 @@ extern float D_L11_001677C0_c[] __asm__("D_L11_001677C0");
 extern float D_L11_001677D0[];
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int level_frame __asm__("D_L11_0015F5CC");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
@@ -1436,7 +1430,6 @@ short count_listed_blarg_ships_in_state_5(int moby_list_index) {
 }
 extern char D_L11_001677C0[];
 extern f32 D_L11_001677D0[];
-extern s32 random_integer_below(s32 limit) __asm__("FUN_00213260");
 
 char *activate_listed_blarg_ship(int list) __asm__("FUN_L11_0031a7d8");
 

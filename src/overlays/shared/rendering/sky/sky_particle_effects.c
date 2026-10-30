@@ -9,9 +9,8 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/sky_shell.h"
 #include "rnc/rendering/sky_particles.h"
+#include "rnc/math/random.h"
 
-s32 random_integer_below(s32 limit) __asm__("FUN_00213260");
-f32 random_angle_radians(void) __asm__("FUN_00213308");
 void vu1_add_g_sregister(s32 register_id, s64 value) __asm__("FUN_00233980");
 s32 rand(void) __asm__("FUN_001160d8");
 void sky_sprite_proc(void) __asm__("FUN_0022bba0");

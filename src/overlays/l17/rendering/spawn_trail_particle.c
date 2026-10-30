@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -12,7 +13,6 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 #include "qcopy.h"
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
 unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) __asm__("FUN_L17_0026fb60");

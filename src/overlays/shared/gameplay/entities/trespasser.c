@@ -8,6 +8,8 @@
 #include "rnc/overlay/quad.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/overlay/collision.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C2A20), where it is exact; names translated to the US level program. */
 
@@ -66,13 +68,11 @@ void compute_mine_launch_velocity(float *origin_position, OvlQuad *target_positi
     out[2] = launch_component_speed;
 }
 #include "qcopy.h"
-float random_float_between(float, float) __asm__("FUN_002132a8");
 int rand(void) __asm__("FUN_001160d8");
 int FUN_001f96f8_2c3440(int) __asm__("FUN_001f96f8");
 void spawn_particle(float *, unsigned char, unsigned char, unsigned char, float, float,
                              int) __asm__("FUN_L00_00269b70");
 void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern s16 D_L00_001B0830_lui[] __asm__("D_L00_001B0830") NOT_SDA;
 void destroy_decoy_with_particles(unsigned char *moby) __asm__("FUN_L00_002c3440");
 
@@ -204,7 +204,6 @@ typedef struct {
 } S179AC0;
 extern S179AC0 D_L00_00179AC0_002c52a8[] __asm__("D_L00_00179AC0")
     __attribute__((section(".data")));
-unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 int FUN_001f96f8_002c52a8(int) __asm__("FUN_001f96f8");
 void FUN_L00_00250df8_002c52a8(void *) __asm__("FUN_L00_00250df8");
 void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
@@ -737,10 +736,8 @@ extern f32 fast_vec_dist(void *,void *) __asm__("FUN_001f9b48");
 extern f32 vector_distance(void *,void *) __asm__("FUN_001f9b80");
 extern f32 fast_arc_tan(f32,f32) __asm__("FUN_001f9e90");
 extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void *memset(void *,int,unsigned int) __asm__("FUN_001153fc");
 extern void debug_print(char *) __asm__("FUN_001e93b0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void clamp_vector_length(void *,void *,f32) __asm__("FUN_001f9c90");
 extern f32 probe_ground_height(void *,s32,f32) __asm__("FUN_00213508");
 extern int suck_get_aim_height(char *) __asm__("FUN_002141f8");
@@ -1699,7 +1696,6 @@ void bomb_glove_update(struct Moby *moby) {
 extern u8 D_0013E539;
 extern s32 moby_table __asm__("D_L00_0015FFD8");
 extern s16 D_L00_001B0830_lui[]  __asm__("D_L00_001B0830")NOT_SDA;
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 extern void append_unique_moby_index(void *, void *, s32) __asm__("FUN_L00_0025f780");
@@ -1982,7 +1978,6 @@ extern void spawn_explosion(float, void *, void *, int, float, float, int, int, 
 extern void initialize_hit_descriptor(float, void *, void *, int) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_0028dbe8_2c4380(int, int, void *) __asm__("FUN_0022da68");
 extern int FUN_001fef20_2c4380(int) __asm__("FUN_001f96f8");
 extern int FUN_001fef68_2c4380(void *) __asm__("FUN_001f9740");

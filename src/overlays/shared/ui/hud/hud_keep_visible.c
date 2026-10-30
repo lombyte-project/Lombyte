@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "rnc/overlay/hud.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 
 /* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
@@ -318,7 +319,6 @@ extern float star_init_limit2_gp __asm__("D_L00_0015F758") __attribute__((sda));
 /* Fills the 100 hud stars with random positions and drift. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236BF8), where it is exact; names translated to the US level program. */
 
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 typedef struct {
     float x, y, vx, vy;
 } Star;

@@ -11,6 +11,7 @@
 #include "qcopy.h"
 #include "rnc/data_labels.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002E3740), where it is exact; names translated to the US level program. */
 
@@ -48,7 +49,6 @@ void update_armed_transport_joint_animation(char *moby) __asm__("FUN_L16_002e305
 
 extern void update_armed_transport_joint_animation(char *) __asm__("FUN_L16_002e3050");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void set_blarg_elite_commando_parent_transform(char *moby, void *owner, void *position, char *vector) __asm__("FUN_L16_002d3dc0");
 void start_blarg_elite_commando_return_to_initial_position(char *moby, int arg) __asm__("FUN_L16_002d3de0");
 extern int func_0022ED80_update(int, int, void *) __asm__("FUN_0022da68");
@@ -265,7 +265,6 @@ extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, char *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern void mark_moby_for_removal_u(char *) __asm__("FUN_0020c828");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
@@ -321,7 +320,7 @@ void update_armed_transport_damage_and_targeting(struct Moby *transport_moby) {
                     do {
                         char *pool = D_L16_0015FFD8_sda;
                         if (*child >= 0)
-                            mark_moby_for_removal_u(pool + (*child << 8));
+                            mark_moby_for_removal(pool + (*child << 8));
                         child++;
                     } while (--count >= 0);
                 }

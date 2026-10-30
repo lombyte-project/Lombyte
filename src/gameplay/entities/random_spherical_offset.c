@@ -1,6 +1,5 @@
 #include "types.h"
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
+#include "rnc/math/random.h"
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");
 

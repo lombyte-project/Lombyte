@@ -6,6 +6,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 
 
@@ -13,7 +14,6 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002DF738), where it is exact; names translated to the US level program. */
 
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_falling_moby(char *moby) __asm__("FUN_L03_002de370");
 

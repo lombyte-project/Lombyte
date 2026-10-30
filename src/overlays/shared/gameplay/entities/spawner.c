@@ -11,6 +11,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* pvars of the projectile moby FUN_L09_00307ba8 spawns */
 typedef struct {
@@ -26,8 +28,6 @@ typedef struct {
 } ShotVars;
 
 extern OvlVec4 D_0013F3D0_307ba8 __asm__("D_0013F3D0");
-extern struct Moby *create_moby(s32) __asm__("FUN_0020c4f8");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern u8 *spawn_source_attached_fading_effect_particle(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
 extern void FUN_L00_00250df8_307ba8(struct Moby *) __asm__("FUN_L00_00250df8");
 
@@ -91,7 +91,6 @@ extern OvlVec4 D_0013F3D0_307d68 __asm__("D_0013F3D0");
 extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
 extern char D_L09_00174000[] __asm__("D_L09_00174000");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 collision_line_307d68(void *, void *, s32, void *, CollisionProbe *) __asm__("FUN_001efa68");
 extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
@@ -323,12 +322,10 @@ int refresh_spawner_population_and_find_free_slot(int unused, char *spawner_vars
     }
     return last;
 }
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int activate_effect_l08(void *, void *, float, void *, int, void *, int) __asm__("FUN_L00_0025ff38");
 extern int refresh_spawner_population_and_find_free_slot(int, char *) __asm__("FUN_L09_0030aae0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void generate_random_scaled_vector2(float *, float) __asm__("FUN_L09_00277758");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float FUN_00213508_30ab80(void *, int, float) __asm__("FUN_00213508");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_random_offset_to_vector_xyz(float *, float) __asm__("FUN_L00_0025f8e0");

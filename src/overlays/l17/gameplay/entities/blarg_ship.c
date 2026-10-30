@@ -10,6 +10,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
@@ -531,10 +533,7 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_0022da68(int, int, int);
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_0025f730(void *a, float x);
@@ -756,7 +755,6 @@ void blarg_ship_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6AF8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
 
@@ -814,7 +812,6 @@ extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_hit_triggered_fragment_spawner(struct Moby *moby) __asm__("FUN_L17_002f5260");
 

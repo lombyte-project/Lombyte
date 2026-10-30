@@ -8,6 +8,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 typedef union {
     u128 q;
     f32 f[4];
@@ -479,9 +480,6 @@ extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 extern char player_camera[] __asm__("D_L00_00166C80");
 extern S6 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
 extern S6 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
@@ -698,10 +696,8 @@ typedef struct { int v[6]; } S6y10;
 
 extern S6y10 D_L00_001E9030;
 extern S6y10 D_L00_001E9048;
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
 extern int FUN_L00_00257b90(int, int);
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
 
 
@@ -874,7 +870,6 @@ M25f878 *find_listed_moby_by_data_id(s32 id) {
     }
     return 0;
 }
-f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 /* Adds a random offset in [-r, r] to each of v[0..2]. */
 void add_random_offset_to_vector_xyz(f32 *inout_vector, f32 random_offset_bound) __asm__("FUN_L00_0025f8e0");
 

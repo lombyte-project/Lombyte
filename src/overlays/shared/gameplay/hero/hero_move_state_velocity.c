@@ -11,6 +11,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 
 typedef union {
     u128 q;
@@ -1025,9 +1026,7 @@ typedef union {
     float f[4];
 } V_217450;
 extern int FUN_001f96f8_217450(int) __asm__("FUN_001f96f8");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern float FUN_001f9dc8_217450(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_217450(float) __asm__("FUN_001f9de0");

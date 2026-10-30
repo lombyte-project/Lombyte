@@ -11,6 +11,8 @@
 #include "rnc/math/fast_math.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 
 
@@ -76,7 +78,6 @@ extern float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern float fast_cos(float);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int D_L17_0015FFD8_t; /* no foreign declaration */
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -351,10 +352,8 @@ extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char *spawn_class_558_moby_toward_target(char *src, char *pos, float *v, float f) __asm__("FUN_L17_002e94d8");
 extern char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
-extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern char fleet_turret_aim_vertex_indices[4] __asm__("D_L17_00161980") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9,
                               float scale, float *v10, float *v11, float *v12);
@@ -367,7 +366,6 @@ void distribute_class_733_group_mobys_along_path(char *turret_moby) __asm__("FUN
 extern void distribute_class_733_group_mobys_along_path(char *m) __asm__("FUN_L17_002cbd38");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int func_001FA898_r(float) __asm__("FUN_001fa6d0");
 
 void dreks_fleet_turret_update(struct Moby *m) __asm__("FUN_L17_002cb310");
@@ -850,7 +848,6 @@ void draw_fleet_scrolling_radial_quads(struct Moby *moby) {
 
 extern char *D_L17_00174758;
 extern char *FUN_L00_0026f080(char *vec, float *pos, float sc, float vy);
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,

@@ -11,6 +11,8 @@
 #include "rnc/gameplay/hero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Movement controller block at vars + 0xC0 (FUN_L01_0026d930 init, FUN_L00_00258b50 step). */
 typedef struct {
@@ -81,7 +83,6 @@ extern Vec4f D_L06_00167540;
 extern s32 *D_L06_001B0C30[];
 extern f32 D_L06_0015F580[] MACRO_ADDR;
 
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern f32 compute_interpolated_record_value(struct Moby *) __asm__("FUN_0020c9e0");
 extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
@@ -423,8 +424,6 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *FUN_L06_00300c60_c(int unused, char *pa, char *pb) __asm__("FUN_L06_00300c60");
 #include "rnc/data_labels.h"
 extern f32 D_0015ED6C;
-extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float FUN_L04_001f1978(float);
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern int FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
@@ -764,7 +763,6 @@ extern f32 beam_quad_corner_uvs[4][2] __asm__("D_L06_001F2E90");
 
 extern void vu1_add_g_sregister(s32, s64) __asm__("FUN_00233980");
 extern u64 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern u32 fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 
@@ -843,7 +841,6 @@ void draw_blarg_space_commando_beam(char *moby) {
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float beam_spark_first_vector_w_gp __asm__("D_L06_0016200C") __attribute__((sda));
 extern float beam_spark_second_vector_w_gp __asm__("D_L06_00162010") __attribute__((sda));
 extern float beam_spark_frame_count_range_start_gp __asm__("D_L06_00162014") __attribute__((sda));
@@ -931,7 +928,6 @@ void update_falling_spinning_moby(struct Moby *moby) {
 }
 
 #include "eetypes.h"
-extern unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 extern float D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
 
@@ -981,7 +977,6 @@ extern short timer_frame_right_x_addend_gp __asm__("D_L06_001620E4") __attribute
 extern short timer_frame_fill_high_byte_gp __asm__("D_L06_001620E8") __attribute__((sda));
 extern void draw_ui_frame(int, int, int, int, int) __asm__("FUN_001f5f18");
 extern int fast_tween_color_local(int, int, float) __asm__("FUN_001fa6e0");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void font_print_center(int a, int b, int c, int d, int e) __asm__("FUN_001f6af0");
 extern void font_print_center_large(int a, int b, int c, int d, int e) __asm__("FUN_001f6c20");
 

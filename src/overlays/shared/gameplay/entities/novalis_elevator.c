@@ -14,6 +14,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/math/random.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 /* Bolt-crank Moby.state, including the callback-only state. */
 enum BoltCrankState {
@@ -425,7 +427,6 @@ extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN
 extern char D_L01_001742E0[];
 extern float D_L01_001742C0[];
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void spawn_two_point_effect_particle(char *, char *) __asm__("FUN_L00_0026c6e8");
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
@@ -873,7 +874,6 @@ typedef struct {
     s32 slot;     /* 0x40: -1 none, else index into D_L01_001DEB10 */
 } SaleVars;
 
-extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern s32 initialize_npc_dialogue(struct Moby *, SaleVars *) __asm__("FUN_L00_002668a0");
 extern s32 FUN_L00_00266448_2e1ac0(struct Moby *, SaleVars *) __asm__("FUN_L00_00266448");
 extern void initialize_vendor_screen(struct Moby *, s32, ItemPrice *) __asm__("FUN_L01_002aea70");
@@ -2401,8 +2401,6 @@ extern float amoeboid_second_movement_particle_base_scale_max_gp __asm__("D_L01_
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/spawn_amoeboid_movement_particles.h"
 extern int amoeboid_second_movement_particle_lifetime_min_gp __asm__("D_L01_001619D8") __attribute__((sda));
 extern int amoeboid_second_movement_particle_lifetime_max_gp __asm__("D_L01_001619DC") __attribute__((sda));
-extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
 
 void spawn_amoeboid_movement_particles(unsigned char *moby) {

@@ -7,10 +7,10 @@
 #include "rnc/overlay/hero_tables.h"
 #include "rnc/globals.h"
 #include "sda.h"
+#include "rnc/math/random.h"
 
 extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890") NOT_SDA;
 extern s32 D_L00_00179AB0 NOT_SDA;
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern s32 FUN_L00_001efc70(void *, void *, s32, void *, s32);
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");

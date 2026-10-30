@@ -6,6 +6,7 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/entities/moby_spawn.h"
 
 typedef struct {
     s32 count;
@@ -411,7 +412,6 @@ typedef struct {
     E00262528 *x134;
     s32 x138;
 } O00262528;
-E00262528 *create_moby(s32) __asm__("FUN_0020c4f8");
 void create_moby_transform_history_entry(O00262528 *history_state, s32 initial_decay_value, s32 sample_delay) __asm__("FUN_L00_00262528");
 
 void create_moby_transform_history_entry(O00262528 *history_state, s32 initial_decay_value, s32 sample_delay) {
@@ -513,7 +513,6 @@ void update_moby_transform_history(S_262608 *history_state, int dec) {
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002638B8), where it is exact; names translated to the US level program. */
 
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* When o+0x13C is set, marks each nonzero moby of the 0x120 list for removal; clears the flag. */
 void clear_moby_transform_history(char *history_state) __asm__("FUN_L00_00262840");
