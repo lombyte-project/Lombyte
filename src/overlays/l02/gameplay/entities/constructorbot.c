@@ -17,6 +17,7 @@
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 typedef struct {
     Vec4f vel;
     s32 timer;
@@ -89,7 +90,6 @@ void update_shard_debris(struct Moby *moby) {
         mark_moby_for_removal(moby);
 }
 #include "qcopy.h"
-extern void FUN_L00_002502f0_c(char *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 int D_L02_00161F4C = 0xd0;
 int D_L02_00161F50 = 0x60;
@@ -105,7 +105,7 @@ char *spawn_projectile_moby(char *source_moby, void *spawn_position, float *proj
     if (moby != 0) {
         moby[0x31] = 1;
         *(unsigned char *)(moby + 0x30) = *(short *)(moby + 0x32) = 0xFF;
-        FUN_L00_002502f0_c(moby, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
+        set_moby_color(moby, D_L02_00161F4C, D_L02_00161F50, D_L02_00161F54);
         *(short *)(moby + 0x34) = *(unsigned short *)(source_moby + 0x34);
         qcopy(moby + 0x10, spawn_position);
         *(float *)(moby + 0x48) = fast_arc_tan(projectile_direction[0], projectile_direction[1]);

@@ -18,6 +18,8 @@
 #include "rnc/rendering/effect_texture.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Movement controller block at vars + 0xC0 (FUN_L01_0026d930 init, FUN_L00_00258b50 step). */
 typedef struct {
@@ -88,7 +90,6 @@ extern Vec4f D_L06_00167540;
 extern s32 *D_L06_001B0C30[];
 extern f32 D_L06_0015F580[] MACRO_ADDR;
 
-extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern s32 FUN_L00_00258b50(struct Moby *, MoveCtl *, void *, void *, f32);
@@ -928,7 +929,6 @@ void update_falling_spinning_moby(struct Moby *moby) {
 }
 
 #include "eetypes.h"
-extern void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 extern float D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
 
 /* Spawns one fragment of the break-apart at pos, flying along vel with a

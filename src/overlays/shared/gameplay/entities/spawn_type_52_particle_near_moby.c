@@ -9,6 +9,8 @@
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/rendering/view/update_view_context.h"
+#include "rnc/runtime/callbacks/noop_main_callback.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00299AF0.c: func_L10_002E51A8), where it is exact; names translated to the US level program. */
 
@@ -390,10 +392,8 @@ extern float D_L10_00167358 NOT_SDA;
 extern float D_0013F5E0_5f18[] __asm__("D_0013F5E0");
 extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void FUN_L00_002223f8(s32, s32);
 extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
-extern void debug_line_5f18(void *, void *) __asm__("FUN_001e93e8");
 
 void FUN_L10_002f5f18(struct UpdateCam *cam) {
     float dir[4];
@@ -522,7 +522,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         look_t = 0.0f;
         sample_path(look, point, &look_seg, &look_t, 0, run->dist / run->path_length * run->look_path_length);
         debug_point_5f18(point, 0.2f);
-        debug_line_5f18(look + 0x10, look + *(int *)look * 16);
+        noop_main_callback(look + 0x10, look + *(int *)look * 16);
         fast_vec_sub(offset, point, &cam->pos);
     }
     fast_vec_scale(point, D_0013F5E0_5f18, -1.0f);

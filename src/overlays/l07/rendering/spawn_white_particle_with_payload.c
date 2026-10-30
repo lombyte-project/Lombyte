@@ -8,12 +8,12 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 /* Spawn a particle moby at pos with a colour, lifetime and size. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/partupd_0029D2B8.c: func_L07_0029D2B8), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0025bfe0(float, float, float, float);
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L07_001B2164 NOT_SDA;
 void spawn_white_particle_with_payload(void *particle_position_source, void *particle_payload_source) __asm__("FUN_L07_0029c4e8");

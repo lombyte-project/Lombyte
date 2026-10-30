@@ -14,6 +14,9 @@
 #include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
 #include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
+#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_001FFED0), where it is exact; names translated to the US level program. */
 
@@ -216,7 +219,6 @@ extern int D_L15_0015F5C4;
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
-void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
 void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 
@@ -336,7 +338,6 @@ extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
 extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern void FUN_001f9a10_20a328(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 #define P D_0013F350_lui
 #define X D_L15_00174440_lui
@@ -423,7 +424,6 @@ extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
-extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00210a08");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_215e58(void *, void *, void *) __asm__("FUN_001f9a10");

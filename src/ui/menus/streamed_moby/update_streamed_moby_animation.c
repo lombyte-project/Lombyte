@@ -6,6 +6,8 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/audio/streaming/start_audio_stream_read.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
 
 typedef struct {
     u8 pad_0[0x20];
@@ -44,9 +46,7 @@ extern u8 animation_asset_read_active[] __asm__("D_001D5CBB");
 
 extern void relocate_asset_entry_pointers(StreamedClassResource *, s32) __asm__("FUN_002032e0");
 extern void decompress_wad(u8 *, u8 *) __asm__("FUN_0020b618");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
-extern s32 start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
 extern s32 mark_menu_stream_buffer_read_active(u8 *) __asm__("FUN_00225dd8");
 
 s32 update_streamed_moby_animation(MobyAnimationStream *stream) __asm__("FUN_002256e8");

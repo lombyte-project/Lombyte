@@ -20,6 +20,15 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/overlay/shared/gameplay/entities/copy_hero_moby_field_38.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/rendering/view/update_view_context.h"
+#include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/world/collision/collision_line.h"
 
 extern union PacketCursor l09_packet __asm__("D_L09_001611C0") MACRO_ADDR;
 extern struct GsTextureAllocation gs_texture_allocation __asm__("D_0015EE74") MACRO_ADDR;
@@ -129,7 +138,6 @@ extern int *D_L09_001611C0;
 extern int D_L09_0015F5CC;
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void queue_level09_strip_texture_packets(int, int) __asm__("FUN_L09_0021e560");
-void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 extern int *D_L09_001611B8[] MACRO_ADDR;
 void draw_level09_scrolling_textured_strips(char *list, int count, float unused, long first_texture_index, long second_texture_index) __asm__("FUN_L09_0021e8c0");
@@ -179,7 +187,6 @@ void draw_level09_scrolling_textured_strips(char *list, int count, float unused,
         }
     }
 }
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern void setup_offset_vector(float, void *, void *) __asm__("FUN_001f9a68");
 extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
@@ -367,7 +374,6 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
 
 
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_reference_position, int spawned_moby_class) __asm__("FUN_L09_002c2500");
 
@@ -556,8 +562,6 @@ extern PebblePath *D_L09_001B0630_2eaa50[] __asm__("D_L09_001B0630");
 extern char D_L09_00166F40_2eaa50[] __asm__("D_L09_00166F40");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
-extern void set_moby_color(struct Moby *, s32, s32, s32) __asm__("FUN_L00_002502f0");
-extern void upd_a(struct Moby *) __asm__("FUN_L00_00250df8");
 
 /* Spawns one of four pebble classes at the spawner, scattered sideways off the end of its path. */
 struct Moby *spawn_path_following_asteroid(struct Moby *owner) __asm__("FUN_L09_002eaa50");
@@ -611,7 +615,7 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
             spawned_moby->scale *= lateral_scatter_distance / 100.0f + 1.0f;
             vars->speed *= frame_time;
         }
-        upd_a(spawned_moby);
+        update_entity(spawned_moby);
     }
     return spawned_moby;
 }
@@ -1056,7 +1060,6 @@ void asteroid_update(struct Moby *asteroid_moby) {
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EEEB0), where it is exact; names translated to the US level program. */
 
 extern s32 rand();
-extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_breakable_stack_replacement(char *source_moby, int spawned_moby_class) __asm__("FUN_L09_002edb60");
 
@@ -1283,9 +1286,7 @@ char *spawn_class_11c_moby(char *owner, void *position, float angle) {
 extern char D_L09_00166F40_2ef430[] __asm__("D_L09_00166F40");
 extern float D_0015ED6C_2ef430 __asm__("D_0015ED6C");
 extern float D_0015ED70_2ef430 __asm__("D_0015ED70");
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void *spawn_spark_2ef430(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 
 /* Per-frame update of a tumbling debris moby: moves and spins it under gravity, bounces it off what it hits, and
    bursts it into two sparks and removes it when its timer runs out or it leaves the area. */
@@ -1405,7 +1406,6 @@ extern char D_L09_00166F40_2ef9b0[] __asm__("D_L09_00166F40");
 extern float D_0015ED6C_2ef9b0 __asm__("D_0015ED6C");
 extern float D_0015ED70_2ef9b0 __asm__("D_0015ED70");
 extern void *spawn_spark_2ef9b0(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 
 /* The heavier tumbling debris: as FUN_L09_002ef430, inside a 2..1021 box, with eight sparks; on a hit it either
    slows down or bounces off, shrinking, with a new random spin. */
@@ -1576,7 +1576,6 @@ extern float platform_hero_offset_tilt_gain_gp __asm__("D_L09_001619F4") __attri
 extern float platform_sink_speed_gp __asm__("D_L09_001619F8") __attribute__((sda));
 extern float platform_height_return_gain_gp __asm__("D_L09_001619FC") __attribute__((sda));
 #include "rnc/overlay/l09/gameplay/entities/asteroid_data/platform_update.h"
-extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");

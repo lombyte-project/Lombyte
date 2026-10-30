@@ -12,6 +12,8 @@
 #include "rnc/overlay/moby_anim.h"
 #include "sda.h"
 #include "rnc/gameplay/state/item_state.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
 
@@ -51,7 +53,6 @@ char *spawn_blarg_elite_commando_rocket(char *owner, float *initial_movement_vec
 
 extern char D_L16_001671C0[];
 extern char D_0013E633[];
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
@@ -183,7 +184,6 @@ void select_blarg_elite_commando_movement_animation(char *moby) __asm__("FUN_L16
 
 extern void select_blarg_elite_commando_movement_animation(char *) __asm__("FUN_L16_002d4070");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void transform_vector_by_basis(void *, void *, void *);
 float advance_blarg_elite_commando_base_position(char *moby, float *target) __asm__("FUN_L16_002d3eb8");
@@ -700,7 +700,6 @@ void set_blarg_elite_commando_parent_transform(char *moby, void *owner, void *po
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby, int return_countdown_ticks) __asm__("FUN_L16_002d3de0");
 
@@ -709,7 +708,7 @@ void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby, in
     if (moby->state == 10) {
         moby->state = 1;
         if (moby->prev_seq != 1) {
-            blend_moby_animation_u(moby, 1, 0, scale_game_frames(0x14));
+            blend_moby_animation(moby, 1, 0, scale_game_frames(0x14));
         }
         moby->visible = 1;
         moby->flags &= 0xFFFE;
@@ -794,22 +793,22 @@ void select_blarg_elite_commando_movement_animation(char *moby) {
     float delta = fast_subtract_rotations(angle, *(float *)(moby + 0x48));
     if (delta < 0.78539819f && -0.78539819f < delta) {
         if ((unsigned char)moby[0x53] != 1) {
-            blend_moby_animation_u(moby, 1, 0, scale_game_frames(0x14));
+            blend_moby_animation(moby, 1, 0, scale_game_frames(0x14));
         }
     } else if (delta < 0.0f) {
         if (*(unsigned short *)(moby + 0x34) & 0x8000) {
             if ((unsigned char)moby[0x53] != 4)
-                blend_moby_animation_u(moby, 4, 0, scale_game_frames(0x14));
+                blend_moby_animation(moby, 4, 0, scale_game_frames(0x14));
         } else {
             if ((unsigned char)moby[0x53] != 5)
-                blend_moby_animation_u(moby, 5, 0, scale_game_frames(0x14));
+                blend_moby_animation(moby, 5, 0, scale_game_frames(0x14));
         }
     } else if (*(unsigned short *)(moby + 0x34) & 0x8000) {
         if ((unsigned char)moby[0x53] != 5)
-            blend_moby_animation_u(moby, 5, 0, scale_game_frames(0x14));
+            blend_moby_animation(moby, 5, 0, scale_game_frames(0x14));
     } else {
         if ((unsigned char)moby[0x53] != 4)
-            blend_moby_animation_u(moby, 4, 0, scale_game_frames(0x14));
+            blend_moby_animation(moby, 4, 0, scale_game_frames(0x14));
     }
 }
 /* Spawn randomized hit particles at joint two, with extra bursts for distant hits. */

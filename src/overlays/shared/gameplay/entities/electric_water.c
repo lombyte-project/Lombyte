@@ -11,6 +11,12 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/overlay/shared/audio/sound/trooper_play_sound.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D7C00.c: func_L15_002DA990), where it is exact; names translated to the US level program. */
 
@@ -33,7 +39,6 @@ extern char *spawn_source_attached_fading_effect_particle(char *src, int col, in
 extern char *create_moby(int);
 extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern void FUN_001f9a68(void *, void *, float);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *pos) __asm__("FUN_L15_002e4580");
 
@@ -128,10 +133,8 @@ extern float D_L15_0015F448;
 extern float D_L15_0015F44C;
 extern float D_L15_0015F450;
 extern float D_L15_0015F454;
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int hero_is_near_ground(void) __asm__("FUN_L15_002d6770");
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
@@ -144,10 +147,8 @@ void draw_electric_water_bolt_effect(char *moby) __asm__("FUN_L15_002d8710");
 void draw_electric_water_countdown(char *moby) __asm__("FUN_L15_002d77c0");
 
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void record_moby_hit(struct Moby *moby, void *hit) __asm__("FUN_L00_00259a88");
@@ -980,7 +981,6 @@ void draw_electric_water_bolt_start_quads(void *mv) {
 extern int D_L15_00174458_s[] __asm__("D_L15_00174458");
 extern int D_L15_0015F5CC_s __asm__("D_L15_0015F5CC");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 extern void play_entity_sound(void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void cart_burst(void *, void *, float, float, int) __asm__("FUN_L00_0025f090");

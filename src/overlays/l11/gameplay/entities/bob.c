@@ -24,6 +24,12 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
+#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 
 /* Moby.state for the resort-owner callbacks; path progression is separate. */
 enum ResortOwnerState {
@@ -209,11 +215,7 @@ typedef struct {
 
 extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
 extern int FUN_00214720(void *, int);
-extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
-extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern unsigned char D_0013D4C3 NOT_SDA;
 extern int D_L11_0015F5C4;
@@ -1669,7 +1671,6 @@ extern unsigned char D_0013E550_309ac0[] __asm__("D_0013E550");
 extern void *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
 extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
@@ -1889,7 +1890,6 @@ void pokitaru_boat_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030B850), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 int try_activate_pokitaru_gate(struct Moby *moby) {
     char *current;
@@ -1905,7 +1905,6 @@ int try_activate_pokitaru_gate(struct Moby *moby) {
     }
     return 1;
 }
-extern void attach_manipulator(struct Moby *, int, void *) __asm__("FUN_0020cb10");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void FUN_L00_0026f080(float *, float *, float, float);
 extern int level_frame __asm__("D_L11_0015F5CC");

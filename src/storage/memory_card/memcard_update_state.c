@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/audio/streaming/start_audio_stream_read.h"
 
 typedef struct {
     s32 x0;
@@ -36,7 +37,6 @@ extern s32 SceMcUnformat(s32 port, s32 slot);
 extern void calculate_ring_buffer_bounds(s32, McChunk **, s32 *) __asm__("func_001FD6E0");
 extern void memcard_restore_info(u8 *, s32, s32) __asm__("func_0020AE60");
 extern s32 memcard_restore_data(u8 *, s32, u32 *) __asm__("func_0020AF20");
-extern s32 start_audio_stream_read(McChunk *, s32, s32) __asm__("FUN_00216788");
 extern s32 sceMcChdir(s32, s32, char *, s32);
 extern s32 sceMcClose(s32 fd);
 extern s32 sceMcDelete(s32 port, s32 slot, char *name);

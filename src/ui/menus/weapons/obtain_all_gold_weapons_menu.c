@@ -1,6 +1,7 @@
 #include "types.h"
 
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 
 /* Text window passed to font_print_window_regular. */
 struct MenuPacket {
@@ -22,7 +23,6 @@ extern void do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
 extern void *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 get_icon_frame() __asm__("func_001FF960");
-extern void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffc30");
 
 s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) __asm__("FUN_00222948");
 

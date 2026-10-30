@@ -5,6 +5,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -13,7 +14,6 @@
 #define MACRO_ADDR __attribute__((section(".sdata")))
 #endif
 #include "qcopy.h"
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 extern unsigned char *D_L17_001B2A54 __attribute__((section(".data")));
 unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) __asm__("FUN_L17_0026fb60");
 unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *record_vector_source) {
@@ -51,7 +51,6 @@ unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *recor
 /* Ported from rac1-decomp (src/overlays/l17_fleet/partupd_00270A28.c: func_L17_00270C98), where it is exact; names translated to the US level program. */
 
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
-extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
 
 unsigned char *create_drone_flight_trail_record(char *position_source, int mode, int step) __asm__("FUN_L17_0026fdd0");
 
@@ -63,7 +62,7 @@ unsigned char *create_drone_flight_trail_record(char *position_source, int mode,
     else
         remaining_steps = 0xF - step;
     if (remaining_steps >= 0) {
-        record = FUN_L00_002678b8_q(0x50);
+        record = create_part(0x50);
         if (record != 0) {
             qcopy(record + 0x10, position_source);
             record[9] = truncate_float_to_s32(1.0f) + 0x70;

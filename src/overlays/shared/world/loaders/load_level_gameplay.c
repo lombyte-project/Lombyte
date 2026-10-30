@@ -9,6 +9,9 @@
 #include "rnc/globals.h"
 #include "rnc/rendering/render_globals.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/audio/streaming/start_audio_stream_read.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/gs/log2dim.h"
 typedef struct {
     s32 a, b, c, off;
 } Ent;
@@ -479,7 +482,6 @@ extern void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern void initialize_hero(void) __asm__("FUN_L00_00204c60");
 extern void reset_hero_to_idle(void) __asm__("FUN_L00_00204f80");
 extern void store_current_level_table_value(int, int) __asm__("FUN_L00_0024a798");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void resolve_lookup_record(short *) __asm__("FUN_L00_0028df58");
 extern void update_moby_proximity_interaction() __asm__("FUN_L00_0028e180");
 extern void initialize_moby_state_record(char *) __asm__("FUN_L00_0028e8a0");
@@ -1774,7 +1776,6 @@ extern void load_hud_banks(void) __asm__("FUN_00202a98");
 extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 FUN_L00_0024d8d0_244110(void *, char *) __asm__("FUN_L00_0024d8d0");
-extern s32 log2dim(s32) __asm__("FUN_001f97a0");
 extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
 extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
 extern void register_moby_class(char *, void *, void *, s32) __asm__("FUN_00203640");
@@ -2076,7 +2077,6 @@ struct StreamLoader {
 };
 extern struct SectorListTable disc_table __asm__("D_00137B80");
 extern struct StreamLoader D_L00_0016C860;
-extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 
 /* streams entry i of the current sector list into the loader buffer */

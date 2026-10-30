@@ -15,6 +15,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/rendering/effects/spawn_spark.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00302A58), where it is exact; names translated to the US level program. */
 
@@ -467,7 +468,6 @@ typedef struct {
 } VendorBeamReq;
 
 extern u8 D_L14_00174560[];
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 /* Sweeps the beam's two end lines; anything they cross takes damage pushed away from the beam. */
 void apply_vendor_beam_damage(char *self) {

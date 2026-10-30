@@ -19,6 +19,13 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_line.h"
 
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 
@@ -453,9 +460,7 @@ int D_L13_00161954 = -1;
 extern int qwarks_starfighter_command_path_slots[] __asm__("D_L13_001D3448");
 extern int qwarks_starfighter_attachment_class_ids[] __asm__("D_L13_001D34D8");
 extern int DebugPrint_alt() __asm__("FUN_001e93b0");
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int advance_moby_along_selected_path(void *, void *, int, int) __asm__("FUN_L13_002e9160");
 extern int update_moby_path_following_away_from_hero(void *, void *, int, int) __asm__("FUN_L13_002e9408");
 extern int continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
@@ -464,7 +469,6 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern short dialogue_playback_phase[] __asm__("D_0015172A");
 extern void reset_numeric_hud_element() __asm__("FUN_L00_00235d80");
 extern void hud_update_counter() __asm__("FUN_L00_00235ea0");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, float d, float max);
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -480,7 +484,6 @@ extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
 extern void FUN_L06_00249738();
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void emit_randomized_moby_joint_effects(struct Moby *moby) __asm__("FUN_L13_002e8b58");
-void set_animation_parameter(s32 anim_id, s32 value) __asm__("FUN_001ff570");
 #include "rnc/gameplay/state/game_globals.h"
 extern char D_0013F350[];
 extern char D_001516D0[];
@@ -1095,7 +1098,6 @@ void update_qwarks_starfighter(Moby388 *moby) {
 
 
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index, int id) {
@@ -1124,7 +1126,6 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
     return moby;
 }
 extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern char coll_hit_1638[] __asm__("D_L13_00174140");
 
 struct PieceVars {
@@ -1269,7 +1270,6 @@ void spawn_forcefield_contact_effects(void *moby, void *data) {
 /* Fades the moby in, waits for its linked moby to be collected or gone, fades out and kills it; spins it all the while. */
 extern int D_0015ED84_n __asm__("D_0015ED84");
 extern void stub_printf(char *, int, int) __asm__("FUN_001e93b0");
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_forcefield_contact_effects(void *, void *) __asm__("FUN_L13_002ed158");
 extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
 

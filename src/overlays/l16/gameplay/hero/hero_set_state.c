@@ -23,6 +23,9 @@
 #include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/hero/air_accel.h"
+#include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
 
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/help_0021EA88.c: func_L16_0021EA88), where it is exact; names translated to the US level program. */
 
@@ -46,8 +49,6 @@ extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
-extern int get_hero_idle_animation_index(int a) __asm__("FUN_L01_00226f10");
-extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int select_hero_hoverboard_animation_variant(void) __asm__("FUN_L05_002551b8");
 extern int queue_animation_update(int, int, int, int, int, int, int) __asm__("FUN_001ff308");
 int D_L16_0015F6E8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
@@ -68,7 +69,6 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void pool_splash(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
-extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void initialize_trick_combo_hud(void) __asm__("FUN_L05_00262ae8");
 extern void update_trick_combo_hud(void) __asm__("FUN_L05_00262b58");
 extern void draw_trick_combo_hud(void) __asm__("FUN_L05_00262f50");
@@ -77,7 +77,6 @@ extern void initialize_hud_element_defaults(void) __asm__("FUN_L05_002661a0");
 extern void FUN_L05_002661e8(void);
 extern void draw_hud_progress_and_rank(void) __asm__("FUN_L05_00266320");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void draw_hud_timer(void) __asm__("FUN_L05_00266710");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */

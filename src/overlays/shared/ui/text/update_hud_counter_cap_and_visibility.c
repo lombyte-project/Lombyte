@@ -12,6 +12,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/ui/hud/get_icon_frame.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 
 extern unsigned char D_0013E529[];
 void hud_update_counter(char *) __asm__("FUN_L00_00235ea0");
@@ -361,7 +362,6 @@ extern float D_L00_0015F7C4_gp __asm__("D_L00_0015F7C4") __attribute__((sda));
 extern u32 strlen(const char *);
 extern unsigned char item_text_variant[] __asm__("D_0013E520");
 extern void FUN_L00_0023b120(char *, int, int, int, int, int);
-extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
 
 int draw_hud_item_selector_panel(HudElem *rec) __asm__("FUN_L00_002382a0");
 
@@ -673,7 +673,6 @@ extern Ent_239918 **D_L00_0015FAC0_c2 __asm__("D_L00_0015FAC0");
 extern int fast_tween_color(int, int, f32) __asm__("FUN_001fa6e0");
 extern Ids D_L00_0015F8C0_239918 __asm__("D_L00_0015F7E0");
 extern char D_L00_0017E5D8_239918[] __asm__("D_L00_0017E4D8");
-extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 extern void hud_frame(void *, int, int, int, int, int) __asm__("FUN_L00_0023b120");
 extern int strlen_alt(int) __asm__("FUN_001166cc");
 extern int func_001FA8A8_239918(int, int, float) __asm__("FUN_001fa6e0");
@@ -884,7 +883,6 @@ typedef struct {
 } Hud;
 
 extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
-extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 extern int pal_mode __asm__("D_0015ED80");
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility_data/draw_health_hud_panel_2.h"
 #include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility_data/draw_health_hud_panel.h"
@@ -1259,7 +1257,6 @@ out:
 }
 extern short D_00140986 NOT_SDA;
 void draw_cropped_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023b6c0");
-void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 int draw_hud_cropped_gauge_panel(char *rec) __asm__("FUN_L00_0023a640");
 
 int draw_hud_cropped_gauge_panel(char *rec) {

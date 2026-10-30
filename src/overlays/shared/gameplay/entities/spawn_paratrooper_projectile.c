@@ -15,11 +15,12 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) __asm__("FUN_L08_00307190");
 char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position, int collision_ignore_moby, int tracked_moby, int lifetime_frames, int burst_mode) {
@@ -50,7 +51,6 @@ char *spawn_paratrooper_projectile(char *initial_velocity, char *spawn_position,
 extern char D_L08_00174640[];
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 

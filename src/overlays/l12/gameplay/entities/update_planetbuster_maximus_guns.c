@@ -26,6 +26,12 @@
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/rendering/font_queue_vu_state.h"
 
 typedef struct Moby Moby;
 
@@ -72,7 +78,6 @@ extern int D_L12_001FB688[];
 extern int FUN_L00_001fefc8(void *);
 extern void *spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void update_planetbuster_maximus_detached_parts(char *) __asm__("FUN_L12_003064e8");
 void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern int D_L12_00161F00_gp __asm__("D_L12_00161F00") MACRO_ADDR;
@@ -394,7 +399,6 @@ extern float D_L12_00161F40;
 #include "rnc/overlay/l12/gameplay/entities/update_planetbuster_maximus_guns_globals.h"
 extern float D_L12_00161F60;
 extern float D_L12_00161F70;
-extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
 
 void update_planetbuster_maximus_detached_parts(char *moby) {
     int i;
@@ -461,7 +465,7 @@ void update_planetbuster_maximus_detached_parts(char *moby) {
             qcopy((char *)&D_L12_00161F40, slot_moby + 0x10);
             qcopy((char *)&planetbuster_maximus_detached_owner_rotation, slot_moby + 0x40);
         }
-        FUN_L00_00250df8_c(slot_moby);
+        update_entity(slot_moby);
     }
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00307C08), where it is exact; names translated to the US level program. */
@@ -545,9 +549,6 @@ extern void vendor_spring(float *, float *, float, float, float, float) __asm__(
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");
 extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
 extern int current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
@@ -788,7 +789,6 @@ void planetbuster_maximus_part_update(char *moby) {
 #include "qcopy.h"
 
 /* Spawns the next linked moby at this one's spot, sets it up and gives it a random spin. */
-extern void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 extern void spawn_jittered_effect_particle_with_optional_basis(char *, int, float) __asm__("FUN_L00_0026de90");
 
 void spawn_next_linked_moby(struct Moby *spawner) __asm__("FUN_L12_003076e0");
@@ -836,7 +836,6 @@ void spawn_next_linked_moby(struct Moby *m) __asm__("FUN_L12_003076e0");
 void update_homing_mine_spawner_target(struct Moby *spawner) __asm__("FUN_L12_00307ab8");
 
 extern void update_homing_mine_spawner_target(struct Moby *m) __asm__("FUN_L12_00307ab8");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void homing_mine_spawner_update(struct Moby *m) __asm__("FUN_L12_00307840");
 void homing_mine_spawner_update(struct Moby *spawner) {
@@ -1231,7 +1230,6 @@ extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void FUN_L08_00258090(void *, int, int, void *);
 extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void vu1_add_g_sregister(s32, unsigned long) __asm__("func_00233980");
-void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void draw_hoven_scrolling_texture_layers(struct Moby *moby) __asm__("FUN_L12_0030be68");
 

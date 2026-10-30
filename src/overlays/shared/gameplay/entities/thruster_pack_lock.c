@@ -16,6 +16,7 @@
 #include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_0030FB58), where it is exact; names translated to the US level program. */
 
@@ -573,7 +574,6 @@ void update_moby_trail_points(char *moby) {
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern unsigned char D_00141968[];
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void update_moby_hit_stats_and_state(char *moby) __asm__("FUN_L11_0031a1c0");
 

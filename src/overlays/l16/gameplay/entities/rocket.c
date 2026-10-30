@@ -7,6 +7,18 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_line.h"
 
 
 
@@ -30,7 +42,6 @@ int is_moby_in_state_6(Level16VendorMoby *moby) {
 
 extern char *create_moby(int);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 unsigned char *spawn_thrown_bomb(int owner, void *spawn_position, float *initial_velocity, int fuse_frames, float gravity) __asm__("FUN_L16_002c6268");
@@ -125,7 +136,6 @@ void initialize_moby_sprite_effect(struct Moby *moby) {
 
 extern char *D_L16_0015FFD8;
 extern int *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
-extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern short *D_L16_001ABFC0_2CB000[] __asm__("D_L16_001ABCC0");
 
 void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) __asm__("FUN_L16_002c9c38");
@@ -339,8 +349,6 @@ void test_dummy_door_update(struct Moby *moby) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void FUN_L00_00257470(void *, int, int);
-extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
-extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_moby_hit_triggered_removal(struct Moby *moby) __asm__("FUN_L16_002d6740");
@@ -444,7 +452,6 @@ void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern L16SparkHit D_L16_001742C0_hit __asm__("D_L16_00174240");
 extern float func_L00_0025CCF0_spark(void *, void *, float, float, float, float,
                                      int) __asm__("FUN_L00_0025bc98");
-extern int func_L00_001EFFF0_spark(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 void update_homing_projectile(unsigned char *moby) __asm__("FUN_L16_002a3f38");
 
@@ -532,7 +539,7 @@ void update_homing_projectile(unsigned char *moby) {
             query.kind = 3;
             query.cls = *(unsigned short *)(moby + 0xA6);
             query.enabled = impact_state;
-            if (func_L00_001EFFF0_spark(previous.f, position, 0, ((void *)player->moby),
+            if (collision_line(previous.f, position, 0, ((void *)player->moby),
                                         &query)) {
                 L16SparkHit *result = &D_L16_001742C0_hit;
                 char *hit = result->moby;
@@ -669,7 +676,6 @@ extern float D_0015ED6C, D_0015EE70_q __asm__("D_0015EE70");
 extern int FUN_L00_001f0d60_q(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void *spawn_feather_moby(void *, void *, void *) __asm__("FUN_L00_002cbf68");
 extern void FUN_0022da68_q(int, int, void *) __asm__("FUN_0022da68");
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern void func_00215C00_57_q(float, float, float, void *) __asm__("FUN_00214db0");
 extern int func_0022ED80_57_q(int, int, void *) __asm__("FUN_0022da68");
 
@@ -762,7 +768,6 @@ typedef struct {
 extern char D_L16_0015F580_macro[] __asm__("D_L16_0015F580") MACRO_ADDR;
 
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
@@ -789,7 +794,7 @@ void update_thrown_bomb(L16FallingMoby *moby) {
            copied a second time for the ground test). */
         qcopy(previous, moby->position);
         fast_vec_add(moby->position, moby->position, bomb_data->velocity);
-        if (func_L00_001EFFF0_spark(previous, moby->position, 5, bomb_data->owner, 0)) {
+        if (collision_line(previous, moby->position, 5, bomb_data->owner, 0)) {
             fast_vec_normalize(normal, D_L16_hitN.normal, 1.0f);
             if (fast_vec_dot(normal, bomb_data->velocity) < 0.0f) {
                 reflect_vector(bomb_data->velocity, bomb_data->velocity, normal);
@@ -1182,7 +1187,6 @@ extern void update_test_dummy_damage_and_respawn(void *) __asm__("FUN_L16_002ce9
 void refresh_test_dummy_door_timer(struct Moby *moby) __asm__("FUN_L16_002d5e80");
 
 extern void refresh_test_dummy_door_timer(struct Moby *) __asm__("FUN_L16_002d5e80");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 unsigned char *spawn_thrown_bomb(int a, void *pos, float *dir, int c, float f) __asm__("FUN_L16_002c6268");
 extern unsigned char *func_L16_002C75D0_2cf180(int, void *, float *, float,
                                                int) __asm__("FUN_L16_002c6268");
@@ -1535,7 +1539,6 @@ typedef struct L16HitMoby {
 extern int D_L16_001619C8_gp __asm__("D_L16_001619C8") __attribute__((sda)); /* no foreign declaration */
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_L16_002cee70_c(char *) __asm__("FUN_L16_002cee70");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 
@@ -2011,7 +2014,6 @@ typedef struct {
     L16PatrolData *data;        /* 0x78 */
 } L16PatrolMoby;
 
-extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 
 /* Patrol step: advances the moby's path node until the next node is ahead and far enough, switching between the base path and its branches. */
 void advance_hoverboard_dummy_path_node(char *patrol_moby) __asm__("FUN_L16_002cf9f8");
@@ -2096,7 +2098,6 @@ typedef struct {
 } L16LeapMoby_u;
 
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 f32 compute_interpolated_record_value_u(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
@@ -2695,16 +2696,11 @@ typedef struct {
 extern char D_0013E633_q[], D_0014171B[], D_0013D388[], D_L16_00167240[] __asm__("D_0013E633");
 extern char D_0014162A_lui[] __asm__("D_0014162A") NOT_SDA;
 extern char D_L16_001671C0_lui[] __asm__("D_L16_001671C0") NOT_SDA;
-extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void *set_class_0287_group_activation_and_find_nearest(int, int) __asm__("FUN_L16_002d5ad0");
 extern void *activate_class_0287_group_and_find_nearest(int, int) __asm__("FUN_L16_002d5bc8");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int,
                                int) __asm__("FUN_L00_002598b0");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void activate_test_dummy_group(int) __asm__("FUN_L16_002ceca8");
 extern void FUN_L16_002d6260_q(char *, void *, float *) __asm__("FUN_L16_002d6260");
 void mmr_q(struct Obj *obj) __asm__("FUN_0020c828");

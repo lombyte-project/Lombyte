@@ -27,6 +27,11 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Scoutbot update: hovers at its post, flies to its target and back, calls reinforcements, shoots, dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D3DF8), where it is exact; names translated to the US level program. */
@@ -78,7 +83,6 @@ extern int FUN_L00_0024f7c8();
 extern int FUN_L00_002dc9f0();
 extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern short D_L08_00161888 __attribute__((sda));
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_0025a120(char *o);
@@ -603,8 +607,6 @@ void draw_scoutbot_glow_quad(char *moby) {
     }
     FUN_001f7d30_002d4108(&pk, 0, 0);
 }
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern float FUN_L08_00211a20(float);
 extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
@@ -700,7 +702,6 @@ char *create_moby_with_particles(int owner, float *position, float *rotation, in
     return moby;
 }
 extern float scale_game_frames_002e8210(float) __asm__("FUN_L08_00211a20");
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void scale_vector_in_place_002e8210(float, void *) __asm__("FUN_L00_0025f730");
 extern void FUN_L00_0025e450_002e8210(void *, void *, void *, float, float, int, int, int,
                                          float, float, float, int, float, float, int, int, int, int)
@@ -1107,7 +1108,6 @@ extern s32 rand(void);
 extern void DebugPrint(char *, ...);
 int FUN_L00_00258830(char *m, char *v, int flags, float a, float b, float c);
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
-int select_point_index_by_distance(void *arg0, void *arg1, float target) __asm__("FUN_L01_0028b510");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void FUN_L00_0025f730(void *a, float x);
 void FUN_L01_0026d930(char *p);
@@ -1129,7 +1129,6 @@ extern void FUN_L00_00263ac8_c(float, void *, int, void *) __asm__("FUN_L00_0026
 extern void FUN_L00_0025a120_c(void *) __asm__("FUN_L00_0025a120");
 extern void debug_print(char *, int) __asm__("FUN_001e93b0");
 extern void FUN_L01_0026d930_c(void *) __asm__("FUN_L01_0026d930");
-extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern void FUN_L00_00259028_c(void *, void *, void *, void *) __asm__("FUN_L00_00259028");
 extern int ray302618(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void FUN_L00_0025f730(void *, float);

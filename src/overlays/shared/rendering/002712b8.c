@@ -18,7 +18,8 @@
 #include "rnc/gameplay/entities/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 extern unsigned char *D_L00_001B2130 NOT_SDA;
 unsigned char *FUN_L00_002712b8(OvlQuad *pos, float *vec, int s, int a, int col, int n, float x,
@@ -58,9 +59,7 @@ unsigned char *FUN_L00_002712b8(OvlQuad *initial_position, float *initial_veloci
     }
     return particle;
 }
-extern void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 extern void FUN_L00_001ff318_271450(void *, void *, float) __asm__("FUN_L00_001ff318");
-extern void FUN_L00_001ff290_271450(void *, void *, void *) __asm__("FUN_L00_001ff290");
 
 void update_moving_rotating_resizing_alpha_fade_particle(unsigned char *particle) __asm__("FUN_L00_00271450");
 
@@ -92,7 +91,7 @@ void update_moving_rotating_resizing_alpha_fade_particle(unsigned char *particle
         fast_vec_add(particle_position, particle_position, particle_velocity);
         scaled_platform_carry[0] = *(OvlQuad *)(&hero.motion.platform_carry);
         FUN_L00_001ff318_271450(gravity_velocity_delta, scaled_platform_carry, *(float *)(particle + 0x1C));
-        FUN_L00_001ff290_271450(gravity_velocity_delta, particle_position, scaled_platform_carry);
+        add_vectors(gravity_velocity_delta, particle_position, scaled_platform_carry);
         fast_vec_scale(gravity_velocity_delta, &hero.gravity_dir, *(float *)(particle_data + 0xC));
         fast_vec_add(particle_velocity, particle_velocity, gravity_velocity_delta);
         fast_vec_scale(particle_velocity, particle_velocity, *(float *)(particle_data + 0x18));
@@ -193,7 +192,6 @@ unsigned char *spawn_splash(u128 *initial_position, u128 *initial_velocity, int 
     }
     return particle;
 }
-void FUN_L00_00267a08_002719f0(unsigned char *) __asm__("FUN_L00_00267a08");
 void update_expanding_rotating_alpha_fade_particle(unsigned char *particle) __asm__("FUN_L00_002719f0");
 
 void update_expanding_rotating_alpha_fade_particle(unsigned char *particle) {
@@ -213,12 +211,11 @@ void update_expanding_rotating_alpha_fade_particle(unsigned char *particle) {
         *(int *)(particle + 4) += 0xFF000000;
     }
     if ((*(int *)(particle + 4) & 0xFF000000) == 0)
-        FUN_L00_00267a08_002719f0(particle);
+        free_effect_particle(particle);
 }
 #include "eetypes.h"
 #include "qcopy.h"
 extern unsigned char *D_L00_001B213C NOT_SDA;
-unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 int FUN_00213260(int);
 unsigned char *spawn_random_alpha_rotated_particle(u128 *position, u128 *initial_velocity, float x) __asm__("FUN_L00_00271b18");
 
@@ -289,7 +286,6 @@ typedef struct {
     V00271d20 acc;
 } O00271d20;
 extern V00271d20 D_L00_00173E60;
-void free_effect_particle(void *) __asm__("FUN_L00_00267a08");
 s32 coll_line_fix(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void update_timed_line_collision_particle(O00271d20 *particle) __asm__("FUN_L00_00271d20");
 
@@ -311,7 +307,6 @@ void update_timed_line_collision_particle(O00271d20 *particle) {
         particle->xa = 0;
     }
 }
-void FUN_L00_00267a08_00271df8(unsigned char *) __asm__("FUN_L00_00267a08");
 extern unsigned char *l00_height_culled_particle_texture_refs[] __asm__("D_L00_001B2148");
 #include "rnc/overlay/shared/rendering/002712b8_globals.h"
 extern float height_culled_particle_size_rate_gp __asm__("D_L00_00160210") __attribute__((sda));
@@ -328,7 +323,7 @@ void update_moving_height_culled_particle(unsigned char *particle) {
         *(float *)(particle + 0xC) += height_culled_particle_size_rate_gp * frame_time * 210000.0f;
     }
     if (*(float *)(particle + 0x18) < *(float *)(particle_data + 0x10)) {
-        FUN_L00_00267a08_00271df8(particle);
+        free_effect_particle(particle);
     }
 }
 #include "sda.h"
@@ -336,7 +331,6 @@ typedef struct {
     f32 x, y, z, w;
 } V __attribute__((aligned(16)));
 void FUN_L00_001ff318(V *, V *, f32);
-void add_vectors(V *, V *, V *) __asm__("FUN_L00_001ff290");
 void update_damped_fading_particle(u8 *particle) __asm__("FUN_L00_00271ec8");
 
 void update_damped_fading_particle(u8 *particle) {
@@ -518,11 +512,10 @@ typedef struct {
     S_2725d8 s;
 } P_2725d8;
 extern u8 *D_L00_001B215C NOT_SDA;
-P_2725d8 *FUN_L00_002678b8_c2(s32) __asm__("FUN_L00_002678b8");
 P_2725d8 *spawn_moby_point_attached_particle(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) __asm__("FUN_L00_002725d8");
 
 P_2725d8 *spawn_moby_point_attached_particle(u8 *owner, u8 *attachment_point_selector, s32 color, s32 initial_size_bits, f32 primary_position_w, f32 secondary_position_w) {
-    P_2725d8 *particle = FUN_L00_002678b8_c2(0x37);
+    P_2725d8 *particle = create_part(0x37);
     /* Fakematch: the dead update gives a0 and a3 retail's saved registers. */
     initial_size_bits++;
     initial_size_bits--;
@@ -602,7 +595,6 @@ void update_expanding_damped_rgb_fading_particle(u8 *particle) {
         *(s32 *)(particle + 4) = ((faded_intensity << 16) | packed_alpha_green) | faded_intensity;
     }
 }
-void FUN_L00_00267a08_002728e8(unsigned char *) __asm__("FUN_L00_00267a08");
 void update_expanding_alpha_pulse_particle(unsigned char *particle) __asm__("FUN_L00_002728e8");
 
 void update_expanding_alpha_pulse_particle(unsigned char *particle) {
@@ -613,7 +605,7 @@ void update_expanding_alpha_pulse_particle(unsigned char *particle) {
     particle_data[4] += particle_data[5];
     particle[8] = truncate_float_to_s32(particle_data[4]);
     if (--*(short *)(particle + 0xa) <= 0)
-        FUN_L00_00267a08_002728e8(particle);
+        free_effect_particle(particle);
     if (*(short *)(particle + 0xa) > 0x40)
         *(int *)(particle + 4) = ((0x80 - *(short *)(particle + 0xa)) << 24) | 0x808080;
     else

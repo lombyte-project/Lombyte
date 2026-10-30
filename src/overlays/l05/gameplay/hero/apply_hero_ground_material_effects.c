@@ -11,9 +11,9 @@
 #include "rnc/gameplay/entities/suck_aim.h"
 #include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 int FUN_L00_001f0d60_239fc0(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
-int FUN_001f0b58_239fc0(void) __asm__("FUN_001f0b58");
 f32 absolute_float(f32) __asm__("FUN_001f99c0");
 void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
@@ -54,7 +54,7 @@ void apply_hero_ground_material_effects(void) {
         hero.selector_3 = 1;
     if (current_level_index == 13 && hero.state.current != 0x7B &&
         FUN_L00_001f0d60_239fc0((u8 *)&hero.motion.body_center, 2, 0, hero.capsule_radius + 0.03f) &&
-        FUN_001f0b58_239fc0() == 11) {
+        collision_hit_material() == 11) {
         goto s7B;
     }
     if (saved_ground_type == 11)
@@ -128,7 +128,6 @@ extern f32 D_L05_00174268 NOT_SDA;
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
-s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");

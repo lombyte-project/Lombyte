@@ -6,11 +6,11 @@
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
-extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void lamp_update(struct Moby *m) __asm__("FUN_L12_0030b6c8");

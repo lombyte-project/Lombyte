@@ -7,6 +7,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/view/update_view_context.h"
 
 typedef struct {
     s32 a, b, c, d;
@@ -396,7 +398,6 @@ typedef struct {
     f32 x84, x88, x8c, x90;
 } B001f4490;
 extern B001f4490 D_L00_0016C058;
-void update_entity(void *) __asm__("FUN_L00_00250df8");
 void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
 
 void update_hero_from_debug_camera(void) {
@@ -469,7 +470,6 @@ extern f32 D_L00_0015F448;
 extern char *D_L00_0015F600;
 extern s32 sound_update(void) __asm__("FUN_0022ca50");
 extern void set_background_color(s32, s32, s32) __asm__("FUN_001fb280");
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void update_fog(void) __asm__("FUN_001f2588");
 extern s32 sprintf(char *, const char *, ...);
 extern f64 fptodp(f32) __asm__("FUN_00120478");

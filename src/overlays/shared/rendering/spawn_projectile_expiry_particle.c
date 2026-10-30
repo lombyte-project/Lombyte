@@ -10,10 +10,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_0029B070.c: func_L07_0029B070), where it is exact; names translated to the US level program. */
 
-extern void *create_part(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L07_001B21CC NOT_SDA;
 unsigned char *spawn_projectile_expiry_particle(char *particle_spawn_position, char *particle_motion_vector) __asm__("FUN_L07_0029a2a0");

@@ -17,6 +17,9 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/math/interpolation.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 /* Looks up the value of the current help record, or 0/0x54 in the special cases. */
 /* Ported from rac1-decomp (src/overlays/shared/help_002274A8.c: func_L01_002274A8), where it is exact; names translated to the US level program. */
@@ -264,7 +267,6 @@ void update_hero_frame(void) {
     update_hero_moby_probed_height_bounds();
 }
 extern void get_moby_color(struct Moby *, int *, int *, int *) __asm__("FUN_L00_00250320");
-extern void set_moby_color(struct Moby *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void copy_hero_color_to_item_mobys(void) __asm__("FUN_L00_002072c8");
 extern void update_item_tint_from_hero(struct Moby *, struct Moby *) __asm__("FUN_L00_00207330");
 
@@ -309,7 +311,6 @@ void update_hero_blink_and_gold_weapon_tint(void)
 #ifndef
 #endif
 extern int func_L00_001F10E0_2cd48(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 void update_hero_ground_material_effects(void) {
@@ -1076,7 +1077,6 @@ extern u8 D_L01_001742E0[] NOT_SDA;
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
-s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
@@ -1131,7 +1131,7 @@ void update_hero_ground_contact_and_gravity(void) {
         collision_sound_class = 3;
     }
     hero.ground_sound_class = collision_sound_class;
-    hero.ground_type = FUN_001f0b58_c();
+    hero.ground_type = collision_hit_material();
     if (hero.ground_type == 0) {
         hero.water_surface_z = resolve_camera_surface_height(D_L01_001742E0, (u8 *)&hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {
@@ -1370,7 +1370,6 @@ extern u8 item_available[] __asm__("D_0013D4C0");
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
 extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
 extern s32 pad_pressed_within(s32, s32, s32) __asm__("FUN_L00_00266d60");
-extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");

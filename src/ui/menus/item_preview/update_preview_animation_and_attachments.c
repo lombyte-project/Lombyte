@@ -14,6 +14,8 @@
 
 #include "rnc/ui/menus/item_preview/preview_animation.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
 
 typedef struct {
     u8 pad0[0x10];
@@ -64,8 +66,6 @@ extern s32 advance_preview_animation_queue(void) __asm__("FUN_00226670");
 extern void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
 extern void load_preview_resource_bindings(s32, s32) __asm__("FUN_00226848");
 extern void blend_moby_animation_ex(Moby *, s32, s32, s32, s32) __asm__("FUN_002130d8");
-extern void blend_moby_animation(Moby *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void set_moby_animation(Moby *, s32, s32) __asm__("FUN_00212ed8");
 extern Moby *create_menu_preview_moby(s32) __asm__("FUN_00225490");
 extern Moby *delete_moby(Moby *) __asm__("FUN_00225530");
 extern void refresh_moby_spatial_bounds() __asm__("func_0020DEF8");

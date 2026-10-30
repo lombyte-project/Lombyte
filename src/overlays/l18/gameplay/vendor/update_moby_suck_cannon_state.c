@@ -6,6 +6,7 @@
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
 
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
@@ -27,7 +28,6 @@ int update_moby_suck_cannon_state(struct Moby *moby) {
 #include "rnc/math/fast_math.h"
 
 
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void hide_moby_and_clear_collision(struct Moby *moby) __asm__("FUN_L18_002fcd00");
 

@@ -20,6 +20,8 @@
 #include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002CF2C0.c: func_L05_0031C0F0), where it is exact; names translated to the US level program. */
 
@@ -93,7 +95,6 @@ extern f32 debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") __attribute__((
 extern f32 debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") __attribute__((sda));
 extern void allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern struct Moby *spawn_debris_c8e0(f32, struct Moby *, s32, void *, void *, s32, s32, void *, void *, void *) __asm__("FUN_L00_00263fd8");
-extern void spawn_proximity_gated_bolts(struct Moby *) __asm__("FUN_L01_002787a0");
 extern void spawn_trail_c8e0(void *, s32, f32, f32, s32, s32, s32, void *, f32) __asm__("FUN_L00_00272060");
 extern struct Spark_c8e0 *spawn_puff(void *, f32, f32, f32, s32, void *, f32, s32) __asm__("FUN_L00_0026d000");
 char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) __asm__("FUN_L05_0031d160");
@@ -278,7 +279,6 @@ void draw_moby_glow_sprite(char *m) {
     }
     draw_geometry_quad(&pk, 0, 0);
 }
-extern void FUN_L00_00250df8_d160(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
     unsigned char *destination_moby = (unsigned char *)create_moby(0x5EA);
@@ -291,7 +291,7 @@ char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
         *(float *)(destination_moby + 0x48) = *(float *)(source_moby + 0x48);
         *(long *)(destination_moby + 0x38) = *(long *)(source_moby + 0x38);
         qcopy(destination_moby + 0x10, source_moby + 0x10);
-        FUN_L00_00250df8_d160(destination_moby);
+        update_entity(destination_moby);
     }
     return (char *)destination_moby;
 }

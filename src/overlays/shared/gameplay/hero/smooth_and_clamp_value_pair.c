@@ -20,6 +20,12 @@ int integrate_hero_motion_with_collisions() __asm__("FUN_L05_002413e0");
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/overlay/shared/input/pad/pad_pressed_within.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 /* Steps two floats of arg toward a target and clamps them to [-1, 1]. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00237B00), where it is exact; names translated to the US level program. */
@@ -98,7 +104,6 @@ extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
 s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
 void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void apply_hero_item_slot_selection(int i) __asm__("FUN_L05_0023dc88");
 
@@ -492,7 +497,6 @@ void update_hero_movement_and_collision_probes(void) {
 /* Adapted from the exact FUN_L00_002279b0 (src/overlays/shared/gameplay/hero/hero_set_state.c): L05 has a wider head guard and its own level data. */
 
 extern float D_L05_00174268 NOT_SDA;
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int func_L00_001EFFF0(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void hero_get_collision_ray_endpoints(void *, void *, int, float, float) __asm__("FUN_L00_002126b8");
 extern int hero_set_state(int, int) __asm__("FUN_L05_0024cee8");
@@ -618,7 +622,6 @@ extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
 extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
-extern int pad_pressed_within(int, int, int *) __asm__("FUN_L00_00266d60");
 extern unsigned short D_00141920[] NOT_SDA;
 extern unsigned short D_00141D80[] NOT_SDA;
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
@@ -1109,8 +1112,6 @@ extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32 FUN_L00_001fefc8_c(u8 *) __asm__("FUN_L00_001fefc8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32 fast_sin(f32) __asm__("FUN_001f9de0");
-extern s32 get_first_moby_in_group(void **, s32, s32, s32) __asm__("FUN_L00_002591d0");
-extern s32 get_next_moby_in_group(void **, void *, s32, s32) __asm__("FUN_L00_002592b8");
 extern s32 D_L00_0015F5CC __asm__("D_L00_0015F5CC");
 extern s32 D_0013D4B8;
 extern s32 weapon_ammo_counts[37] __asm__("D_0013D428");
@@ -1394,9 +1395,7 @@ extern int freeze_stats_time_ref_macro[2] __asm__("D_0015EE58") MACRO_ADDR;
 extern int freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") MACRO_ADDR;
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern void mode_freeze_init(int, void *) __asm__("FUN_001fbab8");
-extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void update_resource_counter(void) __asm__("FUN_001ff768");
 
 #include "rnc/overlay/shared/gameplay/hero/smooth_and_clamp_value_pair_data/update_hero_hoverboard_race_progress.h"

@@ -21,6 +21,12 @@
 #include "rnc/overlay/shared/gameplay/entities/002630b8.h"
 #include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
+#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 
 
 /* triggers objects matching the moby's class */
@@ -42,7 +48,6 @@ extern int level_game_mode __asm__("D_L08_0015F5C4");
 extern struct G D_L08_0016D060;
 extern volatile unsigned char D_0015EDB0[1];
 extern unsigned char D_L08_0017CC40[];
-extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void attach_batalia_deserter_class_manipulator(struct Moby *moby) __asm__("FUN_L08_00305138");
 
@@ -107,15 +112,12 @@ typedef struct {
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int fast_dec_timer(void *) __asm__("FUN_001f9740");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern float FUN_001fa688_cf(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float vector_length_xy(void *);
-extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
-extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
 extern int scale_game_frames(int) __asm__("scale_game_frames");
 extern int tick_countdown_32(int *) __asm__("func_001F9740");
@@ -153,7 +155,6 @@ extern char batalia_deserter_name_text[] __asm__("D_L08_001622E8");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void FUN_L00_0025a120(void *);
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern struct {
     char pad[0x2FC];
     int f2FC;
@@ -392,14 +393,12 @@ extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
-extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern char batalia_plumber_name_text[] __asm__("D_L08_00162308");
 extern char *D_L08_001600EC;
 extern unsigned char *D_L08_0015FFD8;
 extern void request_batalia_cannon_mount(void *) __asm__("FUN_L08_002e1698");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
 extern void FUN_L08_002a1880(int);
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 
 /* Watcher moby update with a scripted reveal, then turns its head toward the hero or a random target. */
 void the_plumber_batalia_update(L14WatchMoby *m) __asm__("FUN_L08_003065d8");

@@ -23,6 +23,12 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 
 
@@ -70,7 +76,6 @@ void request_batalia_cannon_mount(struct Moby *command_target_moby) {
 
 extern char *create_moby(int);
 extern char D_0013E533[];
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, int pjoint) __asm__("FUN_L08_002e1c98");
 
@@ -94,7 +99,6 @@ void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, 
 /* builds a basis from a direction vector and writes the orientation into the moby */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E6130), where it is exact; names translated to the US level program. */
 
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 void set_batalia_bolt_pickup_surface_rotation(struct Moby *moby, float *direction_vector) __asm__("FUN_L08_002e4db8");
 
@@ -611,13 +615,8 @@ extern int FUN_L00_00257b90(int, int);
 extern s32 D_0015ED84;
 extern u8 D_0014C050[];
 extern void FUN_L08_00230b38(int, int);
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void set_race_camera(void *pos, void *rot, int mode, int flag) __asm__("FUN_L00_00216f90");
-void set_camera_position(char *src) __asm__("FUN_L00_002ea9d8");
-void set_camera_rotation(char *src) __asm__("FUN_L00_002eaa30");
-void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
-void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
 void FUN_L08_00306b30(u8 *object, s32 mode);
 void FUN_L08_00313ba8(void);
 extern Hero52 hero52 __asm__("D_0013F350");
@@ -634,15 +633,12 @@ extern short D_L08_00161B40_gp __asm__("D_L08_00161B40") __attribute__((sda));
 extern short D_L08_00161B50_gp __asm__("D_L08_00161B50") __attribute__((sda));
 extern short D_L08_00161BF0_gp __asm__("D_L08_00161BF0") __attribute__((sda));
 extern int FUN_L08_00230b38_c(int,int) __asm__("FUN_L08_00230b38");
-extern void func_L00_002EC0C8_2E16A0(int) __asm__("FUN_L00_002eac18");
 extern void func_L00_001FF328_2E16A0(void *,void *,float) __asm__("FUN_L00_001ff378");
 extern void func_L00_00217718_2E16A0(void *,void *,int,int) __asm__("FUN_L00_00216f90");
 extern void func_L08_00307FF0_2E16A0(char *,int) __asm__("FUN_L08_00306b30");
-extern void func_L00_002EBF50_2E16A0(void *,void *,int,int,int) __asm__("FUN_L00_002eaaa0");
 extern float func_002140F8_2E16A0(float,float) __asm__("FUN_002132a8");
 extern float func_00214D28_2E16A0(float *,float,float) __asm__("FUN_00213ed8");
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
-extern void func_00213DE0_2E16A0(void *,int,int,int) __asm__("FUN_00212f90");
 extern char *func_L00_0026EBC0_2E16A0(char *,char *,int,int,float) __asm__("FUN_L00_0026dd20");
 extern void func_L08_00315068_2E16A0(void) __asm__("FUN_L08_00313ba8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -682,7 +678,7 @@ void update_batalia_cannon(Moby *moby) {
         if (data->health == 0) {
             Moby *node;
             (*(float (*)[4])&moby->rot)[1] = 0.0f; moby->command = 2;
-            func_L00_002EC0C8_2E16A0(0); moby->state = 4;
+            jet_end_mount(0); moby->state = 4;
             node = (Moby *)(D_L08_0015FFD8 + (data->platform_index << 8));
             qcopy(direction, (*(float (*)[4])&node->rot));
             direction[2] = fast_add_rotations(direction[2], 3.1415927f);
@@ -702,14 +698,14 @@ void update_batalia_cannon(Moby *moby) {
             transform_vector_by_basis(work, &D_L08_00161A90_gp, (*(float (*)[16])&moby->rot_row0));
             fast_vec_add(work, work, (*(float (*)[4])&moby->pos));
             func_L00_00217718_2E16A0(work, direction, 0, 1);
-            func_L00_002EC0C8_2E16A0(0);
+            jet_end_mount(0);
             hero52.rot[2] = fast_add_rotations(hero52.rot[2], 3.1415927f);
             moby->state = 4;
         } else {
             int *indices; int count;
             if (moby->state != 5) {
                 data->camera_timer = 2;
-                func_L00_002EBF50_2E16A0((*(float (*)[4])&moby->pos), (*(float (*)[4])&moby->rot), 1, 0, 0);
+                jet_mount((*(float (*)[4])&moby->pos), (*(float (*)[4])&moby->rot), 1, 0, 0);
             }
             moby->state = 5;
             {
@@ -779,7 +775,7 @@ void update_batalia_cannon(Moby *moby) {
             if (data->barrel == 1) {
                 int count;
                 build_spherical_offset(direction, D_L08_00161B00_gp * D_0015ED6C, (*(float (*)[4])&moby->rot)[2], -(*(float (*)[4])&moby->rot)[1]);
-                func_00213DE0_2E16A0(data->guns[0], 1, 0, 0);
+                blend_moby_animation(data->guns[0], 1, 0, 0);
                 transform_vector_by_basis(muzzle, &D_L08_00161B30_gp, (*(float (*)[16])&moby->rot_row0));
                 fast_vec_add(muzzle, (*(float (*)[4])&moby->pos), muzzle);
                 create_moby_with_particles(moby, muzzle, direction, target);
@@ -808,7 +804,7 @@ void update_batalia_cannon(Moby *moby) {
             } else {
                 int count;
                 build_spherical_offset(direction, D_L08_00161B00_gp * D_0015ED6C, (*(float (*)[4])&moby->rot)[2], -(*(float (*)[4])&moby->rot)[1]);
-                func_00213DE0_2E16A0(data->guns[1], 1, 0, 0);
+                blend_moby_animation(data->guns[1], 1, 0, 0);
                 transform_vector_by_basis(muzzle, &D_L08_00161B40_gp, (*(float (*)[16])&moby->rot_row0));
                 fast_vec_add(muzzle, (*(float (*)[4])&moby->pos), muzzle);
                 create_moby_with_particles(moby, muzzle, direction, find_batalia_cannon_aim_target((char *)moby));
@@ -872,7 +868,7 @@ void update_batalia_cannon(Moby *moby) {
                     if (visited52[D_0015ED84][moby->mission] != 0xFF) {
                         Moby *node;
                         (*(float (*)[4])&moby->rot)[1] = 0.0f; moby->command = 2;
-                        func_L00_002EC0C8_2E16A0(0); moby->state = 4;
+                        jet_end_mount(0); moby->state = 4;
                         node = (Moby *)(D_L08_0015FFD8 + (data->platform_index << 8));
                         qcopy(muzzle, (*(float (*)[4])&node->rot)); muzzle[2] = fast_add_rotations(muzzle[2], 3.1415927f);
                         fast_vec_normalize(direction, (*(float (*)[16])&node->rot_row0), 2.5f);
@@ -924,7 +920,7 @@ void update_batalia_cannon(Moby *moby) {
         {
             Moby *gun = data->guns[0];
             qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&moby->rot));
-            if ((gun->anim_flags & 2) && gun->prev_seq == 1) func_00213DE0_2E16A0(gun,0,0,0);
+            if ((gun->anim_flags & 2) && gun->prev_seq == 1) blend_moby_animation(gun,0,0,0);
         }
     }
 
@@ -948,7 +944,7 @@ void update_batalia_cannon(Moby *moby) {
         {
             Moby *gun = data->guns[1];
             qcopy((*(float (*)[4])&gun->pos), work); qcopy((*(float (*)[4])&gun->rot), (*(float (*)[4])&moby->rot));
-            if ((gun->anim_flags & 2) && gun->prev_seq == 1) func_00213DE0_2E16A0(gun,0,0,0);
+            if ((gun->anim_flags & 2) && gun->prev_seq == 1) blend_moby_animation(gun,0,0,0);
         }
     }
 
@@ -1911,7 +1907,6 @@ extern unsigned char *FUN_L00_002603d0(int);
 extern unsigned char *FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
 extern unsigned char D_0014BEC0[][4];
 extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") MACRO_ADDR;
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
 extern void convert_pose_to_reference_local(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void build_axis_roll_matrix(void *, void *, float) __asm__("FUN_L08_0026a0f8");

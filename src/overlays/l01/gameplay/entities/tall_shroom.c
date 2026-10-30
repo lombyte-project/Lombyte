@@ -12,6 +12,10 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/overlay/shared/gameplay/entities/cutscene_set_camera_target.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/font_queue_vu_state.h"
 
 typedef struct {
     u8 pad0[0x5C];
@@ -243,7 +247,6 @@ extern BlobHitInfo collision_hit __asm__("D_L01_001742C0");
 extern s32 D_L01_0015F580;
 extern void draw_moby_offset_textured_quad(void) __asm__("FUN_L01_0030bfa8");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_0025e450(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, s32, f32, f32,
                              s32, s32, s32, s32);
 extern void spawn_burst(void *, void *, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026cbb0");
@@ -352,7 +355,6 @@ typedef struct {
     DebrisVars *vars;
 } DebrisMoby;
 
-extern void update_entity(DebrisMoby *) __asm__("FUN_L00_00250df8");
 extern f32 randf_sym(f32 lo, f32 hi) __asm__("FUN_L00_00257c48");
 
 DebrisMoby *spawn_debris(DebrisMoby *parent_moby, void *debris_vector_source, f32 scale) __asm__("FUN_L01_0030be70");
@@ -415,7 +417,6 @@ typedef struct {
 extern CutsceneFx fx_cutscene __asm__("D_L01_0016CCE0");
 /* MACRO_ADDR: retail rebuilds this address with lui/addiu at each use */
 extern u128 fx_prev_pos __asm__("D_L01_00162070") MACRO_ADDR;
-extern void cutscene_set_camera_target(struct Moby *) __asm__("FUN_L00_002637f8");
 extern void moby_point_position(struct Moby *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern char *spawn_splash(f32, f32, void *, void *, void *) __asm__("FUN_L00_002718d0");
@@ -664,7 +665,6 @@ extern s32 level01_environment_mesh_normal_addresses[] __asm__("D_L01_00208138")
 extern s32 level01_environment_mesh_vertex_attribute_addresses[] __asm__("D_L01_00208150");
 extern u8 level01_environment_mesh_uv_scratch[] __asm__("D_L01_00208170");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 void generate_level01_environment_map_uvs();
 void FUN_L00_001fde98(s32, s32, s32, void *, s32);
 

@@ -25,6 +25,14 @@
 #include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -418,12 +426,10 @@ extern char shuttle_missing_target_error_format[] __asm__("D_L14_001FC840");
 extern s32 shuttle_enter_riding_transition_frames_gp __asm__("D_L14_00161B8C") __attribute__((sda));
 extern s32 shuttle_exit_riding_transition_frames_gp __asm__("D_L14_00161B90") __attribute__((sda));
 extern f32 shuttle_horizontal_rider_correction_limit_scale_gp __asm__("D_L14_00161B88") __attribute__((sda));
-extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 extern void debug_print(const char *, short) __asm__("FUN_001e93b0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void gunship_follow_path(void *) __asm__("FUN_L01_002f5168");
 extern void FUN_L00_001fff28(void *, int, float);
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void shuttle_update(struct Moby *m) __asm__("FUN_L14_002e7bd8");
 void shuttle_update(struct Moby *shuttle_moby) {
@@ -978,8 +984,6 @@ void update_looping_path_moby(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002E0538.c: func_L14_002EE150), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *spawn_flying_bolt(void *spawn_position, float *launch_vector, int collision_ignore_moby, int collision_mode) __asm__("FUN_L14_002eccf0");
@@ -1025,10 +1029,8 @@ typedef struct {
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern int FUN_L00_00257b90(int, int);
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void FUN_L00_00259888(void *, struct Moby *, s32, void *, f32);
 extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern char *FUN_L00_0026dd20(char *, char *, int c, int d, float f);
 /* Result of the last collision line test. */
 extern struct {
@@ -2106,7 +2108,6 @@ extern s32 D_L14_0015F594;
 extern char D_0013CAE4[];
 extern float advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
 extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
-extern void update_entity_matrix(void *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
@@ -2564,12 +2565,9 @@ extern char *D_L14_001600EC;
 extern unsigned char *D_L14_0015FFD8;
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
-extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 void mark_elevator_collected(Level14VendorMoby *m) __asm__("FUN_L14_002ef5a8");
 extern void FUN_L00_00263d40(int, int);
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 
 /* Watcher moby update: gated by its collectable and trigger, then turns its head toward the hero or a random target. */

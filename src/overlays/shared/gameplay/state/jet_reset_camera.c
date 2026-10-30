@@ -10,6 +10,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 typedef struct {
     unsigned char h[0x404];
     unsigned char f[0x7FF];
@@ -79,7 +80,6 @@ extern unsigned short D_00151708 NOT_SDA;
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void enter_hero_vehicle_mode(s32, s32, void *) __asm__("FUN_L00_00210a08");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void init_camera_system(void) __asm__("FUN_L00_001ed280");
 extern void FUN_L00_002852c0(void);
 

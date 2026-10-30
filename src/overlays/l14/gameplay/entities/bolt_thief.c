@@ -22,6 +22,10 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
 
 /* Spawns the effect pieces for a moby: two sparks, the ring of three and a final coloured one. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_002FF358), where it is exact; names translated to the US level program. */
@@ -246,8 +250,6 @@ extern void moby_set_state_one(void *) __asm__("FUN_L14_002ffc08");
 extern void initialize_moby_path_state(void *) __asm__("FUN_L14_002fe900");
 extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
 extern void emit_moby_offset_particles(void *) __asm__("FUN_L14_002feca8");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void FUN_L00_00258278(char*,float,float*,float,float,float);
 
 /* Same routine as bolt_thief_update, without the child hit test. */
@@ -548,8 +550,6 @@ extern struct {
 } D_L14_0016CF60;
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
-extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
-extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 

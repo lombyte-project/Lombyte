@@ -11,6 +11,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
 
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
@@ -101,7 +102,6 @@ extern HoverboardGirlVector race_camera_vectors[] __asm__("D_L05_00215BC0");
 extern HoverboardGirlVector saved_camera_vectors[] __asm__("D_00141050");
 
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern void blend_moby_animation(HoverboardGirlMoby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern f32 probe_ground_height(f32, HoverboardGirlVector *, s32) __asm__("FUN_00213508");
 extern s32 get_dialogue_entry(HoverboardGirlMoby *) __asm__("FUN_L00_002667d0");
 extern void initialize_npc_dialogue(HoverboardGirlMoby *,

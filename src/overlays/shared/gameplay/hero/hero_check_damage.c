@@ -20,11 +20,16 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 /* line query from -> to; fills the collision hit record, nonzero on a hit */
 extern int collision_line(void *from, void *to, int mask, void *ignore, int) __asm__("FUN_001efa68");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 
 /*
  * Ledge probe: steps forward from `pos` along the hero's yaw looking for a
@@ -1138,7 +1143,6 @@ extern s32 D_00141660_lui[4] __asm__("D_00141660") NOT_SDA;
 extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA;
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void spawn_indexed_class_a7_moby(s32) __asm__("FUN_L00_002b4138");
 
 void spawn_hero_item_mobies(void) __asm__("FUN_L00_0020ea80");
@@ -1344,7 +1348,6 @@ extern char D_0013E533_lui[] __asm__("D_0013E533") NOT_SDA;
 extern float sum_basis_absolute_differences(float *a, float *b) __asm__("FUN_L00_0020f0b8");
 #include "rnc/overlay/shared/gameplay/hero/hero_check_damage_globals.h"
 extern int hero_item_rotation_history_target_window_size_gp __asm__("D_L00_0015F694") __attribute__((sda));
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 
@@ -1479,8 +1482,6 @@ extern u8 D_L00_0015F6A8[] __asm__("D_L00_0015F6A8");
 extern u8 opt_mirror_anim __asm__("D_0015EDB5");
 extern s32 large_font_height __asm__("D_L00_0015F690") __attribute__((sda));
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern void pack_pose(void *, void *, s32, s32, s32) __asm__("FUN_L00_002092c8");
 extern void enqueue_hero_glow_draw_callback_once(void) __asm__("FUN_L00_00207d00");
 extern s32 FUN_L00_0020d540(s32) __asm__("FUN_L00_0020d540");
@@ -1796,7 +1797,6 @@ extern int hero_is_in_special_state() __asm__("FUN_L00_0020d568");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
 void hero_switch_item(int i) {
@@ -2231,7 +2231,6 @@ void enter_hero_vehicle_mode(int mode, int requested_state, char *vehicle_moby) 
     }
     hero_set_state(requested_state, 1);
 }
-extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern void clear_hero_queued_animation(void) __asm__("FUN_L00_00232628");
 
@@ -2994,7 +2993,6 @@ extern char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;
 extern X_212318 D_L00_00173E40_lui __asm__("D_L00_00173E40") NOT_SDA;
 extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
 extern int FUN_001efa68_212318(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern int FUN_001f0b58_212318(void) __asm__("FUN_001f0b58");
 extern void FUN_00125180_212318(void *, void *) __asm__("FUN_00125180");
 #define X D_L00_00173E40_lui
 
@@ -3049,7 +3047,7 @@ void clip_hero_velocity_against_probed_surfaces(int force) {
     fast_vec_add(&secondary_probe_offset_or_end, &secondary_probe_offset_or_end, &b);
     r = -1;
     if (FUN_001efa68_212318(&b, &secondary_probe_offset_or_end, 4, hero.moby, 0) && D_L00_00173E5C > 0)
-        r = FUN_001f0b58_212318();
+        r = collision_hit_material();
     primary_hit_normal_angle = 0.0f;
     if (FUN_001efa68_212318(&primary_probe_start, &primary_probe_offset_or_end, 4, hero.moby, 0) && X.i1C > 0)
         primary_hit_normal_angle = fast_arc_tan(X.v40.f[2], vector_length_xy(&X.v40));
@@ -3101,7 +3099,6 @@ extern f32 D_L00_00173E68 NOT_SDA;
 
 s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
-s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");

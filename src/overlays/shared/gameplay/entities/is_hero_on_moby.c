@@ -8,6 +8,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* 1 when m is the hero's current moby of interest: unk4F8 in control mode 3
    or state 0x1C, otherwise unk2FC while unk30E is clear. */
@@ -73,7 +74,6 @@ void spawn_proximity_gated_bolts(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_0026E8E0.c: func_L01_00279E10), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) __asm__("FUN_L01_00278e20");
 

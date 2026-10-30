@@ -10,6 +10,9 @@
 #include "rnc/gameplay/entities/suck_aim.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/entities/copy_hero_moby_field_38.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002BB2F8), where it is exact; names translated to the US level program. */
 
@@ -48,8 +51,6 @@ float interpolate_value_with_repeated_squaring(int flag, int squaring_loop_limit
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E2F98), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__("FUN_L13_002e1c50");
 
@@ -285,7 +286,6 @@ frame_tail:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E7E90), where it is exact; names translated to the US level program. */
 
 extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 unsigned char *spawn_ship_rocket(char *firing_moby, char *spawn_position, char *target, char *initial_rotation, int lifetime_frames,
                                 float scale) __asm__("FUN_L13_002e6a58");

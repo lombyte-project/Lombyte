@@ -21,6 +21,11 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00303CA8), where it is exact; names translated to the US level program. */
@@ -241,7 +246,6 @@ void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) __asm__("FUN_L00_0025b6
 extern void func_L00_0025C710_304310(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern int func_L00_001EFFF0_304310(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern Row *D_L12_001B0C30_304310[] __asm__("D_L12_001B0930");
 extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
@@ -323,7 +327,7 @@ void update_oscillating_target_link(Moby *moby) {
         qcopy(&start, &moby->pos.z);
         qcopy(&end, ((float *)&D_L12_0015FFD8[target].pos));
         make_hit_descriptor(hit, moby, 0x10001, 1.0f, D_L12_0015F580);
-        func_L00_001EFFF0_304310(&start, &end, 0, 0, hit);
+        collision_line(&start, &end, 0, 0, hit);
         break;
     }
 }
@@ -331,8 +335,6 @@ void update_oscillating_target_link(Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_003046C8), where it is exact; names translated to the US level program. */
 
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_L08_00313ba8(void *);
 
 extern char hoven_turret_camera_local_offset __asm__("D_L12_00161EF0") __attribute__((sda));
@@ -491,18 +493,15 @@ extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90"
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void FUN_L00_00262cf0(void *, void *, float, float, float);
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void create_moby_with_particles(void *, void *, void *, int) __asm__("FUN_L08_002e7eb0");
 extern void update_hoven_turret_target_alignment_timer(void *) __asm__("FUN_L12_00303370");
 extern void draw_hoven_turret_hud() __asm__("FUN_L12_00304218");
 extern void draw_hoven_turret_destruction_fade() __asm__("FUN_L12_00304d98");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void attach_manipulator(void *, int, void *);
-extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void detach_manipulator(void *, void *);
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
@@ -687,7 +686,7 @@ void hoven_turret_update(struct Moby *moby) {
             }
             FUN_L00_001fff28(data->f10, 1, -data->f74);
             if (moby->anim_flags & 2) {
-                blend_moby_animation_c(moby, 5, 0, 1);
+                blend_moby_animation(moby, 5, 0, 1);
             }
             fast_dec_timer_s16(&data->f70);
             if ((pad_held[0] & 0xA0) && data->f70 == 0) {
@@ -696,7 +695,7 @@ void hoven_turret_update(struct Moby *moby) {
                 float yaw;
                 int i;
 
-                blend_moby_animation_c(moby, data->f80 == 1 ? 4 : 3, 0, 1);
+                blend_moby_animation(moby, data->f80 == 1 ? 4 : 3, 0, 1);
                 yaw = fast_add_rotations(moby->rot.z, 1.5707964f);
                 build_spherical_offset(firing_offset, hoven_turret_firing_offset_rate * D_0015ED6C_gp, yaw, data->f74);
                 if (data->f80 == 1) {
@@ -980,7 +979,6 @@ void draw_hoven_turret_destruction_fade(Level12VendorCounterMoby *moby) {
 extern void find_point_ahead(struct Moby *, void *, float) __asm__("FUN_L01_00274b78");
 extern void *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(struct Moby *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern void blend_moby_animation(struct Moby *, int, int, int) __asm__("FUN_00212f90");
 extern int collect_mobies_in_sphere(void *, int, struct Moby *, void *, float) __asm__("FUN_L00_001f2868");
 extern int coll_sphere(void *, int, struct Moby *, float) __asm__("FUN_L00_001f0d60");
 extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");

@@ -20,6 +20,9 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/rendering/effects/spawn_spark.h"
+#include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
@@ -190,7 +193,6 @@ void draw_water_reservoir(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_002EE068), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_rocket(char *initial_velocity, char *pos, int owner, int seed, float yaw, float f1, float f2) __asm__("FUN_L12_002ecce8");
 
@@ -241,7 +243,6 @@ typedef struct { char pad0[0x18]; int moby; } ShotColl;
 extern ShotColl D_L12_001742C0_lui __asm__("D_L12_001742C0") NOT_SDA;
 extern int camera_secondary_mode __asm__("D_001413D4") NOT_SDA;
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern int collision_line(void *, void *, int, struct Moby *, int) __asm__("FUN_001efa68");
 extern int coll_sphere(void *, float, int, struct Moby *) __asm__("FUN_L00_001f0d60");
@@ -337,7 +338,6 @@ void rocket_update(struct Moby *moby) {
 
 extern unsigned char D_0013D408_b[] __asm__("D_0013D408");
 extern char D_00141968_h[] __asm__("D_00141968");
-extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern unsigned char D_0013D50F_e[] __asm__("D_0013D408");

@@ -18,6 +18,8 @@
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/overlay/shared/gameplay/entities/cutscene_set_camera_target.h"
+#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
 
 /* Help message playback state (same layout as S00203908 in shared/ui/help/help_request.c). */
 struct L03HelpState {
@@ -234,8 +236,6 @@ struct L03Cutscene {
 };
 
 extern struct L03Cutscene D_L03_0016C960;
-extern void cutscene_set_camera_target(void *) __asm__("FUN_L00_002637f8");
-extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 /* Starts the cutscene, then during mode 3 (frames 900-10000) emits two particle beams from the listed moby. */
 void update_kerwan_cutscene_effects(char *owner_moby) __asm__("FUN_L03_002e01d0");

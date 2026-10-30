@@ -22,6 +22,8 @@
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/world/collision/collision_line.h"
 
 
 
@@ -86,10 +88,8 @@ extern float animation_start(int a, unsigned int b) __asm__("FUN_L04_002418b0");
 extern float animation_end(int a, unsigned int b) __asm__("FUN_L04_00241910");
 extern float fast_cos(float);
 extern int D_L17_0015FFD8_t; /* no foreign declaration */
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern short fleet_beam_endpoint_axis_offset __asm__("D_L17_00161498") __attribute__((sda));
 extern unsigned char *spawn_trail_particle(char *parent, void *pos, float *vec) __asm__("FUN_L17_0026fb60");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 
 extern void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");

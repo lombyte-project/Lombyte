@@ -15,6 +15,8 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/entities/suck_aim.h"
 #include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern char *D_L00_001DD100_lui[] __asm__("D_L00_001DD100") NOT_SDA;
 
@@ -210,7 +212,6 @@ int FUN_L00_0025ff38(char *query_moby, char *target_output, float best, int *lis
 }
 typedef float M4_260400[16] __attribute__((aligned(16)));
 extern char *FUN_L00_002603d0_c(char *) __asm__("FUN_L00_002603d0");
-void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
 int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *input_position, void *input_rotation, float *output_position, void *out) {
     M4_260400 basis_rotation_matrix, composed_rotation_matrix;
@@ -266,7 +267,6 @@ int transform_attachment_pose(u8 *comparison_object, u8 *reference_object, void 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_002616E0), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_002603d0(char *);
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 int convert_pose_to_reference_local(int x, char *o, float *a, float *c, float *b, float *d) __asm__("FUN_L00_00260668");
 int convert_pose_to_reference_local(int x, char *reference_object, float *input_position, float *input_rotation, float *output_position, float *output_rotation) {
@@ -408,7 +408,6 @@ extern s32 D_0015EEA0_macro __asm__("D_0015EEA0") MACRO_ADDR;
 extern int D_L00_0015F598;
 extern unsigned char D_L00_0015FC88_macro[] __asm__("D_L00_0015FC88") MACRO_ADDR;
 extern void debug_print() __asm__("FUN_001e93b0");
-extern int solve_quadratic_equation(float *, float *, float, float, float) __asm__("FUN_L00_002595a0");
 extern int FUN_L00_00261b48(int, void *, void *, void *);
 extern void spawn_bolt_by_value(void *, void *, void *, int, int, int) __asm__("FUN_L00_002a7438");
 

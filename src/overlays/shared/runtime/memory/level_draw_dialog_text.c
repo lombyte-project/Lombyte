@@ -12,6 +12,8 @@
 #include "rnc/rendering/do_gif_paging.h"
 #include "rnc/rendering/setup_gif_paging.h"
 #include "rnc/ui/hud/get_icon_frame.h"
+#include "rnc/ui/help/get_help_message_text.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 
 /* State of the level's message box (D_L00_00173040). */
 typedef struct {
@@ -54,9 +56,7 @@ extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("FUN_001f6af0")
 extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) __asm__("FUN_001f7090");
 extern void font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("FUN_001f7580");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
-extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern s64 get_frame_texture(s32) __asm__("FUN_001ffa10");
-extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 /* Same registers as (w, h, tex, x, y, cx, cy, angle); floats are listed first so they are evaluated first. */
 extern void draw_rotated_sprite(f32 x, f32 y, f32 cx, f32 cy, f32 angle, s32 w, s32 h, s64 tex) __asm__("FUN_00200600");
 

@@ -24,6 +24,10 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
+#include "rnc/rendering/font_queue_vu_state.h"
 
 /* Update for moby class 1470: watches camera boxes around the hero, gives skill points and help messages, and turns the camera. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F4210), where it is exact; names translated to the US level program. */
@@ -542,7 +546,6 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
 extern void update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
 extern void update_moby_path_transform(void *) __asm__("FUN_L11_0031a438");
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 extern float blarg_ship_firing_speed_gp __asm__("D_L17_001623E8") __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
@@ -810,8 +813,6 @@ char *try_activate_blarg_ship_from_list(int list) {
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F6DA0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00257470(void *, int, int);
-extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
-extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void update_hit_triggered_fragment_spawner(struct Moby *moby) __asm__("FUN_L17_002f5260");
@@ -937,7 +938,6 @@ void compute_reflection_sphere_map_uvs(int vertex_count, V3 *input_directions, V
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
 
 extern char reflection_strip_uv_buffer[] __asm__("D_L17_001DE8A0");
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 void compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__("FUN_L17_002f54d8");
 

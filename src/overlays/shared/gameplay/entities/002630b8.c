@@ -18,6 +18,7 @@
 #include "rnc/gameplay/entities/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Record suck_get_aim_height returns for a moby: collision size and aim height. */
 typedef struct MobyBound {
@@ -472,7 +473,6 @@ typedef struct {
 
 extern float frame_time_gp[] __asm__("D_0015ED6C") __attribute__((sda));
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);

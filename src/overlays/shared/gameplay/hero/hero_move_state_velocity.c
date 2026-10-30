@@ -15,6 +15,8 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/interpolation.h"
 #include "rnc/math/spherical_offset.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
 
 typedef union {
     u128 q;
@@ -455,7 +457,6 @@ void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 float spring_angle(float *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
-void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *working_matrix, void *rotation_output, float pitch_smoothing_parameter, float b, float c) __asm__("FUN_L00_00216130");
 
 void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *working_matrix, void *rotation_output, float pitch_smoothing_parameter, float pitch_angular_velocity_damping, float pitch_angular_velocity_limit) {
@@ -1091,10 +1092,8 @@ extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
 extern void copy_matrix_rotation(void *, void *) __asm__("FUN_001fa298");
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void initialize_moby_transform_history(void *, char *) __asm__("FUN_L00_00262500");
 extern void create_moby_transform_history_entry(char *, int, int) __asm__("FUN_L00_00262528");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
 /* Launches the equipped gadget moby: aims it at its target (or along the camera),
  * builds its orientation matrix and starts its animation/sound. */

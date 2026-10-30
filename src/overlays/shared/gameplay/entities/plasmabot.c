@@ -19,6 +19,12 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/audio/sound/trooper_play_sound.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
@@ -205,7 +211,6 @@ void update_linked_moby_position(char *moby) {
 
 extern char *create_moby(int);
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 unsigned char *spawn_floating_mine(unsigned char *owner, char *spawn_position) __asm__("FUN_L14_002ffaf8");
 
@@ -259,7 +264,6 @@ extern char plasmabot_empty_bound_path_format[] __asm__("D_L14_001FBC38");
 extern char plasmabot_missing_hatch_index_format[] __asm__("D_L14_001FBC90");
 extern float probe_ground_height(float, void *, int);
 extern int D_L14_0015F5C4;
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int register_beam_slot(void *, int, int) __asm__("FUN_L00_002e1f28");
 extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
@@ -276,10 +280,8 @@ extern void FUN_L00_0024f7c8(char *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025e450_c(struct Moby *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(float, char *, int, char *);
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_moby_bone_transform_c(char *, int, void *) __asm__("build_moby_bone_transform");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 float update_plasmabot_aim_quaternion(char *moby, int flag, float angle) __asm__("FUN_L14_002b35d8");
 int follow_plasmabot_path(char *moby) __asm__("FUN_L14_002b3418");
 int count_listed_plasmabots_preparing_or_sweeping_beam(int index) __asm__("FUN_L14_002b3920");
@@ -291,7 +293,6 @@ void FUN_L14_002b2ed8_c(struct Moby *m) __asm__("FUN_L14_002b2ed8");
 void process_plasmabot_hit_reaction(char *m) __asm__("FUN_L14_002b2f60");
 void update_plasmabot_aim_joint_rotation(char *moby, float angle) __asm__("FUN_L14_002b37b0");
 void reset_listed_plasmabot_beam_cooldowns(int idx) __asm__("FUN_L14_002b3890");
-void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 
 #define call_4BF0(m) FUN_L14_002b39a0_c((unsigned char *)(m))
 #define call_CE58 ((float (*)(float *, float, float *, float, float, float))approach_angle)
@@ -1459,7 +1460,6 @@ extern s32 D_001413D0_dfd10 __asm__("D_001413D0") NOT_SDA;
 extern void spawn_explosion_dfd10(struct Moby *, void *, void *, f32, f32, s32, s32, s32,
     f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
 
 typedef struct {
     u8 pad0[0x10];

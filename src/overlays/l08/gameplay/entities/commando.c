@@ -30,6 +30,14 @@
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
+#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/rendering/font_queue_vu_state.h"
 
 typedef struct {
     SwarmPathFollower follow[2]; /* 0x00: [0] cruising (state 1), [1] circling (state 2) */
@@ -344,7 +352,6 @@ extern int offset_mesh_first_pass_fixed_alpha_gp __asm__("D_L08_00161DF0") __att
 extern int pair_offset_mesh_fixed_alpha_gp __asm__("D_L08_00161E00") __attribute__((sda));
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_00161E08");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void draw_scrolled_mesh_batch(int) __asm__("FUN_L08_002f0b40");
 extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
@@ -728,7 +735,6 @@ extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* spawn_colored_effect (rendering/00279f00.c) with size before life: the real order
    (size last) reorders the argument evaluation and moves six words. */
 extern unsigned char *spawn_colored_effect_size_first(void *, void *, void *, float, short, unsigned char, unsigned char, unsigned char, unsigned char) __asm__("FUN_L08_0027b450");
-extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 
 void draw_flickering_mesh_effect(struct Moby *m) __asm__("FUN_L08_002f5e58");
 void draw_flickering_mesh_effect(struct Moby *moby) {
@@ -1013,7 +1019,6 @@ extern char flickering_mesh_texture_height_zero_message[] __asm__("D_L08_001FC2A
 extern char flickering_mesh_texture_width_tile_limit_warning[] __asm__("D_L08_001FC2D0");
 extern s32 DebugPrint();
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void update_flickering_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f70a0");
 
@@ -1141,11 +1146,8 @@ typedef struct {
 } WM;
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float vector_length_xy(void *);
-extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
-extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 typedef struct {
@@ -1179,11 +1181,9 @@ extern char commando_name_string[] __asm__("D_L08_001621E0");
 extern int commando_height_probe_distance_limit_gp __asm__("D_L08_001621D8") __attribute__((sda));
 extern char *D_L08_001600EC;
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
-extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(void *) __asm__("FUN_L02_002e0cd8");
 extern void FUN_L00_0025a120(void *);
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 
 /* Watcher update, same routine as batalia_deserter_update with two more states and the joint pose copy. */
 void commando_update(WM *m) __asm__("FUN_L08_00302ce8");

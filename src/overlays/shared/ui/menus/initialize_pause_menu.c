@@ -17,6 +17,10 @@
 #include "sda.h"
 #include "rnc/rendering/do_gif_paging.h"
 #include "rnc/rendering/setup_gif_paging.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/entities/start_scene.h"
+#include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility.h"
+#include "rnc/rendering/view/update_view_context.h"
 
 typedef unsigned int u128d __attribute__((mode(TI), aligned(16)));
 typedef union {
@@ -89,9 +93,6 @@ typedef struct {
 } ViewSettings;
 extern Ent *l00_pause_menu_page_mobys[] __asm__("D_L00_001B9E90");
 extern s32 D_L00_0015F5D8;
-extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
-extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
-extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern s32 D_00141660[];
 extern s32 D_0015EE78_gp __attribute__((sda));
 extern void *D_L00_00197300[];
@@ -128,7 +129,6 @@ extern s32 fade_to_black(s32) __asm__("FUN_001f4a58");
 extern void mode_freeze_init(s32, void *) __asm__("FUN_001fbab8");
 extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
 extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
-extern void set_moby_animation(Ent *, s32, s32) __asm__("FUN_00212ed8");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern int sound_update(void) __asm__("FUN_0022ca50");
 extern void allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
@@ -140,7 +140,6 @@ void close_pause_menu(void) __asm__("FUN_L00_00276908");
 extern void close_pause_menu(void) __asm__("FUN_L00_00276908");
 extern void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
 extern void prepare_target_level_transition(s32) __asm__("FUN_L00_0028ed58");
-extern void start_scene(void *) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(void *) __asm__("FUN_L00_00299460");
 extern void queue_language_zero_movie(void *) __asm__("FUN_L00_002994f8");
 extern void queue_movie_with_game_language(void *) __asm__("FUN_L00_00299560");
@@ -160,7 +159,6 @@ extern s32 D_L00_0015F3F8;
 extern int D_L00_00173E00[];
 extern f32 player_camera[] __asm__("D_L00_00166C80");
 extern s32 frame_size __asm__("D_0013E504") NOT_SDA;
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern s32 sce_gs_sync_v(s32) __asm__("FUN_00122298");

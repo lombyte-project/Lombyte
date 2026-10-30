@@ -22,6 +22,11 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
 
 struct MobyView {
     u8 pad0[0xC];
@@ -161,7 +166,6 @@ extern void FUN_L00_002334d0(void *, void *, f32);
 extern void adjust_hero_velocity_from_collision_probes(s32) __asm__("FUN_L06_002291d0");
 extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");
 extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
-extern void update_entity(struct MobyView *) __asm__("FUN_L00_00250df8");
 extern s32 FUN_L00_001ff600(f32, void *, void *);
 extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
 extern struct PadState D_0013C940;
@@ -203,7 +207,6 @@ extern void fast_sin_cf(s32, s32) __asm__("FUN_L00_00209638");
         FUN_L00_001ff600(frame_scale * -0.07999998f * len + len, &hero.motion.velocity, &hero.motion.velocity);           \
     }
 extern void FUN_L00_0025f730(void *, f32);
-extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 extern void step_angle_toward_target(f32 *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -219,7 +222,6 @@ extern s32 collect_mobies_in_sphere(f32, void *, s32, struct MobyView *, void *)
 extern f32 compute_directed_angle_delta(s32, f32, f32) __asm__("FUN_L00_0025bb38");
 extern void update_hero_target_heading(f32, f32, f32) __asm__("FUN_L00_00214ed8");
 extern void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void set_tracked_class_5f3_moby_position(struct MobyView *, void *) __asm__("FUN_L00_002a9b80");
 extern s32 spawn_homing_bolt(struct MobyView *, void *, f32, f32, s32, f32, f32, f32) __asm__("FUN_L00_002a96f8");
 extern void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
@@ -253,7 +255,6 @@ extern void rotate_hero_about_fixed_local_pivot(f32, f32, f32) __asm__("FUN_L00_
 extern void hero_move_state_velocity(void) __asm__("FUN_L00_00214658");
 extern void compute_hero_fixed_offset_world_position(void *) __asm__("FUN_L00_0020d2f8");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
-extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 extern s32 sample_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
 extern s32 offset_path_index(void *, s32, s32, s32) __asm__("FUN_L00_0025d7a0");
@@ -262,7 +263,6 @@ extern void hero_integrate_velocity(void) __asm__("FUN_L00_00214108");
 extern u8 D_L17_0017A3C0[];
 extern struct HeroAnimRow D_L00_00179AC0_t[] __asm__("D_L17_0017A3C0");
 extern void spawn_random_alpha_rotated_particle(void *, void *, f32) __asm__("FUN_L00_00271b18");
-extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 extern f32 l17_run_stick_turn_threshold[] __asm__("D_L17_0017C6C4");

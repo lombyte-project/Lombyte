@@ -23,6 +23,14 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/rendering/effect_texture.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
+#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -442,8 +450,6 @@ extern void spawn_spark(void *, void *, void *, int, int, int, int, int, int) __
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void approach_position(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
 extern void spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern float l05_drain_cover_gravity __asm__("D_L05_00161DAC") __attribute__((sda));
 extern float l05_drain_cover_hover_acceleration __asm__("D_L05_00161DB0") __attribute__((sda));
 extern int D_L05_00161DB8 __asm__("D_L05_00161DB8") __attribute__((sda));
@@ -758,7 +764,6 @@ extern void *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
 extern void initialize_moby_launch_motion(struct Moby *, struct Moby *, void *, void *, int) __asm__("FUN_L05_00318648");
 extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
-extern void update_entity_f5c8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
                             void *vel, f32 f2);
 extern char pipe_mounted_grating_command_records[] __asm__("D_L05_001BAAA0");
@@ -838,7 +843,7 @@ void pipe_mounted_grating_update(struct Moby *moby) {
                     initialize_moby_launch_motion(piece, moby, piece_initial_motion_step, spin_vel, truncate_float_to_s32(scale_time(life)));
                     *(int *)(vars + 0xC) = 0x200;
                     piece->rot.x = angle;
-                    update_entity_f5c8(piece);
+                    update_entity(piece);
                 }
             }
         }
@@ -1115,10 +1120,6 @@ extern LiftPose *D_L05_001600EC_l __asm__("D_L05_001600EC");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 approach_with_speed(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern void FUN_L00_00260738(char *a, void *b, void *c, void *d);
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void jet_mount(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
-extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 extern void lift_camera_view(void *, void *, void *) __asm__("FUN_L05_00315ee0");
 extern void place_marker_ring(void *) __asm__("FUN_L05_00315f70");
 
@@ -1386,7 +1387,6 @@ void ocean_rilgar_update(char *moby) {
         break;
     }
 }
-extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 extern void FUN_L00_001fff28(void *, int, float);
 extern char *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 
@@ -1564,7 +1564,6 @@ extern s32 breast_growth_count_gp __asm__("D_L05_00161ED0") __attribute__((sda))
 extern unsigned char D_0015EDB0[] MACRO_ADDR;
 extern unsigned char D_L05_0017C8A0[];
 extern void update_hoverboard_girl_boobs_animation(char *, int) __asm__("FUN_L05_00316810");
-extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void update_hoverboard_girl_cutscene_instances(char *arg) __asm__("FUN_L05_00316990");
 void update_hoverboard_girl_cutscene_instances(char *reference_moby) {
@@ -1644,13 +1643,10 @@ typedef struct {
 } L16WatchScratch_c;
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float FUN_001f96b0_c(float) __asm__("FUN_001f96b0");
 extern float fast_add_rotations_c(float, float) __asm__("fast_add_rotations");
 extern float fast_subtract_rotations_c(float, float) __asm__("fast_subtract_rotations");
 extern float vector_length_xy_c(void *) __asm__("vector_length_xy");
-extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
-extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int scale_game_frames_c(int) __asm__("scale_game_frames");
 extern unsigned char D_0015EDB0_b_c __asm__("D_0015EDB0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -1680,7 +1676,6 @@ typedef struct {
 extern char qwarks_bouncer_dialogue_name[] __asm__("D_L05_00161EF0");
 extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 
 extern unsigned char D_0013DD47 NOT_SDA;
 /* Watcher moby update (variant of shady_salesman_update): turns its head toward the hero or a random target. */
@@ -1862,7 +1857,6 @@ extern char shady_salesman_dialogue_name[] __asm__("D_L05_00161EF8");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void attach_big_head_cheat_manipulator_to_matching_moby(char *) __asm__("FUN_L02_002e0cd8");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");

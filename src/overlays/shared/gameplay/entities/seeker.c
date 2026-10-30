@@ -17,6 +17,8 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 /* Per-instance variables of the oClass 52 moby (moby->pvars). */
 typedef struct {
@@ -66,7 +68,6 @@ extern Vec4f D_L09_00166F40;
 extern u8 seeker_invalid_bound_path_format[] __asm__("D_L09_00208320");
 
 extern void debug_print(void *, s16) __asm__("FUN_001e93b0");
-extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern s32 FUN_00213260(s32);
 extern void FUN_L00_00257470(struct Moby *, s32, s32);
 extern s32 FUN_L00_00257b90(s32, s32);
@@ -570,10 +571,8 @@ typedef struct { float x, y, z; char padC[0x34]; Moby *who; char pad44[0xC]; } _
 
 extern int D_L09_001618D8; /* no foreign declaration */
 extern int FUN_L00_002dc9f0();
-extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 extern s32 rand(void);
 extern void FUN_L00_00257470_c2(void *, int, int) __asm__("FUN_L00_00257470");
-extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 int select_moby_combat_target(char *a, char *o, float best) __asm__("FUN_L00_0025fcb8");
 int select_list_point_toward_target(char *a0, void *list, char *pt, char *out) __asm__("FUN_L01_0028b5e0");
 s32 FUN_L00_00258b50(void *m, void *c, void *v, Vec4 *out, f32 f);
@@ -602,12 +601,10 @@ extern void wake_2E39E0(Moby *) __asm__("FUN_L00_0025a120");
 extern int FUN_L04_00252e18_c(Moby *, void *, float) __asm__("FUN_L04_00252e18");
 extern void steer_init_2E39E0(int *) __asm__("FUN_L01_0026d930");
 extern int rand_2E39E0(void) __asm__("FUN_001160d8");
-extern void animate_2E39E0(Moby *, int, int, int) __asm__("FUN_00212f90");
 extern void approach_w(Moby *, float, void *, float, float, float) __asm__("FUN_L00_00258278");
 extern void FUN_L01_0028b5e0_c(Moby *, char *, void *, void *) __asm__("FUN_L01_0028b5e0");
 extern int move_w(Moby *, int *, void *, void *, float) __asm__("FUN_L00_00258b50");
 extern int recover_2E39E0(Moby *, void *) __asm__("FUN_L00_002dc9f0");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void effects_update_2E39E0(Moby *, void *) __asm__("FUN_L00_0025d538");
 
 void update_ground_melee_enemy(Moby *moby) __asm__("FUN_L09_002e27d8");
@@ -742,20 +739,20 @@ void update_ground_melee_enemy(Moby *moby) {
         data->f1A4 = data->speed * D_0015EE6C_2E39E0;
         if (rand_2E39E0() & 1) moby->flags |= 0x8000;
         data->settings = &settings_2E39E0;
-        if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
+        if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
         ground = moby->pos.z = probe_ground_height(&moby->pos, 0, 0.5f);
         break;
     case GROUND_ENEMY_STATE_IDLE:
         fast_vec_sub(&step, &query, &moby->pos);
         if ((kind < 2 || fast_vec_length(&step) < data->range + 4.0f) && absolute_float(moby->pos.z - query.z) < 8.0f && !random_integer_below(19)) {
             moby->state = 2;
-            if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (moby->command == 1 && !random_integer_below(19)) {
             if (random_integer_below(0x100) & 1) data->side_deg = -data->side_deg;
             data->side = data->side_deg * 0.017453292f;
             data->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             moby->command = 0;
         }
         break;
@@ -771,17 +768,17 @@ void update_ground_melee_enemy(Moby *moby) {
             data->side = data->side_deg * 0.017453292f;
             data->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             moby->command = 0;
         } else if (moby->command == 1 && !random_integer_below(19)) {
             if (random_integer_below(0x100) & 1) data->side_deg = -data->side_deg;
             data->side = data->side_deg * 0.017453292f;
             data->side_timer = scale_game_frames((int)random_float_between(30.0f, 90.0f));
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             moby->command = 0;
         }
-        if (moby->prev_seq == 4 && (moby->anim_flags & 2)) animate_2E39E0(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
+        if (moby->prev_seq == 4 && (moby->anim_flags & 2)) blend_moby_animation(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
         break;
     case GROUND_ENEMY_STATE_CHASE: {
         int flags;
@@ -803,7 +800,7 @@ void update_ground_melee_enemy(Moby *moby) {
         fast_vec_sub(&away, &query, &data->home);
         if ((flags & 4) || (vector_distance_xy(&moby->pos, &query) < 1.5f && !(flags & 2))) {
             moby->state = 4;
-            if (moby->prev_seq != 1) animate_2E39E0(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (data->f190 < D_0015EE6C_2E39E0 || 1.0f < steep || (flags & 2)) {
             data->home_timer = scale_game_frames(50);
             moby->state = 5;
@@ -829,7 +826,7 @@ void update_ground_melee_enemy(Moby *moby) {
         }
         if ((moby->anim_flags & 2) && vector_distance_xy(&moby->pos, &query) > 1.5f) {
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         }
         ground = probe_ground_height(&moby->pos, 0, 0.5f);
         data->fall = data->fall - D_0015EE70_2E39E0 * 9.8f;
@@ -851,21 +848,21 @@ void update_ground_melee_enemy(Moby *moby) {
         flags = move_w(moby, &data->steer, &goal, &step, 1.0f);
         if (vector_distance_xy(&moby->pos, &data->home) < 2.0f) {
             moby->state = 1;
-            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
         }
         fast_vec_sub(&away, &query, &data->home);
         if (expired && fast_vec_length(&away) < data->range) {
             if (moby->group != 0xFF) FUN_L01_0026e090(moby->group, 1);
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (expired && moby->command == 1) {
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (flags & 2) {
             moby->pos.x = previous.x;
             moby->pos.y = previous.y;
             moby->state = 12;
-            if (moby->prev_seq != 4) animate_2E39E0(moby, 4, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(random_int_between(10, 13)));
         }
         moby->command = 0;
         break;
@@ -873,7 +870,7 @@ void update_ground_melee_enemy(Moby *moby) {
     case GROUND_ENEMY_STATE_HURT_KNOCKBACK:
         if (mine_fall(moby, data->motion) & 1) {
             moby->state = 9;
-            if (moby->prev_seq != 3) animate_2E39E0(moby, 3, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(random_int_between(10, 13)));
             return;
         }
         if (moby->pos.z < 0.0f) {
@@ -884,14 +881,14 @@ void update_ground_melee_enemy(Moby *moby) {
     case GROUND_ENEMY_STATE_RECOVER_TO_IDLE:
         if (recover_2E39E0(moby, data->motion)) {
             moby->state = 1;
-            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, 0);
+            if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 0, 0);
             data->fC8 = 0;
         }
         break;
     case GROUND_ENEMY_STATE_HURT_RECOVERY:
         if (compute_interpolated_record_value(moby) > 29.0f) {
             moby->state = 3;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
             return;
         }
         break;
@@ -923,25 +920,25 @@ void update_ground_melee_enemy(Moby *moby) {
         fast_vec_sub(&away, &query, &data->home);
         if ((flags & 4) || (vector_distance_xy(&moby->pos, &query) < 1.5f && steep <= 1.0f)) {
             moby->state = 4;
-            if (moby->prev_seq != 1) animate_2E39E0(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (steep <= 1.0f && !(flags & 2)) {
             moby->state = 5;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         } else if ((flags & 2) && expired) {
             moby->state = 1;
-            if (moby->prev_seq != 2) animate_2E39E0(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 0, scale_game_frames(random_int_between(10, 13)));
         } else if (moby->anim_flags & 2) {
             int animation;
             random_integer_below(4);
             animation = random_integer_below(4) ? 2 : 4;
-            animate_2E39E0(moby, animation, 0, scale_game_frames(random_int_between(10, 13)));
+            blend_moby_animation(moby, animation, 0, scale_game_frames(random_int_between(10, 13)));
         }
         moby->command = 0;
         break;
     }
     case GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK: {
         Moby *other;
-        if (moby->seq != 0 && moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+        if (moby->seq != 0 && moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         step.x = fast_cos(moby->rot.z) * (data->speed * D_0015EE6C_2E39E0);
         step.y = fast_sin(moby->rot.z) * (data->speed * D_0015EE6C_2E39E0);
         step.z = 0.0f;
@@ -972,7 +969,7 @@ void update_ground_melee_enemy(Moby *moby) {
         }
         if (data->anchor == 0 || vector_distance_xy(&moby->pos, &data->anchor->pos) > convert_integer_to_float(data->leash)) {
             moby->state = 5;
-            if (moby->prev_seq != 0) animate_2E39E0(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
+            if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         }
         moby->command = 0;
         break;

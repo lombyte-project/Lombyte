@@ -5,6 +5,8 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 void probe_ground_height(void *, s32, f32) __asm__("FUN_00213508");
 /* Calls probe_ground_height(a, 0x20, 0.5f). */
@@ -255,7 +257,6 @@ typedef struct {
 extern int D_L00_0015F434 __asm__("D_L00_0015F434");
 extern u128 D_L00_00173E80_lui __asm__("D_L00_00173E80") NOT_SDA;
 extern float FUN_00213508_00259fe8(void *, int, float) __asm__("FUN_00213508");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
 
 extern E_259fe8_00259fe8 D_L00_0016E080[] NOT_SDA;
@@ -684,7 +685,6 @@ typedef struct {
     unsigned char b70;
 } O_25b440;
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void approach_w(void *, void *, float, float, float,
                                     float) __asm__("FUN_L00_00258278");
 extern float FUN_001f9dc8_25b440(float) __asm__("FUN_001f9dc8");

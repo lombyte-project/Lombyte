@@ -26,6 +26,15 @@
 #include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Pvars of the l02 watcher NPC: it idles, turns its head toward the hero and hands out a reward. */
 typedef struct {
@@ -82,14 +91,10 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) __asm__("FUN_L02_
 extern void update_skid_mcmarx_relocation_sequence(struct Moby *) __asm__("FUN_L02_002e1fb8");
 extern void initialize_moby_grounding(struct Moby *) __asm__("FUN_L02_0025c758");
 extern void initialize_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_002668a0");
-extern s32 update_npc_dialogue(struct Moby *, WatcherVars *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(struct Moby *, f32) __asm__("FUN_L01_002783a8");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
-extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
-extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void update_joint_animation(f32, f32, struct Moby *, void *, s32) __asm__("FUN_L00_002628d8");
 
 extern WatcherReward talk_camera __asm__("D_L02_0016CE60") NOT_SDA; /* dialogue camera spot */
@@ -102,10 +107,6 @@ extern u8 item_available[] __asm__("D_0013D4C0") NOT_SDA; /* by item id */
 extern void start_indexed_disc_stream(int) __asm__("FUN_L02_00298c68");
 extern void advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
 extern f32 approach_value(f32 *p, f32 target, f32 maxstep) __asm__("FUN_00213ed8");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 /* Aridia NPC with a carried prop moby (data+0x178): dialogue state machine (the hint in state 1 is usage
  * record 50), a path-camera ride (3/4) that fades D_L02_0015F3FC in and out, then the shared head-tracking tail. */
@@ -474,7 +475,6 @@ void skid_mcmarx_update(struct Moby *moby) {
 #include "qcopy.h"
 extern char *D_L02_001600EC_n __asm__("D_L02_001600EC");
 extern char *D_L02_0015FFD8_n __asm__("D_L02_0015FFD8");
-extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern int queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
@@ -543,8 +543,6 @@ void update_skid_mcmarx_relocation_sequence(struct Moby *moby) {
 extern struct Moby *D_L02_0015FFD8;
 extern unsigned char D_0014C050[][16];
 extern char voice_pool[] __asm__("D_0013E550");
-extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 /* Lift platform carried by an animated driver moby: follows the driver's joint 0, waits at an end (3/5) for the
  * hero to step on, then plays the driver's up or down animation (2/4) with its loop sound until it ends. */

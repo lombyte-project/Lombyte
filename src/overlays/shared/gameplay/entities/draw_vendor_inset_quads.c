@@ -12,6 +12,8 @@
 #include "sda.h"
 #include "rnc/rendering/do_gif_paging.h"
 #include "rnc/rendering/setup_gif_paging.h"
+#include "rnc/audio/streaming/start_audio_stream_read.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_0029FD68.c: func_L00_002A0C20), where it is exact; names translated to the US level program. */
 
@@ -286,10 +288,8 @@ extern void swap_render_buffer_chain(void) __asm__("FUN_00233630");
 extern void capture_draw_buffer(s32) __asm__("FUN_L00_001f99c0");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
-extern s32 start_audio_stream_read(void *, s32, s32) __asm__("FUN_00216788");
 extern void append_draw_buffer_upload_packets(s32, u32, u32) __asm__("FUN_L00_002a0fc8");
 extern void reset_gs_registers(void) __asm__("FUN_001f3868");
 extern void draw_mobys_setup(void) __asm__("FUN_0020d278");

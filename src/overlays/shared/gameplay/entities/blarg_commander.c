@@ -8,9 +8,10 @@
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 
-extern void FUN_L00_00250df8_8670(void *) __asm__("FUN_L00_00250df8");
 
 char *create_class_55b_moby_from_source(char *source_object) __asm__("FUN_L12_00308670");
 
@@ -27,14 +28,13 @@ char *create_class_55b_moby_from_source(char *source_object) {
         *(char **)(allocated_object + 0xB8) = source_object;
         fast_mem_zero16(object_data, 0x20);
         *(int *)(object_data + 0x10) = (int)(object_data + 0x20);
-        FUN_L00_00250df8_8670(allocated_object);
+        update_entity(allocated_object);
     }
     return (char *)allocated_object;
 }
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 #include "rnc/gameplay/entities/moby.h"
 

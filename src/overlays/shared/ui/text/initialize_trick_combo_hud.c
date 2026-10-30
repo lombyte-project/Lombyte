@@ -5,12 +5,14 @@
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/hud/get_icon_frame.h"
+#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/ui/help/get_help_message_text.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00264C88), where it is exact; names translated to the US level program. */
 
 extern int D_L05_0015F97C;
 #include "rnc/overlay/shared/ui/text/initialize_trick_combo_hud_data/hud_release_held_element.h"
-void set_animation_parameter(s32 arg0, s32 arg1) __asm__("FUN_001ff570");
 
 extern short D_L05_0015F978 __attribute__((sda));
 void hud_release_held_element(void) __asm__("FUN_L05_00264298");
@@ -202,12 +204,10 @@ void update_trick_combo_hud(HudCounter *element) {
 }
 extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
-extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern void font_print_center_large(s32, s32, u64, char *, s32) __asm__("FUN_001f6c20");
 extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
 extern s32 hud_screen_position(char *, s32 *, s32 *) __asm__("FUN_L00_00235a70");
 extern void draw_cropped_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_L00_0023b6c0");
-extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 
 extern s32 D_L05_0015FAE4 MACRO_ADDR;
 extern s32 D_L05_0015FAE8 MACRO_ADDR;

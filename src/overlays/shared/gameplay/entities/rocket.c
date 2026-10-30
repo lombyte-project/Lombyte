@@ -10,6 +10,7 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 typedef struct {
     float pad0[4];
@@ -61,7 +62,6 @@ void emit_moby_sprite_particles(char *moby) {
 #include "sda.h"
 #include "qcopy.h"
 extern int func_001F9850_cc1b8(int) __asm__("FUN_001f96f8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) __asm__("FUN_L10_002cc1b8");
 
 char *create_rocket(float scale, void *initial_velocity, void *pos, int owner, int target, int timer_duration) {

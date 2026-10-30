@@ -8,6 +8,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/ground_probe.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002CD118), where it is exact; names translated to the US level program. */
 
@@ -34,7 +35,6 @@ void emit_sine_modulated_rgba_draw_packet(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002D7B60), where it is exact; names translated to the US level program. */
 
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 
 int hero_is_near_ground(void) __asm__("FUN_L15_002d6770");

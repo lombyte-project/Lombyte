@@ -5,6 +5,7 @@
 
 #include "rnc/gameplay/entities/moby.h"
 #include "moby_update.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 typedef struct {
     s32 count;
@@ -24,7 +25,6 @@ extern void FUN_L00_001eb078(const char *, ...);
 extern void FUN_L00_001ff040(void *, s32, s32);
 extern struct Moby *FUN_L00_00250768(void);
 extern void FUN_L00_00250480(struct Moby *);
-extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 extern f32 FUN_L00_00200240(s32);
 extern s32 fptodp(f32) __asm__("FUN_00120478");
 

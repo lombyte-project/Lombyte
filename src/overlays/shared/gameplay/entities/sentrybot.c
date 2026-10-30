@@ -19,6 +19,13 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/audio/sound/trooper_play_sound.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Sentrybot update: runs the patrol, alert and attack state machine, then sets the alert level and the eye colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_00298BB8), where it is exact; names translated to the US level program. */
@@ -47,7 +54,6 @@ extern int *D_L15_001B0AB0[];
 extern int D_L15_0015F5C4;
 extern int D_L15_0015F5CC;
 extern int D_L15_0015FFD8_m __asm__("D_L15_0015FFD8");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int begin_sentrybot_turn_toward_heading(unsigned char *, char *, int, int, float) __asm__("FUN_L15_00299880");
@@ -85,7 +91,6 @@ extern void set_sentrybot_alarm_duration(char *m, int a) __asm__("FUN_L15_002cba
 void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
 
 extern void prepare_sentrybot_alarm(unsigned char *moby) __asm__("FUN_L15_002cbba0");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void transform_scaled_vertex_batch(char *arg0, int arg1, void *arg2,
                                           char *arg3) __asm__("FUN_0020cd48");
@@ -927,7 +932,6 @@ void sentrybot_update(unsigned char *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AA60), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 int begin_sentrybot_turn_toward_heading(unsigned char *moby, char *moby_data, int next_state, int next_animation, float angle) {
     float heading_delta = -fast_subtract_rotations(*(float *)(moby + 0x48), angle);
@@ -946,25 +950,25 @@ int begin_sentrybot_turn_toward_heading(unsigned char *moby, char *moby_data, in
             *(float *)(moby_data + 0x178) = stored_heading_delta + -6.2831855f;
         }
         if (moby[0x53] != 0xC) {
-            blend_moby_animation_c(moby, 0xC, 0, scale_game_frames(10));
+            blend_moby_animation(moby, 0xC, 0, scale_game_frames(10));
         }
 
     } else if (heading_delta < -0.7853982f) {
         moby[0x20] = 6;
         if (moby[0x53] != 0xA) {
-            blend_moby_animation_c(moby, 0xA, 0, scale_game_frames(10));
+            blend_moby_animation(moby, 0xA, 0, scale_game_frames(10));
         }
 
     } else if (heading_delta > 0.7853982f) {
         moby[0x20] = 7;
         if (moby[0x53] != 0xB) {
-            blend_moby_animation_c(moby, 0xB, 0, scale_game_frames(10));
+            blend_moby_animation(moby, 0xB, 0, scale_game_frames(10));
         }
 
     } else {
         moby[0x20] = next_state;
         if (moby[0x53] != next_animation) {
-            blend_moby_animation_c(moby, next_animation, 0, scale_game_frames(10));
+            blend_moby_animation(moby, next_animation, 0, scale_game_frames(10));
         }
         turn_required = 0;
     }
@@ -1054,7 +1058,6 @@ int can_sentrybot_approach_linked_moby(void *mm) {
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029AFB8), where it is exact; names translated to the US level program. */
 
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 int find_sentrybot_attention_target(char *moby) {
     char *moby_data = *(char **)(moby + 0x78);
@@ -1495,7 +1498,6 @@ void draw_sentrybot_effect_quads(char *moby) {
 extern char D_L15_001673C0_y[] __asm__("D_L15_001673C0");
 extern int D_L15_00174458_y[] __asm__("D_L15_00174458");
 extern float D_0015ED6C;
-extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 void spawn_rocket_trail_spark(char *moby) __asm__("FUN_L15_0029ae18");
 
@@ -1682,9 +1684,7 @@ extern unsigned char *D_L15_001B26DC NOT_SDA;
 extern unsigned char *FUN_L00_002712b8(void *pos, float *vec, int s, int a, int col, int n, float x, float y, float z, float w, float pw);
 extern void *FUN_L00_0026bb70_c(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern void suck_draw_reticle(void *, int, float, float, void *, int, int, float, int) __asm__("FUN_L00_001edf60");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_001ff2c0(void *, void *, void *);
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_001ffd48(void *, void *, float);
 extern void FUN_L00_001ffe20(void *, void *, void *);
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
@@ -2123,7 +2123,6 @@ extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int allocate_packed_color_point_light_slot(float *pos, float radius, float intensity, int color) __asm__("FUN_L00_0023e5e0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern unsigned char *D_L15_001B26AC NOT_SDA;
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void spawn_owner_target_particle(int a0, void *a1, char *a2) __asm__("FUN_L15_0025e2c0");
 unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(void *a, void *b, int c, int d, float f, int n, int e, int g, int h) __asm__("FUN_L00_0026bb70");
@@ -2312,7 +2311,6 @@ extern void spawn_moving_hero_relative_alpha_fade_particle(float *pos, char *vel
 void draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
 
 extern void draw_group_moby_effect_quads(unsigned char *) __asm__("FUN_L15_002a29b8");
-extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void func_L00_0025A8E8_m(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
 void update_hero_seeking_group_moby(char *moby) __asm__("FUN_L15_002a2488");
@@ -2380,7 +2378,7 @@ s2:
     ((unsigned char *)moby)[0x20] = 3;
     if (((unsigned char *)moby)[0x53] != 1) {
         animation_blend_frames = scale_game_frames(10);
-        blend_moby_animation_c2(moby, 1, 0, animation_blend_frames);
+        blend_moby_animation(moby, 1, 0, animation_blend_frames);
     }
     *(int *)(data + 0x68) = scale_game_frames(0xF0);
     return;
@@ -2411,7 +2409,7 @@ s3:
     if (((unsigned char *)moby)[0x53] != 1) return;
     if ((((unsigned char *)moby)[0x70] & 2) == 0) return;
     animation_blend_frames = scale_game_frames(10);
-    blend_moby_animation_c2(moby, 2, 0, animation_blend_frames);
+    blend_moby_animation(moby, 2, 0, animation_blend_frames);
     return;
 
 s4:
@@ -2427,7 +2425,6 @@ tailA:
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_002A3A48), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 int activate_first_inactive_group_moby(int moby_group_index, void *pos) __asm__("FUN_L15_002a2868");
 
@@ -2441,7 +2438,7 @@ int activate_first_inactive_group_moby(int moby_group_index, void *pos) {
             char *data;
             listed_moby[0x20] = 2;
             if (listed_moby[0x53] != 0)
-                blend_moby_animation_u(listed_moby, 0, 0, 0);
+                blend_moby_animation(listed_moby, 0, 0, 0);
             *(unsigned short *)(listed_moby + 0x34) |= 1;
             listed_moby[0x31] = 0;
             data = *(char **)(listed_moby + 0x78);
@@ -3373,7 +3370,7 @@ void prepare_sentrybot_alarm(unsigned char *moby) {
     if (moby[0x20] == 1) {
         moby[0x20] = 2;
         if (moby[0x53] != 1) {
-            blend_moby_animation_u(moby, 1, 0, scale_game_frames(10));
+            blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         }
     }
     if (moby[0x20] == 3) {

@@ -16,6 +16,14 @@
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/entities/copy_hero_moby_field_38.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Moves a moby along a path between its ends once its collectable flag is set, easing between nodes. */
@@ -31,7 +39,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
@@ -917,22 +924,14 @@ extern void spawn_class_144_moby(struct Moby *, Vec4 *) __asm__("FUN_L09_002efda
 extern struct Moby *spawn_class_4ea_projectile(void *, void *, void *, int) __asm__("FUN_L09_00307ba8");
 extern void FUN_L08_00313ba8(void);
 extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void suck_draw_reticle(void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_001edf60");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern void attach_manipulator(struct Moby *, s32, void *) __asm__("FUN_0020cb10");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_001fff28(void *, int, float);
 
 void turret_update(struct Moby *moby) __asm__("FUN_L09_00304c80");
@@ -1226,7 +1225,6 @@ void update_damage_causer(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_003095D0), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
-extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_barrier_replacement(struct Moby *owner, int spawned_moby_class) __asm__("FUN_L09_00308220");
 

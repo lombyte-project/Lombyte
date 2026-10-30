@@ -3,12 +3,12 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated.h"
+#include "rnc/rendering/sky/do_sky_gif_paging.h"
+#include "rnc/rendering/sky/setup_sky_gif_paging.h"
 
 
-extern void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
 extern void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");
-void do_sky_gif_paging(void) __asm__("FUN_0022b558");
-void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 
 void render_sky_shells(void) __asm__("FUN_L03_0022c6a8");
 

@@ -14,6 +14,9 @@
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L06_00167400[];
 extern OvlVec4 D_L06_001fe8d0[];
@@ -176,7 +179,6 @@ extern unsigned char D_0015EDB4;
 extern unsigned char D_0014C050[];
 extern unsigned int fast_tween_color(float, int, int) __asm__("FUN_001fa6e0");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void draw_number(void *, void *, int, unsigned int, int, int, int, float) __asm__("FUN_L01_00285768");
 
 extern int level_mobys_q __asm__("D_L06_0015FFD8") __attribute__((sda));
@@ -308,9 +310,7 @@ typedef struct {
 } Obj;
 
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 

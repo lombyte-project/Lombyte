@@ -17,11 +17,13 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 extern struct UsageStat help_records[] __asm__("D_00141968");
 extern char *D_L06_0015FFD8_83b0 __asm__("D_L06_0015FFD8");
 extern u8 level06_help_hint_variant_selector[] __asm__("D_0013D4CE");
-extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 
 /* Level 6 help hints: shows the help messages for the area and records how often and when each was due. */
 void update_level06_help_hints(struct Moby *moby) __asm__("FUN_L06_003083b0");
@@ -322,9 +324,7 @@ typedef struct {
 
 extern char *create_moby(int);
 extern float D_L06_0015F580[] MACRO_ADDR;
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 

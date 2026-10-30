@@ -6,6 +6,8 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/rendering/font_queue_vu_state.h"
 
 
 
@@ -17,7 +19,6 @@ struct Pkt611c0 {
     int *p;
 };
 extern struct Pkt611c0 l12_render_packet_cursor __asm__("D_L12_001611C0");
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L01_0021fa98(int, int, int, int, int, int);
 extern void FUN_L12_002667fc(int, int, int, int);
 
@@ -62,7 +63,6 @@ typedef struct {
 
 extern L12MobyList D_L12_0016CCE0;
 extern unsigned char l12_npc_big_head_manipulator[] __asm__("D_L12_0017C8C0");
-extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void apply_npc_big_head_cheat(char *moby) __asm__("FUN_L12_002e6b60");
 

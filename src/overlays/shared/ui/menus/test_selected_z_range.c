@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/ui/vendor/vendor_item_info.h"
 #include "asm.h"
+#include "rnc/ui/help/get_help_message_text.h"
 
 /* For a below 0xE0 true when z is 42..43, else when z is at least 39. */
 int test_selected_z_range(int z_range_selector, float x, float y, float z) __asm__("FUN_L00_002497f8");
@@ -29,7 +30,6 @@ typedef struct {
 extern Menu D_L00_001841F0;
 extern char menu_bolt_cost_format[] __asm__("D_L00_0015FE38");
 extern char menu_label_escape_error_text[] __asm__("D_L00_0015FE40");
-extern u8 *get_help_message_text(s32) __asm__("FUN_001fdd10");
 extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 
 /* Copies menu item idx's label into out, expanding one %b (the bolt cost)

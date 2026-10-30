@@ -23,6 +23,12 @@
 #include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/overlay/shared/gameplay/entities/copy_hero_moby_field_38.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_hit_material.h"
 extern float D_L00_001615AC_gp __asm__("D_L00_001615AC") __attribute__((sda));
 extern float D_L00_001615B4_gp __asm__("D_L00_001615B4") __attribute__((sda));
 extern float D_L00_001615C8_gp __asm__("D_L00_001615C8") __attribute__((sda));
@@ -733,7 +739,6 @@ typedef struct {
 } G_2bb400;
 extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
 extern float FUN_001fa580_2bb400(float, float) __asm__("FUN_001fa580");
-extern void FUN_0020e098_2bb400(void *) __asm__("FUN_0020e098");
 
 typedef struct {
     int pad;
@@ -775,7 +780,7 @@ void update_linked_moby_scale_and_rotation(unsigned char *moby) {
         *(float *)(*(char **)(moby + 0x24) + 0x24) * moby_vars->fC * random_float_between(0.5f, 1.0f);
     *(float *)(moby + 0x44) =
         FUN_001fa580_2bb400(*(float *)(moby + 0x44), normalize_angle(moby_vars->fC));
-    FUN_0020e098_2bb400(moby);
+    refresh_moby_spatial_bounds_from_basis(moby);
 }
 
 #include "qcopy.h"
@@ -865,7 +870,6 @@ extern short D_L00_001DBF08[];
 extern void random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void FUN_L00_002bbb00_c(int) __asm__("FUN_L00_002bbb00");
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis,
                                  float angle) __asm__("FUN_00214890");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1431,7 +1435,6 @@ struct Moby *spawn_morphoray_chicken(void *a) __asm__("FUN_L00_002c9348");
 void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 void hud_init_particles(HudElem *e) __asm__("FUN_L00_00236268");
 void hud_update_particles(void) __asm__("FUN_L00_00236458");
-void release_point_light_slot(int i) __asm__("FUN_L00_0023e838");
 void FUN_L00_00263d40(int a, int b);
 extern char D_0013A5E0_2BDAF0[] __asm__("D_0013CAE0");
 extern char item_unlocked[] __asm__("D_0013D408");
@@ -1457,7 +1460,6 @@ extern void func_L00_002BE3A8_2BDAF0(void *) __asm__("FUN_L00_002bd0a0");
 extern void func_L00_001FF4B0_2BDAF0(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_001F9BD8_2BDAF0(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int remove_hud_item(int) __asm__("FUN_001ff480");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern void hud_update_particles(void) __asm__("FUN_L00_00236458");
 
 void morphoray_update(Moby *moby) __asm__("FUN_L00_002bc7e8");
@@ -2460,7 +2462,6 @@ typedef struct {
 } S173E40;
 extern int D_L00_00173E40[] NOT_SDA;
 int FUN_001efa68_002bec80(Vec4_2bec80 *, Vec4_2bec80 *, int, void *, int) __asm__("FUN_001efa68");
-unsigned int collision_hit_material(void) __asm__("FUN_001f0b58");
 float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby) __asm__("FUN_L00_002bec80");
 
 float probe_moby_landing_height(Vec4_2bec80 *probe_position, void *probing_moby) {
@@ -2959,8 +2960,6 @@ int try_start_moby_hop(Mob_2C0CF8 *moby, Blk *block, void *target, int check_lin
 }
 #include "eetypes.h"
 #include "qcopy.h"
-void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
-void copy_hero_moby_field_38(unsigned char *) __asm__("FUN_L00_0025d1b8");
 unsigned char *spawn_doom_bot(int a, u128 *spawn_position, u128 *initial_vector) __asm__("FUN_L00_002bfe08");
 
 unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initial_vector) {

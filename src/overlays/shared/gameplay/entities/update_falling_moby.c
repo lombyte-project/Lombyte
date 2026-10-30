@@ -8,13 +8,13 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
 
 
 
 /* Falling moby: applies gravity, eases its angles toward the target and fades out until its timer ends. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002DF738), where it is exact; names translated to the US level program. */
 
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 
 void update_falling_moby(char *moby) __asm__("FUN_L03_002de370");
 

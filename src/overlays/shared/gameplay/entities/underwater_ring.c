@@ -15,6 +15,9 @@
 #include "rnc/overlay/shared/gameplay/entities/002630b8.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 
 typedef struct {
     s16 timer;
@@ -33,9 +36,6 @@ typedef struct {
     s32 enabled;
 } VendorVars;
 
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern int get_first_moby_in_group(struct Moby **, int, int, int) __asm__("FUN_L00_002591d0");
-extern int get_next_moby_in_group(struct Moby **, struct Moby *, int, int) __asm__("FUN_L00_002592b8");
 extern void set_moby_list_state(int, int) __asm__("FUN_L01_0026e0e0");
 extern u8 D_0013F3D0[];
 extern u8 D_L15_001BB830[];
@@ -278,7 +278,6 @@ extern u8 D_0014C050[];
 extern u32 D_0013CAE4 NOT_SDA;
 extern void try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
-extern void set_moby_animation(struct Moby *, int, int) __asm__("FUN_00212ed8");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void enter_hero_vehicle_mode(int, int, struct Moby *) __asm__("FUN_L00_00210a08");

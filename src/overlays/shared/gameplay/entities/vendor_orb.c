@@ -19,8 +19,17 @@
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
 #include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
-void attach_manipulator(unsigned char *, int, char *) __asm__("FUN_0020cb10");
 float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void FUN_L00_001fff28(char *, int, float);
 void vendor_orb_update(unsigned char *p) __asm__("FUN_L00_002df730");
@@ -57,8 +66,6 @@ typedef union {
 } R_2df808;
 extern unsigned char *FUN_L00_0024e838_2df808(int) __asm__("FUN_L00_0024e838");
 extern float FUN_L00_00257be8_2df808(float, float) __asm__("FUN_L00_00257be8");
-extern void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_randomly_rotated_colored_moby(int owner, V_2df808 *position, V_2df808 *vector,
                                  int flags, unsigned char red, unsigned char green,
                                  unsigned char blue, unsigned char alpha,
@@ -146,10 +153,6 @@ s32 FUN_L00_002e02e0_c(void) __asm__("FUN_L00_002e02e0");
 s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 void emit_hydrodisplacer_effect(char *m) __asm__("FUN_L00_002e01b0");
 void end_hydrodisplacer_interaction(char *a) __asm__("FUN_L00_002e0340");
-void set_camera_position(char *src) __asm__("FUN_L00_002ea9d8");
-void set_camera_rotation(char *src) __asm__("FUN_L00_002eaa30");
-void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
-void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
 extern char D_0013E633_2E0E50[] __asm__("D_0013F350");
 extern char D_0013A5E0_2E0E50[] __asm__("D_0013CAE0");
 extern int D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4") MACRO_ADDR;
@@ -165,7 +168,6 @@ extern char D_L00_00166EC0_2E0E50[] __asm__("D_L00_00166DC0");
 extern int func_001F9850_2E0E50(int) __asm__("FUN_001f96f8");
 extern int pad_pressed_within(int, int, int) __asm__("FUN_L00_00266d60");
 extern int func_L00_002E1790_2E0E50(Moby *) __asm__("FUN_L00_002e02e0");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int func_001FA898_2E0E50(float) __asm__("FUN_001fa6d0");
 extern float func_00214D28_2E0E50(float *, float, float) __asm__("FUN_00213ed8");
@@ -174,7 +176,6 @@ extern void func_001F9C08_2E0E50(void *, void *, void *, float) __asm__("FUN_001
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float func_001FA790_2E0E50(float, float) __asm__("FUN_001fa5c8");
 extern float func_001FA748_2E0E50(float, float) __asm__("FUN_001fa580");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern int func_001F9908_2E0E50(void *) __asm__("FUN_001f9740");
 
 void hydrodisplacer_update(Moby *moby) __asm__("FUN_L00_002df9a0");
@@ -501,7 +502,6 @@ extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
-extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
 
@@ -687,7 +687,6 @@ extern s32 D_L00_00161BF8_c[] __asm__("D_L00_00161BF8") MACRO_ADDR;
 extern s32 D_L00_00161C38_c[] __asm__("D_L00_00161C38") MACRO_ADDR;
 extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") MACRO_ADDR;
 extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") MACRO_ADDR;
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 int release_beam_slot_by_id(int id) __asm__("FUN_L00_002e2040");
 int release_beam_slot_by_id(int id) {
@@ -715,7 +714,6 @@ extern s32 D_L00_00161BF8[] MACRO_ADDR;
 extern s32 D_L00_00161C38[] MACRO_ADDR;
 extern s32 D_L00_00161C48[] MACRO_ADDR;
 extern s32 D_L00_00161C88[] MACRO_ADDR;
-extern void release_point_light_slot(s32) __asm__("FUN_L00_0023e838");
 
 void release_beam_slot(s32 i) __asm__("FUN_L00_002e20f8");
 
@@ -1329,7 +1327,6 @@ extern float D_0015ED6C_2e3a88 __asm__("D_0015ED6C");
 float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 float absolute_float(float) __asm__("FUN_001f99c0");
 void sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
-void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float pterodactyl_path_speed_gp __asm__("D_L00_00161C98") __attribute__((sda));
 extern float pterodactyl_scale_multiplier_gp __asm__("D_L00_00161C9C") __attribute__((sda));
 void pterodactyl_update(unsigned char *m) __asm__("FUN_L00_002e3a88");
@@ -1400,8 +1397,6 @@ void red_plant_update(unsigned char *moby) {
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void spawn_explosion(void *, void *, void *, float, float, int, float, int, float, float, int, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");

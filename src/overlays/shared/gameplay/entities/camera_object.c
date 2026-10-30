@@ -19,6 +19,16 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility.h"
+#include "rnc/ui/help/try_set_help_message.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 /* per-frame level ambience (wind/sway) state machine: picks a random target, then eases toward it */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A5B20), where it is exact; names translated to the US level program. */
@@ -208,7 +218,6 @@ int fetch_and_add_global_accumulator(int addend) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
-void update_entity(unsigned char *) __asm__("FUN_L00_00250df8");
 /* Creates a class 0x3EF moby at v and runs update_entity on it. */
 unsigned char *create_camera_collision_moby(u128 *spawn_position) __asm__("FUN_L00_002a4de0");
 
@@ -530,12 +539,8 @@ typedef struct {
 extern V_2a57a8 hero_pos __asm__("D_0013F3D0") NOT_SDA;
 extern s32 D_0013CAE4_lui __asm__("D_0013CAE4") NOT_SDA;
 extern s32 D_L00_0015F5CC_2a57a8 __asm__("D_L00_0015F5CC");
-void attach_manipulator(M_2a57a8 *, s32, void *) __asm__("FUN_0020cb10");
-void blend_moby_animation_u(P_2a57a8 *, s32, s32, s32) __asm__("FUN_00212f90");
 void FUN_L00_002a5040_2a57a8(void) __asm__("FUN_L00_002a5040");
 void FUN_L00_001fff28_2a57a8(void *, s32, f32) __asm__("FUN_L00_001fff28");
-void upd_a(M_2a57a8 *) __asm__("FUN_L00_00250df8");
-s32 try_set_help_message(s32, s32) __asm__("FUN_00215130");
 void open_vendor_menu(P_2a57a8 *) __asm__("FUN_L00_0029a6b0");
 
 #include "rnc/overlay/shared/gameplay/entities/camera_object_data/vendor_update.h"
@@ -573,7 +578,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         for (i = 0; i < 2; i++) {
             attach_manipulator(q->mC, i, (u8 *)q + 0x10 + i * 0x40);
         }
-        upd_a(q->mC);
+        update_entity(q->mC);
         break;
     case VENDOR_WAIT_FOR_HERO:
         if (q->f90 > 0.0f)
@@ -585,7 +590,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
             absolute_float(vendor_moby->f18 - hero_pos.f[2]) <= 8.0f) {
             vendor_moby->b20 = 2;
             if (vendor_moby->b53 != 1)
-                blend_moby_animation_u(vendor_moby, 1, 0, 10);
+                blend_moby_animation(vendor_moby, 1, 0, 10);
             q->mC->h34 &= 0xFFFE;
         }
         add_draw_callback(FUN_L00_002a5040_2a57a8, vendor_moby);
@@ -594,7 +599,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         vendor_manipulator_rotation_phase = fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase = fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
-        upd_a(q->mC);
+        update_entity(q->mC);
         break;
     case VENDOR_HERO_NEARBY:
         if (q->f90 < 1.0f)
@@ -604,7 +609,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         if (!(D_L00_0015F5CC_2a57a8 & 7) && (hero_distance > 18.0f || z > 10.0f)) {
             vendor_moby->b20 = 1;
             if (vendor_moby->b53)
-                blend_moby_animation_u(vendor_moby, 0, 0, 10);
+                blend_moby_animation(vendor_moby, 0, 0, 10);
             break;
         }
         add_draw_callback(FUN_L00_002a5040_2a57a8, vendor_moby);
@@ -615,7 +620,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         vendor_manipulator_rotation_phase = fast_add_rotations(vendor_manipulator_rotation_phase, 0.01f);
         vendor_manipulator_counter_rotation_phase = fast_add_rotations(vendor_manipulator_counter_rotation_phase, -0.02f);
         q->mC->f2C = q->f90 * q->mC->p24->f24 * 2.5f;
-        upd_a(q->mC);
+        update_entity(q->mC);
         if (hero.state.control_mode != 0 && hero.state.current != 3 && hero.state.control_mode != 1) {
             interaction_allowed = 0;
             help_message_allowed = 0;
@@ -652,7 +657,7 @@ void vendor_update(P_2a57a8 *vendor_moby) {
         if (q->mC) {
             q->f90 = 0.0f;
             q->mC->f2C = q->mC->p24->f24 * q->f90 * 2.5f;
-            upd_a(q->mC);
+            update_entity(q->mC);
         }
         break;
     }
@@ -750,11 +755,9 @@ extern f32 FUN_00213308(void);
 extern f32 FUN_002132a8(f32, f32);
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 FUN_001efa68(void *, void *, s32, s32, s32);
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
 extern void FUN_0020c828(void *);
 extern s32 FUN_L00_001f0d60(void *, s32, void *, f32);
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 allocate_glint_slot(void *, s32, f32) __asm__("FUN_L00_001fe990");
 extern s32 FUN_L00_002603d0(void *);
 extern void convert_pose_to_reference_local(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
@@ -1040,9 +1043,6 @@ extern s32 level_bolts[] __asm__("D_0013DF38");  /* bolts collected per level */
 extern s32 D_L00_0015F598;
 extern void *D_L00_0015FFDC_u __asm__("D_L00_0015FFDC");
 extern f32 D_0015ED6C;                       /* frame-rate scale */
-extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");          /* bolt counter HUD: init */
-extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");          /* update */
-extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");          /* draw */
 extern void queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 /* spawns a sparkle particle */
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
@@ -1284,7 +1284,6 @@ typedef struct {
 } BoltVars_u;
 
 extern void *D_001413D0 NOT_SDA;
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");       /* sets the moby colour */
 extern void FUN_L00_001ff500(void *, void *, float);
 
 /*
@@ -1526,7 +1525,6 @@ typedef struct {
     char p2[8];
     s32 i2090;
 } G_002a7c70;
-void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 void update_wrench_animation_from_hero_state(O_002a7c70 *wrench_moby) __asm__("FUN_L00_002a7c70");
 
@@ -1775,7 +1773,6 @@ extern float approach_value_alt(float*,float,float) __asm__("FUN_00213ed8");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_L00_00173E40_u[] __asm__("D_L00_00173E40");
 extern int FUN_001efa68(void*,void*,int,int,int);
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
 extern int sweep_hit_segment(void*,void*,void*,void*,void*,void*,int) __asm__("FUN_L00_00259d08");
@@ -1788,7 +1785,6 @@ extern void compose_target_euler_rotation(char*,float,float,float) __asm__("FUN_
 extern void update_moby_transform_history(void*,int) __asm__("FUN_L00_00262608");
 extern void clear_moby_transform_history(char*) __asm__("FUN_L00_00262840");
 extern void FUN_L00_002a7780_cb(void) __asm__("FUN_L00_002a7780");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
@@ -2073,7 +2069,6 @@ extern char D_0013F490[];
 extern void *D_001413D0;
 extern float D_L00_001613C4 __attribute__((sda));
 extern short D_L00_001B0770[];
-extern void FUN_L00_00250df8_c(void *) __asm__("FUN_L00_00250df8");
 extern void append_unique_moby_index(void *, short *, int) __asm__("FUN_L00_0025f780");
 
 char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char *tgt, float rz, float ry) __asm__("FUN_L00_002a96f8");
@@ -2139,7 +2134,7 @@ char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char 
             m[0xBC] = 1;
             qcopy(m + 0x10, &D_L00_00173E60);
         }
-        FUN_L00_00250df8_c(m);
+        update_entity(m);
         append_unique_moby_index(m, D_L00_001B0770, 0x1F);
         *(float *)(m + 0x2C) += *(float *)(m + 0x2C);
     }
@@ -2148,7 +2143,6 @@ char *spawn_homing_bolt(void *owner, void *pos, float a, float b, float c, char 
 /* Creates a moby at a position with a scale, colour and a few data fields. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAC50), where it is exact; names translated to the US level program. */
 
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 
 void *spawn_class_593_moby(int unused, void *spawn_position, int initial_paired_value, float scale, float initial_private_scalar, float b) __asm__("FUN_L00_002a99b0");
 
@@ -2237,7 +2231,6 @@ void set_tracked_class_5f3_moby_position(void *unused_creation_arg, OvlQuad *pos
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAE80), where it is exact; names translated to the US level program. */
 
 extern short D_L00_001613C8_d __asm__("D_L00_001613C8") __attribute__((sda));
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 
@@ -2364,7 +2357,6 @@ void draw_mine_predicted_impact_marker(M_2a9c50 *moby) {
 }
 extern float D_0015ED6C_2a9ed0 __asm__("D_0015ED6C");
 extern int D_L00_0015F5CC_2a9ed0 __asm__("D_L00_0015F5CC");
-void FUN_L00_00250df8_2a9ed0(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
     unsigned char *mine_moby = create_moby(0x4A);
@@ -2401,7 +2393,7 @@ unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
             *(int *)(mine_vars + 0x68) = -1;
             *(int *)(mine_moby + 0x94) = 0;
         }
-        FUN_L00_00250df8_2a9ed0(mine_moby);
+        update_entity(mine_moby);
     }
     return mine_moby;
 }
@@ -2438,7 +2430,6 @@ extern N_2aa008 *D_L00_0015FFE4_2aa008 __asm__("D_L00_0015FFE4");
 extern V_2aa008 D_L00_00173E60_2aa008[] __asm__("D_L00_00173E60") NOT_SDA;
 s32 FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
-void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *self, void *base_motion_vector) __asm__("FUN_L00_002aa008");
 
 void initialize_moby_motion_at_position(V_2aa008 *requested_position, N_2aa008 *self, void *base_motion_vector) {

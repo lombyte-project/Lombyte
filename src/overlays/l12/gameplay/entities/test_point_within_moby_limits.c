@@ -6,6 +6,8 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/build_moby_bone_transform.h"
+#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 
 
@@ -39,8 +41,6 @@ extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
 
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 
 void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int mode) __asm__("FUN_L12_0027b9c0");
 

@@ -21,6 +21,12 @@
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Drek missile Moby.state shared by its update and response helpers. */
 enum DrekMissileState {
@@ -1163,7 +1169,6 @@ typedef struct {
 extern ML D_L18_0016D260;
 extern unsigned char l18_drek_boss_big_head_manipulator[] __asm__("D_L18_0017CE40");
 extern short drek_boss_big_head_manipulator_scale_gp __asm__("D_L18_001623A4") __attribute__((sda));
-extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 void attach_drek_boss_big_head_manipulator(char *moby) __asm__("FUN_L18_002f2b18");
 
@@ -1404,10 +1409,8 @@ extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90"
 extern void FUN_L00_0025a120(void *);
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void draw_trail(void *, void *, void *, float, float) __asm__("FUN_L00_00263b70");
-extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void queue_movie_with_game_language(int i) __asm__("FUN_L00_00299560");
 extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 extern void set_class_247_list_data_fields(int idx) __asm__("FUN_L18_002d6d50");
 extern void moby_init_action_mode(void *moby) __asm__("FUN_L18_002d6dc0");
@@ -1447,7 +1450,6 @@ extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,
@@ -2577,16 +2579,13 @@ typedef struct {
 extern void set_moby_attached_effect_alpha_from_distance(void *, float) __asm__("FUN_L18_00265ff8");
 extern int trooper_take_damage(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern void FUN_L00_00250df8_5e80(void *) __asm__("FUN_L00_00250df8");
 extern int FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
 extern int poll_moby_state_and_rearm(char *) __asm__("FUN_L18_002d8050");
 extern char *create_class_274_ring_effect(void *, void *, float) __asm__("FUN_L18_002dc3e0");
 extern void FUN_L18_002f1cc8_5e80(void *) __asm__("FUN_L18_002f1cc8");
 extern void start_position_and_rotation_transition(char *, void *, void *, void *, void *, void *, int, int, int) __asm__("FUN_L18_002dfaa0");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 
@@ -2700,7 +2699,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     build_moby_bone_transform(moby, 4, V10);
     copy_matrix3x4(*(char **)(boss_data + 0x3A0) + 0xC0, V10);
     moby_point_position(moby, 4, *(char **)(boss_data + 0x3A0) + 0x10);
-    FUN_L00_00250df8_5e80(*(char **)(boss_data + 0x3A0));
+    update_entity(*(char **)(boss_data + 0x3A0));
     if (*(int *)(boss_data + 0x3A4) == 0) {
         spawned_child_moby = (unsigned char *)create_moby(0x4E1);
         *(unsigned char **)(boss_data + 0x3A4) = spawned_child_moby;
@@ -2713,7 +2712,7 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     build_moby_bone_transform(*(char **)(boss_data + 0x3A0), 0, V10);
     copy_matrix3x4(*(char **)(boss_data + 0x3A4) + 0xC0, V10);
     moby_point_position(*(char **)(boss_data + 0x3A0), 0, *(char **)(boss_data + 0x3A4) + 0x10);
-    FUN_L00_00250df8_5e80(*(char **)(boss_data + 0x3A4));
+    update_entity(*(char **)(boss_data + 0x3A4));
     {
         int *e = D_L18_001B0EB0[*(int *)(boss_data + 0x218)];
         FUN_L00_0025ff38_5e80(512.0f, moby, boss_data + 0x70, 0, 0, e + 4, e[0]);
@@ -3516,7 +3515,6 @@ extern char *create_class_29_moby(char *owner, float *pos, float *vec, int arg3)
 extern char *create_moby(int);
 extern int FUN_L18_002f8658_u() __asm__("FUN_L18_002f8658");
 extern short D_L18_0016247C_gp __asm__("D_L18_0016247C") __attribute__((sda));
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
 extern short D_L18_0016247C __asm__("D_L18_0016247C");

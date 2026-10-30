@@ -15,6 +15,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
 
 /* Ported from rac1-decomp (src/overlays/l17_fleet/help_0021ED38.c: func_L17_0021ED38), where it is exact; names translated to the US level program. */
 
@@ -86,7 +87,6 @@ extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
 extern void enter_hero_idle_state_for_current_vehicle_mode(void) __asm__("FUN_L06_00239528");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L17_0021e530");

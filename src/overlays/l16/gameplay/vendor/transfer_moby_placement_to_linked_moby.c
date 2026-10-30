@@ -9,6 +9,8 @@
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/ui/help/try_set_help_message.h"
 #ifndef __attribute__((section(".data")))
 #endif
 #ifndef __attribute__((section(".sdata")))
@@ -90,7 +92,6 @@ int advance_moby_path(struct Moby *moby) {
 #include "rnc/math/asm_helpers.h"
 /* Plays the sound that goes with the moby's current variant. */
 
-s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void request_moby_help_message(struct Moby *moby) __asm__("FUN_L16_002e4cd8");
 
@@ -185,7 +186,6 @@ float *D_L16_00161FA8[2] = {D_L16_001DEAF8, D_L16_001DF020};
 extern float D_L16_001DF0C0[];
 extern float D_L16_001DF278[];
 float *D_L16_00161FB0[2] = {D_L16_001DF0C0, D_L16_001DF278};
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void compute_level16_reflection_map_coordinates(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 

@@ -5,6 +5,8 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/rendering/view/update_view_context.h"
 
 extern u8 D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
 extern char D_L00_001C5B00_lui[] __asm__("D_L00_001C5B00") NOT_SDA;
@@ -14,12 +16,10 @@ void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void init_mem_slots(void) __asm__("FUN_002015d8");
 void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void init_view_context(void) __asm__("FUN_001f2c60");
-void update_view_context(void) __asm__("FUN_001f2d98");
 void vu1_init_chain(void) __asm__("FUN_002335d0");
 void register_part_types(void) __asm__("FUN_L00_00268900");
 void dmac_vif1_enable(void) __asm__("FUN_00233d00");
 void init_level_item_inventory(void) __asm__("FUN_L00_0023d198");
-void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern char D_L00_0019A980[] NOT_SDA;
 extern char D_L00_0019A280[] NOT_SDA;
 extern char D_L00_001C7700[] NOT_SDA;
@@ -61,7 +61,6 @@ void init_level_runtime_state(void) {
 extern int D_L00_001C3E98[];
 extern unsigned char D_0015EDD0[] __attribute__((sda));
 extern int D_00141660_23d028[] __asm__("D_00141660");
-void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 void append_level_item_if_absent(int i) __asm__("FUN_L00_0023d3d8");
 void init_level_item_inventory(void) {
     int j;

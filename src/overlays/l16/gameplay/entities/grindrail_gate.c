@@ -31,6 +31,14 @@
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
+#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/font_queue_vu_state.h"
 
 /* Activate the watcher and steer its body and head toward the player. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E45F8), where it is exact; names translated to the US level program. */
@@ -90,16 +98,12 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 extern float vector_length_xy(void *);
-extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
-extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int scale_game_frames(int);
 extern s32 D_L16_0015F5C4 ;
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
-extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
 extern void apply_npc_big_head_cheat(char *) __asm__("FUN_L12_002e6b60");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
@@ -228,7 +232,6 @@ void help_desk_lady_update(L16WatchMoby *moby) {
 /* UpdateMoby: on the first tick scales two data floats by 0.25 into the moby and sets its state. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002E4B50), where it is exact; names translated to the US level program. */
 
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void initialize_moby_rotation_scales(struct Moby *moby) __asm__("FUN_L16_002e36e8");
 
@@ -356,8 +359,6 @@ extern void set_moby_state_14(void *) __asm__("FUN_L03_002c6c90");
 extern void initialize_moby_path_state(void *) __asm__("FUN_L14_002fe900");
 extern void update_linked_moby_position(void *) __asm__("FUN_L14_002fec28");
 extern void emit_moby_offset_particles(void *) __asm__("FUN_L14_002feca8");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 extern void func_L00_002592B0_path54(char*,float,float*,float,float,float) __asm__("FUN_L00_00258278");
 
@@ -605,7 +606,6 @@ extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
 extern s32 D_L16_0015F594;
 extern unsigned char D_0013D4E1 NOT_SDA;
 extern void allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");
 extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
 extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
@@ -1066,7 +1066,6 @@ void update_chomper_hit_reaction_and_target(void *chomper_instance) __asm__("FUN
 
 void update_chomper_hit_reaction_and_target(void *arg) __asm__("FUN_L16_002e6208");
 s32 is_value_within_interpolated_window(struct InterpolatedStateEntry *arg0, f32 fparg0) __asm__("FUN_00214cc8");
-void blend_moby_animation_u(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 short D_L16_00161E48 = 0;
 void chomper_update(struct Moby *m) __asm__("FUN_L16_002e5e08");
@@ -1101,7 +1100,7 @@ void chomper_update(struct Moby *chomper_moby) {
         qcopy(chomper_data + 0x1D0, &chomper_moby->pos);
         chomper_moby->state = 1;
         if (chomper_moby->prev_seq != 2)
-            blend_moby_animation_u(chomper_moby, 2, 0, scale_game_frames(20));
+            blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
         *(unsigned char *)(chomper_data + 0x58) = truncate_float_to_s32(8.0f);
         *(unsigned char *)(chomper_data + 0x5A) = truncate_float_to_s32(3.2f);
         break;
@@ -1109,7 +1108,7 @@ void chomper_update(struct Moby *chomper_moby) {
         if (*(int *)(chomper_data + 0x1C4) != 2) {
             chomper_moby->state = 4;
             if (chomper_moby->prev_seq != 0)
-                blend_moby_animation_u(chomper_moby, 0, 0, scale_game_frames(20));
+                blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
         }
         break;
     case 2:
@@ -1119,7 +1118,7 @@ void chomper_update(struct Moby *chomper_moby) {
         if (move_chomper_toward_position(chomper_moby, chomper_data + 0x180) < 1.25f) {
             chomper_moby->state = 5;
             if (chomper_moby->prev_seq != 1)
-                blend_moby_animation_u(chomper_moby, 1, 0, scale_game_frames(20));
+                blend_moby_animation(chomper_moby, 1, 0, scale_game_frames(20));
         } else if (*(int *)(chomper_data + 0x1C4) == 2)
             chomper_moby->state = 6;
         break;
@@ -1134,7 +1133,7 @@ void chomper_update(struct Moby *chomper_moby) {
         } else if ((chomper_moby->anim_flags & 2) && fast_vec_dist(&chomper_moby->pos, chomper_data + 0x180) > 1.5f) {
             chomper_moby->state = 4;
             if (chomper_moby->prev_seq != 0)
-                blend_moby_animation_u(chomper_moby, 0, 0, scale_game_frames(20));
+                blend_moby_animation(chomper_moby, 0, 0, scale_game_frames(20));
         }
         break;
     }
@@ -1142,7 +1141,7 @@ void chomper_update(struct Moby *chomper_moby) {
         if (move_chomper_toward_position(chomper_moby, chomper_data + 0x1D0) < 1.0f) {
             chomper_moby->state = 1;
             if (chomper_moby->prev_seq != 2)
-                blend_moby_animation_u(chomper_moby, 2, 0, scale_game_frames(20));
+                blend_moby_animation(chomper_moby, 2, 0, scale_game_frames(20));
         } else if (*(int *)(chomper_data + 0x1C4) != 2)
             chomper_moby->state = 4;
         break;
@@ -2060,7 +2059,6 @@ extern char *elevator_reference_transform_table __asm__("D_L16_001600FC");
 extern float elevator_height_offset __asm__("D_L16_00161EAC") __attribute__((sda)); /* no foreign declaration */
 extern float elevator_height_acceleration __asm__("D_L16_00161EBC") __attribute__((sda)); /* no foreign declaration */
 extern f32 D_L16_00161EB8_gp __asm__("D_L16_00161EB8") __attribute__((sda));
-extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 void draw_elevator_rotating_rings(struct Moby *elevator_moby) __asm__("FUN_L16_002e84e8");
 
 extern void draw_elevator_rotating_rings(struct Moby *) __asm__("FUN_L16_002e84e8");
@@ -2471,7 +2469,6 @@ extern float D_L16_001DC0F8[];
 extern float D_L16_001DC348[];
 extern float D_L16_001DC598[];
 float *D_L16_00161F30[4] __attribute__((section(".sdata"))) = {D_L16_001DC0F8, D_L16_001DC348, D_L16_001DC598, 0};
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void FUN_L00_001fde98(int, int, int, char *, int);
 extern void FUN_L16_002e8b98_i(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_l16(int, long) __asm__("FUN_00233980");

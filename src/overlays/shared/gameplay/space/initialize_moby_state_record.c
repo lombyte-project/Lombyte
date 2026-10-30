@@ -9,6 +9,7 @@
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
 
 /* Start the moby's camera-follow state: stash it in the global record, point its update at func_L00_0028F458. */
 /* Ported from rac1-decomp (src/overlays/shared/space_0028FB78.c: func_L00_0028FB78), where it is exact; names translated to the US level program. */
@@ -16,7 +17,6 @@
 extern char D_0013E030_c[] __asm__("D_0013E030");
 extern void deactivate_recorded_moby(void) __asm__("FUN_L00_0028e990");
 extern void update_moby_proximity_interaction(void) __asm__("FUN_L00_0028e180");
-void set_moby_animation(struct Obj *o, s32 sel, s32 idx) __asm__("FUN_00212ed8");
 
 extern s32 D_L00_00160540_gp __asm__("D_L00_00160540") __attribute__((sda));
 void initialize_moby_state_record(char *moby) __asm__("FUN_L00_0028e8a0");

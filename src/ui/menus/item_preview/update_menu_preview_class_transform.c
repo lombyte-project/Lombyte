@@ -1,12 +1,12 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_00226380). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
+#include "rnc/gameplay/animation/advance_moby_animation.h"
+#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
-extern int advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void refresh_moby_spatial_bounds(void *) __asm__("FUN_0020def8");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void normalize_vector_triplet(void *) __asm__("func_00214128");
-extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 /* Class 0x197 uses bone 0x1E; the other preview classes use bone 0x1D.
    Keep the comparison direction used by the retail conditional move. */
 void update_menu_preview_class_transform(PauseMoby *moby) __asm__("FUN_002250f0");

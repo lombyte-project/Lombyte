@@ -25,12 +25,23 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Spawns a Gemlik moby that copies its look and transform from a source moby. */
 
 
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *create_attached_rocket(struct Moby *source_moby, short joint_index) __asm__("FUN_L13_003058a8");
 
@@ -90,10 +101,8 @@ void launch_attached_rocket(struct Moby *moby, char *pos, int distance_reference
     update_entity(moby);
 }
 extern char *FUN_L00_0025a420(void *, int, int);
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern float FUN_002132a8(float, float);
 extern int FUN_L00_002712b8(void *, void *, int, int, int, int, float, float, float, float, float);
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void spawn_projectile_expiry_particle(void *, void *) __asm__("FUN_L07_0029a2a0");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -268,7 +277,6 @@ void spawn_attached_rocket_non_damaging_explosion(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_00307660), where it is exact; names translated to the US level program. */
 
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
 char *spawn_gemlik_projectile(float speed, float *spawn_position, float *launch_displacement, void *source_moby) __asm__("FUN_L13_003061c8");
 
@@ -1168,7 +1176,6 @@ extern f32 FUN_001f96b0_8d10(f32) __asm__("FUN_001f96b0");
 extern void trooper_start_knockback(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void stop_moby_sound_8d10(struct Moby *, s32, s32) __asm__("FUN_L00_00257470");
 extern s32 find_target_8d10(f32, struct Moby *, void *, s32, s32, s32 *, s32) __asm__("FUN_L00_0025ff38");
-extern s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 
 /* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
 void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby *moby) __asm__("FUN_L13_00308d10");
@@ -1695,11 +1702,6 @@ typedef struct {
 extern float D_0015ED70;
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 void compute_lift_mount_transform(struct Moby *moby, float *mount_position, float *mount_rotation) __asm__("FUN_L13_0030ad38");
 
 extern void compute_lift_mount_transform(struct Moby *, float *, float *) __asm__("FUN_L13_0030ad38");
@@ -1868,7 +1870,6 @@ void compute_lift_mount_transform(struct Moby *moby, float *mount_position, floa
 
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002EBD00.c: func_L13_0030C320), where it is exact; names translated to the US level program. */
 
-extern char *get_moby_suck_cannon_record(char *) __asm__("FUN_L00_002db890");
 extern int D_L13_0015FFD8_m __asm__("D_L13_0015FFD8");
 extern short *D_L13_001ABB40[];
 
@@ -1945,7 +1946,6 @@ extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90"
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460");
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void initialize_moby_state_record(void *) __asm__("FUN_L00_0028e8a0");
 
 void update_gemlik_scene_controller(struct Moby *moby) __asm__("FUN_L13_0030b628");
@@ -2348,7 +2348,6 @@ void forward_moby_hits_to_owner(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_0030CAE0.c: func_L13_0030D600), where it is exact; names translated to the US level program. */
 
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 
 char *spawn_poison_vessel_effect_moby(void *position, void *initial_velocity, int duration_frames, int effect_mode) {
     unsigned char *moby = (unsigned char *)create_moby(0x662);
@@ -2501,9 +2500,7 @@ collision:
 #include "rnc/gameplay/state/item_state.h"
 extern unsigned char item_unlocked[] __asm__("D_0013D408");
 extern float D_L13_0015F580[] MACRO_ADDR;
-extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 

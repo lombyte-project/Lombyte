@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_VIEW_UPDATE_VIEW_CONTEXT_H
+#define LOMBYTE_RNC_RENDERING_VIEW_UPDATE_VIEW_CONTEXT_H
+
+#include "types.h"
+
+void update_view_context(void) __asm__("FUN_001f2d98");
+
+#endif /* LOMBYTE_RNC_RENDERING_VIEW_UPDATE_VIEW_CONTEXT_H */

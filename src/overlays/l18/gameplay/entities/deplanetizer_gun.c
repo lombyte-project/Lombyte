@@ -19,6 +19,9 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 typedef struct { char pad[0x30]; int state; int n; char pad38[0x140]; struct Moby *objects[8]; } L18SequenceState;
 extern L18SequenceState D_L18_0016D260_update __asm__("D_L18_0016D260");
 extern int D_L18_0015F5C4;
@@ -754,8 +757,6 @@ void update_moby_visibility_and_half_turn(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F9D48.c: func_L18_002FBB88), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
-extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 void update_moby_transform_and_child(char *moby) __asm__("FUN_L18_002fa728");
@@ -933,7 +934,6 @@ extern void collect_mobies_in_sphere_at_moby_point(void *, float, float, float, 
 extern void update_gadgebot_damage_target_and_glow(struct Moby *) __asm__("FUN_L18_002fc100");
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
 
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 float move_gadgebot_toward_target(char *self, float *src) __asm__("FUN_L18_002fc4e0");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
                                   float, float, int, float, int, int, int,

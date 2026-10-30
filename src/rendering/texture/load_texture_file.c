@@ -3,8 +3,8 @@
 #include "rnc/rendering/texture_upload.h"
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/rendering/gs/log2dim.h"
 
-extern int log2dim(int) __asm__("FUN_001f97a0");
 typedef struct {
     char *clut; /* 0x00 */
     char *pix;  /* 0x04 */

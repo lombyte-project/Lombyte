@@ -10,6 +10,9 @@
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/overlay/shared/gameplay/entities/find_moby_hit.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
+#include "rnc/rendering/font_queue_vu_state.h"
 
 /* Runs the two per-entry update calls over a 13-entry table. */
 
@@ -50,7 +53,6 @@ int batalia_texture_3c_pair_zero_blend_factor_gp __asm__("D_L08_001623B0") = 0x2
 int batalia_texture_3d_blend_factor_gp __asm__("D_L08_001623C0") = 0x30;
 extern unsigned char D_L08_00161E08_u __asm__("D_L08_001623F0");
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void queue_batalia_eight_textured_batches(int) __asm__("FUN_L08_00308db8");
 extern void queue_batalia_six_textured_batches(int) __asm__("FUN_L08_00308e90");
 extern void queue_batalia_offset_textured_batches(int) __asm__("FUN_L08_00308f68");
@@ -84,8 +86,6 @@ void queue_batalia_textured_batch_passes(void) {
 /* Update for a moby that waits for a float flag on a nearby object then runs a delete sequence. */
 
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
-extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
 void update_moby_hit_removal_state(struct Moby *moby) __asm__("FUN_L08_0030bc00");

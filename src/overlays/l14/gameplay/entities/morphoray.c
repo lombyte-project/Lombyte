@@ -6,6 +6,13 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/rendering/clip_volume.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/view/update_view_context.h"
 int initialize_morphoray_private_state() __asm__("FUN_L14_00305a38");
 
 /* Level 14 moby classes: morphoray, button, blarg_heavy_interceptor. */
@@ -61,7 +68,6 @@ void exit_camera_set_state(u8 *target_object) {
     }
 }
 
-extern void update_entity(u8 *) __asm__("FUN_L00_00250df8");
 
 /* Allocate 0x574 bytes, copy the two 16-byte records out of the caller, stamp
  * the header fields and hand it to the level's post-create hook.  Returns the
@@ -120,7 +126,6 @@ extern int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern char *spawn_puff(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 
 void update_bouncing_spark(struct Moby *spark_moby) __asm__("FUN_L14_00300e00");
@@ -304,7 +309,6 @@ void update_bouncing_spark(struct Moby *spark_moby)
 }
 #include "sda.h"
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00302968), where it is exact; names translated to the US level program. */
-extern void FUN_L00_00250df8_f(char *) __asm__("FUN_L00_00250df8");
 extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
 
 extern float spark_initial_moby_value_multiplier_gp __asm__("D_L14_00162098") __attribute__((sda));
@@ -334,7 +338,7 @@ char *create_bouncing_spark(int owner, float *spawn_position, float *initial_vel
         scaled_moby_value = *(float *)(moby + 0x2C) * spark_initial_moby_value_multiplier_gp;
         *(float *)(moby + 0x48) = initial_yaw;
         *(float *)(moby + 0x2C) = scaled_moby_value;
-        FUN_L00_00250df8_f(moby);
+        update_entity(moby);
     }
     return moby;
 }
@@ -460,7 +464,6 @@ extern void update_morphoray_particles(struct Moby *) __asm__("FUN_L14_00305b18"
 extern f32 morphoray_ground_height_offset_gp __asm__("D_L14_001621E8") __attribute__((sda));
 extern f32 morphoray_yaw_step_gp __asm__("D_L14_001621EC") __attribute__((sda));
 extern f32 morphoray_position_offset_scale_gp __asm__("D_L14_001621F0") __attribute__((sda));
-extern void grant_inventory_item(s32, s32) __asm__("FUN_L00_00260860");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void jet_clear_persistent(s32) __asm__("FUN_L00_002502a0");
 extern int memcard_save_data(s32, s32) __asm__("FUN_0020b178");
@@ -894,11 +897,9 @@ extern void cart_burst(void *, void *, float, float, int) __asm__("FUN_L00_0025f
 extern int FUN_001e93b0_6ee0() __asm__("FUN_001e93b0");
 extern void FUN_L14_00307510_6ee0(void *) __asm__("FUN_L14_00307510");
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
-extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern int FUN_L14_00307620_6ee0(void *) __asm__("FUN_L14_00307620");
-extern void FUN_L00_002502f0_6ee0(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern Path_6ee0 *D_L14_001B0BB0_6ee0[] __asm__("D_L14_001B0BB0");
 char D_L14_001FD118[] = "Flying Car (moby1417) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FD150[] = "Flying Car (moby1417) with a flyPath that has no points. UID: %d - RAR\n";
@@ -1030,7 +1031,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
     case FLYING_CAR_WAIT_FOR_PATH_RESET:
         if (fast_dec_timer_s16(&flying_car_data->timer)) {
             Path_6ee0 *path = D_L14_001B0BB0_6ee0[flying_car_data->path];
-            FUN_L00_002502f0_6ee0(flying_car_moby, flying_car_data->effect[4], flying_car_data->effect[5], flying_car_data->effect[6]);
+            set_moby_color(flying_car_moby, flying_car_data->effect[4], flying_car_data->effect[5], flying_car_data->effect[6]);
             flying_car_moby->flags &= 0xFFBE;
             flying_car_moby->collision = flying_car_moby->pclass->collision;
             flying_car_data->timer = scale_game_frames(flying_car_path_reset_delay_frames_gp);
@@ -1213,7 +1214,6 @@ typedef struct {
 
 extern Level14State D_L14_0016CF60;
 extern int D_L14_0015F5C4;
-extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 extern void queue_dialogue_message(int message_id, int message_duration_frames) __asm__("FUN_L00_00263d40");
 s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
@@ -1394,7 +1394,6 @@ extern float D_L14_001675D8 NOT_SDA;
 extern float D_0013F5E0_5290[] __asm__("D_0013F5E0");
 extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void reset_racer_group_to_hero_path_position(struct Moby *m) __asm__("FUN_L14_002d6570");
 
 void update_path_camera(struct UpdateCam *path_camera) __asm__("FUN_L14_00315290");

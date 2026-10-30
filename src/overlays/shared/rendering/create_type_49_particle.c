@@ -6,13 +6,13 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_002803B8.c: func_L08_002803B8), where it is exact; names translated to the US level program. */
 
 
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L08_001B29A4 NOT_SDA;
 void create_type_49_particle(void *pos, int kind, void *vel, float velocity_w_override) __asm__("FUN_L08_0027f5f0");

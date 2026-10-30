@@ -15,6 +15,16 @@
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/gameplay/state/interpolated_record.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/audio/sound/trooper_play_sound.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/gameplay/entities/spawn_moby_break_fragments.h"
+#include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/world/collision/collision_line.h"
 
 
 
@@ -522,7 +532,6 @@ extern u8 D_001413F4[];
 extern u8 D_0013DD50;
 extern void normalize_vector_xyz_7880(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz_7880(float, void *, void *) __asm__("FUN_001f9a68");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_002371e0_7880(float, int, int) __asm__("FUN_L15_00249ce8");
 extern void FUN_L00_00257470_7880(void *, int, long long) __asm__("FUN_L00_00257470");
@@ -683,7 +692,6 @@ no_hit:
 }
 extern char destructible_hit_debris_color_palette[] __asm__("D_L15_001615B8");
 extern struct { u32 words[3]; } D_L15_001615C8;
-extern void add_vectors(void *out, void *a, void *b) __asm__("FUN_L00_001ff290");
 extern int blend_color(float t, int from, int to) __asm__("FUN_L15_00249ce8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_explosion(void *m, void *unused, void *pos, float fA, float fB, int n, int k8, int k9,
@@ -839,10 +847,8 @@ extern void update_joint_animation(float, float, void *, void *, int) __asm__("F
 extern float scale_time(float) __asm__("FUN_L15_001f8648");
 extern int FUN_L00_00257b90(int, int);
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void cart_burst(float, float, void *, void *, long long) __asm__("FUN_L00_0025f090");
-extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void spawn_burst(float, void *, void *, int, int, int, int) __asm__("FUN_L00_0026cbb0");
 
@@ -1254,14 +1260,11 @@ void process_helicopter_hits(struct Moby *moby) __asm__("FUN_L15_002c6900");
 void process_helicopter_hits(struct Moby *m) __asm__("FUN_L15_002c6900");
 extern void select_moby_target_goal(void *, float *, float) __asm__("FUN_L02_00261c80");
 extern int FUN_L00_0025ff38(float, void *, void *, int, int, void *, int);
-extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern struct Moby *spawn_homing_spark_projectile(void *, void *, struct Moby *, int, float) __asm__("FUN_L03_002d5208");
 extern void FUN_L00_0025a120(void *);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_001fff28(void *, int, float);
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
-extern void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 extern void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -1869,7 +1872,6 @@ extern float approach_angle(void *, float, void *, float, float, float) __asm__(
 extern float compute_ultramech_flocking_steering_point(void *, void *, float) __asm__("FUN_L15_002cf110");
 extern float fast_cos(float);
 extern float fast_sin(float);
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__("FUN_L00_00259d08");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
@@ -1891,8 +1893,6 @@ extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, floa
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
-extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __asm__("FUN_L00_00263e30");
-extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void process_ultramech_hits_and_update_target(void *) __asm__("FUN_L15_002d0fa8");
 extern void noop_main_callback(void *, void *) __asm__("func_001E93E8");
@@ -2413,7 +2413,6 @@ extern int D_001413D0 NOT_SDA;
 extern char D_00178700[] __asm__("D_L15_00178700");
 extern int FUN_00249d60(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_0024dcf8(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
-extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 extern void mark_moby_for_removal_cf(void *, int, long long) __asm__("FUN_L00_00257470");
 extern void trooper_knockback_arc(void *, void *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");

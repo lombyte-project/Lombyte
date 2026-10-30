@@ -8,9 +8,10 @@
 #include "sda.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/overlay/shared/gameplay/entities/nanotech_ball.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 
-extern char *get_moby_suck_cannon_record(char *) __asm__("FUN_L00_002db890");
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
 extern void allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 
@@ -48,7 +49,6 @@ s32 FUN_L04_002c41b0(T6 *data_owner) {
 }
 
 
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 /* Creates a class 0x23A moby at pos, copying a few fields from src. */
 void *spawn_class_23a_moby(char *source_moby, char *spawn_position) __asm__("FUN_L04_002d34d8");

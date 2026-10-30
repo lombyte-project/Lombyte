@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/ui/help/get_help_message_text.h"
 
 extern int measure_text_width_regular(char *, int) __asm__("FUN_001f6250");
 extern void draw_stretchable_ui_frame(int, int, int, int, int) __asm__("FUN_00201128");
@@ -42,7 +43,6 @@ void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char
     enable_global_flag();
 }
 /* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001FCC50), where it is exact; names translated to the US level program. */
-extern char *get_help_message_text(s32) __asm__("FUN_001fdd10");
 
 typedef struct {
     s32 text_id;

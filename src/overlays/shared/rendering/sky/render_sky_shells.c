@@ -3,15 +3,15 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated.h"
+#include "rnc/rendering/sky/do_sky_gif_paging.h"
+#include "rnc/rendering/sky/setup_sky_gif_paging.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/shared/initonce_00252E80.c: func_L01_00252E80), where it is exact; names translated to the US level program. */
 
-extern void update_sky_shells_static(void) __asm__("FUN_L00_002892d0");
 extern void update_sky_shells_animated(void) __asm__("FUN_L00_00289420");
-void do_sky_gif_paging(void) __asm__("FUN_0022b558");
-void setup_sky_gif_paging(void) __asm__("FUN_0022b4c8");
 
 void render_sky_shells(void) __asm__("FUN_L01_00252570");
 

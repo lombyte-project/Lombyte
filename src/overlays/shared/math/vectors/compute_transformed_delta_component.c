@@ -10,6 +10,9 @@
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/state/interpolated_record.h"
 #include "rnc/gameplay/entities/suck_aim.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 
 
@@ -111,7 +114,6 @@ typedef struct {
     int w44;
 } B_25c558;
 void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
-void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void trooper_start_knockback(u8 *moby, B_25c558 *knockback_state, int animation_index, int animation_timing_divisor, int animation_frame_index, float knockback_angle) {
     float *moby_vars_record;
@@ -147,11 +149,9 @@ extern float approach_value(float *p, float target, float maxstep);
 extern int *D_L00_00177F00[];
 extern Vec4 D_94C8_60 __asm__("D_L00_00173E60"); /* no foreign declaration */
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
-int solve_quadratic_equation(float *r0, float *r1, float a, float b, float c) __asm__("FUN_L00_002595a0");
 void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void FUN_L00_00259710(void *a);
 void spawn_nearby_effect(char *, float, int, int, void *, void *) __asm__("FUN_L00_00259bc8");

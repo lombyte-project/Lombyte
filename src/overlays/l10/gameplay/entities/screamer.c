@@ -32,6 +32,11 @@
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"
 #include "rnc/storage/memory_card/memcard_save_data.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/ui/help/try_set_help_message.h"
+#include "rnc/world/collision/collision_hit_material.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Gate states shared by the paired gate update callbacks. */
 enum GateState {
@@ -87,7 +92,6 @@ extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__(
 extern float D_0015ED6C;
 extern float D_0015ED70;
 extern int coll_sphere() __asm__("FUN_L00_001f0d60");
-extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void FUN_L00_00257470_c(unsigned char *m, int flags, int arg) __asm__("FUN_L00_00257470");
 void FUN_L00_00258278_c(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
 void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int c, int d) __asm__("FUN_L00_00258ad0");
@@ -105,7 +109,6 @@ extern float func_00214D88_2E0630(float *, float, float *, float, float, float) 
 extern float func_L00_0025CE58_2E0630(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern void func_L00_002607A8_2E0630(void *, float) __asm__("FUN_L00_0025f730");
 extern int func_L00_00259B08_2E0630(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
-extern void func_00213DE0_2E0630(void *, int, int, int) __asm__("FUN_00212f90");
 extern void func_L10_002E14F8_2E0630(void *) __asm__("FUN_L10_002e0138");
 extern float func_L00_0025CC58_2E0630(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern void approach_w(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
@@ -162,13 +165,13 @@ void screamer_update(Moby *moby) {
     case SCREAMER_STATE_WAIT_FOR_ACTIVATION:
         if (data->f104 == 2 && data->f174 != 0) break;
         moby->state = 2;
-        if (moby->prev_seq != 1) func_00213DE0_2E0630(moby, 1, 0, scale_game_frames(10));
+        if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         break;
     case SCREAMER_STATE_WAIT_TO_RISE:
         if ((moby->anim_flags & 2) == 0) break;
         moby->state = 4;
         clear_u64_value(&data->vel);
-        if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, scale_game_frames(10));
+        if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         break;
     case 3:
         break;
@@ -201,11 +204,11 @@ void screamer_update(Moby *moby) {
             int node_index = data->node_index++;
             if (0.0f < D_L10_001B0C30_2E0630[data->path]->nodes[node_index].w) {
                 moby->state = 6;
-                if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, scale_game_frames(10));
+                if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             } else {
                 if (node_index + 1 != D_L10_001B0C30_2E0630[data->path]->count) break;
                 moby->state = 10;
-                if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, scale_game_frames(10));
+                if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(10));
                 probe_ground_height(&moby->pos, 0, 0.5f);
                 qcopy(&data->home, &D_L10_00174360_2E0630);
                 qcopy(&data->wander_goal, &moby->pos);
@@ -223,13 +226,13 @@ void screamer_update(Moby *moby) {
         }
         if (data->node_index == D_L10_001B0C30_2E0630[data->path]->count) {
             moby->state = 10;
-            if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, scale_game_frames(10));
+            if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(10));
             probe_ground_height(&moby->pos, 0, 0.5f);
             qcopy(&data->home, &D_L10_00174360_2E0630);
             qcopy(&data->wander_goal, &moby->pos);
         } else {
             moby->state = 5;
-            if (moby->prev_seq != 4) func_00213DE0_2E0630(moby, 4, 0, scale_game_frames(10));
+            if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(10));
         }
         break;
     case SCREAMER_STATE_IDLE_AT_HOME:
@@ -302,7 +305,6 @@ extern Path *D_L10_001B0C30_2DFC38[] __asm__("D_L10_001B0930");
 extern char D_0013F3D0[];
 extern int D_001413D0[];
 extern float D_0015ED6C, D_0015ED70;
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
@@ -496,9 +498,7 @@ extern int D_L10_001600EC_2e01a8; /* no foreign declaration */
 extern int coll_sphere_mobys(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_001efa68_2e01a8(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001fefc8(void *);
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_0024f7c8(void *, int, void *);
-extern void blend_moby_animation_2e01a8(void *, s32, s32, s32) __asm__("FUN_00212f90");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 void FUN_L00_00257470_2e01a8(unsigned char *m, int flags, int arg) __asm__("FUN_L00_00257470");
 void FUN_L00_00258278_2e01a8(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
@@ -508,7 +508,6 @@ void FUN_L00_00263ac8_2e01a8(float x, int a, int b, unsigned char *p) __asm__("F
 void update_class_1199_hit_reactions_and_targeting(Moby *moby) __asm__("FUN_L10_002e17c0");
 void FUN_L10_002e1cb0_2e01a8(unsigned char *moby) __asm__("FUN_L10_002e1cb0");
 extern Anim *D_L10_001600EC_2E1568 __asm__("D_L10_001600EC");
-extern int func_L00_001EFFF0_2E1568(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 
 void FUN_L10_002e01a8(Moby *moby) {
     float scratch[20];
@@ -544,7 +543,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         case 0:
             moby->state = 3;
             moby->pos.z = moby->pos.z + 2.0f;
-            if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, scale_game_frames(10));
+            if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             break;
         case 1:
             mark_moby_for_removal(moby);
@@ -558,7 +557,7 @@ void FUN_L10_002e01a8(Moby *moby) {
             add_vectors(&scratch[4], &moby->pos, scratch);
             vars->height_offset = random_float_between(0.0f, D_L10_00161E14);
             vars->height_timer = truncate_float_to_s32(scale_time(D_L10_00161E18 * 60.0f) * random_float_between(0.75f, 1.25f));
-            if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, scale_game_frames(10));
+            if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(10));
             break;
         }
         break;
@@ -607,7 +606,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         if (FUN_L00_001fefc8(&moby->command) == 0) break;
         if (moby->group != 0xFF) FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
         moby->state = 6;
-        if (moby->prev_seq != 1) func_00213DE0_2E0630(moby, 1, 0, scale_game_frames(10));
+        if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, scale_game_frames(10));
         break;
     }
     case 4:
@@ -615,7 +614,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         if (vars->f104 != 2 && 3.0f < vector_distance_xy(&moby->pos, &target->pos) && FUN_L00_001fefc8(&moby->command) != 0) {
             if (moby->group != 0xFF) FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
             moby->state = 6;
-            if (moby->prev_seq != 1) func_00213DE0_2E0630(moby, 1, 0, scale_game_frames(10));
+            if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, scale_game_frames(10));
             break;
         }
         if (fast_dec_timer(&vars->wait) == 0) break;
@@ -635,7 +634,7 @@ void FUN_L10_002e01a8(Moby *moby) {
             0.02f, 0.3f, frame_time * 6.2831855f);
         if ((moby->anim_flags & 2) == 0) break;
         moby->state = 7;
-        if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, scale_game_frames(10));
+        if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(10));
         if (random_integer_below(0xFF) & 1) {
             vars->side_angle = 0.2617994f;
         } else {
@@ -666,13 +665,13 @@ void FUN_L10_002e01a8(Moby *moby) {
                 allocate_voice_for_target_entry(0, 0, moby);
                 moby->state = 8;
                 clear_u64_value(&vars->velocity);
-                if (moby->prev_seq != 2) func_00213DE0_2E0630(moby, 2, 4, scale_game_frames(5));
+                if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 4, scale_game_frames(5));
                 break;
             }
         } else if (vars->f104 != 2) {
             break;
         }
-        if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, scale_game_frames(0x14));
+        if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
         moby->state = 5;
         break;
     }
@@ -696,10 +695,10 @@ void FUN_L10_002e01a8(Moby *moby) {
             ((unsigned char *)scratch)[0x38] = 0;
             FUN_L00_0024f7c8(moby, 0, scratch);
             coll_sphere_mobys(0.4f, scratch, 0, moby, &scratch[8]);
-            func_L00_001EFFF0_2E1568(&moby->pos, scratch, 9, moby, &scratch[8]);
+            collision_line(&moby->pos, scratch, 9, moby, &scratch[8]);
         }
         if (vars->f104 != 2 && (moby->anim_flags & 2) == 0) break;
-        if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, scale_game_frames(0x14));
+        if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(0x14));
         moby->state = 5;
         break;
     case 5: {
@@ -747,7 +746,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         if (!(D_L10_00161DFC < dist)) break;
         if (moby->group != 0xFF) FUN_L10_002e1cb0_2e01a8((unsigned char *)moby);
         moby->state = 10;
-        if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, scale_game_frames(10));
+        if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(10));
         break;
     }
     case 10: {
@@ -771,7 +770,7 @@ void FUN_L10_002e01a8(Moby *moby) {
             && absolute_float(D_L10_001600EC_2E1568[vars->f194].f38 - moby->pos.z) < 1.0f) {
             allocate_voice_for_target_entry(0, 0, moby);
             moby->state = 11;
-            if (moby->prev_seq != 2) func_00213DE0_2E0630(moby, 2, 0, scale_game_frames(2));
+            if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 0, scale_game_frames(2));
             break;
         }
         if (vars->f104 != 2) break;
@@ -811,7 +810,7 @@ void FUN_L10_002e01a8(Moby *moby) {
             || *(int *)(((char *)&hero) + 0x208C) == 7
             || (moby->anim_flags & 2)) {
             moby->state = 12;
-            if (moby->prev_seq != 3) func_00213DE0_2E0630(moby, 3, 0, scale_game_frames(2));
+            if (moby->prev_seq != 3) blend_moby_animation(moby, 3, 0, scale_game_frames(2));
             break;
         }
         if (vars->f104 != 2) break;
@@ -1187,8 +1186,6 @@ extern float fast_sin(float);
 extern int D_L10_0015F5CC;
 extern int D_L10_0015FFD8;
 extern char *D_L10_0015FFD0_w[] __asm__("D_L10_0015FFD0") MACRO_ADDR;
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern float l10_toxic_crab_size_scale __asm__("D_L10_00161E24") __attribute__((sda));
 #include "rnc/overlay/l10/gameplay/entities/screamer_data/toxic_crab_update_2.h"
@@ -1972,7 +1969,6 @@ extern int FUN_L00_0025ff38_c(float,char *,void *,int,int,void *,int) __asm__("F
 extern unsigned char D_0013D408[];
 extern void trooper_anim_finish(void *,void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L10_002e0138_c(unsigned char *m) __asm__("FUN_L10_002e0138");
-extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 int find_point_ahead(char *a, char *o, float best) __asm__("FUN_L01_00274b78");
 void FUN_L00_0025ab48_c(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
 void FUN_L00_00263d40(int a, int b);
@@ -1983,7 +1979,6 @@ extern void func_0022EE28_2E52B0(int, int, int) __asm__("FUN_0022db10");
 extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a78");
 extern void func_L00_0025D5B0_2E52B0(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
 extern int func_L00_00260D30_2E52B0(void *, void *, float) __asm__("FUN_L01_00274b78");
-extern void func_00213DE0_2E52B0(void *, int, int, int) __asm__("FUN_00212f90");
 extern char D_0013D50F_2E52B0[] __asm__("D_0013D408");
 extern V_2E52B0 D_L10_00174380_2E52B0 __asm__("D_L10_00174300");
 extern Path_2E52B0 *D_L10_001B0C30_2E52B0[] __asm__("D_L10_001B0930");
@@ -2176,10 +2171,10 @@ void update_toxic_crab_hit_reactions_and_targeting(void *mv) {
         if (scale_game_frames(300) < moby_data->f1D4) {
             if (1.0f < fast_vec_dist(&moby->pos, &moby_data->a170)) {
                 moby->state = 8;
-                if (moby->prev_seq != 4) func_00213DE0_2E52B0(moby, 4, 0, scale_game_frames(12));
+                if (moby->prev_seq != 4) blend_moby_animation(moby, 4, 0, scale_game_frames(12));
             } else if (((Hero *)(((char *)&hero)))->vehicle_mode != 1) {
                 moby->state = 1;
-                if (moby->prev_seq != 0) func_00213DE0_2E52B0(moby, 0, 0, scale_game_frames(20));
+                if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, scale_game_frames(20));
             }
         }
     } else {
@@ -2327,7 +2322,6 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void FUN_L00_0025f730_c(void *, float) __asm__("FUN_L00_0025f730");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void FUN_L10_002e5968_c(char *m) __asm__("FUN_L10_002e5968");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern int D_0015ED84;
 
 void blarg_ship_update(Ship_5E48 *m) __asm__("FUN_L10_002e4a88");
@@ -2724,7 +2718,6 @@ void emit_moby_directional_particles(struct Moby *moby) {
 /* Health upgrade vendor: sells two upgrades (4000 bolts: 5 hp, 30000 bolts: 8 hp) once each,
    then saves the game and shows the purchase message. */
 extern void set_moby_dialogue_record_value(struct Moby *, int) __asm__("FUN_L00_00266858");
-extern int try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern int D_0013ED98 MACRO_ADDR;
 extern int purchased_nanotech_health_gp __asm__("D_0013EDA0") __attribute__((sda));

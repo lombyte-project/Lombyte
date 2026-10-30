@@ -6,6 +6,7 @@
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
 extern int text_screen_active[] __asm__("D_001E6400");
 extern char camera_shake_vectors[] __asm__("D_001870A0");
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
@@ -17,7 +18,6 @@ extern void start_camera_blend(void *) __asm__("func_001EC8A0");
 extern int update_all_cameras(void) __asm__("func_001EC420");
 extern void apply_camera_shake(void *, int) __asm__("func_001ED360");
 extern void update_camera_underwater_flag(void) __asm__("func_001ED7F0");
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void update_camera_environment_from_regions(void *) __asm__("FUN_001ee4b0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 /* Camera update, once per frame: count the frame, run the camera

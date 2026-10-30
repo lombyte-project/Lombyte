@@ -2,11 +2,11 @@
 
 #include "sda.h"
 #include "qcopy.h"
+#include "rnc/rendering/view/update_view_context.h"
 
 extern char render_sequence[] __asm__("D_0018CB20");
 extern float view_tan_half_fov __asm__("D_0018CDB0") NOT_SDA;
 extern char camera_position[] __asm__("D_00187080");
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void sceVu0UnitMatrix(float *);
 extern void SceVu0RotMatrixX(float *, float *, float);
 extern void SceVu0RotMatrixY(float *, float *, float);

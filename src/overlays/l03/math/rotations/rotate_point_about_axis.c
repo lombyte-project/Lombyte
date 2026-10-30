@@ -3,11 +3,11 @@
 #include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
 
 typedef unsigned int Q __attribute__((mode(TI), aligned(16)));
 extern void FUN_L00_001ffd48(void *, void *, float);
 extern void FUN_L00_001ffe20(void *, void *, void *);
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 /* Rotates a point (in place) about a unit axis by angle using a Rodrigues-style
  * matrix: skew = cross-product matrix of axis, sin_part = sin*skew,

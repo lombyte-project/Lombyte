@@ -4,6 +4,7 @@
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/audio/voices/allocate_voice_for_bank_entry.h"
 #include "rnc/overlay/shared/gameplay/entities/002630b8.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 
 extern unsigned char D_0013D4C2 NOT_SDA;
 extern char D_L00_001B47D0[];
@@ -25,7 +26,6 @@ extern short unlock_code_input_sequence[] __asm__("D_L00_001BA4A8");
 extern unsigned char D_0013A4E0[];
 extern unsigned char D_0013C940[];
 extern unsigned char l00_unlock_code_comparison_table[] __asm__("D_L00_001B9BA0");
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 
 void process_unlock_code_input(void) __asm__("FUN_L00_002831c0");
 

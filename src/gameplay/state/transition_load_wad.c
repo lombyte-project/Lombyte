@@ -2,6 +2,7 @@
 #include "types.h"
 #include "rnc/storage/disc_table.h"
 #include "rnc/globals.h"
+#include "rnc/rendering/view/update_view_context.h"
 typedef struct 
 {
   s32 x0;
@@ -128,7 +129,6 @@ extern void QueueDmaTransfer(s32);
 extern void sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
 extern s32 initialize_level_render_state(u8 *) __asm__("FUN_001e9b10");
 extern void init_view_context(void) __asm__("FUN_001f2c60");
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern volatile char log2dim(s32) __asm__("func_001F97A0");
 extern void init_mem_slots(void) __asm__("FUN_002015d8");
 extern void parse_particle_textures(u8 *, u8 *, u8 *, s32) __asm__("FUN_002026c8");

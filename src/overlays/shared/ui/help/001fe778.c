@@ -10,6 +10,7 @@
 #include "rnc/gameplay/entities/suck_aim.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 typedef struct {
     char pad[0x24];
@@ -73,7 +74,6 @@ extern u8 D_L15_00174460[] NOT_SDA;
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68_c(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
-s32 FUN_001f0b58_c(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 void FUN_00125180_c(void *, void *) __asm__("FUN_00125180");
 f32 compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
@@ -133,7 +133,7 @@ void update_hero_ground_contact(void) {
         collision_sound_class = 3;
     }
     hero.ground_sound_class = collision_sound_class;
-    hero.ground_type = FUN_001f0b58_c();
+    hero.ground_type = collision_hit_material();
     if (hero.ground_type == 0) {
         hero.water_surface_z = resolve_camera_surface_height(D_L15_00174460, &hero.water_surface_normal);
         if (hero.motion.pos.f[2] < hero.water_surface_z && hero.in_water_frames <= 0) {

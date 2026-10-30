@@ -20,6 +20,17 @@
 #include "rnc/math/spherical_offset.h"
 #include "rnc/gameplay/entities/ground_probe.h"
 #include "rnc/gameplay/state/interpolated_record.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/entities/copy_hero_moby_field_38.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/view/update_view_context.h"
+#include "rnc/ui/help/try_set_help_message.h"
 
 typedef struct {
     int link;
@@ -54,11 +65,7 @@ extern int test_linked_moby_turn_trigger(void *) __asm__("FUN_L11_0030f270");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_0022da68_c788(int, int, struct Moby *) __asm__("FUN_0022da68");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 void update_child_set_poses(struct Moby *parent_moby) __asm__("FUN_L11_0030d1b0");
 
 void update_child_set_poses(struct Moby *m) __asm__("FUN_L11_0030d1b0");
@@ -258,7 +265,6 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
         break;
     }
 }
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_globals.h"
 extern float child_set_base_z_offset_gp __asm__("D_L11_00161EAC") __attribute__((sda));
 #include "rnc/overlay/l11/gameplay/entities/seesaw_platform_data/update_child_set_poses_3.h"
@@ -808,7 +814,6 @@ typedef struct {
 extern float fast_add_rotations(float, float);
 extern int D_L11_0015FFD8; /* no foreign declaration */
 extern int allocate_voice_for_target_entry();
-extern void func_L00_00251E30_u(void *) __asm__("FUN_L00_00250df8");
 extern void func_0022ED80_u(int, int, void *) __asm__("FUN_0022da68");
 extern char D_0013D355_t[] __asm__("D_0013D388");
 
@@ -837,7 +842,7 @@ void update_link_triggered_moby_motion(struct Moby *moving_moby) {
         qcopy(&spawned_moby->pos, &moving_moby->pos);
         qcopy(&spawned_moby->rot, &moving_moby->rot);
         spawned_moby->rot.x = fast_add_rotations(spawned_moby->rot.x, 3.1415927f);
-        func_L00_00251E30_u(spawned_moby);
+        update_entity(spawned_moby);
         spawned_private_data = (char *)spawned_moby->pvars;
         *(int *)(spawned_private_data + 8) = *(int *)(private_data + 8);
         *(float *)(spawned_private_data + 0x10) = *(float *)(private_data + 0x10);
@@ -877,7 +882,6 @@ extern float seesaw_tilt_feedback_gain_degrees_gp __asm__("D_L11_00161F7C") __at
 extern float seesaw_spin_feedback_gain_degrees_gp __asm__("D_L11_00161F80") __attribute__((sda));
 extern float seesaw_fall_tilt_threshold_degrees_gp __asm__("D_L11_00161F84") __attribute__((sda));
 extern int hero_set_state(int, int) __asm__("FUN_L11_0024db50");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 /* Private variables of the tilting platform (seesaw_platform_update). */
 struct L11TiltVars {
@@ -986,7 +990,6 @@ void update_link_triggered_moby_turn(struct Moby *turning_moby) {
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00310A70), where it is exact; names translated to the US level program. */
 
-extern void copy_hero_moby_field_38(void *) __asm__("FUN_L00_0025d1b8");
 
 char *spawn_moby_with_random_yaw(void *position, void *vector, int id) __asm__("FUN_L11_0030f5a8");
 
@@ -1205,7 +1208,6 @@ void ammocrate_update(struct Moby *pickup) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_00311260), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 char *spawn_ship_pickup_child(struct Moby *owner) __asm__("FUN_L11_0030fd98");
 
@@ -2290,10 +2292,8 @@ extern float D_L11_00162130 __attribute__((sda));
 extern float D_L11_00162150 __attribute__((sda));
 extern float D_L11_00162154 __attribute__((sda));
 extern float D_L11_00162158 __attribute__((sda));
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern float spring_angle(float *, float *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void draw_ship_hud();
@@ -2563,10 +2563,7 @@ extern float D_L11_0016D4F0_a[] __asm__("D_L11_0016D4F0");
 extern void print_3290(char *) __asm__("FUN_001e93b0");
 extern void FUN_L11_0024db50(int, int);
 extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
-extern int try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
-extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
-extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern void hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void emit_type_74_particles_from_moby_joints(void *, void *) __asm__("FUN_L11_003112b8");

@@ -15,6 +15,12 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
 
 
 
@@ -266,7 +272,6 @@ extern char sand_shark_missing_path_message_format[] __asm__("D_L02_001FA8A0");
 extern char sand_shark_empty_path_message_format[] __asm__("D_L02_001FA8C0");
 extern void FUN_001e93b0_e50(char *, short) __asm__("FUN_001e93b0");
 extern int rand_e50(void) __asm__("FUN_001160d8");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -1220,7 +1225,6 @@ void handle_sand_shark_damage_and_targeting(unsigned char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002D7550), where it is exact; names translated to the US level program. */
 
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 void launch_sand_shark(struct Moby *moby, void *position, float *direction) __asm__("FUN_L02_002d6118");
 
@@ -1798,7 +1802,6 @@ void handle_level02_bot_damage_and_retargeting(void *owner_moby) {
 }
 
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern void update_entity_matrix(char *a, void *b, void *c, void *d) __asm__("FUN_L00_00260738");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 
@@ -2431,7 +2434,6 @@ void grab_crane_update(struct Moby *moby) {
 /* Rotates a platform and updates its transform. */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DF038), where it is exact; names translated to the US level program. */
 
-extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void platform_update(struct Moby *moby) __asm__("FUN_L02_002ddc00");
 void platform_update(struct Moby *moby)
@@ -2488,10 +2490,6 @@ extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void request_hero_target_pose(void *, int, float) __asm__("FUN_L00_00233ee8");
 extern int get_hero_target_pose_status() __asm__("FUN_L00_00233f38");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void draw_number(void *, void *, int, int, int, int, int, float) __asm__("FUN_L01_00285768");
 extern void hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 extern void enter_hero_idle_or_stop(void) __asm__("FUN_L02_00237478");
@@ -3355,7 +3353,6 @@ typedef struct {
 int D_L02_00161CC4 = 0x5f243632;
 int D_L02_00161CC8 = 0x61311;
 extern Colors0720 l02_rocks_debris_colors __asm__("D_L02_00161CD0");
-extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 /* Spark emitter; the size float is declared before the int lifetime (same registers) so the calls
  * run in retail order: colour index, size, lifetime. */
 extern void spawn_debris_chunk(void *, void *, u32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");

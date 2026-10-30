@@ -6,11 +6,11 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 /* Spawns an effect moby at the position of moby a. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027ACC8), where it is exact; names translated to the US level program. */
 
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 
 extern short moby_offset_effect_size_gp __asm__("D_L08_00160200") __attribute__((sda));
 extern short moby_offset_effect_color_gp __asm__("D_L08_00160204") __attribute__((sda));

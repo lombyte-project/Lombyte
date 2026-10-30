@@ -22,6 +22,8 @@
 #include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/hero/air_accel.h"
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/help_002306C8.c: func_L14_002306C8), where it is exact; names translated to the US level program. */
 
@@ -58,8 +60,6 @@ extern void hero_queue_sequence(int bank, int seq) __asm__("FUN_L00_002325e0");
 extern void FUN_L00_0025f730(void *a, float x);
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
 extern void clear_moby_transform_history(void *o) __asm__("FUN_L00_00262840");
-extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");

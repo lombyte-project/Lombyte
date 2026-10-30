@@ -7,6 +7,9 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 typedef struct {
     s32 count;
@@ -354,7 +357,6 @@ void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *ou
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_002634F8), where it is exact; names translated to the US level program. */
 
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 
 /* Multiplies the 001fa050 matrices of (x, y, z) and of a+0x40, stored back by matrix_to_euler. */
 void compose_target_euler_rotation(char *rotation_target, float x, float y, float z) __asm__("FUN_L00_00262480");
@@ -452,7 +454,6 @@ typedef struct {
 } S_262608;
 void FUN_L00_00262840_262608(S_262608 *) __asm__("FUN_L00_00262840");
 void update_moby_animation_state(void *) __asm__("FUN_0020c880");
-void FUN_L00_00250df8_262608(void *) __asm__("FUN_L00_00250df8");
 
 void update_moby_transform_history(S_262608 *history_state, int dec) __asm__("FUN_L00_00262608");
 
@@ -487,7 +488,7 @@ void update_moby_transform_history(S_262608 *history_state, int dec) {
             update_moby_animation_state(destination);
             qcopy(destination + 0x10, &history_state->a[k]);
             qcopy(destination + 0x40, &history_state->b[k]);
-            FUN_L00_00250df8_262608(destination);
+            update_entity(destination);
         }
     }
     if (dec) {
@@ -531,7 +532,6 @@ void clear_moby_transform_history(char *history_state) {
     }
 }
 void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
-void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 float absolute_float(float) __asm__("FUN_001f99c0");
 float spring_angle(void *, void *, float, float, float, float,
                               int) __asm__("FUN_L00_0025bc98");

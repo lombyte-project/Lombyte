@@ -16,6 +16,9 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/interpolation.h"
 #include "rnc/math/spherical_offset.h"
+#include "rnc/overlay/shared/gameplay/hero/air_accel.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
 
 /*
  * Hero movement step: clamps the velocity, moves the hero by it (plus the
@@ -410,7 +413,6 @@ extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int FUN_L00_00233660_cf(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
-extern int get_hero_idle_animation_index(int) __asm__("FUN_L01_00226f10");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 extern int scale_game_frames(int);
@@ -438,7 +440,6 @@ extern void build_scaled_hero_move_impulse(float, float) __asm__("FUN_L00_002132
 extern void spawn_nearby_effect(void *, int, int, void *, void *,
                                 float) __asm__("FUN_L00_00259bc8");
 extern void update_hero_target_heading(float, float, float) __asm__("FUN_L00_00214ed8");
-extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 extern void update_hero_lean_and_sway_parameters(void) __asm__("FUN_L00_00215ef8");
 extern void reduce_and_apply_hero_planar_velocity_addend(float) __asm__("FUN_L00_00216710");
 extern void probe_hero_airborne_wall_contact(void) __asm__("FUN_L00_0020b5b8");
@@ -467,7 +468,6 @@ extern void clip_hero_horizontal_velocity(int) __asm__("FUN_L01_00232978");
 extern void air_accel(float) __asm__("FUN_L01_00234358");
 extern void update_hero_airborne_planar_motion(void) __asm__("FUN_L01_00234b40");
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern void fast_sin_cf(int, int) __asm__("FUN_L00_00209638");
 extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");

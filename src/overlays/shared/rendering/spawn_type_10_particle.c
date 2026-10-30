@@ -8,12 +8,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 /* Spawns a type-10 particle at a position and sets its colour, size, life and velocity. */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_00280428), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_0025bfe0(float, float, float, float);
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 
 extern unsigned char *D_L01_001B250C NOT_SDA;
 void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocity) __asm__("FUN_L01_0027f660");
@@ -43,13 +43,12 @@ void spawn_type_10_particle(char *spawn_position, char *initial_particle_velocit
 #endif
 #ifndef
 #endif
-extern unsigned char *func_00218928_80970(int) __asm__("FUN_L00_002678b8");
 extern int func_001F9850_80970(int) __asm__("FUN_001f96f8");
 extern unsigned char *D_L01_001B2538 NOT_SDA;
 char *spawn_type_14_particle(int particle_value, char *position_source) __asm__("FUN_L01_00280970");
 
 char *spawn_type_14_particle(int particle_value, char *position_source) {
-    char *particle = func_00218928_80970(0xE);
+    char *particle = create_part(0xE);
     int particle_frame_offset;
     int *particle_data;
     if (particle) {
@@ -81,13 +80,12 @@ char *spawn_type_14_particle(int particle_value, char *position_source) {
 }
 
 extern char *number_particle_lookup_tables[] __asm__("D_L01_001B25A4");
-extern char *alloc_285768(int) __asm__("FUN_L00_002678b8");
 
 /* Allocates a type 0x29 particle and fills it from the arguments; kind 0xFF
  * derives the frame from flags and picks one of two blend modes. */
 char *draw_number(float scale, void *pos, int a, int idx, int b, unsigned char flags, short h, unsigned char kind) __asm__("FUN_L01_00285768");
 char *draw_number(float scale, void *particle_spawn_position, int source_moby, int number_table_index, int particle_color, unsigned char flags, short particle_lifetime, unsigned char kind) {
-    char *particle = alloc_285768(0x29);
+    char *particle = create_part(0x29);
     if (particle != 0) {
         int *tail = (int *)(particle + 0x20);
         qcopy(particle + 0x10, particle_spawn_position);
@@ -118,12 +116,11 @@ char *draw_number(float scale, void *particle_spawn_position, int source_moby, i
 #endif
 #ifndef MACRO_ADDR
 #endif
-extern unsigned char *func_00218928_87158(int) __asm__("FUN_L00_002678b8");
 extern unsigned char *D_L01_001B25D0 NOT_SDA;
 unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) __asm__("FUN_L01_00287158");
 
 unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_data_value, int particle_lifetime, float particle_scale, float g) {
-    unsigned char *r = func_00218928_87158(0x34);
+    unsigned char *r = create_part(0x34);
     if (r != 0) {
         char *particle_data = (char *)r + 0x20;
         qcopy(r + 0x10, spawn_position);

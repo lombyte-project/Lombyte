@@ -7,6 +7,8 @@
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
+#include "rnc/overlay/shared/gameplay/entities/is_hero_on_moby.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 
 /* Same source as the exact FUN_L06_00309860, with two 0x67E effects and spawned class 0x67D. */
 typedef struct {
@@ -29,9 +31,7 @@ typedef struct {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *create_moby(int);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 

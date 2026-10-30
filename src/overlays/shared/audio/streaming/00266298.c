@@ -11,6 +11,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
+#include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility.h"
 
 /*
  * Scene trigger attached to a moby: when the hero comes close enough (and,
@@ -72,9 +73,6 @@ extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
 extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
-extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
-extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
-extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 
 s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger) __asm__("FUN_L00_00266448");
 s32 update_npc_dialogue(struct Moby *moby, struct SceneTrigger *trigger)

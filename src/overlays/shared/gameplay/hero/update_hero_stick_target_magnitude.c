@@ -8,6 +8,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/interpolation.h"
+#include "rnc/overlay/shared/input/pad/pad_pressed_within.h"
 
 extern float D_L02_0017C3B8[];
 extern void stick_target(int, float) __asm__("FUN_L00_002118c8");
@@ -348,7 +349,6 @@ extern HeroTableRow2C D_L02_0017C228[];
 extern s32 hero_button_8_double_press_countdown_gp __asm__("D_L02_0015F674") __attribute__((sda));
 
 extern s32 hero_set_state(s32, s32) __asm__("FUN_L02_0022b728");
-extern u32 pad_pressed_within(u32 mask, s32 n, s32 *out) __asm__("FUN_L00_00266d60");
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");

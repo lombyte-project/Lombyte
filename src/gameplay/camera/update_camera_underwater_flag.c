@@ -4,8 +4,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/world/collision/collision_hit_material.h"
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern float resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
 /* Camera-inside-water test: cast a ray through the camera focus from
    0.75 above to 0.75 below (up to six hits); on the first hit that is

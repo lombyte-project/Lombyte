@@ -13,6 +13,12 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
+#include "rnc/overlay/shared/math/vectors/add_vectors.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 /* Per-frame update of the player state flags from the current state; same source as FUN_L11_0023c7a0 with states 2 and 7 and without the water check. */
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
@@ -161,7 +167,6 @@ extern u8 D_L12_001742E0[] NOT_SDA;
 void hero_get_collision_ray_endpoints(void *, void *, s32, f32, f32) __asm__("FUN_L00_002126b8");
 s32 FUN_001efa68_u(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32 coll_sound_class(void) __asm__("FUN_L00_001f3608");
-s32 collision_hit_material(void) __asm__("FUN_001f0b58");
 f32 resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 u8 *suck_get_aim_height(s32) __asm__("FUN_002141f8");
@@ -497,7 +502,6 @@ extern void FUN_L00_002334d0(void *, void *, f32);
 extern void clip_hero_horizontal_velocity(s32) __asm__("FUN_L01_00232978");
 extern void correct_hero_airborne_wall_velocity(void) __asm__("FUN_L00_002121c0");
 extern void spawn_hero_radial_particle_burst(void) __asm__("FUN_L00_00217450");
-extern void update_entity(struct MobyView *) __asm__("FUN_L00_00250df8");
 extern s32 allocate_voice_for_target_entry(s32, s32, struct MobyView *) __asm__("FUN_0022da68");
 extern s32 FUN_L00_001ff600(f32, void *, void *);
 extern void update_hero_water_height_and_bobbing(void) __asm__("FUN_L00_00227d40");
@@ -545,7 +549,6 @@ extern void fast_sin_cf(s32, s32) __asm__("FUN_L00_00209638");
         FUN_L00_001ff600(frame_scale * -0.07999998f * len + len, &hero.motion.velocity, &hero.motion.velocity); \
     }
 extern void FUN_L00_0025f730(void *, f32);
-extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 extern void step_angle_toward_target(f32 *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern f32 vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -562,7 +565,6 @@ extern s32 collect_mobies_in_sphere(f32, void *, s32, struct MobyView *, void *)
 extern f32 compute_directed_angle_delta(s32, f32, f32) __asm__("FUN_L00_0025bb38");
 extern void update_hero_target_heading(f32, f32, f32) __asm__("FUN_L00_00214ed8");
 extern void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0");
-extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void set_tracked_class_5f3_moby_position(struct MobyView *, void *) __asm__("FUN_L00_002a9b80");
 extern s32 spawn_homing_bolt(struct MobyView *, void *, f32, f32, s32, f32, f32, f32) __asm__("FUN_L00_002a96f8");
 extern void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
@@ -580,7 +582,6 @@ extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_002337
 extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 collision_line(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
 extern s32 D_0013CB14[];
-extern void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
 extern s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern void spawn_nearby_effect(s32, struct MobyView *, s32, void *, void *, f32) __asm__("FUN_L00_00259bc8");
@@ -596,7 +597,6 @@ extern void rotate_hero_about_fixed_local_pivot(f32, f32, f32) __asm__("FUN_L00_
 extern void hero_update_hop_movement(void) __asm__("FUN_L12_00235c08");
 extern void compute_hero_fixed_offset_world_position(void *) __asm__("FUN_L00_0020d2f8");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
-extern void spawn_color_decaying_effect_particle(void *, void *, s32) __asm__("FUN_L00_0026d598");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 extern s32 sample_path(void *, void *, s32 *, f32 *, f32, s32) __asm__("FUN_L00_0025d808");
 extern s32 offset_path_index(void *, s32, s32, s32) __asm__("FUN_L00_0025d7a0");

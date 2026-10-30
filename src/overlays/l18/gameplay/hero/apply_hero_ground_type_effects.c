@@ -8,10 +8,10 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
+#include "rnc/world/collision/collision_hit_material.h"
 
 /* Same source as the exact FUN_L16_002097a0, with a state 3 flag (0x12E6) and its own landing checks (as FUN_L15_002044c8). */
 extern int D_0015ED84_d __asm__("D_0015ED84");
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
 extern int hero_set_state(int, int) __asm__("FUN_L18_00227dd0");

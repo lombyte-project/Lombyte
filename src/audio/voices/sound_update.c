@@ -9,6 +9,7 @@
 #include "qzero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/snd_flush_sound_commands.h"
 
 typedef union {
     u128 q;
@@ -81,7 +82,6 @@ extern s32 ComputeByteStringHash(u8 *, s32);
 extern int snd_get_doppler_pitch_mod(int arg0);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void read_global_table_entry(void) __asm__("ReadGlobalTableEntry");
-extern s32 snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void snd_set_master_volume(s32, s32) __asm__("FUN_0012e208");
 extern void snd_play_sound_vol_pan_pmpb() __asm__("FUN_0012e308");
 extern void snd_stop_sound(s32) __asm__("FUN_0012e368");

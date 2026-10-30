@@ -6,10 +6,10 @@
 
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00260EE8.c: func_L03_00260EE8), where it is exact; names translated to the US level program. */
 
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 
 void create_type_31_part(int part_word_3c, int *part_quadword_20_source, int *source_quadword, float *source_floats, int part_halfword_0a) __asm__("FUN_L03_00260130");
 

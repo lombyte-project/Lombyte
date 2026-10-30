@@ -22,6 +22,9 @@
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
+#include "rnc/world/collision/collision_line.h"
 
 /* Finds the path segments nearest to the two target points and sums the segment lengths between them. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D7668), where it is exact; names translated to the US level program. */
@@ -105,7 +108,6 @@ typedef struct {
 extern int FUN_L00_0025df68_c(void *, void *, void *, int *, float *, int, float, float, float) __asm__("FUN_L00_0025df68");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void FUN_L00_0025d808_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
-extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) __asm__("FUN_L14_002d6570");
 
@@ -192,7 +194,6 @@ extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
 extern void FUN_L00_001fff28(void *, int, float);
 extern void register_beam_slot(struct Moby *, int, int) __asm__("FUN_L00_002e1f28");
 extern int set_beam_origin_transform_and_endpoint(struct Moby *, void *, void *) __asm__("FUN_L00_002e2190");
-extern int collision_line(void *, void *, int, struct Moby *, void *) __asm__("FUN_001efa68");
 extern char *spawn_mode_controlled_rotating_alpha_fade_particle(void *, void *, int, struct Moby *) __asm__("FUN_L00_00274948");
 extern int allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
@@ -556,7 +557,6 @@ void update_moby_joint_visual_effects(struct Moby *moby) {
 }
 #include "qzero.h"
 extern void FUN_L14_002de2b8_call(struct Moby *, f32, f32) __asm__("FUN_L14_002de2b8");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 #include "rnc/overlay/l14/gameplay/entities/platform_data/update_tilting_platform.h"
 
 void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");

@@ -29,6 +29,11 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/rendering/effects/spawn_spark.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/math/interpolation/count_active_moby_group_members.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/world/collision/collision_line.h"
 extern float frame_scale_inv_macro[] __asm__("D_0015ED68") MACRO_ADDR;
 
 extern char *D_L11_0015FFD8;
@@ -376,7 +381,6 @@ extern float gate_door_y_rotation_degrees_gp __asm__("D_L11_00162310") __attribu
 extern s32 FUN_00214720(void *, s32);
 extern s32 FUN_0022da68(s32, s32, void *);
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern void update_entity(struct Moby *) __asm__("FUN_L00_00250df8");
 
 /* Private variables of the two-door moby FUN_L11_00316320 runs. */
 struct L11GateVars {
@@ -966,7 +970,6 @@ void start_oil_tanker_link_destruction(struct Moby *link_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_00319FA0), where it is exact; names translated to the US level program. */
 
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -1205,7 +1208,6 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void update_moby_trail_points(void *) __asm__("FUN_L11_00319670");
 extern void update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
 extern void update_moby_path_transform(void *) __asm__("FUN_L11_0031a438");
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 extern short blarg_ship_shot_speed_gp __asm__("D_L11_001623D0") __attribute__((sda));
 void blarg_ship_update(struct Moby *moby) __asm__("FUN_L11_00319838");
@@ -1487,7 +1489,6 @@ char *activate_listed_blarg_ship(int list) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031BEF0), where it is exact; names translated to the US level program. */
 
-extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 
 void update_moby_list_empty_dialogue_trigger(struct Moby *moby) __asm__("FUN_L11_0031aa80");
@@ -1717,7 +1718,6 @@ extern int layered_effect_texture_2c_fixed_alpha_gp __asm__("D_L11_001624F8") __
 extern int layered_effect_texture_2a_pair_zero_fixed_alpha_gp __asm__("D_L11_00162518") __attribute__((sda));
 extern int layered_effect_texture_2b_fixed_alpha_gp __asm__("D_L11_00162528") __attribute__((sda));
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void emit_level11_layered_effect_batches_with_pair_offset(int) __asm__("FUN_L11_0031d8d8");
 extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
 extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");

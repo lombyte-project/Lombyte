@@ -12,14 +12,19 @@
 #include "sda.h"
 #include "rnc/math/random.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/math/rotations/matrix_to_euler.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/world/collision/collision_line.h"
 
 
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002A6C20), where it is exact; names translated to the US level program. */
 
 extern s32 rand();
-extern void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
-void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void update_moby_random_interval_animation(struct Moby *moby) __asm__("FUN_L04_002a5a08");
 
@@ -172,7 +177,6 @@ s32 advance_moby_along_path(struct Moby *moby, PathPoints_eb20 *path, s32 i, s32
     return i;
 }
 extern void *memset(void *, int, int) __asm__("FUN_001153fc");
-extern void update_spawned_moby_29ecf8(struct Moby *) __asm__("FUN_L00_00250df8");
 extern void steer_child_moby(void *, s32, struct Moby *, void *, void *) __asm__("FUN_L04_001f30e0");
 extern void update_moby_movement_with_sphere_collision(f32, struct Moby *, void *, void *) __asm__("FUN_L04_001f3a80");
 extern PathPoints_eb20 *D_L04_001b0630[];
@@ -306,7 +310,7 @@ void update_class_55_swarm_controller(struct Moby *moby) {
             part->unk90 = 1.0f;
             part->unk62 = 0x1ee;
             part->unk94 = 5.0f;
-            update_spawned_moby_29ecf8(child);
+            update_entity(child);
         }
     }
     } else {
@@ -503,9 +507,7 @@ extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, flo
 extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
 extern void *spawn_class_23a_moby(void *, void *) __asm__("FUN_L04_002d34d8");
 extern void *random_integer_below_cf(void *, int, unsigned int) __asm__("FUN_001153fc");
-extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 extern void FUN_L00_001fff28(void *, int, float);
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void leg_walker_update(void *, void *, float, float, float) __asm__("FUN_L04_00295778");
 extern void FUN_L00_0025a120(void *);
@@ -522,7 +524,6 @@ extern void build_moby_bone_transform(char *, int, char *);
 extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos,
                                       void *vel) __asm__("FUN_L00_00259bc8");
 extern void copy_matrix3x4(void *, void *);
-extern void attach_manipulator(char *, int, void *) __asm__("FUN_0020cb10");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 void blend_big_axebot_and_axe_animation(char *arg, void *a, void *b, void *c) __asm__("FUN_L04_002ba3e0");
@@ -1484,7 +1485,6 @@ extern int FUN_L00_002dc9f0(void *, void *);
 short D_L04_00161878 = 0x101;
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void update_object_wander_movement(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
-extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern void FUN_L01_0026d930(char *p);
 extern void update_circular_saw_engine_sound(struct Moby *) __asm__("FUN_L04_002c1b80");
 extern void release_voice_slot(int);
@@ -2212,7 +2212,6 @@ extern char D_L04_00166E00[];
 extern char blarg_trooper_missing_path_fields_format[] __asm__("D_L04_001DBC80");
 extern float vector_length_xy(void *);
 extern int DebugPrint();
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int rand(void);
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");

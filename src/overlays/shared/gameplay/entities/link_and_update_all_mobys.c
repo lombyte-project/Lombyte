@@ -4,11 +4,11 @@
 
 #include "rnc/gameplay/entities/moby.h"
 #include "moby_update.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
 extern struct Moby *moby_table __asm__("D_L00_0015FFD8");
 extern struct Moby *D_L00_0015FFE4;
 extern void *active_mobies[] __asm__("D_L00_001ABA00");
 extern void FUN_L00_00250480(struct Moby *moby);
-extern void update_entity(struct Moby *moby) __asm__("FUN_L00_00250df8");
 
 void link_and_update_all_mobys(void) __asm__("FUN_L00_00264740");
 void link_and_update_all_mobys(void)

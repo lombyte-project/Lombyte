@@ -9,10 +9,10 @@
 #include "qcopy.h"
 #include "rnc/math/random.h"
 
-extern unsigned char *create_part(int) __asm__("FUN_L00_002678b8");
 #include "rnc/overlay/shared/rendering/spawn_owner_target_particle_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 extern int owner_target_particle_frame_count_gp __asm__("D_L15_001601FC") __attribute__((sda));
 
 /* Spawns particle type 0x1F of colour `color` at `pos`, starting a quarter of the way from `owner` towards it. */

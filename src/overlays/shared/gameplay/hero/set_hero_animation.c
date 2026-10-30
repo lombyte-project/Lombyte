@@ -16,6 +16,10 @@
 #include "rnc/overlay/shared/gameplay/hero/hero_idle_sequence.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
+#include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 extern int lookup_s16_pair_value(int, int *) __asm__("FUN_L00_002321c0");
 
 /* With both objects at hero +0x1180 and +0x1184 present and the
@@ -28,7 +32,6 @@ extern int lookup_s16_pair_value(int, int *) __asm__("FUN_L00_002321c0");
 int select_hero_slot3_animation_pair(int input_animation_id, int *out_primary_animation_id, int *out_secondary_animation_id) __asm__("FUN_L00_00231ff8");
 
 extern int select_hero_slot3_animation_pair(int, int *, int *) __asm__("FUN_L00_00231ff8");
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void blend_hero_slot3_animation_pair(void) __asm__("FUN_L00_00231d08");
 
@@ -521,7 +524,6 @@ extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_00
 extern s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
 extern f32 FUN_L00_00233a78_32b90(void *) __asm__("FUN_L00_00233a78");
-extern s32 solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 
 f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_acceleration, f32 target_height) __asm__("FUN_L00_00232b90");
 
@@ -1445,7 +1447,6 @@ void FUN_L00_002347c0(void) {
 }
 extern s32 D_L00_0015F5C4_234808 __asm__("D_L00_0015F5C4");
 s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
-void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_001fff28_234808(void *, s32, f32) __asm__("FUN_L00_001fff28");
 #define X  D_L00_0015F5C4_234808
 #define DD frame_time
@@ -1593,7 +1594,6 @@ void apply_hero_moby_scale(void *scale_owner_moby) {
 extern u8 D_L00_0017A608[];
 extern u8 D_L00_0017C680[];
 extern u8 D_L00_0015F6A8[];
-void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 void FUN_L00_002092c8(void *, void *, void *, int, void *);
 void configure_moby_from_source_bone4(void *source_moby, char *destination_moby) __asm__("FUN_L00_00234c78");
 

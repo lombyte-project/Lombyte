@@ -14,6 +14,8 @@
 #include "sda.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/math/interpolation/set_moby_list_state.h"
+#include "rnc/rendering/gs/log2dim.h"
 
 typedef struct {
     char *f0;     /* 0x00 */
@@ -132,7 +134,6 @@ extern void load_hud_banks(void) __asm__("FUN_00202a98");
 extern void upload_texture_images(void *, s32, void *) __asm__("FUN_00203120");
 extern void flush_cache(s32) __asm__("FUN_00118a80");
 extern s32 fast_decompress(void *, char *) __asm__("FUN_L00_0024d8d0");
-extern s32 log2dim(s32) __asm__("FUN_001f97a0");
 extern void initialize_tfrag_render_data(char *, void *) __asm__("FUN_002040e0");
 extern void relocate_sky_definition(char *) __asm__("FUN_002028e0");
 extern void resolve_level_asset_block_pointers(char *) __asm__("FUN_L00_00241728");
@@ -469,7 +470,6 @@ void draw_pulsing_timer_hud(struct Moby *moby) {
     font_print_center_large_001f6c20(timer_text_x, timer_text_y, col, (int)timer_text, 8);
 }
 
-extern void set_moby_list_state(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 
 void set_moby_group_state_two(char *moby_group) __asm__("FUN_L18_002e9e50");
 

@@ -22,6 +22,8 @@
 #include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/gameplay/state/test_path_segment_strict_crossing.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/overlay/shared/gameplay/hero/air_accel.h"
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/help_00216D38.c: func_L03_00216D38), where it is exact; names translated to the US level program. */
 
@@ -44,7 +46,6 @@ extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int sample_path(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
-extern int get_hero_idle_animation_index(int a) __asm__("FUN_L01_00226f10");
 int D_L03_0015F6D8[4] __attribute__((section(".sdata"))) = {8, 0, 11, 16};
 extern s32 D_L03_0015F688 __attribute__((sda));
 struct HeroVelocityKey D_L03_0015F6E8[1] __attribute__((section(".sdata"))) = {{48.0f, 0.0f, 1000}};
@@ -62,9 +63,7 @@ extern void FUN_L00_0025f730(void *a, float x);
 extern void create_moby_transform_history_entry(char *o, int a, int b) __asm__("FUN_L00_00262528");
 extern void clear_moby_transform_history(char *o) __asm__("FUN_L00_00262840");
 extern void pool_splash(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
-extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L03_00216648");

@@ -25,6 +25,16 @@
 #include "rnc/overlay/shared/gameplay/hero/hero_check_damage.h"
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/animation/set_animation_parameter.h"
+#include "rnc/gameplay/animation/set_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/ui/text/update_hud_counter_cap_and_visibility.h"
+#include "rnc/rendering/view/update_view_context.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/tieproc_00299108.c: func_L00_00299108), where it is exact; names translated to the US level program. */
 
@@ -142,9 +152,6 @@ extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern void hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *,
                                   s32) __asm__("FUN_001ff308");
-extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
-extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
-extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void prepare_level_transition_with_help_cleanup(void) __asm__("FUN_L00_0028ecd8");
 extern void reset_frame_counters(void) __asm__("FUN_L00_00297e30");
 extern void count_expired_mobys(void) __asm__("FUN_L00_0024e7a8");
@@ -462,7 +469,6 @@ extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-void update_view_context(void) __asm__("FUN_001f2d98");
 void f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
 void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void process_menu_entry(F_298b18 *, void *, int) __asm__("FUN_00216c48");
@@ -536,7 +542,6 @@ extern unsigned char D_0015EDB0_298de8b __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB4_298de8 __asm__("D_0015EDB4");
 extern float D_L00_0015F5A0_298de8 __asm__("D_L00_0015F5A0");
 extern char player_camera[] __asm__("D_L00_00166C80") NOT_SDA;
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void sce_vu0_unit_matrix(void *) __asm__("FUN_00125218");
 extern void sce_vu0_rot_matrix_x(void *, void *, float) __asm__("FUN_00125360");
 extern void sce_vu0_rot_matrix_y(void *, void *, float) __asm__("FUN_00125408");
@@ -648,7 +653,6 @@ extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern s32 FUN_002168a8(s32);
 extern void FUN_00204790(void);
 extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void update_moby_shadow_range(void *) __asm__("FUN_00213700");
 extern void apply_hero_moby_scale(void *) __asm__("FUN_L00_00234b38");
 extern void update_moby_pulsing_glow_effects(void *) __asm__("FUN_L00_00207430");
@@ -1337,11 +1341,6 @@ extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_
 extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 extern void FUN_L00_00232fe8_29a6b0(void) __asm__("FUN_L00_00232fe8");
-extern void set_moby_animation(void *, s32, s32) __asm__("FUN_00212ed8");
-extern void jet_mount(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void attach_manipulator(char *, s32, void *) __asm__("FUN_0020cb10");
 
 typedef unsigned int Q_29a6b0 __attribute__((mode(TI), aligned(16)));
 extern u8 vendor_extra[] __asm__("D_L00_001CA6E0");
@@ -1474,9 +1473,7 @@ struct S16_29ab70 {
     unsigned short mode;
 };
 extern struct S16_29ab70 D_001516D0_29ab70 __asm__("D_001516D0");
-extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void update_resource_counter(void) __asm__("FUN_001ff768");
 extern void snd_continue_all_sounds_in_group(int) __asm__("FUN_0012e418");
 extern void music_unpause(void) __asm__("FUN_00216088");
@@ -1533,7 +1530,6 @@ struct S16_29ad08 { char pad[0x5A]; s16 mode; };
 extern struct S16_29ad08 D_001516D0_29ad08 __asm__("D_001516D0");
 struct T_29ad08 { char p0[0x10]; s32 id; char p1[0x38]; };
 extern struct T_29ad08 D_L00_00179AC0_29ad08[] __asm__("D_L00_00179AC0");
-extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 extern float f213508_29ad08(float, void *, s32) __asm__("FUN_00213508");
 extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 extern void clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
@@ -1649,7 +1645,6 @@ extern int D_L00_00161188;
 extern int D_L00_00161194;
 extern int D_L00_001CA4C0[];
 extern unsigned char queued_dialogue_id[] __asm__("D_001516EC");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void handle_vendor_auxiliary_moby_event(int vendor_event) __asm__("FUN_L00_0029b4d8");
 
@@ -1734,7 +1729,6 @@ extern unsigned char discount_purchase_pricing __asm__("D_0013D4E3") NOT_SDA;
 extern int D_L00_00161E38;
 extern void select_world_object_resource_tables(int, int) __asm__("FUN_00204a40");
 extern void init_moby_instance(void *, int) __asm__("FUN_0020c5f0");
-extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 extern void FUN_0020d4f0_29b680(void *, int, int, int, int) __asm__("FUN_0020d4f0");
 #define P D_L00_001CA4C0_29b680
 
@@ -1895,7 +1889,6 @@ extern void update_resident_dialogue_animation_state(void *) __asm__("FUN_00237e
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern s32 FUN_001fdd10(s32);
 extern void FUN_00237e90(s32);
-extern void set_animation_parameter(s32, s32) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308(s32, s32, void *, void *, void *, void *, s32);
 void update_vendor_purchase(void) __asm__("FUN_L00_0029ba78");
 extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
@@ -1919,14 +1912,12 @@ extern s32 D_0015ED98;
 extern u8 vendor_item_0x18_purchased[] __asm__("D_00141345");
 extern s32 vendor_purchase_confirmed_gp __asm__("D_L00_00161E0C") __attribute__((sda));
 extern s32 vendor_ammo_quantity_adjustment_enabled_gp __asm__("D_L00_00161E10") __attribute__((sda));
-extern void FUN_L00_00250df8_2ba78(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_0020d4f0_2ba78(void *, int, int, int, int) __asm__("FUN_0020d4f0");
 extern s32 add_ammo(u32, int) __asm__("FUN_L00_00233e40");
 extern void handle_vendor_auxiliary_moby_event(int) __asm__("FUN_L00_0029b4d8");
 extern void build_vendor_menu_rows(int) __asm__("FUN_L00_0029a400");
 extern int get_help_message_text(int) __asm__("FUN_001fdd10");
 extern void set_scrolling_status_message(int) __asm__("FUN_00237e90");
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern s32 queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
 
 #define CUR_TB (D_L00_001C40B0[CUR_ITEM.fD0])
@@ -1956,7 +1947,7 @@ void update_vendor_purchase(void) {
             vendor_menu.f20[4].next_frame = 0;
             update_moby_animation_state(&vendor_menu.f20[4]);
         }
-        FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
+        update_entity(&vendor_menu.f20[4]);
         FUN_0020d4f0_2ba78(&vendor_menu.f20[4], 0x101010, 0xE, 0xE, 0);
         vendor_ammo_quantity_adjustment_enabled_gp = 0;
         if (CUR_ITEM.fD4 == 1 && !(weapon_ammo_counts[CUR_ITEM.fD0] < CUR_TB.hE)) {
@@ -2019,7 +2010,7 @@ void update_vendor_purchase(void) {
                 vendor_menu.f5c = 3;
                 vendor_purchase_confirmed_gp = 0;
                 blend_moby_animation(&vendor_menu.f20[4], 0, ((u8 *)vendor_menu.f20[4].pclass->slots[0])[0x10] - 1, 1);
-                FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
+                update_entity(&vendor_menu.f20[4]);
                 return;
             }
         }
@@ -2028,7 +2019,7 @@ void update_vendor_purchase(void) {
                 vendor_menu.f5c = 3;
                 vendor_purchase_confirmed_gp = 1;
                 blend_moby_animation(&vendor_menu.f20[4], 0, ((u8 *)vendor_menu.f20[4].pclass->slots[0])[0x10] - 1, 8);
-                FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
+                update_entity(&vendor_menu.f20[4]);
                 return;
             }
         }
@@ -2036,7 +2027,7 @@ void update_vendor_purchase(void) {
         if (!vendor_menu.f20[4].b53 && (vendor_menu.f20[4].b70 & 2)) {
             blend_moby_animation(&vendor_menu.f20[4], 1, 0, 1);
         }
-        FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
+        update_entity(&vendor_menu.f20[4]);
         return;
     }
     if (purchase_state == 3) {
@@ -2045,7 +2036,7 @@ void update_vendor_purchase(void) {
             vendor_menu.f20[4].f58 = -1.0f;
             vendor_menu.f5c = 4;
         }
-        FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
+        update_entity(&vendor_menu.f20[4]);
         return;
     }
     if (purchase_state != 4) {
@@ -2132,7 +2123,7 @@ void update_vendor_purchase(void) {
         }
         vendor_menu.f5c = 0;
     }
-    FUN_L00_00250df8_2ba78(&vendor_menu.f20[4]);
+    update_entity(&vendor_menu.f20[4]);
 }
 
 void update_vendor_menu(void) __asm__("FUN_L00_0029c648");

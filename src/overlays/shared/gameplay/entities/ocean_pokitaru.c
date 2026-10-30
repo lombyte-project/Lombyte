@@ -16,6 +16,12 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/rendering/font_queue_vu_state.h"
+#include "rnc/runtime/callbacks/noop_main_callback.h"
+#include "rnc/world/collision/collision_line.h"
 
 extern int FUN_00116248_b7(void *, void *) __asm__("FUN_00116248");
 extern void FUN_0020c828_b7(void *) __asm__("FUN_0020c828");
@@ -87,8 +93,6 @@ char *select_homing_missile_target(float *targeting_origin, float *aim, float ma
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C99E0.c: func_L11_00309C18), where it is exact; names translated to the US level program. */
 
 extern char *create_moby(int);
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 unsigned char *spawn_class_3f1_moby(char *owner, float *launch_direction, float *spawn_position, float travel_distance, float step_length) __asm__("FUN_L11_00308848");
 
@@ -151,11 +155,8 @@ typedef struct {
 
 extern char *D_L11_0015FFD8_089d0 __asm__("D_L11_0015FFD8");
 extern char D_L11_00174880[];
-extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
 extern void initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00259858");
-extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 char *select_homing_missile_target(float *pos, float *aim, float r1, float r2, float maxd) __asm__("FUN_L11_00308670");
@@ -470,7 +471,6 @@ typedef struct { char pad[0x140]; float x, y, z; } Cam;
 typedef struct { char pad[0x228]; float f228, f22C; } Fog;
 
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern void func_L00_001FDE48_30a908(int, void *, void *, void *, int) __asm__("FUN_L00_001fde98");
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L11_001677C0_30a908[] __asm__("D_L11_001677C0");

@@ -6,6 +6,7 @@
 #include "qcopy.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
+#include "rnc/overlay/shared/rendering/effects/create_part.h"
 
 typedef struct {
     f32 x;
@@ -34,7 +35,6 @@ typedef struct {
     SparkBody body;
 } Spark;
 
-extern void *create_part(s32) __asm__("FUN_L00_002678b8");
 extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
 extern u8 *spark_texture_table[] __asm__("D_L01_001B2500");
 
@@ -132,7 +132,6 @@ Particle *pool_bubble(u128 *pos, u128 *motion_position_source, f32 scale) {
     return particle;
 }
 extern u8 *pool_bubbles_texture_table[] __asm__("D_L01_001B25E4");
-void *create_part(s32) __asm__("FUN_L00_002678b8");
 
 Particle *pool_bubbles(u128 *pos, u128 *dir, f32 scale, f32 speed) __asm__("FUN_L01_00287c80");
 Particle *pool_bubbles(u128 *pos, u128 *motion_position_source, f32 scale, f32 speed) {

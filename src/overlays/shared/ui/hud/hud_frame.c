@@ -3,6 +3,7 @@
 #include "asm.h"
 #include "sda.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 
 typedef struct {
     u8 p[6];
@@ -24,7 +25,6 @@ typedef struct {
     s16 y;
 } O0023b120;
 extern G0023b120 D_L00_0017E4D8;
-void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
 void hud_frame(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) __asm__("FUN_L00_0023b120");
 void hud_frame(O0023b120 *hud_element, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
     s32 base_width, base_height, draw_width, draw_height;

@@ -26,6 +26,20 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/rendering/transitions/fade_to_black.h"
+#include "rnc/gameplay/animation/blend_moby_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/entities/copy_hero_moby_field_38.h"
+#include "rnc/overlay/shared/gameplay/hero/air_accel.h"
+#include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/math/interpolation/set_moby_list_state.h"
+#include "rnc/overlay/shared/math/vectors/reflect_vector.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/ui/help/try_set_help_message.h"
 
 /* A path of points: the point count, then 16-byte points whose w is the length of the segment to the next one */
 typedef struct {
@@ -423,10 +437,8 @@ typedef struct {
 } DebrisVars;
 
 extern f32 D_0015ED6C_2f8530 __asm__("D_0015ED6C");
-extern void copy_hero_moby_field_38(struct Moby *) __asm__("FUN_L00_0025d1b8");
 extern s32 rand(void) __asm__("FUN_001160d8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern void upd_a(struct Moby *) __asm__("FUN_L00_00250df8");
 
 struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_timer, s32 fade_out, f32 scale, f32 gravity, f32 spin, f32 seconds) __asm__("FUN_L01_002f8530");
 struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_timer, s32 fade_out,
@@ -469,7 +481,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
         debris_vars->life = truncate_float_to_s32(scale_time(seconds * 60.0f));
         debris_vars->unk20 = fade_out;
         debris_vars->gravity = gravity * 9.8f * frame_time_sq;
-        upd_a(debris_moby);
+        update_entity(debris_moby);
     }
     return debris_moby;
 }
@@ -478,9 +490,7 @@ struct Moby *spawn_debris_chunk(Vec4f *pos, Vec4f *vel, s32 oclass, s32 initial_
 extern CollisionHit collision_hit __asm__("D_L01_001742C0");
 extern s32 collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
 extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
-extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern s32 FUN_L00_00257b90(s32, s32);
-extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, f32, s32) __asm__("FUN_L00_0026ced0");
 
 /* Debris update: falls and spins, bounces off what it hits with a random kick, bursts into 40 sparks once it
    comes to rest (or its unk10 timer runs out), or fades out over unk28 frames when unk20 is set. */
@@ -586,7 +596,6 @@ extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 D_0015EDB0;
 extern MobyList D_L01_0016CCE0;
 extern Effect D_L01_0017C8C0;
-extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 
 void attach_cutscene_fixed_scale_manipulator(void) __asm__("FUN_L01_002fb4b8");
 
@@ -627,11 +636,6 @@ extern int D_L01_001600EC_q __asm__("D_L01_001600EC");
 extern s32 D_0014C190[][64];
 extern void DebugPrint(char *, ...);
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 void FUN_L01_002fb4b8_c(void) __asm__("FUN_L01_002fb4b8");
 extern void func_L01_002FC890_m(char *) __asm__("FUN_L01_002fb4b8");
 extern TpLevelState_fc988 D_L01_001BB9C0_s __asm__("D_L01_001BB6B0");
@@ -757,7 +761,6 @@ extern G_q D_L01_0016CCE0_q __asm__("D_L01_0016CCE0");
 extern int cutscene_mode __asm__("D_L01_0015F5C4");
 #include "rnc/gameplay/state/options.h"
 extern unsigned char D_L01_0017C8C0_lui[] __asm__("D_L01_0017C8C0") NOT_SDA;
-extern void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 #include "rnc/overlay/shared/gameplay/entities/rock_globals.h"
 extern float cutscene_big_head_scale_gp __asm__("D_L01_00161D30") __attribute__((sda));
@@ -859,10 +862,7 @@ extern struct {
     float f88;
 } D_0013F350_w __asm__("D_0013F350");
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
-extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
-extern void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void record_moby_context_bytes(void *, int, void *, int, void *) __asm__("FUN_L01_0029b0a0");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
@@ -1252,7 +1252,6 @@ extern f32 D_L01_00161F18_gp __asm__("D_L01_00161F18") __attribute__((sda));
 extern f32 D_L01_00161F2C_gp __asm__("D_L01_00161F2C") __attribute__((sda));
 extern s32 D_L01_00161F50_gp __asm__("D_L01_00161F50") __attribute__((sda));
 extern void exit_hero_vehicle_mode_and_restore_moby(void) __asm__("FUN_L01_00231450");
-extern void blend_moby_animation(struct Moby *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void set_hero_animation(f32, s32, s32) __asm__("FUN_L00_002323b8");
 extern void initialize_gold_bolt_data(struct Moby *) __asm__("FUN_L01_00308470");
 /* the unit defines these with a char * parameter further down */
@@ -1598,7 +1597,6 @@ void spawn_gold_bolt_particles(char *moby) {
 
 extern int D_0015ED84; /* no foreign declaration */
 extern int moby_killed[] __asm__("D_L01_001BA950");
-extern void set_moby_list_state(char *arg, int val) __asm__("FUN_L01_0026e0e0");
 
 void activate_teleporter_and_record_state(char *moby) __asm__("FUN_L01_00308b28");
 
@@ -1635,7 +1633,6 @@ extern void hide_teleporter_and_children(L01Moby *) __asm__("FUN_L01_003097e8");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern void try_set_teleporter_help_message(char *) __asm__("FUN_L01_00309430");
 extern void draw_moby_radius_ring(char *) __asm__("FUN_L01_003094f0");
-extern void set_moby_list_state(char *, int) __asm__("FUN_L01_0026e0e0");
 extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void advance_accelerated_scalar(float *, float *, float, float, float,
@@ -1842,7 +1839,6 @@ void teleporter_update(struct Moby *moby) {
 /* Places the three child mobys at this moby's position and orients each from its data. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030A6A8), where it is exact; names translated to the US level program. */
 
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 extern float teleporter_child_position_z_offset_gp __asm__("D_L01_00161F78") __attribute__((sda));
 extern float teleporter_child_displacement_angle_degrees_gp __asm__("D_L01_00161F80") __attribute__((sda));
@@ -1875,7 +1871,6 @@ void update_teleporter_child_transforms(char *parent_moby) {
 extern int D_0015ED84; /* no foreign declaration */
 extern int shared_teleporter_help_message_ids[] __asm__("D_L01_00201600");
 extern int level_17_teleporter_help_message_ids[] __asm__("D_L01_00201618");
-s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 extern short level_8_teleporter_help_message_ids __asm__("D_L01_00161F98") __attribute__((sda));
 extern short level_12_teleporter_help_message_ids __asm__("D_L01_00161FA0") __attribute__((sda));

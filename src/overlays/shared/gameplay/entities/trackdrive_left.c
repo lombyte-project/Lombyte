@@ -16,6 +16,13 @@
 #include "rnc/overlay/shared/gameplay/entities/002630b8.h"
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/gameplay/hero/set_hero_animation.h"
+#include "rnc/gameplay/entities/attach_manipulator.h"
+#include "rnc/overlay/shared/gameplay/camera/follow_camera_update.h"
+#include "rnc/overlay/shared/gameplay/hero/air_accel.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
+#include "rnc/overlay/shared/gameplay/vendor/set_camera_rotation.h"
+#include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
+#include "rnc/rendering/view/update_view_context.h"
 
 extern u8 scaled_table_output[] __asm__("D_L02_001CB9C0");
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left_globals.h"
@@ -87,7 +94,6 @@ typedef struct QuadCamera {
 
 typedef struct QuadFrame { char pad0[8]; unsigned short a; unsigned short b; char padC[4]; } QuadFrame;
 
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern void vu1_add_data_ref(void *, int) __asm__("FUN_00233830");
 extern void FUN_L02_0024fca0(void *, void *, void *, void *, void *, int, float);
@@ -436,27 +442,17 @@ extern int FUN_L02_0022b728();
 extern s32 force_help_message(s32 owner, s32 message_id) __asm__("FUN_002151d8");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 void trooper_anim_finish(s32 id, void *s) __asm__("FUN_L00_0025d538");
-void set_camera_position(char *src) __asm__("FUN_L00_002ea9d8");
-void set_camera_rotation(char *src) __asm__("FUN_L00_002eaa30");
-void jet_mount(void *pa, void *pb, s32 mode, s32 w, s32 x) __asm__("FUN_L00_002eaaa0");
-void jet_end_mount(int mode) __asm__("FUN_L00_002eac18");
-void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 void FUN_L02_002d8910_c(float *pos, float *rot, char *moby) __asm__("FUN_L02_002d8910");
 void FUN_L02_002d92f0_c(char *moby) __asm__("FUN_L02_002d92f0");
 void draw_tresspasser_puzzle(char *moby) __asm__("FUN_L02_002d93e8");
 /* Fakematch: the first parameter is an int; as a long the 0 passed after the 64-bit pad test is set again instead of taken from the mask register, like retail. */
 extern int func_0022ED80_2D9F08(long, int, Moby *) __asm__("FUN_0022da68");
 extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void func_L02_002DA728_2D9F08(Moby *) __asm__("FUN_L02_002d92f0");
 extern void func_L02_002D9D48_2D9F08(void *, void *, Moby *) __asm__("FUN_L02_002d8910");
 extern float func_00214D88_2D9F08(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
-extern void func_L00_002EBE88_2D9F08(void *) __asm__("FUN_L00_002ea9d8");
-extern void func_L00_002EBEE0_2D9F08(void *) __asm__("FUN_L00_002eaa30");
 extern int force_help_message(int, int) __asm__("FUN_002151d8");
 extern void func_L02_002DA820_2D9F08(void) __asm__("FUN_L02_002d93e8");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
-extern void request_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L01_002405a0");
 extern void func_L00_0025E590_2D9F08(Moby *, Data *) __asm__("FUN_L00_0025d538");
 extern float D_L02_001D33B0[4][4];
 extern Lvl D_L02_001BBB40_2D9F08 __asm__("D_L02_001BB830");
@@ -552,8 +548,8 @@ void tresspasser_pad_update(Moby *moby) {
         lerp_vector(&camera_pos, &data->vF0, &camera_pos, data->f110);
         camera_rot.z = fast_add_rotations(fast_subtract_rotations(camera_rot.z, data->v100.z) * data->f110, data->v100.z);
         camera_rot.y = fast_add_rotations(fast_subtract_rotations(camera_rot.y, data->v100.y) * data->f110, data->v100.y);
-        func_L00_002EBE88_2D9F08(&camera_pos);
-        func_L00_002EBEE0_2D9F08(&camera_rot);
+        set_camera_position(&camera_pos);
+        set_camera_rotation(&camera_rot);
         D_L02_0017EB08_lui = 1;
         force_help_message(6, 0);
         if (D_L02_00167300_2D9F08.p180 != 0 && D_L02_00167300_2D9F08.p180->unk86 != 5) {
@@ -980,7 +976,6 @@ extern int escalator_direction_timer_frames_gp __asm__("D_L02_00161C18") __attri
 extern float escalator_target_speed_gp __asm__("D_L02_00161C14") __attribute__((sda));
 extern float escalator_acceleration_gp __asm__("D_L02_00161C1C") __attribute__((sda));
 extern float D_0015ED70_2dc6b0 __asm__("D_0015ED70");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void escalator_update(char *moby) __asm__("FUN_L02_002dc6b0");
 void escalator_update(char *moby) {
@@ -1078,7 +1073,6 @@ extern float versatarget_particle_base_lifetime_gp __asm__("D_L02_00161CB0") __a
 extern int versatarget_particle_color_gp __asm__("D_L02_00161CB4") __attribute__((sda));
 extern float versatarget_particle_scale_gp __asm__("D_L02_00161CB8") __attribute__((sda));
 extern float D_L02_00161CBC;
-extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void spawn_moving_hero_relative_alpha_fade_particle(void *, void *, int, int, int, int, float) __asm__("FUN_L00_002730e0");
 void initialize_camera_offset_effect_state(void) __asm__("FUN_L02_002fa6d8");
 void try_select_camera_offset_effect_moby(char *m) __asm__("FUN_L02_002fa7c8");
@@ -1169,7 +1163,6 @@ typedef struct {
 extern int level_game_mode __asm__("D_L02_0015F5C4");
 #include "rnc/gameplay/state/options.h"
 extern unsigned char l02_big_head_cheat_manipulator[] __asm__("D_L02_0017CA40");
-void attach_manipulator(void *arg0, s32 arg1, void *arg2) __asm__("FUN_0020cb10");
 
 extern Level02MobyList talk_camera __asm__("D_L02_0016CE60");
 void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) __asm__("FUN_L02_002e0cd8");
@@ -1194,13 +1187,10 @@ void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) {
 extern void FUN_L02_002ea7d0_c(struct Moby *) __asm__("FUN_L02_002ea7d0");
 extern void FUN_L02_002ea8b0_c(struct Moby *) __asm__("FUN_L02_002ea8b0");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void ea210_approach(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
-extern void FUN_L00_002ea9d8_c(void *) __asm__("FUN_L00_002ea9d8");
-extern void FUN_L00_002eaa30_c(void *) __asm__("FUN_L00_002eaa30");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern int D_L02_0015F5CC;
 extern unsigned char D_001413F4 NOT_SDA;
@@ -1299,8 +1289,8 @@ void tresspasser_update(struct Moby *moby) {
         output[0] = fast_add_rotations(fast_subtract_rotations(d[0], c[0]) * *(float *)(data + 0x40), c[0]);
         if (D_L02_00167400 && *(short *)(D_L02_00167400 + 0x86) != 5)
             jet_mount(position, output, 1, 0, 0);
-        FUN_L00_002ea9d8_c(position);
-        FUN_L00_002eaa30_c(output);
+        set_camera_position(position);
+        set_camera_rotation(output);
         if (D_L02_00179A10.i0 == 0 && D_L02_00179A10.i24 == -1 &&
             0.2f < *(float *)(data + 0x40)) {
             approach_value(1.0f, frame_time * 4.0f, &D_L02_0015F3FC);
