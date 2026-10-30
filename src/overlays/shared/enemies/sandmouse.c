@@ -446,11 +446,11 @@ void update_sandmouse_billboard_quads(struct Moby *moby) __asm__("FUN_L01_0030de
 
 void update_sandmouse_billboard_quads(struct Moby *moby) {
     char *sandmouse_instance_variables = ((char *)moby->pvars);
-    char *entry = sandmouse_instance_variables + 0x70;
+    char *billboard_world_position = sandmouse_instance_variables + 0x70;
     int   i;
     for (i = 0; i < 2; i++) {
-        moby_point_position(moby, i + 3, entry);
-        entry += 0x10;
+        moby_point_position(moby, i + 3, billboard_world_position);
+        billboard_world_position += 0x10;
     }
     add_draw_callback(draw_sandmouse_billboard_quads, moby);
 }
