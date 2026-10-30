@@ -783,7 +783,7 @@ void update_hero_item_slot_blends(void) {
         s32 r;
         s32 k;
         s32 j;
-        f32 out;
+        f32 state_aim_pitch;
         u8 *blend = hero.item_slot_blends[i];
 
         if (blend != 0 && *(s32 *)(blend + 0x34) != 0) {
@@ -857,13 +857,13 @@ void update_hero_item_slot_blends(void) {
         }
         *(s16 *)(item_slot_blend + 0x30) = w.v;
 
-        r = hero_get_state_aim_pitch(((u8 *)hero_blend_owner->moby)[0x53], &out);
+        r = hero_get_state_aim_pitch(((u8 *)hero_blend_owner->moby)[0x53], &state_aim_pitch);
         if (r != 0 || item_slot_blend[0x32] != 0) {
-            if (out != 0.0f) {
+            if (state_aim_pitch != 0.0f) {
                 f32 x = frame_scale_sq;
                 u8 *tb = (u8 *)hero_eases;
-                *(f32 *)(tb + 0x694) = out;
-                *(f32 *)(tb + 0x5E4) = out;
+                *(f32 *)(tb + 0x694) = state_aim_pitch;
+                *(f32 *)(tb + 0x5E4) = state_aim_pitch;
                 *(f32 *)(tb + 0x6D4) = x * 0.05f;
                 *(f32 *)(tb + 0x6D8) = x * 0.3f;
                 *(f32 *)(tb + 0x624) = x * 0.05f;
