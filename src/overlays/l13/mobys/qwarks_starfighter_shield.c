@@ -47,7 +47,7 @@ void update_qwarks_starfighter_shield(struct Moby *moby) {
         REMOVE_MOBY = 4
     };
     int *moby_data = (int *)moby->pvars;
-    int  old;
+    int  previous_point_pair_y_offset;
     int  step;
 
     switch (moby->state) {
@@ -88,15 +88,15 @@ void update_qwarks_starfighter_shield(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    old = moby_data[2];
+    previous_point_pair_y_offset = moby_data[2];
     step = -0x40;
-    moby_data[2] = old + step;
+    moby_data[2] = previous_point_pair_y_offset + step;
     if (moby_data[2] > 0x1000) {
         step = -0x1040;
-        moby_data[2] = old + step;
+        moby_data[2] = previous_point_pair_y_offset + step;
     } else if (moby_data[2] < 0) {
         step = 0xFC0;
-        moby_data[2] = old + step;
+        moby_data[2] = previous_point_pair_y_offset + step;
     }
     offset_moby_class_point_pairs(moby->pclass, 0, step);
 }
