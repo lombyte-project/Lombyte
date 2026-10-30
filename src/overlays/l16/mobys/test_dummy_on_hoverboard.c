@@ -148,7 +148,7 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
     float        displacement_vector[4];
     char        *enumerated_moby;
     char        *group_candidate_moby;
-    char        *other;
+    char        *hero_hoverboard_moby;
     char        *od;
 
     if (hero_state->race_time_frames < scale_game_frames(0xB4)) {
@@ -157,11 +157,11 @@ void collect_hoverboard_dummy_boosts(struct Moby *moby) {
     if (!fast_dec_timer((int *)(moby_pvars + 0x2DC))) {
         return;
     }
-    other = ((char *)hero_state->hoverboard_moby);
-    if (!other) {
+    hero_hoverboard_moby = ((char *)hero_state->hoverboard_moby);
+    if (!hero_hoverboard_moby) {
         return;
     }
-    od = *(char **)(other + 0x78);
+    od = *(char **)(hero_hoverboard_moby + 0x78);
     if (*(int *)(od + 0x44) != -1) {
         get_first_moby_in_group((int *)&enumerated_moby, *(int *)(od + 0x44), 0, 0);
         while (enumerated_moby) {
