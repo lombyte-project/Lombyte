@@ -1156,18 +1156,18 @@ float gravity_z(float *input_vector) {
 /* Copies in to out with z, transformed by the two hero matrices in modes 1 and 2. */
 void gravity_set_z(f32 *out, f32 *in, f32 z) __asm__("FUN_L00_00233b20");
 
-void gravity_set_z(f32 *out, f32 *in, f32 z) {
+void gravity_set_z(f32 *gravity_z_adjusted_vector, f32 *in, f32 z) {
     struct Hero *hero_base = &hero;
     switch (hero_base->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
-        qcopy(out, in);
-        out[2] = z;
+        qcopy(gravity_z_adjusted_vector, in);
+        gravity_z_adjusted_vector[2] = z;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
-        transform_vector(out, in, hero_base->inv_rot_matrix);
-        out[2] = z;
-        transform_vector(out, out, hero_base->rot_matrix);
+        transform_vector(gravity_z_adjusted_vector, in, hero_base->inv_rot_matrix);
+        gravity_z_adjusted_vector[2] = z;
+        transform_vector(gravity_z_adjusted_vector, gravity_z_adjusted_vector, hero_base->rot_matrix);
         break;
     }
 }
