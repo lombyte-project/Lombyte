@@ -559,7 +559,7 @@ typedef struct {
     s16 period_timer; /* 0x50A */
     f32 period_inv;  /* 0x50C */
 } L14WindVars;
-extern char *D_L14_001600EC_w __asm__("D_L14_001600EC");
+#include "rnc/overlay/cuboid.h"
 /* wind applied to the sparks: direction scaled by strength, and a weight */
 extern struct { f32 v; } D_L14_00162230, D_L14_00162234;
 extern s32 D_L14_00162238;
@@ -603,9 +603,9 @@ void update_wind_control(struct Moby *wind_control_moby) {
             return;
         }
         wind_vars->pushing = 0;
-        wind_vars->f14 = 2.0f * fast_vec_length(D_L14_001600EC_w + (wind_vars->point << 7));
-        wind_vars->f18 = fast_vec_length(D_L14_001600EC_w + (wind_vars->point << 7) + 0x10);
-        wind_vars->f1C = fast_vec_length(D_L14_001600EC_w + (wind_vars->point << 7) + 0x20);
+        wind_vars->f14 = 2.0f * fast_vec_length((char *)l14_cuboids + (wind_vars->point << 7));
+        wind_vars->f18 = fast_vec_length((char *)l14_cuboids + (wind_vars->point << 7) + 0x10);
+        wind_vars->f1C = fast_vec_length((char *)l14_cuboids + (wind_vars->point << 7) + 0x20);
         wind_vars->period_timer = scale_game_frames(wind_vars->period);
         wind_vars->period_inv = 1.0f / convert_integer_to_float(wind_vars->period_timer);
         wind_direction_or_push_delta[0] = fast_cos(wind_control_moby->rot.z);
@@ -670,7 +670,6 @@ void update_wind_control(struct Moby *wind_control_moby) {
 }
 /* Starts one spark: places it at a random spot around the emitter, picks its speed and its life. */
 #include "qcopy.h"
-extern struct { char pad[0x30]; float v[4]; char rest[0x40]; } *D_L14_001600EC_k __asm__("D_L14_001600EC");
 extern float D_0015ED6C_k __asm__("D_0015ED6C");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int ftoi_k(float) __asm__("FUN_001fa6d0");
@@ -706,7 +705,7 @@ void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_tr
     up[1] = 0.0f;
     up[3] = 0.0f;
     fast_vec_cross(side, fwd, up);
-    qcopy(spark_vars->pos[i], D_L14_001600EC_k[spark_vars->i504].v);
+    qcopy(spark_vars->pos[i], &l14_cuboids[spark_vars->i504].pos);
     x = -spark_vars->f14;
     y = randf_sym(0.0f, spark_vars->f18);
     z = randf_sym(0.0f, spark_vars->f1C);
@@ -2068,13 +2067,6 @@ void update_elevator_idle_glow(struct Moby *moby) {
         moby->glow_color = fast_tween_color(moby->glow_color, col, 0.1f);
     }
 }
-/* A stop of the taxi route (D_L14_001600EC, 0x80 bytes each). */
-struct L14TaxiStop {
-    u8 pad0[0x30];
-    f32 pos[4];      /* 0x30 */
-    u8 pad40[0x30];
-    f32 rot[4];      /* 0x70 */
-};
 /* pvars of the taxi ship (same layout as FUN_L14_002f1040/f1140/f13f8 use) */
 typedef struct {
     u8 pad0[0x20];
@@ -2097,7 +2089,6 @@ typedef struct {
     f32 save_rot[4];  /* 0xF0 */
     s32 clip[3];      /* 0x100 */
 } L14TaxiVars;
-extern struct L14TaxiStop *D_L14_001600EC_taxi __asm__("D_L14_001600EC");
 extern s32 D_L14_0015F5CC;
 extern s32 D_L14_0015F594;
 extern char D_0013CAE4[];
@@ -2173,11 +2164,11 @@ void taxi_update(struct Moby *moby) {
                 if (D_L14_0015F5CC < scale_game_frames(ticks)) {
                     taxi_vars->target = 0;
                     taxi_vars->picked = 0;
-                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
-                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
+                    qcopy_nc(&moby->pos, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(&moby->rot, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
                     moby->state = 1;
-                    qcopy_nc(taxi_vars->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
-                    qcopy_nc(taxi_vars->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
+                    qcopy_nc(taxi_vars->pos, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(taxi_vars->rot, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
                 } else {
                     if (taxi_vars->picked == 2) {
                         taxi_vars->picked = 3;
@@ -2192,11 +2183,11 @@ void taxi_update(struct Moby *moby) {
                 if (D_L14_0015F5CC < scale_game_frames(ticks)) {
                     taxi_vars->target = 1;
                     taxi_vars->picked = 1;
-                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
-                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
+                    qcopy_nc(&moby->pos, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(&moby->rot, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
                     moby->state = 1;
-                    qcopy_nc(taxi_vars->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
-                    qcopy_nc(taxi_vars->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
+                    qcopy_nc(taxi_vars->pos, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(taxi_vars->rot, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
                 } else {
                     taxi_vars->picked = 0;
                     prepare_taxi_route(moby);
@@ -2207,11 +2198,11 @@ void taxi_update(struct Moby *moby) {
                 if (D_L14_0015F5CC < scale_game_frames(ticks)) {
                     taxi_vars->target = 2;
                     taxi_vars->picked = 2;
-                    qcopy_nc(&moby->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
-                    qcopy_nc(&moby->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
+                    qcopy_nc(&moby->pos, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(&moby->rot, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
                     moby->state = 1;
-                    qcopy_nc(taxi_vars->pos, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
-                    qcopy_nc(taxi_vars->rot, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
+                    qcopy_nc(taxi_vars->pos, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
+                    qcopy_nc(taxi_vars->rot, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
                 } else {
                     taxi_vars->picked = 2;
                     prepare_taxi_route(moby);
@@ -2227,8 +2218,8 @@ void taxi_update(struct Moby *moby) {
             follow_camera_set_distance(0, 7.0f, 0.002f);
         }
         advance_accelerated_scalar(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &taxi_vars->t, &taxi_vars->tv);
-        qcopy_nc(blend_from_position_or_rotation_matrix, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].pos);
-        qcopy_nc(blend_from_rotation, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->picked]].rot);
+        qcopy_nc(blend_from_position_or_rotation_matrix, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
+        qcopy_nc(blend_from_rotation, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
         taxi_sample(0.0f, taxi_vars->path, wrap, blend_to_position, blend_to_rotation, flags);
         lerp_vector(taxi_vars->pos, blend_from_position_or_rotation_matrix, blend_to_position, taxi_vars->t);
         taxi_vars->rot[1] = fast_add_rotations(fast_subtract_rotations(blend_to_rotation[1], blend_from_rotation[1]) * taxi_vars->t, blend_from_rotation[1]);
@@ -2272,8 +2263,8 @@ void taxi_update(struct Moby *moby) {
     case TAXI_STATE_BLEND_PATH_END_TO_STOP: {
         struct Hero *g;
         advance_accelerated_scalar(1.0f, frame_time_sq, frame_time_sq, frame_time * 0.25f, &taxi_vars->t, &taxi_vars->tv);
-        qcopy_nc(blend_to_position, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->target]].pos);
-        qcopy_nc(blend_to_rotation, D_L14_001600EC_taxi[taxi_vars->points[taxi_vars->target]].rot);
+        qcopy_nc(blend_to_position, &l14_cuboids[taxi_vars->points[taxi_vars->target]].pos);
+        qcopy_nc(blend_to_rotation, &l14_cuboids[taxi_vars->points[taxi_vars->target]].rot);
         taxi_sample_f(taxi_vars->path, wrap, blend_from_position_or_rotation_matrix, blend_from_rotation, flags, (float)*taxi_vars->path);
         lerp_vector(taxi_vars->pos, blend_from_position_or_rotation_matrix, blend_to_position, taxi_vars->t);
         taxi_vars->rot[1] = fast_add_rotations(fast_subtract_rotations(blend_to_rotation[1], blend_from_rotation[1]) * taxi_vars->t, blend_from_rotation[1]);
@@ -2353,13 +2344,6 @@ void taxi_update(struct Moby *moby) {
     fast_vec_sub(position_delta, &moby->pos, previous_position);
     update_entity_matrix(taxi_vars->spring, position_delta, previous_rotation, &moby->rot);
 }
-struct L14PathPoint {
-    char pad0[0x30];
-    float pos[4];
-    char pad40[0x30];
-    float rot[4];
-};
-extern struct L14PathPoint *D_L14_001600EC_2f1040 __asm__("D_L14_001600EC");
 struct L14PickVars {
     char pad0[0x60];
     float pos[4];
@@ -2374,7 +2358,7 @@ void initialize_taxi_stop_from_position(struct Moby *moby) {
     int i;
     taxi_vars->picked = -1;
     for (i = 0; i < 5; i++) {
-        if (fast_vec_dist(&moby->pos, D_L14_001600EC_2f1040[taxi_vars->points[i]].pos) < 1.0f) {
+        if (fast_vec_dist(&moby->pos, &l14_cuboids[taxi_vars->points[i]].pos) < 1.0f) {
             taxi_vars->picked = i;
             break;
         }
@@ -2382,9 +2366,9 @@ void initialize_taxi_stop_from_position(struct Moby *moby) {
     moby->state = 1;
     {
         int k = taxi_vars->points[taxi_vars->picked];
-        struct L14PathPoint *taxi_stops = D_L14_001600EC_2f1040;
-        qcopy(taxi_vars->pos, taxi_stops[k].pos);
-        qcopy(taxi_vars->rot, taxi_stops[k].rot);
+        LevelCuboid *taxi_stops = l14_cuboids;
+        qcopy(taxi_vars->pos, &taxi_stops[k].pos);
+        qcopy(taxi_vars->rot, &taxi_stops[k].rot);
     }
 }
 /* Picks the path for the current point and sets the travel speeds; same source as FUN_L16_002e4a58 with five points. */
@@ -2549,7 +2533,6 @@ typedef struct {
 } L14LevelState;
 extern L14LevelState D_L14_001BB930;
 extern char captain_qwark_name[] __asm__("D_L14_00161F20");
-extern char *D_L14_001600EC;
 extern unsigned char *D_L14_0015FFD8;
 extern void initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
@@ -2601,7 +2584,7 @@ void qwark_oltanis_update(L14WatchMoby *moby) {
             if (visited52[moby->bB0 + current_level_index * 16] != 0xFF) {
                 char *camera_point;
                 jet_clear_persistent(moby->bB0);
-                camera_point = D_L14_001600EC + moby_vars->i48 * 128;
+                camera_point = (char *)l14_cuboids + moby_vars->i48 * 128;
                 jet_reset_camera(camera_point + 0x30, camera_point + 0x70);
             }
             enable_elevator_alternate_route(D_L14_0015FFD8 + moby_vars->i44 * 256);
@@ -3358,7 +3341,7 @@ int advance_moby_along_flight_path(struct Moby *moby) {
 #include "rnc/overlay/quad.h"
 /* pvars of the flyer rocket_update moves to a path point */
 typedef struct {
-    s32 point;   /* 0x0: path point index into D_L14_001600EC (0x80 each, position at 0x30) */
+    s32 point;   /* 0x0: path point index into l14_cuboids (0x80 each, position at 0x30) */
     s32 target;  /* 0x4: moby index removed on arrival */
     s32 sound;   /* 0x8: voice slot, -1 when none */
     s32 timer;   /* 0xC */
@@ -3401,7 +3384,7 @@ void rocket_update(struct Moby *moby) {
     case ROCKET_STATE_IDLE:
         return;
     case ROCKET_STATE_FLY_TO_POINT:
-        fast_vec_sub(&destination_delta, D_L14_001600EC + vars->point * 0x80 + 0x30, &moby->pos);
+        fast_vec_sub(&destination_delta, (char *)l14_cuboids + vars->point * 0x80 + 0x30, &moby->pos);
         distance_to_destination = fast_vec_length(&destination_delta);
         fast_dec_timer(&vars->timer);
         speed = rocket_travel_speed_gp * frame_time;
@@ -3417,7 +3400,7 @@ void rocket_update(struct Moby *moby) {
             if (target != 0) {
                 mark_moby_for_removal(target);
             }
-            qcopy(&moby->pos, D_L14_001600EC + vars->point * 0x80 + 0x30);
+            qcopy(&moby->pos, (char *)l14_cuboids + vars->point * 0x80 + 0x30);
             qcopy(&step, &moby->rot_row0);
             step.f[2] = 1.0f;
             spawn_explosion(moby, &step, &moby->pos, 0.0f, 0.0f, 0x14, 0xA, 0xC, 10.0f, 6.0f,

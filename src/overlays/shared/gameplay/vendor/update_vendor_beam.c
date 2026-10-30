@@ -33,15 +33,7 @@ typedef struct {
     Vec4 end_b;       /* 0x640: end of the line along -axis 1 */
 } D1224;
 
-/* A 0x80-byte transform of D_L14_001600EC: three axes, the origin and the euler rotation. */
-typedef struct {
-    Vec4 axis[3];
-    Vec4 origin;
-    u8 pad40[0x30];
-    Vec4 rotation;
-} VendorBeamFrame;
-
-extern VendorBeamFrame *D_L14_001600EC;
+#include "rnc/overlay/cuboid.h"
 extern int D_L14_001620C8;   /* no foreign declaration */
 extern int D_L14_001620D8_t; /* no foreign declaration */
 extern void start_vendor_beam_pulse(char *) __asm__("FUN_L14_003017f8");
@@ -89,7 +81,7 @@ void update_vendor_beam(unsigned char *moby) {
         start_vendor_beam_pulse((char *)moby);
         beam_vars->s10 = scale_game_frames(beam_vars->wC);
         moby[0x20] = 2;
-        beam_vars->f624 = fast_vec_length(&D_L14_001600EC[beam_vars->w0].axis[1]);
+        beam_vars->f624 = fast_vec_length(&l14_cuboids[beam_vars->w0].axes[1]);
         beam_vars->s8 = 1;
         beam_vars->sA = 1;
         break;
@@ -152,7 +144,7 @@ extern int D_L14_0016211C __attribute__((sda));
 extern char D_L14_001674C0[];
 
 typedef struct {
-    int frame;              /* 0x0: D_L14_001600EC transform index */
+    int frame;              /* 0x0: l14_cuboids index */
     u8 pad4[0xE];
     s16 countdown;          /* 0x12 */
     int color;              /* 0x14 */
@@ -172,22 +164,22 @@ void start_vendor_beam_pulse(char *moby) {
     Vec4 path_steps[32];
     Vec4 work, delta;
     Vec4 matrix[4];
-    VendorBeamFrame *frame;
+    LevelCuboid *frame;
     float length;
     int low, high, duration;
     int i, j, k, branch;
 
-    frame = (VendorBeamFrame *)((beam->frame << 7) + (int)D_L14_001600EC);
+    frame = (LevelCuboid *)((beam->frame << 7) + (int)l14_cuboids);
     {
         int ticks = vendor_beam_min_pulse_duration_frames_gp;
-        frame->origin.f[3] = 1.0f;
+        frame->pos.w = 1.0f;
         low = scale_game_frames(ticks);
     }
     high = scale_game_frames(vendor_beam_max_pulse_duration_frames_gp);
     duration = random_int_between(low, high);
     beam->countdown = (short)duration;
     beam->duration = (short)duration;
-    length = fast_vec_length(&D_L14_001600EC[beam->frame].axis[1]);
+    length = fast_vec_length(&l14_cuboids[beam->frame].axes[1]);
     length = length + length;
 
     for (i = 0; i < 32; i++) {
@@ -238,12 +230,12 @@ void start_vendor_beam_pulse(char *moby) {
         }
     }
 
-    if (vector_distance_xy(&D_L14_001600EC[beam->frame].origin, D_L14_001674C0) >= 4.0f) {
+    if (vector_distance_xy(&l14_cuboids[beam->frame].pos, D_L14_001674C0) >= 4.0f) {
         int color;
         int point;
         int never = 0;
-        euler_rotation_matrix(matrix, &D_L14_001600EC[beam->frame].rotation);
-        qcopy(&matrix[3], &D_L14_001600EC[beam->frame].origin);
+        euler_rotation_matrix(matrix, &l14_cuboids[beam->frame].rot);
+        qcopy(&matrix[3], &l14_cuboids[beam->frame].pos);
         for (point = 0; point < 32; point += 8) {
             int frames;
             transform_vector(&work, &beam->points[point], matrix);
@@ -358,10 +350,10 @@ void draw_vendor_beam(char *moby) {
     int start_point;
     int k;
 
-    euler_rotation_matrix(world, &D_L14_001600EC[beam->frame].rotation);
+    euler_rotation_matrix(world, &l14_cuboids[beam->frame].rot);
     transpose_rotation_matrix(inverse, world);
-    qcopy_nc(&world[12], &D_L14_001600EC[beam->frame].origin);
-    fast_vec_sub(camera, D_L14_001674C0, &D_L14_001600EC[beam->frame].origin);
+    qcopy_nc(&world[12], &l14_cuboids[beam->frame].pos);
+    fast_vec_sub(camera, D_L14_001674C0, &l14_cuboids[beam->frame].pos);
     transform_vector_by_basis(camera, camera, inverse);
     texture = get_effect_texture(vendor_beam_effect_texture_index_gp);
     gs_state = (u64)vendor_beam_blend_minuend_selector_gp | ((u64)vendor_beam_blend_subtrahend_selector_gp << 2) | ((u64)vendor_beam_blend_alpha_factor_selector_gp << 4)
@@ -501,9 +493,9 @@ void apply_vendor_beam_damage(char *self) {
         req.v[0] = damage_push_direction.f[0];
         req.v[1] = damage_push_direction.f[1];
     }
-    qcopy_nc(&base, &D_L14_001600EC[beam_vars->w0].origin);
+    qcopy_nc(&base, &l14_cuboids[beam_vars->w0].pos);
     if (beam_vars->s8) {
-        fast_vec_add(&end_a, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
+        fast_vec_add(&end_a, &base, &l14_cuboids[beam_vars->w0].axes[1]);
         if (collision_line(&base, &end_a, 0, beam_moby, 0)) {
             fast_vec_sub(&from, D_L14_00174560, &base);
             collision_offset_length = fast_vec_length(&from);
@@ -515,7 +507,7 @@ void apply_vendor_beam_damage(char *self) {
         }
     }
     if (beam_vars->sA) {
-        fast_vec_sub(&end_b, &base, &D_L14_001600EC[beam_vars->w0].axis[1]);
+        fast_vec_sub(&end_b, &base, &l14_cuboids[beam_vars->w0].axes[1]);
         if (collision_line(&base, &end_b, 0, beam_moby, 0)) {
             fast_vec_sub(&from, D_L14_00174560, &base);
             collision_offset_length = fast_vec_length(&from);
@@ -528,14 +520,14 @@ void apply_vendor_beam_damage(char *self) {
     }
     qcopy(&end_a, &beam_vars->end_a);
     qcopy(&end_b, &beam_vars->end_b);
-    fast_vec_normalize(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[0], beam_vars->radius);
+    fast_vec_normalize(&beam_radius_offset, &l14_cuboids[beam_vars->w0].axes[0], beam_vars->radius);
     fast_vec_add(&from, &end_a, &beam_radius_offset);
     fast_vec_add(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
     fast_vec_sub(&from, &end_a, &beam_radius_offset);
     fast_vec_sub(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);
-    fast_vec_normalize(&beam_radius_offset, &D_L14_001600EC[beam_vars->w0].axis[2], beam_vars->radius);
+    fast_vec_normalize(&beam_radius_offset, &l14_cuboids[beam_vars->w0].axes[2], beam_vars->radius);
     fast_vec_add(&from, &end_a, &beam_radius_offset);
     fast_vec_add(&to, &end_b, &beam_radius_offset);
     collision_line(&from, &to, 1, beam_moby, &req);

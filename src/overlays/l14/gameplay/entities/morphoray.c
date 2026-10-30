@@ -1255,7 +1255,7 @@ void update_moby_list_clear_notification(struct Moby *moby) {
     }
 }
 extern char *D_L14_0015EF50 __asm__("D_L14_0015EF50");
-extern char *D_L14_001600EC __asm__("D_L14_001600EC");
+#include "rnc/overlay/cuboid.h"
 typedef struct {
     char pad0[0x184];
     char *start;
@@ -1360,7 +1360,7 @@ void initialize_path_camera(char *camera) {
     qcopy(camera, initial_camera_transform);
     qcopy(camera + 0x10, initial_camera_transform + 0x10);
     qcopy(camera + 0x20, initial_camera_transform + 0x20);
-    path = D_L14_001600EC + *(int *)(rec + 0x54) * 128 + 0x30;
+    path = (char *)l14_cuboids + *(int *)(rec + 0x54) * 128 + 0x30;
     stand = 0;
     ((float *)&stand)[3] = 1.0f;
     set_race_camera(path, &stand, 0x72, 0);

@@ -539,7 +539,7 @@ extern L14LevelState D_L14_001BB930;
 extern int D_0015ED84_m __asm__("D_0015ED84");
 extern int D_L14_001BABD0[];
 extern char sam_dialogue_name_text[] __asm__("D_L14_00161FE8");
-extern char *D_L14_001600EC;
+#include "rnc/overlay/cuboid.h"
 extern int D_L14_0015F5C4;
 extern unsigned char D_0013DD4F NOT_SDA;
 extern struct {
@@ -596,7 +596,7 @@ void sam_update(L14WatchMoby *moby) {
             if (visited52[moby->bB0 + current_level_index * 16] != 0xFF) {
                 char *t;
                 jet_clear_persistent(moby->bB0);
-                t = D_L14_001600EC + moby_data->i44 * 128;
+                t = (char *)l14_cuboids + moby_data->i44 * 128;
                 jet_reset_camera(t + 0x30, t + 0x70);
             }
             moby_data->fC = 255.0f;
@@ -604,7 +604,7 @@ void sam_update(L14WatchMoby *moby) {
             moby_data->fC = 3.0f;
         }
         if (update_npc_dialogue(moby, moby_data)) {
-            char *t = D_L14_001600EC + moby_data->i48 * 128;
+            char *t = (char *)l14_cuboids + moby_data->i48 * 128;
             D_L14_0016CF60.h46 = 1;
             qcopy(D_L14_0016CF60.q10, t + 0x30);
             clear_u64_value((char *)&D_L14_0016CF60 + 0x20);

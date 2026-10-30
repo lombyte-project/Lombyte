@@ -1606,7 +1606,7 @@ typedef struct Moby Moby;
 
 char *spawn_flying_bolt(void *a, float *b, int c, int d) __asm__("FUN_L14_002eccf0");
 extern int D_L14_0015F5CC MACRO_ADDR; /* no foreign declaration */
-extern int D_L14_001600EC; /* no foreign declaration */
+#include "rnc/overlay/cuboid.h"
 extern float machinegun_turret_retraction_depth_gp __asm__("D_L14_00161508") __attribute__((sda)); /* no foreign declaration */
 extern int D_L14_0016150C __attribute__((sda)); /* no foreign declaration */
 extern float D_L14_00161510 __attribute__((sda)); /* no foreign declaration */
@@ -1767,11 +1767,11 @@ void machinegun_turret_update(char *moby) {
         *(float *)(data + 0x8C) = phase_angle;
         sine_input_angle = fast_add_rotations(phase_angle, *(float *)(data + 0x84) * 0.01745329238474369f);
         aiming_cuboid_index = *(int *)(data + 0x80);
-        aiming_offset_vector = D_L14_001600EC + (aiming_cuboid_index << 7) + 0x10;
+        aiming_offset_vector = (int)l14_cuboids + (aiming_cuboid_index << 7) + 0x10;
         sine_scale = func_001F9FA8_2B4E40(sine_input_angle);
         func_001F9C30_2B4E40(target_point_scratch, aiming_offset_vector, sine_scale);
         aiming_cuboid_index = *(int *)(data + 0x80);
-        aiming_base_point = D_L14_001600EC + (aiming_cuboid_index << 7) + 0x30;
+        aiming_base_point = (int)l14_cuboids + (aiming_cuboid_index << 7) + 0x30;
         fast_vec_add(target_point_scratch, target_point_scratch, aiming_base_point);
         target_heading = fast_arc_tan(target_point_scratch[0] - MOBY(moby)->pos.x, target_point_scratch[1] - MOBY(moby)->pos.y);
         MOBY(moby)->rot.z = target_heading;
