@@ -114,7 +114,7 @@ def category_of(function: dict) -> str:
 
 def group_of(function: dict) -> str:
     """The logical group: the src/overlays file path below its category
-    directory, without the suffix (e.g. ``gameplay/entities/0025d1b8``), or
+    directory, without the suffix (e.g. ``mobys/0025d1b8``), or
     the level."""
     if function["file"]:
         parts = Path(function["file"]).with_suffix("").parts
