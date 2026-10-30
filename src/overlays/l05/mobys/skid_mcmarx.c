@@ -17,16 +17,16 @@ extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 
 char *spawn_racer_child(char *owner) __asm__("FUN_L05_002f8718");
 
-char *spawn_racer_child(char *owner) {
+char *spawn_racer_child(char *racer_moby) {
     char *moby = create_moby(0x1B7);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0xFF;
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 2;
-        qcopy(moby + 0x10, owner + 0x10);
-        qcopy(moby + 0x40, owner + 0x40);
-        MOBY(moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
+        qcopy(moby + 0x10, racer_moby + 0x10);
+        qcopy(moby + 0x40, racer_moby + 0x40);
+        MOBY(moby)->spawn_frame = *(unsigned long *)(racer_moby + 0x38);
         update_entity(moby);
     }
     return moby;
