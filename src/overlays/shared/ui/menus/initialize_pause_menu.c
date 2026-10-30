@@ -795,7 +795,7 @@ void draw_pause_menu_pages(int transfer_only) {
             int   width, height, x, y;
             int   width_log2, height_log2, target_width, target_height;
             int   draw_result, u_start, v_start, u_end, v_end;
-            char *vars;
+            char *page_moby_data;
             if (moby == 0 || page_objects == 0 || page_objects[j] == 0) {
                 continue;
             }
@@ -819,11 +819,11 @@ void draw_pause_menu_pages(int transfer_only) {
                 (*(int (**)(char *))(page_objects[j] + 4))(page_objects[j]);
                 continue;
             }
-            vars = ((char *)MOBY(moby)->pvars);
-            x = *(int *)(vars + 0x50);
-            y = *(int *)(vars + 0x54);
-            width = *(int *)(vars + 0x58);
-            height = *(int *)(vars + 0x5C);
+            page_moby_data = ((char *)MOBY(moby)->pvars);
+            x = *(int *)(page_moby_data + 0x50);
+            y = *(int *)(page_moby_data + 0x54);
+            width = *(int *)(page_moby_data + 0x58);
+            height = *(int *)(page_moby_data + 0x5C);
             width_log2 = 7;
             while ((1 << width_log2) < width) {
                 width_log2++;
