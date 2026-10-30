@@ -316,9 +316,9 @@ void test_dummy_update(unsigned char *moby) {
         break;
     case TEST_DUMMY_STATE_TURN_TO_NEXT_PATH_NODE: { /* slider: turn toward the next node while the timer runs */
         float *yaw = (float *)&MOBY(moby)->rot.z;
-        int    next = dummy_data->node + dummy_data->step;
-        float  angle = fast_arc_tan(((float *)(path + (next << 4)))[4] - MOBY(moby)->pos.x,
-                                   ((float *)(path + (next << 4)))[5] - MOBY(moby)->pos.y);
+        int    next_path_node_index = dummy_data->node + dummy_data->step;
+        float  angle = fast_arc_tan(((float *)(path + (next_path_node_index << 4)))[4] - MOBY(moby)->pos.x,
+                                   ((float *)(path + (next_path_node_index << 4)))[5] - MOBY(moby)->pos.y);
         approach_angle(yaw,
                        &dummy_data->turn,
                        angle,
@@ -326,7 +326,7 @@ void test_dummy_update(unsigned char *moby) {
                        frame_time_sq * 12.566371f,
                        D_0015ED6C * 25.132742f);
         if (fast_dec_timer(&dummy_data->timer)) {
-            dummy_data->node = next;
+            dummy_data->node = next_path_node_index;
             if (moby[0x53] != 10) {
                 blend_moby_animation(moby, 10, 0, scale_game_frames(10));
             }
