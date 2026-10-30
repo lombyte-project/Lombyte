@@ -939,7 +939,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
     f32  *origin_copy;
     u128 *source;
     f32   angle, radius, vertical, lateral, scale, scaled_radius, scaled_vertical;
-    s32   i, next, j, lower, upper, first, second, duration;
+    s32   i, next_group_index, j, lower, upper, spark_header_frame_count, downward_adjustment_frame_count, duration;
 
     i = 0;
     if (amoeboid_burst_group_count_gp > 0) {
@@ -966,7 +966,7 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
             scaled_vertical = lateral * frame_time_gp;
             origin[2] += scaled_vertical;
             qcopy(velocity, origin_copy);
-            next = i + 1;
+            next_group_index = i + 1;
             velocity[2] -=
                 amoeboid_burst_downward_velocity_adjustment_factor_gp * D_0015ED70 *
                 (f32)scale_game_frames(amoeboid_burst_downward_velocity_adjustment_frames_gp);
@@ -985,8 +985,8 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
                     fast_tween_color(random_float_between(0.0f, 1.0f),
                                      amoeboid_burst_spark_secondary_color_randomization_start_gp,
                                      amoeboid_burst_spark_secondary_color_randomization_end_gp);
-                first = scale_game_frames(amoeboid_burst_spark_header_frame_count_gp);
-                second = scale_game_frames(amoeboid_burst_downward_velocity_adjustment_frames_gp);
+                spark_header_frame_count = scale_game_frames(amoeboid_burst_spark_header_frame_count_gp);
+                downward_adjustment_frame_count = scale_game_frames(amoeboid_burst_downward_velocity_adjustment_frames_gp);
                 duration = truncate_float_to_s32(FUN_00220e20(
                     random_float_between((f32)amoeboid_burst_spark_duration_base_gp * 0.5f,
                                          (f32)amoeboid_burst_spark_duration_base_gp * 2.5f)));
@@ -995,12 +995,12 @@ void spawn_amoeboid_burst_sparks(unsigned char *moby, f32 *mode) {
                             velocity,
                             lower,
                             upper,
-                            first,
-                            second,
+                            spark_header_frame_count,
+                            downward_adjustment_frame_count,
                             duration,
                             -1);
             }
-            i = next;
+            i = next_group_index;
         } while (i < amoeboid_burst_group_count_gp);
     }
 }
