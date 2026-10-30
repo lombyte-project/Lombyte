@@ -28,7 +28,7 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
     s32                  selection_index;
     s32                  font_height;
     s32                  entry_count;
-    struct MenuTextItem *entry;
+    struct MenuTextItem *entry_count_cursor;
     struct MenuTextItem *scan_entry;
     s32                  entry_index;
     s32                  selected_entry;
@@ -62,9 +62,9 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
     vu1_add_g_sregister(0x47, 0x2004B);
     setup_gif_paging(0);
     entry_count = 0;
-    entry = menu->data.list.items;
-    while (entry->text != 0) {
-        entry++;
+    entry_count_cursor = menu->data.list.items;
+    while (entry_count_cursor->text != 0) {
+        entry_count_cursor++;
         entry_count++;
     }
 
