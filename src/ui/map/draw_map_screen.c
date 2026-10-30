@@ -67,7 +67,7 @@ s32 draw_map_screen(struct MenuScreen *screen) {
     u8              *pal;
     u8              *pix;
     s32              map_mask_buffer;
-    u8              *base;
+    u8              *map_header_base;
     u8              *a;
     u8              *texture_block_base;
     u8              *tbase;
@@ -145,17 +145,17 @@ s32 draw_map_screen(struct MenuScreen *screen) {
         pal = (u8 *)hdr + hdr->unkC;
         map_mask_buffer = acquire_menu_stream_buffer(0);
         if (map_mask_buffer != 0) {
-            base = (u8 *)level_map_selection.hdr;
-            a = base + hdr->unk0 + 8;
+            map_header_base = (u8 *)level_map_selection.hdr;
+            a = map_header_base + hdr->unk0 + 8;
             if (level_map_selection.level == current_level_index) {
                 compose_bitmap_from_mask(pal, pix, pal, level_map_selection.mask);
             } else {
                 if (level_visit_state[level_map_selection.level] != 0) {
                     load_map_chunk(map_mask_buffer,
                                    D_00141EC0 + (level_map_selection.level << 11),
-                                   base + hdr->unk4);
+                                   map_header_base + hdr->unk4);
                 } else {
-                    decode_map_mask(map_mask_buffer, a, a, base);
+                    decode_map_mask(map_mask_buffer, a, a, map_header_base);
                 }
                 compose_bitmap_from_mask(pal, pix, pal, map_mask_buffer);
             }
