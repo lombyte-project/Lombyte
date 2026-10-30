@@ -291,7 +291,7 @@ void update_drawbridge(Moby *moby) {
 }
 
 void update_drawbridge_segment_transforms(Moby *moby) {
-    Vec_2F69D0      segment_position, first, second;
+    Vec_2F69D0      segment_position, segment_longitudinal_offset, staggered_segment_longitudinal_offset;
     DrawbridgeVars *drawbridge_vars = (DrawbridgeVars *)moby->pvars;
     int             i, j;
     float           length, angle, left, min_length, right, limit;
@@ -300,16 +300,16 @@ void update_drawbridge_segment_transforms(Moby *moby) {
         length = drawbridge_extension - (float)i;
         if (length < 0.0f)
             length = 0.0f;
-        fast_vec_normalize(&first, &moby->rot_row0, length);
+        fast_vec_normalize(&segment_longitudinal_offset, &moby->rot_row0, length);
         transform_vector_by_basis(
             &segment_position, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
         fast_vec_add(&segment_position, &segment_position, &moby->pos);
-        fast_vec_add(&segment_position, &segment_position, &first);
+        fast_vec_add(&segment_position, &segment_position, &segment_longitudinal_offset);
         qcopy(&drawbridge_vars->a[i]->pos, &segment_position);
         transform_vector_by_basis(
             &segment_position, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
         fast_vec_add(&segment_position, &segment_position, &moby->pos);
-        fast_vec_add(&segment_position, &segment_position, &first);
+        fast_vec_add(&segment_position, &segment_position, &segment_longitudinal_offset);
         qcopy(&drawbridge_vars->b[i]->pos, &segment_position);
         angle = drawbridge_pitch_degrees * 0.017453292f - (float)(i * 45) * 0.017453292f;
         if (angle > 1.5707964f)
@@ -331,17 +331,17 @@ void update_drawbridge_segment_transforms(Moby *moby) {
             length = min_length;
         if (right < min_length)
             right = min_length;
-        fast_vec_normalize(&first, &moby->rot_row0, length);
-        fast_vec_normalize(&second, &moby->rot_row0, right);
+        fast_vec_normalize(&segment_longitudinal_offset, &moby->rot_row0, length);
+        fast_vec_normalize(&staggered_segment_longitudinal_offset, &moby->rot_row0, right);
         transform_vector_by_basis(
             &segment_position, (Vec_2F69D0 *)drawbridge_first_row_local_offset_gp, &moby->rot_row0);
         fast_vec_add(&segment_position, &segment_position, &moby->pos);
-        fast_vec_add(&segment_position, &segment_position, &first);
+        fast_vec_add(&segment_position, &segment_position, &segment_longitudinal_offset);
         qcopy(&drawbridge_vars->c[j]->pos, &segment_position);
         transform_vector_by_basis(
             &segment_position, (Vec_2F69D0 *)drawbridge_second_row_local_offset_gp, &moby->rot_row0);
         fast_vec_add(&segment_position, &segment_position, &moby->pos);
-        fast_vec_add(&segment_position, &segment_position, &second);
+        fast_vec_add(&segment_position, &segment_position, &staggered_segment_longitudinal_offset);
         qcopy(&drawbridge_vars->d[j]->pos, &segment_position);
 
         left = drawbridge_pitch_degrees * 0.017453292f - (float)(j * 2) * 0.7853982f;
