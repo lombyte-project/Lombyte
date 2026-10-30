@@ -344,7 +344,7 @@ f32 select_moby_heading_by_collision_probes(
 f32 select_moby_heading_by_collision_probes(Mob *moby,
                                             VU  *probe_origin,
                                             f32 *target_position,
-                                            f32 *out,
+                                            f32 *probe_distance_score_out,
                                             f32  probe_heading,
                                             f32  arc,
                                             f32  step,
@@ -374,7 +374,7 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
     bestDist = 0.0f;
     x = moby->p78;
     bestDiff = 6.2831855f;
-    *out = bestDist;
+    *probe_distance_score_out = bestDist;
     if (target_position != 0) {
         preferred_heading =
             FUN_001f9e90_c(target_position[0] - moby->f10, target_position[1] - moby->f14);
@@ -397,19 +397,19 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
         if (probe_moby_landing_height(&probe_end, moby) != 0.0f) {
             best = preferred_heading;
             bestDist = horizontal_probe_distance;
-            *out = horizontal_probe_distance;
+            *probe_distance_score_out = horizontal_probe_distance;
         }
     } else {
         if (coll_hit_moby == x->p38 || (coll_hit_moby != 0 && coll_hit_moby->pclass != 0 &&
                                         coll_hit_moby->pclass->type == 5)) {
-            *out = 100.0f;
+            *probe_distance_score_out = 100.0f;
             return preferred_heading;
         }
         best = preferred_heading;
         bestDist = fast_vec_dist(&probe_start, &D_L00_00173E60);
         bestDiff = 0.0f;
-        if (*out < bestDist) {
-            *out = bestDist;
+        if (*probe_distance_score_out < bestDist) {
+            *probe_distance_score_out = bestDist;
         }
     }
 
@@ -429,8 +429,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                     bestDiff = sweep_heading_error;
                     best = arc;
                     bestDist = horizontal_probe_distance;
-                    if (*out < horizontal_probe_distance) {
-                        *out = horizontal_probe_distance;
+                    if (*probe_distance_score_out < horizontal_probe_distance) {
+                        *probe_distance_score_out = horizontal_probe_distance;
                     }
                 }
             }
@@ -438,7 +438,7 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
             if ((*(XD *)D_L00_00173E40).unk18 == x->p38 ||
                 ((*(XD *)D_L00_00173E40).unk18 != 0 && (*(XD *)D_L00_00173E40).unk18->p24 != 0 &&
                  (*(XD *)D_L00_00173E40).unk18->p24->h46 == 5)) {
-                *out = 100.0f;
+                *probe_distance_score_out = 100.0f;
                 return arc;
             }
             hit_distance = fast_vec_dist(&probe_start, &D_L00_00173E60);
@@ -446,8 +446,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                 best = arc;
                 bestDist = hit_distance;
                 bestDiff = fast_difference_between_rotations(best, preferred_heading);
-                if (*out < hit_distance) {
-                    *out = hit_distance;
+                if (*probe_distance_score_out < hit_distance) {
+                    *probe_distance_score_out = hit_distance;
                 }
             } else if (hit_distance == bestDist) {
                 sweep_heading_error = fast_difference_between_rotations(arc, preferred_heading);
@@ -455,8 +455,8 @@ f32 select_moby_heading_by_collision_probes(Mob *moby,
                     bestDiff = sweep_heading_error;
                     best = arc;
                     bestDist = hit_distance;
-                    if (*out < hit_distance) {
-                        *out = hit_distance;
+                    if (*probe_distance_score_out < hit_distance) {
+                        *probe_distance_score_out = hit_distance;
                     }
                 }
             }
