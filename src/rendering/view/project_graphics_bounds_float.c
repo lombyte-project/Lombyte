@@ -13,7 +13,7 @@ void project_graphics_bounds_float(
 
 void project_graphics_bounds_float(
 
-    u128 *first, u128 *opposite, f32 *width, f32 *height, f32 *x, f32 *y) {
+    u128 *origin_world, u128 *opposite, f32 *width, f32 *height, f32 *x, f32 *y) {
     Vec4  first_projected;
     Vec4  opposite_projected;
     Vec4 *opposite_pointer;
@@ -22,7 +22,7 @@ void project_graphics_bounds_float(
     s32   output_byte;
 
     opposite_pointer = &opposite_projected;
-    first_projected.q = *first;
+    first_projected.q = *origin_world;
     /* Fakematch: combine folds this never-true byte test; until then the second set
        hides opposite_pointer's stack base from alias analysis. */
     output_byte = *(u8 *)x;
