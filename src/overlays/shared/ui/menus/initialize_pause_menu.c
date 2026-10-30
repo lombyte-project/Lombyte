@@ -124,7 +124,7 @@ extern void apply_group_entry_adjustment(s32) __asm__("FUN_L00_00235310");
 extern s32 show_health_hud(void) __asm__("FUN_L00_00234e00");
 extern s32 hud_keep_visible(s32, s32) __asm__("FUN_L00_00235e18");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
-extern V g_debug_camera[] __asm__("D_L00_00166DC0");
+#include "rnc/rendering/debug/debug_menu.h"
 extern Own l00_pause_menu_exit_guarded_page_owner __asm__("D_L00_001B71F0");
 extern Own D_L00_001B7DD0;
 extern Own D_L00_001B80E0;
@@ -245,8 +245,8 @@ void initialize_pause_menu(void) {
         qzero(row);
     }
     qzero(&D_L00_00180260);
-    qcopy(&D_L00_001B9CF0.v40, &g_debug_camera[0]);
-    qcopy(&D_L00_001B9CF0.v50, &g_debug_camera[1]);
+    qcopy(&D_L00_001B9CF0.v40, &g_debug_camera.position);
+    qcopy(&D_L00_001B9CF0.v50, &g_debug_camera.angles);
     {
         f32 unk21C = 524288.0f;
         f32 unk228 = 255.0f;
@@ -491,8 +491,8 @@ void update_pause_menu(void) {
         }
         D_L00_0015F578 = 0x1E000;
         calculate_dma_transfer_address();
-        qcopy(&g_debug_camera[0], &D_L00_001B9CF0.v40);
-        qcopy(&g_debug_camera[1], &D_L00_001B9CF0.v50);
+        qcopy(&g_debug_camera.position, &D_L00_001B9CF0.v40);
+        qcopy(&g_debug_camera.angles, &D_L00_001B9CF0.v50);
         D_L00_0016CAF0_lui = D_L00_001B9CF0.unkE8;
         select_moby_context(0);
         if (D_L00_001B9CF0.unk140 != 0) {

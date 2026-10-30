@@ -340,15 +340,6 @@ typedef struct {
     char pad18[8];
 } Spline;
 
-typedef struct {
-    MobyInst *f0;
-    char pad4[0x22];
-    short f26;
-    char pad28[8];
-    int f30;
-    int f34;
-    int f38;
-} ShipSpawn;
 
 typedef struct {
     char pad0[0x2080];
@@ -381,7 +372,7 @@ extern LevelLoad173E40 coll_hit __asm__("D_L00_00173E40");
 extern MobyInst *moby_table __asm__("D_L00_0015FFD8") MACRO_ADDR;
 extern MobyInst *D_L00_0015FFDC MACRO_ADDR;
 extern MobyInst *D_L00_0015FFE0 MACRO_ADDR;
-extern ShipSpawn level_render_state __asm__("D_0013E030");
+#include "rnc/rendering/level_render_state.h"
 extern ShrubClass *D_L00_001BC030[];
 extern ShrubInst *D_L00_00160494 MACRO_ADDR;
 extern ShrubInst *D_L00_00160498 MACRO_ADDR;
@@ -452,7 +443,7 @@ extern int first_class_ids[] __asm__("D_L00_00160548");
 extern int shrub_color_buffer_descriptor[] __asm__("D_L00_00160B70");
 extern int D_L00_00160F50 MACRO_ADDR;
 extern int D_L00_00160FCC MACRO_ADDR;
-extern int g_debug_menu[] __asm__("D_L00_0016C058");
+#include "rnc/rendering/debug/debug_menu.h"
 extern int D_L00_001AB840[];
 extern int D_L00_001BA4D0[];
 extern int find_or_assign_bolt_source_slot(int, int) __asm__("FUN_L00_00284d90");
@@ -555,9 +546,9 @@ char *load_level_gameplay(int skip_gameplay_read) {
         D_L00_0015F454 = *(float *)(p + 3);
         D_L00_0015F638 = *(float *)(p + 4);
         p += 12;
-        level_render_state.f30 = ship_spawn_settings[0];
-        level_render_state.f34 = ship_spawn_settings[1];
-        level_render_state.f38 = ship_spawn_settings[2];
+        level_render_state.path = ship_spawn_settings[0];
+        level_render_state.source_camera_index = ship_spawn_settings[1];
+        level_render_state.destination_camera_index = ship_spawn_settings[2];
     }
     update_fog();
     D_L00_00160F80 = 512000.0f;
@@ -1444,14 +1435,14 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_00160170 = 0;
     D_L00_00160178 = 0;
     fast_mem_zero16(D_L00_001B1880, 0x200);
-    level_render_state.f0 = 0;
+    level_render_state.player = 0;
     if (0.0f < ship[0]) {
         MobyInst *m;
 
-        if (D_0015ED84 == 13 && level_render_state.f26 == 2) {
+        if (D_0015ED84 == 13 && level_render_state.content_variant == 2) {
             if (D_L00_00160540 != 0) {
                 for (m = moby_table; m->f20 != 0xFF; m++) {
-                    if (m->fA6 == first_class_ids[level_render_state.f26]) {
+                    if (m->fA6 == first_class_ids[level_render_state.content_variant]) {
                         initialize_moby_state_record((char *)m);
                         set_moby_animation(m, 1, 0);
                         break;
@@ -1459,10 +1450,10 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 }
             }
         }
-        if (level_render_state.f0 == 0) {
+        if (level_render_state.player == 0) {
             float ship_spawn_rotation;
 
-            m = create_moby(first_class_ids[level_render_state.f26]);
+            m = create_moby(first_class_ids[level_render_state.content_variant]);
             m->f10 = ship[0];
             m->f14 = ship[1];
             m->f18 = ship[2];
@@ -1474,7 +1465,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
             m->f34 &= ~2;
             set_moby_animation(m, 1, 0);
             update_entity(m);
-            level_render_state.f0 = m;
+            level_render_state.player = (struct ResidentRenderObject *)m;
             store_current_level_table_value((int)m, 0);
         }
     }
@@ -1608,7 +1599,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 q += 2;
             }
         }
-        g_debug_menu[7] = 2;
+        g_debug_menu.occlusion_mode = 2;
     } else {
         MobyInst *m;
         TieInst *t;
@@ -1624,7 +1615,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
         for (i = 0; i < D_L00_00160F50; i++) {
             D_L00_00160F4C[i].f3A = 0x7F80;
         }
-        g_debug_menu[7] = 0;
+        g_debug_menu.occlusion_mode = 0;
     }
     reset_draw_globals();
     initialize_hero();
@@ -1638,8 +1629,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_001B0830[0] = 0;
     D_L00_0015F5CC = 0;
     D_L00_0015F63C = 0;
-    if (level_render_state.f0 != 0) {
-        *(long *)&level_render_state.f0->f38 = *(long *)&D_0013F350.f2080->f38;
+    if (level_render_state.player != 0) {
+        *(long *)&((MobyInst *)level_render_state.player)->f38 = *(long *)&D_0013F350.f2080->f38;
     }
     switch (D_0015ED84) {
     case 2:
