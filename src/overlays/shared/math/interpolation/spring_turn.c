@@ -671,14 +671,14 @@ int get_next_moby_in_group(char **out,
                            int    include_sign_bit_set_entries,
                            int    require_sign_bit_set_entries) __asm__("FUN_L00_002592b8");
 
-int get_next_moby_in_group(char **out,
+int get_next_moby_in_group(char **next_moby_output,
                            char  *target,
                            int    include_sign_bit_set_entries,
 
                            int require_sign_bit_set_entries) {
     int entry_sign_bit_set;
 
-    *out = 0;
+    *next_moby_output = 0;
     if (target != D_L00_00160114) {
         if (D_L00_0015FFF4 < *(unsigned char *)(target + 0x21)) {
             goto fail;
@@ -705,7 +705,7 @@ int get_next_moby_in_group(char **out,
         D_L00_0016010C++;
         D_L00_00160110 = *D_L00_0016010C & 0x7FFF;
         D_L00_00160114 = moby_table + (D_L00_00160110 << 8);
-        *out = D_L00_00160114;
+        *next_moby_output = D_L00_00160114;
         entry_sign_bit_set = *(signed char *)(D_L00_00160114 + 0x20) < 0;
         if ((include_sign_bit_set_entries == 0 && require_sign_bit_set_entries == 0 &&
              entry_sign_bit_set == 0) ||
@@ -714,7 +714,7 @@ int get_next_moby_in_group(char **out,
             return 0;
         }
     } while ((short)*D_L00_0016010C >= 0);
-    *out = 0;
+    *next_moby_output = 0;
     return -1;
 }
 
