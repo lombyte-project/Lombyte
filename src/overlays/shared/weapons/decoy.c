@@ -219,13 +219,13 @@ u8 *spawn_decoy(s32 owner_moby, u128 *position, u128 *other_position) {
             candidate = 0;
             best_value = 0;
             for (i = 1; i <= D_L00_001B0830_lui[0]; i++) {
-                u8 *entry = (u8 *)(moby_table + (D_L00_001B0830_lui[i] << 8));
-                if (entry != 0 &&
-                    (*(s16 *)(entry + 0xa6) == 0xcb || *(s16 *)(entry + 0xa6) == 0x76c) &&
-                    entry[0x20] < 5) {
-                    current_value = *(s32 *)(*(u8 **)(entry + 0x78) + 0x54);
+                u8 *listed_moby = (u8 *)(moby_table + (D_L00_001B0830_lui[i] << 8));
+                if (listed_moby != 0 &&
+                    (*(s16 *)(listed_moby + 0xa6) == 0xcb || *(s16 *)(listed_moby + 0xa6) == 0x76c) &&
+                    listed_moby[0x20] < 5) {
+                    current_value = *(s32 *)(*(u8 **)(listed_moby + 0x78) + 0x54);
                     if (best_value <= current_value) {
-                        candidate = entry;
+                        candidate = listed_moby;
                         best_value = current_value;
                     }
                 }
