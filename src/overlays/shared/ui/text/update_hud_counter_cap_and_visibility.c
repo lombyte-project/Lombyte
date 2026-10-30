@@ -406,7 +406,7 @@ extern unsigned char D_00141EA0[];
 
 extern char  D_L00_0015F7C8[];
 extern void *D_L00_0015FAC0;
-extern s32   fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
+extern s32   fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern s32   font_print_center(s32, s32, s64, char *, s32) __asm__("func_001F6AF0");
 extern s32   sprintf(char *, const char *, ...);
 extern int   D_L00_0015F718_gp __asm__("D_L00_0015F718") __attribute__((sda));

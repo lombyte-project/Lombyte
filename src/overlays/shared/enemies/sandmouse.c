@@ -894,7 +894,6 @@ extern char *D_L01_00167280        NOT_SDA;
 extern char                        D_0013F350[] NOT_SDA;
 extern char                        D_L01_0020BA10[] NOT_SDA;
 extern char                        D_L01_0020BA30[] NOT_SDA;
-extern f32                         random_float_between(f32, f32) __asm__("func_002132A8");
 extern float                       fast_vec_dist(void *, void *);
 extern int                         debug_print() __asm__("FUN_001e93b0");
 extern int                         FUN_L00_00257b90(int, int);
@@ -923,7 +922,6 @@ extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8
 extern void FUN_L01_0026d930(void *);
 extern void compute_sand_mouse_approach_target(void *, void *) __asm__("FUN_L01_002e30b8");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void        compute_sandmouse_follow_goal(void *unused, float *p) __asm__("FUN_L01_0030d260");
 void        emit_sandmouse_particles(struct Moby *m) __asm__("FUN_L01_0030dda0");
 void        attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
@@ -1085,7 +1083,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                     (*(Moby **)(hero_bytes + 0x1130))->state = 1;
                 }
                 D_L01_001DEB38_lui.owner = sandmouse_moby;
-                hero_set_state(0x1F, 0);
+                l01_hero_set_state(0x1F, 0);
                 set_hero_animation((float)scale_game_frames(6), 0, 0);
                 if (sandmouse_vars->link != -1) {
                     LNK(sandmouse_vars->link)->command = 5;
@@ -1180,7 +1178,7 @@ void sandmouse_update(Moby *sandmouse_moby) {
                 allocate_voice_for_target_entry(1, 4, (struct VoiceTarget *)sandmouse_moby);
         }
     }
-        hero_set_state(0, 1);
+        l01_hero_set_state(0, 1);
         sandmouse_moby->flags &= 0xFFBE;
         if (sandmouse_vars->link != -1) {
             LNK(sandmouse_vars->link)->flags &= 0xFFBE;

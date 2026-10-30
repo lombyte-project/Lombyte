@@ -30,6 +30,8 @@
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
+#include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C2A20), where it is exact; names translated to the US level program. */
 
@@ -377,8 +379,6 @@ void            sub_2c5dc8(void *, void *, void *) __asm__("FUN_001f9a28");
 void            fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 float           fast_vec_length(void *) __asm__("FUN_001f9af0");
 void            fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-float           fast_cos(float) __asm__("FUN_001f9dc8");
-float           fast_sin(float) __asm__("FUN_001f9de0");
 float           fast_normalize_angle(float) __asm__("FUN_001fa610");
 void            fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 void            draw_geometry_quad(void *, int, int) __asm__("FUN_001f7d30");
@@ -592,14 +592,11 @@ typedef union {
 } V2c7320;
 
 extern s32  pad_held[] __asm__("D_0013CAE0") NOT_SDA;
-extern f32  fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern void sub_2c7320(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern f32  fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32  fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern f32  vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32  fast_cos(f32) __asm__("FUN_001f9dc8");
-extern f32  fast_sin(f32) __asm__("FUN_001f9de0");
 extern f32  fn_2c7320(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025abf0");
 void        compute_glove_of_doom_launch_velocity(V2c7320 *origin_position,
                                                   V2c7320 *target_position,
@@ -794,7 +791,6 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position,
 }
 
 /* Ported from rac1-decomp (nonmatching/shared/func_L00_002C12B0.c: func_L00_002C12B0). */
-#include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 
 typedef struct {
@@ -843,7 +839,6 @@ typedef struct {
 extern CollisionHit coll_hit __asm__("D_L00_00173E40") NOT_SDA;
 extern char         D_L00_00177F00[], D_L00_001E9B48[], D_L00_001E9B70[];
 extern s32          D_L00_0015F5C4;
-extern f32          fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
 extern f32          vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern f32          fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern s32          truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
@@ -1488,7 +1483,6 @@ extern void initialize_moby_motion_at_position(void *, void *, void *) __asm__("
 extern struct Moby *spawn_mine(void *, void *, void *) __asm__("FUN_L00_002a9ed0");
 extern void         append_unique_moby_index(void *, void *, int) __asm__("FUN_L00_0025f780");
 extern f32          square_root(f32) __asm__("FUN_001f9988");
-extern f32          fast_add_rotations(f32, f32) __asm__("FUN_001fa580");
 extern void         fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern s32          scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern s32          collision_line(void *, void *, s32, void *, s32) __asm__("FUN_001efa68");
@@ -1497,7 +1491,6 @@ extern void         transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa
 extern void         transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void         transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern f32          vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32          fast_subtract_rotations(f32, f32) __asm__("FUN_001fa5c8");
 extern int          use_ammo(int, int) __asm__("FUN_L00_00233db8");
 extern int          get_ammo(int) __asm__("FUN_L00_00233e98");
 
@@ -2136,12 +2129,8 @@ u8 *spawn_decoy(s32 value, u128 *position, u128 *other_position) {
 /* Tests a movement vector against the player and turns a colliding moby. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002C12B0.c: func_L00_002C4B90), where it is exact; names translated to the US level program. */
 
-extern f32   fast_cos(f32) __asm__("func_001F9DC8");
-extern f32   fast_sin(f32) __asm__("func_001F9DE0");
-extern f32   fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 extern float square_root(float) __asm__("FUN_001f9988");
-extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern f32   fast_vec_length(void *a) __asm__("FUN_001f9af0");
 
 typedef struct {
@@ -2237,8 +2226,6 @@ extern s32            D_L00_0015F5C4; /* nonzero: no throws */
 extern f32 frame_time MACRO_ADDR;     /* frame-rate scale */
 /* coll_hit's normal as a whole quadword (CollisionHit names only x/y/z) */
 extern Vec4 D_L00_00166DC0 NOT_SDA;
-extern f32                 fast_cos(f32) __asm__("FUN_001f9dc8"); /* cos */
-extern f32                 fast_sin(f32) __asm__("FUN_001f9de0"); /* sin */
 extern void                FUN_001f4600(void *, void *);
 extern void                draw_moby_oscillating_textured_quads(void) __asm__("FUN_L00_002c31c0");
 
@@ -3054,13 +3041,11 @@ typedef struct Data {
     float size;
 } Data;
 
-extern f32     fast_vec_dist(void *, void *) __asm__("func_001F9B48");
 extern f32     fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float   frame_time;
 extern int     FUN_L00_00205000();
 extern int     hero_set_state() __asm__("FUN_L00_002223f8");
 extern int     FUN_L00_002323b8();
-extern s32     allocate_voice_for_target_entry() __asm__("func_0022DA68");
 unsigned char *spawn_swingshot_hook(unsigned char *src, float f) __asm__("FUN_L00_002c6f88");
 void           suck_draw_reticle(int   a,
                                  int   b,
@@ -3708,10 +3693,6 @@ typedef float Mat_2c7548[4][4] __attribute__((aligned(16)));
 typedef float Mat3_2c7548[3][4] __attribute__((aligned(16)));
 
 extern char  g_debug_camera[] __asm__("D_L00_00166DC0");
-extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern void  fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern int   collision_line_2c7548(void *, void *, int, int, int) __asm__("FUN_001efa68");

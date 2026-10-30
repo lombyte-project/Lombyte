@@ -4,13 +4,17 @@
 #include "rnc/hero/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/random.h"
+#include "rnc/math/spherical_offset.h"
+#include "rnc/mobys/moby_spawn.h"
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/level_globals.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
-#include "rnc/math/fast_math.h"
 #include "rnc/overlay/shared/audio/voices/voice_is_playing.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
@@ -41,10 +45,7 @@ extern int           elevator_activation_save_id_bits[] __asm__("D_L09_001BA650"
 extern int           is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern float         scale_time(float) __asm__("FUN_001f96b0");
 extern int           is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
-extern s32           allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern void          set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
-extern void          release_voice_slot(s32) __asm__("FUN_0022d798");
-float                absolute_float(float input) __asm__("func_001F99C0");
 extern char          D_0013E550[];
 
 #define F(p, o) (*(float *)((p) + (o)))
@@ -319,10 +320,6 @@ extern float         D_L09_00166F40[];
 extern int           D_L09_0015F5CC;
 extern int           FUN_L00_0025e450_u() __asm__("FUN_L00_0025e450");
 extern unsigned char voice_pool[] __asm__("D_0013E550");
-s32                  allocate_voice_for_target_entry(s32   entry_index,
-                                                     s32   flags,
-                                                     void *target) __asm__("FUN_0022da68");
-void                 mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern void          spawn_explosion(void *,
                                      void *,
                                      void *,
@@ -586,12 +583,8 @@ typedef struct {
 extern Moby *moby_list __asm__("D_L09_0015FFD8");
 extern char  D_L09_00209050[];
 extern char  D_L09_00209080[];
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int   stub_printf() __asm__("FUN_001e93b0");
-extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
-extern void  fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void  FUN_L00_0024f7c8(void *, int, void *);
-extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void         FUN_L00_0025e450(f32   burst,
                               f32   unused_float,
                               f32   owner_effect,
@@ -799,7 +792,6 @@ void airship_chain_link_update(Moby *m) {
     }
 }
 #else
-extern void fast_vec_normalize(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void print_missing_link(char *, short) __asm__("FUN_001e93b0");
 extern void effect_00304360(f32,
                             f32,
@@ -1064,11 +1056,7 @@ allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__(
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void suck_draw_reticle(void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_001edf60");
-extern float fast_cos(float) __asm__("FUN_001f9dc8");
-extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern void  build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void  FUN_L00_001fff28(void *, int, float);
 
 void turret_update(struct Moby *moby) __asm__("FUN_L09_00304c80");
@@ -1420,8 +1408,6 @@ void update_damage_causer(struct Moby *moby) {
 /* spawn a moby copying position, rotation and data word from owner */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_003095D0), where it is exact; names translated to the US level program. */
 
-extern char *create_moby(int);
-
 char *spawn_barrier_replacement(struct Moby *owner,
                                 int          spawned_moby_class) __asm__("FUN_L09_00308220");
 
@@ -1462,13 +1448,11 @@ typedef struct Flags_309688 {
 } Flags_309688;
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern f32   random_float_between(f32, f32) __asm__("func_002132A8");
 
 #include "rnc/overlay/l09/mobys/elevator_data/barrier_update.h"
 
 extern int           FUN_L00_001fefc8();
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
-extern void          mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void          scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 struct Moby         *spawn_tumbling_debris(
             struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) __asm__("FUN_L09_002ef868");
@@ -1496,7 +1480,6 @@ extern float         func_001F9F90_309688(float) __asm__("FUN_001f9dc8");
 extern float         func_001F9FA8_309688(float) __asm__("FUN_001f9de0");
 extern float         func_001F9B88_309688(float) __asm__("FUN_001f99c0");
 extern void          func_L00_001FF4B0_309688(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void          fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void          func_L00_0025F4A8_309688(void *,
                                               void *,
                                               void *,
@@ -1658,7 +1641,6 @@ float       spring_angle(float *p, float *q, int n, float x, float a, float b, f
 extern float func_002140F8_30A560(float, float) __asm__("FUN_002132a8");
 extern void  func_001E9730_30A560() __asm__("FUN_001e93b0");
 extern int   func_001F9850_30A560(int) __asm__("FUN_001f96f8");
-extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern char          D_L09_00209518_30A560[] __asm__("D_L09_00209228");
 extern unsigned char D_0013E633_30A560[] __asm__("D_0013F350");
@@ -2068,7 +2050,6 @@ typedef struct {
 extern f32 D_L09_00161DF8 __attribute__((sda));
 extern float
 advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
-extern int  random_integer_below(int) __asm__("FUN_00213260");
 extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
 extern void spawn_moving_resizing_height_snapped_alpha_fade_particle(
     void *, int, int, float, float) __asm__("FUN_L00_002715e8");

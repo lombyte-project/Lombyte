@@ -5728,7 +5728,7 @@ extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 void        spawn_moby_breakup_effect(char *source_moby) __asm__("FUN_L06_00300278");
 
 extern void spawn_moby_breakup_effect(char *) __asm__("FUN_L06_00300278");
-extern void add_draw_callback(int, char *) __asm__("FUN_L06_00210fc8");
+extern void FUN_L06_00210fc8(int, char *);
 extern void allocate_voice_for_target_entry_ffcb0(int, int, char *) __asm__("FUN_0022da68");
 
 extern void FUN_L06_00300958(void);
@@ -5909,14 +5909,14 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
     }
     if (data[1] != 0) {
         if (data[0] != 0)
-            add_draw_callback((int)effect_quad_draw_single, moby);
+            FUN_L06_00210fc8((int)effect_quad_draw_single, moby);
         else
-            add_draw_callback((int)FUN_L06_00300958, moby);
+            FUN_L06_00210fc8((int)FUN_L06_00300958, moby);
     } else {
         if (data[0] != 0)
-            add_draw_callback((int)draw_backdrop_mesh, moby);
+            FUN_L06_00210fc8((int)draw_backdrop_mesh, moby);
         else
-            add_draw_callback((int)FUN_L06_00300588, moby);
+            FUN_L06_00210fc8((int)FUN_L06_00300588, moby);
     }
 }
 
@@ -7897,7 +7897,6 @@ extern float fast_vec_dist(void *, void *);
 extern int   D_L06_00162234;
 extern int   D_L06_00162238;
 extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern s32   fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern float D_L06_001621F8 __attribute__((sda));
 
 #include "rnc/overlay/l06/mobys/fred_data/update_moby_vector_streams_and_particle_burst_2.h"

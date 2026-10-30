@@ -122,7 +122,6 @@ extern float         fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern float         fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float         vector_length_xy(void *);
 extern int           random_float_between_cf(float) __asm__("FUN_001fa6d0");
-extern int           scale_game_frames(int) __asm__("scale_game_frames");
 extern int           tick_countdown_32(int *) __asm__("func_001F9740");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
@@ -833,7 +832,6 @@ extern char batalia_effect_sine_offsets[] __asm__("D_L08_001F8550");
 #include "rnc/overlay/l08/mobys/batalia_deserter_globals.h"
 
 extern int   D_L08_001623F0;
-extern int   truncate_float_to_s32();
 extern short batalia_effect_reference_position_x __asm__("D_L08_00162380") __attribute__((sda));
 int          D_L08_001623C4 = 0;
 extern int  *D_L08_001623E8[2] __attribute__((sda));

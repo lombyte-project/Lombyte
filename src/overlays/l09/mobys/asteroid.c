@@ -4,9 +4,11 @@
 #include "rnc/globals.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/random.h"
+#include "rnc/mobys/moby_spawn.h"
 
 #include "rnc/rendering/dma_tag.h"
-#include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/game/item_state.h"
 #include "rnc/audio/voice_alloc.h"
@@ -407,8 +409,6 @@ void build_packet_and_draw_scaled_entries(void *data_ptr, void *list_ptr, int co
 
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002C3690), where it is exact; names translated to the US level program. */
 
-extern char *create_moby(int);
-
 char *spawn_airship_part(struct Moby *rotation_source_moby,
                          char        *spawn_reference_position,
                          int          spawned_moby_class) __asm__("FUN_L09_002c2500");
@@ -473,9 +473,6 @@ char *find_nearest_moby_by_class(void *search_position, int type, float *nearest
 /* spawns a debris moby with randomized velocity toward a point */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EB808), where it is exact; names translated to the US level program. */
 
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int   random_integer_below(int) __asm__("FUN_00213260");
-
 char *spawn_fading_asteroid_debris(struct Moby *owner,
                                    float       *inherited_velocity) __asm__("FUN_L09_002ea528");
 
@@ -522,9 +519,6 @@ char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity
 }
 /* spawns a debris moby at a random point of a ring above the arena, falling toward the centre */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EBA58), where it is exact; names translated to the US level program. */
-
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 
 char *spawn_falling_asteroid(void) __asm__("FUN_L09_002ea778");
 
@@ -606,8 +600,6 @@ typedef struct {
 } PebblePath;
 
 extern char D_L09_00166F40_2eaa50[] __asm__("D_L09_00166F40");
-extern s32  random_integer_below(s32) __asm__("FUN_00213260");
-extern f32  random_float_between(f32, f32) __asm__("FUN_002132a8");
 
 /* Spawns one of four pebble classes at the spawner, scattered sideways off the end of its path. */
 struct Moby *spawn_path_following_asteroid(struct Moby *owner) __asm__("FUN_L09_002eaa50");
@@ -672,8 +664,6 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
 
 /* ticks a fading drifting moby: decays its velocity, follows it and eases its rotation */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EC010), where it is exact; names translated to the US level program. */
-
-void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 void update_fading_asteroid_debris(unsigned char *moby) __asm__("FUN_L09_002ead30");
 
@@ -1345,9 +1335,7 @@ typedef struct {
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern char *
 spawn_class_11c_moby(char *owner, void *position, float angle) __asm__("FUN_L09_002ee380");
-extern float fast_cos(float);
-extern float fast_sin(float);
-extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 
 void handle_moby_damage_and_destruction(struct Moby *moby) __asm__("FUN_L09_002ee110");
 
@@ -1529,8 +1517,6 @@ struct DebrisVars {
     struct Moby *src;    /* 0x18 */
     s32          life;   /* 0x1C */
 };
-
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 
 /* spawns a debris moby of class 0x140 + kind at pos with velocity vel and a random spin */
 struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) {

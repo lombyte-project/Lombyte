@@ -24,6 +24,9 @@
 #include "rnc/rendering/sky/sky_sprite_proc.h"
 #include "rnc/overlay/shared/rendering/sky/sky_particle_effects.h"
 #include "rnc/overlay/shared/rendering/sky/sky_shells_rotate_two.h"
+#include "qzero.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 void draw_sky_shells_with_particles_and_rotating_shell(void) __asm__("FUN_L00_00289330");
 
@@ -255,10 +258,6 @@ void apply_level_specific_cutscene_moby_effects(void) {
         }
     }
 }
-
-#include "qzero.h"
-#include "rnc/math/fast_math.h"
-#include "rnc/math/asm_helpers.h"
 
 typedef union {
     u128 q;

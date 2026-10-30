@@ -19,6 +19,8 @@
 #include "rnc/overlay/shared/mobys/spawn_type_52_particle_near_moby.h"
 #include "rnc/overlay/shared/props/pool_init_tiles.h"
 #include "rnc/overlay/shared/mobys/update_object_wander_movement.h"
+#include "rnc/mobys/animation/blend_moby_animation.h"
+#include "rnc/world/collision/ground_probe.h"
 
 typedef struct {
     float position[3];
@@ -295,7 +297,6 @@ typedef union {
     float     f[4];
 } L12Vector;
 
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void  approach_value_c(f32 *, f32, f32) __asm__("func_00213ED8");
 extern float func_00214358_order(float, void *, int) __asm__("FUN_00213508");
 extern void  func_00214D28_order(float, float, void *) __asm__("FUN_00213ed8");
@@ -313,9 +314,8 @@ void ease_hoven_anklebiter_height_to_ground(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E2BF8), where it is exact; names translated to the US level program. */
 
-extern int  random_integer_below(int);
-extern int  scale_game_frames(int);
-extern void blend_moby_animation(void *, int, int, int);
+extern int random_integer_below(int);
+extern int scale_game_frames(int);
 
 void select_hoven_anklebiter_pursuit_animation(struct Moby *moby) __asm__("FUN_L12_002e18e8");
 
@@ -549,7 +549,6 @@ extern void select_moby_combat_target(char *, float *, float) __asm__("FUN_L00_0
 extern void FUN_L00_002628d8_c(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L12_002e3098_u(struct Moby *) __asm__("FUN_L12_002e3098");
 extern void approach_value_alt(void *, float, float) __asm__("FUN_00213ed8");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 f32         compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float       FUN_L00_0025abf0(float *a, float *b, float *out, float speed, float g);
 int         FUN_L00_00257b90(int lo, int hi);
@@ -566,7 +565,6 @@ void FUN_L12_002e3528_c(struct Moby *moby) __asm__("FUN_L12_002e3528");
 extern char  D_0013E633_2E2EF0[] __asm__("D_001413D0");
 extern void  func_L12_002E4838_2E2EF0(void *) __asm__("FUN_L12_002e3528");
 extern int   FUN_L01_00274b78_c(char *, char *, float) __asm__("FUN_L01_00274b78");
-extern void  blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void  func_L01_0026E8E0_2E2EF0(char *) __asm__("FUN_L01_0026d930");
 extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int   func_001160D8_2E2EF0(void) __asm__("FUN_001160d8");
@@ -2068,7 +2066,6 @@ extern s32 D_001413D0_e81e0 __asm__("D_001413D0") NOT_SDA;
 extern void
 call_for_help_e81e0(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
 extern void         moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern float        probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern void         allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void         FUN_L00_00257470(struct Moby *, int, int);
 extern struct Moby *D_L12_00178380[];
@@ -2631,7 +2628,6 @@ void update_blarg_trooper_attachment(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9B30), where it is exact; names translated to the US level program. */
 
 extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
-f32         probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 
 /* Eases the moby's height toward the ground below it. */
 void ease_blarg_trooper_height_to_ground(char *moby) {
@@ -3309,7 +3305,6 @@ typedef struct {
 
 extern float D_0015ED64_b570 __asm__("D_0015ED64");
 extern void  attach_shared_manipulator_to_matching_class_moby(void *) __asm__("FUN_L03_002db480");
-extern void  blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 
 void edwina_update(L16WatchMoby *m) __asm__("FUN_L12_002eb570");
 

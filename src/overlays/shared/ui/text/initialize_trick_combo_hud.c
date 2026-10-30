@@ -3,6 +3,7 @@
 #include "asm.h"
 
 #include "sda.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/mobys/animation/set_animation_parameter.h"
@@ -234,7 +235,6 @@ extern s32 trick_combo_pulsing_label_x_gp __asm__("D_L05_0015F8A4") __attribute_
 extern s32 trick_combo_pulsing_label_y_gp __asm__("D_L05_0015F8A8") __attribute__((sda));
 
 #include "rnc/overlay/shared/ui/text/initialize_trick_combo_hud_data/draw_trick_combo_hud.h"
-#include "rnc/math/fast_math.h"
 
 extern s32 trick_combo_rotation_text_center_x_gp __asm__("D_L05_0015F8B4") __attribute__((sda));
 extern s32 trick_combo_rotation_text_y_gp __asm__("D_L05_0015F8B8") __attribute__((sda));

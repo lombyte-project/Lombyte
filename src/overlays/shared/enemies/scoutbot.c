@@ -83,7 +83,6 @@ extern float D_0015ED70;
 extern int   fast_tween_color() __asm__("FUN_001fa6e0");
 extern int   FUN_L00_0024f7c8();
 extern int   FUN_L00_002dc9f0();
-extern s32   allocate_voice_for_target_entry() __asm__("func_0022DA68");
 extern short D_L08_00161888 __attribute__((sda));
 s32          is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 void         FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);

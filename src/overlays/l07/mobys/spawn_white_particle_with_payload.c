@@ -5,6 +5,7 @@
 #include "qcopy.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/math/random.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 
@@ -41,7 +42,6 @@ void spawn_white_particle_with_payload(void *particle_position_source,
 }
 
 #include "rnc/math/vector.h"
-#include "rnc/math/fast_math.h"
 
 /* Finds the point of segment a-b nearest to the surface of the sphere (center, radius), preferring
    the one closer to ref when both hits are equally good. Writes it to out and returns its distance

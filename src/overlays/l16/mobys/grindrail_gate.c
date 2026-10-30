@@ -354,7 +354,6 @@ extern int   debug_print() __asm__("FUN_001e93b0");
 int          advance_bolt_thief_path(struct Moby *moby) __asm__("FUN_L16_002e3fa0");
 
 extern int  advance_bolt_thief_path(struct Moby *moby) __asm__("FUN_L16_002e3fa0");
-extern int  is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern f32  D_L16_00161D94;
 extern f32  D_L16_00161D98_gp __asm__("D_L16_00161D98") __attribute__((sda));
 extern void FUN_L00_00257470(void *, int, int);

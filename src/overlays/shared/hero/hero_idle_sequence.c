@@ -1321,6 +1321,7 @@ typedef struct {
 
 extern char D_L00_001801D0[] NOT_SDA;
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
+extern void get_moby_light_direction(void *, void *) __asm__("FUN_0020d510");
 extern void FUN_L00_002503c0(void *, void *);
 
 void update_item_tint_from_hero(void *item_moby, char *hero_moby) __asm__("FUN_L00_00207330");
@@ -2057,7 +2058,6 @@ typedef struct {
 
 extern G_208b60 D_0013F350_208b60 __asm__("D_0013F350");
 extern int      D_L00_00173E40[];
-void            get_moby_light_direction(M_208b60 *, V_208b60 *) __asm__("FUN_0020d510");
 s32             collision_line(V_208b60 *, V_208b60 *, s32, s32, s32) __asm__("FUN_001efa68");
 #define G D_0013F350_208b60
 extern V_208b60 l00_hero_height_probe_direction __asm__("D_L00_001AEB90");

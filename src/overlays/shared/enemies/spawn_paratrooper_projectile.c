@@ -216,7 +216,6 @@ typedef struct {
 } Obj;
 
 extern char  D_L08_001675C0[];
-extern f32   random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_L08_00160260 __attribute__((sda));
 extern float ground_particle_scatter_minimum_z_scale_gp __asm__("D_L08_00162340")
     __attribute__((sda));

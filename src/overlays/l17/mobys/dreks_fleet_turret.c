@@ -689,7 +689,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int   hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int   rand(void);
 extern int   random_integer_below(int);
-extern int   truncate_float_to_s32();
 extern short fleet_radial_rotation_rate_degrees_factor __asm__("D_L17_00161B78")
     __attribute__((sda));
 extern short fleet_radial_base_elevation_degrees __asm__("D_L17_00161B7C") __attribute__((sda));

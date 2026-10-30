@@ -31,6 +31,8 @@
 #include "rnc/math/random/random_spherical_offset.h"
 #include "rnc/overlay/shared/vendor/vendor_orb.h"
 #include "rnc/overlay/shared/rendering/spawn_mode_controlled_rotating_alpha_fade_particle.h"
+#include "rnc/math/random.h"
+#include "rnc/mobys/moby_spawn.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
@@ -229,9 +231,6 @@ void update_linked_moby_position(char *moby) {
 /* Spawns moby class 0x3A5 at the given position, owned by owner, with three randomised angle values. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_00300F80), where it is exact; names translated to the US level program. */
 
-extern char *create_moby(int);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-
 unsigned char *spawn_floating_mine(unsigned char *owner,
                                    char          *spawn_position) __asm__("FUN_L14_002ffaf8");
 
@@ -288,7 +287,6 @@ extern int   D_L14_0015F5C4;
 extern int   test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int   release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
 extern int   FUN_L14_002b39a0_c(unsigned char *) __asm__("FUN_L14_002b39a0");
-extern s32   random_integer_below(s32) __asm__("func_00213260");
 extern float l14_plasmabot_beam_trace_endpoint_distance __asm__("D_L14_001614E4")
     __attribute__((sda));
 extern float l14_plasmabot_aim_sweep_half_angle __asm__("D_L14_001614E8") __attribute__((sda));
@@ -319,7 +317,6 @@ extern void FUN_L00_0025e450_c(struct Moby *,
                                int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(float, char *, int, char *);
 extern void build_moby_bone_transform_c(char *, int, void *) __asm__("build_moby_bone_transform");
-extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 float       update_plasmabot_aim_quaternion(char *moby,
                                             int   flag,
                                             float angle) __asm__("FUN_L14_002b35d8");
@@ -843,9 +840,6 @@ extern u8                  D_L14_0015F580[] MACRO_ADDR;
 
 extern void FUN_L14_002b3a20_c(struct Moby *) __asm__("FUN_L14_002b3a20");
 extern void FUN_L14_002b2928_u(struct Moby *) __asm__("FUN_L14_002b2928");
-extern void FUN_00213358(void *, f32, f32);
-extern f32  FUN_002132a8(f32, f32);
-extern s32  FUN_00213260(s32);
 
 /* Ship engine effects: puffs exhaust particles from joint 1 and places the nozzle and beam points from joints 7 and 2. */
 void update_plasmabot_visual_effects(struct Moby *moby) __asm__("FUN_L14_002b2600");
@@ -870,11 +864,11 @@ void update_plasmabot_visual_effects(struct Moby *moby) {
     fast_vec_sub(&exhaust_position_offset, &particle_spawn_position, &D_L14_001674C0);
     fast_vec_normalize(&exhaust_position_offset, &exhaust_position_offset, -0.5f);
     fast_vec_add(&effect_positions->exhaust, &particle_spawn_position, &exhaust_position_offset);
-    FUN_00213358(&particle_initial_velocity, 0.005f, 0.03f);
+    random_spherical_offset(&particle_initial_velocity, 0.005f, 0.03f);
     particle = spawn_mode_controlled_rotating_alpha_fade_particle(
         &particle_spawn_position, &particle_initial_velocity, 0x7F, moby);
     if (particle != NULL) {
-        particle->life = FUN_002132a8(6000.0f, 32000.0f);
+        particle->life = random_float_between(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
         particle = spawn_mode_controlled_rotating_alpha_fade_particle(
@@ -883,10 +877,10 @@ void update_plasmabot_visual_effects(struct Moby *moby) {
             continue;
         }
         fade = &particle->fade;
-        if (i == 2 && FUN_00213260(8) == 0) {
+        if (i == 2 && random_integer_below(8) == 0) {
             particle->life = 180000.0f;
         } else {
-            particle->life = FUN_002132a8(80000.0f, 120000.0f);
+            particle->life = random_float_between(80000.0f, 120000.0f);
         }
         particle->frames = scale_game_frames(2);
         inverse_lifetime_frames = 1.0f / convert_integer_to_float(particle->frames);
@@ -1065,7 +1059,6 @@ typedef struct {
     s32 delay;  /* 0x238: frames, counted down */
 } DelayVars;
 
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 
 extern f32 plasmabot_base_target_range_gp __asm__("D_L14_001614C4") __attribute__((sda));
@@ -1530,8 +1523,6 @@ extern float D_0015ED60;
 #define DE670_GRAVITY   D_L14_00161B18
 extern void *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern void  FUN_L14_002dec40(struct Moby *);
-extern f32   fast_add_rotations(f32, f32);
-extern s32   random_integer_below(s32) __asm__("FUN_00213260");
 extern s32   FUN_L00_00257b90(s32, s32);
 extern s32   coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void  spawn_explosion(void *,
@@ -1732,7 +1723,6 @@ extern void spawn_explosion_dfd10(struct Moby *,
                                   s32,
                                   s32,
                                   s32) __asm__("FUN_L00_0025e450");
-extern int  random_integer_below(int) __asm__("FUN_00213260");
 
 typedef struct {
     struct Moby *owner;
@@ -1982,11 +1972,10 @@ typedef struct {
 char *
 spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 extern P_eca8 *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
-extern f32     random_float_between(f32, f32) __asm__("func_002132A8");
 extern int     D_L14_0015F580_c __asm__("D_L14_0015F580");
 int            FUN_L00_00257b90(int lo, int hi);
-extern float   func_002140F8_2E17B8(float, float) __asm__("FUN_002132a8");
-extern int     func_002140B0_2E17B8(int) __asm__("FUN_00213260");
+extern float   func_002140F8_2E17B8(float, float) __asm__("random_float_between");
+extern int     func_002140B0_2E17B8(int) __asm__("random_integer_below");
 extern void
 func_L00_0026DA50_2E17B8(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern Particle_2E17B8 *func_L00_0026DEA0_2E17B8(

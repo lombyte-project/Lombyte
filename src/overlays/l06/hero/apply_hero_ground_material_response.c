@@ -900,7 +900,6 @@ extern void FUN_L00_002118c8_c(f32, s32) __asm__("FUN_L00_002118c8");
 extern void turn_to(s32, f32, f32, f32) __asm__("FUN_L00_00211e30");
 extern s32  try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_00211e98");
-extern f32  absolute_float(f32) __asm__("FUN_001f99c0");
 extern void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 extern s32  get_hero_help_value(s32) __asm__("FUN_L06_0021d0a0");
 extern void

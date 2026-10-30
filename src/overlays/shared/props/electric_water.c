@@ -771,7 +771,7 @@ extern short D_L15_00161CC8[] MACRO_ADDR;
 extern short D_L15_00161CD0[] MACRO_ADDR;
 extern short D_L15_00161CD8[] MACRO_ADDR;
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
+extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void scale_vector_xyz(void *, void *, float) __asm__("FUN_001f9a68");
 unsigned char *

@@ -27,6 +27,7 @@
 #include "rnc/overlay/shared/game/unlock_planet.h"
 #include "rnc/overlay/shared/vendor/set_camera_rotation.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/rendering/packets/emit_rgba_draw_packet.h"
 
 /* Hoven vendor draw: builds the two strip matrices, then draws the four rings as quads lit by their phase. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002EDAA0.c: func_L12_00303CA8), where it is exact; names translated to the US level program. */

@@ -26,7 +26,7 @@
 
 #include "rnc/overlay/l03/hero/00205830_globals.h"
 
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
+extern f32 absolute_float(f32) __asm__("func_001F99C0");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
 s32 find_first_nearby_registered_path(Vec4 *from,

@@ -73,7 +73,6 @@ typedef struct {
 } __attribute__((aligned(16))) SkyRotVec_2899a8;
 
 extern char *D_L00_0016051C_2899a8 __asm__("D_L00_0016051C");
-extern char  D_L00_001BD7E0[] __asm__("D_L00_001BD7E0");
 extern s32   D_L00_0015F5CC_2899a8 __asm__("D_L00_0015F5CC");
 
 void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");

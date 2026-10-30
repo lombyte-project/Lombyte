@@ -1553,7 +1553,6 @@ extern char         D_00141680_49a8[];
 #include "rnc/rendering/debug/debug_menu.h"
 
 extern f32                  D_0015ED6C;
-extern f32                  random_float_between(f32, f32) __asm__("func_002132A8");
 extern int                  D_0015ED84;
 extern int                  D_L00_0015F5C4; /* no foreign declaration */
 extern float D_L00_0017ACF4 NOT_SDA;
@@ -1568,7 +1567,6 @@ collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_00
 extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
 int         allocate_colored_effect_slot(
             void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
 struct Moby *spawn_homing_shot(struct Moby *source,

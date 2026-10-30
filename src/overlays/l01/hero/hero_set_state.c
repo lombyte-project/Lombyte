@@ -65,11 +65,11 @@ extern void pool_splash(int, int, int, float, float, float, float) __asm__("FUN_
 extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
-extern int  hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
+extern int  l01_hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 extern char level_01_transform_trail_jump_velocity_keys[] __asm__("D_L01_0017C3A0");
 extern char level_01_water_surface_jump_velocity_keys[] __asm__("D_L01_0017C3E0");
 
-int hero_set_state(int a, int b) {
+int l01_hero_set_state(int a, int b) {
     int   old2088;
     char *moby;
     int   old20A7;
@@ -135,7 +135,7 @@ int hero_set_state(int a, int b) {
         }
         qcopy(&p->motion.momentum, &p->motion.resolved_velocity);
         if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
-            hero_set_state(HERO_STATE_SLIP, 1);
+            l01_hero_set_state(HERO_STATE_SLIP, 1);
             return 0;
         }
         {
@@ -512,7 +512,7 @@ int hero_set_state(int a, int b) {
             struct Hero *s = &hero;
             s->rand_timer.range = 0x68;
             if (s->on_slip_ground != 0 && s->frames_off_ground.s == 0) {
-                hero_set_state(HERO_STATE_SLIP, 1);
+                l01_hero_set_state(HERO_STATE_SLIP, 1);
                 return 0;
             }
         }
@@ -584,13 +584,13 @@ int hero_set_state(int a, int b) {
         p->unk2284 = 0;
         qcopy(&p->motion.momentum, &p->motion.resolved_velocity);
         if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
-            hero_set_state(HERO_STATE_SLIP, 1);
+            l01_hero_set_state(HERO_STATE_SLIP, 1);
             return 0;
         }
         if (try_start_hero_item_idle_animation())
             return 0;
         if (get_hero_idle_animation_index(0) == 0x54) {
-            if (hero_set_state(HERO_STATE_IDLE, 0)) {
+            if (l01_hero_set_state(HERO_STATE_IDLE, 0)) {
                 set_hero_animation(
                     get_hero_idle_animation_index(0), 0, (float)scale_game_frames(0x12));
             }
@@ -630,7 +630,7 @@ int hero_set_state(int a, int b) {
         if (frame_time * 7.0f < p->ground_speed)
             p->ground_speed = frame_time * 7.0f;
         if (p->on_slip_ground != 0 && p->frames_off_ground.s == 0) {
-            hero_set_state(HERO_STATE_SLIP, 1);
+            l01_hero_set_state(HERO_STATE_SLIP, 1);
             return 0;
         }
         {
@@ -1656,12 +1656,12 @@ int handle_hero_gadget_button(void) {
                             scale_game_frames(0x14) < hero.state_timer) {
                             launch_hero_wrench();
                         } else {
-                            hero_set_state(0x15, 1);
+                            l01_hero_set_state(0x15, 1);
                         }
                     } else if (hero.unk308 == 1) {
-                        hero_set_state(0x70, 1);
+                        l01_hero_set_state(0x70, 1);
                     } else {
-                        hero_set_state(0x13, 1);
+                        l01_hero_set_state(0x13, 1);
                     }
                 }
             }
@@ -1679,9 +1679,9 @@ int handle_hero_gadget_button(void) {
                 if ((hero.past_jump_apex == 0 ? hero.ground_distance > 0.1f
                                               : hero.ground_distance > 0.57f) ||
                     (hero.state.current == 8 && hero.ground_distance > 0.57f)) {
-                    hero_set_state(0x14, 1);
+                    l01_hero_set_state(0x14, 1);
                 } else if (hero.on_slip_ground == 0) {
-                    hero_set_state(0x13, 1);
+                    l01_hero_set_state(0x13, 1);
                 }
             }
         } else if (hero.state.control_mode == 6) {
@@ -1690,7 +1690,7 @@ int handle_hero_gadget_button(void) {
                 hero.anim_changing == 0 && (float)((int *)row)[4] <= hero.anim_frame &&
                 (controller_state.held & 0xa) != 0 &&
                 pad_pressed_within(buttons, scale_game_frames(0xf), 0) != 0) {
-                hero_set_state(0x15, 1);
+                l01_hero_set_state(0x15, 1);
             } else if (hero.anim_changing == 0 && (float)((int *)row)[4] <= hero.anim_frame) {
                 frames = (truncate_float_to_s32(hero.anim_frame) - ((int *)row)[3]) * 2;
                 if (frames < 1)
@@ -1699,11 +1699,11 @@ int handle_hero_gadget_button(void) {
                     frames = scale_game_frames(0xf);
                 if (hero.on_slip_ground == 0 && pad_pressed_within(buttons, frames, 0) != 0) {
                     if ((controller_state.held & 0xa) != 0)
-                        hero_set_state(0x15, 1);
+                        l01_hero_set_state(0x15, 1);
                     else if (hero.unk308 == 1)
-                        hero_set_state(0x70, 1);
+                        l01_hero_set_state(0x70, 1);
                     else
-                        hero_set_state(0x13, 1);
+                        l01_hero_set_state(0x13, 1);
                 }
             }
         }
@@ -1767,7 +1767,7 @@ int handle_hero_gadget_button(void) {
                         if (hero.state.control_mode == 0xc || hero.state.control_mode == 0 ||
                             hero.state.current == 3 ||
                             (hero.state.control_mode == 1 && hero.stick_magnitude < 0.7f))
-                            hero_set_state(0x23, 1);
+                            l01_hero_set_state(0x23, 1);
                         else
                             start_equipped_item_animation();
                     } else if (hero.items[0].moby != 0) {
@@ -1785,7 +1785,7 @@ int handle_hero_gadget_button(void) {
                 int hold = hero.items[0].ready_frames;
                 if (pad_pressed_within(buttons, hold < limit ? hold : limit, &out2) != 0 &&
                     hero.items[0].moby != 0) {
-                    hero_set_state(0x20, 1);
+                    l01_hero_set_state(0x20, 1);
                     if (hero.items[0].moby != 0)
                         allocate_voice_for_target_entry(0, 0, hero.items[0].moby);
                 }
@@ -1806,7 +1806,7 @@ int handle_hero_gadget_button(void) {
                  ((hero.state.control_mode == 2 || hero.state.control_mode == 4) &&
                   hero.grounded_frames != 0)) &&
                 (controller_state.held & 8) != 0 && (controller_state.pressed & 8) != 0)
-                hero_set_state(0x81, 1);
+                l01_hero_set_state(0x81, 1);
             if ((controller_state.pressed & 8) != 0 && hero.state.current != 0x81)
                 r1_double_tap_timer = scale_game_frames(0x1e);
         } else if (hero.state.current != 0x13 && hero.state.current != 0x81 &&

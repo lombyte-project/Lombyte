@@ -8,6 +8,9 @@
 #include "rnc/math_consts.h"
 #include "asm.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/quaternions/quaternion_to_matrix.h"
 
 #include "rnc/overlay/shared/vendor/vendor_orb_globals.h"
 #include "sda.h"
@@ -35,9 +38,10 @@
 #include "rnc/overlay/shared/vehicles/veldin_ship.h"
 
 extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
-float        fast_add_rotations(float, float) __asm__("FUN_001fa580");
 void         FUN_L00_001fff28(char *, int, float);
 void         vendor_orb_update(unsigned char *p) __asm__("FUN_L00_002df730");
+/* lerp_vector with the blend factor first, as these callers pass it. */
+void lerp_vector_by(f32 t, void *out, void *a, void *b) __asm__("FUN_001f9a40");
 
 void vendor_orb_update(unsigned char *moby) {
     enum {
@@ -162,19 +166,13 @@ typedef struct {
 
 extern char  D_0013F350[] NOT_SDA;
 extern char  D_L00_00166DC0[] NOT_SDA;
-extern f32   advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
-extern f32   fast_add_rotations(f32, f32) __asm__("func_001FA580");
-extern f32   fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern int   FUN_001f96b0_c() __asm__("FUN_001f96b0");
 extern int   FUN_001f9a40_c() __asm__("FUN_001f9a40");
 extern int   hero_set_state() __asm__("FUN_L00_002223f8");
 extern int   FUN_L00_00266d60();
-extern s32   truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void  FUN_L00_002323b8(int, int);
-extern void  clear_u64_value(void *) __asm__("func_001F99F8");
 extern void  tick_countdown_32(s32 *) __asm__("func_001F9740");
 s32          FUN_L00_002e02e0_c(void) __asm__("FUN_L00_002e02e0");
-s32          scale_game_frames(s32) __asm__("FUN_001f96f8");
 void         emit_hydrodisplacer_effect(char *m) __asm__("FUN_L00_002e01b0");
 void         end_hydrodisplacer_interaction(char *a) __asm__("FUN_L00_002e0340");
 extern char  D_0013E633_2E0E50[] __asm__("D_0013F350");
@@ -198,7 +196,6 @@ extern float func_00214D28_2E0E50(float *, float, float) __asm__("FUN_00213ed8")
 extern float
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void  func_001F9C08_2E0E50(void *, void *, void *, float) __asm__("FUN_001f9a40");
-extern void  clear_u64_value(void *) __asm__("FUN_001f99f8");
 extern float func_001FA790_2E0E50(float, float) __asm__("FUN_001fa5c8");
 extern float func_001FA748_2E0E50(float, float) __asm__("FUN_001fa580");
 extern int   func_001F9908_2E0E50(void *) __asm__("FUN_001f9740");
@@ -442,7 +439,6 @@ typedef struct {
 
 extern float D_0015ED6C_2e01b0 __asm__("D_0015ED6C");
 int          FUN_001f9740_2e01b0(void *) __asm__("FUN_001f9740");
-void         fast_vec_normalize(V_2e01b0 *, void *, float) __asm__("FUN_001f9bf8");
 void         spawn_debris_chunk(V_2e01b0 *, V_2e01b0 *, int, int) __asm__("FUN_L00_0026f548");
 int          FUN_001f96f8_2e01b0(int) __asm__("FUN_001f96f8");
 
@@ -560,7 +556,6 @@ extern f32  FUN_001fa580_2e03a0(f32, f32) __asm__("FUN_001fa580");
 extern void debug_print() __asm__("FUN_001e93b0");
 extern void FUN_L00_002e0788_2e03a0(void *) __asm__("FUN_L00_002e0788");
 extern f32  vector_distance(void *, void *) __asm__("FUN_001f9b80");
-extern f32  absolute_float(f32) __asm__("FUN_001f99c0");
 extern void start_scene(s32) __asm__("FUN_L00_00298840");
 extern void help_request(s32, s32) __asm__("FUN_L00_00203908");
 extern void memcard_save_data(s32, s32) __asm__("FUN_0020b178");
@@ -651,15 +646,9 @@ void pilots_helmet_update(M_2e03a0_2e03a0 *moby) {
     }
 }
 
-extern void  fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void  fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void  vscl_2e0788(void *, void *, float) __asm__("FUN_001f9bf8");
-extern int   f9740_2e0788(void *) __asm__("FUN_001f9740");
-extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
-extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
-extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern int   truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
+extern void vscl_2e0788(void *, void *, float) __asm__("FUN_001f9bf8");
+extern int  f9740_2e0788(void *) __asm__("FUN_001f9740");
+extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern unsigned char *
 spr_2e0788(OvlQuad *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 
@@ -827,7 +816,6 @@ typedef struct {
 
 extern BeamTransform beam_transforms[] __asm__("D_L00_001E6D20");
 extern Q002e2190     D_L00_001E6DE0[];
-void                 fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 s32                  set_beam_origin_transform_and_endpoint(s32   id,
                                                             void *beam_origin_transform,
                                                             void *endpoint_position) __asm__("FUN_L00_002e2190");
@@ -906,16 +894,9 @@ typedef struct {
 
 extern BeamStrand beam_strands[] __asm__("D_L00_001E6E40");
 extern Vec4       zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
-extern f32        convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern f32        fast_cos(f32) __asm__("func_001F9DC8");
-extern f32        fast_sin(f32) __asm__("func_001F9DE0");
 extern f32        fast_subtract_rotations_c(f32, f32) __asm__("func_001FA5C8");
-extern f32        fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void       fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void       normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void       scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
-extern void       transform_vector(void *, void *, void *) __asm__("func_001F9D20");
-extern void       transform_vector_by_basis(void *, void *, void *) __asm__("func_001F9CF8");
 f32               FUN_L00_00257c48(f32, f32);
 f32               normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 int               allocate_colored_effect_slot(
@@ -940,7 +921,6 @@ extern int           beam_endpoint_spark_tag_mode[] __asm__("D_L00_00161C68") MA
 extern int           beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
 extern float         D_L00_00161BF0_gp __asm__("D_L00_00161BF0") __attribute__((sda));
 extern void          func_001F9BF0_2E3700(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float         fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float         func_001FA748_2E3700(float, float) __asm__("FUN_001fa580");
 extern float         func_001FA790_2E3700(float, float) __asm__("FUN_001fa5c8");
 extern float         func_001FA888_2E3700(int) __asm__("FUN_001fa6c0");
@@ -948,10 +928,6 @@ extern float         normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float         func_001F9FA8_2E3700(float) __asm__("FUN_001f9de0");
 extern float         func_001F9F90_2E3700(float) __asm__("FUN_001f9dc8");
 extern void          func_L00_001FF4B0_2E3700(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void          fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void          transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-extern void          transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void          fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void          func_001F9BD8_2E3700(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int           func_001F9850_2E3700(int) __asm__("FUN_001f96f8");
 
@@ -1355,7 +1331,6 @@ void FUN_001f9bf8_e3388(void *, void *, f32) __asm__("FUN_001f9bf8");
 void FUN_001f9ad8_e3388(void *, void *, void *) __asm__("FUN_001f9ad8");
 s64  get_effect_texture(s32) __asm__("FUN_001f44b8");
 void FUN_001f9a68_e3388(void *, void *, f32) __asm__("FUN_001f9a68");
-void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 void FUN_001f9a10_e3388(void *, void *, void *) __asm__("FUN_001f9a10");
 void draw_geometry_quad(void *, s32, s32) __asm__("FUN_001f7d30");
 
@@ -1458,8 +1433,6 @@ typedef struct {
 
 extern int  *toad_paths[] __asm__("D_L00_001B04B0") NOT_SDA;
 extern float D_0015ED6C_2e3a88 __asm__("D_0015ED6C");
-float        fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-float        absolute_float(float) __asm__("FUN_001f99c0");
 void         sample_camera_path(void *, float, int, void *, void *, int) __asm__("FUN_00214e58");
 extern float pterodactyl_path_speed_gp __asm__("D_L00_00161C98") __attribute__((sda));
 extern float pterodactyl_scale_multiplier_gp __asm__("D_L00_00161C9C") __attribute__((sda));
@@ -1510,14 +1483,11 @@ void pterodactyl_update(unsigned char *moby) {
     }
 }
 
-float FUN_001f9b48(void *, void *);
-float fast_vec_length(void *) __asm__("FUN_001f9af0");
-int   scale_game_frames(int) __asm__("FUN_001f96f8");
-void  red_plant_update(unsigned char *p) __asm__("FUN_L00_002e3ca8");
+void red_plant_update(unsigned char *p) __asm__("FUN_L00_002e3ca8");
 
 void red_plant_update(unsigned char *moby) {
     char *hero_position = (char *)&hero.motion.pos;
-    if (FUN_001f9b48(hero_position, moby + 0x10) < 1.0f) {
+    if (fast_vec_dist(hero_position, moby + 0x10) < 1.0f) {
         if (fast_vec_length(hero_position + 0x80) > frame_time + frame_time && moby[0x53] != 1) {
             blend_moby_animation(moby, 1, 0, scale_game_frames(6));
         }
@@ -1531,9 +1501,7 @@ void red_plant_update(unsigned char *moby) {
 /* Update of an effect-group moby: state machine over its life, then it steers a sprite along its path and bounces it off surfaces. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5238), where it is exact; names translated to the US level program. */
 
-extern f32  fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern int  coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
-extern void quaternion_to_matrix(void *, void *) __asm__("FUN_001fa4f8");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -1555,8 +1523,6 @@ extern void spawn_explosion(void *,
 extern void
 spawn_color_swapped_explosion_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
 extern void build_quaternion_from_axis_angle(void *, void *, f32) __asm__("FUN_00214530");
-extern void multiply_matrix3x3(void *, void *, void *) __asm__("func_001FA328");
-extern void euler_rotation_basis(void *, void *) __asm__("func_001FA030");
 extern int  func_001F9908_r(int *) __asm__("FUN_001f9740");
 extern int  func_001FA898_r(float) __asm__("FUN_001fa6d0");
 extern int  func_L00_001F10E0_s(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
@@ -1796,8 +1762,6 @@ extern char   D_L00_00166E10_002e4430[] __asm__("D_L00_00166E10") NOT_SDA;
 void          FUN_001f9a68_002e4430(void *, void *, float) __asm__("FUN_001f9a68");
 void          FUN_001f9a10_002e4430(void *, void *, void *) __asm__("FUN_001f9a10");
 void          FUN_001f9a28_002e4430(void *, void *, void *) __asm__("FUN_001f9a28");
-float         fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-void          clear_u64_value(void *) __asm__("FUN_001f99f8");
 void          follow_camera_reset(char *o) __asm__("FUN_L00_002e4430");
 
 void follow_camera_reset(char *camera) {
@@ -1834,11 +1798,9 @@ void follow_camera_reset(char *camera) {
 /* angle between a direction and an axis, signed */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E5A30), where it is exact; names translated to the US level program. */
 
-extern char  D_L00_00166E10[];
-extern float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
-extern void  FUN_001f9a10_c2(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void  FUN_001f9a68_c3(void *, void *, float) __asm__("FUN_001f9a68");
+extern char D_L00_00166E10[];
+extern void FUN_001f9a10_c2(void *, void *, void *) __asm__("FUN_001f9a10");
+extern void FUN_001f9a68_c3(void *, void *, float) __asm__("FUN_001f9a68");
 
 float compute_follow_camera_signed_target_angle(char *camera, float target_offset_scale) __asm__("FUN_L00_002e4580");
 
@@ -1929,9 +1891,7 @@ void apply_follow_camera_translation(char *camera) {
 }
 
 typedef float V4[4] __attribute__((aligned(16)));
-void          fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void   vcopy_2e48a0(void *, void *) __asm__("FUN_001f9a68");
-void          fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void compute_follow_camera_offset_target_up_projection(void *out) __asm__("FUN_L00_002e48a0");
 
 void compute_follow_camera_offset_target_up_projection(void *out) {
@@ -1967,7 +1927,6 @@ extern int                  camera_secondary_mode_lui __asm__("D_001413D4") NOT_
 extern int D_001413DC       NOT_SDA;
 extern float D_L00_00166EEC NOT_SDA;
 extern int                  FUN_001f9770_c2(void *) __asm__("FUN_001f9770");
-extern s32                  scale_game_frames(s32) __asm__("func_001F96F8");
 extern s32                  D_L00_00161D24_gp __asm__("D_L00_00161D24") __attribute__((sda));
 extern short follow_camera_ground_aware_focus_transition_frames_gp __asm__("D_L00_00161D38")
     __attribute__((sda));
@@ -2242,12 +2201,9 @@ void FUN_L00_002e4930(char *camera) {
 /* per-frame state machine that eases a moby's attach pose toward the camera block's vector */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E6498), where it is exact; names translated to the US level program. */
 
-extern f32  convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 extern int  FUN_001f96f8_c2(int) __asm__("FUN_001f96f8");
 extern int  FUN_001f9770_c(void *) __asm__("FUN_001f9770");
-extern void lerp_vector(float, void *, void *, void *) __asm__("FUN_001f9a40");
 extern void FUN_001f9a68_c2(void *, void *, float) __asm__("FUN_001f9a68");
-float       absolute_float(float input) __asm__("func_001F99C0");
 
 extern short follow_camera_ground_focus_angle_upper_bound_gp __asm__("D_L00_00161D0C")
     __attribute__((sda));
@@ -2345,10 +2301,10 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
     case CAM_ATTACH_BLEND_FOCUS_VELOCITY_WITH_HOLD_TRANSITION:
     case CAM_ATTACH_BLEND_OUT_FOCUS_VELOCITY:
     case CAM_ATTACH_BLEND_BACK_FOCUS_VELOCITY:
-        lerp_vector((float)*(short *)(attach_state + 0xD4) * *(float *)(attach_state + 0xCC),
-                    attach_state + 0x10,
-                    attach_state + 0x30,
-                    attach_state + 0x20);
+        lerp_vector_by((float)*(short *)(attach_state + 0xD4) * *(float *)(attach_state + 0xCC),
+                       attach_state + 0x10,
+                       attach_state + 0x30,
+                       attach_state + 0x20);
         if (*(unsigned char *)(attach_state + 0xD7) == 0) {
             if (coll_sphere(0.2f, camera + 0x30, 0x12, 0)) {
                 qcopy(attach_state + 0x30, attach_state + 0x10);
@@ -2394,10 +2350,10 @@ void FUN_L00_002e4fe8(char *camera, float *out_focus_velocity) {
         x = fast_vec_dot(hero_position, camera_view + 0x30);
         FUN_001f9a68_c2(out_focus_velocity, camera_view + 0x30, x);
         fast_vec_sub(attach_state, hero_position, out_focus_velocity);
-        lerp_vector(*(float *)&follow_camera_projected_focus_blend_fraction_gp,
-                    out_focus_velocity,
-                    out_focus_velocity,
-                    attach_state + 0x20);
+        lerp_vector_by(*(float *)&follow_camera_projected_focus_blend_fraction_gp,
+                       out_focus_velocity,
+                       out_focus_velocity,
+                       attach_state + 0x20);
         break;
     case CAM_ATTACH_PROJECT_HERO_FOCUS_VELOCITY:
     default:
@@ -2493,7 +2449,6 @@ extern f32 follow_camera_position_transition_end_stiffness_gp __asm__("D_L00_001
     __attribute__((sda));
 extern f32 follow_camera_position_transition_end_damping_gp __asm__("D_L00_00161D34")
     __attribute__((sda));
-s32  fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32  compute_follow_camera_target_position(void *, void *, void *, s32) __asm__("FUN_L00_002e5678");
 void interpolate_follow_camera_position(void *, void *, void *, f32, f32, f32) __asm__("FUN_L00_002e55b8");
 void follow_camera_transition(O002e5730 *o, void *a) __asm__("FUN_L00_002e5730");
@@ -2538,13 +2493,7 @@ extern s32 camera_collision_mask __asm__("D_L00_0015EF58");
 /* Point where the last collision line stopped (CollisionHit.point). */
 extern f32 collision_hit_point[4] __asm__("D_L00_00173E60") __attribute__((aligned(16)));
 
-extern f32  fast_vec_length(void *v) __asm__("FUN_001f9af0");
-extern void fast_vec_add(void *out, void *a, void *b) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern void lerp_vector(f32 t, void *out, void *a, void *b) __asm__("FUN_001f9a40");
-extern f32  convert_integer_to_float(s32 i) __asm__("FUN_001fa6c0");
-extern s32  fast_dec_timer(void *timer) __asm__("FUN_001f9770");
 extern f32  cam_interp_values(void *state,
                               f32   value,
                               f32   target,
@@ -2621,22 +2570,22 @@ void follow_camera_springs(void *camera_moby) {
         if (++follow_block->blend_timer > scale_game_frames(follow_cam_blend_frames)) {
             follow_block->blend_timer = scale_game_frames(follow_cam_blend_frames);
         }
-        lerp_vector((f32)follow_block->blend_timer /
-                        convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)),
-                    base,
-                    follow_block,
-                    camera_state->follow.offset);
+        lerp_vector_by((f32)follow_block->blend_timer /
+                           convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)),
+                       base,
+                       follow_block,
+                       camera_state->follow.offset);
         fast_vec_add(camera_state->follow.look_target, look, base);
     } else {
-        fast_dec_timer(&camera_state->follow.blend_timer);
+        fast_dec_timer_s16(&camera_state->follow.blend_timer);
         if (follow_block->blend_timer < 0) {
             follow_block->blend_timer = 0;
         }
-        lerp_vector((f32)follow_block->blend_timer /
-                        convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)),
-                    base,
-                    follow_block,
-                    camera_state->follow.offset);
+        lerp_vector_by((f32)follow_block->blend_timer /
+                           convert_integer_to_float(scale_game_frames(follow_cam_blend_frames)),
+                       base,
+                       follow_block,
+                       camera_state->follow.offset);
         fast_vec_add(camera_state->follow.look_target, look, base);
     }
     follow_camera_transition(camera_moby, look);
@@ -2920,7 +2869,6 @@ void set_follow_camera_blend_output_flags(void) {
 /* Measures the signed angle between two offsets of an object's data relative to an axis, and (within the limit) stores a scaled blend in the object's data. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E9B60), where it is exact; names translated to the US level program. */
 
-extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float
 cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
 extern void FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");

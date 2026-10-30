@@ -33,6 +33,9 @@
 #include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
 #include "rnc/overlay/shared/props/trackdrive_left.h"
 #include "rnc/overlay/shared/mobys/build_symmetric_adjacency_masks.h"
+#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/ui/help/try_set_help_message.h"
 
 /* Moby.state for the resort-owner callbacks; path progression is separate. */
 enum ResortOwnerState {
@@ -105,7 +108,6 @@ void update_pokitaru_pickup(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_002CC9D0), where it is exact; names translated to the US level program. */
 
-extern char *create_moby(int);
 extern float
 approach_angle(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
@@ -1293,7 +1295,6 @@ extern char         *D_L11_0015FFD8_2518 __asm__("D_L11_0015FFD8");
 extern unsigned char D_001413F5_lui __asm__("D_001413F5") NOT_SDA;
 extern float         D_0015ED6C_2518 __asm__("D_0015ED6C");
 extern float         D_0015ED70_2518 __asm__("D_0015ED70");
-extern char         *create_moby(int) __asm__("FUN_0020c4f8");
 extern void          FUN_L11_002f3040_2518(char *) __asm__("FUN_L11_002f3040");
 extern void          FUN_L11_002f2cd0_2518(char *) __asm__("FUN_L11_002f2cd0");
 extern void          FUN_L11_002f2d58_2518(char *) __asm__("FUN_L11_002f2d58");
@@ -1733,7 +1734,7 @@ unsigned char *spawn_ship_projectile(struct Moby *spawning_moby,
         MOBY(moby)->scale =
             *(float *)(((char *)MOBY(moby)->pclass) + 0x24) *
             (spawning_moby->scale / *(float *)(((char *)spawning_moby->pclass) + 0x24));
-        FUN_L00_00250df8(moby);
+        update_entity(moby);
     }
     return moby;
 }

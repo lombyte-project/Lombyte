@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-s32 hero_set_state(s32, s32) __asm__("FUN_L01_0023cf98");
+s32 l01_hero_set_state(s32, s32) __asm__("FUN_L01_0023cf98");
 
 #endif /* LOMBYTE_RNC_OVERLAY_L01_HERO_HERO_SET_STATE_H */

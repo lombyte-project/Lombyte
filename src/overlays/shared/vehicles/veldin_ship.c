@@ -26,6 +26,8 @@
 #include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"
 #include "rnc/overlay/shared/camera/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/mobys/update_object_wander_movement.h"
+#include "rnc/math/random.h"
+#include "rnc/math/spherical_offset.h"
 
 typedef unsigned int Q_2cfcb8 __attribute__((mode(TI)));
 
@@ -341,7 +343,6 @@ void probe_ground_height_cf(u8 *, s32, void *, void *, void *, void *) __asm__("
 void mark_moby_for_removal_cf(u8 *, s32, s32) __asm__("FUN_L00_00257470");
 s32  FUN_L00_00257218_2d0538(u8 *, s32 *) __asm__("FUN_L00_00257218");
 f32  random_angle_radians(void) __asm__("FUN_00213308");
-f32  random_float_between(f32, f32) __asm__("FUN_002132a8");
 s32  solve_quadratic_equation(f32 *, f32 *, f32, f32, f32) __asm__("FUN_L00_002595a0");
 void FUN_L00_00261b48(s32, void *, void *, void *);
 u8  *spawn_on_path(u8 *, s32, s32, s32) __asm__("FUN_L00_002c52a8");
@@ -584,7 +585,6 @@ extern void    trooper_play_sound(s32, s32, void *, s32) __asm__("FUN_L00_0028dc
 extern void    FUN_0028dbe8_2d09b8(s32, s32, void *) __asm__("FUN_L00_0028dbe8");
 extern void    spawn_spinning_fade_in_out_effect_particle(
        f32, f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_0026b790");
-extern f32  random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_001ff500_2d09b8(f32, void *, void *) __asm__("FUN_001f9bf8");
 extern void *
 spawn_crate_debris(void *, void *, void *, void *, s32, s32, f32, f32) __asm__("FUN_L00_002af8b0");
@@ -1137,7 +1137,6 @@ extern char          camera_position[] __asm__("D_L00_00166DC0");
 extern int           D_0013C940;
 extern int           D_L00_00173E40;
 extern int           FUN_001efa68_c(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern void          build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 void                 compute_glove_of_doom_launch_velocity(
                     void *pos, void *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("FUN_L00_002c7320");
 extern char  D_0013F990_2D3608[] __asm__("D_0013F990");
@@ -1145,7 +1144,6 @@ extern char  controller_state_2D3608[] __asm__("D_0013C940");
 extern float func_001F9F90_2D3608(float) __asm__("FUN_001f9dc8");
 extern float func_001F9FA8_2D3608(float) __asm__("FUN_001f9de0");
 extern void  func_001F9C30_2D3608(void *, void *, float) __asm__("FUN_001f9a68");
-extern void  build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern int   func_L00_001EFFF0_2D3608(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern void  func_L00_002C8680_2D3608(float *pos,
                                       float *tgt,
@@ -1635,7 +1633,6 @@ extern u8                  D_L00_001E1170[] NOT_SDA;
 #include "rnc/overlay/shared/vehicles/veldin_ship_data/metal_detector_update.h"
 
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void engine_voice_set_pitch(s32, s32) __asm__("FUN_L00_0028df38");
@@ -1987,7 +1984,6 @@ typedef struct {
 } Vx __attribute__((aligned(16)));
 
 extern char *moby_table __asm__("D_L00_0015FFD8");
-extern f32   random_float_between(f32, f32) __asm__("func_002132A8");
 extern int   FUN_L00_001fefc8(void *);
 extern int   allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
@@ -2399,10 +2395,9 @@ extern int   FUN_L00_002dc9f0_2d4610(void *, void *) __asm__("FUN_L00_002dc9f0")
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float
 move_horny_toad_toward_position(unsigned char *m, float *t, float vel) __asm__("FUN_L00_002d54c8");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern int   is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
-extern void  collect_mobies_in_sphere_at_moby_point(
-     void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
+extern int  is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
+extern void collect_mobies_in_sphere_at_moby_point(
+    void *, float, float, float, int, int, int, int, int) __asm__("FUN_L00_002599e8");
 extern int  test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern int  random_integer_below(int) __asm__("FUN_00213260");
 extern void FUN_0022da68_2d4610(int, int, int) __asm__("FUN_0022da68");
@@ -3743,7 +3738,6 @@ void     reset_smoke_fire_spawner_particle(P *spawner, int i) __asm__("FUN_L00_0
 void  reset_smoke_fire_spawner_particle(P *, int) __asm__("FUN_L00_002d7bf0");
 void  FUN_L00_002d7d58_c(P *, int) __asm__("FUN_L00_002d7d58");
 float FUN_L00_00257c48(float, float);
-float random_float_between(float, float) __asm__("FUN_002132a8");
 int   FUN_L00_00257b90(int, int);
 E    *FUN_L00_0026d000(V *, int, float, float, V *, float, int, float);
 s16   FUN_001f96f8_c(int) __asm__("FUN_001f96f8");

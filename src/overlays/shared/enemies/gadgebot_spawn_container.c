@@ -12,6 +12,7 @@
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/random.h"
 #include "sda.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
@@ -29,8 +30,7 @@
 extern unsigned char *spawn_spinning_fade_in_out_effect_particle(
     void *, int, int, float, float, float, float, float) __asm__("FUN_L00_0026b790");
 extern float            randf_sym(float, float) __asm__("FUN_L00_00257c48");
-extern float            random_float_between(float, float) __asm__("FUN_002132a8");
-extern float            random_angle_radians(void) __asm__("FUN_00213308");
+extern char            *create_moby(int) __asm__("FUN_0020c4f8");
 extern char *D_001413D0 NOT_SDA;
 extern float            D_0015ED6C;
 extern unsigned char *
@@ -315,8 +315,6 @@ void draw_gadgebot_spawn_container(char *moby) {
 /* Spawns a moby of type 0x12F at the owner's position and links it to the owner. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D9F68), where it is exact; names translated to the US level program. */
 
-extern char *create_moby(int);
-
 char *spawn_gadgebot_pad(char *owner) __asm__("FUN_L06_002d8b98");
 
 char *spawn_gadgebot_pad(char *owner) {
@@ -371,8 +369,6 @@ typedef struct Moby Moby;
 
 extern char               D_0013E533[];
 extern char               D_L06_00174600[];
-extern f32                random_angle_radians(void) __asm__("func_00213308");
-extern f32                random_float_between(f32, f32) __asm__("func_002132A8");
 extern float              D_0015ED6C_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_0015ED70   MACRO_ADDR;
 extern float              FUN_L00_0025abf0(void *, void *, void *, float, float);
@@ -382,7 +378,6 @@ extern int D_L06_0015FDF8 MACRO_ADDR;
 extern int                mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int                FUN_L00_00261b48(int, void *, void *, void *);
 extern int                FUN_L00_002dc9f0(void *, void *);
-extern s32                random_integer_below(s32) __asm__("func_00213260");
 extern int                D_L06_00161C10 __attribute__((sda));
 extern int                D_L06_00161C14 __attribute__((sda));
 extern short              D_L06_00161BF0[1] __attribute__((sda));
@@ -1025,7 +1020,6 @@ void move_frog_with_collision_resolution(
 
 #include "rnc/mobys/moby.h"
 
-extern int  random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 
 /* Bursts 4 then 8 particles up from the moby, then removes the moby stored at vars+0x20C. */
@@ -1096,7 +1090,6 @@ extern f32 D_L06_00161C44 __attribute__((sda));
 
 extern f32   moby_spark_push_scale_range_end_gp __asm__("D_L06_00161C64") __attribute__((sda));
 extern void  add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
-extern f32   random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern f32   scale_time(f32) __asm__("FUN_001f96b0");
@@ -1434,7 +1427,7 @@ extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_
 extern float fast_add_rotations(float, float);
 extern float vector_length_xy(void *);
 extern int   D_00141610[];
-extern int   coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
+extern int   coll_sphere(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 extern int   FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int   is_moby_in_class_range_500_to_540(void *) __asm__("FUN_L00_0025e3b8");
 extern int   test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
@@ -2224,9 +2217,9 @@ void gadgebot_update(GbMoby *moby) {
                 do {
                     qcopy(position_and_displacement_scratch, moby->pos);
                     position_and_displacement_scratch[2] += gadgebot_vars->ctl.unk04;
-                    if (coll_sphere(convert_integer_to_float(gadgebot_vars->ctl.i00) *
+                    if (coll_sphere(position_and_displacement_scratch,
+                                    convert_integer_to_float(gadgebot_vars->ctl.i00) *
                                         0.0009765625f,
-                                    position_and_displacement_scratch,
                                     6,
                                     moby) == 0) {
                         break;

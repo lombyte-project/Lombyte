@@ -237,7 +237,7 @@ extern float steer_2d1688(float *, float *, float, float, float, float) __asm__(
 extern void  fast_vec_normalize(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void  fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void  fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-extern float absolute_float(float) __asm__("FUN_001f99c0");
+extern float absolute_float(float) __asm__("func_001F99C0");
 extern float
 advance_accelerated_scalar(float *, float, float *, float, float, float) __asm__("FUN_00213f38");
 extern int  point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
@@ -518,7 +518,6 @@ extern unsigned char             *
 spawn_splash(void *, void *, void *, float, float) __asm__("FUN_L00_002718d0");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 
 void spawn_sharkigator_splash_effects(int unused, char *position) __asm__("FUN_L05_002d1fd8");
 
@@ -632,8 +631,6 @@ typedef struct {
 } Data_2D8388;
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern f32   fast_sin(f32) __asm__("func_001F9DE0");
-extern f32   random_angle_radians(void) __asm__("func_00213308");
 extern float D_0015ED6C;
 extern float D_0015ED70;
 
@@ -996,11 +993,8 @@ void draw_group_scenery_ship_trails(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DBF10), where it is exact; names translated to the US level program. */
 
-extern f32   fast_cos(f32) __asm__("func_001F9DC8");
 extern float FUN_L00_0025be00(float *, float *, float, float, float, float);
 extern int   FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern s32   random_integer_below(s32) __asm__("func_00213260");
-extern s32   scale_game_frames(s32) __asm__("func_001F96F8");
 extern void  FUN_L01_0026d930(char *p);
 extern void  handle_amoeboid_hits(unsigned char *m) __asm__("FUN_L05_002daf58");
 extern void  spawn_amoeboid_particles(unsigned char *moby) __asm__("FUN_L05_002db018");
@@ -1079,8 +1073,6 @@ void amoeboid_update(struct Moby *moby) {
 /* Emits up to two particle effects around the moby, each in a random direction. */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_002DC2A8), where it is exact; names translated to the US level program. */
 
-extern float fast_cos(float) __asm__("func_001F9DC8");
-extern float fast_sin(float) __asm__("func_001F9DE0");
 extern void
 spawn_type_52_particle(float *, float, float, int, int, int) __asm__("FUN_L01_00287158");
 
@@ -1122,7 +1114,6 @@ void spawn_amoeboid_particles(unsigned char *moby) {
 
 extern char *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern f32  random_float_between(f32, f32) __asm__("func_002132A8");
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 
 void spawn_amoeboid_hit_sparks(void *moby, void *base_spark_vector) {
@@ -1176,9 +1167,9 @@ typedef struct Moby Moby;
 
 extern char  D_L05_0015F580[] MACRO_ADDR;
 extern char  D_L05_001671C0[];
-extern f32   approach_value(f32 *, f32, f32);
+extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float FUN_L04_001f1978(float);
-extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
+extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_vec_dist(void *, void *);
 extern int   D_L05_0015FFD8;
 extern int   D_L05_0015F5C4;

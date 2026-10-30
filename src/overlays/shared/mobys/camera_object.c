@@ -33,6 +33,8 @@
 #include "rnc/mobys/animation/update_moby_animation_state.h"
 #include "rnc/overlay/shared/mobys/open_vendor_menu.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
+#include "rnc/audio/voice_alloc.h"
+#include "rnc/math/spherical_offset.h"
 
 /* per-frame level ambience (wind/sway) state machine: picks a random target, then eases toward it */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002A5B20), where it is exact; names translated to the US level program. */
@@ -808,13 +810,9 @@ extern MobyKillTable D_L00_001BB230 NOT_SDA;
 extern u8                           D_0014C050[][16];
 extern f32                          D_0015ED6C;
 
-extern s32  FUN_00213260(s32);
-extern f32  FUN_00213308(void);
-extern f32  FUN_002132a8(f32, f32);
 extern f32  scale_time(f32) __asm__("FUN_001f96b0");
 extern s32  FUN_001efa68(void *, void *, s32, s32, s32);
 extern void approach_value(void *, f32, f32) __asm__("FUN_00213ed8");
-extern void FUN_0020c828(void *);
 extern s32  FUN_L00_001f0d60(void *, s32, void *, f32);
 extern s32  allocate_glint_slot(void *, s32, f32) __asm__("FUN_L00_001fe990");
 extern s32  FUN_L00_002603d0(void *);
@@ -871,7 +869,7 @@ void bolt_update(Bolt *bolt_moby) {
         bolt_moby->flags |= 0x100;
         bolt_moby->unk30 = 0x20;
         bolt_moby->unk32 = 0x20;
-        if (FUN_00213260(2) == 0) {
+        if (random_integer_below(2) == 0) {
             v->unk55 |= 1;
         }
         fast_vec_normalize(&geometry_scratch, &bolt_moby->unkE0, 0.2f);
@@ -894,8 +892,8 @@ void bolt_update(Bolt *bolt_moby) {
             qcopy(&v->pos, &bolt_moby->pos);
             clear_u64_value(&v->rot);
         }
-        v->unk50 = FUN_00213308();
-        v->unk58 = FUN_00213308();
+        v->unk50 = random_angle_radians();
+        v->unk58 = random_angle_radians();
         v->ground_z = bolt_moby->pos.f[2];
         v->slot_timer = FUN_L00_00257b90(0, scale_game_frames(600));
         v->slot = -1;
@@ -936,7 +934,7 @@ void bolt_update(Bolt *bolt_moby) {
         if (bolt_moby->pos.f[2] < v->ground_z - 2.0f &&
             bolt_moby->pos.f[2] < hero.motion.pos.f[2] - 2.0f) {
             FUN_L00_002a7210_c(
-                bolt_moby, hero.moby, FUN_002132a8(-15.0f, 15.0f) * 0.017453292f, 0.0f);
+                bolt_moby, hero.moby, random_float_between(-15.0f, 15.0f) * 0.017453292f, 0.0f);
             return;
         }
         if (FUN_L00_001f0d60(&bolt_moby->pos, 0x22, bolt_moby, hr) == 0) {
@@ -954,7 +952,7 @@ void bolt_update(Bolt *bolt_moby) {
             if (hero.health.hp == 0) {
                 return;
             }
-            fast_vec_normalize(&v->vel, &v->vel, FUN_002132a8(3.0f, 7.0f) * D_0015ED6C);
+            fast_vec_normalize(&v->vel, &v->vel, random_float_between(3.0f, 7.0f) * D_0015ED6C);
             FUN_L00_002a7210_c(bolt_moby, hero.moby, 0.0f, 0.0f);
             return;
         }
@@ -968,7 +966,8 @@ void bolt_update(Bolt *bolt_moby) {
             return;
         }
         bolt_moby->state = 2;
-        v->hop_frames = v->hop_left = truncate_float_to_s32(scale_time(FUN_002132a8(30.0f, 40.0f)));
+        v->hop_frames = v->hop_left =
+            truncate_float_to_s32(scale_time(random_float_between(30.0f, 40.0f)));
         if (D_L00_00173E40.moby != 0 && FUN_L00_002603d0((void *)D_L00_00173E40.moby) != 0) {
             void *gm = (void *)D_L00_00173E40.moby;
             v->ground_moby = gm;
@@ -996,7 +995,8 @@ void bolt_update(Bolt *bolt_moby) {
             return;
         }
         bolt_moby->state = 3;
-        v->hop_frames = v->hop_left = truncate_float_to_s32(scale_time(FUN_002132a8(10.0f, 20.0f)));
+        v->hop_frames = v->hop_left =
+            truncate_float_to_s32(scale_time(random_float_between(10.0f, 20.0f)));
         return;
     case BOLT_IDLE:
         hero_distance = vector_distance_xy(&bolt_moby->pos, &hero.motion.pos);
@@ -1007,7 +1007,7 @@ void bolt_update(Bolt *bolt_moby) {
         }
         if ((u8 *)bolt_moby > D_L00_0015FFDC && D_L00_0015FFBC < 200 && 48.0f < hero_distance &&
             bolt_moby->unk31 == 0) {
-            FUN_0020c828(bolt_moby);
+            mark_moby_for_removal(bolt_moby);
             return;
         }
         if (bolt_moby->unk31 != 0 || v->ground_moby != 0) {
@@ -1098,7 +1098,7 @@ void bolt_update(Bolt *bolt_moby) {
                 D_L00_001BB230.killed[bolt_moby->unkB2] = bolt_moby->unkB0 + 2;
             }
         }
-        FUN_0020c828(bolt_moby);
+        mark_moby_for_removal(bolt_moby);
         return;
     }
 }
@@ -1315,7 +1315,6 @@ void update_bolt_grounded_pose(char *moby, void *out1, void *out2) {
 
 extern int   D_15F5CC_2a7210 __asm__("D_L00_0015F5CC");
 extern float D_15ED6C_2a7210 __asm__("D_0015ED6C");
-extern void  allocate_voice_for_target_entry(int, int, char *) __asm__("FUN_0022da68");
 extern void  build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN_00214530");
 
 extern int   last_bolt_attraction_sound_frame_gp __asm__("D_L00_001613AC") __attribute__((sda));
@@ -1737,7 +1736,6 @@ int should_trigger_wrench_hit_reaction(void) {
     return 0;
 }
 
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void
 emit_2a7e20(float *, int, int, int, int, void *, float, float, float) __asm__("FUN_L00_00272060");
 
@@ -1793,7 +1791,6 @@ typedef union {
 
 extern V2a8028 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern f32     D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
-extern void    build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void    spawn_two_point_effect_particle(void *, void *) __asm__("FUN_L00_0026c6e8");
 extern void    spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 extern void    FUN_L00_002a7e20_c(void *, s32) __asm__("FUN_L00_002a7e20");
@@ -2052,8 +2049,6 @@ extern void compose_target_euler_rotation(char *, float, float, float) __asm__("
 extern void update_moby_transform_history(void *, int) __asm__("FUN_L00_00262608");
 extern void clear_moby_transform_history(char *) __asm__("FUN_L00_00262840");
 extern void FUN_L00_002a7780_cb(void) __asm__("FUN_L00_002a7780");
-extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void        suck_draw_reticle(int   a,
                               int   b,
                               void *pos,

@@ -97,7 +97,6 @@ extern int   coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60")
 extern int   FUN_L00_00257b90(int, int);
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int   collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-float        absolute_float(float input) __asm__("FUN_001f99c0");
 
 void update_drifting_effect_particle_with_distance_fade(char *particle) __asm__("FUN_L00_002694f8");
 
@@ -957,7 +956,6 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void         *spawn_pos
 extern f32   advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float D_0015ED6C;
 extern float D_0015ED70;
-extern s32   fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern float D_L00_001601B8 __attribute__((sda));
 extern float spinning_particle_default_final_size_gp __asm__("D_L00_001601BC") __attribute__((sda));
 extern float D_L00_001601D8 __attribute__((sda));

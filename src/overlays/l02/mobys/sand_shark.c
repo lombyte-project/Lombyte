@@ -1577,9 +1577,7 @@ int          D_L02_00161A94 = 0x78;
 extern float level02_bot_wake_spray_planar_magnitude_max_gp __asm__("D_L02_00161A98")
     __attribute__((sda));
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int   FUN_L00_00259028(char *m, char *p, float *pos, char *v);
-extern int   is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32   rand(void);
 extern void *FUN_L00_00263fd8(char  *src,
                               int    cls,

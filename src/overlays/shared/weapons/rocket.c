@@ -6,6 +6,7 @@
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/world/collision/ground_probe.h"
@@ -21,10 +22,7 @@ typedef struct {
     float d[4];
 } L10SpriteData;
 
-extern void           fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern int            func_001F9850_298940(int) __asm__("FUN_001f96f8");
 extern int            fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern float          absolute_float(float) __asm__("FUN_001f99c0");
 extern unsigned char *func_L00_00273E08_298940(
     void *, int, unsigned char, int, int, int, int, float) __asm__("FUN_L00_00272f68");
 void emit_moby_sprite_particles(char *moby) __asm__("FUN_L10_00298940");
@@ -51,11 +49,10 @@ void emit_moby_sprite_particles(char *moby) {
             sprite_data->a[i] = phase_sum + 255.0f;
         }
         if (fast_dec_timer(&sprite_data->c[i])) {
-            sprite_data->c[i] = func_001F9850_298940(0xFF);
+            sprite_data->c[i] = scale_game_frames(0xFF);
         }
-        color_blend_offset =
-            convert_integer_to_float(func_001F9850_298940(0xFF) - sprite_data->c[i]);
-        color_blend_offset = color_blend_offset / (float)func_001F9850_298940(0xFF);
+        color_blend_offset = convert_integer_to_float(scale_game_frames(0xFF) - sprite_data->c[i]);
+        color_blend_offset = color_blend_offset / (float)scale_game_frames(0xFF);
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - color_blend_offset));
         func_L00_00273E08_298940(d,
                                  col,
@@ -72,13 +69,12 @@ void emit_moby_sprite_particles(char *moby) {
 #include "sda.h"
 #include "qcopy.h"
 
-extern int func_001F9850_cc1b8(int) __asm__("FUN_001f96f8");
-char      *create_rocket(float scale,
-                         void *initial_velocity,
-                         void *pos,
-                         int   owner,
-                         int   target,
-                         int   timer_duration) __asm__("FUN_L10_002cc1b8");
+char *create_rocket(float scale,
+                    void *initial_velocity,
+                    void *pos,
+                    int   owner,
+                    int   target,
+                    int   timer_duration) __asm__("FUN_L10_002cc1b8");
 
 char *create_rocket(
 
@@ -94,7 +90,7 @@ char *create_rocket(
         rocket[0x20] = 1;
         qcopy(rocket + 0x10, pos);
         qcopy(shot_data, initial_velocity);
-        *(int *)(shot_data + 0x18) = func_001F9850_cc1b8(timer_duration);
+        *(int *)(shot_data + 0x18) = scale_game_frames(timer_duration);
         *(int *)(shot_data + 0x10) = owner;
         *(int *)(shot_data + 0x14) = target;
         *(int *)(shot_data + 0x28) = 0;
@@ -111,7 +107,6 @@ char *create_rocket(
 /* Homing shot: steers toward the hero along an intercept course, trails sparks, then bursts. */
 
 #include "qcopy.h"
-#include "rnc/math/fast_math.h"
 #include "rnc/mobys/moby.h"
 
 typedef int Q_cc2e8 __attribute__((mode(TI), aligned(16)));
