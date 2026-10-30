@@ -872,7 +872,7 @@ void prepare_movie_playback(s32 sector, s32 size, s32 language) {
     s32 image[24];
     s32 large_count, small_count, gs_address, source, i, j;
 
-    voice_pool.header[0x6B] |= 8;
+    voice_pool.reverb_commands |= 8;
     flush_cache(0);
     sound_stop_all_sounds();
     music_stop();

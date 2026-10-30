@@ -2,21 +2,12 @@
 #include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
 #include "rnc/audio/mixer/snd_set_playback_mode.h"
+#include "rnc/audio/voice_pool.h"
 
 struct SoundMenuInput {
     u8 pad_0[0x1C0];
     s32 held_buttons;
     s32 pressed_buttons;
-};
-
-struct SoundMenuMixer {
-    u8 pad_0[0x48];
-    s32 group_0_volume;
-    s32 group_1_volume;
-    s32 group_2_volume;
-    s32 group_3_volume;
-    s32 group_4_volume;
-    s32 group_5_volume;
 };
 
 struct SoundMenu {
@@ -29,7 +20,6 @@ struct SoundMenu {
 };
 
 extern struct SoundMenuInput D_0013C940;
-extern struct SoundMenuMixer voice_pool __asm__("D_0013E550");
 extern s32 D_001D5D14 NOT_SDA;
 extern s32 music_volume __asm__("D_0015EDEC") MACRO_ADDR;
 extern s32 sound_volume __asm__("D_0015EDF0") MACRO_ADDR;

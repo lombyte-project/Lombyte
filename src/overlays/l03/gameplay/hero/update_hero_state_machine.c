@@ -46,11 +46,11 @@ extern HeroAnimRow D_L03_00179BC0[];
 extern HeroTableEntry70 l03_hero_idle_fidget_records[] __asm__("D_L03_00179990");
 extern S17A800 D_L03_0017A780;
 extern S17BF38 D_L03_0017BEB8;
-extern char voice_pool[] __asm__("D_0013E550");
 #include "rnc/overlay/l03/gameplay/hero/update_hero_state_machine_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/audio/voice_pool.h"
 extern float D_L03_00166ED8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float adjust_hero_animation_speed_for_target_frame(float a, float b, float c, float d) __asm__("FUN_L00_00208f20");
@@ -895,7 +895,7 @@ void update_hero_state_machine(void) {
                         break;
                     }
                     if (hero.voice_slot2 != -1) {
-                        Row13E650 *voice_slot_entry = (Row13E650 *)(voice_pool + hero.voice_slot2 * 0x70);
+                        Row13E650 *voice_slot_entry = (Row13E650 *)((u8 *)&voice_pool + hero.voice_slot2 * 0x70);
                         if (voice_slot_entry->f88 == ((unsigned char *)hero.moby) && voice_slot_entry->f74 != 0) {
                             release_voice_slot(hero.voice_slot2);
                         }

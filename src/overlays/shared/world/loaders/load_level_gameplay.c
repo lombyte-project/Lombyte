@@ -114,6 +114,7 @@ void print_moby_class_sizes(int *record, int n) {
  * whole shrub. A moby has red, green and blue at 0x64, 0x68, 0x6c. */
 
 #include "qcopy.h"
+#include "rnc/audio/voice_pool.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/loaders_00240398.c: func_L00_002422D8), where it is exact; names translated to the US level program. */
 
@@ -339,18 +340,6 @@ typedef struct {
 } Cuboid;
 
 typedef struct {
-    char pad0[8];
-    int f8;
-    char padC[0x84];
-} SoundInst;
-
-typedef struct {
-    char pad0[0xD90];
-    int fD90;
-    SoundInst *fD94;
-} SoundGlobals;
-
-typedef struct {
     Qword f0;
     char *f10;
     int f14;
@@ -403,7 +392,6 @@ extern ShrubClass *D_L00_001BC030[];
 extern ShrubInst *D_L00_00160494 MACRO_ADDR;
 extern ShrubInst *D_L00_00160498 MACRO_ADDR;
 extern ShrubMatrix *D_L00_0016049C MACRO_ADDR;
-extern SoundGlobals voice_pool __asm__("D_0013E550");
 extern Spline *D_L00_0015F70C MACRO_ADDR;
 extern TextHeader D_L00_00179410;
 extern TextTable *D_L00_0015F660  MACRO_ADDR;
@@ -910,24 +898,24 @@ char *load_level_gameplay(int skip_gameplay_read) {
         int n = *(int *)p;
 
         p += 0x10;
-        voice_pool.fD90 = n;
+        voice_pool.sound_instance_count = n;
         if (n != 0) {
             int size = n * 0x90;
             int i;
 
-            voice_pool.fD94 = (SoundInst *)mem;
+            voice_pool.sound_instances = (SoundInstance *)mem;
             mem += size;
             mem = (char *)(((u32)mem + 0x3F) & 0xFFFFFFC0);
-            FillTransferWords(voice_pool.fD94, 0, size);
-            for (i = 0; i < voice_pool.fD90; i++) {
-                SoundInst *e = voice_pool.fD94 + i;
+            FillTransferWords(voice_pool.sound_instances, 0, size);
+            for (i = 0; i < voice_pool.sound_instance_count; i++) {
+                SoundInstance *e = voice_pool.sound_instances + i;
 
                 copy_memory_aligned(e, p, 0x90);
                 p += 0x90;
                 resolve_lookup_record((short *)e);
             }
         } else {
-            voice_pool.fD94 = 0;
+            voice_pool.sound_instances = 0;
         }
     }
     {
@@ -1126,16 +1114,16 @@ char *load_level_gameplay(int skip_gameplay_read) {
                 mem += size;
             }
         }
-        for (i = 0; i < voice_pool.fD90; i++) {
-            int k = voice_pool.fD94[i].f8;
+        for (i = 0; i < voice_pool.sound_instance_count; i++) {
+            int k = voice_pool.sound_instances[i].data;
 
             if (k < 0) {
-                voice_pool.fD94[i].f8 = 0;
+                voice_pool.sound_instances[i].data = 0;
             } else {
                 int size = tbl[k].f4;
                 char *src = pv + tbl[k].f0;
 
-                voice_pool.fD94[i].f8 = (int)mem;
+                voice_pool.sound_instances[i].data = (int)mem;
                 fast_mem_copy(mem, src, size);
                 tbl[k].f0 = (int)mem;
                 mem += size;

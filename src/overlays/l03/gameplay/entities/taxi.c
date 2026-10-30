@@ -70,6 +70,7 @@ void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) {
 }
 #include "rnc/gameplay/hero.h"
 #include "qcopy.h"
+#include "rnc/audio/voice_pool.h"
 
 struct RailPath {
     s32 count;
@@ -888,15 +889,6 @@ typedef struct {
     f32 roll_vel;     /* 0x70 */
 } RailFlyerVars;
 
-/* One entry of the sound voice table, 0x70 bytes apart. */
-typedef struct {
-    u8 pad0[0x74];
-    u8 active;
-    u8 pad75[0x13];
-    struct Moby *owner;
-} VoiceSlot;
-
-extern u8 voice_pool[] __asm__("D_0013E550");
 extern f32 rail_flyer_speed_acceleration_gp __asm__("D_L03_00161B0C") __attribute__((sda));
 extern f32 rail_flyer_yaw_acceleration_degrees_gp __asm__("D_L03_00161B14") __attribute__((sda));
 extern f32 D_L03_00161B1C __attribute__((sda));
@@ -950,8 +942,8 @@ s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) {
             *snd = play_moby_sound(0, 4, rail_moby, 0x330);
     } else {
         if (sound_voice != -1) {
-            VoiceSlot *voice_slot = (VoiceSlot *)(voice_pool + sound_voice * 0x70);
-            if (voice_slot->owner == rail_moby && voice_slot->active)
+            VoicePoolWindow *voice_slot = (VoicePoolWindow *)((u8 *)&voice_pool + sound_voice * 0x70);
+            if ((struct Moby *)voice_slot->voice.owner == rail_moby && voice_slot->voice.state)
                 release_voice_slot(sound_voice);
         }
         *snd = -1;

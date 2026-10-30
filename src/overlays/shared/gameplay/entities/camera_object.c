@@ -181,6 +181,7 @@ extern float wrapped_value_decrement_rate_gp __asm__("D_L00_00161378") __attribu
 extern float D_L00_00161384_gp __asm__("D_L00_00161384") __attribute__((sda));
 extern float D_L00_0016138C_gp __asm__("D_L00_0016138C") __attribute__((sda));
 #include "rnc/globals.h"
+#include "rnc/audio/voice_pool.h"
 void update_frame_timing_and_wrapped_value(unsigned char *state_object) __asm__("FUN_L00_002a4cd8");
 
 void update_frame_timing_and_wrapped_value(unsigned char *state_object) {
@@ -1802,12 +1803,11 @@ extern void draw_target_reticle(int,int,float,float,int,int,int,float,int) __asm
 extern int collide_sphere(void*,float,int,void*,void*) __asm__("FUN_L00_001f2868");
 
 extern char D_0013F350[];
-extern unsigned char voice_pool[] __asm__("D_0013E550");
 static __inline__ WrenchHero *wrench_hero(void) { return (WrenchHero*)D_0013F350; }
 static __inline__ float *sweep_end(void) { return (float*)(D_0013E533+0x181D); }
 static __inline__ unsigned long combo_step(int animation) { return (unsigned char)(animation-15); }
 static __inline__ float *hero_velocity(void) { return (float*)(D_0013E533+0xF5D); }
-static __inline__ unsigned char *voice_slot(int slot) { return voice_pool+slot*0x70; }
+static __inline__ unsigned char *voice_slot(int slot) { return (unsigned char *)&voice_pool+slot*0x70; }
 static __inline__ WrenchHero *sweep_hero(void) { return (WrenchHero*)((char*)sweep_end()-0xA00); }
 
 void wrench_update(WrenchMoby *m) __asm__("FUN_L00_002a84c8");

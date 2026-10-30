@@ -47,7 +47,6 @@ extern HeroAnimRow D_L16_00179F20[];
 extern HeroTableEntry70 l16_idle_fidget_entries[] __asm__("D_L16_00179CF0");
 extern S17AB60 D_L16_0017AAE0;
 extern S17C298 D_L16_0017C218;
-extern char voice_pool[] __asm__("D_0013E550");
 extern float D_L16_0015F638;
 extern float D_L16_001671D8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -136,6 +135,7 @@ extern int func_L00_00235790_r(void) __asm__("FUN_L00_00234e00");
 #include "rnc/overlay/l16/gameplay/hero/update_hero_state_transitions_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/audio/voice_pool.h"
 void update_hero_state_transitions(void) __asm__("FUN_L16_002270c8");
 
 void update_hero_state_transitions(void) {
@@ -975,7 +975,7 @@ void update_hero_state_transitions(void) {
                         break;
                     }
                     if (hero.voice_slot2 != -1) {
-                        Row13E650 *voice_slot_record = (Row13E650 *)(voice_pool + hero.voice_slot2 * 0x70);
+                        Row13E650 *voice_slot_record = (Row13E650 *)((u8 *)&voice_pool + hero.voice_slot2 * 0x70);
                         if (voice_slot_record->f88 == ((unsigned char *)hero.moby) && voice_slot_record->f74 != 0) {
                             release_voice_slot(hero.voice_slot2);
                         }

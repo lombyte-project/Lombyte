@@ -53,7 +53,6 @@ extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890");
 extern S166D80 player_camera __asm__("D_L00_00166C80");
 extern S17A780 D_L00_0017A680;
 extern S17BEB8 D_L00_0017BDB8;
-extern char voice_pool[] __asm__("D_0013E550");
 extern float D_L00_0015F638;
 extern float D_L00_00166DD8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -82,6 +81,7 @@ extern int probe_hero_ledge_edge(float *, float *) __asm__("FUN_L00_0020c758");
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/audio/voice_pool.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int hero_check_damage(int) __asm__("FUN_L00_00210ce8");
@@ -1101,7 +1101,7 @@ void hero_update_transitions(void) {
                         break;
                     }
                     if (hero.voice_slot2 != -1) {
-                        Row13E650 *voice_slot_record = (Row13E650 *)(voice_pool + hero.voice_slot2 * 0x70);
+                        Row13E650 *voice_slot_record = (Row13E650 *)((u8 *)&voice_pool + hero.voice_slot2 * 0x70);
                         if (voice_slot_record->f88 == ((unsigned char *)hero.moby) && voice_slot_record->f74 != 0) {
                             release_voice_slot(hero.voice_slot2);
                         }

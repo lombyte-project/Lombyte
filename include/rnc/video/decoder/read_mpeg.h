@@ -5,11 +5,6 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/video/decoder/read_buf.h"
 
-struct Globals_0013E550 {
-    u8 pad_0[0x5C];
-    s32 unk5C;
-};
-
 
 /* The caller reserves [context+0xD9040, context+0xD9048) for this
    stream. read_mpeg reads byte_count; read_cd_stream_sectors advances

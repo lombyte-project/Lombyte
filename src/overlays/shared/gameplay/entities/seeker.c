@@ -56,15 +56,8 @@ typedef struct {
     u8 unk280[1];
 } Moby52Vars;
 
-typedef struct {
-    u8 pad0[0x74];
-    u8 active;
-    u8 pad75[0x13];
-    struct Moby *owner;
-} VoiceSlot;
-
-extern u8 voice_pool[] __asm__("D_0013E550");
 #include "rnc/overlay/shared/gameplay/entities/seeker_globals.h"
+#include "rnc/audio/voice_pool.h"
 extern Vec4f D_L09_00166F40;
 extern u8 seeker_invalid_bound_path_format[] __asm__("D_L09_00208320");
 
@@ -104,7 +97,7 @@ void seeker_update(struct Moby *moby) {
     f32 height;
     f32 limit;
     f32 vertical_follow_adjustment;
-    VoiceSlot *slot;
+    VoicePoolWindow *slot;
 
     update_seeker_damage_and_target(moby);
     target = vars->target;
@@ -266,8 +259,8 @@ void seeker_update(struct Moby *moby) {
     case SEEKER_STATE_FATAL_KNOCKBACK:
         voice = vars->voice;
         if (voice != -1) {
-            slot = (VoiceSlot *)(voice_pool + voice * 0x70);
-            if (slot->owner == moby && slot->active != 0) {
+            slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
+            if ((struct Moby *)slot->voice.owner == moby && slot->voice.state != 0) {
                 release_voice_slot(voice);
             }
         }
@@ -281,8 +274,8 @@ void seeker_update(struct Moby *moby) {
         FUN_L00_00257470(moby, 0, -1);
         voice = vars->voice;
         if (voice != -1) {
-            slot = (VoiceSlot *)(voice_pool + voice * 0x70);
-            if (slot->owner == moby && slot->active != 0) {
+            slot = (VoicePoolWindow *)((u8 *)&voice_pool + voice * 0x70);
+            if ((struct Moby *)slot->voice.owner == moby && slot->voice.state != 0) {
                 release_voice_slot(voice);
             }
         }

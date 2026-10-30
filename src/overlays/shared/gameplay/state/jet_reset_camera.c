@@ -12,6 +12,7 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/gameplay/camera/init_camera_system.h"
+#include "rnc/audio/voice_pool.h"
 typedef struct {
     unsigned char h[0x404];
     unsigned char f[0x7FF];
@@ -22,7 +23,6 @@ extern int D_L00_001BA4D0[] NOT_SDA;
 extern char D_L00_001BB230[] NOT_SDA;
 extern unsigned char D_0014C050[][16];
 extern char D_001516D0[];
-extern char voice_pool[] __asm__("D_0013E550");
 
 void jet_reset_camera(OvlQuad *a, OvlQuad *b) __asm__("FUN_L00_00284e50");
 void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
@@ -54,7 +54,7 @@ void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
     qcopy(saved_state + 0x20, saved_rotation);
     hero_state = &hero;
     saved_value_source = D_001516D0;
-    saved_state_fields_source = voice_pool;
+    saved_state_fields_source = (char *)&voice_pool;
     {
         char *hero_moby = ((char *)hero_state->moby);
         *(int *)(saved_state + 0x30) = *(int *)(hero_moby + 0x38);
@@ -103,12 +103,12 @@ void restore_or_clear_level_state(void) {
     *(int *)((char *)hero.moby + 0x3C) = *(int *)(s + 0x34);
     *(int *)((char *)hero.moby + 0x80) = *(int *)(s + 0x38);
     {
-        int updated_state_flags = voice_pool[0x6B] | 7;
-        *(int *)(voice_pool + 0x64) = *(int *)(s + 0x3C);
-        voice_pool[0x68] = s[0x40];
-        voice_pool[0x69] = s[0x41];
-        voice_pool[0x6A] = s[0x42];
-        voice_pool[0x6B] = updated_state_flags;
+        int updated_state_flags = voice_pool.reverb_commands | 7;
+        voice_pool.reverb_depth = *(int *)(s + 0x3C);
+        voice_pool.reverb_type = s[0x40];
+        voice_pool.reverb_delay = s[0x41];
+        voice_pool.reverb_feedback = s[0x42];
+        voice_pool.reverb_commands = updated_state_flags;
         D_00151708 = *(unsigned short *)(s + 0xC54);
     }
     if (*(int *)(s + 0x44) != 0 && *(int *)(s + 0x44) != 3) {

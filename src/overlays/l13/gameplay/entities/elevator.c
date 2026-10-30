@@ -28,6 +28,7 @@
 #include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
+#include "rnc/audio/voice_pool.h"
 
 #ifndef NOT_SDA
 #define NOT_SDA __attribute__((section(".data")))
@@ -2885,7 +2886,6 @@ extern JetPlayer jet_player47 __asm__("D_0013F350");
 extern JetCamera jet_camera47 __asm__("D_L13_00166F80");
 extern JetTransition D_001516D0[];
 #include "rnc/gameplay/state/game_globals.h"
-extern unsigned char voice_pool[] __asm__("D_0013E550");
 #include "rnc/overlay/l13/gameplay/entities/elevator_data/fighter_jet_update.h"
 extern JetTexture l13_texture_descriptors[] __asm__("D_L13_0016D480");
 extern unsigned int l13_texture_palette_data_base __asm__("D_L13_0015F420");
@@ -3044,7 +3044,7 @@ void fighter_jet_update(Jet *jet_moby) {
         unsigned char *audio;
         if (jet_data->blend!=0.0f) { approach_value(&jet_data->blend,0.0f,frame_time*4.0f); D_L13_0015F3FC=jet_data->blend; }
         force_help_message(6,0); D_L13_0015F608=2;
-        audio=voice_pool+jet_data->engine_sound*0x70;
+        audio=(unsigned char *)&voice_pool+jet_data->engine_sound*0x70;
         if (*(Jet**)(audio+0x88)!=jet_moby || !audio[0x74]) { jet_data->engine_sound=-1; jet_data->engine_sound=allocate_voice_for_target_entry(0,4,(int)jet_moby); }
         update_fighter_jet_flight(jet_moby,jet_data);
         if (((JetPlayer*)(&jet_player47))->pad160F&1) jet_moby->state=5;
@@ -3064,10 +3064,10 @@ void fighter_jet_update(Jet *jet_moby) {
         {
             int id=jet_data->engine_sound;
             unsigned char *audio;
-            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=(unsigned char *)&voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->engine_sound=-1;
             id=jet_data->weapon_sound;
-            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=(unsigned char *)&voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->weapon_sound=-1;
         }
         jet_game_state(0,5); jet_data->blend=0.99f; D_L13_0015F3FC=0.99f; jet_moby->state=1;
@@ -3077,10 +3077,10 @@ void fighter_jet_update(Jet *jet_moby) {
         {
             int id=jet_data->engine_sound;
             unsigned char *audio;
-            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=(unsigned char *)&voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->engine_sound=-1;
             id=jet_data->weapon_sound;
-            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=(unsigned char *)&voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->weapon_sound=-1;
         }
         jet_moby->state=7; break;
@@ -3097,10 +3097,10 @@ void fighter_jet_update(Jet *jet_moby) {
                 {
             int id=jet_data->engine_sound;
             unsigned char *audio;
-            if (id!=active) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=active) { audio=(unsigned char *)&voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->engine_sound=-1;
             id=jet_data->weapon_sound;
-            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=(unsigned char *)&voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->weapon_sound=-1;
         }
                 jet_moby->state=0;
@@ -3126,10 +3126,10 @@ void fighter_jet_update(Jet *jet_moby) {
         {
             int id=jet_data->engine_sound;
             unsigned char *audio;
-            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=(unsigned char *)&voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->engine_sound=-1;
             id=jet_data->weapon_sound;
-            if (id!=-1) { audio=voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
+            if (id!=-1) { audio=(unsigned char *)&voice_pool+id*0x70; if (*(Jet**)(audio+0x88)==jet_moby && audio[0x74]) release_voice_slot(id); }
             jet_data->weapon_sound=-1;
         }
         jet_reset_camera((char *)&jet_player47+0x80,(char *)&jet_player47+0x90); jet_moby->state=9;

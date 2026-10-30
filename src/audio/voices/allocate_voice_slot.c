@@ -124,7 +124,7 @@ check_calculated_volume:
     committed_slot = (VoicePoolWindow *)((u8 *)&voice_pool + slot_index * 0x70);
     committed_slot->voice.flags = flags;
     committed_slot->voice.state = VOICE_SLOT_START_QUEUED;
-    committed_slot->voice.history_position = 0;
+    committed_slot->voice.occlusion_history_position = 0;
     pitch_bend_max = definition->pitch_bend_max;
     pitch_bend_min = definition->pitch_bend_min;
     if (pitch_bend_max != pitch_bend_min) {

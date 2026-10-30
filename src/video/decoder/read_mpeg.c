@@ -6,8 +6,8 @@
 #include "rnc/video/player/movie_player.h"
 #include "rnc/gameplay/state/options.h"
 #include "rnc/audio/mixer/snd_set_master_volume.h"
+#include "rnc/audio/voice_pool.h"
 
-extern struct Globals_0013E550 voice_pool __asm__("D_0013E550");
 extern struct PadStateWords pad_words __asm__("D_0013C940");
 extern s32 D_0015EEA0;
 /* Movie skip mode (decode_mode): -1 no skipping, 2 any new button. Read
@@ -125,7 +125,7 @@ s32 read_mpeg(struct VideoDec *video_dec, struct ReadBuf *read_buf,
     }
     end_display();
     audio_dec_reset(&movie_player->audio_dec);
-    snd_set_master_volume(5, voice_pool.unk5C);
+    snd_set_master_volume(5, voice_pool.group_5_volume);
     snd_flush_sound_commands();
     return skipped;
 }

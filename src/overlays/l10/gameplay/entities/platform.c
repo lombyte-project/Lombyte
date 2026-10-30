@@ -74,6 +74,7 @@ void bombthrower_grass_update(struct Moby *moby) {
 }
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/audio/voice_pool.h"
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
 
@@ -662,7 +663,6 @@ void gate_update(unsigned char *gate_moby) {
 
 /* Ported from rac1-decomp (src/overlays/l10_orxon/vendor_00296BD8.c: func_L10_002C8DE0), where it is exact; names translated to the US level program. */
 
-extern char voice_pool[] __asm__("D_0013E550");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern int FUN_L00_0028dc90(int i, int a1, int v, int k);
 extern void *spawn_splitting_effect_particle_with_collision_response_and_fade(char *a, char *b, unsigned char c, int d) __asm__("FUN_L00_0026fd28");
@@ -711,7 +711,7 @@ void update_timed_effect_emitter(struct Moby *moby) {
             moby->state = 0;
             k = *(int *)(data + 0x10);
             if (k != -1) {
-                unsigned char *voice_entry = (unsigned char *)voice_pool + k * 0x70;
+                unsigned char *voice_entry = (unsigned char *)&voice_pool + k * 0x70;
                 if (*(unsigned char **)(voice_entry + 0x88) == moby && voice_entry[0x74] != 0) {
                     release_voice_slot(k);
                 }
@@ -1968,7 +1968,7 @@ void update_data_processor_linked_effect(struct Moby *moby) {
         tick_countdown_32(data + 0x34);
         voice = *(int *)(data + 0x30);
         if (voice != -1) {
-            unsigned char *entry = (unsigned char *)voice_pool + voice * 0x70;
+            unsigned char *entry = (unsigned char *)&voice_pool + voice * 0x70;
             if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
                 release_voice_slot(voice);
         }

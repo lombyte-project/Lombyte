@@ -15,71 +15,8 @@
 #include "rnc/audio/mixer/snd_set_master_volume.h"
 #include "rnc/audio/sound/calculate_voice_volume.h"
 #include "rnc/audio/voices/snd_stop_sound.h"
+#include "rnc/audio/voice_pool.h"
 
-typedef union {
-    u128 q;
-    f32 f[4];
-} VoiceVector;
-
-typedef struct {
-    u8 pad00[0x18];
-    u8 source_state;
-    u8 attenuation_flags;
-    s16 sound_index;
-    s32 bank_handle;
-} VoiceDefinition;
-
-typedef struct {
-    u8 pad00[0x10];
-    VoiceVector position;
-    u8 state;
-    u8 pad21[0x9F];
-    VoiceVector rotation;
-} VoiceMoby;
-
-typedef struct {
-    u32 handle; /* 0x00 */
-    u8 state;   /* 0x04 */
-    u8 flags;   /* 0x05 */
-    u8 pad06[2];
-    VoiceDefinition *definition; /* 0x08 */
-    s32 pad0C;
-    s32 volume;                     /* 0x10 */
-    s32 pitch_bend;                 /* 0x14 */
-    VoiceMoby *moby;                /* 0x18 */
-    s32 owner_context;              /* 0x1C */
-    VoiceVector position;           /* 0x20 */
-    VoiceVector position_offset;    /* 0x30 */
-    u32 occlusion_history_position; /* 0x40 */
-    u8 occlusion_history[36];       /* 0x44 */
-    u8 pad68[8];
-} VoiceSlot;
-
-typedef struct {
-    VoiceVector listener_history[4]; /* 0x000 */
-    s32 listener_history_position;   /* 0x040 */
-    s32 pad44;
-    s32 group_0_volume; /* 0x048 */
-    s32 group_1_volume;
-    s32 group_2_volume;
-    s32 group_3_volume;
-    s32 group_4_volume;
-    s32 group_5_volume;
-    s32 pad60;
-    s32 reverb_depth; /* 0x064 */
-    u8 reverb_type;
-    u8 reverb_delay;
-    u8 reverb_feedback;
-    u8 reverb_commands;
-    s32 pending_commands; /* 0x06C */
-    VoiceSlot voices[30]; /* 0x070 */
-    s32 padD90[2];
-    s32 occlusion_frame; /* 0xD98 */
-    s32 padD9C;
-    VoiceVector occlusion_samples[6]; /* 0xDA0 */
-} VoiceRuntimeState;
-
-extern VoiceRuntimeState voice_pool __asm__("D_0013E550");
 extern f32 sound_water_height_threshold[] __asm__("D_0013F640");
 extern s32 use_alt_fog[] __asm__("D_001872D4");
 
@@ -219,7 +156,7 @@ s32 sound_update(void) {
                 }
             }
         }
-        moby = voice_pool.voices[slot_index].moby;
+        moby = voice_pool.voices[slot_index].owner;
         owner_removed = 0;
         /* Fakematch: the goto pair keeps retail's branch order for the two removal states. */
         if (moby != NULL) {
@@ -233,7 +170,7 @@ s32 sound_update(void) {
         owner_checked_label:;
         }
         if (owner_removed) {
-            voice_pool.voices[slot_index].moby = NULL;
+            voice_pool.voices[slot_index].owner = NULL;
         }
         {
             s32 state = voice_pool.voices[slot_index].state;
@@ -252,7 +189,7 @@ s32 sound_update(void) {
             }
         }
 
-        if (voice_pool.voices[slot_index].moby != NULL &&
+        if (voice_pool.voices[slot_index].owner != NULL &&
             !(voice_pool.voices[slot_index].flags & 8)) {
             if (voice_pool.voices[slot_index].flags & 0x40) {
                 transform_vector_by_basis(&direction, &voice_pool.voices[slot_index].position_offset,
@@ -264,10 +201,10 @@ s32 sound_update(void) {
             } else {
                 voice_pool.voices[slot_index].position.f[2] -= 1.0f;
                 fast_vec_sub(&relative_velocity,
-                                    &voice_pool.voices[slot_index].moby->position,
+                                    &voice_pool.voices[slot_index].owner->position,
                                     &voice_pool.voices[slot_index].position);
                 qcopy(&voice_pool.voices[slot_index].position,
-                      &voice_pool.voices[slot_index].moby->position);
+                      &voice_pool.voices[slot_index].owner->position);
                 voice_pool.voices[slot_index].position.f[2] += 1.0f;
             }
         } else {
@@ -406,7 +343,7 @@ s32 sound_update(void) {
             {
                 s32 state = voice_pool.voices[slot_index].state;
                 if (state == 7) {
-                    voice_pool.voices[slot_index].moby = NULL;
+                    voice_pool.voices[slot_index].owner = NULL;
                     voice_pool.voices[slot_index].owner_context = 0;
                     voice_pool.voices[slot_index].state = 0;
                 } else {

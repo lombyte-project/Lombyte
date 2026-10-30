@@ -48,7 +48,6 @@ extern HeroAnimRow D_L08_0017A2C0[];
 extern HeroTableEntry70 l08_hero_idle_fidget_entries[] __asm__("D_L08_0017A090");
 extern S17AF00 D_L08_0017AE80;
 extern S17C638 D_L08_0017C5B8;
-extern char voice_pool[] __asm__("D_0013E550");
 #include "rnc/overlay/l08/gameplay/hero/update_hero_state_transitions_globals.h"
 extern float D_L08_001675D8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -75,6 +74,7 @@ extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/audio/voice_pool.h"
 extern int nearest_rail_point() __asm__("FUN_L00_0020cd08");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int is_wrench_moby(void *) __asm__("FUN_L00_00211360");
@@ -968,7 +968,7 @@ void update_hero_state_transitions(void) {
                         break;
                     }
                     if (hero.voice_slot2 != -1) {
-                        Row13E650 *voice_slot_entry = (Row13E650 *)(voice_pool + hero.voice_slot2 * 0x70);
+                        Row13E650 *voice_slot_entry = (Row13E650 *)((u8 *)&voice_pool + hero.voice_slot2 * 0x70);
                         if (voice_slot_entry->f88 == ((unsigned char *)hero.moby) && voice_slot_entry->f74 != 0) {
                             release_voice_slot(hero.voice_slot2);
                         }
