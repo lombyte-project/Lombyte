@@ -24,7 +24,7 @@ s32 sceMcWrite(s32 fd, u8 *buffer, s32 size) {
     s32 rpc_result;
     u32 i;
     s32 root_off;
-    s32 base;
+    s32 buffer_alignment_reference;
 
     if (mc_rpc_client.serve == 0) {
         return -0x64;
@@ -38,8 +38,8 @@ s32 sceMcWrite(s32 fd, u8 *buffer, s32 size) {
         D_00159A80.size = 0;
         D_00159A80.buffer = 0;
     } else {
-        base = (s32)buffer - 0x10;
-        root_off = ((s32)(buffer - 1) & 0xFFFFFFF0) - base;
+        buffer_alignment_reference = (s32)buffer - 0x10;
+        root_off = ((s32)(buffer - 1) & 0xFFFFFFF0) - buffer_alignment_reference;
         D_00159A80.size = size - root_off;
         D_00159A80.origin = root_off;
         D_00159A80.buffer = (s32)(buffer + root_off);
