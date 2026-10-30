@@ -263,7 +263,7 @@ void crate_update(struct Moby *moby) {
     s32          hitAngle;
     struct Moby *it;
     CrateVars   *crate_vars;
-    Contact     *other;
+    Contact     *hit_contact;
     Coll        *coll;
     s32          touched;
     s32          doHit;
@@ -291,13 +291,13 @@ void crate_update(struct Moby *moby) {
         update_crate_stack_motion(moby);
     }
     touched = 0;
-    other = find_moby_hit(moby, 0x1830000, 0);
-    if (other != NULL && other->hit.s.flags == 0x1000000) {
-        other = NULL;
+    hit_contact = find_moby_hit(moby, 0x1830000, 0);
+    if (hit_contact != NULL && hit_contact->hit.s.flags == 0x1000000) {
+        hit_contact = NULL;
         touched = 1;
     }
     if (moby->oclass >= 0x1FB && moby->oclass <= 0x1FD) {
-        resolve_moby_hit_response(moby, other, coll, 0, &hitKind, &hitB, &hitAngle, 4);
+        resolve_moby_hit_response(moby, hit_contact, coll, 0, &hitKind, &hitB, &hitAngle, 4);
     }
 
     switch (moby->state) {
@@ -332,16 +332,16 @@ void crate_update(struct Moby *moby) {
             moby->state = 5;
             break;
         }
-        if (other == NULL || !(other->damage > 0.0f)) {
+        if (hit_contact == NULL || !(hit_contact->damage > 0.0f)) {
             break;
         }
         doHit = 1;
-        if (moby->oclass == 0x1F6 && !(other->hit.s.flags & 0x20000)) {
+        if (moby->oclass == 0x1F6 && !(hit_contact->hit.s.flags & 0x20000)) {
             doHit = 0;
         }
         if (moby->oclass == 0x1F9) {
             moby->state = 5;
-            if (other->hit.s.flags & 0x20000) {
+            if (hit_contact->hit.s.flags & 0x20000) {
                 moby->command = 1;
             } else {
                 moby->command =
@@ -351,19 +351,19 @@ void crate_update(struct Moby *moby) {
             doHit = 0;
         }
         if (moby->oclass >= 0x1FB && moby->oclass <= 0x1FD) {
-            if (other->hit.s.flags & 0x20000) {
+            if (hit_contact->hit.s.flags & 0x20000) {
                 moby->oclass = 0x1FE;
             }
             if (hitKind == 3) {
                 moby->oclass = 0x1FE;
             }
-            if ((other->hit.bits & 0x0050000000000000LL) || hitAngle == 0xB4) {
-                s32 next = moby->oclass + 1;
+            if ((hit_contact->hit.bits & 0x0050000000000000LL) || hitAngle == 0xB4) {
+                s32 next_crate_class_id = moby->oclass + 1;
 
-                if (next >= 0x1FF) {
-                    next = 0x1FE;
+                if (next_crate_class_id >= 0x1FF) {
+                    next_crate_class_id = 0x1FE;
                 }
-                moby->oclass = next;
+                moby->oclass = next_crate_class_id;
             }
             if (moby->oclass != 0x1FE) {
                 moby->oclass++;
@@ -379,9 +379,9 @@ void crate_update(struct Moby *moby) {
         if (doHit == 0) {
             break;
         }
-        break_crate(moby, moby->oclass == 0x1F9, other);
-        if (crate_vars->unkC8 != 0 && other != NULL && other->hit.s.moby != NULL) {
-            s16 hit_moby_class_id = other->hit.s.moby->oclass;
+        break_crate(moby, moby->oclass == 0x1F9, hit_contact);
+        if (crate_vars->unkC8 != 0 && hit_contact != NULL && hit_contact->hit.s.moby != NULL) {
+            s16 hit_moby_class_id = hit_contact->hit.s.moby->oclass;
 
             if (hit_moby_class_id == 0x2CD || hit_moby_class_id == 0x22C) {
                 s16 saved = moby->unkB4;
@@ -525,7 +525,7 @@ void crate_update(struct Moby *moby) {
         if (moby->command == 0) {
             moby->command = scale_game_frames(60) * 3 - 1;
             crate_vars->unkB8 = moby->spawn_frame;
-        } else if (moby->command > scale_game_frames(15) && other != NULL) {
+        } else if (moby->command > scale_game_frames(15) && hit_contact != NULL) {
             moby->command = truncate_float_to_s32(scale_time(random_float_between(5.0f, 15.0f)));
         }
         if (moby->command % scale_game_frames(60) == scale_game_frames(60) - 3 ||
