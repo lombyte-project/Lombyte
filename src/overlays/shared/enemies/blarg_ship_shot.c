@@ -19,10 +19,10 @@ extern char D_L11_00174880[];
 
 extern char *FUN_L00_0026dd20(char *pos, char *vel, int c, int d, float f);
 extern int   projectile_trail_color_start_gp __asm__("D_L11_00161DC0") __attribute__((sda));
-extern int   projectile_trail_color_end_gp __asm__("D_L11_00161DC4") __attribute__((sda));
+int projectile_trail_color_end_gp __asm__("D_L11_00161DC4") = 0x80808020;
 extern int   projectile_trail_frame_count_gp __asm__("D_L11_00161DC8") __attribute__((sda));
 extern int   D_L11_00161DCC __attribute__((sda));
-extern float projectile_trail_velocity_scale_gp __asm__("D_L11_00161DD0") __attribute__((sda));
+float projectile_trail_velocity_scale_gp __asm__("D_L11_00161DD0") = 0.5f;
 extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
 /* spawns a streak moby aimed along a direction with the given size and colour */

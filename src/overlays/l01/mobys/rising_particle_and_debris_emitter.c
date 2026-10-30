@@ -46,7 +46,7 @@ SteamColors D_L01_00161C08 = {
     {0x2b8, 0x2b9, 0x2ba}
 };
 
-extern SteamColors l01_rising_particle_variant_indices __asm__("D_L01_00161C18");
+SteamColors l01_rising_particle_variant_indices __asm__("D_L01_00161C18") = {{0, 1, 2}};
 extern void
 spawn_debris_chunk(void *, void *, u32, s32, f32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L00_0026bed0");

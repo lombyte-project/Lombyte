@@ -29,9 +29,9 @@ extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void FUN_L00_002df4a8_u(void *) __asm__("FUN_L00_002df4a8");
 
 extern s32   D_L00_0015F5CC;
-extern int   red_orb_pulse_color_start_gp __asm__("D_L00_00161B90") __attribute__((sda));
-extern int   red_orb_pulse_color_end_gp __asm__("D_L00_00161B94") __attribute__((sda));
-extern float red_orb_pulse_angular_speed_degrees_gp __asm__("D_L00_00161B98") __attribute__((sda));
+int red_orb_pulse_color_start_gp __asm__("D_L00_00161B90") = 0x404070;
+int red_orb_pulse_color_end_gp __asm__("D_L00_00161B94") = 0x202020;
+float red_orb_pulse_angular_speed_degrees_gp __asm__("D_L00_00161B98") = 1.8e+02f;
 
 int   D_L02_00161EC0 = 0x404070;
 int   D_L02_00161EC4 = 0x202020;

@@ -26,7 +26,7 @@ typedef struct {
 } MapBitGrid;
 
 extern s32 D_L00_00184218 NOT_SDA;
-extern s32        rotated_map_transform_enabled __asm__("D_L00_0015FDF8") __attribute__((sda));
+s32 rotated_map_transform_enabled __asm__("D_L00_0015FDF8") = 0;
 extern MapBitGrid D_L00_001841F0_lui __asm__("D_L00_001841F0") NOT_SDA;
 extern MapFilter  D_L00_00182BA0[19][16] NOT_SDA;
 extern MapFilterCallback D_L00_00183F90[19][8] NOT_SDA;

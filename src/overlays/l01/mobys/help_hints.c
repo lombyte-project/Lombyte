@@ -23,7 +23,7 @@ struct L01HelpRecord {
     s32 v;
 };
 
-extern struct L01HelpState  help_state __asm__("D_L01_00179890");
+struct L01HelpState help_state __asm__("D_L01_00179890") = {0, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff}, -1};
 extern struct L01HelpRecord help_records[] __asm__("D_00141968");
 extern s32                  cutscene_mode_macro __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern s32 D_L01_0015F688   MACRO_ADDR;

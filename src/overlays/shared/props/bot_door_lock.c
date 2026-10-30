@@ -180,9 +180,9 @@ void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *targ
 
 extern void draw_bot_door_lock_glow(struct Moby *moby) __asm__("FUN_L06_00307578");
 
-extern float bot_door_lock_number_bob_amplitude_gp __asm__("D_L06_001622DC") __attribute__((sda));
-extern float bot_door_lock_number_bob_period_gp __asm__("D_L06_001622E0") __attribute__((sda));
-extern float bot_door_lock_color_pulse_period_gp __asm__("D_L06_001622E4") __attribute__((sda));
+float bot_door_lock_number_bob_amplitude_gp __asm__("D_L06_001622DC") = 0.025f;
+float bot_door_lock_number_bob_period_gp __asm__("D_L06_001622E0") = 2.5f;
+float bot_door_lock_color_pulse_period_gp __asm__("D_L06_001622E4") = 2.0f;
 extern float bot_door_lock_number_color_pulse_amplitude_gp __asm__("D_L06_001622E8")
     __attribute__((sda));
 extern float bot_door_lock_max_effect_horizontal_scale_gp __asm__("D_L06_001622EC")
@@ -322,3 +322,7 @@ float                D_L10_00161F28 = 2.5f;
 float                D_L10_00161F2C = 2.0f;
 float                D_L10_00161F30 = 36.0f;
 float                D_L10_00161F34 = 0.75f;
+
+float bot_door_lock_number_color_pulse_amplitude_gp __asm__("D_L06_001622E8") = 36.0f;
+
+float bot_door_lock_max_effect_horizontal_scale_gp __asm__("D_L06_001622EC") = 0.75f;

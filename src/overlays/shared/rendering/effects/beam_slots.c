@@ -185,7 +185,7 @@ extern BeamOrigin    beam_origins[] __asm__("D_L00_001E6D50");
 extern Q_2E3700      D_L00_001E7130_2E3700[] __asm__("D_L00_001E6DE0");
 extern Q_2E3700      D_L00_001E7160_2E3700[] __asm__("D_L00_001E6E10");
 extern char          D_0013E633_2E3700[] __asm__("D_0013F5E0");
-extern float         D_L00_00161BF0_gp __asm__("D_L00_00161BF0") __attribute__((sda));
+float D_L00_00161BF0_gp __asm__("D_L00_00161BF0") = 5.0f;
 extern float         beam_scroll[] __asm__("D_L00_00161C78") MACRO_ADDR;
 extern TrailSlot     l00_beam_strand_axis_and_origin_slots[] __asm__("D_L00_001E6D30");
 extern f32           D_L00_001E6E10_e3388[][4] __asm__("D_L00_001E6E10");

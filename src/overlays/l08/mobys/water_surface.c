@@ -23,7 +23,7 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 
 /* Splashes the hero into the water: once inits the water plane, queues the
  * surface draw, and when the hero breaks the surface spawns spray and ripples. */
-extern int   water_entry_plane_initialized_gp __asm__("D_L08_00161970") __attribute__((sda));
+int water_entry_plane_initialized_gp __asm__("D_L08_00161970") = 0;
 extern float water_entry_plane_data[4] __asm__("D_L08_001D7060");
 extern f32   D_L08_0015F580[] MACRO_ADDR;
 extern void  FUN_L08_002da0d0(void *);

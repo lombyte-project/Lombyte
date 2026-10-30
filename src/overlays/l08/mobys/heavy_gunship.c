@@ -32,9 +32,9 @@ typedef struct {
     s16               sound; /* 0x17E */
 } HeavyGunshipVars;
 
-extern s32 heavy_gunship_updates_disabled_gp __asm__("D_L08_00161D40") __attribute__((sda));
-extern f32 heavy_gunship_path_speed_gp __asm__("D_L08_00161D34") __attribute__((sda));
-extern f32 heavy_gunship_part_spin_speed_degrees_gp __asm__("D_L08_00161D38") __attribute__((sda));
+s32 heavy_gunship_updates_disabled_gp __asm__("D_L08_00161D40") = 0;
+f32 heavy_gunship_path_speed_gp __asm__("D_L08_00161D34") = 5.0f;
+f32 heavy_gunship_part_spin_speed_degrees_gp __asm__("D_L08_00161D38") = 3e+01f;
 extern float        D_0015ED6C;
 extern struct Moby *D_L08_0015FFD8;
 

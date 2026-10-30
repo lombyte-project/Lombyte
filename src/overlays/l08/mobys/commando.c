@@ -100,7 +100,7 @@ typedef struct {
 
 extern unsigned char D_0013D3B4 NOT_SDA;
 extern char                     commando_name_string[] __asm__("D_L08_001621E0");
-extern int   commando_height_probe_distance_limit_gp __asm__("D_L08_001621D8") __attribute__((sda));
+int commando_height_probe_distance_limit_gp __asm__("D_L08_001621D8") = 0x18;
 extern char *D_L08_001600EC;
 extern float D_L08_001675C0_c[] __asm__("D_L08_001675C0");
 extern void  FUN_L00_0025a120(void *);

@@ -16,7 +16,7 @@ typedef struct {
 extern MobyList      D_L05_0016CC60;
 extern int           D_L05_0015F5C4;
 extern unsigned char D_L05_0017C8A0[];
-extern short         big_head_manipulator_scale_gp __asm__("D_L05_00161EE8") __attribute__((sda));
+short big_head_manipulator_scale_gp __asm__("D_L05_00161EE8") = 0x3333;
 
 void attach_big_head_cheat_manipulator(char *moby) __asm__("FUN_L05_00317398");
 
@@ -71,7 +71,7 @@ void attach_big_head_cheat_manipulator_to_matching_moby(char *moby) {
 extern MobyList      D_L03_0016C960;
 extern int           D_L03_0015F5C4;
 extern unsigned char D_L03_0017C540[];
-extern short shared_manipulator_attachment_scale __asm__("D_L03_00161BC4") __attribute__((sda));
+short shared_manipulator_attachment_scale __asm__("D_L03_00161BC4") = 0;
 
 /* The same helper on manipulator slot 1. */
 void attach_shared_manipulator_to_matching_class_moby(char *moby) __asm__("FUN_L03_002db480");

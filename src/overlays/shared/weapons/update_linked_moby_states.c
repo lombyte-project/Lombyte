@@ -18,8 +18,8 @@ typedef struct {
 int  find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
-extern int linked_moby_selection_delay_gp __asm__("D_L00_00161478") __attribute__((sda));
-extern int owned_record_cooldown_gp __asm__("D_L00_00161480") __attribute__((sda));
+int linked_moby_selection_delay_gp __asm__("D_L00_00161478") = 0;
+int owned_record_cooldown_gp __asm__("D_L00_00161480") = 0;
 
 int D_L01_001614A0 = 0;
 int D_L01_001614A8 = 0;

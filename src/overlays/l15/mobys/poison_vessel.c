@@ -83,7 +83,7 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 
 extern float D_0015ED6C;
 
-extern float poison_vessel_gravity_gp __asm__("D_L15_00161FBC") __attribute__((sda));
+float poison_vessel_gravity_gp __asm__("D_L15_00161FBC") = 2e+01f;
 
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 

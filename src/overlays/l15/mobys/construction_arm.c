@@ -35,11 +35,11 @@ int construction_arm_effect_duration_min_frames_gp __asm__("D_L15_001619F4") = 0
 
 int construction_arm_effect_duration_max_frames_gp __asm__("D_L15_001619F8") = 0x78;
 
-extern float construction_arm_effect_speed_max_gp __asm__("D_L15_001619FC") __attribute__((sda));
+float construction_arm_effect_speed_max_gp __asm__("D_L15_001619FC") = 1e+01f;
 
-extern float construction_arm_wait_time_min_gp __asm__("D_L15_00161A00") __attribute__((sda));
+float construction_arm_wait_time_min_gp __asm__("D_L15_00161A00") = 2.0f;
 
-extern float construction_arm_wait_time_max_gp __asm__("D_L15_00161A04") __attribute__((sda));
+float construction_arm_wait_time_max_gp __asm__("D_L15_00161A04") = 2e+01f;
 
 extern unsigned short *l15_moby_group_member_lists[] __asm__("D_L15_001ABE40");
 

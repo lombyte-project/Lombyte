@@ -22,9 +22,9 @@ extern float D_L12_0015F3FC;
 
 #include "rnc/overlay/l12/mobys/water_reservoir_globals.h"
 
-extern float water_reservoir_angle_rate_degrees_gp __asm__("D_L12_001619CC") __attribute__((sda));
+float water_reservoir_angle_rate_degrees_gp __asm__("D_L12_001619CC") = 1.8e+02f;
 int          D_L12_001619D0 = 105;
-extern float water_reservoir_random_offset_radius_gp __asm__("D_L12_001619D4") __attribute__((sda));
+float water_reservoir_random_offset_radius_gp __asm__("D_L12_001619D4") = 0.25f;
 
 #include "rnc/overlay/l12/mobys/water_reservoir_data/water_reservoir_update_3.h"
 
@@ -38,7 +38,7 @@ int D_L12_001619F8 = 0x10022;
 
 #include "rnc/overlay/l12/mobys/water_reservoir_data/water_reservoir_update.h"
 
-extern float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") __attribute__((sda));
+float water_reservoir_height_approach_rate_gp __asm__("D_L12_00161A08") = 6.0f;
 
 void water_reservoir_update(struct Moby *moby) __asm__("FUN_L12_002ec720");
 
@@ -150,7 +150,7 @@ int          D_L12_00161A0C = 0;
 int          D_L12_00161A18 = 1;
 int          D_L12_00161A1C = 0x40602020;
 int          D_L12_00161A20 = 0x40681818;
-extern short water_reservoir_segment_cosine_scale_gp __asm__("D_L12_00161A24") __attribute__((sda));
+short water_reservoir_segment_cosine_scale_gp __asm__("D_L12_00161A24") = -13107;
 extern void  draw_geometry_quad(void *, void *, int);
 
 void draw_water_reservoir(struct Moby *moby) {

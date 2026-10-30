@@ -370,3 +370,17 @@ float D_L14_0016222C = 5.0f;
 float ground_particle_scatter_spawn_vector_xy_bias[2] __asm__("D_L08_00162360") = {0};
 
 int ground_particle_scatter_distant_spawn_argument_gp __asm__("D_L08_00162358") = 1;
+
+short ground_particle_scatter_count_interpolation_start_override_gp __asm__("D_L08_0016234C") = 0;
+
+short ground_particle_scatter_count_interpolation_end_override_gp __asm__("D_L08_00162350") = 0;
+
+float ground_particle_scatter_minimum_z_scale_gp __asm__("D_L08_00162340") = 0.5f;
+
+float ground_particle_scatter_reference_height_offset_gp __asm__("D_L08_00162344") = 1e+01f;
+
+float ground_particle_scatter_xy_offset_random_range_gp __asm__("D_L08_00162348") = 18.0f;
+
+float ground_particle_scatter_minimum_z_scale_override_gp __asm__("D_L08_00162354") = -1.0f;
+
+float ground_particle_scatter_ground_height_floor_offset_gp __asm__("D_L08_0016235C") = 5.0f;

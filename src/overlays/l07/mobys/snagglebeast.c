@@ -2213,8 +2213,8 @@ void draw_rope_strips(void) {
     vu1_add_g_sregister(0x47, 0x5360b);
 }
 
-extern int   D_L07_00161B6C_gp __asm__("D_L07_00161B6C") __attribute__((sda));
-extern int   D_L07_00161B70_gp __asm__("D_L07_00161B70") __attribute__((sda));
+int D_L07_00161B6C_gp __asm__("D_L07_00161B6C") = 1;
+int D_L07_00161B70_gp __asm__("D_L07_00161B70") = 1;
 extern float row_phase_step_gp __asm__("D_L07_00161B7C") __attribute__((sda));
 
 int D_L07_00161B80 = 0;

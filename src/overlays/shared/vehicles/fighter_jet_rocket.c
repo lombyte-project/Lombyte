@@ -177,7 +177,7 @@ extern void      spawn_explosion(void *,
                                  int,
                                  int) __asm__("FUN_L00_0025e450");
 extern Tex       D_L13_001B2380 __asm__("D_L13_001B2380");
-extern V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160");
+V4_2E8040 D_L13_001741E0_2E8040 __asm__("D_L13_00174160") = {0};
 
 void update_fighter_jet_rocket(Moby *m) __asm__("FUN_L13_002e6c08");
 

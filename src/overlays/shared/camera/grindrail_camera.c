@@ -624,3 +624,7 @@ s32          D_L05_0015F71C = 0;
 LevelSpline *l08_splines __asm__("D_L08_0015F70C") = 0;
 s32          D_L16_0015F71C = 0;
 LevelSpline *l17_splines __asm__("D_L17_0015F70C") = 0;
+
+CameraPresetRow *D_L01_0015EF50_macro __asm__("D_L01_0015EF50") = 0;
+
+LevelSpline *l01_splines_macro __asm__("D_L01_0015F70C") = 0;

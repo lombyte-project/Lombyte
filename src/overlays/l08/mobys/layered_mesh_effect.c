@@ -16,9 +16,9 @@
 /* Draw callback: draws the scrolled mesh layers with effect textures 0x3A to 0x3D, two of them faded by distance. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_002F2288), where it is exact; names translated to the US level program. */
 
-extern int scrolled_mesh_unscaled_fixed_alpha_gp __asm__("D_L08_00161DD0") __attribute__((sda));
-extern int offset_mesh_first_pass_fixed_alpha_gp __asm__("D_L08_00161DF0") __attribute__((sda));
-extern int pair_offset_mesh_fixed_alpha_gp __asm__("D_L08_00161E00") __attribute__((sda));
+int scrolled_mesh_unscaled_fixed_alpha_gp __asm__("D_L08_00161DD0") = 0x40;
+int offset_mesh_first_pass_fixed_alpha_gp __asm__("D_L08_00161DF0") = 0x20;
+int pair_offset_mesh_fixed_alpha_gp __asm__("D_L08_00161E00") = 0x30;
 extern unsigned char layered_mesh_effect_fade_alpha __asm__("D_L08_00161E08");
 extern int           get_effect_texture(int) __asm__("FUN_001f44b8");
 extern void          draw_scrolled_mesh_batch(int) __asm__("FUN_L08_002f0b40");
@@ -73,8 +73,8 @@ extern s32   D_L08_001E2858[];
 extern s32   D_L08_001E8310[];
 extern char  layered_mesh_effect_sine_output_pair[] __asm__("D_L08_001E8350");
 extern int   D_L08_00161E08;
-extern short layered_mesh_effect_center_x __asm__("D_L08_00161DC0") __attribute__((sda));
-extern short layered_mesh_rgba_tables_initialized __asm__("D_L08_00161E04") __attribute__((sda));
+short layered_mesh_effect_center_x __asm__("D_L08_00161DC0") = -30441;
+short layered_mesh_rgba_tables_initialized __asm__("D_L08_00161E04") = 0;
 extern s32   D_L08_001DDF20[];
 extern s32   D_L08_001DB518[];
 extern void  draw_layered_mesh_effect(void) __asm__("FUN_L08_002f0dc8");

@@ -151,7 +151,7 @@ extern s32  D_L08_001F8528[];
 extern char batalia_effect_sine_offsets[] __asm__("D_L08_001F8550");
 
 extern int   D_L08_001623F0;
-extern short batalia_effect_reference_position_x __asm__("D_L08_00162380") __attribute__((sda));
+short batalia_effect_reference_position_x __asm__("D_L08_00162380") = -32768;
 
 int D_L08_001623C4 = 0;
 

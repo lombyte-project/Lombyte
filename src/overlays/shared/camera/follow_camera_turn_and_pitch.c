@@ -86,8 +86,8 @@ void follow_camera_turn_and_pitch(unsigned char *o, float k, float in) __asm__("
 #include "rnc/overlay/shared/camera/follow_camera_turn_and_pitch_globals.h"
 #include "rnc/math/asm_helpers.h"
 
-extern float follow_camera_input_stiffness_gp __asm__("D_L00_00161CAC") __attribute__((sda));
-extern float follow_camera_input_damping_gp __asm__("D_L00_00161CB0") __attribute__((sda));
+float follow_camera_input_stiffness_gp __asm__("D_L00_00161CAC") = 1.0f;
+float follow_camera_input_damping_gp __asm__("D_L00_00161CB0") = 1.0f;
 
 void follow_camera_turn_and_pitch(unsigned char *camera_object, float k, float in) {
     V_2e8bb8       axis;

@@ -2047,3 +2047,5 @@ void update_hero_state_transitions(void) {
         hero.anim_seq_frames = 0;
     }
 }
+
+int D_L11_0015F6DC_d __asm__("D_L11_0015F6DC") = 0;

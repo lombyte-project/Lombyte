@@ -439,9 +439,9 @@ extern int   collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int   FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int   select_birdbot_path_node(void *, int *) __asm__("FUN_L01_002e6790");
 extern int   scale_game_frames(int);
-extern short birdbot_projectile_speed_gp __asm__("D_L01_00161950") __attribute__((sda));
-extern short birdbot_path_speed_scale_gp __asm__("D_L01_00161954") __attribute__((sda));
-extern short birdbot_path_entry_animation_speed_gp __asm__("D_L01_0016195C") __attribute__((sda));
+short birdbot_projectile_speed_gp __asm__("D_L01_00161950") = 0;
+short birdbot_path_speed_scale_gp __asm__("D_L01_00161954") = 0;
+short birdbot_path_entry_animation_speed_gp __asm__("D_L01_0016195C") = 0;
 extern void *FUN_L00_00263fd8_u(char *,
                                 int,
                                 float *,

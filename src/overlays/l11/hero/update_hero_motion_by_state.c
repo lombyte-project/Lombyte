@@ -2389,3 +2389,5 @@ void update_hero_motion_by_state(void) {
         hero.anim_seq_frames = 0;
     }
 }
+
+s32 level_frame __asm__("D_L11_0015F5CC") = 0;

@@ -39,7 +39,7 @@ typedef struct {
     unsigned short h34;
 } M_2310;
 
-extern float D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
+f32 D_L18_00162308_gp __asm__("D_L18_00162308") = 0;
 extern float
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 void synchronize_lift_group_height(void *source_moby) __asm__("FUN_L18_002f2598");
@@ -57,9 +57,9 @@ extern void draw_lift_22_quad_mesh(struct Moby *moby) __asm__("FUN_L18_002f2970"
 
 #include "rnc/overlay/l18/mobys/lift_globals.h"
 
-extern int   lift_alternate_height_requested_gp __asm__("D_L18_001622FC") __attribute__((sda));
-extern int   next_lift_instance_index_gp __asm__("D_L18_001622F8") __attribute__((sda));
-extern float lift_texture_u_scroll_rate_gp __asm__("D_L18_0016230C") __attribute__((sda));
+int lift_alternate_height_requested_gp __asm__("D_L18_001622FC") = 0;
+int next_lift_instance_index_gp __asm__("D_L18_001622F8") = 0;
+float lift_texture_u_scroll_rate_gp __asm__("D_L18_0016230C") = 0.05f;
 extern unsigned char D_00141400 NOT_SDA;
 extern unsigned char D_0013D406 NOT_SDA;
 void update_lift_state_and_queue_draw(struct Moby *lift_moby) __asm__("FUN_L18_002f2310");
@@ -203,13 +203,13 @@ typedef struct {
     FVec4 v;
 } FRow;
 
-extern short lift_mesh_blend_minuend_selector_gp __asm__("D_L18_00162310") __attribute__((sda));
-extern short lift_mesh_blend_subtrahend_selector_gp __asm__("D_L18_00162314") __attribute__((sda));
-extern short lift_mesh_blend_factor_selector_gp __asm__("D_L18_00162318") __attribute__((sda));
-extern short lift_mesh_blend_addend_selector_gp __asm__("D_L18_0016231C") __attribute__((sda));
-extern short lift_mesh_blend_upper_word_gp __asm__("D_L18_00162320") __attribute__((sda));
-extern short lift_mesh_effect_texture_index_gp __asm__("D_L18_00162324") __attribute__((sda));
-extern short lift_mesh_quad_color_gp __asm__("D_L18_00162328") __attribute__((sda));
+short lift_mesh_blend_minuend_selector_gp __asm__("D_L18_00162310") = 0;
+short lift_mesh_blend_subtrahend_selector_gp __asm__("D_L18_00162314") = 1;
+short lift_mesh_blend_factor_selector_gp __asm__("D_L18_00162318") = 0;
+short lift_mesh_blend_addend_selector_gp __asm__("D_L18_0016231C") = 1;
+short lift_mesh_blend_upper_word_gp __asm__("D_L18_00162320") = 0x80;
+short lift_mesh_effect_texture_index_gp __asm__("D_L18_00162324") = 0x2b;
+short lift_mesh_quad_color_gp __asm__("D_L18_00162328") = 0x5050;
 extern f32   D_L18_00162308_gp __asm__("D_L18_00162308") __attribute__((sda));
 extern float D_L18_001DA7A0[][2] NOT_SDA;
 extern FRow  D_L18_001DA3C0[] NOT_SDA;

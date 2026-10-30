@@ -42,11 +42,11 @@ int D_L15_001620F4 = 64;
 
 #include "rnc/overlay/l15/mobys/radial_ripple_mesh_data/draw_moby_radial_ripple_mesh_buffers.h"
 
-extern float ripple_mesh_buffers_z_amplitude_gp __asm__("D_L15_00162100") __attribute__((sda));
+float ripple_mesh_buffers_z_amplitude_gp __asm__("D_L15_00162100") = 0.1f;
 
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 
-extern float ripple_mesh_buffers_uv_scroll_rate_gp __asm__("D_L15_00162104") __attribute__((sda));
+float ripple_mesh_buffers_uv_scroll_rate_gp __asm__("D_L15_00162104") = 0.1f;
 
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 
@@ -162,7 +162,7 @@ Quad4 D_L15_00162170 = {
     {1.0f, -0.62831855f, 1.0f, 0.62831855f}
 };
 
-extern float ripple_mesh_uv_scroll_rate_gp __asm__("D_L15_0016216C") __attribute__((sda));
+float ripple_mesh_uv_scroll_rate_gp __asm__("D_L15_0016216C") = 0.025f;
 
 float D_L15_001DDBA0[204] = {
     3.485078f,  4.343359f,  0.0f, 5.279609f,  3.600078f,  0.0f,    2.980781f,  2.623281f,  0.0f,
@@ -280,11 +280,11 @@ int D_L15_00162158 = 45;
 
 int D_L15_0016215C = 64;
 
-extern float ripple_mesh_radial_wavelength_gp __asm__("D_L15_00162160") __attribute__((sda));
+float ripple_mesh_radial_wavelength_gp __asm__("D_L15_00162160") = 8.0f;
 
 #include "rnc/overlay/l15/mobys/radial_ripple_mesh_data/draw_moby_radial_ripple_mesh.h"
 
-extern float ripple_mesh_z_amplitude_gp __asm__("D_L15_00162168") __attribute__((sda));
+float ripple_mesh_z_amplitude_gp __asm__("D_L15_00162168") = 0.1f;
 
 void draw_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002eb108");
 
@@ -499,15 +499,15 @@ int D_L15_001621E8 = 45;
 
 int D_L15_001621EC = 64;
 
-extern float scaled_ripple_radial_wavelength_gp __asm__("D_L15_001621F0") __attribute__((sda));
+float scaled_ripple_radial_wavelength_gp __asm__("D_L15_001621F0") = 8.0f;
 
 #include "rnc/overlay/l15/mobys/radial_ripple_mesh_data/draw_scaled_moby_radial_ripple_mesh.h"
 
-extern float scaled_ripple_z_amplitude_gp __asm__("D_L15_001621F8") __attribute__((sda));
+float scaled_ripple_z_amplitude_gp __asm__("D_L15_001621F8") = 0.1f;
 
-extern float scaled_ripple_uv_scroll_rate_gp __asm__("D_L15_001621FC") __attribute__((sda));
+float scaled_ripple_uv_scroll_rate_gp __asm__("D_L15_001621FC") = 0.1f;
 
-extern float scaled_ripple_template_vertex_scale_gp __asm__("D_L15_00162200") __attribute__((sda));
+float scaled_ripple_template_vertex_scale_gp __asm__("D_L15_00162200") = 0.5f;
 
 void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edbe0");
 
@@ -792,15 +792,15 @@ int D_L15_00162258 = 45;
 
 int D_L15_0016225C = 64;
 
-extern float ripple_88_radial_wavelength_gp __asm__("D_L15_00162260") __attribute__((sda));
+float ripple_88_radial_wavelength_gp __asm__("D_L15_00162260") = 8.0f;
 
 #include "rnc/overlay/l15/mobys/radial_ripple_mesh_data/draw_scaled_88_vertex_moby_radial_ripple_mesh.h"
 
-extern float ripple_88_z_amplitude_gp __asm__("D_L15_00162268") __attribute__((sda));
+float ripple_88_z_amplitude_gp __asm__("D_L15_00162268") = 0.1f;
 
-extern float ripple_88_uv_scroll_rate_gp __asm__("D_L15_0016226C") __attribute__((sda));
+float ripple_88_uv_scroll_rate_gp __asm__("D_L15_0016226C") = 0.1f;
 
-extern float ripple_88_template_vertex_scale_gp __asm__("D_L15_00162270") __attribute__((sda));
+float ripple_88_template_vertex_scale_gp __asm__("D_L15_00162270") = 1.1f;
 
 void draw_scaled_88_vertex_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002edfc0");
 

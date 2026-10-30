@@ -2205,3 +2205,7 @@ void fighter_jet_update(Jet *jet_moby) {
     if ((unsigned int)(state - 3) < 2 || (unsigned char)state == 8)
         spawn_fighter_jet_joint_particles(jet_moby, (char *)jet_data);
 }
+
+LevelCuboid *l13_cuboids_gp __asm__("D_L13_001600EC") = 0;
+
+unsigned int l13_texture_palette_data_base __asm__("D_L13_0015F420") = 0;

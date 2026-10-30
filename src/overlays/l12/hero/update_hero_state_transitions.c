@@ -2157,3 +2157,7 @@ void update_hero_state_transitions(void) {
         hero.anim_seq_frames = 0;
     }
 }
+
+int D_L12_0015F6DC_d __asm__("D_L12_0015F6DC") = 0;
+
+int item_selector_hud_activation_blocked __asm__("D_L12_0015F594") = 0;

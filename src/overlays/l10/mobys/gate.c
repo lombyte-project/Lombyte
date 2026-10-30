@@ -15,7 +15,7 @@ typedef struct {
     unsigned char collected[1];
 } BfState;
 
-extern BfState       l10_gate_completion_records __asm__("D_L10_001BAA50");
+BfState l10_gate_completion_records __asm__("D_L10_001BAA50") = {0};
 extern unsigned char l10_gate_persistence_eligibility_by_mission[8] __asm__("D_L10_0015FC88");
 void                 gate_update(unsigned char *m) __asm__("FUN_L10_002befe8");
 

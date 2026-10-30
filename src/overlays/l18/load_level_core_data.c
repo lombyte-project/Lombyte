@@ -520,3 +520,5 @@ s32 load_level_core_data(s32 full, s32 keep) {
     game_frame++;
     return 0;
 }
+
+char *D_L18_0016016C_2463f8 __asm__("D_L18_0016016C") = 0;

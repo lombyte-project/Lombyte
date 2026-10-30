@@ -12,7 +12,7 @@
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00301FE8), where it is exact; names translated to the US level program. */
 
-extern f32 D_L06_00162080_gp __asm__("D_L06_00162080") __attribute__((sda));
+f32 D_L06_00162080_gp __asm__("D_L06_00162080") = 0.1f;
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
 

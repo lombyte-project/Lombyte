@@ -292,7 +292,7 @@ void update_child_sets_controller(struct Moby *child_sets_controller) {
 
 #include "rnc/overlay/l11/mobys/child_sets_controller_globals.h"
 
-extern float child_set_base_z_offset_gp __asm__("D_L11_00161EAC") __attribute__((sda));
+float child_set_base_z_offset_gp __asm__("D_L11_00161EAC") = -14.0f;
 
 #include "rnc/overlay/l11/mobys/child_sets_controller_data/update_child_set_poses_3.h"
 
@@ -300,11 +300,11 @@ extern float D_L11_00161EB4 __attribute__((sda));
 
 #include "rnc/overlay/l11/mobys/child_sets_controller_data/update_child_set_poses_2.h"
 
-extern float child_set_base_rotation_y_degrees_gp __asm__("D_L11_00161EBC") __attribute__((sda));
+float child_set_base_rotation_y_degrees_gp __asm__("D_L11_00161EBC") = 3e+01f;
 
 #include "rnc/overlay/l11/mobys/child_sets_controller_data/update_child_set_poses.h"
 
-extern float final_child_set_z_offset_gp __asm__("D_L11_00161F08") __attribute__((sda));
+float final_child_set_z_offset_gp __asm__("D_L11_00161F08") = -0.2f;
 
 extern float fast_add_rotations(float, float);
 

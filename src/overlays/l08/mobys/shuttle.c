@@ -51,7 +51,7 @@ typedef struct {
 
 extern s32      level_game_mode __asm__("D_L08_0015F5C4");
 extern s32      D_L08_0015F594 __attribute__((sda));
-extern LiftLock l08_shuttle_departure_lock __asm__("D_L08_00179C10");
+LiftLock l08_shuttle_departure_lock __asm__("D_L08_00179C10") = {0, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff}, -1};
 extern s32      D_0013CAE4[];
 extern void     build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void

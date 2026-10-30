@@ -3331,3 +3331,17 @@ char *D_L00_0015F318 = 0;
 int   D_L00_00160104 = 0;
 int   D_L00_00160490 = 0;
 int   D_L00_00160FCC = 0;
+
+Tbl *l00_level_asset_entry_table __asm__("D_L00_0015F618") = 0;
+
+LevelSpline *l00_splines_macro __asm__("D_L00_0015F70C") = 0;
+
+u64 level_texture_128x128_descriptor[3] __asm__("D_L00_001827C0") = {0};
+
+u64 level_texture_64x64_descriptor[3] __asm__("D_L00_001827D8") = {0};
+
+char *effect_texture_data_base __asm__("D_L00_0015F420") = 0;
+
+char *D_L00_00160FC0_244110 __asm__("D_L00_00160FC0") = 0;
+
+char *D_L00_00160494_244110 __asm__("D_L00_00160494") = 0;

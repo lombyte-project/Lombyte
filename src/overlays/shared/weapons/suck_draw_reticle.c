@@ -24,7 +24,7 @@ typedef struct {
     int     count;
 } T1edf60;
 
-extern T1edf60 l00_reticle_submission_queue __asm__("D_L00_00169040");
+T1edf60 l00_reticle_submission_queue __asm__("D_L00_00169040") = {0};
 void           suck_draw_reticle(int      a,
                                  int      b,
                                  OvlQuad *pos,

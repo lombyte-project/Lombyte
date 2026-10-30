@@ -57,10 +57,10 @@ struct RData51 {
 };
 
 /* no foreign declaration */
-extern f32 D_L08_00161AC0_gp __asm__("D_L08_00161AC0") __attribute__((sda));
+float D_L08_00161AC0 = 7.5f;
 
 /* no foreign declaration */
-extern int D_L08_00161AC8_gp __asm__("D_L08_00161AC8") __attribute__((sda));
+int D_L08_00161AC8 = 0x60808080;
 
 /* no foreign declaration */
 extern int D_L08_00161AD4_gp __asm__("D_L08_00161AD4") __attribute__((sda));
@@ -72,112 +72,112 @@ extern int D_L08_00161AD8_gp __asm__("D_L08_00161AD8") __attribute__((sda));
 extern int D_L08_00161ADC_gp __asm__("D_L08_00161ADC") __attribute__((sda));
 
 /* no foreign declaration */
-extern f32 D_L08_00161B60_gp __asm__("D_L08_00161B60") __attribute__((sda));
+float D_L08_00161B60 = -1.8e+02f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B64_gp __asm__("D_L08_00161B64") __attribute__((sda));
+float D_L08_00161B64 = 1.4e+02f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B68_gp __asm__("D_L08_00161B68") __attribute__((sda));
+float D_L08_00161B68 = 55.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B6C_gp __asm__("D_L08_00161B6C") __attribute__((sda));
+float D_L08_00161B6C = 55.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B70_gp __asm__("D_L08_00161B70") __attribute__((sda));
+float D_L08_00161B70 = 4e+01f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B74_gp __asm__("D_L08_00161B74") __attribute__((sda));
+float D_L08_00161B74 = 4e+01f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B78_gp __asm__("D_L08_00161B78") __attribute__((sda));
+float D_L08_00161B78 = 4e+01f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B7C_gp __asm__("D_L08_00161B7C") __attribute__((sda));
+float D_L08_00161B7C = 4e+01f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B80_gp __asm__("D_L08_00161B80") __attribute__((sda));
+float D_L08_00161B80 = 1.8e+02f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B84_gp __asm__("D_L08_00161B84") __attribute__((sda));
+float D_L08_00161B84 = 1.4e+02f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B88_gp __asm__("D_L08_00161B88") __attribute__((sda));
+float D_L08_00161B88 = 55.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B8C_gp __asm__("D_L08_00161B8C") __attribute__((sda));
+float D_L08_00161B8C = 55.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B90_gp __asm__("D_L08_00161B90") __attribute__((sda));
+float D_L08_00161B90 = 5.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B94_gp __asm__("D_L08_00161B94") __attribute__((sda));
+float D_L08_00161B94 = 5.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B98_gp __asm__("D_L08_00161B98") __attribute__((sda));
+float D_L08_00161B98 = 8.0f;
 
 /* no foreign declaration */
-extern f32 D_L08_00161B9C_gp __asm__("D_L08_00161B9C") __attribute__((sda));
+float D_L08_00161B9C = 8.0f;
 
 /* no foreign declaration */
-extern int D_L08_00161BA0_gp __asm__("D_L08_00161BA0") __attribute__((sda));
+int D_L08_00161BA0 = 0x10;
 
 /* no foreign declaration */
-extern int D_L08_00161BA4_gp __asm__("D_L08_00161BA4") __attribute__((sda));
+int D_L08_00161BA4 = 6;
 
 /* no foreign declaration */
-extern int D_L08_00161BA8_gp __asm__("D_L08_00161BA8") __attribute__((sda));
+int D_L08_00161BA8 = 0x11;
 
 /* no foreign declaration */
-extern int D_L08_00161BAC_gp __asm__("D_L08_00161BAC") __attribute__((sda));
+int D_L08_00161BAC = 0x12;
 
 /* no foreign declaration */
-extern int D_L08_00161BB0_gp __asm__("D_L08_00161BB0") __attribute__((sda));
+int D_L08_00161BB0 = 0;
 
 /* no foreign declaration */
-extern int D_L08_00161BB4_gp __asm__("D_L08_00161BB4") __attribute__((sda));
+int D_L08_00161BB4 = 0x8000000;
 
 /* no foreign declaration */
-extern int D_L08_00161BB8_gp __asm__("D_L08_00161BB8") __attribute__((sda));
+int D_L08_00161BB8 = 0x800;
 
 /* no foreign declaration */
-extern int D_L08_00161BBC_gp __asm__("D_L08_00161BBC") __attribute__((sda));
+int D_L08_00161BBC = 0x8000800;
 
 /* no foreign declaration */
-extern int D_L08_00161BC0_gp __asm__("D_L08_00161BC0") __attribute__((sda));
+int D_L08_00161BC0 = 0;
 
 /* no foreign declaration */
-extern int D_L08_00161BC4_gp __asm__("D_L08_00161BC4") __attribute__((sda));
+int D_L08_00161BC4 = 0x2000000;
 
 /* no foreign declaration */
-extern int D_L08_00161BC8_gp __asm__("D_L08_00161BC8") __attribute__((sda));
+int D_L08_00161BC8 = 0x200;
 
 /* no foreign declaration */
-extern int D_L08_00161BCC_gp __asm__("D_L08_00161BCC") __attribute__((sda));
+int D_L08_00161BCC = 0x2000200;
 
 /* no foreign declaration */
-extern int D_L08_00161BD0_gp __asm__("D_L08_00161BD0") __attribute__((sda));
+int D_L08_00161BD0 = 0x1600160;
 
 /* no foreign declaration */
-extern int D_L08_00161BD4_gp __asm__("D_L08_00161BD4") __attribute__((sda));
+int D_L08_00161BD4 = 0xa000a0;
 
 /* no foreign declaration */
-extern int D_L08_00161BD8_gp __asm__("D_L08_00161BD8") __attribute__((sda));
+int D_L08_00161BD8 = 0x1600160;
 
 /* no foreign declaration */
-extern int D_L08_00161BDC_gp __asm__("D_L08_00161BDC") __attribute__((sda));
+int D_L08_00161BDC = 0;
 
 /* no foreign declaration */
-extern int D_L08_00161BE0_gp __asm__("D_L08_00161BE0") __attribute__((sda));
+int D_L08_00161BE0 = 0;
 
 /* no foreign declaration */
-extern int D_L08_00161BE4_gp __asm__("D_L08_00161BE4") __attribute__((sda));
+int D_L08_00161BE4 = 0x4000000;
 
 /* no foreign declaration */
-extern int D_L08_00161BE8_gp __asm__("D_L08_00161BE8") __attribute__((sda));
+int D_L08_00161BE8 = 0x400;
 
 /* no foreign declaration */
-extern int   D_L08_00161BEC_gp __asm__("D_L08_00161BEC") __attribute__((sda));
+int D_L08_00161BEC = 0x4000400;
 extern s64   get_effect_texture(s32) __asm__("func_001F44B8");
 extern void  vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void  FUN_L02_0020bc88_c(void *, void *, void *, long, int) __asm__("FUN_L02_0020bc88");
@@ -255,23 +255,23 @@ char        *spawn_turret_rocket(int    owner,
                                  float *rotation,
                                  int    value) __asm__("FUN_L08_002e7eb0");
 extern float D_0015ED70;
-extern float D_L08_00161AE8_gp __asm__("D_L08_00161AE8") __attribute__((sda));
-extern float D_L08_00161AEC_gp __asm__("D_L08_00161AEC") __attribute__((sda));
-extern float D_L08_00161AF0_gp __asm__("D_L08_00161AF0") __attribute__((sda));
-extern float D_L08_00161AF4_gp __asm__("D_L08_00161AF4") __attribute__((sda));
-extern float D_L08_00161AF8_gp __asm__("D_L08_00161AF8") __attribute__((sda));
-extern float D_L08_00161AFC_gp __asm__("D_L08_00161AFC") __attribute__((sda));
-extern float D_L08_00161B00_gp __asm__("D_L08_00161B00") __attribute__((sda));
+float D_L08_00161AE8_gp __asm__("D_L08_00161AE8") = 1.8e+02f;
+float D_L08_00161AEC_gp __asm__("D_L08_00161AEC") = 22.5f;
+float D_L08_00161AF0_gp __asm__("D_L08_00161AF0") = 45.0f;
+float D_L08_00161AF4_gp __asm__("D_L08_00161AF4") = 1.8e+02f;
+float D_L08_00161AF8_gp __asm__("D_L08_00161AF8") = 3.6e+02f;
+float D_L08_00161AFC_gp __asm__("D_L08_00161AFC") = 7.2e+02f;
+float D_L08_00161B00_gp __asm__("D_L08_00161B00") = 1.8e+02f;
 extern s32   D_0015ED84;
 extern char  D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
 extern int   D_0015ED84;
-extern short D_L08_00161A90_gp __asm__("D_L08_00161A90") __attribute__((sda));
-extern short D_L08_00161B10_gp __asm__("D_L08_00161B10") __attribute__((sda));
-extern short D_L08_00161B20_gp __asm__("D_L08_00161B20") __attribute__((sda));
-extern short D_L08_00161B30_gp __asm__("D_L08_00161B30") __attribute__((sda));
-extern short D_L08_00161B40_gp __asm__("D_L08_00161B40") __attribute__((sda));
-extern short D_L08_00161B50_gp __asm__("D_L08_00161B50") __attribute__((sda));
-extern short D_L08_00161BF0_gp __asm__("D_L08_00161BF0") __attribute__((sda));
+short D_L08_00161A90_gp __asm__("D_L08_00161A90") = 0;
+short D_L08_00161B10_gp __asm__("D_L08_00161B10") = 0x3d71;
+short D_L08_00161B20_gp __asm__("D_L08_00161B20") = 0x3d71;
+short D_L08_00161B30_gp __asm__("D_L08_00161B30") = -28836;
+short D_L08_00161B40_gp __asm__("D_L08_00161B40") = -28836;
+short D_L08_00161B50_gp __asm__("D_L08_00161B50") = 0x5e35;
+short D_L08_00161BF0_gp __asm__("D_L08_00161BF0") = -13107;
 extern void  func_L00_001FF328_2E16A0(void *, void *, float) __asm__("FUN_L00_001ff378");
 extern void  func_L00_00217718_2E16A0(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void         set_batalia_cannon_platform_mode(u8 *platform, s32 mode) __asm__("FUN_L08_00306b30");

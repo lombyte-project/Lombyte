@@ -26,9 +26,9 @@ typedef struct {
 
 extern char *D_L15_0015FFE4;
 
-extern f32 swinging_door_swing_angle_degrees_gp __asm__("D_L15_001614FC") __attribute__((sda));
+f32 swinging_door_swing_angle_degrees_gp __asm__("D_L15_001614FC") = -35.0f;
 
-extern f32 swinging_door_swing_duration_gp __asm__("D_L15_00161500") __attribute__((sda));
+f32 swinging_door_swing_duration_gp __asm__("D_L15_00161500") = 0.2f;
 
 void update_swinging_door(struct Moby *moby) __asm__("FUN_L15_002a3ba8");
 

@@ -81,8 +81,8 @@ extern f32 D_L06_00161FA8 __attribute__((sda));
 #include "rnc/overlay/shared/enemies/blarg_space_commando_globals.h"
 
 extern s32   ranged_attack_cooldown_frames_gp __asm__("D_L06_00161FC0") __attribute__((sda));
-extern f32   melee_attack_distance_threshold_gp __asm__("D_L06_00161FC4") __attribute__((sda));
-extern f32   vehicle_melee_windup_animation_speed_gp __asm__("D_L06_00161FCC") __attribute__((sda));
+f32 melee_attack_distance_threshold_gp __asm__("D_L06_00161FC4") = 4.0f;
+f32 vehicle_melee_windup_animation_speed_gp __asm__("D_L06_00161FCC") = 0.125f;
 extern Vec4f D_L06_00167540;
 extern s32  *D_L06_001B0C30[];
 extern f32   D_L06_0015F580[] MACRO_ADDR;
@@ -745,7 +745,7 @@ void process_blarg_space_commando_hits(char *moby) {
 
 extern char D_L06_00174600_lui[] __asm__("D_L06_00174600") NOT_SDA;
 
-extern float beam_spread_degrees_gp __asm__("D_L06_00161FD4") __attribute__((sda));
+float beam_spread_degrees_gp __asm__("D_L06_00161FD4") = 45.0f;
 extern int   beam_duration_frames_gp __asm__("D_L06_00161FD8") __attribute__((sda));
 void         initialize_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff100");
 
@@ -793,7 +793,7 @@ typedef struct {
 
 extern float approach_value(float *, float, float);
 extern int   collision_line(void *, void *, int, void *, void *);
-extern f32   beam_point_horizontal_speed_gp __asm__("D_L06_00161FD0") __attribute__((sda));
+f32 beam_point_horizontal_speed_gp __asm__("D_L06_00161FD0") = 6.0f;
 void         draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
 
 void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
@@ -983,10 +983,10 @@ void draw_blarg_space_commando_beam(char *moby) {
 extern char *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern float scale_time(float) __asm__("FUN_001f96b0");
-extern float beam_spark_first_vector_w_gp __asm__("D_L06_0016200C") __attribute__((sda));
-extern float beam_spark_second_vector_w_gp __asm__("D_L06_00162010") __attribute__((sda));
-extern float beam_spark_frame_count_range_start_gp __asm__("D_L06_00162014") __attribute__((sda));
-extern float beam_spark_frame_count_range_end_gp __asm__("D_L06_00162018") __attribute__((sda));
+float beam_spark_first_vector_w_gp __asm__("D_L06_0016200C") = 0.25f;
+float beam_spark_second_vector_w_gp __asm__("D_L06_00162010") = 0.1f;
+float beam_spark_frame_count_range_start_gp __asm__("D_L06_00162014") = 1e+01f;
+float beam_spark_frame_count_range_end_gp __asm__("D_L06_00162018") = 2e+01f;
 extern float beam_spark_second_frame_count_range_start_gp __asm__("D_L06_0016201C")
     __attribute__((sda));
 extern float beam_spark_second_frame_count_range_end_gp __asm__("D_L06_00162020")
@@ -999,9 +999,9 @@ extern float beam_spark_horizontal_scale_range_start_gp __asm__("D_L06_0016202C"
     __attribute__((sda));
 extern float beam_spark_horizontal_scale_range_end_gp __asm__("D_L06_00162030")
     __attribute__((sda));
-extern float beam_spark_vector_z_range_start_gp __asm__("D_L06_00162034") __attribute__((sda));
-extern float beam_spark_vector_z_range_end_gp __asm__("D_L06_00162038") __attribute__((sda));
-extern float beam_spark_spawn_probability_gp __asm__("D_L06_0016203C") __attribute__((sda));
+float beam_spark_vector_z_range_start_gp __asm__("D_L06_00162034") = -0.065f;
+float beam_spark_vector_z_range_end_gp __asm__("D_L06_00162038") = 0.125f;
+float beam_spark_spawn_probability_gp __asm__("D_L06_0016203C") = 0.25f;
 
 void spawn_blarg_space_commando_beam_sparks(char *moby) {
     char *data = ((char *)MOBY(moby)->pvars);
@@ -1120,3 +1120,15 @@ f32 beam_quad_corner_uvs[4][2] __asm__("D_L06_001F2E90") = {
     {0.5f, 0.5f},
     {0.5f, 0.0f},
 };
+
+float beam_spark_second_frame_count_range_start_gp __asm__("D_L06_0016201C") = 1e+01f;
+
+float beam_spark_second_frame_count_range_end_gp __asm__("D_L06_00162020") = 2e+01f;
+
+float beam_spark_third_frame_count_range_start_gp __asm__("D_L06_00162024") = 1e+01f;
+
+float beam_spark_third_frame_count_range_end_gp __asm__("D_L06_00162028") = 2e+01f;
+
+float beam_spark_horizontal_scale_range_start_gp __asm__("D_L06_0016202C") = 0.25f;
+
+float beam_spark_horizontal_scale_range_end_gp __asm__("D_L06_00162030") = 0.75f;

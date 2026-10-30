@@ -66,7 +66,7 @@ extern OvlVec4 D_0013F3D0_307ba8 __asm__("D_0013F3D0");
 extern OvlVec4 D_0013F3D0_307d68 __asm__("D_0013F3D0");
 extern OvlVec4 D_L09_00166F40_307d68 __asm__("D_L09_00166F40");
 extern char    D_L09_00174000[] __asm__("D_L09_00174000");
-extern OvlVec4 l09_projectile_impact_position __asm__("D_L09_00173FE0");
+OvlVec4 l09_projectile_impact_position __asm__("D_L09_00173FE0") = {0};
 
 struct Moby *
 spawn_turret_shot(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life) __asm__("FUN_L09_00307ba8");

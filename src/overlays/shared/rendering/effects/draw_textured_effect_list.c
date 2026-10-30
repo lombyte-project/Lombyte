@@ -119,3 +119,5 @@ void draw_level_12_effects(void) {
 f32 D_L15_0017CA60[1] __attribute__((section(".data"))) = {0};
 
 f32 D_L15_0017CA64[1] __attribute__((section(".data"))) = {0};
+
+struct Pkt611c0 l12_render_packet_cursor __asm__("D_L12_001611C0") = {0};

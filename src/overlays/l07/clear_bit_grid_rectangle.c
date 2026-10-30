@@ -11,7 +11,7 @@ typedef struct {
     unsigned char *p;
 } Grid;
 
-extern Grid l07_packed_bit_grid __asm__("D_L07_00184270");
+Grid l07_packed_bit_grid __asm__("D_L07_00184270") = {0};
 
 void clear_bit_grid_rectangle(int x, int y0, int width, int height) __asm__("FUN_L07_00270248");
 

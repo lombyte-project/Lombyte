@@ -13,7 +13,7 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 
 extern int   collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern void  reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
-extern float leaf_motion_parameters[6] __asm__("D_L04_001CB940");
+float leaf_motion_parameters[6] __asm__("D_L04_001CB940") = {0};
 extern char  D_L04_00173FE0[];
 
 /* Three-state motion update. The saved position is restored when the timer expires. */

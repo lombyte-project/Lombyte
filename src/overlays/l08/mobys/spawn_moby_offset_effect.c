@@ -11,9 +11,9 @@
 /* Spawns an effect moby at the position of moby a. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/partupd_0027ACC8.c: func_L08_0027ACC8), where it is exact; names translated to the US level program. */
 
-extern short moby_offset_effect_size_gp __asm__("D_L08_00160200") __attribute__((sda));
-extern short moby_offset_effect_color_gp __asm__("D_L08_00160204") __attribute__((sda));
-extern short moby_offset_effect_offset_length_gp __asm__("D_L08_00160208") __attribute__((sda));
+short moby_offset_effect_size_gp __asm__("D_L08_00160200") = -18432;
+short moby_offset_effect_color_gp __asm__("D_L08_00160204") = -224;
+short moby_offset_effect_offset_length_gp __asm__("D_L08_00160208") = 0;
 extern unsigned char *D_L08_001B291C NOT_SDA;
 unsigned char *spawn_moby_offset_effect(char *source_moby) __asm__("FUN_L08_00279f00");
 

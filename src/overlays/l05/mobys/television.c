@@ -10,7 +10,7 @@ extern float fast_add_rotations(float, float);
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0031A0A8), where it is exact; names translated to the US level program. */
 
-extern short television_scale_multiplier_gp __asm__("D_L05_00161F08") __attribute__((sda));
+short television_scale_multiplier_gp __asm__("D_L05_00161F08") = 0x3333;
 void         television_update(struct Moby *moby) __asm__("FUN_L05_00318b98");
 
 void television_update(struct Moby *moby) {

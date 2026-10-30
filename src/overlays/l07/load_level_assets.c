@@ -522,3 +522,5 @@ s32 load_level_assets(s32 full, s32 keep) {
 }
 
 s32 D_L07_00173E9C[1] __attribute__((section(".data"))) = {0};
+
+char *D_L18_0016016C_26b768 __asm__("D_L07_0016016C") = 0;

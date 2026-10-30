@@ -35,7 +35,7 @@ extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 /* updates matching objects in the selected object range */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002E0258.c: func_L08_002E4118), where it is exact; names translated to the US level program. */
 void         build_bolt_thief_target_list(struct Moby *moby) __asm__("FUN_L08_002e2da0");
-extern float bolt_thief_waypoint_speed_gp __asm__("D_L08_00161C50") __attribute__((sda));
+float bolt_thief_waypoint_speed_gp __asm__("D_L08_00161C50") = 1e+01f;
 extern char  D_001413D0[];
 extern void  FUN_L00_00263ac8(float, struct Moby *, int, void *);
 extern void  FUN_L00_0025a120(struct Moby *);

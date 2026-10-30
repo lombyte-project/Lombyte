@@ -38,7 +38,7 @@ typedef struct {
 } PathPos;
 
 extern int   FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
-extern float D_L14_00161A38_gp __asm__("D_L14_00161A38") __attribute__((sda));
+float D_L14_00161A38_gp __asm__("D_L14_00161A38") = 9.0f;
 
 void initialize_racer_path_tracking(struct Moby *racer_moby) __asm__("FUN_L14_002d6358");
 
@@ -589,7 +589,7 @@ extern float D_L14_0015F580[] MACRO_ADDR;
 
 #include "rnc/overlay/l14/mobys/racer_path_and_weapon_globals.h"
 
-extern float joint_light_position_w_gp __asm__("D_L14_00161A60") __attribute__((sda));
+float joint_light_position_w_gp __asm__("D_L14_00161A60") = 6.0f;
 extern void  random_spherical_offset(void *, float, float) __asm__("FUN_00213358");
 extern void  draw_racer_glow_quads(struct Moby *) __asm__("FUN_L14_002d71f0");
 

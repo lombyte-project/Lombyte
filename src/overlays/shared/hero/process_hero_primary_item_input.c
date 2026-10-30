@@ -662,7 +662,7 @@ extern PadState       D_0013CA40_p2523C8 __asm__("D_0013C940");
 extern int            D_00141660_lui __asm__("D_00141660") NOT_SDA;
 extern unsigned char  D_0013D5C8_2523C8[] __asm__("D_0013D4DC");
 extern HeroTableRow2C D_L05_0017C088[];
-extern int            D_L05_0015F674_gp __asm__("D_L05_0015F674") __attribute__((sda));
+int D_L05_0015F674_gp __asm__("D_L05_0015F674") = 0;
 extern Moby          *D_L05_0015FFD8_macro __asm__("D_L05_0015FFD8") MACRO_ADDR;
 extern int            D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
 extern int            D_0015ED84_gp __asm__("D_0015ED84") MACRO_ADDR;

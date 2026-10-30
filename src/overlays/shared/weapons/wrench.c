@@ -224,7 +224,7 @@ extern void FUN_001f7d30_2a7780(void *, void *, int) __asm__("FUN_001f7d30");
 
 extern E_2a7780 effects[] __asm__("D_L00_001D92E8");
 extern int      last_frame __asm__("D_L00_001613C0");
-extern f32      uv_scale __asm__("D_L00_001613BC") __attribute__((sda));
+f32 uv_scale __asm__("D_L00_001613BC") = 1.1f;
 
 extern char *get_moby_target_info(void *) __asm__("FUN_002141f8");
 

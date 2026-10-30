@@ -319,3 +319,7 @@ int check_path_camera_priority(char *camera, char *control_mode_gate_object) {
 }
 
 extern char *D_L14_0015EF50;
+
+VendorView_5290 l14_camera_projection_state __asm__("D_L14_0016D140") = {0};
+
+char *D_L14_0015F050_15920 __asm__("D_L14_0015EF50") = 0;

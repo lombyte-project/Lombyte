@@ -22,7 +22,7 @@ extern float absolute_float(float);
 
 extern CameraOffsetEffect   camera_offset_effect __asm__("D_L02_00167600");
 extern float D_L02_0016760C NOT_SDA;
-extern short                D_L02_0016238C_gp __asm__("D_L02_0016238C") __attribute__((sda));
+short D_L02_0016238C_gp __asm__("D_L02_0016238C") = -15729;
 extern char                 D_0013CA44[];
 extern short                D_L02_0016238C;
 

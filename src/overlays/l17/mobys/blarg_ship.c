@@ -31,7 +31,7 @@ extern void           update_moby_trail_points(void *) __asm__("FUN_L11_00319670
 extern void           update_moby_hit_stats_and_state(void *) __asm__("FUN_L11_0031a1c0");
 extern void           update_moby_path_transform(void *) __asm__("FUN_L11_0031a438");
 
-extern float blarg_ship_firing_speed_gp __asm__("D_L17_001623E8") __attribute__((sda));
+float blarg_ship_firing_speed_gp __asm__("D_L17_001623E8") = 32.0f;
 void         blarg_ship_update(struct Moby *moby) __asm__("FUN_L17_002f40d8");
 
 void blarg_ship_update(struct Moby *moby) {

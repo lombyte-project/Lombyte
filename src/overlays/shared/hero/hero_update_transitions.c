@@ -70,7 +70,7 @@ extern float          fast_cos(float);
 extern float          fast_sin(float);
 extern float          vector_length_xy(void *);
 extern int D_00141660 NOT_SDA;
-extern int            D_L00_0015F678_gp __asm__("D_L00_0015F678") __attribute__((sda));
+int D_L00_0015F678_gp __asm__("D_L00_0015F678") = 0;
 extern int            D_L00_0015F6DC __asm__("D_L00_0015F6DC");
 extern int            D_L00_0015F594 __attribute__((sda));
 extern int D_L00_0016C780 NOT_SDA;

@@ -96,7 +96,7 @@ extern int   coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60")
 extern void  make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void  record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void  cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern float rocket_trail_offset_z_scale_gp __asm__("D_L03_00161B28") __attribute__((sda));
+float rocket_trail_offset_z_scale_gp __asm__("D_L03_00161B28") = 0.35f;
 extern CollisionHit D_L03_00173F40;
 
 /* Homing rocket update: flies on, trails smoke, steers up or down toward a target, explodes on impact or timeout. */

@@ -41,8 +41,8 @@ typedef struct {
     float x, y, z, radius;
 } L16SingleSphere_2e98e0;
 
-extern short                  D_L16_00161F90_gp __asm__("D_L16_00161F90") __attribute__((sda));
-extern short                  D_L16_00161F98_gp __asm__("D_L16_00161F98") __attribute__((sda));
+short D_L16_00161F90_gp __asm__("D_L16_00161F90") = 0x6e;
+short D_L16_00161F98_gp __asm__("D_L16_00161F98") = -7856;
 extern L16SingleSphere_2e98e0 D_L16_00161F60_bounds_2e98e0[] __asm__("D_L16_001DF2B0")
     __attribute__((section(".data")));
 

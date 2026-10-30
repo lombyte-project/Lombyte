@@ -82,7 +82,7 @@ extern volatile f32 frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern f32          frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 extern u8           D_0015EDB3_macro __asm__("D_0015EDB3") MACRO_ADDR;
 extern s32          D_L06_0015F5CC_macro __asm__("D_L06_0015F5CC") MACRO_ADDR;
-extern f32          D_L06_0017BFDC_lui __asm__("D_L06_0017BFDC") NOT_SDA;
+f32 D_L06_0017BFDC_lui __asm__("D_L06_0017BFDC") NOT_SDA = 1.0f;
 extern void         hero_update(void) __asm__("FUN_L00_00211670");
 extern void         apply_hero_ground_material_response(void) __asm__("FUN_L06_00222fb8");
 extern void         check_ledge_grab(void) __asm__("FUN_L00_0020bed0");

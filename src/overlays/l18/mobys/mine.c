@@ -177,7 +177,7 @@ typedef struct {
 extern float FUN_L00_0025abf0_q(float *a, float *b, float *out, float speed, float g) __asm__("FUN_L00_0025abf0");
 extern int *D_L18_001AC240_lui[] __asm__("D_L18_001AC240") NOT_SDA;
 extern int  D_L18_0015FFD8_m __asm__("D_L18_0015FFD8");
-extern f32  D_L18_00161994_gp __asm__("D_L18_00161994") __attribute__((sda));
+f32 D_L18_00161994_gp __asm__("D_L18_00161994") = 2.5f;
 
 char *launch_class_238_moby_from_list(float  horizontal_speed,
                                       int    launching_moby,

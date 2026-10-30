@@ -47,10 +47,10 @@ struct Spark_c8e0 {
     } draw;
 };
 
-extern f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") __attribute__((sda));
+f32 D_L05_00161FC8_gp __asm__("D_L05_00161FC8") = 4.0f;
 
-extern f32  debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") __attribute__((sda));
-extern f32  debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") __attribute__((sda));
+f32 debris_axis_launch_speed_gp __asm__("D_L05_00161FD0") = 0.075f;
+f32 debris_upward_launch_speed_gp __asm__("D_L05_00161FD4") = 0.08f;
 extern void allocate_voice_for_target_entry(s32, s32, struct Moby *) __asm__("FUN_0022da68");
 extern struct Moby *spawn_debris_c8e0(f32,
                                       struct Moby *,
@@ -241,7 +241,7 @@ typedef struct {
 extern float glow_sprite_local_vertices[4][4] __asm__("D_L05_00215C70");
 extern void  draw_geometry_quad(void *, void *, int);
 
-extern short glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") __attribute__((sda));
+short glow_sprite_camera_offset_distance __asm__("D_L05_00161FCC") = -13107;
 extern char  D_L05_001671C0_lui[] __asm__("D_L05_001671C0") NOT_SDA;
 
 void draw_moby_glow_sprite(char *m) {

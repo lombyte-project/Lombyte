@@ -24,8 +24,8 @@ FUN_L00_00259bc8_2c7530(float, void *, void *, int, void *, void *) __asm__("FUN
 extern void spawn_type_14_particle(int, void *) __asm__("FUN_L01_00280970");
 extern void FUN_0020c828(void *);
 
-extern s32 moby_motion_particle_random_sign_base_gp __asm__("D_L01_00161494") __attribute__((sda));
-extern f32 moby_motion_collision_radius_gp __asm__("D_L01_0016149C") __attribute__((sda));
+s32 moby_motion_particle_random_sign_base_gp __asm__("D_L01_00161494") = 8;
+f32 moby_motion_collision_radius_gp __asm__("D_L01_0016149C") = 0.25f;
 
 /* spawns two bursts of particles around a point */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002C84D8), where it is exact; names translated to the US level program. */

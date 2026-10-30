@@ -50,7 +50,7 @@ typedef struct {
 } TargetBoardVars;
 
 void         spawn_gunship_parts(struct Moby *moby) __asm__("FUN_L08_002e1d70");
-extern float gunship_part_spin_speed_degrees_gp __asm__("D_L08_00161C3C") __attribute__((sda));
+float gunship_part_spin_speed_degrees_gp __asm__("D_L08_00161C3C") = 3e+01f;
 
 typedef struct {
     struct Moby *part; /* moved along with the anchor's joint */
@@ -86,10 +86,10 @@ typedef struct {
     s16               sound; /* 0x28E */
 } GunshipVars;
 
-extern s32 gunship_updates_disabled_gp __asm__("D_L08_00161C4C") __attribute__((sda));
-extern f32 gunship_path_speed_gp __asm__("D_L08_00161C38") __attribute__((sda));
-extern f32 gunship_turn_acceleration_degrees_gp __asm__("D_L08_00161C44") __attribute__((sda));
-extern f32 gunship_max_turn_speed_degrees_gp __asm__("D_L08_00161C48") __attribute__((sda));
+s32 gunship_updates_disabled_gp __asm__("D_L08_00161C4C") = 0;
+f32 gunship_path_speed_gp __asm__("D_L08_00161C38") = 5.0f;
+f32 gunship_turn_acceleration_degrees_gp __asm__("D_L08_00161C44") = 2e+01f;
+f32 gunship_max_turn_speed_degrees_gp __asm__("D_L08_00161C48") = 9e+01f;
 extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");
 extern f32          scale_time(f32) __asm__("FUN_001f96b0");
 extern void         FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);

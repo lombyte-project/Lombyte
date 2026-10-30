@@ -118,7 +118,7 @@ void update_rocket_moby(struct Moby *moby) {
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
 /* Spawns a moby that travels along a path, with its heading set from the direction vector. */
-extern float rocket_spawn_scale_multiplier_gp __asm__("D_L18_00161960") __attribute__((sda));
+float rocket_spawn_scale_multiplier_gp __asm__("D_L18_00161960") = 5.0f;
 extern void  set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern void  allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
@@ -257,7 +257,7 @@ extern void func_L00_0025F4A8_alt(void *,
                                   int,
                                   int) __asm__("FUN_L00_0025e450");
 
-extern float rocket_explosion_hit_priority_gp __asm__("D_L18_0016196C") __attribute__((sda));
+float rocket_explosion_hit_priority_gp __asm__("D_L18_0016196C") = 3.0f;
 
 void spawn_rocket_explosion(void *moby_object, void *movement_step) {
     char  *moby = moby_object;
@@ -321,8 +321,8 @@ extern void               draw_geometry_quad(void *, int, int) __asm__("FUN_001f
 
 #include "rnc/overlay/l18/mobys/rocket_data/draw_rocket_target_pulse_quad.h"
 
-extern int rocket_target_pulse_color_start_gp __asm__("D_L18_00161980") __attribute__((sda));
-extern int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") __attribute__((sda));
+int rocket_target_pulse_color_start_gp __asm__("D_L18_00161980") = 0x800020f0;
+int rocket_target_pulse_color_end_gp __asm__("D_L18_00161984") = 0x8000f0f0;
 
 void draw_rocket_target_pulse_quad(struct Moby *m) {
     Pk           pk;

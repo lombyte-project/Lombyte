@@ -3673,3 +3673,5 @@ void enter_hero_idle_or_stop(void) {
         hero_set_state(HERO_STATE_STOP, 1);
     }
 }
+
+int D_L02_0015F6DC_d __asm__("D_L02_0015F6DC") = 0;

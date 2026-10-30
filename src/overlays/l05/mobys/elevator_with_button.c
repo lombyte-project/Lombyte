@@ -250,9 +250,9 @@ void elevator_with_button_update(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_003173A8), where it is exact; names translated to the US level program. */
 
-extern short lift_camera_height_offset_gp __asm__("D_L05_00161EC0") __attribute__((sda));
-extern short lift_camera_pitch_degrees_gp __asm__("D_L05_00161EC4") __attribute__((sda));
-extern short lift_camera_distance_along_facing_gp __asm__("D_L05_00161EC8") __attribute__((sda));
+short lift_camera_height_offset_gp __asm__("D_L05_00161EC0") = 0;
+short lift_camera_pitch_degrees_gp __asm__("D_L05_00161EC4") = 0;
+short lift_camera_distance_along_facing_gp __asm__("D_L05_00161EC8") = 0;
 
 void FUN_L05_00315ee0(char *lift_moby, char *camera_position, char *camera_rotation) {
     float pitch_degrees;

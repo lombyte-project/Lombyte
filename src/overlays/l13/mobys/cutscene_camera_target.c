@@ -11,7 +11,7 @@ typedef struct {
     int  target;
 } L13Action;
 
-extern L13Action l13_cutscene_target_effect_controller __asm__("D_L13_0016CB60");
+L13Action l13_cutscene_target_effect_controller __asm__("D_L13_0016CB60") = {0};
 
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 

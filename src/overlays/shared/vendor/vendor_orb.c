@@ -10,7 +10,7 @@
 
 void FUN_L00_001fff28(char *, int, float);
 
-extern float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") __attribute__((sda));
+float vendor_orb_rotation_rate_degrees_gp __asm__("D_L00_00161BB0") = 45.0f;
 
 float D_L01_00161FF0 = 45.0f;
 float D_L02_00161F48 = 45.0f;

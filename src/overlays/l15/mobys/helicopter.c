@@ -343,9 +343,9 @@ extern LevelPath *D_L15_001B0AB0[];
 
 extern LevelSaveState D_L15_001BABD0;
 
-extern float helicopter_bob_period_gp __asm__("D_L15_00161A08") __attribute__((sda));
+float helicopter_bob_period_gp __asm__("D_L15_00161A08") = 2.0f;
 
-extern float helicopter_bob_amplitude_gp __asm__("D_L15_00161A0C") __attribute__((sda));
+float helicopter_bob_amplitude_gp __asm__("D_L15_00161A0C") = 0.17f;
 
 extern struct Moby *create_class_55b_moby_from_source(struct Moby *) __asm__("FUN_L12_00308670");
 

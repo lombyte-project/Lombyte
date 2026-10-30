@@ -246,3 +246,5 @@ extern void *spawn_debris_chunk(void *pos,
 
 extern void *
 mine_debris(void *pos, void *vel, int color, int color2, float size, int life, int tint) __asm__("FUN_L00_0026bed0");
+
+Colors l15_destructible_secondary_debris_color_palette __asm__("D_L15_00161578") = {{0, 1, 2}};

@@ -20,7 +20,7 @@ spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("F
 
 #include "rnc/overlay/level_save_state.h"
 
-extern DebrisClassChoices l01_cave_wall_debris_oclass_choices __asm__("D_L01_00161C70");
+DebrisClassChoices l01_cave_wall_debris_oclass_choices __asm__("D_L01_00161C70") = {{0x2b8, 0x2b9, 0x2ba}};
 extern u8                 D_0013D388[];
 
 /* Removed once collected; when hit, bursts into 500 smoke puffs and 100 chunks, marks itself collected and sets D_0013D388[0xE] (an item-availability flag). */

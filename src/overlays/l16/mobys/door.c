@@ -74,7 +74,7 @@ extern int *D_L16_001ABCC0[];
 /* Activate the linked mobys and return the one nearest the challenge target. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D6E98), where it is exact; names translated to the US level program. */
 
-extern float class_0287_group_activation_value_gp __asm__("D_L16_00161A80") __attribute__((sda));
+float class_0287_group_activation_value_gp __asm__("D_L16_00161A80") = 1.5f;
 
 #include "rnc/overlay/l16/mobys/door.h"
 

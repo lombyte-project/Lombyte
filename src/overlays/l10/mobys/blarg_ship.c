@@ -132,8 +132,8 @@ extern int   D_L10_00161EE4 __attribute__((sda));
 
 #include "rnc/overlay/l10/mobys/blarg_ship_globals.h"
 
-extern float blarg_ship_rocket_speed_gp __asm__("D_L10_00161EE8") __attribute__((sda));
-extern float blarg_ship_firing_animation_speed_gp __asm__("D_L10_00161EEC") __attribute__((sda));
+float blarg_ship_rocket_speed_gp __asm__("D_L10_00161EE8") = 32.0f;
+float blarg_ship_firing_animation_speed_gp __asm__("D_L10_00161EEC") = 2.0f;
 extern unsigned char D_0013D4CB[];
 extern unsigned char D_001413F4[];
 extern unsigned char D_00141C48[];

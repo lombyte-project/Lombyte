@@ -55,7 +55,7 @@ struct SceneTrigger {
 extern s32 D_L00_0015F5C4; /* nonzero blocks all triggers */
 extern s32 game_frame __asm__("D_L00_0015F5CC");
 extern s32 D_0013CAE4[]; /* bit 0x10 lifts the facing check */
-extern s32 bolt_hud_item __asm__("D_L00_00160130") __attribute__((sda));
+s32 bolt_hud_item __asm__("D_L00_00160130") = -1;
 
 extern void FUN_L00_002668a0_c(struct Moby *, struct SceneTrigger *) __asm__("FUN_L00_002668a0");
 extern void process_menu_entry(struct Moby *, struct SceneTrigger *, s32) __asm__("FUN_00216c48");

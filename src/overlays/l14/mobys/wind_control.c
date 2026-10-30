@@ -66,7 +66,7 @@ void initialize_wind_spark(struct Moby *wind_control_moby,
 
 void initialize_wind_spark(struct Moby *m, int i, void *dir) __asm__("FUN_L14_002eb388");
 
-extern f32 wind_effect_strength_gp __asm__("D_L14_00161C08") __attribute__((sda));
+f32 wind_effect_strength_gp __asm__("D_L14_00161C08") = 2e+01f;
 
 extern s32 wind_push_decay_frames_gp __asm__("D_L14_00161C04") __attribute__((sda));
 
@@ -183,13 +183,13 @@ typedef struct {
     int   i504;
 } Spk_k;
 
-extern int wind_spark_speed_range_start_gp __asm__("D_L14_00161C30") __attribute__((sda));
+int wind_spark_speed_range_start_gp __asm__("D_L14_00161C30") = 0xf;
 
-extern int wind_spark_speed_range_end_gp __asm__("D_L14_00161C34") __attribute__((sda));
+int wind_spark_speed_range_end_gp __asm__("D_L14_00161C34") = 0x28;
 
-extern float wind_spark_size_range_start_gp __asm__("D_L14_00161C38") __attribute__((sda));
+float wind_spark_size_range_start_gp __asm__("D_L14_00161C38") = 2.0f;
 
-extern float wind_spark_size_range_end_gp __asm__("D_L14_00161C3C") __attribute__((sda));
+float wind_spark_size_range_end_gp __asm__("D_L14_00161C3C") = 6.0f;
 
 void initialize_wind_spark(struct Moby *wind_control_moby, int i, void *spark_travel_direction) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
@@ -234,7 +234,7 @@ void draw_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb810");
 
 extern int wind_spark_peak_alpha_gp __asm__("D_L14_00161C10") __attribute__((sda));
 
-extern int wind_spark_fade_in_frames_gp __asm__("D_L14_00161C2C") __attribute__((sda));
+int wind_spark_fade_in_frames_gp __asm__("D_L14_00161C2C") = 0x1e;
 
 void update_wind_sparks(struct Moby *wind_control_moby) {
     Spk_k *spark_vars = (Spk_k *)wind_control_moby->pvars;
@@ -310,7 +310,7 @@ typedef struct {
 
 extern char D_L14_001674C0_m[] __asm__("D_L14_001674C0");
 
-extern int wind_spark_base_color_gp __asm__("D_L14_00161C0C") __attribute__((sda));
+int wind_spark_base_color_gp __asm__("D_L14_00161C0C") = 0x7f7f7f;
 
 float D_L14_001DFD40[4][4] = {
     {0.0f,  1.0f,  1.0f, 1.0f},

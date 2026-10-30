@@ -233,7 +233,7 @@ int update_hud_elements(int call) {
     return positive_timer_count;
 }
 
-extern int D_L00_0015F968_gp __asm__("D_L00_0015F968") __attribute__((sda));
+int D_L00_0015F968_gp __asm__("D_L00_0015F968") = 0;
 extern int D_L00_0015F96C;
 extern int D_L00_0015F970;
 extern int

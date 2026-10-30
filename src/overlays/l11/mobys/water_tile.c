@@ -266,3 +266,7 @@ void populate_water_tile_neighbor_indices(int selected_tile_index) {
         }
     }
 }
+
+Light_e088 l11_water_tile_light __asm__("D_L11_001CB280") = {32.0f, 32.0f, -16.0f, -16.0f, 2.0f, 2.0f, 0.95f, 0.16f, 0.1f, 0.0f, 0, 0, 0.0f, 0.0f, 0.0f, 0, 0};
+
+void *l11_water_tile_binding_record_base __asm__("D_L11_001612D4") = 0;

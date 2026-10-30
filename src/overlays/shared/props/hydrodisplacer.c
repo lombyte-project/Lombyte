@@ -381,3 +381,7 @@ void end_hydrodisplacer_interaction(char *moby) {
         hero_set_state(HERO_STATE_IDLE, 1);
     }
 }
+
+int D_L00_0015F404_macro __asm__("D_L00_0015F404") = 0;
+
+float D_L00_00161BB4_macro __asm__("D_L00_00161BB4") = 1e+02f;

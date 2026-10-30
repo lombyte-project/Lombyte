@@ -8,7 +8,7 @@
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002FE5D0.c: func_L06_00302248), where it is exact; names translated to the US level program. */
 extern char  D_0013E533[];
-extern float moby_bobbing_amplitude_gp __asm__("D_L06_00162090") __attribute__((sda));
+float moby_bobbing_amplitude_gp __asm__("D_L06_00162090") = 3.0f;
 extern int   GB_FRAME_gp __asm__("D_L06_0015F5CC") __attribute__((sda));
 void         update_breakaway_piece(char *moby) __asm__("FUN_L06_00300df0");
 

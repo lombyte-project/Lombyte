@@ -43,7 +43,7 @@ typedef struct {
 
 extern float D_0015ED6C;
 
-extern float vertical_gate_travel_distance_gp __asm__("D_L15_001614F8") __attribute__((sda));
+float vertical_gate_travel_distance_gp __asm__("D_L15_001614F8") = 4.25f;
 
 extern int D_L15_00161AC0;
 
@@ -55,7 +55,7 @@ extern unsigned char D_0013F3D0_2A48B0[] __asm__("D_0013F3D0");
 
 extern char D_L15_00167440_2A48B0[] __asm__("D_L15_001673C0");
 
-extern int D_L15_00184AA8_lui __asm__("D_L15_00184AA8") NOT_SDA;
+int D_L15_00184AA8_lui __asm__("D_L15_00184AA8") NOT_SDA = 0;
 
 void update_vertical_gate(GateMoby *gate_moby) __asm__("FUN_L15_002a36d0");
 

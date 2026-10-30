@@ -15,3 +15,5 @@ void trackdrive_left_update(char *moby) {
         MOBY(moby)->flags |= 0x40;
     }
 }
+
+unsigned int l02_trackdrive_left_moby_address_cutoff __asm__("D_L02_0015FFDC") = 0;

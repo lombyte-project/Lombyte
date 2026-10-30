@@ -34,8 +34,8 @@ typedef struct {
     PV2e5178 *pv;
 } M2e5178;
 
-extern f32  D_L04_00161D78_gp __asm__("D_L04_00161D78") __attribute__((sda));
-extern f32  D_L04_00161D7C_gp __asm__("D_L04_00161D7C") __attribute__((sda));
+f32 D_L04_00161D78_gp __asm__("D_L04_00161D78") = 0;
+f32 D_L04_00161D7C_gp __asm__("D_L04_00161D7C") = 3.6e+02f;
 extern u128 coll_hit_normal_lui[] __asm__("D_L04_00174000") NOT_SDA;
 extern s32  coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 void        update_woodcut_bot_debris(M2e5178 *entity) __asm__("FUN_L04_002e5178");

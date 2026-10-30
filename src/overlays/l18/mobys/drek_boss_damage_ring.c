@@ -29,7 +29,7 @@ void        mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 #include "rnc/overlay/l18/mobys/drek_boss_damage_ring_globals.h"
 
-extern float class_274_ring_phase_rate_gp __asm__("D_L18_00161CA0") __attribute__((sda));
+float class_274_ring_phase_rate_gp __asm__("D_L18_00161CA0") = 2.0f;
 void         update_drek_boss_damage_ring(struct Moby *moby) __asm__("FUN_L18_002dc260");
 
 void update_drek_boss_damage_ring(struct Moby *moby) {
@@ -87,7 +87,7 @@ char *create_class_274_ring_effect(void *owner, void *vector, float value) {
 extern int scale_game_frames(int);
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002DD848), where it is exact; names translated to the US level program. */
 
-extern s32 D_L18_00161C9C_gp __asm__("D_L18_00161C9C") __attribute__((sda));
+s32 D_L18_00161C9C_gp __asm__("D_L18_00161C9C") = 0x14;
 
 void refresh_ring_effect(struct Moby *moby, void *pos, float radius) __asm__("FUN_L18_002dc458");
 
@@ -129,12 +129,12 @@ extern float class_274_ring_quad_uvs[] __asm__("D_L18_001D4330");
 
 #include "rnc/overlay/l18/mobys/drek_boss_damage_ring_data/draw_class_274_ring_effect.h"
 
-extern int   class_274_ring_color_start_gp __asm__("D_L18_00161CB8") __attribute__((sda));
-extern int   class_274_ring_color_end_gp __asm__("D_L18_00161CBC") __attribute__((sda));
-extern float class_274_ring_segment_angle_degrees_gp __asm__("D_L18_00161CC0") __attribute__((sda));
-extern float class_274_ring_draw_height_offset_gp __asm__("D_L18_00161CC4") __attribute__((sda));
+int class_274_ring_color_start_gp __asm__("D_L18_00161CB8") = 0x800060ff;
+int class_274_ring_color_end_gp __asm__("D_L18_00161CBC") = 0xff;
+float class_274_ring_segment_angle_degrees_gp __asm__("D_L18_00161CC0") = 3e+01f;
+float class_274_ring_draw_height_offset_gp __asm__("D_L18_00161CC4") = 1.0f;
 extern float D_L18_00161CC8 __attribute__((sda));
-extern float class_274_ring_layer_radius_offset_gp __asm__("D_L18_00161CCC") __attribute__((sda));
+float class_274_ring_layer_radius_offset_gp __asm__("D_L18_00161CCC") = 0.05f;
 extern float D_L18_00161CD4 __attribute__((sda));
 
 void draw_class_274_ring_effect(char *moby) {

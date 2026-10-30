@@ -50,10 +50,10 @@ void         FUN_L00_00250df8_2af8b0(void *) __asm__("FUN_L00_00250df8");
 extern s32   coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern void  vscl_2afa48(void *, void *, f32) __asm__("FUN_001f9a68");
 
-extern float D_L00_00161448_gp __asm__("D_L00_00161448") __attribute__((sda));
-extern float D_L00_0016144C_gp __asm__("D_L00_0016144C") __attribute__((sda));
-extern f32   D_L00_00161470_gp __asm__("D_L00_00161470") __attribute__((sda));
-extern s32   D_L00_00161474_gp __asm__("D_L00_00161474") __attribute__((sda));
+float D_L00_00161448_gp __asm__("D_L00_00161448") = 0;
+float D_L00_0016144C_gp __asm__("D_L00_0016144C") = 3.6e+02f;
+f32 D_L00_00161470_gp __asm__("D_L00_00161470") = 0.9f;
+s32 D_L00_00161474_gp __asm__("D_L00_00161474") = 4;
 
 float D_L01_00161448 = 0;
 float D_L01_0016144C = 3.6e+02f;

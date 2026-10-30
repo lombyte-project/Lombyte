@@ -40,7 +40,7 @@ extern void spawn_explosion(char *,
                             s32,
                             u8) __asm__("FUN_L00_0025e450");
 
-extern f32 landmine_spin_rate_degrees_gp __asm__("D_L08_00161F70") __attribute__((sda));
+f32 landmine_spin_rate_degrees_gp __asm__("D_L08_00161F70") = 1.8e+02f;
 void       update_landmine(struct Moby *moby) __asm__("FUN_L08_002f44c0");
 
 void update_landmine(struct Moby *moby) {

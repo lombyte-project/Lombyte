@@ -23,7 +23,7 @@ extern void start_scene(int) __asm__("FUN_L00_00298840");
 
 extern void emit_moby_sprite_particles(char *) __asm__("FUN_L10_00298940");
 
-extern short bolt_grabber_scale_multiplier_gp __asm__("D_L15_00162078") __attribute__((sda));
+short bolt_grabber_scale_multiplier_gp __asm__("D_L15_00162078") = 0;
 
 void bolt_grabber_update(struct Moby *m) __asm__("FUN_L15_002ea748");
 

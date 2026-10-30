@@ -36,24 +36,24 @@ extern f32  scale_time(f32) __asm__("FUN_001f96b0");
 extern void random_vector(void *, f32, f32) __asm__("FUN_L00_00257d78");
 extern char *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern float spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
+f32 spark_speed_gp __asm__("D_L06_00161CEC") = 6.0f;
 
 int spark_color0 __asm__("D_L06_00161CFC") = 0x6070ff90;
 
 int spark_color1 __asm__("D_L06_00161D00") = 0x10b0ffc0;
 
-extern int spark_life_min __asm__("D_L06_00161D04") __attribute__((sda));
-extern int spark_life_max __asm__("D_L06_00161D08") __attribute__((sda));
-extern int spark_fade_min __asm__("D_L06_00161D0C") __attribute__((sda));
-extern int spark_fade_max __asm__("D_L06_00161D10") __attribute__((sda));
+int spark_life_min __asm__("D_L06_00161D04") = 1;
+int spark_life_max __asm__("D_L06_00161D08") = 0x14;
+int spark_fade_min __asm__("D_L06_00161D0C") = 0x14;
+int spark_fade_max __asm__("D_L06_00161D10") = 0x28;
 
 int spark_frames __asm__("D_L06_00161D14") = 0x1e;
 
-extern float spark_drift_scale __asm__("D_L06_00161D1C") __attribute__((sda));
-extern float spark_spread __asm__("D_L06_00161D20") __attribute__((sda));
-extern float spark_dir __asm__("D_L06_00161CF4") __attribute__((sda));
-extern float spark_vel __asm__("D_L06_00161CF8") __attribute__((sda));
-extern float spark_drift __asm__("D_L06_00161D18") __attribute__((sda));
+float spark_drift_scale __asm__("D_L06_00161D1C") = 0.125f;
+float spark_spread __asm__("D_L06_00161D20") = 0.75f;
+float spark_dir __asm__("D_L06_00161CF4") = 0.33f;
+float spark_vel __asm__("D_L06_00161CF8") = 1.01f;
+float spark_drift __asm__("D_L06_00161D18") = 1.0f;
 
 /* Ported from rac1-decomp (src/overlays/l06_blarg/vendor_002B5990.c: func_L06_002F5560), where it is exact; names translated to the US level program. */
 typedef struct {
@@ -75,7 +75,7 @@ typedef struct {
 } __attribute__((aligned(16))) Vx;
 
 extern f32   spark_speed_gp __asm__("D_L06_00161CEC") __attribute__((sda));
-extern short toxic_gas_vent_max_collision_range_gp __asm__("D_L06_00161CF0") __attribute__((sda));
+short toxic_gas_vent_max_collision_range_gp __asm__("D_L06_00161CF0") = 0;
 extern void  release_voice_slot(int) __asm__("FUN_0022d798");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 

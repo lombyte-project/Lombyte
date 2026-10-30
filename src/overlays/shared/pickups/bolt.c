@@ -162,8 +162,8 @@ extern int   transform_attachment_pose(
 extern int  D_15F5CC_2a7210 __asm__("D_L00_0015F5CC");
 extern void build_quaternion_from_axis_angle(void *, void *, float) __asm__("FUN_00214530");
 
-extern int   last_bolt_attraction_sound_frame_gp __asm__("D_L00_001613AC") __attribute__((sda));
-extern float bolt_spin_angle_limit_degrees_gp __asm__("D_L00_001613A8") __attribute__((sda));
+int last_bolt_attraction_sound_frame_gp __asm__("D_L00_001613AC") = 0;
+float bolt_spin_angle_limit_degrees_gp __asm__("D_L00_001613A8") = 7.2e+02f;
 
 extern void *D_001413D0 NOT_SDA;
 extern void             FUN_L00_001ff500(void *, void *, float);

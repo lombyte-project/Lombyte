@@ -932,3 +932,9 @@ short third_position_particle_config __asm__("D_L11_001621E8") = 0x7f4f;
 short extra_scattered_joint_particle_config __asm__("D_L11_001621F8") = -32513;
 short extra_joint_position_particle_config __asm__("D_L11_00162208") = 0x7f00;
 short D_L11_001623F0_gp __asm__("D_L11_001623F0") = 0;
+
+LvState D_L11_001BBF40_3102C8 __asm__("D_L11_001BBC30") = {0};
+
+LvState D_L11_001BB2E0_3102C8 __asm__("D_L11_001BAFD0") = {0};
+
+int D_L11_001611C0_lui __asm__("D_L11_001611C0") = 0;

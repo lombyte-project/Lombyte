@@ -532,3 +532,5 @@ s32 load_level_archive_resources(s32 full, s32 keep) {
 }
 
 s32 D_L06_0017459C[1] __attribute__((section(".data"))) = {0};
+
+char *D_L18_0016016C_252dd0 __asm__("D_L06_0016016C") = 0;

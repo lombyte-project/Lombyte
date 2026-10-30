@@ -253,3 +253,5 @@ void update_fighter_jet_missile(struct Moby *moby) {
             mark_moby_for_removal(moby);
     }
 }
+
+char *target_search_moby_list_head __asm__("D_L11_0015FFE4") = 0;

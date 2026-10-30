@@ -101,7 +101,7 @@ spring_angle(float *, float, float *, int, float, float, float) __asm__("FUN_L00
 
 #include "rnc/overlay/l12/mobys/platform_globals.h"
 
-extern float platform_tilt_approach_divisor_gp __asm__("D_L12_00161918") __attribute__((sda));
+float platform_tilt_approach_divisor_gp __asm__("D_L12_00161918") = 15.0f;
 void         steer_platform_toward_target(char  *moby,
                                           float *target_angles,
                                           void  *target,
@@ -157,7 +157,7 @@ void steer_platform_toward_target(
 
 extern char D_0013E533[];
 
-extern float platform_tilt_offset_divisor_gp __asm__("D_L12_00161914") __attribute__((sda));
+float platform_tilt_offset_divisor_gp __asm__("D_L12_00161914") = 8.0f;
 void         compute_platform_target_tilt(struct Moby *moby,
                                           float       *out,
                                           int          on) __asm__("FUN_L12_002e3e28");

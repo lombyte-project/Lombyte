@@ -89,7 +89,7 @@ extern UV    l11_ocean_strip_vertex_uvs[] __asm__("D_L11_001DA310");
 extern Pos   l11_ocean_wave_grid_vertex_positions[] __asm__("D_L11_001D9F08");
 extern int   D_L11_001DA208[];
 extern UV    l11_ocean_wave_grid_vertex_uvs[] __asm__("D_L11_001DA510");
-extern float wave_speed[2] __asm__("D_L11_00161DF8") __attribute__((sda));
+float wave_speed[2] __asm__("D_L11_00161DF8") = {2.0f, 3.0f};
 extern float tide_level_macro __asm__("D_L11_00161E18") MACRO_ADDR;
 
 extern float camera_pos_b358[] __asm__("D_L11_001677C0");

@@ -103,13 +103,13 @@ extern float D_0015ED6C;
 
 #include "rnc/overlay/l18/mobys/trespasser_barrier_globals.h"
 
-extern f32 glow_moby_phase_rate_gp __asm__("D_L18_001622E0") __attribute__((sda));
+f32 glow_moby_phase_rate_gp __asm__("D_L18_001622E0") = 2.0f;
 
 #include "rnc/overlay/l18/mobys/trespasser_barrier_data/draw_trespasser_barrier_quads.h"
 
-extern int glow_moby_phase_blend_start_color_gp __asm__("D_L18_001622C8") __attribute__((sda));
-extern int glow_moby_phase_blend_end_color_gp __asm__("D_L18_001622CC") __attribute__((sda));
-extern f32 glow_moby_layer_z_step_gp __asm__("D_L18_001622D0") __attribute__((sda));
+int glow_moby_phase_blend_start_color_gp __asm__("D_L18_001622C8") = 0x3000ff00;
+int glow_moby_phase_blend_end_color_gp __asm__("D_L18_001622CC") = 0xc0ff;
+f32 glow_moby_layer_z_step_gp __asm__("D_L18_001622D0") = 2.035f;
 extern f32 D_L18_001622D4 __attribute__((sda));
 
 f32 D_L18_001DA350[4][2] = {

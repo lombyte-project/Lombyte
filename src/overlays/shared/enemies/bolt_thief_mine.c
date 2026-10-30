@@ -223,3 +223,5 @@ unsigned char *spawn_bolt_thief_mine(unsigned char *owner, char *spawn_position)
     }
     return spawned_moby;
 }
+
+char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC") = 0;

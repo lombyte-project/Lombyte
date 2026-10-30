@@ -35,7 +35,7 @@ extern V2_12a0 l08_scroll_pair_rates[] __asm__("D_L08_001DB500");
 extern float scroll_pos_x[] __asm__("D_L08_00161E10") MACRO_ADDR;
 extern float scroll_pos_y[] __asm__("D_L08_00161E14") MACRO_ADDR;
 
-extern float scroll_entry_x_rates_gp[2] __asm__("D_L08_00161DE0") __attribute__((sda));
+float scroll_entry_x_rates_gp[2] __asm__("D_L08_00161DE0") = {0.01f, 1.0f};
 extern float D_L08_00161DE4[] MACRO_ADDR;
 
 /* Runs the two per-entry update calls over a 13-entry table. */

@@ -53,15 +53,15 @@ extern int                    D_L06_00161E50;
 extern int                    D_L06_00161E54;
 extern f32                    D_L06_00161E08 __attribute__((sda));
 extern float                  D_L06_00161E0C __attribute__((sda));
-extern float beam_barrier_collision_z_offset_gp __asm__("D_L06_00161E18") __attribute__((sda));
+float beam_barrier_collision_z_offset_gp __asm__("D_L06_00161E18") = 2.25f;
 extern int   beam_barrier_burst_color_from_gp __asm__("D_L06_00161E1C") __attribute__((sda));
-extern int   beam_barrier_burst_color_to_gp __asm__("D_L06_00161E20") __attribute__((sda));
-extern float beam_barrier_burst_scale_min_gp __asm__("D_L06_00161E24") __attribute__((sda));
-extern float beam_barrier_burst_scale_max_gp __asm__("D_L06_00161E28") __attribute__((sda));
-extern int beam_barrier_burst_lifetime_min_frames_gp __asm__("D_L06_00161E2C") __attribute__((sda));
-extern int beam_barrier_burst_lifetime_max_frames_gp __asm__("D_L06_00161E30") __attribute__((sda));
-extern float beam_barrier_burst_drift_min_speed_gp __asm__("D_L06_00161E34") __attribute__((sda));
-extern float beam_barrier_burst_drift_max_speed_gp __asm__("D_L06_00161E38") __attribute__((sda));
+int beam_barrier_burst_color_to_gp __asm__("D_L06_00161E20") = 0x80802080;
+float beam_barrier_burst_scale_min_gp __asm__("D_L06_00161E24") = 0.125f;
+float beam_barrier_burst_scale_max_gp __asm__("D_L06_00161E28") = 0.333f;
+int beam_barrier_burst_lifetime_min_frames_gp __asm__("D_L06_00161E2C") = 0x1e;
+int beam_barrier_burst_lifetime_max_frames_gp __asm__("D_L06_00161E30") = 0x3c;
+float beam_barrier_burst_drift_min_speed_gp __asm__("D_L06_00161E34") = 1.2f;
+float beam_barrier_burst_drift_max_speed_gp __asm__("D_L06_00161E38") = 2.1f;
 extern float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern int   current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
 extern int   D_0015EEA4_macro __asm__("D_0015EEA4") MACRO_ADDR;
@@ -352,7 +352,7 @@ int D_L06_00161DF0 = 0x80c04070;
 
 int D_L06_00161DF4 = 0xff0000;
 
-extern float beam_barrier_texture_u_step_gp __asm__("D_L06_00161DF8") __attribute__((sda));
+float beam_barrier_texture_u_step_gp __asm__("D_L06_00161DF8") = 0.25f;
 
 float D_L06_00161DFC = 0;
 
@@ -430,10 +430,10 @@ void draw_beam_barrier_segments(char *moby) {
     }
 }
 
-extern f32 beam_barrier_rotation_x_speed_degrees_gp __asm__("D_L06_00161E10") __attribute__((sda));
-extern f32 beam_barrier_render_phase_speed_gp __asm__("D_L06_00161E00") __attribute__((sda));
-extern f32 beam_barrier_class_scale_multiplier_gp __asm__("D_L06_00161E14") __attribute__((sda));
-extern f32 beam_barrier_strand_jitter_max_speed_gp __asm__("D_L06_00161E04") __attribute__((sda));
+f32 beam_barrier_rotation_x_speed_degrees_gp __asm__("D_L06_00161E10") = 5.0f;
+f32 beam_barrier_render_phase_speed_gp __asm__("D_L06_00161E00") = 2.0f;
+f32 beam_barrier_class_scale_multiplier_gp __asm__("D_L06_00161E14") = 1.75f;
+f32 beam_barrier_strand_jitter_max_speed_gp __asm__("D_L06_00161E04") = 0.4f;
 extern int D_L06_00161E40[4] MACRO_ADDR;
 
 Vec4 D_L06_001DB870[4][30] = {0};

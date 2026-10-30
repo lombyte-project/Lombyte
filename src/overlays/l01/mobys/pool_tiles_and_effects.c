@@ -328,3 +328,5 @@ f32 D_L01_001CAD30[1] __attribute__((section(".data"))) = {0};
 f32 D_L01_001CAD34[1] __attribute__((section(".data"))) = {0};
 
 f32 D_L01_001CAD38[1] __attribute__((section(".data"))) = {0};
+
+u8 *pool_draw_tex __asm__("D_L01_001612D4") = 0;

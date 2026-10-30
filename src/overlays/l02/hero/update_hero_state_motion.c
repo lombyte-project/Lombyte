@@ -324,7 +324,7 @@ f32  compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
 void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 
-extern CollisionHit HH __asm__("D_L02_00174440") NOT_SDA;
+CollisionHit HH __asm__("D_L02_00174440") = {0};
 #define HI(o) (*(s32 *)(D_L02_00174440 + (o)))
 #define HF(o) (*(f32 *)(D_L02_00174440 + (o)))
 
