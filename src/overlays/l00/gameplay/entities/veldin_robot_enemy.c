@@ -727,8 +727,8 @@ typedef struct {
     u8 alpha;
 } SlotMoby;
 
-extern s32 D_L00_00161BF8[] MACRO_ADDR;
-extern s32 D_L00_00161C88[] MACRO_ADDR;
+extern int beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern int beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
 extern void release_beam_slot(s32) __asm__("FUN_L00_002e20f8");
 extern void update_slot_panes_and_effects(s32, s32) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");
@@ -748,8 +748,8 @@ void update_beam_slot_controller(SlotMoby *slot_controller) {
     switch (slot_controller->state) {
     case SLOT_CONTROLLER_STATE_INITIALIZE:
         for (j = 0; j < 3; j++) {
-            D_L00_00161BF8[j] = 0;
-            D_L00_00161C88[j] = 0;
+            beam_slot_state[j] = 0;
+            beam_slot_id[j] = 0;
         }
         slot_controller->state = 1;
         slot_controller->alpha = 0xFF;
@@ -757,14 +757,14 @@ void update_beam_slot_controller(SlotMoby *slot_controller) {
     case SLOT_CONTROLLER_STATE_PROCESS_SLOTS:
         dispatched_slot_count = 0;
         for (i = 0; i < 3; i++) {
-            slot_state = D_L00_00161BF8[i];
+            slot_state = beam_slot_state[i];
             if (slot_state == 1) {
             } else if (slot_state == 4) {
                 release_beam_slot(i);
             } else if (slot_state != 0) {
                 dispatched_slot_count++;
-                update_slot_panes_and_effects(D_L00_00161C88[i], i);
-                D_L00_00161BF8[i] = 4;
+                update_slot_panes_and_effects(beam_slot_id[i], i);
+                beam_slot_state[i] = 4;
             }
         }
         if (dispatched_slot_count != 0) {
