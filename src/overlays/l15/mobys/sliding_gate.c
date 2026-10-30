@@ -64,16 +64,16 @@ void update_sliding_gate(struct Moby *gate_moby) {
         trigger_active = 0;
         gate_vars->travel = 0;
         if (gate_vars->trigger != -1) {
-            struct Moby *other =
+            struct Moby *gate_trigger_moby =
                 (struct Moby *)((char *)l15_moby_array + gate_vars->trigger * 0x100);
-            if (other->oclass == 0x4b9) {
-                if (other->state == 4) {
+            if (gate_trigger_moby->oclass == 0x4b9) {
+                if (gate_trigger_moby->state == 4) {
                     trigger_active = 1;
                     goto check_lock;
                 }
             }
-            if (other->oclass == 0x596) {
-                trigger_active = other->state == 4;
+            if (gate_trigger_moby->oclass == 0x596) {
+                trigger_active = gate_trigger_moby->state == 4;
             }
         }
     check_lock:
