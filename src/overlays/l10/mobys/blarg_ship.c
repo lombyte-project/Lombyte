@@ -392,20 +392,20 @@ void blarg_ship_update(Ship_5E48 *ship) {
             break;
         goto del;
     case BLARG_SHIP_STATE_HIT_REACTION: {
-        unsigned char next;
+        unsigned char pre_hit_state;
         if (ship->b52 != 4)
             break;
         if (!(ship->b70 & 2))
             break;
-        next = ship->bBC;
-        if (next == 4) {
+        pre_hit_state = ship->bBC;
+        if (pre_hit_state == 4) {
             blend_moby_animation(ship, 3, 0, scale_game_frames(10));
             ship->f58 = blarg_ship_firing_animation_speed_gp;
-            ship->state = next;
+            ship->state = pre_hit_state;
             d->i168 = truncate_float_to_s32(FUN_L04_001f1978(d->f160 * 60.0f));
-        } else if (next == 6) {
+        } else if (pre_hit_state == 6) {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
-            ship->state = next;
+            ship->state = pre_hit_state;
         } else {
             blend_moby_animation(ship, 2, 0, scale_game_frames(10));
             ship->state = 5;
