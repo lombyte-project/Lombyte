@@ -577,10 +577,10 @@ int  FUN_L00_00259028(unsigned char *moby,
                       char          *movement_control,
                       float         *target_position,
 
-                      void *out) {
+                      void *movement_displacement_output) {
     int   navigation_result_flags = 0;
     float target_heading, heading_error;
-    clear_u64_value(out);
+    clear_u64_value(movement_displacement_output);
     if (fast_vec_dist(moby + 0x10, target_position) < *(float *)(movement_control + 0x2C))
         navigation_result_flags = 4;
     target_heading = fast_arc_tan(target_position[0] - MOBY(moby)->pos.x,
@@ -603,7 +603,7 @@ int  FUN_L00_00259028(unsigned char *moby,
         navigation_result_flags |= move_w(moby,
                                           movement_control,
                                           target_position,
-                                          out,
+                                          movement_displacement_output,
                                           (*(float *)(movement_control + 0x28) - heading_error) /
                                               *(float *)(movement_control + 0x28));
         if (0.1f < heading_error)
