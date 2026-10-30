@@ -181,15 +181,15 @@ void underwater_ring_update(struct Moby *moby) {
 
 extern void draw_moby_radial_ripple_mesh_buffers(void) __asm__("FUN_L15_002eac90");
 
-void ripple_strips_moby_update(char *moby) __asm__("FUN_L15_002eb0a0");
-void ripple_strips_moby_update(char *moby) {
-    if (*(unsigned char *)(moby + 0x20) == 0) {
+void ripple_strips_moby_update(struct Moby *moby) __asm__("FUN_L15_002eb0a0");
+void ripple_strips_moby_update(struct Moby *moby) {
+    if (moby->state == 0) {
         set_moby_color(moby, 0x40, 0x40, 0x40);
-        moby[0x20] = 1;
+        moby->state = 1;
     } else {
         add_draw_callback((void *)draw_moby_radial_ripple_mesh_buffers, moby);
-        *(short *)(moby + 0x32) = 0;
-        *(unsigned short *)(moby + 0x34) |= 1;
+        moby->draw_dist = 0;
+        moby->flags |= 1;
     }
 }
 #include "sda.h"

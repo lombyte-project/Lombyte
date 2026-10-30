@@ -1405,7 +1405,7 @@ void gold_bolt_update(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_00309758), where it is exact; names translated to the US level program. */
 
-void update_gold_bolt_glow_rings(char *m) __asm__("FUN_L01_00308550");
+void update_gold_bolt_glow_rings(struct Moby *m) __asm__("FUN_L01_00308550");
 extern void FUN_L01_003089f0_u(char *) __asm__("FUN_L01_003089f0");
 
 void update_gold_bolt_visuals(struct Moby *moby) __asm__("FUN_L01_00308380");
@@ -1447,8 +1447,8 @@ extern int gold_bolt_glow_ring_particle_use_flags_44_gp __asm__("D_L01_00161F48"
 extern int gold_bolt_glow_ring_particle_texture_index_gp __asm__("D_L01_00161F4C") __attribute__((sda));
 extern unsigned char *FUN_L00_00272f68(void *, int, unsigned char, int, int, int, int, float);
 
-void update_gold_bolt_glow_rings(char *moby) {
-    char *moby_vars = *(char **)(moby + 0x78);
+void update_gold_bolt_glow_rings(struct Moby *moby) {
+    char *moby_vars = ((char *)moby->pvars);
     float glow_particle_position[4];
     float glow_origin_position[4];
     float step[4];
@@ -1502,10 +1502,10 @@ typedef struct {
 
 extern u8 *D_L01_001600EC;
 
-void update_gold_bolt_pickup_camera(char *moby) __asm__("FUN_L01_003087e0");
+void update_gold_bolt_pickup_camera(struct Moby *moby) __asm__("FUN_L01_003087e0");
 
-void update_gold_bolt_pickup_camera(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void update_gold_bolt_pickup_camera(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     V4 output_position;
     V4 output_rotation;
     V4 start_rotation;
@@ -1513,7 +1513,7 @@ void update_gold_bolt_pickup_camera(char *moby) {
     f32 record_value;
     f32 interpolation_factor;
 
-    if (*(unsigned char *)(moby + 0x52) == 1) {
+    if (moby->seq == 1) {
         record_value = compute_interpolated_record_value(moby);
     } else {
         record_value = 170.0f;
@@ -1564,9 +1564,9 @@ extern int gold_bolt_particle_initial_color_gp __asm__("D_L01_00161F68") __attri
 extern int gold_bolt_particle_loop_color_gp __asm__("D_L01_00161F6C") __attribute__((sda));
 extern float gold_bolt_particle_initial_scale_gp __asm__("D_L01_00161F70") __attribute__((sda));
 extern float gold_bolt_particle_loop_scale_gp __asm__("D_L01_00161F74") __attribute__((sda));
-void spawn_gold_bolt_particles(char *moby) __asm__("FUN_L01_003089f0");
+void spawn_gold_bolt_particles(struct Moby *moby) __asm__("FUN_L01_003089f0");
 
-void spawn_gold_bolt_particles(char *moby) {
+void spawn_gold_bolt_particles(struct Moby *moby) {
     float v[4];
     float particle_velocity[4];
     float u[4];
@@ -1574,7 +1574,7 @@ void spawn_gold_bolt_particles(char *moby) {
     int i;
     int particle_lifetime;
     int loop_particle_lifetime;
-    if (*(unsigned char *)(moby + 0x20) == 1) {
+    if (moby->state == 1) {
         fast_vec_scale(v, moby, 0.0009765625f);
     } else {
         moby_point_position(moby, 0, v);
@@ -1598,20 +1598,20 @@ void spawn_gold_bolt_particles(char *moby) {
 extern int D_0015ED84; /* no foreign declaration */
 extern int moby_killed[] __asm__("D_L01_001BA950");
 
-void activate_teleporter_and_record_state(char *moby) __asm__("FUN_L01_00308b28");
+void activate_teleporter_and_record_state(struct Moby *moby) __asm__("FUN_L01_00308b28");
 
-void activate_teleporter_and_record_state(char *moby) {
+void activate_teleporter_and_record_state(struct Moby *moby) {
     int level_bitset_byte_offset = D_0015ED84 << 8;
     unsigned char moby_group_index;
-    *(int *)((u8 *)D_0014C190 + (((short)*(unsigned short *)(moby + 0xB2) >> 5) * 4 + level_bitset_byte_offset)) |=
-        1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-    moby_killed[(short)*(unsigned short *)(moby + 0xB2) >> 5] |=
-        1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-    moby_group_index = *(unsigned char *)(moby + 0x21);
+    *(int *)((u8 *)D_0014C190 + (((short)moby->save_id >> 5) * 4 + level_bitset_byte_offset)) |=
+        1 << (moby->save_id & 0x1F);
+    moby_killed[(short)moby->save_id >> 5] |=
+        1 << (moby->save_id & 0x1F);
+    moby_group_index = moby->group;
     if (moby_group_index != 0xFF)
         set_moby_list_state((char *)moby_group_index, 1);
     else
-        moby[0x20] = 1;
+        moby->state = 1;
 }
 #include "qcopy.h"
 
@@ -1627,11 +1627,11 @@ extern char *D_L01_0015FFD8;
 extern int D_L01_0015F594 __attribute__((sda));
 
 extern int FUN_00214720(void *, int);
-extern void activate_teleporter_and_record_state(char *) __asm__("FUN_L01_00308b28");
+extern void activate_teleporter_and_record_state(struct Moby *) __asm__("FUN_L01_00308b28");
 extern void show_teleporter_and_children(char *) __asm__("FUN_L01_00309838");
 extern void hide_teleporter_and_children(L01Moby *) __asm__("FUN_L01_003097e8");
 extern void update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
-extern void try_set_teleporter_help_message(char *) __asm__("FUN_L01_00309430");
+extern void try_set_teleporter_help_message(struct Moby *) __asm__("FUN_L01_00309430");
 extern void draw_moby_radius_ring(char *) __asm__("FUN_L01_003094f0");
 extern void request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
 extern void play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
@@ -1876,8 +1876,8 @@ extern short level_8_teleporter_help_message_ids __asm__("D_L01_00161F98") __att
 extern short level_12_teleporter_help_message_ids __asm__("D_L01_00161FA0") __attribute__((sda));
 extern short level_16_teleporter_help_message_ids __asm__("D_L01_00161FA8") __attribute__((sda));
 extern short level_18_teleporter_help_message_ids __asm__("D_L01_00161FB0") __attribute__((sda));
-void try_set_teleporter_help_message(char *moby) {
-    int *data = *(int **)(moby + 0x78);
+void try_set_teleporter_help_message(struct Moby *moby) {
+    int *data = ((int *)moby->pvars);
     switch (D_0015ED84) {
     case 12:
         try_set_help_message(4, ((int *)&level_12_teleporter_help_message_ids)[data[4]]);

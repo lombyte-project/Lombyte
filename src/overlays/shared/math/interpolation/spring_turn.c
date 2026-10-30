@@ -20,6 +20,7 @@ float interpolate_wrapped_angle_cosine_eased(float x, float y, float z) {
     return fast_add_rotations(x, wrapped_angle_delta * ((1.0f - phase_cosine) * 0.5f));
 }
 #include "qcopy.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Vector cosine interpolation: dst = a + (b - a) * ((1 - cos(t * pi)) * 0.5).
    Scalar analogue matched at src/game/mobyutil.c:func_00214220. */
@@ -78,9 +79,9 @@ float spring_turn(float *turn_step, float current_angle, float target_angle, flo
     return fast_add_rotations(current_angle, *turn_step);
 }
 
-void FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-void FUN_L00_00258278(unsigned char *moby, float *turn_step, float target_heading, float spring_strength, float damping_factor, float limit) {
-    float wrapped_heading_delta = fast_subtract_rotations(target_heading, *(float *)(moby + 0x48));
+void FUN_L00_00258278(struct Moby *m, float *ptr, float t, float b, float c, float limit);
+void FUN_L00_00258278(struct Moby *moby, float *turn_step, float target_heading, float spring_strength, float damping_factor, float limit) {
+    float wrapped_heading_delta = fast_subtract_rotations(target_heading, moby->rot.z);
     float k = wrapped_heading_delta / 0.15707964f;
     float unclamped_turn_step;
     if (1.0f < k)
@@ -101,7 +102,7 @@ void FUN_L00_00258278(unsigned char *moby, float *turn_step, float target_headin
     } else if (*turn_step < -absolute_float(wrapped_heading_delta)) {
         *turn_step = -absolute_float(wrapped_heading_delta);
     }
-    *(float *)(moby + 0x48) = fast_add_rotations(*(float *)(moby + 0x48), *turn_step);
+    moby->rot.z = fast_add_rotations(moby->rot.z, *turn_step);
 }
 #include "eetypes.h"
 #include "qcopy.h"

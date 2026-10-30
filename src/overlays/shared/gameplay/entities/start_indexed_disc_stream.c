@@ -41,20 +41,21 @@ void start_indexed_disc_stream(s32 i) {
 #include "eetypes.h"
 #include "qcopy.h"
 #include "sda.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 extern int process_moby_suck_cannon_suction(void *) __asm__("FUN_L00_002db8f8");
 
 /* Moby state 9 while FUN_L00_002db8f8 reports a hit, back to 1 when it stops. */
-int update_moby_suck_cannon_state(char *a) __asm__("FUN_L02_002d61c0");
+int update_moby_suck_cannon_state(struct Moby *a) __asm__("FUN_L02_002d61c0");
 
-int update_moby_suck_cannon_state(char *moby) {
+int update_moby_suck_cannon_state(struct Moby *moby) {
     int suction_result = process_moby_suck_cannon_suction(moby);
     if (suction_result == 0) {
-        if (*(unsigned char *)(moby + 0x20) == 0x9)
-            moby[0x20] = 1;
+        if (moby->state == 0x9)
+            moby->state = 1;
     } else {
-        moby[0x20] = 0x9;
+        moby->state = 0x9;
     }
     return suction_result;
 }

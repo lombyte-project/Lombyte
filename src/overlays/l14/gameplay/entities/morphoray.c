@@ -360,42 +360,42 @@ void raise_unlock_sequence_mobys(struct Moby *moby) __asm__("FUN_L14_00305680");
 extern void raise_unlock_sequence_mobys(struct Moby *) __asm__("FUN_L14_00305680");
 
 /* Moby that unlocks once: skips straight to done if this level already recorded it, otherwise waits for its trigger moby to reach state 2, records the unlock in the level's bit sets and runs a countdown. */
-void update_unlock_sequence_controller(unsigned char *moby) __asm__("FUN_L14_00305408");
+void update_unlock_sequence_controller(struct Moby *moby) __asm__("FUN_L14_00305408");
 
-void update_unlock_sequence_controller(unsigned char *moby) {
+void update_unlock_sequence_controller(struct Moby *moby) {
     enum {
         UNLOCK_SEQUENCE_INITIALIZE = 0,
         UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER = 1,
         UNLOCK_SEQUENCE_COUNTDOWN = 2
     };
-    int *unlock_sequence_data = *(int **)(moby + 0x78);
+    int *unlock_sequence_data = ((int *)moby->pvars);
     short id;
 
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case UNLOCK_SEQUENCE_INITIALIZE:
         if (unlock_sequence_data[3] < 0 || unlock_sequence_data[0] < 0 || unlock_sequence_data[4] < 0) {
             mark_moby_for_removal(moby);
             return;
         }
-        id = *(short *)(moby + 0xB2);
+        id = ((short)moby->save_id);
         if (D_L14_001BB930.collected[id] != 0) {
-            moby[0x20] = 3;
+            moby->state = 3;
             return;
         }
-        if (D_0014C190_257218[current_level_index][id >> 5] >> (*(unsigned short *)(moby + 0xB2) & 0x1F) & 1) {
-            moby[0x20] = 3;
+        if (D_0014C190_257218[current_level_index][id >> 5] >> (moby->save_id & 0x1F) & 1) {
+            moby->state = 3;
             return;
         }
-        moby[0x20] = 1;
+        moby->state = 1;
         save_and_lower_unlock_sequence_mobys((char *)moby);
         break;
     case UNLOCK_SEQUENCE_WAIT_FOR_TRIGGER:
         if (((unsigned char *)D_L14_0015FFD8)[unlock_sequence_data[3] * 0x100 + 0x20] != 2) {
             return;
         }
-        D_0014C190_257218[current_level_index][*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-        D_L14_001BABD0[*(short *)(moby + 0xB2) >> 5] |= 1 << (*(unsigned short *)(moby + 0xB2) & 0x1F);
-        moby[0x20] = 2;
+        D_0014C190_257218[current_level_index][((short)moby->save_id) >> 5] |= 1 << (moby->save_id & 0x1F);
+        D_L14_001BABD0[((short)moby->save_id) >> 5] |= 1 << (moby->save_id & 0x1F);
+        moby->state = 2;
         unlock_sequence_data[1] = scale_game_frames(0x78);
         ((float *)unlock_sequence_data)[2] = 1.0f / convert_integer_to_float(unlock_sequence_data[1]);
         activate_descriptor(unlock_sequence_data[4]);
@@ -404,7 +404,7 @@ void update_unlock_sequence_controller(unsigned char *moby) {
         fast_dec_timer(&unlock_sequence_data[1]);
         raise_unlock_sequence_mobys((char *)moby);
         if (unlock_sequence_data[1] == 0) {
-            moby[0x20] = 3;
+            moby->state = 3;
         }
         break;
     }

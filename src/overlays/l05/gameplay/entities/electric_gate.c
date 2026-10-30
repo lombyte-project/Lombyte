@@ -109,7 +109,7 @@ extern char D_L05_001671C0[];
 extern int D_L05_0015F5CC_e[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 extern int allocate_voice_for_target_entry() __asm__("FUN_0022da68");
 extern short D_L05_0015FFD8_d __asm__("D_L05_0015FFD8");
-extern void draw_electric_gate_beams(char *moby) __asm__("FUN_L05_0030de90");
+extern void draw_electric_gate_beams(struct Moby *moby) __asm__("FUN_L05_0030de90");
 void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 
 extern short electric_gate_beam_callback_frame_gp __asm__("D_L05_00161D38") __attribute__((sda));
@@ -197,7 +197,7 @@ extern Vec4 l05_electric_gate_outer_beam_base_positions[4] __asm__("D_L05_0020B7
 extern Vec4 l05_electric_gate_inner_beam_base_positions[4] __asm__("D_L05_0020B7A0");
 extern short *D_L05_001ABCC0[];
 extern int frame_number __asm__("D_L05_0015F5CC");
-void draw_electric_gate_beams(char *moby) {
+void draw_electric_gate_beams(struct Moby *moby) {
     struct GeometryQuad quads[2][5];
     char matrix[0x40];
     u64 texture;
@@ -236,7 +236,7 @@ void draw_electric_gate_beams(char *moby) {
         }
     }
 
-    list = (unsigned short *)D_L05_001ABCC0[*(unsigned char *)(moby + 0x21)];
+    list = (unsigned short *)D_L05_001ABCC0[moby->group];
     do {
         char *entry;
         offset = (*list & 0x7FFF) << 8;
@@ -273,15 +273,15 @@ extern unsigned char l05_volume_blended_color_high_byte __asm__("D_L05_00161203"
 extern unsigned char l05_volume_blended_color_lower_middle_byte __asm__("D_L05_00161201");
 extern unsigned char l05_volume_blended_color_low_byte __asm__("D_L05_00161200");
 
-void update_fog_zone(char *moby) __asm__("FUN_L05_0030e1f8");
+void update_fog_zone(struct Moby *moby) __asm__("FUN_L05_0030e1f8");
 
-void update_fog_zone(char *moby) {
+void update_fog_zone(struct Moby *moby) {
     enum {
         FOG_ZONE_INITIALIZE = 0,
         FOG_ZONE_WAIT_TO_APPLY_PRESET = 1,
         FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS = 2
     };
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)moby->pvars);
     float hero_offset_from_volume_origin[4];
     float hero_position_in_volume_space[4];
     char *hero_position = (char *)&hero.motion.pos;
@@ -315,7 +315,7 @@ void update_fog_zone(char *moby) {
             *(int *)(data + 0x34) = 0x40408070;
             *(int *)(data + 0x30) = c;
         }
-        moby[0x20] = 1;
+        moby->state = 1;
         break;
     case FOG_ZONE_WAIT_TO_APPLY_PRESET:
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0x2C))) {
@@ -332,7 +332,7 @@ void update_fog_zone(char *moby) {
                 D_L05_0015F450 = f2;
                 D_L05_0015F454 = f3;
             }
-            moby[0x20] = 2;
+            moby->state = 2;
         }
         break;
     case FOG_ZONE_WAIT_TO_RESTORE_SAVED_SETTINGS:
@@ -350,7 +350,7 @@ void update_fog_zone(char *moby) {
                 D_L05_0015F450 = f2;
                 D_L05_0015F454 = f3;
             }
-            moby[0x20] = 1;
+            moby->state = 1;
         }
         break;
     }
@@ -1346,10 +1346,10 @@ void FUN_L05_00315f70(char *moby) {
 
 extern f32 D_L05_00211B20[];
 
-void draw_ocean_grid_outside_clip_volumes(char *moby) __asm__("FUN_L05_00316070");
+void draw_ocean_grid_outside_clip_volumes(struct Moby *moby) __asm__("FUN_L05_00316070");
 
-void draw_ocean_grid_outside_clip_volumes(char *moby) {
-    int *clip_volume_index_cursor = *(int **)(moby + 0x78);
+void draw_ocean_grid_outside_clip_volumes(struct Moby *moby) {
+    int *clip_volume_index_cursor = ((int *)moby->pvars);
     int i;
     int none = 1;
     for (i = 0; i < 8; clip_volume_index_cursor++, i++) {
@@ -1367,16 +1367,16 @@ void draw_ocean_grid_outside_clip_volumes(char *moby) {
 extern char D_L05_00211B28[];
 extern float D_L05_00211B20[];
 
-void ocean_rilgar_update(char *moby) __asm__("FUN_L05_00316110");
-void ocean_rilgar_update(char *moby) {
+void ocean_rilgar_update(struct Moby *moby) __asm__("FUN_L05_00316110");
+void ocean_rilgar_update(struct Moby *moby) {
     enum {
         OCEAN_RILGAR_INITIALIZE = 0,
         OCEAN_RILGAR_UPDATE_BOBBING = 1
     };
-    switch ((unsigned char)moby[0x20]) {
+    switch ((unsigned char)((char)moby->state)) {
     case OCEAN_RILGAR_INITIALIZE:
         prepare_scaled_table_with_byte_128(D_L05_00211B20, 1.0f);
-        moby[0x20] = 1;
+        moby->state = 1;
         ((unsigned char *)moby)[0x30] = 0xFF;
         break;
     case OCEAN_RILGAR_UPDATE_BOBBING:
@@ -1982,23 +1982,23 @@ extern int D_L05_0015F5C4_macro[] __asm__("D_L05_0015F5C4") MACRO_ADDR;
 
 /* Two-state marker: arms the moby, then once its target is found copies the
  * target position and sets the bob height from the frame counter. */
-void update_hero_clip_volume_outputs(char *moby) __asm__("FUN_L05_00318a68");
+void update_hero_clip_volume_outputs(struct Moby *moby) __asm__("FUN_L05_00318a68");
 
-void update_hero_clip_volume_outputs(char *moby) {
+void update_hero_clip_volume_outputs(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_CHECK_HERO_VOLUME = 1
     };
-    int state = *(unsigned char *)(moby + 0x20);
-    int *clip_volume_index_ptr = *(int **)(moby + 0x78);
+    int state = moby->state;
+    int *clip_volume_index_ptr = ((int *)moby->pvars);
     char *hero_position;
 
     switch (state) {
     case MOBY_INITIALIZE:
-        *(unsigned char *)(moby + 0x20) = 1;
-        *(unsigned short *)(moby + 0x34) |= 1;
-        *(unsigned char *)(moby + 0x30) = 0xFF;
-        *(int *)(moby + 0x94) = 0;
+        moby->state = 1;
+        moby->flags |= 1;
+        moby->update_dist = 0xFF;
+        moby->collision = 0;
         break;
     case MOBY_CHECK_HERO_VOLUME:
         hero_position = (char *)&hero.motion.pos;
@@ -2064,7 +2064,7 @@ extern char D_0013CAE4[];
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
 void initialize_taxi_stop_state(void *moby_v) __asm__("FUN_L05_00319208");
-extern void select_taxi_route(char *) __asm__("FUN_L05_003193a8");
+extern void select_taxi_route(struct Moby *) __asm__("FUN_L05_003193a8");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__("FUN_00214e58");
 
@@ -2262,8 +2262,8 @@ void initialize_taxi_stop_state(void *moby_v) {
 }
 /* Picks the path for the current point (five points, point 2 chosen by the table entry) and sets the travel speeds; same source as FUN_L16_002e4a58. */
 
-void select_taxi_route(char *moby) {
-    char *taxi_data = *(char **)(moby + 0x78);
+void select_taxi_route(struct Moby *moby) {
+    char *taxi_data = ((char *)moby->pvars);
     char *selected_path;
     float inv, frame_scaled_travel_step, frame_squared_travel_step, first_path_segment_length;
     switch (*(short *)(taxi_data + 0xB4)) {
@@ -2307,14 +2307,14 @@ void select_taxi_route(char *moby) {
 
 extern int D_L05_0015F5C4_c __asm__("D_L05_0015F5C4");
 
-void qwarks_trailer_update(char *moby) __asm__("FUN_L05_00319c28");
-void qwarks_trailer_update(char *moby) {
+void qwarks_trailer_update(struct Moby *moby) __asm__("FUN_L05_00319c28");
+void qwarks_trailer_update(struct Moby *moby) {
     if (D_L05_0015F5C4_c == 2) {
-        moby[0x31] = 0;
-        *(unsigned short *)(moby + 0x34) |= 1;
+        moby->visible = 0;
+        moby->flags |= 1;
     } else {
-        moby[0x31] = 1;
-        *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+        moby->visible = 1;
+        moby->flags &= 0xFFFE;
     }
 }
 

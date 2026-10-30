@@ -277,17 +277,17 @@ extern char level06_camera_target_update_data[] __asm__("D_L06_0016CFE0");
 extern int D_L06_0015F5C4;
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
-void update_gated_moby_effects(unsigned char *moby) __asm__("FUN_L06_00309348");
+void update_gated_moby_effects(struct Moby *moby) __asm__("FUN_L06_00309348");
 
-void update_gated_moby_effects(unsigned char *moby) {
+void update_gated_moby_effects(struct Moby *moby) {
     enum {
         MOBY_INITIALIZE = 0,
         MOBY_CONDITIONAL_CAMERA_TARGET_UPDATE = 1
     };
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case MOBY_INITIALIZE:
-        moby[0x30] = 0xFF;
-        moby[0x20] = 1;
+        moby->update_dist = 0xFF;
+        moby->state = 1;
         break;
     case MOBY_CONDITIONAL_CAMERA_TARGET_UPDATE:
         if (D_L06_0015F5C4 == 2) {

@@ -12,6 +12,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
+#include "rnc/gameplay/entities/moby.h"
 typedef union {
     u128 q;
     f32 f[4];
@@ -448,16 +449,16 @@ f32 normalize_angle(f32 angle_radians) {
 extern int FUN_L00_0025e3b8_u(void *) __asm__("FUN_L00_0025e3b8");
 
 /* False for null; true for a moby outside FUN_L00_0025e3b8's range or of class 0x1F6. */
-int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char *moby) __asm__("FUN_L00_0025e368");
+int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(struct Moby *moby) __asm__("FUN_L00_0025e368");
 
-int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char *moby) {
+int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(struct Moby *moby) {
     int predicate_result;
     if (moby == 0) {
         predicate_result = 0;
     } else if (FUN_L00_0025e3b8_u(moby) == 0) {
         predicate_result = 1;
     } else {
-        predicate_result = *(short *)(moby + 0xA6) == 0x1F6;
+        predicate_result = moby->oclass == 0x1F6;
     }
     return predicate_result;
 }

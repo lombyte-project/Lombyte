@@ -18,14 +18,15 @@
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/rendering/view/project_to_screen.h"
+#include "rnc/gameplay/entities/moby.h"
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float D_L06_00167400[];
 extern OvlVec4 D_L06_001fe8d0[];
 extern float D_L06_001fe960[][2];
 extern u32 D_L06_001fe9a8[];
 extern int D_L06_001fe9d0[][4];
-void draw_bot_door_lock_glow(char *moby) __asm__("FUN_L06_00307578");
-void draw_bot_door_lock_glow(char *moby) {
+void draw_bot_door_lock_glow(struct Moby *moby) __asm__("FUN_L06_00307578");
+void draw_bot_door_lock_glow(struct Moby *moby) {
     struct GeometryQuad quad;
     OvlVec4 result[4];
     float rotation[4];
@@ -35,7 +36,7 @@ void draw_bot_door_lock_glow(char *moby) {
     int i;
     OvlVec4 *pos0, *pos1, *pos2, *pos3;
     OvlVec4 *result0, *result1, *result2, *result3;
-    float *data = *(float **)(moby + 0x78);
+    float *data = ((float *)moby->pvars);
     rotation[0] = 0.0f; rotation[1] = 0.0f; rotation[2] = D_L06_00167400[86];
     euler_rotation_basis(matrix, rotation);
     data[7] += 0.01f;
@@ -57,18 +58,18 @@ void draw_bot_door_lock_glow(char *moby) {
         transform_vector_by_basis(result1, &D_L06_001fe8d0[D_L06_001fe9d0[i][1]], matrix);
         transform_vector_by_basis(result2, &D_L06_001fe8d0[D_L06_001fe9d0[i][2]], matrix);
         transform_vector_by_basis(result3, &D_L06_001fe8d0[D_L06_001fe9d0[i][3]], matrix);
-        quad.positions[0].f[0] = *(float *)(moby + 16) + result[0].f[0] * data[9];
-        quad.positions[0].f[1] = *(float *)(moby + 20) + result[0].f[1] * data[9];
-        quad.positions[0].f[2] = *(float *)(moby + 24) + result[0].f[2];
-        quad.positions[1].f[0] = *(float *)(moby + 16) + result[1].f[0] * data[9];
-        quad.positions[1].f[1] = *(float *)(moby + 20) + result[1].f[1] * data[9];
-        quad.positions[1].f[2] = *(float *)(moby + 24) + result[1].f[2];
-        quad.positions[2].f[0] = *(float *)(moby + 16) + result[2].f[0] * data[9];
-        quad.positions[2].f[1] = *(float *)(moby + 20) + result[2].f[1] * data[9];
-        quad.positions[2].f[2] = *(float *)(moby + 24) + result[2].f[2];
-        quad.positions[3].f[0] = *(float *)(moby + 16) + result[3].f[0] * data[9];
-        quad.positions[3].f[1] = *(float *)(moby + 20) + result[3].f[1] * data[9];
-        quad.positions[3].f[2] = *(float *)(moby + 24) + result[3].f[2];
+        quad.positions[0].f[0] = moby->pos.x + result[0].f[0] * data[9];
+        quad.positions[0].f[1] = moby->pos.y + result[0].f[1] * data[9];
+        quad.positions[0].f[2] = moby->pos.z + result[0].f[2];
+        quad.positions[1].f[0] = moby->pos.x + result[1].f[0] * data[9];
+        quad.positions[1].f[1] = moby->pos.y + result[1].f[1] * data[9];
+        quad.positions[1].f[2] = moby->pos.z + result[1].f[2];
+        quad.positions[2].f[0] = moby->pos.x + result[2].f[0] * data[9];
+        quad.positions[2].f[1] = moby->pos.y + result[2].f[1] * data[9];
+        quad.positions[2].f[2] = moby->pos.z + result[2].f[2];
+        quad.positions[3].f[0] = moby->pos.x + result[3].f[0] * data[9];
+        quad.positions[3].f[1] = moby->pos.y + result[3].f[1] * data[9];
+        quad.positions[3].f[2] = moby->pos.z + result[3].f[2];
         quad.colors[0] = D_L06_001fe9a8[D_L06_001fe9d0[i][0]];
         quad.colors[1] = D_L06_001fe9a8[D_L06_001fe9d0[i][1]];
         quad.colors[2] = D_L06_001fe9a8[D_L06_001fe9d0[i][2]];
@@ -117,18 +118,18 @@ void draw_bot_door_lock_glow(char *moby) {
     transform_vector_by_basis(result1, pos1, matrix);
     transform_vector_by_basis(result2, pos2, matrix);
     transform_vector_by_basis(result3, pos3, matrix);
-    quad.positions[0].f[0] = *(float *)(moby + 16) + result[0].f[0];
-    quad.positions[0].f[1] = *(float *)(moby + 20) + result[0].f[1];
-    quad.positions[0].f[2] = *(float *)(moby + 24) + result[0].f[2];
-    quad.positions[1].f[0] = *(float *)(moby + 16) + result[1].f[0];
-    quad.positions[1].f[1] = *(float *)(moby + 20) + result[1].f[1];
-    quad.positions[1].f[2] = *(float *)(moby + 24) + result[1].f[2];
-    quad.positions[2].f[0] = *(float *)(moby + 16) + result[2].f[0];
-    quad.positions[2].f[1] = *(float *)(moby + 20) + result[2].f[1];
-    quad.positions[2].f[2] = *(float *)(moby + 24) + result[2].f[2];
-    quad.positions[3].f[0] = *(float *)(moby + 16) + result[3].f[0];
-    quad.positions[3].f[1] = *(float *)(moby + 20) + result[3].f[1];
-    quad.positions[3].f[2] = *(float *)(moby + 24) + result[3].f[2];
+    quad.positions[0].f[0] = moby->pos.x + result[0].f[0];
+    quad.positions[0].f[1] = moby->pos.y + result[0].f[1];
+    quad.positions[0].f[2] = moby->pos.z + result[0].f[2];
+    quad.positions[1].f[0] = moby->pos.x + result[1].f[0];
+    quad.positions[1].f[1] = moby->pos.y + result[1].f[1];
+    quad.positions[1].f[2] = moby->pos.z + result[1].f[2];
+    quad.positions[2].f[0] = moby->pos.x + result[2].f[0];
+    quad.positions[2].f[1] = moby->pos.y + result[2].f[1];
+    quad.positions[2].f[2] = moby->pos.z + result[2].f[2];
+    quad.positions[3].f[0] = moby->pos.x + result[3].f[0];
+    quad.positions[3].f[1] = moby->pos.y + result[3].f[1];
+    quad.positions[3].f[2] = moby->pos.z + result[3].f[2];
     quad.colors[0] = ((u32)(int)((1.0f - data[8]) * 128.0f) << 24) | 0x808080;
     quad.colors[3] = quad.colors[2] = quad.colors[1] = quad.colors[0];
     quad.texture_coordinates[0][0] = 0.0f; quad.texture_coordinates[0][1] = 0.0f;
@@ -168,7 +169,7 @@ void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *targ
     }
 }
 #include "rnc/overlay/quad.h"
-extern void draw_bot_door_lock_glow(char *moby) __asm__("FUN_L06_00307578");
+extern void draw_bot_door_lock_glow(struct Moby *moby) __asm__("FUN_L06_00307578");
 #include "rnc/overlay/shared/gameplay/entities/bot_door_lock_globals.h"
 extern float bot_door_lock_number_bob_amplitude_gp __asm__("D_L06_001622DC") __attribute__((sda));
 extern float bot_door_lock_number_bob_period_gp __asm__("D_L06_001622E0") __attribute__((sda));
@@ -367,15 +368,15 @@ void update_hit_triggered_moby_breakup(char *self) {
 void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
 
 
-void update_timed_sprite_effect(char *moby) __asm__("FUN_L06_0030be60");
+void update_timed_sprite_effect(struct Moby *moby) __asm__("FUN_L06_0030be60");
 
-void update_timed_sprite_effect(char *moby) {
+void update_timed_sprite_effect(struct Moby *moby) {
     enum {
         SPRITE_EFFECT_STATE_REMOVE = 0,
         SPRITE_EFFECT_STATE_ANIMATE = 1
     };
-    float *effect_data = *(float **)(moby + 0x78);
-    switch ((unsigned char)moby[0x20]) {
+    float *effect_data = ((float *)moby->pvars);
+    switch ((unsigned char)((char)moby->state)) {
     case SPRITE_EFFECT_STATE_REMOVE:
         mark_moby_for_removal(moby);
         break;

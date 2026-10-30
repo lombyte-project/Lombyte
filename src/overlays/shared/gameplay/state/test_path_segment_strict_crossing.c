@@ -12,6 +12,7 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/gameplay/animation/update_moby_animation_state.h"
 #include "rnc/gameplay/entities/detach_manipulator.h"
+#include "rnc/gameplay/entities/moby.h"
 
 typedef struct {
     s32 count;
@@ -562,15 +563,15 @@ void update_joint_animation(void *moby, unsigned char *joint_animation_state, in
 
 
 /* Advances angle *p by y and swaps the old x*sin offset in a+0x18 for the new one. */
-void update_moby_vertical_oscillation(float x, float y, char *moby, float *phase_angle, float *previous_sine_offset) __asm__("FUN_L00_00262b00");
+void update_moby_vertical_oscillation(float x, float y, struct Moby *moby, float *phase_angle, float *previous_sine_offset) __asm__("FUN_L00_00262b00");
 
-void update_moby_vertical_oscillation(float x, float y, char *moby, float *phase_angle, float *previous_sine_offset) {
+void update_moby_vertical_oscillation(float x, float y, struct Moby *moby, float *phase_angle, float *previous_sine_offset) {
     float sine_offset;
     *phase_angle = fast_add_rotations(*phase_angle, y);
-    *(float *)(moby + 0x18) -= *previous_sine_offset;
+    moby->pos.z -= *previous_sine_offset;
     sine_offset = fast_sin(*phase_angle) * x;
     *previous_sine_offset = sine_offset;
-    *(float *)(moby + 0x18) += sine_offset;
+    moby->pos.z += sine_offset;
 }
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00261B00.c: func_L00_00263BF8), where it is exact; names translated to the US level program. */
 

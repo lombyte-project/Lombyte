@@ -1274,21 +1274,21 @@ extern void spawn_forcefield_contact_effects(void *, void *) __asm__("FUN_L13_00
 extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
 
 extern char forcefield_missing_trigger_format[] __asm__("D_L13_001F4FB0");
-void forcefield_update(unsigned char *m) __asm__("FUN_L13_002ed4a8");
-void forcefield_update(unsigned char *moby) {
+void forcefield_update(struct Moby *m) __asm__("FUN_L13_002ed4a8");
+void forcefield_update(struct Moby *moby) {
     enum {
         FORCEFIELD_STATE_INITIALIZE = 0,
         FORCEFIELD_STATE_MONITOR_LINKED_MOBY = 1,
         FORCEFIELD_STATE_FADE_OUT = 2,
         FORCEFIELD_STATE_REMOVE = 3
     };
-    char *forcefield_data = *(char **)(moby + 0x78);
+    char *forcefield_data = ((char *)moby->pvars);
     int wrap_adjusted_step;
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case FORCEFIELD_STATE_INITIALIZE:
-        moby[0x20] = 1;
-        moby[0x23] = 0x14;
-        *(unsigned short *)(moby + 0x34) |= 0xA08;
+        moby->state = 1;
+        moby->alpha = 0x14;
+        moby->flags |= 0xA08;
         *(short *)(forcefield_data + 0xE) = -1;
         *(float *)(forcefield_data + 4) = 1.0f;
         set_moby_color(moby, 0x80, 0x80, 0x80);
@@ -1299,21 +1299,21 @@ void forcefield_update(unsigned char *moby) {
             if (linked_moby == 0 || linked_moby[0x20] == 0xFE || linked_moby[0x20] == 0xFD ||
                 (D_0014C190_257218[D_0015ED84_n][*(short *)(linked_moby + 0xB2) >> 5] >> (*(unsigned short *)(linked_moby + 0xB2) & 0x1F)) & 1) {
                 *(float *)(forcefield_data + 4) = 1.0f;
-                moby[0x20] = 2;
+                moby->state = 2;
             }
         } else {
             *(float *)(forcefield_data + 4) = 1.0f;
-            moby[0x20] = 2;
-            stub_printf(forcefield_missing_trigger_format, *(short *)(moby + 0xA6), *(short *)(moby + 0xB2));
+            moby->state = 2;
+            stub_printf(forcefield_missing_trigger_format, moby->oclass, ((short)moby->save_id));
         }
         spawn_forcefield_contact_effects(moby, forcefield_data);
         break;
     case FORCEFIELD_STATE_FADE_OUT:
         *(float *)(forcefield_data + 4) -= frame_scale * 0.05f;
         if (*(float *)(forcefield_data + 4) < 0.0f)
-            moby[0x20] = 3;
+            moby->state = 3;
         else
-            moby[0x23] = truncate_float_to_s32(*(float *)(forcefield_data + 4) * 20.0f);
+            moby->alpha = truncate_float_to_s32(*(float *)(forcefield_data + 4) * 20.0f);
         break;
     case FORCEFIELD_STATE_REMOVE:
         if (*(short *)(forcefield_data + 0xE) != -1) {
@@ -1332,7 +1332,7 @@ void forcefield_update(unsigned char *moby) {
         *(short *)(forcefield_data + 0xC) += 0x1000;
         wrap_adjusted_step = 0x10C0;
     }
-    offset_moby_class_point_pairs(*(void **)(moby + 0x24), wrap_adjusted_step, 0);
+    offset_moby_class_point_pairs(((void *)moby->pclass), wrap_adjusted_step, 0);
 }
 
 
@@ -1453,15 +1453,15 @@ typedef struct {
 extern int debug_print_alt_q() __asm__("FUN_001e93b0");
 
 extern char D_L13_001F51B0[] NOT_SDA;
-void update_moby_state_relay(char *moby) __asm__("FUN_L13_002f8880");
+void update_moby_state_relay(struct Moby *moby) __asm__("FUN_L13_002f8880");
 
-void update_moby_state_relay(char *moby) {
+void update_moby_state_relay(struct Moby *moby) {
     enum {
         STATE_RELAY_INITIALIZE = 0,
         STATE_RELAY_WAIT_FOR_SECOND_STATE_SET = 1,
         STATE_RELAY_WAIT_FOR_FIRST_STATE_SET = 2
     };
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)moby->pvars);
     char *monitored_moby = 0;
     int monitored_moby_index = *(int *)data;
     int found;
@@ -1472,7 +1472,7 @@ void update_moby_state_relay(char *moby) {
     switch (data[0x1C]) {
     case STATE_RELAY_INITIALIZE:
         if (monitored_moby == 0) {
-            debug_print_alt_q(D_L13_001F51B0, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
+            debug_print_alt_q(D_L13_001F51B0, ((short)moby->save_id), moby->oclass);
             mark_moby_for_removal(moby);
         } else if (data[0x1D] != 0) {
             data[0x1C] = 1;
@@ -1498,9 +1498,9 @@ void update_moby_state_relay(char *moby) {
                     o[0xBC] = data[0x17];
             }
             if (data[0x19] != -1)
-                moby[0x20] = data[0x19];
+                moby->state = data[0x19];
             if (data[0x1B] != -1)
-                moby[0xBC] = data[0x1B];
+                moby->command = data[0x1B];
             data[0x1C] = 2;
         }
         break;
@@ -1522,9 +1522,9 @@ void update_moby_state_relay(char *moby) {
                     o[0xBC] = data[0x16];
             }
             if (data[0x18] != -1)
-                moby[0x20] = data[0x18];
+                moby->state = data[0x18];
             if (data[0x1A] != -1)
-                moby[0xBC] = data[0x1A];
+                moby->command = data[0x1A];
             data[0x1C] = 1;
         }
         break;
@@ -1541,9 +1541,9 @@ extern char gate_missing_controller_format[] __asm__("D_L13_001F51E0");
 extern int D_L13_0015FFD8; /* no foreign declaration */
 extern int debug_print_alt() __asm__("FUN_001e93b0");
 
-void update_controller_linked_gate(char *moby) __asm__("FUN_L13_002f8a78");
+void update_controller_linked_gate(struct Moby *moby) __asm__("FUN_L13_002f8a78");
 
-void update_controller_linked_gate(char *moby) {
+void update_controller_linked_gate(struct Moby *moby) {
     enum {
         GATE_STATE_INITIALIZE = 0,
         GATE_STATE_OPEN = 1,
@@ -1551,7 +1551,7 @@ void update_controller_linked_gate(char *moby) {
         GATE_STATE_CLOSED = 3,
         GATE_STATE_OPENING = 4
     };
-    char *gate_data = *(char **)(moby + 0x78);
+    char *gate_data = ((char *)moby->pvars);
     char *controller_moby = 0;
     int open;
     int close;
@@ -1579,66 +1579,66 @@ void update_controller_linked_gate(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case GATE_STATE_INITIALIZE:
         if (controller_moby == 0) {
-            debug_print_alt(gate_missing_controller_format, *(short *)(moby + 0xB2), *(short *)(moby + 0xA6));
+            debug_print_alt(gate_missing_controller_format, ((short)moby->save_id), moby->oclass);
             mark_moby_for_removal(moby);
             return;
         }
         set_moby_color(moby, 0x80, 0x80, 0x80);
-        *(unsigned short *)(moby + 0x34) |= 0xA08;
+        moby->flags |= 0xA08;
         if (*(int *)(gate_data + 0x18) == 0) {
             *(float *)(gate_data + 0x10) = 1.0f;
-            moby[0x20] = 1;
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
-            moby[0x23] = 0x14;
+            moby->state = 1;
+            moby->collision = *(int *)(((char *)moby->pclass) + 0x10);
+            moby->alpha = 0x14;
         } else {
             *(float *)(gate_data + 0x10) = 0.0f;
-            moby[0x20] = 3;
-            *(int *)(moby + 0x94) = 0;
-            moby[0x23] = 0;
+            moby->state = 3;
+            moby->collision = 0;
+            moby->alpha = 0;
         }
         break;
     case GATE_STATE_OPEN:
         if (close) {
-            *(int *)(moby + 0x94) = 0;
-            moby[0x20] = 2;
+            moby->collision = 0;
+            moby->state = 2;
         }
         break;
     case GATE_STATE_CLOSING:
         if (open) {
-            moby[0x20] = 4;
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            moby->state = 4;
+            moby->collision = *(int *)(((char *)moby->pclass) + 0x10);
         }
         *(float *)(gate_data + 0x10) -= frame_scale * 0.05f;
         if (*(float *)(gate_data + 0x10) < 0.0f) {
             *(float *)(gate_data + 0x10) = 0.0f;
-            moby[0x20] = 3;
-            *(int *)(moby + 0x94) = 0;
-            moby[0x31] = 0;
-            *(unsigned short *)(moby + 0x34) |= 1;
+            moby->state = 3;
+            moby->collision = 0;
+            moby->visible = 0;
+            moby->flags |= 1;
         }
         break;
     case GATE_STATE_CLOSED:
         if (open) {
-            moby[0x20] = 4;
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
-            moby[0x31] = 1;
-            *(unsigned short *)(moby + 0x34) &= 0xFFFE;
+            moby->state = 4;
+            moby->collision = *(int *)(((char *)moby->pclass) + 0x10);
+            moby->visible = 1;
+            moby->flags &= 0xFFFE;
         }
         break;
     case GATE_STATE_OPENING:
         if (close) {
-            *(int *)(moby + 0x94) = 0;
-            moby[0x20] = 2;
+            moby->collision = 0;
+            moby->state = 2;
         }
         *(float *)(gate_data + 0x10) += frame_scale * 0.05f;
         if (1.0f < *(float *)(gate_data + 0x10)) {
             *(float *)(gate_data + 0x10) = 1.0f;
-            moby[0x20] = 1;
-            *(int *)(moby + 0x94) = *(int *)(*(char **)(moby + 0x24) + 0x10);
+            moby->state = 1;
+            moby->collision = *(int *)(((char *)moby->pclass) + 0x10);
         }
         break;
     }
-    moby[0x23] = truncate_float_to_s32(*(float *)(gate_data + 0x10) * 20.0f);
+    moby->alpha = truncate_float_to_s32(*(float *)(gate_data + 0x10) * 20.0f);
     step = 0xC0;
     *(int *)(gate_data + 0x14) += step;
     if (*(int *)(gate_data + 0x14) > 0x1000) {
@@ -1648,7 +1648,7 @@ void update_controller_linked_gate(char *moby) {
         *(int *)(gate_data + 0x14) += 0x1000;
         step += 0x1000;
     }
-    offset_moby_class_point_pairs(*(unsigned char **)(moby + 0x24), step, 0);
+    offset_moby_class_point_pairs(((unsigned char *)moby->pclass), step, 0);
 }
 
 char D_L13_001F4F38[] = "tractor too long, abort\n";

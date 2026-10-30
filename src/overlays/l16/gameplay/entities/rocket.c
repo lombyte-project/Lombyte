@@ -892,7 +892,7 @@ void emit_moby_sprite_effect_particles(struct Moby *moby) {
 extern float freeze_stats_score_ref_b __asm__("D_0015EE6C"), D_0015ED70_c __asm__("D_0015ED70");
 extern void FUN_L16_002c9a50_u(unsigned char *) __asm__("FUN_L16_002c9a50");
 extern void update_conveyor_group_motion_transforms(int, void *) __asm__("FUN_L16_002c9c38");
-void draw_conveyor_belt_strips(char *m) __asm__("FUN_L16_002c9cd0");
+void draw_conveyor_belt_strips(struct Moby *m) __asm__("FUN_L16_002c9cd0");
 
 extern float conveyor_belt_base_speed_gp __asm__("D_L16_0016198C") __attribute__((sda));
 void conveyor_belt_update(struct Moby *m) __asm__("FUN_L16_002c9878");
@@ -1023,9 +1023,9 @@ extern int D_L16_001600EC_m __asm__("D_L16_001600EC");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad_u(void *, void *, int) __asm__("draw_geometry_quad");
 
-void draw_conveyor_belt_strips(char *moby) {
+void draw_conveyor_belt_strips(struct Moby *moby) {
     L16RibbonPacket_u packets[2];
-    char *conveyor_data = *(char **)(moby + 0x78);
+    char *conveyor_data = ((char *)moby->pvars);
     float scale = fast_vec_length(D_L16_001600EC_m + ((*(int *)(conveyor_data + 0x60)) << 7)) * 2.001f;
     int count = truncate_float_to_s32(scale);
     float step = 2.0f / scale;
@@ -1870,8 +1870,8 @@ int find_linked_pair_partner_by_height(struct Moby *moby) {
 extern int *D_L16_001ABCC0[];
 
 int is_linked_pair_effect_enabled(void *mv) {
-    unsigned char *moby = mv;
-    unsigned short *group_entry = (unsigned short *)D_L16_001ABCC0[moby[0x21]];
+    struct Moby *moby = mv;
+    unsigned short *group_entry = (unsigned short *)D_L16_001ABCC0[moby->group];
     if (group_entry == 0)
         return 1;
     for (;;) {

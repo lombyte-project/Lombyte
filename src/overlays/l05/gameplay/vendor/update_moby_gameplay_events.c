@@ -9,6 +9,7 @@
 #include "rnc/gameplay/state/usage_stats.h"
 #include "rnc/rendering/clip_volume.h"
 #include "rnc/overlay/shared/gameplay/entities/cutscene_set_camera_target.h"
+#include "rnc/gameplay/entities/moby.h"
 extern char D_0013F3D0[];
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA, D_001413DC NOT_SDA, D_0013D464 NOT_SDA;
 extern unsigned char menu_item_enabled_1 __asm__("D_0013D395"), D_0013D4D6, D_0013D388, D_0013D4CF;
@@ -83,12 +84,12 @@ extern L05Fields_0013D4C0 item_available __asm__("D_0013D4C0");
 #include "rnc/overlay/l05/gameplay/vendor/update_moby_gameplay_events_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-void update_moby_gameplay_events(unsigned char *moby) __asm__("FUN_L05_0031bf40");
+void update_moby_gameplay_events(struct Moby *moby) __asm__("FUN_L05_0031bf40");
 
-void update_moby_gameplay_events(unsigned char *moby) {
-    int *data = *(int **)(moby + 0x78);
+void update_moby_gameplay_events(struct Moby *moby) {
+    int *data = ((int *)moby->pvars);
     int value, elapsed, limit;
-    moby[0x30] = 0xff;
+    moby->update_dist = 0xff;
 
     if (is_point_inside_clip_volume(D_0013F3D0, data[20])) {
         if (*(int *)(D_0013F3D0 + 0x200c) == 0x12 && data[26]++ > scale_game_frames(0x168)) {

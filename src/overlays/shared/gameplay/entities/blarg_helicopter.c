@@ -1850,18 +1850,18 @@ void qwark_rilgar_update(L03WatchMoby *moby) {
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern unsigned char l03_draw_callback_setup_byte_target[] __asm__("D_L03_001DC1A0");
 
-void update_moby_draw_callback(unsigned char *moby) __asm__("FUN_L03_002dc9b0");
+void update_moby_draw_callback(struct Moby *moby) __asm__("FUN_L03_002dc9b0");
 
-void update_moby_draw_callback(unsigned char *moby) {
+void update_moby_draw_callback(struct Moby *moby) {
     enum {
         DRAW_CALLBACK_INITIALIZE = 0,
         DRAW_CALLBACK_REGISTER = 1
     };
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case DRAW_CALLBACK_INITIALIZE:
         prepare_scaled_float_table_with_target_byte(l03_draw_callback_setup_byte_target, 0x20, 0.6666667f);
-        moby[0x20] = 1;
-        moby[0x30] = 0xFF;
+        moby->state = 1;
+        moby->update_dist = 0xFF;
         break;
     case DRAW_CALLBACK_REGISTER:
         add_draw_callback(register_audio_stream_callback, moby);

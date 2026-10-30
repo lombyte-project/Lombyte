@@ -154,14 +154,14 @@ void spawn_moby_offset_puffs(Moby_2FF358 *source_moby) {
 
 extern char *D_L14_0015FFD8;
 
-void mark_moby_and_linked_moby_for_removal(char *moby) __asm__("FUN_L14_002fe238");
+void mark_moby_and_linked_moby_for_removal(struct Moby *moby) __asm__("FUN_L14_002fe238");
 
-void mark_moby_and_linked_moby_for_removal(char *moby) {
-    char *data = *(char **)(moby + 0x78);
+void mark_moby_and_linked_moby_for_removal(struct Moby *moby) {
+    char *data = ((char *)moby->pvars);
     char *other = D_L14_0015FFD8 + (*(int *)(data + 4) << 8);
     if (other != 0 && other[0x20] >= 0)
         mark_moby_for_removal(other);
-    if (moby[0x20] >= 0)
+    if (((char)moby->state) >= 0)
         mark_moby_for_removal(moby);
 }
 

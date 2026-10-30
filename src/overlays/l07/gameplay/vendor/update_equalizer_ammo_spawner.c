@@ -12,6 +12,7 @@
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/overlay/shared/gameplay/entities/draw_trail.h"
+#include "rnc/gameplay/entities/moby.h"
 
 
 extern void debug_print(const char *, ...) __asm__("FUN_001e93b0");
@@ -35,11 +36,11 @@ extern L07ScaleRow l07_ammo_spawner_scaling_rows[] __asm__("D_L07_001C4130");
 /* Ported from rac1-decomp nonmatching/l07_umbris/func_L07_0031E6B0.c (func_L07_0031E6B0) */
 /* Umbris item spawner: measures its path once, then for each listed item whose stock ratio is in
  * range spawns batches of pickups along the path, away from the target moby. */
-void update_equalizer_ammo_spawner(char *moby) __asm__("FUN_L07_0031d2e0");
+void update_equalizer_ammo_spawner(struct Moby *moby) __asm__("FUN_L07_0031d2e0");
 
-void update_equalizer_ammo_spawner(char *moby) {
-    int *data = *(int **)(moby + 0x78);
-    int state = *(unsigned char *)(moby + 0x20);
+void update_equalizer_ammo_spawner(struct Moby *moby) {
+    int *data = ((int *)moby->pvars);
+    int state = moby->state;
     if (state == 1) goto state_one;
     if (state >= 2) return;
     if (state != 0) return;
@@ -55,7 +56,7 @@ void update_equalizer_ammo_spawner(char *moby) {
             bad = 1;
         }
         if (bad) {
-            debug_print(D_L07_00211B30, *(short *)(moby + 0xb2));
+            debug_print(D_L07_00211B30, ((short)moby->save_id));
             mark_moby_for_removal(moby);
             return;
         }
@@ -66,7 +67,7 @@ void update_equalizer_ammo_spawner(char *moby) {
                 fast_vec_dist(&nodes[i + 1], &nodes[(i + 1) % *(int *)nodes + 1]);
             *(float *)(data + 8) += ((L07PathNode *)(D_L07_001B0530[data[1]] + (i << 4)))[1].length;
         }
-        moby[0x20] = 1;
+        moby->state = 1;
     }
     return;
 state_one:
@@ -135,7 +136,7 @@ state_one:
                 }
             }
         }
-        moby[0x20] = 2;
+        moby->state = 2;
     }
 }
 
@@ -156,14 +157,14 @@ extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float,
                                  float) __asm__("FUN_L00_0026d000");
 extern char D_L07_0016C960_c[] __asm__("D_L07_0016C8E0");
 
-void update_scene_moby_effect_bursts(char *moby) __asm__("FUN_L07_0031eba8");
+void update_scene_moby_effect_bursts(struct Moby *moby) __asm__("FUN_L07_0031eba8");
 
-void update_scene_moby_effect_bursts(char *moby) {
+void update_scene_moby_effect_bursts(struct Moby *moby) {
     enum {
         MOBY_STATE_INITIALIZE = 0,
         MOBY_STATE_UPDATE = 1
     };
-    int state = *(unsigned char *)(moby + 0x20);
+    int state = moby->state;
     int current_scene_state;
     int k;
     int scene_state_offset;
@@ -174,8 +175,8 @@ void update_scene_moby_effect_bursts(char *moby) {
     float effect_spawn_position[4];
     switch (state) {
     case MOBY_STATE_INITIALIZE:
-        *(unsigned char *)(moby + 0x30) = 0xFF;
-        moby[0x20] = 1;
+        moby->update_dist = 0xFF;
+        moby->state = 1;
         break;
     case MOBY_STATE_UPDATE:
         current_scene_state = scene_state;
@@ -228,17 +229,17 @@ void update_scene_moby_effect_bursts(char *moby) {
 extern short scene_trail_velocity_length __asm__("D_L07_00161CD8") __attribute__((sda));
 extern short scene_trail_first_spawn_particle_value __asm__("D_L07_00161CDC") __attribute__((sda));
 extern short scene_trail_second_spawn_particle_value __asm__("D_L07_00161CE0") __attribute__((sda));
-void update_scene_moby_trails(unsigned char *moby) __asm__("FUN_L07_0031f900");
+void update_scene_moby_trails(struct Moby *moby) __asm__("FUN_L07_0031f900");
 
-void update_scene_moby_trails(unsigned char *moby) {
+void update_scene_moby_trails(struct Moby *moby) {
     enum {
         TRAIL_STATE_INITIALIZE = 0,
         TRAIL_STATE_UPDATE = 1
     };
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case TRAIL_STATE_INITIALIZE:
-        moby[0x30] = 0xFF;
-        moby[0x20] = 1;
+        moby->update_dist = 0xFF;
+        moby->state = 1;
         break;
     case TRAIL_STATE_UPDATE:
         if (scene_state == 2) {

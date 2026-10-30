@@ -243,9 +243,9 @@ extern short faucet_fallback_pulse_end_color_gp __asm__("D_L05_001618D0") __attr
 extern short D_0015EE6C_s __asm__("D_0015ED6C");
 
 void update_hydrodisplacer_faucet_pulse_color(void *mv) {
-    char *moby = mv;
+    struct Moby *moby = mv;
     struct Hero *base = &hero;
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)moby->pvars);
     int pulse_color;
     float pulse_phase;
     if (((char *)base->ground_moby) == moby) {
@@ -269,9 +269,9 @@ void update_hydrodisplacer_faucet_pulse_color(void *mv) {
         } else {
             pulse_color = fast_tween_color(*(int *)&faucet_fallback_pulse_start_color_gp, *(int *)&faucet_fallback_pulse_end_color_gp, (fast_sin(pulse_phase) + 1.0f) * 0.5f);
         }
-        *(int *)(moby + 0x90) = fast_tween_color(*(int *)&faucet_base_color_gp, pulse_color, *(float *)(data + 0x1C));
+        moby->glow_color = fast_tween_color(*(int *)&faucet_base_color_gp, pulse_color, *(float *)(data + 0x1C));
     } else {
-        *(int *)(moby + 0x90) = *(int *)&faucet_base_color_gp;
+        moby->glow_color = *(int *)&faucet_base_color_gp;
     }
 }
 #include "rnc/gameplay/state/item_state.h"

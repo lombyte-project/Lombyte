@@ -474,10 +474,10 @@ void draw_beam_and_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __as
 void draw_beam_anchor_camera_facing_quads(void *mv) __asm__("FUN_L00_002bb0b0");
 
 void draw_beam_anchor_camera_facing_quads(void *) __asm__("FUN_L00_002bb0b0");
-void draw_beam_and_arc_effects(u8 *moby) __asm__("FUN_L00_002ba970");
+void draw_beam_and_arc_effects(struct Moby *moby) __asm__("FUN_L00_002ba970");
 
-void draw_beam_and_arc_effects(u8 *moby) {
-    S2ba970 *moby_vars = *(S2ba970 **)(moby + 0x78);
+void draw_beam_and_arc_effects(struct Moby *moby) {
+    S2ba970 *moby_vars = ((S2ba970 *)moby->pvars);
     beam_first_pass_texture_u_offset_gp -= beam_first_pass_texture_u_scroll_speed_gp * frame_scale;
     if (beam_first_pass_texture_u_offset_gp <= -8.0f) {
         beam_first_pass_texture_u_offset_gp += 8.0f;
@@ -749,22 +749,22 @@ typedef struct {
     float fC;
 } V_2bb400;
 
-void update_linked_moby_scale_and_rotation(unsigned char *moby) __asm__("FUN_L00_002bb400");
+void update_linked_moby_scale_and_rotation(struct Moby *moby) __asm__("FUN_L00_002bb400");
 
-void update_linked_moby_scale_and_rotation(unsigned char *moby) {
-    V_2bb400 *moby_vars = *(V_2bb400 **)(moby + 0x78);
+void update_linked_moby_scale_and_rotation(struct Moby *moby) {
+    V_2bb400 *moby_vars = ((V_2bb400 *)moby->pvars);
     unsigned char *o = moby_vars->o;
     int old, unwrapped_angle, angle_delta;
     if (o[0x20] == 0 || (o[0x20] & 0xF0) == 0xF0) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (o != 0 && (*(u16 *)(moby + 0x34) & 1) != (*(u16 *)(o + 0x34) & 1)) {
-        *(u16 *)(moby + 0x34) &= ~1;
-        *(u16 *)(moby + 0x34) |= *(u16 *)(moby_vars->o + 0x34) & 1;
+    if (o != 0 && (moby->flags & 1) != (*(u16 *)(o + 0x34) & 1)) {
+        moby->flags &= ~1;
+        moby->flags |= *(u16 *)(moby_vars->o + 0x34) & 1;
     }
     if (hero.items[0].ready_frames < scale_game_frames(0x19)) {
-        *(u16 *)(moby + 0x34) |= 0x41;
+        moby->flags |= 0x41;
     }
     old = moby_vars->ang;
     angle_delta = -0xC0;
@@ -777,11 +777,11 @@ void update_linked_moby_scale_and_rotation(unsigned char *moby) {
         angle_delta = 0xF40;
         moby_vars->ang = old + angle_delta;
     }
-    offset_moby_class_point_pairs(*(void **)(moby + 0x24), 0, angle_delta);
-    *(float *)(moby + 0x2C) =
-        *(float *)(*(char **)(moby + 0x24) + 0x24) * moby_vars->fC * random_float_between(0.5f, 1.0f);
-    *(float *)(moby + 0x44) =
-        FUN_001fa580_2bb400(*(float *)(moby + 0x44), normalize_angle(moby_vars->fC));
+    offset_moby_class_point_pairs(((void *)moby->pclass), 0, angle_delta);
+    moby->scale =
+        *(float *)(((char *)moby->pclass) + 0x24) * moby_vars->fC * random_float_between(0.5f, 1.0f);
+    moby->rot.y =
+        FUN_001fa580_2bb400(moby->rot.y, normalize_angle(moby_vars->fC));
     refresh_moby_spatial_bounds_from_basis(moby);
 }
 

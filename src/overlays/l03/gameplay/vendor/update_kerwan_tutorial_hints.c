@@ -51,26 +51,26 @@ extern struct Moby *D_L03_0015FFE4;
 extern s32 get_ammo(s32) __asm__("FUN_L00_00233e98");
 
 /* Kerwan tutorial hint triggers: plays help messages and counts usage stats while the hero is inside the moby's clip volumes. */
-void update_kerwan_tutorial_hints(u8 *moby) __asm__("FUN_L03_002df520");
+void update_kerwan_tutorial_hints(struct Moby *moby) __asm__("FUN_L03_002df520");
 
-void update_kerwan_tutorial_hints(u8 *moby) {
+void update_kerwan_tutorial_hints(struct Moby *moby) {
     enum {
         TUTORIAL_HINTS_INITIALIZE = 0,
         TUTORIAL_HINTS_UPDATE = 1
     };
-    s32 *data = *(s32 **)(moby + 0x78);
+    s32 *data = ((s32 *)moby->pvars);
     struct Moby *candidate_moby;
     s32 count;
     s32 i;
     s32 scaled_time_value;
 
     fast_dec_timer(&data[22]);
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case TUTORIAL_HINTS_INITIALIZE:
         data[20] = 0;
         data[21] = 0;
-        moby[0x30] = 0xFF;
-        moby[0x20] = 1;
+        moby->update_dist = 0xFF;
+        moby->state = 1;
         break;
     case TUTORIAL_HINTS_UPDATE:
         if (is_point_inside_clip_volume(&hero.motion.pos, data[30]) &&

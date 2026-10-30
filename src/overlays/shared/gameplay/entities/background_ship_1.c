@@ -19,6 +19,7 @@
 #include "rnc/overlay/shared/gameplay/entities/moby_point_position.h"
 #include "rnc/overlay/shared/math/vectors/random_vector.h"
 #include "rnc/rendering/effects/spawn_spark.h"
+#include "rnc/gameplay/entities/moby.h"
 
 /* Walks the moby list matching this moby's id and pulses each match's data slots while it is bright. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002ED740), where it is exact; names translated to the US level program. */
@@ -613,8 +614,8 @@ extern void spawn_moby_break_fragments(void *, int, int, int, int, int, int) __a
 extern void spawn_proximity_gated_bolts(void *) __asm__("FUN_L01_002787a0");
 extern void spawn_moby_from_placement(void *, int) __asm__("FUN_L01_00278e20");
 
-void white_flower_update(char *m) __asm__("FUN_L02_002f1f60");
-void white_flower_update(char *moby) {
+void white_flower_update(struct Moby *m) __asm__("FUN_L02_002f1f60");
+void white_flower_update(struct Moby *moby) {
     enum {
         WHITE_FLOWER_INITIALIZE = 0,
         WHITE_FLOWER_WAIT_FOR_HIT = 1,
@@ -622,15 +623,15 @@ void white_flower_update(char *moby) {
     };
     int hit = 0;
     char *hit_record = find_moby_hit(moby, 0x10000, 0);
-    switch (*(unsigned char *)(moby + 0x20)) {
+    switch (moby->state) {
     case WHITE_FLOWER_INITIALIZE:
-        moby[0x20] = 1;
+        moby->state = 1;
         break;
     case WHITE_FLOWER_WAIT_FOR_HIT:
         if (hit_record != 0 && *(float *)(hit_record + 0x2C) > 0.0f)
             hit = 1;
         if (hit)
-            moby[0x20] = 2;
+            moby->state = 2;
         break;
     case WHITE_FLOWER_REMOVE:
         allocate_voice_for_target_entry(0, 0, (int)moby);

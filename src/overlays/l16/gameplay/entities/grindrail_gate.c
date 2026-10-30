@@ -1669,14 +1669,14 @@ void restore_gadgetron_ceo_non_challenge_environment(struct Moby *moby) {
 #ifndef
 #endif
 extern int func_00215570_e7208(void *, int) __asm__("FUN_00214720");
-void update_two_region_trigger_latch(char *moby) __asm__("FUN_L16_002e7208");
+void update_two_region_trigger_latch(struct Moby *moby) __asm__("FUN_L16_002e7208");
 
-void update_two_region_trigger_latch(char *moby) {
+void update_two_region_trigger_latch(struct Moby *moby) {
     enum {
         CLIP_TRIGGER_WAIT_FOR_ARMING = 0,
         CLIP_TRIGGER_CHECK_LATCH = 1
     };
-    char *data = *(char **)(moby + 0x78);
+    char *data = ((char *)moby->pvars);
     switch (*(int *)(data + 8)) {
     case CLIP_TRIGGER_WAIT_FOR_ARMING: {
         char *hero_position = (char *)&hero.motion.pos;
@@ -2620,9 +2620,9 @@ extern void draw_level16_visible_single_reflection_mesh(void) __asm__("FUN_L16_0
 extern L16SingleSphere D_L16_00161F60_bounds[] __asm__("D_L16_00161F80")
     __attribute__((section(".sdata")));
 
-void update_level16_single_mesh_render_state(unsigned char *moby) __asm__("FUN_L16_002e93b0");
+void update_level16_single_mesh_render_state(struct Moby *moby) __asm__("FUN_L16_002e93b0");
 
-void update_level16_single_mesh_render_state(unsigned char *moby) {
+void update_level16_single_mesh_render_state(struct Moby *moby) {
     enum {
         SINGLE_MESH_RENDER_INITIALIZE_BOUNDING_SPHERE = 0,
         SINGLE_MESH_RENDER_QUEUE_CALLBACK = 1
@@ -2633,7 +2633,7 @@ void update_level16_single_mesh_render_state(unsigned char *moby) {
     float *out;
     float *verts;
     int count;
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case SINGLE_MESH_RENDER_INITIALIZE_BOUNDING_SPHERE: {
         for (i = 0; i <= 0; i++) {
             maxx = maxy = maxz = -1024.0f;
@@ -2678,8 +2678,8 @@ void update_level16_single_mesh_render_state(unsigned char *moby) {
                     out[3] = vertex_to_center_distance;
             }
         }
-        moby[0x20] = 1;
-        moby[0x30] = *(unsigned short *)(moby + 0x32) = 255;
+        moby->state = 1;
+        moby->update_dist = moby->draw_dist = 255;
         break;
     }
     case SINGLE_MESH_RENDER_QUEUE_CALLBACK:
@@ -2697,9 +2697,9 @@ extern short D_L16_00161F98_gp __asm__("D_L16_00161F98") __attribute__((sda));
 extern L16SingleSphere_2e98e0 D_L16_00161F60_bounds_2e98e0[] __asm__("D_L16_001DF2B0")
     __attribute__((section(".data")));
 
-void update_level16_two_mesh_render_state(unsigned char *moby) __asm__("FUN_L16_002e98e0");
+void update_level16_two_mesh_render_state(struct Moby *moby) __asm__("FUN_L16_002e98e0");
 
-void update_level16_two_mesh_render_state(unsigned char *moby) {
+void update_level16_two_mesh_render_state(struct Moby *moby) {
     enum {
         TWO_MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         TWO_MESH_RENDER_QUEUE_CALLBACK = 1
@@ -2710,7 +2710,7 @@ void update_level16_two_mesh_render_state(unsigned char *moby) {
     float *out;
     float *verts;
     int count;
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case TWO_MESH_RENDER_INITIALIZE_BOUNDING_SPHERES: {
         for (i = 0; i <= 1; i++) {
             maxx = maxy = maxz = -1024.0f;
@@ -2756,8 +2756,8 @@ void update_level16_two_mesh_render_state(unsigned char *moby) {
                     out[3] = vertex_to_center_distance;
             }
         }
-        moby[0x20] = 1;
-        moby[0x30] = *(unsigned short *)(moby + 0x32) = 255;
+        moby->state = 1;
+        moby->update_dist = moby->draw_dist = 255;
         break;
     }
     case TWO_MESH_RENDER_QUEUE_CALLBACK:
@@ -2818,9 +2818,9 @@ extern float D_L16_001E34A0[];
 extern float D_L16_001E3828[];
 float *D_L16_00162018[4] __attribute__((section(".sdata"))) = {D_L16_001E2DB0, D_L16_001E34A0, D_L16_001E3828, 0};
 extern L16SingleSphere_2ea128 D_L16_001E5390[] NOT_SDA;
-void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) __asm__("FUN_L16_002ea128");
+void update_level16_three_mesh_bounds_and_callback(struct Moby *moby) __asm__("FUN_L16_002ea128");
 
-void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) {
+void update_level16_three_mesh_bounds_and_callback(struct Moby *moby) {
     enum {
         MESH_RENDER_INITIALIZE_BOUNDING_SPHERES = 0,
         MESH_RENDER_QUEUE_CALLBACK = 1
@@ -2831,7 +2831,7 @@ void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) {
     float *out;
     float *verts;
     int count;
-    switch (moby[0x20]) {
+    switch (moby->state) {
     case MESH_RENDER_INITIALIZE_BOUNDING_SPHERES: {
         for (i = 0; i <= 2; i++) {
             maxx = maxy = maxz = -1024.0f;
@@ -2877,8 +2877,8 @@ void update_level16_three_mesh_bounds_and_callback(unsigned char *moby) {
                     out[3] = vertex_to_center_distance;
             }
         }
-        moby[0x20] = 1;
-        moby[0x30] = *(unsigned short *)(moby + 0x32) = 255;
+        moby->state = 1;
+        moby->update_dist = moby->draw_dist = 255;
         break;
     }
     case MESH_RENDER_QUEUE_CALLBACK:

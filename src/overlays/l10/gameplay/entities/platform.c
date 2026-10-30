@@ -1546,21 +1546,21 @@ extern void func_L00_002633D8_f(float, float, void *, int *, float *,
                                 void *) __asm__("FUN_L00_00262360");
 extern int trooper_play_sound(int, int, void *, int) __asm__("FUN_L00_0028dc90");
 
-void update_path_spark_emitter(char *moby) __asm__("FUN_L10_002d8d30");
+void update_path_spark_emitter(struct Moby *moby) __asm__("FUN_L10_002d8d30");
 
-void update_path_spark_emitter(char *moby) {
+void update_path_spark_emitter(struct Moby *moby) {
     enum {
         SPARK_STATE_WAIT_FOR_TIMER = 0,
         SPARK_STATE_TRAVERSE_PATH = 1
     };
-    char *spark_vars = *(char **)(moby + 0x78);
+    char *spark_vars = ((char *)moby->pvars);
     int *path;
     float spark_path_position[4];
     int seg;
     float frac;
     float first_path_segment_length;
     if (*(int *)spark_vars == -1) {
-        func_001E9730_2da0f0(path_spark_missing_path_message, *(short *)(moby + 0xB2));
+        func_001E9730_2da0f0(path_spark_missing_path_message, ((short)moby->save_id));
         mark_moby_for_removal(moby);
         return;
     }
@@ -1580,7 +1580,7 @@ void update_path_spark_emitter(char *moby) {
         }
         *(int *)(spark_vars + 0x10) = -1;
         if (func_001F9908_v(spark_vars + 8) != 0) {
-            moby[0x20] = 1;
+            moby->state = 1;
             *(int *)(spark_vars + 4) = 0;
         }
         break;
@@ -1614,7 +1614,7 @@ void update_path_spark_emitter(char *moby) {
             *(OvlQuad *)(((char *)&voice_positions) + *(int *)(spark_vars + 0x10) * 0x70) = *(OvlQuad *)spark_path_position;
         }
         if (seg == *path - 1) {
-            moby[0x20] = 0;
+            moby->state = 0;
             *(int *)(spark_vars + 8) = scale_game_frames(0x78);
         }
         break;

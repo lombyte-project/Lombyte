@@ -6,12 +6,13 @@
 #include "sda.h"
 #include "rnc/overlay/entities.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/gameplay/entities/moby.h"
 /* Recognize the active vendor object state. */
 
-int test_linked_moby_turn_trigger(char *moby) __asm__("FUN_L11_0030f270");
+int test_linked_moby_turn_trigger(struct Moby *moby) __asm__("FUN_L11_0030f270");
 
-int test_linked_moby_turn_trigger(char *moby) {
-    if (*(short *)(moby + 0xA6) == 0x49b && ((unsigned char *)moby)[0x20] == 0x2) {
+int test_linked_moby_turn_trigger(struct Moby *moby) {
+    if (moby->oclass == 0x49b && ((unsigned char *)moby)[0x20] == 0x2) {
         return 1;
     }
     return 0;
