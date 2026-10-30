@@ -14,9 +14,9 @@ struct ThreeOptionMenu {
 extern void  setup_gif_paging(s32) __asm__("func_001F4280");
 extern void  do_gif_paging(void) __asm__("func_001F4398");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32   count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
-extern s32   count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
-extern s32   count_nonzero_entries_up_to_30(void) __asm__("func_00215348");
+extern s32   count_gold_bolts(void) __asm__("func_00215290");
+extern s32   count_gold_weapons(void) __asm__("func_00215300");
+extern s32   count_skill_points(void) __asm__("func_00215348");
 extern s32   sprintf(char *, const char *, ...);
 extern s32   measure_text_width_regular(char *, s32) __asm__("func_001F6250");
 extern void  font_print_center(s32, s32, u64, char *, s32) __asm__("func_001F6AF0");
@@ -39,17 +39,17 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
     line_spacing = menu->height / 5;
     draw_y = menu->height / 5 - 8;
     maximum_text_width = 0;
-    sprintf(text_buffer, get_help_message_text(0x522F), count_nonzero_entries_up_to_40(), 0x28);
+    sprintf(text_buffer, get_help_message_text(0x522F), count_gold_bolts(), 0x28);
     measured_width = measure_text_width_regular(text_buffer, -1);
     if (maximum_text_width < measured_width) {
         maximum_text_width = measured_width;
     }
-    sprintf(text_buffer, get_help_message_text(0x5230), count_nonzero_entries_up_to_10(), 10);
+    sprintf(text_buffer, get_help_message_text(0x5230), count_gold_weapons(), 10);
     measured_width = measure_text_width_regular(text_buffer, -1);
     if (maximum_text_width < measured_width) {
         maximum_text_width = measured_width;
     }
-    sprintf(text_buffer, get_help_message_text(0x5231), count_nonzero_entries_up_to_30(), 0x1E);
+    sprintf(text_buffer, get_help_message_text(0x5231), count_skill_points(), 0x1E);
     measured_width = measure_text_width_regular(text_buffer, -1);
     if (maximum_text_width < measured_width) {
         maximum_text_width = measured_width;
@@ -62,18 +62,18 @@ s32 draw_localized_three_option_menu(struct ThreeOptionMenu *menu) {
     disable_font_color_codes();
     font_print_center(menu->menu_width >> 1, draw_y, 0x80FFA888, get_help_message_text(0x522E), -1);
     draw_y += line_spacing;
-    draw_menu_selection_marker(0xB, draw_y + 9, count_nonzero_entries_up_to_40() == 0x28);
-    sprintf(text_buffer, get_help_message_text(0x522F), count_nonzero_entries_up_to_40(), 0x28);
+    draw_menu_selection_marker(0xB, draw_y + 9, count_gold_bolts() == 0x28);
+    sprintf(text_buffer, get_help_message_text(0x522F), count_gold_bolts(), 0x28);
     font_print(
         0x14, draw_y, 0x80FFA888, text_buffer, -1, get_effect_texture(font_texture_index), glyphs);
     draw_y += line_spacing;
-    draw_menu_selection_marker(0xB, draw_y + 9, count_nonzero_entries_up_to_10() == 10);
-    sprintf(text_buffer, get_help_message_text(0x5230), count_nonzero_entries_up_to_10(), 10);
+    draw_menu_selection_marker(0xB, draw_y + 9, count_gold_weapons() == 10);
+    sprintf(text_buffer, get_help_message_text(0x5230), count_gold_weapons(), 10);
     font_print(
         0x14, draw_y, 0x80FFA888, text_buffer, -1, get_effect_texture(font_texture_index), glyphs);
     draw_y += line_spacing;
-    draw_menu_selection_marker(0xB, draw_y + 9, count_nonzero_entries_up_to_30() == 0x1E);
-    sprintf(text_buffer, get_help_message_text(0x5231), count_nonzero_entries_up_to_30(), 0x1E);
+    draw_menu_selection_marker(0xB, draw_y + 9, count_skill_points() == 0x1E);
+    sprintf(text_buffer, get_help_message_text(0x5231), count_skill_points(), 0x1E);
     font_print(
         0x14, draw_y, 0x80FFA888, text_buffer, -1, get_effect_texture(font_texture_index), glyphs);
     enable_font_color_codes();

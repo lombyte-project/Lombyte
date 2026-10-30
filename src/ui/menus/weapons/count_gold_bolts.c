@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 
-s32 count_nonzero_entries_up_to_40(void) __asm__("FUN_00215290");
+s32 count_gold_bolts(void) __asm__("FUN_00215290");
 
-s32 count_nonzero_entries_up_to_40(void) {
+s32 count_gold_bolts(void) {
     s32 count = 0;
     s32 row;
     s32 k;
@@ -21,5 +21,4 @@ s32 count_nonzero_entries_up_to_40(void) {
     return (count < 0x29) ? count : 0x28;
 }
 
-extern __typeof__(count_nonzero_entries_up_to_40) func_00215290
-    __attribute__((alias("FUN_00215290")));
+extern __typeof__(count_gold_bolts) func_00215290 __attribute__((alias("FUN_00215290")));

@@ -39,7 +39,7 @@ s32 snd_got_returns(void) {
 extern s32 func_0012DE70(void) __attribute__((alias("FUN_0012de70")));
 extern s32 snd_GotReturns(void) __attribute__((alias("FUN_0012de70")));
 
-void StoreObjectIndex(s32 *obj, s32 idx) {
+void snd_prepare_return_buffer(s32 *obj, s32 idx) {
     snd_current_buffer_index = idx;
     snd_current_buffer = obj;
     obj[idx + 1] = 0;

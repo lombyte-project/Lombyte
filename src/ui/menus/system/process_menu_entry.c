@@ -2,7 +2,7 @@
 #include "sda.h"
 #include "rnc/globals.h"
 #include "rnc/ui/hud/remove_hud_item.h"
-#include "rnc/ui/menus/weapons/compute_clamped_count_difference.h"
+#include "rnc/ui/menus/weapons/count_unspent_gold_bolts.h"
 
 typedef struct {
     s32 unk0;
@@ -160,11 +160,10 @@ void process_menu_entry(void *callback_context, Menu *menu, s32 follow_entry_lin
         ok = alternate_item_available[entry->unkA] != 0;
         break;
     case MENU_CONDITION_COUNT_DIFFERENCE_MET:
-        ok = !(compute_clamped_count_difference() < entry->unkA);
+        ok = !(count_unspent_gold_bolts() < entry->unkA);
         break;
     case MENU_CONDITION_BOLT_THRESHOLD_AND_COUNT_DIFFERENCE_MET:
-        ok = current_bolt_count >= D_001DFFB0[entry->unkA].unk14 &&
-             compute_clamped_count_difference() >= 4;
+        ok = current_bolt_count >= D_001DFFB0[entry->unkA].unk14 && count_unspent_gold_bolts() >= 4;
         break;
     default:
         ok = 0;

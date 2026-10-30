@@ -1,9 +1,9 @@
 #include "types.h"
 #include "rnc/game/item_state.h"
 
-s32 count_nonzero_entries_up_to_10(void) __asm__("FUN_00215300");
+s32 count_gold_weapons(void) __asm__("FUN_00215300");
 
-s32 count_nonzero_entries_up_to_10(void) {
+s32 count_gold_weapons(void) {
     s32 count = 0;
     s32 i;
 
@@ -18,5 +18,4 @@ s32 count_nonzero_entries_up_to_10(void) {
     return (count < 0xB) ? count : 0xA;
 }
 
-extern __typeof__(count_nonzero_entries_up_to_10) func_00215300
-    __attribute__((alias("FUN_00215300")));
+extern __typeof__(count_gold_weapons) func_00215300 __attribute__((alias("FUN_00215300")));

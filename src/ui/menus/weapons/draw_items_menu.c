@@ -4,7 +4,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
 #include "rnc/ui/text/font/font_print_right.h"
-#include "rnc/ui/menus/weapons/compute_clamped_count_difference.h"
+#include "rnc/ui/menus/weapons/count_unspent_gold_bolts.h"
 
 typedef struct {
     u8  pad0[0x20];
@@ -25,8 +25,8 @@ font_print_window_regular(struct TextRegion *, u64, char *, s32) __asm__("func_0
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void  append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void  draw_moby_list(s32, s32) __asm__("func_0020D330");
-extern s32   count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
-extern s32   count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
+extern s32   count_gold_bolts(void) __asm__("func_00215290");
+extern s32   count_gold_weapons(void) __asm__("func_00215300");
 extern void *memset(void *, s32, u32);
 extern int   sprintf(char *, const char *, ...);
 extern char *strchr(const char *, int);
@@ -111,7 +111,7 @@ s32 draw_items_menu(ItemsMenu *menu) {
     font_print_right(0xC8, 0x1D, 0x80FFA888L, get_help_message_text(0x4F4F), -1);
     font_print_right(0xC8, 0x36, 0x80FFA888L, get_help_message_text(0x4F50), -1);
     font_print_right(0xC8, 0x54, 0x80FFA888L, get_help_message_text(0x4F51), -1);
-    collected_count = count_nonzero_entries_up_to_40();
+    collected_count = count_gold_bolts();
     sprintf(text_buffer, D_001602A0, collected_count);
     font_print_left(add_offset(text_shadow_x, 0xF0),
                     add_offset(text_shadow_y, 0x1D),
@@ -119,14 +119,14 @@ s32 draw_items_menu(ItemsMenu *menu) {
                     text_buffer,
                     -1);
     font_print_left(0xF0, 0x1D, 0x80FFA888L, text_buffer, -1);
-    sprintf(text_buffer, D_001602A0, count_nonzero_entries_up_to_10() * 4);
+    sprintf(text_buffer, D_001602A0, count_gold_weapons() * 4);
     font_print_left(add_offset(text_shadow_x, 0xF0),
                     add_offset(text_shadow_y, 0x36),
                     0x80000000L,
                     text_buffer,
                     -1);
     font_print_left(0xF0, 0x36, 0x80FFA888L, text_buffer, -1);
-    sprintf(text_buffer, D_001602A0, compute_clamped_count_difference());
+    sprintf(text_buffer, D_001602A0, count_unspent_gold_bolts());
     font_print_left(add_offset(text_shadow_x, 0xF0),
                     add_offset(text_shadow_y, 0x54),
                     0x80000000L,

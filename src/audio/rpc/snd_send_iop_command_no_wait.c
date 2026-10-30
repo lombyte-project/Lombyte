@@ -19,7 +19,7 @@ extern s32           printf(const char *, ...);
 extern s32           snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void          snd_post_message(void) __asm__("func_0012E9A0");
 extern s32           FlushCache(s32);
-extern s32           StoreObjectIndex(void *, s32);
+extern s32           snd_prepare_return_buffer(void *, s32);
 extern s32           SceSifCheckStatRpc(void *);
 extern s32           sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_data) __asm__("FUN_0012e6e0");
@@ -35,7 +35,7 @@ void snd_send_iop_command_no_wait(s32 cmd, s32 size, u8 *data, s32 cb, s64 cb_da
 
     held = 0;
     if (snd_batches_held == 0 && snd_current_buffer == 0 && size == 0 && cb == 0) {
-        StoreObjectIndex(snd_sync_buffer, 1);
+        snd_prepare_return_buffer(snd_sync_buffer, 1);
         while (SceSifCheckStatRpc(sound_command_client) != 0) {
             printf(snd_non_idle_error_string);
             snd_flush_sound_commands();

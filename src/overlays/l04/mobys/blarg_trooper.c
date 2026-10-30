@@ -11,7 +11,7 @@
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/math/vectors/normalize_vector_triplet.h"
+#include "rnc/math/normalize_vector_triplet.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/level_path.h"
 #include "rnc/overlay/quad.h"

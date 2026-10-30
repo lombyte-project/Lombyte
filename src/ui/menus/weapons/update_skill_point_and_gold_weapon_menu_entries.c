@@ -17,8 +17,8 @@ struct Labels {
 
 extern struct Menu   skill_point_and_gold_weapon_menu __asm__("D_001D2800");
 extern struct Labels skill_point_and_gold_weapon_menu_labels __asm__("D_001D2878");
-extern s32           count_nonzero_entries_up_to_30(void) __asm__("func_00215348");
-extern s32           count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
+extern s32           count_skill_points(void) __asm__("func_00215348");
+extern s32           count_gold_weapons(void) __asm__("func_00215300");
 void                 update_skill_point_and_gold_weapon_menu_entries(void) __asm__("FUN_00226e58");
 
 void update_skill_point_and_gold_weapon_menu_entries(void) {
@@ -26,9 +26,9 @@ void update_skill_point_and_gold_weapon_menu_entries(void) {
     s32 has_at_least_30_skill_points;
     s32 has_at_least_10_gold_weapons;
 
-    has_at_least_15_skill_points = count_nonzero_entries_up_to_30() >= 15;
-    has_at_least_30_skill_points = count_nonzero_entries_up_to_30() >= 30;
-    has_at_least_10_gold_weapons = count_nonzero_entries_up_to_10() >= 10;
+    has_at_least_15_skill_points = count_skill_points() >= 15;
+    has_at_least_30_skill_points = count_skill_points() >= 30;
+    has_at_least_10_gold_weapons = count_gold_weapons() >= 10;
     skill_point_and_gold_weapon_menu.items[0].state = has_at_least_15_skill_points ? 3 : 2;
     skill_point_and_gold_weapon_menu.items[1].state = has_at_least_30_skill_points ? 3 : 2;
     skill_point_and_gold_weapon_menu.items[2].state = has_at_least_10_gold_weapons ? 10 : 2;

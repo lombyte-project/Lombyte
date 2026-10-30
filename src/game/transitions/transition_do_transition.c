@@ -63,7 +63,7 @@ extern void start_level(int level) __asm__("FUN_001e9488");
 extern void transition_load_wad(void) __asm__("FUN_001ea830");
 extern void update_gameplay_frame(void) __asm__("func_001EB0A8");
 extern void transition_default_draw() __asm__("FUN_001eb410");
-extern s32  is_active_state_entry(s32 entry_index, s32 id) __asm__("FUN_001eb740");
+extern s32  is_voice_active(s32 entry_index, s32 id) __asm__("FUN_001eb740");
 extern s32  set_pal_mode() __asm__("func_001F34E8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
@@ -175,13 +175,13 @@ void transition_do_transition(void) {
             } else if (render_sequence.time < D_001862B0[i].start ||
                        D_001862B0[i].end < render_sequence.time) {
                 goto stop;
-            } else if (is_active_state_entry(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
+            } else if (is_voice_active(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
                 continue;
             }
             D_001862B0[i].voice = allocate_voice_for_group_entry(D_001862B0[i].sound, 0, 0);
             continue;
         stop:
-            if (is_active_state_entry(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
+            if (is_voice_active(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
                 release_voice_slot(D_001862B0[i].voice);
             }
             D_001862B0[i].voice = -1;

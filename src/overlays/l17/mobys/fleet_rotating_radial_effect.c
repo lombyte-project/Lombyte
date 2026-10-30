@@ -14,7 +14,7 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/world/collision/collision_line.h"
-#include "rnc/math/vectors/normalize_vector_triplet.h"
+#include "rnc/math/normalize_vector_triplet.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/l17/mobys/fleet_rotating_radial_effect_globals.h"
 
