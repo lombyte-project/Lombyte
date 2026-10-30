@@ -880,7 +880,7 @@ void draw_fighter_jet_hud(struct Moby *moby) __asm__("FUN_L13_002b97f8");
 void draw_fighter_jet_hud(struct Moby *moby) {
     char          *moby_vars = ((char *)moby->pvars);
     char          *screen_dimensions;
-    unsigned char *base;
+    unsigned char *player_ammo_capacity_state;
     unsigned char *player_ammo_state;
     unsigned char *player_health_state;
     unsigned char *health_warning_player_state;
@@ -947,8 +947,8 @@ void draw_fighter_jet_hud(struct Moby *moby) {
     }
     y = 0x40;
     x = 0x18;
-    base = D_0013F350;
-    ammo_icon_count = base[0x15F7];
+    player_ammo_capacity_state = D_0013F350;
+    ammo_icon_count = player_ammo_capacity_state[0x15F7];
     for (i = 0; i < ammo_icon_count; i++) {
         player_ammo_state = D_0013F350;
         if (i < player_ammo_state[0x15F6]) {
