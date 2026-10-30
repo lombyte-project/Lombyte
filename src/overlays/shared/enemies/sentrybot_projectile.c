@@ -29,7 +29,7 @@ void update_sentrybot_projectile(unsigned char *moby) __asm__("FUN_L15_002e4380"
 
 void update_sentrybot_projectile(unsigned char *moby) {
     char *moby_vars = ((char *)MOBY(moby)->pvars);
-    float next[4];
+    float next_position[4];
     char  col[0x30];
     char *hit;
     if (moby_vars == 0) {
@@ -39,10 +39,10 @@ void update_sentrybot_projectile(unsigned char *moby) {
     if (moby[0x20] != 0)
         return;
     MOBY(moby)->rot.x = fast_add_rotations(MOBY(moby)->rot.x, frame_time * 6.2831855f);
-    fast_vec_add(next, moby + 0x10, moby_vars);
+    fast_vec_add(next_position, moby + 0x10, moby_vars);
     make_hit_descriptor(col, moby, 1, 2.0f, moby_vars);
     *(short *)(col + 0x1A) = MOBY(moby)->oclass;
-    if (collision_line(moby + 0x10, next, 0, moby, col) != 0 ||
+    if (collision_line(moby + 0x10, next_position, 0, moby, col) != 0 ||
         coll_sphere(moby + 0x10, 0, moby, 0.3f) != 0 || fast_dec_timer(moby_vars + 0x38) != 0) {
         hit = (char *)D_L15_00174458[0];
         if (hit != 0 && (int)hit != *(int *)(moby_vars + 0x3C)) {
@@ -54,7 +54,7 @@ void update_sentrybot_projectile(unsigned char *moby) {
             return;
         }
     }
-    qcopy(moby + 0x10, next);
+    qcopy(moby + 0x10, next_position);
     if (D_L15_0015F5CC_s % 3 == 0)
         spawn_moby_point_offset_particle(moby, 30000.0f, 0, 0.1f);
 }
