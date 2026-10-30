@@ -774,7 +774,7 @@ typedef struct {
     unsigned char p1[0x20A4 - 0x2090];
     unsigned char b20A4;
 } G_2e7138;
-extern float D_0013CA40_lui __asm__("D_0013CA40") NOT_SDA;
+extern float D_0013CA40_lui[] __asm__("D_0013CA40") NOT_SDA;
 extern float D_L00_00161CC8_gp __asm__("D_L00_00161CC8") __attribute__((sda));
 void FUN_L00_001ff500_2e7138(void *, void *, float) __asm__("FUN_L00_001ff500");
 
@@ -795,7 +795,7 @@ int update_follow_camera_orbit_after_collision(unsigned char *camera_moby, void 
         return sphere_collision_found;
     }
     adjusted_orbit_length = fast_vec_length(A);
-    if (hero.vehicle_mode != 2 && absolute_float(D_0013CA40_lui) > 0.05f && sphere_collision_found) {
+    if (hero.vehicle_mode != 2 && absolute_float(D_0013CA40_lui[0]) > 0.05f && sphere_collision_found) {
         adjusted_orbit_length -= follow_camera_collision_retraction_rate_gp * frame_scale;
         *(short *)(B + 0x34) = scale_game_frames(0x884);
     }
@@ -1023,7 +1023,7 @@ int reject_follow_camera_first_step_backward_hit(void *camera_moby, int step_ind
 }
 typedef float V_2e7a30[4] __attribute__((aligned(16)));
 extern float follow_cam_min_distance_gp __asm__("D_L00_00161CD8") __attribute__((sda));
-extern float D_0013CA40_2e7a30 __asm__("D_0013CA40") NOT_SDA;
+extern float D_0013CA40_lui[] __asm__("D_0013CA40") NOT_SDA;
 extern struct Hero hero __asm__("D_0013F350") NOT_SDA;
 extern V_2e7a30 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern V_2e7a30 D_L00_00166E40_lui __asm__("D_L00_00166E40") NOT_SDA;
@@ -1070,7 +1070,7 @@ int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
                 qcopy(save, probe_position);
                 if (adjust_follow_camera_orbit_probe_for_collisions(camera_moby, probe_position, i, accumulated_radial_adjustment_distance, spd)) {
                     found = 1;
-                    if (hero_state->vehicle_mode != 2 && absolute_float(D_0013CA40_2e7a30) > 0.05f) {
+                    if (hero_state->vehicle_mode != 2 && absolute_float(D_0013CA40_lui[0]) > 0.05f) {
                         fast_vec_sub(position_delta, step, save);
                         fast_vec_normalize(position_delta, position_delta, 1.0f);
                         if (absolute_float(fast_vec_dot(D_L00_00166E40_lui, position_delta)) <
