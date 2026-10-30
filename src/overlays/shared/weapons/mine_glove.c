@@ -92,7 +92,7 @@ void compute_mine_launch_velocity(float   *origin_position,
 
 void compute_mine_launch_velocity(float   *origin_position,
                                   OvlQuad *target_position,
-                                  float   *out,
+                                  float   *launch_velocity,
                                   float    gravity,
                                   float    min_horizontal_distance,
 
@@ -125,9 +125,9 @@ void compute_mine_launch_velocity(float   *origin_position,
     if (half < launch_component_speed_squared)
         launch_component_speed_squared = half;
     launch_component_speed = FUN_001f9988_2c1928(launch_component_speed_squared);
-    out[0] = FUN_001f9dc8_2c1928(launch_heading) * launch_component_speed;
-    out[1] = FUN_001f9de0_2c1928(launch_heading) * launch_component_speed;
-    out[2] = launch_component_speed;
+    launch_velocity[0] = FUN_001f9dc8_2c1928(launch_heading) * launch_component_speed;
+    launch_velocity[1] = FUN_001f9de0_2c1928(launch_heading) * launch_component_speed;
+    launch_velocity[2] = launch_component_speed;
 }
 
 /* Mine glove update: aims the glove and throws a mine at the target. */
