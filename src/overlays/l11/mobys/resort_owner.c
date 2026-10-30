@@ -748,7 +748,7 @@ int classify_resort_owner_target_proximity(struct Moby *moby) {
 extern int   collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern float func_L00_0025A748_f(void *) __asm__("FUN_L00_00259710");
 
-int try_find_resort_owner_jump_target(struct Moby *moby, float *out) {
+int try_find_resort_owner_jump_target(struct Moby *moby, float *jump_target_position) {
     char *pvars = (char *)moby->pvars;
     int  *clip_volume_index_ptr = (int *)(pvars + 0xF8);
     int   i;
@@ -765,7 +765,7 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *out) {
     }
     if (found) {
         float *pos = &moby->pos.x;
-        fast_vec_sub(candidate_position, out, pos);
+        fast_vec_sub(candidate_position, jump_target_position, pos);
         if (fast_vec_length(candidate_position) > 4.0f)
             fast_vec_normalize(candidate_position, candidate_position, 4.0f);
         fast_vec_add(candidate_position, candidate_position, pos);
@@ -781,7 +781,7 @@ int try_find_resort_owner_jump_target(struct Moby *moby, float *out) {
                     candidate_position[2] = landing_ground_height + 0.15f;
                     if (collision_line(collision_start_position, candidate_position, 2, moby, 0)) {
                         candidate_position[2] = landing_ground_height;
-                        qcopy(out, candidate_position);
+                        qcopy(jump_target_position, candidate_position);
                         return 1;
                     }
                 }
