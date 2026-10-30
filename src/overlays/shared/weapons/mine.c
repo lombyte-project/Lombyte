@@ -383,7 +383,7 @@ s32              FUN_L00_002603d0_2aa008(void *) __asm__("FUN_L00_002603d0");
 
 unsigned char *spawn_mine(int owner, OvlQuad *pos) __asm__("FUN_L00_002a9ed0");
 
-unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
+unsigned char *spawn_mine(int mine_owner_moby, OvlQuad *spawn_position) {
     unsigned char *mine_moby = create_moby(0x4A);
     if (mine_moby) {
         unsigned char *mine_vars = ((unsigned char *)MOBY(mine_moby)->pvars);
@@ -392,7 +392,7 @@ unsigned char *spawn_mine(int owner, OvlQuad *spawn_position) {
         mine_moby[0x31] = 1;
         MOBY(mine_moby)->scale = MOBY(mine_moby)->scale * 0.5f;
         mine_moby[0x20] = 0;
-        *(int *)(mine_vars + 0x30) = owner;
+        *(int *)(mine_vars + 0x30) = mine_owner_moby;
         *(short *)(mine_vars + 0x36) = 0;
         *(int *)(mine_vars + 0x78) = 0;
         qcopy(mine_moby + 0x10, spawn_position);
