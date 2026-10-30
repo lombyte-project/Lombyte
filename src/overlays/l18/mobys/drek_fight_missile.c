@@ -521,7 +521,7 @@ void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) {
     char *missile_trail_vars = (char *)moby->pvars;
     int   trail_slot_byte_offset;
     int   current_game_frame;
-    int   old;
+    int   effect_callbacks_last_queued_frame;
     if ((game_frame & 3) == 0) {
         *(unsigned short *)(missile_trail_vars + 0x166) = (*(unsigned short *)(missile_trail_vars + 0x166) + 1) & 0xF;
         if ((float)*(short *)(missile_trail_vars + 0x164) < 4.0f) {
@@ -531,9 +531,9 @@ void update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) {
     trail_slot_byte_offset = *(short *)(missile_trail_vars + 0x166) << 4;
     qcopy((char *)(trail_slot_byte_offset + (int)missile_trail_vars) + 0x10, &moby->pos);
     current_game_frame = game_frame;
-    old = *(int *)&drek_missile_effect_callbacks_last_queued_frame_gp;
+    effect_callbacks_last_queued_frame = *(int *)&drek_missile_effect_callbacks_last_queued_frame_gp;
     *(float *)(missile_trail_vars + trail_slot_byte_offset + 0x1C) = 1.0f;
-    if (current_game_frame != old) {
+    if (current_game_frame != effect_callbacks_last_queued_frame) {
         *(int *)&drek_missile_effect_callbacks_last_queued_frame_gp = current_game_frame;
         add_draw_callback(draw_drek_fight_missile_group_trails, moby);
         add_draw_callback(render_drek_fight_missile_group_effects, moby);
