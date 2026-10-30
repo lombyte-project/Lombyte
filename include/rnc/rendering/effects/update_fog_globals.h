@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Scalar data read by src/rendering/effects/update_fog.c. */
+/* Scalar data read by src/rendering/view/update_fog.c. */
 extern u8 water_fog_color_red __asm__("D_001610C4");
 extern u8 water_fog_color_green __asm__("D_001610C5");
 extern u8 water_fog_color_blue __asm__("D_001610C6");

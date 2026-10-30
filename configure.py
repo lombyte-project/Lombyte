@@ -137,7 +137,7 @@ ROUTE_EXCEPTIONS = {
     # only 87.8): the packet high word is (u64)(u32)n << 32 taken from the 2nd
     # argument instead of w1 >> 32, and 0x20 is OR-ed with (w1 & 0x1C) in the
     # mode>=0 branch but with (prim << 6) in the two negative branches.
-    "rendering/texture/set_up_vis_gif_viewer": "cc_sn_padless",
+    "rendering/packets/set_up_vis_gif_viewer": "cc_sn_padless",
     "gameplay/animation/update_moby_animation_state": "cc_sn_padless",
     # patch_moby_gifs: patch moby class GIF tex words through the texture remap
     # table
@@ -469,7 +469,7 @@ SDATA_OVERLAYS = {
     "gameplay/state/tick_space_transition": (0x15F5EC, 0x6056C, 4),
     "gameplay/state/initialize_level_render_state": (0x1603D0, 0x61350, 4),
     "gameplay/entities/resolve_camera_surface_height": (0x1611A0, 0x62120, 4),
-    "rendering/effects/update_fog": (0x1610C4, 0x62044, 3),
+    "rendering/view/update_fog": (0x1610C4, 0x62044, 3),
     "rendering/texture/dma_shrub_textures": (0x1603F8, 0x61378, 4),
     "rendering/texture/dma_tfrag_textures": (0x160EC4, 0x61E44, 4),
     "rendering/buffers/swap_render_buffer_chain": (0x160F04, 0x61E84, 4),
@@ -499,7 +499,7 @@ DATA_OVERLAYS = {
     "gameplay/build_variant_effect_quads": (0x1D9890, 0xDA810, 384),
     "rendering/effects/build_resident_indexed_texture_warp_meshes": (0x1D9A10, 0xDA990, 32),
     "ui/map/level_selection/draw_level_selection_map": (0x1DDE28, 0xDEDA8, 320),
-    "rendering/entities/register_object_render_class": (0x1E1900, 0xE2880, 256),
+    "rendering/ties/register_object_render_class": (0x1E1900, 0xE2880, 256),
     "gameplay/vendor/render_capture_scrolling_text": (0x1E6018, 0xE6F98, 512),
     "gameplay/vendor/render_vendor_capture_pass_sequence": (0x1E6218, 0xE7198, 96),
     "textbin/render_vendor_capture_texture_overlays_pass": (0x1E6620, 0xE75A0, 64),
@@ -519,7 +519,7 @@ DATA_OVERLAYS = {
     "textbin/audio/snd_start_sound_system": (0x133280, 0x34200, 8192),
     "gameplay/camera/update_all_cameras": (0x187410, 0x88390, 7680),
     "world/loaders/register_moby_class": (0x1B3900, 0xB4880, 448),
-    "rendering/tfrag/set_tfrag_dists": (0x1DE7F0, 0xDF770, 64),
+    "rendering/tfrags/set_tfrag_dists": (0x1DE7F0, 0xDF770, 64),
 }
 
 # Uninitialised variables a unit defines.  `.sbss` (small ones) sits in the
