@@ -483,7 +483,7 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
     hit = find_moby_hit(moby, 0x330000, 0);
     hit_reaction(moby, hit, robot_dog_pvars + 0x20, 0, &hit_reaction_code, &damage, 0, 4);
     if (hit_reaction_code != 1 && moby->state != 21) {
-        char *other;
+        char *hit_source_moby;
         if (moby->group != 255)
             FUN_L01_0026e090(moby->group, 1);
         {
@@ -494,9 +494,9 @@ void update_robot_dog_hit_reaction(struct Moby *moby) {
             *(float *)(robot_dog_pvars + 0x130) = speed;
             *(float *)(robot_dog_pvars + 0x20) = health;
         }
-        other = *(char **)(hit + 0x20);
-        angle = fast_arc_tan(moby->pos.x - *(float *)(other + 0x10),
-                             moby->pos.y - *(float *)(other + 0x14));
+        hit_source_moby = *(char **)(hit + 0x20);
+        angle = fast_arc_tan(moby->pos.x - *(float *)(hit_source_moby + 0x10),
+                             moby->pos.y - *(float *)(hit_source_moby + 0x14));
         {
             float rotationSpeed = frame_time * 10.0f;
             moby->flags &= 0xEFFF;
