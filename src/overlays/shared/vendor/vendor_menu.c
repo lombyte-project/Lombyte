@@ -497,7 +497,7 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4_29ab70;
 
 extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
-extern void update_resource_counter(void) __asm__("FUN_001ff768");
+extern void decrement_resource_counter(void) __asm__("FUN_001ff768");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern int  vendor_close_hero_local_offset_gp __asm__("D_L00_00161070") __attribute__((sda));
 void        close_vendor_menu(int exit_cutscene_completed) __asm__("FUN_L00_0029ab70");
@@ -512,7 +512,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
         set_animation_parameter(*(int *)(vendor_state_base + 0x50), 0);
     *(int *)(vendor_state_base + 0x54) = -1;
     *(int *)(vendor_state_base + 0x50) = -1;
-    update_resource_counter();
+    decrement_resource_counter();
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
@@ -645,7 +645,7 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     euler_rotation.f[2] =
         fast_add_rotations(*(float *)(*(char **)(vendor_state_base + 0x28) + 0x48), -1.5707964f);
     set_race_camera(&world_position, &euler_rotation, 0, 1);
-    update_resource_counter();
+    decrement_resource_counter();
     if ((unsigned short)(music_stream_state.secondary.state - 6) >= 2)
         music_stream_state.secondary.state = 5;
     snd_continue_all_sounds_in_group(0x1D);

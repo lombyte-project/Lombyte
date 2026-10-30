@@ -53,7 +53,7 @@ extern u8        D_0013E533[];
 extern f32       hit_damage_override_table[2] __asm__("D_0015FFC8") __attribute__((sda));
 extern f32       hit_vector_scale_table[][8] __asm__("D_001CC0C8");
 extern u8        hit_response_code_table[][4] __asm__("D_001CC080");
-extern Q_25a478 *read_state_field(void *);
+extern Q_25a478 *get_moby_hit_state(void *);
 extern s32       scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32       fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32       fast_cos(f32) __asm__("func_001F9DC8");
@@ -307,11 +307,11 @@ s32 resolve_moby_hit_response(O_25a478 *hit_recipient_moby,
     if (fp)
         *fp = hit_record->f2C;
     if (hit_response_index == 4) {
-        object_state = read_state_field(hit_recipient_moby);
+        object_state = get_moby_hit_state(hit_recipient_moby);
         if (object_state)
             object_state->b2E = 1;
     } else {
-        Q_25a478 *object_state_for_flag_clear = read_state_field(hit_recipient_moby);
+        Q_25a478 *object_state_for_flag_clear = get_moby_hit_state(hit_recipient_moby);
         if (object_state_for_flag_clear)
             object_state_for_flag_clear->b2E = 0;
     }

@@ -308,7 +308,7 @@ typedef struct {
 } DoorMoby;
 
 extern s16  D_00141628[];
-extern void initialize_global_state_entry(s32) __asm__("FUN_0022e188");
+extern void request_space_load(s32) __asm__("FUN_0022e188");
 
 void clank_cutscene_trigger_update(DoorMoby *m) __asm__("FUN_L00_002d9dc8");
 
@@ -356,7 +356,7 @@ void clank_cutscene_trigger_update(DoorMoby *moby) {
             vars->unk2C = 3.0f;
         }
         if (vars->unk24 >= 4 && D_L00_0015F5C4 != 6) {
-            initialize_global_state_entry(1);
+            request_space_load(1);
         }
         break;
     case CLANK_TRIGGER_WAIT_TO_REPOLL_DIALOGUE:

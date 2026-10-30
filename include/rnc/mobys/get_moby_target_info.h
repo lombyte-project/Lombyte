@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* The record pvars[0] points to on mobys with flag 0x20: hit state, aim bounds. */
+/* A moby's target info record (pvars[0], hit state and aim bounds); 0 unless flag 0x20 is set. */
 int get_moby_target_info(char *moby) __asm__("FUN_002141f8");
 
 #endif /* LOMBYTE_RNC_MOBYS_GET_MOBY_TARGET_INFO_H */
