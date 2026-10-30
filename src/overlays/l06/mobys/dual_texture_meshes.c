@@ -5480,7 +5480,7 @@ void draw_dual_texture_50_quad_mesh(void) {
 }
 
 void draw_dual_texture_58_quad_mesh(void) {
-    Packet first, second;
+    Packet first, mesh_second_pass_quad_packet;
     float  matrix[4][4] __attribute__((aligned(16)));
     float  quad_facing_unit_direction[4] __attribute__((aligned(16)));
     float  quad_facing_center_or_normal[4] __attribute__((aligned(16)));
@@ -5491,29 +5491,29 @@ void draw_dual_texture_58_quad_mesh(void) {
     int    i, j;
     float  facing;
 
-    first.tex = get_effect_texture(dual_texture_mesh_first_pass_texture_index_gp);
-    second.tex = get_effect_texture(0x2a);
+    mesh_first_pass_quad_packet.tex = get_effect_texture(dual_texture_mesh_first_pass_texture_index_gp);
+    mesh_second_pass_quad_packet.tex = get_effect_texture(0x2a);
     matrix_ptr = matrix;
     flags = (long)dual_texture_mesh_blend_color_a_selector_gp |
             (long)dual_texture_mesh_blend_color_b_selector_gp << 2 |
             (long)dual_texture_mesh_blend_alpha_c_selector_gp << 4 |
             (long)dual_texture_mesh_blend_color_d_selector_gp << 6 |
             (long)dual_texture_mesh_blend_fixed_alpha_gp << 32;
-    second.unk88 = flags;
-    first.unk88 = flags;
-    second.unk80 = 0xFF9000000260L;
-    first.unk80 = 0xFF9000000260L;
-    second.unk70 = 0;
-    first.unk70 = 0;
+    mesh_second_pass_quad_packet.unk88 = flags;
+    mesh_first_pass_quad_packet.unk88 = flags;
+    mesh_second_pass_quad_packet.unk80 = 0xFF9000000260L;
+    mesh_first_pass_quad_packet.unk80 = 0xFF9000000260L;
+    mesh_second_pass_quad_packet.unk70 = 0;
+    mesh_first_pass_quad_packet.unk70 = 0;
     set_identity_matrix(matrix_ptr);
-    first.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
-    first.color[2] = l06_dual_texture_mesh_first_pass_vertex_color;
-    first.color[1] = l06_dual_texture_mesh_first_pass_vertex_color;
-    first.color[0] = l06_dual_texture_mesh_first_pass_vertex_color;
-    second.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
-    second.color[2] = dual_texture_mesh_second_pass_vertex_color_gp;
-    second.color[1] = dual_texture_mesh_second_pass_vertex_color_gp;
-    second.color[0] = dual_texture_mesh_second_pass_vertex_color_gp;
+    mesh_first_pass_quad_packet.color[3] = l06_dual_texture_mesh_first_pass_vertex_color;
+    mesh_first_pass_quad_packet.color[2] = l06_dual_texture_mesh_first_pass_vertex_color;
+    mesh_first_pass_quad_packet.color[1] = l06_dual_texture_mesh_first_pass_vertex_color;
+    mesh_first_pass_quad_packet.color[0] = l06_dual_texture_mesh_first_pass_vertex_color;
+    mesh_second_pass_quad_packet.color[3] = dual_texture_mesh_second_pass_vertex_color_gp;
+    mesh_second_pass_quad_packet.color[2] = dual_texture_mesh_second_pass_vertex_color_gp;
+    mesh_second_pass_quad_packet.color[1] = dual_texture_mesh_second_pass_vertex_color_gp;
+    mesh_second_pass_quad_packet.color[0] = dual_texture_mesh_second_pass_vertex_color_gp;
     i = 0;
     do {
         fast_vec_scale(
@@ -5532,18 +5532,18 @@ void draw_dual_texture_58_quad_mesh(void) {
                 int   uv_index = D_L06_001EF310[i][j][1];
                 float u, v;
                 fast_vec_scale(
-                    &first.v[j], D_L06_001EED30[vertex_index], dual_texture_mesh_position_scale_gp);
-                qcopy(&second.v[j], &first.v[j]);
+                    &mesh_first_pass_quad_packet.v[j], D_L06_001EED30[vertex_index], dual_texture_mesh_position_scale_gp);
+                qcopy(&mesh_second_pass_quad_packet.v[j], &mesh_first_pass_quad_packet.v[j]);
                 u = D_L06_001EF6B0[uv_index][0];
                 v = D_L06_001EF6B0[uv_index][1];
-                first.uv[j][0] = u + y_offset;
-                first.uv[j][1] = v + x_offset;
-                second.uv[j][0] = u;
-                second.uv[j][1] = v;
+                mesh_first_pass_quad_packet.uv[j][0] = u + y_offset;
+                mesh_first_pass_quad_packet.uv[j][1] = v + x_offset;
+                mesh_second_pass_quad_packet.uv[j][0] = u;
+                mesh_second_pass_quad_packet.uv[j][1] = v;
                 j++;
             } while (j < 4);
-            draw_geometry_quad(&first, matrix, 0);
-            draw_geometry_quad(&second, matrix, 0);
+            draw_geometry_quad(&mesh_first_pass_quad_packet, matrix, 0);
+            draw_geometry_quad(&mesh_second_pass_quad_packet, matrix, 0);
         }
     next:
         i++;
