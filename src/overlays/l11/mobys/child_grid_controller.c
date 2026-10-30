@@ -66,7 +66,7 @@ void update_child_grid_controller(struct Moby *grid_controller) {
     Vec4f          rot;
     int            row;
     int            col;
-    float          old;
+    float          previous_fade;
 
     switch (grid_controller->state) {
     case CHILD_GRID_STATE_CREATE_CHILDREN:
@@ -99,10 +99,10 @@ void update_child_grid_controller(struct Moby *grid_controller) {
         break;
     }
     case CHILD_GRID_STATE_FADE_TO_POINT_POSE:
-        old = grid_controller_vars->fade;
+        previous_fade = grid_controller_vars->fade;
         approach_value(&grid_controller_vars->fade, 1.0f, 1.0f / (float)scale_game_frames(20));
         D_L11_0015F3FC = 1.0f - absolute_float(grid_controller_vars->fade);
-        if (old < 0.0f && 0.0f <= grid_controller_vars->fade) {
+        if (previous_fade < 0.0f && 0.0f <= grid_controller_vars->fade) {
             struct Moby *link =
                 (struct Moby *)(D_L11_0015FFD8_d800 + (grid_controller_vars->link << 8));
             char *source_pose_point;
@@ -152,10 +152,10 @@ void update_child_grid_controller(struct Moby *grid_controller) {
         }
         break;
     case CHILD_GRID_STATE_FADE_TO_HERO_POSE:
-        old = grid_controller_vars->fade;
+        previous_fade = grid_controller_vars->fade;
         approach_value(&grid_controller_vars->fade, 1.0f, 1.0f / (float)scale_game_frames(20));
         D_L11_0015F3FC = 1.0f - absolute_float(grid_controller_vars->fade);
-        if (old < 0.0f && 0.0f <= grid_controller_vars->fade) {
+        if (previous_fade < 0.0f && 0.0f <= grid_controller_vars->fade) {
             set_race_camera(&hero.motion.pos, &hero.motion.rot, 0, 1);
             jet_end_mount(3);
         } else if (1.0f <= grid_controller_vars->fade) {
