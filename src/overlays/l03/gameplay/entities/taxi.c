@@ -1,6 +1,7 @@
 /* Level 03 moby classes: mine_layer, mine, taxi, robo_shack_sign, helga, big_al, robot_qwark. */
 #include "types.h"
 #include "rnc/gameplay/state/level_object_states.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_path.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/globals.h"
@@ -467,17 +468,8 @@ typedef struct {
     s32 age;              /* 0x6C: frames alive */
 } MineVars;
 
-/* The level camera record (only the shake fields written here). */
-typedef struct {
-    u8 pad0[0x160];
-    f32 shake;            /* 0x160 */
-    u8 pad164[4];
-    s32 shake_frames;     /* 0x168 */
-} MineCamera;
-
 extern MineBlast l03_mine_camera_blast_template __asm__("D_L03_001E32B0");
 extern struct Moby *D_L03_00178000[];
-extern MineCamera D_L03_00166D80_cbea8 __asm__("D_L03_00166D80");
 extern char mine_moby_index_list[] __asm__("D_L03_001B08B0");
 extern void allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FUN_0022da68");
 extern int collect_mobies_in_sphere(void *, int, struct Moby *, void *, f32) __asm__("FUN_L00_001f2868");
@@ -627,8 +619,8 @@ void update_mine(struct Moby *mine_moby) {
             }
         }
         allocate_voice_for_target_entry(0, 0, mine_moby);
-        D_L03_00166D80_cbea8.shake = explosion_reference_distance < 20.0f ? 0.4f - explosion_reference_distance * 0.0175f : 0.050000012f;
-        D_L03_00166D80_cbea8.shake_frames = scale_game_frames(0x19);
+        l03_camera.shake_amount = explosion_reference_distance < 20.0f ? 0.4f - explosion_reference_distance * 0.0175f : 0.050000012f;
+        l03_camera.shake_frames = scale_game_frames(0x19);
         mine_camera_blast(&blast, &mine_moby->pos, 0, 0);
         mine_spawn_drops(mine_moby, mine_moby_index_list);
         mark_moby_for_removal(mine_moby);

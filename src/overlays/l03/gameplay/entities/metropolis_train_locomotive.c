@@ -1,5 +1,6 @@
 /* Level 03 moby classes: metropolis_train_locomotive, moving_platform_small, metropolis_train_carriage, red_ship_1, robot_dog. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/entities/moby_class_id.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/gameplay/hero.h"
@@ -368,10 +369,6 @@ void update_metropolis_train_idle_motion(struct Moby *moby) {
 
 #include "rnc/gameplay/entities/moby.h"
 
-typedef struct {
-    char p0[0x140];
-    float pos[4];
-} Cam292e98;
 
 typedef struct {
     char p00[0x20];
@@ -426,7 +423,6 @@ typedef struct {
     int i2C;
 } Turret292e98;
 
-extern Cam292e98 D_L03_00166D80_292e98 __asm__("D_L03_00166D80");
 extern char *D_L03_0015FFD8_292e98 __asm__("D_L03_0015FFD8");
 extern struct Moby *D_L03_0015FFD8_m292 __asm__("D_L03_0015FFD8");
 #include "rnc/overlay/cuboid.h"
@@ -448,10 +444,10 @@ extern void debug_printf_292e98(char *, ...) __asm__("FUN_001e93b0");
 /* Points a turret moby's data (yaw 0x18, pitch 0x14) at the hero, seen from the level camera. */
 #define AIM_AT_HERO(t)                                                                                          \
     {                                                                                                           \
-        (t)->f18 = fast_arc_tan(hero.motion.pos.f[0] - D_L03_00166D80_292e98.pos[0],                           \
-                                hero.motion.pos.f[1] - D_L03_00166D80_292e98.pos[1]);                          \
-        (t)->f14 = -fast_arc_tan(vector_distance_xy(D_L03_00166D80_292e98.pos, hero.motion.pos.f),                    \
-                                 hero.motion.pos.f[2] - D_L03_00166D80_292e98.pos[2]);                          \
+        (t)->f18 = fast_arc_tan(hero.motion.pos.f[0] - l03_camera.pos.f[0],                           \
+                                hero.motion.pos.f[1] - l03_camera.pos.f[1]);                          \
+        (t)->f14 = -fast_arc_tan(vector_distance_xy(l03_camera.pos.f, hero.motion.pos.f),                    \
+                                 hero.motion.pos.f[2] - l03_camera.pos.f[2]);                          \
     }
 
 /* Keeps the engine loop sound playing and restarts the horn at random intervals. */
@@ -657,12 +653,12 @@ void metropolis_train_locomotive_update(char *moby) {
         ((char *)&D_L03_0015FFD8_m292[data->iD8])[0xBC] = 1;
         tdb = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->iD8] + 0x78);
         path = ((char *)l03_paths[data->iAC]);
-        tdb->f18 = fast_arc_tan(*(float *)(path + 0x10) - D_L03_00166D80_292e98.pos[0],
-                                             *(float *)(path + 0x14) - D_L03_00166D80_292e98.pos[1]);
+        tdb->f18 = fast_arc_tan(*(float *)(path + 0x10) - l03_camera.pos.f[0],
+                                             *(float *)(path + 0x14) - l03_camera.pos.f[1]);
         tdb->f14 =
-            -fast_arc_tan(vector_distance_xy(D_L03_00166D80_292e98.pos, ((char *)l03_paths[data->iAC]) + 0x10),
-                          *(float *)(((char *)l03_paths[data->iAC]) + 0x18) - D_L03_00166D80_292e98.pos[2]);
         l03_cuboids[tdb->i28].pos.x =
+            -fast_arc_tan(vector_distance_xy(l03_camera.pos.f, ((char *)l03_paths[data->iAC]) + 0x10),
+                          *(float *)(((char *)l03_paths[data->iAC]) + 0x18) - l03_camera.pos.f[2]);
             fast_cos(PATH_HEADING(((char *)l03_paths[data->iAC]))) * -(data->fDC + 4.0f);
         l03_cuboids[tdb->i28].pos.y =
             fast_sin(PATH_HEADING(((char *)l03_paths[data->iAC]))) * -(data->fDC + 4.0f);

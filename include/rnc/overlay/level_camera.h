@@ -31,6 +31,7 @@ typedef struct {
 } LevelCamera;
 
 extern LevelCamera l01_camera __asm__("D_L01_00167100");
+extern LevelCamera l03_camera __asm__("D_L03_00166D80");
 extern LevelCamera l06_camera __asm__("D_L06_00167400");
 extern LevelCamera l08_camera __asm__("D_L08_00167480");
 extern LevelCamera l12_camera __asm__("D_L12_00167100");
