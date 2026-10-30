@@ -45,7 +45,7 @@ void append_scrolling_textured_quad(int           x,
     int         y1 = (y + quad_height) * 16 + screen_extent.top - 8;
     SpaceUvPair uv[4];
     long       *quad_payload;
-    int        *base;
+    int        *quad_packet_start;
 
     uv[0].f.u = texture_u_left;
     uv[0].f.v = texture_v_top;
@@ -60,11 +60,11 @@ void append_scrolling_textured_quad(int           x,
     render_packet_cursor.words[1] = 0;
     render_packet_cursor.words[2] = 0;
     render_packet_cursor.words[3] = 0x50000007;
-    base = render_packet_cursor.words;
-    render_packet_cursor.words = base + 4;
-    qcopy(base + 4, loading_quad_packet_header_template);
-    quad_payload = (long *)(base + 8);
-    render_packet_cursor.words = base + 8;
+    quad_packet_start = render_packet_cursor.words;
+    render_packet_cursor.words = quad_packet_start + 4;
+    qcopy(quad_packet_start + 4, loading_quad_packet_header_template);
+    quad_payload = (long *)(quad_packet_start + 8);
+    render_packet_cursor.words = quad_packet_start + 8;
     quad_payload[0] = texture_register_value;
     quad_payload[1] = 0x54;
     quad_payload[2] = (rgba & 0xFFFFFFFFL) | (0xFE00L << 46);
