@@ -73,14 +73,24 @@ extern void pool_splash(void *, int, int, float, float, float, float) __asm__("F
 extern int  check_scaled_vector_bsphere(char *, float) __asm__("FUN_L01_00275690");
 extern void render_level_water_grids(void) __asm__("FUN_L05_0030d678");
 
-extern Cam                  l05_water_light_heading_source __asm__("D_L05_00180340");
-extern Light                light __asm__("D_L05_001CAD00");
-extern int                  water_grid_fixed_point_bounds[][4] __asm__("D_L05_0020B440");
-extern unsigned short       record_draw_values[] __asm__("D_L05_0020B380");
-extern int                  rise_frames[] __asm__("D_L05_0020B3E0");
-extern float                rise_speeds[] __asm__("D_L05_0020B3F8");
-extern int                  base_rise_frames[] __asm__("D_L05_0020B410");
-extern float                base_rise_speeds[] __asm__("D_L05_0020B428");
+extern Cam   l05_water_light_heading_source __asm__("D_L05_00180340");
+extern Light light __asm__("D_L05_001CAD00");
+int          water_grid_fixed_point_bounds[48][4] __asm__("D_L05_0020B440") = {0};
+
+unsigned short record_draw_values[48] __asm__("D_L05_0020B380") = {
+    0xfff0, 0x3100, 0xffff, 0x1331, 0xc800, 0xfff0, 0x8ccc, 0xffff, 0xfec8, 0xf531, 0xffff, 0x37f,
+    0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+    0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff,
+    0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xfffe, 0xeffc};
+
+int rise_frames[6] __asm__("D_L05_0020B3E0") = {0x67, 0x2b1, 0x320, 0x514, 0x4e20, 0x4e20};
+
+float rise_speeds[6] __asm__("D_L05_0020B3F8") = {0.0f, 0.51f, 0.26f, 0.475f, 0.8f, 2.0f};
+
+int base_rise_frames[6] __asm__("D_L05_0020B410") = {0x67, 0x2b1, 0x320, 0x514, 0x4e20, 0x4e20};
+
+float base_rise_speeds[6] __asm__("D_L05_0020B428") = {0.0f, 0.51f, 0.26f, 0.475f, 0.8f, 2.0f};
+
 extern void *D_L05_001612D4 MACRO_ADDR;
 extern unsigned char        D_L05_00161204[] MACRO_ADDR;
 extern unsigned char        D_L05_00161205[] MACRO_ADDR;

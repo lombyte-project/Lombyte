@@ -94,16 +94,22 @@ extern unsigned short l07_water_grid_override_control_value __asm__("D_L07_00161
 extern int water_shared_byte_clear_enabled __asm__("D_L07_00161B38") __attribute__((sda));
 
 /* no foreign declaration */
-extern int            water_grid_geometry_descriptors[][4] __asm__("D_L07_00204700");
-extern s32            random_integer_below(s32) __asm__("func_00213260");
-extern unsigned short l07_water_grid_saved_control_values[] __asm__("D_L07_00204680");
-void                  set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
-void                  pool_set_scale(float s) __asm__("FUN_L01_002b7ef0");
-void                  render_level07_water_grids(void) __asm__("FUN_L07_0030cd20");
-void                  initialize_level07_water_grid_neighbors(int arg) __asm__("FUN_L07_0030cd48");
-extern void           FUN_L01_002b7a48_2cd2b0(void *, int) __asm__("FUN_L01_002b7a48");
-extern void           pool_set_scale(float) __asm__("FUN_L01_002b7ef0");
-extern void           FUN_L01_002b7c68_2cd2b0(void *, void *) __asm__("FUN_L01_002b7c68");
+int water_grid_geometry_descriptors[36][4] __asm__("D_L07_00204700") = {0};
+
+extern s32 random_integer_below(s32) __asm__("func_00213260");
+
+unsigned short l07_water_grid_saved_control_values[36] __asm__("D_L07_00204680") = {
+    0xeeff, 0x17ff, 0xff,   0x77,   0xec00, 0x7300, 0xfff0, 0x7ff0, 0x8cf,  0x133,  0xff77, 0x7700,
+    0xeecc, 0xffff, 0x17ff, 0x4ee,  0x17,   0xfecc, 0x7731, 0xefff, 0xffff, 0x133,  0xffff, 0xffff,
+    0x3333, 0xec00, 0xff00, 0x1000, 0xffff, 0xffff, 0xffff, 0x133,  0xffff, 0xffff, 0xffff, 0xffff};
+
+void        set_moby_list_state(int list, int state) __asm__("FUN_L01_0026e0e0");
+void        pool_set_scale(float s) __asm__("FUN_L01_002b7ef0");
+void        render_level07_water_grids(void) __asm__("FUN_L07_0030cd20");
+void        initialize_level07_water_grid_neighbors(int arg) __asm__("FUN_L07_0030cd48");
+extern void FUN_L01_002b7a48_2cd2b0(void *, int) __asm__("FUN_L01_002b7a48");
+extern void pool_set_scale(float) __asm__("FUN_L01_002b7ef0");
+extern void FUN_L01_002b7c68_2cd2b0(void *, void *) __asm__("FUN_L01_002b7c68");
 extern void
 FUN_L01_002b8288_2cd2b0(void *, int, float, float, float, float) __asm__("FUN_L01_002b8288");
 extern void  initialize_level07_water_grid_neighbors(int) __asm__("FUN_L07_0030cd48");
