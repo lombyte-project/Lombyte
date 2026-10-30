@@ -46,7 +46,7 @@ void update_command_triggered_falling_platform(char *moby) {
     float previous[4];
     float delta[4];
     float rotation[4];
-    float scratch[4];
+    float platform_to_hero_offset[4];
     float current_rotation[4];
     float current_position[4];
     float transformed[4];
@@ -203,9 +203,9 @@ void update_command_triggered_falling_platform(char *moby) {
         if (*(int *)(falling_platform_vars + 0xAC) != 0) {
             float forward, side;
             fast_dec_timer((int *)(falling_platform_vars + 0xAC));
-            fast_vec_sub(scratch, &hero.motion.pos, moby + 0x10);
-            forward = fast_vec_dot(scratch, moby + 0xC0);
-            side = fast_vec_dot(scratch, moby + 0xD0) * -0.03f;
+            fast_vec_sub(platform_to_hero_offset, &hero.motion.pos, moby + 0x10);
+            forward = fast_vec_dot(platform_to_hero_offset, moby + 0xC0);
+            side = fast_vec_dot(platform_to_hero_offset, moby + 0xD0) * -0.03f;
             forward *= 0.03f;
             sway = fast_add_rotations(sway, side);
             sway = fast_add_rotations(sway, forward);
