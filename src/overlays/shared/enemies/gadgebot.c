@@ -1183,14 +1183,14 @@ void assign_gadgebot_attack_targets(void) {
 
     moby_count = 0;
     {
-        char *entry;
-        for (i = 0; (entry = (char *)D_L06_001AC180[i]) != 0; i++) {
-            if (*(short *)(entry + 0xA6) == 0x359 && ((unsigned char *)entry)[0x20] == 5 &&
-                ((unsigned char *)entry)[0xBC] != 2 && moby_count != 0x32) {
-                char *current_target = ((GbSlots *)PVARS(entry))->target;
+        char *gadgebot_candidate;
+        for (i = 0; (gadgebot_candidate = (char *)D_L06_001AC180[i]) != 0; i++) {
+            if (*(short *)(gadgebot_candidate + 0xA6) == 0x359 && ((unsigned char *)gadgebot_candidate)[0x20] == 5 &&
+                ((unsigned char *)gadgebot_candidate)[0xBC] != 2 && moby_count != 0x32) {
+                char *current_target = ((GbSlots *)PVARS(gadgebot_candidate))->target;
                 if (current_target == 0 || ((unsigned char *)current_target)[0x20] == 0xFE ||
                     ((unsigned char *)current_target)[0x20] == 0xFD) {
-                    mobys[moby_count++] = entry;
+                    mobys[moby_count++] = gadgebot_candidate;
                 }
             }
         }
