@@ -1157,7 +1157,7 @@ func_L00_0025CE58_2B4828(float *, float, float *, float, float, float) __asm__("
    Returns the remaining difference between the target and the current yaw offset. */
 float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) {
     char *state = ((char *)MOBY(moby)->pvars);
-    char *owner = *(char **)(state + 0x110);
+    char *aim_target_moby = *(char **)(state + 0x110);
     float turn = fast_subtract_rotations(target_angle, MOBY(moby)->rot.z);
     if (turn > 1.2217304706573486f)
         turn = 1.2217304706573486f;
@@ -1181,9 +1181,9 @@ float update_plasmabot_aim_quaternion(char *moby, int flag, float target_angle) 
         float       *cp;
         struct Hero *hero_state;
         float        target_pitch_angle;
-        qcopy(owner_aim_position, owner + 0x10);
+        qcopy(owner_aim_position, aim_target_moby + 0x10);
         hero_state = &hero;
-        if (((char *)hero_state->moby) == owner)
+        if (((char *)hero_state->moby) == aim_target_moby)
             owner_aim_position[2] = owner_aim_position[2] - hero_state->ground_distance;
         bp = owner_aim_offset;
         fast_vec_sub(bp, owner_aim_position, moby + 0x10);
