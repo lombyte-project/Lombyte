@@ -361,7 +361,7 @@ void level_draw_dialog_text(void) {
         s32  first_place_or_record_color;
         s32  other_place_or_no_record_color;
         s32  best;
-        s32  record;
+        s32  race_score_record;
         s32  unit;
         s32  rem;
         s32  per;
@@ -491,8 +491,8 @@ void level_draw_dialog_text(void) {
                                   line,
                                   -1);
             }
-            record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
-            if (record != 0 && record == hero.race_score) {
+            race_score_record = freeze_stats_score_ref_a[(current_level_index ^ 0x10) ? 0 : 1];
+            if (race_score_record != 0 && race_score_record == hero.race_score) {
                 sprintf(line, results_record_label_format, get_help_message_text(0x50A5));
                 font_print_center(0x100,
                                   results_rank_and_records_base_y + 0x56,
