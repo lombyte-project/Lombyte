@@ -609,7 +609,7 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) __asm__("FUN_L00_002
 void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     Quad          pk;
     Vec4A_2b3628  mtx[4];
-    Vec4A_2b3628  out[2];
+    Vec4A_2b3628  child_joint_positions[2];
     Ids           ids;
     Vec4A_2b3628  up;
     Vec4A_2b3628  beam_quad_transform[4];
@@ -631,14 +631,14 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     pk.tag[0] = 0;
     if (beam_effect_vars->f4 != 0) {
         ids = D_L00_00161488;
-        transform_scaled_vertex_batch(child, 2, &ids, out);
+        transform_scaled_vertex_batch(child, 2, &ids, child_joint_positions);
     } else {
         ids = D_L00_00161490;
-        transform_scaled_vertex_batch(child, 2, &ids, out);
+        transform_scaled_vertex_batch(child, 2, &ids, child_joint_positions);
     }
     *(Q_2b3628 *)&up = 0;
     up.y = 1.0f;
-    fast_vec_sub(&mtx[2], &out[0], &out[1]);
+    fast_vec_sub(&mtx[2], &child_joint_positions[0], &child_joint_positions[1]);
     fast_vec_normalize(&mtx[2], &mtx[2], 1.0f);
     mtx[2].w = 0.0f;
     fast_vec_cross(&mtx[0], &up, &mtx[2]);
@@ -646,7 +646,7 @@ void draw_joint_aligned_beam_effect(struct Moby *beam_moby) {
     mtx[0].w = 0.0f;
     fast_vec_cross(&mtx[1], &mtx[2], &mtx[0]);
     mtx[1].w = 0.0f;
-    qcopy(&mtx[3], &out[1]);
+    qcopy(&mtx[3], &child_joint_positions[1]);
     mtx[3].w = 1.0f;
     qcopy(&beam_moby->rot_row0, &mtx[0]);
     qcopy(&beam_moby->rot_row1, &mtx[1]);
