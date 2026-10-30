@@ -1631,9 +1631,9 @@ void draw_nanotech_ball(Moby *moby) {
     float        view_dir[4] __attribute__((aligned(16)));
     float        to_camera[4] __attribute__((aligned(16)));
     float        vertex[4] __attribute__((aligned(16)));
-    D_2D9EA0    *vars = (D_2D9EA0 *)moby->pvars;
+    D_2D9EA0    *nanotech_ball_draw_state = (D_2D9EA0 *)moby->pvars;
     Moby        *owner;
-    float        pulse = vars->bob_offset / l00_nanotech_ball_bob_amplitude;
+    float        pulse = nanotech_ball_draw_state->bob_offset / l00_nanotech_ball_bob_amplitude;
     int          i, j, color;
     short       *indices;
     short       *row;
@@ -1656,12 +1656,12 @@ void draw_nanotech_ball(Moby *moby) {
     center[0] = moby->pos.x;
     center[1] = moby->pos.y;
     center[2] = moby->pos.z + 0.5f;
-    center[2] += vars->bob_offset;
+    center[2] += nanotech_ball_draw_state->bob_offset;
     center[3] = 1.0f;
     fast_vec_add(&center, &center, D_L00_00161AF0_macro);
     fast_vec_sub(&to_camera, g_debug_camera, &center);
     fast_vec_normalize(forward, &to_camera, 1.0f);
-    owner = vars->owner;
+    owner = nanotech_ball_draw_state->owner;
     fast_vec_cross(&side, forward, &owner->rot_row2);
     fast_vec_normalize(&side, &side, 1.0f);
     fast_vec_cross(&up, &side, forward);
@@ -1744,7 +1744,7 @@ void draw_nanotech_ball(Moby *moby) {
         quad.colors[0] = 0x107f7f7f;
         quad.texture[3] = 0x8000000044ULL;
         {
-            Moby *owner = vars->owner;
+            Moby *owner = nanotech_ball_draw_state->owner;
             qcopy(basis, &owner->rot_row0);
             qcopy(&side, &owner->rot_row1);
             qcopy(&up, &owner->rot_row2);
