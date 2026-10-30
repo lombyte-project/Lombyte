@@ -381,14 +381,14 @@ void follow_camera_apply_overrides(O_2e6000 *camera_moby) {
     sum = 0.0f;
     {
         /* `next` is a separate variable: with a plain j++ gcc reverses the loop or gives the counter another saved register. */
-        s32  j = 0, next;
+        s32  j = 0, next_rotation_delta_index;
         f32 *q = direction_or_rotation_deltas;
         do {
-            next = j + 1;
+            next_rotation_delta_index = j + 1;
             *q = fast_difference_between_rotations(D_L00_00166E10[j + 43], D_L00_00166E10[j + 44]);
             sum += *q;
             q++;
-            j = next;
+            j = next_rotation_delta_index;
         } while (j < 4);
     }
 
