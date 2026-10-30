@@ -1013,7 +1013,7 @@ char *FUN_L03_002d4288(char *heading_vector, char *pos, struct Moby *parent, int
         collision_start_pos[2] = *(float *)(pos + 8);
         if (collision_line(collision_start_pos, pos, 2, parent, 0) != 0) {
             *(int *)(moby_vars + 0x14) = 0;
-            *(OvlQuad *)(spawned_moby + 0x10) = *(OvlQuad *)&coll_hit;
+            *(OvlQuad *)&MOBY(spawned_moby)->pos = *(OvlQuad *)&coll_hit;
             *(int *)(moby_vars + 0x24) = 0;
         }
         update_entity(spawned_moby);

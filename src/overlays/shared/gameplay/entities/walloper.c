@@ -727,9 +727,9 @@ u8 *spawn_linked_moby_from_basis(u8 *basis_source_moby) {
         spawned_moby[0x20] = 0;
         *(u8 **)(spawned_moby_vars + 8) = basis_source_moby;
         clear_u64_value(spawned_moby + 0x40);
-        *(OvlQuad *)(spawned_moby + 0xC0) = *(OvlQuad *)(basis_source_moby + 0xC0);
-        *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)(basis_source_moby + 0xD0);
-        *(OvlQuad *)(spawned_moby + 0xE0) = *(OvlQuad *)(basis_source_moby + 0xE0);
+        *(OvlQuad *)&MOBY(spawned_moby)->rot_row0 = *(OvlQuad *)&MOBY(basis_source_moby)->rot_row0;
+        *(OvlQuad *)&MOBY(spawned_moby)->rot_row1 = *(OvlQuad *)&MOBY(basis_source_moby)->rot_row1;
+        *(OvlQuad *)&MOBY(spawned_moby)->rot_row2 = *(OvlQuad *)&MOBY(basis_source_moby)->rot_row2;
         refresh_moby_spatial_bounds_from_basis(spawned_moby);
         update_entity(spawned_moby);
     }
@@ -1272,7 +1272,7 @@ char *select_morphoray_target_and_adjust_aim(char *self, float *position, float 
     *(VecQuad *)start = *(VecQuad *)position;
     hero_base = ((char *)&hero);
     hero_moby = *(char **)(hero_base + 0x2080);
-    *(VecQuad *)end = *(VecQuad *)(hero_moby + 0x10);
+    *(VecQuad *)end = *(VecQuad *)&MOBY(hero_moby)->pos;
     position = start;
     end[2] = position[2];
     collision = collision_line((Vec4f *)end, (Vec4f *)position, 6, hero_moby, 0);

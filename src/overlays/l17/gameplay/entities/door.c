@@ -427,7 +427,7 @@ char *spawn_class_558_moby_toward_target(struct Moby *source_moby, char *spawn_p
         MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 0;
-        *(long *)(spawned_moby + 0x38) = source_moby->spawn_frame;
+        MOBY(spawned_moby)->spawn_frame = source_moby->spawn_frame;
         qcopy(spawned_position, spawn_position);
         spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         *(float *)(spawned_vars + 0x40) = movement_speed;

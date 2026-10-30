@@ -406,7 +406,7 @@ void spawn_moby_radial_particles(char *moby) {
         float angle_start_radians, angle_end_radians, xy_random_range;
         i = 0;
         xy_random_range = *(float *)(moby_data + 0x24) * frame_time;
-        *(OvlQuad *)spawn_center_position = *(OvlQuad *)(moby + 0x10);
+        *(OvlQuad *)spawn_center_position = *(OvlQuad *)&MOBY(moby)->pos;
         angle_start_radians = (*(float *)(moby_data + 0x28) - 180.0f) / 180.0f * 3.1415927f;
         angle_end_radians = (*(float *)(moby_data + 0x2C) - 180.0f) / 180.0f * 3.1415927f;
         for (; i < *(int *)(moby_data + 0x14); i++) {

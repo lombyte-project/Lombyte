@@ -274,7 +274,7 @@ void *spawn_moby_attachment(char *source_moby, char *spawn_position) {
         *(int *)(spawned_moby + 0x40) = 0;
         *(int *)(spawned_moby + 0x44) = 0;
         MOBY(spawned_moby)->rot.z = MOBY(source_moby)->rot.z;
-        *(unsigned long *)(spawned_moby + 0x38) = *(unsigned long *)(source_moby + 0x38);
+        MOBY(spawned_moby)->spawn_frame = MOBY(source_moby)->spawn_frame;
         qcopy(spawned_moby + 0x10, position_copy_ptr);
         update_entity(spawned_moby);
     }

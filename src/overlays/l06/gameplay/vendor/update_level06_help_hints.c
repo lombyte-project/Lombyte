@@ -364,7 +364,7 @@ void update_hit_triggered_moby_replacement(char *self) {
             MOBY(spawned_moby)->draw_dist = 0xFF;
             qcopy(spawned_moby + 0x10, self + 0x10);
             qcopy(spawned_moby + 0x40, self + 0x40);
-            *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
+            MOBY(spawned_moby)->spawn_frame = *(long *)(self + 0x38);
             update_entity(spawned_moby);
         }
         mark_moby_for_removal(self);

@@ -830,7 +830,7 @@ void moving_platform_small_update(char *moby) {
         *(OvlQuad *)step = *(OvlQuad *)endpoint_delta_or_position;
         fast_vec_normalize(step, step, base);
         fast_vec_add(endpoint_delta_or_position, *(char **)(pb + 0x10) + 0x10, step);
-        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)endpoint_delta_or_position;
+        *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)endpoint_delta_or_position;
         if (*(int *)(data + 0x10C) >= scale_game_frames(240)) {
             pb[4] = pb[4] * -1;
             voice_slot_index = *(int *)(data + 0x104);
@@ -1287,7 +1287,7 @@ void red_ship_1_update(char *moby) {
     flag = 0;
     data = ((char *)MOBY(moby)->pvars);
     if (((unsigned char *)moby)[0x31] == 0) {
-        *(OvlQuad *)culling_sphere_or_motion_delta = *(OvlQuad *)(moby + 0x10);
+        *(OvlQuad *)culling_sphere_or_motion_delta = *(OvlQuad *)&MOBY(moby)->pos;
         culling_sphere_or_motion_delta[3] = 7.0f;
         flag = fast_bsphere_check(culling_sphere_or_motion_delta, MOBY(moby)->draw_dist) == -1;
     }
@@ -1380,7 +1380,7 @@ void red_ship_1_update(char *moby) {
         MOBY(moby)->rot.z = fast_arc_tan(*(float *)(data + 0xA0) - zero[0], *(float *)(data + 0xA4) - zero[1]);
         *(float *)(data + 0x114) = 0.0f;
         *(float *)(data + 0x11C) = 0.0f;
-        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(data + 0xE0);
+        *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)(data + 0xE0);
         add_moby_rotation_based_offsets(moby, moby_position);
         data[0x131] = 7;
         initial_speed_oscillation_phase = *(float *)(data + 0x13C);
@@ -1417,8 +1417,8 @@ void red_ship_1_update(char *moby) {
         }
         break;
     case RED_SHIP_FOLLOW_PATH_SPLINE:
-        *(OvlQuad *)old_rot = *(OvlQuad *)(moby + 0x40);
-        *(OvlQuad *)old_pos = *(OvlQuad *)(moby + 0x10);
+        *(OvlQuad *)old_rot = *(OvlQuad *)&MOBY(moby)->rot;
+        *(OvlQuad *)old_pos = *(OvlQuad *)&MOBY(moby)->pos;
         path_tangent_or_moby_position = data + 0xA0;
         if (*(float *)(data + 0x100) >= 1.0f) {
             *(float *)(data + 0x100) -= 1.0f;
@@ -1442,7 +1442,7 @@ void red_ship_1_update(char *moby) {
         }
         path_tangent_or_moby_position = moby + 0x10;
         *(float *)(data + 0x100) += step;
-        *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(data + 0xE0);
+        *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)(data + 0xE0);
         if (!flag) {
             add_moby_rotation_based_offsets(moby, path_tangent_or_moby_position);
         }
@@ -1468,7 +1468,7 @@ char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int
         MOBY(child_moby)->scale *= scale;
         *(char **)child_data = parent;
         qcopy(child_moby + 0x10, (char *)parent->pvars + 0xF0);
-        *(OvlQuad *)(child_moby + 0x40) = *(OvlQuad *)&parent->rot;
+        *(OvlQuad *)&MOBY(child_moby)->rot = *(OvlQuad *)&parent->rot;
         MOBY(child_moby)->rot.x = random_angle_radians();
         *(short *)(child_data + 0xC) = timer_frames;
         b = (color >> 16) & 0xFF;
@@ -1651,7 +1651,7 @@ void robot_dog_update(char *moby) {
     case ROBOT_DOG_WAIT_FOR_ACTIVATION:
         if (data->i270 != -1) {
             activation_path = D_L03_001B05B0_c5bb8[data->i270];
-            *(OvlQuad *)(moby + 0x10) = *(OvlQuad *)(activation_path + 0x10);
+            *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)(activation_path + 0x10);
             MOBY(moby)->rot.z = fast_arc_tan(*(float *)(activation_path + 0x20) - *(float *)(activation_path + 0x10),
                                                    *(float *)(activation_path + 0x24) - *(float *)(activation_path + 0x14));
             if ((random_integer_below(14) == 0 && is_point_inside_clip_volume_cf(((unsigned char *)moby)[0x21])) ||

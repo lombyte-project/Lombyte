@@ -3020,7 +3020,7 @@ void draw_spiderbot_effect_quad(char *moby) {
     fast_vec_sub(A, d + 0x10, moby + 0x10);
     *(OvlQuad *)B = *(OvlQuad *)A;
     fast_vec_normalize(B, B, 0.5f);
-    *(OvlQuad *)C = *(OvlQuad *)(moby + 0x10);
+    *(OvlQuad *)C = *(OvlQuad *)&MOBY(moby)->pos;
     add_vectors(D, C, B);
     fast_vec_sub(E, C, d + 0x10);
     fast_vec_sub(A, C, D_L15_001673C0);

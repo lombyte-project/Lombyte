@@ -3139,7 +3139,7 @@ void update_infobot_particle_effect(char *moby) {
     if (MOBY(moby)->flags & 1) {
         return;
     }
-    v.q = *(OvlQuad *)(moby + 0x10);
+    v.q = *(OvlQuad *)&MOBY(moby)->pos;
     v.f[2] += 0.333000004f;
     fast_vec_sub(d, camera_position, moby + 0x10);
     fast_vec_normalize(d, d, -0.3f);

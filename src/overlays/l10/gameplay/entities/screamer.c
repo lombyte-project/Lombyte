@@ -1242,7 +1242,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
     FUN_L00_00263ac8(2.5f, (int)m, 2, crab_data->q2B0);
     *(OvlQuad *)from = *(OvlQuad *)m->pos;
     from[2] += 1.0f;
-    *(OvlQuad *)to = *(OvlQuad *)(target_moby + 0x10);
+    *(OvlQuad *)to = *(OvlQuad *)&MOBY(target_moby)->pos;
     to[2] += 1.0f;
     if (fast_vec_dist(from, to) < 15.0f &&
         !(from[0] < 2.0f || 1021.0f < from[0] || from[1] < 2.0f || 1021.0f < from[1] ||
@@ -1442,7 +1442,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
                     float to2[4];
                     *(OvlQuad *)from2 = *(OvlQuad *)m->pos;
                     from2[2] += 1.0f;
-                    *(OvlQuad *)to2 = *(OvlQuad *)(target_moby + 0x10);
+                    *(OvlQuad *)to2 = *(OvlQuad *)&MOBY(target_moby)->pos;
                     to2[2] += 1.0f;
                     if (collision_line(from2, to2, 2, m, 0)) {
                         char *h = ground_hit;
@@ -1537,7 +1537,7 @@ void toxic_crab_update(Moby2E30F8 *m) {
             int ok = 1;
             *(OvlQuad *)from2 = *(OvlQuad *)m->pos;
             from2[2] += 1.0f;
-            *(OvlQuad *)to2 = *(OvlQuad *)(target_moby + 0x10);
+            *(OvlQuad *)to2 = *(OvlQuad *)&MOBY(target_moby)->pos;
             to2[2] += 1.0f;
             if (collision_line(from2, to2, 2, m, 0)) {
                 char *h = ground_hit;

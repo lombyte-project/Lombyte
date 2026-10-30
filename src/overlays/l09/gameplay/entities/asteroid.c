@@ -400,9 +400,9 @@ char *spawn_airship_part(struct Moby *rotation_source_moby, char *spawn_referenc
         transform_vector_by_basis(&position_offset, &position_offset, &rotation_source_moby->rot_row0);
         fast_vec_add(spawned_position, spawn_reference_position, &position_offset);
         qcopy(spawned_moby + 0x40, &rotation_source_moby->rot);
-        *(OvlQuad *)(spawned_moby + 0xC0) = *(OvlQuad *)&rotation_source_moby->rot_row0;
-        *(OvlQuad *)(spawned_moby + 0xD0) = *(OvlQuad *)&rotation_source_moby->rot_row1;
-        *(OvlQuad *)(spawned_moby + 0xE0) = *(OvlQuad *)&rotation_source_moby->rot_row2;
+        *(OvlQuad *)&MOBY(spawned_moby)->rot_row0 = *(OvlQuad *)&rotation_source_moby->rot_row0;
+        *(OvlQuad *)&MOBY(spawned_moby)->rot_row1 = *(OvlQuad *)&rotation_source_moby->rot_row1;
+        *(OvlQuad *)&MOBY(spawned_moby)->rot_row2 = *(OvlQuad *)&rotation_source_moby->rot_row2;
         update_entity(spawned_moby);
     }
     return spawned_moby;
@@ -1274,7 +1274,7 @@ char *spawn_class_11c_moby(char *owner, void *position, float angle) {
         qcopy(moby + 0x10, copy);
         qcopy(moby + 0x40, owner + 0x40);
         MOBY(moby)->rot.z = angle;
-        *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
+        MOBY(moby)->spawn_frame = *(long *)(owner + 0x38);
         update_entity(moby);
     }
     return moby;
@@ -1486,7 +1486,7 @@ char *spawn_class_144_moby(struct Moby *owner, void *position, float angle) {
         MOBY(moby)->draw_dist = state;
         qcopy(moby + 0x10, copy);
         qcopy(moby + 0x40, &owner->rot);
-        *(long *)(moby + 0x38) = owner->spawn_frame;
+        MOBY(moby)->spawn_frame = owner->spawn_frame;
         update_entity(moby);
     }
     return moby;

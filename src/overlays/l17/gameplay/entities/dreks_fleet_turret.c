@@ -701,7 +701,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
                     if (fast_vec_dist((moby + 0x10), &hero.motion.pos) < 30.0f) {
                         collision_line((moby + 0x10), spC0, 9, moby, &blk);
                     }
-                    spD0[0] = *(OvlQuad *)(moby + 0x10);
+                    spD0[0] = *(OvlQuad *)&MOBY(moby)->pos;
                     *(float *)((char *)spD0 + 0xC) = *(float *)&fleet_radial_radius;
                     if (fast_bsphere_check((char *)spD0, 20.0f) != -1 && (j == 0 || j == 4)) {
                         spF0[0] = 0;
@@ -723,7 +723,7 @@ void update_fleet_rotating_radial_effect(char *moby) {
                                 if (particle_direction_sign_or_minimum_speed < 0.0f)
                                     spE0[0] = spC0[0];
                                 else
-                                    spE0[0] = *(OvlQuad *)(moby + 0x10);
+                                    spE0[0] = *(OvlQuad *)&MOBY(moby)->pos;
                                 fast_vec_scale(spF0, spF0, random_float_between(0.0f, 0.9f));
                                 particle_vector_scratch_destination = (char *)particle_vector_scratch;
                                 add_vectors(particle_vector_scratch_destination, spE0, spF0);

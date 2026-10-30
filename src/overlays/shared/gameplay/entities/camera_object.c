@@ -2192,7 +2192,7 @@ void *spawn_tracked_class_5f3_moby(int unused, float *spawn_position) {
         MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         moby_vars = ((char *)MOBY(spawned_moby)->pvars);
-        *(OvlQuad *)(spawned_moby + 0x10) = *(OvlQuad *)spawn_position;
+        *(OvlQuad *)&MOBY(spawned_moby)->pos = *(OvlQuad *)spawn_position;
         D_L00_0015F324 = 0xFF;
         D_L00_0015F334 = 0xFFFFFF;
         D_L00_0015F338 = 0x1F00000042L;
@@ -2224,7 +2224,7 @@ void set_tracked_class_5f3_moby_position(void *unused_creation_arg, OvlQuad *pos
     moby = D_L00_001613C8;
     moby_vars = ((u8 *)MOBY(moby)->pvars);
     if (MOBY(moby)->oclass == 0x5F3) {
-        *(OvlQuad *)(moby + 0x10) = position_copy;
+        *(OvlQuad *)&MOBY(moby)->pos = position_copy;
         *(s16 *)(moby_vars + 0x2E) = 1;
     }
 }

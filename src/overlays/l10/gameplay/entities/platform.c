@@ -93,7 +93,7 @@ char *spawn_fixed_height_destruction_moby(struct Moby *owner) {
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         MOBY(moby)->rot.z = owner->rot.z;
-        *(long *)(moby + 0x38) = owner->spawn_frame;
+        MOBY(moby)->spawn_frame = owner->spawn_frame;
         qcopy(moby + 0x10, &owner->pos);
         MOBY(moby)->pos.z = 59.0f;
         update_entity(moby);
@@ -131,7 +131,7 @@ void update_cycling_platform(char *platform_moby) {
         *(short *)(platform_vars + 0x3E) = 5;
         *(int *)(platform_vars + 0x20) = 0;
         *(short *)(platform_vars + 0x24) = 0;
-        *(OvlQuad *)(platform_vars + 0xA0) = *(OvlQuad *)(platform_moby + 0x10);
+        *(OvlQuad *)(platform_vars + 0xA0) = *(OvlQuad *)&MOBY(platform_moby)->pos;
         platform_moby[0x20] = 1;
         break;
     case PLATFORM_STATE_RISING: {
@@ -585,7 +585,7 @@ void gadgebot_telepot_pad_update(char *moby)
     if (D_L10_0015F5CC % func_001F9850_2BFBB8(0x3c) == 0 && *data != -1) {
         for (i = 0; i < func_001FA898_2BFBB8(16.0f); i++) {
             char *effect;
-            *(Q_2BFBB8 *)position = *(Q_2BFBB8 *)(moby + 0x10);
+            *(Q_2BFBB8 *)position = *(Q_2BFBB8 *)&MOBY(moby)->pos;
             position[2] += func_001FA888_2BFBB8(i) * 0.1f * 0.0625f + 1.8f;
             effect = (char *)func_L00_00272488_2BFBB8(position, 0, 0x1eff7f40, 0.0f, D_0015ED6C * 315000.0f);
             if (effect != 0) {
@@ -637,7 +637,7 @@ void gate_update(unsigned char *gate_moby) {
     unsigned short id;
     switch (gate_moby[0x20]) {
     case GATE_STATE_WAIT_FOR_SAVE_FLAG:
-        *(OvlQuad *)saved_position = *(OvlQuad *)(gate_moby + 0x10);
+        *(OvlQuad *)saved_position = *(OvlQuad *)&MOBY(gate_moby)->pos;
         id = MOBY(gate_moby)->save_id;
         if (D_L10_001BB6B0_bf.collected[(short)id] != 0 ||
             (*(int *)(D_0014C190_bf + (((short)id >> 5) * 4 + (D_0015ED84_bf << 8))) >> (id & 0x1F)) & 1) {
@@ -1675,7 +1675,7 @@ void lab_door_update(unsigned char *door_moby) {
     }
     switch (door_moby[0x20]) {
     case LAB_DOOR_STATE_INITIALIZE:
-        *(OvlQuad *)door_vars = *(OvlQuad *)(door_moby + 0x10);
+        *(OvlQuad *)door_vars = *(OvlQuad *)&MOBY(door_moby)->pos;
         door_moby[0x20] = 2;
         break;
     case LAB_DOOR_STATE_DESCENDING:
@@ -2228,7 +2228,7 @@ unsigned char *spawn_path_spark_effect(int source_moby, void *initial_position, 
         effect_moby[0x23] = 0x40;
         effect_moby[0x20] = 0;
         effect_data = ((int *)MOBY(effect_moby)->pvars);
-        *(OvlQuad *)(effect_moby + 0x10) = *(OvlQuad *)initial_position;
+        *(OvlQuad *)&MOBY(effect_moby)->pos = *(OvlQuad *)initial_position;
         glow_n(effect_moby, 0x7F, 0x40, 0);
         lifetime_frames = 10.0f / (D_0015ED6C_dd * 5.0f);
         effect_data[0] = path_address;
@@ -2256,7 +2256,7 @@ void update_path_spark_effect(char *moby) __asm__("FUN_L10_002dd3d8");
 void update_path_spark_effect(char *moby) {
  float old[4],blast_hit_position[4],path_segment_index,path_segment_remainder;
  char *effect_data=((char *)MOBY(moby)->pvars);
- *(OvlQuad *)old=*(OvlQuad *)(moby+0x10);
+ *(OvlQuad *)old=*(OvlQuad *)&MOBY(moby)->pos;
  ((EffectData *)effect_data)->phase+=((EffectData *)effect_data)->speed;
  ((EffectData *)effect_data)->speed*=(((EffectData *)effect_data)->growth-1.0f)*frame_scale+1.0f;
  FUN_L00_00262360_c(((EffectData *)effect_data)->owner,&path_segment_index,&path_segment_remainder,moby+0x10,((EffectData *)effect_data)->phase,((EffectData *)effect_data)->size);
@@ -2273,7 +2273,7 @@ void update_path_spark_effect(char *moby) {
  }
  if(*(float *)(((char *)MOBY(moby)->pclass)+0x24)*0.25f<MOBY(moby)->scale) {
   int count=collect_mobies_in_sphere(moby+0x10,0.15f,16,*(void **)(effect_data+0x10),0);
-  *(OvlQuad *)blast_hit_position=*(OvlQuad *)(moby+0x10);
+  *(OvlQuad *)blast_hit_position=*(OvlQuad *)&MOBY(moby)->pos;
   send_blast_hits(*(void **)(effect_data+0x10),blast_hit_position,D_L10_00178380_u,count,0,0x810001,2,1,2.0f,1.0f,1.0f);
  }
 }

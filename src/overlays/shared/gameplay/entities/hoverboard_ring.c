@@ -292,7 +292,7 @@ char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) {
         MOBY(destination_moby)->rot.x = MOBY(source_moby)->rot.x;
         MOBY(destination_moby)->rot.y = MOBY(source_moby)->rot.y;
         MOBY(destination_moby)->rot.z = MOBY(source_moby)->rot.z;
-        *(long *)(destination_moby + 0x38) = *(long *)(source_moby + 0x38);
+        MOBY(destination_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
         qcopy(destination_moby + 0x10, source_moby + 0x10);
         update_entity(destination_moby);
     }

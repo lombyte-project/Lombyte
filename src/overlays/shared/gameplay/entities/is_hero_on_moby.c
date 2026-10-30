@@ -86,7 +86,7 @@ void spawn_moby_from_placement(struct Moby *placement_source_moby, int oClass) {
                                (placement_source_moby->scale / placement_source_moby->pclass->scale);
         qcopy(destination_moby + 0x10, &placement_source_moby->pos);
         qcopy(destination_moby + 0x40, &placement_source_moby->rot);
-        *(long *)(destination_moby + 0x38) = placement_source_moby->spawn_frame;
+        MOBY(destination_moby)->spawn_frame = placement_source_moby->spawn_frame;
         destination_moby[0x30] = 0;
         MOBY(destination_moby)->flags = 0;
         update_entity(destination_moby);

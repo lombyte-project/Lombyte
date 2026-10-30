@@ -1039,7 +1039,7 @@ char *spawn_class_511_moby_with_sparks(char *source_moby, void *spawn_position, 
         mob[0x31] = 1;
         *(int *)(mob + 0x2C) = 0;
         moby_vars = *(char **)(mob + 0x78);
-        *(long *)(mob + 0x38) = *(long *)(source_moby + 0x38);
+        *(long *)(mob + 0x38) = ((long)MOBY(source_moby)->spawn_frame);
         mob[0x20] = 1;
         qcopy(mob + 0x10, spawn_position);
         qcopy(mob + 0x40, source_moby + 0x40);

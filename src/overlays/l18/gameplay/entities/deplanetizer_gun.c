@@ -785,7 +785,7 @@ void update_moby_transform_and_child(char *moby) {
         if (new_child != 0) {
             *(unsigned short *)(new_child + 0x32) = ((unsigned short)MOBY(moby)->draw_dist);
             (*(char **)(data + 0x84))[0x31] = 1;
-            *(long *)(*(char **)(data + 0x84) + 0x38) = *(long *)(moby + 0x38);
+            *(long *)(*(char **)(data + 0x84) + 0x38) = ((long)MOBY(moby)->spawn_frame);
             *(float *)(*(char **)(data + 0x84) + 0x2C) *=
                 MOBY(moby)->scale / *(float *)(((char *)MOBY(moby)->pclass) + 0x24);
         }

@@ -61,9 +61,9 @@ char *create_attached_rocket(struct Moby *source_moby, short joint_index) {
         spawned_moby_position = moby + 0x10;
         moby_point_position(source_moby, joint_index, spawned_moby_position);
         qcopy(moby + 0x40, &source_moby->rot);
-        *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)&source_moby->rot_row0;
-        *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)&source_moby->rot_row1;
-        *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)&source_moby->rot_row2;
+        *(OvlQuad *)&MOBY(moby)->rot_row0 = *(OvlQuad *)&source_moby->rot_row0;
+        *(OvlQuad *)&MOBY(moby)->rot_row1 = *(OvlQuad *)&source_moby->rot_row1;
+        *(OvlQuad *)&MOBY(moby)->rot_row2 = *(OvlQuad *)&source_moby->rot_row2;
         qcopy(moby_vars + 0x10, spawned_moby_position);
         MOBY(moby)->collision = 0;
         update_entity(moby);
@@ -88,9 +88,9 @@ void launch_attached_rocket(struct Moby *moby, char *pos, int distance_reference
     *(float *)(moby_vars + 0x28) = max_travel_distance;
     qcopy(&moby->rot, source_moby + 0x40);
     mp = &moby->pos;
-    *(OvlQuad *)&moby->rot_row0 = *(OvlQuad *)(source_moby + 0xC0);
-    *(OvlQuad *)&moby->rot_row1 = *(OvlQuad *)(source_moby + 0xD0);
-    *(OvlQuad *)&moby->rot_row2 = *(OvlQuad *)(source_moby + 0xE0);
+    *(OvlQuad *)&moby->rot_row0 = *(OvlQuad *)&MOBY(source_moby)->rot_row0;
+    *(OvlQuad *)&moby->rot_row1 = *(OvlQuad *)&MOBY(source_moby)->rot_row1;
+    *(OvlQuad *)&moby->rot_row2 = *(OvlQuad *)&MOBY(source_moby)->rot_row2;
     moby_point_position(*(void **)(moby_vars + 0x20), *(short *)(moby_vars + 0x26), mp);
     qcopy(moby_vars + 0x10, mp);
     qcopy(moby_vars, pos);

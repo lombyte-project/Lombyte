@@ -426,7 +426,7 @@ char *create_class_29_moby(struct Moby *owner, float *spawn_position, float *ini
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(long *)(moby + 0x38) = owner->spawn_frame;
+        MOBY(moby)->spawn_frame = owner->spawn_frame;
         MOBY(moby)->scale = MOBY(moby)->scale * 3.0f;
         qcopy(moby + 0x10, spawn_position);
         data = ((char *)MOBY(moby)->pvars);

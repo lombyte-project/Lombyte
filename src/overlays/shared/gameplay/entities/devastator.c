@@ -1897,7 +1897,7 @@ unsigned char *spawn_visibomb_missile(unsigned char *source_moby, V_2b58d8 *laun
         }
         copy_hero_moby_field_38(spawned_moby);
         *(int *)(spawned_moby_vars + 0x2C) = allocate_voice_for_target_entry(0, 4, spawned_moby);
-        collision_start.q = *(OvlQuad *)(source_moby + 0x10);
+        collision_start.q = *(OvlQuad *)&MOBY(source_moby)->pos;
         collision_start.f[2] = launch_position->f[2];
         if (FUN_001efa68_2b58d8(&collision_start, launch_position, 0, ({
                 struct Hero *collision_ignored_hero = &hero;

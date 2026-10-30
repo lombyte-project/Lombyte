@@ -112,7 +112,7 @@ char *spawn_gadgebot_spawn_container(char *owner) {
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         MOBY(moby)->rot.z = *(float *)(owner + 0x48);
-        *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
+        MOBY(moby)->spawn_frame = *(long *)(owner + 0x38);
         MOBY(moby)->flags |= 0x1000;
         qcopy(moby + 0x10, owner + 0x10);
         update_entity(moby);
@@ -297,7 +297,7 @@ char *spawn_gadgebot_pad(char *owner) {
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         MOBY(moby)->rot.z = *(float *)(owner + 0x48);
-        *(long *)(moby + 0x38) = *(long *)(owner + 0x38);
+        MOBY(moby)->spawn_frame = *(long *)(owner + 0x38);
         MOBY(moby)->parent = owner;
         qcopy(moby + 0x10, owner + 0x10);
         update_entity(moby);
@@ -440,7 +440,7 @@ void frog_update(unsigned char *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            *(long *)(child + 0x38) = *(long *)(moby + 0x38);
+            *(long *)(child + 0x38) = ((long)MOBY(moby)->spawn_frame);
             *(unsigned short *)(*(char **)(data + 0x20C) + 0x34) |= 0x4002;
             {
                 char *child = *(char **)(data + 0x20C);
@@ -2889,7 +2889,7 @@ void energy_sphere_holder_update(char *holder_moby) {
         spawned_moby[0x30] = 0x40;
         spawned_moby[0x31] = 1;
         MOBY(spawned_moby)->draw_dist = 0x40;
-        *(long *)(spawned_moby + 0x38) = *(long *)(holder_moby + 0x38);
+        MOBY(spawned_moby)->spawn_frame = ((long)MOBY(holder_moby)->spawn_frame);
         MOBY(spawned_moby)->flags = MOBY(holder_moby)->flags | 0x5000;
         qcopy(spawned_moby + 0x10, holder_moby + 0x10);
         MOBY(spawned_moby)->rot.x = random_angle_radians();

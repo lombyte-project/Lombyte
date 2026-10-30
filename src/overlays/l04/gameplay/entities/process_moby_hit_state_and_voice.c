@@ -66,7 +66,7 @@ void *spawn_class_23a_moby(char *source_moby, char *spawn_position) {
         *(int *)(created_moby + 0x40) = 0;
         *(int *)(created_moby + 0x44) = 0;
         MOBY(created_moby)->rot.z = MOBY(source_moby)->rot.z;
-        *(unsigned long *)(created_moby + 0x38) = *(unsigned long *)(source_moby + 0x38);
+        MOBY(created_moby)->spawn_frame = MOBY(source_moby)->spawn_frame;
         qcopy(created_moby + 0x10, saved_position_ptr);
         update_entity(created_moby);
     }

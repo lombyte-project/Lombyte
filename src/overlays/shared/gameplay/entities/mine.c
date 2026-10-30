@@ -2058,7 +2058,7 @@ unsigned char *spawn_crate_debris(unsigned char *owner, void *initial_velocity, 
         debris_moby[0x30] = 0xFF;
         MOBY(debris_moby)->draw_dist = 0x7E;
         debris_moby[0x31] = 1;
-        *(long *)(debris_moby + 0x38) = *(long *)(owner + 0x38);
+        MOBY(debris_moby)->spawn_frame = *(long *)(owner + 0x38);
         debris_moby[0x20] = 0;
         MOBY(debris_moby)->rot.x = random_angle_radians();
         MOBY(debris_moby)->rot.y = random_angle_radians();

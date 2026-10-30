@@ -51,7 +51,7 @@ char *spawn_class_3a6_moby(char *source_moby, float *direction_vector, char *spa
         MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 0;
-        *(long *)(spawned_moby + 0x38) = *(long *)(source_moby + 0x38);
+        MOBY(spawned_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
         MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 20.0f;
         qcopy(spawned_moby + 0x10, spawn_position);
         moby_vars = ((char *)MOBY(spawned_moby)->pvars);

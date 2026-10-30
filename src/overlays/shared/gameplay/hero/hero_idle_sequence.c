@@ -1187,7 +1187,7 @@ void copy_hero_color_to_item_mobys(void) {
                 destination_moby = *(int *)(hero_item_stride_base + 0x1094);
             }
             if (destination_moby != 0) {
-                *(long *)(destination_moby + 0x38) = *(long *)(*(int *)(hero_base + 0x2080) + 0x38);
+                MOBY(destination_moby)->spawn_frame = *(long *)(*(int *)(hero_base + 0x2080) + 0x38);
             }
         }
     }

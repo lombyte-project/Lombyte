@@ -489,7 +489,7 @@ void *FUN_L00_00263fd8(char *source_moby, int fragment_class, float *fragment_sp
         fragment_moby[0x31] = 1;
         MOBY(fragment_moby)->flags |= 0x100;
         fragment_pvars = ((char *)MOBY(fragment_moby)->pvars);
-        *(long *)(fragment_moby + 0x38) = *(long *)(source_moby + 0x38);
+        MOBY(fragment_moby)->spawn_frame = ((long)MOBY(source_moby)->spawn_frame);
         fragment_moby[0x20] = 1;
         qcopy(fragment_moby + 0x10, fragment_spawn_position);
         euler_rotation_basis(fragment_moby + 0xC0, fragment_euler_rotation);

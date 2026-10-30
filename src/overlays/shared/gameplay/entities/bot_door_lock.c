@@ -214,7 +214,7 @@ void bot_door_lock_update(char *moby) {
         data[9] = bot_door_lock_max_effect_horizontal_scale_gp;
         return;
     case BOT_DOOR_LOCK_STATE_ACTIVE:
-        *(OvlQuad *)number_anchor_position = *(OvlQuad *)(moby + 0x10);
+        *(OvlQuad *)number_anchor_position = *(OvlQuad *)&MOBY(moby)->pos;
         number_anchor_position[2] += 2.75f;
         if (fast_vec_dist(D_L06_00167540, moby + 0x10) < 32.0f) {
             data[9] += frame_time + frame_time;
@@ -354,7 +354,7 @@ void update_hit_triggered_moby_breakup(char *self) {
             MOBY(spawned_moby)->draw_dist = 0xFF;
             qcopy(spawned_moby + 0x10, self + 0x10);
             qcopy(spawned_moby + 0x40, self + 0x40);
-            *(long *)(spawned_moby + 0x38) = *(long *)(self + 0x38);
+            MOBY(spawned_moby)->spawn_frame = *(long *)(self + 0x38);
             update_entity(spawned_moby);
         }
         mark_moby_for_removal(self);

@@ -32,7 +32,7 @@ char *spawn_blarg_elite_commando_rocket(char *owner, float *initial_movement_vec
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(unsigned long *)(moby + 0x38) = *(unsigned long *)(owner + 0x38);
+        MOBY(moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
         MOBY(moby)->scale = MOBY(moby)->scale * 3.0f;
         qcopy(moby + 0x10, spawn_position);
         data = ((char *)MOBY(moby)->pvars);
@@ -127,7 +127,7 @@ char *spawn_class_32_moby(char *owner, char *initial_movement_vector, void *spaw
         MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         spawned_moby[0x20] = 0;
-        *(unsigned long *)(spawned_moby + 0x38) = *(unsigned long *)(owner + 0x38);
+        MOBY(spawned_moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
         MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 3.0f;
         qcopy(spawned_moby + 0x10, spawn_position);
         moby_data = ((char *)MOBY(spawned_moby)->pvars);

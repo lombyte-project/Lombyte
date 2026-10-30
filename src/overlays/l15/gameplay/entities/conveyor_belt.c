@@ -886,7 +886,7 @@ char *spawn_codebot_slot_effect(char *spawn_position, char *spawn_rotation) {
         MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
         qcopy(spawned_moby + 0x10, saved_position);
-        *(OvlQuad *)(spawned_moby + 0x40) = *(OvlQuad *)(saved_spawn_position_and_rotation + 0x10);
+        *(OvlQuad *)&MOBY(spawned_moby)->rot = *(OvlQuad *)(saved_spawn_position_and_rotation + 0x10);
         upd_a(spawned_moby);
     }
     return spawned_moby;

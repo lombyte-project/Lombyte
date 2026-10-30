@@ -2670,9 +2670,9 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
             if (MOBY(attached_moby)->pos.z > 1001.0f)
                 MOBY(attached_moby)->pos.z = 1001.0f;
             qcopy(attached_moby + 0x40, &parent_moby->rot);
-            *(OvlQuad *)(attached_moby + 0xC0) = *(OvlQuad *)&parent_moby->rot_row0;
-            *(OvlQuad *)(attached_moby + 0xD0) = *(OvlQuad *)&parent_moby->rot_row1;
-            *(OvlQuad *)(attached_moby + 0xE0) = *(OvlQuad *)&parent_moby->rot_row2;
+            *(OvlQuad *)&MOBY(attached_moby)->rot_row0 = *(OvlQuad *)&parent_moby->rot_row0;
+            *(OvlQuad *)&MOBY(attached_moby)->rot_row1 = *(OvlQuad *)&parent_moby->rot_row1;
+            *(OvlQuad *)&MOBY(attached_moby)->rot_row2 = *(OvlQuad *)&parent_moby->rot_row2;
         }
     }
     attachment_joint_index = attachment_joint_indices_by_command[parent_moby->command];
@@ -2698,9 +2698,9 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
             if (MOBY(attached_moby)->pos.z > 1001.0f)
                 MOBY(attached_moby)->pos.z = 1001.0f;
             qcopy(attached_moby + 0x40, &parent_moby->rot);
-            *(OvlQuad *)(attached_moby + 0xC0) = *(OvlQuad *)&parent_moby->rot_row0;
-            *(OvlQuad *)(attached_moby + 0xD0) = *(OvlQuad *)&parent_moby->rot_row1;
-            *(OvlQuad *)(attached_moby + 0xE0) = *(OvlQuad *)&parent_moby->rot_row2;
+            *(OvlQuad *)&MOBY(attached_moby)->rot_row0 = *(OvlQuad *)&parent_moby->rot_row0;
+            *(OvlQuad *)&MOBY(attached_moby)->rot_row1 = *(OvlQuad *)&parent_moby->rot_row1;
+            *(OvlQuad *)&MOBY(attached_moby)->rot_row2 = *(OvlQuad *)&parent_moby->rot_row2;
         }
     } else {
         if (*(char **)(attachment_data + 0xF0) != 0 && *(unsigned char *)(*(char **)(attachment_data + 0xF0) + 0x20) != 0xFE &&
@@ -2713,9 +2713,9 @@ void update_moby_joint_attachments(struct Moby *parent_moby, char *attachment_da
     if (pose_follower_moby != 0) {
         qcopy(pose_follower_moby + 0x10, &parent_moby->pos);
         qcopy(pose_follower_moby + 0x40, &parent_moby->rot);
-        *(OvlQuad *)(pose_follower_moby + 0xC0) = *(OvlQuad *)&parent_moby->rot_row0;
-        *(OvlQuad *)(pose_follower_moby + 0xD0) = *(OvlQuad *)&parent_moby->rot_row1;
-        *(OvlQuad *)(pose_follower_moby + 0xE0) = *(OvlQuad *)&parent_moby->rot_row2;
+        *(OvlQuad *)&MOBY(pose_follower_moby)->rot_row0 = *(OvlQuad *)&parent_moby->rot_row0;
+        *(OvlQuad *)&MOBY(pose_follower_moby)->rot_row1 = *(OvlQuad *)&parent_moby->rot_row1;
+        *(OvlQuad *)&MOBY(pose_follower_moby)->rot_row2 = *(OvlQuad *)&parent_moby->rot_row2;
     }
 }
 /* springs a moby's pitch and yaw toward targets and clamps the pitch */
@@ -2898,7 +2898,7 @@ void detach_moby_joint_attachment(void *unused, char *parent_data, int child_slo
         random_half_range = random_half_range * 3.1415927f;
         random_third_angle_step = random_float_between(-random_half_range, random_half_range);
         *(float *)(data + 0x38) = random_third_angle_step;
-        *(long *)(moby + 0x38) = 0x40404000000000L;
+        MOBY(moby)->spawn_frame = 0x40404000000000L;
         MOBY(moby)->hit_slot = 0xFF;
         *slot = 0;
     }

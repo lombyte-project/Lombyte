@@ -2657,7 +2657,7 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
             MOBY(spawned_moby)->draw_dist = 0x40;
             spawned_moby[0x31] = 1;
             spawned_moby[0x30] = 0x40;
-            *(long *)(spawned_moby + 0x38) = *(long *)(moby + 0x38);
+            MOBY(spawned_moby)->spawn_frame = ((long)MOBY(moby)->spawn_frame);
             MOBY(spawned_moby)->rot.x = random_angle_radians();
             MOBY(spawned_moby)->rot.y = random_angle_radians();
             MOBY(spawned_moby)->rot.z = random_angle_radians();

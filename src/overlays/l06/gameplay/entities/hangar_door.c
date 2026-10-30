@@ -3207,7 +3207,7 @@ void update_moby_pair_transforms(char *moby) {
         *(char **)(data + 0x40) = (char *)create_moby(0x41f);
         *(unsigned short *)(*(char **)(data + 0x40) + 0x32) = 0x40;
         (*(char **)(data + 0x40))[0x31] = 1;
-        *(long *)(*(char **)(data + 0x40) + 0x38) = *(long *)(moby + 0x38);
+        *(long *)(*(char **)(data + 0x40) + 0x38) = ((long)MOBY(moby)->spawn_frame);
         *(unsigned short *)(*(char **)(data + 0x40) + 0x34) = MOBY(moby)->flags;
         child = *(char **)(data + 0x40) + 0x10;
         qcopy(child, moby + 0x10);

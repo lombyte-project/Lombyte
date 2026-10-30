@@ -21,7 +21,7 @@ char *spawn_destruction_replacement_moby(struct Moby *owner) {
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
         MOBY(moby)->rot.z = owner->rot.z;
-        *(long *)(moby + 0x38) = owner->spawn_frame;
+        MOBY(moby)->spawn_frame = owner->spawn_frame;
         qcopy(moby + 0x10, &owner->pos);
         MOBY(moby)->pos.z = 59.0f;
         update_entity(moby);

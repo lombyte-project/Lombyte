@@ -113,7 +113,7 @@ char *spawn_racer_child(char *owner) {
         moby[0x20] = 2;
         qcopy(moby + 0x10, owner + 0x10);
         qcopy(moby + 0x40, owner + 0x40);
-        *(unsigned long *)(moby + 0x38) = *(unsigned long *)(owner + 0x38);
+        MOBY(moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
         update_entity(moby);
     }
     return moby;
@@ -2052,7 +2052,7 @@ void extermitank_update(unsigned char *moby) {
         attach_manipulator((char *)moby, 1, (unsigned char *)(data + 0x130));
         MOBY(moby)->flags |= 0x1000;
         g = ((char *)&D_0013F350);
-        *(long *)(moby + 0x38) = *(long *)(*(char **)(g + 0x2080) + 0x38);
+        MOBY(moby)->spawn_frame = *(long *)(*(char **)(g + 0x2080) + 0x38);
         FUN_L01_0026d930(data + 0x70);
         *(float *)(data + 0x7C) = 2.0f;
         *(float *)(data + 0x78) = 4.0f;

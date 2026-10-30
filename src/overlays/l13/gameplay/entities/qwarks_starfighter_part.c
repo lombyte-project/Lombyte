@@ -1117,9 +1117,9 @@ char *spawn_moby_joint_attachment(char *parent_moby, int attachment_joint_index,
         *(char **)(data + 0x3C) = parent_moby;
         update_entity(moby);
         qcopy(moby + 0x40, parent_moby + 0x40);
-        *(OvlQuad *)(moby + 0xC0) = *(OvlQuad *)(parent_moby + 0xC0);
-        *(OvlQuad *)(moby + 0xD0) = *(OvlQuad *)(parent_moby + 0xD0);
-        *(OvlQuad *)(moby + 0xE0) = *(OvlQuad *)(parent_moby + 0xE0);
+        *(OvlQuad *)&MOBY(moby)->rot_row0 = *(OvlQuad *)&MOBY(parent_moby)->rot_row0;
+        *(OvlQuad *)&MOBY(moby)->rot_row1 = *(OvlQuad *)&MOBY(parent_moby)->rot_row1;
+        *(OvlQuad *)&MOBY(moby)->rot_row2 = *(OvlQuad *)&MOBY(parent_moby)->rot_row2;
         *(int *)(data + 0x40) = scale_game_frames(0x258);
         update_entity(moby);
     }

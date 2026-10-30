@@ -88,7 +88,7 @@ void *spawn_joint_aligned_moby_part(struct Moby *parent, int oClass, int joint, 
         MOBY(child_moby)->draw_dist = 0xFF;
         child_moby[0x31] = 1;
         MOBY(child_moby)->flags |= 0x4000;
-        *(long *)(child_moby + 0x38) = *(long *)(*(char **)(D_0013E533 + 0x2E9D) + 0x38);
+        MOBY(child_moby)->spawn_frame = *(long *)(*(char **)(D_0013E533 + 0x2E9D) + 0x38);
         qcopy(child_moby + 0x40, &parent->rot);
         moby_point_position(child_moby, joint, child_joint_position);
         moby_point_position(parent, pjoint, parent_joint_position);
