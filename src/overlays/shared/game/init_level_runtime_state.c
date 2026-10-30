@@ -66,8 +66,8 @@ void       append_level_item_if_absent(int i) __asm__("FUN_L00_0023d3d8");
 
 void init_level_item_inventory(void) {
     int           j;
-    int           item;
-    unsigned char entry;
+    int           inventory_item_id;
+    unsigned char packed_inventory_entry;
     if (current_level_index >= 19) {
         int i;
         for (i = 0; i < 37; i++) {
@@ -75,31 +75,31 @@ void init_level_item_inventory(void) {
             items_acquired[i] = 1;
         }
         {
-            int entry0 = 0x4A;
-            int entry1 = 0x50;
-            int entry2 = 0x4F;
-            int entry3 = 0x54;
-            int entry4 = 0x51;
-            int entry5 = 0x4E;
-            int entry6 = 0x4B;
-            int entry7 = 0x52;
-            int entry8 = 0x4D;
-            int entry9 = 0x59;
-            int entry10 = 0x58;
-            int entry11 = 0x53;
+            int packed_item_10_entry = 0x4A;
+            int packed_item_16_entry = 0x50;
+            int packed_item_15_entry = 0x4F;
+            int packed_item_20_entry = 0x54;
+            int packed_item_17_entry = 0x51;
+            int packed_item_14_entry = 0x4E;
+            int packed_item_11_entry = 0x4B;
+            int packed_item_18_entry = 0x52;
+            int packed_item_13_entry = 0x4D;
+            int packed_item_25_entry = 0x59;
+            int packed_item_24_entry = 0x58;
+            int packed_item_19_entry = 0x53;
             pause_iop_sprite_lists[0] = 15;
-            D_0015EDD0[0] = entry0;
-            D_0015EDD0[1] = entry1;
-            D_0015EDD0[2] = entry2;
-            D_0015EDD0[3] = entry3;
-            D_0015EDD0[4] = entry4;
-            D_0015EDD0[5] = entry5;
-            D_0015EDD0[6] = entry6;
-            D_0015EDD0[7] = entry7;
-            D_0015EDD0[8] = entry8;
-            D_0015EDD0[9] = entry9;
-            D_0015EDD0[10] = entry10;
-            D_0015EDD0[11] = entry11;
+            D_0015EDD0[0] = packed_item_10_entry;
+            D_0015EDD0[1] = packed_item_16_entry;
+            D_0015EDD0[2] = packed_item_15_entry;
+            D_0015EDD0[3] = packed_item_20_entry;
+            D_0015EDD0[4] = packed_item_17_entry;
+            D_0015EDD0[5] = packed_item_14_entry;
+            D_0015EDD0[6] = packed_item_11_entry;
+            D_0015EDD0[7] = packed_item_18_entry;
+            D_0015EDD0[8] = packed_item_13_entry;
+            D_0015EDD0[9] = packed_item_25_entry;
+            D_0015EDD0[10] = packed_item_24_entry;
+            D_0015EDD0[11] = packed_item_19_entry;
             pause_iop_sprite_lists[1] = 12;
             pause_iop_sprite_lists[2] = 13;
             pause_iop_sprite_lists[3] = 11;
@@ -116,13 +116,13 @@ void init_level_item_inventory(void) {
             D_00141660_23d028[0] = 10;
         }
         for (i = 0; i < 12; i++) {
-            entry = D_0015EDD0[i];
-            if (entry != 0xFF) {
-                item = entry & 0x3F;
-                if (item != 10) {
-                    for (j = 0; j < 19 && D_L00_001C3E98[j] != item; j++)
+            packed_inventory_entry = D_0015EDD0[i];
+            if (packed_inventory_entry != 0xFF) {
+                inventory_item_id = packed_inventory_entry & 0x3F;
+                if (inventory_item_id != 10) {
+                    for (j = 0; j < 19 && D_L00_001C3E98[j] != inventory_item_id; j++)
                         ;
-                    if (j == 19 || item == 0)
+                    if (j == 19 || inventory_item_id == 0)
                         D_0015EDD0[i] = 0xFF;
                 }
             }
