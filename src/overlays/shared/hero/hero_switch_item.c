@@ -2950,20 +2950,20 @@ void turn_hero_toward_transformed_move_direction(int   rotation_direction,
 
                                                  float z) {
     V4_211d78 transformed_direction;
-    float     out;
+    float     yaw_turn_increment;
     float     zero = 0.0f;
     float     transformed_direction_angle;
     transform_vector(transformed_direction, &hero.motion.move_dir, hero.inv_rot_matrix);
     transformed_direction_angle = fast_arc_tan(transformed_direction[0], transformed_direction[1]);
-    out = zero;
-    hero.motion.yaw_error = spring_angle((char *)&out,
+    yaw_turn_increment = zero;
+    hero.motion.yaw_error = spring_angle((char *)&yaw_turn_increment,
                                          (char *)&hero.motion.yaw_rate,
                                          rotation_direction,
                                          transformed_direction_angle,
                                          x,
                                          y,
                                          z);
-    apply_hero_rotation_offset(zero, zero, out);
+    apply_hero_rotation_offset(zero, zero, yaw_turn_increment);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002124E8), where it is exact; names translated to the US level program. */
