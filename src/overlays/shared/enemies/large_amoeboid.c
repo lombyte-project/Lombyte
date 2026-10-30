@@ -850,7 +850,7 @@ char *activate_smaller_amoeboid(void *source_moby) {
 
 /* Nearest live entity of type 0x26F in list idx within 120 units of self, or 0. */
 
-char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) {
+char *find_nearest_class_26f_moby_in_list(char *reference_moby, int candidate_list_index) {
     short *list = l01_moby_index_lists_by_group[candidate_list_index];
     float  best = 120.0f;
     char  *nearest_entity = 0;
@@ -863,7 +863,7 @@ char *find_nearest_class_26f_moby_in_list(char *self, int candidate_list_index) 
             if ((*(Ent **)&D_L01_0015FFD8)[i].type == 0x26F) {
                 if ((*(Ent **)&D_L01_0015FFD8)[i].state < 0x7F) {
                     float candidate_distance =
-                        fast_vec_dist((*(Ent **)&D_L01_0015FFD8)[i].pos, self + 0x10);
+                        fast_vec_dist((*(Ent **)&D_L01_0015FFD8)[i].pos, reference_moby + 0x10);
                     if (candidate_distance < best) {
                         best = candidate_distance;
                         nearest_entity = D_L01_0015FFD8 + (i << 8);
