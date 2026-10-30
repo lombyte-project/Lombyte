@@ -6,8 +6,9 @@
 
 /* A 0x80-byte cuboid of the level's cuboid table: three axes scaled to its
    size, its position, the basis that takes a point into its space, and its
-   rotation. Cameras, lifts and taxi stops take their position and rotation
-   from one. */
+   rotation. A point offset from pos and taken through to_local lies in
+   [-1, 1] on each axis inside the cuboid. Cameras, lifts and taxi stops take
+   their position and rotation from one. */
 typedef struct {
     Vec4f axes[3];      /* 0x00 */
     Vec4f pos;          /* 0x30 */
@@ -19,5 +20,6 @@ typedef struct {
 extern LevelCuboid *l01_cuboids __asm__("D_L01_001600EC");
 extern LevelCuboid *l05_cuboids __asm__("D_L05_001600EC");
 extern LevelCuboid *l06_cuboids __asm__("D_L06_001600EC");
+extern LevelCuboid *l10_cuboids __asm__("D_L10_001600EC");
 
 #endif /* LOMBYTE_RNC_OVERLAY_CUBOID_H */

@@ -1,6 +1,6 @@
 /* Level 10 moby classes: screamer, toxic_crab, blarg_ship, nanotech_upgrade_vendor, gun, gate_1, gate_2. */
 #include "types.h"
-#include "rnc/overlay/level_volume.h"
+#include "rnc/overlay/cuboid.h"
 #include "rnc/overlay/level_save_state.h"
 
 #include "rnc/overlay/level_globals.h"
@@ -377,10 +377,10 @@ void update_screamer_hit_reactions_and_targeting(struct Moby *moby) {
     if (data->f174 == 2) {
         target_selection_status = ahead_f(data->f180, moby, data->fC0);
         if (target_selection_status != 2) {
-            LevelVolume *bp = &l10_volumes[data->f194];
-            fast_vec_sub(relative_offset, D_0013F3D0, &bp->origin);
+            LevelCuboid *bp = &l10_cuboids[data->f194];
+            fast_vec_sub(relative_offset, D_0013F3D0, &bp->pos);
             relative_offset[3] = 0.0f;
-            transform_vector_by_basis(transformed_offset, relative_offset, bp->inv_axis);
+            transform_vector_by_basis(transformed_offset, relative_offset, bp->to_local);
             if (transformed_offset[0] <= -1.0f || 0.0f <= transformed_offset[0] || transformed_offset[1] <= -1.0f || 1.0f <= transformed_offset[1] || transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2]) data->f104 = 2;
         }
     } else if (moby->state == 1 && data->f18C >= 0) {
@@ -533,7 +533,7 @@ void FUN_L10_002e01a8(Moby *moby) {
             scratch[1] = fast_sin(random_angle_radians()) * 10.0f;
             moby->state = 9;
             scratch[2] = 0.0f;
-            moby->pos.z = l10_volumes[vars->f194].origin.f[2];
+            moby->pos.z = l10_cuboids[vars->f194].pos.z;
             add_vectors(&scratch[4], &moby->pos, scratch);
             vars->height_offset = random_float_between(0.0f, D_L10_00161E14);
             vars->height_timer = truncate_float_to_s32(scale_time(D_L10_00161E18 * 60.0f) * random_float_between(0.75f, 1.25f));
@@ -713,7 +713,7 @@ void FUN_L10_002e01a8(Moby *moby) {
             vars->height_offset = random_float_between(0.0f, D_L10_00161E14);
             vars->height_timer = truncate_float_to_s32(scale_time(D_L10_00161E18 * 60.0f) * random_float_between(0.75f, 1.25f));
         }
-        climb = l10_volumes[vars->f194].origin.f[2] - moby->pos.z - vars->height_offset;
+        climb = l10_cuboids[vars->f194].pos.z - moby->pos.z - vars->height_offset;
         if (frame_time + frame_time < climb) {
             climb = frame_time + frame_time;
         } else if (climb < frame_time * -2.0f) {
@@ -738,7 +738,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.z = 0.0f;
-        climb = l10_volumes[vars->f194].origin.f[2] - moby->pos.z;
+        climb = l10_cuboids[vars->f194].pos.z - moby->pos.z;
         if (frame_time * 4.0f < climb) {
             climb = frame_time * 4.0f;
         } else if (climb < frame_time * -4.0f) {
@@ -747,7 +747,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         vars->velocity.z = climb;
         func_L00_00259B08_2E0630(moby, &vars->velocity, 0.5f, 0x200, 0.0f, 0);
         if (dist < D_L10_00161DFC
-            && absolute_float(l10_volumes[vars->f194].origin.f[2] - moby->pos.z) < 1.0f) {
+            && absolute_float(l10_cuboids[vars->f194].pos.z - moby->pos.z) < 1.0f) {
             allocate_voice_for_target_entry(0, 0, moby);
             moby->state = 11;
             if (moby->prev_seq != 2) blend_moby_animation(moby, 2, 0, scale_game_frames(2));
@@ -769,7 +769,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 6.0f);
         vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 6.0f);
         vars->velocity.z = 0.0f;
-        climb = l10_volumes[vars->f194].origin.f[2] - moby->pos.z;
+        climb = l10_cuboids[vars->f194].pos.z - moby->pos.z;
         if (frame_time * 3.0f < climb) {
             climb = frame_time * 3.0f;
         } else if (climb < frame_time * -3.0f) {
@@ -806,7 +806,7 @@ void FUN_L10_002e01a8(Moby *moby) {
         vars->velocity.x = fast_cos(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.y = fast_sin(moby->rot.z) * (frame_time * 4.0f);
         vars->velocity.z = 0.0f;
-        climb = l10_volumes[vars->f194].origin.f[2] - moby->pos.z;
+        climb = l10_cuboids[vars->f194].pos.z - moby->pos.z;
         if (frame_time * 3.0f < climb) {
             climb = frame_time * 3.0f;
         } else if (climb < frame_time * -3.0f) {
@@ -974,10 +974,10 @@ void update_class_1199_hit_reactions_and_targeting(struct Moby *moby)
     if (data->f174 == 2) {
         target_selection_status = ahead_f(data->f180, moby, data->fC0);
         if (target_selection_status != 2) {
-            LevelVolume *bp = &l10_volumes[data->f194];
-            fast_vec_sub(vector_scratch, D_0013F3D0, &bp->origin);
+            LevelCuboid *bp = &l10_cuboids[data->f194];
+            fast_vec_sub(vector_scratch, D_0013F3D0, &bp->pos);
             vector_scratch[3] = 0.0f;
-            transform_vector_by_basis(transformed_offset, vector_scratch, bp->inv_axis);
+            transform_vector_by_basis(transformed_offset, vector_scratch, bp->to_local);
             if (transformed_offset[0] <= -1.0f || 1.0f <= transformed_offset[0] || transformed_offset[1] <= -1.0f || 1.0f <= transformed_offset[1] || transformed_offset[2] <= -1.0f || 1.0f <= transformed_offset[2]) {
                 data->f104 = 2;
             }
