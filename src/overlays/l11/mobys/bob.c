@@ -131,21 +131,21 @@ void bob_update(WatcherMoby *moby) {
             fast_vec_add(moby_vars->target, moby_vars->target, moby->position);
         }
         if (moby_vars->moving_timer) {
-            qcopy(scratch.target, hero.motion.body_center.f);
+            qcopy(look_tracking_vectors.target, hero.motion.body_center.f);
             rate = 0.04f;
             head_rate = 0.3f;
         } else {
-            qcopy(scratch.target, moby_vars->target);
+            qcopy(look_tracking_vectors.target, moby_vars->target);
         }
     }
     if (tracking) {
         float yaw;
         float pitch;
-        qcopy(scratch.eye, moby->position);
-        scratch.eye[2] += 1.0f;
-        fast_vec_sub(scratch.delta, scratch.target, scratch.eye);
-        yaw = fast_subtract_rotations(fast_arc_tan(scratch.delta[0], scratch.delta[1]), moby->yaw);
-        pitch = -fast_arc_tan(vector_length_xy(scratch.delta), scratch.delta[2]);
+        qcopy(look_tracking_vectors.eye, moby->position);
+        look_tracking_vectors.eye[2] += 1.0f;
+        fast_vec_sub(look_tracking_vectors.delta, look_tracking_vectors.target, look_tracking_vectors.eye);
+        yaw = fast_subtract_rotations(fast_arc_tan(look_tracking_vectors.delta[0], look_tracking_vectors.delta[1]), moby->yaw);
+        pitch = -fast_arc_tan(vector_length_xy(look_tracking_vectors.delta), look_tracking_vectors.delta[2]);
         if (yaw > 1.5707964f)
             yaw = 1.5707964f;
         else if (yaw < -1.5707964f)
