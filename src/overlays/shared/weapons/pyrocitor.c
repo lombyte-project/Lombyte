@@ -802,13 +802,13 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
     int            i;
 
     for (i = 0; i < 15; i++) {
-        char *entry = *(char **)(slots_base - (-(i * 4)));
-        if (entry == 0) {
+        char *flame_effect = *(char **)(slots_base - (-(i * 4)));
+        if (flame_effect == 0) {
             continue;
         }
-        if (*(unsigned char *)entry == 0xC && entry[1] >= 0) {
-            float hit_sphere_radius = *(float *)(entry + 0xC) / 210000.0f * 0.5f;
-            char *entry_direction_vector = entry + 0x20;
+        if (*(unsigned char *)flame_effect == 0xC && flame_effect[1] >= 0) {
+            float hit_sphere_radius = *(float *)(flame_effect + 0xC) / 210000.0f * 0.5f;
+            char *entry_direction_vector = flame_effect + 0x20;
             int   sub_type;
             set_vector_length_xy(hit_direction_vector, entry_direction_vector, 1.0f);
             hit_direction_vector[2] = 1.0f;
@@ -821,8 +821,8 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
             *(unsigned char *)(hit_descriptor + 0x18) = 5;
             *(unsigned char *)(hit_descriptor + 0x19) = 1;
             *(unsigned short *)(hit_descriptor + 0x1A) = ((unsigned short)MOBY(moby)->oclass);
-            collect_mobies_in_sphere((entry + 0x10), hit_sphere_radius, 0, moby, hit_descriptor);
-            sub_type = *(short *)(entry + 0xA);
+            collect_mobies_in_sphere((flame_effect + 0x10), hit_sphere_radius, 0, moby, hit_descriptor);
+            sub_type = *(short *)(flame_effect + 0xA);
             if (sub_type == 10) {
                 int j;
                 for (j = 0; j < *(int *)&pyrocitor_spark_burst_count_gp; j++) {
@@ -856,7 +856,7 @@ void update_pyrocitor_flame_effect_slots(char *moby) {
                         (float)*(int *)&pyrocitor_spark_random_frame_count_min_gp,
                         (float)*(int *)&pyrocitor_spark_random_frame_count_max_gp)));
                     FUN_L00_00257d78(spark_position, 0.0f, hit_sphere_radius + hit_sphere_radius);
-                    fast_vec_add(spark_position, spark_position, (entry + 0x10));
+                    fast_vec_add(spark_position, spark_position, (flame_effect + 0x10));
                     spawn_spark(spark_position,
                                 qv,
                                 spark_random_vector,
