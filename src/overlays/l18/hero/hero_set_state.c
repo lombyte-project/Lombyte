@@ -70,7 +70,7 @@ extern char hero_trail_jump_velocity_key_profile[] __asm__("D_L18_0017C920");
 extern char hero_water_surface_jump_velocity_key_profile[] __asm__("D_L18_0017C960");
 
 int hero_set_state(int a, int b) {
-    int   old2088;
+    int   previous_state_step;
     char *moby;
     int   old20A7;
     float grind_direction_or_jump_probe_position[4];
@@ -90,7 +90,7 @@ int hero_set_state(int a, int b) {
     }
     {
         struct Hero *p = &hero;
-        old2088 = p->state.step;
+        previous_state_step = p->state.step;
         moby = ((char *)p->moby);
         old20A7 = p->item_select_blocked;
         p->state.prev2 = p->state.prev;
@@ -1003,7 +1003,7 @@ int hero_set_state(int a, int b) {
         struct Hero *p = &hero;
         if (p->jump_lock_timer != 0) {
             p->state.current = p->state.prev;
-            p->state.step = old2088;
+            p->state.step = previous_state_step;
             p->state_timer = p->state.prev_timer;
             return 0;
         }
