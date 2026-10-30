@@ -120,12 +120,12 @@ void update_help_hints(Moby *moby) {
                     is_point_inside_clip_volume(((char *)&D_0013F3D0), tutorial_trigger_vars->f38) != 0) {
                     Hero *hero = (Hero *)(((char *)&D_0013F3D0 - 0x80));
                     if (hero->state.prev == 0x3B && hero->state_timer == 0) {
-                        Moby *other;
-                        for (other = D_L04_00160064_2E57F8; other != 0; other = other->next) {
-                            if (other->oclass == 0x118 &&
-                                fast_vec_dist(((float *)&other->pos), ((char *)&D_0013F3D0)) <
+                        Moby *hint_candidate_moby;
+                        for (hint_candidate_moby = D_L04_00160064_2E57F8; hint_candidate_moby != 0; hint_candidate_moby = hint_candidate_moby->next) {
+                            if (hint_candidate_moby->oclass == 0x118 &&
+                                fast_vec_dist(((float *)&hint_candidate_moby->pos), ((char *)&D_0013F3D0)) <
                                     3.0f &&
-                                *(float *)*(void **)&other->pvars != 1.0f) {
+                                *(float *)*(void **)&hint_candidate_moby->pvars != 1.0f) {
                                 tutorial_trigger_vars->f20++;
                                 if (tutorial_trigger_vars->f20 == 3 || tutorial_trigger_vars->f20 == 6) {
                                     help_request(0x3EE, 0x42);
