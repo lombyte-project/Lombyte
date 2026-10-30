@@ -127,7 +127,7 @@ void update_reflection_mesh_pair(struct Moby *moby) {
     int    i, j;
     float  maxx, maxy, maxz, minx, miny, minz;
     float  vertex_position[4];
-    float *out;
+    float *two_mesh_bounding_sphere_components;
     float *verts;
     int    count;
     switch (moby->state) {
@@ -158,8 +158,8 @@ void update_reflection_mesh_pair(struct Moby *moby) {
                 }
             }
             {
-                L16SingleSphere_2e98e0 *base = D_L16_00161F60_bounds_2e98e0;
-                L16SingleSphere_2e98e0 *sphere = base + i;
+                L16SingleSphere_2e98e0 *two_mesh_bounding_spheres = D_L16_00161F60_bounds_2e98e0;
+                L16SingleSphere_2e98e0 *sphere = two_mesh_bounding_spheres + i;
                 sphere->radius = 0.0f;
                 sphere->x = (maxx + minx) * 0.5f;
                 sphere->y = (maxy + miny) * 0.5f;
@@ -167,16 +167,16 @@ void update_reflection_mesh_pair(struct Moby *moby) {
             }
             for (j = 0; j < ((int *)&reflection_mesh_pair_vertex_counts)[i]; j++) {
                 float vertex_to_center_distance;
-                out = (float *)(D_L16_00161F60_bounds_2e98e0 + i);
+                two_mesh_bounding_sphere_components = (float *)(D_L16_00161F60_bounds_2e98e0 + i);
                 vertex_position[0] =
                     ((float **)&reflection_mesh_pair_position_tables)[i][j * 3 + 0];
                 vertex_position[1] =
                     ((float **)&reflection_mesh_pair_position_tables)[i][j * 3 + 1];
                 vertex_position[2] =
                     ((float **)&reflection_mesh_pair_position_tables)[i][j * 3 + 2];
-                vertex_to_center_distance = fast_vec_dist(vertex_position, out);
-                if (vertex_to_center_distance > out[3])
-                    out[3] = vertex_to_center_distance;
+                vertex_to_center_distance = fast_vec_dist(vertex_position, two_mesh_bounding_sphere_components);
+                if (vertex_to_center_distance > two_mesh_bounding_sphere_components[3])
+                    two_mesh_bounding_sphere_components[3] = vertex_to_center_distance;
             }
         }
         moby->state = 1;
