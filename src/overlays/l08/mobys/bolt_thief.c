@@ -80,14 +80,14 @@ void bolt_thief_update(struct Moby *moby) __asm__("FUN_L08_002e2df0");
 void build_bolt_thief_target_list(struct Moby *moby) {
     char  *bolt_thief_vars = (char *)moby->pvars;
     int    oclass = 0x279;
-    char  *base = D_L08_0015FFD8;
+    char  *moby_array_base = D_L08_0015FFD8;
     int   *ids = (int *)(bolt_thief_vars + 0x130);
     char **output = (char **)(bolt_thief_vars + 0x158);
     int    i = 9;
     for (;;) {
-        char *other = (char *)((*ids << 8) + (unsigned int)base);
-        if (*(short *)(other + 0xA6) == oclass) {
-            *output++ = other;
+        char *candidate_target_moby = (char *)((*ids << 8) + (unsigned int)moby_array_base);
+        if (*(short *)(candidate_target_moby + 0xA6) == oclass) {
+            *output++ = candidate_target_moby;
         }
         --i;
         if (i < 0)
