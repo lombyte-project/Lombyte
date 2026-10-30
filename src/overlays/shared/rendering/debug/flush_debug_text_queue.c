@@ -142,12 +142,7 @@ void draw_debug_text(s32 x, s32 y, s32 color, s32 text_address) {
 #include "rnc/input/pad_state.h"
 #include "rnc/rendering/debug/debug_menu.h"
 extern struct PadStateWords D_0013C940;
-/* The debug camera state sits 0x140 bytes into this block. */
-typedef struct {
-    u8 unk0[0x140];
-    DebugCameraState camera;
-} DebugCameraBlock;
-extern DebugCameraBlock player_camera __asm__("D_L00_00166C80");
+#include "rnc/overlay/level_camera.h"
 extern void update_all_cameras(void) __asm__("FUN_001ec420");
 extern void reset_follow_camera_state_from_position(void *) __asm__("FUN_L00_002e6bf8");
 
@@ -183,64 +178,64 @@ void update_debug_camera(void) {
         if ((pad->buttons.held_pressed & 3) != 3) {
             if (D_0013C940.buttons.w.held & 0x1000) {
                 if (free_look) {
-                    fast_vec_normalize(&step, player_camera.camera.basis,
+                    fast_vec_normalize(&step, l00_camera.unk350,
                                  g_debug_menu.movement_speed);
-                    fast_vec_add(player_camera.camera.position,
-                                 player_camera.camera.position, &step);
+                    fast_vec_add(l00_camera.pos.f,
+                                 l00_camera.pos.f, &step);
                 } else {
-                    player_camera.camera.position[0] +=
-                        fast_cos(player_camera.camera.angles[2]) *
+                    l00_camera.pos.f[0] +=
+                        fast_cos(l00_camera.yaw) *
                         g_debug_menu.movement_speed;
-                    player_camera.camera.position[1] +=
-                        fast_sin(player_camera.camera.angles[2]) *
+                    l00_camera.pos.f[1] +=
+                        fast_sin(l00_camera.yaw) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 0x4000) {
                 if (free_look) {
-                    fast_vec_normalize(&step, player_camera.camera.basis,
+                    fast_vec_normalize(&step, l00_camera.unk350,
                                  g_debug_menu.movement_speed);
-                    fast_vec_sub(player_camera.camera.position,
-                                 player_camera.camera.position, &step);
+                    fast_vec_sub(l00_camera.pos.f,
+                                 l00_camera.pos.f, &step);
                 } else {
-                    player_camera.camera.position[0] -=
-                        fast_cos(player_camera.camera.angles[2]) *
+                    l00_camera.pos.f[0] -=
+                        fast_cos(l00_camera.yaw) *
                         g_debug_menu.movement_speed;
-                    player_camera.camera.position[1] -=
-                        fast_sin(player_camera.camera.angles[2]) *
+                    l00_camera.pos.f[1] -=
+                        fast_sin(l00_camera.yaw) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 1) {
                 if (free_look) {
-                    fast_vec_normalize(&step, player_camera.camera.basis + 4,
+                    fast_vec_normalize(&step, l00_camera.unk350 + 4,
                                  g_debug_menu.movement_speed);
-                    fast_vec_add(player_camera.camera.position,
-                                 player_camera.camera.position, &step);
+                    fast_vec_add(l00_camera.pos.f,
+                                 l00_camera.pos.f, &step);
                 } else {
-                    player_camera.camera.position[0] -=
-                        fast_sin(player_camera.camera.angles[2]) *
+                    l00_camera.pos.f[0] -=
+                        fast_sin(l00_camera.yaw) *
                         g_debug_menu.movement_speed;
-                    player_camera.camera.position[1] +=
-                        fast_cos(player_camera.camera.angles[2]) *
+                    l00_camera.pos.f[1] +=
+                        fast_cos(l00_camera.yaw) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
             }
             if (D_0013C940.buttons.w.held & 2) {
                 if (free_look) {
-                    fast_vec_normalize(&step, player_camera.camera.basis + 4,
+                    fast_vec_normalize(&step, l00_camera.unk350 + 4,
                                  g_debug_menu.movement_speed);
-                    fast_vec_sub(player_camera.camera.position,
-                                 player_camera.camera.position, &step);
+                    fast_vec_sub(l00_camera.pos.f,
+                                 l00_camera.pos.f, &step);
                 } else {
-                    player_camera.camera.position[0] +=
-                        fast_sin(player_camera.camera.angles[2]) *
+                    l00_camera.pos.f[0] +=
+                        fast_sin(l00_camera.yaw) *
                         g_debug_menu.movement_speed;
-                    player_camera.camera.position[1] -=
-                        fast_cos(player_camera.camera.angles[2]) *
+                    l00_camera.pos.f[1] -=
+                        fast_cos(l00_camera.yaw) *
                         g_debug_menu.movement_speed;
                 }
                 moved = 1;
@@ -276,12 +271,12 @@ void update_debug_camera(void) {
                 r[1].f[0] = sine;
                 r[0].f[0] = cosine;
                 r[1].f[1] = cosine;
-                copy_matrix_rotation(m, player_camera.camera.basis);
+                copy_matrix_rotation(m, l00_camera.unk350);
                 multiply_matrix(m, m, r);
-                copy_matrix3x4(player_camera.camera.basis, m);
+                copy_matrix3x4(l00_camera.unk350, m);
             } else {
-                player_camera.camera.angles[2] = fast_subtract_rotations(
-                    player_camera.camera.angles[2], g_debug_menu.yaw_speed);
+                l00_camera.yaw = fast_subtract_rotations(
+                    l00_camera.yaw, g_debug_menu.yaw_speed);
             }
         } else {
             g_debug_menu.yaw_speed = g_debug_menu.yaw_speed / 1.5f;
@@ -309,12 +304,12 @@ void update_debug_camera(void) {
             r[0].f[2] = sine;
             r[2].f[0] = -sine;
             r[2].f[2] = cosine;
-            copy_matrix_rotation(m, player_camera.camera.basis);
+            copy_matrix_rotation(m, l00_camera.unk350);
             multiply_matrix(m, m, r);
-            copy_matrix3x4(player_camera.camera.basis, m);
+            copy_matrix3x4(l00_camera.unk350, m);
         } else {
-            player_camera.camera.angles[1] = fast_subtract_rotations(
-                player_camera.camera.angles[1], g_debug_menu.pitch_speed);
+            l00_camera.pitch = fast_subtract_rotations(
+                l00_camera.pitch, g_debug_menu.pitch_speed);
         }
     } else {
         g_debug_menu.pitch_speed = g_debug_menu.pitch_speed / 1.5f;
@@ -343,9 +338,9 @@ void update_debug_camera(void) {
             r[1].f[2] = -sine;
             r[2].f[1] = sine;
             r[2].f[2] = cosine;
-            copy_matrix_rotation(m, player_camera.camera.basis);
+            copy_matrix_rotation(m, l00_camera.unk350);
             multiply_matrix(rolled_basis, m, r);
-            copy_matrix3x4(player_camera.camera.basis, rolled_basis);
+            copy_matrix3x4(l00_camera.unk350, rolled_basis);
         }
     } else {
         g_debug_menu.roll_speed = g_debug_menu.roll_speed / 1.5f;
@@ -371,29 +366,29 @@ void update_debug_camera(void) {
     {
         Vec4 r[3];
         if (free_look) {
-            fast_vec_normalize(&r[0], player_camera.camera.basis + 8, g_debug_menu.vertical_speed);
-            fast_vec_add(player_camera.camera.position, player_camera.camera.position,
+            fast_vec_normalize(&r[0], l00_camera.unk350 + 8, g_debug_menu.vertical_speed);
+            fast_vec_add(l00_camera.pos.f, l00_camera.pos.f,
                          &r[0]);
         } else {
-            player_camera.camera.position[2] += g_debug_menu.vertical_speed;
+            l00_camera.pos.f[2] += g_debug_menu.vertical_speed;
         }
         if (!free_look) {
-            euler_rotation_matrix(r, player_camera.camera.angles);
+            euler_rotation_matrix(r, &l00_camera.unk150);
             fast_vec_normalize(&r[0], &r[0], 1.0f);
             fast_vec_normalize(&r[1], &r[1], 1.0f);
             fast_vec_normalize(&r[2], &r[2], 1.0f);
-            copy_matrix3x4(player_camera.camera.basis, r);
+            copy_matrix3x4(l00_camera.unk350, r);
         }
     }
-    if (g_debug_menu.control_mode == 2 && player_camera.camera.target != 0) {
-        target = player_camera.camera.target;
-        qcopy(target->position, player_camera.camera.position);
-        qcopy(target->basis, player_camera.camera.basis);
-        qcopy(target->basis + 4, player_camera.camera.basis + 4);
-        qcopy(target->basis + 8, player_camera.camera.basis + 8);
-        qcopy(target->previous_basis, player_camera.camera.basis);
-        copy_vector3(target->camera_position, player_camera.camera.position);
-        reset_follow_camera_state_from_position(player_camera.camera.target);
+    if (g_debug_menu.control_mode == 2 && l00_camera.unk180 != 0) {
+        target = (DebugCameraTarget *)l00_camera.unk180;
+        qcopy(target->position, l00_camera.pos.f);
+        qcopy(target->basis, l00_camera.unk350);
+        qcopy(target->basis + 4, l00_camera.unk350 + 4);
+        qcopy(target->basis + 8, l00_camera.unk350 + 8);
+        qcopy(target->previous_basis, l00_camera.unk350);
+        copy_vector3(target->camera_position, l00_camera.pos.f);
+        reset_follow_camera_state_from_position(l00_camera.unk180);
     }
 }
 #include "qcopy.h"
@@ -405,17 +400,17 @@ extern B001f4490 D_L00_0016C058;
 void update_hero_from_debug_camera(void) __asm__("FUN_L00_001f4490");
 
 void update_hero_from_debug_camera(void) {
-    DebugCameraBlock *debug_camera_block = &player_camera;
+    LevelCamera *debug_camera_block = &l00_camera;
     B001f4490 *hero_camera_offsets = &D_L00_0016C058;
     struct Hero *hero_state;
     u8 *hero_moby;
-    f32 camera_to_hero_angle = fast_add_rotations(debug_camera_block->camera.angles[2], hero_camera_offsets->x88);
+    f32 camera_to_hero_angle = fast_add_rotations(debug_camera_block->yaw, hero_camera_offsets->x88);
     f32 angle_cosine = fast_cos(camera_to_hero_angle);
     hero_state = &hero;
-    hero_state->motion.pos.f[0] = debug_camera_block->camera.position[0] + angle_cosine * hero_camera_offsets->x8c;
-    hero_state->motion.pos.f[1] = debug_camera_block->camera.position[1] + fast_sin(camera_to_hero_angle) * hero_camera_offsets->x8c;
-    hero_state->motion.pos.f[2] = debug_camera_block->camera.position[2] + hero_camera_offsets->x90;
-    hero_state->motion.rot.f[2] = fast_add_rotations(debug_camera_block->camera.angles[2], hero_camera_offsets->x84);
+    hero_state->motion.pos.f[0] = debug_camera_block->pos.f[0] + angle_cosine * hero_camera_offsets->x8c;
+    hero_state->motion.pos.f[1] = debug_camera_block->pos.f[1] + fast_sin(camera_to_hero_angle) * hero_camera_offsets->x8c;
+    hero_state->motion.pos.f[2] = debug_camera_block->pos.f[2] + hero_camera_offsets->x90;
+    hero_state->motion.rot.f[2] = fast_add_rotations(debug_camera_block->yaw, hero_camera_offsets->x84);
     euler_rotation_matrix(hero_state, hero_state->motion.rot.f);
     hero_moby = *(u8 **)&hero_state->moby;
     qcopy(hero_moby + 0x10, &hero_state->motion.pos);
@@ -533,9 +528,9 @@ void update_debug_menu(void) {
                              level_view_context.background_color[2]);
         g_debug_menu.start_capture_status = 110;
         g_debug_menu.sample_capture_status = 110;
-        g_debug_menu.unknown_94 = (s32)player_camera.camera.position[0] >> 2;
-        g_debug_menu.unknown_98 = (s32)player_camera.camera.position[1] >> 2;
-        g_debug_menu.unknown_9c = (s32)player_camera.camera.position[2] >> 2;
+        g_debug_menu.unknown_94 = (s32)l00_camera.pos.f[0] >> 2;
+        g_debug_menu.unknown_98 = (s32)l00_camera.pos.f[1] >> 2;
+        g_debug_menu.unknown_9c = (s32)l00_camera.pos.f[2] >> 2;
         return;
     }
     row_counts = l00_debug_menu_column_row_counts;
@@ -598,14 +593,14 @@ void update_debug_menu(void) {
                 case DEBUG_CONTROL_MODE_CAPTURE_HERO_CAMERA_OFFSET:
                     g_debug_menu.update_flags = 0;
                     fast_vec_sub(scratch.sample.hero_offset, &hero.motion.pos,
-                                        player_camera.camera.position);
+                                        l00_camera.pos.f);
                     g_debug_menu.target_distance = vector_length_xy(scratch.sample.hero_offset);
                     g_debug_menu.target_angle = fast_subtract_rotations(
                         fast_arc_tan(scratch.sample.hero_offset[0], scratch.sample.hero_offset[1]),
-                        player_camera.camera.angles[2]);
-                    g_debug_menu.target_height = hero.motion.pos.f[2] - player_camera.camera.position[2];
+                        l00_camera.yaw);
+                    g_debug_menu.target_height = hero.motion.pos.f[2] - l00_camera.pos.f[2];
                     g_debug_menu.target_yaw =
-                        fast_subtract_rotations(hero.motion.rot.f[2], player_camera.camera.angles[2]);
+                        fast_subtract_rotations(hero.motion.rot.f[2], l00_camera.yaw);
                     break;
                 case DEBUG_CONTROL_MODE_ENABLE_SECOND_AND_THIRD_UPDATE_FLAGS:
                     g_debug_menu.update_flags = 6;
@@ -870,12 +865,12 @@ void update_debug_menu(void) {
                 if (count > 0) {
                     sample = occlusion_samples;
                     do {
-                        if (sample[0] < player_camera.camera.position[0] + 0.5f &&
-                            sample[0] > player_camera.camera.position[0] - 0.5f &&
-                            sample[1] < player_camera.camera.position[1] + 0.5f &&
-                            sample[1] > player_camera.camera.position[1] - 0.5f &&
-                            sample[2] < player_camera.camera.position[2] + 0.5f &&
-                            sample[2] > player_camera.camera.position[2] - 0.5f) {
+                        if (sample[0] < l00_camera.pos.f[0] + 0.5f &&
+                            sample[0] > l00_camera.pos.f[0] - 0.5f &&
+                            sample[1] < l00_camera.pos.f[1] + 0.5f &&
+                            sample[1] > l00_camera.pos.f[1] - 0.5f &&
+                            sample[2] < l00_camera.pos.f[2] + 0.5f &&
+                            sample[2] > l00_camera.pos.f[2] - 0.5f) {
                             found = 1;
                             break;
                         }
@@ -887,8 +882,8 @@ void update_debug_menu(void) {
                 break;
             sprintf(scratch.sample.path, path_format, directory, current_level_index,
                     occlusion_deltas_file_name, iso_version_suffix);
-            sprintf(scratch.sample.line, add_sample_format, fptodp(player_camera.camera.position[0]),
-                    fptodp(player_camera.camera.position[1]), fptodp(player_camera.camera.position[2]));
+            sprintf(scratch.sample.line, add_sample_format, fptodp(l00_camera.pos.f[0]),
+                    fptodp(l00_camera.pos.f[1]), fptodp(l00_camera.pos.f[2]));
             fd = sceOpen(scratch.sample.path, 0x303);
             if (fd >= 0) {
                 sceLseek(fd, 0, 2);
@@ -903,9 +898,9 @@ void update_debug_menu(void) {
                 fd = sceOpen(scratch.sample.path, 0x303);
                 if (fd >= 0) {
                     sceLseek(fd, 0, 2);
-                    sceWrite(fd, &player_camera.camera.position[0], 4);
-                    sceWrite(fd, &player_camera.camera.position[1], 4);
-                    sceWrite(fd, &player_camera.camera.position[2], 4);
+                    sceWrite(fd, &l00_camera.pos.f[0], 4);
+                    sceWrite(fd, &l00_camera.pos.f[1], 4);
+                    sceWrite(fd, &l00_camera.pos.f[2], 4);
                     sceLseek(fd, 0, 0);
                     size = sceLseek(fd, 0, 2);
                     if (size <= 0x100000) {
@@ -923,8 +918,8 @@ void update_debug_menu(void) {
             s32 fd;
             sprintf(scratch.start_point.path, level_file_path_format, level_directory, current_level_index,
                     occlusion_deltas_file_name, iso_version_suffix);
-            sprintf(scratch.start_point.line, start_point_format, fptodp(player_camera.camera.position[0]),
-                    fptodp(player_camera.camera.position[1]), fptodp(player_camera.camera.position[2]));
+            sprintf(scratch.start_point.line, start_point_format, fptodp(l00_camera.pos.f[0]),
+                    fptodp(l00_camera.pos.f[1]), fptodp(l00_camera.pos.f[2]));
             fd = sceOpen(scratch.start_point.path, 0x303);
             if (fd >= 0) {
                 sceLseek(fd, 0, 2);
