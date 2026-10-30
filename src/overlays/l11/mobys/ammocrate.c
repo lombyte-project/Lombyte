@@ -248,7 +248,7 @@ void ammocrate_update(struct Moby *pickup) {
 
 char *spawn_ship_pickup_child(struct Moby *owner) __asm__("FUN_L11_0030fd98");
 
-char *spawn_ship_pickup_child(struct Moby *owner) {
+char *spawn_ship_pickup_child(struct Moby *pickup_moby) {
     char *moby = create_moby(0x4C3);
     if (moby != 0) {
         char *child_private_data;
@@ -258,9 +258,9 @@ char *spawn_ship_pickup_child(struct Moby *owner) {
         moby[0x31] = 1;
         moby[0x20] = 0;
         moby[0xBC] = 0;
-        qcopy(moby + 0x10, &owner->pos);
-        qcopy(moby + 0x40, &owner->rot);
-        *(char **)(child_private_data + 0x70) = owner;
+        qcopy(moby + 0x10, &pickup_moby->pos);
+        qcopy(moby + 0x40, &pickup_moby->rot);
+        *(char **)(child_private_data + 0x70) = pickup_moby;
         if ((unsigned char)moby[0x53] != 2) {
             blend_moby_animation(moby, 2, 0xD, 0);
         }
