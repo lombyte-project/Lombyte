@@ -14,7 +14,7 @@ void build_axis_roll_matrix(void *out,
                             void *roll_axis_direction,
                             float roll) __asm__("FUN_L08_0026a0f8");
 
-void build_axis_roll_matrix(void *out, void *roll_axis_direction, float roll) {
+void build_axis_roll_matrix(void *roll_matrix_destination, void *roll_axis_direction, float roll) {
     float M[4][4];
     float Rz[4][4];
     float Ry[4][4];
@@ -49,5 +49,5 @@ void build_axis_roll_matrix(void *out, void *roll_axis_direction, float roll) {
     multiply_matrix(M, Rz, M);
     qcopy(working_direction, roll_axis_direction);
     transform_vector(working_direction, working_direction, M);
-    copy_matrix3x4(out, M);
+    copy_matrix3x4(roll_matrix_destination, M);
 }
