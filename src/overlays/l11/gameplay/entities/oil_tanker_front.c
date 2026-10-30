@@ -527,7 +527,6 @@ struct L11ChainVars {
 };
 
 extern float oil_tanker_path_progress_step_gp __asm__("D_L11_00162320") __attribute__((sda));
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 void update_oil_tanker_front_path_pose(struct Moby *moby) __asm__("FUN_L11_00317678");
@@ -754,7 +753,6 @@ extern char D_00141C18[];
 extern float D_L11_0015F580[] MACRO_ADDR;
 extern float oil_tanker_head_fragment_velocity_scale_gp __asm__("D_L11_00162330") __attribute__((sda));
 extern struct Moby *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10,
                        float *v11, float scale, float *v12);
@@ -972,7 +970,6 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                              float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L11_00319028_c(char *moby) __asm__("FUN_L11_00319028");
 extern void FUN_L11_003191c0_c(char *moby) __asm__("FUN_L11_003191c0");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 extern short energy_sphere_particle_scale_target_gp __asm__("D_L11_00162388") __attribute__((sda));
 void energy_sphere_update(unsigned char *moby) __asm__("FUN_L11_00318b30");
@@ -1500,7 +1497,6 @@ char *activate_listed_blarg_ship(int list) {
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern void allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void update_moby_list_empty_dialogue_trigger(struct Moby *moby) __asm__("FUN_L11_0031aa80");
 
@@ -1528,7 +1524,6 @@ void spawn_bubble_surface_effects(struct Moby *source_moby, float *ground, int s
 void spawn_bubble_surface_effects(struct Moby *m, float *ground, int n1, int n2) __asm__("FUN_L11_0031ae68");
 extern void FUN_L11_0031b098_c(char *) __asm__("FUN_L11_0031b098");
 unsigned char *FUN_L00_0026f080(void *pos, float *v, float x, float y);
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern char *func_L00_0026FF20_p(void *, float *, float, float) __asm__("FUN_L00_0026f080");
 
 extern short bubble_pre_surface_vertical_acceleration_gp __asm__("D_L11_00162400") __attribute__((sda));

@@ -390,7 +390,6 @@ typedef struct {
 } L14Player;
 extern float FUN_001f9b80_c(void *, void *) __asm__("FUN_001f9b80");
 extern float vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int FUN_001f9740_c(int *) __asm__("FUN_001f9740");
 extern int FUN_001fa6d0(float);
 extern void FUN_L00_002668a0_c(void *, void *) __asm__("FUN_L00_002668a0");

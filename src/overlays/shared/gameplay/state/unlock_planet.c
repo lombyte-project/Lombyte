@@ -228,7 +228,6 @@ int FUN_L00_00260400(int unused_subject_object, char *reference_object, void *in
 #include "rnc/overlay/quad.h"
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
 u8 *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
-void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *,
                                void *) __asm__("FUN_L00_00260668");
 void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
@@ -283,7 +282,6 @@ int convert_pose_to_reference_local(int x, char *reference_object, float *input_
     return 1;
 }
 typedef float M4[16] __attribute__((aligned(16)));
-void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 #include "qcopy.h"
 void update_entity_matrix(char *out, OvlQuad *pos, void *m1, void *m2) __asm__("FUN_L00_00260738");
 void update_entity_matrix(char *out, OvlQuad *position_delta, void *previous_rotation, void *current_rotation) {

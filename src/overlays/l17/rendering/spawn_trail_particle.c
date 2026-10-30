@@ -51,7 +51,6 @@ unsigned char *spawn_trail_particle(struct Moby *parent, void *pos, float *recor
 /* Ported from rac1-decomp (src/overlays/l17_fleet/partupd_00270A28.c: func_L17_00270C98), where it is exact; names translated to the US level program. */
 
 extern int FUN_001fa6e0_q(int, int, float) __asm__("FUN_001fa6e0");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern unsigned char *FUN_L00_002678b8_q(int) __asm__("FUN_L00_002678b8");
 
 unsigned char *create_drone_flight_trail_record(char *position_source, int mode, int step) __asm__("FUN_L17_0026fdd0");

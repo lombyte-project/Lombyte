@@ -427,7 +427,6 @@ extern void enter_hero_vehicle_mode(s32, s32, struct Moby *) __asm__("FUN_L00_00
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a10_215e58(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void update_hero_planar_distance_spring_motion(void) __asm__("FUN_L00_00221b68");
 extern void transform_hero_local_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_00233660");
@@ -574,7 +573,6 @@ skip:
 /* Select the message associated with the current help mode. */
 /* Ported from rac1-decomp (src/overlays/shared/help_001FFED0.c: func_L15_0021B2C8), where it is exact; names translated to the US level program. */
 
-extern int hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 
 void set_hero_state_for_vehicle_mode(void) __asm__("FUN_L15_0021ab60");
 

@@ -43,7 +43,6 @@ void update_moby_random_interval_animation(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vendor_0029FCF0.c: func_L04_002BB670), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void blend_big_axebot_and_axe_animation(char *moby, void *new_seq, void *frame_index, void *blend_frames) __asm__("FUN_L04_002ba3e0");
 
@@ -1488,10 +1487,7 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int collect_mobies_in_sphere(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
-extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int FUN_L00_002dc9f0(void *, void *);
-extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 short D_L04_00161878 = 0x101;
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 extern void update_object_wander_movement(char *moby, char *d, float a, float b) __asm__("FUN_L00_00261630");
@@ -1501,8 +1497,6 @@ extern void update_circular_saw_engine_sound(struct Moby *) __asm__("FUN_L04_002
 extern void blend_moby_animation(void *, void *, void *, void *) __asm__("FUN_00212f90");
 extern void release_voice_slot(int);
 extern void transform_vector_by_basis(void *, void *, void *);
-int check_circular_saw_melee_attack_spacing(struct Moby *moby) __asm__("FUN_L04_002c1e98");
-void spawn_circular_saw_destruction_effects(struct Moby *moby) __asm__("FUN_L04_002c1d70");
 extern char D_0013E550[];
 extern void *func_L00_0025B478_2C35F0(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void func_L00_002592B0_b(char *moby, float target, float *vel, float k, float d,
@@ -2228,14 +2222,12 @@ extern char blarg_trooper_missing_path_fields_format[] __asm__("D_L04_001DBC80")
 extern float vector_length_xy(void *);
 extern int DebugPrint();
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int rand(void);
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void manipulator_set_scale(void *, float) __asm__("FUN_L00_00263b38");
 extern void spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 extern void blend_moby_animation_p(void *, void *, void *, void *) __asm__("FUN_00212f90");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 void destroy_blarg_trooper(char *arg) __asm__("FUN_L04_002c4808");
 extern int func_L00_002594C8_o(void *, void *, void *, float, float, float, float,
                                int) __asm__("FUN_L00_00258490");

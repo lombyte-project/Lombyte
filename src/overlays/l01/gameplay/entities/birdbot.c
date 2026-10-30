@@ -2130,11 +2130,7 @@ typedef struct {
     s16 ready;                     /* 0x2E: segment lengths computed */
 } PathCarrierVars;
 
-extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 /* nearest point of the path to pos, with its segment and position on it */
 extern void FUN_L00_0025df68(PePath *, void *, void *, f32 *, s32 *, s32, f32, f32, f32);
 /* the point a step further along the path; nonzero at the path's end */
@@ -2286,7 +2282,6 @@ extern short D_L01_0015FFD8_c __asm__("D_L01_0015FFD8");
 extern short fighter_jet_minimum_distance_scale_gp __asm__("D_L01_00161AF4") __attribute__((sda));
 extern short fighter_jet_minimum_scale_camera_distance_gp __asm__("D_L01_00161AF8") __attribute__((sda));
 extern short fighter_jet_full_scale_camera_distance_gp __asm__("D_L01_00161AFC") __attribute__((sda));
-extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263d40(int, int);
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
@@ -2938,20 +2933,16 @@ extern char *camera_points __asm__("D_L01_001600EC") MACRO_ADDR;
 extern char *paths[] __asm__("D_L01_001B0930");
 extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
 
-extern void *find_moby_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
 extern void queue_dialogue_message(s32, s32) __asm__("FUN_L00_00263d40");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32, f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern void spawn_debris(char *, void *, f32) __asm__("FUN_L01_0030be70");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int debug_print() __asm__("FUN_001e93b0");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern s32 hero_set_state(s32, s32) __asm__("FUN_L01_0023cf98");
 extern void jet_mount(void *, void *, s32, s32, s32) __asm__("FUN_L00_002eaaa0");
 extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 extern s32 collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern void moby_point_position(void *, s32, void *) __asm__("FUN_L00_0024f7c8");
 extern GunshipMoby *spawn_beam(void *, void *, void *, void *, s32, s32) __asm__("FUN_L01_002f68a0");
 
 extern s32 current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
@@ -3329,7 +3320,6 @@ typedef struct {
 SteamColors D_L01_00161C08 = {{0x2b8, 0x2b9, 0x2ba}};
 extern SteamColors l01_rising_particle_variant_indices __asm__("D_L01_00161C18");
 extern s32 tick_countdown_32(void *) __asm__("FUN_001f9740");
-extern f32 random_angle_radians(void) __asm__("FUN_00213308");
 extern void spawn_debris_chunk(void *, void *, u32, s32, f32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void *mine_debris(void *, void *, u32, u32, f32, s32, u32) __asm__("FUN_L00_0026bed0");
 
@@ -3496,7 +3486,6 @@ CapColors D_L01_00161C40 = {{0x2b8, 0x2b9, 0x2ba}};
 extern s32 D_0014C190[][64];
 extern s32 cutscene_active __asm__("D_L01_0015F404");
 void apply_falling_rock_camera_overrides(Obj *obj) __asm__("FUN_L01_002f9000");
-extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 
 void falling_rock_update(CapMoby *m) __asm__("FUN_L01_002f9080");
 void falling_rock_update(CapMoby *falling_rock) {

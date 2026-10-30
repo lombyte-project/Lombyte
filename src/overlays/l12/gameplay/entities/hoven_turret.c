@@ -233,7 +233,6 @@ extern int collision_line() __asm__("FUN_001efa68");
 extern int FUN_L00_00259888();
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) __asm__("FUN_L00_0025b6b8");
-void update_oscillating_target_link_strips(struct Moby *moby) __asm__("FUN_L12_00302c58");
 extern void func_L00_0025C710_304310(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
@@ -505,7 +504,6 @@ extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0
 extern void detach_manipulator(void *, void *);
 extern void memcard_save_data(s32, s32) __asm__("func_0020B178");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
-void update_hoven_turret_camera(struct Moby *moby) __asm__("FUN_L12_003032e8");
 extern char D_0013E533[];
 extern unsigned char D_0014171B_304920[] __asm__("D_0014C050");
 extern int invert52_macro[] __asm__("D_0015EDDC") MACRO_ADDR;

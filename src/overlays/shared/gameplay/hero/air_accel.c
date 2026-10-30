@@ -985,7 +985,6 @@ void hero_speed_from_table(void) {
 extern char D_L01_001742C0_lui[] __asm__("D_L01_001742C0") NOT_SDA;
 extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 
 extern int D_L01_001742DC NOT_SDA;
@@ -1273,7 +1272,6 @@ extern void f2347c0_233940(void) __asm__("FUN_L00_002347c0");
 extern void f233810_233940(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern void f2334d0_233940(void *, void *, f32) __asm__("FUN_L00_002334d0");
 extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
-extern s32 rig_probe(void *, s32, f32, s32, f32) __asm__("FUN_L00_001f19a0");
 extern s32 coll3_233940(void *, f32) __asm__("FUN_L00_001f3170");
 extern u128_233940 D_L01_001742F0[] NOT_SDA;
 s32 resolve_hero_position_with_collision_queries(s32 mode) __asm__("FUN_L01_00233940");
@@ -1369,7 +1367,6 @@ typedef struct {
     u8 pad4[0x70 - 4];
 } Entry70;
 
-extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 extern u8 item_available[] __asm__("D_0013D4C0");
 
 extern void update_hero_tilt(void) __asm__("FUN_L00_002165b8");
@@ -1526,7 +1523,6 @@ void request_hero_idle_state_for_vehicle_mode(void) {
     }
 }
 extern s32 pad_held __asm__("D_0013CAE0") NOT_SDA;
-extern int hero_set_state(int, int) __asm__("FUN_L01_0023cf98");
 void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 void stick_target(s32, f32) __asm__("FUN_L00_002118c8");
 void hero_queue_sequence(s32, s32) __asm__("FUN_L00_002325e0");

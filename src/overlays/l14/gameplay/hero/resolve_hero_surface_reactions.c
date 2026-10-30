@@ -114,7 +114,6 @@ void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int hero_set_state(int, int) __asm__("FUN_L14_0022ff58");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
 void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 

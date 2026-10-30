@@ -759,7 +759,6 @@ void blarg_ship_update(struct Moby *moby) {
 
 extern char D_0013E533[];
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 char *try_activate_blarg_ship_from_list(int list) __asm__("FUN_L17_002f4fb8");
 
@@ -988,8 +987,6 @@ extern float D_L17_001DF280[];
 float *D_L17_00162450[2] = {D_L17_001DF280, 0};
 extern float D_L17_001DF598[];
 float *D_L17_00162458[2] = {D_L17_001DF598, 0};
-void compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__("FUN_L17_002f54d8");
-void vu1_add_g_sregister(s32 a0, s64 a1) __asm__("FUN_00233980");
 
 int D_L17_00162420[2] = {66, 0};
 extern float D_L17_001DF070[];

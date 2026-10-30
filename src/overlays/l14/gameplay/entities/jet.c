@@ -730,7 +730,6 @@ struct L14SparkTarget {
 extern struct L14SparkTarget D_L14_00167380_spark __asm__("D_L14_00167380");
 void draw_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb810");
 
-void draw_wind_sparks(struct Moby *m) __asm__("FUN_L14_002eb810");
 
 extern int wind_spark_peak_alpha_gp __asm__("D_L14_00161C10") __attribute__((sda));
 extern int wind_spark_fade_in_frames_gp __asm__("D_L14_00161C2C") __attribute__((sda));
@@ -1241,7 +1240,6 @@ f32 D_L14_001E0050_d530[3][16][4] __asm__("D_L14_001E0050") = {0};
 u16 D_L14_001E0350_d530[3][16] __asm__("D_L14_001E0350") = {0};
 extern int arc_ftoi(float) __asm__("FUN_001fa6d0");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void allocate_voice_for_group_entry(int, int, void *) __asm__("FUN_0022dba0");
 extern void arc_enqueue(void (*)(char *), char *) __asm__("FUN_001f4600");
 void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spawn_pair_count) __asm__("FUN_L14_002ee6b0");
@@ -1670,10 +1668,8 @@ void settle_elevator_at_path_endpoint(struct Moby *elevator_moby) __asm__("FUN_L
 void settle_elevator_at_path_endpoint(struct Moby *m) __asm__("FUN_L14_002ef3e0");
 void rebuild_elevator_world_path(u8 *moby) __asm__("FUN_L14_002ef630");
 
-void rebuild_elevator_world_path(u8 *moby) __asm__("FUN_L14_002ef630");
 void update_elevator_idle_glow(struct Moby *moby) __asm__("FUN_L14_002ef6f0");
 
-void update_elevator_idle_glow(struct Moby *moby) __asm__("FUN_L14_002ef6f0");
 
 /* pvars of the vendor platform (shared with FUN_L14_002eef60/ef150/ef3e0/ef630) */
 typedef struct {
@@ -2143,16 +2139,12 @@ extern int taxi_inside(void *, int) __asm__("FUN_00214720");
 extern int taxi_sound(int, int, void *) __asm__("FUN_0022da68");
 void initialize_taxi_stop_from_position(struct Moby *moby) __asm__("FUN_L14_002f1040");
 
-void initialize_taxi_stop_from_position(struct Moby *moby) __asm__("FUN_L14_002f1040");
 void prepare_taxi_route(struct Moby *moby) __asm__("FUN_L14_002f1140");
 
-void prepare_taxi_route(struct Moby *moby) __asm__("FUN_L14_002f1140");
 struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) __asm__("FUN_L14_002f12f0");
 
-struct Moby *find_group_moby_by_tag(struct Moby *moby, int tag) __asm__("FUN_L14_002f12f0");
 void request_taxi_stop_prompt(struct Moby *moby) __asm__("FUN_L14_002f13f8");
 
-void request_taxi_stop_prompt(struct Moby *moby) __asm__("FUN_L14_002f13f8");
 
 extern void taxi_sample_f(s32 *, int, void *, void *, int, float) __asm__("FUN_00214e58");
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002E0538.c (func_L14_002F19C0) */
@@ -3066,7 +3058,6 @@ extern void *tram_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int allocate_voice_for_bank_entry(int, int, int) __asm__("FUN_0022db10");
 extern void FUN_L00_0025f090(void *, void *, int, float, float);
 extern void tram_remove(void *) __asm__("FUN_0020c828");
-void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
 void spawn_moby_exhaust_puffs(struct Moby *m) __asm__("FUN_L14_002fd310");
 int advance_moby_along_flight_path(struct Moby *moby) __asm__("FUN_L14_002fd918");
 
@@ -3373,7 +3364,6 @@ extern float D_L14_00161F84 __attribute__((sda));
 extern float flight_path_bank_yaw_error_scale_gp __asm__("D_L14_00161F88") __attribute__((sda));
 extern float flight_path_step_rate_gp __asm__("D_L14_00161F78") __attribute__((sda));
 extern void flag_vendor_item(int) __asm__("FUN_L13_00316f48");
-float absolute_float(float input) __asm__("func_001F99C0");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern int FUN_L00_0025d808_2f05d8(void *, void *, void *, void *, int,
                                     float) __asm__("FUN_L00_0025d808");

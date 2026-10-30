@@ -586,7 +586,6 @@ extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da
 extern void spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void tall_shroom_update(TriggerMoby *obj) __asm__("FUN_L01_0030d0f0");
 void tall_shroom_update(TriggerMoby *shroom_moby) {
@@ -695,8 +694,6 @@ typedef struct {
 } ScrollMoby;
 
 extern f32 frame_delta_time __asm__("D_0015ED7C");
-void draw_level01_environment_mapped_meshes(void) __asm__("FUN_L01_0030f0e0");
-void add_draw_callback(void *fn, void *arg) __asm__("FUN_001f4600");
 
 void update_level01_environment_map_uv_scroll(ScrollMoby *moby) __asm__("FUN_L01_0030f208");
 

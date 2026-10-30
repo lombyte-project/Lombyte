@@ -282,11 +282,6 @@ unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mod
 void FUN_L14_002b2600_c(struct Moby *m) __asm__("FUN_L14_002b2600");
 void FUN_L14_002b2ed8_c(struct Moby *m) __asm__("FUN_L14_002b2ed8");
 void process_plasmabot_hit_reaction(char *m) __asm__("FUN_L14_002b2f60");
-void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
-void deactivate_plasmabot(char *moby) __asm__("FUN_L14_002b3318");
-void activate_plasmabot(char *moby) __asm__("FUN_L14_002b3330");
-void initialize_plasmabot_path_state(char *moby) __asm__("FUN_L14_002b3358");
-void scale_and_apply_plasmabot_planar_velocity(char *moby) __asm__("FUN_L14_002b3578");
 void update_plasmabot_aim_joint_rotation(char *moby, float angle) __asm__("FUN_L14_002b37b0");
 void reset_listed_plasmabot_beam_cooldowns(int idx) __asm__("FUN_L14_002b3890");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
@@ -296,7 +291,6 @@ void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0
 #define call_F4A8 ((void (*)(char *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int))FUN_L00_0025e450_c)
 #define call_D678 ((void (*)(char *))mark_moby_for_removal_c)
 
-void update_plasmabot(char *moby) __asm__("FUN_L14_002b17d8");
 void update_plasmabot(char *moby) __asm__("FUN_L14_002b17d8");
 
 void update_plasmabot(char *moby) {
@@ -955,11 +949,8 @@ void update_plasmabot_target_range(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B41B0), where it is exact; names translated to the US level program. */
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern char D_0013E533[];
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int release_beam_slot_by_id(char *) __asm__("FUN_L00_002e2040");
 extern float plasmabot_stagger_motion_z_scale_gp __asm__("D_L14_001614C8") __attribute__((sda));
-extern void FUN_L00_00257470(void *, int, int);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void func_L00_0025D5B0_i(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
@@ -1055,7 +1046,6 @@ void process_plasmabot_hit_reaction(char *moby) {
 /* steers the moby toward its target: queries the path, eases x/y, then turns to face the heading */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B4668), where it is exact; names translated to the US level program. */
 
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 extern float func_L00_0025CE58_2B4668(float *p, float a, float *v, float b, float c, float d) __asm__("FUN_L00_0025be00");
 
@@ -1144,7 +1134,6 @@ int count_listed_plasmabots_preparing_or_sweeping_beam(int moby_list_index) {
 /* Returns 0 if any listed moby of class 0x1C is in state 2, else 1. */
 
 extern char *D_L14_0015FFD8;
-extern short *D_L14_001ABF40[];
 
 int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) __asm__("FUN_L14_002b39a0");
 
@@ -1319,7 +1308,6 @@ typedef struct {
     int f90;
 } Obj;
 
-extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 
 int refresh_plasmabot_hatch_reset_delay(int i) {
     unsigned char *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
@@ -1340,11 +1328,9 @@ extern float D_0015ED60;
 #define DE670_GRAVITY D_L14_00161B18
 extern void *D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern void FUN_L14_002dec40(struct Moby *);
-extern void add_draw_callback(void (*)(struct Moby *), struct Moby *) __asm__("FUN_001f4600");
 extern f32 fast_add_rotations(f32, f32);
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern s32 FUN_L00_00257b90(s32, s32);
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern s32 coll_sphere(f32, void *, s32, void *) __asm__("FUN_L00_001f0d60");
 extern void spawn_explosion(void *, void *, void *, f32, f32, s32, s32, s32,
                               f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
@@ -1473,7 +1459,6 @@ extern void spawn_explosion_dfd10(struct Moby *, void *, void *, f32, f32, s32, 
     f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int trooper_play_sound(int, int, struct Moby *, int) __asm__("FUN_L00_0028dc90");
-extern int sample_path(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 
 typedef struct {
     u8 pad0[0x10];
@@ -1564,10 +1549,8 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         emit_debris_trail_particles(moby);
 }
 extern void build_look_at_2e0170(void *, void *, void *, float) __asm__("FUN_00214890");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void create_effect_2e0170(void *, void *, void *, void *, void *, int, float, float, float) __asm__("FUN_L00_0025df68");
-extern float D_0015ED60;
 extern char *race_paths_2e0170 __asm__("D_L14_0015F70C");
 
 extern float ballistic_debris_launch_magnitude_range_start_gp __asm__("D_L14_00161B30") __attribute__((sda));
@@ -1684,7 +1667,6 @@ char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __a
 extern P_eca8 *FUN_L00_0026d000(void *, float, float, float, int, void *, float, int);
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern int D_L14_0015F580_c __asm__("D_L14_0015F580");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_00274948_c(u128_2E17B8 *a, u128_2E17B8 *b, int c, int d) __asm__("FUN_L00_00274948");
 void random_spherical_offset(void *out, f32 a, f32 b) __asm__("FUN_00213358");

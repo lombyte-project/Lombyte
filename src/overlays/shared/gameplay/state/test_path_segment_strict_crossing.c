@@ -229,7 +229,6 @@ typedef struct {
 
 extern SegmentPath_262030 *D_L00_001B04B0_262030[] __asm__("D_L00_001B04B0");
 extern char D_0013F5E0[];
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern void FUN_001ff278_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
 extern void FUN_001ff2a8_262030(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
 extern f32 FUN_001ff398_262030(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ab0");

@@ -688,7 +688,6 @@ no_hit:
 extern char destructible_hit_debris_color_palette[] __asm__("D_L15_001615B8");
 extern struct { u32 words[3]; } D_L15_001615C8;
 extern void add_vectors(void *out, void *a, void *b) __asm__("FUN_L00_001ff290");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int blend_color(float t, int from, int to) __asm__("FUN_L15_00249ce8");
 extern void FUN_L00_00257470(void *, int, int);
 extern void spawn_explosion(void *m, void *unused, void *pos, float fA, float fB, int n, int k8, int k9,

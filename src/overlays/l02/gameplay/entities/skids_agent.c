@@ -680,7 +680,6 @@ extern char aridia_ocean_middle_clip_last_draw_data[] __asm__("D_L02_001F3E10");
 extern char aridia_ocean_animated_frame_packet[] __asm__("D_L02_001F3E80");
 extern void begin_animated_frame_rendering(float, float, float, float, int, int, int, int, int, int, void *) __asm__("FUN_L02_002a4818");
 extern void FUN_L02_002a47f8_c(void) __asm__("FUN_L02_002a47f8");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void refresh_point_light(void *) __asm__("FUN_00201f58");
 
 /* Draws the parts whose clip volumes contain the camera (all of them when

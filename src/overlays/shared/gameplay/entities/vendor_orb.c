@@ -446,7 +446,6 @@ s32 test_hydrodisplacer_activation_flag(void) {
 
 extern int D_L00_0015F404;
 extern short D_L00_0015F3FC;
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 
 /* Moby state 4: clears two globals, calls 002eac18(3); control mode 0x13: calls 002223f8(0, 1). */
 void end_hydrodisplacer_interaction(char *moby) __asm__("FUN_L00_002e0340");
@@ -1751,7 +1750,6 @@ typedef float V4[4] __attribute__((aligned(16)));
 void fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void vcopy_2e48a0(void *, void *) __asm__("FUN_001f9a68");
 void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 void follow_camera_hero_target(int, void *) __asm__("FUN_L00_002e4168");
 void compute_follow_camera_offset_target_up_projection(void *out) __asm__("FUN_L00_002e48a0");
 
@@ -2202,7 +2200,6 @@ void interpolate_follow_camera_position(void *mm, void *vv, void *tt, f32 stiffn
     current_values[1] = cam_interp_values(camera_state + 0xE4, current_values[1], target_values[1], stiffness, damping, limit);
     current_values[2] = cam_interp_values(camera_state + 0xE8, current_values[2], target_values[2], stiffness, damping, limit);
 }
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 s32 compute_follow_camera_target_position(void *mm, void *input_offset, void *out_target_position, s32 k) __asm__("FUN_L00_002e5678");
 
 s32 compute_follow_camera_target_position(void *mm, void *input_offset, void *out_target_position, s32 k) {
@@ -2590,7 +2587,6 @@ void set_follow_camera_blend_output_flags(void) {
 extern float fast_subtract_rotations(float, float) __asm__("FUN_001fa5c8");
 extern float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
 extern void FUN_001f9a68_c4(void *, void *, float) __asm__("FUN_001f9a68");
-float absolute_float(float input) __asm__("func_001F99C0");
 
 float update_follow_camera_angle_blend_from_direction(char *camera, float *input_direction, float blend_update_angle_limit) __asm__("FUN_L00_002e86b0");
 

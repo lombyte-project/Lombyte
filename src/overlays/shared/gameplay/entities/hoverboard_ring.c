@@ -103,7 +103,6 @@ char *spawn_moby_class_5ea_from_source(unsigned char *source_moby) __asm__("FUN_
 extern char *spawn_moby_class_5ea_from_source(unsigned char *) __asm__("FUN_L05_0031d160");
 void draw_moby_glow_sprite(char *m) __asm__("FUN_L05_0031cf58");
 
-void draw_moby_glow_sprite(char *m) __asm__("FUN_L05_0031cf58");
 
 /* Mine update: sets its glow, fades it out with camera distance and blows up into debris, smoke and sparks when something touches it. */
 void update_moby_glow_and_contact_explosion(struct Moby *moby) __asm__("FUN_L05_0031c8e0");

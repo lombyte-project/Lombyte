@@ -1297,7 +1297,6 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern char *D_L05_001B0930[]; /* no foreign declaration */
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F3D0[];
-extern int D_0015ED84;
 extern char *D_L05_001B0930[];
 
 void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) __asm__("FUN_L05_00254358");

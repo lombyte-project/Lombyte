@@ -424,7 +424,6 @@ void euler_rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void transpose_rotation_matrix(void *, void *) __asm__("FUN_001fa2d8");
 void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float square_root(float) __asm__("FUN_001f9988");
-float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void compute_rotated_vector_angles(Vec4 *input_vector, float *out) __asm__("FUN_L00_00216078");
 
 void compute_rotated_vector_angles(Vec4 *input_vector, float *out) {
@@ -449,12 +448,9 @@ typedef struct {
     OvlQuad q[4];
 } QM;
 float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-float square_root(float) __asm__("FUN_001f9988");
-float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
 void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 void euler_to_matrix_ee(void *, void *) __asm__("FUN_001fa070");
 void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
-void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 float spring_angle(float *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
 void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void compute_hero_reference_tilt_rotation(V_216130 *reference_vector, M_216130 *working_matrix, void *rotation_output, float pitch_smoothing_parameter, float b, float c) __asm__("FUN_L00_00216130");
@@ -661,10 +657,8 @@ extern s32 D_0013CB14[];
 
 extern void stick_target(s32, f32) __asm__("FUN_L00_002118c8");
 extern void turn_to(s32, f32, f32, f32) __asm__("FUN_L00_00211e30");
-extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void FUN_001f9a10_c(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_001f99f8_c(void *) __asm__("FUN_001f99f8");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
 extern f32 FUN_001f9e90_c(f32, f32) __asm__("FUN_001f9e90");
 extern void clip_hero_velocity_against_probed_surfaces(s32) __asm__("FUN_L00_00212318");
 
@@ -884,7 +878,6 @@ void rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 void clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 void clear_moby_transform_history(void *) __asm__("FUN_L00_00262840");
-void clear_u64_value(void *) __asm__("FUN_001f99f8");
 void reset_global_state_fields(void) __asm__("FUN_00217020");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
@@ -942,11 +935,8 @@ void set_race_camera(Vec4_00216f90 *hero_world_position, Vec4_00216f90 *hero_eul
 extern unsigned char D_0013F350_217118[] __asm__("D_0013F350");
 extern unsigned char coll_hit[] __asm__("D_L00_00173E40")
     __attribute__((section(".data")));
-float gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
 void FUN_001f9a68_217118(void *, float, void *) __asm__("FUN_001f9a68");
-void set_gravity_relative_vector_length_xy(void *, void *, float) __asm__("FUN_L00_00233ba0");
 void add_hero_forward_offset(void *, void *, float) __asm__("FUN_L00_00233708");
-void gravity_set_z(void *, void *, float) __asm__("FUN_L00_00233b20");
 void FUN_001f9a10_217118(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00233810_217118(void *, void *, float) __asm__("FUN_L00_00233810");
 int FUN_L00_001efc70_217118(void *, void *, int, void *, int) __asm__("FUN_L00_001efc70");
@@ -1099,7 +1089,6 @@ extern float FUN_001f9e90_c2(float, float) __asm__("FUN_001f9e90");
 extern float fast_add_rotations(float, float) __asm__("FUN_001fa580");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void clear_u64_value(void *) __asm__("FUN_001f99f8");
-extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
 extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void multiply_matrix3x3(void *, void *, void *) __asm__("FUN_001fa328");
@@ -1113,7 +1102,6 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
  * builds its orientation matrix and starts its animation/sound. */
 void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 
-void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
 void launch_hero_wrench(void) {
     f32 aim_origin_or_euler_angles[4];
     f32 delta[4];

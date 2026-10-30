@@ -1016,7 +1016,6 @@ extern char flickering_mesh_texture_width_tile_limit_warning[] __asm__("D_L08_00
 extern s32 DebugPrint();
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-void draw_flickering_mesh_effect(struct Moby *m) __asm__("FUN_L08_002f5e58");
 
 void update_flickering_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f70a0");
 

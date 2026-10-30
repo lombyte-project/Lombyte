@@ -561,7 +561,6 @@ extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L0
 
 void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 
-void update_tilting_platform(struct Moby *moby) __asm__("FUN_L14_002de1f8");
 void update_tilting_platform(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     void *rotation;

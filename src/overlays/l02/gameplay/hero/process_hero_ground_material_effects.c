@@ -143,7 +143,6 @@ extern s32 D_0013DF88[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
-extern int hero_set_state(int, int) __asm__("FUN_L02_0022b728");
 void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
 void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -760,7 +759,6 @@ extern void transform_vector_by_basis(void *, void *, void *);
 f32 fast_cos(f32);
 f32 fast_sin(f32);
 s32 FUN_L00_00233660_cf(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-s32 is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
 extern s32 D_0013CB14[];
 
 void update_hero_state_motion(void) __asm__("FUN_L02_00225c20");

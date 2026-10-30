@@ -173,7 +173,6 @@ void initialize_level_transition_with_audio(int audio_selection_mode) {
 }
 extern short D_0013E05C NOT_SDA;
 void music_pause(int) __asm__("FUN_00216050");
-void sound_update(void) __asm__("FUN_0022ca50");
 void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 void initialize_level_transition_with_audio(int) __asm__("FUN_L00_0028e9c8");
 /* Sets D_L00_0015F5D8, keeps +0x22A8 >= 1, calls 00216050, sound_update, 002039a0, 0028e9c8. */
@@ -220,7 +219,6 @@ typedef struct {
 } C_0028ed58;
 extern C_0028ed58 D_L00_0016C860_0028ed58 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
-void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 void initialize_level_transition_with_audio(s32) __asm__("FUN_L00_0028e9c8");
 void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
 s32 memcard_save_data(s32, s32) __asm__("FUN_0020b178");
@@ -276,7 +274,6 @@ extern struct {
     int x58, x5c;
 } D_L00_0016C860_eed0 __asm__("D_L00_0016C860") __attribute__((section(".data")));
 void FUN_002335a0_eed0(void) __asm__("FUN_002335a0");
-void initialize_level_transition_with_audio(s32) __asm__("FUN_L00_0028e9c8");
 extern u8 D_0013DD43 NOT_SDA;
 extern u8 level_14_entry_transition_gate[] __asm__("D_0013D3F0");
 void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");

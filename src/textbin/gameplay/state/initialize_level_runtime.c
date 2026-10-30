@@ -141,7 +141,6 @@ extern s32 sceGsSyncV(s32);
 extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void snd_resolve_bank_xrefs(void) __asm__("FUN_0012e1a8");
 
-void initialize_level_runtime(void) __asm__("FUN_00230f60");
 
 void initialize_level_runtime(void) {
     s64 texture_packet[4];

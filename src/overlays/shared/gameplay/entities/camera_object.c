@@ -1583,7 +1583,6 @@ int should_trigger_wrench_hit_reaction(void) {
         return 1;
     return 0;
 }
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
@@ -1623,7 +1622,6 @@ extern V2a8028 D_L00_00173E60_lui __asm__("D_L00_00173E60") NOT_SDA;
 extern f32 D_L00_00173E40_lui[] __asm__("D_L00_00173E40") NOT_SDA;
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void spawn_two_point_effect_particle(void *, void *) __asm__("FUN_L00_0026c6e8");
 extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern void spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
@@ -1777,7 +1775,6 @@ typedef union {
 extern WrenchAttack attack_records[] __asm__("D_L00_0017BC28");
 extern WrenchMoby *D_L00_00177F00[];
 extern char D_0013E533[];
-extern float D_0015ED6C;
 extern float approach_value_alt(float*,float,float) __asm__("FUN_00213ed8");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int D_L00_00173E40_u[] __asm__("D_L00_00173E40");
@@ -1805,8 +1802,6 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void enqueue_callback_list_1_alt(void (*)(void), void *) __asm__("FUN_001f4600");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-int get_wrench_hit_sound_variant(void) __asm__("FUN_L00_002a7d90");
-int should_trigger_wrench_hit_reaction(void) __asm__("FUN_L00_002a7de0");
 void suck_draw_reticle(int a, int b, void *pos, int kind, int mode, float x, float y, float z) __asm__("FUN_L00_001edf60");
 void FUN_L00_002a7c70_c(void *m) __asm__("FUN_L00_002a7c70");
 void emit_randomized_sparkle_pairs(float *pos, int n) __asm__("FUN_L00_002a7e20");
@@ -2299,14 +2294,11 @@ typedef struct {
     u8 pad0[0x78];
     PV *pv;
 } M_2a9c50;
-extern s32 D_L00_0015F5C4;
 extern s32 D_L00_0015F5CC;
 /* Spin angles of the second quad: x is read through $gp, the rest as an
    array through the unsplit address macro (from rac1-decomp's form). */
 extern f32 spin_angles_x __asm__("D_L00_001613E0") __attribute__((sda));
 extern f32 spin_angles[] __asm__("D_L00_001613E0") MACRO_ADDR;
-extern f32 scale_time(f32) __asm__("FUN_001f96b0");
-extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
 extern void draw_geometry_quad(void *, void *, s32) __asm__("FUN_001f7d30");
 void draw_mine_predicted_impact_marker(M_2a9c50 *moby) __asm__("FUN_L00_002a9c50");
 

@@ -1078,7 +1078,6 @@ void scan_hero_input_sequences(void) {
     }
 }
 void fade_to_black(int) __asm__("FUN_001f4a58");
-void update_hero_in_vehicle_mode(void) __asm__("FUN_L00_002062b0");
 void advance_hero_animation(void) __asm__("FUN_L00_00232670");
 void hero_update(void) __asm__("FUN_L00_00211670");
 void apply_hero_selected_flags_and_state_transitions(void) __asm__("FUN_L00_0020b960");
@@ -1090,17 +1089,12 @@ void update_hero_delayed_voice_requests(void) __asm__("FUN_L00_00216f10");
 void update_hero_easing_targets_and_point_effects(void) __asm__("FUN_L00_0020b1d8");
 void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 
-void update_hero_collision_ease_target(void) __asm__("FUN_L00_0020a318");
 void update_hero_pitch_and_yaw_easing_targets(void) __asm__("FUN_L00_0020a540");
 void update_hero_target_tracking(void) __asm__("FUN_L00_0020ac98");
 void update_hero_idle_random_rotation_targets(void) __asm__("FUN_L00_0020a9e8");
-void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
-void update_hero_glow_and_extra_manipulators(void) __asm__("FUN_L00_002059d8");
 void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
-void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 void update_hero_moby(void) __asm__("FUN_L00_00208820");
 
-void update_hero_moby(void) __asm__("FUN_L00_00208820");
 void update_hero_world_matrices(s32 moby_override) __asm__("FUN_L00_00209240");
 
 void update_hero_world_matrices(int) __asm__("FUN_L00_00209240");
@@ -1108,16 +1102,11 @@ void update_hero_equipped_items(void) __asm__("FUN_L00_00210928");
 void begin_draw_frame(void) __asm__("FUN_001f7978");
 void update_hero_scalar_pulse(void) __asm__("FUN_L00_00207c48");
 void apply_hero_and_item_scale_sequence(void) __asm__("FUN_L00_00207a58");
-void check_hero_item_reward_conditions(void) __asm__("FUN_L00_00206cf8");
-void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
-void dispatch_hero_animation_timed_events(void) __asm__("FUN_L00_00206080");
-void scan_hero_input_sequences(void) __asm__("FUN_L00_00206e00");
 void noop_main_callback(int) __asm__("FUN_001e93e8");
 void reveal_map_around_position(void *) __asm__("FUN_L00_002484e0");
 void FUN_L00_00257024(int);
 void update_hero_color_and_item_tint(void) __asm__("FUN_L00_002076a8");
 
-void update_hero_color_and_item_tint(void) __asm__("FUN_L00_002076a8");
 void update_hero_moby_probed_height_bounds(void) __asm__("FUN_L00_00208b60");
 void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
 
@@ -1370,7 +1359,6 @@ void update_moby_vertical_oscillation(char *, float *, float *, float, float) __
 extern char D_L00_0017A6C0[] NOT_SDA;
 void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 
-void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 void apply_hero_vertical_oscillation(void) {
     struct Hero *P = &hero;
     Vec4_2078a8 position_offset;
@@ -1401,7 +1389,6 @@ extern void update_moby_rotation_oscillation(int, char *, char *, float, float, 
 
 void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 
-void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 void apply_hero_rotation_oscillation(void) {
     struct Hero *hero_state = &hero;
     if (hero_state->state.current == 0x7F) {
@@ -1515,7 +1502,6 @@ typedef struct {
 } P_207d40;
 extern P_207d40 D_0013F350_lui __asm__("D_0013F350") NOT_SDA;
 extern void draw_offset_textured_effect_quad(void *, s32, f32, f32) __asm__("FUN_L00_00263618");
-extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern void FUN_00213ed8_207d40(void *, f32, f32) __asm__("FUN_00213ed8");
 #define P D_0013F350_lui
 
@@ -1769,7 +1755,6 @@ extern void FUN_L00_00232fe8(void);
 extern void FUN_L00_002330d0(void);
 extern void apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 extern void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void offset_hero_position_against_gravity(void *, void *, float) __asm__("FUN_L00_002336e8");
 extern void set_moby_local_table_entry(void *, int, void *, float, float) __asm__("FUN_L00_0024eed8");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
@@ -1979,7 +1964,6 @@ void update_hero_moby_probed_height_bounds(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00209598), where it is exact; names translated to the US level program. */
 
-extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 
 f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame, f32 anim_speed_divisor, f32 frame_delta_scale, f32 anim_speed_step) __asm__("FUN_L00_00208f20");
 
@@ -2260,7 +2244,6 @@ void emit_hero_periodic_surface_effect(int counter_reset_range, int effect_spawn
         hero_state->cnt = random_integer_below(counter_reset_range);
     }
 }
-extern float D_0015ED6C;
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void spawn_splash(void *, void *, void *, float,
@@ -2308,11 +2291,9 @@ void fast_sin_cf(int seed, int limit) {
 typedef struct {
     float x, y, z, w;
 } __attribute__((aligned(16))) V_209848;
-float random_float_between(float, float) __asm__("FUN_002132a8");
 float random_angle_radians(void) __asm__("FUN_00213308");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void spawn_debris_chunk(V_209848 *, V_209848 *, int, int) __asm__("FUN_L00_0026f548");
-int random_integer_below(int) __asm__("FUN_00213260");
 void emit_hero_periodic_surface_particles(int counter_reset_range, int effect_spawn_counter_threshold) __asm__("FUN_L00_00209848");
 
 void emit_hero_periodic_surface_particles(int counter_reset_range, int effect_spawn_counter_threshold) {
@@ -2348,7 +2329,6 @@ typedef union {
     OvlQuad q;
     float f[4];
 } V_209a40;
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_L00_0024f7c8_209a40(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int random_integer_below_cf(void *, void *, float, float) __asm__("FUN_L00_0026f080");
 
@@ -2445,8 +2425,6 @@ void emit_hero_surface_effect_burst(s32 puffs, s32 debris, s32 flash) {
 }
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 void spawn_color_decaying_effect_particle(void *, void *, int) __asm__("FUN_L00_0026d598");
-float random_float_between(float, float) __asm__("FUN_002132a8");
-float random_angle_radians(void) __asm__("FUN_00213308");
 void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 void FUN_L00_00269958(void *, void *, int, int, int, int, int,
                              int);
@@ -2660,13 +2638,11 @@ typedef struct {
 extern G_a540 D_0013F350_a540 __asm__("D_0013F350");
 extern P_a540 D_L00_0017A680_a540 __asm__("D_L00_0017A680");
 extern f32 D_0015EE14 __asm__("D_0015EE14");
-extern f32 D_0015EE18 __asm__("D_0015EE18");
 
 extern void FUN_00213ed8_a540(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
 extern void set_fourth_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a228");
-extern s32 random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
 extern f32 interpolate_scalar_linear(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
 
@@ -2805,7 +2781,6 @@ extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa6
 extern int suck_get_aim_height(char *) __asm__("FUN_002141f8");
 extern unsigned char hero_pos[] __asm__("D_0013F3D0");
 extern void transform_hero_local_offset_to_world(float *, float, float, float) __asm__("FUN_L00_00233660");
-void set_first_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1e0");
 void set_fourth_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a228");
 void set_third_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a210");
 
@@ -3020,7 +2995,6 @@ typedef struct {
     f32 x, y;
 } S2;
 
-extern float D_0015ED6C;
 extern V4_20b5b8 coll_hit_normal[] __asm__("D_L00_00173E80");
 
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
@@ -3205,8 +3179,6 @@ typedef struct {
 extern P20b960 D_0013F350_20b960 __asm__("D_0013F350");
 int coll_sphere(void *, int, int, f32) __asm__("FUN_L00_001f0d60");
 int FUN_001f0b58_20b960(void) __asm__("FUN_001f0b58");
-void exit_hero_vehicle_mode_if_mode_three(void) __asm__("FUN_L00_0020b930");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 #define P D_0013F350_20b960
 void apply_hero_selected_flags_and_state_transitions(void) {
     u8 save = P.b12ED;
@@ -3333,14 +3305,12 @@ typedef struct {
     int i3C;
 } Obj;
 
-extern float D_0015ED6C;
 extern int FUN_001efa68_c(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int rig_probe() __asm__("FUN_L00_001f19a0");
 extern unsigned char D_0013F350[];
 void predict_position_with_vertical_drop(void *a, void *b, void *c, int d, float f) __asm__("FUN_L00_00259508");
 extern char D_0013F450_20C568[] __asm__("D_0013F350");
-extern int D_L00_00173E40[];
 extern void predict_position_with_vertical_drop(void *a, void *b, void *c, int d, float f) __asm__("FUN_L00_00259508");
 extern int func_L00_001EFFF0_20C568(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int func_L00_001F3958_20C568(void) __asm__("FUN_001f0b58");

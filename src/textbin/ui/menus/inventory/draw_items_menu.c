@@ -44,7 +44,6 @@ static inline int divide_coordinate(s32 a, int n) {
     return a / n;
 }
 
-s32 draw_items_menu(ItemsMenu *menu) __asm__("FUN_0021eb20");
 
 s32 draw_items_menu(ItemsMenu *menu) {
     char text_buffer[0x80];

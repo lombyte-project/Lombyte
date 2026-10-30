@@ -346,7 +346,6 @@ void update_planetbuster_maximus_guns(char *moby) {
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 
-void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 
 void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) {
     char *data = (char *)moby->pvars;
@@ -554,7 +553,6 @@ extern void capture_linked_moby_relative_transforms(char *, void *, int) __asm__
 extern void apply_linked_moby_relative_transforms(char *, char *, int) __asm__("FUN_L12_0027b370");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L12_003054b0_u(void *moby) __asm__("FUN_L12_003054b0");
-void initialize_planetbuster_maximus_detached_part_motion(struct Moby *moby, int slot) __asm__("FUN_L12_00306350");
 extern int current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
 extern char D_0013F3D0[];
 

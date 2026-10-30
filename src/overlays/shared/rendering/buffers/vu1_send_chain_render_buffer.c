@@ -48,7 +48,6 @@ void vu1_send_chain_render_buffer(void) {
 extern int D_L00_001611A0 __attribute__((sda));
 extern char vu1_sync_timeout_message[] __asm__("D_L00_001E9548");
 void FUN_L00_001ff018(int);
-void debug_print(char *) __asm__("FUN_001e93b0");
 void reset_graphics(void) __asm__("FUN_001f21c0");
 /* Waits while D_L00_001611A0 has any mask bit; after 100000 tries reports and resets graphics. */
 void vu1_sync_chain(int mask) __asm__("FUN_L00_002a09d8");

@@ -498,7 +498,6 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void blend_moby_animation_2e01a8(void *, s32, s32, s32) __asm__("FUN_00212f90");
-int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 void FUN_L00_00257470_2e01a8(unsigned char *m, int flags, int arg) __asm__("FUN_L00_00257470");
 void FUN_L00_00258278_2e01a8(unsigned char *m, float *ptr, float t, float b, float c, float limit) __asm__("FUN_L00_00258278");
@@ -1845,7 +1844,6 @@ extern int D_L10_00161EB8 __attribute__((sda));
 extern int D_L10_00161EBC __attribute__((sda));
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float random_float_between_3a90(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int fast_tween_color_3a90(int, int, float) __asm__("FUN_001fa6e0");
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
@@ -1997,7 +1995,6 @@ extern int update_collision_l08(void *, void *, void *, int, int *, float *, int
 extern void func_0022EE28_2E52B0(int, int, int) __asm__("FUN_0022db10");
 extern void trooper_set_knockback(float *, float, float) __asm__("FUN_L03_00250a78");
 extern void func_L00_0025D5B0_2E52B0(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern int func_L00_00260D30_2E52B0(void *, void *, float) __asm__("FUN_L01_00274b78");
 extern void func_00213DE0_2E52B0(void *, int, int, int) __asm__("FUN_00212f90");
 extern char D_0013D50F_2E52B0[] __asm__("D_0013D408");
@@ -2347,7 +2344,6 @@ extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_002
 extern void FUN_L10_002e5968_c(char *m) __asm__("FUN_L10_002e5968");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void build_spherical_offset_c(void *, f32, f32, f32) __asm__("func_00214DB0");
-s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 extern int D_0015ED84;
 
 void blarg_ship_update(Ship_5E48 *m) __asm__("FUN_L10_002e4a88");
@@ -2749,7 +2745,6 @@ extern void set_moby_dialogue_record_value(struct Moby *, int) __asm__("FUN_L00_
 extern int try_set_help_message(int, int) __asm__("FUN_00215130");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern int memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern int D_0013ED98 MACRO_ADDR;
 extern int purchased_nanotech_health_gp __asm__("D_0013EDA0") __attribute__((sda));
 extern int D_L10_0013F640 __asm__("D_L10_0013F640") MACRO_ADDR;
@@ -2882,7 +2877,6 @@ extern unsigned char D_0013D504[];
 extern unsigned char D_00141B20[];
 s32 FUN_L00_00203908(s32 a, s32 b);
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
-extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern char D_0013E633_2E9978[] __asm__("D_00141B20");
 extern unsigned char D_0014171B_2E9978[] __asm__("D_0013D504");
 extern unsigned char D_0013D5CA_2E9978[] __asm__("D_0015EEA4") __attribute__((sda));

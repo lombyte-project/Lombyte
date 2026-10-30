@@ -726,7 +726,6 @@ typedef struct {
 } G_2bb400;
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void offset_moby_class_point_pairs(void *, int, int) __asm__("FUN_L00_0024efb0");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float FUN_001fa580_2bb400(float, float) __asm__("FUN_001fa580");
 extern void FUN_0020e098_2bb400(void *) __asm__("FUN_0020e098");
 
@@ -1168,16 +1167,11 @@ typedef struct {
     long unk70, tex, unk80, unk88;
 } Q_2bc1a0;
 void FUN_001f9a68_2bc1a0(float, void *, void *) __asm__("FUN_001f9a68");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_001f9bf8_2bc1a0(void *, void *, float) __asm__("FUN_001f9bf8");
-void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
 long FUN_001f44b8_2bc1a0(int) __asm__("FUN_001f44b8");
 int random_integer_below(int) __asm__("FUN_00213260");
 float FUN_001fa6c0_2bc1a0(int) __asm__("FUN_001fa6c0");
 int FUN_001fa6d0_2bc1a0(float) __asm__("FUN_001fa6d0");
-void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 extern float walloper_quad_basis_offset_scale_gp __asm__("D_L00_001616BC") __attribute__((sda));
 extern float walloper_quad_corner_scale_gp __asm__("D_L00_001616B8") __attribute__((sda));
 extern int walloper_quad_texture_index_gp __asm__("D_L00_001616C8") __attribute__((sda));
@@ -1452,7 +1446,6 @@ extern unsigned char D_0013E633_2BDAF0[] __asm__("D_0013E533");
 extern char voice_pool[] __asm__("D_0013E550");
 extern char D_L00_001803C0_2BDAF0[] __asm__("D_L00_001802C0");
 extern char D_L00_00166C80[];
-extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
 extern int func_001F9938_2BDAF0(void *) __asm__("FUN_001f9770");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int func_001F9850_2BDAF0(int) __asm__("FUN_001f96f8");
@@ -1749,7 +1742,6 @@ extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __as
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
 unsigned char *FUN_L00_00272060(void *pos, int s, float x, float y, int color, int mode, int b, float *v, float z);
 unsigned char *spawn_proximity_corrected_size_alpha_tween_particle(void *pos, int s, int col, int mode, int b, float *vec, int h, float x, float y) __asm__("FUN_L00_00275910");
-void reset_beam_chain_and_pulse_state(u8 *moby) __asm__("FUN_L00_002bcf98");
 void draw_beam_ring_and_rail_effects(void *o) __asm__("FUN_L00_002bdc50");
 extern float D_L00_001616F0_gp __asm__("D_L00_001616F0") __attribute__((sda));
 extern int D_L00_001616F4_gp __asm__("D_L00_001616F4") __attribute__((sda));
@@ -1808,7 +1800,6 @@ extern Vec_2BE3A8 D_L00_00173F60_2BE3A8 __asm__("D_L00_00173E60");
 extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") MACRO_ADDR;
 #include "rnc/data_labels.h"
 extern void func_L00_002BE2A0_2BE3A8(void) __asm__("FUN_L00_002bcf98");
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern Info *func_L00_0025D390_2BE3A8(struct Moby *) __asm__("FUN_002141f8");
 extern void func_001F9BD8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1819,13 +1810,11 @@ extern void func_L00_001FF4B0_2BE3A8(void *, void *, float) __asm__("FUN_001f9bf
 extern void func_001F9C08_2BE3A8(void *, void *, void *, float) __asm__("FUN_001f9a40");
 extern void func_001F9C30_2BE3A8(void *, void *, float) __asm__("FUN_001f9a68");
 extern void func_001F9CA0_2BE3A8(void *, void *, void *) __asm__("FUN_001f9ad8");
-extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern float func_001F9FA8_2BE3A8(float) __asm__("FUN_001f9de0");
 extern float func_001F9F90_2BE3A8(float) __asm__("FUN_001f9dc8");
 extern void func_001F9EE8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9d20");
 extern void func_001F49B0_2BE3A8(void *, struct Moby *) __asm__("FUN_001f4600");
 extern void draw_beam_ring_and_rail_effects(void *) __asm__("FUN_L00_002bdc50");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern int func_001F9850_2BE3A8(int) __asm__("FUN_001f96f8");
 extern void func_L00_00272F00_2BE3A8(void *, int, int, int, int, void *, float, float, float) __asm__("FUN_L00_00272060");
@@ -2076,10 +2065,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) __asm__("FUN_L00_002be890");
 
 void draw_beam_origin_camera_facing_quads(void *) __asm__("FUN_L00_002be890");
 long FUN_001f44b8(int);
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
 float fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
-void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 /* scrolls the two texture-offset accumulators and draws the 10x20 band of
    textured quads between the D_L00_001DC060/001DC1A0 rings, skipping
    back-facing ones */
@@ -2892,12 +2878,9 @@ typedef struct {
 
 extern int FUN_001efa68_c2(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern int FUN_L00_001ff600();
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 float calculate_triangular_corrected_scalar(float *a, float *b, int *out, float f) __asm__("FUN_L00_00259468");
 float FUN_L00_002bec80_c2(void *p, void *q) __asm__("FUN_L00_002bec80");
-float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_002beab0_c(char *a, int b, void *c) __asm__("FUN_L00_002beab0");
 void FUN_L00_002bec00_c(char *a) __asm__("FUN_L00_002bec00");
 void FUN_L00_002bec48_c(char *a) __asm__("FUN_L00_002bec48");
@@ -3044,7 +3027,6 @@ unsigned char *spawn_doom_bot(int linked_moby, u128 *spawn_position, u128 *initi
 #include "rnc/math/vector.h"
 extern char *D_L00_00173E58 NOT_SDA;
 int FUN_001efa68(Vec4 *, Vec4 *, int, void *, int);
-unsigned int collision_hit_material(void) __asm__("FUN_001f0b58");
 int compute_moby_state_from_vertical_probe(unsigned char *moby) __asm__("FUN_L00_002bfec8");
 
 int compute_moby_state_from_vertical_probe(unsigned char *moby) {

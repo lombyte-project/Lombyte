@@ -1446,8 +1446,6 @@ extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
 f32 probe_ground_height(void *arg0, s32 arg1, f32 arg2) __asm__("FUN_00213508");
 s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
-void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");
-void attach_drek_boss_big_head_manipulator(char *moby) __asm__("FUN_L18_002f2b18");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,
@@ -2590,9 +2588,7 @@ extern char *create_class_274_ring_effect(void *, void *, float) __asm__("FUN_L1
 extern void FUN_L18_002f1cc8_5e80(void *) __asm__("FUN_L18_002f1cc8");
 extern void start_position_and_rotation_transition(char *, void *, void *, void *, void *, void *, int, int, int) __asm__("FUN_L18_002dfaa0");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 
 extern short l18_drek_boss_class_scale_multiplier_gp __asm__("D_L18_00162330") __attribute__((sda));
@@ -3460,7 +3456,6 @@ extern int D_L18_00162384_macro[] __asm__("D_L18_00162384") MACRO_ADDR;
 
 void update_moby_scene_visibility_and_height_reflection(M *moby) __asm__("FUN_L18_002f7ad8");
 
-void update_moby_scene_visibility_and_height_reflection(M *moby) __asm__("FUN_L18_002f7ad8");
 void update_moby_scene_visibility_and_height_reflection(M *moby) {
     enum {
         MOBY_INITIALIZE = 0,
@@ -3526,10 +3521,7 @@ extern short D_L18_0016247C_gp __asm__("D_L18_0016247C") __attribute__((sda));
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
-s32 is_value_within_interpolated_window(void *arg0, f32 fparg0) __asm__("FUN_00214cc8");
-void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 extern short D_L18_0016247C __asm__("D_L18_0016247C");
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void func_L18_002F9AB8_v(void *) __asm__("FUN_L18_002f8658");
 
 void rocket_tank_update(M1454 *m) __asm__("FUN_L18_002f7c40");
@@ -3660,8 +3652,6 @@ extern void *FUN_L00_00257470_cf(char *src, int cls, float *pos, void *mat, int 
                                  float scale, float *v10, float *v11,
                                  float *v12) __asm__("FUN_L00_00263fd8");
 extern void FUN_L00_001fff28(void *, int, float);
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void func_L00_0025F4A8_alt(void *, void *, void *, float, float, int, int, int, float, float,

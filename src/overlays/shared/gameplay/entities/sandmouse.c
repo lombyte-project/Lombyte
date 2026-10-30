@@ -703,7 +703,6 @@ void draw_sandmouse_billboard_quads(char *moby) {
 /* Attach two effect entries and register their update callback. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002F7700.c: func_L01_0030F2A8), where it is exact; names translated to the US level program. */
 
-void draw_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030de68");
 extern void add_draw_callback(void (*)(char *), char *) __asm__("FUN_001f4600");
 
 void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
@@ -788,9 +787,7 @@ extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void compute_sandmouse_follow_goal(void *unused, float *p) __asm__("FUN_L01_0030d260");
-void try_fire_sandmouse_projectile(char *moby, char *state) __asm__("FUN_L01_0030d5f0");
 void emit_sandmouse_particles(char *m) __asm__("FUN_L01_0030dda0");
-void update_sandmouse_billboard_quads(char *moby) __asm__("FUN_L01_0030ded0");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
 void detach_manipulator(void *moby, void *manip) __asm__("FUN_0020cb88");
 
@@ -1764,7 +1761,6 @@ void set_camera_5_track_acceleration_yz(float camera_track_accel_y, float camera
 }
 extern char *D_L00_0015F5F4;
 extern char D_0013E550[];
-extern char D_L01_00167240[];
 extern int calculate_voice_distance_volume(float, float, float, void *) __asm__("FUN_0022c6f8");
 extern int play_voice_319928(int, int, void *, int) __asm__("FUN_L00_0028ddd8");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");

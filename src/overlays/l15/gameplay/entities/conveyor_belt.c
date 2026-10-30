@@ -622,7 +622,6 @@ int D_L15_0016215C = 64;
 extern float ripple_mesh_radial_wavelength_gp __asm__("D_L15_00162160") __attribute__((sda));
 #include "rnc/overlay/l15/gameplay/entities/conveyor_belt_data/draw_moby_radial_ripple_mesh.h"
 extern float ripple_mesh_z_amplitude_gp __asm__("D_L15_00162168") __attribute__((sda));
-void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void draw_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L15_002eb108");
 
@@ -705,7 +704,6 @@ extern void queue_planet_unlock_message(int) __asm__("FUN_L00_00262d38");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
 void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
-void draw_quartu_cutscene_messages(void) __asm__("FUN_L15_002eb6b8");
 
 void update_quartu_cutscene_trigger(struct Moby *moby) __asm__("FUN_L15_002eb4c0");
 
@@ -952,7 +950,6 @@ extern int can_spawn_codebot_slot_effect(int) __asm__("FUN_L15_002f78e0");
 extern int count_missing_or_dying_mobys_in_list(int) __asm__("FUN_L15_002ebfb0");
 extern void set_moby_list_visibility(int, int) __asm__("FUN_L15_002ebf28");
 extern char *spawn_codebot_slot_effect(char *, char *) __asm__("FUN_L15_002eb9e0");
-extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 
 /* Bind this call to its checked overlay instance rather than a duplicate. */
 extern float scale_time(float) __asm__("FUN_L15_001f8648");
@@ -1091,10 +1088,8 @@ extern s32 current_level_index_gp __asm__("D_0015ED84") MACRO_ADDR;
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
-int memcard_save_data(int slot, int flags) __asm__("FUN_0020b178");
 extern unsigned char big_head_cheat_enabled_macro[] __asm__("D_0015EDB0") MACRO_ADDR;
 extern void FUN_L00_002502a0(int);
-extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern void update_joint_animation(void *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00284e50(void *, void *);
 extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
@@ -1830,7 +1825,6 @@ void draw_scaled_moby_radial_ripple_mesh(struct Moby *moby) {
 }
 extern float D_0015ED6C_2edfc0 __asm__("D_0015ED6C") MACRO_ADDR;
 extern int FUN_001f44b8_2edfc0(int) __asm__("FUN_001f44b8");
-extern void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 extern float FUN_001f96b0_2edfc0(float) __asm__("FUN_001f96b0");
 extern void FUN_00233980_2edfc0(int, long) __asm__("FUN_00233980");
 extern void FUN_L00_001fde98_2edfc0(int, int, int, void *, int) __asm__("FUN_L00_001fde98");

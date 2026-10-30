@@ -566,7 +566,6 @@ extern float D_L08_001D1D80[4][4] NOT_SDA;
 #include "rnc/overlay/shared/gameplay/entities/scoutbot_globals.h"
 extern float scoutbot_glow_position_offset_scale_gp __asm__("D_L08_00161898") __attribute__((sda));
 extern float scoutbot_glow_quad_vertex_scale_gp __asm__("D_L08_0016189C") __attribute__((sda));
-void draw_scoutbot_glow_quad(char *arg) __asm__("FUN_L08_002d4108");
 void draw_scoutbot_glow_quad(char *moby) {
     char *data = *(char **)(moby + 0x78);
     Pk pk;
@@ -1118,16 +1117,13 @@ extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern void DebugPrint(char *, ...);
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 float approach_angle(float *cur, float *vel, float target, float lim, float accel, float maxv) __asm__("FUN_L00_0025be00");
 int FUN_L00_00258830(char *m, char *v, int flags, float a, float b, float c);
 int FUN_L00_00259028(unsigned char *m, char *c, float *tgt, void *out);
 int mine_fall(void *moby, void *motion) __asm__("FUN_L00_0025c698");
 int select_point_index_by_distance(void *arg0, void *arg1, float target) __asm__("FUN_L01_0028b510");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
-void FUN_L00_0025a120(char *o);
 void FUN_L00_0025f730(void *a, float x);
-void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 void FUN_L01_0026d930(char *p);
 void update_blarg_paratrooper_damage_and_state(char *m) __asm__("FUN_L08_003024d8");
 extern char D_0013F350[];

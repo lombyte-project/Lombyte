@@ -489,7 +489,6 @@ extern void blend_moby_animation(void *,int,int,int) __asm__("FUN_00212f90");
 extern void func_L01_0026E8E0_2E2EF0(char *) __asm__("FUN_L01_0026d930");
 extern int random_int_between(int,int) __asm__("FUN_L00_00257b90");
 extern int func_001160D8_2E2EF0(void) __asm__("FUN_001160d8");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float func_00214358_2E2EF0(void *,int,float) __asm__("FUN_00213508");
 extern float random_float_between(float,float) __asm__("FUN_002132a8");
 extern float smooth54(float *,float,float) __asm__("FUN_00213ed8");
@@ -839,7 +838,6 @@ extern int D_L12_00161884 __attribute__((sda));
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 
 void FUN_L12_002e3098(struct Moby *moby);
 void FUN_L12_002e3098(struct Moby *moby) {
@@ -1052,7 +1050,6 @@ void process_hoven_anklebiter_damage_and_alerts(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E4C58), where it is exact; names translated to the US level program. */
 
 extern char *spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
-int FUN_L00_00257b90(int lo, int hi);
 unsigned char *FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
 extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
@@ -1207,9 +1204,7 @@ extern int FUN_L08_002025d0(void *, int, int, void *, int);
 extern void interpolate_vector(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-void emit_platform_exhaust_effects(struct Moby *moby) __asm__("FUN_L12_002e3948");
 void FUN_L12_002e3c08_c(char *m, float *ang, void *target, int unused, int brake) __asm__("FUN_L12_002e3c08");
-void compute_platform_target_tilt(struct Moby *moby, float *out, int on) __asm__("FUN_L12_002e3e28");
 extern Path *D_L12_001B0C30_2E51E8[] __asm__("D_L12_001B0930");
 extern void func_L12_002E4F18_2E51E8(void *, void *, void *, int, int) __asm__("FUN_L12_002e3c08");
 
@@ -1508,11 +1503,9 @@ typedef struct {
 
 extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[];
 extern float fast_subtract_rotations(float, float);
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern void begin_dialogue_camera_transition(void *, float) __asm__("FUN_L01_002783a8");
 extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void initialize_moby_grounding(void *) __asm__("FUN_L02_0025c758");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
 extern void FUN_L00_00250df8_x(void *) __asm__("FUN_L00_00250df8");
@@ -2069,18 +2062,13 @@ typedef struct {
 extern s32 D_001413D0_e81e0 __asm__("D_001413D0") NOT_SDA;
 extern f32 D_0015ED6C_e81e0 __asm__("D_0015ED6C");
 extern f32 D_0015ED70_e81e0 __asm__("D_0015ED70");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
-extern s32 count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
 extern void alert_group_e81e0(s32, s32) __asm__("FUN_L01_0026e090");
-extern void call_for_help_e81e0(struct Moby *, s32, s32, Vec4f *, f32 *, f32) __asm__("FUN_L00_00259bc8");
 extern s32 is_point_inside_clip_volume(void *, s32) __asm__("FUN_00214720");
 extern BlargTrooperHit *find_hit_e81e0(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void take_damage_e81e0(struct Moby *, BlargTrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
-extern void trooper_knockback_arc(void *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void start_fall_e81e0(struct Moby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");
 extern void anim_reset_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 extern void anim_update_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d538");
-extern void remove_blarg_trooper_and_attachment(struct Moby *) __asm__("FUN_L12_002e86d0");
 
 /* Damage and alert step of the Hoven blarg trooper (cf. FUN_L12_002e3528): refreshes its
    speed while alerted, calls for help behind itself once its groups have 9 or
@@ -2185,7 +2173,6 @@ void set_blarg_trooper_aim_yaw_offsets(struct Moby *moby, float *pos) {
     *(float *)(data + 0x188) = yaw_offset * 0.35f;
     *(float *)(data + 0x208) = yaw_offset * 0.8f;
 }
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 /* Release the vendor moby and any child it owns. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9A50), where it is exact; names translated to the US level program. */
@@ -2196,9 +2183,7 @@ typedef struct {
 } Level12VendorData;
 
 
-extern void FUN_L00_00257470(struct Moby *, int, int);
 
-void remove_blarg_trooper_and_attachment(struct Moby *moby) __asm__("FUN_L12_002e86d0");
 void remove_blarg_trooper_and_attachment(struct Moby *moby) {
     moby->unkB4 = 0;
     FUN_L00_00257470(moby, 0, -1);
@@ -2210,8 +2195,6 @@ void remove_blarg_trooper_and_attachment(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9AA0), where it is exact; names translated to the US level program. */
 
 extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void update_moby_bone_attachment(void *, void *, int) __asm__("FUN_L12_0027b9c0");
 
 void update_blarg_trooper_attachment(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -2246,7 +2229,6 @@ extern void approach_angle(void *, void *, float, float, float, float) __asm__("
 extern void approach_8808(void *, float, float) __asm__("FUN_00213ed8");
 extern void move_moby_along_heading(void *, void *) __asm__("FUN_L12_00271dd8");
 extern int path_8808(int, void *, void *, void *) __asm__("FUN_L00_00261b48");
-extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 
 void steer_blarg_trooper_toward_point(struct Moby *moby, float *target, float max_angle, float approach_speed) {
     char *data = (char *)moby->pvars;
@@ -2310,7 +2292,6 @@ void steer_blarg_trooper_toward_point(struct Moby *moby, float *target, float ma
 }
 extern f32 approach_value_e9f68(void *, f32, f32) __asm__("FUN_00213ed8");
 extern float spring_turn(float *, float, float, float, float, float) __asm__("FUN_L00_00258110");
-extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
 extern void find_point_ahead(void *, void *, float) __asm__("FUN_L01_00274b78");
 extern void FUN_L00_00263ac8(void *, int, void *, float);
 void process_blarg_helicopter_hits(struct Moby *moby) __asm__("FUN_L12_002eb220");
@@ -2331,7 +2312,6 @@ extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern char *spawn_rocket(void *, void *, int, int, float, float, float) __asm__("FUN_L12_002ecce8");
-extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern unsigned char D_001413F4 NOT_SDA;
 extern int D_L12_00161F00 MACRO_ADDR;
 extern int D_L12_00161F20 MACRO_ADDR;
@@ -2718,7 +2698,6 @@ int follow_blarg_helicopter_path(struct Moby *moby, int path_index) {
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
@@ -2804,11 +2783,9 @@ typedef struct {
 } L12WatchGlobals;
 
 extern L12WatchGlobals D_0013D5B0_lui __asm__("D_0013D5B0") NOT_SDA;
-extern int D_L12_0015F5C4 __asm__("D_L12_0015F5C4");
 extern float D_0015ED64_b570 __asm__("D_0015ED64");
 extern void attach_shared_manipulator_to_matching_class_moby(void *) __asm__("FUN_L03_002db480");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 
 void edwina_update(L16WatchMoby *m) __asm__("FUN_L12_002eb570");
 void edwina_update(L16WatchMoby *moby) {
@@ -3039,8 +3016,6 @@ void process_helicopter_hits_and_reactivation(struct Moby *moby, int flag) {
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002ED228), where it is exact; names translated to the US level program. */
 
-extern char *D_L12_001B0930[];
-extern float D_0015ED6C;
 extern void initialize_path_descriptor(char *p) __asm__("FUN_L01_0028b410");
 extern void FUN_L12_002ebca8_c(char *m, int flag) __asm__("FUN_L12_002ebca8");
 void check_scaled_vector_bsphere(char *vec, float scale) __asm__("FUN_L01_00275690");
@@ -3133,8 +3108,6 @@ void helicopter_update(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002ED550), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_001fefc8(void *);
-extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 
 void crane_arm_update(unsigned char *m) __asm__("FUN_L12_002ec1d0");
 void crane_arm_update(unsigned char *moby) {

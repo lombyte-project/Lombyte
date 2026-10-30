@@ -402,7 +402,6 @@ s32 FUN_001efa68_221ee0(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 #define G D_0013F350_lui
 void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 
-void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 void select_hero_grapple_swing_target(void) {
     union {
         OvlQuad q;
@@ -477,7 +476,6 @@ extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_002147
 
 int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 
-int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 int select_hero_grapple_target(void) {
     char *hero_target_check_base, *hero_angle_state_base, *gb, *hero_target_output_base, *hero_target_result_base;
     char *candidate_moby;
@@ -595,7 +593,6 @@ extern float gravity_length_xy(float *v) __asm__("FUN_L00_002339d0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float vector_length_xy(void *);
-extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern int D_0015EEA4;
 extern int D_L00_001612D0;
 extern int D_L00_001612D8;
@@ -605,14 +602,11 @@ extern int return_hero_animation_id_unchanged(int) __asm__("FUN_L00_002050b8");
 extern int hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
-extern int stick_direction_vs_facing(void) __asm__("FUN_L00_00221df8");
 extern int try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 extern s32 D_L00_0015F688 __attribute__((sda));
 extern short hero_run_start_frame_by_speed_step __asm__("D_L00_0015F6D8") __attribute__((sda));
-extern unsigned char D_0013E533[];
 extern unsigned char l00_hero_run_jump_animation_by_run_frame[] __asm__("D_L00_0017BDD8");
 extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void hero_change_health(int n) __asm__("FUN_L00_002050c0");
@@ -644,7 +638,6 @@ extern void fill_transfer_words(void *, int, int) __asm__("func_001F97E8");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void fast_vec_sub(void *dst, void *a, void *b) __asm__("FUN_001f9a28");
-extern char D_0013F350[];
 
 /* Sets hero.state.current to a: moves state, control_mode and state_timer into the prev_* fields, zeroes state_step, then sets up the new state; returns 0 when the change is refused. */
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -3271,22 +3264,17 @@ extern unsigned char item_available[] __asm__("D_0013D4C0");
 extern Rec2C D_L00_0017BD28_228770[] __asm__("D_L00_0017BC28");
 
 /* Gadget and weapon input for the current hero state: starts the matching move and returns 1 when the state changed. */
-extern int is_wrench_moby(char *) __asm__("FUN_L00_00211360");
 extern void launch_hero_wrench(void) __asm__("FUN_L00_00217658");
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void select_hero_grapple_swing_target(void) __asm__("FUN_L00_00221ee0");
 extern int select_hero_grapple_target(void) __asm__("FUN_L00_00222158");
 extern int can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
-extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
 extern int get_ammo(int) __asm__("FUN_L00_00233e98");
 extern void start_equipped_item_animation(void) __asm__("FUN_L00_0020e4c8");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 extern int f_fun_l00_00266d60_227fa0(int, int, int *) __asm__("FUN_L00_00266d60");
 extern int f_fun_001f9740_227fa0(int *) __asm__("FUN_001f9740");
-extern int scale_game_frames(int) __asm__("FUN_001f96f8");
 
 #include "rnc/overlay/shared/gameplay/hero/hero_set_state_data/process_hero_equipped_item_input.h"
 extern s32 D_00141660 NOT_SDA;
@@ -3726,7 +3714,6 @@ void update_hero_animation_for_movement_speed(void) {
    when set. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00221A98.c: func_L00_00229778), where it is exact; names translated to the US level program. */
 
-extern char D_0013F350[];
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
 /* Removes the moby at &hero.unk1614 and clears flags 0x41 on those at 0x1180/0x1184. */

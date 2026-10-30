@@ -2316,11 +2316,9 @@ extern int play_entity_sound() __asm__("FUN_L00_002598b0");
 extern int FUN_L00_0025a420_c() __asm__("FUN_L00_0025a420");
 int FUN_L00_0025ff38_c(float best, char *a, char *o, int *excluded, int excluded_count, void *region, int region_count) __asm__("FUN_L00_0025ff38");
 void FUN_L00_00257470_c(unsigned char *m, int flags, int arg) __asm__("FUN_L00_00257470");
-void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void trooper_anim_update(void *a, void *s) __asm__("FUN_L00_0025d458");
 void FUN_L00_0025d538_c(s32 id, void *s) __asm__("FUN_L00_0025d538");
 void FUN_L06_002f9698_c(char *arg) __asm__("FUN_L06_002f9698");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float func_001F9878_2FA618(float) __asm__("FUN_001f96b0");
 extern Target *func_L00_0025B478_2FA618(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -2335,7 +2333,6 @@ extern int activate_effect_l08(float, void *, void *, int, int, void *, int) __a
 extern int *D_L06_001B0FB0_2FA618[] __asm__("D_L06_001B0C30");
 extern unsigned char D_0013E633_2FA618[] __asm__("D_0013F350");
 
-void update_alien_snapper_hit_response_and_targeting(Moby *moby) __asm__("FUN_L06_002f91e8");
 
 void update_alien_snapper_hit_response_and_targeting(Moby *moby)
 {
@@ -2500,24 +2497,16 @@ extern short D_L06_00161F04 __attribute__((sda));
 extern short D_L06_00161F08 __attribute__((sda));
 extern void FUN_L06_002fa9c0_c(void *) __asm__("FUN_L06_002fa9c0");
 extern void blend_moby_animation_c2(void *, s32, s32, s32) __asm__("FUN_00212f90");
-f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 int count_active_moby_group_members(int i, int st) __asm__("FUN_L01_0026e008");
-int check_all_listed_class_33b_states_fe_fd_or_10(int index) __asm__("FUN_L06_002e9ea0");
 int FUN_L06_002fb2a8_c(char *moby) __asm__("FUN_L06_002fb2a8");
 int FUN_L06_002fb668_c(char *moby) __asm__("FUN_L06_002fb668");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 void reset_numeric_hud_element(HudElem *e) __asm__("FUN_L00_00235d80");
 void hud_update_counter(HudElem *e) __asm__("FUN_L00_00235ea0");
-void FUN_L00_0025a120(char *o);
-void spawn_color_swapped_explosion_burst(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
-void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
-void spawn_moby_break_fragments(unsigned char *m, int n, int cnt, int base, int range, int cnt2, int flag) __asm__("FUN_L00_00263e30");
-void set_listed_class_16f_state_2_and_data_28_to_one(int index) __asm__("FUN_L06_002d9e08");
 void set_listed_class_16f_state_2_and_clear_data_28(int idx) __asm__("FUN_L06_002d9e78");
 void FUN_L06_002f5360_c2(char *moby) __asm__("FUN_L06_002f5360");
 void FUN_L06_002f53e8_c2(char *moby) __asm__("FUN_L06_002f53e8");
 void set_moby_list_state_18(int idx) __asm__("FUN_L06_002f9948");
-void clear_moby_list_state_18(int index) __asm__("FUN_L06_002f99b0");
 void FUN_L06_002fb090_c(char *moby) __asm__("FUN_L06_002fb090");
 void FUN_L06_002fb148_c(char *moby) __asm__("FUN_L06_002fb148");
 void FUN_L06_002fb4b0_c(char *arg) __asm__("FUN_L06_002fb4b0");
@@ -2532,7 +2521,6 @@ extern int queue_animation_update(int, int, void *, void *, void *, void *, int)
 extern void func_L00_00236710_q(void) __asm__("FUN_L00_00235d80");
 extern void func_L00_00236830_q(void) __asm__("FUN_L00_00235ea0");
 extern char func_L06_0024A080_q[] __asm__("FUN_L06_00249738");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void set_moby_list_state_18(int) __asm__("FUN_L06_002f9948");
 extern void func_0020D678_q(void *) __asm__("FUN_0020c828");
 extern void func_L06_002F6818_q(void *) __asm__("FUN_L06_002f53e8");
@@ -2547,7 +2535,6 @@ extern void clear_moby_list_state_18(int) __asm__("FUN_L06_002f99b0");
 extern void func_L06_002FD0B8_q(void *) __asm__("FUN_L06_002fbc88");
 extern int check_all_listed_class_33b_states_fe_fd_or_10(int) __asm__("FUN_L06_002e9ea0");
 extern int count_active_moby_group_members(int, int) __asm__("FUN_L01_0026e008");
-extern float approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float func_00214D28_q(float *, float, float) __asm__("FUN_00213ed8");
 extern void func_L00_00262DF0_q(int, void *, float, void *) __asm__("FUN_L00_00261d78");
 extern float func_0020D830_q(void *) __asm__("FUN_0020c9e0");

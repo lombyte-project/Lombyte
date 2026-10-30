@@ -439,7 +439,6 @@ s32 resolve_hero_position_collisions(s32 mode) {
     return 1;
 }
 
-s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 
 typedef union { OvlQuad q; f32 f[4]; } V_c413e0;
 
@@ -491,7 +490,6 @@ extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f80");
-void update_hero_ground_contact(void) __asm__("FUN_L05_002402a8");
 
 /* Same routine as FUN_L16_00211098, without the mode 15 and 21 cases. */
 void integrate_hero_motion_with_collisions(void) __asm__("FUN_L05_002413e0");

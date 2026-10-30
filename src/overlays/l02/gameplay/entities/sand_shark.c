@@ -1360,7 +1360,6 @@ extern float level02_bot_wake_spray_planar_magnitude_max_gp __asm__("D_L02_00161
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern int FUN_L00_00259028(char *m, char *p, float *pos, char *v);
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("func_00214720");
 extern s32 rand(void);
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -2101,7 +2100,6 @@ void draw_elevator_rotating_rings(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DDE48), where it is exact; names translated to the US level program. */
 
 extern int FUN_L00_001fefc8(void *);
-void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void bulldozer_update(struct Moby *moby) __asm__("FUN_L02_002dca10");
 void bulldozer_update(struct Moby *moby) {
@@ -2402,7 +2400,6 @@ Level02GroupMoby *select_inactive_group_sand_shark_for_nest(Level02GroupMoby *ow
 /* four-state update: waits for a flag, plays a transition, and rolls a random heading on entering state 2 or 7 */
 /* Ported from rac1-decomp (src/overlays/l02_aridia/vendor_002A59D8.c: func_L02_002DE7A8), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void grab_crane_update(struct Moby *moby) __asm__("FUN_L02_002dd370");
 void grab_crane_update(struct Moby *moby) {
@@ -2924,7 +2921,6 @@ void snap_transport_pod_rails_to_offsets(struct Moby *moby) {
 
 extern char voice_pool[] __asm__("D_0013E550");
 extern int FUN_0022da68(int, int, int);
-void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 extern short crane_animation_speed_gp __asm__("D_L02_00161C68") __attribute__((sda));
 void crane_update(struct Moby *moby) __asm__("FUN_L02_002df1a8");
@@ -3323,7 +3319,6 @@ void tresspasser_door2_update(struct Moby *moby) {
 
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 void blend_moby_animation_c(void *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 int D_L02_00161C9C = 0x6f707070;
 int D_L02_00161CA0 = 0x707070;

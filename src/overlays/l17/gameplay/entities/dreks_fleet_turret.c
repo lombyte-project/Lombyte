@@ -627,7 +627,6 @@ extern unsigned char *spawn_moving_hero_relative_alpha_fade_particle(float *pos,
                                        unsigned char b, int mode, float scale) __asm__("FUN_L00_002730e0");
 void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 
-void draw_fleet_scrolling_radial_quads(struct Moby *moby) __asm__("FUN_L17_002d7cf0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void normalize_vector_triplet(void *) __asm__("FUN_00214128");
 
@@ -865,7 +864,6 @@ extern short fleet_bobbing_phase_rate_degrees __asm__("D_L17_00161D30") __attrib
 extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 f32 resolve_camera_surface_height(struct CameraProbePosition *position,
                                   s32 optional_output) __asm__("FUN_002135f0");
-void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
 void mark_moby_for_removal_u(struct Obj *obj) __asm__("FUN_0020c828");
 extern void make_hit_descriptor(char *arg, int a, int b, float scale,
                                   void *src) __asm__("FUN_L00_00259888");

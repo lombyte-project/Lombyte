@@ -733,7 +733,6 @@ extern s32 D_L00_00161C88[] MACRO_ADDR;
 extern void release_beam_slot(s32) __asm__("FUN_L00_002e20f8");
 extern void update_slot_panes_and_effects(s32, s32) __asm__("FUN_L00_002e2250");
 extern void draw_active_beam_slots() __asm__("FUN_L00_002e2af0");
-void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 
 void update_beam_slot_controller(SlotMoby *slot_controller) __asm__("FUN_L00_002e1df0");
 

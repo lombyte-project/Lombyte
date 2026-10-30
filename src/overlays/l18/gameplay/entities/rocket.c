@@ -463,7 +463,6 @@ void spawn_rocket_trail_effects(void *mobyp, void *vec) __asm__("FUN_L18_002d548
 extern void spawn_rocket_explosion(void *, void *) __asm__("FUN_L18_002d5610");
 void draw_rocket_target_pulse_quad(struct Moby *m) __asm__("FUN_L18_002d5768");
 
-void draw_rocket_target_pulse_quad(struct Moby *m) __asm__("FUN_L18_002d5768");
 
 void update_rocket_moby(struct Moby *moby) __asm__("FUN_L18_002d5050");
 
@@ -1719,7 +1718,6 @@ extern void jet_animate(unsigned char *m, float s) __asm__("FUN_L00_00259fe8");
 extern void draw_expanding_projectile_ring() __asm__("FUN_L18_002dba20");
 void process_expanding_ring_collisions(struct Moby *moby) __asm__("FUN_L18_002dbe80");
 
-void process_expanding_ring_collisions(struct Moby *moby) __asm__("FUN_L18_002dbe80");
 extern void mark_moby_for_removal_p(void *) __asm__("FUN_0020c828");
 
 void update_ballistic_ring_projectile(struct Moby *moby) __asm__("FUN_L18_002db460");
@@ -2728,7 +2726,6 @@ extern unsigned char D_L18_00161FD5[3] MACRO_ADDR;
 extern unsigned char D_L18_00161FE1[3] MACRO_ADDR;
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002A8400.c: func_L18_002EBBF0). */
-void spawn_explosion_burst(void *arg) __asm__("FUN_L18_002ea800");
 void spawn_explosion_burst(void *source_moby) {
     float velocity[4] __attribute__((aligned(16)));
     float offset[4] __attribute__((aligned(16)));

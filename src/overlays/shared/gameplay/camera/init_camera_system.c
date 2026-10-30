@@ -170,8 +170,6 @@ extern Elem D_L00_00167150[];
 extern S D_L00_00166C80;
 extern int D_L00_0015EF4C;
 extern int level_camera_present_flags[] __asm__("D_L00_00169890");
-s32 find_camera_table_index_by_id(s32 id) __asm__("FUN_L00_001ed230");
-void init_camera_system(void) __asm__("FUN_L00_001ed280");
 
 void setup_level_cameras(void) __asm__("FUN_L00_001ed358");
 extern f32 D_L00_0015EF40_gp __asm__("D_L00_0015EF40") __attribute__((sda));

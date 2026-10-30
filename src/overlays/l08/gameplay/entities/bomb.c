@@ -474,7 +474,6 @@ extern unsigned char D_0013D4CB NOT_SDA;
 extern void FUN_L00_00260738(void *, void *, void *, void *);
 void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) __asm__("FUN_L08_002d5950");
 
-void spawn_bomber_tank_joint_particles(char *moby, int joint, int count) __asm__("FUN_L08_002d5950");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern unsigned short D_00141C38 NOT_SDA;
@@ -484,11 +483,9 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 void update_bomber_tank_damage_and_aim(Moby *moby) __asm__("FUN_L08_002d4ca0");
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
 
-void advance_bomber_tank_along_path(struct Moby *moby, int path_id) __asm__("FUN_L08_002d55c8");
 void scatter_bomber_tank_linked_debris(char *moby) __asm__("FUN_L08_002d5d08");
 void remove_bomber_tank_linked_debris(struct Moby *moby) __asm__("FUN_L08_002d6450");
 
-void remove_bomber_tank_linked_debris(struct Moby *moby) __asm__("FUN_L08_002d6450");
 
 typedef struct {
     u8 pad0[0x20];
@@ -1054,8 +1051,6 @@ void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
-extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern float D_0015ED6C;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 #include "rnc/overlay/l08/gameplay/entities/bomb_data/spawn_bomber_tank_joint_particles_2.h"
 extern float bomber_tank_joint_particle_jitter_magnitude_base_gp __asm__("D_L08_001618DC") __attribute__((sda));
@@ -1064,7 +1059,6 @@ extern float bomber_tank_joint_particle_horizontal_spread_range_end_gp __asm__("
 #include "rnc/overlay/l08/gameplay/entities/bomb_data/spawn_bomber_tank_joint_particles.h"
 extern int FUN_L00_0024f7c8();
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_0020DAF8_2D6C58(char *, int, char *) __asm__("FUN_0020cca8");
 extern float func_00214158_2D6C58(void) __asm__("FUN_00213308");
 extern float func_002140F8_2D6C58(float, float) __asm__("FUN_002132a8");
@@ -1138,11 +1132,8 @@ typedef struct { char pad0[0x21]; unsigned char group; char pad22[0xDE]; } Blk_7
 typedef struct { char pad0[0x140]; float x,y,z,w; } Camera46;
 
 extern Camera46 D_L08_00167480;
-extern char *D_L08_0015FFD8;
 extern char *D_L08_001600EC;
-extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern float fast_difference_between_rotations(float, float) __asm__("func_001FA688");
-extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern short *D_L08_001AC040[];
 extern void FUN_L00_0025e450_c2(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void initialize_moby_launch_motion(void*,int,void*,void*,int) __asm__("FUN_L05_00318648");
@@ -1300,7 +1291,6 @@ extern void prepare_scaled_table_with_byte_128(void *, float) __asm__("FUN_L02_0
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void FUN_L08_002da0d0(void *);
 extern int voice_is_playing(struct Moby *, int) __asm__("FUN_L00_0028d8c0");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern char *spawn_burst_moby(void *, float) __asm__("FUN_L00_002d7e90");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_00257b90(int, int);
@@ -1534,7 +1524,6 @@ typedef struct { char pad0[0x140]; float x,y,z,w; } Camera46_c;
 
 char *spawn_bomb_with_velocity(int arg, char *pos, char *vec) __asm__("FUN_L08_002d22e0");
 char *FUN_L08_002daa10_c(struct Moby *moby) __asm__("FUN_L08_002daa10");
-extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern float D_L08_00161978_gp __asm__("D_L08_00161978") __attribute__((sda));
 extern float l08_bombthrower_throw_timing_speed_gp __asm__("D_L08_0016197C") __attribute__((sda));
 extern float l08_bombthrower_aim_shortening_rate_gp __asm__("D_L08_00161988") __attribute__((sda));
@@ -1559,7 +1548,6 @@ extern void FUN_L00_0025f730(void*,float);
 extern void FUN_L01_0026d930(char *p);
 extern void spawn_moby_table_puff_pattern(void *) __asm__("FUN_L04_002c46d0");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
-void FUN_L00_00257470(unsigned char *m, int flags, int arg);
 void FUN_L00_00263ac8(float x, int a, int b, unsigned char *p);
 extern Hit_2D5FA8_c *find_2D5FA8_c(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern int trooper_take_damage(struct Moby *, Hit_2D5FA8_c *, float *, int, int *, float *, int, int) __asm__("FUN_00213928");
@@ -1926,23 +1914,19 @@ extern s32 level_game_mode __asm__("D_L08_0015F5C4");
 extern s32 D_L08_0015F594 __attribute__((sda));
 extern LiftLock l08_shuttle_departure_lock __asm__("D_L08_00179C10");
 extern s32 D_0013CAE4[];
-extern void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void resolve_point_path_segment_xy_clearance(s32, float, void *, void *) __asm__("FUN_L00_00261d78");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern void update_moby_transform_wobble(struct Moby *) __asm__("FUN_L08_002dc4a0");
 void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0c8");
 
-void update_shuttle_stop_world_points(struct Moby *moby) __asm__("FUN_L08_002dc0c8");
 void select_shuttle_route_for_hero(struct Moby *moby) __asm__("FUN_L08_002dc180");
 
-void select_shuttle_route_for_hero(struct Moby *moby) __asm__("FUN_L08_002dc180");
 int advance_shuttle_path_travel(struct Moby *moby) __asm__("FUN_L08_002dc648");
 
 int advance_shuttle_path_travel(struct Moby *m) __asm__("FUN_L08_002dc648");
 void try_set_shuttle_departure_help_message(struct Moby *moby) __asm__("FUN_L08_002dc7f0");
 
-void try_set_shuttle_departure_help_message(struct Moby *moby) __asm__("FUN_L08_002dc7f0");
 
 /* Lift update: runs the lift's state machine (0 setup, 2 carry the hero
  * when riding, 3 travel to the selected stop) and moves anything riding it
@@ -2023,7 +2007,6 @@ void shuttle_update(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD440), where it is exact; names translated to the US level program. */
 
 extern char shuttle_stop_local_points[] __asm__("D_L08_001DB280");
-extern int D_L08_001B0CB0[];
 
 void update_shuttle_stop_world_points(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -2142,7 +2125,6 @@ void select_shuttle_route_for_hero(struct Moby *moby) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD9C0), where it is exact; names translated to the US level program. */
 
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
-extern float D_0015ED70;
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("FUN_00214e58");
 
 int advance_shuttle_path_travel(struct Moby *moby) {
@@ -2248,7 +2230,6 @@ typedef struct EffectRecord {
     int state;
 } EffectRecord;
 
-extern CollisionHit D_L08_00174640;
 void update_ballistic_projectile(struct Moby *moby) __asm__("FUN_L08_002dc9a8");
 
 void update_ballistic_projectile(struct Moby *moby) {
@@ -2421,9 +2402,7 @@ typedef struct { char pad0[0x2C]; unsigned char active; } Persistent46;
 
 
 extern char *D_L08_0015FFD8_macro __asm__("D_L08_0015FFD8") MACRO_ADDR;
-extern char D_0013D388[] NOT_SDA;
 extern char D_0013F3D0[] NOT_SDA;
-extern float D_0015ED6C MACRO_ADDR;
 extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 #include "rnc/overlay/l08/gameplay/entities/bomb_data/update_rocket_3.h"
 extern float rocket_guidance_velocity_correction_limit_gp __asm__("D_L08_00161A04") __attribute__((sda));
@@ -2748,14 +2727,10 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
  * or on a hit. */
 
 extern int camera_secondary_mode_lui __asm__("D_001413D4")NOT_SDA;
-extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 #include "rnc/overlay/l08/gameplay/entities/bomb_data/update_path_following_moby.h"
 extern unsigned char D_0013D408[];
 extern void *find_moby_hit(void*,int,int) __asm__("FUN_L00_0025a420");
-extern void spawn_explosion(void *,void *,void *,float,float,int,int,int,float,float,float,float,int,float,int,int,int,int) __asm__("FUN_L00_0025e450");
-extern void FUN_L00_00263d40(int, int);
 extern void FUN_L08_002dec90_c(char *m, char *pos) __asm__("FUN_L08_002dec90");
-s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 
 void update_path_following_moby(char *moby) __asm__("FUN_L08_002de848");
 

@@ -605,7 +605,6 @@ int draw_uniform_size_hud_stars(HudElem *hud_element) {
     }
     return hud_element->w;
 }
-void hud_update_counter() __asm__("FUN_L00_00235ea0");
 /* Calls hud_update_counter. */
 void mine_blend_color(void) __asm__("FUN_L00_002371e0");
 void mine_blend_color(void) {

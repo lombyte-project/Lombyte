@@ -474,8 +474,6 @@ typedef struct G2d1428 {
 } G2d1428;
 extern V2d1428 collision_hit_point __asm__("D_L00_00173E60");
 s32 is_moby_in_class_range_500_to_540(M2d1428 *) __asm__("FUN_L00_0025e3b8");
-void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
@@ -506,12 +504,10 @@ extern s32 absolute_int_2d09b8(s32) __asm__("FUN_001f99a8");
 extern void trooper_play_sound(s32, s32, void *, s32) __asm__("FUN_L00_0028dc90");
 extern void FUN_0028dbe8_2d09b8(s32, s32, void *) __asm__("FUN_L00_0028dbe8");
 extern s32 FUN_0025e3b8_2d09b8(void *) __asm__("FUN_L00_0025e3b8");
-extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
 extern void spawn_spinning_fade_in_out_effect_particle(f32, f32, f32, f32, f32, void *, s32, s32) __asm__("FUN_L00_0026b790");
 extern void FUN_001ff278_2d09b8(void *, void *, void *) __asm__("FUN_001f9a10");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void FUN_001ff500_2d09b8(f32, void *, void *) __asm__("FUN_001f9bf8");
-extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern void *spawn_crate_debris(void *, void *, void *, void *, s32, s32, f32, f32) __asm__("FUN_L00_002af8b0");
 extern void FUN_00250df8_2d09b8(void *) __asm__("FUN_L00_00250df8");
 extern void random_vector(f32, f32, void *) __asm__("FUN_L00_00257d78");
@@ -998,7 +994,6 @@ extern char D_0013F990[];
 extern char camera_position[] __asm__("D_L00_00166DC0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern float D_0015ED70;
 extern int D_0013C940;
 extern int D_L00_00166C80;
 extern int D_L00_00173E40;
@@ -1117,7 +1112,6 @@ typedef int u128_D3B20 __attribute__((mode(TI)));
 extern char D_0013A4E0[];
 extern char D_0013E533[];
 extern unsigned char D_0014161B;
-extern int D_0015ED84;
 extern int D_0015EEA4;
 extern int allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
 extern int use_ammo(int, int) __asm__("FUN_L00_00233db8");
@@ -1131,7 +1125,6 @@ extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void release_moby_with_collision_check(float *, char *, void *) __asm__("FUN_L00_002c3888");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal() __asm__("FUN_0020c828");
-void decoy_glove_aim_throw(int collision_arg, Moby_2D3608 *carrier, float *position) __asm__("FUN_L00_002d2158");
 extern u8 D_0013E539_lui __asm__("D_0013E539") NOT_SDA;
 extern char D_0013CAE4[];
 #include "rnc/gameplay/state/game_globals.h"
@@ -1306,9 +1299,7 @@ extern float D_0015ED6C;
 #include "rnc/overlay/shared/gameplay/entities/veldin_ship_globals.h"
 extern int metal_detector_trail_initial_quad_color_gp __asm__("D_L00_00161914") __attribute__((sda));
 extern int metal_detector_trail_texture_selector_gp __asm__("D_L00_00161918") __attribute__((sda));
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 extern int func_001F4868_2D3F40(int) __asm__("FUN_001f44b8");
 extern void func_L00_001FF4B0_2D3F40(void *, void *, float) __asm__("FUN_001f9bf8");
 extern void func_L00_001FD1D8_2D3F40(void *, void *, int) __asm__("FUN_001f7d30");
@@ -1459,7 +1450,6 @@ extern void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern s32 voice_is_playing(struct Moby *, s32) __asm__("FUN_L00_0028d8c0");
 extern void engine_voice_set_pitch(s32, s32) __asm__("FUN_L00_0028df38");
-extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
 extern void add_random_offset_to_vector_xyz(void *, f32) __asm__("FUN_L00_0025f8e0");
 extern void spawn_bolt_by_value(void *, void *, void *, s32, s32, s32) __asm__("FUN_L00_002a7438");
 /* the unit declares mark_moby_for_removal() without a prototype further down */
@@ -1783,7 +1773,6 @@ extern int allocate_colored_effect_slot(float *, float, float, float, float, flo
 extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned char D_L00_001802C0[];
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
-extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 
 void update_animated_point_light_moby(unsigned char *moby) __asm__("FUN_L00_002d3a10");
 
@@ -2812,7 +2801,6 @@ extern Player D_0013F3D0;
 extern Camera D_0013F350;
 extern f32 D_0015ED6C;
 extern f32 D_0015ED70;
-extern s32 D_L00_0015F5C4;
 extern struct Moby *D_L00_0015FFD8;   /* the level's moby array */
 extern Cutscene *D_L00_001600EC_2d5de8 __asm__("D_L00_001600EC");
 
@@ -3589,7 +3577,6 @@ typedef struct {
 } V_2d7d58;
 extern V_2d7d58 D_L00_001CB7E0_lui[] __asm__("D_L00_001CB7E0") NOT_SDA;
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float D_L00_001D02E0_lui[] __asm__("D_L00_001D02E0") NOT_SDA;
 extern float D_L00_001D15A0_lui[] __asm__("D_L00_001D15A0") NOT_SDA;
 extern float D_L00_001D31C0_lui[] __asm__("D_L00_001D31C0") NOT_SDA;

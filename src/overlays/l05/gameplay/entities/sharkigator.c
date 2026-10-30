@@ -518,7 +518,6 @@ extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8")
 extern int lerp_2d7020(float, int, int) __asm__("FUN_001fa6e0");
 extern int frame_number __asm__("D_L05_0015F5CC");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
-void draw_group_moby_glow_quads(unsigned char *moby) __asm__("FUN_L05_002d6f48");
 
 /* Per-frame glow: updates three parts, pulses the colour, and queues a redraw
  * once per frame. */
@@ -602,7 +601,6 @@ float absolute_float(float input) __asm__("func_001F99C0");
 int voice_is_playing(int a, int i) __asm__("FUN_L00_0028d8c0");
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void update_moby_glow_and_queue_draw(char *m) __asm__("FUN_L05_002d7020");
-void advance_scenery_ship_along_path(char *moby, int *path) __asm__("FUN_L05_002d7890");
 void draw_group_scenery_ship_trails(char *moby) __asm__("FUN_L05_002d7920");
 extern float func_00214158_2D8388(void) __asm__("FUN_00213308");
 extern float func_001F9B88_2D8388(float input) __asm__("FUN_001f99c0");
@@ -1066,7 +1064,6 @@ extern void FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, voi
 extern void build_symmetric_adjacency_masks(int *, int, int) __asm__("FUN_L05_0028be78");
 extern void mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
-float absolute_float(float input) __asm__("func_001F99C0");
 void FUN_L05_00303390_c(Moby *m) __asm__("FUN_L05_00303390");
 void FUN_L05_00303b08_c(struct Moby *m, s32 node, f32 side) __asm__("FUN_L05_00303b08");
 extern float D_0013F3D0[];
@@ -1534,7 +1531,6 @@ extern float D_L05_00161A98_gp __asm__("D_L05_00161A98") __attribute__((sda));
 extern int collision_line() __asm__("FUN_001efa68");
 extern int trooper_take_damage() __asm__("FUN_00213928");
 extern void FUN_L00_002628d8(char *, char *, int, float, float);
-float absolute_float(float input) __asm__("func_001F99C0");
 int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded, int excluded_count, void *region, int region_count);
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
 void trooper_knockback_arc(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
@@ -1882,7 +1878,6 @@ extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-float absolute_float(float input) __asm__("func_001F99C0");
 extern SegmentPath *segment_paths_3054B0[] __asm__("D_L05_001B0930");
 extern void func_001F9BD8_3054B0(PathVec *, PathVec *, PathVec *) __asm__("FUN_001f9a10");
 extern void func_001F9BF0_3054B0(PathVec *, PathVec *, PathVec *) __asm__("FUN_001f9a28");
@@ -1981,7 +1976,6 @@ extern short D_L05_00161B78 __attribute__((sda));
 extern float D_L05_00161B7C __attribute__((sda));
 extern void FUN_L00_001fff28(void *, int, float);
 extern void mark_moby_for_removal_c3(void *) __asm__("func_0020C828");
-float absolute_float(float input) __asm__("func_001F99C0");
 void handle_extermitank_hits_and_sync_children(char *moby) __asm__("FUN_L05_00305178");
 void process_extermitank_particle_hits(char *m) __asm__("FUN_L05_00305898");
 void attach_manipulator(void *owner, s32 slot_index, void *manip) __asm__("FUN_0020cb10");
@@ -2667,7 +2661,6 @@ typedef struct {
     int f50;
 } ChildData;
 
-char *spawn_racer_child(char *owner) __asm__("FUN_L05_002f8718");
 extern float frame_scale_sq_macro __asm__("D_0015ED64") MACRO_ADDR;
 extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern float spring_angle(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
@@ -2678,9 +2671,7 @@ extern int is_moby_in_class_range_500_to_540(int) __asm__("FUN_L00_0025e3b8");
 extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern void copy_racer_path_node(char *moby, int idx, float *out) __asm__("FUN_L05_00306d30");
 extern void add_moby_frames_for_group_proximity(char *moby) __asm__("FUN_L05_00307010");
-float absolute_float(float input) __asm__("func_001F99C0");
 void advance_racer_path_node(char *obj) __asm__("FUN_L05_00306e10");
-void start_racer_branch_jump(char *moby) __asm__("FUN_L05_00307358");
 void FUN_L05_00307570_c(struct Moby *m) __asm__("FUN_L05_00307570");
 extern char D_001413DC[];
 extern int func_L00_001F2BE8_308D68(void *, int, void *, void *, float) __asm__("FUN_L00_001f2868");
@@ -3339,7 +3330,6 @@ void water_update(struct Moby *moby) {
 extern char D_L05_001D6880[];
 extern short *D_L05_001ABCC0[];
 
-void synchronize_group_water_heights(char *moby) __asm__("FUN_L05_0030d5c0");
 void synchronize_group_water_heights(char *moby) {
     char *data = *(char **)(moby + 0x78);
     short *group_member_list = D_L05_001ABCC0[*(unsigned char *)(moby + 0x21)];

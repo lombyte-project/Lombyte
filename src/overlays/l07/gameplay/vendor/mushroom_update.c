@@ -130,7 +130,6 @@ void robot_head_update(char *self) {
     }
     }
 }
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 
 
 void mark_moby_for_removal_c_c2(struct Obj *obj) __asm__("FUN_0020c828");

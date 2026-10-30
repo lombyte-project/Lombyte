@@ -1177,7 +1177,6 @@ void turret_update(struct Moby *moby) {
     }
 }
 extern void FUN_001f9bf8(f32, void *, void *);
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void initialize_hit_descriptor(void *, void *, s32, f32) __asm__("FUN_L00_00259858");
 extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
 extern char damage_causer_contact_log_format[] __asm__("D_L09_002090B0");
@@ -1288,7 +1287,6 @@ extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
-float absolute_float(float input) __asm__("func_001F99C0");
 struct Moby *spawn_tumbling_debris(struct Moby *src, Vec4 *pos, Vec4 *vel, s32 kind, f32 scale) __asm__("FUN_L09_002ef868");
 void FUN_L00_0025e450(f32 burst, f32 unused_float, f32 owner_effect, f32 owner_effect2, f32 cutoff, f32 scale, f32 flash, void *owner, s32 unused2, void *pos, s32 puff_count, s32 spark_count, s32 shard_count, s32 sound, s32 shake, s32 spray_count, s32 tint, u8 alternate);
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
@@ -1589,7 +1587,6 @@ typedef struct {
 } PathFlyerVars_00309c08;
 extern void scale_vector_00309c08(f32, void *, void *) __asm__("FUN_001f9a68");
 extern s32 voice_is_playing(void *, s32) __asm__("FUN_L00_0028d8c0");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 extern u8 D_0013F3D0[];
 extern u8 D_0014C050[];
 extern s32 D_L09_0015F5CC NOT_SDA;

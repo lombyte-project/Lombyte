@@ -902,9 +902,7 @@ typedef struct { char pad0[0x10]; Vec4f a; Vec4f b; } Path_6ee0;
 
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void cart_burst(void *, void *, float, float, int) __asm__("FUN_L00_0025f090");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern int FUN_001e93b0_6ee0() __asm__("FUN_001e93b0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void FUN_L14_00307510_6ee0(void *) __asm__("FUN_L14_00307510");
 extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
@@ -1751,12 +1749,8 @@ extern float path_key_camera_angle_override_progress_thresholds[][3] __asm__("D_
 extern float path_key_camera_linked_moby_event_progress_thresholds[][3] __asm__("D_L14_001F6C08");
 extern CamKey5d48 D_L14_001F6488[];
 extern char D_L14_0017AD80[];
-extern int random_integer_below(int) __asm__("FUN_00213260");
-extern float interpolate_angle(float, float, float) __asm__("FUN_L00_0025b750");
 extern float rope_spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_001eb328");
 extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
-extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-extern void compute_position_from_spherical_offset(void *, void *, void *) __asm__("FUN_L00_001ed580");
 extern void build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 
 /* Ported from rac1-decomp src/overlays/l14_oltanis/vendor_002FF358.c (func_L14_003171D0) */
@@ -1984,7 +1978,6 @@ void update_path_key_camera(char *path_key_camera) {
 /* Tells whether the vendor slot still blocks the menu (1) or lets it through (0). */
 
 extern char *D_L14_0015EF50;
-extern u8 *D_L14_00167500 NOT_SDA;
 
 int FUN_L14_00316748(char *moby, char *other) {
     char *slot_record = *(char **)(D_L14_0015EF50 + *(short *)(moby + 0x84) * 32 + 0x1C);

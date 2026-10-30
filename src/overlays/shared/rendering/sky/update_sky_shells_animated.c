@@ -139,8 +139,6 @@ void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) {
     euler_to_matrix_ee(D_L00_001BD7E0, shell_rotation_angles);
     sky_draw_shell(1);
 }
-void sky_sprite_proc(void) __asm__("FUN_0022bba0");
-void FUN_00233980(int, long);
 void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_0028a208");
 
 void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) {
@@ -317,7 +315,6 @@ void draw_three_sky_shells_with_modulo_50000_and_100000_rotation(void) {
     sky_draw_shell(2);
 }
 extern u8 *D_L00_0016051C_0028aa98 __asm__("D_L00_0016051C");
-void sky_sprite_proc(void) __asm__("FUN_0022bba0");
 void FUN_00233980_0028aa98(s32, u64) __asm__("FUN_00233980");
 void draw_two_sky_shells_with_particles(void) __asm__("FUN_L00_0028aa98");
 

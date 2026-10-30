@@ -1143,9 +1143,6 @@ typedef union {
     float f[4];
 } V_2ace70;
 extern float D_0015ED6C_2ace70 __asm__("D_0015ED6C");
-unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-float random_float_between(float, float) __asm__("FUN_002132a8");
-void update_entity(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_bomb(int owner, void *pos) __asm__("FUN_L00_002ace70");
 unsigned char *spawn_bomb(int owner, void *spawn_position) {
     unsigned char *bomb_moby = create_moby(0x79);
@@ -1517,10 +1514,8 @@ extern float FUN_001f9af0_2adb30(void *) __asm__("FUN_001f9af0");
 extern float FUN_001f9dc8_2adb30(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_2adb30(float) __asm__("FUN_001f9de0");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float FUN_002135f0_2adb30(float *, void *) __asm__("FUN_002135f0");
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int FUN_0022da68_2adb30(int, int, int) __asm__("FUN_0022da68");
@@ -1533,7 +1528,6 @@ extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_
 extern unsigned char *FUN_L00_002603d0_2adb30(unsigned char *) __asm__("FUN_L00_002603d0");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void FUN_L00_0026a9f0_2adb30(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
-extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
 extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern int FUN_L00_002ad410_2adb30(void *, void *, int) __asm__("FUN_L00_002ad410");
 extern char *FUN_L00_002af450_2adb30(char *, char *, int, int, int) __asm__("FUN_L00_002af450");
@@ -1955,9 +1949,6 @@ void bomb_update(BombMoby *bomb_moby) {
     }
 }
 extern float D_0015ED6C_2af450 __asm__("D_0015ED6C");
-unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
-void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
-float random_float_between(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2af450(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_debris(void *pos, void *vel, int n, int flag, int g) __asm__("FUN_L00_002af450");
 unsigned char *spawn_debris(void *spawn_position, void *initial_velocity, int lifetime_frames, int flag, int trail_color_mask) {
@@ -2002,7 +1993,6 @@ typedef struct {
 } W_2af5b8;
 extern float D_0015ED6C_2af5b8 __asm__("D_0015ED6C");
 extern float D_0015ED70_2af5b8 __asm__("D_0015ED70");
-float random_float_between(float, float) __asm__("FUN_002132a8");
 void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
 int random_integer_below(int) __asm__("FUN_00213260");
 int FUN_L00_0025c0e8_c(int, int) __asm__("FUN_L00_0025c0e8");
@@ -2062,11 +2052,9 @@ typedef struct {
     int i20;
     float f24, f28;
 } V_2af8b0;
-unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 float random_angle_radians(void) __asm__("FUN_00213308");
 int FUN_001f96f8_2af8b0(int) __asm__("FUN_001f96f8");
 float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-float random_float_between(float, float) __asm__("FUN_002132a8");
 void FUN_L00_00250df8_2af8b0(void *) __asm__("FUN_L00_00250df8");
 unsigned char *spawn_crate_debris(unsigned char *owner, void *vel, void *pos, void *rot, int type,
                                 int n, float lo, float hi) __asm__("FUN_L00_002af8b0");
@@ -2137,7 +2125,6 @@ extern s32 coll_sphere(void *, s32, s32, f32) __asm__("FUN_L00_001f0d60");
 extern f32 fast_vec_dot(void *, void *) __asm__("FUN_001f9ab0");
 extern void vscl_2afa48(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32 randf_sym(f32, f32) __asm__("FUN_L00_00257c48");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void nanotech_crate_fragment_update(M_2afa48 *m) __asm__("FUN_L00_002afa48");
 void nanotech_crate_fragment_update(M_2afa48 *fragment_moby) {
     enum {
@@ -2510,7 +2497,6 @@ extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void FUN_L00_0026a4c8(Q1688 *a, Q1688 *b, int c, int d, int n, float f);
 void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 void spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
-void select_gold_devastator_missile_target(char *self, O *out, char *skip) __asm__("FUN_L00_002affa8");
 extern Impact1688 impact1688 __asm__("D_L00_00173E40");
 extern HeroMotion1688 hero_motion1688 __asm__("D_0013F350");
 extern float FUN_L00_001ff430_c(void *) __asm__("FUN_L00_001ff430");
@@ -2875,16 +2861,10 @@ typedef struct {
     V_2b1af0 b;
 } P_2b1af0;
 void fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 void scale_2b1af0(void *, void *, float) __asm__("FUN_001f9a68");
-float random_float_between(float, float) __asm__("FUN_002132a8");
-void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-float randf_sym(float, float) __asm__("FUN_L00_00257c48");
-int scale_game_frames(int) __asm__("FUN_001f96f8");
 int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 void spawn_particle(void *, void *, int, int, int, int, float, float, float, float,
                   float) __asm__("FUN_L00_002712b8");
-void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern P_2b1af0 l00_object_offset_particle_velocity_contributions __asm__("D_0013F450");
 void emit_object_offset_particles(unsigned char *source_object) __asm__("FUN_L00_002b1af0");
 
@@ -2933,7 +2913,6 @@ void emit_object_offset_particles(unsigned char *source_object) {
     }
 }
 void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
-int random_integer_below(int) __asm__("FUN_00213260");
 
 extern V_2b1af0 l00_object_offset_burst_reference_direction __asm__("D_0013F9B0");
 void emit_object_offset_particle_burst(unsigned char *source_object) __asm__("FUN_L00_002b1de0");

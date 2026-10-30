@@ -258,7 +258,6 @@ typedef struct {
 extern char * D_L03_0015FFE4_macro __asm__("D_L03_0015FFE4") MACRO_ADDR;
 extern char * D_L03_0015FFD8_macro __asm__("D_L03_0015FFD8") MACRO_ADDR;
 extern void FUN_0020c828_2bef68(void *) __asm__("FUN_0020c828");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 typedef struct Data_2C0330 {
     char pad0[0x20];
     float hp;
@@ -719,8 +718,6 @@ extern int collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_0022da68(int, int, void *);
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
-extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern float FUN_002132a8(float, float);
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
 extern void FUN_0020c828(void *);
@@ -961,7 +958,6 @@ extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_0025a120(void *);
-extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_002628d8_c(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
 extern void RaiseKernelTrap();
@@ -999,9 +995,7 @@ extern void func_L00_002514B8_2CDDC8(void*) __asm__("FUN_0020d580");
 extern void func_0020D678_2CDDC8(void *) __asm__("FUN_0020c828");
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern char D_0013E633_2CDDC8[] __asm__("D_0013E533");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void func_L00_001FF240_2CDDC8(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void func_L00_002584A8_2CDDC8(void *, int, int) __asm__("FUN_L00_00257470");
 extern void func_L00_00265050_2CDDC8(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void func_L00_0025B178_2CDDC8(void *) __asm__("FUN_L00_0025a120");
@@ -1292,11 +1286,8 @@ void blarg_helicopter_update(HMob49 *moby) {
 /* Moby update: advance a timer from a collision query, switch state, aim head angles. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002CF600), where it is exact; names translated to the US level program. */
 
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 
 void handle_blarg_helicopter_hits(char *helicopter_moby) {
     int hit_reaction_status;
@@ -1631,7 +1622,6 @@ void update_homing_spark_projectile(Moby *moby) {
 /* Spawns a class 0x350 moby and fills its data block from a position, vector and parameters. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002D65D0), where it is exact; names translated to the US level program. */
 
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
 
 char *spawn_homing_spark_projectile(char *velocity, char *spawn_position, int target_moby, int lifetime_frames, float target_height) {
     char *spawned_moby = (char *)create_moby(0x350);
@@ -1754,7 +1744,6 @@ typedef struct {
 extern unsigned char *D_L03_0015FFD8 __attribute__((sda));
 extern char D_L03_001E3628[], D_L03_001E3660[], D_L03_001E3690[];
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern void debug_print(void *) __asm__("FUN_001e93b0");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void set_moby_dialogue_record_value(void *, int) __asm__("FUN_L00_00266858");

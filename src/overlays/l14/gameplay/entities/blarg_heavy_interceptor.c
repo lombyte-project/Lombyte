@@ -1530,7 +1530,6 @@ extern int D_L14_001D8680[];
 extern int D_L14_001D8680_b[] __asm__("D_L14_001D8680");
 char *select_farthest_unselected_group_moby(int index, int *ids) __asm__("FUN_L14_002aef28");
 
-char *select_farthest_unselected_group_moby(int index, int *ids) __asm__("FUN_L14_002aef28");
 extern void draw_blarg_heavy_interceptor_spinning_beam(char *) __asm__("FUN_L14_002add48");
 extern void draw_blarg_heavy_interceptor_light_ring(char *) __asm__("FUN_L14_002ada18");
 void draw_blarg_heavy_interceptor_group_effects(struct Moby *moby) {
@@ -1645,7 +1644,6 @@ extern char D_L14_001FBD78[];
 extern void func_L14_002B5590_2B4E40(unsigned char *m) __asm__("FUN_L14_002b4340");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void func_00213D28_2B4E40(void *, int, int) __asm__("FUN_00212ed8");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern float func_001F9FA8_2B4E40(float) __asm__("FUN_001f9de0");
 extern int func_L00_00260D30_2B4E40(void *, void *, float) __asm__("FUN_L14_00268038");
 extern char *spawn_flying_bolt(void *, float *, int, int) __asm__("FUN_L14_002eccf0");
@@ -2142,7 +2140,6 @@ extern int allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022d
 extern int scale_game_frames_c(int) __asm__("FUN_001f96f8");
 extern float D_L14_00161540 __attribute__((sda));
 extern unsigned char *FUN_L14_002bb310_c(char *owner, float angle, char *posp) __asm__("FUN_L14_002bb310");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void FUN_L00_0025e450_c(void *, void *, void *, float, float, int, int, int, float, float, float, int, float, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L14_002b5290_c(unsigned char *m) __asm__("FUN_L14_002b5290");
 extern void FUN_L14_002b5428_c(char *moby) __asm__("FUN_L14_002b5428");
@@ -2823,7 +2820,6 @@ void initialize_minibomber_path_following(struct Moby *moby) {
     clear_u64_value(moby_vars + 0xF0);
 }
 /* Exhaust puffs: two red sparks and three white puffs of shrinking size behind the moby. */
-extern int random_integer_below(int) __asm__("FUN_00213260");
 
 void emit_minibomber_exhaust_puffs(struct Moby *moby) __asm__("FUN_L14_002b5dd8");
 

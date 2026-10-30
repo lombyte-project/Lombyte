@@ -657,10 +657,8 @@ extern int collision_line(void *, void *, int, void *, void *);
 extern f32 beam_point_horizontal_speed_gp __asm__("D_L06_00161FD0") __attribute__((sda));
 void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
 
-void draw_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff680");
 void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
 
-void spawn_blarg_space_commando_beam_sparks(char *moby) __asm__("FUN_L06_002ff978");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 
 void update_blarg_space_commando_beam(void *owner_moby) {

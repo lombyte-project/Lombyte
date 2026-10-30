@@ -825,17 +825,13 @@ skip:
 
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern char fighter_jet_ammo_icon_strip_data[] __asm__("D_L17_001D99E0");
-extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int D_L17_001D9B68[];
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 int lock_hold_frames __asm__("D_L17_00162170") = 500;
 int lock_fade_frames __asm__("D_L17_00162174") = 100;
 extern short D_L17_00162180 __attribute__((sda));
-extern unsigned char D_0013E500[];
 extern void append_rotated_sprite_quad(float, float, float, float, float, int, int, long, int, int,
                                        int, int, float, float) __asm__("FUN_001f5ab0");
 extern void append_scaled_screen_triangle_strip(float, float, float, void *, int, int, long) __asm__("FUN_L11_00310ad0");
-extern void project_world_point_to_screen_pixels(void *, void *, void *, int) __asm__("FUN_L11_00311210");
 extern void update_fighter_jet_target_lock(int a, char *p) __asm__("FUN_L17_002eb768");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
                                s64) __asm__("func_001F5450");
@@ -967,7 +963,6 @@ void draw_fighter_jet_hud(struct Moby *moby) {
 /* Builds a rotated offset vector from the moby, flips a facing flag on a pad press, and updates the aim. */
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002AA068.c: func_L17_002EDAF0), where it is exact; names translated to the US level program. */
 
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern int spawn_class_3f1_moby(void *, void *, void *, float, float) __asm__("FUN_L11_00308848");
 extern f32 D_L17_001620A0_gp __asm__("D_L17_001620A0") __attribute__((sda));
 extern unsigned char D_0013A4E0_u[] __asm__("D_0013A4E0");
@@ -1135,7 +1130,6 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
 extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
 extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void draw_fighter_jet_hud();
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void transform_vector_by_basis(void *, void *, void *);
 extern void update_view_context() __asm__("func_001F2D98");
 void update_fighter_jet_aim_and_fire_projectile(char *moby, char *obj, float p2, float p3) __asm__("FUN_L17_002ec000");
@@ -1143,7 +1137,6 @@ void try_fire_fighter_jet_rocket(char *moby, char *obj) __asm__("FUN_L17_002ec15
 void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *horizontal_steering_input, float *vertical_steering_input) __asm__("FUN_L17_002edf10");
 
 void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *a, float *b) __asm__("FUN_L17_002edf10");
-void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void add_draw_callback(int arg0, int arg1) __asm__("FUN_001f4600");
 extern char D_0013C940[];
 extern char D_0013E550[];
@@ -2006,7 +1999,6 @@ void adjust_fighter_jet_steering_for_flight_bounds(char *moby, float *horizontal
     }
 }
 /* Updates the class-1380 lift: rises/lowers between two heights, blends the camera and pulses its colour by state. */
-extern char D_L17_001676C0[];
 extern char D_L17_001B0DB0[];
 extern f32 advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern float random_angle_radians(void) __asm__("FUN_00213308");
@@ -2294,12 +2286,10 @@ typedef struct {
 
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float approach_angle(float *p, float *v, float a, float b, float c, float d) __asm__("FUN_L00_0025be00");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int FUN_L17_002efd48_c(char *moby, float *target, float speed) __asm__("FUN_L17_002efd48");
-extern int random_integer_below(int) __asm__("FUN_00213260");
 short D_L17_00162200 = 0x909;
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9,
                               float scale, float *v10, float *v11, float *v12);
@@ -2315,12 +2305,9 @@ void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int clip_v
 void update_robot_dog_hit_reaction_and_target_detection(void *moby_v, int arg) __asm__("FUN_L17_002efa48");
 void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
 
-void update_robot_dog_aim_joint(struct Moby *moby) __asm__("FUN_L17_002f00a0");
 void update_robot_dog_glow_effects(struct Moby *moby) __asm__("FUN_L17_002f0210");
 
-void update_robot_dog_glow_effects(struct Moby *moby) __asm__("FUN_L17_002f0210");
 f32 compute_interpolated_record_value(void *arg0) __asm__("FUN_0020c9e0");
-s32 is_point_inside_clip_volume(s32 arg0, s32 arg1) __asm__("FUN_00214720");
 void blend_moby_animation_c(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 void mark_moby_for_removal_c(void *obj) __asm__("FUN_0020c828");
 
@@ -3127,7 +3114,6 @@ int D_L17_001622B4 = 128;
 int D_L17_001622B8 = 45;
 int D_L17_001622BC = 64;
 #include "rnc/overlay/l17/gameplay/entities/door_data/draw_ripple_ring.h"
-void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void draw_ripple_ring(struct Moby *moby) __asm__("FUN_L17_002f0948");
 void draw_ripple_ring(struct Moby *moby) {
@@ -3252,7 +3238,6 @@ int D_L17_0016237C = 64;
 extern float ripple_radial_phase_distance_scale_gp __asm__("D_L17_00162380") __attribute__((sda));
 extern float ripple_phase_period_gp __asm__("D_L17_00162384") __attribute__((sda));
 extern float ripple_z_amplitude_gp __asm__("D_L17_00162388") __attribute__((sda));
-void font_queue_vu_state(void) __asm__("FUN_001f76a0");
 
 void draw_moby_radial_ripple_mesh(struct Moby *moby) __asm__("FUN_L17_002f10c8");
 
@@ -3360,7 +3345,6 @@ extern void fade_to_black(int) __asm__("FUN_001f4a58");
 int update_shuttle_travel_and_camera(char *moby, int idx) __asm__("FUN_L17_002f2180");
 void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
 
-void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
 extern char D_0014C190[];
 extern char D_0013CAE4[];
 

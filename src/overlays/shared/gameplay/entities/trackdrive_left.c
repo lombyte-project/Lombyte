@@ -256,9 +256,7 @@ void build_interpolated_dma_packet(QuadDrawArgs *draw_parameters) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002A58C0), where it is exact; names translated to the US level program. */
 
 extern int *D_L02_001611C0;
-extern void update_camera_view_matrices(void) __asm__("FUN_001f2260");
 extern void vu1_add_vif_code(int) __asm__("FUN_00233938");
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 void aa_blur_pass(void) __asm__("FUN_001fb680");
 extern void vu1_tex_flush(void) __asm__("FUN_00233b68");
 
@@ -948,7 +946,6 @@ void draw_tresspasser_puzzle_radial_strip(void *unused, f32 angle, f32 start_dis
 }
 
 typedef struct { long a, b, c, d; } Q_2dae88;
-extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
 int tex_2dae88(int) __asm__("FUN_001f44b8");
 void f20bc88_2dae88(Q_2dae88 *, int *, int *, int, int) __asm__("FUN_L02_0020bc88");
 extern Q_2dae88 l02_tresspasser_textured_quad_packed_vertices[] __asm__("D_L02_001D3310");
@@ -1203,11 +1200,9 @@ extern void clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 extern void help_request(int, int) __asm__("FUN_L00_00203908");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void ea210_approach(float, float, float, float, void *, void *) __asm__("FUN_00213f38");
-extern void jet_mount(void *, void *, int, int, int) __asm__("FUN_L00_002eaaa0");
 extern void FUN_L00_002ea9d8_c(void *) __asm__("FUN_L00_002ea9d8");
 extern void FUN_L00_002eaa30_c(void *) __asm__("FUN_L00_002eaa30");
 extern float approach_value(float, float, void *) __asm__("FUN_00213ed8");
-extern void jet_end_mount(int) __asm__("FUN_L00_002eac18");
 extern void memcard_save_data(int, int) __asm__("FUN_0020b178");
 extern void mark_moby_for_removal(struct Moby *) __asm__("FUN_0020c828");
 extern int D_L02_0015F5CC;

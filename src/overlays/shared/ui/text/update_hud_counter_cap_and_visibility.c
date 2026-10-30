@@ -1078,8 +1078,6 @@ extern s32 digit_width __asm__("D_L00_0015F84C") __attribute__((sda));
 /* "%d" */
 extern char bolt_count_format[] __asm__("D_L00_0015F850") NOT_SDA;
 
-extern int get_icon_frame(int, int) __asm__("FUN_001ff960");
-extern void draw_hud_sprite(int, int, int, int, int, int) __asm__("FUN_001ffc30");
 /* int return and no prototype are load-bearing */
 extern int sprintf_alt() __asm__("FUN_00116248");
 extern void font_print_right(int, int, int, char *, int) __asm__("FUN_001f6940");

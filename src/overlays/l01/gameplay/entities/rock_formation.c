@@ -430,7 +430,6 @@ extern f32 scale_time(f32) __asm__("FUN_001f96b0");
 extern f32 vector_distance(void *, void *) __asm__("FUN_001f9b80");
 extern s32 collision_line(void *, void *, s32, void *, void *) __asm__("FUN_001efa68");
 extern s32 probe_world_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-void spawn_explosion_effects(struct Moby *moby, u128 *where, s32 sound, f32 scale, f32 light) __asm__("FUN_L01_002fa1b0");
 void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern u8 D_L01_00167240[];
 extern u128 D_L01_001742E0;
@@ -1254,7 +1253,6 @@ void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
 extern void spawn_proximity_gated_bolts() __asm__("FUN_L01_002787a0");
 extern void *FUN_L00_00263fd8(void *, s32, void *, void *, s32, s32, void *, void *, f32, void *);
 extern void spawn_moby_from_placement() __asm__("FUN_L01_00278e20");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void green_mushroom_update(SparkMoby *m) __asm__("FUN_L01_002fd9a0");
 void green_mushroom_update(SparkMoby *mushroom_moby) {
@@ -1878,8 +1876,6 @@ ClonedMoby *initialize_beehive_spawn_moby(ClonedMoby *clone_spawner_moby) {
     update_entity(destination_moby);
     return destination_moby;
 }
-void *trooper_find_hit(void *, s32, s32) __asm__("FUN_L00_0025a420");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 void mushroom_underside_update(void *self) __asm__("FUN_L01_00307c48");
 void mushroom_underside_update(void *self) {

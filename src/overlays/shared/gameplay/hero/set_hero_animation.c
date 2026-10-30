@@ -91,7 +91,6 @@ int lookup_hero_slot3_animation_key(int key, int *out) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_002326D0), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void blend_hero_slot3_mapped_animation_pair(int id, int frame_index, float blend_frames) __asm__("FUN_L00_00231e78");
 
@@ -251,7 +250,6 @@ end:
 }
 /* Ported from rac1-decomp (src/overlays/shared/help_00232560.c: func_L00_00232A78), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation(MobyAnim *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void blend_hero_mapped_moby_animation(int animation_id, int frame_index, float blend_frames) __asm__("FUN_L00_00232220");
 
@@ -1569,7 +1567,6 @@ typedef struct {
 } B_00234b38;
 extern B_00234b38 D_L00_0016C860_00234b38 __asm__("D_L00_0016C860")
     __attribute__((section(".data")));
-void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_00234a50_00234b38(void *) __asm__("FUN_L00_00234a50");
 void apply_hero_moby_scale(void *a) __asm__("FUN_L00_00234b38");
 

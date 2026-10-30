@@ -400,7 +400,6 @@ void draw_swingshot_cable(char *moby) {
     }
 }
 #include "eetypes.h"
-unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 void set_moby_color(unsigned char *, int, int, int) __asm__("FUN_L00_002502f0");
 void moby_point_position(unsigned char *, int, void *) __asm__("FUN_L00_0024f7c8");
 int scale_game_frames(int) __asm__("FUN_001f96f8");
@@ -431,8 +430,6 @@ unsigned char *spawn_swingshot_hook(unsigned char *owner_moby, float initial_hoo
     return spawned_moby;
 }
 int FUN_001f96f8_2c7070(int) __asm__("FUN_001f96f8");
-void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 void refresh_moby_spatial_bounds_from_basis(void *) __asm__("FUN_0020e098");
 extern unsigned char D_001413FF NOT_SDA;
 void swingshot_hook_update(unsigned char *m) __asm__("FUN_L00_002c7070");
@@ -590,10 +587,6 @@ void compute_glove_of_doom_launch_velocity(V2c7320 *origin_position, V2c7320 *ta
     }
 }
 #include "qcopy.h"
-s32 collision_hit_material() __asm__("FUN_001f0b58");
-float random_float_between(float, float) __asm__("FUN_002132a8");
-int rand(void) __asm__("FUN_001160d8");
-int scale_game_frames(int) __asm__("FUN_001f96f8");
 void spawn_particle(float *, unsigned char, unsigned char, unsigned char, float, float, int) __asm__("FUN_L00_00269b70");
 void spawn_moby_collision_particles(unsigned char *moby) __asm__("FUN_L00_002c8078");
 
@@ -630,7 +623,6 @@ void spawn_moby_collision_particles(unsigned char *moby) {
     }
 }
 #include "qcopy.h"
-unsigned char *create_moby(int) __asm__("FUN_0020c4f8");
 unsigned char *spawn_glove_of_doom_held_moby(int spawning_moby, u128 *spawn_position, u128 *initial_velocity) __asm__("FUN_L00_002c8218");
 
 unsigned char *spawn_glove_of_doom_held_moby(int spawning_moby, u128 *spawn_position, u128 *initial_velocity) {
@@ -1143,7 +1135,6 @@ float FUN_001f9b80_2c1778(void *, void *) __asm__("FUN_001f9b80");
 float FUN_001f99c0_2c1778(float) __asm__("FUN_001f99c0");
 void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
 float approach_value(void *, float, float) __asm__("FUN_00213ed8");
-void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 
 extern const float l00_trespasser_pickup_initial_height_offset __asm__("D_L00_00161828") __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/trespasser_globals.h"
@@ -1994,7 +1985,6 @@ extern void spawn_explosion(float, void *, void *, int, float, float, int, int, 
                               float, float, float, float, int, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void initialize_hit_descriptor(float, void *, void *, int) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void FUN_0028dbe8_2c4380(int, int, void *) __asm__("FUN_0022da68");
@@ -2356,7 +2346,6 @@ extern int FUN_001fa6d0_2c53c0(float) __asm__("FUN_001fa6d0");
 extern int FUN_001f99a8_2c53c0(int) __asm__("FUN_001f99a8");
 extern int FUN_L00_0028dc90_2c53c0(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern float jet_distance(void *, void *) __asm__("FUN_L00_00250430");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 typedef struct {
     int amount;
     char pad4[2];
@@ -3302,7 +3291,6 @@ typedef struct {
 } DeliveryStats;
 
 extern DeliveryStats D_00141680;
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void compute_glove_of_doom_throw_velocity(struct Moby *, CarrierVars *, OvlVec4 *) __asm__("FUN_L00_002c7548");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 

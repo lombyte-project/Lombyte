@@ -45,7 +45,6 @@ void draw_background_ship_1_joint_billboards(char *self) {
 extern int D_L02_0015F5CC;
 extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void add_draw_callback(void (*)(void), void *) __asm__("FUN_001f4600");
-void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec308");
 
 void prepare_background_ship_1_joint_billboards(char *moby) __asm__("FUN_L02_002ec3f0");
 
@@ -110,7 +109,6 @@ extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68
 extern void delete_moby(void *) __asm__("func_0020C828");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
 s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
-void prepare_background_ship_1_joint_billboards(char *moby) __asm__("FUN_L02_002ec3f0");
 extern int func_0022ED80_r(int, int, int) __asm__("FUN_0022da68");
 
 void background_ship_1_update(char *moby) __asm__("FUN_L02_002ec4b8");
@@ -307,7 +305,6 @@ void spawn_background_ship_1_joint_sparks(char *moby, void *previous_position) {
             spark_part[9] = truncate_float_to_s32(8.0f) + 0x60;
     }
 }
-void draw_background_ship_1_joint_billboards(char *self) __asm__("FUN_L02_002ec308");
 void draw_matching_moby_slot_quads(char *self) __asm__("FUN_L02_002ecc68");
 
 void prepare_background_ship_2_joint_draw_data(char *moby) __asm__("FUN_L02_002ecd50");
@@ -358,7 +355,6 @@ extern int background_ship_2_color_tween_end_gp __asm__("D_L02_00161FCC") __attr
 extern void prepare_background_ship_2_joint_draw_data(char *m) __asm__("FUN_L02_002ecd50");
 extern void spawn_background_ship_2_joint_sparks(char *moby, void *previous_position) __asm__("FUN_L02_002ed420");
 extern void spawn_background_ship_2_level_10_joint_sparks(char *moby, void *arg) __asm__("FUN_L02_002ed658");
-s32 allocate_voice_for_bank_entry(s32 entry_index, s32 flags, s32 owner) __asm__("FUN_0022db10");
 extern char D_001413F4[];
 
 void background_ship_2_update(char *moby) __asm__("FUN_L02_002ece18");
@@ -668,7 +664,6 @@ extern char *D_L02_00167400_d __asm__("D_L02_00167400") NOT_SDA;
 
 void set_nonzero_follow_camera_parameters(float x, float y, float z) __asm__("FUN_L02_002f6598");
 
-void set_nonzero_follow_camera_parameters(float x, float y, float z) __asm__("FUN_L02_002f6598");
 void set_nonzero_follow_camera_parameters(float x, float y, float z) {
     char *moby = D_L02_00167400_d;
     if (*(short *)(moby + 0x86) == 0) {

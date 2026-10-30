@@ -395,7 +395,6 @@ void FUN_L00_00263fd8_263e30(void *, int, void *, void *, int, int, void *, void
                              void *) __asm__("FUN_L00_00263fd8");
 int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
 float random_angle_radians(void) __asm__("FUN_00213308");
-int random_integer_below(int) __asm__("FUN_00213260");
 void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) __asm__("FUN_L00_00263e30");
 
 void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_class, int consecutive_class_fragment_count, int base, int range, int random_class_fragment_limit, int flag) {

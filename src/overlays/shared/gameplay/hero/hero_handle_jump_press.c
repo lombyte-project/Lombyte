@@ -252,7 +252,6 @@ typedef struct {
 extern E00229a98 item_defs[] __asm__("D_L00_00179AC0");
 s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
 void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
-void set_hero_animation(s32, s32, f32) __asm__("FUN_L00_002323b8");
 s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
 
 s32 try_start_hero_item_idle_animation(void) {

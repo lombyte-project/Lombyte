@@ -711,7 +711,6 @@ extern int D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
 
 void update_moby_visibility_and_half_turn(struct Moby *moby) __asm__("FUN_L18_002fa640");
 
-void update_moby_visibility_and_half_turn(struct Moby *moby) __asm__("FUN_L18_002fa640");
 void update_moby_visibility_and_half_turn(struct Moby *moby) {
     enum {
         INITIALIZE_STATE_MACHINE = 0,
@@ -931,7 +930,6 @@ extern void collect_mobies_in_sphere_at_moby_point(void *, float, float, float, 
 extern void update_gadgebot_damage_target_and_glow(struct Moby *) __asm__("FUN_L18_002fc100");
 void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
 
-void draw_gadgebot_launch_glow_quad(struct Moby *m) __asm__("FUN_L18_002fc860");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 float move_gadgebot_toward_target(char *self, float *src) __asm__("FUN_L18_002fc4e0");

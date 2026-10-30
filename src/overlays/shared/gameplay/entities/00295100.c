@@ -457,7 +457,6 @@ extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18 D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
 void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-void fade_to_black(int) __asm__("FUN_001f4a58");
 void update_view_context(void) __asm__("FUN_001f2d98");
 void f20c828_298b18(M_298b18 *) __asm__("FUN_0020c828");
 float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
@@ -800,7 +799,6 @@ typedef struct {
     P2_002994f8 x[5];
     P2_002994f8 y[5];
 } Tab_002994f8;
-void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 /* Passes disc table entry i at 0x1A28 (0x1A50 while D_0015ED80 is set) to FUN_L00_002995d0. */
 void queue_language_zero_movie(s32 i) __asm__("FUN_L00_002994f8");
 
@@ -817,7 +815,6 @@ void queue_language_zero_movie(s32 i) {
     }
     prepare_movie_playback(a, b, 0);
 }
-void prepare_movie_playback(s32, s32, s32) __asm__("FUN_L00_002995d0");
 /* Passes movie i (the alt table while D_0015ED80 is set) and the language to FUN_L00_002995d0. */
 void queue_movie_with_game_language(s32 i) __asm__("FUN_L00_00299560");
 
@@ -1052,7 +1049,6 @@ extern s32 D_L00_0015F3FC;
 void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
 void fade_to_black(s32) __asm__("FUN_001f4a58");
 void request_audio_stream_break(void) __asm__("FUN_002166e8");
-void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
 /* Calls 002a09d8(1), fades to black, breaks the audio stream, clears globals, calls 002335a0. */
 void end_slideshow(void) __asm__("FUN_L00_00299c00");
 
@@ -1340,9 +1336,6 @@ extern void snd_flush_sound_commands(void) __asm__("FUN_0012dc80");
 extern void build_vendor_menu_rows(s32) __asm__("FUN_L00_0029a400");
 extern void reset_hud_and_suspend_weapon_updates(void) __asm__("FUN_L00_0023aef8");
 extern s32 queue_animation_update(s32, s32, void *, void *, void *, void *, s32) __asm__("FUN_001ff308");
-extern void initialize_bolt_counter_hud(void) __asm__("FUN_L00_00239cc8");
-extern void update_bolt_counter_hud_animation_and_visibility(void) __asm__("FUN_L00_00239d00");
-extern void draw_bolt_counter_hud_panel(void) __asm__("FUN_L00_00239df8");
 extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
 extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
 extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
@@ -1551,7 +1544,6 @@ extern struct T_29ad08 D_L00_00179AC0_29ad08[] __asm__("D_L00_00179AC0");
 extern void jet_end_mount(s32) __asm__("FUN_L00_002eac18");
 extern float f213508_29ad08(float, void *, s32) __asm__("FUN_00213508");
 extern void vu1_sync_chain(s32) __asm__("FUN_L00_002a09d8");
-extern void sound_update(void) __asm__("FUN_0022ca50");
 extern void clear_hero_item_slot(s32, s32) __asm__("FUN_L00_0020fca8");
 extern void parse_space_scene_chunk(s32, s32) __asm__("FUN_002049f0");
 extern void load_scene_chunks_with_fade(s32) __asm__("FUN_L00_002454c8");
@@ -1886,46 +1878,28 @@ extern VendorItemSlot40 D_L00_001C8FF0[];
 extern VendorItemSlot30 l00_vendor_item_display_transform_parameters[] __asm__("D_L00_001C9930");
 extern VendorRow D_L00_00165E80[];
 extern s16 cd_read_active[] __asm__("D_001516D8");
-extern char D_0013D1D0[];
 extern u8 vendor_moby_update_label[] __asm__("D_L00_00161128");
 extern u8 vendor_hero_update_label[] __asm__("D_L00_00161138");
 extern u8 vendor_part_update_label[] __asm__("D_L00_00161148");
-extern s32 D_L00_00161188;
-extern s32 D_L00_0016118C;
 #include "rnc/overlay/shared/gameplay/entities/00295100_data/update_vendor_purchase_2.h"
-extern s32 D_L00_00161E18;
 #include "rnc/overlay/shared/gameplay/entities/00295100_data/update_vendor_purchase.h"
-extern s32 D_L00_00161E20;
 extern f32 D_L00_00161E24;
-extern s32 D_L00_00161E30;
 extern s32 D_L00_00161E38;
-extern s32 D_0015ED80;
 extern Vec4 D_L00_00165F80[3];
 extern void *D_L00_00197300[];
 extern ViewCamera D_L00_00166C80;
 extern f32 D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 
-extern void reset_frame_counters(void) __asm__("FUN_L00_00297e30");
-extern void update_game_frame_and_idle_counters(void) __asm__("FUN_L00_00297e70");
-extern void update_visible_resident_objects(void) __asm__("FUN_00212e28");
 extern void FUN_0022dc50(void);
-extern void coordinate_hero_frame_update(void) __asm__("FUN_L00_002070d0");
-extern void update_parts(void) __asm__("FUN_00217b88");
-extern void noop_main_callback(void *, s32) __asm__("FUN_001e93e8");
 extern void FUN_00212f90(void *, s32, s32, s32);
-extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("FUN_0022da68");
 extern void detach_manipulator(void *, void *) __asm__("FUN_0020cb88");
 extern void start_vendor_exit_cutscene(void) __asm__("FUN_L00_0029ad08");
 extern void close_vendor_menu(s32) __asm__("FUN_L00_0029ab70");
-extern void update_hud_elements(s32) __asm__("FUN_L00_0023ac78");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void draw_vendor_inset_quads(void) __asm__("FUN_L00_0029f990");
-extern void set_camera_position(void *) __asm__("FUN_L00_002ea9d8");
-extern void set_camera_rotation(void *) __asm__("FUN_L00_002eaa30");
 extern void FUN_00201a28(void);
 extern void decompress_and_relocate_vendor_moby_assets(void) __asm__("FUN_L00_0029a330");
 extern void init_moby_instance(void *, s32) __asm__("FUN_0020c5f0");
-extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern void pack_render_command_fields(void *, s32, s32, s32, s32) __asm__("FUN_0020d4f0");
 extern void handle_vendor_auxiliary_moby_event(s32) __asm__("FUN_L00_0029b4d8");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
@@ -1935,25 +1909,14 @@ extern s32 FUN_001fdd10(s32);
 extern void FUN_00237e90(s32);
 extern void set_animation_parameter(s32, s32) __asm__("FUN_001ff570");
 extern s32 FUN_001ff308(s32, s32, void *, void *, void *, void *, s32);
-extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
-extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
-extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 void update_vendor_purchase(void) __asm__("FUN_L00_0029ba78");
-extern void calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
-extern void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
-extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
-extern void update_view_context(void) __asm__("FUN_001f2d98");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void restore_hero_after_vendor_exit_cutscene(void) __asm__("FUN_L00_0029af80");
 extern void FUN_002049f0(s32);
-extern void sce_vu0_unit_matrix(void *) __asm__("FUN_00125218");
 extern void sce_vu0_rot_matrix_x(void *, void *, f32) __asm__("FUN_00125360");
 extern void sce_vu0_rot_matrix_y(void *, void *, f32) __asm__("FUN_00125408");
 extern void sceVu0RotMatrixZ(void *, void *, f32) __asm__("FUN_001252b8");
-extern void update_moby_shadow_range(void *) __asm__("FUN_00213700");
-extern void apply_hero_moby_scale(void *) __asm__("FUN_L00_00234b38");
-extern void FUN_0022ca50(void);
 
 #define CUR_ITEM (vendor_menu.fD0[vendor_menu.f58])
 
@@ -1969,28 +1932,16 @@ extern s32 D_0015ED98;
 extern u8 vendor_item_0x18_purchased[] __asm__("D_00141345");
 extern s32 vendor_purchase_confirmed_gp __asm__("D_L00_00161E0C") __attribute__((sda));
 extern s32 vendor_ammo_quantity_adjustment_enabled_gp __asm__("D_L00_00161E10") __attribute__((sda));
-extern s32 D_L00_00161E30;
-extern s32 D_L00_00161E34;
-extern void init_moby_instance(void *, int) __asm__("FUN_0020c5f0");
-extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
-extern void update_moby_animation_state(void *) __asm__("FUN_0020c880");
 extern void FUN_L00_00250df8_2ba78(void *) __asm__("FUN_L00_00250df8");
 extern void FUN_0020d4f0_2ba78(void *, int, int, int, int) __asm__("FUN_0020d4f0");
 extern s32 allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 extern s32 add_ammo(u32, int) __asm__("FUN_L00_00233e40");
 extern void handle_vendor_auxiliary_moby_event(int) __asm__("FUN_L00_0029b4d8");
 extern void build_vendor_menu_rows(int) __asm__("FUN_L00_0029a400");
 extern int get_help_message_text(int) __asm__("FUN_001fdd10");
 extern void set_scrolling_status_message(int) __asm__("FUN_00237e90");
 extern void grant_inventory_item(int, int) __asm__("FUN_L00_00260860");
-extern void set_animation_parameter(int, int) __asm__("FUN_001ff570");
 extern s32 queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
-extern void initialize_vendor_selected_item_mobys(void) __asm__("FUN_L00_0029b680");
-extern void initialize_numeric_hud_timer_and_base_dimensions(void) __asm__("FUN_L00_0023a760");
-extern void hud_update_counter(void) __asm__("FUN_L00_00235ea0");
-extern void draw_weapon_ammo_hud_panel(void) __asm__("FUN_L00_0023a7a8");
 
 #define CUR_TB (D_L00_001C40B0[CUR_ITEM.fD0])
 void update_vendor_purchase(void) {

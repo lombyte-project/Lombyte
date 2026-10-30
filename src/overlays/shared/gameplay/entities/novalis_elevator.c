@@ -423,7 +423,6 @@ void novalis_elevator_update(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B90A8.c: func_L01_002C84D8), where it is exact; names translated to the US level program. */
 
 extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern char D_L01_00167240[];
 extern char D_L01_001742E0[];
 extern float D_L01_001742C0[];
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");
@@ -1291,7 +1290,6 @@ typedef struct {
 #define hero_2e3f20 ((Hero_2e3f20 *)&hero)
 #define mover_2e3f20 (*(Mover *)&D_L01_001DEB38)
 extern struct Moby *ents_2e3f20 __asm__("D_L01_0015FFD8");
-extern int D_0015ED84;
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_data/sand_mouse_update.h"
 extern char sand_mouse_already_completed_message[] __asm__("D_L01_0020AE80");
 extern char sand_mouse_missing_start_house_message[] __asm__("D_L01_0020AEA0");
@@ -1305,11 +1303,6 @@ extern int step_mover_2e3f20(void *, void *, float *, float *) __asm__("FUN_L00_
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 extern void spawn_particle_2e3f20(float *, int, int, int, int, float *, float, float, float) __asm__("FUN_L00_00272060");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
-extern int rand(void) __asm__("FUN_001160d8");
-extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void compute_sand_mouse_approach_target(int, void *) __asm__("FUN_L01_002e30b8");
 extern void sand_mouse_compute_target(char *, char *) __asm__("FUN_L01_002e3110");
@@ -1620,7 +1613,6 @@ typedef struct {
 
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -1706,7 +1698,6 @@ extern void FUN_0022da68(int, int, char *);
 extern int FUN_00213260(int);
 extern float FUN_00213308(void);
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern void FUN_0020c828(void *);
 extern float frame_time_gp __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_0015ED70 MACRO_ADDR;
 extern float D_0013F420[4];
@@ -2111,9 +2102,7 @@ extern short amoeboid_color_cycle_start_gp __asm__("D_L01_00161998") __attribute
 extern short amoeboid_color_cycle_end_gp __asm__("D_L01_0016199C") __attribute__((sda));
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-float absolute_float(float input) __asm__("func_001F99C0");
 extern float D_0013F420[];
 extern int D_001413D0[];
 extern const float D_L01_001619A0_gp __asm__("D_L01_001619A0") __attribute__((sda));
@@ -2576,7 +2565,6 @@ s32 reserve_expired_frame_slot(s32 *values, s32 count, s32 offset) {
 
 extern char *get_moby_suck_cannon_record(char *) __asm__("FUN_L00_002db890");
 extern int launch_suck_cannon_projectile(char *, int, int, float) __asm__("FUN_L00_002dbc30");
-extern void FUN_0022da68(int, int, char *);
 
 int launch_suck_cannon_projectile_and_sync_moby_state(char *moby, int a, int position_source_moby, float position_z_offset) __asm__("FUN_L01_002f1d18");
 
@@ -2725,7 +2713,6 @@ typedef struct {
     s32 count;         /* spawn budget; the moby is deleted when it runs out */
 } AreaVars;
 
-extern int D_0015ED84;
 extern s32 *D_L01_001B0930_2f2eb8[] __asm__("D_L01_001B0930");
 extern void FUN_0020c828_2f2eb8(struct Moby *) __asm__("FUN_0020c828");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");

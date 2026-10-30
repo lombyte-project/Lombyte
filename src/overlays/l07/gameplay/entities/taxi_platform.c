@@ -241,7 +241,6 @@ int classify_sharkigator_water_height_gap(char *moby, char *data) {
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310038), where it is exact; names translated to the US level program. */
 
-void blend_moby_animation_u(MobyAnim *moby, int new_seq, int frame_index, int blend_frames) __asm__("FUN_00212f90");
 
 void set_sharkigator_idle_state_from_water_height_gap(char *sharkigator_moby) __asm__("FUN_L07_0030ec58");
 
@@ -581,17 +580,7 @@ void update_taxi_platform(unsigned char *moby) {
     }
 }
 /* Moves a moby along a path between its two ends, hidden while its gate byte is set. */
-extern char *D_L07_001B0530[];
-extern float scale_time(float) __asm__("FUN_001f96b0");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
-extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
 extern unsigned char D_L07_0015FC88[] MACRO_ADDR;
-extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern char D_0013E550[];
 
 void update_mission_gated_taxi_platform(struct Moby *moby) __asm__("FUN_L07_002cdb28");
 
@@ -1440,7 +1429,6 @@ extern int FUN_L07_00281ef8_2cd2b0(void *, int, int, int) __asm__("FUN_L07_00281
 extern float FUN_00213ed8_2cd2b0(float *, float, float) __asm__("FUN_00213ed8");
 extern void FUN_L01_0026e090_2cd2b0(int, int) __asm__("FUN_L01_0026e090");
 extern void FUN_L00_002a3ec8_2cd2b0(void *, int, int, float, float, float, float) __asm__("FUN_L00_002a3ec8");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int FUN_L01_00275690_2cd2b0(void *, float) __asm__("FUN_L01_00275690");
 extern void FUN_L01_002b7fe0_2cd2b0(void *, int) __asm__("FUN_L01_002b7fe0");
 extern void render_level07_water_grids(void) __asm__("FUN_L07_0030cd20");
@@ -2213,7 +2201,6 @@ void draw_fading_ring_effect(unsigned char *moby) {
 
 extern int D_L07_00173ED8;
 extern int FUN_001efa68(void *, void *, int, int, int);
-extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_0025e450();
 extern void spawn_moby_point_offset_particle(char *, int, float, float) __asm__("FUN_L07_0029b8d8");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -2660,18 +2647,13 @@ extern unsigned char l07_sharkigator_water_gap_transition_states[1] __asm__("D_L
 extern unsigned char *spawn_moving_resizing_height_snapped_alpha_fade_particle(void *, int, int, float, float) __asm__("FUN_L00_002715e8");
 extern void FUN_L00_002223f8(int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_00263ac8(void *, int, void *, float);
 extern void set_sharkigator_idle_state_from_water_height_gap(char *arg) __asm__("FUN_L07_0030ec58");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 extern void noop_main_callback(void *, void *) __asm__("FUN_001e93e8");
-int initialize_sharkigator(char *moby, char *data) __asm__("FUN_L07_0030ed30");
 int update_sharkigator_horizontal_velocity_by_heading(char *moby, char *obj, float a, float lo, float up, float hi, float down, float vmax, float vmin) __asm__("FUN_L07_0030f1e0");
-int test_sharkigator_target_sphere_collision(void *moby, int id, float scale) __asm__("FUN_L07_0030f4d0");
-int test_other_group_moby_state_range(unsigned char *moby, int lower, int upper) __asm__("FUN_L07_0030f540");
 void FUN_L00_002a3ec8_c(void *grids, s32 count, s32 mode, f32 x, f32 z, f32 radius, f32 amount) __asm__("FUN_L00_002a3ec8");
 void handle_sharkigator_hit(char *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
-void select_sharkigator_navigation_heading(struct Moby *moby, struct WalkerData *data) __asm__("FUN_L07_0030eee8");
 void advance_sharkigator_swim_movement(char *a, char *b, float f12, float f13, float f14) __asm__("FUN_L07_0030f0f8");
 void handle_sharkigator_contact_attack(char *moby, char *obj, int state, int anim, int seq, int frame, int next, int id, float lo, float hi, float len, float scale, float radius) __asm__("FUN_L07_0030f308");
 extern char D_0013F65C[];
@@ -3181,14 +3163,10 @@ end:
         mark_moby_for_removal(moby);
     }
 }
-extern int rand(void) __asm__("FUN_001160d8");
 extern float step_angle_toward_target(float *, float, int, float) __asm__("FUN_L00_0025bc00");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern void reorient_position_about_pivot(void *, void *, void *, void *, void *) __asm__("FUN_L07_00288968");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern char *D_L07_0015FFD8_3112c8 __asm__("D_L07_0015FFD8");
 extern char D_0013F3D0[];
 extern char D_0013F440[];
@@ -3392,7 +3370,6 @@ void update_command_triggered_falling_platform(char *moby) {
 extern void set_moby_color(void *, int, int, int) __asm__("FUN_L00_002502f0");
 s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags,
                                       void *target) __asm__("FUN_0022da68");
-void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
 void update_hero_triggered_falling_platform(char *moby) __asm__("FUN_L07_00311bc8");
 
@@ -3574,10 +3551,7 @@ typedef struct Packet {
 } Packet;
 
 extern int D_L07_0015F5CC_lui __asm__("D_L07_0015F5CC");
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
-extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 unsigned char *spawn_color_tween_emitter_particle(void *pos, unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, int g, float x, float y) __asm__("FUN_L00_002729c8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern int FUN_001efa68_2cd2b0(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern void *FUN_L00_002729c8_2cd2b0(float *pos, unsigned char a1, unsigned char a2, unsigned char a3,
     unsigned char a4, unsigned char a5, void *a6, float f0, float f1) __asm__("FUN_L00_002729c8");

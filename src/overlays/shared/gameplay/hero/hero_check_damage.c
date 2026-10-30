@@ -1805,9 +1805,6 @@ extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void clear_hero_idle_rotation_targets(void) __asm__("FUN_L00_0020a500");
 extern void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 extern void replenish_hero_drones(void) __asm__("FUN_L00_002cdcc0");
-s32 can_select_hero_item_31(void) __asm__("FUN_L00_0020fe30");
-void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
-void set_hero_item_switch_timer_for_item(int id) __asm__("FUN_L00_0020fde0");
 void blend_moby_animation(void *arg0, int arg1, int arg2, int arg3) __asm__("FUN_00212f90");
 
 void hero_switch_item(int i) __asm__("FUN_L00_0020fea0");
@@ -2198,7 +2195,6 @@ void update_hero_equipped_items(void) {
     update_hero_and_equipped_item_glows();
     hero_update_items();
 }
-void cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void clear_moby_transform_history(void *) __asm__("FUN_L00_00262840");
 void FUN_L00_00232fe8_210a08(void) __asm__("FUN_L00_00232fe8");
 void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
@@ -2344,7 +2340,6 @@ extern s32 D_0013DF88[] __asm__("D_0013DF88");
 extern s32 D_0015EEA8 __asm__("D_0015EEA8");
 extern f32 D_0015ED6C_210ce8 __asm__("D_0015ED6C");
 
-void release_and_clear_hero_voice_slots(void) __asm__("FUN_L00_00206c08");
 void FUN_L00_00216de8_210ce8(s32, s32) __asm__("FUN_L00_00216de8");
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 void FUN_L00_00210c80_210ce8(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
@@ -2869,7 +2864,6 @@ void turn_to(int rotation_direction, float x, float y, float z) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00212550), where it is exact; names translated to the US level program. */
 
-extern int FUN_L00_0020d498_u(int) __asm__("FUN_L00_0020d498");
 extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 
 void turn_hero_toward_move_direction_for_item(void) __asm__("FUN_L00_00211e98");
@@ -2889,7 +2883,6 @@ void turn_hero_toward_move_direction_for_item(void) {
 }
 extern float D_0015ED6C_211f38 __asm__("D_0015ED6C");
 extern int FUN_L00_0020d498_211f38(int) __asm__("FUN_L00_0020d498");
-extern void turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 
 void turn_hero_toward_move_direction_with_stick_scale(void) __asm__("FUN_L00_00211f38");
 
@@ -3329,7 +3322,6 @@ d1:
 extern f32 D_0015ED6C_c __asm__("D_0015ED6C");
 extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
-float absolute_float(float input) __asm__("func_001F99C0");
 extern float func_L00_0025C918_2136A8(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 
 void correct_hero_ground_penetration(void) __asm__("FUN_L00_00212ff0");
@@ -3394,7 +3386,6 @@ void correct_hero_ground_penetration(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_00213970), where it is exact; names translated to the US level program. */
 
-extern char D_0013E533_lui[];
 void build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 
 void build_scaled_hero_move_impulse(float scale_factor, float impulse_length_reduction) __asm__("FUN_L00_002132b8");
@@ -3573,7 +3564,6 @@ void resolve_hero_collisions_with_history(void) {
 /* The FUN_L00_00233xxx helpers work in the hero's gravity frame (hero byte
    0x20B3: 0 = world z up, otherwise the frame of the hero's moby). */
 extern void update_hero_attachment(s32, void *, void *) __asm__("FUN_L00_00233f80");
-extern f32 gravity_length_xy(void *) __asm__("FUN_L00_002339d0");
 extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void gravity_flatten(void *, void *) __asm__("FUN_L00_002338d0");
@@ -3938,10 +3928,6 @@ extern u8 D_0013D4C2 NOT_SDA;
 extern s32 pad_held_lui __asm__("D_0013CAE0")NOT_SDA;
 
 extern s32 hero_slot_item_id(s32) __asm__("FUN_L00_0020d498");
-extern f32 gravity_z(void *) __asm__("FUN_L00_00233a78");
-extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
-extern void FUN_L00_00233810(void *, void *, f32);
-extern void FUN_L00_002334d0(void *, void *, f32);
 
 struct Curve {
     s32 start;

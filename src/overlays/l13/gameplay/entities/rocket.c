@@ -95,7 +95,6 @@ typedef struct {
 
 void update_attached_rocket(struct Moby *moby) __asm__("FUN_L13_00305a58");
 
-void update_attached_rocket(struct Moby *moby) __asm__("FUN_L13_00305a58");
 void spawn_attached_rocket_non_damaging_explosion(struct Moby *moby) __asm__("FUN_L13_00306148");
 
 void spawn_attached_rocket_explosion(struct Moby *moby) __asm__("FUN_L13_003060b8");

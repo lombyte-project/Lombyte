@@ -416,7 +416,6 @@ char *find_nearest_moby_by_class(void *search_position, int type, float *nearest
 /* spawns a debris moby with randomized velocity toward a point */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EB808), where it is exact; names translated to the US level program. */
 
-extern float D_L09_00166F40[];
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
@@ -1356,7 +1355,6 @@ void update_tumbling_debris(struct Moby *moby) {
 extern char level09_scrolling_strip_entries[] __asm__("D_L09_001F3080");
 extern char level09_scaled_surface_entries[] __asm__("D_L09_001F63C0");
 extern char level09_textured_surface_draw_settings[] __asm__("D_L09_001FC740");
-extern int D_L09_0015F5CC;
 extern void draw_textured_grid(char *moby) __asm__("FUN_L03_00291918");
 extern void build_packet_and_draw_scaled_entries(void *, void *, int) __asm__("FUN_L09_002c1978");
 
@@ -1704,7 +1702,6 @@ void platform_update(Moby *moby)
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_00301C38), where it is exact; names translated to the US level program. */
 
 extern int D_0015EEA4_q __asm__("D_0015EEA4");
-extern int D_L09_0015F5CC;
 extern int help_request(int a, int b) __asm__("FUN_L00_00203908");
 extern unsigned char D_0013D4C2_q[] __asm__("D_0013D4C2");
 extern unsigned char D_0013F3D0_lui[] __asm__("D_0013F3D0") NOT_SDA;

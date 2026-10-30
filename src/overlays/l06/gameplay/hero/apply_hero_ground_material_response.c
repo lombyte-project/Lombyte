@@ -115,7 +115,6 @@ void FUN_001f9a28_8(void *, void *, void *) __asm__("FUN_001f9a28");
 f32 FUN_001f9dc8_8(f32) __asm__("FUN_001f9dc8");
 f32 FUN_001f9de0_8(f32) __asm__("FUN_001f9de0");
 void FUN_001f9a10_8(void *, void *, void *) __asm__("FUN_001f9a10");
-extern int hero_set_state(int, int) __asm__("FUN_L06_002356a0");
 void FUN_L00_00216de8_8(s32, s32) __asm__("FUN_L00_00216de8");
 void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
 
@@ -846,7 +845,6 @@ s32 D_L06_0015F68C = 0;
 extern u8 D_L06_00167558[];
 
 extern void emit_hero_periodic_surface_effect(s32, s32) __asm__("FUN_L00_00209540");
-extern void build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8");
 extern void stop_hero_motion_without_forward_support(f32, f32) __asm__("FUN_L00_00217118");
 extern void FUN_L00_002118c8_c(f32, s32) __asm__("FUN_L00_002118c8");
 extern void turn_to(s32, f32, f32, f32) __asm__("FUN_L00_00211e30");
@@ -918,7 +916,6 @@ extern f32 forward_component(void *) __asm__("FUN_L00_00213350");
 extern struct HeroTableRow2C D_L06_0017C3A8[];
 extern struct LevelTable_QS D_L06_00167400;
 #define Q D_L06_00167400
-extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void gravity_set_z(void *, void *, f32) __asm__("FUN_L00_00233b20");
 extern void offset_hero_position_against_gravity(void *, void *, f32) __asm__("FUN_L00_002336e8");
 extern void make_hit_descriptor(void *, struct MobyView *, s32, f32, void *) __asm__("FUN_L00_00259888");
@@ -941,7 +938,6 @@ struct PlayerSpeedTuning {
 };
 extern struct PlayerSpeedTuning D_L06_0017C538_c __asm__("D_L06_0017C538");
 extern s32 allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
-extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
 extern void FUN_L00_00233810(void *, void *, f32);
 extern s32 FUN_001efa68_c(void *, void *, s32, struct MobyView *, s32) __asm__("FUN_001efa68");
 extern void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");

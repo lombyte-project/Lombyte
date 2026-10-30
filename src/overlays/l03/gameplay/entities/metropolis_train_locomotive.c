@@ -440,7 +440,6 @@ extern void jet_game_state(int, int) __asm__("FUN_L01_0027a248");
 extern void set_moby_state_14(char *) __asm__("FUN_L03_002c6c90");
 extern void debug_printf_292e98(char *, ...) __asm__("FUN_001e93b0");
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
-void update_metropolis_train_motion(char *moby) __asm__("FUN_L03_00292890");
 
 /* Heading of a path's first segment. */
 #define PATH_HEADING(p) \
@@ -731,11 +730,9 @@ void metropolis_train_locomotive_update(char *moby) {
 extern char *D_L03_001B05B0_294c08[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_294c08[] __asm__("D_0013E550");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
-extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern void noop_main_callback(void *) __asm__("FUN_001e93e8");
 extern void FUN_L00_0025f730(void *, float);
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 /* Path platform update: waits, then glides along its path one way and back (ease in/out over 240 frames),
  * or steps node to node towards the path end, pausing between runs and playing its loop sound. */
@@ -903,8 +900,6 @@ void moving_platform_small_update(char *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_002965A0), where it is exact; names translated to the US level program. */
 
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
-extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void metropolis_train_carriage_update(struct Moby *moby) __asm__("FUN_L03_002953f8");
 void metropolis_train_carriage_update(struct Moby *moby) {
@@ -976,11 +971,9 @@ void maintain_emitter_sound_voice(struct Moby *moby) {
 extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern int FUN_L00_001fefc8(void *);
 extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, int, float) __asm__("FUN_L00_0026ced0");
-extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 struct Moby;
 char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) __asm__("FUN_L03_002bad40");
 
-char *spawn_emitter_child_effect(struct Moby *parent, int unused, int color, int secondary_color, int timer_frames, float f, float scale) __asm__("FUN_L03_002bad40");
 
 /* Hit effects for the Kerwan train and turret classes: sparks or smoke puffs pushed along the hit velocity,
  * with countdowns in the moby data (0x12E, 0x12F) limiting how often they spawn. */
@@ -1084,7 +1077,6 @@ void update_moby_emitter_effects(char *moby, void *vel_in, int quiet) {
 }
 /* Ported from rac1-decomp (src/overlays/l03_kerwan/vendor_00293720.c: func_L03_0029E1A8), where it is exact; names translated to the US level program. */
 
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 
 void update_spline_moby_orientation(struct Moby *moby) __asm__("FUN_L03_0029cff0");
@@ -1241,7 +1233,6 @@ extern char *D_L03_0015FFD8_29dba8 __asm__("D_L03_0015FFD8");
 extern char *D_L03_001B05B0_29dba8[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_29dba8[] __asm__("D_0013E550");
 extern char spline_moby_missing_path_warning_format[] __asm__("D_L03_001E2A28");
-extern float random_angle_radians(void) __asm__("FUN_00213308");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
 extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b8");
@@ -1255,13 +1246,11 @@ extern void evaluate_cubic_hermite_segment(float t, void *out, void *p1, void *p
 extern void compute_sampled_spline_path_lengths(void *, int, void *, float, float) __asm__("FUN_L01_0028bb90");
 extern void add_moby_rotation_based_offsets(char *, char *) __asm__("FUN_L03_0029c8a8");
 extern void update_spline_moby_destruction_and_respawn(char *, void *, int) __asm__("FUN_L03_0029d2e0");
-extern void release_voice_slot(int) __asm__("FUN_0022d798");
 extern void report_29dba8(void *, int, int) __asm__("FUN_001e93b0");
 
 /* Train car update: keeps the cars of a group in step (stops them all when none can move), and on its
  * first frame snaps to the nearest path node and sets up the spline; then runs along the path spline,
  * steering, banking and spawning its hit/smoke effects; state 2 waits without a path, 3 waits a timer. */
-void red_ship_1_update(char *moby) __asm__("FUN_L03_0029dba8");
 void red_ship_1_update(char *moby) {
     enum {
         RED_SHIP_INITIALIZE = 0,
@@ -1562,21 +1551,17 @@ typedef struct {
 extern char *D_L03_0015FFD8_c5bb8 __asm__("D_L03_0015FFD8");
 extern char *D_L03_001B05B0_c5bb8[] __asm__("D_L03_001B05B0");
 char D_L03_001618D0 = 3;
-extern char D_L03_00166EC0[];
 extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
-extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float compute_interpolated_record_value_c5bb8(void *) __asm__("FUN_0020c9e0");
 extern int rand(void) __asm__("FUN_001160d8");
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
 extern int FUN_L00_00259028(char *m, char *p, char *pos, char *v);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 extern int FUN_L00_002dc9f0(void *, void *);
 extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__("FUN_L03_0024e830");
 extern int can_release_linked_robot_dog(struct Moby *moby) __asm__("FUN_L03_002c6ca0");
 extern int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
-extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 extern void FUN_L00_00257470(void *, int, int);
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
@@ -1591,7 +1576,6 @@ void update_robot_dog_hit_reaction(struct Moby *moby) __asm__("FUN_L03_002c6a20"
 
 extern void update_robot_dog_hit_reaction(struct Moby *moby) __asm__("FUN_L03_002c6a20");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void spawn_debris_c5bb8(char *, int, float *, void *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 
 /* Kerwan enemy update: waits at home, walks its path or chases the target picked by FUN_L03_0024e830
@@ -1877,7 +1861,6 @@ void robot_dog_update(char *moby) {
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8");
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L03_002c6ca0_c(unsigned char *) __asm__("FUN_L03_002c6ca0");
-extern void *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
@@ -2162,7 +2145,6 @@ extern char sphere_collision_resolved_position[] __asm__("D_L03_00173F70");
 extern char D_L03_00173F80[];
 extern float FUN_L00_00258278_cf(void *) __asm__("FUN_0020c9e0");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
-extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern float allocate_voice_for_target_entry_cf(void *) __asm__("FUN_L00_00259710");
 extern float truncate_float_to_s32_cf(float) __asm__("FUN_001f96b0");
 extern int is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
@@ -2175,12 +2157,10 @@ extern int FUN_001f9770_cf(float, unsigned char *, char *) __asm__("FUN_L03_002c
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
 extern int FUN_L00_0025df68_cf(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
-extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern int is_point_inside_clip_volume_cf(int) __asm__("FUN_L03_002c6d98");
 extern int probe_ground_height_cf(int unused, char *m, char *a, void *b, char *c,
                                   void *d) __asm__("FUN_L00_00260400");
-extern int allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern short D_L03_001618F4 __attribute__((sda));
 extern unsigned char *FUN_L03_0024fba8_cf(int) __asm__("FUN_L00_002603d0");
 extern void *FUN_L00_00257470_cf(char *, int, float *, void *, int, int, float, float *, float *,
@@ -2201,13 +2181,11 @@ extern void spawn_explosion(void *, void *, void *, float, float, int, int, int,
                                 int) __asm__("FUN_L00_0025e450");
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void FUN_L03_00250ae8_cf(void *, void *, void *) __asm__("FUN_L00_001ff290");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00250ae8");
 extern void compute_interpolated_record_value_cf(void *, void *, void *, int, float, float,
                                                  float) __asm__("FUN_L03_002d4288");
 extern void is_value_within_interpolated_window_cf(void *) __asm__("FUN_L03_002c9ca0");
 extern void mark_moby_for_removal_cf(void *, void *, float) __asm__("FUN_L03_0024fba8");
-extern void moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 
 void update_kerwan_path_enemy(Moby2C8398 *m) __asm__("FUN_L03_002c6fd0");
 
@@ -3230,8 +3208,6 @@ void update_kerwan_path_enemy_hit_reaction(Moby2C8398 *moby) {
     moby->bA4 = 0xFF;
     trooper_anim_finish(moby, (char *)moby_data + 0x60);
 }
-extern int select_moby_target_with_hero_fallback(char *, char *, float) __asm__("FUN_L03_0024e830");
-extern int FUN_L00_0025df68(void *, void *, void *, int *, float *, int, float, float, float);
 
 /* Picks the path node to head for next: walks the path ring from the start and keeps the node best aligned
  * with the target direction, else the one nearest the target (but at least 16 units away). */

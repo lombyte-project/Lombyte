@@ -522,8 +522,6 @@ extern void gravity_flatten(float *, float *) __asm__("FUN_L00_002338d0");
 extern void gravity_set_z(float *, float *, float) __asm__("FUN_L00_00233b20");
 extern void set_gravity_relative_vector_length_xy(float *, float *, float) __asm__("FUN_L00_00233ba0");
 extern void update_hero_attachment(int, void *, void *) __asm__("FUN_L00_00233f80");
-s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
-void update_hero_ground_contact(void) __asm__("FUN_L16_0020ffb0");
 extern char D_0013F430[] MACRO_ADDR;
 
 void integrate_hero_motion(void) __asm__("FUN_L16_00211098");

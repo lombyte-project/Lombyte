@@ -365,7 +365,6 @@ void update_hit_triggered_moby_breakup(char *self) {
 
 void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
 
-void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
 void add_draw_callback(s32 arg0, s32 arg1) __asm__("FUN_001f4600");
 void mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
 
