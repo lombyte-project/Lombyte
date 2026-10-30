@@ -47,7 +47,7 @@ struct VoicePoolWindow {
 
 void door_half_update(struct Moby *self) __asm__("FUN_L01_002f4710");
 
-void door_half_update(struct Moby *self) {
+void door_half_update(struct Moby *door_half_moby) {
     enum {
         DOOR_HALF_STATE_INITIALIZE = 0,
         DOOR_HALF_STATE_FOLLOW_DRIVER = 1
@@ -58,14 +58,14 @@ void door_half_update(struct Moby *self) {
     s32                     handle;
     struct VoicePoolWindow *window;
 
-    door_half_vars = (struct SliderVars *)self->pvars;
-    switch (self->state) {
+    door_half_vars = (struct SliderVars *)door_half_moby->pvars;
+    switch (door_half_moby->state) {
     case DOOR_HALF_STATE_INITIALIZE:
-        door_half_vars->start_x = self->pos.x;
-        door_half_vars->start_y = self->pos.y;
+        door_half_vars->start_x = door_half_moby->pos.x;
+        door_half_vars->start_y = door_half_moby->pos.y;
         door_half_vars->sound = -1;
         door_half_vars->last_progress = 0.0f;
-        self->state = 1;
+        door_half_moby->state = 1;
         break;
     case DOOR_HALF_STATE_FOLLOW_DRIVER:
         if (door_half_vars->target == -1 || door_half_vars->end_x == 0.0f ||
@@ -76,35 +76,35 @@ void door_half_update(struct Moby *self) {
             break;
 
         progress = (f32 *)driver->pvars;
-        self->pos.x = door_half_vars->start_x +
+        door_half_moby->pos.x = door_half_vars->start_x +
                       (door_half_vars->end_x - door_half_vars->start_x) * progress[0];
-        self->pos.y = door_half_vars->start_y +
+        door_half_moby->pos.y = door_half_vars->start_y +
                       (door_half_vars->end_y - door_half_vars->start_y) * progress[0];
         if (progress[0] != door_half_vars->last_progress) {
             if (progress[0] == 1.0f || progress[0] == 0.0f) {
                 /* reached an end: stop the loop, play the stop sound */
-                if (voice_is_playing(self, door_half_vars->sound)) {
+                if (voice_is_playing(door_half_moby, door_half_vars->sound)) {
                     handle = door_half_vars->sound;
                     if (handle != -1) {
                         window = (struct VoicePoolWindow *)((u8 *)&voice_pool +
                                                             handle * sizeof(struct Voice));
-                        if (window->voice.owner == self && window->voice.state != 0)
+                        if (window->voice.owner == door_half_moby && window->voice.state != 0)
                             release_voice_slot(handle);
                     }
                     door_half_vars->sound = -1;
                 }
-                allocate_voice_for_target_entry(1, 0, self);
-            } else if (!voice_is_playing(self, door_half_vars->sound)) {
-                door_half_vars->sound = allocate_voice_for_target_entry(0, 4, self);
+                allocate_voice_for_target_entry(1, 0, door_half_moby);
+            } else if (!voice_is_playing(door_half_moby, door_half_vars->sound)) {
+                door_half_vars->sound = allocate_voice_for_target_entry(0, 4, door_half_moby);
             }
         } else {
             /* not moving: stop the loop */
-            if (voice_is_playing(self, door_half_vars->sound)) {
+            if (voice_is_playing(door_half_moby, door_half_vars->sound)) {
                 handle = door_half_vars->sound;
                 if (handle != -1) {
                     window = (struct VoicePoolWindow *)((u8 *)&voice_pool +
                                                         handle * sizeof(struct Voice));
-                    if (window->voice.owner == self && window->voice.state != 0)
+                    if (window->voice.owner == door_half_moby && window->voice.state != 0)
                         release_voice_slot(handle);
                 }
                 door_half_vars->sound = -1;
