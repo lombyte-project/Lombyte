@@ -118,7 +118,7 @@ void rocket_update(struct Moby *moby) {
         ROCKET_STATE_FLYING = 1,
         ROCKET_STATE_DETONATE = 2
     };
-    ShotVars *vars = (ShotVars *)moby->pvars;
+    ShotVars *rocket_state = (ShotVars *)moby->pvars;
     float     old_pos[4];
     float     side[4];
     float     back[4];
@@ -128,26 +128,26 @@ void rocket_update(struct Moby *moby) {
     case ROCKET_STATE_FLYING: {
         char *touch = find_moby_hit(moby, 0x230000, 0);
         int   damage;
-        if (touch != 0 && *(struct Moby **)(touch + 0x20) != vars->owner) {
+        if (touch != 0 && *(struct Moby **)(touch + 0x20) != rocket_state->owner) {
             moby->state = 2;
             break;
         }
-        if (current_level_index == 12 && camera_secondary_mode[0] == 50 && vars->owner != 0) {
-            if ((signed char)vars->owner->state < 0) {
+        if (current_level_index == 12 && camera_secondary_mode[0] == 50 && rocket_state->owner != 0) {
+            if ((signed char)rocket_state->owner->state < 0) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            if (vars->owner->state < 2) {
+            if (rocket_state->owner->state < 2) {
                 moby->state = 2;
                 break;
             }
         }
         qcopy(old_pos, &moby->pos);
-        fast_vec_add(&moby->pos, &moby->pos, vars);
-        moby->rot.z = vars->yaw;
+        fast_vec_add(&moby->pos, &moby->pos, rocket_state);
+        moby->rot.z = rocket_state->yaw;
         moby->rot.x = fast_add_rotations(moby->rot.x, frame_time * 6.2831855f);
-        fast_vec_normalize(side, vars, 0.2f);
-        fast_vec_normalize(back, vars, -0.2f);
+        fast_vec_normalize(side, rocket_state, 0.2f);
+        fast_vec_normalize(back, rocket_state, -0.2f);
         add_vectors(trail, back, &moby->pos);
         spawn_effect(back,
                      side,
@@ -167,14 +167,14 @@ void rocket_update(struct Moby *moby) {
                      0);
         if (collision_line(&moby->pos, old_pos, 0, moby, 0) ||
             coll_sphere(&moby->pos, 0.2f, 0, moby)) {
-            if (D_L12_001742C0_lui.moby != 0 && D_L12_001742C0_lui.moby != (int)vars->owner) {
+            if (D_L12_001742C0_lui.moby != 0 && D_L12_001742C0_lui.moby != (int)rocket_state->owner) {
                 damage = 1;
                 if (current_level_index == 12 && camera_secondary_mode[0] == 50) {
                     damage = D_L12_00161F20 >= 16 ? 2 : 3;
                 }
-                make_hit_descriptor(&hit, moby, 0x10003, damage, vars);
-                hit.dir[0] = fast_cos(vars->yaw);
-                hit.dir[1] = fast_sin(vars->yaw);
+                make_hit_descriptor(&hit, moby, 0x10003, damage, rocket_state);
+                hit.dir[0] = fast_cos(rocket_state->yaw);
+                hit.dir[1] = fast_sin(rocket_state->yaw);
                 hit.dir[2] = 1.0f;
                 hit.dir[3] = 5627.9248f;
                 hit.unk18 = 1;
@@ -184,7 +184,7 @@ void rocket_update(struct Moby *moby) {
             }
             moby->state = 2;
         }
-        if (fast_dec_timer(&vars->timer)) {
+        if (fast_dec_timer(&rocket_state->timer)) {
             moby->state = 2;
         }
         break;
