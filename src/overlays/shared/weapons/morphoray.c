@@ -1396,7 +1396,7 @@ char *select_morphoray_target_and_adjust_aim(char  *self,
 
 char *
 
-select_morphoray_target_and_adjust_aim(char *self, float *position, float *heading, float *pitch) {
+select_morphoray_target_and_adjust_aim(char *morphoray_moby, float *position, float *heading, float *pitch) {
     float        start[4] __attribute__((aligned(16)));
     float        end[4] __attribute__((aligned(16)));
     float        target[4] __attribute__((aligned(16)));
@@ -1413,7 +1413,7 @@ select_morphoray_target_and_adjust_aim(char *self, float *position, float *headi
     char        *hero_moby;
 
     limit = D_L00_001616DC;
-    a0s[0] = (int)self;
+    a0s[0] = (int)morphoray_moby;
     *(VecQuad *)start = *(VecQuad *)position;
     hero_base = ((char *)&hero);
     hero_moby = *(char **)(hero_base + 0x2080);
@@ -1491,7 +1491,7 @@ select_morphoray_target_and_adjust_aim(char *self, float *position, float *headi
             }
             if (apparentAngle < morphoray_target_angle_threshold_degrees_gp * 0.017453292f) {
                 int valid = 1;
-                if (collision_line((Vec4f *)position, (Vec4f *)target, 6, self, 0)) {
+                if (collision_line((Vec4f *)position, (Vec4f *)target, 6, morphoray_moby, 0)) {
                     if (!D_L00_00173E40[6] || (char *)D_L00_00173E40[6] != candidate)
                         valid = 0;
                 }
