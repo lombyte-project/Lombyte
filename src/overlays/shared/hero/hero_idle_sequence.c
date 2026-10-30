@@ -2341,7 +2341,7 @@ extern void FUN_00254b58_002092c8(s32) __asm__("FUN_L00_00254b58");
 void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) __asm__("FUN_L00_002092c8");
 
 void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 pose_source_moby) {
-    u64 *out;
+    u64 *packed_pose_write_cursor;
     s32  rotation_count;
     s32  scale_count;
     s32  translation_count;
@@ -2352,20 +2352,20 @@ void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 pose_s
 
     if (pose_source_moby == 0)
         pose_source_moby = (*(s32 *)D_001413D0);
-    out = (u64 *)(pose + 1);
+    packed_pose_write_cursor = (u64 *)(pose + 1);
     FUN_00254b58_002092c8(pose_source_moby);
     pose->root_rotation = PACKED_IDENTITY;
     rotation_count = 1;
     for (i = 1; joints[i] >= 0; i++) {
-        *out++ = pack_vector_s16((joints[i] << 6) + SPR_JOINT_ROTATION, 32768.0f);
+        *packed_pose_write_cursor++ = pack_vector_s16((joints[i] << 6) + SPR_JOINT_ROTATION, 32768.0f);
         rotation_count++;
     }
     if (padding > 0) {
         s32 remaining = padding;
         do {
-            *out = PACKED_IDENTITY;
+            *packed_pose_write_cursor = PACKED_IDENTITY;
             remaining--;
-            out++;
+            packed_pose_write_cursor++;
             rotation_count++;
         } while (remaining != 0);
     }
@@ -2375,10 +2375,10 @@ void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 pose_s
     for (; joints[i] >= 0; i++) {
         packed_joint_components = pack_vector_s16(SPR_JOINT_SCALE + (joints[i] << 6), 4096.0f);
         if ((packed_joint_components & PACKED_XYZ_MASK) != PACKED_UNIT_SCALE) {
-            *out = packed_joint_components & PACKED_XYZ_MASK;
+            *packed_pose_write_cursor = packed_joint_components & PACKED_XYZ_MASK;
             scale_count++;
-            *(u16 *)((u8 *)out + 6) = i | 0x8000;
-            out++;
+            *(u16 *)((u8 *)packed_pose_write_cursor + 6) = i | 0x8000;
+            packed_pose_write_cursor++;
         }
     }
     translation_count = 0;
@@ -2386,17 +2386,17 @@ void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 pose_s
         packed_joint_components = pack_vector_s16(SPR_JOINT_TRANSLATION + (joints[joint] << 6), 1.0f);
         if ((packed_joint_components & PACKED_XYZ_MASK) !=
             (pack_vector_s16(*(s32 *)(model + 0x18) + (joint << 4), 1.0f) & PACKED_XYZ_MASK)) {
-            *out = packed_joint_components & PACKED_XYZ_MASK;
+            *packed_pose_write_cursor = packed_joint_components & PACKED_XYZ_MASK;
             translation_count++;
-            *(u16 *)((u8 *)out + 6) = joint;
-            out++;
+            *(u16 *)((u8 *)packed_pose_write_cursor + 6) = joint;
+            packed_pose_write_cursor++;
         }
     }
-    if ((u32)out & 0xf)
-        *out++ = 0;
+    if ((u32)packed_pose_write_cursor & 0xf)
+        *packed_pose_write_cursor++ = 0;
     pose->translation_count = translation_count;
     pose->scale_offset = rotation_size;
-    pose->size = ((u8 *)out - (u8 *)&pose->root_rotation) >> 4;
+    pose->size = ((u8 *)packed_pose_write_cursor - (u8 *)&pose->root_rotation) >> 4;
     pose->scale_count = scale_count;
     pose->translation_offset = (rotation_count + scale_count) << 3;
     pose->unk2 = 0;
