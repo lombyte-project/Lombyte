@@ -11,6 +11,7 @@
 #include "rnc/overlay/collision.h"
 #include "rnc/math/circle_offset.h"
 #include "rnc/overlay/level_globals.h"
+#include "rnc/overlay/level_spline.h"
 #include "sda.h"
 #include "rnc/gameplay/entities/moby_spawn.h"
 #include "rnc/gameplay/entities/build_moby_bone_transform.h"
@@ -153,14 +154,6 @@ int probe_hero_ledge_edge(Vec4 *ledge_probe_origin, f32 *facing_yaw)
     }
     return 0;
 }
-struct LedgeSpot {
-    Vec4 sphere;
-    s32 *owner;
-    s32 kind;
-    u8 pad18[8];
-};
-
-extern struct LedgeSpot *D_L00_0015F70C;
 extern s32 D_L00_0015F710;
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
@@ -178,15 +171,15 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
 
     *(u128 *)query_position = *(u128 *)from;
     for (i = 0; i < D_L00_0015F710; i++) {
-        if (skip != 0 && D_L00_0015F70C[i].owner == skip)
+        if (skip != 0 && (s32 *)l00_splines[i].path == skip)
             continue;
-        if (only != 0 && D_L00_0015F70C[i].owner != only)
+        if (only != 0 && (s32 *)l00_splines[i].path != only)
             continue;
-        if (*D_L00_0015F70C[i].owner == 0)
+        if (l00_splines[i].path->count == 0)
             continue;
-        if (fast_vec_dist(&D_L00_0015F70C[i], query_position) > D_L00_0015F70C[i].sphere.f[3])
+        if (fast_vec_dist(&l00_splines[i].bounds, query_position) > l00_splines[i].bounds.f[3])
             continue;
-        if (!FUN_L00_0025df68(D_L00_0015F70C[i].owner, query_position, to, &gotI, &gotF, D_L00_0015F70C[i].kind,
+        if (!FUN_L00_0025df68(l00_splines[i].path, query_position, to, &gotI, &gotF, l00_splines[i].kind,
                               12.0f, 10.0f, 0.0f))
             continue;
         hero_state = &hero;
@@ -202,10 +195,10 @@ int FUN_L00_0020cd08(Vec4 *from, s32 **outOwner, Vec4 *to, s32 *outI, f32 *outF,
         height = absolute_float(query_position->f[2] - to->f[2]);
         if (!(distance < distance_limit && height < height_limit))
             continue;
-        *outOwner = D_L00_0015F70C[i].owner;
+        *outOwner = (s32 *)l00_splines[i].path;
         *outI = gotI;
         *outF = gotF;
-        *outKind = D_L00_0015F70C[i].kind;
+        *outKind = l00_splines[i].kind;
         return 1;
     }
     return 0;
@@ -4068,7 +4061,7 @@ u8 D_L01_0017AA88 NOT_SDA = 7;
 u8 D_L01_0017CB00 NOT_SDA = 0;
 u8 D_L01_0015F6A8 = 7;
 s32 D_L01_0015F690 = 1;
-struct LedgeSpot *D_L02_0015F70C = 0;
+LevelSpline *l02_splines __asm__("D_L02_0015F70C") = 0;
 s32 D_L02_0015F710 = 0;
 s32 D_L02_0015F6A0[2] = {0xc, 0xd};
 u8 D_L02_0017D080 NOT_SDA = 0;
@@ -4084,7 +4077,7 @@ u8 D_L03_0017A708 NOT_SDA = 7;
 u8 D_L03_0017C780 NOT_SDA = 0;
 u8 D_L03_0015F6A8 = 7;
 s32 D_L03_0015F690 = 1;
-struct LedgeSpot *D_L04_0015F70C = 0;
+LevelSpline *l04_splines __asm__("D_L04_0015F70C") = 0;
 s32 D_L04_0015F710 = 0;
 s32 D_L04_0015F6A0[2] = {0xc, 0xd};
 u8 D_L04_0017CC00 NOT_SDA = 0;
@@ -4103,7 +4096,7 @@ u8 D_L05_0017AA68 NOT_SDA = 7;
 u8 D_L05_0017CB00 NOT_SDA = 0;
 u8 D_L05_0015F6B8 = 7;
 s32 D_L05_0015F690 = 1;
-struct LedgeSpot *D_L06_0015F70C = 0;
+LevelSpline *l06_splines __asm__("D_L06_0015F70C") = 0;
 s32 D_L06_0015F710 = 0;
 s32 D_L06_0015F6A0[2] = {0xc, 0xd};
 u8 D_L06_0017D200 NOT_SDA = 0;
@@ -4112,7 +4105,7 @@ u8 D_L06_0017AD88 NOT_SDA = 7;
 u8 D_L06_0017CE00 NOT_SDA = 0;
 u8 D_L06_0015F6A8 = 7;
 s32 D_L06_0015F690 = 1;
-struct LedgeSpot *D_L07_0015F70C = 0;
+LevelSpline *l07_splines __asm__("D_L07_0015F70C") = 0;
 s32 D_L07_0015F710 = 0;
 s32 D_L07_0015F6A0[2] = {0xc, 0xd};
 u8 D_L07_0017CB00 NOT_SDA = 0;
@@ -4130,7 +4123,7 @@ u8 D_L08_0017AE08 NOT_SDA = 7;
 u8 D_L08_0017CE80 NOT_SDA = 0;
 u8 D_L08_0015F6A8 = 7;
 s32 D_L08_0015F690 = 1;
-struct LedgeSpot *D_L09_0015F70C = 0;
+LevelSpline *l09_splines __asm__("D_L09_0015F70C") = 0;
 s32 D_L09_0015F710 = 0;
 s32 D_L09_0015F6A0[2] = {0xc, 0xd};
 u8 D_L09_0017CC00 NOT_SDA = 0;
@@ -4141,7 +4134,7 @@ u8 D_L09_0015F6A8 = 7;
 s32 D_L09_0015F690 = 1;
 float D_L09_0017BF38 NOT_SDA = 0;
 s32 D_L09_00173FDC NOT_SDA = 0;
-struct LedgeSpot *D_L10_0015F70C = 0;
+LevelSpline *l10_splines __asm__("D_L10_0015F70C") = 0;
 s32 D_L10_0015F710 = 0;
 s32 D_L10_0015F6A0[2] = {0xc, 0xd};
 u8 D_L10_0017CF00 NOT_SDA = 0;
@@ -4152,7 +4145,7 @@ u8 D_L10_0015F6A8 = 7;
 s32 D_L10_0015F690 = 1;
 float D_L10_0017C238 NOT_SDA = 0;
 s32 D_L10_001742DC NOT_SDA = 0;
-struct LedgeSpot *D_L11_0015F70C = 0;
+LevelSpline *l11_splines __asm__("D_L11_0015F70C") = 0;
 s32 D_L11_0015F710 = 0;
 s32 D_L11_0015F6A0[2] = {0xc, 0xd};
 u8 D_L11_0017D480 NOT_SDA = 0;
@@ -4161,7 +4154,7 @@ u8 D_L11_0017B008 NOT_SDA = 7;
 u8 D_L11_0017D080 NOT_SDA = 0;
 u8 D_L11_0015F6A8 = 7;
 s32 D_L11_0015F690 = 1;
-struct LedgeSpot *D_L12_0015F70C = 0;
+LevelSpline *l12_splines __asm__("D_L12_0015F70C") = 0;
 s32 D_L12_0015F710 = 0;
 s32 D_L12_0015F6A0[2] = {0xc, 0xd};
 u8 D_L12_0017CF00 NOT_SDA = 0;
@@ -4170,7 +4163,7 @@ u8 D_L12_0017AA88 NOT_SDA = 7;
 u8 D_L12_0017CB00 NOT_SDA = 0;
 u8 D_L12_0015F6A8 = 7;
 s32 D_L12_0015F690 = 1;
-struct LedgeSpot *D_L13_0015F70C = 0;
+LevelSpline *l13_splines __asm__("D_L13_0015F70C") = 0;
 s32 D_L13_0015F710 = 0;
 s32 D_L13_0015F6A0[2] = {0xc, 0xd};
 u8 D_L13_0017CD80 NOT_SDA = 0;

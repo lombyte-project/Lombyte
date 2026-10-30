@@ -12,6 +12,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/level_spline.h"
 
 
 
@@ -957,35 +958,19 @@ int update_moby_state_pause(struct Moby *moby) {
     }
     return state_pause_result;
 }
-/* A path and the points along it (the count, then the points from 0x10) */
-typedef struct {
-    s32 count;
-    u8 pad4[0xC];
-    Vec4f points[1];
-} PathPoints;
-
-/* One entry of the D_L18_0015F70C path list (0x20 bytes) */
-typedef struct {
-    u8 pad0[0xC];
-    f32 weight;       /* 0xC: 0 disables the path */
-    PathPoints *path; /* 0x10 */
-    u8 pad14[0xC];
-} PathLink;
-
 /* pvars of FUN_L18_002d62e8: up to 4 pairs of paths that meet, the hero gets the nearer one */
 typedef struct {
     struct {
-        PathLink *first;
-        PathLink *second;
+        LevelSpline *first;
+        LevelSpline *second;
     } pair[4];             /* 0x00: second starts where first's last point is */
     struct {
         f32 first;
         f32 second;
-    } weight[4];           /* 0x20: their weights before they were cleared */
+    } radius[4];           /* 0x20: their radii before they were cleared */
     s32 node[2];           /* 0x40: indexes into D_L18_001600EC */
 } PathJunctionVars;
 
-extern PathLink *l18_path_links __asm__("D_L18_0015F70C");
 extern char *D_L18_001600EC;
 extern char *create_class_326_moby(void *vector) __asm__("FUN_L18_002e22c0");
 
@@ -1010,21 +995,21 @@ void update_path_junction_selection(struct Moby *moby) {
         pair_or_node_index = 0;
         do {
             for (i = 0; i < path_link_count; i++) {
-                if (l18_path_links[i].weight == 0.0f) {
+                if (l18_splines[i].bounds.f[3] == 0.0f) {
                     continue;
                 }
-                vars->pair[pair_or_node_index].first = &l18_path_links[i];
-                vars->weight[pair_or_node_index].first = l18_path_links[i].weight;
+                vars->pair[pair_or_node_index].first = &l18_splines[i];
+                vars->radius[pair_or_node_index].first = l18_splines[i].bounds.f[3];
                 for (j = 0; j < path_link_count; j++) {
-                    if (l18_path_links[j].weight == 0.0f) {
+                    if (l18_splines[j].bounds.f[3] == 0.0f) {
                         continue;
                     }
-                    if (fast_vec_dist(&l18_path_links[i].path->points[0],
-                                     &l18_path_links[j].path->points[l18_path_links[j].path->count - 1]) < 0.5f) {
-                        vars->pair[pair_or_node_index].second = &l18_path_links[j];
-                        vars->weight[pair_or_node_index].second = l18_path_links[j].weight;
-                        l18_path_links[j].weight = 0.0f;
-                        l18_path_links[i].weight = 0.0f;
+                    if (fast_vec_dist(&l18_splines[i].path->points[0],
+                                     &l18_splines[j].path->points[l18_splines[j].path->count - 1]) < 0.5f) {
+                        vars->pair[pair_or_node_index].second = &l18_splines[j];
+                        vars->radius[pair_or_node_index].second = l18_splines[j].bounds.f[3];
+                        l18_splines[j].bounds.f[3] = 0.0f;
+                        l18_splines[i].bounds.f[3] = 0.0f;
                         pair_or_node_index++;
                         break;
                     }
@@ -1044,11 +1029,11 @@ void update_path_junction_selection(struct Moby *moby) {
             }
             near_first = vector_distance_xy(&hero.motion.pos, &vars->pair[k].first->path->points[0]);
             if (near_first < vector_distance_xy(&hero.motion.pos, &vars->pair[k].second->path->points[0])) {
-                vars->pair[k].first->weight = vars->weight[k].first;
-                vars->pair[k].second->weight = 0.0f;
+                vars->pair[k].first->bounds.f[3] = vars->radius[k].first;
+                vars->pair[k].second->bounds.f[3] = 0.0f;
             } else {
-                vars->pair[k].first->weight = 0.0f;
-                vars->pair[k].second->weight = vars->weight[k].second;
+                vars->pair[k].first->bounds.f[3] = 0.0f;
+                vars->pair[k].second->bounds.f[3] = vars->radius[k].second;
             }
         }
         break;
