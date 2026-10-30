@@ -685,8 +685,6 @@ void align_hero_to_tresspasser_pad(char *moby) {
  * segments in the given colour. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002DB810), where it is exact; names translated to the US level program. */
 
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern int tresspasser_ring_arc_first_vertex_uv_gp __asm__("D_L02_00161B0C") __attribute__((sda));
 extern int tresspasser_ring_arc_second_vertex_uv_gp __asm__("D_L02_00161B10") __attribute__((sda));
 extern int tresspasser_ring_arc_third_vertex_uv_gp __asm__("D_L02_00161B14") __attribute__((sda));

@@ -84,7 +84,6 @@ typedef struct Hero_2B94B0 {
     float f228C;
 } Hero_2B94B0;
 
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern float D_0015ED70;
 extern int D_0015ED84;
 extern char *D_L08_0015FFD8;
@@ -100,7 +99,6 @@ extern int FUN_L08_002025d0(void*,int,int,void*,int);
 extern int allocate_voice_for_target_entry(int,int,void*) __asm__("FUN_0022da68");
 extern s32 queue_animation_update() __asm__("func_001FF308");
 extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern int func_L00_001F39B0_2B94B0(void *, void *, int, int, int) __asm__("FUN_L08_002025d0");
 extern void func_L00_001FF610_2B94B0(void *, void *, void *) __asm__("FUN_L00_001ff660");
@@ -148,7 +146,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
         }
         fast_vec_add(A, P, moby_data->vel);
         fast_vec_normalize(B, moby_data->vel, bolt_pickup_collision_clearance_distance_gp);
-        subtract_vector_xyz(B, P, B);
+        fast_vec_sub(B, P, B);
         fast_vec_normalize(C, moby_data->vel, f20 + bolt_pickup_collision_clearance_distance_gp);
         fast_vec_add(C, C, P);
         if (D_L08_0015F5CC % 2 == (((char *)moby - D_L08_0015FFD8) >> 8) % 2
@@ -158,7 +156,7 @@ void update_bolt_pickup(Moby_2B94B0 *moby)
                 if (f20 < bolt_pickup_collision_stop_speed_threshold_gp) {
                     ok = 0;
                 } else {
-                    subtract_vector_xyz(E, P, (D_L08_001746D8_2B94B0 + 8));
+                    fast_vec_sub(E, P, (D_L08_001746D8_2B94B0 + 8));
                     fast_vec_normalize(E, E, bolt_pickup_collision_clearance_distance_gp);
                     fast_vec_add(P, (D_L08_001746D8_2B94B0 + 8), E);
                 }
@@ -280,14 +278,12 @@ extern CollisionHit D_L08_00174640;
 extern blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868");
 extern float D_0015ED6C MACRO_ADDR;
 extern float D_0015ED70_gp __asm__("D_0015ED70") MACRO_ADDR;
-extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float D_L08_00174660[];
 extern int collision_line(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern float bomb_downward_acceleration_gp __asm__("D_L08_00161860") __attribute__((sda));
 extern void FUN_L00_001ff660_c(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void jet_animate(void *, float) __asm__("FUN_L00_00259fe8");
@@ -296,8 +292,6 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *, void *, void *, float, float, int, int, int, float, float, float, float, int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
 extern void FUN_L00_0025f090_c(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00269958_c(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
-extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern float D_L08_0015F580_macro[] __asm__("D_L08_0015F580") MACRO_ADDR;
 
 void update_bomb(char *moby) __asm__("FUN_L08_002d23f0");
@@ -350,7 +344,7 @@ void update_bomb(char *moby) {
             *(v128_36F8 *)normalized_direction = *(v128_36F8 *)random_direction;
             fast_vec_normalize(normalized_direction, normalized_direction, D_0015ED6C);
             selected_table_entry = (int *)table_or_bounce_scratch.b + random_integer_below(4);
-            FUN_L00_00269958_c((moby + 0x10), normalized_direction, *selected_table_entry, 0x4FFF, scale_game_frames_c(0x2D), 0x32, 0x78, 1);
+            FUN_L00_00269958_c((moby + 0x10), normalized_direction, *selected_table_entry, 0x4FFF, scale_game_frames(0x2D), 0x32, 0x78, 1);
         }
         qcopy(c.r.start, moby + 0x10);
         collision_z_offset = 0.16f;
@@ -390,11 +384,11 @@ void update_bomb(char *moby) {
                     fast_vec_add((bomb_vars + 0x10), (bomb_vars + 0x10), &table_or_bounce_scratch);
                     fast_vec_scale((bomb_vars + 0x10), (bomb_vars + 0x10), 0.4f);
                     *(int *)(bomb_vars + 0x24) += 1;
-                    *(int *)(bomb_vars + 0x20) = scale_game_frames_c(0xB4);
+                    *(int *)(bomb_vars + 0x20) = scale_game_frames(0xB4);
                     if (fast_vec_length((bomb_vars + 0x10)) < D_0015ED6C) {
                         int r;
                         *(unsigned char *)(moby + 0x20) = two;
-                        r = scale_game_frames_c(0x78);
+                        r = scale_game_frames(0x78);
                         *(int *)(bomb_vars + 0x20) = r;
                         *(float *)(bomb_vars + 0x28) = 254.0f / (float)r;
                         clear_u64_value((bomb_vars + 0x10));
@@ -418,9 +412,9 @@ void update_bomb(char *moby) {
     case BOMB_STATE_STATIONARY_FUSE:
         if (fast_dec_timer(bomb_vars + 0x20)) {
             *(unsigned char *)(moby + 0x20) = 0x63;
-        } else if (*(int *)(bomb_vars + 0x20) == scale_game_frames_c(0x3C)
-                   || *(int *)(bomb_vars + 0x20) == scale_game_frames_c(0x28)
-                   || *(int *)(bomb_vars + 0x20) == scale_game_frames_c(0x14)) {
+        } else if (*(int *)(bomb_vars + 0x20) == scale_game_frames(0x3C)
+                   || *(int *)(bomb_vars + 0x20) == scale_game_frames(0x28)
+                   || *(int *)(bomb_vars + 0x20) == scale_game_frames(0x14)) {
             *(unsigned char *)(bomb_vars + 7) = 0xFA;
             trooper_anim_update(moby, (short *)bomb_vars);
         }
@@ -718,7 +712,7 @@ void update_bomber_tank(Moby *moby) {
         break;
     }
     }
-    subtract_vector_xyz(velocity, &moby->pos, old_pos);
+    fast_vec_sub(velocity, &moby->pos, old_pos);
     FUN_L00_00260738(vars->unk60, velocity, &moby->rot, old_rot);
 }
 /* Per-frame update of a batalia turret moby: damage, its death state and its two helper parts. */
@@ -1032,7 +1026,6 @@ void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002D6C58), where it is exact; names translated to the US level program. */
 
 extern char *spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 #include "rnc/overlay/l08/gameplay/entities/bomb_data/spawn_bomber_tank_joint_particles_2.h"
@@ -1352,7 +1345,7 @@ void spawn_particle_line_effect(struct Moby *moby, void *from, void *to, int cou
     int alpha, grey;
     int i;
 
-    subtract_vector_xyz(&step, to, from);
+    fast_vec_sub(&step, to, from);
     fast_vec_scale(&step, &step, 1.0f / (f32)count);
     grow = (size1 - size0) / (f32)count;
     effect_initial_velocity.q = 0;
@@ -1518,7 +1511,6 @@ extern int D_L08_001619D0_gp __asm__("D_L08_001619D0") __attribute__((sda));
 extern int FUN_L00_00259028(char *m, char *p, float *pos, char *v);
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int select_nearest_xy_moby_with_hero_fallback(void *, float, void *) __asm__("FUN_L08_0026a3d0");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void FUN_L00_00258278(void*,void*,float,float,float,float);
 extern void FUN_L00_0025a120(void *);
 extern void trooper_start_knockback(void *, void *, float, int, int, int) __asm__("FUN_L00_0025c558");
@@ -1772,7 +1764,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
         if (moby->seq == moby->prev_seq && FUN_0020c9e0(moby) == 19.0f) {
             float distance, time;
             char *next;
-            subtract_vector_xyz(aim, &target->pos, &moby->pos);
+            fast_vec_sub(aim, &target->pos, &moby->pos);
             aim[2] = 0.0f;
             distance = fast_vec_length(aim);
             time = distance / FUN_L04_001f1978(l08_bombthrower_throw_timing_speed_gp);
@@ -1785,7 +1777,7 @@ void blarg_bombthrower_update(struct Moby *moby) {
             FUN_L00_0025f730(aim, distance);
             fast_vec_add(aim, aim, &moby->pos);
             moby_point_position(moby, 9, point);
-            subtract_vector_xyz(velocity, &target->pos, point);
+            fast_vec_sub(velocity, &target->pos, point);
             set_vector_length_xy(velocity, velocity, time);
             velocity[2] = FUN_L00_0025abf0(point, aim, &scratch, time, -(frame_time_sq * 15.0f));
             next = spawn_bomb_with_velocity((int)moby, (char *)point, (char *)velocity);
@@ -1975,7 +1967,7 @@ void shuttle_update(struct Moby *moby) {
     update_moby_transform_wobble(moby);
     if (vars->stop != -1)
         update_shuttle_stop_world_points((char *)moby);
-    subtract_vector_xyz(&delta, &moby->pos, &old_pos);
+    fast_vec_sub(&delta, &moby->pos, &old_pos);
     update_entity_matrix(vars->motion, &delta, &old_rot, &moby->rot);
 }
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DD440), where it is exact; names translated to the US level program. */
@@ -2172,7 +2164,6 @@ char *spawn_bomber_tank_projectile(char *source_moby, char *spawn_position, char
 }
 extern int FUN_L08_002dc9a8_collision(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern int FUN_L08_002dc9a8_trace(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-extern void FUN_L08_002dc9a8_transform(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void FUN_L08_002dc9a8_add(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void FUN_L08_002dc9a8_scale(float, void *, void *) __asm__("FUN_001f9bf8");
 extern float FUN_L08_002dc9a8_random(float, float) __asm__("FUN_002132a8");
@@ -2236,7 +2227,7 @@ void update_ballistic_projectile(struct Moby *moby) {
     case PROJECTILE_STATE_FLYING: {
         position = (float *)(moby_bytes + 0x10);
         qcopy(original, position);
-        FUN_L08_002dc9a8_transform(position, position, data);
+        fast_vec_add(position, position, data);
         *(float *)(data + 8) -= D_0015ED70 * 10.8f;
         qcopy(record.pos, position);
         record.owner = moby_bytes;
@@ -2284,7 +2275,7 @@ void update_ballistic_projectile(struct Moby *moby) {
             record.pos[0] = FUN_L08_002dc9a8_sin(angle) * radius;
             record.pos[1] = FUN_L08_002dc9a8_cos(angle) * radius;
             record.pos[2] = 0.0f;
-            FUN_L08_002dc9a8_transform(record.pos, record.pos, moby_bytes + 0x10);
+            fast_vec_add(record.pos, record.pos, moby_bytes + 0x10);
             frame_time = radius * D_0015ED6C_lui;
             radius *= 0.717f;
             record.pos[2] -= radius;
@@ -2445,9 +2436,9 @@ void update_rocket(M46 *moby) {
         yaw=fast_arc_tan(moby->position[0]-target[0],moby->position[1]-target[1]);
         pitch=fast_arc_tan(vector_distance_xy(target,moby->position),moby->position[2]-target[2]);
         FUN_L00_00262cf0(target,target,data->roll,data->yaw,data->pitch);
-        subtract_vector_xyz(delta,target,moby->position);
+        fast_vec_sub(delta,target,moby->position);
         FUN_L00_0025f730(delta,target_data->speed*D_0015ED6C);
-        subtract_vector_xyz(velocity_correction_or_effect_velocity,delta,data->velocity);
+        fast_vec_sub(velocity_correction_or_effect_velocity,delta,data->velocity);
         FUN_L00_0025f730(velocity_correction_or_effect_velocity,rocket_guidance_velocity_correction_limit_gp*frame_time_sq_macro);
         fast_vec_add(data->velocity,data->velocity,velocity_correction_or_effect_velocity);
         fast_vec_add(moby->position,moby->position,data->velocity);
@@ -2473,9 +2464,9 @@ void update_rocket(M46 *moby) {
         scale=moby->model->scale*3.0f;
         approach_value(&moby->scale,scale,moby->model->scale/(float)scale_game_frames(180));
         qcopy(target,data->target->position); target[2]+=5.0f;
-        subtract_vector_xyz(delta,target,moby->position);
+        fast_vec_sub(delta,target,moby->position);
         FUN_L00_0025f730(delta,target_data->speed*D_0015ED6C);
-        subtract_vector_xyz(velocity_correction_or_effect_velocity,delta,data->velocity);
+        fast_vec_sub(velocity_correction_or_effect_velocity,delta,data->velocity);
         FUN_L00_0025f730(velocity_correction_or_effect_velocity,rocket_guidance_velocity_correction_limit_gp*4.0f*frame_time_sq_macro);
         fast_vec_add(data->velocity,data->velocity,velocity_correction_or_effect_velocity);
         fast_vec_add(moby->position,moby->position,data->velocity);
@@ -2516,7 +2507,7 @@ void update_rocket(M46 *moby) {
         qcopy_nc(target,route->path->e[next]);
         if (route->waypoint!=route->path->count-1) {
             int life0,life1,size1;
-            subtract_vector_xyz(delta,target,moby->position);
+            fast_vec_sub(delta,target,moby->position);
             fast_vec_normalize(delta,delta,rocket_route_speed_gp*D_0015ED6C);
             fast_vec_add(moby->position,moby->position,delta);
             if (fast_vec_dist(moby->position,target)<0.5f) route->waypoint=next;
@@ -2559,7 +2550,7 @@ void update_rocket(M46 *moby) {
                         else {
                             float launch_yaw,center_yaw,min_frames,max_frames,angle_delta;
                             float *launch_offset;
-                            subtract_vector_xyz(velocity_correction_or_effect_velocity,other->position,moby->position); velocity_correction_or_effect_velocity[2]=0.0f;
+                            fast_vec_sub(velocity_correction_or_effect_velocity,other->position,moby->position); velocity_correction_or_effect_velocity[2]=0.0f;
                             fast_vec_normalize(velocity_correction_or_effect_velocity,velocity_correction_or_effect_velocity,D_0015ED6C*12.0f);
                             velocity_correction_or_effect_velocity[2]=random_float_between(D_0015ED6C*8.0f,D_0015ED6C*12.0f);
                             other->animation=0;
@@ -2684,7 +2675,7 @@ void spawn_rocket_explosion_and_debris(char *moby, int transform_index, int spaw
             transform_vector(spawn_position, spawn_position, D_L08_001600EC + (transform_index << 7));
             qcopy(spawned_moby + 0x10, spawn_position);
             clear_u64_value(local_rotation_offset);
-            subtract_vector_xyz(launch_velocity, spawn_position, moby + 0x10);
+            fast_vec_sub(launch_velocity, spawn_position, moby + 0x10);
             set_vector_length_xy(launch_velocity, launch_velocity, random_float_between(D_0015ED6C_lui * 12.0f, D_0015ED6C_lui * 15.0f));
             launch_velocity[2] = random_float_between(D_0015ED6C_lui * 6.0f, D_0015ED6C_lui * 18.0f);
             initialize_moby_launch_motion(spawned_moby, (int)moby, launch_velocity, local_rotation_offset, truncate_float_to_s32(random_float_between(60.0f, 90.0f)));
@@ -2781,7 +2772,7 @@ void update_path_following_moby(char *moby) {
             allocate_voice_for_bank_entry(1, 0, 0);
             FUN_L00_00263d40(0x53D6, -1);
         }
-        subtract_vector_xyz(frame_displacement, moby + 0x10, previous_position);
+        fast_vec_sub(frame_displacement, moby + 0x10, previous_position);
         qcopy(moby_vars + 0x10, frame_displacement);
         *(float *)(moby_vars + 0x18) = *(float *)(moby_vars + 0x18) + (D_0015ED6C + D_0015ED6C);
         spawn_explosion(moby, frame_displacement, moby + 0x10, 0.0f, 0.0f, 0x14, 0x28, 0x10, 10.0f, 5.0f, 9.0f, 1.0f, -1, 15.0f, 1, 1, -1, 0);
@@ -2822,7 +2813,7 @@ void spawn_moby_motion_spark(struct Moby *moby, char *pos) {
     float local_spawn_offset[4];
     int initial_spark_color, second_spark_color, frame_count, second_frame_count, third_frame_count;
     char *spawned_spark;
-    subtract_vector_xyz(frame_displacement, &moby->pos, pos);
+    fast_vec_sub(frame_displacement, &moby->pos, pos);
     *(OvlQuad *)local_spawn_offset = 0;
     local_spawn_offset[0] = -2.3f;
     local_spawn_offset[2] = 0.3f;

@@ -13,9 +13,7 @@ typedef struct {
     int c[4];
     float d[4];
 } L10SpriteData;
-extern void func_001F9BF0_298940(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void fast_vec_normalize(void *, void *, float) __asm__("FUN_001f9bf8");
-extern void func_001F9BD8_298940(void *, void *, void *) __asm__("FUN_001f9a10");
 extern int func_001F9850_298940(int) __asm__("FUN_001f96f8");
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern float absolute_float(float) __asm__("FUN_001f99c0");
@@ -31,10 +29,10 @@ void emit_moby_sprite_particles(char *moby) {
     float color_blend_offset;
 
     *(float *)(moby + 0x18) += 0.5f;
-    func_001F9BF0_298940(d, D_L10_00167240, moby + 0x10);
+    fast_vec_sub(d, D_L10_00167240, moby + 0x10);
     fast_vec_normalize(d, d, -0.3f);
     fast_vec_normalize(particle_position_step, d, 0.1f);
-    func_001F9BD8_298940(d, d, moby + 0x10);
+    fast_vec_add(d, d, moby + 0x10);
     *(float *)(moby + 0x18) -= 0.5f;
     for (i = 0; i < 4; i++) {
         float phase_sum = sprite_data->a[i] + sprite_data->b[i];
@@ -52,7 +50,7 @@ void emit_moby_sprite_particles(char *moby) {
         col = fast_tween_color(0x4040FFFF, 0x1040FFFF, absolute_float(0.5f - color_blend_offset));
         func_L00_00273E08_298940(d, col, truncate_float_to_s32(sprite_data->a[i]) & 0xFF, 0x35, 1, 2, 0,
                                  sprite_data->d[i]);
-        func_001F9BD8_298940(d, d, particle_position_step);
+        fast_vec_add(d, d, particle_position_step);
     }
 }
 #include "sda.h"

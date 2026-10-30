@@ -202,8 +202,6 @@ void spawn_nearby_effect(unsigned char *owner_moby, int x, int y, u128 *hit_vect
 }
 typedef float V4_259d08[4] __attribute__((aligned(16)));
 void FUN_001f9a68_00259d08(void *, void *, float) __asm__("FUN_001f9a68");
-void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
-void FUN_001f9a28_00259d08(void *, void *, void *) __asm__("FUN_001f9a28");
 int FUN_001efa68_00259d08(void *, void *, int, void *, int) __asm__("FUN_001efa68");
 int sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, int f, int n) __asm__("FUN_L00_00259d08");
 int sweep_hit_segment(void *first_endpoint_end, void *second_endpoint_end, void *first_endpoint_start, void *second_endpoint_start, void *hit_source_moby, int hit_descriptor_address, int sample_count) {
@@ -211,8 +209,8 @@ int sweep_hit_segment(void *first_endpoint_end, void *second_endpoint_end, void 
     float k, sweep_fraction;
     int i = 0;
     k = 1.0f / convert_integer_to_float(sample_count);
-    FUN_001f9a28_00259d08(da, first_endpoint_end, first_endpoint_start);
-    FUN_001f9a28_00259d08(db, second_endpoint_end, second_endpoint_start);
+    fast_vec_sub(da, first_endpoint_end, first_endpoint_start);
+    fast_vec_sub(db, second_endpoint_end, second_endpoint_start);
     sweep_fraction = k;
     for (; i < sample_count; i++) {
         FUN_001f9a68_00259d08(va, da, sweep_fraction);
@@ -378,7 +376,6 @@ extern f32 D_L00_00160080[2] __attribute__((sda));
 extern f32 D_L00_001B01C8[][8];
 extern u8 D_L00_001B0180[][4];
 extern Q_25a478 *suck_get_aim_height(void *) __asm__("FUN_002141f8");
-extern f32 FUN_001f9af0_c(void *) __asm__("FUN_001f9af0");
 
 /* hit_reaction is the executable function of the same bytes (src/gameplay). */
 
@@ -392,8 +389,6 @@ typedef struct {
     f32 f2C;
     s32 i30;
 } __attribute__((aligned(16))) M_0025a9f8;
-f32 FUN_001f9dc8_0025a9f8(f32) __asm__("FUN_001f9dc8");
-f32 FUN_001f9de0_0025a9f8(f32) __asm__("FUN_001f9de0");
 void FUN_L00_00259a88_0025a9f8(u8 *, M_0025a9f8 *) __asm__("FUN_L00_00259a88");
 void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0,
                       s32 c1, f32 f, f32 spd, f32 z) __asm__("FUN_L00_0025a9f8");
@@ -419,8 +414,8 @@ void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, 
         l.m.b28 = c0;
         l.m.b29 = c1;
         a = fast_arc_tan(*(f32 *)(e + 0x10) - pp[0], *(f32 *)(e + 0x14) - pp[1]);
-        l.m.x = FUN_001f9dc8_0025a9f8(a) * spd;
-        l.m.y = FUN_001f9de0_0025a9f8(a) * spd;
+        l.m.x = fast_cos(a) * spd;
+        l.m.y = fast_sin(a) * spd;
         l.m.z = z;
         l.m.w = 5627.925f;
         FUN_L00_00259a88_0025a9f8(list[i], &l.m);
@@ -471,7 +466,6 @@ typedef union {
 } Vec4_25aca0 __attribute__((aligned(16)));
 
 extern void compute_moby_joint_matrices(void *, int, int) __asm__("FUN_0020fa90");
-extern void FUN_001f9a28_25aca0(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void FUN_001f9a68_25aca0(float, void *, void *) __asm__("FUN_001f9a68");
 extern void scale_vector(float, void *, void *) __asm__("FUN_001f9a80");
 extern void FUN_001251e8_25aca0(float, void *, void *) __asm__("FUN_001251e8");
@@ -558,7 +552,7 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
                     case SHAPE_ENDPOINT_SEGMENT_WITH_BALL_OFFSET: {
                         FUN_001251e8_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &first, (void *)(0x70000000 + (*(short *)list << 4)));
                         FUN_001251e8_25aca0(*(float *)(entity + 0x2c) * 0.0009765625f, &second, (void *)(0x70000000 + (*(short *)(list + 2) << 4)));
-                        FUN_001f9a28_25aca0(&third, &first, &second);
+                        fast_vec_sub(&third, &first, &second);
                         radius = FUN_001f9af0_25aca0(&third);
                         extent = *(float *)(list + 8) * *(float *)(entity + 0x2c) * 0.0009765625f;
                           weights[count] = extent * 1.5707964f * extent * radius;
@@ -640,7 +634,7 @@ int generate_random_points_from_shape_entries(float density, unsigned char *enti
             list = entry + 4;
             FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &first, (void *)(0x70000000 + (*(short *)list << 4)));
             FUN_001251e8_25aca0(*(float *)(entity + 0x2c), &second, (void *)(0x70000000 + (*(short *)(list + 2) << 4)));
-            FUN_001f9a28_25aca0(&third, &second, &first);
+            fast_vec_sub(&third, &second, &first);
             weight = random_float_between(0.0f, 1.0f);
             FUN_001f9a68_25aca0(weight, &third, &third);
             fast_vec_add(&fourth, &third, &first);
@@ -696,7 +690,6 @@ extern void approach_w(void *, void *, float, float, float,
                                     float) __asm__("FUN_L00_00258278");
 extern float FUN_001f9dc8_25b440(float) __asm__("FUN_001f9dc8");
 extern float FUN_001f9de0_25b440(float) __asm__("FUN_001f9de0");
-extern void FUN_001f9a10_25b440(void *, void *, void *) __asm__("FUN_001f9a10");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float FUN_00213508_25b440(void *, int, float) __asm__("FUN_00213508");
 
@@ -730,7 +723,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
         motion_displacement[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
         motion_displacement[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
         motion_displacement[2] = arc_motion_state->f10;
-        FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, motion_displacement);
+        fast_vec_add(moving_object->pos, moving_object->pos, motion_displacement);
         arc_motion_state->f10 -= arc_motion_state->f1C;
         if (arc_motion_state->f10 < 0.0f) {
             prediction_time = scale_time(arc_motion_state->f28 + arc_motion_state->f28 + 10.0f);
@@ -751,7 +744,7 @@ int update_arc_motion(O_25b440 *moving_object, S_25b440 *arc_motion_state) {
             motion_displacement[0] = FUN_001f9dc8_25b440(arc_motion_state->f18) * arc_motion_state->f14;
             motion_displacement[1] = FUN_001f9de0_25b440(arc_motion_state->f18) * arc_motion_state->f14;
             motion_displacement[2] = 0.0f;
-            FUN_001f9a10_25b440(moving_object->pos, moving_object->pos, motion_displacement);
+            fast_vec_add(moving_object->pos, moving_object->pos, motion_displacement);
         }
     case WAIT_AFTER_GROUND_CLAMP:
         if (moving_object->b70 & 2) {

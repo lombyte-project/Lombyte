@@ -1339,7 +1339,6 @@ extern char D_0013E533_lui[] __asm__("D_0013E533") NOT_SDA;
 extern float sum_basis_absolute_differences(float *a, float *b) __asm__("FUN_L00_0020f0b8");
 #include "rnc/overlay/shared/gameplay/hero/hero_check_damage_globals.h"
 extern int hero_item_rotation_history_target_window_size_gp __asm__("D_L00_0015F694") __attribute__((sda));
-extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 extern void matrix_to_euler(void *, void *) __asm__("FUN_00214598");
 void normalize_vector_triplet(f32 *vectors) __asm__("FUN_00214128");
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
@@ -3303,7 +3302,6 @@ d1:
 /* Snaps the hero's follow position toward its target, stepping up by a bounded amount. */
 /* Ported from rac1-decomp (src/overlays/shared/help_0020CDF0.c: func_L00_002136A8), where it is exact; names translated to the US level program. */
 
-extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern float func_L00_0025C918_2136A8(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 

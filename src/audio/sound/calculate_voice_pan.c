@@ -3,8 +3,6 @@
 #include "rnc/math/asm_helpers.h"
 extern f32 camera_position[4] __asm__("D_00187080");
 extern f32 clamp_float(f32, f32, f32) __asm__("FUN_001f99e8");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 s32 calculate_voice_pan(s32 unused, f32 *position, void *listener_matrix) __asm__("FUN_0022c830");
 
 s32 calculate_voice_pan(s32 unused, f32 *position, void *listener_matrix) {

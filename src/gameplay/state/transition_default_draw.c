@@ -3,6 +3,7 @@
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/math/asm_helpers.h"
 
 struct Globals_0016045C {
     u8 pad_0[0x4];
@@ -27,7 +28,6 @@ extern u64 get_effect_texture() __asm__("func_001F44B8");
 extern s32 dispatch_callback_list_1() __asm__("func_001F4650");
 extern s32 emit_rgba_draw_packet() __asm__("func_001F5210");
 extern s32 draw_textured_quad() __asm__("func_001F5450");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 append_gif_transfer_packet() __asm__("func_001FB368");
 extern s32 aa_blur_pass() __asm__("func_001FB680");
 extern s32 draw_dialog_text() __asm__("func_001FBC50");

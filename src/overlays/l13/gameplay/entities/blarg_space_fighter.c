@@ -734,7 +734,6 @@ void update_hovering_rocket_attacker_common(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4A68), where it is exact; names translated to the US level program. */
 
 extern int hit_reaction(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_L00_0025a478");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 
@@ -858,7 +857,6 @@ int select_blarg_space_fighter_path_point_by_distance(char *pt, int *path_point_
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4F10), where it is exact; names translated to the US level program. */
 
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 void FUN_L13_002c3988_c(char *moby, char *d, float p2, float p3) __asm__("FUN_L13_002c3988");
 
 int advance_blarg_space_fighter_along_path(struct Moby *moby, char *moby_data, int aim) __asm__("FUN_L13_002c3c88");
@@ -1123,8 +1121,6 @@ typedef struct Snd { char pad0[0x74]; unsigned char b74; char pad75[0x13]; void 
 extern char *spawn_class_3f9_moby(int owner, float *dir, float *pos, float size, float len, float z) __asm__("FUN_L11_00308f48");
 extern char blarg_space_fighter_missing_path_debug_format[] __asm__("D_L13_001F4700");
 extern float D_L13_001670C0[];
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern int select_point_index_by_distance(void *, void *, float) __asm__("FUN_L01_0028b510");
 extern int update_blarg_space_fighter_path_following();
 extern s32 rand(void);
@@ -1132,7 +1128,6 @@ extern unsigned char *spawn_ship_pickup(char *position, int moby_class) __asm__(
 extern void DebugPrint(char *, ...);
 extern void add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern void allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 void FUN_L13_002c37e0_c(struct Moby *moby, unsigned char *d, float *fp) __asm__("FUN_L13_002c37e0");
 extern char D_0013E550[];

@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/globals.h"
 #include "rnc/rendering/level_render_state.h"
+#include "rnc/math/fast_math.h"
 
 
 struct Globals_0013DD58 {
@@ -45,7 +46,6 @@ extern s32 snd_stream_safe_cd_callback(s32) __asm__("FUN_0012ef28");
 extern void snd_set_reverb_ex(s32, s32, s32, s32, s32) __asm__("func_0012EF68");
 extern s32 read_file_entry_with_retry(s32) __asm__("func_0012F368");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
 extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern void append_palette_transfer_packet(void) __asm__("func_001FB6E0");

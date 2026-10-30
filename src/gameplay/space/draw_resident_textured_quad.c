@@ -3,6 +3,7 @@
 
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 extern u64 D_00160580;
 extern char D_001D97B0[];
@@ -10,7 +11,6 @@ extern f32 resident_quad_scale_by_level[] __asm__("D_001D9A90");
 extern f32 resident_quad_base_positions[][4] __asm__("D_001D9A50");
 extern s32 D_001604F0 __attribute__((sda));
 extern void vu1_add_g_sregister(s32, u64) __asm__("FUN_00233980");
-extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 extern void draw_geometry_quad(struct GeometryQuad *, s32, s32) __asm__("func_001F7D30");
 
 void draw_resident_textured_quad(void) __asm__("FUN_0022e8c8");

@@ -86,7 +86,6 @@ extern void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
 
 extern void draw_fleet_beam_quad(struct Moby *moby) __asm__("FUN_L17_002a95b8");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void add_draw_callback(void *, void *) __asm__("FUN_001f4600");
 extern void transform_vector_by_basis(void *, void *, void *);
 void make_hit_descriptor(char *a, int b, int c, float d, void *q) __asm__("FUN_L00_00259888");
@@ -356,8 +355,6 @@ extern float random_float_between(float a, float b) __asm__("FUN_002132a8");
 extern float vector_length_xy(void *);
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern char fleet_turret_aim_vertex_indices[4] __asm__("D_L17_00161980") __attribute__((sda));
 extern void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9,
                               float scale, float *v10, float *v11, float *v12);

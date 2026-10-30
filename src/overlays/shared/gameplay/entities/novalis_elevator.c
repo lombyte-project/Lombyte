@@ -229,7 +229,6 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern int allocate_voice_for_target_entry(int, int, void *) __asm__("func_0022DA68");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
@@ -2084,7 +2083,6 @@ extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern char *activate_smaller_amoeboid(void *) __asm__("FUN_L01_002ef350");
 extern char *find_nearest_class_26f_moby_in_list(char *, int) __asm__("FUN_L01_002ef478");
 extern char D_0013E533[];
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
 extern float fast_vec_dist(void *, void *);
 extern char *D_L01_0015FFD8;

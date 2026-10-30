@@ -15,6 +15,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 typedef struct FRow {
     f32 v[3];
@@ -130,13 +131,8 @@ extern void PackDmaTag(s32 arg0, u64 arg1, u64 arg2);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void reset_draw_globals(void) __asm__("func_001F37E8");
 extern void enable_global_flag(void) __asm__("func_001F61E8");
-extern void clear_blocks_16(void *, s32) __asm__("FUN_001f9810");
-extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
-extern f32 max_float(f32, f32) __asm__("FUN_001f99c8");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern void set_video_timing(s32) __asm__("func_00214970");
 extern void reset_global_state_fields(void) __asm__("func_00217020");
 extern void FUN_0022a5e0(void *);
@@ -205,8 +201,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     coll_output.xC = 0;
     coll_output.x10 = 0;
     coll_output.x14 = 0;
-    clear_blocks_16(moby_grids, 0x10000);
-    clear_blocks_16(D_001C76E0, 0x60);
+    fast_mem_zero16(moby_grids, 0x10000);
+    fast_mem_zero16(D_001C76E0, 0x60);
 
     environment = (u8 *)header + header->x0;
     D_0018CD00.x23C = *(s32 *)environment;
@@ -233,9 +229,9 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     part_clip_dist = 0x1F4000;
     PackDmaTag(D_0018CD00.x23C, D_0018CD00.x240, D_0018CD00.x244);
     vu0_load_micro_program(D_00100AE0);
-    clear_blocks_16(point_lights, 0x100);
-    clear_blocks_16(point_light_data, 0x180);
-    clear_blocks_16(dir_lights, 0x400);
+    fast_mem_zero16(point_lights, 0x100);
+    fast_mem_zero16(point_light_data, 0x180);
+    fast_mem_zero16(dir_lights, 0x400);
 
     light_record = (u8 *)header + header->directional_lights_offset;
     light_count = *(s32 *)light_record;
@@ -457,7 +453,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     D_001600B4 = -1;
     D_001600B0 = 0;
     D_001600B8 = 0;
-    clear_blocks_16(D_001CD780, 0x200);
+    fast_mem_zero16(D_001CD780, 0x200);
     for (moby = D_0015FF18; moby != moby_instance_perm_end; moby++) {
         moby->x36 = 0x7F80;
     }

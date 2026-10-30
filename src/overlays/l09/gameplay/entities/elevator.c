@@ -9,6 +9,7 @@
 #include "rnc/overlay/level_globals.h"
 #include "sda.h"
 #include "rnc/math/asm_helpers.h"
+#include "rnc/math/fast_math.h"
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Moves a moby along a path between its ends once its collectable flag is set, easing between nodes. */
@@ -24,14 +25,10 @@ extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern s32 allocate_voice_for_target_entry(s32, s32, void *) __asm__("func_0022DA68");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
 extern void set_hero_idle_state_for_vehicle_mode(void) __asm__("FUN_L00_00227638");
 extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
-extern void fast_vec_sub(void *out, void *a, void *b) __asm__("FUN_001f9a28");
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013E550[];
 
@@ -192,7 +189,7 @@ void elevator_update(unsigned char *moby) {
             } else {
                 segment_start = path + 0x10 + i * 16;
                 fast_vec_sub(segment_offset, path + 0x20 + i * 16, segment_start);
-                scale_vector_xyz(segment_offset, segment_offset, segment_fraction);
+                fast_vec_scale(segment_offset, segment_offset, segment_fraction);
                 fast_vec_add((moby + 0x10), segment_offset, segment_start);
             }
             F(data, 0xBC) = F(moby, 0x18) - orig[2];
@@ -236,7 +233,6 @@ extern s32 trooper_take_damage(struct Moby *, VendorHitSource *, f32 *, s32, s32
 extern void FUN_L00_00257470(struct Moby *, s32, s32);
 extern void trooper_anim_update(struct Moby *, u8 *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(struct Moby *, u8 *) __asm__("FUN_L00_0025d538");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 
 void handle_refueling_station_damage(struct Moby *moby, VendorVars *vars, f32 *health) __asm__("FUN_L09_00303b30");
 
@@ -305,7 +301,6 @@ extern int D_L09_0015F5CC;
 extern int D_L09_0015FFD8_u __asm__("D_L09_0015FFD8");
 extern int FUN_L00_0025e450_u() __asm__("FUN_L00_0025e450");
 extern unsigned char voice_pool[] __asm__("D_0013E550");
-extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 s32 allocate_voice_for_target_entry(s32 entry_index, s32 flags,
                                       void *target) __asm__("FUN_0022da68");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
@@ -937,7 +932,6 @@ extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void build_spherical_offset(void *, float, float, float) __asm__("FUN_00214db0");
 extern void update_entity(void *) __asm__("FUN_L00_00250df8");
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void FUN_L00_001fff28(void *, int, float);
 
 void turret_update(struct Moby *moby) __asm__("FUN_L09_00304c80");
@@ -1272,10 +1266,7 @@ typedef struct Flags_309688 {
 } Flags_309688;
 
 extern char *FUN_L00_0025a420(void *, int, int);
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern f32 vector_length_xyz_c(void *) __asm__("FUN_001f9af0");
 #include "rnc/overlay/l09/gameplay/entities/elevator_data/barrier_update.h"
 extern int FUN_L00_001fefc8();
 extern unsigned char D_0014C050_c[] __asm__("D_0014C050");
@@ -1389,7 +1380,6 @@ typedef struct {
     float z;
 } Mpos_30A560;
 
-extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern int D_L09_0015FFD8_c __asm__("D_L09_0015FFD8");
 extern float floating_ship_piece_hero_offset_tilt_gain_gp __asm__("D_L09_00161DC4") __attribute__((sda));
 extern float floating_ship_piece_sink_speed_gp __asm__("D_L09_00161DC8") __attribute__((sda));
@@ -1405,7 +1395,6 @@ void reorient_position_about_pivot(void *a0, void *a1, void *a2, void *a3, void 
 extern float func_002140F8_30A560(float, float) __asm__("FUN_002132a8");
 extern void func_001E9730_30A560() __asm__("FUN_001e93b0");
 extern int func_001F9850_30A560(int) __asm__("FUN_001f96f8");
-extern void func_001F9BF0_30A560(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
 extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void reorient_position_about_pivot(void *input_position, void *output_position, void *pivot_position, void *inverse_rotation_angles, void *forward_rotation_angles) __asm__("FUN_L07_00288968");
@@ -1485,7 +1474,7 @@ void update_floating_ship_piece(char *moby) {
             float tilt;
             float pitch_target;
             fast_dec_timer((int *)(data + 0x88));
-            func_001F9BF0_30A560(hero_offset, (D_0013E633_30A560 + 0x80), moby + 0x10);
+            fast_vec_sub(hero_offset, (D_0013E633_30A560 + 0x80), moby + 0x10);
             deg_to_rad = 0.0174532924f;
             side_dot = fast_vec_dot(hero_offset, moby + 0xC0);
             front_dot = fast_vec_dot(hero_offset, moby + 0xD0);
@@ -1507,7 +1496,7 @@ void update_floating_ship_piece(char *moby) {
                 allocate_voice_for_target_entry(1, 0, moby);
             }
             reorient_position_about_pivot((D_0013E633_30A560 + 0x80), carried_pos, moby + 0x10, old_angles, data + 0x60);
-            func_001F9BF0_30A560(D_0013E633_30A560 + 0xF0, carried_pos, (D_0013E633_30A560 + 0x80));
+            fast_vec_sub(D_0013E633_30A560 + 0xF0, carried_pos, (D_0013E633_30A560 + 0x80));
             ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] = ((Hero *)D_0013E633_30A560)->motion.platform_delta.f[2] + (*(float *)(moby + 0x18) - old_pos[2]);
         } else {
             float rise;

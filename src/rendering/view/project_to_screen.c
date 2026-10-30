@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 struct CameraView {
     u8 pad_0[0x140];
@@ -32,9 +33,6 @@ struct Locals {
 
 extern struct CameraView preview_camera __asm__("D_00186F40");
 extern f32 D_0018CF10[];
-extern void transform_vector(void *a, void *b, void *c) __asm__("FUN_001f9d20");
-extern void set_identity_matrix(void *a) __asm__("FUN_001f9fc8");
-extern void multiply_matrix(void *a, void *b, void *c) __asm__("FUN_001fa378");
 void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) __asm__("FUN_001f2070");
 
 void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) {

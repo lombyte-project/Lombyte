@@ -4,6 +4,7 @@
 
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 struct CameraPath {
     s32 count;
@@ -11,9 +12,6 @@ struct CameraPath {
     u128 points[1];
 };
 
-extern void lerp_vector(void *, void *, void *, f32) __asm__("FUN_001f9a40");
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_add_rotations(f32, f32) __asm__("func_001FA580");
 extern f32 fast_subtract_rotations(f32, f32) __asm__("func_001FA5C8");
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");

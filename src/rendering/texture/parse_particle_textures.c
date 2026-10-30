@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/math/asm_helpers.h"
 
 struct ParticleHdr {
     s32 count;
@@ -16,7 +17,6 @@ struct ParticleTex {
 #include "rnc/rendering/texture/parse_particle_textures_globals.h"
 extern u8 resident_lookup_payload[] __asm__("D_001CE180");
 extern struct ParticleTex resident_particle_texture_ranges[] __asm__("D_001CD980");
-extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern s32 log2dim(s32) __asm__("FUN_001f97a0");
 
 void parse_particle_textures(struct ParticleHdr *hdr, s32 base, s32 *src,

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/math/asm_helpers.h"
 
 struct SaveBlock {
     u8 *base;
@@ -12,7 +13,6 @@ struct SaveHeader {
     s32 checksum;
 };
 
-extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern s32 calculate_crc16(void *, s32) __asm__("func_0020ACC0");
 
 s32 memcard_prepare_data(struct SaveHeader *out, s32 slot,

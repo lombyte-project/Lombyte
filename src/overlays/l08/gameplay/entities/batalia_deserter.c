@@ -57,7 +57,6 @@ void attach_batalia_deserter_class_manipulator(struct Moby *moby) {
     }
 }
 #include "qcopy.h"
-extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
 #include "sda.h"
 typedef struct {
     char pad00[4];
@@ -112,11 +111,10 @@ extern float vector_length_xy(void *);
 extern int update_npc_dialogue(void *, void *) __asm__("FUN_L00_00266448");
 extern int initialize_npc_dialogue(void *, void *) __asm__("FUN_L00_002668a0");
 extern int random_float_between_cf(float) __asm__("FUN_001fa6d0");
-extern int scale_game_frames_c(int) __asm__("scale_game_frames");
+extern int scale_game_frames(int) __asm__("scale_game_frames");
 extern int tick_countdown_32(int *) __asm__("func_001F9740");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
 extern void update_joint_animation(float, float, void *, void *, int) __asm__("FUN_L00_002628d8");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
 typedef struct {
     char pad00[0x24];
@@ -230,7 +228,7 @@ void batalia_deserter_update(WM *moby) {
                                 ((L16WatchPlayer *)((char *)&D_0013E633_watch + 0xE1D))->aim[1] -
                                     moby->position[1])) < 1.5707964f) {
             if (fast_vec_length(player + 0x80) > 0.01f)
-                deserter_data->moving_timer = scale_game_frames_c(120);
+                deserter_data->moving_timer = scale_game_frames(120);
             else
                 tick_countdown_32(&deserter_data->moving_timer);
         } else if (deserter_data->moving_timer) {
@@ -675,7 +673,6 @@ struct G08c {
     char *objs[1];
 };
 
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern struct G08c D_L08_0016D060_c __asm__("D_L08_0016D060");
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 
@@ -713,8 +710,6 @@ void update_batalia_selected_moby_effects(struct Moby *moby) {
 
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_0030A150), where it is exact; names translated to the US level program. */
 
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
-extern void euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 extern void spawn_effect_with_initial_motion(float *, float *, int, float) __asm__("FUN_L08_0027fe00");
 
 void spawn_batalia_moby_effects_with_random_motion(struct Moby *moby) __asm__("FUN_L08_00308c90");

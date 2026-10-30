@@ -1,7 +1,7 @@
 #include "types.h"
+#include "rnc/math/asm_helpers.h"
 
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 void decode_compressed_occlusion_map(u8 *destination, u8 *control_stream,
                                      u8 *span_stream) __asm__("FUN_00207c28");
 

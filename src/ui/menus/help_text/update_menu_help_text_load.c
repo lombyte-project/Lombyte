@@ -4,13 +4,13 @@
 #include "rnc/storage/disc_table.h"
 #include "rnc/data_labels.h"
 #include "rnc/gameplay/state/game_globals.h"
+#include "rnc/math/asm_helpers.h"
 
 extern u8 D_001996D0[];
 
 extern s32 help_msgs __asm__("D_0015F6A0");
 
 extern s32 start_audio_stream_read(s32 read_destination, s32 sector, s32 sector_count) __asm__("FUN_00216788");
-extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 
 static inline int pauseSlotCount(void) {
     char *b = D_001996D0;

@@ -3,8 +3,8 @@
 
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
+#include "rnc/math/asm_helpers.h"
 extern char textured_rectangle_packet_header_template[] __asm__("D_00160860");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
 void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 tex) __asm__("FUN_001f5808");
 

@@ -7,12 +7,12 @@
 #include "rnc/math/vector.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/globals.h"
+#include "rnc/math/asm_helpers.h"
 
 
 extern u128 spark_spawn_points_by_variant[][6] __asm__("D_001D9B60");
 
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern void transform_vector_by_basis(void *, void *, void *) __asm__("FUN_001f9cf8");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern s32 spawn_spark(void *, void *, void *, s32, s32, s32, s32, s32, s32) __asm__("func_00218888");
 

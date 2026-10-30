@@ -6,6 +6,7 @@
 #include "rnc/storage/disc_table.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/math/fast_math.h"
 
 typedef struct {
     s32 off;
@@ -62,7 +63,6 @@ extern s32 check_memory_card(void) __asm__("FUN_00209168");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void play_mpeg_movie(s32, s32, s32, s32, s32) __asm__("func_0023A3B8");
-extern s32 scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void DebugPrint(char *, ...);
 extern s32 load_audio_bank_by_location(s32) __asm__("func_0022D708");
 extern void snd_resolve_bank_xrefs(void) __asm__("func_0012E1A8");

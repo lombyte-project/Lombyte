@@ -1,7 +1,7 @@
 /* Ported from rac1-decomp (src/game/mobyutil.c, func_00215650). */
 #include "qcopy.h"
 #include "rnc/math/fast_math.h"
-extern void multiply_quaternions(void *, void *, void *) __asm__("FUN_001fa3c0");
+#include "rnc/math/asm_helpers.h"
 /* Conjugate-style sandwich: out = quat * (vec with w = 0) * quat_conj, where
    quat_conj is quat negated with its w kept (multiply_quaternions is the quaternion
    multiply). The 16-byte copy of vec is qcopy's lq/sq. */

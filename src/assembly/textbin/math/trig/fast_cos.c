@@ -1,7 +1,7 @@
 #include "types.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
-f32 fast_cos(f32 radians) __asm__("FUN_001f9dc8");
 
 #ifndef NON_MATCHING
 INCLUDE_ASM("config/us/expected/asm/assembly/textbin/math/trig/fast_cos/FUN_001f9dc8.s", FUN_001f9dc8);

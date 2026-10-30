@@ -9,6 +9,7 @@
 #include "rnc/gameplay/state/options.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
 
 /* State of the level's message box (D_00193300). */
 typedef struct {
@@ -44,7 +45,6 @@ extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) 
 extern void font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("func_001F7580");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 extern s32 fast_tween_color(s32, s32, f32) __asm__("func_001FA6E0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern s32 get_icon_frame(s32, s32) __asm__("func_001FF960");

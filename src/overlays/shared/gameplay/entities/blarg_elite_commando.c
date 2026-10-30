@@ -182,7 +182,6 @@ extern void update_blarg_elite_commando_damage_and_pursuit(struct Moby *) __asm_
 void select_blarg_elite_commando_movement_animation(char *moby) __asm__("FUN_L16_002d4070");
 
 extern void select_blarg_elite_commando_movement_animation(char *) __asm__("FUN_L16_002d4070");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
@@ -823,7 +822,6 @@ typedef struct {
 extern L16ParticleChoices D_L16_001E8300, D_L16_001E8618;
 extern L16ParticleChoices D_L16_001E8600, D_L16_001E8318;
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 

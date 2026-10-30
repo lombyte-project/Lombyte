@@ -98,7 +98,6 @@ typedef struct {
     OvlVec4_261b48 points[1];
 } SegmentPath_261d78_261b48;
 
-extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c);
 int FUN_L00_00261b48(int idx, void *a, void *b, void *c) {
@@ -158,7 +157,6 @@ typedef struct {
 } SegmentPath_261d78;
 
 extern SegmentPath_261d78 *D_L00_001B04B0_261d78[] __asm__("D_L00_001B04B0");
-extern f32 absolute_float(f32) __asm__("FUN_001f99c0");
 extern void FUN_001ff278_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a10");
 extern void FUN_001ff2a8_261d78(OvlVec4 *, OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9a28");
 extern f32 FUN_001ff398_261d78(OvlVec4 *, OvlVec4 *) __asm__("FUN_001f9ab0");
@@ -323,7 +321,6 @@ typedef struct {
     Vec4 points[1];     /* 0x10 */
 } PointPath;
 
-extern void scale_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
 
 /* Samples path at distance dist (points spacing apart): stores the segment, the distance into it and the point. */
 void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *out, f32 dist, f32 spacing) __asm__("FUN_L00_00262360");
@@ -348,7 +345,7 @@ void path_sample_at_distance(PointPath *path, s32 *seg_out, f32 *along, Vec4 *ou
     *along = dist - convert_integer_to_float(seg) * spacing;
     fast_vec_sub(&tmp, &path->points[*seg_out + 1], &path->points[*seg_out]);
     out->q = tmp.q;
-    scale_vector_xyz(out, out, *along);
+    fast_vec_normalize(out, out, *along);
     fast_vec_add(&tmp, out, &path->points[*seg_out]);
     out->q = tmp.q;
 }

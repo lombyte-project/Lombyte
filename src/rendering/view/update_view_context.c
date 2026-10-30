@@ -6,6 +6,7 @@
 #include "rnc/math/vector.h"
 #include "rnc/rendering/view.h"
 #include "rnc/globals.h"
+#include "rnc/math/asm_helpers.h"
 
 struct FogRegs2 {
     u8 pad0[0x28];
@@ -41,7 +42,6 @@ extern struct {
 
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern void copy_memory_aligned(void *, void *, s32) __asm__("FUN_001f9838");
 extern void set_tfrag_dists(void) __asm__("func_00233068");
 
 void update_view_context(void) __asm__("FUN_001f2d98");

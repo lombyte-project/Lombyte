@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/math/asm_helpers.h"
 
 struct VoiceVolumeDefinition {
     u8 pad_0[0x8];
@@ -8,7 +9,6 @@ struct VoiceVolumeDefinition {
     u8 attenuation_flags;
 };
 extern f32 convert_integer_to_float() __asm__("func_001FA6C0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 s32 calculate_voice_distance_volume(struct VoiceVolumeDefinition *definition, f32 distance,
                                     f32 near_distance, f32 far_distance) __asm__("FUN_0022c6f8");
 

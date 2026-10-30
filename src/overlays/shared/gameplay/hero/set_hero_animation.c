@@ -515,10 +515,6 @@ typedef union {
 
 extern u8 coll_hit_normal[] __asm__("D_L00_00173E80") NOT_SDA;
 extern f32 collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
-extern void FUN_001f9a28_32b90(void *, void *, void *) __asm__("FUN_001f9a28");
-extern void FUN_001f9a68_32b90(void *, void *, f32) __asm__("FUN_001f9a68");
-extern void FUN_001f9a10_32b90(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void FUN_001f9bf8_32b90(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void clip_negative_segment_endpoint_xyz(V4 *, void *) __asm__("FUN_L00_0025d238");
 extern s32 collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 extern f32 FUN_L00_00233d30_32b90(void *) __asm__("FUN_L00_00233d30");
@@ -538,9 +534,9 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
     switch (hero.gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         if (target_height < 0.0f) {
-            FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
+            fast_vec_scale(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
             trajectory_endpoint[2] -= ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration;
-            FUN_001f9a10_32b90(trajectory_endpoint, trajectory_endpoint, &hero.motion.pos);
+            fast_vec_add(trajectory_endpoint, trajectory_endpoint, &hero.motion.pos);
             collision_start_or_gravity_vector.q = hero.motion.pos.q;
             clip_negative_segment_endpoint_xyz(&collision_start_or_gravity_vector, trajectory_endpoint);
             qcopy(&collision_start_or_gravity_vector, &hero.motion.pos);
@@ -560,12 +556,12 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
         qcopy(&collision_start_or_gravity_vector, &hero.ground_normal);
-        FUN_001f9bf8_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, gravity_acceleration);
-        FUN_001f9a68_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, -1.0f);
-        FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
-        FUN_001f9a68_32b90(&trajectory_work_vector, &collision_start_or_gravity_vector, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration);
-        FUN_001f9a10_32b90(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
-        FUN_001f9a10_32b90(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
+        fast_vec_normalize(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, gravity_acceleration);
+        fast_vec_scale(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, -1.0f);
+        fast_vec_scale(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
+        fast_vec_scale(&trajectory_work_vector, &collision_start_or_gravity_vector, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration);
+        fast_vec_add(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
+        fast_vec_add(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
         hero_position_copy.q = hero.motion.pos.q;
         clip_negative_segment_endpoint_xyz(&hero_position_copy, trajectory_endpoint);
         if (collision_line(&hero.motion.pos, trajectory_endpoint, 0x24, 0, 0) != 0) {
@@ -583,13 +579,13 @@ f32 predict_hero_trajectory_intercept_time(f32 prediction_frames, f32 gravity_ac
         trajectory_work_vector.f[2] = 100.0f;
         trajectory_work_vector.f[1] = 100.0f;
         trajectory_work_vector.f[0] = 100.0f;
-        FUN_001f9a28_32b90(&collision_start_or_gravity_vector, &hero.motion.pos, &trajectory_work_vector);
-        FUN_001f9bf8_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, gravity_acceleration);
-        FUN_001f9a68_32b90(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, -1.0f);
-        FUN_001f9a68_32b90(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
-        FUN_001f9a68_32b90(&trajectory_work_vector, &collision_start_or_gravity_vector, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration);
-        FUN_001f9a10_32b90(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
-        FUN_001f9a10_32b90(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
+        fast_vec_sub(&collision_start_or_gravity_vector, &hero.motion.pos, &trajectory_work_vector);
+        fast_vec_normalize(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, gravity_acceleration);
+        fast_vec_scale(&collision_start_or_gravity_vector, &collision_start_or_gravity_vector, -1.0f);
+        fast_vec_scale(trajectory_endpoint, &hero.motion.velocity, prediction_frames);
+        fast_vec_scale(&trajectory_work_vector, &collision_start_or_gravity_vector, ((prediction_frames * prediction_frames + prediction_frames) * 0.5f) * gravity_acceleration);
+        fast_vec_add(trajectory_endpoint, &trajectory_work_vector, trajectory_endpoint);
+        fast_vec_add(trajectory_endpoint, &hero.motion.pos, trajectory_endpoint);
         hero_position_copy.q = hero.motion.pos.q;
         clip_negative_segment_endpoint_xyz(&hero_position_copy, trajectory_endpoint);
         if (collision_line(&hero.motion.pos, trajectory_endpoint, 0x24, 0, 0) != 0) {
@@ -837,8 +833,6 @@ int resolve_hero_gravity_mode(void) {
 typedef struct {
     f32 v[4];
 } V002334d0 __attribute__((aligned(16)));
-void FUN_001f9bf8_002334d0(void *, void *, f32) __asm__("FUN_001f9bf8");
-void FUN_001f9a10_002334d0(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k);
 void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
     struct Hero *hero_base = &hero;
@@ -848,16 +842,16 @@ void FUN_L00_002334d0(f32 *out, f32 *in, f32 k) {
         out[2] = in[2] - k;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
-        FUN_001f9bf8_002334d0(&offset_vector, &hero_base->ground_normal, -k);
-        FUN_001f9a10_002334d0(out, in, &offset_vector);
+        fast_vec_normalize(&offset_vector, &hero_base->ground_normal, -k);
+        fast_vec_add(out, in, &offset_vector);
         break;
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         if (hero_base->state.current == 0x3E && hero_base->air_frames.s == 0) {
-            FUN_001f9bf8_002334d0(&offset_vector, &hero_base->ground_normal, -k);
+            fast_vec_normalize(&offset_vector, &hero_base->ground_normal, -k);
         } else {
-            FUN_001f9bf8_002334d0(&offset_vector, &hero.gravity_dir, k);
+            fast_vec_normalize(&offset_vector, &hero.gravity_dir, k);
         }
-        FUN_001f9a10_002334d0(out, in, &offset_vector);
+        fast_vec_add(out, in, &offset_vector);
         break;
     }
 }
@@ -953,7 +947,6 @@ typedef struct {
 typedef struct {
     f32 v[4];
 } V00233810 __attribute__((aligned(16)));
-void FUN_001f9a10_00233810(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z);
 void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
     struct Hero *hero_base = &hero;
@@ -970,7 +963,7 @@ void FUN_L00_00233810(f32 *out, f32 *in, f32 z) {
         offset_vector.v[2] = z;
         euler_rotation_matrix(&moby_rotation_matrix, ((u8 *)hero_base->moby) + 0x40);
         transform_vector(&offset_vector, &offset_vector, &moby_rotation_matrix);
-        FUN_001f9a10_00233810(out, in, &offset_vector);
+        fast_vec_add(out, in, &offset_vector);
         break;
     }
 }
@@ -1450,7 +1443,6 @@ void FUN_L00_002347c0(void) {
     }
 }
 extern s32 D_L00_0015F5C4_234808 __asm__("D_L00_0015F5C4");
-f32 FUN_001f9de0_234808(f32) __asm__("FUN_001f9de0");
 s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 void attach_manipulator(void *, s32, void *) __asm__("FUN_0020cb10");
 void FUN_L00_001fff28_234808(void *, s32, f32) __asm__("FUN_L00_001fff28");
@@ -1470,7 +1462,7 @@ void animate_hero_slot4_and_slot5_visuals(void) {
         else
             hero.unk22E8 = fast_add_rotations(hero.unk22E8, DD * 2.0943952f);
         *(s32 *)(slot4_moby + 0x90) =
-            fast_tween_color(0xD2D2D2, 0x285050, FUN_001f9de0_234808(hero.unk22E8) * 0.5f + 0.5f);
+            fast_tween_color(0xD2D2D2, 0x285050, fast_sin(hero.unk22E8) * 0.5f + 0.5f);
     }
     slot4_secondary_moby = (char *)hero.items[4].moby2;
     if (slot4_secondary_moby) {
@@ -1485,7 +1477,7 @@ void animate_hero_slot4_and_slot5_visuals(void) {
             f32 v;
             hero.unk22EC = v = fast_add_rotations(hero.unk22EC, DD * 1.5707964f);
             *(s32 *)(slot4_secondary_moby + 0x90) =
-                fast_tween_color(0x1E1ED2, 0x1E1E50, FUN_001f9de0_234808(v) * 0.5f + 0.5f);
+                fast_tween_color(0x1E1ED2, 0x1E1E50, fast_sin(v) * 0.5f + 0.5f);
         }
     }
     slot5_moby = (char *)hero.items[5].moby;
@@ -1495,7 +1487,7 @@ void animate_hero_slot4_and_slot5_visuals(void) {
         else
             hero.unk22F0 = fast_add_rotations(hero.unk22EC, DD * 1.9198622f);
         *(s32 *)(slot5_moby + 0x90) =
-            fast_tween_color(0xAAC8AA, 0x965050, FUN_001f9de0_234808(hero.unk22F0) * 0.5f + 0.5f);
+            fast_tween_color(0xAAC8AA, 0x965050, fast_sin(hero.unk22F0) * 0.5f + 0.5f);
         if (slot5_moby) {
             if (!hero.unk1D90.attached)
                 attach_manipulator(slot5_moby, 0, &hero.unk1D90);

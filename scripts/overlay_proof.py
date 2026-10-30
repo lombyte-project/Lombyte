@@ -71,6 +71,11 @@ def exe_symbols(game_root: Path = ov.ROOT) -> dict[str, int]:
             addr = int(label[-8:], 16)
             values.setdefault(cname, addr)
             values.setdefault(label, addr)
+    # and the names the headers declare for executable functions
+    for header in sorted((game_root / "include").rglob("*.h")):
+        text = header.read_text(errors="replace")
+        for m in re.finditer(r"\b([A-Za-z_]\w*)\s*\([^;{)]*\)\s*__asm__\s*\(\s*\"((?:FUN|func)_[0-9A-Fa-f]{8})\"\s*\)", text):
+            values.setdefault(m.group(1), int(m.group(2)[-8:], 16))
     return values
 
 

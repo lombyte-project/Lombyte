@@ -37,7 +37,6 @@ extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern f32 fast_arc_tan(f32, f32) __asm__("func_001F9E90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern void set_vector_length_xy(void *, void *, f32) __asm__("FUN_001f9c48");
 
 s32 fun_00213928(O_25a478 *obj, P_25a478 *p, Q_25a478 *q, u32 flags, s32 *out, f32 *fp, s32 *kp, s32 idx) __asm__("FUN_00213928");
 

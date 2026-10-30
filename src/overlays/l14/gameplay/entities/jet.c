@@ -182,7 +182,6 @@ typedef struct {
 extern char D_L14_001674C0[];
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
-extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
 void draw_ribbon_effect_path(struct Moby *ribbon_moby, void *path, int outer_alpha, int inner_alpha, int point_count) {
@@ -1133,7 +1132,6 @@ extern float D_L14_00161CC0[] MACRO_ADDR;
 extern float D_L14_00161CD0[];
 extern int D_L14_0015F5C4;
 extern s32 random_integer_below(s32) __asm__("func_00213260");
-extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 extern short lightning_arc_interval_remaining_frames_gp __asm__("D_L14_00161C50") __attribute__((sda));
 extern short lightning_arc_interval_frames_gp __asm__("D_L14_00161C54") __attribute__((sda));
 extern short lightning_arc_initialized_gp __asm__("D_L14_00161C58") __attribute__((sda));
@@ -1391,7 +1389,6 @@ extern int D_L14_00161C70_gp __asm__("D_L14_00161C70") __attribute__((sda));
 #include "rnc/overlay/l14/gameplay/entities/jet_data/draw_branched_lightning_arc.h"
 extern float D_L14_00161C88 __attribute__((sda));
 extern int D_L14_00161CF8_macro[]  __asm__("D_L14_00161CF8")MACRO_ADDR;
-extern s32 truncate_float_to_s32_c2(f32) __asm__("func_001FA6D0");
 extern s16 D_L14_001E0000[];
 extern short D_L14_001E0350[];
 extern unsigned char D_L14_00161CE0[] MACRO_ADDR;
@@ -1586,8 +1583,6 @@ void draw_branched_lightning_arc(void) {
 
 extern f32 random_angle_radians(void) __asm__("func_00213308");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
-extern s32 scale_game_frames_c(s32) __asm__("func_001F96F8");
-extern s32 truncate_float_to_s32_c(f32) __asm__("func_001FA6D0");
 extern unsigned char * FUN_L00_00272060(float *pos, int a, float f0, float f1, int col, int mode, int b, float *vel, float f2);
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 
@@ -1615,13 +1610,13 @@ void spawn_lightning_arc_particle_pairs(float *particle_spawn_position, int spaw
         particle_spawn_position[0] += FUN_L00_00257c48(0.0f, 0.15f);
         particle_spawn_position[1] += FUN_L00_00257c48(0.0f, 0.15f);
         particle_spawn_position[2] += FUN_L00_00257c48(0.0f, 0.15f);
-        id = scale_game_frames_c(0x3C);
+        id = scale_game_frames(0x3C);
         particle = FUN_L00_00272060(particle_spawn_position, id, particle_scale * 0.1f, particle_scale, 0x7F7F2020, 0, random_sign, initial_velocity, *(float *)&D_L14_00161CA8);
         if (particle != 0) {
             particle[9] = func_001FA898_r(4.0f) + 0x70;
         }
         random_sign = -random_sign;
-        particle = FUN_L00_00272060(particle_spawn_position, scale_game_frames_c(0x3C), particle_scale * 0.07f, particle_scale * 0.7f, 0x7F7F7F7F, 1, random_sign, initial_velocity, *(float *)&D_L14_00161CA8);
+        particle = FUN_L00_00272060(particle_spawn_position, scale_game_frames(0x3C), particle_scale * 0.07f, particle_scale * 0.7f, 0x7F7F7F7F, 1, random_sign, initial_velocity, *(float *)&D_L14_00161CA8);
         if (particle != 0) {
             particle[9] = func_001FA898_r(4.0f) + 0x70;
         }

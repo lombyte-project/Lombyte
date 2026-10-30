@@ -418,7 +418,6 @@ char *find_nearest_moby_by_class(void *search_position, int type, float *nearest
 
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern int random_integer_below(int) __asm__("FUN_00213260");
-extern void scale_vector_xyz(void *out, void *a, f32 s) __asm__("FUN_001f9a68");
 
 char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity) __asm__("FUN_L09_002ea528");
 
@@ -436,7 +435,7 @@ char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity
         fast_vec_add(dv, spawned_moby_vars, owner_vars);
         fast_vec_normalize(spawned_moby_vars, spawned_moby_vars, frame_time * 50.0f);
         fast_vec_add(spawned_moby_vars, spawned_moby_vars, inherited_velocity);
-        scale_vector_xyz(spawned_moby_vars, spawned_moby_vars, frame_scale * -0.7f + 1.0f);
+        fast_vec_scale(spawned_moby_vars, spawned_moby_vars, frame_scale * -0.7f + 1.0f);
         ((unsigned char *)moby)[0x30] = 0xFF;
         *(short *)(moby + 0x32) = 0xFF;
         moby[0x31] = 1;
@@ -465,8 +464,6 @@ char *spawn_fading_asteroid_debris(struct Moby *owner, float *inherited_velocity
 /* spawns a debris moby at a random point of a ring above the arena, falling toward the centre */
 /* Ported from rac1-decomp (src/overlays/l09_gaspar/vendor_002C2B08.c: func_L09_002EBA58), where it is exact; names translated to the US level program. */
 
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 extern f32 random_float_between(f32, f32) __asm__("func_002132A8");
 extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
@@ -923,7 +920,6 @@ typedef struct {
     float pts[1][4];           /* 0x10 */
 } Path;
 
-extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern void update_fading_asteroid_debris(unsigned char *m) __asm__("FUN_L09_002ead30");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1198,7 +1194,6 @@ extern char *spawn_class_11c_moby(char *owner, void *position, float angle) __as
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern void trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
-extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 
 void handle_moby_damage_and_destruction(struct Moby *moby) __asm__("FUN_L09_002ee110");
 
@@ -1329,7 +1324,7 @@ void update_tumbling_debris(struct Moby *moby) {
     }
     if (collision_line(old, pos, 2, moby, 0)) {
         reflect_vector(debris_vars, debris_vars, D_L09_00174000);
-        scale_vector_xyz(debris_vars, debris_vars, random_float_between(0.45f, 0.75f));
+        fast_vec_scale(debris_vars, debris_vars, random_float_between(0.45f, 0.75f));
         if (fast_vec_length(debris_vars) < D_0015ED70_2ef430 * 10.0f) {
             clear_u64_value(debris_vars);
         }
@@ -1450,13 +1445,13 @@ void update_shrinking_tumbling_debris(struct Moby *moby) {
     }
     if (collision_line(old, pos, 2, moby, 0)) {
         if (collision_hit_material() == 1) {
-            scale_vector_xyz(debris_vars, debris_vars, 0.4f);
+            fast_vec_scale(debris_vars, debris_vars, 0.4f);
             debris_vars[4] *= 0.25f;
             debris_vars[5] *= 0.25f;
         } else {
             moby->scale *= 0.8f;
             reflect_vector(debris_vars, debris_vars, D_L09_00174000);
-            scale_vector_xyz(debris_vars, debris_vars, random_float_between(0.3f, 0.1f));
+            fast_vec_scale(debris_vars, debris_vars, random_float_between(0.3f, 0.1f));
             if (fast_vec_length(debris_vars) < D_0015ED6C_2ef9b0 * 5.0f) {
                 *(int *)(debris_vars + 7) = 0;
             }
@@ -1521,7 +1516,7 @@ char *spawn_radially_scattered_moby(void *unused, float lower_radius, float uppe
         *(int *)(data + 8) = 0;
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, origin);
         fast_vec_add(&MOBY(moby)->pos, &MOBY(moby)->pos, direction);
-        scale_vector_xyz(data, data, 0.35f);
+        fast_vec_scale(data, data, 0.35f);
         MOBY(moby)->anim_speed *= 0.5f;
         MOBY(moby)->rot.z = fast_arc_tan(*(float *)data, *(float *)(data + 4));
         MOBY(moby)->update_dist = 0xFF;

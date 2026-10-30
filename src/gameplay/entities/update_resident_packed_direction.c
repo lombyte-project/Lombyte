@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/data_labels.h"
+#include "rnc/math/asm_helpers.h"
 struct Vec3 {
     f32 x;
     f32 y;
@@ -7,7 +8,6 @@ struct Vec3 {
 };
 extern struct Vec3 resident_packed_direction __asm__("D_001CAA80");
 extern void get_moby_light_direction(s32, f32 *) __asm__("FUN_0020d510");
-extern f32 fast_arc_tan(f32, f32) __asm__("FUN_001f9e90");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 void update_resident_packed_direction(void) __asm__("FUN_0020cfd0");

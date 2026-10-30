@@ -3,6 +3,7 @@
 #include "qcopy.h"
 
 #include "rnc/math/vector.h"
+#include "rnc/math/asm_helpers.h"
 
 struct G {
     f32 f[0x50];
@@ -18,7 +19,6 @@ extern void sceVu0UnitMatrix(void *);
 extern void SceVu0RotMatrixX(void *, void *, f32);
 extern void SceVu0RotMatrixY(void *, void *, f32);
 extern void sceVu0RotMatrixZ(void *, void *, f32);
-extern void multiply_matrix(void *, void *, void *) __asm__("FUN_001fa378");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 
 void update_camera_view_matrices(void) __asm__("FUN_001f2260");
