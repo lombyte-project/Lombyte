@@ -126,7 +126,7 @@ struct Moby *spawn_turret_shot(void *owner, OvlVec4 *pos, OvlVec4 *vel, s32 life
 void update_turret_shot(struct Moby *projectile_moby) __asm__("FUN_L09_00307d68");
 
 void update_turret_shot(struct Moby *projectile_moby) {
-    OvlVec4         old;
+    OvlVec4         previous_projectile_position;
     CollisionProbe  pr;
     OvlVec4         push;
     OvlVec4         spark_scatter_vector;
@@ -136,7 +136,7 @@ void update_turret_shot(struct Moby *projectile_moby) {
     s32             i;
 
     distance_to_hero = fast_vec_dist(&projectile_moby->pos, &D_0013F3D0_307d68);
-    qcopy(&old, &projectile_moby->pos);
+    qcopy(&previous_projectile_position, &projectile_moby->pos);
     fast_vec_add(&projectile_moby->pos, &projectile_moby->pos, &projectile_vars->vel);
     if (projectile_vars->unk28 == 0 && projectile_vars->unk24 != 0 &&
         projectile_vars->dist < distance_to_hero && distance_to_hero < 3.0f) {
@@ -177,7 +177,7 @@ void update_turret_shot(struct Moby *projectile_moby) {
         mark_moby_for_removal(projectile_moby);
         return;
     }
-    if (collision_line(&old, &projectile_moby->pos, 0, projectile_vars->owner, probe) == 0)
+    if (collision_line(&previous_projectile_position, &projectile_moby->pos, 0, projectile_vars->owner, probe) == 0)
         return;
 
     qcopy(&projectile_moby->pos, &l09_projectile_impact_position);
