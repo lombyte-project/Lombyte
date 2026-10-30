@@ -71,7 +71,7 @@ extern void *create_moby() __asm__("FUN_0020c4f8");
 char *
 create_class_274_ring_effect(void *owner, void *vector, float value) __asm__("FUN_L18_002dc3e0");
 
-char *create_class_274_ring_effect(void *owner, void *vector, float ring_radius) {
+char *create_class_274_ring_effect(void *ring_sound_source_moby, void *vector, float ring_radius) {
     char *moby = create_moby(0x274);
     if (moby != 0) {
         char *ring_effect_private_vars = ((char *)MOBY(moby)->pvars);
@@ -79,7 +79,7 @@ char *create_class_274_ring_effect(void *owner, void *vector, float ring_radius)
         qcopy(moby + 0x10, vector);
         *(float *)ring_effect_private_vars = ring_radius;
         *(int *)(ring_effect_private_vars + 0x08) = 3;
-        *(void **)(ring_effect_private_vars + 0x0C) = owner;
+        *(void **)(ring_effect_private_vars + 0x0C) = ring_sound_source_moby;
     }
     return moby;
 }
