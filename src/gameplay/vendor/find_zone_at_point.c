@@ -9,7 +9,7 @@ typedef struct {
     unsigned short h;
 } ZoneBox;
 extern char *surface_height_tiles_macro __asm__("D_00161190")MACRO_ADDR;
-extern float surface_height_grid[] __asm__("D_001E66E0");
+#include "rnc/gameplay/surface_height_grid.h"
 extern int truncate_float_to_s32(float) __asm__("func_001FA6D0");
 /* Index of the zone whose box (in 1/1024 units, 0x800 deep) holds the
    point and whose 4x4 cell mask at +0x1E has the point's cell set, or
@@ -36,8 +36,8 @@ int find_zone_at_point(float x, float y, float z) {
             continue;
         }
         zn = surface_height_tiles_macro + i * 0x1190;
-        cx = truncate_float_to_s32((x - (*(float *)(zn + 0) + surface_height_grid[2])) / surface_height_grid[4]);
-        cy = truncate_float_to_s32((y - (*(float *)(zn + 4) + surface_height_grid[3])) / surface_height_grid[5]);
+        cx = truncate_float_to_s32((x - (*(float *)(zn + 0) + surface_height_grid.origin_x)) / surface_height_grid.cell_width);
+        cy = truncate_float_to_s32((y - (*(float *)(zn + 4) + surface_height_grid.origin_y)) / surface_height_grid.cell_height);
         bit = 1 << (((cx >> 2) & 3) | (cy & 0xC));
         if (*(unsigned short *)(zn + 0x1E) & bit) {
             return i;
