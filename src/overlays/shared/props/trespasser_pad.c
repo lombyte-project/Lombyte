@@ -204,7 +204,7 @@ void compute_tresspasser_pad_camera_transform(float *pos,
     float   to;
     float   dl;
     int     camera_transform_index;
-    char   *base;
+    char   *camera_transform_table;
 
     camera_transform_index = *(int *)(((char *)MOBY(moby)->pvars) + 0xE8);
     if (camera_transform_index == -1) {
@@ -224,9 +224,9 @@ void compute_tresspasser_pad_camera_transform(float *pos,
         camera_rotation_output[1] = 0;
         camera_rotation_output[2] = fast_add_rotations(pick, 3.14159274f);
     } else {
-        base = (char *)l02_cuboids;
-        qcopy(pos, base + camera_transform_index * 128 + 0x30);
-        qcopy(camera_rotation_output, base + camera_transform_index * 128 + 0x70);
+        camera_transform_table = (char *)l02_cuboids;
+        qcopy(pos, camera_transform_table + camera_transform_index * 128 + 0x30);
+        qcopy(camera_rotation_output, camera_transform_table + camera_transform_index * 128 + 0x70);
     }
 }
 
