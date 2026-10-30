@@ -734,11 +734,11 @@ void destroy_frog_child_moby(struct Moby *moby) {
     float debris_velocity[4];
     float pos[4];
     float offset[4];
-    u8   *vars;
+    u8   *frog_vars;
     int   i;
     int   j;
 
-    vars = moby->pvars;
+    frog_vars = moby->pvars;
     allocate_voice_for_target_entry(4, 0, (int)moby);
     qcopy(origin, &moby->pos);
     origin[2] = origin[2] + 0.5f;
@@ -752,7 +752,7 @@ void destroy_frog_child_moby(struct Moby *moby) {
         fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
         spawn_crate_debris(
-            *(void **)(vars + 0x20C), debris_velocity, pos, D_L06_0015F580, 0x165, 0, 0.3f, 0.6f);
+            *(void **)(frog_vars + 0x20C), debris_velocity, pos, D_L06_0015F580, 0x165, 0, 0.3f, 0.6f);
     }
     for (j = 7; j >= 0; j--) {
         float speed = random_float_between(1.0f, 4.0f) * frame_time;
@@ -763,7 +763,7 @@ void destroy_frog_child_moby(struct Moby *moby) {
         *(u128 *)pos = *(u128 *)offset;
         fast_vec_normalize(debris_velocity, pos, speed);
         fast_vec_add(pos, pos, origin);
-        spawn_crate_debris(*(void **)(vars + 0x20C),
+        spawn_crate_debris(*(void **)(frog_vars + 0x20C),
                            debris_velocity,
                            pos,
                            D_L06_0015F580,
@@ -772,8 +772,8 @@ void destroy_frog_child_moby(struct Moby *moby) {
                            0.5f,
                            0.7f);
     }
-    mark_moby_for_removal(*(void **)(vars + 0x20C));
-    *(int *)(vars + 0x20C) = 0;
+    mark_moby_for_removal(*(void **)(frog_vars + 0x20C));
+    *(int *)(frog_vars + 0x20C) = 0;
 }
 
 /* Throws D_L06_00161C18 bursts of sparks from around the moby: each burst gets a random heading, speed and rise on top
