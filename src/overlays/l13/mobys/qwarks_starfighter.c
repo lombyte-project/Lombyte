@@ -529,8 +529,8 @@ void begin_starfighter_death_sequence(struct Moby *moby,
                                       char        *vars,
                                       int         *result) __asm__("FUN_L13_002e97e0");
 
-void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *remaining_health) {
-    int          path_ids = (int)vars + 0xB0;
+void begin_starfighter_death_sequence(struct Moby *moby, char *starfighter_moby_data, int *remaining_health) {
+    int          path_ids = (int)starfighter_moby_data + 0xB0;
     struct Moby *mobys;
     float        dx;
     float        dy;
@@ -542,16 +542,16 @@ void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *remain
     *remaining_health = 0;
     moby->flags &= 0xEFFF;
     FUN_L00_00257470(moby, 0, -1);
-    vars[0x67] = 0x78;
-    trooper_anim_update(moby, (short *)(vars + 0x60));
-    vars[0x13B] = 4;
+    starfighter_moby_data[0x67] = 0x78;
+    trooper_anim_update(moby, (short *)(starfighter_moby_data + 0x60));
+    starfighter_moby_data[0x13B] = 4;
     scale = D_0015ED6C * 10.0f;
-    velocity = (char *)l13_cuboids + (*(int *)(vars + 0x130) << 7);
-    *(short *)(vars + 0x9C) = 0;
-    fast_vec_normalize(vars + 0x70, velocity, scale);
+    velocity = (char *)l13_cuboids + (*(int *)(starfighter_moby_data + 0x130) << 7);
+    *(short *)(starfighter_moby_data + 0x9C) = 0;
+    fast_vec_normalize(starfighter_moby_data + 0x70, velocity, scale);
     {
-        int   index = *(short *)(vars + 0x9C);
-        int  *path_id = (int *)path_ids + (unsigned char)vars[0x13B];
+        int   index = *(short *)(starfighter_moby_data + 0x9C);
+        int  *path_id = (int *)path_ids + (unsigned char)starfighter_moby_data[0x13B];
         char *path = D_L13_001B07B0[*path_id];
         char *point;
         char *next;
@@ -564,8 +564,8 @@ void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *remain
         moby->rot.z = fast_arc_tan(dx, dy);
     }
     {
-        int   index = *(short *)(vars + 0x9C);
-        int  *path_id = (int *)path_ids + (unsigned char)vars[0x13B];
+        int   index = *(short *)(starfighter_moby_data + 0x9C);
+        int  *path_id = (int *)path_ids + (unsigned char)starfighter_moby_data[0x13B];
         char *path = D_L13_001B07B0[*path_id];
         int   point = index * 16 + 0x10;
         int   next = index * 16 + 0x20;
@@ -573,35 +573,35 @@ void begin_starfighter_death_sequence(struct Moby *moby, char *vars, int *remain
         horizontal = vector_distance_xy(path + point, path + next);
     }
     {
-        int   index = *(short *)(vars + 0x9C);
+        int   index = *(short *)(starfighter_moby_data + 0x9C);
         char *path;
         char *point;
         char *next;
 
-        path_ids += (unsigned char)vars[0x13B] * 4;
+        path_ids += (unsigned char)starfighter_moby_data[0x13B] * 4;
         path = D_L13_001B07B0[*(int *)path_ids];
         next = path + (index + 1) * 16;
         point = path + index * 16;
         dz = *(float *)(next + 0x18) - *(float *)(point + 0x18);
         moby->rot.y = -fast_arc_tan(horizontal, dz);
     }
-    vars[0x10C] = 1;
+    starfighter_moby_data[0x10C] = 1;
     mobys = (struct Moby *)D_L13_0015FFD8;
-    mobys[*(int *)(vars + 0x134)].flags |= 2;
-    mobys[*(int *)(vars + 0x134)].flags |= 1;
-    mobys[*(int *)(vars + 0x134)].visible = 0;
-    activate_descriptor(*(int *)(vars + 0x12C));
+    mobys[*(int *)(starfighter_moby_data + 0x134)].flags |= 2;
+    mobys[*(int *)(starfighter_moby_data + 0x134)].flags |= 1;
+    mobys[*(int *)(starfighter_moby_data + 0x134)].visible = 0;
+    activate_descriptor(*(int *)(starfighter_moby_data + 0x12C));
     moby->state = 7;
-    *(float *)(vars + 0xAC) = D_0015ED6C * 80.0f;
-    *(int *)(vars + 0xF8) = scale_game_frames(600);
-    queue_starfighter_voice_line(moby, (unsigned char *)vars, 0x22, 1);
-    *(short *)(vars + 0x138) = 0;
-    vars[0x148] = 0;
-    if (*(int *)(vars + 0x104) != -1) {
-        set_animation_parameter(*(int *)(vars + 0x104), 0);
-        *(int *)(vars + 0x104) = -1;
+    *(float *)(starfighter_moby_data + 0xAC) = D_0015ED6C * 80.0f;
+    *(int *)(starfighter_moby_data + 0xF8) = scale_game_frames(600);
+    queue_starfighter_voice_line(moby, (unsigned char *)starfighter_moby_data, 0x22, 1);
+    *(short *)(starfighter_moby_data + 0x138) = 0;
+    starfighter_moby_data[0x148] = 0;
+    if (*(int *)(starfighter_moby_data + 0x104) != -1) {
+        set_animation_parameter(*(int *)(starfighter_moby_data + 0x104), 0);
+        *(int *)(starfighter_moby_data + 0x104) = -1;
     }
-    *(int *)(vars + 0x13C) = -1;
+    *(int *)(starfighter_moby_data + 0x13C) = -1;
 }
 
 typedef struct Moby_2EAE80 Moby_2EAE80;
