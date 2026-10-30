@@ -1096,7 +1096,7 @@ extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
 void draw_starfighter_tractor_beam(struct Moby *moby) __asm__("FUN_L13_002ea8c8");
 
 void draw_starfighter_tractor_beam(struct Moby *moby) {
-    char               *vars = (char *)moby->pvars;
+    char               *starfighter_instance_data = (char *)moby->pvars;
     struct GeometryQuad quad;
     float               start[4];
     float               direction[4];
@@ -1132,7 +1132,7 @@ void draw_starfighter_tractor_beam(struct Moby *moby) {
     quad.texture_coordinates[2][1] = one;
     quad.texture_coordinates[3][1] = one;
     moby_point_position(moby, 0x13, start);
-    fast_vec_sub(direction, vars + 0x80, start);
+    fast_vec_sub(direction, starfighter_instance_data + 0x80, start);
     clamp_vector_length(direction, direction, 100.0f);
     length = fast_vec_length(direction);
     scale = length / 100.0f;
