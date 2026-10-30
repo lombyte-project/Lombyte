@@ -82,7 +82,7 @@ void ultramech_scientist_update(struct Moby *moby) {
     };
     char        *ultramech_scientist_private_data;
     char        *hero_pos;
-    struct Moby *other;
+    struct Moby *moby_list_cursor;
     int          control_mode;
 
     ultramech_scientist_private_data = (char *)moby->pvars;
@@ -127,30 +127,30 @@ void ultramech_scientist_update(struct Moby *moby) {
             break;
         }
         moby->state = 3;
-        other = (struct Moby *)D_L15_0015FFE4;
-        if (other == 0) {
+        moby_list_cursor = (struct Moby *)D_L15_0015FFE4;
+        if (moby_list_cursor == 0) {
             break;
         }
         {
             int dead_state = 0xFE;
             int gone_state = 0xFD;
-            for (; other != 0; other = other->next) {
-                if (other->mission != *(int *)(ultramech_scientist_private_data + 0x280)) {
+            for (; moby_list_cursor != 0; moby_list_cursor = moby_list_cursor->next) {
+                if (moby_list_cursor->mission != *(int *)(ultramech_scientist_private_data + 0x280)) {
                     continue;
                 }
-                if (other == moby) {
+                if (moby_list_cursor == moby) {
                     continue;
                 }
-                if (other == 0) {
+                if (moby_list_cursor == 0) {
                     continue;
                 }
-                if (other->state == dead_state) {
+                if (moby_list_cursor->state == dead_state) {
                     continue;
                 }
-                if (other->state == gone_state) {
+                if (moby_list_cursor->state == gone_state) {
                     continue;
                 }
-                mark_moby_for_removal(other);
+                mark_moby_for_removal(moby_list_cursor);
             }
         }
         break;
@@ -169,30 +169,30 @@ void ultramech_scientist_update(struct Moby *moby) {
         FUN_L00_002502a0(*(int *)(ultramech_scientist_private_data + 0x280));
         moby->anim_speed = 0.0f;
         moby->state = 2;
-        other = (struct Moby *)D_L15_0015FFE4;
-        if (other == 0) {
+        moby_list_cursor = (struct Moby *)D_L15_0015FFE4;
+        if (moby_list_cursor == 0) {
             break;
         }
         {
             int dead_state = 0xFE;
             int gone_state = 0xFD;
-            for (; other != 0; other = other->next) {
-                if (other->mission != *(int *)(ultramech_scientist_private_data + 0x280)) {
+            for (; moby_list_cursor != 0; moby_list_cursor = moby_list_cursor->next) {
+                if (moby_list_cursor->mission != *(int *)(ultramech_scientist_private_data + 0x280)) {
                     continue;
                 }
-                if (other == moby) {
+                if (moby_list_cursor == moby) {
                     continue;
                 }
-                if (other == 0) {
+                if (moby_list_cursor == 0) {
                     continue;
                 }
-                if (other->state == dead_state) {
+                if (moby_list_cursor->state == dead_state) {
                     continue;
                 }
-                if (other->state == gone_state) {
+                if (moby_list_cursor->state == gone_state) {
                     continue;
                 }
-                mark_moby_for_removal(other);
+                mark_moby_for_removal(moby_list_cursor);
             }
         }
         break;
