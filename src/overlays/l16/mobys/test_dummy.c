@@ -532,7 +532,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
     int         status;
     float       amount;
     L16HitData *hit_data;
-    char       *record;
+    char       *dummy_hit_record;
 
     if (hit_moby->state == 1) {
         return;
@@ -561,8 +561,8 @@ void update_test_dummy_damage_and_respawn(void *moby) {
         FUN_L16_002cee70_c((char *)hit_moby);
     }
     amount = 0.0f;
-    record = find_moby_hit(hit_moby, 0x330000, 0);
-    hit_reaction(hit_moby, record, &hit_data->health, 0, &status, &amount, 0, 4);
+    dummy_hit_record = find_moby_hit(hit_moby, 0x330000, 0);
+    hit_reaction(hit_moby, dummy_hit_record, &hit_data->health, 0, &status, &amount, 0, 4);
     if (status != 1 && hit_moby->state != 10 && hit_moby->state != 11) {
         hit_data->health -= amount;
         if (hit_data->health <= 0.0f) {
@@ -588,7 +588,7 @@ void update_test_dummy_damage_and_respawn(void *moby) {
             if (hit_moby->animation != 8) {
                 blend_moby_animation(hit_moby, 8, 2, 1);
             } else {
-                record = 0;
+                dummy_hit_record = 0;
             }
             hit_data->reaction_time = 120;
             trooper_anim_update(hit_moby, hit_data->reaction);
