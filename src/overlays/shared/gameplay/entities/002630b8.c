@@ -226,7 +226,7 @@ typedef struct {
 } Effect;
 extern Effect *spawn_puff(void *, f32, f32, f32, s32, void *, f32, u32)
     __asm__("FUN_L00_0026d000");
-extern u8 D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
+extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 void cutscene_set_camera_target(u8 *m) __asm__("FUN_L00_002637f8");
 void cutscene_set_camera_target(u8 *moby) {
     Vec4_2634f8 vectors[4];
@@ -257,7 +257,7 @@ void cutscene_set_camera_target(u8 *moby) {
                 if (random_integer_below(2) != 0)
                     signed_random_value = -signed_random_value;
                 effect = spawn_puff(&effect_spawn_position, size, 1.0f, 0.75f, signed_random_value,
-                                                   D_L00_0015F580_macro, lifetime, 0x503030ff);
+                                                   &zero_vector, lifetime, 0x503030ff);
                 if (effect) {
                     EffectTail *tail = &effect->tail;
                     effect->hA = scale_game_frames(6);
@@ -280,7 +280,7 @@ void cutscene_set_camera_target(u8 *moby) {
             count = 4;
             do {
                 effect = spawn_puff(&effect_spawn_position, size, 1.0f, 1.0f, 0x10,
-                                                   D_L00_0015F580_macro, lifetime, 0x7fffffff);
+                                                   &zero_vector, lifetime, 0x7fffffff);
                 if (effect) {
                     EffectTail *tail = &effect->tail;
                     effect->hA = scale_game_frames(2);
@@ -391,8 +391,7 @@ void queue_formatted_dialogue_message(s32 help_message_selector, s32 format_argu
     D_L00_0015F640 = message_duration_frames;
 }
 typedef unsigned int u128_263e30 __attribute__((mode(TI), aligned(16)));
-extern unsigned char D_L00_0015F580_263e30[] __asm__("D_L00_0015F580")
-    __attribute__((section(".sdata")));
+extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 void FUN_L00_00263fd8_263e30(void *, int, void *, void *, int, int, void *, void *, float,
                              void *) __asm__("FUN_L00_00263fd8");
 int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
@@ -410,8 +409,8 @@ void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_c
         if (consecutive_class_fragment_count > 0)
             for (i = 0; i < consecutive_class_fragment_count; i++) {
                 FUN_L00_00263fd8_263e30(source_moby, first_fragment_class + i, source_moby + 0x10, source_moby + 0x40, 0, mode,
-                                        D_L00_0015F580_263e30, D_L00_0015F580_263e30, 0.0f,
-                                        D_L00_0015F580_263e30);
+                                        &zero_vector, &zero_vector, 0.0f,
+                                        &zero_vector);
             }
     }
     if (first_fragment_class > 0 && range > 0) {
@@ -423,8 +422,8 @@ void spawn_moby_break_fragments(unsigned char *source_moby, int first_fragment_c
                 random_fragment_euler_rotation[1] = random_angle_radians();
                 random_fragment_euler_rotation[2] = random_angle_radians();
                 FUN_L00_00263fd8_263e30(source_moby, base + random_integer_below(range), &fragment_spawn_positions[i], random_fragment_euler_rotation, 0, mode,
-                                        D_L00_0015F580_263e30, D_L00_0015F580_263e30, 0.0f,
-                                        D_L00_0015F580_263e30);
+                                        &zero_vector, &zero_vector, 0.0f,
+                                        &zero_vector);
             }
         }
     }

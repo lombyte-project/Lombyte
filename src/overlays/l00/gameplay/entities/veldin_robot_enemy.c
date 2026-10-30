@@ -220,7 +220,7 @@ extern Vec4 D_L00_00166DC0;
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 extern CollisionHit coll_hit __asm__("D_L00_00173E40");
 extern Path *toad_paths[] __asm__("D_L00_001B04B0");
-extern s32 D_L00_0015F580[] MACRO_ADDR;
+extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 
 extern void update_veldin_robot_damage_and_targeting() __asm__("FUN_L00_002e1678");
 extern void FUN_L00_0025a120(ElectroidMoby *);
@@ -444,12 +444,12 @@ void veldin_robot_enemy_update(ElectroidMoby *moby) {
         if (mine_fall(moby, vars->unk70) & 0x140) {
             cart_burst(moby, &moby->pos, -1, 0.75f, 13.0f);
             spawn_moby_break_fragments(moby, 0x7AB, 1, 0x7AB, 1, 4, 0);
-            FUN_L00_00263fd8(moby, 0x78D, &moby->pos, &moby->unk40, 0, 0, 0.0f, D_L00_0015F580,
-                             D_L00_0015F580, D_L00_0015F580);
-            FUN_L00_00263fd8(moby, 0x78E, &moby->pos, &moby->unk40, 0, 0, 0.0f, D_L00_0015F580,
-                             D_L00_0015F580, D_L00_0015F580);
-            FUN_L00_00263fd8(moby, 0x78F, &moby->pos, &moby->unk40, 0, 0, 0.0f, D_L00_0015F580,
-                             D_L00_0015F580, D_L00_0015F580);
+            FUN_L00_00263fd8(moby, 0x78D, &moby->pos, &moby->unk40, 0, 0, 0.0f, &zero_vector,
+                             &zero_vector, &zero_vector);
+            FUN_L00_00263fd8(moby, 0x78E, &moby->pos, &moby->unk40, 0, 0, 0.0f, &zero_vector,
+                             &zero_vector, &zero_vector);
+            FUN_L00_00263fd8(moby, 0x78F, &moby->pos, &moby->unk40, 0, 0, 0.0f, &zero_vector,
+                             &zero_vector, &zero_vector);
             mark_moby_for_removal(moby);
             return;
         }
@@ -624,7 +624,7 @@ void update_veldin_robot_effects(SparkMoby *moby) {
         particle->unkC = random_float_between(6000.0f, 32000.0f);
     }
     for (i = 0; i < 3; i++) {
-        particle = spawn_mode_controlled_rotating_alpha_fade_particle(vars->pos, D_L00_0015F580, 0x7F, moby);
+        particle = spawn_mode_controlled_rotating_alpha_fade_particle(vars->pos, &zero_vector, 0x7F, moby);
         if (particle != 0) {
             particle_tail = &particle->tail;
             if (i == 2 && random_integer_below(8) == 0) {
@@ -851,12 +851,12 @@ void update_phase_effect_controller(FlockMoby *moby) {
             if (effect_source_moby != 0 && scale_game_frames_s32(150) <= D_L00_0016C860.level &&
                 D_L00_0016C860.level <= scale_game_frames_s32(220)) {
                 moby_point_position(effect_source_moby, 0, effect_spawn_position);
-                draw_trail(effect_spawn_position, effect_spawn_position, D_L00_0015F580, 120000.0f, 50000.0f);
+                draw_trail(effect_spawn_position, effect_spawn_position, &zero_vector, 120000.0f, 50000.0f);
                 for (i = 0; i < 10; i++) {
                     color = (random_int_between(0x40, 0x80) << 24) | 0x787878;
                     random_magnitude = random_int_between(0, 4);
                     part = spawn_puff(effect_spawn_position, random_integer_below(2) == 0 ? random_magnitude : -random_magnitude,
-                                            D_L00_0015F580, color, 0.75f, 1.0f, 1.03f, 120000.0f);
+                                            &zero_vector, color, 0.75f, 1.0f, 1.03f, 120000.0f);
                     if (part != 0) {
                         part->unk3 = 0x44;
                         tail = &part->tail;

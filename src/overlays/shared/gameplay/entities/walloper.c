@@ -95,8 +95,8 @@ extern int test_moby_linked_record_word8(void *) __asm__("FUN_L00_00259830");
 extern int collision_line(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern void collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void FUN_0022da68(int, int, void *);
-extern char D_L00_0015F580_lui[] __asm__("D_L00_0015F580");
-extern char D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
+extern Vec4 zero_vector __asm__("D_L00_0015F580");
+extern Vec4 zero_vector_macro __asm__("D_L00_0015F580") MACRO_ADDR;
 extern unsigned char *FUN_L00_00272060(void *, int, float, float, int, int, int, float *, float) __asm__("FUN_L00_00272060");
 
 typedef struct { Vec4 direction; int words[2]; u8 kind, mode; short id; float amount; int flag; } HitDescriptor;
@@ -452,7 +452,7 @@ next_candidate:;
             FUN_L00_00272060(beam_state, scale_game_frames(15), amplitude, amplitude, 0, 0, spin, (float *)&target_delta, 0.0f);
         }
     }
-    FUN_L00_00272060(&beam_state->tip, scale_game_frames(12), amplitude * 0.1f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, (float *)D_L00_0015F580_macro, 0.0f);
+    FUN_L00_00272060(&beam_state->tip, scale_game_frames(12), amplitude * 0.1f, amplitude, D_L00_001615F8 | 0x7f000000, 0, spin, zero_vector_macro.f, 0.0f);
 }
 typedef struct {
     u8 pad[0x3E];
@@ -1766,7 +1766,7 @@ Vec_2BE3A8 D_L17_001D1320[12][20] = {0};
 Vec_2BE3A8 D_L18_001D1020[12][20] = {0};
 extern Vec_2BE3A8 beam_pulse_positions[3] __asm__("D_L00_001DD0A0");
 extern Vec_2BE3A8 D_L00_00173F60_2BE3A8 __asm__("D_L00_00173E60");
-extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") MACRO_ADDR;
+extern Vec4 zero_vector_macro __asm__("D_L00_0015F580") MACRO_ADDR;
 #include "rnc/data_labels.h"
 extern void func_L00_002BE2A0_2BE3A8(void) __asm__("FUN_L00_002bcf98");
 extern void func_001F9BD8_2BE3A8(void *, void *, void *) __asm__("FUN_001f9a10");
@@ -1897,15 +1897,15 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
     }
     if (random_integer_below(2) == 0) {
         qcopy(&point, &beam_rail_a_points[11]);
-        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F2020, 0, sign, D_L00_0015F660_2BE3A8, spark_size * 0.1f, spark_size, 0.003f);
+        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F2020, 0, sign, &zero_vector_macro, spark_size * 0.1f, spark_size, 0.003f);
         sign = -sign;
-        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, D_L00_0015F660_2BE3A8, spark_size * 0.07f, spark_size * 0.7f, 0.003f);
+        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, &zero_vector_macro, spark_size * 0.07f, spark_size * 0.7f, 0.003f);
     }
     if (random_integer_below(2) == 0) {
         qcopy(&point, &beam_rail_b_points[11]);
-        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F20207F, 0, sign, D_L00_0015F660_2BE3A8, spark_size * 0.1f, spark_size, 0.003f);
+        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F20207F, 0, sign, &zero_vector_macro, spark_size * 0.1f, spark_size, 0.003f);
         sign = -sign;
-        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, D_L00_0015F660_2BE3A8, spark_size * 0.07f, spark_size * 0.7f, 0.003f);
+        func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, &zero_vector_macro, spark_size * 0.07f, spark_size * 0.7f, 0.003f);
     }
     func_001F9BF0_2BE3A8(&beam_segment_direction, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
     func_L00_001FF4B0_2BE3A8(&beam_segment_direction, &beam_segment_direction, D_L00_00161734_gp * frame_scale);

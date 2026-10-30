@@ -2716,7 +2716,7 @@ typedef struct FlameHit {
 } FlameHit;
 
 typedef Vec_2b2100 Vec;
-extern Vec D_L00_0015F580 __asm__("D_L00_0015F580") MACRO_ADDR;
+extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 extern f32 pyrocitor_light_color_start_x_gp __asm__("D_L00_001614F0") __attribute__((sda));
 extern f32 pyrocitor_light_color_end_x_gp __asm__("D_L00_00161500") __attribute__((sda));
 extern f32 D_L00_00161510 __attribute__((sda));
@@ -2791,7 +2791,7 @@ void pyrocitor_update(struct Moby *moby) {
             }
         }
         if (pyrocitor_vars->light != -1) {
-            lerp_vector(&lights_2b2100[pyrocitor_vars->light], &lights_2b2100[pyrocitor_vars->light], &D_L00_0015F580, 0.1f);
+            lerp_vector(&lights_2b2100[pyrocitor_vars->light], &lights_2b2100[pyrocitor_vars->light], &zero_vector, 0.1f);
             if (fast_vec_length(&lights_2b2100[pyrocitor_vars->light]) < 0.001f) {
                 release_point_light_slot(pyrocitor_vars->light);
                 /* Fakematch: the dead test on moby keeps the s6/s7 assignment of retail. */

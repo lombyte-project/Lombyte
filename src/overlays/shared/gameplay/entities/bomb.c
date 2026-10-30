@@ -1075,13 +1075,13 @@ extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int,
 extern char collision_hit_point[] __asm__("D_L00_00173E60");
 extern f32 fast_vec_length(void *) __asm__("func_001F9AF0");
 extern float D_0015ED6C;
-extern char D_L00_0015F580[] MACRO_ADDR;
+extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 extern float D_L00_00161890_gp __asm__("D_L00_00161890") __attribute__((sda));
 extern float cubic_hermite_scalar(float, float, float, float, float) __asm__("FUN_L00_00257e20");
 extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern s32 scale_game_frames(s32) __asm__("func_001F96F8");
 #include "rnc/overlay/shared/gameplay/entities/bomb_data/spawn_homing_shot.h"
-extern unsigned char *spawn_random_size_rotated_particle(char *a, char *b, int c, float f) __asm__("FUN_L00_00275158");
+extern unsigned char *spawn_random_size_rotated_particle(char *a, void *b, int c, float f) __asm__("FUN_L00_00275158");
 extern unsigned char D_0013E05A[];
 extern unsigned char D_L00_00173E80[];
 extern void *FUN_L00_0026dd20(void *, void *, unsigned, int, float);
@@ -1194,7 +1194,7 @@ char *spawn_homing_shot(char *owner, char *spawn_pos, char *target, float vx, fl
         } else {
             spawn_source_attached_fading_effect_particle(moby, 0x2F4F7F7F, *(short *)(vars + 0x24), -1, homing_shot_attached_particle_size);
             for (i = 0; i < 17; i++) {
-                trail = (char *)spawn_random_size_rotated_particle(moby + 0x10, D_L00_0015F580, 1, 0.0f);
+                trail = (char *)spawn_random_size_rotated_particle(moby + 0x10, &zero_vector, 1, 0.0f);
                 if (trail != 0) {
                     *(float *)(trail + 0xC) = random_float_between(homing_shot_trail_initial_size_min, homing_shot_trail_initial_size_max);
                     index = convert_integer_to_float(i);

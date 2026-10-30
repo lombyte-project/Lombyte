@@ -647,37 +647,37 @@ void emit_moby_color_cycling_particles(unsigned char *moby) {
     }
 }
 typedef int s32_2e1f28;
-extern s32_2e1f28 D_L00_00161BF8_macro[] __asm__("D_L00_00161BF8") MACRO_ADDR;
-extern s32_2e1f28 D_L00_00161C08_macro[] __asm__("D_L00_00161C08") MACRO_ADDR;
-extern s32_2e1f28 D_L00_00161C18_macro[] __asm__("D_L00_00161C18") MACRO_ADDR;
-extern s32_2e1f28 D_L00_00161C28_macro[] __asm__("D_L00_00161C28") MACRO_ADDR;
-extern s32_2e1f28 D_L00_00161C38_macro[] __asm__("D_L00_00161C38") MACRO_ADDR;
-extern s32_2e1f28 D_L00_00161C48_macro[] __asm__("D_L00_00161C48") MACRO_ADDR;
-extern s32_2e1f28 D_L00_00161C58_macro[] __asm__("D_L00_00161C58") MACRO_ADDR;
-extern s32_2e1f28 D_L00_00161C68_macro[] __asm__("D_L00_00161C68") MACRO_ADDR;
-extern s32_2e1f28 D_L00_00161C78_macro[] __asm__("D_L00_00161C78") MACRO_ADDR;
-extern s32_2e1f28 D_L00_00161C88_macro[] __asm__("D_L00_00161C88") MACRO_ADDR;
+extern int beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern float beam_amplitude_phase[] __asm__("D_L00_00161C08") MACRO_ADDR;
+extern float beam_twist_phase[] __asm__("D_L00_00161C18") MACRO_ADDR;
+extern float beam_swell_phase[] __asm__("D_L00_00161C28") MACRO_ADDR;
+extern int beam_endpoint_light[] __asm__("D_L00_00161C38") MACRO_ADDR;
+extern int beam_tip_light[] __asm__("D_L00_00161C48") MACRO_ADDR;
+extern int beam_endpoint_effect_flags[] __asm__("D_L00_00161C58") MACRO_ADDR;
+extern int beam_endpoint_spark_tag_mode[] __asm__("D_L00_00161C68") MACRO_ADDR;
+extern float beam_scroll_macro[] __asm__("D_L00_00161C78") MACRO_ADDR;
+extern int beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
 s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 endpoint_effect_flags, s32_2e1f28 endpoint_spark_tag_mode) __asm__("FUN_L00_002e1f28");
 
 s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 a, s32_2e1f28 b) __asm__("FUN_L00_002e1f28");
 s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 endpoint_effect_flags, s32_2e1f28 endpoint_spark_tag_mode) {
     s32_2e1f28 i, j;
     for (i = 0; i < 3; i++) {
-        if (D_L00_00161C88_macro[i] == id)
+        if (beam_slot_id[i] == id)
             return 1;
     }
     for (j = 0; j < 3; j++) {
-        if (D_L00_00161C88_macro[j] == 0) {
-            D_L00_00161C88_macro[j] = id;
-            D_L00_00161C08_macro[j] = 0;
-            D_L00_00161C18_macro[j] = 0;
-            D_L00_00161C28_macro[j] = 0;
-            D_L00_00161C38_macro[j] = -1;
-            D_L00_00161C48_macro[j] = -1;
-            D_L00_00161C58_macro[j] = endpoint_effect_flags;
-            D_L00_00161C68_macro[j] = endpoint_spark_tag_mode;
-            D_L00_00161C78_macro[j] = 0;
-            D_L00_00161BF8_macro[j] = 1;
+        if (beam_slot_id[j] == 0) {
+            beam_slot_id[j] = id;
+            beam_amplitude_phase[j] = 0;
+            beam_twist_phase[j] = 0;
+            beam_swell_phase[j] = 0;
+            beam_endpoint_light[j] = -1;
+            beam_tip_light[j] = -1;
+            beam_endpoint_effect_flags[j] = endpoint_effect_flags;
+            beam_endpoint_spark_tag_mode[j] = endpoint_spark_tag_mode;
+            beam_scroll_macro[j] = 0;
+            beam_slot_state[j] = 1;
             return 1;
         }
     }
@@ -685,25 +685,25 @@ s32_2e1f28 register_beam_slot(s32_2e1f28 id, s32_2e1f28 endpoint_effect_flags, s
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E34F0), where it is exact; names translated to the US level program. */
 
-extern s32 D_L00_00161BF8_c[] __asm__("D_L00_00161BF8") MACRO_ADDR;
-extern s32 D_L00_00161C38_c[] __asm__("D_L00_00161C38") MACRO_ADDR;
-extern s32 D_L00_00161C48_c[] __asm__("D_L00_00161C48") MACRO_ADDR;
-extern s32 D_L00_00161C88_c[] __asm__("D_L00_00161C88") MACRO_ADDR;
+extern int beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern int beam_endpoint_light[] __asm__("D_L00_00161C38") MACRO_ADDR;
+extern int beam_tip_light[] __asm__("D_L00_00161C48") MACRO_ADDR;
+extern int beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
 
 int release_beam_slot_by_id(int id) __asm__("FUN_L00_002e2040");
 int release_beam_slot_by_id(int id) {
     unsigned int i;
     for (i = 0; (int)i < 3; i++) {
-        if (D_L00_00161C88_c[i] == id) {
-            D_L00_00161BF8_c[i] = 0;
-            D_L00_00161C88_c[i] = 0;
-            if (D_L00_00161C38_c[i] != -1) {
-                release_point_light_slot(D_L00_00161C38_c[i]);
-                D_L00_00161C38_c[i] = -1;
+        if (beam_slot_id[i] == id) {
+            beam_slot_state[i] = 0;
+            beam_slot_id[i] = 0;
+            if (beam_endpoint_light[i] != -1) {
+                release_point_light_slot(beam_endpoint_light[i]);
+                beam_endpoint_light[i] = -1;
             }
-            if (D_L00_00161C48_c[i] != -1) {
-                release_point_light_slot(D_L00_00161C48_c[i]);
-                D_L00_00161C48_c[i] = -1;
+            if (beam_tip_light[i] != -1) {
+                release_point_light_slot(beam_tip_light[i]);
+                beam_tip_light[i] = -1;
             }
             return 1;
         }
@@ -712,36 +712,37 @@ int release_beam_slot_by_id(int id) {
 }
 #include "sda.h"
 
-extern s32 D_L00_00161BF8[] MACRO_ADDR;
-extern s32 D_L00_00161C38[] MACRO_ADDR;
-extern s32 D_L00_00161C48[] MACRO_ADDR;
-extern s32 D_L00_00161C88[] MACRO_ADDR;
+extern int beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern int beam_endpoint_light[] __asm__("D_L00_00161C38") MACRO_ADDR;
+extern int beam_tip_light[] __asm__("D_L00_00161C48") MACRO_ADDR;
+extern int beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
 
 void release_beam_slot(s32 i) __asm__("FUN_L00_002e20f8");
 
 void release_beam_slot(s32 i) {
     s32 first_endpoint_light_index;
-    first_endpoint_light_index = D_L00_00161C38[i];
-    D_L00_00161BF8[i] = 0;
-    D_L00_00161C88[i] = 0;
+    first_endpoint_light_index = beam_endpoint_light[i];
+    beam_slot_state[i] = 0;
+    beam_slot_id[i] = 0;
     if (first_endpoint_light_index != -1) {
         release_point_light_slot(first_endpoint_light_index);
-        D_L00_00161C38[i] = -1;
+        beam_endpoint_light[i] = -1;
     }
-    if (D_L00_00161C48[i] != -1) {
-        release_point_light_slot(D_L00_00161C48[i]);
-        D_L00_00161C48[i] = -1;
+    if (beam_tip_light[i] != -1) {
+        release_point_light_slot(beam_tip_light[i]);
+        beam_tip_light[i] = -1;
     }
 }
 #include "qcopy.h"
 #include "sda.h"
 typedef struct {
-    u8 b[0x40];
-} B002e2190;
+    f32 basis[3][4];
+    f32 origin[4];
+} BeamTransform;
 typedef struct {
     u8 b[0x10];
 } Q002e2190;
-extern B002e2190 D_L00_001E6D20[];
+extern BeamTransform beam_transforms[] __asm__("D_L00_001E6D20");
 extern Q002e2190 D_L00_001E6DE0[];
 void fast_mem_copy(void *, void *, s32) __asm__("FUN_001f98d0");
 s32 set_beam_origin_transform_and_endpoint(s32 id, void *beam_origin_transform, void *endpoint_position) __asm__("FUN_L00_002e2190");
@@ -750,12 +751,12 @@ s32 set_beam_origin_transform_and_endpoint(s32 id, void *src, void *v) __asm__("
 s32 set_beam_origin_transform_and_endpoint(s32 id, void *beam_origin_transform, void *endpoint_position) {
     s32 i;
     for (i = 0; i < 3; i++) {
-        if (id == D_L00_00161C88[i]) {
-            if (D_L00_00161BF8[i] == 1)
-                D_L00_00161BF8[i] = 2;
-            else if (D_L00_00161BF8[i] == 4)
-                D_L00_00161BF8[i] = 3;
-            fast_mem_copy(&D_L00_001E6D20[i], beam_origin_transform, 0x40);
+        if (id == beam_slot_id[i]) {
+            if (beam_slot_state[i] == 1)
+                beam_slot_state[i] = 2;
+            else if (beam_slot_state[i] == 4)
+                beam_slot_state[i] = 3;
+            fast_mem_copy(&beam_transforms[i], beam_origin_transform, 0x40);
             qcopy(&D_L00_001E6DE0[i], endpoint_position);
             return 1;
         }
@@ -778,10 +779,6 @@ typedef float Vec_2E3700[4] __attribute__((aligned(16)));
 
 typedef struct { float x, y, z, w; } Pt;
 
-typedef struct { char pad0[0x30]; float v30[4]; } Slot;
-
-typedef struct { float v[4]; char pad10[0x30]; } End;
-
 typedef struct { float v[4]; } Q_2E3700;
 
 typedef struct {
@@ -802,15 +799,16 @@ typedef struct {
 
 typedef struct { char pad0[0x10]; float v10[3]; float f1C; } Snd;
 
-typedef struct { char b[0x140]; } Pane;
-
+/* The origin row of a BeamTransform, read through its own label. */
 typedef struct {
-    f32 v[4];
-    u8 pad[0x30];
-} T_e3388;
+    f32 origin[4];
+    u8 pad10[0x30];
+} BeamOrigin;
 
-extern Pane D_L00_001E6E40[];
-extern char D_L00_0015F580[] MACRO_ADDR;
+typedef struct { Pt points[20]; } BeamStrand;
+
+extern BeamStrand beam_strands[] __asm__("D_L00_001E6E40");
+extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
@@ -825,23 +823,23 @@ f32 FUN_L00_00257c48(f32, f32);
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 int allocate_colored_effect_slot(void *v, float a, float b_0023e738, float c, float d, float e) __asm__("FUN_L00_0023e738");
 unsigned char *spawn_mode_controlled_rotating_alpha_fade_particle(void *a, void *b, int c, int d) __asm__("FUN_L00_00274948");
-extern Slot D_L00_001E7070_2E3700[] __asm__("D_L00_001E6D20");
-extern End D_L00_001E70A0_2E3700[] __asm__("D_L00_001E6D50");
+extern BeamTransform beam_transforms[] __asm__("D_L00_001E6D20");
+extern BeamOrigin beam_origins[] __asm__("D_L00_001E6D50");
 extern Q_2E3700 D_L00_001E7130_2E3700[] __asm__("D_L00_001E6DE0");
 extern Q_2E3700 D_L00_001E7160_2E3700[] __asm__("D_L00_001E6E10");
-extern Pt D_L00_001E7190_2E3700[][20] __asm__("D_L00_001E6E40");
+extern BeamStrand beam_strands[] __asm__("D_L00_001E6E40");
 extern Snd D_L00_001803C0_2E3700[] __asm__("D_L00_001802C0");
 extern char D_0013E633_2E3700[] __asm__("D_0013F5E0");
-extern char D_L00_0015F580_macro[] __asm__("D_L00_0015F580") MACRO_ADDR;
-extern int D_L00_00161CC8_2E3700[] __asm__("D_L00_00161BF8") MACRO_ADDR;
-extern float D_L00_00161CD8_2E3700[] __asm__("D_L00_00161C08") MACRO_ADDR;
-extern float D_L00_00161CE8_2E3700[] __asm__("D_L00_00161C18") MACRO_ADDR;
-extern float D_L00_00161CF8_2E3700[] __asm__("D_L00_00161C28") MACRO_ADDR;
-extern int D_L00_00161D08_2E3700[] __asm__("D_L00_00161C38") MACRO_ADDR;
-extern int D_L00_00161D18_2E3700[] __asm__("D_L00_00161C48") MACRO_ADDR;
-extern int D_L00_00161D28_2E3700[] __asm__("D_L00_00161C58") MACRO_ADDR;
-extern int D_L00_00161D38_2E3700[] __asm__("D_L00_00161C68") MACRO_ADDR;
-extern int D_L00_00161D58_2E3700[] __asm__("D_L00_00161C88") MACRO_ADDR;
+extern Vec4 zero_vector __asm__("D_L00_0015F580") MACRO_ADDR;
+extern int beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern float beam_amplitude_phase[] __asm__("D_L00_00161C08") MACRO_ADDR;
+extern float beam_twist_phase[] __asm__("D_L00_00161C18") MACRO_ADDR;
+extern float beam_swell_phase[] __asm__("D_L00_00161C28") MACRO_ADDR;
+extern int beam_endpoint_light[] __asm__("D_L00_00161C38") MACRO_ADDR;
+extern int beam_tip_light[] __asm__("D_L00_00161C48") MACRO_ADDR;
+extern int beam_endpoint_effect_flags[] __asm__("D_L00_00161C58") MACRO_ADDR;
+extern int beam_endpoint_spark_tag_mode[] __asm__("D_L00_00161C68") MACRO_ADDR;
+extern int beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
 extern float D_L00_00161BF0_gp __asm__("D_L00_00161BF0") __attribute__((sda));
 extern void func_001F9BF0_2E3700(void *, void *, void *) __asm__("FUN_001f9a28");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -881,13 +879,13 @@ void update_slot_panes_and_effects(int unused, int beam) {
     int j;
     int second_strand_point_index;
 
-    func_001F9BF0_2E3700(span, &D_L00_001E7130_2E3700[beam], &D_L00_001E70A0_2E3700[beam]);
+    func_001F9BF0_2E3700(span, &D_L00_001E7130_2E3700[beam], &beam_origins[beam]);
     step = fast_vec_length(span) / 20.0f;
-    if (D_L00_00161CC8_2E3700[beam] == 2) {
-        D_L00_00161CC8_2E3700[beam] = 3;
+    if (beam_slot_state[beam] == 2) {
+        beam_slot_state[beam] = 3;
         for (i = 0; i < 20; i++) {
-            Pt *first = &D_L00_001E7190_2E3700[strand][i];
-            Pt *second = &D_L00_001E7190_2E3700[next_strand][i];
+            Pt *first = &beam_strands[strand].points[i];
+            Pt *second = &beam_strands[next_strand].points[i];
 
             first->x = step * (float)i;
             first->y = first->z = 0.0f;
@@ -897,31 +895,31 @@ void update_slot_panes_and_effects(int unused, int beam) {
             second->w = 1.0f;
         }
     }
-    D_L00_00161CD8_2E3700[beam] = func_001FA748_2E3700(D_L00_00161CD8_2E3700[beam], 0.17453292f);
-    D_L00_00161CE8_2E3700[beam] = func_001FA790_2E3700(D_L00_00161CE8_2E3700[beam], 0.80285144f);
-    D_L00_00161CF8_2E3700[beam] = func_001FA748_2E3700(D_L00_00161CF8_2E3700[beam], 0.05236f);
+    beam_amplitude_phase[beam] = func_001FA748_2E3700(beam_amplitude_phase[beam], 0.17453292f);
+    beam_twist_phase[beam] = func_001FA790_2E3700(beam_twist_phase[beam], 0.80285144f);
+    beam_swell_phase[beam] = func_001FA748_2E3700(beam_swell_phase[beam], 0.05236f);
     phase_step = 360.0f / (func_001FA888_2E3700(20) * 0.5f) * 0.017453292f;
     for (j = 0; j < 19; j++) {
         float fj = (float)j;
         float amplitude = func_001FA888_2E3700(j) / func_001FA888_2E3700(20) * 0.3f + 0.1f;
-        Pt *point = &D_L00_001E7190_2E3700[strand][j];
+        Pt *point = &beam_strands[strand].points[j];
 
-        amplitude = amplitude * func_001F9FA8_2E3700(normalize_angle(D_L00_00161CD8_2E3700[beam] + fj * phase_step));
+        amplitude = amplitude * func_001F9FA8_2E3700(normalize_angle(beam_amplitude_phase[beam] + fj * phase_step));
         point->y = 0.0f;
         point->w = 1.0f;
         point->z = amplitude;
         point->x = step * fj;
     }
-    qcopy_nc(from, &D_L00_001E70A0_2E3700[beam]);
+    qcopy_nc(from, &beam_origins[beam]);
     one = 1.0f;
     func_001F9BF0_2E3700(span2, &D_L00_001E7130_2E3700[beam], from);
     func_L00_001FF4B0_2E3700(beam_direction, span2, one);
     fast_vec_cross(side, beam_direction, D_0013E633_2E3700);
     func_L00_001FF4B0_2E3700(side, side, -1.0f);
     fast_vec_cross(up, side, beam_direction);
-    transform_vector(tip, &D_L00_001E7190_2E3700[strand][18], beam_direction);
+    transform_vector(tip, &beam_strands[strand].points[18], beam_direction);
     qcopy(&D_L00_001E7160_2E3700[beam], tip);
-    point = D_L00_001E7190_2E3700[next_strand];
+    point = beam_strands[next_strand].points;
     for (second_strand_point_index = 0; second_strand_point_index < 19; second_strand_point_index++) {
         float fn = (float)second_strand_point_index;
         float twist;
@@ -931,8 +929,8 @@ void update_slot_panes_and_effects(int unused, int beam) {
         float random;
 
         point->z = 0.0f;
-        twist = normalize_angle(D_L00_00161CE8_2E3700[beam] + fn * 0.99483764f);
-        swell = normalize_angle(D_L00_00161CF8_2E3700[beam] + fn * 0.20944f);
+        twist = normalize_angle(beam_twist_phase[beam] + fn * 0.99483764f);
+        swell = normalize_angle(beam_swell_phase[beam] + fn * 0.20944f);
         height = func_001F9FA8_2E3700(swell) * 0.5f;
         ripple = func_001F9FA8_2E3700(twist);
         random = randf_sym(0.0f, 0.2f);
@@ -954,14 +952,14 @@ void update_slot_panes_and_effects(int unused, int beam) {
         particle_velocity.f[3] = one;
         particle_velocity.f[0] = speed * func_001F9F90_2E3700(angle);
         particle_velocity.f[1] = speed * func_001F9FA8_2E3700(angle);
-        transform_vector_by_basis(&particle_velocity, &particle_velocity, &D_L00_001E7070_2E3700[beam]);
-        spawn_mode_controlled_rotating_alpha_fade_particle(D_L00_001E7070_2E3700[beam].v30, &particle_velocity, 0x7F, D_L00_00161D58_2E3700[beam]);
+        transform_vector_by_basis(&particle_velocity, &particle_velocity, &beam_transforms[beam]);
+        spawn_mode_controlled_rotating_alpha_fade_particle(beam_transforms[beam].origin, &particle_velocity, 0x7F, beam_slot_id[beam]);
         if (random_integer_below(3) == 0) {
             Part *spark;
 
-            fast_vec_scale(first_endpoint_effect_position, &D_L00_001E7070_2E3700[beam], 0.3f);
-            func_001F9BD8_2E3700(first_endpoint_effect_position, first_endpoint_effect_position, D_L00_001E7070_2E3700[beam].v30);
-            spark = spawn_mode_controlled_rotating_alpha_fade_particle(first_endpoint_effect_position, D_L00_0015F580_macro, 0x7F, D_L00_00161D58_2E3700[beam]);
+            fast_vec_scale(first_endpoint_effect_position, &beam_transforms[beam], 0.3f);
+            func_001F9BD8_2E3700(first_endpoint_effect_position, first_endpoint_effect_position, beam_transforms[beam].origin);
+            spark = spawn_mode_controlled_rotating_alpha_fade_particle(first_endpoint_effect_position, &zero_vector, 0x7F, beam_slot_id[beam]);
             if (spark != 0) {
                 PartSub *sub = &spark->sub;
 
@@ -969,14 +967,14 @@ void update_slot_panes_and_effects(int unused, int beam) {
                 spark->fA = func_001F9850_2E3700(4);
                 sub->f10 = one / func_001FA888_2E3700(spark->fA);
                 sub->f18 = 0x7F7F7F;
-                if (D_L00_00161D38_2E3700[beam] == 1) sub->f16 = 1;
+                if (beam_endpoint_spark_tag_mode[beam] == 1) sub->f16 = 1;
             }
         }
         random_float_between(0.01f, 0.05f);
         random_spherical_offset(&particle_velocity, 0.01f, 0.05f);
-        spawn_mode_controlled_rotating_alpha_fade_particle(tip, &particle_velocity, 0x7F, D_L00_00161D58_2E3700[beam]);
+        spawn_mode_controlled_rotating_alpha_fade_particle(tip, &particle_velocity, 0x7F, beam_slot_id[beam]);
         if (random_integer_below(3) == 0) {
-            Part *spark = spawn_mode_controlled_rotating_alpha_fade_particle(tip, D_L00_0015F580_macro, 0x7F, D_L00_00161D58_2E3700[beam]);
+            Part *spark = spawn_mode_controlled_rotating_alpha_fade_particle(tip, &zero_vector, 0x7F, beam_slot_id[beam]);
 
             if (spark != 0) {
                 PartSub *sub = &spark->sub;
@@ -985,31 +983,31 @@ void update_slot_panes_and_effects(int unused, int beam) {
                 spark->fA = func_001F9850_2E3700(4);
                 sub->f10 = 1.0f / func_001FA888_2E3700(spark->fA);
                 sub->f18 = 0x7F7F7F;
-                if (D_L00_00161D38_2E3700[beam] == 1) sub->f16 = 2;
+                if (beam_endpoint_spark_tag_mode[beam] == 1) sub->f16 = 2;
             }
         }
     }
-    if (D_L00_00161D28_2E3700[beam] != 0) {
-        if (D_L00_00161D28_2E3700[beam] & 1) {
-            qcopy(first_endpoint_effect_position, &D_L00_001E70A0_2E3700[beam]);
+    if (beam_endpoint_effect_flags[beam] != 0) {
+        if (beam_endpoint_effect_flags[beam] & 1) {
+            qcopy(first_endpoint_effect_position, &beam_origins[beam]);
             first_endpoint_effect_position[2] -= 0.25f;
-            if (D_L00_00161D08_2E3700[beam] == -1) {
-                D_L00_00161D08_2E3700[beam] = allocate_colored_effect_slot(first_endpoint_effect_position, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
+            if (beam_endpoint_light[beam] == -1) {
+                beam_endpoint_light[beam] = allocate_colored_effect_slot(first_endpoint_effect_position, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
             }
-            if (D_L00_00161D08_2E3700[beam] >= 0) {
-                Snd *light = &D_L00_001803C0_2E3700[D_L00_00161D08_2E3700[beam]];
+            if (beam_endpoint_light[beam] >= 0) {
+                Snd *light = &D_L00_001803C0_2E3700[beam_endpoint_light[beam]];
 
                 qcopy(light->v10, first_endpoint_effect_position);
                 light->f1C = D_L00_00161BF0_gp;
             }
         }
-        if (D_L00_00161D28_2E3700[beam] & 2) {
+        if (beam_endpoint_effect_flags[beam] & 2) {
             tip[2] += 0.5f;
-            if (D_L00_00161D18_2E3700[beam] == -1) {
-                D_L00_00161D18_2E3700[beam] = allocate_colored_effect_slot(tip, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
+            if (beam_tip_light[beam] == -1) {
+                beam_tip_light[beam] = allocate_colored_effect_slot(tip, D_L00_00161BF0_gp, 0.0f, 1.0f, 1.0f, 2.0f);
             }
-            if (D_L00_00161D18_2E3700[beam] >= 0) {
-                Snd *light = &D_L00_001803C0_2E3700[D_L00_00161D18_2E3700[beam]];
+            if (beam_tip_light[beam] >= 0) {
+                Snd *light = &D_L00_001803C0_2E3700[beam_tip_light[beam]];
 
                 qcopy(light->v10, tip);
                 light->f1C = D_L00_00161BF0_gp;
@@ -1020,9 +1018,9 @@ void update_slot_panes_and_effects(int unused, int beam) {
 /* Scrolls and draws the two panes of each active slot (3 slots). */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002E1660.c: func_L00_002E3FA0), where it is exact; names translated to the US level program. */
 
-extern float D_L00_00161C78_f[] __asm__("D_L00_00161C78") MACRO_ADDR;
-extern int D_L00_00161BF8_c2[] __asm__("D_L00_00161BF8") MACRO_ADDR;
-extern int D_L00_00161C88_c2[] __asm__("D_L00_00161C88") MACRO_ADDR;
+extern float beam_scroll[] __asm__("D_L00_00161C78") MACRO_ADDR;
+extern int beam_slot_state[] __asm__("D_L00_00161BF8") MACRO_ADDR;
+extern int beam_slot_id[] __asm__("D_L00_00161C88") MACRO_ADDR;
 extern void draw_beam_strand_with_glow(int, int, void *, int, int, int) __asm__("FUN_L00_002e2c88");
 extern void draw_beam_endpoint_quads_with_glow(int, int) __asm__("FUN_L00_002e3388");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
@@ -1037,17 +1035,17 @@ void draw_active_beam_slots(char *moby) {
         float scroll;
         int texture_id, glow_texture_id;
         int pane, next_pane;
-        if (D_L00_00161C88_c2[i] == 0 || D_L00_00161BF8_c2[i] < 2) continue;
+        if (beam_slot_id[i] == 0 || beam_slot_state[i] < 2) continue;
         pane = i << 1;
         next_pane = pane + 1;
-        scroll = D_L00_00161C78_f[i] - frame_scale * 0.2f;
-        D_L00_00161C78_f[i] = scroll;
-        if (scroll <= -8.0f) D_L00_00161C78_f[i] = scroll + 8.0f;
-        draw_beam_endpoint_quads_with_glow(D_L00_00161C88_c2[i], i);
+        scroll = beam_scroll[i] - frame_scale * 0.2f;
+        beam_scroll[i] = scroll;
+        if (scroll <= -8.0f) beam_scroll[i] = scroll + 8.0f;
+        draw_beam_endpoint_quads_with_glow(beam_slot_id[i], i);
         texture_id = moby_data[1] + 0x28;
         glow_texture_id = moby_data[0] + 0x28;
-        draw_beam_strand_with_glow(texture_id, glow_texture_id, &D_L00_001E6E40[pane], 0x80, 0x40, i);
-        draw_beam_strand_with_glow(texture_id, glow_texture_id, &D_L00_001E6E40[next_pane], 0x30, 0x10, i);
+        draw_beam_strand_with_glow(texture_id, glow_texture_id, &beam_strands[pane], 0x80, 0x40, i);
+        draw_beam_strand_with_glow(texture_id, glow_texture_id, &beam_strands[next_pane], 0x30, 0x10, i);
     }
 }
 /* Builds the trail quad and its glow quad from the slot tables and draws them along the
@@ -1080,7 +1078,7 @@ void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *point
     *(int *)&quads[1].texture_coordinates[0][1] = 0;
     glow_color = (glow_alpha << 24) | 0x7F4040;
     zero = quads[1].texture_coordinates[0][1];
-    uv_offset = *(float *)&D_L00_00161C78_macro[slot];
+    uv_offset = beam_scroll_macro[slot];
     quads[1].colors[0] = quads[1].colors[1] = quads[1].colors[2] = quads[1].colors[3] = glow_color;
     quads[1].primitive = quads[0].primitive;
     quads[1].texture_state = quads[0].texture_state;
@@ -1099,7 +1097,7 @@ void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *point
     quads[0].texture_coordinates[2][1] = zero;
     quads[0].texture_coordinates[3][1] = 1.0f;
     half_width = 0.6f;
-    if (*(short *)(D_L00_00161C88[slot] + 0xA6) == 0x1C) half_width = 0.3f;
+    if (*(short *)(beam_slot_id[slot] + 0xA6) == 0x1C) half_width = 0.3f;
     width.q = 0;
     glow_width.q = 0;
     glow_width.f[2] = half_width + half_width;
@@ -1189,7 +1187,7 @@ void draw_beam_strand_with_glow(int texture_id, int glow_texture_id, void *point
             qcopy(&quads[1].positions[0], &quads[1].positions[2]);
             qcopy(&quads[1].positions[1], &quads[1].positions[3]);
             taper = cubic_hermite_scalar(-1.0f, zero, 1.0f, zero, convert_integer_to_float(i) / convert_integer_to_float(20));
-            scroll = D_L00_00161C78_f[slot];
+            scroll = beam_scroll[slot];
             quads[0].texture_coordinates[0][0] = scroll + zero;
             quads[0].texture_coordinates[0][1] = zero;
             quads[0].texture_coordinates[1][0] = scroll + zero;
@@ -1216,7 +1214,7 @@ typedef struct {
     u64 r88;
 } Q_e3388;
 
-extern T_e3388 D_L00_001E6D50_e3388[] __asm__("D_L00_001E6D50");
+extern BeamOrigin beam_origins[] __asm__("D_L00_001E6D50");
 extern f32 D_L00_001E6E10_e3388[][4] __asm__("D_L00_001E6E10");
 extern u8 g_debug_camera[] __asm__("D_L00_00166DC0");
 
@@ -1243,7 +1241,7 @@ void draw_beam_endpoint_quads_with_glow(s32 unused, s32 beam_slot) {
     s32 i;
     s32 j;
 
-    qcopy(quad_endpoint_position, &D_L00_001E6D50_e3388[beam_slot]);
+    qcopy(quad_endpoint_position, &beam_origins[beam_slot]);
     quad_endpoint_position[3] = 1.0f;
     FUN_001f9a28_e3388(endpoint_to_camera_axis, g_debug_camera, quad_endpoint_position);
     FUN_001f9bf8_e3388(endpoint_to_camera_axis, endpoint_to_camera_axis, 1.0f);
@@ -1446,7 +1444,7 @@ void robot_arm_update(char *moby) {
             spawn_color_swapped_explosion_burst(moby, effect_offset_or_world_position, -1, *(float *)(moby_data + 0x2C) * 0.5f, 0.0f);
         } else {
             float half_collision_radius = *(float *)(moby_data + 0x2C) * 0.5f;
-            spawn_explosion(moby, D_L00_0015F580, effect_offset_or_world_position, 0.0f, 0.0f, 5, *(float *)(moby_data + 0x2C), 3, half_collision_radius, 9.0f, 5, half_collision_radius, -1, 0.0f, 0, 0, -1, 0);
+            spawn_explosion(moby, &zero_vector, effect_offset_or_world_position, 0.0f, 0.0f, 5, *(float *)(moby_data + 0x2C), 3, half_collision_radius, 9.0f, 5, half_collision_radius, -1, 0.0f, 0, 0, -1, 0);
         }
         mark_moby_for_removal(moby);
         return;
@@ -2986,9 +2984,9 @@ float D_L14_00162080 = 45.0f;
 float D_L14_00162128 = 1e+02f;
 s32 D_L14_00162188 = 0;
 s32 D_L14_00162198 = 0;
-B002e2190 D_L14_001EDD40 = {0};
+BeamTransform D_L14_001EDD40 = {0};
 Q002e2190 D_L14_001EDE00 = {0};
-Pane D_L14_001EDE60 = {0};
+BeamStrand D_L14_001EDE60 = {0};
 float D_L14_00162140 = 5.0f;
 
 f32 D_L14_001EDD00[4][4] = {
@@ -3027,9 +3025,9 @@ s32 D_L15_00161FD8 = 0;
 s32 D_L15_00162018 = 0;
 s32 D_L15_00162028 = 0;
 s32 D_L15_00162068 = 0;
-B002e2190 D_L15_001D9570 = {0};
+BeamTransform D_L15_001D9570 = {0};
 Q002e2190 D_L15_001D9630 = {0};
-Pane D_L15_001D9690 = {0};
+BeamStrand D_L15_001D9690 = {0};
 float D_L15_00161FD0 = 5.0f;
 
 f32 D_L15_001D9530[4][4] = {
