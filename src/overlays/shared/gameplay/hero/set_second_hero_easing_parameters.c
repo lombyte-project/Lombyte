@@ -3,44 +3,32 @@
 #include "rnc/gameplay/hero.h"
 #include "asm.h"
 
-typedef struct {
-    u8 pad[0x154];
-    f32 a, b;
-} S0020a1f8;
-extern S0020a1f8 D_L00_0017A680_0020a1f8 __asm__("D_L00_0017A680");
-/* Stores the two floats in D_L00_0017A680. */
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
+/* Sets the accel and max_speed of one hero ease. */
 void set_second_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1f8");
 
 void set_second_hero_easing_parameters(float a, float b) {
-    S0020a1f8 *destination = &D_L00_0017A680_0020a1f8;
-    destination->a = a;
-    destination->b = b;
+    struct HeroEase *destination = hero_eases;
+    destination[1].accel = a;
+    destination[1].max_speed = b;
 }
-typedef struct {
-    u8 pad[0x204];
-    f32 a, b;
-} S0020a210;
-extern S0020a210 D_L00_0017A680_0020a210 __asm__("D_L00_0017A680");
-/* Stores the two floats in D_L00_0017A680. */
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
+/* Sets the accel and max_speed of one hero ease. */
 void set_third_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a210");
 
 void set_third_hero_easing_parameters(float a, float b) {
-    S0020a210 *destination = &D_L00_0017A680_0020a210;
-    destination->a = a;
-    destination->b = b;
+    struct HeroEase *destination = hero_eases;
+    destination[2].accel = a;
+    destination[2].max_speed = b;
 }
-typedef struct {
-    u8 pad[0x2B4];
-    f32 a, b;
-} S0020a228;
-extern S0020a228 D_L00_0017A680_0020a228 __asm__("D_L00_0017A680");
-/* Stores the two floats in D_L00_0017A680. */
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
+/* Sets the accel and max_speed of one hero ease. */
 void set_fourth_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a228");
 
 void set_fourth_hero_easing_parameters(float a, float b) {
-    S0020a228 *destination = &D_L00_0017A680_0020a228;
-    destination->a = a;
-    destination->b = b;
+    struct HeroEase *destination = hero_eases;
+    destination[3].accel = a;
+    destination[3].max_speed = b;
 }
 
 

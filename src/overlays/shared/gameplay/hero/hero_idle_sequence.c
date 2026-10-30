@@ -227,51 +227,40 @@ void update_hero_easing_record(struct HeroEase *ease_record) {
     clear_u64_value(&ease_record->rot_target);
     ease_record->scale = 1.0f;
 }
-extern struct HeroEase D_L00_0017A680_002054e8[] __asm__("D_L00_0017A680");
-/* Runs FUN_L00_00205168 on each entry of D_L00_0017A680 (0x1550 bytes). */
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
+/* Runs FUN_L00_00205168 on each of the 31 hero eases (0x1550 bytes). */
 void update_hero_easing_records(void) __asm__("FUN_L00_002054e8");
 
 void update_hero_easing_records(void) {
-    struct HeroEase *ease_record = D_L00_0017A680_002054e8;
+    struct HeroEase *ease_record = hero_eases;
     struct HeroEase *end = (struct HeroEase *)((u8 *)ease_record + 0x1550);
     do {
         update_hero_easing_record(ease_record);
         ease_record++;
     } while ((s32)ease_record < (s32)end);
 }
-typedef struct {
-    u8 unk0;
-    u8 active;
-    char pad[0x3E];
-    char m40[0x20];
-    char m60[0x30];
-    char m90[0x12];
-    s16 type;
-    char pad2[8];
-    f32 scale;
-} Ent;
-extern Ent D_L00_0017A680_c[] __asm__("D_L00_0017A680");
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 s32 get_hero_easing_moby_by_kind(s32) __asm__("FUN_L00_00205110");
 
 void reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 
 void reset_hero_easing_records(void) {
     s32 i;
-    char *manipulator_records_base = (char *)D_L00_0017A680_c;
+    char *manipulator_records_base = (char *)hero_eases;
     char *record_reset_destination = manipulator_records_base + 0x90;
     char *record_reset_cursor = manipulator_records_base + 0x60;
     for (i = 0; i < 31; i++) {
-        Ent *manipulator_record = &D_L00_0017A680_c[i];
-        if (manipulator_record->active != 0) {
-            s32 manipulator_moby = get_hero_easing_moby_by_kind(manipulator_record->type);
+        struct HeroEase *manipulator_record = &hero_eases[i];
+        if (manipulator_record->attached != 0) {
+            s32 manipulator_moby = get_hero_easing_moby_by_kind(manipulator_record->kind);
             if (manipulator_moby != 0)
                 detach_manipulator(manipulator_moby, manipulator_record);
         }
-        clear_u64_value(D_L00_0017A680_c[i].m40);
+        clear_u64_value(&hero_eases[i].rot);
         clear_u64_value(record_reset_cursor);
-        record_reset_cursor += sizeof(Ent);
+        record_reset_cursor += sizeof(struct HeroEase);
         clear_u64_value(record_reset_destination);
-        record_reset_destination += sizeof(Ent);
+        record_reset_destination += sizeof(struct HeroEase);
         manipulator_record->scale = 1.0f;
     }
 }
@@ -298,7 +287,7 @@ void update_hero_random_timer(void) {
     }
 }
 typedef u32 Quad_56a8 __attribute__((mode(TI), aligned(16)));
-extern u8 D_L00_0017A680_56a8[] __asm__("D_L00_0017A680");
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 
 extern Quad_56a8 l00_hero_random_manipulator_initial_quaternions[] __asm__("D_L00_0017C040");
 extern Quad_56a8 l00_hero_random_manipulator_initial_scales[] __asm__("D_L00_0017C0B0");
@@ -308,31 +297,31 @@ extern f32 hero_random_manipulator_blend_by_phase[] __asm__("D_L00_0017C190");
 void update_hero_rotation_targets_and_random_manipulators(void) __asm__("FUN_L00_002056a8");
 
 void update_hero_rotation_targets_and_random_manipulators(void) {
-    u8 *e;
+    struct HeroEase *e;
 
     {
-        u8 *e = D_L00_0017A680_56a8;
-        *(f32 *)(e + 0x8a8) = *(f32 *)(e + 0x278) * 0.25f;
-        if (*(f32 *)(e + 0x8a8) > 0.14835298f)
-            *(f32 *)(e + 0x8a8) = 0.14835298f;
-        else if (*(f32 *)(e + 0x8a8) < -0.14835298f)
-            *(f32 *)(e + 0x8a8) = -0.14835298f;
+        struct HeroEase *e = hero_eases;
+        e[12].rot_target.f[2] = e[3].rot_target.f[2] * 0.25f;
+        if (e[12].rot_target.f[2] > 0.14835298f)
+            e[12].rot_target.f[2] = 0.14835298f;
+        else if (e[12].rot_target.f[2] < -0.14835298f)
+            e[12].rot_target.f[2] = -0.14835298f;
     }
-    e = D_L00_0017A680_56a8;
-    *(f32 *)(e + 0x8a4) = *(f32 *)(e + 0x274) / 2.8f;
-    if (*(f32 *)(e + 0x8a4) > 0.29670596f)
-        *(f32 *)(e + 0x8a4) = 0.29670596f;
-    if (*(f32 *)(e + 0x8a4) < -0.17453292f)
-        *(f32 *)(e + 0x8a4) = -0.17453292f;
+    e = hero_eases;
+    e[12].rot_target.f[1] = e[3].rot_target.f[1] / 2.8f;
+    if (e[12].rot_target.f[1] > 0.29670596f)
+        e[12].rot_target.f[1] = 0.29670596f;
+    if (e[12].rot_target.f[1] < -0.17453292f)
+        e[12].rot_target.f[1] = -0.17453292f;
     if ((u32)(*((u8 *)hero.moby + 0x53) - 1) < 2) {
-        if (*(f32 *)(e + 0x8a8) > 0.034906585f)
-            *(f32 *)(e + 0x8a8) = 0.034906585f;
-        if (*(f32 *)(e + 0x8a8) < -0.034906585f)
-            *(f32 *)(e + 0x8a8) = -0.034906585f;
-        if (*(f32 *)(e + 0x8a4) > 0.12217305f)
-            *(f32 *)(e + 0x8a4) = 0.12217305f;
-        if (*(f32 *)(e + 0x8a4) < -0.12217305f)
-            *(f32 *)(e + 0x8a4) = -0.12217305f;
+        if (e[12].rot_target.f[2] > 0.034906585f)
+            e[12].rot_target.f[2] = 0.034906585f;
+        if (e[12].rot_target.f[2] < -0.034906585f)
+            e[12].rot_target.f[2] = -0.034906585f;
+        if (e[12].rot_target.f[1] > 0.12217305f)
+            e[12].rot_target.f[1] = 0.12217305f;
+        if (e[12].rot_target.f[1] < -0.12217305f)
+            e[12].rot_target.f[1] = -0.12217305f;
     }
     update_hero_random_timer();
     {
@@ -2469,14 +2458,14 @@ typedef struct {
     float a;
     float b;
 } S0020a1e0;
-extern S0020a1e0 D_L00_0017A680;
-/* Stores the two floats in D_L00_0017A680. */
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
+/* Sets the accel and max_speed of the first hero ease. */
 void set_first_hero_easing_parameters(float a, float b) __asm__("FUN_L00_0020a1e0");
 
 void set_first_hero_easing_parameters(float a, float b) {
-    S0020a1e0 *destination_record = &D_L00_0017A680;
-    destination_record->a = a;
-    destination_record->b = b;
+    struct HeroEase *destination_record = hero_eases;
+    destination_record->accel = a;
+    destination_record->max_speed = b;
 }
 typedef struct V0020a240 {
     f32 x, y, z, w;
@@ -2507,13 +2496,13 @@ s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_rad
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020A990), where it is exact; names translated to the US level program. */
 
 extern V collision_hit_point __asm__("D_L00_00173E60") NOT_SDA;
-extern char D_L00_0017A680_lui[] __asm__("D_L00_0017A680") NOT_SDA;
+extern struct HeroEase hero_eases_lui[] __asm__("D_L00_0017A680") NOT_SDA;
 extern void *D_L00_00173E58_lui __asm__("D_L00_00173E58") NOT_SDA;
 
 void update_hero_collision_ease_target(void) {
     char *hero_state_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
-    char *state_ease_table;
-    char *hit_ease_table;
+    struct HeroEase *state_ease_table;
+    struct HeroEase *hit_ease_table;
     char *hero_position;
     char *hit_hero_state_base;
     float probe_z_offset, probe_end_radius, distance_based_ease_value, state_frame_scale_squared, frame_scale_squared;
@@ -2523,11 +2512,11 @@ void update_hero_collision_ease_target(void) {
     if (hero_slot_item_id(0) == 0x1A)
         return;
     if (*(int *)(hero_state_base + 0x2084) == 0x81) {
-        state_ease_table = D_L00_0017A680_lui;
+        state_ease_table = hero_eases_lui;
         state_frame_scale_squared = frame_scale_sq;
-        *(float *)(state_ease_table + 0x694) = -0.349065840f;
-        *(float *)(state_ease_table + 0x6D4) = state_frame_scale_squared * 0.05f;
-        *(float *)(state_ease_table + 0x6D8) = state_frame_scale_squared * 0.3f;
+        state_ease_table[9].rot_target.f[1] = -0.349065840f;
+        state_ease_table[9].accel = state_frame_scale_squared * 0.05f;
+        state_ease_table[9].max_speed = state_frame_scale_squared * 0.3f;
     }
     probe_end_radius = 1.29999995f;
     if (*(short *)(hero_state_base + 0x22C8) != 0)
@@ -2544,9 +2533,9 @@ void update_hero_collision_ease_target(void) {
         }
     }
     frame_scale_squared = frame_scale_sq;
-    hit_ease_table = D_L00_0017A680_lui;
-    *(float *)(hit_ease_table + 0x6D4) = frame_scale_squared * 0.05f;
-    *(float *)(hit_ease_table + 0x6D8) = frame_scale_squared * 0.3f;
+    hit_ease_table = hero_eases_lui;
+    hit_ease_table[9].accel = frame_scale_squared * 0.05f;
+    hit_ease_table[9].max_speed = frame_scale_squared * 0.3f;
     hero_position = (char *)((unsigned char *)&D_0013E533) + 0xE9D;
     distance_based_ease_value = fast_vec_dist(hero_position, collision_hit_point);
     hit_hero_state_base = (char *)((unsigned char *)&D_0013E533) + 0xE1D;
@@ -2558,7 +2547,7 @@ void update_hero_collision_ease_target(void) {
         distance_based_ease_value = -0.523598790f;
     if (distance_based_ease_value < -1.22173047f)
         distance_based_ease_value = -1.22173047f;
-    *(float *)(hit_ease_table + 0x694) = distance_based_ease_value;
+    hit_ease_table[9].rot_target.f[1] = distance_based_ease_value;
     *(short *)(hit_hero_state_base + 0x22C8) = 1;
 }
 extern char D_0013F350_0020a500[] __asm__("D_0013F350");
@@ -2601,21 +2590,9 @@ typedef struct {
     void *p2274;
 } G_a540;
 
-typedef struct {
-    char p000[0x114];
-    f32 f114;
-    f32 f118;
-    char p11c[0x274 - 0x11C];
-    f32 f274;
-    f32 f278;
-    char p27c[0xC5C - 0x27C];
-    f32 fc5c;
-    char pc60[0xD0C - 0xC60];
-    f32 fd0c;
-} P_a540;
 
 extern G_a540 D_0013F350_a540 __asm__("D_0013F350");
-extern P_a540 D_L00_0017A680_a540 __asm__("D_L00_0017A680");
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 extern f32 D_0015EE14 __asm__("D_0015EE14");
 
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
@@ -2623,20 +2600,18 @@ extern f32 interpolate_scalar_linear(f32, f32, f32) __asm__("FUN_L00_0025b6a8");
 
 extern u8 D_0015EDB3 __asm__("D_0015EDB3");
 #define G D_0013F350_a540
-#define P D_L00_0017A680_a540
 
 void update_hero_pitch_and_yaw_easing_targets(void) {
     G_a540 *g;
     G_a540 *h;
-    P_a540 *p;
     f32 pitch_target_radians, random_blend_factor, k;
     s32 hero_animation_sequence_index;
     s32 min_delay_frames;
 
     if (D_0015EDB3 != 0 && G.i1184 != 0) {
-        P.fd0c = D_0015EE18;
+        hero_eases[18].scale = D_0015EE18;
     }
-    P.fc5c = D_0015EE14;
+    hero_eases[17].scale = D_0015EE14;
     if (*(u8 *)0x15EDB1 != 0) {
         approach_value(&D_0015EE14, 1.57f, 0.05f);
     } else {
@@ -2650,9 +2625,9 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
             pitch_target_radians = 0.47123888f;
         if ((1.0f - G.f25c) * 35.0f * DEG_TO_RAD < pitch_target_radians)
             pitch_target_radians = (1.0f - G.f25c) * 35.0f * DEG_TO_RAD;
-        P.f274 = pitch_target_radians;
+        hero_eases[3].rot_target.f[1] = pitch_target_radians;
         set_second_hero_easing_parameters(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);
-        P.f114 = P.f274 * 0.7f;
+        hero_eases[1].rot_target.f[1] = hero_eases[3].rot_target.f[1] * 0.7f;
         return;
     }
     if (G.i2084 != 0)
@@ -2687,11 +2662,11 @@ void update_hero_pitch_and_yaw_easing_targets(void) {
             G.f1004 = 0.0f;
     }
     set_fourth_hero_easing_parameters(G.f1014, G.f1018);
-    P.f278 = G.f1008;
-    P.f274 = G.f1004;
+    hero_eases[3].rot_target.f[2] = G.f1008;
+    hero_eases[3].rot_target.f[1] = G.f1004;
     set_second_hero_easing_parameters(frame_scale_sq * 0.008f, frame_scale_sq * 0.3f);
-    P.f118 = P.f278 * 0.52f;
-    P.f114 = P.f274 * 0.55f;
+    hero_eases[1].rot_target.f[2] = hero_eases[3].rot_target.f[2] * 0.52f;
+    hero_eases[1].rot_target.f[1] = hero_eases[3].rot_target.f[1] * 0.55f;
 }
 /* Re-rolls four random motion parameters and copies each pair into its 0xB0-byte record. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B060), where it is exact; names translated to the US level program. */
@@ -2710,7 +2685,7 @@ void update_hero_idle_random_rotation_targets(void) {
     if (*(unsigned char *)(*(int *)(base + 0x2080) + 0x53) != 0) return;
     motion_timers = (int *)(base + 0x1060);
     hero_state_base = base;
-    motion_ease_table = ((char *)D_L00_0017A680_c);
+    motion_ease_table = ((char *)hero_eases);
     for (i = 0; i < 4; i++) {
         char *motion_slot_base;
         if (fast_dec_timer(&motion_timers[i])) {
@@ -2749,7 +2724,7 @@ void update_hero_idle_random_rotation_targets(void) {
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020B310), where it is exact; names translated to the US level program. */
 
 extern char *active_mobies[] __asm__("D_L00_001ABA00");
-extern char D_L00_0017A780[] __asm__("D_L00_0017A680");
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 extern int D_L00_0015F6B0 __asm__("D_L00_0015F5CC");
 extern int FUN_001efa68_ac98(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern unsigned char hero_pos[] __asm__("D_0013F3D0");
@@ -2765,7 +2740,8 @@ void update_hero_target_tracking(void) {
     float bestPri, bestDist;
     float aim_position_scratch[8];
     char *secondary_position;
-    char *info, *info2, *manipulator_table, *selected_moby;
+    char *info, *info2, *selected_moby;
+    struct HeroEase *manipulator_table;
     float yaw_delta, pitch, s;
     int mode = *(int *)(hero_control_mode_owner + 0x208C);
     if (mode != 1 && mode != 4 && mode != 2 && mode != 7 && mode != 0) {
@@ -2854,11 +2830,11 @@ void update_hero_target_tracking(void) {
         pitch = 0.0f;
     }
     set_fourth_hero_easing_parameters(frame_scale_sq * 0.021f, frame_scale_sq * 0.27f);
-    manipulator_table = D_L00_0017A780;
-    *(float *)(manipulator_table + 0x274) = pitch;
-    *(float *)(manipulator_table + 0x278) = yaw_delta * 0.7f;
+    manipulator_table = hero_eases;
+    manipulator_table[3].rot_target.f[1] = pitch;
+    manipulator_table[3].rot_target.f[2] = yaw_delta * 0.7f;
     set_third_hero_easing_parameters(frame_scale_sq * 0.014f, frame_scale_sq * 0.3f);
-    *(float *)(manipulator_table + 0x1C8) = *(float *)(manipulator_table + 0x278) * 0.55f;
+    manipulator_table[2].rot_target.f[2] = manipulator_table[3].rot_target.f[2] * 0.55f;
 }
 typedef struct {
     u8 p0[0x2C0];
@@ -2880,24 +2856,9 @@ typedef struct {
     u8 p2088[4];
     s32 i208C;
 } P_20b1d8;
-typedef struct {
-    u8 p0[0x320];
-    f32 f320, f324;
-    u8 p328[0x36C - 0x328];
-    f32 f36C;
-    u8 p370[0x3D0 - 0x370];
-    f32 f3D0, f3D4;
-    u8 p3D8[0x41C - 0x3D8];
-    f32 f41C;
-    u8 p420[0x480 - 0x420];
-    f32 f480;
-    u8 p484[0x530 - 0x484];
-    f32 f530;
-} A_20b1d8;
 extern P_20b1d8 D_0013F350_20b1d8 __asm__("D_0013F350");
-extern A_20b1d8 D_L00_0017A680_20b1d8 __asm__("D_L00_0017A680");
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 #define P D_0013F350_20b1d8
-#define A D_L00_0017A680_20b1d8
 extern s32 hero_is_in_special_state(void) __asm__("FUN_L00_0020d568");
 extern void configure_hero_point_effect_emission(s32, s32, s32, s32, f32, f32) __asm__("FUN_L00_00233288");
 extern void spawn_jittered_effect_particle_with_optional_basis(void *, void *, f32) __asm__("FUN_L00_0026de90");
@@ -2912,8 +2873,8 @@ void update_hero_easing_targets_and_point_effects(void) {
         0.06981317f < absolute_float(P.f2C8) || 0.06981317f < absolute_float(P.f2CC) ||
         0.06981317f < absolute_float(P.f2D0) || 0.06981317f < absolute_float(P.f2D4)) {
         if (P.h308 != 1) {
-            A.f324 = -P.f2C8;
-            A.f3D4 = -P.f2CC;
+            hero_eases[4].rot_target.f[1] = -P.f2C8;
+            hero_eases[5].rot_target.f[1] = -P.f2CC;
             clamped_rotation_angle = fast_arc_tan(0.2f, P.f2C0) * 1.2f;
             secondary_clamped_rotation_angle = -fast_arc_tan(0.2f, P.f2C4) * 1.2f;
             if (0.7853982f < clamped_rotation_angle)
@@ -2924,15 +2885,15 @@ void update_hero_easing_targets_and_point_effects(void) {
                 secondary_clamped_rotation_angle = 0.17453292f;
             if (secondary_clamped_rotation_angle < -0.7853982f)
                 secondary_clamped_rotation_angle = -0.7853982f;
-            A.f480 = clamped_rotation_angle;
-            A.f530 = secondary_clamped_rotation_angle;
-            A.f320 = -fast_subtract_rotations(P.f2D0, -clamped_rotation_angle);
-            A.f3D0 = -fast_subtract_rotations(P.f2D4, -secondary_clamped_rotation_angle);
+            hero_eases[6].rot_target.f[0] = clamped_rotation_angle;
+            hero_eases[7].rot_target.f[0] = secondary_clamped_rotation_angle;
+            hero_eases[4].rot_target.f[0] = -fast_subtract_rotations(P.f2D0, -clamped_rotation_angle);
+            hero_eases[5].rot_target.f[0] = -fast_subtract_rotations(P.f2D4, -secondary_clamped_rotation_angle);
         }
     }
     if (P.i10E0) {
-        A.f36C = 0.01f;
-        A.f41C = 0.01f;
+        hero_eases[4].scale = 0.01f;
+        hero_eases[5].scale = 0.01f;
     }
     if (!(P.h12AE & 0x80)) {
         if (P.i2084 == 3)

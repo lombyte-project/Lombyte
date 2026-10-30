@@ -1,18 +1,14 @@
 /* FUN_L00_00215340 split out of 00214658.c so it builds with the SN
-   compiler on its own. Hero pose table offsets (D_L00_0017A680) are kept
-   as byte offsets. */
+   compiler on its own. */
 #include "types.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
-typedef struct { f32 f[0x300]; } T_215340;
-extern T_215340 D_L00_0017A680;
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 extern void set_first_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1e0");
 extern void set_third_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a210");
-
-#define TF(o) (D_L00_0017A680.f[(o) / 4])
 
 void adjust_hero_pose_targets_from_motion(void) __asm__("FUN_L00_00215340");
 
@@ -32,36 +28,36 @@ void adjust_hero_pose_targets_from_motion(void) {
             if (1.4f < run_step_pose_input) run_step_pose_input = 1.4f;
             else if (run_step_pose_input < -1.4f) run_step_pose_input = -1.4f;
             nv = -run_step_pose_input;
-            TF(0x60) = nv * 0.14f;
+            hero_eases[0].rot_target.f[0] = nv * 0.14f;
             k = hero.motion.flat_speed / (frame_time * 5.7f);
             if (1.0f < k) k = 1.0f;
             if (k < 0.0f) k = 0.0f;
-            TF(0x60) = nv * 0.14f * k;
-            TF(0x118) = run_step_pose_input * 0.16f;
-            TF(0x1C0) = run_step_pose_input * -0.12f;
-            TF(0x278) = run_step_pose_input * 0.65f;
-            TF(0x274) = absolute_float(run_step_pose_input) * -0.15f;
-            TF(0x270) = absolute_float(run_step_pose_input) * 0.16f;
-            TF(0x958) = nv * 0.35f;
-            TF(0xA08) = nv * 0.3f;
-            TF(0xAB8) = nv * 0.3f;
-            TF(0xB68) = nv * 0.3f;
-            TF(0x954) = absolute_float(run_step_pose_input) * 0.35f;
-            TF(0xA04) = absolute_float(run_step_pose_input) * 0.2f;
+            hero_eases[0].rot_target.f[0] = nv * 0.14f * k;
+            hero_eases[1].rot_target.f[2] = run_step_pose_input * 0.16f;
+            hero_eases[2].rot_target.f[0] = run_step_pose_input * -0.12f;
+            hero_eases[3].rot_target.f[2] = run_step_pose_input * 0.65f;
+            hero_eases[3].rot_target.f[1] = absolute_float(run_step_pose_input) * -0.15f;
+            hero_eases[3].rot_target.f[0] = absolute_float(run_step_pose_input) * 0.16f;
+            hero_eases[13].rot_target.f[2] = nv * 0.35f;
+            hero_eases[14].rot_target.f[2] = nv * 0.3f;
+            hero_eases[15].rot_target.f[2] = nv * 0.3f;
+            hero_eases[16].rot_target.f[2] = nv * 0.3f;
+            hero_eases[13].rot_target.f[1] = absolute_float(run_step_pose_input) * 0.35f;
+            hero_eases[14].rot_target.f[1] = absolute_float(run_step_pose_input) * 0.2f;
         } else {
             run_pose_weight = hero.motion.yaw_error * 0.5f;
             if (0.8f < run_pose_weight) run_pose_weight = 0.8f;
             else if (run_pose_weight < -0.8f) run_pose_weight = -0.8f;
             run_pose_weight = run_pose_weight * absolute_float(run_pose_weight) * 1.25f;
-            TF(0x118) = run_pose_weight;
-            TF(0x278) = run_pose_weight;
+            hero_eases[1].rot_target.f[2] = run_pose_weight;
+            hero_eases[3].rot_target.f[2] = run_pose_weight;
             run_pose_magnitude = absolute_float(run_pose_weight);
             nw = -run_pose_weight;
-            TF(0x274) = run_pose_magnitude * 0.25f;
-            TF(0x958) = nw * 0.35f;
-            TF(0xA08) = nw * 0.3f;
-            TF(0xAB8) = nw * 0.3f;
-            TF(0xB68) = nw * 0.3f;
+            hero_eases[3].rot_target.f[1] = run_pose_magnitude * 0.25f;
+            hero_eases[13].rot_target.f[2] = nw * 0.35f;
+            hero_eases[14].rot_target.f[2] = nw * 0.3f;
+            hero_eases[15].rot_target.f[2] = nw * 0.3f;
+            hero_eases[16].rot_target.f[2] = nw * 0.3f;
         }
     } else if (hero.state.current == HERO_STATE_LAND || hero.state.current == 0x81) {
         set_first_hero_easing_parameters(0.008f, 0.08f);
@@ -77,37 +73,37 @@ void adjust_hero_pose_targets_from_motion(void) {
             else if (scaled_pose_input < -1.1f) scaled_pose_input = -1.1f;
         }
         unclamped_opposing_pose_target = -scaled_pose_input * 0.52f;
-        TF(0x60) = unclamped_opposing_pose_target;
-        if (0.28f < unclamped_opposing_pose_target) TF(0x60) = 0.28f;
-        else if (unclamped_opposing_pose_target < -0.28f) TF(0x60) = -0.28f;
+        hero_eases[0].rot_target.f[0] = unclamped_opposing_pose_target;
+        if (0.28f < unclamped_opposing_pose_target) hero_eases[0].rot_target.f[0] = 0.28f;
+        else if (unclamped_opposing_pose_target < -0.28f) hero_eases[0].rot_target.f[0] = -0.28f;
         unclamped_amplified_pose_target = scaled_pose_input * 1.2f;
-        TF(0x278) = unclamped_amplified_pose_target;
-        TF(0x118) = scaled_pose_input * 0.58f;
-        TF(0x1C0) = scaled_pose_input * -0.28f;
-        if (0.6f < unclamped_amplified_pose_target) TF(0x278) = 0.6f;
-        else if (unclamped_amplified_pose_target < -0.6f) TF(0x278) = -0.6f;
+        hero_eases[3].rot_target.f[2] = unclamped_amplified_pose_target;
+        hero_eases[1].rot_target.f[2] = scaled_pose_input * 0.58f;
+        hero_eases[2].rot_target.f[0] = scaled_pose_input * -0.28f;
+        if (0.6f < unclamped_amplified_pose_target) hero_eases[3].rot_target.f[2] = 0.6f;
+        else if (unclamped_amplified_pose_target < -0.6f) hero_eases[3].rot_target.f[2] = -0.6f;
         unclamped_pose_magnitude = absolute_float(scaled_pose_input) * 0.2f;
-        TF(0x274) = unclamped_pose_magnitude;
-        if (0.2f < unclamped_pose_magnitude) TF(0x274) = 0.2f;
-        else if (unclamped_pose_magnitude < -0.2f) TF(0x274) = -0.2f;
-        TF(0x270) = absolute_float(scaled_pose_input) * 0.16f;
+        hero_eases[3].rot_target.f[1] = unclamped_pose_magnitude;
+        if (0.2f < unclamped_pose_magnitude) hero_eases[3].rot_target.f[1] = 0.2f;
+        else if (unclamped_pose_magnitude < -0.2f) hero_eases[3].rot_target.f[1] = -0.2f;
+        hero_eases[3].rot_target.f[0] = absolute_float(scaled_pose_input) * 0.16f;
         if (hero.state.current == 0x81) {
             if (frame_time * 0.5f < hero.motion.flat_speed) {
                 relative_displacement_angle = fast_subtract_rotations(fast_arc_tan(hero.motion.displacement.f[0], hero.motion.displacement.f[1]), hero.motion.rot.f[2]);
                 motion_correction_scale = hero.motion.flat_speed * 3.0f;
-                TF(0x60) = -fast_sin(relative_displacement_angle) * motion_correction_scale;
-                TF(0x64) = fast_cos(relative_displacement_angle) * motion_correction_scale;
-                if (0.43633232f < TF(0x60)) TF(0x60) = 0.43633232f;
-                else if (TF(0x60) < -0.43633232f) TF(0x60) = -0.43633232f;
-                if (0.43633232f < TF(0x64)) TF(0x64) = 0.43633232f;
-                else if (TF(0x64) < -0.43633232f) TF(0x64) = -0.43633232f;
+                hero_eases[0].rot_target.f[0] = -fast_sin(relative_displacement_angle) * motion_correction_scale;
+                hero_eases[0].rot_target.f[1] = fast_cos(relative_displacement_angle) * motion_correction_scale;
+                if (0.43633232f < hero_eases[0].rot_target.f[0]) hero_eases[0].rot_target.f[0] = 0.43633232f;
+                else if (hero_eases[0].rot_target.f[0] < -0.43633232f) hero_eases[0].rot_target.f[0] = -0.43633232f;
+                if (0.43633232f < hero_eases[0].rot_target.f[1]) hero_eases[0].rot_target.f[1] = 0.43633232f;
+                else if (hero_eases[0].rot_target.f[1] < -0.43633232f) hero_eases[0].rot_target.f[1] = -0.43633232f;
             }
-            TF(0x64) = fast_add_rotations(TF(0x64), -0.12217305f);
+            hero_eases[0].rot_target.f[1] = fast_add_rotations(hero_eases[0].rot_target.f[1], -0.12217305f);
         }
-        TF(0x958) = -scaled_pose_input * 0.35f;
-        TF(0xA08) = -scaled_pose_input * 0.3f;
-        TF(0xAB8) = -scaled_pose_input * 0.3f;
-        TF(0xB68) = -scaled_pose_input * 0.3f;
+        hero_eases[13].rot_target.f[2] = -scaled_pose_input * 0.35f;
+        hero_eases[14].rot_target.f[2] = -scaled_pose_input * 0.3f;
+        hero_eases[15].rot_target.f[2] = -scaled_pose_input * 0.3f;
+        hero_eases[16].rot_target.f[2] = -scaled_pose_input * 0.3f;
     } else if (hero.state.control_mode == 2 || hero.state.control_mode == 4) {
         set_first_hero_easing_parameters(0.04f, 0.2f);
         set_second_hero_easing_parameters(0.04f, 0.2f);
@@ -116,12 +112,12 @@ void adjust_hero_pose_targets_from_motion(void) {
         x = hero.motion.yaw_error;
         if (1.4f < x) x = 1.4f;
         else if (x < -1.4f) x = -1.4f;
-        TF(0x118) = x * 0.29f;
-        TF(0x1C0) = x * -0.27f;
-        TF(0x278) = x * 0.87f;
-        TF(0x958) = -x * 0.35f;
-        TF(0xA08) = -x * 0.3f;
-        TF(0xAB8) = -x * 0.3f;
-        TF(0xB68) = -x * 0.3f;
+        hero_eases[1].rot_target.f[2] = x * 0.29f;
+        hero_eases[2].rot_target.f[0] = x * -0.27f;
+        hero_eases[3].rot_target.f[2] = x * 0.87f;
+        hero_eases[13].rot_target.f[2] = -x * 0.35f;
+        hero_eases[14].rot_target.f[2] = -x * 0.3f;
+        hero_eases[15].rot_target.f[2] = -x * 0.3f;
+        hero_eases[16].rot_target.f[2] = -x * 0.3f;
     }
 }

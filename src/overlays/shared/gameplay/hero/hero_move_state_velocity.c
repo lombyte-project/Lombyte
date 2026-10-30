@@ -224,9 +224,8 @@ void update_hero_target_heading(float a, float b, float c) {
         hero.attack_target_yaw = r;
     }
 }
-extern struct { f32 f[0xB68 / 4]; } D_L00_0017A680_214fe8 __asm__("D_L00_0017A680");
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 extern void transform_vector(void *, void *, void *) __asm__("FUN_001f9d20");
-#define V214(off) (D_L00_0017A680_214fe8.f[(off) / 4])
 void update_hero_transformed_negative_z_angle_parameters(void) __asm__("FUN_L00_00214fe8");
 
 void update_hero_transformed_negative_z_angle_parameters(void) {
@@ -247,14 +246,14 @@ void update_hero_transformed_negative_z_angle_parameters(void) {
     x = transformed_negative_z_vector.f[0] * 0.6981317f;
     if (limit < x) x = limit;
     else if (x < -limit) x = -limit;
-    V214(0x114) = x;
-    V214(0x274) = -x * 0.5f;
+    hero_eases[1].rot_target.f[1] = x;
+    hero_eases[3].rot_target.f[1] = -x * 0.5f;
     /* Keep the independent scalar reloads used by retail. */
     y = -((volatile f32 *)transformed_negative_z_vector.f)[1] * 0.6981317f;
     if (limit < y) y = limit;
     else if (y < -limit) y = -limit;
-    V214(0x110) = y;
-    V214(0x270) = -y * 0.25f;
+    hero_eases[1].rot_target.f[0] = y;
+    hero_eases[3].rot_target.f[0] = -y * 0.25f;
     x = -((volatile f32 *)transformed_negative_z_vector.f)[0] * 1.2217305f;
     if (0.99483764f < x) x = 0.99483764f;
     if (x < -0.12217305f) x = -0.12217305f;
@@ -265,35 +264,21 @@ void update_hero_transformed_negative_z_angle_parameters(void) {
     }
     pitch = x;
     y = transformed_negative_z_vector.f[1] * 1.2217305f;
-    V214(0x954) = pitch * 0.57f;
-    V214(0xA04) = pitch * 0.5f;
-    V214(0xB64) = pitch * 0.35f;
-    V214(0xAB4) = pitch * 0.5f;
+    hero_eases[13].rot_target.f[1] = pitch * 0.57f;
+    hero_eases[14].rot_target.f[1] = pitch * 0.5f;
+    hero_eases[16].rot_target.f[1] = pitch * 0.35f;
+    hero_eases[15].rot_target.f[1] = pitch * 0.5f;
     if (1.2217305f < y) y = 1.2217305f;
     else if (y < -1.2217305f) y = -1.2217305f;
     z = y;
-    V214(0xB60) = z;
+    hero_eases[16].rot_target.f[0] = z;
     lean = z * 0.7f;
-    V214(0x950) = lean;
-    V214(0xA00) = lean;
-    V214(0xAB0) = lean;
+    hero_eases[13].rot_target.f[0] = lean;
+    hero_eases[14].rot_target.f[0] = lean;
+    hero_eases[15].rot_target.f[0] = lean;
 }
-#undef V214
-typedef struct {
-    u8 p0[0x10E0];
-    f32 f10E0;
-    u8 p1[4];
-    f32 f10E8;
-    u8 p2[0x1190 - 0x10EC];
-    f32 f1190;
-    f32 f1194;
-    f32 f1198;
-    u8 p3[0x1240 - 0x119C];
-    f32 f1240;
-} X_215b68;
-extern X_215b68 D_L00_0017A680_lui __asm__("D_L00_0017A680") NOT_SDA;
+extern struct HeroEase hero_eases_lui[] __asm__("D_L00_0017A680") NOT_SDA;
 extern f32 FUN_001f99c0_215b68(f32) __asm__("FUN_001f99c0");
-#define X D_L00_0017A680_lui
 
 void update_hero_motion_response_parameters(void) __asm__("FUN_L00_00215b68");
 
@@ -310,16 +295,16 @@ void update_hero_motion_response_parameters(void) {
         state_scaled_motion_input = state_scaled_motion_input * FUN_001f99c0_215b68(state_scaled_motion_input) * 1.25f;
         clamped_speed_ratio = hero.motion.flat_speed / (frame_time * 3.0f);
         negated_scaled_input = -state_scaled_motion_input;
-        X.f1240 = negated_scaled_input * 0.3f;
+        hero_eases_lui[26].rot_target.f[0] = negated_scaled_input * 0.3f;
         if (1.0f < clamped_speed_ratio)
             clamped_speed_ratio = 1.0f;
         if (clamped_speed_ratio < 0.0f)
             clamped_speed_ratio = 0.0f;
-        X.f10E8 = state_scaled_motion_input;
-        X.f1240 = X.f1240 * clamped_speed_ratio;
-        X.f10E0 = negated_scaled_input * 0.35f;
-        X.f1198 = state_scaled_motion_input * 1.35f;
-        X.f1194 = FUN_001f99c0_215b68(state_scaled_motion_input) * 0.25f;
+        hero_eases_lui[24].rot_target.f[2] = state_scaled_motion_input;
+        hero_eases_lui[26].rot_target.f[0] = hero_eases_lui[26].rot_target.f[0] * clamped_speed_ratio;
+        hero_eases_lui[24].rot_target.f[0] = negated_scaled_input * 0.35f;
+        hero_eases_lui[25].rot_target.f[2] = state_scaled_motion_input * 1.35f;
+        hero_eases_lui[25].rot_target.f[1] = FUN_001f99c0_215b68(state_scaled_motion_input) * 0.25f;
         return;
     }
     if (hero.state.current == 0x4F) {
@@ -329,29 +314,29 @@ void update_hero_motion_response_parameters(void) {
         else if (state_scaled_motion_input < -1.25f)
             state_scaled_motion_input = -1.25f;
         unclamped_negated_value = -state_scaled_motion_input * 0.52f;
-        X.f1240 = unclamped_negated_value;
+        hero_eases_lui[26].rot_target.f[0] = unclamped_negated_value;
         if (0.28f < unclamped_negated_value)
-            X.f1240 = 0.28f;
+            hero_eases_lui[26].rot_target.f[0] = 0.28f;
         else if (unclamped_negated_value < -0.28f)
-            X.f1240 = -0.28f;
+            hero_eases_lui[26].rot_target.f[0] = -0.28f;
         unclamped_response = state_scaled_motion_input * 1.7f;
-        X.f1198 = unclamped_response;
-        X.f10E8 = state_scaled_motion_input * 0.58f;
+        hero_eases_lui[25].rot_target.f[2] = unclamped_response;
+        hero_eases_lui[24].rot_target.f[2] = state_scaled_motion_input * 0.58f;
         if (0.7f < unclamped_response)
-            X.f1198 = 0.7f;
+            hero_eases_lui[25].rot_target.f[2] = 0.7f;
         else if (unclamped_response < -0.7f)
-            X.f1198 = -0.7f;
+            hero_eases_lui[25].rot_target.f[2] = -0.7f;
         unclamped_magnitude = FUN_001f99c0_215b68(state_scaled_motion_input) * 0.2f;
-        X.f1194 = unclamped_magnitude;
+        hero_eases_lui[25].rot_target.f[1] = unclamped_magnitude;
         clamp_bound = 0.2f;
         if (clamp_bound < unclamped_magnitude)
             goto st94;
         clamp_bound = -0.2f;
         if (unclamped_magnitude < clamp_bound) {
         st94:
-            X.f1194 = clamp_bound;
+            hero_eases_lui[25].rot_target.f[1] = clamp_bound;
         }
-        X.f1190 = FUN_001f99c0_215b68(state_scaled_motion_input) * 0.16f;
+        hero_eases_lui[25].rot_target.f[0] = FUN_001f99c0_215b68(state_scaled_motion_input) * 0.16f;
         return;
     }
     control_mode = hero.state.control_mode;
@@ -361,22 +346,11 @@ void update_hero_motion_response_parameters(void) {
             u = 1.4f;
         else if (u < -1.4f)
             u = -1.4f;
-        X.f10E8 = u * 0.29f;
-        X.f1198 = u * 0.87f;
+        hero_eases_lui[24].rot_target.f[2] = u * 0.29f;
+        hero_eases_lui[25].rot_target.f[2] = u * 0.87f;
     }
 }
-/* Fields of D_L00_0017A680 this function writes (the unit's X_215b68 holds the others). */
-typedef struct {
-    u8 pad_000[0xCC8];
-    f32 fCC8;                      /* lean angle, clamped to +-75 degrees */
-    u8 pad_CCC[0x2C];
-    f32 fCF8;                      /* sway amount scaled by 1024 / moby scale */
-    u8 pad_CFC[0x8];
-    f32 fD04;
-    f32 fD08;
-} LeanState;
-
-extern LeanState hero_eases __asm__("D_L00_0017A680") NOT_SDA;
+extern struct HeroEase hero_eases_lui[] __asm__("D_L00_0017A680") NOT_SDA;
 /* D_L00_0017A680 + 0xD0C, written through its own symbol as in retail */
 extern f32 D_L00_0017B38C[];
 extern f32 D_0015EE18;
@@ -403,8 +377,8 @@ void update_hero_lean_and_sway_parameters(void)
     scale = 1024.0f / hero_state->items[3].moby2->scale;
     if (hero_state->state.current == 2) {
         clamped_lean_input = hero_state->motion.yaw_error;
-        hero_eases.fD04 = 0.02f;
-        hero_eases.fD08 = 0.35f;
+        hero_eases_lui[18].accel = 0.02f;
+        hero_eases_lui[18].max_speed = 0.35f;
         if (clamped_lean_input > 1.4f)
             clamped_lean_input = 1.4f;
         else if (clamped_lean_input < -1.4f)
@@ -414,12 +388,12 @@ void update_hero_lean_and_sway_parameters(void)
             lean = 1.3089969f;
         else if (lean < -1.3089969f)
             lean = -1.3089969f;
-        hero_eases.fCC8 = lean;
+        hero_eases_lui[18].rot_target.f[2] = lean;
         sway = 0.1f;
         sway = absolute_float(clamped_lean_input) * sway + sway;
         if (sway > 0.07f)
             sway = 0.07f;
-        hero_eases.fCF8 = sway * scale;
+        hero_eases_lui[18].pos_target.f[2] = sway * scale;
     }
 }
 #include "eetypes.h"

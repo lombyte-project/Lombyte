@@ -20,11 +20,6 @@
 /* Hero state machine: per-frame transition logic for the current hero state (shared build, levels 00, 04, 07, 09, 10, 13). */
 /* Ported from rac1-decomp (src/overlays/shared/help_0022A340.c: func_L00_0022A340), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    char p0[0x254];
-    float f254;
-    float f258;
-} S17A780;
 
 
 typedef struct {
@@ -45,7 +40,7 @@ extern HeroTableRow2C attack_records[] __asm__("D_L00_0017BC28");
 extern HeroAnimRow item_defs[] __asm__("D_L00_00179AC0");
 extern HeroTableEntry70 idle_fidgets[] __asm__("D_L00_00179890");
 extern S166D80 player_camera __asm__("D_L00_00166C80");
-extern S17A780 D_L00_0017A680;
+extern struct HeroEase hero_eases[] __asm__("D_L00_0017A680");
 extern float D_L00_0015F638;
 extern float D_L00_00166DD8 NOT_SDA;
 extern float scale_time(float) __asm__("FUN_001f96b0");
@@ -277,8 +272,8 @@ void hero_update_transitions(void) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(7));
                             }
                         }
-                        if (0.61086524f < D_L00_0017A680.f258 ||
-                            D_L00_0017A680.f254 > 0.43633232f) {
+                        if (0.61086524f < hero_eases[3].rot.f[2] ||
+                            hero_eases[3].rot.f[1] > 0.43633232f) {
                             m = ((unsigned char *)hero.items[3].moby);
                             if (m != 0 && m[0x53] != 1) {
                                 blend_moby_animation(m, 1, 0, scale_game_frames(0xC));
@@ -325,8 +320,8 @@ void hero_update_transitions(void) {
                     if (scale_game_frames(0xA) < hero.state_timer) {
                         if (((unsigned char *)hero.items[3].moby2) != 0 && ((unsigned char *)hero.items[3].moby2)[0x53] == 1) {
                             if (fast_dec_timer(&hero.slot3_anim_timer)) {
-                                if (0.55850536f > D_L00_0017A680.f258 &&
-                                    D_L00_0017A680.f254 < 0.34906584f && hero.items[3].state == 2) {
+                                if (0.55850536f > hero_eases[3].rot.f[2] &&
+                                    hero_eases[3].rot.f[1] < 0.34906584f && hero.items[3].state == 2) {
                                     hero.slot3_anim_timer = random_int_between(scale_game_frames(0x6E),
                                                                         scale_game_frames(0x10E));
                                     blend_hero_slot3_animation_pair();

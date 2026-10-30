@@ -18,7 +18,7 @@ extern s32 D_00141660 NOT_SDA;
 #include "rnc/overlay/level_labels.h"
 extern struct Moby *D_L00_0015FFDC; /* end of the moby table */
 extern s32 D_L00_00160540;
-extern struct HeroEase D_L00_0017A680[] NOT_SDA;
+extern struct HeroEase hero_eases_lui[] __asm__("D_L00_0017A680") NOT_SDA;
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
 extern void update_hero_ground_contact_and_surface_slopes(void) __asm__("FUN_L00_002127b8");
 extern void update_hero_moby(void) __asm__("FUN_L00_00208820");
@@ -66,13 +66,13 @@ void initialize_hero(void) {
         D_00141660 = 10;
 
     for (i = 0; i < 31; i++) {
-        D_L00_0017A680[i].attached = 0;
-        clear_u64_value(&D_L00_0017A680[i].rot_target);
-        clear_u64_value(&D_L00_0017A680[i].rot);
-        clear_u64_value(&D_L00_0017A680[i].rot_vel);
-        clear_u64_value(&D_L00_0017A680[i].pos_target);
-        clear_u64_value(&D_L00_0017A680[i].pos);
-        clear_u64_value(&D_L00_0017A680[i].pos_vel);
+        hero_eases_lui[i].attached = 0;
+        clear_u64_value(&hero_eases_lui[i].rot_target);
+        clear_u64_value(&hero_eases_lui[i].rot);
+        clear_u64_value(&hero_eases_lui[i].rot_vel);
+        clear_u64_value(&hero_eases_lui[i].pos_target);
+        clear_u64_value(&hero_eases_lui[i].pos);
+        clear_u64_value(&hero_eases_lui[i].pos_vel);
     }
     /* the eight voice slots unk2218..unk2234 as one array, indexed from the hero base */
     for (i = 0; i < 8; i++)
