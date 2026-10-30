@@ -16,18 +16,18 @@ extern s32                 queue_animation_update(s32 chan,
 
 s32 remove_hud_item(s32 item) __asm__("FUN_001ff480");
 
-s32 remove_hud_item(s32 item) {
+s32 remove_hud_item(s32 hud_item_id) {
     s32 *cursor;
     s32  index;
 
     index = 0;
-    if (hud_chan_slots.unk64 != item) {
+    if (hud_chan_slots.unk64 != hud_item_id) {
         cursor = (s32 *)((u8 *)&hud_chan_slots + 0x64);
     loop_2:
         index += 1;
         cursor = (s32 *)((u8 *)cursor + 0x90);
         if (index < 0xD) {
-            if (*cursor == item) {
+            if (*cursor == hud_item_id) {
                 goto block_4;
             }
             goto loop_2;
