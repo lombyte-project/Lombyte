@@ -497,12 +497,12 @@ void skid_mcmarx_update(Moby *moby) {
                     float air_time;
                     float jump_speed;
                     int   i;
-                    int   next;
+                    int   next_path_node_index;
 
-                    for (i = racer_instance_vars->point_index; i < racer_instance_vars->jump_point; i = next) {
-                        next = offset_path_index((char *)racer_instance_vars->path, i, 1, 1);
+                    for (i = racer_instance_vars->point_index; i < racer_instance_vars->jump_point; i = next_path_node_index) {
+                        next_path_node_index = offset_path_index((char *)racer_instance_vars->path, i, 1, 1);
                         path_length += vector_distance_xy((float(*)[4])racer_instance_vars->path + (i + 1),
-                                                          (float(*)[4])racer_instance_vars->path + (next + 1));
+                                                          (float(*)[4])racer_instance_vars->path + (next_path_node_index + 1));
                     }
                     air_time = path_length / racer_instance_vars->speed;
                     jump_speed = (racer_instance_vars->path->points[racer_instance_vars->jump_point].z -
