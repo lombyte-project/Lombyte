@@ -2729,7 +2729,7 @@ s32 probe_hero_forward_collision(f32 *out,
                                  f32  probe_z_offset,
                                  f32  probe_end_radius) __asm__("FUN_L00_0020a240");
 
-s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_radius) {
+s32 probe_hero_forward_collision(f32 *hit_distance_xy_out, f32 probe_z_offset, f32 probe_end_radius) {
     G0020a240 *hero_state = (G0020a240 *)&hero;
     V0020a240  probe_start;
     V0020a240  probe_end;
@@ -2738,8 +2738,8 @@ s32 probe_hero_forward_collision(f32 *out, f32 probe_z_offset, f32 probe_end_rad
         &probe_start, hero_state->f234 - 0.02f, 0.0f, probe_z_offset);
     transform_hero_polar_offset_to_world(&probe_end, probe_end_radius, 0.0f, probe_z_offset);
     if (collision_line(&probe_start, &probe_end, 2, 0, 0)) {
-        if (out != 0)
-            *out = vector_distance_xy(hero_state->v80, D_L00_00173E60);
+        if (hit_distance_xy_out != 0)
+            *hit_distance_xy_out = vector_distance_xy(hero_state->v80, D_L00_00173E60);
         return 1;
     }
     return 0;
