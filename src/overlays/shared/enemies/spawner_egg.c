@@ -76,9 +76,9 @@ static inline void bubble_bounce(struct Moby *moby, BubbleVars *vars) {
 
 struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) __asm__("FUN_L09_0030a778");
 
-struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
+struct Moby *respawn_spawner_child(struct Moby *parent_spawner_moby, Vec4 *pos) {
     struct Moby *spawned_moby;
-    struct Moby *other;
+    struct Moby *child_suck_cannon_record;
     u8          *owner_vars;
     s16         *child_aim_height_record;
     s32          left;
@@ -89,9 +89,9 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
     pos_ptr = &pos_copy;
     pos_copy.q = pos->q;
 
-    if (owner == 0)
+    if (parent_spawner_moby == 0)
         return 0;
-    owner_vars = owner->pvars;
+    owner_vars = parent_spawner_moby->pvars;
     spawned_moby = 0;
     respawned_child = 0;
     if (get_first_moby_in_group(&spawned_moby, *(s32 *)(owner_vars + 0x94), 1, 1) == 0) {
@@ -116,20 +116,20 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
         if (owner_vars[0x93] != 0)
             spawned_moby->scale = spawned_moby->pclass->scale * 0.1f;
         set_moby_animation(spawned_moby, 0, 0);
-        other = get_moby_suck_cannon_record(spawned_moby);
-        if (other != 0) {
-            *(volatile s32 *)((u8 *)other + 0x6c) = 0;
-            *(volatile s32 *)((u8 *)other + 0x94) = 0;
-            *(volatile s16 *)((u8 *)other + 0x68) = 0;
+        child_suck_cannon_record = get_moby_suck_cannon_record(spawned_moby);
+        if (child_suck_cannon_record != 0) {
+            *(volatile s32 *)((u8 *)child_suck_cannon_record + 0x6c) = 0;
+            *(volatile s32 *)((u8 *)child_suck_cannon_record + 0x94) = 0;
+            *(volatile s16 *)((u8 *)child_suck_cannon_record + 0x68) = 0;
         }
-        if (owner->unkB4 < spawned_moby->unkB4)
-            spawned_moby->unkB4 = owner->unkB4;
+        if (parent_spawner_moby->unkB4 < spawned_moby->unkB4)
+            spawned_moby->unkB4 = parent_spawner_moby->unkB4;
         if (spawned_moby->unkB4 < 1)
             spawned_moby->unkB4 = 1;
-        left = (u16)owner->unkB4 - (u16)spawned_moby->unkB4;
-        owner->unkB4 = left;
+        left = (u16)parent_spawner_moby->unkB4 - (u16)spawned_moby->unkB4;
+        parent_spawner_moby->unkB4 = left;
         if ((s16)left < 0)
-            owner->unkB4 = 1;
+            parent_spawner_moby->unkB4 = 1;
         {
             struct Moby *target = ((struct Moby *volatile *)&spawned_moby)[0];
             target->collision = target->pclass->collision;
@@ -144,7 +144,7 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
             *(f32 *)child_aim_height_record = (f32)child_aim_height_record[2];
         }
     } else {
-        debug_print(spawner_child_respawn_failure_format, (s16)owner->save_id, D_L09_0015F5CC);
+        debug_print(spawner_child_respawn_failure_format, (s16)parent_spawner_moby->save_id, D_L09_0015F5CC);
     }
     return respawned_child;
 }
