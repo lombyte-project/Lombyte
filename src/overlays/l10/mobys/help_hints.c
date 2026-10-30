@@ -81,7 +81,7 @@ void update_help_hints(Moby *moby) {
         HELP_MESSAGE_STATE_CHECK_CONDITIONS = 1
     };
     EvData *conditional_help_config = (EvData *)((int *)moby->pvars);
-    Moby   *other;
+    Moby   *conditional_help_list_moby;
     int     any_active;
     int     elapsed;
 
@@ -127,8 +127,8 @@ void update_help_hints(Moby *moby) {
             help_request(0x2715, 0x5C);
         }
         any_active = 0;
-        for (other = l10_conditional_help_moby_list_head; other != 0; other = other->next) {
-            if (other->oclass == 0x359 && other->state != 1)
+        for (conditional_help_list_moby = l10_conditional_help_moby_list_head; conditional_help_list_moby != 0; conditional_help_list_moby = conditional_help_list_moby->next) {
+            if (conditional_help_list_moby->oclass == 0x359 && conditional_help_list_moby->state != 1)
                 any_active = 1;
         }
         if (any_active == 0)
