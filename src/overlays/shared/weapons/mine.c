@@ -429,7 +429,7 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
                                         void     *base_motion_vector) __asm__("FUN_L00_002aa008");
 
 void initialize_moby_motion_at_position(V_2aa008 *requested_position,
-                                        N_2aa008 *self,
+                                        N_2aa008 *initialized_moby,
 
                                         void *base_motion_vector) {
     V_2aa008     random_offset;
@@ -443,12 +443,12 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     s32          bestv;
     V_2aa008    *k;
     vector_scratch.q = 0;
-    moby_vars = self->p78;
+    moby_vars = initialized_moby->p78;
     vector_scratch.f[0] = random_float_between(-1.0f, 1.0f);
     vector_scratch.f[1] = random_float_between(-1.0f, 1.0f);
     vector_scratch.f[2] = random_float_between(-1.0f, 1.0f);
-    self->b20 = 1;
-    self->f2C = self->f2C / 0.65f;
+    initialized_moby->b20 = 1;
+    initialized_moby->f2C = initialized_moby->f2C / 0.65f;
     random_offset.q = vector_scratch.q;
     fast_vec_normalize(&random_offset,
                        &random_offset,
@@ -465,8 +465,8 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     for (scanned_moby = D_L00_0015FFE4_2aa008; scanned_moby; scanned_moby = scanned_moby->p28) {
         if (scanned_moby->b20 != 0xFE)
             if (scanned_moby->b20 != 0xFD)
-                if (scanned_moby->hA6 == self->hA6)
-                    if (scanned_moby != self) {
+                if (scanned_moby->hA6 == initialized_moby->hA6)
+                    if (scanned_moby != initialized_moby) {
                         if (best == 0 || ((D_2aa008 *)scanned_moby->p78)->i5C < bestv) {
                             bestv = ((D_2aa008 *)scanned_moby->p78)->i5C;
                             best = scanned_moby;
@@ -476,14 +476,14 @@ void initialize_moby_motion_at_position(V_2aa008 *requested_position,
     }
     if (count >= 8)
         ((D_2aa008 *)best->p78)->i5C = -1;
-    qcopy(&self->v10, requested_position);
+    qcopy(&initialized_moby->v10, requested_position);
     vector_scratch.q = ((Q_2aa008 *)hero.moby)->v10.q;
     vector_scratch.f[2] = requested_position->f[2];
     if (collision_line(&vector_scratch, requested_position, 0, hero.moby, 0)) {
         k = D_L00_00173E60_2aa008;
-        qcopy(&self->v10, &k[0]);
+        qcopy(&initialized_moby->v10, &k[0]);
         fast_vec_normalize(&collision_position_offset, &k[2], frame_time_sq * 9.7f);
-        fast_vec_add(&self->v10, &self->v10, &collision_position_offset);
+        fast_vec_add(&initialized_moby->v10, &initialized_moby->v10, &collision_position_offset);
         reflect_vector(moby_vars, moby_vars, &k[2]);
         fast_vec_scale(moby_vars, moby_vars, 0.6f);
     }
