@@ -95,8 +95,8 @@ void thruster_pack_lock_red_update(struct Moby *moby) {
             allocate_voice_for_target_entry(0, 0, (int)moby);
             index = *(int *)(thruster_pack_lock_red_private_vars + 0x70);
             if (index != -1) {
-                unsigned char *entry = (unsigned char *)((char *)&voice_pool) + index * 0x70;
-                if (*(struct Moby **)(entry + 0x88) == moby && entry[0x74] != 0)
+                unsigned char *voice_slot_record = (unsigned char *)((char *)&voice_pool) + index * 0x70;
+                if (*(struct Moby **)(voice_slot_record + 0x88) == moby && voice_slot_record[0x74] != 0)
                     release_voice_slot(index);
             }
             *(int *)(thruster_pack_lock_red_private_vars + 0x70) = -1;
