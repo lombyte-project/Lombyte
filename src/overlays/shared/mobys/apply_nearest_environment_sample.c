@@ -16,7 +16,7 @@ extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32)
 
 void apply_nearest_environment_sample(char *object) __asm__("FUN_L00_002500b8");
 
-void apply_nearest_environment_sample(char *object) {
+void apply_nearest_environment_sample(char *environment_sample_target) {
     float          position_delta[4];
     float          best = 999999.0f;
     float          entry_distance;
@@ -30,7 +30,7 @@ void apply_nearest_environment_sample(char *object) {
     unsigned char *entry_update_destination;
 
     for (i = 0; i < D_L00_00160014; i++) {
-        fast_vec_sub(position_delta, object + 0x10, D_L00_00160040 + i * 0x30);
+        fast_vec_sub(position_delta, environment_sample_target + 0x10, D_L00_00160040 + i * 0x30);
         entry_distance = fast_vec_length(position_delta);
         if (entry_distance <= 8.0f && entry_distance < best) {
             best = entry_distance;
@@ -43,15 +43,15 @@ void apply_nearest_environment_sample(char *object) {
     }
     selected_entry_byte_offset = nearest_entry_index * 0x30;
     packing_source_entry = (char *)(selected_entry_byte_offset + (int)D_L00_00160040);
-    pack_render_command_fields(object,
-                               *(int *)(object + 0x80) =
+    pack_render_command_fields(environment_sample_target,
+                               *(int *)(environment_sample_target + 0x80) =
                                    (*(int *)(packing_source_entry + 0x18) << 16) +
                                    (*(int *)(packing_source_entry + 0x14) << 8) +
                                    *(int *)(packing_source_entry + 0x10),
                                0,
                                0,
                                0);
-    *(int *)(object + 0x38) =
+    *(int *)(environment_sample_target + 0x38) =
         *(int *)((char *)(selected_entry_byte_offset + (int)D_L00_00160040) + 0x1C);
     global_update_source_entry = (char *)(selected_entry_byte_offset + (int)D_L00_00160040);
     if (*(unsigned char *)(global_update_source_entry + 0x27) != 0) {
