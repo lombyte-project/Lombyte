@@ -23,12 +23,20 @@ extern float         fast_subtract_rotations(float, float);
 /* Same source as the exact taxi_update, with its moby data 8 bytes further on, an x range on the pickup test and a table test for state 6. */
 
 extern char D_0013CAE4[];
-extern float
-advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern f32  advance_accelerated_scalar(f32 *value,
+                                       f32 *velocity,
+                                       f32  target,
+                                       f32  acceleration_step,
+                                       f32  braking_step,
+                                       f32  maximum_speed) __asm__("FUN_00213f38");
 void        initialize_taxi_stop_state(void *moby_v) __asm__("FUN_L05_00319208");
 extern void select_taxi_route(struct Moby *) __asm__("FUN_L05_003193a8");
-extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
-extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__("FUN_00214e58");
+extern void sample_camera_path(int  *path,
+                               s32   loop,
+                               void *position,
+                               f32  *rotation,
+                               s32   flags,
+                               f32   progress) __asm__("FUN_00214e58");
 
 void taxi_update(struct Moby *moby) __asm__("FUN_L05_00318c78");
 
@@ -88,24 +96,28 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     case TAXI_BLEND_TO_PATH_START:
-        advance_accelerated_scalar(1.0f,
-                                   frame_time_sq,
-                                   frame_time_sq,
-                                   frame_time * 0.5f,
-                                   (float *)(taxi_data + 0xC0),
-                                   (float *)(taxi_data + 0xC4));
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((float (*)(float, float, float, float, float *, float *))advance_accelerated_scalar)(
+            1.0f,
+            frame_time_sq,
+            frame_time_sq,
+            frame_time * 0.5f,
+            (float *)(taxi_data + 0xC0),
+            (float *)(taxi_data + 0xC4));
         qa = rotation_or_start_position_scratch;
         s = *(int *)(taxi_data + 0x80 - (-(*(short *)(taxi_data + 0xB4) * 4)));
         tab = l05_cuboids;
         qcopy(qa, &tab[s].pos);
         qcopy(interpolation_start_angles, &tab[s].rot);
         z = 0.0f;
-        func_00215CA8_f5848(z,
-                            *(int **)(taxi_data + 0xAC),
-                            0,
-                            interpolation_end_position,
-                            interpolation_end_angles,
-                            0);
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((void (*)(float, int *, int, void *, float *, int))sample_camera_path)(
+            z,
+            *(int **)(taxi_data + 0xAC),
+            0,
+            interpolation_end_position,
+            interpolation_end_angles,
+            0);
         lerp_vector(taxi_data + 0x60,
                     rotation_or_start_position_scratch,
                     interpolation_end_position,
@@ -132,12 +144,14 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     case TAXI_BLEND_TO_DESTINATION:
-        advance_accelerated_scalar(1.0f,
-                                   frame_time_sq,
-                                   frame_time_sq,
-                                   frame_time * 0.5f,
-                                   (float *)(taxi_data + 0xC0),
-                                   (float *)(taxi_data + 0xC4));
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((float (*)(float, float, float, float, float *, float *))advance_accelerated_scalar)(
+            1.0f,
+            frame_time_sq,
+            frame_time_sq,
+            frame_time * 0.5f,
+            (float *)(taxi_data + 0xC0),
+            (float *)(taxi_data + 0xC4));
         qa = interpolation_end_position;
         s = *(int *)(taxi_data + 0x80 - (-(*(short *)(taxi_data + 0xB6) * 4)));
         tab = l05_cuboids;

@@ -88,8 +88,6 @@ typedef union {
     float     f[4];
 } L12Vector;
 
-extern float func_00214358_order(float, void *, int) __asm__("FUN_00213508");
-
 void ease_hoven_anklebiter_height_to_ground(char *moby) __asm__("FUN_L12_002e1878");
 
 /* Moves the moby along its path at the given speed and keeps it on the path; returns the move result, or 2 when it has been stuck too long. */
@@ -101,7 +99,7 @@ void ease_hoven_anklebiter_height_to_ground(char *moby) {
     float     value;
     qcopy(&position, moby + 0x10);
     position.f[2] += 0.5f;
-    value = func_00214358_order(0.5f, &position, 0);
+    value = probe_ground_height(&position, 0, 0.5f);
     approach_value(value, frame_time_sq * 27.0f, moby + 0x18);
 }
 
@@ -243,18 +241,17 @@ extern void
     spawn_nearby_effect(void *, int, int, void *, void *, float) __asm__("FUN_L00_00259bc8");
 f32 compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 int step_moby_motion(void *moby, void *motion) __asm__("FUN_L00_0025c698");
-extern char  D_0013E633_2E2EF0[] __asm__("D_001413D0");
-extern void  process_hoven_anklebiter_damage_and_alerts(struct Moby *) __asm__("FUN_L12_002e3528");
-extern int   FUN_L01_00274b78_c(char *, char *, float) __asm__("FUN_L01_00274b78");
-extern void  func_L01_0026E8E0_2E2EF0(char *) __asm__("FUN_L01_0026d930");
-extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int   rand(void) __asm__("FUN_001160d8");
-extern float smooth54(float *, float, float) __asm__("FUN_00213ed8");
-extern int   func_L00_0025A208_2E2EF0(int *, int, int, int) __asm__("FUN_L00_002591d0");
-extern int   func_L00_0025A2F0_2E2EF0(int *, int, int, int) __asm__("FUN_L00_002592b8");
-extern void  func_L01_0026F040_2E2EF0(int, int) __asm__("FUN_L01_0026e090");
-extern void  approach_w(char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
-extern void  select_hoven_anklebiter_pursuit_animation(struct Moby *) __asm__("FUN_L12_002e18e8");
+extern char D_0013E633_2E2EF0[] __asm__("D_001413D0");
+extern void process_hoven_anklebiter_damage_and_alerts(struct Moby *) __asm__("FUN_L12_002e3528");
+extern int  FUN_L01_00274b78_c(char *, char *, float) __asm__("FUN_L01_00274b78");
+extern void func_L01_0026E8E0_2E2EF0(char *) __asm__("FUN_L01_0026d930");
+extern int  random_int_between(int, int) __asm__("FUN_L00_00257b90");
+extern int  rand(void) __asm__("FUN_001160d8");
+extern int  func_L00_0025A208_2E2EF0(int *, int, int, int) __asm__("FUN_L00_002591d0");
+extern int  func_L00_0025A2F0_2E2EF0(int *, int, int, int) __asm__("FUN_L00_002592b8");
+extern void func_L01_0026F040_2E2EF0(int, int) __asm__("FUN_L01_0026e090");
+extern void approach_w(char *, float *, float, float, float, float) __asm__("FUN_L00_00258278");
+extern void select_hoven_anklebiter_pursuit_animation(struct Moby *) __asm__("FUN_L12_002e18e8");
 extern float
 func_L00_0025BC48_2E2EF0(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
 extern void  setup_fall54(float, char *, float *, int, int, int) __asm__("FUN_L00_0025c558");
@@ -391,9 +388,9 @@ void update_hoven_anklebiter(AnklebiterMoby *moby) {
                 blend_moby_animation(moby, 15, 0, scale_game_frames(14));
             count = data->idle_timer;
             if (count > scale_game_frames(20))
-                smooth54(&data->idle_speed, D_0015ED6C * 2.5f, D_0015ED70 * 7.0f);
+                approach_value(D_0015ED6C * 2.5f, D_0015ED70 * 7.0f, &data->idle_speed);
             else
-                smooth54(&data->idle_speed, 0.0f, D_0015ED70 * 7.0f);
+                approach_value(0.0f, D_0015ED70 * 7.0f, &data->idle_speed);
             moby->anim_rate = 0.8f;
             update_object_wander_movement((char *)moby, (char *)data->idle_pos, 0.35f, 0.25f);
         }

@@ -310,7 +310,6 @@ create_class_274_ring_effect(void *owner, void *vector, float value) __asm__("FU
 extern char *
 spawn_drek_boss_electric_ball(void *owner, void *vector, int value) __asm__("FUN_L18_002ea0f0");
 extern f32   aas_c(f32, f32, f32, f32, f32 *, f32 *) __asm__("func_00213F38");
-extern float D_0015ED6C_e[] __asm__("D_0015ED6C") MACRO_ADDR;
 extern float D_L18_0015F3FC;
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float get_camera_transition_progress(void *moby) __asm__("FUN_L18_002dfb90");
@@ -642,8 +641,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (boss_data->f38C <= 301.0f) {
@@ -724,8 +723,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         qcopy(position_and_displacement_scratch, boss_data->f340 + 4);
         hit = advance_drek_boss_planar_position_toward_target(
@@ -806,10 +805,10 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
-        approach_value(&boss_data->f374, frame_time * 12.0f, D_0015ED6C_e[1] * 20.0f);
+        approach_value(&boss_data->f374, frame_time * 12.0f, frame_time_sq * 20.0f);
         if (boss_data->f374 != 0.0f) {
             fast_vec_sub(position_and_displacement_scratch,
                          (char *)boss_data->f340 + (boss_data->f348 * 0x10 + 0x10),
@@ -857,7 +856,7 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     }
     case DREK_BOSS_FINISH_PATH_AND_WAIT_FOR_HERO:
         if (boss_data->f348 != *boss_data->f340) {
-            approach_value(&boss_data->f374, frame_time * 10.0f, D_0015ED6C_e[1] * 20.0f);
+            approach_value(&boss_data->f374, frame_time * 10.0f, frame_time_sq * 20.0f);
             fast_vec_sub(position_and_displacement_scratch,
                          (char *)boss_data->f340 + (boss_data->f348 * 0x10 + 0x10),
                          boss_data->f3C0);
@@ -998,8 +997,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if ((moby->f70 & 2) == 0) {
@@ -1092,8 +1091,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         moby_point_position(moby, 0x13, position_and_displacement_scratch);
         *(BossTI *)position_displacement_direction_and_rotation_scratch =
@@ -1169,8 +1168,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (is_value_within_interpolated_window((char *)moby, 1.0f) != 0 ||
@@ -1258,8 +1257,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (boss_data->f354 < boss_data->f358 + boss_data->f35C) {
@@ -1323,8 +1322,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if (fast_dec_timer(&boss_data->f354) != 0) {
@@ -1384,8 +1383,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         if ((moby->f70 & 2) != 0 && moby->f53 != 12) {
@@ -1441,8 +1440,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         if (fast_dec_timer(&boss_data->f354) != 0) {
             update_drek_boss_hero_follow_movement((char *)moby);
@@ -1497,8 +1496,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         {
             /* Retail scales the index before it sets up the call. */
@@ -1523,8 +1522,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         moby_init_action_mode(boss_data->f330);
         if (advance_drek_boss_planar_position_toward_target(
@@ -1576,8 +1575,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
         approach_angle(aim,
                        &boss_data->f370,
                        desired_yaw,
-                       D_0015ED6C_e[1] * 6.2831855f,
-                       D_0015ED6C_e[1] * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
+                       frame_time_sq * 6.2831855f,
                        frame_time * 6.2831855f);
         update_drek_boss_arena_circling_movement((struct Moby *)moby);
         boss_data->f358 = boss_data->f358 + 1;
@@ -1746,8 +1745,8 @@ void drek_final_boss_robot_update(BossMoby *moby) {
     fast = 0.03f;
     boss_data->f3D4 = fast_add_rotations(boss_data->f3D4, frame_time * 3.1415927f);
     aas_c(boss_data->f3D0 * fast_sin(boss_data->f3D4) + boss_data->f3D8,
-          D_0015ED6C_e[1] * 4.0f,
-          D_0015ED6C_e[1] * 4.0f,
+          frame_time_sq * 4.0f,
+          frame_time_sq * 4.0f,
           frame_time * 4.0f,
           &boss_data->f3DC,
           &boss_data->f3E0);
@@ -2111,8 +2110,12 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
     }
 }
 
-extern float
-advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern f32 advance_accelerated_scalar(f32 *value,
+                                      f32 *velocity,
+                                      f32  target,
+                                      f32  acceleration_step,
+                                      f32  braking_step,
+                                      f32  maximum_speed) __asm__("FUN_00213f38");
 
 int advance_drek_boss_planar_position_toward_target(char *moby,
                                                     float movement_speed_limit,
@@ -2129,13 +2132,15 @@ int advance_drek_boss_planar_position_toward_target(char *moby,
     fast_vec_sub(planar_displacement, x, boss_position);
     planar_displacement[2] = initialization_zero;
     planar_target_distance = fast_vec_length(planar_displacement);
-    acceleration_and_braking_step = D_0015ED6C_e[1] * 10.0f;
-    advance_accelerated_scalar(planar_target_distance,
-                               acceleration_and_braking_step,
-                               acceleration_and_braking_step,
-                               movement_speed_limit,
-                               distance_progress,
-                               (float *)(data + 0x374));
+    acceleration_and_braking_step = frame_time_sq * 10.0f;
+    /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+    ((float (*)(float, float, float, float, float *, float *))advance_accelerated_scalar)(
+        planar_target_distance,
+        acceleration_and_braking_step,
+        acceleration_and_braking_step,
+        movement_speed_limit,
+        distance_progress,
+        (float *)(data + 0x374));
     fast_vec_normalize(planar_displacement, planar_displacement, *(float *)(data + 0x374));
     fast_vec_add(boss_position, boss_position, planar_displacement);
     if (planar_target_distance < 0.1f) {
@@ -2489,14 +2494,13 @@ extern float D_L18_001623DC_gp __asm__("D_L18_001623DC") __attribute__((sda));
 
 extern int
 queue_animation_update(int, int, void *, void *, void *, void *, int) __asm__("FUN_001ff308");
-extern void  follow_camera_set_distance(float, float, int) __asm__("FUN_L00_002e8450");
-extern void  follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
-extern void  FUN_L06_00316330(void *);
-extern int   drek_boss_scalar_scan_entry_gates[] __asm__("D_L18_0016A290");
-extern char  l18_drek_boss_scalar_scan_records[] __asm__("D_L18_00167B50");
-extern void  reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
-extern void  FUN_L06_00249738(void);
-extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float) __asm__("FUN_00213f38");
+extern void follow_camera_set_distance(float, float, int) __asm__("FUN_L00_002e8450");
+extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
+extern void FUN_L06_00316330(void *);
+extern int  drek_boss_scalar_scan_entry_gates[] __asm__("D_L18_0016A290");
+extern char l18_drek_boss_scalar_scan_records[] __asm__("D_L18_00167B50");
+extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
+extern void FUN_L06_00249738(void);
 
 #include "rnc/overlay/l18/mobys/drek_final_boss_robot_data/update_drek_boss_state_dependent_scalars.h"
 
@@ -2624,20 +2628,22 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                                                                  0x15e);
         }
     }
-    advance_accelerated_scalar_7288(
+    /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+    ((float (*)(float *, float, float *, float, float, float))advance_accelerated_scalar)(
         first_scalar_value,
         x,
         first_scalar_update_state,
-        *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * D_0015ED6C_e[1],
-        *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * D_0015ED6C_e[1],
-        drek_boss_scalar_maximum_speed_gp * D_0015ED6C_e[0]);
-    advance_accelerated_scalar_7288(
+        *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * frame_time_sq,
+        *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * frame_time_sq,
+        drek_boss_scalar_maximum_speed_gp * frame_time);
+    /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+    ((float (*)(float *, float, float *, float, float, float))advance_accelerated_scalar)(
         second_scalar_value,
         y,
         second_scalar_update_state,
-        *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * D_0015ED6C_e[1],
-        *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * D_0015ED6C_e[1],
-        drek_boss_scalar_maximum_speed_gp * D_0015ED6C_e[0]);
+        *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * frame_time_sq,
+        *(float *)&l18_drek_boss_scalar_acceleration_and_braking_gp * frame_time_sq,
+        drek_boss_scalar_maximum_speed_gp * frame_time);
 }
 
 /* Ported from rac1-decomp (src/overlays/l18_veldin2/vendor_002F2AE0.c: func_L18_002F8B00), where it is exact; names translated to the US level program. */

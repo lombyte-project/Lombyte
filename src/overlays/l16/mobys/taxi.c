@@ -59,11 +59,15 @@ typedef struct {
 extern L16PickupPose *D_L16_001600EC;
 extern char          *find_group_moby_by_data_id(struct Moby *, int) __asm__("FUN_L16_002e4be0");
 extern char           D_0013CAE4[];
-extern float
-advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
-extern float                    D_0015EE6C_u;
-extern int                      advance_taxi_path(struct Moby *) __asm__("FUN_L16_002e4c40");
-extern s32                      D_L16_0015F594;
+extern f32            advance_accelerated_scalar(f32 *value,
+                                                 f32 *velocity,
+                                                 f32  target,
+                                                 f32  acceleration_step,
+                                                 f32  braking_step,
+                                                 f32  maximum_speed) __asm__("FUN_00213f38");
+extern float          D_0015EE6C_u;
+extern int            advance_taxi_path(struct Moby *) __asm__("FUN_L16_002e4c40");
+extern s32            D_L16_0015F594;
 extern unsigned char D_0013D4E1 NOT_SDA;
 extern void transfer_moby_placement_to_linked_moby(void *) __asm__("FUN_L16_002e4b58");
 extern void request_taxi_destination_help_message(struct Moby *) __asm__("FUN_L16_002e4cd8");
@@ -72,8 +76,12 @@ extern void transform_moby_table_entry_vectors(struct Moby *) __asm__("FUN_L16_0
 extern void initialize_taxi_stop_state(void *) __asm__("FUN_L16_002e4900");
 extern void FUN_L16_002e4a58_c(char *) __asm__("FUN_L16_002e4a58");
 extern void release_voice_slot(s32) __asm__("FUN_0022d798");
-extern void sample_camera_path_u(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");
-extern void func_00215CA8_f5848(float, int *, int, void *, float *, int) __asm__("FUN_00214e58");
+extern void sample_camera_path(int  *path,
+                               s32   loop,
+                               void *position,
+                               f32  *rotation,
+                               s32   flags,
+                               f32   progress) __asm__("FUN_00214e58");
 
 void taxi_update(struct Moby *moby) __asm__("FUN_L16_002e43e0");
 
@@ -132,19 +140,22 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     case TAXI_BLEND_TO_PATH_START:
-        advance_accelerated_scalar(1.0f,
-                                   frame_time_sq,
-                                   frame_time_sq,
-                                   frame_time * 0.5f,
-                                   (float *)(taxi_data + 0xB0),
-                                   (float *)(taxi_data + 0xB4));
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((float (*)(float, float, float, float, float *, float *))advance_accelerated_scalar)(
+            1.0f,
+            frame_time_sq,
+            frame_time_sq,
+            frame_time * 0.5f,
+            (float *)(taxi_data + 0xB0),
+            (float *)(taxi_data + 0xB4));
         qa = transposed_rotation_or_start_position;
         s = *(int *)(taxi_data + 0x80 - (-(*(short *)(taxi_data + 0xAC) * 4)));
         tab = D_L16_001600EC;
         qcopy(qa, tab[s].position);
         qcopy(transition_start_rotation, tab[s].direction);
         z = 0.0f;
-        func_00215CA8_f5848(
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((void (*)(float, int *, int, void *, float *, int))sample_camera_path)(
             z, *(int **)(taxi_data + 0xA4), 0, transition_end_position, transition_end_rotation, 0);
         lerp_vector(taxi_data + 0x60,
                     transposed_rotation_or_start_position,
@@ -172,23 +183,25 @@ void taxi_update(struct Moby *moby) {
         }
         break;
     case TAXI_BLEND_TO_DESTINATION_POSE:
-        advance_accelerated_scalar(1.0f,
-                                   frame_time_sq,
-                                   frame_time_sq,
-                                   frame_time * 0.5f,
-                                   (float *)(taxi_data + 0xB0),
-                                   (float *)(taxi_data + 0xB4));
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((float (*)(float, float, float, float, float *, float *))advance_accelerated_scalar)(
+            1.0f,
+            frame_time_sq,
+            frame_time_sq,
+            frame_time * 0.5f,
+            (float *)(taxi_data + 0xB0),
+            (float *)(taxi_data + 0xB4));
         qa = transition_end_position;
         s = *(int *)(taxi_data + 0x80 - (-(*(short *)(taxi_data + 0xAE) * 4)));
         tab = D_L16_001600EC;
         qcopy(qa, tab[s].position);
         qcopy(transition_end_rotation, tab[s].direction);
-        sample_camera_path_u(*(int **)(taxi_data + 0xA4),
-                             0,
-                             transposed_rotation_or_start_position,
-                             transition_start_rotation,
-                             0,
-                             (float)**(int **)(taxi_data + 0xA4));
+        sample_camera_path(*(int **)(taxi_data + 0xA4),
+                           0,
+                           transposed_rotation_or_start_position,
+                           transition_start_rotation,
+                           0,
+                           (float)**(int **)(taxi_data + 0xA4));
         lerp_vector(taxi_data + 0x60,
                     transposed_rotation_or_start_position,
                     transition_end_position,
@@ -380,21 +393,19 @@ found:
 }
 /* Advances a moby's path: steps the path position and returns whether it has reached the end. */
 
-extern float
-advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
-extern void sample_camera_path(int *, int, void *, float *, int, float) __asm__("FUN_00214e58");
-
 int advance_taxi_path(struct Moby *moby) __asm__("FUN_L16_002e4c40");
 
 int advance_taxi_path(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;
     int  *path;
-    advance_accelerated_scalar(1.0f,
-                               *(float *)(moby_data + 0xC8),
-                               *(float *)(moby_data + 0xC8),
-                               *(float *)(moby_data + 0xc4),
-                               (float *)(moby_data + 0xb0),
-                               (float *)(moby_data + 0xb4));
+    /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+    ((float (*)(float, float, float, float, float *, float *))advance_accelerated_scalar)(
+        1.0f,
+        *(float *)(moby_data + 0xC8),
+        *(float *)(moby_data + 0xC8),
+        *(float *)(moby_data + 0xc4),
+        (float *)(moby_data + 0xb0),
+        (float *)(moby_data + 0xb4));
     path = *(int **)(moby_data + 0xa4);
     sample_camera_path(path,
                        0,

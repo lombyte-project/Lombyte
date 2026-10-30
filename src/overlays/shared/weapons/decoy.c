@@ -9,6 +9,7 @@
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/world/collision/ground_probe.h"
+#include "rnc/overlay/level_labels.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/hero/copy_hero_moby_field_38.h"
@@ -79,7 +80,6 @@ void        FUN_001f9a28_2c40a0(void *, void *, void *) __asm__("FUN_001f9a28");
 f32         FUN_001f9b20_2c40a0(void *) __asm__("FUN_001f9b20");
 f32         FUN_001f9af0_2c40a0(void *) __asm__("FUN_001f9af0");
 f32         vendor_spring(f32 *, f32, f32 *, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
-f32         FUN_00213508_2c40a0(void *, f32, s32) __asm__("FUN_00213508");
 void        FUN_001f9bf8_2c40a0(void *, void *, f32) __asm__("FUN_001f9bf8");
 void        FUN_L00_00258830_2c40a0(void *, void *, f32, f32, f32, int) __asm__("FUN_L00_00258830");
 s32         collision_hit_material() __asm__("FUN_001f0b58");
@@ -146,8 +146,6 @@ extern f32 frame_time MACRO_ADDR;
 extern f32            frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern CollisionHit   coll_hit __asm__("D_L00_00173E40");
 extern Vec4           D_L00_00166DC0;
-extern u8            *moby_table __asm__("D_L00_0015FFD8");
-extern S173E40        D_L00_00173E40;
 extern char           D_00173F60_alias[] __asm__("D_L00_00173E60");
 /* coll_hit's normal as a whole quadword (CollisionHit names only x/y/z) */
 extern Vec4 D_L00_00166DC0 NOT_SDA;
@@ -287,8 +285,8 @@ void release_moby_with_collision_check(float *release_position,
         qzero(state + 0x10);
         moby[0x20] = 4;
         *(short *)(state + 0x44) = scale_game_frames_c(30);
-        *(float *)(moby + 0x18) = D_L00_00173E40.height;
-        qcopy(collision_normal, D_L00_00173E40.vector);
+        *(float *)(moby + 0x18) = ((S173E40 *)D_L00_00173E40)->height;
+        qcopy(collision_normal, ((S173E40 *)D_L00_00173E40)->vector);
         {
             float co, si;
             co = fast_cos(*(float *)(moby + 0x48));
@@ -471,7 +469,7 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
                   frame_scale_sq * 0.3f,
                   frame_time * 4.0f);
     if (horizontal_separation_error == 0.0f && moby_vars->f60 == 0.0f) {
-        if (FUN_001f99c0_2c40a0(self->f18 - FUN_00213508_2c40a0(self->v10, 0.5f, 0)) < 0.02f)
+        if (FUN_001f99c0_2c40a0(self->f18 - probe_ground_height(self->v10, 0, 0.5f)) < 0.02f)
             moby_vars->i68 = 0;
     }
     horizontal_separation_distance = FUN_001f9af0_2c40a0(horizontal_displacement);
@@ -480,7 +478,7 @@ void update_decoy_proximity_motion(S_2c40a0 *self) {
     if (moby_vars->f60 < horizontal_separation_distance)
         FUN_001f9bf8_2c40a0(horizontal_displacement, horizontal_displacement, moby_vars->f60);
     FUN_L00_00258830_2c40a0(self, horizontal_displacement, 0.5f, 0.4f, 0.0f, 0);
-    ground_height = FUN_00213508_2c40a0(self->v10, 0.5f, 0);
+    ground_height = probe_ground_height(self->v10, 0, 0.5f);
     if (self->f18 < ground_height) {
         self->f18 = ground_height;
         moby_vars->f64 = 0.0f;

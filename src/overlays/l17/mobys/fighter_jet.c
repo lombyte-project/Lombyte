@@ -580,6 +580,7 @@ void draw_fighter_jet_lock_marker(float         x,
                                   unsigned char alpha) {
     int   texture_handle;
     float quad_size;
+    /* Fakematch: retail uses only the low word of the texture; the cast keeps it. */
     texture_handle = ((s32(*)(s32))get_effect_texture)(0x2E);
     quad_size = scale * 20.0f;
     append_rotated_textured_screen_quad(x,

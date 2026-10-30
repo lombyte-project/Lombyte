@@ -56,8 +56,12 @@ extern s32 D_L14_0015F594;
 
 extern char D_0013CAE4[];
 
-extern float
-advance_accelerated_scalar(float, float, float, float, float *, float *) __asm__("FUN_00213f38");
+extern f32 advance_accelerated_scalar(f32 *value,
+                                      f32 *velocity,
+                                      f32  target,
+                                      f32  acceleration_step,
+                                      f32  braking_step,
+                                      f32  maximum_speed) __asm__("FUN_00213f38");
 
 extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
 
@@ -66,8 +70,6 @@ extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00
 extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
 
 extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
-
-extern void taxi_sample(float, s32 *, int, void *, void *, int) __asm__("FUN_00214e58");
 
 void initialize_taxi_stop_from_position(struct Moby *moby) __asm__("FUN_L14_002f1040");
 
@@ -201,12 +203,15 @@ void taxi_update(struct Moby *moby) {
         if (g->ground_moby == moby && g->air_frames.s == 0) {
             follow_camera_set_distance(0, 7.0f, 0.002f);
         }
-        advance_accelerated_scalar(
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((float (*)(float, float, float, float, float *, float *))advance_accelerated_scalar)(
             1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &taxi_vars->t, &taxi_vars->tv);
         qcopy_nc(blend_from_position_or_rotation_matrix,
                  &l14_cuboids[taxi_vars->points[taxi_vars->picked]].pos);
         qcopy_nc(blend_from_rotation, &l14_cuboids[taxi_vars->points[taxi_vars->picked]].rot);
-        taxi_sample(0.0f, taxi_vars->path, wrap, blend_to_position, blend_to_rotation, flags);
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((void (*)(float, s32 *, int, void *, void *, int))sample_camera_path)(
+            0.0f, taxi_vars->path, wrap, blend_to_position, blend_to_rotation, flags);
         lerp_vector(taxi_vars->pos,
                     blend_from_position_or_rotation_matrix,
                     blend_to_position,
@@ -226,7 +231,8 @@ void taxi_update(struct Moby *moby) {
     }
     case TAXI_STATE_BLEND_SAVED_POSE_TO_PATH_START: {
         float hermite_blend_fraction;
-        advance_accelerated_scalar(
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((float (*)(float, float, float, float, float *, float *))advance_accelerated_scalar)(
             1.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f, &taxi_vars->t, &taxi_vars->tv);
         qcopy(blend_from_position_or_rotation_matrix, taxi_vars->save_pos);
         qcopy(blend_from_rotation, taxi_vars->save_rot);
@@ -266,7 +272,8 @@ void taxi_update(struct Moby *moby) {
     }
     case TAXI_STATE_BLEND_PATH_END_TO_STOP: {
         struct Hero *g;
-        advance_accelerated_scalar(
+        /* Fakematch: retail moves these arguments in another order; the cast keeps it. */
+        ((float (*)(float, float, float, float, float *, float *))advance_accelerated_scalar)(
             1.0f, frame_time_sq, frame_time_sq, frame_time * 0.25f, &taxi_vars->t, &taxi_vars->tv);
         qcopy_nc(blend_to_position, &l14_cuboids[taxi_vars->points[taxi_vars->target]].pos);
         qcopy_nc(blend_to_rotation, &l14_cuboids[taxi_vars->points[taxi_vars->target]].rot);

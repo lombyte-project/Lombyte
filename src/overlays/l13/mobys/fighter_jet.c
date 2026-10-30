@@ -212,6 +212,7 @@ void draw_fighter_jet_lock_marker(float         x,
                                   unsigned char alpha) {
     int   effect_texture;
     float quad_size;
+    /* Fakematch: retail uses only the low word of the texture; the cast keeps it. */
     effect_texture = ((s32(*)(s32))get_effect_texture)(0x37);
     quad_size = size_scale * 20.0f;
     append_rotated_textured_screen_quad(x,
@@ -966,6 +967,7 @@ void draw_fighter_jet_hud(struct Moby *moby) {
     }
     ex = *(int *)(moby_vars + 0xE0);
     ey = *(int *)(moby_vars + 0xE4);
+    /* Fakematch: retail uses only the low word of the texture; the cast keeps it. */
     aim_reticle_texture = ((s32(*)(s32))get_effect_texture)(0x11);
     append_rotated_sprite_quad(ex,
                                ey,
@@ -981,34 +983,38 @@ void draw_fighter_jet_hud(struct Moby *moby) {
                                0,
                                0.5f,
                                0.5f);
-    append_rotated_sprite_quad(ex,
-                               ey,
-                               40.0f,
-                               40.0f,
-                               0.0f,
-                               0x3F,
-                               0x3F,
-                               ((s32(*)(s32))get_effect_texture)(0x12),
-                               0xFFFFF3,
-                               0xFF20FF20,
-                               0,
-                               0,
-                               0.5f,
-                               0.5f);
-    append_rotated_sprite_quad(ex,
-                               ey,
-                               10.0f,
-                               10.0f,
-                               0.0f,
-                               0x1F,
-                               0x1F,
-                               ((s32(*)(s32))get_effect_texture)(8),
-                               0xFFFFF3,
-                               0xFF20FF20,
-                               0,
-                               0,
-                               0.5f,
-                               0.5f);
+    append_rotated_sprite_quad(
+        ex,
+        ey,
+        40.0f,
+        40.0f,
+        0.0f,
+        0x3F,
+        0x3F,
+        /* Fakematch: retail uses only the low word of the texture; the cast keeps it. */
+        ((s32(*)(s32))get_effect_texture)(0x12),
+        0xFFFFF3,
+        0xFF20FF20,
+        0,
+        0,
+        0.5f,
+        0.5f);
+    append_rotated_sprite_quad(
+        ex,
+        ey,
+        10.0f,
+        10.0f,
+        0.0f,
+        0x1F,
+        0x1F,
+        /* Fakematch: retail uses only the low word of the texture; the cast keeps it. */
+        ((s32(*)(s32))get_effect_texture)(8),
+        0xFFFFF3,
+        0xFF20FF20,
+        0,
+        0,
+        0.5f,
+        0.5f);
     health_warning_player_state = D_0013F350;
     if (*(float *)(health_warning_player_state + 0x15FC) <
             *(float *)(health_warning_player_state + 0x1600) / 10.0f &&

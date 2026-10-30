@@ -1056,6 +1056,7 @@ void draw_tresspasser_puzzle_radial_strip(
     LO4(packed_vertices[3], truncate_float_to_s32(end_sine_component));
 
     strip_texture_tex0 =
+        /* Fakematch: retail uses only the low word of the texture; the cast keeps it. */
         ((s32(*)(s32))get_effect_texture)(tresspasser_radial_strip_texture_index_gp);
     FUN_L02_0020bc88_u(packed_vertices, vertex_uvs, vertex_colors, strip_texture_tex0, 0);
 
@@ -1118,11 +1119,13 @@ void draw_tresspasser_puzzle_textured_quads(void) {
         vertex_colors[0] = vertex_colors[1] = vertex_colors[2] = vertex_colors[3] =
             tresspasser_textured_quad_color_gp;
         packed_vertices = *vertex_quad_cursor++;
-        f20bc88_2dae88(&packed_vertices,
-                       vertex_uvs,
-                       vertex_colors,
-                       ((int (*)(int))get_effect_texture)(D_L02_00161B1C_gp + 0x28),
-                       1);
+        f20bc88_2dae88(
+            &packed_vertices,
+            vertex_uvs,
+            vertex_colors,
+            /* Fakematch: retail uses only the low word of the texture; the cast keeps it. */
+            ((int (*)(int))get_effect_texture)(D_L02_00161B1C_gp + 0x28),
+            1);
     }
 }
 
