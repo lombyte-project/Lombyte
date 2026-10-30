@@ -206,7 +206,7 @@ void update_lift(struct Moby *moby) {
 
 void compute_lift_mount_transform(struct Moby *moby, float *mount_position, float *mount_rotation) {
     float mount_offset_angle, k;
-    char *base;
+    char *mount_facing_target_base;
     clear_u64_value(mount_rotation);
     k = 2.25f;
     if ((moby->command >= 2 && (moby->command & 1)) || (moby->state >= 2 && (moby->state & 1))) {
@@ -221,7 +221,7 @@ void compute_lift_mount_transform(struct Moby *moby, float *mount_position, floa
     mount_position[2] = 1.5f;
     transform_vector_by_basis(mount_position, mount_position, &moby->rot_row0);
     fast_vec_add(mount_position, mount_position, &moby->pos);
-    base = D_0013E533 + 0xE1D;
-    mount_rotation[2] = fast_arc_tan(*(float *)(base + 0xD0) - mount_position[0],
-                                     *(float *)(base + 0xD4) - mount_position[1]);
+    mount_facing_target_base = D_0013E533 + 0xE1D;
+    mount_rotation[2] = fast_arc_tan(*(float *)(mount_facing_target_base + 0xD0) - mount_position[0],
+                                     *(float *)(mount_facing_target_base + 0xD4) - mount_position[1]);
 }
