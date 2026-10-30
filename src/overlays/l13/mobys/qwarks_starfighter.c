@@ -89,13 +89,13 @@ int queue_starfighter_voice_line(void          *unused,
                                  int            base,
                                  int            line_count) __asm__("FUN_L13_002e86f8");
 
-int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int base, int line_count) {
+int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int line_group_start_index, int line_count) {
     int j = rand_q() % line_count;
-    int id = l13_starfighter_voice_line_ids[base + j];
+    int id = l13_starfighter_voice_line_ids[line_group_start_index + j];
     int i;
     int lt;
-    if (base < 0x1D) {
-        if (base < 0xC) {
+    if (line_group_start_index < 0x1D) {
+        if (line_group_start_index < 0xC) {
             if (moby_data[0x148] != 0)
                 return 0;
             if (*(short *)(moby_data + 0x144) > 0)
@@ -103,24 +103,24 @@ int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int bas
         } else {
             if (*(short *)(moby_data + 0x146) > 0)
                 return 0;
-            if (moby_data[0x148] != 0 && base >= 0x17 && base < 0x1B)
+            if (moby_data[0x148] != 0 && line_group_start_index >= 0x17 && line_group_start_index < 0x1B)
                 return 0;
         }
     }
-    lt = base < 0x1D;
+    lt = line_group_start_index < 0x1D;
     if (music_stream_state.secondary.handle != 0 ||
         music_stream_state.queued_secondary_track != -1) {
         if (lt)
             return 0;
     }
-    if (base < 0x1D) {
+    if (line_group_start_index < 0x1D) {
         for (i = 0; i < line_count; i++) {
             if ((*(int *)(moby_data + 0x13C) >> id) & 1) {
-                if (base < 0xC && random_integer_below(4) == 0)
+                if (line_group_start_index < 0xC && random_integer_below(4) == 0)
                     *(int *)(moby_data + 0x13C) &= ~(1 << id);
                 j++;
                 j %= line_count;
-                id = l13_starfighter_voice_line_ids[base + j];
+                id = l13_starfighter_voice_line_ids[line_group_start_index + j];
             } else {
                 music_stream_state.queued_secondary_track = id + 50000;
                 moby_data[0x13A] = 1;
@@ -128,7 +128,7 @@ int queue_starfighter_voice_line(void *unused, unsigned char *moby_data, int bas
                 return 1;
             }
         }
-        if (base < 0xC)
+        if (line_group_start_index < 0xC)
             *(int *)(moby_data + 0x13C) &= ~(1 << id);
     } else {
         music_stream_state.queued_secondary_track = id + 50000;
