@@ -169,7 +169,7 @@ char *spawn_blarg_elite_commando_rocket(char  *owner,
                                         float *initial_movement_vector,
                                         char  *spawn_position) __asm__("FUN_L16_002a09a0");
 
-char *spawn_blarg_elite_commando_rocket(char  *owner,
+char *spawn_blarg_elite_commando_rocket(char  *firing_commando_moby,
                                         float *initial_movement_vector,
 
                                         char *spawn_position) {
@@ -182,13 +182,13 @@ char *spawn_blarg_elite_commando_rocket(char  *owner,
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        MOBY(moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
+        MOBY(moby)->spawn_frame = *(unsigned long *)(firing_commando_moby + 0x38);
         MOBY(moby)->scale = MOBY(moby)->scale * 3.0f;
         qcopy(moby + 0x10, spawn_position);
         spawned_rocket_data = ((char *)MOBY(moby)->pvars);
         qcopy(spawned_rocket_data, initial_movement_vector);
         *(int *)(spawned_rocket_data + 0x14) = scale_game_frames(0xF0);
-        *(char **)(spawned_rocket_data + 0x18) = owner;
+        *(char **)(spawned_rocket_data + 0x18) = firing_commando_moby;
         *(int *)(spawned_rocket_data + 0x10) = 0;
         MOBY(moby)->rot.z = fast_arc_tan(initial_movement_vector[0], initial_movement_vector[1]);
         xy_length = vector_length_xy(initial_movement_vector);
