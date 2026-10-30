@@ -1,5 +1,6 @@
 /* Level 17 moby classes: blarg_ship. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math_consts.h"
@@ -36,7 +37,6 @@
 
 extern char *fleet_moby_array_end __asm__("D_L17_0015FFDC");
 extern char D_0013E52B[];
-extern char D_L17_00167580[];
 extern char fleet_camera_box_configuration_error_format[] __asm__("D_L17_001E6F60");
 extern int D_00141DC4 NOT_SDA;
 extern int fleet_help_request_gate_state[] __asm__("D_L17_00179D10");
@@ -251,7 +251,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
         set_follow_camera_blend_output_flags();
         set_follow_camera_angle_blend_from_position((int)(D_L17_001600EC + (*(int *)(pvars + 0x44) << 7) + 0x30), 0.02617994f,
                          0.0f);
-        cam = D_L17_00167580;
+        cam = (char *)&l17_camera;
         target_heading = fast_arc_tan(*(float *)(D_L17_001600EC + ((*(int *)(pvars + 0x44) << 7) + 0x30)) -
                              *(float *)(cam + 0x140),
                          *(float *)(D_L17_001600EC + ((*(int *)(pvars + 0x44) << 7) + 0x34)) -
@@ -268,7 +268,7 @@ void update_fleet_camera_box_watcher(struct Moby *moby) {
             char *cam;
             set_follow_camera_angle_blend_from_position((int)(D_L17_001600EC + (*(int *)(pvars + 0x40) << 7) + 0x30), 0.02617994f,
                              0.0f);
-            cam = D_L17_00167580;
+            cam = (char *)&l17_camera;
             target_heading = fast_arc_tan(*(float *)(D_L17_001600EC + ((*(int *)(pvars + 0x40) << 7) + 0x30)) -
                                  *(float *)(cam + 0x140),
                              *(float *)(D_L17_001600EC + ((*(int *)(pvars + 0x40) << 7) + 0x34)) -

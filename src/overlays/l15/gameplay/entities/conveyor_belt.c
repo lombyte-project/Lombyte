@@ -1,5 +1,6 @@
 /* Level 15 moby classes: conveyor_belt, poison_vessel, bolt_grabber, codebot_slot, ultramech_scientist. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_save_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/math_consts.h"
@@ -2129,7 +2130,6 @@ int is_hero_in_moby_follow_camera_region(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l15_quartu/vendor_002EDB50.c: func_L15_002F9AE8), where it is exact; names translated to the US level program. */
 
 extern char angular_limit_projection_axis_record[] __asm__("D_L15_00167410");
-extern char D_L15_00167280[];
 
 int check_moby_target_angular_limits(char *moby, float projected_angle_limit_degrees, float b) __asm__("FUN_L15_002f8698");
 
@@ -2155,7 +2155,7 @@ int check_moby_target_angular_limits(char *moby, float projected_angle_limit_deg
     if (projected_angle_limit_degrees == 0.0f && b == 0.0f) {
         return 1;
     }
-    g = D_L15_00167280;
+    g = (char *)&l15_camera;
     fast_vec_sub(target_displacement, target_record + 0x30, *(char **)(g + 0x180) + 0x30);
     dot1 = fast_vec_dot(target_displacement, (projection_axis_record + 0x30));
     fast_vec_scale(scaled_axis_vector, (projection_axis_record + 0x30), dot1);

@@ -143,7 +143,6 @@ extern char D_L10_00167240[];
 extern char ground_hit[] __asm__("D_L10_001742C0");
 extern int level_frame __asm__("D_L11_0015F5CC");
 extern float tide_level __asm__("D_L11_00161E18");
-extern char D_L11_00167680[];
 extern int D_L11_0016D180 __attribute__((section(".data")));
 extern char path_table[] __asm__("D_L11_001B0EB0");
 extern char D_L11_001DA880[];

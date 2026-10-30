@@ -1,5 +1,6 @@
 /* Shared moby classes: rocket, ocean_pokitaru. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -468,7 +469,6 @@ typedef struct {
     float f28;
     float f2C;
 } Data;
-typedef struct { char pad[0x140]; float x, y, z; } Cam;
 typedef struct { char pad[0x228]; float f228, f22C; } Fog;
 
 extern int get_effect_texture(int) __asm__("FUN_001f44b8");
@@ -578,7 +578,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     far_quad.q80 = 0xFF9000000260L;
     far_quad.q88 = 0x8000000044L;
     far_quad.z70 = 0;
-    if (ocean_vars->f14 < ((Cam *)D_L11_00167680)->z - ocean_vars->f24 &&
+    if (ocean_vars->f14 < l11_camera.pos.f[2] - ocean_vars->f24 &&
         hero.state.current != 0x1D && D_L11_0016D180 == 0) {
         far_quad.uv[0].u = 0.0f;
         far_quad.uv[0].v = 0.0f;
@@ -594,10 +594,10 @@ void draw_pokitaru_ocean(struct Moby *moby) {
         far_quad.col[3] = far_quad.col[1];
         *(u128 *)&far_quad.v[0] = *(u128 *)&strip_corners[1];
         *(u128 *)&far_quad.v[1] = *(u128 *)&strip_corners[1];
-        far_quad.v[1].z = ((Cam *)D_L11_00167680)->z - ocean_vars->f24;
+        far_quad.v[1].z = l11_camera.pos.f[2] - ocean_vars->f24;
         *(u128 *)&far_quad.v[2] = *(u128 *)&strip_corners[3];
         *(u128 *)&far_quad.v[3] = *(u128 *)&strip_corners[3];
-        far_quad.v[3].z = ((Cam *)D_L11_00167680)->z - ocean_vars->f24;
+        far_quad.v[3].z = l11_camera.pos.f[2] - ocean_vars->f24;
         draw_geometry_quad(&far_quad, 0, 0);
     }
     vu1_add_g_sregister(0x42, 0x8000000048L);
@@ -606,7 +606,7 @@ void draw_pokitaru_ocean(struct Moby *moby) {
     vu1_add_g_sregister(0x47, 0x513F1);
     colA = ocean_vars->fC;
     colB = ocean_vars->f10;
-    color_interpolation_scalar = 1.0f - (((Cam *)D_L11_00167680)->z - tide_level_macro) / ocean_vars->f2C;
+    color_interpolation_scalar = 1.0f - (l11_camera.pos.f[2] - tide_level_macro) / ocean_vars->f2C;
     if (color_interpolation_scalar > 1.0f) {
         color_interpolation_scalar = 1.0f;
     }
@@ -621,31 +621,31 @@ void draw_pokitaru_ocean(struct Moby *moby) {
                 for (x = ocean_vars->f18 * -2.0f; x < ocean_vars->f18 * 2.0f; x += ocean_vars->f18) {
                     l11_ocean_wave_grid_vertex_uvs[vertex_count].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + wave_offset[layer].u;
                     l11_ocean_wave_grid_vertex_uvs[vertex_count].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + wave_offset[layer].v;
-                    l11_ocean_wave_grid_vertex_positions[vertex_count].x = x + ((Cam *)D_L11_00167680)->x + 1.0f;
-                    l11_ocean_wave_grid_vertex_positions[vertex_count].y = y + ((Cam *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[vertex_count].x = x + l11_camera.pos.f[0] + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[vertex_count].y = y + l11_camera.pos.f[1] + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[vertex_count].z = tide_level_macro;
                     i = vertex_count + 1;
                     l11_ocean_wave_grid_vertex_uvs[i].u = x / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + wave_offset[layer].u;
                     l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + wave_offset[layer].v;
-                    l11_ocean_wave_grid_vertex_positions[i].x = x + ((Cam *)D_L11_00167680)->x + 1.0f;
-                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].x = x + l11_camera.pos.f[0] + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + l11_camera.pos.f[1] + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     i = vertex_count + 2;
                     l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + wave_offset[layer].u;
                     l11_ocean_wave_grid_vertex_uvs[i].v = y / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + wave_offset[layer].v;
-                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam *)D_L11_00167680)->x + 1.0f;
-                    l11_ocean_wave_grid_vertex_positions[i].y = y + ((Cam *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + l11_camera.pos.f[0] + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].y = y + l11_camera.pos.f[1] + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     i = vertex_count + 3;
                     l11_ocean_wave_grid_vertex_uvs[i].u = (x + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + wave_offset[layer].u;
                     l11_ocean_wave_grid_vertex_uvs[i].v = (y + ocean_vars->f18) / (ocean_vars->f18 * 2.0f) * wave_speed[layer] + wave_offset[layer].v;
-                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + ((Cam *)D_L11_00167680)->x + 1.0f;
-                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + ((Cam *)D_L11_00167680)->y + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].x = x + ocean_vars->f18 + l11_camera.pos.f[0] + 1.0f;
+                    l11_ocean_wave_grid_vertex_positions[i].y = y + ocean_vars->f18 + l11_camera.pos.f[1] + 1.0f;
                     l11_ocean_wave_grid_vertex_positions[i].z = tide_level_macro;
                     for (i = vertex_count; i < vertex_count + 4; i++) {
-                        scratch_vector.x = l11_ocean_wave_grid_vertex_positions[i].x - ((Cam *)D_L11_00167680)->x;
-                        scratch_vector.y = l11_ocean_wave_grid_vertex_positions[i].y - ((Cam *)D_L11_00167680)->y;
-                        scratch_vector.z = l11_ocean_wave_grid_vertex_positions[i].z - ((Cam *)D_L11_00167680)->z;
+                        scratch_vector.x = l11_ocean_wave_grid_vertex_positions[i].x - l11_camera.pos.f[0];
+                        scratch_vector.y = l11_ocean_wave_grid_vertex_positions[i].y - l11_camera.pos.f[1];
+                        scratch_vector.z = l11_ocean_wave_grid_vertex_positions[i].z - l11_camera.pos.f[2];
                         scratch_vector.w = 1.0f;
                         color_interpolation_scalar = vector_length_xy(&scratch_vector) / (ocean_vars->f18 * 2.0f);
                         if (color_interpolation_scalar > 1.0f) {

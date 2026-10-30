@@ -1,5 +1,6 @@
 /* Level 11 moby classes: oil_tanker_front, energy_sphere, blarg_ship. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/gameplay/entities/moby.h"
@@ -1779,7 +1780,6 @@ extern char layered_effect_half_gray_rgba_tables[] __asm__("D_L11_001F9A48");
 extern char layered_effect_half_gray_table_entry_counts[] __asm__("D_L11_001F4978");
 extern float layered_effect_position_x_gp __asm__("D_L11_001624E8") __attribute__((sda));
 #include "rnc/overlay/l11/gameplay/entities/oil_tanker_front_data/update_level11_layered_effect_and_queue_draw.h"
-extern char D_L11_00167680[];
 extern int layered_effect_color_tables_initialized_gp __asm__("D_L11_0016252C") __attribute__((sda));
 extern void draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
 extern void scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
@@ -1826,7 +1826,7 @@ void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
         }
         break;
     case EFFECT_UPDATE_AND_QUEUE_DRAW:
-        reference_position_base = D_L11_00167680;
+        reference_position_base = (char *)&l11_camera;
         if (*(float *)(reference_position_base + 0x148) < 170.0f)
             return;
         effect_bounds[0] = layered_effect_position_x_gp;
@@ -1884,7 +1884,7 @@ void draw_level11_distance_faded_effect_batches(struct Moby *moby) {
     vu1_add_g_sregister(0x14, 0xFF9000000260L);
     vu1_add_g_sregister(0x47, 0x513F1L);
     font_queue_vu_state();
-    reference_position_base = D_L11_00167680;
+    reference_position_base = (char *)&l11_camera;
     if (*(float *)(reference_position_base + 0x148) > 255.0f || is_point_inside_clip_volume(reference_position_base + 0x140, moby_vars[0]) ||
         is_point_inside_clip_volume(reference_position_base + 0x140, moby_vars[1]) ||
         is_point_inside_clip_volume(reference_position_base + 0x140, moby_vars[2])) {
@@ -1984,7 +1984,7 @@ void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
         }
         break;
     case EFFECT_UPDATE_AND_QUEUE_DRAW:
-        reference_position_base = D_L11_00167680;
+        reference_position_base = (char *)&l11_camera;
         if (*(float *)(reference_position_base + 0x148) < 170.0f)
             return;
         effect_bounds[0] = distance_faded_effect_position_x_gp;

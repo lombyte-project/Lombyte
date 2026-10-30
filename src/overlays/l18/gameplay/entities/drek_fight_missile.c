@@ -1,5 +1,6 @@
 /* Level 18 moby classes: drek_fight_missile, drek_final_boss_robot, deplanetizer_gun, rocket_tank. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/audio/voice_pool.h"
 
 #include "rnc/gameplay/hero.h"
@@ -3158,7 +3159,6 @@ extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
 extern void FUN_L06_00316330(void *);
 extern int drek_boss_scalar_scan_entry_gates[] __asm__("D_L18_0016A290");
 extern char l18_drek_boss_scalar_scan_records[] __asm__("D_L18_00167B50");
-extern char D_L18_00167680[];
 extern void reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void FUN_L06_00249738(void);
 extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float)
@@ -3246,7 +3246,7 @@ void update_drek_boss_state_dependent_scalars(char *moby) {
                     if (MOBY(moby)->state >= 2) {
                         if (*(int *)(boss_data + 0x3ec) != 0 || D_L18_001623A0_gp != 0) {
                             char *follow_camera_gate_record;
-                            follow_camera_gate_source = D_L18_00167680;
+                            follow_camera_gate_source = (char *)&l18_camera;
                             follow_camera_gate_record = *(char **)(follow_camera_gate_source + 0x180);
                             if (follow_camera_gate_record != 0 && *(short *)(follow_camera_gate_record + 0x86) == 0) {
                                 follow_camera_set_distance(drek_boss_follow_camera_distance_target_gp, 0.003f, 0);
