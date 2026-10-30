@@ -38,7 +38,7 @@ void emit_textured_rectangle(f32 x,
     s32            vb;
     s32            ub;
     long          *packet_words;
-    struct DmaTag *base;
+    struct DmaTag *rectangle_dma_tag;
 
     if (x0 > 0x9000 || x1 < 0x7000 || y0 > 0x9000 || y1 < 0x7000) {
         return;
@@ -51,11 +51,11 @@ void emit_textured_rectangle(f32 x,
     vb = v + vh;
     u0_fixed = u * 16;
     u1_fixed = ub * 16;
-    base = render_packet_cursor.tag;
-    render_packet_cursor.tag = base + 1;
-    qcopy(base + 1, textured_rectangle_packet_header_template);
-    packet_words = (long *)(base + 2);
-    render_packet_cursor.tag = base + 2;
+    rectangle_dma_tag = render_packet_cursor.tag;
+    render_packet_cursor.tag = rectangle_dma_tag + 1;
+    qcopy(rectangle_dma_tag + 1, textured_rectangle_packet_header_template);
+    packet_words = (long *)(rectangle_dma_tag + 2);
+    render_packet_cursor.tag = rectangle_dma_tag + 2;
     packet_words[0] = texture_packet_word;
     packet_words[1] = 0x154;
     packet_words[2] =
