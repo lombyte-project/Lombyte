@@ -2,12 +2,6 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 
-struct CameraView {
-    u8 pad_0[0x140];
-    f32 unk140;
-    f32 unk144;
-    f32 unk148;
-};
 
 struct ScreenPoint {
     f32 unk0;
@@ -31,7 +25,7 @@ struct Locals {
     f32 v9C;
 };
 
-extern struct CameraView preview_camera __asm__("D_00186F40");
+#include "rnc/ui/menus/menu_globals.h"
 extern f32 D_0018CF10[];
 void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) __asm__("FUN_001f2070");
 
@@ -42,9 +36,9 @@ void project_to_screen(struct ScreenPoint *screen_out, s32 world_pos) {
     f32 x;
 
     set_identity_matrix(&L);
-    L.v30 = -preview_camera.unk140 * 1024.0f;
-    L.v34 = -preview_camera.unk144 * 1024.0f;
-    L.v38 = -preview_camera.unk148 * 1024.0f;
+    L.v30 = -preview_camera.position.f[0] * 1024.0f;
+    L.v34 = -preview_camera.position.f[1] * 1024.0f;
+    L.v38 = -preview_camera.position.f[2] * 1024.0f;
     multiply_matrix(&L.v40, (u8 *)&preview_camera + 0x40, &L);
     fast_vec_scale(&L.blk80, world_pos, 1024.0f);
     L.v8C = 1.0f;

@@ -17,7 +17,7 @@ int setup_menu_display_text(char *menu) __asm__("FUN_0021ef78");
 
 int setup_menu_display_text(char *menu) {
     char formatted_menu_text[0x100];
-    char *preview_camera_state = preview_camera;
+    char *preview_camera_state = (char *)&preview_camera;
     char *menu_moby_list = *(char **)(menu + 0x44);
     int count;
 

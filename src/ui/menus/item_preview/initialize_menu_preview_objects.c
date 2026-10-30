@@ -57,7 +57,7 @@ int initialize_menu_preview_objects(char *preview) {
         held_flag--;
     }
     if (object != 0) {
-        char *camera = preview_camera;
+        char *camera = (char *)&preview_camera;
         struct MenuSystem *g;
 
         *(char **)(preview + 0x44) = object;

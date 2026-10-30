@@ -14,7 +14,7 @@ int enter_streamed_moby_screen(char *screen_state) {
     *(int *)(screen_state + 0x34) = 0;
     if (preview_moby != 0) {
         char *moby_sidecar;
-        char *preview_camera_state = preview_camera;
+        char *preview_camera_state = (char *)&preview_camera;
         *(char **)(screen_state + 0x44) = preview_moby;
         *(short *)(preview_moby + 0x34) = 0;
         *(float *)(preview_moby + 0x10) = *(float *)(preview_camera_state + 0x140) + 2.2f;

@@ -18,13 +18,7 @@ struct RotatingPreviewMoby {
     void (*update)(struct RotatingPreviewMoby *);
     struct RotatingPreviewOwner **preview_vars;
 };
-struct PreviewCamera {
-    u8 pad00[0x140];
-    f32 x;
-    f32 y;
-    f32 z;
-};
-extern struct PreviewCamera preview_camera __asm__("D_00186F40");
+#include "rnc/ui/menus/menu_globals.h"
 extern struct RotatingPreviewMoby *create_menu_preview_moby(s32) __asm__("func_00225490");
 extern void rotate_preview_moby_x(struct RotatingPreviewMoby *) __asm__("FUN_0021f120");
 s32 create_rotating_preview_moby(struct RotatingPreviewOwner *owner) __asm__("FUN_0021ea48");
@@ -35,9 +29,9 @@ s32 create_rotating_preview_moby(struct RotatingPreviewOwner *owner) {
     if (moby != 0) {
         owner->preview_moby = moby;
         moby->flags = 0;
-        moby->x = preview_camera.x + 8.0f;
-        moby->y = preview_camera.y + 0.5f;
-        moby->z = preview_camera.z - 0.1f;
+        moby->x = preview_camera.position.f[0] + 8.0f;
+        moby->y = preview_camera.position.f[1] + 0.5f;
+        moby->z = preview_camera.position.f[2] - 0.1f;
         moby->rotation_y = -1.9f;
         moby->update = rotate_preview_moby_x;
         *moby->preview_vars = owner;

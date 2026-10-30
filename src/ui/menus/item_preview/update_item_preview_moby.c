@@ -28,7 +28,7 @@ int update_item_preview_moby(struct MenuScreen *menu) {
         char *spawned_moby = create_menu_preview_moby(want);
 
         if (spawned_moby != 0) {
-            char *preview_camera_base = preview_camera;
+            char *preview_camera_base = (char *)&preview_camera;
 
             menu->data.preview.moby = spawned_moby;
             *(short *)(spawned_moby + 0x34) = 0;

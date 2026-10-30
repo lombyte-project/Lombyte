@@ -24,11 +24,6 @@ typedef struct {
     s16 class_id;
 } EnvironmentMappedObject;
 
-typedef struct {
-    u8 pad0[0x140];
-    float position_x;
-    float position_y;
-} EnvironmentCameraState;
 
 #include "rnc/rendering/entities/render_environment_mapped_object_globals.h"
 #include "rnc/rendering/entities/render_environment_mapped_object_globals.h"
@@ -42,7 +37,7 @@ extern s32 environment_mesh_quad_counts[2] __asm__("D_00160540") __attribute__((
 extern Vec4 *environment_mesh_normals[2] __asm__("D_00160550") __attribute__((sda));
 extern Vec4 *environment_mesh_positions[2] __asm__("D_00160560") __attribute__((sda));
 extern IndexedQuad *environment_mesh_quads[2] __asm__("D_00160570") __attribute__((sda));
-extern EnvironmentCameraState preview_camera __asm__("D_00186F40");
+#include "rnc/ui/menus/menu_globals.h"
 extern Vec4 environment_mapping_transformed_vertex_positions[] __asm__("D_001DC4E0");
 extern float environment_mapping_vertex_uvs[][2] __asm__("D_001DCB40");
 extern float environment_mapping_saved_vertex_uvs[][2] __asm__("D_001DCE70");
@@ -107,8 +102,8 @@ void render_environment_mapped_object(EnvironmentMappedObject *object) {
     colors[1] = color;
     colors[0] = color;
     build_moby_bone_transform(object, 0, object_transform);
-    if (game_mode != 0 || (absolute_float(preview_camera.position_x - object->position_x) < 16.0f &&
-                            absolute_float(preview_camera.position_y - object->position_y) < 16.0f)) {
+    if (game_mode != 0 || (absolute_float(preview_camera.position.f[0] - object->position_x) < 16.0f &&
+                            absolute_float(preview_camera.position.f[1] - object->position_y) < 16.0f)) {
         mapping_enabled = 1;
     }
     if (game_mode == 6 && ship_substate[0] == 4) {

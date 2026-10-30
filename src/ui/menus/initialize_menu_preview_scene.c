@@ -8,10 +8,6 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/rendering/render_globals.h"
 
-struct S {
-    u8 pad_0[0x140];
-    float f140, f144, f148;
-};
 struct P {
     u8 pad_0[0x10];
     u8 f10;
@@ -37,7 +33,7 @@ extern struct MenuPage menu_preview_initial_page __asm__("D_001D45C8"); /* page 
 extern u8 D_0019C150[];
 extern u8 D_0019C160[];
 extern void quad_moby_update() __asm__("FUN_0023a2c0");
-extern struct S preview_camera __asm__("D_00186F40");
+#include "rnc/ui/menus/menu_globals.h"
 #include "rnc/ui/menus/initialize_menu_preview_scene_globals.h"
 #include "rnc/math/fast_math.h"
 extern u8 menu_preview_lighting_scale_source_gp __asm__("D_001601C0") __attribute__((sda));
@@ -88,9 +84,9 @@ void initialize_menu_preview_scene(void) {
                 s32 k;
                 preview_moby->f34 &= 0xFFFD;
                 ((struct O2 *)panel_slots[i])->f74 = quad_moby_update;
-                ((struct O2 *)panel_slots[i])->f10 = preview_camera.f140;
-                ((struct O2 *)panel_slots[i])->f14 = preview_camera.f144;
-                ((struct O2 *)panel_slots[i])->f18 = preview_camera.f148;
+                ((struct O2 *)panel_slots[i])->f10 = preview_camera.position.f[0];
+                ((struct O2 *)panel_slots[i])->f14 = preview_camera.position.f[1];
+                ((struct O2 *)panel_slots[i])->f18 = preview_camera.position.f[2];
                 ((struct O2 *)panel_slots[i])->f40 = 0;
                 ((struct O2 *)panel_slots[i])->f44 = 0;
                 ((struct O2 *)panel_slots[i])->f48 = 0;

@@ -2,6 +2,7 @@
 #define LOMBYTE_RNC_UI_MENUS_MENU_GLOBALS_H
 
 #include "types.h"
+#include "rnc/math/vector.h"
 
 extern unsigned char menu_item_enabled_0 __asm__("D_0013D394") __attribute__((section(".data")));
 extern unsigned char menu_item_enabled_9 __asm__("D_0013D39D") __attribute__((section(".data")));
@@ -33,7 +34,20 @@ typedef struct MenuItemInfo {
 } MenuItemInfo;
 
 extern MenuItemInfo menu_item_info[] __asm__("D_001863D0");
-extern char preview_camera[] __asm__("D_00186F40");
+/* The active camera (D_00186F40): the view matrices update_camera_view_matrices
+   builds, the camera position and basis, and the camera-switch state. */
+struct PreviewCamera {
+    f32 view_matrices[0x50];      /* 0x000 */
+    Vec4 position;                /* 0x140 */
+    Vec4 rotation;                /* 0x150: basis angles while the camera rows are not published */
+    u8 pad160[0x258 - 0x160];
+    f32 timed_control_step;       /* 0x258: advance_timed_camera_control subtracts it from sequence */
+    u8 pad25C[0x350 - 0x25C];
+    Vec4 forward;                 /* 0x350 */
+    Vec4 right;                   /* 0x360 */
+    Vec4 up;                      /* 0x370 */
+};
+extern struct PreviewCamera preview_camera __asm__("D_00186F40");
 /* Level object mobys, indexed by map icon id (copy_level_object_positions, update_map_icons). */
 struct Moby;
 extern struct Moby *menu_action_messages[] __asm__("D_00199478");

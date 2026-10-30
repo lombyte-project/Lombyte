@@ -42,7 +42,7 @@ void update_camera(void) {
         *(short *)cam_trans_state = 0;
         cam_trans_state[2] = 0;
     }
-    preview_camera_state = preview_camera;
+    preview_camera_state = (char *)&preview_camera;
     (*(int *)(preview_camera_state + 0x398))++;
     advance_timed_camera_control();
     refresh_camera_control_flags();
