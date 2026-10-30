@@ -657,15 +657,6 @@ typedef union {
     u128_2c82f0 q;
     float f[4];
 } Vec4_2c82f0;
-typedef struct {
-    u8 p0[0x100];
-    Vec4_2c82f0 v100;
-    u8 p1[0x2FC - 0x110];
-    void *w2FC;
-    u8 p2[0x2080 - 0x300];
-    char *w2080;
-} S13F350;
-extern S13F350 D_0013F350_002c82f0 __asm__("D_0013F350");
 extern float D_0015ED70_002c82f0 __asm__("D_0015ED70");
 extern char collision_hit_point[] __asm__("D_L00_00173E60") NOT_SDA;
 void *FUN_L00_002603d0_002c82f0(void *) __asm__("FUN_L00_002603d0");
@@ -677,19 +668,19 @@ void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released
 
 void release_glove_of_doom_held_moby(Vec4_2c82f0 *release_position, u8 *released_moby, void *initial_velocity) {
     char *q = *(char **)(released_moby + 0x78);
-    S13F350 *P;
+    struct Hero *P;
     char *released_moby_position, *collision_reference_moby;
     Vec4_2c82f0 collision_start, collision_position_offset;
     qcopy(q, initial_velocity);
-    P = &D_0013F350_002c82f0;
-    if (P->w2FC && FUN_L00_002603d0_002c82f0(P->w2FC)) {
-        FUN_001f9a10_002c82f0(q, q, &P->v100);
+    P = &hero;
+    if (P->ground_moby && FUN_L00_002603d0_002c82f0(P->ground_moby)) {
+        FUN_001f9a10_002c82f0(q, q, &P->motion.displacement);
     }
     released_moby_position = released_moby + 0x10;
     qcopy(released_moby_position, release_position);
     {
-        S13F350 *P2 = &D_0013F350_002c82f0;
-        collision_reference_moby = P2->w2080;
+        struct Hero *P2 = &hero;
+        collision_reference_moby = (char *)P2->moby;
     }
     collision_start.q = ((Vec4_2c82f0 *)(collision_reference_moby + 0x10))->q;
     collision_start.f[2] = release_position->f[2];

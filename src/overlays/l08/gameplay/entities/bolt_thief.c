@@ -582,10 +582,6 @@ struct CannonData52 {
     Moby *visual; float visual_angle;
 };
 
-typedef struct Hero52 {
-    char pad0[0x80]; float pos[4], rot[4]; char padA0[0x156F]; unsigned char interact;
-    char pad1610[0x710]; float input[2]; char pad1D28[0x358]; Moby *moby;
-} Hero52;
 
 
 char *FUN_L00_0026dd20(void *pos, void *dir, int a, int b, float f);
@@ -621,7 +617,6 @@ extern void mark_moby_for_removal(void *) __asm__("func_0020C828");
 void set_race_camera(void *pos, void *rot, int mode, int flag) __asm__("FUN_L00_00216f90");
 void FUN_L08_00306b30(u8 *object, s32 mode);
 void FUN_L08_00313ba8(void);
-extern Hero52 hero52 __asm__("D_0013F350");
 extern char D_0013E633_2E16A0[] __asm__("D_0013CAE0");
 extern char D_0013A5E0_2E16A0[] __asm__("D_0013CAE4");
 extern unsigned char visited52[][16] __asm__("D_0014C050");
@@ -667,13 +662,13 @@ void update_batalia_cannon(Moby *moby) {
     qcopy(position, (*(float (*)[4])&moby->pos));
     position[2] += 0.4f;
     if (fast_dec_timer_s16(&data->exit_timer) && moby->command == 1) {
-        qcopy(hero52.pos, position);
-        qcopy(hero52.rot, (*(float (*)[4])&moby->rot));
-        offset[0] = fast_cos(hero52.rot[2]) * -0.7f;
-        offset[1] = fast_sin(hero52.rot[2]) * -0.7f;
+        qcopy(hero.motion.pos.f, position);
+        qcopy(hero.motion.rot.f, (*(float (*)[4])&moby->rot));
+        offset[0] = fast_cos(hero.motion.rot.f[2]) * -0.7f;
+        offset[1] = fast_sin(hero.motion.rot.f[2]) * -0.7f;
         offset[2] = 0.0f;
-        fast_vec_add(hero52.pos, hero52.pos, offset);
-        fast_mem_zero16((char *)hero52.pos + 0x60, 0x90);
+        fast_vec_add(hero.motion.pos.f, hero.motion.pos.f, offset);
+        fast_mem_zero16((char *)hero.motion.pos.f + 0x60, 0x90);
         if (data->health == 0) {
             Moby *node;
             (*(float (*)[4])&moby->rot)[1] = 0.0f; moby->command = 2;
@@ -687,9 +682,9 @@ void update_batalia_cannon(Moby *moby) {
             func_L08_00307FF0_2E16A0((char *)node, 0);
             return;
         }
-        if (visited52[D_0015ED84][moby->mission] != 0xFF && (hero52.interact & 1)) hero_respawn();
+        if (visited52[D_0015ED84][moby->mission] != 0xFF && (hero.ship_flags & 1)) hero_respawn();
         if (((*(int *)D_0013A5E0_2E16A0 & 0x10) || (*(unsigned char *)(l08_cannon_hero_interaction_flags) & 1)) && visited52[D_0015ED84][moby->mission] == 0xFF) {
-            hero52.interact = 0;
+            hero.ship_flags = 0;
             hero_set_state(0, 1);
             moby->command = 2; (*(float (*)[4])&moby->rot)[1] = 0.0f;
             euler_rotation_basis((*(float (*)[16])&moby->rot_row0), (*(float (*)[4])&moby->rot));
@@ -698,7 +693,7 @@ void update_batalia_cannon(Moby *moby) {
             fast_vec_add(work, work, (*(float (*)[4])&moby->pos));
             func_L00_00217718_2E16A0(work, direction, 0, 1);
             jet_end_mount(0);
-            hero52.rot[2] = fast_add_rotations(hero52.rot[2], 3.1415927f);
+            hero.motion.rot.f[2] = fast_add_rotations(hero.motion.rot.f[2], 3.1415927f);
             moby->state = 4;
         } else {
             int *indices; int count;
@@ -718,12 +713,12 @@ void update_batalia_cannon(Moby *moby) {
             }
         }
     } else if (moby->command == 2) {
-        if (vector_distance_xy(position, (*(float (*)[4])&hero52.moby->pos)) > 1.0f) {
+        if (vector_distance_xy(position, (*(float (*)[4])&hero.moby->pos)) > 1.0f) {
             moby->command = 0;
             data->exit_timer = scale_game_frames(60);
         }
     } else if (visited52[D_0015ED84][moby->mission] == 0xFF) {
-        if (vector_distance_xy(position, (*(float (*)[4])&hero52.moby->pos)) < 1.0f && hero52.pos[2] - (*(float (*)[4])&moby->pos)[2] < 7.0f && data->exit_timer == 0 && data->health > 0) {
+        if (vector_distance_xy(position, (*(float (*)[4])&hero.moby->pos)) < 1.0f && hero.motion.pos.f[2] - (*(float (*)[4])&moby->pos)[2] < 7.0f && data->exit_timer == 0 && data->health > 0) {
             moby->command = 1;
             hero_set_state(50, 1);
         }
@@ -749,8 +744,8 @@ void update_batalia_cannon(Moby *moby) {
     }
     case CANNON_MOUNTED_CONTROL:
         if (data->health < 0) data->health = 0;
-        work[0] = hero52.input[0];
-        work[1] = invert52 ? hero52.input[1] : -hero52.input[1];
+        work[0] = hero.stick_x;
+        work[1] = invert52 ? hero.stick_y : -hero.stick_y;
         magnitude = vector_length_xy(work);
         if (magnitude > 1.0f) func_L00_001FF328_2E16A0(work, work, magnitude);
         yaw = D_L08_00161AE8_gp * 0.017453292f * D_0015ED6C * -work[0];
@@ -883,9 +878,9 @@ void update_batalia_cannon(Moby *moby) {
                     for (i=0; i<4; i++) {
                         Moby *node;
                         node = (Moby *)(D_L08_0015FFD8 + (indices[i] << 8));
-                        if (fast_difference_between_rotations(fast_arc_tan((*(float (*)[4])&node->pos)[0]-hero52.pos[0], (*(float (*)[4])&node->pos)[1]-hero52.pos[1]), hero52.rot[2]) < best_angle && node->state < 0x7F) {
+                        if (fast_difference_between_rotations(fast_arc_tan((*(float (*)[4])&node->pos)[0]-hero.motion.pos.f[0], (*(float (*)[4])&node->pos)[1]-hero.motion.pos.f[1]), hero.motion.rot.f[2]) < best_angle && node->state < 0x7F) {
                             best = i;
-                            best_angle = fast_difference_between_rotations(fast_arc_tan((*(float (*)[4])&node->pos)[0]-hero52.pos[0], (*(float (*)[4])&node->pos)[1]-hero52.pos[1]), hero52.rot[2]);
+                            best_angle = fast_difference_between_rotations(fast_arc_tan((*(float (*)[4])&node->pos)[0]-hero.motion.pos.f[0], (*(float (*)[4])&node->pos)[1]-hero.motion.pos.f[1]), hero.motion.rot.f[2]);
                         }
                     }
                     data->target_index = best;
