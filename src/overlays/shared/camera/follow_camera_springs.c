@@ -812,14 +812,14 @@ void apply_follow_camera_translation(char *camera) {
 
 void compute_follow_camera_offset_target_up_projection(void *out) __asm__("FUN_L00_002e48a0");
 
-void compute_follow_camera_offset_target_up_projection(void *out) {
+void compute_follow_camera_offset_target_up_projection(void *out_target_up_projection) {
     V4    offset_target_position, hero_position;
     char *camera_view = D_L00_00166E10;
     vcopy_2e48a0(offset_target_position, camera_view + 0x20);
     follow_camera_hero_target(*(int *)(camera_view - 0x10), hero_position);
     fast_vec_add(offset_target_position, offset_target_position, hero_position);
     fast_vec_scale(
-        out, camera_view + 0x30, fast_vec_dot(camera_view + 0x30, offset_target_position));
+        out_target_up_projection, camera_view + 0x30, fast_vec_dot(camera_view + 0x30, offset_target_position));
 }
 
 /* camera attach mode transitions: picks the next state from the player's state and arms its timers */
