@@ -1635,7 +1635,7 @@ void handle_gadgebot_hit_knockback(unsigned char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002F4C00), where it is exact; names translated to the US level program. */
 void draw_gadgebot_group_glow_effects(char *owner) __asm__("FUN_L06_002f37d0");
 
-void draw_gadgebot_group_glow_effects(char *owner) {
+void draw_gadgebot_group_glow_effects(char *group_reference_moby) {
     int   list;
     float effect_scale = 0.057f;
     int   i;
@@ -1643,11 +1643,11 @@ void draw_gadgebot_group_glow_effects(char *owner) {
     char *effect_position;
     if (big_head_cheat_enabled_macro[3] != 0)
         effect_scale = 0.114f;
-    get_first_moby_in_group(&list, ((unsigned char *)owner)[0x21], 0, 0);
+    get_first_moby_in_group(&list, ((unsigned char *)group_reference_moby)[0x21], 0, 0);
     while (list != 0) {
         if (*(unsigned char *)(list + 0x31) != 0) {
             moby_vars = *(char **)(list + 0x78);
-            if (*(short *)(list + 0xA6) == *(short *)(owner + 0xA6)) {
+            if (*(short *)(list + 0xA6) == *(short *)(group_reference_moby + 0xA6)) {
                 effect_position = moby_vars + 0x140;
                 for (i = 2; i >= 0; i--) {
                     draw_offset_textured_effect_quad(
