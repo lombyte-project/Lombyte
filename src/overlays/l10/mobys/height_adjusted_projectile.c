@@ -51,7 +51,7 @@ void update_height_adjusted_projectile(struct Moby *moby) {
         HEIGHT_MODE_FOLLOW_SELECTED_MOBY_HEIGHT = 3
     };
     char *projectile_vars = (char *)moby->pvars;
-    float old[4] __attribute__((aligned(16)));
+    float movement_start_position[4] __attribute__((aligned(16)));
     float found[20] __attribute__((aligned(16)));
     float check[4] __attribute__((aligned(16)));
     float raised[4] __attribute__((aligned(16)));
@@ -59,7 +59,7 @@ void update_height_adjusted_projectile(struct Moby *moby) {
     float rand_dir[4] __attribute__((aligned(16)));
     int   i;
 
-    qcopy(old, &moby->pos);
+    qcopy(movement_start_position, &moby->pos);
     fast_vec_add(&moby->pos, &moby->pos, projectile_vars);
     find_point_ahead(20.0f, moby, found);
     switch (*(short *)(projectile_vars + 0x12)) {
@@ -94,14 +94,14 @@ void update_height_adjusted_projectile(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    if (collision_line(old, &moby->pos, 0, *(int *)(projectile_vars + 0x20), (int)hit)) {
+    if (collision_line(movement_start_position, &moby->pos, 0, *(int *)(projectile_vars + 0x20), (int)hit)) {
         char        *collision = D_L10_001742C0;
-        struct Moby *other = *(struct Moby **)(collision + 0x18);
-        if (other == 0 || other->oclass != 0x359) {
+        struct Moby *impacted_moby = *(struct Moby **)(collision + 0x18);
+        if (impacted_moby == 0 || impacted_moby->oclass != 0x359) {
             qcopy(&moby->pos, collision + 0x20);
             if (*(char **)(projectile_vars + 0x14) != 0) {
-                if (other != 0) {
-                    if (other == D_001413D0_lui && *(struct Moby **)(projectile_vars + 0x20) != 0 &&
+                if (impacted_moby != 0) {
+                    if (impacted_moby == D_001413D0_lui && *(struct Moby **)(projectile_vars + 0x20) != 0 &&
                         (*(struct Moby **)(projectile_vars + 0x20))->state != 0xfe &&
                         (*(struct Moby **)(projectile_vars + 0x20))->state != 0xfd)
                         **(char **)(projectile_vars + 0x14) = 1;
