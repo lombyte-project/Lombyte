@@ -584,7 +584,7 @@ void process_blarg_space_commando_hits(char *moby) {
         HIT_RESPONSE_PRESERVING_MOBY_STATE = 11
     };
     extern unsigned char D_0013D408[];
-    char                *vars;
+    char                *commando_state;
     char                *hit_record;
     char                *fragment;
     int                 *route_record;
@@ -598,19 +598,19 @@ void process_blarg_space_commando_hits(char *moby) {
     float                remaining_health;
     float                lo, hi, spd, minimum_fragment_speed, pull;
 
-    vars = ((char *)MOBY(moby)->pvars);
+    commando_state = ((char *)MOBY(moby)->pvars);
     MOBY(moby)->scale = *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * D_L06_00161FA8;
     update_blarg_space_commando_beam(moby);
-    if (*(int *)(vars + 0x38) != 0) {
-        *(int *)(vars + 0x188) =
+    if (*(int *)(commando_state + 0x38) != 0) {
+        *(int *)(commando_state + 0x188) =
             truncate_float_to_s32(FUN_L04_001f1978(random_float_between(180.0f, 240.0f)));
-        *(int *)(vars + 0x38) = 0;
+        *(int *)(commando_state + 0x38) = 0;
     }
-    fast_dec_timer((s32 *)(vars + 0x188));
+    fast_dec_timer((s32 *)(commando_state + 0x188));
     *(int *)&dt = 0;
     hit_record = find_moby_hit(moby, 0x330000, 0);
     hit_response_index =
-        resolve_moby_hit_response(moby, hit_record, vars + 0x20, 0, &hit, &dt, 0, 4);
+        resolve_moby_hit_response(moby, hit_record, commando_state + 0x20, 0, &hit, &dt, 0, 4);
     if (hit != 1 && (unsigned char)moby[0x20] != 0x10) {
         if (current_level_index_gp == 0xA && hit_record != 0 &&
             *(char **)(hit_record + 0x20) != 0 &&
@@ -619,12 +619,12 @@ void process_blarg_space_commando_hits(char *moby) {
             allocate_voice_for_bank_entry(1, 0, 0);
             queue_dialogue_message(0x53D6, -1);
         }
-        remaining_health = *(float *)(vars + 0x20) - dt;
-        *(float *)(vars + 0x20) = remaining_health;
+        remaining_health = *(float *)(commando_state + 0x20) - dt;
+        *(float *)(commando_state + 0x20) = remaining_health;
         if (remaining_health <= 0.0f)
             hit_response_index = 1;
-        *(int *)(vars + 0x80) = 0x1F4;
-        *(float *)(vars + 0x88) = 0.5f;
+        *(int *)(commando_state + 0x80) = 0x1F4;
+        *(float *)(commando_state + 0x88) = 0.5f;
         switch (hit_response_index) {
         case NONFATAL_KNOCKBACK_HIT_RESPONSE:
         case TIMED_NONFATAL_KNOCKBACK_HIT_RESPONSE:
@@ -638,15 +638,15 @@ void process_blarg_space_commando_hits(char *moby) {
             int   knockback_frames;
             float b, a;
             moby[0x20] = 0xF;
-            q = vars + 0x60;
+            q = commando_state + 0x60;
             knockback_frames = scale_game_frames(0x3C);
             a = nonfatal_knockback_horizontal_speed_gp * D_0015ED6C;
             b = nonfatal_knockback_vertical_speed_gp * D_0015ED6C;
-            *(short *)(vars + 0x26) = knockback_frames;
-            *(float *)(vars + 0x7C) = b;
-            *(float *)(vars + 0x78) = a;
-            *(float *)(vars + 0xB0) = 8.0f;
-            *(float *)(vars + 0xB4) = 15.0f;
+            *(short *)(commando_state + 0x26) = knockback_frames;
+            *(float *)(commando_state + 0x7C) = b;
+            *(float *)(commando_state + 0x78) = a;
+            *(float *)(commando_state + 0xB0) = 8.0f;
+            *(float *)(commando_state + 0xB4) = 15.0f;
             trooper_start_knockback(
                 moby,
                 q,
@@ -654,7 +654,7 @@ void process_blarg_space_commando_hits(char *moby) {
                 7,
                 1,
                 0);
-            *(unsigned char *)(vars + 0x117) = 0xFA;
+            *(unsigned char *)(commando_state + 0x117) = 0xFA;
             break;
         }
         case FATAL_HIT_RESPONSE:
@@ -662,14 +662,14 @@ void process_blarg_space_commando_hits(char *moby) {
             char *q;
             float a, b;
             moby[0x20] = 0x10;
-            q = vars + 0x60;
+            q = commando_state + 0x60;
             a = fatal_knockback_horizontal_speed_gp * D_0015ED6C;
             b = fatal_knockback_vertical_speed_gp * D_0015ED6C;
             MOBY(moby)->flags &= 0xEFFF;
-            *(float *)(vars + 0x78) = a;
-            *(float *)(vars + 0x7C) = b;
-            *(float *)(vars + 0xB0) = 9.0f;
-            *(float *)(vars + 0xB4) = 18.0f;
+            *(float *)(commando_state + 0x78) = a;
+            *(float *)(commando_state + 0x7C) = b;
+            *(float *)(commando_state + 0xB0) = 9.0f;
+            *(float *)(commando_state + 0xB4) = 18.0f;
             bits = 0;
             lo = *(float *)&bits;
             bits = 0x3E4CCCCD;
@@ -707,7 +707,7 @@ void process_blarg_space_commando_hits(char *moby) {
                     *(float *)(fragment + 0x2C) = *(float *)(fragment + 0x2C) * 0.4f;
                 }
             }
-            *(unsigned char *)(vars + 0x117) = 0xFA;
+            *(unsigned char *)(commando_state + 0x117) = 0xFA;
             FUN_L00_00257470(moby, 0, -1);
             break;
         }
@@ -716,29 +716,29 @@ void process_blarg_space_commando_hits(char *moby) {
         default:
             break;
         }
-        trooper_anim_update(moby, (short *)(vars + 0x110));
+        trooper_anim_update(moby, (short *)(commando_state + 0x110));
     }
     MOBY(moby)->hit_slot = 0xFF;
-    trooper_anim_finish(moby, vars + 0x110);
-    if (*(int *)(vars + 0x188) != 0) {
-        *(float *)(vars + 0x198) = base_home_distance_limit_gp + 6.0f;
+    trooper_anim_finish(moby, commando_state + 0x110);
+    if (*(int *)(commando_state + 0x188) != 0) {
+        *(float *)(commando_state + 0x198) = base_home_distance_limit_gp + 6.0f;
     } else {
-        *(float *)(vars + 0x198) = base_home_distance_limit_gp;
+        *(float *)(commando_state + 0x198) = base_home_distance_limit_gp;
     }
     {
-        char *q = vars + 0x120;
-        route_record = D_L06_001B0C30[*(int *)(vars + 0x180)];
+        char *q = commando_state + 0x120;
+        route_record = D_L06_001B0C30[*(int *)(commando_state + 0x180)];
         if (FUN_L00_0025ff38(
-                *(float *)(vars + 0x198), moby, q, 0, 0, route_record + 4, *route_record) != 2) {
-            if (*(float *)(vars + 0x198) < vector_distance_xy(vars + 0x170, vars + 0x120)) {
-                *(int *)(vars + 0x164) = 2;
-            } else if (3.0f < absolute_float(MOBY(moby)->pos.z - *(float *)(vars + 0x128))) {
-                *(int *)(vars + 0x164) = 2;
+                *(float *)(commando_state + 0x198), moby, q, 0, 0, route_record + 4, *route_record) != 2) {
+            if (*(float *)(commando_state + 0x198) < vector_distance_xy(commando_state + 0x170, commando_state + 0x120)) {
+                *(int *)(commando_state + 0x164) = 2;
+            } else if (3.0f < absolute_float(MOBY(moby)->pos.z - *(float *)(commando_state + 0x128))) {
+                *(int *)(commando_state + 0x164) = 2;
             }
         }
     }
-    if (*(int *)(vars + 0x160) == 0) {
-        *(int *)(vars + 0x160) = *(int *)(((char *)&D_001413D0));
+    if (*(int *)(commando_state + 0x160) == 0) {
+        *(int *)(commando_state + 0x160) = *(int *)(((char *)&D_001413D0));
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00300530), where it is exact; names translated to the US level program. */
