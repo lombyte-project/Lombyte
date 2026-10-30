@@ -9,7 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/math/fast_math.h"
 
@@ -288,7 +288,7 @@ char *select_nearest_drone_target(char *search_position, int *excl) {
         class_callback_data = get_moby_suck_cannon_record(candidate_moby);
         if (class_callback_data != 0 && *(short *)(class_callback_data + 0x68) > 0)
             continue;
-        x = (char *)suck_get_aim_height(candidate_moby);
+        x = (char *)get_moby_target_info(candidate_moby);
         qcopy(candidate_position_scratch, candidate_moby + 0x10);
         if (x != 0)
             candidate_position_scratch[2] =
@@ -405,7 +405,7 @@ void update_drone(struct Moby *updated_moby) {
             other = func_L00_002CF3D8_2CF808(&hero.motion, ((DroneSlots *)&hero)->exclusions);
             if (other != 0) {
                 char *h;
-                h = suck_get_aim_height(other);
+                h = get_moby_target_info(other);
                 qcopy(&old_pos, &other->pos);
                 if (h != 0)
                     old_pos.f[2] += *(f32 *)(h + 0x10);
@@ -428,7 +428,7 @@ void update_drone(struct Moby *updated_moby) {
                     char      *target_height_data;
                     assigned->target = other;
                     assigned->target_oclass = other->oclass;
-                    target_height_data = suck_get_aim_height(other);
+                    target_height_data = get_moby_target_info(other);
                     qcopy(&old_pos, &other->pos);
                     if (target_height_data != 0)
                         old_pos.f[2] += *(f32 *)(target_height_data + 0x10);
@@ -607,7 +607,7 @@ state3: {
     target = drone_vars->target;
     if (target != 0 && target->oclass == drone_vars->target_oclass && target->state != 0xFE &&
         target->state != 0xFD) {
-        char *h = suck_get_aim_height(target);
+        char *h = get_moby_target_info(target);
         qcopy(&target_pos, &drone_vars->target->pos);
         if (h != 0)
             target_pos.f[2] += *(f32 *)(h + 0x10);
@@ -690,7 +690,7 @@ state4: {
     if (target->state == 0xFD)
         goto fade_clear;
     {
-        char *h = suck_get_aim_height(target);
+        char *h = get_moby_target_info(target);
         qcopy(&old_pos, &drone_vars->target->pos);
         if (h != 0)
             old_pos.f[2] += *(f32 *)(h + 0x10);

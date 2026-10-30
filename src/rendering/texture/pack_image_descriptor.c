@@ -29,7 +29,7 @@ typedef struct ImageDescriptorOutput {
     u16 zero12;
 } ImageDescriptorOutput;
 
-void PackImageDescriptor(ImageDescriptorOutput *output, ImageDescriptorInput *input) {
+void pack_image_descriptor(ImageDescriptorOutput *output, ImageDescriptorInput *input) {
     output->zero0 = 0;
     output->height_half = input->height.halves.low_half;
     output->zero4 = 0;

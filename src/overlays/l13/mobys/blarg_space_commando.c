@@ -52,8 +52,7 @@ extern char D_L13_001670C0[];
 
 #include "rnc/overlay/l13/mobys/blarg_space_commando_globals.h"
 
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 
 extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 
@@ -619,7 +618,7 @@ void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby 
     fast_dec_timer(&vars->idle_timer);
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
-    code = fun_00213928(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
+    code = resolve_moby_hit_response(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
     if (kind != 1 && moby->state != 0x10) {
         if (hit != 0 && *(struct Moby **)(hit + 0x20) != 0 &&
             (*(struct Moby **)(hit + 0x20))->oclass == 0x4EE) {

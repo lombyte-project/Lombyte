@@ -144,8 +144,7 @@ extern char  D_0013F420[];
 extern char *FUN_L00_0025a420(void *, int, int);
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int   update_float_countdown(void *) __asm__("FUN_L08_00211b08");
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(void *, void *, int, int, int, float) __asm__("FUN_L00_0025c558");
@@ -1411,7 +1410,7 @@ void update_sentrybot_hit_response_and_target_visibility(void *object, int flag)
         *(float *)(((char *)MOBY(moby)->pclass) + 0x24) * sentrybot_class_scale_multiplier_gp;
     impact = 0.0f;
     hit = FUN_L00_0025a420(moby, 0x330000, 0);
-    code = fun_00213928(moby, hit, data + 0x20, 0, &kind, &impact, 0, 4);
+    code = resolve_moby_hit_response(moby, hit, data + 0x20, 0, &kind, &impact, 0, 4);
     if (kind != 1 && moby[0x20] != 0x17) {
         if ((unsigned char)D_001413F4[0] == 0)
             alert_visible_group_sentrybots(moby);

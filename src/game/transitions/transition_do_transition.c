@@ -7,7 +7,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/packets/put_draw_buffer_large.h"
-#include "rnc/runtime/read_global_table_entry.h"
+#include "rnc/audio/rpc/snd_hold_command_batches.h"
 #include "rnc/ui/hud/banks/load_hud_banks.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/runtime/iop/initialize_sif_rpc.h"
@@ -52,7 +52,7 @@ extern SoundCue      D_001862B0[];
 extern TransferState render_sequence __asm__("D_0018CB20");
 extern WadHeader *volatile D_001940C8[];
 
-extern void QueueDmaTransfer(s32 index);
+extern void load_help_message_group(s32 index);
 extern s32  rand(void);
 extern void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff);
 extern s32  sceGsSyncV(s32 mode);
@@ -63,7 +63,7 @@ extern void start_level(int level) __asm__("FUN_001e9488");
 extern void transition_load_wad(void) __asm__("FUN_001ea830");
 extern void update_gameplay_frame(void) __asm__("func_001EB0A8");
 extern void transition_default_draw() __asm__("FUN_001eb410");
-extern s32  is_active_state_entry(s32 entry_index, s32 id) __asm__("FUN_001eb740");
+extern s32  is_voice_active(s32 entry_index, s32 id) __asm__("FUN_001eb740");
 extern s32  set_pal_mode() __asm__("func_001F34E8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
@@ -71,7 +71,7 @@ extern void append_palette_transfer_packet() __asm__("func_001FB6E0");
 extern s32  run_state_handler() __asm__("func_00208840");
 extern s32  load_and_initialize_level_chunk() __asm__("func_00209370");
 extern s32  memcard_update_state() __asm__("func_002093D8");
-extern s32  load(u8 *dst, s32 a, s32 b) __asm__("func_00216828");
+extern s32  read_disc_sectors_and_wait(u8 *dst, s32 a, s32 b) __asm__("func_00216828");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern s32
 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) __asm__("FUN_0022dba0");
@@ -106,37 +106,38 @@ void transition_do_transition(void) {
     /* Load chunks 1..5 before chunk 0, advancing each destination to 16-byte alignment. */
     chunk_destination = (u8 *)hdr + 0x60;
     level_root = hdr;
-    first_size = load(chunk_destination,
-                      ((volatile struct DiscFile *)&chunk_source_table->wad_chunks[1])->sector,
-                      ((volatile struct DiscFile *)&chunk_source_table->wad_chunks[1])->size);
+    first_size = read_disc_sectors_and_wait(
+        chunk_destination,
+        ((volatile struct DiscFile *)&chunk_source_table->wad_chunks[1])->sector,
+        ((volatile struct DiscFile *)&chunk_source_table->wad_chunks[1])->size);
     hdr->chunk[1].size = first_size;
     hdr->chunk[1].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)first_size + 0xF) & alignment_mask;
-    hdr->chunk[2].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[2].sector,
-                              chunk_source_table->wad_chunks[2].size);
+    hdr->chunk[2].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[2].sector,
+                                                    chunk_source_table->wad_chunks[2].size);
     hdr->chunk[2].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)hdr->chunk[2].size + 0xF) & alignment_mask;
-    hdr->chunk[3].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[3].sector,
-                              chunk_source_table->wad_chunks[3].size);
+    hdr->chunk[3].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[3].sector,
+                                                    chunk_source_table->wad_chunks[3].size);
     hdr->chunk[3].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)hdr->chunk[3].size + 0xF) & alignment_mask;
-    hdr->chunk[4].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[4].sector,
-                              chunk_source_table->wad_chunks[4].size);
+    hdr->chunk[4].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[4].sector,
+                                                    chunk_source_table->wad_chunks[4].size);
     hdr->chunk[4].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)hdr->chunk[4].size + 0xF) & alignment_mask;
-    hdr->chunk[5].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[5].sector,
-                              chunk_source_table->wad_chunks[5].size);
+    hdr->chunk[5].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[5].sector,
+                                                    chunk_source_table->wad_chunks[5].size);
     hdr->chunk[5].off = chunk_destination - (u8 *)hdr;
     chunk_destination += ((u32)hdr->chunk[5].size + 0xF) & alignment_mask;
-    hdr->chunk[0].size = load(chunk_destination,
-                              chunk_source_table->wad_chunks[0].sector,
-                              chunk_source_table->wad_chunks[0].size);
+    hdr->chunk[0].size = read_disc_sectors_and_wait(chunk_destination,
+                                                    chunk_source_table->wad_chunks[0].sector,
+                                                    chunk_source_table->wad_chunks[0].size);
     hdr->chunk[0].off = chunk_destination - (u8 *)hdr;
-    initialize_resource_entry();
+    hud_heap_reset();
     initialize_sif_rpc();
     init_stash();
     init_hud();
@@ -151,7 +152,7 @@ void transition_do_transition(void) {
     }
     wait = 0;
     level = rand() % 4;
-    read_global_table_entry();
+    snd_hold_command_batches();
     while (space_load_pending == 0) {
         vu1_send_chain();
         swap_render_buffer_chain();
@@ -161,7 +162,7 @@ void transition_do_transition(void) {
         memcard_update_state();
         run_state_handler();
         update_primary_pad_state();
-        QueueDmaTransfer(D_0015ED88);
+        load_help_message_group(D_0015ED88);
         space_load_in_progress = 0;
         for (i = 0; D_001862B0[i].start != -1; i++) {
             if (D_001862B0[i].end == -1) {
@@ -175,13 +176,13 @@ void transition_do_transition(void) {
             } else if (render_sequence.time < D_001862B0[i].start ||
                        D_001862B0[i].end < render_sequence.time) {
                 goto stop;
-            } else if (is_active_state_entry(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
+            } else if (is_voice_active(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
                 continue;
             }
             D_001862B0[i].voice = allocate_voice_for_group_entry(D_001862B0[i].sound, 0, 0);
             continue;
         stop:
-            if (is_active_state_entry(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
+            if (is_voice_active(D_001862B0[i].voice, D_001862B0[i].sound) != 0) {
                 release_voice_slot(D_001862B0[i].voice);
             }
             D_001862B0[i].voice = -1;

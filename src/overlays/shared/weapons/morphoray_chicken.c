@@ -12,7 +12,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/world/collision/ground_probe.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/math/fast_math.h"
@@ -293,7 +293,7 @@ struct Moby *spawn_morphoray_chicken(State *source_state) {
         moby_vars->unk74 = D_0013E520[0x15];
         spawned_moby->command = moby_vars->unk74;
         FUN_L00_00257470(source_state, 0, -1);
-        source_record = suck_get_aim_height(source_state);
+        source_record = get_moby_target_info(source_state);
         if (source_record != NULL && *(u8 *)((u8 *)source_record + 0xE) == 1) {
             *(u8 *)((u8 *)source_record + 0xE) = 2;
         } else {

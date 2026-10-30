@@ -26,8 +26,8 @@ struct Rect {
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
-extern void enable_global_flag() __asm__("func_001F61E8");
-extern void disable_global_flag() __asm__("func_001F61F8");
+extern void enable_font_color_codes() __asm__("func_001F61E8");
+extern void disable_font_color_codes() __asm__("func_001F61F8");
 extern void font_print_large(s32, s32, u64, s32, s32) __asm__("func_001F6530");
 extern s32  font_print_wrapped_small(s32, s32, s32, s32, s32, s32, s32) __asm__("func_001F6FD0");
 extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
@@ -68,7 +68,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
             flag = menu->sel[level_map_selection.level] == i;
             col = flag ? 0x8020FFFF : 0x80FFA888;
             if (flag) {
-                disable_global_flag();
+                disable_font_color_codes();
             }
             wrapped_text_result =
                 font_print_wrapped_small(0x10,
@@ -79,7 +79,7 @@ s32 draw_missions_menu2(struct MissionsMenu *menu) {
                                          get_help_message_text(*mission_id_cursor),
                                          -1);
             if (flag) {
-                enable_global_flag();
+                enable_font_color_codes();
             }
             step = (wrapped_text_result >= 0x11) ? 2 : 1;
             if (step == 2) {

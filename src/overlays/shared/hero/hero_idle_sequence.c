@@ -15,7 +15,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/world/collision/ground_probe.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
@@ -3021,7 +3021,7 @@ void update_hero_target_tracking(void) {
         bestPri = 0.0f;
         best = 0;
         for (i = 0; (candidate_moby = active_mobies[i]) != 0; i++) {
-            info = (char *)suck_get_aim_height(candidate_moby);
+            info = (char *)get_moby_target_info(candidate_moby);
             if (info != 0) {
                 float candidate_distance, candidate_yaw_difference, sc, pri;
                 candidate_distance = vector_distance_xy(hero_pos + 0x0, candidate_moby + 0x10);
@@ -3075,7 +3075,7 @@ void update_hero_target_tracking(void) {
     if (selected_moby == 0)
         return;
     qcopy(aim_position_scratch, selected_moby + 0x10);
-    info2 = (char *)suck_get_aim_height(selected_moby);
+    info2 = (char *)get_moby_target_info(selected_moby);
     if (info2 != 0)
         aim_position_scratch[2] += (float)*(unsigned char *)(info2 + 0x3A) * 0.125f;
     transform_hero_local_offset_to_world(&aim_position_scratch[4], 0.3f, 0.0f, 0.85f);
@@ -3630,7 +3630,7 @@ void check_ledge_grab(void) {
 
     if (((Hit_20C568 *)((char *)D_L00_00173E40))->m18 != 0) {
         grabbable = 0;
-        moby_info = suck_get_aim_height(((Hit_20C568 *)((char *)D_L00_00173E40))->m18);
+        moby_info = get_moby_target_info(((Hit_20C568 *)((char *)D_L00_00173E40))->m18);
         moby_props = FUN_L00_002603d0(((Hit_20C568 *)((char *)D_L00_00173E40))->m18);
         if (moby_info != 0 && (moby_info->h1E & 1)) {
             grabbable = 1;

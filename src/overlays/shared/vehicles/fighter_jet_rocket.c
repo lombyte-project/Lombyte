@@ -6,7 +6,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/rendering/view/build_look_at_matrix.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
@@ -48,7 +48,7 @@ unsigned char *spawn_fighter_jet_rocket(struct Moby *firing_moby,
         if (target != 0) {
             char *target_flag_data;
             *(int *)(data + 0x3C) = *(short *)(target + 0xA6);
-            target_flag_data = suck_get_aim_height(target);
+            target_flag_data = get_moby_target_info(target);
             if (target_flag_data != 0) {
                 *(unsigned short *)(target_flag_data + 0x1E) |= 0x80;
             }

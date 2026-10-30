@@ -30,7 +30,7 @@
 #include "rnc/audio/streaming/continue_audio_stream_if_ready.h"
 #include "qzero.h"
 #include "rnc/game/game_globals.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/overlay/l13/mobys/qwarks_starfighter_shield.h"
 
@@ -730,7 +730,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
         lo = hi + step * 0.3f;
         if (moby_data->first != 0) {
             r = func_L00_0025B478_2EAE80(moby_data->first, 0x230000, 0);
-            fun_00213928(moby, r, dd, 0, &hit, 0, 0, 4);
+            resolve_moby_hit_response(moby, r, dd, 0, &hit, 0, 0, 4);
             if (r != 0 && r->target != 0 &&
                 (r->target->oclass == 0x52 || r->target->oclass == 0x53 ||
                  r->target->oclass == 0xD4)) {
@@ -811,7 +811,7 @@ void process_moby_attachment_damage(Moby_2EAE80 *moby, Data_2EAE80 *moby_data) {
                 continue;
             }
             r = func_L00_0025B478_2EAE80(moby_data->list[i], 0x230000, 0);
-            fun_00213928(moby, r, dd, 0, &hit, 0, 0, 4);
+            resolve_moby_hit_response(moby, r, dd, 0, &hit, 0, 0, 4);
             if (r != 0 && r->target != 0 &&
                 (r->target->oclass == 0x52 || r->target->oclass == 0x53 ||
                  r->target->oclass == 0xD4)) {

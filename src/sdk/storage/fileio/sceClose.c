@@ -15,7 +15,7 @@ struct SifFileState {
 extern struct SifFileState D_00156880;
 extern struct SifFileSlot *get_iob(s32);
 extern s32                 _sceFsWaitS(s32 arg0);
-extern s32                 ReadQueueStatus(void);
+extern s32                 _sceFsSigSema(void);
 extern s32                 CreateSema(void *param);
 extern s32                 DeleteSema(s32 id);
 extern s32                 WaitSema(s32 id);
@@ -33,11 +33,11 @@ s32 sceClose(s32 fd) {
     io = get_iob(fd);
     _sceFsWaitS(1);
     if (FsResetState == 0) {
-        ReadQueueStatus();
+        _sceFsSigSema();
         return -1;
     }
     if (io == NULL || io->flags == 0) {
-        ReadQueueStatus();
+        _sceFsSigSema();
         return -9;
     }
     state->unkC = io->fd;
@@ -51,12 +51,12 @@ s32 sceClose(s32 fd) {
     state->unk8 = 4;
     if (sceSifCallRpc(&fio_rpc_client, 1, 0, state, 0x14, fio_rpc_result, 4, 0, 0) < 0) {
         DeleteSema(sid);
-        ReadQueueStatus();
+        _sceFsSigSema();
         return -0xB;
     }
     io->flags = 0;
     ok = *(u32 *)((u32)fio_rpc_result | 0x20000000);
-    ReadQueueStatus();
+    _sceFsSigSema();
     if (ok == 0) {
         DeleteSema(sid);
         return -0xB;

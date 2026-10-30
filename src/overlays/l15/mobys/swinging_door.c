@@ -7,7 +7,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/l15/mobys/swinging_door_globals.h"
 
 extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
@@ -59,7 +59,7 @@ void update_swinging_door(struct Moby *moby) {
             }
             for (candidate_moby = (struct Moby *)D_L15_0015FFE4; candidate_moby != 0;
                  candidate_moby = candidate_moby->next) {
-                if (suck_get_aim_height(candidate_moby) == 0) {
+                if (get_moby_target_info(candidate_moby) == 0) {
                     continue;
                 }
                 if (is_point_inside_clip_volume(&candidate_moby->pos, vars->open_volume)) {

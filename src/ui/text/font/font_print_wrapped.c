@@ -72,7 +72,7 @@ s32 font_print_wrapped(s32 x,
             cx = x;
             cy += 16;
         } else if ((u8)(*current_text_byte - 8) < 8) {
-            if (GlobalStateFlag != 0) {
+            if (font_color_codes_enabled != 0) {
                 color &= 0xFF000000;
                 color |= font_palette_colors[*current_text_byte - 8] & 0xFFFFFF;
             }

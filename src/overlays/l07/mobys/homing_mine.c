@@ -11,10 +11,10 @@
 #include "rnc/overlay/level_labels.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 
-extern s32  collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
-extern int  fun_00213928(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
-extern void FUN_L00_00257470(void *, int, int);
-extern void FUN_00212f90(void *, int, int, int);
+extern s32 collect_mobies_in_sphere(f32, void *, s32, void *, void *) __asm__("FUN_L00_001f2868");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern void  FUN_L00_00257470(void *, int, int);
+extern void  FUN_00212f90(void *, int, int, int);
 extern float D_0015ED6C;
 extern Vec4  D_L07_00166E40;
 
@@ -68,7 +68,7 @@ extern void set_moby_list_state(s32, s32) __asm__("FUN_L01_0026e0e0");
 
 typedef struct {
     u8           pad0[0x20];
-    f32          health; /* 0x20: lowered by fun_00213928 */
+    f32          health; /* 0x20: lowered by resolve_moby_hit_response */
     u8           pad24[0x14];
     struct Moby *target; /* 0x38 */
     u8           pad3C[0x24];
@@ -140,7 +140,7 @@ void homing_mine_update(struct Moby *moby) {
     }
     health = &vars->health;
     hit = find_moby_hit(moby, 0x230000, 0);
-    fun_00213928(moby, hit, health, 0, &touching, 0, 0, 4);
+    resolve_moby_hit_response(moby, hit, health, 0, &touching, 0, 0, 4);
     if (touching >= 2 && hit != NULL && (*(struct Moby **)(hit + 0x20))->oclass != 0x456 &&
         (*(struct Moby **)(hit + 0x20))->oclass != 0x365 &&
         (*(struct Moby **)(hit + 0x20))->oclass != 0x367) {

@@ -10,7 +10,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/world/collision/ground_probe.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/props/grow_and_fade_out.h"
 #include "rnc/overlay/shared/rendering/effects/explosion_light.h"
 #include "rnc/math/fast_math.h"
@@ -1071,7 +1071,7 @@ void mine_update(M910 *mine_moby) {
                             goto next;
                         }
                         rg = range;
-                        p = suck_get_aim_height((unsigned char *)candidate_moby);
+                        p = get_moby_target_info((unsigned char *)candidate_moby);
                         if (p != 0) {
                             rg = range + convert_integer_to_float(p[0xA]) * 0.125f;
                         }

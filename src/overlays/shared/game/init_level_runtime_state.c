@@ -16,7 +16,7 @@
 extern u8   D_L00_00197BC0_lui[] __asm__("D_L00_00197BC0") NOT_SDA;
 extern char D_L00_001C5B00_lui[] __asm__("D_L00_001C5B00") NOT_SDA;
 extern char D_L00_001BC1B0_lui[] __asm__("D_L00_001BC1B0") NOT_SDA;
-void        calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
+void        select_level_vu_chain(void) __asm__("FUN_002335a0");
 void        fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void        register_part_types(void) __asm__("FUN_L00_00268900");
 void        init_level_item_inventory(void) __asm__("FUN_L00_0023d198");
@@ -32,7 +32,7 @@ void        init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
 void init_level_runtime_state(void) {
     int texture_allocation_base;
     register_audio_stream_callback();
-    calculate_dma_transfer_address();
+    select_level_vu_chain();
     init_mem_slots();
     texture_allocation_base = gs_texture_allocation_base;
     gs_texture_allocation_cursor = texture_allocation_base;

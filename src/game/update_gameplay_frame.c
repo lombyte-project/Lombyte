@@ -46,7 +46,7 @@ typedef struct {
 
 extern RenderSequenceState render_sequence __asm__("D_0018CB20");
 extern s32                 intro_overlay_timer __asm__("D_0015EF58");
-extern void                InitializeTransferCommand(void);
+extern void                enter_main_menu(void);
 extern void                noop_callback_e(RenderSequenceActor *) __asm__("func_001E9410");
 extern void                noop_callback_h(void) __asm__("func_001E9428");
 extern void                noop_callback_i(void) __asm__("func_001E9430");
@@ -131,7 +131,7 @@ void update_gameplay_frame(void) {
                 0x60;
         }
         if (controller_state.pressed & (PAD_CROSS | PAD_START)) {
-            InitializeTransferCommand();
+            enter_main_menu();
         }
         sound_update();
     } else if (game_mode == 3) {

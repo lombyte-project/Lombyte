@@ -38,7 +38,7 @@ extern struct LoadMenuControllerState controller_state __asm__("D_0013C940");
 
 extern s16                       D_0013E05A[];
 extern struct LoadMenuMixerState voice_pool __asm__("D_0013E550");
-extern void                      InitializeGlobalStateEntry(s32);
+extern void                      request_space_load(s32);
 extern s32                       mode_freeze_init() __asm__("func_001FBAB8");
 extern s32                       allocate_voice_for_target_entry() __asm__("func_0022DA68");
 s32 loading_data_menu(struct LoadMenuDescriptor *menu) __asm__("FUN_002232d8");
@@ -69,7 +69,7 @@ s32 loading_data_menu(struct LoadMenuDescriptor *menu) {
             scaled_volume_70 = ((s32)(sound_volume * 7)) / 10;
             voice_pool.group_4_volume = scaled_volume_70;
             voice_pool.group_5_volume = sound_volume;
-            InitializeGlobalStateEntry(current_level_index);
+            request_space_load(current_level_index);
             D_0013E05A[0] = 0;
         } else {
             return 0;

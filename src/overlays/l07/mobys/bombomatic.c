@@ -26,7 +26,7 @@ char        *spawn_bombomatic_projectile(char *spawn_position,
 extern char D_L07_00166E40[];
 extern int  allocate_voice_for_target_entry(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-extern int  fun_00213928(void *, void *, void *, int, int *, float *, int, int);
+extern int  resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int);
 extern void trooper_anim_update(void *, short *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void spawn_explosion(void *,
@@ -209,7 +209,7 @@ void bombomatic_update(char *moby) {
     }
     hit_info = FUN_L00_0025a420(moby, 0x230000, 0);
     health_ptr = moby_data + 0x20;
-    hit_reaction_result = fun_00213928(moby, hit_info, health_ptr, 0, &ia, 0, 0, 4);
+    hit_reaction_result = resolve_moby_hit_response(moby, hit_info, health_ptr, 0, &ia, 0, 0, 4);
     switch (hit_reaction_result) {
     case HIT_REACTION_NONE:
         break;

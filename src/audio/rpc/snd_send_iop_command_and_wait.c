@@ -11,12 +11,12 @@ extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern s32  snd_got_returns(void) __asm__("func_0012DE70");
 extern void snd_send_current_batch(void) __asm__("func_0012E9D8");
 extern s32  FlushCache(s32);
-extern s32  StoreObjectIndex(void *, s32);
+extern s32  snd_prepare_return_buffer(void *, s32);
 extern s32  SceSifCheckStatRpc(void *);
 extern s32  sceSifCallRpc(void *, s32, s32, void *, s32, void *, s32, void *, void *);
 s32         snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) __asm__("FUN_0012e548");
 
-extern s32 GlobalTableStatus __asm__("D_0015ECC4") __attribute__((sda));
+extern s32 snd_batches_held __asm__("D_0015ECC4") __attribute__((sda));
 
 s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
     s32 i;
@@ -31,7 +31,7 @@ s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
         FlushCache(0);
     check:;
     } while (snd_current_buffer != 0);
-    StoreObjectIndex(snd_sync_buffer, 1);
+    snd_prepare_return_buffer(snd_sync_buffer, 1);
     while (SceSifCheckStatRpc(sound_command_client) != 0) {
         printf("989snd.c: RPC collision!\n");
         snd_flush_sound_commands();
@@ -46,7 +46,7 @@ s32 snd_send_iop_command_and_wait(s32 cmd, s32 size, u8 *data) {
     while (snd_got_returns() == 0) {
     }
     result = snd_sync_buffer[1];
-    if (*snd_batch_command_buffers[snd_batch_index] != 0 && GlobalTableStatus == 0) {
+    if (*snd_batch_command_buffers[snd_batch_index] != 0 && snd_batches_held == 0) {
         snd_send_current_batch();
     }
     return result;

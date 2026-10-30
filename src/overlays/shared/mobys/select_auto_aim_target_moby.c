@@ -14,13 +14,13 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/math/random/random_vector.h"
 #include "rnc/overlay/shared/ui/hud/hud_keep_visible.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 
-/* Record suck_get_aim_height returns for a moby: collision size and aim height. */
+/* Record get_moby_target_info returns for a moby: collision size and aim height. */
 typedef struct MobyBound {
     u8  pad0[0xA];
     u8  size; /* 0x0A: radius in eighths */
@@ -63,7 +63,7 @@ struct Moby *select_auto_aim_target_moby(
         if ((s8)candidate_moby->state < 0)
             continue;
         qcopy(&target, &candidate_moby->pos);
-        aim_bounds = suck_get_aim_height(candidate_moby);
+        aim_bounds = get_moby_target_info(candidate_moby);
         if (aim_bounds)
             target.f[2] += aim_bounds->height;
         else

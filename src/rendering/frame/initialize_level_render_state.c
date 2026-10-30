@@ -18,7 +18,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/rendering/ties/light_ties.h"
 #include "rnc/rendering/tfrags/light_tfrags.h"
-#include "rnc/runtime/state/enable_global_flag.h"
+#include "rnc/ui/text/font/enable_font_color_codes.h"
 
 typedef struct FRow {
     f32 v[3];
@@ -130,12 +130,12 @@ extern char               too_many_directional_lights_message[] __asm__("D_001E7
 
 extern void DebugPrint(char *fmt, ...);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void PackDmaTag(s32 arg0, u64 arg1, u64 arg2);
+extern void set_background_color(s32 red, u64 green, u64 blue);
 extern void update_fog(void) __asm__("func_001F2588");
 extern void reset_draw_globals(void) __asm__("func_001F37E8");
 extern void scale_vector(void *, void *, f32) __asm__("FUN_001f9a80");
 extern void set_video_timing(s32) __asm__("func_00214970");
-extern void reset_global_state_fields(void) __asm__("func_00217020");
+extern void reset_pad_history(void) __asm__("func_00217020");
 extern void FUN_0022a5e0(void *);
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
 
@@ -226,7 +226,7 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     occl_fog_density_set = 500.0f;
     occl_fog_count = 500;
     part_clip_dist = 0x1F4000;
-    PackDmaTag(D_0018CD00.x23C, D_0018CD00.x240, D_0018CD00.x244);
+    set_background_color(D_0018CD00.x23C, D_0018CD00.x240, D_0018CD00.x244);
     vu0_load_micro_program(D_00100AE0);
     fast_mem_zero16(point_lights, 0x100);
     fast_mem_zero16(point_light_data, 0x180);
@@ -468,8 +468,8 @@ u8 *initialize_level_render_state(LevelHeader *header) {
     }
     ((OcclCamState *)occl_cam_state)->x1C = 0;
     reset_draw_globals();
-    reset_global_state_fields();
-    enable_global_flag();
+    reset_pad_history();
+    enable_font_color_codes();
     world_update_time = 0;
     sequence = 1.0f;
     return pool;

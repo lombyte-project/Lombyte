@@ -109,8 +109,7 @@ extern s32   random_integer_below(s32) __asm__("FUN_00213260");
 extern char *create_moby(int);
 extern int   FUN_L00_00257b90(int, int);
 extern int   hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void  PackDmaTag(s32 arg0, unsigned long arg1, unsigned long arg2);
-extern void  set_background_color(int, int, int) __asm__("FUN_001fb280");
+extern void  set_background_color(s32 red, unsigned long green, unsigned long blue);
 int          FUN_L00_002603d0_2b58d8(void *) __asm__("FUN_L00_002603d0");
 void         FUN_L00_002b56d0_2b58d8(void *) __asm__("FUN_L00_002b56d0");
 void         FUN_L00_00250df8_2b58d8(void *) __asm__("FUN_L00_00250df8");
@@ -553,7 +552,7 @@ void moby_save_globals_state(void *m_) {
     D_L00_001604A4 = 144.0f;
     D_L00_0015FFF0 = 0x90;
     D_L00_0016017C = 0x50000;
-    PackDmaTag(0x40, 0x60, 0x40);
+    set_background_color(0x40, 0x60, 0x40);
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B33E8.c: func_L00_002B6AE0), where it is exact; names translated to the US level program. */

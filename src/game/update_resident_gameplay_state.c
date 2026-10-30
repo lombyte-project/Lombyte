@@ -7,7 +7,7 @@
 #include "rnc/rendering/level_render_state.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
-#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
+#include "rnc/rendering/vu1/select_level_vu_chain.h"
 #include "rnc/world/loaders/parse_space_scene_chunk.h"
 #include "rnc/audio/voices/pause_all_sounds.h"
 
@@ -171,7 +171,7 @@ extern void update_all_point_lights(void) __asm__("func_00201A28");
 extern void update_moby_animation_state(ResidentRenderObject *) __asm__("func_0020C880");
 extern void update_resident_packed_direction(void) __asm__("func_0020CFD0");
 extern void refresh_moby_spatial_bounds(ResidentRenderObject *) __asm__("func_0020DEF8");
-extern void update_visible_resident_objects(void) __asm__("func_00212E28");
+extern void update_visible_mobys(void) __asm__("func_00212E28");
 extern void update_moby_shadow_range(ResidentRenderObject *) __asm__("func_00213700");
 extern f32  advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
 extern void
@@ -227,7 +227,7 @@ void update_resident_gameplay_state(void) {
     case LEVEL_RENDER_STATE_PLAYBACK_TO_MENU:
     case LEVEL_RENDER_STATE_PLAYBACK_WITH_MUSIC_RESUME:
         noop_callback_i();
-        update_visible_resident_objects();
+        update_visible_mobys();
         enqueue_voice_request();
         noop_callback_g();
         update_parts();
@@ -278,7 +278,7 @@ void update_resident_gameplay_state(void) {
                 music_stream_state.secondary.state != 7) {
                 music_stream_state.secondary.state = 5;
             }
-            calculate_dma_transfer_address();
+            select_level_vu_chain();
             view_tan_half_fov[0] = 0.63f;
             update_view_context();
             /* Retail releases the attachment once per sequence object, even when that object is null. */
@@ -544,7 +544,7 @@ void update_resident_gameplay_state(void) {
 
     case LEVEL_RENDER_STATE_SCRIPTED_CAMERA_AND_PATH:
         noop_callback_i();
-        update_visible_resident_objects();
+        update_visible_mobys();
         enqueue_voice_request();
         noop_callback_g();
         update_parts();

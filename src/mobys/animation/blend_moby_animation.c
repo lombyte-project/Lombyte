@@ -4,7 +4,7 @@
 #include "rnc/game/game_globals.h"
 #include "rnc/math/fast_math.h"
 
-extern int find_or_allocate_id_slot(int v) __asm__("func_0020CC18");
+extern int find_or_allocate_moby_render_slot(int v) __asm__("func_0020CC18");
 
 typedef struct {
     char          _pad00[0x10];
@@ -54,7 +54,7 @@ void blend_moby_animation(MobyAnim *moby, int new_seq, int frame_index, int blen
     }
     if (*(float *)((char *)moby + 0x54) > 0.025f || *(int *)((char *)moby + 0x60) != 0 ||
         *(int *)((char *)moby + 0x64) != 0) {
-        slot = find_or_allocate_id_slot((int)moby);
+        slot = find_or_allocate_moby_render_slot((int)moby);
         if (slot >= 0) {
             FUN_0020ede8(moby, slot | 0x300);
             qcopy(D_001B2C00 + slot * 0x10, (char *)moby + 0xF0);

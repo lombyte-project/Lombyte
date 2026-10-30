@@ -14,7 +14,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
 #include "rnc/game/interpolated_record.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/find_moby_hit.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
@@ -1664,7 +1664,7 @@ void suckcannon_update(SuckMoby *self) {
                         float          tyaw, tpitch, dyaw, distance, offangle;
                         SuckAimHeight *candidate_aim_height;
                         qcopy(&work.fire.point, &candidate_target->pos);
-                        candidate_aim_height = suck_get_aim_height(candidate_target);
+                        candidate_aim_height = get_moby_target_info(candidate_target);
                         if (candidate_aim_height)
                             work.fire.point.f.z += candidate_aim_height->height;
                         else
@@ -1927,7 +1927,7 @@ s32 launch_suck_cannon_projectile(u8 *moby,
     *(s32 *)(projectile_record + 0x94) = FUN_001f96f8_002dbc30(300);
     *(u8 **)(projectile_record + 0x74) = target;
     if (target != 0) {
-        x = suck_get_aim_height(target);
+        x = get_moby_target_info(target);
         if (x != 0)
             *(u16 *)(x + 0x1E) |= 0x80;
         qcopy(projectile_record + 0x40, target + 0x10);

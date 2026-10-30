@@ -242,8 +242,7 @@ extern int *D_L18_001B0EB0[] __asm__("D_L18_001B0EB0");
 void        draw_group_gadgebot_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
 
 extern void draw_group_gadgebot_joint_glows(struct Moby *moby) __asm__("FUN_L18_002fca98");
-extern int
-fun_00213928(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern int  random_integer_below(int) __asm__("FUN_00213260");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void
@@ -343,7 +342,7 @@ void update_gadgebot_damage_target_and_glow(struct Moby *moby) {
     }
     dmg = 0.0f;
     coll = find_moby_hit(moby, 0x330000, 0);
-    fun_00213928(moby, coll, &sentry_vars->health, 0, &hit, &dmg, 0, 4);
+    resolve_moby_hit_response(moby, coll, &sentry_vars->health, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && moby->state != 6 && dmg != 0.0f) {
         sentry_vars->health -= dmg;
         if (sentry_vars->health <= 0.0f) {

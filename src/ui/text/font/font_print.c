@@ -44,7 +44,7 @@ void font_print(
     do {
         /* Bytes 8..15 select a palette color, preserving the current alpha. */
         if ((u8)(*cursor - 8) < 8) {
-            if (GlobalStateFlag != 0) {
+            if (font_color_codes_enabled != 0) {
                 color &= 0xFF000000;
                 color |= font_palette_colors[*cursor - 8] & 0xFFFFFF;
             }

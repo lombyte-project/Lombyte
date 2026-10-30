@@ -5,7 +5,7 @@
 #include "rnc/rendering/view/update_view_context.h"
 #include "rnc/rendering/view/init_view_context.h"
 #include "rnc/rendering/vu1/vu1_init_chain.h"
-#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
+#include "rnc/rendering/vu1/select_level_vu_chain.h"
 #include "rnc/streaming/decompress_wad.h"
 #include "rnc/runtime/memory/init_mem_slots.h"
 #include "rnc/world/loaders/register_moby_class.h"
@@ -141,7 +141,7 @@ extern s32           tfrag_texture_size_table[] __asm__("D_001E0900");
 extern s32           object_render_texture_lookup_table[] __asm__("D_001E2600");
 extern void          fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
 extern void          FlushCache(s32);
-extern void          QueueDmaTransfer(s32);
+extern void          load_help_message_group(s32);
 extern void          sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
 extern s32           initialize_level_render_state(u8 *) __asm__("FUN_001e9b10");
 extern volatile char log2dim(s32) __asm__("func_001F97A0");
@@ -150,7 +150,7 @@ extern void          register_object_render_class(u8 *, u8 *, u8 *, s32) __asm__
 extern void register_shrub_render_class(u8 *, u8 *, u8 *, u8 *, s32) __asm__("func_00203B08");
 extern void initialize_tfrag_render_data(u8 *, u8 *) __asm__("func_002040E0");
 extern void start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
-extern volatile unsigned int load(s32, s32, s32) __asm__("func_00216828");
+extern volatile unsigned int read_disc_sectors_and_wait(s32, s32, s32) __asm__("func_00216828");
 extern void                  update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 extern s32                   sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
 extern s32                   sceGsExecLoadImage(void *, u8 *);
@@ -184,7 +184,7 @@ void transition_load_wad(void) {
     s64          u;
     intro_overlay_timer = 0;
     i = 0;
-    calculate_dma_transfer_address();
+    select_level_vu_chain();
     init_mem_slots();
     current_vu_chain = 0x100000;
     gs_texture_allocation_base = 0x2C0000;
@@ -318,11 +318,12 @@ void transition_load_wad(void) {
     }
     parse_space_scene_chunk(0);
     help_msg_data = D_001940C0.x1C;
-    load(D_001940C0.x1C, disc_table.help_text.sector, disc_table.help_text.size);
+    read_disc_sectors_and_wait(
+        D_001940C0.x1C, disc_table.help_text.sector, disc_table.help_text.size);
     help_offset_table = help_msg_data;
     D_001940C0.x1C = help_msg_data + (disc_table.help_text.size << 11);
     for (k = 0; k < 8; k++) {
-        QueueDmaTransfer(k);
+        load_help_message_group(k);
         j = 0;
         if (D_001996D0.count > 0) {
             te = help_msgs;
@@ -336,7 +337,7 @@ void transition_load_wad(void) {
         }
     }
 
-    QueueDmaTransfer(0);
+    load_help_message_group(0);
     sound_entry_count_or_moby_class_slot = (new_var = resident_class_slot_by_id[0x472]);
     if (sound_entry_count_or_moby_class_slot >= 0) {
         ((MobyClass *)moby_class_resources[sound_entry_count_or_moby_class_slot])->x28 =

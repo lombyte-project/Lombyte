@@ -91,7 +91,8 @@ void font_print_window(FontWindow *window,
                 if (text[position] == ' ' || text[position] < 0x10) {
                     break_position = position;
                 }
-                if (GlobalStateFlag != 0 && (text[position] >= 8 && text[position] < 0x10)) {
+                if (font_color_codes_enabled != 0 &&
+                    (text[position] >= 8 && text[position] < 0x10)) {
                     current_color = text[position] - 8;
                 }
                 if (text[position] < 2) {

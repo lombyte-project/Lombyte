@@ -19,7 +19,7 @@ extern struct FsSeekRequest D_00156880;
 /* Also accessed by the asynchronous completion interrupt handler. */
 extern struct SifFileSlot *get_iob(s32 fd);
 extern s32                 _sceFsWaitS(s32);
-extern s32                 ReadQueueStatus(void);
+extern s32                 _sceFsSigSema(void);
 extern s32                 CreateSema(struct SemaParam *);
 extern s32                 DeleteSema(s32);
 extern s32                 WaitSema(s32);
@@ -41,11 +41,11 @@ s32 sceLseek(s32 fd, s32 offset, s32 origin) {
     file_slot = get_iob(fd);
     _sceFsWaitS(4);
     if (FsResetState == 0) {
-        ReadQueueStatus();
+        _sceFsSigSema();
         return -1;
     }
     if (file_slot == 0 || (flags = file_slot->flags) == 0) {
-        ReadQueueStatus();
+        _sceFsSigSema();
         return -9;
     }
     request->fd = file_slot->fd;
@@ -75,11 +75,11 @@ s32 sceLseek(s32 fd, s32 offset, s32 origin) {
     }
     if (sceSifCallRpc(&fio_rpc_client, 4, 0, &D_00156880, 0x1C, fio_rpc_result, 4, 0, 0) < 0) {
         DeleteSema(completion_semaphore);
-        ReadQueueStatus();
+        _sceFsSigSema();
         return -11;
     }
     rpc_result = *(s32 *)((u32)fio_rpc_result | 0x20000000);
-    ReadQueueStatus();
+    _sceFsSigSema();
     if (rpc_result == 0) {
         DeleteSema(completion_semaphore);
         return -11;

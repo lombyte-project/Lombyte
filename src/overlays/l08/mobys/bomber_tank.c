@@ -20,7 +20,7 @@
 #include "rnc/overlay/shared/math/interpolation/compute_directed_angle_delta.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/spawn_spark.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 #include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/math/random.h"
 #include "rnc/game/item_state.h"
@@ -434,7 +434,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
         if (source_class == 0x1A9 || source_class == 0x47)
             source = 0;
     }
-    fun_00213928(moby, source, &data->health, 0, &hit, &damage, 0, 4);
+    resolve_moby_hit_response(moby, source, &data->health, 0, &hit, &damage, 0, 4);
     one = 1;
     if (hit != one && moby->state != 0) {
         data->health -= damage;

@@ -10,7 +10,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/rpc/snd_flush_sound_commands.h"
-#include "rnc/runtime/read_global_table_entry.h"
+#include "rnc/audio/rpc/snd_hold_command_batches.h"
 #include "rnc/audio/effects/snd_set_reverb_ex.h"
 #include "rnc/audio/mixer/snd_set_master_volume.h"
 #include "rnc/audio/sound/calculate_voice_volume.h"
@@ -413,7 +413,7 @@ s32 sound_update(void) {
     music_update();
     snd_reset_state_and_flush_commands();
     snd_flush_sound_commands();
-    read_global_table_entry();
+    snd_hold_command_batches();
     voice_pool.pending_commands = 0;
     return 0;
 }

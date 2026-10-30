@@ -4,9 +4,9 @@
 extern void  setup_gif_paging(int) __asm__("func_001F4280");
 extern void  do_gif_paging(void) __asm__("func_001F4398");
 extern void *get_help_message_text(int) __asm__("func_001FDD10");
-extern void  PackImageDescriptor(void *, char *);
+extern void  pack_image_descriptor(void *, char *);
 extern void  font_print_window_regular(void *, long, void *, int) __asm__("func_001F7580");
-/* A text box on the menu's own geometry (PackImageDescriptor's box, then
+/* A text box on the menu's own geometry (pack_image_descriptor's box, then
    arg0+0x18..0x24: top y + 4, bottom y + h - 4, x, x + w, centre).
    Per state (arg0+0x50): the list states draw each text id of the -1
    terminated list at arg0+0x34 down from a start that the line count
@@ -29,7 +29,7 @@ int draw_menu_text_box(char *menu_text_box) {
     vu1_add_g_sregister(0x47, 0x30000);
     vu1_add_g_sregister(0x42, 0x8000000044L);
     setup_gif_paging(0);
-    PackImageDescriptor(box, menu_text_box);
+    pack_image_descriptor(box, menu_text_box);
     box[9] = 9;
     box[3] = *(int *)(menu_text_box + 0x18) + *(int *)(menu_text_box + 0x20);
     box[0] = *(int *)(menu_text_box + 0x1C) + 4;

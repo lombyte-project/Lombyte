@@ -1529,7 +1529,7 @@ extern int           D_0015EE3C_macro __asm__("D_0015EE3C") MACRO_ADDR;
 extern int           freeze_stats_time_ref_macro[2] __asm__("D_0015EE58") MACRO_ADDR;
 extern int           freeze_stats_score_ref_a_macro[2] __asm__("D_0015EE68") MACRO_ADDR;
 extern void          set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void          update_resource_counter(void) __asm__("FUN_001ff768");
+extern void          decrement_resource_counter(void) __asm__("FUN_001ff768");
 
 #include "rnc/overlay/shared/hero/process_hero_primary_item_input_data/update_hero_hoverboard_race_progress.h"
 
@@ -1753,7 +1753,7 @@ void update_hero_hoverboard_race_progress(void) {
             set_animation_parameter(hero.trick_hud_handle, 0);
             hero.trick_hud_handle = -1;
         }
-        update_resource_counter();
+        decrement_resource_counter();
     } else if (D_0015ED84_lui == 0x10) {
         if (race_pvars->f28 == -1) {
             return;
@@ -1780,7 +1780,7 @@ void update_hero_hoverboard_race_progress(void) {
             set_animation_parameter(hero.trick_hud_handle, 0);
             hero.trick_hud_handle = -1;
         }
-        update_resource_counter();
+        decrement_resource_counter();
     }
 }
 

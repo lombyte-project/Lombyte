@@ -220,8 +220,8 @@ void emit_forcefield_tower_destruction_effects(unsigned char *source_moby,
 
 extern int fptodp(float) __asm__("FUN_00120478");
 
-extern int
-fun_00213928(struct Moby *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(
+    struct Moby *, void *, float *, int, int *, int, int, int) __asm__("FUN_00213928");
 
 extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
@@ -284,7 +284,7 @@ void process_forcefield_tower_damage(struct Moby *moby, unsigned char *moby_data
                        fptodp(*(float *)(hit_record + 4)),
                        fptodp(*(float *)(hit_record + 8)));
         }
-        switch (fun_00213928(moby, hit_record, health, 0, &hit, 0, 0, 4)) {
+        switch (resolve_moby_hit_response(moby, hit_record, health, 0, &hit, 0, 0, 4)) {
         case HIT_REACTION_LETHAL:
         case HIT_REACTION_REMOVE:
             *health = 0.0f;

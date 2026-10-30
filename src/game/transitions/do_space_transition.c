@@ -39,7 +39,7 @@ extern u8                       unloaded_sound_bank_format[] __asm__("D_001E8988
 
 extern void DebugPrint();
 extern void FlushCache(s32);
-extern void PackDmaTag(u64, u64, u64);
+extern void set_background_color(u64, u64, u64);
 extern void snd_flush_sound_commands(void) __asm__("func_0012DC80");
 extern void snd_resolve_bank_xrefs(void) __asm__("func_0012E1A8");
 extern void snd_unload_bank(s32) __asm__("FUN_0012e1d8");
@@ -115,7 +115,7 @@ void do_space_transition(void) {
     view_context.fog_g = 0;
     view_context.fog_near_dist = 0;
     view_context.fog_far_int = 128.0f;
-    PackDmaTag(0, 0, 0);
+    set_background_color(0, 0, 0);
     if (space_load_macro < 0) {
         while (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0) {
             memcard_update_state();

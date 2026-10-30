@@ -86,10 +86,9 @@ extern void probe_frog_local_z_collision(char *) __asm__("FUN_L06_002e9aa8");
 extern void FUN_L06_002e9b60_c(void *, void *, int, float, float) __asm__("FUN_L06_002e9b60");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void        trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
-void update_frog_health_respawn_and_target(struct Moby *moby) __asm__("FUN_L06_002e94f0");
-void destroy_frog_child_moby(struct Moby *moby) __asm__("FUN_L06_002e9f30");
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+void       update_frog_health_respawn_and_target(struct Moby *moby) __asm__("FUN_L06_002e94f0");
+void       destroy_frog_child_moby(struct Moby *moby) __asm__("FUN_L06_002e9f30");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void  mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 void         spawn_moby_directional_spark_bursts(struct Moby *moby,
                                                  Vec4 *spark_push_direction) __asm__("FUN_L06_002ea198");
@@ -560,7 +559,7 @@ void update_frog_health_respawn_and_target(struct Moby *moby) {
     }
     damage = 0.0f;
     hit = find_moby_hit(moby, 0x330000, 0);
-    code = fun_00213928(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
+    code = resolve_moby_hit_response(moby, hit, &vars->health, 0, &kind, &damage, 0, 4);
     if (kind != 1 && moby->state != 0xE) {
         vars->health = vars->health - damage;
         if (vars->health <= 0.0f) {

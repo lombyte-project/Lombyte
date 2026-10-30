@@ -16,8 +16,8 @@ extern float D_L12_0015F580[] MACRO_ADDR;
 extern void  make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void  find_point_ahead(struct Moby *, void *, float) __asm__("FUN_L01_00274b78");
 extern void *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
-extern int
-fun_00213928(struct Moby *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
+extern int   resolve_moby_hit_response(
+      struct Moby *, void *, void *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern int
 collect_mobies_in_sphere(void *, int, struct Moby *, void *, float) __asm__("FUN_L00_001f2868");
 extern int  coll_sphere(void *, int, struct Moby *, float) __asm__("FUN_L00_001f0d60");
@@ -86,7 +86,7 @@ void update_homing_mine(struct Moby *moby) {
 
     find_point_ahead(moby, target, 8.0f);
     source = find_moby_hit(moby, 0x230000, 0);
-    fun_00213928(moby, source, damage, 0, &hits, 0, 0, 4);
+    resolve_moby_hit_response(moby, source, damage, 0, &hits, 0, 0, 4);
     if (vector_distance_xy(&moby->pos, target) < 0.25f ||
         (hits >= 2 && source != NULL && source->moby->oclass != 0x4F5)) {
         spawn_explosion_304e00(moby,

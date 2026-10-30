@@ -468,7 +468,7 @@ extern unsigned char                 mission_state[] __asm__("D_L00_0015FC88") M
 extern unsigned char                 D_L00_001804C0[];
 extern unsigned char                 D_L00_001BC1B0[];
 extern unsigned char                 D_L00_001C5B00[];
-extern void                          enable_global_flag(void) __asm__("func_001F61E8");
+extern void                          enable_font_color_codes(void) __asm__("func_001F61E8");
 extern void                          scale_vector(void *, void *, float) __asm__("FUN_001f9a80");
 extern void                          FUN_0022a5e0(void *);
 extern void                          light_tfrags(void *) __asm__("FUN_00234f98");
@@ -481,7 +481,7 @@ extern void update_moby_proximity_interaction() __asm__("FUN_L00_0028e180");
 extern void initialize_moby_state_record(char *) __asm__("FUN_L00_0028e8a0");
 extern void FillTransferWords(void *, s32, s32);
 extern void FlushCache(s32);
-extern void PackDmaTag(unsigned long, unsigned long, unsigned long);
+extern void set_background_color(unsigned long, unsigned long, unsigned long);
 extern void PackRenderCommandFields(void *, s32, s32, s32, s32);
 extern void reset_draw_globals(void) __asm__("FUN_001f37e8");
 extern void set_moby_animation(void *, s32, s32) __asm__("func_00212ED8");
@@ -489,9 +489,9 @@ extern void set_video_timing(s32) __asm__("func_00214970");
 extern void update_camera(void) __asm__("func_001EDAA8");
 extern void update_fog(void) __asm__("func_001F2588");
 extern void vu0_load_micro_program(void *) __asm__("func_002334D8");
-void        reset_global_state_fields(void) __asm__("func_00217020");
+void        reset_pad_history(void) __asm__("func_00217020");
 void        srand(int value) __asm__("func_001160C8");
-extern void load(void *, int, int) __asm__("FUN_00216828");
+extern void read_disc_sectors_and_wait(void *, int, int) __asm__("FUN_00216828");
 
 char                *load_level_gameplay(int skip_gameplay_read) __asm__("FUN_L00_00241940");
 extern unsigned char l00_moby_load_exclusion_flags_by_uid[] __asm__("D_L00_001BB684");
@@ -511,9 +511,11 @@ char *load_level_gameplay(int skip_gameplay_read) {
     mem = D_L00_00173E00.f18;
     if (skip_gameplay_read == 0) {
         if (pal_mode != 0) {
-            load(mem, disc_table.sound_archive_alt.sector, disc_table.sound_archive_alt.size);
+            read_disc_sectors_and_wait(
+                mem, disc_table.sound_archive_alt.sector, disc_table.sound_archive_alt.size);
         } else {
-            load(mem, disc_table.sound_archive.sector, disc_table.sound_archive.size);
+            read_disc_sectors_and_wait(
+                mem, disc_table.sound_archive.sector, disc_table.sound_archive.size);
         }
         level_root[1] = mem; /* D_0015EE50 */
     }
@@ -568,7 +570,7 @@ char *load_level_gameplay(int skip_gameplay_read) {
     D_L00_001604A4 = 500.0f;
     D_L00_0015FFF0 = 500;
     D_L00_0016017C = 0x1F4000;
-    PackDmaTag(D_L00_0016CA40.f23C, D_L00_0016CA40.f240, D_L00_0016CA40.f244);
+    set_background_color(D_L00_0016CA40.f23C, D_L00_0016CA40.f240, D_L00_0016CA40.f244);
     vu0_load_micro_program(D_00100AE0);
     fast_mem_zero16(point_lights, 0x100);
     fast_mem_zero16(D_L00_001804C0, 0x180);
@@ -1636,8 +1638,8 @@ char *load_level_gameplay(int skip_gameplay_read) {
     reset_hero_to_idle();
     setup_level_cameras();
     update_camera();
-    reset_global_state_fields();
-    enable_global_flag();
+    reset_pad_history();
+    enable_font_color_codes();
     D_L00_001B0770[0] = 0;
     D_L00_001B07B0[0] = 0;
     D_L00_001B0830[0] = 0;

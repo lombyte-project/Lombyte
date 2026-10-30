@@ -21,8 +21,7 @@ extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern int   is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
 extern int   step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
 
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
 extern void
 trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
@@ -580,7 +579,7 @@ void handle_constructorbot_damage_and_retargeting(void *owner_moby) {
     if (hit_record != 0 && *(short *)(*(char **)(hit_record + 0x20) + 0xA6) == 0x264) {
         hit_record = 0;
     }
-    fun_00213928(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
+    resolve_moby_hit_response(moby, hit_record, &moby_vars->hp, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && ((unsigned char *)moby)[0x20] != 0x11) {
         moby_vars->hp -= dmg;
         moby_vars->i90 = truncate_float_to_s32(614.4f);

@@ -14,9 +14,9 @@ extern s32 sceTtyWrite();
 s32 write(s32 fd, s32 source_buffer, s32 byte_count) {
     register s32 tty_arg = source_buffer;
     if ((u32)(fd - 1) < 2U) {
-        if (CoreGlobalWord == 0) {
+        if (tty_initialized == 0) {
             if (sceTtyInit() != 0) {
-                CoreGlobalWord = 1;
+                tty_initialized = 1;
                 goto block_4;
             }
             goto block_5;

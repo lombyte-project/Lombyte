@@ -30,9 +30,8 @@ extern void         FUN_L00_0024f7c8(void *, int, void *);
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
 
 extern float FUN_L04_001f1978(float);
-extern int   fun_00213928() __asm__("FUN_00213928");
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int   resolve_moby_hit_response() __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 
 extern char D_L10_00167240[];
@@ -472,7 +471,7 @@ void update_blarg_ship_hit_reactions_and_targeting(struct Moby *moby) {
     float          dmg;
     int            hit_response_code;
     dmg = 0.0f;
-    hit_response_code = fun_00213928(moby, info, pvars + 0x20, 5, &out, &dmg, 0, 4);
+    hit_response_code = resolve_moby_hit_response(moby, info, pvars + 0x20, 5, &out, &dmg, 0, 4);
     if (info != 0 && out != 1 && moby->state != 8) {
         if ((*(float *)(pvars + 0x20) -= dmg) <= 0.0f) {
             hit_response_code = 1;

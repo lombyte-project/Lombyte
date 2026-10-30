@@ -617,9 +617,8 @@ typedef struct MobyData {
     int           f194;
 } MobyData;
 
-extern int fun_00213928() __asm__("FUN_00213928");
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response() __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
 extern void trooper_anim_update(void *m, void *p) __asm__("FUN_L00_0025d458");
 
@@ -641,7 +640,7 @@ void update_darter_hit_reactions_and_targeting(struct Moby *moby) {
     fast_dec_timer(&data->f184);
     if (moby->state != 13) {
         hit_record = find_moby_hit(moby, 0x330000, 0);
-        fun_00213928(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
+        resolve_moby_hit_response(moby, hit_record, &data->f20, 5, &hit_processing_status, 0, 0, 4);
         if (hit_record != 0 && hit_record->moby->oclass != moby->oclass) {
             if (data->f20 <= hit_record->f2C) {
                 data->f20 = 0.0f;

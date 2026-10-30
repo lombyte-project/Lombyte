@@ -17,7 +17,7 @@
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/mobys/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-#include "rnc/math/vectors/normalize_vector_triplet.h"
+#include "rnc/math/normalize_vector_triplet.h"
 
 #include "qcopy.h"
 

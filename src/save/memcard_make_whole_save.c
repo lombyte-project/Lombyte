@@ -11,8 +11,8 @@ void memcard_make_whole_save(u8 *cursor) {
     s32 index;
     s32 size;
 
-    *(s32 *)(cursor + 0x0) = get_dma_packet_span_bytes(mc_gamedata);
-    *(s32 *)(cursor + 0x4) = get_dma_packet_span_bytes(mc_leveldata);
+    *(s32 *)(cursor + 0x0) = memcard_get_data_size(mc_gamedata);
+    *(s32 *)(cursor + 0x4) = memcard_get_data_size(mc_leveldata);
     cursor += 8;
     cursor += memcard_prepare_data(cursor, 0, mc_gamedata);
     index = 0;

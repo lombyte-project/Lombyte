@@ -56,7 +56,7 @@ extern float D_L00_0015F5A8_macro[] __asm__("D_L00_0015F5A8") MACRO_ADDR;
 extern int  debug_print(void *) __asm__("FUN_001e93b0");
 extern void init_level_runtime_state(void) __asm__("FUN_L00_0023d028");
 extern int  load_level_assets_and_gameplay(int, int) __asm__("FUN_L00_00244110");
-extern void clear_dma_queue_entry(void) __asm__("FUN_001f0b88");
+extern void reset_draw_config(void) __asm__("FUN_001f0b88");
 extern void initialize_level_map_archive(void) __asm__("FUN_L00_002464a8");
 extern void load_misc_animations_into_stash(void) __asm__("FUN_L00_00276078");
 extern void prepare_level_entry_transition(void) __asm__("FUN_L00_0028eed0");
@@ -82,7 +82,7 @@ extern void dispatch_game_state_update(void) __asm__("FUN_00230ee8");
 extern void update_slideshow(void) __asm__("FUN_L00_00299c48");
 extern void draw_framebuffer_with_timed_text(void) __asm__("FUN_L00_001f8f78");
 extern void frame_roll_counter(void) __asm__("FUN_L00_001f6d70");
-extern void read_global_table_entry(void) __asm__("FUN_0012eaf0");
+extern void snd_hold_command_batches(void) __asm__("FUN_0012eaf0");
 extern long get_frame_texture(int) __asm__("FUN_001ffa10");
 extern void
 draw_rotated_sprite(float, float, int, int, long, float, float, float) __asm__("FUN_00200600");
@@ -136,7 +136,7 @@ void run_level_main_loop(void) {
     g_debug_menu.scene_index = -1;
     g_debug_menu.selected_column = one;
     g_debug_menu.actuator_enabled = one;
-    clear_dma_queue_entry();
+    reset_draw_config();
     initialize_level_map_archive();
     init_hud();
     load_misc_animations_into_stash();
@@ -163,7 +163,7 @@ void run_level_main_loop(void) {
     }
     item_usage[current_level_index].level_mask =
         item_usage[current_level_index].level_mask | (1 << current_level_index) | 0x80000000;
-    read_global_table_entry();
+    snd_hold_command_batches();
 
     while (D_L00_0015F570 == 0) {
         quit = 0;
@@ -390,8 +390,8 @@ extern unsigned char      D_0014161B[];
 extern unsigned char      l00_map_outside_circle_mask[] __asm__("D_L00_00184394");
 extern void decode_map_mask(int *dst, unsigned char *src, short *offs) __asm__("FUN_00206710");
 extern void load_map_chunk(void *dst, unsigned char *src, int) __asm__("FUN_00207bb0");
-s32         load(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
-s32         stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
+s32 read_disc_sectors_and_wait(s32 dst, s32 sector, s32 sector_count) __asm__("FUN_00216828");
+s32 stash_send_data(u32 src, s32 qw, s32 count, s32 tag) __asm__("FUN_00232e40");
 extern struct DiscFile D_00138438[];
 extern char            D_001383A0[];
 extern char            D_00141EC0[];
@@ -450,7 +450,7 @@ void initialize_level_map_archive(void) {
         archive_base = ((int **)&D_L00_00173E08)[0];
         archive = (int *)((int)archive_base + 0x9A800);
         scratch = file->size << 7;
-        load(archive, file->sector, file->size);
+        read_disc_sectors_and_wait(archive, file->sector, file->size);
         state->file_handle =
             stash_send_data((int)archive, scratch, 0x4800, (int)map_archive_stash_tag);
         state->transfer_bytes = scratch;

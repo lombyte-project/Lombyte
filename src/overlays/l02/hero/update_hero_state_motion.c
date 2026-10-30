@@ -318,7 +318,7 @@ s32  collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 s32  coll_sound_class(void) __asm__("FUN_L00_001f3608");
 f32  resolve_camera_surface_height(void *, void *) __asm__("FUN_002135f0");
 s32  is_moby_in_class_range_500_to_540(s32) __asm__("FUN_L00_0025e3b8");
-u8  *suck_get_aim_height(s32) __asm__("FUN_002141f8");
+u8  *get_moby_target_info(s32) __asm__("FUN_002141f8");
 void sceVu0Normalize(void *, void *) __asm__("FUN_00125180");
 f32  compute_gravity_relative_vector_inclination(void *) __asm__("FUN_L00_00233d30");
 void compute_rotated_vector_angles(void *, void *) __asm__("FUN_L00_00216078");
@@ -412,7 +412,7 @@ void update_hero_ground_contact(void) {
         if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.on_flagged_ground_moby = 1;
         }
-        hit_moby_flag_data = suck_get_aim_height(HH.moby);
+        hit_moby_flag_data = get_moby_target_info(HH.moby);
         if (hit_moby_flag_data != 0 && (*(u16 *)(hit_moby_flag_data + 0x1E) & 8)) {
             hero.on_flagged_ground_moby = 1;
         }

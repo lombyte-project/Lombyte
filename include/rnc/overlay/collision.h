@@ -14,7 +14,7 @@
  */
 typedef struct {
     u8 pad0[0x18];
-    s32 moby; /* 0x18: passed to suck_get_aim_height (reads moby+0x34, moby+0x78); 0 when no moby was hit */
+    s32 moby; /* 0x18: passed to get_moby_target_info (reads moby+0x34, moby+0x78); 0 when no moby was hit */
     s32 unk1C; /* 0x1C: > 0 gates copying point and the normal into the hero (shared/hero/air_accel.c) */
     union {
         OvlQuad q;

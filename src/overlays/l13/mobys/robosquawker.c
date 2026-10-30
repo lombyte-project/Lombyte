@@ -400,8 +400,7 @@ extern int D_L13_0015F5C4;
 
 extern int D_L13_001613B0[] __attribute__((section(".sdata")));
 
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 
@@ -517,7 +516,8 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     }
     dmg = 0.0f;
     hit = FUN_L00_0025a420(robosquawker_moby, 0x330000, 0);
-    fun_00213928(robosquawker_moby, hit, &robosquawker_vars->f20, 0, &hits, &dmg, 0, 4);
+    resolve_moby_hit_response(
+        robosquawker_moby, hit, &robosquawker_vars->f20, 0, &hits, &dmg, 0, 4);
     fast_dec_timer_s16(&robosquawker_vars->h26);
     if (robosquawker_vars->h26 < scale_game_frames(0x2D) && hit != 0 &&
         robosquawker_moby->state != 0x63) {

@@ -34,7 +34,7 @@
 #include "rnc/overlay/shared/hero/update_hero_and_vehicle_mode_effects.h"
 #include "rnc/overlay/shared/mobys/capture_linked_moby_relative_transforms.h"
 #include "rnc/data_labels.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/game/options.h"
 #include "rnc/overlay/level_labels.h"
 
@@ -74,7 +74,7 @@ void set_moby_attached_effect_alpha_from_distance(FadingEffectMoby *moby, float 
     if (moby == 0) {
         return;
     }
-    effect = suck_get_aim_height(moby);
+    effect = get_moby_target_info(moby);
     if (effect == 0) {
         return;
     }
@@ -1817,8 +1817,7 @@ typedef struct {
     char  pad40[0x40];
 } VendorNode_5e80;
 
-extern int
-fun_00213928(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
@@ -1867,7 +1866,8 @@ void update_drek_boss_damage_and_phase_transitions(char *moby) {
             }
         }
     }
-    fun_00213928(moby, hit_record, boss_data + 0x20, 0, &hit_processing_status, &step, 0, 4);
+    resolve_moby_hit_response(
+        moby, hit_record, boss_data + 0x20, 0, &hit_processing_status, &step, 0, 4);
     if (hit_processing_status != 1) {
         int type = MOBY(moby)->state;
         if ((type >= 0xC && type <= 0x13) || type == 2) {

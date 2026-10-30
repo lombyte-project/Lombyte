@@ -36,7 +36,7 @@ extern s32   FUN_001efa68(void *, void *, s32, s32, s32);
 
 extern void *D_001413D0 NOT_SDA;
 
-extern char *suck_get_aim_height(void *) __asm__("FUN_002141f8");
+extern char *get_moby_target_info(void *) __asm__("FUN_002141f8");
 extern int   FUN_001efa68(void *, void *, int, int, int);
 
 extern V     D_L00_00173E60;
@@ -91,7 +91,7 @@ char *spawn_giant_clank_missile(
         *(int *)(d + 0x20) = 0;
         *(char **)(d + 0x18) = tgt;
         if (tgt != 0) {
-            unsigned char *e = (unsigned char *)suck_get_aim_height(tgt);
+            unsigned char *e = (unsigned char *)get_moby_target_info(tgt);
             if (e != 0) {
                 *(unsigned short *)(e + 0x1E) |= 0x80;
                 if (e[0xB] != 0)

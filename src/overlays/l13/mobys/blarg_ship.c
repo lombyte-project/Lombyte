@@ -31,8 +31,7 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 
-extern int
-fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 
 extern void trooper_anim_update(struct Moby *, void *) __asm__("FUN_L00_0025d458");
 
@@ -70,7 +69,7 @@ void blarg_ship_update(struct Moby *moby) {
     }
     data = (char *)moby->pvars;
     hit = find_moby_hit(moby, 0x10000, 0);
-    fun_00213928(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
+    resolve_moby_hit_response(moby, hit, data + 0x20, 0, hit_buffer, 0, 0, 4);
     switch (moby->state) {
     case BLARG_SHIP_ENTER_DAMAGE_HANDLING:
         moby->state = 1;

@@ -9,7 +9,7 @@
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/mobys/animation/set_moby_animation.h"
 #include "rnc/rendering/effects/update_fog.h"
-#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
+#include "rnc/rendering/vu1/select_level_vu_chain.h"
 
 struct Ent3 {
     u8 pad0[0x10];
@@ -30,7 +30,7 @@ struct Ent {
 
 extern void reset_active_camera_position_and_basis(void) __asm__("func_00218D10");
 extern void initialize_menu_preview_scene(void) __asm__("FUN_00218f98");
-extern void update_visible_resident_objects() __asm__("FUN_00212e28");
+extern void update_visible_mobys() __asm__("FUN_00212e28");
 extern void mode_freeze_init(s32, struct MenuPage *) __asm__("func_001FBAB8");
 extern void close_menu_system(void) __asm__("FUN_002191b8");
 
@@ -58,7 +58,7 @@ void update_menu_system(void) {
             return;
         }
         D_0015F5B8 = 0x1E000;
-        calculate_dma_transfer_address();
+        select_level_vu_chain();
         update_fog();
         space_load_in_progress = 1;
         menu_system.help_text_buffer = 0;
@@ -149,7 +149,7 @@ void update_menu_system(void) {
             }
         }
     }
-    update_visible_resident_objects();
+    update_visible_mobys();
     if (menu_system.close_request != 0) {
         close_menu_system();
     }

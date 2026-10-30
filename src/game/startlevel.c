@@ -43,13 +43,13 @@ extern volatile SoundSlot *volatile level_sound_defs __asm__("D_0015F634");
 extern volatile s32 level_sound_def_count __asm__("D_0015F630");
 
 extern void init_once(void) __asm__("func_00201650");
-extern void InitializeStreamingState(void);
+extern void reset_gs_texture_allocation(void);
 extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern void dmac_vif1_enable(void) __asm__("func_00233D00");
-extern void ClearDmaQueueEntry(void);
+extern void reset_draw_config(void);
 extern s32  sceGsSyncV(s32);
 extern void put_disp_buffer(void) __asm__("func_001FB2A8");
-extern void PackDmaTag(s32, u64, u64);
+extern void set_background_color(s32, u64, u64);
 extern void FlushCache(s32);
 extern void decompress_wad(s32, s32) __asm__("func_0020B618");
 extern void put_draw_buffer_large(void) __asm__("func_001FB2D0");
@@ -101,7 +101,7 @@ void startlevel(void) {
 
     boot_level_active = 1;
     init_once();
-    InitializeStreamingState();
+    reset_gs_texture_allocation();
     for (i = 0; i < level_bss_end - level_bss_start; i++) {
         level_bss_start[i] = 0;
     }
@@ -109,12 +109,12 @@ void startlevel(void) {
     frames = 0;
     vu1_init_chain();
     dmac_vif1_enable();
-    ClearDmaQueueEntry();
+    reset_draw_config();
     game_frame_counter_macro = 0;
     sceGsSyncV(0);
     game_mode_macro = 0;
     put_disp_buffer();
-    PackDmaTag(0, 0, 0);
+    set_background_color(0, 0, 0);
     hdr = (LevelHeader *)(((u32)D_24135F & 0xFFFFC000) + 0x2C0000);
     while ((memory_card_notice = check_memory_card()) != 0 &&
            (frames < 11 || controller_state.pressed == 0)) {
@@ -129,7 +129,7 @@ void startlevel(void) {
                            hdr->code + (s32)hdr);
             FlushCache(0);
             vu1_init_chain();
-            PackDmaTag(0, 0, 0);
+            set_background_color(0, 0, 0);
             put_draw_buffer_large();
             append_gif_transfer_packet();
             draw_boot_image(hdr->code + (s32)hdr);
@@ -173,7 +173,7 @@ void startlevel(void) {
     }
     FlushCache(0);
     vu1_init_chain();
-    PackDmaTag(0, 0, 0);
+    set_background_color(0, 0, 0);
     put_draw_buffer_large();
     append_gif_transfer_packet();
     draw_boot_image(hdr->code + (s32)hdr);

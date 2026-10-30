@@ -376,7 +376,8 @@ extern f32 mine_layer_nonlethal_knockback_speed_scale_gp __asm__("D_L03_001618FC
 #include "rnc/overlay/l03/mobys/mine_layer_data/handle_mine_layer_damage.h"
 
 extern TrooperHit *trooper_find_hit(struct Moby *, s32, s32) __asm__("FUN_L00_0025a420");
-extern s32 fun_00213928(struct Moby *, TrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
+extern s32         resolve_moby_hit_response(
+            struct Moby *, TrooperHit *, f32 *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_00213928");
 extern void trooper_knockback_arc(Vec4 *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(f32, struct Moby *, void *, s32, s32, s32) __asm__("FUN_L00_0025c558");
@@ -404,8 +405,8 @@ void handle_mine_layer_damage(struct Moby *damaged_moby) {
 
     dmg = 0.0f;
     hit_record = trooper_find_hit(damaged_moby, 0x330000, 0);
-    damage_response =
-        fun_00213928(damaged_moby, hit_record, &trooper_vars->health, 0, &hit, &dmg, 0, 4);
+    damage_response = resolve_moby_hit_response(
+        damaged_moby, hit_record, &trooper_vars->health, 0, &hit, &dmg, 0, 4);
     if (hit != 1 && damaged_moby->state != 5) {
         if (hit_record->source != NULL) {
             if (hit_record->source != hero.items[0].moby)

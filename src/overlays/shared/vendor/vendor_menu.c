@@ -34,7 +34,7 @@
 #include "rnc/mobys/animation/update_moby_animation_state.h"
 #include "rnc/mobys/detach_manipulator.h"
 #include "rnc/mobys/init_moby_instance.h"
-#include "rnc/mobys/update_visible_resident_objects.h"
+#include "rnc/mobys/update_visible_mobys.h"
 #include "rnc/overlay/shared/ui/hud/hud_update_counter.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/world/loaders/relocate_asset_entry_pointers.h"
@@ -108,7 +108,7 @@ void       fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 void       clear_active_help_record(void) __asm__("FUN_L00_002039a0");
 
 extern float D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
-void         calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
+void         select_level_vu_chain(void) __asm__("FUN_002335a0");
 void         set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 
 extern void sce_vu0_unit_matrix(void *) __asm__("FUN_00125218");
@@ -497,7 +497,7 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4_29ab70;
 
 extern void f2330d0_29ab70(void) __asm__("FUN_L00_002330d0");
-extern void update_resource_counter(void) __asm__("FUN_001ff768");
+extern void decrement_resource_counter(void) __asm__("FUN_001ff768");
 extern void music_unpause(void) __asm__("FUN_00216088");
 extern int  vendor_close_hero_local_offset_gp __asm__("D_L00_00161070") __attribute__((sda));
 void        close_vendor_menu(int exit_cutscene_completed) __asm__("FUN_L00_0029ab70");
@@ -512,7 +512,7 @@ void close_vendor_menu(int exit_cutscene_completed) {
         set_animation_parameter(*(int *)(vendor_state_base + 0x50), 0);
     *(int *)(vendor_state_base + 0x54) = -1;
     *(int *)(vendor_state_base + 0x50) = -1;
-    update_resource_counter();
+    decrement_resource_counter();
     D_L00_0015F5D8 = 1;
     D_L00_0015F5C4 = 0;
     hero_set_state(HERO_STATE_IDLE, 1);
@@ -593,7 +593,7 @@ void start_vendor_exit_cutscene(void) {
     fill_transfer_words(&D_L00_0016C860_lui, 0, 0x1C0);
     fill_transfer_words(D_L00_0017C340_lui, 0, 0x40);
     vu1_sync_chain(1);
-    calculate_dma_transfer_address();
+    select_level_vu_chain();
     selected = (s32 *)((char *)vendor_state + 0x48);
     offset = D_L00_001611CC - 0x40000;
     D_L00_001611CC = offset;
@@ -645,7 +645,7 @@ void restore_hero_after_vendor_exit_cutscene(void) {
     euler_rotation.f[2] =
         fast_add_rotations(*(float *)(*(char **)(vendor_state_base + 0x28) + 0x48), -1.5707964f);
     set_race_camera(&world_position, &euler_rotation, 0, 1);
-    update_resource_counter();
+    decrement_resource_counter();
     if ((unsigned short)(music_stream_state.secondary.state - 6) >= 2)
         music_stream_state.secondary.state = 5;
     snd_continue_all_sounds_in_group(0x1D);
@@ -1155,7 +1155,7 @@ void update_vendor_menu(void) {
             }
             if ((g_debug_menu.update_flags & 2) ||
                 ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-                update_visible_resident_objects();
+                update_visible_mobys();
                 FUN_0022dc50();
             }
             noop_main_callback(vendor_moby_update_label, 3);
@@ -1466,7 +1466,7 @@ void update_vendor_menu(void) {
         if (D_L00_00161E18 == 1) {
             if (--vendor_close_delay_frames_remaining == 0) {
                 D_L00_0015F5D8 = 1;
-                calculate_dma_transfer_address();
+                select_level_vu_chain();
                 FUN_00212f90(vendor_menu.vendor_moby, 4, 9, 8);
                 vendor_menu.vendor_moby->f58 = frame_scale * -0.5f;
                 if (vendor_menu.mode != 0) {
@@ -1493,7 +1493,7 @@ void update_vendor_menu(void) {
         break;
     case VENDOR_MENU_EXIT_CUTSCENE:
         reset_frame_counters();
-        update_visible_resident_objects();
+        update_visible_mobys();
         FUN_0022dc50();
         coordinate_hero_frame_update();
         update_parts();
@@ -1513,7 +1513,7 @@ void update_vendor_menu(void) {
         cs = &D_L00_0016C860;
         if (cs->f34 >= cs->h40) {
             fade_level = 0.0f;
-            calculate_dma_transfer_address();
+            select_level_vu_chain();
             D_L00_0016CAF0_lui = 0.63f;
             update_view_context();
             for (j = 0; j < D_L00_0016C860.h44; j++) {

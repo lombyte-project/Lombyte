@@ -621,7 +621,7 @@ float score_hero_target_candidate(
 }
 
 extern char *active_mobies[] __asm__("D_L00_001ABA00") NOT_SDA;
-float       *suck_get_aim_height(char *) __asm__("FUN_002141f8");
+float       *get_moby_target_info(char *) __asm__("FUN_002141f8");
 float        score_hero_target_candidate(char *, float, float, float, float, int *) __asm__("FUN_L00_0020d6b0");
 char *find_best_hero_heading_target(float range_limit,
                                     float reference_yaw,
@@ -638,7 +638,7 @@ char *find_best_hero_heading_target(float range_limit,
     int   i = 0;
     char *candidate_moby;
     while ((candidate_moby = active_mobies[i]) != 0) {
-        float *candidate_eligibility_value = suck_get_aim_height(candidate_moby);
+        float *candidate_eligibility_value = get_moby_target_info(candidate_moby);
         if (candidate_eligibility_value != 0 && *candidate_eligibility_value != 0.0f &&
             (MOBY(candidate_moby)->flags & 0x1000)) {
             int   out;
@@ -694,7 +694,7 @@ void update_hero_condition_animation(void) {
     on = 0;
     if (hero.unk2274) {
         on = 1;
-        animation_selector_data = suck_get_aim_height(hero.unk2274);
+        animation_selector_data = get_moby_target_info(hero.unk2274);
         anim = 0x79;
         if (animation_selector_data && animation_selector_data[0x3C]) {
             anim = select_hero_condition_animation_id(animation_selector_data[0x3C]);
@@ -3383,7 +3383,7 @@ void update_hero_ground_contact_and_surface_slopes(void) {
         if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.on_flagged_ground_moby = 1;
         }
-        hit_moby_flag_data = suck_get_aim_height(HH.moby);
+        hit_moby_flag_data = get_moby_target_info(HH.moby);
         if (hit_moby_flag_data != 0 && (*(u16 *)(hit_moby_flag_data + 0x1E) & 8)) {
             hero.on_flagged_ground_moby = 1;
         }

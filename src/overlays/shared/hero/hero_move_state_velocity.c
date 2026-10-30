@@ -991,7 +991,7 @@ void        rotation_matrix(void *, void *) __asm__("FUN_001fa050");
 void        euler_rotation_basis(void *, void *) __asm__("FUN_001fa030");
 void        clear_hero_target_and_ground_speeds(void) __asm__("FUN_L00_002118b0");
 void        clear_moby_transform_history(void *) __asm__("FUN_L00_00262840");
-void        reset_global_state_fields(void) __asm__("FUN_00217020");
+void        reset_pad_history(void) __asm__("FUN_00217020");
 void        cancel_hero_item_animation(void) __asm__("FUN_L00_0020e698");
 void        reset_hero_easing_records(void) __asm__("FUN_L00_00205538");
 extern int  hero_set_state(int, int) __asm__("FUN_L00_002223f8");
@@ -1038,7 +1038,7 @@ void set_race_camera(Vec4_00216f90 *hero_world_position,
     clear_u64_value(position_destination + 0x20);
     *(int *)(hero_base + 0x184) = 0;
     *(unsigned char *)(hero_base + 0x22CA) = 0;
-    reset_global_state_fields();
+    reset_pad_history();
     cancel_hero_item_animation();
     reset_hero_easing_records();
     if (mode != -1)

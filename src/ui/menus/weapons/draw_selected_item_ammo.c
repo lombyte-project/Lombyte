@@ -18,7 +18,7 @@ struct ImageEntry {
 };
 
 extern struct ImageEntry D_001DFFB0[];
-extern void              PackImageDescriptor(s32 *, s32);
+extern void              pack_image_descriptor(s32 *, s32);
 extern void              setup_gif_paging(s32) __asm__("func_001F4280");
 extern void              do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
@@ -65,7 +65,7 @@ s32 draw_selected_item_ammo(s32 image_descriptor_input) {
         }
     }
     setup_gif_paging(0);
-    PackImageDescriptor((s32 *)descriptor, image_descriptor_input);
+    pack_image_descriptor((s32 *)descriptor, image_descriptor_input);
     *(s16 *)(descriptor + 0x10) = 0x10;
     *(s16 *)(descriptor + 0x12) = 3;
     font_print_window_regular((s32 *)descriptor, (((u64)0x80FF << 0x10) | 0xA888), sp_slot, -1);

@@ -37,7 +37,7 @@ extern void queue_scene_movie_with_game_language(int) __asm__("FUN_L00_00299460"
 extern void clear_bit_grid_rectangle(int x, int y, int w, int h) __asm__("FUN_L07_00270248");
 extern void unlock_planet(int) __asm__("FUN_L00_002607d0");
 extern int  memcard_save_data(int, int) __asm__("FUN_0020b178");
-extern void initialize_global_state_entry(int) __asm__("FUN_0022e188");
+extern void request_space_load(int) __asm__("FUN_0022e188");
 void        update_umbris_scene_progression(struct Moby *moby) __asm__("FUN_L07_002f5ba0");
 void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 
@@ -197,7 +197,7 @@ void update_umbris_scene_progression(struct Moby *moby) {
         clear_bit_grid_rectangle(0x87, 0xC, 0x56, 0x3C);
         unlock_planet(8);
         memcard_save_data(0, 8);
-        initialize_global_state_entry(8);
+        request_space_load(8);
         moby->state = 12;
         break;
     case CONTROLLER_CLEANUP_LINKED_MOBY:

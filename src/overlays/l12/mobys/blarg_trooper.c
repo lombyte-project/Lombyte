@@ -14,7 +14,7 @@
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/overlay/l12/mobys/hoven_anklebiter.h"
 #include "rnc/overlay/l12/mobys/miner.h"
-#include "rnc/game/fun_00213928.h"
+#include "rnc/mobys/resolve_moby_hit_response.h"
 
 extern char D_L12_00167240[];
 
@@ -591,7 +591,7 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
     }
     coll = find_hit_e81e0(moby, 0x330000, 0);
     dmg = 0.0f;
-    fun_00213928(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
+    resolve_moby_hit_response(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
     if (coll != 0 && coll->moby->oclass != moby->oclass && coll->moby->oclass != 0xB8 &&
         moby->state != 9 && dmg != 0.0f) {
         if (moby->group != 0xFF) {

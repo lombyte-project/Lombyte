@@ -16,7 +16,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/interpolation.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/world/collision/collision_hit_material.h"
@@ -510,7 +510,7 @@ void update_hero_ledge_probe(void) {
 
     if (coll_hit.moby != 0) {
         moby_allowed = 0;
-        moby_record = suck_get_aim_height(coll_hit.moby);
+        moby_record = get_moby_target_info(coll_hit.moby);
         moby_data = FUN_L00_002603d0((char *)coll_hit.moby);
         if (moby_record && (*(u16 *)(moby_record + 0x1E) & 1))
             moby_allowed = 1;
@@ -1211,7 +1211,7 @@ void update_hero_ground_contact_and_gravity(void) {
         if (is_moby_in_class_range_500_to_540(HH.moby)) {
             hero.on_flagged_ground_moby = 1;
         }
-        hit_moby_record = suck_get_aim_height(HH.moby);
+        hit_moby_record = get_moby_target_info(HH.moby);
         if (hit_moby_record != 0 && (*(u16 *)(hit_moby_record + 0x1E) & 8)) {
             hero.on_flagged_ground_moby = 1;
         }

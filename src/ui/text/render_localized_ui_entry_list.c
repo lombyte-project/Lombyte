@@ -6,8 +6,8 @@
 #include "rnc/ui/text/font_state.h"
 #include "rnc/rendering/vu1_registers.h"
 #include "rnc/ui/menus/widgets/fade_menu_color.h"
-#include "rnc/runtime/state/disable_global_flag.h"
-#include "rnc/runtime/state/enable_global_flag.h"
+#include "rnc/ui/text/font/disable_font_color_codes.h"
+#include "rnc/ui/text/font/enable_font_color_codes.h"
 
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
@@ -138,7 +138,7 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
             } else if (menu->data.list.flags & 0x4000) {
                 x = half_width - (maximum_text_width >> 1);
             }
-            disable_global_flag();
+            disable_font_color_codes();
             font_print(x + text_shadow_x,
                        y + text_shadow_y,
                        0x80000000L,
@@ -146,14 +146,14 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
                        -1,
                        get_effect_texture(font_texture_index),
                        glyphs);
-            enable_global_flag();
+            enable_font_color_codes();
             if (menu->data.list.flags & 0x80) {
-                disable_global_flag();
+                disable_font_color_codes();
             }
             font_print(x, y, color, text_id, -1, get_effect_texture(font_texture_index), glyphs);
             y += row_height;
             if (menu->data.list.items[entry_index].subtext != 0) {
-                disable_global_flag();
+                disable_font_color_codes();
                 shadow_x = x + text_shadow_x;
                 shadow_y = y + text_shadow_y;
                 secondary_text = get_help_message_text(menu->data.list.items[entry_index].subtext);
@@ -165,7 +165,7 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
                            get_effect_texture(font_texture_index),
                            glyphs);
                 if (!(menu->data.list.flags & 0x80)) {
-                    enable_global_flag();
+                    enable_font_color_codes();
                 }
                 font_print(x,
                            y,
@@ -177,7 +177,7 @@ s32 render_localized_ui_entry_list(struct MenuScreen *menu) {
                 y += row_height;
             }
             if (menu->data.list.flags & 0x80) {
-                enable_global_flag();
+                enable_font_color_codes();
             }
             entry_index++;
             selection_index++;

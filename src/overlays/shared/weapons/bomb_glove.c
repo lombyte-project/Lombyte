@@ -7,7 +7,7 @@
 #include "rnc/overlay/collision.h"
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
 #include "rnc/overlay/shared/hero/hero_move_state_velocity.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
@@ -297,7 +297,7 @@ void bomb_glove_update(struct Moby *moby) {
             struct Moby *candidate;
             hero.throw_target = 0;
             while ((candidate = D_L00_001ABA00_lui[entry]) != 0) {
-                u8 *data = suck_get_aim_height(candidate);
+                u8 *data = get_moby_target_info(candidate);
                 if ((s8)candidate->state >= 0 && data && (candidate->flags & 0x1000)) {
                     f32 candidateAngle, elevation, difference;
                     qcopy(&temporary.arc, &candidate->pos);

@@ -43,7 +43,7 @@
 #include "rnc/mobys/animation/update_moby_animation_state.h"
 #include "rnc/mobys/detach_manipulator.h"
 #include "rnc/mobys/init_moby_instance.h"
-#include "rnc/mobys/update_visible_resident_objects.h"
+#include "rnc/mobys/update_visible_mobys.h"
 #include "rnc/overlay/shared/ui/hud/hud_update_counter.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/world/loaders/relocate_asset_entry_pointers.h"
@@ -505,7 +505,7 @@ typedef struct {
 extern float     D_L00_0016CAF0_lui __asm__("D_L00_0016CAF0") NOT_SDA;
 extern O_298b18 *D_L00_0015FFDC_298b18 __asm__("D_L00_0015FFDC");
 extern C_298b18  D_L00_0016C860_298b18 __asm__("D_L00_0016C860") NOT_SDA;
-void             calculate_dma_transfer_address(void) __asm__("FUN_002335a0");
+void             select_level_vu_chain(void) __asm__("FUN_002335a0");
 void             f2330d0_298b18(void) __asm__("FUN_L00_002330d0");
 void             set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 void             process_menu_entry(F_298b18 *, void *, int) __asm__("FUN_00216c48");
@@ -519,7 +519,7 @@ void finish_cutscene(void) {
     if ((unsigned short)(music_stream_state.secondary.state - 6) >= 2)
         music_stream_state.secondary.state = 5;
     D_L00_0015F5D8 = 1;
-    calculate_dma_transfer_address();
+    select_level_vu_chain();
     fade_to_black(0xC);
     D_L00_0015F5C0_macro[1] = 0;
     D_L00_0016CAF0_lui = 0.63f;
@@ -734,7 +734,7 @@ void update_cutscene_playback(void) {
     }
     if ((g_debug_menu.update_flags & 2) ||
         ((g_debug_menu.update_flags & 0x10) && (D_0013CAE4 & 0x200))) {
-        update_visible_resident_objects();
+        update_visible_mobys();
         enqueue_voice_request();
     }
     noop_main_callback(D_L00_00160FF8, 3);
@@ -1135,7 +1135,7 @@ void end_slideshow(void) {
     D_L00_0015F5C0_macro[1] = 0;
     D_L00_0015F5D8 = 1;
     D_L00_0015F3FC = 0;
-    calculate_dma_transfer_address();
+    select_level_vu_chain();
 }
 
 extern s16  cd_read_active[] __asm__("D_001516D8");

@@ -16,7 +16,7 @@ extern s32   intro_overlay_alpha __asm__("D_0015EF50");
 extern s32   language_intro_overlay_alpha __asm__("D_0015EF54");
 extern s32   game_frame_counter __asm__("D_0015F438");
 extern float sequence __asm__("D_0015F43C");
-extern s32   GlobalStateFlag __asm__("D_0015F49C");
+extern s32   font_color_codes_enabled __asm__("D_0015F49C");
 extern s32   space_load_pending __asm__("D_0015F5B0");
 extern s32   space_load __asm__("D_0015F600");
 extern s32   world_update_time __asm__("D_0015F60C");

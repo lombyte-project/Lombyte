@@ -11,7 +11,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/mobys/detach_manipulator.h"
@@ -86,7 +86,7 @@ struct Moby *select_sandmouse_projectile_target(struct Moby *moby,
 
         if (candidate_moby->draw_dist == 0)
             continue;
-        hp = suck_get_aim_height(candidate_moby);
+        hp = get_moby_target_info(candidate_moby);
         if (candidate_moby == 0 || candidate_moby->pclass == 0)
             continue;
         candidate_target_kind = ((TargetClass *)candidate_moby->pclass)->kind;
@@ -191,7 +191,7 @@ void try_fire_sandmouse_projectile(char *moby, char *state) {
                 if (cutscene_mode_gp != 2) {
                     char *target_aim_height_data;
                     qcopy(&target_aim_position, target_moby + 0x10);
-                    target_aim_height_data = suck_get_aim_height(target_moby);
+                    target_aim_height_data = get_moby_target_info(target_moby);
                     if (target_aim_height_data != 0)
                         target_aim_position.f[2] =
                             target_aim_position.f[2] + *(float *)(target_aim_height_data + 0x10);

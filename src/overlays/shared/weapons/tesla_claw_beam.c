@@ -80,7 +80,7 @@ extern float convert_integer_to_float(int) __asm__("FUN_001fa6c0");
 extern int   truncate_float_to_s32(float) __asm__("FUN_001fa6d0");
 extern int   scale_game_frames(int) __asm__("FUN_001f96f8");
 extern int   fast_dec_timer_s16() __asm__("FUN_001f9770");
-extern int   suck_get_aim_height() __asm__("FUN_002141f8");
+extern int   get_moby_target_info() __asm__("FUN_002141f8");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int   FUN_L00_00257b90(int, int), FUN_00213260(int);
 extern void  make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
@@ -976,7 +976,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
                     goto next_candidate;
                 if (candidate->state == 0xfd)
                     goto next_candidate;
-                if (!suck_get_aim_height(candidate))
+                if (!get_moby_target_info(candidate))
                     continue;
                 fast_vec_sub(&target0, &candidate->pos, beam_state);
                 distance_w16 = vector_length_xy(&target0);
@@ -1032,14 +1032,14 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
     }
     primary_distance = 0.0f;
     if (beam_state->target) {
-        data = (char *)suck_get_aim_height(beam_state->target);
+        data = (char *)get_moby_target_info(beam_state->target);
         qcopy(&target0, &beam_state->target->pos);
         target0.f[2] += *(float *)(data + 0x10);
         primary_distance = fast_vec_dist(beam_state, &target0);
         spacing = primary_distance * 0.05f;
     }
     if (beam_state->second_target) {
-        data = (char *)suck_get_aim_height(beam_state->second_target);
+        data = (char *)get_moby_target_info(beam_state->second_target);
         qcopy(&target1, &beam_state->second_target->pos);
         target1.f[2] += *(float *)(data + 0x10);
         spacing = (fast_vec_dist(&target0, &target1) + primary_distance) * 0.05f;
@@ -1186,7 +1186,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
         if (hit_result) {
             candidate = (struct Moby *)coll_hit.moby;
             if (candidate) {
-                if (!suck_get_aim_height(candidate) || !candidate->pclass ||
+                if (!get_moby_target_info(candidate) || !candidate->pclass ||
                     *(short *)((char *)candidate->pclass + 0x46) != 5)
                     record_moby_hit(candidate, &hit);
                 else {
@@ -1225,7 +1225,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
         {
             char *aim;
             int   frames = 5;
-            aim = (char *)suck_get_aim_height(beam_state->target);
+            aim = (char *)get_moby_target_info(beam_state->target);
             if (aim && *(short *)(aim + 4) == 1)
                 frames = 1;
             beam_state->unk44 = scale_game_frames(frames);
@@ -1246,7 +1246,7 @@ void build_beam_and_arc_points(struct Moby *beam_owner_moby) {
         {
             char *aim;
             int   frames = 5;
-            aim = (char *)suck_get_aim_height(beam_state->second_target);
+            aim = (char *)get_moby_target_info(beam_state->second_target);
             if (aim && *(short *)(aim + 4) == 1)
                 frames = 1;
             beam_state->unk46 = scale_game_frames(frames);

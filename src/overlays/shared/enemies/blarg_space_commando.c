@@ -546,14 +546,14 @@ extern char *FUN_L06_00300c60_c(int unused, char *pa, char *pb) __asm__("FUN_L06
 
 #include "rnc/data_labels.h"
 
-extern f32           D_0015ED6C;
-extern float         FUN_L04_001f1978(float);
-extern float         randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
-extern int           FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
-extern int           fun_00213928(void *, void *, void *, int, int *, float *, int, int);
-extern int          *D_L06_001B0C30[];
-extern int           current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
-extern float         D_L06_00161FA8 __attribute__((sda));
+extern f32   D_0015ED6C;
+extern float FUN_L04_001f1978(float);
+extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
+extern int   FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
+extern int   resolve_moby_hit_response(void *, void *, void *, int, int *, float *, int, int);
+extern int  *D_L06_001B0C30[];
+extern int   current_level_index_gp __asm__("D_0015ED84") __attribute__((sda));
+extern float D_L06_00161FA8 __attribute__((sda));
 extern unsigned char D_0013D408[];
 extern void          FUN_L00_00257470(void *, int, int);
 extern void
@@ -609,7 +609,8 @@ void process_blarg_space_commando_hits(char *moby) {
     fast_dec_timer((s32 *)(vars + 0x188));
     *(int *)&dt = 0;
     hit_record = find_moby_hit(moby, 0x330000, 0);
-    hit_response_index = fun_00213928(moby, hit_record, vars + 0x20, 0, &hit, &dt, 0, 4);
+    hit_response_index =
+        resolve_moby_hit_response(moby, hit_record, vars + 0x20, 0, &hit, &dt, 0, 4);
     if (hit != 1 && (unsigned char)moby[0x20] != 0x10) {
         if (current_level_index_gp == 0xA && hit_record != 0 &&
             *(char **)(hit_record + 0x20) != 0 &&

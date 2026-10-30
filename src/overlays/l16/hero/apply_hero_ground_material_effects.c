@@ -10,7 +10,7 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/world/collision/collision_hit_material.h"
@@ -267,7 +267,7 @@ void update_hero_ground_contact(void) {
                 FUN_L00_002334d0((u8 *)&HH.point, (u8 *)&HH.point, 1.0f);
             }
         }
-        hit_moby_record = suck_get_aim_height(HH.moby);
+        hit_moby_record = get_moby_target_info(HH.moby);
         if (hit_moby_record != 0 && (*(u16 *)(hit_moby_record + 0x1E) & 8)) {
             hero.on_flagged_ground_moby = 1;
         }

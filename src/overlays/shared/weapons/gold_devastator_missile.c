@@ -10,7 +10,7 @@
 #include "rnc/mobys/moby_spawn.h"
 #include "rnc/audio/voice_alloc.h"
 #include "rnc/math/spherical_offset.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/rendering/effects/explosion_light.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math/fast_math.h"
@@ -420,7 +420,7 @@ unsigned char *spawn_devastator_missile(unsigned char *owner,
         *(unsigned char **)(missile_data + 0x18) = target_moby;
         *(float *)(missile_data + 0x20) = default_desired_speed / 3.0f;
         if (target_moby != 0) {
-            target_aim_record = suck_get_aim_height(target_moby);
+            target_aim_record = get_moby_target_info(target_moby);
             if (target_aim_record != 0) {
                 *(unsigned short *)(target_aim_record + 0x1E) |= 0x80;
                 if (target_aim_record[0xB]) {
@@ -498,7 +498,7 @@ void select_gold_devastator_missile_target(char *self, O *out, char *skip) {
         opos = candidate_moby + 0x10;
         if (40.0f < fast_vec_dist(&candidate_aim_position, spos))
             goto next;
-        candidate_aim_record_address = suck_get_aim_height(candidate_moby);
+        candidate_aim_record_address = get_moby_target_info(candidate_moby);
         if (candidate_aim_record_address == 0)
             goto np;
         if (candidate_aim_record_address <= 0x100000)

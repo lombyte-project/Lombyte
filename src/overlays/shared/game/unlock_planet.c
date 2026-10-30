@@ -14,7 +14,7 @@
 #include "rnc/game/item_state.h"
 #include "rnc/math/random.h"
 #include "rnc/rendering/clip_volume.h"
-#include "rnc/weapons/suck_aim.h"
+#include "rnc/mobys/get_moby_target_info.h"
 #include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
@@ -516,7 +516,7 @@ void spawn_randomized_bolt_drop(
         return;
     }
     if (flags & 4) {
-        aim = (unsigned char *)suck_get_aim_height(moby);
+        aim = (unsigned char *)get_moby_target_info(moby);
         if (aim) {
             qcopy(base_velocity, aim + 0x20);
         }

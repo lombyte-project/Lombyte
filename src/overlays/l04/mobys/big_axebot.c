@@ -13,7 +13,7 @@
 #include "rnc/mobys/attach_manipulator.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
-#include "rnc/math/vectors/normalize_vector_triplet.h"
+#include "rnc/math/normalize_vector_triplet.h"
 #include "rnc/overlay/shared/enemies/trooper_set_knockback.h"
 #include "rnc/overlay/level_path.h"
 #include "rnc/overlay/quad.h"
