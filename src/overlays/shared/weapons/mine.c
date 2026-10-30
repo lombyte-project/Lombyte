@@ -499,10 +499,10 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     float C[4];
     float box[4];
     int   x;
-    char *base = D_0013F350;
+    char *hero_state = D_0013F350;
     int   i;
     char *owner_moby_vars;
-    if (*(int *)(base + 0x2084) == 0x72)
+    if (*(int *)(hero_state + 0x2084) == 0x72)
         return 0;
     if (D_L00_0015F5C4_c != 0)
         return 0;
@@ -510,19 +510,19 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
     if (MOBY(moby)->state == 0) {
         trajectory_position[0] =
             fast_cos(fast_add_rotations(
-                -0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) *
+                -0.36196801f, fast_arc_tan(*(float *)(hero_state + 0x670), *(float *)(hero_state + 0x674)))) *
             0.859039f;
         trajectory_position[1] =
             fast_sin(fast_add_rotations(
-                -0.36196801f, fast_arc_tan(*(float *)(base + 0x670), *(float *)(base + 0x674)))) *
+                -0.36196801f, fast_arc_tan(*(float *)(hero_state + 0x670), *(float *)(hero_state + 0x674)))) *
             0.859039f;
         *(int *)&trajectory_position[2] = 0;
-        fast_vec_add(trajectory_position, trajectory_position, base + 0x80);
+        fast_vec_add(trajectory_position, trajectory_position, hero_state + 0x80);
         trajectory_position[2] = trajectory_position[2] + 0.49082f;
         qcopy(B, trajectory_state);
-        if (*(int *)(base + 0x2FC) != 0 &&
-            FUN_L00_002603d0_u((void *)*(int *)(base + 0x2FC)) != 0 && mode != 0) {
-            fast_vec_add(B, B, base + 0x100);
+        if (*(int *)(hero_state + 0x2FC) != 0 &&
+            FUN_L00_002603d0_u((void *)*(int *)(hero_state + 0x2FC)) != 0 && mode != 0) {
+            fast_vec_add(B, B, hero_state + 0x100);
         }
         x = scale_game_frames(0x78);
     } else {
@@ -538,8 +538,8 @@ int predict_mine_impact(char *trajectory_state, char *moby, int mode) {
         }
     }
     {
-        char *base2 = D_0013F350;
-        char *hero_moby = *(char **)(base2 + 0x2080);
+        char *collision_hero_state = D_0013F350;
+        char *hero_moby = *(char **)(collision_hero_state + 0x2080);
         *(u128 *)box = *(u128 *)(hero_moby + 0x10);
         box[2] = trajectory_position[2];
         if (FUN_001efa68(box, trajectory_position, 0x10, (int)hero_moby, 0) != 0) {
