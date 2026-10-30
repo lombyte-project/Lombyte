@@ -10,7 +10,7 @@ void compose_bitmap_from_mask(u8 *composed_bitmap, u8 *src_set, u8 *src_clear, u
     s32 limit = 0x7FFF;
     do {
         s32 bit = 1;
-        u8 *next = mask + 1;
+        u8 *next_mask_byte = mask + 1;
         s32 count = 7;
         do {
             u8 selected_source_byte;
@@ -26,6 +26,6 @@ void compose_bitmap_from_mask(u8 *composed_bitmap, u8 *src_set, u8 *src_clear, u
             bit <<= 1;
         } while (count >= 0);
         outer += 1;
-        mask = next;
+        mask = next_mask_byte;
     } while (outer <= limit);
 }
