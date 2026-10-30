@@ -51,7 +51,7 @@ s32 D_L18_0015F30C = 0;
 void draw_visibomb_outside_zone_overlay(struct Moby *moby) __asm__("FUN_L01_00302438");
 
 void draw_visibomb_outside_zone_overlay(struct Moby *moby) {
-    s32         *vars = (s32 *)moby->pvars;
+    s32         *outside_zone_timeout_vars = (s32 *)moby->pvars;
     s32          row_count;
     s32          column_count;
     s32          row;
@@ -79,7 +79,7 @@ void draw_visibomb_outside_zone_overlay(struct Moby *moby) {
             coordinate[0] = (f32)(row * 32);
             coordinate[1] = (f32)(column * 32);
             tile_half = tile_size >> 1;
-            opacity = convert_integer_to_float(vars[0x50]) * 127.5f /
+            opacity = convert_integer_to_float(outside_zone_timeout_vars[0x50]) * 127.5f /
                       convert_integer_to_float(scale_game_frames(90));
             color = (truncate_float_to_s32(opacity) << 24) + base_color;
             texture_x = random_integer_below(32);
