@@ -237,16 +237,16 @@ extern int  hero_set_state(int, int) __asm__("FUN_L15_00216c38");
 void restore_saved_hero_moby_and_clear_vehicle_mode(void) __asm__("FUN_L15_00208ca8");
 
 void restore_saved_hero_moby_and_clear_vehicle_mode(void) {
-    unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
+    unsigned char *hero_state_for_vehicle_exit = ((unsigned char *)&D_0013E533) + 0xE1D;
     unsigned char *hero_state_bytes;
     int            flag_clear_target;
     void          *moby_to_remove;
     char          *restored_hero_moby;
-    if (base[0x20A4] == 2) {
-        int animation_parameter_value = *(short *)(base + 0x1634);
+    if (hero_state_for_vehicle_exit[0x20A4] == 2) {
+        int animation_parameter_value = *(short *)(hero_state_for_vehicle_exit + 0x1634);
         if (animation_parameter_value != -1) {
             set_animation_parameter(animation_parameter_value, 0);
-            *(short *)(base + 0x1634) = -1;
+            *(short *)(hero_state_for_vehicle_exit + 0x1634) = -1;
         }
     }
     reset_hero_easing_records();
