@@ -656,13 +656,13 @@ int test_follow_camera_point_in_collision_volume(OvlQuad *input_quad) {
 s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out,
                                                        s32      flag) __asm__("FUN_L00_002e42c0");
 
-s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out, s32 flag) {
+s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out_ground_aware_target_position, s32 flag) {
     OvlQuad      position_and_offset_vectors[4];
     struct Hero *player = &hero;
     u8          *camera_view = D_L00_00166E10_lui;
     f32          ground_distance;
     if (player->frames_off_ground.s == 0) {
-        follow_camera_hero_target(*(s32 *)(camera_view - 0x10), out);
+        follow_camera_hero_target(*(s32 *)(camera_view - 0x10), out_ground_aware_target_position);
         return 1;
     }
     follow_camera_hero_target(*(s32 *)(camera_view - 0x10), &position_and_offset_vectors[0]);
@@ -681,16 +681,16 @@ s32 compute_follow_camera_ground_aware_target_position(OvlQuad *out, s32 flag) {
                                   0x12,
                                   player->moby,
                                   0)) {
-            qcopy(out, &D_L00_00173E60_002e42c0);
+            qcopy(out_ground_aware_target_position, &D_L00_00173E60_002e42c0);
             return 0;
         }
-        qcopy(out, &position_and_offset_vectors[0]);
+        qcopy(out_ground_aware_target_position, &position_and_offset_vectors[0]);
         return -1;
     } else {
         FUN_001f9a68_002e42c0(
             &position_and_offset_vectors[1], camera_view + 0x30, -ground_distance);
         FUN_001f9a10_002e42c0(
-            out, &position_and_offset_vectors[0], &position_and_offset_vectors[1]);
+            out_ground_aware_target_position, &position_and_offset_vectors[0], &position_and_offset_vectors[1]);
         return 1;
     }
 }
