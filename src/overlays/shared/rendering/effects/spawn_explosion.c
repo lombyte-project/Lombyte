@@ -1007,7 +1007,7 @@ void spawn_color_swapped_explosion_burst(char *owner,
                                          char *pos,
                                          float scale,
                                          float flash) __asm__("FUN_L00_0025f3e8");
-void spawn_color_swapped_explosion_burst(char *owner,
+void spawn_color_swapped_explosion_burst(char *glow_owner_moby,
                                          char *effect_position,
                                          float scale,
 
@@ -1037,13 +1037,13 @@ void spawn_color_swapped_explosion_burst(char *owner,
             0,
             sp * scale);
     }
-    if (owner != 0) {
+    if (glow_owner_moby != 0) {
         rgb[0] = 0x7F;
         rgb[1] = 0x40;
         rgb[2] = 0;
         swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         first_glow_scale = scale * 4.0f;
-        spawn_glow_particle(owner,
+        spawn_glow_particle(glow_owner_moby,
                             effect_position,
                             &zero_vec,
                             first_glow_scale,
@@ -1057,7 +1057,7 @@ void spawn_color_swapped_explosion_burst(char *owner,
         rgb[2] = 0;
         swap_color_channel_words(&rgb[0], &rgb[1], &rgb[2], 1);
         second_glow_scale = scale * 3.0f;
-        spawn_glow_particle(owner,
+        spawn_glow_particle(glow_owner_moby,
                             effect_position,
                             &zero_vec,
                             second_glow_scale,
