@@ -570,13 +570,13 @@ float score_hero_target_candidate(char *target_moby,
 
 float score_hero_target_candidate(
 
-    char *target_moby, float yaw, float range, float ylim, float plim, int *out) {
+    char *target_moby, float yaw, float range, float ylim, float plim, int *target_rejected_output) {
     float        target_scoring_origin[4] __attribute__((aligned(16)));
     struct Hero *hero_state;
     float        target_distance, hero_yaw_error, angular_penalty, elevation_angle_error,
         angular_limit_error, target_score;
 
-    *out = 0;
+    *target_rejected_output = 0;
     qcopy(target_scoring_origin, &hero.motion.pos);
     hero_state = &hero;
     if (hero_state->state.current == 0x14) {
@@ -584,7 +584,7 @@ float score_hero_target_candidate(
     }
     target_distance = fast_vec_dist(target_scoring_origin, target_moby + 0x10);
     if (range < target_distance)
-        *out = 1;
+        *target_rejected_output = 1;
     hero_yaw_error = fast_difference_between_rotations(
         fast_arc_tan(MOBY(target_moby)->pos.x - target_scoring_origin[0],
                      MOBY(target_moby)->pos.y - target_scoring_origin[1]),
@@ -611,9 +611,9 @@ float score_hero_target_candidate(
             angular_limit_error = b;
     }
     if (0.0f < ylim && ylim < angular_limit_error)
-        *out = 1;
+        *target_rejected_output = 1;
     if (0.0f < plim && plim < elevation_angle_error)
-        *out = 1;
+        *target_rejected_output = 1;
     target_score = target_distance + angular_penalty * target_distance;
     if (is_moby_in_class_range_500_to_540(target_moby))
         target_score += 7.0f;
