@@ -62,12 +62,12 @@ s32 move_moby_along_heading(struct Moby *moby, void *ctl) __asm__("FUN_L12_00271
 
 s32 move_moby_along_heading(struct Moby *moby, void *ctl) {
     Vec4 ahead;
-    Vec4 out;
+    Vec4 movement_displacement;
 
     qcopy(&ahead, &moby->pos);
     ahead.f[0] += fast_cos(moby->rot.z) * 100.0f;
     ahead.f[1] += fast_sin(moby->rot.z) * 100.0f;
-    return FUN_L00_00258b50(moby, ctl, &ahead, &out, 1.0f);
+    return FUN_L00_00258b50(moby, ctl, &ahead, &movement_displacement, 1.0f);
 }
 
 /* Tests whether a point lies within height, distance and heading limits of a moby. */
