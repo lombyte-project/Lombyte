@@ -715,9 +715,9 @@ void steer_blarg_trooper_toward_point(struct Moby *moby,
     char *trooper_steering_vars = (char *)moby->pvars;
     float distance;
     float angle;
-    float old[4] __attribute__((aligned(16)));
+    float trooper_pre_move_position[4] __attribute__((aligned(16)));
     float path_constrained_position[4] __attribute__((aligned(16)));
-    float next[4] __attribute__((aligned(16)));
+    float path_constraint_test_position[4] __attribute__((aligned(16)));
     float delta[4] __attribute__((aligned(16)));
     int   count;
 
@@ -762,17 +762,17 @@ void steer_blarg_trooper_toward_point(struct Moby *moby,
             approach_value(trooper_steering_vars + 0xf4, frame_time, frame_time_sq * 7.0f);
         }
     }
-    *(OvlQuad *)old = *(OvlQuad *)&moby->pos;
+    *(OvlQuad *)trooper_pre_move_position = *(OvlQuad *)&moby->pos;
     move_moby_along_heading(moby, trooper_steering_vars + 0xd0);
     if (*(int *)(trooper_steering_vars + 0x26c) != -1) {
-        fast_vec_sub(delta, old, &moby->pos);
+        fast_vec_sub(delta, trooper_pre_move_position, &moby->pos);
         fast_vec_normalize(delta, delta, 0.05f);
-        fast_vec_add(next, old, delta);
-        if (path_8808(*(int *)(trooper_steering_vars + 0x26c), &moby->pos, next, path_constrained_position)) {
+        fast_vec_add(path_constraint_test_position, trooper_pre_move_position, delta);
+        if (path_8808(*(int *)(trooper_steering_vars + 0x26c), &moby->pos, path_constraint_test_position, path_constrained_position)) {
             char *path = ((char *)l12_paths[*(int *)(trooper_steering_vars + 0x26c)]);
             if (!point_in_path_xy(&moby->pos, path + 0x10, *(int *)path))
                 *(OvlQuad *)&moby->pos = *(OvlQuad *)path_constrained_position;
-            if (fast_vec_dist(&moby->pos, old) < frame_time * 0.5f) {
+            if (fast_vec_dist(&moby->pos, trooper_pre_move_position) < frame_time * 0.5f) {
                 ++*(unsigned char *)(trooper_steering_vars + 0x243);
                 count = *(unsigned char *)(trooper_steering_vars + 0x243);
                 if (scale_game_frames(15) < count)
