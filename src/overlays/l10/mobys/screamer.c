@@ -70,8 +70,8 @@ extern float
 func_L00_0025CE58_2E0630(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
 extern void func_L00_002607A8_2E0630(void *, float) __asm__("FUN_L00_0025f730");
 extern int
-func_L00_00259B08_2E0630(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
-extern void  func_L10_002E14F8_2E0630(void *) __asm__("FUN_L10_002e0138");
+     func_L00_00259B08_2E0630(void *, void *, float, int, float, int) __asm__("FUN_L00_00258ad0");
+void activate_waiting_moby_group_members(struct Moby *moby) __asm__("FUN_L10_002e0138");
 extern float func_L00_0025CC58_2E0630(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern void  approach_w(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern int   func_L00_001F10E0_2E0630(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -224,7 +224,7 @@ void screamer_update(Moby *moby) {
                               1]
                  << 8);
             if (linked != 0)
-                func_L10_002E14F8_2E0630(linked);
+                activate_waiting_moby_group_members(linked);
         }
         if (data->node_index == l10_paths[data->path]->count) {
             moby->state = 10;

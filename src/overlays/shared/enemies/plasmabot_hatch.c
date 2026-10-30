@@ -99,6 +99,8 @@ typedef struct {
     int            f90;
 } Obj;
 
+int refresh_plasmabot_hatch_reset_delay(int i) __asm__("FUN_L14_002d9870");
+
 int refresh_plasmabot_hatch_reset_delay(int i) {
     struct Moby *moby = (unsigned char *)(D_L14_ffd0_e_macro[2] + i * 256);
     int         *data = ((int *)moby->pvars);

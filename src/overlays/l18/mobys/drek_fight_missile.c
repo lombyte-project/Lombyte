@@ -224,6 +224,9 @@ extern unsigned char *D_L18_0015FFD8;
 
 #include "rnc/overlay/l18/mobys/drek_fight_missile.h"
 
+int activate_drek_fight_missiles_in_group(
+    char *moby, int group, float *missile_activation_position) __asm__("FUN_L18_002f0030");
+
 int activate_drek_fight_missiles_in_group(char *moby,
                                           int   group,
 

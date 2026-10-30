@@ -616,6 +616,8 @@ extern int D_L16_0015FFD8_d __asm__("D_L16_0015FFD8");
  * the US level program (data still reached through the MACRO_ADDR form). */
 #include "rnc/overlay/l16/mobys/test_dummy.h"
 
+void activate_test_dummy_group(int moby_group_index) __asm__("FUN_L16_002ceca8");
+
 void activate_test_dummy_group(int moby_group_index) {
     short *group_entry = (short *)D_L16_001ABCC0_u[moby_group_index];
     if (group_entry != 0) {

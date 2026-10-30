@@ -876,6 +876,8 @@ int try_activate_pokitaru_gate(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_002CC828.c: func_L11_0030BC00), where it is exact; names translated to the US level program. */
 
+int is_moby_in_state_five(struct Moby *arg) __asm__("FUN_L11_0030a830");
+
 int is_moby_in_state_five(struct Moby *moby) {
     return moby->state == 5;
 }

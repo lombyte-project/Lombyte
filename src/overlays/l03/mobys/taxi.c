@@ -292,6 +292,10 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 
 /* Moves m along rail path `path`, easing speed toward the end and banking into turns;
    keeps the travel sound playing and releases it on arrival. Returns 1 at the last point. */
+s32 advance_moby_along_rail_path(struct Moby *rail_moby,
+                                 s32          path,
+                                 s32         *snd) __asm__("FUN_L03_002d3918");
+
 s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) {
     RailFlyerVars *rail_flyer_vars = (RailFlyerVars *)rail_moby->pvars;
     LevelPath    **pp = &l03_paths[path];

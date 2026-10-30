@@ -246,6 +246,8 @@ void spawn_enemy_fighter_exhaust(struct Moby *emitter_moby) {
     }
 }
 
+void initialize_flight_path_state(struct Moby *moby) __asm__("FUN_L14_002fc890");
+
 void initialize_flight_path_state(struct Moby *moby) {
     char  *data = (char *)moby->pvars;
     float *path = (float *)l14_paths[*(int *)(data + 0x68)];

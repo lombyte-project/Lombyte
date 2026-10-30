@@ -39,6 +39,9 @@ extern void update_entity() __asm__("FUN_L00_00250df8");
 #include "rnc/overlay/l01/mobys/birdbot_projectile.h"
 
 /* yaw and pitch are passed by birdbot_update but not read. */
+void *spawn_birdbot_projectile(
+    void *owner, void *pos, void *vel, f32 yaw, f32 pitch, s32 color) __asm__("FUN_L01_002fa068");
+
 void *
 
 spawn_birdbot_projectile(void *owner, void *pos, void *vel, f32 yaw, f32 pitch, s32 color) {

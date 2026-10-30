@@ -43,6 +43,12 @@ extern char D_L16_001671C0[];
 
 #include "rnc/overlay/l16/mobys/reflection_mesh_trio.h"
 
+void compute_level16_reflection_map_coordinates(int    point_count,
+                                                Vec3  *direction_vectors,
+                                                Vec3  *point_positions,
+                                                int    unused,
+                                                float *out) __asm__("FUN_L16_002e8b98");
+
 void compute_level16_reflection_map_coordinates(
 
     int point_count, Vec3 *direction_vectors, Vec3 *point_positions, int unused, float *out) {
@@ -118,6 +124,8 @@ float       *D_L16_00161F30[4]
     __attribute__((section(".sdata"))) = {D_L16_001DC0F8, D_L16_001DC348, D_L16_001DC598, 0};
 
 extern void FUN_L00_001fde98(int, int, int, char *, int);
+
+void env_map_a_draw(void) __asm__("FUN_L16_002e8d40");
 
 void env_map_a_draw(void) {
     int *mesh_point_counts = (int *)D_L16_00161EF0_gp;

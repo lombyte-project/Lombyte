@@ -357,6 +357,8 @@ extern s32 game_language_macro __asm__("D_0015ED88") MACRO_ADDR;
 extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 
 /* Opens the vendor: clears its state, spawns the vendor moby when none is given, builds the item list and its texts, then sets up the camera and the four slot offsets. */
+void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
+
 void open_vendor_menu(void *vendor_moby_arg) {
     VendorMoby_29a6b0 *vendor_moby = vendor_moby_arg;
     s32                i;

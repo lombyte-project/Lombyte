@@ -54,6 +54,8 @@ extern int D_L06_0015FFD8_d __asm__("D_L06_0015FFD8");
 
 /* Sets each listed alien queen slider to state 2 with its float at +0x28 set to 1.0 (move out). */
 /* 0x002d9e08, 108 bytes. Ported from rac1-decomp, where it is exact; names translated to the US level program. */
+void set_listed_alien_queen_sliders_state_2_and_data_28_to_one(int index) __asm__("FUN_L06_002d9e08");
+
 void set_listed_alien_queen_sliders_state_2_and_data_28_to_one(int index) {
     short *moby_index_cursor = D_L06_001ABFC0[index];
     if (moby_index_cursor != 0) {
@@ -70,6 +72,8 @@ void set_listed_alien_queen_sliders_state_2_and_data_28_to_one(int index) {
 
 /* Sets each listed alien queen slider to state 2 with its word at +0x28 cleared (move back). */
 /* 0x002d9e78, 100 bytes. Ported from rac1-decomp, where it is exact; names translated to the US level program. */
+void set_listed_alien_queen_sliders_state_2_and_clear_data_28(int moby_list_index) __asm__("FUN_L06_002d9e78");
+
 void set_listed_alien_queen_sliders_state_2_and_clear_data_28(int moby_list_index) {
     short *moby_index_cursor = D_L06_001ABFC0[moby_list_index];
     if (moby_index_cursor != 0) {

@@ -59,6 +59,10 @@ extern void  update_entity(void *) __asm__("FUN_L00_00250df8");
 
 /* Spawns a moby of class 0x1A9 at a position, with a random spin and a heading from a vector. */
 /* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002B9438.c: func_L08_002DDC18), where it is exact; names translated to the US level program. */
+char *spawn_bomber_tank_bomb(char *source_moby,
+                             char *spawn_position,
+                             char *initial_velocity) __asm__("FUN_L08_002dc8a0");
+
 char *spawn_bomber_tank_bomb(char *source_moby, char *spawn_position, char *initial_velocity) {
     char *moby = create_moby(0x1A9);
     char *data;

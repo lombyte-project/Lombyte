@@ -78,6 +78,8 @@ extern int *D_L16_001ABCC0[];
 /* The linked moby of class 0x28A nearest a position, within 37 units. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002A50F0.c: func_L16_002D7178), where it is exact; names translated to the US level program. */
 
+void *find_nearest_test_dummy_door(int index, void *position) __asm__("FUN_L16_002d5db0");
+
 void *find_nearest_test_dummy_door(int index, void *position) {
     short *group_entry = (short *)D_L16_001ABCC0[index];
     char  *nearest = 0;
@@ -103,6 +105,8 @@ void *find_nearest_test_dummy_door(int index, void *position) {
 extern int scale_game_frames(int);
 
 extern s32 FUN_001f99a8_5e80(s32) __asm__("FUN_001f99a8");
+
+void refresh_test_dummy_door_timer(struct Moby *moby) __asm__("FUN_L16_002d5e80");
 
 void refresh_test_dummy_door_timer(struct Moby *moby) {
     char *moby_data = (char *)moby->pvars;

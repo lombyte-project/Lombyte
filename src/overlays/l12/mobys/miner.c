@@ -47,6 +47,10 @@ extern char *D_L12_001600EC;
 extern void  advance_moby_animation(void *) __asm__("FUN_0020d580");
 
 /* Ported from rac1-decomp (src/overlays/l12_hoven/mobyutil_00272D90.c: func_L12_0027C9B8), where it is exact; names translated to the US level program. */
+void update_moby_bone_attachment(struct Moby   *parent,
+                                 unsigned char *child,
+                                 int            mode) __asm__("FUN_L12_0027b9c0");
+
 void update_moby_bone_attachment(struct Moby *parent, unsigned char *child, int mode) {
     char workspace[0x40];
     build_moby_bone_transform(parent, mode, workspace);

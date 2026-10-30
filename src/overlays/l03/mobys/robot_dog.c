@@ -543,6 +543,8 @@ extern int get_next_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002592b
 
 extern int is_kerwan_path_enemy_in_state_9(unsigned char *) __asm__("FUN_L03_002c6d58");
 
+int is_point_inside_clip_volume_cf(int id) __asm__("FUN_L03_002c6d98");
+
 int is_point_inside_clip_volume_cf(int id) {
     unsigned char *item;
     if (id == 0xFF)

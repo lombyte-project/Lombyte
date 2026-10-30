@@ -534,6 +534,12 @@ void update_rocket(M46 *moby) {
     }
 }
 
+struct Moby *spawn_rocket(void        *pos,
+                          struct Moby *target,
+                          void        *velocity,
+                          float        pitch,
+                          float        yaw) __asm__("FUN_L08_002de3e0");
+
 struct Moby *spawn_rocket(void *pos, struct Moby *target, void *velocity, float pitch, float yaw) {
     struct Moby *moby = create_moby(0x1B3);
     char        *data;

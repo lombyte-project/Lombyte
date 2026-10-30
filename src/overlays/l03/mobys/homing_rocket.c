@@ -24,6 +24,14 @@ char *spawn_homing_rocket(void        *heading_vector,
                           int          timer_frames,
                           float        initial_heading,
                           float        initial_speed,
+                          float        unread_value) __asm__("FUN_L03_002d4288");
+
+char *spawn_homing_rocket(void        *heading_vector,
+                          void        *pos,
+                          struct Moby *parent,
+                          int          timer_frames,
+                          float        initial_heading,
+                          float        initial_speed,
 
                           float unread_value) {
     char *spawned_moby = (char *)create_moby(0x341);

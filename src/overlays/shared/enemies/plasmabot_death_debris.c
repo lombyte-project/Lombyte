@@ -160,6 +160,8 @@ extern float plasmabot_debris_z_velocity_range_start_gp __asm__("D_L14_00161B10"
 extern float plasmabot_debris_z_velocity_range_end_gp __asm__("D_L14_00161B14")
     __attribute__((sda));
 
+unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) __asm__("FUN_L14_002dea98");
+
 unsigned char *spawn_plasmabot_death_debris(char *owner, char *pos) {
     unsigned char *spawned_moby = create_moby(0x145);
     char          *spawned_vars;

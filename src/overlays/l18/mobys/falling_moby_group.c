@@ -248,6 +248,8 @@ extern void set_group_child_carrier_byte_bc(int, int) __asm__("FUN_L18_002fa888"
 
 #include "rnc/overlay/l18/mobys/falling_moby_group.h"
 
+void activate_drek_boss_class_0565_moby(struct Moby *moby) __asm__("FUN_L18_002f1c38");
+
 void activate_drek_boss_class_0565_moby(struct Moby *moby) {
     char *state = (char *)moby->pvars;
     if (moby->oclass == 0x565 && moby->state == 1) {

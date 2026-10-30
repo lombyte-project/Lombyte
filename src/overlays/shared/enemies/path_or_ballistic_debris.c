@@ -171,6 +171,9 @@ extern float ballistic_debris_z_velocity_range_start_gp __asm__("D_L14_00161B38"
 extern float ballistic_debris_z_velocity_range_end_gp __asm__("D_L14_00161B3C")
     __attribute__((sda));
 
+unsigned char *
+spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
+
 unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) {
     unsigned char *spawned_moby = create_moby(0x193);
     unsigned char *pos;
