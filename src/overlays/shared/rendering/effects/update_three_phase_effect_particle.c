@@ -339,17 +339,17 @@ void update_colliding_effect_particle(unsigned char *m) __asm__("FUN_L00_00269d2
 void update_colliding_effect_particle(unsigned char *particle) {
     unsigned char *particle_data = particle + 0x20;
     unsigned char *update_parameters = *(unsigned char **)(particle_data + 0xc);
-    float          next[4] __attribute__((aligned(16)));
+    float          position_or_velocity_scratch[4] __attribute__((aligned(16)));
     float          matrix[4] __attribute__((aligned(16)));
     float          velocity[4] __attribute__((aligned(16)));
     float          collision[4] __attribute__((aligned(16)));
     float          rotation[16] __attribute__((aligned(16)));
     float          red, green, blue, limit;
     int            color;
-    next[0] = *(float *)(particle + 0x10) + *(float *)(particle_data + 0x0);
-    next[1] = *(float *)(particle + 0x14) + *(float *)(particle_data + 0x4);
-    next[2] = *(float *)(particle + 0x18) + *(float *)(particle_data + 0x8);
-    if ((*(unsigned int *)(update_parameters + 0x70) & 1) && particle_collision_269d20(particle + 0x10, next, 4, particle, 0)) {
+    position_or_velocity_scratch[0] = *(float *)(particle + 0x10) + *(float *)(particle_data + 0x0);
+    position_or_velocity_scratch[1] = *(float *)(particle + 0x14) + *(float *)(particle_data + 0x4);
+    position_or_velocity_scratch[2] = *(float *)(particle + 0x18) + *(float *)(particle_data + 0x8);
+    if ((*(unsigned int *)(update_parameters + 0x70) & 1) && particle_collision_269d20(particle + 0x10, position_or_velocity_scratch, 4, particle, 0)) {
         velocity[0] = *(float *)(particle_data + 0x0);
         velocity[1] = *(float *)(particle_data + 0x4);
         velocity[2] = *(float *)(particle_data + 0x8);
@@ -364,7 +364,7 @@ void update_colliding_effect_particle(unsigned char *particle) {
         /* Fakematch: retail reads $s0 on this path before setting it, so reorg sees it
            live at the else label and fills the beqz delay slot like retail. */
         REG_LIVE("$16");
-        *(u128 *)(particle + 0x10) = *(u128 *)next;
+        *(u128 *)(particle + 0x10) = *(u128 *)position_or_velocity_scratch;
     }
     if (*(unsigned int *)(update_parameters + 0x70) & 2) {
         red = convert_integer_to_float((particle[4] << 8) | particle_data[0x18]) / 65535.0f;
@@ -462,20 +462,20 @@ void update_colliding_effect_particle(unsigned char *particle) {
     }
     particle[8] = truncate_float_to_s32(*(float *)(particle_data + 0x14) * 255.0f);
     if (*(unsigned int *)(update_parameters + 0x70) & 8) {
-        next[0] = *(float *)(particle_data + 0x0);
-        next[1] = *(float *)(particle_data + 0x4);
-        next[2] = *(float *)(particle_data + 0x8);
+        position_or_velocity_scratch[0] = *(float *)(particle_data + 0x0);
+        position_or_velocity_scratch[1] = *(float *)(particle_data + 0x4);
+        position_or_velocity_scratch[2] = *(float *)(particle_data + 0x8);
         if (*(unsigned int *)(update_parameters + 0x70) & 0x8000) {
             euler_rotation_matrix(rotation, *(void **)(update_parameters + 0x7c) + 0x40);
             transform_vector(matrix, update_parameters, rotation);
         } else {
             *(u128 *)matrix = *(u128 *)update_parameters;
         }
-        fast_vec_add(next, next, matrix);
+        fast_vec_add(position_or_velocity_scratch, position_or_velocity_scratch, matrix);
         clamp_vector_length(next, next, *(float *)(update_parameters + 0x40));
-        *(float *)(particle_data + 0x0) = next[0];
-        *(float *)(particle_data + 0x4) = next[1];
-        *(float *)(particle_data + 0x8) = next[2];
+        *(float *)(particle_data + 0x0) = position_or_velocity_scratch[0];
+        *(float *)(particle_data + 0x4) = position_or_velocity_scratch[1];
+        *(float *)(particle_data + 0x8) = position_or_velocity_scratch[2];
     }
     *(float *)(particle + 0xc) += *(float *)(update_parameters + 0x30) * D_0015ED60_269d20;
     if (*(float *)(particle + 0xc) < *(float *)(update_parameters + 0x74))
