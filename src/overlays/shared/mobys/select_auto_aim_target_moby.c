@@ -491,7 +491,7 @@ void spawn_moby_break_fragments(unsigned char *source_moby,
 void spawn_moby_break_fragments(unsigned char *source_moby,
                                 int            first_fragment_class,
                                 int            consecutive_class_fragment_count,
-                                int            base,
+                                int            random_fragment_class_base,
                                 int            range,
                                 int            random_class_fragment_limit,
 
@@ -528,7 +528,7 @@ void spawn_moby_break_fragments(unsigned char *source_moby,
                 random_fragment_euler_rotation[1] = random_angle_radians();
                 random_fragment_euler_rotation[2] = random_angle_radians();
                 FUN_L00_00263fd8_263e30(source_moby,
-                                        base + random_integer_below(range),
+                                        random_fragment_class_base + random_integer_below(range),
                                         &fragment_spawn_positions[i],
                                         random_fragment_euler_rotation,
                                         0,
