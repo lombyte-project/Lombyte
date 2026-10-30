@@ -606,28 +606,28 @@ void update_ground_melee_enemy(Moby *moby) {
         break;
     }
     case GROUND_ENEMY_STATE_LEASHED_FORWARD_WALK: {
-        Moby *other;
+        Moby *avoidance_candidate;
         if (moby->seq != 0 && moby->prev_seq != 0)
             blend_moby_animation(moby, 0, 0, scale_game_frames(random_int_between(10, 13)));
         step.x = fast_cos(moby->rot.z) * (ground_enemy_vars->speed * frame_time);
         step.y = fast_sin(moby->rot.z) * (ground_enemy_vars->speed * frame_time);
         step.z = 0.0f;
         fast_vec_add(&goal, &moby->pos, &step);
-        for (other = D_L09_00160064_2E39E0; other != 0; other = other->next) {
-            if (other != moby && (signed char)other->state >= 0 &&
-                (other->oclass == 0 || other->oclass == 193)) {
-                if (vector_distance_xy(&goal, &other->pos) < 2.0f) {
+        for (avoidance_candidate = D_L09_00160064_2E39E0; avoidance_candidate != 0; avoidance_candidate = avoidance_candidate->next) {
+            if (avoidance_candidate != moby && (signed char)avoidance_candidate->state >= 0 &&
+                (avoidance_candidate->oclass == 0 || avoidance_candidate->oclass == 193)) {
+                if (vector_distance_xy(&goal, &avoidance_candidate->pos) < 2.0f) {
                     float old_z = moby->pos.z;
                     float bearing =
-                        fast_arc_tan(other->pos.x - moby->pos.x, other->pos.y - moby->pos.y);
+                        fast_arc_tan(avoidance_candidate->pos.x - moby->pos.x, avoidance_candidate->pos.y - moby->pos.y);
                     float turn_side = fast_subtract_rotations(moby->rot.z, bearing);
                     float turn = frame_time * 1.5707964f;
                     if (!(turn_side > 0.0f))
                         turn = -turn;
                     moby->rot.z = fast_add_rotations(moby->rot.z, turn);
-                    fast_vec_sub(&goal, &moby->pos, &other->pos);
+                    fast_vec_sub(&goal, &moby->pos, &avoidance_candidate->pos);
                     fast_vec_normalize(&goal, &goal, 2.0f);
-                    fast_vec_add(&goal, &goal, &other->pos);
+                    fast_vec_add(&goal, &goal, &avoidance_candidate->pos);
                     goal.z = old_z;
                 }
             }
