@@ -348,15 +348,15 @@ void emit_hydrodisplacer_effect(char *moby) {
 s32 test_hydrodisplacer_activation_flag(void) __asm__("FUN_L00_002e02e0");
 
 s32 test_hydrodisplacer_activation_flag(void) {
-    struct Hero *base;
+    struct Hero *activation_hero;
     u8          *linked_moby;
     s32          ground_moby_address;
     s32          idx;
     u8           flags;
-    base = &hero;
+    activation_hero = &hero;
     linked_moby = moby_table;
-    ground_moby_address = ((s32)base->ground_moby);
-    flags = (u8)base->hydro_tank_full;
+    ground_moby_address = ((s32)activation_hero->ground_moby);
+    flags = (u8)activation_hero->hydro_tank_full;
     linked_moby += *(s32 *)*(s32 *)((u8 *)ground_moby_address + 0x78) << 8;
     if (!flags) {
         if (linked_moby[0xBC] & 2)
