@@ -377,8 +377,8 @@ int update_shuttle_travel_and_camera(char *moby, int route_index) {
                 moby_path_blend);
     set_camera_position(camera_position);
     {
-        char *base = D_L17_001600EC + (shuttle_vars->e84 << 7);
-        set_race_camera(base + 0x30, base + 0x70, 0x72, 0);
+        char *hero_placement_record = D_L17_001600EC + (shuttle_vars->e84 << 7);
+        set_race_camera(hero_placement_record + 0x30, hero_placement_record + 0x70, 0x72, 0);
     }
     if (i3 > 0) {
         interpolation_start_angle =
