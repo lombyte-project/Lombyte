@@ -41,7 +41,8 @@ extern float D_L05_00161AF8 __attribute__((sda));
 
 #include "rnc/overlay/l05/mobys/extermitank_data/extermitank_update_6.h"
 
-extern float D_L05_00161B18 __attribute__((sda));
+extern float l05_extermitank_tracked_particle_paired_frame_count_base_gp __asm__("D_L05_00161B18")
+    __attribute__((sda));
 extern float D_L05_00161B1C __attribute__((sda));
 extern float extermitank_tracked_particle_vector_a_xy_scale_gp __asm__("D_L05_00161B20")
     __attribute__((sda));
@@ -58,7 +59,8 @@ extern float extermitank_tracked_particle_vector_b_spread_degrees_gp __asm__("D_
 
 #include "rnc/overlay/l05/mobys/extermitank_data/extermitank_update_3.h"
 
-extern float D_L05_00161B48 __attribute__((sda));
+extern float l05_extermitank_secondary_particle_paired_frame_count_base_gp __asm__("D_L05_00161B48")
+    __attribute__((sda));
 extern float D_L05_00161B4C __attribute__((sda));
 extern float extermitank_secondary_particle_vector_a_xy_scale_gp __asm__("D_L05_00161B50")
     __attribute__((sda));

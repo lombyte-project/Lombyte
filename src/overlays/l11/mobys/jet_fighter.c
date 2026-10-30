@@ -61,7 +61,7 @@ typedef struct {
 extern IconEC5D0     l11_ship_radar_icon_definitions[] __asm__("D_L11_001F1058");
 extern s64           get_effect_texture(s32) __asm__("func_001F44B8");
 extern unsigned char frame_size[] __asm__("D_0013E504");
-extern unsigned char draw_map51[4] __asm__("D_0015EDB4");
+extern unsigned char D_0015EDB4[4];
 extern void
     draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
 

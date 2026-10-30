@@ -103,8 +103,9 @@ extern float D_L08_001675C0[];
 extern float FUN_L04_001f1978(float);
 extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern int   D_L08_001619AC_gp __asm__("D_L08_001619AC") __attribute__((sda));
-extern int   D_L08_001619D0_gp __asm__("D_L08_001619D0") __attribute__((sda));
-extern int   FUN_L00_00259028(char *m, char *p, float *pos, char *v);
+extern int   l08_bombthrower_fade_interpolation_divisor_gp __asm__("D_L08_001619D0")
+    __attribute__((sda));
+extern int FUN_L00_00259028(char *m, char *p, float *pos, char *v);
 extern int
 select_nearest_xy_moby_with_hero_fallback(void *, float, void *) __asm__("FUN_L08_0026a3d0");
 extern void FUN_L00_0025a120(void *);

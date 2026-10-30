@@ -119,7 +119,7 @@ typedef struct {
 
 extern IconEC5D0     l17_fighter_jet_radar_contact_icon_definitions[] __asm__("D_L17_001D9B38");
 extern unsigned char frame_size[] __asm__("D_0013E504");
-extern unsigned char draw_map51[4] __asm__("D_0015EDB4");
+extern unsigned char D_0015EDB4[4];
 extern void
     draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64) __asm__("func_001F5450");
 
