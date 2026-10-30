@@ -177,7 +177,7 @@ typedef struct {
 
 // Moves DIST along a spline from segment *IDX at offset *T, updates both, and writes the point reached to OUT; 1 when an end was passed.
 int FUN_L00_0025d808(Spline *path,
-                     float  *out,
+                     float  *sampled_point,
                      int    *segment_index,
                      float  *segment_offset,
                      int     loop,
@@ -232,11 +232,11 @@ int FUN_L00_0025d808(Spline *path,
         }
     }
     i = *segment_index;
-    qcopy_nc(out, &path->pt[i]);
+    qcopy_nc(sampled_point, &path->pt[i]);
     if (i == path->n - 1 && !loop) {
         if (traversal_direction == -1) {
             *segment_index = 0;
-            qcopy_nc(out, &path->pt[0]);
+            qcopy_nc(sampled_point, &path->pt[0]);
             *segment_offset = 0.0f;
         }
         return 1;
@@ -247,7 +247,7 @@ int FUN_L00_0025d808(Spline *path,
     }
     fast_vec_sub(segment_delta, &path->pt[j], &path->pt[i]);
     fast_vec_normalize(segment_delta, segment_delta, *segment_offset);
-    fast_vec_add(out, out, segment_delta);
+    fast_vec_add(sampled_point, sampled_point, segment_delta);
     return crossed_path_boundary;
 }
 
