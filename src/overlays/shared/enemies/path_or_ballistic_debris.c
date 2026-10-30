@@ -174,20 +174,20 @@ extern float ballistic_debris_z_velocity_range_end_gp __asm__("D_L14_00161B3C")
 unsigned char *
 spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) __asm__("FUN_L14_002e0170");
 
-unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mode) {
+unsigned char *spawn_path_or_ballistic_debris(char *debris_origin_moby, float *scale, int mode) {
     unsigned char *spawned_moby = create_moby(0x193);
     unsigned char *pos;
     if (spawned_moby != 0) {
         char *spawned_vars = ((char *)MOBY(spawned_moby)->pvars);
         float launch_vector_scratch[8];
         pos = spawned_moby + 0x10;
-        qcopy(pos, owner + 0x10);
-        MOBY(spawned_moby)->rot.z = *(float *)(owner + 0x48);
+        qcopy(pos, debris_origin_moby + 0x10);
+        MOBY(spawned_moby)->rot.z = *(float *)(debris_origin_moby + 0x48);
         spawned_moby[0x20] = mode;
         spawned_moby[0x30] = 0xFF;
         MOBY(spawned_moby)->draw_dist = 0xFF;
         spawned_moby[0x31] = 1;
-        *(char **)spawned_vars = owner;
+        *(char **)spawned_vars = debris_origin_moby;
         if (spawned_moby[0x20] == 0) {
             int          index;
             LevelSpline *splines;
@@ -195,7 +195,7 @@ unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mod
             fields[1] = scale_game_frames(90);
             splines = l14_splines;
             *(float *)(spawned_vars + 8) = *scale * frame_time;
-            index = *(int *)(*(char **)(owner + 0x78) + 0x60);
+            index = *(int *)(*(char **)(debris_origin_moby + 0x78) + 0x60);
             fields[5] = 0;
             fields[3] = index;
             fields[4] = 0;
