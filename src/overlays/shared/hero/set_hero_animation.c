@@ -223,25 +223,25 @@ int             select_hero_slot3_animation_pair(int  input_animation_id,
 void sync_hero_slot3_animation_speed(void) __asm__("FUN_L00_00232128");
 
 void sync_hero_slot3_animation_speed(void) {
-    struct Hero *base = &hero;
+    struct Hero *hero_slot3_animation_speed_state = &hero;
     int          mapped_animation_ids[2];
 
-    if (base->vehicle_mode != 0) {
+    if (hero_slot3_animation_speed_state->vehicle_mode != 0) {
         return;
     }
-    if (base->items[3].state != 2) {
+    if (hero_slot3_animation_speed_state->items[3].state != 2) {
         return;
     }
-    if (select_hero_slot3_animation_pair(*(unsigned char *)(((char *)base->moby) + 0x53),
+    if (select_hero_slot3_animation_pair(*(unsigned char *)(((char *)hero_slot3_animation_speed_state->moby) + 0x53),
                                          &mapped_animation_ids[0],
                                          &mapped_animation_ids[1]) == 0) {
         return;
     }
-    if (((char *)base->items[3].moby) != 0) {
-        *(float *)(((char *)base->items[3].moby) + 0x58) = base->anim_speed;
+    if (((char *)hero_slot3_animation_speed_state->items[3].moby) != 0) {
+        *(float *)(((char *)hero_slot3_animation_speed_state->items[3].moby) + 0x58) = hero_slot3_animation_speed_state->anim_speed;
     }
-    if (((char *)base->items[3].moby2) != 0) {
-        *(float *)(((char *)base->items[3].moby2) + 0x58) = base->anim_speed;
+    if (((char *)hero_slot3_animation_speed_state->items[3].moby2) != 0) {
+        *(float *)(((char *)hero_slot3_animation_speed_state->items[3].moby2) + 0x58) = hero_slot3_animation_speed_state->anim_speed;
     }
 }
 
