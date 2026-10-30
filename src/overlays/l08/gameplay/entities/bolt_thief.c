@@ -178,6 +178,7 @@ void spawn_shrub_parts(char *moby) {
 extern float D_0015ED6C;
 
 #include "rnc/overlay/l08/gameplay/entities/bolt_thief_globals.h"
+#include "rnc/overlay/level_path.h"
 extern float shrub_part_spin_speed_degrees_gp __asm__("D_L08_00161D28") __attribute__((sda));
 void update_shrub_parts(struct Moby *parent_moby) __asm__("FUN_L08_002e8ba0");
 
@@ -1312,7 +1313,6 @@ extern s32 gunship_updates_disabled_gp __asm__("D_L08_00161C4C") __attribute__((
 extern f32 gunship_path_speed_gp __asm__("D_L08_00161C38") __attribute__((sda));
 extern f32 gunship_turn_acceleration_degrees_gp __asm__("D_L08_00161C44") __attribute__((sda));
 extern f32 gunship_max_turn_speed_degrees_gp __asm__("D_L08_00161C48") __attribute__((sda));
-extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8_m __asm__("D_L08_0015FFD8");
 
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -1367,8 +1367,8 @@ void update_gunship(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        vars->follow[0].path = D_L08_001B0CB0[vars->follow[0].path_id];
-        vars->follow[1].path = D_L08_001B0CB0[vars->follow[1].path_id];
+        vars->follow[0].path = l08_paths[vars->follow[0].path_id];
+        vars->follow[1].path = l08_paths[vars->follow[1].path_id];
         vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
         qcopy(&moby->pos, &vars->follow[1].path->points[0]);
         spawn_gunship_parts(moby);
@@ -1469,7 +1469,7 @@ void update_gunship(struct Moby *moby) {
         }
         break;
     case GUNSHIP_BEGIN_PRIMARY_PATH: {
-        SwarmPath *path;
+        LevelPath *path;
 
         moby->state = 1;
         path = vars->follow[0].path;
@@ -1614,11 +1614,11 @@ void bolt_thief_update(struct Moby *moby) {
     moby->hit_slot = 0xFF;
     switch (moby->state) {
     case BOLT_THIEF_INITIALIZE:
-        data->follow[0].path = D_L08_001B0CB0[data->follow[0].path_id];
+        data->follow[0].path = l08_paths[data->follow[0].path_id];
         qcopy(&moby->pos, &data->follow[0].path->points[0]);
         data->follow[0].point = 1;
         if (data->follow[1].path_id >= 0) {
-            data->follow[1].path = D_L08_001B0CB0[data->follow[1].path_id];
+            data->follow[1].path = l08_paths[data->follow[1].path_id];
             data->follow[1].point = 1;
         }
         moby->flags |= 0x1000;
@@ -1631,7 +1631,7 @@ void bolt_thief_update(struct Moby *moby) {
         }
         break;
     case BOLT_THIEF_WAIT_FOR_HERO_NEAR_TRIGGER:
-        qcopy(&point, &D_L08_001B0CB0[data->w220]->points[0]);
+        qcopy(&point, &l08_paths[data->w220]->points[0]);
         if (fast_vec_dist(hero.motion.pos.f, &point) < 24.0f) {
             build_bolt_thief_target_list((char *)moby);
             moby->state = 5;
@@ -1642,7 +1642,7 @@ void bolt_thief_update(struct Moby *moby) {
         break;
     case BOLT_THIEF_FOLLOW_PRIMARY_PATH_TO_COLLECTION_POINT: {
         SwarmPathFollower *follower;
-        SwarmPath *path;
+        LevelPath *path;
         int next;
         float heading;
 
@@ -2647,8 +2647,8 @@ void shrub_update(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        vars->follow[0].path = D_L08_001B0CB0[vars->follow[0].path_id];
-        vars->follow[1].path = D_L08_001B0CB0[vars->follow[1].path_id];
+        vars->follow[0].path = l08_paths[vars->follow[0].path_id];
+        vars->follow[1].path = l08_paths[vars->follow[1].path_id];
         vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
         moby->flags |= 0x4000;
         qcopy(&moby->pos, &vars->follow[1].path->points[0]);
@@ -2745,7 +2745,7 @@ void shrub_update(struct Moby *moby) {
         }
         break;
     case SHRUB_BEGIN_PRIMARY_PATH: {
-        SwarmPath *path;
+        LevelPath *path;
 
         moby->state = 1;
         path = vars->follow[0].path;

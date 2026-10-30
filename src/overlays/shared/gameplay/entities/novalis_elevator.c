@@ -173,6 +173,7 @@ typedef struct {
 
 extern s32 D_L01_0015F5E0 MACRO_ADDR;
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator_globals.h"
+#include "rnc/overlay/level_path.h"
 extern u32 cached_water_texture_id_gp __asm__("D_L01_00161228") __attribute__((sda));
 extern u32 cached_water_second_texture_id_gp __asm__("D_L01_0016122C") __attribute__((sda));
 extern u32 D_L01_00161230 __attribute__((sda));
@@ -243,7 +244,6 @@ void build_water_render_setup_packet(void) {
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Path mover gated by an activation trigger and its collectable flag; plays the arrival cue on the way back. */
-extern char *D_L01_001B0930[];
 typedef struct {
     u8 pad0[0x454];
     u8 collected[1];
@@ -271,7 +271,7 @@ void novalis_elevator_update(unsigned char *moby) {
     if (*(int *)(data + 0xB4) == -1) {
         return;
     }
-    path = D_L01_001B0930[*(int *)(data + 0xB4)];
+    path = ((char *)l01_paths[*(int *)(data + 0xB4)]);
     if (*(int *)(data + 0xCC) != -1) {
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xCC)) == 0) {
             moby[0x30] = 0xFF;
@@ -2253,7 +2253,7 @@ void process_amoeboid_hits_and_update_targeting(char *moby) {
     }
     path_search_gate_moby_index = *(int *)(moby_vars + 0x260);
     if (path_search_gate_moby_index <= 0 || *(unsigned char *)((path_search_gate_moby_index << 8) + (*(int *)&D_L01_0015FFD8) + 0xBC) != 0) {
-        search_path = D_L01_001B0930[*(int *)(moby_vars + 0x24C)];
+        search_path = ((char *)l01_paths[*(int *)(moby_vars + 0x24C)]);
         path_search_position = moby_vars + 0x1C0;
         if (FUN_L00_0025ff38(*(float *)(moby_vars + 0x228), moby, path_search_position, 0, 0, search_path + 0x10, *(int *)search_path) != 2) {
             if (*(float *)(moby_vars + 0x228) < vector_distance_xy(moby_vars + 0x210, path_search_position)
@@ -2698,7 +2698,6 @@ typedef struct {
     s32 count;         /* spawn budget; the moby is deleted when it runs out */
 } AreaVars;
 
-extern s32 *D_L01_001B0930_2f2eb8[] __asm__("D_L01_001B0930");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 
 extern s32 D_L01_00161AF0 __attribute__((sda));
@@ -2745,7 +2744,7 @@ void update_nearest_area_moby_selection(struct Moby *moby) {
         qcopy(&target, &hero.motion.pos);
     }
     if (area_vars->area.s.path != -1) {
-        path = D_L01_001B0930_2f2eb8[area_vars->area.s.path];
+        path = ((s32 *)l01_paths[area_vars->area.s.path]);
         k = point_in_path_xy(&target, path + 4, path[0]);
         if (k) {
             goto in_range;
@@ -2992,7 +2991,7 @@ void gunship_follow_path(struct Moby *moby) {
     switch (moby->state) {
     case GUNSHIP_PATH_STATE_INITIALIZE:
         if (path_cursor->path_id != -1) {
-            PathNodes *pn = (PathNodes *)D_L01_001B0930[path_cursor->path_id];
+            PathNodes *pn = (PathNodes *)l01_paths[path_cursor->path_id];
             if (fast_vec_dist(&pn->node[0], &pn->node[pn->count - 1]) < 0.5f)
                 pn->count--;
         } else {

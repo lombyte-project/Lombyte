@@ -123,6 +123,7 @@ void apply_spatial_trigger_to_moby_list(int unused_trigger_moby, int trigger_var
 }
 #include "qcopy.h"
 #include "rnc/gameplay/entities/moby.h"
+#include "rnc/overlay/level_path.h"
 
 /* pvars of the trigger moby run by FUN_L05_002f5200 */
 typedef struct {
@@ -136,7 +137,6 @@ typedef struct {
 } TriggerVars;
 
 extern Vec4 D_L05_001671C0_2f5200 __asm__("D_L05_001671C0");
-extern s32 *D_L05_001B0930_2f5200[] __asm__("D_L05_001B0930");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 
 void update_moby_spatial_trigger(struct Moby *trigger_moby) __asm__("FUN_L05_002f5200");
@@ -159,7 +159,7 @@ void update_moby_spatial_trigger(struct Moby *trigger_moby) {
         inside = 1;
     }
     if (!inside && trigger_vars->path != -1) {
-        path = D_L05_001B0930_2f5200[trigger_vars->path];
+        path = ((s32 *)l05_paths[trigger_vars->path]);
         inside = point_in_path_xy(&target, path + 4, path[0]) != 0;
     }
     if (!inside) {
@@ -602,7 +602,6 @@ typedef struct {
 extern SaveFlags D_L05_001BB6B0;
 extern SaveFlags D_L05_001BAA50_s __asm__("D_L05_001BAA50");
 extern unsigned char D_L05_0015FC88[] MACRO_ADDR;
-extern char *D_L05_001B0930[];
 extern u8 D_0014C050[];
 
 void floor_button_update(struct Moby *moby) __asm__("FUN_L05_0030c5b0");
@@ -631,14 +630,14 @@ void floor_button_update(struct Moby *moby) {
             list = vars[0];
             if (list != -1) {
                 i = 0;
-                if (*(s32 *)D_L05_001B0930[list] > 0) {
+                if (*(s32 *)l05_paths[list] > 0) {
                     do {
-                        entry = D_L05_001B0930[list] + i * 16;
+                        entry = ((char *)l05_paths[list]) + i * 16;
                         if (*(f32 *)(entry + 0x1C) == ((f32 *)vars)[1])
                             *(s32 *)(entry + 0x1C) = 0;
                         list = vars[0];
                         i++;
-                    } while (i < *(s32 *)D_L05_001B0930[list]);
+                    } while (i < *(s32 *)l05_paths[list]);
                 }
             }
         } else {
@@ -667,14 +666,14 @@ void floor_button_update(struct Moby *moby) {
             list = vars[0];
             if (list != -1) {
                 i = 0;
-                if (*(s32 *)D_L05_001B0930[list] > 0) {
+                if (*(s32 *)l05_paths[list] > 0) {
                     do {
-                        entry = D_L05_001B0930[list] + i * 16;
+                        entry = ((char *)l05_paths[list]) + i * 16;
                         if (*(f32 *)(entry + 0x1C) == ((f32 *)vars)[1])
                             *(s32 *)(entry + 0x1C) = 0;
                         list = vars[0];
                         i++;
-                    } while (i < *(s32 *)D_L05_001B0930[list]);
+                    } while (i < *(s32 *)l05_paths[list]);
                 }
             }
         }
@@ -952,7 +951,7 @@ void transform_moby_vector_table_to_world_space(char *moby) {
     char *data = ((char *)MOBY(moby)->pvars);
     int vector_table_index = *(int *)(data + 0xDC);
     if (vector_table_index != -1) {
-        char *vector_table_entry = D_L05_001B0930[vector_table_index];
+        char *vector_table_entry = ((char *)l05_paths[vector_table_index]);
         if (*(int *)vector_table_entry == 7) {
             int i;
             struct Hero *player_hero;

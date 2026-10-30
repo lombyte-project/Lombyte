@@ -2,6 +2,7 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/level_path.h"
 
 
 
@@ -13,7 +14,7 @@ extern int test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L
 void build_symmetric_adjacency_masks(int *list, int list_count, int adjacency_table_index) __asm__("FUN_L05_0028be78");
 
 void build_symmetric_adjacency_masks(int *list, int list_count, int adjacency_table_index) {
-    char *adjacency_table = D_L05_001B0930[adjacency_table_index];
+    char *adjacency_table = ((char *)l05_paths[adjacency_table_index]);
     int i, j, k, found;
     {
         int mask_clear_index;

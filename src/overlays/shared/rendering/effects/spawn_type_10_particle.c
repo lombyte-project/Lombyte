@@ -138,6 +138,7 @@ unsigned char *spawn_type_52_particle(void *spawn_position, int b, int particle_
 #include "qzero.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/overlay/level_path.h"
 
 /* spawns a type-74 particle with transformed offset and velocity */
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028B570), where it is exact; names translated to the US level program. */
@@ -196,7 +197,7 @@ void initialize_path_descriptor(char *path_descriptor) {
     char *path_data;
     path_descriptor[5] = 0;
     *(int *)(path_descriptor + 8) = 0;
-    *(char **)(path_descriptor + 0x10) = paths[*(int *)(path_descriptor + 0x14)];
+    *(char **)(path_descriptor + 0x10) = ((char *)l01_paths[*(int *)(path_descriptor + 0x14)]);
     for (i = 0; i < **(int **)(path_descriptor + 0x10); i++) {
         path_data = *(char **)(path_descriptor + 0x10);
         path_node_byte_offset = i << 4;

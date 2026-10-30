@@ -932,23 +932,23 @@ void snagglebeast_update(unsigned char *moby) {
         if (*(int *)(data + 0x18C) != -1) {
             int i;
             for (i = 0; i < *(int *)D_L07_001B0530[*(int *)(data + 0x18C)]; i++) {
-                ((SwarmPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i].f[3] =
+                ((LevelPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i].f[3] =
                     fast_vec_dist(D_L07_001B0530[*(int *)(data + 0x18C)] + (i * 16 + 0x10),
                                   D_L07_001B0530[*(int *)(data + 0x18C)] + (((i + 1) % *(int *)D_L07_001B0530[*(int *)(data + 0x18C)]) * 16 + 0x10));
-                *(float *)(data + 0x190) += ((SwarmPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i].f[3];
+                *(float *)(data + 0x190) += ((LevelPath *)D_L07_001B0530[*(int *)(data + 0x18C)])->points[i].f[3];
             }
         }
         if (*(int *)(data + 0x290) != -1) {
             char *chase_path = D_L07_001B0530[*(int *)(data + 0x290)];
             int i;
             for (i = 0; i < *(int *)chase_path; i++) {
-                ((SwarmPath *)chase_path)->points[i].f[3] = fast_vec_dist(chase_path + (i * 16 + 0x10), chase_path + (((i + 1) % *(int *)chase_path) * 16 + 0x10));
+                ((LevelPath *)chase_path)->points[i].f[3] = fast_vec_dist(chase_path + (i * 16 + 0x10), chase_path + (((i + 1) % *(int *)chase_path) * 16 + 0x10));
             }
         }
         if (*(int *)(data + 0x188) != -1) {
             int i;
             for (i = 0; i < *(int *)D_L07_001B0530[*(int *)(data + 0x188)]; i++) {
-                int k = truncate_float_to_s32(((SwarmPath *)D_L07_001B0530[*(int *)(data + 0x188)])->points[i].f[3]);
+                int k = truncate_float_to_s32(((LevelPath *)D_L07_001B0530[*(int *)(data + 0x188)])->points[i].f[3]);
                 if ((unsigned int)k < 4) ((ChaserPathPoints *)data)->path_points[k] = i;
             }
         }

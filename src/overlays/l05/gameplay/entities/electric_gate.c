@@ -101,6 +101,7 @@ void record_grid_entry_neighbor_indices(int selected_entry_index) {
     }
 }
 #include "qcopy.h"
+#include "rnc/overlay/level_path.h"
 
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_0030F130), where it is exact; names translated to the US level program. */
 
@@ -1324,12 +1325,11 @@ void FUN_L05_00315ee0(char *lift_moby, char *camera_position, char *camera_rotat
 }
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317438), where it is exact; names translated to the US level program. */
 
-extern char *D_L05_001B0930[];
 
 void FUN_L05_00315f70(char *moby) {
     int i = 0;
     char *data = ((char *)MOBY(moby)->pvars);
-    char *tab = D_L05_001B0930[*(int *)(data + 0x68)];
+    char *tab = ((char *)l05_paths[*(int *)(data + 0x68)]);
     float ring_point_angle = 0.0f;
     float step = 6.28318f / (float)(*(int *)tab - 1);
     for (; i < *(int *)tab; i++) {
@@ -2267,28 +2267,28 @@ void select_taxi_route(struct Moby *moby) {
     float inv, frame_scaled_travel_step, frame_squared_travel_step, first_path_segment_length;
     switch (*(short *)(taxi_data + 0xB4)) {
     case TAXI_PAIRED_ROUTE_FIRST_STOP:
-        *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0x94)];
+        *(char **)(taxi_data + 0xAC) = ((char *)l05_paths[*(int *)(taxi_data + 0x94)]);
         *(short *)(taxi_data + 0xB6) = 1;
         break;
     case TAXI_PAIRED_ROUTE_SECOND_STOP:
-        *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0x98)];
+        *(char **)(taxi_data + 0xAC) = ((char *)l05_paths[*(int *)(taxi_data + 0x98)]);
         *(short *)(taxi_data + 0xB6) = 0;
         break;
     case TAXI_BRANCHING_STOP:
         if (D_0014C050[current_level_index][*(int *)(taxi_data + 0xB8)] != 0xFF) {
-            *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0x9C)];
+            *(char **)(taxi_data + 0xAC) = ((char *)l05_paths[*(int *)(taxi_data + 0x9C)]);
             *(short *)(taxi_data + 0xB6) = 3;
         } else {
-            *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0xA4)];
+            *(char **)(taxi_data + 0xAC) = ((char *)l05_paths[*(int *)(taxi_data + 0xA4)]);
             *(short *)(taxi_data + 0xB6) = 4;
         }
         break;
     case TAXI_PRIMARY_BRANCH_STOP:
-        *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0xA0)];
+        *(char **)(taxi_data + 0xAC) = ((char *)l05_paths[*(int *)(taxi_data + 0xA0)]);
         *(short *)(taxi_data + 0xB6) = 2;
         break;
     case TAXI_FALLBACK_BRANCH_STOP:
-        *(char **)(taxi_data + 0xAC) = D_L05_001B0930[*(int *)(taxi_data + 0xA8)];
+        *(char **)(taxi_data + 0xAC) = ((char *)l05_paths[*(int *)(taxi_data + 0xA8)]);
         *(short *)(taxi_data + 0xB6) = 2;
         break;
     }

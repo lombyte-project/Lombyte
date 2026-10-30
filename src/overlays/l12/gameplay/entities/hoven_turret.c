@@ -58,6 +58,7 @@ extern float oscillating_link_strip_quad_vertex_offsets[][4] __asm__("D_L12_001F
 extern float oscillating_link_strip_transform_rotations[][4] __asm__("D_L12_001FB5B0");
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_data/draw_oscillating_target_link_strips.h"
 #include "rnc/overlay/l12/gameplay/entities/hoven_turret_globals.h"
+#include "rnc/overlay/level_path.h"
 extern float oscillating_link_strip_segment_u_step_gp __asm__("D_L12_00161DF4") __attribute__((sda));
 extern float oscillating_link_strip_scroll_phase_gp __asm__("D_L12_00161DF8") __attribute__((sda));
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
@@ -239,14 +240,12 @@ extern char D_L12_00167240[];
 extern float D_0015ED6C;
 extern float D_L12_0015F580[] MACRO_ADDR;
 extern int D_0013F3D0; /* no foreign declaration */
-extern int D_L12_001B0930; /* no foreign declaration */
 extern int collision_line() __asm__("FUN_001efa68");
 extern int FUN_L00_00259888();
 void interpolate_vector(f32 t, f32 *out, f32 *a, f32 *b) __asm__("FUN_L00_0025b6b8");
 extern void func_L00_0025C710_304310(void *, void *, void *, float) __asm__("FUN_L00_0025b6b8");
 extern void func_L12_00304038_304310(void *) __asm__("FUN_L12_00302c58");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
-extern Row *D_L12_001B0C30_304310[] __asm__("D_L12_001B0930");
 extern float D_0013F4D0_304310[] __asm__("D_0013F3D0");
 
 void update_oscillating_target_link(Moby *moby) __asm__("FUN_L12_00302f30");
@@ -284,7 +283,7 @@ void update_oscillating_target_link(Moby *moby) {
                                              D_L12_0015FFD8[data->target].pos.y - moby->pos.y);
         data->dist = fast_vec_dist(((float *)&moby->pos), (char *)D_L12_0015FFD8 + (data->target << 8) + 0x10);
         data->angle = fast_add_rotations(data->angle, data->turn * 0.017453292f * D_0015ED6C);
-        row = D_L12_001B0C30_304310[data->row];
+        row = ((Row *)l12_paths[data->row]);
         swing = fast_sin(data->angle);
         if (1.5707964f < data->angle && data->angle < 3.1415927f) {
             swing = 2.0f - swing;

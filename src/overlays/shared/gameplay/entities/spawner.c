@@ -28,6 +28,7 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_hit_material.h"
 #include "rnc/world/collision/collision_line.h"
+#include "rnc/overlay/level_path.h"
 
 /* pvars of the projectile moby FUN_L09_00307ba8 spawns */
 typedef struct {
@@ -385,7 +386,7 @@ void spawner_update(char *moby)
                 excluded_count = 1;
             }
             if (*(int *)(spawner_vars + 0x88) != -1) {
-                char *q = D_L09_001B0630[*(int *)(spawner_vars + 0x88)];
+                char *q = ((char *)l09_paths[*(int *)(spawner_vars + 0x88)]);
                 region_count = *(int *)q;
                 region = q + 0x10;
             }

@@ -33,6 +33,7 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/gameplay/fun_00213928.h"
+#include "rnc/overlay/level_path.h"
 
 /* Scoutbot update: hovers at its post, flies to its target and back, calls reinforcements, shoots, dies. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D3DF8), where it is exact; names translated to the US level program. */
@@ -319,7 +320,6 @@ void scoutbot_update(Moby *moby) {
 /* Takes hits (dying at 0 health), then follows the moby's path and gives up on it when too far off. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_002D49E8), where it is exact; names translated to the US level program. */
 
-extern char *D_L08_001B0CB0[];
 extern int hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int FUN_L00_0025ff38();
 extern void FUN_L00_00257470(void *, int, int);
@@ -346,7 +346,7 @@ void update_scoutbot_health_and_target(struct Moby *moby) {
     }
     ((unsigned char *)moby)[0xA4] = 0xFF;
     if (((unsigned char *)moby)[0x20] != 0 && ((unsigned char *)moby)[0x20] != 4) {
-        char *path = D_L08_001B0CB0[*(int *)(data + 0x21C)];
+        char *path = ((char *)l08_paths[*(int *)(data + 0x21C)]);
         if (func_L00_00260FB0_f(moby, data + 0x170, 14.0f, 0, 0, path + 0x10, *(int *)path) != 2) {
             if (14.0f < vector_distance_xy(data + 0x1C0, data + 0x170)) {
                 *(int *)(data + 0x1B4) = 2;
@@ -1169,7 +1169,7 @@ void blarg_paratrooper_update(char *moby) {
     path=0;
     update_blarg_paratrooper_damage_and_state(moby);
     target = data->f160;
-    if(data->f1FC!=-1) path=D_L08_001B0CB0[data->f1FC];
+    if(data->f1FC!=-1) path=((char *)l08_paths[data->f1FC]);
     hero=(Hero302618 *)(((char *)&D_0013F350));
     if(hero->mode == 61 && hero->timer < scale_game_frames(30) &&
        (*(unsigned char *)((char *)(moby)+0x20))!=8 && (*(unsigned char *)((char *)(moby)+0x20))!=10 && (*(unsigned char *)((char *)(moby)+0x20))!=4 && (*(unsigned char *)((char *)(moby)+0x20))!=11 &&
@@ -1199,7 +1199,7 @@ void blarg_paratrooper_update(char *moby) {
         data->f114=D_0015ED6C*8.726646f;
         data->fF8=0.34906584f; data->fFC=0.2f;
         if(random302618()&1) (*(unsigned short *)((char *)(moby)+0x34))|=0x8000;
-        qcopy(moby+0x10,D_L08_001B0CB0[data->f1D4]+0x10);
+        qcopy(moby+0x10,((char *)l08_paths[data->f1D4])+0x10);
         if(path) {
             int index;
             short direction;
@@ -1230,18 +1230,18 @@ void blarg_paratrooper_update(char *moby) {
         }
         FUN_L00_00259028_c(moby,(char *)data+0xD0,path+0x10+data->f1F4*16,pos);
         if(target && data->f164!=2 && fast_dec_timer((char *)data+0x1F0)) {
-            data->f1F4=select_point_index_by_distance(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
+            data->f1F4=select_point_index_by_distance(moby+0x10,((char *)l08_paths[data->f1D4]),0.0f);
             (*(unsigned char *)((char *)(moby)+0x20))=2;
         }
         break;
     case PARATROOPER_STATE_APPROACH_WAYPOINT: {
         float distance;
-        data->f1F4=select_point_index_by_distance(moby+0x10,D_L08_001B0CB0[data->f1D4],0.0f);
-        distance=vector_distance_xy(moby+0x10,D_L08_001B0CB0[data->f1D4]+0x10+data->f1F4*16);
+        data->f1F4=select_point_index_by_distance(moby+0x10,((char *)l08_paths[data->f1D4]),0.0f);
+        distance=vector_distance_xy(moby+0x10,((char *)l08_paths[data->f1D4])+0x10+data->f1F4*16);
         if(distance<1.0f || distance<data->fE0) {
             data->fE0=0.0f; (*(unsigned char *)((char *)(moby)+0x20))=3;
         } else {
-            FUN_L00_00259028_c(moby,(char *)data+0xD0,D_L08_001B0CB0[data->f1D4]+0x10+data->f1F4*16,pos);
+            FUN_L00_00259028_c(moby,(char *)data+0xD0,((char *)l08_paths[data->f1D4])+0x10+data->f1F4*16,pos);
             if((*(unsigned char *)((char *)(moby)+0x53))!=2) blend_moby_animation(moby,2,0,random302618()%4+7);
         }
         break;
@@ -1272,7 +1272,7 @@ void blarg_paratrooper_update(char *moby) {
                 qcopy((char *)data+0x1C0,moby+0x10);
                 data->f1F4=(data->f1F4+1)&1;
                 (*(unsigned char *)((char *)(moby)+0x20))=4;
-                fast_vec_sub(pos,D_L08_001B0CB0[data->f1D4]+0x10+data->f1F4*16,moby+0x10);
+                fast_vec_sub(pos,((char *)l08_paths[data->f1D4])+0x10+data->f1F4*16,moby+0x10);
                 if(fast_vec_dot(moby+0xD0,pos)<0.0f) {
                     if((*(unsigned char *)((char *)(moby)+0x53))!=18) blend_moby_animation(moby,18,0,scale_game_frames(5));
                 } else if((*(unsigned char *)((char *)(moby)+0x53))!=16) blend_moby_animation(moby,16,0,scale_game_frames(5));
@@ -1294,7 +1294,7 @@ void blarg_paratrooper_update(char *moby) {
             float progress=1.0f-(23.0f-frame)/11.0f;
             float arc;
             if(progress>1.0f) progress=1.0f; else if(progress<0.0f) progress=0.0f;
-            lerp_vector(pos,(char *)data+0x1C0,D_L08_001B0CB0[data->f1D4]+0x10+data->f1F4*16,progress);
+            lerp_vector(pos,(char *)data+0x1C0,((char *)l08_paths[data->f1D4])+0x10+data->f1F4*16,progress);
             arc=2.0f*(progress-0.5f);
             pos[2]+=height302618*(1.0f-arc*arc);
             qcopy(moby+0x10,pos);
@@ -1346,7 +1346,7 @@ void blarg_paratrooper_update(char *moby) {
                 (*(unsigned short *)&data->f1DA)++;
                 data->f1F4=(data->f1F4+1)&1;
                 (*(unsigned char *)((char *)(moby)+0x20))=4;
-                fast_vec_sub(pos,D_L08_001B0CB0[data->f1D4]+0x10+data->f1F4*16,moby+0x10);
+                fast_vec_sub(pos,((char *)l08_paths[data->f1D4])+0x10+data->f1F4*16,moby+0x10);
                 if(fast_vec_dot(moby+0xD0,pos)<0.0f) {
                     if((*(unsigned char *)((char *)(moby)+0x53))!=18) blend_moby_animation(moby,18,0,scale_game_frames(5));
                 } else if((*(unsigned char *)((char *)(moby)+0x53))!=16) blend_moby_animation(moby,16,0,scale_game_frames(5));
@@ -1361,7 +1361,7 @@ void blarg_paratrooper_update(char *moby) {
         turn302618(rotation,heading,(char *)data+0x1E0,D_0015ED70*8.726646f,D_0015ED70*8.726646f,D_0015ED6C*12.566371f);
         frame=compute_interpolated_record_value(moby);
         if(frame>12.0f && frame<23.0f && (*(float *)((char *)(moby)+0x54))==0.0f) {
-            fast_vec_sub(pos,D_L08_001B0CB0[data->f1D4]+0x10,moby+0x10);
+            fast_vec_sub(pos,((char *)l08_paths[data->f1D4])+0x10,moby+0x10);
             FUN_L00_0025f730(pos,D_0015ED6C*24.0f);
             FUN_L00_00258830_c(moby,pos,shove302618,shove_rate302618,0.0f,0);
         } else if((*(unsigned char *)((char *)(moby)+0x70))&2) {
@@ -1602,7 +1602,7 @@ void update_blarg_paratrooper_damage_and_state(char *moby) {
 
     if (random_integer_below(4) == 0) {
         {
-            char *path = D_L08_001B0CB0[*(int *)(data + 0x1d0)];
+            char *path = ((char *)l08_paths[*(int *)(data + 0x1d0)]);
             reaction = activate_effect_l08(moby, data + 0x120, *(float *)(data + 0x1dc), 0, 0, path + 0x10, *(int *)path);
         }
         if (reaction != 2) {

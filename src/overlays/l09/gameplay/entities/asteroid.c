@@ -195,6 +195,7 @@ extern void setup_offset_vector(float, void *, void *) __asm__("FUN_001f9a68");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
 extern void restore_view_after_textured_grid(void *) __asm__("FUN_L02_002a46e0");
 #include "rnc/overlay/l09/gameplay/entities/asteroid_globals.h"
+#include "rnc/overlay/level_path.h"
 extern int D_L09_0016CDD0;
 extern int D_L09_0016CDD8[];
 extern int D_L09_0016CD50[];
@@ -560,7 +561,6 @@ typedef struct {
     Vec4 pts[1];         /* 0x10: count + 1 points, pts[-1] is this header */
 } PebblePath;
 
-extern PebblePath *D_L09_001B0630_2eaa50[] __asm__("D_L09_001B0630");
 extern char D_L09_00166F40_2eaa50[] __asm__("D_L09_00166F40");
 extern s32 random_integer_below(s32) __asm__("FUN_00213260");
 extern f32 random_float_between(f32, f32) __asm__("FUN_002132a8");
@@ -597,7 +597,7 @@ struct Moby *spawn_path_following_asteroid(struct Moby *owner) {
         vars->spin_x = random_float_between(-0.0052359877f, 0.0052359877f);
         vars->spin_y = random_float_between(-0.0052359877f, 0.0052359877f);
         if (vars->path >= 0) {
-            path = D_L09_001B0630_2eaa50[vars->path];
+            path = ((PebblePath *)l09_paths[vars->path]);
             lateral_scatter_distance = random_float_between(-30.0f, 30.0f);
             fast_vec_sub(&path_displacement, &path->pts[path->count - 1], &path->pts[path->count - 2]);
             fast_vec_sub(&path_scatter_vector, &path->pts[1], &path->pts[0]);
@@ -937,7 +937,6 @@ extern float D_0015ED6C_c __asm__("D_0015ED6C");
 extern void update_fading_asteroid_debris(unsigned char *m) __asm__("FUN_L09_002ead30");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
 s32 compute_advanced_moby_path_position(struct Moby *m, void *path, void *out, s32 i, s32 dir, f32 dist) __asm__("FUN_L09_00294ae0");
-extern Path *D_L09_001B0930_2ECC50[] __asm__("D_L09_001B0630");
 
 void asteroid_update(struct Moby *m) __asm__("FUN_L09_002eb970");
 void asteroid_update(struct Moby *asteroid_moby) {
@@ -961,7 +960,7 @@ void asteroid_update(struct Moby *asteroid_moby) {
         moby_vars->speed = D_0015ED6C_c * 10.0f;
         moby_vars->centre[0] = moby_vars->centre[1] = moby_vars->centre[2] = 0.0f;
         if (moby_vars->path >= 0) {
-            Path *ring = D_L09_001B0930_2ECC50[moby_vars->path];
+            Path *ring = ((Path *)l09_paths[moby_vars->path]);
             for (i = 0; i < ring->n; i++) {
                 fast_vec_add(moby_vars->centre, moby_vars->centre, ring->pts[i]);
             }
@@ -1006,7 +1005,7 @@ void asteroid_update(struct Moby *asteroid_moby) {
         return;
     }
     qcopy_nc(((f32 *)&asteroid_moby->pos), moby_vars->target);
-    path = D_L09_001B0930_2ECC50[moby_vars->path];
+    path = ((Path *)l09_paths[moby_vars->path]);
     if (asteroid_moby->command == 0 && moby_vars->count < 50 && fast_dec_timer(&moby_vars->timer)) {
         moby_vars->timer = scale_game_frames(15) + random_integer_below(scale_game_frames(30));
         spawn_path_following_asteroid(asteroid_moby);

@@ -112,6 +112,7 @@ extern QuadCorner l10_animated_quad_first_base_corners[] __asm__("D_L10_001DA350
 extern float quad_layer_uv_phase_divisors[][2] __asm__("D_L10_001DA270");
 extern float quad_corner_base_uvs[][2] __asm__("D_L10_001DA2F0");
 #include "rnc/overlay/shared/gameplay/entities/spawn_type_52_particle_near_moby_globals.h"
+#include "rnc/overlay/level_path.h"
 extern int quad_layer_colors[] __asm__("D_L10_001DA250");
 extern int quad_layer_uv_cosine_selectors[][2] __asm__("D_L10_001DA2B0");
 extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
@@ -224,7 +225,6 @@ void activate_descriptor(int i) {
     descriptor_record[0x38] = 1;
     descriptor_record[0x39] = 0;
 }
-extern char *D_L10_001B0930_5a78[] __asm__("D_L10_001B0930");
 extern int point_in_path_xy(float *, float *, int) __asm__("FUN_L00_00259740");
 
 int check_descriptor_hero_trigger(char *moby) __asm__("FUN_L10_002f5a78");
@@ -245,8 +245,8 @@ int check_descriptor_hero_trigger(char *moby) {
     } else if (*(int *)(e + 0x14) >= 0) {
         int i = *(int *)(e + 0x14);
         if (point_in_path_xy((float *)(&hero.motion.pos),
-                                  (float *)(D_L10_001B0930_5a78[i] + 0x10),
-                                  *(int *)D_L10_001B0930_5a78[i]))
+                                  (float *)(((char *)l10_paths[i]) + 0x10),
+                                  *(int *)l10_paths[i]))
             return 1;
     } else if (e[0x38] != 0 && e[0x39] == 0) {
         return 1;
@@ -314,7 +314,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
     m2 = (Vec4f *)&path_camera->m2;
     stops->fov_end = fast_arc_tan(1.0f, D_L10_0016CEC0.tan_half_fov) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
-        char *path = D_L10_001B0930_5a78[*(int *)(rec + 0x20)];
+        char *path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
         int i = 0;
         if (i < *(int *)path) {
             f32 *stop_fov = fov;
@@ -350,7 +350,7 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
             *(f32 *)(rec + 0x3C) = run->path_length / convert_integer_to_float(scale_game_frames(frames)) * 60.0f;
     }
     if (*(int *)(rec + 0x24) >= 0) {
-        char *path = D_L10_001B0930_5a78[*(int *)(rec + 0x24)];
+        char *path = ((char *)l10_paths[*(int *)(rec + 0x24)]);
         int i;
         for (i = 0; i < *(int *)path; i++) {
             int offset = i * 16;
@@ -384,7 +384,6 @@ void initialize_path_camera(struct UpdateCam *path_camera) {
 #include "qcopy.h"
 #include "rnc/gameplay/camera/update_cam.h"
 
-extern char *D_L10_001B0930_5f18[] __asm__("D_L10_001B0930");
 extern char *D_L10_0015FFD8_5f18 __asm__("D_L10_0015FFD8");
 extern f32 D_L10_0015F3FC;
 extern s32 D_L10_0015F404;
@@ -418,8 +417,8 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
     if (run->started == 0) {
         D_L10_0015F3FC += 0.05f;
         if (D_L10_0015F3FC >= 1.0f) {
-            char *start_path = D_L10_001B0930_5f18[*(int *)(rec + 0x20)];
-            char *look_path = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
+            char *start_path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
+            char *look_path = ((char *)l10_paths[*(int *)(rec + 0x24)]);
             D_L10_0015F3FC = 1.0f;
             D_L10_0015F404 = 1;
             run->started = 1;
@@ -470,7 +469,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         if (D_L10_0015F3FC < 0.0f)
             D_L10_0015F3FC = 0.0f;
     }
-    path = D_L10_001B0930_5f18[*(int *)(rec + 0x20)];
+    path = ((char *)l10_paths[*(int *)(rec + 0x20)]);
     qcopy(dir, &cam->pos);
     done = sample_path(path, &cam->pos.x, &run->seg, &run->t, 0, *(float *)(rec + 0x3C) * frame_time);
     if (run->timer != 0) {
@@ -517,7 +516,7 @@ void FUN_L10_002f5f18(struct UpdateCam *cam) {
         fast_vec_add(look_point, &anchor->pos, point);
         fast_vec_sub(offset, look_point, &cam->pos);
     } else {
-        char *look = D_L10_001B0930_5f18[*(int *)(rec + 0x24)];
+        char *look = ((char *)l10_paths[*(int *)(rec + 0x24)]);
         look_seg = 0;
         look_t = 0.0f;
         sample_path(look, point, &look_seg, &look_t, 0, run->dist / run->path_length * run->look_path_length);

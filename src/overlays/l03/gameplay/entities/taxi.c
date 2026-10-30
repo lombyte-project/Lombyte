@@ -1,5 +1,6 @@
 /* Level 03 moby classes: mine_layer, mine, taxi, robo_shack_sign, helga, big_al, robot_qwark. */
 #include "types.h"
+#include "rnc/overlay/level_path.h"
 #include "rnc/overlay/collision.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -149,7 +150,6 @@ typedef struct {
     u8 unk160[0x10];      /* 0x160: FUN_L00_00263ac8 record */
 } TrooperVars;
 
-extern struct RailPath *D_L03_001B05B0[];
 s32 mine_layer_fire_interval_frames_gp __asm__("D_L03_00161918") = 0x12c;
 extern f32 mine_layer_patrol_animation_speed_gp __asm__("D_L03_0016191C") __attribute__((sda));
 extern f32 mine_layer_initial_scale_multiplier_gp __asm__("D_L03_00161920") __attribute__((sda));
@@ -228,7 +228,7 @@ void mine_layer_update(struct Moby *mine_layer_moby) {
         mine_layer_vars->unk24 = 2;
         mine_layer_vars->unk28 = 1;
         mine_layer_vars->unk29 = 0;
-        path = D_L03_001B05B0[mine_layer_vars->patrol.path_index];
+        path = ((struct RailPath *)l03_paths[mine_layer_vars->patrol.path_index]);
         mine_layer_vars->patrol.path = path;
         qcopy(&mine_layer_moby->pos, &path->pts[0]);
         mine_layer_vars->patrol.idx = 1;
@@ -761,14 +761,14 @@ void update_rail_taxi(struct Moby *taxi_moby) {
 
     set_moby_dialogue_record_value(taxi_moby, is_taxi_in_round_trip_phase((u8 *)taxi_moby));
     if (taxi_path_point_debug_draw_enabled_gp != 0) {
-        for (i = 0; i < D_L03_001B05B0[taxi_vars->out[0]]->count; i++) {
-            draw_number(&D_L03_001B05B0[taxi_vars->out[0]]->pts[i], taxi_moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.333f);
+        for (i = 0; i < ((struct RailPath *)l03_paths[taxi_vars->out[0]])->count; i++) {
+            draw_number(&((struct RailPath *)l03_paths[taxi_vars->out[0]])->pts[i], taxi_moby, 4, 0x800000FF, 0x7F, 2, 0xFF, 0.333f);
         }
-        for (i = 0; i < D_L03_001B05B0[taxi_vars->back[0]]->count; i++) {
-            draw_number(&D_L03_001B05B0[taxi_vars->back[0]]->pts[i], taxi_moby, 4, 0x8000FF00, 0x7F, 2, 0xFF, 0.333f);
+        for (i = 0; i < ((struct RailPath *)l03_paths[taxi_vars->back[0]])->count; i++) {
+            draw_number(&((struct RailPath *)l03_paths[taxi_vars->back[0]])->pts[i], taxi_moby, 4, 0x8000FF00, 0x7F, 2, 0xFF, 0.333f);
         }
-        for (i = 0; i < D_L03_001B05B0[taxi_vars->onward[0]]->count; i++) {
-            draw_number(&D_L03_001B05B0[taxi_vars->onward[0]]->pts[i], taxi_moby, 4, 0x80FF0000, 0x7F, 2, 0xFF, 0.333f);
+        for (i = 0; i < ((struct RailPath *)l03_paths[taxi_vars->onward[0]])->count; i++) {
+            draw_number(&((struct RailPath *)l03_paths[taxi_vars->onward[0]])->pts[i], taxi_moby, 4, 0x80FF0000, 0x7F, 2, 0xFF, 0.333f);
         }
     }
     qcopy(&oldPos, &taxi_moby->pos);
@@ -776,11 +776,11 @@ void update_rail_taxi(struct Moby *taxi_moby) {
     switch (taxi_moby->state) {
     case TAXI_INITIALIZE:
         if (taxi_vars->out[0] != -1) {
-            qcopy_nc(&taxi_moby->pos, &D_L03_001B05B0[taxi_vars->out[0]]->pts[0]);
-            taxi_moby->rot.z = fast_arc_tan(D_L03_001B05B0[taxi_vars->out[0]]->pts[1].f[0] - taxi_moby->pos.x, D_L03_001B05B0[taxi_vars->out[0]]->pts[1].f[1] - taxi_moby->pos.y);
+            qcopy_nc(&taxi_moby->pos, &((struct RailPath *)l03_paths[taxi_vars->out[0]])->pts[0]);
+            taxi_moby->rot.z = fast_arc_tan(((struct RailPath *)l03_paths[taxi_vars->out[0]])->pts[1].f[0] - taxi_moby->pos.x, ((struct RailPath *)l03_paths[taxi_vars->out[0]])->pts[1].f[1] - taxi_moby->pos.y);
         } else if (taxi_vars->back[0] != -1) {
-            qcopy_nc(&taxi_moby->pos, &D_L03_001B05B0[taxi_vars->back[0]]->pts[0]);
-            taxi_moby->rot.z = fast_arc_tan(D_L03_001B05B0[taxi_vars->back[0]]->pts[1].f[0] - taxi_moby->pos.x, D_L03_001B05B0[taxi_vars->back[0]]->pts[1].f[1] - taxi_moby->pos.y);
+            qcopy_nc(&taxi_moby->pos, &((struct RailPath *)l03_paths[taxi_vars->back[0]])->pts[0]);
+            taxi_moby->rot.z = fast_arc_tan(((struct RailPath *)l03_paths[taxi_vars->back[0]])->pts[1].f[0] - taxi_moby->pos.x, ((struct RailPath *)l03_paths[taxi_vars->back[0]])->pts[1].f[1] - taxi_moby->pos.y);
         }
         taxi_moby->draw_dist = 0;
         taxi_moby->update_dist = 0xFF;
@@ -802,11 +802,11 @@ void update_rail_taxi(struct Moby *taxi_moby) {
                 (is_point_inside_clip_volume(&hero.motion.pos, taxi_vars->volume[route_index]) || taxi_vars->route == route_index)) {
                 taxi_moby->collision = taxi_moby->pclass->collision;
                 if (taxi_vars->out[route_index] != -1) {
-                    route_path = D_L03_001B05B0[taxi_vars->out[route_index]];
+                    route_path = ((struct RailPath *)l03_paths[taxi_vars->out[route_index]]);
                     qcopy(&taxi_moby->pos, &route_path->pts[0]);
                     taxi_moby->rot.z = fast_arc_tan(route_path->pts[1].f[0] - taxi_moby->pos.x, route_path->pts[1].f[1] - taxi_moby->pos.y);
                 } else if (taxi_vars->back[route_index] != -1) {
-                    route_path = D_L03_001B05B0[taxi_vars->back[route_index]];
+                    route_path = ((struct RailPath *)l03_paths[taxi_vars->back[route_index]]);
                     qcopy(&taxi_moby->pos, &route_path->pts[0]);
                     taxi_moby->rot.z = fast_arc_tan(route_path->pts[1].f[0] - taxi_moby->pos.x, route_path->pts[1].f[1] - taxi_moby->pos.y);
                 }
@@ -901,7 +901,7 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
    keeps the travel sound playing and releases it on arrival. Returns 1 at the last point. */
 s32 advance_moby_along_rail_path(struct Moby *rail_moby, s32 path, s32 *snd) {
     RailFlyerVars *rail_flyer_vars = (RailFlyerVars *)rail_moby->pvars;
-    struct RailPath **pp = &D_L03_001B05B0[path];
+    struct RailPath **pp = ((struct RailPath **)&l03_paths[path]);
     Vec4f target_path_point, movement_delta;
     f32 acc;
     f32 target_pitch;
@@ -1531,7 +1531,7 @@ void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
             mark_moby_for_removal((char *)moby);
             return;
         }
-        path = D_L03_001B05B0[vars->path];
+        path = ((struct RailPath *)l03_paths[vars->path]);
         path_mover_distance_step = frame_time * 3.0f;
         for (i = 0; i < path->count - 2; i++)
             path->pts[i].f[3] = fast_vec_dist(&path->pts[i], &path->pts[i + 1]);
@@ -1544,7 +1544,7 @@ void update_path_mover_spawner(struct RailSpawnerMoby *moby) {
     }
     if (fast_dec_timer(&vars->timer)) {
         vars->timer = truncate_float_to_s32(2.9f / path_mover_distance_step);
-        spawn_path_mover(D_L03_001B05B0[vars->path], 0.0f);
+        spawn_path_mover(((struct RailPath *)l03_paths[vars->path]), 0.0f);
     }
     if (!voice_is_playing(moby, vars->voice))
         vars->voice = FUN_L00_0028dc90(0, 4, moby, 0x382);
@@ -2000,7 +2000,7 @@ void update_rail_lift(struct Moby *lift_moby) {
     switch (lift_moby->state) {
     case LIFT_INITIALIZE:
         lift_moby->command = lift_vars->start_end;
-        qcopy(&lift_moby->pos, &D_L03_001B05B0[lift_vars->path[lift_moby->command]]->pts[0]);
+        qcopy(&lift_moby->pos, &((struct RailPath *)l03_paths[lift_vars->path[lift_moby->command]])->pts[0]);
         lift_vars->hud = -1;
         lift_vars->timer = 0;
         lift_moby->state = 1;
@@ -2008,16 +2008,16 @@ void update_rail_lift(struct Moby *lift_moby) {
         lift_moby->draw_dist = 0xFF;
         break;
     case LIFT_WAIT_FOR_DEPARTURE:
-        hero_end = fast_vec_dist(&hero.motion.pos, &D_L03_001B05B0[lift_vars->path[0]]->pts[0]) <
-                   fast_vec_dist(&hero.motion.pos, &D_L03_001B05B0[lift_vars->path[1]]->pts[0]);
-        lift_end = fast_vec_dist(&lift_moby->pos, &D_L03_001B05B0[lift_vars->path[0]]->pts[0]) <
-                   fast_vec_dist(&lift_moby->pos, &D_L03_001B05B0[lift_vars->path[1]]->pts[0]);
+        hero_end = fast_vec_dist(&hero.motion.pos, &((struct RailPath *)l03_paths[lift_vars->path[0]])->pts[0]) <
+                   fast_vec_dist(&hero.motion.pos, &((struct RailPath *)l03_paths[lift_vars->path[1]])->pts[0]);
+        lift_end = fast_vec_dist(&lift_moby->pos, &((struct RailPath *)l03_paths[lift_vars->path[0]])->pts[0]) <
+                   fast_vec_dist(&lift_moby->pos, &((struct RailPath *)l03_paths[lift_vars->path[1]])->pts[0]);
         if (!lift_vars->started) {
             if (lift_vars->autostart || is_point_inside_clip_volume(&hero.motion.pos, lift_vars->volume)) {
                 lift_moby->collision = lift_moby->pclass->collision;
                 lift_moby->command = hero_end;
                 lift_moby->flags &= 0xFFBE;
-                *(u128 *)&lift_moby->pos = *(u128 *)&D_L03_001B05B0[lift_vars->path[hero_end]]->pts[0];
+                *(u128 *)&lift_moby->pos = *(u128 *)&((struct RailPath *)l03_paths[lift_vars->path[hero_end]])->pts[0];
                 lift_moby->state = 3;
                 lift_vars->unk64 = 1;
                 lift_vars->started = 1;

@@ -33,6 +33,7 @@
 #include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/ui/fonts/font_queue_vu_state.h"
 #include "rnc/overlay/shared/gameplay/state/capture_linked_moby_relative_transforms.h"
+#include "rnc/overlay/level_path.h"
 
 typedef struct Moby Moby;
 
@@ -539,7 +540,6 @@ extern float D_L12_00161F70_gp __asm__("D_L12_00161F70") MACRO_ADDR;
 extern float approach_value(float *, float, float);
 extern int D_L12_001619A0 MACRO_ADDR;
 extern int D_L12_001619B4 MACRO_ADDR;
-extern int D_L12_001B0930;
 extern int D_L12_0015F404 MACRO_ADDR;
 
 #include "rnc/overlay/l12/gameplay/entities/update_planetbuster_maximus_guns_data/planetbuster_maximus_part_update.h"
@@ -592,7 +592,7 @@ void planetbuster_maximus_part_update(char *moby) {
             int j;
             D_L12_00161F24 = 0;
             capture_linked_moby_relative_transforms(moby, moby_data, 0x11);
-            path = ((P_7DB0 * *)&D_L12_001B0930)[*(int *)(moby_data + 0x5C0)];
+            path = ((P_7DB0 * *)&(*(int *)l12_paths))[*(int *)(moby_data + 0x5C0)];
             qcopy(moby + 0x10, path + 1);
             *(float *)(moby_data + 0x618) = MOBY(moby)->pos.z;
             MOBY(moby)->rot.z = fast_arc_tan(path[2].v[0] - path[1].v[0], path[2].v[1] - path[1].v[1]);
@@ -669,7 +669,7 @@ void planetbuster_maximus_part_update(char *moby) {
         update_moby_rotation_oscillation(moby, moby_data + 0x5E4, moby_data + 0x5E8, planetbuster_maximus_rotation_oscillation_amplitude_gp,
                           planetbuster_maximus_rotation_oscillation_common_factor_phase_rate_degrees * 0.017453292f * D_0015ED6C_gp,
                           planetbuster_maximus_rotation_oscillation_component_mix_phase_rate_degrees * 0.017453292f * D_0015ED6C_gp);
-        path = ((P_7DB0 * *)&D_L12_001B0930)[*(int *)(moby_data + 0x5C0)];
+        path = ((P_7DB0 * *)&(*(int *)l12_paths))[*(int *)(moby_data + 0x5C0)];
         if (*(short *)(moby_data + 0x5F8) < *(int *)path - 11) {
             approach_value((float *)(moby_data + 0x5F0), D_0015ED6C_gp * 8.0f, frame_time_sq_macro * 10.0f);
         } else {

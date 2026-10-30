@@ -36,6 +36,7 @@ int test_point_within_moby_limits(char *moby, float *point_position, float x, fl
 }
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
 #include "qcopy.h"
+#include "rnc/overlay/level_path.h"
 
 
 
@@ -68,7 +69,7 @@ void cache_consecutive_point_distances(int point_data_index) {
     int i;
     if (point_data_index == -1)
         return;
-    point_data = D_L12_001B0930[point_data_index];
+    point_data = ((char *)l12_paths[point_data_index]);
     for (i = 0; i < *(int *)point_data - 1; i++) {
         int point_byte_offset = i * 16;
         *(float *)(point_data + point_byte_offset + 0x1C) =

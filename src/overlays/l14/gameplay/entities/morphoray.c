@@ -116,6 +116,7 @@ extern Coll_0e00 D_L14_00174540;
 extern int D_L14_00174558 NOT_SDA;
 extern int D_L14_0016208C_gp __asm__("D_L14_0016208C") __attribute__((sda));
 #include "rnc/overlay/l14/gameplay/entities/morphoray_globals.h"
+#include "rnc/overlay/level_path.h"
 extern float spark_contact_clearance_gp __asm__("D_L14_00162088") __attribute__((sda));
 extern float spark_minimum_speed_gp __asm__("D_L14_00162090") __attribute__((sda));
 extern float spark_rolling_speed_factor_gp __asm__("D_L14_00162094") __attribute__((sda));
@@ -768,7 +769,6 @@ void FUN_L14_003061d8(void *updated_moby) {
         break;
     }
 }
-extern char *D_L14_001B0BB0[];
 
 void button_update(struct Moby *moby) __asm__("FUN_L14_00306b78");
 void button_update(struct Moby *moby) {
@@ -800,14 +800,14 @@ void button_update(struct Moby *moby) {
             list = button_pvars[0];
             if (list != -1) {
                 i = 0;
-                if (*(s32 *)D_L14_001B0BB0[list] > 0) {
+                if (*(s32 *)l14_paths[list] > 0) {
                     do {
-                        path_entry_base = D_L14_001B0BB0[list] + i * 16;
+                        path_entry_base = ((char *)l14_paths[list]) + i * 16;
                         if (*(f32 *)(path_entry_base + 0x1C) == ((f32 *)button_pvars)[1])
                             *(s32 *)(path_entry_base + 0x1C) = 0;
                         list = button_pvars[0];
                         i++;
-                    } while (i < *(s32 *)D_L14_001B0BB0[list]);
+                    } while (i < *(s32 *)l14_paths[list]);
                 }
             }
         } else {
@@ -834,14 +834,14 @@ void button_update(struct Moby *moby) {
             list = button_pvars[0];
             if (list != -1) {
                 i = 0;
-                if (*(s32 *)D_L14_001B0BB0[list] > 0) {
+                if (*(s32 *)l14_paths[list] > 0) {
                     do {
-                        path_entry_base = D_L14_001B0BB0[list] + i * 16;
+                        path_entry_base = ((char *)l14_paths[list]) + i * 16;
                         if (*(f32 *)(path_entry_base + 0x1C) == ((f32 *)button_pvars)[1])
                             *(s32 *)(path_entry_base + 0x1C) = 0;
                         list = button_pvars[0];
                         i++;
-                    } while (i < *(s32 *)D_L14_001B0BB0[list]);
+                    } while (i < *(s32 *)l14_paths[list]);
                 }
             }
         }
@@ -900,7 +900,6 @@ extern void fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
 extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern int FUN_L14_00307620_6ee0(void *) __asm__("FUN_L14_00307620");
-extern Path_6ee0 *D_L14_001B0BB0_6ee0[] __asm__("D_L14_001B0BB0");
 char D_L14_001FD118[] = "Flying Car (moby1417) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FD150[] = "Flying Car (moby1417) with a flyPath that has no points. UID: %d - RAR\n";
 extern int flying_car_path_reset_delay_frames_gp __asm__("D_L14_0016227C") __attribute__((sda));
@@ -948,7 +947,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
             mark_moby_for_removal(flying_car_moby);
             return;
         }
-        if (*(int *)D_L14_001B0BB0_6ee0[flying_car_data->path] == 0) {
+        if (*(int *)l14_paths[flying_car_data->path] == 0) {
             FUN_001e93b0_6ee0(D_L14_001FD150, (s16)flying_car_moby->save_id);
             mark_moby_for_removal(flying_car_moby);
             return;
@@ -1030,7 +1029,7 @@ void update_flying_car(struct Moby *flying_car_moby) {
         break;
     case FLYING_CAR_WAIT_FOR_PATH_RESET:
         if (fast_dec_timer_s16(&flying_car_data->timer)) {
-            Path_6ee0 *path = D_L14_001B0BB0_6ee0[flying_car_data->path];
+            Path_6ee0 *path = ((Path_6ee0 *)l14_paths[flying_car_data->path]);
             set_moby_color(flying_car_moby, flying_car_data->effect[4], flying_car_data->effect[5], flying_car_data->effect[6]);
             flying_car_moby->flags &= 0xFFBE;
             flying_car_moby->collision = flying_car_moby->pclass->collision;
@@ -1075,7 +1074,7 @@ void initialize_flying_car_path(struct Moby *moby) __asm__("FUN_L14_00307510");
 
 void initialize_flying_car_path(struct Moby *moby) {
     char *flying_car_data = (char *)moby->pvars;
-    char *path = D_L14_001B0BB0[*(int *)(flying_car_data + 0x78)];
+    char *path = ((char *)l14_paths[*(int *)(flying_car_data + 0x78)]);
     int i;
     for (i = 0; i < *(int *)path; i++) {
         int point_byte_offset = i * 16;
@@ -1094,7 +1093,6 @@ void initialize_flying_car_path(struct Moby *moby) {
 /* Flies the moby along its path. At the end of the path (or once it has sunk to the floor height) it bursts,
  * lets its rider go and returns 0; otherwise it speeds up while the hero rides it (or holds it), slows down
  * otherwise, sinks by its speed, eases onto the path point and banks into the turns, and returns 1. */
-extern char *D_L14_001B0BB0_7620[] __asm__("D_L14_001B0BB0");
 extern char *D_L14_0015FFD8_7620 __asm__("D_L14_0015FFD8");
 extern float D_L14_00162274 __attribute__((sda));
 extern int sample_path(char *path, float *out, void *pos, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
@@ -1114,7 +1112,7 @@ int update_flying_car_path_motion(struct Moby *moby) {
     int end;
     int voice_slot_index;
 
-    end = sample_path(D_L14_001B0BB0_7620[*(int *)(flying_car_data + 0x78)], pos, flying_car_data + 0x70, flying_car_data + 0x74, *(short *)(flying_car_data + 0x8E),
+    end = sample_path(((char *)l14_paths[*(int *)(flying_car_data + 0x78)]), pos, flying_car_data + 0x70, flying_car_data + 0x74, *(short *)(flying_car_data + 0x8E),
                          *(float *)(flying_car_data + 0xC8) * frame_time);
     if ((*(short *)(flying_car_data + 0x8E) == 0 && end != 0) || moby->pos.z <= flying_car_burst_height_threshold_gp) {
         cart_burst(moby, &moby->pos, 5.0f, 13.0f, -1);
@@ -1318,7 +1316,7 @@ void initialize_path_camera(char *camera) {
     }
     fov_stops->fov_end = fast_arc_tan(1.0f, l14_camera_projection_state.fB0) * 2.0f;
     if (*(int *)(rec + 0x20) >= 0) {
-        path = D_L14_001B0BB0[*(int *)(rec + 0x20)];
+        path = ((char *)l14_paths[*(int *)(rec + 0x20)]);
         fov_stop_count = 0;
         for (i = 0; i < *(int *)path; i++) {
             char *seg = path + i * 16;
@@ -1338,7 +1336,7 @@ void initialize_path_camera(char *camera) {
             *(float *)(camera_run + 2) / convert_integer_to_float(scale_game_frames(*(short *)(rec + 0x3A))) * 60.0f;
     }
     if (*(int *)(rec + 0x24) >= 0) {
-        path = D_L14_001B0BB0[*(int *)(rec + 0x24)];
+        path = ((char *)l14_paths[*(int *)(rec + 0x24)]);
         for (i = 0; i < *(int *)path; i++) {
             char *seg;
             segment_length = fast_vec_dist(path + (i * 16 + 0x10), path + (((i + 1) % *(int *)path) * 16 + 0x10));
@@ -1387,7 +1385,6 @@ typedef struct {
 } VendorCamRun_5290;
 
 extern char *D_L14_0015EF50_5290 __asm__("D_L14_0015EF50");
-extern char *D_L14_001B0BB0_5290[] __asm__("D_L14_001B0BB0");
 extern char *D_L14_0015FFD8_5290 __asm__("D_L14_0015FFD8");
 extern char path_camera_target_offset_basis[] __asm__("D_L14_001676D0");
 extern float D_L14_001675D8 NOT_SDA;
@@ -1416,8 +1413,8 @@ void update_path_camera(struct UpdateCam *path_camera) {
     int i;
 
     if (camera_run->started == 0) {
-        char *pa = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
-        char *pb = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
+        char *pa = ((char *)l14_paths[*(int *)(rec + 0x20)]);
+        char *pb = ((char *)l14_paths[*(int *)(rec + 0x24)]);
         path_camera_active = 1;
         camera_run->started = 1;
         qcopy(&path_camera->pos, pa + 0x10);
@@ -1441,7 +1438,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         fast_vec_cross(&path_camera->m2, &path_camera->m1, &path_camera->m0);
         return;
     }
-    path = D_L14_001B0BB0_5290[*(int *)(rec + 0x20)];
+    path = ((char *)l14_paths[*(int *)(rec + 0x20)]);
     qcopy(initial_look_direction_or_previous_position, &path_camera->pos);
     done = sample_path(path, &path_camera->pos.x, &camera_run->seg, &camera_run->t, 0, *(float *)(rec + 0x3C) * frame_time);
     if (camera_run->timer != 0 && fast_dec_timer_s16(&camera_run->timer) != 0)
@@ -1506,7 +1503,7 @@ void update_path_camera(struct UpdateCam *path_camera) {
         fast_vec_add(v, &o->pos, u);
         fast_vec_sub(t, v, &path_camera->pos);
     } else {
-        char *look = D_L14_001B0BB0_5290[*(int *)(rec + 0x24)];
+        char *look = ((char *)l14_paths[*(int *)(rec + 0x24)]);
         seg2 = 0;
         tt2 = 0.0f;
         sample_path(look, u, &seg2, &tt2, 0, camera_run->dist / camera_run->len_a * camera_run->len_b);

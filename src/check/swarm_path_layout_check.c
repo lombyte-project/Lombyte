@@ -7,9 +7,9 @@
 
 #include "rnc/overlay/swarm_path.h"
 
-SIZE_CHECK(path, SwarmPath, 0x20);
-OFFSET_CHECK(count, SwarmPath, count, 0);
-OFFSET_CHECK(points, SwarmPath, points, 0x10);
+SIZE_CHECK(path, LevelPath, 0x20);
+OFFSET_CHECK(count, LevelPath, count, 0);
+OFFSET_CHECK(points, LevelPath, points, 0x10);
 SIZE_CHECK(follower, SwarmPathFollower, 0x30);
 OFFSET_CHECK(point, SwarmPathFollower, point, 0);
 OFFSET_CHECK(direction, SwarmPathFollower, direction, 4);

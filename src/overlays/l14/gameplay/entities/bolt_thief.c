@@ -166,6 +166,7 @@ void mark_moby_and_linked_moby_for_removal(struct Moby *moby) {
 }
 
 #include "qcopy.h"
+#include "rnc/overlay/level_path.h"
 
 
 typedef struct {
@@ -236,7 +237,6 @@ typedef struct {
     void *standing;             /* 0x23C: the moby the hero stands on */
 } L16CratePlayer;
 
-extern char *D_L14_001B0BB0[];
 extern char *spawn_floating_mine(void *, void *) __asm__("FUN_L14_002ffaf8");
 extern char D_L14_001FCF20[], D_L14_001FCF58[], D_L14_001FCFA0[], D_L14_001FCFD8[], D_L14_001FD020[];
 extern int debug_print() __asm__("FUN_001e93b0");
@@ -302,7 +302,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                 mark_moby_for_removal(moby);
                 return;
             }
-            if (*(int *)D_L14_001B0BB0[moby_data->path] == 0) {
+            if (*(int *)l14_paths[moby_data->path] == 0) {
                 debug_print(D_L14_001FCF58, moby->id);
                 mark_moby_for_removal(moby);
                 return;
@@ -313,7 +313,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
                     mark_moby_for_removal(moby);
                     return;
                 }
-                if (*(int *)D_L14_001B0BB0[moby_data->other_path] == 0) {
+                if (*(int *)l14_paths[moby_data->other_path] == 0) {
                     debug_print(D_L14_001FCFD8, moby->id);
                     mark_moby_for_removal(moby);
                     return;
@@ -366,7 +366,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
         break;
     case BOLT_THIEF_STATE_SETTLE_AT_PATH_END: {
         L16CrateData *settle_data = moby->data;
-        char *path = D_L14_001B0BB0[settle_data->path];
+        char *path = ((char *)l14_paths[settle_data->path]);
         float target[4];
         float zero;
 
@@ -406,7 +406,7 @@ void bolt_thief_update(L16CrateMoby *moby) {
             moby_data->timer = 0.0f;
             moby_data->counter = 0;
             moby_data->turn = moby_data->vx = moby_data->vy = moby_data->vz = moby_data->timer;
-            path = D_L14_001B0BB0[moby_data->path];
+            path = ((char *)l14_paths[moby_data->path]);
             qcopy(moby->position, path + 0x10);
             moby->rotation[2] = fast_arc_tan(*(float *)(path + 0x20) - *(float *)(path + 0x10),
                                                *(float *)(path + 0x24) - *(float *)(path + 0x14));
@@ -449,9 +449,9 @@ int update_bolt_thief_path_movement(struct Moby *moby) {
     if (*(float *)(data + 0xF8) != 0.0f)
         path_sample_step = *(float *)(data + 0xF8) * frame_time;
     if (moby->state == 5)
-        path = D_L14_001B0BB0[*(int *)(data + 0xDC)];
+        path = ((char *)l14_paths[*(int *)(data + 0xDC)]);
     else
-        path = D_L14_001B0BB0[*(int *)(data + 0xD8)];
+        path = ((char *)l14_paths[*(int *)(data + 0xD8)]);
     path_sample_result = sample_path(path, pos, (float *)(data + 0xD0), (float *)(data + 0xD4), 0, path_sample_step);
     vendor_spring(&moby->pos.x, (float *)(data + 0xE4), pos[0], bolt_thief_path_spring_gain_gp,
                      bolt_thief_path_spring_damping_gp, 0.0f);

@@ -27,10 +27,10 @@
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/math/vectors/fast_subtract_rotations_cf.h"
 #include "rnc/overlay/shared/rendering/view/reorient_position_about_pivot.h"
+#include "rnc/overlay/level_path.h"
 #define F(p, o) (*(float *)((p) + (o)))
 
 /* Moves a moby along a path between its ends once its collectable flag is set, easing between nodes. */
-extern char *D_L09_001B0630[];
 typedef struct {
     u8 pad0[0x454];
     u8 collected[1];
@@ -63,7 +63,7 @@ void elevator_update(unsigned char *moby) {
     if (*(int *)(data + 0xB4) == -1) {
         return;
     }
-    path = D_L09_001B0630[*(int *)(data + 0xB4)];
+    path = ((char *)l09_paths[*(int *)(data + 0xB4)]);
     if (*(int *)(data + 0xC0) != -1) {
         unsigned short id;
         if (is_point_inside_clip_volume(&hero.motion.pos, *(int *)(data + 0xC0)) ||
@@ -1574,7 +1574,7 @@ void shuttle_update(struct Moby *moby) {
         SHUTTLE_STATE_FOLLOW_PATH = 3
     };
     PathFlyerVars_00309c08 *vars = (PathFlyerVars_00309c08 *)moby->pvars;
-    PathNodes_00309c08 *path = (PathNodes_00309c08 *)D_L09_001B0630[vars->path];
+    PathNodes_00309c08 *path = (PathNodes_00309c08 *)l09_paths[vars->path];
     Vec4 *position = &moby->pos;
     Vec4 original;
     Vec4 rotation;
@@ -1596,7 +1596,7 @@ void shuttle_update(struct Moby *moby) {
             PathNodes_00309c08 *path;
             Vec4 *endpoint;
             attach_manipulator(moby, 0, (u8 *)vars + 0x60);
-            path = (PathNodes_00309c08 *)D_L09_001B0630[vars->path];
+            path = (PathNodes_00309c08 *)l09_paths[vars->path];
             moby->state = 1;
             if (D_0014C050[moby->mission + current_level_index * 16] == 0xFF) {
                 vars->dir = -1;
@@ -1742,7 +1742,7 @@ int advance_shuttle_along_path(struct Moby *moby) {
     Vec4 puff;
     int done = 0;
 
-    path = (PathNodes *)D_L09_001B0630[vars->path];
+    path = (PathNodes *)l09_paths[vars->path];
     vars->lag += (0.0f - vars->lag) * 0.005f;
     qcopy(&target, &path->node[vars->node]);
     target.f[2] += vars->speed * D_L09_00161DF8;

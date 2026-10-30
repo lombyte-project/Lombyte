@@ -178,6 +178,7 @@ extern GlowVec_bfa8 l01_moby_offset_quad_source_corners[4] __asm__("D_L01_0020B9
 extern char D_L01_00167240[];
 extern GlowVec_bfa8 D_0013F5E0[];
 #include "rnc/overlay/shared/gameplay/entities/sandmouse_globals.h"
+#include "rnc/overlay/level_path.h"
 extern f32 moby_quad_c0_offset_scale_gp __asm__("D_L01_00162064") __attribute__((sda));
 extern f32 moby_quad_e0_offset_scale_gp __asm__("D_L01_0016206C") __attribute__((sda));
 extern s64 get_effect_texture(s32) __asm__("FUN_001f44b8");
@@ -1238,7 +1239,6 @@ typedef struct {
 
 extern CameraPresetRow *D_L01_0015EF50;
 extern CameraTarget *D_L01_0015F70C;
-extern CameraPath *D_L01_001B0930[];
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 
 /* Resets the camera's orbit, focus, spring, view and track from fixed values; for a kind 2 preset it
@@ -1301,10 +1301,10 @@ void reset_camera_state_and_prepare_preset_paths(Camera *destination_camera) {
     blend->unkC = 0;
     blend->unk10 = 1;
     if (preset->kind == 2 && preset->ready == 0) {
-        track_path = D_L01_001B0930[preset->track_path];
+        track_path = ((CameraPath *)l01_paths[preset->track_path]);
         target_path = D_L01_0015F70C[preset->target].path;
-        preset_path = D_L01_001B0930[preset->path];
-        look_path = D_L01_001B0930[preset->look_path];
+        preset_path = ((CameraPath *)l01_paths[preset->path]);
+        look_path = ((CameraPath *)l01_paths[preset->look_path]);
         preset->ready = 1;
         for (i = 0; i < preset_path->count; i++) {
             FUN_L00_0025df68(track_path, &preset_path->pts[i], &at, &seg, &path_fraction_or_length, 0, 20.0f, 5.0f, 0.0f);
@@ -1443,7 +1443,6 @@ extern float camera_basis_reference_direction[] __asm__("D_L01_001672B0");
 extern float cam_interp_values(float a, float b, float *p, float c, float d, float e);
 extern int sample_path(void *, void *, int *, float *, float, int) __asm__("FUN_L00_0025d808");
 extern int current_level_index_macro __asm__("D_0015ED84") MACRO_ADDR;
-extern Path *D_L01_001B0C30_316730[] __asm__("D_L01_001B0930");
 
 void update_camera_position_and_orientation_from_paths(Cam *cam) __asm__("FUN_L01_00315358");
 
@@ -1478,9 +1477,9 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         fraction = ((Hero *)(((char *)((char *)&hero))))->rail_seg_frac;
         progress->t = fraction;
         progress->idx = segment;
-        sample_path(D_L01_001B0C30_316730[path_index], camera_goal, &progress->idx, &progress->t, 1.0f, 0);
+        sample_path(((Path *)l01_paths[path_index]), camera_goal, &progress->idx, &progress->t, 1.0f, 0);
         qcopy(follow->pos, camera_goal);
-        path = D_L01_001B0C30_316730[path_index];
+        path = ((Path *)l01_paths[path_index]);
         dist = path->nodes[segment].w * (fraction / ((Path *)((Hero *)(((char *)((char *)&hero))))->rail_spline)->nodes[segment].w);
         fast_vec_sub(delta, &path->nodes[segment + 1], &path->nodes[segment]);
         fast_vec_normalize(look_target, delta, dist);
@@ -1489,10 +1488,10 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         camera_to_update->pos[1] = cam_interp_values(camera_to_update->pos[1], rail_point[1], &data->vel[1], rate, 0.175f, 0.0f);
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], rail_point[2], &data->vel[2], rate, 0.175f, 0.0f);
     } else if (mode == 2) {
-        Path *pathA = D_L01_001B0C30_316730[path_index];
+        Path *pathA = ((Path *)l01_paths[path_index]);
         Path *pathD = D_L01_0015F70C_macro[params->unk24].unk10;
-        Path *pathC = D_L01_001B0C30_316730[params->unk28];
-        Path *pathB = D_L01_001B0C30_316730[params->unk2C];
+        Path *pathC = ((Path *)l01_paths[params->unk28]);
+        Path *pathB = ((Path *)l01_paths[params->unk2C]);
         int i;
         int previous_path_node_index = 0;
         int range_start = 0;
@@ -1562,7 +1561,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         camera_to_update->pos[1] = cam_interp_values(camera_to_update->pos[1], look_target[1], &data->vel[1], data->unk10, 0.175f, 0.0f);
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], look_target[2], &data->vel[2], data->unk10, 0.175f, 0.0f);
     } else {
-        Path *path = D_L01_001B0C30_316730[path_index];
+        Path *path = ((Path *)l01_paths[path_index]);
 
         if (params->unk24 < 0) {
             float lead_offset;
@@ -1589,7 +1588,7 @@ void update_camera_position_and_orientation_from_paths(Cam *camera_to_update) {
         camera_to_update->pos[2] = cam_interp_values(camera_to_update->pos[2], camera_goal[2], &data->vel[2], rate, 0.175f, 0.0f);
     }
     if (params->unk24 < 0) {
-        Path *path = D_L01_001B0C30_316730[params->unk20];
+        Path *path = ((Path *)l01_paths[params->unk20]);
 
         FUN_L00_0025df68(path, ((Hero *)(((char *)((char *)&hero))))->motion.pos.f, look_target, &segment, &fraction, 0, 20.0f, 1.0f, 0.0f);
         if (current_level_index_macro == 0xE && params->unk30 == 0) {
@@ -1656,7 +1655,7 @@ void initialize_camera_transform_and_paths(Camera *destination_camera) {
         CameraPath *path;
         s32 i;
         s32 next;
-        path = D_L01_001B0930[camera_preset->track_path];
+        path = ((CameraPath *)l01_paths[camera_preset->track_path]);
         for (i = 0; i < path->count; i++) {
             next = (i + 1) % path->count;
             path->pts[i].f[3] = fast_vec_dist(&path->pts[i], &path->pts[next]);
@@ -1667,7 +1666,7 @@ void initialize_camera_transform_and_paths(Camera *destination_camera) {
     if (camera_preset->kind == 3) {
         CameraPath *path;
         s32 next;
-        path = D_L01_001B0930[camera_preset->track_path];
+        path = ((CameraPath *)l01_paths[camera_preset->track_path]);
         seg = 0;
         path_fraction = 0.0f;
         if (FUN_L00_0025df68(path, &D_0013F3D0_315de0, &at, &seg, &path_fraction,

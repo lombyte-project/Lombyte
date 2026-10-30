@@ -58,6 +58,7 @@ typedef struct {
 
 #include "rnc/overlay/shared/gameplay/entities/seeker_globals.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/overlay/level_path.h"
 extern Vec4f D_L09_00166F40;
 extern u8 seeker_invalid_bound_path_format[] __asm__("D_L09_00208320");
 
@@ -338,7 +339,6 @@ extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470
 extern float func_001F9878_2C73D0(float) __asm__("FUN_001f96b0");
 extern int func_L00_00260D30_2C73D0(void *, void *, float) __asm__("FUN_L04_00252e18");
 extern int activate_effect_l08(void *, void *, float, int, int, void *, int) __asm__("FUN_L00_0025ff38");
-extern Path *D_L09_001B0930_2C73D0[] __asm__("D_L09_001B0630");
 extern char D_0013E633_2C73D0[] __asm__("D_001413D0");
 
 void update_seeker_damage_and_target(Moby *moby) __asm__("FUN_L09_002c6230");
@@ -459,7 +459,7 @@ void update_seeker_damage_and_target(Moby *moby) {
         } else {
             Path *path;
             data->reach = 12.0f;
-            path = D_L09_001B0930_2C73D0[data->path];
+            path = ((Path *)l09_paths[data->path]);
             goal = data->target;
             result = activate_effect_l08(moby, goal, 12.0f, 0, 0, path->pts, path->count);
             lost_state = 2;
@@ -578,7 +578,6 @@ extern unsigned char D_001413F4[];
 extern float D_0015EE6C_2E39E0 __asm__("D_0015ED6C");
 extern float D_0015EE70_2E39E0 __asm__("D_0015ED70");
 extern float D_L09_00166FC0_2E39E0[] __asm__("D_L09_00166F40");
-extern char *D_L09_001B0930_2E39E0[] __asm__("D_L09_001B0630");
 extern Moby *D_L09_00160064_2E39E0 __asm__("D_L09_0015FFE4");
 extern float impulse __asm__("D_L09_001618C8") __attribute__((sda));
 extern float lift_2E39E0 __asm__("D_L09_001618CC") __attribute__((sda));
@@ -776,7 +775,7 @@ void update_ground_melee_enemy(Moby *moby) {
         float steep;
         steep = absolute_float(moby->pos.z - query.z);
         steep /= vector_distance_xy(&moby->pos, &query);
-        if (data->path != -1) FUN_L01_0028b5e0_c(moby, D_L09_001B0930_2E39E0[data->path], &query, &goal);
+        if (data->path != -1) FUN_L01_0028b5e0_c(moby, ((char *)l09_paths[data->path]), &query, &goal);
         else qcopy(&goal, &query);
         approach_w(moby, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y) + data->side, data->turn, 0.05f, 0.3f, 0.2f);
         step.x = 2.0f * fast_cos(moby->rot.z);
@@ -829,7 +828,7 @@ void update_ground_melee_enemy(Moby *moby) {
         break;
     case GROUND_ENEMY_STATE_RETURN_HOME: {
         int flags;
-        if (data->path != -1) FUN_L01_0028b5e0_c(moby, D_L09_001B0930_2E39E0[data->path], &data->home, &goal);
+        if (data->path != -1) FUN_L01_0028b5e0_c(moby, ((char *)l09_paths[data->path]), &data->home, &goal);
         else qcopy(&goal, &data->home);
         approach_w(moby, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y), data->turn, 0.02f, 0.3f, 0.1f);
         step.x = 2.0f * fast_cos(moby->rot.z);
@@ -900,7 +899,7 @@ void update_ground_melee_enemy(Moby *moby) {
         float steep;
         steep = absolute_float(moby->pos.z - query.z);
         steep /= vector_distance_xy(&moby->pos, &query);
-        if (data->path != -1) FUN_L01_0028b5e0_c(moby, D_L09_001B0930_2E39E0[data->path], &data->home, &goal);
+        if (data->path != -1) FUN_L01_0028b5e0_c(moby, ((char *)l09_paths[data->path]), &data->home, &goal);
         else qcopy(&goal, &data->home);
         approach_w(moby, fast_arc_tan(goal.x - moby->pos.x, goal.y - moby->pos.y), data->turn, 0.05f, 0.3f, 0.2f);
         step.x = 2.0f * fast_cos(moby->rot.z);

@@ -187,6 +187,7 @@ extern void update_moby_movement_with_sphere_collision(f32, struct Moby *, void 
 extern PathPoints_eb20 *D_L04_001b0630[];
 f32 D_L04_00166130[8] __attribute__((section(".bss")));
 #include "rnc/overlay/l04/gameplay/entities/big_axebot_globals.h"
+#include "rnc/overlay/level_path.h"
 extern s32 swarm_motion_parameters_initialized_gp __asm__("D_L04_001513C0") __attribute__((sda));
 
 /* Variables of a swarm child (class 0x55). */
@@ -506,7 +507,6 @@ extern int FUN_L04_00295de8_cf(void *, void *, void *, int, float, float, float,
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int allocate_voice_for_target_entry(int, int, char *);
 extern int mark_moby_for_removal_cf() __asm__("FUN_L04_002ba470");
-extern struct Path5BD0 *D_L04_001B0630[];
 extern void *FUN_L00_00263fd8(char *, int, float *, void *, int, int, float, float *, float *,
                               float *);
 extern void *spawn_moby_attachment(void *, void *) __asm__("FUN_L04_002ce080");
@@ -530,7 +530,6 @@ extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos,
 extern void copy_matrix3x4(void *, void *);
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 void blend_big_axebot_and_axe_animation(char *arg, void *a, void *b, void *c) __asm__("FUN_L04_002ba3e0");
-extern P_B7B0 *D_L04_001B0930_B7B0[] __asm__("D_L04_001B0630");
 
 void big_axebot_update(M_B7B0 *moby) __asm__("FUN_L04_002ba520");
 void big_axebot_update(M_B7B0 *moby) {
@@ -844,7 +843,7 @@ void big_axebot_update(M_B7B0 *moby) {
         }
         break;
     case BIG_AXEBOT_STATE_FOLLOW_PATH: {
-        P_B7B0 *path = D_L04_001B0930_B7B0[data->f434];
+        P_B7B0 *path = ((P_B7B0 *)l04_paths[data->f434]);
         float a;
 
         if (moby->f53 != 3) {
@@ -893,14 +892,14 @@ void big_axebot_update(M_B7B0 *moby) {
             vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * 2.0f;
             vector_quaternion_scratch[2] = 0.0f;
             fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
-            if (point_in_path_xy(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
-                                 D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
+            if (point_in_path_xy(vector_quaternion_scratch, ((P_B7B0 *)l04_paths[data->f41C])->pts,
+                                 ((P_B7B0 *)l04_paths[data->f41C])->count) == 0) {
                 data->f410 = 0.0f;
                 blend_big_axebot_and_axe_animation((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                 moby->state = 9;
             }
-            if (point_in_path_xy(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
-                                 D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
+            if (point_in_path_xy(tpos, ((P_B7B0 *)l04_paths[data->f41C])->pts,
+                                 ((P_B7B0 *)l04_paths[data->f41C])->count) == 0) {
                 moby->state = 6;
             }
         }
@@ -929,15 +928,15 @@ void big_axebot_update(M_B7B0 *moby) {
                 vector_quaternion_scratch[1] = fast_sin(moby->rot[2]) * 2.0f;
                 vector_quaternion_scratch[2] = 0.0f;
                 fast_vec_add(vector_quaternion_scratch, vector_quaternion_scratch, moby->pos);
-                if (point_in_path_xy(vector_quaternion_scratch, D_L04_001B0930_B7B0[data->f41C]->pts,
-                                     D_L04_001B0930_B7B0[data->f41C]->count) == 0) {
+                if (point_in_path_xy(vector_quaternion_scratch, ((P_B7B0 *)l04_paths[data->f41C])->pts,
+                                     ((P_B7B0 *)l04_paths[data->f41C])->count) == 0) {
                     data->f410 = 0.0f;
                     blend_big_axebot_and_axe_animation((char *)moby, (void *)8, 0, (void *)scale_game_frames(0xC));
                     moby->state = 9;
                     moby->fBC |= 0x10;
                 }
-                if (point_in_path_xy(tpos, D_L04_001B0930_B7B0[data->f41C]->pts,
-                                     D_L04_001B0930_B7B0[data->f41C]->count) != 0) {
+                if (point_in_path_xy(tpos, ((P_B7B0 *)l04_paths[data->f41C])->pts,
+                                     ((P_B7B0 *)l04_paths[data->f41C])->count) != 0) {
                     moby->state = 1;
                 }
             }
@@ -1494,7 +1493,6 @@ extern void transform_vector_by_basis(void *, void *, void *);
 extern char D_0013E550[];
 extern void func_L00_002592B0_b(char *moby, float target, float *vel, float k, float d,
                                 float max) __asm__("FUN_L00_00258278");
-extern P_35F0 *D_L04_001B0930_2C35F0[] __asm__("D_L04_001B0630");
 
 void circular_saw_enemy_update(M_35F0 *moby) __asm__("FUN_L04_002c2270");
 void circular_saw_enemy_update(M_35F0 *moby) {
@@ -1723,8 +1721,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             qcopy(save, moby->pos);
             update_object_wander_movement((char *)moby, (char *)data->f240, 0.35f, 0.25f);
             if (data->f138 != -1) {
-                if (point_in_path_xy(moby->pos, D_L04_001B0930_2C35F0[data->f138]->pts,
-                                     D_L04_001B0930_2C35F0[data->f138]->count) == 0) {
+                if (point_in_path_xy(moby->pos, ((P_35F0 *)l04_paths[data->f138])->pts,
+                                     ((P_35F0 *)l04_paths[data->f138])->count) == 0) {
                     qcopy(moby->pos, save);
                 }
             }
@@ -1733,8 +1731,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             }
             if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
                 if (flag || data->f138 == -1 ||
-                    point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
-                                     D_L04_001B0930_2C35F0[data->f138]->count) != 0) {
+                    point_in_path_xy(&tg, ((P_35F0 *)l04_paths[data->f138])->pts,
+                                     ((P_35F0 *)l04_paths[data->f138])->count) != 0) {
                     int nf = (data->f14E & 1) == 0;
                     if (nf) {
                         data->f14E |= 1;
@@ -1770,8 +1768,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
     case CIRCULAR_SAW_STATE_CHASE_TARGET:
         if ((flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) &&
             (flag || data->f138 == -1 ||
-             point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
-                              D_L04_001B0930_2C35F0[data->f138]->count) != 0)) {
+             point_in_path_xy(&tg, ((P_35F0 *)l04_paths[data->f138])->pts,
+                              ((P_35F0 *)l04_paths[data->f138])->count) != 0)) {
             rot = compute_circular_saw_flock_steering(moby, dest, flag ? data->f140 * 2.0f : data->f140);
             if (target_distance < 2.0f && data->f146 == 0 && check_circular_saw_melee_attack_spacing((char *)moby) != 0) {
                 blend_moby_animation(moby, (void *)7, 0, (void *)scale_game_frames(10));
@@ -1789,14 +1787,14 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                             frame_time_sq * 3.1415927f, frame_time * 3.1415927f);
         break;
     case CIRCULAR_SAW_STATE_FOLLOW_PATH: {
-        P_35F0 *path = D_L04_001B0930_2C35F0[data->f150];
+        P_35F0 *path = ((P_35F0 *)l04_paths[data->f150]);
         int i;
         float *yaw_velocity;
 
         if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
             if (flag || data->f138 == -1 ||
-                point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
-                                 D_L04_001B0930_2C35F0[data->f138]->count) != 0) {
+                point_in_path_xy(&tg, ((P_35F0 *)l04_paths[data->f138])->pts,
+                                 ((P_35F0 *)l04_paths[data->f138])->count) != 0) {
                 int nf = (data->f14E & 1) == 0;
                 if (nf) {
                     data->f14E |= 1;
@@ -1847,12 +1845,12 @@ void circular_saw_enemy_update(M_35F0 *moby) {
         break;
     }
     case CIRCULAR_SAW_STATE_POINT_ATTACK: {
-        P_35F0 *path = D_L04_001B0930_2C35F0[data->f150];
+        P_35F0 *path = ((P_35F0 *)l04_paths[data->f150]);
 
         if (flag ? target_distance < data->f140 * 2.0f : target_distance < data->f140) {
             if (flag || data->f138 == -1 ||
-                point_in_path_xy(&tg, D_L04_001B0930_2C35F0[data->f138]->pts,
-                                 D_L04_001B0930_2C35F0[data->f138]->count) != 0) {
+                point_in_path_xy(&tg, ((P_35F0 *)l04_paths[data->f138])->pts,
+                                 ((P_35F0 *)l04_paths[data->f138])->count) != 0) {
                 int nf = (data->f14E & 1) == 0;
                 if (nf) {
                     data->f14E |= 1;
@@ -1981,8 +1979,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             qcopy(np, moby->pos);
             FUN_L00_00258490(moby, np, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
             if (data->f138 == -1 ||
-                point_in_path_xy(np, D_L04_001B0930_2C35F0[data->f138]->pts,
-                                 D_L04_001B0930_2C35F0[data->f138]->count) != 0) {
+                point_in_path_xy(np, ((P_35F0 *)l04_paths[data->f138])->pts,
+                                 ((P_35F0 *)l04_paths[data->f138])->count) != 0) {
                 qcopy(moby->pos, np);
             }
         }
@@ -2019,8 +2017,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
             qcopy(np, moby->pos);
             moved = FUN_L00_00258490(moby, np, v, 0, 0.25f, 0.57f, 0.5f, 0.5235988f);
             if (data->f138 == -1 ||
-                point_in_path_xy(np, D_L04_001B0930_2C35F0[data->f138]->pts,
-                                 D_L04_001B0930_2C35F0[data->f138]->count) != 0) {
+                point_in_path_xy(np, ((P_35F0 *)l04_paths[data->f138])->pts,
+                                 ((P_35F0 *)l04_paths[data->f138])->count) != 0) {
                 qcopy(moby->pos, np);
                 if (moved == 0) {
                     anim = 0;
@@ -2047,8 +2045,8 @@ void circular_saw_enemy_update(M_35F0 *moby) {
                 qcopy(np, moby->pos);
                 FUN_L00_00258490(moby, np, v, 0, 0.25f, 1.25f, 0.5f, 0.5235988f);
                 if (data->f138 == -1 ||
-                    point_in_path_xy(np, D_L04_001B0930_2C35F0[data->f138]->pts,
-                                     D_L04_001B0930_2C35F0[data->f138]->count) != 0) {
+                    point_in_path_xy(np, ((P_35F0 *)l04_paths[data->f138])->pts,
+                                     ((P_35F0 *)l04_paths[data->f138])->count) != 0) {
                     qcopy(moby->pos, np);
                 }
             }
@@ -2328,7 +2326,7 @@ void blarg_trooper_update(struct Moby *moby) {
     bi = -1;
     best = 0.0f;
     qcopy(update_scratch.v50, &update_scratch.tgt[8]);
-    path = D_L04_001B0630[*(short *)(data + 0xE8) != 0 ? path_index_when_selector_nonzero : path_index_when_selector_zero];
+    path = ((struct Path5BD0 *)l04_paths[*(short *)(data + 0xE8) != 0 ? path_index_when_selector_nonzero : path_index_when_selector_zero]);
     for (i = 0; i < path->count; i++) {
         float d = vector_distance_xy(update_scratch.v50, path->pts[i]);
         if (d > best) {

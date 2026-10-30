@@ -31,6 +31,7 @@ int find_nearest_point_index_xy(char *moby, char *points, int count) {
 #include "rnc/gameplay/entities/moby.h"
 
 #include "qcopy.h"
+#include "rnc/overlay/level_path.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/fastfunc_001F2F68.c: func_L04_001F3010), where it is exact; names translated to the US level program. */
 
@@ -75,7 +76,6 @@ extern s32 D_L04_00173FF0[];
 extern int collision_line() __asm__("FUN_001efa68");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 int find_closest_polygon_edge_point(float *out, float *p, float *poly, int n) __asm__("FUN_L04_0024c7d8");
-extern PathEl *D_L04_001B0930_1F3010[] __asm__("D_L04_001B0630");
 extern Coll D_L04_00174040_1F3010 __asm__("D_L04_00173FC0");
 extern char D_0013F450_1F3010[] __asm__("D_0013F350");
 
@@ -111,7 +111,7 @@ void steer_child_moby(Moby **others, int other_count, Moby *moby, Steer *steer, 
     hit = 0;
     too_close = 0;
     if (steer->path != -1) {
-        path = D_L04_001B0930_1F3010[steer->path];
+        path = ((PathEl *)l04_paths[steer->path]);
         nearest_index = find_nearest_point_index_xy(moby, &path[1], path[0].n);
         hit = find_closest_polygon_edge_point(&path_hit, &moby->pos, &path[1], path[0].n);
         if (hit == 0) {

@@ -97,6 +97,7 @@ void remove_flying_debris(u8 *self) {
 
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/overlay/level_path.h"
 
 /* Path mover gated by an activation trigger and its collectable flag: slides between the two ends of its path,
    eases towards the path point and carries what stands on it. */
@@ -138,7 +139,6 @@ typedef struct {
     u8 collected[1];
 } L14LevelState;
 
-extern int *D_L14_001B0BB0[];
 extern L14LevelState D_L14_001BB930;
 extern s32 D_L14_001BABD0[];
 extern int is_point_inside_clip_volume(void *, int) __asm__("FUN_00214720");
@@ -170,7 +170,7 @@ void update_path_mover(struct Moby *moby) {
     if (vars->path == -1) {
         return;
     }
-    path = (MoverPath *)D_L14_001B0BB0[vars->path];
+    path = (MoverPath *)l14_paths[vars->path];
     if (vars->show_volume != -1) {
         if (is_point_inside_clip_volume(&hero.motion.pos, vars->show_volume) == 0) {
             moby->update_dist = 0xFF;
@@ -351,7 +351,7 @@ void update_path_mover(struct Moby *moby) {
 void ease_path_mover_to_endpoint(struct Moby *moby) {
     char *moby_vars = (char *)moby->pvars;
     float endpoint_target_position[4] __attribute__((aligned(16)));
-    int *path = D_L14_001B0BB0[*(int *)(moby_vars + 0xB4)];
+    int *path = ((int *)l14_paths[*(int *)(moby_vars + 0xB4)]);
     if (*(float *)(moby_vars + 0xA4) > 0.5f)
         qcopy(endpoint_target_position, (char *)path + path[0] * 16);
     else
@@ -494,10 +494,10 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
             *(s16 *)(moby_vars + 0x20A) = count_moby_group_members(moby);
             return;
         }
-        if (*(int *)(moby_vars + 0x74) == -1 || *D_L14_001B0BB0[*(int *)(moby_vars + 0x74)] == 0 ||
-            *(int *)(moby_vars + 0x78) == -1 || *D_L14_001B0BB0[*(int *)(moby_vars + 0x78)] == 0 ||
+        if (*(int *)(moby_vars + 0x74) == -1 || *((int *)l14_paths[*(int *)(moby_vars + 0x74)]) == 0 ||
+            *(int *)(moby_vars + 0x78) == -1 || *((int *)l14_paths[*(int *)(moby_vars + 0x78)]) == 0 ||
             *(int *)(moby_vars + 0x70) < 0 ||
-            *(int *)(moby_vars + 0x204) == -1 || *D_L14_001B0BB0[*(int *)(moby_vars + 0x204)] == 0) {
+            *(int *)(moby_vars + 0x204) == -1 || *((int *)l14_paths[*(int *)(moby_vars + 0x204)]) == 0) {
             FUN_0020c828(moby);
             return;
         }
@@ -505,8 +505,8 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         *(float *)(moby_vars + 0x20) = 4.0f;
         *(s16 *)(moby_vars + 0x24) = 4;
         moby_vars[0x28] = 3;
-        qcopy(&moby->pos, (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x74)] + 0x10);
-        qcopy(moby_vars + 0x170, (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x78)] + 0x10);
+        qcopy(&moby->pos, (char *)l14_paths[*(int *)(moby_vars + 0x74)] + 0x10);
+        qcopy(moby_vars + 0x170, (char *)l14_paths[*(int *)(moby_vars + 0x78)] + 0x10);
         initialize_blarg_heavy_interceptor_paths(moby);
         *(s16 *)(moby_vars + 0x88) = 1;
         *(float *)(moby_vars + 0x21C) = -1.0f;
@@ -646,7 +646,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
                 FUN_L00_001fff28(moby_vars + 0x130, 1, *(float *)(moby_vars + 0x1C0));
             }
             if (try_retract_turret_group(*(int *)(moby_vars + 0x70))) {
-                MoverPath *p = (MoverPath *)D_L14_001B0BB0[*(int *)(moby_vars + 0x204)];
+                MoverPath *p = (MoverPath *)l14_paths[*(int *)(moby_vars + 0x204)];
 
                 moby->state = 5;
                 *(int *)(moby_vars + 0x80) = p->count - 2;
@@ -661,7 +661,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         FUN_L14_002aea08_c618(moby);
         update_blarg_heavy_interceptor_return_path_position(moby, 0.01f, 5.0f, -1.0f);
         if (*(s16 *)(moby_vars + 0x208) != 0) {
-            int *tab = D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
+            int *tab = ((int *)l14_paths[*(int *)(moby_vars + 0x78)]);
 
             near_seg = 0;
             near_t = 0.0f;
@@ -683,13 +683,13 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
 
         FUN_L14_002aea08_c618(moby);
         source_segment_index = *(int *)(moby_vars + 0x84);
-        seg = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
+        seg = (char *)l14_paths[*(int *)(moby_vars + 0x78)];
         source_path_distance = 0.0f;
         for (i = 0; i < source_segment_index; i++) {
             source_path_distance += *(float *)(seg + i * 16 + 0x1C);
         }
         source_path_distance += *(float *)(moby_vars + 0x1CC);
-        tab = D_L14_001B0BB0[*(int *)(moby_vars + 0x74)];
+        tab = ((int *)l14_paths[*(int *)(moby_vars + 0x74)]);
         t = source_path_distance / *(float *)(moby_vars + 0x16C) * *(float *)(moby_vars + 0x190);
         rejoin_path_loop_enabled = *(s16 *)(moby_vars + 0x8A);
         path_seg = 0;
@@ -702,7 +702,7 @@ void update_blarg_heavy_interceptor(struct Moby *moby) {
         if (fast_vec_dist(&moby->pos, vector_scratch) < 0.5f) {
             moby->state = 1;
         }
-        FUN_L00_0025d808_c618(D_L14_001B0BB0[*(int *)(moby_vars + 0x78)], vector_scratch, moby_vars + 0x84, moby_vars + 0x1CC, *(s16 *)(moby_vars + 0x8A), 0.0f);
+        FUN_L00_0025d808_c618(((int *)l14_paths[*(int *)(moby_vars + 0x78)]), vector_scratch, moby_vars + 0x84, moby_vars + 0x1CC, *(s16 *)(moby_vars + 0x8A), 0.0f);
         ease_c618((f32 *)(moby_vars + 0x170), vector_scratch[0], (f32 *)(moby_vars + 0x180), D_L14_001613A0_gp, D_L14_001613A4_gp, 0.0f);
         ease_c618((f32 *)(moby_vars + 0x174), vector_scratch[1], (f32 *)(moby_vars + 0x184), D_L14_001613A0_gp, D_L14_001613A4_gp, 0.0f);
         ease_c618((f32 *)(moby_vars + 0x178), vector_scratch[2], (f32 *)(moby_vars + 0x188), D_L14_001613A0_gp, D_L14_001613A4_gp, 0.0f);
@@ -1253,7 +1253,7 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
     int *path;
     int i;
     float segment_length;
-    path = D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
+    path = ((int *)l14_paths[*(int *)(moby_vars + 0x78)]);
     *(int *)(moby_vars + 0x16C) = 0;
     for (i = 0; i < path[0]; i++) {
         segment_length = fast_vec_dist((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
@@ -1262,7 +1262,7 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
             *(float *)(moby_vars + 0x16C) += segment_length;
         }
     }
-    path = D_L14_001B0BB0[*(int *)(moby_vars + 0x74)];
+    path = ((int *)l14_paths[*(int *)(moby_vars + 0x74)]);
     *(int *)(moby_vars + 0x190) = 0;
     for (i = 0; i < path[0]; i++) {
         segment_length = fast_vec_dist((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
@@ -1271,13 +1271,13 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
             *(float *)(moby_vars + 0x190) += segment_length;
         }
     }
-    path = D_L14_001B0BB0[*(int *)(moby_vars + 0x204)];
+    path = ((int *)l14_paths[*(int *)(moby_vars + 0x204)]);
     for (i = 0; i < path[0]; i++) {
         *(float *)((char *)path + (i << 4) + 0x1C) =
             fast_vec_dist((char *)path + (i * 16 + 0x10), (char *)path + (((i + 1) % path[0]) * 16 + 0x10));
     }
     if (*(float *)(moby_vars + 0x210) != 0.0f) {
-        int *sampling_path = D_L14_001B0BB0[*(int *)(moby_vars + 0x78)];
+        int *sampling_path = ((int *)l14_paths[*(int *)(moby_vars + 0x78)]);
         *(int *)(moby_vars + 0x84) = 0;
         *(float *)(moby_vars + 0x1CC) = 0.0f;
         FUN_L00_0025d808_2af688(sampling_path, &moby->pos, moby_vars + 0x84, moby_vars + 0x1CC, *(short *)(moby_vars + 0x8A),
@@ -1307,7 +1307,7 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
     float path_target_position[4];
     float save = *(float *)(data + 0x1CC);
     int save2 = *(int *)(data + 0x84);
-    int r = FUN_L00_0025d808_2af918(D_L14_001B0BB0[*(int *)(data + 0x78)], path_target_position, (int *)(data + 0x84),
+    int r = FUN_L00_0025d808_2af918(((int *)l14_paths[*(int *)(data + 0x78)]), path_target_position, (int *)(data + 0x84),
                                      (float *)(data + 0x1CC), *(short *)(data + 0x8A),
                                      *(float *)(data + 0x168));
     FUN_L00_0025b8c0_c((float *)(data + 0x170), (float *)(data + 0x180), path_target_position[0],
@@ -1327,7 +1327,7 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
 /* Moves the moby to the point on its second path that matches how far along its first path it is. */
 void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    char *seg = (char *)D_L14_001B0BB0[*(int *)(data + 0x78)];
+    char *seg = (char *)l14_paths[*(int *)(data + 0x78)];
     int source_segment_index = *(int *)(data + 0x84);
     float source_path_distance = 0.0f;
     float out[4];
@@ -1342,7 +1342,7 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
         source_path_distance += *(float *)(seg + i * 16 + 0x1C);
     }
     source_path_distance += *(float *)(data + 0x1CC);
-    tab = D_L14_001B0BB0[*(int *)(data + 0x74)];
+    tab = ((int *)l14_paths[*(int *)(data + 0x74)]);
     destination_path_distance = source_path_distance / *(float *)(data + 0x16C) * *(float *)(data + 0x190);
     destination_path_loop_enabled = *(short *)(data + 0x8A);
     destination_segment_index = 0;
@@ -1366,7 +1366,7 @@ extern int FUN_L00_0025d808_2afb40(void *, void *, void *, void *, int,
 extern short blarg_heavy_interceptor_return_path_position_damping_coefficient_gp __asm__("D_L14_001613FC") __attribute__((sda));
 void update_blarg_heavy_interceptor_return_path_position(struct Moby *moby, float position_easing_factor, float path_traversal_speed, float path_direction_multiplier) {
     char *data = (char *)moby->pvars;
-    int *list = D_L14_001B0BB0[*(int *)(data + 0x204)];
+    int *list = ((int *)l14_paths[*(int *)(data + 0x204)]);
     float target_position[4];
     if (*(short *)(data + 0x208) != 0) {
         qcopy(target_position, (char *)list + list[0] * 16);
@@ -2142,7 +2142,6 @@ extern void release_voice_slot(s32) __asm__("FUN_0022d798");
 extern void set_moby_animation_c(void *, s32, s32) __asm__("func_00212ED8");
 int advance_minibomber_along_path(struct Moby *moby, char *a1, int a2, int a3, float *v, float *vel, float f12, float f13, float f14, float f15, float f16, float f17, float f18) __asm__("FUN_L14_002b5730");
 s32 is_value_within_interpolated_window(void *anim, f32 value) __asm__("FUN_00214cc8");
-extern PathNode *D_L14_001B0F30_2B5938[] __asm__("D_L14_001B0BB0");
 extern char *func_L14_00302968_2B5938(int a0, float *a1, float *a2, float f, int a3) __asm__("FUN_L14_003014e0");
 extern void func_L00_0025F4A8_2B5938(void *, void *, void *, float, float, int, int, int, float, float, float, float,
                                      int, float, int, int, int, int) __asm__("FUN_L00_0025e450");
@@ -2199,7 +2198,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        path = D_L14_001B0F30_2B5938[d->fD0];
+        path = ((PathNode *)l14_paths[d->fD0]);
         if (path->n == 0) {
             debug_print(D_L14_001FBE18, moby->fB2);
             mark_moby_for_removal(moby);
@@ -2210,7 +2209,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        if (D_L14_001B0F30_2B5938[d->fD4]->n == 0) {
+        if (((PathNode *)l14_paths[d->fD4])->n == 0) {
             debug_print(D_L14_001FBE80, moby->fB2);
             mark_moby_for_removal(moby);
             return;
@@ -2220,7 +2219,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        if (D_L14_001B0F30_2B5938[d->fD8]->n == 0) {
+        if (((PathNode *)l14_paths[d->fD8])->n == 0) {
             debug_print(D_L14_001FBEE8, moby->fB2);
             mark_moby_for_removal(moby);
             return;
@@ -2230,7 +2229,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        if (D_L14_001B0F30_2B5938[d->f150]->n == 0) {
+        if (((PathNode *)l14_paths[d->f150])->n == 0) {
             debug_print(minibomber_empty_exit_path_diagnostic, moby->fB2);
             mark_moby_for_removal(moby);
             return;
@@ -2264,9 +2263,9 @@ void minibomber_update(Moby_2B5938 *moby) {
     case MINIBOMBER_STATE_FOLLOW_INTRO_OR_EXIT_PATH: {
         PathNode *path;
         if (d->f10C == 0) {
-            path = D_L14_001B0F30_2B5938[d->fD0];
+            path = ((PathNode *)l14_paths[d->fD0]);
         } else {
-            path = D_L14_001B0F30_2B5938[d->f150];
+            path = ((PathNode *)l14_paths[d->f150]);
         }
         if (d->fB4 == 2) {
             moby->state = 3;
@@ -2274,7 +2273,7 @@ void minibomber_update(Moby_2B5938 *moby) {
                                      minibomber_intro_exit_path_step_distance_gp * D_0015ED60, minibomber_intro_exit_position_error_gain_gp, minibomber_position_velocity_damping_gp, minibomber_position_snap_threshold_scale_gp,
                                      minibomber_intro_exit_heading_error_gain_gp, minibomber_heading_velocity_damping_gp, minibomber_heading_velocity_limit_gp) != 0) {
             qcopy(d->f180, path + path->n);
-            path = D_L14_001B0F30_2B5938[d->fDC];
+            path = ((PathNode *)l14_paths[d->fDC]);
             if (d->f10C == 0) {
                 qcopy(v, path + 1);
                 qcopy(v + 4, path + path->n);
@@ -2299,9 +2298,9 @@ void minibomber_update(Moby_2B5938 *moby) {
     case MINIBOMBER_STATE_RETRACE_INTRO_OR_EXIT_PATH: {
         PathNode *path;
         if (d->f10C == 0) {
-            path = D_L14_001B0F30_2B5938[d->fD0];
+            path = ((PathNode *)l14_paths[d->fD0]);
         } else {
-            path = D_L14_001B0F30_2B5938[d->f150];
+            path = ((PathNode *)l14_paths[d->f150]);
         }
         if (d->fB4 != 2) {
             moby->state = 2;
@@ -2323,8 +2322,8 @@ void minibomber_update(Moby_2B5938 *moby) {
                 d->fEC = 0.0f;
             } else {
                 PathNode *q;
-                d->fE8 = D_L14_001B0F30_2B5938[d->fDC]->n - 2;
-                q = D_L14_001B0F30_2B5938[d->fDC] + d->fE8;
+                d->fE8 = ((PathNode *)l14_paths[d->fDC])->n - 2;
+                q = ((PathNode *)l14_paths[d->fDC]) + d->fE8;
                 d->fEC = q[1].v[3];
             }
             moby->state = 7;
@@ -2347,7 +2346,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         if (d->f10C == 1) {
             spd = -spd;
         }
-        if (advance_minibomber_along_path((char *)moby, (char *)D_L14_001B0F30_2B5938[d->fDC], (int)&d->fE8, (int)&d->fEC, d->fF0,
+        if (advance_minibomber_along_path((char *)moby, (char *)l14_paths[d->fDC], (int)&d->fE8, (int)&d->fEC, d->fF0,
                               &d->fE4, spd, minibomber_retrace_and_traversal_position_error_gain_gp, minibomber_position_velocity_damping_gp, minibomber_position_snap_threshold_scale_gp, minibomber_retrace_and_traversal_heading_error_gain_gp,
                               minibomber_heading_velocity_damping_gp, minibomber_heading_velocity_limit_gp) != 0) {
             PathNode *path;
@@ -2357,7 +2356,7 @@ void minibomber_update(Moby_2B5938 *moby) {
             } else {
                 d->f10C = 0;
             }
-            path = D_L14_001B0F30_2B5938[d->fDC];
+            path = ((PathNode *)l14_paths[d->fDC]);
             if (d->f10C == 0) {
                 qcopy(v, path + 1);
                 qcopy(v + 4, path + path->n);
@@ -2377,7 +2376,7 @@ void minibomber_update(Moby_2B5938 *moby) {
         }
         break;
     case MINIBOMBER_STATE_AIM_AT_BOMB_POINT: {
-        PathNode *q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
+        PathNode *q = ((PathNode *)l14_paths[d->fD8]) + d->f100;
         tg = fast_subtract_rotations(fast_arc_tan(q[1].v[0] - moby->pos[0], q[1].v[1] - moby->pos[1]), moby->rot);
         blended_aim_angle = cosine_interpolate(tg, d->f104, (float)d->f102 / convert_integer_to_float(scale_game_frames_c(minibomber_bomb_aim_duration_frames)));
         FUN_L00_001fff28(d->f120, 2, blended_aim_angle);
@@ -2397,16 +2396,16 @@ void minibomber_update(Moby_2B5938 *moby) {
             n = (float)scale_game_frames_c(minibomber_bomb_flight_duration_frames);
             FUN_L00_001fff28(d->f120, 2, d->f104);
             moby_point_position(moby, 1, v);
-            fast_vec_sub(v + 4, D_L14_001B0F30_2B5938[d->fD8] + (d->f100 + 1), v);
+            fast_vec_sub(v + 4, ((PathNode *)l14_paths[d->fD8]) + (d->f100 + 1), v);
             v[6] = 0.0f;
             fast_vec_scale(v + 4, v + 4, 1.0f / n);
             bomb_gravity = minibomber_bomb_gravity_gp * frame_time_sq;
-            q = D_L14_001B0F30_2B5938[d->fD8] + d->f100;
+            q = ((PathNode *)l14_paths[d->fD8]) + d->f100;
             d->f48 = -((v[2] - q[1].v[2]) + -bomb_gravity * (n * n) * 0.5f) / n;
             func_L14_00302968_2B5938((int)moby, v, v + 4, bomb_gravity, scale_game_frames_c(minibomber_bomb_initial_fade_timer_frames));
             FUN_L14_002b5968_u((char *)moby, v, d->f104);
             d->f100++;
-            if (d->f100 >= D_L14_001B0F30_2B5938[d->fD8]->n) {
+            if (d->f100 >= ((PathNode *)l14_paths[d->fD8])->n) {
                 moby->state = 4;
                 d->f102 = scale_game_frames_c(minibomber_aim_return_duration_frames);
             } else {
@@ -2561,7 +2560,7 @@ void update_minibomber_target(struct Moby *moby) __asm__("FUN_L14_002b5530");
 void update_minibomber_target(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (moby->state != 0 && moby->state != 9) {
-        int *bound_path = D_L14_001B0BB0[*(int *)(data + 0xD4)];
+        int *bound_path = ((int *)l14_paths[*(int *)(data + 0xD4)]);
         FUN_L00_0025ff38(255.0f, moby, data + 0x70, 0, 0, bound_path + 4, *bound_path);
         if (*(int *)(data + 0xB0) == 0) {
             *(int *)(data + 0xB0) = *(int *)(D_0013E533 + 0x2E9D);
@@ -2578,15 +2577,15 @@ void initialize_minibomber_path_segment_lengths(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     char *path;
     int i;
-    path = D_L14_001B0BB0[*(int *)(data + 0xD0)];
+    path = ((int *)l14_paths[*(int *)(data + 0xD0)]);
     for (i = 0; i < *(int *)path - 1; i++) {
         *(float *)(path + 0x1C + i * 0x10) = fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
-    path = D_L14_001B0BB0[*(int *)(data + 0x150)];
+    path = ((int *)l14_paths[*(int *)(data + 0x150)]);
     for (i = 0; i < *(int *)path - 1; i++) {
         *(float *)(path + 0x1C + i * 0x10) = fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
-    path = D_L14_001B0BB0[*(int *)(data + 0xDC)];
+    path = ((int *)l14_paths[*(int *)(data + 0xDC)]);
     for (i = 0; i < *(int *)path - 1; i++) {
         *(float *)(path + 0x1C + i * 0x10) = fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
@@ -2741,9 +2740,9 @@ void initialize_minibomber_path_retrace(struct Moby *moby) {
     int *active_path;
     int penultimate_node_index;
     if (mover_vars->alt == 0)
-        active_path = D_L14_001B0BB0[mover_vars->pathA];
+        active_path = ((int *)l14_paths[mover_vars->pathA]);
     else
-        active_path = D_L14_001B0BB0[mover_vars->pathB];
+        active_path = ((int *)l14_paths[mover_vars->pathB]);
     penultimate_node_index = *active_path - 2;
     mover_vars->node = penultimate_node_index;
     mover_vars->w = *(float *)((penultimate_node_index << 4) + (char *)active_path + 0x1C);
@@ -2792,9 +2791,9 @@ void initialize_minibomber_path_following(struct Moby *moby) {
     *(int *)(moby_vars + 0xC0) = 0;
     *(int *)(moby_vars + 0xC4) = 0;
     if (*(int *)(moby_vars + 0x10C) == 0)
-        active_path = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0xD0)];
+        active_path = (char *)l14_paths[*(int *)(moby_vars + 0xD0)];
     else
-        active_path = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x150)];
+        active_path = (char *)l14_paths[*(int *)(moby_vars + 0x150)];
     qcopy(&moby->pos, active_path + 0x10);
     fast_vec_sub(initial_path_direction, active_path + 0x20, &moby->pos);
     moby->rot.z = fast_arc_tan(initial_path_direction[0], initial_path_direction[1]);
@@ -3089,7 +3088,7 @@ void update_level14_racer(struct Moby *racer_moby) {
     switch (racer_moby->state) {
     case RACER_STATE_INITIALIZE:
         if (racer_vars->path == -1 || *race_paths[racer_vars->path].points == 0 || racer_vars->start_point == -1 ||
-            *D_L14_001B0BB0[racer_vars->start_point] != 3 || racer_vars->volume == -1) {
+            *((int *)l14_paths[racer_vars->start_point]) != 3 || racer_vars->volume == -1) {
             FUN_0020c828(racer_moby);
             return;
         }
@@ -3122,7 +3121,7 @@ void update_level14_racer(struct Moby *racer_moby) {
         racer_moby->anim_speed = 0.5f;
         racer_vars->timer = scale_game_frames(level14_racer_start_interpolation_duration_frames_gp);
         racer_vars->inv_time = 1.0f / convert_integer_to_float(racer_vars->timer);
-        qcopy(&racer_moby->pos, (char *)D_L14_001B0BB0[racer_vars->end_point] + 0x10);
+        qcopy(&racer_moby->pos, (char *)l14_paths[racer_vars->end_point] + 0x10);
     case RACER_STATE_WAIT_FOR_START_ANIMATION:
         if (compute_interpolated_record_value(racer_moby) >= 3.0f)
             interpolate_racer_to_path_start(racer_moby);

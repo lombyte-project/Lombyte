@@ -57,6 +57,7 @@ void draw_textured_grid(char *moby) {
 }
 #include "qcopy.h"
 #include "rnc/overlay/entities.h"
+#include "rnc/overlay/level_path.h"
 
 /* update: follow the parent, blend its color, scale by the wind factor */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00292AC0.c: func_L03_002BC140), where it is exact; names translated to the US level program. */
@@ -977,7 +978,6 @@ s32 FUN_L00_0025df68(s32 *path, void *point, void *nearest, f32 *fraction, s32 *
 void record_moby_hit(unsigned char *m, void *src) __asm__("FUN_L00_00259a88");
 void handle_blarg_helicopter_hits(char *m) __asm__("FUN_L03_002ce238");
 extern int D_L03_001BA5D0[] __asm__("D_L03_001BA5D0");
-extern HPath49 *D_L03_001B08B0_2CDDC8[] __asm__("D_L03_001B05B0");
 extern int select_moby_target_with_hero_fallback(void*,void*,float) __asm__("FUN_L03_0024e830");
 extern void func_L00_00263950_2CDDC8(char*,char*,int,float,float) __asm__("FUN_L00_002628d8");
 extern void handle_blarg_helicopter_hits(char*) __asm__("FUN_L03_002ce238");
@@ -1036,7 +1036,7 @@ void blarg_helicopter_update(HMob49 *moby) {
         HPath49 **paths;
         moby->update_distance=0x20; data->health=3.0f; data->health_word=truncate_float_to_s32(3.0f);
         data->enabled=1; data->kind=2; data->gun_kind=25; data->gun_enabled=1; data->gun_mode=6; data->flag29=0;
-        paths=D_L03_001B08B0_2CDDC8;
+        paths=((HPath49 **)l03_paths);
         data->route_a.path=paths[data->route_a.path_id];
         if (data->route_b.path_id!=-1) data->route_b.path=paths[data->route_b.path_id];
         qcopy(moby->position,data->route_a.path->points);
@@ -1060,7 +1060,7 @@ void blarg_helicopter_update(HMob49 *moby) {
         break;
     }
     case BLARG_HELICOPTER_ACTIVATION_PATH: {
-        HPath49 *path=D_L03_001B08B0_2CDDC8[data->activation_path];
+        HPath49 *path=((HPath49 *)l03_paths[data->activation_path]);
         float progress,distance,step,limit,angle;
         if (data->activation_region!=-1 && !is_point_inside_clip_volume(D_0013F3D0,data->activation_region)) break;
         data->activation_region=-1;
@@ -1159,7 +1159,7 @@ void blarg_helicopter_update(HMob49 *moby) {
     }
         if (is_point_inside_clip_volume(work.target.position,data->alternate ? data->other_switch_region : data->switch_region)) {
             if (data->alternate ? data->other_exit_path!=-1 : data->exit_path!=-1) {
-                HPath49 *path=D_L03_001B08B0_2CDDC8[data->alternate ? data->other_exit_path : data->exit_path]; int i;
+                HPath49 *path=((HPath49 *)l03_paths[data->alternate ? data->other_exit_path : data->exit_path]); int i;
                 for (i=0; i<path->count-2; i++)
                     path->points[i].length=fast_vec_dist(&path->points[i],&path->points[i+1]);
             }
@@ -1179,7 +1179,7 @@ void blarg_helicopter_update(HMob49 *moby) {
             moby->rotation[1]=spring_turn(&data->roll_velocity,moby->rotation[1],0.0f,D_0015ED70*0.5235988f,D_0015ED70*1.0471976f,D_0015ED6C*0.7853982f);
             moby->rotation[0]=spring_turn(&data->pitch_velocity,moby->rotation[0],0.0f,D_0015ED70*0.5235988f,D_0015ED70*1.0471976f,D_0015ED6C*0.7853982f); break;
         }
-        path=D_L03_001B08B0_2CDDC8[data->alternate ? data->other_exit_path : data->exit_path];
+        path=((HPath49 *)l03_paths[data->alternate ? data->other_exit_path : data->exit_path]);
         func_L00_0025EFC0_2CDDC8(path,moby->position,work.projected,&work.segment_b,&work.fraction_b,0,999.0f,5.0f,0.0f);
         progress=convert_integer_to_float(work.segment_b)*path->points[0].length+work.fraction_b+2.0f;
         distance=fast_vec_dist(moby->position,(char*)path+(path->count<<4)); step=D_0015ED70*10.0f;

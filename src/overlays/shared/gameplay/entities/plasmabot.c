@@ -1,5 +1,6 @@
 /* Shared moby classes: plasmabot, plasmabot_hatch, mine. */
 #include "types.h"
+#include "rnc/overlay/level_path.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -33,14 +34,13 @@
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B2A28.c: func_L14_002B44B8), where it is exact; names translated to the US level program. */
 
 extern char D_0013E533[];
-extern int *D_L14_001B0BB0[];
 extern int FUN_L00_0025ff38(char *, char *, float, int, int, int *, int);
 
 void update_plasmabot_target(char *moby) __asm__("FUN_L14_002b3268");
 
 void update_plasmabot_target(char *moby) {
     char *data = ((char *)MOBY(moby)->pvars);
-    int *target_filter_record = D_L14_001B0BB0[*(int *)(data + 0x244)];
+    int *target_filter_record = ((int *)l14_paths[*(int *)(data + 0x244)]);
     if (FUN_L00_0025ff38(moby, data + 0xD0, *(float *)(data + 0x234), 0, 0, target_filter_record + 4, *target_filter_record) != 2) {
         if (*(float *)(data + 0x234) < vector_distance_xy(moby + 0x10, data + 0xD0)) {
             *(int *)(data + 0x114) = 2;
@@ -93,7 +93,7 @@ void initialize_plasmabot_path_state(char *moby) {
     *(float *)(moby_vars + 0x254) = *(float *)(moby_vars + 0x250);
     if (*(int *)(moby_vars + 0x240) == -1)
         return;
-    path = (char *)D_L14_001B0BB0[*(int *)(moby_vars + 0x240)];
+    path = (char *)l14_paths[*(int *)(moby_vars + 0x240)];
     for (i = 0; i < *(int *)path; i++) {
         int point_offset = i * 16;
         *(float *)(path + point_offset + 0x1C) =
@@ -172,7 +172,7 @@ void initialize_moby_path_state(char *moby) {
     char *data = ((char *)MOBY(moby)->pvars);
     char *path;
     int i;
-    path = D_L14_001B0BB0[*(int *)(data + 0xD8)];
+    path = ((int *)l14_paths[*(int *)(data + 0xD8)]);
     for (i = 0; i < *(int *)path - 1; i++) {
         *(float *)(path + 0x1C + i * 0x10) = fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
     }
@@ -184,7 +184,7 @@ void initialize_moby_path_state(char *moby) {
     *(float *)(data + 0xF0) = *(float *)(data + 0xE4) = *(float *)(data + 0xE8) =
         *(float *)(data + 0xEC) = 0.0f;
     if (*(int *)(data + 0xFC) != 1) {
-        path = D_L14_001B0BB0[*(int *)(data + 0xDC)];
+        path = ((int *)l14_paths[*(int *)(data + 0xDC)]);
         for (i = 0; i < *(int *)path - 1; i++) {
             *(float *)(path + 0x1C + i * 0x10) =
                 fast_vec_dist(path + 0x10 + i * 0x10, path + 0x20 + i * 0x10);
@@ -372,7 +372,7 @@ void update_plasmabot(char *moby) {
                 DebugPrint(plasmabot_missing_intro_path_format, ((short)MOBY(moby)->save_id));
                 { call_D678(moby); return; }
             }
-            if (*D_L14_001B0BB0[*(int *)(data + 0x240)] == 0) {
+            if (*((int *)l14_paths[*(int *)(data + 0x240)]) == 0) {
                 DebugPrint(plasmabot_empty_intro_path_format, ((short)MOBY(moby)->save_id));
                 { call_D678(moby); return; }
             }
@@ -381,7 +381,7 @@ void update_plasmabot(char *moby) {
             DebugPrint(plasmabot_missing_bound_path_format, ((short)MOBY(moby)->save_id));
             { call_D678(moby); return; }
         }
-        if (*D_L14_001B0BB0[*(int *)(data + 0x244)] == 0) {
+        if (*((int *)l14_paths[*(int *)(data + 0x244)]) == 0) {
             DebugPrint(plasmabot_empty_bound_path_format, ((short)MOBY(moby)->save_id));
             { call_D678(moby); return; }
         }
@@ -394,7 +394,7 @@ void update_plasmabot(char *moby) {
         }
         initialize_plasmabot_path_state(moby);
         if (*(int *)(data + 0x240) != -1) {
-            qcopy(moby + 0x10, (char *)D_L14_001B0BB0[*(int *)(data + 0x240)] + 0x10);
+            qcopy(moby + 0x10, (char *)l14_paths[*(int *)(data + 0x240)] + 0x10);
         }
         data[0x28] = 1;
         data[0x29] = 0;
@@ -442,7 +442,7 @@ void update_plasmabot(char *moby) {
         activate_plasmabot(moby);
         ((unsigned char *)moby)[0x20] = 2;
         set_moby_animation(moby, 1, 0);
-        path = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
+        path = (float *)l14_paths[*(int *)(data + 0x240)];
         MOBY(moby)->rot.z = fast_arc_tan(path[8] - path[4], path[9] - path[5]);
         *(int *)(data + 0x268) = 0;
         *(float *)(data + 0x27C) = 1.0f;
@@ -467,7 +467,7 @@ void update_plasmabot(char *moby) {
         }
         break;
     case PLASMABOT_RETURN_TO_PATH_START: {
-        float *path = (float *)D_L14_001B0BB0[*(int *)(data + 0x240)];
+        float *path = (float *)l14_paths[*(int *)(data + 0x240)];
         vendor_spring((float *)&MOBY(moby)->pos, (float *)(data + 0x254), path[4], 0.01f, 0.2f, 0.0f);
         vendor_spring((float *)&MOBY(moby)->pos.y, (float *)(data + 0x258), path[5], 0.01f, 0.2f, 0.0f);
         if ((moby[0x70] & 2) && ((unsigned char *)moby)[0x52] == ((unsigned char *)moby)[0x53]) {
@@ -540,7 +540,7 @@ void update_plasmabot(char *moby) {
                 int index = *(int *)(data + 0x24C) - 1;
                 char *path;
                 *(int *)(data + 0x24C) = index;
-                path = (char *)D_L14_001B0BB0[*(int *)(data + 0x240)];
+                path = (char *)l14_paths[*(int *)(data + 0x240)];
                 *(float *)(data + 0x250) = *(float *)(path + (index << 4) + 0x1C);
             }
             *(float *)(data + 0x27C) = -1.0f;
@@ -1060,7 +1060,7 @@ int follow_plasmabot_path(char *moby) {
     float pre_spring_position[4];
     float target_offset[4];
     char *data = ((char *)MOBY(moby)->pvars);
-    int reached = sample_path(D_L14_001B0BB0[*(int *)(data + 0x240)], path_target_position, data + 0x24C, data + 0x250, 0,
+    int reached = sample_path(((int *)l14_paths[*(int *)(data + 0x240)]), path_target_position, data + 0x24C, data + 0x250, 0,
                               plasmabot_path_traversal_speed_gp * frame_time * *(float *)(data + 0x27C));
     float path_target_heading;
     float k;

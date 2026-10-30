@@ -55,9 +55,9 @@ typedef struct {
 } SwarmVars;
 
 #include "rnc/overlay/l08/gameplay/entities/commando_globals.h"
+#include "rnc/overlay/level_path.h"
 extern s32 swarm_update_disabled_gp __asm__("D_L08_00161D40") __attribute__((sda));
 extern f32 swarm_path_movement_speed_gp __asm__("D_L08_00161D34") __attribute__((sda));
-extern SwarmPath *D_L08_001B0CB0[];
 extern struct Moby *D_L08_0015FFD8;
 
 extern f32 scale_time(f32) __asm__("FUN_001f96b0");
@@ -111,8 +111,8 @@ void update_path_following_moby_swarm(struct Moby *moby) {
             mark_moby_for_removal(moby);
             return;
         }
-        vars->follow[0].path = D_L08_001B0CB0[vars->follow[0].path_id];
-        vars->follow[1].path = D_L08_001B0CB0[vars->follow[1].path_id];
+        vars->follow[0].path = l08_paths[vars->follow[0].path_id];
+        vars->follow[1].path = l08_paths[vars->follow[1].path_id];
         vars->fire_timer = truncate_float_to_s32(scale_time(random_float_between(300.0f, 600.0f)));
         moby->flags |= 0x4000;
         qcopy(&moby->pos, &vars->follow[1].path->points[0]);
@@ -203,7 +203,7 @@ void update_path_following_moby_swarm(struct Moby *moby) {
         }
         break;
     case SWARM_START_PRIMARY_PATH: {
-        SwarmPath *path;
+        LevelPath *path;
 
         moby->state = 1;
         path = vars->follow[0].path;

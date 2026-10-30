@@ -120,6 +120,7 @@ void update_and_draw_scrolling_overlay_layers(s32 count, ScrollLayer *scroll_lay
     }
 }
 #include "eetypes.h"
+#include "rnc/overlay/level_path.h"
 
 typedef union {
     u128 q;
@@ -635,7 +636,6 @@ typedef struct {
     struct PeMoby *f2080;
 } PeHero;
 
-extern char *D_L01_001B0930_u[] __asm__("D_L01_001B0930");
 extern char *D_L01_001600EC;
 extern char *spawn_colored_half_scale_moby(void *, void *, void *, float, float, int) __asm__("FUN_L01_002fa068");
 extern char birdbot_missing_path_format[] __asm__("D_L01_0020AF80");
@@ -856,10 +856,10 @@ void birdbot_update(PeMoby *birdbot_moby) {
             mark_moby_for_removal(birdbot_moby);
             return;
         }
-        birdbot_vars->main.path = (PePath *)D_L01_001B0930_u[birdbot_vars->main.path_id];
+        birdbot_vars->main.path = (PePath *)l01_paths[birdbot_vars->main.path_id];
         c->idx = 0;
         if (birdbot_vars->side.path_id >= 0) {
-            birdbot_vars->side.path = (PePath *)D_L01_001B0930_u[birdbot_vars->side.path_id];
+            birdbot_vars->side.path = (PePath *)l01_paths[birdbot_vars->side.path_id];
             birdbot_vars->side.idx = 0;
             qcopy(&birdbot_moby->pos, &birdbot_vars->side.path->pts[0]);
         } else {
@@ -1480,7 +1480,6 @@ typedef struct {
 extern s32 cutscene_mode __asm__("D_L01_0015F5C4");
 #include "rnc/overlay/l01/gameplay/entities/birdbot_data/peckbot_update.h"
 s32 D_L01_00161A70 = 0x9020202;
-extern s32 D_L01_001B0930[];
 extern MobyNode *D_L01_0015FFE4;
 extern u8 D_L01_00161A80[] MACRO_ADDR;
 
@@ -1854,7 +1853,7 @@ void peckbot_update(Mob577 *self) {
         chase_target_height_distance_ratio = absolute_float(self->pos.f[2] - target.pos.f[2]);
         chase_target_height_distance_ratio = chase_target_height_distance_ratio / vector_distance_xy(&self->pos, &target.pos);
         if (peckbot_vars->path != -1) {
-            select_list_point_toward_target(self, D_L01_001B0930[peckbot_vars->path], &target.pos, &position_scratch);
+            select_list_point_toward_target(self, ((int)l01_paths[peckbot_vars->path]), &target.pos, &position_scratch);
         } else {
             qcopy(&position_scratch, &target.pos);
         }
@@ -1926,7 +1925,7 @@ void peckbot_update(Mob577 *self) {
         break;
     case PECKBOT_STATE_RETURN_HOME:
         if (peckbot_vars->path != -1) {
-            select_list_point_toward_target(self, D_L01_001B0930[peckbot_vars->path], &peckbot_vars->home, &position_scratch);
+            select_list_point_toward_target(self, ((int)l01_paths[peckbot_vars->path]), &peckbot_vars->home, &position_scratch);
         } else {
             qcopy(&position_scratch, &peckbot_vars->home);
         }
@@ -2013,7 +2012,7 @@ void peckbot_update(Mob577 *self) {
         recovery_target_height_distance_ratio = absolute_float(self->pos.f[2] - target.pos.f[2]);
         recovery_target_height_distance_ratio = recovery_target_height_distance_ratio / vector_distance_xy(&self->pos, &target.pos);
         if (peckbot_vars->path != -1) {
-            select_list_point_toward_target(self, D_L01_001B0930[peckbot_vars->path], &peckbot_vars->home, &position_scratch);
+            select_list_point_toward_target(self, ((int)l01_paths[peckbot_vars->path]), &peckbot_vars->home, &position_scratch);
         } else {
             qcopy(&position_scratch, &peckbot_vars->home);
         }
@@ -2155,7 +2154,7 @@ void water_current_update(Moby *self)
     if (water_current_vars == NULL || water_current_vars->path == -1) {
         return;
     }
-    path = (PePath *)D_L01_001B0930_u[water_current_vars->path];
+    path = (PePath *)l01_paths[water_current_vars->path];
     if (water_current_vars->ready == 0) {
         /* store each segment's length in its start point's w */
         water_current_vars->ready = 1;
@@ -2591,7 +2590,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
                 D_L01_0015FFD8_m[v->camera].unkBC = 1;
             }
             if (v->path != -1) {
-                carrier_path = (PePath *)D_L01_001B0930_u[v->path];
+                carrier_path = (PePath *)l01_paths[v->path];
                 for (volume_or_path_node_index = 0; volume_or_path_node_index < carrier_path->count; volume_or_path_node_index++) {
                     if (carrier_path->pts[volume_or_path_node_index].f[3] == 1.0f) {
                         v->stop = volume_or_path_node_index;
@@ -2618,7 +2617,7 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
                                        frame_time_sq * 125.6637039f, frame_time * 3.1415927f);
         }
         if (v->path != -1) {
-            carrier_path = (PePath *)D_L01_001B0930_u[v->path];
+            carrier_path = (PePath *)l01_paths[v->path];
             k = v->node;
             if (k == v->stop && v->arrived == 0) {
                 if (carrier_moby->prev_seq != 2) {
@@ -2918,7 +2917,6 @@ extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern s32 moby_array __asm__("D_L01_0015FFD8") MACRO_ADDR;
 extern char *camera_points __asm__("D_L01_001600EC") MACRO_ADDR;
-extern char *paths[] __asm__("D_L01_001B0930");
 extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
 
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
@@ -2975,7 +2973,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
     do {
         if (bomber_jet_moby->state == 0) {
             if (sub->path != -1) {
-                GunshipPath *path = (GunshipPath *)paths[sub->path];
+                GunshipPath *path = (GunshipPath *)l01_paths[sub->path];
                 j = 0;
                 gunship_vars->speed = gunship_vars->speed * 2.0f;
                 if (fast_vec_dist((char *)path + 0x10, (char *)path + (path->count << 4)) < 0.5f) {

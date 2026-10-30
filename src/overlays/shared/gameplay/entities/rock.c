@@ -1,5 +1,6 @@
 /* Shared moby classes: rock, the_plumber, spawn_point, gold_bolt, teleporter. */
 #include "types.h"
+#include "rnc/overlay/level_path.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -62,7 +63,6 @@ typedef struct {
     s32 count;          /* 0x70 */
 } RailVars;
 
-extern RailPath *D_L01_001B0930[];
 extern s32 D_0015ED84;
 extern void approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern s32 FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
@@ -98,7 +98,7 @@ void update_rail_hero_motion(struct Moby *rail_moby) {
     if (rail_vars->ready == 0) {
         rail_vars->ready = 1;
         for (i = 0; i < rail_vars->count; i++) {
-            RailPath *measured_path = D_L01_001B0930[rail_vars->paths[i]];
+            RailPath *measured_path = ((RailPath *)l01_paths[rail_vars->paths[i]]);
             for (j = 0; j < measured_path->count - 1; j++) {
                 measured_path->pts[j].f[3] = fast_vec_dist(&measured_path->pts[j], &measured_path->pts[j + 1]);
             }
@@ -112,7 +112,7 @@ void update_rail_hero_motion(struct Moby *rail_moby) {
     best = 9999.0f;
     best_path = 0;
     for (k = 0; k < rail_vars->count; k++) {
-        path = D_L01_001B0930[rail_vars->paths[k]];
+        path = ((RailPath *)l01_paths[rail_vars->paths[k]]);
         FUN_L00_0025df68(path, &hero.motion.pos, &pt, &seg, &candidate_fraction, 0, 999.0f, 5.0f, 0.0f);
         candidate_path_distance = vector_distance_xy(&hero.motion.pos, &pt);
         if (candidate_path_distance < best) {
@@ -1172,7 +1172,6 @@ typedef struct {
 } ZoneVars;
 
 extern struct Moby *D_L01_0015FFE4_302648 __asm__("D_L01_0015FFE4");
-extern s32 *D_L01_001B0930_302648[] __asm__("D_L01_001B0930");
 extern s32 point_in_path_xy(void *, void *, s32) __asm__("FUN_L00_00259740");
 extern void terminate_visibomb_missile(struct Moby *, void *) __asm__("FUN_L00_002b5b20");
 
@@ -1206,7 +1205,7 @@ void update_target_outside_zone_timeout(struct Moby *moby) {
     zone_vars->count++;
     for (i = 0; i < 20; i++) {
         if (zone_vars->zones[i].path != -1 && target_moby->pos.z > zone_vars->zones[i].zmin && target_moby->pos.z < zone_vars->zones[i].zmax) {
-            path = D_L01_001B0930_302648[zone_vars->zones[i].path];
+            path = ((s32 *)l01_paths[zone_vars->zones[i].path]);
             if (point_in_path_xy(&target_moby->pos, path + 4, path[0])) {
                 zone_vars->count = 0;
                 break;

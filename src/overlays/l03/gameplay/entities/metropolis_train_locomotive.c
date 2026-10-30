@@ -113,6 +113,7 @@ int can_release_linked_robot_dog(struct Moby *moby) {
 
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/overlay/level_path.h"
 
 /* Places a train: puts the engine at `at` facing ang (offset back by its length), then lays each linked
  * car behind the previous one along ang, updating their motion deltas, and enables the coupling moby. */
@@ -428,7 +429,6 @@ typedef struct {
 extern Cam292e98 D_L03_00166D80_292e98 __asm__("D_L03_00166D80");
 extern char *D_L03_0015FFD8_292e98 __asm__("D_L03_0015FFD8");
 extern struct Moby *D_L03_0015FFD8_m292 __asm__("D_L03_0015FFD8");
-extern char *D_L03_001B05B0_292e98[] __asm__("D_L03_001B05B0");
 typedef struct {
     char p0[0x30];
     float pos[4];
@@ -547,7 +547,7 @@ void metropolis_train_locomotive_update(char *moby) {
         data->fDC = 20.0f;
         data->fC8 = data->fC0 = data->fC0 * frame_time;
         if (data->iAC != -1) {
-            second_path = D_L03_001B05B0_292e98[data->iAC];
+            second_path = ((char *)l03_paths[data->iAC]);
             data->iD4 = -1;
             second_path_node_index = 0;
             if (*(int *)second_path > 0) {
@@ -570,7 +570,7 @@ void metropolis_train_locomotive_update(char *moby) {
         *(unsigned short *)(coupling + 0x34) |= 6;
         break;
     case TRAIN_SETUP_COUPLING_PATH:
-        *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA4] + 0x10);
+        *(OvlQuad *)start = *(OvlQuad *)(((char *)l03_paths[data->iA4]) + 0x10);
         place_metropolis_train(moby, start, 0.0f);
         cdata->i74 = data->iA4;
         cdata->fFC = data->fC0;
@@ -578,11 +578,11 @@ void metropolis_train_locomotive_update(char *moby) {
         moby[0xBC] = 2;
         break;
     case TRAIN_POSITION_FOR_BOARDING:
-        *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iA8] + 0x10);
-        place_metropolis_train(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iA8]));
+        *(OvlQuad *)start = *(OvlQuad *)(((char *)l03_paths[data->iA8]) + 0x10);
+        place_metropolis_train(moby, start, PATH_HEADING(((char *)l03_paths[data->iA8])));
         moby[0xBC] = 3;
         cdata->i74 = data->iA4;
-        cdata->path = D_L03_001B05B0_292e98[cdata->i74];
+        cdata->path = ((char *)l03_paths[cdata->i74]);
         cdata->i60 = 1;
         data->fC8 = 0.0f;
         break;
@@ -663,25 +663,25 @@ void metropolis_train_locomotive_update(char *moby) {
         }
         ((char *)&D_L03_0015FFD8_m292[data->iD8])[0xBC] = 1;
         tdb = *(Turret292e98 **)((char *)&D_L03_0015FFD8_m292[data->iD8] + 0x78);
-        path = D_L03_001B05B0_292e98[data->iAC];
+        path = ((char *)l03_paths[data->iAC]);
         tdb->f18 = fast_arc_tan(*(float *)(path + 0x10) - D_L03_00166D80_292e98.pos[0],
                                              *(float *)(path + 0x14) - D_L03_00166D80_292e98.pos[1]);
         tdb->f14 =
-            -fast_arc_tan(vector_distance_xy(D_L03_00166D80_292e98.pos, D_L03_001B05B0_292e98[data->iAC] + 0x10),
-                          *(float *)(D_L03_001B05B0_292e98[data->iAC] + 0x18) - D_L03_00166D80_292e98.pos[2]);
+            -fast_arc_tan(vector_distance_xy(D_L03_00166D80_292e98.pos, ((char *)l03_paths[data->iAC]) + 0x10),
+                          *(float *)(((char *)l03_paths[data->iAC]) + 0x18) - D_L03_00166D80_292e98.pos[2]);
         D_L03_001600EC_292e98[tdb->i28].pos[0] =
-            fast_cos(PATH_HEADING(D_L03_001B05B0_292e98[data->iAC])) * -(data->fDC + 4.0f);
+            fast_cos(PATH_HEADING(((char *)l03_paths[data->iAC]))) * -(data->fDC + 4.0f);
         D_L03_001600EC_292e98[tdb->i28].pos[1] =
-            fast_sin(PATH_HEADING(D_L03_001B05B0_292e98[data->iAC])) * -(data->fDC + 4.0f);
+            fast_sin(PATH_HEADING(((char *)l03_paths[data->iAC]))) * -(data->fDC + 4.0f);
         D_L03_001600EC_292e98[tdb->i28].pos[2] = 0.0f;
         fast_vec_add(D_L03_001600EC_292e98[tdb->i28].pos, D_L03_001600EC_292e98[tdb->i28].pos,
-                       D_L03_001B05B0_292e98[data->iAC] + 0x10);
+                       ((char *)l03_paths[data->iAC]) + 0x10);
         D_L03_001600EC_292e98[tdb->i28].pos[2] += 2.7f;
         clear_u64_value(D_L03_001600EC_292e98[tdb->i28].v70);
-        D_L03_001600EC_292e98[tdb->i28].v70[2] = PATH_HEADING(D_L03_001B05B0_292e98[data->iAC]);
+        D_L03_001600EC_292e98[tdb->i28].v70[2] = PATH_HEADING(((char *)l03_paths[data->iAC]));
         tdb->i2C = scale_game_frames(10000);
-        *(OvlQuad *)start = *(OvlQuad *)(D_L03_001B05B0_292e98[data->iAC] + 0x10);
-        place_metropolis_train(moby, start, PATH_HEADING(D_L03_001B05B0_292e98[data->iAC]));
+        *(OvlQuad *)start = *(OvlQuad *)(((char *)l03_paths[data->iAC]) + 0x10);
+        place_metropolis_train(moby, start, PATH_HEADING(((char *)l03_paths[data->iAC])));
         cdata->i74 = data->iAC;
         cdata->i60 = 1;
         cdata->fF0 = 1.0f;
@@ -734,7 +734,6 @@ void metropolis_train_locomotive_update(char *moby) {
         break;
     }
 }
-extern char *D_L03_001B05B0_294c08[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_294c08[] __asm__("D_0013E550");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
 extern int trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
@@ -785,7 +784,7 @@ void moving_platform_small_update(char *moby) {
     switch (((unsigned char *)moby)[0x20]) {
     case PLATFORM_INITIALIZE_AND_WAIT:
         pa = data + 0xB0;
-        *(char **)(data + 0xC0) = D_L03_001B05B0_294c08[*(int *)(data + 0xE0)];
+        *(char **)(data + 0xC0) = ((char *)l03_paths[*(int *)(data + 0xE0)]);
         if (*(int *)(data + 0xF8) != 0) {
             pa[4] = -1;
         } else {
@@ -1233,7 +1232,6 @@ void update_spline_moby_destruction_and_respawn(char *moby, void *vel_in, int fl
 }
 #undef SPAWN_DEBRIS
 extern char *D_L03_0015FFD8_29dba8 __asm__("D_L03_0015FFD8");
-extern char *D_L03_001B05B0_29dba8[] __asm__("D_L03_001B05B0");
 extern char D_0013E550_29dba8[] __asm__("D_0013E550");
 extern char spline_moby_missing_path_warning_format[] __asm__("D_L03_001E2A28");
 extern int get_first_moby_in_group(int *, int, int, int) __asm__("FUN_L00_002591d0");
@@ -1329,7 +1327,7 @@ void red_ship_1_update(char *moby) {
     case RED_SHIP_INITIALIZE:
         MOBY(moby)->flags |= 0x1000;
         if (*(int *)(pm + 0x14) != -1) {
-            path = (int *)D_L03_001B05B0_29dba8[*(int *)(pm + 0x14)];
+            path = (int *)l03_paths[*(int *)(pm + 0x14)];
             if (fast_vec_dist((char *)path + 0x10, (char *)path + *path * 0x10) < 0.5f) {
                 *path -= 1;
             }
@@ -1549,7 +1547,6 @@ typedef struct {
 } Data2c5bb8;
 
 extern char *D_L03_0015FFD8_c5bb8 __asm__("D_L03_0015FFD8");
-extern char *D_L03_001B05B0_c5bb8[] __asm__("D_L03_001B05B0");
 char D_L03_001618D0 = 3;
 extern float D_L03_0015F580_macro[]  __asm__("D_L03_0015F580")MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
@@ -1650,7 +1647,7 @@ void robot_dog_update(char *moby) {
         break;
     case ROBOT_DOG_WAIT_FOR_ACTIVATION:
         if (data->i270 != -1) {
-            activation_path = D_L03_001B05B0_c5bb8[data->i270];
+            activation_path = ((char *)l03_paths[data->i270]);
             *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)(activation_path + 0x10);
             MOBY(moby)->rot.z = fast_arc_tan(*(float *)(activation_path + 0x20) - *(float *)(activation_path + 0x10),
                                                    *(float *)(activation_path + 0x24) - *(float *)(activation_path + 0x14));
@@ -1719,7 +1716,7 @@ void robot_dog_update(char *moby) {
         }
         break;
     case ROBOT_DOG_FOLLOW_PATH:
-        path = (int *)D_L03_001B05B0_c5bb8[data->i270];
+        path = (int *)l03_paths[data->i270];
         FUN_L00_0025df68(path, moby + 0x10, forward_vector_or_path_point, &seg, &frac, 0, 999.0f, 5.0f, 0.0f);
         if (data->i278 < seg) {
             data->i278 = seg;
@@ -2130,7 +2127,6 @@ typedef struct Moby2C8398 {
     char pBD[0x43];
 } Moby2C8398;
 
-extern char *D_L03_001B05B0[];
 extern CollisionHit D_L03_00173F40;
 extern char sphere_collision_resolved_position[] __asm__("D_L03_00173F70");
 extern char D_L03_00173F80[];
@@ -2273,7 +2269,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
         m->flags |= 0x1000;
         moby_data->s250 = 0;
         {
-            char *np = D_L03_001B05B0[moby_data->pf.id];
+            char *np = ((char *)l03_paths[moby_data->pf.id]);
             moby_data->pf.idx = 0;
             moby_data->pf.path = np;
             qcopy(m->pos, np + 0x10);
@@ -2303,7 +2299,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
             blend_moby_animation(m, 0, 0, scale_game_frames(10));
         }
         if (moby_data->i290 != -1) {
-            char *np = D_L03_001B05B0[moby_data->i290];
+            char *np = ((char *)l03_paths[moby_data->i290]);
             *(OvlQuad *)m->pos = *(OvlQuad *)(np + 0x10);
             m->rot[2] = fast_arc_tan(*(float *)(np + 0x20) - *(float *)(np + 0x10),
                                             *(float *)(np + 0x24) - *(float *)(np + 0x14));
@@ -2638,7 +2634,7 @@ void update_kerwan_path_enemy(Moby2C8398 *m) {
     }
     case ENEMY_FOLLOW_ALTERNATE_PATH: {
         {
-            char *path = D_L03_001B05B0[moby_data->i290];
+            char *path = ((char *)l03_paths[moby_data->i290]);
             float v[4];
             int seg;
             float frac;

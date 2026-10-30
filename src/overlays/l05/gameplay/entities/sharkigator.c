@@ -1,5 +1,6 @@
 /* Level 05 moby classes: sharkigator, scenery_ship, amoeboid, extermibot, extermitank, skid_mcmarx, floating_platform, box, water. */
 #include "types.h"
+#include "rnc/overlay/level_path.h"
 #include "rnc/gameplay/state/item_state.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -140,7 +141,6 @@ void copy_racer_path_node(char *moby, int path_node_index, float *out) {
 /* advances a moby's path waypoint until it reaches one flagged 2.0 */
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_002D28D0.c: func_L05_003087B0), where it is exact; names translated to the US level program. */
 
-extern char *D_L05_001B0930[];
 extern int offset_path_index(char *, int, int, int) __asm__("FUN_L00_0025d7a0");
 
 void start_racer_branch_jump(char *moby) __asm__("FUN_L05_00307358");
@@ -150,7 +150,7 @@ void start_racer_branch_jump(char *moby) {
     char *active_path = *(char **)(moby_data + 0x244);
     int path_node_index;
     int path_node_byte_offset;
-    if (active_path != D_L05_001B0930[*(int *)(moby_data + 0x220)]) {
+    if (active_path != ((char *)l05_paths[*(int *)(moby_data + 0x220)])) {
         if (*(float *)(moby_data + 0x24C) <= 0.0f) {
             path_node_index = *(short *)(moby_data + 0x258);
             path_node_byte_offset = path_node_index * 16;
@@ -276,12 +276,12 @@ state_zero:
             mark_moby_2d1688(moby);
             return;
         }
-        *(int *)(data + 0x68) = random_integer_below(*(int *)D_L05_001B0930[index]);
+        *(int *)(data + 0x68) = random_integer_below(*(int *)l05_paths[index]);
         *(int *)(data + 0x6c) = scale_game_frames(600);
         if (MOBY(moby)->prev_seq != 1) {
             set_action_2d1688(moby, 1, 0, scale_game_frames(10));
         }
-        height = *(float *)(D_L05_001B0930[*(int *)(data + 0x60)] + 0x18) - (D_L05_00161388);
+        height = *(float *)(((char *)l05_paths[*(int *)(data + 0x60)]) + 0x18) - (D_L05_00161388);
         MOBY(moby)->pos.z = height;
         *(float *)(data + 0x80) = height;
         MOBY(moby)->state = one;
@@ -289,7 +289,7 @@ state_zero:
     }
 state_one:
     {
-        path = D_L05_001B0930[*(int *)(data + 0x60)];
+        path = ((char *)l05_paths[*(int *)(data + 0x60)]);
         qcopy(v, path + *(int *)(data + 0x68) * 16 + 0x10);
         point = moby + 0x48;
         {
@@ -306,8 +306,8 @@ state_one:
         fast_vec_add(moby + 0x10, moby + 0x10, w);
         height = fast_vec_dist(moby + 0x10, v);
         if (height < 3.0f || fast_dec_timer(data + 0x6c) != 0) {
-            index = random_integer_below(*(int *)D_L05_001B0930[*(int *)(data + 0x60)]);
-            *(int *)(data + 0x68) = (*(int *)(data + 0x68) + index) % *(int *)D_L05_001B0930[*(int *)(data + 0x60)];
+            index = random_integer_below(*(int *)l05_paths[*(int *)(data + 0x60)]);
+            *(int *)(data + 0x68) = (*(int *)(data + 0x68) + index) % *(int *)l05_paths[*(int *)(data + 0x60)];
             *(int *)(data + 0x6c) = scale_game_frames(600);
         }
         if ((hero.state.control_mode == 0x12 || hero.state.current == 0x12) &&
@@ -349,7 +349,7 @@ state_two:
             return;
         }
         if (hero.state.current == 0x12) return;
-        path = D_L05_001B0930[*(int *)(data + 0x60)];
+        path = ((char *)l05_paths[*(int *)(data + 0x60)]);
         if (point_in_path_xy(&hero.motion.pos, path + 0x10, *(int *)path) != 0)
             *(int *)(data + 0x7c) = scale_game_frames(600);
         else
@@ -623,7 +623,6 @@ extern void func_0020D678_2D8388(void *) __asm__("FUN_0020c828");
 extern void update_moby_glow_and_queue_draw(char *moby) __asm__("FUN_L05_002d7020");
 extern void func_L05_002D8B68_2D8388(void) __asm__("FUN_L05_002d7920");
 extern float D_L05_001672C8_2D8388[] __asm__("D_L05_001671C8");
-extern char *D_L05_001B0CB0_2D8388[] __asm__("D_L05_001B0930");
 
 void scenery_ship_update(char *moby) __asm__("FUN_L05_002d7140");
 void scenery_ship_update(char *moby) {
@@ -664,7 +663,7 @@ void scenery_ship_update(char *moby) {
         data->f1C = func_00214158_2D8388();
         data->f328 = -1;
         data->f368 = func_00214158_2D8388();
-        path = D_L05_001B0CB0_2D8388[data->path];
+        path = ((char *)l05_paths[data->path]);
         if (*(float *)(path + 0x1C) == -1.0f) {
             max_turn = 0.0f;
             point = path + ((*(int *)path - 1) << 4);
@@ -705,7 +704,7 @@ void scenery_ship_update(char *moby) {
         data->f1C = phase;
         wave = func_001F9FA8_2D8388(phase);
         MOBY(moby)->glow_color = func_001FA8A8_2D8388(D_L05_001613D8, D_L05_001613DC, (wave + 1.0f) * 0.5f);
-        advance_scenery_ship_along_path(moby, (int *)D_L05_001B0CB0_2D8388[data->path]);
+        advance_scenery_ship_along_path(moby, (int *)l05_paths[data->path]);
         if (func_L00_0028EB98_2D8388(moby, data->f328) == 0) {
             data->f328 = func_0022ED80_2D8388(1, 4, (int)moby);
         }
@@ -892,7 +891,6 @@ extern void handle_amoeboid_hits(unsigned char *m) __asm__("FUN_L05_002daf58");
 extern void spawn_amoeboid_particles(unsigned char *moby) __asm__("FUN_L05_002db018");
 extern void blend_moby_animation_c(void *, s32, s32, s32) __asm__("FUN_00212f90");
 void mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-extern char *D_L05_001B0CB0_x[] __asm__("D_L05_001B0930");
 
 void amoeboid_update(struct Moby *m) __asm__("FUN_L05_002dac80");
 void amoeboid_update(struct Moby *moby) {
@@ -910,7 +908,7 @@ void amoeboid_update(struct Moby *moby) {
         moby->update_dist = 0x40;
         if (moby->prev_seq != 0)
             blend_moby_animation_c(moby, 0, 0, 0);
-        if (*(int *)(moby_data + 0xB0) == -1 || *(int *)D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)] == 0) {
+        if (*(int *)(moby_data + 0xB0) == -1 || *(int *)l05_paths[*(int *)(moby_data + 0xB0)] == 0) {
             mark_moby_for_removal(moby);
             return;
         }
@@ -925,7 +923,7 @@ void amoeboid_update(struct Moby *moby) {
         }
         break;
     case AMOEBOID_FOLLOW_PATH: {
-        char *path_node_base = D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)] + *(int *)(moby_data + 0xB4) * 16;
+        char *path_node_base = ((char *)l05_paths[*(int *)(moby_data + 0xB0)]) + *(int *)(moby_data + 0xB4) * 16;
         float yaw = fast_arc_tan(*(float *)(path_node_base + 0x10) - moby->pos.x,
                                  *(float *)(path_node_base + 0x14) - moby->pos.y);
         FUN_L00_0025be00(&moby->rot.z, (float *)(moby_data + 0xBC), yaw, frame_time_sq * 1.0471976f,
@@ -935,11 +933,11 @@ void amoeboid_update(struct Moby *moby) {
         facing_direction[2] = 0.0f;
         FUN_L00_00258b50(moby, moby_data + 0x60, facing_direction, moby_data + 0x40, 1.0f);
         if (fast_dec_timer(moby_data + 0xB8) != 0 ||
-            vector_distance_xy(&moby->pos, D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)] +
+            vector_distance_xy(&moby->pos, ((char *)l05_paths[*(int *)(moby_data + 0xB0)]) +
                                        (*(int *)(moby_data + 0xB4) * 16 + 0x10)) < 1.0f) {
-            int r = random_integer_below(*(int *)D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)]);
+            int r = random_integer_below(*(int *)l05_paths[*(int *)(moby_data + 0xB0)]);
             *(int *)(moby_data + 0xB4) =
-                (*(int *)(moby_data + 0xB4) + r) % *(int *)D_L05_001B0CB0_x[*(int *)(moby_data + 0xB0)];
+                (*(int *)(moby_data + 0xB4) + r) % *(int *)l05_paths[*(int *)(moby_data + 0xB0)];
             *(int *)(moby_data + 0xB8) = scale_game_frames(600);
         }
         spawn_amoeboid_particles(moby);
@@ -1556,7 +1554,6 @@ extern Moby *func_L05_003053D8_3047E8(void *, int) __asm__("FUN_L05_00303f80");
 extern float func_001F9FA8_3047E8(float) __asm__("FUN_001f9de0");
 extern void func_001F9BF0_3047E8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern void update_joint_animation(void *, void *, int, float, float) __asm__("FUN_L00_002628d8");
-extern Path_3047E8 *D_L05_001B0CB0_3047E8[] __asm__("D_L05_001B0930");
 extern char D_0013F420[];
 extern s32 D_001413D0_lui[] __asm__("D_001413D0") NOT_SDA;
 
@@ -1682,7 +1679,7 @@ void handle_extermibot_hits_and_update_targeting(Moby *moby) {
     } else {
         moby_data->f2A0 = moby_data->f29C;
     }
-    if (activate_effect_l08(moby_data->f2A0, moby, moby_data->f120, 0, 0, D_L05_001B0CB0_3047E8[moby_data->f2CC]->pts, D_L05_001B0CB0_3047E8[moby_data->f2CC]->n) != 2) {
+    if (activate_effect_l08(moby_data->f2A0, moby, moby_data->f120, 0, 0, ((Path_3047E8 *)l05_paths[moby_data->f2CC])->pts, ((Path_3047E8 *)l05_paths[moby_data->f2CC])->n) != 2) {
         if (moby_data->f2A0 < vector_distance_xy(moby_data->f270, moby_data->f120) || 3.0f < func_001F9B88_3047E8(moby->pos.z - moby_data->f128)) {
             moby_data->f164 = 2;
         }
@@ -1877,7 +1874,6 @@ extern f32 fast_vec_dot(void *, void *) __asm__("func_001F9AB0");
 extern f32 fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
 extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern SegmentPath *segment_paths_3054B0[] __asm__("D_L05_001B0930");
 extern void func_001F9BD8_3054B0(PathVec *, PathVec *, PathVec *) __asm__("FUN_001f9a10");
 extern void func_001F9BF0_3054B0(PathVec *, PathVec *, PathVec *) __asm__("FUN_001f9a28");
 extern void func_001F9CA0_3054B0(PathVec *, PathVec *, PathVec *) __asm__("FUN_001f9ad8");
@@ -1902,8 +1898,8 @@ f32 push_point_from_path(s32 path_index, void *input, void *output, f32 distance
 
     found = 0;
     qcopy_nc(&working, point);
-    for (i = 0; i < segment_paths_3054B0[path_index]->count - 1; i++) {
-        entry = &segment_paths_3054B0[path_index];
+    for (i = 0; i < ((SegmentPath *)l05_paths[path_index])->count - 1; i++) {
+        entry = ((SegmentPath **)&l05_paths[path_index]);
         if ((*entry)->points[i].f[3] == 0.0f && (*entry)->points[i + 1].f[3] == 0.0f)
             continue;
         func_001F9BF0_3054B0(&difference, &working, &(*entry)->points[i]);
@@ -2056,7 +2052,7 @@ void extermitank_update(unsigned char *moby) {
         *(float *)(data + 0xAC) = 0.01f;
         *(float *)(data + 0xB0) = 0.3f;
         *(float *)(data + 0xB4) = 0.1f;
-        *(char **)(data + 0xD0) = D_L05_001B0930[*(int *)(data + 0xD4)];
+        *(char **)(data + 0xD0) = ((char *)l05_paths[*(int *)(data + 0xD4)]);
         *(int *)(data + 0xC0) = 1;
         qcopy(moby + 0x10, *(char **)(data + 0xD0) + 0x10);
         moby[0x20] = 1;
@@ -2104,8 +2100,8 @@ void extermitank_update(unsigned char *moby) {
         if (vector_distance_xy(moby + 0x10, h) < *(float *)(data + 0x174)) {
             if (absolute_float(MOBY(moby)->pos.z - *(float *)(h + 8)) < 4.0f) {
                 if (*(int *)(data + 0x190) == -1
-                    || FUN_L00_00259740(h, D_L05_001B0930[*(int *)(data + 0x190)] + 0x10,
-                                         *(int *)D_L05_001B0930[*(int *)(data + 0x190)]) != 0) {
+                    || FUN_L00_00259740(h, ((char *)l05_paths[*(int *)(data + 0x190)]) + 0x10,
+                                         *(int *)l05_paths[*(int *)(data + 0x190)]) != 0) {
                     qcopy(origin_position, moby + 0x10);
                     origin_position[2] = origin_position[2] + 3.0f;
                     if (collision_line(origin_position, h + 0x50, 2, moby, 0) == 0) {
@@ -2217,8 +2213,8 @@ void extermitank_update(unsigned char *moby) {
         if (*(float *)(data + 0x174) < vector_distance_xy(moby + 0x10, h)
             || 4.0f <= absolute_float(MOBY(moby)->pos.z - *(float *)(h + 8))
             || (*(int *)(data + 0x190) != -1
-                && FUN_L00_00259740(h, D_L05_001B0930[*(int *)(data + 0x190)] + 0x10,
-                                     *(int *)D_L05_001B0930[*(int *)(data + 0x190)]) == 0)
+                && FUN_L00_00259740(h, ((char *)l05_paths[*(int *)(data + 0x190)]) + 0x10,
+                                     *(int *)l05_paths[*(int *)(data + 0x190)]) == 0)
             || collision_line(working_position, D_0013E533 + 0xEED, 2, moby, 0) != 0) {
             if (moby[0x53] != 0) blend_moby_animation(moby, 0, 0, 3);
             moby[0x20] = 1;
@@ -2493,7 +2489,7 @@ void advance_racer_path_node(char *patrol_moby) {
         }
         path = patrol_data->path;
         patrol_data->node = (patrol_data->node + 1) % path->count;
-        base = (L16PatrolPath *)D_L05_001B0930[patrol_data->base_path];
+        base = (L16PatrolPath *)l05_paths[patrol_data->base_path];
         if (path != base) {
             /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
             if (patrol_data->node == path->count - 1) {
@@ -2505,7 +2501,7 @@ void advance_racer_path_node(char *patrol_moby) {
             /* At a marked node of the base path: more often than not, onto the branch the mark names. */
             int branch = truncate_float_to_s32(patrol_data->path->points[patrol_data->node][3]) - 1;
 
-            patrol_data->path = (L16PatrolPath *)D_L05_001B0930[patrol_data->branch_path[branch]];
+            patrol_data->path = (L16PatrolPath *)l05_paths[patrol_data->branch_path[branch]];
             patrol_data->node = 0;
         }
         /* The same two statements as before the loop, written out again: the compiler merges the copies. */
@@ -2696,7 +2692,7 @@ void skid_mcmarx_update(Moby *moby) {
 
         moby->update_dist = 0x18;
         moby->flags |= 0x41;
-        path = (Path *)D_L05_001B0930[data->path_id];
+        path = (Path *)l05_paths[data->path_id];
         data->path = path;
         copy_racer_path_node((char *)moby, 0, path_point);
         qcopy(((float *)&moby->pos), path_point);

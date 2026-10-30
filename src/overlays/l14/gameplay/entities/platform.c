@@ -1,5 +1,6 @@
 /* Level 14 moby classes: platform. */
 #include "types.h"
+#include "rnc/overlay/level_path.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/math/vector.h"
 #include "rnc/gameplay/hero.h"
@@ -35,7 +36,6 @@ typedef struct {
     float t;
 } PathPos;
 
-extern int *D_L14_001B0BB0[];
 extern int D_L14_0015F70C;
 extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
 extern float D_L14_00161A38_gp __asm__("D_L14_00161A38") __attribute__((sda));
@@ -54,14 +54,14 @@ void initialize_racer_path_tracking(struct Moby *racer_moby) {
     *(int *)(moby_data + 0x68) = 0;
     *(int *)(moby_data + 0x64) = 0;
     z = *(float *)(moby_data + 0x68);
-    tg = (char *)D_L14_001B0BB0[*(int *)(moby_data + 0x88)] + 0x30;
+    tg = (char *)l14_paths[*(int *)(moby_data + 0x88)] + 0x30;
     nearest_path_position.t = z;
     nearest_path_position.i = 0;
     FUN_L00_0025df68(path, tg, nearest_path_position.v, &nearest_path_position.i, &nearest_path_position.t, 0, 20.0f, 5.0f, z);
     *(short *)(moby_data + 0x8C) = nearest_path_position.i;
     nearest_path_position.t = z;
     nearest_path_position.i = 0;
-    FUN_L00_0025df68(path, (char *)D_L14_001B0BB0[*(int *)(moby_data + 0x88)] + 0x20, nearest_path_position.v, &nearest_path_position.i, &nearest_path_position.t, 0,
+    FUN_L00_0025df68(path, (char *)l14_paths[*(int *)(moby_data + 0x88)] + 0x20, nearest_path_position.v, &nearest_path_position.i, &nearest_path_position.t, 0,
                      20.0f, 5.0f, z);
     second_point_segment = nearest_path_position.i;
     *(short *)(moby_data + 0x8E) = second_point_segment;
@@ -75,7 +75,6 @@ void initialize_racer_path_tracking(struct Moby *racer_moby) {
 
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002D77E0), where it is exact; names translated to the US level program. */
 
-extern char *D_L14_001B0F30_a[] __asm__("D_L14_001B0BB0");
 
 int interpolate_racer_to_path_start(struct Moby *racer_moby) __asm__("FUN_L14_002d64d0");
 
@@ -86,7 +85,7 @@ int interpolate_racer_to_path_start(struct Moby *racer_moby) {
     float remaining_frames;
     ok = fast_dec_timer(moby_data + 0x6C) != 0;
     remaining_frames = convert_integer_to_float(*(int *)(moby_data + 0x6C));
-    lerp_vector(&racer_moby->pos, ent + 0x10, D_L14_001B0F30_a[*(int *)(moby_data + 0x84)] + 0x10,
+    lerp_vector(&racer_moby->pos, ent + 0x10, ((char *)l14_paths[*(int *)(moby_data + 0x84)]) + 0x10,
                  remaining_frames * *(float *)(moby_data + 0x70));
     return ok;
 }
@@ -94,7 +93,6 @@ int interpolate_racer_to_path_start(struct Moby *racer_moby) {
 extern unsigned short *D_L14_001ABF40_6570[] __asm__("D_L14_001ABF40");
 extern char *D_L14_0015FFD8_6570 __asm__("D_L14_0015FFD8");
 extern char *D_L14_0015F70C_6570 __asm__("D_L14_0015F70C");
-extern char *D_L14_001B0BB0_6570[] __asm__("D_L14_001B0BB0");
 typedef struct { char p[0x48]; float f48; } M_6570;
 typedef struct {
     char p0[0x80];
@@ -131,7 +129,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
         char *od = *(char **)(o + 0x78);
         char *path = hero.rail_spline;
         if (path == *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10)) {
-            char *tp = D_L14_001B0BB0_6570[*(int *)(od + 0x88)];
+            char *tp = ((char *)l14_paths[*(int *)(od + 0x88)]);
             nearest_segment_distance = 0.0f;
             FUN_L00_0025df68_c(path, tp + 0x10, near, &path_segment_index, &nearest_segment_distance, 0, 20.0f, 5.0f, 0.0f);
             fast_vec_sub(path_heading_delta, path + (path_segment_index * 16 + 0x40), path + (path_segment_index * 16 + 0x10));

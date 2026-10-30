@@ -110,6 +110,7 @@ extern float D_0015ED70;
 extern int D_0015ED84;
 extern char *D_L08_0015FFD8;
 #include "rnc/overlay/l08/gameplay/entities/bomb_data/update_bolt_pickup.h"
+#include "rnc/overlay/level_path.h"
 extern float bolt_pickup_collision_stop_speed_threshold_gp __asm__("D_L08_00161458") __attribute__((sda));
 extern float bolt_pickup_collision_speed_reduction_gp __asm__("D_L08_0016145C") __attribute__((sda));
 extern int bolt_pickup_bob_period_ticks_gp __asm__("D_L08_00161460") __attribute__((sda));
@@ -477,7 +478,6 @@ extern s32 D_001413D0[];
 extern const float D_L08_001618CC __attribute__((sda));
 extern float bomber_tank_projectile_speed_gp __asm__("D_L08_001618A8") __attribute__((sda));
 extern float D_L08_001618D0 __attribute__((sda));
-extern int D_L08_001B0CB0[];
 extern unsigned char D_0013D3B6 NOT_SDA;
 extern unsigned char D_0013D4CB NOT_SDA;
 extern void FUN_L00_00260738(void *, void *, void *, void *);
@@ -617,12 +617,12 @@ void update_bomber_tank(Moby *moby) {
                 if (moby->prev_seq != 0) blend_moby_animation(moby, 0, 0, 0);
             } else {
                 remove_bomber_tank_linked_debris(moby);
-                qcopy(&moby->pos, (char *)D_L08_001B0CB0[vars->path] + 0x10);
+                qcopy(&moby->pos, (char *)l08_paths[vars->path] + 0x10);
                 moby->state = 6;
                 if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, 0);
             }
         } else {
-            qcopy(&moby->pos, (char *)D_L08_001B0CB0[vars->path] + 0x10);
+            qcopy(&moby->pos, (char *)l08_paths[vars->path] + 0x10);
             moby->state = 6;
             if (moby->prev_seq != 1) blend_moby_animation(moby, 1, 0, 0);
         }
@@ -675,7 +675,7 @@ void update_bomber_tank(Moby *moby) {
         break;
     case BOMBER_TANK_STATE_WAIT_FOR_TRIGGER:
         if (*(float *)((Moby *)D_L08_0015FFD8 + vars->trigger_moby)->pvars == 1.0f) {
-            qcopy(&moby->pos, (char *)D_L08_001B0CB0[vars->start_point] + 0x10);
+            qcopy(&moby->pos, (char *)l08_paths[vars->start_point] + 0x10);
             qcopy(&vars->part_a->pos, &moby->pos);
             qcopy(&vars->part_b->pos, &moby->pos);
             moby->flags &= 0xFFBE;
@@ -786,7 +786,6 @@ extern float D_0015ED6C_lui __asm__("D_0015ED6C");
 extern int D_L08_0015F5B0 __asm__("D_L08_0015F5B0");
 extern int D_L08_0015F5B4_gp __asm__("D_L08_0015F5B4") __attribute__((sda));
 extern int D_L08_0015F5BC_gp __asm__("D_L08_0015F5BC") __attribute__((sda));
-extern Path *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
 extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D408");
 extern void *spawn_2D5FA8(Moby *, int, float *, float *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 extern void mark_moby_for_removal_cf(Moby *, int, int) __asm__("FUN_L00_00257470");
@@ -901,7 +900,7 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
     if (data->partA != 0) data->partA->hit_slot = 0xFF;
     if (data->partB != 0) data->partB->hit_slot = 0xFF;
 
-    activate_effect_l08(100.0f, moby, data->target, 0, 0, D_L08_001B0FB0_2D5FA8[data->path]->list, D_L08_001B0FB0_2D5FA8[data->path]->count);
+    activate_effect_l08(100.0f, moby, data->target, 0, 0, ((Path *)l08_paths[data->path])->list, ((Path *)l08_paths[data->path])->count);
     if (data->fF0 == 0) data->fF0 = *(int *)D_001413D0;
     if (data->mode != 2) {
         float yaw, distance, pitch;
@@ -967,7 +966,7 @@ typedef struct {
 
 void advance_bomber_tank_along_path(struct Moby *moby, int path_id) {
     PathMoverVars *vars = (PathMoverVars *)moby->pvars;
-    int *path = (int *)D_L08_001B0CB0[path_id];
+    int *path = (int *)l08_paths[path_id];
     float point[4];
     float step[3];
     float scale;
@@ -1973,7 +1972,7 @@ extern char shuttle_stop_local_points[] __asm__("D_L08_001DB280");
 
 void update_shuttle_stop_world_points(struct Moby *moby) {
     char *data = (char *)moby->pvars;
-    int *stop_point_table = (int *)D_L08_001B0CB0[*(int *)(data + 0x8C)];
+    int *stop_point_table = (int *)l08_paths[*(int *)(data + 0x8C)];
     if (*stop_point_table == 8) {
         char *local_point = shuttle_stop_local_points;
         char *moby_rotation_basis = &moby->rot_row0;
@@ -2004,7 +2003,6 @@ typedef struct {
 
 #include "rnc/gameplay/state/game_globals.h"
 extern int D_L08_0015F5CC; /* no foreign declaration */
-extern Route *D_L08_001B0FB0_r[] __asm__("D_L08_001B0CB0");
 
 void select_shuttle_route_for_hero(struct Moby *moby) {
     enum {
@@ -2015,9 +2013,9 @@ void select_shuttle_route_for_hero(struct Moby *moby) {
     };
     char *data = (char *)moby->pvars;
     char *pl = (char *)&hero.motion.pos;
-    Route *route = D_L08_001B0FB0_r[*(int *)(data + 0x88)];
-    Route *configured_path = D_L08_001B0FB0_r[*(int *)(data + 0x80)];
-    Route *alternate_path = D_L08_001B0FB0_r[*(int *)(data + 0x84)];
+    Route *route = ((Route *)l08_paths[*(int *)(data + 0x88)]);
+    Route *configured_path = ((Route *)l08_paths[*(int *)(data + 0x80)]);
+    Route *alternate_path = ((Route *)l08_paths[*(int *)(data + 0x84)]);
     float best_candidate_distance = fast_vec_dist(pl, (char *)route + (route->count << 4));
     float configured_path_start_distance = fast_vec_dist(pl, configured_path->e[0]);
     float alternate_path_start_distance = fast_vec_dist(pl, alternate_path->e[0]);
@@ -2125,9 +2123,9 @@ void try_set_shuttle_departure_help_message(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     if (*(float *)(data + 0x104) > 0.9f) {
         try_set_help_message(0xA, 0x1F4D);
-    } else if (*(int *)(data + 0x120) == D_L08_001B0CB0[*(int *)(data + 0x80)]) {
+    } else if (*(int *)(data + 0x120) == ((int)l08_paths[*(int *)(data + 0x80)])) {
         try_set_help_message(0xA, 0x1F50);
-    } else if (*(int *)(data + 0x120) == D_L08_001B0CB0[*(int *)(data + 0x88)]) {
+    } else if (*(int *)(data + 0x120) == ((int)l08_paths[*(int *)(data + 0x88)])) {
         try_set_help_message(0xA, 0x1F4F);
     } else {
         try_set_help_message(0xA, 0x1F4E);
@@ -2376,7 +2374,6 @@ extern unsigned int D_L08_0015FFDC MACRO_ADDR;
 extern void FUN_L00_00262cf0(void*,void*,float,float,float);
 extern void spawn_effect(void*,void*,int,int,int,int,int,int) __asm__("FUN_L00_00269958");
 extern void FUN_L08_002de528_u(void*,int,int,int) __asm__("FUN_L08_002de528");
-extern Route_2dd4f8_2dd3c0 *D_L08_001B0FB0_r_c[] __asm__("D_L08_001B0CB0");
 
 void update_rocket(M46 *moby) __asm__("FUN_L08_002dd3c0");
 void update_rocket(M46 *moby) {
@@ -2415,7 +2412,7 @@ void update_rocket(M46 *moby) {
             return;
         }
         if (!data->persistent) data->timer=scale_game_frames(10);
-        data->path=D_L08_001B0FB0_r_c[data->path_index];
+        data->path=((Route_2dd4f8_2dd3c0 *)l08_paths[data->path_index]);
         qcopy(moby->position,data->path->e[0]);
         data->waypoint=1; moby->state=3; moby->animation=0; moby->flags=0;
         return;
@@ -2700,7 +2697,7 @@ void update_path_following_moby(char *moby) {
     char *moby_position = moby + 0x10;
     int *path;
     qcopy(previous_position, moby_position);
-    path = (int *)D_L08_001B0CB0[*(int *)moby_vars];
+    path = (int *)l08_paths[*(int *)moby_vars];
     switch (MOBY(moby)->state) {
     case MOBY_STATE_INITIALIZE_PATH:
         if (*(int *)moby_vars == -1) {

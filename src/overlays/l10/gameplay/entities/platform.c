@@ -75,6 +75,7 @@ void bombthrower_grass_update(struct Moby *moby) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 #include "rnc/audio/voice_pool.h"
+#include "rnc/overlay/level_path.h"
 extern void *create_moby() __asm__("FUN_0020c4f8");
 
 
@@ -1529,7 +1530,6 @@ finish:
 extern char point_light_parameter_entries[] __asm__("D_L10_00180740");
 extern char path_spark_missing_path_message[] __asm__("D_L10_001DD120");
 extern f32 fast_vec_dist(void *, void *) __asm__("func_001F9B48");
-extern int *D_L10_001B0930[];
 extern int allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int path_sample_at_distance() __asm__("FUN_L00_00262360");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
@@ -1560,7 +1560,7 @@ void update_path_spark_emitter(struct Moby *moby) {
         mark_moby_for_removal(moby);
         return;
     }
-    path = D_L10_001B0930[*(int *)spark_vars];
+    path = ((int *)l10_paths[*(int *)spark_vars]);
     ((unsigned char *)moby)[0x30] = 0xFF;
     switch (((unsigned char *)moby)[0x20]) {
     case SPARK_STATE_WAIT_FOR_TIMER:

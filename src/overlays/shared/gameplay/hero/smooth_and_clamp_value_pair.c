@@ -59,6 +59,7 @@ void smooth_and_clamp_value_pair(float *out, float *smoothed_values, float step)
 }
 
 #include "sda.h"
+#include "rnc/overlay/level_path.h"
 int hero_anim_tilt_lookup(int id, float *out) __asm__("FUN_L05_0023b378");
 int hero_anim_tilt_lookup(int id, float *out) {
     *out = 0.0f;
@@ -1296,10 +1297,8 @@ void update_hero_hoverboard_trick_score(void) {
 /* Finds the nearest path node ahead of the hero (behind the facing test) and returns its position and heading. */
 /* Ported from rac1-decomp (src/overlays/shared/help_00237B00.c: func_L05_00254B38), where it is exact; names translated to the US level program. */
 
-extern char *D_L05_001B0930[]; /* no foreign declaration */
 float absolute_float(float input) __asm__("func_001F99C0");
 extern char D_0013F3D0[];
-extern char *D_L05_001B0930[];
 
 void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) __asm__("FUN_L05_00254358");
 
@@ -1316,7 +1315,7 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
         qcopy(out_rotation, hero_base + 0x90);
         return;
     }
-    path = D_L05_001B0930[*(int *)(((char *)path_owner_moby->pvars) + 0x24)];
+    path = ((char *)l05_paths[*(int *)(((char *)path_owner_moby->pvars) + 0x24)]);
     distance = 9999999.0f;
     best = 0;
     for (i = 0; i < *(int *)path; i += 2) {
@@ -1427,7 +1426,7 @@ void update_hero_hoverboard_race_progress(void) {
     if (race_pvars->unk20 == -1) {
         return;
     }
-    path = ((Path * *)D_L05_001B0930)[race_pvars->unk20];
+    path = ((Path * *)((char **)l05_paths))[race_pvars->unk20];
     hero.race_path = (void *)path;
     if (D_0015ED84_lui == 0x10) {
         *(u128_254608 *)world_position_scratch = 0;
