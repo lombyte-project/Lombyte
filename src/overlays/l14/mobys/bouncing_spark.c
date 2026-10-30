@@ -278,7 +278,7 @@ char *create_bouncing_spark(int    owner,
 
 char *create_bouncing_spark(
 
-    int owner, float *spawn_position, float *initial_velocity, int fade_timer, float gravity) {
+    int collision_exclusion_owner, float *spawn_position, float *initial_velocity, int fade_timer, float gravity) {
     char          *moby = create_moby(0x4A9);
     float          initial_yaw, scaled_moby_value;
     unsigned short initial_trail_timer;
@@ -288,7 +288,7 @@ char *create_bouncing_spark(
         MOBY(moby)->draw_dist = 0xFF;
         moby[0x31] = 1;
         moby[0x20] = 0;
-        *(int *)(spark_data + 0x24) = owner;
+        *(int *)(spark_data + 0x24) = collision_exclusion_owner;
         qcopy(moby + 0x10, spawn_position);
         qcopy(spark_data + 0x10, initial_velocity);
         initial_trail_timer = D_L14_0016208C;
