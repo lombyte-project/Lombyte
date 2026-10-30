@@ -18,10 +18,10 @@ void interpolate_moby_and_linked_moby_positions_on_path(char *moby) __asm__("FUN
 void interpolate_moby_and_linked_moby_positions_on_path(char *moby) {
     int   *moby_vars = ((int *)MOBY(moby)->pvars);
     int   *path_data = ((int *)l04_paths[moby_vars[2]]);
-    char  *base = D_L04_0015FFD0[2];
+    char  *moby_array_base = D_L04_0015FFD0[2];
     int    source_moby_byte_offset = moby_vars[0] * 256;
-    float *source_moby_vars = *(float **)(base + source_moby_byte_offset + 0x78);
-    char  *destination_moby = base + moby_vars[1] * 256;
+    float *source_moby_vars = *(float **)(moby_array_base + source_moby_byte_offset + 0x78);
+    char  *destination_moby = moby_array_base + moby_vars[1] * 256;
     float  weighted_first_point[4];
     float  weighted_second_point[4];
     float  path_interpolation_factor, path_point_coordinate;
