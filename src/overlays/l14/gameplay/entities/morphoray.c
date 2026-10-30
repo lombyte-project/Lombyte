@@ -17,6 +17,7 @@ int initialize_morphoray_private_state() __asm__("FUN_L14_00305a38");
 
 /* Level 14 moby classes: morphoray, button, blarg_heavy_interceptor. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/overlay/level_spline.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/hero.h"
@@ -1256,11 +1257,6 @@ void update_moby_list_clear_notification(struct Moby *moby) {
 }
 extern char *D_L14_0015EF50 __asm__("D_L14_0015EF50");
 #include "rnc/overlay/cuboid.h"
-typedef struct {
-    char pad0[0x184];
-    char *start;
-} VendorSet_4f00;
-extern VendorSet_4f00 D_L14_00167380 __asm__("D_L14_00167380");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 
 typedef struct {
@@ -1355,7 +1351,7 @@ void initialize_path_camera(char *camera) {
     *(float *)(camera_saved_state + 0x20) = 0.03f;
     *(float *)(camera_saved_state + 0x24) = 0.2f;
     clear_u64_value(camera_saved_state + 0x30);
-    initial_camera_transform = D_L14_00167380.start;
+    initial_camera_transform = l14_camera.unk184;
     qcopy(camera + 0x30, initial_camera_transform + 0x30);
     qcopy(camera, initial_camera_transform);
     qcopy(camera + 0x10, initial_camera_transform + 0x10);

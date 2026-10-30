@@ -1,5 +1,6 @@
 /* Level 16 moby classes: rocket, test_dummy_door, bomb, conveyor_belt, test_dummy, wall_button, test_dummy_on_hoverboard, door. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/math_consts.h"
@@ -2236,7 +2237,6 @@ typedef struct {
 } L16RacePlayer;
 
 extern L16RacePlayer D_L16_0015F580 MACRO_ADDR;
-extern L16RacePlayer D_L16_00167080;
 extern int *D_L16_00178300[];
 extern float approach_value(float *p, float target, float maxstep);
 extern int D_00159F4C; /* no foreign declaration */
@@ -2344,11 +2344,11 @@ void test_dummy_on_hoverboard_update(unsigned char *moby) {
 
             *(short *)(hoverboard_dummy_data + 0x2F2) = count;
             if (scale_game_frames(240) < timer) {
-                L16RacePlayer *player = &D_L16_00167080;
+                LevelCamera *player = &l16_camera;
 
                 if (fast_difference_between_rotations(
-                        fast_arc_tan(MOBY(moby)->pos.x - player->position[0],
-                                     MOBY(moby)->pos.y - player->position[1]),
+                        fast_arc_tan(MOBY(moby)->pos.x - player->pos.f[0],
+                                     MOBY(moby)->pos.y - player->pos.f[1]),
                         player->yaw) > 1.5707964f) {
                     MOBY(moby)->collision = *(int *)(((char *)MOBY(moby)->pclass) + 0x10);
                     MOBY(moby)->flags &= ~0x41;
