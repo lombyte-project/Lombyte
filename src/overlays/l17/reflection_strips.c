@@ -26,7 +26,7 @@ void compute_reflection_sphere_map_uvs(int    vertex_count,
 
 void compute_reflection_sphere_map_uvs(
 
-    int vertex_count, V3 *input_directions, V3 *vertex_positions, int unused, float *out) {
+    int vertex_count, V3 *input_directions, V3 *vertex_positions, int unused, float *sphere_map_output_uvs) {
     V4  normalized_position_delta;
     V4  vertex_position;
     V4  reflection_mapping_vector;
@@ -57,8 +57,8 @@ void compute_reflection_sphere_map_uvs(
         reflection_mapping_vector.v.z = reflection_mapping_vector.v.z + 1.0f;
         sphere_map_denominator = fast_vec_length(&reflection_mapping_vector);
         sphere_map_denominator = sphere_map_denominator + sphere_map_denominator;
-        out[i * 2] = (reflection_mapping_vector.v.x / sphere_map_denominator + 0.5f) * 4.0f;
-        out[i * 2 + 1] = (reflection_mapping_vector.v.y / sphere_map_denominator + 0.5f) * 4.0f;
+        sphere_map_output_uvs[i * 2] = (reflection_mapping_vector.v.x / sphere_map_denominator + 0.5f) * 4.0f;
+        sphere_map_output_uvs[i * 2 + 1] = (reflection_mapping_vector.v.y / sphere_map_denominator + 0.5f) * 4.0f;
     }
 }
 /* Ported from rac1-decomp (src/overlays/l17_fleet/vendor_002F1558.c: func_L17_002F71D0), where it is exact; names translated to the US level program. */
