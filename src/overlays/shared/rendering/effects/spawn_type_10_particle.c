@@ -389,7 +389,7 @@ void compute_path_node_tangent(void *out,
                                float tangent_tension,
                                float tangent_bias) __asm__("FUN_L01_0028b8c8");
 
-void compute_path_node_tangent(void *out,
+void compute_path_node_tangent(void *node_tangent,
                                int  *path_descriptor,
                                int   node_index_offset,
                                float tangent_tension,
@@ -426,9 +426,9 @@ void compute_path_node_tangent(void *out,
     delta_length_limit = delta_length_limit * 1.1f;
     blended_delta_length = fast_vec_length(blended_delta);
     if (delta_length_limit < blended_delta_length) {
-        fast_vec_normalize(out, blended_delta, delta_length_limit);
+        fast_vec_normalize(node_tangent, blended_delta, delta_length_limit);
     } else {
-        *(OvlQuad *)out = *(OvlQuad *)blended_delta;
+        *(OvlQuad *)node_tangent = *(OvlQuad *)blended_delta;
     }
 }
 /* Ported from rac1-decomp (src/overlays/shared/partupd_00280428.c: func_L01_0028C848), where it is exact; names translated to the US level program. */
