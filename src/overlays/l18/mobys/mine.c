@@ -205,12 +205,12 @@ char *launch_class_238_moby_from_list(float  horizontal_speed,
         return 0;
     }
     {
-        char          *base = D_L18_0015FFD8_m;
+        char          *moby_instance_array_base = D_L18_0015FFD8_m;
         unsigned short encoded_moby_entry;
         do {
             encoded_moby_entry = *moby_list_entry;
             {
-                char *candidate_moby = base + ((encoded_moby_entry & 0x7FFF) << 8);
+                char *candidate_moby = moby_instance_array_base + ((encoded_moby_entry & 0x7FFF) << 8);
                 if (MOBY(candidate_moby)->oclass == 0x238) {
                     if (((unsigned char *)candidate_moby)[0x20] == 5) {
                         found = candidate_moby;
