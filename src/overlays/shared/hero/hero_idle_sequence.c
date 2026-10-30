@@ -2928,18 +2928,18 @@ extern float FUN_L00_00257c48(float lo, float hi);
 extern char  hero_idle_rotation_timers[] __asm__("D_001403B0");
 
 void update_hero_idle_random_rotation_targets(void) {
-    char *base = (char *)((char *)&D_0013F350_002062b0);
+    char *hero_base_or_ease_record_offset = (char *)((char *)&D_0013F350_002062b0);
     int  *motion_timers;
     char *hero_state_base;
     int   i, j;
     char *motion_ease_table;
 
-    if (*(int *)(base + 0x2084) != 0)
+    if (*(int *)(hero_base_or_ease_record_offset + 0x2084) != 0)
         return;
-    if (*(unsigned char *)(*(int *)(base + 0x2080) + 0x53) != 0)
+    if (*(unsigned char *)(*(int *)(hero_base_or_ease_record_offset + 0x2080) + 0x53) != 0)
         return;
-    motion_timers = (int *)(base + 0x1060);
-    hero_state_base = base;
+    motion_timers = (int *)(hero_base_or_ease_record_offset + 0x1060);
+    hero_state_base = hero_base_or_ease_record_offset;
     motion_ease_table = ((char *)hero_eases);
     for (i = 0; i < 4; i++) {
         char *motion_slot_base;
@@ -2976,9 +2976,9 @@ void update_hero_idle_random_rotation_targets(void) {
         }
         motion_slot_base = hero_state_base + i * 0x10;
         j = i + 13;
-        base = (char *)(j * 0xB0);
+        hero_base_or_ease_record_offset = (char *)(j * 0xB0);
         {
-            char *motion_record_destination = motion_ease_table + (int)base;
+            char *motion_record_destination = motion_ease_table + (int)hero_base_or_ease_record_offset;
             *(float *)(motion_record_destination + 0x68) = *(float *)(motion_slot_base + 0x1028);
             *(float *)(motion_record_destination + 0x64) = *(float *)(motion_slot_base + 0x1024);
         }
