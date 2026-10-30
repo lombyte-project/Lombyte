@@ -45,14 +45,14 @@ void moving_platform_small_update(char *moby) {
     char          *target;
     int            voice_slot_index;
     int            easing_frame_count;
-    int            next;
+    int            next_path_node_index;
     int            end;
     int            count;
     int            next_path_node_byte_offset;
     int            node_off;
     signed char    path_node_step;
     float          speed;
-    float          base;
+    float          eased_endpoint_distance;
     float          d;
     unsigned char *voice_slot_entry;
 
@@ -92,7 +92,7 @@ void moving_platform_small_update(char *moby) {
     case PLATFORM_EASED_ENDPOINT_TRAVEL:
         pb = platform_pvars + 0xB0;
         speed = *(float *)(platform_pvars + 0x114);
-        base = 0.0f;
+        eased_endpoint_distance = 0.0f;
         if ((MOBY(moby)->oclass == 0x389 || MOBY(moby)->oclass == 0x364) &&
             !voice_is_playing(moby, *(int *)(platform_pvars + 0x104))) {
             *(int *)(platform_pvars + 0x104) = trooper_play_sound(0, 4, (int)moby, 0x389);
@@ -101,17 +101,17 @@ void moving_platform_small_update(char *moby) {
         if (scale_game_frames(240) / 2 < *(int *)(platform_pvars + 0x10C)) {
             speed = -speed;
             easing_frame_count = scale_game_frames(240) - *(int *)(platform_pvars + 0x10C);
-            base = *(float *)(platform_pvars + 0x110);
+            eased_endpoint_distance = *(float *)(platform_pvars + 0x110);
         }
-        base += speed * 0.5f * convert_integer_to_float(easing_frame_count * easing_frame_count);
+        eased_endpoint_distance += speed * 0.5f * convert_integer_to_float(easing_frame_count * easing_frame_count);
         if (pb[4] < 0) {
-            base = *(float *)(platform_pvars + 0x110) - base;
+            eased_endpoint_distance = *(float *)(platform_pvars + 0x110) - eased_endpoint_distance;
         }
         fast_vec_sub(endpoint_delta_or_position,
                      *(char **)(pb + 0x10) + **(int **)(pb + 0x10) * 0x10,
                      *(char **)(pb + 0x10) + 0x10);
         *(OvlQuad *)step = *(OvlQuad *)endpoint_delta_or_position;
-        fast_vec_normalize(step, step, base);
+        fast_vec_normalize(step, step, eased_endpoint_distance);
         fast_vec_add(endpoint_delta_or_position, *(char **)(pb + 0x10) + 0x10, step);
         *(OvlQuad *)&MOBY(moby)->pos = *(OvlQuad *)endpoint_delta_or_position;
         if (*(int *)(platform_pvars + 0x10C) >= scale_game_frames(240)) {
@@ -140,8 +140,8 @@ void moving_platform_small_update(char *moby) {
         path_node_step = pc[4];
         count = *path;
         end = path_node_step < 0 ? 0 : count - 1;
-        next = (*(int *)(platform_pvars + 0xB0) + count + path_node_step) % count;
-        node_off = next * 0x10;
+        next_path_node_index = (*(int *)(platform_pvars + 0xB0) + count + path_node_step) % count;
+        node_off = next_path_node_index * 0x10;
         platform_position = moby + 0x10;
         fast_vec_sub(platform_pvars + 0xA0, (char *)path + (node_off + 0x10), platform_position);
         next_path_node_byte_offset = node_off;
@@ -169,8 +169,8 @@ void moving_platform_small_update(char *moby) {
         if (fast_vec_dist(moby + 0x10,
                           *(char **)(pc + 0x10) + (next_path_node_byte_offset + 0x10)) <
             *(float *)(platform_pvars + 0xE4) * 2.0f) {
-            *(int *)pc = next;
-            if ((next == end || *(int *)(platform_pvars + 0x108) != 0) && *(int *)(platform_pvars + 0xF0) > 0) {
+            *(int *)pc = next_path_node_index;
+            if ((next_path_node_index == end || *(int *)(platform_pvars + 0x108) != 0) && *(int *)(platform_pvars + 0xF0) > 0) {
                 voice_slot_index = *(int *)(platform_pvars + 0x104);
                 if (voice_slot_index != -1) {
                     voice_slot_entry = (unsigned char *)&voice_pool + voice_slot_index * 0x70;
