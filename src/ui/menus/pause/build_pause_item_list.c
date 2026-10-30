@@ -28,15 +28,15 @@ int build_pause_item_list(void) {
     for (i = 0; i < 15; i++) {
         int id = pause_item_candidate_entries[i].id;
         if (item_available[id] != 0) {
-            Item0A       *out = &pause_item_list_entries[item_count];
+            Item0A       *pause_item_entry = &pause_item_list_entries[item_count];
             MenuItemInfo *rec = &menu_item_info[id];
             unsigned char b = item_text_variant[id];
             int           has_text_variant = b != 0;
-            out->a = rec->unk38;
-            out->b = has_text_variant << 2;
-            out->c = 0;
-            out->id = id;
-            out->idx = i;
+            pause_item_entry->a = rec->unk38;
+            pause_item_entry->b = has_text_variant << 2;
+            pause_item_entry->c = 0;
+            pause_item_entry->id = id;
+            pause_item_entry->idx = i;
             pause_item_variant_values[item_count] = b ? rec->unk42 : rec->unk40;
             item_count++;
         }
