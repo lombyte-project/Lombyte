@@ -181,12 +181,12 @@ extern void update_item_tint_from_hero(int, int) __asm__("FUN_L00_00207330");
 void update_enabled_item_tint_from_hero(void) __asm__("FUN_L15_00200788");
 
 void update_enabled_item_tint_from_hero(void) {
-    unsigned char *base = ((unsigned char *)&D_0013E533) + 0xE1D;
-    int            index = *(int *)(base + 0x10B8);
+    unsigned char *hero_state_base = ((unsigned char *)&D_0013E533) + 0xE1D;
+    int            index = *(int *)(hero_state_base + 0x10B8);
     if (index >= 0 && *(D_0013E05A + 0x4C6 + index) != 0) {
-        int first = *(int *)(base + 0x1090);
-        if (first != 0) {
-            update_item_tint_from_hero(first, *(int *)(base + 0x2080));
+        int item_moby = *(int *)(hero_state_base + 0x1090);
+        if (item_moby != 0) {
+            update_item_tint_from_hero(item_moby, *(int *)(hero_state_base + 0x2080));
         }
     }
 }
