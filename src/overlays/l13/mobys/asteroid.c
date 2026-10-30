@@ -236,7 +236,7 @@ void asteroid_update(struct Moby *moby) {
         ASTEROID_RESET_AT_HOME = 3,
         ASTEROID_WAIT_TO_RESPAWN = 4
     };
-    struct BlobVars *vars = (struct BlobVars *)moby->pvars;
+    struct BlobVars *asteroid_vars = (struct BlobVars *)moby->pvars;
     f32              distance = fast_vec_dist(&moby->pos, &hero_pos);
     f32              size;
     f32              spin;
@@ -244,11 +244,11 @@ void asteroid_update(struct Moby *moby) {
 
     switch (moby->state) {
     case ASTEROID_INITIALIZE:
-        qcopy(&vars->home, &moby->pos);
-        vars->home.w = 20.0f;
-        qcopy(vars->dir, &moby->rot_row0);
-        vars->start_scale = moby->scale;
-        vars->pieces = random_int_between(2, 3);
+        qcopy(&asteroid_vars->home, &moby->pos);
+        asteroid_vars->home.w = 20.0f;
+        qcopy(asteroid_vars->dir, &moby->rot_row0);
+        asteroid_vars->start_scale = moby->scale;
+        asteroid_vars->pieces = random_int_between(2, 3);
         if (moby->scale < moby->pclass->scale) {
             moby->unk72 = 0;
         }
@@ -257,30 +257,30 @@ void asteroid_update(struct Moby *moby) {
     case ASTEROID_WAIT_TO_LAUNCH:
         if (hero.state.current == 0x32 && hero.ship_moby != 0 && hero.ship_moby->oclass == 0x45 &&
             (moby->visible != 0 || distance < 40.0f)) {
-            fast_vec_normalize(vars, vars->dir, random_float_between(1.0f, 10.0f) * frame_time);
+            fast_vec_normalize(asteroid_vars, asteroid_vars->dir, random_float_between(1.0f, 10.0f) * frame_time);
             moby->state = 2;
         }
         break;
     case ASTEROID_MOVE_AND_COLLIDE:
-        fast_dec_timer_s16(&vars->cooldown);
-        fast_vec_add(&moby->pos, &moby->pos, vars);
+        fast_dec_timer_s16(&asteroid_vars->cooldown);
+        fast_vec_add(&moby->pos, &moby->pos, asteroid_vars);
         if (moby->visible != 0 || distance < 40.0f) {
-            if (vars->child == 0) {
-                vars->timer = scale_game_frames(0x168);
+            if (asteroid_vars->child == 0) {
+                asteroid_vars->timer = scale_game_frames(0x168);
             } else {
-                vars->timer = scale_game_frames(0x78);
+                asteroid_vars->timer = scale_game_frames(0x78);
             }
-            if (vars->cooldown == 0) {
+            if (asteroid_vars->cooldown == 0) {
                 moby->collision = moby->pclass->collision;
                 size = moby->scale / moby->pclass->scale;
                 if ((frame_count & 1) == (((char *)moby - (char *)moby_base) >> 8 & 1) &&
                     FUN_L00_001f0d60_1638(size * 6.2f, &moby->pos, 0, moby) != 0) {
-                    if ((struct Moby *)coll_hit_1638.moby != vars->owner) {
-                        reflect_vector(vars, vars, &coll_hit_1638.normal_x);
+                    if ((struct Moby *)coll_hit_1638.moby != asteroid_vars->owner) {
+                        reflect_vector(asteroid_vars, asteroid_vars, &coll_hit_1638.normal_x);
                         qcopy(&moby->pos, coll_hit_1638.pad30);
                         if (coll_hit_1638.moby == 0 ||
                             ((struct Moby *)coll_hit_1638.moby)->oclass != 0xD4) {
-                            FUN_L13_002e1348_1638(moby, vars, size);
+                            FUN_L13_002e1348_1638(moby, asteroid_vars, size);
                         }
                     }
                 } else {
@@ -290,14 +290,14 @@ void asteroid_update(struct Moby *moby) {
                         size = moby->scale;
                         size /= moby->pclass->scale;
                         clamp_vector_length(hit, hit, frame_time * 20.0f);
-                        fast_vec_add(vars, vars, hit);
-                        FUN_L13_002e1348_1638(moby, vars, size);
+                        fast_vec_add(asteroid_vars, asteroid_vars, hit);
+                        FUN_L13_002e1348_1638(moby, asteroid_vars, size);
                     }
                     moby->hit_slot = 0xFF;
                 }
             }
-        } else if (fast_dec_timer(&vars->timer) != 0) {
-            if (vars->child == 1) {
+        } else if (fast_dec_timer(&asteroid_vars->timer) != 0) {
+            if (asteroid_vars->child == 1) {
                 mark_moby_for_removal(moby);
                 return;
             }
@@ -305,49 +305,49 @@ void asteroid_update(struct Moby *moby) {
             moby->collision = 0;
             moby->flags |= 1;
             moby->visible = 0;
-            moby->scale = vars->start_scale;
+            moby->scale = asteroid_vars->start_scale;
         }
         break;
     case ASTEROID_RESET_AT_HOME:
-        qcopy(&moby->pos, &vars->home);
-        qzero(&vars->spin);
+        qcopy(&moby->pos, &asteroid_vars->home);
+        qzero(&asteroid_vars->spin);
         spin = random_float_between(-30.0f, 30.0f) * DEG_TO_RAD * frame_time;
         switch (rand_1638() % 3) {
         case SPIN_AXIS_X:
-            vars->spin.x = spin;
+            asteroid_vars->spin.x = spin;
             break;
         case SPIN_AXIS_Y:
-            vars->spin.y = spin;
+            asteroid_vars->spin.y = spin;
             break;
         case SPIN_AXIS_Z:
-            vars->spin.z = spin;
+            asteroid_vars->spin.z = spin;
             break;
         }
         spin = random_float_between(-180.0f, 180.0f) * DEG_TO_RAD * frame_time;
         switch (rand_1638() % 3) {
         case SPIN_AXIS_X:
-            vars->spin.x = spin;
+            asteroid_vars->spin.x = spin;
             break;
         case SPIN_AXIS_Y:
-            vars->spin.y = spin;
+            asteroid_vars->spin.y = spin;
             break;
         case SPIN_AXIS_Z:
-            vars->spin.z = spin;
+            asteroid_vars->spin.z = spin;
             break;
         }
         moby->rot.x = random_angle_radians();
         moby->rot.y = random_angle_radians();
         moby->rot.z = random_angle_radians();
-        qzero(&vars->vel);
-        moby->scale = vars->start_scale;
+        qzero(&asteroid_vars->vel);
+        moby->scale = asteroid_vars->start_scale;
         if (moby->pclass->scale < moby->scale) {
             moby->unk72 = 100;
         }
         moby->state = 1;
         break;
     case ASTEROID_WAIT_TO_RESPAWN:
-        if (fast_bsphere_check(&vars->home, moby->draw_dist) < 0) {
-            qcopy(&moby->pos, &vars->home);
+        if (fast_bsphere_check(&asteroid_vars->home, moby->draw_dist) < 0) {
+            qcopy(&moby->pos, &asteroid_vars->home);
             moby->collision = moby->pclass->collision;
             moby->visible = 1;
             moby->flags &= ~1;
@@ -373,9 +373,9 @@ void asteroid_update(struct Moby *moby) {
     if (moby->pos.z > 1003.0f) {
         moby->pos.z = 1003.0f;
     }
-    moby->rot.x = fast_add_rotations(moby->rot.x, vars->spin.x);
-    moby->rot.y = fast_add_rotations(moby->rot.y, vars->spin.y);
-    moby->rot.z = fast_add_rotations(moby->rot.z, vars->spin.z);
+    moby->rot.x = fast_add_rotations(moby->rot.x, asteroid_vars->spin.x);
+    moby->rot.y = fast_add_rotations(moby->rot.y, asteroid_vars->spin.y);
+    moby->rot.z = fast_add_rotations(moby->rot.z, asteroid_vars->spin.z);
 }
 
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
