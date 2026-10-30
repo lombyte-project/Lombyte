@@ -2568,7 +2568,10 @@ void update_level16_three_mesh_render_state(struct Moby *moby) {
 }
 /* Sets up the draw state, then draws the one entry of the level's table; same source as env_map_a_draw. */
 
-extern char D_L16_00161F80_macro[][16] __asm__("D_L16_00161F80") MACRO_ADDR;
+typedef struct {
+    float x, y, z, radius;
+} L16SingleSphere;
+extern L16SingleSphere l16_single_reflection_mesh_bounds[] __asm__("D_L16_00161F80") MACRO_ADDR;
 extern void FUN_L16_002e8b98_t(int, int, int, int, char *) __asm__("FUN_L16_002e8b98");
 extern void vu1_add_g_sregister_2e9270(int, long) __asm__("FUN_00233980");
 
@@ -2598,7 +2601,7 @@ void draw_level16_visible_single_reflection_mesh(void) {
     vu1_add_g_sregister_2e9270(0x14, 0xFF9000000260);
     font_queue_vu_state();
     for (i = 0; i < 1; i++) {
-        if (fast_bsphere_check(D_L16_00161F80_macro[i], 512.0f) != -1) {
+        if (fast_bsphere_check(&l16_single_reflection_mesh_bounds[i], 512.0f) != -1) {
             FUN_L16_002e8b98_t(point_counts[i], direction_vectors[i], point_positions[i], unused_reflection_arguments[i], D_L16_001DDC80);
             FUN_L00_001fde98(point_counts[i], point_positions[i], point_word_streams[i], D_L16_001DDC80, 1);
         }
@@ -2607,13 +2610,8 @@ void draw_level16_visible_single_reflection_mesh(void) {
 /* Compute bounding spheres for one mesh and register their renderer. */
 /* Ported from rac1-decomp (src/overlays/l16_kalebo3/vendor_002E7C70.c: func_L16_002EA828), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    float x, y, z, radius;
-} L16SingleSphere;
 
 extern void draw_level16_visible_single_reflection_mesh(void) __asm__("FUN_L16_002e9270");
-extern L16SingleSphere D_L16_00161F60_bounds[] __asm__("D_L16_00161F80")
-    __attribute__((section(".sdata")));
 
 void update_level16_single_mesh_render_state(struct Moby *moby) __asm__("FUN_L16_002e93b0");
 
@@ -2656,7 +2654,7 @@ void update_level16_single_mesh_render_state(struct Moby *moby) {
                 }
             }
             {
-                L16SingleSphere *sphere = D_L16_00161F60_bounds + i;
+                L16SingleSphere *sphere = l16_single_reflection_mesh_bounds + i;
                 sphere->radius = 0.0f;
                 sphere->x = (maxx + minx) * 0.5f;
                 sphere->y = (maxy + miny) * 0.5f;
@@ -2664,7 +2662,7 @@ void update_level16_single_mesh_render_state(struct Moby *moby) {
             }
             for (j = 0; j < D_L16_00161F40[i]; j++) {
                 float vertex_to_center_distance;
-                out = (float *)(D_L16_00161F60_bounds + i);
+                out = (float *)(l16_single_reflection_mesh_bounds + i);
                 vertex_position[0] = ((float **)D_L16_00161F60)[i][j * 3 + 0];
                 vertex_position[1] = ((float **)D_L16_00161F60)[i][j * 3 + 1];
                 vertex_position[2] = ((float **)D_L16_00161F60)[i][j * 3 + 2];

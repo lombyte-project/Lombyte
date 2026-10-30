@@ -244,7 +244,7 @@ int FUN_L00_00260400(int u0, char *a, void *b, void *c, float *v, void *out);
 int FUN_L00_0028dc90(int i, int a1, int v, int k);
 void send_blast_hits(u8 *self, OvlQuad *pos, u8 **list, s32 n, u8 *skip, s32 k, s32 c0, s32 c1, f32 f, f32 spd, f32 z) __asm__("FUN_L00_0025a9f8");
 extern char D_L15_001744C0_2E9358[] __asm__("D_L15_00174440");
-extern int D_L15_00174458_lui __asm__("D_L15_00174458") NOT_SDA;
+extern int D_L15_00174458_lui[] __asm__("D_L15_00174458") NOT_SDA;
 extern int D_001413D0_lui __asm__("D_001413D0") NOT_SDA;
 extern s32 D_L15_00178500[] __asm__("D_L15_00178500");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
@@ -274,7 +274,7 @@ void poison_vessel_update(Moby_2E9358 *moby) {
     previous_position.q = moby->pos;
     clear_u64_value(&collision_scratch_vector);
     if (coll_sphere(0.5f, &moby->pos, 1, moby)) {
-        if (D_L15_00174458_lui == 0 || FUN_L00_002603d0(D_L15_00174458_lui) == 0) {
+        if (D_L15_00174458_lui[0] == 0 || FUN_L00_002603d0(D_L15_00174458_lui[0]) == 0) {
             moby->bBC = 1;
         }
     }
@@ -311,8 +311,8 @@ void poison_vessel_update(Moby_2E9358 *moby) {
             if (target_moby->state == 0xFE || data->target->state == 0xFD) {
                 moby->bBC = state;
                 data->target = 0;
-            } else if (D_L15_00174458_lui != 0) {
-                follow_context = FUN_L00_002603d0(D_L15_00174458_lui);
+            } else if (D_L15_00174458_lui[0] != 0) {
+                follow_context = FUN_L00_002603d0(D_L15_00174458_lui[0]);
                 if (follow_context != 0) {
                     probe_ground_height_cf(moby, data->target, &moby->pos, &moby->v40, &moby->pos, &moby->v40);
                     fast_vec_sub(&temporary_vector, &moby->pos, &previous_position);

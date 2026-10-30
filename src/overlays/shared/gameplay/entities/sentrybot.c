@@ -1496,7 +1496,7 @@ void draw_sentrybot_effect_quads(char *moby) {
 #include "qcopy.h"
 #include "rnc/overlay/quad.h"
 extern char D_L15_001673C0_y[] __asm__("D_L15_001673C0");
-extern int D_L15_00174458_y[] __asm__("D_L15_00174458");
+extern int D_L15_00174458[];
 extern float D_0015ED6C;
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 void spawn_rocket_trail_spark(char *moby) __asm__("FUN_L15_0029ae18");
@@ -1529,7 +1529,7 @@ void rocket_update(unsigned char *moby) {
     make_hit_descriptor(col, moby, 0x10003, collision_setup_value, rocket_data);
     *(short *)(col + 0x1A) = MOBY(moby)->oclass;
     if (collision_line(back, next, 0x10, moby, col) != 0 || fast_dec_timer(rocket_data + 0x14) != 0) {
-        if (D_L15_00174458_y[0] != *(int *)(rocket_data + 0x18)) {
+        if (D_L15_00174458[0] != *(int *)(rocket_data + 0x18)) {
             trooper_play_sound(8, 0, moby, 0x27E);
             spawn_rocket_detonation_glow((char *)moby);
             mark_moby_for_removal(moby);

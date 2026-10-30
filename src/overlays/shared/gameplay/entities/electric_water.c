@@ -978,7 +978,7 @@ void draw_electric_water_bolt_start_quads(void *mv) {
 }
 /* Spinning shot: flies along its velocity and blows up when it hits something, nears the hero or times out. */
 #include "qcopy.h"
-extern int D_L15_00174458_s[] __asm__("D_L15_00174458");
+extern int D_L15_00174458[];
 extern int D_L15_0015F5CC_s __asm__("D_L15_0015F5CC");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
@@ -1006,7 +1006,7 @@ void update_spinning_projectile(unsigned char *moby) {
     make_hit_descriptor(col, moby, 1, 2.0f, moby_vars);
     *(short *)(col + 0x1A) = MOBY(moby)->oclass;
     if (collision_line(moby + 0x10, next, 0, moby, col) != 0 || coll_sphere(moby + 0x10, 0, moby, 0.3f) != 0 || fast_dec_timer(moby_vars + 0x38) != 0) {
-        hit = (char *)D_L15_00174458_s[0];
+        hit = (char *)D_L15_00174458[0];
         if (hit != 0 && (int)hit != *(int *)(moby_vars + 0x3C)) {
             if (*(short *)(hit + 0xA6) != 0x4E)
                 play_entity_sound(moby, 0.5f, moby + 0x10, 1, 2.0f, 0.0f, 0, 1, 0);
