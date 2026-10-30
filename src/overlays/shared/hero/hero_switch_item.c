@@ -1831,7 +1831,7 @@ void clear_hero_item_slot(int i, int respawn_threshold) {
 void set_hero_condition_animation_timer_for_item(int id) __asm__("FUN_L00_0020fd80");
 
 void set_hero_condition_animation_timer_for_item(int id) {
-    struct Hero *base;
+    struct Hero *hero_condition_animation_state;
 
     switch (id) {
     case 9:
@@ -1839,9 +1839,9 @@ void set_hero_condition_animation_timer_for_item(int id) {
     case 13:
     case 16:
     case 23:
-        base = &hero;
-        base->unk22CE = 3;
-        base->unk1DC = scale_game_frames(0x46);
+        hero_condition_animation_state = &hero;
+        hero_condition_animation_state->unk22CE = 3;
+        hero_condition_animation_state->unk1DC = scale_game_frames(0x46);
         break;
     }
 }
