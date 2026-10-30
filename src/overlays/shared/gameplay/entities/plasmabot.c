@@ -1,5 +1,6 @@
 /* Shared moby classes: plasmabot, plasmabot_hatch, mine. */
 #include "types.h"
+#include "rnc/overlay/level_spline.h"
 #include "rnc/overlay/level_path.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
@@ -1462,12 +1463,6 @@ extern void spawn_explosion_dfd10(struct Moby *, void *, void *, f32, f32, s32, 
     f32, f32, f32, f32, s32, f32, s32, s32, s32, s32) __asm__("FUN_L00_0025e450");
 extern int random_integer_below(int) __asm__("FUN_00213260");
 
-typedef struct {
-    u8 pad0[0x10];
-    void *points;
-    u8 pad14[0xC];
-} RacePath;
-extern RacePath *race_paths_dfd10 __asm__("D_L14_0015F70C");
 
 typedef struct {
     struct Moby *owner;
@@ -1500,7 +1495,7 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
     f32 speed;
 
     if (moby->state == 0) {
-        points = race_paths_dfd10[data->path].points;
+        points = l14_splines[data->path].path;
         qcopy(&probe, &moby->pos);
         sample_path(points, &moby->pos, &data->path_t, &data->path_u, 0, data->path_speed);
         fast_vec_sub(position_offset, &moby->pos, &probe);
@@ -1551,7 +1546,6 @@ void update_path_or_ballistic_debris(struct Moby *moby) {
         emit_debris_trail_particles(moby);
 }
 extern void create_effect_2e0170(void *, void *, void *, void *, void *, int, float, float, float) __asm__("FUN_L00_0025df68");
-extern char *race_paths_2e0170 __asm__("D_L14_0015F70C");
 
 extern float ballistic_debris_launch_magnitude_range_start_gp __asm__("D_L14_00161B30") __attribute__((sda));
 extern float ballistic_debris_launch_magnitude_range_end_gp __asm__("D_L14_00161B34") __attribute__((sda));
@@ -1573,16 +1567,16 @@ unsigned char *spawn_path_or_ballistic_debris(char *owner, float *scale, int mod
         *(char **)spawned_vars = owner;
         if (spawned_moby[0x20] == 0) {
             int index;
-            char *path;
+            LevelSpline *splines;
             int *fields = (int *)spawned_vars;
             fields[1] = scale_game_frames(90);
-            path = race_paths_2e0170;
+            splines = l14_splines;
             *(float *)(spawned_vars + 8) = *scale * frame_time;
             index = *(int *)(*(char **)(owner + 0x78) + 0x60);
             fields[5] = 0;
             fields[3] = index;
             fields[4] = 0;
-            create_effect_2e0170(*(void **)(path + index * 0x20 + 0x10),
+            create_effect_2e0170(splines[index].path,
                 pos, launch_vector_scratch, fields + 4, fields + 5, 0, 20.0f, 5.0f, *(float *)(spawned_vars + 0x14));
         } else {
             float angle;
@@ -1968,7 +1962,7 @@ float D_L15_00161A70 = 0.075f;
 float D_L15_00161A74 = 0.2f;
 float D_L15_00161A78 = 0.2f;
 float D_L15_00161A7C = 0.3f;
-RacePath *D_L15_0015F70C = 0;
+LevelSpline *D_L15_0015F70C = 0;
 f32 D_L15_00161AA8 = 0.003f;
 f32 D_L15_00161AAC = 0.97f;
 f32 D_L15_00161AB0 = 0.05f;

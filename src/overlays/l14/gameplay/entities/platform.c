@@ -1,5 +1,6 @@
 /* Level 14 moby classes: platform. */
 #include "types.h"
+#include "rnc/overlay/level_spline.h"
 #include "rnc/overlay/level_path.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/math/vector.h"
@@ -36,7 +37,6 @@ typedef struct {
     float t;
 } PathPos;
 
-extern int D_L14_0015F70C;
 extern int FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
 extern float D_L14_00161A38_gp __asm__("D_L14_00161A38") __attribute__((sda));
 
@@ -44,7 +44,7 @@ void initialize_racer_path_tracking(struct Moby *racer_moby) __asm__("FUN_L14_00
 
 void initialize_racer_path_tracking(struct Moby *racer_moby) {
     char *moby_data = (char *)racer_moby->pvars;
-    char *path = *(char **)(D_L14_0015F70C + *(int *)(moby_data + 0x60) * 32 + 0x10);
+    char *path = (char *)l14_splines[*(int *)(moby_data + 0x60)].path;
     char *tg;
     PathPos nearest_path_position;
     int k;
@@ -80,7 +80,7 @@ int interpolate_racer_to_path_start(struct Moby *racer_moby) __asm__("FUN_L14_00
 
 int interpolate_racer_to_path_start(struct Moby *racer_moby) {
     char *moby_data = (char *)racer_moby->pvars;
-    char *ent = *(char **)((char *)((*(int *)(moby_data + 0x60) << 5) + (int)D_L14_0015F70C) + 0x10);
+    char *ent = (char *)l14_splines[*(int *)(moby_data + 0x60)].path;
     int ok;
     float remaining_frames;
     ok = fast_dec_timer(moby_data + 0x6C) != 0;
@@ -92,7 +92,6 @@ int interpolate_racer_to_path_start(struct Moby *racer_moby) {
 /* Lines up the three listed racers on the hero's track at the start point and resets their race state. */
 extern unsigned short *D_L14_001ABF40_6570[] __asm__("D_L14_001ABF40");
 extern char *D_L14_0015FFD8_6570 __asm__("D_L14_0015FFD8");
-extern char *D_L14_0015F70C_6570 __asm__("D_L14_0015F70C");
 typedef struct { char p[0x48]; float f48; } M_6570;
 typedef struct {
     char p0[0x80];
@@ -128,7 +127,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
         char *o = D_L14_0015FFD8_6570 + ((*moby_index_cursor & 0x7FFF) << 8);
         char *od = *(char **)(o + 0x78);
         char *path = hero.rail_spline;
-        if (path == *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10)) {
+        if (path == (char *)l14_splines[*(int *)(od + 0x60)].path) {
             char *tp = ((char *)l14_paths[*(int *)(od + 0x88)]);
             nearest_segment_distance = 0.0f;
             FUN_L00_0025df68_c(path, tp + 0x10, near, &path_segment_index, &nearest_segment_distance, 0, 20.0f, 5.0f, 0.0f);
@@ -146,7 +145,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
     for (i = 0; i < 3; i++) {
         char *o = list[i];
         char *od = *(char **)(o + 0x78);
-        char *path = *(char **)(D_L14_0015F70C_6570 + *(int *)(od + 0x60) * 32 + 0x10);
+        char *path = (char *)l14_splines[*(int *)(od + 0x60)].path;
         o[0x20] = 6;
         ((M_6570 *)o)->f48 = fast_arc_tan(hero.motion.pos.f[0] - group_anchor_moby->pos.x, hero.motion.pos.f[1] - group_anchor_moby->pos.y);
         path_step_distance = -D_L14_00161A38_gp;
@@ -199,7 +198,7 @@ void update_racer_path_and_weapon(struct Moby *racer_moby) __asm__("FUN_L14_002d
 
 void update_racer_path_and_weapon(struct Moby *racer_moby) {
     char *moby_data = (char *)racer_moby->pvars;
-    char *path = *(char **)(D_L14_0015F70C + *(int *)(moby_data + 0x60) * 32 + 0x10);
+    char *path = (char *)l14_splines[*(int *)(moby_data + 0x60)].path;
     V_67e8 near;
     V_67e8 joint_transform_and_aim_vectors[4];
     V_67e8 ma[4];
@@ -417,7 +416,7 @@ void advance_moby_along_path(struct Moby *moby) __asm__("FUN_L14_002d7198");
 void advance_moby_along_path(struct Moby *moby) {
     char *data = (char *)moby->pvars;
     int path_index = *(int *)(data + 0x60);
-    sample_path(*(int *)((path_index << 5) + D_L14_0015F70C + 0x10), &moby->pos, data + 0x64,
+    sample_path((int)l14_splines[path_index].path, &moby->pos, data + 0x64,
                      data + 0x68, 0, D_L14_00161A30 * frame_time);
 }
 /* Draws the racer's two glow quads, at its lamp (0xE0) and its tail (0x200), turned to face the camera. */
@@ -690,7 +689,6 @@ typedef struct {
 } Obj;
 
 extern char D_0013E633[] __asm__("D_0013F3D0");
-extern int D_L14_0015F7EC __asm__("D_L14_0015F70C");
 extern int trooper_play_sound(int i, int voice_flags, int moby, int k) __asm__("FUN_L00_0028dc90");
 extern void initialize_ribbon_effect_state(char *) __asm__("FUN_L14_002df080");
 extern void animate_ribbon_effect_paths(char *) __asm__("FUN_L14_002df138");
@@ -723,11 +721,11 @@ void update_ribbon_effect_moby(struct Moby *moby) {
         x = &hero;
         if (x->state.control_mode != 0xF ||
             (x->rail_spline !=
-                 *(int *)((*(int *)(data + 0x1F4) << 5) + D_L14_0015F7EC + 0x10) &&
+                 (int)l14_splines[*(int *)(data + 0x1F4)].path &&
              x->rail_spline !=
-                 *(int *)((*(int *)(data + 0x1F8) << 5) + D_L14_0015F7EC + 0x10) &&
+                 (int)l14_splines[*(int *)(data + 0x1F8)].path &&
              x->rail_spline !=
-                 *(int *)((*(int *)(data + 0x1FC) << 5) + D_L14_0015F7EC + 0x10))) {
+                 (int)l14_splines[*(int *)(data + 0x1FC)].path)) {
             if (16.0f < absolute_float(x->motion.pos.f[0] - moby->pos.x))
                 goto end;
             if (16.0f < absolute_float(x->motion.pos.f[1] - moby->pos.y))

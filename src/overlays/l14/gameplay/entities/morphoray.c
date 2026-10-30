@@ -17,6 +17,7 @@ int initialize_morphoray_private_state() __asm__("FUN_L14_00305a38");
 
 /* Level 14 moby classes: morphoray, button, blarg_heavy_interceptor. */
 #include "types.h"
+#include "rnc/overlay/level_spline.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -1541,9 +1542,6 @@ int check_camera_hero_requirements(char *camera, char *control_mode_gate_object)
 /* Starts the vendor camera: measures the three camera paths of the slot record into the length tables,
  * resets the camera's blend state, loads the default angles and aims the camera at the hero. */
 extern char *D_L14_0015EF50_59d8 __asm__("D_L14_0015EF50");
-extern char *D_L14_0015F70C_59d8 __asm__("D_L14_0015F70C");
-/* the third path read goes through a volatile alias (retail reloads the zone table there) */
-extern char *volatile D_L14_0015F70C_59v __asm__("D_L14_0015F70C");
 extern float D_L14_001F6C80[][1000];
 extern float D_L14_001F6488_59d8[] __asm__("D_L14_001F6488");
 extern float D_L14_001624A8 __attribute__((sda));
@@ -1558,7 +1556,7 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     float up[4];
     char *rec = *(char **)(D_L14_0015EF50_59d8 + cam->descriptor_index * 32 + 0x1C);
     char *path;
-    char *path_record_table;
+    LevelSpline *path_record_table;
     char *camera_saved_state;
     float *camera_parameters;
     int *camera_state_block;
@@ -1569,25 +1567,26 @@ void initialize_path_key_camera(struct UpdateCam *cam) {
     float hero_heading_radians;
     int i;
 
-    path_record_table = D_L14_0015F70C_59d8;
+    path_record_table = l14_splines;
     *(int *)(rec + 0x20) = 2;
     *(short *)(rec + 0x30) = 0;
     *(short *)(rec + 0x32) = 0;
-    path = *(char **)(path_record_table + *(int *)(rec + 0x34) * 32 + 0x10);
+    path = (char *)path_record_table[*(int *)(rec + 0x34)].path;
     sum = 0.0f;
     for (i = 0; i < *(int *)path - 1; i++) {
         D_L14_001F6C80[0][i] = sum;
         sum += *(float *)(path + i * 16 + 0x1C);
     }
     D_L14_001F6C80[0][i] = sum;
-    path = *(char **)(D_L14_0015F70C_59d8 + *(int *)(rec + 0x38) * 32 + 0x10);
+    path = (char *)l14_splines[*(int *)(rec + 0x38)].path;
     sum = 0.0f;
     for (i = 0; i < *(int *)path - 1; i++) {
         D_L14_001F6C80[1][i] = sum;
         sum += *(float *)(path + i * 16 + 0x1C);
     }
     D_L14_001F6C80[1][i] = sum;
-    path = *(char **)(D_L14_0015F70C_59v + *(int *)(rec + 0x3C) * 32 + 0x10);
+    /* retail reloads the spline table for the third path */
+    path = (char *)(*(LevelSpline *volatile *)&l14_splines)[*(int *)(rec + 0x3C)].path;
     sum = 0.0f;
     for (i = 0; i < *(int *)path - 1; i++) {
         D_L14_001F6C80[2][i] = sum;
@@ -1681,11 +1680,6 @@ typedef struct {
     CamRec5d48 *rec;
 } CamSlot5d48;
 typedef struct {
-    char pad0[0x10];
-    int id;
-    char pad1[0xC];
-} CamZone5d48;
-typedef struct {
     char pad0[0x60];
     int zone;
     char pad1[0x164];
@@ -1713,7 +1707,7 @@ typedef struct {
 
 #define MOBYDATA_5d48(m) ((CamMobyData5d48 *)(m)->pvars)
 extern CamSlot5d48 *D_L14_0015EF50_macro __asm__("D_L14_0015EF50") MACRO_ADDR;
-extern CamZone5d48 *D_L14_0015F70C_macro __asm__("D_L14_0015F70C") MACRO_ADDR;
+extern LevelSpline *l14_splines_macro __asm__("D_L14_0015F70C") MACRO_ADDR;
 extern char *D_L14_0015FFD8_5d48 __asm__("D_L14_0015FFD8") MACRO_ADDR;
 extern int D_L14_001624B4 MACRO_ADDR;
 extern int D_L14_001624B8 MACRO_ADDR;
@@ -1754,9 +1748,9 @@ void update_path_key_camera(char *path_key_camera) {
 
     D_L14_001624B4 = data->st.count;
     D_L14_001624B8 = st->idx;
-    if (hero.rail_spline == D_L14_0015F70C_macro[rec->p34].id) {
+    if (hero.rail_spline == (s32)l14_splines_macro[rec->p34].path) {
         side = 0;
-    } else if (hero.rail_spline == D_L14_0015F70C_macro[rec->p38].id) {
+    } else if (hero.rail_spline == (s32)l14_splines_macro[rec->p38].path) {
         side = 1;
     } else {
         side = 2;
@@ -1774,7 +1768,7 @@ void update_path_key_camera(char *path_key_camera) {
         struct Moby *second_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m28 << 8));
         struct Moby *third_linked_moby = (struct Moby *)(D_L14_0015FFD8_5d48 + (rec->m2C << 8));
 
-        if (hero.rail_spline == D_L14_0015F70C_macro[MOBYDATA_5d48(first_linked_moby)->zone].id) {
+        if (hero.rail_spline == (s32)l14_splines_macro[MOBYDATA_5d48(first_linked_moby)->zone].path) {
             first_linked_moby->command = 1;
             if (rec->n30 > 0) {
                 {
@@ -1795,7 +1789,7 @@ void update_path_key_camera(char *path_key_camera) {
                     }
                 }
             }
-        } else if (hero.rail_spline == D_L14_0015F70C_macro[MOBYDATA_5d48(second_linked_moby)->zone].id) {
+        } else if (hero.rail_spline == (s32)l14_splines_macro[MOBYDATA_5d48(second_linked_moby)->zone].path) {
             second_linked_moby->command = 1;
             if (rec->n30 > 0) {
                 if (random_integer_below(2)) {

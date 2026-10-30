@@ -1,5 +1,6 @@
 /* Level 14 moby classes: platform, blarg_heavy_interceptor, machinegun_turret, minibomber, plasmabot. */
 #include "types.h"
+#include "rnc/overlay/level_spline.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/globals.h"
@@ -3013,18 +3014,12 @@ unsigned char *spawn_flying_debris(struct Moby *owner, float angle, char *posp) 
 }
 
 /* One record of the level's path table (D_L14_0015F70C), 0x20 bytes apart. */
-struct L14PathRec {
-    u8 pad0[0x10];
-    s32 *points;       /* 0x10: first word is the point count */
-    u8 pad14[0xC];
-};
-
 /* Pvars of a moby that waits for the race to start, rides its path and leaves at a trigger volume. */
 struct L14RacerVars {
     u8 pad0[0x40];
     Vec4 trail;        /* 0x40: effect state (spawn_explosion) */
     u8 pad50[0x10];
-    s32 path;          /* 0x60: index into D_L14_0015F70C (-1: none) */
+    s32 path;          /* 0x60: index into l14_splines (-1: none) */
     u8 pad64[8];
     s32 timer;         /* 0x6C */
     f32 inv_time;      /* 0x70: 1 / timer at the start of the run */
@@ -3047,7 +3042,7 @@ struct L14RaceState {
     s16 phase;         /* 0x86 */
 };
 
-extern struct L14PathRec *race_paths __asm__("D_L14_0015F70C") __attribute__((sda));
+extern LevelSpline *l14_splines_gp __asm__("D_L14_0015F70C") __attribute__((sda));
 extern struct L14RaceState *race_state __asm__("D_L14_00167500") NOT_SDA;
 extern s32 level14_racer_start_interpolation_duration_frames_gp __asm__("D_L14_00161A2C") __attribute__((sda));
 #include "rnc/overlay/l14/gameplay/entities/blarg_heavy_interceptor_data/update_level14_racer.h"
@@ -3085,7 +3080,7 @@ void update_level14_racer(struct Moby *racer_moby) {
 
     switch (racer_moby->state) {
     case RACER_STATE_INITIALIZE:
-        if (racer_vars->path == -1 || *race_paths[racer_vars->path].points == 0 || racer_vars->start_point == -1 ||
+        if (racer_vars->path == -1 || l14_splines_gp[racer_vars->path].path->count == 0 || racer_vars->start_point == -1 ||
             *((int *)l14_paths[racer_vars->start_point]) != 3 || racer_vars->volume == -1) {
             FUN_0020c828(racer_moby);
             return;
