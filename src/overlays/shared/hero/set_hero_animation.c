@@ -1083,16 +1083,16 @@ void FUN_L00_00233810(f32 *gravity_offset_adjusted_vector, f32 *in, f32 z) {
 void gravity_flatten(float *dst, float *src) __asm__("FUN_L00_002338d0");
 
 void gravity_flatten(float *flattened_vector, float *input_vector) {
-    struct Hero *base = &hero;
+    struct Hero *hero_gravity_flatten_state = &hero;
     float        gravity_axis_projection[4] __attribute__((aligned(16)));
 
-    switch (base->gravity_mode) {
+    switch (hero_gravity_flatten_state->gravity_mode) {
     case HERO_GRAVITY_WORLD_DOWN:
         qcopy(flattened_vector, input_vector);
         flattened_vector[2] = 0.0f;
         break;
     case HERO_GRAVITY_OPPOSITE_GROUND_NORMAL:
-        fast_vec_normalize(gravity_axis_projection, &base->ground_normal, 1.0f);
+        fast_vec_normalize(gravity_axis_projection, &hero_gravity_flatten_state->ground_normal, 1.0f);
         fast_vec_scale(gravity_axis_projection,
                        gravity_axis_projection,
                        fast_vec_dot(gravity_axis_projection, input_vector));
@@ -1100,8 +1100,8 @@ void gravity_flatten(float *flattened_vector, float *input_vector) {
         break;
     case HERO_GRAVITY_TOWARD_REFERENCE_POINT:
         fast_vec_scale(gravity_axis_projection,
-                       &base->gravity_dir,
-                       fast_vec_dot(&base->gravity_dir, input_vector));
+                       &hero_gravity_flatten_state->gravity_dir,
+                       fast_vec_dot(&hero_gravity_flatten_state->gravity_dir, input_vector));
         fast_vec_sub(flattened_vector, input_vector, gravity_axis_projection);
         break;
     }
