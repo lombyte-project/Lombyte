@@ -1,4 +1,4 @@
-/* Level 00 moby classes: clank_cutscene_trigger. */
+/* Level 00 moby class clank_cutscene_trigger. */
 /* Mostly per-level sky drawing; also holds the per-level moby hooks and a door moby update. */
 #include "types.h"
 #include "rnc/rendering/sky_shell.h"
@@ -16,14 +16,12 @@
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/audio/streaming/initialize_npc_dialogue.h"
-#include "rnc/overlay/shared/audio/streaming/update_npc_dialogue.h"
+#include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated.h"
 #include "rnc/rendering/sky/do_sky_gif_paging.h"
 #include "rnc/rendering/sky/setup_sky_gif_paging.h"
 #include "rnc/rendering/sky/sky_sprite_proc.h"
 #include "rnc/overlay/shared/rendering/sky/sky_particle_effects.h"
-#include "rnc/overlay/shared/rendering/sky/sky_shells_rotate_two.h"
 #include "qzero.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"

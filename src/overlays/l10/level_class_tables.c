@@ -15,12 +15,9 @@ void FUN_L00_002ed230();
 void FUN_L01_002b9eb0();
 void FUN_L01_002f8718();
 void FUN_L06_002ea6a8();
-void FUN_L09_00307d68();
 void FUN_L10_002be858();
 void FUN_L10_002cc2e8();
-void FUN_L10_002d85c8();
 void FUN_L10_002d92b8();
-void FUN_L10_002e01a8();
 void FUN_L10_002f5f18();
 void background_ship_2_update() __asm__("FUN_L02_002ece18");
 void blarg_ship_update() __asm__("FUN_L10_002e4a88");
@@ -30,6 +27,7 @@ void block_cave_update() __asm__("FUN_L10_002dd650");
 void bolt_update() __asm__("FUN_L00_002a5dd8");
 void bomb_glove_update() __asm__("FUN_L00_002c26c8");
 void bomb_update() __asm__("FUN_L00_002adb30");
+void bombthrower_bomb_update() __asm__("FUN_L10_002d85c8");
 void bombthrower_grass_update() __asm__("FUN_L10_002d8c00");
 void bot_door_lock_update() __asm__("FUN_L06_00307d30");
 void camera_object_update() __asm__("FUN_L00_002a4e48");
@@ -38,13 +36,13 @@ void cancel_moby_suction_and_save_state() __asm__("FUN_L06_002ea7c8");
 void cancel_suck_cannon_suction_and_set_moby_state_5() __asm__("FUN_L00_002caf10");
 void conditionally_set_camera_state_three() __asm__("FUN_L00_002ec7b0");
 void crate_update() __asm__("FUN_L00_002cf218");
+void darter_update() __asm__("FUN_L10_002e01a8");
 void debris_update() __asm__("FUN_L00_002af5b8");
 void decoy_glove_update() __asm__("FUN_L00_002d2670");
 void decoy_update() __asm__("FUN_L00_002c4380");
 void devastator_update() __asm__("FUN_L00_002b2100");
 void devestator_ammo_update() __asm__("FUN_L00_002c53c0");
 void doom_bot_update() __asm__("FUN_L00_002bffa8");
-void emit_moby_directional_particles() __asm__("FUN_L10_002e5be0");
 void energy_sphere_holder_update() __asm__("FUN_L06_002f7288");
 void energy_sphere_update() __asm__("FUN_L06_002f7ab8");
 void evaluate_descriptor_eligibility() __asm__("FUN_L10_002f65f8");
@@ -64,7 +62,6 @@ void gold_bolt_update() __asm__("FUN_L01_00307ca0");
 void gold_devastator_missile_update() __asm__("FUN_L00_002b03a0");
 void grow_and_fade_out_update() __asm__("FUN_L00_002d7f38");
 void gun_update() __asm__("FUN_L10_002e8ab0");
-void handle_moby_destruction() __asm__("FUN_L10_002d9eb8");
 void helipack_update() __asm__("FUN_L00_002d37d0");
 void hydrodisplacer_update() __asm__("FUN_L00_002df9a0");
 void infobot_update() __asm__("FUN_L00_002d5de8");
@@ -91,7 +88,6 @@ void pterodactyl_update() __asm__("FUN_L00_002e3a88");
 void pyrocitor_update() __asm__("FUN_L00_002b77f0");
 void quad_moby_update() __asm__("FUN_0023a2c0");
 void robot_arm_update() __asm__("FUN_L00_002e3d88");
-void rocket_update() __asm__("FUN_L00_002cd1f0");
 void screamer_update() __asm__("FUN_L10_002df270");
 void select_camera_mode_by_hero_vector_alignment() __asm__("FUN_L00_002ea810");
 void spawn_point_update() __asm__("FUN_L01_00300220");
@@ -104,26 +100,27 @@ void tesla_claw_update() __asm__("FUN_L00_002b87e0");
 void toxic_crab_update() __asm__("FUN_L10_002e1d38");
 void trespasser_update() __asm__("FUN_L00_002c1718");
 void update_animated_point_light_moby() __asm__("FUN_L00_002d3a10");
-void update_beam_effect_lifecycle() __asm__("FUN_L00_002b4198");
+void update_breakable_prop() __asm__("FUN_L10_002eb7e0");
 void update_camera_pose_with_optional_collision() __asm__("FUN_L00_002eb218");
-void update_conditional_help_messages() __asm__("FUN_L10_002e85b8");
 void update_configurable_particle_emitter() __asm__("FUN_L10_002ea1f0");
+void update_cutscene_camera_target() __asm__("FUN_L10_002eacd8");
 void update_cutscene_trigger() __asm__("FUN_L01_002fb5b0");
 void update_cycling_platform() __asm__("FUN_L10_00295a38");
 void update_damped_falling_moby() __asm__("FUN_L00_002cc210");
 void update_data_processor_linked_effect() __asm__("FUN_L10_002da2c8");
+void update_destructible_object() __asm__("FUN_L10_002d9eb8");
+void update_directional_particle_emitter() __asm__("FUN_L10_002e5be0");
+void update_directional_spark_emitter() __asm__("FUN_L08_002f5830");
 void update_drone() __asm__("FUN_L00_002ce358");
 void update_falling_spinning_moby() __asm__("FUN_L06_00300b90");
 void update_glow_particle() __asm__("FUN_L00_002acad8");
 void update_height_adjusted_projectile() __asm__("FUN_L10_002d7b80");
+void update_help_hints() __asm__("FUN_L10_002e85b8");
 void update_hero_aligned_camera_from_input() __asm__("FUN_L00_002e9f38");
 void update_hero_flag_from_moby_local_box() __asm__("FUN_L10_002e9028");
 void update_hero_relocation_trigger() __asm__("FUN_L10_00298b68");
-void update_hit_triggered_fragment_spawner() __asm__("FUN_L10_002eb6f0");
-void update_hit_triggered_moby_spawner() __asm__("FUN_L10_002eb7e0");
 void update_homing_shot() __asm__("FUN_L00_002cb418");
-void update_jitter_strand_grid_moby() __asm__("FUN_L10_002dcc58");
-void update_level_mode_dispatcher() __asm__("FUN_L10_002eacd8");
+void update_jitter_strand_grid() __asm__("FUN_L10_002dcc58");
 void update_linked_moby_hitbox() __asm__("FUN_L10_002c9c70");
 void update_linked_moby_scale_and_rotation() __asm__("FUN_L00_002bb400");
 void update_linked_moby_states() __asm__("FUN_L00_002b3458");
@@ -134,13 +131,16 @@ void update_morphoray_chicken() __asm__("FUN_L00_002c97e0");
 void update_nearest_area_moby_selection() __asm__("FUN_L01_002f2eb8");
 void update_path_spark_effect() __asm__("FUN_L10_002dd3d8");
 void update_path_spark_emitter() __asm__("FUN_L10_002d8d30");
-void update_requested_state_from_box_position() __asm__("FUN_L01_00319f18");
+void update_reverb_box_emitter() __asm__("FUN_L01_00319f18");
+void update_ryno_rocket() __asm__("FUN_L00_002cd1f0");
+void update_shattering_prop() __asm__("FUN_L10_002eb6f0");
 void update_sinking_platform() __asm__("FUN_L10_00295c20");
 void update_sound_emitter_playback_by_distance() __asm__("FUN_L00_002ed950");
-void update_spark_emitter() __asm__("FUN_L08_002f5830");
 void update_target_outside_zone_timeout() __asm__("FUN_L01_00302648");
 void update_target_tracking_camera() __asm__("FUN_L00_002ec6c0");
+void update_thruster_pack_flame() __asm__("FUN_L00_002b4198");
 void update_timed_effect_emitter() __asm__("FUN_L10_002c7a20");
+void update_turret_shot() __asm__("FUN_L09_00307d68");
 void vendor_orb_update() __asm__("FUN_L00_002df730");
 void vendor_update() __asm__("FUN_L00_002a57a8");
 void visibomb_update() __asm__("FUN_L00_002b3058");
@@ -197,7 +197,7 @@ struct MobyClassUpdate moby_classes[174] __asm__("D_L10_001DD600")
         { 0x9d,                         devastator_update, default_moby_methods},
         { 0xa3,                           visibomb_update, default_moby_methods},
         { 0xa6,                 update_linked_moby_states, default_moby_methods},
-        { 0xa7,              update_beam_effect_lifecycle, default_moby_methods},
+        { 0xa7,                update_thruster_pack_flame, default_moby_methods},
         { 0xa8,                            blaster_update, default_moby_methods},
         { 0xac,                          FUN_L00_002b6140, default_moby_methods},
         { 0xaf,                            taunter_update, default_moby_methods},
@@ -242,7 +242,7 @@ struct MobyClassUpdate moby_classes[174] __asm__("D_L10_001DD600")
         {0x1ac,                update_damped_falling_moby, default_moby_methods},
         {0x1b1,                        noop_main_callback, default_moby_methods},
         {0x1c6,                          FUN_L00_002cc608, default_moby_methods},
-        {0x1c9,                             rocket_update, default_moby_methods},
+        {0x1c9,                        update_ryno_rocket, default_moby_methods},
         {0x1df,                              update_drone, default_moby_methods},
         {0x1e3,                                         0, default_moby_methods},
         {0x1f4,                              crate_update, default_moby_methods},
@@ -258,7 +258,7 @@ struct MobyClassUpdate moby_classes[174] __asm__("D_L10_001DD600")
         {0x26a,                        noop_main_callback, default_moby_methods},
         {0x27a,                                         0, default_moby_methods},
         {0x27f,          update_animated_point_light_moby, default_moby_methods},
-        {0x288,                      update_spark_emitter, default_moby_methods},
+        {0x288,          update_directional_spark_emitter, default_moby_methods},
         {0x2be,               update_timed_effect_emitter, default_moby_methods},
         {0x2e1,                   update_cutscene_trigger, default_moby_methods},
         {0x2ee,                            infobot_update, default_moby_methods},
@@ -276,7 +276,7 @@ struct MobyClassUpdate moby_classes[174] __asm__("D_L10_001DD600")
         {0x359,                           gadgebot_update, default_moby_methods},
         {0x35b,         update_height_adjusted_projectile, default_moby_methods},
         {0x393,                             fred_1_update, default_moby_methods},
-        {0x3aa,                          FUN_L10_002d85c8, default_moby_methods},
+        {0x3aa,                   bombthrower_bomb_update, default_moby_methods},
         {0x3ab,                  bombthrower_grass_update, default_moby_methods},
         {0x3b3,                 update_path_spark_emitter, default_moby_methods},
         {0x3ee,                    devestator_ammo_update, default_moby_methods},
@@ -284,10 +284,10 @@ struct MobyClassUpdate moby_classes[174] __asm__("D_L10_001DD600")
         {0x407,                          FUN_L10_002d92b8, default_moby_methods},
         {0x40e,               energy_sphere_holder_update, default_moby_methods},
         {0x410,                      energy_sphere_update, default_moby_methods},
-        {0x417,                   handle_moby_destruction, default_moby_methods},
+        {0x417,                update_destructible_object, default_moby_methods},
         {0x42b,       update_data_processor_linked_effect, default_moby_methods},
         {0x42c,               blarg_space_commando_update, default_moby_methods},
-        {0x431,            update_jitter_strand_grid_moby, default_moby_methods},
+        {0x431,                 update_jitter_strand_grid, default_moby_methods},
         {0x43d,              update_falling_spinning_moby, default_moby_methods},
         {0x43e,              update_falling_spinning_moby, default_moby_methods},
         {0x43f,              update_falling_spinning_moby, default_moby_methods},
@@ -302,19 +302,19 @@ struct MobyClassUpdate moby_classes[174] __asm__("D_L10_001DD600")
         {0x477,                         vendor_orb_update, default_moby_methods},
         {0x4a8,                      update_glow_particle, default_moby_methods},
         {0x4ac,                           screamer_update, default_moby_methods},
-        {0x4af,                          FUN_L10_002e01a8, default_moby_methods},
+        {0x4af,                             darter_update, default_moby_methods},
         {0x4b2,                         toxic_crab_update, default_moby_methods},
         {0x4cd,                         blarg_ship_update, default_moby_methods},
-        {0x4d8,           emit_moby_directional_particles, default_moby_methods},
+        {0x4d8,       update_directional_particle_emitter, default_moby_methods},
         {0x4e3,                     hydrodisplacer_update, default_moby_methods},
-        {0x4ea,                          FUN_L09_00307d68, default_moby_methods},
+        {0x4ea,                        update_turret_shot, default_moby_methods},
         {0x502,                           lab_door_update, default_moby_methods},
         {0x509,                        noop_main_callback, default_moby_methods},
         {0x50a,                      pilots_helmet_update, default_moby_methods},
         {0x515,                          FUN_L10_002be858, default_moby_methods},
         {0x516,                      bot_door_lock_update, default_moby_methods},
         {0x52e,            nanotech_upgrade_vendor_update, default_moby_methods},
-        {0x540,          update_conditional_help_messages, default_moby_methods},
+        {0x540,                         update_help_hints, default_moby_methods},
         {0x542,                                gun_update, default_moby_methods},
         {0x562,      update_hero_flag_from_moby_local_box, default_moby_methods},
         {0x58d,                             gate_1_update, default_moby_methods},
@@ -329,7 +329,7 @@ struct MobyClassUpdate moby_classes[174] __asm__("D_L10_001DD600")
         {0x5fe,                          robot_arm_update, default_moby_methods},
         {0x601,                          robot_arm_update, default_moby_methods},
         {0x608,      update_configurable_particle_emitter, default_moby_methods},
-        {0x613,              update_level_mode_dispatcher, default_moby_methods},
+        {0x613,             update_cutscene_camera_target, default_moby_methods},
         {0x61c,                        pterodactyl_update, default_moby_methods},
         {0x623,                          robot_arm_update, default_moby_methods},
         {0x624,                          robot_arm_update, default_moby_methods},
@@ -338,8 +338,8 @@ struct MobyClassUpdate moby_classes[174] __asm__("D_L10_001DD600")
         {0x6a8,                          robot_arm_update, default_moby_methods},
         {0x70e,                          FUN_L01_002f8718, default_moby_methods},
         {0x70f,                          FUN_L01_002f8718, default_moby_methods},
-        {0x73f,     update_hit_triggered_fragment_spawner, default_moby_methods},
-        {0x740,         update_hit_triggered_moby_spawner, default_moby_methods},
+        {0x73f,                    update_shattering_prop, default_moby_methods},
+        {0x740,                     update_breakable_prop, default_moby_methods},
         {0x741,                        noop_main_callback, default_moby_methods},
         {0x742,                          robot_arm_update, default_moby_methods},
         {0x76c,                              decoy_update, default_moby_methods},
@@ -376,6 +376,6 @@ struct SoundHandler sound_handlers[3] __asm__("D_L10_001DDF80")
 
     __attribute__((section("lvl.sndvtbl"))) = {
         { 0, update_sound_emitter_playback_by_distance},
-        { 3,  update_requested_state_from_box_position},
+        { 3,                 update_reverb_box_emitter},
         {-1,                                         0},
 };

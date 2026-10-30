@@ -1,0 +1,140 @@
+/* Text: draws timed text lines. */
+#include "types.h"
+#include "asm.h"
+#include "rnc/math/asm_helpers.h"
+#include "rnc/ui/help/get_help_message_text.h"
+#include "rnc/runtime/state/disable_global_flag.h"
+#include "rnc/runtime/state/enable_global_flag.h"
+#include "rnc/ui/text/font/measure_text_width_regular.h"
+#include "rnc/ui/frames/draw_stretchable_ui_frame.h"
+
+extern void font_print_large(int, int, u64, char *, int) __asm__("FUN_001f6530");
+
+void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__("FUN_L00_001fcb28");
+
+void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) {
+    enum {
+        TEXT_ALIGN_CENTER = 0,
+        TEXT_ALIGN_RIGHT = 1
+    };
+    int width, right, left;
+    u32 shadow;
+    s32 color;
+    width = measure_text_width_regular(text, -1) * scale;
+    left = x;
+    right = left;
+    switch (mode) {
+    case TEXT_ALIGN_CENTER:
+        left -= width >> 1;
+        right = x + (width >> 1);
+        break;
+    case TEXT_ALIGN_RIGHT:
+        left -= width;
+        break;
+    case -1:
+        right = left + width;
+        break;
+    }
+    draw_stretchable_ui_frame(
+        left - 0x20, y - 0xE, right - left + 0x40, 0x1C, truncate_float_to_s32(scale * 112.0f));
+    disable_global_flag();
+    shadow = (int)(alpha * 128.0f) << 24;
+    color = shadow + 0xE0E0E0;
+    font_print_large(left + 1, y - 7, shadow, text, -1);
+    font_print_large(left, y - 8, color, text, -1);
+    enable_global_flag();
+}
+/* Ported from rac1-decomp (src/overlays/shared/draw_001F3A78.c: func_L00_001FCC50), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    s32 text_id;
+    s16 x;
+    s16 y;
+    s16 start;
+    s16 duration;
+    s16 mode;
+    s16 separator_mode;
+} LevelTextEntry;
+
+void draw_timed_text(LevelTextEntry *entry, s32 frame) __asm__("FUN_L00_001fcca0");
+
+void draw_timed_text(LevelTextEntry *entry, s32 frame) {
+    int            start = entry->start;
+    int            end = start + entry->duration;
+    float          scale, alpha;
+    unsigned char *source;
+    char           buffer[256];
+    char          *out;
+    int            y;
+    int            k;
+
+    if (frame < start)
+        return;
+    if (end < frame)
+        return;
+    scale = 1.0f;
+    if (frame < start + 16)
+        scale = (float)(frame - start) * 0.0625f;
+    if (end - 8 < frame)
+        scale = (float)(end - frame) * 0.125f;
+    alpha = 1.0f;
+    if (frame < start + 32) {
+        k = frame - 16;
+        alpha = (float)(k - start) * 0.0625f;
+        if (alpha < 0.0f)
+            alpha = 0.0f;
+    }
+    if (end - 16 < frame) {
+        k = frame + 8;
+        alpha = (float)(end - k) * 0.125f;
+        if (alpha < 0.0f)
+            alpha = 0.0f;
+    }
+    source = (unsigned char *)get_help_message_text(entry->text_id);
+    if (entry->separator_mode == 1) {
+        out = buffer;
+    joined_text:
+        while (*source != 0) {
+            if (*source == 1) {
+                *out++ = ' ';
+                *out++ = '-';
+                *out++ = ' ';
+                while (*source == 1)
+                    source++;
+                if (*source != 0)
+                    goto joined_text;
+                out -= 3;
+            } else {
+                *out++ = *source++;
+            }
+        }
+        {
+            int x = entry->x;
+            int line_y = entry->y;
+            int mode = entry->mode;
+            *out = 0;
+            draw_timed_text_line(x, line_y, mode, scale, alpha, buffer);
+        }
+    } else {
+        out = buffer;
+        y = entry->y;
+        while (*source != 0) {
+            if (*source == 1) {
+                *out = 0;
+                draw_timed_text_line(entry->x, y, entry->mode, scale, alpha, buffer);
+                y += 26;
+                out = buffer;
+                while (*source == 1)
+                    source++;
+                if (*source == 0)
+                    break;
+            } else {
+                *out++ = *source++;
+            }
+        }
+        if (out > buffer) {
+            *out = 0;
+            draw_timed_text_line(entry->x, y, entry->mode, scale, alpha, buffer);
+        }
+    }
+}

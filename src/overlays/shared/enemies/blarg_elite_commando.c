@@ -1,223 +1,101 @@
-/* Shared moby classes: rocket, blarg_elite_commando. */
+/* Shared moby class blarg_elite_commando. */
+
 #include "types.h"
 #include "rnc/hero/hero.h"
 #include "rnc/mobys/moby.h"
 #include "rnc/math_consts.h"
 #include "rnc/globals.h"
-#include "asm.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
-
 #include "qcopy.h"
-#include "rnc/overlay/moby_anim.h"
-#include "sda.h"
 #include "rnc/game/item_state.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/world/collision/collision_line.h"
-#include "rnc/overlay/shared/mobys/manipulator_set_scale.h"
-
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1B58), where it is exact; names translated to the US level program. */
-
-extern char *create_moby(int);
-
-char *spawn_blarg_elite_commando_rocket(char  *owner,
-                                        float *initial_movement_vector,
-                                        char  *spawn_position) __asm__("FUN_L16_002a09a0");
-
-char *spawn_blarg_elite_commando_rocket(char  *owner,
-                                        float *initial_movement_vector,
-
-                                        char *spawn_position) {
-    char *moby = create_moby(0x31);
-    if (moby != 0) {
-        char *data;
-        float xy_length;
-        float elevation_angle;
-        ((unsigned char *)moby)[0x30] = 0xFF;
-        MOBY(moby)->draw_dist = 0xFF;
-        moby[0x31] = 1;
-        moby[0x20] = 0;
-        MOBY(moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
-        MOBY(moby)->scale = MOBY(moby)->scale * 3.0f;
-        qcopy(moby + 0x10, spawn_position);
-        data = ((char *)MOBY(moby)->pvars);
-        qcopy(data, initial_movement_vector);
-        *(int *)(data + 0x14) = scale_game_frames(0xF0);
-        *(char **)(data + 0x18) = owner;
-        *(int *)(data + 0x10) = 0;
-        MOBY(moby)->rot.z = fast_arc_tan(initial_movement_vector[0], initial_movement_vector[1]);
-        xy_length = vector_length_xy(initial_movement_vector);
-        elevation_angle = fast_arc_tan(xy_length, initial_movement_vector[2]);
-        MOBY(moby)->rot.y = -elevation_angle;
-        moby[0x31] = 0;
-        MOBY(moby)->flags |= 1;
-    }
-    return moby;
-}
-/* Steer a projectile toward its target and emit its impact effects. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1C50), where it is exact; names translated to the US level program. */
-
-extern char D_L16_001671C0[];
-extern char D_0013E633[];
-extern int  trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
-extern void
-play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
-extern void spawn_explosion(void *,
-                            void *,
-                            void *,
-                            float,
-                            float,
-                            int,
-                            int,
-                            int,
-                            float,
-                            float,
-                            float,
-                            int,
-                            float,
-                            float,
-                            int,
-                            int,
-                            int,
-                            int) __asm__("FUN_L00_0025e450");
-extern void spawn_rocket_trail_spark(char *) __asm__("FUN_L15_0029ae18");
-void        build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
-void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
-
-void rocket_update(char *m) __asm__("FUN_L16_002a0a98");
-
-void rocket_update(char *rocket_moby) {
-    float desired[4], next[4], delta[4], blend[4];
-    char *rocket_data = ((char *)MOBY(rocket_moby)->pvars);
-    void *remaining;
-    float yaw, pitch;
-    if (*(int *)(rocket_data + 0x34) == 0 &&
-        fast_vec_dist(rocket_moby + 0x10, D_L16_001671C0) < 15.0f) {
-        *(int *)(rocket_data + 0x34) = 1;
-        trooper_play_sound(5, 0, (int)rocket_moby, 0x54C);
-    }
-    if (MOBY(rocket_moby)->state != 0)
-        return;
-    spawn_rocket_trail_spark(rocket_moby);
-    fast_vec_sub(delta, rocket_data + 0x10, rocket_moby + 0x10);
-    yaw = fast_arc_tan(delta[0], delta[1]);
-    pitch = fast_arc_tan(vector_length_xy(delta), delta[2]);
-    yaw = fast_add_rotations(yaw, *(float *)(rocket_data + 0x28));
-    pitch = fast_add_rotations(pitch, *(float *)(rocket_data + 0x2C));
-    if (pitch > 1.2217305f)
-        pitch = 1.2217305f;
-    else if (pitch < -1.2217305f)
-        pitch = -1.2217305f;
-    build_spherical_offset(desired, *(float *)(rocket_data + 0x24), yaw, pitch);
-    if (fast_dec_timer((int *)(rocket_data + 0x20)) == 0) {
-        float blend_ticks_remaining = convert_integer_to_float(*(int *)(rocket_data + 0x20));
-        float blend_duration_ticks = convert_integer_to_float(*(int *)(rocket_data + 0x30));
-        lerp_vector(blend, desired, rocket_data, blend_ticks_remaining / blend_duration_ticks);
-        fast_vec_add(next, rocket_moby + 0x10, blend);
-        MOBY(rocket_moby)->rot.z = fast_arc_tan(blend[0], blend[1]);
-        MOBY(rocket_moby)->rot.y = -fast_arc_tan(vector_length_xy(blend), blend[2]);
-    } else {
-        fast_vec_add(next, rocket_moby + 0x10, desired);
-        MOBY(rocket_moby)->rot.z = yaw;
-        MOBY(rocket_moby)->rot.y = pitch;
-    }
-    remaining = delta;
-    if (collision_line((rocket_moby + 0x10), next, 0, rocket_moby, 0) != 0 ||
-        fast_vec_length(remaining) < *(float *)(rocket_data + 0x24)) {
-        if (hero.vehicle_mode == 2)
-            play_entity_sound((int)rocket_moby, 2.0f, (rocket_moby + 0x10), 3, 2.0f, 1.0f, 0, 1, 0);
-        trooper_play_sound(4, 0, (int)rocket_moby, 0x54C);
-        spawn_explosion(rocket_moby,
-                        rocket_data,
-                        (rocket_moby + 0x10),
-                        4.0f,
-                        4.0f,
-                        10,
-                        3,
-                        16,
-                        4.0f,
-                        2.0f,
-                        9.0f,
-                        -1,
-                        1.0f,
-                        15.0f,
-                        1,
-                        1,
-                        -1,
-                        0);
-        mark_moby_for_removal(rocket_moby);
-    } else
-        qcopy((rocket_moby + 0x10), next);
-}
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002A1F78), where it is exact; names translated to the US level program. */
-
-extern float random_float_between(float, float) __asm__("FUN_002132a8");
-
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/enemies/blarg_elite_commando_globals.h"
-
-extern float class_32_symmetric_angle_bound_degrees_gp __asm__("D_L16_001613E0")
-    __attribute__((sda));
-extern float class_32_zero_based_angle_bound_degrees_gp __asm__("D_L16_001613E4")
-    __attribute__((sda));
-
-char *spawn_class_32_moby(char *owner,
-                          char *initial_movement_vector,
-                          void *pos,
-                          void *vel,
-                          int   blend_duration_ticks,
-                          float unused) __asm__("FUN_L16_002a0dc0");
-
-char *spawn_class_32_moby(char *owner,
-                          char *initial_movement_vector,
-                          void *spawn_position,
-                          void *target_position,
-                          int   blend_duration_ticks,
-
-                          float unused) {
-    char *spawned_moby = (char *)create_moby(0x32);
-    char *moby_data;
-    float initial_movement_length, x, random_angle_radians, y;
-    if (spawned_moby) {
-        MOBY(spawned_moby)->update_dist = 0xFF;
-        MOBY(spawned_moby)->draw_dist = 0xFF;
-        spawned_moby[0x31] = 1;
-        spawned_moby[0x20] = 0;
-        MOBY(spawned_moby)->spawn_frame = *(unsigned long *)(owner + 0x38);
-        MOBY(spawned_moby)->scale = MOBY(spawned_moby)->scale * 3.0f;
-        qcopy(spawned_moby + 0x10, spawn_position);
-        moby_data = ((char *)MOBY(spawned_moby)->pvars);
-        qcopy(moby_data, initial_movement_vector);
-        qcopy(moby_data + 0x10, target_position);
-        *(int *)(moby_data + 0x30) = blend_duration_ticks;
-        *(int *)(moby_data + 0x20) = blend_duration_ticks;
-        initial_movement_length = fast_vec_length(initial_movement_vector);
-        x = class_32_symmetric_angle_bound_degrees_gp;
-        *(float *)(moby_data + 0x24) = initial_movement_length;
-        random_angle_radians = random_float_between(-x, x) * DEG_TO_RAD;
-        y = class_32_zero_based_angle_bound_degrees_gp;
-        *(float *)(moby_data + 0x28) = random_angle_radians;
-        *(float *)(moby_data + 0x2C) = random_float_between(0.0f, y) * DEG_TO_RAD;
-        *(int *)(moby_data + 0x34) = 0;
-        MOBY(spawned_moby)->rot.z = fast_arc_tan(*(float *)initial_movement_vector,
-                                                 *(float *)(initial_movement_vector + 4));
-        MOBY(spawned_moby)->rot.y = -fast_arc_tan(vector_length_xy(initial_movement_vector),
-                                                  *(float *)(initial_movement_vector + 8));
-        spawned_moby[0x31] = 0;
-        MOBY(spawned_moby)->flags |= 1;
-    }
-    return spawned_moby;
-}
-
-#include "qcopy.h"
 #include "rnc/overlay/quad.h"
+#include "rnc/game/options.h"
+#include "rnc/overlay/shared/enemies/blarg_elite_commando_data/blarg_elite_commando_update.h"
+#include "rnc/overlay/shared/enemies/blarg_elite_commando_rocket.h"
 
-/* Update the floating enemy's patrol, attack and death states. */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D40B8), where it is exact; names translated to the US level program. */
+typedef struct {
+    char          pad00[0x20];
+    float         health;
+    char          pad24[0x14];
+    int           reset_timer;
+    char          pad3C[0x24];
+    short         damage[3];
+    unsigned char pad66;
+    unsigned char animation;
+    char          pad68[8];
+    float         knockback[4];
+    float         impulse_time;
+    float         vertical_impulse;
+    float         forward_impulse;
+    float         lateral_impulse;
+    int           sound_timer;
+    int           active;
+    float         damping;
+    char          pad9C[0x11];
+    unsigned char pending;
+    char          padAE[0x12];
+    float         blend_start;
+    float         blend_end;
+    char          padC8[8];
+    float         target[4];
+    char          padE0[0x30];
+    int           owner;
+    int           pursuit_mode;
+    char          pad118[0xC];
+    float         pursuit_range;
+    char          pad128[4];
+    int           path_index;
+    char          pad130[0x1B0];
+    int           pursuit_timer;
+    char          pad2E4[0x24];
+    int           reward_hits;
+} L16DamageData;
 
-extern char *D_L16_001B0930[];
-extern char *spawn_blarg_elite_commando_rocket(char *, float *, char *) __asm__("FUN_L16_002a09a0");
-extern char  D_L16_001671C0[], D_0013E633[];
-extern char  D_L16_00167240[], D_0013E533[];
+typedef struct {
+    OvlQuad vector;
+    int     status;
+    float   amount;
+    float   angle;
+    float   fatal_angle;
+} L16DamageScratch;
+
+typedef struct {
+    char          pad00[0x2080];
+    int           owner;
+    char          pad2084[8];
+    int           mode;
+    char          pad2090[0x14];
+    unsigned char difficulty;
+} L16DamageResident;
+
+typedef struct {
+    unsigned char pad00[0x1D];
+    unsigned char awarded;
+} L16DamageReward;
+
+typedef struct {
+    char pad00[0x2E0];
+    int  timer;
+} L16GroupTimer;
+
+typedef struct {
+    char           pad00[0x20];
+    signed char    state;
+    unsigned char  group;
+    char           pad22[0x56];
+    L16GroupTimer *data;
+} L16GroupMoby;
+
+typedef struct {
+    int values[6];
+} L16ParticleChoices;
+
+void         mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
+extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float
 approach_angle(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
@@ -225,40 +103,69 @@ extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern float fast_add_rotations(float, float);
 extern float fast_sin(float);
 extern float random_angle_radians(void) __asm__("FUN_00213308");
-
-#include "rnc/game/options.h"
-#include "rnc/overlay/shared/enemies/blarg_elite_commando_data/blarg_elite_commando_update.h"
-
-extern int                D_L16_0015F5C4;
-extern int D_L16_0016CC90 NOT_SDA;
-extern int                mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int                voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
-extern int            is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
-extern int            random_integer_below(int) __asm__("FUN_00213260");
-extern int            scale_game_frames(int);
-extern int            truncate_float_to_s32(float);
-extern int D_001413DC NOT_SDA;
-extern void           moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
+extern int   step_moby_motion(void *, void *) __asm__("FUN_L00_0025c698");
+extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
+extern int   is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
+extern int   random_integer_below(int) __asm__("FUN_00213260");
+extern int   scale_game_frames(int);
+extern int   truncate_float_to_s32(float);
+extern void  moby_point_position(void *, int, void *) __asm__("FUN_L00_0024f7c8");
 extern void
      update_blarg_elite_commando_damage_and_pursuit(struct Moby *) __asm__("FUN_L16_002d38b0");
 void select_blarg_elite_commando_movement_animation(char *moby) __asm__("FUN_L16_002d4070");
-
-extern void select_blarg_elite_commando_movement_animation(char *) __asm__("FUN_L16_002d4070");
-extern void allocate_voice_for_target_entry(int, int, int) __asm__("FUN_0022da68");
-extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");
 extern void transform_vector_by_basis(void *, void *, void *);
-float       advance_blarg_elite_commando_base_position(char  *moby,
-                                                       float *target) __asm__("FUN_L16_002d3eb8");
 extern void FUN_L16_002d41f8_2(void *, void *) __asm__("FUN_L16_002d41f8");
 void        update_blarg_elite_commando_joint_aim(char *commando_moby) __asm__("FUN_L16_002d4590");
-
-void update_blarg_elite_commando_joint_aim(char *m) __asm__("FUN_L16_002d4590");
-void emit_blarg_elite_commando_joint_sparks(char *commando_moby) __asm__("FUN_L16_002d4908");
-
-void         emit_blarg_elite_commando_joint_sparks(char *m) __asm__("FUN_L16_002d4908");
+void        emit_blarg_elite_commando_joint_sparks(char *commando_moby) __asm__("FUN_L16_002d4908");
 extern float func_L16_002D5280_update(char *, void *, int) __asm__("FUN_L16_002d3eb8");
 extern int   func_0022ED80_update(int, int, void *) __asm__("FUN_0022da68");
+extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
+extern int
+hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
+extern int  select_moby_combat_target(float, char *, void *) __asm__("FUN_L00_0025fcb8");
+extern int  FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
+extern void FUN_L00_00257470(void *, int, int);
+extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
+extern void
+trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
+extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
+extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
+extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
+extern void
+randomize_blarg_elite_commando_group_pursuit_timers(void *, int, int) __asm__("FUN_L16_002d3f78");
+s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
+extern float
+advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+extern float func_001F9878_timer(float) __asm__("FUN_001f96b0");
+extern int   random_int_between(int, int) __asm__("FUN_L00_00257b90");
+extern void  spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
+extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
+extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
+extern char *
+spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
+extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
+extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
+extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 
+extern char               D_L16_001671C0[];
+extern char              *D_L16_001B0930[];
+extern char               D_L16_001671C0[], D_0013E633[];
+extern int                D_L16_0015F5C4;
+extern int D_L16_0016CC90 NOT_SDA;
+extern int D_001413DC     NOT_SDA;
+extern int    blarg_elite_commando_reward_kill_count_gp __asm__("D_0015EE10") __attribute__((sda));
+extern char  *D_L16_0015FFD8;
+extern short *D_L16_001ABCC0[];
+extern L16ParticleChoices D_L16_001E8300, D_L16_001E8618;
+extern L16ParticleChoices D_L16_001E8600, D_L16_001E8318;
+extern char               D_L16_00167240[], D_0013F420[];
+
+L16ParticleChoices D_L18_001F2710 = {
+    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
+};
+
+/* Update the floating enemy's patrol, attack and death states. */
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D40B8), where it is exact; names translated to the US level program. */
 void blarg_elite_commando_update(char *m) __asm__("FUN_L16_002d2cf0");
 
 void blarg_elite_commando_update(char *commando_moby) {
@@ -509,7 +416,7 @@ void blarg_elite_commando_update(char *commando_moby) {
         movement = scratch_vector;
         position = commando_moby + 0x10;
         qcopy(movement, position);
-        if (mine_fall(commando_moby, commando_data + 0x70) & 0x160) {
+        if (step_moby_motion(commando_moby, commando_data + 0x70) & 0x160) {
             FUN_L16_002d41f8_2(commando_moby, position);
             func_0022ED80_update(0, 0, commando_moby);
             mark_moby_for_removal(commando_moby);
@@ -554,86 +461,9 @@ void blarg_elite_commando_update(char *commando_moby) {
     if (current_level_index == 18 && D_L16_0015F5C4 == 2 && (unsigned int)(D_L16_0016CC90 - 3) < 3U)
         mark_moby_for_removal(commando_moby);
 }
+
 /* Handle damage and knockback, then update the pursuit target and timer. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D4C78), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char          pad00[0x20];
-    float         health;
-    char          pad24[0x14];
-    int           reset_timer;
-    char          pad3C[0x24];
-    short         damage[3];
-    unsigned char pad66;
-    unsigned char animation;
-    char          pad68[8];
-    float         knockback[4];
-    float         impulse_time;
-    float         vertical_impulse;
-    float         forward_impulse;
-    float         lateral_impulse;
-    int           sound_timer;
-    int           active;
-    float         damping;
-    char          pad9C[0x11];
-    unsigned char pending;
-    char          padAE[0x12];
-    float         blend_start;
-    float         blend_end;
-    char          padC8[8];
-    float         target[4];
-    char          padE0[0x30];
-    int           owner;
-    int           pursuit_mode;
-    char          pad118[0xC];
-    float         pursuit_range;
-    char          pad128[4];
-    int           path_index;
-    char          pad130[0x1B0];
-    int           pursuit_timer;
-    char          pad2E4[0x24];
-    int           reward_hits;
-} L16DamageData;
-
-typedef struct {
-    OvlQuad vector;
-    int     status;
-    float   amount;
-    float   angle;
-    float   fatal_angle;
-} L16DamageScratch;
-
-typedef struct {
-    char          pad00[0x2080];
-    int           owner;
-    char          pad2084[8];
-    int           mode;
-    char          pad2090[0x14];
-    unsigned char difficulty;
-} L16DamageResident;
-
-typedef struct {
-    unsigned char pad00[0x1D];
-    unsigned char awarded;
-} L16DamageReward;
-
-extern char *find_moby_hit(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int   blarg_elite_commando_reward_kill_count_gp __asm__("D_0015EE10") __attribute__((sda));
-extern int
-hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int  select_moby_combat_target(float, char *, void *) __asm__("FUN_L00_0025fcb8");
-extern int  FUN_L00_0025ff38(float, char *, void *, int, int, void *, int);
-extern void FUN_L00_00257470(void *, int, int);
-extern void trooper_knockback_arc(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");
-extern void
-trooper_start_knockback(float, void *, void *, int, int, int) __asm__("FUN_L00_0025c558");
-extern void trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
-extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
-extern void
-randomize_blarg_elite_commando_group_pursuit_timers(void *, int, int) __asm__("FUN_L16_002d3f78");
-s32 allocate_voice_for_bank_entry(s32 arg1, s32 arg0, s32 arg2) __asm__("FUN_0022db10");
-
 void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) {
     enum {
         HIT_RESPONSE_UNAVAILABLE = 0,
@@ -792,8 +622,8 @@ void update_blarg_elite_commando_damage_and_pursuit(struct Moby *commando_moby) 
     if (commando_data->owner == 0)
         commando_data->owner = ((L16DamageResident *)((char *)&hero))->owner;
 }
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
 
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5188), where it is exact; names translated to the US level program. */
 void set_blarg_elite_commando_parent_transform(char *moby,
                                                void *owner,
                                                void *position,
@@ -809,8 +639,8 @@ void set_blarg_elite_commando_parent_transform(char *moby,
     qcopy(data + 0x2C0, position);
     *(float *)(data + 0x2CC) = *(float *)(vector + 8);
 }
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
 
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D51A8), where it is exact; names translated to the US level program. */
 void start_blarg_elite_commando_return_to_initial_position(
     struct Moby *moby, int return_countdown_ticks) __asm__("FUN_L16_002d3de0");
 
@@ -833,11 +663,11 @@ void start_blarg_elite_commando_return_to_initial_position(struct Moby *moby,
         *(float *)(commando_data + 0x2D4) = frame_time * 5.0f;
     }
 }
+
 /* steers the moby's vector toward the target and returns the distance */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5280), where it is exact; names translated to the US level program. */
-
-extern float
-advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
+float advance_blarg_elite_commando_base_position(char  *moby,
+                                                 float *target) __asm__("FUN_L16_002d3eb8");
 
 float advance_blarg_elite_commando_base_position(char *moby, float *target) {
     char *data = ((char *)MOBY(moby)->pvars);
@@ -858,26 +688,9 @@ float advance_blarg_elite_commando_base_position(char *moby, float *target) {
     fast_vec_add(base_position, base_position, movement_step);
     return distance;
 }
+
 /* Randomize the timers of active mobys in the selected linked group. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5340), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char pad00[0x2E0];
-    int  timer;
-} L16GroupTimer;
-
-typedef struct {
-    char           pad00[0x20];
-    signed char    state;
-    unsigned char  group;
-    char           pad22[0x56];
-    L16GroupTimer *data;
-} L16GroupMoby;
-
-extern char  *D_L16_0015FFD8;
-extern short *D_L16_001ABCC0[];
-extern float  func_001F9878_timer(float) __asm__("FUN_001f96b0");
-
 void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby,
                                                          int   lower,
 
@@ -904,8 +717,8 @@ void randomize_blarg_elite_commando_group_pursuit_timers(void *group_source_moby
             goto next;
     }
 }
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 
+/* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5438), where it is exact; names translated to the US level program. */
 void select_blarg_elite_commando_movement_animation(char *moby) {
     char *data = ((char *)MOBY(moby)->pvars);
     char *target = D_L16_001B0930[*(int *)(data + 0x120)] + (*(short *)(data + 0x300) << 4);
@@ -932,19 +745,9 @@ void select_blarg_elite_commando_movement_animation(char *moby) {
             blend_moby_animation(moby, 4, 0, scale_game_frames(0x14));
     }
 }
+
 /* Spawn randomized hit particles at joint two, with extra bursts for distant hits. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D55C0), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    int values[6];
-} L16ParticleChoices;
-
-extern L16ParticleChoices D_L16_001E8300, D_L16_001E8618;
-extern L16ParticleChoices D_L16_001E8600, D_L16_001E8318;
-extern int                random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
-extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
-
 void emit_blarg_elite_commando_death_particles(void *moby) __asm__("FUN_L16_002d41f8");
 
 void emit_blarg_elite_commando_death_particles(void *moby) {
@@ -1008,12 +811,9 @@ void emit_blarg_elite_commando_death_particles(void *moby) {
     spawn_glow_particle(moby, origin, movement, 3.5f, scale_game_frames(27), 96, 16, 0, 64);
     spawn_glow_particle(moby, origin, movement, 3.0f, scale_game_frames(29), 32, 0, 0, 32);
 }
+
 /* Aim paired joints toward the owner or player, then smooth their rotations. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5958), where it is exact; names translated to the US level program. */
-
-extern char D_L16_00167240[], D_0013F420[];
-extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
-
 void update_blarg_elite_commando_joint_aim(char *commando_moby) {
     float position[4], target[4], matrix[16], delta[4], aim[4], aimDelta[4], velocity[4];
     char *commando_data = ((char *)MOBY(commando_moby)->pvars);
@@ -1076,15 +876,9 @@ void update_blarg_elite_commando_joint_aim(char *commando_moby) {
     update_joint_animation(
         commando_moby, commando_data + 0x230, 3, frame_scale_sq * 0.03f, frame_scale_sq * 0.3f);
 }
+
 /* Emit randomized joint particles while the moby is active. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A1B58.c: func_L16_002D5CD0), where it is exact; names translated to the US level program. */
-
-extern char *
-spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
-extern int  fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern void build_moby_bone_transform(void *, int, void *) __asm__("FUN_0020cca8");
-extern void random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
-
 void emit_blarg_elite_commando_joint_sparks(char *commando_moby) {
     float matrix[16], velocity[4], acceleration[4], scatter[4];
     int   i;
@@ -1120,13 +914,6 @@ void emit_blarg_elite_commando_joint_sparks(char *commando_moby) {
         spawn_spark(matrix + 12, velocity, acceleration, color1, color2, time1, time2, time3, -1);
     }
 }
-
-float D_L18_001613E0 = 3e+01f;
-float D_L18_001613E4 = 2e+01f;
-
-L16ParticleChoices D_L18_001F2710 = {
-    {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}
-};
 
 L16ParticleChoices D_L16_001E8300 = {
     {0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}

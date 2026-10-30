@@ -1,0 +1,12 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_BOMB_GLOVE_BOMB_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_BOMB_GLOVE_BOMB_H
+
+#include "types.h"
+
+typedef struct {
+    char p0[0xA];
+    u8   bA;
+    u8   bB;
+} E;
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_WEAPONS_BOMB_GLOVE_BOMB_H */

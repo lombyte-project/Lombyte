@@ -1,0 +1,269 @@
+/* Level 17 hero: help value selection, hit response and movement smoothing. */
+#include "types.h"
+#include "rnc/hero/hero.h"
+#include "rnc/globals.h"
+#include "asm.h"
+#include "rnc/overlay/hero.h"
+#include "rnc/overlay/quad.h"
+#include "rnc/overlay/entities.h"
+#include "rnc/data_labels.h"
+#include "rnc/overlay/level_labels.h"
+#include "rnc/math/interpolation.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
+#include "rnc/overlay/shared/hero/hero_idle_sequence.h"
+#include "rnc/overlay/l17/hero/hero_set_state.h"
+
+/* Returns the current help record's value, 0x54 or 0x6E in two special states, or 0 when no record applies. */
+/* Ported from rac1-decomp (src/overlays/l17_fleet/help_00202740.c: func_L17_00202740), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    char pad[0x24];
+    int  v;
+    char pad2[0x24];
+} Rec;
+
+extern Rec D_L17_0017A3C0[];
+
+int select_hero_help_value(int allow_slot_item_help) __asm__("FUN_L17_002020a8");
+
+int select_hero_help_value(int allow_slot_item_help) {
+    struct Hero *hero_for_vehicle_check = &hero;
+    switch (hero_for_vehicle_check->vehicle_mode) {
+    case HERO_VEHICLE_MODE_CLANK:
+        return 0;
+    case 3:
+        return 0;
+    }
+    {
+        struct Hero *hero_for_help_checks = &hero;
+        if (hero_for_help_checks->health.hp == 1) {
+            return 0x54;
+        }
+        if (hero_for_help_checks->on_ice_ground != 0) {
+            return 0x6E;
+        }
+        if (allow_slot_item_help == 0) {
+            return 0;
+        }
+        if (hero_for_help_checks->item_anim_active == 0) {
+            return 0;
+        }
+        if (hero_for_help_checks->unk20AA == 0) {
+            return 0;
+        }
+        if (hero_for_help_checks->unk22C8 != 0) {
+            return 0;
+        }
+    }
+    {
+        int i = hero_slot_item_id(0);
+        return D_L17_0017A3C0[i].v;
+    }
+}
+
+#include "qcopy.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
+#define G hero
+
+/* Same source as the exact FUN_L08_00222800, with a mode 1 case (animation 0x46). */
+
+void allocate_hero_voice_for_entry(s32, s32) __asm__("FUN_L00_00216de8");
+void hero_knockback(void *, s32, f32, f32) __asm__("FUN_L00_00210c80");
+
+#define G hero
+
+extern OvlMobyEntry40 l17_moby_hit_response_entries[] __asm__("D_L17_00178A00");
+s32 process_hero_hit_response(s32 apply_state_and_motion_response) __asm__("FUN_L17_0020dbe8");
+
+s32 process_hero_hit_response(s32 apply_state_and_motion_response) {
+    u8             *hero_moby;
+    OvlMobyEntry40 *hero_moby_entry;
+    u8             *mob;
+    s32             flag;
+    s32             id;
+    f32             xy_scale, z_response, frame_duration;
+    OvlVec4         motion_delta;
+
+    if (G.state.control_mode == 0x14) {
+        return 0;
+    }
+    if (G.state.control_mode == 7) {
+        return 0;
+    }
+    if (G.state.current == 0x32) {
+        return 0;
+    }
+    if (G.invulnerable_frames != 0) {
+        return 0;
+    }
+    if (D_L17_0015F5C4 != 0) {
+        return 0;
+    }
+    G.damage_source_moby = 0;
+    hero_moby = (u8 *)G.moby;
+    if (hero_moby[0xA4] == 0xFF) {
+        return 0;
+    }
+    hero_moby_entry = &l17_moby_hit_response_entries[hero_moby[0xA4]];
+    if (hero_moby_entry->owner != hero_moby) {
+        return 0;
+    }
+    if ((hero_moby_entry->unk24 ^ 1) & 1) {
+        return 0;
+    }
+    D_0013DF88[current_level_index]++;
+    G.damage_source_moby = (struct Moby *)hero_moby_entry->target;
+    D_0015EEA8++;
+    if (G.state.control_mode == 0xF) {
+        G.unk5BE = 1;
+        return 0;
+    }
+    if (apply_state_and_motion_response == 0) {
+        return 1;
+    }
+    release_and_clear_hero_voice_slots();
+    flag = 0;
+    if (hero_moby_entry->flags & 1) {
+        qcopy(&motion_delta, &hero_moby_entry->pos);
+        if (*(f32 *)((u8 *)hero_moby_entry + 0x1C) == 5627.9248046875f) {
+            flag = 1;
+        }
+    } else if (hero_moby_entry->target != 0) {
+        fast_vec_sub(&motion_delta, (u8 *)&G + 0x80, hero_moby_entry->target + 0x10);
+    } else {
+        motion_delta.f[0] = fast_cos(fast_add_rotations(G.motion.rot.f[2], 3.1415927f));
+        motion_delta.f[1] = fast_sin(fast_add_rotations(G.motion.rot.f[2], 3.1415927f));
+        motion_delta.i[2] = 0;
+    }
+    switch (G.vehicle_mode) {
+    case HERO_VEHICLE_MODE_ON_FOOT:
+        mob = (u8 *)G.damage_source_moby;
+        if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x4EB || *(s16 *)(mob + 0xA6) == 0x558)) {
+            id = 0x80;
+        call_ret:
+            hero_set_state(id, 1);
+            return 1;
+        }
+        if (G.state.control_mode == 0x16) {
+            hero_set_state(0x6D, 1);
+            G.motion.resolved_velocity_z.f[2] = frame_time * 7.0f;
+            return 1;
+        }
+        if (G.state.control_mode == 0x12) {
+            mob = (u8 *)G.damage_source_moby;
+            if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
+                id = 0x82;
+                goto call_ret;
+            }
+            hero_set_state(0x75, 1);
+        } else if (G.state.control_mode == 0x11) {
+            mob = (u8 *)G.damage_source_moby;
+            if (mob != 0 && *(s16 *)(mob + 0xA6) == 0x28F) {
+                id = 0x82;
+                goto call_ret;
+            }
+            if (current_level_index == 0xF || current_level_index == 0x11) {
+                mob = (u8 *)G.damage_source_moby;
+                if (mob != 0 && (*(s16 *)(mob + 0xA6) == 0x28F || *(s16 *)(mob + 0xA6) == 0x7B ||
+                                 *(s16 *)(mob + 0xA6) == 0x29D)) {
+                    allocate_hero_voice_for_entry(0x1C, 0);
+                }
+            }
+            hero_set_state(0x76, 1);
+        } else if (G.state.control_mode == 3) {
+            mob = (u8 *)G.damage_source_moby;
+            if (mob != 0) {
+                id = 0x82;
+                if (*(s16 *)(mob + 0xA6) == 0x28F) {
+                    goto call_ret;
+                }
+            }
+            hero_set_state(HERO_STATE_HURT, 1);
+        } else {
+            hero_set_state(HERO_STATE_HURT, 1);
+        }
+        frame_duration = frame_time;
+        xy_scale = frame_duration * 5.7f;
+        z_response = frame_duration * 2.4f;
+        if (G.on_magnet_ground != 0) {
+            xy_scale = 0.0f;
+            z_response = frame_duration * 1.7f;
+        }
+        hero_knockback(&motion_delta, flag, xy_scale, z_response);
+        if (flag != 0 && hero_moby_entry->unk28 == 4) {
+            motion_delta.f[2] += motion_delta.f[2];
+        }
+        break;
+    case HERO_VEHICLE_MODE_CLANK:
+        hero_set_state(0x46, 1);
+        hero_knockback(&motion_delta, flag, frame_time * 5.0f, frame_time * 3.0f);
+        break;
+    case 3:
+        hero_set_state(0x56, 1);
+        hero_knockback(&motion_delta, flag, frame_time * 5.0f, frame_time * 2.4f);
+        break;
+    }
+    fast_vec_add(&hero.motion.velocity, &hero.motion.velocity, &motion_delta);
+    fast_vec_add(&hero.motion.displacement, &hero.motion.displacement, &motion_delta);
+    return 1;
+}
+
+/* Adapted from the exact FUN_L00_00211380 (src/overlays/shared/hero/hero_check_damage.c); L17 has no mode-2 case in the b20A4 switch. */
+
+void vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
+void update_hero_smoothing(void) __asm__("FUN_L17_0020e1c0");
+
+void update_hero_smoothing(void) {
+    switch (hero.vehicle_mode) {
+    case HERO_VEHICLE_MODE_ON_FOOT:
+        hero.capsule_top_target = 0.8f;
+        hero.capsule_bottom_target = 0.7f;
+        hero.capsule_radius_target = 0.45f;
+        break;
+    case HERO_VEHICLE_MODE_CLANK:
+        hero.capsule_top_target = 0.59999996f;
+        hero.capsule_bottom_target = 0.45000002f;
+        hero.capsule_radius_target = 0.3f;
+        break;
+    case 3:
+        hero.capsule_top_target = 0.8f;
+        hero.capsule_bottom_target = 0.6f;
+        hero.capsule_radius_target = 0.45f;
+        break;
+    }
+    if (hero.state.control_mode == 4) {
+        if (hero.state_timer > hero.takeoff_frame && hero.past_jump_apex == 0)
+            hero.capsule_bottom_target = hero.unk434;
+    } else if (hero.state.current == HERO_STATE_FALL) {
+        hero.capsule_bottom_target = 0.5f;
+    } else if (hero.state.current == HERO_STATE_CROUCH) {
+        hero.capsule_top_target = 0.35000002f;
+    } else if ((u32)(hero.state.control_mode - 0x11) < 2) {
+        hero.capsule_top_target = 0.0f;
+        hero.capsule_bottom_target = 0.0f;
+    } else if (hero.on_ice_ground && hero.grounded_frames) {
+        hero.capsule_top_target = 0.8f;
+        hero.capsule_bottom_target = 0.9f;
+    } else if (hero.state.current == HERO_STATE_SINK) {
+        hero.capsule_radius_target = 0.8f;
+    }
+    if (!hero.wall_hit || hero.state.prev_control_mode == 0x12 || hero.state.control_mode == 0x11 ||
+        hero.base_condition ||
+        vector_distance_xy(hero.wall_contact_point.f, hero.motion.pos.f) >
+            hero.capsule_radius * 0.5f) {
+        f32         *smoothing_state = D_0013F570;
+        struct Hero *hero_for_smoothing_targets = (struct Hero *)((u8 *)smoothing_state - 0x220);
+        approach_value(
+            hero_for_smoothing_targets->capsule_top_target, frame_scale * 0.02f, smoothing_state);
+        approach_value(hero_for_smoothing_targets->capsule_bottom_target,
+                       frame_scale * 0.02f,
+                       smoothing_state + 1);
+        vendor_spring(smoothing_state + 5,
+                      smoothing_state + 6,
+                      hero_for_smoothing_targets->capsule_radius_target,
+                      frame_scale_sq * 0.02f,
+                      frame_scale_sq * 0.3f,
+                      frame_time * 4.0f);
+    }
+}

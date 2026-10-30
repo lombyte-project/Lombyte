@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* World: loads the level gameplay and assets, resolves asset blocks and starts cutscene chunk reads. */
 #include "types.h"
 #include "rnc/streaming/disc_table.h"
 #include "rnc/overlay/point_light.h"
@@ -14,13 +14,13 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/world/collision/ground_probe.h"
 #include "rnc/audio/streaming/start_audio_stream_read.h"
-#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 #include "rnc/rendering/frame/log2dim.h"
 #include "rnc/mobys/init_moby_instance.h"
 #include "rnc/game/clear_scene_state_buffers.h"
 #include "rnc/overlay/shared/mobys/link_and_update_all_mobys.h"
-#include "rnc/overlay/shared/rendering/load_two_int_two_float_header.h"
-#include "rnc/overlay/shared/runtime/dma/fast_decompress.h"
+#include "rnc/overlay/shared/world/load_two_int_two_float_header.h"
+#include "rnc/overlay/shared/runtime/fast_decompress.h"
 #include "rnc/overlay/shared/world/load_level_texture_bank.h"
 #include "rnc/rendering/ties/light_ties.h"
 #include "rnc/world/loaders/relocate_asset_entry_pointers.h"

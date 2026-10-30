@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MATH_VECTORS_ADD_VECTORS_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_MATH_VECTORS_ADD_VECTORS_H
-
-#include "types.h"
-
-void add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MATH_VECTORS_ADD_VECTORS_H */

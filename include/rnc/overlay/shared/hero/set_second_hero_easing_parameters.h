@@ -3,7 +3,6 @@
 
 #include "types.h"
 
-void help_queue_add(s32, s32, s32) __asm__("FUN_L00_00216ec0");
 void set_second_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a1f8");
 void set_fourth_hero_easing_parameters(f32, f32) __asm__("FUN_L00_0020a228");
 

@@ -173,7 +173,7 @@ Data can move to C too; its bytes are checked like code.
    to a `*_OVERLAYS` table in `configure.py`. With `--level N` it writes level
    data and adds its `name<TAB>size` row to `config/overlays/us/data.tsv`.
    A `D_XXXXXXXX` row is data every level holds at that address, such as
-   `src/overlays/shared/data/level_globals.c`.
+   `src/overlays/shared/world/level_globals.c`.
 3. `make elf` (boot) or `make overlays` (levels) must end with `PASS`.
 
 More: names, types and placement in

@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Math and moby motion: cosine-eased interpolation, spring_turn, ground probes, moving a moby with step collision, moby group iteration and countdowns. */
 #include "types.h"
 #include "asm.h"
 #include "rnc/math/fast_math.h"
@@ -140,7 +140,6 @@ void FUN_L00_00258278(struct Moby *moby,
 }
 
 #include "eetypes.h"
-#include "qcopy.h"
 #include "rnc/overlay/quad.h"
 
 typedef union {
@@ -283,8 +282,6 @@ int FUN_L00_00258490(
     return ok;
 }
 
-#include "qcopy.h"
-
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259868), where it is exact; names translated to the US level program. */
 
 typedef struct {
@@ -303,75 +300,82 @@ extern int    coll_sphere() __asm__("FUN_L00_001f0d60");
 extern V_94C8 D_94C8_60 __asm__("D_L00_00173E60");
 extern int    func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) __asm__("FUN_L00_00258830");
-int FUN_L00_00258830_c(char *moving_object,
-                       char *movement_displacement,
-                       int   flags,
-                       float a,
-                       float b,
+int move_moby_with_step_collision(char *moby,
+                                  char *velocity,
+                                  int   flags,
+                                  float step_height,
+                                  float radius,
+                                  float height) __asm__("FUN_L00_00258830");
+int move_moby_with_step_collision(char *moby,
+                                  char *velocity,
+                                  int   flags,
+                                  float step_height,
+                                  float radius,
 
-                       float ground_probe_offset) {
+                                  float height) {
     Vs    original_position;
     Vs    raised_position;
     Vs    probe_end;
     Vs    scaled_displacement;
-    int   r = 0;
-    int   fl = (flags * 2) & 0x20;
-    char *movement_position = moving_object + 0x10;
+    int   result = 0;
+    int   coll_flags = (flags * 2) & 0x20;
+    char *movement_position = moby + 0x10;
     int   i;
     char *collision_position;
 
     qcopy(&original_position, movement_position);
-    fast_vec_add(movement_position, movement_position, movement_displacement);
-    if (b < fast_vec_length(movement_displacement)) {
+    fast_vec_add(movement_position, movement_position, velocity);
+    if (radius < fast_vec_length(velocity)) {
         qcopy(&raised_position, &original_position);
-        raised_position.a[2] += a;
-        fast_vec_normalize(&scaled_displacement, movement_displacement, b);
+        raised_position.a[2] += step_height;
+        fast_vec_normalize(&scaled_displacement, velocity, radius);
         fast_vec_add(&probe_end, &scaled_displacement, movement_position);
-        probe_end.a[2] += a;
-        if (collision_line(&raised_position, &probe_end, fl, (int)moving_object, 0)) {
+        probe_end.a[2] += step_height;
+        if (collision_line(&raised_position, &probe_end, coll_flags, (int)moby, 0)) {
             fast_vec_sub(movement_position, (char *)&D_94C8_60, &scaled_displacement);
-            r = 1;
-            *(float *)(moving_object + 0x18) -= a;
+            result = 1;
+            *(float *)(moby + 0x18) -= step_height;
         }
     }
-    for (i = 0, collision_position = moving_object + 0x10; i < 6; i++) {
+    for (i = 0, collision_position = moby + 0x10; i < 6; i++) {
         qcopy(&raised_position, collision_position);
-        raised_position.a[2] += a;
-        if (func_L00_001F10E0_l(&raised_position, b, fl | 4, moving_object)) {
+        raised_position.a[2] += step_height;
+        if (func_L00_001F10E0_l(&raised_position, radius, coll_flags | 4, moby)) {
             qcopy(collision_position, &coll_hit_position);
-            r |= 1;
-            *(float *)(moving_object + 0x18) -= a;
+            result |= 1;
+            *(float *)(moby + 0x18) -= step_height;
         } else {
             break;
         }
     }
-    b = *(float *)(moving_object + 0x18) - ground_probe_offset;
+    radius = *(float *)(moby + 0x18) - height;
     qcopy(&raised_position, collision_position);
     qcopy(&probe_end, collision_position);
-    raised_position.a[2] += a;
-    probe_end.a[2] = b - 0.05f;
-    if (collision_line(&raised_position, &probe_end, fl | 2, (int)moving_object, 0)) {
+    raised_position.a[2] += step_height;
+    probe_end.a[2] = radius - 0.05f;
+    if (collision_line(&raised_position, &probe_end, coll_flags | 2, (int)moby, 0)) {
         if (D_L00_00173E40[7] > 0) {
             float g;
-            r |= 2;
+            result |= 2;
             g = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48),
                              vector_length_xy((char *)D_L00_00173E40 + 0x40));
             if (g > 0.5f) {
-                r |= 4;
+                result |= 4;
             }
             g = *(float *)((char *)D_L00_00173E40 + 0x28);
-            if (b < g) {
-                *(float *)(moving_object + 0x18) += (g - b) * 0.3f;
+            if (radius < g) {
+                *(float *)(moby + 0x18) += (g - radius) * 0.3f;
             }
         }
     }
-    fast_vec_sub(movement_displacement, collision_position, &original_position);
-    return r;
+    fast_vec_sub(velocity, collision_position, &original_position);
+    return result;
 }
 
-void FUN_L00_00258830(int, int, float, float, float, int);
-/* Calls FUN_L00_00258830 with c converted to float and divided by 1024. */
+/* move_moby_with_step_collision as this caller passes it: the moby and velocity as ints. */
+void move_moby_with_step_collision_int_args(int, int, float, float, float, int) __asm__("FUN_L00_00258830");
+
+/* Calls move_moby_with_step_collision with the radius given in 1/1024 units. */
 void move_moby_with_collision_integer_radius(int   moby,
                                              int   movement_displacement,
                                              float x,
@@ -386,12 +390,13 @@ void move_moby_with_collision_integer_radius(int   moby,
                                              int   collision_radius_fixed,
 
                                              int collision_flags) {
-    FUN_L00_00258830(moby,
-                     movement_displacement,
-                     x,
-                     convert_integer_to_float(collision_radius_fixed) * (1.0f / 1024.0f),
-                     y,
-                     collision_flags);
+    move_moby_with_step_collision_int_args(moby,
+                                           movement_displacement,
+                                           x,
+                                           convert_integer_to_float(collision_radius_fixed) *
+                                               (1.0f / 1024.0f),
+                                           y,
+                                           collision_flags);
 }
 
 #include "rnc/math/vector.h"

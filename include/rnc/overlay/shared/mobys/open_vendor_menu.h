@@ -1,8 +1,0 @@
-#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_OPEN_VENDOR_MENU_H
-#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_OPEN_VENDOR_MENU_H
-
-#include "types.h"
-
-void open_vendor_menu(void *) __asm__("FUN_L00_0029a6b0");
-
-#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_OPEN_VENDOR_MENU_H */

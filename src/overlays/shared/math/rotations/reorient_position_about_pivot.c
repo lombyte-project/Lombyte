@@ -1,0 +1,31 @@
+/* Rotations: reorients a position about a pivot. */
+#include "types.h"
+#include "asm.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
+
+/* Ported from rac1-decomp (src/overlays/shared/mobyutil_00289960.c: func_L07_00289960), where it is exact; names translated to the US level program. */
+
+void reorient_position_about_pivot(void *input_position,
+                                   void *output_position,
+                                   void *pivot_position,
+                                   void *inverse_rotation_angles,
+                                   void *forward_rotation_angles) __asm__("FUN_L07_00288968");
+
+void reorient_position_about_pivot(void *input_position,
+                                   void *output_position,
+                                   void *pivot_position,
+                                   void *inverse_rotation_angles,
+
+                                   void *forward_rotation_angles) {
+    float inverse_rotation_matrix[16];
+    float forward_rotation_matrix[16];
+    float pivot_relative_position[4];
+    euler_rotation_matrix(inverse_rotation_matrix, inverse_rotation_angles);
+    transpose_rotation_matrix(inverse_rotation_matrix, inverse_rotation_matrix);
+    euler_rotation_matrix(forward_rotation_matrix, forward_rotation_angles);
+    fast_vec_sub(pivot_relative_position, input_position, pivot_position);
+    transform_vector(pivot_relative_position, pivot_relative_position, inverse_rotation_matrix);
+    transform_vector(pivot_relative_position, pivot_relative_position, forward_rotation_matrix);
+    fast_vec_add(output_position, pivot_relative_position, pivot_position);
+}

@@ -1,0 +1,227 @@
+/* Level 11 moby class layered_scroll_effect (class 1903): builds and draws its scrolling layer batches, fading texture 0x29 by distance. */
+#include "types.h"
+#include "rnc/overlay/level_camera.h"
+#include "rnc/hero/hero.h"
+#include "rnc/mobys/moby.h"
+#include "asm.h"
+#include "rnc/overlay/entities.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
+#include "sda.h"
+#include "rnc/mobys/moby_spawn.h"
+#include "rnc/rendering/vu1_registers.h"
+#include "rnc/runtime/callbacks/add_draw_callback.h"
+#include "rnc/ui/text/font/font_queue_vu_state.h"
+#include "rnc/overlay/l11/mobys/layered_scroll_effect_globals.h"
+/* Ported from rac1-decomp (src/overlays/l11_pokitaru/vendor_00312BD8.c: func_L11_0031ED48), where it is exact; names translated to the US level program. */
+
+extern int   D_L11_001FF750_u[] __asm__("D_L11_001FF750");
+extern int   layered_effect_offset_pairs_scratch[] __asm__("D_L11_001FF770");
+extern short D_L11_00162530_gp __asm__("D_L11_00162530") __attribute__((sda));
+extern short D_L11_00162570_gp __asm__("D_L11_00162570") __attribute__((sda));
+extern void  FUN_L00_001fde98(int, int, int, void *, int);
+extern void  FUN_L08_00258090(void *, int, int, void *);
+
+extern short layered_effect_triple_word_source_tables_gp __asm__("D_L11_00162540")
+    __attribute__((sda));
+extern short layered_effect_pair_source_tables_gp __asm__("D_L11_00162550") __attribute__((sda));
+void         emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) __asm__("FUN_L11_0031d8d8");
+extern void emit_level11_layered_effect_batches_with_pair_offset(int) __asm__("FUN_L11_0031d8d8");
+
+void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) {
+    int *element_counts = (int *)&D_L11_00162530_gp;
+    int *triple_word_source_tables = (int *)&layered_effect_triple_word_source_tables_gp;
+    int *pair_source_tables = (int *)&layered_effect_pair_source_tables_gp;
+    int *word_source_tables = (int *)&D_L11_00162570_gp;
+    int  i;
+    for (i = 0; i < 4; i++) {
+        FUN_L08_00258090(layered_effect_offset_pairs_scratch,
+                         pair_source_tables[i],
+                         element_counts[i],
+                         (char *)D_L11_001FF750_u + pair_offset_index * 8);
+        FUN_L00_001fde98(element_counts[i],
+                         triple_word_source_tables[i],
+                         word_source_tables[i],
+                         layered_effect_offset_pairs_scratch,
+                         1);
+    }
+}
+
+extern int layered_effect_texture_2c_fixed_alpha_gp __asm__("D_L11_001624F8") __attribute__((sda));
+extern int layered_effect_texture_2a_pair_zero_fixed_alpha_gp __asm__("D_L11_00162518")
+    __attribute__((sda));
+extern int  layered_effect_texture_2b_fixed_alpha_gp __asm__("D_L11_00162528") __attribute__((sda));
+extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void draw_eleven_entry_scrolled_texture_batch(int) __asm__("FUN_L08_002f0c18");
+extern void emit_pair_offset_render_batch(int) __asm__("FUN_L08_002f0cf0");
+
+extern unsigned char D_L11_0016258C[] MACRO_ADDR;
+void                 draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
+extern void          draw_level11_layered_effect_batches(void) __asm__("FUN_L11_0031db50");
+
+void draw_level11_layered_effect_batches(void) {
+    vu1_add_g_sregister(0x42, 0x8000000044L);
+    vu1_add_g_sregister(8, 0);
+    vu1_add_g_sregister(0x14, 0xFF9000000260L);
+    vu1_add_g_sregister(0x47, 0x513F1);
+    font_queue_vu_state();
+    vu1_add_g_sregister(6, get_effect_texture(0x2C));
+    vu1_add_g_sregister(0x42, (long)layered_effect_texture_2c_fixed_alpha_gp << 32 | 0x44);
+    emit_level11_layered_effect_batches_with_pair_offset(0);
+    if (D_L11_0016258C[4] != 0) {
+        vu1_add_g_sregister(6, get_effect_texture(0x29));
+        vu1_add_g_sregister(
+            0x42,
+            (long)((layered_effect_texture_29_fixed_alpha_scale * D_L11_0016258C[4]) >> 8) << 32 |
+                0x68);
+        emit_level11_layered_effect_batches_with_pair_offset(1);
+        vu1_add_g_sregister(
+            0x42,
+            (long)((layered_effect_texture_29_fixed_alpha_scale * D_L11_0016258C[4]) >> 8) << 32 |
+                0x62);
+        emit_level11_layered_effect_batches_with_pair_offset(2);
+    }
+    vu1_add_g_sregister(6, get_effect_texture(0x2A));
+    vu1_add_g_sregister(0x42,
+                        (long)layered_effect_texture_2a_pair_zero_fixed_alpha_gp << 32 | 0x48);
+    emit_pair_offset_render_batch(0);
+    vu1_add_g_sregister(0x42, (long)layered_effect_texture_2a_pair_one_fixed_alpha << 32 | 0x48);
+    emit_pair_offset_render_batch(1);
+    vu1_add_g_sregister(6, get_effect_texture(0x2B));
+    vu1_add_g_sregister(0x42, (long)layered_effect_texture_2b_fixed_alpha_gp << 32 | 0x48);
+    draw_eleven_entry_scrolled_texture_batch(0);
+    vu1_add_g_sregister(0x47, 0x5360B);
+}
+/* Level overlay code; generated by `decomp overlays stubs`, stubs replaced by C as functions are matched. */
+
+/* triggers objects matching the moby's class */
+/* Ported from rac1-decomp (src/overlays/l08_batalia/vendor_002EAF48.c: func_L08_003065F8), where it is exact; names translated to the US level program. */
+
+extern int D_L11_001625B0[2] MACRO_ADDR;
+
+typedef struct {
+    float f;
+    int   pad;
+} Fl;
+
+extern Fl    D_L11_0016259C[] MACRO_ADDR;
+extern Fl    D_L11_001625AC[] MACRO_ADDR;
+extern Pair  D_L11_00162598[] MACRO_ADDR;
+extern Pair  D_L11_001625A8[] MACRO_ADDR;
+extern Pair  D_L11_001FF750[];
+extern char  layered_effect_quarter_gray_table_entry_counts[] __asm__("D_L11_001F9A78");
+extern char  layered_effect_quarter_gray_rgba_tables[] __asm__("D_L11_001FF730");
+extern char  D_L11_00162530[4] __attribute__((sda));
+extern char  D_L11_00162570[4] __attribute__((sda));
+extern char  layered_effect_sine_output_pair[] __asm__("D_L11_001FF758");
+extern char  layered_effect_half_gray_rgba_tables[] __asm__("D_L11_001F9A48");
+extern char  layered_effect_half_gray_table_entry_counts[] __asm__("D_L11_001F4978");
+extern float layered_effect_position_x_gp __asm__("D_L11_001624E8") __attribute__((sda));
+
+#include "rnc/overlay/l11/mobys/layered_scroll_effect_data/update_level11_layered_effect_and_queue_draw.h"
+
+extern int layered_effect_color_tables_initialized_gp __asm__("D_L11_0016252C")
+    __attribute__((sda));
+extern void
+scale_rgba_tables(void *, int, void *, float, float, float, float, int) __asm__("FUN_L08_002f0f68");
+extern void
+advance_wrapped_sine_pair(void *, float, float, float, void *) __asm__("FUN_L08_002f1158");
+extern void advance_scroll_offsets(int) __asm__("FUN_L08_002f12a0");
+extern void advance_scroll_entry(int) __asm__("FUN_L08_002f1378");
+
+extern unsigned char l11_layered_effect_texture_29_distance_fade_alpha __asm__("D_L11_00162590");
+void update_level11_layered_effect_and_queue_draw(struct Moby *moby) __asm__("FUN_L11_0031e2f0");
+
+void update_level11_layered_effect_and_queue_draw(struct Moby *moby) {
+    enum {
+        EFFECT_INITIALIZE = 0,
+        EFFECT_UPDATE_AND_QUEUE_DRAW = 1
+    };
+    int   i;
+    float effect_bounds[4];
+    float effect_to_reference_delta[4];
+    float effect_distance;
+    char *reference_position_base;
+
+    switch (moby->state) {
+    case EFFECT_INITIALIZE:
+        if (layered_effect_color_tables_initialized_gp == 0) {
+            scale_rgba_tables(D_L11_00162570, 4, D_L11_00162530, 0.7f, 1.0f, 0.9f, 0.5f, 1);
+            scale_rgba_tables(layered_effect_half_gray_rgba_tables,
+                              0xB,
+                              layered_effect_half_gray_table_entry_counts,
+                              0.5f,
+                              0.5f,
+                              0.5f,
+                              1.0f,
+                              1);
+            scale_rgba_tables(layered_effect_quarter_gray_rgba_tables,
+                              8,
+                              layered_effect_quarter_gray_table_entry_counts,
+                              0.25f,
+                              0.25f,
+                              0.25f,
+                              0.7f,
+                              1);
+            layered_effect_color_tables_initialized_gp = 1;
+        }
+        moby->state = 1;
+        for (i = 0; i < 3; i++) {
+            D_L11_001FF750[i].a = 0;
+            D_L11_001FF750[i].b = 0;
+            D_L11_001625B0[0] = 0;
+            D_L11_001625B0[1] = 0;
+        }
+        for (i = 0; i < 2; i++) {
+            D_L11_00162598[i].a = 0;
+            D_L11_0016259C[i].f = i * 0.4f;
+        }
+        for (i = 0; i < 1; i++) {
+            D_L11_001625A8[i].a = 0;
+            D_L11_001625AC[i].f = i * 0.4f;
+        }
+        break;
+    case EFFECT_UPDATE_AND_QUEUE_DRAW:
+        reference_position_base = (char *)&l11_camera;
+        if (*(float *)(reference_position_base + 0x148) < 170.0f)
+            return;
+        effect_bounds[0] = layered_effect_position_x_gp;
+        effect_bounds[1] = layered_effect_position_y;
+        effect_bounds[2] = layered_effect_position_z;
+        effect_bounds[3] = layered_effect_bounds_radius;
+        if (fast_bsphere_check(effect_bounds, 1000.0f) < 0)
+            return;
+        if (!(180.0f < *(float *)(reference_position_base + 0x148)))
+            return;
+        effect_to_reference_delta[0] = layered_effect_position_x_gp;
+        effect_to_reference_delta[1] = layered_effect_position_y;
+        effect_to_reference_delta[2] = layered_effect_position_z;
+        effect_to_reference_delta[3] = 1.0f;
+        fast_vec_sub(
+            effect_to_reference_delta, reference_position_base + 0x140, effect_to_reference_delta);
+        effect_distance = fast_vec_length(effect_to_reference_delta);
+        if (effect_distance <= 35.0f) {
+            advance_scroll_offsets(0);
+            advance_wrapped_sine_pair(
+                layered_effect_sine_output_pair, 0.52f, 0.62f, 0.06f, (void *)D_L11_001625B0);
+            advance_scroll_offsets(2);
+            if (effect_distance < 15.0f) {
+                l11_layered_effect_texture_29_distance_fade_alpha = 0xFF;
+            } else if (effect_distance < 35.0f) {
+                D_L11_0016258C[4] =
+                    truncate_float_to_s32((1.0f - (effect_distance - 15.0f) / 20.0f) * 255.0f);
+            } else {
+                l11_layered_effect_texture_29_distance_fade_alpha = 0;
+            }
+        }
+        advance_scroll_entry(0);
+        advance_scroll_entry(0);
+        advance_scroll_entry(1);
+        add_draw_callback(draw_level11_layered_effect_batches, moby);
+        break;
+    }
+}
+
+int D_L11_001625B0[2] = {0};
+
+unsigned char l11_layered_effect_texture_29_distance_fade_alpha __asm__("D_L11_00162590") = 0;

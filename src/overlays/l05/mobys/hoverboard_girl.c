@@ -1,3 +1,4 @@
+/* Level 05 moby class hoverboard_girl: her update, her boobs animation and her cutscene instances. */
 #include "types.h"
 #include "rnc/game/level_object_states.h"
 #include "rnc/hero/hero.h"
@@ -11,10 +12,12 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
-#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/shared/audio/streaming/get_dialogue_entry.h"
+#include "rnc/overlay/shared/cutscenes/update_npc_dialogue.h"
 #include "rnc/overlay/shared/mobys/initialize_moby_grounding.h"
+#include "rnc/mobys/attach_manipulator.h"
+#include "rnc/mobys/moby.h"
 
 /* Class 918 (hoverboard_girl), Rilgar / Blackwater City.
  * The update counts player action 11 at frame 15 when she faces the player.
@@ -100,22 +103,17 @@ extern HoverboardGirlVector saved_camera_vectors[] __asm__("D_00141050");
 
 extern f32  scale_time(f32) __asm__("FUN_001f96b0");
 extern f32  probe_ground_height(f32, HoverboardGirlVector *, s32) __asm__("FUN_00213508");
-extern void initialize_npc_dialogue(HoverboardGirlMoby *,
-                                    HoverboardGirlState *) __asm__("FUN_L00_002668a0");
-extern s32  update_npc_dialogue(HoverboardGirlMoby *,
-                                HoverboardGirlState *) __asm__("FUN_L00_00266448");
 extern void begin_dialogue_camera_transition(f32, HoverboardGirlMoby *) __asm__("FUN_L01_002783a8");
 extern void set_race_camera(HoverboardGirlVector *,
                             HoverboardGirlVector *,
                             s32,
                             s32) __asm__("FUN_L00_00216f90");
-extern void jet_game_state(s32, s32) __asm__("FUN_L01_0027a248");
+extern void request_music_track(s32, s32) __asm__("FUN_L01_0027a248");
 extern void memcard_save_data(s32, s64) __asm__("FUN_0020b178");
 extern void build_spherical_offset(f32, f32, f32, void *) __asm__("FUN_00214db0");
 extern void update_joint_animation(
     HoverboardGirlMoby *, HoverboardGirlJoint *, s32, f32, f32) __asm__("FUN_L00_002628d8");
-extern void
-     update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *) __asm__("FUN_L05_00316990");
+void update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *) __asm__("FUN_L05_00316990");
 void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *,
                                             HoverboardGirlState *) __asm__("FUN_L05_00316810");
 void update_hoverboard_girl(HoverboardGirlMoby *) __asm__("FUN_L05_00316ab8");
@@ -148,6 +146,48 @@ void update_hoverboard_girl_boobs_animation(HoverboardGirlMoby *moby, Hoverboard
         joint++;
         state_window = (HoverboardGirlState *)((u8 *)state_window + 0x80);
     } while (joint_index < 2);
+}
+
+/* The level's moby list: count at 0x44, moby pointers from 0x178. */
+typedef struct {
+    char  pad0[0x44];
+    short count;
+    char  pad46[0x132];
+    char *mobys[1];
+} MobyList;
+
+extern MobyList      D_L05_0016CC60;
+extern unsigned char D_0015EDB0[] MACRO_ADDR;
+extern unsigned char D_L05_0017C8A0[];
+
+/* Applies breast growth (breast_growth_count) and big-head manipulators to the cutscene instances
+ * of the girl's class. */
+/* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317E58), where it is exact; names translated to the US level program. */
+void update_hoverboard_girl_cutscene_instances(HoverboardGirlMoby *girl) {
+    char *reference_moby = (char *)girl;
+
+    if (game_mode == 2 && (D_0015EDB0[0] != 0 || breast_growth_count_gp != 0)) {
+        int i;
+        for (i = 0; i < D_L05_0016CC60.count; i++) {
+            char *moby = D_L05_0016CC60.mobys[i];
+            if (MOBY(moby)->oclass == MOBY(reference_moby)->oclass) {
+                if (D_0015EDB0[0] != 0) {
+                    unsigned char *manipulator = D_L05_0017C8A0;
+                    if (manipulator[1] == 0) {
+                        attach_manipulator(moby, 0, manipulator);
+                        *(float *)(manipulator + 0x20) = 2.75f;
+                        *(float *)(manipulator + 0x24) = 2.75f;
+                        *(float *)(manipulator + 0x28) = 2.75f;
+                    }
+                }
+                if (breast_growth_count_gp != 0) {
+                    update_hoverboard_girl_boobs_animation(
+                        (HoverboardGirlMoby *)moby,
+                        *(HoverboardGirlState **)(reference_moby + 0x78));
+                }
+            }
+        }
+    }
 }
 
 void update_hoverboard_girl(HoverboardGirlMoby *moby) __asm__("FUN_L05_00316ab8");
@@ -201,11 +241,11 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             set_race_camera(&race_camera_vectors[0], &race_camera_vectors[1], 0, 1);
             qcopy(&saved_camera_vectors[0], &race_camera_vectors[2]);
             qcopy(&saved_camera_vectors[1], &race_camera_vectors[3]);
-            jet_game_state(2, 6);
+            request_music_track(2, 6);
         }
         if (moby->dialogue_event == 1) {
             set_race_camera(&race_camera_vectors[2], &race_camera_vectors[3], 0, 1);
-            jet_game_state(0, 8);
+            request_music_track(0, 8);
             if (alternate_item_available == 0) {
                 state->previous_dialogue_state = state->dialogue_state;
                 state->dialogue_state = 4;
@@ -215,7 +255,7 @@ void update_hoverboard_girl(HoverboardGirlMoby *moby) {
             moby->dialogue_event = 0;
         }
         if (moby->dialogue_event == 2) {
-            jet_game_state(0, 8);
+            request_music_track(0, 8);
             set_race_camera(&race_camera_vectors[2], &race_camera_vectors[3], 0, 1);
             moby->dialogue_event = 0;
         }

@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Walker enemies: gait mask and gait helpers, time to landing, and the gait update. */
 #include "types.h"
 #include "rnc/globals.h"
 #include "asm.h"

@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Help: requests a help message and clears help records. */
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "asm.h"

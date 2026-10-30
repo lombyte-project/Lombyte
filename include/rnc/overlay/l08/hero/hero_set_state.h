@@ -1,6 +1,7 @@
 #ifndef LOMBYTE_RNC_OVERLAY_L08_HERO_HERO_SET_STATE_H
 #define LOMBYTE_RNC_OVERLAY_L08_HERO_HERO_SET_STATE_H
 
+/* Level 08 hero_set_state, defined in src/overlays/l08/hero/hero_set_state.c. */
 #include "types.h"
 
 s32 hero_set_state(s32, s32) __asm__("FUN_L08_00230b38");

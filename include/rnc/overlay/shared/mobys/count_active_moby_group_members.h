@@ -1,0 +1,9 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_COUNT_ACTIVE_MOBY_GROUP_MEMBERS_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_COUNT_ACTIVE_MOBY_GROUP_MEMBERS_H
+
+#include "types.h"
+
+s32  count_active_moby_group_members(s32, s32) __asm__("FUN_L01_0026e008");
+void set_moby_list_state(void *, s32) __asm__("FUN_L01_0026e0e0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_COUNT_ACTIVE_MOBY_GROUP_MEMBERS_H */

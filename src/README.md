@@ -31,6 +31,8 @@ Rules:
 
 - Name folders after game concepts, never after tools or vague words.
 - Place a file by what its functions do, not by the file next to it.
+- Level code holds one moby class (or camera or sound emitter type) per file,
+  named after the class; its helpers and methods live with it.
 - No folder with only one file, and at most three folders deep.
 - Headers mirror the source path under `include/rnc/` (`include/rnc/overlay/` for level code).
 

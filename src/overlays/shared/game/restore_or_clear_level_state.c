@@ -1,0 +1,268 @@
+/* Level state: restores or clears the saved level state and its moby state entries, finds a moby by id, and resets the camera. */
+#include "types.h"
+#include "rnc/audio/music/music_stream_state.h"
+#include "rnc/hero/hero_state.h"
+#include "rnc/hero/hero.h"
+#include "rnc/globals.h"
+#include "asm.h"
+
+#include "qcopy.h"
+#include "rnc/overlay/quad.h"
+#include "rnc/game/item_state.h"
+#include "rnc/math/asm_helpers.h"
+#include "rnc/overlay/level_labels.h"
+#include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
+#include "rnc/overlay/shared/camera/init_camera_system.h"
+#include "rnc/audio/voice_pool.h"
+
+typedef struct {
+    unsigned char h[0x404];
+    unsigned char f[0x7FF];
+} B_00284e50;
+
+extern B_00284e50 D_L00_001BA620 NOT_SDA;
+extern B_00284e50 D_L00_001BB280 NOT_SDA;
+extern int                       D_L00_001BA4D0[] NOT_SDA;
+extern char                      D_L00_001BB230[] NOT_SDA;
+extern unsigned char             D_0014C050[][16];
+
+void jet_reset_camera(OvlQuad *a, OvlQuad *b) __asm__("FUN_L00_00284e50");
+
+void jet_reset_camera(OvlQuad *saved_position, OvlQuad *saved_rotation) {
+    unsigned char *save_candidate_cursor;
+    int            i;
+    char          *saved_state;
+    struct Hero   *hero_state;
+    char          *saved_value_source;
+    char          *saved_state_fields_source;
+    int            lvl;
+    signed char    saved_value_override;
+    int            source_byte;
+
+    copy_memory_aligned((int)&D_L00_001BB280, &D_L00_001BA620, 0x404);
+    lvl = current_level_index;
+    for (save_candidate_cursor = D_L00_001BA620.f, i = 0; i < 0x7FF; i++, save_candidate_cursor++) {
+        source_byte = *save_candidate_cursor;
+        if ((unsigned char)source_byte == 0)
+            continue;
+        if ((unsigned char)source_byte != 1 &&
+            D_0014C050[lvl][(unsigned char)source_byte - 2] != 0xFF)
+            continue;
+        D_L00_001BB280.f[i] = source_byte;
+        D_0014C190_257218[lvl][i >> 5] |= 1 << (i & 0x1F);
+        D_L00_001BA4D0[i >> 5] |= 1 << (i & 0x1F);
+    }
+    saved_state = D_L00_001BB230;
+    *(int *)D_L00_001BB230 = 1;
+    qcopy(saved_state + 0x10, saved_position);
+    qcopy(saved_state + 0x20, saved_rotation);
+    hero_state = &hero;
+    saved_value_source = (char *)&music_stream_state;
+    saved_state_fields_source = (char *)&voice_pool;
+    {
+        char *hero_moby = ((char *)hero_state->moby);
+        *(int *)(saved_state + 0x30) = *(int *)(hero_moby + 0x38);
+        *(int *)(saved_state + 0x34) = *(int *)(hero_moby + 0x3C);
+        *(int *)(saved_state + 0x38) = *(int *)(hero_moby + 0x80);
+        *(int *)(saved_state + 0x44) = hero_state->vehicle_mode;
+        *(char **)(saved_state + 0x48) = hero_moby;
+        *(int *)(saved_state + 0x4C) = hero_state->unk22CC;
+        *(int *)(saved_state + 0x3C) = *(int *)(saved_state_fields_source + 0x64);
+        *(char *)(saved_state + 0x40) = *(unsigned char *)(saved_state_fields_source + 0x68);
+        *(char *)(saved_state + 0x41) = *(unsigned char *)(saved_state_fields_source + 0x69);
+        *(char *)(saved_state + 0x42) = *(unsigned char *)(saved_state_fields_source + 0x6A);
+        saved_value_override = *(signed char *)(saved_value_source + 0x22);
+        if (saved_value_override != -1) {
+            *(int *)(saved_state + 0xC54) = saved_value_override;
+        } else {
+            *(int *)(saved_state + 0xC54) = *(short *)(saved_value_source + 0x38);
+        }
+    }
+}
+
+extern char                      D_L00_001BA5D0[] NOT_SDA;
+extern u8                       *D_L00_0015FFDC;
+extern unsigned short D_00151708 NOT_SDA;
+extern void                      fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
+extern void                      raise_kernel_trap(void) __asm__("FUN_001f97b0");
+extern void enter_hero_vehicle_mode(s32, s32, void *) __asm__("FUN_L00_00210a08");
+extern void FUN_L00_002852c0(void);
+
+void restore_or_clear_level_state(void) __asm__("FUN_L00_00285008");
+
+void restore_or_clear_level_state(void) {
+    char        *s = D_L00_001BB230;
+    int          i;
+    short        id;
+    u8          *record_cursor;
+    struct Hero *hero_state;
+
+    if (*(int *)s == 0) {
+        fill_transfer_words(D_L00_001BA5D0, 0, 0xC60);
+        return;
+    }
+    copy_memory_aligned((int)D_L00_001BA5D0, s, 0xC60);
+    qcopy(&hero.motion.pos, s + 0x10);
+    qcopy(&hero.motion.rot, s + 0x20);
+    *(int *)((char *)hero.moby + 0x38) = *(int *)(s + 0x30);
+    *(int *)((char *)hero.moby + 0x3C) = *(int *)(s + 0x34);
+    *(int *)((char *)hero.moby + 0x80) = *(int *)(s + 0x38);
+    {
+        int updated_state_flags = voice_pool.reverb_commands | 7;
+        voice_pool.reverb_depth = *(int *)(s + 0x3C);
+        voice_pool.reverb_type = s[0x40];
+        voice_pool.reverb_delay = s[0x41];
+        voice_pool.reverb_feedback = s[0x42];
+        voice_pool.reverb_commands = updated_state_flags;
+        D_00151708 = *(unsigned short *)(s + 0xC54);
+    }
+    if (*(int *)(s + 0x44) != 0 && *(int *)(s + 0x44) != 3) {
+        id = 0;
+        switch (*(int *)(s + 0x44)) {
+        case HERO_VEHICLE_MODE_CLANK:
+            id = 0x57;
+            break;
+        case HERO_VEHICLE_MODE_GIANT_CLANK:
+            id = 0x1A3;
+            break;
+        default:
+            raise_kernel_trap();
+            break;
+        }
+
+        for (i = 0;; i++) {
+            record_cursor = moby_table + i * 0x100;
+            if (record_cursor >= D_L00_0015FFDC)
+                break;
+            if (*(short *)(record_cursor + 0xA6) == id) {
+                char *s = D_L00_001BB230;
+                enter_hero_vehicle_mode(*(int *)(s + 0x44), *(int *)(s + 0x4C), record_cursor);
+                break;
+            }
+        }
+    }
+    hero_state = &hero;
+    update_entity(hero_state->moby);
+    euler_rotation_basis((char *)hero.moby + 0xC0, &hero.motion.rot);
+    init_camera_system();
+    FUN_L00_002852c0();
+}
+
+/* Finds the moby (0x100 bytes each) whose short at 0xB2 equals id; 0 when none. */
+u8 *find_moby_by_id(s32 unused_parameter, s32 id) __asm__("FUN_L00_002851c0");
+
+u8 *find_moby_by_id(s32 unused_parameter, s32 id) {
+    u8 *record_cursor;
+    for (record_cursor = moby_table; record_cursor != D_L00_0015FFDC; record_cursor += 0x100) {
+        if (*(s16 *)(record_cursor + 0xB2) == id)
+            return record_cursor;
+    }
+    return 0;
+}
+
+/* Ported from rac1-decomp (src/overlays/shared/pause_00277208.c: func_L00_002864E0), where it is exact; names translated to the US level program. */
+
+typedef struct {
+    int            off;
+    int            pad;
+    unsigned short len;
+    short          kind;
+    short          a;
+    short          b;
+} Ent;
+
+void restore_moby_state_entries(int *entry_block) __asm__("FUN_L00_00285208");
+
+void restore_moby_state_entries(int *entry_block) {
+    int i;
+
+    for (i = 0; i < *entry_block; i++) {
+        int moby_address =
+            find_moby_by_id(((Ent *)(entry_block + 1))[i].b, ((Ent *)(entry_block + 1))[i].a);
+        if (moby_address != 0) {
+            int entry_copy_destination;
+            if (((Ent *)(entry_block + 1))[i].kind == 1) {
+                entry_copy_destination = ((Ent *)(entry_block + 1))[i].off + moby_address;
+            } else {
+                entry_copy_destination =
+                    ((Ent *)(entry_block + 1))[i].off + *(int *)(moby_address + 0x78);
+            }
+            copy_memory_aligned(entry_copy_destination,
+                                &((Ent *)(entry_block + 1))[i].pad,
+                                ((Ent *)(entry_block + 1))[i].len);
+        }
+    }
+}
+
+B_00284e50 D_L01_001BB700 = {0};
+
+B_00284e50 D_L02_001BAC20 = {0};
+
+B_00284e50 D_L02_001BB880 = {0};
+
+B_00284e50 D_L03_001BB380 = {0};
+
+B_00284e50 D_L04_001BB400 = {0};
+
+B_00284e50 D_L05_001BB700 = {0};
+
+int D_L05_001BA950 NOT_SDA = 0;
+B_00284e50         D_L06_001BADA0 = {0};
+
+B_00284e50 D_L06_001BBA00 = {0};
+
+B_00284e50 D_L07_001BA6A0 = {0};
+
+B_00284e50 D_L07_001BB300 = {0};
+
+B_00284e50 D_L08_001BBA80 = {0};
+
+int D_L08_001BACD0 NOT_SDA = 0;
+B_00284e50         D_L09_001BA7A0 = {0};
+
+B_00284e50 D_L09_001BB400 = {0};
+
+B_00284e50 D_L10_001BAAA0 = {0};
+
+B_00284e50 D_L10_001BB700 = {0};
+
+B_00284e50 D_L11_001BB020 = {0};
+
+B_00284e50 D_L11_001BBC80 = {0};
+
+int D_L11_001BAED0 NOT_SDA = 0;
+B_00284e50         D_L12_001BAAA0 = {0};
+
+B_00284e50 D_L12_001BB700 = {0};
+
+int D_L12_001BA950 NOT_SDA = 0;
+B_00284e50         D_L13_001BA920 = {0};
+
+B_00284e50 D_L13_001BB580 = {0};
+
+B_00284e50 D_L14_001BAD20 = {0};
+
+B_00284e50 D_L14_001BB980 = {0};
+
+B_00284e50 D_L15_001BAC20 = {0};
+
+B_00284e50 D_L15_001BB880 = {0};
+
+B_00284e50 D_L16_001BAAA0 = {0};
+
+B_00284e50 D_L16_001BB700 = {0};
+
+int D_L16_001BA950 NOT_SDA = 0;
+B_00284e50         D_L17_001BAF20 = {0};
+
+B_00284e50 D_L17_001BBB80 = {0};
+
+B_00284e50 D_L18_001BB020 = {0};
+
+B_00284e50 D_L18_001BBC80 = {0};
+
+int D_L18_001BAED0 NOT_SDA = 0;
+
+B_00284e50 D_L00_001BA620 = {0};
+
+B_00284e50 D_L00_001BB280 = {0};

@@ -1,0 +1,9 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_CUTSCENES_UPDATE_CUTSCENE_PLAYBACK_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_CUTSCENES_UPDATE_CUTSCENE_PLAYBACK_H
+
+#include "types.h"
+
+void start_scene(void *) __asm__("FUN_L00_00298840");
+void queue_scene_movie_with_game_language(void *) __asm__("FUN_L00_00299460");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_CUTSCENES_UPDATE_CUTSCENE_PLAYBACK_H */

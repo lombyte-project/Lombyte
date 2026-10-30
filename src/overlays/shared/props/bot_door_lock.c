@@ -1,6 +1,5 @@
-/* Shared moby classes: bot_door_lock, mushroom. */
+/* Shared moby class bot_door_lock: its update, glow and the targets it activates. */
 #include "types.h"
-#include "asm.h"
 #include "rnc/globals.h"
 #include "rnc/overlay/level_labels.h"
 
@@ -10,14 +9,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/rendering/effect_texture.h"
-#include "rnc/rendering/vu1_registers.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/mobys/apply_nearest_environment_sample.h"
-#include "rnc/overlay/shared/mobys/find_moby_hit.h"
-#include "rnc/overlay/shared/mobys/is_hero_on_moby.h"
-#include "rnc/overlay/shared/math/vectors/add_vectors.h"
-#include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/rendering/view/project_to_screen.h"
+#include "rnc/overlay/shared/math/vu0_vector_ops.h"
 #include "rnc/mobys/moby.h"
 
 extern void draw_geometry_quad(void *, void *, int) __asm__("FUN_001f7d30");
@@ -184,11 +178,7 @@ void activate_bot_door_lock_target(unsigned char *lock_moby, unsigned char *targ
     }
 }
 
-#include "rnc/overlay/quad.h"
-
 extern void draw_bot_door_lock_glow(struct Moby *moby) __asm__("FUN_L06_00307578");
-
-#include "rnc/overlay/shared/props/bot_door_lock_globals.h"
 
 extern float bot_door_lock_number_bob_amplitude_gp __asm__("D_L06_001622DC") __attribute__((sda));
 extern float bot_door_lock_number_bob_period_gp __asm__("D_L06_001622E0") __attribute__((sda));
@@ -321,244 +311,6 @@ void bot_door_lock_update(char *moby) {
     }
 }
 
-#include "sda.h"
-#include "rnc/overlay/entities.h"
-
-#include "qcopy.h"
-#include "rnc/overlay/quad.h"
-
-/* Stage machine for a three-state effect moby: wait, activate, burst and delete. */
-/* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_0031BDB8.c: func_L07_00320980), where it is exact; names translated to the US level program. */
-
-typedef struct {
-    char           pad0[0x10];
-    char           pos[0x10];
-    unsigned char  b20;
-    char           pad21[0xB];
-    float          f2C;
-    unsigned char  b30;
-    unsigned char  b31;
-    short          s32;
-    unsigned short h34;
-    char           pad36[0x12];
-    float          f48;
-    char           pad4C[0x2C];
-    Child         *child;
-    char           pad7C[0x14];
-    int            f90;
-} Obj;
-
-extern char *create_moby(int);
-extern void  FUN_L00_00263fd8(void *, int, void *, void *, int, int, float, void *, void *, void *);
-void         mark_moby_for_removal(struct Obj *obj) __asm__("FUN_0020c828");
-extern char *create_moby(int) __asm__("FUN_0020c4f8");
-
-void update_hit_triggered_moby_breakup(char *self) __asm__("FUN_L06_00309860");
-
-void update_hit_triggered_moby_breakup(char *self) {
-    enum {
-        MOBY_STATE_INITIALIZE = 0,
-        MOBY_STATE_WAIT_FOR_HIT = 1,
-        MOBY_STATE_SPAWN_AND_REMOVE = 2
-    };
-    int          flag = 0;
-    struct Moby *hit_moby = find_moby_hit(self, 0x10000, 0);
-    switch (((unsigned char *)self)[0x20]) {
-    case MOBY_STATE_INITIALIZE:
-        self[0x20] = 1;
-        break;
-    case MOBY_STATE_WAIT_FOR_HIT:
-        if (hit_moby != 0 && hit_moby->scale > 0.0f) {
-            flag = 1;
-        }
-        if (flag) {
-            self[0x20] = 2;
-        }
-        break;
-    case MOBY_STATE_SPAWN_AND_REMOVE: {
-        char *spawned_moby;
-        allocate_voice_for_target_entry(0, 0, (int)self);
-        spawn_proximity_gated_bolts(self);
-        FUN_L00_00263fd8(self,
-                         0x679,
-                         self + 0x10,
-                         self + 0x40,
-                         0,
-                         0,
-                         0.0f,
-                         D_L06_0015F580,
-                         D_L06_0015F580,
-                         D_L06_0015F580);
-        FUN_L00_00263fd8(self,
-                         0x67a,
-                         self + 0x10,
-                         self + 0x40,
-                         0,
-                         0,
-                         0.0f,
-                         D_L06_0015F580,
-                         D_L06_0015F580,
-                         D_L06_0015F580);
-        FUN_L00_00263fd8(self,
-                         0x67b,
-                         self + 0x10,
-                         self + 0x40,
-                         0,
-                         0,
-                         0.0f,
-                         D_L06_0015F580,
-                         D_L06_0015F580,
-                         D_L06_0015F580);
-        spawned_moby = create_moby(0x678);
-        if (spawned_moby != 0) {
-            spawned_moby[0x31] = 1;
-            MOBY(spawned_moby)->draw_dist = 0xFF;
-            qcopy(spawned_moby + 0x10, self + 0x10);
-            qcopy(spawned_moby + 0x40, self + 0x40);
-            MOBY(spawned_moby)->spawn_frame = *(long *)(self + 0x38);
-            update_entity(spawned_moby);
-        }
-        mark_moby_for_removal(self);
-        break;
-    }
-    }
-}
-/* UpdateMoby: state 0 deletes, state 1 draws and times out */
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_0030D2A0), where it is exact; names translated to the US level program. */
-
-void draw_projected_fading_quad(char *moby) __asm__("FUN_L06_0030bfa8");
-
-void update_timed_sprite_effect(struct Moby *moby) __asm__("FUN_L06_0030be60");
-
-void update_timed_sprite_effect(struct Moby *moby) {
-    enum {
-        SPRITE_EFFECT_STATE_REMOVE = 0,
-        SPRITE_EFFECT_STATE_ANIMATE = 1
-    };
-    float *effect_data = ((float *)moby->pvars);
-    switch ((unsigned char)((char)moby->state)) {
-    case SPRITE_EFFECT_STATE_REMOVE:
-        mark_moby_for_removal(moby);
-        break;
-    case SPRITE_EFFECT_STATE_ANIMATE:
-        add_draw_callback(draw_projected_fading_quad, moby);
-        effect_data[0] = effect_data[0] + effect_data[1];
-        if (2.0f < effect_data[0]) {
-            mark_moby_for_removal(moby);
-        }
-        break;
-    }
-}
-
-void spawn_timed_projected_sprite_effect(char *world_position,
-                                         int   duration_updates,
-                                         int   start_color,
-                                         int   end_color) __asm__("FUN_L06_0030bef8");
-
-void spawn_timed_projected_sprite_effect(char *world_position,
-                                         int   duration_updates,
-                                         int   start_color,
-
-                                         int end_color) {
-    OvlQuad        position_copy;
-    char          *vp = (char *)&position_copy;
-    unsigned char *effect_moby;
-    position_copy = *(OvlQuad *)world_position;
-    effect_moby = (unsigned char *)create_moby(0x76A);
-    if (effect_moby) {
-        char *effect_data = ((char *)MOBY(effect_moby)->pvars);
-        float duration_as_float;
-        qcopy(effect_moby + 0x10, vp);
-        duration_as_float = convert_integer_to_float(duration_updates);
-        *(int *)(effect_data + 0xC) = end_color;
-        *(int *)(effect_data + 0x8) = start_color;
-        *(float *)(effect_data + 0x4) = 2.0f / duration_as_float;
-        effect_moby[0x30] = 0xFF;
-        effect_moby[0x20] = 1;
-    }
-}
-
-extern u32  fast_tween_color(f32, s32, s32) __asm__("FUN_001fa6e0");
-extern void FUN_L02_0020bc88(void *, void *, void *, s64, s32);
-extern s32  D_0013E500[];
-extern s32  projected_quad_texture_selector_gp __asm__("D_L06_00162414") __attribute__((sda));
-extern s32  projected_quad_base_radius_gp __asm__("D_L06_00162418") __attribute__((sda));
-extern s32  projected_quad_top_right_uv_gp __asm__("D_L06_0016241C") __attribute__((sda));
-extern s32  projected_quad_top_left_uv_gp __asm__("D_L06_00162420") __attribute__((sda));
-extern s32  projected_quad_bottom_right_uv_gp __asm__("D_L06_00162424") __attribute__((sda));
-extern s32  projected_quad_bottom_left_uv_gp __asm__("D_L06_00162428") __attribute__((sda));
-
-/* Draws a screen-space sprite at the moby, grown and faded in by the first data float. */
-void draw_projected_fading_quad(char *moby) {
-    float  *effect_data = ((float *)MOBY(moby)->pvars);
-    OvlVec4 world_position;
-    s64     corners[4];
-    u32     colors[4];
-    s32     uvs[4];
-    float   screen[4];
-    float   size;
-    float   fade;
-    s32     y, x, radius;
-    s32     raw_x;
-    u64     texture;
-    u32     color;
-    s32    *screen_center;
-    float   screen_offset;
-
-    qcopy(&world_position, moby + 0x10);
-    size = effect_data[0];
-    if (1.0f < size)
-        size = 1.0f;
-    fade = effect_data[0] - 1.0f;
-    if (1.0f < fade)
-        fade = 1.0f;
-    else if (fade < 0.0f)
-        fade = 0.0f;
-    vu1_add_g_sregister(0x47, 0x5380B);
-    project_to_screen(screen, &world_position);
-    screen_center = D_0013E500;
-    raw_x = truncate_float_to_s32(screen[0] - (float)screen_center[4]);
-    screen_offset = (float)screen_center[4];
-    y = truncate_float_to_s32(screen[1] - screen_offset);
-    x = raw_x - 0x1000;
-    y -= 0x1000;
-    uvs[0] = projected_quad_top_right_uv_gp;
-    uvs[1] = projected_quad_top_left_uv_gp;
-    uvs[2] = projected_quad_bottom_right_uv_gp;
-    uvs[3] = projected_quad_bottom_left_uv_gp;
-    color = fast_tween_color(fade, *(s32 *)&effect_data[2], *(s32 *)&effect_data[3]);
-    colors[3] = color;
-    colors[2] = color;
-    colors[1] = color;
-    colors[0] = color;
-    radius = truncate_float_to_s32((float)(projected_quad_base_radius_gp << 4) * size);
-    corners[3] = 0xfffff080008000LL;
-    corners[2] = 0xfffff080008000LL;
-    corners[1] = 0xfffff080008000LL;
-    corners[0] = 0xfffff080008000LL;
-    corners[0] += (y - radius) << 16;
-    corners[0] += x + radius;
-    corners[1] += (y - radius) << 16;
-    corners[1] += x - radius;
-    corners[2] += (y + radius) << 16;
-    corners[2] += x + radius;
-    corners[3] += (y + radius) << 16;
-    corners[3] += x - radius;
-    texture = get_effect_texture(projected_quad_texture_selector_gp);
-    FUN_L02_0020bc88(corners, uvs, colors, texture, 1);
-    vu1_add_g_sregister(0x47, 0x5360B);
-}
-/* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_00317770), where it is exact; names translated to the US level program. */
-
-extern char *target_reference_table __asm__("D_L06_0015EF50");
-
-void FUN_L06_00316330(char *moby) {
-    if (MOBY(moby)->unk86 == 0x12) {
-        *(int *)(*(char **)(target_reference_table + *(short *)(moby + 0x84) * 32 + 0x1C) + 0x50) =
-            1;
-    }
-}
-
 s32 D_L06_001FE9D0[1] __attribute__((section(".data"))) = {0};
 
 s32 D_L10_001DA210[1] __attribute__((section(".data"))) = {0};
@@ -570,16 +322,3 @@ float                D_L10_00161F28 = 2.5f;
 float                D_L10_00161F2C = 2.0f;
 float                D_L10_00161F30 = 36.0f;
 float                D_L10_00161F34 = 0.75f;
-s32                  D_L18_001625D4 = 0xb;
-s32                  D_L18_001625D8 = 0x320;
-s32                  D_L18_001625DC = 0;
-s32                  D_L18_001625E0 = 0x4000000;
-s32                  D_L18_001625E4 = 0x400;
-s32                  D_L18_001625E8 = 0x4000400;
-
-s32 projected_quad_texture_selector_gp __asm__("D_L06_00162414") = 0xb;
-s32 projected_quad_base_radius_gp __asm__("D_L06_00162418") = 0x320;
-s32 projected_quad_top_right_uv_gp __asm__("D_L06_0016241C") = 0;
-s32 projected_quad_top_left_uv_gp __asm__("D_L06_00162420") = 0x4000000;
-s32 projected_quad_bottom_right_uv_gp __asm__("D_L06_00162424") = 0x400;
-s32 projected_quad_bottom_left_uv_gp __asm__("D_L06_00162428") = 0x4000400;

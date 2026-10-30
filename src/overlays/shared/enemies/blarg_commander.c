@@ -7,9 +7,9 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/random.h"
 #include "rnc/mobys/moby_spawn.h"
-#include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
+#include "rnc/overlay/shared/mobys/step_moby_motion.h"
 #include "rnc/mobys/animation/blend_moby_animation.h"
-#include "rnc/overlay/shared/rendering/update_entity.h"
+#include "rnc/overlay/shared/mobys/evaluate_moby_animation_pose.h"
 
 char *create_class_55b_moby_from_source(char *source_object) __asm__("FUN_L12_00308670");
 
@@ -148,7 +148,7 @@ void blarg_commander_update(char *moby) {
     moby_pvars = ((char *)MOBY(moby)->pvars);
     if (moby_state == 1) {
         motion_state = moby_pvars + 0x20;
-        motion_result_flags = mine_fall(moby, motion_state);
+        motion_result_flags = step_moby_motion(moby, motion_state);
         mo->vx = fast_add_rotations(mo->vx, frame_time * 4.3633232f);
         mo->vy = fast_add_rotations(mo->vy, frame_time * 4.3633232f);
         MOBY(moby)->flags &= 0xEFFF;

@@ -1,0 +1,21 @@
+/* Pad: the actuator power calculation (the executable has the same function). */
+#include "types.h"
+#include "asm.h"
+#include "rnc/math/fast_math.h"
+
+typedef struct {
+    s16 f00;
+    u8  f02;
+    u8  f03;
+    s16 f04;
+    u16 f06;
+    s16 f08;
+    s16 f0a;
+    s16 f0c;
+    u8  f0e;
+    u8  f0f;
+} L00Entry;
+
+extern L00Entry D_L00_00166000[8];
+
+/* FUN_L00_001eaa08 is the executable function of the same bytes (src/gameplay). */

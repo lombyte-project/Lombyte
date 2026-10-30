@@ -1,8 +1,7 @@
+/* Hero: tries the water state transition; split out of hero_set_state.c so it builds with the SN compiler on its own. */
 #include "sda.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/world/collision/collision_line.h"
-/* FUN_L00_00227778 split out of hero_set_state.c so it builds with the SN
-   compiler on its own. */
 #include "types.h"
 #include "qcopy.h"
 #include "rnc/hero/hero.h"

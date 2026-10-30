@@ -69,7 +69,7 @@ Level data in C has its `D_LNN_XXXXXXXX` label and a row (name, size) in
 --into FILE` writes both. `make overlays` compares its bytes, with pointers
 resolved for that level, to what the level loads there. A row named
 `D_XXXXXXXX` (no level) is data that every level has at that address, like
-the zero globals in `src/overlays/shared/data/level_globals.c`; it is checked
+the zero globals in `src/overlays/shared/world/level_globals.c`; it is checked
 and counted in every level. A pointer to a function the level holds more than
 once must name the copy the level's word points to.
 

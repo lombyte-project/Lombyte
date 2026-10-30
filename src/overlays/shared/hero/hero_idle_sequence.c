@@ -1,4 +1,4 @@
-/* Level overlay code: stubs become C as functions are matched. */
+/* Hero idle sequence and per-frame helpers: health, easing records, random timers, rotation targets, glow and HUD effects. */
 #include "types.h"
 #include "rnc/overlay/level_globals.h"
 #include "rnc/hero/hero.h"
@@ -18,18 +18,18 @@
 #include "rnc/weapons/suck_aim.h"
 #include "rnc/runtime/callbacks/add_draw_callback.h"
 #include "rnc/mobys/animation/build_moby_bone_transform.h"
-#include "rnc/overlay/shared/mobys/002630b8.h"
+#include "rnc/overlay/shared/mobys/select_auto_aim_target_moby.h"
 #include "rnc/overlay/shared/mobys/moby_point_position.h"
-#include "rnc/overlay/shared/hero/hero_check_damage.h"
+#include "rnc/overlay/shared/hero/hero_switch_item.h"
 #include "rnc/overlay/shared/hero/hero_set_state.h"
 #include "rnc/overlay/shared/hero/set_hero_animation.h"
 #include "rnc/overlay/shared/math/random/random_int_between.h"
-#include "rnc/overlay/shared/math/rotations/clip_negative_segment_endpoint_xyz.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_explosion.h"
 #include "rnc/overlay/shared/ui/help/help_request.h"
 #include "rnc/rendering/effects/fade_to_black.h"
 #include "rnc/overlay/shared/hero/set_second_hero_easing_parameters.h"
-#include "rnc/overlay/shared/math/rotations/split_float_fraction.h"
-#include "rnc/overlay/shared/rendering/commands/get_moby_color.h"
+#include "rnc/overlay/shared/math/split_float_fraction.h"
+#include "rnc/overlay/shared/rendering/set_moby_color.h"
 #include "rnc/overlay/shared/hero/advance_hero_animation.h"
 #include "rnc/overlay/shared/ui/map/reveal_map_around_position.h"
 #include "rnc/rendering/frame/begin_draw_frame.h"
@@ -406,7 +406,6 @@ void update_hero_rotation_targets_and_random_manipulators(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00205FF0). */
 #include "rnc/mobys/moby.h"
-#include "qcopy.h"
 
 /* hero + 0xEF0: four more manipulators after manipulators[7], then a random-delay timer */
 struct HeroExtraManipulators {
@@ -666,8 +665,6 @@ void dispatch_hero_animation_timed_events(void) {
         break;
     }
 }
-
-#include "qcopy.h"
 
 typedef float M4_2061f0[16] __attribute__((aligned(16)));
 void          matrix_to_euler(void *, void *) __asm__("FUN_00214598");
@@ -1065,7 +1062,6 @@ void release_and_clear_hero_voice_slots(void) {
 }
 
 #include "sda.h"
-#include "rnc/overlay/quad.h"
 
 typedef struct {
     u8  p[0x280];
@@ -1726,8 +1722,6 @@ void FUN_L00_00208038(u128 *glow_position, int b, float x, float y) {
     hero_glow_queue_owner->n++;
 }
 
-#include "rnc/mobys/moby.h"
-
 typedef int u128_2080b0 __attribute__((mode(TI)));
 
 typedef union {
@@ -2206,8 +2200,6 @@ f32 adjust_hero_animation_speed_for_target_frame(f32 target_anim_frame,
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00209690), where it is exact; names translated to the US level program. */
 
-#include "rnc/data_labels.h"
-
 float FUN_L00_00209018(float *a, int n);
 
 float FUN_L00_00209018(float *sample_values, int sample_count) {
@@ -2294,8 +2286,6 @@ void rotate_hero_about_fixed_local_pivot(float x, float y, float z) {
     rotation_reference_vector[2] = 0.6f;
     rotate_hero_about_local_pivot(rotation_reference_vector, x, y, z);
 }
-
-#include "sda.h"
 
 typedef struct {
     s32 v[9];
@@ -3512,7 +3502,6 @@ void apply_hero_selected_flags_and_state_transitions(void) {
 }
 #undef P
 #include "rnc/math/vector.h"
-#include "rnc/mobys/moby.h"
 
 /* the ledge probe of the hero: looks for an edge ahead to grab, and where it finds one stores the grab point and direction */
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_0020C568), where it is exact; names translated to the US level program. */
