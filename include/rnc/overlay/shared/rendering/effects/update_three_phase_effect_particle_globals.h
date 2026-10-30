@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Scalar data read by src/overlays/shared/rendering/update_three_phase_effect_particle.c. */
+/* Scalar data read by src/overlays/shared/rendering/effects/update_three_phase_effect_particle.c. */
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern int rotating_grayscale_particle_fade_reference_duration __asm__("D_L00_001601A4");
 extern int spinning_particle_default_initial_color_blend_source __asm__("D_L00_001601A8");

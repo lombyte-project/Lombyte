@@ -309,7 +309,7 @@ void update_timed_line_collision_particle(O00271d20 *particle) {
     }
 }
 extern unsigned char *l00_height_culled_particle_texture_refs[] __asm__("D_L00_001B2148");
-#include "rnc/overlay/shared/rendering/002712b8_globals.h"
+#include "rnc/overlay/shared/rendering/effects/particles_globals.h"
 extern float height_culled_particle_size_rate_gp __asm__("D_L00_00160210") __attribute__((sda));
 void update_moving_height_culled_particle(unsigned char *particle) __asm__("FUN_L00_00271df8");
 

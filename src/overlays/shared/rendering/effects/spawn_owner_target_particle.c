@@ -9,7 +9,7 @@
 #include "qcopy.h"
 #include "rnc/math/random.h"
 
-#include "rnc/overlay/shared/rendering/spawn_owner_target_particle_globals.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_owner_target_particle_globals.h"
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"

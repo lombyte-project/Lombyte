@@ -25,7 +25,7 @@
 #include "rnc/overlay/shared/math/interpolation/spring_turn.h"
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/overlay/shared/ui/help/adjust_hero_pose_targets_from_motion.h"
 
 struct MobyView {

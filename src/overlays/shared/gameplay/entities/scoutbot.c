@@ -29,7 +29,7 @@
 #include "rnc/overlay/shared/math/vectors/compute_transformed_delta_component.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/rendering/commands/set_moby_color.h"
-#include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/gameplay/trooper_take_damage.h"

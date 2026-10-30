@@ -35,7 +35,7 @@
 #include "rnc/overlay/shared/gameplay/state/jet_reset_camera.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
 #include "rnc/overlay/shared/rendering/effects/glow_quads_draw.h"
-#include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/gameplay/animation/get_moby_joint_matrices.h"
 #include "rnc/overlay/shared/audio/streaming/set_moby_dialogue_record_value.h"

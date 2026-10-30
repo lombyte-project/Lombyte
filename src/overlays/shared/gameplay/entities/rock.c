@@ -38,7 +38,7 @@
 #include "rnc/overlay/shared/math/interpolation/set_moby_list_state.h"
 #include "rnc/overlay/shared/math/vectors/reflect_vector.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/ui/help/try_set_help_message.h"
 #include "rnc/overlay/shared/gameplay/camera/queue_planet_unlock_message.h"
 #include "rnc/overlay/shared/gameplay/entities/novalis_elevator.h"

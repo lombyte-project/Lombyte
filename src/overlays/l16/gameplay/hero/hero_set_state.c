@@ -25,7 +25,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 #include "rnc/gameplay/animation/blend_moby_animation.h"
 #include "rnc/overlay/shared/gameplay/hero/air_accel.h"
-#include "rnc/overlay/shared/rendering/spawn_type_10_particle.h"
+#include "rnc/overlay/shared/rendering/effects/spawn_type_10_particle.h"
 #include "rnc/overlay/shared/gameplay/hero/set_second_hero_easing_parameters.h"
 #include "rnc/overlay/shared/gameplay/hero/smooth_and_clamp_value_pair.h"
 

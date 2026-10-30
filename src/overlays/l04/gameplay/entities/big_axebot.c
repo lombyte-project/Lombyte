@@ -17,7 +17,7 @@
 #include "rnc/gameplay/entities/refresh_moby_spatial_bounds_from_basis.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
-#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle.h"
 #include "rnc/world/collision/collision_line.h"
 #include "rnc/gameplay/animation/update_moby_animation_state.h"
 #include "rnc/math/vectors/normalize_vector_triplet.h"

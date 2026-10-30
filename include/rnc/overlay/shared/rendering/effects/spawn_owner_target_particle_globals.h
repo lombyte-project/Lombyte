@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-/* Scalar data read by src/overlays/shared/rendering/spawn_owner_target_particle.c. */
+/* Scalar data read by src/overlays/shared/rendering/effects/spawn_owner_target_particle.c. */
 /* Explicit _gp views stay in the source at their assembler declaration sites. */
 extern int owner_target_particle_frame_count __asm__("D_L15_001601FC");
 

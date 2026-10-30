@@ -494,7 +494,7 @@ void update_animated_fading_effect_particle(unsigned char *particle) {
 }
 void FUN_L00_00267a08_0026a6f0(unsigned char *) __asm__("FUN_L00_00267a08");
 int FUN_001f96f8_0026a6f0(int) __asm__("FUN_001f96f8");
-#include "rnc/overlay/shared/rendering/update_three_phase_effect_particle_globals.h"
+#include "rnc/overlay/shared/rendering/effects/update_three_phase_effect_particle_globals.h"
 extern int rotating_grayscale_particle_fade_reference_duration_gp __asm__("D_L00_001601A4") __attribute__((sda));
 void update_rotating_grayscale_effect_particle(unsigned char *particle) __asm__("FUN_L00_0026a6f0");
 
