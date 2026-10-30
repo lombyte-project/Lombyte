@@ -1365,8 +1365,8 @@ void begin_sand_shark_return_home_if_outside_path(struct Moby *moby) __asm__("FU
 
 void begin_sand_shark_return_home_if_outside_path(struct Moby *moby) {
     char *sand_shark_instance_vars = (char *)moby->pvars;
-    char *entry = D_L02_001B0AB0[*(int *)(sand_shark_instance_vars + 0x290)];
-    if (point_in_path_xy(&moby->pos, entry + 0x10, *(int *)entry) == 0) {
+    char *configured_path = D_L02_001B0AB0[*(int *)(sand_shark_instance_vars + 0x290)];
+    if (point_in_path_xy(&moby->pos, configured_path + 0x10, *(int *)configured_path) == 0) {
         moby->state = 0x12;
         if (moby->prev_seq) {
             blend_moby_animation(moby, 0, 0, scale_game_frames(20));
