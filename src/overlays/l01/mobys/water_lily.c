@@ -83,7 +83,7 @@ void water_lily_update(HoverMoby *water_lily) {
     };
     HoverVars   *v;
     struct Hero *pl;
-    HoverVec     old;
+    HoverVec     previous_water_lily_position;
     HoverVec     collision_adjusted_position;
     HoverVec     step;
     HoverVec     vector_scratch;
@@ -91,15 +91,15 @@ void water_lily_update(HoverMoby *water_lily) {
     f32          dz;
     f32          max_vertical_step;
 
-    old.q = water_lily->pos.q;
+    previous_water_lily_position.q = water_lily->pos.q;
     v = water_lily->pvars;
-    collision_adjusted_position.q = old.q;
+    collision_adjusted_position.q = previous_water_lily_position.q;
     if (v == 0) {
         return;
     }
     switch (water_lily->state) {
     case WATER_LILY_STATE_INITIALIZE:
-        *(u128 *)v = old.q;
+        *(u128 *)v = previous_water_lily_position.q;
         water_lily->state = 1;
         break;
     case WATER_LILY_STATE_UPDATE_POSITION:
@@ -138,13 +138,13 @@ void water_lily_update(HoverMoby *water_lily) {
                          1.5707964f);
         water_lily->pos.v.x = collision_adjusted_position.v.x;
         water_lily->pos.v.y = collision_adjusted_position.v.y;
-        water_lily->pos.v.z = old.v.z;
-        if (fast_vec_dist(&old, &water_lily->pos) >
+        water_lily->pos.v.z = previous_water_lily_position.v.z;
+        if (fast_vec_dist(&previous_water_lily_position, &water_lily->pos) >
             water_lily_max_horizontal_speed_gp * frame_time_macro) {
-            fast_vec_sub(&vector_scratch, &water_lily->pos, &old);
+            fast_vec_sub(&vector_scratch, &water_lily->pos, &previous_water_lily_position);
             step.q = vector_scratch.q;
             fast_vec_normalize(&step, &step, water_lily_max_horizontal_speed_gp * frame_time_macro);
-            fast_vec_add(&vector_scratch, &old, &step);
+            fast_vec_add(&vector_scratch, &previous_water_lily_position, &step);
             water_lily->pos.q = vector_scratch.q;
         }
         dz = resolve_camera_surface_height(&water_lily->pos, 0) - water_lily->pos.v.z;
