@@ -41,7 +41,7 @@ void update_all_mobys_profiled(void) {
     f32          share;
     s32          scaled_ticks;
     s32          count;
-    s32         *entry;
+    s32         *class_profile_counters;
     s16          profile_label;
 
     if ((*(u64 *)pad_held & 0x800000007LL) != 0x800000007LL) {
@@ -68,9 +68,9 @@ void update_all_mobys_profiled(void) {
                 update_entity(moby);
             }
             current_ticks = *(volatile s32 *)0x10000000;
-            entry = (s32 *)0x11004000 + (moby->class_slot * 2);
-            entry[0] = entry[0] + 1;
-            entry[1] = entry[1] + current_ticks;
+            class_profile_counters = (s32 *)0x11004000 + (moby->class_slot * 2);
+            class_profile_counters[0] = class_profile_counters[0] + 1;
+            class_profile_counters[1] = class_profile_counters[1] + current_ticks;
         }
         moby = moby->next;
     }
