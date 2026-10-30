@@ -13,7 +13,7 @@ extern void           fill_transfer_words(void *dst, s32 value, s32 size) __asm_
    per column, and a column whose sum reaches 8 sets its bit in the output. */
 void downsample_map_coverage(u8 *out) __asm__("FUN_00208030");
 
-void downsample_map_coverage(u8 *out) {
+void downsample_map_coverage(u8 *coverage_mask) {
     s32            acc[128];
     struct Table16 nibble_contributions;
     u8            *packed_map_cursor;
@@ -24,7 +24,7 @@ void downsample_map_coverage(u8 *out) {
     s32            packed_column_start;
     u32            packed_source_byte;
 
-    coverage_mask_cursor = out;
+    coverage_mask_cursor = coverage_mask;
     packed_map_cursor = D_001A00FC[0];
     nibble_contributions = map_coverage_nibble_contribution_table;
     for (i = 0; i < 0x200; i++) {
@@ -53,7 +53,7 @@ void downsample_map_coverage(u8 *out) {
             }
         }
     }
-    out[0] = (out[0] & 0xFE) | 2;
+    coverage_mask[0] = (coverage_mask[0] & 0xFE) | 2;
 }
 
 extern __typeof__(downsample_map_coverage) func_00208030 __attribute__((alias("FUN_00208030")));
