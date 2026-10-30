@@ -545,7 +545,7 @@ void update_planetbuster_maximus_glow_color(struct Moby *moby) {
     int   alpha = 0x80000000;
     char *linked_parts_owner_pvars = (char *)moby->pvars;
     for (i = 0; i < 18; i++) {
-        struct Moby *other;
+        struct Moby *glow_target_moby;
         int          period;
         float        sine;
         float        color;
@@ -556,12 +556,12 @@ void update_planetbuster_maximus_glow_color(struct Moby *moby) {
         float        phase;
         float        divisor;
         if (i == 17) {
-            other = moby;
+            glow_target_moby = moby;
         } else {
-            other = (struct Moby *)((char *)(*(struct Moby **)&D_L12_0015FFD8_p) +
+            glow_target_moby = (struct Moby *)((char *)(*(struct Moby **)&D_L12_0015FFD8_p) +
                                     ((unsigned int)*(int *)(linked_parts_owner_pvars + i * 0x30 + 0x20) << 8));
         }
-        if (other->oclass == 0x4FE)
+        if (glow_target_moby->oclass == 0x4FE)
             continue;
         {
             period = scale_game_frames(0xAA);
@@ -575,8 +575,8 @@ void update_planetbuster_maximus_glow_color(struct Moby *moby) {
             packed_color = ((blue + 0x46) << 16) | alpha |
                            ((green + 0xB4 > 0xFF ? 0xFF : green + 0xB4) << 8) |
                            (red + 0xB4 > 0xFF ? 0xFF : red + 0xB4);
-            other->flags |= 0x10;
-            other->glow_color = packed_color;
+            glow_target_moby->flags |= 0x10;
+            glow_target_moby->glow_color = packed_color;
         }
     }
     /* Fakematch: keeping alpha live past the loop gives retail's schedule of the loop body. */
