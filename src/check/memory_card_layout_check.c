@@ -1,12 +1,11 @@
 /* Built only by `make layout-check-sys` (never linked). gcc 2.95 has no
    _Static_assert: a negative array size fails the compile. */
 #define OFFSET_CHECK(name, type, field, off) \
-    typedef char offset_check_##name[ \
-        ((unsigned long)&((type *)0)->field == (off)) ? 1 : -1]
+    typedef char offset_check_##name[((unsigned long)&((type *)0)->field == (off)) ? 1 : -1]
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 
 SIZE_CHECK(entry, struct MemoryCardSaveEntry, 0x1C);
 OFFSET_CHECK(card_save_index, struct MemoryCard, save_index, 0x14);

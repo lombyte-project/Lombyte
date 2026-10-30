@@ -3,8 +3,8 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "types.h"
-
-extern int effect_quad_count __asm__("D_0015F474") MACRO_ADDR;
+#include "rnc/rendering/render_globals.h"
+#include "rnc/math/fast_math.h"
 
 typedef float FVec4[4] __attribute__((aligned(16)));
 
@@ -18,28 +18,28 @@ typedef struct {
 } LightRec;
 
 extern FRow light_quad_vertex_template[4] __asm__("D_0018CAA0");
-extern int get_effect_texture(int) __asm__("FUN_001f44b8");
-extern void fast_vec_normalize(void *dst, void *src, float len) __asm__("FUN_001f9bf8");
-extern void fast_draw_quad_real(void *, int, int) __asm__("func_001F7D30");
+extern int  get_effect_texture(int) __asm__("FUN_001f44b8");
+extern void draw_geometry_quad(void *, int, int) __asm__("func_001F7D30");
 
 /* Builds a 4-row matrix per light in D_0018E340 (count D_0015F474):
    each row starts as the light's position and is pushed along the
    corner D_0018CAA0[k], projected off the normalised light direction,
-   scaled by the position's w; fast_draw_quad_real draws it. The packet header,
+   scaled by the position's w; draw_geometry_quad draws it. The packet header,
    colours and UVs are filled on the stack but never sent. Both copies
    are qcopy (retail's lq/sq stay inside the loop), and the inner loop
    needs its own counter, not the one the setup loop used. */
 void draw_light_quads(void) __asm__("FUN_001f4880");
 
 extern LightRec light_quad_records[] __asm__("D_0018E340");
+
 void draw_light_quads(void) {
-    FRow quad_vertices[4];
-    int colors[4];
-    float uv[4][2];
+    FRow          quad_vertices[4];
+    int           colors[4];
+    float         uv[4][2];
     unsigned long pkt[4];
-    FRow dir;
-    int i;
-    int j;
+    FRow          dir;
+    int           i;
+    int           j;
 
     pkt[1] = get_effect_texture(0);
     pkt[2] = 0xFF9000000260;
@@ -52,7 +52,7 @@ void draw_light_quads(void) {
     }
     for (i = 0; i < effect_quad_count; i++) {
         float radius;
-        int k;
+        int   k;
 
         qcopy(&dir, &light_quad_records[i].dir);
         fast_vec_normalize(&dir, &dir, 1.0f);
@@ -68,7 +68,7 @@ void draw_light_quads(void) {
             quad_vertices[k].v[1] += (cy - dir.v[1] * corner_normal_dot) * radius;
             quad_vertices[k].v[2] -= dir.v[2] * corner_normal_dot * radius;
         }
-        fast_draw_quad_real(quad_vertices, 0, 0);
+        draw_geometry_quad(quad_vertices, 0, 0);
     }
 }
 

@@ -2,6 +2,7 @@
 #include "sda.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
+
 void vu1_add_data_ref(s32 data_addr, s32 qword_count) __asm__("FUN_00233830");
 
 void vu1_add_data_ref(s32 data_addr, s32 qword_count) {

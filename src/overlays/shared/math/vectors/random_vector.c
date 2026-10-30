@@ -1,12 +1,12 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "asm.h"
+#include "rnc/math/fast_math.h"
 
 float random_float_between(float *, float, float) __asm__("FUN_002132a8");
 float random_angle_radians(void) __asm__("FUN_00213308");
-float fast_cos(float) __asm__("FUN_001f9dc8");
-float fast_sin(float) __asm__("FUN_001f9de0");
-void random_vector(float *out, float lo, float hi) __asm__("FUN_L00_00257d78");
+void  random_vector(float *out, float lo, float hi) __asm__("FUN_L00_00257d78");
+
 void random_vector(float *out, float lo, float hi) {
     float radial_scale = random_float_between(out, lo, hi);
     float azimuth_angle = random_angle_radians();
@@ -15,18 +15,22 @@ void random_vector(float *out, float lo, float hi) {
     out[1] = fast_sin(azimuth_angle) * fast_sin(polar_angle) * radial_scale;
     out[2] = fast_cos(polar_angle) * radial_scale;
 }
-#define NOT_SDA
-
-#define MACRO_ADDR
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258E58), where it is exact; names translated to the US level program. */
 
 /* Cubic interpolation through four points a..d at t. */
 float cubic_hermite_scalar(float a, float b, float c, float d, float t) __asm__("FUN_L00_00257e20");
-float cubic_hermite_scalar(float start_slope_reference_value, float start_value, float end_value, float end_slope_reference_value, float interpolation_fraction) {
-    float cubic_coefficient = (end_slope_reference_value - end_value) - (start_slope_reference_value - start_value);
+float cubic_hermite_scalar(float start_slope_reference_value,
+                           float start_value,
+                           float end_value,
+                           float end_slope_reference_value,
+
+                           float interpolation_fraction) {
+    float cubic_coefficient =
+        (end_slope_reference_value - end_value) - (start_slope_reference_value - start_value);
     float quadratic_coefficient = (start_slope_reference_value - start_value) - cubic_coefficient;
     float t_squared = interpolation_fraction * interpolation_fraction;
     float t_cubed = t_squared * interpolation_fraction;
-    return cubic_coefficient * t_cubed + quadratic_coefficient * t_squared + (end_value - start_slope_reference_value) * interpolation_fraction + start_value;
+    return cubic_coefficient * t_cubed + quadratic_coefficient * t_squared +
+           (end_value - start_slope_reference_value) * interpolation_fraction + start_value;
 }

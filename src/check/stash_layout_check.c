@@ -1,12 +1,11 @@
 /* EE offsets used by FUN_00232d00, FUN_00232e40, FUN_00232f20
  * and LookupResourceEntry (0x00233038). Not linked into the game. */
-#include "rnc/storage/stash.h"
+#include "rnc/streaming/stash/stash.h"
 
-#define CHECK_CAT2(a, b) a##b
-#define CHECK_CAT(a, b) CHECK_CAT2(a, b)
-#define CHECK(cond) typedef char CHECK_CAT(layout_check_, __LINE__)[(cond) ? 1 : -1]
-#define OFFSET(type, field, off) \
-    CHECK((unsigned long)&((type *)0)->field == (off))
+#define CHECK_CAT2(a, b)         a##b
+#define CHECK_CAT(a, b)          CHECK_CAT2(a, b)
+#define CHECK(cond)              typedef char CHECK_CAT(layout_check_, __LINE__)[(cond) ? 1 : -1]
+#define OFFSET(type, field, off) CHECK((unsigned long)&((type *)0)->field == (off))
 
 CHECK(sizeof(struct StashState) == 0x38);
 OFFSET(struct StashState, iop_base, 0x00);

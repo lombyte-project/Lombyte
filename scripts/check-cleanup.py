@@ -21,8 +21,11 @@ import argparse
 import ast
 import bisect
 import collections
+import difflib
 import importlib.util
+import os
 import re
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -50,7 +53,8 @@ ASM_LABEL = re.compile(r'__asm__\s*\(\s*"([^"]*)"\s*\)')
 LABEL_STRING = re.compile(r"[A-Za-z_.$][\w.$]*(?:\+\d+)?")
 # The only files that may hold instructions: the approved quadword idiom and the
 # EE-kernel primitives (privileged instructions C cannot express).
-ASM_HEADERS = {"include/qcopy.h", "include/qzero.h", "include/kernel.h", "include/moby_update.h"}
+ASM_HEADERS = {"include/qcopy.h", "include/qzero.h", "include/kernel.h", "include/moby_update.h",
+               "include/macros.h"}
 ASM_ANY = re.compile(r"\b(?:__asm__|__asm|asm)\b(\s*(?:volatile|__volatile__)\b)?\s*\(")
 FUNC_DECL = re.compile(r"\b(\w+)\s*\(((?:[^;{}()]|\([^()]*\))*)\)\s*__asm__\s*\(\s*\"(" + FUN_LABEL + r")\"\s*\)")
 DATA_DECL = re.compile(r"\b(\w+)\s*((?:\[[^\]]*\]\s*)*)__asm__\s*\(\s*\"(" + DATA_LABEL + r")\"\s*\)")
@@ -573,11 +577,27 @@ def export(rev: str, dest: Path) -> None:
         tar.extractall(dest, filter="data")
 
 
+def format_base(root: Path) -> bool:
+    """Format the exported base tree with scripts/format.py; False when clang-format is missing."""
+    if not all((SCRIPTS / name).is_file() for name in ("format.py", "blank-blocks.py")) \
+            or not (ROOT / ".clang-format").is_file():
+        return False
+    spec = importlib.util.spec_from_file_location("format_c", SCRIPTS / "format.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    if not shutil.which(module.CLANG_FORMAT):
+        return False
+    paths = [str(p.relative_to(root)) for top in ("src", "include") if (root / top).is_dir()
+             for p in (root / top).rglob("*") if p.suffix in (".c", ".h")]
+    module.format_tree(paths, root)
+    return True
+
+
 def changes(base: str) -> tuple[dict[str, str | None], set[str]]:
     """Map each changed working-tree path to its base path (None when new), plus deleted paths."""
     changed: dict[str, str | None] = {}
     deleted = set()
-    out = git("diff", "-M", "--name-status", "-z", base, "--")
+    out = git("-c", "diff.renameLimit=0", "diff", "-M", "--name-status", "-z", base, "--")
     fields = out.split("\0")
     i = 0
     while i < len(fields) and fields[i]:
@@ -656,12 +676,66 @@ def main() -> int:
     problems: list[Problem] = []
     asm_edits = [p for p in sorted(set(changed) | deleted) if p.startswith("asm/") or "/asm/" in p]
     problems += [Problem("asm-files", p, "files in asm/ are generated; do not edit them") for p in asm_edits]
+    c_changed = [rel for rel in sorted(changed) if rel.endswith((".c", ".h"))
+                 and rel.startswith(("src/", "include/")) and (ROOT / rel).is_file()]
+    if c_changed and (SCRIPTS / "format.py").is_file() and shutil.which(os.environ.get("CLANG_FORMAT", "clang-format")):
+        check = subprocess.run([sys.executable, str(SCRIPTS / "format.py"), "--check", *c_changed],
+                               cwd=ROOT, capture_output=True, text=True)
+        for line in check.stdout.splitlines():
+            rel = line.split(":", 1)[0]
+            problems.append(Problem("format", rel, "not formatted; run python3 scripts/format.py " + rel))
 
     with tempfile.TemporaryDirectory() as tmp:
         base_root = Path(tmp)
         export(base, base_root)
+        # Compare against the base formatted the same way, so a problem that
+        # only reads differently after scripts/format.py is not new.
+        formatted = format_base(base_root)
         base_tree = Tree(base_root)
         rename = {new: old for new, old in changed.items() if old}
+        # A file moved and edited past git's rename threshold shows up as
+        # deleted + added: pair the two when the file name is unique on both sides.
+        if formatted:
+            # Formatting can push a moved file below git's rename threshold:
+            # look for renames again between the formatted base and the tree.
+            for top in ("src", "include"):
+                out = subprocess.run(["git", "-c", "diff.renameLimit=0", "diff", "--no-index", "-M",
+                                      "--name-status", "-z", str(base_root / top), top],
+                                     cwd=ROOT, capture_output=True, text=True).stdout.split("\0")
+                i = 0
+                while i < len(out) and out[i]:
+                    if out[i][0] == "R":
+                        old = os.path.relpath(out[i + 1], base_root)
+                        new = out[i + 2]
+                        if new in changed and changed[new] is None and old in deleted:
+                            rename[new] = old
+                        i += 3
+                    else:
+                        i += 2
+        gone = collections.defaultdict(list)
+        for old in deleted:
+            gone[Path(old).name].append(old)
+        paired = set(rename.values())
+        for name in list(gone):
+            gone[name] = [old for old in gone[name] if old not in paired]
+        added = collections.defaultdict(list)
+        for new, old in changed.items():
+            if old is None and new not in rename:
+                added[Path(new).name].append(new)
+        for name, news in added.items():
+            olds = list(gone.get(name, []))
+            if len(news) == 1 and len(olds) == 1:
+                rename[news[0]] = olds[0]
+                continue
+            # Several files of that name: pair each with the most similar one.
+            for new_path in news:
+                if not olds:
+                    break
+                text = read(ROOT, new_path)
+                best = max(olds, key=lambda old: difflib.SequenceMatcher(
+                    None, text, read(base_root, old) if (base_root / old).is_file() else "").quick_ratio())
+                rename[new_path] = best
+                olds.remove(best)
 
         # Per-file problems are pooled over all changed files, so code moved between files stays old.
         head, before = [], []
@@ -670,7 +744,8 @@ def main() -> int:
                 head += file_problems(rel, read(ROOT, rel))
         for old in sorted({old for old in changed.values() if old} | deleted):
             if Path(old).suffix in TEXT_SUFFIXES:
-                before += file_problems(old, git("show", f"{base}:{old}"))
+                text = read(base_root, old) if formatted and (base_root / old).is_file() else None
+                before += file_problems(old, text if text is not None else git("show", f"{base}:{old}"))
         problems += new_problems(head, before, None)
         problems += new_problems(tree_problems(head_tree), tree_problems(base_tree, True), rename)
 

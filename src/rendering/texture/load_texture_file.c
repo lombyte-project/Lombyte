@@ -2,17 +2,18 @@
 #include "sda.h"
 #include "rnc/rendering/texture_upload.h"
 #include "types.h"
+#include "rnc/globals.h"
+#include "rnc/rendering/frame/log2dim.h"
 
-extern int log2dim(int) __asm__("FUN_001f97a0");
 typedef struct {
     char *clut; /* 0x00 */
     char *pix;  /* 0x04 */
-    char pad08[0xC];
-    int clutSize; /* 0x14 */
-    char pad18[0x34];
-    int tw; /* 0x4C */
-    int th; /* 0x50 */
-    char pad54[0xC];
+    char  pad08[0xC];
+    int   clutSize; /* 0x14 */
+    char  pad18[0x34];
+    int   tw; /* 0x4C */
+    int   th; /* 0x50 */
+    char  pad54[0xC];
 } TexDesc;
 
 /* Loads a 256-colour texture file p (width at +8, height at +0xC, CLUT
@@ -22,17 +23,17 @@ typedef struct {
    TEX0 value returned. */
 long load_texture_file(char *p) __asm__("FUN_00204cf0");
 
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 extern s32 pending_texture_upload_count_macro __asm__("D_0015F458") MACRO_ADDR;
+
 long load_texture_file(char *texture_file_data) {
     TexDesc texture_desc;
-    int texture_buffer_width;
-    int cbp;
-    int tbp;
-    int addr;
-    long reg;
-    long texture_register_bits;
-    long *pt;
+    int     texture_buffer_width;
+    int     cbp;
+    int     tbp;
+    int     addr;
+    long    reg;
+    long    texture_register_bits;
+    long   *pt;
 
     texture_desc.clut = texture_file_data + 0x20;
     texture_desc.clutSize = 0x400;
@@ -49,15 +50,19 @@ long load_texture_file(char *texture_file_data) {
         texture_buffer_width = 0;
     }
     texture_buffer_width = 1 << texture_buffer_width;
-    texture_register_bits = (long)tbp | ((long)texture_buffer_width << 14) | ((long)0x13 << 20) | ((long)texture_desc.tw << 26);
+    texture_register_bits = (long)tbp | ((long)texture_buffer_width << 14) | ((long)0x13 << 20) |
+                            ((long)texture_desc.tw << 26);
     pt = &texture_register_bits;
-    texture_register_bits = *pt | ((long)texture_desc.th << 30) | ((long)1 << 34) | ((long)cbp << 37);
+    texture_register_bits =
+        *pt | ((long)texture_desc.th << 30) | ((long)1 << 34) | ((long)cbp << 37);
     reg = *pt | ((long)4 << 61);
     if (pending_texture_upload_count_macro < TEXTURE_UPLOAD_MAX) {
-        pending_texture_uploads[pending_texture_upload_count_macro].clut_data = (int)texture_desc.clut;
+        pending_texture_uploads[pending_texture_upload_count_macro].clut_data =
+            (int)texture_desc.clut;
         pending_texture_uploads[pending_texture_upload_count_macro].cbp = cbp;
         pending_texture_uploads[pending_texture_upload_count_macro].unk4 = 0;
-        pending_texture_uploads[pending_texture_upload_count_macro].image_data = (int)texture_desc.pix;
+        pending_texture_uploads[pending_texture_upload_count_macro].image_data =
+            (int)texture_desc.pix;
         pending_texture_uploads[pending_texture_upload_count_macro].tw = texture_desc.tw;
         pending_texture_uploads[pending_texture_upload_count_macro].th = texture_desc.th;
         pending_texture_uploads[pending_texture_upload_count_macro].tbp = tbp;

@@ -7,15 +7,15 @@
 /* EE DMA channel register block. */
 typedef struct sceDmaChan {
     s32 chcr;
-    u8 pad_04[0xC];
+    u8  pad_04[0xC];
     s32 madr;
-    u8 pad_14[0x1C];
+    u8  pad_14[0x1C];
     s32 tadr;
-    u8 pad_34[0xC];
+    u8  pad_34[0xC];
     s32 asr0;
-    u8 pad_44[0xC];
+    u8  pad_44[0xC];
     s32 asr1;
-    u8 pad_54[0x2C];
+    u8  pad_54[0x2C];
     s32 sadr;
 } sceDmaChan;
 

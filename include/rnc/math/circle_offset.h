@@ -7,8 +7,7 @@
 
 /* Moves v's x/y by 2 * r toward angle ang. Kept an inline function (not a
    macro): the ledge probes FUN_L00_0020c758 / FUN_L01_0022d838 match only so. */
-static inline void circle_offset(Vec4 *v, f32 ang, f32 r)
-{
+static inline void circle_offset(Vec4 *v, f32 ang, f32 r) {
     r += r;
     v->f[0] += fast_cos(ang) * r;
     v->f[1] += fast_sin(ang) * r;

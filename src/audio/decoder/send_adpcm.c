@@ -1,8 +1,9 @@
 /* Ported from rac1-decomp (src/game/movie/audiodec.c, func_0023C390). */
 #include "sda.h"
 #include "rnc/audio/decoder/audio_dec.h"
+
 extern unsigned char *D_001612BC MACRO_ADDR;
-extern int snd_get_movie_nax(void) __asm__("FUN_0012f178");
+extern int                       snd_get_movie_nax(void) __asm__("FUN_0012f178");
 extern void send_to_spu(struct AudioDec *, unsigned char *, int, int) __asm__("func_0023AF18");
 /* sendADPCM(_AudioDec *): once enough is buffered (state 1: 4 KiB,
    filling the IOP buffer from iopLastPos; state 2: the free space behind
@@ -14,7 +15,7 @@ extern void send_to_spu(struct AudioDec *, unsigned char *, int, int) __asm__("f
    the end of the body, so it is its own register at the loop test as
    in retail; the header bytes go through a local copy of the buffer
    pointer (one load, as retail). */
-void send_adpcm(void *arg0) __asm__("FUN_0023afc0");
+void send_adpcm(void *audio_decoder) __asm__("FUN_0023afc0");
 
 void send_adpcm(void *audio_decoder) {
     enum {
@@ -22,9 +23,9 @@ void send_adpcm(void *audio_decoder) {
         ADPCM_SPU_POSITION_REFILL = 2
     };
     struct AudioDec *ad = audio_decoder;
-    int avail = 0;
-    int i, j, copied_byte_count;
-    unsigned char *interleaved_channel_read_cursor, *channel_staging_write_cursor;
+    int              avail = 0;
+    int              i, j, copied_byte_count;
+    unsigned char   *interleaved_channel_read_cursor, *channel_staging_write_cursor;
 
     switch (ad->state) {
     case ADPCM_IOP_BUFFER_FILL:
@@ -41,7 +42,8 @@ void send_adpcm(void *audio_decoder) {
     }
     while (avail >= 0x400 && ad->count >= ad->hdr.ch << 10) {
         for (i = 0; i < ad->hdr.ch; i++) {
-            interleaved_channel_read_cursor = ad->data + (ad->put - ad->count + ad->size) % ad->size;
+            interleaved_channel_read_cursor =
+                ad->data + (ad->put - ad->count + ad->size) % ad->size;
             interleaved_channel_read_cursor += i * ad->hdr.interSize;
             channel_staging_write_cursor = D_001612BC;
             copied_byte_count = 0;

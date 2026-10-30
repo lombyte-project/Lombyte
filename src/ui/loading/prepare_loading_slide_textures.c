@@ -5,48 +5,64 @@
 #include "rnc/globals.h"
 #include "types.h"
 #include "rnc/sdk/libgraph.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
+#include "rnc/rendering/render_globals.h"
 
 struct CommonArchiveMemory {
-    u8 pad_0[0x14];
+    u8  pad_0[0x14];
     s32 archive_base;
 };
 
-extern s32 gs_texture_allocation_base __asm__("D_0015EE8C");
 extern struct CommonArchiveMemory D_001940C0;
-extern void FlushCache(s32 a0);
-extern s32 sceCdSync(s32 a0);
-extern s32 sceGsExecLoadImage(sceGsLoadImage *load_image, s32 image_address);
-extern s32 sceGsSetDefLoadImage(sceGsLoadImage *load_image, s32 block_offset, s32 buffer_width,
-                                s32 pixel_storage_format, s32 x, s32 y, s32 width, s32 height);
-extern s32 wait_for_graphics_pipeline_idle(s32 a0, s32 a1) __asm__("func_00120558");
+extern void                       FlushCache(s32 a0);
+extern s32                        sceCdSync(s32 a0);
+extern s32                        sceGsExecLoadImage(sceGsLoadImage *load_image, s32 image_address);
+extern s32                        sceGsSetDefLoadImage(sceGsLoadImage *load_image,
+                                                       s32             block_offset,
+                                                       s32             buffer_width,
+                                                       s32             pixel_storage_format,
+                                                       s32             x,
+                                                       s32             y,
+                                                       s32             width,
+                                                       s32             height);
+extern s32 sceGsSyncPath(s32 unused_arg0, s32 unused_arg1) __asm__("func_00120558");
 extern s32 decompress_wad(s32 source_address, s32 destination_address) __asm__("func_0020B618");
-extern s32 submit_cd_read_request(void *a0, u32 a1, u32 a2) __asm__("func_00216728");
+extern s32 submit_audio_stream_io_request(void *read_destination,
+                                          u32   lsn,
+                                          u32   sectors) __asm__("func_00216728");
 
-void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 second_slide,
-                                    u64 *shared_texture, u64 *first_texture,
+void prepare_loading_slide_textures(s32  language_index,
+                                    s32  first_slide,
+                                    s32  second_slide,
+                                    u64 *shared_texture,
+                                    u64 *first_texture,
                                     u64 *second_texture) __asm__("FUN_00231878");
 
-void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 second_slide,
-                                    u64 *shared_texture, u64 *first_texture, u64 *second_texture) {
-    s32 texture_bases[6];
-    sceGsLoadImage load_image;
-    u64 *first_output;
-    u64 *second_output;
-    s32 upload_index;
-    s32 *texture_base_output;
-    s32 upload_bytes;
-    s32 image_address;
-    s32 archive_base;
+void prepare_loading_slide_textures(s32  language_index,
+                                    s32  first_slide,
+                                    s32  second_slide,
+                                    u64 *shared_texture,
+                                    u64 *first_texture,
+
+                                    u64 *second_texture) {
+    s32                         texture_bases[6];
+    sceGsLoadImage              load_image;
+    u64                        *first_output;
+    u64                        *second_output;
+    s32                         upload_index;
+    s32                        *texture_base_output;
+    s32                         upload_bytes;
+    s32                         image_address;
+    s32                         archive_base;
     struct CommonArchiveMemory *archive_memory;
 
     first_output = first_texture;
     second_output = second_texture;
     archive_memory = &D_001940C0;
     upload_index = 0;
-    submit_cd_read_request((void *)(archive_memory->archive_base + 0x100000),
-                           disc_table.loading_slides[language_index].sector,
-                           disc_table.loading_slides[language_index].size);
+    submit_audio_stream_io_request((void *)(archive_memory->archive_base + 0x100000),
+                                   disc_table.loading_slides[language_index].sector,
+                                   disc_table.loading_slides[language_index].size);
     sceCdSync(0);
     FlushCache(0);
     decompress_wad(archive_memory->archive_base + 0x100000, archive_memory->archive_base);
@@ -57,39 +73,39 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
     texture_base_output = texture_bases;
     for (upload_index = 0; upload_index < 6; upload_index++) {
         if (upload_index == 0) {
-            sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0, 0, 0,
-                                 0x10, 0x10);
+            sceGsSetDefLoadImage(
+                &load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0, 0, 0, 0x10, 0x10);
             upload_bytes = 0x400;
             image_address = (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + 4)) + 0x20;
         } else if (upload_index == 1) {
-            sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0x13, 0,
-                                 0, 0x40, 0x40);
+            sceGsSetDefLoadImage(
+                &load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0x13, 0, 0, 0x40, 0x40);
             upload_bytes = 0x1000;
             image_address = (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + 4)) + 0x420;
         } else if (upload_index == 2) {
-            sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0, 0, 0,
-                                 0x10, 0x10);
+            sceGsSetDefLoadImage(
+                &load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0, 0, 0, 0x10, 0x10);
             upload_bytes = 0x400;
             image_address =
                 (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + first_slide * 4 + 8)) +
                 0x20;
         } else if (upload_index == 3) {
-            sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 8, 0x13, 0,
-                                 0, 0x200, 0x40);
+            sceGsSetDefLoadImage(
+                &load_image, (gs_texture_allocation_cursor << 8) >> 16, 8, 0x13, 0, 0, 0x200, 0x40);
             upload_bytes = 0x8000;
             image_address =
                 (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + first_slide * 4 + 8)) +
                 0x420;
         } else if (upload_index == 4) {
-            sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0, 0, 0,
-                                 0x10, 0x10);
+            sceGsSetDefLoadImage(
+                &load_image, (gs_texture_allocation_cursor << 8) >> 16, 1, 0, 0, 0, 0x10, 0x10);
             upload_bytes = 0x400;
             image_address =
                 (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + second_slide * 4 + 8)) +
                 0x20;
         } else {
-            sceGsSetDefLoadImage(&load_image, (gs_texture_allocation_cursor << 8) >> 16, 8, 0x13, 0,
-                                 0, 0x200, 0x40);
+            sceGsSetDefLoadImage(
+                &load_image, (gs_texture_allocation_cursor << 8) >> 16, 8, 0x13, 0, 0, 0x200, 0x40);
             upload_bytes = 0x8000;
             image_address =
                 (s32)((u8 *)archive_base + *(s32 *)((u8 *)archive_base + second_slide * 4 + 8)) +
@@ -97,7 +113,7 @@ void prepare_loading_slide_textures(s32 language_index, s32 first_slide, s32 sec
         }
         FlushCache(0);
         sceGsExecLoadImage(&load_image, image_address);
-        wait_for_graphics_pipeline_idle(0, 0);
+        sceGsSyncPath(0, 0);
         *texture_base_output = gs_texture_allocation_cursor >> 8;
         gs_texture_allocation_cursor = gs_texture_allocation_cursor + upload_bytes;
         texture_base_output++;

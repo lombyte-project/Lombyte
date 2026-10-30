@@ -1,6 +1,7 @@
 #include "types.h"
+
 extern s32 snd_send_iop_command_no_wait() __asm__("func_0012E6E0");
-void snd_stop_sound(s32 arg0) __asm__("FUN_0012e368");
+void       snd_stop_sound(s32 sound_handle) __asm__("FUN_0012e368");
 
 void snd_stop_sound(s32 sound_handle) {
     s32 sound_handle_payload[4];

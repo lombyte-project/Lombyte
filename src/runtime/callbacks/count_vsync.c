@@ -1,9 +1,10 @@
 /* Ported from rac1-decomp (src/core/permcb.c, func_0012F308). */
 #include "sda.h"
+
 extern long frm_clock_time __asm__("D_0015ED40") MACRO_ADDR;
 extern long frm_vsync_cnt __asm__("D_0015ED48") MACRO_ADDR;
 extern long frm_vsync_time __asm__("D_0015ED50") MACRO_ADDR;
-int count_vsync(void) __asm__("FUN_0012f1c8");
+int         count_vsync(void) __asm__("FUN_0012f1c8");
 
 int count_vsync(void) {
     frm_vsync_cnt++;

@@ -3,6 +3,7 @@
 
 /* Descriptive names recovered from retail menu labels and consumers. */
 #include "types.h"
+
 typedef struct {
     s32 unknown_00;
     s32 draw_flags;
@@ -66,26 +67,28 @@ typedef struct {
     s32 unknown_ec;
     s32 battle_camera_enabled;
     s32 actuator_enabled;
-    u8 start_capture_status;
-    u8 sample_capture_status;
+    u8  start_capture_status;
+    u8  sample_capture_status;
 } DebugMenuState;
 
 typedef struct {
     f32 basis[12];
     f32 position[4];
     f32 previous_basis[4];
-    u8 reserved_50[0x14];
+    u8  reserved_50[0x14];
     f32 camera_position[3];
 } DebugCameraTarget;
+
 typedef struct {
-    f32 position[4];
-    f32 angles[4];
-    u8 reserved_20[0x20];
+    f32                position[4];
+    f32                angles[4];
+    u8                 reserved_20[0x20];
     DebugCameraTarget *target;
-    u8 reserved_44[0x1CC];
-    f32 basis[12];
+    u8                 reserved_44[0x1CC];
+    f32                basis[12];
 } DebugCameraState;
-extern DebugMenuState g_debug_menu __asm__("D_L00_0016C058");
+
+extern DebugMenuState   g_debug_menu __asm__("D_L00_0016C058");
 extern DebugCameraState g_debug_camera __asm__("D_L00_00166DC0");
 
 #endif

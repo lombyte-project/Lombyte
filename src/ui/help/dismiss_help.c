@@ -7,6 +7,7 @@ typedef struct {
     int x28;    /* 0x28 */
     int count;  /* 0x2C: entries in the D_0015F780 table */
 } HelpState;
+
 extern char D_001996D0[];
 /* Advances the help screen's state (D_001996D0). Every access goes
    through the global, and cases 6 and 7 are spelled out: the jump table

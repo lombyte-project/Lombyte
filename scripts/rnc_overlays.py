@@ -16,6 +16,8 @@ RECORDS_DIR = ROOT / "config/us/overlays"
 ASM_DIR = RECORDS_DIR / "asm"
 CATALOGUE = ROOT / "config/overlays/us/functions.tsv"
 DATA_CATALOGUE = ROOT / "config/overlays/us/data.tsv"
+COMPILER_DATA = ROOT / "config/overlays/us/compiler_data.tsv"
+EXE_DATA = ROOT / "config/overlays/us/exe_data.tsv"
 
 RECORD_NAMES = ("lit", "bss", "data", "vtbl", "camvtbl", "sndvtbl", "text")
 GP = 0x166C00              # _gp of the executable; every level inherits it
@@ -129,6 +131,30 @@ def read_data_catalogue(path: Path = DATA_CATALOGUE) -> dict[str, int]:
                 name, size = line.split("\t")[:2]
                 rows[name] = int(size)
     return rows
+
+
+def read_compiler_data(path: Path = COMPILER_DATA) -> set[tuple[int, int, int]]:
+    """Switch tables and float literals the compiler makes from overlay C,
+    proven by `make overlays`: {(level, address, size)}."""
+    rows = set()
+    if path.is_file():
+        for line in path.read_text().splitlines():
+            if line and not line.startswith("#"):
+                level, address, size = line.split("\t")[:3]
+                rows.add((int(level), int(address, 16), int(size)))
+    return rows
+
+
+def write_compiler_data(rows, path: Path = COMPILER_DATA) -> None:
+    if path == EXE_DATA:
+        lines = ["# Copies of the executable's data in C that the levels hold, proven by",
+                 "# make overlays (scripts/overlay_exe_data.py, scripts/overlay_unit.py --write)."]
+    else:
+        lines = ["# Switch tables and float literals the compiler makes from the C in",
+                 "# src/overlays, proven by make overlays (scripts/overlay_unit.py --write)."]
+    lines += ["# level\taddress\tsize"]
+    lines += [f"{level:02d}\t{address:08X}\t{size}" for level, address, size in sorted(rows)]
+    path.write_text("\n".join(lines) + "\n")
 
 
 @lru_cache(maxsize=None)

@@ -142,7 +142,7 @@ def print_check(result: dict) -> None:
     print("\nEdit the C body, then run this command again.")
 
 
-def verify_all() -> int:
+def verify_all(write: bool = False) -> int:
     """Every function in C under src/overlays must be byte-exact."""
     problem = ensure_configured(force=True)
     if problem:
@@ -155,7 +155,7 @@ def verify_all() -> int:
     from elftools.elf.elffile import ELFFile
 
     import overlay_proof as proof
-    total, copies, bad = 0, 0, []
+    total, copies, bad, pools = 0, 0, [], set()
     data_rows, data_defined = ov.read_data_catalogue(), {}
     for obj in sorted((BUILD / "c").glob("**/*.c.o")):
         # An object left behind by a moved or deleted source is not counted.
@@ -183,6 +183,7 @@ def verify_all() -> int:
             if not verdict["exact"]:
                 bad.append(f"{name:24s} {verdict['verdict']}  ({obj.relative_to(BUILD)})")
                 continue
+            pools.update(verdict.get("pools", ()))
             # every other copy (other levels, or twice in one level) is placed
             # and compared too: callees and level data resolve per level
             for place in ov.read_catalogue()[name].places[1:]:
@@ -195,10 +196,22 @@ def verify_all() -> int:
                 if not verdict["exact"]:
                     bad.append(f"{name:24s} L{place[0]:02d}:{place[1]:08x} {verdict['verdict']}"
                                f"  ({obj.relative_to(BUILD)})")
+                    continue
+                pools.update(verdict.get("pools", ()))
     for name in sorted(data_defined.keys() | data_rows.keys()):
         if data_rows.get(name) != data_defined.get(name):
             bad.append(f"{name:24s} config/overlays/us/data.tsv says {data_rows.get(name)} bytes, "
                        f"src/overlays defines {data_defined.get(name)}")
+    import overlay_exe_data
+    for path, rows in ((ov.COMPILER_DATA, pools), (ov.EXE_DATA, overlay_exe_data.proven_copies())):
+        if rows == ov.read_compiler_data(path):
+            continue
+        if write:
+            ov.write_compiler_data(rows, path)
+            print(f"wrote {path.relative_to(ROOT)}")
+        else:
+            bad.append(f"{path.relative_to(ROOT)} is not what the C compiles to: "
+                       "run scripts/overlay_unit.py --write")
     for line in bad:
         print(line)
     if bad:
@@ -210,4 +223,4 @@ def verify_all() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(verify_all())
+    raise SystemExit(verify_all(write="--write" in sys.argv[1:]))

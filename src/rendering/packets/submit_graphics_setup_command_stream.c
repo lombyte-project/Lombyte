@@ -5,39 +5,43 @@
 
 #include "eetypes.h"
 #include "rnc/rendering/dma_tag.h"
+#include "rnc/rendering/vu1_registers.h"
 
 /* GIF packets that program the GS for the NTSC and PAL video modes. */
 extern u8 ntsc_graphics_setup_packet[0x70] __asm__("D_001D7E50");
 extern u8 pal_graphics_setup_packet[0x70] __asm__("D_001D7EC0");
+
 struct GraphicsSetupRecord {
-    s32 command_count;
-    s32 command_flags;
-    f32 second_depth;
-    f32 first_depth;
+    s32  command_count;
+    s32  command_flags;
+    f32  second_depth;
+    f32  first_depth;
     u128 direction;
 };
+
 extern u8 *render_packet_bytes __asm__("D_00160F00");
+
 struct VideoModeState {
     s32 v;
 };
+
 extern struct VideoModeState pal_mode __asm__("D_0015ED80");
-extern s32 graphics_setup_word __asm__("D_001603A0");
-extern void append_fullscreen_setup_strips(void) __asm__("func_002271D0");
+extern s32                   graphics_setup_word __asm__("D_001603A0");
+extern void                  append_fullscreen_setup_strips(void) __asm__("func_002271D0");
 extern void prepare_scaled_direction_and_perpendicular(f32 *, f32) __asm__("func_00226FB8");
-extern u8 *parse_typed_resource_record(u8 *) __asm__("func_002270E8");
+extern u8  *parse_typed_resource_record(u8 *) __asm__("func_002270E8");
 extern void func_00228520(f32 *, f32 *);
 extern void func_00227A08(u32, s32, s32);
 extern void emit_selected_graphics_dma_packets(s32, s32, s32) __asm__("func_00227140");
-extern void emit_gs_register_write(s32, s64) __asm__("func_00233980");
 extern void append_fullscreen_clear_strips(s64) __asm__("func_00227378");
-void submit_graphics_setup_command_stream(u8 *command_stream) __asm__("FUN_00227548");
+void        submit_graphics_setup_command_stream(u8 *command_stream) __asm__("FUN_00227548");
 
 void submit_graphics_setup_command_stream(u8 *command_stream) {
-    f32 first_vector[4];
-    f32 second_vector[4];
-    f32 direction[4];
+    f32                         first_vector[4];
+    f32                         second_vector[4];
+    f32                         direction[4];
     struct GraphicsSetupRecord *record;
-    s32 command_index;
+    s32                         command_index;
 
     append_fullscreen_setup_strips();
     record = (struct GraphicsSetupRecord *)command_stream;
@@ -65,14 +69,15 @@ void submit_graphics_setup_command_stream(u8 *command_stream) {
         record = (struct GraphicsSetupRecord *)command_stream;
     }
     if (pal_mode.v) {
-        emit_gs_register_write(0x4C, 0x80080);
+        vu1_add_g_sregister(0x4C, 0x80080);
     } else {
-        emit_gs_register_write(0x4C, 0x80070);
+        vu1_add_g_sregister(0x4C, 0x80070);
     }
-    emit_gs_register_write(0x42, 0x2000000064LL);
+    vu1_add_g_sregister(0x42, 0x2000000064LL);
     append_fullscreen_clear_strips(0);
-    emit_gs_register_write(0x47, 0x5360B);
-    emit_gs_register_write(0x42, 0x8000000044LL);
+    vu1_add_g_sregister(0x47, 0x5360B);
+    vu1_add_g_sregister(0x42, 0x8000000044LL);
 }
+
 extern __typeof__(submit_graphics_setup_command_stream) func_00227548
     __attribute__((alias("FUN_00227548")));

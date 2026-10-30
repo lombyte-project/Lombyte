@@ -12,12 +12,14 @@ typedef struct {
 
 typedef struct {
     void *text;
-    s32 pad[3];
+    s32   pad[3];
 } TextEntry;
 
-extern HelpState D_001996D0;
+extern HelpState  D_001996D0;
 extern TextEntry *help_msgs __asm__("D_0015F6A0");
+
 #include "rnc/rendering/screen.h"
+
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("func_0022DB10");
 extern void font_set_window(u16 *, u16, u16, u16, u16, u16, u16, u16, u32);
 extern void font_print_window_small(void *, u64, void *, s32) __asm__("func_001F75F0");
@@ -27,13 +29,13 @@ void link_localized_display_text(void) __asm__("FUN_001fdd58");
 void link_localized_display_text(void) {
     /* win is unsigned (lhu) but w/h are signed: the narrowing gives the
        sll 16 / sra 17 shift-by-one retail has instead of a plain sra. */
-    u16 win[16];
+    u16        win[16];
     HelpState *box;
-    void *text;
-    s32 screenY;
-    s32 y0;
-    short measured_text_width, rendered_text_height;
-    s32 hHalf5;
+    void      *text;
+    s32        screenY;
+    s32        y0;
+    short      measured_text_width, rendered_text_height;
+    s32        hHalf5;
 
     D_001996D0.state = 1;
     D_001996D0.x04 = 0;

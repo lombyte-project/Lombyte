@@ -11,26 +11,26 @@
  * hero.damage_source_moby and aims the hero at pos (flags bit 0) or at target+0x10.
  */
 typedef struct {
-    u8 pad0[0x10];
-    OvlQuad pos;                   /* 0x10: used when flags & 1; w == 5627.9248 is special-cased */
-    u8 *target;                    /* 0x20: moby; its type (+0xA6) picks the hero state */
-    s32 unk24;                     /* 0x24: bit 0 tested */
-    u8 unk28;                      /* 0x28: tested == 4 */
-    u8 pad29[7];
-    s32 flags;                     /* 0x30: bit 0 = use pos */
-    u8 *owner;                     /* 0x34: moby the entry belongs to */
-    u8 pad38[8];
+    u8      pad0[0x10];
+    OvlQuad pos;    /* 0x10: used when flags & 1; w == 5627.9248 is special-cased */
+    u8     *target; /* 0x20: moby; its type (+0xA6) picks the hero state */
+    s32     unk24;  /* 0x24: bit 0 tested */
+    u8      unk28;  /* 0x28: tested == 4 */
+    u8      pad29[7];
+    s32     flags; /* 0x30: bit 0 = use pos */
+    u8     *owner; /* 0x34: moby the entry belongs to */
+    u8      pad38[8];
 } OvlMobyEntry40;
 
 typedef struct {
-    char v[16];
-    char padv[16];
+    char  v[16];
+    char  padv[16];
     float f20;
-    char pad24[4];
+    char  pad24[4];
     float f28;
-    char pad2C[4];
-    int f30;
-    int f34;
+    char  pad2C[4];
+    int   f30;
+    int   f34;
 } Child;
 
 typedef struct {

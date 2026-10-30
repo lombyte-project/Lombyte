@@ -1,8 +1,18 @@
 #include "types.h"
-extern s32 snd_send_iop_command_no_wait() __asm__("func_0012E6E0");
-void snd_set_reverb_ex(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4) __asm__("FUN_0012ef68");
 
-void snd_set_reverb_ex(s32 reverb_request_word_0, s32 reverb_request_word_1, s32 reverb_request_word_2, s32 reverb_request_word_3, s32 reverb_request_word_4) {
+extern s32 snd_send_iop_command_no_wait() __asm__("func_0012E6E0");
+void       snd_set_reverb_ex(s32 reverb_request_word_0,
+                             s32 reverb_request_word_1,
+                             s32 reverb_request_word_2,
+                             s32 reverb_request_word_3,
+                             s32 reverb_request_word_4) __asm__("FUN_0012ef68");
+
+void snd_set_reverb_ex(s32 reverb_request_word_0,
+                       s32 reverb_request_word_1,
+                       s32 reverb_request_word_2,
+                       s32 reverb_request_word_3,
+
+                       s32 reverb_request_word_4) {
     s32 sp_slot[5];
     sp_slot[0] = reverb_request_word_0;
     sp_slot[1] = reverb_request_word_1;

@@ -1,4 +1,5 @@
 #include "types.h"
+
 typedef struct HelpMsg {
     s32 unk0;
     s32 id;
@@ -7,13 +8,13 @@ typedef struct HelpMsg {
 } HelpMsg;
 
 struct HelpMessageState {
-    u8 pad_0[0x2C];
+    u8  pad_0[0x2C];
     s32 unk2C;
 };
 
 extern struct HelpMessageState D_001996D0;
-extern HelpMsg *help_msgs __asm__("D_0015F6A0");
-s32 find_help_message_index(s32 message_id) __asm__("FUN_001fdca0");
+extern HelpMsg                *help_msgs __asm__("D_0015F6A0");
+s32                            find_help_message_index(s32 message_id) __asm__("FUN_001fdca0");
 
 s32 find_help_message_index(s32 message_id) {
     s32 i;

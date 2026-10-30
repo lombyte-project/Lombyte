@@ -1,39 +1,39 @@
 #include "types.h"
 
 #include "rnc/ui/menus/menu_screen.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 
 /* Text window passed to font_print_window_regular. */
 struct MenuPacket {
-    u8 pad_0[2];
+    u8  pad_0[2];
     s16 height; /* 0x2: from menu->height */
-    u8 pad_4[2];
-    s16 width;  /* 0x6: from menu->width */
-    s16 x;      /* 0x8: text x */
-    s16 y;      /* 0xA: text y */
-    u8 pad_C[2];
-    u16 end_y;  /* 0xE: y below the printed text; the next line starts 0x10 lower */
+    u8  pad_4[2];
+    s16 width; /* 0x6: from menu->width */
+    s16 x;     /* 0x8: text x */
+    s16 y;     /* 0xA: text y */
+    u8  pad_C[2];
+    u16 end_y; /* 0xE: y below the printed text; the next line starts 0x10 lower */
     s16 unk10;
-    u8 pad_12[6];
+    u8  pad_12[6];
 };
 
-extern void memset() __asm__("func_001153FC");
-extern void setup_gif_paging() __asm__("func_001F4280");
-extern void do_gif_paging() __asm__("func_001F4398");
-extern void font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
+extern void  memset() __asm__("func_001153FC");
+extern void  setup_gif_paging() __asm__("func_001F4280");
+extern void  do_gif_paging() __asm__("func_001F4398");
+extern void  font_print_window_regular(void *, u64, void *, s32) __asm__("func_001F7580");
 extern void *get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32 get_icon_frame() __asm__("func_001FF960");
-extern void draw_hud_sprite(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_001ffc30");
+extern s32   get_icon_frame() __asm__("func_001FF960");
 
 s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) __asm__("FUN_00222948");
 
 s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     struct MenuPacket packet;
     struct MenuPacket text_window_template;
-    void *first_message_text;
-    s32 icon;
-    s16 end_y;
-    s32 first_y = 4;
-    s16 pos_x = 0x18;
+    void             *first_message_text;
+    s32               icon;
+    s16               end_y;
+    s32               first_y = 4;
+    s16               pos_x = 0x18;
 
     memset(&text_window_template, 0, 0x18);
     text_window_template.height = menu->height;
@@ -51,8 +51,8 @@ s32 obtain_all_gold_weapons_menu(struct MenuScreen *menu) {
     packet.y = first_y;
     icon = get_icon_frame(0xE99A, 6);
     draw_hud_sprite(icon, 4, end_y + 0x18, 0x10, 0x10, 0x80);
-    font_print_window_regular(&packet, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x5183),
-                              -1);
+    font_print_window_regular(
+        &packet, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x5183), -1);
     do_gif_paging();
     return 2;
 }

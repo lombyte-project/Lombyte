@@ -2,8 +2,6 @@
 #include "sda.h"
 #include "rnc/rendering/texture_upload.h"
 
-
-
 extern s32 pending_texture_upload_count_macro __asm__("D_0015F458") MACRO_ADDR;
 /* Registers an 8-bit texture: returns its GS TEX0 value (tbp = tex >> 8,
    tbw = 1 << max(tw - 6, 0), PSMT8, tw, th, tcc 1, cbp = clut >> 8,
@@ -13,7 +11,7 @@ extern s32 pending_texture_upload_count_macro __asm__("D_0015F458") MACRO_ADDR;
 long register_8bit_texture(s32 tw, s32 th, s32 clut_data, s32 image_data, s32 cbp, s32 tbp) __asm__("FUN_00204e30");
 
 long register_8bit_texture(s32 tw, s32 th, s32 clut_data, s32 image_data, s32 cbp, s32 tbp) {
-    s32 texture_buffer_width;
+    s32  texture_buffer_width;
     long reg;
 
     texture_buffer_width = tw - 6;

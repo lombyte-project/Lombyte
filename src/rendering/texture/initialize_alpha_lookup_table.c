@@ -1,6 +1,7 @@
 #include "types.h"
+
 extern s32 bit_swap_lut[] __asm__("D_0018E740");
-void initialize_alpha_lookup_table(void) __asm__("FUN_001f7a30");
+void       initialize_alpha_lookup_table(void) __asm__("FUN_001f7a30");
 
 void initialize_alpha_lookup_table(void) {
     s32 i;

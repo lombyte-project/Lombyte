@@ -1,9 +1,11 @@
 #include "types.h"
+
 extern u32 D_00160F00;
+
 void AppendDmaTag(u32 addr) {
     u32 *tag;
     u32 *cursor;
-    u32 value;
+    u32  value;
 
     cursor = (u32 *)D_00160F00;
     value = addr + 0x90000000;

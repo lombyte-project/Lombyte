@@ -1,28 +1,33 @@
 /* Ported from rac1-decomp (src/game/tiefunc.c, func_00236CA8). */
 #include "sda.h"
 #include "rnc/rendering/draw_config.h"
+#include "rnc/math/asm_helpers.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "types.h"
-extern void fast_mem_copy(void *, void *, int) __asm__("FUN_001f98d0");
+#include "rnc/rendering/render_globals.h"
+#include "rnc/globals.h"
+
 extern void FlushCache(int);
-extern char *D_001E1700[];
-extern s32 D_001E3000[];
-extern u8 D_001E4200[];
-extern u8 D_001E2A00[];
-extern u8 D_001E3E00[];
-extern u8 tie_light_data[] __asm__("D_001E3200");
-extern u8 tie_light_data2[] __asm__("D_001E4400");
+
+#include "rnc/rendering/object_render_class.h"
+
+extern s32            D_001E3000[];
+extern u8             D_001E4200[];
+extern u8             D_001E2A00[];
+extern u8             D_001E3E00[];
+extern u8             tie_light_data2[] __asm__("D_001E4400");
 extern int D_00160F68 MACRO_ADDR;
-extern u8 D_00160F30[];
-extern u8 D_00160F40[];
-extern u8 D_001DF030[];
-extern void noop_core_callback_secondary(void *, int) __asm__("func_001F21B8"); /* empty profiling marker */
+extern u8             D_00160F30[];
+extern u8             D_00160F40[];
+extern u8             D_001DF030[];
+extern void           noop_core_callback_secondary(void *,
+                                                   int) __asm__("func_001F21B8"); /* empty profiling marker */
 extern void noop_core_callback(void *, int) __asm__("func_001F21B0"); /* empty profiling marker */
 extern void tie_proc(void) __asm__("FUN_00235be8");
 extern void WriteDmaChannel(void *, int, int);
 extern void dma_tie_textures(void) __asm__("func_00235640"); /* DmaTieTextures */
-extern int registered_object_render_class_count_macro __asm__("D_00160F4C") MACRO_ADDR;
+extern int  registered_object_render_class_count_macro __asm__("D_00160F4C") MACRO_ADDR;
 /* DrawTies_2: DrawTies_1's two passes, the first with the odd ties' 0x8
    flag set (and the saved tie data swapped in around it), the second with
    the even ones'. Each flag loop reads the tie count into its own local
@@ -30,14 +35,12 @@ extern int registered_object_render_class_count_macro __asm__("D_00160F4C") MACR
    `&= ~8` stays an int AND with -9, not andi 0xFFF7). */
 void draw_ties_2(void) __asm__("FUN_00235990");
 
-extern s32 gs_texture_allocation_start __asm__("D_0015EE78") MACRO_ADDR;
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
 void draw_ties_2(void) {
     {
         int i;
         int n = registered_object_render_class_count_macro;
         for (i = 1; i < n; i += 2) {
-            *(short *)(D_001E1700[i] + 0x24) |= 8;
+            object_render_classes[i]->flags |= 8;
         }
     }
     {
@@ -63,19 +66,19 @@ void draw_ties_2(void) {
         int i;
         int n = registered_object_render_class_count_macro;
         for (i = 1; i < n; i += 2) {
-            *(short *)(D_001E1700[i] + 0x24) &= ~8;
+            object_render_classes[i]->flags &= ~8;
         }
     }
     {
         int i;
         int n = registered_object_render_class_count_macro;
         for (i = 0; i < n; i += 2) {
-            *(short *)(D_001E1700[i] + 0x24) |= 8;
+            object_render_classes[i]->flags |= 8;
         }
     }
     {
         struct DrawConfig *d = &draw_config;
-        int p = render_packet_cursor.addr;
+        int                p = render_packet_cursor.addr;
         D_00160F68 = p;
         gs_texture_allocation_cursor = gs_texture_allocation_start;
         p += 0x10;
@@ -92,7 +95,7 @@ void draw_ties_2(void) {
         int i;
         int n = registered_object_render_class_count_macro;
         for (i = 0; i < n; i += 2) {
-            *(short *)(D_001E1700[i] + 0x24) &= ~8;
+            object_render_classes[i]->flags &= ~8;
         }
     }
     fast_mem_copy((void *)render_packet_cursor.addr, D_001DF030, 0x20);

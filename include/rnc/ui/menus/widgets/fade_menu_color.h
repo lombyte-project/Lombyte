@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_WIDGETS_FADE_MENU_COLOR_H
+#define LOMBYTE_RNC_UI_MENUS_WIDGETS_FADE_MENU_COLOR_H
+
+#include "types.h"
+
+s32 fade_menu_color(s32, s32, s32) __asm__("FUN_0021b6d8");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_WIDGETS_FADE_MENU_COLOR_H */

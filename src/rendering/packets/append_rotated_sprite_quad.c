@@ -7,35 +7,56 @@
 extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
 extern void fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
-extern f32 fast_cos(f32) __asm__("func_001F9DC8");
-extern f32 fast_sin(f32) __asm__("func_001F9DE0");
-extern s32 convert_float_to_integer(f32) __asm__("func_001FA6D0");
+extern f32  fast_cos(f32) __asm__("func_001F9DC8");
+extern f32  fast_sin(f32) __asm__("func_001F9DE0");
+extern s32  truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 
-void append_rotated_sprite_quad(f32 center_x, f32 center_y, f32 quad_width, f32 quad_height,
-                                f32 angle, s32 texture_width, s32 texture_height,
-                                s64 texture_tex0, s64 z_and_fog, s32 color, u8 flip_u, u8 flip_v,
-                                f32 pivot_u, f32 pivot_v) __asm__("FUN_001f5ab0");
+void append_rotated_sprite_quad(f32 center_x,
+                                f32 center_y,
+                                f32 quad_width,
+                                f32 quad_height,
+                                f32 angle,
+                                s32 texture_width,
+                                s32 texture_height,
+                                s64 texture_tex0,
+                                s64 z_and_fog,
+                                s32 color,
+                                u8  flip_u,
+                                u8  flip_v,
+                                f32 pivot_u,
+                                f32 pivot_v) __asm__("FUN_001f5ab0");
 
-void append_rotated_sprite_quad(f32 center_x, f32 center_y, f32 quad_width, f32 quad_height,
-                                f32 angle, s32 texture_width, s32 texture_height,
-                                s64 texture_tex0, s64 z_and_fog, s32 color, u8 flip_u, u8 flip_v,
-                                f32 pivot_u, f32 pivot_v) {
-    Vec4f vertical_edge;
-    Vec4f horizontal_edge;
-    Vec4f center;
-    Vec4f temporary;
-    Vec4f top_left;
-    Vec4f top_right;
-    Vec4f bottom_left;
-    Vec4f bottom_right;
+void append_rotated_sprite_quad(f32 center_x,
+                                f32 center_y,
+                                f32 quad_width,
+                                f32 quad_height,
+                                f32 angle,
+                                s32 texture_width,
+                                s32 texture_height,
+                                s64 texture_tex0,
+                                s64 z_and_fog,
+                                s32 color,
+                                u8  flip_u,
+                                u8  flip_v,
+                                f32 pivot_u,
+
+                                f32 pivot_v) {
+    Vec4f          vertical_edge;
+    Vec4f          horizontal_edge;
+    Vec4f          center;
+    Vec4f          temporary;
+    Vec4f          top_left;
+    Vec4f          top_right;
+    Vec4f          bottom_left;
+    Vec4f          bottom_right;
     struct DmaTag *tag;
-    u64 *packet_words;
-    s32 texture_left;
-    s32 texture_right;
-    s32 texture_top;
-    s32 texture_bottom;
-    f32 inverse_pivot_u;
-    f32 inverse_pivot_v;
+    u64           *packet_words;
+    s32            texture_left;
+    s32            texture_right;
+    s32            texture_top;
+    s32            texture_bottom;
+    f32            inverse_pivot_u;
+    f32            inverse_pivot_v;
 
     if (flip_u != 0) {
         texture_left = ((u32)texture_width << 4);
@@ -89,27 +110,26 @@ void append_rotated_sprite_quad(f32 center_x, f32 center_y, f32 quad_width, f32 
     packet_words[4] = color;
     packet_words[5] = texture_left | texture_top;
     packet_words[6] =
-        (convert_float_to_integer(top_left.x * 16.0f) + screen_extent.left - 8) |
-        ((u64)(convert_float_to_integer(top_left.y * 16.0f) + screen_extent.top - 8) << 16) |
+        (truncate_float_to_s32(top_left.x * 16.0f) + screen_extent.left - 8) |
+        ((u64)(truncate_float_to_s32(top_left.y * 16.0f) + screen_extent.top - 8) << 16) |
         ((u64)z_and_fog << 32);
     packet_words[7] = texture_right | texture_top;
     packet_words[8] =
-        (convert_float_to_integer(top_right.x * 16.0f) + screen_extent.left - 8) |
-        ((u64)(convert_float_to_integer(top_right.y * 16.0f) + screen_extent.top - 8) << 16) |
+        (truncate_float_to_s32(top_right.x * 16.0f) + screen_extent.left - 8) |
+        ((u64)(truncate_float_to_s32(top_right.y * 16.0f) + screen_extent.top - 8) << 16) |
         ((u64)z_and_fog << 32);
     packet_words[9] = texture_left | texture_bottom;
     packet_words[10] =
-        (convert_float_to_integer(bottom_left.x * 16.0f) + screen_extent.left - 8) |
-        ((u64)(convert_float_to_integer(bottom_left.y * 16.0f) + screen_extent.top - 8) << 16) |
+        (truncate_float_to_s32(bottom_left.x * 16.0f) + screen_extent.left - 8) |
+        ((u64)(truncate_float_to_s32(bottom_left.y * 16.0f) + screen_extent.top - 8) << 16) |
         ((u64)z_and_fog << 32);
     packet_words[11] = texture_right | texture_bottom;
     packet_words[12] =
-        (convert_float_to_integer(bottom_right.x * 16.0f) + screen_extent.left - 8) |
-        ((u64)(convert_float_to_integer(bottom_right.y * 16.0f) + screen_extent.top - 8) << 16) |
+        (truncate_float_to_s32(bottom_right.x * 16.0f) + screen_extent.left - 8) |
+        ((u64)(truncate_float_to_s32(bottom_right.y * 16.0f) + screen_extent.top - 8) << 16) |
         ((u64)z_and_fog << 32);
     packet_words[13] = 0;
     render_packet_cursor.tag = (struct DmaTag *)((u8 *)render_packet_cursor.tag + 0x70);
 }
 
 extern __typeof__(append_rotated_sprite_quad) func_001F5AB0 __attribute__((alias("FUN_001f5ab0")));
-

@@ -2,14 +2,15 @@
 #include "rnc/input/pad_state.h"
 
 extern void noop_memory_callback(void) __asm__("func_00208810");
+
 #include "rnc/ui/map/map_state.h"
 
 int update_map_zoom_and_pan(void) __asm__("FUN_00205440");
 
 int update_map_zoom_and_pan(void) {
     float *zoom;
-    int *xs;
-    int *ys;
+    int   *xs;
+    int   *ys;
 
     noop_memory_callback();
     if (controller_state.pressed & (PAD_SELECT | PAD_R3)) {
@@ -38,10 +39,10 @@ int update_map_zoom_and_pan(void) {
     }
     {
         float z = zoom[level_map_selection.loaded];
-        int xlo = (int)(0.0f / z) << 15;
-        int ylo = (int)(1280.0f / z) << 15;
-        int xhi = 0x10000000 - xlo;
-        int yhi = 0x10000000 - ylo;
+        int   xlo = (int)(0.0f / z) << 15;
+        int   ylo = (int)(1280.0f / z) << 15;
+        int   xhi = 0x10000000 - xlo;
+        int   yhi = 0x10000000 - ylo;
 
         if (xs[level_map_selection.loaded] < xlo) {
             xs[level_map_selection.loaded] = xlo;

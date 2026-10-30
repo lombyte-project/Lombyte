@@ -3,17 +3,22 @@
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
 #include "types.h"
-extern int *gif_page_marker_a __asm__("D_0015F450") MACRO_ADDR;
-extern int effect_tex_cnt __asm__("D_0015F45C") MACRO_ADDR;
-extern s32 pending_texture_upload_count __asm__("D_0015F458");
+#include "rnc/rendering/render_globals.h"
+#include "rnc/globals.h"
+
+extern int *gif_page_marker __asm__("D_0015F450") MACRO_ADDR;
+
 typedef struct {
     long unk0;
     long unk8;
 } PageSlot;
+
 extern char D_0019A3E8[];
+
 static inline char *PagingArena(void) {
     return D_0019A3E8;
 }
+
 /* SetupGifPaging(int): marks the render_packet_cursor.words packet in D_0015F450 and
    reserves 0x10 bytes, copies D_0015EE78 to D_0015EE74, clears
    pending_texture_upload_count and the first dword of the D_0015F45C paging slots, then,
@@ -26,17 +31,16 @@ static inline char *PagingArena(void) {
    gives retail's copy for the loop) with the element offset first
    (`i * 8 + base`); the second through a block-local pointer, whose
    %hi retail keeps. */
-void setup_gif_paging(int arg0) __asm__("FUN_001f4280");
+void setup_gif_paging(int skip_paging_entry_reset) __asm__("FUN_001f4280");
 
 extern PageSlot effect_texture_definitions[] __asm__("D_0018D440");
-extern s32 gs_texture_allocation_start __asm__("D_0015EE78") MACRO_ADDR;
-extern s32 gs_texture_allocation_cursor __asm__("D_0015EE74") MACRO_ADDR;
-extern s32 gs_texture_allocation_base_macro __asm__("D_0015EE8C") MACRO_ADDR;
+extern s32      gs_texture_allocation_base_macro __asm__("D_0015EE8C") MACRO_ADDR;
+
 void setup_gif_paging(int skip_paging_entry_reset) {
     int *packet_cursor = render_packet_cursor.words;
-    int i;
+    int  i;
 
-    gif_page_marker_a = packet_cursor;
+    gif_page_marker = packet_cursor;
     packet_cursor += 4;
     render_packet_cursor.words = packet_cursor;
     gs_texture_allocation_cursor = gs_texture_allocation_start;
@@ -58,7 +62,7 @@ void setup_gif_paging(int skip_paging_entry_reset) {
         }
         {
             char *paging_arena = D_0019A3E8;
-            int j;
+            int   j;
 
             for (j = 0; j < *(int *)(*(char **)(paging_arena + 0x18) + 0x24); j++) {
                 *(short *)(*(char **)(paging_arena + 0x28) + j * 8 + 4) = 0;

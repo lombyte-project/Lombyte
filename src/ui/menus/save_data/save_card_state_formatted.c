@@ -3,7 +3,7 @@
 #include "rnc/globals.h"
 
 /* D_0013D2AC is the +0x1C field of the shared D_0013D290 save-state block. */
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
 
 void save_card_state_formatted(void) __asm__("FUN_00208b88");
 

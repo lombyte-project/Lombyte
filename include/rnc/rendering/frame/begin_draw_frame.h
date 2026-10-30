@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_FRAME_BEGIN_DRAW_FRAME_H
+#define LOMBYTE_RNC_RENDERING_FRAME_BEGIN_DRAW_FRAME_H
+
+#include "types.h"
+
+void begin_draw_frame(void) __asm__("FUN_001f7978");
+
+#endif /* LOMBYTE_RNC_RENDERING_FRAME_BEGIN_DRAW_FRAME_H */

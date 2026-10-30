@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_WORLD_SELECT_WORLD_OBJECT_RESOURCE_TABLES_H
+#define LOMBYTE_RNC_WORLD_SELECT_WORLD_OBJECT_RESOURCE_TABLES_H
+
+#include "types.h"
+
+void select_world_object_resource_tables(s32, s32) __asm__("FUN_00204a40");
+
+#endif /* LOMBYTE_RNC_WORLD_SELECT_WORLD_OBJECT_RESOURCE_TABLES_H */

@@ -1,10 +1,11 @@
 #include "types.h"
+
 extern s32 setup_gif_paging() __asm__("func_001F4280");
 extern s32 do_gif_paging() __asm__("func_001F4398");
 extern s32 font_print_large(s32, s32, u64, s32, s32) __asm__("func_001F6530");
 extern s32 get_help_message_text() __asm__("func_001FDD10");
 extern s32 vu1_add_g_sregister() __asm__("func_00233980");
-s32 draw_mission_menu_labels(void) __asm__("FUN_0021f5f8");
+s32        draw_mission_menu_labels(void) __asm__("FUN_0021f5f8");
 
 s32 draw_mission_menu_labels(void) {
     vu1_add_g_sregister(0x42, 0x44);

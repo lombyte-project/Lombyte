@@ -1,7 +1,7 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/data_labels.h"
 
 extern s32 snd_play_vag_stream_by_loc_ex_cb() __asm__("func_0012EC08");
@@ -23,7 +23,16 @@ void music_start_track_50000(s32 track, s32 flags, s32 volume) {
             music_stream_state.secondary.volume = volume;
             music_stream_state.secondary.crossfade_enabled = 0;
             snd_play_vag_stream_by_loc_ex_cb(
-                handle, 0, 0, 0, (s16)volume, 0, 2, 0, 0x21, D_002169C0,
+                handle,
+                0,
+                0,
+                0,
+                (s16)volume,
+                0,
+                2,
+                0,
+                0x21,
+                D_002169C0,
                 (u64)((s64)(((u8 *)&music_stream_state + 0x50)) << 0x20) >> 0x20);
         }
     }

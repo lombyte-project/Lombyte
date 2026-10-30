@@ -1,16 +1,53 @@
-# Formatting only: whitespace and line breaks never change the generated code.
-# Includes keep their order and comments keep their wording.
+# Human first: the code should read well at first glance.
+# Formatting only: whitespace and line breaks never change the generated code
+# (make elf and make overlays prove it). Includes keep their order and
+# comments keep their wording.
 BasedOnStyle: LLVM
 IndentWidth: 4
 ColumnLimit: 100
-SortIncludes: Never
-ReflowComments: false
+UseTab: Never
+
+# Braces and short forms: one statement per line.
+BreakBeforeBraces: Attach
+InsertBraces: false
 AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
 IndentCaseLabels: false
+
+# Declarations: pointer star on the name, struct fields and their offset
+# comments in columns.
 PointerAlignment: Right
 AlignConsecutiveMacros: Consecutive
-BreakBeforeBraces: Attach
-InsertBraces: false
+AlignEscapedNewlines: Left
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+AlignConsecutiveBitFields: Consecutive
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
+AlignArrayOfStructures: Right
+
+# Long calls and prototypes: all arguments on one line, or one per line.
+BinPackArguments: false
+BinPackParameters: false
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AlignAfterOpenBracket: Align
+BreakStringLiterals: false
+
+# Blank lines: never more than one in a row.
+SeparateDefinitionBlocks: Leave
+MaxEmptyLinesToKeep: 1
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+# Includes and comments stay as written.
+SortIncludes: Never
+IncludeBlocks: Preserve
+ReflowComments: false
 SpaceBeforeParens: ControlStatements

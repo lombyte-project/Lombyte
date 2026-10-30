@@ -2,16 +2,18 @@
 #include "types.h"
 #include "asm.h"
 #include "rnc/globals.h"
-extern s32 frame_size __asm__("D_0013E504") __attribute__((section(".data")));
-extern s32 D_L06_0015F8E8 __attribute__((sda));
-extern f32 D_L06_0015F8F0 __attribute__((sda));
-extern f32 D_L06_0015F8F4 __attribute__((sda));
-extern f32 convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-extern s32 fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
-extern s32 get_icon_frame(s32, s32) __asm__("FUN_001ff960");
-extern void draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffc30");
-extern void draw_hud_sprite_flipped(s32, s32, s32, s32, s32, s32) __asm__("FUN_001ffe18");
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
+#include "sda.h"
+#include "rnc/ui/hud/get_icon_frame.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite.h"
+#include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
+
+extern s32  frame_size __asm__("D_0013E504") NOT_SDA;
+extern s32  D_L06_0015F8E8 __attribute__((sda));
+extern f32  D_L06_0015F8F0 __attribute__((sda));
+extern f32  D_L06_0015F8F4 __attribute__((sda));
+extern s32  fast_tween_color(s32, s32, f32) __asm__("FUN_001fa6e0");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 
 s32 FUN_L06_00249738(u8 *p) {
@@ -26,19 +28,26 @@ s32 FUN_L06_00249738(u8 *p) {
     /* Fakematch: computing this row before the default one gives retail's order. */
     ntsc_y = frame_size - 50;
     y = frame_size - 42;
-    if (!pal_mode) y = ntsc_y;
+    if (!pal_mode)
+        y = ntsc_y;
     level = current_level_index;
-    if (level == 7 || level == 13) segments = 6;
-    if (level == 18) segments = 7;
-    if (p[0x70] == 0) return *(s32 *)(p + 0x58);
+    if (level == 7 || level == 13)
+        segments = 6;
+    if (level == 18)
+        segments = 7;
+    if (p[0x70] == 0)
+        return *(s32 *)(p + 0x58);
     {
         if (level == 13) {
             y = 18;
-            if (pal_mode != 0) y = 10;
+            if (pal_mode != 0)
+                y = 10;
         }
         alpha = convert_integer_to_float(p[0x70]) * 0.125f;
-        if (alpha > 1.0f) alpha = 1.0f;
-        else if (alpha < 0.0f) alpha = 0.0f;
+        if (alpha > 1.0f)
+            alpha = 1.0f;
+        else if (alpha < 0.0f)
+            alpha = 0.0f;
         remaining = segments - 1;
         scaled_alpha = alpha * 128.0f;
         i = truncate_float_to_s32(scaled_alpha);
@@ -52,8 +61,7 @@ s32 FUN_L06_00249738(u8 *p) {
         x = 0;
         color = 0x800000ff;
         if (*(s32 *)(p + 0x74) != 0) {
-            fill = (f32)*(s32 *)(p + 0x74) /
-                   convert_integer_to_float(*(s32 *)(p + 8));
+            fill = (f32) * (s32 *)(p + 0x74) / convert_integer_to_float(*(s32 *)(p + 8));
             step = 1.0f / convert_integer_to_float(segments);
             limit = remaining * step;
             if (limit < fill) {
@@ -89,3 +97,13 @@ s32 FUN_L06_00249738(u8 *p) {
     }
     return *(s32 *)(p + 0x58);
 }
+
+s32 D_L07_0015F8E8 = 0x114;
+f32 D_L07_0015F8F0 = 0.7f;
+f32 D_L07_0015F8F4 = 0.7f;
+s32 D_L13_0015F8E8 = 0x114;
+f32 D_L13_0015F8F0 = 0.7f;
+f32 D_L13_0015F8F4 = 0.7f;
+s32 D_L18_0015F8E8 = 0x114;
+f32 D_L18_0015F8F0 = 0.7f;
+f32 D_L18_0015F8F4 = 0.7f;

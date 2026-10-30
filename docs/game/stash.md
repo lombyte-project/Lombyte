@@ -1,7 +1,7 @@
 # IOP stash transfers
 
 `src/storage/stash/` manages a 64-slot allocation table over an IOP buffer.
-The shared EE state and entries are defined in `include/rnc/storage/stash.h`.
+The shared EE state and entries are defined in `include/rnc/streaming/stash/stash.h`.
 
 ## Functions
 
@@ -19,7 +19,7 @@ The names describe what the code does, not Insomniac's original names.
 
 One quadword is 16 bytes. Send's `transfer_qwords` controls DMA size;
 `reserve_qwords` controls reserved space and the stored length. They can differ:
-`src/overlays/shared/rendering/00245c28.c` reserves 0x4800 quadwords while
+`src/overlays/shared/game/run_level_main_loop.c` reserves 0x4800 quadwords while
 passing a separate transfer length. Send uses direct SIF DMA, not RPC command 0.
 It ignores the DMA result and records the slot regardless, so a returned slot
 does not guarantee transfer success or completion.

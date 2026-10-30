@@ -1,17 +1,20 @@
 #include "types.h"
 
 #include "rnc/rendering/dma_tag.h"
+
 struct GifPaging {
     struct DmaTag *start;
     struct DmaTag *end;
 };
-extern s32 D_0018A2DC[];
+
+extern s32  D_0018A2DC[];
 extern void FUN_0020b4a8(void);
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 
 void do_gif_paging(void) __asm__("FUN_001f4398");
 
 extern struct GifPaging gif_page_marker __asm__("D_0015F450");
+
 void do_gif_paging(void) {
     struct DmaTag *tag;
 

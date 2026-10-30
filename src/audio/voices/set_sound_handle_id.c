@@ -1,12 +1,14 @@
 #include "types.h"
+
 struct Handle {
     u32 id;
-    u8 pad4[6];
+    u8  pad4[6];
     s16 state;
 };
+
 extern char sound_handle_id_conflict_diagnostic[] __asm__("D_00160068");
 extern void DebugPrint(char *, ...);
-void set_sound_handle_id(u32 id, s64 arg) __asm__("FUN_00216b68");
+void        set_sound_handle_id(u32 id, s64 arg) __asm__("FUN_00216b68");
 
 void set_sound_handle_id(u32 id, s64 playback_record_address) {
     struct Handle *playback_record = (struct Handle *)(s32)playback_record_address;

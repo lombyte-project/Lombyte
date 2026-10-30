@@ -5,80 +5,84 @@
 #include "rnc/math/vector.h"
 
 #include "qcopy.h"
+#include "rnc/math/fast_math.h"
+#include "rnc/math/asm_helpers.h"
+#include "rnc/world/collision/collision_line.h"
+#include "rnc/mobys/moby.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00259868), where it is exact; names translated to the US level program. */
 
-typedef struct { float a[4]; } Vs __attribute__((aligned(16)));
+typedef struct {
+    float a[4];
+} Vs __attribute__((aligned(16)));
 
-extern Vec4 D_L00_00173E70;
-extern f32 vector_length_xy(void *) __asm__("FUN_001f9b20");
-extern f32 vector_length_xyz(void *) __asm__("FUN_001f9af0");
-extern float fast_arc_tan(float, float) __asm__("FUN_001f9e90");
-extern int D_L00_00173E40[];
-extern int collision_line(void *, void *, int, int, int) __asm__("FUN_001efa68");
-extern int coll_sphere() __asm__("FUN_L00_001f0d60");
-extern void add_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a10");
-extern void normalize_vector_xyz(void *, void *, f32) __asm__("FUN_001f9bf8");
-extern void subtract_vector_xyz(void *, void *, void *) __asm__("FUN_001f9a28");
-extern Vec4 D_94C8_60 __asm__("D_L00_00173E60");
-extern int func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+#include "rnc/overlay/collision.h"
 
-int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, float radius, float height);
-int FUN_L00_00258830(char *moby, char *velocity, int flags, float step_height, float radius, float height) {
-    Vs old_pos;
-    Vs ray_start;
-    Vs ray_end;
-    Vs reach;
-    int result = 0;
-    int coll_flags = (flags * 2) & 0x20;
+extern int  D_L00_00173E40[];
+extern int  coll_sphere() __asm__("FUN_L00_001f0d60");
+extern Vec4 collision_hit_point __asm__("D_L00_00173E60");
+extern int  func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
+
+int FUN_L00_00258830(
+    char *moby, char *velocity, int flags, float step_height, float radius, float height);
+int FUN_L00_00258830(
+
+    char *moby, char *velocity, int flags, float step_height, float radius, float height) {
+    Vs    old_pos;
+    Vs    ray_start;
+    Vs    ray_end;
+    Vs    reach;
+    int   result = 0;
+    int   coll_flags = (flags * 2) & 0x20;
     char *pos = moby + 0x10;
-    int i;
+    int   i;
     char *position;
 
     qcopy(&old_pos, pos);
-    add_vector_xyz(pos, pos, velocity);
-    if (radius < vector_length_xyz(velocity)) {
+    fast_vec_add(pos, pos, velocity);
+    if (radius < fast_vec_length(velocity)) {
         qcopy(&ray_start, &old_pos);
         ray_start.a[2] += step_height;
-        normalize_vector_xyz(&reach, velocity, radius);
-        add_vector_xyz(&ray_end, &reach, pos);
+        fast_vec_normalize(&reach, velocity, radius);
+        fast_vec_add(&ray_end, &reach, pos);
         ray_end.a[2] += step_height;
-        if (collision_line(&ray_start, &ray_end, coll_flags, (int)moby, 0)) {
-            subtract_vector_xyz(pos, (char *)&D_94C8_60, &reach);
+        if (collision_line(&ray_start, &ray_end, coll_flags, moby, 0)) {
+            fast_vec_sub(pos, (char *)&collision_hit_point, &reach);
             result = 1;
-            *(float *)(moby + 0x18) -= step_height;
+            MOBY(moby)->pos.z -= step_height;
         }
     }
     for (i = 0, position = moby + 0x10; i < 6; i++) {
         qcopy(&ray_start, position);
         ray_start.a[2] += step_height;
         if (func_L00_001F10E0_l(&ray_start, radius, coll_flags | 4, moby)) {
-            qcopy(position, &D_L00_00173E70);
+            qcopy(position, &coll_hit_position);
             result |= 1;
-            *(float *)(moby + 0x18) -= step_height;
+            MOBY(moby)->pos.z -= step_height;
         } else {
             break;
         }
     }
-    radius = *(float *)(moby + 0x18) - height;
+    radius = MOBY(moby)->pos.z - height;
     qcopy(&ray_start, position);
     qcopy(&ray_end, position);
     ray_start.a[2] += step_height;
     ray_end.a[2] = radius - 0.05f;
-    if (collision_line(&ray_start, &ray_end, coll_flags | 2, (int)moby, 0)) {
+    if (collision_line(&ray_start, &ray_end, coll_flags | 2, moby, 0)) {
         if (D_L00_00173E40[7] > 0) {
             float surface;
             result |= 2;
-            surface = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48), vector_length_xy((char *)D_L00_00173E40 + 0x40));
+            surface = fast_arc_tan(*(float *)((char *)D_L00_00173E40 + 0x48),
+                                   vector_length_xy((char *)D_L00_00173E40 + 0x40));
             if (surface > 0.5f) {
                 result |= 4;
             }
             surface = *(float *)((char *)D_L00_00173E40 + 0x28);
             if (radius < surface) {
-                *(float *)(moby + 0x18) += (surface - radius) * 0.3f;
+                MOBY(moby)->pos.z += (surface - radius) * 0.3f;
             }
         }
     }
-    subtract_vector_xyz(velocity, position, &old_pos);
+    fast_vec_sub(velocity, position, &old_pos);
     return result;
 }

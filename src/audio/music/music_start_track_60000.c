@@ -1,6 +1,6 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 #include "rnc/data_labels.h"
 
 // D_002169C0 is a code address retail passes as a pointer, not a data symbol;
@@ -24,7 +24,16 @@ void music_start_track_60000(s32 track, s32 track_flags, s32 volume) {
             music_stream_state.secondary.volume = volume;
             music_stream_state.secondary.crossfade_enabled = 0;
             snd_play_vag_stream_by_loc_ex_cb(
-                location, 0, 0, 0, (s16)volume, 0, 2, 0, 0x21, D_002169C0,
+                location,
+                0,
+                0,
+                0,
+                (s16)volume,
+                0,
+                2,
+                0,
+                0x21,
+                D_002169C0,
                 (u64)((s64)(((u8 *)&music_stream_state + 0x50)) << 0x20) >> 0x20);
         }
     }

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_HANDLE_JUMP_PRESS_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_HANDLE_JUMP_PRESS_H
+
+#include "types.h"
+
+s32 try_start_hero_item_idle_animation(void) __asm__("FUN_L00_00229a98");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_HANDLE_JUMP_PRESS_H */

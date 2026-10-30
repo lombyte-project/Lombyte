@@ -1,18 +1,18 @@
 #include "types.h"
 #include "rnc/audio/music/music_stream_state.h"
-#include "rnc/storage/disc_table.h"
+#include "rnc/streaming/disc_table.h"
 
 extern void music_primary_start_callback() __asm__("FUN_00216b28");
-extern void snd_play_vag_stream_by_loc_ex_cb(s32, s32, s32, s32, s16, s32, s32, s32, s32,
-                                             void (*)(), u64) __asm__("func_0012EC08");
+extern void snd_play_vag_stream_by_loc_ex_cb(
+    s32, s32, s32, s32, s16, s32, s32, s32, s32, void (*)(), u64) __asm__("func_0012EC08");
 
 void music_start_track(s32 track, s32 track_flags, s32 volume) __asm__("FUN_00215c40");
 
 void music_start_track(s32 track, s32 track_flags, s32 volume) {
     volatile s32 *entry;
-    s64 stream_location;
-    u8 *disc_table_base;
-    s32 track_location_table_offset;
+    s64           stream_location;
+    u8           *disc_table_base;
+    s32           track_location_table_offset;
 
     if (music_stream_state.primary.handle == 0) {
         disc_table_base = (u8 *)&disc_table;
@@ -29,7 +29,16 @@ void music_start_track(s32 track, s32 track_flags, s32 volume) {
             music_stream_state.primary.crossfade_enabled = 0;
             stream_location = *entry;
             snd_play_vag_stream_by_loc_ex_cb(
-                stream_location, 0, 0, 0, volume, 0, 1, 0, 0x20, music_primary_start_callback,
+                stream_location,
+                0,
+                0,
+                0,
+                volume,
+                0,
+                1,
+                0,
+                0x20,
+                music_primary_start_callback,
                 (u64)((s64)(((u8 *)&music_stream_state + 0x34)) << 0x20) >> 0x20);
         }
     }

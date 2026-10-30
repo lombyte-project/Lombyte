@@ -1,6 +1,6 @@
 struct InitBlock {
-    int input;
-    int zero;
+    int  input;
+    int  zero;
     int *first;
     int *second;
 };
@@ -11,7 +11,7 @@ int init_block_fn(int value) __asm__("func_00119568");
 
 int init_block_fn(int value) {
     struct InitBlock *base;
-    int *ring_storage_start;
+    int              *ring_storage_start;
     base = &InitBlockData;
     ring_storage_start = (int *)((char *)base + 16);
     base->input = value;

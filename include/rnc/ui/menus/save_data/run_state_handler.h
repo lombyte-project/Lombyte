@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_SAVE_DATA_RUN_STATE_HANDLER_H
+#define LOMBYTE_RNC_UI_MENUS_SAVE_DATA_RUN_STATE_HANDLER_H
+
+#include "types.h"
+
+void run_state_handler(void) __asm__("FUN_00208840");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_SAVE_DATA_RUN_STATE_HANDLER_H */

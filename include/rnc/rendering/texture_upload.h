@@ -11,8 +11,8 @@ struct TextureUpload {
     s16 unk4;       /* 0x04: every writer stores 0 */
     s16 cbp;        /* 0x06: GS block of the CLUT, TEX0.CBP */
     s32 image_data; /* 0x08: EE address of the pixels (load_texture_file: texture pixel pointer) */
-    u8 tw;          /* 0x0C: log2 width, TEX0.TW */
-    u8 th;          /* 0x0D: log2 height, TEX0.TH */
+    u8  tw;         /* 0x0C: log2 width, TEX0.TW */
+    u8  th;         /* 0x0D: log2 height, TEX0.TH */
     s16 tbp;        /* 0x0E: GS block of the pixels, TEX0.TBP0 */
 }; /* size 0x10 */
 
@@ -24,12 +24,12 @@ extern struct TextureUpload pending_texture_uploads[0x40] __asm__("D_0018D040");
    save screen preview in update_menu_stream_image and the map textures in
    draw_map_screen use the same CLUT +0x20 / pixels +0x420 split). */
 struct ClutImage {
-    u8 pad0[0x8];
+    u8  pad0[0x8];
     s32 width;  /* 0x008: pixels; log2dim turns it into TEX0.TW */
     s32 height; /* 0x00C: pixels; TEX0.TH */
-    u8 pad10[0x10];
-    u8 clut[0x400]; /* 0x020: 256 RGBA entries */
-    u8 pixels[1];   /* 0x420: width * height indices */
+    u8  pad10[0x10];
+    u8  clut[0x400]; /* 0x020: 256 RGBA entries */
+    u8  pixels[1];   /* 0x420: width * height indices */
 };
 
 #endif /* LOMBYTE_RNC_RENDERING_TEXTURE_UPLOAD_H */

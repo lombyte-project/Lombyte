@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_VENDOR_CONFIGURE_CAPTURE_TARGET_H
+#define LOMBYTE_RNC_UI_VENDOR_CONFIGURE_CAPTURE_TARGET_H
+
+#include "types.h"
+
+void configure_capture_target(s32, s32, f32) __asm__("FUN_00239690");
+
+#endif /* LOMBYTE_RNC_UI_VENDOR_CONFIGURE_CAPTURE_TARGET_H */

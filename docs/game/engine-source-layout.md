@@ -117,10 +117,10 @@ typedef struct StashGetInfo {
 ```
 
 They match the stash code in the executable:
-- `src/storage/stash/init_stash.c`: fills `D_001DD1A0` (`StashInfo`) and the
+- `src/streaming/stash/init_stash.c`: fills `D_001DD1A0` (`StashInfo`) and the
   64-entry `D_001DD1D8` table (`StashBlock`) through `IOP_STASH_INFO`.
-- `src/storage/stash/stash_send_data.c`: direct SIF DMA into the IOP buffer (not an RPC command 0 call).
-- `src/storage/stash/stash_receive_data.c`: `IOP_STASH_FETCH`.
+- `src/streaming/stash/stash_send_data.c`: direct SIF DMA into the IOP buffer (not an RPC command 0 call).
+- `src/streaming/stash/stash_receive_data.c`: `IOP_STASH_FETCH`.
 
 ## Sound driver subsystem (`989snd.c`)
 

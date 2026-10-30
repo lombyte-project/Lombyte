@@ -2,6 +2,7 @@
 #include "rnc/ui/map/map_state.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/audio/music/music_stream_state.h"
+
 extern void request_audio_stream_break() __asm__("FUN_002166e8");
 
 s32 leave_map_screen(void) __asm__("FUN_0021bda0");

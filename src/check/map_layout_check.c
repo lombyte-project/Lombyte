@@ -4,8 +4,7 @@
 #include "rnc/ui/map/map_icon.h"
 
 #define CHECK(type, name, field, off) \
-    typedef char check_##name[ \
-        ((unsigned long)&((struct type *)0)->field == (off)) ? 1 : -1]
+    typedef char check_##name[((unsigned long)&((struct type *)0)->field == (off)) ? 1 : -1]
 #define SIZE_CHECK(type, size) \
     typedef char size_check_##type[(sizeof(struct type) == (size)) ? 1 : -1]
 

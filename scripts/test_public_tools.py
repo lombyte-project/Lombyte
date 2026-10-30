@@ -535,7 +535,7 @@ class DataDeclarationTests(unittest.TestCase):
     """No new data label may get a second type or name (scripts/data-decls.py)."""
 
     # Labels that still disagree; lower it when you fix some, never raise it.
-    KNOWN_CONFLICTS = 574
+    KNOWN_CONFLICTS = 420
 
     def test_no_new_conflicting_declarations(self):
         decls = load_module("rnc_data_decls", ROOT / "scripts" / "data-decls.py")
@@ -1965,6 +1965,32 @@ class DataRefsTests(unittest.TestCase):
     def test_scalar_quotes_types_with_brackets(self):
         self.assertEqual(self.refs.scalar("struct Foo"), "struct Foo")
         self.assertEqual(self.refs.scalar("u8 *[2]"), '"u8 *[2]"')
+
+
+class FormatTests(unittest.TestCase):
+    """scripts/blank-blocks.py and scripts/format.py: whitespace only."""
+
+    def load(self, name):
+        path = Path(__file__).resolve().parent / name
+        spec = importlib.util.spec_from_file_location(name.replace("-", "_")[:-3], path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    def test_blank_line_between_top_level_blocks(self):
+        fix = self.load("blank-blocks.py").fix
+        text = '#include "types.h"\ntypedef struct {\n    int a;\n} A;\nextern int x;\nint f(void) {\n    return x;\n}\n'
+        self.assertEqual(fix(text), '#include "types.h"\n\ntypedef struct {\n    int a;\n} A;\n\n'
+                                    'extern int x;\n\nint f(void) {\n    return x;\n}\n')
+
+    def test_multi_line_define_stays_whole(self):
+        fix = self.load("blank-blocks.py").fix
+        text = '#define TWO \\\n    { int a; } \\\n    { int b; }\nint y;\n'
+        self.assertIn('#define TWO \\\n    { int a; } \\\n    { int b; }\n', fix(text))
+
+    def test_include_asm_stays_on_one_line(self):
+        join = self.load("format.py").join_macros
+        self.assertEqual(join('INCLUDE_ASM("a/b.s",\n            func);\n'), 'INCLUDE_ASM("a/b.s", func);\n')
 
 
 class CleanupCheckTests(unittest.TestCase):

@@ -6,22 +6,39 @@
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
 
-void draw_textured_quad(s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 uw, s32 vh, s64 color,
+void draw_textured_quad(s32 x,
+                        s32 y,
+                        s32 w,
+                        s32 h,
+                        s32 u,
+                        s32 v,
+                        s32 uw,
+                        s32 vh,
+                        s64 color,
                         s64 extra) __asm__("FUN_001f5450");
 
-void draw_textured_quad(s32 x, s32 y, s32 quad_width, s32 quad_height, s32 u, s32 v, s32 uw, s32 vh, s64 color,
+void draw_textured_quad(s32 x,
+                        s32 y,
+                        s32 quad_width,
+                        s32 quad_height,
+                        s32 u,
+                        s32 v,
+                        s32 uw,
+                        s32 vh,
+                        s64 color,
+
                         s64 extra) {
     struct DmaTag *tag;
-    u64 *packet_words;
-    s32 sx;
-    s32 sy;
-    s32 x1;
-    s32 y1;
-    s32 x0;
-    s32 y0;
-    s32 u1;
-    s32 u0;
-    s32 texture_v_end;
+    u64           *packet_words;
+    s32            sx;
+    s32            sy;
+    s32            x1;
+    s32            y1;
+    s32            x0;
+    s32            y0;
+    s32            u1;
+    s32            u0;
+    s32            texture_v_end;
 
     sx = screen_extent.left;
     sy = screen_extent.top;

@@ -70,7 +70,27 @@ Level data in C has its `D_LNN_XXXXXXXX` label and a row (name, size) in
 resolved for that level, to what the level loads there. A row named
 `D_XXXXXXXX` (no level) is data that every level has at that address, like
 the zero globals in `src/overlays/shared/data/level_globals.c`; it is checked
-and counted in every level.
+and counted in every level. A pointer to a function the level holds more than
+once must name the copy the level's word points to.
+
+Each level's `lvl.vtbl`, `lvl.camvtbl` and `lvl.sndvtbl` sections (the moby
+classes, camera types and sound emitter types the executable looks ids up in)
+are in `src/overlays/lNN/level_class_tables.c`.
+
+The compiler's own data for a function in C, its switch tables and float
+literals, is checked too: each table word must point into the function at the
+place the level's table holds, and each literal must equal the level's bytes.
+`config/overlays/us/compiler_data.tsv` lists these places (level, address,
+size); `make overlays` fails when it is out of date, and
+`scripts/overlay_unit.py --write` rewrites it.
+
+A level program also holds a copy of the executable's data, moved to other
+addresses. Where the executable's code reads a data object at A and the same
+function's copy in a level reads A + d, the level's bytes at A + d must equal
+the executable's (pointers moved the same way).
+`config/overlays/us/exe_data.tsv` lists the copies of executable data in C
+that pass (`scripts/overlay_exe_data.py`), so data put in C in the executable
+counts in every level that holds it.
 
 ## Progress
 

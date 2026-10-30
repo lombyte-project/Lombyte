@@ -1,7 +1,8 @@
 #include "types.h"
-extern s32 snd_send_iop_command_no_wait(s32 cmd, s32 size, void *buf, s32 a,
-                                        s32 b) __asm__("func_0012E6E0");
-void snd_continue_all_sounds_in_group(s32 arg0) __asm__("FUN_0012e418");
+
+extern s32
+snd_send_iop_command_no_wait(s32 cmd, s32 size, void *buf, s32 a, s32 b) __asm__("func_0012E6E0");
+void snd_continue_all_sounds_in_group(s32 payload_word) __asm__("FUN_0012e418");
 
 void snd_continue_all_sounds_in_group(s32 payload_word) {
     u8 sp_slot[0x10];

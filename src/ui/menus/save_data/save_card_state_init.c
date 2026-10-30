@@ -1,6 +1,7 @@
 #include "sda.h"
-extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
-#include "rnc/storage/memory_card/memory_card_state.h"
+#include "rnc/save/memory_card_state.h"
+#include "rnc/globals.h"
+
 void save_card_state_init(void) __asm__("FUN_002088a8");
 
 void save_card_state_init(void) {

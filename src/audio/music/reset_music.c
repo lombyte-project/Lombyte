@@ -5,7 +5,7 @@
 extern s32 snd_flush_sound_commands() __asm__("func_0012DC80");
 extern s32 snd_init_vag_streaming_ex() __asm__("func_0012EB20");
 extern s32 register_audio_stream_callback() __asm__("func_00215420");
-void reset_music(void) __asm__("FUN_00215390");
+void       reset_music(void) __asm__("FUN_00215390");
 
 void reset_music(void) {
     s32 neg = -1;

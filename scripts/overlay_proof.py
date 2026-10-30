@@ -71,6 +71,11 @@ def exe_symbols(game_root: Path = ov.ROOT) -> dict[str, int]:
             addr = int(label[-8:], 16)
             values.setdefault(cname, addr)
             values.setdefault(label, addr)
+    # and the names the headers declare for executable functions
+    for header in sorted((game_root / "include").rglob("*.h")):
+        text = header.read_text(errors="replace")
+        for m in re.finditer(r"\b([A-Za-z_]\w*)\s*\([^;{)]*\)\s*__asm__\s*\(\s*\"((?:FUN|func)_[0-9A-Fa-f]{8})\"\s*\)", text):
+            values.setdefault(m.group(1), int(m.group(2)[-8:], 16))
     return values
 
 
@@ -101,6 +106,16 @@ def place_in_level(name: str, level: int, near: int) -> int:
     if not matches:
         raise Unresolved(name)
     return min(matches, key=lambda a: abs(a - near))
+
+
+def function_copies(name: str, level: int) -> list[int]:
+    """Every place of function NAME in LEVEL (none for data)."""
+    m = ov.EXE_FUNC.match(name)
+    if m:
+        name = f"FUN_{int(m.group(1), 16):08x}"
+    elif not ov.OVERLAY_FUNC.match(name):
+        return []
+    return ov.places_in_level(name, level) or []
 
 
 def resolve_symbol(name: str, level: int, near: int) -> int:
@@ -323,6 +338,7 @@ class Placer:
         self.rodata_map = None
         self.rodata_error = None
         self.retail = None
+        self.literals: list[tuple[int, int]] = []  # (address, width) of each placed literal
 
     def place_text_offset(self, toff: int, near: int) -> int:
         owner = None
@@ -504,7 +520,40 @@ class Placer:
         mine = bytes(sec.data()[offset:offset + width])
         if len(mine) != width or ov.level_data_bytes(self.level, theirs, width) != mine:
             raise Unresolved(f"literal {sec.name}+0x{offset:x} differs from level data at 0x{theirs:x}")
+        self.literals.append((theirs, width))
         return theirs
+
+    def switch_tables(self) -> tuple[list[tuple[int, int]], str | None]:
+        """(address, size) of each switch table placed by scan_rodata, after
+        checking its words: each points into this function at the place the
+        level's table holds. A table ends at the first word that does not."""
+        if self.rodata_map is None:
+            return [], None
+        index = self.elf.get_section_index(".rodata")
+        rels = {rel["r_offset"]: rel for sec in self.elf.iter_sections()
+                if isinstance(sec, RelocationSection) and sec["sh_info"] == index
+                for rel in sec.iter_relocations()}
+        data = bytes(self.rodata.data())
+        tables = []
+        starts = {local for local, _ in self.rodata_map}
+        for local, address in self.rodata_map:
+            off = local
+            while off + 4 <= len(data) and off in rels and (off == local or off not in starts):
+                rel = rels[off]
+                sym = self.sym_of(rel)
+                if rel["r_info_type"] != R_MIPS_32 or section_name(self.elf, sym["st_shndx"]) != ".text":
+                    break
+                target = sym["st_value"] + self.word_at(data, off)
+                if not self.off <= target < self.off + self.size:
+                    break
+                theirs = ov.level_data_bytes(self.level, address + off - local, 4)
+                if theirs is None or self.word_at(theirs, 0) != self.base_text + target:
+                    return [], f"RODATA switch table word at 0x{address + off - local:x} differs"
+                off += 4
+            if off == local:
+                return [], f"RODATA switch table at 0x{address:x} holds no case address"
+            tables.append((address, off - local))
+        return tables, None
 
     def apply(self, ours: bytearray, orig: bytes):
         for hi_rel, lo_rel, hi_imm, lo_imm in self.hi_los(orig):
@@ -698,6 +747,13 @@ def check(obj_path, name: str, show: bool = False, place: tuple[int, int] | None
             result["verdict"] = ("LINK literal address where retail references a symbol: "
                                  + ", ".join(f"+0x{o:x} ({refs[o]})" for o in missing[:4]))
             return result
+        tables, problem = placer.switch_tables()
+        if problem:
+            result["verdict"] = problem
+            return result
+        # the compiler's own data for this function (its switch tables and
+        # float literals), proven equal to the level's bytes at these places
+        result["pools"] = sorted({(level, a, n) for a, n in tables + placer.literals})
         result.update(verdict="EXACT", exact=True, differing_words=0)
         return result
     result.update(verdict=f"BYTES {len(rows)}/{row.size // 4}", differing_words=len(rows),
@@ -756,7 +812,8 @@ def copy_check(obj_path, name: str, place: tuple[int, int]) -> dict:
 
 
 DATA_METHOD = "overlay-data-bytes-v1"
-DATA_SECTIONS = (".data", ".sdata", ".rodata", ".bss", ".sbss")
+# lvl.*: the tables a level program places for the executable to look ids up in
+DATA_SECTIONS = (".data", ".sdata", ".rodata", ".bss", ".sbss", "lvl.vtbl", "lvl.camvtbl", "lvl.sndvtbl")
 
 
 def data_symbols(elf: ELFFile) -> list:
@@ -875,6 +932,10 @@ def check_data(obj_path, name: str) -> dict:
                 unresolved.append(e.what)
                 continue
             addend = int.from_bytes(ours[off:off + 4], "little")
+            # a function the level holds more than once: the copy the word names
+            word = int.from_bytes(retail[off:off + 4], "little") - addend
+            if word != value and word in function_copies(target.name, level):
+                value = word
             ours[off:off + 4] = ((value + addend) & 0xFFFFFFFF).to_bytes(4, "little")
     if unresolved:
         result["verdict"] = "LINK " + ", ".join(unresolved[:4])

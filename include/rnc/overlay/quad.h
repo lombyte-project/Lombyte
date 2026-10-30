@@ -10,8 +10,8 @@ typedef int OvlQuad __attribute__((mode(TI)));
 /* Same layout as Vec4 (rnc/math/vector.h), built on OvlQuad. */
 typedef union {
     OvlQuad q;
-    f32 f[4];
-    s32 i[4];
+    f32     f[4];
+    s32     i[4];
 } OvlVec4;
 
 #endif /* LOMBYTE_RNC_OVERLAY_QUAD_H */

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_PACKETS_PUT_DRAW_BUFFER_SMALL_H
+#define LOMBYTE_RNC_RENDERING_PACKETS_PUT_DRAW_BUFFER_SMALL_H
+
+#include "types.h"
+
+void put_draw_buffer_small(void) __asm__("FUN_001fb3d0");
+
+#endif /* LOMBYTE_RNC_RENDERING_PACKETS_PUT_DRAW_BUFFER_SMALL_H */

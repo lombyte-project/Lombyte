@@ -1,13 +1,14 @@
 #include "types.h"
 #include "sda.h"
 
-#include "rnc/storage/memory_card/memory_card_state.h"
-extern u8 D_0015EE98[] MACRO_ADDR;
+#include "rnc/save/memory_card_state.h"
+
+extern u8  D_0015EE98[] MACRO_ADDR;
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
 extern s32 memcard_make_whole_save() __asm__("func_0020ABB0");
 extern s32 sceCdReadClock();
 extern s32 sceScfGetLocalTimefromRTC();
-void start_memory_card_save(s32 save_data, s32 slot) __asm__("FUN_00226a70");
+void       start_memory_card_save(s32 save_data, s32 slot) __asm__("FUN_00226a70");
 
 void start_memory_card_save(s32 save_data, s32 slot) {
     load_and_initialize_level_chunk();

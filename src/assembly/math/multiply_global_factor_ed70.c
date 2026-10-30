@@ -2,8 +2,7 @@
 #include "asm.h"
 
 #ifndef NON_MATCHING
-INCLUDE_ASM("config/us/expected/asm/assembly/math/multiply_global_factor_ed70/func_001F9730.s",
-            multiply_global_factor_ed70);
+INCLUDE_ASM("config/us/expected/asm/assembly/math/multiply_global_factor_ed70/func_001F9730.s", multiply_global_factor_ed70);
 #else
 /* No C body on purpose: this unit is intentional low-level assembly
    (config/us/unit_categories.json), so it has no C goal and no public

@@ -3,15 +3,15 @@
 #include "rnc/rendering/fs_aa_buffer.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/rendering/view.h"
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+#include "rnc/math/fast_math.h"
 
 void init_view_context(void) __asm__("FUN_001f2c60");
 
 void init_view_context(void) {
     struct FsAaBuf *fs_aa_buf = &fs_aa_buffer;
-    struct View *view = &view_context;
-    s32 hw;
-    s32 hh;
+    struct View    *view = &view_context;
+    s32             hw;
+    s32             hh;
 
     hw = fs_aa_buf->display_width >> 1;
     hh = fs_aa_buf->display_height >> 1;

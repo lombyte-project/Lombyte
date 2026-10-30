@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_DEBUG_DRAW_DEBUG_PROFILER_H
+#define LOMBYTE_RNC_RENDERING_DEBUG_DRAW_DEBUG_PROFILER_H
+
+#include "types.h"
+
+void draw_debug_profiler(void) __asm__("FUN_001f39d0");
+
+#endif /* LOMBYTE_RNC_RENDERING_DEBUG_DRAW_DEBUG_PROFILER_H */

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_FRAME_LOG2DIM_H
+#define LOMBYTE_RNC_RENDERING_FRAME_LOG2DIM_H
+
+#include "types.h"
+
+s32 log2dim(s32) __asm__("FUN_001f97a0");
+
+#endif /* LOMBYTE_RNC_RENDERING_FRAME_LOG2DIM_H */

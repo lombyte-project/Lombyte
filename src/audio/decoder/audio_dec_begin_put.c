@@ -1,10 +1,15 @@
 #include "types.h"
 #include "rnc/audio/decoder/audio_dec.h"
 
-void audio_dec_begin_put(struct AudioDec *dec, void **ptr1, s32 *size1, void **ptr2,
-                         s32 *size2) __asm__("FUN_0023ad58");
+void audio_dec_begin_put(
+    struct AudioDec *dec, void **ptr1, s32 *size1, void **ptr2, s32 *size2) __asm__("FUN_0023ad58");
 
-void audio_dec_begin_put(struct AudioDec *dec, void **first_destination, s32 *size1, void **second_destination, s32 *size2) {
+void audio_dec_begin_put(struct AudioDec *dec,
+                         void           **first_destination,
+                         s32             *size1,
+                         void           **second_destination,
+
+                         s32 *size2) {
     s32 writable_byte_count;
 
     if (dec->state == 0) {
@@ -34,5 +39,6 @@ void audio_dec_begin_put(struct AudioDec *dec, void **first_destination, s32 *si
         }
     }
 }
+
 extern void func_0023AD58(struct AudioDec *, void **, s32 *, void **, s32 *)
     __attribute__((alias("FUN_0023ad58")));

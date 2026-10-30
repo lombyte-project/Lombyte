@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
+
 struct Point {
     u64 flags;
     s16 y;
@@ -8,9 +9,10 @@ struct Point {
     s16 u;
     s16 v;
 };
+
 extern struct Point effect_texture_definitions[] __asm__("D_0018D440");
-extern s16 log2dim(s32) __asm__("FUN_001f97a0");
-void unpack_point_records(s32 *src, s32 count) __asm__("FUN_00202800");
+extern s16          log2dim(s32) __asm__("FUN_001f97a0");
+void                unpack_point_records(s32 *src, s32 count) __asm__("FUN_00202800");
 
 void unpack_point_records(s32 *serialized_texture_records, s32 count) {
     s32 x;

@@ -2,8 +2,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
 
-void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim,
-                               s32 pixels) __asm__("FUN_00200e08");
+void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) __asm__("FUN_00200e08");
 
 void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) {
     u64 *packet_words;
@@ -18,15 +17,17 @@ void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pix
     packet_words[4] = 0x46;
     packet_words[5] = prim;
     if (pixels != 0) {
-        packet_words[6] = (x0 + screen_extent.left - 8) | ((u64)(y0 + screen_extent.top - 8) << 16) |
-               (u64)0xFFFFF000 << 24;
-        packet_words[7] = (x1 + screen_extent.left - 8) | ((u64)(y1 + screen_extent.top - 8) << 16) |
-               (u64)0xFFFFF000 << 24;
+        packet_words[6] = (x0 + screen_extent.left - 8) |
+                          ((u64)(y0 + screen_extent.top - 8) << 16) | (u64)0xFFFFF000 << 24;
+        packet_words[7] = (x1 + screen_extent.left - 8) |
+                          ((u64)(y1 + screen_extent.top - 8) << 16) | (u64)0xFFFFF000 << 24;
     } else {
         packet_words[6] = ((x0 << 4) + screen_extent.left - 0x10) |
-               ((u64)((y0 << 4) + screen_extent.top - 0x10) << 16) | (u64)0xFFFFF000 << 24;
+                          ((u64)((y0 << 4) + screen_extent.top - 0x10) << 16) |
+                          (u64)0xFFFFF000 << 24;
         packet_words[7] = ((x1 << 4) + screen_extent.left - 0x10) |
-               ((u64)((y1 << 4) + screen_extent.top - 0x10) << 16) | (u64)0xFFFFF000 << 24;
+                          ((u64)((y1 << 4) + screen_extent.top - 0x10) << 16) |
+                          (u64)0xFFFFF000 << 24;
     }
     render_packet_cursor.tag += 3;
 }

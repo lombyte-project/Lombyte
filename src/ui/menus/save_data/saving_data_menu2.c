@@ -8,40 +8,42 @@ typedef struct __attribute__((packed)) {
 #include "rnc/input/pad_state.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
-#include "rnc/storage/memory_card/memory_card_state.h"
-extern volatile u16 D_0013E05A[];
-extern s32 alternate_animation_sequence __asm__("D_0015EE20");
-extern s32 D_0015EE24;
-extern s32 selected_save_slot __asm__("D_0015EE34");
-extern Unaligned64 D_0015EE98[1];
-extern s32 D_001D2640[];
+#include "rnc/save/memory_card_state.h"
+#include "rnc/game/options.h"
+
+extern volatile u16    D_0013E05A[];
+extern s32             D_0015EE24;
+extern Unaligned64     D_0015EE98[1];
+extern s32             D_001D2640[];
 extern struct MenuPage D_001D4E38[];
 extern struct MenuPage D_001D4F98[];
-extern void InitializeGlobalStateEntry(s32 value);
-extern void mode_freeze_init() __asm__("func_001FBAB8");
-extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
-extern void start_memory_card_save(s32 arg0, s32 arg1) __asm__("FUN_00226a70");
-extern s32 load_level_zero_preserving_progress() __asm__("FUN_00226b08");
-extern s32 allocate_voice_for_target_entry() __asm__("func_0022DA68");
+extern void            InitializeGlobalStateEntry(s32 value);
+extern void            mode_freeze_init() __asm__("func_001FBAB8");
+extern s32             load_and_initialize_level_chunk() __asm__("func_00209370");
+extern void            start_memory_card_save(s32 save_data, s32 slot) __asm__("FUN_00226a70");
+extern s32             load_level_zero_preserving_progress() __asm__("FUN_00226b08");
+extern s32             allocate_voice_for_target_entry() __asm__("func_0022DA68");
 
 s32 saving_data_menu2(struct MenuScreen *w) __asm__("FUN_002235b8");
 
 s32 saving_data_menu2(struct MenuScreen *w) {
-    s32 old;
-    s32 pad;
-    s32 cursor;
-    s32 cur;
-    s32 fl;
+    s32              old;
+    s32              pad;
+    s32              cursor;
+    s32              cur;
+    s32              fl;
     struct MenuPage *back;
 
     if (menu_system.current->focus != w) {
         return 0;
     }
     old = w->data.save.slot;
-    if (w->data.save.step == 0 && menu_system.previous == D_001D4E38 && menu_system.previous->confirmed != 0) {
+    if (w->data.save.step == 0 && menu_system.previous == D_001D4E38 &&
+        menu_system.previous->confirmed != 0) {
         w->data.save.step = 1;
     }
-    if (w->data.save.step == 0 && menu_system.previous == D_001D4F98 && menu_system.previous->confirmed != 0) {
+    if (w->data.save.step == 0 && menu_system.previous == D_001D4F98 &&
+        menu_system.previous->confirmed != 0) {
         w->data.save.step = 1;
     }
     if (w->data.save.step == 1) {
@@ -65,16 +67,22 @@ s32 saving_data_menu2(struct MenuScreen *w) {
             mode_freeze_init(3, menu_system.current);
             return 0;
         }
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x24) = current_bolt_count;
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x20) = current_level_index;
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x2C) = D_0015EE24;
-        *(Unaligned64 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x30) = D_0015EE98[0];
-        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x28) = alternate_animation_sequence;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x24) =
+            current_bolt_count;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x20) =
+            current_level_index;
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x2C) =
+            D_0015EE24;
+        *(Unaligned64 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C +
+                         0x30) = D_0015EE98[0];
+        *(s32 *)((u8 *)&memory_card_state + memory_card_state.card[0].save_index * 0x1C + 0x28) =
+            alternate_animation_sequence;
         InitializeGlobalStateEntry(0);
         D_0013E05A[0] = 1;
     }
 
-    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) && menu_system.close_locked == 0) {
+    if ((controller_state.pressed_unmasked & (PAD_SELECT | PAD_R3 | PAD_START)) &&
+        menu_system.close_locked == 0) {
         return 1;
     }
     if (controller_state.pressed_unmasked & PAD_TRIANGLE) {
@@ -89,7 +97,8 @@ s32 saving_data_menu2(struct MenuScreen *w) {
         menu_system.next = menu_system.current->back;
         return 0;
     }
-    if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0 || memory_card_state.card[0].type != 2) {
+    if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0 ||
+        memory_card_state.card[0].type != 2) {
         return 0;
     }
 

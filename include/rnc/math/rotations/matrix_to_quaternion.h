@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_MATH_ROTATIONS_MATRIX_TO_QUATERNION_H
+#define LOMBYTE_RNC_MATH_ROTATIONS_MATRIX_TO_QUATERNION_H
+
+#include "types.h"
+
+void matrix_to_quaternion(void *, void *) __asm__("FUN_00214260");
+
+#endif /* LOMBYTE_RNC_MATH_ROTATIONS_MATRIX_TO_QUATERNION_H */

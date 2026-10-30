@@ -1,20 +1,21 @@
 #include "types.h"
+
 struct ScrollingStatus {
-    u8 pad_0[0x2C];
+    u8  pad_0[0x2C];
     s32 unk2C;
-    u8 pad_30[0x14];
+    u8  pad_30[0x14];
     s32 unk44;
 };
 
-extern u8 scrolling_status_message_ids[] __asm__("D_001E5FB8");
+extern u8                     scrolling_status_message_ids[] __asm__("D_001E5FB8");
 extern struct ScrollingStatus D_001E63C0;
-extern s32 draw_framebuffer_rect() __asm__("func_001FB8F0");
-extern s32 get_help_message_text() __asm__("func_001FDD10");
-extern s32 random_integer_below() __asm__("func_00213260");
-extern s32 set_scrolling_status_message() __asm__("func_00237E90");
+extern s32                    draw_framebuffer_rect() __asm__("func_001FB8F0");
+extern s32                    get_help_message_text() __asm__("func_001FDD10");
+extern s32                    random_integer_below() __asm__("func_00213260");
+extern s32                    set_scrolling_status_message() __asm__("func_00237E90");
 extern s32 render_capture_scrolling_text(s32, s32, s32, f32) __asm__("func_00238310");
 extern s32 strlen();
-void update_scrolling_status_message(void) __asm__("FUN_00238520");
+void       update_scrolling_status_message(void) __asm__("FUN_00238520");
 
 void update_scrolling_status_message(void) {
     draw_framebuffer_rect(0, 0, 0x200, 0x80, 0x200, 0x80, 0);

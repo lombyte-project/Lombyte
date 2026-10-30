@@ -1,4 +1,5 @@
 #include "types.h"
+
 extern void func_00227D80();
 extern void func_00227ED0();
 

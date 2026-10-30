@@ -1,60 +1,50 @@
 #include "types.h"
+#include "rnc/game/level_object_states.h"
 #include "rnc/ui/text/text_region.h"
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 #include "rnc/ui/map/map_icon.h"
 #include "rnc/ui/map/map_state.h"
 #include "rnc/globals.h"
+#include "rnc/mobys/moby.h"
 
 /* Map screen icon refresh: places the fixed icons (-1..-9), projects the
    others through world_to_map_coords, then sizes each label box. */
 
 typedef struct {
-    u8 pad0[0x24];
+    u8  pad0[0x24];
     s16 active;
-    u8 pad26[2];
+    u8  pad26[2];
 } MapIconLink;
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-    s32 flag;
-} MapPoint;
+#include "rnc/game/level_state.h"
 
-typedef struct {
-    u8 pad0[0x10];
-    f32 x;
-    f32 y;
-    u8 pad18[0x30];
-    f32 z;
-} MapWorldObject;
-
-#include "rnc/gameplay/state/level_state.h"
 extern struct MapIcon *map_icon_lists_by_level[] __asm__("D_001A2BC0");
-extern s32 D_001A01F4[];
-extern s32 D_0015FD60 __attribute__((sda));
-extern MapWorldObject *D_00199478[];
-extern MapPoint D_0013D5B0[];
+extern s32             D_001A01F4[];
+extern s32             D_0015FD60 __attribute__((sda));
+
+#include "rnc/ui/menus/menu_globals.h"
+
 extern s32 D_0013D5BC[];
+
 extern struct {
-    u8 pad0[0x10];
+    u8           pad0[0x10];
     MapIconLink *links;
 } D_001A2C10;
 
-extern void world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y,
-                                s32 level) __asm__("func_00208408");
+extern void
+world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y, s32 level) __asm__("func_00208408");
 extern void format_menu_item_text(s32 idx, char *dst) __asm__("func_00208280");
-extern void font_print_window_small(struct TextRegion *, long, char *,
-                                    int) __asm__("func_001F75F0");
+extern void
+font_print_window_small(struct TextRegion *, long, char *, int) __asm__("func_001F75F0");
 
 void update_map_icons(s32 level, s32 flag) __asm__("FUN_0020bf90");
 
 void update_map_icons(s32 level, s32 flag) {
-    char label_text[128];
-    f32 map_x;
-    f32 map_y;
+    char            label_text[128];
+    f32             map_x;
+    f32             map_y;
     struct MapIcon *icon;
-    s32 icon_index;
+    s32             icon_index;
 
     if (level < 19 && level_visit_state[level] != 0) {
         level_map_selection.icons = map_icon_lists_by_level[level];
@@ -63,7 +53,10 @@ void update_map_icons(s32 level, s32 flag) {
     }
 
     if (hero.motion.pos.f[2] != 0.0f && level == current_level_index && flag) {
-        world_to_map_coords(hero.motion.pos.f[0], hero.motion.pos.f[1], &map_x, &map_y,
+        world_to_map_coords(hero.motion.pos.f[0],
+                            hero.motion.pos.f[1],
+                            &map_x,
+                            &map_y,
                             D_0015FD60 ? level + 100 : level);
         level_map_selection.pan_x[level] = (s32)(map_x * 4096.0f) << 16;
         level_map_selection.pan_y[level] = (s32)(map_y * 4096.0f) << 16;
@@ -111,15 +104,22 @@ void update_map_icons(s32 level, s32 flag) {
                 icon->y = 0.72265625f;
             } else {
                 if (level == current_level_index) {
-                    if (D_00199478[icon->id] != 0) {
-                        world_to_map_coords(D_00199478[icon->id]->x, D_00199478[icon->id]->y,
-                                            &icon->x, &icon->y, level);
-                        level_map_selection.icons[icon_index].angle = D_00199478[icon->id]->z;
+                    if (menu_action_messages[icon->id] != 0) {
+                        world_to_map_coords(menu_action_messages[icon->id]->pos.x,
+                                            menu_action_messages[icon->id]->pos.y,
+                                            &icon->x,
+                                            &icon->y,
+                                            level);
+                        level_map_selection.icons[icon_index].angle =
+                            menu_action_messages[icon->id]->rot.z;
                     }
                 } else {
-                    world_to_map_coords(D_0013D5B0[icon->id].x, D_0013D5B0[icon->id].y, &icon->x,
-                                        &icon->y, level);
-                    level_map_selection.icons[icon_index].angle = D_0013D5B0[icon->id].z;
+                    world_to_map_coords(level_object_states[icon->id].x,
+                                        level_object_states[icon->id].y,
+                                        &icon->x,
+                                        &icon->y,
+                                        level);
+                    level_map_selection.icons[icon_index].angle = level_object_states[icon->id].z;
                 }
             }
             icon_index++;

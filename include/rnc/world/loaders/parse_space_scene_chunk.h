@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_WORLD_LOADERS_PARSE_SPACE_SCENE_CHUNK_H
+#define LOMBYTE_RNC_WORLD_LOADERS_PARSE_SPACE_SCENE_CHUNK_H
+
+#include "types.h"
+
+void parse_space_scene_chunk(s32) __asm__("FUN_002049f0");
+
+#endif /* LOMBYTE_RNC_WORLD_LOADERS_PARSE_SPACE_SCENE_CHUNK_H */

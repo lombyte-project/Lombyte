@@ -27,7 +27,7 @@ void draw_rect_overlay(int y0, int y1, int x0, int x1, unsigned long rgba) {
         *(short *)(base + 4) = 0x8001;
     }
     {
-        int *base = render_packet_cursor.words;
+        int  *base = render_packet_cursor.words;
         long *p;
         render_packet_cursor.words = base + 4;
         p = (long *)render_packet_cursor.words;
@@ -41,18 +41,18 @@ void draw_rect_overlay(int y0, int y1, int x0, int x1, unsigned long rgba) {
         *(short *)(base + 4) = 0x8004;
     }
     {
-        int *base = render_packet_cursor.words;
+        int  *base = render_packet_cursor.words;
         long *p;
         render_packet_cursor.words = base + 4;
         p = (long *)render_packet_cursor.words;
-        p[0] = (x0 * 16 + screen_extent.left - 8) | ((long)(y0 * 16 + screen_extent.top - 8) << 16) |
-               ((long)0xFFFFF0 << 32);
-        p[1] = (x1 * 16 + screen_extent.left - 8) | ((long)(y0 * 16 + screen_extent.top - 8) << 16) |
-               ((long)0xFFFFF0 << 32);
-        p[2] = (x0 * 16 + screen_extent.left - 8) | ((long)(y1 * 16 + screen_extent.top - 8) << 16) |
-               ((long)0xFFFFF0 << 32);
-        p[3] = (x1 * 16 + screen_extent.left - 8) | ((long)(y1 * 16 + screen_extent.top - 8) << 16) |
-               ((long)0xFFFFF0 << 32);
+        p[0] = (x0 * 16 + screen_extent.left - 8) |
+               ((long)(y0 * 16 + screen_extent.top - 8) << 16) | ((long)0xFFFFF0 << 32);
+        p[1] = (x1 * 16 + screen_extent.left - 8) |
+               ((long)(y0 * 16 + screen_extent.top - 8) << 16) | ((long)0xFFFFF0 << 32);
+        p[2] = (x0 * 16 + screen_extent.left - 8) |
+               ((long)(y1 * 16 + screen_extent.top - 8) << 16) | ((long)0xFFFFF0 << 32);
+        p[3] = (x1 * 16 + screen_extent.left - 8) |
+               ((long)(y1 * 16 + screen_extent.top - 8) << 16) | ((long)0xFFFFF0 << 32);
     }
     render_packet_cursor.words = (int *)((char *)render_packet_cursor.words + 0x20);
 }

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_MOBYS_ANIMATION_BLEND_MOBY_ANIMATION_H
+#define LOMBYTE_RNC_MOBYS_ANIMATION_BLEND_MOBY_ANIMATION_H
+
+#include "types.h"
+
+void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
+
+#endif /* LOMBYTE_RNC_MOBYS_ANIMATION_BLEND_MOBY_ANIMATION_H */

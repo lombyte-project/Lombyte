@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_RECORD_MOBY_CONTEXT_BYTES_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_RECORD_MOBY_CONTEXT_BYTES_H
+
+#include "types.h"
+
+void record_moby_context_bytes(void *, s32, void *, s32, void *) __asm__("FUN_L01_0029b0a0");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_RECORD_MOBY_CONTEXT_BYTES_H */

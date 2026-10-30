@@ -7,47 +7,56 @@
 struct TieInstance;
 
 typedef struct {
-    u64 tex0;
+    union {
+        u64 d;
+        s32 w[2];
+    } tex0;
     u64 pad8;
     union {
         u64 d;
         s32 w[2];
     } tex1;
     u64 pad18;
-    u64 mip;
+    union {
+        u64 d;
+        s32 w[2];
+    } mip;
     u64 pad28;
     union {
         u64 d;
         s32 w[2];
+        u8  b[8];
     } clamp;
     u64 pad38;
     u64 end;
     u64 pad48;
 } ObjectRenderRecord;
+
 typedef struct {
     s32 offset;
-    u8 pad4[0xC];
+    u8  pad4[0xC];
 } RenderStreamEntry;
+
 typedef struct {
-    RenderStreamEntry *streams[3];
-    s32 packed_normals;
-    u8 pad10[0x10];
-    u8 stream_counts[3];
-    u8 record_count;
-    u8 pad24[2];
-    u16 instance_count;                 /* 0x26 */
+    RenderStreamEntry  *streams[3];
+    s32                 packed_normals;
+    u8                  pad10[0x10];
+    u8                  stream_counts[3];
+    u8                  record_count;
+    s16                 flags;          /* 0x24 */
+    u16                 instance_count; /* 0x26 */
     struct TieInstance *first_instance; /* 0x28 */
     ObjectRenderRecord *records;
-    f32 bounding_sphere[4]; /* 0x30: center xyz, radius */
-    f32 unk40;              /* 0x40 */
-    u8 pad44[2];
-    u16 class_slot;
-    f32 scale;
+    f32                 bounding_sphere[4]; /* 0x30: center xyz, radius */
+    f32                 unk40;              /* 0x40 */
+    u8                  pad44[2];
+    u16                 class_slot;
+    f32                 scale;
 } ObjectRenderClass;
 
 extern ObjectRenderClass *object_render_classes[128] __asm__("D_001E1700");
-extern s16 object_render_class_ids[128] __asm__("D_001E1900");
-extern s32 object_render_class_fixed_thresholds[128] __asm__("D_001E2E00");
-extern MaterialMap object_render_class_material_maps[128] __asm__("D_001E3600");
+extern s16                object_render_class_ids[128] __asm__("D_001E1900");
+extern s32                object_render_class_fixed_thresholds[128] __asm__("D_001E2E00");
+extern MaterialMap        object_render_class_material_maps[128] __asm__("D_001E3600");
 
 #endif /* LOMBYTE_RNC_RENDERING_OBJECT_RENDER_CLASS_H */

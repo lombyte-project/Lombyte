@@ -5,7 +5,7 @@ s32 get_menu_stream_buffer_size(s32 buffer_address) __asm__("FUN_00225d88");
 
 s32 get_menu_stream_buffer_size(s32 buffer_address) {
     struct MenuStreamBuffer *entry;
-    s32 index;
+    s32                      index;
 
     entry = menu_stream_buffers;
     index = 0;

@@ -22,8 +22,8 @@ typedef struct {
    as words. */
 typedef union {
     u128 q;
-    f32 f[4];
-    s32 i[4];
+    f32  f[4];
+    s32  i[4];
 } Vec4;
 
 #endif /* LOMBYTE_RNC_MATH_VECTOR_H */

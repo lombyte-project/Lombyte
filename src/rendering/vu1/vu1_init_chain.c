@@ -10,6 +10,7 @@ void vu1_init_chain(void) __asm__("FUN_002335d0");
 extern s32 D_00160F10_macro __asm__("D_00160F10") MACRO_ADDR;
 extern s32 D_0015F63C_macro __asm__("D_0015F63C") MACRO_ADDR;
 extern s32 D_0015F638_gp __asm__("D_0015F638") __attribute__((sda));
+
 void vu1_init_chain(void) {
     s32 start;
     s32 end;

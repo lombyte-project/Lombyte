@@ -1,0 +1,147 @@
+/* This is a software floating point library which can be used instead of
+   the floating point routines in libgcc1.c for targets without hardware
+   floating point. 
+ Copyright (C) 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
+
+This file is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2, or (at your option) any
+later version.
+
+In addition to the permissions in the GNU General Public License, the
+Free Software Foundation gives you unlimited permission to link the
+compiled version of this file with other programs, and to distribute
+those programs without any restriction coming from the use of this
+file.  (The General Public License restrictions do apply in other
+respects; for example, they cover modification of the file, and
+distribution when not linked into another program.)
+
+This file is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; see the file COPYING.  If not, write to
+the Free Software Foundation, 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.  */
+
+/* As a special exception, if you link this library with other files,
+   some of which are compiled with GCC, to produce an executable,
+   this library does not by itself cause the resulting executable
+   to be covered by the GNU General Public License.
+   This exception does not however invalidate any other reasons why
+   the executable file might be covered by the GNU General Public License.  */
+
+/* Source: GCC 2.95.2 fp-bit.c. */
+
+/* _fpadd_parts: stock GCC 2.95.2 fp-bit.c body; `thenan` is the SDK's global
+ * data object at 0x1596F0 (config name D_001596F0). */
+
+#include "types.h"
+#include "rnc/sdk/library/fp_number.h"
+
+extern FpNumber D_001596F0;
+
+#define LSHIFT(a) \
+    { a = (a & 1) | (a >> 1); }
+#define IMPLICIT_1 0x1000000000000000ULL
+#define IMPLICIT_2 0x2000000000000000ULL
+
+FpNumber *_fpadd_parts(FpNumber *left_operand, FpNumber *right_operand, FpNumber *result) {
+    s64 tfraction;
+    s32 a_normal_exp;
+    s32 b_normal_exp;
+    u64 a_fraction;
+    u64 b_fraction;
+
+    if ((u32)left_operand->class < 2) {
+        return left_operand;
+    }
+    if ((u32)right_operand->class < 2) {
+        return right_operand;
+    }
+    if ((left_operand->class ^ 4) == 0) {
+        if ((right_operand->class ^ 4) == 0 && left_operand->sign != right_operand->sign) {
+            return &D_001596F0;
+        }
+        return left_operand;
+    }
+    if ((right_operand->class ^ 4) == 0) {
+        return right_operand;
+    }
+    if ((right_operand->class ^ 2) == 0) {
+        if ((left_operand->class ^ 2) == 0) {
+            *result = *left_operand;
+            result->sign = left_operand->sign & right_operand->sign;
+            return result;
+        }
+        return left_operand;
+    }
+    if ((left_operand->class ^ 2) == 0) {
+        return right_operand;
+    }
+
+    a_normal_exp = left_operand->normal_exp;
+    b_normal_exp = right_operand->normal_exp;
+    a_fraction = left_operand->fraction;
+    b_fraction = right_operand->fraction;
+
+    {
+        s32 exponent_difference;
+
+        exponent_difference = a_normal_exp - b_normal_exp;
+        if (exponent_difference < 0) {
+            exponent_difference = -exponent_difference;
+        }
+        if (exponent_difference < 64) {
+            while (a_normal_exp > b_normal_exp) {
+                b_normal_exp++;
+                LSHIFT(b_fraction);
+            }
+            while (b_normal_exp > a_normal_exp) {
+                a_normal_exp++;
+                LSHIFT(a_fraction);
+            }
+        } else {
+            if (a_normal_exp > b_normal_exp) {
+                b_normal_exp = a_normal_exp;
+                b_fraction = 0;
+            } else {
+                a_normal_exp = b_normal_exp;
+                a_fraction = 0;
+            }
+        }
+    }
+
+    if (left_operand->sign != right_operand->sign) {
+        if (left_operand->sign) {
+            tfraction = -a_fraction + b_fraction;
+        } else {
+            tfraction = a_fraction - b_fraction;
+        }
+        if (tfraction >= 0) {
+            result->sign = 0;
+            result->normal_exp = a_normal_exp;
+            result->fraction = tfraction;
+        } else {
+            result->sign = 1;
+            result->normal_exp = a_normal_exp;
+            result->fraction = -tfraction;
+        }
+        while (result->fraction < IMPLICIT_1 && result->fraction) {
+            result->fraction <<= 1;
+            result->normal_exp--;
+        }
+    } else {
+        result->sign = left_operand->sign;
+        result->normal_exp = a_normal_exp;
+        result->fraction = a_fraction + b_fraction;
+    }
+    result->class = 3;
+    if (result->fraction >= IMPLICIT_2) {
+        LSHIFT(result->fraction);
+        result->normal_exp++;
+    }
+    return result;
+}

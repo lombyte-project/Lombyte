@@ -1,0 +1,9 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_BUFFERS_TRANSFER_DRAW_BUFFER_CHUNKS_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_BUFFERS_TRANSFER_DRAW_BUFFER_CHUNKS_H
+
+#include "types.h"
+
+void transfer_draw_buffer_chunks(void *, s32, s32) __asm__("FUN_L00_002a0f18");
+void append_draw_buffer_upload_packets(s32, s32, s32) __asm__("FUN_L00_002a0fc8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_BUFFERS_TRANSFER_DRAW_BUFFER_CHUNKS_H */

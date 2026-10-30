@@ -5,9 +5,10 @@
 #include "rnc/ui/menus/menu_screen.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/menus/menu_globals.h"
-extern char *delete_moby(char *) __asm__("FUN_00225530");
+#include "rnc/mobys/delete_moby.h"
+
 extern void *create_menu_preview_moby(int) __asm__("func_00225490");
-extern void rotate_item_preview_moby(struct MenuScreen *) __asm__("FUN_0021e1f8");
+extern void  rotate_item_preview_moby(struct MenuScreen *) __asm__("FUN_0021e1f8");
 /* Keeps the item preview moby in step with the highlighted entry: drop it
    when the entry's class (menu_item_info preview_class) is -1, spawn it in
    front of the camera focus when there is none yet, or respawn it with
@@ -16,19 +17,20 @@ int update_item_preview_moby(struct MenuScreen *menu) __asm__("FUN_0021df98");
 
 int update_item_preview_moby(struct MenuScreen *menu) {
     struct MenuScreen *grid = menu_system.current->focus;
-    int item = grid->data.grid.cells[grid->data.grid.selected_cell].id;
-    short current_preview_class;
-    MenuItemInfo *rec;
-    short want;
+    int                item = grid->data.grid.cells[grid->data.grid.selected_cell].id;
+    short              current_preview_class;
+    MenuItemInfo      *rec;
+    short              want;
 
-    current_preview_class = menu->data.preview.moby != 0 ? *(short *)(menu->data.preview.moby + 0xA6) : -1;
+    current_preview_class =
+        menu->data.preview.moby != 0 ? *(short *)(menu->data.preview.moby + 0xA6) : -1;
     rec = &menu_item_info[item];
     want = rec->preview_class;
     if (want != -1 && current_preview_class == -1) {
         char *spawned_moby = create_menu_preview_moby(want);
 
         if (spawned_moby != 0) {
-            char *preview_camera_base = preview_camera;
+            char *preview_camera_base = (char *)&preview_camera;
 
             menu->data.preview.moby = spawned_moby;
             *(short *)(spawned_moby + 0x34) = 0;

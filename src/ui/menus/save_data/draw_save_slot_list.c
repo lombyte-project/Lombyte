@@ -1,0 +1,125 @@
+#include "types.h"
+#include "sda.h"
+#include "rnc/save/memory_card_state.h"
+#include "rnc/data_labels.h"
+#include "rnc/ui/menus/menu_globals.h"
+#include "rnc/globals.h"
+#include "rnc/ui/hud/get_icon_frame.h"
+
+typedef struct {
+    u8  pad_0[0x20];
+    s32 width;
+    u8  pad_24[0x1C];
+    s32 selected_slot;
+} SaveMenu;
+
+extern char save_slot_play_time_format[] __asm__("D_00160300");
+extern char save_slot_grouped_bolts_format[] __asm__("D_00160310");
+extern char save_slot_hex_triplet_format[] __asm__("D_00160320");
+
+extern void  setup_gif_paging(s32) __asm__("func_001F4280");
+extern void  do_gif_paging(void) __asm__("func_001F4398");
+extern void  font_print_small(s32, s32, u64, char *, s32) __asm__("func_001F65B0");
+extern void  font_print_center_small(s32, s32, u64, char *, s32) __asm__("func_001F6B88");
+extern char *get_help_message_text(s32) __asm__("func_001FDD10");
+extern void  draw_hud_sprite(s32, s32, s32, s32, s32, s32) __asm__("func_001FFC30");
+extern void  append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
+extern s32   sprintf(char *, const char *, ...);
+
+s32 draw_save_slot_list(SaveMenu *menu) __asm__("FUN_002239e0");
+
+s32 draw_save_slot_list(SaveMenu *menu) {
+    char                        text[0x50];
+    struct MemoryCardSaveEntry *slot;
+    s32                         color;
+    s32                         width;
+    s32                         inner_right;
+    s32                         highlight_top;
+    s32                         highlight_bottom;
+    s32                         inner_top;
+    s32                         inner_bottom;
+    s32                         i;
+    s32                         y;
+    s32                         play_ticks;
+    s32                         hours;
+    s32                         bolts;
+    s32                         minutes;
+
+    y = 4;
+    setup_gif_paging(0);
+    for (i = 0; i < 5; i++) {
+        width = menu->width;
+        highlight_top = y - 4;
+        highlight_bottom = y + 0x34;
+        inner_right = width - 3;
+        inner_top = y - 1;
+        inner_bottom = y + 0x31;
+        if (memory_card_state.state < 3 && memory_card_state.pending_state < 0 &&
+            menu->selected_slot == i) {
+            append_screen_rect_packet(0, highlight_top, width, highlight_bottom, 0x8020FFFF, 0);
+            append_screen_rect_packet(
+                3, inner_top, inner_right, inner_bottom, panel_clear_color, 0);
+        }
+        append_screen_rect_packet(3, inner_top, inner_right, inner_bottom, 0x80303030, 0);
+        slot = &memory_card_state.card[0].entries[i];
+        if (memory_card_state.state >= 3 || memory_card_state.pending_state >= 0 ||
+            memory_card_state.card[0].type != 2) {
+            y += 0x30;
+        } else {
+            if (slot->id == -1) {
+                y += 0x10;
+                font_print_center_small(
+                    menu->width / 2, y, 0x80FFA888, get_help_message_text(0x5217), -1);
+                y += 0x20;
+            } else {
+                play_ticks = slot->time;
+                hours = play_ticks / 216000;
+                minutes = play_ticks / 3600 - hours * 60;
+                color = menu->selected_slot == i ? (s32)0x8020FFFF : (s32)0x80FFA888;
+                if (hours > 99) {
+                    hours = 99;
+                }
+                sprintf(text, save_slot_play_time_format, hours, minutes);
+                draw_hud_sprite(get_icon_frame(0xE99E, 3), 4, y, 0x10, 0x10, 0x80);
+                font_print_small(0x16, y, color, text, -1);
+                if (slot->count != 0) {
+                    draw_hud_sprite(get_icon_frame(0xE99E, 4), 0x4E, y, 0x10, 0x10, 0x80);
+                    sprintf(text, D_001602A0, slot->count < 100 ? slot->count : 99);
+                    font_print_small(0x60, y, color, text, -1);
+                }
+                bolts = slot->bolts;
+                if (bolts > 9999999) {
+                    bolts = 9999999;
+                }
+                y += 0x10;
+                if (bolts < 1000) {
+                    sprintf(text, D_001602A0, bolts);
+                } else if (bolts < 1000000) {
+                    sprintf(text, D_001602D0, bolts / 1000, bolts % 1000);
+                } else {
+                    sprintf(text,
+                            save_slot_grouped_bolts_format,
+                            bolts / 1000000,
+                            bolts % 1000000 / 1000,
+                            bolts % 1000);
+                }
+                draw_hud_sprite(get_icon_frame(0x754F, 0xF), 4, y, 0x10, 0x10, 0x80);
+                font_print_small(0x16, y, color, text, -1);
+                y += 0x10;
+                sprintf(text, save_slot_hex_triplet_format, slot->b16, slot->b15, slot->b17);
+                draw_hud_sprite(get_icon_frame(0xE99E, 2), 4, y, 0x10, 0x10, 0x80);
+                font_print_small(0x16, y, color, text, -1);
+                y += 0x10;
+            }
+        }
+        if (pal_mode != 0) {
+            y += 0x24;
+        } else {
+            y += 0x1B;
+        }
+    }
+    do_gif_paging();
+    return 2;
+}
+
+extern __typeof__(draw_save_slot_list) func_002239E0 __attribute__((alias("FUN_002239e0")));

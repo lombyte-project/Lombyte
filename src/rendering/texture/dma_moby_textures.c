@@ -2,10 +2,11 @@
 #include "rnc/rendering/draw_config.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/globals.h"
+
 extern struct TagPtr D_0015FF0C;
-extern void FUN_00211408(s32);
-extern void vu1_tex_flush(void) __asm__("func_00233B68");
-void dma_moby_textures(void) __asm__("FUN_0020cdf0");
+extern void          FUN_00211408(s32);
+extern void          vu1_tex_flush(void) __asm__("func_00233B68");
+void                 dma_moby_textures(void) __asm__("FUN_0020cdf0");
 
 void dma_moby_textures(void) {
     struct DmaTag *tag;

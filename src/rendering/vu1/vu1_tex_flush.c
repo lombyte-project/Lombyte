@@ -2,8 +2,9 @@
 #include "sda.h"
 #define RENDER_PACKET_CURSOR_ATTR MACRO_ADDR
 #include "rnc/rendering/dma_tag.h"
+
 extern u8 vu1_gs_regs_tex_flush[] __asm__("D_001DEE00");
-void vu1_tex_flush(void) __asm__("FUN_00233b68");
+void      vu1_tex_flush(void) __asm__("FUN_00233b68");
 
 void vu1_tex_flush(void) {
     *render_packet_cursor.words = 0x30000003;

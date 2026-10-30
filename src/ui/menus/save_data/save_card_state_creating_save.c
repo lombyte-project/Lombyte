@@ -1,8 +1,8 @@
 /* Ported from rac1-decomp (src/game/menu.c, func_002096D8). */
 #include "sda.h"
-#include "rnc/storage/memory_card/memory_card_state.h"
-extern int mode_freeze_state __asm__("D_0015EEB0") MACRO_ADDR;
-extern int mode_freeze_flags __asm__("D_0015EEB4") MACRO_ADDR;
+#include "rnc/save/memory_card_state.h"
+#include "rnc/globals.h"
+
 void save_card_state_creating_save(void) __asm__("FUN_00208d60");
 
 void save_card_state_creating_save(void) {

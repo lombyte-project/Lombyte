@@ -6,7 +6,7 @@
 /* State of the sound system's disc read: set when a read starts, cleared by its callback. */
 struct StartSoundWork {
     volatile s32 read_active;
-    u8 pad_4[0xC];
+    u8           pad_4[0xC];
     volatile s32 read_error;
 };
 

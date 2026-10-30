@@ -10,17 +10,17 @@ struct Sprite {
 
 struct Group {
     s32 count;
-    u8 pad4[0x1C];
+    u8  pad4[0x1C];
     s32 items[1];
 };
 
 struct SpriteFile {
-    u8 pad0[4];
+    u8  pad0[4];
     s16 loaded;
     s16 ngroups;
-    u8 pad8[4];
+    u8  pad8[4];
     s16 nsprites;
-    u8 padE[2];
+    u8  padE[2];
     s32 sprites;
     s32 unk14;
     s32 unk18;
@@ -29,7 +29,7 @@ struct SpriteFile {
 };
 
 extern struct SpriteFile *level_sky_effect_data __asm__("D_0016045C");
-extern s16 log2dim(s32) __asm__("FUN_001f97a0");
+extern s16                log2dim(s32) __asm__("FUN_001f97a0");
 
 /* Prepares the sky data of a level. The sky block starts with a header:
  *   0x00  background colour (RGBA), set only on some levels
@@ -44,14 +44,14 @@ extern s16 log2dim(s32) __asm__("FUN_001f97a0");
 void relocate_sky_definition(struct SpriteFile *f) __asm__("FUN_002028e0");
 
 void relocate_sky_definition(struct SpriteFile *sky_definition) {
-    s32 *serialized_texture_words;
-    s32 i;
-    s32 k;
-    s32 j;
-    s32 serialized_palette_offset;
-    s32 serialized_texel_offset;
-    s32 texture_width;
-    s32 texture_height;
+    s32          *serialized_texture_words;
+    s32           i;
+    s32           k;
+    s32           j;
+    s32           serialized_palette_offset;
+    s32           serialized_texel_offset;
+    s32           texture_width;
+    s32           texture_height;
     struct Group *relocated_group;
 
     level_sky_effect_data = sky_definition;

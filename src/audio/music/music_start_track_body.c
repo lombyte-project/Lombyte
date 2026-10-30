@@ -1,8 +1,18 @@
 /* Ported from rac1-decomp (src/game/music.c, set_sound_handle_id). */
-#include "rnc/storage/disc_table.h"
-extern short D_001516D0[];
-extern void snd_play_vag_stream_by_loc_ex_cb(int, int, int, int, short, int, int, int, int,
-                                             void (*)(int, long), long) __asm__("func_0012EC08");
+#include "rnc/streaming/disc_table.h"
+#include "rnc/audio/music/music_stream_state.h"
+
+extern void snd_play_vag_stream_by_loc_ex_cb(int,
+                                             int,
+                                             int,
+                                             int,
+                                             short,
+                                             int,
+                                             int,
+                                             int,
+                                             int,
+                                             void (*)(int, long),
+                                             long) __asm__("func_0012EC08");
 extern void music_primary_replace_callback(int, long) __asm__("FUN_00216ad0");
 /* music_StartTrackBody(int, int, int): when the music record at +0x34 is
    already playing (its word neither 0 nor -1) and not in state 9, starts
@@ -16,13 +26,13 @@ extern void music_primary_replace_callback(int, long) __asm__("FUN_00216ad0");
 void music_start_track_body(int track, int track_flags, int volume) __asm__("FUN_00215d18");
 
 void music_start_track_body(int track, int track_flags, int volume) {
-    char *music_state_base = (char *)D_001516D0;
-    char *base;
-    int *music_track_locations;
+    char        *music_state_base = (char *)&music_stream_state;
+    char        *base;
+    int         *music_track_locations;
     unsigned int active_stream_handle;
-    long track_location;
-    int i;
-    int flags;
+    long         track_location;
+    int          i;
+    int          flags;
 
     if (*(short *)(music_state_base + 0x3E) == 9) {
         return;
@@ -46,7 +56,15 @@ void music_start_track_body(int track, int track_flags, int volume) {
     *(int *)(music_state_base + 0x4C) = 0xBB80;
     *(short *)(music_state_base + 0x3A) = volume;
     *(short *)(music_state_base + 0x44) = 0;
-    snd_play_vag_stream_by_loc_ex_cb(track_location, 0, 0, 0, volume, 0, 1, active_stream_handle, flags,
+    snd_play_vag_stream_by_loc_ex_cb(track_location,
+                                     0,
+                                     0,
+                                     0,
+                                     volume,
+                                     0,
+                                     1,
+                                     active_stream_handle,
+                                     flags,
                                      music_primary_replace_callback,
                                      (long)(unsigned int)(music_state_base + 0x34));
 }

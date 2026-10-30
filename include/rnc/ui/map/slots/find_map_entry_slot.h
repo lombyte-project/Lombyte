@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MAP_SLOTS_FIND_MAP_ENTRY_SLOT_H
+#define LOMBYTE_RNC_UI_MAP_SLOTS_FIND_MAP_ENTRY_SLOT_H
+
+#include "types.h"
+
+s32 find_map_entry_slot(s32) __asm__("FUN_002050a0");
+
+#endif /* LOMBYTE_RNC_UI_MAP_SLOTS_FIND_MAP_ENTRY_SLOT_H */

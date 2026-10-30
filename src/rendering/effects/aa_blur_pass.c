@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/fs_aa_packets.h"
+
 void aa_blur_pass(void) __asm__("FUN_001fb680");
 
 void aa_blur_pass(void) {
@@ -11,5 +12,4 @@ void aa_blur_pass(void) {
     render_packet_cursor.bytes += 0x10;
 }
 
-extern __typeof__(aa_blur_pass) func_001FB680
-    __attribute__((alias("FUN_001fb680")));
+extern __typeof__(aa_blur_pass) func_001FB680 __attribute__((alias("FUN_001fb680")));

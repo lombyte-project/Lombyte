@@ -7,18 +7,18 @@ struct Vec3Padded {
 
 extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("func_001F9BF8");
 
-void normalize_vector_triplet(f32 *arg0) __asm__("FUN_00214128");
+void normalize_vector_triplet(f32 *matrix) __asm__("FUN_00214128");
 
 void normalize_vector_triplet(f32 *matrix) {
     struct Vec3Padded scratch;
-    f32 *base;
-    f32 *component_read_cursor;
-    f32 *component_write_cursor;
-    f32 value;
-    s32 offset;
-    s32 i;
-    s32 next;
-    s32 count;
+    f32              *base;
+    f32              *component_read_cursor;
+    f32              *component_write_cursor;
+    f32               value;
+    s32               offset;
+    s32               i;
+    s32               next;
+    s32               count;
 
     base = matrix;
     i = 0;

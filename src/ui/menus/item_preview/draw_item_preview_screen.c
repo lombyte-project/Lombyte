@@ -1,23 +1,26 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "rnc/ui/menus/menu_screen.h"
+
 struct Descriptor {
-    u8 pad0[0x10];
+    u8  pad0[0x10];
     s16 w;
     s16 h;
-    u8 pad14[0xC];
+    u8  pad14[0xC];
 };
-#include "rnc/gameplay/state/item_state.h"
+
+#include "rnc/game/item_state.h"
+
 extern void PackImageDescriptor(struct Descriptor *, struct MenuScreen *);
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging() __asm__("func_001F4398");
 extern void font_print_window_regular(struct Descriptor *, u64, u8 *, s32) __asm__("func_001F7580");
-extern u8 *get_help_message_text(s32) __asm__("func_001FDD10");
+extern u8  *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void draw_moby_list(void *, s32) __asm__("func_0020D330");
-s32 draw_item_preview_screen(struct MenuScreen *item) __asm__("FUN_0021e110");
+s32         draw_item_preview_screen(struct MenuScreen *item) __asm__("FUN_0021e110");
 
 s32 draw_item_preview_screen(struct MenuScreen *item) {
-    struct Descriptor desc;
+    struct Descriptor  desc;
     struct MenuScreen *grid;
 
     grid = menu_system.current->focus;
@@ -35,8 +38,8 @@ s32 draw_item_preview_screen(struct MenuScreen *item) {
     PackImageDescriptor(&desc, item);
     desc.w = 0x10;
     desc.h = 3;
-    font_print_window_regular(&desc, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x4F4D),
-                              -1);
+    font_print_window_regular(
+        &desc, ((u64)0x80FF << 16) | 0xA888, get_help_message_text(0x4F4D), -1);
     do_gif_paging();
     return 2;
 }

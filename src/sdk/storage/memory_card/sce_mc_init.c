@@ -1,69 +1,64 @@
 #include "types.h"
 #include "kernel.h"
-typedef struct {
-    u8 pad0[0x24];
-    void *server;
-} SifClientData;
+#include "rnc/sdk/libmc.h"
 
-
-extern s32 D_00132DAC[];
 extern char mc_rpc_bind_error_message[] __asm__("D_00153450");
 extern char mcserv_old_release_message[] __asm__("D_00153468");
 extern char mcman_old_release_message[] __asm__("D_00153490");
-extern SifClientData D_00159A00;
-extern u8 D_00159A80[];
-extern s32 D_0015AFC0[];
-extern s32 CreateSema(struct SemaParam *);
-extern s32 WaitSema(s32);
-extern s32 SignalSema(s32);
-extern s32 sceMcSync(s32, s32 *, s32 *);
+extern u8   D_00159A80[];
+extern s32  CreateSema(struct SemaParam *);
+extern s32  WaitSema(s32);
+extern s32  SignalSema(s32);
+extern s32  sceMcSync(s32, s32 *, s32 *);
 extern void sceSifInitRpc(u32);
-extern s32 sceSifBindRpc(SifClientData *, u32, u32);
-extern s32 sceSifCallRpc(SifClientData *, u32, u32, void *, s32, void *, s32, void *, void *);
+extern s32  sceSifBindRpc(struct sceSifClientData *, u32, u32);
+extern s32
+sceSifCallRpc(struct sceSifClientData *, u32, u32, void *, s32, void *, s32, void *, void *);
 extern s32 scePrintf(const char *, ...);
 
 s32 sceMcInit(void) {
     struct SemaParam param;
-    s32 rpc_call_result;
-    s32 i;
+    s32              rpc_call_result;
+    s32              i;
 
-    if (D_00132DAC[0] < 0) {
+    if (mc_sema < 0) {
         param.initCount = 1;
         param.maxCount = 1;
         param.option = 0;
-        D_00132DAC[0] = CreateSema(&param);
+        mc_sema = CreateSema(&param);
     }
     sceMcSync(0, 0, 0);
-    WaitSema(D_00132DAC[0]);
+    WaitSema(mc_sema);
     sceSifInitRpc(0);
     while (1) {
-        if (sceSifBindRpc(&D_00159A00, 0x80000400, 0) < 0) {
+        if (sceSifBindRpc(&mc_rpc_client, 0x80000400, 0) < 0) {
             scePrintf(mc_rpc_bind_error_message);
             while (1) {
             }
         }
-        if (D_00159A00.server != 0) {
+        if (mc_rpc_client.serve != 0) {
             break;
         }
         i = 0x100000;
         while (--i != 0) {
         }
     }
-    rpc_call_result = sceSifCallRpc(&D_00159A00, 0xFE, 0, D_00159A80, 48, D_0015AFC0, 12, 0, 0);
-    SignalSema(D_00132DAC[0]);
+    rpc_call_result =
+        sceSifCallRpc(&mc_rpc_client, MC_FUNC_INIT, 0, D_00159A80, 48, mc_rpc_result, 12, 0, 0);
+    SignalSema(mc_sema);
     if (rpc_call_result < 0) {
-        D_00159A00.server = 0;
+        mc_rpc_client.serve = 0;
         return rpc_call_result - 100;
     }
-    if (D_0015AFC0[1] < 522) {
+    if (mc_rpc_result[1] < 522) {
         scePrintf(mcserv_old_release_message);
-        D_00159A00.server = 0;
+        mc_rpc_client.serve = 0;
         return -120;
     }
-    if (D_0015AFC0[2] < 526) {
+    if (mc_rpc_result[2] < 526) {
         scePrintf(mcman_old_release_message);
-        D_00159A00.server = 0;
+        mc_rpc_client.serve = 0;
         return -121;
     }
-    return D_0015AFC0[0];
+    return mc_rpc_result[0];
 }

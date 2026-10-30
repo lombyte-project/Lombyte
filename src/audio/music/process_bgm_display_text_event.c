@@ -1,7 +1,8 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
-#include "rnc/gameplay/state/game_globals.h"
+#include "rnc/game/game_globals.h"
+#include "rnc/math/fast_math.h"
 
 struct Glyph {
     u8 u;
@@ -11,23 +12,36 @@ struct Glyph {
 };
 
 #include "rnc/ui/text/font_palette.h"
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
+
 extern void emit_textured_rectangle(f32, f32, f32, f32, s32, s32, s32, s32, u64, s32) __asm__("FUN_001f5808");
 
-void process_bgm_display_text_event(u64 color, u8 *s, s32 n, s32 tex, struct Glyph *g, f32 x, f32 y,
-                                    f32 scale) __asm__("FUN_001f6638");
+void process_bgm_display_text_event(u64           color,
+                                    u8           *s,
+                                    s32           n,
+                                    s32           tex,
+                                    struct Glyph *g,
+                                    f32           x,
+                                    f32           y,
+                                    f32           scale) __asm__("FUN_001f6638");
 
-void process_bgm_display_text_event(u64 color, u8 *str, s32 byte_limit, s32 texture_packet_word, struct Glyph *glyph_table, f32 x,
-                                    f32 y, f32 scale) {
-    u8 *text_cursor;
-    s32 i;
-    f32 size;
-    f32 top;
-    f32 dx;
-    f32 dy;
+void process_bgm_display_text_event(u64           color,
+                                    u8           *str,
+                                    s32           byte_limit,
+                                    s32           texture_packet_word,
+                                    struct Glyph *glyph_table,
+                                    f32           x,
+                                    f32           y,
+
+                                    f32 scale) {
+    u8           *text_cursor;
+    s32           i;
+    f32           size;
+    f32           top;
+    f32           dx;
+    f32           dy;
     struct Glyph *additional_glyph;
-    s32 avg;
-    s32 mk;
+    s32           avg;
+    s32           mk;
 
     if (font_window_active == 0) {
         font_palette_colors[0] = color;
@@ -47,10 +61,20 @@ void process_bgm_display_text_event(u64 color, u8 *str, s32 byte_limit, s32 text
         } else if (glyph_table[*text_cursor].adv != 0) {
             top = convert_integer_to_float(glyph_table[*text_cursor].top) * scale;
             if ((u8)(*text_cursor + 0x80) < 0x28) {
-                additional_glyph = (struct Glyph *)(((*text_cursor + 0x40) << 2) + (s32)glyph_table);
+                additional_glyph =
+                    (struct Glyph *)(((*text_cursor + 0x40) << 2) + (s32)glyph_table);
                 dx = convert_integer_to_float(additional_glyph->adv) * scale;
                 dy = convert_integer_to_float(additional_glyph->top) * scale;
-                emit_textured_rectangle(x + dx, y + dy, size, size, additional_glyph->u, additional_glyph->v, 16, 16, color, texture_packet_word);
+                emit_textured_rectangle(x + dx,
+                                        y + dy,
+                                        size,
+                                        size,
+                                        additional_glyph->u,
+                                        additional_glyph->v,
+                                        16,
+                                        16,
+                                        color,
+                                        texture_packet_word);
             }
             if (*text_cursor < 0x20) {
                 avg = (s32)((color & 0xFF) + ((color >> 8) & 0xFF) + ((color >> 16) & 0xFF)) / 3;
@@ -58,10 +82,27 @@ void process_bgm_display_text_event(u64 color, u8 *str, s32 byte_limit, s32 text
                 mk += avg << 16;
                 mk += avg << 8;
                 avg += mk;
-                emit_textured_rectangle(x, y + top, scale * 24.0f, scale * 16.0f, glyph_table[*text_cursor].u, glyph_table[*text_cursor].v, 24, 16,
-                             avg, texture_packet_word);
+                emit_textured_rectangle(x,
+                                        y + top,
+                                        scale * 24.0f,
+                                        scale * 16.0f,
+                                        glyph_table[*text_cursor].u,
+                                        glyph_table[*text_cursor].v,
+                                        24,
+                                        16,
+                                        avg,
+                                        texture_packet_word);
             } else if (*text_cursor > 0x20) {
-                emit_textured_rectangle(x, y + top, size, size, glyph_table[*text_cursor].u, glyph_table[*text_cursor].v, 16, 16, color, texture_packet_word);
+                emit_textured_rectangle(x,
+                                        y + top,
+                                        size,
+                                        size,
+                                        glyph_table[*text_cursor].u,
+                                        glyph_table[*text_cursor].v,
+                                        16,
+                                        16,
+                                        color,
+                                        texture_packet_word);
             }
             x += convert_integer_to_float(glyph_table[*text_cursor].adv) * scale;
         }

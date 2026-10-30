@@ -5,23 +5,25 @@
 #include "rnc/globals.h"
 #include "rnc/rendering/geometry_quad.h"
 #include "rnc/rendering/level_render_state.h"
+#include "rnc/math/fast_math.h"
 
 extern s32 game_mode_macro __asm__("D_0015F604") MACRO_ADDR;
+
 typedef struct {
     u32 w0;
     u32 w1;
 } ColorPair;
-extern ColorPair warp_trail_colors[] __asm__("D_001D9A30");
-extern f32 warp_trail_widths __asm__("D_001604D0") __attribute__((sda));
 
-extern s64 get_effect_texture(s32) __asm__("func_001F44B8");
+extern ColorPair warp_trail_colors[] __asm__("D_001D9A30");
+extern f32       warp_trail_widths __asm__("D_001604D0") __attribute__((sda));
+
+extern s64  get_effect_texture(s32) __asm__("func_001F44B8");
 extern void draw_geometry_quad(void *, s32, s32) __asm__("func_001F7D30");
-extern void add_vectors(void *, void *, void *) __asm__("func_001F9A10");
+extern void fast_vec_add(void *, void *, void *) __asm__("func_001F9A10");
 extern void fast_vec_sub(void *, void *, void *) __asm__("func_001F9A28");
-extern void cross_vectors_xyz(void *, void *, void *) __asm__("func_001F9AD8");
-extern void normalize_vector(void *, void *, f32) __asm__("func_001F9BF8");
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
-extern u32 fast_tween_color(u32, u32, f32) __asm__("func_001FA6E0");
+extern void fast_vec_cross(void *, void *, void *) __asm__("func_001F9AD8");
+extern void fast_vec_normalize(void *, void *, f32) __asm__("func_001F9BF8");
+extern u32  fast_tween_color(u32, u32, f32) __asm__("func_001FA6E0");
 
 static inline Vec4 *get_history_position(s32 strip, s32 history_index) {
     return &((Vec4(*)[32])level_render_state.primary_history)[strip][history_index];
@@ -35,9 +37,9 @@ void build_resident_indexed_texture_warp_meshes(void) {
         Vec4 cross_strip_differences[4];
         Vec4 edge_normals[4];
     } workspace;
-    s32 vertex;
-    s32 uv_vertex;
-    s32 history_index;
+    s32   vertex;
+    s32   uv_vertex;
+    s32   history_index;
     Vec4 *secondary_current;
     Vec4 *primary_current;
     Vec4 *secondary_next;
@@ -95,14 +97,14 @@ texture_ready:
                 primary_after_next =
                     &level_render_state.primary_history[(history_index + 2) & 0x1F];
                 for (strip = 0; strip < 2; strip++) {
-                    fast_vec_sub(&workspace.cross_strip_differences[0], secondary_current,
-                                 primary_current);
-                    fast_vec_sub(&workspace.cross_strip_differences[1], primary_current,
-                                 secondary_current);
-                    fast_vec_sub(&workspace.cross_strip_differences[2], secondary_next,
-                                 primary_next);
-                    fast_vec_sub(&workspace.cross_strip_differences[3], primary_next,
-                                 secondary_next);
+                    fast_vec_sub(
+                        &workspace.cross_strip_differences[0], secondary_current, primary_current);
+                    fast_vec_sub(
+                        &workspace.cross_strip_differences[1], primary_current, secondary_current);
+                    fast_vec_sub(
+                        &workspace.cross_strip_differences[2], secondary_next, primary_next);
+                    fast_vec_sub(
+                        &workspace.cross_strip_differences[3], primary_next, secondary_next);
                     fast_vec_sub(&workspace.edge_normals[1],
                                  (Vec4 *)((strip << 9) + (u32)primary_next),
                                  (Vec4 *)((strip << 9) + (u32)primary_current));
@@ -112,18 +114,18 @@ texture_ready:
                     if (page == 0) {
                         qcopy(&workspace.edge_normals[3], &workspace.edge_normals[1]);
                     }
-                    cross_vectors_xyz(&workspace.edge_normals[0],
-                                      &workspace.cross_strip_differences[0],
-                                      &workspace.edge_normals[1]);
-                    cross_vectors_xyz(&workspace.edge_normals[1],
-                                      &workspace.cross_strip_differences[1],
-                                      &workspace.edge_normals[1]);
-                    cross_vectors_xyz(&workspace.edge_normals[2],
-                                      &workspace.cross_strip_differences[2],
-                                      &workspace.edge_normals[3]);
-                    cross_vectors_xyz(&workspace.edge_normals[3],
-                                      &workspace.cross_strip_differences[3],
-                                      &workspace.edge_normals[3]);
+                    fast_vec_cross(&workspace.edge_normals[0],
+                                   &workspace.cross_strip_differences[0],
+                                   &workspace.edge_normals[1]);
+                    fast_vec_cross(&workspace.edge_normals[1],
+                                   &workspace.cross_strip_differences[1],
+                                   &workspace.edge_normals[1]);
+                    fast_vec_cross(&workspace.edge_normals[2],
+                                   &workspace.cross_strip_differences[2],
+                                   &workspace.edge_normals[3]);
+                    fast_vec_cross(&workspace.edge_normals[3],
+                                   &workspace.cross_strip_differences[3],
+                                   &workspace.edge_normals[3]);
                     position = &quad.positions[0];
                     for (vertex = 0; vertex < 4; vertex++) {
                         s32 history_step;
@@ -135,13 +137,17 @@ texture_ready:
                         progress = convert_integer_to_float(page - age) * 0.03125f;
                         quad.colors[vertex] = fast_tween_color(
                             warp_trail_colors[level_render_state.content_variant].w0,
-                            warp_trail_colors[level_render_state.content_variant].w1, progress);
+                            warp_trail_colors[level_render_state.content_variant].w1,
+                            progress);
                         progress = 1.0f - progress * progress;
-                        normalize_vector(position, &workspace.edge_normals[vertex],
-                                         progress *
-                                             (&warp_trail_widths)[level_render_state.content_variant]);
-                        add_vectors(position, position,
-                                    get_history_position(strip, (history_index + history_step) & 0x1F));
+                        fast_vec_normalize(
+                            position,
+                            &workspace.edge_normals[vertex],
+                            progress * (&warp_trail_widths)[level_render_state.content_variant]);
+                        fast_vec_add(
+                            position,
+                            position,
+                            get_history_position(strip, (history_index + history_step) & 0x1F));
                         position++;
                     }
                     draw_geometry_quad(&quad, 0, 0);
@@ -155,11 +161,15 @@ texture_ready:
                         age = history_step;
                         age--;
                         progress = convert_integer_to_float(page - age) * 0.03125f;
-                        normalize_vector(side_position, side_normal,
-                                         (1.0f - progress * progress) *
-                                             (&warp_trail_widths)[level_render_state.content_variant]);
-                        add_vectors(side_position, side_position,
-                                    get_history_position(strip, (history_index + history_step) & 0x1F));
+                        fast_vec_normalize(
+                            side_position,
+                            side_normal,
+                            (1.0f - progress * progress) *
+                                (&warp_trail_widths)[level_render_state.content_variant]);
+                        fast_vec_add(
+                            side_position,
+                            side_position,
+                            get_history_position(strip, (history_index + history_step) & 0x1F));
                         side_normal++;
                         side_position++;
                     }
@@ -173,4 +183,9 @@ texture_ready:
 extern __typeof__(build_resident_indexed_texture_warp_meshes) func_0022E420
     __attribute__((alias("FUN_0022e420")));
 
-f32 warp_texture_coordinates[4][2] = {{0, 0.5f}, {1.0f, 0.5f}, {0, 0.5f}, {1.0f, 0.5f}};
+f32 warp_texture_coordinates[4][2] = {
+    {   0, 0.5f},
+    {1.0f, 0.5f},
+    {   0, 0.5f},
+    {1.0f, 0.5f}
+};

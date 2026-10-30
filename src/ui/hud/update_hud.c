@@ -5,26 +5,29 @@
 #include "rnc/rendering/render_globals.h"
 
 struct HudSlot {
-    u8 pad_0[0x18];
+    u8  pad_0[0x18];
     s32 unk18;
 };
+
 extern s32 hud_msg_count __asm__("D_0015F680");
-extern u8 hud_msg_text1[] __asm__("D_001993D8");
-extern u8 hud_msg_text2[] __asm__("D_00199428");
+extern u8  hud_msg_text1[] __asm__("D_001993D8");
+extern u8  hud_msg_text2[] __asm__("D_00199428");
 extern s32 scale_game_frames() __asm__("func_001F96F8");
 extern s32 draw_framed_text() __asm__("func_00201200");
-void update_hud(void) __asm__("FUN_001ff780");
+void       update_hud(void) __asm__("FUN_001ff780");
 
 extern s32 D_0015F684;
+
 #include "rnc/ui/hud/update_hud_globals.h"
+
 void update_hud(void) {
-    s32 update_fn;
+    s32   update_fn;
     short new_var2;
-    u8 *slot;
-    s32 text_color;
-    s32 temp_2_59;
-    s32 temp_2_76;
-    s32 remaining;
+    u8   *slot;
+    s32   text_color;
+    s32   raised_alpha;
+    s32   lowered_alpha;
+    s32   remaining;
     if (hud_state.unk30 == 0) {
         goto block_2;
     }
@@ -70,18 +73,18 @@ block_11:
     if (hud_msg_count == 0) {
         goto block_15;
     }
-    temp_2_59 = D_0015F684 + (0x80 / scale_game_frames(8));
-    D_0015F684 = temp_2_59;
-    if (temp_2_59 < 0x81) {
+    raised_alpha = D_0015F684 + (0x80 / scale_game_frames(8));
+    D_0015F684 = raised_alpha;
+    if (raised_alpha < 0x81) {
         goto block_17;
     }
     D_0015F684 = 0x80;
     goto block_17;
 block_15:
-    temp_2_76 = D_0015F684 - (0x80 / scale_game_frames(8));
+    lowered_alpha = D_0015F684 - (0x80 / scale_game_frames(8));
 
-    D_0015F684 = temp_2_76;
-    if (temp_2_76 >= 0) {
+    D_0015F684 = lowered_alpha;
+    if (lowered_alpha >= 0) {
         goto block_17;
     }
     D_0015F684 = 0;
@@ -121,3 +124,5 @@ block_28:
 }
 
 __attribute__((alias("FUN_001ff780"))) extern void func_001FF780(void);
+
+s32 hud_msg_y = 0;

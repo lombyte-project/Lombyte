@@ -3,21 +3,41 @@
 
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
+#include "rnc/math/asm_helpers.h"
+
 extern char textured_rectangle_packet_header_template[] __asm__("D_00160860");
-extern s32 truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
 
-void emit_textured_rectangle(f32 x, f32 y, f32 w, f32 h, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 tex) __asm__("FUN_001f5808");
+void emit_textured_rectangle(f32 x,
+                             f32 y,
+                             f32 w,
+                             f32 h,
+                             s32 u,
+                             s32 v,
+                             s32 uw,
+                             s32 vh,
+                             u64 rgba,
+                             u64 tex) __asm__("FUN_001f5808");
 
-void emit_textured_rectangle(f32 x, f32 y, f32 screen_width, f32 screen_height, s32 u, s32 v, s32 uw, s32 vh, u64 rgba, u64 texture_packet_word) {
-    s32 x0 = truncate_float_to_s32(x * 16.0f) + screen_extent.left - 8;
-    s32 x1 = truncate_float_to_s32((x + screen_width) * 16.0f) + screen_extent.left - 8;
-    s32 y0 = truncate_float_to_s32(y * 16.0f) + screen_extent.top - 8;
-    s32 y1 = truncate_float_to_s32((y + screen_height) * 16.0f) + screen_extent.top - 8;
-    s32 u1_fixed;
-    s32 u0_fixed;
-    s32 vb;
-    s32 ub;
-    long *packet_words;
+void emit_textured_rectangle(f32 x,
+                             f32 y,
+                             f32 screen_width,
+                             f32 screen_height,
+                             s32 u,
+                             s32 v,
+                             s32 uw,
+                             s32 vh,
+                             u64 rgba,
+
+                             u64 texture_packet_word) {
+    s32            x0 = truncate_float_to_s32(x * 16.0f) + screen_extent.left - 8;
+    s32            x1 = truncate_float_to_s32((x + screen_width) * 16.0f) + screen_extent.left - 8;
+    s32            y0 = truncate_float_to_s32(y * 16.0f) + screen_extent.top - 8;
+    s32            y1 = truncate_float_to_s32((y + screen_height) * 16.0f) + screen_extent.top - 8;
+    s32            u1_fixed;
+    s32            u0_fixed;
+    s32            vb;
+    s32            ub;
+    long          *packet_words;
     struct DmaTag *base;
 
     if (x0 > 0x9000 || x1 < 0x7000 || y0 > 0x9000 || y1 < 0x7000) {
@@ -38,7 +58,8 @@ void emit_textured_rectangle(f32 x, f32 y, f32 screen_width, f32 screen_height, 
     render_packet_cursor.tag = base + 2;
     packet_words[0] = texture_packet_word;
     packet_words[1] = 0x154;
-    packet_words[2] = (u64)(0xA | ((long)u << 4) | ((long)ub << 14)) | ((long)v << 24) | ((long)vb << 34);
+    packet_words[2] =
+        (u64)(0xA | ((long)u << 4) | ((long)ub << 14)) | ((long)v << 24) | ((long)vb << 34);
     packet_words[3] = rgba;
     packet_words[4] = (v << 20) + u0_fixed;
     packet_words[5] = x0 | ((long)y0 << 16) | ((long)0xFFFFF0 << 32);

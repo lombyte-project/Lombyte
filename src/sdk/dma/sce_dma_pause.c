@@ -1,6 +1,8 @@
 #include "types.h"
+
 extern s32 DIntr();
 extern s32 EnableInterrupts();
+
 s32 sceDmaPause(volatile u32 *chcr) {
     s32 state;
     u32 ctrl;

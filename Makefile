@@ -8,7 +8,7 @@
 # Setup: put a legally owned disc dump in dumps/ (e.g. dumps/game.iso) and
 # install the toolchain (docs/build/building.md). Then run `make elf`.
 
-.PHONY: elf iso clean-iso check progress overlays
+.PHONY: elf iso clean-iso check progress overlays format
 
 check: ## Run the public CI checks locally (tests, script parse, progress report)
 	python3 scripts/test_public_tools.py -v
@@ -20,6 +20,9 @@ check: ## Run the public CI checks locally (tests, script parse, progress report
 	  for f in $$(find src/check -name '*_layout_check.c' | sort); do \
 	    $$cc/cpp -Iinclude $$f | $$cc/cc1 -quiet -o /dev/null || exit 1; done; \
 	  echo "layout checks: OK"; else echo "layout checks: skipped (no $$cc)"; fi
+
+format: ## Format the C sources the human-first way (scripts/format.py)
+	python3 scripts/format.py
 
 progress: ## After `make elf`: measure C_FUZZY and preview the report and map in build/progress/
 	.venv/bin/python scripts/gen_progress_report.py --workspace build/baseline

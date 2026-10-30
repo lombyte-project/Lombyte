@@ -17,13 +17,13 @@
  * invariant where retail has it. (Folding the +0x10 into the load
  * offset instead of keeping a base pointer costs another 8.)
  */
-void unpack_spr_descriptor(void *arg0) __asm__("FUN_001238a0");
+void unpack_spr_descriptor(void *descriptor) __asm__("FUN_001238a0");
 
 void unpack_spr_descriptor(void *descriptor) {
-    char *scratchpad_descriptor = (char *)((unsigned int)descriptor | 0x20000000);
+    char          *scratchpad_descriptor = (char *)((unsigned int)descriptor | 0x20000000);
     unsigned char *inline_source_bytes;
-    char *destination;
-    int i;
+    char          *destination;
+    int            i;
 
     if (*(int *)(scratchpad_descriptor + 0x0) != 0) {
         destination = *(char **)(scratchpad_descriptor + 0x8);

@@ -1,12 +1,11 @@
 /* Built only by `make layout-check-sys` (never linked). gcc 2.95 has no
    _Static_assert: a negative array size fails the compile. */
 #define OFFSET_CHECK(name, type, field, off) \
-    typedef char offset_check_##name[ \
-        ((unsigned long)&((type *)0)->field == (off)) ? 1 : -1]
+    typedef char offset_check_##name[((unsigned long)&((type *)0)->field == (off)) ? 1 : -1]
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
-#include "rnc/gameplay/camera/follow_cam.h"
+#include "rnc/camera/follow_cam.h"
 
 OFFSET_CHECK(reset, FollowCamState, reset, 0x20);
 OFFSET_CHECK(reset_distance, FollowCamState, reset.distance, 0x28);

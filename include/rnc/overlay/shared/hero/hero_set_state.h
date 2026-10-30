@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_SET_STATE_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_SET_STATE_H
+
+#include "types.h"
+
+int hero_set_state(int, int) __asm__("FUN_L00_002223f8");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_HERO_HERO_SET_STATE_H */

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_START_SCENE_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_START_SCENE_H
+
+#include "types.h"
+
+void start_scene(void *) __asm__("FUN_L00_00298840");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_MOBYS_START_SCENE_H */

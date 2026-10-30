@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_GAME_JET_RESET_CAMERA_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_GAME_JET_RESET_CAMERA_H
+
+#include "types.h"
+
+void jet_reset_camera(void *, void *) __asm__("FUN_L00_00284e50");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_GAME_JET_RESET_CAMERA_H */

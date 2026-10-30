@@ -1,8 +1,10 @@
 #include "types.h"
+
 extern s32 snd_flush_sound_commands() __asm__("FUN_0012dc80");
-void snd_reset_state_and_flush_commands(s32 arg0) __asm__("FUN_0012eb00");
+void       snd_reset_state_and_flush_commands(s32 unused_arg) __asm__("FUN_0012eb00");
 
 extern s32 GlobalTableStatus __asm__("D_0015ECC4") __attribute__((sda));
+
 void snd_reset_state_and_flush_commands(s32 unused_arg) {
     GlobalTableStatus = 0;
     snd_flush_sound_commands();

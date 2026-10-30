@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_FRAME_RESET_DRAW_GLOBALS_H
+#define LOMBYTE_RNC_RENDERING_FRAME_RESET_DRAW_GLOBALS_H
+
+#include "types.h"
+
+void reset_draw_globals(void) __asm__("FUN_001f37e8");
+
+#endif /* LOMBYTE_RNC_RENDERING_FRAME_RESET_DRAW_GLOBALS_H */

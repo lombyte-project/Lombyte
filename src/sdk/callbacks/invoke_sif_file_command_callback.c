@@ -5,11 +5,11 @@ typedef void (*SifFileCommandCallback)(void *);
 
 typedef struct SifFileCommandCallbackRecord {
     SifFileCommandCallback callback;
-    void *argument;
+    void                  *argument;
 } SifFileCommandCallbackRecord;
 
-void invoke_sif_file_command_callback(void *packet, SifFileCommandCallbackRecord *callback_record)
-    __asm__("FUN_0011b980");
+void invoke_sif_file_command_callback(
+    void *packet, SifFileCommandCallbackRecord *callback_record) __asm__("FUN_0011b980");
 
 void invoke_sif_file_command_callback(void *packet, SifFileCommandCallbackRecord *callback_record) {
     SifFileCommandCallback callback = callback_record->callback;
@@ -21,4 +21,5 @@ void invoke_sif_file_command_callback(void *packet, SifFileCommandCallbackRecord
     CpuEnableInt();
 }
 
-extern __typeof__(invoke_sif_file_command_callback) func_0011B980 __attribute__((alias("FUN_0011b980")));
+extern __typeof__(invoke_sif_file_command_callback) func_0011B980
+    __attribute__((alias("FUN_0011b980")));

@@ -2,21 +2,29 @@
 #include "types.h"
 #include "rnc/rendering/screen.h"
 #include "rnc/rendering/view.h"
+#include "rnc/math/fast_math.h"
 
-extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void update_view_context(void) __asm__("func_001F2D98");
-void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 horizontal_fov,
-                                   f32 fog_near_distance, f32 fog_far_distance,
-                                   f32 fog_near_intensity,
-                                   f32 fog_far_intensity) __asm__("FUN_001f33b8");
+void        configure_graphics_projection(s32 viewport_width,
+                                          s32 viewport_height,
+                                          f32 horizontal_fov,
+                                          f32 fog_near_distance,
+                                          f32 fog_far_distance,
+                                          f32 fog_near_intensity,
+                                          f32 fog_far_intensity) __asm__("FUN_001f33b8");
 
-void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 horizontal_fov,
-                                   f32 fog_near_distance, f32 fog_far_distance,
-                                   f32 fog_near_intensity, f32 fog_far_intensity) {
+void configure_graphics_projection(s32 viewport_width,
+                                   s32 viewport_height,
+                                   f32 horizontal_fov,
+                                   f32 fog_near_distance,
+                                   f32 fog_far_distance,
+                                   f32 fog_near_intensity,
+
+                                   f32 fog_far_intensity) {
     struct View *context = &view_context;
-    s32 half_width = viewport_width >> 1;
-    s32 half_height = viewport_height >> 1;
-    f32 projection_half_height;
+    s32          half_width = viewport_width >> 1;
+    s32          half_height = viewport_height >> 1;
+    f32          projection_half_height;
 
     screen_extent.width = viewport_width;
     screen_extent.height = viewport_height;
@@ -41,4 +49,5 @@ void configure_graphics_projection(s32 viewport_width, s32 viewport_height, f32 
     update_view_context();
 }
 
-extern __typeof__(configure_graphics_projection) func_001F33B8 __attribute__((alias("FUN_001f33b8")));
+extern __typeof__(configure_graphics_projection) func_001F33B8
+    __attribute__((alias("FUN_001f33b8")));

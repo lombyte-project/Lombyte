@@ -1,19 +1,17 @@
 /*
- * Compile-time layout checks for struct Hero (include/rnc/gameplay/hero.h).
+ * Compile-time layout checks for struct Hero (include/rnc/hero/hero.h).
  * Built by `make check` with the EE compiler; a wrong offset makes an array
  * size negative and the compile fails. Nothing here is linked.
  */
-#include "rnc/gameplay/hero.h"
+#include "rnc/hero/hero.h"
 
-#define CHECK_CAT2(a, b) a##b
-#define CHECK_CAT(a, b) CHECK_CAT2(a, b)
-#define CHECK(cond) typedef char CHECK_CAT(layout_check_, __LINE__)[(cond) ? 1 : -1]
-#define HERO_OFFSET_CHECK(field, off) \
-    CHECK((unsigned long)&((struct Hero *)0)->field == (off))
+#define CHECK_CAT2(a, b)              a##b
+#define CHECK_CAT(a, b)               CHECK_CAT2(a, b)
+#define CHECK(cond)                   typedef char CHECK_CAT(layout_check_, __LINE__)[(cond) ? 1 : -1]
+#define HERO_OFFSET_CHECK(field, off) CHECK((unsigned long)&((struct Hero *)0)->field == (off))
 #define SLOT_OFFSET_CHECK(field, off) \
     CHECK((unsigned long)&((struct HeroItemSlot *)0)->field == (off))
-#define EASE_OFFSET_CHECK(field, off) \
-    CHECK((unsigned long)&((struct HeroEase *)0)->field == (off))
+#define EASE_OFFSET_CHECK(field, off) CHECK((unsigned long)&((struct HeroEase *)0)->field == (off))
 
 CHECK(sizeof(struct MobyTrail) == 0x140);
 CHECK((unsigned long)&((struct MobyTrail *)0)->copy_fade == 0x100);

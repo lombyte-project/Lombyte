@@ -1,15 +1,14 @@
 /* Compile-time EE layout checks; never linked into the game. */
 #define OFFSET_CHECK(name, type, field, off) \
-    typedef char offset_check_##name[ \
-        ((unsigned long)&((type *)0)->field == (off)) ? 1 : -1]
+    typedef char offset_check_##name[((unsigned long)&((type *)0)->field == (off)) ? 1 : -1]
 #define SIZE_CHECK(name, type, size) \
     typedef char size_check_##name[(sizeof(type) == (size)) ? 1 : -1]
 
 #include "rnc/overlay/swarm_path.h"
 
-SIZE_CHECK(path, SwarmPath, 0x20);
-OFFSET_CHECK(count, SwarmPath, count, 0);
-OFFSET_CHECK(points, SwarmPath, points, 0x10);
+SIZE_CHECK(path, LevelPath, 0x20);
+OFFSET_CHECK(count, LevelPath, count, 0);
+OFFSET_CHECK(points, LevelPath, points, 0x10);
 SIZE_CHECK(follower, SwarmPathFollower, 0x30);
 OFFSET_CHECK(point, SwarmPathFollower, point, 0);
 OFFSET_CHECK(direction, SwarmPathFollower, direction, 4);

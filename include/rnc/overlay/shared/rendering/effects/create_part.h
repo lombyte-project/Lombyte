@@ -1,0 +1,9 @@
+#ifndef LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_CREATE_PART_H
+#define LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_CREATE_PART_H
+
+#include "types.h"
+
+void *create_part(s32) __asm__("FUN_L00_002678b8");
+void  free_effect_particle(void *) __asm__("FUN_L00_00267a08");
+
+#endif /* LOMBYTE_RNC_OVERLAY_SHARED_RENDERING_EFFECTS_CREATE_PART_H */

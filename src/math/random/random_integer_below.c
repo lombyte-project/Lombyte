@@ -1,5 +1,8 @@
 #include "types.h"
+#include "rnc/math/random.h"
+
 extern s32 rand() __asm__("FUN_001160d8");
+
 s32 random_integer_below(s32 limit) __asm__("FUN_00213260");
 
 s32 random_integer_below(s32 limit) {

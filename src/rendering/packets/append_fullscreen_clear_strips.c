@@ -25,21 +25,21 @@ void append_fullscreen_clear_strips(s64 color) __asm__("FUN_00227378");
 void append_fullscreen_clear_strips(s64 color) {
     struct ClearStripPacket *base;
     struct ClearStripPacket *packet_cursor;
-    s64 *commands;
-    volatile s64 *vertices; /* GIF packet words, written in order */
-    struct FsAaBuf *dimensions;
-    s32 strip_count;
-    s32 display_height;
-    s32 display_width;
-    s32 strip_index;
-    s32 left_x;
-    s32 top_y;
-    s32 right_x;
-    s32 bottom_y;
-    s32 negative_half_width;
-    s32 dividend;
-    s64 packed_top_y;
-    s64 packed_bottom_y;
+    s64                     *commands;
+    volatile s64            *vertices; /* GIF packet words, written in order */
+    struct FsAaBuf          *dimensions;
+    s32                      strip_count;
+    s32                      display_height;
+    s32                      display_width;
+    s32                      strip_index;
+    s32                      left_x;
+    s32                      top_y;
+    s32                      right_x;
+    s32                      bottom_y;
+    s32                      negative_half_width;
+    s32                      dividend;
+    s64                      packed_top_y;
+    s64                      packed_bottom_y;
 
     dimensions = &fs_aa_buffer;
     display_width = dimensions->display_width;
@@ -91,6 +91,6 @@ void append_fullscreen_clear_strips(s64 color) {
     render_packet_cursor[0]->gif_control = 0;
     render_packet_cursor[0] = (struct ClearStripPacket *)((u8 *)render_packet_cursor[0] + 0x10);
 }
+
 extern __typeof__(append_fullscreen_clear_strips) func_00227378
     __attribute__((alias("FUN_00227378")));
-

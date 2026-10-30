@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_WORLD_DATA_FIND_ID_IN_TERMINATED_TABLE_H
+#define LOMBYTE_RNC_WORLD_DATA_FIND_ID_IN_TERMINATED_TABLE_H
+
+#include "types.h"
+
+s32 find_id_in_terminated_table(s32) __asm__("FUN_00205220");
+
+#endif /* LOMBYTE_RNC_WORLD_DATA_FIND_ID_IN_TERMINATED_TABLE_H */

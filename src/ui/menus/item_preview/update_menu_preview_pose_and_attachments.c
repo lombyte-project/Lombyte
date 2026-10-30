@@ -3,13 +3,14 @@
 /* Ported from rac1-decomp (src/game/pause.c, func_002260A8). */
 #include "qcopy.h"
 #include "rnc/ui/menus/pause_moby.h"
-#include "rnc/gameplay/gadgets/hand_gadget.h"
+#include "rnc/weapons/hand_gadget.h"
 #include "rnc/ui/menus/menu_globals.h"
+
 extern void copy_matrix3x4(void *, void *) __asm__("func_001FA2B8");
 /* Second name for the same table: the two arms below differ only in which name
    they pass, which keeps the compiler from merging them before the call. */
 extern char preview_binding_table_alias[] __asm__("D_001863D0");
-extern int advance_moby_animation(void *) __asm__("func_0020D580");
+extern int  advance_moby_animation(void *) __asm__("func_0020D580");
 extern void refresh_moby_spatial_bounds(void *) __asm__("func_0020DEF8");
 extern void build_moby_bone_transform(int, int, void *) __asm__("func_0020CCA8");
 extern void normalize_vector_triplet(void *) __asm__("func_00214128");
@@ -22,12 +23,12 @@ void update_menu_preview_pose_and_attachments(void *preview) __asm__("FUN_00224e
 
 void update_menu_preview_pose_and_attachments(void *preview) {
     PauseMoby *moby = preview;
-    char **preview_vars = moby->vars;
-    f32 transform[16];
-    s32 source_moby_address = *(int *)(*preview_vars + 0x44);
-    s32 is_second_preview_moby;
-    s32 first_attachment_active;
-    s32 second_attachment_active;
+    char     **preview_vars = moby->vars;
+    f32        transform[16];
+    s32        source_moby_address = *(int *)(*preview_vars + 0x44);
+    s32        is_second_preview_moby;
+    s32        first_attachment_active;
+    s32        second_attachment_active;
 
     advance_moby_animation(moby);
     refresh_moby_spatial_bounds(moby);
@@ -48,13 +49,19 @@ void update_menu_preview_pose_and_attachments(void *preview) {
         detach_manipulator(source_moby_address, &first_attachment_manipulator);
     }
     if (!is_second_preview_moby) {
-        noop_callback_s(preview_binding_table_alias, menu_item_info,
-                        moby->resource_address, 0, source_moby_address);
+        noop_callback_s(preview_binding_table_alias,
+                        menu_item_info,
+                        moby->resource_address,
+                        0,
+                        source_moby_address);
         moby->primary_binding = (char *)menu_item_info;
         moby->secondary_binding = (char *)menu_item_info;
     } else {
-        noop_callback_s(menu_item_info, preview_binding_table_alias,
-                        moby->resource_address, 0, source_moby_address);
+        noop_callback_s(menu_item_info,
+                        preview_binding_table_alias,
+                        moby->resource_address,
+                        0,
+                        source_moby_address);
         moby->primary_binding = preview_binding_table_alias;
         moby->secondary_binding = preview_binding_table_alias;
     }

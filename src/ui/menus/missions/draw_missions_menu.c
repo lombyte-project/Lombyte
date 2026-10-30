@@ -1,8 +1,10 @@
 #include "types.h"
 #include "rnc/globals.h"
+#include "rnc/runtime/state/disable_global_flag.h"
+#include "rnc/runtime/state/enable_global_flag.h"
 
 struct Menu {
-    u8 pad0[0x20];
+    u8  pad0[0x20];
     s32 w;
     s32 h;
 };
@@ -10,10 +12,8 @@ struct Menu {
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void setup_gif_paging(s32) __asm__("func_001F4280");
 extern void do_gif_paging(void) __asm__("func_001F4398");
-extern s32 get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32 measure_text_width_small(s32, s32) __asm__("func_001F6270");
-extern void disable_global_flag(void) __asm__("func_001F61F8");
-extern void enable_global_flag(void) __asm__("func_001F61E8");
+extern s32  get_help_message_text(s32) __asm__("func_001FDD10");
+extern s32  measure_text_width_small(s32, s32) __asm__("func_001F6270");
 extern void font_print_small(s32, s32, u64, s32, s32) __asm__("func_001F65B0");
 
 s32 draw_missions_menu(struct Menu *m) __asm__("FUN_0021f368");

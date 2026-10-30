@@ -1,4 +1,5 @@
 #include "types.h"
+
 u32 sceIpuSync(s32 sync_mode) {
     enum {
         IPU_SYNC_WAIT = 0,

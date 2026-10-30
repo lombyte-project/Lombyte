@@ -1,35 +1,37 @@
 #include "types.h"
 #include "sifrpc.h"
 #include "rnc/data_labels.h"
+#include "rnc/sdk/libmc.h"
+
 struct McGetDirRequest {
     s32 unk0;
     s32 unk4;
     s32 unk8;
     s32 unkC;
     s32 unk10;
-    u8 pad_14[0x3FF];
+    u8  pad_14[0x3FF];
     s32 unk413;
 };
 
-extern struct sceSifClientData D_00159A00;
 extern struct McGetDirRequest D_00159AB0;
-extern s32 PollSema();
-extern s32 SignalSema();
-extern s32 sceSifCallRpc();
-extern s32 sceSifWriteBackDCache();
-extern s32 strncpy(s8 *, s8 *, s32);
+extern s32                    PollSema();
+extern s32                    SignalSema();
+extern s32                    sceSifCallRpc();
+extern s32                    sceSifWriteBackDCache();
+extern s32                    strncpy(s8 *, s8 *, s32);
+
 s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
-    s32 result;
-    s32 var_2_30;
+    s32          result;
+    s32          ret;
     register s32 path_arg = slot;
 
-    if (D_00159A00.serve == 0) {
+    if (mc_rpc_client.serve == 0) {
         return -0x64;
     }
-    var_2_30 = -0xC8;
-    if (PollSema(D_00132DAC[0]) >= 0) {
+    ret = -0xC8;
+    if (PollSema(mc_sema) >= 0) {
         if ((name == NULL) || (*name == 0)) {
-            SignalSema(D_00132DAC[0]);
+            SignalSema(mc_sema);
             return -0xD2;
         }
         D_00159AB0.unk0 = port;
@@ -42,15 +44,16 @@ s32 sceMcGetDir(s32 port, s32 slot, s8 *name, s32 mode, s32 maxent, s32 table) {
         if (maxent >= 0) {
             sceSifWriteBackDCache(table, maxent << 6);
         }
-        result = sceSifCallRpc(&D_00159A00, 0xD, 1, &D_00159AB0, 0x414, D_0015AFC0, 4, 0, 0);
+        result = sceSifCallRpc(
+            &mc_rpc_client, MC_FUNC_GET_DIR, 1, &D_00159AB0, 0x414, mc_rpc_result, 4, 0, 0);
         if (result == 0) {
-            D_00132DA8[0] = 0xD;
+            mc_current_func = MC_FUNC_GET_DIR;
         } else {
-            SignalSema(D_00132DAC[0]);
+            SignalSema(mc_sema);
         }
-        var_2_30 = result;
+        ret = result;
         /* Duplicate return node #12. Try simplifying control flow for better match */
-        return var_2_30;
+        return ret;
     }
-    return var_2_30;
+    return ret;
 }

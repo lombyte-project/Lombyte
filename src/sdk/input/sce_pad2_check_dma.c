@@ -1,9 +1,9 @@
 #include "types.h"
 
 typedef struct PadPort {
-    u8 pad[0xC];
+    u8  pad[0xC];
     u8 *unkC;
-    u8 pad2[816 - 0x10];
+    u8  pad2[816 - 0x10];
 } PadPort;
 
 typedef struct DmaState {

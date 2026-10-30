@@ -41,19 +41,20 @@ negative indices but does not check the upper slot bound.
 
 ## Layouts
 
-- Pool header: `0x70` bytes. Slot stride: `0x70` bytes. Definition stride: `0x20`.
+- Pool (`VoicePool`, `0xE00` bytes): a `0x70`-byte header (listener history,
+  group volumes, reverb), thirty `0x70`-byte voices, then at `0xD90` the
+  level sound instances (`0x90` each) and at `0xDA0` the listener occlusion
+  samples. Definition stride: `0x20`.
 - `VoicePoolWindow` is an access view at `pool_base + index * 0x70`.
   Its `voice` begins at `+0x70`; it is not an array element to increment.
 - `MobyAudioView` and `MobyClassAudioView` are local partial views.
   The `+0x24` class pointer and class `+0x28` sound definitions agree with
-  `include/rnc/gameplay/entities/moby.h`. The count at class `+0x0D`
+  `include/rnc/mobys/moby.h`. The count at class `+0x0D`
   is inferred from the bounds check.
 - Definition `+0x1A` is the sound index and `+0x1C` the bank handle passed by
   `sound_update` to `snd_play_sound_vol_pan_pmpb`.
-  The allocator reads it as unsigned 16-bit, the updater as signed 16-bit.
 - Slot `+0x1C` is cleared as owner context, not unused padding.
-- Storage at slot `+0x44` includes 36 occlusion-history bytes and eight bytes
-  not interpreted by this view; it is not a 44-sample history.
+- Slot `+0x44` holds 36 occlusion-history bytes, then eight bytes not yet read.
 
 `src/check/voice_pool_layout_check.c` checks the EE offsets, sizes and alignment.
 

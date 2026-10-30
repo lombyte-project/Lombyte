@@ -2,11 +2,12 @@
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
 #include "rnc/data_labels.h"
-extern s32 dialogue_stream_locations[] __asm__("D_0011C178");
-extern u8 music_player_dialogue[] __asm__("D_00151720");
+
+extern s32  dialogue_stream_locations[] __asm__("D_0011C178");
+extern u8   music_player_dialogue[] __asm__("D_00151720");
 extern void music_secondary_start_callback() __asm__("func_002169C0");
-extern void snd_play_vag_stream_by_loc_ex_cb(s32, s32, s32, s32, s16, s32, s32, s32, s32,
-                                             void (*)(), u64) __asm__("func_0012EC08");
+extern void snd_play_vag_stream_by_loc_ex_cb(
+    s32, s32, s32, s32, s16, s32, s32, s32, s32, void (*)(), u64) __asm__("func_0012EC08");
 void music_start_track_30000(s32 track, s32 flags, s32 volume) __asm__("FUN_002156d8");
 
 void music_start_track_30000(s32 track, s32 flags, s32 volume) {
@@ -22,8 +23,17 @@ void music_start_track_30000(s32 track, s32 flags, s32 volume) {
         music_stream_state.secondary.remaining_time = 48000;
         music_stream_state.secondary.volume = volume;
         music_stream_state.secondary.crossfade_enabled = 0;
-        snd_play_vag_stream_by_loc_ex_cb(*entry, 0, 0, 0, D_0015EE1C ? volume : 0, 0, 2, 0, 0x21,
-                                         music_secondary_start_callback, (u32)music_player_dialogue);
+        snd_play_vag_stream_by_loc_ex_cb(*entry,
+                                         0,
+                                         0,
+                                         0,
+                                         D_0015EE1C ? volume : 0,
+                                         0,
+                                         2,
+                                         0,
+                                         0x21,
+                                         music_secondary_start_callback,
+                                         (u32)music_player_dialogue);
     }
 }
 

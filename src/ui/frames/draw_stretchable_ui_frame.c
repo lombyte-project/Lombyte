@@ -1,9 +1,9 @@
 #include "types.h"
+
 extern s32 get_icon_frame() __asm__("FUN_001ff960");
 extern s32 draw_hud_sprite() __asm__("FUN_001ffc30");
 extern s32 draw_hud_sprite_flipped() __asm__("FUN_001ffe18");
-void draw_stretchable_ui_frame(s32 x, s32 y, s32 width, s32 arg3,
-                               s32 arg4) __asm__("FUN_00201128");
+void       draw_stretchable_ui_frame(s32 x, s32 y, s32 width, s32 height, s32 alpha) __asm__("FUN_00201128");
 
 void draw_stretchable_ui_frame(s32 x, s32 y, s32 width, s32 height, s32 alpha) {
     s32 middle_frame;

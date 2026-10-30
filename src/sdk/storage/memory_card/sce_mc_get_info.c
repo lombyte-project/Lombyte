@@ -1,37 +1,36 @@
 #include "types.h"
 #include "sifrpc.h"
+#include "rnc/sdk/libmc.h"
+
 struct McGetInfoRequest {
-    u8 pad_0[0x4];
+    u8  pad_0[0x4];
     s32 unk4;
     s32 unk8;
     s32 unkC;
     s32 unk10;
     s32 unk14;
-    u8 pad_18[0x4];
+    u8  pad_18[0x4];
     s32 unk1C;
 };
 
-extern u8 D_00123D10[];
-extern u32 D_00132DA8[];
-extern s32 D_00132DAC[];
-extern struct sceSifClientData D_00159A00;
-extern u32 D_00159A28[];
-extern u32 D_00159A2C[];
-extern u32 D_00159A30[];
+extern u8                      D_00123D10[];
+extern u32                     D_00159A28[];
+extern u32                     D_00159A2C[];
+extern u32                     D_00159A30[];
 extern struct McGetInfoRequest D_00159A80;
-extern u8 D_00159F00[];
-extern u8 D_0015AFC0[];
-extern s32 PollSema();
-extern s32 SignalSema();
-extern s32 sceSifCallRpc();
-extern s32 sceSifWriteBackDCache();
+extern u8                      D_00159F00[];
+extern s32                     PollSema();
+extern s32                     SignalSema();
+extern s32                     sceSifCallRpc();
+extern s32                     sceSifWriteBackDCache();
+
 s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {
     s32 result;
 
-    if (D_00159A00.serve == 0) {
+    if (mc_rpc_client.serve == 0) {
         return -0x64;
     }
-    if (PollSema(D_00132DAC[0]) < 0) {
+    if (PollSema(mc_sema) < 0) {
         return -0xC8;
     }
     D_00159A80.unk4 = port;
@@ -56,12 +55,19 @@ s32 sceMcGetInfo(s32 port, s32 slot, s32 type, s32 free_blocks, s32 format) {
     D_00159A2C[0] = free_blocks;
     D_00159A30[0] = (u32)format;
     sceSifWriteBackDCache(D_00159F00, 0xC0);
-    result =
-        sceSifCallRpc(&D_00159A00, 1, 1, &D_00159A80, 0x30, D_0015AFC0, 4, D_00123D10, D_00159F00);
+    result = sceSifCallRpc(&mc_rpc_client,
+                           MC_FUNC_GET_INFO,
+                           1,
+                           &D_00159A80,
+                           0x30,
+                           mc_rpc_result,
+                           4,
+                           D_00123D10,
+                           D_00159F00);
     if (result == 0) {
-        D_00132DA8[0] = 1;
+        mc_current_func = MC_FUNC_GET_INFO;
     } else {
-        SignalSema(D_00132DAC[0]);
+        SignalSema(mc_sema);
     }
     return result;
 }

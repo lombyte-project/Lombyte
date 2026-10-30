@@ -1,5 +1,6 @@
 #include "types.h"
 #include "rnc/audio/decoder/audio_dec.h"
+
 void audio_dec_end_put(struct AudioDec *ad, s32 n) __asm__("FUN_0023ae28");
 
 void audio_dec_end_put(struct AudioDec *ad, s32 byte_count) {

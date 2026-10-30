@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_WORLD_LOADERS_RELOCATE_SKY_DEFINITION_H
+#define LOMBYTE_RNC_WORLD_LOADERS_RELOCATE_SKY_DEFINITION_H
+
+#include "types.h"
+
+void relocate_sky_definition(void *) __asm__("FUN_002028e0");
+
+#endif /* LOMBYTE_RNC_WORLD_LOADERS_RELOCATE_SKY_DEFINITION_H */

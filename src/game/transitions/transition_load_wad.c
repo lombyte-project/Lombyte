@@ -1,0 +1,348 @@
+#include "rnc/mobys/moby_class_tables.h"
+#include "types.h"
+#include "rnc/streaming/disc_table.h"
+#include "rnc/globals.h"
+#include "rnc/rendering/view/update_view_context.h"
+#include "rnc/rendering/view/init_view_context.h"
+#include "rnc/rendering/vu1/vu1_init_chain.h"
+#include "rnc/runtime/dma/calculate_dma_transfer_address.h"
+#include "rnc/streaming/decompress_wad.h"
+#include "rnc/runtime/memory/init_mem_slots.h"
+#include "rnc/world/loaders/register_moby_class.h"
+#include "rnc/world/loaders/relocate_sky_definition.h"
+#include "rnc/world/loaders/unpack_point_records.h"
+#include "rnc/world/loaders/upload_texture_images.h"
+#include "rnc/world/loaders/parse_space_scene_chunk.h"
+
+typedef struct {
+    s32 x0;
+    s32 data;
+    s32 x8;
+    s32 xC;
+    s32 x10;
+    s32 x14;
+    s32 n18;
+    s32 x1C;
+    s32 n20;
+    s32 x24;
+    s32 n28;
+    s32 x2C;
+    s32 n30;
+    s32 x34;
+    s32 n38;
+    s32 x3C;
+    s32 n40;
+    s32 x44;
+    s32 n48;
+    s32 x4C;
+    s32 x50;
+    s32 x54;
+    s32 x58;
+    s32 x5C;
+    s32 x60;
+    s32 x64;
+    s32 x68;
+    s32 x6C;
+    s32 x70;
+    s32 x74;
+    s32 x78;
+    s32 x7C;
+    s32 x80;
+    s32 x84;
+} WadHeader;
+
+typedef struct {
+    s32 offset;
+    u16 x4;
+    u16 pad6;
+    s32 pad8[2];
+} WadTex;
+
+typedef struct {
+    s32 offset;
+    s32 x4;
+    s32 pad8[2];
+    u8  x10[0x10];
+} WadClass20;
+
+typedef struct {
+    s32 offset;
+    s32 x4;
+    s32 pad8[2];
+    u8  x10[0x10];
+    u8  x20[0x10];
+} WadClass30;
+
+typedef struct {
+    s32 offset;
+    s32 size;
+} WadSound;
+
+typedef struct {
+    u8  pad0[0x14];
+    u8 *hdr;
+    s32 x18;
+    s32 x1C;
+} LoadState;
+
+typedef struct {
+    u8  pad0[0x58];
+    s32 x58;
+    s32 x5C;
+    s32 x60[0x46];
+} SoundBanks;
+
+typedef struct {
+    s32 offset;
+    s32 pad[3];
+} TextEntry;
+
+typedef struct {
+    u8  pad0[0x2C];
+    s32 count;
+} HelpState;
+
+typedef struct {
+    u8    pad0[0xD];
+    u8    xD;
+    u8    padE[0x1A];
+    void *x28;
+} MobyClass;
+
+extern s64        D_0015EF48;
+extern s32        intro_overlay_timer __asm__("D_0015EF58");
+extern s32        help_msg_data __asm__("D_0015EF60");
+extern s32        help_offset_table __asm__("D_0015EF64");
+extern TextEntry *help_msgs __asm__("D_0015F6A0");
+extern s32        D_0015FF00;
+extern s32        D_0015FF08;
+extern s32        registered_shrub_render_class_count __asm__("D_001603CC");
+
+#include "rnc/game/transitions/transition_load_wad_globals.h"
+
+extern s32        registered_object_render_class_count __asm__("D_00160F4C");
+extern u8         boot_sound_defs_b[] __asm__("D_001861E0");
+extern u8         D_00186310[];
+extern SoundBanks render_sequence __asm__("D_0018CB20");
+extern LoadState  D_001940C0;
+extern u8         D_00194180[];
+extern HelpState  D_001996D0;
+
+#include "rnc/rendering/material_templates.h"
+
+extern s32 D_001B5980[];
+extern s32 D_001B6180[];
+
+#include "rnc/rendering/resident_class.h"
+#include "rnc/rendering/render_globals.h"
+
+extern s32           shrub_render_texture_lookup_table[] __asm__("D_001D84B0");
+extern s32           tfrag_texture_size_table[] __asm__("D_001E0900");
+extern s32           object_render_texture_lookup_table[] __asm__("D_001E2600");
+extern void          fill_transfer_words(void *, s32, s32) __asm__("func_001F97E8");
+extern void          FlushCache(s32);
+extern void          QueueDmaTransfer(s32);
+extern void          sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
+extern s32           initialize_level_render_state(u8 *) __asm__("FUN_001e9b10");
+extern volatile char log2dim(s32) __asm__("func_001F97A0");
+extern void          parse_particle_textures(u8 *, u8 *, u8 *, s32) __asm__("FUN_002026c8");
+extern void          register_object_render_class(u8 *, u8 *, u8 *, s32) __asm__("func_00203730");
+extern void register_shrub_render_class(u8 *, u8 *, u8 *, u8 *, s32) __asm__("func_00203B08");
+extern void initialize_tfrag_render_data(u8 *, u8 *) __asm__("func_002040E0");
+extern void start_audio_stream_read(u8 *, s32, s32) __asm__("FUN_00216788");
+extern volatile unsigned int load(s32, s32, s32) __asm__("func_00216828");
+extern void                  update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
+extern s32                   sceGsSetDefLoadImage(void *, s16, s16, s16, s16, s16, s16, s16);
+extern s32                   sceGsExecLoadImage(void *, u8 *);
+
+void transition_load_wad(void) __asm__("FUN_001ea830");
+
+void transition_load_wad(void) {
+    u8           li[0x60];
+    WadHeader   *hdr;
+    u8          *data;
+    u8          *base;
+    s32          size;
+    s32          i;
+    s32          j;
+    s32          k;
+    s32          sound_entry_count_or_moby_class_slot;
+    s32          v;
+    s32         *out;
+    int          new_var;
+    WadTex      *texture_definition_entries;
+    s32          new_var4;
+    WadClass20  *render_class_entry;
+    u8          *new_var3;
+    WadClass30  *shrub_class_entry;
+    WadSound    *snd;
+    TextEntry   *te;
+    WadTex      *new_var2;
+    s32          k_800 = 0x800;
+    register s32 adj;
+    s64          special_texture_state_base_bits;
+    s64          u;
+    intro_overlay_timer = 0;
+    i = 0;
+    calculate_dma_transfer_address();
+    init_mem_slots();
+    current_vu_chain = 0x100000;
+    gs_texture_allocation_base = 0x2C0000;
+    gs_texture_allocation_start = 0x2C0000;
+    gs_texture_allocation_cursor = 0x2C0000;
+    fill_transfer_words(D_00194180, 0x87654321, 0x10);
+    fill_transfer_words(resident_class_slot_by_id, -1, k_800);
+    fill_transfer_words(resident_class_material_maps, -1, 0xE00);
+    fill_transfer_words(D_001B6180, 0, 0xE0);
+    init_view_context();
+    update_view_context();
+    vu1_init_chain();
+    start_audio_stream_read(
+        D_001940C0.hdr + 0x1000000, disc_table.unk14E8.sector, disc_table.unk14E8.size);
+    update_audio_stream_until_idle(1);
+    FlushCache(0);
+    size = decompress_wad(D_001940C0.hdr + 0x1000000, D_001940C0.hdr);
+    FlushCache(0);
+    hdr = (WadHeader *)D_001940C0.hdr;
+    upload_texture_images(((u8 *)hdr) + hdr->x0, hdr->x8, ((u8 *)hdr) + hdr->xC);
+    special_texture_state_base_bits =
+        ((s64)((gs_texture_allocation_base + hdr->x70) >> 8)) | 0x1D308000;
+    u = (((s64)((gs_texture_allocation_base + hdr->x74) >> 8)) << 37) | (((s64)0xB800) << 19);
+    data = ((u8 *)hdr) + hdr->data;
+    base = data + hdr->x60;
+    special_material_template[0] = (special_texture_state_base_bits | u) | (((s64)(-1)) << 63);
+    special_material_template[1] = 0xFFA0000000E0;
+    special_material_template[2] = 0x0040000400004000;
+    texture_definition_entries = (WadTex *)(((u8 *)hdr) + hdr->x34);
+    if ((tfrag_texture_definition_count = hdr->n30) > 0) {
+        do {
+            tfrag_texture_size_table[i] = (((s32)base) + texture_definition_entries[i].offset) +
+                                          (log2dim(texture_definition_entries[i].x4) << 28);
+            i++;
+        } while (i < tfrag_texture_definition_count);
+    }
+    k = 0;
+    texture_definition_entries = (new_var2 = (WadTex *)(((u8 *)hdr) + hdr->x3C));
+    if ((D_0015FF08 = hdr->n38) > 0) {
+        do {
+            D_001B5980[k] = (((s32)base) + texture_definition_entries[k].offset) +
+                            (log2dim(texture_definition_entries[k].x4) << 28);
+            k++;
+        } while (k < D_0015FF08);
+    }
+    k = 0;
+    texture_definition_entries = (new_var2 = (WadTex *)(((u8 *)hdr) + hdr->x44));
+    if ((object_render_texture_definition_count = hdr->n40) > 0) {
+        do {
+            object_render_texture_lookup_table[k] =
+                (((s32)base) + texture_definition_entries[k].offset) +
+                (log2dim(texture_definition_entries[k].x4) << 28);
+            k++;
+        } while (k < object_render_texture_definition_count);
+    }
+    k = 0;
+    texture_definition_entries = (new_var2 = (WadTex *)(((u8 *)hdr) + hdr->x4C));
+    if ((shrub_render_texture_definition_count = hdr->n48) > 0) {
+        do {
+            shrub_render_texture_lookup_table[k] =
+                (((s32)base) + texture_definition_entries[k].offset) +
+                (log2dim(texture_definition_entries[k].x4) << 28);
+            k++;
+        } while (k < shrub_render_texture_definition_count);
+    }
+    initialize_tfrag_render_data(data + hdr->x10, ((u8 *)hdr) + hdr->x34);
+    relocate_sky_definition(data + hdr->x14);
+    render_class_entry = (WadClass20 *)(((u8 *)hdr) + hdr->x1C);
+    D_0015FF00 = 0;
+    registered_object_render_class_count = 0;
+    registered_shrub_render_class_count = 0;
+    for (k = 0; k < hdr->n18; k++) {
+        register_moby_class((render_class_entry->offset != 0) ? (data + render_class_entry->offset)
+                                                              : (0),
+                            ((u8 *)hdr) + hdr->x3C,
+                            render_class_entry->x10,
+                            render_class_entry->x4);
+        render_class_entry++;
+    }
+
+    render_class_entry = (WadClass20 *)(((u8 *)hdr) + hdr->x24);
+    for (k = 0; k < hdr->n20; k++) {
+        register_object_render_class(data + render_class_entry->offset,
+                                     ((u8 *)hdr) + hdr->x44,
+                                     render_class_entry->x10,
+                                     render_class_entry->x4);
+        render_class_entry++;
+    }
+
+    shrub_class_entry = (WadClass30 *)(((u8 *)hdr) + hdr->x2C);
+    for (k = 0; k < hdr->n28; k++) {
+        register_shrub_render_class(data + shrub_class_entry->offset,
+                                    ((u8 *)hdr) + hdr->x4C,
+                                    shrub_class_entry->x10,
+                                    shrub_class_entry->x20,
+                                    shrub_class_entry->x4);
+        shrub_class_entry++;
+    }
+
+    level_texture_payload_address = (s32)(data + hdr->x68);
+    unpack_point_records(((u8 *)hdr) + hdr->x5C, hdr->x58);
+    new_var3 = data + hdr->x64;
+    new_var4 = hdr->x54;
+    parse_particle_textures(
+        ((u8 *)hdr) + (new_var = hdr->x6C), new_var3, ((u8 *)hdr) + new_var4, hdr->x50);
+    sceGsSetDefLoadImage(li, (gs_texture_allocation_cursor << 8) >> 16, 4, 0, 0, 0, 0x100, 0x80);
+    FlushCache(0);
+    sceGsExecLoadImage(li, data + hdr->x84);
+    sceGsSyncPath(0, 0);
+    D_001940C0.x18 = ((s32)D_001940C0.hdr) + size;
+    v = gs_texture_allocation_cursor;
+    D_0015EF48 = ((v >> 8) | 0x20010000) | (((s64)0xB800) << 19);
+    gs_texture_allocation_cursor = v + 0x20000;
+    gs_texture_allocation_start = v + 0x20000;
+    D_001940C0.x1C = initialize_level_render_state(data + hdr->x7C);
+    fill_transfer_words(&render_sequence, 0, 0x1C0);
+    fill_transfer_words(D_00186310, 0, 0x40);
+    render_sequence.x58 = D_001940C0.x1C;
+    render_sequence.x5C = (D_001940C0.x1C += 0x40000);
+    D_001940C0.x1C += 0x40000;
+    snd = (WadSound *)(data + hdr->x80);
+    sound_entry_count_or_moby_class_slot = 0;
+    if (snd->size != 0) {
+        out = render_sequence.x60;
+        do {
+            sound_entry_count_or_moby_class_slot++;
+            *out = ((s32)(data + hdr->x80)) + (snd->offset + k_800);
+            snd++;
+            out++;
+        } while ((sound_entry_count_or_moby_class_slot < 0x46) && (snd->size != 0));
+    }
+    parse_space_scene_chunk(0);
+    help_msg_data = D_001940C0.x1C;
+    load(D_001940C0.x1C, disc_table.help_text.sector, disc_table.help_text.size);
+    help_offset_table = help_msg_data;
+    D_001940C0.x1C = help_msg_data + (disc_table.help_text.size << 11);
+    for (k = 0; k < 8; k++) {
+        QueueDmaTransfer(k);
+        j = 0;
+        if (D_001996D0.count > 0) {
+            te = help_msgs;
+            adj = ((s32)te) - 8;
+            {
+                do {
+                    te[j].offset += adj;
+                    j++;
+                } while (j < D_001996D0.count);
+            }
+        }
+    }
+
+    QueueDmaTransfer(0);
+    sound_entry_count_or_moby_class_slot = (new_var = resident_class_slot_by_id[0x472]);
+    if (sound_entry_count_or_moby_class_slot >= 0) {
+        ((MobyClass *)moby_class_resources[sound_entry_count_or_moby_class_slot])->x28 =
+            boot_sound_defs_b;
+        ((MobyClass *)moby_class_resources[sound_entry_count_or_moby_class_slot])->xD = 5;
+    }
+}
+
+extern __typeof__(transition_load_wad) func_001EA830 __attribute__((alias("FUN_001ea830")));

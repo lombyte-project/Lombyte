@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_SDK_GRAPH_SCE_GS_SYNC_PATH_H
+#define LOMBYTE_RNC_SDK_GRAPH_SCE_GS_SYNC_PATH_H
+
+#include "types.h"
+
+s32 sceGsSyncPath(s32, s32) __asm__("FUN_00120558");
+
+#endif /* LOMBYTE_RNC_SDK_GRAPH_SCE_GS_SYNC_PATH_H */

@@ -1,13 +1,14 @@
 #include "types.h"
+
 struct MobyObject {
-    u8 pad_0[0x34];
-    u16 unk34;
-    u8 pad_36[0x42];
+    u8                     pad_0[0x34];
+    u16                    unk34;
+    u8                     pad_36[0x42];
     struct MobyObjectData *unk78;
 };
 
 struct MobyObjectData {
-    u8 pad_0[0x10];
+    u8  pad_0[0x10];
     s32 unk10;
 };
 

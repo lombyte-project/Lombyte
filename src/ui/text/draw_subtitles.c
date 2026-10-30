@@ -1,21 +1,27 @@
 /* Ported from rac1-decomp (src/game/draw.c, func_001F4F90). */
 #include "sda.h"
 #include "types.h"
+
 typedef struct {
     short start;   /* 0x0 */
     short end;     /* 0x2 */
     short text[6]; /* 0x4: string offsets, one per language */
 } Subtitle;
+
 typedef struct {
-    char pad00[0x34];
-    int time; /* 0x34 */
-    char pad38[0x14];
+    char  pad00[0x34];
+    int   time; /* 0x34 */
+    char  pad38[0x14];
     char *subs; /* 0x4C */
 } SubState;
+
 extern SubState render_sequence __asm__("D_0018CB20");
+
 #include "rnc/rendering/screen.h"
-extern void font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7,
-                                int a8);
+#include "rnc/globals.h"
+
+extern void
+font_set_window(void *arg0, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8);
 extern void font_print_window_regular(void *, long, char *, int) __asm__("func_001F7580");
 extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
 /* Draws the subtitle showing at the current time (D_0018CB20+0x34): the
@@ -30,11 +36,10 @@ extern void draw_ui_frame(int, int, int, int, int) __asm__("func_001F5F18");
    bottom-first, which gives retail's registers. */
 void draw_subtitles(void) __asm__("FUN_001f4be0");
 
-extern s32 game_language __asm__("D_0015ED88") MACRO_ADDR;
 void draw_subtitles(void) {
     Subtitle *subtitle;
-    int lang;
-    int language_text_slot;
+    int       lang;
+    int       language_text_slot;
 
     if (render_sequence.subs == 0) {
         return;
@@ -51,11 +56,12 @@ void draw_subtitles(void) {
         {
             short win[16];
             short measured_text_width, measured_text_height;
-            int hw, hh;
+            int   hw, hh;
 
-            font_set_window(win, 0xC8, 0x208, 0x28, 0x1D8, 0x100, screen_extent.height - 0x38, 0x12,
-                                7);
-            font_print_window_regular(win, 0x80B0B0B0, render_sequence.subs + subtitle->text[language_text_slot], -1);
+            font_set_window(
+                win, 0xC8, 0x208, 0x28, 0x1D8, 0x100, screen_extent.height - 0x38, 0x12, 7);
+            font_print_window_regular(
+                win, 0x80B0B0B0, render_sequence.subs + subtitle->text[language_text_slot], -1);
             win[5] = screen_extent.height - 0x3C;
             measured_text_width = win[6];
             measured_text_height = win[7];
@@ -66,7 +72,8 @@ void draw_subtitles(void) {
             }
             draw_ui_frame(win[5] - hh, win[5] + hh, 0x100 - hw, 0x100 + hw, 0x60);
             win[9] &= ~4;
-            font_print_window_regular(win, 0x80B0B0B0, render_sequence.subs + subtitle->text[language_text_slot], -1);
+            font_print_window_regular(
+                win, 0x80B0B0B0, render_sequence.subs + subtitle->text[language_text_slot], -1);
             return;
         }
     }

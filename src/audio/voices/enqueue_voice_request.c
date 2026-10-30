@@ -1,28 +1,16 @@
 #include "types.h"
-
-struct Handler;
-struct Handler {
-    s32 id;
-    void (*fn)(struct Handler *);
-    u8 pad8[0x88];
-};
-struct Table {
-    u8 pad0[0xD90];
-    s32 count;
-    struct Handler *handlers;
-};
-extern struct Table D_0013E550;
+#include "rnc/audio/voice_pool.h"
 
 void enqueue_voice_request(void) __asm__("FUN_0022dc50");
 
 void enqueue_voice_request(void) {
     s32 i;
 
-    for (i = 0; i < D_0013E550.count; i++) {
-        struct Handler *handler = (struct Handler *)(i * 0x90 + (s32)D_0013E550.handlers);
+    for (i = 0; i < voice_pool.sound_instance_count; i++) {
+        SoundInstance *handler = (SoundInstance *)(i * 0x90 + (s32)voice_pool.sound_instances);
 
-        if (handler->fn != 0) {
-            handler->fn(handler);
+        if (handler->update != 0) {
+            handler->update(handler);
         }
     }
 }

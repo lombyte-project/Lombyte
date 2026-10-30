@@ -4,12 +4,10 @@
 
 extern struct TagPtr D_00160470;
 extern struct TagPtr sky_gif_paging_bypass_tag __asm__("D_00160474");
-extern s32 D_0018A2B4[];
-struct SkyPagingState {
-    s32 current_page;
-    s32 next_page;
-};
-extern struct SkyPagingState D_0015EE74;
+extern s32           D_0018A2B4[];
+
+#include "rnc/globals.h"
+
 extern void FUN_0020b4a8(void);
 extern void vu1_tex_flush(void) __asm__("func_00233B68");
 
@@ -39,7 +37,7 @@ void do_sky_gif_paging(void) {
     sky_gif_paging_bypass_tag.p->addr = (u32)render_packet_cursor.tag;
     sky_gif_paging_bypass_tag.p->vif0 = 0;
     sky_gif_paging_bypass_tag.p->vif1 = 0;
-    D_0015EE74.current_page = D_0015EE74.next_page;
+    gs_texture_allocation.cursor = gs_texture_allocation.start;
 }
 
 extern __typeof__(do_sky_gif_paging) func_0022B558 __attribute__((alias("FUN_0022b558")));
