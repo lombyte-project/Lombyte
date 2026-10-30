@@ -38,13 +38,13 @@ void reset_selected_moby_to_current_placement(void *moby_v) {
     if (spawn != 0) {
         int   index;
         char *slot = taxi_vars;
-        char *entry;
+        char *placement_table_base;
         position = spawn + 0x10;
         slot += *(short *)(taxi_vars + 0xB4) << 2;
         index = *(int *)(slot + 0x80) << 7;
-        entry = (char *)l05_cuboids;
-        qcopy(position, (void *)(index + (int)entry + 0x30));
-        qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
+        placement_table_base = (char *)l05_cuboids;
+        qcopy(position, (void *)(index + (int)placement_table_base + 0x30));
+        qcopy(spawn + 0x40, (void *)(index + (int)placement_table_base + 0x70));
         initialize_taxi_stop_state(spawn);
     }
     *(short *)(taxi_vars + 0xB4) = *(unsigned short *)(taxi_vars + 0xB6);
