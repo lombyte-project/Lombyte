@@ -99,7 +99,7 @@ void advance_racer_path_node(char *patrol_moby) {
     heading = fast_arc_tan(target[0] - moby->position[0], target[1] - moby->position[1]);
     for (;;) {
         L16PatrolPath *path;
-        L16PatrolPath *base;
+        L16PatrolPath *racer_base_path;
 
         copy_racer_path_node((char *)moby, patrol_data->node, target);
         distance = vector_distance_xy(target, patrol_data->position);
@@ -110,13 +110,13 @@ void advance_racer_path_node(char *patrol_moby) {
         }
         path = patrol_data->path;
         patrol_data->node = (patrol_data->node + 1) % path->count;
-        base = (L16PatrolPath *)l05_paths[patrol_data->base_path];
-        if (path != base) {
+        racer_base_path = (L16PatrolPath *)l05_paths[patrol_data->base_path];
+        if (path != racer_base_path) {
             /* At the last node of a branch: back to the base path, five nodes past its nearest one. */
             if (patrol_data->node == path->count - 1) {
-                patrol_data->path = base;
+                patrol_data->path = racer_base_path;
                 patrol_data->node =
-                    select_point_index_by_distance(patrol_data->position, base, 0.0f);
+                    select_point_index_by_distance(patrol_data->position, racer_base_path, 0.0f);
                 patrol_data->node =
                     offset_path_index((char *)patrol_data->path, patrol_data->node, 5, 1);
             }
