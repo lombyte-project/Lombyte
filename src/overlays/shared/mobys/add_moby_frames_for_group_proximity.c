@@ -17,7 +17,7 @@ void add_moby_frames_for_group_proximity(char *moby) {
     float        position_delta[4];
     char        *group_member_moby;
     char        *proximity_candidate_moby;
-    char        *other;
+    char        *player_hoverboard_moby;
     char        *od;
 
     if (player_hero->race_time_frames < scale_game_frames(0xB4)) {
@@ -26,11 +26,11 @@ void add_moby_frames_for_group_proximity(char *moby) {
     if (!fast_dec_timer((int *)(proximity_moby_vars + 0x264))) {
         return;
     }
-    other = ((char *)player_hero->hoverboard_moby);
-    if (!other) {
+    player_hoverboard_moby = ((char *)player_hero->hoverboard_moby);
+    if (!player_hoverboard_moby) {
         return;
     }
-    od = *(char **)(other + 0x78);
+    od = *(char **)(player_hoverboard_moby + 0x78);
     if (*(int *)(od + 0x44) != -1) {
         get_first_moby_in_group((int *)&group_member_moby, *(int *)(od + 0x44), 0, 0);
         while (group_member_moby) {
