@@ -169,7 +169,7 @@ void scenery_ship_update(char *moby) {
     char        *path;
     char        *current;
     char        *previous_path_node_base;
-    char        *next;
+    char        *next_path_node_base;
     char        *point;
     int          i;
     int          k;
@@ -213,9 +213,9 @@ void scenery_ship_update(char *moby) {
                 in_angle = fast_arc_tan(
                     *(float *)(current + 0x10) - *(float *)(previous_path_node_base + 0x10),
                     *(float *)(current + 0x14) - *(float *)(previous_path_node_base + 0x14));
-                next = path + (i + 1) * 16;
-                out_angle = fast_arc_tan(*(float *)(next + 0x10) - *(float *)(current + 0x10),
-                                         *(float *)(next + 0x14) - *(float *)(current + 0x14));
+                next_path_node_base = path + (i + 1) * 16;
+                out_angle = fast_arc_tan(*(float *)(next_path_node_base + 0x10) - *(float *)(current + 0x10),
+                                         *(float *)(next_path_node_base + 0x14) - *(float *)(current + 0x14));
                 turn = fast_subtract_rotations(out_angle, in_angle);
                 *(float *)(current + 0x1C) = turn;
                 if (max_turn < func_001F9B88_2D8388(turn)) {
