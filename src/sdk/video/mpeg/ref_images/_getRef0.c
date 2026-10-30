@@ -25,7 +25,7 @@ void _getRef0(struct MpegDecoder  *decoder,
     struct MpegMcFetch *fl;
     struct MpegMcFetch *fc;
     u8                 *mc;
-    int                 fetch_index, x, y, mbx, mby, ly, lx, first_span_rows, base, code, mb;
+    int                 fetch_index, x, y, mbx, mby, ly, lx, first_span_rows, fetch_scratch_base, code, mb;
     int                 cmvx, cmvy, ch, cmbx, cmby;
     int                 xh, yh, cyo, luma_first_span_offset, luma_second_span_offset;
     u8                 *data;
@@ -68,12 +68,12 @@ void _getRef0(struct MpegDecoder  *decoder,
             fl->n1 = 0;
         }
     }
-    base = decoder->mb_buf[decoder->mb_buf_index].spr_base + fetch_index * 0x600;
+    fetch_scratch_base = decoder->mb_buf[decoder->mb_buf_index].spr_base + fetch_index * 0x600;
     cmvx = dx / 2;
     luma_first_span_offset = ly << 4;
-    fl->p0 = (u8 *)(base + luma_first_span_offset);
+    fl->p0 = (u8 *)(fetch_scratch_base + luma_first_span_offset);
     luma_second_span_offset = luma_first_span_offset + 0x300;
-    fl->p1 = (u8 *)(base + luma_second_span_offset);
+    fl->p1 = (u8 *)(fetch_scratch_base + luma_second_span_offset);
     fl->step = 16 << fieldpred;
     cmvy = dy / 2;
     code = (avg << 2) | (xh << 1) | yh;
@@ -118,8 +118,8 @@ void _getRef0(struct MpegDecoder  *decoder,
     {
         int chroma_first_span_offset = (ly << 3) + 0x100;
         int chroma_second_span_offset = (ly << 3) + 0x400;
-        u8 *chroma_first_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + base + chroma_first_span_offset);
-        u8 *chroma_second_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + base + chroma_second_span_offset);
+        u8 *chroma_first_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + fetch_scratch_base + chroma_first_span_offset);
+        u8 *chroma_second_span_data = (u8 *)((((cmbx - mbx) << 1) + (cmby - mby)) * 0x180 + fetch_scratch_base + chroma_second_span_offset);
         fc->p1 = chroma_second_span_data;
         fc->p0 = chroma_first_span_data;
     }
