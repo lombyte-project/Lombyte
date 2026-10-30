@@ -86,7 +86,6 @@ extern f32 D_L01_001DEB4C __attribute__((section(".data")));
 extern s32 level_game_mode __asm__("D_L02_0015F5C4");
 extern short D_L02_0015F688 __attribute__((sda));
 extern int *D_L02_001611C0;
-extern char D_L02_00167280[];
 extern float D_L02_001673D8 __attribute__((section(".data")));
 extern f32 D_L02_00174460 __attribute__((section(".data")));
 extern int D_L03_0015EF50;

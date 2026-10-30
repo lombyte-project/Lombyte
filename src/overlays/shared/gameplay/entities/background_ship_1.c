@@ -1,5 +1,6 @@
 /* Shared moby classes: background_ship_1, background_ship_2, white_flower. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "rnc/math_consts.h"
@@ -754,14 +755,13 @@ void update_camera_offset_effect_state(void) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBC00), where it is exact; names translated to the US level program. */
 
 extern char D_0013CA44[];
-extern char D_L02_00167280_c[] __asm__("D_L02_00167280");
 extern short D_L02_0016238C;
 
 void try_select_camera_offset_effect_moby(char *candidate_moby) __asm__("FUN_L02_002fa7c8");
 
 void try_select_camera_offset_effect_moby(char *candidate_moby) {
     float candidate_displacement[4];
-    char *camera_selection_context = D_L02_00167280_c;
+    char *camera_selection_context = (char *)&l02_camera;
     char *selection_reference = *(char **)(camera_selection_context + 0x180);
     char *candidate_selection_state;
     float vector_distance;
@@ -864,7 +864,7 @@ rejected:
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FCBC0), where it is exact; names translated to the US level program. */
 
 extern char D_L02_00167410[] NOT_SDA;
-extern char D_L02_00167280[] NOT_SDA;
+extern LevelCamera l02_camera_lui __asm__("D_L02_00167280") NOT_SDA;
 
 int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_degrees, float b) __asm__("FUN_L02_002fb788");
 
@@ -891,7 +891,7 @@ int test_moby_camera_target_angle_limits(char *moby, float residual_angle_limit_
     if (residual_angle_limit_degrees == 0.0f && b == 0.0f) {
         return 1;
     }
-    g = D_L02_00167280;
+    g = (char *)&l02_camera_lui;
     fast_vec_sub(target_displacement, target_moby + 0x10, *(char **)(g + 0x180) + 0x30);
     dot1 = fast_vec_dot(target_displacement, (shared_axis_data + 0x30));
     fast_vec_scale(scaled_axis_vector, (shared_axis_data + 0x30), dot1);

@@ -1,5 +1,6 @@
 /* Level 02 moby classes: constructorbot. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
 #include "asm.h"
@@ -563,7 +564,7 @@ void set_vendor_camera_mode(int mode, int camera_argument_value) {
         VENDOR_CAMERA_MODE_SET_ARGUMENT_PAIR = 2,
         VENDOR_CAMERA_MODE_CAPTURE_HERO_POSITION = 3
     };
-    char *vendor_camera_context = D_L02_00167280;
+    char *vendor_camera_context = (char *)&l02_camera;
     char *vendor_camera = *(char **)(vendor_camera_context + 0x180);
     char *camera_data = *(char **)(vendor_camera + 0x70);
     char *camera_argument_pair = camera_data + 0xE0;

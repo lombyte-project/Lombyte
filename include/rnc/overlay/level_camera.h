@@ -23,7 +23,9 @@ typedef struct {
     f32 shake2_amount;              /* 0x170 */
     u8 pad174[4];
     s32 shake2_frames;              /* 0x178 */
-    u8 pad17C[0xE0];
+    u8 pad17C[4];
+    struct Moby *unk180;            /* 0x180 */
+    u8 pad184[0xD8];
     struct Moby *focus_moby;        /* 0x25C: a moby that takes the camera's attention (blarg helicopter); 0: none */
     s32 focus_time;                 /* 0x260: reset to 0 when focus_moby is set */
     u8 pad264[0xEC];
@@ -31,6 +33,7 @@ typedef struct {
 } LevelCamera;
 
 extern LevelCamera l01_camera __asm__("D_L01_00167100");
+extern LevelCamera l02_camera __asm__("D_L02_00167280");
 extern LevelCamera l03_camera __asm__("D_L03_00166D80");
 extern LevelCamera l06_camera __asm__("D_L06_00167400");
 extern LevelCamera l08_camera __asm__("D_L08_00167480");

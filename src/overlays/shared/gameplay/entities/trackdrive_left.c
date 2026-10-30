@@ -1,5 +1,6 @@
 /* Shared moby classes: trackdrive_left, tresspasser_pad, escalator, swingshot_versatarget, tresspasser. */
 #include "types.h"
+#include "rnc/overlay/level_camera.h"
 #include "rnc/gameplay/entities/moby.h"
 #include "rnc/gameplay/hero.h"
 #include "rnc/globals.h"
@@ -322,13 +323,8 @@ void trackdrive_left_update(char *moby) {
 #include "qcopy.h"
 
 typedef float V2d8910[4] __attribute__((aligned(16)));
-typedef struct {
-    char pad[0x140];
-    float x;
-    float y;
-} H2d8910;
-extern H2d8910 D_L02_00167280_lui __asm__("D_L02_00167280") NOT_SDA;
 #include "rnc/overlay/cuboid.h"
+extern LevelCamera l02_camera_lui __asm__("D_L02_00167280") NOT_SDA;
 
 /* Spawn point for the moby: its slot's stored position and rotation, or, with no slot, a point beside it on the side facing the hero. */
 void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation_output, char *moby) __asm__("FUN_L02_002d8910");
@@ -347,8 +343,8 @@ void compute_tresspasser_pad_camera_transform(float *pos, float *camera_rotation
     if (camera_transform_index == -1) {
         left = fast_add_rotations(MOBY(moby)->rot.z, 1.57079637f);
         right = fast_add_rotations(MOBY(moby)->rot.z, -1.57079637f);
-        to = fast_arc_tan(D_L02_00167280_lui.x - MOBY(moby)->pos.x,
-                          D_L02_00167280_lui.y - MOBY(moby)->pos.y);
+        to = fast_arc_tan(l02_camera_lui.pos.f[0] - MOBY(moby)->pos.x,
+                          l02_camera_lui.pos.f[1] - MOBY(moby)->pos.y);
         dl = fast_difference_between_rotations(to, left);
         pick = dl < fast_difference_between_rotations(to, right) ? left : right;
         fast_vec_add(midpoint_position, &hero.motion.pos, moby + 0x10);
@@ -401,13 +397,6 @@ typedef struct Data {
     unsigned short h11E;
 } Data;
 
-typedef struct Cam {
-    char p0[0x140];
-    Vec_2D9F08 v140;
-    Vec_2D9F08 v150;
-    char p160[0x20];
-    struct Moby *p180;
-} Cam;
 
 typedef struct Pad {
     char p0[0x1A4];
@@ -462,7 +451,6 @@ extern Vec_2D9F08 D_L02_00167440_2D9F08[] __asm__("D_L02_001673C0");
 extern float frame_time_sq_macro __asm__("D_0015ED70") MACRO_ADDR;
 extern float frame_time_macro __asm__("D_0015ED6C") MACRO_ADDR;
 extern int D_L02_0017EB08_lui __asm__("D_L02_0017EB08") NOT_SDA;
-extern Cam D_L02_00167300_2D9F08 __asm__("D_L02_00167280");
 extern Idle D_L02_00179A10;
 extern int D_L02_001BADE0_2D9F08[] __asm__("D_L02_001BAAD0");
 extern int D_L02_00161B1C_gp __asm__("D_L02_00161B1C") __attribute__((sda));
@@ -552,11 +540,11 @@ void tresspasser_pad_update(Moby *moby) {
         set_camera_rotation(&camera_rot);
         D_L02_0017EB08_lui = 1;
         force_help_message(6, 0);
-        if (D_L02_00167300_2D9F08.p180 != 0 && D_L02_00167300_2D9F08.p180->unk86 != 5) {
-            jet_mount(&D_L02_00167300_2D9F08.v140, &D_L02_00167300_2D9F08.v150, 1, 0, 0);
+        if (l02_camera.unk180 != 0 && l02_camera.unk180->unk86 != 5) {
+            jet_mount(&l02_camera.pos, &l02_camera.unk150, 1, 0, 0);
         }
         i = 0;
-        if (0.99f <= data->f110 && fast_difference_between_rotations(D_L02_00167300_2D9F08.v150.z, camera_rot.z) < 0.017453292f) {
+        if (0.99f <= data->f110 && fast_difference_between_rotations(l02_camera.yaw, camera_rot.z) < 0.017453292f) {
             add_draw_callback(func_L02_002DA820_2D9F08, moby);
             for (i = 0; i < 12; i++) {
                 if (data->iB0[i] == 1) {
