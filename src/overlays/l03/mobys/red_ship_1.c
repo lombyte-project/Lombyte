@@ -507,7 +507,7 @@ void red_ship_1_update(char *moby) {
     float          old_pos[4];
     float          culling_sphere_or_motion_delta[4];
     float          position_delta[4];
-    char          *item;
+    char          *iterated_group_moby;
     char          *spline_moby_pvars;
     char          *pm;
     char          *path_tangent_or_moby_position;
@@ -540,28 +540,28 @@ void red_ship_1_update(char *moby) {
     if (((unsigned char *)moby)[0x21] != 0xFF && ((unsigned char *)moby)[0x20] != 0 &&
         ((unsigned char *)moby)[0x20] != 3) {
         found = 0;
-        get_first_moby_in_group((int *)&item, ((unsigned char *)moby)[0x21], 0, 0);
-        if (item == moby) {
+        get_first_moby_in_group((int *)&iterated_group_moby, ((unsigned char *)moby)[0x21], 0, 0);
+        if (iterated_group_moby == moby) {
             goto test;
             for (;;) {
-                get_next_moby_in_group((int *)&item, (int)item, 0, 0);
+                get_next_moby_in_group((int *)&iterated_group_moby, (int)iterated_group_moby, 0, 0);
             test:
-                if (item == 0) {
+                if (iterated_group_moby == 0) {
                     break;
                 }
                 if (check_scaled_vector_bsphere(
-                        item, convert_integer_to_float(*(short *)(item + 0x32))) != -1) {
+                        iterated_group_moby, convert_integer_to_float(*(short *)(iterated_group_moby + 0x32))) != -1) {
                     found = 1;
                     break;
                 }
             }
             if (!found) {
-                get_first_moby_in_group((int *)&item, ((unsigned char *)moby)[0x21], 0, 0);
-                while (item != 0) {
-                    group_member_data = *(char **)(item + 0x78);
-                    item[0x20] = 3;
+                get_first_moby_in_group((int *)&iterated_group_moby, ((unsigned char *)moby)[0x21], 0, 0);
+                while (iterated_group_moby != 0) {
+                    group_member_data = *(char **)(iterated_group_moby + 0x78);
+                    iterated_group_moby[0x20] = 3;
                     *(short *)(group_member_data + 0x12C) = scale_game_frames(5);
-                    get_next_moby_in_group((int *)&item, (int)item, 0, 0);
+                    get_next_moby_in_group((int *)&iterated_group_moby, (int)iterated_group_moby, 0, 0);
                 }
             }
         }
