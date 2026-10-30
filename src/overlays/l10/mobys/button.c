@@ -41,7 +41,7 @@ void button_update(struct Moby *moby) {
     FloorPlateVars *plate_vars = (FloorPlateVars *)moby->pvars;
     s32             pressed = 0;
     struct Moby    *door;
-    struct Moby    *other;
+    struct Moby    *nearby_moby;
     s32             i;
     f32             ground_height;
     s32             nearby_moby_count;
@@ -54,8 +54,8 @@ void button_update(struct Moby *moby) {
     nearby_moby_count = collect_mobies_in_sphere(&moby->pos, 1.0f, 0, moby, NULL);
     if (nearby_moby_count != 0) {
         for (i = 0; i < nearby_moby_count; i++) {
-            other = nearby_mobys[i];
-            ground_height = probe_ground_height(&other->pos, 0, 0.5f);
+            nearby_moby = nearby_mobys[i];
+            ground_height = probe_ground_height(&nearby_moby->pos, 0, 0.5f);
             if (((GroundHit *)ground_hit)->moby == moby &&
                 absolute_float(ground_height - nearby_mobys[i]->pos.z) < 0.1f) {
                 if (nearby_mobys[i]->oclass != 0x3EF) {
