@@ -852,26 +852,26 @@ void transition_moby_group_state_1_to_2(char *group_source_moby) {
     }
 }
 
-float compute_alien_snapper_target_gap_angle(char *self) {
-    char *owner = *(char **)(*(char **)(self + 0x78) + 0x160);
+float compute_alien_snapper_target_gap_angle(char *snapper_moby) {
+    char *target_moby = *(char **)(*(char **)(snapper_moby + 0x78) + 0x160);
     float hi, lo, owner_to_self_angle_radians, owner_to_self_distance,
         translated_owner_to_self_vector[3];
     short *moby_index_cursor;
-    if ((unsigned char)self[0x21] == 0xFF) {
-        return fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
-                            *(float *)(self + 0x14) - *(float *)(owner + 0x14));
+    if ((unsigned char)snapper_moby[0x21] == 0xFF) {
+        return fast_arc_tan(*(float *)(snapper_moby + 0x10) - *(float *)(target_moby + 0x10),
+                            *(float *)(snapper_moby + 0x14) - *(float *)(target_moby + 0x14));
     }
     lo = -(*(float *)&alien_snapper_gap_angle_limit_degrees_gp * DEG_TO_RAD);
     hi = *(float *)&alien_snapper_gap_angle_limit_degrees_gp * DEG_TO_RAD;
-    owner_to_self_angle_radians = fast_arc_tan(*(float *)(self + 0x10) - *(float *)(owner + 0x10),
-                                               *(float *)(self + 0x14) - *(float *)(owner + 0x14));
-    owner_to_self_distance = fast_vec_dist(owner + 0x10, self + 0x10);
+    owner_to_self_angle_radians = fast_arc_tan(*(float *)(snapper_moby + 0x10) - *(float *)(target_moby + 0x10),
+                                               *(float *)(snapper_moby + 0x14) - *(float *)(target_moby + 0x14));
+    owner_to_self_distance = fast_vec_dist(target_moby + 0x10, snapper_moby + 0x10);
     translated_owner_to_self_vector[0] = fast_cos(owner_to_self_angle_radians) * 2.0f;
     translated_owner_to_self_vector[1] = fast_sin(owner_to_self_angle_radians) * 2.0f;
     translated_owner_to_self_vector[2] = 0.0f;
     fast_vec_add(
         translated_owner_to_self_vector, translated_owner_to_self_vector, D_0013E533 + 0xE9D);
-    moby_index_cursor = D_L06_001ABFC0_p[(unsigned char)self[0x21]];
+    moby_index_cursor = D_L06_001ABFC0_p[(unsigned char)snapper_moby[0x21]];
     if (moby_index_cursor == 0) {
         return 0.0f;
     }
@@ -879,11 +879,11 @@ float compute_alien_snapper_target_gap_angle(char *self) {
         int   listed_moby_index = *(unsigned short *)moby_index_cursor & 0x7FFF;
         char *listed_moby = (char *)(listed_moby_index * 256 + (int)D_L06_0015FFD8);
         if ((unsigned char)listed_moby[0x20] == 8 ||
-            fast_vec_dist(listed_moby + 0x10, owner + 0x10) < owner_to_self_distance) {
+            fast_vec_dist(listed_moby + 0x10, target_moby + 0x10) < owner_to_self_distance) {
             float d = fast_arc_tan(*(float *)(D_L06_0015FFD8 + listed_moby_index * 256 + 0x10) -
-                                       *(float *)(owner + 0x10),
+                                       *(float *)(target_moby + 0x10),
                                    *(float *)(D_L06_0015FFD8 + listed_moby_index * 256 + 0x14) -
-                                       *(float *)(owner + 0x14));
+                                       *(float *)(target_moby + 0x14));
             float listed_moby_angle_offset_radians =
                 fast_subtract_rotations(d, owner_to_self_angle_radians);
             if (listed_moby_angle_offset_radians > 0.0f && listed_moby_angle_offset_radians < hi) {
