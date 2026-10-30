@@ -972,8 +972,8 @@ float calculate_hero_aim_angles(float *pos,
                                 float  lead) __asm__("FUN_L13_002ea400");
 
 float calculate_hero_aim_angles(float *pos, float *pitch, float *yaw, float lead) {
-    struct Hero *base = &hero;
-    char        *hero_ship_moby = ((char *)base->ship_moby);
+    struct Hero *hero_ship_owner = &hero;
+    char        *hero_ship_moby = ((char *)hero_ship_owner->ship_moby);
     float        target_position[4];
     float        y;
     float        pitch_angle;
