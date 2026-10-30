@@ -172,12 +172,12 @@ void process_heavy_gunship_part_hits(struct Moby *moby) {
         }
         {
             int        start = truncate_float_to_s32(random_float_between(0.0f, 23.0f));
-            SwarmPart *base = slots;
+            SwarmPart *linked_part_table = slots;
             i = 0;
             do {
                 int        index = (i + start) % 8 + 9;
                 SwarmPart *candidate;
-                slots = &base[index];
+                slots = &linked_part_table[index];
                 candidate = slots;
                 if (candidate->moby != 0) {
                     u8   *vector = candidate->moby->pvars;
