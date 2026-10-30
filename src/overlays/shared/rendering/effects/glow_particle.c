@@ -72,7 +72,7 @@ unsigned char *spawn_glow_particle(void *owner,
                                    int   alpha,
                                    float scale) __asm__("FUN_L00_002ac910");
 
-unsigned char *spawn_glow_particle(void *owner,
+unsigned char *spawn_glow_particle(void *glow_source_moby,
                                    void *spawn_position,
                                    void *initial_velocity,
                                    int   lifetime,
@@ -105,7 +105,7 @@ unsigned char *spawn_glow_particle(void *owner,
         set_moby_color(moby, red, green, blue);
         glow_particle_data->f18 = MOBY(moby)->scale * scale;
         *(int *)(moby + 0x2C) = 0;
-        glow_particle_data->o = owner;
+        glow_particle_data->o = glow_source_moby;
         qcopy(moby + 0x10, spawn_position);
         qcopy(glow_particle_data, initial_velocity);
         qcopy(moby + 0x40, &rot_copy);
