@@ -960,15 +960,15 @@ void transform_hero_polar_offset_to_world(float *out,
                                           float  angle,
                                           float  z) __asm__("FUN_L00_002335c8");
 
-void transform_hero_polar_offset_to_world(float *out, float radius, float angle, float z) {
-    struct Hero *base;
+void transform_hero_polar_offset_to_world(float *world_position_out, float radius, float angle, float z) {
+    struct Hero *hero_polar_transform_state;
 
-    out[0] = fast_cos(angle) * radius;
-    out[1] = fast_sin(angle) * radius;
-    base = &hero;
-    out[2] = z;
-    transform_vector(out, out, base->rot_matrix);
-    fast_vec_add(out, out, &base->motion.pos);
+    world_position_out[0] = fast_cos(angle) * radius;
+    world_position_out[1] = fast_sin(angle) * radius;
+    hero_polar_transform_state = &hero;
+    world_position_out[2] = z;
+    transform_vector(world_position_out, world_position_out, hero_polar_transform_state->rot_matrix);
+    fast_vec_add(world_position_out, world_position_out, &hero_polar_transform_state->motion.pos);
 }
 /* Sets OUT to the point (X, Y, Z, 0) (cleared first by func_001F9BC0),
    then transforms it by the matrix at hero and adds the vector at
