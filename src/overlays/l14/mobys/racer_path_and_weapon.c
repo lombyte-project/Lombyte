@@ -139,13 +139,13 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
     int             path_segment_index;
     float           nearest_segment_distance;
     unsigned short *moby_index_cursor = D_L14_001ABF40_6570[group_anchor_moby->group];
-    char          **out;
+    char          **racer_list_write_cursor;
     int             i;
     float           path_step_distance;
     if (moby_index_cursor == 0) {
         return;
     }
-    out = list;
+    racer_list_write_cursor = list;
     do {
         char *o = D_L14_0015FFD8_6570 + ((*moby_index_cursor & 0x7FFF) << 8);
         char *od = *(char **)(o + 0x78);
@@ -175,7 +175,7 @@ void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
             set_race_camera(
                 path + (path_segment_index * 16 + 0x10), hero_path_euler_rotation, 0x28, 0);
         }
-        *out++ = o;
+        *racer_list_write_cursor++ = o;
     } while ((short)*moby_index_cursor++ >= 0);
     for (i = 0; i < 3; i++) {
         char *o = list[i];
