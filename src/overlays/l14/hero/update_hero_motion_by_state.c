@@ -959,7 +959,7 @@ void update_hero_motion_by_state(void) {
         }
         {
             f32 a = fast_add_rotations(hero.motion.rot.f[2], -1.5707964f);
-            f32 old;
+            f32 swing_radius_before_spring;
             f32 d;
             vD0.f[0] = fast_cos(a) * 0.15f;
             vD0.f[1] = fast_sin(a) * 0.15f;
@@ -970,14 +970,14 @@ void update_hero_motion_by_state(void) {
             fast_vec_normalize(&vC0, &vC0, hero.unk9A4);
             fast_vec_add(&motion_vector_scratch, &MV(hero.swing_target_moby)->u10.v10, &vC0);
             fast_vec_sub(&hero.motion.velocity, &motion_vector_scratch, &vD0);
-            old = hero.unk9A4;
+            swing_radius_before_spring = hero.unk9A4;
             vendor_spring(&hero.unk9A4,
                           &hero.swing_length_vel,
                           hero.unk9A0,
                           hero.swing_rope_spring_k,
                           hero.unk9C8,
                           hero.swing_rope_max_speed);
-            d = hero.unk9A4 - old;
+            d = hero.unk9A4 - swing_radius_before_spring;
             if (fast_vec_length(&vC0) > hero.unk9A4) {
                 fast_vec_normalize(&vC0, &vC0, d);
                 fast_vec_add(&hero.motion.pos, &hero.motion.pos, &vC0);
