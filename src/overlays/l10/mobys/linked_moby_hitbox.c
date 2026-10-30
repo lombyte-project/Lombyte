@@ -72,12 +72,12 @@ void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
 
         memcpy(found, D_L10_00178380_u, count * 4);
         for (i = 0; i < count; i++) {
-            struct Moby *other = found[i];
+            struct Moby *hitbox_candidate_moby = found[i];
 
-            if (other == 0 || other->state == 0xFE || other->state == 0xFD) {
+            if (hitbox_candidate_moby == 0 || hitbox_candidate_moby->state == 0xFE || hitbox_candidate_moby->state == 0xFD) {
                 continue;
             }
-            fast_vec_sub(&delta, &other->pos, &moby->pos);
+            fast_vec_sub(&delta, &hitbox_candidate_moby->pos, &moby->pos);
             transpose_rotation_matrix(inv, moby_rotation_basis);
             transform_vector(&local, &delta, inv);
             qcopy(&point, &local);
@@ -96,9 +96,9 @@ void spawn_linked_hitbox_contact_effects(struct Moby *moby, HitBox *box) {
             fast_vec_add(&point, &point, &moby->pos);
             point_moby_count = collect_mobies_in_sphere(&point, box->margin_x, 0x10, moby, 0);
             for (j = 0; j < point_moby_count; j++) {
-                if (D_L10_00178380_u[j] == other) {
+                if (D_L10_00178380_u[j] == hitbox_candidate_moby) {
                     spawn_nearby_effect_without_direction(
-                        (unsigned char *)other, (int)moby, 0x10001, &point, box->strength);
+                        (unsigned char *)hitbox_candidate_moby, (int)moby, 0x10001, &point, box->strength);
                 }
             }
         }
