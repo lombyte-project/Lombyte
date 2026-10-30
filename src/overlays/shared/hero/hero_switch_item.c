@@ -1589,8 +1589,8 @@ void update_hero_item_mobys(void) {
     s32 i;
     s32 j;
     s32 joint;
-    s32 first;
-    s32 second;
+    s32 is_item_10_17_20_or_25;
+    s32 is_item_5_to_7;
     s32 third;
     s32 random_range;
     s32 item_id;
@@ -1637,14 +1637,14 @@ void update_hero_item_mobys(void) {
                 } else {
                     qcopy(moby + 0x10, (((u8 *)(&hero)) + 0xaf0) + (joint * 0x40));
                     if ((large_font_height == 0) || (item_defs[item_id].slot_anim_count == 0)) {
-                        first = is_hero_slot_item_id_10_17_20_or_25(i);
-                        second = is_hero_slot_item_id_5_to_7(i);
+                        is_item_10_17_20_or_25 = is_hero_slot_item_id_10_17_20_or_25(i);
+                        is_item_5_to_7 = is_hero_slot_item_id_5_to_7(i);
                         third = FUN_L00_0020d540(i);
-                        if (((first == 0) && (second == 0)) && (third == 0))
+                        if (((is_item_10_17_20_or_25 == 0) && (is_item_5_to_7 == 0)) && (third == 0))
                             advance_moby_animation(moby);
                         update_entity(moby);
                         copy_matrix3x4(moby + 0xc0, hero_joint_world_matrices + (joint * 0x40));
-                        if (((first == 0) && (second == 0)) && (third == 0))
+                        if (((is_item_10_17_20_or_25 == 0) && (is_item_5_to_7 == 0)) && (third == 0))
                             normalize_vector_triplet(moby + 0xc0);
                         scratch.direction[0] = 1.0f;
                         scratch.direction[1] = 0.0f;
@@ -1657,7 +1657,7 @@ void update_hero_item_mobys(void) {
                             fast_arc_tan(scratch.direction[0], scratch.direction[1]);
                         refresh_moby_spatial_bounds_from_basis(moby);
                         *((u16 *)&MOBY(moby)->flags) |= 6;
-                        if (first != 0) {
+                        if (is_item_10_17_20_or_25 != 0) {
                             pack_pose(l00_hero_item_10_17_20_25_joint_selection,
                                       l00_hero_item_10_17_20_25_packed_pose,
                                       *((s32 *)&MOBY(moby)->pclass),
@@ -1669,7 +1669,7 @@ void update_hero_item_mobys(void) {
                                 l00_hero_item_10_17_20_25_packed_pose;
                             *((void **)&MOBY(moby)->prev_frame_data) =
                                 l00_hero_item_10_17_20_25_packed_pose;
-                        } else if (second != 0) {
+                        } else if (is_item_5_to_7 != 0) {
                             if ((*((s16 *)&MOBY(moby)->oclass)) == 0x1b1)
                                 pack_pose(D_L00_0017A608,
                                           D_L00_0017C680,
