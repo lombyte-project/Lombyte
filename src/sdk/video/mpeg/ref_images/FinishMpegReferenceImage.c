@@ -38,8 +38,8 @@ typedef struct Obj40 {
    at D_00153A80 and report it. Returns whether it fits. */
 int FinishMpegReferenceImage(void *object) __asm__("FUN_00129b38");
 
-int FinishMpegReferenceImage(void *object) {
-    Obj40 *reference_image_object = (Obj40 *)object;
+int FinishMpegReferenceImage(void *mpeg_reference_image) {
+    Obj40 *reference_image_object = (Obj40 *)mpeg_reference_image;
     int    return_value = 1;
     if (reference_image_object->unk008 != 2) {
         int saved_reference_image_value = reference_image_object->unk118;
