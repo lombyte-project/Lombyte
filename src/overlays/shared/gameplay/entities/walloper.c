@@ -1642,9 +1642,10 @@ extern s32 D_L00_00161724_gp __asm__("D_L00_00161724") __attribute__((sda));
 extern float D_L00_001617D0 MACRO_ADDR;
 extern s32 D_L00_00161824;
 extern s32 D_L00_00161818;
-extern s32 D_L00_001DBF50 NOT_SDA;
+typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2BE3A8;
+extern Vec_2BE3A8 beam_prev_nodes[12] __asm__("D_L00_001DBF50");
 extern u128 D_L00_001DBF60_lui __asm__("D_L00_001DBF60") NOT_SDA;
-extern s32 D_L00_001DD0D0 NOT_SDA;
+extern Vec_2BE3A8 beam_pulse_directions[3] __asm__("D_L00_001DD0D0");
 extern void scale_vector_2bcf98(float, void *, void *) __asm__("FUN_001f9a68");
 
 void reset_beam_chain_and_pulse_state(u8 *moby) __asm__("FUN_L00_002bcf98");
@@ -1663,7 +1664,7 @@ void reset_beam_chain_and_pulse_state(u8 *moby) {
         scale_vector_2bcf98(-scale, &step, moby + 0xD0);
         qcopy(&D_L00_001DBF60_lui, source);
         for (i = 1; i < 12; i++) {
-            fast_vec_add(&D_L00_001DBF60_lui + i, (u128 *)&D_L00_001DBF50 + i, &step);
+            fast_vec_add(&D_L00_001DBF60_lui + i, (u128 *)beam_prev_nodes + i, &step);
         }
         D_L00_00161718_gp = 0;
         D_L00_00161720_gp = 0;
@@ -1672,7 +1673,7 @@ void reset_beam_chain_and_pulse_state(u8 *moby) {
         D_L00_00161824 = 0;
         for (j = 0; j < 3; j++) {
             (&D_L00_00161818)[j] = 0;
-            qcopy((u128 *)&D_L00_001DD0D0 + j, &step);
+            qcopy((u128 *)beam_pulse_directions + j, &step);
         }
     }
 }
@@ -1681,7 +1682,6 @@ void reset_beam_chain_and_pulse_state(u8 *moby) {
  * pulses along the beam. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002BA7C8.c: func_L00_002BE3A8), where it is exact; names translated to the US level program. */
 
-typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2BE3A8;
 
 typedef struct {
     Vec_2BE3A8 pos;
@@ -1711,10 +1711,7 @@ extern int D_L00_001617E8;
 extern int D_L00_00161808;
 extern int D_L00_00161818;
 extern int D_L00_00161824;
-extern int D_L00_001DBF50;
 extern int D_L00_001DBF70;
-extern int D_L00_001DD0A0;
-extern int D_L00_001DD0D0;
 extern int FUN_001efa68_c_c(Vec4f *, Vec4f *, int, void *, int) __asm__("FUN_001efa68");
 extern int lerp_vector() __asm__("FUN_001f9a40");
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
@@ -1749,7 +1746,6 @@ extern float D_L00_001618B8_2BE3A8[3] __asm__("D_L00_001617E8") MACRO_ADDR;
 extern float D_L00_001617F8_macro[3] __asm__("D_L00_001617F8") MACRO_ADDR;
 extern float D_L00_001618D8_2BE3A8[3] __asm__("D_L00_00161808") MACRO_ADDR;
 extern int D_L00_001618E8_2BE3A8[3] __asm__("D_L00_00161818") MACRO_ADDR;
-extern Vec_2BE3A8 beam_prev_nodes[12] __asm__("D_L00_001DBF50");
 extern Vec_2BE3A8 D_L00_001DC260_2BE3A8[12] __asm__("D_L00_001DBF60");
 extern Vec_2BE3A8 beam_rail_a_points[12] __asm__("D_L00_001DC020");
 extern Vec_2BE3A8 beam_rail_b_points[12] __asm__("D_L00_001DC0E0");
@@ -1773,7 +1769,6 @@ Vec_2BE3A8 D_L16_001D0AA0[12][20] = {0};
 Vec_2BE3A8 D_L17_001D1320[12][20] = {0};
 Vec_2BE3A8 D_L18_001D1020[12][20] = {0};
 extern Vec_2BE3A8 beam_pulse_positions[3] __asm__("D_L00_001DD0A0");
-extern Vec_2BE3A8 beam_pulse_directions[3] __asm__("D_L00_001DD0D0");
 extern Vec_2BE3A8 D_L00_00173F60_2BE3A8 __asm__("D_L00_00173E60");
 extern char D_L00_0015F660_2BE3A8[] __asm__("D_L00_0015F580") MACRO_ADDR;
 #include "rnc/data_labels.h"
@@ -2026,8 +2021,6 @@ extern float D_L00_00161724 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects_2.h"
 extern int D_L00_00161798 __attribute__((sda));
 #include "rnc/overlay/shared/gameplay/entities/walloper_data/draw_beam_ring_and_rail_effects.h"
-extern OvlVec4 D_L00_001DC020[] NOT_SDA;
-extern OvlVec4 D_L00_001DC0E0[] NOT_SDA;
 extern OvlQuad D_L00_001DC060[][20] NOT_SDA;
 extern OvlQuad D_L00_001DC1A0[][20] NOT_SDA;
 void draw_scrolling_ribbon_colored(void *, int, int, float, float, float, int, int) __asm__("FUN_L00_002be078");
@@ -2050,8 +2043,8 @@ void draw_beam_ring_and_rail_effects(void *moby) {
 
     beam_rail_first_pass_texture_u_offset_gp = beam_rail_first_pass_texture_u_offset_gp - beam_rail_first_pass_texture_u_scroll_speed_gp * frame_scale;
     if (beam_rail_first_pass_texture_u_offset_gp <= -8.0f) beam_rail_first_pass_texture_u_offset_gp += 8.0f;
-    draw_scrolling_ribbon_colored(D_L00_001DC020, beam_rail_first_pass_alpha_gp, beam_rail_second_pass_alpha_gp, beam_rail_first_pass_half_width_gp, beam_rail_second_pass_half_width_gp, beam_rail_second_pass_segment_extension_factor_gp, 12, beam_first_rail_second_pass_base_vertex_color_gp);
-    draw_scrolling_ribbon_colored(D_L00_001DC0E0, beam_rail_first_pass_alpha_gp, beam_rail_second_pass_alpha_gp, beam_rail_first_pass_half_width_gp, beam_rail_second_pass_half_width_gp, beam_rail_second_pass_segment_extension_factor_gp, 12, beam_second_rail_second_pass_base_vertex_color_gp);
+    draw_scrolling_ribbon_colored(beam_rail_a_points, beam_rail_first_pass_alpha_gp, beam_rail_second_pass_alpha_gp, beam_rail_first_pass_half_width_gp, beam_rail_second_pass_half_width_gp, beam_rail_second_pass_segment_extension_factor_gp, 12, beam_first_rail_second_pass_base_vertex_color_gp);
+    draw_scrolling_ribbon_colored(beam_rail_b_points, beam_rail_first_pass_alpha_gp, beam_rail_second_pass_alpha_gp, beam_rail_first_pass_half_width_gp, beam_rail_second_pass_half_width_gp, beam_rail_second_pass_segment_extension_factor_gp, 12, beam_second_rail_second_pass_base_vertex_color_gp);
     draw_beam_pulse_quads(moby);
     draw_beam_origin_camera_facing_quads(moby);
     k = D_0013E535;

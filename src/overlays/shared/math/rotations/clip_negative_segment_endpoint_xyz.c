@@ -693,10 +693,6 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
 }
 typedef struct { float x, y, z, w; } Vy10 __attribute__((aligned(16)));
 
-typedef struct { int v[6]; } S6y10;
-
-extern S6y10 D_L00_001E9030;
-extern S6y10 D_L00_001E9048;
 extern float explosion_flash_descriptor[] __asm__("D_L00_001B02F0");
 extern int FUN_L00_00257b90(int, int);
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
@@ -720,12 +716,12 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
     float sp, big;
     clear_u64_value(&particle_velocity);
     for (i = 2; i >= 0; i--) {
-        S6y10 first_particle_color_palette;
-        S6y10 second_particle_color_palette;
+        S6 first_particle_color_palette;
+        S6 second_particle_color_palette;
         sp = random_float_between(8.0f, 10.0f) * frame_time;
         big = scale * 400000.0f;
-        first_particle_color_palette = D_L00_001E9030;
-        second_particle_color_palette = D_L00_001E9048;
+        first_particle_color_palette = burst_first_color_palette;
+        second_particle_color_palette = burst_second_color_palette;
         spawn_particle(burst_position, &particle_velocity, first_particle_color_palette.v[random_integer_below(6)], second_particle_color_palette.v[random_integer_below(6)],
             big, FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
             FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, sp * scale);
@@ -766,8 +762,8 @@ void cart_burst(u8 *owner, u128 *burst_position, int sound, float scale, float f
 void spawn_color_swapped_explosion_burst(char *owner, char *pos, float scale, float flash) __asm__("FUN_L00_0025f3e8");
 void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, float scale, float flash) {
     Vy10 zero_vec;
-    S6y10 first_particle_color_palette;
-    S6y10 second_particle_color_palette;
+    S6 first_particle_color_palette;
+    S6 second_particle_color_palette;
     int rgb[3];
     int i;
     float k5, sp, big, first_glow_scale, second_glow_scale;
@@ -776,8 +772,8 @@ void spawn_color_swapped_explosion_burst(char *owner, char *effect_position, flo
     for (i = 2; i >= 0; i--) {
         sp = random_float_between(8.0f, 10.0f) * frame_time;
         big = scale * k5;
-        first_particle_color_palette = D_L00_001E9030;
-        second_particle_color_palette = D_L00_001E9048;
+        first_particle_color_palette = burst_first_color_palette;
+        second_particle_color_palette = burst_second_color_palette;
         spawn_particle(effect_position, &zero_vec, swap_packed_color_channels(first_particle_color_palette.v[random_integer_below(6)], 1), swap_packed_color_channels(second_particle_color_palette.v[random_integer_below(6)], 1),
             big, FUN_L00_00257b90(scale_game_frames(0xF), scale_game_frames(0x14)),
             FUN_L00_00257b90(scale_game_frames(0x19), scale_game_frames(0x1E)), 0, 0, sp * scale);

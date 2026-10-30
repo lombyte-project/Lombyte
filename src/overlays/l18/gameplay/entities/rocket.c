@@ -2805,9 +2805,9 @@ extern int D_L18_00162008_gp __asm__("D_L18_00162008") __attribute__((sda));
 extern int D_L18_00162010_gp __asm__("D_L18_00162010") __attribute__((sda));
 extern int D_L18_00162024_gp __asm__("D_L18_00162024") __attribute__((sda));
 extern int D_L18_00162054_q __asm__("D_L18_00162054");
-extern short electric_bolt_first_side_arc_reset_frames __asm__("D_L18_001620C8");
-extern short electric_bolt_first_side_arc_timer_distance_reference __asm__("D_L18_001620D0");
 extern short D_L18_001620B8_b[4] __asm__("D_L18_001620B8");
+extern short electric_bolt_side_arc_reset_frames[4] __asm__("D_L18_001620C8");
+extern short electric_bolt_side_arc_timer_distance_references[4] __asm__("D_L18_001620D0");
 extern float D_L18_001D9CF0_q[][4] __asm__("D_L18_001D9CF0");
 extern float D_L18_001D9D00_q[][4] __asm__("D_L18_001D9D00");
 extern int D_L18_001D9F80_q[] __asm__("D_L18_001D9F80");
@@ -2817,12 +2817,6 @@ extern void norm_q(void *, void *, float) __asm__("FUN_001f9bf8");
 
 extern int electric_bolt_initialization_requested_gp __asm__("D_L18_00161FEC") __attribute__((sda));
 #include "rnc/overlay/l18/gameplay/entities/rocket_data/initialize_electric_bolt_effect_if_requested_2.h"
-extern short electric_bolt_second_side_arc_reset_frames __asm__("D_L18_001620CA");
-extern short electric_bolt_third_side_arc_reset_frames __asm__("D_L18_001620CC");
-extern short electric_bolt_fourth_side_arc_reset_frames __asm__("D_L18_001620CE");
-extern short electric_bolt_second_side_arc_timer_distance_reference __asm__("D_L18_001620D2");
-extern short electric_bolt_third_side_arc_timer_distance_reference __asm__("D_L18_001620D4");
-extern short electric_bolt_fourth_side_arc_timer_distance_reference __asm__("D_L18_001620D6");
 #include "rnc/overlay/l18/gameplay/entities/rocket_data/initialize_electric_bolt_effect_if_requested.h"
 extern int D_L18_001620DC;
 void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
@@ -2847,14 +2841,14 @@ void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
         }
         for (j = 0; j < 4; j++)
             D_L18_001620B8_b[j] = -1;
-        electric_bolt_first_side_arc_reset_frames = 8;
-        electric_bolt_first_side_arc_timer_distance_reference = 4;
-        electric_bolt_second_side_arc_reset_frames = 4;
-        electric_bolt_second_side_arc_timer_distance_reference = 2;
-        electric_bolt_third_side_arc_timer_distance_reference = 4;
-        electric_bolt_third_side_arc_reset_frames = 8;
-        electric_bolt_fourth_side_arc_reset_frames = 4;
-        electric_bolt_fourth_side_arc_timer_distance_reference = 2;
+        electric_bolt_side_arc_reset_frames[0] = 8;
+        electric_bolt_side_arc_timer_distance_references[0] = 4;
+        electric_bolt_side_arc_reset_frames[1] = 4;
+        electric_bolt_side_arc_timer_distance_references[1] = 2;
+        electric_bolt_side_arc_timer_distance_references[2] = 4;
+        electric_bolt_side_arc_reset_frames[2] = 8;
+        electric_bolt_side_arc_reset_frames[3] = 4;
+        electric_bolt_side_arc_timer_distance_references[3] = 2;
         D_L18_00162008_gp = 0;
         D_L18_00162010_gp = 0;
         D_L18_00162024_gp = 0;
@@ -2902,8 +2896,8 @@ extern s32 D_L18_00162054_gp __asm__("D_L18_00162054") __attribute__((sda));
 extern float primary_bolt_random_step_blend_weight_gp __asm__("D_L18_0016208C") __attribute__((sda));
 extern short D_L18_001620B8[] MACRO_ADDR;
 extern short D_L18_001620C0[] MACRO_ADDR;
-extern short D_L18_001620C8[] MACRO_ADDR;
-extern short D_L18_001620D0[] MACRO_ADDR;
+extern short electric_bolt_side_arc_reset_frames_macro[] __asm__("D_L18_001620C8") MACRO_ADDR;
+extern short electric_bolt_side_arc_timer_distance_references_macro[] __asm__("D_L18_001620D0") MACRO_ADDR;
 extern void build_look_at_matrix(void *out, void *dir, void *axis, f32 ang) __asm__("FUN_00214890");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("func_00214DB0");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
@@ -3022,7 +3016,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
         }
         if (fast_dec_timer_s16(D_L18_001620B8 + k)) {
             int j;
-            D_L18_001620B8[k] = scale_game_frames(D_L18_001620C8[k]);
+            D_L18_001620B8[k] = scale_game_frames(electric_bolt_side_arc_reset_frames_macro[k]);
             D_L18_001620C0[k] = 0;
             scale = FUN_L00_00257c48(0.52359879f, 1.04719758f);
             rotation_angle_or_particle_scale = random_float_between(-1.04719758f, 0.17453292f);
@@ -3052,7 +3046,7 @@ void update_electric_bolt_geometry_and_particles(void *moby) {
                 fast_vec_add((l18_electric_bolt_side_arc_points[k].p + j), &l18_electric_bolt_side_arc_predecessor_view[k].p[j - 1], &side_arc_segment_offsets[j]);
             }
             {
-                int x = D_L18_001620D0[k];
+                int x = electric_bolt_side_arc_timer_distance_references_macro[k];
                 int y = D_L18_001620B8[k];
                 float fr;
                 if (x < y) {
@@ -3165,14 +3159,7 @@ int D_L18_00162008_gp __asm__("D_L18_00162008") = 0;
 int D_L18_00162010_gp __asm__("D_L18_00162010") = 0;
 int D_L18_00162024_gp __asm__("D_L18_00162024") = 0;
 
-short electric_bolt_first_side_arc_reset_frames __asm__("D_L18_001620C8") = 0;
-short electric_bolt_first_side_arc_timer_distance_reference __asm__("D_L18_001620D0") = 0;
-
-short electric_bolt_second_side_arc_reset_frames __asm__("D_L18_001620CA") = 0;
-short electric_bolt_third_side_arc_reset_frames __asm__("D_L18_001620CC") = 0;
-short electric_bolt_fourth_side_arc_reset_frames __asm__("D_L18_001620CE") = 0;
-short electric_bolt_second_side_arc_timer_distance_reference __asm__("D_L18_001620D2") = 0;
-short electric_bolt_third_side_arc_timer_distance_reference __asm__("D_L18_001620D4") = 0;
-short electric_bolt_fourth_side_arc_timer_distance_reference __asm__("D_L18_001620D6") = 0;
+short electric_bolt_side_arc_reset_frames[4] __asm__("D_L18_001620C8") = {0};
+short electric_bolt_side_arc_timer_distance_references[4] __asm__("D_L18_001620D0") = {0};
 
 int D_L18_001620DC = 0;
