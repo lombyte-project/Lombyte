@@ -208,8 +208,8 @@ void update_mine_group(struct Moby *moby) {
     int    current;
     int    child;
     int    i;
-    int    first;
-    int    next;
+    int    child_placement_segment_index;
+    int    child_placement_segment_distance;
     float  distance;
     float  position[4];
     char  *limit;
@@ -284,7 +284,7 @@ void update_mine_group(struct Moby *moby) {
         int j;
         int placed, follower;
         current = 0;
-        next = 0;
+        child_placement_segment_distance = 0;
         qcopy(position, path + 0x10);
         for (j = 0; j < *(int *)path; j++) {
             int offset = j * 16;
@@ -295,7 +295,7 @@ void update_mine_group(struct Moby *moby) {
             debug_print(mine_group_not_found_message, *(int *)(boltcrate_pvars + 0x74));
             return;
         }
-        first = *(int *)(boltcrate_pvars + 0x90) = select_point_index_by_distance(&moby->pos, path, 0.0f);
+        child_placement_segment_index = *(int *)(boltcrate_pvars + 0x90) = select_point_index_by_distance(&moby->pos, path, 0.0f);
         placed = 0;
         if (0 < ((MineGroupView *)boltcrate_pvars)->child_count)
             do {
@@ -304,8 +304,8 @@ void update_mine_group(struct Moby *moby) {
                 qcopy((void *)(current + 0x10), position);
                 qcopy((void *)(follower + 0x80), position);
                 qcopy((void *)(follower + 0x70), position);
-                ((MineSegmentView *)follower)->segment = first;
-                ((MineSegmentView *)follower)->next_segment = first + 1;
+                ((MineSegmentView *)follower)->segment = child_placement_segment_index;
+                ((MineSegmentView *)follower)->next_segment = child_placement_segment_index + 1;
                 if (get_next_moby_in_group(&current, current, 1, 0)) {
                     int child_count = *(int *)(boltcrate_pvars + 0x78);
                     if (placed < child_count - 1) {
@@ -317,7 +317,7 @@ void update_mine_group(struct Moby *moby) {
                     *(int *)(boltcrate_pvars + 0x78) = placed + 1;
                     break;
                 }
-                sample_path(path, position, &first, (float *)&next, *(float *)(boltcrate_pvars + 0x80), 1);
+                sample_path(path, position, &child_placement_segment_index, (float *)&child_placement_segment_distance, *(float *)(boltcrate_pvars + 0x80), 1);
                 placed++;
             } while (placed < *(int *)(boltcrate_pvars + 0x78));
         if (!*(unsigned char *)(boltcrate_pvars + 0x94)) {
