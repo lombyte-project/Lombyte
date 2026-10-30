@@ -312,12 +312,12 @@ void spawn_sharkigator_splash_effects(int unused, char *position) {
     float effect_spawn_vector[4];
     char *spawned_object;
     int   i;
-    char *base;
+    char *splash_surface_height_ptr;
     int   random_spawn_value;
     spawned_object = spawn_burst_moby(position, 3.0f);
     if (spawned_object)
         spawned_object[0x23] = 0x70;
-    for (base = (char *)&D_L05_001612E8, i = 15; i >= 0; i--) {
+    for (splash_surface_height_ptr = (char *)&D_L05_001612E8, i = 15; i >= 0; i--) {
         float effect_xy_heading = random_angle_radians();
         float k = random_float_between(frame_time * 0.0f, frame_time * 3.0f);
         effect_spawn_vector[0] = fast_cos(effect_xy_heading) * k;
@@ -334,7 +334,7 @@ void spawn_sharkigator_splash_effects(int unused, char *position) {
         effect_spawn_vector[2] = D_L05_001612E8 + 0.05f;
         splash = spawn_splash(effect_spawn_vector,
                               D_L05_0015F580_macro,
-                              base,
+                              splash_surface_height_ptr,
                               random_float_between(0.7f, 1.0f),
                               i == 0 ? 2.0f : -2.0f);
         if (splash) {
