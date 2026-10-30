@@ -3,8 +3,8 @@
 #include "rnc/ui/map/map_state.h"
 #include "types.h"
 #include "rnc/ui/menus/menu_globals.h"
+#include "rnc/ui/map/slots/find_map_entry_slot.h"
 extern unsigned char D_0013D4E1 NOT_SDA;
-extern int find_map_entry_slot(int) __asm__("FUN_002050a0");
 /* Picks the map to load next: the current map id (level_map_selection.level,
    +0x100 when D_0013D4E1 is set) unless find_map_entry_slot finds it already
    in a slot, otherwise the nearest entry of the 20-id list D_001601E0

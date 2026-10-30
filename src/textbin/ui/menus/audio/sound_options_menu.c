@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/ui/menus/menu_system.h"
 #include "sda.h"
+#include "rnc/audio/mixer/snd_set_playback_mode.h"
 
 struct SoundMenuInput {
     u8 pad_0[0x1C0];
@@ -36,7 +37,6 @@ extern s32 playback_mode __asm__("D_0015EDE8") MACRO_ADDR;
 extern s32 selected_level_index_lui __asm__("D_001A0314")NOT_SDA;
 extern s32 allocate_voice_for_target_entry(s32 flags, s32 sound_index,
                                            s32 sound_owner) __asm__("func_0022DA68");
-void snd_set_playback_mode(s32 menu) __asm__("FUN_0012e240");
 
 s32 sound_options_menu(struct SoundMenu *menu) __asm__("FUN_0021cb30");
 

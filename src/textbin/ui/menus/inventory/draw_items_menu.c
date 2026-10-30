@@ -4,6 +4,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
 #include "rnc/ui/text/font/font_print_right.h"
+#include "rnc/ui/menus/weapons/compute_clamped_count_difference.h"
 
 typedef struct {
     u8 pad0[0x20];
@@ -25,7 +26,6 @@ extern void font_print_window_regular(struct TextRegion *, u64, char *,
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("func_00200E08");
 extern void draw_moby_list(s32, s32) __asm__("func_0020D330");
-extern s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
 extern s32 count_nonzero_entries_up_to_40(void) __asm__("func_00215290");
 extern s32 count_nonzero_entries_up_to_10(void) __asm__("func_00215300");
 extern void *memset(void *, s32, u32);

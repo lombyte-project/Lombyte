@@ -9,6 +9,7 @@
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
 #include "rnc/overlay/shared/rendering/effects/create_part.h"
+#include "rnc/overlay/shared/gameplay/entities/ground_height_at.h"
 
 extern void update_falling_effect_particle() __asm__("FUN_L00_00268d48");
 extern void update_timed_effect_particle() __asm__("FUN_L00_00268fe8");
@@ -206,7 +207,6 @@ typedef struct {
 /* read through a one-field struct: a plain f32 changes the addressing */
 extern ParticleClearance particle_clearance __asm__("D_L00_00160258");
 extern f32 particle_min_ground __asm__("D_L00_00160260");
-extern f32 ground_height_at(Vec4 *) __asm__("FUN_L00_00263468");
 
 void update_falling_effect_particle(FallingParticle *particle)
 {

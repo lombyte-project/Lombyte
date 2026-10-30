@@ -1,6 +1,7 @@
 #include "types.h"
 #include "rnc/data_labels.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/rendering/occlusion/parse_occlusion_grid.h"
 
 typedef struct {
     u8 pad_0[0x140];
@@ -16,7 +17,6 @@ extern s32 occl_invalid_grid __asm__("D_0015F64C");
 extern u8 *occl_previous_grid __asm__("D_0015F650");
 #include "rnc/gameplay/camera/update_cam.h"
 
-extern u8 *parse_occlusion_grid(s32, s32, s32) __asm__("FUN_001f2690");
 extern u8 *get_occlusion_grid_from_pair(s32, s32, s32, s32, s32, s32, f32) __asm__("FUN_001f2768");
 extern void clear_blocks_16(u8 *, s32) __asm__("FUN_001f9810");
 extern void fast_mem_copy(u8 *, u8 *, s32) __asm__("FUN_001f98d0");

@@ -6,9 +6,9 @@
 #include "rnc/overlay/shared/rendering/sky/update_sky_shells_animated.h"
 #include "rnc/rendering/sky/do_sky_gif_paging.h"
 #include "rnc/rendering/sky/setup_sky_gif_paging.h"
+#include "rnc/overlay/shared/rendering/sky/sky_shells_rotate_two.h"
 
 
-extern void sky_shells_rotate_two(void) __asm__("FUN_L00_002899a8");
 
 void render_sky_shells(void) __asm__("FUN_L03_0022c6a8");
 

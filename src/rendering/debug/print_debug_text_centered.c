@@ -1,6 +1,6 @@
 #include "types.h"
+#include "rnc/rendering/debug/print_debug_text.h"
 extern s32 font_char_widths[] __asm__("D_00189DC0");
-extern void print_debug_text(s32, s32, s32, u8 *) __asm__("FUN_001f0bd0");
 
 s32 print_debug_text_centered(s32 x, s32 y, s32 color, u8 *text) __asm__("FUN_001f0c50");
 

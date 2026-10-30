@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rnc/video/decoder/buffers/get_fifo_index.h"
 
 typedef struct {
     u64 lo;
@@ -29,7 +30,6 @@ extern s32 SignalSema(s32 semaphore);
 extern void err_message(s32 message) __asm__("FUN_0023ab78");
 extern char dma_add_not_active_message[] __asm__("D_001E8B20");
 extern void set_d4_chcr(s32 control) __asm__("FUN_0023bbb0");
-extern u32 get_fifo_index(ViBuf *buffer, s32 dma_address) __asm__("FUN_0023baf8");
 extern void sc_tag2(u64 *output, u32 high_word, u32 middle_word,
                            u32 low_word) __asm__("func_0023BC20");
 

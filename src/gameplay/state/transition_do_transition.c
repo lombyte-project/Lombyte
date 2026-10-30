@@ -10,6 +10,10 @@
 #include "rnc/runtime/data/read_global_table_entry.h"
 #include "rnc/ui/hud/banks/load_hud_banks.h"
 #include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/runtime/rpc/initialize_sif_rpc.h"
+#include "rnc/storage/stash/init_stash.h"
+#include "rnc/ui/hud/banks/hud_heap_reset.h"
+#include "rnc/ui/hud/init_hud.h"
 
 typedef struct {
     s32 off;
@@ -46,7 +50,6 @@ extern SoundCue D_001862B0[];
 extern TransferState render_sequence __asm__("D_0018CB20");
 extern WadHeader *volatile D_001940C8[];
 
-extern void initialize_resource_entry(void) __asm__("InitializeResourceEntry");
 extern void QueueDmaTransfer(s32 index);
 extern s32 rand(void);
 extern void sceGsResetGraph(s16 mode, s16 inter, s16 out, s16 ff);
@@ -63,15 +66,12 @@ extern s32 set_pal_mode() __asm__("func_001F34E8");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
 extern void put_draw_buffer_small(void) __asm__("func_001FB3D0");
 extern void append_palette_transfer_packet() __asm__("func_001FB6E0");
-extern void init_hud(void) __asm__("FUN_001fee88");
 extern s32 run_state_handler() __asm__("func_00208840");
 extern s32 load_and_initialize_level_chunk() __asm__("func_00209370");
 extern s32 memcard_update_state() __asm__("func_002093D8");
 extern s32 load(u8 *dst, s32 a, s32 b) __asm__("func_00216828");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern s32 allocate_voice_for_group_entry(s32 group_entry_index, s32 flags, s32 owner) __asm__("FUN_0022dba0");
-extern void initialize_sif_rpc(void) __asm__("FUN_00232ce0");
-extern void init_stash(void) __asm__("FUN_00232d00");
 extern void vu1_init_chain(void) __asm__("func_002335D0");
 extern void swap_render_buffer_chain(void) __asm__("func_00233630");
 extern void vu1_send_chain(void) __asm__("func_002336A0");

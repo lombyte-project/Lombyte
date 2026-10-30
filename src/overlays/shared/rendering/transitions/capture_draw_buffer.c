@@ -5,6 +5,7 @@
 #include "rnc/rendering/render_globals.h"
 #include "rnc/overlay/shared/rendering/buffers/vu1_send_chain_render_buffer.h"
 #include "rnc/rendering/vu1/vu1_init_chain.h"
+#include "rnc/overlay/shared/rendering/transfer_draw_buffer_chunks.h"
 
 
 
@@ -12,7 +13,6 @@
 
 extern int D_0013E05A[];
 extern s32 sceGsSyncV(s32);
-extern void transfer_draw_buffer_chunks(void *, int, int) __asm__("FUN_L00_002a0f18");
 
 /* Calls 002a09d8(1), waits for vsync, counts a frame, starts the VU1 chain, calls 002a0f18. */
 void capture_draw_buffer(void *destination) __asm__("FUN_L00_001f99c0");

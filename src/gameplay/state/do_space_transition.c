@@ -2,6 +2,8 @@
 #include "rnc/globals.h"
 #include "rnc/rendering/level_render_state.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/audio/streaming/safe_cd/snd_stream_safe_cd_callback.h"
+#include "rnc/gameplay/state/tick_space_transition.h"
 
 
 struct Globals_0013DD58 {
@@ -42,7 +44,6 @@ extern void snd_resolve_bank_xrefs(void) __asm__("func_0012E1A8");
 extern void snd_unload_bank(s32) __asm__("FUN_0012e1d8");
 extern void snd_reset_state_and_flush_commands(void) __asm__("func_0012EB00");
 extern s32 snd_stream_safe_cd_sync(s32) __asm__("func_0012EE08");
-extern s32 snd_stream_safe_cd_callback(s32) __asm__("FUN_0012ef28");
 extern void snd_set_reverb_ex(s32, s32, s32, s32, s32) __asm__("func_0012EF68");
 extern s32 read_file_entry_with_retry(s32) __asm__("func_0012F368");
 extern void fade_to_black(s32) __asm__("func_001F4A58");
@@ -55,7 +56,6 @@ extern void run_state_handler(void) __asm__("func_00208840");
 extern void memcard_update_state(void) __asm__("func_002093D8");
 extern void music_stop(void) __asm__("func_00215EE8");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
-extern void tick_space_transition(void) __asm__("FUN_00226e08");
 extern void sound_stop_all_sounds(void) __asm__("func_0022DCD0");
 extern void update_resident_gameplay_state(void) __asm__("func_0022F778");
 extern void dispatch_game_state_update(void) __asm__("func_00230EE8");

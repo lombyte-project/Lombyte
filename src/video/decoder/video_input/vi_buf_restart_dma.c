@@ -1,12 +1,12 @@
 #include "types.h"
 #include "rnc/video/decoder/vi_buf.h"
+#include "rnc/video/decoder/buffers/get_fifo_index.h"
+#include "rnc/video/decoder/dma/set_d3_chcr.h"
 #define DGET(a) (*(volatile u32 *)(a))
 #define BLOCK_IN_DMA_RANGE(i, start, n_dma, n) \
     ((((i) + (n) - (start)) % (n)) >= 0 && (((i) + (n) - (start)) % (n)) < (n_dma))
 extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);
-extern s32 get_fifo_index(struct ViBuf *, u32) __asm__("FUN_0023baf8");
-extern void set_d3_chcr(u32) __asm__("FUN_0023bb40");
 extern void set_d4_chcr(u32) __asm__("FUN_0023bbb0");
 s32 vi_buf_restart_dma(struct ViBuf *f) __asm__("FUN_0023c280");
 

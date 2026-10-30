@@ -2,6 +2,7 @@
 #include "sda.h"
 #include "rnc/globals.h"
 #include "rnc/ui/hud/remove_hud_item.h"
+#include "rnc/ui/menus/weapons/compute_clamped_count_difference.h"
 
 typedef struct {
     s32 unk0;
@@ -53,7 +54,6 @@ extern char *strcpy(char *, const char *);
 extern char *FindSubstring(char *, char *);
 extern s32 sprintf(char *, const char *, ...);
 extern void copy_text_to_shared_buffer(char *) __asm__("func_001FF658");
-extern s32 compute_clamped_count_difference(void) __asm__("FUN_00215248");
 
 #define SCRATCH ((char *)0x70000000)
 

@@ -3,6 +3,7 @@
 #include "rnc/input/pad_state.h"
 #include "rnc/audio/music/music_stream_state.h"
 #include "rnc/globals.h"
+#include "rnc/world/data/find_id_in_terminated_table.h"
 
 
 
@@ -34,7 +35,6 @@ extern struct MapEntry D_001383A0[];
 extern struct MapEntry D_00138438[];
 
 extern s32 update_map_zoom_and_pan() __asm__("FUN_00205440");
-extern s32 find_id_in_terminated_table(s32 id) __asm__("FUN_00205220");
 extern s32 find_map_entry_slot() __asm__("FUN_002050a0");
 extern s32 pick_map_slot_to_evict() __asm__("FUN_00205278");
 extern void move_map_entry_slot() __asm__("FUN_00205000");

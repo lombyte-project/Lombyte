@@ -11,6 +11,8 @@
 #include "rnc/rendering/view/update_view_context.h"
 #include "rnc/audio/voices/sound_update.h"
 #include "rnc/rendering/update_fog.h"
+#include "rnc/rendering/debug/print_debug_text.h"
+#include "rnc/rendering/debug/print_debug_text_centered.h"
 
 typedef struct {
     s32 a, b, c, d;
@@ -1027,14 +1029,12 @@ extern float D_L00_0015F44C;
 extern float D_L00_0015F450;
 extern float D_L00_0015F454;
 extern int D_0013E520[];
-extern int print_debug_text_centered(int,int,int,char*) __asm__("FUN_001f0c50");
 extern char debug_menu_segment_visited_format[] __asm__("D_L00_0015F0F0");
 #include "rnc/gameplay/state/game_globals.h"
 extern u8 D_L00_0015F445;
 extern u8 D_L00_0015F446;
 extern void flush_debug_text_queue(void) __asm__("FUN_L00_001f36f8");
 extern void append_gif_transfer_packet() __asm__("func_001FB368");
-void print_debug_text(s32 x, s32 y, s32 color, char *text) __asm__("FUN_001f0bd0");
 extern double fptodp(float) __asm__("FUN_00120478");
 
 static __inline__ int flag_offset60(int flags) {

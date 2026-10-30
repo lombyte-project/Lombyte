@@ -35,6 +35,10 @@
 #include "rnc/overlay/shared/gameplay/entities/initialize_moby_grounding.h"
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
 #include "rnc/overlay/shared/gameplay/state/record_moby_context_bytes.h"
+#include "rnc/overlay/shared/gameplay/entities/blarg_helicopter.h"
+#include "rnc/overlay/shared/gameplay/entities/hydrodisplacer_faucet.h"
+#include "rnc/overlay/shared/gameplay/hero/hero_move_state_velocity.h"
+#include "rnc/overlay/shared/ui/help/help_request.h"
 
 /* Taxi stop selection shared by route helpers. */
 enum TaxiStop {
@@ -766,7 +770,6 @@ void update_drain_cover_tilt(char *moby, float turn_scale, float speed_scale) {
 }
 extern void *find_moby_hit(struct Moby *, int, int) __asm__("FUN_L00_0025a420");
 extern void random_vector(void *, float, float) __asm__("FUN_L00_00257d78");
-extern void initialize_moby_launch_motion(struct Moby *, struct Moby *, void *, void *, int) __asm__("FUN_L05_00318648");
 extern u8 *FUN_L00_00272060(void *pos, s32 life, f32 size0, f32 size1, s32 color, s32 mode, s32 spin,
                             void *vel, f32 f2);
 extern char pipe_mounted_grating_command_records[] __asm__("D_L05_001BAAA0");
@@ -1342,7 +1345,6 @@ void FUN_L05_00315f70(char *moby) {
 /* Ported from rac1-decomp (src/overlays/l05_rilgar/vendor_0030EB68.c: func_L05_00317538), where it is exact; names translated to the US level program. */
 
 extern f32 D_L05_00211B20[];
-extern void draw_textured_grid(char *) __asm__("FUN_L03_00291918");
 
 void draw_ocean_grid_outside_clip_volumes(char *moby) __asm__("FUN_L05_00316070");
 
@@ -1676,7 +1678,6 @@ typedef struct {
     float target[4];
 } WD2;
 extern char qwarks_bouncer_dialogue_name[] __asm__("D_L05_00161EF0");
-extern void attach_big_head_cheat_manipulator(void *) __asm__("FUN_L05_00317398");
 
 extern unsigned char D_0013DD47 NOT_SDA;
 /* Watcher moby update (variant of shady_salesman_update): turns its head toward the hero or a random target. */
@@ -1852,11 +1853,9 @@ extern char D_0013E633[], D_0014171B[], D_0013D24D[], D_L16_00167240[];
 extern float fast_add_rotations(float, float);
 extern float fast_subtract_rotations(float, float);
 extern float vector_length_xy(void *);
-extern int help_request(int, int) __asm__("FUN_L00_00203908");
 extern int scale_game_frames(int);
 extern char shady_salesman_dialogue_name[] __asm__("D_L05_00161EF8");
 extern unsigned char D_0015EDB0_b __asm__("D_0015EDB0");
-extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
 extern void jet_clear_persistent(int) __asm__("FUN_L00_002502a0");
 extern void queue_dialogue_message(int, int) __asm__("FUN_L00_00263d40");
 extern L16WatchPlayer D_0013E633_watch __asm__("D_0013E533");
@@ -2061,15 +2060,9 @@ typedef struct {
 } PickupPose;
 
 extern PickupPose *D_L05_001600EC_p __asm__("D_L05_001600EC");
-extern char *find_moby_in_owner_list_by_id(void *, int) __asm__("FUN_L05_00319598");
 extern char D_0013CAE4[];
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
-extern int advance_moby_path(char *) __asm__("FUN_L05_003195f8");
-extern void reset_selected_moby_to_current_placement(void *) __asm__("FUN_L05_00319510");
-extern void request_moby_variant_help_message(char *) __asm__("FUN_L05_00319690");
-extern void apply_moby_position_and_rotation_wobble(char *) __asm__("FUN_L05_00319740");
-extern void transform_moby_vector_table_to_world_space(char *) __asm__("FUN_L05_003198e8");
 void initialize_taxi_stop_state(void *moby_v) __asm__("FUN_L05_00319208");
 extern void select_taxi_route(char *) __asm__("FUN_L05_003193a8");
 extern void sample_camera_path(void *, s32, void *, void *, s32, f32) __asm__("func_00214E58");

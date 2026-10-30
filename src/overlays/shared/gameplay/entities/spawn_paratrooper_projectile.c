@@ -18,6 +18,9 @@
 #include "rnc/overlay/shared/math/vectors/add_vectors.h"
 #include "rnc/overlay/shared/rendering/update_entity.h"
 #include "rnc/overlay/shared/audio/voices/vendor_volume.h"
+#include "rnc/overlay/shared/gameplay/entities/ground_height_at.h"
+#include "rnc/overlay/shared/gameplay/entities/spawn_ground_contact_effect_particle.h"
+#include "rnc/overlay/shared/gameplay/entities/update_float_countdown.h"
 
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D3DF8.c: func_L08_00308650), where it is exact; names translated to the US level program. */
 
@@ -173,19 +176,15 @@ extern float ground_particle_scatter_ground_height_floor_offset_gp __asm__("D_L0
 extern int update_float_countdown() __asm__("FUN_L08_00211b08");
 extern u128_3091B0 D_L08_00160250 MACRO_ADDR;
 extern void spawn_span_particle(void *, void *, void *, float) __asm__("FUN_L08_00272cb8");
-float ground_height_at(Vec4 *v) __asm__("FUN_L00_00263468");
 void FUN_L00_00262cf0(void *a, void *b);
-void spawn_ground_contact_effect_particle(void *v) __asm__("FUN_L00_002634f8");
 void create_type_49_particle(void *pos, int kind, void *vel, float f) __asm__("FUN_L08_0027f5f0");
 void randomize_ground_particle_scatter_parameters(int arg) __asm__("FUN_L08_00307b90");
 extern char D_L08_00167640_3091B0[] __asm__("D_L08_001675C0");
 extern void randomize_ground_particle_scatter_parameters(int) __asm__("FUN_L08_00307b90");
-extern int update_float_countdown(float *) __asm__("FUN_L08_00211b08");
 extern void fast_add_rotations_cf(void *, void *, float, float, float) __asm__("FUN_L00_00262cf0");
 extern float func_002140F8_3091B0(float, float) __asm__("FUN_002132a8");
 extern void func_L08_00273A80_3091B0(void *, void *, float, void *) __asm__("FUN_L08_00272cb8");
 extern void func_L08_002803B8_3091B0(void *, void *, float, void *) __asm__("FUN_L08_0027f5f0");
-extern void spawn_ground_contact_effect_particle(void *) __asm__("FUN_L00_002634f8");
 
 void scatter_ground_particles(Moby *moby) __asm__("FUN_L08_00307cf0");
 

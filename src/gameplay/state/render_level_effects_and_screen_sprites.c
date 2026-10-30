@@ -17,6 +17,9 @@
 #include "rnc/gameplay/entities/draw/draw_mobys_setup.h"
 #include "rnc/rendering/state/begin_draw_frame.h"
 #include "rnc/rendering/view/update_camera_view_matrices.h"
+#include "rnc/rendering/reset_active_camera_position_and_basis.h"
+#include "rnc/rendering/view/configure_graphics_render_target_and_projection.h"
+#include "rnc/ui/menus/widgets/draw_menu_flashing_panel.h"
 
 /* Retail 0x002196b8..0x00219d77: draws the level-effect moby lists, then
    projects each enabled menu panel slot to the screen, renders panel
@@ -53,15 +56,12 @@ struct RenderPanel {
 
 extern s64 capture_texture_tex0 __asm__("D_0015EED0");
 
-extern void reset_active_camera_position_and_basis(void) __asm__("FUN_00218d10");
 extern void project_graphics_bounds(Vec4 *, Vec4 *, s32 *, s32 *, s32 *, s32 *)
     __asm__("FUN_00237a78");
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
-extern void configure_graphics_render_target_and_projection(s32, s32, s32, f32) __asm__("FUN_001f7888");
 extern void draw_hud_rect_depth(s32, s32, s32, s32, u64, u32, s32) __asm__("FUN_00200f90");
 extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64, s64)
     __asm__("FUN_001f5450");
-extern void draw_menu_flashing_panel(PanelRenderSlot *) __asm__("FUN_00223e28");
 
 void render_level_effects_and_screen_sprites(void) __asm__("FUN_002196b8");
 

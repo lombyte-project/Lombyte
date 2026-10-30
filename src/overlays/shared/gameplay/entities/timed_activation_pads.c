@@ -10,6 +10,7 @@
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/overlay/shared/gameplay/entities/apply_nearest_environment_sample.h"
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/overlay/shared/gameplay/state/unlock_planet.h"
 
 
 
@@ -347,7 +348,6 @@ void door_update(u8 *moby)
 }
 extern void fast_vec_scale(f32, void *, void *) __asm__("FUN_001f9a68");
 extern void scale_vector_xyz_alt_31aee0(f32, void *, void *) __asm__("FUN_001f9bf8");
-extern void update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
 void bridge_update(u8 *moby) __asm__("FUN_L07_0031aee0");
 void bridge_update(u8 *moby)

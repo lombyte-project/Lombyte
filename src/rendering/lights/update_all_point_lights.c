@@ -2,6 +2,7 @@
 
 #include "qcopy.h"
 #include "rnc/rendering/render_globals.h"
+#include "rnc/rendering/lights/create_point_light.h"
 
 extern char camera_lighting_reference_angle[] __asm__("D_00187098");
 extern char dir_lights[] __asm__("D_0019BDC0");
@@ -10,7 +11,6 @@ extern float fast_add_rotations(float, float) __asm__("func_001FA580");
 extern float fast_cos(float) __asm__("func_001F9DC8");
 extern float fast_sin(float) __asm__("func_001F9DE0");
 extern float fast_vec_dist(void *, void *) __asm__("FUN_001f9b48");
-extern void create_point_light(int) __asm__("FUN_00201ba8");
 extern void refresh_point_light(int) __asm__("FUN_00201f58");
 void update_all_point_lights(void) __asm__("FUN_00201a28");
 

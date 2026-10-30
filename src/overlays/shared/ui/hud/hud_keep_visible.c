@@ -9,6 +9,9 @@
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite_flipped.h"
 #include "rnc/ui/text/font/measure_text_width_regular.h"
+#include "rnc/gameplay/animation/apply_pending_animation.h"
+#include "rnc/overlay/shared/ui/hud/hud_frame.h"
+#include "rnc/textbin/ui/frames/draw_framed_text.h"
 
 /* The level's HUD bank reset, a shorter func_001FF6B8 (src/game/hud.c):
    for each of the 13 bank records at D_L00_0017DD50, func_001FFB38(i,
@@ -30,7 +33,6 @@ typedef struct {
 extern HudBank hud_elements[] __asm__("D_L00_0017DC50");
 s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c,
                            s32 b) __asm__("FUN_001ff308");
-void apply_pending_animation(struct Anim *anim) __asm__("FUN_001ff418");
 
 void reset_hud_animation_channels(void) __asm__("FUN_L00_00235878");
 
@@ -418,7 +420,6 @@ extern float D_L00_0015F76C __attribute__((sda));
 extern void append_screen_rect_packet(s32, s32, s32, s32, u64, s32) __asm__("FUN_00200e08");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern void allocate_hero_voice_for_entry(int, int) __asm__("FUN_L00_00216de8");
-extern void draw_rotated_hud_sprite(int, int, int, int, int, int) __asm__("FUN_L00_0023bac0");
 extern void FUN_L00_001ff348(void *, void *, void *);
 extern void draw_hud_sprite_subpixel(s32, s32, s32, s32, s32, s32) __asm__("FUN_00200080");
 
@@ -627,7 +628,6 @@ extern char freeze_stats_time_format[] __asm__("D_L00_001E84C0") NOT_SDA;
 extern char freeze_stats_score_format[] __asm__("D_L00_0015F778") NOT_SDA;
 extern s32 font_print_center(s32, s32, s32, s32, s32) __asm__("FUN_001f6af0");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
-extern void draw_framed_text(s32, s32, s32, char *) __asm__("FUN_00201200");
 
 int draw_hud_text_panel(HudElem *hud_element) __asm__("FUN_L00_00237200");
 

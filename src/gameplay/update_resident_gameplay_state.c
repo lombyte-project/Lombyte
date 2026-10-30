@@ -9,6 +9,7 @@
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/runtime/dma/calculate_dma_transfer_address.h"
 #include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/audio/voices/pause_all_sounds.h"
 
 typedef union {
     u128 quadword;
@@ -187,7 +188,6 @@ extern void sample_camera_path(ScriptedPath *, s32, void *, void *, s32,
 extern void continue_audio_stream_if_ready(void) __asm__("FUN_00215b10");
 extern void update_audio_stream_until_idle(s32) __asm__("FUN_002168a8");
 extern void update_parts(void) __asm__("func_00217B88");
-extern void pause_all_sounds(s32) __asm__("FUN_00218d78");
 extern void sound_update(void) __asm__("func_0022CA50");
 extern void enqueue_voice_request(void) __asm__("func_0022DC50");
 extern void update_level_gameplay_frame(void) __asm__("func_0022EAA8");

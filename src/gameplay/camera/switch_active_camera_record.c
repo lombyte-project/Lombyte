@@ -7,6 +7,7 @@
 
 #include "rnc/gameplay/camera/update_cam.h"
 #include "rnc/globals.h"
+#include "rnc/gameplay/camera/backup_current_cam.h"
 
 typedef struct {
     u8 pad0[0x1D];
@@ -40,7 +41,6 @@ struct CameraTransitionState {
 
 extern struct CameraTransitionState preview_camera __asm__("D_00186F40");
 
-extern void backup_current_cam(void) __asm__("FUN_001ebc90");
 extern void camera_run_setup_to_new_cam(struct UpdateCam *next_camera) __asm__("func_001EBEC8");
 extern void fast_mem_copy(void *dst, void *src, s32 size) __asm__("func_001F98D0");
 extern s32 truncate_float_to_s32(f32 transition_duration) __asm__("func_001FA6D0");

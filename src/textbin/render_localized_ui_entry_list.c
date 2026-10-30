@@ -5,6 +5,7 @@
 #include "rnc/data_labels.h"
 #include "rnc/ui/text/font_state.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/ui/menus/widgets/fade_menu_color.h"
 
 
 
@@ -17,7 +18,6 @@ extern void disable_global_flag(void) __asm__("func_001F61F8");
 extern s32 measure_text_width(char *, s32, u8 *) __asm__("func_001F6200");
 extern void font_print(s32, s32, long, char *, s32, s32, u8 *) __asm__("func_001F62B0");
 extern char *get_help_message_text(s32) __asm__("func_001FDD10");
-extern s32 fade_menu_color(s32, s32, s32) __asm__("FUN_0021b6d8");
 s32 render_localized_ui_entry_list(struct MenuScreen *menu) __asm__("FUN_0021b1c8");
 
 s32 render_localized_ui_entry_list(struct MenuScreen *menu) {

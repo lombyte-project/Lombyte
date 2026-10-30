@@ -1,10 +1,10 @@
 #include "types.h"
 #include "rnc/video/decoder/vi_buf.h"
+#include "rnc/video/decoder/dma/set_d3_chcr.h"
 #define DGET(a) (*(volatile u32 *)(a))
 extern s32 WaitSema(s32);
 extern s32 SignalSema(s32);
 extern void set_d4_chcr(s32) __asm__("FUN_0023bbb0");
-extern void set_d3_chcr(s32) __asm__("FUN_0023bb40");
 s32 vi_buf_stop_dma(struct ViBuf *f) __asm__("FUN_0023c170");
 
 s32 vi_buf_stop_dma(struct ViBuf *vi_buf) {

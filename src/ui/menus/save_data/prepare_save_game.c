@@ -6,12 +6,12 @@
 
 #include "rnc/storage/memory_card/memory_card_state.h"
 #include "rnc/globals.h"
+#include "rnc/ui/map/copy_level_object_positions.h"
 extern void memcard_make_whole_save(char *out) __asm__("func_0020ABB0");
 extern void prepare_save_game(int, int) __asm__("FUN_002269c0");
 extern char D_0015EE98[] MACRO_ADDR;
 extern void sceCdReadClock(void *);
 extern void sceScfGetLocalTimefromRTC(void *);
-extern void copy_level_object_positions(void) __asm__("FUN_00208770");
 extern void save_map_coverage(void *) __asm__("func_00207B08");
 
 void prepare_save_game(int save_data, int slot) __asm__("FUN_002269c0");

@@ -7,12 +7,12 @@
 #include "rnc/gameplay/camera/camera_globals.h"
 #include "rnc/math/asm_helpers.h"
 #include "rnc/math/rotations/matrix_to_euler.h"
+#include "rnc/gameplay/camera/update_camera_tracking_state.h"
 extern int text_screen_active[] __asm__("D_001E6400");
 extern char camera_shake_vectors[] __asm__("D_001870A0");
 extern unsigned char D_0015EDB4[4] MACRO_ADDR;
 extern void advance_timed_camera_control(void) __asm__("FUN_001eda60");
 extern void refresh_camera_control_flags(void) __asm__("func_001ED940");
-extern void update_camera_tracking_state(void) __asm__("FUN_001ed470");
 extern void update_camera_blend(char *) __asm__("FUN_001ed2b0");
 extern void start_camera_blend(void *) __asm__("func_001EC8A0");
 extern int update_all_cameras(void) __asm__("func_001EC420");

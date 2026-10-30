@@ -6,8 +6,8 @@
 #include "rnc/runtime/state/disable_global_flag.h"
 #include "rnc/runtime/state/enable_global_flag.h"
 #include "rnc/ui/text/font/measure_text_width_regular.h"
+#include "rnc/ui/frames/draw_stretchable_ui_frame.h"
 
-extern void draw_stretchable_ui_frame(int, int, int, int, int) __asm__("FUN_00201128");
 extern void font_print_large(int, int, u64, char *, int) __asm__("FUN_001f6530");
 
 void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__("FUN_L00_001fcb28");

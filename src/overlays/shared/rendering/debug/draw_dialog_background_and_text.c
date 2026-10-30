@@ -9,10 +9,10 @@
 #include "rnc/rendering/packets/append_gif_transfer_packet.h"
 #include "rnc/rendering/packets/emit_rgba_draw_packet.h"
 #include "rnc/rendering/state/reset_gs_registers.h"
+#include "rnc/overlay/shared/ui/menus/initialize_pause_menu.h"
 
 extern int D_L00_0015F5D8;
 int FUN_L00_00201720(void);
-void draw_pause_menu_pages(int) __asm__("FUN_L00_002772c0");
 /* The level overlay's own copy of draw_dialog_text: same code, own data. */
 void level_draw_dialog_text(void) __asm__("FUN_L00_002018c8");
 extern s32 D_L00_0015F3F4_gp __asm__("D_L00_0015F3F4") __attribute__((sda));
@@ -31,7 +31,6 @@ void draw_dialog_background_and_text(void) {
     }
 }
 extern s32 D_L00_0015F5D8;
-void draw_pause_menu_pages(s32) __asm__("FUN_L00_002772c0");
 /* Calls FUN_L00_002772c0(0) while D_L00_0015F5D8 is clear. */
 void draw_page_contents(void) __asm__("FUN_L00_001f8f50");
 

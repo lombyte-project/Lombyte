@@ -5,6 +5,7 @@
 #include "rnc/globals.h"
 #include "rnc/gameplay/hero.h"
 #include "sda.h"
+#include "rnc/overlay/shared/ui/menus/ensure_menu_cache_entry.h"
 
 typedef struct {
     f32 lower;
@@ -31,7 +32,6 @@ extern MapFilter D_L00_00182BA0[19][16] NOT_SDA;
 extern MapFilterCallback D_L00_00183F90[19][8] NOT_SDA;
 extern s32 D_L00_001844A8[] NOT_SDA;
 extern void world_to_map_coords(f32, f32, f32 *, f32 *, s32) __asm__("FUN_00208408");
-extern s32 ensure_menu_cache_entry(s32) __asm__("FUN_L00_00249d80");
 
 void reveal_map_around_position(f32 *position) __asm__("FUN_L00_002484e0");
 void reveal_map_around_position(f32 *position) {

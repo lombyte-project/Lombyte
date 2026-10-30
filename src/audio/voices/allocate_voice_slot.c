@@ -8,6 +8,7 @@
 
 #include "rnc/audio/voice_pool.h"
 #include "rnc/math/random.h"
+#include "rnc/audio/sound/calculate_voice_volume.h"
 typedef struct {
     VoiceVector value;
     u8 pad10[0x60];
@@ -15,7 +16,6 @@ typedef struct {
 extern VoicePositionRecord voice_positions[] __asm__("D_0013E5E0");
 extern u8 voice_volume_records[] __asm__("D_0013E5C0");
 extern void clear_u64_value(VoiceVector *) __asm__("func_001F99F8");
-extern s32 calculate_voice_volume(VoiceSlot *, VoiceVector *) __asm__("FUN_0022c7e8");
 
 s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *,
                         s32) __asm__("FUN_0022d7f0");

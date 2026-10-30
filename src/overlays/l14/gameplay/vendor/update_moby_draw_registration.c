@@ -9,6 +9,7 @@
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/audio/streaming/register_audio_stream_callback.h"
 #include "rnc/overlay/shared/gameplay/entities/trackdrive_left.h"
+#include "rnc/overlay/shared/rendering/effects/draw_textured_effect_list.h"
 extern unsigned char l14_scaled_table_setup_target[] __asm__("D_L14_001E9C60");
 
 void update_moby_draw_registration(struct Moby *moby) __asm__("FUN_L14_00303370");
@@ -64,7 +65,6 @@ void initialize_morphoray_private_state(O_FUN_L14_00305a38 *moby) {
 
 extern char level14_textured_effect_list[] __asm__("D_L14_001F5F80");
 extern s32 get_effect_texture() __asm__("FUN_001f44b8");
-extern void draw_textured_effect_list(void *, int, int, int) __asm__("FUN_L12_002bc210");
 
 void draw_level14_textured_effect_list(void) __asm__("FUN_L14_00307a28");
 

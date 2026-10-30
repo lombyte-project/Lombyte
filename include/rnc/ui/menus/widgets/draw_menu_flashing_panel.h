@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_UI_MENUS_WIDGETS_DRAW_MENU_FLASHING_PANEL_H
+#define LOMBYTE_RNC_UI_MENUS_WIDGETS_DRAW_MENU_FLASHING_PANEL_H
+
+#include "types.h"
+
+void draw_menu_flashing_panel(void *) __asm__("FUN_00223e28");
+
+#endif /* LOMBYTE_RNC_UI_MENUS_WIDGETS_DRAW_MENU_FLASHING_PANEL_H */

@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_AUDIO_SOUND_CALCULATE_VOICE_VOLUME_H
+#define LOMBYTE_RNC_AUDIO_SOUND_CALCULATE_VOICE_VOLUME_H
+
+#include "types.h"
+
+s32 calculate_voice_volume(void *, void *) __asm__("FUN_0022c7e8");
+
+#endif /* LOMBYTE_RNC_AUDIO_SOUND_CALCULATE_VOICE_VOLUME_H */

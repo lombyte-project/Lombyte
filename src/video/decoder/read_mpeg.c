@@ -5,6 +5,7 @@
 #include "rnc/video/decoder/decoder_globals.h"
 #include "rnc/video/player/movie_player.h"
 #include "rnc/gameplay/state/options.h"
+#include "rnc/audio/mixer/snd_set_master_volume.h"
 
 extern struct Globals_0013E550 voice_pool __asm__("D_0013E550");
 extern struct PadStateWords pad_words __asm__("D_0013C940");
@@ -19,7 +20,6 @@ extern void FlushCache(s32);
 extern s32 sceGsSyncV(s32);
 extern s32 sceMpegDemuxPssRing(struct VideoDec *, u8 *, s32, struct ReadBuf *, s32);
 extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");
-extern void snd_set_master_volume(s32, s32) __asm__("FUN_0012e208");
 extern void update_primary_pad_state(void) __asm__("func_00217A10");
 extern void switch_thread(void) __asm__("func_0023A770");
 extern s32 is_audio_ok(void) __asm__("func_0023A790");

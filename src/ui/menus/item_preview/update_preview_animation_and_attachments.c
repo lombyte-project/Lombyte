@@ -19,6 +19,8 @@
 #include "rnc/gameplay/entities/delete_moby.h"
 #include "rnc/ui/menus/item_preview/create_menu_preview_moby.h"
 #include "rnc/ui/menus/stream_buffers/get_menu_stream_buffer_size.h"
+#include "rnc/ui/menus/item_preview/clear_preview_resource_bindings.h"
+#include "rnc/ui/menus/stream_buffers/clear_menu_stream_buffer_read_active.h"
 
 typedef struct {
     u8 pad0[0x10];
@@ -59,13 +61,11 @@ extern PreviewItemDefinition preview_item_definitions[] __asm__("D_001863D0");
 extern u8 attachment_update_callback[] __asm__("FUN_00224b68");
 
 extern void decompress_wad() __asm__("func_0020B618");
-extern s32 clear_menu_stream_buffer_read_active(s32) __asm__("FUN_00225e20");
 extern void relocate_asset_entry_pointers() __asm__("FUN_002032e0");
 extern s32 start_audio_stream_read(s32, s32, s32) __asm__("FUN_00216788");
 extern void RaiseKernelTrap(void);
 extern s32 mark_menu_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
 extern s32 advance_preview_animation_queue(void) __asm__("FUN_00226670");
-extern void clear_preview_resource_bindings(void) __asm__("FUN_002267b8");
 extern void load_preview_resource_bindings(s32, s32) __asm__("FUN_00226848");
 extern void blend_moby_animation_ex(Moby *, s32, s32, s32, s32) __asm__("FUN_002130d8");
 extern void refresh_moby_spatial_bounds() __asm__("func_0020DEF8");

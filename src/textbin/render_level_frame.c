@@ -8,6 +8,7 @@
 #include "rnc/ui/text/font_state.h"
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/entities/prune_moby_references.h"
 
 struct LevelProjectionState {
     u8 pad_0[0xB0];
@@ -32,7 +33,6 @@ extern void draw_textured_quad(s32, s32, s32, s32, s32, s32, s32, s32, s64,
 extern s32 truncate_float_to_s32(f32) __asm__("func_001FA6D0");
 extern void append_gif_transfer_packet() __asm__("func_001FB368");
 extern void draw_rotated_sprite(f32, f32, f32, f32, s32, s32, s64, f32) __asm__("FUN_00200600");
-extern void prune_moby_references(void) __asm__("FUN_0020cc60");
 extern void patch_moby_gifs() __asm__("func_0020CEF8");
 extern void draw_mobys(void) __asm__("func_0020D460");
 extern void draw_sky_shells() __asm__("func_0022B288");

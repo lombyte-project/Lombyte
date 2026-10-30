@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_GAMEPLAY_STATE_TICK_SPACE_TRANSITION_H
+#define LOMBYTE_RNC_GAMEPLAY_STATE_TICK_SPACE_TRANSITION_H
+
+#include "types.h"
+
+void tick_space_transition(void) __asm__("FUN_00226e08");
+
+#endif /* LOMBYTE_RNC_GAMEPLAY_STATE_TICK_SPACE_TRANSITION_H */

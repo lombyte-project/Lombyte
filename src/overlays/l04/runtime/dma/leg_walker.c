@@ -17,6 +17,7 @@
 #include "rnc/gameplay/entities/attach_manipulator.h"
 #include "rnc/overlay/shared/math/vectors/rotation_2D5FA8.h"
 #include "rnc/rendering/geometry/transform_scaled_vertex_batch.h"
+#include "rnc/overlay/shared/gameplay/state/animation_start.h"
 
 /* Ported from rac1-decomp (src/overlays/l04_eudora/vuchain_00293490.c: func_L04_00293490), where it is exact; names translated to the US level program. */
 
@@ -54,8 +55,6 @@ extern char invalid_animation_message[] __asm__("D_L04_001DB360");
 extern char rig_size_message[] __asm__("D_L04_001DB3F0");
 extern void debug_print() __asm__("FUN_001e93b0");
 extern void raise_kernel_trap(void) __asm__("FUN_001f97b0");
-extern float animation_start(int, int) __asm__("FUN_L04_002418b0");
-extern float animation_end(int, int) __asm__("FUN_L04_00241910");
 extern float FUN_L04_001f1978(float);
 
 void initialize_leg_rig(struct Moby *moby, LegRig *rig) __asm__("FUN_L04_002923b8");

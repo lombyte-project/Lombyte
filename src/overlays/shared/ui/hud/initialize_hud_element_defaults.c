@@ -9,6 +9,7 @@
 #include "rnc/ui/hud/get_icon_frame.h"
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
+#include "rnc/ui/frames/draw_stretchable_ui_frame.h"
 
 /* Sets up a HUD element: timer, 128x128 size, zero offsets. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00263490.c: func_L05_00266B90), where it is exact; names translated to the US level program. */
@@ -52,7 +53,6 @@ extern char hud_timer_time_row_centering_format[] __asm__("D_L05_0015FA58");
 extern char hud_timer_time_label_format[] __asm__("D_L05_0015FA68");
 extern char hud_timer_time_value_format[] __asm__("D_L05_0015FA70");
 
-extern void draw_stretchable_ui_frame(int, int, int, int, int) __asm__("FUN_00201128");
 extern int sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern int FUN_001f6250(char *, int);
 extern void print_text_with_texture_3(int x, int y, u64 color, char *text, int len) __asm__("FUN_L00_001fb470");

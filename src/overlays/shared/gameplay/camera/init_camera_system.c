@@ -8,6 +8,9 @@
 #include "rnc/math/fast_math.h"
 #include "rnc/math/asm_helpers.h"
 #include "sda.h"
+#include "rnc/gameplay/camera/backup_current_cam.h"
+#include "rnc/gameplay/camera/camera_run_setup_to_new_cam.h"
+#include "rnc/gameplay/camera/update_camera_tracking_state.h"
 
 typedef struct {
     char pad09[0x86];
@@ -100,9 +103,6 @@ typedef struct {
 
 extern S_u D_L00_00166C80_c __asm__("D_L00_00166C80");
 extern char active_camera_saved_state_storage[] __asm__("D_L00_00169110");
-extern void update_camera_tracking_state(void) __asm__("FUN_001ed470");
-void backup_current_cam(void) __asm__("FUN_001ebc90");
-void camera_run_setup_to_new_cam(struct Moby *cam) __asm__("FUN_001ebec8");
 
 void init_camera_system(void) __asm__("FUN_L00_001ed280");
 void init_camera_system(void) {

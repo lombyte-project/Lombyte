@@ -7,6 +7,7 @@
 #include "rnc/gameplay/state/game_globals.h"
 #include "rnc/ui/menus/menu_globals.h"
 #include "rnc/math/fast_math.h"
+#include "rnc/gameplay/state/do_space_transition.h"
 
 typedef struct {
     s32 off;
@@ -70,7 +71,6 @@ extern s32 transition_do_transition(void) __asm__("FUN_001eb798");
 extern s32 reset_vif1_gif(void) __asm__("func_001204B8");
 extern void sceGsResetGraph(s16, s16, s16, s16);
 extern void set_pal_mode(void) __asm__("func_001F34E8");
-extern void do_space_transition(void) __asm__("FUN_00231ff0");
 
 static inline void clear_bytes(u8 *p, s32 n) {
     s32 i;

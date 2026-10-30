@@ -10,6 +10,8 @@
 #include "rnc/rendering/vu1/vu1_init_chain.h"
 #include "rnc/runtime/memory/init_mem_slots.h"
 #include "rnc/world/parse_space_scene_chunk.h"
+#include "rnc/audio/banks/snd_bank_load_from_ee_cb.h"
+#include "rnc/rendering/state/reset_draw_globals.h"
 
 void initialize_level_runtime(void) __asm__("FUN_00230f60");
 
@@ -134,9 +136,7 @@ extern void unpack_point_records(s32 src, s32 count) __asm__("FUN_00202800");
 extern void parse_particle_textures(s32 hdr, s32 base, s32 src, s32 count) __asm__("FUN_002026c8");
 extern s32 upload_mip_texture(s32, void *) __asm__("func_00202270");
 extern void clear_blocks_16(void *, s32) __asm__("func_001F9810");
-extern void reset_draw_globals(void) __asm__("FUN_001f37e8");
 extern s32 rand(void);
-extern void snd_bank_load_from_ee_cb(s32 cmd, void *arg, s64 data) __asm__("FUN_0012e088");
 extern void store_sound_bank_handle_callback() __asm__("func_0022DD78");
 extern s32 sceGsSyncV(s32);
 extern s32 snd_flush_sound_commands(void) __asm__("func_0012DC80");

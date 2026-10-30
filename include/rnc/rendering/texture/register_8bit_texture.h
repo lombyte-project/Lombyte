@@ -1,0 +1,8 @@
+#ifndef LOMBYTE_RNC_RENDERING_TEXTURE_REGISTER_8BIT_TEXTURE_H
+#define LOMBYTE_RNC_RENDERING_TEXTURE_REGISTER_8BIT_TEXTURE_H
+
+#include "types.h"
+
+long register_8bit_texture(s32, s32, void *, void *, s32, s32) __asm__("FUN_00204e30");
+
+#endif /* LOMBYTE_RNC_RENDERING_TEXTURE_REGISTER_8BIT_TEXTURE_H */

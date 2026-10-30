@@ -12,12 +12,12 @@
 #include "rnc/audio/streaming/start_audio_stream_read.h"
 #include "rnc/rendering/gs/log2dim.h"
 #include "rnc/ui/menus/stream_buffers/get_menu_stream_buffer_size.h"
+#include "rnc/rendering/texture/register_8bit_texture.h"
+#include "rnc/ui/menus/stream_buffers/clear_menu_stream_buffer_read_active.h"
 
-extern s64 register_8bit_texture(s32, s32, u8 *, u8 *, s32, s32) __asm__("FUN_00204e30");
 extern void FUN_0020b4a8(void);
 extern void decompress_wad(u8 *, s32) __asm__("FUN_0020b618");
 extern s32 mark_menu_stream_buffer_read_active(s32) __asm__("FUN_00225dd8");
-extern s32 clear_menu_stream_buffer_read_active(s32) __asm__("FUN_00225e20");
 
 s32 update_menu_stream_image(struct MenuScreen *stream) __asm__("FUN_0021f990");
 

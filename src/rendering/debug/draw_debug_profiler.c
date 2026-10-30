@@ -2,6 +2,9 @@
 #include "rnc/rendering/draw_config.h"
 #include "sda.h"
 #include "rnc/rendering/ties/light_ties.h"
+#include "rnc/gameplay/entities/prune_moby_references.h"
+#include "rnc/rendering/texture/patch_tie_texture_fields.h"
+#include "rnc/rendering/tfrags/light_tfrags.h"
 
 typedef struct {
     u8 pad_0[4];
@@ -81,7 +84,6 @@ extern void append_gif_transfer_packet(void) __asm__("func_001FB368");
 extern void aa_blur_pass(void) __asm__("func_001FB680");
 extern void draw_help(void) __asm__("func_001FE980");
 extern void update_hud(void) __asm__("func_001FF780");
-extern void prune_moby_references(void) __asm__("FUN_0020cc60");
 extern void patch_moby_gifs(void) __asm__("func_0020CEF8");
 extern void draw_mobys(void) __asm__("func_0020D460");
 extern void part_proc(void) __asm__("func_00217C18");
@@ -96,8 +98,6 @@ extern void vu1_add_data_ref(void *, s32) __asm__("func_00233830");
 extern void vu1_add_g_sregister(s32, u64) __asm__("func_00233980");
 extern void vu1_gs_regs_normal(void) __asm__("func_00233BC8");
 extern void vu1_gs_regs_alt(void) __asm__("func_00233C28");
-extern void light_tfrags(void *) __asm__("FUN_00234f98");
-extern void patch_tie_texture_fields(void) __asm__("FUN_00235780");
 extern void copy_render_buffer_pair(void) __asm__("FUN_00235840");
 extern void register_entity_render_resources(void) __asm__("FUN_00235898");
 extern void draw_ties_1(void) __asm__("func_002358C8");

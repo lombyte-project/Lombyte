@@ -15,6 +15,7 @@
 #include "rnc/ui/help/get_help_message_text.h"
 #include "rnc/ui/hud/sprites/draw_hud_sprite.h"
 #include "rnc/ui/frames/draw_ui_frame.h"
+#include "rnc/rendering/draw_outlined_rect.h"
 
 /* State of the level's message box (D_L00_00173040). */
 typedef struct {
@@ -51,7 +52,6 @@ extern void memset(void *, s32, s32) __asm__("FUN_001153fc");
 extern s32 sprintf(char *, const char *, ...) __asm__("FUN_00116248");
 extern void strncpy(void *, char *, s32) __asm__("FUN_00116808");
 extern s32 get_effect_texture(s32) __asm__("FUN_001f44b8");
-extern void draw_outlined_rect(s32, s32, s32, s32, s32) __asm__("FUN_001f6060");
 extern s32 font_print_center(s32, s32, s64, char *, s32) __asm__("FUN_001f6af0");
 extern void font_print_window(struct TextRegion *, s64, void *, s32, s32, u8 *) __asm__("FUN_001f7090");
 extern void font_print_window_regular(struct TextRegion *, s32, char *, s32) __asm__("FUN_001f7580");

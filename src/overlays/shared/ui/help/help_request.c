@@ -4,6 +4,7 @@
 #include "asm.h"
 #include "rnc/data_labels.h"
 #include "rnc/overlay/level_labels.h"
+#include "rnc/ui/help/push_help_history.h"
 
 typedef struct {
     s32 state;
@@ -18,7 +19,6 @@ typedef struct {
 } P00203908;
 extern S00203908 D_L00_00179410_00203908 __asm__("D_L00_00179410");
 extern P00203908 D_00141968_00203908[] __asm__("D_00141968");
-void push_help_history(s32) __asm__("FUN_001fed30");
 /* Starts help entry b with message a when no help is showing; pushes a to the help history. */
 s32 help_request(s32 a, s32 b) __asm__("FUN_L00_00203908");
 s32 help_request(s32 message_id, s32 help_record_index) {

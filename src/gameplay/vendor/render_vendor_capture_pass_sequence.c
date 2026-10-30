@@ -5,6 +5,7 @@
 #include "sda.h"
 #include "qcopy.h"
 #include "rnc/rendering/vu1_registers.h"
+#include "rnc/gameplay/vendor/configure_capture_target.h"
 
 typedef u128 CaptureVector;
 extern int capture_primary_transition __asm__("D_00161298") MACRO_ADDR;
@@ -22,7 +23,6 @@ extern float convert_integer_to_float(int) __asm__("func_001FA6C0");
 extern int truncate_float_to_s32(float) __asm__("func_001FA6D0");
 extern void project_graphics_bounds_float(void *, void *, float *, float *, float *,
                                           float *) __asm__("func_00237C80");
-extern void configure_capture_target(int, int, float) __asm__("FUN_00239690");
 extern void draw_centered_capture_background(int, int) __asm__("func_001FB740");
 extern void update_scrolling_status_message(char *) __asm__("FUN_00238520");
 extern void render_vendor_item_details_pass(char *) __asm__("func_002389E0");

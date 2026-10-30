@@ -9,13 +9,13 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/gameplay/callbacks/add_draw_callback.h"
 #include "rnc/ui/help/try_set_help_message.h"
+#include "rnc/overlay/shared/ui/help/remove_help_message_for_selector.h"
 
 /* Per-frame update of a pickup-like moby: pulses its colour, tracks the player's range and collects items. */
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 extern int D_L00_0015F5C4;
 extern char ship_proximity_local_offsets[] __asm__("D_L00_001BD880");
 extern int D_L00_0015F630 __asm__("D_L00_0015F630");
-extern int remove_help_message_for_selector(int) __asm__("FUN_L00_002644e0");
 extern unsigned char D_0013CAE4[];
 extern unsigned char alternate_item_available[] __asm__("D_0013D388");
 extern unsigned char l00_moby_followup_scene_gate[] __asm__("D_0013DD4B");

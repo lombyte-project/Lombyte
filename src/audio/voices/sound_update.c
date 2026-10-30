@@ -11,6 +11,10 @@
 #include "rnc/math/asm_helpers.h"
 #include "rnc/audio/snd_flush_sound_commands.h"
 #include "rnc/runtime/data/read_global_table_entry.h"
+#include "rnc/audio/effects/snd_set_reverb_ex.h"
+#include "rnc/audio/mixer/snd_set_master_volume.h"
+#include "rnc/audio/sound/calculate_voice_volume.h"
+#include "rnc/audio/voices/snd_stop_sound.h"
 
 typedef union {
     u128 q;
@@ -82,19 +86,15 @@ extern s32 use_alt_fog[] __asm__("D_001872D4");
 extern s32 ComputeByteStringHash(u8 *, s32);
 extern int snd_get_doppler_pitch_mod(int arg0);
 extern void fill_transfer_words(void *, s32, s32) __asm__("FUN_001f97e8");
-extern void snd_set_master_volume(s32, s32) __asm__("FUN_0012e208");
 extern void snd_play_sound_vol_pan_pmpb() __asm__("FUN_0012e308");
-extern void snd_stop_sound(s32) __asm__("FUN_0012e368");
 extern void snd_sound_is_still_playing_cb() __asm__("FUN_0012e448");
 extern void snd_set_sound_params_cb() __asm__("FUN_0012e4c0");
 extern void snd_reset_state_and_flush_commands() __asm__("FUN_0012eb00");
-extern void snd_set_reverb_ex(s32, s32, s32, s32, s32) __asm__("FUN_0012ef68");
 extern void snd_auto_reverb(s32, s32, s32, s32) __asm__("FUN_0012efe0");
 extern f32 convert_integer_to_float(s32) __asm__("func_001FA6C0");
 extern void music_update() __asm__("FUN_00216290");
 extern void clamp_voice_position_to_collision(void *) __asm__("FUN_0022c5a8");
 extern u8 test_voice_occlusion(VoiceSlot *, void *) __asm__("FUN_0022c658");
-extern s32 calculate_voice_volume(VoiceSlot *, VoiceVector *) __asm__("FUN_0022c7e8");
 extern s32 calculate_voice_pan(VoiceSlot *, VoiceVector *, void *) __asm__("FUN_0022c830");
 extern void voice_start_callback() __asm__("FUN_0022dd90");
 extern void voice_update_callback() __asm__("FUN_0022ddd8");
