@@ -239,9 +239,9 @@ void hoven_turret_update(struct Moby *moby) {
         break;
     case HOVEN_TURRET_STATE_WAIT_FOR_BOARDING: {
         {
-            Vec_304920 out;
+            Vec_304920 turret_world_point;
 
-            moby_point_position(moby, 3, out);
+            moby_point_position(moby, 3, turret_world_point);
         }
         if (vector_distance_xy(((float *)&moby->pos),
                                ((Hero *)(D_0013E533 + 0xE1D))->motion.pos.f) < 7.0f ||
