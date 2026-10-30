@@ -104,7 +104,7 @@ void rock_update(struct Moby *m) __asm__("FUN_L01_002f8718");
 
 void rock_update(struct Moby *debris_moby) {
     DebrisVars *debris_vars = (DebrisVars *)debris_moby->pvars;
-    Vec4        old;
+    Vec4        previous_position;
     Vec4        bounce_or_particle_velocity;
     Vec4        particle_position;
     Vec4        particle_offset_direction;
@@ -112,7 +112,7 @@ void rock_update(struct Moby *debris_moby) {
     f32         spin;
     s32         i;
 
-    qcopy(&old, &debris_moby->pos);
+    qcopy(&previous_position, &debris_moby->pos);
     debris_vars->vel.z -= debris_vars->gravity;
     fast_vec_add(&debris_moby->pos, &debris_moby->pos, &debris_vars->vel);
     debris_moby->rot.z = fast_add_rotations(debris_moby->rot.z, debris_vars->spin);
@@ -122,7 +122,7 @@ void rock_update(struct Moby *debris_moby) {
         return;
     }
     if (fast_dec_timer(&debris_vars->life)) {
-        if (collision_line(&old, &debris_moby->pos, 0, debris_moby, 0) != 0 ||
+        if (collision_line(&previous_position, &debris_moby->pos, 0, debris_moby, 0) != 0 ||
             coll_sphere(debris_vars->scale, &debris_moby->pos, 0, debris_moby) != 0) {
             velocity_heading = fast_arc_tan(debris_vars->vel.x, debris_vars->vel.y);
             bounce_or_particle_velocity.f[0] =
