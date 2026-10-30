@@ -514,13 +514,13 @@ extern f32 split_float_fraction(void *, f32) __asm__("FUN_L00_00200228");
 f32 normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 
 f32 normalize_angle(f32 angle_radians) {
-    f32 out;
+    f32 shifted_angle_integral_turns;
     f32 x;
     f32 pi = 3.14159274f;
     f32 tp = 6.2831855f;
     x = angle_radians + pi;
     x /= tp;
-    x = split_float_fraction(&out, x);
+    x = split_float_fraction(&shifted_angle_integral_turns, x);
     x *= tp;
     return x - pi;
 }
