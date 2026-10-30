@@ -58,9 +58,9 @@ void set_selected_object_float_triplets(float first_triplet_middle,
     *(float *)(second_triplet_store_base + 0x24) = second_triplet_middle;
     *(float *)(second_triplet_store_base + 0x28) = second_triplet_last;
     {
-        char *other = *(char **)(moby + 0x70);
-        *(float *)(other + 0x10) = first_triplet_first;
-        *(float *)(other + 0x14) = first_triplet_middle;
-        *(float *)(other + 0x18) = first_triplet_last;
+        char *first_triplet_store_base = *(char **)(moby + 0x70);
+        *(float *)(first_triplet_store_base + 0x10) = first_triplet_first;
+        *(float *)(first_triplet_store_base + 0x14) = first_triplet_middle;
+        *(float *)(first_triplet_store_base + 0x18) = first_triplet_last;
     }
 }
