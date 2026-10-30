@@ -165,7 +165,7 @@ extern void start_slideshow(void) __asm__("FUN_L00_00299a68");
 extern Own  l00_pause_menu_default_page_owner __asm__("D_L00_001B2588");
 extern Own  D_L00_001B3518;
 extern Own  D_L00_001B6088;
-extern Own  D_L00_001B6B38;
+extern Own  l00_pause_menu_state_preserving_entry_page_owner __asm__("D_L00_001B6B38");
 extern Own  D_L00_001B86C8;
 
 #include "rnc/overlay/shared/ui/menus/initialize_pause_menu_globals.h"
@@ -221,7 +221,7 @@ void initialize_pause_menu(void) {
         state->unk8 = page;
         state->unk124 = 1;
     } else if (state_id == 0x23) {
-        page = &D_L00_001B6B38;
+        page = &l00_pause_menu_state_preserving_entry_page_owner;
         state->owner = page;
         state->unk8 = page;
     } else if (state_id == 0x2D) {
