@@ -278,7 +278,7 @@ extern f32 rocket_strike_fighter_exhaust_grey_puff_row0_offset_gp __asm__("D_L14
 void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     Vec4     step;
     Vec4     pos;
-    Vec4     base;
+    Vec4     common_exhaust_origin;
     L14Puff *puff;
     int      i;
     int      j;
@@ -293,7 +293,7 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     fast_vec_add(&pos, &moby->pos, &step);
     fast_vec_scale(&step, &moby->rot_row2, rocket_strike_fighter_exhaust_base_row2_offset_gp);
     fast_vec_add(&pos, &pos, &step);
-    qcopy(&base, &pos);
+    qcopy(&common_exhaust_origin, &pos);
     fast_vec_scale(&step, &moby->rot_row1, rocket_strike_fighter_exhaust_paired_emitter_offset_gp);
     fast_vec_add(&pos, &pos, &step);
     for (j = 0; j < 2; j++) {
@@ -335,7 +335,7 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
     }
     size = 300000.0f;
     fast_vec_scale(&step, &moby->rot_row0, rocket_strike_fighter_exhaust_grey_puff_row0_offset_gp);
-    fast_vec_add(&pos, &base, &step);
+    fast_vec_add(&pos, &common_exhaust_origin, &step);
     grey = FUN_L00_00257b90(0x40, 0x80);
     grey = 0x7F000000 | grey << 16 | grey << 8 | grey;
     if (random_integer_below(3) != 0) {
@@ -360,7 +360,7 @@ void spawn_rocket_strike_fighter_exhaust(struct Moby *moby) {
         }
     }
     fast_vec_scale(&step, &moby->rot_row1, rocket_strike_fighter_exhaust_paired_emitter_offset_gp);
-    fast_vec_sub(&pos, &base, &step);
+    fast_vec_sub(&pos, &common_exhaust_origin, &step);
     for (j = 0; j < 2; j++) {
         spin = random_integer_below(16);
         puff = spawn_puff(&pos,
