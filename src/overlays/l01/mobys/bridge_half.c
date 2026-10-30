@@ -41,7 +41,7 @@ extern void release_voice_slot(int) __asm__("FUN_0022d798");
 
 void bridge_half_update(PendulumMoby *self) __asm__("FUN_L01_002fb8a8");
 
-void bridge_half_update(PendulumMoby *self) {
+void bridge_half_update(PendulumMoby *bridge_half_moby) {
     enum {
         BRIDGE_HALF_INITIALIZE = 0,
         BRIDGE_HALF_WAIT_FOR_TRIGGER = 1,
@@ -53,18 +53,18 @@ void bridge_half_update(PendulumMoby *self) {
     s32           voice_slot_index;
     u8           *voice;
 
-    pendulum_vars = self->vars;
-    switch (self->state) {
+    pendulum_vars = bridge_half_moby->vars;
+    switch (bridge_half_moby->state) {
     case BRIDGE_HALF_INITIALIZE:
-        qcopy(&pendulum_vars->pivot, &self->pos);
+        qcopy(&pendulum_vars->pivot, &bridge_half_moby->pos);
         pendulum_vars->swing = 1.0f;
-        self->state = 1;
+        bridge_half_moby->state = 1;
         pendulum_vars->sound = -1;
         break;
     case BRIDGE_HALF_WAIT_FOR_TRIGGER:
-        if (self->trigger == 2 || D_0014C050[self->id + current_level_index * 16] == 0xFF) {
-            self->state = 2;
-            self->trigger = 0;
+        if (bridge_half_moby->trigger == 2 || D_0014C050[bridge_half_moby->id + current_level_index * 16] == 0xFF) {
+            bridge_half_moby->state = 2;
+            bridge_half_moby->trigger = 0;
         }
         break;
     case BRIDGE_HALF_REDUCE_SWING_TO_ZERO:
@@ -76,25 +76,25 @@ void bridge_half_update(PendulumMoby *self) {
             voice_slot_index = pendulum_vars->sound;
             if (voice_slot_index != -1) {
                 voice = ((u8 *)&voice_pool) + voice_slot_index * 0x70;
-                if (*(void **)(voice + 0x88) == self && voice[0x74] != 0) {
+                if (*(void **)(voice + 0x88) == bridge_half_moby && voice[0x74] != 0) {
                     release_voice_slot(voice_slot_index);
                 }
             }
             pendulum_vars->sound = -1;
-            self->state = 1;
-        } else if (!voice_is_playing(self, pendulum_vars->sound)) {
-            pendulum_vars->sound = FUN_0022da68(0, 4, self);
+            bridge_half_moby->state = 1;
+        } else if (!voice_is_playing(bridge_half_moby, pendulum_vars->sound)) {
+            pendulum_vars->sound = FUN_0022da68(0, 4, bridge_half_moby);
         }
         break;
     }
-    self->rot_x = pendulum_vars->swing * 0.62831855f;
+    bridge_half_moby->rot_x = pendulum_vars->swing * 0.62831855f;
     arm.q = 0;
     arm.f[2] = -11.0f;
     fast_vec_add(&arm, &arm, &pendulum_vars->pivot);
-    swing_offset.f[0] = fast_cos(self->rot_z) * 11.0f * fast_sin(self->rot_x);
-    swing_offset.f[1] = fast_sin(self->rot_z) * 11.0f * fast_sin(self->rot_x);
-    swing_offset.f[2] = fast_cos(self->rot_x) * 11.0f;
-    fast_vec_add(&self->pos, &arm, &swing_offset);
+    swing_offset.f[0] = fast_cos(bridge_half_moby->rot_z) * 11.0f * fast_sin(bridge_half_moby->rot_x);
+    swing_offset.f[1] = fast_sin(bridge_half_moby->rot_z) * 11.0f * fast_sin(bridge_half_moby->rot_x);
+    swing_offset.f[2] = fast_cos(bridge_half_moby->rot_x) * 11.0f;
+    fast_vec_add(&bridge_half_moby->pos, &arm, &swing_offset);
 }
 
 extern float fast_cos(float);
