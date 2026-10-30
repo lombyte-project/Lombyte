@@ -636,7 +636,7 @@ typedef struct {
     struct PeMoby *f2080;
 } PeHero;
 
-extern char *D_L01_001600EC;
+#include "rnc/overlay/cuboid.h"
 extern char *spawn_colored_half_scale_moby(void *, void *, void *, float, float, int) __asm__("FUN_L01_002fa068");
 extern char birdbot_missing_path_format[] __asm__("D_L01_0020AF80");
 extern float absolute_float(float) __asm__("func_001F99C0");
@@ -966,11 +966,11 @@ void birdbot_update(PeMoby *birdbot_moby) {
         if (vector_distance_xy(&birdbot_moby->pos, &selected_combat_target) < birdbot_vars->f1A8 ||
             is_point_inside_clip_volume(&hero.motion.pos, birdbot_vars->w1C0) != 0 || birdbot_vars->w1E8 != 0) {
             if (birdbot_vars->w1C4 != -1) {
-                char *p;
+                LevelCuboid *p;
 
                 hero_set_state(0x1F, 0);
-                p = D_L01_001600EC + (birdbot_vars->w1C4 << 7);
-                jet_mount(p + 0x30, p + 0x70, 0, 0, 0);
+                p = &l01_cuboids[birdbot_vars->w1C4];
+                jet_mount(&p->pos, &p->rot, 0, 0, 0);
                 cutscene_active = 1;
                 birdbot_vars->w1C8 = scale_game_frames(0x168);
             }
@@ -1010,19 +1010,19 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 }
             }
         } else if (birdbot_vars->w1E4 != -1) {
-            char *p;
+            LevelCuboid *p;
             float a;
             float deployment_step_length;
             float z;
 
-            p = (char *)((birdbot_vars->w1E4 << 7) + (int)D_L01_001600EC);
-            a = fast_arc_tan(*(float *)(p + 0x30) - birdbot_moby->pos.f[0],
-                                *(float *)(p + 0x34) - birdbot_moby->pos.f[1]);
+            p = (LevelCuboid *)((birdbot_vars->w1E4 << 7) + (int)l01_cuboids);
+            a = fast_arc_tan(p->pos.x - birdbot_moby->pos.f[0],
+                                p->pos.y - birdbot_moby->pos.f[1]);
             FUN_L00_00258278_cf((char *)birdbot_moby, &birdbot_vars->f194, a, 0.01f, 0.3f, 0.1f);
             deployment_step_length = fast_vec_length(&birdbot_vars->v1D0);
             z = birdbot_vars->v1D0.f[2];
             fast_vec_normalize(&birdbot_vars->v1D0, &birdbot_vars->v1D0, deployment_step_length * 0.95f);
-            fast_vec_sub(&vb, D_L01_001600EC + (birdbot_vars->w1E4 << 7) + 0x30, &birdbot_moby->pos);
+            fast_vec_sub(&vb, &l01_cuboids[birdbot_vars->w1E4].pos, &birdbot_moby->pos);
             fast_vec_normalize(&vb, &vb, deployment_step_length * 0.05f);
             fast_vec_add(&birdbot_vars->v1D0, &birdbot_vars->v1D0, &vb);
             if (frame_time * 10.0f < deployment_step_length) {
@@ -1036,7 +1036,7 @@ void birdbot_update(PeMoby *birdbot_moby) {
                 birdbot_vars->v1D0.f[2] = z;
             }
             fast_vec_add(&birdbot_moby->pos, &birdbot_moby->pos, &birdbot_vars->v1D0);
-            if (fast_vec_dist(&birdbot_moby->pos, D_L01_001600EC + (birdbot_vars->w1E4 << 7) + 0x30) <
+            if (fast_vec_dist(&birdbot_moby->pos, &l01_cuboids[birdbot_vars->w1E4].pos) <
                 frame_time * 10.0f) {
                 if (birdbot_moby->b53 != 0) {
                     blend_moby_animation(birdbot_moby, 0, 0, scale_game_frames(5));
@@ -2472,7 +2472,7 @@ typedef struct {
     f32 y;                    /* 0x14 */
     f32 yaw;                  /* 0x18 */
     u8 pad1C[8];
-    s32 node;                 /* 0x24: index into D_L01_001600EC */
+    s32 node;                 /* 0x24: index into l01_cuboids */
     u8 pad28[4];
     s32 frames;               /* 0x2C */
 } CarrierCamVars;
@@ -2496,15 +2496,6 @@ typedef struct {
 typedef struct {
     Vec4 v[8];
 } CarrierOffsets;
-
-/* One 0x80-byte camera record of the level table at D_L01_001600EC. */
-typedef struct {
-    u8 pad0[0x70];
-    f32 x;                    /* 0x70 */
-    f32 y;                    /* 0x74 */
-    f32 yaw;                  /* 0x78 */
-    u8 pad7C[4];
-} CarrierCamPoint;
 
 /* struct Moby fields this function uses (the unit keeps a file-local struct Moby of its own, so
    rnc/gameplay/entities/moby.h cannot be included here). */
@@ -2533,7 +2524,6 @@ typedef struct {
 } CarrierMoby;
 
 extern CarrierMoby *D_L01_0015FFD8_m __asm__("D_L01_0015FFD8");
-extern CarrierCamPoint *D_L01_001600EC_p __asm__("D_L01_001600EC");
 extern CarrierCamera D_L01_00167100_c __asm__("D_L01_00167100");
 extern CarrierOffsets l01_carrier_rider_local_offsets __asm__("D_L01_0020B360");
 extern void advance_moby_animation(void *) __asm__("FUN_0020d580");
@@ -2605,14 +2595,14 @@ void stationary_ship_update(CarrierMoby *carrier_moby) {
         if (v->camera != -1) {
             cv = (CarrierCamVars *)D_L01_0015FFD8_m[v->camera].pvars;
             camera_target_yaw = fast_arc_tan(carrier_moby->pos.x - D_L01_00167100_c.x, carrier_moby->pos.y - D_L01_00167100_c.y);
-            camera_node_yaw_delta = fast_subtract_rotations(D_L01_001600EC_p[cv->node].yaw, camera_target_yaw);
+            camera_node_yaw_delta = fast_subtract_rotations(l01_cuboids[cv->node].rot.z, camera_target_yaw);
             if (camera_node_yaw_delta < 0.0f) {
-                camera_target_yaw = D_L01_001600EC_p[cv->node].yaw;
+                camera_target_yaw = l01_cuboids[cv->node].rot.z;
             } else if (v->max_deg * 0.017453292f < camera_node_yaw_delta) {
-                camera_target_yaw = fast_add_rotations(D_L01_001600EC_p[cv->node].yaw, -v->max_deg * 0.017453292f);
+                camera_target_yaw = fast_add_rotations(l01_cuboids[cv->node].rot.z, -v->max_deg * 0.017453292f);
             }
-            cv->x = D_L01_001600EC_p[cv->node].x;
-            cv->y = D_L01_001600EC_p[cv->node].y;
+            cv->x = l01_cuboids[cv->node].rot.x;
+            cv->y = l01_cuboids[cv->node].rot.y;
             cv->yaw = spring_turn(&v->turn, D_L01_00167100_c.yaw, camera_target_yaw, frame_time_sq * 12.566371f,
                                        frame_time_sq * 125.6637039f, frame_time * 3.1415927f);
         }
@@ -2916,7 +2906,7 @@ extern GunshipHit collision_hit __asm__("D_L01_001742C0");
 extern s32 level_moby_killed[][64] __asm__("D_0014C190");
 extern s32 moby_killed[] __asm__("D_L01_001BA950");
 extern s32 moby_array __asm__("D_L01_0015FFD8") MACRO_ADDR;
-extern char *camera_points __asm__("D_L01_001600EC") MACRO_ADDR;
+extern LevelCuboid *l01_cuboids_macro __asm__("D_L01_001600EC") MACRO_ADDR;
 extern s32 cutscene_active __asm__("D_L01_0015F404") MACRO_ADDR;
 
 extern void allocate_voice_for_bank_entry(s32, s32, s32) __asm__("FUN_0022db10");
@@ -3031,7 +3021,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                 bomber_jet_moby->flags &= 0xFFBE;
                 if (gunship_vars->cutscene_camera != -1) {
                     hero_set_state(0x72, 0);
-                    jet_mount(camera_points + (gunship_vars->cutscene_camera << 7) + 0x30, camera_points + (gunship_vars->cutscene_camera << 7) + 0x70, 0, 0, 0);
+                    jet_mount(&l01_cuboids_macro[gunship_vars->cutscene_camera].pos, &l01_cuboids_macro[gunship_vars->cutscene_camera].rot, 0, 0, 0);
                     cutscene_active = 1;
                     bomber_jet_moby->w94 = 0;
                     bomber_jet_moby->flags &= 0xEFFF;
@@ -3093,7 +3083,7 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                 if (j == 0) break;
                 if (is_point_inside_clip_volume(camera_pos, gunship_vars->camera_block_volume)) break;
                 for (i = j - 1; i >= 0; i--) {
-                    if (collision_line(camera_pos, camera_points + (explosion_vector_or_target_indices.v[i] << 7) + 0x30, 0x86, bomber_jet_moby, 0)) {
+                    if (collision_line(camera_pos, &l01_cuboids_macro[explosion_vector_or_target_indices.v[i]].pos, 0x86, bomber_jet_moby, 0)) {
                         if (collision_hit.moby == 0 || collision_hit.moby != bomber_jet_moby) {
                             explosion_vector_or_filtered_target_indices.v[i] = -1;
                             remaining_target_count--;
@@ -3116,9 +3106,9 @@ void bomber_jet_update(GunshipMoby *bomber_jet_moby) {
                     i = explosion_vector_or_target_indices.v[random_integer_below(j)];
                     gunship_vars->gun_side ^= 1;
                     moby_point_position(bomber_jet_moby, gunship_vars->gun_side, &pos);
-                    fast_vec_sub(&beam_step_vector, camera_points + (i << 7) + 0x30, &pos);
+                    fast_vec_sub(&beam_step_vector, &l01_cuboids_macro[i].pos, &pos);
                     fast_vec_normalize(&beam_step_vector, &beam_step_vector, frame_time_macro * 160.0f);
-                    col.q = *(u128 *)((i << 7) + (int)camera_points + 0x30);
+                    col.q = *(u128 *)&l01_cuboids_macro[i].pos;
                     bm = spawn_beam(bomber_jet_moby, &pos, &beam_step_vector, &col, is_point_inside_clip_volume(&hero.motion.pos, gunship_vars->beam_volume), gunship_vars->trigger_volume != -1);
                     if (bm != 0) {
                         int k = 0;
@@ -3382,7 +3372,6 @@ typedef struct {
     Sub *sub;
 } Obj;
 
-extern u8 *D_L01_001600EC_u __asm__("D_L01_001600EC");
 extern f32 falling_rock_camera_rotation_angle_gp __asm__("D_L01_00161C28") __attribute__((sda));
 extern f32 falling_rock_camera_distance_gp __asm__("D_L01_00161C2C") __attribute__((sda));
 extern f32 falling_rock_camera_height_gp __asm__("D_L01_00161C30") __attribute__((sda));
@@ -3400,10 +3389,10 @@ void apply_falling_rock_camera_overrides(Obj *falling_rock_moby) __asm__("FUN_L0
 
 void apply_falling_rock_camera_overrides(Obj *falling_rock_moby) {
     u8 rotated_vector[16];
-    u8 *camera_record;
+    LevelCuboid *camera_record;
 
-    camera_record = D_L01_001600EC_u + falling_rock_moby->sub->idx * 128;
-    build_look_at_matrix(rotated_vector, camera_record, camera_record + 0x20, falling_rock_camera_rotation_angle_gp);
+    camera_record = &l01_cuboids[falling_rock_moby->sub->idx];
+    build_look_at_matrix(rotated_vector, &camera_record->axes[0], &camera_record->axes[2], falling_rock_camera_rotation_angle_gp);
     set_follow_camera_angle_blend_from_direction(rotated_vector, 0.13962634f, 0.0f);
     follow_camera_set_distance(0, falling_rock_camera_distance_gp, falling_rock_camera_override_companion_value_gp);
     follow_camera_set_height(falling_rock_camera_height_gp, falling_rock_camera_override_companion_value_gp);
@@ -3480,7 +3469,7 @@ void falling_rock_update(CapMoby *falling_rock) {
         FALLING_ROCK_STATE_FALLEN = 4
     };
     CapVars *falling_rock_vars;
-    u8 *camera_record;
+    LevelCuboid *camera_record;
 
     falling_rock_vars = falling_rock->pvars;
     if (falling_rock->state != 1 && !fast_dec_timer_s16(&falling_rock_vars->wait) && random_integer_below(100) < 5) {
@@ -3522,9 +3511,9 @@ void falling_rock_update(CapMoby *falling_rock) {
         break;
     case FALLING_ROCK_STATE_WAIT_FOR_TRIGGER:
         if (falling_rock_vars->cam != -1) {
-            camera_record = (u8 *)(falling_rock_vars->cam * 128 + (s32)D_L01_001600EC_u);
-            if (hero.motion.pos.f[2] >= *(f32 *)(camera_record + 0x38) &&
-                vector_distance_xy(&hero.motion.pos, camera_record + 0x30) < 10.0f &&
+            camera_record = (LevelCuboid *)(falling_rock_vars->cam * 128 + (s32)l01_cuboids);
+            if (hero.motion.pos.f[2] >= camera_record->pos.z &&
+                vector_distance_xy(&hero.motion.pos, &camera_record->pos) < 10.0f &&
                 ((u32)hero.state.control_mode < 2 || hero.state.control_mode == 9)) {
                 falling_rock_vars->wait = random_int_between(scale_game_frames(300), scale_game_frames(600));
                 falling_rock_vars->rise = scale_game_frames(falling_rock_vars->rise_len);

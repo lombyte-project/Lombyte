@@ -265,7 +265,7 @@ extern float D_L05_0015F448;
 extern float D_L05_0015F44C;
 extern float D_L05_0015F450;
 extern float D_L05_0015F454;
-extern int D_L05_001600EC; /* no foreign declaration */
+#include "rnc/overlay/cuboid.h"
 extern unsigned char D_L05_0015F444;
 extern unsigned char D_L05_0015F445;
 extern unsigned char D_L05_0015F446;
@@ -358,9 +358,9 @@ void update_fog_zone(struct Moby *moby) {
     hero_position = (char *)&hero.motion.pos;
     if (is_point_inside_clip_volume(hero_position, *(int *)(data + 0x38))) {
         int c;
-        fast_vec_sub(hero_offset_from_volume_origin, hero_position, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x30);
+        fast_vec_sub(hero_offset_from_volume_origin, hero_position, &l05_cuboids[*(int *)(data + 0x38)].pos);
         hero_offset_from_volume_origin[3] = 0.0f;
-        transform_vector_by_basis(hero_position_in_volume_space, hero_offset_from_volume_origin, D_L05_001600EC + *(int *)(data + 0x38) * 128 + 0x40);
+        transform_vector_by_basis(hero_position_in_volume_space, hero_offset_from_volume_origin, l05_cuboids[*(int *)(data + 0x38)].to_local);
         c = fast_tween_color(*(int *)(data + 0x30), *(int *)(data + 0x34), (hero_position_in_volume_space[0] + 1.0f) * 0.5f);
         l05_volume_blended_color_lower_middle_byte = c >> 8;
         l05_volume_blended_color_upper_middle_byte = c >> 16;
@@ -387,18 +387,18 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
     float slide_motion_scratch[4];
     float slide_step_distance;
     float speed;
-    char *pose_entry;
+    LevelCuboid *pose_entry;
     float remaining_slide_distance;
     float reach;
 
     switch (MOBY(moby)->state) {
     case MOBY_PLACE_AT_POSE_OFFSET: {
-        char *initial_pose_entry;
+        LevelCuboid *initial_pose_entry;
 
-        initial_pose_entry = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
-        qcopy(moby + 0x10, initial_pose_entry + 0x30);
-        MOBY(moby)->rot.z = *(float *)(initial_pose_entry + 0x78);
-        fast_vec_normalize(slide_motion_scratch, initial_pose_entry + 0x10, *(float *)(data + 0x18));
+        initial_pose_entry = &l05_cuboids[*(int *)(data + 0x10)];
+        qcopy(moby + 0x10, &initial_pose_entry->pos);
+        MOBY(moby)->rot.z = initial_pose_entry->rot.z;
+        fast_vec_normalize(slide_motion_scratch, &initial_pose_entry->axes[1], *(float *)(data + 0x18));
         if (*(int *)(data + 0x1C) != 0) {
             fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
             MOBY(moby)->flags |= 0x8000;
@@ -415,14 +415,14 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         }
         break;
     case MOBY_SLIDE_TO_END_POINT:
-        pose_entry = (char *)(D_L05_001600EC + (*(int *)(data + 0x10) << 7));
+        pose_entry = &l05_cuboids[*(int *)(data + 0x10)];
         reach = *(float *)(data + 0x18) * 3.0f;
         slide_step_distance = 0.0f;
-        fast_vec_normalize(slide_motion_scratch, pose_entry + 0x10, reach);
+        fast_vec_normalize(slide_motion_scratch, &pose_entry->axes[1], reach);
         if (*(int *)(data + 0x1C) != 0) {
             fast_vec_scale(slide_motion_scratch, slide_motion_scratch, -1.0f);
         }
-        fast_vec_add(slide_motion_scratch, pose_entry + 0x30, slide_motion_scratch);
+        fast_vec_add(slide_motion_scratch, &pose_entry->pos, slide_motion_scratch);
         fast_vec_sub(slide_motion_scratch, slide_motion_scratch, moby + 0x10);
         remaining_slide_distance = fast_vec_length(slide_motion_scratch);
         speed = fast_vec_length(data);
@@ -435,12 +435,12 @@ void update_triggered_moby_slide_and_lowering(char *moby) {
         }
         break;
     case MOBY_LOWER_BELOW_POSE_HEIGHT:
-        pose_entry = (char *)D_L05_001600EC;
-        pose_entry += *(int *)(data + 0x10) << 7;
-        advance_accelerated_scalar(*(float *)(pose_entry + 0x38) - 5.9f, frame_time_sq * 20.0f,
+        pose_entry = l05_cuboids;
+        pose_entry += *(int *)(data + 0x10);
+        advance_accelerated_scalar(pose_entry->pos.z - 5.9f, frame_time_sq * 20.0f,
                                    frame_time_sq * 40.0f, frame_time * 10.0f,
                                    (float *)&MOBY(moby)->pos.z, (float *)(data + 8));
-        if (MOBY(moby)->pos.z < *(float *)(pose_entry + 0x38) - 5.9f) {
+        if (MOBY(moby)->pos.z < pose_entry->pos.z - 5.9f) {
             MOBY(moby)->state = 4;
         }
         break;
@@ -1086,7 +1086,7 @@ typedef struct {
     f32 top;          /* 0x60 */
     f32 bottom;       /* 0x64 */
     s32 marker;       /* 0x68: marker ring in D_L05_001B0930 and camera id, -1: none */
-    s32 pose;         /* 0x6C: index into D_L05_001600EC */
+    s32 pose;         /* 0x6C: index into l05_cuboids */
     f32 progress;     /* 0x70: 0 at the bottom, 1 at the top */
     s32 sound;        /* 0x74: voice slot, -1: none */
     f32 fade;         /* 0x78 */
@@ -1096,10 +1096,6 @@ typedef struct {
     f32 speed;        /* 0x88 */
 } LiftVars;
 
-typedef struct {
-    u8 pad0[0x70];
-    Vec4f rot; /* 0x70: z: yaw at the top */
-} LiftPose;
 
 typedef struct {
     u32 handle;
@@ -1121,7 +1117,6 @@ typedef struct {
 } LiftVoiceWindow;
 
 extern u16 D_0014162A NOT_SDA;
-extern LiftPose *D_L05_001600EC_l __asm__("D_L05_001600EC");
 
 extern f32 approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern f32 approach_with_speed(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_00213f38");
@@ -1194,7 +1189,7 @@ void elevator_with_button_update(struct Moby *moby) {
         target = moby->state == 2 ? 1.0f : 0.0f;
         approach_with_speed(&vars->progress, &vars->speed, target, max_speed, max_speed, progress_speed_limit);
         moby->pos.z = (vars->top - vars->bottom) * vars->progress + vars->bottom;
-        moby->rot.z = fast_subtract_rotations(D_L05_001600EC_l[vars->pose].rot.z, vars->base_yaw) * vars->progress;
+        moby->rot.z = fast_subtract_rotations(l05_cuboids[vars->pose].rot.z, vars->base_yaw) * vars->progress;
         moby->rot.z = fast_add_rotations(moby->rot.z, vars->base_yaw);
         if (absolute_float(vars->progress - target) < 0.01f) {
             vars->timer = scale_game_frames(120);
@@ -2051,14 +2046,7 @@ void television_update(struct Moby *moby) {
     }
 }
 /* Same source as the exact taxi_update, with its moby data 8 bytes further on, an x range on the pickup test and a table test for state 6. */
-typedef struct {
-    char pad00[0x30];
-    float position[4];
-    char pad40[0x30];
-    float direction[4];
-} PickupPose;
 
-extern PickupPose *D_L05_001600EC_p __asm__("D_L05_001600EC");
 extern char D_0013CAE4[];
 extern float advance_accelerated_scalar_c(float, float, float, float, float *,
                                           float *) __asm__("FUN_00213f38");
@@ -2084,7 +2072,7 @@ void taxi_update(struct Moby *moby) {
     float z;
     struct Moby *destination_stop_moby;
     char *voice_slot;
-    PickupPose *tab;
+    LevelCuboid *tab;
     float *qa;
     int voice_slot_index;
     int s;
@@ -2124,9 +2112,9 @@ void taxi_update(struct Moby *moby) {
                                      (float *)(taxi_data + 0xC0), (float *)(taxi_data + 0xC4));
         qa = rotation_or_start_position_scratch;
         s = *(int *)(taxi_data + 0x80 - (-(*(short *)(taxi_data + 0xB4) * 4)));
-        tab = D_L05_001600EC_p;
-        qcopy(qa, tab[s].position);
-        qcopy(interpolation_start_angles, tab[s].direction);
+        tab = l05_cuboids;
+        qcopy(qa, &tab[s].pos);
+        qcopy(interpolation_start_angles, &tab[s].rot);
         z = 0.0f;
         func_00215CA8_f5848(z, *(int **)(taxi_data + 0xAC), 0, interpolation_end_position, interpolation_end_angles, 0);
         lerp_vector(taxi_data + 0x60, rotation_or_start_position_scratch, interpolation_end_position, *(float *)(taxi_data + 0xC0));
@@ -2152,9 +2140,9 @@ void taxi_update(struct Moby *moby) {
                                      (float *)(taxi_data + 0xC0), (float *)(taxi_data + 0xC4));
         qa = interpolation_end_position;
         s = *(int *)(taxi_data + 0x80 - (-(*(short *)(taxi_data + 0xB6) * 4)));
-        tab = D_L05_001600EC_p;
-        qcopy(qa, tab[s].position);
-        qcopy(interpolation_end_angles, tab[s].direction);
+        tab = l05_cuboids;
+        qcopy(qa, &tab[s].pos);
+        qcopy(interpolation_end_angles, &tab[s].rot);
         sample_camera_path(*(int **)(taxi_data + 0xAC), 0, rotation_or_start_position_scratch, interpolation_start_angles, 0, (float)**(int **)(taxi_data + 0xAC));
         lerp_vector(taxi_data + 0x60, rotation_or_start_position_scratch, interpolation_end_position, *(float *)(taxi_data + 0xC0));
         *(float *)(taxi_data + 0x74) = fast_add_rotations(
@@ -2204,7 +2192,6 @@ void taxi_update(struct Moby *moby) {
     FUN_L00_00260738(taxi_data + 0x20, position_delta, old_rotation, &moby->rot);
 }
 #include "qcopy.h"
-extern char *D_L05_001600EC_19208 __asm__("D_L05_001600EC");
 
 void initialize_taxi_stop_state(void *moby_v) {
     char *moby = moby_v;
@@ -2215,7 +2202,7 @@ void initialize_taxi_stop_state(void *moby_v) {
     char *pose_table_base;
     *(short *)(data + 0xB4) = -1;
     for (i = 0; i < 5; i++) {
-        if (fast_vec_dist(moby + 0x10, D_L05_001600EC_19208 + (list[i] << 7) + 0x30) < 1.0f) {
+        if (fast_vec_dist(moby + 0x10, &l05_cuboids[list[i]].pos) < 1.0f) {
             *(short *)(data + 0xB4) = i;
         }
     }
@@ -2255,7 +2242,7 @@ void initialize_taxi_stop_state(void *moby_v) {
         selected += *(short *)(data + 0xB4);
         selected_pose_byte_offset = *selected << 7;
     }
-    pose_table_base = D_L05_001600EC_19208;
+    pose_table_base = (char *)l05_cuboids;
     qcopy(data + 0x60, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x30));
     qcopy(data + 0x70, (void *)(selected_pose_byte_offset + (int)pose_table_base + 0x70));
 }

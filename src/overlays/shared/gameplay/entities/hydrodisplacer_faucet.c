@@ -815,7 +815,7 @@ void blarg_gun_update(char *moby)
 }
 extern char *func_L05_0031AAA8_19510(void *, int) __asm__("FUN_L05_00319598");
 extern void initialize_taxi_stop_state(void *) __asm__("FUN_L05_00319208");
-extern char *D_L16_001601AC_m_19510 __asm__("D_L05_001600EC");
+#include "rnc/overlay/cuboid.h"
 void reset_selected_moby_to_current_placement(void *moby_v) __asm__("FUN_L05_00319510");
 
 void reset_selected_moby_to_current_placement(void *moby_v) {
@@ -830,7 +830,7 @@ void reset_selected_moby_to_current_placement(void *moby_v) {
         position = spawn + 0x10;
         slot += *(short *)(data + 0xB4) << 2;
         index = *(int *)(slot + 0x80) << 7;
-        entry = D_L16_001601AC_m_19510;
+        entry = (char *)l05_cuboids;
         qcopy(position, (void *)(index + (int)entry + 0x30));
         qcopy(spawn + 0x40, (void *)(index + (int)entry + 0x70));
         initialize_taxi_stop_state(spawn);

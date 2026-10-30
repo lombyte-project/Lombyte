@@ -664,15 +664,10 @@ typedef struct {
     /* 0x38 */ int f38;
     /* 0x3C */ int f3C;
 } Data;
-typedef struct {
-    /* 0x00 */ char pad0[0x30];
-    /* 0x30 */ V4 a;
-    /* 0x40 */ char pad40[0x30];
-    /* 0x70 */ V4 b;
-} Rec;
+#include "rnc/overlay/cuboid.h"
 typedef struct { unsigned char pad0[0x454]; unsigned char collected[1]; } Lv;
 extern Moby_2FC140 *ents_macro __asm__("D_L01_0015FFD8") MACRO_ADDR;
-extern Rec *D_L01_001600EC_macro __asm__("D_L01_001600EC") MACRO_ADDR;
+extern LevelCuboid *l01_cuboids_macro __asm__("D_L01_001600EC") MACRO_ADDR;
 extern int cutscene_mode __asm__("D_L01_0015F5C4") MACRO_ADDR;
 extern char D_L01_001BAD60_2FC140[] __asm__("D_L01_001BAA50");
 extern Lv D_L01_001BB9C0_2FC140 __asm__("D_L01_001BB6B0");
@@ -762,14 +757,14 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
                     linked_moby_data = ents_macro[data->link].data;
                     linked_moby_data->timer = scale_game_frames(0x1A4);
                     ents_macro[data->link].fBC = 1;
-                    clear_u64_value(&D_L01_001600EC_macro[linked_moby_data->rec].b);
+                    clear_u64_value(&l01_cuboids_macro[linked_moby_data->rec].rot);
                     clear_u64_value(&linked_moby_data->v);
-                    D_L01_001600EC_macro[linked_moby_data->rec].b.y = -fast_arc_tan(
-                        vector_distance_xy(&D_L01_001600EC_macro[linked_moby_data->rec].a, &moby->pos),
-                        moby->pos.z - D_L01_001600EC_macro[linked_moby_data->rec].a.z);
-                    D_L01_001600EC_macro[linked_moby_data->rec].b.z = fast_arc_tan(
-                        moby->pos.x - D_L01_001600EC_macro[linked_moby_data->rec].a.x,
-                        moby->pos.y - D_L01_001600EC_macro[linked_moby_data->rec].a.y);
+                    l01_cuboids_macro[linked_moby_data->rec].rot.y = -fast_arc_tan(
+                        vector_distance_xy(&l01_cuboids_macro[linked_moby_data->rec].pos, &moby->pos),
+                        moby->pos.z - l01_cuboids_macro[linked_moby_data->rec].pos.z);
+                    l01_cuboids_macro[linked_moby_data->rec].rot.z = fast_arc_tan(
+                        moby->pos.x - l01_cuboids_macro[linked_moby_data->rec].pos.x,
+                        moby->pos.y - l01_cuboids_macro[linked_moby_data->rec].pos.y);
                 }
                 moby->state = 2;
             }
@@ -780,11 +775,11 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         if (data->link != -1) {
             linked_moby_data = ents_macro[data->link].data;
             linked_moby_data->v.y = -fast_arc_tan(
-                vector_distance_xy(&D_L01_001600EC_macro[linked_moby_data->rec].a, &moby->pos),
-                moby->pos.z - D_L01_001600EC_macro[linked_moby_data->rec].a.z);
+                vector_distance_xy(&l01_cuboids_macro[linked_moby_data->rec].pos, &moby->pos),
+                moby->pos.z - l01_cuboids_macro[linked_moby_data->rec].pos.z);
             linked_moby_data->v.z = fast_arc_tan(
-                moby->pos.x - D_L01_001600EC_macro[linked_moby_data->rec].a.x,
-                moby->pos.y - D_L01_001600EC_macro[linked_moby_data->rec].a.y);
+                moby->pos.x - l01_cuboids_macro[linked_moby_data->rec].pos.x,
+                moby->pos.y - l01_cuboids_macro[linked_moby_data->rec].pos.y);
         }
         if (moby->f53 == 0) {
             if (moby->pos.z - data->fC <= 0.0f) {
@@ -890,7 +885,7 @@ void agnogg_ship_front_update(Moby_2FC140 *moby) {
         }
         jet_clear_persistent(moby->fB0);
         if (data->rec != -1) {
-            jet_reset_camera(&D_L01_001600EC_macro[data->rec].a, &D_L01_001600EC_macro[data->rec].b);
+            jet_reset_camera(&l01_cuboids_macro[data->rec].pos, &l01_cuboids_macro[data->rec].rot);
         }
         memcard_save_data(0, -1);
         show_tracked_moby();

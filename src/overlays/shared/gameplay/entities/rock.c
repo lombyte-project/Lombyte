@@ -635,7 +635,7 @@ typedef struct {
 extern char cutscene_camera_init_position_error_format[] __asm__("D_L01_0020B550");
 extern int D_0015ED84; /* no foreign declaration */
 extern int cutscene_active __asm__("D_L01_0015F404");
-extern int D_L01_001600EC_q __asm__("D_L01_001600EC");
+#include "rnc/overlay/cuboid.h"
 extern s32 D_0014C190[][64];
 extern void DebugPrint(char *, ...);
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -696,21 +696,21 @@ void update_cutscene_trigger(char *moby) {
         if (*(int *)(trigger_vars + 0x28) == -1) {
             set_race_camera(hero_position, hero_position + 0x10, 0x72, 1);
         } else {
-            char *o = D_L01_001600EC_q + *(int *)(trigger_vars + 0x28) * 128;
-            set_race_camera(o + 0x30, o + 0x70, 0x72, 1);
+            LevelCuboid *o = &l01_cuboids[*(int *)(trigger_vars + 0x28)];
+            set_race_camera(&o->pos, &o->rot, 0x72, 1);
         }
         if (*(int *)(trigger_vars + 0x30) != 0) {
             jet_mount(saved_camera_position, saved_camera_rotation, 2, *(int *)(trigger_vars + 0x34), 0);
         } else {
-            char *o = D_L01_001600EC_q + *(int *)(trigger_vars + 0x24) * 128;
-            jet_mount(o + 0x30, o + 0x70, 0, 0, 0);
+            LevelCuboid *o = &l01_cuboids[*(int *)(trigger_vars + 0x24)];
+            jet_mount(&o->pos, &o->rot, 0, 0, 0);
         }
         cutscene_active = 1;
         moby[0x20] = 2;
         moby[0xBC] = 1;
         {
             int o = *(int *)(trigger_vars + 0x24) << 7;
-            char *record_table_base = D_L01_001600EC_q;
+            char *record_table_base = (char *)l01_cuboids;
             qcopy(trigger_vars, (char *)(o + (int)record_table_base) + 0x30);
             qcopy(trigger_vars + 0x10, (char *)(o + (int)record_table_base) + 0x70);
         }
@@ -856,7 +856,6 @@ extern char plumber_level_eight_dialogue_data[] __asm__("D_L01_00161D38");
 extern char plumber_fallback_dialogue_data[] __asm__("D_L01_00161D48");
 extern char D_L01_00167240_c[] __asm__("D_L01_00167240");
 extern char D_L01_001BAAA0[];
-extern char *camera_points __asm__("D_L01_001600EC");
 extern struct {
     char pad[0x80];
     float f80;
@@ -925,8 +924,8 @@ void the_plumber_update(L01WatchMoby *plumber_moby) {
         if (D_0014C050_c[plumber_moby->bB0 + D_0015ED84_c * 16] != 0xFF) {
             jet_clear_persistent(plumber_moby->bB0);
             if (plumber_vars->i4C != -1) {
-                char *camera_record = camera_points + plumber_vars->i4C * 128;
-                jet_reset_camera(camera_record + 0x30, camera_record + 0x70);
+                LevelCuboid *camera_record = &l01_cuboids[plumber_vars->i4C];
+                jet_reset_camera(&camera_record->pos, &camera_record->rot);
             }
         }
         plumber_moby->state = 1;
@@ -1499,7 +1498,6 @@ typedef struct {
 
 #include "qcopy.h"
 
-extern u8 *D_L01_001600EC;
 
 void update_gold_bolt_pickup_camera(struct Moby *moby) __asm__("FUN_L01_003087e0");
 
@@ -1532,13 +1530,13 @@ void update_gold_bolt_pickup_camera(struct Moby *moby) {
         output_rotation.z = fast_add_rotations(position_offset_heading, 3.141590118408203f);
         output_rotation.y = interpolation_factor * -0.17000000178813934f;
     } else {
-        lerp_vector(&output_position.x, D_L01_001600EC + *(s32 *)(data + 4) * 128 + 0x30,
-                     D_L01_001600EC + *(s32 *)(data + 8) * 128 + 0x30, interpolation_factor);
+        lerp_vector(&output_position.x, &l01_cuboids[*(s32 *)(data + 4)].pos,
+                     &l01_cuboids[*(s32 *)(data + 8)].pos, interpolation_factor);
         {
-            u8 *base = D_L01_001600EC;
+            LevelCuboid *cuboids = l01_cuboids;
 
-            qcopy(&start_rotation, base + *(s32 *)(data + 4) * 128 + 0x70);
-            qcopy(&end_rotation, base + *(s32 *)(data + 8) * 128 + 0x70);
+            qcopy(&start_rotation, &cuboids[*(s32 *)(data + 4)].rot);
+            qcopy(&end_rotation, &cuboids[*(s32 *)(data + 8)].rot);
         }
         output_rotation.z = fast_add_rotations(fast_subtract_rotations(end_rotation.z, start_rotation.z) * interpolation_factor, start_rotation.z);
         output_rotation.y = fast_add_rotations(fast_subtract_rotations(end_rotation.y, start_rotation.y) * interpolation_factor, start_rotation.y);

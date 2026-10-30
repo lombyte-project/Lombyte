@@ -5667,7 +5667,7 @@ void set_moby_list_state_17(int moby_list_index) {
 
 extern char D_0013F3D0[];
 extern unsigned char *D_L06_0015FFD8_ffcb0 __asm__("D_L06_0015FFD8");
-extern char *D_L06_001600EC_ffcb0 __asm__("D_L06_001600EC");
+#include "rnc/overlay/cuboid.h"
 extern float D_L06_0015F3FC __asm__("D_L06_0015F3FC");
 extern void advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
 extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
@@ -5736,7 +5736,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                 D_L06_0015F408 = 0x12;
                 state = data[5];
                 state <<= 7;
-                base = (int)D_L06_001600EC_ffcb0;
+                base = (int)l06_cuboids;
                 qcopy(camera_position, (void *)(state + base + 0x30));
                 qcopy(camera_setup_rotation_or_position_target, (void *)(state + base + 0x70));
             }
@@ -5753,14 +5753,14 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                     int base;
                     base = data[4];
                     base <<= 7;
-                    base += (int)D_L06_001600EC_ffcb0;
+                    base += (int)l06_cuboids;
                     facing = fast_arc_tan(MOBY(moby)->pos.x - *(float *)(base + 0x30), MOBY(moby)->pos.y - *(float *)(base + 0x34));
                 }
                 {
                     int state;
                     state = data[4];
                     state <<= 7;
-                    base = (int)D_L06_001600EC_ffcb0;
+                    base = (int)l06_cuboids;
                     *(float *)(state + base + 0x78) = facing;
                 }
                 state = data[4];
@@ -5789,7 +5789,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                     int base;
                     state = data[3];
                     state <<= 7;
-                    base = (int)D_L06_001600EC_ffcb0;
+                    base = (int)l06_cuboids;
                     qcopy((void *)(state + base + 0x30), D_0013F3D0);
                     *(float *)(state + base + 0x38) -= 0.5f;
                 }
@@ -5805,7 +5805,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
                 int base;
                 state = data[5];
                 state <<= 7;
-                base = (int)D_L06_001600EC_ffcb0;
+                base = (int)l06_cuboids;
                 qcopy(camera_position, (void *)(state + base + 0x30));
                 qcopy(from, (void *)(state + base + 0x70));
             }
@@ -5827,7 +5827,7 @@ void update_moby_camera_sequence_and_draw_selection(char *moby) {
         if (vector_distance_xy(moby + 0x10, D_0013F3D0) < 16.0f) {
             state = data[3];
             state <<= 7;
-            base = (int)D_L06_001600EC_ffcb0;
+            base = (int)l06_cuboids;
             qcopy((void *)(state + base + 0x30), D_0013F3D0);
             *(float *)(state + base + 0x38) -= 0.5f;
             data[3] = -1;
@@ -6364,7 +6364,6 @@ void fred_update(struct Moby *moby) {
 }
 #include "rnc/gameplay/state/game_globals.h"
 extern char *D_L06_0015FFD8_301b90 __asm__("D_L06_0015FFD8");
-extern char *D_L06_001600EC_301b90 __asm__("D_L06_001600EC");
 extern int *D_L06_001B0C30_301b90[] __asm__("D_L06_001B0C30");
 extern char dialogue_playback_phase[] __asm__("D_0015172A");
 extern int D_L06_0015F5C4 __asm__("D_L06_0015F5C4");
@@ -6457,7 +6456,7 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
         clear_moby_list_state_18(*(int *)(moby_vars + 8));
         set_moby_state_3(D_L06_0015FFD8_301b90 + (*(int *)(moby_vars + 0x20) << 8));
         {
-            *(float *)((char *)((*(int *)(moby_vars + 0xC) << 7) + (int)D_L06_001600EC_301b90) + 0x38) += 10.0f;
+            ((LevelCuboid *)((*(int *)(moby_vars + 0xC) << 7) + (int)l06_cuboids))->pos.z += 10.0f;
             p = D_L06_001B0C30_301b90[*(int *)(moby_vars + 0x24)];
             qcopy(va, (char *)p + 0x20);
             qcopy(vb, (char *)p + 0x10);
@@ -6472,8 +6471,8 @@ void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) {
             FUN_L06_00312a78(va);
             FUN_L06_00312ad0(vc);
             {
-                char *q = D_L06_001600EC_301b90 + (*(int *)(moby_vars + 0x28) << 7);
-                set_race_camera(q + 0x30, q + 0x70, 0x72, 0);
+                LevelCuboid *q = &l06_cuboids[*(int *)(moby_vars + 0x28)];
+                set_race_camera(&q->pos, &q->rot, 0x72, 0);
             }
         }
         return;
@@ -6663,7 +6662,6 @@ extern int D_0015EE1D;
 extern int D_0015EE1C;
 extern int D_L06_0015F5C4;
 extern int D_L06_0015F594 __asm__("D_L06_0015F594");
-extern char *D_L06_001600EC_302578 __asm__("D_L06_001600EC");
 extern char *D_L06_0015FFD8_302578 __asm__("D_L06_0015FFD8");
 extern int D_L06_00179B90[] __asm__("D_L06_00179B90");
 extern char *D_L06_001B0C30_302578[] __asm__("D_L06_001B0C30");
@@ -6805,7 +6803,7 @@ void shuttle_update(struct Moby *moby) {
             }
         } else if (shuttle_vars->go == 0) {
             if (shuttle_vars->sel == 0 && is_point_inside_clip_volume((char *)&hero.motion.pos, shuttle_vars->zone[0]) != 0) {
-                int base = (int)D_L06_001600EC_302578;
+                int base = (int)l06_cuboids;
                 int ofs = shuttle_vars->cam[2] << 7;
                 qcopy(((float *)&moby->pos), (char *)(ofs + base + 0x30));
                 qcopy(((float *)&moby->rot), (char *)(ofs + base + 0x70));
@@ -6813,13 +6811,13 @@ void shuttle_update(struct Moby *moby) {
                 D_L06_0015FDF8 = 0;
             } else if (shuttle_vars->sel == 2 && is_point_inside_clip_volume((char *)&hero.motion.pos, shuttle_vars->zone[1]) != 0) {
                 int ofs = shuttle_vars->cam[0] << 7;
-                int base = (int)D_L06_001600EC_302578;
+                int base = (int)l06_cuboids;
                 qcopy(((float *)&moby->pos), (char *)(ofs + base + 0x30));
                 qcopy(((float *)&moby->rot), (char *)(ofs + base + 0x70));
                 shuttle_vars->sel = 0;
                 D_L06_0015FDF8 = 0;
             } else if (shuttle_vars->sel != 1 && is_point_inside_clip_volume((char *)&hero.motion.pos, shuttle_vars->zone[2]) != 0) {
-                int base = (int)D_L06_001600EC_302578;
+                int base = (int)l06_cuboids;
                 int ofs = shuttle_vars->cam[1] << 7;
                 qcopy(((float *)&moby->pos), (char *)(ofs + base + 0x30));
                 qcopy(((float *)&moby->rot), (char *)(ofs + base + 0x70));
@@ -6849,7 +6847,7 @@ void shuttle_update(struct Moby *moby) {
             set_selected_object_float_triplets(0.001f, 1.0f, 1.0f, 0.001f, 1.0f, 1.0f);
             set_camera_position(a);
             set_camera_rotation(rot);
-            set_race_camera(D_L06_001600EC_302578 + (shuttle_vars->cut << 7) + 0x30, D_L06_001600EC_302578 + (shuttle_vars->cut << 7) + 0x70, 0x72, 0);
+            set_race_camera(&l06_cuboids[shuttle_vars->cut].pos, &l06_cuboids[shuttle_vars->cut].rot, 0x72, 0);
             allocate_voice_302578(2, 0, moby);
         }
         break;
@@ -6860,7 +6858,7 @@ void shuttle_update(struct Moby *moby) {
             moby->state = 4;
             shuttle_vars->fF4 = 0;
             ofs = shuttle_vars->cam[shuttle_vars->sel] << 7;
-            base = (int)D_L06_001600EC_302578;
+            base = (int)l06_cuboids;
             qcopy(((float *)&moby->pos), (char *)(ofs + base + 0x30));
             qcopy(((float *)&moby->rot), (char *)(ofs + base + 0x70));
             euler_rotation_basis(((float *)&moby->rot_row0), ((float *)&moby->rot));
@@ -7047,7 +7045,6 @@ extern int allocate_voice_for_group_entry_303160(int, int, void *) __asm__("FUN_
 extern void push_piece_303160(float, struct Moby *, void *, void *, int) __asm__("FUN_L06_00303748");
 extern void break_apart_shuttle_linked_mobys(struct Moby *) __asm__("FUN_L06_00303b68");
 extern char D_L06_001B0C30_303160[] __asm__("D_L06_001B0C30");
-extern char *D_L06_001600EC_303160 __asm__("D_L06_001600EC");
 /* Moves the moby along three paths and plays the sound marked on the path points. */
 int update_shuttle_path_ride(char *moby, int path) {
     float rotation[4], position[4];
@@ -7057,7 +7054,7 @@ int update_shuttle_path_ride(char *moby, int path) {
     Path *third_path = ((Path **)D_L06_001B0C30_303160)[ride->path_c[path]];
     float time, first_index_f, first_fraction, third_fraction, angle, rate;
     int first_index, middle_index, third_index, marker, prev_marker;
-    char *sound;
+    LevelCuboid *sound;
 
     approach_value(&ride->progress, 1.0f, 1.0f / (float)scale_game_frames(0x4B0));
     time = ride->progress * (float)(first_path->n - 1);
@@ -7115,8 +7112,8 @@ int update_shuttle_path_ride(char *moby, int path) {
         first_path->p[first_index - 1].w = -1.0f;
         if (marker < 8 && prev_marker < 8) {
             allocate_voice_for_group_entry_303160(0, 0, moby);
-            sound = D_L06_001600EC_303160 + (ride->sound_slot[marker] << 7);
-            push_piece_303160(6.0f, (struct Moby *)moby, sound + 0x30, sound, 6);
+            sound = &l06_cuboids[ride->sound_slot[marker]];
+            push_piece_303160(6.0f, (struct Moby *)moby, &sound->pos, sound, 6);
         } else if (marker == 10 || prev_marker == 10) {
             allocate_voice_for_group_entry_303160(1, 0, moby);
             break_apart_shuttle_linked_mobys((struct Moby *)moby);
@@ -7322,14 +7319,6 @@ typedef struct Data_304098 {
     int f48;
 } Data_304098;
 
-typedef struct {
-    char pad0[0x30];
-    Vector_304098 a;
-    char pad40[0x30];
-    Vector_304098 b;
-} Cut;
-
-extern Cut *D_L06_001600EC_304098 __asm__("D_L06_001600EC");
 extern struct Moby *D_L06_0015FFD8_304098 __asm__("D_L06_0015FFD8");
 extern char D_0013F3D0[] NOT_SDA;
 typedef struct { char pad0[0x160]; float f160; int pad164; int f168; } Fx;
@@ -7415,8 +7404,8 @@ void red_button_update(struct Moby *moby) {
         break;
     case WAIT_CAMERA_START_DELAY:
         if (fast_dec_timer(&data->timer)) {
-            qcopy_nc(&camera_position, &D_L06_001600EC_304098[data->cut].a);
-            qcopy(&camera_rotation, &D_L06_001600EC_304098[data->cut].b);
+            qcopy_nc(&camera_position, &l06_cuboids[data->cut].pos);
+            qcopy(&camera_rotation, &l06_cuboids[data->cut].rot);
             moby->state = 5;
             data->t = 0.0f;
             data->vel = 0.0f;
@@ -7445,26 +7434,26 @@ void red_button_update(struct Moby *moby) {
         }
         previous_value = data->t;
         approach_two_stage_304098(&data->t, &data->vel, 2.0f, frame_time_sq, frame_time_sq, frame_time * 0.5f);
-        qcopy(&camera_position, &D_L06_001600EC_304098[data->cut].a);
+        qcopy(&camera_position, &l06_cuboids[data->cut].pos);
         camera_position.z = camera_position.z + data->t * 18.0f;
         set_camera_position(&camera_position);
-        set_camera_rotation(&D_L06_001600EC_304098[data->cut].b);
+        set_camera_rotation(&l06_cuboids[data->cut].rot);
         previous_value = previous_value * 100.0f;
         current_angle = data->t * 100.0f * 0.0174532925f;
         previous_value = previous_value * 0.0174532925f;
         entry = data->list;
         for (i = 8; i >= 0; i--, entry++) {
-            if (previous_value < D_L06_001600EC_304098[*entry].b.z && D_L06_001600EC_304098[*entry].b.z < current_angle) {
-                emit_red_button_particle_burst((int)moby, &D_L06_001600EC_304098[*entry].a);
+            if (previous_value < l06_cuboids[*entry].rot.z && l06_cuboids[*entry].rot.z < current_angle) {
+                emit_red_button_particle_burst((int)moby, &l06_cuboids[*entry].pos);
                 event_304098(0, 0, moby);
             }
         }
         if (1.075f <= data->t) {
-            set_race_camera(&D_L06_001600EC_304098[data->cut2].a, &D_L06_001600EC_304098[data->cut2].b, 0x72, 0);
+            set_race_camera(&l06_cuboids[data->cut2].pos, &l06_cuboids[data->cut2].rot, 0x72, 0);
             fade_to_black(scale_game_frames(10));
             moby->state = 6;
             jet_end_mount(3);
-            qcopy(&next_position, &D_L06_001600EC_304098[data->cut2].a);
+            qcopy(&next_position, &l06_cuboids[data->cut2].pos);
             next_position.z = next_position.z + 1.0f;
             next_position.y = next_position.y - 2.5f;
             clear_u64_value(&camera_rotation);
@@ -7478,7 +7467,7 @@ void red_button_update(struct Moby *moby) {
         break;
     case HOLD_OFFSET_CAMERA_UNTIL_PROGRESS_COMPLETE:
         approach_two_stage_304098(&data->t, &data->vel, 2.0f, frame_time_sq, frame_time_sq, frame_time + frame_time);
-        qcopy(&camera_rotation, &D_L06_001600EC_304098[data->cut2].a);
+        qcopy(&camera_rotation, &l06_cuboids[data->cut2].pos);
         camera_rotation.z = camera_rotation.z + 1.0f;
         camera_rotation.y = camera_rotation.y - 2.5f;
         clear_u64_value(&camera_position);
@@ -7489,7 +7478,7 @@ void red_button_update(struct Moby *moby) {
         if (2.0f <= data->t) {
             moby->state = 7;
             data->timer2 = scale_game_frames(0xE10);
-            set_race_camera(&D_L06_001600EC_304098[data->cut2].a, &D_L06_001600EC_304098[data->cut2].b, 0, 0);
+            set_race_camera(&l06_cuboids[data->cut2].pos, &l06_cuboids[data->cut2].rot, 0, 0);
             jet_end_mount(3);
             set_moby_state_two((unsigned char *)&D_L06_0015FFD8_304098[data->moby3]);
         }

@@ -580,7 +580,7 @@ typedef struct {
     f32 rest_height;       /* 0x3C */
 } BoltCrankVars;
 
-extern char *D_L01_001600EC;
+#include "rnc/overlay/cuboid.h"
 extern char D_L01_001BAAA0[];
 extern f32 D_L01_00167258_lui __asm__("D_L01_00167258") NOT_SDA;
 extern char *D_L01_00167280_lui __asm__("D_L01_00167280") NOT_SDA;
@@ -666,8 +666,8 @@ void bolt_crank_update(struct Moby *moby) {
                                 }
                                 hero_set_state(HERO_STATE_CRANK, 1);
                                 jet_mount(D_L01_00167240, D_L01_00167240 + 0x10, 3, scale_game_frames(0xB4), 0);
-                                set_camera_rotation(D_L01_001600EC + (crank->camera_point << 7) + 0x70);
-                                set_camera_position(D_L01_001600EC + (crank->camera_point << 7) + 0x30);
+                                set_camera_rotation(&l01_cuboids[crank->camera_point].rot);
+                                set_camera_position(&l01_cuboids[crank->camera_point].pos);
                                 set_camera_5_track_acceleration_yz(crank->camera_params[0], crank->camera_params[1]);
                                 moby->state = BOLT_CRANK_TURNING;
                                 crank->fall_speed = 0.0f;
@@ -699,8 +699,8 @@ void bolt_crank_update(struct Moby *moby) {
                 record_moby_context_bytes(crank, 4, moby, 2, D_L01_001BAAA0);
                 jet_clear_persistent(moby->mission);
                 if (crank->exit_camera_point != -1) {
-                    char *point = D_L01_001600EC + (crank->exit_camera_point << 7);
-                    jet_reset_camera(point + 0x30, point + 0x70);
+                    LevelCuboid *point = &l01_cuboids[crank->exit_camera_point];
+                    jet_reset_camera(&point->pos, &point->rot);
                 }
             }
             moby->pos.z = moby->pos.z - frame_time * 0.5f;
@@ -737,8 +737,8 @@ void bolt_crank_update(struct Moby *moby) {
                     record_moby_context_bytes(crank, 4, moby, 2, D_L01_001BAAA0);
                     jet_clear_persistent(moby->mission);
                     if (crank->exit_camera_point != -1) {
-                        char *point = D_L01_001600EC + (crank->exit_camera_point << 7);
-                        jet_reset_camera(point + 0x30, point + 0x70);
+                        LevelCuboid *point = &l01_cuboids[crank->exit_camera_point];
+                        jet_reset_camera(&point->pos, &point->rot);
                     }
                 }
             }
