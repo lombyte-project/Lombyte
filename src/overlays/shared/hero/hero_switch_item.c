@@ -3074,7 +3074,7 @@ void set_planar_vel(float radians) {
     struct Hero *hero_state = &hero;
     float        y;
     float        ground_speed;
-    float        out[4];
+    float        computed_velocity[4];
 
     y = hero_state->motion.rot.f[2];
     if (radians <= 3.14159274f) {
@@ -3093,12 +3093,12 @@ void set_planar_vel(float radians) {
         euler_rotation_matrix(matrix, ((char *)hero_state->moby) + 0x40);
         transform_vector(velocity_vector, velocity_vector, matrix);
 
-        qcopy(out, velocity_vector);
+        qcopy(computed_velocity, velocity_vector);
     } else {
-        build_spherical_offset(out, ground_speed, y, hero_state->ground_pitch.f);
+        build_spherical_offset(computed_velocity, ground_speed, y, hero_state->ground_pitch.f);
     }
 
-    qcopy(&hero.motion.velocity, out);
+    qcopy(&hero.motion.velocity, computed_velocity);
 }
 
 typedef unsigned int u128_2121c0_002121c0 __attribute__((mode(TI), aligned(16)));
