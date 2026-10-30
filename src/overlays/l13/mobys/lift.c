@@ -61,7 +61,7 @@ void update_lift(struct Moby *moby) {
         LIFT_WAIT_AT_TOP_FOR_HERO_TO_LEAVE = 6,
         LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE = 7
     };
-    LiftVarsA6D8 *vars = (LiftVarsA6D8 *)moby->pvars;
+    LiftVarsA6D8 *lift_vars = (LiftVarsA6D8 *)moby->pvars;
     float         delta[4];
     float         rot[4];
     float         mount_position_work[4];
@@ -71,37 +71,37 @@ void update_lift(struct Moby *moby) {
     fast_vec_scale(delta, &moby->pos, -1.0f);
     qcopy(rot, &moby->rot);
     moby->rot.y = fast_add_rotations(
-        (1.0f - (moby->pos.z - vars->bottom) / (vars->top - vars->bottom)) * 3.1415927f,
-        vars->angle * DEG_TO_RAD);
+        (1.0f - (moby->pos.z - lift_vars->bottom) / (lift_vars->top - lift_vars->bottom)) * 3.1415927f,
+        lift_vars->angle * DEG_TO_RAD);
     switch (moby->state) {
     case LIFT_INITIALIZE:
-        vars->pulse = random_angle_radians();
-        vars->voice = -1;
-        vars->timer = 0;
+        lift_vars->pulse = random_angle_radians();
+        lift_vars->voice = -1;
+        lift_vars->timer = 0;
         moby->state = 4;
         break;
     case LIFT_BLEND_TO_MOUNT_TRANSFORM: {
-        float old = vars->blend;
-        advance_accelerated_scalar(&vars->blend,
-                                   &vars->blend_speed,
+        float previous_mount_blend = lift_vars->blend;
+        advance_accelerated_scalar(&lift_vars->blend,
+                                   &lift_vars->blend_speed,
                                    1.0f,
                                    D_0015ED70 * 4.0f,
                                    D_0015ED70 * 4.0f,
                                    D_0015ED6C * 4.0f);
-        if (vars->blend < 1.0f) {
-            float remaining_blend_ratio = (1.0f - vars->blend) / (1.0f - old);
-            char *base;
+        if (lift_vars->blend < 1.0f) {
+            float remaining_blend_ratio = (1.0f - lift_vars->blend) / (1.0f - previous_mount_blend);
+            char *mount_rotation_reference_base;
             compute_lift_mount_transform(moby, mount_transform_work, mount_rotation);
             fast_vec_sub(mount_position_work, D_L13_001670C0, mount_transform_work);
-            base = D_L13_001670C0 - 0x140;
+            mount_rotation_reference_base = D_L13_001670C0 - 0x140;
             fast_vec_scale(mount_position_work, mount_position_work, remaining_blend_ratio);
             fast_vec_add(mount_transform_work, mount_transform_work, mount_position_work);
             mount_rotation[1] = fast_add_rotations(
-                fast_subtract_rotations(*(float *)(base + 0x154), mount_rotation[1]) *
+                fast_subtract_rotations(*(float *)(mount_rotation_reference_base + 0x154), mount_rotation[1]) *
                     remaining_blend_ratio,
                 mount_rotation[1]);
             mount_rotation[2] = fast_add_rotations(
-                fast_subtract_rotations(*(float *)(base + 0x158), mount_rotation[2]) *
+                fast_subtract_rotations(*(float *)(mount_rotation_reference_base + 0x158), mount_rotation[2]) *
                     remaining_blend_ratio,
                 mount_rotation[2]);
             set_camera_position(mount_transform_work);
@@ -116,25 +116,25 @@ void update_lift(struct Moby *moby) {
     case LIFT_MOVE_TO_TOP:
     case LIFT_MOVE_TO_BOTTOM: {
         float target;
-        if (!voice_is_playing(moby, vars->voice))
-            vars->voice = allocate_voice_for_target_entry(0, 4, moby);
+        if (!voice_is_playing(moby, lift_vars->voice))
+            lift_vars->voice = allocate_voice_for_target_entry(0, 4, moby);
         if (moby->command != 0) {
             compute_lift_mount_transform(moby, mount_position_work, mount_transform_work);
             set_camera_position(mount_position_work);
             set_camera_rotation(mount_transform_work);
         }
         if (moby->state == 2)
-            target = vars->top;
+            target = lift_vars->top;
         else
-            target = vars->bottom;
+            target = lift_vars->bottom;
         advance_accelerated_scalar(&moby->pos.z,
-                                   &vars->speed,
+                                   &lift_vars->speed,
                                    target,
                                    D_0015ED70 * 8.0f,
                                    D_0015ED70 * 8.0f,
                                    D_0015ED6C * 40.0f);
         if (absolute_float(moby->pos.z - target) == 0.0f) {
-            vars->timer = scale_game_frames(0x46);
+            lift_vars->timer = scale_game_frames(0x46);
             if (moby->state == 2)
                 moby->state = 6;
             else
@@ -146,11 +146,11 @@ void update_lift(struct Moby *moby) {
     }
     case LIFT_WAIT_AT_TOP_FOR_HERO_TO_LEAVE:
     case LIFT_WAIT_AT_BOTTOM_FOR_HERO_TO_LEAVE:
-        if (vars->timer != 0 && fast_dec_timer(&vars->timer))
+        if (lift_vars->timer != 0 && fast_dec_timer(&lift_vars->timer))
             hero_set_state(0, 0);
-        if (voice_is_playing(moby, vars->voice)) {
-            release_voice_slot(vars->voice);
-            vars->voice = -1;
+        if (voice_is_playing(moby, lift_vars->voice)) {
+            release_voice_slot(lift_vars->voice);
+            lift_vars->voice = -1;
         }
         if (hero.ground_moby != moby) {
             if (moby->state == 7)
@@ -162,8 +162,8 @@ void update_lift(struct Moby *moby) {
     case LIFT_IDLE_AT_TOP:
     case LIFT_IDLE_AT_BOTTOM: {
         int i;
-        vars->pulse = fast_add_rotations(vars->pulse, D_0015ED6C * 6.2831855f);
-        i = truncate_float_to_s32((fast_sin(vars->pulse) * 4.0f - 3.0f) * 128.0f);
+        lift_vars->pulse = fast_add_rotations(lift_vars->pulse, D_0015ED6C * 6.2831855f);
+        i = truncate_float_to_s32((fast_sin(lift_vars->pulse) * 4.0f - 3.0f) * 128.0f);
         if (i > 0x80)
             i = 0x80;
         else if (i < 0x20)
@@ -179,29 +179,29 @@ void update_lift(struct Moby *moby) {
             moby->state = 1;
             hero_set_state(0x72, 1);
             jet_mount(D_L13_001670C0, D_L13_001670C0 + 0x10, 1, 0, 0);
-            vars->blend = 0.0f;
+            lift_vars->blend = 0.0f;
             break;
         }
         if (moby->state == 4) {
             float d = vector_distance_xy(&moby->pos, &hero.motion.pos);
-            if (absolute_float(hero.ground_z.f - vars->bottom) < 2.0f && d < 32.0f && d > 5.0f) {
+            if (absolute_float(hero.ground_z.f - lift_vars->bottom) < 2.0f && d < 32.0f && d > 5.0f) {
                 moby->command = 0;
                 moby->state = 3;
-                vars->speed = -(D_0015ED6C * 5.0f);
+                lift_vars->speed = -(D_0015ED6C * 5.0f);
             }
         } else if (moby->state == 5) {
             float d = vector_distance_xy(&moby->pos, &hero.motion.pos);
-            if (absolute_float(hero.ground_z.f - vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
+            if (absolute_float(hero.ground_z.f - lift_vars->top) < 2.0f && d < 32.0f && d > 5.0f) {
                 moby->command = 0;
                 moby->state = 2;
-                vars->speed = D_0015ED6C * 5.0f;
+                lift_vars->speed = D_0015ED6C * 5.0f;
             }
         }
         break;
     }
     }
     fast_vec_add(delta, delta, &moby->pos);
-    update_entity_matrix(vars->path, delta, rot, &moby->rot);
+    update_entity_matrix(lift_vars->path, delta, rot, &moby->rot);
 }
 
 void compute_lift_mount_transform(struct Moby *moby, float *mount_position, float *mount_rotation) {
