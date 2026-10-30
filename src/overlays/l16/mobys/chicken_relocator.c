@@ -223,12 +223,12 @@ void update_chicken_relocator(struct Moby *moby) {
         case TARGET_STATUS_REPOSITION_READY:
             moby->state = 1;
             {
-                char *other = find_group_chicken_in_state_6(*(int *)target_cycle_data);
-                if (other != 0) {
+                char *moby_to_reposition = find_group_chicken_in_state_6(*(int *)target_cycle_data);
+                if (moby_to_reposition != 0) {
                     qcopy(pos, target + 0x10);
                     pos[2] += 1.0f;
                     pos[2] = probe_ground_height(pos, 0, 0.5f);
-                    reposition_moby_with_collision_check(other, pos);
+                    reposition_moby_with_collision_check(moby_to_reposition, pos);
                 }
             }
             break;
