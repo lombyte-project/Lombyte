@@ -981,16 +981,16 @@ void transform_hero_local_offset_to_world(float *out,
                                           float  y,
                                           float  z) __asm__("FUN_L00_00233660");
 
-void transform_hero_local_offset_to_world(float *out, float x, float y, float z) {
-    struct Hero *base;
+void transform_hero_local_offset_to_world(float *transformed_world_position, float x, float y, float z) {
+    struct Hero *hero_transform_state;
 
-    clear_u64_value(out);
-    base = &hero;
-    out[0] = x;
-    out[1] = y;
-    out[2] = z;
-    transform_vector(out, out, base->rot_matrix);
-    fast_vec_add(out, out, &base->motion.pos);
+    clear_u64_value(transformed_world_position);
+    hero_transform_state = &hero;
+    transformed_world_position[0] = x;
+    transformed_world_position[1] = y;
+    transformed_world_position[2] = z;
+    transform_vector(transformed_world_position, transformed_world_position, hero_transform_state->rot_matrix);
+    fast_vec_add(transformed_world_position, transformed_world_position, &hero_transform_state->motion.pos);
 }
 
 void FUN_L00_002334d0_002336e8(float) __asm__("FUN_L00_002334d0");
