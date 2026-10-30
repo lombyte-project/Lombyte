@@ -750,28 +750,28 @@ extern int beam_duration_frames_gp __asm__("D_L06_00161FD8") __attribute__((sda)
 void       initialize_blarg_space_commando_beam(char *moby) __asm__("FUN_L06_002ff100");
 
 void initialize_blarg_space_commando_beam(char *moby) {
-    char *vars = ((char *)MOBY(moby)->pvars);
+    char *commando_beam_state = ((char *)MOBY(moby)->pvars);
     float point_offset[4];
     int   i;
     probe_ground_height(moby + 0x10, 0, 0.5f);
-    fast_vec_normalize(vars + 0x220, D_L06_00174600_lui, 1.0f);
-    moby_point_position(moby, 0, vars + 0x210);
-    *(float *)(vars + 0x218) = MOBY(moby)->pos.z;
+    fast_vec_normalize(commando_beam_state + 0x220, D_L06_00174600_lui, 1.0f);
+    moby_point_position(moby, 0, commando_beam_state + 0x210);
+    *(float *)(commando_beam_state + 0x218) = MOBY(moby)->pos.z;
     for (i = 0; i < 16; i++) {
         float angle_offset = convert_integer_to_float(i) * 0.0625f - 0.5f;
         angle_offset = angle_offset * (beam_spread_degrees_gp * 0.017453292f);
         point_offset[0] = fast_cos(fast_add_rotations(angle_offset, MOBY(moby)->rot.z)) * 0.2f;
         point_offset[1] = fast_sin(fast_add_rotations(angle_offset, MOBY(moby)->rot.z)) * 0.2f;
         point_offset[2] = 0.15f;
-        fast_vec_add((float *)(vars + 0x230 + i * 16), (float *)(vars + 0x210), point_offset);
+        fast_vec_add((float *)(commando_beam_state + 0x230 + i * 16), (float *)(commando_beam_state + 0x210), point_offset);
         if (i == 0 || i == 15) {
-            float *endpoint_color_blend_factor = (float *)(vars + 0x23C + i * 16);
+            float *endpoint_color_blend_factor = (float *)(commando_beam_state + 0x23C + i * 16);
             *endpoint_color_blend_factor = *endpoint_color_blend_factor = 0.0f;
         } else {
-            *(float *)(vars + 0x23C + i * 16) = 1.0f;
+            *(float *)(commando_beam_state + 0x23C + i * 16) = 1.0f;
         }
     }
-    *(float *)(vars + 0x21C) = (float)scale_game_frames(beam_duration_frames_gp);
+    *(float *)(commando_beam_state + 0x21C) = (float)scale_game_frames(beam_duration_frames_gp);
 }
 /* Shared moby update: steps the timer at 0x21C, spaces 16 entries, and runs the pair checks. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002FF000.c: func_L06_003006F8), where it is exact; names translated to the US level program. */
