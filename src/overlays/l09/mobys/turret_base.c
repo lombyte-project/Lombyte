@@ -13,7 +13,7 @@ typedef unsigned int u128_ee380 __attribute__((mode(TI)));
 char *
 spawn_turret_base(struct Moby *owner, void *position, float angle) __asm__("FUN_L09_002efda8");
 
-char *spawn_turret_base(struct Moby *owner, void *position, float angle) {
+char *spawn_turret_base(struct Moby *source_moby, void *position, float angle) {
     u128_ee380 position_copy;
     void      *copy = &position_copy;
     char      *moby;
@@ -23,13 +23,13 @@ char *spawn_turret_base(struct Moby *owner, void *position, float angle) {
     if (moby != 0) {
         unsigned char state;
 
-        ((unsigned char *)moby)[0x30] = owner->update_dist;
-        state = owner->update_dist;
+        ((unsigned char *)moby)[0x30] = source_moby->update_dist;
+        state = source_moby->update_dist;
         moby[0x31] = 1;
         MOBY(moby)->draw_dist = state;
         qcopy(moby + 0x10, copy);
-        qcopy(moby + 0x40, &owner->rot);
-        MOBY(moby)->spawn_frame = owner->spawn_frame;
+        qcopy(moby + 0x40, &source_moby->rot);
+        MOBY(moby)->spawn_frame = source_moby->spawn_frame;
         update_entity(moby);
     }
     return moby;
