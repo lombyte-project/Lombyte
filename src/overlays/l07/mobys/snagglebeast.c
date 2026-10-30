@@ -297,33 +297,33 @@ collect_snagglebeast_navigation_ids(void *unused, void *dp, void *op) __asm__("F
 
 void *collect_snagglebeast_navigation_ids(void *unused, void *dp, void *op) {
     char *snagglebeast_moby_vars = dp;
-    int  *out = op;
+    int  *collected_navigation_ids = op;
     int   output_count = 0;
     int   output_candidate_0 = *(int *)(snagglebeast_moby_vars + 0x170);
     int   output_candidate_1, output_candidate_2, output_candidate_3, output_candidate_4,
         output_candidate_5;
     if (output_candidate_0 != -1)
-        out[output_count++] = output_candidate_0;
+        collected_navigation_ids[output_count++] = output_candidate_0;
     output_candidate_1 = *(int *)(snagglebeast_moby_vars + 0x174);
     if (output_candidate_1 != -1)
-        out[output_count++] = output_candidate_1;
+        collected_navigation_ids[output_count++] = output_candidate_1;
     output_candidate_2 = *(int *)(snagglebeast_moby_vars + 0x178);
     if (output_candidate_2 != -1)
-        out[output_count++] = output_candidate_2;
+        collected_navigation_ids[output_count++] = output_candidate_2;
     if ((((unsigned char)snagglebeast_moby_vars[0x19C] ^ 1) & 1)) {
         output_candidate_3 = *(int *)(snagglebeast_moby_vars + 0x17C);
         if (output_candidate_3 != -1)
-            out[output_count++] = output_candidate_3;
+            collected_navigation_ids[output_count++] = output_candidate_3;
     }
     if (!((unsigned char)snagglebeast_moby_vars[0x19C] & 2)) {
         output_candidate_4 = *(int *)(snagglebeast_moby_vars + 0x180);
         if (output_candidate_4 != -1)
-            out[output_count++] = output_candidate_4;
+            collected_navigation_ids[output_count++] = output_candidate_4;
     }
     if (!((unsigned char)snagglebeast_moby_vars[0x19C] & 4)) {
         output_candidate_5 = *(int *)(snagglebeast_moby_vars + 0x184);
         if (output_candidate_5 != -1)
-            out[output_count++] = output_candidate_5;
+            collected_navigation_ids[output_count++] = output_candidate_5;
     }
     return (void *)output_count;
 }
