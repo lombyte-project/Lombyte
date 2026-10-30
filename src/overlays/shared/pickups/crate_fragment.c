@@ -135,7 +135,7 @@ unsigned char *spawn_crate_debris(unsigned char *owner,
                                   float          lo,
                                   float          hi) __asm__("FUN_L00_002af8b0");
 
-unsigned char *spawn_crate_debris(unsigned char *owner,
+unsigned char *spawn_crate_debris(unsigned char *debris_source_moby,
                                   void          *initial_velocity,
                                   void          *spawn_position,
                                   void          *initial_rotation,
@@ -148,11 +148,11 @@ unsigned char *spawn_crate_debris(unsigned char *owner,
     if (debris_moby) {
         V_2af8b0 *debris_data = ((V_2af8b0 *)MOBY(debris_moby)->pvars);
         float     scale_multiplier;
-        debris_data->o = owner;
+        debris_data->o = debris_source_moby;
         debris_moby[0x30] = 0xFF;
         MOBY(debris_moby)->draw_dist = 0x7E;
         debris_moby[0x31] = 1;
-        MOBY(debris_moby)->spawn_frame = *(long *)(owner + 0x38);
+        MOBY(debris_moby)->spawn_frame = *(long *)(debris_source_moby + 0x38);
         debris_moby[0x20] = 0;
         MOBY(debris_moby)->rot.x = random_angle_radians();
         MOBY(debris_moby)->rot.y = random_angle_radians();
