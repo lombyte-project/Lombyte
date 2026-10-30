@@ -7,13 +7,13 @@ float random_float_between(float *, float, float) __asm__("FUN_002132a8");
 float random_angle_radians(void) __asm__("FUN_00213308");
 void  random_vector(float *out, float lo, float hi) __asm__("FUN_L00_00257d78");
 
-void random_vector(float *out, float lo, float hi) {
-    float radial_scale = random_float_between(out, lo, hi);
+void random_vector(float *generated_vector, float lo, float hi) {
+    float radial_scale = random_float_between(generated_vector, lo, hi);
     float azimuth_angle = random_angle_radians();
     float polar_angle = random_angle_radians();
-    out[0] = fast_cos(azimuth_angle) * fast_sin(polar_angle) * radial_scale;
-    out[1] = fast_sin(azimuth_angle) * fast_sin(polar_angle) * radial_scale;
-    out[2] = fast_cos(polar_angle) * radial_scale;
+    generated_vector[0] = fast_cos(azimuth_angle) * fast_sin(polar_angle) * radial_scale;
+    generated_vector[1] = fast_sin(azimuth_angle) * fast_sin(polar_angle) * radial_scale;
+    generated_vector[2] = fast_cos(polar_angle) * radial_scale;
 }
 
 /* Ported from rac1-decomp (src/overlays/shared/mobyutil_00258BC8.c: func_L00_00258E58), where it is exact; names translated to the US level program. */
