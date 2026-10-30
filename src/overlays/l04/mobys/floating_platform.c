@@ -28,10 +28,10 @@ void floating_platform_update(char *moby) {
         FLOATING_PLATFORM_INITIALIZE = 0,
         FLOATING_PLATFORM_UPDATE_MOTION = 1
     };
-    float old[4];
+    float previous_position[4];
     float delta[4];
     char *platform_vars = ((char *)MOBY(moby)->pvars);
-    qcopy(old, moby + 0x10);
+    qcopy(previous_position, moby + 0x10);
     if (platform_vars == 0) {
         mark_moby_for_removal(moby);
         return;
@@ -81,6 +81,6 @@ void floating_platform_update(char *moby) {
         break;
     }
     }
-    fast_vec_sub(delta, moby + 0x10, old);
+    fast_vec_sub(delta, moby + 0x10, previous_position);
     update_entity_matrix(platform_vars + 0x60, delta, moby + 0x40, moby + 0x40);
 }
