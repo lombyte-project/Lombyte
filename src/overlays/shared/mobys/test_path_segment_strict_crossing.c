@@ -173,7 +173,7 @@ s32 resolve_point_path_segment_xy_clearance(f32      distance,
                                             s32      path_index,
                                             OvlVec4 *point,
 
-                                            OvlVec4 *out) {
+                                            OvlVec4 *adjusted_point) {
     OvlVec4              difference;
     OvlVec4              scaled_difference;
     OvlVec4              working;
@@ -181,19 +181,19 @@ s32 resolve_point_path_segment_xy_clearance(f32      distance,
     OvlVec4              scaled_segment;
     OvlVec4              cross;
     OvlVec4              scaled_cross;
-    SegmentPath_261d78 **entry;
+    SegmentPath_261d78 **segment_path_slot;
     s32                  i;
     s32                  found;
 
     found = 0;
     qcopy_nc(&working, point);
     for (i = 0; i < D_L00_001B04B0_261d78[path_index]->count - 1; i++) {
-        entry = &D_L00_001B04B0_261d78[path_index];
-        if ((*entry)->points[i].f[3] == 0.0f && (*entry)->points[i + 1].f[3] == 0.0f)
+        segment_path_slot = &D_L00_001B04B0_261d78[path_index];
+        if ((*segment_path_slot)->points[i].f[3] == 0.0f && (*segment_path_slot)->points[i + 1].f[3] == 0.0f)
             continue;
-        fast_vec_sub(&difference, &working, &(*entry)->points[i]);
+        fast_vec_sub(&difference, &working, &(*segment_path_slot)->points[i]);
         difference.i[2] = 0;
-        fast_vec_sub(&segment, &(*entry)->points[i + 1], &(*entry)->points[i]);
+        fast_vec_sub(&segment, &(*segment_path_slot)->points[i + 1], &(*segment_path_slot)->points[i]);
         segment.i[2] = 0;
         fast_vec_normalize(&scaled_segment, &segment, 1.0f);
         fast_vec_cross(&cross, &difference, &scaled_segment);
@@ -207,7 +207,7 @@ s32 resolve_point_path_segment_xy_clearance(f32      distance,
                     continue;
                 found = 1;
                 fast_vec_normalize(&scaled_difference, &difference, distance);
-                fast_vec_add(&working, &scaled_difference, &(*entry)->points[i]);
+                fast_vec_add(&working, &scaled_difference, &(*segment_path_slot)->points[i]);
                 working.f[2] = point->f[2];
             } else {
                 found = 1;
@@ -215,13 +215,13 @@ s32 resolve_point_path_segment_xy_clearance(f32      distance,
                 fast_vec_sub(&scaled_difference, &difference, &scaled_cross);
                 fast_vec_normalize(&scaled_difference, &scaled_difference, distance);
                 fast_vec_add(&scaled_difference, &scaled_difference, &scaled_cross);
-                fast_vec_add(&working, &scaled_difference, &(*entry)->points[i]);
+                fast_vec_add(&working, &scaled_difference, &(*segment_path_slot)->points[i]);
                 working.f[2] = point->f[2];
             }
         }
     }
     if (found)
-        qcopy(out, &working);
+        qcopy(adjusted_point, &working);
     return found;
 }
 
