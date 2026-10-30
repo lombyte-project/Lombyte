@@ -27,8 +27,7 @@ typedef union {
     float        f[4];
 } __attribute__((aligned(16))) L16TransportVector;
 
-char *spawn_class_32_moby(char *owner, char *vec, void *pos, void *vel, int c) __asm__(
-    "FUN_L16_002a0dc0");
+char *spawn_class_32_moby(char *owner, char *vec, void *pos, void *vel, int c) __asm__("FUN_L16_002a0dc0");
 extern char *D_L16_0015FFD8;
 extern char *D_L16_001B0930[];
 extern f32   advance_accelerated_scalar(f32 *, f32 *, f32, f32, f32, f32) __asm__("func_00213F38");
@@ -65,8 +64,7 @@ extern void spawn_explosion(void *,
                             int,
                             int,
                             int) __asm__("FUN_L00_0025e450");
-void        update_armed_transport_damage_and_targeting(struct Moby *transport_moby) __asm__(
-    "FUN_L16_002e2b60");
+void        update_armed_transport_damage_and_targeting(struct Moby *transport_moby) __asm__("FUN_L16_002e2b60");
 
 extern void update_armed_transport_damage_and_targeting(struct Moby *) __asm__("FUN_L16_002e2b60");
 void        compute_armed_transport_path_headings(void *path_data) __asm__("FUN_L16_002e2fa0");

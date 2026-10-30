@@ -644,8 +644,7 @@ extern f32 secondary_beam_and_arc_second_pass_half_width_gp __asm__("D_L00_00161
     __attribute__((sda));
 extern f32 secondary_beam_second_pass_segment_extension_factor_gp __asm__("D_L00_00161634")
     __attribute__((sda));
-void draw_beam_and_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__(
-    "FUN_L00_002baae0");
+void draw_beam_and_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002baae0");
 void draw_beam_anchor_camera_facing_quads(void *mv) __asm__("FUN_L00_002bb0b0");
 
 void draw_beam_anchor_camera_facing_quads(void *) __asm__("FUN_L00_002bb0b0");
@@ -1319,8 +1318,7 @@ extern f32 walloper_arc_first_pass_half_width_gp __asm__("D_L00_00161690") __att
 extern f32 walloper_arc_second_pass_half_width_gp __asm__("D_L00_00161694") __attribute__((sda));
 f32        convert_integer_to_float(s32) __asm__("FUN_001fa6c0");
 s32        truncate_float_to_s32(f32) __asm__("FUN_001fa6d0");
-void       draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__(
-    "FUN_L00_002bbbc8");
+void       draw_walloper_arc_two_pass_quads(void *, s32, s32, s32, f32, f32, f32) __asm__("FUN_L00_002bbbc8");
 void draw_walloper_camera_facing_quad(void *mv) __asm__("FUN_L00_002bc1a0");
 
 void draw_walloper_camera_facing_quad(void *) __asm__("FUN_L00_002bc1a0");
@@ -2535,8 +2533,7 @@ extern int D_L00_00161798 __attribute__((sda));
 
 extern OvlQuad D_L00_001DC060[][20] NOT_SDA;
 extern OvlQuad D_L00_001DC1A0[][20] NOT_SDA;
-void draw_scrolling_ribbon_colored(void *, int, int, float, float, float, int, int) __asm__(
-    "FUN_L00_002be078");
+void draw_scrolling_ribbon_colored(void *, int, int, float, float, float, int, int) __asm__("FUN_L00_002be078");
 void draw_beam_pulse_quads(void *unused) __asm__("FUN_L00_002be650");
 
 void draw_beam_pulse_quads(void *) __asm__("FUN_L00_002be650");

@@ -760,8 +760,7 @@ extern int                  FUN_001efa68(void *, void *, int, int, int);
 extern int                  FUN_L00_00257b90(int, int);
 extern int                  trooper_play_sound(int, int, int, int) __asm__("FUN_L00_0028dc90");
 extern unsigned char        D_0013F350[];
-extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__(
-    "FUN_L00_0026a9f0");
+extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern void scale_vector_xyz_c(void *, void *, float) __asm__("FUN_001f9a68");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
@@ -1762,17 +1761,13 @@ extern float platform_height_return_gain_gp __asm__("D_L09_001619FC") __attribut
 
 #include "rnc/overlay/l09/mobys/asteroid_data/platform_update.h"
 
-extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__(
-    "FUN_L00_00262b00");
-extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void scale_vector_xyz_c3(void *, void *, float) __asm__("FUN_001f9a68");
-float       spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__(
-    "FUN_L00_0025bc98");
+float       spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 extern int   func_001F9850_2F9A50(int) __asm__("FUN_001f96f8");
 extern float func_001F9C78_2F9A50(void *a, void *b) __asm__("FUN_001f9ab0");
-extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, float) __asm__(
-    "FUN_L00_0025bc98");
+extern float func_L00_0025CCF0_2F9A50(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern unsigned char D_0013E633_2F9A50[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0[];
 

@@ -140,8 +140,7 @@ extern int     random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern float   randf_sym(float, float) __asm__("FUN_L00_00257c48");
 /* Dust puff emitter, declared in the argument order the other levels use (pos, three floats, n, vel, size, colour). */
 extern unsigned char *
-spawn_puff(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__(
-    "FUN_L00_0026d000");
+spawn_puff(void *pos, float r, float lo, float hi, int n, void *vel, float size, int color) __asm__("FUN_L00_0026d000");
 
 /* Emits n dust puffs evenly spaced along the segment from a to b. */
 void emit_sand_shark_dust_puffs_along_segment(void *moby,
@@ -352,8 +351,7 @@ extern void         random_vector(void *, float, float) __asm__("FUN_L00_00257d7
 extern void
 FUN_L00_00258278_c(void *, float, float *, float, float, float) __asm__("FUN_L00_00258278");
 extern void FUN_L00_00258b50(void *, void *, void *, void *, float);
-extern void play_entity_sound(void *, void *, float, int, float, float, int, int, int) __asm__(
-    "FUN_L00_002598b0");
+extern void play_entity_sound(void *, void *, float, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void FUN_L00_0025a120_e50(void *) __asm__("FUN_L00_0025a120");
 extern void
            turn_angle_e50(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
@@ -2963,8 +2961,7 @@ void        advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("F
 extern void advance_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002def80");
 extern void snap_transport_pod_rails_to_offsets(struct Moby *moby) __asm__("FUN_L02_002df0b0");
 extern void set_vendor_camera_mode(int, int) __asm__("FUN_L02_002f8a18");
-extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__(
-    "FUN_L02_002f8aa0");
+extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
 extern int D_0015EEA4_gp __asm__("D_0015EEA4") __attribute__((sda));
 /* Aridia lift: carries the hero between two stops, with its two rail mobys, gears and a camera path. */

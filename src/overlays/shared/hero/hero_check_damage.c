@@ -626,8 +626,7 @@ float score_hero_target_candidate(
 
 extern char *active_mobies[] __asm__("D_L00_001ABA00") NOT_SDA;
 float       *suck_get_aim_height(char *) __asm__("FUN_002141f8");
-float        score_hero_target_candidate(char *, float, float, float, float, int *) __asm__(
-    "FUN_L00_0020d6b0");
+float        score_hero_target_candidate(char *, float, float, float, float, int *) __asm__("FUN_L00_0020d6b0");
 char *find_best_hero_heading_target(float range_limit,
                                     float reference_yaw,
                                     float angular_error_limit,
@@ -684,8 +683,7 @@ int                  FUN_L00_0020d498_20da68(int) __asm__("FUN_L00_0020d498");
 char                *allocate_moby_animation_slot(char *, int) __asm__("FUN_L00_0024f028");
 float                FUN_00213ed8_20da68(void *, float, float) __asm__("FUN_00213ed8");
 void                 release_moby_animation_slot(char *, char **) __asm__("FUN_L00_0024f0e8");
-void                 initialize_moby_animation_blend(char *, char *, int, int, int, int) __asm__(
-    "FUN_L00_0024f3e0");
+void                 initialize_moby_animation_blend(char *, char *, int, int, int, int) __asm__("FUN_L00_0024f3e0");
 void FUN_L00_0024f190_20da68(char *, char *) __asm__("FUN_L00_0024f190");
 void update_hero_condition_animation(void) __asm__("FUN_L00_0020da68");
 
@@ -3260,8 +3258,7 @@ typedef struct {
 } __attribute__((aligned(16))) Vec4_002126b8;
 
 void clip_negative_segment_endpoint_xyz(Vec4_002126b8 *, void *) __asm__("FUN_L00_0025d238");
-void hero_get_collision_ray_endpoints(Vec4_002126b8 *, Vec4_002126b8 *, int, float, float) __asm__(
-    "FUN_L00_002126b8");
+void hero_get_collision_ray_endpoints(Vec4_002126b8 *, Vec4_002126b8 *, int, float, float) __asm__("FUN_L00_002126b8");
 void hero_get_collision_ray_endpoints(
 
     Vec4_002126b8 *ray_start, Vec4_002126b8 *ray_end, int mode, float fa, float fb) {

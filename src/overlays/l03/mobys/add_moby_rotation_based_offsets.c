@@ -61,10 +61,8 @@ extern float moby_rotation_oscillation_first_phase_rate_gp __asm__("D_L03_00161B
     __attribute__((sda));
 extern float moby_rotation_oscillation_second_phase_rate_gp __asm__("D_L03_00161BE8")
     __attribute__((sda));
-extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__(
-    "FUN_L00_00262b00");
-extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
 void update_moby_oscillation(struct Moby *moby) __asm__("FUN_L03_002dd0f0");
 

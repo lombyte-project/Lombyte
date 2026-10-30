@@ -1054,8 +1054,7 @@ struct DriftEmitter {
 };
 
 extern struct DriftEmitter D_L01_001DEB38;
-extern s32 move_moby_with_collision_integer_radius(void *, void *, s32, s32, f32, f32) __asm__(
-    "FUN_L00_00258ad0");
+extern s32 move_moby_with_collision_integer_radius(void *, void *, s32, s32, f32, f32) __asm__("FUN_L00_00258ad0");
 
 /* shrinks and sinks the moby, then hands it to the drift emitter */
 s32 update_sand_mouse_fall_motion(void        *ctx,
@@ -2925,8 +2924,7 @@ int launch_suck_cannon_projectile_and_sync_moby_state(struct Moby *moby,
     return projectile_launch_result;
 }
 
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern void  blend_moby_animation(void *m, int a, int b, int c) __asm__("FUN_00212f90");
 extern float D_0015ED70_lui __asm__("D_0015ED70");
 
@@ -3259,13 +3257,11 @@ extern s32  select_point_index_by_distance(void *, PathNodes *, f32) __asm__("FU
 extern void
 compute_path_node_tangent(QVec *, PathCursor *, s32, f32, f32) __asm__("FUN_L01_0028b8c8");
 extern f32 FUN_00213308(void);
-extern f32 compute_sampled_spline_path_lengths(f32, f32, PathCursor *, s32, struct Moby *) __asm__(
-    "FUN_L01_0028bb90");
+extern f32 compute_sampled_spline_path_lengths(f32, f32, PathCursor *, s32, struct Moby *) __asm__("FUN_L01_0028bb90");
 extern void FUN_0022d798(s32);
 extern s32  advance_path_node_index(PathCursor *) __asm__("FUN_L01_0028b878");
 extern s32  resolve_path_node_index(PathCursor *, s32) __asm__("FUN_L01_0028b828");
-extern void evaluate_cubic_hermite_segment(f32, QVec *, QVec *, QVec *, QVec *, QVec *) __asm__(
-    "FUN_L01_0028ba80");
+extern void evaluate_cubic_hermite_segment(f32, QVec *, QVec *, QVec *, QVec *, QVec *) __asm__("FUN_L01_0028ba80");
 extern f32  FUN_L00_00258110(f32 *, f32, f32, f32, f32, f32);
 extern f32  normalize_angle(f32) __asm__("FUN_L00_0025e310");
 extern void spawn_type_10_particle(QVec *, QVec *) __asm__("FUN_L01_0027f660");

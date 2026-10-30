@@ -31,8 +31,7 @@ extern f32
 extern f32
     blarg_heavy_interceptor_group_wait_return_path_traversal_speed_gp __asm__("D_L14_001613F4")
         __attribute__((sda));
-extern f32 blarg_heavy_interceptor_group_wait_return_path_position_easing_factor_gp __asm__(
-    "D_L14_001613F8") __attribute__((sda));
+extern f32 blarg_heavy_interceptor_group_wait_return_path_position_easing_factor_gp __asm__("D_L14_001613F8") __attribute__((sda));
 extern s32 blarg_heavy_interceptor_patrol_glow_red_gp __asm__("D_L14_00161400")
     __attribute__((sda));
 extern s32 blarg_heavy_interceptor_patrol_glow_green_gp __asm__("D_L14_00161404")

@@ -593,8 +593,7 @@ char *spawn_poison_vessel_effect_moby(void *position,
                                       int   effect_mode) __asm__("FUN_L13_0030c138");
 
 extern char *spawn_poison_vessel_effect_moby(void *, void *, int, int) __asm__("FUN_L13_0030c138");
-extern void  spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__(
-    "FUN_L00_0026a9f0");
+extern void  spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern char *spawn_randomly_rotated_colored_moby(void *,
                                                  void *,
                                                  void *,
@@ -994,8 +993,7 @@ extern int  FUN_L00_00261b48(int, void *, void *, void *);
 extern s32  rand(void);
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void FUN_L00_00258278(void *moby, float *vel, float target, float k, float d, float max);
-extern void sweep_hit_segment(void *, void *, void *, void *, struct Moby *, Shot *, int) __asm__(
-    "FUN_L00_00259d08");
+extern void sweep_hit_segment(void *, void *, void *, void *, struct Moby *, Shot *, int) __asm__("FUN_L00_00259d08");
 extern void FUN_L00_0025a120(void *);
 extern void
 approach_angle(float *, float, float *, float, float, float) __asm__("FUN_L00_0025be00");
@@ -1030,8 +1028,7 @@ extern float l13_blarg_space_commando_probe_trigger_distance_xy __asm__("D_L13_0
     __attribute__((sda));
 extern float l13_blarg_space_commando_horizontal_speed_limit_base __asm__("D_L13_00161E78")
     __attribute__((sda));
-extern void func_L00_002592B0_309330(struct Moby *, float, float *, float, float, float) __asm__(
-    "FUN_L13_00263fc8");
+extern void func_L00_002592B0_309330(struct Moby *, float, float *, float, float, float) __asm__("FUN_L13_00263fc8");
 
 void blarg_space_commando_update(struct Moby *moby) __asm__("FUN_L13_00307e98");
 
@@ -1447,8 +1444,7 @@ extern s32
 find_target_8d10(f32, struct Moby *, void *, s32, s32, s32 *, s32) __asm__("FUN_L00_0025ff38");
 
 /* Walker update: takes hits (knocked back, or dies at no health), picks its target and falls onto or slides off the ground. */
-void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby *moby) __asm__(
-    "FUN_L13_00308d10");
+void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby *moby) __asm__("FUN_L13_00308d10");
 
 void update_blarg_space_commando_damage_targeting_and_ground_motion(struct Moby *moby) {
     enum {
@@ -2487,8 +2483,7 @@ void update_gemlik_scene_controller(struct Moby *moby) {
 
 extern char *D_L13_001B07B0[];
 extern int   FUN_L00_0025df68(void *, void *, float *, int *, float *, int, float, float, float);
-extern int   compute_advanced_moby_path_position(void *, void *, void *, int, int, float) __asm__(
-    "FUN_L09_00294ae0");
+extern int   compute_advanced_moby_path_position(void *, void *, void *, int, int, float) __asm__("FUN_L09_00294ae0");
 
 void update_moby_path_follower(struct Moby *moby) __asm__("FUN_L13_0030bb70");
 

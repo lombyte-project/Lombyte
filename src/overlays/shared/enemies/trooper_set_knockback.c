@@ -25,8 +25,7 @@ void trooper_set_knockback(float *knockback_state,
 #include "eetypes.h"
 #include "rnc/math/fast_math.h"
 
-extern void *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__(
-    "FUN_L00_002712b8");
+extern void *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
 extern void *spawn_burst(void *, void *, s32, s32, s32, s32, f32) __asm__("FUN_L00_0026cbb0");
 
 void emit_radial_particle_burst(char *orientation_source,

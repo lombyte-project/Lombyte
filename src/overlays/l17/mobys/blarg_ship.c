@@ -928,8 +928,7 @@ extern void *FUN_L00_00263fd8(char  *src,
                               float *v12);
 
 extern float D_L17_0015F580_macro[] __asm__("D_L17_0015F580") MACRO_ADDR;
-void         update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) __asm__(
-    "FUN_L17_002f5390");
+void         update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) __asm__("FUN_L17_002f5390");
 
 void update_hit_triggered_fragment_and_placement_spawner(struct Moby *moby) {
     enum {
@@ -1031,8 +1030,7 @@ void compute_reflection_sphere_map_uvs(
 
 extern char reflection_strip_uv_buffer[] __asm__("D_L17_001DE8A0");
 extern void FUN_L00_001fde98(int, int, int, void *, int);
-void        compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__(
-    "FUN_L17_002f54d8");
+void        compute_reflection_sphere_map_uvs(int n, V3 *b, V3 *a, int unused, float *out) __asm__("FUN_L17_002f54d8");
 
 int D_L17_001623F0[2] = {26, 26};
 

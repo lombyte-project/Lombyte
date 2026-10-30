@@ -698,8 +698,7 @@ extern int  collision_hit_material(void) __asm__("FUN_001f0b58");
 extern void blend_moby_animation(Moby *, int, int, int) __asm__("FUN_00212f90");
 /* Argument order as the chicken passes them: the order of their definitions changes the code. */
 extern void FUN_L00_00263ac8(void *, int, void *, float);
-extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__(
-    "FUN_L00_0026ced0");
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern int FUN_L00_001f2868(void *, float, int, void *, void *);
 void       spawn_explosion(char         *m,
                            void         *unused,
@@ -720,8 +719,7 @@ void       spawn_explosion(char         *m,
                            int           s18,
                            unsigned char flag) __asm__("FUN_L00_0025e450");
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 unsigned char *spawn_feather_moby(int unused, void *pos, float *vel) __asm__("FUN_L00_002cbf68");
 extern int     FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
 extern void    FUN_L00_00258278(void *, float *, float, float, float, float);
@@ -1273,8 +1271,7 @@ s32 FUN_L00_002caf40(s32 moby_address) {
 
 typedef int w128 __attribute__((mode(TI)));
 
-extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__(
-    "FUN_L00_0026daa0");
+extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 extern char  collision_hit_point[] __asm__("D_L00_00173E60");
 extern f32   fast_vec_length(void *) __asm__("func_001F9AF0");
 extern float D_0015ED6C;

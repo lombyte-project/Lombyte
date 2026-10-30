@@ -176,8 +176,7 @@ extern void glow_quads_draw() __asm__("FUN_L00_0023db30");
 extern void FUN_L00_002935b8();
 extern void emit_moby_particle_pairs(VeldinMoby *) __asm__("FUN_L00_0023e008");
 extern void FUN_L00_00257024(void *);
-extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, s32, f32) __asm__(
-    "FUN_L00_0026ced0");
+extern void spawn_effect_particle_with_target_scalar(void *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0026ced0");
 extern VeldinLevelState D_L00_0016C860;
 
 void apply_level_specific_cutscene_moby_effects(void) __asm__("FUN_L00_0023e268");

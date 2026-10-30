@@ -47,8 +47,7 @@ extern float FUN_L00_0025bb38_0025bc98(float, int, float) __asm__("FUN_L00_0025b
 extern void
 advance_damped_scalar_velocity(float *, float, float, float, float) __asm__("FUN_L00_0025b798");
 
-float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__(
-    "FUN_L00_0025bc98");
+float spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 float spring_angle(float *current_angle,
                    float *angular_velocity,
                    int    rotation_direction,

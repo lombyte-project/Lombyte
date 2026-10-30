@@ -2,8 +2,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
 
-void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) __asm__(
-    "FUN_00200e08");
+void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) __asm__("FUN_00200e08");
 
 void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) {
     u64 *packet_words;

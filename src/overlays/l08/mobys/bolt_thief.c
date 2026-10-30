@@ -2340,8 +2340,7 @@ extern unsigned char *FUN_L00_00272060(
 extern unsigned char D_0014BEC0[][4];
 extern unsigned char D_L08_0015FC88_macro[] __asm__("D_L08_0015FC88") MACRO_ADDR;
 extern void          FUN_L00_0025f730_c(void *a, float x) __asm__("FUN_L00_0025f730");
-extern void convert_pose_to_reference_local(void *, int, void *, void *, void *, void *) __asm__(
-    "FUN_L00_00260668");
+extern void convert_pose_to_reference_local(void *, int, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void build_axis_roll_matrix(void *, void *, float) __asm__("FUN_L08_0026a0f8");
 extern void FUN_L08_002e4e90_c(char *m, float *out, float *rot) __asm__("FUN_L08_002e4e90");
 extern void FUN_L08_002e5188_c(char *m) __asm__("FUN_L08_002e5188");

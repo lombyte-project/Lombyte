@@ -74,8 +74,7 @@ typedef struct {
 } V4 __attribute__((aligned(16)));
 
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__(
-    "FUN_L00_0025aca0");
+extern int generate_random_points_from_shape_entries(void *, int, void *, void *, float) __asm__("FUN_L00_0025aca0");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 
 void spawn_particles_at_shape_points(void *source_object,
@@ -151,8 +150,7 @@ typedef struct {
 } B_25c558;
 
 void blend_moby_animation_ex(void *, int, int, int, int) __asm__("FUN_002130d8");
-void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) __asm__(
-    "FUN_L00_0025c558");
+void trooper_start_knockback(u8 *a, B_25c558 *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void trooper_start_knockback(u8       *moby,
                              B_25c558 *knockback_state,
                              int       animation_index,

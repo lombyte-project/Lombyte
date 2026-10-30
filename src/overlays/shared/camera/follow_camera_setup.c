@@ -1264,8 +1264,7 @@ extern int         test_follow_camera_point_in_collision_volume(void *) __asm__(
 extern int         FUN_L00_001f0d60_2e7a30(void *, int, int, float) __asm__("FUN_L00_001f0d60");
 extern int         FUN_L00_002e79c8_2e7a30(void *, int, void *, float) __asm__("FUN_L00_002e79c8");
 
-int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) __asm__(
-    "FUN_L00_002e7a30");
+int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) __asm__("FUN_L00_002e7a30");
 
 int resolve_follow_camera_orbit_path_collisions(unsigned char *camera_moby) {
     OvlQuad        initial_orbit_vector[1];

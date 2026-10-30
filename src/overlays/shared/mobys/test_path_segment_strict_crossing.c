@@ -561,8 +561,7 @@ void clear_moby_transform_history(char *history_state) {
 float spring_angle(void *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
 void  build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 
-void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) __asm__(
-    "FUN_L00_002628d8");
+void update_joint_animation(void *m, unsigned char *p, int c, float fa, float fb) __asm__("FUN_L00_002628d8");
 void update_joint_animation(
 
     void *moby, unsigned char *joint_animation_state, int joint_index, float fa, float fb) {

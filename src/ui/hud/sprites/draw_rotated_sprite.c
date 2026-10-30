@@ -15,8 +15,7 @@ struct Vec4 {
 extern f32 fast_cos(f32) __asm__("func_001F9DC8");
 extern f32 fast_sin(f32) __asm__("func_001F9DE0");
 
-void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f32 ang) __asm__(
-    "FUN_00200600");
+void draw_rotated_sprite(s32 w, s32 h, s64 buf, f32 x, f32 y, f32 cx, f32 cy, f32 ang) __asm__("FUN_00200600");
 
 void draw_rotated_sprite(s32 texture_width,
                          s32 texture_height,

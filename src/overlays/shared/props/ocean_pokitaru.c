@@ -188,8 +188,7 @@ initialize_hit_descriptor(float, void *, struct Moby *, int) __asm__("FUN_L00_00
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern char *FUN_L00_0026dd20_c(void *, void *, int, int, float) __asm__("FUN_L00_0026dd20");
 extern void  mark_moby_for_removal(void *) __asm__("FUN_0020c828");
-char *select_homing_missile_target(float *pos, float *aim, float r1, float r2, float maxd) __asm__(
-    "FUN_L11_00308670");
+char *select_homing_missile_target(float *pos, float *aim, float r1, float r2, float maxd) __asm__("FUN_L11_00308670");
 
 static inline void copy_xyz_089d0(float *dst, float *src) {
     dst[0] = src[0];

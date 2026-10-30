@@ -2,8 +2,7 @@
 #include "rnc/rendering/dma_tag.h"
 #include "rnc/rendering/screen.h"
 
-void draw_hud_rect_depth(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, u32 z, s32 pixels) __asm__(
-    "FUN_00200f90");
+void draw_hud_rect_depth(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, u32 z, s32 pixels) __asm__("FUN_00200f90");
 
 void draw_hud_rect_depth(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, u32 z, s32 pixels) {
     u64 *packet_words;

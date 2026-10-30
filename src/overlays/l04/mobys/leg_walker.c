@@ -373,8 +373,7 @@ extern s32 rig_probe(void *, s32, f32, struct Moby *, f32) __asm__("FUN_L00_001f
 extern f32 D_0015ED60;
 extern s32 D_L04_00173FF0[] NOT_SDA;
 
-s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) __asm__(
-    "FUN_L04_00295778");
+s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) __asm__("FUN_L04_00295778");
 
 s32 leg_walker_update(struct Moby *moby, LegRig *rig, f32 speed, f32 heading, f32 step) {
     union {

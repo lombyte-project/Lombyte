@@ -413,8 +413,7 @@ int          FUN_L00_0025ff38(float best,
                               int   region_count);
 int  select_moby_record_by_xy_distance(char *a, char *o, float best) __asm__("FUN_L04_00252e18");
 void trooper_knockback_arc(void *v, float *ang, float *s1, float *s2) __asm__("FUN_L00_0025ab48");
-void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__(
-    "FUN_L00_0025c558");
+void trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void        FUN_L01_0026e090_c(int i, int v) __asm__("FUN_L01_0026e090");
 extern void func_L00_0025E4B0_2C73D0(void *, void *) __asm__("FUN_L00_0025d458");
 extern void func_L00_0025BBA0_2C73D0(void *, float *, void *, void *) __asm__("FUN_L00_0025ab48");

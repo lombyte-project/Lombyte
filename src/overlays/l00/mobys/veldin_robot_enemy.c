@@ -512,8 +512,7 @@ typedef struct {
 extern s16  scale_game_frames(s32) __asm__("FUN_001f96f8");
 extern void FUN_L00_00257470(ElectroidMoby *, s32, s32);
 extern void
-hit_reaction(ElectroidMoby *, ElectroidHit *, void *, s32, s32 *, f32 *, s32, s32) __asm__(
-    "FUN_L00_0025a478");
+hit_reaction(ElectroidMoby *, ElectroidHit *, void *, s32, s32 *, f32 *, s32, s32) __asm__("FUN_L00_0025a478");
 extern void trooper_knockback_arc(ElectroidVec *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
 extern void
 trooper_start_knockback(ElectroidMoby *, void *, s32, s32, s32, f32) __asm__("FUN_L00_0025c558");

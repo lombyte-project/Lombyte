@@ -371,8 +371,7 @@ void resort_owner_update(struct Moby *moby) {
 
 extern int   is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
 extern float FUN_L00_0025abf0(void *, void *, float, int, float);
-extern void  transform_attachment_pose(void *, void *, void *, void *, void *, void *) __asm__(
-    "FUN_L00_002604f0");
+extern void  transform_attachment_pose(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern void  FUN_00212f90(void *, int, int, int);
 extern float D_0015ED70;
 extern float D_0015ED6C;
@@ -1300,8 +1299,7 @@ extern void          FUN_L11_002f2cd0_2518(char *) __asm__("FUN_L11_002f2cd0");
 extern void          FUN_L11_002f2d58_2518(char *) __asm__("FUN_L11_002f2d58");
 extern void          update_teleporter_child_transforms(char *) __asm__("FUN_L01_003092d0");
 extern void          request_hero_target_pose(float *, int, float) __asm__("FUN_L00_00233ee8");
-extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__(
-    "FUN_L00_002598b0");
+extern void FUN_L00_002598b0_2518(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern int get_hero_target_pose_status(void) __asm__("FUN_L00_00233f38");
 extern void
 advance_accelerated_scalar(float *, float *, float, float, float, float) __asm__("FUN_00213f38");
@@ -1681,8 +1679,7 @@ typedef struct {
     unsigned char     unk70;
 } MobyAnim_309378;
 
-extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__(
-    "FUN_L00_0026daa0");
+extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 void blend_moby_animation_309378(MobyAnim_309378 *arg0,
                                  int              arg1,
                                  int              arg2,
@@ -1771,8 +1768,7 @@ extern unsigned char D_0013E550_309ac0[] __asm__("D_0013E550");
 extern void         *D_0013F64C_lui __asm__("D_0013F64C") NOT_SDA;
 extern float         random_angle_radians(void) __asm__("FUN_00213308");
 extern void          scale_vec_309ac0(float *, float) __asm__("FUN_L00_0025f730");
-extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void follow_camera_set_distance(int, float, float) __asm__("FUN_L00_002e8450");
 extern void follow_camera_set_height(float, float) __asm__("FUN_L00_002e84b8");
 void        update_pokitaru_boat_joint_effects(struct Moby *moby) __asm__("FUN_L11_0030a500");

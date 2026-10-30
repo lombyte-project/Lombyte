@@ -371,8 +371,7 @@ extern int   rand(void) __asm__("FUN_001160d8");
 extern void  add_random_offset_to_vector_xyz(float *v, float s) __asm__("FUN_L00_0025f8e0");
 extern float
 FUN_L00_0025abf0_2bef68(void *, void *, void *, float, float) __asm__("FUN_L00_0025abf0");
-extern char *spawn_class_221_moby(char *owner, float *pos, float *dir, short ang, int arg) __asm__(
-    "FUN_L03_002c45d8");
+extern char *spawn_class_221_moby(char *owner, float *pos, float *dir, short ang, int arg) __asm__("FUN_L03_002c45d8");
 extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern char  D_L03_00166EC0[];
 extern char  D_0013E533_2bef68[] __asm__("D_0013E533");
@@ -1118,8 +1117,7 @@ typedef struct {
     float         fraction_b;
 } HWork49;
 
-char *spawn_homing_spark_projectile(char *a, char *pos, int c, int d, float f) __asm__(
-    "FUN_L03_002d5208");
+char *spawn_homing_spark_projectile(char *a, char *pos, int c, int d, float f) __asm__("FUN_L03_002d5208");
 extern char *D_L03_0015FFD8_c __asm__("D_L03_0015FFD8") __attribute__((sda));
 extern f32   random_angle_radians(void) __asm__("func_00213308");
 extern float D_0015ED6C;

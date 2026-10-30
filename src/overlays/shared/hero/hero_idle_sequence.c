@@ -554,8 +554,7 @@ extern unsigned char D_0013D4D5[];
 extern void reset_numeric_hud_element_32x32_base(void) __asm__("FUN_L00_00235dc0");
 extern void update_hud_panel_visibility(void) __asm__("FUN_L00_0023a218");
 extern void draw_hud_bolt_exclamation_panel(void) __asm__("FUN_L00_0023a2d0");
-s32         queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__(
-    "FUN_001ff308");
+s32         queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
 
 void update_hero_bolt_exclamation_hud(void) __asm__("FUN_L00_00205ea8");
 
@@ -1486,8 +1485,7 @@ typedef struct {
 } S13F350;
 
 extern float D_0015ED6C;
-void         update_moby_vertical_oscillation(char *, float *, float *, float, float) __asm__(
-    "FUN_L00_00262b00");
+void         update_moby_vertical_oscillation(char *, float *, float *, float, float) __asm__("FUN_L00_00262b00");
 extern char D_L00_0017A6C0[] NOT_SDA;
 void        apply_hero_vertical_oscillation(void) __asm__("FUN_L00_002078a8");
 
@@ -1519,8 +1517,7 @@ void apply_hero_vertical_oscillation(void) {
 
 /* Ported from rac1-decomp (src/overlays/shared/help_00203E98.c: func_L00_00208000), where it is exact; names translated to the US level program. */
 
-extern void update_moby_rotation_oscillation(int, char *, char *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_rotation_oscillation(int, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
 void apply_hero_rotation_oscillation(void) __asm__("FUN_L00_002079e8");
 
@@ -2351,8 +2348,7 @@ extern void FUN_00254b58_002092c8(s32) __asm__("FUN_L00_00254b58");
 /* Packs the scratchpad joints listed in joints[1..] (ended by a negative
    entry) into pose: every rotation, padding identity rotations, the scales
    that are not 1.0 and the translations that differ from the bind pose. */
-void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) __asm__(
-    "FUN_L00_002092c8");
+void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) __asm__("FUN_L00_002092c8");
 
 void pack_pose(s32 *joints, PackedPose *pose, u8 *model, s32 padding, s32 context) {
     u64 *out;
@@ -3543,11 +3539,9 @@ extern int           FUN_001efa68_c(void *, void *, int, int, int) __asm__("FUN_
 extern int           collision_hit_material(void) __asm__("FUN_001f0b58");
 extern int           rig_probe() __asm__("FUN_L00_001f19a0");
 extern unsigned char D_0013F350[];
-void predict_position_with_vertical_drop(void *a, void *b, void *c, int d, float f) __asm__(
-    "FUN_L00_00259508");
+void predict_position_with_vertical_drop(void *a, void *b, void *c, int d, float f) __asm__("FUN_L00_00259508");
 extern char D_0013F450_20C568[] __asm__("D_0013F350");
-extern void predict_position_with_vertical_drop(void *a, void *b, void *c, int d, float f) __asm__(
-    "FUN_L00_00259508");
+extern void predict_position_with_vertical_drop(void *a, void *b, void *c, int d, float f) __asm__("FUN_L00_00259508");
 extern int  func_L00_001EFFF0_20C568(void *, void *, int, int, int) __asm__("FUN_001efa68");
 extern int  func_L00_001F3958_20C568(void) __asm__("FUN_001f0b58");
 extern Obj *FUN_L00_002603d0(char *);

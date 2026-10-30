@@ -1028,8 +1028,7 @@ extern short D_L15_00161C70_gp __asm__("D_L15_00161C70") __attribute__((sda));
 extern short D_L15_00161C74_gp __asm__("D_L15_00161C74") __attribute__((sda));
 extern short D_L15_00161C78_gp __asm__("D_L15_00161C78") __attribute__((sda));
 extern short D_L15_00161CA0_gp __asm__("D_L15_00161CA0") __attribute__((sda));
-extern void  draw_beam_and_arc_two_pass_quads(char *, int, int, int, float, float, float) __asm__(
-    "FUN_L00_002baae0");
+extern void  draw_beam_and_arc_two_pass_quads(char *, int, int, int, float, float, float) __asm__("FUN_L00_002baae0");
 extern void FUN_L15_002d8e48_8710(char *) __asm__("FUN_L15_002d8e48");
 #define F(x) (*(float *)&(x))
 void draw_electric_water_bolt_effect(char *moby) {
@@ -1169,8 +1168,7 @@ extern int  D_L15_00174458[];
 extern int  D_L15_0015F5CC_s __asm__("D_L15_0015F5CC");
 extern void make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern int  coll_sphere(void *, int, void *, float) __asm__("FUN_L00_001f0d60");
-extern void play_entity_sound(void *, float, void *, int, float, float, int, int, int) __asm__(
-    "FUN_L00_002598b0");
+extern void play_entity_sound(void *, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void cart_burst(void *, void *, float, float, int) __asm__("FUN_L00_0025f090");
 extern void FUN_0022da68_s(int, int, void *) __asm__("FUN_0022da68");
 extern void mark_moby_for_removal(void *) __asm__("FUN_0020c828");

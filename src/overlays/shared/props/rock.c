@@ -67,8 +67,7 @@ extern s32  D_0015ED84;
 extern void approach_value(float *, float, float) __asm__("FUN_00213ed8");
 extern s32  FUN_L00_0025df68(void *, void *, void *, s32 *, f32 *, s32, f32, f32, f32);
 extern s32  sample_path(void *, void *, s32 *, f32 *, s32, f32) __asm__("FUN_L00_0025d808");
-extern f32 vendor_spring(f32 *value, f32 target, f32 *speed, f32 accel, f32 decel, f32 max) __asm__(
-    "FUN_L00_0025b8c0");
+extern f32 vendor_spring(f32 *value, f32 target, f32 *speed, f32 accel, f32 decel, f32 max) __asm__("FUN_L00_0025b8c0");
 
 /* Grind rail: measures its paths once, then while the hero is in control mode 0x10 snaps it to the nearest path
    point in range and pulls it along, faster on level 1 the more rail is left. */
@@ -249,12 +248,10 @@ extern float D_0015ED6C            MACRO_ADDR;
 extern float D_L01_0015F5D0        MACRO_ADDR;
 extern int                         cutscene_active_macro __asm__("D_L01_0015F404") MACRO_ADDR;
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__(
-    "FUN_L00_002ac910");
+extern int spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern void spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
 extern void FUN_L00_0026a4c8(void *, void *, int, int, int, float);
-extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__(
-    "FUN_L00_0026a9f0");
+extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
     void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 extern char D_0013F3D0[];
@@ -944,8 +941,7 @@ extern unsigned char D_L01_0017C8C0_lui[] __asm__("D_L01_0017C8C0") NOT_SDA;
 #include "rnc/overlay/shared/props/rock_globals.h"
 
 extern float cutscene_big_head_scale_gp __asm__("D_L01_00161D30") __attribute__((sda));
-void         attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) __asm__(
-    "FUN_L01_002ff028");
+void         attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) __asm__("FUN_L01_002ff028");
 
 void attach_cutscene_big_head_manipulator(struct Moby *class_reference_moby) {
     if (cutscene_mode == 2 && big_head_cheat_enabled != 0) {

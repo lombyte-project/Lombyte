@@ -641,10 +641,8 @@ extern float planetbuster_maximus_rotation_oscillation_amplitude_gp __asm__("D_L
 
 extern void FUN_L00_00258278(char *moby, float target, float *vel, float k, float d, float max);
 extern void vendor_spring(float *, float *, float, float, float, float) __asm__("FUN_L00_0025b8c0");
-extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__(
-    "FUN_L00_00262b00");
-extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void start_scene(int) __asm__("FUN_L00_00298840");
 extern void
            capture_linked_moby_relative_transforms(char *, void *, int) __asm__("FUN_L12_0027b268");

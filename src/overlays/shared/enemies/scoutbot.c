@@ -1401,8 +1401,7 @@ typedef struct {
     short         f20E;
 } Paratrooper302618;
 
-char *spawn_paratrooper_projectile(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__(
-    "FUN_L08_00307190");
+char *spawn_paratrooper_projectile(char *pos, char *dir, int a2, int a3, int a4, int a5) __asm__("FUN_L08_00307190");
 extern char  D_L08_001675C0[];
 extern char  D_L08_001FC8F0[];
 extern char  paratrooper_invalid_jump_path_format[] __asm__("D_L08_001FC630");
@@ -1452,8 +1451,7 @@ extern void
            FUN_L00_00258830_c(void *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
 extern int damage302618(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void *
-FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__(
-    "FUN_L00_00263fd8");
+FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 
 extern char paratrooper_invalid_wake_path_format[] __asm__("D_L08_001FC600");
 void        blarg_paratrooper_update(char *moby) __asm__("FUN_L08_00301158");

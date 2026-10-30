@@ -5,8 +5,7 @@
 
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
-void draw_hud_sprite_subpixel(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__(
-    "FUN_00200080");
+void draw_hud_sprite_subpixel(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("FUN_00200080");
 
 void draw_hud_sprite_subpixel(s32 id, s32 x, s32 y, s32 width, s32 height, s32 alpha) {
     struct HudState   *hud = &hud_state;

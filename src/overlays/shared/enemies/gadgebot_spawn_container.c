@@ -396,8 +396,7 @@ blend_frog_rotation_to_facing_frame(char *, float *, float *) __asm__("FUN_L06_0
 extern void probe_frog_local_z_collision(char *) __asm__("FUN_L06_002e9aa8");
 extern void FUN_L06_002e9b60_c(void *, void *, int, float, float) __asm__("FUN_L06_002e9b60");
 extern void blend_moby_animation(void *, s32, s32, s32) __asm__("FUN_00212f90");
-void        trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__(
-    "FUN_L00_0025c558");
+void        trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void        update_frog_health_respawn_and_target(struct Moby *moby) __asm__("FUN_L06_002e94f0");
 void        destroy_frog_child_moby(struct Moby *moby) __asm__("FUN_L06_002e9f30");
 extern char D_0013F3D0[];
@@ -980,8 +979,7 @@ extern u128 D_L06_001745E0 NOT_SDA;
 
 #include "rnc/overlay/quad.h"
 
-extern OvlVec4 coll_hit_pos __asm__(
-    "D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
+extern OvlVec4 coll_hit_pos __asm__("D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
 
 void move_frog_with_collision_resolution(float  scale,
                                          float  threshold,
@@ -1028,8 +1026,7 @@ void move_frog_with_collision_resolution(
 #include "rnc/mobys/moby.h"
 
 extern int  random_integer_below(int) __asm__("FUN_00213260");
-extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__(
-    "FUN_L00_002af8b0");
+extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 
 /* Bursts 4 then 8 particles up from the moby, then removes the moby stored at vars+0x20C. */
 void destroy_frog_child_moby(struct Moby *moby) {
@@ -1430,8 +1427,7 @@ extern GbHit                  D_L06_001745C0;
 extern Moby                  *D_L06_0015FFD8;
 extern GbMoby *D_L06_001745D8 NOT_SDA;
 extern GbStats                l06_gadgebot_command_range_stats __asm__("D_L06_0017EC58");
-extern char *spawn_source_attached_fading_effect_particle(float, char *, int, int, int) __asm__(
-    "FUN_L00_0026daa0");
+extern char *spawn_source_attached_fading_effect_particle(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
 extern float randf_sym(float lo, float hi) __asm__("FUN_L00_00257c48");
 extern float step_angle_toward_target(float *, int, float, float) __asm__("FUN_L00_0025bc00");
 extern float approach_value(float *p, float target, float maxstep) __asm__("FUN_00213ed8");
@@ -1458,8 +1454,7 @@ extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN
 extern void
 play_entity_sound(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
-extern void vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__(
-    "FUN_L00_0025b8c0");
+extern void vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00272060(void *, int, float, float, int, int, int, float, void *);
 extern void assign_gadgebot_attack_targets(void) __asm__("FUN_L06_002f2250");

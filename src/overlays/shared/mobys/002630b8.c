@@ -382,8 +382,7 @@ typedef struct {
     T_263b70      tail;
 } P_263b70;
 
-P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float, int) __asm__(
-    "FUN_L00_0026d000");
+P_263b70 *FUN_L00_0026d000_263b70(void *, int, void *, float, float, float, float, int) __asm__("FUN_L00_0026d000");
 void draw_trail(void *first_spawn_position,
                 void *second_spawn_position,
                 void *particle_velocity,
@@ -482,8 +481,7 @@ void                 FUN_L00_00263fd8_263e30(void *,
                                              void *,
                                              float,
                                              void *) __asm__("FUN_L00_00263fd8");
-int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__(
-    "FUN_L00_0025aca0");
+int generate_random_points_from_shape_entries(void *, int, void *, int, float) __asm__("FUN_L00_0025aca0");
 void spawn_moby_break_fragments(unsigned char *source_moby,
                                 int            first_fragment_class,
                                 int            consecutive_class_fragment_count,

@@ -942,10 +942,8 @@ typedef struct {
 extern L16ParticleChoices D_L16_001E8300, D_L16_001E8618;
 extern L16ParticleChoices D_L16_001E8600, D_L16_001E8318;
 extern int                random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__(
-    "FUN_L00_0026a9f0");
-extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__(
-    "FUN_L00_002ac910");
+extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
+extern void spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 
 void emit_blarg_elite_commando_death_particles(void *moby) __asm__("FUN_L16_002d41f8");
 

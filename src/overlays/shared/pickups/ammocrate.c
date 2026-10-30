@@ -345,8 +345,7 @@ frame_tail:
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002B8FC0.c: func_L13_002E7E90), where it is exact; names translated to the US level program. */
 
-extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__(
-    "FUN_L00_0026daa0");
+extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 
 unsigned char *spawn_ship_rocket(struct Moby *firing_moby,
                                  char        *spawn_position,

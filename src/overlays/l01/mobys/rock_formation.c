@@ -38,8 +38,7 @@ typedef struct {
 extern DebrisColors l01_rock_formation_debris_oclass_choices __asm__("D_L01_00161C50");
 extern s32          FUN_0022da68(s32, s32, void *);
 extern int          FUN_L00_00257b90(int lo, int hi);
-extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__(
-    "FUN_L00_0026ced0");
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, float, int) __asm__("FUN_L00_0026ced0");
 extern struct Moby *
 spawn_debris_chunk(void *, void *, s32, f32, s32, f32, f32, f32, s32) __asm__("FUN_L01_002f8530");
 extern void FUN_L00_00257470(void *, s32, s32);
@@ -303,8 +302,7 @@ typedef struct {
 } BeamMoby;
 
 void set_moby_color(void *, s32, s32, s32) __asm__("FUN_L00_002502f0");
-void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__(
-    "FUN_L00_0026daa0");
+void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__("FUN_L00_0026daa0");
 extern void update_entity() __asm__("FUN_L00_00250df8");
 
 BeamMoby *spawn_colored_half_scale_moby(s32   owner,
@@ -380,8 +378,7 @@ BurstLight D_L01_001E3440 = {
 extern void
 spawn_particle(void *, void *, u32, u32, f32, s32, s32, f32, s32, s32) __asm__("FUN_L00_0026a9f0");
 /* s32 return is load-bearing: a void prototype changes the code */
-extern s32 spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__(
-    "FUN_L00_002ac910");
+extern s32 spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
 /* allocate_voice_for_target_entry; the unit declares it under this name */
 extern void mine_camera_blast(void *, void *, s32, s32) __asm__("FUN_L00_002d3838");
 

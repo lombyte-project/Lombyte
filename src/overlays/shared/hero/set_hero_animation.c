@@ -1416,8 +1416,7 @@ extern void  scale_game_frames_v_233f80(int) __asm__("FUN_001f96f8");
 extern Plat *f_L00_002603d0(void *) __asm__("FUN_L00_002603d0");
 extern void
 probe_ground_height_cf(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
-extern int convert_pose_to_reference_local(int, void *, void *, void *, void *, void *) __asm__(
-    "FUN_L00_00260668");
+extern int convert_pose_to_reference_local(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern void
 transform_attachment_pose(int, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 extern float approach_value(float *, float, float) __asm__("FUN_00213ed8");

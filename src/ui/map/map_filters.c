@@ -177,8 +177,7 @@ union RegionVector {
 
 extern f32 vector_distance(void *a, void *b) __asm__("func_001F9B80");
 
-s32 map_filter_l07_0(s32 projected_x, s32 projected_y, f32 x, f32 y, f32 z) __asm__(
-    "func_00206BD8");
+s32 map_filter_l07_0(s32 projected_x, s32 projected_y, f32 x, f32 y, f32 z) __asm__("func_00206BD8");
 
 s32 map_filter_l07_0(s32 projected_x, s32 projected_y, f32 x, f32 y, f32 z) {
     s32 special_state;
@@ -227,8 +226,7 @@ s32 map_filter_l07_0(s32 projected_x, s32 projected_y, f32 x, f32 y, f32 z) {
 
 s32 region_enabled NOT_SDA = 0;
 
-s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) __asm__(
-    "func_00206E18");
+s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) __asm__("func_00206E18");
 
 s32 map_filter_l07_1(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
     struct Hero *hero_ptr = &hero;
@@ -288,8 +286,7 @@ s32 map_filter_l07_2(s32 px, s32 py) {
 }
 
 extern u32 D_001A03BC[];
-s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) __asm__(
-    "func_00207100");
+s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) __asm__("func_00207100");
 
 s32 map_filter_l07_3(s32 px, s32 py, f32 unused1, f32 unused2, f32 reveal_test_value) {
     if (py < 0xBB) {

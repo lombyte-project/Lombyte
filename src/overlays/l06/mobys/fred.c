@@ -6558,8 +6558,7 @@ extern int   hero_respawn(void) __asm__("FUN_L00_00211250");
 extern void  FUN_001f4600(int, char *) __asm__("FUN_L06_00210fc8");
 extern void  draw_pulsing_timer_display(char *) __asm__("FUN_L06_003021d8");
 extern void  allocate_voice_for_group_entry(int, int, int) __asm__("FUN_0022dba0");
-extern void  set_selected_object_float_triplets(float, float, float, float, float, float) __asm__(
-    "FUN_L02_002f8aa0");
+extern void  set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 
 void update_moby_linked_sequence_camera_and_timer(unsigned char *moby) __asm__("FUN_L06_00301b90");
 
@@ -7403,8 +7402,7 @@ extern int   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern u8 *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
-extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__(
-    "FUN_L00_0026a9f0");
+extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 
 void FUN_L06_00303748(float scale, char *moby, char *pos, char *push, int count) {
     float  position[4], direction[4], velocity[4], acceleration[4];

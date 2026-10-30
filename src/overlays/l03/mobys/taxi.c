@@ -59,10 +59,8 @@ extern float taxi_rocking_first_phase_rate_degrees_gp __asm__("D_L03_00161AFC")
     __attribute__((sda));
 extern float taxi_rocking_second_phase_rate_degrees_gp __asm__("D_L03_00161B00")
     __attribute__((sda));
-extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__(
-    "FUN_L00_00262b00");
-extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(char *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
 void update_taxi_bobbing_and_rocking(struct Moby *taxi_moby) __asm__("FUN_L03_002d3c40");
 
@@ -617,8 +615,7 @@ extern void allocate_voice_for_target_entry(int, int, struct Moby *) __asm__("FU
 extern int
 collect_mobies_in_sphere(void *, int, struct Moby *, void *, f32) __asm__("FUN_L00_001f2868");
 extern void
-send_blast_hits(struct Moby *, void *, void *, int, int, int, int, int, f32, f32, f32) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(struct Moby *, void *, void *, int, int, int, int, int, f32, f32, f32) __asm__("FUN_L00_0025a9f8");
 extern s32  random_int_between(s32, s32) __asm__("FUN_L00_00257b90");
 extern int  mine_blend_color(int, int, f32) __asm__("FUN_L00_002371e0");
 extern void build_spherical_offset(void *, f32, f32, f32) __asm__("FUN_00214db0");
@@ -1309,8 +1306,7 @@ typedef struct {
 extern void  add_vectors(void *, void *, void *) __asm__("FUN_L00_001ff290");
 extern int   FUN_L00_00257b90(int, int);
 extern void  spawn_effect(void *, void *, int, int, int, int, int, int) __asm__("FUN_L00_00269958");
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern int   coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void  make_hit_descriptor(void *, void *, int, float, void *) __asm__("FUN_L00_00259888");
 extern void  record_moby_hit(void *, void *) __asm__("FUN_L00_00259a88");
@@ -1438,8 +1434,7 @@ extern void attach_manipulator(void *, int, void *) __asm__("FUN_0020cb10");
 
 /* During the cutscene, nudges a camera value at two time windows and attaches
  * the shared manipulator to every listed moby of the same class as m. */
-void apply_helga_big_head_cutscene_adjustments(struct Moby *class_reference_moby) __asm__(
-    "FUN_L03_002da710");
+void apply_helga_big_head_cutscene_adjustments(struct Moby *class_reference_moby) __asm__("FUN_L03_002da710");
 
 void apply_helga_big_head_cutscene_adjustments(struct Moby *class_reference_moby) {
     char *shared_attachment_record;
@@ -2159,8 +2154,7 @@ extern void       talker_spawn_debris(struct Moby *,
                                       s32) __asm__("FUN_L00_0025e450");
 extern int        talker_init(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_002668a0");
 extern int        talker_update(struct Moby *, struct TalkerVars *) __asm__("FUN_L00_00266448");
-extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, s32, f32) __asm__(
-    "FUN_L00_0026ced0");
+extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, s32, f32) __asm__("FUN_L00_0026ced0");
 
 /* A talking moby that can be shot down: talks (and may warp the hero) when
  * approached, and once hit by a type 3 hit or already recorded as collected
@@ -2312,8 +2306,7 @@ extern void initialize_numeric_hud_element(void) __asm__("FUN_L00_00237190");
 extern void hud_keep_visible(int, int) __asm__("FUN_L00_00235e18");
 extern void FUN_L00_002371e0(void);
 extern void draw_hud_text_panel(void) __asm__("FUN_L00_00237200");
-s32         queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__(
-    "FUN_001ff308");
+s32         queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
 s32 try_set_help_message(s32 arg0, s32 arg1) __asm__("FUN_00215130");
 
 void update_rail_lift_help_and_hud(struct Moby *lift_moby, int mode) __asm__("FUN_L03_002dcbc8");

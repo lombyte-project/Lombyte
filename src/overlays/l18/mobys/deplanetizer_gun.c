@@ -42,8 +42,7 @@ void                    spawn_deplanetizer_gun_trail_effects(void *first_positio
                                                              float f0,
                                                              float f1) __asm__("FUN_L18_002fa250");
 
-extern void spawn_deplanetizer_gun_trail_effects(void *, void *, void *, float, float) __asm__(
-    "FUN_L18_002fa250");
+extern void spawn_deplanetizer_gun_trail_effects(void *, void *, void *, float, float) __asm__("FUN_L18_002fa250");
 void draw_three_scaled_camera_facing_quads(void) __asm__("FUN_L18_002f9780");
 
 extern void draw_three_scaled_camera_facing_quads(void) __asm__("FUN_L18_002f9780");
@@ -74,8 +73,7 @@ extern void  func_L00_0025F4A8_alt(void *,
                                    int,
                                    int,
                                    int) __asm__("FUN_L00_0025e450");
-extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float, int) __asm__(
-    "FUN_L00_0026d000");
+extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float, int) __asm__("FUN_L00_0026d000");
 extern struct Moby *l18_moby_list_head __asm__("D_L18_0015FFE4");
 extern struct Moby *l18_deplanetizer_class_059b_glow_moby __asm__("D_L18_00162528");
 
@@ -903,8 +901,7 @@ void draw_moby_three_scaled_two_tint_quads(struct Moby *m) {
 
 unsigned char *
 FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
-extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float, int) __asm__(
-    "FUN_L00_0026d000");
+extern char *func_L00_0026DEA0_c(void *, int, void *, float, float, float, float, int) __asm__("FUN_L00_0026d000");
 
 void spawn_deplanetizer_gun_trail_effects(void *first_position_source,
                                           void *second_position_source,

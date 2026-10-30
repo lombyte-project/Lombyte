@@ -169,8 +169,7 @@ extern char D_L07_0016C8E0[];
 extern void cutscene_set_camera_target(int) __asm__("FUN_L00_002637f8");
 unsigned char *
 FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
-extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float, float) __asm__(
-    "FUN_L00_0026d000");
+extern char *func_L00_0026DEA0_c(void *, int, void *, int, float, float, float, float) __asm__("FUN_L00_0026d000");
 extern char D_L07_0016C960_c[] __asm__("D_L07_0016C8E0");
 
 void update_scene_moby_effect_bursts(struct Moby *moby) __asm__("FUN_L07_0031eba8");

@@ -480,11 +480,9 @@ extern void update_hero_target_heading(f32, f32, f32) __asm__("FUN_L00_00214ed8"
 extern void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0");
 extern void set_tracked_class_5f3_moby_position(struct MobyView *,
                                                 void *) __asm__("FUN_L00_002a9b80");
-extern s32  spawn_homing_bolt(struct MobyView *, void *, f32, f32, s32, f32, f32, f32) __asm__(
-    "FUN_L00_002a96f8");
+extern s32  spawn_homing_bolt(struct MobyView *, void *, f32, f32, s32, f32, f32, f32) __asm__("FUN_L00_002a96f8");
 extern void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
-extern s32  play_entity_sound(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32) __asm__(
-    "FUN_L00_002598b0");
+extern s32  play_entity_sound(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32) __asm__("FUN_L00_002598b0");
 
 struct PlayerSpeedTuning {
     u8  pad0[8];

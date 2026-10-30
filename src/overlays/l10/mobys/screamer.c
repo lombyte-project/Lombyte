@@ -109,8 +109,7 @@ void         FUN_L00_00258278_c(unsigned char *m,
                                 float          b,
                                 float          c,
                                 float          limit) __asm__("FUN_L00_00258278");
-void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int c, int d) __asm__(
-    "FUN_L00_00258ad0");
+void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int c, int d) __asm__("FUN_L00_00258ad0");
 void FUN_L00_0025a120_c(char *o) __asm__("FUN_L00_0025a120");
 void step_angle_toward_target(float *p, void *o, float a, float lim) __asm__("FUN_L00_0025bc00");
 void FUN_L00_0025f3e8_c(char *owner,
@@ -2600,8 +2599,7 @@ extern char *
 create_rocket(void *vel, void *pos, int a, int b, int c, float scale) __asm__("FUN_L10_002cc1b8");
 extern char  D_L10_00179890[];
 extern char  blarg_ship_missing_path_error_format[] __asm__("D_L10_001DD390");
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float fast_vec_dist(void *, void *);
 extern s32   D_0015ED84;
 extern int   D_L10_00161EE4 __attribute__((sda));

@@ -33,7 +33,13 @@ def clang_format(paths: list[str], cwd: Path) -> None:
                        cwd=cwd, check=True)
 
 
+# An assembler label or attribute stays on the line of its declaration, where
+# the report and proof scripts look for it.
+SPLIT_LABEL = re.compile(r"(__asm__\s*\(|__attribute__\s*\(\()\s*\n\s*")
+
+
 def join_macros(text: str) -> str:
+    text = SPLIT_LABEL.sub(r"\1", text)
     return WHOLE_LINE_MACROS.sub(lambda m: re.sub(r"\(\s+", "(", re.sub(r",\s*\n\s*", ", ", m.group(0))), text)
 
 

@@ -11,8 +11,7 @@
 #include "rnc/overlay/shared/math/random/random_int_between.h"
 
 void step_angle_toward_target(void *, s32, f32, f32) __asm__("FUN_L00_0025bc00");
-s32  FUN_L00_00258490_261630(void *, void *, void *, s32, f32, f32, f32, f32) __asm__(
-    "FUN_L00_00258490");
+s32  FUN_L00_00258490_261630(void *, void *, void *, s32, f32, f32, f32, f32) __asm__("FUN_L00_00258490");
 f32  interpolate_angle(f32, f32, f32) __asm__("FUN_L00_0025b750");
 void update_object_wander_movement(u8 *moving_object,
                                    u8 *movement_state,

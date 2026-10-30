@@ -32,8 +32,7 @@ extern void fast_vec_normalize(f32 *, f32 *, f32) __asm__("func_001F9BF8");
    cell indices use signed fractions, so interpolation can extrapolate on
    either side of a sample. Cell 15 uses dedicated edge and corner samples.
    Either output may be omitted without suppressing a successful lookup. */
-s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) __asm__(
-    "FUN_00239f58");
+s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) __asm__("FUN_00239f58");
 
 s32 sample_surface_height_map(f32 *height, f32 *normal, f32 x, f32 y, f32 z) {
     f32                x_tangent[4] __attribute__((aligned(16)));

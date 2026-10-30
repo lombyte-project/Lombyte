@@ -1002,8 +1002,7 @@ void blarg_gunner_update(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002B2020.c: func_L13_002B60D8), where it is exact; names translated to the US level program. */
 
-extern void *create_moby_joint_particle(void *, int, int, float, float, int, float, int) __asm__(
-    "FUN_L13_00280400");
+extern void *create_moby_joint_particle(void *, int, int, float, float, int, float, int) __asm__("FUN_L13_00280400");
 extern void kill_part(void *) __asm__("FUN_L00_00267a08");
 
 /* Per-frame glow effect: spawns it while the moby is active (byte 0x31 set), frees it otherwise. */
@@ -2765,8 +2764,7 @@ extern void          append_scaled_screen_triangle_strip(
              float, float, float, void *, int, int, long) __asm__("FUN_L11_00310ad0");
 extern void append_rotated_sprite_quad(
     float, float, float, float, float, int, int, int, int, int, int, int, float, float);
-extern void draw_textured_quad_local(int, int, int, int, int, int, int, int, long, long) __asm__(
-    "FUN_001f5450");
+extern void draw_textured_quad_local(int, int, int, int, int, int, int, int, long, long) __asm__("FUN_001f5450");
 void         append_four_quarter_turn_effect_quads(unsigned char a,
                                                    unsigned char b,
                                                    unsigned char c,

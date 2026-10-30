@@ -157,8 +157,7 @@ extern short *D_L14_001ABF40[];
 
 #include "rnc/overlay/shared/enemies/plasmabot_data/fun_l14_002b3890.h"
 
-void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) __asm__(
-    "FUN_L14_002b3890");
+void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) __asm__("FUN_L14_002b3890");
 
 void reset_listed_plasmabot_beam_cooldowns(int selected_moby_list_index) {
     short *listed_moby_entry_cursor;
@@ -1332,8 +1331,7 @@ int count_listed_plasmabots_preparing_or_sweeping_beam(int moby_list_index) {
 
 extern char *D_L14_0015FFD8;
 
-int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) __asm__(
-    "FUN_L14_002b39a0");
+int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) __asm__("FUN_L14_002b39a0");
 
 int check_listed_plasmabots_not_starting_path_traversal(unsigned char *source_moby) {
     unsigned short *moby_list_entry;
@@ -2198,8 +2196,7 @@ extern char *floating_mine_respawn_address_limit __asm__("D_L14_0015FFDC");
 #include "rnc/overlay/shared/enemies/plasmabot_data/update_floating_mine.h"
 
 extern float probe_ground_height_ff640(float, void *, int) __asm__("FUN_00213508");
-extern int   fun_00213928(struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__(
-    "FUN_00213928");
+extern int   fun_00213928(struct Moby *, MobyHit *, HitInfo *, int, int *, int, int, int) __asm__("FUN_00213928");
 extern void explode_ff640(struct Moby *,
                           void *,
                           void *,

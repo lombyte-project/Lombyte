@@ -934,8 +934,7 @@ extern int           D_L08_0015F5B4_gp __asm__("D_L08_0015F5B4") __attribute__((
 extern int           D_L08_0015F5BC_gp __asm__("D_L08_0015F5BC") __attribute__((sda));
 extern unsigned char D_0013D50F_2D5FA8[] __asm__("D_0013D408");
 extern void *
-spawn_2D5FA8(Moby *, int, float *, float *, int, int, float, float *, float *, float *) __asm__(
-    "FUN_L00_00263fd8");
+spawn_2D5FA8(Moby *, int, float *, float *, int, int, float, float *, float *, float *) __asm__("FUN_L00_00263fd8");
 extern void mark_moby_for_removal_cf(Moby *, int, int) __asm__("FUN_L00_00257470");
 extern int
 activate_effect_l08(float, Moby *, float *, int, int, char *, int) __asm__("FUN_L00_0025ff38");

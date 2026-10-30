@@ -30,8 +30,7 @@ typedef struct {
 } O0023b120;
 
 extern G0023b120 D_L00_0017E4D8;
-void             hud_frame(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) __asm__(
-    "FUN_L00_0023b120");
+void             hud_frame(O0023b120 *o, s32 id, s32 x, s32 y, u32 flags, s32 extra) __asm__("FUN_L00_0023b120");
 
 void hud_frame(O0023b120 *hud_element, s32 id, s32 x, s32 y, u32 flags, s32 extra) {
     s32        base_width, base_height, draw_width, draw_height;

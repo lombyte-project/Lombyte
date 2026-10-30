@@ -1586,12 +1586,10 @@ void         transform_hero_local_offset_to_world(float *out,
 void         release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 extern s32   D_L00_0015F5C4_macro __asm__("D_L00_0015F5C4");
 extern int   hero_set_state(int, int) __asm__("FUN_L00_002223f8");
-extern void  FUN_L00_001edf60_49a8(int, int, float, void *, float, int, int, float, int) __asm__(
-    "FUN_L00_001edf60");
+extern void  FUN_L00_001edf60_49a8(int, int, float, void *, float, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern struct Moby *
 FUN_L00_002b46a8_49a8(struct Moby *, void *, float *, float *) __asm__("FUN_L00_002b46a8");
-extern void FUN_L00_002caf70_49a8(void *, float, float, float, float, void *, void *) __asm__(
-    "FUN_L00_002caf70");
+extern void FUN_L00_002caf70_49a8(void *, float, float, float, float, void *, void *) __asm__("FUN_L00_002caf70");
 extern int  random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern void set_moby_animation(void *, int, int) __asm__("FUN_00212ed8");
 
@@ -2097,10 +2095,8 @@ spawn_spinning_fade_in_out_effect_particle(void *pos,
                                                        float f2,
                                                        float f3,
                                                        float scale) __asm__("FUN_L00_0026b790");
-extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__(
-    "FUN_L00_0026a9f0");
-extern void spawn_glow_particle(void *, void *, void *, int, int, int, int, int, float) __asm__(
-    "FUN_L00_002ac910");
+extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
+extern void spawn_glow_particle(void *, void *, void *, int, int, int, int, int, float) __asm__("FUN_L00_002ac910");
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
 
 void spawn_moby_particle_and_glow_burst(char *source_moby, int flag) __asm__("FUN_L00_002b5d00");
@@ -2305,8 +2301,7 @@ extern void  spawn_explosion(void *,
 extern int
 collect_mobies_in_sphere_2b6140(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void add_random_offset_to_vector_xyz(void *, float) __asm__("FUN_L00_0025f8e0");
 
 extern int D_L00_0015F458 __attribute__((sda));

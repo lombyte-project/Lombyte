@@ -267,8 +267,7 @@ int           FUN_L00_00260400(int    unused_subject_object,
 
 typedef float V4_2604f0[4] __attribute__((aligned(16)));
 u8           *FUN_L00_002603d0_002604f0(void *) __asm__("FUN_L00_002603d0");
-void          FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *, void *) __asm__(
-    "FUN_L00_00260668");
+void          FUN_L00_00260668_002604f0(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 void FUN_L00_0025f730_002604f0(void *, float) __asm__("FUN_L00_0025f730");
 int  transform_attachment_pose(u8   *comparison_object,
                                u8   *reference_object,
@@ -277,8 +276,7 @@ int  transform_attachment_pose(u8   *comparison_object,
                                void *transformed_position,
                                void *transformed_rotation) __asm__("FUN_L00_002604f0");
 
-int transform_attachment_pose(u8 *a, u8 *b, void *c, void *d, void *e, void *f) __asm__(
-    "FUN_L00_002604f0");
+int transform_attachment_pose(u8 *a, u8 *b, void *c, void *d, void *e, void *f) __asm__("FUN_L00_002604f0");
 int transform_attachment_pose(u8   *comparison_object,
                               u8   *reference_object,
                               void *position,
@@ -322,8 +320,7 @@ int transform_attachment_pose(u8   *comparison_object,
 
 extern int FUN_L00_002603d0(char *);
 
-int convert_pose_to_reference_local(int x, char *o, float *a, float *c, float *b, float *d) __asm__(
-    "FUN_L00_00260668");
+int convert_pose_to_reference_local(int x, char *o, float *a, float *c, float *b, float *d) __asm__("FUN_L00_00260668");
 int convert_pose_to_reference_local(int    x,
                                     char  *reference_object,
                                     float *input_position,

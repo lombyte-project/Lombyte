@@ -28,8 +28,7 @@ typedef struct {
     Ent32 e[1];
 } Tbl;
 
-void set_moby_local_table_entry(char *p, int idx, void *v, float a, float b) __asm__(
-    "FUN_L00_0024eed8");
+void set_moby_local_table_entry(char *p, int idx, void *v, float a, float b) __asm__("FUN_L00_0024eed8");
 void set_moby_local_table_entry(
 
     char *moby, int table_entry_index, void *v, float unscaled_entry_w, float b) {

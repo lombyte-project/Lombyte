@@ -47,8 +47,7 @@ void set_listed_class_16f_state_2_and_data_28_to_one(int index) {
 /* 0x002d9e78, 100 bytes.
  * Ported from rac1-decomp, where it is exact; names translated to
  * the US level program (data still reached through the MACRO_ADDR form). */
-void set_listed_class_16f_state_2_and_clear_data_28(int moby_list_index) __asm__(
-    "FUN_L06_002d9e78");
+void set_listed_class_16f_state_2_and_clear_data_28(int moby_list_index) __asm__("FUN_L06_002d9e78");
 
 void set_listed_class_16f_state_2_and_clear_data_28(int moby_list_index) {
     short *moby_index_cursor = D_L06_001ABFC0[moby_list_index];
@@ -1954,8 +1953,7 @@ s32   FUN_L00_00258b50(void *m, void *c, void *v, Vec4 *out, f32 f);
 s32   FUN_L00_00261b48(s32 path_index, OvlVec4 *start, OvlVec4 *end, OvlVec4 *out);
 void  FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
 void  FUN_L00_0025a120(char *o);
-void  trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__(
-    "FUN_L00_0025c558");
+void  trooper_start_knockback(u8 *a, void *b, int c, int d, int e, float f) __asm__("FUN_L00_0025c558");
 void        spawn_color_swapped_explosion_burst(char *owner,
                                                 char *pos,
                                                 float scale,

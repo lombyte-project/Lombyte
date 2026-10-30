@@ -547,8 +547,7 @@ extern float D_L04_0015F580[] MACRO_ADDR;
 extern float D_L04_00166F40[4];
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
-extern float spring_turn(float cur, float target, float *vel, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float cur, float target, float *vel, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float probe_ground_height(void *, int, float) __asm__("FUN_00213508");
 extern int   point_in_path_xy(void *, void *, int) __asm__("FUN_L00_00259740");
 extern int   D_L04_0015F5C4;
@@ -556,8 +555,7 @@ extern int   FUN_L00_001fefc8(void *);
 extern int   is_point_inside_clip_volume(void *arg0, int arg1) __asm__("FUN_00214720");
 extern int
 hit_reaction(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
-extern int FUN_L04_00295de8_cf(void *, void *, void *, int, float, float, float, float) __asm__(
-    "FUN_L00_00258490");
+extern int FUN_L04_00295de8_cf(void *, void *, void *, int, float, float, float, float) __asm__("FUN_L00_00258490");
 extern int mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int allocate_voice_for_target_entry(int, int, char *);
 extern int mark_moby_for_removal_cf() __asm__("FUN_L04_002ba470");
@@ -580,8 +578,7 @@ extern void FUN_L00_00263ac8(float, int, int, unsigned char *);
 extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void advance_moby_animation(void *);
 extern void build_moby_bone_transform(char *, int, char *);
-extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos, void *vel) __asm__(
-    "FUN_L00_00259bc8");
+extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos, void *vel) __asm__("FUN_L00_00259bc8");
 extern void copy_matrix3x4(void *, void *);
 extern void refresh_moby_spatial_bounds_from_basis(void *);
 void        blend_big_axebot_and_axe_animation(char *arg,
@@ -2479,8 +2476,7 @@ extern void                 record_moby_hit(void *, void *) __asm__("FUN_L00_002
 extern void update_joint_animation(char *, char *, int, float, float) __asm__("FUN_L00_002628d8");
 extern void spawn_class_b8_projectile(void *, void *, void *, int) __asm__("FUN_L04_002aee30");
 void        destroy_blarg_trooper(struct Moby *arg) __asm__("FUN_L04_002c4808");
-extern int  func_L00_002594C8_o(void *, void *, void *, float, float, float, float, int) __asm__(
-    "FUN_L00_00258490");
+extern int  func_L00_002594C8_o(void *, void *, void *, float, float, float, float, int) __asm__("FUN_L00_00258490");
 
 void blarg_trooper_update(struct Moby *moby) __asm__("FUN_L04_002c4850");
 

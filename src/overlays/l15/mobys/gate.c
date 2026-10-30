@@ -580,8 +580,7 @@ extern void   FUN_L00_0025e450_7880(void *,
                                     int,
                                     int,
                                     int) __asm__("FUN_L00_0025e450");
-extern void  *spawn_debris_chunk(void *, void *, int, float, int, float, float, float, int) __asm__(
-    "FUN_L01_002f8530");
+extern void  *spawn_debris_chunk(void *, void *, int, float, int, float, float, float, int) __asm__("FUN_L01_002f8530");
 extern void *mine_debris(void *, void *, int, int, float, int, int) __asm__("FUN_L00_0026bed0");
 
 void update_destructible_moby_with_radial_debris(struct Moby *moby) __asm__("FUN_L15_002a7880");
@@ -785,8 +784,7 @@ extern void *spawn_debris_chunk(void *pos,
                                 float c,
                                 int   d) __asm__("FUN_L01_002f8530");
 extern void *
-mine_debris(void *pos, void *vel, int color, int color2, float size, int life, int tint) __asm__(
-    "FUN_L00_0026bed0");
+mine_debris(void *pos, void *vel, int color, int color2, float size, int life, int tint) __asm__("FUN_L00_0026bed0");
 
 /* Hit by a shot (a 0x40-byte entry of the hit table that names this moby): sparks fly from the hit
    point, a burst and delta follow, then the moby goes away. Not hit: on its first update it sets its
@@ -1149,8 +1147,7 @@ typedef struct {
 
 extern void FUN_001f9bf8_4f88(float, void *, void *) __asm__("FUN_001f9bf8");
 extern void FUN_001f9a68_4f88(float, void *, void *) __asm__("FUN_001f9a68");
-extern void move_moby_with_sphere_collision(float, float, struct Moby *, void *, int) __asm__(
-    "FUN_L15_00247e90");
+extern void move_moby_with_sphere_collision(float, float, struct Moby *, void *, int) __asm__("FUN_L15_00247e90");
 
 void steer_helicopter(struct Moby      *moby,
                       SteeringVec_4f88 *goal,
@@ -2103,8 +2100,7 @@ typedef struct {
 char *
 create_rocket(float scale, void *vel, void *pos, int a, int b, int c) __asm__("FUN_L10_002cc1b8");
 extern float FUN_L04_001f1978(float);
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float FUN_L00_0025abf0(void *a, void *b, void *out, float speed, float g);
 extern float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
 extern float
@@ -2112,8 +2108,7 @@ compute_ultramech_flocking_steering_point(void *, void *, float) __asm__("FUN_L1
 extern float fast_cos(float);
 extern float fast_sin(float);
 extern int   FUN_L00_00258490(void *, void *, void *, int, float, float, float, float);
-extern int   sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__(
-    "FUN_L00_00259d08");
+extern int   sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, void *f, int n) __asm__("FUN_L00_00259d08");
 extern int   mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
 extern int   voice_is_playing(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int   is_value_within_interpolated_window(char *, float) __asm__("FUN_00214cc8");
@@ -2140,8 +2135,7 @@ extern void  emit_radial_particle_burst(void *, void *, int) __asm__("FUN_L03_00
 extern void  process_ultramech_hits_and_update_target(void *) __asm__("FUN_L15_002d0fa8");
 extern void  noop_main_callback(void *, void *) __asm__("func_001E93E8");
 extern void  transform_vector_by_basis(void *, void *, void *);
-extern char *func_L10_002CD578_v(void *vel, float scale, void *pos, int a, int b, int c) __asm__(
-    "FUN_L10_002cc1b8");
+extern char *func_L10_002CD578_v(void *vel, float scale, void *pos, int a, int b, int c) __asm__("FUN_L10_002cc1b8");
 
 void ultramech_unlimited_update(UMoby *m) __asm__("FUN_L15_002cf3a8");
 

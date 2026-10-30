@@ -59,8 +59,7 @@ extern float probe_ground_height(void *, int, float) __asm__("func_00213508");
 extern float D_L18_0015F580[] MACRO_ADDR;
 extern int   D_L18_0015F5C4;
 extern int   D_L18_0016D290_lui __asm__("D_L18_0016D290") NOT_SDA;
-int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_position) __asm__(
-    "FUN_L18_002f0120");
+int update_drek_fight_missile_wander_movement(char *moby, float *wander_target_position) __asm__("FUN_L18_002f0120");
 
 extern int   update_drek_fight_missile_wander_movement(char  *moby,
                                                        float *vec) __asm__("FUN_L18_002f0120");
@@ -93,8 +92,7 @@ void        select_drek_fight_missile_wander_target(struct Moby *moby,
 
 extern void select_drek_fight_missile_wander_target(struct Moby *moby,
                                                     void        *out) __asm__("FUN_L18_002f02e8");
-void        update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) __asm__(
-    "FUN_L18_002f0848");
+void        update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) __asm__("FUN_L18_002f0848");
 
 extern void
 update_drek_fight_missile_trail_and_queue_effects(struct Moby *moby) __asm__("FUN_L18_002f0848");
@@ -1624,8 +1622,7 @@ extern void  moby_init_action_mode(void *moby) __asm__("FUN_L18_002d6dc0");
 extern void  request_thruster_pack_lock_red_wait(unsigned char *arg,
                                                  int            value) __asm__("FUN_L18_002d7f68");
 extern void  end_thruster_pack_lock_red_wait(unsigned char *arg) __asm__("FUN_L18_002d7fd0");
-extern void  spawn_class_270_moby(char *pos, float *vec, int arg, float fa, float fb) __asm__(
-    "FUN_L18_002db938");
+extern void  spawn_class_270_moby(char *pos, float *vec, int arg, float fa, float fb) __asm__("FUN_L18_002db938");
 extern void refresh_ring_effect(char *moby, void *pos, float f) __asm__("FUN_L18_002dc458");
 extern void start_position_and_rotation_transition(char *moby,
                                                    void *v0,
@@ -3091,8 +3088,7 @@ fun_00213928(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN
 extern void  trooper_anim_update(void *m, short *p) __asm__("FUN_L00_0025d458");
 extern void  trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern char *create_moby(int) __asm__("FUN_0020c4f8");
-extern int   FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e, int f) __asm__(
-    "FUN_L00_0025ff38");
+extern int   FUN_L00_0025ff38_5e80(float a, char *m, char *b, int c, int d, int *e, int f) __asm__("FUN_L00_0025ff38");
 extern int   poll_moby_state_and_rearm(char *) __asm__("FUN_L18_002d8050");
 extern char *create_class_274_ring_effect(void *, void *, float) __asm__("FUN_L18_002dc3e0");
 extern void  FUN_L18_002f1cc8_5e80(void *) __asm__("FUN_L18_002f1cc8");
@@ -3771,8 +3767,7 @@ extern int   drek_boss_scalar_scan_entry_gates[] __asm__("D_L18_0016A290");
 extern char  l18_drek_boss_scalar_scan_records[] __asm__("D_L18_00167B50");
 extern void  reset_numeric_hud_element(void) __asm__("FUN_L00_00235d80");
 extern void  FUN_L06_00249738(void);
-extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float) __asm__(
-    "FUN_00213f38");
+extern float advance_accelerated_scalar_7288(float *, float, float *, float, float, float) __asm__("FUN_00213f38");
 
 #include "rnc/overlay/l18/mobys/drek_fight_missile_data/update_drek_boss_state_dependent_scalars.h"
 

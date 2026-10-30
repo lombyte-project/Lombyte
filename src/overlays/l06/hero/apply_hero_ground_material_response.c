@@ -620,8 +620,7 @@ extern void  build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8"
 extern void  speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void  turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern void  stick_target(int, float) __asm__("FUN_L00_002118c8");
-extern f32   FUN_L00_0025bc98_2b438(float *, float *, int, float, float, float, float) __asm__(
-    "FUN_L00_0025bc98");
+extern f32   FUN_L00_0025bc98_2b438(float *, float *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
@@ -975,12 +974,10 @@ extern void update_hero_target_heading(f32, f32, f32) __asm__("FUN_L00_00214ed8"
 extern void update_hero_planar_movement_velocity(void) __asm__("FUN_L00_002167d0");
 extern void set_tracked_class_5f3_moby_position(struct MobyView *,
                                                 void *) __asm__("FUN_L00_002a9b80");
-extern s32  spawn_homing_bolt(struct MobyView *, void *, f32, f32, s32, f32, f32, f32) __asm__(
-    "FUN_L00_002a96f8");
+extern s32  spawn_homing_bolt(struct MobyView *, void *, f32, f32, s32, f32, f32, f32) __asm__("FUN_L00_002a96f8");
 extern void transform_hero_polar_offset_to_world(void *, f32, f32, f32) __asm__("FUN_L00_002335c8");
 extern f32  hero_alt_ledge_shimmy_speed_by_anim_frame[] __asm__("D_L06_001C4470");
-extern s32  play_entity_sound(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32) __asm__(
-    "FUN_L00_002598b0");
+extern s32  play_entity_sound(struct MobyView *, f32, void *, s32, f32, f32, s32, s32, s32) __asm__("FUN_L00_002598b0");
 
 struct PlayerSpeedTuning {
     u8  pad0[8];

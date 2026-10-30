@@ -181,10 +181,8 @@ void update_cycling_platform(char *platform_moby) {
 extern f32  random_angle_radians(void) __asm__("func_00213308");
 extern int  is_hero_on_moby(void *) __asm__("FUN_L01_00277fb8");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__(
-    "FUN_L00_00262b00");
-extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 
 void update_sinking_platform(struct Moby *moby) __asm__("FUN_L10_00295c20");
 
@@ -1349,8 +1347,7 @@ extern void  func_L00_00251358_2D9988(void *, void *, void *, void *) __asm__("F
 extern void  func_L00_00251328_2D9988(void *, int, int, int) __asm__("FUN_L00_002502f0");
 extern int func_L00_001F2BE8_2D9988(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 
 void FUN_L10_002d85c8(char *m) {
     char *data;
@@ -1664,8 +1661,7 @@ finish:
 extern char point_light_parameter_entries[] __asm__("D_L10_00180740");
 extern char path_spark_missing_path_message[] __asm__("D_L10_001DD120");
 extern f32  fast_vec_dist(void *, void *) __asm__("func_001F9B48");
-extern int  allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__(
-    "FUN_L00_0023e738");
+extern int  allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int     path_sample_at_distance() __asm__("FUN_L00_00262360");
 extern void    release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 unsigned char *spawn_path_spark_effect(int   source_moby,
@@ -1675,8 +1671,7 @@ unsigned char *spawn_path_spark_effect(int   source_moby,
                                        float y,
                                        float z) __asm__("FUN_L10_002dd270");
 
-unsigned char *spawn_path_spark_effect(int a, void *pos, int b, float x, float y, float z) __asm__(
-    "FUN_L10_002dd270");
+unsigned char *spawn_path_spark_effect(int a, void *pos, int b, float x, float y, float z) __asm__("FUN_L10_002dd270");
 extern int func_001E9730_2da0f0(void *, int) __asm__("FUN_001e93b0");
 extern int func_001F9908_v(void *) __asm__("FUN_001f9740");
 extern void
@@ -2530,8 +2525,7 @@ typedef struct {
 } EffectData;
 
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void
 FUN_L00_00262360_c(int, float *, float *, void *, float, float) __asm__("FUN_L00_00262360");
 

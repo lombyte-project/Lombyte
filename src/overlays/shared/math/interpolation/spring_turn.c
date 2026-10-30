@@ -79,8 +79,7 @@ void interpolate_wrapped_rotations_cosine_eased(float *out,
                                     cosine_ease_weight);
 }
 
-float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__(
-    "FUN_L00_00258110");
+float spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_00258110");
 float spring_turn(float *turn_step,
                   float  current_angle,
                   float  target_angle,
@@ -304,8 +303,7 @@ extern int    coll_sphere() __asm__("FUN_L00_001f0d60");
 extern V_94C8 D_94C8_60 __asm__("D_L00_00173E60");
 extern int    func_L00_001F10E0_l(void *, float, int, void *) __asm__("FUN_L00_001f0d60");
 
-int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) __asm__(
-    "FUN_L00_00258830");
+int FUN_L00_00258830_c(char *m, char *v, int flags, float a, float b, float c) __asm__("FUN_L00_00258830");
 int FUN_L00_00258830_c(char *moving_object,
                        char *movement_displacement,
                        int   flags,

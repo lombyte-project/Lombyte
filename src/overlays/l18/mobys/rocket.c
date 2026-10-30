@@ -253,8 +253,7 @@ typedef struct {
     Level18VendorFloatData *data;
 } Level18VendorFloatMoby;
 
-float get_position_and_rotation_transition_progress(Level18VendorFloatMoby *moby) __asm__(
-    "FUN_L18_002dfb90");
+float get_position_and_rotation_transition_progress(Level18VendorFloatMoby *moby) __asm__("FUN_L18_002dfb90");
 
 float get_position_and_rotation_transition_progress(Level18VendorFloatMoby *moby) {
     return moby->data->value;
@@ -975,8 +974,7 @@ typedef struct {
     unsigned char unk70; /* 0x70 */
 } MobyAnim_q;
 
-extern float FUN_L00_0025abf0_q(float *a, float *b, float *out, float speed, float g) __asm__(
-    "FUN_L00_0025abf0");
+extern float FUN_L00_0025abf0_q(float *a, float *b, float *out, float speed, float g) __asm__("FUN_L00_0025abf0");
 extern int *D_L18_001AC240_lui[] __asm__("D_L18_001AC240") NOT_SDA;
 extern int  D_L18_0015FFD8_m __asm__("D_L18_0015FFD8");
 extern f32  D_L18_00161994_gp __asm__("D_L18_00161994") __attribute__((sda));
@@ -2804,8 +2802,7 @@ extern void  add_vector_9768(float *, float *, float *) __asm__("FUN_001f9a10");
 extern void  random_vector(float *, float, float) __asm__("FUN_L00_00257d78");
 extern int   coll_sphere(float, float *, int, void *) __asm__("FUN_L00_001f0d60");
 extern void  remove_moby_9768(void *) __asm__("FUN_0020c828");
-extern void  spawn_particle(void *, void *, int, int, float, int, int, float, int, int) __asm__(
-    "FUN_L00_0026a9f0");
+extern void  spawn_particle(void *, void *, int, int, float, int, int, float, int, int) __asm__("FUN_L00_0026a9f0");
 extern void
 spawn_particle_alt_9768(float, void *, void *, int, int, int) __asm__("FUN_L00_0026a4c8");
 extern int   D_L18_0015F580;
@@ -2816,8 +2813,7 @@ extern float D_0013F3D0[4];
 extern unsigned char D_L18_001F29A0_9768[] __asm__("D_L18_001F29A0");
 extern unsigned char D_L18_001F29B8_9768[] __asm__("D_L18_001F29B8");
 
-void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) __asm__(
-    "FUN_L18_002e9768");
+void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) __asm__("FUN_L18_002e9768");
 
 void update_moby_hit_response_burst_and_ballistic_flight(struct Moby *moby) {
     enum {

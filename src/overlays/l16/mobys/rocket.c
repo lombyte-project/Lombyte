@@ -145,8 +145,7 @@ extern char  *D_L16_0015FFD8;
 extern int   *D_L16_001ABCC0_c[] __asm__("D_L16_001ABCC0");
 extern short *D_L16_001ABFC0_2CB000[] __asm__("D_L16_001ABCC0");
 
-void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) __asm__(
-    "FUN_L16_002c9c38");
+void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) __asm__("FUN_L16_002c9c38");
 
 void update_conveyor_group_motion_transforms(int index, void *conveyor_motion_vector) {
     short *group_entry = D_L16_001ABFC0_2CB000[index];
@@ -456,8 +455,7 @@ typedef struct {
 
 extern char *D_L16_001B255C NOT_SDA;
 extern char *
-spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__(
-    "FUN_L00_002712b8");
+spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
 extern f32   approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern float D_0015ED6C, frame_time;
 extern float freeze_stats_score_ref_b __asm__("D_0015ED6C"), frame_time_sq;
@@ -490,8 +488,7 @@ extern void func_L00_0025F4A8_alt(void *,
 void        build_spherical_offset(f32 *out, f32 scale, f32 a, f32 b) __asm__("FUN_00214db0");
 void        mark_moby_for_removal(void *obj) __asm__("FUN_0020c828");
 extern L16SparkHit D_L16_001742C0_hit __asm__("D_L16_00174240");
-extern float       func_L00_0025CCF0_spark(void *, void *, float, float, float, float, int) __asm__(
-    "FUN_L00_0025bc98");
+extern float       func_L00_0025CCF0_spark(void *, void *, float, float, float, float, int) __asm__("FUN_L00_0025bc98");
 
 void update_homing_projectile(unsigned char *moby) __asm__("FUN_L16_002a3f38");
 
@@ -2348,13 +2345,11 @@ typedef struct {
 } L16LeapMoby_u;
 
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
-f32        compute_interpolated_record_value_u(struct InterpolatedStateEntry *arg0) __asm__(
-    "FUN_0020c9e0");
+f32        compute_interpolated_record_value_u(struct InterpolatedStateEntry *arg0) __asm__("FUN_0020c9e0");
 void        mine_blend_color(void) __asm__("FUN_L00_002371e0");
 extern void func_L00_00237B70_anim(void *, int, int, int) __asm__("FUN_L00_002371e0");
 
-void update_hoverboard_dummy_jump_animation_and_pitch(L16LeapMoby_u *leap_moby) __asm__(
-    "FUN_L16_002d0058");
+void update_hoverboard_dummy_jump_animation_and_pitch(L16LeapMoby_u *leap_moby) __asm__("FUN_L16_002d0058");
 
 void update_hoverboard_dummy_jump_animation_and_pitch(L16LeapMoby_u *leap_moby) {
     float          root0, root1;
@@ -3034,8 +3029,7 @@ extern char  D_L16_001671C0_lui[] __asm__("D_L16_001671C0") NOT_SDA;
 extern void *set_class_0287_group_activation_and_find_nearest(int, int) __asm__("FUN_L16_002d5ad0");
 extern void *activate_class_0287_group_and_find_nearest(int, int) __asm__("FUN_L16_002d5bc8");
 extern void  set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90");
-extern void  FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int, int) __asm__(
-    "FUN_L00_002598b0");
+extern void  FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 extern void activate_test_dummy_group(int) __asm__("FUN_L16_002ceca8");
 extern void FUN_L16_002d6260_q(char *, void *, float *) __asm__("FUN_L16_002d6260");
 void        mmr_q(struct Obj *obj) __asm__("FUN_0020c828");

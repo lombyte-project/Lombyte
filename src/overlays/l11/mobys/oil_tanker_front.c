@@ -2042,8 +2042,7 @@ extern void  FUN_L08_00258090(void *, int, int, void *);
 extern short layered_effect_triple_word_source_tables_gp __asm__("D_L11_00162540")
     __attribute__((sda));
 extern short layered_effect_pair_source_tables_gp __asm__("D_L11_00162550") __attribute__((sda));
-void         emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) __asm__(
-    "FUN_L11_0031d8d8");
+void         emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) __asm__("FUN_L11_0031d8d8");
 
 void emit_level11_layered_effect_batches_with_pair_offset(int pair_offset_index) {
     int *element_counts = (int *)&D_L11_00162530_gp;
@@ -2345,8 +2344,7 @@ extern int distance_faded_effect_color_tables_initialized_gp __asm__("D_L11_0016
     __attribute__((sda));
 extern unsigned char D_L11_00162610_c __asm__("D_L11_00162610");
 
-void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) __asm__(
-    "FUN_L11_0031f150");
+void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) __asm__("FUN_L11_0031f150");
 
 void update_level11_distance_faded_effect_and_queue_draw(struct Moby *moby) {
     enum {

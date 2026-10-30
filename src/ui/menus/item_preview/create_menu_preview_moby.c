@@ -21,8 +21,7 @@ struct PreviewMoby {
 };
 
 extern void refresh_moby_spatial_bounds(struct PreviewMoby *) __asm__("func_0020DEF8");
-extern void pack_render_command_fields(struct PreviewMoby *, s32, s32, s32, s32) __asm__(
-    "PackRenderCommandFields");
+extern void pack_render_command_fields(struct PreviewMoby *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
 struct PreviewMoby *create_menu_preview_moby(s32 oclass) __asm__("FUN_00225490");
 

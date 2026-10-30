@@ -1076,8 +1076,7 @@ extern void trooper_anim_finish(void *, void *) __asm__("FUN_L00_0025d538");
 extern void select_moby_combat_target(void *, void *, float) __asm__("FUN_L00_0025fcb8");
 extern void FUN_L00_00263ac8(float, void *, int, void *);
 extern void reset_walker_gait_helpers(void *) __asm__("FUN_L00_002a1538");
-extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__(
-    "FUN_L00_002af8b0");
+extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 extern void reset_leg_rig_from_animation(void *, void *) __asm__("FUN_L04_00295de8");
 extern void initialize_woodcut_bot_movement_data(void *) __asm__("FUN_L04_002d1418");
 extern void blend_moby_animation(void *, int, int, int) __asm__("FUN_00212f90");

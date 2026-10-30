@@ -32,8 +32,7 @@ typedef char *va_list;
 #define _CONST        const
 extern s32    D_0012F770[];
 extern char **get_state_resource_wrapper(void) __asm__("GetStateResourceWrapper");
-extern s32    convert_multibyte_character(RncReent *, s32 *, const char *, s32, s32 *) __asm__(
-    "ConvertMultibyteCharacter");
+extern s32    convert_multibyte_character(RncReent *, s32 *, const char *, s32, s32 *) __asm__("ConvertMultibyteCharacter");
 extern s32   __swsetup(RncFile *);
 extern s32   __sbprintf(RncFile *, const char *, va_list);
 extern s32   __sprint(RncFile *, RncStdioUio *);

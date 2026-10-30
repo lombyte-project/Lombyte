@@ -582,8 +582,7 @@ extern s32                 level_frame_count_lui __asm__("D_L07_0015F5CC");
 extern float               D_0015ED6C;
 extern struct ChaserTarget D_L07_00173EC0;
 extern int                 FUN_L00_00259028(struct Moby *, void *, int, void *);
-extern int probe_vertical_ground_collision(void *, struct Moby *, int, float, float) __asm__(
-    "FUN_L00_002583f0");
+extern int probe_vertical_ground_collision(void *, struct Moby *, int, float, float) __asm__("FUN_L00_002583f0");
 
 int update_snagglebeast_chase_movement(struct Moby       *chaser_moby,
                                        struct ChaserVars *chaser_vars,
@@ -851,8 +850,7 @@ extern void spawn_moby_point_offset_particle(char *, int, float, float) __asm__(
 extern int
 update_alternating_joint_emission_burst(void *, char *, float *) __asm__("FUN_L07_003122b0");
 extern int   is_value_within_interpolated_window(void *, float) __asm__("FUN_00214cc8");
-extern void *spawn_moby_class_1046(int, void *, int, float, float, float, float, float) __asm__(
-    "FUN_L07_0030dbb0");
+extern void *spawn_moby_class_1046(int, void *, int, float, float, float, float, float) __asm__("FUN_L07_0030dbb0");
 extern void FUN_L00_0024f7c8(void *, int, void *);
 extern void configure_timed_point_light(
     void *, void *, int, void *, short, unsigned int, int, float) __asm__("FUN_L07_00311eb8");

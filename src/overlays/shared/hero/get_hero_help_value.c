@@ -564,8 +564,7 @@ typedef union {
     f32         f[4];
 } V_22a1d0;
 
-extern OvlVec4 coll_hit_pos __asm__(
-    "D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
+extern OvlVec4 coll_hit_pos __asm__("D_L06_001745F0") NOT_SDA; /* position after push-out of the last collision query */
 extern void f2347c0_22a1d0(void) __asm__("FUN_L00_002347c0");
 extern void f233810_22a1d0(void *, void *, f32) __asm__("FUN_L00_00233810");
 extern void f2334d0_22a1d0(void *, void *, f32) __asm__("FUN_L00_002334d0");

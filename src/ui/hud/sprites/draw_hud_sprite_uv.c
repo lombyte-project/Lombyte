@@ -5,8 +5,7 @@
 
 extern u64 get_frame_texture(s32) __asm__("func_001FFA10");
 
-void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 alpha) __asm__(
-    "FUN_00200258");
+void draw_hud_sprite_uv(s32 id, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 alpha) __asm__("FUN_00200258");
 
 void draw_hud_sprite_uv(
 

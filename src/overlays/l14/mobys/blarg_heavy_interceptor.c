@@ -380,8 +380,7 @@ void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) __asm__(
 
 extern void
      update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *) __asm__("FUN_L14_002ae6d8");
-void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) __asm__(
-    "FUN_L14_002ae7d8");
+void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) __asm__("FUN_L14_002ae7d8");
 
 extern void
      update_blarg_heavy_interceptor_patrol_path_position(struct Moby *) __asm__("FUN_L14_002ae7d8");
@@ -1214,8 +1213,7 @@ typedef struct {
 
 extern float blarg_heavy_interceptor_spinning_beam_initial_offset_scale_gp __asm__("D_L14_00161434")
     __attribute__((sda));
-extern float blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair_gp __asm__(
-    "D_L14_00161438") __attribute__((sda));
+extern float blarg_heavy_interceptor_spinning_beam_offset_scale_increment_per_pair_gp __asm__("D_L14_00161438") __attribute__((sda));
 extern float blarg_heavy_interceptor_spinning_beam_initial_quad_scale_gp __asm__("D_L14_0016143C")
     __attribute__((sda));
 extern float
@@ -1571,10 +1569,8 @@ void initialize_blarg_heavy_interceptor_paths(struct Moby *moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AF918), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__(
-    "FUN_L00_0025b8c0");
-extern int FUN_L00_0025d808_2af918(int *tab, float *out, int *a, float *b, int c, float d) __asm__(
-    "FUN_L00_0025d808");
+extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
+extern int FUN_L00_0025d808_2af918(int *tab, float *out, int *a, float *b, int c, float d) __asm__("FUN_L00_0025d808");
 
 void update_blarg_heavy_interceptor_patrol_aim_point(struct Moby *moby) {
     char *data = (char *)moby->pvars;
@@ -1666,8 +1662,7 @@ void update_blarg_heavy_interceptor_patrol_path_position(struct Moby *moby) {
 /* Picks a target point from a list or searches for one, then eases the moby's position toward it per axis. */
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002AFB40), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__(
-    "FUN_L00_0025b8c0");
+extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int
 FUN_L00_0025d808_2afb40(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 
@@ -1752,8 +1747,7 @@ update_moby_rotation_oscillation(u8 *, u8 *, u8 *, f32, f32, f32) __asm__("FUN_L
  * Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c:
  * func_L14_002AFC48), where it is exact; names translated to the US level
  * program. */
-void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *moby) __asm__(
-    "FUN_L14_002aea08");
+void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *moby) __asm__("FUN_L14_002aea08");
 
 void update_blarg_heavy_interceptor_oscillation_and_patrol_heading(struct Moby *moby) {
     u8 *data = ((u8 *)moby->pvars);
@@ -3057,8 +3051,7 @@ void minibomber_update(Moby_2B5938 *moby) {
 }
 
 /* Same source as the exact FUN_L14_002b4340: skips states 0 and 9, keeps the model scale, and hit reactions play animation 2. */
-extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, int) __asm__(
-    "FUN_L00_0025a478");
+extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_00212f90(void *, int, int, int);
 extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 
@@ -3135,8 +3128,7 @@ void process_minibomber_hit_reactions(struct Moby *hit_owner_moby) {
 }
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6678), where it is exact; names translated to the US level program. */
 
-extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__(
-    "FUN_L00_0025b8c0");
+extern float FUN_L00_0025b8c0_c(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern f32  D_L14_00161540_gp __asm__("D_L14_00161540") __attribute__((sda));
 extern void FUN_L00_00262b00_c(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
 extern void
@@ -3234,8 +3226,7 @@ void initialize_minibomber_path_segment_lengths(struct Moby *moby) {
 
 extern float FUN_L00_0025b8c0_5730(
     float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
-extern void steer_5730(char *moby, float *vel, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258278");
+extern void steer_5730(char *moby, float *vel, float target, float k, float d, float max) __asm__("FUN_L00_00258278");
 
 extern int FUN_L00_0025d808_5730() __asm__("FUN_L00_0025d808");
 int        advance_minibomber_along_path(struct Moby *moby,
@@ -3299,8 +3290,7 @@ int advance_minibomber_along_path(struct Moby *moby,
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002ACCC0.c: func_L14_002B6AA0), where it is exact; names translated to the US level program. */
 
 extern void FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
-extern void approach_w(char *moby, float target, float *vel, float k, float d, float max) __asm__(
-    "FUN_L00_00258278");
+extern void approach_w(char *moby, float target, float *vel, float k, float d, float max) __asm__("FUN_L00_00258278");
 
 void ease_minibomber_position_and_heading(char  *moby,
                                           float *target,
@@ -3612,8 +3602,7 @@ extern void  e450_b78(void *,
                       int,
                       int) __asm__("FUN_L00_0025e450");
 extern char *spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-extern int   allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__(
-    "FUN_L00_0023e738");
+extern int   allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern PuffParticle *
 spawn_puff_d(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 

@@ -26,8 +26,7 @@ extern void update_branching_and_fading_effect_particle(void) __asm__("FUN_L00_0
 extern void update_spinning_and_fading_effect_particle(void) __asm__("FUN_L00_0026b500");
 extern void update_spinning_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026b910");
 extern void update_attached_or_fading_effect_particle(void) __asm__("FUN_L00_0026ba68");
-extern void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(void) __asm__(
-    "FUN_L00_0026bca8");
+extern void update_shrinking_effect_particle_with_gravity_and_secondary_spawns(void) __asm__("FUN_L00_0026bca8");
 extern void update_fading_debris_particle_with_landing_spawn(void) __asm__("FUN_L00_0026c088");
 extern void FUN_L00_0026c3c8(void);
 extern void update_descending_fade_in_out_effect_particle(void) __asm__("FUN_L00_0026c558");

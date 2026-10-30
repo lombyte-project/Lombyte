@@ -422,8 +422,7 @@ void initialize_hero_relative_camera(void *camera_instance) {
 #include "sda.h"
 
 extern float cam_interp_values(void *, float, float, float, float, float) __asm__("FUN_001ebd78");
-void         update_smoothed_hero_relative_camera_position(void *camera_instance) __asm__(
-    "FUN_L03_002ebb00");
+void         update_smoothed_hero_relative_camera_position(void *camera_instance) __asm__("FUN_L03_002ebb00");
 
 void update_smoothed_hero_relative_camera_position(void *camera_instance) {
     char        *camera = camera_instance;
@@ -475,8 +474,7 @@ void update_smoothed_hero_relative_camera_position(void *camera_instance) {
 extern char  camera_look_offset_direction[] __asm__("D_L03_00166F40");
 extern short camera_target_height_stiffness __asm__("D_L03_00161E70") __attribute__((sda));
 extern short camera_target_height_damping __asm__("D_L03_00161E74") __attribute__((sda));
-f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__(
-    "FUN_001ebd78");
+f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__("FUN_001ebd78");
 
 void rebuild_camera_orientation_axes(void *camera_instance) __asm__("FUN_L03_002ebc58");
 

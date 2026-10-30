@@ -280,10 +280,8 @@ spawn_moving_hero_relative_alpha_fade_particle(float        *pos,
 extern unsigned char *
 create_drone_flight_trail_record(char *pos, int mode, int step) __asm__("FUN_L17_0026fdd0");
 extern unsigned char D_00141968_x_q[] __asm__("D_00141968");
-extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int, int) __asm__(
-    "FUN_L00_002598b0");
-extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale, void *src) __asm__(
-    "FUN_L00_00259888");
+extern void FUN_L00_002598b0_q(int, float, void *, int, float, float, int, int, int) __asm__("FUN_L00_002598b0");
+extern void func_L00_0025A8C0_alt_q(char *arg, int a, int b, float scale, void *src) __asm__("FUN_L00_00259888");
 
 extern char D_L17_00174760_lui[] __asm__("D_L17_00174760") NOT_SDA;
 void        update_drone_flight_and_sparks(struct Moby *moby) __asm__("FUN_L17_002e8e08");
@@ -4000,8 +3998,7 @@ extern short      shuttle_second_stop_departure_scale_multiplier __asm__("D_L17_
     __attribute__((sda));
 extern short shuttle_first_stop_departure_scale_multiplier __asm__("D_L17_001623AC")
     __attribute__((sda));
-extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__(
-    "FUN_L02_002f8aa0");
+extern void set_selected_object_float_triplets(float, float, float, float, float, float) __asm__("FUN_L02_002f8aa0");
 int  update_shuttle_travel_and_camera(char *moby, int idx) __asm__("FUN_L17_002f2180");
 void update_shuttle_help_message(struct Moby *moby) __asm__("FUN_L17_002f20d8");
 

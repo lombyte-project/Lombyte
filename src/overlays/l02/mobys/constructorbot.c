@@ -40,8 +40,7 @@ extern void    fast_vec_add(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void    fast_vec_scale(void *, void *, f32) __asm__("FUN_001f9a68");
 extern f32     approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 extern s32     scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern u8     *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__(
-    "FUN_L00_002712b8");
+extern u8     *spawn_particle(void *, void *, s32, s32, s32, s32, f32, f32, f32, f32, f32) __asm__("FUN_L00_002712b8");
 
 /* Shard debris update: drifts along its velocity, sheds particle trails and expires when its timer runs out. */
 void update_shard_debris(struct Moby *moby) __asm__("FUN_L02_002ebf20");

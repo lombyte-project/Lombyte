@@ -2694,8 +2694,7 @@ extern float D_L11_00162130 __attribute__((sda));
 extern float D_L11_00162150 __attribute__((sda));
 extern float D_L11_00162154 __attribute__((sda));
 extern float D_L11_00162158 __attribute__((sda));
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__(
-    "FUN_L00_0025b8c0");
+extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern float
 spring_angle(float *, float *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void spawn_explosion(void *,
@@ -3619,10 +3618,8 @@ extern void  play_entity_sound(
 extern float jump_speed_4318(void *, void *, int, float, float) __asm__("FUN_L00_0025abf0");
 extern float turn_to_4318(float *, float *, float, float, float, float) __asm__("FUN_L00_0025be00");
 extern int   FUN_L00_0025c698_4318(struct Moby *, void *) __asm__("FUN_L00_0025c698");
-extern void  spawn_color_swapped_explosion_burst(struct Moby *, void *, int, float, float) __asm__(
-    "FUN_L00_0025f3e8");
-extern void follow_carrier_4318(struct Moby *, void *, void *, void *, void *, void *) __asm__(
-    "FUN_L00_00260400");
+extern void  spawn_color_swapped_explosion_burst(struct Moby *, void *, int, float, float) __asm__("FUN_L00_0025f3e8");
+extern void follow_carrier_4318(struct Moby *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260400");
 extern int   test_path_segment_strict_crossing(int, void *, void *) __asm__("FUN_L00_00261968");
 extern void  move_4318(struct Moby *, void *, float, float, float, int) __asm__("FUN_L00_00258830");
 extern float randf_sym(float, float) __asm__("FUN_L00_00257c48");

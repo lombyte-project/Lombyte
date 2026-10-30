@@ -19,8 +19,7 @@
    func_001FFC48. */
 /* Ported from rac1-decomp (src/overlays/shared/hud_00235960.c: func_L00_00236208), where it is exact; names translated to the US level program. */
 
-s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__(
-    "FUN_001ff308");
+s32 queue_animation_update(s32 chan, s32 id, s32 fn, s32 d, s32 e, s32 c, s32 b) __asm__("FUN_001ff308");
 
 void reset_hud_animation_channels(void) __asm__("FUN_L00_00235878");
 

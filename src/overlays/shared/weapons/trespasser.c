@@ -872,8 +872,7 @@ extern void         spawn_explosion(float,
                                     int) __asm__("FUN_L00_0025e450");
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern void
-send_blast_hits(void *, void *, void *, int, void *, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern int  FUN_L00_001ff600(float, void *, void *);
 extern void save_state_fields_to_hero(char *) __asm__("FUN_L00_002beb90");
 extern void restore_state_fields_from_hero(char *) __asm__("FUN_L00_002bebc8");
@@ -881,8 +880,7 @@ extern void save_state_vector_and_fields_to_hero(char *) __asm__("FUN_L00_002bec
 extern void restore_saved_state_fields_from_hero(char *) __asm__("FUN_L00_002bec48");
 extern int  probe_moby_raised_sphere_collision(char *, int, void *) __asm__("FUN_L00_002beab0");
 extern void FUN_L00_00260400(void *, int, void *, void *, void *, void *);
-extern int  move_moby_with_collision_integer_radius(void *, void *, int, int, float, float) __asm__(
-    "FUN_L00_00258ad0");
+extern int  move_moby_with_collision_integer_radius(void *, void *, int, int, float, float) __asm__("FUN_L00_00258ad0");
 extern void FUN_L00_00258278(void *, float *, float, float, float, float);
 extern struct Moby *
 select_class5_target_or_hero(void *, void *, void *, void *, int) __asm__("FUN_L00_002bed90");
@@ -1761,8 +1759,7 @@ extern void sub_2c(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32  scale_ticks(s32) __asm__("FUN_001fa6c0");
 extern f32  FUN_L00_0025abf0(void *, void *, f32, f32, s32);
 
-void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__(
-    "FUN_L00_002c2488");
+void aim_throw_arc(V2c2488 *pos, V2c2488 *tgt, f32 *out, f32 speed, f32 unused, f32 range) __asm__("FUN_L00_002c2488");
 void aim_throw_arc(V2c2488 *origin_position,
                    V2c2488 *target_position,
                    f32     *out,
@@ -3074,8 +3071,7 @@ void           suck_draw_reticle(int   a,
                                  float y,
                                  float z) __asm__("FUN_L00_001edf60");
 extern Moby   *FUN_L00_002c6f88_2bffa8(void *, float) __asm__("FUN_L00_002c6f88");
-extern void FUN_L00_001edf60_2bffa8(int, int, float, void *, int, float, int, float, int) __asm__(
-    "FUN_L00_001edf60");
+extern void FUN_L00_001edf60_2bffa8(int, int, float, void *, int, float, int, float, int) __asm__("FUN_L00_001edf60");
 extern int   FUN_001f96f8_2bffa8(int) __asm__("FUN_001f96f8");
 extern float FUN_001f9b48_2bffa8(void *, void *) __asm__("FUN_001f9b48");
 extern void  FUN_001f9a28_2bffa8(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -3377,8 +3373,7 @@ extern float D_0015ED60_2c6158 __asm__("D_0015ED60");
 extern float D_0013F8C4_2c6158 __asm__("D_0013F8C4");
 extern float D_0013F62C_2c6158 __asm__("D_0013F62C");
 extern void  hero_set_state(s32, s32) __asm__("FUN_L00_002223f8");
-extern void  FUN_001edf60_2c6158(void *, float, u32, void *, s32, float, s32, float, s32) __asm__(
-    "FUN_L00_001edf60");
+extern void  FUN_001edf60_2c6158(void *, float, u32, void *, s32, float, s32, float, s32) __asm__("FUN_L00_001edf60");
 extern s32   FUN_001fef20_2c6158(s32) __asm__("FUN_001f96f8");
 extern void  FUN_0028dbe8_2c6158(s32, s32, void *) __asm__("FUN_0022da68");
 extern void  FUN_001f93e0_2c6158(void *, void *) __asm__("FUN_L00_001f93e0");

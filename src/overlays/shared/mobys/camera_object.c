@@ -818,8 +818,7 @@ extern void FUN_0020c828(void *);
 extern s32  FUN_L00_001f0d60(void *, s32, void *, f32);
 extern s32  allocate_glint_slot(void *, s32, f32) __asm__("FUN_L00_001fe990");
 extern s32  FUN_L00_002603d0(void *);
-extern void convert_pose_to_reference_local(void *, void *, void *, void *, void *, void *) __asm__(
-    "FUN_L00_00260668");
+extern void convert_pose_to_reference_local(void *, void *, void *, void *, void *, void *) __asm__("FUN_L00_00260668");
 extern s32  FUN_L00_00257b90(s32, s32);
 extern void build_quaternion_from_axis_rotations(void *, void *) __asm__("FUN_L00_00259f50");
 extern void FUN_L00_0025f730(void *, f32);
@@ -2043,8 +2042,7 @@ extern int            collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern int            test_hero_animation_frame_window(float) __asm__("FUN_L00_00211870");
 extern int
 sweep_hit_segment(void *, void *, void *, void *, void *, void *, int) __asm__("FUN_L00_00259d08");
-extern int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char *) __asm__(
-    "FUN_L00_0025e368");
+extern int is_nonnull_moby_outside_table_or_class_range_500_to_540_or_class_502(char *) __asm__("FUN_L00_0025e368");
 extern int  allocate_voice_for_target_entry_alt(int, int, int) __asm__("FUN_0022da68");
 extern void hero_set_attack_ticks(int) __asm__("FUN_L00_00232640");
 extern void

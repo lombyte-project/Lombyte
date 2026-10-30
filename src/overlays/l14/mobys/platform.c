@@ -129,8 +129,7 @@ extern void set_race_camera(void *, void *, int, int) __asm__("FUN_L00_00216f90"
 extern void
 FUN_L00_0025d808_6570(void *, void *, void *, void *, int, float) __asm__("FUN_L00_0025d808");
 
-void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) __asm__(
-    "FUN_L14_002d6570");
+void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) __asm__("FUN_L14_002d6570");
 
 void reset_racer_group_to_hero_path_position(struct Moby *group_anchor_moby) {
     char           *list[4];

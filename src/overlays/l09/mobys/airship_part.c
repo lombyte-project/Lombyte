@@ -61,17 +61,14 @@ typedef union {
 } Buf;
 
 extern int  debug_print() __asm__("FUN_001e93b0");
-extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__(
-    "FUN_L00_00262b00");
-extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void mark_moby_for_removal_cf(void *, int, int) __asm__("FUN_L00_00257470");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern char *
 spawn_spark(void *, void *, void *, int, int, int, int, int, int) __asm__("FUN_00218888");
 extern int  random_int_between(int, int) __asm__("FUN_L00_00257b90");
-extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__(
-    "FUN_L00_0026a9f0");
+extern void spawn_particle(void *, void *, int, int, int, int, int, int, float, float) __asm__("FUN_L00_0026a9f0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 
 extern char                       airship_part_missing_parent_format[] __asm__("D_L09_002082A0");

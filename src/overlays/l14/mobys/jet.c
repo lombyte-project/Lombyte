@@ -1902,8 +1902,7 @@ extern struct L14VendorLevel D_L14_001BB930_v __asm__("D_L14_001BB930");
 extern void                  vendor_volume(s32 voice, s32 volume) __asm__("FUN_L01_002a1968");
 extern int                   vendor_ftoi(float) __asm__("FUN_001fa6d0");
 extern int                   fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
-extern float vendor_spring(float *p, float t, float *v, float u1, float u2, float eps) __asm__(
-    "FUN_L00_0025b8c0");
+extern float vendor_spring(float *p, float t, float *v, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 void initialize_elevator_path_state(struct Moby *moby) __asm__("FUN_L14_002eef60");
 
 void initialize_elevator_path_state(struct Moby *m) __asm__("FUN_L14_002eef60");

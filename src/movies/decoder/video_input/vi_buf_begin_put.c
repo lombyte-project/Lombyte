@@ -3,8 +3,7 @@
 
 extern s32 signal_semaphore() __asm__("FUN_00118990");
 extern s32 wait_semaphore() __asm__("FUN_001189b0");
-void       vi_buf_begin_put(struct ViBuf *buf, s32 *ptr0, s32 *len0, s32 *ptr1, s32 *len1) __asm__(
-    "FUN_0023be20");
+void       vi_buf_begin_put(struct ViBuf *buf, s32 *ptr0, s32 *len0, s32 *ptr1, s32 *len1) __asm__("FUN_0023be20");
 
 void vi_buf_begin_put(struct ViBuf *ring_buffer,
                       s32          *first_write_address_out,

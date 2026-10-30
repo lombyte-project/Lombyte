@@ -40,8 +40,7 @@ s32 find_camera_record_by_id(s32 id) {
     }
 }
 
-float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__(
-    "FUN_L00_001eb328");
+float rope_spring_turn(float *p, float a, float b, float c, float d, float lim) __asm__("FUN_L00_001eb328");
 float rope_spring_turn(float *spring_state,
                        float  current_angle,
                        float  target_angle,

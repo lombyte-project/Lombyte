@@ -13,8 +13,7 @@ struct Glyph {
 
 #include "rnc/ui/text/font_palette.h"
 
-extern void emit_textured_rectangle(f32, f32, f32, f32, s32, s32, s32, s32, u64, s32) __asm__(
-    "FUN_001f5808");
+extern void emit_textured_rectangle(f32, f32, f32, f32, s32, s32, s32, s32, u64, s32) __asm__("FUN_001f5808");
 
 void process_bgm_display_text_event(u64           color,
                                     u8           *s,

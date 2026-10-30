@@ -12,8 +12,7 @@ extern s32 vi_buf_put_ts(struct ViBuf *, struct ViBufTimeStamp *) __asm__("func_
    vi_buf_put_ts returns 0 for a full timestamp queue, otherwise 1,
    including when both timestamps are negative and no entry is added.
    video_callback tests this result and reports the zero case. */
-s32 video_dec_put_ts(struct VideoDec *vd, s64 pts, s64 dts, s32 pos, s32 len) __asm__(
-    "FUN_0023cc98");
+s32 video_dec_put_ts(struct VideoDec *vd, s64 pts, s64 dts, s32 pos, s32 len) __asm__("FUN_0023cc98");
 
 s32 video_dec_put_ts(struct VideoDec *vd, s64 pts, s64 dts, s32 pos, s32 len) {
     struct ViBufTimeStamp ts;

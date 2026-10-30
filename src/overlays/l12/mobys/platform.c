@@ -1299,8 +1299,7 @@ extern char *
 spawn_burst(void *pos, void *dir, int c, int d, int n, int k, float f) __asm__("FUN_L00_0026cbb0");
 unsigned char *
 FUN_L00_0026d000(void *pos, int n, void *vel, int color, float r, float lo, float hi, float size);
-extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__(
-    "FUN_L00_0026d000");
+extern void *func_L00_0026DEA0_x(void *, float, float, float, int, void *, float, int) __asm__("FUN_L00_0026d000");
 
 float D_L12_00161920[4] __attribute__((section(".sdata"))) = {-1.5f, 0.8f, -0.5f, 0.0f};
 
@@ -1521,8 +1520,7 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 extern void update_entity_matrix(char *, void *, void *, void *) __asm__("FUN_L00_00260738");
-void        FUN_L12_002e3c08_c(char *m, float *ang, void *target, int unused, int brake) __asm__(
-    "FUN_L12_002e3c08");
+void        FUN_L12_002e3c08_c(char *m, float *ang, void *target, int unused, int brake) __asm__("FUN_L12_002e3c08");
 extern void func_L12_002E4F18_2E51E8(void *, void *, void *, int, int) __asm__("FUN_L12_002e3c08");
 
 void platform_update(Moby *moby) __asm__("FUN_L12_002e3ed8");
@@ -3125,8 +3123,7 @@ update_state:
 /* Springs the moby's two rotation angles toward a heading taken from its data's direction vector. */
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002EC180), where it is exact; names translated to the US level program. */
 
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 
 void update_blarg_helicopter_motion_tilt(struct Moby *moby) {
     char *data = (char *)moby->pvars;

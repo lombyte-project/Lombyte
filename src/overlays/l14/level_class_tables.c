@@ -337,9 +337,7 @@ struct MobyClassUpdate moby_classes[154] __asm__("D_L14_001FD280")
         {   -1,                                         0, default_moby_methods},
 };
 
-struct CameraType level_camera_types[10] __asm__(
-
-    "D_L14_001FDA00") __attribute__((section("lvl.camvtbl"))) = {
+struct CameraType level_camera_types[10] __asm__("D_L14_001FDA00") __attribute__((section("lvl.camvtbl"))) = {
     { 0,        noop_callback_l,               follow_camera_setup,follow_camera_update,                          noop_main_callback                                                                           },
     { 4,
      camera_transition_update,                  FUN_L00_002ea7a0,

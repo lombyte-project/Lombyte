@@ -990,8 +990,7 @@ extern int   FUN_001e93b0_6ee0() __asm__("FUN_001e93b0");
 extern void  FUN_L14_00307510_6ee0(void *) __asm__("FUN_L14_00307510");
 extern void  fill_transfer_words(void *, int, int) __asm__("FUN_001f97e8");
 extern void  trooper_anim_update(void *, void *) __asm__("FUN_L00_0025d458");
-extern void  update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void  update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern int FUN_L14_00307620_6ee0(void *) __asm__("FUN_L14_00307620");
 char       D_L14_001FD118[] = "Flying Car (moby1417) with no flyPath. UID: %d - RAR\n";
 char D_L14_001FD150[] = "Flying Car (moby1417) with a flyPath that has no points. UID: %d - RAR\n";
@@ -1216,8 +1215,7 @@ void initialize_flying_car_path(struct Moby *moby) {
  * otherwise, sinks by its speed, eases onto the path point and banks into the turns, and returns 1. */
 extern char *D_L14_0015FFD8_7620 __asm__("D_L14_0015FFD8");
 extern float D_L14_00162274 __attribute__((sda));
-extern int   sample_path(char *path, float *out, void *pos, void *t, int dir, float step) __asm__(
-    "FUN_L00_0025d808");
+extern int   sample_path(char *path, float *out, void *pos, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern void cart_burst(void *, void *, f32, f32, s32) __asm__("FUN_L00_0025f090");
 extern void FUN_L00_00258278(struct Moby *, f32, f32 *, f32, f32, f32);
 extern f32  vendor_spring(f32 *, f32 *, f32, f32, f32, f32) __asm__("FUN_L00_0025b8c0");
@@ -1558,8 +1556,7 @@ extern char                *D_L14_0015FFD8_5290 __asm__("D_L14_0015FFD8");
 extern char                 path_camera_target_offset_basis[] __asm__("D_L14_001676D0");
 extern float D_L14_001675D8 NOT_SDA;
 extern float                D_0013F5E0_5290[] __asm__("D_0013F5E0");
-extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__(
-    "FUN_L00_0025d808");
+extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern float cosine_interpolate(float, float, float) __asm__("FUN_002133d0");
 extern void  reset_racer_group_to_hero_path_position(struct Moby *m) __asm__("FUN_L14_002d6570");
 

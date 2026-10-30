@@ -251,8 +251,7 @@ extern int                D_0015EEA4;
 
 extern struct Hero hero_lui __asm__("D_0013F350") NOT_SDA;
 /* Picks slot w74 from the stick angle (or steps it with the 0x1000-0x8000 pad bits), counts hold frames in b71/b70, records the slot's entry when released, and closes when b70 runs out. */
-void update_hud_item_selector_selection_and_visibility(Obj *hud_element) __asm__(
-    "FUN_L00_00237ba0");
+void update_hud_item_selector_selection_and_visibility(Obj *hud_element) __asm__("FUN_L00_00237ba0");
 
 void update_hud_item_selector_selection_and_visibility(Obj *hud_element) {
     float x, y, mag, stick_angle, a, slot_position, previous_slot_angle;
@@ -627,8 +626,7 @@ void initialize_four_slot_hud_selector(char *hud_element) {
     D_L00_0015F72C = 0;
 }
 
-void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) __asm__(
-    "FUN_L00_00238b80");
+void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) __asm__("FUN_L00_00238b80");
 
 void update_hud_radial_selector_selection_and_visibility(Obj *hud_element) {
     float x, y, input_magnitude, selection_angle;
@@ -1195,8 +1193,7 @@ typedef struct T00239d00 {
 
 extern s32 bolt_panel_open_steps_gp __asm__("D_L00_0015F824") __attribute__((sda));
 extern s32 bolt_text_fade_steps_gp __asm__("D_L00_0015F828") __attribute__((sda));
-void       update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) __asm__(
-    "FUN_L00_00239d00");
+void       update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) __asm__("FUN_L00_00239d00");
 
 void update_bolt_counter_hud_animation_and_visibility(T00239d00 *hud_element) {
     u8 *visibility_counters = &hud_element->a;

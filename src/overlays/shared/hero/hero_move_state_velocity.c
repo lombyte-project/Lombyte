@@ -35,8 +35,7 @@ extern void  build_scaled_hero_move_impulse(f32, f32) __asm__("FUN_L00_002132b8"
 extern void  speed_step(f32, f32) __asm__("FUN_L00_00212088");
 extern void  turn_to(int, float, float, float) __asm__("FUN_L00_00211e30");
 extern void  stick_target(int, float) __asm__("FUN_L00_002118c8");
-extern f32   FUN_L00_0025bc98_214658(float *, float *, int, float, float, float, float) __asm__(
-    "FUN_L00_0025bc98");
+extern f32   FUN_L00_0025bc98_214658(float *, float *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void rotate_hero_about_fixed_local_pivot(float, float, float) __asm__("FUN_L00_002091d8");
 extern void set_gravity_relative_vector_length_xy(void *, void *, f32) __asm__("FUN_L00_00233ba0");
 extern void add_hero_forward_offset(void *, void *, f32) __asm__("FUN_L00_00233708");
@@ -639,8 +638,7 @@ void apply_hero_reference_tilt(void) {
     }
 }
 
-extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float, float) __asm__(
-    "FUN_L00_0025bc98");
+extern float FUN_L00_0025bc98_2165b8(void *, void *, int, float, float, float, float) __asm__("FUN_L00_0025bc98");
 extern void apply_hero_reference_tilt(void) __asm__("FUN_L00_002163f0");
 
 void update_hero_tilt(void) __asm__("FUN_L00_002165b8");

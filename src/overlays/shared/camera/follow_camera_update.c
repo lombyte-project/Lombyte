@@ -249,8 +249,7 @@ extern void follow_camera_pull_back(char *, float *, float *) __asm__("FUN_L00_0
 extern void
 build_look_at_matrix(void *dst, void *vec, void *axis, float angle) __asm__("FUN_00214890");
 extern void fast_vec_cross(void *, void *, void *) __asm__("FUN_001f9ad8");
-f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__(
-    "FUN_001ebd78");
+f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__("FUN_001ebd78");
 float absolute_float(float input) __asm__("func_001F99C0");
 
 void         follow_camera_orbit(int arg) __asm__("FUN_L00_002e9720");
@@ -865,8 +864,7 @@ extern void        FUN_001f9a28_2ea810(void *, void *, void *) __asm__("FUN_001f
 extern float       FUN_001f9af0_2ea810(void *) __asm__("FUN_001f9af0");
 #define Q l00_camera_lui
 
-void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) __asm__(
-    "FUN_L00_002ea810");
+void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) __asm__("FUN_L00_002ea810");
 
 void select_camera_mode_by_hero_vector_alignment(A_2ea810 *camera_object) {
     float  scaled_axis_scratch[4];
@@ -1062,8 +1060,7 @@ extern void interpolate_wrapped_rotations_cosine_eased(float *,
                                                        float *,
                                                        float *,
                                                        float) __asm__("FUN_L00_00258050");
-f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__(
-    "FUN_001ebd78");
+f32 cam_interp_values(void *p, f32 to, f32 stiffness, f32 damping, f32 max, f32 vel) __asm__("FUN_001ebd78");
 
 void update_camera_pose_from_targets(void *camera) __asm__("FUN_L00_002eae20");
 
@@ -1489,8 +1486,7 @@ char *initialize_mode6_orbit_camera(void *target_moby) {
     return camera_record;
 }
 
-void select_camera_mode_by_hero_alignment_and_distance(char *camera_object) __asm__(
-    "FUN_L00_002eba18");
+void select_camera_mode_by_hero_alignment_and_distance(char *camera_object) __asm__("FUN_L00_002eba18");
 
 void select_camera_mode_by_hero_alignment_and_distance(char *camera_object) {
     struct Hero *hero_data = &hero;
@@ -2515,8 +2511,7 @@ extern void sub_2edad8(void *, void *, void *) __asm__("FUN_001f9a28");
 extern f32  absolute_float(f32) __asm__("FUN_001f99c0");
 extern s32  play_voice(s32, s32, void *, s32) __asm__("FUN_L00_0028ddd8");
 extern s32  scale_game_frames(s32) __asm__("FUN_001f96f8");
-void        update_sound_emitter_playback_at_random_position(u8 *sound_emitter) __asm__(
-    "FUN_L00_002edad8");
+void        update_sound_emitter_playback_at_random_position(u8 *sound_emitter) __asm__("FUN_L00_002edad8");
 
 void update_sound_emitter_playback_at_random_position(u8 *sound_emitter) {
     V_2edad8  reference_position_delta;

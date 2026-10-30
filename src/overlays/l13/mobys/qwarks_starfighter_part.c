@@ -457,8 +457,7 @@ extern char     level13_point_light_slots[] __asm__("D_L13_001805C0");
 extern char     qwarks_starfighter_tractor_offscreen_abort_message[] __asm__("D_L13_001F4F18");
 extern f32      random_float_between(f32, f32) __asm__("func_002132A8");
 extern float    D_L13_00160660[] MACRO_ADDR;
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern int   D_0015ED84;
 extern int   D_0015EEA4;
@@ -468,8 +467,7 @@ int          D_L13_00161954 = -1;
 extern int   qwarks_starfighter_command_path_slots[] __asm__("D_L13_001D3448");
 extern int   qwarks_starfighter_attachment_class_ids[] __asm__("D_L13_001D34D8");
 extern int   DebugPrint_alt() __asm__("FUN_001e93b0");
-extern int   allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__(
-    "FUN_L00_0023e738");
+extern int   allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern int advance_moby_along_selected_path(void *, void *, int, int) __asm__("FUN_L13_002e9160");
 extern int
 update_moby_path_following_away_from_hero(void *, void *, int, int) __asm__("FUN_L13_002e9408");
@@ -1357,8 +1355,7 @@ void update_qwarks_starfighter_part(struct Moby *moby) {
 #include "types.h"
 
 extern int collect_mobies_in_sphere(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
-extern void spawn_nearby_effect_without_direction(float, void *, void *, int, void *) __asm__(
-    "FUN_L10_0024c7f0");
+extern void spawn_nearby_effect_without_direction(float, void *, void *, int, void *) __asm__("FUN_L10_0024c7f0");
 extern void *memcpy(void *, const void *, unsigned int);
 
 extern void *sphere_hits_ed158[] __asm__("D_L13_00178200");
@@ -1526,8 +1523,7 @@ extern unsigned char menu_item_enabled_115[] __asm__("D_0013D407");
 extern char          D_00141968[];
 extern char          statistics_level_flags[] __asm__("D_00141CE4");
 
-void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) __asm__(
-    "FUN_L13_002f3778");
+void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) __asm__("FUN_L13_002f3778");
 
 void update_linked_moby_statistics_and_hero_volume_flag(struct Moby *moby) {
     char          *data;

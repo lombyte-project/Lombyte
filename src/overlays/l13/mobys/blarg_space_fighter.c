@@ -33,8 +33,7 @@ enum AsteroidSpinAxis {
 };
 
 extern char *create_moby_c13(int) __asm__("FUN_0020c4f8");
-extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__(
-    "FUN_L00_0026daa0");
+extern char *spawn_source_attached_fading_effect_particle(char *, int, int, int, float) __asm__("FUN_L00_0026daa0");
 
 unsigned char *spawn_level_13_homing_rocket(char *owner_moby,
                                             char *pos,
@@ -904,10 +903,8 @@ void update_hovering_rocket_attacker(unsigned char *moby) {
 
 extern int  FUN_L13_002c2d30_update(void *, int) __asm__("FUN_L00_0028d8c0");
 extern int  FUN_L13_002c2d30_allocate(int, int, void *) __asm__("FUN_L13_00297fa0");
-extern void update_moby_vertical_oscillation(float, float, void *, float *, float *) __asm__(
-    "FUN_L00_00262b00");
-extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_vertical_oscillation(float, float, void *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(void *, void *, void *, float, float, float) __asm__("FUN_L00_00262b80");
 extern float random_float_between(float, float) __asm__("FUN_002132a8");
 extern void  FUN_L00_0024f7c8(void *, int, void *);
 extern int   FUN_L00_00257b90(int, int);
@@ -1188,8 +1185,7 @@ void process_blarg_space_fighter_damage(struct Moby *moby, unsigned char *moby_d
 /* steers a moby's pitch toward a target with a spring, then damps and clamps it */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002C4C10), where it is exact; names translated to the US level program. */
 
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float normalize_angle(float) __asm__("FUN_L00_0025e310");
 extern void  FUN_L00_00258278(char *moby, float *vel, float target, float k, float d, float max);
 float        absolute_float(float input) __asm__("func_001F99C0");
@@ -2071,8 +2067,7 @@ Blk24 D_L13_001F4968 = {
 };
 
 extern float D_L13_0015F580;
-extern int   spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__(
-    "FUN_L00_002ac910");
+extern int   spawn_glow_particle(void *, void *, void *, float, int, int, int, int, int) __asm__("FUN_L00_002ac910");
 extern s32 random_integer_below(s32) __asm__("func_00213260");
 extern unsigned char             *
 spawn_spinning_fade_in_out_effect_particle(void *pos,
@@ -2084,8 +2079,7 @@ spawn_spinning_fade_in_out_effect_particle(void *pos,
                                                        float f3,
                                                        float scale) __asm__("FUN_L00_0026b790");
 extern void FUN_L00_0026a9f0(void *, void *, int, int, int, int, int, float, int, float);
-extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__(
-    "FUN_L00_002af8b0");
+extern void spawn_crate_debris(void *, void *, void *, void *, int, int, float, float) __asm__("FUN_L00_002af8b0");
 
 void emit_forcefield_tower_destruction_effects(unsigned char *source_moby,
                                                void          *effect_position,
@@ -2600,8 +2594,7 @@ char *spawn_asteroid_fragment(char *owner,
  * pieces are left, or turns into its pop state / is deleted when none are. */
 /* Ported from rac1-decomp (src/overlays/l13_gemlik/vendor_002C2638.c: func_L13_002E2690), where it is exact; names translated to the US level program. */
 
-char *spawn_asteroid_fragment(char *owner, char *pos, char *vec, int a3, float f) __asm__(
-    "FUN_L13_002e1140");
+char *spawn_asteroid_fragment(char *owner, char *pos, char *vec, int a3, float f) __asm__("FUN_L13_002e1140");
 extern char D_L13_00160680[] MACRO_ADDR;
 extern void func_L00_0025F4A8_s(void *,
                                 void *,
@@ -3819,8 +3812,7 @@ int FUN_L13_002e86f8_c(void *unused, unsigned char *p, int base, int n) __asm__(
 void               FUN_L13_002e9680_c(void *unused, char *p, int idx) __asm__("FUN_L13_002e9680");
 extern char        D_0013F450_2EAE80[] __asm__("D_0013F350");
 extern Hit_2EAE80 *func_L00_0025B478_2EAE80(void *, int, int) __asm__("FUN_L00_0025a420");
-extern int func_L00_0025B4D0_2EAE80(void *, void *, void *, int, void *, void *, int, int) __asm__(
-    "FUN_00213928");
+extern int func_L00_0025B4D0_2EAE80(void *, void *, void *, int, void *, void *, int, int) __asm__("FUN_00213928");
 extern void func_L13_002EAC18_2EAE80(void *, void *, void *, void *) __asm__("FUN_L13_002e97e0");
 extern void func_L00_0025E4B0_2EAE80(void *, void *) __asm__("FUN_L00_0025d458");
 extern void func_0022ED80_2EAE80(int, int, void *) __asm__("FUN_0022da68");

@@ -2,8 +2,7 @@
 #include "rnc/streaming/stash/stash.h"
 
 extern s32 sceSifCallRpc(void *, u32, u32, void *, s32, void *, s32, void (*)(void *), void *);
-s32 stash_receive_data(u8 *dst, u32 slot, s32 offset_qwords, s32 qword_count, u32 rpc_mode) __asm__(
-    "FUN_00232f20");
+s32 stash_receive_data(u8 *dst, u32 slot, s32 offset_qwords, s32 qword_count, u32 rpc_mode) __asm__("FUN_00232f20");
 
 s32 stash_receive_data(
 

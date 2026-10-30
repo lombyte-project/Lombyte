@@ -246,8 +246,7 @@ char                D_L09_00208F90[] = "Moby class %d Damage Received: %f\n";
 char                D_L09_00208FF0[] = "Moby class %d Damage Received: %f\n";
 extern s32          fptodp(f32) __asm__("FUN_00120478");
 extern void         debug_print(char *, s32, s32) __asm__("FUN_001e93b0");
-extern s32 fun_00213928(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32) __asm__(
-    "FUN_00213928");
+extern s32 fun_00213928(struct Moby *, VendorHitSource *, f32 *, s32, s32 *, s32, s32, s32) __asm__("FUN_00213928");
 extern void FUN_L00_00257470(struct Moby *, s32, s32);
 extern void trooper_anim_update(struct Moby *, u8 *) __asm__("FUN_L00_0025d458");
 extern void trooper_anim_finish(struct Moby *, u8 *) __asm__("FUN_L00_0025d538");
@@ -1064,8 +1063,7 @@ extern int
 allocate_colored_effect_slot(void *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void FUN_L00_0026dd20(void *, void *, int, int, float);
 extern void divide_vector_xyz(void *, void *, float) __asm__("FUN_L00_001ff378");
-extern void suck_draw_reticle(void *, int, void *, int, int, int, float, float, float) __asm__(
-    "FUN_L00_001edf60");
+extern void suck_draw_reticle(void *, int, void *, int, int, int, float, float, float) __asm__("FUN_L00_001edf60");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
 extern float compute_interpolated_record_value(void *) __asm__("FUN_0020c9e0");
@@ -1653,19 +1651,15 @@ extern float floating_ship_piece_height_return_rate_gp __asm__("D_L09_00161DCC")
 
 extern int           DebugPrint_alt() __asm__("FUN_001e93b0");
 extern unsigned char D_0013F350[];
-extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__(
-    "FUN_L00_00262b00");
-extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_vertical_oscillation(float, float, char *, float *, float *) __asm__("FUN_L00_00262b00");
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void scale_vector_xyz_c2(void *, void *, float) __asm__("FUN_001f9a68");
-float       spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__(
-    "FUN_L00_0025bc98");
+float       spring_angle(float *p, float *q, int n, float x, float a, float b, float c) __asm__("FUN_L00_0025bc98");
 extern float func_002140F8_30A560(float, float) __asm__("FUN_002132a8");
 extern void  func_001E9730_30A560() __asm__("FUN_001e93b0");
 extern int   func_001F9850_30A560(int) __asm__("FUN_001f96f8");
 extern float fast_vec_dot(void *a, void *b) __asm__("FUN_001f9ab0");
-extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, float) __asm__(
-    "FUN_L00_0025bc98");
+extern float func_L00_0025CCF0_30A560(void *, float, void *, int, float, float, float) __asm__("FUN_L00_0025bc98");
 extern char          D_L09_00209518_30A560[] __asm__("D_L09_00209228");
 extern unsigned char D_0013E633_30A560[] __asm__("D_0013F350");
 extern unsigned char D_0013F3D0[];

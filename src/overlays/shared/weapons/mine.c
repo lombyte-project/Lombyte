@@ -207,8 +207,7 @@ extern void reflect_vector(void *, void *, void *) __asm__("FUN_L00_001ff660");
 extern void make_hit_descriptor(void *, void *, int, void *, float) __asm__("FUN_L00_00259888");
 extern void jet_animate(unsigned char *, float) __asm__("FUN_L00_00259fe8");
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void spawn_explosion(void *,
                             void *,
                             void *,
@@ -229,8 +228,7 @@ extern void spawn_explosion(void *,
                             int) __asm__("FUN_L00_0025e450");
 extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f090");
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
-extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__(
-    "FUN_L00_00262b80");
+extern void update_moby_rotation_oscillation(void *, char *, char *, float, float, float) __asm__("FUN_L00_00262b80");
 extern void spawn_debris_chunk(void *, void *, int, int) __asm__("FUN_L00_0026f548");
 extern void spawn_gravity_floor_burst_particle(
     void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002738e8");
@@ -2921,16 +2919,14 @@ extern void fast_vec_normalize(void *, void *, f32) __asm__("FUN_001f9bf8");
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 void        FUN_L00_0026a4c8(Q1688 *a, Q1688 *b, int c, int d, int n, float f);
 void        spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
-void spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__(
-    "FUN_L00_002712b8");
+void spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
 extern Impact1688     impact1688 __asm__("D_L00_00173E40");
 extern HeroMotion1688 hero_motion1688 __asm__("D_0013F350");
 extern float          FUN_L00_001ff430_c(void *) __asm__("FUN_L00_001ff430");
 extern void           FUN_L00_001ff2c0_c(void *, void *, void *) __asm__("FUN_L00_001ff2c0");
 extern float spring_turn(void *, float, float, float, float, float) __asm__("FUN_L00_00258110");
 extern unsigned char *
-smoke1688(void *, void *, int, int, int, int, float, float, float, float, float) __asm__(
-    "FUN_L00_002712b8");
+smoke1688(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
 extern void build_look_at_matrix(void *, void *, void *, float) __asm__("FUN_00214890");
 extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L00_001ff290_c(void *, void *, void *) __asm__("FUN_L00_001ff290");
@@ -3471,8 +3467,7 @@ typedef struct {
 void fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 void scale_2b1af0(void *, void *, float) __asm__("FUN_001f9a68");
 int  random_int_between(int, int) __asm__("FUN_L00_00257b90");
-void spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__(
-    "FUN_L00_002712b8");
+void spawn_particle(void *, void *, int, int, int, int, float, float, float, float, float) __asm__("FUN_L00_002712b8");
 extern P_2b1af0 l00_object_offset_particle_velocity_contributions __asm__("D_0013F450");
 void emit_object_offset_particles(unsigned char *source_object) __asm__("FUN_L00_002b1af0");
 

@@ -1,8 +1,7 @@
 #include "types.h"
 #include "rnc/math/fast_math.h"
 
-f32 cam_interp_values(f32 from, f32 to, f32 stiffness, f32 damping, f32 max, f32 *vel) __asm__(
-    "FUN_001ebd78");
+f32 cam_interp_values(f32 from, f32 to, f32 stiffness, f32 damping, f32 max, f32 *vel) __asm__("FUN_001ebd78");
 
 f32 cam_interp_values(f32 from, f32 to, f32 stiffness, f32 damping, f32 max, f32 *retained_step) {
     f32 delta;

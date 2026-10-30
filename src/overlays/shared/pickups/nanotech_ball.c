@@ -1420,8 +1420,7 @@ extern R   *FUN_L00_002db890_c(M_da360 *) __asm__("FUN_L00_002db890");
 extern s32  is_suck_cannon_suction_blocked_by_hero_state(void) __asm__("FUN_L00_002d9f78");
 extern f32  fast_difference_between_rotations(f32, f32) __asm__("FUN_001fa688");
 extern s32  FUN_001efa68_c(void *, V_da360 *, s32, M_da360 *, s32) __asm__("FUN_001efa68");
-int process_suck_cannon_suction_candidate(u8 *p, void *q, void *m_, void *r_, void *buf) __asm__(
-    "FUN_L00_002da058");
+int process_suck_cannon_suction_candidate(u8 *p, void *q, void *m_, void *r_, void *buf) __asm__("FUN_L00_002da058");
 extern void FUN_L00_002da1e0_c(M_da360 *) __asm__("FUN_L00_002da1e0");
 extern void FUN_L00_002df1e0_c(M_da360 *) __asm__("FUN_L00_002df1e0");
 void update_suck_cannon_suction(u8 *cannon_moby, void *cannon_data) __asm__("FUN_L00_002da360");
@@ -2398,11 +2397,9 @@ extern int      collect_mobies_in_sphere() __asm__("FUN_L00_001f2868");
 extern s32      scale_game_frames_c(s32) __asm__("func_001F96F8");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void swap_color_channel_words(int *, int *, int *, int) __asm__("FUN_L00_0025c088");
-extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__(
-    "FUN_L00_0026a9f0");
+extern void spawn_particle(void *, void *, int, int, float, int, int, int, int, float) __asm__("FUN_L00_0026a9f0");
 extern void    fast_vec_scale(void *, void *, f32) __asm__("func_001F9A68");
 unsigned char *spawn_randomly_rotated_colored_moby(int           owner,
                                                    void         *position,
@@ -2754,8 +2751,7 @@ extern void  extract_matrix_rotation_quaternion(void *, void *) __asm__("func_00
 f32          normalize_angle(f32 a) __asm__("FUN_L00_0025e310");
 int          invoke_optional_moby_callback_or_return_one(char *a) __asm__("FUN_L00_002da218");
 void         FUN_L00_00258278(unsigned char *m, float *ptr, float t, float b, float c, float limit);
-void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int c, int d) __asm__(
-    "FUN_L00_00258ad0");
+void move_moby_with_collision_integer_radius(int a, int b, float x, float y, int c, int d) __asm__("FUN_L00_00258ad0");
 void                 spawn_effect_particle_with_transformed_random_offset(void *pos,
                                                                           void *mat) __asm__("FUN_L00_0026c3d0");
 void                 FUN_L00_002dc938_c(char *p, char *q, int flag) __asm__("FUN_L00_002dc938");

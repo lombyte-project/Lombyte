@@ -427,8 +427,7 @@ extern s32                  D_L10_0015F404;
 extern char                 D_L10_00167450[];
 extern float D_L10_00167358 NOT_SDA;
 extern float                D_0013F5E0_5f18[] __asm__("D_0013F5E0");
-extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__(
-    "FUN_L00_0025d808");
+extern int sample_path(char *path, float *out, void *seg, void *t, int dir, float step) __asm__("FUN_L00_0025d808");
 extern void FUN_L00_002223f8(s32, s32);
 extern void debug_point_5f18(void *, float) __asm__("FUN_001e93e8");
 

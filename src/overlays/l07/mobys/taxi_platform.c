@@ -159,8 +159,7 @@ void ocean_umbris_update(unsigned char *moby) {
 /* Slows and steers a moby toward another when it is below and close in height. */
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_0030F4C0), where it is exact; names translated to the US level program. */
 
-extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos, void *vel) __asm__(
-    "FUN_L00_00259bc8");
+extern void spawn_nearby_effect(char *m, float t, int a, int b, void *pos, void *vel) __asm__("FUN_L00_00259bc8");
 
 void register_fading_ring_hit(char *affected_moby,
                               char *effect_moby,
@@ -272,8 +271,7 @@ int classify_sharkigator_water_height_gap(char *moby, char *data) {
 }
 /* Ported from rac1-decomp (src/overlays/l07_umbris/vendor_002CE470.c: func_L07_00310038), where it is exact; names translated to the US level program. */
 
-void set_sharkigator_idle_state_from_water_height_gap(char *sharkigator_moby) __asm__(
-    "FUN_L07_0030ec58");
+void set_sharkigator_idle_state_from_water_height_gap(char *sharkigator_moby) __asm__("FUN_L07_0030ec58");
 
 void set_sharkigator_idle_state_from_water_height_gap(char *sharkigator_moby) {
     enum {
@@ -2609,8 +2607,7 @@ typedef struct {
 } LaunchParams;
 
 extern void trooper_knockback_arc(Vec4f *, f32 *, f32 *, f32 *) __asm__("FUN_L00_0025ab48");
-extern void trooper_start_knockback(f32, struct Moby *, LaunchParams *, s32, s32, s32) __asm__(
-    "FUN_L00_0025c558");
+extern void trooper_start_knockback(f32, struct Moby *, LaunchParams *, s32, s32, s32) __asm__("FUN_L00_0025c558");
 
 void start_sharkigator_death_knockback(struct Moby  *moby,
                                        LaunchParams *knockback_state,
@@ -3006,8 +3003,7 @@ extern WaterGrid *D_L07_001612D0;
 extern char       D_0013E533[];
 extern char       D_L07_002117F8[];
 extern char       sharkigator_unexpected_init_message[] __asm__("D_L07_00211838");
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float         resolve_camera_surface_height(void *, int) __asm__("func_002135F0");
 extern int           D_L07_001612D8;
 extern int           DebugPrint_alt() __asm__("FUN_001e93b0");
@@ -3046,8 +3042,7 @@ void        FUN_L00_002a3ec8_c(void *grids,
                                f32   radius,
                                f32   amount) __asm__("FUN_L00_002a3ec8");
 void        handle_sharkigator_hit(struct Moby *m, char *x, float *hp) __asm__("FUN_L07_0030e998");
-void advance_sharkigator_swim_movement(char *a, char *b, float f12, float f13, float f14) __asm__(
-    "FUN_L07_0030f0f8");
+void advance_sharkigator_swim_movement(char *a, char *b, float f12, float f13, float f14) __asm__("FUN_L07_0030f0f8");
 void        handle_sharkigator_contact_attack(struct Moby *moby,
                                               char        *obj,
                                               int          state,

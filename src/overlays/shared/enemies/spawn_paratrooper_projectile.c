@@ -149,8 +149,7 @@ extern short ground_particle_scatter_count_interpolation_start_override_gp __asm
     __attribute__((sda));
 extern short ground_particle_scatter_count_interpolation_end_override_gp __asm__("D_L08_00162350")
     __attribute__((sda));
-void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) __asm__(
-    "FUN_L08_00307b90");
+void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) __asm__("FUN_L08_00307b90");
 
 void randomize_ground_particle_scatter_parameters(int use_reduced_xy_range_preset) {
     float xy_random_range_scale, countdown_range_start, count_interpolation_end,

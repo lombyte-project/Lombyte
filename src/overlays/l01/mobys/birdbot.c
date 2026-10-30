@@ -61,8 +61,7 @@ extern void               FUN_L01_00262618(ScrollLayer *);
 extern void               FUN_L01_0021fa98(s32, s32, s32, s32, s32, s32);
 
 /* Scrolls the UV offsets of count overlay layers (wrapping into [-1, 1]) and, for each one in view, queues its two-texture GS setup and draws it. */
-void update_and_draw_scrolling_overlay_layers(s32 count, ScrollLayer *scroll_layer) __asm__(
-    "FUN_L01_002b96e0");
+void update_and_draw_scrolling_overlay_layers(s32 count, ScrollLayer *scroll_layer) __asm__("FUN_L01_002b96e0");
 
 void update_and_draw_scrolling_overlay_layers(s32 count, ScrollLayer *scroll_layer) {
     struct DmaTag *tag;
@@ -327,8 +326,7 @@ SplashColors D_L01_0020AF68 = {
 
 extern void fast_vec_sub(void *, void *, void *) __asm__("FUN_001f9a28");
 extern s32  scale_game_frames(s32) __asm__("FUN_001f96f8");
-extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, f32, s32) __asm__(
-    "FUN_L00_0026ced0");
+extern void spawn_effect_particle_with_target_scalar(void *, void *, u32, u32, f32, s32) __asm__("FUN_L00_0026ced0");
 
 void spawn_birdbot_movement_particles(SplashMoby_u *moby, u128 *origin) __asm__("FUN_L01_002e6518");
 
@@ -714,14 +712,12 @@ typedef struct {
 
 #include "rnc/overlay/cuboid.h"
 
-extern char *spawn_colored_half_scale_moby(void *, void *, void *, float, float, int) __asm__(
-    "FUN_L01_002fa068");
+extern char *spawn_colored_half_scale_moby(void *, void *, void *, float, float, int) __asm__("FUN_L01_002fa068");
 extern char  birdbot_missing_path_format[] __asm__("D_L01_0020AF80");
 extern float absolute_float(float) __asm__("func_001F99C0");
 extern float D_L01_0015F580[] MACRO_ADDR;
 extern float FUN_L04_001f1978(float);
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float compute_interpolated_record_value(void *);
 extern float fast_cos(float);
 extern float fast_sin(float);
@@ -731,8 +727,7 @@ extern int   cutscene_active __asm__("D_L01_0015F404");
 extern int   DebugPrint();
 extern int   collision_line(void *, void *, int, void *, void *) __asm__("FUN_001efa68");
 extern int   collision_hit_material(void) __asm__("FUN_001f0b58");
-extern int   FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int, int) __asm__(
-    "FUN_L00_0025a478");
+extern int   FUN_L00_0025a478_u(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern int   select_birdbot_path_node(void *, int *) __asm__("FUN_L01_002e6790");
 extern int   scale_game_frames(int);
 extern int   fast_dec_timer(void *) __asm__("func_001F9740");
@@ -3115,8 +3110,7 @@ extern BoundGroup D_L01_001E3380[];
 extern void       fast_vec_scale(void *, void *, float) __asm__("FUN_001f9a68");
 extern void       draw_two_scroll_layers(void) __asm__("FUN_L01_002f6150");
 
-void initialize_bounds_and_enqueue_scroll_layers(void *callback_argument) __asm__(
-    "FUN_L01_002f6180");
+void initialize_bounds_and_enqueue_scroll_layers(void *callback_argument) __asm__("FUN_L01_002f6180");
 
 void initialize_bounds_and_enqueue_scroll_layers(void *callback_argument) {
     Vec4  bounding_sphere;
@@ -3185,8 +3179,7 @@ typedef struct {
 } BeamMoby;
 
 extern void update_entity() __asm__("FUN_L00_00250df8");
-extern void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__(
-    "FUN_L00_0026daa0");
+extern void spawn_source_attached_fading_effect_particle(void *, u32, s32, s32, f32) __asm__("FUN_L00_0026daa0");
 
 BeamMoby *FUN_L01_002f68a0(void *owner, u128 *pos, u128 *dir, u128 *color, s32 kind) {
     Vec4      position_copy;

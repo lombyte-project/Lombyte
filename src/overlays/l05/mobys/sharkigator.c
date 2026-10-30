@@ -1208,8 +1208,7 @@ extern void cart_burst(void *, void *, int, float, float) __asm__("FUN_L00_0025f
 extern void
 resolve_point_path_segment_xy_clearance(int, void *, void *, float) __asm__("FUN_L00_00261d78");
 extern void
-FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__(
-    "FUN_L00_00263fd8");
+FUN_L00_00263fd8_c(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void  mark_moby_for_removal_c2(void *) __asm__("func_0020C828");
 f32          compute_interpolated_record_value(void *anim) __asm__("FUN_0020c9e0");
 void         FUN_L05_00303390_c(Moby *m) __asm__("FUN_L05_00303390");
@@ -2690,8 +2689,7 @@ extern void spawn_explosion(void *,
                             int,
                             int) __asm__("FUN_L00_0025e450");
 extern void
-spawn_particle_305178(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__(
-    "FUN_L00_00263fd8");
+spawn_particle_305178(void *, int, void *, void *, int, int, float, void *, void *, void *) __asm__("FUN_L00_00263fd8");
 extern void  update_motion_305178(void *, void *) __asm__("FUN_L00_0025d458");
 extern float fast_difference_between_rotations(float, float) __asm__("FUN_001fa688");
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
@@ -3558,10 +3556,8 @@ void floating_platform_update(unsigned char *moby) {
 }
 
 extern char *D_L05_0015FFD8_c __asm__("D_L05_0015FFD8");
-extern void convert_pose_to_reference_local(char *, char *, char *, char *, char *, char *) __asm__(
-    "FUN_L00_00260668");
-extern void transform_attachment_pose(char *, char *, char *, char *, char *, char *) __asm__(
-    "FUN_L00_002604f0");
+extern void convert_pose_to_reference_local(char *, char *, char *, char *, char *, char *) __asm__("FUN_L00_00260668");
+extern void transform_attachment_pose(char *, char *, char *, char *, char *, char *) __asm__("FUN_L00_002604f0");
 extern void FUN_L00_00260738_c(char *, float *, float *, char *) __asm__("FUN_L00_00260738");
 
 void box_update(char *moby) __asm__("FUN_L05_0030bf98");

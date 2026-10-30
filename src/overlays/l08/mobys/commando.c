@@ -1267,8 +1267,7 @@ char        D_L08_001FC250[] =
 extern char flickering_mesh_texture_height_zero_message[] __asm__("D_L08_001FC2A0");
 extern char flickering_mesh_texture_width_tile_limit_warning[] __asm__("D_L08_001FC2D0");
 extern s32  DebugPrint();
-extern int  allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__(
-    "FUN_L00_0023e738");
+extern int  allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 
 void update_flickering_mesh_effect(struct Moby *moby) __asm__("FUN_L08_002f70a0");
 

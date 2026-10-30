@@ -556,8 +556,7 @@ f32            approach_value(f32 *, f32, f32) __asm__("FUN_00213ed8");
 s32            collision_line(void *, void *, s32, s32, s32) __asm__("FUN_001efa68");
 void           break_crate(M2d1428 *, s32, s32) __asm__("FUN_L00_002d09b8");
 void           FUN_L00_002d0538_c(M2d1428 *) __asm__("FUN_L00_002d0538");
-void           transform_attachment_pose(M2d1428 *, void *, void *, void *, void *, void *) __asm__(
-    "FUN_L00_002604f0");
+void           transform_attachment_pose(M2d1428 *, void *, void *, void *, void *, void *) __asm__("FUN_L00_002604f0");
 P2d1428 *FUN_L00_002603d0(void *);
 void     update_entity_matrix(void *, void *, void *, void *) __asm__("FUN_L00_00260738");
 
@@ -595,8 +594,7 @@ extern f32  random_angle_radians(void) __asm__("FUN_00213308");
 extern u8   FUN_001fef20_2d09b8(s32) __asm__("FUN_001f96f8");
 extern void
 spawn_particle(void *, void *, s32, s32, s32, s32, s32, s32, f32, f32) __asm__("FUN_L00_0026a9f0");
-extern void spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__(
-    "FUN_L00_002ac910");
+extern void spawn_glow_particle(void *, void *, void *, f32, s32, s32, s32, s32, s32) __asm__("FUN_L00_002ac910");
 
 void break_crate(M2d1428 *moby, s32 hit, s32 source) __asm__("FUN_L00_002d09b8");
 
@@ -1991,8 +1989,7 @@ typedef struct {
 extern char *moby_table __asm__("D_L00_0015FFD8");
 extern f32   random_float_between(f32, f32) __asm__("func_002132A8");
 extern int   FUN_L00_001fefc8(void *);
-extern int   allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__(
-    "FUN_L00_0023e738");
+extern int   allocate_colored_effect_slot(float *, float, float, float, float, float) __asm__("FUN_L00_0023e738");
 extern void release_point_light_slot(int) __asm__("FUN_L00_0023e838");
 
 void update_animated_point_light_moby(unsigned char *moby) __asm__("FUN_L00_002d3a10");
@@ -2838,8 +2835,7 @@ extern float D_0015ED6C_2d54c8 __asm__("D_0015ED6C");
    absolute: reach it as D_0015ED6C + 4, past whose size the assembler skips $gp. */
 #define D_0015ED70_2d54c8 (((float *)&D_0015ED6C_2d54c8)[1])
 float approach_angle(void *, float, void *, float, float, float) __asm__("FUN_L00_0025be00");
-float advance_accelerated_scalar(float *, float, float, float, float, float *) __asm__(
-    "FUN_00213f38");
+float advance_accelerated_scalar(float *, float, float, float, float, float *) __asm__("FUN_00213f38");
 float FUN_001f9dc8_2d54c8(float) __asm__("FUN_001f9dc8");
 float FUN_001f9de0_2d54c8(float) __asm__("FUN_001f9de0");
 void  FUN_L00_00258830_2d54c8(void *, void *, int, float, float, float) __asm__("FUN_L00_00258830");

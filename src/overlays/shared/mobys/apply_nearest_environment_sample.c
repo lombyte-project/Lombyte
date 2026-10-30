@@ -12,8 +12,7 @@
 
 extern char no_environment_sample_message[] __asm__("D_L00_001E8ED8");
 extern void debug_print() __asm__("FUN_001e93b0");
-extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__(
-    "PackRenderCommandFields");
+extern void pack_render_command_fields(struct RenderEntry *, s32, s32, s32, s32) __asm__("PackRenderCommandFields");
 
 void apply_nearest_environment_sample(char *object) __asm__("FUN_L00_002500b8");
 

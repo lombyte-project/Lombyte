@@ -19,8 +19,7 @@ extern VoicePositionRecord voice_positions[] __asm__("D_0013E5E0");
 extern u8                  voice_volume_records[] __asm__("D_0013E5C0");
 extern void                clear_u64_value(VoiceVector *) __asm__("func_001F99F8");
 
-s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *, s32) __asm__(
-    "FUN_0022d7f0");
+s32 allocate_voice_slot(VoiceDefinition *, u32, VoiceMoby *, VoiceVector *, s32) __asm__("FUN_0022d7f0");
 
 /* Reserve a game-side slot and queue its start for sound_update.
  * Ordinary owners search 26 slots; the hero, its first item, and class 0x472

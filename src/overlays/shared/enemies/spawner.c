@@ -44,8 +44,7 @@ typedef struct {
 } ShotVars;
 
 extern OvlVec4 D_0013F3D0_307ba8 __asm__("D_0013F3D0");
-extern u8 *spawn_source_attached_fading_effect_particle(f32, struct Moby *, u32, s32, s32) __asm__(
-    "FUN_L00_0026daa0");
+extern u8 *spawn_source_attached_fading_effect_particle(f32, struct Moby *, u32, s32, s32) __asm__("FUN_L00_0026daa0");
 
 struct Moby *spawn_class_4ea_projectile(void    *owner,
                                         OvlVec4 *pos,
@@ -319,8 +318,7 @@ struct Moby *respawn_spawner_child(struct Moby *owner, Vec4 *pos) {
     return result;
 }
 
-extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, int) __asm__(
-    "FUN_L00_0025a478");
+extern int FUN_L00_0025a478_c(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_L00_0025a478");
 extern void FUN_L00_0025d458_c(void *, void *) __asm__("FUN_L00_0025d458");
 extern void FUN_L00_0025d538_c(void *, void *) __asm__("FUN_L00_0025d538");
 extern void FUN_L00_00257470_c(void *, int, int) __asm__("FUN_L00_00257470");

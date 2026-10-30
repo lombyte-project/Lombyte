@@ -452,8 +452,7 @@ extern short second_position_particle_config __asm__("D_L11_001621D8") __attribu
 extern short third_position_particle_config __asm__("D_L11_001621E8") __attribute__((sda));
 extern short extra_scattered_joint_particle_config __asm__("D_L11_001621F8") __attribute__((sda));
 extern short extra_joint_position_particle_config __asm__("D_L11_00162208") __attribute__((sda));
-void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) __asm__(
-    "FUN_L11_003112b8");
+void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) __asm__("FUN_L11_003112b8");
 
 void emit_type_74_particles_from_moby_joints(void *moby, char *particle_emission_data) {
     int i;

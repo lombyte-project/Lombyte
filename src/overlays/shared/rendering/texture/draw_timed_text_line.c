@@ -10,8 +10,7 @@
 
 extern void font_print_large(int, int, u64, char *, int) __asm__("FUN_001f6530");
 
-void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__(
-    "FUN_L00_001fcb28");
+void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) __asm__("FUN_L00_001fcb28");
 
 void draw_timed_text_line(int x, int y, int mode, float scale, float alpha, char *text) {
     enum {

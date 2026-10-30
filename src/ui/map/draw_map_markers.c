@@ -11,8 +11,7 @@ extern s32 marker_half_size __asm__("D_0015FDB0") MACRO_ADDR;
 extern void
 world_to_map_coords(f32 x, f32 y, f32 *map_x, f32 *map_y, s32 level) __asm__("func_00208408");
 extern s32  get_icon_frame(s32 id, s32 frame) __asm__("func_001FF960");
-extern void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) __asm__(
-    "func_00200E08");
+extern void append_screen_rect_packet(s32 x0, s32 y0, s32 x1, s32 y1, u64 prim, s32 pixels) __asm__("func_00200E08");
 extern void
 draw_hud_sprite_subpixel(s32 id, s32 x, s32 y, s32 w, s32 h, s32 alpha) __asm__("func_00200080");
 

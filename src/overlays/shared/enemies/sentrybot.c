@@ -58,8 +58,7 @@ extern int   D_L15_0015F5CC;
 extern struct Moby *l15_moby_array __asm__("D_L15_0015FFD8");
 extern int          fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 extern int          mine_fall(void *, void *) __asm__("FUN_L00_0025c698");
-extern int begin_sentrybot_turn_toward_heading(unsigned char *, char *, int, int, float) __asm__(
-    "FUN_L15_00299880");
+extern int begin_sentrybot_turn_toward_heading(unsigned char *, char *, int, int, float) __asm__("FUN_L15_00299880");
 int move_sentrybot_toward_point(char  *moby,
                                 float *point,
                                 float  target_forward_step) __asm__("FUN_L15_00299ae0");
@@ -1714,8 +1713,7 @@ void spawn_rocket_trail_spark(char *moby) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029C168), where it is exact; names translated to the US level program. */
 
 extern float D_L15_0015F580[] MACRO_ADDR;
-extern void  spawn_glow_particle(char *, char *, int, int, float, int, int, int, int) __asm__(
-    "FUN_L00_002ac910");
+extern void  spawn_glow_particle(char *, char *, int, int, float, int, int, int, int) __asm__("FUN_L00_002ac910");
 
 extern float rocket_detonation_glow_scale_gp __asm__("D_L15_00161458") __attribute__((sda));
 extern int rocket_detonation_glow_lifetime_frames_gp __asm__("D_L15_0016145C") __attribute__((sda));
@@ -1816,8 +1814,7 @@ extern float      D_0015ED70;
 #include "rnc/overlay/shared/enemies/sentrybot_data/update_target_leading_missile_2.h"
 
 extern float FUN_L00_001ff430(void *);
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern float fast_vec_dist(void *, void *);
 
 #include "rnc/overlay/shared/enemies/sentrybot_data/update_target_leading_missile.h"
@@ -1838,16 +1835,14 @@ extern unsigned char                *FUN_L00_002712b8(void  *pos,
                                                       float  pw);
 extern void *
 FUN_L00_0026bb70_c(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
-extern void suck_draw_reticle(void *, int, float, float, void *, int, int, float, int) __asm__(
-    "FUN_L00_001edf60");
+extern void suck_draw_reticle(void *, int, float, float, void *, int, int, float, int) __asm__("FUN_L00_001edf60");
 extern void FUN_L00_001ff2c0(void *, void *, void *);
 extern void FUN_L00_001ffd48(void *, void *, float);
 extern void FUN_L00_001ffe20(void *, void *, void *);
 extern void FUN_L00_0025a9f8(void *, void *, void *, int, int, int, int, int, float, float, float);
 extern void mine_spawn_drops(void *, void *) __asm__("FUN_L00_0025f800");
 extern void FUN_L00_0026a4c8(void *pos, void *vel, int color, int tag, int life, float size);
-extern void spawn_particle(void *, void *, int, int, float, int, int, float, int, int) __asm__(
-    "FUN_L00_0026a9f0");
+extern void spawn_particle(void *, void *, int, int, float, int, int, float, int, int) __asm__("FUN_L00_0026a9f0");
 extern void spawn_burst(void *, void *, int, int, int, int, float) __asm__("FUN_L00_0026cbb0");
 extern void FUN_L00_002ac910(char *, char *, int, int, float, int, int, int, int);
 extern void mine_camera_blast(void *, void *, int, int) __asm__("FUN_L00_002d3838");
@@ -2358,8 +2353,7 @@ void update_target_leading_missile(M_29E8A0 *missile_moby) {
 /* update: scale and fade a moby, spawn an effect, delete it when done */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_00298BB8.c: func_L15_0029FCB0), where it is exact; names translated to the US level program. */
 
-extern void play_entity_sound(float, char *, char *, float, float, int, int, int, int) __asm__(
-    "FUN_L00_002598b0");
+extern void play_entity_sound(float, char *, char *, float, float, int, int, int, int) __asm__("FUN_L00_002598b0");
 
 void update_scaling_fading_hit_sphere(struct Moby *moby) __asm__("FUN_L15_0029ead0");
 
@@ -2471,8 +2465,7 @@ extern int allocate_packed_color_point_light_slot(float *pos,
 extern int random_int_between(int, int) __asm__("FUN_L00_00257b90");
 extern unsigned char *D_L15_001B26AC NOT_SDA;
 extern void
-send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__(
-    "FUN_L00_0025a9f8");
+send_blast_hits(void *, void *, void *, int, int, int, int, int, float, float, float) __asm__("FUN_L00_0025a9f8");
 extern void    spawn_owner_target_particle(int a0, void *a1, char *a2) __asm__("FUN_L15_0025e2c0");
 unsigned char *spawn_shrinking_effect_particle_with_gravity_and_secondary_spawns(
     void *a,
@@ -2503,8 +2496,7 @@ extern void func_L00_0026AA10_29FF90(void *,
                                      int) __asm__("FUN_L00_00269b70");
 extern int func_L00_001F2BE8_29FF90(void *, float, int, void *, void *) __asm__("FUN_L00_001f2868");
 extern char *func_L00_0026E940_29FF90(float, char *, int, int, int) __asm__("FUN_L00_0026daa0");
-extern void *func_L00_0026CA10_29FF90(void *, void *, int, int, float, int, int, int, int) __asm__(
-    "FUN_L00_0026bb70");
+extern void *func_L00_0026CA10_29FF90(void *, void *, int, int, float, int, int, int, int) __asm__("FUN_L00_0026bb70");
 
 extern f32 frame_scale_macro __asm__("D_0015ED60") MACRO_ADDR;
 void       update_charged_blast(Moby29FF90 *moby) __asm__("FUN_L15_0029edb0");
@@ -2734,8 +2726,7 @@ extern void  spawn_moving_hero_relative_alpha_fade_particle(float        *pos,
 void         draw_group_moby_effect_quads(unsigned char *moby) __asm__("FUN_L15_002a29b8");
 
 extern void draw_group_moby_effect_quads(unsigned char *) __asm__("FUN_L15_002a29b8");
-extern void func_L00_0025A8E8_m(void *, void *, int, float, float, float, int, int, int) __asm__(
-    "FUN_L00_002598b0");
+extern void func_L00_0025A8E8_m(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 
 void update_hero_seeking_group_moby(char *moby) __asm__("FUN_L15_002a2488");
 

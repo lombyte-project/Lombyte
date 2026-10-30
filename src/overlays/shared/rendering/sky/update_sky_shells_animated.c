@@ -149,8 +149,7 @@ void draw_sky_shells_with_particles_and_modulo_50000_rotation(void) {
     sky_draw_shell(1);
 }
 
-void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__(
-    "FUN_L00_0028a208");
+void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) __asm__("FUN_L00_0028a208");
 
 void draw_three_sky_shells_with_particles_and_modulo_50000_rotation(void) {
     float third_shell_rotation_angles[4] __attribute__((aligned(16)));

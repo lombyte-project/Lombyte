@@ -130,8 +130,7 @@ int        play_entity_sound(void *moby,
     return collect_mobies_in_sphere(position, sphere_radius, i, moby, descriptor);
 }
 
-extern int play_entity_sound(void *, void *, int, float, float, float, int, int, int) __asm__(
-    "FUN_L00_002598b0");
+extern int play_entity_sound(void *, void *, int, float, float, float, int, int, int) __asm__("FUN_L00_002598b0");
 /* Calls play_entity_sound at a moby point; the f13 argument is ignored and c is passed again as a float. */
 int collect_mobies_in_sphere_at_moby_point(void *moby,
                                            int   point,
@@ -226,8 +225,7 @@ typedef struct {
 extern G_259bc8 D_L00_00173E40 NOT_SDA;
 extern MobyHit                 moby_hits[] __asm__("D_L00_00178100") NOT_SDA;
 
-void spawn_nearby_effect(unsigned char *m, int x, int y, u128 *p, u128 *q, float f) __asm__(
-    "FUN_L00_00259bc8");
+void spawn_nearby_effect(unsigned char *m, int x, int y, u128 *p, u128 *q, float f) __asm__("FUN_L00_00259bc8");
 void spawn_nearby_effect(unsigned char *owner_moby,
                          int            x,
                          int            y,
@@ -262,8 +260,7 @@ void spawn_nearby_effect(unsigned char *owner_moby,
 typedef float V4_259d08[4] __attribute__((aligned(16)));
 void          FUN_001f9a68_00259d08(void *, void *, float) __asm__("FUN_001f9a68");
 int           FUN_001efa68_00259d08(void *, void *, int, void *, int) __asm__("FUN_001efa68");
-int           sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, int f, int n) __asm__(
-    "FUN_L00_00259d08");
+int           sweep_hit_segment(void *a, void *b, void *c, void *d, void *e, int f, int n) __asm__("FUN_L00_00259d08");
 int sweep_hit_segment(void *first_endpoint_end,
                       void *second_endpoint_end,
                       void *first_endpoint_start,

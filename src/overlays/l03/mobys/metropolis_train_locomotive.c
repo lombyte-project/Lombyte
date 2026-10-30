@@ -191,8 +191,7 @@ void place_metropolis_train(struct Moby *moby, float *pos, float heading) {
 
 extern char *D_L03_0015FFD8_292890 __asm__("D_L03_0015FFD8");
 extern char  D_L03_001E2410[];
-extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__(
-    "FUN_L00_00258110");
+extern float spring_turn(float *vel, float cur, float target, float k, float d, float max) __asm__("FUN_L00_00258110");
 extern void debug_print(void *, int) __asm__("FUN_001e93b0");
 extern void gunship_follow_path(char *) __asm__("FUN_L01_002f5168");
 
@@ -1000,8 +999,7 @@ void maintain_emitter_sound_voice(struct Moby *moby) {
 }
 
 extern int  FUN_L00_001fefc8(void *);
-extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, int, float) __asm__(
-    "FUN_L00_0026ced0");
+extern void spawn_effect_particle_with_target_scalar(void *, void *, int, int, int, float) __asm__("FUN_L00_0026ced0");
 struct Moby;
 char *spawn_emitter_child_effect(struct Moby *parent,
                                  int          unused,
@@ -2367,8 +2365,7 @@ extern int          is_value_within_interpolated_window(char *, float) __asm__("
 extern int FUN_L00_0025df68_cf(char *m, char *p, float *pos, char *v) __asm__("FUN_L00_00259028");
 extern int fast_subtract_rotations_cf(void *) __asm__("FUN_L00_001fefc8");
 extern int is_point_inside_clip_volume_cf(int) __asm__("FUN_L03_002c6d98");
-extern int probe_ground_height_cf(int unused, char *m, char *a, void *b, char *c, void *d) __asm__(
-    "FUN_L00_00260400");
+extern int probe_ground_height_cf(int unused, char *m, char *a, void *b, char *c, void *d) __asm__("FUN_L00_00260400");
 extern short          D_L03_001618F4 __attribute__((sda));
 extern unsigned char *FUN_L03_0024fba8_cf(int) __asm__("FUN_L00_002603d0");
 extern void          *FUN_L00_00257470_cf(char *,

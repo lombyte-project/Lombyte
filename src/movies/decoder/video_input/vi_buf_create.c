@@ -36,8 +36,7 @@ typedef struct {
 
 extern s32 CreateSema(struct SemaParam *);
 
-s32 vi_buf_create(ViBuf *f, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 n_ts) __asm__(
-    "FUN_0023bc48");
+s32 vi_buf_create(ViBuf *f, u128 *data, u128 *tag, s32 size, TimeStamp *ts, s32 n_ts) __asm__("FUN_0023bc48");
 
 s32 vi_buf_create(
 

@@ -1840,8 +1840,7 @@ extern float fast_arc_sin(float) __asm__("FUN_001f9df8");
 extern void  FUN_001f9a10_c2(void *, void *, void *) __asm__("FUN_001f9a10");
 extern void  FUN_001f9a68_c3(void *, void *, float) __asm__("FUN_001f9a68");
 
-float compute_follow_camera_signed_target_angle(char *camera, float target_offset_scale) __asm__(
-    "FUN_L00_002e4580");
+float compute_follow_camera_signed_target_angle(char *camera, float target_offset_scale) __asm__("FUN_L00_002e4580");
 
 float compute_follow_camera_signed_target_angle(char *camera, float target_offset_scale) {
     float hero_position[4], offset_target_position[4], angle_direction[4], axis_projection[4];
@@ -2496,8 +2495,7 @@ extern f32 follow_camera_position_transition_end_damping_gp __asm__("D_L00_00161
     __attribute__((sda));
 s32  fast_dec_timer_s16(void *) __asm__("FUN_001f9770");
 s32  compute_follow_camera_target_position(void *, void *, void *, s32) __asm__("FUN_L00_002e5678");
-void interpolate_follow_camera_position(void *, void *, void *, f32, f32, f32) __asm__(
-    "FUN_L00_002e55b8");
+void interpolate_follow_camera_position(void *, void *, void *, f32, f32, f32) __asm__("FUN_L00_002e55b8");
 void follow_camera_transition(O002e5730 *o, void *a) __asm__("FUN_L00_002e5730");
 
 void follow_camera_transition(O002e5730 *camera, void *input_offset) {

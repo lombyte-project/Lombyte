@@ -280,8 +280,7 @@ skip:
 extern float fast_vec_length(void *) __asm__("FUN_001f9af0");
 extern float fast_cos(float) __asm__("FUN_001f9dc8");
 extern float fast_sin(float) __asm__("FUN_001f9de0");
-extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__(
-    "FUN_L00_0025b8c0");
+extern float vendor_spring(float *p, float *v, float t, float u1, float u2, float eps) __asm__("FUN_L00_0025b8c0");
 extern int           scale_game_frames(int) __asm__("FUN_001f96f8");
 extern unsigned char D_0013E533[];
 
