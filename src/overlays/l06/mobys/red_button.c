@@ -106,7 +106,7 @@ void red_button_update(struct Moby *moby) {
     float         current_angle;
     int           i;
     int           help_message_available;
-    int          *entry;
+    int          *particle_burst_cut_index_entry;
     int           duration;
     int           timer;
 
@@ -193,11 +193,11 @@ void red_button_update(struct Moby *moby) {
         previous_value = previous_value * 100.0f;
         current_angle = red_button_vars->t * 100.0f * 0.0174532925f;
         previous_value = previous_value * 0.0174532925f;
-        entry = red_button_vars->list;
-        for (i = 8; i >= 0; i--, entry++) {
-            if (previous_value < l06_cuboids[*entry].rot.z &&
-                l06_cuboids[*entry].rot.z < current_angle) {
-                emit_red_button_particle_burst((int)moby, &l06_cuboids[*entry].pos);
+        particle_burst_cut_index_entry = red_button_vars->list;
+        for (i = 8; i >= 0; i--, particle_burst_cut_index_entry++) {
+            if (previous_value < l06_cuboids[*particle_burst_cut_index_entry].rot.z &&
+                l06_cuboids[*particle_burst_cut_index_entry].rot.z < current_angle) {
+                emit_red_button_particle_burst((int)moby, &l06_cuboids[*particle_burst_cut_index_entry].pos);
                 allocate_voice_for_group_entry(0, 0, moby);
             }
         }
