@@ -199,7 +199,7 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
     float direction[4];
     float point[4];
     float local[4];
-    float scratch[16];
+    float surface_basis_and_collection_vectors[16];
 
     switch (moby->state) {
     case BOLT_PICKUP_INITIALIZE: {
@@ -335,8 +335,8 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
     case BOLT_PICKUP_TURN_TOWARD_HERO: {
         Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
 
-        euler_rotation_matrix(scratch, vars->v10);
-        qcopy(direction, scratch + 8);
+        euler_rotation_matrix(surface_basis_and_collection_vectors, vars->v10);
+        qcopy(direction, surface_basis_and_collection_vectors + 8);
         if (fast_dec_timer(&vars->timer) != 0) {
             Vars_4BE8 *vars = (Vars_4BE8 *)moby->pvars;
             float      deg_to_rad = 0.017453292f;
@@ -419,11 +419,11 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                            l08_bolt_pickup_collection_target_speed * frame_time,
                            l08_bolt_pickup_collection_acceleration * frame_time_sq);
         } else {
-            fast_vec_normalize(scratch, collection_motion_reference - 0x120, vars->u70.f);
-            fast_vec_sub(scratch + 4, scratch, vars->velocity);
-            FUN_L00_0025f730_c(scratch + 4,
+            fast_vec_normalize(surface_basis_and_collection_vectors, collection_motion_reference - 0x120, vars->u70.f);
+            fast_vec_sub(surface_basis_and_collection_vectors + 4, surface_basis_and_collection_vectors, vars->velocity);
+            FUN_L00_0025f730_c(surface_basis_and_collection_vectors + 4,
                                l08_bolt_pickup_collection_acceleration * frame_time_sq);
-            fast_vec_add(vars->velocity, vars->velocity, scratch + 4);
+            fast_vec_add(vars->velocity, vars->velocity, surface_basis_and_collection_vectors + 4);
         }
         if (collection_target_distance < vars->f74) {
             vars->f74 = collection_target_distance;
@@ -476,32 +476,32 @@ void update_batalia_bolt_pickup(struct Moby *moby) {
                     break;
                 }
                 shrink = 0.7f;
-                random_vector(scratch, frame_time * shrink, frame_time);
-                fast_vec_scale(scratch + 4, scratch, 10.0f);
-                fast_vec_add(scratch + 4, scratch + 4, &moby->pos);
+                random_vector(surface_basis_and_collection_vectors, frame_time * shrink, frame_time);
+                fast_vec_scale(surface_basis_and_collection_vectors + 4, surface_basis_and_collection_vectors, 10.0f);
+                fast_vec_add(surface_basis_and_collection_vectors + 4, surface_basis_and_collection_vectors + 4, &moby->pos);
                 spin = random_integer_below(2);
                 if (spin == 0) {
                     spin--;
                 }
                 size = random_float_between(0.4f, 0.5f);
-                FUN_L00_00272060(scratch + 4,
+                FUN_L00_00272060(surface_basis_and_collection_vectors + 4,
                                  scale_game_frames(0x19),
                                  size * 0.2f,
                                  size,
                                  0x7F207F7F,
                                  0,
                                  spin,
-                                 scratch,
+                                 surface_basis_and_collection_vectors,
                                  0.0f);
                 spin = -spin;
-                FUN_L00_00272060(scratch + 4,
+                FUN_L00_00272060(surface_basis_and_collection_vectors + 4,
                                  scale_game_frames(0x19),
                                  size * 0.14f,
                                  size * shrink,
                                  0x7F7F7F7F,
                                  1,
                                  spin,
-                                 scratch,
+                                 surface_basis_and_collection_vectors,
                                  0.0f);
                 source = moby->parent;
                 if (source && !(source->id & 0x80)) {
