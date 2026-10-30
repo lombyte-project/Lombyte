@@ -1425,7 +1425,7 @@ extern char D_0013F3D0[];
 void compute_hero_hoverboard_respawn_transform(float *out,
                                                float *out_rotation) __asm__("FUN_L05_00254358");
 
-void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) {
+void compute_hero_hoverboard_respawn_transform(float *out_position, float *out_rotation) {
     char        *hero_base = (char *)((char *)((char *)&hero));
     struct Moby *path_owner_moby = *(char **)(hero_base + 0x86C);
     char        *path;
@@ -1434,7 +1434,7 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
     float        ground_probe_position[4] __attribute__((aligned(16)));
 
     if (path_owner_moby == 0) {
-        qcopy(out, hero_base + 0x80);
+        qcopy(out_position, hero_base + 0x80);
         qcopy(out_rotation, hero_base + 0x90);
         return;
     }
@@ -1449,8 +1449,8 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
             fast_arc_tan(*(float *)(candidate_path_record + 0x10) - *(float *)(hero_bytes + 0x80),
                          *(float *)(candidate_path_record + 0x14) - *(float *)(hero_bytes + 0x84));
         int   path_count_plus_two = *(int *)path + 2;
-        int   next = (i + path_count_plus_two) % *(int *)path;
-        char *lookahead_path_record = path + next * 16;
+        int   lookahead_path_index = (i + path_count_plus_two) % *(int *)path;
+        char *lookahead_path_record = path + lookahead_path_index * 16;
         if (fast_difference_between_rotations(
                 angle,
                 fast_arc_tan(*(float *)(lookahead_path_record + 0x10) -
@@ -1480,10 +1480,10 @@ void compute_hero_hoverboard_respawn_transform(float *out, float *out_rotation) 
         }
     next_point:;
     }
-    qcopy(out, path + best * 16 + 0x10);
-    qcopy(ground_probe_position, out);
+    qcopy(out_position, path + best * 16 + 0x10);
+    qcopy(ground_probe_position, out_position);
     ground_probe_position[2] += 2.0f;
-    out[2] = probe_ground_height(ground_probe_position, 0, 0.5f);
+    out_position[2] = probe_ground_height(ground_probe_position, 0, 0.5f);
     clear_u64_value(out_rotation);
     {
         float *selected_path_record = (float *)(path + best * 16);
