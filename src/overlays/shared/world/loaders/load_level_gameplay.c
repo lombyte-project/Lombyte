@@ -1,6 +1,7 @@
 /* Level overlay code: stubs become C as functions are matched. */
 #include "types.h"
 #include "rnc/storage/disc_table.h"
+#include "rnc/overlay/texture_ref.h"
 #include "asm.h"
 
 #include "sda.h"
@@ -1675,12 +1676,6 @@ typedef struct {
     char *seqs[1];  /* 0x48 */
 } Class244110;
 
-typedef struct {
-    s32 offset;
-    u16 kind;
-    u16 pad6;
-    s32 pad8[2];
-} TexRef244110;
 
 typedef struct {
     s16 off;
@@ -1702,7 +1697,6 @@ extern u64 D_L00_001827F0[3];
 extern s32 tfrag_packed_texture_refs[] __asm__("D_L00_001C4A00");
 extern s32 texture_count __asm__("D_L00_0015FFC8");
 extern u32 D_L00_00199A80[];
-extern u8 D_L00_001AEBC0[];
 extern s32 tie_packed_texture_refs[] __asm__("D_L00_001C6700");
 extern s32 shrub_packed_texture_refs[] __asm__("D_L00_001BC5B0");
 extern char *D_L00_0015F600_244110 __asm__("D_L00_0015F600");
@@ -1792,10 +1786,10 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
     char *free;
     char *end;
     Span244110 *span;
-    TexRef244110 *moby_texture_refs;
-    TexRef244110 *tfrag_texture_refs;
-    TexRef244110 *tie_texture_refs;
-    TexRef244110 *shrub_texture_refs;
+    TextureRef *moby_texture_refs;
+    TextureRef *tfrag_texture_refs;
+    TextureRef *tie_texture_refs;
+    TextureRef *shrub_texture_refs;
     char *sound_table_base;
     s32 i;
     s32 j;
@@ -1841,20 +1835,20 @@ s32 load_level_assets_and_gameplay(s32 full, s32 keep) {
         D_L00_001827F0[1] = 0x0000FFA0000000E0;
         D_L00_001827F0[2] = 0x0040000400004000;
 
-        tfrag_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0xD]);
+        tfrag_texture_refs = (TextureRef *)((char *)core_header + core_header[0xD]);
         tfrag_texture_ref_count = core_header[0xC];
         for (tfrag_texture_ref_index = 0; tfrag_texture_ref_index < tfrag_texture_ref_count; tfrag_texture_ref_index++)
             tfrag_packed_texture_refs[tfrag_texture_ref_index] = D_L00_0015F40C + tfrag_texture_refs[tfrag_texture_ref_index].offset + (log2dim(tfrag_texture_refs[tfrag_texture_ref_index].kind) << 28);
-        moby_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0xF]);
+        moby_texture_refs = (TextureRef *)((char *)core_header + core_header[0xF]);
         texture_count = core_header[0xE];
         for (moby_texture_ref_index = 0; moby_texture_ref_index < texture_count; moby_texture_ref_index++)
             D_L00_00199A80[moby_texture_ref_index] = D_L00_0015F40C + moby_texture_refs[moby_texture_ref_index].offset + (log2dim(moby_texture_refs[moby_texture_ref_index].kind) << 28);
-        fast_mem_copy(D_L00_001AEBC0, moby_texture_refs, texture_count * 16);
-        tie_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0x11]);
+        fast_mem_copy(moby_texture_table, moby_texture_refs, texture_count * 16);
+        tie_texture_refs = (TextureRef *)((char *)core_header + core_header[0x11]);
         tie_texture_ref_count = core_header[0x10];
         for (tie_texture_ref_index = 0; tie_texture_ref_index < tie_texture_ref_count; tie_texture_ref_index++)
             tie_packed_texture_refs[tie_texture_ref_index] = D_L00_0015F40C + tie_texture_refs[tie_texture_ref_index].offset + (log2dim(tie_texture_refs[tie_texture_ref_index].kind) << 28);
-        shrub_texture_refs = (TexRef244110 *)((char *)core_header + core_header[0x13]);
+        shrub_texture_refs = (TextureRef *)((char *)core_header + core_header[0x13]);
         shrub_texture_ref_count = core_header[0x12];
         for (shrub_texture_ref_index = 0; shrub_texture_ref_index < shrub_texture_ref_count; shrub_texture_ref_index++)
             shrub_packed_texture_refs[shrub_texture_ref_index] = D_L00_0015F40C + shrub_texture_refs[shrub_texture_ref_index].offset + (log2dim(shrub_texture_refs[shrub_texture_ref_index].kind) << 28);
