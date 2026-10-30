@@ -295,17 +295,17 @@ extern int electric_beam_final_color_gp __asm__("D_L14_001620F8") __attribute__(
 extern int fast_tween_color(int, int, float) __asm__("FUN_001fa6e0");
 
 void update_electric_beam_animation(char *moby) {
-    char *vars = ((char *)MOBY(moby)->pvars);
+    char *beam_animation_state = ((char *)MOBY(moby)->pvars);
     char *beam_point, *src;
     u8   *indices;
     int   i, j, k, copy_i, next_i;
     float fraction;
 
-    if (*(s16 *)(vars + 0x12) != 0) {
-        *(s16 *)(vars + 0x12) = *(u16 *)(vars + 0x12) - 1;
-        indices = (u8 *)(vars + 0x18);
-        src = vars + 0x260;
-        beam_point = vars + 0x60;
+    if (*(s16 *)(beam_animation_state + 0x12) != 0) {
+        *(s16 *)(beam_animation_state + 0x12) = *(u16 *)(beam_animation_state + 0x12) - 1;
+        indices = (u8 *)(beam_animation_state + 0x18);
+        src = beam_animation_state + 0x260;
+        beam_point = beam_animation_state + 0x60;
         for (j = 22; j >= 0; j--) {
             fast_vec_add(beam_point, beam_point, src);
             beam_point += 0x10;
@@ -315,7 +315,7 @@ void update_electric_beam_animation(char *moby) {
         do {
             next_i = i + 1;
             for (k = 2; k >= 0; k--) {
-                char *row = vars + (i << 4) + (2 - k) * 0x40;
+                char *row = beam_animation_state + (i << 4) + (2 - k) * 0x40;
                 fast_vec_add(row + 0x460, row + 0x460, row + 0x560);
             }
             i = next_i;
@@ -325,27 +325,27 @@ void update_electric_beam_animation(char *moby) {
             indices = 0; /* End the saved index-base lifetime after the transfer. */
             copy_i = 0;
             do {
-                qcopy(vars + 0x420 + (copy_i << 4),
-                      (char *)(((u8)src[copy_i] << 4) + (int)vars) + 0x20);
+                qcopy(beam_animation_state + 0x420 + (copy_i << 4),
+                      (char *)(((u8)src[copy_i] << 4) + (int)beam_animation_state) + 0x20);
                 copy_i++;
             } while (copy_i < 4);
         }
     }
-    if (*(s16 *)(vars + 0x12) > electric_beam_color_transition_countdown_gp) {
-        fraction = convert_integer_to_float(*(s16 *)(vars + 0x12) -
+    if (*(s16 *)(beam_animation_state + 0x12) > electric_beam_color_transition_countdown_gp) {
+        fraction = convert_integer_to_float(*(s16 *)(beam_animation_state + 0x12) -
                                             electric_beam_color_transition_countdown_gp) /
-                   convert_integer_to_float(*(int *)(vars + 0x620) -
+                   convert_integer_to_float(*(int *)(beam_animation_state + 0x620) -
                                             electric_beam_color_transition_countdown_gp);
-        *(int *)(vars + 0x14) = fast_tween_color(
+        *(int *)(beam_animation_state + 0x14) = fast_tween_color(
             electric_beam_transition_color_gp, electric_beam_initial_color_gp, fraction);
-    } else if (*(s16 *)(vars + 0x12) > D_L14_001620C8) {
+    } else if (*(s16 *)(beam_animation_state + 0x12) > D_L14_001620C8) {
         fraction =
-            convert_integer_to_float(*(s16 *)(vars + 0x12) - D_L14_001620C8) /
+            convert_integer_to_float(*(s16 *)(beam_animation_state + 0x12) - D_L14_001620C8) /
             convert_integer_to_float(electric_beam_color_transition_countdown_gp - D_L14_001620C8);
-        *(int *)(vars + 0x14) = fast_tween_color(
+        *(int *)(beam_animation_state + 0x14) = fast_tween_color(
             electric_beam_final_color_gp, electric_beam_transition_color_gp, fraction);
     } else {
-        *(int *)(vars + 0x14) = 0;
+        *(int *)(beam_animation_state + 0x14) = 0;
     }
 }
 
