@@ -548,7 +548,7 @@ extern void anim_update_e81e0(struct Moby *, void *) __asm__("FUN_L00_0025d538")
    more members, hands off inside its clip volume, and takes hits from other
    classes (dying, or staggering back). */
 void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
-    BlargTrooperVars *vars = (BlargTrooperVars *)moby->pvars;
+    BlargTrooperVars *trooper_damage_alert_vars = (BlargTrooperVars *)moby->pvars;
     Vec4              help_direction_or_hit_position;
     s32               hit;
     f32               dmg;
@@ -556,25 +556,25 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
     f32               unused;
     BlargTrooperHit  *coll;
 
-    if (vars->reset_alert != 0) {
-        vars->reset_alert = 0;
-        vars->alert_timer = scale_game_frames(0xF0);
+    if (trooper_damage_alert_vars->reset_alert != 0) {
+        trooper_damage_alert_vars->reset_alert = 0;
+        trooper_damage_alert_vars->alert_timer = scale_game_frames(0xF0);
     }
     if (moby->state != 0) {
-        vars->speed = fast_dec_timer_s16(&vars->alert_timer) ? vars->alert_speed : 20.0f;
+        trooper_damage_alert_vars->speed = fast_dec_timer_s16(&trooper_damage_alert_vars->alert_timer) ? trooper_damage_alert_vars->alert_speed : 20.0f;
     }
-    if (vars->call_enabled != 0 && moby->state != 2) {
-        vars->call_timer++;
-        if (scale_game_frames(0x3C) * 17 < vars->call_timer) {
+    if (trooper_damage_alert_vars->call_enabled != 0 && moby->state != 2) {
+        trooper_damage_alert_vars->call_timer++;
+        if (scale_game_frames(0x3C) * 17 < trooper_damage_alert_vars->call_timer) {
             s32 count = 0;
-            if (vars->groups[0] != -1)
-                count += count_active_moby_group_members(vars->groups[0], 2);
-            if (vars->groups[1] != -1)
-                count += count_active_moby_group_members(vars->groups[1], 2);
-            if (vars->groups[2] != -1)
-                count += count_active_moby_group_members(vars->groups[2], 2);
-            if (vars->groups[3] != -1)
-                count += count_active_moby_group_members(vars->groups[3], 2);
+            if (trooper_damage_alert_vars->groups[0] != -1)
+                count += count_active_moby_group_members(trooper_damage_alert_vars->groups[0], 2);
+            if (trooper_damage_alert_vars->groups[1] != -1)
+                count += count_active_moby_group_members(trooper_damage_alert_vars->groups[1], 2);
+            if (trooper_damage_alert_vars->groups[2] != -1)
+                count += count_active_moby_group_members(trooper_damage_alert_vars->groups[2], 2);
+            if (trooper_damage_alert_vars->groups[3] != -1)
+                count += count_active_moby_group_members(trooper_damage_alert_vars->groups[3], 2);
             if (count >= 9 && random_integer_below(0x27) == 0) {
                 help_direction_or_hit_position.f[0] =
                     fast_cos(fast_add_rotations(moby->rot.z, 3.1415927f));
@@ -590,55 +590,55 @@ void process_blarg_trooper_damage_and_alerts(struct Moby *moby) {
             }
         }
     }
-    if (vars->volume != -1 && is_point_inside_clip_volume(&hero.motion.pos, vars->volume)) {
+    if (trooper_damage_alert_vars->volume != -1 && is_point_inside_clip_volume(&hero.motion.pos, trooper_damage_alert_vars->volume)) {
         remove_blarg_trooper_and_attachment(moby);
         return;
     }
     coll = find_hit_e81e0(moby, 0x330000, 0);
     dmg = 0.0f;
-    resolve_moby_hit_response(moby, coll, &vars->health, 0, &hit, &dmg, 0, 4);
+    resolve_moby_hit_response(moby, coll, &trooper_damage_alert_vars->health, 0, &hit, &dmg, 0, 4);
     if (coll != 0 && coll->moby->oclass != moby->oclass && coll->moby->oclass != 0xB8 &&
         moby->state != 9 && dmg != 0.0f) {
         if (moby->group != 0xFF) {
             alert_group_e81e0(moby->group, 1);
         }
-        vars->health -= dmg;
-        vars->unk80 = frame_time_sq * 30.0f;
-        vars->unkAD = 0;
-        vars->unk94 = 9;
-        vars->unkA0 = 1.0f;
-        vars->unkA4 = 1.0f;
-        vars->unkA8 = 1.0f;
-        if (vars->health <= 0.0f) {
+        trooper_damage_alert_vars->health -= dmg;
+        trooper_damage_alert_vars->unk80 = frame_time_sq * 30.0f;
+        trooper_damage_alert_vars->unkAD = 0;
+        trooper_damage_alert_vars->unk94 = 9;
+        trooper_damage_alert_vars->unkA0 = 1.0f;
+        trooper_damage_alert_vars->unkA4 = 1.0f;
+        trooper_damage_alert_vars->unkA8 = 1.0f;
+        if (trooper_damage_alert_vars->health <= 0.0f) {
             moby->flags &= ~0x1000;
-            vars->unk88 = frame_time * 12.0f;
-            vars->unk8C = frame_time * 9.0f;
+            trooper_damage_alert_vars->unk88 = frame_time * 12.0f;
+            trooper_damage_alert_vars->unk8C = frame_time * 9.0f;
             help_direction_or_hit_position.q = coll->pos.q;
             trooper_knockback_arc(
-                &help_direction_or_hit_position, &angle, &vars->unk88, &vars->unk8C);
-            start_fall_e81e0(moby, vars->fall, 9, 1, 0, angle);
-            vars->unkC0 = 10.0f;
-            vars->unkC4 = 19.0f;
+                &help_direction_or_hit_position, &angle, &trooper_damage_alert_vars->unk88, &trooper_damage_alert_vars->unk8C);
+            start_fall_e81e0(moby, trooper_damage_alert_vars->fall, 9, 1, 0, angle);
+            trooper_damage_alert_vars->unkC0 = 10.0f;
+            trooper_damage_alert_vars->unkC4 = 19.0f;
             moby->state = 9;
-            vars->unk67 = 0x78;
-            anim_reset_e81e0(moby, vars->anim);
+            trooper_damage_alert_vars->unk67 = 0x78;
+            anim_reset_e81e0(moby, trooper_damage_alert_vars->anim);
         } else {
-            vars->unk88 = frame_time * 4.7f;
-            vars->unk8C = frame_time * 7.7f;
+            trooper_damage_alert_vars->unk88 = frame_time * 4.7f;
+            trooper_damage_alert_vars->unk8C = frame_time * 7.7f;
             help_direction_or_hit_position.q = coll->pos.q;
             trooper_knockback_arc(
-                &help_direction_or_hit_position, &unused, &vars->unk88, &vars->unk8C);
-            start_fall_e81e0(moby, vars->fall, 6, 1, 0, unused);
-            vars->unkC0 = 4.0f;
-            vars->unkC4 = 8.0f;
+                &help_direction_or_hit_position, &unused, &trooper_damage_alert_vars->unk88, &trooper_damage_alert_vars->unk8C);
+            start_fall_e81e0(moby, trooper_damage_alert_vars->fall, 6, 1, 0, unused);
+            trooper_damage_alert_vars->unkC0 = 4.0f;
+            trooper_damage_alert_vars->unkC4 = 8.0f;
             moby->state = 4;
-            vars->unk67 = 0xFA;
-            vars->stun_timer = scale_game_frames(0x3C);
-            anim_reset_e81e0(moby, vars->anim);
+            trooper_damage_alert_vars->unk67 = 0xFA;
+            trooper_damage_alert_vars->stun_timer = scale_game_frames(0x3C);
+            anim_reset_e81e0(moby, trooper_damage_alert_vars->anim);
         }
     }
     moby->hit_slot = 0xFF;
-    anim_update_e81e0(moby, vars->anim);
+    anim_update_e81e0(moby, trooper_damage_alert_vars->anim);
 }
 /* Ported from rac1-decomp (src/overlays/l12_hoven/vendor_002C0310.c: func_L12_002E9988), where it is exact; names translated to the US level program. */
 
