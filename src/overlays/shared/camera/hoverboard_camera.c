@@ -480,7 +480,7 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
     V_32B1F8      rel;
     V_32B1F8      lateral;
     V_32B1F8      radial;
-    V_32B1F8      base;
+    V_32B1F8      camera_position_before_height;
     V_32B1F8      goal;
     V_32B1F8      offset;
     V_32B1F8      probe;
@@ -512,9 +512,9 @@ void update_orbit_camera_position(Camera_32B1F8 *camera) {
         fast_vec_normalize(&offset, &focus_state->axis, along);
         fast_vec_sub(&lateral, &rel, &offset);
         fast_vec_normalize(&radial, &lateral, spring->dist);
-        fast_vec_add(&base, &focus, &radial);
+        fast_vec_add(&camera_position_before_height, &focus, &radial);
         fast_vec_normalize(&offset, &focus_state->axis, spring->height);
-        fast_vec_add(&goal, &base, &offset);
+        fast_vec_add(&goal, &camera_position_before_height, &offset);
         fast_vec_add(&goal, &goal, &orbit->bias);
         camera->pos.x = cam_interp_values(
             camera->pos.x, goal.x, &orbit->vel[0], orbit->k10, orbit->k14, orbit->k18);
