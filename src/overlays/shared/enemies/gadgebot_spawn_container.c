@@ -154,7 +154,7 @@ void destroy_gadgebot_spawn_container(void *moby_ptr, void *target_ptr) {
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002D9548.c: func_L06_002D98E0), where it is exact; names translated to the US level program. */
 char *spawn_gadgebot_spawn_container(char *owner) __asm__("FUN_L06_002d8510");
 
-char *spawn_gadgebot_spawn_container(char *owner) {
+char *spawn_gadgebot_spawn_container(char *spawning_gadgebot) {
     char *moby = create_moby(0x12E);
     if (moby != 0) {
         ((unsigned char *)moby)[0x30] = 0x60;
@@ -162,10 +162,10 @@ char *spawn_gadgebot_spawn_container(char *owner) {
         moby[0x31] = 1;
         *(int *)(moby + 0x40) = 0;
         *(int *)(moby + 0x44) = 0;
-        MOBY(moby)->rot.z = *(float *)(owner + 0x48);
-        MOBY(moby)->spawn_frame = *(long *)(owner + 0x38);
+        MOBY(moby)->rot.z = *(float *)(spawning_gadgebot + 0x48);
+        MOBY(moby)->spawn_frame = *(long *)(spawning_gadgebot + 0x38);
         MOBY(moby)->flags |= 0x1000;
-        qcopy(moby + 0x10, owner + 0x10);
+        qcopy(moby + 0x10, spawning_gadgebot + 0x10);
         update_entity(moby);
     }
     return moby;
