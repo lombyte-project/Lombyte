@@ -32,10 +32,10 @@ void synchronize_linked_moby_heights(char *moby) __asm__("FUN_L11_0030e690");
 
 void synchronize_linked_moby_heights(char *moby) {
     short *moby_index_cursor = D_L11_001AC240[MOBY(moby)->group];
-    int    base = D_L11_0015FFD8;
+    int    moby_array_base = D_L11_0015FFD8;
     do {
         int        i = (*moby_index_cursor & 0x7FFF) * 256;
-        char      *linked_moby = (char *)(i + base);
+        char      *linked_moby = (char *)(i + moby_array_base);
         WaterGrid *grid;
         MOBY(linked_moby)->pos.z = MOBY(moby)->pos.z;
         grid = &l11_water_grids[*(int *)(((char *)MOBY(linked_moby)->pvars) + 4)];
