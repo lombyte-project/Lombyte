@@ -2230,12 +2230,12 @@ void set_tracked_class_5f3_moby_position(void *unused_creation_arg, OvlQuad *pos
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5138.c: func_L00_002AAE80), where it is exact; names translated to the US level program. */
 
-extern short D_L00_001613C8_d __asm__("D_L00_001613C8") __attribute__((sda));
+extern short tracked_class_5f3_moby __asm__("D_L00_001613C8") __attribute__((sda));
 
 void remove_tracked_class_5f3_moby(void) __asm__("FUN_L00_002a9be0");
 
 void remove_tracked_class_5f3_moby(void) {
-    struct Moby *tracked_moby = *(char **)&D_L00_001613C8_d;
+    struct Moby *tracked_moby = *(char **)&tracked_class_5f3_moby;
     if (tracked_moby != 0) {
         if (tracked_moby->oclass == 0x5F3) {
             char *data;
@@ -2248,9 +2248,9 @@ void remove_tracked_class_5f3_moby(void) {
             point_light_slot_index = *(short *)(data + 0x2C);
             if (point_light_slot_index != -1)
                 release_point_light_slot(point_light_slot_index);
-            mark_moby_for_removal(*(char **)&D_L00_001613C8_d);
+            mark_moby_for_removal(*(char **)&tracked_class_5f3_moby);
         }
-        *(int *)&D_L00_001613C8_d = 0;
+        *(int *)&tracked_class_5f3_moby = 0;
     }
 }
 typedef union {
@@ -2920,4 +2920,4 @@ int D_L00_0015F324 = 0;
 
 int D_L00_0015F334 = 0;
 
-short D_L00_001613C8_d __asm__("D_L00_001613C8") = 0;
+short tracked_class_5f3_moby __asm__("D_L00_001613C8") = 0;

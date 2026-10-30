@@ -508,7 +508,7 @@ int FUN_L00_00259028(unsigned char *moby, char *movement_control, float *target_
 extern int D_L00_0015FFF4;
 extern unsigned short *D_L00_001AB840_2591d0[] __asm__("D_L00_001AB840");
 extern char *D_L00_00160114;
-extern unsigned short *D_L00_0016010C_2591d0 __asm__("D_L00_0016010C");
+extern unsigned short *moby_group_entry_cursor __asm__("D_L00_0016010C");
 extern short D_L00_00160110;
 extern char *D_L00_0015FFD8_2591d0 __asm__("D_L00_0015FFD8");
 int FUN_L00_002592b8_c(char **, char *) __asm__("FUN_L00_002592b8");
@@ -528,7 +528,7 @@ int get_first_moby_in_group(char **out, int moby_group_index, int include_sign_b
     *out = 0;
     D_L00_00160114 = 0;
     entry_index_list = D_L00_001AB840_2591d0[moby_group_index];
-    D_L00_0016010C_2591d0 = entry_index_list;
+    moby_group_entry_cursor = entry_index_list;
     if (entry_index_list == 0) return -1;
     entry_index = *entry_index_list & 0x7FFF;
     D_L00_00160110 = entry_index;
@@ -727,5 +727,5 @@ unsigned short *D_L18_0016010C = 0;
 short D_L18_00160110 = 0;
 
 char *D_L00_00160114 = 0;
-unsigned short *D_L00_0016010C_2591d0 __asm__("D_L00_0016010C") = 0;
+unsigned short *moby_group_entry_cursor __asm__("D_L00_0016010C") = 0;
 short D_L00_00160110 = 0;

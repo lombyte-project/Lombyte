@@ -491,8 +491,8 @@ typedef union {
     f32 f[4];
     u128 q;
 } __attribute__((aligned(16))) V2d09b8;
-extern s32 D_L00_001618D4_2d09b8 __asm__("D_L00_001618D4");
-extern s32 D_L00_001618D8_2d09b8 __asm__("D_L00_001618D8");
+extern s32 D_L00_001618D4 __asm__("D_L00_001618D4");
+extern s32 D_L00_001618D8 __asm__("D_L00_001618D8");
 extern s32 D_L00_0015FFBC __asm__("D_L00_0015FFBC");
 extern f32 D_L00_0015F5D0 __asm__("D_L00_0015F5D0");
 extern s32 D_001413DC_lui __asm__("D_001413DC") NOT_SDA;
@@ -543,15 +543,15 @@ void break_crate(M2d1428 *moby, s32 hit, s32 source) {
     u32 *effect, *velocity;
 
     close = 0;
-    if (absolute_int_2d09b8(D_L00_0015F5CC - D_L00_001618D4_2d09b8) > 1) {
+    if (absolute_int_2d09b8(D_L00_0015F5CC - D_L00_001618D4) > 1) {
         if (moby->oclass == 0x1FA)
             trooper_play_sound(0, 0, moby, 500);
         else
             FUN_0028dbe8_2d09b8(0, 0, moby);
-        D_L00_001618D4_2d09b8 = D_L00_0015F5CC;
+        D_L00_001618D4 = D_L00_0015F5CC;
     }
-    if (absolute_int_2d09b8(D_L00_0015F5CC - D_L00_001618D8_2d09b8) >= 2)
-        D_L00_001618D8_2d09b8 = D_L00_0015F5CC;
+    if (absolute_int_2d09b8(D_L00_0015F5CC - D_L00_001618D8) >= 2)
+        D_L00_001618D8 = D_L00_0015F5CC;
     else
         close = 1;
     if (*(u8 **)(vars + 0xA0)) {
@@ -3762,6 +3762,6 @@ f32 D_L18_00161D14 = 14.0f;
 
 T_2d0538 l00_crate_drop_unused_stack_copy_source __asm__("D_L00_001E9E30") = {{0xd6, 0xde, 0xe1, 0xe2, 0xcc, 0xdf, 0xd5}};
 
-s32 D_L00_001618D4_2d09b8 __asm__("D_L00_001618D4") = 0;
+s32 D_L00_001618D4 __asm__("D_L00_001618D4") = 0;
 
-s32 D_L00_001618D8_2d09b8 __asm__("D_L00_001618D8") = 0;
+s32 D_L00_001618D8 __asm__("D_L00_001618D8") = 0;

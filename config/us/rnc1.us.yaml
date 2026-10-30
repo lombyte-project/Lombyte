@@ -684,7 +684,7 @@ segments:
           - [0x2c100, c, sdk/video/mpeg/demux/_PES_packet]
           - [0x2c6b0, c, sdk/video/mpeg/api/sce_mpeg_init]
           - [0x2c758, c, sdk/video/mpeg/api/sce_mpeg_create]
-          - [0x2c960, c, sdk/video/mpeg/return_success_at_0012b9e0]
+          - [0x2c960, c, sdk/video/mpeg/api/sce_mpeg_delete]
           - [0x2c968, textbin, text_gap_0012b9e8]
           - [0x2c970, c, sdk/video/mpeg/api/sce_mpeg_get_picture]
           - [0x2c9b8, textbin, text_gap_0012b9f0_post_sdk_worker]

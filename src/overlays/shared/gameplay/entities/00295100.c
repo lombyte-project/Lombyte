@@ -554,7 +554,7 @@ extern char D_L00_0016CA40_lui[] __asm__("D_L00_0016CA40") NOT_SDA;
 extern unsigned char D_0015EDB0_298de8 __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB0_298de8b __asm__("D_0015EDB0");
 extern unsigned char D_0015EDB4_298de8 __asm__("D_0015EDB4");
-extern float D_L00_0015F5A0_298de8 __asm__("D_L00_0015F5A0");
+extern float D_L00_0015F5A0 __asm__("D_L00_0015F5A0");
 extern char player_camera[] __asm__("D_L00_00166C80") NOT_SDA;
 extern void sce_vu0_unit_matrix(void *) __asm__("FUN_00125218");
 extern void sce_vu0_rot_matrix_x(void *, void *, float) __asm__("FUN_00125360");
@@ -595,7 +595,7 @@ int apply_cutscene_camera_key(void) {
     *(float *)(camera_state + 0x378) = camera_key_rotation_matrix[6];
     if (D_0015EDB4_298de8)
         fast_vec_cross(camera_position + 0x220, camera_position + 0x230, camera_position + 0x210);
-    k = D_L00_0015F5A0_298de8;
+    k = D_L00_0015F5A0;
     if (D_0015EDB0_298de8b && k != 0.0f) {
         qcopy(camera_offset, camera_position + 0x210);
         fast_vec_normalize(camera_offset, camera_offset, k);
@@ -3939,7 +3939,7 @@ s32 D_L18_00162810 __attribute__((section(".bss")));
 
 float D_L00_0015F59C = 1.0f;
 
-float D_L00_0015F5A0_298de8 __asm__("D_L00_0015F5A0") = 0;
+float D_L00_0015F5A0 __asm__("D_L00_0015F5A0") = 0;
 
 int D_L00_00161048_macro __asm__("D_L00_00161048") = 0;
 

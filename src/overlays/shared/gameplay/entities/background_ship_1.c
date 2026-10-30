@@ -702,21 +702,21 @@ typedef struct {
     int a;
     int b;
     float c;
-    int d;
-    void (*e)(void);
-} S_2fa6d8;
+    float duration;
+    void (*apply)(void);
+} CameraOffsetEffect;
 
-extern S_2fa6d8 D_L02_00167600_2fa6d8 __asm__("D_L02_00167600");
+extern CameraOffsetEffect camera_offset_effect __asm__("D_L02_00167600");
 extern void apply_camera_offset_effect(void) __asm__("FUN_L02_002fa710");
 
 void initialize_camera_offset_effect_state(void) __asm__("FUN_L02_002fa6d8");
 
 void initialize_camera_offset_effect_state(void) {
-    D_L02_00167600_2fa6d8.a = 0;
-    D_L02_00167600_2fa6d8.b = 0;
-    D_L02_00167600_2fa6d8.c = 10000.0f;
-    D_L02_00167600_2fa6d8.d = 0;
-    D_L02_00167600_2fa6d8.e = apply_camera_offset_effect;
+    camera_offset_effect.a = 0;
+    camera_offset_effect.b = 0;
+    camera_offset_effect.c = 10000.0f;
+    camera_offset_effect.duration = 0;
+    camera_offset_effect.apply = apply_camera_offset_effect;
 }
 /* Start the timed effect while its duration is nonzero. */
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBB48), where it is exact; names translated to the US level program. */
@@ -735,24 +735,16 @@ void apply_camera_offset_effect(void) {
 }
 /* Ported from rac1-decomp (src/overlays/shared/vendor_002A5218.c: func_L02_002FBBA8), where it is exact; names translated to the US level program. */
 
-typedef struct {
-    int a;
-    int b;
-    float c;
-    float d;
-} S;
-
-extern S D_L02_00167600;
 extern short D_L02_0016238C_gp __asm__("D_L02_0016238C") __attribute__((sda));
 
 void update_camera_offset_effect_state(void) {
-    S *effect_state = &D_L02_00167600;
+    CameraOffsetEffect *effect_state = &camera_offset_effect;
     effect_state->c = 10000.0f;
     if (effect_state->b == 0) {
-        float decremented_duration = effect_state->d - *(float *)&D_L02_0016238C_gp;
-        effect_state->d = decremented_duration;
+        float decremented_duration = effect_state->duration - *(float *)&D_L02_0016238C_gp;
+        effect_state->duration = decremented_duration;
         if (decremented_duration < 0.0f) {
-            effect_state->d = 0.0f;
+            effect_state->duration = 0.0f;
         }
     } else {
         effect_state->b = 0;
@@ -1233,11 +1225,11 @@ char *D_L03_00166FDC NOT_SDA = 0;
 int D_L03_001AB940 NOT_SDA = 0;
 short D_L04_00161F4C = -15729;
 short D_L05_001621A4 = -15729;
-S_2fa6d8 D_L06_00167780 = {0};
+CameraOffsetEffect D_L06_00167780 = {0};
 float D_L06_0016778C NOT_SDA = 0;
 short D_L06_0016256C = -15729;
 char *D_L06_0016765C NOT_SDA = 0;
-S_2fa6d8 D_L07_00167080 = {0};
+CameraOffsetEffect D_L07_00167080 = {0};
 float D_L07_0016708C NOT_SDA = 0;
 short D_L07_00161E24 = -15729;
 char *D_L07_00166F5C NOT_SDA = 0;
@@ -1315,26 +1307,26 @@ short D_L10_001620BC = -32513;
 short D_L10_001620C0 = 0x4060;
 short D_L10_001620C4 = 0x6020;
 short D_L10_001620C8 = 0x6050;
-S_2fa6d8 D_L10_00167480 = {0};
+CameraOffsetEffect D_L10_00167480 = {0};
 float D_L10_0016748C NOT_SDA = 0;
 short D_L10_0016220C = -15729;
-S_2fa6d8 D_L11_00167A00 = {0};
+CameraOffsetEffect D_L11_00167A00 = {0};
 float D_L11_00167A0C NOT_SDA = 0;
 short D_L11_00162774 = -15729;
 short D_L12_0016224C = -15729;
 char *D_L12_0016735C NOT_SDA = 0;
-S_2fa6d8 D_L13_00167300 = {0};
+CameraOffsetEffect D_L13_00167300 = {0};
 float D_L13_0016730C NOT_SDA = 0;
 short D_L13_001620C4 = -15729;
-S_2fa6d8 D_L14_00167700 = {0};
+CameraOffsetEffect D_L14_00167700 = {0};
 float D_L14_0016770C NOT_SDA = 0;
 short D_L14_0016247C = -15729;
 short D_L15_001623CC = -15729;
 short D_L16_00162194 = -15729;
-S_2fa6d8 D_L17_00167900 = {0};
+CameraOffsetEffect D_L17_00167900 = {0};
 float D_L17_0016790C NOT_SDA = 0;
 short D_L17_0016267C = -15729;
-S_2fa6d8 D_L18_00167A00 = {0};
+CameraOffsetEffect D_L18_00167A00 = {0};
 float D_L18_00167A0C NOT_SDA = 0;
 short D_L18_00162794 = -15729;
 char *D_L18_001678DC NOT_SDA = 0;
@@ -1355,6 +1347,6 @@ short background_ship_2_level_10_first_spark_color_tween_start_gp __asm__("D_L02
 short background_ship_2_level_10_first_spark_color_tween_end_gp __asm__("D_L02_00162024") = 0x4060;
 short background_ship_2_level_10_second_spark_color_tween_start_gp __asm__("D_L02_00162028") = 0x6020;
 short background_ship_2_level_10_second_spark_color_tween_end_gp __asm__("D_L02_0016202C") = 0x6050;
-S_2fa6d8 D_L02_00167600_2fa6d8 __asm__("D_L02_00167600") = {0};
+CameraOffsetEffect camera_offset_effect __asm__("D_L02_00167600") = {0};
 float D_L02_0016760C NOT_SDA = 0;
 char *D_L02_001674DC NOT_SDA = 0;

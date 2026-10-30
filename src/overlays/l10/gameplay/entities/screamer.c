@@ -924,7 +924,7 @@ typedef struct Path_2E2B80 {
 } Path_2E2B80;
 
 extern float FUN_L04_001f1978(float);
-extern int trooper_take_damage() __asm__("FUN_00213928");
+extern int fun_00213928() __asm__("FUN_00213928");
 extern int FUN_L00_0025ff38();
 extern int spawn_randomized_bolt_drop() __asm__("FUN_L00_00260a88");
 extern int blend_moby_animation_alt(int) __asm__("FUN_00212f90");

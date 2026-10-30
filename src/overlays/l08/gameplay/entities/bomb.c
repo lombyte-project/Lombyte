@@ -783,7 +783,7 @@ int FUN_L00_0025ff38(float best, char *a, char *o, int *excluded, int excluded_c
 void *FUN_L00_00263fd8(char *src, int cls, float *pos, void *mat, int a8, int a9, float *v10, float *v11, float scale, float *v12);
 void FUN_L00_00257470(unsigned char *m, int flags, int arg);
 extern float D_0015ED6C_lui __asm__("D_0015ED6C");
-extern int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0");
+extern int D_L08_0015F5B0 __asm__("D_L08_0015F5B0");
 extern int D_L08_0015F5B4_gp __asm__("D_L08_0015F5B4") __attribute__((sda));
 extern int D_L08_0015F5BC_gp __asm__("D_L08_0015F5BC") __attribute__((sda));
 extern Path *D_L08_001B0FB0_2D5FA8[] __asm__("D_L08_001B0CB0");
@@ -864,11 +864,11 @@ void update_bomber_tank_damage_and_aim(Moby *moby) {
                 if (D_0015ED84 == 8) {
                     int part = data->part_id;
                     if (part != 0 && source != 0 && source->moby != 0 && source->moby->oclass == 0x661) {
-                        if (part == one) D_L08_0015F694_2D5FA8 = one;
+                        if (part == one) D_L08_0015F5B0 = one;
                         if (part == 2) D_L08_0015F5B4_gp = one;
                         if (part == 3) bomber_tank_part_3_destroyed_by_class_661_gp = one;
                         if (part == 4) D_L08_0015F5BC_gp = one;
-                        if (D_L08_0015F694_2D5FA8 != 0 && D_L08_0015F5B4_gp != 0) {
+                        if (D_L08_0015F5B0 != 0 && D_L08_0015F5B4_gp != 0) {
                             unsigned char *flags = D_0013D50F_2D5FA8;
                             if (flags[0xD] == 0) {
                                 flags[0xD] = one;
@@ -2838,7 +2838,7 @@ void spawn_moby_motion_spark(struct Moby *moby, char *pos) {
 
 blk16 l08_bomb_moving_particle_initial_colors __asm__("D_L08_00161868") = {{-1, -1, -1, 0x2f, -1, -1, 0, 0x2f, -1, 0x7f, 0, 0x2f, -1, 0x4f, 0, 0x2f}};
 
-int D_L08_0015F694_2D5FA8 __asm__("D_L08_0015F5B0") = 0;
+int D_L08_0015F5B0 __asm__("D_L08_0015F5B0") = 0;
 int D_L08_0015F5B4_gp __asm__("D_L08_0015F5B4") = 0;
 int D_L08_0015F5BC_gp __asm__("D_L08_0015F5BC") = 0;
 

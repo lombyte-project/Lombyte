@@ -482,8 +482,8 @@ typedef struct { char pad[0x160]; float f160; int f164; int f168; } Cam;
 typedef struct { float f[11]; } Fl;
 extern char g_debug_camera[] __asm__("D_L00_00166DC0");
 extern char player_camera[] __asm__("D_L00_00166C80");
-extern S6 D_L00_001E9030_25e450 __asm__("D_L00_001E9030");
-extern S6 D_L00_001E9048_25e450 __asm__("D_L00_001E9048");
+extern S6 burst_first_color_palette __asm__("D_L00_001E9030");
+extern S6 burst_second_color_palette __asm__("D_L00_001E9048");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
 extern void initialize_hit_descriptor(void *, void *, int, float) __asm__("FUN_L00_00259858");
 extern int collect_mobies_in_sphere(float, void *, int, void *, void *) __asm__("FUN_L00_001f2868");
@@ -599,8 +599,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
         S6 c1;
         float sp;
         sp = random_float_between(8.0f, 10.0f) * frame_time_macro;
-        c0 = D_L00_001E9030_25e450;
-        c1 = D_L00_001E9048_25e450;
+        c0 = burst_first_color_palette;
+        c1 = burst_second_color_palette;
         sp = sp - proximity_speed_reduction * frame_time_macro;
         sp = sp * fF;
         spawn_particle(explosion_position, &vb, swap_packed_color_channels(c0.v[random_integer_below(6)], flag),
@@ -615,8 +615,8 @@ void spawn_explosion(char *owner_moby, void *unused, char *explosion_position, f
     {
     int i;
     for (i = 0; i < k9; i++) {
-        S6 c0 = D_L00_001E9030_25e450;
-        S6 c1 = D_L00_001E9048_25e450;
+        S6 c0 = burst_first_color_palette;
+        S6 c1 = burst_second_color_palette;
         Q_25e450 randomized_particle_vector;
         Q_25e450 rnd;
         int first_packed_color;
@@ -952,5 +952,5 @@ S6 D_L18_001F1760 = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff
 S6 D_L18_001F1778 = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
 u8 *D_L18_0015FFE0 = 0;
 
-S6 D_L00_001E9030_25e450 __asm__("D_L00_001E9030") = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
-S6 D_L00_001E9048_25e450 __asm__("D_L00_001E9048") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};
+S6 burst_first_color_palette __asm__("D_L00_001E9030") = {{0x4f008fff, 0x4f008fff, 0x4f007fff, 0x4f006fff, 0x2fffffff, 0x2fffffff}};
+S6 burst_second_color_palette __asm__("D_L00_001E9048") = {{0x2f005f7f, 0x2f004f7f, 0x2f003f7f, 0x2f00004f, 0x2f000000, 0x3f000000}};

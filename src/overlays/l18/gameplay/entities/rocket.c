@@ -2805,8 +2805,8 @@ extern int D_L18_00162008_gp __asm__("D_L18_00162008") __attribute__((sda));
 extern int D_L18_00162010_gp __asm__("D_L18_00162010") __attribute__((sda));
 extern int D_L18_00162024_gp __asm__("D_L18_00162024") __attribute__((sda));
 extern int D_L18_00162054_q __asm__("D_L18_00162054");
-extern short D_L18_001620C8_q __asm__("D_L18_001620C8");
-extern short D_L18_001620D0_q __asm__("D_L18_001620D0");
+extern short electric_bolt_first_side_arc_reset_frames __asm__("D_L18_001620C8");
+extern short electric_bolt_first_side_arc_timer_distance_reference __asm__("D_L18_001620D0");
 extern short D_L18_001620B8_b[4] __asm__("D_L18_001620B8");
 extern float D_L18_001D9CF0_q[][4] __asm__("D_L18_001D9CF0");
 extern float D_L18_001D9D00_q[][4] __asm__("D_L18_001D9D00");
@@ -2847,8 +2847,8 @@ void initialize_electric_bolt_effect_if_requested(struct Moby *moby) {
         }
         for (j = 0; j < 4; j++)
             D_L18_001620B8_b[j] = -1;
-        D_L18_001620C8_q = 8;
-        D_L18_001620D0_q = 4;
+        electric_bolt_first_side_arc_reset_frames = 8;
+        electric_bolt_first_side_arc_timer_distance_reference = 4;
         electric_bolt_second_side_arc_reset_frames = 4;
         electric_bolt_second_side_arc_timer_distance_reference = 2;
         electric_bolt_third_side_arc_timer_distance_reference = 4;
@@ -3165,8 +3165,8 @@ int D_L18_00162008_gp __asm__("D_L18_00162008") = 0;
 int D_L18_00162010_gp __asm__("D_L18_00162010") = 0;
 int D_L18_00162024_gp __asm__("D_L18_00162024") = 0;
 
-short D_L18_001620C8_q __asm__("D_L18_001620C8") = 0;
-short D_L18_001620D0_q __asm__("D_L18_001620D0") = 0;
+short electric_bolt_first_side_arc_reset_frames __asm__("D_L18_001620C8") = 0;
+short electric_bolt_first_side_arc_timer_distance_reference __asm__("D_L18_001620D0") = 0;
 
 short electric_bolt_second_side_arc_reset_frames __asm__("D_L18_001620CA") = 0;
 short electric_bolt_third_side_arc_reset_frames __asm__("D_L18_001620CC") = 0;

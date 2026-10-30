@@ -309,7 +309,7 @@ void update_bouncing_spark(struct Moby *spark_moby)
 }
 #include "sda.h"
 /* Ported from rac1-decomp (src/overlays/l14_oltanis/vendor_002FF358.c: func_L14_00302968), where it is exact; names translated to the US level program. */
-extern unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") __attribute__((sda));
+extern unsigned short D_L14_0016208C __asm__("D_L14_0016208C") __attribute__((sda));
 
 extern float spark_initial_moby_value_multiplier_gp __asm__("D_L14_00162098") __attribute__((sda));
 char *create_bouncing_spark(int owner, float *pos, float *initial_velocity, int fade_timer, float gravity) __asm__("FUN_L14_003014e0");
@@ -327,7 +327,7 @@ char *create_bouncing_spark(int owner, float *spawn_position, float *initial_vel
         *(int *)(spark_data + 0x24) = owner;
         qcopy(moby + 0x10, spawn_position);
         qcopy(spark_data + 0x10, initial_velocity);
-        initial_trail_timer = D_L14_0016208C_g;
+        initial_trail_timer = D_L14_0016208C;
         *(float *)(spark_data + 0x1C) = gravity;
         *(int *)(spark_data + 0x20) = fade_timer;
         *(unsigned short *)(spark_data + 0x28) = initial_trail_timer;
@@ -1977,7 +1977,7 @@ int helper_sequence_owner_animation_duration_frames __asm__("D_L14_0016220C") = 
 
 Rgb_0e00 l14_spark_rolling_fade_source_rgb __asm__("D_L14_001620A8") = {67.0f, 2.3e+02f, 132.0f};
 
-unsigned short D_L14_0016208C_g __asm__("D_L14_0016208C") = 0xc;
+unsigned short D_L14_0016208C __asm__("D_L14_0016208C") = 0xc;
 
 int flying_car_path_reset_delay_frames_gp __asm__("D_L14_0016227C") = 0x1f4;
 

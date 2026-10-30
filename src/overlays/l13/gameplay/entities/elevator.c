@@ -1090,7 +1090,7 @@ extern float FUN_L00_0025abf0(void *, void *, void *, float, float);
 extern float approach_value(float *, float, float);
 extern int D_L13_0015F5C4;
 extern int D_L13_001613B0[] __attribute__((section(".sdata")));
-extern int trooper_take_damage(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
+extern int fun_00213928(void *, void *, void *, int, int *, float *, int, int) __asm__("FUN_00213928");
 extern int coll_sphere(float, void *, int, void *) __asm__("FUN_L00_001f0d60");
 extern int FUN_L00_00258830(void *, void *, float, float, float, int);
 extern int FUN_L00_00258b50(void *, void *, void *, void *, float);
@@ -1185,7 +1185,7 @@ void robosquawker_update(RsMoby *robosquawker_moby) {
     }
     dmg = 0.0f;
     hit = FUN_L00_0025a420(robosquawker_moby, 0x330000, 0);
-    trooper_take_damage(robosquawker_moby, hit, &robosquawker_vars->f20, 0, &hits, &dmg, 0, 4);
+    fun_00213928(robosquawker_moby, hit, &robosquawker_vars->f20, 0, &hits, &dmg, 0, 4);
     fast_dec_timer_s16(&robosquawker_vars->h26);
     if (robosquawker_vars->h26 < scale_game_frames(0x2D) && hit != 0 && robosquawker_moby->state != 0x63) {
         if (hit->src->hA6 >= 0xB0 && hit->src->hA6 <= 0xB1 && robosquawker_vars->h26 != 0) {
