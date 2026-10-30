@@ -16,28 +16,28 @@ extern int hero_slot_item_id(int) __asm__("FUN_L00_0020d498");
 int hero_get_gadget_anim_id(int allow_item_lookup) __asm__("FUN_L12_00227f10");
 
 int hero_get_gadget_anim_id(int allow_item_lookup) {
-    char *base = D_0013E533 + 0xE1D;
+    char *animation_selection_state = D_0013E533 + 0xE1D;
     int   i;
     char *item_table_entry;
-    if (((unsigned char *)base)[0x20A4] == 3) {
+    if (((unsigned char *)animation_selection_state)[0x20A4] == 3) {
         return 0;
     }
-    if (*(int *)(base + 0x22A8) == 1) {
+    if (*(int *)(animation_selection_state + 0x22A8) == 1) {
         return 0x54;
     }
-    if (((unsigned char *)base)[0x12E2] != 0) {
+    if (((unsigned char *)animation_selection_state)[0x12E2] != 0) {
         return 0x6E;
     }
     if (allow_item_lookup == 0) {
         return 0;
     }
-    if (((unsigned char *)base)[0x20A8] == 0) {
+    if (((unsigned char *)animation_selection_state)[0x20A8] == 0) {
         return 0;
     }
-    if (((unsigned char *)base)[0x20AA] == 0) {
+    if (((unsigned char *)animation_selection_state)[0x20AA] == 0) {
         return 0;
     }
-    if (*(short *)(base + 0x22C8) != 0) {
+    if (*(short *)(animation_selection_state + 0x22C8) != 0) {
         return 0;
     }
     i = hero_slot_item_id(0) * 0x4C;
