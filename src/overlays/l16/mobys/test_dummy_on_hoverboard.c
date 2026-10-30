@@ -35,8 +35,8 @@ void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby,
                                      int                        index,
                                      void                      *out) __asm__("FUN_L16_002cf9d0");
 
-void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby, int index, void *out) {
-    qcopy(out, moby->data->vectors + index * 16 + 16);
+void copy_hoverboard_dummy_path_node(Level16VendorVectorMoby_u *moby, int index, void *path_node_destination) {
+    qcopy(path_node_destination, moby->data->vectors + index * 16 + 16);
 }
 
 s32 random_integer_below(s32 arg0) __asm__("FUN_00213260");
