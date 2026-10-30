@@ -48,7 +48,7 @@ char *spawn_asteroid_fragment(char *owner,
                               int   remaining_split_count,
                               float scale) __asm__("FUN_L13_002e1140");
 
-char *spawn_asteroid_fragment(char *owner,
+char *spawn_asteroid_fragment(char *parent_asteroid,
                               char *spawn_position,
                               char *initial_velocity,
                               int   remaining_split_count,
@@ -60,7 +60,7 @@ char *spawn_asteroid_fragment(char *owner,
         float spin_increment;
         ((unsigned char *)moby)[0x30] = 0xFF;
         moby_data = ((char *)MOBY(moby)->pvars);
-        MOBY(moby)->draw_dist = *(unsigned short *)(owner + 0x32);
+        MOBY(moby)->draw_dist = *(unsigned short *)(parent_asteroid + 0x32);
         moby[0x31] = 1;
         moby[0x20] = 2;
         moby[0xBC] = 0;
@@ -68,7 +68,7 @@ char *spawn_asteroid_fragment(char *owner,
         qcopy(moby + 0x10, spawn_position);
         qcopy(moby_data, initial_velocity);
         MOBY(moby)->scale = scale;
-        *(char **)(moby_data + 0x48) = owner;
+        *(char **)(moby_data + 0x48) = parent_asteroid;
         *(int *)(moby_data + 0x40) = 1;
         *(short *)(moby_data + 0x4C) = scale_game_frames(0x1E);
         *(short *)(moby_data + 0x4E) = remaining_split_count;
