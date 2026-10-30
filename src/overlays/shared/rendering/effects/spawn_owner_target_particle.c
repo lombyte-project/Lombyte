@@ -76,7 +76,7 @@ unsigned char *create_type_47_particle(void  *particle_position,
                                        int    g,
                                        int    h,
 
-                                       char *owner) {
+                                       char *particle_owner) {
     unsigned char *particle = create_part(0x47);
     if (particle != 0) {
         int  *packed_p_vector, *packed_c_vector;
@@ -101,7 +101,7 @@ unsigned char *create_type_47_particle(void  *particle_position,
         *(short *)(packed_p_vector + 4) = particle_frame_count;
         *(short *)((char *)packed_p_vector + 0x12) = g;
         *(short *)((char *)packed_p_vector + 0x14) = h;
-        packed_p_vector[6] = *(int *)(owner + 0x78);
+        packed_p_vector[6] = *(int *)(particle_owner + 0x78);
     }
     return particle;
 }
