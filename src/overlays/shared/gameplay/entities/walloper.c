@@ -1640,7 +1640,7 @@ extern s32 D_L00_00161824;
 extern s32 D_L00_00161818;
 typedef struct { float x, y, z, w; } __attribute__((aligned(16))) Vec_2BE3A8;
 extern Vec_2BE3A8 beam_prev_nodes[12] __asm__("D_L00_001DBF50");
-extern u128 D_L00_001DBF60_lui __asm__("D_L00_001DBF60") NOT_SDA;
+extern Vec_2BE3A8 beam_nodes[] __asm__("D_L00_001DBF60") NOT_SDA;
 extern Vec_2BE3A8 beam_pulse_directions[3] __asm__("D_L00_001DD0D0");
 extern void scale_vector_2bcf98(float, void *, void *) __asm__("FUN_001f9a68");
 
@@ -1658,9 +1658,9 @@ void reset_beam_chain_and_pulse_state(u8 *moby) {
         scale = D_L00_001616DC_gp / convert_integer_to_float(12);
         D_L00_001617CC_macro = scale;
         scale_vector_2bcf98(-scale, &step, moby + 0xD0);
-        qcopy(&D_L00_001DBF60_lui, source);
+        qcopy(&beam_nodes[0], source);
         for (i = 1; i < 12; i++) {
-            fast_vec_add(&D_L00_001DBF60_lui + i, (u128 *)beam_prev_nodes + i, &step);
+            fast_vec_add(&beam_nodes[i], (u128 *)beam_prev_nodes + i, &step);
         }
         D_L00_00161718_gp = 0;
         D_L00_00161720_gp = 0;
@@ -1742,7 +1742,7 @@ extern float D_L00_001618B8_2BE3A8[3] __asm__("D_L00_001617E8") MACRO_ADDR;
 extern float D_L00_001617F8_macro[3] __asm__("D_L00_001617F8") MACRO_ADDR;
 extern float D_L00_001618D8_2BE3A8[3] __asm__("D_L00_00161808") MACRO_ADDR;
 extern int D_L00_001618E8_2BE3A8[3] __asm__("D_L00_00161818") MACRO_ADDR;
-extern Vec_2BE3A8 D_L00_001DC260_2BE3A8[12] __asm__("D_L00_001DBF60");
+extern Vec_2BE3A8 beam_nodes[] __asm__("D_L00_001DBF60") NOT_SDA;
 extern Vec_2BE3A8 beam_rail_a_points[12] __asm__("D_L00_001DC020");
 extern Vec_2BE3A8 beam_rail_b_points[12] __asm__("D_L00_001DC0E0");
 Vec_2BE3A8 D_L00_001DC1A0_2BE3A8[12][20] __asm__("D_L00_001DC1A0") = {0};
@@ -1837,29 +1837,29 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         int i;
 
         D_L00_001617CC_macro = beam_length * D_L00_001616F0_gp;
-        qcopy(&D_L00_001DC260_2BE3A8[0], data);
+        qcopy(&beam_nodes[0], data);
         qcopy(&beam_rail_a_points[0], data);
         qcopy(&beam_rail_b_points[0], data);
         for (i = 1; i < 12; i++) {
             float seg_length;
 
-            func_001F9BF0_2BE3A8(&segment, &D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
+            func_001F9BF0_2BE3A8(&segment, &beam_nodes[i], &beam_nodes[i - 1]);
             progress = func_001FA888_2BE3A8(i) * D_L00_001616F0_gp;
             factor = progress * -0.49999997f + 0.9f;
             if (D_L00_001616F4_gp < i && data->target != 0) {
-                func_001F9BF0_2BE3A8(&point, &data->target->pos, &D_L00_001DC260_2BE3A8[i]);
+                func_001F9BF0_2BE3A8(&point, &data->target->pos, &beam_nodes[i]);
                 func_L00_001FF4B0_2BE3A8(&point, &point, D_L00_001617CC_macro);
                 func_001F9C08_2BE3A8(&aim, &aim, &point, 0.2f);
             }
             func_001F9C08_2BE3A8(&point, &segment, &aim, factor);
             seg_length = fast_vec_length(&point);
             if (seg_length == 0.0f) {
-                qcopy(&D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
+                qcopy(&beam_nodes[i], &beam_nodes[i - 1]);
             } else {
                 func_001F9C30_2BE3A8(&point, &point, D_L00_001617CC_macro / seg_length);
-                func_001F9BD8_2BE3A8(&D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1], &point);
+                func_001F9BD8_2BE3A8(&beam_nodes[i], &beam_nodes[i - 1], &point);
             }
-            func_001F9BF0_2BE3A8(&beam_segment_direction, &D_L00_001DC260_2BE3A8[i], &D_L00_001DC260_2BE3A8[i - 1]);
+            func_001F9BF0_2BE3A8(&beam_segment_direction, &beam_nodes[i], &beam_nodes[i - 1]);
             func_001F9CA0_2BE3A8(&side, &beam_segment_direction, D_0013F5E0_r);
             func_L00_001FF4B0_2BE3A8(&side, &side, D_L00_00161708_gp + (D_L00_0016170C_gp - D_L00_00161708_gp) * progress);
             {
@@ -1871,9 +1871,9 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
 
                 for (ring_index = 0; ring_index < 20; ring_index++) {
                     build_look_at_matrix(&ring, &side, &beam_segment_direction, (float)ring_index * D_L00_00161704_gp);
-                    func_001F9BD8_2BE3A8(&D_L00_001DC1A0_2BE3A8[i][ring_index], &ring, &D_L00_001DC260_2BE3A8[i]);
+                    func_001F9BD8_2BE3A8(&D_L00_001DC1A0_2BE3A8[i][ring_index], &ring, &beam_nodes[i]);
                 }
-                qcopy(&node, &D_L00_001DC260_2BE3A8[i]);
+                qcopy(&node, &beam_nodes[i]);
                 func_L00_001FF4B0_2BE3A8(&fwd, &beam_segment_direction, 1.0f);
                 func_L00_001FF4B0_2BE3A8(&out, &side, 1.0f);
                 func_001F9CA0_2BE3A8(&up, &out, &fwd);
@@ -1907,11 +1907,11 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         sign = -sign;
         func_L00_00272F00_2BE3A8(&point, func_001F9850_2BE3A8(30), 0x7F7F7F7F, 1, sign, &zero_vector_macro, spark_size * 0.07f, spark_size * 0.7f, 0.003f);
     }
-    func_001F9BF0_2BE3A8(&beam_segment_direction, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
+    func_001F9BF0_2BE3A8(&beam_segment_direction, &beam_nodes[1], &beam_nodes[0]);
     func_L00_001FF4B0_2BE3A8(&beam_segment_direction, &beam_segment_direction, D_L00_00161734_gp * frame_scale);
     if (random_integer_below(2) == 0) {
         func_L00_001FF4B0_2BE3A8(&side, &moby->rot_row1, D_L00_00161740_gp);
-        func_001F9BD8_2BE3A8(&point, &D_L00_001DC260_2BE3A8[0], &side);
+        func_001F9BD8_2BE3A8(&point, &beam_nodes[0], &side);
         {
             Tab colors;
             Vec_2BE3A8 out;
@@ -1941,7 +1941,7 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
                 D_L00_001618D8_2BE3A8[slot] = D_L00_0016175C_gp;
                 D_L00_001618B8_2BE3A8[slot] = func_001FA888_2BE3A8(D_L00_00161763_macro[0]);
                 qcopy(&beam_pulse_positions[slot], data);
-                func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[1], &D_L00_001DC260_2BE3A8[0]);
+                func_001F9BF0_2BE3A8(&side, &beam_nodes[1], &beam_nodes[0]);
                 func_L00_001FF4B0_2BE3A8(&beam_pulse_directions[slot], &side, 1.0f);
                 break;
             }
@@ -1982,11 +1982,11 @@ void update_beam_ring_rail_and_pulse_effects(struct Moby *moby) {
         }
         node_index = func_001FA898_2BE3A8(travelled / D_L00_001617CC_macro);
         remainder = D_L00_001617F8_macro[pulse] - func_001FA888_2BE3A8(node_index) * D_L00_001617CC_macro;
-        qcopy(&beam_pulse_positions[pulse], &D_L00_001DC260_2BE3A8[node_index]);
+        qcopy(&beam_pulse_positions[pulse], &beam_nodes[node_index]);
         if (node_index == 11) {
-            func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[node_index], &beam_prev_nodes[node_index]);
+            func_001F9BF0_2BE3A8(&side, &beam_nodes[node_index], &beam_prev_nodes[node_index]);
         } else {
-            func_001F9BF0_2BE3A8(&side, &D_L00_001DC260_2BE3A8[node_index + 1], &D_L00_001DC260_2BE3A8[node_index]);
+            func_001F9BF0_2BE3A8(&side, &beam_nodes[node_index + 1], &beam_nodes[node_index]);
         }
         inv_length = fast_vec_length(&side);
         if (inv_length == 0.0f) {
@@ -2285,7 +2285,7 @@ typedef struct {
     float unk68, unk6C;
     long unk70, tex, unk80, unk88;
 } Q_2be890;
-extern V_2be890 D_L00_001DBF60 __asm__("D_L00_001DBF60") NOT_SDA;
+extern Vec_2BE3A8 beam_nodes[] __asm__("D_L00_001DBF60") NOT_SDA;
 void FUN_001f9a68_2be890(float, void *, void *) __asm__("FUN_001f9a68");
 void FUN_001f9a10_2be890(void *, void *, void *) __asm__("FUN_001f9a10");
 void FUN_001f9a28_2be890(void *, void *, void *) __asm__("FUN_001f9a28");
@@ -2323,7 +2323,7 @@ void draw_beam_origin_camera_facing_quads(void *mv) {
     quad.unk68 = 1.0f;
     quad.unk6C = 1.0f;
     FUN_001f9bf8_2be890(&offset_vector, moby_bytes + 0xD0, beam_origin_quad_basis_offset_length_gp);
-    FUN_001f9a10_2be890(&camera_facing_transform[3], &D_L00_001DBF60, &offset_vector);
+    FUN_001f9a10_2be890(&camera_facing_transform[3], &beam_nodes[0], &offset_vector);
     FUN_001f9a28_2be890(&offset_vector, &(*(V_2be890 *)g_debug_camera), &camera_facing_transform[3]);
     FUN_001f9bf8_2be890(&camera_facing_transform[0], &offset_vector, 1.0f);
     FUN_001f9ad8_2be890(&camera_facing_transform[1], &camera_facing_transform[0], &(*(V_2be890 *)D_0013F5E0));
@@ -4968,4 +4968,4 @@ float D_L00_00161808_macro[3] __asm__("D_L00_00161808") = {0};
 
 int D_L00_00161818_macro[3] __asm__("D_L00_00161818") = {0};
 
-V_2be890 D_L00_001DBF60 __asm__("D_L00_001DBF60") = {0};
+Vec_2BE3A8 beam_nodes[1] __asm__("D_L00_001DBF60") = {0};

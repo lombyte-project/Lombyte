@@ -721,7 +721,7 @@ extern unsigned char *create_part2(int, int) __asm__("FUN_L00_002678c0");
 extern float scale_time(float) __asm__("FUN_001f96b0");
 extern int FUN_001fa6e0_26b230(int, int, float) __asm__("FUN_001fa6e0");
 extern unsigned swap_packed_color_channels(unsigned, int) __asm__("FUN_L00_0025c0e8");
-extern unsigned char *D_L00_001B20B0_lui __asm__("D_L00_001B20B0") NOT_SDA;
+extern unsigned char *effect_texture_ids __asm__("D_L00_001B20B0") NOT_SDA;
 
 extern unsigned char item_text_variant[] __asm__("D_0013E520");
 
@@ -788,7 +788,7 @@ unsigned char *spawn_spinning_and_fading_effect_particle(void *spawn_position, v
                 if (!item_text_variant[0x10])
                     offset = 0;
             }
-            particle[2] = D_L00_001B20B0_lui[random_integer_below(8) + offset];
+            particle[2] = effect_texture_ids[random_integer_below(8) + offset];
             particle[3] = 0x44;
         }
         particle[9] = truncate_float_to_s32(4.0f) + 0x40;
@@ -2807,7 +2807,7 @@ typedef struct {
 extern P_26fd28 *alloc_26fd28(s32) __asm__("FUN_L00_002678b8");
 extern s32 FUN_L00_0025bfe0(f32, f32, f32, f32);
 extern s32 rnd_26fd28(void) __asm__("FUN_001160d8");
-extern u8 *tex __asm__("D_L00_001B20B0") NOT_SDA;
+extern unsigned char *effect_texture_ids __asm__("D_L00_001B20B0") NOT_SDA;
 P_26fd28 *spawn_splitting_effect_particle_with_collision_response_and_fade(u128 *pos, u128 *initial_velocity, u8 initial_flags, s32 collision_context) __asm__("FUN_L00_0026fd28");
 
 P_26fd28 *spawn_splitting_effect_particle_with_collision_response_and_fade(u128 *pos, u128 *initial_velocity, u8 initial_flags, s32 collision_context) {
@@ -2827,7 +2827,7 @@ P_26fd28 *spawn_splitting_effect_particle_with_collision_response_and_fade(u128 
         initial_rotation_phase = random_angle_radians();
         e->f10 = initial_rotation_phase;
         particle->b8 = (s32)(initial_rotation_phase * 256.0f);
-        particle->b2 = tex[rnd_26fd28() & 7];
+        particle->b2 = effect_texture_ids[rnd_26fd28() & 7];
         e->b18 = initial_flags;
         e->h14 = 0;
         e->h16 = 0;
@@ -2886,7 +2886,7 @@ typedef struct {
     char pad[0xC];
 } S_26ff10;
 
-extern u8 *D_L00_001B20B0_26ff10 __asm__("D_L00_001B20B0") NOT_SDA;
+extern unsigned char *effect_texture_ids __asm__("D_L00_001B20B0") NOT_SDA;
 
 extern Moby_26ff10 *FUN_L00_0026fd28_26ff10(void *, void *, s32,
                                             void *) __asm__("FUN_L00_0026fd28");
@@ -2943,7 +2943,7 @@ void update_splitting_effect_particle_with_collision_response_and_fade(Moby_26ff
         particle->posv.f[1] = particle->posv.f[1] + random_float_between(nsp, sp);
         particle->posv.f[2] = particle->posv.f[2] + random_float_between(nsp, sp);
     }
-    tab = D_L00_001B20B0_26ff10;
+    tab = effect_texture_ids;
     particle->b02 = tab[(particle->h0A + pv->f16 + (particle->b02 - tab[0])) & 7];
     fast_vec_add(v0u.f, particle->posv.f, pv);
     k = pv->f14;
@@ -3065,7 +3065,7 @@ void tick_finite_effect_particle_lifetime(char *particle) {
 
 extern float D_0015ED60_c2 __asm__("D_0015ED60");
 extern int FUN_L00_0025bfe0(float, float, float, float);
-extern unsigned char *D_L00_001B20B0 NOT_SDA;
+extern unsigned char *effect_texture_ids __asm__("D_L00_001B20B0") NOT_SDA;
 extern void *FUN_L00_002678b8_c2(int) __asm__("FUN_L00_002678b8");
 
 void *spawn_splitting_effect_particle_with_collision_and_fade(char *spawn_position, char *initial_velocity, unsigned char initial_flags, int collision_context) __asm__("FUN_L00_00270758");
@@ -3087,7 +3087,7 @@ void *spawn_splitting_effect_particle_with_collision_and_fade(char *spawn_positi
         initial_rotation_phase = random_float_between(0.0f, 1.0f);
         *(float *)(particle_data + 0x10) = initial_rotation_phase;
         particle[8] = (char)(int)(initial_rotation_phase * 256.0f);
-        particle[2] = D_L00_001B20B0[rand() & 7];
+        particle[2] = effect_texture_ids[rand() & 7];
         particle_data[0x18] = initial_flags;
         *(short *)(particle_data + 0x14) = 0;
         *(short *)(particle_data + 0x16) = 0;
@@ -3142,7 +3142,7 @@ typedef struct {
     f32 x1C;
     s32 x20;
 } C_270948;
-extern u8 *D_L00_001B20B0_c[] __asm__("D_L00_001B20B0");
+extern unsigned char *effect_texture_ids __asm__("D_L00_001B20B0") NOT_SDA;
 extern s32 coll_line_fix(void *, void *, s32, s32, void *) __asm__("FUN_001efa68");
 
 void update_splitting_effect_particle_with_collision_and_fade(M_270948 *particle) __asm__("FUN_L00_00270948");
@@ -3181,7 +3181,7 @@ void update_splitting_effect_particle_with_collision_and_fade(M_270948 *particle
         particle->pos.f[1] += random_float_between(nr, position_jitter_extent);
         particle->pos.f[2] += random_float_between(nr, position_jitter_extent);
     }
-    particle->b2 = D_L00_001B20B0_c[0][(particle->hA + e->h16 + (particle->b2 - D_L00_001B20B0_c[0][0])) & 7];
+    particle->b2 = effect_texture_ids[(particle->hA + e->h16 + (particle->b2 - effect_texture_ids[0])) & 7];
     fast_vec_add(&v, &particle->pos, e);
     hit = 0;
     if (e->h14 > scale_game_frames(3)) {
