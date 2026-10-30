@@ -83,13 +83,13 @@ extern unsigned short *D_L14_001ABF40[];
 
 void save_and_lower_unlock_sequence_mobys(struct Moby *moby) {
     unsigned short *moby_id_cursor = D_L14_001ABF40[*(int *)moby->pvars];
-    float          *out;
+    float          *saved_moby_height_write_cursor;
     if (moby_id_cursor != 0) {
-        int base = D_L14_0015FFD8;
-        out = unlock_sequence_saved_moby_heights;
+        int moby_array_base = D_L14_0015FFD8;
+        saved_moby_height_write_cursor = unlock_sequence_saved_moby_heights;
         do {
-            float *target_moby = (float *)(base + ((*moby_id_cursor & 0x7FFF) << 8));
-            *out++ = target_moby[6];
+            float *target_moby = (float *)(moby_array_base + ((*moby_id_cursor & 0x7FFF) << 8));
+            *saved_moby_height_write_cursor++ = target_moby[6];
             target_moby[6] -= 20.0f;
             *(unsigned short *)((char *)target_moby + 0x34) |= 0x41;
         } while (*(short *)moby_id_cursor++ >= 0);
